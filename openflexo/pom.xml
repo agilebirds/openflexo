@@ -22,7 +22,8 @@
 		<organization.logo>http://www.agilebirds.com/_Ressources/img/header_Logo.gif</organization.logo>
 	</properties>
 	<scm>
-		<connection>scm:git:ssh://gitolite@server.capexpe.org/openflexo</connection>
+		<connection>scm:git:ssh://git@github.com:agilebirds/openflexo.git</connection>
+		<url>https://github.com/agilebirds/openflexo</url>
 	</scm>
 	<repositories>
 		<repository>
@@ -84,5 +85,11 @@
 		<module>flexoserver</module>
 		<module>packaging</module>
 	</modules>
+	<ciManagement>
+		<system>Jenkins</system>
+		<url>https://test.flexoserver.com/jenkins/</url>
+	</ciManagement>
+	<url>http://www.openflexo.com</url>
+	<description>Openflexo is the open source business architecture platform that supports collaborative agile missions by seamlessly transforming multi-facet enterprise models into business oriented deliverables.</description>
 </project>
 
