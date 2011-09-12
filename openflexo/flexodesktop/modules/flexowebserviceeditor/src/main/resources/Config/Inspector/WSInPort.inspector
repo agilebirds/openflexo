@@ -1,0 +1,7 @@
+<inspector title = "ws_in_operation"  inheritsfrom ="WSAbstractInPort.inspector">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+	</tab>
+</inspector>

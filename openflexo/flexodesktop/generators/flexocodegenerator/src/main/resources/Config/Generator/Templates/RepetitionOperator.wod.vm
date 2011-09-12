@@ -1,0 +1,52 @@
+#set($list = ${widget.getOperator().getHTMLListDescriptor()})
+#set($operator = ${widget.getOperator()})
+#name(): WORepetition {
+#if($list)
+    list = ${list.getListName()}DisplayGroup.displayedObjects;
+    index = ${list.getIndexName()};
+    item = ${list.getItemName()};
+#else
+    list = ${operator.getListAccessor().getWodStringRepresentation()};
+    index = indexOf#capName();
+    #if(${operator.getBindingItem()})
+    item = ${operator.getBindingItem().getWodStringRepresentation()};
+    #else
+    item = itemOf#capName();
+    #end
+#end
+}
+#if($list)
+#if(${operator.getHasBatch()})
+${list.getListName()}Batch: WDLAquaBatchDisplayNoForm {
+    displayGroup = ${list.getListName()}DisplayGroup;
+    name = ${list.getListName()}Name;
+    numberOfObjectsPerBatch = ${list.getListName()}NumberOfObjectsPerBatch;
+    currentBatchIndex = ${list.getListName()}CurrentBatchIndex;
+    objectName = "ref";
+    objectNamePlural = "refs";
+    isShowingHeader = true;
+    displayOnOneLine = false;
+    #set($bloc = $widget.findBlocInParent())    
+    #if ($bloc)
+    anchor = "$bloc.getAnchor()"; // From the bloc
+    #end
+    //showAllObjects = ${list.getListName()}ShowAllObjects;
+}
+#end
+
+${list.getListName()}_HASRESULTS: WOConditional {
+    condition = ${list.getListName()}HasResults;
+}
+
+${list.getListName()}_HASNORESULTS: WOConditional {
+    condition = ${list.getListName()}HasResults;
+    negate = true;
+}
+
+    #if (${project.getIsLocalized()})
+${list.getListName()}_NoItemToDisplay: ${project.getPrefix()}LocalizedString {
+    value = "AnyRepetition_NoItemToDisplay";
+}
+    #end
+#end ## End of if($list)
+#renderSequence($widget)

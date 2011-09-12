@@ -1,0 +1,20 @@
+<inspector title = "Loop on sub-process" inheritsfrom="SubProcessNode.inspector" inspectedClassName="org.openflexo.foundation.wkf.node.LoopSubProcessNode">
+
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+	</tab>
+
+	<tab name="Data" index="3">
+		<property name="condition" label="condition" widget="CUSTOM" constraint="2">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="CONDITION_BINDING_DEFINITION"/>			
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+		</property>
+	</tab>
+
+</inspector>

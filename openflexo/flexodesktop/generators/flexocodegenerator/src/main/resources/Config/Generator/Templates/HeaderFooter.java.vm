@@ -1,0 +1,364 @@
+#**
+* HeaderFooter.java.vm
+* Template for the whole HeaderFooter class to generate for an application.
+* The context contains the following keys:
+*  - project: the current project (FlexoProject)
+*  - projectGenerator: the current Project Generator (ProjectGenerator)
+*  - repository: the current target code repository (CGRepository)
+*  - generator: the current generator (HeaderFooterGenerator)
+*  - buttonsJava: the java code support previously generated with template HFButton.java.vm 
+*                 for all buttons appearing in the HeaderFooter (e.g. logout)
+*  - buttonsHtml: the html code support previously generated with template HFButton.html.vm 
+*                 for all buttons appearing in the HeaderFooter (e.g. logout)
+*  - buttonsWod: the wod code support previously generated with template HFButton.wod.vm 
+*                 for all buttons appearing in the HeaderFooter (e.g. logout)
+*
+* Note: menu items are FlexoItemMenu objects, and the menu itself is a FlexoNavigationMenu.
+*#
+#macro(postfix $menuItem)#if(!$menuItem.isRootMenu())#postfix($menuItem.getFather())_$menuItem.getIndex()#end#end
+
+#macro(menuName $menuItem)$generator.getJavaString($menuItem.getMenuLabel())#postfix($menuItem)#end
+
+#macro(menuItemUrl $menuItem)
+    #if(${menuItem.getUseUrl()})
+        "${menuItem.getUrl()}"
+    #else
+        #if(${menuItem.getOperation()} && ${menuItem.getOperation().hasWOComponent()})
+            ${menuItem.getOperation().getComponentDefinition().getName()}.getUrlForOperation(context() 
+            #foreach ($componentBindingDef in ${menuItem.getOperation().getComponentDefinition().getBindingDefinitions()})
+                , ${componentBindingDef.getType().getDefaultValue()}
+            #end
+            #if(${menuItem.getOperation().getComponentDefinition().getHasTabContainer()})
+                , #if(${menuItem.getTabComponent()})#set($tmp = "#upNameForWidget(${menuItem.getOperation().getComponentDefinition().getWOComponent().getTabWidgetForTabComponent(${menuItem.getTabComponent()})})") #if($tmp)${menuItem.getOperation().getComponentDefinition().getName()}.$tmp #else null #end #else null #end
+            #end
+            , (long)${menuItem.getOperation().getComponentInstance().getFlexoID()})
+        #else
+            "#"
+        #end
+    #end
+#end
+
+#macro(menuItem $menuItem)
+    public NSDictionary #menuName($menuItem)MenuDictionary() {
+        NSMutableDictionary md = new NSMutableDictionary();
+        NSMutableArray children = new NSMutableArray();
+        
+        #if(!${menuItem.getSubItems().isEmpty()})
+            NSDictionary childrenItem;
+        
+            #foreach($item in $menuItem.getSubItems())
+                childrenItem = #menuName($item)MenuDictionary();
+                if(childrenItem!=null)
+                    children.addObject(childrenItem);
+            #end
+        #end
+        md.setObjectForKey("#menuName($menuItem)", "KEY");
+		#if(${project.getIsLocalized()})
+			md.setObjectForKey(localizedString("#generateKey($menuItem 'menuLabel' $menuItem.getMenuLabel())"), "LABEL");
+		#else
+			md.setObjectForKey("$menuItem.getMenuLabel()", "LABEL");
+		#end
+        
+        #if(${menuItem.getOperation()} && ${menuItem.getOperation().hasWOComponent()})
+            #if(!${project.getWorkflow().getRoleList().getRoles().isEmpty()} && $generator.isPrototype())
+        if(${project.getPrefix()}Util.hasNeededAccessRightForScreenClassName((NSKeyValueCoding)((Session)session()).currentUser(), "${menuItem.getOperation().getComponentDefinition().getName()}", ${menuItem.getOperation().getComponentInstance().getFlexoID()}l)) {
+            md.setObjectForKey(#menuItemUrl($menuItem), "URL");
+        } else {
+            md.setObjectForKey("#", "URL");
+            if(children.count()==0)
+                return null;
+        }
+            #else
+        md.setObjectForKey(#menuItemUrl($menuItem), "URL");
+            #end
+        #else
+            #if(!${menuItem.getUseUrl()} || ${menuItem.getUrl().indexOf("#")} == 1)
+        if(children.count()==0)
+            return null;
+            #end
+        md.setObjectForKey(#menuItemUrl($menuItem), "URL");
+        #end
+        md.setObjectForKey(children, "CHILDREN");
+        return md;
+    }
+    
+  #foreach($item in $menuItem.getSubItems())
+    #menuItem($item)
+  #end
+#end
+
+import com.webobjects.foundation.*;
+import com.webobjects.appserver.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.eoaccess.*;
+
+import be.denali.core.service.DenaliCoreConfig;
+import be.denali.core.woapp.WDLApplication;
+import be.denali.core.woapp.WDLComponent;
+import be.denali.core.woapp.WDLSession;
+import com.webobjects.foundation.NSKeyValueCoding;
+
+import java.util.Map;
+import java.util.Vector;
+import java.util.Map.Entry;
+
+import java.util.Enumeration;
+import java.util.logging.Level;
+
+/**
+ * @author FlexoBPM Generator, Agile Birds sprl. (see www.FlexoBPM.com)
+ */
+@SuppressWarnings("serial")
+public class ${project.getPrefix()}HeaderFooter extends ${generator.getProject().getDataModel().getWORepository().getCustomComponentEntity().getClassName()} {
+    private static final java.util.logging.Logger logger = be.denali.core.utils.WDLLog.getLogger(${project.getPrefix()}HeaderFooter.class);
+    private NSArray _menuArray;
+
+    public ${project.getPrefix()}HeaderFooter(WOContext context){
+        super(context);
+    }
+                   
+    public boolean synchronizesVariablesWithBindings(){
+        return false;
+    }
+
+    #if($generator.isPrototype() && !$repository.includeReader())
+    protected WOComponent openHelpPopup(){
+        return ${project.getPrefix()}HelpPopup.createPage(String.valueOf((Long) valueForBinding("helpKey")),context());
+    }
+
+    public boolean currentPageHasHelp() {
+        return ((Application)Application.application()).helpPopupDescriptorForKey(String.valueOf((Long) valueForBinding("helpKey"))) != null;
+    }
+    #elseif($repository.includeReader())
+    public boolean currentPageHasHelp() {
+        return isLoggedIn() && isDocGenerated();
+    }
+    
+    public boolean isDocGenerated()
+    {
+    	return valueForBinding("isDocGenerated")!=null && (Boolean)valueForBinding("isDocGenerated");
+    }
+    
+    public String helpUrl() {
+        String uri = getOperationURI();
+        return Application.ReaderResourceRequestHandler.urlForReaderResourceNamed(null, "reader/main.html", context())+(uri!=null?"?selectedNode="+uri:"");
+    }
+    #end
+    
+    public String getOperationURI() {
+        return (String)valueForBinding("operationURI");
+    }
+    
+    public boolean isLoggedIn() {
+        return hasSession() && ((Session)session()).currentUser()!=null;
+    }
+
+    /**
+     * Return true if we have to display the menu.
+     * It return true only if the session is valid.
+     * @return true if we have to display the menu.
+     * @see WDLSession${sharp}isValidSessionForRequest(com.webobjects.appserver.WORequest)
+     */
+    public boolean showMenu() {
+        if(hasBinding("showMenu")) return ((Boolean)valueForBinding("showMenu")).booleanValue();
+        return true;
+    }
+    
+    public String title() {
+        if(hasBinding("title")) return (String)valueForBinding("title");
+        else return "${project.getPrefix()}Application"; 
+    }
+    
+    /** 
+    * @return array of needed css urls
+    * New css files can be added manually
+    * see jsArray for adding more js files
+    */
+    public NSArray cssArray() {
+	NSMutableArray ma = new NSMutableArray();
+        if (hasBinding("cssSheet")) {
+       		ma.addObject(urlForResourceNamed("DenaliWebResources",(String)valueForBinding("cssSheet")));        	
+        }
+		
+        // Add more css files from CSS.framework
+        // ma.addObject("/${repository.getWarName()}/webserverresources/Frameworks/CSS.framework/WebServerResources/Lightbox/CSS/lightview.css");
+        // ma.addObject("/${repository.getWarName()}/webserverresources/Frameworks/CSS.framework/WebServerResources/CSS/CSS.css");
+
+	if (ma.count()>0)
+		return ma;
+	else
+		return null;
+    }
+
+
+    /** 
+    * @return array of needed js urls
+    * additional js, eg. in CSS.framework can be manually added here 
+    */
+    public NSArray jsArray() {
+        NSMutableArray array = new NSMutableArray();
+        if(hasBinding("needDateAssistant"))
+            array.addObject(urlForResourceNamed("DenaliWebResources","CalendarPopup.js"));
+	    
+	    // Add more js fiels from CSS.framework
+	    // array.addObject("/${repository.getWarName()}/webserverresources/Frameworks/CSS.framework/WebServerResources/Lightbox/JS/prototype.js");
+	    // array.addObject("/${repository.getWarName()}/webserverresources/Frameworks/CSS.framework/WebServerResources/Lightbox/JS/scriptaculous.js");
+	    // array.addObject("/${repository.getWarName()}/webserverresources/Frameworks/CSS.framework/WebServerResources/Lightbox/JS/lightview.js");
+	    
+		if (array.count()>0)
+		   return array;
+	    else
+		   return null;
+    }
+    
+    public boolean isRecorderFrameworkLoaded() {
+        return (NSBundle.bundleForName("ScenarioRecorder") != null);
+    }
+    
+    public String recExclURL() {
+        if (hasSession())
+            return DirectAction.getUrlFromDAString(context(),"DirectAction/default");
+        else
+            return context().directActionURLForActionNamed("DirectAction/default", null);
+    }
+
+    public String recInclURL() {
+        if (hasSession())
+            return DirectAction.getUrlFromDAString(context(),"ScenarioRecorderDA/openScenarioRecorderFrameset");
+        else
+            return context().directActionURLForActionNamed("ScenarioRecorderDA/openScenarioRecorderFrameset", null);
+    }
+    
+    
+    public String titleBackgroundImgSrc() {
+        return urlForResourceNamed("DenaliWebResources", DenaliCoreConfig.getConfig().applicationStyle()+"/"+DenaliCoreConfig.getConfig().applicationStyle()+"_TitleBackground.gif");
+    }
+    
+    public String styleForPageHeader() {
+        return "background-image: url("+titleBackgroundImgSrc()+");";
+    }
+
+    #if($generator.isPrototype())
+        public String getUniqueWKFID() {
+            return "WKF_INFO";
+        }
+    
+        public String wkfJSOnclick() {
+            return WDLJSHiddenPopup.showPopupJSString(getUniqueWKFID(),null,-300,0);
+        }
+		
+		public NSDictionary nextOperationItem;
+    
+        @SuppressWarnings("unchecked")
+    	public Vector<NSDictionary> getNextOperationList()
+        {
+        	Vector<NSDictionary> result = new Vector<NSDictionary>();
+        	Map<String, String> nextOperationMap = (Map<String, String>) valueForBinding("selectOperationMap");
+        	if(nextOperationMap != null)
+        	{
+        		for(Entry<String, String> entry : nextOperationMap.entrySet())
+        		{
+        			result.add(new NSDictionary(new String[]{entry.getKey(), entry.getValue()}, new String[]{"key", "value"}));
+        		}
+        	}
+        	
+        	return result;
+        }
+	#end
+	
+	#if(${project.getIsLocalized()})
+		
+		public String languageItem;
+		
+		public NSArray getLanguages() {
+			NSMutableArray array = new NSMutableArray();
+            Enumeration<?> en = WDLApplication.getLocalizationService().getLanguages().objectEnumerator();
+            while(en.hasMoreElements())
+            {
+            	String language = (String) en.nextElement();
+            	if(language.length() <= 2)
+            		array.addObject(language);
+            }
+            return array;
+		}
+		
+		public NSDictionary getChangeLanguageQueryDictionary()
+		{
+			return new NSDictionary(languageItem, "language");
+		}
+		
+		public String getLanguageLinkStyle() {
+    		StringBuilder sb = new StringBuilder();
+    		sb.append("color: white;");
+    		if(language().isoCode().toLowerCase().equals(languageItem.toLowerCase()))
+    			sb.append("font-weight: bold;");
+    		return sb.toString();
+    	}
+	#end
+	
+	public long getOperationComponentInstanceID()
+	{
+		return 0;
+	}
+	
+    public NSArray menuArray() {
+        if (_menuArray == null) {
+            NSMutableArray children = new NSMutableArray();
+            NSDictionary childrenItem;
+            #foreach($menuItem in ${project.getFlexoNavigationMenu().getRootMenu().getSubItems()})
+            childrenItem = #menuName($menuItem)MenuDictionary();
+            if(childrenItem!=null)
+                children.addObject(childrenItem);
+            #end
+            _menuArray = children;
+        }
+        return _menuArray;
+    }
+    
+    #if($generator.isPrototype())
+        #if(!${project.getWorkflow().getRoleList().getRoles().isEmpty()})
+        public String getColorForRole() {
+            String role = ((Session)session()).getWorkflowComponentInstance().getRole();
+            #foreach($role in $project.getWorkflow().getAllSortedRoles())
+                #if($isNotFirst)else#end
+                if("$generator.escapeStringForJava(${role.getName()})".equals(role))
+                #if(${role.getAwtColor()})
+                    return "rgb(${role.getAwtColor().getRed()}, ${role.getAwtColor().getGreen()}, ${role.getAwtColor().getBlue()});";
+                #else
+                    return "rgb(255, 0, 0);";
+                #end
+                #set($isNotFirst = true)
+            #end
+            return null;
+        }
+        #end
+        public String styleForDivRole() {
+        #if(!${project.getWorkflow().getRoleList().getRoles().isEmpty()})
+            StringBuilder sb = new StringBuilder();
+            sb.append("margin: 5px 15px 0px 15px;");
+            sb.append("z-index: 1;");
+            sb.append("height: 50px;");
+            sb.append("width: 300px;");
+            sb.append("line-height: 50px;");
+            sb.append("white-space: nowrap;");
+            sb.append("overflow: hidden;");
+            sb.append("position: absolute;");
+            sb.append("right: 0;");
+            sb.append("top: 0;");
+            sb.append("text-align: center;");
+            sb.append("vertical-align: middle;");
+            sb.append("font-size: 20px;");
+            sb.append("font-weight: bold;");
+            sb.append("background-color: "+getColorForRole()+";");
+            return sb.toString();
+        #else
+            return "display: none;";
+        #end
+        }
+    #end
+
+#foreach($menuItem in ${project.getFlexoNavigationMenu().getRootMenu().getSubItems()})
+#menuItem($menuItem)
+#end
+##$buttonsJava
+}

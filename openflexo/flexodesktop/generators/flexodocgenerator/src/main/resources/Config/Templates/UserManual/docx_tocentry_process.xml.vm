@@ -1,0 +1,124 @@
+## -*-xml-*-
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (DefinitionsDocGenerator)
+* - repository: the current repository for which we generate the doc (DGRepository)
+* - level: the level to use in title.
+* - objet: the flexo process to generate
+*#
+#macro(nodeTypeInTitle $node)
+	#if(${node.isOperatorNode()})
+			#if(${node.isTestNode()})
+				Test: 
+			#end
+	#elseif(${node.getClassNameKey()} == 'event_node')
+			Event: 
+	#else ##Is activity node
+		#if($node.isSubProcessNode())
+			#if($node.isFork())
+				Activity (parallel sub-process): 
+			#elseif($node.isLoop())
+				Activity (loop sub-process): 
+        	#elseif($node.isSingle())
+				Activity bloc: 
+			#elseif($a.isWSCall()) 
+				Activity  (WS call sub-process): 
+			#else
+				Activity (loop-single-instance sub-process):
+			#end
+		#else
+			Activity:
+		#end
+	#end
+#end
+
+#macro(activityMustBeDocumented $node $res)
+	#set($res=false)
+	#if(${node.isOperatorNode()})
+			#if(${node.isTestNode()})
+				#set($res=true)
+			#end
+	#elseif(${node.getClassNameKey()} == 'event_node')
+			#set($res=true) 
+	#else ##Is activity node
+		#if($node.isSubProcessNode())
+			#if($node.isFork())
+				#set($res=true) 
+			#elseif($node.isLoop())
+				#set($res=true) 
+        	#elseif($node.isSingle())
+				#set($res=true)
+			#elseif($a.isWSCall()) 
+				#set($res=true) 
+			#else
+				#set($res=true)
+			#end
+		#else
+			#set($res=true)
+		#end
+	#end
+	#if($node.getDontGenerate())
+		#set($res=false)
+	#end
+#end
+
+#set($process = $object)
+<w:p>
+	<w:r>
+			<w:rPr>
+				<w:pStyle w:val="Heading$level"/>
+				<w:b/>
+				<w:u w:val="single"/>
+			</w:rPr>
+			<w:t xml:space="preserve">Name: </w:t>
+	</w:r>
+	 #renderName($process)
+</w:p>
+	
+<w:p>
+	<w:r>
+			<w:rPr>
+				<w:pStyle w:val="Heading$level"/>
+				<w:b/>
+				<w:u w:val="single"/>
+			</w:rPr>
+			<w:t xml:space="preserve">Description:</w:t>
+	</w:r>
+</w:p>
+
+
+
+
+
+#description($process)
+
+#if(${process.hasSpecificDescriptionForKey('Objectives')})	
+	<w:p>
+		<w:r>
+			<w:rPr>
+				<w:pStyle w:val="Heading$level"/>
+				<w:b/>
+				<w:u w:val="single"/>
+			</w:rPr>
+			<w:t xml:space="preserve">Objectives:</w:t>
+		</w:r>
+	</w:p>
+	#renderSpecificDescription($process "Objectives")
+#end
+
+
+
+
+#metricsForNode($process)
+
+#getCurrentTocEntry($currentTocEntry)
+#if(${currentTocEntry.getIncludeStatusList()})
+    #statusesForNode($process)
+#end
+
+#**
+* Recursion on subprocesses
+*#
+#renderProcessOrFolderChildren($process $level)

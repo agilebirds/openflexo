@@ -1,0 +1,97 @@
+#macro(valuesList)
+#foreach($value in ${widget.getValueList()})#if (${foreach.index} > 0), #end"${generator.escapeStringForJava(${value})}"#end
+#end
+
+## 1) The item
+#if(!$widget.isDKV() && !${widget.getBindingItem().isBindingValid()})
+	public String itemOf#capName();
+#end
+
+## 2) The selection
+#if(!${widget.getBindingSelection().isBindingValid()} && !${widget.getIsAcceptableForAnyProcessInstanceDictionary()})
+  #set($type = "String")
+  #set($quote ='"')
+  #set($value = "$quote${generator.escapeStringForJava($widget.getValue())}$quote")
+  #if(${widget.getBindingNoSelectionString().isBindingValid()} || ${widget.isStatusList()})
+	#set($value = "null");
+  #elseif($widget.isDKV())
+     #set($value = "$quote${generator.escapeStringForJava(${widget.getDomain().getSortedKeys().get(0).getName()})}$quote")
+  #end
+  ## TODO: check that the next call is valid (pass a macro within an argument)
+  #getset($type "selectionOf#capName()" $value)
+#end 
+
+## 3) The list
+#if(!${widget.isDKV()} && !${widget.getBindingList().isBindingValid()})
+
+	#if(${widget.getDropdownType().isDBList()} && (${widget.getBindingSelection().isBindingValid()} || ${widget.getBindingItem().isBindingValid()}))
+		#if(${widget.getBindingSelection().isBindingValid()})
+			#set($type = ${widget.getBindingSelection().getBindingPathLastElement().getType().getName()})
+		#else
+			#set($type = ${widget.getBindingItem().getBindingPathLastElement().getType().getName()})
+		#end
+		private Vector<$type> listOf#capName() = null;
+			
+		public Vector<$type> listOf#capName()()
+        {
+			if(listOf#capName() == null)
+			{
+				listOf#capName() = (Vector<$type>)getBusinessDataStorage().getAllBusinessDataSamples(WorkflowBusinessData.${toolbox.cleanStringForProcessDictionaryKey($type)});
+			}
+			
+			return listOf#capName();
+		}
+	#else
+        private Vector<String> listOf#capName() = new Vector<String>(java.util.Arrays.asList(new String[]{#valuesList()}));
+        
+        public Vector<String> listOf#capName()()
+        {
+    		#if(${widget.isStatusList()})
+    			#if(${widget.isInRepetition()})
+    				#set($inferredListProcess =  ${widget.getHTMLListDescriptor().getRepetitionOperator().getInferredListProcess()})
+    			#elseif(${widget.getIsFilterForRepetition()})
+    				#set($inferredListProcess =  ${widget.getIsFilterForRepetition().getInferredListProcess()})
+    			#end
+    			#if($inferredListProcess)
+    				Vector<String> results = WorkflowProcess.${inferredListProcess.getProcessDictionaryKey()}.getStatuses();
+    			#else
+    				Vector<String> results = statusList();
+    			#end
+    			if(results.size() == 0)
+    				return listOf#capName();
+    			return results;
+    		#else
+    			return listOf#capName();
+    		#end
+        }
+	#end
+#end
+
+## 4) The name
+#if($widget.isInPopup())
+    public String nameFor#capName()()
+    {
+        #if(${widget.isInRepetition()})
+            return "#name()" + uniqueIdentifierForName() + ${widget.getHTMLListDescriptor().getIndexName()};
+        #else
+            return "#name()" + uniqueIdentifierForName();
+        #end
+    }
+    
+    #if($widget.getSubmitForm())
+    public String onChange#capName()()
+    {
+        StringBuilder sb = new StringBuilder();
+        if(includePopupInPage())
+            sb.append("document."+formName()+"."+hiddenFieldName()+".value = '"+uniqueIdentifier()+"';");
+        sb.append("if(document."+formName()+".onsubmit!=null)document."+formName()+".onsubmit(); document.formName.submit();");
+        return sb.toString();
+    }
+    #end
+    
+#elseif(${widget.isInRepetition()})
+    public String nameFor#capName()()
+    {
+        return "#name()" + ${widget.getHTMLListDescriptor().getIndexName()};
+    }
+#end

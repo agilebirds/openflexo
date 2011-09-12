@@ -1,0 +1,38 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = "AC_ACCESS_POINT_ID"; 
+            name = accessPointID; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = "AC_CHANNEL_ID"; 
+            name = channelID; 
+            prototypeName = id; 
+        }
+    ); 
+    className = FCAccessChannel; 
+    classProperties = (channelID, accessPointID, channel, accessPoint); 
+    externalName = "FC_ACCESS_CHANNEL"; 
+    fetchSpecificationDictionary = {}; 
+    name = FCAccessChannel; 
+    primaryKeyAttributes = (channelID, accessPointID); 
+    relationships = (
+        {
+            destination = FCAccessPoint; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = accessPointID; sourceAttribute = accessPointID; }); 
+            name = accessPoint; 
+        }, 
+        {
+            destination = FCVerticalChannel; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = channelID; sourceAttribute = channelID; }); 
+            name = channel; 
+        }
+    ); 
+}

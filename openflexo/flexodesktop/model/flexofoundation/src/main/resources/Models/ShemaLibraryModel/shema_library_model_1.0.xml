@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Mapping model for shema library encoding version 1.0 -->
+
+<model builder="org.openflexo.foundation.xml.OEShemaLibraryBuilder" handlesReferences="yes" serializationMode="pseudoTree"> 
+
+  <mapId>
+	  <map entityClass="org.openflexo.foundation.FlexoModelObject" identifierAccessor="serializationIdentifier"/>
+  </mapId>
+	
+  <entity name="org.openflexo.foundation.FlexoModelObject" abstract="YES" finalizer="finalizeDeserialization">
+  	<property name="userIdentifier" xmlTag="userID" attribute="YES" copyable="no" description="Unique ID of the user (used for team synchronization)"/>
+  	<property name="flexoID" xmlTag="flexoID" attribute="YES" copyable="no" description="Unique ID generated and maintained by Flexo"/>
+  	<property name="docFormat" xmlTag="docFormat" attribute="YES" description=""/>
+    <property name="dontGenerate" xmlTag="dontGenerate" attribute="YES" description="Check this box, if you don't want this node to generate documentation"/>
+    <property name="description" xmlTag="description" attribute="YES" description="Defines widget name"/>
+    <property name="hasSpecificDescriptions" xmlTag="useSpecificDescriptions" attribute="YES" description="Wheter the specific descriptions should be used in the generated documentation or not"/>
+    <property name="specificDescriptions" xmlTag="specificDescriptions" type="hashtable" description="Hashtable(String,String) that contains a name of a DocType as a key, and a description specific to that DocType as the value"/>
+    <property name="customProperties" contains="org.openflexo.foundation.FlexoProperty" type="vector" primary="yes"/>
+    <property name="dynamicProperties" xmlTag="?" type="unmappedAttributes" description="Hashtable(String,String) that contains dynamic properties (data that are not handled by application, but need to be stored in the context of back compatibility)"/>
+    <description>Root class for all objects of Flexo</description>
+  </entity>
+
+  <entity name="org.openflexo.foundation.FlexoProperty" xmlTag="FlexoProperty">
+     <property name="name" xmlTag="name" attribute="yes"/>
+     <property name="value" xmlTag="value" attribute="yes"/>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.ontology.shema.OESLObject" abstract="YES" finalizer="finalizeDeserialization">
+    <description>Root class for all objects coding the shema library</description>
+  </entity>
+
+  <entity name="org.openflexo.foundation.ontology.shema.OEShemaLibrary" abstract="NO" xmlTag="ShemaLibrary">
+    <description>Repository for shema folders and shemas</description>
+    <property name="rootFolder" xmlTag="ShemaFolder" description="TODO"/> 
+   </entity>
+
+  <entity name="org.openflexo.foundation.ontology.shema.OEShemaFolder" abstract="NO" xmlTag="ShemaFolder">
+    <description>Folder for shema folders and shemas</description>
+    <property name="name" xmlTag="folderName" description="TODO"/> 
+    <property name="subFolders" xmlTag="ShemaFolder" type="vector" primary="yes" description="TODO"/> 
+    <property name="shemas" contains="org.openflexo.foundation.ontology.shema.OEShemaDefinition" type="vector" primary="yes" description="TODO"/>
+   	<property name="index" xmlTag = "docIndex" attribute="yes"/>
+  </entity>  
+
+	
+ <!-- Definitions for shemas -->
+
+  <entity name="org.openflexo.foundation.ontology.shema.OEShemaDefinition" xmlTag="Shema">
+    <description>TODO</description>
+ 	<property name="name" xmlTag="name" attribute="YES" description="TODO"/>
+    <property name="calcURI" xmlTag="calcURI" attribute="YES"/>
+ 	<property name="index" xmlTag = "docIndex" attribute="yes"/>	
+  </entity>
+
+</model>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GeometricSet id="1">
+  <Line id="2" name="Line1">
+    <LineGraphicalRepresentation id="3" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="4" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="5" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="6" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </LineGraphicalRepresentation>
+    <LineWithTwoPointsConstruction id="7">
+      <P1_ExplicitPointConstruction id="8" point="82.0,262.0" />
+      <P2_ExplicitPointConstruction id="9" point="431.0,201.0" />
+    </LineWithTwoPointsConstruction>
+    <Resulting_FGELine id="10" p1="82.0,262.0" p2="431.0,201.0" />
+  </Line>
+  <Line id="11" name="Line2">
+    <LineGraphicalRepresentation id="12" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="13" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="14" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="15" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </LineGraphicalRepresentation>
+    <LineWithTwoPointsConstruction id="16">
+      <P1_ExplicitPointConstruction id="17" point="288.0,445.0" />
+      <P2_ExplicitPointConstruction id="18" point="426.0,135.0" />
+    </LineWithTwoPointsConstruction>
+    <Resulting_FGELine id="19" p1="288.0,445.0" p2="426.0,135.0" />
+  </Line>
+  <ObjectIntersection id="20" name="ObjectIntersection3">
+    <ComputedAreaGraphicalRepresentation id="21" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="22" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="23" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="24" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </ComputedAreaGraphicalRepresentation>
+    <IntersectionConstruction id="25">
+      <Reference_ObjectReference id="26">
+        <Reference_LineWithTwoPointsConstruction idref="7" />
+      </Reference_ObjectReference>
+      <Reference_ObjectReference id="27">
+        <Reference_LineWithTwoPointsConstruction idref="16" />
+      </Reference_ObjectReference>
+    </IntersectionConstruction>
+    <Resulting_FGEPoint id="28" x="393.71857835865774" y="207.5162370204065" />
+  </ObjectIntersection>
+  <GeometricDrawingGraphicalRepresentation id="29" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" width="10000.0" height="10000.0" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255">
+    <TextStyle id="30" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+  </GeometricDrawingGraphicalRepresentation>
+</GeometricSet>
+

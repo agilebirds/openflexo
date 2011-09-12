@@ -1,0 +1,19 @@
+#if ($widget.getTooltip() && !$widget.getTooltip().trim().equals("")) 
+	#if($project.getIsLocalized())
+		<webobject name="Label_#name()_Tooltip">
+			<webobject name="Label_#name()"></webobject>
+		</webobject>
+	#else
+    	<span title="$widget.getJavascriptToolTip()" class="${widget.getTextCSSClass().getName()}">
+    		$generator.escapeStringForHTML($widget.getValue())
+    	</span>
+    #end
+#else
+	<span class="${widget.getTextCSSClass().getName()}">
+        #if($project.getIsLocalized())
+			<webobject name="Label_#name()"></webobject>
+        #else
+			$generator.escapeStringForHTML($widget.getValue())
+        #end
+	</span>
+#end

@@ -1,0 +1,16 @@
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (DefinitionsDocGenerator)
+* - repository: the current repository for which we generate the doc (DGRepository)
+* - level: the level to use in title.
+*#
+
+<!-- entering docx_tocentry_screens.xml -->
+#foreach($cd in ${project.getFlexoComponentLibrary().getAllComponentList()})
+	#if(!$cd.getDontGenerate())
+		#renderScreen($cd $level)
+	#end
+#end
+<!-- exiting docx_tocentry_screens.xml -->

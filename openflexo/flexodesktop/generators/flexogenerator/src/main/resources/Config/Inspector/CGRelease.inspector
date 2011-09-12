@@ -1,0 +1,12 @@
+<inspector title = "generated_code_release">
+	<tab name="Basic" index="0">
+		<property name="name" label="name" widget="READ_ONLY_TEXT_FIELD" constraint="0"/>
+		<property name="versionIdentifier" label="version" widget="READ_ONLY_TEXT_FIELD" constraint="1"/>
+		<property name="date" label="date" widget="READ_ONLY_TEXT_FIELD" constraint="2"/>
+		<property name="userId" label="userId" widget="READ_ONLY_TEXT_FIELD" constraint="3"/>
+		<property name="description" label="description" widget="READ_ONLY_TEXT_AREA" constraint="4">
+			<param name="rows" value="10"/>
+		</property>
+	</tab>
+	
+</inspector>

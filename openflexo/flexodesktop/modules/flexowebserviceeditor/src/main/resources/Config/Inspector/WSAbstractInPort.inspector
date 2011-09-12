@@ -1,0 +1,30 @@
+<inspector title = "ws_abstract_in_port"  inheritsfrom ="WSPort.inspector">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+
+	</tab>
+	
+	<tab name="Messages" index="1">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property_list name="inputMessageDefinition.entries" label="input_message" constraint="2">
+		  <param name="visible_row_count" value="4"/>
+		  <param name="row_height" value="20"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		  <property_list_column name="variableName" label="name" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="100"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="type" label="type" widget="CUSTOM">
+			<param name="column_width" value="100"/>
+			<param name="resizable" value="true"/>
+			<param name="className" value="org.openflexo.components.widget.DMTypeInspectorWidget"/>
+			<param name="format" value="simplifiedStringRepresentation"/>
+			<param name="project" value="project"/>
+		  </property_list_column>
+		</property_list>
+	</tab>
+</inspector>

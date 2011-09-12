@@ -1,0 +1,85 @@
+headerFooter: ${project.getPrefix()}PopupHeaderFooter {
+    showMenu = false;
+    title = title;
+}
+FORM: WOForm {
+    action = formAction;
+    name = "formName";
+}
+
+HIDDEN_FORM: WOHiddenField {
+    name = hiddenFieldName;
+    value = submittedKey;
+}
+
+List_Descriptions: WORepetition{
+    list = help.specificDescriptionKeys;
+    item = helpDescriptionKey;
+}
+
+String_ListDescriptionTitle: WOString {
+	value = helpDescriptionKey;
+}
+
+String_ListDescription: WOString {
+	value = helpDescriptionForKey;
+	escapeHTML = false;
+}
+
+
+hasParents: WOConditional{
+    condition = help.hasParent;
+}
+parents: WORepetition{
+    list = help.parents;
+    item = itemHelp;
+}
+itemParentLink: WOHyperlink{
+    href="#";
+    onclick=scriptForItemHelpJump;
+}
+itemParentName: WOString{
+    value = itemHelp.shortLabel;
+}
+hasScreenshoot: WOConditional {
+    condition = help.screenshootName;
+}
+screen: WOImage {
+    filename = help.screenshootName;
+    width = "400px";
+}
+hasButtons : WOConditional {
+    condition = help.hasButtons;
+}
+buttonRep : WORepetition {
+    list = help.buttons;
+    item = itemButton;
+}
+itemButtonIsHyperlink: WOConditional {
+    condition = itemButton.isHyperlink;
+}
+itemButtonIsImage: WOConditional {
+    condition = itemButton.isImage;
+}
+itemButtonIsCustom: WOConditional {
+    condition = itemButton.isCustom;
+}
+customButtonView: WOString{
+    value = itemButton.value;
+}
+hyperlinkButtonView: WOHyperlink{
+    href = "#";
+    value = itemButton.value;
+}
+hyperlinkButtonContent: WOString{
+    value = itemButton.value;
+}
+buttonImage: WOImage {
+    filename = itemButton.imageName;
+    framework = itemButton.frameworkName;
+}
+
+String_ButtonDescription: WOString {
+	value = getItemButtonDescription;
+	escapeHTML = false;
+}

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.WKFAnnotation" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="20" title="Graphics" layout="twocols" font="SansSerif,0,11" name="GraphicsTab">
+      <Label label="text_color" localize="true" name="TextColorLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <Color data="data.textColor" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" name="TextColor" localize="true" />
+      <Label label="text_font" localize="true" name="TextFontLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
+      <Font sampleText="Sample for this font" data="data.textFont.font" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" name="TextFont" localize="true" />
+      <Label label="text_alignment" localize="true" name="TextAlignmentLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
+      <DropDown format="object.name" localize="true" name="TextAlignment" data="data.textAlignment" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" width="150" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$TextAlignment" />
+      <Label label="dash_style" localize="true" name="DashStyleLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
+      <DropDown format="object.name" localize="true" name="DashStyle" data="data.dashStyle" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" width="150" showIcon="true" iteratorClassName="org.openflexo.fge.graphics.ForegroundStyle$DashStyle" />
+      <Label label="border_color" localize="true" name="BorderColorLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
+      <Color data="data.borderColor" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" name="BorderColor" localize="true" />
+      <Label label="rounded_corners" localize="true" name="IsRoundedLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" />
+      <CheckBox selected="false" localize="true" name="IsRounded" data="data.isRounded" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" />
+      <Label label="solid_background" localize="true" name="IsSolidBackgroundLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" />
+      <CheckBox selected="false" localize="true" name="IsSolidBackground" data="data.isSolidBackground" constraints="twocols(location=right;index=13;expandHorizontally=false;expandVertically=false)" />
+      <Label label="background_color" localize="true" name="BackgroundColorLabel" constraints="twocols(location=left;index=14;expandHorizontally=false;expandVertically=false)" />
+      <Color data="data.backgroundColor" constraints="twocols(location=right;index=15;expandHorizontally=false;expandVertically=false)" name="BackgroundColor" localize="true" />
+    </Tab>
+    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label label="text" localize="true" name="TextLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <TextArea data="data.text" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=true)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="Text" localize="true" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Graphics" lang="French">Graphisme</Localized>
+    <Localized key="text_color" lang="English">Text color</Localized>
+    <Localized key="text_color" lang="French">Couleur du texte</Localized>
+    <Localized key="text_color" lang="Dutch">Text color</Localized>
+    <Localized key="text_font" lang="English">Text font</Localized>
+    <Localized key="text_font" lang="French">Police du texte</Localized>
+    <Localized key="text_font" lang="Dutch">Text font</Localized>
+    <Localized key="text_alignment" lang="English">Text alignment</Localized>
+    <Localized key="text_alignment" lang="French">Alignement du texte</Localized>
+    <Localized key="text_alignment" lang="Dutch">Text alignment</Localized>
+    <Localized key="dash_style" lang="English">Dash style</Localized>
+    <Localized key="dash_style" lang="French">Style de pointillé</Localized>
+    <Localized key="dash_style" lang="Dutch">Dash style</Localized>
+    <Localized key="border_color" lang="English">Bordercolor</Localized>
+    <Localized key="border_color" lang="French">Couleur du bord</Localized>
+    <Localized key="border_color" lang="Dutch">Bordercolor</Localized>
+    <Localized key="rounded_corners" lang="English">Rounded corners</Localized>
+    <Localized key="rounded_corners" lang="French">Coins arrondis</Localized>
+    <Localized key="rounded_corners" lang="Dutch">Rounded corners</Localized>
+    <Localized key="solid_background" lang="English">Solid background</Localized>
+    <Localized key="solid_background" lang="French">Arrière plan solide</Localized>
+    <Localized key="solid_background" lang="Dutch">Solid background</Localized>
+    <Localized key="background_color" lang="English">Background color</Localized>
+    <Localized key="background_color" lang="French">Couleur de l'arrière-plan</Localized>
+    <Localized key="background_color" lang="Dutch">Background color</Localized>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="text" lang="English">Text</Localized>
+    <Localized key="text" lang="French">Texte</Localized>
+    <Localized key="text" lang="Dutch">Text</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Bounding box" />
+</Panel>
+

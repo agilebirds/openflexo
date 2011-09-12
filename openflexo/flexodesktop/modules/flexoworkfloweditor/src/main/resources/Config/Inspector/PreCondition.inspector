@@ -1,0 +1,21 @@
+<inspector title = "PreCondition"  inheritsfrom ="WKFRepresentable.inspector" inspectedClassName="org.openflexo.foundation.wkf.node.FlexoPreCondition">
+
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="name" label="name" widget="TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="initTokenNbr" label="init_token_number" widget="INTEGER" constraint="3">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="triggerLevel" label="trigger_level" widget="INTEGER" constraint="4"/>
+		<property name="attachedBeginNode" label="attached_begin_node" widget="DROPDOWN" constraint="5">
+			<param name="dynamiclist" value="availableBeginNodes"/>
+			<param name="format" value="name"/>
+		</property>
+
+	</tab>
+
+</inspector>

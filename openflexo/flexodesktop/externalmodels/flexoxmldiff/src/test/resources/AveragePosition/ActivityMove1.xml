@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlexoProcess id="BMA_393" name="ActivityPara" operationGenSubPath="/src" pageGenSubPath="/src" popupGenSubPath="/src" superClassGenSubPath="/src" tabGenSubPath="/src" isWebService="false" docIndex="1" userID="BMA" flexoID="393" dontEscapeLatex="false" dontGenerate="false" description="No description" useSpecificDescriptions="false" posiX="0" posiY="0" width="0" height="0" textColor="0,0,0" backColor="255,255,255">
+  <RoleList id="BMA_396" userID="BMA" flexoID="396" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" />
+  <DeadLineList id="BMA_399" userID="BMA" flexoID="399" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" />
+  <StatusList id="BMA_397" DefaultStatus="ActivityPara.STATUS.Default" userID="BMA" flexoID="397" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+    <Status id="BMA_398" docIndex="1" userID="BMA" flexoID="398" dontEscapeLatex="false" dontGenerate="false" description="No description" useSpecificDescriptions="false">
+      <label>Default</label>
+    </Status>
+  </StatusList>
+  <ActivityPetriGraph id="BMA_400" isVisible="true" posiX="0" posiY="0" width="0" height="0" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="400" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+    <ActivityNode id="BMA_401" nodeType="BEGIN" isWaiting="false" isSelfActivated="false" posiX="200" posiY="400" width="60" height="65" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="401" dontEscapeLatex="false" dontGenerate="true" useSpecificDescriptions="false" nodeName="BEGIN" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="1" roleTextColor="128,128,128">
+      <NodeProperties />
+    </ActivityNode>
+    <ActivityNode id="BMA_403" nodeType="END" isWaiting="false" isSelfActivated="false" posiX="500" posiY="200" width="60" height="65" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="403" dontEscapeLatex="false" dontGenerate="true" useSpecificDescriptions="false" nodeName="END" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="2" roleTextColor="128,128,128">
+      <NodeProperties />
+    </ActivityNode>
+  </ActivityPetriGraph>
+  <ProcessProperties />
+  <PortRegistery id="BMA_402" isVisible="false" posiX="80" posiY="20" width="250" height="60" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="402" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" />
+</FlexoProcess>

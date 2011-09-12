@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.node.SubProcessNode" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="5" title="Stats" layout="twocols" font="SansSerif,0,11" name="StatsTab">
+      <Label align="center" localize="true" name="StatisticsinfoLabel" data="data.statistics.infoLabel" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" width="200" height="60" />
+      <Label label="include_begin_end" localize="true" name="StatisticsincludeBeginEndNodeLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
+      <CheckBox selected="false" localize="true" name="StatisticsincludeBeginEndNode" data="data.statistics.includeBeginEndNode" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" />
+      <Label label="# activities_in_process" localize="true" name="SubProcessstatisticsrealActivityCountLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" visible="((data.statistics.includeBeginEndNode = false) &amp; (data.hasSubProcess = true))" />
+      <TextField passwd="false" readOnly="true" localize="true" name="SubProcessstatisticsrealActivityCount" data="data.subProcess.statistics.realActivityCount.toString" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" visible="((data.statistics.includeBeginEndNode = false) &amp; (data.hasSubProcess = true))" />
+      <Label label="# activities_in_process" localize="true" name="SubProcessstatisticsactivityCountLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" visible="((data.statistics.includeBeginEndNode = true) &amp; (data.hasSubProcess = true))" />
+      <TextField passwd="false" readOnly="true" localize="true" name="SubProcessstatisticsactivityCount" data="data.subProcess.statistics.activityCount.toString" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" visible="((data.statistics.includeBeginEndNode = true) &amp; (data.hasSubProcess = true))" />
+      <Label label="# operations_in_process" localize="true" name="SubProcessstatisticsrealOperationCountLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" visible="((data.statistics.includeBeginEndNode = false) &amp; (data.hasSubProcess = true))" />
+      <TextField passwd="false" readOnly="true" localize="true" name="SubProcessstatisticsrealOperationCount" data="data.subProcess.statistics.realOperationCount.toString" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=false)" visible="((data.statistics.includeBeginEndNode = false) &amp; (data.hasSubProcess = true))" />
+      <Label label="# operations_in_process" localize="true" name="SubProcessstatisticsoperationCountLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" visible="((data.statistics.includeBeginEndNode = true) &amp; (data.hasSubProcess = true))" />
+      <TextField passwd="false" readOnly="true" localize="true" name="SubProcessstatisticsoperationCount" data="data.subProcess.statistics.operationCount.toString" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=false)" visible="((data.statistics.includeBeginEndNode = true) &amp; (data.hasSubProcess = true))" />
+      <Label label="# actions_in_process" localize="true" name="SubProcessstatisticsrealActionCountLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" visible="((data.statistics.includeBeginEndNode = false) &amp; (data.hasSubProcess = true))" />
+      <TextField passwd="false" readOnly="true" localize="true" name="SubProcessstatisticsrealActionCount" data="data.subProcess.statistics.realActionCount.toString" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=false)" visible="((data.statistics.includeBeginEndNode = false) &amp; (data.hasSubProcess = true))" />
+      <Label label="# actions_in_process" localize="true" name="SubProcessstatisticsactionCountLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" visible="((data.statistics.includeBeginEndNode = true) &amp; (data.hasSubProcess = true))" />
+      <TextField passwd="false" readOnly="true" localize="true" name="SubProcessstatisticsactionCount" data="data.subProcess.statistics.actionCount.toString" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=false)" visible="((data.statistics.includeBeginEndNode = true) &amp; (data.hasSubProcess = true))" />
+      <Label label="# monitoring_operations" localize="true" name="StatisticsoperationCountLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" visible="((data.statistics.includeBeginEndNode = true) &amp; (data.mightHaveOperationPetriGraph = true))" />
+      <TextField passwd="false" readOnly="true" localize="true" name="StatisticsoperationCount" data="data.statistics.operationCount.toString" constraints="twocols(location=right;index=11;expandHorizontally=true;expandVertically=false)" visible="((data.statistics.includeBeginEndNode = true) &amp; (data.mightHaveOperationPetriGraph = true))" />
+      <Label label="# monitoring_operations" localize="true" name="StatisticsrealOperationCountLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" visible="((data.statistics.includeBeginEndNode = false) &amp; (data.mightHaveOperationPetriGraph = true))" />
+      <TextField passwd="false" readOnly="true" localize="true" name="StatisticsrealOperationCount" data="data.statistics.realOperationCount.toString" constraints="twocols(location=right;index=11;expandHorizontally=true;expandVertically=false)" visible="((data.statistics.includeBeginEndNode = false) &amp; (data.mightHaveOperationPetriGraph = true))" />
+      <Label label="# monitoring_actions" localize="true" name="StatisticsactionCountLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" visible="((data.statistics.includeBeginEndNode = true) &amp; (data.mightHaveOperationPetriGraph = true))" />
+      <TextField passwd="false" readOnly="true" localize="true" name="StatisticsactionCount" data="data.statistics.actionCount.toString" constraints="twocols(location=right;index=13;expandHorizontally=true;expandVertically=false)" visible="((data.statistics.includeBeginEndNode = true) &amp; (data.mightHaveOperationPetriGraph = true))" />
+      <Label label="# monitoring_actions" localize="true" name="StatisticsrealActionCountLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" visible="((data.statistics.includeBeginEndNode = false) &amp; (data.mightHaveOperationPetriGraph = true))" />
+      <TextField passwd="false" readOnly="true" localize="true" name="StatisticsrealActionCount" data="data.statistics.realActionCount.toString" constraints="twocols(location=right;index=13;expandHorizontally=true;expandVertically=false)" visible="((data.statistics.includeBeginEndNode = false) &amp; (data.mightHaveOperationPetriGraph = true))" />
+    </Tab>
+    <Tab index="1" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label label="sub_process" localize="true" name="SubProcessLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
+      <Custom componentClassName="org.openflexo.components.widget.FIBProcessSelector" data="data.subProcess" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=false)" name="SubProcess" localize="true" manageDynamicModel="true">
+        <Assignment variable="component.selectableCondition" value="&quot;data.isAcceptableAsSubProcess(SubProcess.customComponent.candidateValue)&quot;" />
+        <Assignment variable="component.project" value="data.project" />
+      </Custom>
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="include_begin_end" lang="English">Include begin and end nodes</Localized>
+    <Localized key="include_begin_end" lang="French">Inclure les noeuds début et fin</Localized>
+    <Localized key="include_begin_end" lang="Dutch">Include begin and end nodes</Localized>
+    <Localized key="# activities_in_process" lang="English"># activities in process</Localized>
+    <Localized key="# activities_in_process" lang="French"># activités dans le processus</Localized>
+    <Localized key="# activities_in_process" lang="Dutch"># activities in process</Localized>
+    <Localized key="# operations_in_process" lang="English"># operations in process</Localized>
+    <Localized key="# operations_in_process" lang="French"># opérations dans le processus</Localized>
+    <Localized key="# operations_in_process" lang="Dutch"># operations in process</Localized>
+    <Localized key="# actions_in_process" lang="English"># actions in process</Localized>
+    <Localized key="# actions_in_process" lang="French"># actions dans le processus</Localized>
+    <Localized key="# actions_in_process" lang="Dutch"># actions in process</Localized>
+    <Localized key="# monitoring_operations" lang="English"># monitoring operations</Localized>
+    <Localized key="# monitoring_operations" lang="French"># opérations de monitoring</Localized>
+    <Localized key="# monitoring_operations" lang="Dutch"># monitoring operations</Localized>
+    <Localized key="# monitoring_actions" lang="English"># monitoring actions</Localized>
+    <Localized key="# monitoring_actions" lang="French"># actions de monitoring</Localized>
+    <Localized key="# monitoring_actions" lang="Dutch"># monitoring actions</Localized>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="sub_process" lang="English">Sub process</Localized>
+    <Localized key="sub_process" lang="French">Sous-processus</Localized>
+    <Localized key="sub_process" lang="Dutch">Sub process</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Sub Process Node" />
+</Panel>
+

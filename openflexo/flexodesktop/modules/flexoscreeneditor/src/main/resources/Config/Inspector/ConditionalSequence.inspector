@@ -1,0 +1,27 @@
+<inspector title = "Conditional">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+	</tab>
+
+	<tab name="Doc" index="2" layout="DEFAULT">
+		<property name="operator.dontGenerate" label="dont_generate" widget="CHECKBOX" constraint="0"/>
+		<property name="operator.label" label="label" widget="TEXT_FIELD" constraint="1"/>
+		<property name="operator.description" label="description" widget="TEXT_AREA" constraint="3">
+			<param name="rows" value="10"/>
+		</property>
+		<property name="operator.docFormat" label="docFormat" widget="DROPDOWN" help="Select a specific language if you used it explicitly in your description, otherwise leave this unset" constraint="5">
+			<param name="format" value="name"/>
+		</property>
+	</tab>
+
+	<tab name="Data" index="3" layout="DEFAULT">
+        <property name="operator.isNegate" label="negate" widget="CHECKBOX" constraint="0" help="invert conditional value."/>
+	    <property name="operator.bindingConditional" label="binding_conditional" widget="CUSTOM" constraint="3">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="operator.bindingConditionalDefinition"/>			
+			<param name="creates_entry" value="operator.createsBindingVariable"/>			
+		</property>
+		<hidden name="additionalBindings"/>
+	</tab>
+
+</inspector>

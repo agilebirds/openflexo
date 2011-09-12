@@ -1,0 +1,59 @@
+import com.webobjects.appserver.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+import be.denali.core.woapp.WDLDirectAction;
+
+/**
+ * This class contains the direct actions to access the page of 
+ * ${prefix}Application
+ * @author FlexoBPM Generator, Agile Birds sprl. (see www.FlexoBPM.com)
+ */
+public class ${prefix}DA extends WDLDirectAction {
+
+    public NSArray directActionsWithNoSession() {
+        return new NSArray();
+    }
+    
+    /**
+    * Default constructor (never call it directly).
+    */
+    public ${prefix}DA(WORequest aRequest) {
+        super(aRequest);
+    }
+
+#if($profile)
+    public WOActionResults userProfileAction() {
+        return ${profile}.createPageForDirectAction(this);
+    }
+#end
+
+#foreach($cd in $project.getAllInstanciatedOperationComponentDefinition())
+    public WOActionResults open${cd.getName()}Action() {
+        return ${cd.getName()}.createPageForDirectAction(this);
+    }
+
+#end
+#if(!${project.getWorkflow().getRoleList().getRoles().isEmpty()})
+    public WOActionResults reloadAccessRightsDefinitionAction() {
+        WOResponse response = new WOResponse();
+        if(hasSession() && ((Session)session()).currentUser().isSuperAdmin())
+        {
+            ${prefix}Util.reloadAccessRights();
+            response.appendContentString("Access righs reloaded");
+        }
+        else
+        {
+            response.appendContentString("Invalid access right !!!");
+        }
+        
+        response.setStatus(200);
+        return response;
+    }
+#end
+
+#if(${generator.isPrototype()})
+	public WOActionResults openPrototypeSamplesAdminPageAction() {
+		return PrototypeSamplesAdminPage.createPageForDirectAction(this);
+	}
+#end
+}

@@ -1,0 +1,12 @@
+#name()Link: WOHyperlink{
+    href = "#";
+    #if($widget.isInPopup())
+    onclick = scriptClosePopup;
+    #end
+#if($widget.isCustomButton())
+    class="denaliButton";
+#end
+    id="#name()";
+    #tooltipAsTitle()
+}
+#renderLinkContent($widget)

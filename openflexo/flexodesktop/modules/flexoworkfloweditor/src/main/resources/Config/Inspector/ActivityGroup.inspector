@@ -1,0 +1,17 @@
+<inspector title = "Activity Group" inheritsfrom ="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.wkf.ActivityGroup">
+
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="groupName" label="name" widget="TEXT_FIELD" constraint="0">
+		</property>
+	</tab>
+
+	<tab name="Graphics" index="20" layout="DEFAULT">
+		<property name="color" label="background_color" widget="COLOR" constraint="6">
+			<param name="columns" value="10"/>
+		</property>
+	</tab>
+	
+</inspector>

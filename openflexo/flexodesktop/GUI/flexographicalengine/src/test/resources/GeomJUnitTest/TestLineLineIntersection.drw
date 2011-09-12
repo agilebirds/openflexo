@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GeometricSet id="1">
+  <Line id="2" name="Line1">
+    <LineGraphicalRepresentation id="3" displayLabel="true" text="Line1" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="-11.0" isVisible="true" layer="10">
+      <TextStyle id="4" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="5" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="6" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </LineGraphicalRepresentation>
+    <LineWithTwoPointsConstruction id="7">
+      <P1_ExplicitPointConstruction id="8" point="122.0,178.0" />
+      <P2_ExplicitPointConstruction id="9" point="438.0,123.0" />
+    </LineWithTwoPointsConstruction>
+    <Resulting_FGELine id="10" p1="122.0,178.0" p2="438.0,123.0" />
+  </Line>
+  <Line id="11" name="Line2">
+    <LineGraphicalRepresentation id="12" displayLabel="true" text="Line2" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="-9.0" isVisible="true" layer="10">
+      <TextStyle id="13" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="14" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="15" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </LineGraphicalRepresentation>
+    <ParallelLineWithPointConstruction id="16">
+      <L_LineReference id="17">
+        <Reference_LineWithTwoPointsConstruction idref="7" />
+      </L_LineReference>
+      <P_ExplicitPointConstruction id="18" point="385.0,211.0" />
+    </ParallelLineWithPointConstruction>
+    <Resulting_FGELine id="19" p1="135.3077536182589,254.45909351580605" p2="451.30775361824806,199.4590935158002" />
+  </Line>
+  <Line id="20" name="Line3">
+    <LineGraphicalRepresentation id="21" displayLabel="true" text="Line3" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="20.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="22" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="23" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="24" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </LineGraphicalRepresentation>
+    <OrthogonalLineWithPointConstruction id="25">
+      <L_LineReference id="26">
+        <Reference_LineWithTwoPointsConstruction idref="7" />
+      </L_LineReference>
+      <P_PointReference id="27">
+        <Reference_ExplicitPointConstruction idref="9" />
+      </P_PointReference>
+    </OrthogonalLineWithPointConstruction>
+    <description />
+    <Resulting_FGELine id="28" p1="438.0,123.0" p2="420.85272546950375,24.481113606700802" />
+  </Line>
+  <ObjectIntersection id="29" name="Intersect_Line1_Line3">
+    <ComputedAreaGraphicalRepresentation id="30" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="31" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="32" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="33" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </ComputedAreaGraphicalRepresentation>
+    <IntersectionConstruction id="34">
+      <Reference_ObjectReference id="35">
+        <Reference_LineWithTwoPointsConstruction idref="7" />
+      </Reference_ObjectReference>
+      <Reference_ObjectReference id="36">
+        <Reference_OrthogonalLineWithPointConstruction idref="25" />
+      </Reference_ObjectReference>
+    </IntersectionConstruction>
+    <description>Test intersection of two lines</description>
+    <Resulting_FGEPoint id="37" x="438.0" y="123.00000000000001" />
+  </ObjectIntersection>
+  <ObjectIntersection id="38" name="Intersect_Line1_Line2">
+    <ComputedAreaGraphicalRepresentation id="39" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="40" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="41" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="42" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </ComputedAreaGraphicalRepresentation>
+    <IntersectionConstruction id="43">
+      <Reference_ObjectReference id="44">
+        <Reference_LineWithTwoPointsConstruction idref="7" />
+      </Reference_ObjectReference>
+      <Reference_ObjectReference id="45">
+        <Reference_ParallelLineWithPointConstruction idref="16" />
+      </Reference_ObjectReference>
+    </IntersectionConstruction>
+    <description>Test that two parallel and disjoint lines intersect as empty area</description>
+    <Resulting_FGEEmptyArea id="46" />
+  </ObjectIntersection>
+  <ObjectIntersection id="47" name="ObjectIntersection1">
+    <ComputedAreaGraphicalRepresentation id="48" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="49" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="50" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="51" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </ComputedAreaGraphicalRepresentation>
+    <IntersectionConstruction id="52">
+      <Reference_ObjectReference id="53">
+        <Reference_LineWithTwoPointsConstruction idref="7" />
+      </Reference_ObjectReference>
+      <Reference_ObjectReference id="54">
+        <Reference_LineWithTwoPointsConstruction idref="7" />
+      </Reference_ObjectReference>
+    </IntersectionConstruction>
+    <description>Intersection of both equals lines give same line</description>
+    <Resulting_FGELine id="55" p1="122.0,178.0" p2="438.0,123.0" />
+  </ObjectIntersection>
+  <GeometricDrawingGraphicalRepresentation id="56" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" width="10000.0" height="10000.0" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255">
+    <TextStyle id="57" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+  </GeometricDrawingGraphicalRepresentation>
+</GeometricSet>
+

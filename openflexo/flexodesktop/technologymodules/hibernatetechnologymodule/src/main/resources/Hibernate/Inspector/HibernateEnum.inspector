@@ -1,0 +1,14 @@
+<inspector title = "hibernate_enum" >
+	<tab name="Basic" index="0">
+		<property name="name" label="name" widget="TEXT_FIELD" constraint="1">
+			<param name="columns" value="10"/>
+		</property>
+		
+		<property name="specificDescriptions" label="specific_description" widget="CUSTOM" depends="project,hasSpecificDescriptions" constraint="2">
+			<param name="className" value="org.openflexo.components.widget.DescriptionInspectorWidget"/>
+			<param name="expandHorizontally" value="true"/>     <!-- Available horizontal space is "taken" by the dynamic component, when possible -->
+			<param name="expandVertically" value="true"/>     <!-- Available vertical space is "taken" by the dynamic component, when possible -->
+			<param name="useUltraLightWysiwyg" value="false"/>
+		</property>
+	</tab>
+</inspector>

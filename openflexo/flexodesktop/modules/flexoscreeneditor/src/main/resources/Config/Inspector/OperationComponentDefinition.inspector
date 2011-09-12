@@ -1,0 +1,9 @@
+<inspector title = "Operation component" inheritsfrom="ComponentDefinition.inspector">
+
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+	</tab>
+
+</inspector>

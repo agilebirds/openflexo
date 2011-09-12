@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model handlesReferences="yes" serializationMode="deepFirst">
+	 
+  <entity name="org.openflexo.xmlcode.examples.example5.Graph" xmlTag="Graph"> 
+    <property name="nodes" xmlTag="Node" type="vector"/> 
+  </entity> 
+	
+  <entity name="org.openflexo.xmlcode.examples.example5.Node" xmlTag="AttachedNode,OriginNode,Node"> 
+    <property name="identifier" xmlTag="identifier" attribute="yes"/> 
+    <property name="preConditions" xmlTag="AttachedPreCondition" type="vector"/> 
+    <property name="outgoingEdges" xmlTag="OutgoingEdge1,OutgoingEdge2" type="vector"/> 
+  </entity> 
+	
+ <entity name="org.openflexo.xmlcode.examples.example5.PreCondition" xmlTag="AttachedPreCondition,DestinationPreCondition,PreCondition"> 
+    <property name="identifier" xmlTag="identifier" attribute="yes"/> 
+    <property name="attachedNode" xmlTag="AttachedNode"/> 
+    <property name="incomingEdges" xmlTag="IncomingEdge1,IncomingEdge2" type="vector"/> 
+  </entity> 
+	
+  <entity name="org.openflexo.xmlcode.examples.example5.Edge" abstract="yes"> 
+    <property name="identifier" xmlTag="identifier" attribute="yes"/> 
+    <property name="originNode" xmlTag="OriginNode"/> 
+    <property name="destinationPreCondition" xmlTag="DestinationPreCondition"/> 
+  </entity> 
+	
+  <entity name="org.openflexo.xmlcode.examples.example5.Edge1" xmlTag="OutgoingEdge1,IncomingEdge1,Edge1"/> 
+	
+  <entity name="org.openflexo.xmlcode.examples.example5.Edge2" xmlTag="OutgoingEdge2,IncomingEdge2,Edge2"/> 
+	
+</model>

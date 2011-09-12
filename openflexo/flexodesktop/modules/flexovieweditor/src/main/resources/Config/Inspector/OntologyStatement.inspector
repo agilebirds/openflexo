@@ -1,0 +1,13 @@
+<inspector title = "Statement" inheritsfrom="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.ontology.OntologyStatement">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+		<property name="toString" label="name" widget="READ_ONLY_TEXT_AREA" constraint="0" displayLabel="NO">
+			<param name="columns" value="20"/>
+			<param name="columns" value="5"/>
+		</property>
+	</tab>
+
+	<tab name="Advanced" index="2" layout="DEFAULT">
+	</tab>
+
+</inspector>

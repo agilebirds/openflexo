@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+        <wo wocomponentcontent="true" class="${project.getPrefix()}HeaderFooter">
+        <binding name="title"/>
+        <binding name="helpKey"/>
+        <binding name="onLoadBody"/>
+        <binding name="operationURI"/>
+        <binding name="isDocGenerated"/>
+		#if($generator.isPrototype())
+			<binding name="selectOperationMap"/>
+		#end
+        </wo>
+</wodefinitions>

@@ -1,0 +1,12 @@
+<inspector title = "Exclusive Event Based Gateway" inheritsfrom="OperatorNode.inspector" inspectedClassName="org.openflexo.foundation.wkf.node.ExclusiveEventBasedOperator">
+
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+	</tab>
+	
+	<tab name="Advanced" index="1">
+	</tab>
+	
+</inspector>

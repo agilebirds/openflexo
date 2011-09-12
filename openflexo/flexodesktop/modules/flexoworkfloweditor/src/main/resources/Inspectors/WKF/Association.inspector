@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.edge.WKFAssociation" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label label="arrow" localize="true" name="ArrowLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
+      <DropDown localize="true" name="Arrow" data="data.arrow" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" iteratorClassName="org.openflexo.foundation.wkf.edge.WKFAssociation$Arrow" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="arrow" lang="English">Arrow</Localized>
+    <Localized key="arrow" lang="French">Flèche</Localized>
+    <Localized key="arrow" lang="Dutch">Arrow</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Association" />
+</Panel>
+

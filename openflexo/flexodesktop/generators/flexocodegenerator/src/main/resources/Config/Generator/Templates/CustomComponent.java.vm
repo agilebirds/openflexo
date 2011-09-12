@@ -1,0 +1,264 @@
+#package()
+import java.text.DateFormat;
+import com.webobjects.appserver.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+import java.util.Vector;
+
+import be.denali.core.woapp.WDLApplication;
+import be.denali.core.woapp.WDLSession;
+import be.denali.language.DLLanguageInterface;
+import be.denali.flexo.commons.hcwo.IFlexoComponent;
+import ${entity.getParentBaseEntity().getFullQualifiedName()};
+import java.util.logging.Level;
+import ${projectGenerator.getProcessBusinessDataBaseEntity().getFullQualifiedName()};
+#if(${projectGenerator.getWorkflowClassPackage()})
+	import ${projectGenerator.getWorkflowClassPackage()}.*;
+#end
+#imports($entity)
+
+#if(${generator.isPrototype()})
+    public abstract class ${entity.getClassName()} extends $entity.getParentBaseEntity().getName() implements IFlexoComponent {
+#else
+import be.denali.dbbusinesslogic.WDLBLComponent;
+    
+    public abstract class ${entity.getClassName()} extends WDLBLComponent implements IFlexoComponent {
+#end
+    private static final java.util.logging.Logger logger = be.denali.core.utils.WDLLog.getLogger(${entity.getClassName()}.class);
+    
+    public static Boolean getBooleanValueForKey(WORequest request, String key) {
+        String s = (String)request.formValueForKey(key);
+        return s==null?null:Boolean.valueOf(s);
+    }
+
+    public static boolean booleanValueForKey(WORequest request, String key) {
+        Boolean b = getBooleanValueForKey(request,key);
+        return b==null?false:b.booleanValue();
+    }
+
+    public static Character getCharacterValueForKey(WORequest request, String key) {
+        String s = (String)request.formValueForKey(key);
+        return (s==null || s.length()==0)?null:new Character(s.charAt(0));
+    }
+
+    public static char charValueForKey(WORequest request, String key) {
+        Character c = getCharacterValueForKey(request,key);
+        return c==null?' ':c.charValue();
+    }
+
+    public static Double getDoubleValueForKey(WORequest request, String key) {
+        String s = (String)request.formValueForKey(key);
+        try {
+            return s==null?null:new Double(s);
+        } catch (NumberFormatException nbe) {
+            if (logger.isLoggable(Level.WARNING))
+                logger.warning("NumberFormatException occured: "+nbe.getMessage()+". Set level to FINE on logger named '" + logger.getName() + "' to see stacktrace.");
+            if (logger.isLoggable(Level.FINE))
+                logger.log(Level.FINE, "NumberFormatException occured: " + nbe.getMessage(), nbe);
+        }
+        return null;
+    }
+
+    public static double doubleValueForKey(WORequest request, String key) {
+        Double d = getDoubleValueForKey(request, key);
+        return d==null?0.0:d.doubleValue();
+    }
+
+    public static Integer getIntegerValueForKey(WORequest request, String key) {
+        String s = (String)request.formValueForKey(key);
+        try {
+            return s==null?null:Integer.valueOf(s);
+        } catch (NumberFormatException nbe) {
+            if (logger.isLoggable(Level.WARNING))
+                logger.warning("NumberFormatException occured: "+nbe.getMessage()+". Set level to FINE on logger named '" + logger.getName() + "' to see stacktrace.");
+            if (logger.isLoggable(Level.FINE))
+                logger.log(Level.FINE, "NumberFormatException occured: " + nbe.getMessage(), nbe);
+        }
+        return null;
+    }
+
+    public static int intValueForKey(WORequest request, String key) {
+        Integer i = getIntegerValueForKey(request, key);
+        return i==null?0:i.intValue();
+    }
+
+    public static Long getLongValueForKey(WORequest request, String key) {
+        String s = (String)request.formValueForKey(key);
+        try {
+            return s==null?null:Long.valueOf(s);
+        } catch (NumberFormatException nbe) {
+            if (logger.isLoggable(Level.WARNING))
+                logger.warning("NumberFormatException occured: "+nbe.getMessage()+". Set level to FINE on logger named '" + logger.getName() + "' to see stacktrace.");
+            if (logger.isLoggable(Level.FINE))
+                logger.log(Level.FINE, "NumberFormatException occured: " + nbe.getMessage(), nbe);
+        }
+        return null;
+    }
+    
+    public static long longValueForKey(WORequest request, String key) {
+        Long l = getLongValueForKey(request, key);
+        return l==null?0:l.longValue();
+    }
+
+    public static String getStringValueForKey(WORequest request, String key) {
+        return (String)request.formValueForKey(key);
+    }
+
+    protected NSMutableArray errorArray;
+    public StringBuffer validationMessages;
+    public StringBuffer warningValidationMessages;
+    public StringBuffer confirmMessages;
+    protected String hiddenFieldValue;
+    protected EOEditingContext ec;
+	public Map<String, String> selectOperationMap = null;
+    
+    public ${entity.getClassName()}(WOContext context)
+    {
+        super(context);
+    }
+
+    public void appendToResponse(WOResponse aResponse, WOContext aContext)
+    {
+        if(hasBinding("ec"))
+            ec = (EOEditingContext)valueForBinding("ec");
+        hiddenFieldValue = null; // Needs to be reset before reconstructing the page
+        super.appendToResponse(aResponse,aContext); 
+        errorArray = null;
+        validationMessages = null;
+        warningValidationMessages = null;
+        confirmMessages = null;
+		selectOperationMap = null;
+    }
+    
+    @Override
+    public Session session() {
+        return (Session)super.session();
+    }
+    
+    public Application application() {
+        return (Application)WOApplication.application();
+    }
+    
+    public String currentUserLogin(){
+        if(context().hasSession() && session().currentUser()!=null)
+            return session().currentUser().login();
+        return null;
+    }
+    
+    public DateFormat getDateFormatter() {
+        return ${project.getPrefix()}Util.getDateFormatter();
+    }
+
+    public boolean synchronizesVariablesWithBindings(){
+        return false;
+    }
+    
+    public DLLanguageInterface language(){
+        if(hasSession() && session().language()!=null)
+            return session().language();
+        if(WDLApplication.getLocalizationService()!=null)
+            return WDLApplication.getLanguageService().getLanguage(WDLApplication.getLocalizationService().getDefaultLanguage());
+         return super.language();
+    }
+    
+    public String localizedString(String value) {
+        return ${project.getPrefix()}LocalizedString.localizedString( value, language().isoCode());
+    }
+    
+    #foreach($domain in ${project.getDKVModel().getDomains()})
+    /**
+    * #if(!$domain.getDontEscapeLatex())
+    * ${generator.getJavaDocString(${domain.getDescription()})}
+    #end*
+    */ 
+    public String domain${generator.capitalize(${generator.getJavaString(${domain.getName()})})}(){
+        return ${project.getPrefix()}Constants.DKVDomains.${generator.capitalize(${generator.getJavaString(${domain.getName()})})}.DOMAIN_NAME;
+    }
+    #end
+    
+    #if(!${project.getWorkflow().getRoleList().getRoles().isEmpty()})
+           public String domain${generator.getPrefix()}Roles(){
+            return "${generator.getPrefix()}Roles";
+        }
+    #end
+    
+    protected void setValidationMessages() {
+        validationMessages = null;
+        // Append validation from the sub components.
+        if(errorArray!=null){
+            Enumeration en = errorArray.objectEnumerator();
+            while(en.hasMoreElements()){
+                addToValidationMessages(en.nextElement().toString());
+            }
+            errorArray = null;
+        }
+    }
+
+    protected void addToValidationMessages(String message) {
+        if (validationMessages == null)
+            validationMessages = new StringBuffer();
+        else
+            validationMessages.append("<BR>");
+        validationMessages.append(message);
+    }
+
+    protected void addToWarningValidationMessages(String message) {
+        if (warningValidationMessages == null)
+            warningValidationMessages = new StringBuffer();
+        else
+            warningValidationMessages.append("<BR>");
+        warningValidationMessages.append(message);
+    }
+    
+    protected void addToConfirmMessages(String message) {
+        if (confirmMessages == null)
+            confirmMessages = new StringBuffer();
+        else
+            confirmMessages.append("<BR>");
+        confirmMessages.append(message);
+    }
+
+    public void addToValidationErrors(String error) {
+        if(errorArray==null) errorArray = new NSMutableArray();
+        if(!errorArray.containsObject(error)) errorArray.addObject(error);
+    }
+
+    public boolean hasValidationMessages() {
+        return validationMessages!=null && !validationMessages.toString().equals("");
+    }
+
+    public boolean hasWarningValidationMessages() {
+        return warningValidationMessages!=null && !warningValidationMessages.toString().equals("");
+    }
+    
+    public boolean hasConfirmMessages() {
+        return confirmMessages!=null && !confirmMessages.toString().equals("");
+    }
+    
+	public WorkflowComponentInstance getWorkflowComponentInstance() {
+		return WorkflowComponentInstance.getWorkflowComponentInstance(getOperationComponentInstanceID());
+	}
+	
+    public String processName() {
+        return getWorkflowComponentInstance().getProcess().getProcessName();
+    }
+
+    public Vector<String> statusList() {
+        return getWorkflowComponentInstance().getProcess().getStatuses();
+    }
+    
+	#if($generator.isPrototype())
+		public ProcessBusinessData ${generator.getCustomComponentCurrentProcessBusinessDataGetterName()}() {
+			return session().getCurrentProcessBusinessData();
+		}
+		
+		public ProcessBusinessData ${generator.getCustomComponentCurrentProcessBusinessDataGetterName()}(String processKey) {
+			return session().getBusinessDataStorage().getCurrentProcessBusinessData(WorkflowProcess.getWorkflowProcess(processKey));
+		}
+		
+		public BusinessDataStorage getBusinessDataStorage()
+		{
+			return session().getBusinessDataStorage();
+		}
+	#end
+}

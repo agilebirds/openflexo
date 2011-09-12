@@ -1,0 +1,6 @@
+#!/bin/bash
+
+dossierCourant=`pwd`
+echo "Launching help indexer for "$dossierCourant
+cd $dossierCourant/Help
+/Developer/jh2.0/javahelp/bin/jhindexer $dossierCourant/Help/HTML/* $dossierCourant/Help/HTML/*/*

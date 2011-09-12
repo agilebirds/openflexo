@@ -1,0 +1,14 @@
+#set($woName = "WDLViewFlashMovie")
+#set($src = "flashMovie")
+#if(${widget.getFormat().name()}=="QUICKTIME")
+    #set($woName = "WDLViewVideoMovie")
+    #set($src = "videoMovie")
+#end
+
+#name(): $woName {
+    $src = #if(${widget.getBindingUrl().getWodStringRepresentation()})${widget.getBindingUrl().getWodStringRepresentation()}#else""#end;
+    width = "$widget.getWidthPixel()";
+    height = "$widget.getHeightPixel()";
+    #tooltipAsTitle()
+    #additionalBindings()
+}

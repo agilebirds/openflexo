@@ -1,0 +1,7 @@
+<Table visibleRowCount="3" rowHeight="18">
+	<Parameter name="x" value="10"/>
+	<Parameter name="y" value="180"/>
+	<TextFieldColumn title="col1" columnWidth="40" resizable="true"/>
+	<TextFieldColumn title="col2" columnWidth="60" resizable="true" />
+	<Parameter name="isPaletteElement" value="true"/>
+</Table>

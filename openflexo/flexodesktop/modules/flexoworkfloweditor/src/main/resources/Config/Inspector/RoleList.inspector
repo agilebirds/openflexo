@@ -1,0 +1,24 @@
+<inspector title = "RoleList" inspectedClassName="org.openflexo.foundation.wkf.RoleList">
+
+	<tab name="Roles" index="0">
+		<property_list name="sortedRolesVector" label="roles" constraint="0">
+		  <param name="visible_row_count" value="5"/>
+		  <param name="row_height" value="20"/>
+		  <property_list_column name="name" label="name" widget="TEXT_FIELD">
+			<param name="column_width" value="80"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="awtColor" label="color" widget="COLOR">
+			<param name="column_width" value="40"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="description" label="description" widget="TEXT_FIELD">
+			<param name="column_width" value="100"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_action name="new" type="ADD" method="performAddRole"/>
+		  <property_list_action name="delete" type="DELETE" method="performDeleteRole" isAvailable="isRoleDeletable"/>
+		</property_list>
+	</tab>
+
+</inspector>

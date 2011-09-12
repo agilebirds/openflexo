@@ -1,0 +1,310 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+  <html>
+    <head>
+      <title>XMLCoDe</title>
+    </head>
+    
+    <body>
+      <center>
+	<p>
+	</p>
+	<h1>XMLCoDe</h1>
+	<h2>A free implementation of an XML COder/DEcoder:<br>a Java XML serialization/deserialization tool</h2>
+      </center>
+      
+	<p>
+	</p>
+	<hr> 
+	<p>
+	</p>
+    <center>
+      <a href="index.html">Back to summary</a>
+    </center>
+    <p>
+    </p>
+
+    <center>
+      <h2>Advanced XML mapping definitions: contextual XML Tags</h2>
+    </center>
+    
+    <p><br>
+    </p>
+
+    <p>This document introduce you with a more complex example 
+    of mapping definition in the context of graph structures. We will see here how to code 
+    complex data structures with graphs, and inheritance. We will see how contextual XML tags
+    technique may be efficiently used to improve code maintainance.</p>
+    <p>Before to read this, it's recommanded to read
+	<a href="mapping_graph_structures.html">Advanced feature: mapping graph structures</a>.</p>
+
+    <h3>
+      1. Lets see an example...
+    </h3>
+
+    <p>
+    	Suppose that you want to code this graph structure.
+    </p>
+  
+  	<p>
+  	<ul>
+  	<li><b><tt>Graph</tt></b>
+ 	<ul>
+ 	<li>identifier : <tt>int</tt></li>
+  	<li>nodes : <tt>Vector</tt> of <tt>Node</tt></li>
+  	</ul>
+  	</li>
+ 	<li><b><tt>Node</tt></b>
+  	<ul>
+ 	<li>identifier : <tt>int</tt></li>
+  	<li>preConditions : <tt>Vector</tt> of <tt>PreCondition</tt></li>
+  	<li>outgoingEdges : <tt>Vector</tt> of <tt>Edge</tt></li>
+  	</ul>
+  	</li>
+	<li><b><tt>PreCondition</tt></b>
+  	<ul>
+ 	<li>identifier : <tt>int</tt></li>
+  	<li>attachedNode : <tt>Node</tt></li>
+  	<li>incomingEdges : <tt>Vector</tt> of <tt>Edge</tt></li>
+  	</ul>
+  	</li>
+ 	<li><b><tt>Edge</tt> (abstract class)</b>
+  	<ul>
+ 	<li>identifier : <tt>int</tt></li>
+  	<li>originNode : <tt>Node</tt></li>
+  	<li>destinationPreCondition : <tt>PreCondition</tt></li>
+  	</ul>
+  	</li>
+ 	<li><b><tt>Edge1</tt></b> extends <b><tt>Edge</tt></b></li>
+ 	<li><b><tt>Edge2</tt></b> extends <b><tt>Edge</tt></b></li>
+  	</ul>
+  	</p>
+  
+  	<p>This little example is complex enough to show many issues related to inheritance and multiple contexts.</p>
+	
+	<p>Indeed, internal lookup scheme rely on XML tag recognition. But in this context, a same object may arise 
+	in many contexts (here a pre-condition is related to a node via 'preConditions' property, and also to an edge 
+	via 'destinationPreCondition' property). If we code an object with same XML tag, this may arise to ambiguities and
+	ambivalent data: and thus inconsistant data.</p>
+	
+	<p>That's why we define many XML tags for an entity, given all contexts where serialization will be invoked on 
+	related object.</p>
+	
+	<p>We also define many XML tags for a property, in order to define scope for searched objects belonging to this
+	property.</p>
+	
+	<p>Inheritance support multiply defined XML tags, like here in this example, with <tt>Edge</tt>, <tt>Edge1</tt> 
+	and <tt>Edge2</tt></p>.
+	
+	<h3>
+      2. XML Mapping definition
+    </h3>
+
+    <p>
+    	This mapping handle this object model.
+    </p>
+
+<pre>	
+&LT;?xml version="1.0" encoding="UTF-8"?&GT;
+&LT;model handlesReferences="yes"&GT;
+	 
+  &LT;entity name="fr.enstb.xmlcode.examples.example5.Graph" xmlTag="Graph"&GT; 
+    &LT;property name="nodes" xmlTag="Node" type="vector"/&GT; 
+  &LT;/entity&GT; 
+	
+  &LT;entity name="fr.enstb.xmlcode.examples.example5.Node" xmlTag="AttachedNode,OriginNode,Node"&GT; 
+    &LT;property name="identifier" xmlTag="identifier" attribute="yes"/&GT; 
+    &LT;property name="preConditions" xmlTag="AttachedPreCondition" type="vector"/&GT; 
+    &LT;property name="outgoingEdges" xmlTag="OutgoingEdge1,OutgoingEdge2" type="vector"/&GT; 
+  &LT;/entity&GT; 
+	
+
+&LT;entity name="fr.enstb.xmlcode.examples.example5.PreCondition" xmlTag="AttachedPreCondition,DestinationPreCondition,PreCondition"&GT; 
+    &LT;property name="identifier" xmlTag="identifier" attribute="yes"/&GT; 
+    &LT;property name="attachedNode" xmlTag="AttachedNode"/&GT; 
+    &LT;property name="incomingEdges" xmlTag="IncomingEdge1,IncomingEdge2" type="vector"/&GT; 
+  &LT;/entity&GT; 
+	
+  &LT;entity name="fr.enstb.xmlcode.examples.example5.Edge" abstract="yes"&GT; 
+    &LT;property name="identifier" xmlTag="identifier" attribute="yes"/&GT; 
+    &LT;property name="originNode" xmlTag="OriginNode"/&GT; 
+    &LT;property name="destinationPreCondition" xmlTag="DestinationPreCondition"/&GT; 
+  &LT;/entity&GT; 
+	
+  &LT;entity name="fr.enstb.xmlcode.examples.example5.Edge1" xmlTag="OutgoingEdge1,IncomingEdge1,Edge1"/&GT; 
+	
+  &LT;entity name="fr.enstb.xmlcode.examples.example5.Edge2" xmlTag="OutgoingEdge2,IncomingEdge2,Edge2"/&GT; 
+	
+&LT;/model&GT;
+</pre>	
+
+	<h3>
+      3. Introducing context issues
+    </h3>
+
+	<p>
+    	This mapping is correct, but is not easy to maintain.
+    </p>
+	
+	<p>
+    	If we want to add <tt>Edge3</tt> concept inheriting from <tt>Edge</tt>, we will have to:
+    	<ul>
+    	<li>Add en entry <tt>Edge3</tt>:
+ <pre>
+  &LT;entity name="fr.enstb.xmlcode.examples.example5.Edge3" xmlTag="OutgoingEdge3,IncomingEdge3,Edge3"/&GT; 
+ </pre>
+    	</li>
+     	<li>Update all properties regarding <tt>Edge</tt> concept (and all eventual parent concepts), here:
+<pre>
+  &LT;entity name="fr.enstb.xmlcode.examples.example5.Node" xmlTag="AttachedNode,OriginNode,Node"&GT; 
+    ... 
+    &LT;property name="outgoingEdges" xmlTag="OutgoingEdge1,OutgoingEdge2,OutgoingEdge3" type="vector"/&GT; 
+    ... 
+  &LT;/entity&GT; 
+</pre>
+    	and
+<pre>
+&LT;entity name="fr.enstb.xmlcode.examples.example5.PreCondition" xmlTag="AttachedPreCondition,DestinationPreCondition,PreCondition"&GT; 
+    ... 
+    &LT;property name="incomingEdges" xmlTag="IncomingEdge1,IncomingEdge2,IncomingEdge3" type="vector"/&GT; 
+    ... 
+&LT;/entity&GT; 
+</pre>
+    	</li>
+    </ul>
+    </p>
+	
+	<p>
+	Further more, if an edge must be serialized in an other context (new property where context is <tt>Foo</tt>),
+	you will have to code XML Tag as:
+<pre>
+xmlTag="FooEdge1,FooEdge2,FooEdge3"
+</pre>
+	</p>
+	
+	<p>
+    	We understand it: this is really not easy to maintain this.
+    </p>
+	
+	<p>
+    	New version of XMLCoDe provide a solution to easily solve those problems...
+    </p>
+	
+	
+	<h3>
+      4. Contextual XML Tags
+    </h3>
+
+	<p>
+    	A new tag <tt>contains</tt> has been introduced in <tt>property</tt> definition.
+<pre>
+&LT;property ... contains="full.qualified.class.name" ...&GT;
+</pre>
+		This allow to replace the complete list of XML tags related to desired type.
+    </p>
+	
+	<p>
+    	Thus, definition of:
+<pre>
+    &LT;property name="incomingEdges" contains="fr.enstb.xml.examples.example5.Edge" type="vector"/&GT; 
+</pre>	
+		is equivalent to:
+<pre>
+    &LT;property name="incomingEdges" xmlTag="IncomingEdge1,IncomingEdge2,IncomingEdge3,OutgoingEdge1,OutgoingEdge2,OutgoingEdge3,Edge1,Edge2,Edge3" type="vector"/&GT; 
+</pre>	
+	</p>
+	
+	<p>
+		Which is not really what we want.
+	</p>
+		
+	<p>
+		We also need to precise desired context, eg:
+<pre>
+    &LT;property name="incomingEdges" contains="fr.enstb.xml.examples.example5.Edge" context="Incoming" type="vector"/&GT; 
+</pre>	
+		is equivalent to:
+<pre>
+    &LT;property name="incomingEdges" xmlTag="IncomingEdge1,IncomingEdge2,IncomingEdge3" type="vector"/&GT; 
+</pre>	
+		if we declared all available contexts in entities:
+<pre>
+    &LT;entity name="fr.enstb.xmlcode.examples.example5.Edge" abstract="yes" contexts="Outgoing,Incoming"&GT; 
+</pre>	
+		Note that this available context description is subject to inheritance (en entity inherits from all parent entity contexts).
+	</p>
+		
+	<p>
+		Derived tags are built by associating context and base tag (example: <tt>&LT;ContextBaseTag&GT;</tt>).
+	</p>
+		
+		
+	<h3>
+      5. New XML mapping rewritten according to those new features
+    </h3>
+
+	<p>
+		We can now rewritte XML mapping like this (and this one is much more easily maintainable):
+<pre>
+&LT;?xml version="1.0" encoding="UTF-8"?&GT;
+&LT;model handlesReferences="yes"&GT;
+	 
+  &LT;entity name="fr.enstb.xmlcode.examples.example5.Graph" xmlTag="Graph"&GT; 
+    &LT;property name="nodes" xmlTag="Node" type="vector"/&GT; 
+  &LT;/entity&GT; 
+	
+  &LT;entity name="fr.enstb.xmlcode.examples.example5.Node" xmlTag="Node" contexts="Attached,Origin"&GT;
+    &LT;property name="identifier" xmlTag="identifier" attribute="yes"/&GT; 
+    &LT;property name="preConditions" contains="fr.enstb.xmlcode.examples.example5.PreCondition"  type="vector" context="Attached"/&GT;
+    &LT;property name="outgoingEdges" contains="fr.enstb.xmlcode.examples.example5.Edge"  type="vector" context="Outgoing"/&GT;
+  &LT;/entity&GT; 
+	
+
+&LT;entity name="fr.enstb.xmlcode.examples.example5.PreCondition" xmlTag="PreCondition" contexts="Attached,Destination" &GT;
+    &LT;property name="identifier" xmlTag="identifier" attribute="yes"/&GT; 
+    &LT;property name="attachedNode" contains="fr.enstb.xmlcode.examples.example5.Node" context="Attached"/&GT;
+    &LT;property name="incomingEdges" contains="fr.enstb.xmlcode.examples.example5.Edge"  type="vector" context="Incoming"/&GT;
+  &LT;/entity&GT; 
+	
+  &LT;entity name="fr.enstb.xmlcode.examples.example5.Edge" abstract="yes" contexts="Outgoing,Incoming" &GT;
+    &LT;property name="identifier" xmlTag="identifier" attribute="yes"/&GT; 
+    &LT;property name="originNode" contains="fr.enstb.xmlcode.examples.example5.Node" context="Origin"/&GT;
+    &LT;property name="destinationPreCondition" contains="fr.enstb.xmlcode.examples.example5.PreCondition" context="Destination"/&GT;
+   &LT;/entity&GT; 
+	
+  &LT;entity name="fr.enstb.xmlcode.examples.example5.Edge1" xmlTag="Edge1"/&GT; 
+	
+  &LT;entity name="fr.enstb.xmlcode.examples.example5.Edge2" xmlTag="Edge2"/&GT; 
+	
+&LT;/model&GT;
+</pre>	
+	</p>
+		
+		
+	<h3>
+      6. Conclusions
+    </h3>
+
+	<p>
+		We see how to make an XML mapping much more easily maintainable. We understand that this technique allow to
+		specify complex and fine-tuned relationships, and reduce the problem of redondant information.
+	</p>
+		
+	<p>NB: This example is extracted from <b><tt>example5</tt></b> delivered in source distribution</p>
+	
+	<p>
+	</p>
+    <center>
+      <a href="index.html">Back to summary</a>
+    </center>
+    <p>
+    </p>
+
+   <hr>
+    <address><a href="mailto:sylvain.guerin@enst-bretagne.fr">Sylvain Guerin</a></address>
+<!-- Created: Fri Dec  7 17:47:50 CET 2001 -->
+<!-- hhmts start -->
+Last modified: Wed Jan 24 12:17:54 CET 2007
+<!-- hhmts end -->
+  </body>
+</html>
+

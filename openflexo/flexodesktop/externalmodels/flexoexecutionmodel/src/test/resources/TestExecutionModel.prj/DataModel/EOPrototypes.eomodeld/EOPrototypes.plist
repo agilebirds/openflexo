@@ -1,0 +1,386 @@
+{
+    attributes = (
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "CHAR VARYING"; 
+            name = address; 
+            valueClassName = NSString; 
+            width = 2000; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = NUMBER; 
+            name = artificialKey; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = CHARACTER; 
+            name = boolean; 
+            valueClassName = NSString; 
+            width = 1; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = CHARACTER; 
+            name = char1; 
+            valueClassName = NSString; 
+            width = 1; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = CHARACTER; 
+            name = char2; 
+            valueClassName = NSString; 
+            width = 2; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = CHARACTER; 
+            name = char3; 
+            valueClassName = NSString; 
+            width = 3; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = CHARACTER; 
+            name = char5; 
+            valueClassName = NSString; 
+            width = 5; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = CLOB; 
+            name = clob; 
+            valueClassName = NSString; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "CHAR VARYING"; 
+            name = clob1000000; 
+            valueClassName = NSString; 
+            width = 1000000; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "CHAR VARYING"; 
+            name = bigArray; 
+            valueClassName = NSString; 
+            width = 1000000; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "CHAR VARYING"; 
+            name = bigDictionary; 
+            valueClassName = NSString; 
+            width = 1000000; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = CHARACTER; 
+            name = country; 
+            valueClassName = NSString; 
+            width = 2; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = INTEGER; 
+            name = currency; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = TIMESTAMP; 
+            name = date; 
+            valueClassName = NSCalendarDate; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "DOUBLE PRECISION"; 
+            name = double; 
+            valueClassName = NSNumber; 
+            valueType = d; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "CHAR VARYING"; 
+            name = email; 
+            valueClassName = NSString; 
+            width = 200; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "CHAR VARYING"; 
+            name = str2; 
+            valueClassName = NSString; 
+            width = 2; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "CHAR VARYING"; 
+            name = str3; 
+            valueClassName = NSString; 
+            width = 3; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "CHAR VARYING"; 
+            name = str78; 
+            valueClassName = NSString; 
+            width = 78; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "CHAR VARYING"; 
+            name = str15; 
+            valueClassName = NSString; 
+            width = 15; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "CHAR VARYING"; 
+            name = str8; 
+            valueClassName = NSString; 
+            width = 8; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "CHAR VARYING"; 
+            name = str40; 
+            valueClassName = NSString; 
+            width = 40; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = FLOAT; 
+            name = float; 
+            valueClassName = NSNumber; 
+            valueType = f; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = INTEGER; 
+            name = id; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = INTEGER; 
+            name = int; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "CHAR VARYING"; 
+            name = name; 
+            valueClassName = NSString; 
+            width = 540; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "CHAR VARYING"; 
+            name = phone; 
+            valueClassName = NSString; 
+            width = 100; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "CHAR VARYING"; 
+            name = str5; 
+            valueClassName = NSString; 
+            width = 5; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "CHAR VARYING"; 
+            name = str20; 
+            valueClassName = NSString; 
+            width = 20; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "CHAR VARYING"; 
+            name = str10; 
+            valueClassName = NSString; 
+            width = 10; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "CHAR VARYING"; 
+            name = str100; 
+            valueClassName = NSString; 
+            width = 100; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "CHAR VARYING"; 
+            name = str1000; 
+            valueClassName = NSString; 
+            width = 1000; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "CHAR VARYING"; 
+            name = str200; 
+            valueClassName = NSString; 
+            width = 200; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "CHAR VARYING"; 
+            name = str2000; 
+            valueClassName = NSString; 
+            width = 2000; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "CHAR VARYING"; 
+            name = smallDictionary; 
+            valueClassName = NSString; 
+            width = 2000; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "CHAR VARYING"; 
+            name = smallArray; 
+            valueClassName = NSString; 
+            width = 2000; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "CHAR VARYING"; 
+            name = str50; 
+            valueClassName = NSString; 
+            width = 50; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "CHAR VARYING"; 
+            name = str500; 
+            valueClassName = NSString; 
+            width = 500; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "CHAR VARYING"; 
+            name = varchar2000; 
+            valueClassName = NSString; 
+            width = 2000; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = "CHAR VARYING"; 
+            name = zipCode; 
+            valueClassName = NSString; 
+            width = 15; 
+        }
+    ); 
+    className = EOGenericRecord; 
+    classProperties = (
+        id, 
+        currency, 
+        str50, 
+        str100, 
+        str200, 
+        str500, 
+        str1000, 
+        str2000, 
+        date, 
+        int, 
+        email, 
+        zipCode, 
+        clob, 
+        boolean, 
+        country, 
+        phone, 
+        varchar2000, 
+        clob1000000, 
+        str10, 
+        char2, 
+        char1, 
+        char3, 
+        address, 
+        char5, 
+        float, 
+        name, 
+        double
+    ); 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (
+            id, 
+            currency, 
+            str50, 
+            str100, 
+            str200, 
+            str500, 
+            str1000, 
+            str2000, 
+            date, 
+            int, 
+            email, 
+            zipCode, 
+            clob, 
+            boolean, 
+            country, 
+            phone, 
+            address, 
+            char1, 
+            char2, 
+            char3, 
+            char5, 
+            clob1000000, 
+            float, 
+            name, 
+            str10, 
+            varchar2000, 
+            artificialKey, 
+            double
+        ); 
+    }; 
+    name = EOPrototypes; 
+    primaryKeyAttributes = (artificialKey); 
+}

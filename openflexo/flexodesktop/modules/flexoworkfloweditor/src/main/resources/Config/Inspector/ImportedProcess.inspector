@@ -1,0 +1,6 @@
+<inspector title = "Process (imported)" inheritsfrom ="ImportedModelObject.inspector" inspectedClassName="ignore">
+	<tab name="Basic" index="0">
+		
+	</tab>
+</inspector>
+

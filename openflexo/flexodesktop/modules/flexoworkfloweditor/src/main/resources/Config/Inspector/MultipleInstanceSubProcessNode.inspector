@@ -1,0 +1,15 @@
+<inspector title = "Multiple sub-process instances" inheritsfrom="SubProcessNode.inspector"  inspectedClassName="org.openflexo.foundation.wkf.node.MultipleInstanceSubProcessNode">
+
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="isSequential" label="is_sequential" widget="CHECKBOX" constraint="9"/>
+		<property name="displaySubProcessImage" label="display_thumb" widget="CHECKBOX" constraint="10"/>
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+		
+	</tab>
+
+</inspector>

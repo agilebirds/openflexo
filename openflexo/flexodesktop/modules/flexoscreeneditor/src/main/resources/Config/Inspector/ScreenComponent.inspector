@@ -1,0 +1,10 @@
+<inspector title = "Monitoring Screen" inheritsfrom ="WOComponent.inspector">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="componentDefinition.process" label="process" widget="CUSTOM" constraint="3">
+			<param name="className" value="org.openflexo.components.widget.ProcessInspectorWidget"/>
+		</property>
+	</tab>
+</inspector>

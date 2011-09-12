@@ -1,0 +1,94 @@
+<inspector title = "Common" inspectedClassName="org.openflexo.fge.GraphicalRepresentation">
+
+	<tab name="Data" index="0" layout="DEFAULT">
+	</tab>
+
+	<tab name="Graphics" index="3" layout="DEFAULT">
+		<property name="textStyle" label="text_style" widget="CUSTOM" constraint="4">
+			<param name="className" value="org.openflexo.fge.view.widget.TextStyleInspectorWidget"/>
+		</property>
+	</tab>
+
+	<tab name="Edition" index="4" layout="DEFAULT">
+  	    <property name="isReadOnly" label="read_only" widget="CHECKBOX" constraint="0"/>
+		<property name="isSelectable" label="is_selectable" widget="CHECKBOX" constraint="10"/>
+		<property name="isSelected" label="is_selected" widget="READ_ONLY_CHECKBOX" constraint="11"/>
+		<property name="isFocusable" label="is_focusable" widget="CHECKBOX" constraint="13"/>
+		<property name="isFocused" label="is_focused" widget="READ_ONLY_CHECKBOX" constraint="14"/>
+		<property_list name="mouseClickControls" label="mouse_click_controls" constraint="30">
+		  <param name="displayLabel" value="true"/>
+		  <param name="visible_row_count" value="5"/>
+		  <param name="row_height" value="20"/>
+		  <property_list_column name="name" label="name" widget="TEXT_FIELD">
+			<param name="column_width" value="150"/>
+			<param name="resizable" value="false"/>
+		  </property_list_column>
+		  <property_list_column name="button" label="button" widget="DROPDOWN">
+			<param name="column_width" value="80"/>
+			<param name="resizable" value="false"/>
+		  </property_list_column>
+		  <property_list_column name="clickCount" label="click_count" widget="INTEGER">
+			<param name="column_width" value="50"/>
+			<param name="resizable" value="false"/>
+		  </property_list_column>
+		  <property_list_column name="shiftPressed" label="shift" widget="CHECKBOX">
+			<param name="column_width" value="50"/>
+			<param name="resizable" value="false"/>
+		  </property_list_column>
+		  <property_list_column name="ctrlPressed" label="ctrl" widget="CHECKBOX">
+			<param name="column_width" value="50"/>
+			<param name="resizable" value="false"/>
+		  </property_list_column>
+		  <property_list_column name="metaPressed" label="meta" widget="CHECKBOX">
+			<param name="column_width" value="50"/>
+			<param name="resizable" value="false"/>
+		  </property_list_column>
+		  <property_list_column name="altPressed" label="alt" widget="CHECKBOX">
+			<param name="column_width" value="50"/>
+			<param name="resizable" value="false"/>
+		  </property_list_column>
+		  <property_list_column name="actionType" label="action" widget="DROPDOWN">
+			<param name="column_width" value="100"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_action name="new" type="ADD" method="createMouseClickControl"/>
+		  <property_list_action name="delete" type="DELETE" method="deleteMouseClickControl" isAvailable="isMouseClickControlDeletable"/>
+		</property_list>
+		<property_list name="mouseDragControls" label="mouse_drag_controls" constraint="31">
+		  <param name="displayLabel" value="true"/>
+		  <param name="visible_row_count" value="5"/>
+		  <param name="row_height" value="20"/>
+		  <property_list_column name="name" label="name" widget="TEXT_FIELD">
+			<param name="column_width" value="150"/>
+			<param name="resizable" value="false"/>
+		  </property_list_column>
+		  <property_list_column name="button" label="button" widget="DROPDOWN">
+			<param name="column_width" value="80"/>
+			<param name="resizable" value="false"/>
+		  </property_list_column>
+		  <property_list_column name="shiftPressed" label="shift" widget="CHECKBOX">
+			<param name="column_width" value="50"/>
+			<param name="resizable" value="false"/>
+		  </property_list_column>
+		  <property_list_column name="ctrlPressed" label="ctrl" widget="CHECKBOX">
+			<param name="column_width" value="50"/>
+			<param name="resizable" value="false"/>
+		  </property_list_column>
+		  <property_list_column name="metaPressed" label="meta" widget="CHECKBOX">
+			<param name="column_width" value="50"/>
+			<param name="resizable" value="false"/>
+		  </property_list_column>
+		  <property_list_column name="altPressed" label="alt" widget="CHECKBOX">
+			<param name="column_width" value="50"/>
+			<param name="resizable" value="false"/>
+		  </property_list_column>
+		  <property_list_column name="actionType" label="action" widget="DROPDOWN">
+			<param name="column_width" value="100"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_action name="new" type="ADD" method="createMouseDragControl"/>
+		  <property_list_action name="delete" type="DELETE" method="deleteMouseDragControl" isAvailable="isMouseDragControlDeletable"/>
+		</property_list>
+ 	</tab>
+
+</inspector>

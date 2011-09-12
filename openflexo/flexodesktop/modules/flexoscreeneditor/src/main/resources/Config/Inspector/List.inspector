@@ -1,0 +1,53 @@
+<inspector title = "List" inheritsfrom ="InnerTableWidget.inspector">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+		<property name="colCount" label="cols" widget="INTEGER" constraint="2"/>
+		<property name="listName" label="list name" widget="TEXT_FIELD" constraint="3" help="Will be used in the code for several accessors">
+			<param name="columns" value="10"/>
+		</property>
+	    <property name="elementsPerBatchInteger" label="elements_per_batch" widget="INTEGER" constraint="4" help="Default number of elements to show per batch (all elements if = 0)">
+			<param name="columns" value="10"/>
+		</property>
+        <property name="hideHeaders" label="hide_headers" widget="CHECKBOX" constraint="5" help="Check this if you want to hide the headers of this list."/>
+        <property name="hasExcelButton" label="has_excel_button" widget="CHECKBOX" constraint="6" help="Check this if this list to be exportable to Excel."/>
+        <property name="hasRefreshButton" label="has_refresh_button" widget="CHECKBOX" constraint="7" help="Check this if this list can be refreshed."/>
+	    
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+	    <property name="entity" label="fetched_entity" widget="CUSTOM" constraint="3">
+			<param name="className" value="org.openflexo.components.widget.DMEntityInspectorWidget"/>
+		</property>
+	    <property name="listType" label="list_type" widget="DROPDOWN" constraint="4">
+	        <param name="staticlist" value="Fetch,Accessor"/>
+	    </property>	
+        <property name="permanentFilter" label="permanent_filter" widget="DROPDOWN" constraint="5">
+        	<param name="format" value="name"/>
+        	<param name="dynamiclist" value="availableQualifiers"/>
+        </property>
+   		<property name="tdWidths" label="specific_td_width" widget="TEXT_FIELD" constraint="6" help="'row'-'col':'width % or width px'; exemple: 1-2:120px; 3-3:20%"/>
+	</tab>
+
+	<tab name="Doc" index="2" layout="DEFAULT">
+		<property name="excelExportComment" label="excel_comment" widget="TEXT_AREA" constraint="5"/>
+	</tab>
+
+	<tab name="Data" index="3" layout="DEFAULT">
+ 		<property name="listAccessor" label="binding_list" widget="CUSTOM" constraint="1" help="Name of the java accessor for the list"
+                depends="list_type" conditional="list_type=Accessor">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="bindingListDefinition"/>			
+			<param name="creates_entry" value="createsBindingVariable"/>			
+		</property>
+		<property name="itemVariable" label="binding_item" widget="CUSTOM" constraint="2" help="instance variable for the item">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="bindingItemDefinition"/>			
+			<param name="creates_entry" value="createsBindingVariable"/>			
+		</property>
+        <property name="fetchObjects" label="fetch_objects" widget="CHECKBOX" constraint="4" help="if checked : will fetch objects instead of raw row."
+                depends="list_type" conditional="list_type=Fetch||list_type=null">
+		</property>
+ 		
+	</tab>
+	
+</inspector>

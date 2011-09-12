@@ -1,0 +1,6 @@
+#macro(addToSpringContext $xml)#void(${projectGenerator.addCrossModuleDataInList(${springImplementation.getTechnologyModuleDefinition()}, ${generator}, "applicationContext", ${xml})})#end
+#macro(getSpringContext)
+	#foreach($xml in ${generator.getModuleGenerator().getModuleData("applicationContext")})
+		$xml
+	#end
+#end

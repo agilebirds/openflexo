@@ -1,0 +1,5 @@
+#name(): WOImage{
+    src = #if(${widget.getBindingImageUrl().getWodStringRepresentation()})${widget.getBindingImageUrl().getWodStringRepresentation()}#else""#end;
+    #additionalBindings()
+    #tooltipAsTitle()
+}

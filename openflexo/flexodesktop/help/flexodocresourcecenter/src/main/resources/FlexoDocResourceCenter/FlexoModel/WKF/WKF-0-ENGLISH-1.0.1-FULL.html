@@ -1,0 +1,99 @@
+
+    A <i>workflow</i> organizes the flow of activities performed by the human <i>end 
+    users</i> and the <i>machines</i>. A process is composed of sub-processes 
+    and activities.
+
+    <ul>
+      <li>
+        A sub-process is mostly a parallel sub-process. This means that you 
+        have different flows running in parallel through your process. (e.g. 
+        in the package delivery process of a delivery company, you have many 
+        packages being delivered at the same time).
+      </li>
+      <li>
+        Process screens are mostly managing lists of flow instances (e.g. the 
+        list of packages being delivered for the delivery company) but can 
+        also be used as Key Performance Indicator (KPI) dashboards or 
+        management cockpits.
+      </li>
+      <li>
+        A role is also associated with a process, meaning that a person from a 
+        given group of users is responsible for the process.
+      </li>
+    </ul>
+    <p>
+      A workflow is organized as three levels of Petri network:
+    </p>
+    <ol>
+      <li>
+        <b>Activity level:</b>
+
+        <p>
+          An activity is also associated with a role, thus a person or a group 
+          of persons having the same role. An activity is a set of operations 
+          done by one single role. Users can belong to several roles.
+        </p>
+        An activity is composed of operations.
+      </li>
+      <li>
+        <b>Operation Level:</b>
+
+        <p>
+          The operations level models the sequence of elementary tasks 
+          performed by the end users associated with the activity. Tasks from 
+          this operation level are mostly associated with screens for 
+          interaction with human users (&#12;ll in forms, advance in the process, 
+          etc.) but can also be associated with self-executable nodes (i.e. 
+          triggering automatically performed computation steps) without any 
+          associated screens.
+        </p>
+        An operation is composed of action
+      </li>
+      <li>
+        <b>Action level:</b>
+
+        <p>
+          The action level is the interaction level. One the one hand, actions 
+          can be associated with screen buttons, hyperlinks, icons, etc. to 
+          interact with the user and make him/her move in the process, change 
+          the status of his/her &#12;le, etc. (see Section 5.8 for more details). 
+          On the other hand, actions can be associated with code function 
+          calls for interacting with legacy applications and/or performing 
+          some particular computation. There are three di&#11;erent types of 
+          actions:
+        </p>
+        <ul>
+          <li>
+            The <i>FlexoActions</i> are work flow actions that usually 
+            interact with the users and propagate tokens in the Petri network 
+            once executed. We usually stay on the same subprocess and move to 
+            the next work flow step. The DisplayActions do not follow the 
+            normal flow of the Petri network. They do not send any token but 
+            usually switch the focus to a very different process.
+          </li>
+          <li>
+            <i>DisplayActions</i> are so called because they allow to switch 
+            to, and therefore display, a screen associated with another 
+            sub-process.
+          </li>
+          <li>
+            The <i>Self-executable actions</i> are similar to FlexoActions. 
+            They also follows the normal flow of the Petri network, propagate 
+            tokens etc., but they do not interact with the user but are 
+            associated with a piece of code that is executed as soon as the 
+            action preconditions are m
+          </li>
+        </ul>
+      </li>
+      <li>
+        <b>Events level:</b>
+
+        <p>
+          The Flexo model also features the notion of Events that react to 
+          external signals (e.g. arrival of an email) or internal timers by 
+          propagating token to their outgoing arcs. <i>Events</i> can be added 
+          at any level.
+        </p>
+      </li>
+    </ol>
+  

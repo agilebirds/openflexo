@@ -1,0 +1,306 @@
+% style to support Flexo processes documentation
+
+\usepackage{ifthen}
+\RequirePackage{url}
+\RequirePackage{longtable}
+\RequirePackage{aeguill}
+
+\newcommand{\doctitle}{\tiny{Use \texttt{$\backslash$renewcommand\{$\backslash$doctitle\}\{xxxx\}} in your document}}
+\newcommand{\docshorttitle}{\tiny{Use \texttt{$\backslash$renewcommand\{$\backslash$docshorttitle\}\{xxxx\}} in your document}}
+\newcommand{\docversion}{\tiny{Use \texttt{$\backslash$renewcommand\{$\backslash$docversion\}\{xxxx\}} in your document}}
+
+\newcommand{\softversion}{\tiny{Use \texttt{$\backslash$renewcommand\{$\backslash$softversion\}\{xxxx\}} in your document}}
+\newcommand{\docudate}{\tiny{Use \texttt{$\backslash$renewcommand\{$\backslash$docudate\}\{xxxx\}} in your document}}
+\newcommand{\docuauthor}{\tiny{Use \texttt{$\backslash$renewcommand\{$\backslash$docuauthor\}\{xxxx\}} in your document}}
+\newcommand{\docreviewer}{\tiny{Use \texttt{$\backslash$renewcommand\{$\backslash$docreviewer\}\{xxxx\}} in your document}}
+\newcommand{\reviewdate}{\tiny{Use \texttt{$\backslash$renewcommand\{$\backslash$reviewdate\}\{xxxx\}} in your document}}
+\newcommand{\docref}{\tiny{Use \texttt{$\backslash$renewcommand\{$\backslash$docref\}\{xxxx\}} in your document}}
+\newcommand{\doccustomer}{\tiny{Use \texttt{$\backslash$renewcommand\{$\backslash$doccustomer\}\{xxxx\}} in your document}}
+
+\newcommand{\docversionname}{Document version}
+\newcommand{\softversionname}{Software version}
+\newcommand{\docudatename}{Document date}
+\newcommand{\docuauthorname}{Author}
+\newcommand{\docreviewername}{Reviewed by}
+\newcommand{\reviewdatename}{Review date}
+\newcommand{\docrefname}{Document reference}
+\newcommand{\denalilogo}{\includegraphics[width=3cm]{Figures/denali-logo}}
+\newcommand{\denalicontactblock}{
+\begin{center}\small
+  \begin{tabular}{p{12.1cm}lr}
+    \hline
+    Agile Birds sprl & VAT: & BE 0817 832 041\\
+Rue du Prieure, 1 B-1348 Louvain-la-Neuve, Belgique & \\
+\multicolumn{3}{c}{Tel: +32 495 57 51 84\hfill \hfill \url{www.agilebirds.com}}\\
+    \hline
+  \end{tabular}
+\end{center}
+}
+\newcommand{\denalititlepage}{{
+    \thispagestyle{empty}
+    \mbox{}\vfill
+    \centering \denalilogo{}
+    \vfill
+    {\huge\textbf{\doccustomer\\[0.5cm]\doctitle}}
+    \vfill
+    \begin{tabular}{|>{\bfseries}l<{:}l|}
+      \hline
+      \docversionname& \docversion\\ 
+      \softversionname & \softversion\\
+      \docudatename & \docudate\\
+      \docuauthorname & \docuauthor\\
+      \docreviewername & \docreviewer\\
+      \reviewdatename & \reviewdate\\
+      \docrefname & \docref\\
+      \hline
+    \end{tabular}
+    \vfill
+    \denalicontactblock{}
+    \clearpage
+  }
+}
+
+% break line after heading
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+                                    {3.25ex \@plus1ex \@minus.2ex}%
+                                    {1.5ex \@plus .2ex}%
+                                    {\normalfont\normalsize\bfseries}}
+
+% break line after headingg
+% no parindent
+\renewcommand\subparagraph{\@startsection{subparagraph}{5}{\z@}%
+                                       {3.25ex \@plus1ex \@minus .2ex}%
+                                       {1.5ex \@plus .2ex}%
+                                      {\normalfont\normalsize\bfseries}}
+
+\let\origItemize=\itemize
+\let\origEnumerate =\enumerate
+\let\origDescription =\description
+% Prevent infinite loops
+\let\origItemize =\itemize         
+\let\origEnumerate =\enumerate
+\let\origDescription =\description
+
+% tweak the vertical spacing parameters
+\def\Myspacing{
+    \itemsep=3pt\topsep=0pt\partopsep=0pt\parskip=10pt\parsep=1pt\leftmargin=0pt\itemindent=1pt
+}
+
+\def\myitemsep{
+    % Redefine the environments in terms of the original values
+    \renewenvironment{itemize}{\origItemize\Myspacing}{\endlist}
+    \renewenvironment{enumerate}{\origEnumerate\Myspacing}{\endlist}
+    \renewenvironment{description}{\origDescription\Myspacing}{\endlist}
+}
+
+\def\doitemsep{
+    % Redefine the environments to the original values
+    \renewenvironment{itemize}{\origItemize}{\endlist}
+    \renewenvironment{enumerate}{\origEnumerate}{\endlist}
+    \renewenvironment{description}{\origDescription}{\endlist}
+}
+
+%-------------------------------------------------------------------------------
+% Flexo Roles
+\newenvironment{flexoroles}{\begin{center}\begin{longtable}{|>{\bfseries}p{5cm}|p{9.7cm}|}
+\hline\hline
+\textbf{Role}&\textbf{Description}\\
+\hline\hline\endhead\multicolumn{2}{|r|}{(continued on next page)}\\\hline\endfoot\endlastfoot}{
+\end{longtable}
+\end{center}
+}
+\newcommand{\flexorole}[2]{#1 & #2\\\hline}
+
+%-------------------------------------------------------------------------------
+% Flexo Statuses
+\newenvironment{flexostatuses}{\begin{center}\begin{longtable}{|>{\bfseries}p{5cm}|p{9.7cm}|}
+\hline\hline
+\textbf{Status}&\textbf{Description}\\
+\hline\hline\endhead\multicolumn{2}{|r|}{(continued on next page)}\\\hline\endfoot\endlastfoot}{
+\end{longtable}
+\end{center}
+}
+\newcommand{\flexostatus}[2]{#1& #2\\\hline}
+
+%-------------------------------------------------------------------------------
+% Flexo Events
+\newenvironment{flexoevents}{\begin{center}\begin{longtable}{|>{\bfseries}p{5cm}|p{9.7cm}|}
+\hline\hline
+\textbf{Event}&\textbf{Description}\\
+\hline\hline\endhead\multicolumn{2}{|r|}{(continued on next page)}\\\hline\endfoot\endlastfoot}{
+\end{longtable}
+\end{center}
+}
+\newcommand{\flexoevent}[2]{#1& #2\\\hline}
+
+%-------------------------------------------------------------------------------
+% Flexo Activity
+\newenvironment{flexoactivities}{\begin{center}\begin{longtable}{|>{\bfseries}p{4cm}|p{8cm}|p{2.7cm}|}
+\hline\hline
+\textbf{Activity}&\textbf{Description}&\textbf{Role}\\
+\hline\hline\endhead\multicolumn{3}{|r|}{(continued on next page)}\\\hline\endfoot\endlastfoot}{
+\end{longtable}
+\end{center}
+}
+\newcommand{\flexoactivity}[3]{#1& #2& #3\\\hline}
+
+%------------------------------------------------------------------------------
+% Flexo Operation
+\newenvironment{flexooperations}{}{}
+\newcommand{\flexooperation}[5]{\paragraph{Operation: \emph{#2}}\label{#4}
+#3
+\par \smallskip \textbf{User role:} #5 
+}
+
+%-------------------------------------------------------------------------------
+% Flexo Process
+\newcommand{\flexoprocessfigure}[2]{
+  \begin{center}
+    \includegraphics[width=147mm]{#1}
+  \end{center}
+}
+
+%-------------------------------------------------------------------------------
+% Flexo Activity
+\newcommand{\flexoactivityfigure}[2]{
+  \begin{center}
+    \includegraphics[width=147mm]{#1}
+  \end{center}
+}
+
+%-------------------------------------------------------------------------------
+
+\newenvironment{flexoterms}{\begin{center}\begin{longtable}{|>{\bfseries}p{4cm}|p{8cm}|}
+\hline\hline
+\textbf{Role}&\textbf{Description}\\
+\hline\hline\endhead\hline\multicolumn{2}{|r|}{(continued on next page)}\\\hline\endfoot\hline\endlastfoot}{
+\end{longtable}
+\end{center}
+}
+\newcommand{\flexoterm}[2]{#1 & #2\\\hline}
+
+%-------------------------------------------------------------------------------
+\newenvironment{flexohyperlinks}{\begin{center}\begin{longtable}{|>{\bfseries}p{8cm}|l|l|l|}
+\hline\hline
+\textbf{Description}&\textbf{Type}&\textbf{Destination}\\
+\hline\hline\endhead\hline\multicolumn{3}{|r|}{(continued on next page)}\\
+\hline\endfoot\hline\endlastfoot}{
+\end{longtable}
+\end{center}
+}
+\newcommand{\flexohyperlink}[3]{#1 & #2 &#3 \\\hline}
+
+%-------------------------------------------------------------------------------
+% Blocks
+\usepackage{color}
+\definecolor{darkred}{rgb}{0.75,0,0}
+\definecolor{darkgreen}{rgb}{0,0.25,0}
+\definecolor{darkblue}{rgb}{0,0,0.5}
+\definecolor{darkmagenta}{rgb}{0.5,0,0.5}
+\definecolor{shadecolor}{rgb}{0.93,0.93,0.93}
+
+\newenvironment{blocks}{}{}
+
+\newcommand{\block}[1]{\nopagebreak \par \textbf{Description of the screen area:~\guillemotleft{}#1 \guillemotright{}} \par }
+
+%-------------------------------------------------------------------------------
+% Tabs
+% \newenvironment{tabs}{\begin{list}{}{}}{\end{list}}}
+
+% \newcommand{\tab}[1]{\item[$\bullet$ Tab: #1]\mbox{}\\}
+\newenvironment{tabs}{}{}
+\newcommand{\tab}[1]{\nopagebreak \par \textbf{Description of the tab:~\guillemotleft{}#1 \guillemotright{}} \par }
+\newcommand{\tabdetail}[1]{\subsection{Tab #1}\nopagebreak\par{}\nopagebreak}
+\newcommand{\subtabdetail}[1]{\subsubsection{Tab #1}\nopagebreak\par{}\nopagebreak}
+
+%-------------------------------------------------------------------------------
+% Popups
+% \newenvironment{popups}{\begin{description}}{\end{description}}
+
+% \newcommand{\popup}[1]{\item[$\bullet$ Popup: #1]}
+\newenvironment{popups}{\doitemsep \begin{itemize}}{\end{itemize} \myitemsep}
+
+\newcommand{\popup}[1]{\item \textbf{Popup: \guillemotleft{}#1\guillemotright{}}}
+\newcommand{\popupdetail}[1]{\subsection{{Popup #1}}\nopagebreak\par{}\nopagebreak}
+\newcommand{\subpopupdetail}[1]{\subsubsection{{Popup #1}}\nopagebreak\par{}\nopagebreak}
+
+%-------------------------------------------------------------------------------
+% Lists
+\newenvironment{lists}{\doitemsep \begin{itemize}}{\end{itemize}\myitemsep}
+
+\newcommand{\listitem}[1]{\item List functions: #1}
+
+%-------------------------------------------------------------------------------
+% Block Outputs
+\newenvironment{outputtable}{\begin{longtable}{|l|p{6.5cm}|l|p{5.5cm}|}
+\multicolumn{4}{p{147mm}}{}\\
+\hline\hline
+\textbf{Id}&\textbf{Label and description}&\textbf{Type}&\textbf{Sample values}\\
+\hline\hline\endfirsthead
+\hline\hline
+\textbf{Id}&\textbf{Label and description}&\textbf{Type}&\textbf{Sample values}\\
+\hline\hline\endhead
+\multicolumn{4}{|r|}{(continued on next page)}\\
+\hline\endfoot\endlastfoot}{
+\end{longtable}
+}
+\newcommand{\outputrow}[4]{#1 & #2 & #3 & #4\\\hline}
+
+%-------------------------------------------------------------------------------
+% Block Inputs
+\newenvironment{inputtable}{\begin{longtable}{|l|p{5cm}|l|l|p{2cm}|c|}
+\multicolumn{6}{p{147mm}}{}\\
+\hline\hline
+\textbf{Id}&\textbf{Label and description}&\textbf{Widget}&\textbf{Type}&\textbf{Default}&\textbf{M}\\
+\hline\hline
+\endfirsthead
+\hline\hline
+\textbf{Id}&\textbf{Label and description}&\textbf{Widget}&\textbf{Type}&\textbf{Default}&\textbf{M}\\
+\hline\hline
+\endhead\multicolumn{2}{|l}{\footnotesize M=Mandatory}&\multicolumn{4}{r|}{(continued on next page)}\\
+\hline\endfoot\multicolumn{6}{|p{147mm}|}{\footnotesize M=Mandatory}\\\hline\endlastfoot}{
+\end{longtable}
+}
+\newcommand{\inputrow}[6]{#1 & #2 & #3 & #4 & #5 & #6 \\\hline}
+
+%-------------------------------------------------------------------------------
+% Block Actions
+\newenvironment{actiontable}{\doitemsep \begin{itemize}}{\end{itemize} \myitemsep}
+\newcommand{\actionrow}[7]{\item{\textbf{#1: #6}\nopagebreak}
+\begin{itemize}
+\item Label: #2 \hspace{3mm} #4
+\item Short desc.: #3
+\item Tooltip: #7 
+\item System action: #5
+\end{itemize}
+}
+
+%----------------------------------------------------------------------
+\newcommand{\buttonfigure}[1]{\parbox{4mm}{\vspace{-1mm}\begin{center}\includegraphics[height=4mm]{#1}\end{center}}}
+
+\newcommand{\labeldescription}[2]{\textbf{#1:} {#2}}
+%-------------------------------------------------------------------------------
+% Page 
+\newcommand{\pagesection}[1]{\subsection{Screen: #1}}
+\newcommand{\subpagesection}[1]{\subsubsection{Screen: #1}}
+\newcommand{\UnderscoreCommands}{\do\flexooperation\do\flexoprocessfigure}
+\usepackage[strings]{underscore}
+
+\newcommand{\dropdownvalue}[1]{\texttt{#1}}
+
+% define what it takes to obtain a list of all the requirements
+%% format for listing requirements
+\newcommand*\l@function{\@dottedtocline{1}{1.5em}{2.3em}}
+%% format for listing usecases
+\newcommand\tableoffunctions[1]{%
+    \if@twocolumn
+      \@restonecoltrue\onecolumn
+    \else
+      \@restonecolfalse
+    \fi
+%    \chapter*{#1
+%        \@mkboth{%
+%           \MakeUppercase{#1}}{\MakeUppercase{#1}}}%
+    \@starttoc{loa}%
+    \if@restonecol\twocolumn\fi
+    }

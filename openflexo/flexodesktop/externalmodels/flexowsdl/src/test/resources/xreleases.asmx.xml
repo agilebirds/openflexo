@@ -1,0 +1,1065 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://www.xignite.com/services/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" targetNamespace="http://www.xignite.com/services/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.xignite.com/services/">
+      <s:element name="GetTodaysSecurityHeadlines">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Identifier" type="s:string"/>
+            <s:element minOccurs="1" maxOccurs="1" name="IdentifierType" type="tns:IdentifierTypes"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:simpleType name="IdentifierTypes">
+        <s:restriction base="s:string">
+          <s:enumeration value="Symbol"/>
+          <s:enumeration value="CIK"/>
+          <s:enumeration value="CUSIP"/>
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="GetTodaysSecurityHeadlinesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTodaysSecurityHeadlinesResult" type="tns:SecurityHeadlines"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SecurityHeadlines">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:Common">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="Security" type="tns:Security"/>
+              <s:element minOccurs="0" maxOccurs="1" name="Headlines" type="tns:ArrayOfSecurityHeadline"/>
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="Common">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Outcome" type="tns:OutcomeTypes"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Message" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Identity" type="s:string"/>
+          <s:element minOccurs="1" maxOccurs="1" name="Delay" type="s:double"/>
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="OutcomeTypes">
+        <s:restriction base="s:string">
+          <s:enumeration value="Success"/>
+          <s:enumeration value="SystemError"/>
+          <s:enumeration value="RequestError"/>
+          <s:enumeration value="RegistrationError"/>
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="Security">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:Common">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="CIK" type="s:string"/>
+              <s:element minOccurs="0" maxOccurs="1" name="Cusip" type="s:string"/>
+              <s:element minOccurs="0" maxOccurs="1" name="Symbol" type="s:string"/>
+              <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string"/>
+              <s:element minOccurs="0" maxOccurs="1" name="Market" type="s:string"/>
+              <s:element minOccurs="0" maxOccurs="1" name="CategoryOrIndustry" type="s:string"/>
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="ArrayOfSecurityHeadline">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="SecurityHeadline" nillable="true" type="tns:SecurityHeadline"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="SecurityHeadline">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ReleaseId" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Title" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Date" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Source" type="tns:ReleaseSource"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Reference" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ReleaseSource">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="SourceType" type="tns:ReleaseSourceTypes"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Type" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Url" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="ReleaseSourceTypes">
+        <s:restriction base="s:string">
+          <s:enumeration value="All"/>
+          <s:enumeration value="SEC"/>
+          <s:enumeration value="BusinessWire"/>
+          <s:enumeration value="PRNewsWire"/>
+          <s:enumeration value="MarketWire"/>
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="Header" type="tns:Header"/>
+      <s:complexType name="Header">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Tracer" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetTodaysMarketHeadlines">
+        <s:complexType/>
+      </s:element>
+      <s:element name="GetTodaysMarketHeadlinesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTodaysMarketHeadlinesResult" type="tns:MarketHeadlines"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="MarketHeadlines">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:Common">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="Headlines" type="tns:ArrayOfMarketHeadline"/>
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="ArrayOfMarketHeadline">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="MarketHeadline" nillable="true" type="tns:MarketHeadline"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="MarketHeadline">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ReleaseId" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Security" type="tns:Security"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Title" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Date" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Source" type="tns:ReleaseSource"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Reference" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetTopSecurityHeadlines">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Identifier" type="s:string"/>
+            <s:element minOccurs="1" maxOccurs="1" name="IdentifierType" type="tns:IdentifierTypes"/>
+            <s:element minOccurs="1" maxOccurs="1" name="Count" type="s:int"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTopSecurityHeadlinesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTopSecurityHeadlinesResult" type="tns:SecurityHeadlines"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTopMarketHeadlines">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Count" type="s:int"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTopMarketHeadlinesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTopMarketHeadlinesResult" type="tns:MarketHeadlines"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLastSecurityHeadlines">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Identifier" type="s:string"/>
+            <s:element minOccurs="1" maxOccurs="1" name="IdentifierType" type="tns:IdentifierTypes"/>
+            <s:element minOccurs="0" maxOccurs="1" name="SinceDate" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLastSecurityHeadlinesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetLastSecurityHeadlinesResult" type="tns:SecurityHeadlines"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLastMarketHeadlines">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SinceDate" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLastMarketHeadlinesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetLastMarketHeadlinesResult" type="tns:MarketHeadlines"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SearchSecurityHeadlines">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Identifier" type="s:string"/>
+            <s:element minOccurs="1" maxOccurs="1" name="IdentifierType" type="tns:IdentifierTypes"/>
+            <s:element minOccurs="1" maxOccurs="1" name="Source" type="tns:ReleaseSourceTypes"/>
+            <s:element minOccurs="0" maxOccurs="1" name="Title" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="StartDate" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="EndDate" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SearchSecurityHeadlinesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SearchSecurityHeadlinesResult" type="tns:SecurityHeadlines"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SearchMarketHeadlines">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Source" type="tns:ReleaseSourceTypes"/>
+            <s:element minOccurs="0" maxOccurs="1" name="Title" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="StartDate" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="EndDate" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SearchMarketHeadlinesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SearchMarketHeadlinesResult" type="tns:MarketHeadlines"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetHistoricalSecurityHeadlines">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Identifier" type="s:string"/>
+            <s:element minOccurs="1" maxOccurs="1" name="IdentifierType" type="tns:IdentifierTypes"/>
+            <s:element minOccurs="1" maxOccurs="1" name="Source" type="tns:ReleaseSourceTypes"/>
+            <s:element minOccurs="0" maxOccurs="1" name="StartDate" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="EndDate" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetHistoricalSecurityHeadlinesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetHistoricalSecurityHeadlinesResult" type="tns:SecurityHeadlines"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetHistoricalMarketHeadlines">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Source" type="tns:ReleaseSourceTypes"/>
+            <s:element minOccurs="0" maxOccurs="1" name="StartDate" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="EndDate" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetHistoricalMarketHeadlinesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetHistoricalMarketHeadlinesResult" type="tns:MarketHeadlines"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetReleaseContent">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ReleaseID" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetReleaseContentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetReleaseContentResult" type="tns:Release"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Release">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:Common">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="ReleaseId" type="s:string"/>
+              <s:element minOccurs="0" maxOccurs="1" name="Security" type="tns:Security"/>
+              <s:element minOccurs="0" maxOccurs="1" name="Headline" type="tns:SecurityHeadline"/>
+              <s:element minOccurs="0" maxOccurs="1" name="Content" type="s:string"/>
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="SecurityHeadlines" nillable="true" type="tns:SecurityHeadlines"/>
+      <s:element name="MarketHeadlines" nillable="true" type="tns:MarketHeadlines"/>
+      <s:element name="Release" nillable="true" type="tns:Release"/>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetTodaysSecurityHeadlinesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTodaysSecurityHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="GetTodaysSecurityHeadlinesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTodaysSecurityHeadlinesResponse"/>
+  </wsdl:message>
+  <wsdl:message name="GetTodaysSecurityHeadlinesHeader">
+    <wsdl:part name="Header" element="tns:Header"/>
+  </wsdl:message>
+  <wsdl:message name="GetTodaysMarketHeadlinesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTodaysMarketHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="GetTodaysMarketHeadlinesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTodaysMarketHeadlinesResponse"/>
+  </wsdl:message>
+  <wsdl:message name="GetTodaysMarketHeadlinesHeader">
+    <wsdl:part name="Header" element="tns:Header"/>
+  </wsdl:message>
+  <wsdl:message name="GetTopSecurityHeadlinesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTopSecurityHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="GetTopSecurityHeadlinesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTopSecurityHeadlinesResponse"/>
+  </wsdl:message>
+  <wsdl:message name="GetTopSecurityHeadlinesHeader">
+    <wsdl:part name="Header" element="tns:Header"/>
+  </wsdl:message>
+  <wsdl:message name="GetTopMarketHeadlinesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTopMarketHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="GetTopMarketHeadlinesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTopMarketHeadlinesResponse"/>
+  </wsdl:message>
+  <wsdl:message name="GetTopMarketHeadlinesHeader">
+    <wsdl:part name="Header" element="tns:Header"/>
+  </wsdl:message>
+  <wsdl:message name="GetLastSecurityHeadlinesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetLastSecurityHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="GetLastSecurityHeadlinesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetLastSecurityHeadlinesResponse"/>
+  </wsdl:message>
+  <wsdl:message name="GetLastSecurityHeadlinesHeader">
+    <wsdl:part name="Header" element="tns:Header"/>
+  </wsdl:message>
+  <wsdl:message name="GetLastMarketHeadlinesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetLastMarketHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="GetLastMarketHeadlinesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetLastMarketHeadlinesResponse"/>
+  </wsdl:message>
+  <wsdl:message name="GetLastMarketHeadlinesHeader">
+    <wsdl:part name="Header" element="tns:Header"/>
+  </wsdl:message>
+  <wsdl:message name="SearchSecurityHeadlinesSoapIn">
+    <wsdl:part name="parameters" element="tns:SearchSecurityHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="SearchSecurityHeadlinesSoapOut">
+    <wsdl:part name="parameters" element="tns:SearchSecurityHeadlinesResponse"/>
+  </wsdl:message>
+  <wsdl:message name="SearchSecurityHeadlinesHeader">
+    <wsdl:part name="Header" element="tns:Header"/>
+  </wsdl:message>
+  <wsdl:message name="SearchMarketHeadlinesSoapIn">
+    <wsdl:part name="parameters" element="tns:SearchMarketHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="SearchMarketHeadlinesSoapOut">
+    <wsdl:part name="parameters" element="tns:SearchMarketHeadlinesResponse"/>
+  </wsdl:message>
+  <wsdl:message name="SearchMarketHeadlinesHeader">
+    <wsdl:part name="Header" element="tns:Header"/>
+  </wsdl:message>
+  <wsdl:message name="GetHistoricalSecurityHeadlinesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetHistoricalSecurityHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="GetHistoricalSecurityHeadlinesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetHistoricalSecurityHeadlinesResponse"/>
+  </wsdl:message>
+  <wsdl:message name="GetHistoricalSecurityHeadlinesHeader">
+    <wsdl:part name="Header" element="tns:Header"/>
+  </wsdl:message>
+  <wsdl:message name="GetHistoricalMarketHeadlinesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetHistoricalMarketHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="GetHistoricalMarketHeadlinesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetHistoricalMarketHeadlinesResponse"/>
+  </wsdl:message>
+  <wsdl:message name="GetHistoricalMarketHeadlinesHeader">
+    <wsdl:part name="Header" element="tns:Header"/>
+  </wsdl:message>
+  <wsdl:message name="GetReleaseContentSoapIn">
+    <wsdl:part name="parameters" element="tns:GetReleaseContent"/>
+  </wsdl:message>
+  <wsdl:message name="GetReleaseContentSoapOut">
+    <wsdl:part name="parameters" element="tns:GetReleaseContentResponse"/>
+  </wsdl:message>
+  <wsdl:message name="GetReleaseContentHeader">
+    <wsdl:part name="Header" element="tns:Header"/>
+  </wsdl:message>
+  <wsdl:message name="GetTodaysSecurityHeadlinesHttpGetIn">
+    <wsdl:part name="Identifier" type="s:string"/>
+    <wsdl:part name="IdentifierType" type="s:string"/>
+  </wsdl:message>
+  <wsdl:message name="GetTodaysSecurityHeadlinesHttpGetOut">
+    <wsdl:part name="Body" element="tns:SecurityHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="GetTodaysMarketHeadlinesHttpGetIn"/>
+  <wsdl:message name="GetTodaysMarketHeadlinesHttpGetOut">
+    <wsdl:part name="Body" element="tns:MarketHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="GetTopSecurityHeadlinesHttpGetIn">
+    <wsdl:part name="Identifier" type="s:string"/>
+    <wsdl:part name="IdentifierType" type="s:string"/>
+    <wsdl:part name="Count" type="s:string"/>
+  </wsdl:message>
+  <wsdl:message name="GetTopSecurityHeadlinesHttpGetOut">
+    <wsdl:part name="Body" element="tns:SecurityHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="GetTopMarketHeadlinesHttpGetIn">
+    <wsdl:part name="Count" type="s:string"/>
+  </wsdl:message>
+  <wsdl:message name="GetTopMarketHeadlinesHttpGetOut">
+    <wsdl:part name="Body" element="tns:MarketHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="GetLastSecurityHeadlinesHttpGetIn">
+    <wsdl:part name="Identifier" type="s:string"/>
+    <wsdl:part name="IdentifierType" type="s:string"/>
+    <wsdl:part name="SinceDate" type="s:string"/>
+  </wsdl:message>
+  <wsdl:message name="GetLastSecurityHeadlinesHttpGetOut">
+    <wsdl:part name="Body" element="tns:SecurityHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="GetLastMarketHeadlinesHttpGetIn">
+    <wsdl:part name="SinceDate" type="s:string"/>
+  </wsdl:message>
+  <wsdl:message name="GetLastMarketHeadlinesHttpGetOut">
+    <wsdl:part name="Body" element="tns:MarketHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="SearchSecurityHeadlinesHttpGetIn">
+    <wsdl:part name="Identifier" type="s:string"/>
+    <wsdl:part name="IdentifierType" type="s:string"/>
+    <wsdl:part name="Source" type="s:string"/>
+    <wsdl:part name="Title" type="s:string"/>
+    <wsdl:part name="StartDate" type="s:string"/>
+    <wsdl:part name="EndDate" type="s:string"/>
+  </wsdl:message>
+  <wsdl:message name="SearchSecurityHeadlinesHttpGetOut">
+    <wsdl:part name="Body" element="tns:SecurityHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="SearchMarketHeadlinesHttpGetIn">
+    <wsdl:part name="Source" type="s:string"/>
+    <wsdl:part name="Title" type="s:string"/>
+    <wsdl:part name="StartDate" type="s:string"/>
+    <wsdl:part name="EndDate" type="s:string"/>
+  </wsdl:message>
+  <wsdl:message name="SearchMarketHeadlinesHttpGetOut">
+    <wsdl:part name="Body" element="tns:MarketHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="GetHistoricalSecurityHeadlinesHttpGetIn">
+    <wsdl:part name="Identifier" type="s:string"/>
+    <wsdl:part name="IdentifierType" type="s:string"/>
+    <wsdl:part name="Source" type="s:string"/>
+    <wsdl:part name="StartDate" type="s:string"/>
+    <wsdl:part name="EndDate" type="s:string"/>
+  </wsdl:message>
+  <wsdl:message name="GetHistoricalSecurityHeadlinesHttpGetOut">
+    <wsdl:part name="Body" element="tns:SecurityHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="GetHistoricalMarketHeadlinesHttpGetIn">
+    <wsdl:part name="Source" type="s:string"/>
+    <wsdl:part name="StartDate" type="s:string"/>
+    <wsdl:part name="EndDate" type="s:string"/>
+  </wsdl:message>
+  <wsdl:message name="GetHistoricalMarketHeadlinesHttpGetOut">
+    <wsdl:part name="Body" element="tns:MarketHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="GetReleaseContentHttpGetIn">
+    <wsdl:part name="ReleaseID" type="s:string"/>
+  </wsdl:message>
+  <wsdl:message name="GetReleaseContentHttpGetOut">
+    <wsdl:part name="Body" element="tns:Release"/>
+  </wsdl:message>
+  <wsdl:message name="GetTodaysSecurityHeadlinesHttpPostIn">
+    <wsdl:part name="Identifier" type="s:string"/>
+    <wsdl:part name="IdentifierType" type="s:string"/>
+  </wsdl:message>
+  <wsdl:message name="GetTodaysSecurityHeadlinesHttpPostOut">
+    <wsdl:part name="Body" element="tns:SecurityHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="GetTodaysMarketHeadlinesHttpPostIn"/>
+  <wsdl:message name="GetTodaysMarketHeadlinesHttpPostOut">
+    <wsdl:part name="Body" element="tns:MarketHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="GetTopSecurityHeadlinesHttpPostIn">
+    <wsdl:part name="Identifier" type="s:string"/>
+    <wsdl:part name="IdentifierType" type="s:string"/>
+    <wsdl:part name="Count" type="s:string"/>
+  </wsdl:message>
+  <wsdl:message name="GetTopSecurityHeadlinesHttpPostOut">
+    <wsdl:part name="Body" element="tns:SecurityHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="GetTopMarketHeadlinesHttpPostIn">
+    <wsdl:part name="Count" type="s:string"/>
+  </wsdl:message>
+  <wsdl:message name="GetTopMarketHeadlinesHttpPostOut">
+    <wsdl:part name="Body" element="tns:MarketHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="GetLastSecurityHeadlinesHttpPostIn">
+    <wsdl:part name="Identifier" type="s:string"/>
+    <wsdl:part name="IdentifierType" type="s:string"/>
+    <wsdl:part name="SinceDate" type="s:string"/>
+  </wsdl:message>
+  <wsdl:message name="GetLastSecurityHeadlinesHttpPostOut">
+    <wsdl:part name="Body" element="tns:SecurityHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="GetLastMarketHeadlinesHttpPostIn">
+    <wsdl:part name="SinceDate" type="s:string"/>
+  </wsdl:message>
+  <wsdl:message name="GetLastMarketHeadlinesHttpPostOut">
+    <wsdl:part name="Body" element="tns:MarketHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="SearchSecurityHeadlinesHttpPostIn">
+    <wsdl:part name="Identifier" type="s:string"/>
+    <wsdl:part name="IdentifierType" type="s:string"/>
+    <wsdl:part name="Source" type="s:string"/>
+    <wsdl:part name="Title" type="s:string"/>
+    <wsdl:part name="StartDate" type="s:string"/>
+    <wsdl:part name="EndDate" type="s:string"/>
+  </wsdl:message>
+  <wsdl:message name="SearchSecurityHeadlinesHttpPostOut">
+    <wsdl:part name="Body" element="tns:SecurityHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="SearchMarketHeadlinesHttpPostIn">
+    <wsdl:part name="Source" type="s:string"/>
+    <wsdl:part name="Title" type="s:string"/>
+    <wsdl:part name="StartDate" type="s:string"/>
+    <wsdl:part name="EndDate" type="s:string"/>
+  </wsdl:message>
+  <wsdl:message name="SearchMarketHeadlinesHttpPostOut">
+    <wsdl:part name="Body" element="tns:MarketHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="GetHistoricalSecurityHeadlinesHttpPostIn">
+    <wsdl:part name="Identifier" type="s:string"/>
+    <wsdl:part name="IdentifierType" type="s:string"/>
+    <wsdl:part name="Source" type="s:string"/>
+    <wsdl:part name="StartDate" type="s:string"/>
+    <wsdl:part name="EndDate" type="s:string"/>
+  </wsdl:message>
+  <wsdl:message name="GetHistoricalSecurityHeadlinesHttpPostOut">
+    <wsdl:part name="Body" element="tns:SecurityHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="GetHistoricalMarketHeadlinesHttpPostIn">
+    <wsdl:part name="Source" type="s:string"/>
+    <wsdl:part name="StartDate" type="s:string"/>
+    <wsdl:part name="EndDate" type="s:string"/>
+  </wsdl:message>
+  <wsdl:message name="GetHistoricalMarketHeadlinesHttpPostOut">
+    <wsdl:part name="Body" element="tns:MarketHeadlines"/>
+  </wsdl:message>
+  <wsdl:message name="GetReleaseContentHttpPostIn">
+    <wsdl:part name="ReleaseID" type="s:string"/>
+  </wsdl:message>
+  <wsdl:message name="GetReleaseContentHttpPostOut">
+    <wsdl:part name="Body" element="tns:Release"/>
+  </wsdl:message>
+  <wsdl:portType name="XigniteReleasesSoap">
+    <wsdl:operation name="GetTodaysSecurityHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return press releases for a security for today.</documentation>
+      <wsdl:input message="tns:GetTodaysSecurityHeadlinesSoapIn"/>
+      <wsdl:output message="tns:GetTodaysSecurityHeadlinesSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetTodaysMarketHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return press releases for today.</documentation>
+      <wsdl:input message="tns:GetTodaysMarketHeadlinesSoapIn"/>
+      <wsdl:output message="tns:GetTodaysMarketHeadlinesSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetTopSecurityHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return the top press releases for a security.</documentation>
+      <wsdl:input message="tns:GetTopSecurityHeadlinesSoapIn"/>
+      <wsdl:output message="tns:GetTopSecurityHeadlinesSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetTopMarketHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return the top press releases.</documentation>
+      <wsdl:input message="tns:GetTopMarketHeadlinesSoapIn"/>
+      <wsdl:output message="tns:GetTopMarketHeadlinesSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetLastSecurityHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return the last press releases for a security since a certain time.</documentation>
+      <wsdl:input message="tns:GetLastSecurityHeadlinesSoapIn"/>
+      <wsdl:output message="tns:GetLastSecurityHeadlinesSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetLastMarketHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return the last press releases since a certain time.</documentation>
+      <wsdl:input message="tns:GetLastMarketHeadlinesSoapIn"/>
+      <wsdl:output message="tns:GetLastMarketHeadlinesSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="SearchSecurityHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Search press releases for a security by date and title.</documentation>
+      <wsdl:input message="tns:SearchSecurityHeadlinesSoapIn"/>
+      <wsdl:output message="tns:SearchSecurityHeadlinesSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="SearchMarketHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Search press releases by date and title.</documentation>
+      <wsdl:input message="tns:SearchMarketHeadlinesSoapIn"/>
+      <wsdl:output message="tns:SearchMarketHeadlinesSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetHistoricalSecurityHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return press releases headlines for a security and a date range.</documentation>
+      <wsdl:input message="tns:GetHistoricalSecurityHeadlinesSoapIn"/>
+      <wsdl:output message="tns:GetHistoricalSecurityHeadlinesSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetHistoricalMarketHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return press releases headlines for a date range.</documentation>
+      <wsdl:input message="tns:GetHistoricalMarketHeadlinesSoapIn"/>
+      <wsdl:output message="tns:GetHistoricalMarketHeadlinesSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetReleaseContent">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return the content of a press release.</documentation>
+      <wsdl:input message="tns:GetReleaseContentSoapIn"/>
+      <wsdl:output message="tns:GetReleaseContentSoapOut"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="XigniteReleasesHttpGet">
+    <wsdl:operation name="GetTodaysSecurityHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return press releases for a security for today.</documentation>
+      <wsdl:input message="tns:GetTodaysSecurityHeadlinesHttpGetIn"/>
+      <wsdl:output message="tns:GetTodaysSecurityHeadlinesHttpGetOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetTodaysMarketHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return press releases for today.</documentation>
+      <wsdl:input message="tns:GetTodaysMarketHeadlinesHttpGetIn"/>
+      <wsdl:output message="tns:GetTodaysMarketHeadlinesHttpGetOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetTopSecurityHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return the top press releases for a security.</documentation>
+      <wsdl:input message="tns:GetTopSecurityHeadlinesHttpGetIn"/>
+      <wsdl:output message="tns:GetTopSecurityHeadlinesHttpGetOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetTopMarketHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return the top press releases.</documentation>
+      <wsdl:input message="tns:GetTopMarketHeadlinesHttpGetIn"/>
+      <wsdl:output message="tns:GetTopMarketHeadlinesHttpGetOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetLastSecurityHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return the last press releases for a security since a certain time.</documentation>
+      <wsdl:input message="tns:GetLastSecurityHeadlinesHttpGetIn"/>
+      <wsdl:output message="tns:GetLastSecurityHeadlinesHttpGetOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetLastMarketHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return the last press releases since a certain time.</documentation>
+      <wsdl:input message="tns:GetLastMarketHeadlinesHttpGetIn"/>
+      <wsdl:output message="tns:GetLastMarketHeadlinesHttpGetOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="SearchSecurityHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Search press releases for a security by date and title.</documentation>
+      <wsdl:input message="tns:SearchSecurityHeadlinesHttpGetIn"/>
+      <wsdl:output message="tns:SearchSecurityHeadlinesHttpGetOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="SearchMarketHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Search press releases by date and title.</documentation>
+      <wsdl:input message="tns:SearchMarketHeadlinesHttpGetIn"/>
+      <wsdl:output message="tns:SearchMarketHeadlinesHttpGetOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetHistoricalSecurityHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return press releases headlines for a security and a date range.</documentation>
+      <wsdl:input message="tns:GetHistoricalSecurityHeadlinesHttpGetIn"/>
+      <wsdl:output message="tns:GetHistoricalSecurityHeadlinesHttpGetOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetHistoricalMarketHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return press releases headlines for a date range.</documentation>
+      <wsdl:input message="tns:GetHistoricalMarketHeadlinesHttpGetIn"/>
+      <wsdl:output message="tns:GetHistoricalMarketHeadlinesHttpGetOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetReleaseContent">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return the content of a press release.</documentation>
+      <wsdl:input message="tns:GetReleaseContentHttpGetIn"/>
+      <wsdl:output message="tns:GetReleaseContentHttpGetOut"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="XigniteReleasesHttpPost">
+    <wsdl:operation name="GetTodaysSecurityHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return press releases for a security for today.</documentation>
+      <wsdl:input message="tns:GetTodaysSecurityHeadlinesHttpPostIn"/>
+      <wsdl:output message="tns:GetTodaysSecurityHeadlinesHttpPostOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetTodaysMarketHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return press releases for today.</documentation>
+      <wsdl:input message="tns:GetTodaysMarketHeadlinesHttpPostIn"/>
+      <wsdl:output message="tns:GetTodaysMarketHeadlinesHttpPostOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetTopSecurityHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return the top press releases for a security.</documentation>
+      <wsdl:input message="tns:GetTopSecurityHeadlinesHttpPostIn"/>
+      <wsdl:output message="tns:GetTopSecurityHeadlinesHttpPostOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetTopMarketHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return the top press releases.</documentation>
+      <wsdl:input message="tns:GetTopMarketHeadlinesHttpPostIn"/>
+      <wsdl:output message="tns:GetTopMarketHeadlinesHttpPostOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetLastSecurityHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return the last press releases for a security since a certain time.</documentation>
+      <wsdl:input message="tns:GetLastSecurityHeadlinesHttpPostIn"/>
+      <wsdl:output message="tns:GetLastSecurityHeadlinesHttpPostOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetLastMarketHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return the last press releases since a certain time.</documentation>
+      <wsdl:input message="tns:GetLastMarketHeadlinesHttpPostIn"/>
+      <wsdl:output message="tns:GetLastMarketHeadlinesHttpPostOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="SearchSecurityHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Search press releases for a security by date and title.</documentation>
+      <wsdl:input message="tns:SearchSecurityHeadlinesHttpPostIn"/>
+      <wsdl:output message="tns:SearchSecurityHeadlinesHttpPostOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="SearchMarketHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Search press releases by date and title.</documentation>
+      <wsdl:input message="tns:SearchMarketHeadlinesHttpPostIn"/>
+      <wsdl:output message="tns:SearchMarketHeadlinesHttpPostOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetHistoricalSecurityHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return press releases headlines for a security and a date range.</documentation>
+      <wsdl:input message="tns:GetHistoricalSecurityHeadlinesHttpPostIn"/>
+      <wsdl:output message="tns:GetHistoricalSecurityHeadlinesHttpPostOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetHistoricalMarketHeadlines">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return press releases headlines for a date range.</documentation>
+      <wsdl:input message="tns:GetHistoricalMarketHeadlinesHttpPostIn"/>
+      <wsdl:output message="tns:GetHistoricalMarketHeadlinesHttpPostOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetReleaseContent">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Return the content of a press release.</documentation>
+      <wsdl:input message="tns:GetReleaseContentHttpPostIn"/>
+      <wsdl:output message="tns:GetReleaseContentHttpPostOut"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="XigniteReleasesSoap" type="tns:XigniteReleasesSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <wsdl:operation name="GetTodaysSecurityHeadlines">
+      <soap:operation soapAction="http://www.xignite.com/services/GetTodaysSecurityHeadlines" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:GetTodaysSecurityHeadlinesHeader" part="Header" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTodaysMarketHeadlines">
+      <soap:operation soapAction="http://www.xignite.com/services/GetTodaysMarketHeadlines" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:GetTodaysMarketHeadlinesHeader" part="Header" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTopSecurityHeadlines">
+      <soap:operation soapAction="http://www.xignite.com/services/GetTopSecurityHeadlines" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:GetTopSecurityHeadlinesHeader" part="Header" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTopMarketHeadlines">
+      <soap:operation soapAction="http://www.xignite.com/services/GetTopMarketHeadlines" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:GetTopMarketHeadlinesHeader" part="Header" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLastSecurityHeadlines">
+      <soap:operation soapAction="http://www.xignite.com/services/GetLastSecurityHeadlines" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:GetLastSecurityHeadlinesHeader" part="Header" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLastMarketHeadlines">
+      <soap:operation soapAction="http://www.xignite.com/services/GetLastMarketHeadlines" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:GetLastMarketHeadlinesHeader" part="Header" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchSecurityHeadlines">
+      <soap:operation soapAction="http://www.xignite.com/services/SearchSecurityHeadlines" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:SearchSecurityHeadlinesHeader" part="Header" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchMarketHeadlines">
+      <soap:operation soapAction="http://www.xignite.com/services/SearchMarketHeadlines" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:SearchMarketHeadlinesHeader" part="Header" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetHistoricalSecurityHeadlines">
+      <soap:operation soapAction="http://www.xignite.com/services/GetHistoricalSecurityHeadlines" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:GetHistoricalSecurityHeadlinesHeader" part="Header" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetHistoricalMarketHeadlines">
+      <soap:operation soapAction="http://www.xignite.com/services/GetHistoricalMarketHeadlines" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:GetHistoricalMarketHeadlinesHeader" part="Header" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetReleaseContent">
+      <soap:operation soapAction="http://www.xignite.com/services/GetReleaseContent" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:GetReleaseContentHeader" part="Header" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="XigniteReleasesHttpGet" type="tns:XigniteReleasesHttpGet">
+    <http:binding verb="GET"/>
+    <wsdl:operation name="GetTodaysSecurityHeadlines">
+      <http:operation location="/GetTodaysSecurityHeadlines"/>
+      <wsdl:input>
+        <http:urlEncoded/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTodaysMarketHeadlines">
+      <http:operation location="/GetTodaysMarketHeadlines"/>
+      <wsdl:input>
+        <http:urlEncoded/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTopSecurityHeadlines">
+      <http:operation location="/GetTopSecurityHeadlines"/>
+      <wsdl:input>
+        <http:urlEncoded/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTopMarketHeadlines">
+      <http:operation location="/GetTopMarketHeadlines"/>
+      <wsdl:input>
+        <http:urlEncoded/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLastSecurityHeadlines">
+      <http:operation location="/GetLastSecurityHeadlines"/>
+      <wsdl:input>
+        <http:urlEncoded/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLastMarketHeadlines">
+      <http:operation location="/GetLastMarketHeadlines"/>
+      <wsdl:input>
+        <http:urlEncoded/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchSecurityHeadlines">
+      <http:operation location="/SearchSecurityHeadlines"/>
+      <wsdl:input>
+        <http:urlEncoded/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchMarketHeadlines">
+      <http:operation location="/SearchMarketHeadlines"/>
+      <wsdl:input>
+        <http:urlEncoded/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetHistoricalSecurityHeadlines">
+      <http:operation location="/GetHistoricalSecurityHeadlines"/>
+      <wsdl:input>
+        <http:urlEncoded/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetHistoricalMarketHeadlines">
+      <http:operation location="/GetHistoricalMarketHeadlines"/>
+      <wsdl:input>
+        <http:urlEncoded/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetReleaseContent">
+      <http:operation location="/GetReleaseContent"/>
+      <wsdl:input>
+        <http:urlEncoded/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="XigniteReleasesHttpPost" type="tns:XigniteReleasesHttpPost">
+    <http:binding verb="POST"/>
+    <wsdl:operation name="GetTodaysSecurityHeadlines">
+      <http:operation location="/GetTodaysSecurityHeadlines"/>
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTodaysMarketHeadlines">
+      <http:operation location="/GetTodaysMarketHeadlines"/>
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTopSecurityHeadlines">
+      <http:operation location="/GetTopSecurityHeadlines"/>
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTopMarketHeadlines">
+      <http:operation location="/GetTopMarketHeadlines"/>
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLastSecurityHeadlines">
+      <http:operation location="/GetLastSecurityHeadlines"/>
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLastMarketHeadlines">
+      <http:operation location="/GetLastMarketHeadlines"/>
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchSecurityHeadlines">
+      <http:operation location="/SearchSecurityHeadlines"/>
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchMarketHeadlines">
+      <http:operation location="/SearchMarketHeadlines"/>
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetHistoricalSecurityHeadlines">
+      <http:operation location="/GetHistoricalSecurityHeadlines"/>
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetHistoricalMarketHeadlines">
+      <http:operation location="/GetHistoricalMarketHeadlines"/>
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetReleaseContent">
+      <http:operation location="/GetReleaseContent"/>
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="XigniteReleases">
+    <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">This web service provides corporate press release information.</documentation>
+    <wsdl:port name="XigniteReleasesSoap" binding="tns:XigniteReleasesSoap">
+      <soap:address location="http://www.xignite.com/xreleases.asmx"/>
+    </wsdl:port>
+    <wsdl:port name="XigniteReleasesHttpGet" binding="tns:XigniteReleasesHttpGet">
+      <http:address location="http://www.xignite.com/xreleases.asmx"/>
+    </wsdl:port>
+    <wsdl:port name="XigniteReleasesHttpPost" binding="tns:XigniteReleasesHttpPost">
+      <http:address location="http://www.xignite.com/xreleases.asmx"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

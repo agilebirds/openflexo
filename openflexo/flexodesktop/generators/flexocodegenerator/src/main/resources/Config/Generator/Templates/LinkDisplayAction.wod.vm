@@ -1,0 +1,56 @@
+#set($confirmBinding = "confirmPanelMessage")
+#if($widget.getPopupComponentDefinition())
+	#set($linkComponent = "${widget.getPopupComponentDefinition()}PopupLink")
+#elseif($widget.getSubmitForm() || ${widget.isInRepetition()})
+	#set($linkComponent = "WDLMultiSubmitLink")
+#elseif($widget.hasConfirmMessage())
+	#set($linkComponent = "WDLJSConfirmPanel")
+	#set($confirmBinding = "confirmMessage")
+#else
+	#set($linkComponent = "WOHyperlink")
+#end
+  
+#name()Condition: WOConditional {
+    condition = show#capName();
+}
+
+#name()Link: $linkComponent {
+	#if($widget.getPopupComponentDefinition())
+		#if(${widget.getIncludePopupInPage()})
+			hiddenFieldValue = hiddenFieldValue;
+			includePopupInPage = true;
+			#if(${widget.isInRepetition()})
+				uniqueIdentifier = ${widget.repetition().getHTMLListDescriptor().getIndexName()};
+			#end
+		#end
+		#foreach($binding in ${widget.getPopupComponentInstance().getBindings()})
+			#if(${binding.getBindingValue()})
+				${binding.getBindingDefinitionName()} = ${binding.getBindingValue().getWodStringRepresentation()};
+			#end
+		#end
+	#end
+
+	#if($widget.getSubmitForm() || ${widget.isInRepetition()})
+		#if($widget.getPopupComponentDefinition())
+			confirmValue = #name()Value;
+		#else
+			value = #name()Value;
+		#end
+	#else
+		href = getUrlFor#capName();
+	#end
+	#if($widget.hasConfirmMessage())
+		#if($project.getIsLocalized())
+			$confirmBinding = confirmMessageForLink#capName();
+		#else
+			$confirmBinding = "${widget.getJavascriptConfirmMessage()}";           
+		#end
+	#end
+	#if($widget.isCustomButton())
+		class="denaliButton";
+	#end
+    #additionalBindings()
+    #tooltipAsTitle()
+}
+
+#renderLinkContent($widget)

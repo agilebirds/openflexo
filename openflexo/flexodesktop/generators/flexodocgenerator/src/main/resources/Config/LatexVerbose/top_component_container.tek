@@ -1,0 +1,39 @@
+<GEN_IF(POPUP)>
+\hypertarget{<TOP_REFERENCE>}{}
+\popup{<POPUP_NAME>}\nopagebreak
+\nopagebreak
+{
+\begin{center}
+\scalebox{0.6}{
+\includegraphics{<IMAGE_NAME>}}\par
+\hyperlink{<POPUP_REFERENCE>}{<POPUP_NAME>}
+\end{center}
+}
+</GEN_IF(POPUP)>
+<GEN_IF(TAB)>
+\hypertarget{<TOP_REFERENCE>}{}
+\tab{<TAB_NAME>}\nopagebreak
+<DESCRIPTION>
+{
+\begin{center}
+\includegraphics[width=147mm]{<IMAGE_NAME>}
+\end{center}
+}
+<GEN_IF(BLOCK_LIST)>\par This tab contains the following screen areas:
+<BLOCK_LIST></GEN_IF(BLOCK_LIST)>
+</GEN_IF(TAB)>
+
+<GEN_IF(PAGE)>
+\hypertarget{<TOP_REFERENCE>}{}
+\textbf{Screen name:} <PAGE_NAME>
+\par \textbf{Description:} <DESCRIPTION>
+\nopagebreak
+{
+\begin{center}
+\includegraphics[width=147mm]{<IMAGE_NAME>}
+\end{center}
+}
+<GEN_IF(BLOCK_LIST)><BLOCK_LIST></GEN_IF(BLOCK_LIST)>
+</GEN_IF(PAGE)>
+<GEN_IF(TAB_LIST)>
+<TAB_LIST></GEN_IF(TAB_LIST)>

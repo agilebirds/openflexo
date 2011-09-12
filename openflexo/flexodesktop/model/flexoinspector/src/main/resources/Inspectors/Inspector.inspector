@@ -1,0 +1,27 @@
+<inspector title = "Node"  inheritsfrom ="WKFRepresentable.inspector">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="name" label="name" widget="TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		</property>
+	</tab>
+	<tab name="Advanced" index="1">
+	</tab>
+	<tab name="Doc" index="2">
+		<property name="index" label="index" widget="INTEGER" constraint="0"/>
+	</tab>
+	<tab name="Graphics" index="4" layout="DEFAULT">
+		<!--<property name="nodeLabelPosX" label="label_pos_x" widget="READ_ONLY_INTEGER" constraint="6">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="nodeLabelPosY" label="label_pos_y" widget="READ_ONLY_INTEGER" constraint="7">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="displayLabel" label="display_label" widget="CHECKBOX" constraint="8">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>-->
+	</tab>
+</inspector>

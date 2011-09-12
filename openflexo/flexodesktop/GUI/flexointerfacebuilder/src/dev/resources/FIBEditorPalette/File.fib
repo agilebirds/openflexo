@@ -1,0 +1,5 @@
+<File column="10">
+	<Parameter name="x" value="10"/>
+	<Parameter name="y" value="140"/>
+	<Parameter name="isPaletteElement" value="true"/>
+</File>

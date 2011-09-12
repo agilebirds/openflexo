@@ -1,0 +1,196 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[a4paper, width=16.1cm, height=24cm]{geometry}
+\usepackage[latin1]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\hypersetup{%
+urlcolor=blue,
+colorlinks=true,
+linkcolor=blue,
+}%
+
+\usepackage{flexolist}
+\usepackage{flexodm}
+\newcommand{\systemname}{<SYSTEM_NAME>}
+\newcommand{\systemversion}{V <SYSTEM_VERSION>}
+\newcommand{\documentname}{<PROJECT_NAME>}
+\newcommand{\documentdate}{<DOCUMENT_DATE>}
+\newcommand*{\DOT}{.}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{1pt}
+
+\renewcommand{\doccustomer}{<CUSTOMER>}
+\renewcommand{\doctitle}{<DOC_TITLE>}
+\renewcommand{\docversion}{0.1.0}
+\renewcommand{\softversion}{\systemversion}
+\renewcommand{\docudate}{\documentdate}
+\renewcommand{\docuauthor}{<AUTHOR>}
+\renewcommand{\docreviewer}{<REVIEWER>}
+\renewcommand{\reviewdate}{<REVIEW_DATE>}
+\renewcommand{\docref}{\documentname.tex\_\docversion}
+\setlength{\parindent}{0pt}
+\addtolength{\headheight}{20mm}
+%\addtolength{\textheight}{-13mm}
+%\usepackage{draftcopy}
+%\draftcopyName{Confidential}{120}
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{5}
+\DeclareGraphicsExtensions{.jpg,.pdf}
+%\sloppy
+%\usepackage{layout}
+\usepackage{array}
+\LTpre=0pt \LTpost=0.25\smallskipamount
+\graphicspath{{./}} %Insert here the different directories where figures should be found. Just add the path's inside a pair of braces {}
+\begin{document}
+
+\makeatletter
+\begingroup
+\let\ps@plain\ps@empty
+\pagestyle{empty}
+\denalititlepage
+
+\tableofcontents
+\clearpage
+\endgroup
+\makeatother
+\myitemsep
+
+% If this is put in front of the table of contents it will look
+% rather funny so refrain from doing that.
+\setlength{\parindent}{0em}
+%\setlength{\parskip}{2pt}
+\newlength{\parskipBU}
+\setlength{\parskipBU}{\parskip}
+\fancyhead{}
+\fancyfoot{}
+%\fancyheadoffset{15mm}
+
+\fancyhead[C]{
+	\begin{tabular}{|c|@{}c@{}|} 
+    \hline
+	\raisebox{-4mm}{\includegraphics{Logo}}& %Type here the name (without its extension) of the logo to display in the H/F
+    {\begin{tabular}{c|c|c}
+      \parbox{63mm}{\vspace{1mm}\hspace*{16mm}\textbf{Functional Specification \hspace*{15mm}\vspace{1mm}}}\hspace*{15mm} & \multicolumn{2}{c}{\documentname} \\
+      \cline{1-3}
+	  \systemname/\systemversion & \documentdate & Page \thepage{} of \pageref{LastPage}
+  	\end{tabular}
+	}\\
+	\hline
+\end{tabular}
+}
+\fancyfoot[L]{\small \copyright Denali Consulting s.a., 2005} % Don't forget to increase it every year
+\fancyfoot[R]{\small Version: \docversion}
+
+\pagestyle{fancy}
+\newpage
+\section{Purpose}
+\label{sec:purpose}
+
+The purpose of this Functional Specification is to define and document the functional behavior of .... This Functional Specification corresponds to specification collected during user meetings and Prototype reviews. 
+Processes defined for this application are described in details in respect of the following structure: Process \textgreater Activity \textgreater Operation \textgreater Action.
+A Prototype is provided in parallel of this document to illustrate the user interface and the application logic. It is provided as an internet website without databases. For a better understanding and review of this document, it is recommended to use the associated Prototype.
+This document and the prototype define the Application Blueprint and should be validated and signed before any development start.
+
+
+\section{Scope}
+\label{sec:scope}
+
+
+\section{Stakeholders}
+\label{sec:stakeholders}
+
+\begin{center}\begin{longtable}{|l|l|l|l|}\hline\hline
+\textbf{Role} & \textbf{Name} & \textbf{Init.} & \textbf{Responsible for}\\\hline\hline\endhead\multicolumn{4}{|r|}{(continued on next page)}\\\hline\endfoot\endlastfoot
+First user & ... & ... & Review \& approve the FS.\\\hline
+Project Manager & ... & ... & Review \& approve the FS.\\\hline
+Business Analyst	& ... & ... & Adviser.\\\hline
+Vendor & Denali & DEN & Analyse \& Development\\\hline
+\end{longtable}\end{center}
+
+\section{Definitions}
+\label{sec:definitions}
+
+\begin{itemize}
+  \item  \labeldescription{Process} {The process definition consists of a network of activities and their relationships, criteria to indicate the start and termination of the process, and information about the
+individual activities.}
+  \item \labeldescription{Activity} {A description of a piece of work that forms one logical step within a process.}
+  \item \labeldescription{Operation} {An Operation defined one step within an Activity and it's generaly associated with a user interface.}
+  \item \labeldescription{Action} {A functional element within a user interface in an Operation (generally associated with an icon or a button).}
+  \item \labeldescription{Roles} {User role associated with an Activity. A user is associated with one or more role within a process.}
+  \item \labeldescription{Block} {A graphical limited area within a user interface, containing label, fields and actions.}
+  \item \labeldescription{Popup} {A user interface called from  another one and displayed over it.}
+  \item \labeldescription{Widget} {Type of object in the user interface (e.g.: dropdown, texfield,...).}
+  \item \labeldescription{Output field} {Information displayed in user interfaces that cannot be modified.}
+  \item \labeldescription{Input field} {Field form allowing the user to introduce value for a specific data.}
+  \item \labeldescription{M} {Mandatory field} 
+\end{itemize}
+\newpage
+\section{Functions}
+\label{sec:functions}
+
+% include the flexo generated documentation
+\input{<FILE_NAME>.wkf} %Insert here the name (without the extension .tex) and path of the generated document
+\newpage
+
+\section{Datamodel}
+\label{sec:datamodel}
+\input{<FILE_NAME>.dm} % Insert between the two brackets the correct path (absolute or relative to the position of this one) to the generated document "something.dm.tex" (do not copy the .tek)
+\newpage
+
+\section{Screen Details}
+\label{sec:screendetails}
+\input{<FILE_NAME>.ie}
+
+\section{Logical data}
+\label{sec:logical-data}
+
+
+\section{Applications}
+\label{sec:applications}
+
+
+\section{Technologies}
+\label{sec:technologies}
+
+
+\section{Technical environment}
+\label{sec:techn-envir}
+
+
+\section{Non production platforms}
+\label{sec:non-prod-platf}
+
+
+ \section{Additionnal operational aspects}
+\label{sec:addit-oper-aspects}
+
+
+\section{References}
+\label{sec:references}
+
+\appendix
+
+
+\section{Business requirements coverage}
+\label{sec:busin-requ-cover}
+
+
+\section{Function coverage}
+\label{sec:function-coverage}
+
+
+\section{Application coverage}
+\label{sec:application-coverage}
+
+
+\section{Revision log}
+\label{sec:revision-log}
+
+
+
+
+
+\end{document}

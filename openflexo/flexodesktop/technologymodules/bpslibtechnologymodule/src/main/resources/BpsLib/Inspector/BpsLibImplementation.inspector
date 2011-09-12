@@ -1,0 +1,6 @@
+<inspector title = "maven_implementation" >
+	<tab name="Basic" index="0">
+		<property name="includeMails" label="includeMails" widget="CHECKBOX" constraint="1" />
+		<property name="includeLocalization" label="includeLocalization" widget="CHECKBOX" constraint="2" />
+	</tab>
+</inspector>

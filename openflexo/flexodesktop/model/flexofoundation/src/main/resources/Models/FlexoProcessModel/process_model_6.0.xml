@@ -1,0 +1,727 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model builder="org.openflexo.foundation.xml.FlexoProcessBuilder" handlesReferences="yes" serializationMode="pseudoTree"> 
+
+  <description>
+  This is the model for process encoding, version 6.0
+  This version contains major changes, such as:
+	  - bpmn event refactoring
+  </description>
+  
+  <mapId>
+	  <map entityClass="org.openflexo.foundation.FlexoModelObject" identifierAccessor="serializationIdentifier"/>
+  </mapId>
+	
+  <entity name="org.openflexo.foundation.FlexoModelObject" abstract="YES" finalizer="finalizeDeserialization">
+   <description>Root class for all objects of Flexo</description>
+  	<property name="userIdentifier" xmlTag="userID" attribute="YES" copyable="no" description="Unique ID of the user (used for team synchronization)"/>
+  	<property name="flexoID" xmlTag="flexoID" attribute="YES" copyable="no" description="Unique ID generated and maintained by Flexo"/>
+    <property name="docFormat" xmlTag="docFormat" attribute="YES" description=""/>
+    <property name="dontGenerate" xmlTag="dontGenerate" attribute="YES" description="Check this box, if you don't want this node to generate documentation"/>
+    <property name="description" xmlTag="description" attribute="YES" description="Defines widget name"/>
+    <property name="hasSpecificDescriptions" xmlTag="useSpecificDescriptions" attribute="YES" description="Wheter the specific descriptions should be used in the generated documentation or not"/>
+    <property name="specificDescriptions" xmlTag="specificDescriptions" type="hashtable" description="Hashtable(String,String) that contains a name of a DocType as a key, and a description specific to that DocType as the value"/>
+    <property name="customProperties" contains="org.openflexo.foundation.FlexoProperty" type="vector" primary="yes"/>
+    <property name="dynamicProperties" xmlTag="?" type="unmappedAttributes" description="Hashtable(String,String) that contains dynamic properties (data that are not handled by application, but need to be stored in the context of back compatibility)"/>
+    <property name="editionPatternReferences" type="vector" contains="org.openflexo.foundation.ontology.EditionPatternReference" primary="yes"/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.ontology.EditionPatternReference" xmlTag="EditionPatternReference">
+     <description>EditionPattern references in which this object is involved</description>
+     <property name="editionPattern" xmlTag="editionPattern" attribute="YES" description=""/>
+     <property name="instanceId" xmlTag="instanceId" attribute="YES" description=""/>
+     <property name="patternRoleName" xmlTag="patternRole" attribute="YES" description=""/>
+     <property name="actors" contains="org.openflexo.foundation.ontology.EditionPatternReference$ActorReference" primary="yes" type="hashtable" key="patternRole" description=""/> 
+  </entity>
+
+  <entity name="org.openflexo.foundation.ontology.EditionPatternReference$ActorReference" abstract="yes">
+      <property name="patternRole" xmlTag="patternRole" attribute="YES" description=""/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.ontology.EditionPatternReference$ConceptActorReference" xmlTag="ConceptActorReference">
+      <property name="objectURI" xmlTag="objectURI" attribute="YES" description=""/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.ontology.EditionPatternReference$ObjectPropertyStatementActorReference" xmlTag="ObjectPropertyStatementActorReference">
+      <property name="subjectURI" xmlTag="subjectURI" attribute="YES" description=""/>
+      <property name="objectPropertyURI" xmlTag="objectPropertyURI" attribute="YES" description=""/>
+      <property name="objectURI" xmlTag="objectURI" attribute="YES" description=""/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.ontology.EditionPatternReference$SubClassStatementActorReference" xmlTag="SubClassStatementActorReference">
+      <property name="subjectURI" xmlTag="subjectURI" attribute="YES" description=""/>
+      <property name="parentURI" xmlTag="parentURI" attribute="YES" description=""/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.ontology.EditionPatternReference$RestrictionStatementActorReference" xmlTag="RestrictionStatementActorReference">
+      <property name="subjectURI" xmlTag="subjectURI" attribute="YES" description=""/>
+      <property name="propertyURI" xmlTag="propertyURI" attribute="YES" description=""/>
+      <property name="objectURI" xmlTag="objectURI" attribute="YES" description=""/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.ontology.EditionPatternReference$ModelObjectActorReference" xmlTag="ModelObjectActorReference">
+      <property name="objectReference" xmlTag="objectReference" attribute="YES" description=""/>
+   </entity>
+  
+  
+  <entity name="org.openflexo.foundation.FlexoImportableObject" abstract="YES">
+    <property name="isDeletedOnServer" xmlTag="isDeletedOnServer" attribute="YES" description="Unique ID generated and maintained by Flexo"/>
+    <property name="URI" xmlTag="URI" attribute="YES" description=""/>
+    <property name="versionURI" xmlTag="versionURI" attribute="YES" description=""/>
+    <property name="URIFromSourceObject" xmlTag="URISource" attribute="YES" description="the URI of the object this object was issued from"/>
+  </entity>    
+
+  <entity name="org.openflexo.foundation.FlexoProperty" xmlTag="FlexoProperty">
+     <property name="name" xmlTag="name" attribute="yes"/>
+     <property name="value" xmlTag="value" attribute="yes"/>
+  </entity>
+  
+   <entity name="org.openflexo.foundation.RepresentableFlexoModelObject" abstract="YES">
+    <description>Contains data used for graphical representations</description>
+    <property name="graphicalProperties" xmlTag="GraphicalProperties" type="properties" description="Dynamic properties storing data used for graphical representation"/> 
+  </entity>
+
+	 <entity name="org.openflexo.foundation.wkf.WKFObject" abstract="YES" finalizer="finalizeDeserialization">
+    <description>Root class for all objects coding a FlexoProcess</description>
+  </entity>
+
+  <!-- Definitions for Process -->
+
+  <entity name="org.openflexo.foundation.wkf.FlexoProcess" xmlTag="FlexoProcess">
+    <description>This represents a Flexo process or sub-process. Contains data describing the process
+		and an ACTIVITY-levelled Petri-Graph</description>
+    <property name="name" xmlTag="name" attribute="YES" description="Name of the process"/> 
+	<property name="statusList" xmlTag="StatusList" description="List of all status involved in this process"/>
+    <property name="activityPetriGraph" xmlTag="ActivityPetriGraph" primary="yes" description="Defines Petri graph of this process"/> 
+    <property name="metricsValues" xmlTag="Metrics" type="vector" primary="yes"/> 
+    <property name="isWebService" xmlTag="isWebService" attribute="YES" description="Flag indicating wether this process is a WebService"/> 
+    <property name="portRegistery" xmlTag="PortRegistery" description="Port registery for this FlexoProcess"/>
+    <property name="serviceInterfaces" xmlTag="ServiceInterface" type="Vector" primary="yes" description="Service Interfaces of this process"/> 
+    <property name="lastUpdate" xmlTag = "lastUpdate" attribute="yes" description="Last update date of this object. Used for optimistic dependancy checking."/> 
+ </entity>
+ 
+  <entity name="org.openflexo.foundation.wkf.StatusList" xmlTag="StatusList">
+    <description>Represents a list of Status, related to a process</description>
+ 	<property name="status" xmlTag="Status" type="vector" primary="yes" description="List of status that are contained inside this StatusList"/>
+	<property name="defaultStatusAsString" xmlTag="DefaultStatus" attribute="YES" description="Default status for the process related to this StatusList"/>
+  </entity>
+  
+   <entity name="org.openflexo.foundation.wkf.Status" xmlTag="Status">
+    <description>Represents a status for a process</description>
+ 	<property name="name" xmlTag="label" description="Name of the status"/>
+ </entity>
+  
+  <!-- Definitions for Petri Graphs -->
+
+  <entity name="org.openflexo.foundation.wkf.FlexoPetriGraph" abstract="YES" contexts="Execution">
+    <description>Represents a Petri Graph: this is a graph where nodes are linked
+		together using edges transporting tokens that activate preconditions, at
+		the entrance of a node</description>
+    <!--<property name="isVisible" xmlTag="isVisible" attribute="YES" description="Defines visibility of this petri graph"/> -->
+   <property name="nodes" contains="org.openflexo.foundation.wkf.node.AbstractNode" type="vector" primary="yes" description="List of all nodes contained in this Petri graph"/>
+   <property name="artefacts" contains="org.openflexo.foundation.wkf.WKFArtefact" type="vector" primary="yes" description="List of all annotations contained in this Petri graph"/>
+   <property name="groups" contains="org.openflexo.foundation.wkf.WKFGroup" type="vector" primary="yes" description="List of all groups declared in this Petri graph"/>
+ </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.ActivityPetriGraph" xmlTag="ActivityPetriGraph">
+    <description>Represents a Petri Graph at ACTIVITY level</description>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.OperationPetriGraph" xmlTag="OperationPetriGraph">
+    <description>Represents a Petri Graph at OPERATION level</description>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.ActionPetriGraph" xmlTag="ActionPetriGraph">
+    <description>Represents a Petri Graph at ACTION level</description>
+  </entity> 
+
+  <!-- Definitions for groups -->
+
+  <entity name="org.openflexo.foundation.wkf.WKFGroup" abstract="yes">
+    <description>Represents a group</description>
+   	<property name="groupName" xmlTag = "groupName" attribute="yes"/>
+	<!--<property name="color" xmlTag="color" attribute="yes" description="Color of role that will be used in Workflow Editor to represents this group"/>-->
+    <property name="nodes" contains="org.openflexo.foundation.wkf.node.AbstractNode" type="vector" primary="no" description="List of all nodes contained in this group: references only"/>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.ActivityGroup" xmlTag="ActivityGroup">
+    <description>Represents a group at ACTIVITY level</description>
+   </entity> 
+  <entity name="org.openflexo.foundation.wkf.WKFArtefact" abstract="yes">
+    <description>Represents an artefact</description>
+   	<property name="text" xmlTag = "text"/>
+   	<property name="metricsValues" xmlTag="Metrics" type="vector" primary="yes"/> 
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.WKFAnnotation" xmlTag="WKFAnnotation">
+    <description>Represents an annotation</description>
+   	<property name="isAnnotation" xmlTag = "isAnnotation" attribute="yes"/>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.WKFDataSource" xmlTag="WKFDataSource">
+    <description>Represents a data source</description>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.WKFDataObject" xmlTag="WKFDataObject">
+    <description>Represents a data object</description>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.wkf.WKFStockObject" xmlTag="WKFStock">
+    <description>Represents a stock object</description>
+  </entity> 
+
+
+  <!-- Definitions for nodes -->
+
+  <entity name="org.openflexo.foundation.utils.Sortable" abstract="Yes">
+  	<property name="index" xmlTag = "docIndex" attribute="yes"/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.wkf.node.WKFNode" abstract="YES" contexts="Start,End">
+    <property name="incomingAssociations" contains="org.openflexo.foundation.wkf.edge.WKFAssociation" context="Incoming" type="vector" primary="no" description="Incoming post-conditions"/>
+    <property name="outgoingAssociations" contains="org.openflexo.foundation.wkf.edge.WKFAssociation" context="Outgoing" type="vector" primary="yes" description="Outgoing post-conditions"/>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.wkf.node.AbstractNode" abstract="YES">
+    <description>Abstract representation of a node included in the process model</description>
+    <property name="nodeName" xmlTag="nodeName" attribute="YES" description="Name of node"/> 
+    <property name="incomingPostConditions" contains="org.openflexo.foundation.wkf.edge.FlexoPostCondition" context="Incoming" type="vector" primary="no" description="Incoming post-conditions"/>
+    <property name="outgoingPostConditions" contains="org.openflexo.foundation.wkf.edge.FlexoPostCondition" context="Outgoing" type="vector" primary="yes" description="Outgoing post-conditions"/>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.node.PetriGraphNode" abstract="YES">
+    <description>Abstract representation of a node included in the process model</description>
+    <property name="nodeName" xmlTag="nodeName" attribute="YES" description="Name of node"/> 
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.node.FlexoNode" abstract="YES" contexts="AttachedBegin">
+    <description>Abstract representation of a node included in a PetriGraph at a given level. 
+		Contains pre-conditions and a set of post-conditions (instance of FlexoNodeExit)</description>
+    <property name="nodeType" xmlTag="nodeType" attribute="YES" description="Type of node: NORMAL/BEGIN/END"/> 
+    <property name="isWaiting" xmlTag="isWaiting" attribute="YES" description="TODO"/> 
+    <property name="isSelfActivated" xmlTag="isSelfActivated" attribute="YES" description="TODO"/> 
+    <property name="preConditions" xmlTag="FlexoPreCondition" type="vector" primary="yes" description="Pre-conditions attached to this node"/> 
+	<property name="activationPrimitive" xmlTag="activationPrimitive" attribute="YES" description="Binding defining execution primitive when node is activated"/> 
+	<property name="desactivationPrimitive" xmlTag="desactivationPrimitive" attribute="YES" description="Binding defining execution primitive when node is desactivated"/>
+	<property name="newStatusAsString" xmlTag="statusAsString" attribute="YES"/>  
+	<property name="activationAssignments" xmlTag="activationAssignment" type="vector" description="Assignments defined while activating this node"/> 
+	<property name="desactivationAssignments" xmlTag="desactivationAssignment" type="vector" description="Assignments defined while desactivating this node"/> 
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.node.FatherNode" abstract="YES">
+     <description>Represents ActivityNode and OperationNode</description>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.node.AbstractActivityNode" abstract="YES">
+    <description>Represents an abstract activity, which could be either an Activity or a SubProcess</description>
+    <property name="operationPetriGraph" xmlTag="OperationPetriGraph" primary="yes" description="Petri graph at OPERATION level attached to this activity"/>
+    <property name="roleReference" xmlTag="role" attribute="YES" description="Role for this activity stored as an external reference"/> 
+    <property name="roleAReference" xmlTag="roleA" attribute="YES" description="Role for this activity stored as an external reference"/> 
+    <property name="roleCReference" xmlTag="roleC" attribute="YES" description="Role for this activity stored as an external reference"/> 
+    <property name="roleIReference" xmlTag="roleI" attribute="YES" description="Role for this activity stored as an external reference"/> 
+    <property name="responsibleRoleReferences" xmlTag="ResponsibleRoles" type="vector" description="Roles responsible for this activity"/>
+    <property name="accountableRoleReferences" xmlTag="AccountableRoles" type="vector" description="Roles accoutable for this activity"/>
+    <property name="consultedRoleReferences" xmlTag="ConsultedRoles" type="vector" description="Roles consulted for this activity"/>
+    <property name="informedRoleReferences" xmlTag="InformedRoles" type="vector" description="Roles informed for this activity"/>
+    <property name="inheritedRoleName" xmlTag="inheritedRoleName" attribute="YES" description="Role name for this activity, when defined from a parent process"/> 
+    <property name="acronym" xmlTag="acronym" attribute="YES" description="Short name for this activity"/>
+    <property name="roleTextColor" xmlTag="roleTextColor" attribute="YES" description="Defines role text color"/> 
+    <property name="cssSheet" xmlTag="CSS" description="The Css for the components used in this activity"/>
+    <property name="metricsValues" xmlTag="Metrics" type="vector" primary="yes"/>
+    <property name="linkedProcessReference" xmlTag="linkedProcess" attribute="yes"/>
+    <property name="documentationUrl" xmlTag="documentationUrl" attribute="yes"/>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.node.ActivityNode" xmlTag="ActivityNode">
+    <property name="taskType" xmlTag="taskType"/>
+    <description>Represents a FlexoNode at ACTIVITY level</description>
+  </entity> 
+  <entity name="org.openflexo.foundation.wkf.node.SelfExecutableActivityNode" xmlTag="SelfExecutableActivityNode">
+    <description>Represents a self-executable FlexoNode at ACTIVITY level</description>
+	<property name="executionPrimitive" xmlTag="executionPrimitive" attribute="YES" description="Binding defining execution primitive"/> 
+	<property name="assignments" xmlTag="assignment" type="vector" description="Assignments defined for this self executable node"/>
+	<property name="assignmentDescriptions" xmlTag="assignmentDescriptions" type="vector"/> 
+    <property name="executionPetriGraph" contains="org.openflexo.foundation.wkf.ActivityPetriGraph" context="Execution" description="Defines execution Petri graph for this self-executable node"/> 
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.node.SubProcessNode" abstract="yes">
+    <description>Represents a FlexoNode at ACTIVITY level containing a sub-process</description>
+    <property name="subProcessReference" xmlTag="subProcess" attribute="YES" description="SubProcess"/> 
+    <property name="portMapRegistery" xmlTag="PortMapRegistery" description="PortMap registery for this SubProcessNode"/>
+    <property name="serviceInterfaceName" xmlTag="serviceInterfaceName" attribute="YES" description="Name of the service interface to which the portmap registry of this subprocess node is bound."/> 
+    <property name="displaySubProcessImage" xmlTag="displaySubProcessImage" attribute="YES" description="true means that this node contains a thumb of the subprocess"/> 
+  </entity> 
+
+   <entity name="org.openflexo.foundation.wkf.node.MultipleInstanceSubProcessNode" xmlTag="MultipleInstanceSubProcessNode">
+     <description>Activity related of a set of sub-processes executed in paralell or sequential</description>
+     <property name="isSequential" xmlTag="isSequential" attribute="YES" description="True if processes must be executed sequentially"/> 
+   </entity> 
+
+   <entity name="org.openflexo.foundation.wkf.node.SingleInstanceSubProcessNode" xmlTag="SingleInstanceSubProcessNode">
+     <description>Activity related to execution of a single instance of sub-process</description>
+   </entity> 
+
+   <entity name="org.openflexo.foundation.wkf.node.LoopSubProcessNode" xmlTag="LoopSubProcessNode">
+     <description>Activity related to execution of a sub-process within a loop</description>
+     <property name="loopType" xmlTag="loopType" attribute="YES" description="Type of loop (WHILE/UNTIL/FOR_INCREMENT/FOR_COLLECTION)"/> 
+     <property name="condition" xmlTag="condition" attribute="YES"/> 
+     <property name="iterator" xmlTag="iterator" attribute="YES"/> 
+     <property name="beginValue" xmlTag="beginValue" attribute="YES"/> 
+     <property name="endValue" xmlTag="endValue" attribute="YES"/> 
+     <property name="incrementValue" xmlTag="incrementValue" attribute="YES"/> 
+     <property name="iterationCollection" xmlTag="iterationCollection" attribute="YES"/> 
+     <property name="collectionItem" xmlTag="collectionItem" attribute="YES"/> 
+    </entity> 
+
+   <entity name="org.openflexo.foundation.wkf.node.WSCallSubProcessNode" xmlTag="WSCallSubProcessNode">
+     <description>Entry point to access WebService calls</description>
+   </entity> 
+
+   <entity name="org.openflexo.foundation.wkf.node.OperationNode" xmlTag="OperationNode">
+     <description>Represents a FlexoNode at level OPERATION: generally maps a screen</description>
+    <property name="actionPetriGraph" xmlTag="ActionPetriGraph" primary="yes" description="Petri graph at ACTION level attached to this operation"/>
+    <property name="componentInstance" xmlTag="OperationComponentInstance" description="TODO"/> 
+    <property name="tabOperationComponentInstance" xmlTag="TabComponentInstance" description="TODO"/> 
+    <property name="acronym" xmlTag="acronym" attribute="YES" description="Short name for this operation"/>
+    <property name="isSynchronized" xmlTag="isSynchronized" attribute="YES" description="Defines whether this operation must be synchronized or not"/> 
+    <property name="componentTextColor" xmlTag="componentTextColor" attribute="YES" description="Defines component text color"/> 
+	<property name="cssSheet" xmlTag="CSS" description="The Css for the component used by this operation"/>
+    <property name="lastUpdate" xmlTag="lastUpdate" attribute="YES" description="date used to perform fine tuning resource dependancies computing"/>
+    <property name="metricsValues" xmlTag="Metrics" type="vector" primary="yes"/>
+   </entity> 
+
+ <entity name="org.openflexo.foundation.wkf.node.SelfExecutableOperationNode" xmlTag="SelfExecutableOperationNode">
+    <description>Represents a self-executable FlexoNode at OPERATION level</description>
+	<property name="executionPrimitive" xmlTag="executionPrimitive" attribute="YES" description="Binding defining execution primitive"/> 
+	<property name="assignments" xmlTag="assignment" type="vector" description="Assignments defined for this self executable node"/>
+	<property name="assignmentDescriptions" xmlTag="assignmentDescriptions" type="vector"/> 
+    <property name="executionPetriGraph" contains="org.openflexo.foundation.wkf.OperationPetriGraph" context="Execution" description="Defines execution Petri graph for this self-executable node"/> 
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.node.ActionNode" xmlTag="ActionNode">
+     <description>Represents a FlexoNode at level ACTION</description>
+    <property name="actionType" xmlTag="actionType" attribute="YES" description="Type of action: FLEXO\_ACTION/DISPLAY\_ACTION/..."/> 
+    <property name="associatedButtonWidgetFlexoID" xmlTag="associatedButtonFlexoID" attribute="YES" description="flexoID of the Button or link associated to this action node."/>
+    <property name="displayProcessFlexoID" xmlTag="displayProcessFlexoID" attribute="YES" description="flexoID of the process this display action references"/>
+    <property name="displayOperationFlexoID" xmlTag="displayOperationFlexoID" attribute="YES" description="flexoID of the operation this display action references"/> 
+    <property name="tabActionComponentInstance" xmlTag="TabComponentInstance" description="TODO"/> 
+  </entity>
+	
+  <entity name="org.openflexo.foundation.wkf.node.SelfExecutableActionNode" xmlTag="SelfExecutableActionNode">
+    <description>Represents a self-executable FlexoNode at ACTION level</description>
+	<property name="executionPrimitive" xmlTag="executionPrimitive" attribute="YES" description="Binding defining execution primitive"/> 
+	<property name="assignments" xmlTag="assignment" type="vector" description="Assignments defined for this self executable node"/>
+	<property name="assignmentDescriptions" xmlTag="assignmentDescriptions" type="vector"/> 
+    <property name="executionPetriGraph" contains="org.openflexo.foundation.wkf.ActionPetriGraph" context="Execution" description="Defines execution Petri graph for this self-executable node"/> 
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.node.FlexoPreCondition" xmlTag="FlexoPreCondition">
+    <description>A precondition maps the concept of slot in Petri graphs formalization. Receive tokens, and activate attached FLEXO node. Also acts as a trigger to above level, since a BEGIN node of next level is also attached to it.</description>
+    <property name="initTokenNbr" xmlTag="initTokenNbr" attribute="YES" description="Initial number of tokens"/> 
+    <property name="triggerLevel" xmlTag="triggerLevel" attribute="YES" description="Number of tokens sufficient to trigger precondition"/> 
+    <property name="attachedBeginNode" contains="org.openflexo.foundation.wkf.node.FlexoNode" context="AttachedBegin" primary="no" description="BEGIN node of above level, which will be activated at pre-condition activation"/>  
+  </entity> 
+
+  <!-- Definitions for operator nodes -->
+
+  <entity name="org.openflexo.foundation.wkf.node.OperatorNode" xmlTag="OperatorNode" abstract="yes">
+    <description>Represents a logical operator</description>
+    <property name="roleReference" xmlTag="role" attribute="yes" description="The representation role in which this operator is used"/> 
+  </entity>
+
+  <entity name="org.openflexo.foundation.wkf.node.CommonOutputOperatorNode" xmlTag="CommonOutputOperatorNode" abstract="yes">
+    <description>Represents a logical operator with undifferenciated outputs</description>
+  </entity>
+
+  <entity name="org.openflexo.foundation.wkf.node.IFOperator" xmlTag="IFOperator">
+    <description>Represents a logical operator</description>
+    <property name="positiveEvaluationPostConditions" contains="org.openflexo.foundation.wkf.edge.FlexoPostCondition" context="PositiveEvaluationOutgoing" type="vector" primary="yes" description="Outgoing post-conditions attached to this operator for positive evaluation"/> 
+    <property name="negativeEvaluationPostConditions" contains="org.openflexo.foundation.wkf.edge.FlexoPostCondition" context="NegativeEvaluationOutgoing" type="vector" primary="yes" description="Outgoing post-conditions attached to this operator for negative evaluation"/>
+    <property name="newStatusForPositiveEvaluationAsString" xmlTag="positiveStatus" attribute="yes" description="The new status if the operator evaluates to true"/> 
+    <property name="newStatusForNegativeEvaluationAsString" xmlTag="negativeStatus" attribute="yes" description="The new status if the operator evaluates to false"/> 
+	<property name="conditionPrimitive" xmlTag="conditionPrimitive" attribute="YES" description="Binding condition primitive if this node is a conditional operator"/> 
+  </entity>
+
+  <entity name="org.openflexo.foundation.wkf.node.ANDOperator" xmlTag="ANDOperator">
+    <description>Represents a logical AND operator</description>
+  </entity>
+	
+  <entity name="org.openflexo.foundation.wkf.node.OROperator" xmlTag="OROperator">
+    <description>Represents a logical OR operator</description>
+  </entity>
+  <entity name="org.openflexo.foundation.wkf.node.InclusiveOperator" xmlTag="InclusiveOperator">
+    <description>Represents a Inclusive gateway</description>
+  </entity>
+  <entity name="org.openflexo.foundation.wkf.node.ComplexOperator" xmlTag="ComplexOperator">
+    <description>Represents a complex gateway</description>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.wkf.node.ExclusiveEventBasedOperator" xmlTag="ExclusiveEventBasedOperator">
+    <description>Represents a logical exclusive event based gateway</description>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.wkf.node.SWITCHOperator" xmlTag="SWITCHOperator">
+    <description>Represents a logical SWITCH operator</description>
+  </entity>
+	
+ <entity name="org.openflexo.foundation.wkf.node.LOOPOperator" xmlTag="LOOPOperator">
+    <description>Represents a logical LOOP operator</description>
+     <property name="loopType" xmlTag="loopType" attribute="YES" description="Type of loop (WHILE/UNTIL/FOR_INCREMENT/FOR_COLLECTION)"/> 
+     <property name="condition" xmlTag="condition" attribute="YES"/> 
+     <property name="iterator" xmlTag="iterator" attribute="YES"/> 
+     <property name="beginValue" xmlTag="beginValue" attribute="YES"/> 
+     <property name="endValue" xmlTag="endValue" attribute="YES"/> 
+     <property name="incrementValue" xmlTag="incrementValue" attribute="YES"/> 
+     <property name="iterationCollection" xmlTag="iterationCollection" attribute="YES"/> 
+     <property name="collectionItem" xmlTag="collectionItem" attribute="YES"/> 
+    <property name="executionPetriGraph" contains="org.openflexo.foundation.wkf.FlexoPetriGraph" context="Execution" description="Defines execution Petri graph for this self-executable node"/> 
+  </entity>
+	
+	
+  <!-- Definitions for event nodes -->
+   
+  <entity name="org.openflexo.foundation.wkf.node.EventNode" xmlTag="EventNode">
+    <description>Representation of an event node</description>
+    <property name="roleReference" xmlTag="role" attribute="yes" description="The representation role in which this operator is used"/>
+    <property name="boundaryActivityID" xmlTag="boundaryActivityID" attribute="yes" description=""/>
+    <property name="linkedProcessReference" xmlTag="linkedProcess" attribute="yes" description="The process triggering or triggered by this event"/>
+    <property name="documentationUrl" xmlTag="documentationUrl" attribute="yes"/>
+    <property name="eventType" xmlTag="eventType" attribute="yes"/>
+    <property name="trigger" xmlTag="trigger" attribute="yes"/>
+    <property name="isCatching" xmlTag="isCatching" attribute="yes"/>
+    <property name="fromAddress" xmlTag="fromAddress" attribute="YES" description="from address - MailOut ONLY"/> 
+    <property name="toAddress" xmlTag="toAddress" attribute="YES" description="to address - MailOut ONLY"/> 
+    <property name="mailBody" xmlTag="mailBody" attribute="YES" description="message body - MailOut ONLY"/> 
+    <property name="mailSubject" xmlTag="mailSubject" attribute="YES" description="mail subject - MailOut ONLY"/> 
+    <property name="dateBinding" xmlTag="dateBinding" attribute="YES" description="Date for the timer - Timer ONLY"/>
+    <property name="delay" xmlTag="delay" attribute="YES" description="Delay for time-out to be triggered - Timeout ONLY"/>
+  </entity> 
+<!-- 
+  <entity name="org.openflexo.foundation.wkf.node.MailIn" xmlTag="MailIn">
+    <description>Represents an event raised when a mail arrives</description>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.node.MailOut" xmlTag="MailOut">
+    <description>Represents a send mail event</description>
+    <property name="fromAddress" xmlTag="fromAddress" attribute="YES" description="from address"/> 
+    <property name="toAddress" xmlTag="toAddress" attribute="YES" description="to address"/> 
+    <property name="mailBody" xmlTag="mailBody" attribute="YES" description="message body"/> 
+    <property name="mailSubject" xmlTag="mailSubject" attribute="YES" description="mail subject"/> 
+    <property name="dateBinding" xmlTag="dateBinding" attribute="YES" description="Date for the timer"/>
+    <property name="delay" xmlTag="delay" attribute="YES" description="Delay for time-out to be triggered"/>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.node.Timer" xmlTag="Timer">
+    <description>Represents a timer set by an incoming edge and triggered to outgoing edges</description>
+    <property name="dateBinding" xmlTag="dateBinding" attribute="YES" description="Date for the timer"/>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.node.TimeOut" xmlTag="TimeOut">
+    <description>Represents an event raised when deadline assigned to related process, activity or operation expires</description>
+    <property name="delay" xmlTag="delay" attribute="YES" description="Delay for time-out to be triggered"/>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.node.FaultThrower" xmlTag="FaultThrower">
+    <description>Represents an fault event explicitely triggered by an incoming edge</description>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.node.FaultHandler" xmlTag="FaultHandler">
+    <description>Represents a node able to catch fault (exception) raised somewhere in above structure</description>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.node.DefaultStartEvent" xmlTag="DefaultStartEvent">
+  </entity> 
+  
+  <entity name="org.openflexo.foundation.wkf.node.DefaultEndEvent" xmlTag="DefaultEndEvent">
+  </entity> 
+  
+  <entity name="org.openflexo.foundation.wkf.node.CancelThrower" xmlTag="CancelThrower">
+    <description>Represents a cancel event explicitely triggered by an incoming edge</description>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.node.CancelHandler" xmlTag="CancelHandler">
+    <description>Represents a node able to catch cancel action thrown somewhere in above structure</description>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.node.CompensateThrower" xmlTag="CompensateThrower">
+    <description>Represents a compensate event explicitely triggered by an incoming edge</description>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.node.CompensateHandler" xmlTag="CompensateHandler">
+    <description>Represents a node able to catch ompensate action thrown somewhere in above structure</description>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.node.Checkpoint" xmlTag="Checkpoint">
+    <description>Represents a data storage checkpoint</description>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.node.Revert" xmlTag="Revert">
+    <description>Represents a data storage rollback</description>
+  </entity> 
+ -->
+  <!-- Definitions for processes communication: notion of ports and portmaps -->
+
+  <entity name="org.openflexo.foundation.wkf.ws.PortRegistery" xmlTag="PortRegistery">
+    <description>A PortRegistery is attached to a FlexoProcess and contains all the ports used in the context of WebServices</description>
+    <property name="isVisible" xmlTag="isVisible" attribute="YES" description="Defines visibility of thisport registery"/> 
+    <property name="newPorts" xmlTag="NewPort" type="Vector" primary="yes" description="'New instance' ports"/> 
+    <property name="deletePorts" xmlTag="DeletePort" type="Vector" primary="yes" description="'Delete instance' ports"/> 
+    <property name="inPorts" xmlTag="InPort" type="Vector" primary="yes" description="Input ports"/> 
+    <property name="inOutPorts" xmlTag="InOutPort" type="Vector" primary="yes" description="Input/Output ports"/> 
+   <property name="outPorts" xmlTag="OutPort" type="Vector" primary="yes" description="Output ports"/> 
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.ws.FlexoPort" abstract="YES" contexts="Related">
+    <description>Abstract representation of a port associated to a PortRegistery associated to 
+		a FlexoProcess</description>
+ </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.ws.ServiceInterface" xmlTag="ServiceInterface">
+    <description>A ServiceInterface is attached to a FlexoProcess and contains all the serviceOperations used in the context of WebServices</description>
+    <property name="name" xmlTag="label" description="Name of this ServiceInterface"/>
+    <property name="operations" xmlTag="ServiceOperation" type="Vector" primary="yes" description="Service Operations"/>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.ws.ServiceOperation" xmlTag="ServiceOperation">
+    <description>A ServiceOperation is a WebService representation of a Port.</description>
+    <property name="name" xmlTag="label" description="Name of this ServiceOperation"/>
+    <description>Abstract representation of a port sending data to outside (response)</description>
+    <property name="outputMessageDefinition" contains="org.openflexo.foundation.wkf.ws.ServiceMessageDefinition" context="Output" description="Output message definition"/> 
+    <property name="inputMessageDefinition" contains="org.openflexo.foundation.wkf.ws.ServiceMessageDefinition" context="Input" description="Input message definition"/> 
+    <property name="port" contains="org.openflexo.foundation.wkf.ws.FlexoPort" context="Related" description="Associated Port"/>
+    <property name="inputMessageBindings" xmlTag="ServiceInputMessageBindings" context="Input"  description="Define input message bindings"/> 
+    <property name="outputMessageBindings" xmlTag="ServiceOutputMessageBindings" context="Output"  description="Define output message bindings"/> 
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.ws.AbstractMessageDefinition" abstract="YES" contexts="Input,Output">
+    <description>Used to store port's message definition and ServiceOperation's messageDefinition</description>
+    <property name="name" xmlTag="label" description="Name of this MessageDefinition"/>
+    <property name="entries" xmlTag="MessageEntry" type="vector" description="Entries defined in this message"/> 
+  </entity> 
+  
+  <entity name="org.openflexo.foundation.wkf.ws.MessageDefinition" xmlTag="MessageDefinition" contexts="Input,Output">
+    <description>Used to store port's message definition</description>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.ws.ServiceMessageDefinition" xmlTag="ServiceMessageDefinition" contexts="Input,Output">
+    <description>Used to store port's message definition</description>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.ws.MessageEntry" xmlTag="MessageEntry">
+    <description>Used to store port's message definition entry</description>
+    <property name="variableName" xmlTag="entryName" attribute="YES" description="Name of this entry"/> 
+    <property name="type" xmlTag="type" attribute="YES" description="Full-qualified class name for this entry"/> 
+    <property name="isMandatory" xmlTag="isMandatory" attribute="YES" description="True if this entry must be mandatory set"/> 
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.ws.OutputPort" abstract="YES">
+    <description>Abstract representation of a port sending data to outside (response)</description> 
+    <property name="outputMessageDefinition" contains="org.openflexo.foundation.wkf.ws.MessageDefinition" context="Output" description="Output message definition"/> 
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.ws.AbstractInPort" abstract="YES">
+    <description>Abstract representation of a IN port associated to a PortRegistery associated to 
+ a FlexoProcess: such a port receive message and could be of type IN (normal), IN/OUT (synchronous call), 
+ NEW (new instance) or DELETE (delete instance)</description>
+    <property name="inputMessageDefinition" contains="org.openflexo.foundation.wkf.ws.MessageDefinition" context="Input" description="Input message definition"/>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.ws.InPort" xmlTag="InPort">
+    <description>Input data port associated to a PortRegistery associated to a SubProcessNode</description>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.ws.InOutPort" xmlTag="InOutPort">
+    <description>Input/output data port associated to a PortRegistery associated to a SubProcessNode.
+	This port is used to modelize synchronous call: request and immediate response.</description>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.ws.OutPort" xmlTag="OutPort">
+    <description>Output data port associated to a PortRegistery associated to a SubProcessNode</description>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.ws.NewPort" xmlTag="NewPort">
+    <description>'New instance' port associated to a PortRegistery associated to a SubProcessNode</description>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.ws.DeletePort" xmlTag="DeletePort">
+    <description>'Delete instance' port associated to a PortRegistery associated to a SubProcessNode</description>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.ws.PortMapRegistery" xmlTag="PortMapRegistery">
+    <description>A PortMapRegistery is attached to a SubProcessNode and contains all the portmaps used in the context of WebServices</description>
+    <property name="orientation" xmlTag="orientation" attribute="YES" description="Orientation of PortMap registery"/> 
+    <property name="portMaps" xmlTag="FlexoPortMap" type="Vector" primary="yes" description="All the PortMaps registered in this registery"/> 
+   	<!--<property name="isHidden" xmlTag="hidePortMap" attribute="YES" description="Wheter the portMapRegistery should be hidden or not"/> -->
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.ws.FlexoPortMap" xmlTag="FlexoPortMap">
+    <description>Abstract representation of connexion between a port associated to a PortRegistery 
+  associated to a FlexoProcess and the SubProcessNode and thus, related petri graph
+  where the SubProcessNode is embedded: this make the connexion between the abstract
+  representation of a FlexoProcess, and the instanciation of this process inside a
+  SubProcessNode.</description>
+    <property name="portName" xmlTag="portName" attribute="YES" description="Name of related port"/> 
+   	<!--<property name="isHidden" xmlTag="hidePortMap" attribute="YES" description="Wheter the portMap should be hidden or not"/> -->
+  </entity> 
+
+	 <!-- Definition for message bindings -->
+ 
+  <entity name="org.openflexo.foundation.wkf.ws.MessageBindings" xmlTag="MessageBindings" contexts="Input,Output">
+    <description>All bindings defining a message</description>
+    <property name="bindings" xmlTag="MessageBinding" type="vector" primary="yes" description="TODO"/>
+  </entity>
+
+   <entity name="org.openflexo.foundation.wkf.ws.MessageEntryBinding" xmlTag="MessageBinding">
+    <description>Represents a message binding</description>
+    <property name="bindingDefinitionName" xmlTag="name"  attribute="YES" description="TODO"/> 
+    <property name="bindingValue" xmlTag="value"  attribute="YES" description="TODO"/> 
+  </entity>
+
+
+	 <!-- Definition for service message bindings -->
+ 
+  <entity name="org.openflexo.foundation.wkf.ws.ServiceMessageBindings" abstract="YES" contexts="Input,Output">
+    <description>All bindings defining a message</description>
+    <property name="bindings" xmlTag="ServiceMessageBinding" type="vector" primary="yes" description="TODO"/>
+  </entity>
+  <entity name="org.openflexo.foundation.wkf.ws.ServiceInputMessageBindings" xmlTag="ServiceInputMessageBindings" contexts="Input">
+    <description>All bindings defining a message</description>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.wkf.ws.ServiceOutputMessageBindings" xmlTag="ServiceOutputMessageBindings" contexts="Output">
+    <description>All bindings defining a message</description>
+  </entity>
+
+   <entity name="org.openflexo.foundation.wkf.ws.ServiceMessageEntryBinding" xmlTag="ServiceMessageBinding">
+    <description>Represents a message binding</description>
+    <property name="bindingDefinitionName" xmlTag="name"  attribute="YES" description="TODO"/> 
+    <property name="bindingValue" xmlTag="value"  attribute="YES" description="TODO"/> 
+  </entity>
+
+  <!-- Definitions for post-conditions -->
+
+  <entity name="org.openflexo.foundation.wkf.edge.WKFEdge" abstract="YES" contexts="Incoming,Outgoing">
+     <property name="name" xmlTag="name" attribute="YES" description="Name of this post-condition"/> 
+     <property name="startNode" contains="org.openflexo.foundation.wkf.node.WKFNode" context="Start" primary="no" description="Start node of this edge"/>
+     <property name="endNode" contains="org.openflexo.foundation.wkf.node.WKFNode" context="End" primary="no" description="End node of this edge"/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.wkf.edge.WKFAssociation" xmlTag="Association">
+  	<property name="arrow" xmlTag="arrow"/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.wkf.edge.FlexoPostCondition" abstract="YES" contexts="PositiveEvaluationOutgoing,NegativeEvaluationOutgoing">
+    <description>Abstract definition of a post-condition, also called edge</description>
+    <property name="metricsValues" xmlTag="Metrics" type="vector" primary="yes"/> 
+    <property name="delay" xmlTag="delay" attribute="YES" description="Delay for the token to be received by target pre-condition"/>
+    <property name="isConditional" xmlTag="isConditional" attribute="YES"/>
+    <property name="isDefaultFlow" xmlTag="isDefaultFlow" attribute="YES"/>
+    <property name="conditionDescription" xmlTag="conditionDescription" attribute="YES"/>
+    <property name="conditionPrimitive" xmlTag="conditionPrimitive" attribute="YES" description="Binding condition primitive if this node is a conditional operator"/> 
+    <property name="isGenericOutput" xmlTag="isGenericOutput" attribute="YES" description="Flag if edge is defined as generic output (bypass validation)"/>
+   </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.edge.TokenEdge" xmlTag="TokenEdge">
+    <description>Edge linking 2 FlexoNode in the context of petri graphs (carry tokens)</description>
+    <property name="tokenIncrem" xmlTag="tokenIncrem" attribute="YES" description="Increment"/> 
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.edge.MessageEdge" abstract="YES">
+    <description>Abstract edge used to link FlexoNode with ports or portmaps and carrying a message</description>
+    <property name="inputMessage" contains="org.openflexo.foundation.wkf.ws.MessageBindings" context="Input"  description="Define input message bindings"/>
+    <property name="outputMessage" contains="org.openflexo.foundation.wkf.ws.MessageBindings" context="Output"  description="Define output message bindings"/>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.edge.InternalMessageEdge" abstract="YES">
+    <description>Abstract edge linking a FlexoNode and a FlexoPort, inside a FlexoProcess</description>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.edge.ExternalMessageEdge" abstract="YES">
+    <description>Abstract edge linking a FlexoNode and a FlexoPortMap, and used to make connection between a process and a sub-process</description>
+    <property name="accessedProcessInstance" xmlTag="accessedProcessInstance" attribute="YES" description="Binding defining accessed ProcessInstance"/> 
+    <property name="parentProcessInstance" xmlTag="parentProcessInstance" attribute="YES" description="Binding defining parent ProcessInstance"/> 
+    <property name="returnedProcessInstance" xmlTag="returnedProcessInstance" attribute="YES" description="Binding defining returned ProcessInstance"/>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.edge.InternalMessageInEdge" xmlTag="InternalMessageInEdge">
+    <description>Edge linking a AbstractInPort to a FlexoNode</description>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.edge.InternalMessageOutEdge" xmlTag="InternalMessageOutEdge">
+    <description>Edge linking a FlexoNode to a OutPort</description>
+  </entity> 
+
+   <entity name="org.openflexo.foundation.wkf.edge.ExternalMessageInEdge" xmlTag="ExternalMessageInEdge" >
+    <description>Edge linking an EdgeStarting to a PortMap</description>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.wkf.edge.ExternalMessageOutEdge" xmlTag="ExternalMessageOutEdge" >
+    <description>Edge linking a FlexoNode to a PortMap</description>
+  </entity>
+  
+  <!-- <entity name="org.openflexo.foundation.wkf.edge.ExternalMessageInEdge" xmlTag="ExternalOperatorMessageInEdge" >
+    <description>Edge linking an OperatorNode to a PortMap</description>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.wkf.edge.ExternalOperatorMessageOutEdge" xmlTag="ExternalOperatorMessageOutEdge" >
+    <description>Edge linking an OperatorNode to a PortMap</description>
+  </entity>
+   -->
+  <entity name="org.openflexo.foundation.wkf.edge.ForwardWSEdge" xmlTag="ForwardWSEdge">
+    <description>Edge linking an IN port to a WS IN portmap</description>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.edge.BackwardWSEdge" xmlTag="BackwardWSEdge">
+    <description>Edge linking an OUT PortMap a a WS Edge to an OUT port</description>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.edge.TransferWSEdge" xmlTag="TransferWSEdge">
+    <description>Edge linking a WS OUT portmap to a WS IN portmap</description>
+  </entity> 
+
+    <entity name="org.openflexo.foundation.wkf.MetricsValue" xmlTag="Metrics">
+      <property name="metricsDefinitionReference" xmlTag="metricsDefinition" attribute="yes"/>
+      <property name="stringValue" xmlTag="stringValue" attribute="yes"/>
+      <property name="intValue" xmlTag="intValue" attribute="yes"/>
+      <property name="doubleValue" xmlTag="doubleValue" attribute="yes"/>
+      <property name="durationValue" xmlTag="durationValue" attribute="yes"/>
+      <property name="booleanValue" xmlTag="booleanValue" attribute="yes"/>
+      <property name="unit" xmlTag="unit" attribute="yes"/>
+    </entity>
+
+    <!-- Definition for NodeCompound -->
+ 
+    <entity name="org.openflexo.foundation.wkf.node.NodeCompound" xmlTag="NodeCompound">
+    <description>Represents a compound of node, which consists in a closed subgraph extracted
+		from a Petri-Graph, where some nodes, pre and post-conditions can be selected. Using
+		this structure ensure that the obtained graph is closed, complete and consistent (does
+		not contains post-conditions pointing outside the graph). NOTE: this object is not used
+		to store data (in the context of persistence) but for clipboard operations.</description>
+ 	<property name="nodes" contains="org.openflexo.foundation.wkf.node.PetriGraphNode" type="vector" primary="yes" description="List of all nodes contained in this compound"/>
+ 	<property name="artefacts" contains="org.openflexo.foundation.wkf.WKFArtefact" type="vector" primary="yes" description="List of all annotations contained in this compound"/>
+  </entity>
+  
+   <!-- Definition for ComponentInstances -->
+ 
+  <entity name="org.openflexo.foundation.ie.ComponentInstance" abstract="YES">
+    <description>Instance of a WO</description>
+    <property name="componentName" xmlTag="componentName"  attribute="YES" description="TODO"/> 
+    <property name="bindings" xmlTag="Binding" type="vector" primary="yes" description="TODO"/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.ie.TabComponentInstance" abstract="NO" xmlTag="TabComponentInstance">
+  </entity>
+  
+  <entity name="org.openflexo.foundation.ie.OperationComponentInstance" abstract="NO" xmlTag="OperationComponentInstance">
+  </entity>
+   
+   <!-- Bindings -->
+  
+  <entity name="org.openflexo.foundation.ie.ComponentInstanceBinding" xmlTag="Binding">
+    <description>Instance of a WO</description>
+    <property name="bindingDefinitionName" xmlTag="name"  attribute="YES" description="TODO"/> 
+    <property name="bindingValue" xmlTag="value"  attribute="YES" description="TODO"/> 
+  </entity>
+
+ </model>
+

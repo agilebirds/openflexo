@@ -1,0 +1,21 @@
+<inspector title = "java_class" inheritsfrom="FJPJavaEntity.inspector">
+	<tab name="Basic" index="0">
+		<property name="name" label="name" widget="READ_ONLY_TEXT_FIELD" constraint="0"/>
+		<property name="package" label="package" widget="READ_ONLY_TEXT_FIELD" constraint="1"/>
+		<property name="superClassAsString" label="extends" widget="READ_ONLY_TEXT_FIELD" constraint="2"/>
+		<property name="implementsAsString" label="implements" widget="READ_ONLY_TEXT_FIELD" constraint="3"/>
+		<property name="isEnum" label="is_enumeration" widget="READ_ONLY_CHECKBOX" constraint="4"/>
+		<property name="isInterface" label="is_interface" widget="READ_ONLY_CHECKBOX" constraint="5"/>
+		<property name="isInner" label="is_inner_class" widget="READ_ONLY_CHECKBOX" constraint="6"/>
+	</tab>
+	
+	<tab name="Modifiers" index="1">
+	</tab>
+	
+	<tab name="Code" index="2">
+	</tab>
+
+	<tab name="Javadoc" index="3">
+	</tab>
+	
+</inspector>

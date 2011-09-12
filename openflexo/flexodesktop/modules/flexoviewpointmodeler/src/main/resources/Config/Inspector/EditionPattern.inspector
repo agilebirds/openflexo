@@ -1,0 +1,12 @@
+<inspector title = "Edition Pattern" inheritsfrom="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.ontology.calc.EditionPattern">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+		<property name="name" label="name" widget="TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+		</property>
+	</tab>
+
+	<tab name="Advanced" index="2" layout="DEFAULT">
+	</tab>
+
+</inspector>

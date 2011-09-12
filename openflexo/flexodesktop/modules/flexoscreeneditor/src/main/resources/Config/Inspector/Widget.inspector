@@ -1,0 +1,41 @@
+<inspector title = "IEWidget" inheritsfrom ="AbstractWidget.inspector">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+		<property name="tooltip" label="tooltip" widget="TEXT_FIELD" constraint="99"/>
+	</tab>
+
+	<tab name="Doc" index="1" layout="DEFAULT">
+		<property name="label" label="label" widget="TEXT_FIELD" constraint="1"/>
+	</tab>
+
+	<tab name="Advanced" index="2" layout="DEFAULT">
+<!--		<property name="calculatedLabel" label="calculated_label" widget="READ_ONLY_TEXT_FIELD" constraint="0"/>-->
+		<property name="wOComponent.name" label="component_name" widget="READ_ONLY_TEXT_FIELD" constraint="0">
+			<param name="visibleFor" value="MAINTAINER"/>
+		</property>
+		<property name="inspectorName" label="inspector_name" widget="READ_ONLY_TEXT_FIELD" constraint="1">
+			<param name="columns" value="10"/>
+			<param name="visibleFor" value="MAINTAINER"/>
+		</property>
+		
+	</tab>
+
+	<tab name="Data" index="3" layout="DEFAULT">
+		<property_list name="additionalBindings" label="additional_widget_bindings" constraint="10">
+		  <param name="visibleFor" value="DEVELOPPER,MAINTAINER"/>
+		  <param name="visible_row_count" value="5"/>
+		  <param name="row_height" value="20"/>
+		  <property_list_column name="variableName" label="name" widget="TEXT_FIELD">
+			<param name="column_width" value="60"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="value" label="value" widget="TEXT_FIELD">
+			<param name="column_width" value="100"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_action name="new" type="ADD" method="createNewAdditionalBinding"/>
+		  <property_list_action name="delete" type="DELETE" method="removeFromAdditionalBindings" isAvailable="isAdditionalBindingDeletable"/>
+		</property_list>
+	</tab>
+
+</inspector>

@@ -1,0 +1,12 @@
+<GEN_IF(PROCESS_ITEM_LIST)>
+The following processes are defined for this application and described in this section with their activities, operations, screens and functions:
+\begin{description}
+<PROCESS_ITEM_LIST>
+\end{description}
+</GEN_IF(PROCESS_ITEM_LIST)>
+<GEN_IF(!PROCESS_ITEM_LIST)>
+There are no process defined for this project.
+</GEN_IF(!PROCESS_ITEM_LIST)>
+<GEN_IF(PROCESS_LIST)>
+<PROCESS_LIST>
+</GEN_IF(PROCESS_LIST)>

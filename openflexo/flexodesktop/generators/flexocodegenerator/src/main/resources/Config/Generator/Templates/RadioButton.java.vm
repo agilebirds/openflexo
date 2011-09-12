@@ -1,0 +1,150 @@
+## There are 3 cases: Not in a list, In a list with a selection of a row, In a list with a selection of a column on each row;
+## These 3 cases are identified by: LIST (wheter the radio is in a list or not), MULTIPLE (wheter there should be one selected item or multiple ones) 
+## FIRST determines if this is the first radio button of the group or not.
+#if(!$widget.isInRepetition())
+    #if($widget.hasSmallestFlexoID())
+        /**
+        * This method returns the name for a group of radio button
+        */
+        public String $widget.getGroupName()GroupName(){
+            return "$widget.getGroupName()" #if($widget.isInPopup()) +  uniqueIdentifierForName() #end;
+        }
+	#end
+	
+	#if(!${widget.getBindingChecked().isBindingValid()} && !${widget.getIsAcceptableForAnyProcessInstanceDictionary()})
+        /**
+        * ${generator.getJavaDocString($widget.getDescription())}<br>
+        * This boolean value determines wheter the radio button "#name()" is checked or not.
+        * This button belongs to the group named $widget.getGroupName().
+        */
+		#getset("Boolean" "#name()" ${widget.getValue()})
+	#else
+		#if(${widget.getBindingChecked().isBindingValid()})
+			#set($javaGetAccessor = ${widget.getBindingChecked().getJavaCodeStringRepresentation()})
+			#set($javaSetAccessor = ${widget.getBindingChecked().getSetterJavaCodeStringRepresentation("value")})
+		#else
+			#set($javaGetAccessor = "(Boolean)getCurrentProcessBusinessData().valueForKeyPath($quote${widget.getProcessInstanceDictionaryKey()}$quote)")
+			#set($javaSetAccessor = "getCurrentProcessBusinessData().takeValueForKey(value, $quote${widget.getProcessInstanceDictionaryKey()}$quote)")
+		#end
+		
+		public boolean get#capName()() {
+			Boolean value = $javaGetAccessor;
+			if(value == null)
+				value = ${widget.getValue()};
+			return value;
+		}
+		
+		public void set#capName()(boolean value) {
+			$javaSetAccessor;
+		}
+	#end
+    
+    #if(${widget.getSubmitForm()} && $widget.isInPopup())
+        public String onClick#capName()()
+        {
+            StringBuilder sb = new StringBuilder();
+            
+            if(includePopupInPage())
+                sb.append("document."+formName()+"."+hiddenFieldName()+".value = '"+uniqueIdentifier()+"';");
+    
+            sb.append("if(document."+formName()+".onsubmit!=null)document."+formName()+".onsubmit(); document.formName.submit();");
+            
+            return sb.toString();
+        }
+    #end
+#else
+    #if(!${widget.getUseOneNameForAllRadios()})
+        #if($widget.hasSmallestFlexoID())
+            /**
+            * Key: #if(${widget.repetition().getItemType().getName()})${widget.repetition().getItemType().getName()}#else NSKeyValueCoding #end (Content type: ${widget.repetition().getContentType()})
+            * Value: String
+            */
+            private Hashtable<#if(${widget.repetition().getItemType().getName()})${widget.repetition().getItemType().getName()}#else NSKeyValueCoding #end,String> $widget.getGroupName()Selection = new Hashtable<#if(${widget.repetition().getItemType().getName()})${widget.repetition().getItemType().getName()}#else NSKeyValueCoding #end ,String>();
+    
+            /**
+            * This method returns the name for a group of radio button
+            */
+            public String $widget.getGroupName()GroupName(){
+                return "$widget.getGroupName()"#if(!$generator.isPrototype())+${widget.getHTMLListDescriptor().getItemName()}!=null?${widget.getHTMLListDescriptor().getIndexName()}:null#end#if($generator.isPrototype())+${widget.getHTMLListDescriptor().getIndexName()}#end #if($widget.isInPopup()) +  uniqueIdentifierForName() #end;
+            }
+        #end
+
+        public boolean #name()() {
+            return ${widget.getGroupName()}Selection.get(${widget.getHTMLListDescriptor().getItemName()})!=null && ${widget.getGroupName()}Selection.get(${widget.getHTMLListDescriptor().getItemName()}).equals("#name()");
+        }
+    
+        public void set#capName()(boolean b){
+            if (b)
+                ${widget.getGroupName()}Selection.put(${widget.getHTMLListDescriptor().getItemName()},"#name()");
+            else if (#name()())
+                ${widget.getGroupName()}Selection.remove(${widget.getHTMLListDescriptor().getItemName()});
+        }
+
+        #if(${widget.getSubmitForm()} && $widget.isInPopup())
+            public String onClick#capName()()
+            {
+                StringBuilder sb = new StringBuilder();
+                
+                if(includePopupInPage())
+                    sb.append("document."+formName()+"."+hiddenFieldName()+".value = '"+uniqueIdentifier()+"';");
+        
+                sb.append("if(document."+formName()+".onsubmit!=null)document."+formName()+".onsubmit(); document.formName.submit();");
+                
+                return sb.toString();
+            }
+        #end
+    #else ## getUseOneNameForAllRadios()
+        #if($widget.hasSmallestFlexoID())
+            /**
+            * This method returns the name for a group of radio button
+            */
+            public String $widget.getGroupName()GroupName(){
+                return "$widget.getGroupName()" #if($widget.isInPopup()) +  uniqueIdentifierForName() #end;
+            }
+            
+            #if(${widget.getSubmitForm()} && $widget.isInPopup())
+                public String onClick#capName()()
+                {
+                    StringBuilder sb = new StringBuilder();
+                    
+                    if(includePopupInPage())
+                        sb.append("document."+formName()+"."+hiddenFieldName()+".value = '"+uniqueIdentifier()+"';");
+            
+                    sb.append("if(document."+formName()+".onsubmit!=null)document."+formName()+".onsubmit(); document.formName.submit();");
+                    
+                    return sb.toString();
+                }
+            #end
+        
+            #if(!${widget.getHTMLListDescriptor().getRepetitionOperator().getEntityName()})
+				#addSingleJavaSelectorVariableNameForRepetitionOp(${widget.repetition()} "selectedItemOf#capName()" )
+                private NSKeyValueCoding selectedItemOf#capName()=null;
+
+                public boolean #name()() {
+                    return selectedItemOf#capName()==${widget.getHTMLListDescriptor().getItemName()};
+                }
+            
+                public void set#capName()(boolean b) {
+                    if (b)
+                        selectedItemOf#capName()=${widget.getHTMLListDescriptor().getItemName()};
+                    else if (selectedItemOf#capName()==${widget.getHTMLListDescriptor().getItemName()})
+                        selectedItemOf#capName()=null;
+                }
+            #else
+				#addSingleJavaSelectorVariableNameForRepetitionOp(${widget.repetition()} "selectedItemOf!${widget.getHTMLListDescriptor().getRepetitionOperator().getEntityName()}")
+                private NSKeyValueCoding selectedItemOf!${widget.getHTMLListDescriptor().getRepetitionOperator().getEntityName()}=null;
+            
+                public boolean #name()() {
+                    return selectedItemOf!${widget.getHTMLListDescriptor().getRepetitionOperator().getEntityName()}==${widget.getHTMLListDescriptor().getItemName()};
+                }
+            
+                public void set#capName()(boolean b) {
+                    if (b)
+                        selectedItemOf!${widget.getHTMLListDescriptor().getRepetitionOperator().getEntityName()}=${widget.getHTMLListDescriptor().getItemName()};
+                    else if (selectedItemOf!${widget.getHTMLListDescriptor().getRepetitionOperator().getEntityName()}==${widget.getHTMLListDescriptor().getItemName()})
+                        selectedItemOf!${widget.getHTMLListDescriptor().getRepetitionOperator().getEntityName()}=null;
+                }
+               #end
+        #end
+    #end
+#end

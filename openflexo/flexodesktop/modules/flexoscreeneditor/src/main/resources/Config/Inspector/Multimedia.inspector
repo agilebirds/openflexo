@@ -1,0 +1,27 @@
+<inspector title = "Multimedia" inheritsfrom ="Widget.inspector">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+    	<property name="url" label="url" widget="TEXT_FIELD" constraint="1">
+    	    <param name="validateOnReturn" value="true"/>
+    	</property>
+    	<property name="format" label="format" widget="DROPDOWN" constraint="2"/>
+        <property name="widthPixel" label="width_pixel" widget="INTEGER" constraint="3"/>
+        <property name="heightPixel" label="height_pixel" widget="INTEGER" constraint="4"/>
+        <property name="embeddedVideoCode" label="embed_video_(html_code)" widget="TEXT_AREA" constraint="6"/>
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+	</tab>
+
+	<tab name="Doc" index="2" layout="DEFAULT">
+	</tab>
+
+	<tab name="Data" index="3" layout="DEFAULT">
+		<property name="bindingUrl" label="binding_url" widget="CUSTOM" constraint="3">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="bindingSourceUrlDefinition"/>			
+			<param name="creates_entry" value="createsBindingVariable"/>			
+		</property>
+	</tab>
+
+</inspector>

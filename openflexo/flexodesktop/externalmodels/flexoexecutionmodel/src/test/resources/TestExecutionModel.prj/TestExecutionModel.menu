@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlexoNavigationMenu id="SYL_413" useDefaultImage="true" userProfileProcessFlexoID="-1" userProfileOperationFlexoID="-1" userID="SYL" flexoID="413" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+  <FlexoItemMenu id="SYL_415" processFlexoID="-1" operationFlexoID="-1" isPageTarget="true" useUrl="false" userID="SYL" flexoID="415" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+    <menuLabel>hidden root</menuLabel>
+  </FlexoItemMenu>
+</FlexoNavigationMenu>
+

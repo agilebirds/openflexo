@@ -1,0 +1,16 @@
+#name()Link: WDLMultiSubmitLink {
+#if($widget.isCustomButton())
+    class="denaliButton";
+#end
+    value=#name()Value;
+    hiddenFieldName=hiddenFieldName;
+    #tooltipAsTitle()
+    #if($widget.hasConfirmMessage())
+        #if($project.getIsLocalized())
+    confirmPanelMessage = confirmMessageForLink#capName();
+        #else
+    confirmPanelMessage = "${widget.getJavascriptConfirmMessage()}";           
+        #end
+    #end
+}
+#renderLinkContent($widget)

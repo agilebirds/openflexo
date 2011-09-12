@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActivityNode id="SYL_9500" nodeType="BEGIN" isWaiting="false" isSelfActivated="false" posiX="175" posiY="0" width="49" height="67" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="9500" dontEscapeLatex="false" dontGenerate="true" useSpecificDescriptions="false" nodeName="BEGIN" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="-1" roleTextColor="128,128,128">
+  <NodeProperties />
+</ActivityNode>
+

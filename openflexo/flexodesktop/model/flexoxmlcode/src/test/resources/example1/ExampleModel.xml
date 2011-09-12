@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model> 
+  <entity name="org.openflexo.xmlcode.examples.example1.Command" xmlTag="command"> 
+    <property name="qty" xmlTag="quantity" attribute="YES"/> 
+    <property name="commandIsAlreadyPaid" xmlTag="commandIsAlreadyPaid" attribute="YES"/> 
+    <property name="movie" xmlTag="movie"/> 
+    <property name="customer" xmlTag="customer"/> 
+  </entity> 
+  <entity name="org.openflexo.xmlcode.examples.example1.Customer" xmlTag="customer"> 
+    <property name="name" xmlTag="name"/> 
+  </entity> 
+  <entity name="org.openflexo.xmlcode.examples.example1.Movie" xmlTag="movie"> 
+    <property name="title" xmlTag="name" attribute="YES"/> 
+    <property name="description" text="YES"/>
+    <property name="dateReleased" xmlTag="date"/> 
+    <property name="roles" xmlTag="role" type="vector"/> 
+    <property name="category" xmlTag="cat"/> 
+  </entity> 
+  <entity name="org.openflexo.xmlcode.examples.example1.Role" xmlTag="role"> 
+    <property name="roleName" xmlTag="name" attribute="YES"/> 
+  </entity> 
+</model>

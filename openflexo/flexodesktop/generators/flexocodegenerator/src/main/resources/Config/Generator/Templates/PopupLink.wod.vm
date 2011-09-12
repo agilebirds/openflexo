@@ -1,0 +1,70 @@
+ButtonContent: WOComponentContent {
+}
+
+Link_OpenPopup: WDLJSModalWindow {
+    action = openPopup;
+    width = width;
+    height = height;
+    title = title;
+    class = ^class;
+    windowName = "$componentDefinition.getName()";
+}
+
+Condition_DontIncludePopupInPage: WOConditional {
+    condition = includePopupInPage;
+    negate = true;
+}
+
+Condition_IncludePopupInPage: WOConditional {
+    condition = includePopupInPage;
+}
+
+Link_DisplayHiddenDiv: WOHyperlink {
+    href = "#";
+    title = title;
+    class = ^class;
+    onclick = onClickPopupButton;
+}
+
+HiddenDiv: WDLJSHiddenPopup {
+    uniqueIdentifier = hiddenDivUniqueIdentifier;
+    draggable = true;
+    resizable = true;
+    closeButton = true;
+    visible = displayPopupOnLoad;
+    positionX = positionX;
+    positionY = positionY;
+    width = width;
+}
+
+PopupContent: ${componentDefinition.getName()}Popup {
+    hiddenFieldValue = hiddenFieldValue;
+    displayPopupOnLoad = displayPopupOnLoad;
+    positionX = positionX;
+    positionY = positionY;
+    scrollX = scrollX;
+    scrollY = scrollY;
+    uniqueIdentifier = ^uniqueIdentifier;
+    confirmValue = ^confirmValue;
+	href = ^href;
+#foreach($bd in $componentDefinition.getBindingDefinitions())     
+    #if(!${generator.isPrototype()} || !${bd.getType().isEOEntity()})
+    ${bd.getVariableName()} = ${bd.getVariableName()};
+    #end
+#end
+}
+
+Hidden_PositionField: WOHiddenField {
+    value = positionHiddenValue;
+    name = positionHiddenName;
+}
+
+Script_onsubmit: WOString {
+    value = onSubmitScript;
+    escapeHTML = false;
+}
+
+Script_ScrollIfNeeded: WOString {
+    value = scrollIfNeededScript;
+    escapeHTML = false;
+}

@@ -1,0 +1,37 @@
+<inspector title = "Port Registery"  inheritsfrom ="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.wkf.ws.PortRegistery">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="isVisible" label="is_visible" widget="CHECKBOX" constraint="0"/>
+	</tab>
+	
+	<tab name="Graphics_SWL" index="21" layout="DEFAULT" visibilityContext="SWL">
+		<property name="integerParameter('swl_nb',1)" label="swimming_lane_number" widget="INTEGER" constraint="0">
+			<param name="columns" value="10"/>
+			<param name="minimum" value="1"/>
+			<param name="maximum" value="255"/>
+			<param name="increment" value="1"/>
+		</property>
+		<property name="integerParameter('swl_height',80)" label="swimming_lane_height" widget="INTEGER" constraint="1">
+			<param name="columns" value="10"/>
+			<param name="minimum" value="30"/>
+			<param name="maximum" value="1000"/>
+			<param name="increment" value="1"/>
+		</property>
+		<property name="integerParameter('swl_index',80)" label="index" widget="INTEGER" constraint="2">
+			<param name="columns" value="10"/>
+			<param name="minimum" value="0"/>
+			<param name="maximum" value="255"/>
+			<param name="increment" value="1"/>
+		</property>
+		<property name="textColor('swl')" label="text_color" widget="COLOR" constraint="6">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="bgColor" label="back_color" widget="COLOR" constraint="7">
+			<param name="columns" value="10"/>
+		</property>
+	</tab>
+
+
+</inspector>

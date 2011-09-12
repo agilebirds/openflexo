@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OEShema id="SYL_539" userID="SYL" flexoID="539" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+  <DrawingGraphicalRepresentation id="1" className="org.openflexo.oe.shema.OEShemaGR" width="1000.0" height="1000.0" drawWorkingArea="true" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+    <TextStyle id="2" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+  </DrawingGraphicalRepresentation>
+  <ContainedOEShape id="SYL_541" name="A" editionPatternIdentifier="BOTCompany" editionPatternInstanceId="540" userID="SYL" flexoID="541" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+    <ShapeGraphicalRepresentation id="3" className="org.openflexo.oe.shema.OEShapeGR" x="152.0" y="83.0" width="401.64564233286455" height="328.9608454608455" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="A" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="84.37035698724098" absoluteTextY="20.006764588118774" textAlignment="CENTER">
+      <ForegroundStyle id="4" noStroke="false" color="102,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorGradientBackgroundStyle id="5" color1="255,255,102" color2="255,204,204" direction="SOUTH_EAST_NORTH_WEST" useTransparency="true" transparencyLevel="0.5" />
+      <Border id="6" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="7" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="8" isRounded="true" arcSize="15.0" />
+      <TextStyle id="9" font="SansSerif,0,11" color="102,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+    <EditionPatternReference id="SYL_559" editionPattern="http://www.agilebirds.com/flexo/ontologies/Calcs/BasicOrganizationTreeEditor.owl#BOTCompany" instanceId="540" patternRole="shape" userID="SYL" flexoID="559" dontGenerate="false" useSpecificDescriptions="false">
+      <ConceptActorReference id="SYL_560" objectURI="http://www.agilebirds.com/projects/2011/2/TestOE_1297347758330#A" userID="SYL" flexoID="560" dontGenerate="false" useSpecificDescriptions="false" patternRole="company" />
+      <ModelObjectActorReference id="SYL_561" objectReference="SHEMA.BasicOrganization#SYL_541" userID="SYL" flexoID="561" dontGenerate="false" useSpecificDescriptions="false" patternRole="shape" />
+    </EditionPatternReference>
+    <ContainedOEShape id="SYL_543" name="B" editionPatternIdentifier="BOTDepartment" editionPatternInstanceId="542" userID="SYL" flexoID="543" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+      <ShapeGraphicalRepresentation id="10" className="org.openflexo.oe.shema.OEShapeGR" x="144.0" y="36.18086956521738" width="227.9732057416268" height="158.21623188405798" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="2" isFloatingLabel="true" text="B" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="59.583906046107" absoluteTextY="35.46225887056468" textAlignment="CENTER">
+        <ForegroundStyle id="11" noStroke="false" color="0,102,102" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorGradientBackgroundStyle id="12" color1="0,153,153" color2="255,255,255" direction="SOUTH_EAST_NORTH_WEST" useTransparency="true" transparencyLevel="0.2" />
+        <Border id="13" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="14" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="15" isRounded="true" arcSize="15.0" />
+        <TextStyle id="16" font="SansSerif,0,11" color="0,51,51" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <EditionPatternReference id="SYL_562" editionPattern="http://www.agilebirds.com/flexo/ontologies/Calcs/BasicOrganizationTreeEditor.owl#BOTDepartment" instanceId="542" patternRole="shape" userID="SYL" flexoID="562" dontGenerate="false" useSpecificDescriptions="false">
+        <ModelObjectActorReference id="SYL_563" objectReference="SHEMA.BasicOrganization#SYL_543" userID="SYL" flexoID="563" dontGenerate="false" useSpecificDescriptions="false" patternRole="shape" />
+        <ConceptActorReference id="SYL_564" objectURI="http://www.agilebirds.com/projects/2011/2/TestOE_1297347758330#B" userID="SYL" flexoID="564" dontGenerate="false" useSpecificDescriptions="false" patternRole="department" />
+      </EditionPatternReference>
+      <ContainedOEShape id="SYL_549" name="X" editionPatternIdentifier="Employee" editionPatternInstanceId="548" userID="SYL" flexoID="549" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+        <ShapeGraphicalRepresentation id="17" className="org.openflexo.oe.shema.OEShapeGR" x="141.0" y="18.0" width="39.21875" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="3" isFloatingLabel="true" text="X" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="26.0" absoluteTextY="45.0" textAlignment="CENTER">
+          <ForegroundStyle id="18" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ImageBackgroundStyle id="19" imageFile="/Users/sylvain/FlexoResourceCenter6/Calcs/BasicOrganizationTreeEditor.calc/ManagerOrange.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="20" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="21" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <RectangleShape id="22" isRounded="false" arcSize="30.0" />
+          <TextStyle id="23" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </ShapeGraphicalRepresentation>
+        <EditionPatternReference id="SYL_565" editionPattern="http://www.agilebirds.com/flexo/ontologies/Calcs/BasicOrganizationTreeEditor.owl#Employee" instanceId="548" patternRole="managerAsShape" userID="SYL" flexoID="565" dontGenerate="false" useSpecificDescriptions="false">
+          <ConceptActorReference id="SYL_566" objectURI="http://www.agilebirds.com/projects/2011/2/TestOE_1297347758330#X" userID="SYL" flexoID="566" dontGenerate="false" useSpecificDescriptions="false" patternRole="employeeAsManager" />
+          <ModelObjectActorReference id="SYL_567" objectReference="SHEMA.BasicOrganization#SYL_549" userID="SYL" flexoID="567" dontGenerate="false" useSpecificDescriptions="false" patternRole="managerAsShape" />
+        </EditionPatternReference>
+      </ContainedOEShape>
+      <ContainedOEShape id="SYL_553" name="Worker" editionPatternIdentifier="Employee" editionPatternInstanceId="552" userID="SYL" flexoID="553" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+        <ShapeGraphicalRepresentation id="24" className="org.openflexo.oe.shema.OEShapeGR" x="29.0" y="78.0" width="39.21875" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="3" isFloatingLabel="true" text="Worker" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="23.0" absoluteTextY="36.0" textAlignment="CENTER">
+          <ForegroundStyle id="25" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ImageBackgroundStyle id="26" imageFile="/Users/sylvain/FlexoResourceCenter6/Calcs/BasicOrganizationTreeEditor.calc/WorkerOrange.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="27" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="28" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <RectangleShape id="29" isRounded="false" arcSize="30.0" />
+          <TextStyle id="30" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </ShapeGraphicalRepresentation>
+        <EditionPatternReference id="SYL_568" editionPattern="http://www.agilebirds.com/flexo/ontologies/Calcs/BasicOrganizationTreeEditor.owl#Employee" instanceId="552" patternRole="workerAsShape" userID="SYL" flexoID="568" dontGenerate="false" useSpecificDescriptions="false">
+          <ConceptActorReference id="SYL_569" objectURI="http://www.agilebirds.com/projects/2011/2/TestOE_1297347758330#Worker" userID="SYL" flexoID="569" dontGenerate="false" useSpecificDescriptions="false" patternRole="employeeAsWorker" />
+          <ModelObjectActorReference id="SYL_570" objectReference="SHEMA.BasicOrganization#SYL_553" userID="SYL" flexoID="570" dontGenerate="false" useSpecificDescriptions="false" patternRole="workerAsShape" />
+        </EditionPatternReference>
+      </ContainedOEShape>
+      <ContainedOEConnector id="SYL_554" editionPatternInstanceId="0" userID="SYL" flexoID="554" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+        <ConnectorGraphicalRepresentation id="31" className="org.openflexo.oe.shema.OEConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="NONE" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+          <ForegroundStyle id="32" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <StartShapeGraphicalRepresentation idref="24" />
+          <EndShapeGraphicalRepresentation idref="17" />
+          <LineConnector id="33" lineConnectorType="MINIMAL_LENGTH" />
+          <TextStyle id="34" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </ConnectorGraphicalRepresentation>
+        <FromOEShape idref="SYL_553" />
+        <ToOEShape idref="SYL_549" />
+      </ContainedOEConnector>
+      <ContainedOEShape id="SYL_556" name="Worker2" editionPatternIdentifier="Employee" editionPatternInstanceId="555" userID="SYL" flexoID="556" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+        <ShapeGraphicalRepresentation id="35" className="org.openflexo.oe.shema.OEShapeGR" x="154.0" y="100.0" width="39.21875" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="3" isFloatingLabel="true" text="Worker2" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="23.0" absoluteTextY="36.0" textAlignment="CENTER">
+          <ForegroundStyle id="36" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ImageBackgroundStyle id="37" imageFile="/Users/sylvain/FlexoResourceCenter6/Calcs/BasicOrganizationTreeEditor.calc/WorkerOrange.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="38" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="39" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <RectangleShape id="40" isRounded="false" arcSize="30.0" />
+          <TextStyle id="41" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </ShapeGraphicalRepresentation>
+        <EditionPatternReference id="SYL_571" editionPattern="http://www.agilebirds.com/flexo/ontologies/Calcs/BasicOrganizationTreeEditor.owl#Employee" instanceId="555" patternRole="workerAsShape" userID="SYL" flexoID="571" dontGenerate="false" useSpecificDescriptions="false">
+          <ConceptActorReference id="SYL_572" objectURI="http://www.agilebirds.com/projects/2011/2/TestOE_1297347758330#Worker2" userID="SYL" flexoID="572" dontGenerate="false" useSpecificDescriptions="false" patternRole="employeeAsWorker" />
+          <ModelObjectActorReference id="SYL_573" objectReference="SHEMA.BasicOrganization#SYL_556" userID="SYL" flexoID="573" dontGenerate="false" useSpecificDescriptions="false" patternRole="workerAsShape" />
+        </EditionPatternReference>
+      </ContainedOEShape>
+      <ContainedOEConnector id="SYL_558" editionPatternIdentifier="EmployeeHierarchicalRelationship" editionPatternInstanceId="557" userID="SYL" flexoID="558" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+        <ConnectorGraphicalRepresentation id="42" className="org.openflexo.oe.shema.OEConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="-17.0" textAlignment="CENTER">
+          <ForegroundStyle id="43" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <StartShapeGraphicalRepresentation idref="17" />
+          <EndShapeGraphicalRepresentation idref="35" />
+          <LineConnector id="44" lineConnectorType="MINIMAL_LENGTH" />
+          <TextStyle id="45" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </ConnectorGraphicalRepresentation>
+        <FromOEShape idref="SYL_549" />
+        <ToOEShape idref="SYL_556" />
+        <EditionPatternReference id="SYL_574" editionPattern="http://www.agilebirds.com/flexo/ontologies/Calcs/BasicOrganizationTreeEditor.owl#EmployeeHierarchicalRelationship" instanceId="557" patternRole="connector" userID="SYL" flexoID="574" dontGenerate="false" useSpecificDescriptions="false">
+          <ModelObjectActorReference id="SYL_575" objectReference="SHEMA.BasicOrganization#SYL_558" userID="SYL" flexoID="575" dontGenerate="false" useSpecificDescriptions="false" patternRole="connector" />
+          <ObjectPropertyStatementActorReference id="SYL_576" subjectURI="http://www.agilebirds.com/projects/2011/2/TestOE_1297347758330#Worker2" objectPropertyURI="http://www.agilebirds.com/flexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isUnderResponsabilityOf" objectURI="http://www.agilebirds.com/projects/2011/2/TestOE_1297347758330#X" userID="SYL" flexoID="576" dontGenerate="false" useSpecificDescriptions="false" patternRole="isUnderResponsabilityOf" />
+          <ObjectPropertyStatementActorReference id="SYL_577" subjectURI="http://www.agilebirds.com/projects/2011/2/TestOE_1297347758330#X" objectPropertyURI="http://www.agilebirds.com/flexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isResponsibleOf" objectURI="http://www.agilebirds.com/projects/2011/2/TestOE_1297347758330#Worker2" userID="SYL" flexoID="577" dontGenerate="false" useSpecificDescriptions="false" patternRole="isResponsibleOf" />
+        </EditionPatternReference>
+      </ContainedOEConnector>
+    </ContainedOEShape>
+    <ContainedOEShape id="SYL_545" name="C" editionPatternIdentifier="BOTDepartment" editionPatternInstanceId="544" userID="SYL" flexoID="545" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+      <ShapeGraphicalRepresentation id="46" className="org.openflexo.oe.shema.OEShapeGR" x="184.0" y="211.0" width="178.98395721925135" height="98.40579710144928" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="2" isFloatingLabel="true" text="C" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="46.77989790957706" absoluteTextY="22.056471764117937" textAlignment="CENTER">
+        <ForegroundStyle id="47" noStroke="false" color="0,102,102" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorGradientBackgroundStyle id="48" color1="0,153,153" color2="255,255,255" direction="SOUTH_EAST_NORTH_WEST" useTransparency="true" transparencyLevel="0.2" />
+        <Border id="49" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="50" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="51" isRounded="true" arcSize="15.0" />
+        <TextStyle id="52" font="SansSerif,0,11" color="0,51,51" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <EditionPatternReference id="SYL_578" editionPattern="http://www.agilebirds.com/flexo/ontologies/Calcs/BasicOrganizationTreeEditor.owl#BOTDepartment" instanceId="544" patternRole="shape" userID="SYL" flexoID="578" dontGenerate="false" useSpecificDescriptions="false">
+        <ModelObjectActorReference id="SYL_579" objectReference="SHEMA.BasicOrganization#SYL_545" userID="SYL" flexoID="579" dontGenerate="false" useSpecificDescriptions="false" patternRole="shape" />
+        <ConceptActorReference id="SYL_580" objectURI="http://www.agilebirds.com/projects/2011/2/TestOE_1297347758330#C" userID="SYL" flexoID="580" dontGenerate="false" useSpecificDescriptions="false" patternRole="department" />
+      </EditionPatternReference>
+      <ContainedOEShape id="SYL_551" name="Y" editionPatternIdentifier="Employee" editionPatternInstanceId="550" userID="SYL" flexoID="551" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+        <ShapeGraphicalRepresentation id="53" className="org.openflexo.oe.shema.OEShapeGR" x="127.0" y="28.0" width="39.21875" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="3" isFloatingLabel="true" text="Y" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="23.0" absoluteTextY="46.0" textAlignment="CENTER">
+          <ForegroundStyle id="54" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ImageBackgroundStyle id="55" imageFile="/Users/sylvain/FlexoResourceCenter6/Calcs/BasicOrganizationTreeEditor.calc/ManagerYellow.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="56" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="57" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <RectangleShape id="58" isRounded="false" arcSize="30.0" />
+          <TextStyle id="59" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </ShapeGraphicalRepresentation>
+        <EditionPatternReference id="SYL_581" editionPattern="http://www.agilebirds.com/flexo/ontologies/Calcs/BasicOrganizationTreeEditor.owl#Employee" instanceId="550" patternRole="managerAsShape" userID="SYL" flexoID="581" dontGenerate="false" useSpecificDescriptions="false">
+          <ConceptActorReference id="SYL_582" objectURI="http://www.agilebirds.com/projects/2011/2/TestOE_1297347758330#Y" userID="SYL" flexoID="582" dontGenerate="false" useSpecificDescriptions="false" patternRole="employeeAsManager" />
+          <ModelObjectActorReference id="SYL_583" objectReference="SHEMA.BasicOrganization#SYL_551" userID="SYL" flexoID="583" dontGenerate="false" useSpecificDescriptions="false" patternRole="managerAsShape" />
+        </EditionPatternReference>
+      </ContainedOEShape>
+    </ContainedOEShape>
+    <ContainedOEShape id="SYL_547" name="Z" editionPatternIdentifier="Employee" editionPatternInstanceId="546" userID="SYL" flexoID="547" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+      <ShapeGraphicalRepresentation id="60" className="org.openflexo.oe.shema.OEShapeGR" x="18.0" y="69.0" width="57.941513783094166" height="55.99237699237702" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="2" isFloatingLabel="true" text="Z" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="15.708819132854561" absoluteTextY="10.285744596082354" textAlignment="CENTER">
+        <ForegroundStyle id="61" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ImageBackgroundStyle id="62" imageFile="/Users/sylvain/FlexoResourceCenter6/Calcs/BasicOrganizationTreeEditor.calc/CEO.png" scaleX="0.8520810850455024" scaleY="0.8483693483693487" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="63" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="64" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="65" isRounded="false" arcSize="30.0" />
+        <TextStyle id="66" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <EditionPatternReference id="SYL_584" editionPattern="http://www.agilebirds.com/flexo/ontologies/Calcs/BasicOrganizationTreeEditor.owl#Employee" instanceId="546" patternRole="managerAsShape" userID="SYL" flexoID="584" dontGenerate="false" useSpecificDescriptions="false">
+        <ConceptActorReference id="SYL_585" objectURI="http://www.agilebirds.com/projects/2011/2/TestOE_1297347758330#Z" userID="SYL" flexoID="585" dontGenerate="false" useSpecificDescriptions="false" patternRole="employeeAsManager" />
+        <ModelObjectActorReference id="SYL_586" objectReference="SHEMA.BasicOrganization#SYL_547" userID="SYL" flexoID="586" dontGenerate="false" useSpecificDescriptions="false" patternRole="managerAsShape" />
+      </EditionPatternReference>
+    </ContainedOEShape>
+  </ContainedOEShape>
+</OEShema>
+

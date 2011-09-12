@@ -1,0 +1,131 @@
+<webobject name="HEADER_FOOTER">
+	<webobject name="CONDITIONAL_VALIDATION">
+		<p class="denaliError">
+			<webobject name="STRING_VALIDATION">
+			</webobject>
+		</p>
+	</webobject>
+	<webobject name="CONDITIONAL_VALIDATION_WARNING">
+		<p class="denaliWarning">
+			<webobject name="STRING_VALIDATION_WARNING">
+			</webobject>
+		</p>
+	</webobject>
+	<webobject name="CONDITIONAL_CONFIRM_MESSAGES">
+		<p class="denaliConfirm">
+			<webobject name="STRING_CONFIRM_MESSAGES">
+			</webobject>
+		</p>
+	</webobject>
+	<webobject name="FORM">
+		<webobject name="HIDDEN_FORM">
+		</webobject>
+		
+		<div class="denaliBloc">
+			<div class="denaliBlocHeader">
+				<h3 class="denaliBlocTitle">
+					<a href="javascript: void(0);" onclick="event.returnValue = false; return false;" >
+						Download prototype samples files
+					</a>
+				</h3>
+			</div>
+			<div class="denaliBlocContent">
+				<table class="denaliHTMLTable">
+					<tr class="denaliRow">
+						<td class="DLBlockBodyContent">
+							<webobject name="Radio_DownloadDefault">
+							</webobject>
+							Download default samples
+						</td>
+					</tr>
+					<tr class="denaliRow">
+						<td class="DLBlockBodyContent">
+							<webobject name="Radio_DownloadCurrentUsedForNewSession">
+							</webobject>
+							Download current samples used for new session
+						</td>
+					</tr>
+					<tr class="denaliRow">
+						<td class="DLBlockBodyContent">
+							<webobject name="Radio_DownloadCurrentStoredInSession">
+							</webobject>
+							Download samples stored in current session
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="denaliBlocFooter">
+				<div class="denaliBlocFooterButton">
+					<webobject name="Button_Download">
+						Download
+					</webobject>
+				</div>
+			</div>
+		</div>
+		
+		<div class="denaliBloc">
+			<div class="denaliBlocHeader">
+				<h3 class="denaliBlocTitle">
+					<a href="javascript: void(0);" onclick="event.returnValue = false; return false;" >
+						Update prototype samples files
+					</a>
+				</h3>
+			</div>
+			<div class="denaliBlocContent">
+				<table class="denaliHTMLTable">
+					<tr class="denaliRow">
+						<td class="DLBlockBodyTitle" style=" width: 15%;">
+							Upload zip file
+						</td>
+						<td class="DLBlockBodyContent">
+							<webobject name="Upload_SamplesFile">
+							</webobject>
+							<webobject name="Button_Upload">
+								Upload
+							</webobject>
+						</td>
+					</tr>
+					<tr class="denaliRow">
+						<td class="DLBlockBodyTitle">
+						</td>
+						<td class="DLBlockBodyContent">
+						</td>
+					</tr>
+					<tr class="denaliRow">
+						<td class="DLBlockBodyTitle">
+							Save current session state
+						</td>
+						<td class="DLBlockBodyContent">
+							<webobject name="Button_SaveSessionState">
+								Save
+							</webobject>
+						</td>
+					</tr>
+					<tr class="denaliRow">
+						<td class="DLBlockBodyTitle">
+						</td>
+						<td class="DLBlockBodyContent">
+						</td>
+					</tr>
+					<tr class="denaliRow">
+						<td class="DLBlockBodyTitle">
+							Rollback to default samples
+						</td>
+						<td class="DLBlockBodyContent">
+							<webobject name="Button_RollbackDefaultState">
+								Rollback
+							</webobject>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="denaliBlocFooter">
+				<div class="denaliBlocFooterButton">
+				</div>
+			</div>
+		</div>
+		
+		<webobject name="PAGE_DA">
+		</webobject>
+	</webobject>
+</webobject>

@@ -1,0 +1,47 @@
+<inspector title = "source_repository">
+	<tab name="Basic" index="0">
+		<property name="description" label="description" widget="TEXT_AREA" constraint="0">
+			<param name="rows" value="10"/>
+		</property>
+		<property name="displayName" label="name" widget="TEXT_FIELD" constraint="2">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="directory" label="source_directory" widget="DIRECTORY" constraint="4">
+		</property>
+		<property name="preferredTemplateRepository" label="templates_repository" widget="DROPDOWN" constraint="6">
+			<param name="dynamiclist" value="generatedCode.templates.customCodeRepositoriesVector"/>
+			<param name="format" value="name"/>
+		</property>
+	</tab>
+	
+	<tab name="Advanced" index="1">
+	<property name="name" label="name_unmodifiable" widget="READ_ONLY_TEXT_FIELD" constraint="2">
+			<param name="columns" value="10"/>
+		</property>
+	</tab>
+
+	<tab name="History" index="2">
+		<property name="manageHistory" label="manage_history" widget="CHECKBOX" constraint="0"/>
+		<property_list name="releases" label="releases" constraint="1" depends="manageHistory" conditional="manageHistory=true">
+		  <param name="visible_row_count" value="10"/>
+		  <param name="row_height" value="20"/>
+		  <property_list_column name="versionIdentifier" label="version" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="50"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="name" label="name" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="100"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="date" label="date" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="200"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="userId" label="user" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="100"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		</property_list>
+	</tab>
+		
+</inspector>

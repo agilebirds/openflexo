@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GeometricSet id="1">
+  <Polylin id="2" name="Polylin1">
+    <PolylinGraphicalRepresentation id="3" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="4" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="5" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="6" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PolylinGraphicalRepresentation>
+    <PolylinWithNPointsConstruction id="7">
+      <P_ExplicitPointConstruction id="8" point="98.0,236.0" />
+      <P_ExplicitPointConstruction id="9" point="204.0,452.0" />
+      <P_ExplicitPointConstruction id="10" point="314.0,75.0" />
+      <P_ExplicitPointConstruction id="11" point="544.0,201.0" />
+    </PolylinWithNPointsConstruction>
+    <Resulting_FGEPolylin id="12" className="org.openflexo.fge.geom.FGERectPolylin">
+      <FGEPoint id="13" x="98.0" y="236.0" />
+      <FGEPoint id="14" x="204.0" y="452.0" />
+      <FGEPoint id="15" x="314.0" y="75.0" />
+      <FGEPoint id="16" x="544.0" y="201.0" />
+    </Resulting_FGEPolylin>
+  </Polylin>
+  <GeometricDrawingGraphicalRepresentation id="17" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" width="10000.0" height="10000.0" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255">
+    <TextStyle id="18" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+  </GeometricDrawingGraphicalRepresentation>
+</GeometricSet>
+

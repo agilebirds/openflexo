@@ -1,0 +1,1022 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XMI xmi.version="1.0">
+  <XMI.header>
+    <XMI.documentation>
+      <XMI.exporter>Novosoft UML Library</XMI.exporter>
+      <XMI.exporterVersion>0.4.19</XMI.exporterVersion>
+    </XMI.documentation>
+    <XMI.metamodel xmi.name="UML" xmi.version="1.3"/>
+  </XMI.header>
+  <XMI.content>
+    <Model_Management.Model xmi.id="xmi.1">
+      <Foundation.Core.ModelElement.name>uni</Foundation.Core.ModelElement.name>
+      <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+      <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+      <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+      <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+      <Foundation.Core.Namespace.ownedElement>
+        <Model_Management.Package xmi.id="xmi.2" xmi.uuid="3AE9873B03C2">
+          <Foundation.Core.ModelElement.name>Use Case View</Foundation.Core.ModelElement.name>
+          <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+          <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+          <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+          <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+          <Foundation.Core.ModelElement.namespace>
+            <Foundation.Core.Namespace xmi.idref="xmi.1"/>
+          </Foundation.Core.ModelElement.namespace>
+          <Foundation.Core.Namespace.ownedElement>
+            <Foundation.Extension_Mechanisms.Stereotype xmi.id="xmi.3">
+              <Foundation.Core.ModelElement.name>obsolete</Foundation.Core.ModelElement.name>
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.2"/>
+              </Foundation.Core.ModelElement.namespace>
+              <Foundation.Extension_Mechanisms.Stereotype.extendedElement>
+                <Foundation.Core.ModelElement xmi.idref="xmi.4"/>
+              </Foundation.Extension_Mechanisms.Stereotype.extendedElement>
+            </Foundation.Extension_Mechanisms.Stereotype>
+            <Behavioral_Elements.Use_Cases.UseCase xmi.id="xmi.4" xmi.uuid="3B4D571F03D4">
+              <Foundation.Core.ModelElement.name>Lecture</Foundation.Core.ModelElement.name>
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.2"/>
+              </Foundation.Core.ModelElement.namespace>
+            </Behavioral_Elements.Use_Cases.UseCase>
+            <Behavioral_Elements.Use_Cases.UseCase xmi.id="xmi.5" xmi.uuid="3B4D57370032">
+              <Foundation.Core.ModelElement.name>Examination</Foundation.Core.ModelElement.name>
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.2"/>
+              </Foundation.Core.ModelElement.namespace>
+              <Foundation.Core.GeneralizableElement.specialization>
+                <Foundation.Core.Generalization xmi.idref="xmi.6"/>
+              </Foundation.Core.GeneralizableElement.specialization>
+            </Behavioral_Elements.Use_Cases.UseCase>
+            <Behavioral_Elements.Use_Cases.UseCase xmi.id="xmi.7" xmi.uuid="3B4D57E303C0">
+              <Foundation.Core.ModelElement.name>Hard examination</Foundation.Core.ModelElement.name>
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.2"/>
+              </Foundation.Core.ModelElement.namespace>
+              <Foundation.Core.GeneralizableElement.generalization>
+                <Foundation.Core.Generalization xmi.idref="xmi.6"/>
+              </Foundation.Core.GeneralizableElement.generalization>
+            </Behavioral_Elements.Use_Cases.UseCase>
+            <Model_Management.Package xmi.id="xmi.8" xmi.uuid="3B4D57110398">
+              <Foundation.Core.ModelElement.name>NewPackage</Foundation.Core.ModelElement.name>
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.2"/>
+              </Foundation.Core.ModelElement.namespace>
+            </Model_Management.Package>
+            <Foundation.Core.Generalization xmi.id="xmi.6" xmi.uuid="3B4D57F7030C">
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.2"/>
+              </Foundation.Core.ModelElement.namespace>
+              <Foundation.Core.Generalization.child>
+                <Foundation.Core.GeneralizableElement xmi.idref="xmi.7"/>
+              </Foundation.Core.Generalization.child>
+              <Foundation.Core.Generalization.parent>
+                <Foundation.Core.GeneralizableElement xmi.idref="xmi.5"/>
+              </Foundation.Core.Generalization.parent>
+            </Foundation.Core.Generalization>
+            <Foundation.Core.Association xmi.id="xmi.9">
+              <Foundation.Core.ModelElement.name>depends on</Foundation.Core.ModelElement.name>
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.2"/>
+              </Foundation.Core.ModelElement.namespace>
+              <Foundation.Core.Association.connection>
+                <Foundation.Core.AssociationEnd xmi.id="xmi.10">
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.AssociationEnd.isNavigable xmi.value="false"/>
+                  <Foundation.Core.AssociationEnd.aggregation xmi.value="none"/>
+                  <Foundation.Core.AssociationEnd.multiplicity>
+                    <Foundation.Data_Types.Multiplicity xmi.id="xmi.11">
+                      <Foundation.Data_Types.Multiplicity.range>
+                        <Foundation.Data_Types.MultiplicityRange xmi.id="xmi.12">
+                          <Foundation.Data_Types.MultiplicityRange.lower>1</Foundation.Data_Types.MultiplicityRange.lower>
+                          <Foundation.Data_Types.MultiplicityRange.upper>1</Foundation.Data_Types.MultiplicityRange.upper>
+                        </Foundation.Data_Types.MultiplicityRange>
+                      </Foundation.Data_Types.Multiplicity.range>
+                    </Foundation.Data_Types.Multiplicity>
+                  </Foundation.Core.AssociationEnd.multiplicity>
+                  <Foundation.Core.AssociationEnd.association>
+                    <Foundation.Core.Association xmi.idref="xmi.9"/>
+                  </Foundation.Core.AssociationEnd.association>
+                  <Foundation.Core.AssociationEnd.type>
+                    <Foundation.Core.Classifier xmi.idref="xmi.5"/>
+                  </Foundation.Core.AssociationEnd.type>
+                </Foundation.Core.AssociationEnd>
+                <Foundation.Core.AssociationEnd xmi.id="xmi.13">
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.AssociationEnd.isNavigable xmi.value="true"/>
+                  <Foundation.Core.AssociationEnd.aggregation xmi.value="none"/>
+                  <Foundation.Core.AssociationEnd.multiplicity>
+                    <Foundation.Data_Types.Multiplicity xmi.idref="xmi.11"/>
+                  </Foundation.Core.AssociationEnd.multiplicity>
+                  <Foundation.Core.AssociationEnd.association>
+                    <Foundation.Core.Association xmi.idref="xmi.9"/>
+                  </Foundation.Core.AssociationEnd.association>
+                  <Foundation.Core.AssociationEnd.type>
+                    <Foundation.Core.Classifier xmi.idref="xmi.4"/>
+                  </Foundation.Core.AssociationEnd.type>
+                </Foundation.Core.AssociationEnd>
+              </Foundation.Core.Association.connection>
+            </Foundation.Core.Association>
+            <Foundation.Core.Association xmi.id="xmi.14">
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.2"/>
+              </Foundation.Core.ModelElement.namespace>
+              <Foundation.Core.Association.connection>
+                <Foundation.Core.AssociationEnd xmi.id="xmi.15">
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.AssociationEnd.isNavigable xmi.value="true"/>
+                  <Foundation.Core.AssociationEnd.aggregation xmi.value="none"/>
+                  <Foundation.Core.AssociationEnd.multiplicity>
+                    <Foundation.Data_Types.Multiplicity xmi.idref="xmi.11"/>
+                  </Foundation.Core.AssociationEnd.multiplicity>
+                  <Foundation.Core.AssociationEnd.association>
+                    <Foundation.Core.Association xmi.idref="xmi.14"/>
+                  </Foundation.Core.AssociationEnd.association>
+                  <Foundation.Core.AssociationEnd.type>
+                    <Foundation.Core.Classifier xmi.idref="xmi.5"/>
+                  </Foundation.Core.AssociationEnd.type>
+                </Foundation.Core.AssociationEnd>
+                <Foundation.Core.AssociationEnd xmi.id="xmi.16">
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.AssociationEnd.isNavigable xmi.value="false"/>
+                  <Foundation.Core.AssociationEnd.aggregation xmi.value="none"/>
+                  <Foundation.Core.AssociationEnd.multiplicity>
+                    <Foundation.Data_Types.Multiplicity xmi.idref="xmi.11"/>
+                  </Foundation.Core.AssociationEnd.multiplicity>
+                  <Foundation.Core.AssociationEnd.association>
+                    <Foundation.Core.Association xmi.idref="xmi.14"/>
+                  </Foundation.Core.AssociationEnd.association>
+                  <Foundation.Core.AssociationEnd.type>
+                    <Foundation.Core.Classifier xmi.idref="xmi.17"/>
+                  </Foundation.Core.AssociationEnd.type>
+                </Foundation.Core.AssociationEnd>
+              </Foundation.Core.Association.connection>
+            </Foundation.Core.Association>
+            <Foundation.Core.Association xmi.id="xmi.18">
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.2"/>
+              </Foundation.Core.ModelElement.namespace>
+              <Foundation.Core.Association.connection>
+                <Foundation.Core.AssociationEnd xmi.id="xmi.19">
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.AssociationEnd.isNavigable xmi.value="true"/>
+                  <Foundation.Core.AssociationEnd.aggregation xmi.value="none"/>
+                  <Foundation.Core.AssociationEnd.multiplicity>
+                    <Foundation.Data_Types.Multiplicity xmi.idref="xmi.11"/>
+                  </Foundation.Core.AssociationEnd.multiplicity>
+                  <Foundation.Core.AssociationEnd.association>
+                    <Foundation.Core.Association xmi.idref="xmi.18"/>
+                  </Foundation.Core.AssociationEnd.association>
+                  <Foundation.Core.AssociationEnd.type>
+                    <Foundation.Core.Classifier xmi.idref="xmi.4"/>
+                  </Foundation.Core.AssociationEnd.type>
+                </Foundation.Core.AssociationEnd>
+                <Foundation.Core.AssociationEnd xmi.id="xmi.20">
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.AssociationEnd.isNavigable xmi.value="false"/>
+                  <Foundation.Core.AssociationEnd.aggregation xmi.value="none"/>
+                  <Foundation.Core.AssociationEnd.multiplicity>
+                    <Foundation.Data_Types.Multiplicity xmi.idref="xmi.11"/>
+                  </Foundation.Core.AssociationEnd.multiplicity>
+                  <Foundation.Core.AssociationEnd.association>
+                    <Foundation.Core.Association xmi.idref="xmi.18"/>
+                  </Foundation.Core.AssociationEnd.association>
+                  <Foundation.Core.AssociationEnd.type>
+                    <Foundation.Core.Classifier xmi.idref="xmi.17"/>
+                  </Foundation.Core.AssociationEnd.type>
+                </Foundation.Core.AssociationEnd>
+              </Foundation.Core.Association.connection>
+            </Foundation.Core.Association>
+          </Foundation.Core.Namespace.ownedElement>
+        </Model_Management.Package>
+        <Model_Management.Package xmi.id="xmi.21" xmi.uuid="3AE9873B03C1">
+          <Foundation.Core.ModelElement.name>Logical View</Foundation.Core.ModelElement.name>
+          <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+          <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+          <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+          <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+          <Foundation.Core.ModelElement.namespace>
+            <Foundation.Core.Namespace xmi.idref="xmi.1"/>
+          </Foundation.Core.ModelElement.namespace>
+          <Foundation.Core.Namespace.ownedElement>
+            <Foundation.Extension_Mechanisms.Stereotype xmi.id="xmi.22">
+              <Foundation.Core.ModelElement.name>utility</Foundation.Core.ModelElement.name>
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.21"/>
+              </Foundation.Core.ModelElement.namespace>
+              <Foundation.Extension_Mechanisms.Stereotype.extendedElement>
+                <Foundation.Core.ModelElement xmi.idref="xmi.23"/>
+                <Foundation.Core.ModelElement xmi.idref="xmi.24"/>
+                <Foundation.Core.ModelElement xmi.idref="xmi.25"/>
+                <Foundation.Core.ModelElement xmi.idref="xmi.26"/>
+                <Foundation.Core.ModelElement xmi.idref="xmi.27"/>
+              </Foundation.Extension_Mechanisms.Stereotype.extendedElement>
+            </Foundation.Extension_Mechanisms.Stereotype>
+            <Foundation.Core.Class xmi.id="xmi.23" xmi.uuid="3B29D7C8010E">
+              <Foundation.Core.ModelElement.name>Address</Foundation.Core.ModelElement.name>
+              <Foundation.Core.ModelElement.visibility xmi.value="public"/>
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+              <Foundation.Core.Class.isActive xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.21"/>
+              </Foundation.Core.ModelElement.namespace>
+            </Foundation.Core.Class>
+            <Foundation.Core.Class xmi.id="xmi.28" xmi.uuid="3AE987400197">
+              <Foundation.Core.ModelElement.name>Person</Foundation.Core.ModelElement.name>
+              <Foundation.Core.ModelElement.visibility xmi.value="public"/>
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+              <Foundation.Core.Class.isActive xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.21"/>
+              </Foundation.Core.ModelElement.namespace>
+              <Foundation.Core.GeneralizableElement.specialization>
+                <Foundation.Core.Generalization xmi.idref="xmi.29"/>
+                <Foundation.Core.Generalization xmi.idref="xmi.30"/>
+              </Foundation.Core.GeneralizableElement.specialization>
+              <Foundation.Core.Classifier.feature>
+                <Foundation.Core.Operation xmi.id="xmi.31" xmi.uuid="3AE98756006C">
+                  <Foundation.Core.ModelElement.name>setAddress</Foundation.Core.ModelElement.name>
+                  <Foundation.Core.ModelElement.visibility xmi.value="public"/>
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.BehavioralFeature.isQuery xmi.value="false"/>
+                  <Foundation.Core.Operation.concurrency xmi.value="sequential"/>
+                  <Foundation.Core.Operation.isRoot xmi.value="false"/>
+                  <Foundation.Core.Operation.isLeaf xmi.value="false"/>
+                  <Foundation.Core.Operation.isAbstract xmi.value="false"/>
+                  <Foundation.Core.Feature.owner>
+                    <Foundation.Core.Classifier xmi.idref="xmi.28"/>
+                  </Foundation.Core.Feature.owner>
+                  <Foundation.Core.BehavioralFeature.parameter>
+                    <Foundation.Core.Parameter xmi.id="xmi.32">
+                      <Foundation.Core.ModelElement.name>return</Foundation.Core.ModelElement.name>
+                      <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                      <Foundation.Core.Parameter.kind xmi.value="return"/>
+                      <Foundation.Core.Parameter.behavioralFeature>
+                        <Foundation.Core.BehavioralFeature xmi.idref="xmi.31"/>
+                      </Foundation.Core.Parameter.behavioralFeature>
+                      <Foundation.Core.Parameter.type>
+                        <Foundation.Core.Classifier xmi.idref="xmi.24"/>
+                      </Foundation.Core.Parameter.type>
+                    </Foundation.Core.Parameter>
+                    <Foundation.Core.Parameter xmi.id="xmi.33">
+                      <Foundation.Core.ModelElement.name>a</Foundation.Core.ModelElement.name>
+                      <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                      <Foundation.Core.Parameter.kind xmi.value="in"/>
+                      <Foundation.Core.Parameter.behavioralFeature>
+                        <Foundation.Core.BehavioralFeature xmi.idref="xmi.31"/>
+                      </Foundation.Core.Parameter.behavioralFeature>
+                      <Foundation.Core.Parameter.type>
+                        <Foundation.Core.Classifier xmi.idref="xmi.23"/>
+                      </Foundation.Core.Parameter.type>
+                    </Foundation.Core.Parameter>
+                  </Foundation.Core.BehavioralFeature.parameter>
+                </Foundation.Core.Operation>
+                <Foundation.Core.Attribute xmi.id="xmi.34" xmi.uuid="3AE9874A02B3">
+                  <Foundation.Core.ModelElement.name>age</Foundation.Core.ModelElement.name>
+                  <Foundation.Core.ModelElement.visibility xmi.value="public"/>
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.Feature.owner>
+                    <Foundation.Core.Classifier xmi.idref="xmi.28"/>
+                  </Foundation.Core.Feature.owner>
+                  <Foundation.Core.StructuralFeature.type>
+                    <Foundation.Core.Classifier xmi.idref="xmi.25"/>
+                  </Foundation.Core.StructuralFeature.type>
+                </Foundation.Core.Attribute>
+                <Foundation.Core.Attribute xmi.id="xmi.35" xmi.uuid="3AE98793018C">
+                  <Foundation.Core.ModelElement.name>name</Foundation.Core.ModelElement.name>
+                  <Foundation.Core.ModelElement.visibility xmi.value="public"/>
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.Feature.owner>
+                    <Foundation.Core.Classifier xmi.idref="xmi.28"/>
+                  </Foundation.Core.Feature.owner>
+                  <Foundation.Core.StructuralFeature.type>
+                    <Foundation.Core.Classifier xmi.idref="xmi.26"/>
+                  </Foundation.Core.StructuralFeature.type>
+                </Foundation.Core.Attribute>
+              </Foundation.Core.Classifier.feature>
+            </Foundation.Core.Class>
+            <Behavioral_Elements.Use_Cases.Actor xmi.id="xmi.17" xmi.uuid="3AE9876500D2">
+              <Foundation.Core.ModelElement.name>Professor</Foundation.Core.ModelElement.name>
+              <Foundation.Core.ModelElement.visibility xmi.value="public"/>
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.21"/>
+              </Foundation.Core.ModelElement.namespace>
+              <Foundation.Core.ModelElement.clientDependency>
+                <Foundation.Core.Dependency xmi.idref="xmi.36"/>
+                <Foundation.Core.Dependency xmi.idref="xmi.37"/>
+              </Foundation.Core.ModelElement.clientDependency>
+              <Foundation.Core.GeneralizableElement.generalization>
+                <Foundation.Core.Generalization xmi.idref="xmi.29"/>
+              </Foundation.Core.GeneralizableElement.generalization>
+            </Behavioral_Elements.Use_Cases.Actor>
+            <Foundation.Core.Class xmi.id="xmi.38" xmi.uuid="3AE987720329">
+              <Foundation.Core.ModelElement.name>Student</Foundation.Core.ModelElement.name>
+              <Foundation.Core.ModelElement.visibility xmi.value="public"/>
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+              <Foundation.Core.Class.isActive xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.21"/>
+              </Foundation.Core.ModelElement.namespace>
+              <Foundation.Core.GeneralizableElement.generalization>
+                <Foundation.Core.Generalization xmi.idref="xmi.30"/>
+              </Foundation.Core.GeneralizableElement.generalization>
+            </Foundation.Core.Class>
+            <Foundation.Core.Interface xmi.id="xmi.39" xmi.uuid="3AE987AB0209">
+              <Foundation.Core.ModelElement.name>Mentor</Foundation.Core.ModelElement.name>
+              <Foundation.Core.ModelElement.visibility xmi.value="public"/>
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.21"/>
+              </Foundation.Core.ModelElement.namespace>
+              <Foundation.Core.ModelElement.supplierDependency>
+                <Foundation.Core.Dependency xmi.idref="xmi.37"/>
+              </Foundation.Core.ModelElement.supplierDependency>
+            </Foundation.Core.Interface>
+            <Foundation.Core.Class xmi.id="xmi.40" xmi.uuid="3AE988980079">
+              <Foundation.Core.ModelElement.name>Money</Foundation.Core.ModelElement.name>
+              <Foundation.Core.ModelElement.visibility xmi.value="public"/>
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+              <Foundation.Core.Class.isActive xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.21"/>
+              </Foundation.Core.ModelElement.namespace>
+              <Foundation.Core.ModelElement.supplierDependency>
+                <Foundation.Core.Dependency xmi.idref="xmi.36"/>
+              </Foundation.Core.ModelElement.supplierDependency>
+            </Foundation.Core.Class>
+            <Foundation.Core.Class xmi.id="xmi.41" xmi.uuid="3B1FB1750014">
+              <Foundation.Core.ModelElement.name>Faculty</Foundation.Core.ModelElement.name>
+              <Foundation.Core.ModelElement.visibility xmi.value="public"/>
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+              <Foundation.Core.Class.isActive xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.21"/>
+              </Foundation.Core.ModelElement.namespace>
+            </Foundation.Core.Class>
+            <Foundation.Core.Class xmi.id="xmi.42" xmi.uuid="3B1FB18C0104">
+              <Foundation.Core.ModelElement.name>University</Foundation.Core.ModelElement.name>
+              <Foundation.Core.ModelElement.visibility xmi.value="public"/>
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+              <Foundation.Core.Class.isActive xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.21"/>
+              </Foundation.Core.ModelElement.namespace>
+            </Foundation.Core.Class>
+            <Foundation.Core.AssociationClass xmi.id="xmi.43" xmi.uuid="3B1FB213024E">
+              <Foundation.Core.ModelElement.name>Period</Foundation.Core.ModelElement.name>
+              <Foundation.Core.ModelElement.visibility xmi.value="public"/>
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+              <Foundation.Core.Class.isActive xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.21"/>
+              </Foundation.Core.ModelElement.namespace>
+              <Foundation.Core.Association.connection>
+                <Foundation.Core.AssociationEnd xmi.id="xmi.44">
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.AssociationEnd.isNavigable xmi.value="true"/>
+                  <Foundation.Core.AssociationEnd.aggregation xmi.value="none"/>
+                  <Foundation.Core.AssociationEnd.multiplicity>
+                    <Foundation.Data_Types.Multiplicity xmi.idref="xmi.11"/>
+                  </Foundation.Core.AssociationEnd.multiplicity>
+                  <Foundation.Core.AssociationEnd.association>
+                    <Foundation.Core.Association xmi.idref="xmi.43"/>
+                  </Foundation.Core.AssociationEnd.association>
+                  <Foundation.Core.AssociationEnd.type>
+                    <Foundation.Core.Classifier xmi.idref="xmi.17"/>
+                  </Foundation.Core.AssociationEnd.type>
+                </Foundation.Core.AssociationEnd>
+                <Foundation.Core.AssociationEnd xmi.id="xmi.45">
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.AssociationEnd.isNavigable xmi.value="true"/>
+                  <Foundation.Core.AssociationEnd.aggregation xmi.value="none"/>
+                  <Foundation.Core.AssociationEnd.multiplicity>
+                    <Foundation.Data_Types.Multiplicity xmi.idref="xmi.11"/>
+                  </Foundation.Core.AssociationEnd.multiplicity>
+                  <Foundation.Core.AssociationEnd.association>
+                    <Foundation.Core.Association xmi.idref="xmi.43"/>
+                  </Foundation.Core.AssociationEnd.association>
+                  <Foundation.Core.AssociationEnd.type>
+                    <Foundation.Core.Classifier xmi.idref="xmi.41"/>
+                  </Foundation.Core.AssociationEnd.type>
+                </Foundation.Core.AssociationEnd>
+              </Foundation.Core.Association.connection>
+              <Foundation.Core.Classifier.feature>
+                <Foundation.Core.Attribute xmi.id="xmi.46" xmi.uuid="3B1FB2590316">
+                  <Foundation.Core.ModelElement.name>from</Foundation.Core.ModelElement.name>
+                  <Foundation.Core.ModelElement.visibility xmi.value="public"/>
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.Feature.owner>
+                    <Foundation.Core.Classifier xmi.idref="xmi.43"/>
+                  </Foundation.Core.Feature.owner>
+                  <Foundation.Core.StructuralFeature.type>
+                    <Foundation.Core.Classifier xmi.idref="xmi.27"/>
+                  </Foundation.Core.StructuralFeature.type>
+                </Foundation.Core.Attribute>
+                <Foundation.Core.Attribute xmi.id="xmi.47" xmi.uuid="3B1FB2580316">
+                  <Foundation.Core.ModelElement.name>to</Foundation.Core.ModelElement.name>
+                  <Foundation.Core.ModelElement.visibility xmi.value="public"/>
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.Feature.owner>
+                    <Foundation.Core.Classifier xmi.idref="xmi.43"/>
+                  </Foundation.Core.Feature.owner>
+                  <Foundation.Core.StructuralFeature.type>
+                    <Foundation.Core.Classifier xmi.idref="xmi.27"/>
+                  </Foundation.Core.StructuralFeature.type>
+                </Foundation.Core.Attribute>
+              </Foundation.Core.Classifier.feature>
+            </Foundation.Core.AssociationClass>
+            <Model_Management.Package xmi.id="xmi.48" xmi.uuid="3B29C60603CA">
+              <Foundation.Core.ModelElement.name>templates</Foundation.Core.ModelElement.name>
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.21"/>
+              </Foundation.Core.ModelElement.namespace>
+              <Foundation.Core.Namespace.ownedElement>
+                <Foundation.Core.Class xmi.id="xmi.49" xmi.uuid="3B29C6290384">
+                  <Foundation.Core.ModelElement.name>Class</Foundation.Core.ModelElement.name>
+                  <Foundation.Core.ModelElement.visibility xmi.value="public"/>
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+                  <Foundation.Core.Class.isActive xmi.value="false"/>
+                  <Foundation.Core.ModelElement.namespace>
+                    <Foundation.Core.Namespace xmi.idref="xmi.48"/>
+                  </Foundation.Core.ModelElement.namespace>
+                  <Foundation.Core.ModelElement.clientDependency>
+                    <Foundation.Core.Dependency xmi.idref="xmi.50"/>
+                    <Foundation.Core.Dependency xmi.idref="xmi.51"/>
+                  </Foundation.Core.ModelElement.clientDependency>
+                  <Foundation.Core.ModelElement.supplierDependency>
+                    <Foundation.Core.Dependency xmi.idref="xmi.50"/>
+                    <Foundation.Core.Dependency xmi.idref="xmi.52"/>
+                  </Foundation.Core.ModelElement.supplierDependency>
+                </Foundation.Core.Class>
+                <Foundation.Core.AssociationClass xmi.id="xmi.53" xmi.uuid="3B29C64902BC">
+                  <Foundation.Core.ModelElement.name>SuperClass</Foundation.Core.ModelElement.name>
+                  <Foundation.Core.ModelElement.visibility xmi.value="public"/>
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+                  <Foundation.Core.Class.isActive xmi.value="false"/>
+                  <Foundation.Core.ModelElement.namespace>
+                    <Foundation.Core.Namespace xmi.idref="xmi.48"/>
+                  </Foundation.Core.ModelElement.namespace>
+                  <Foundation.Core.GeneralizableElement.specialization>
+                    <Foundation.Core.Generalization xmi.idref="xmi.54"/>
+                  </Foundation.Core.GeneralizableElement.specialization>
+                  <Foundation.Core.Association.connection>
+                    <Foundation.Core.AssociationEnd xmi.id="xmi.55">
+                      <Foundation.Core.ModelElement.name>RoleA</Foundation.Core.ModelElement.name>
+                      <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                      <Foundation.Core.AssociationEnd.isNavigable xmi.value="true"/>
+                      <Foundation.Core.AssociationEnd.aggregation xmi.value="none"/>
+                      <Foundation.Core.AssociationEnd.multiplicity>
+                        <Foundation.Data_Types.Multiplicity xmi.idref="xmi.11"/>
+                      </Foundation.Core.AssociationEnd.multiplicity>
+                      <Foundation.Core.ModelElement.constraint>
+                        <Foundation.Core.Constraint xmi.idref="xmi.56"/>
+                      </Foundation.Core.ModelElement.constraint>
+                      <Foundation.Core.AssociationEnd.association>
+                        <Foundation.Core.Association xmi.idref="xmi.53"/>
+                      </Foundation.Core.AssociationEnd.association>
+                      <Foundation.Core.AssociationEnd.type>
+                        <Foundation.Core.Classifier xmi.idref="xmi.57"/>
+                      </Foundation.Core.AssociationEnd.type>
+                    </Foundation.Core.AssociationEnd>
+                    <Foundation.Core.AssociationEnd xmi.id="xmi.58">
+                      <Foundation.Core.ModelElement.name>RoleB</Foundation.Core.ModelElement.name>
+                      <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                      <Foundation.Core.AssociationEnd.isNavigable xmi.value="true"/>
+                      <Foundation.Core.AssociationEnd.aggregation xmi.value="composite"/>
+                      <Foundation.Core.AssociationEnd.multiplicity>
+                        <Foundation.Data_Types.Multiplicity xmi.id="xmi.59">
+                          <Foundation.Data_Types.Multiplicity.range>
+                            <Foundation.Data_Types.MultiplicityRange xmi.id="xmi.60">
+                              <Foundation.Data_Types.MultiplicityRange.lower>1</Foundation.Data_Types.MultiplicityRange.lower>
+                              <Foundation.Data_Types.MultiplicityRange.upper>-1</Foundation.Data_Types.MultiplicityRange.upper>
+                            </Foundation.Data_Types.MultiplicityRange>
+                          </Foundation.Data_Types.Multiplicity.range>
+                        </Foundation.Data_Types.Multiplicity>
+                      </Foundation.Core.AssociationEnd.multiplicity>
+                      <Foundation.Core.AssociationEnd.association>
+                        <Foundation.Core.Association xmi.idref="xmi.53"/>
+                      </Foundation.Core.AssociationEnd.association>
+                      <Foundation.Core.AssociationEnd.type>
+                        <Foundation.Core.Classifier xmi.idref="xmi.49"/>
+                      </Foundation.Core.AssociationEnd.type>
+                    </Foundation.Core.AssociationEnd>
+                  </Foundation.Core.Association.connection>
+                </Foundation.Core.AssociationClass>
+                <Foundation.Core.Class xmi.id="xmi.61" xmi.uuid="3B29C65600DC">
+                  <Foundation.Core.ModelElement.name>SubClass</Foundation.Core.ModelElement.name>
+                  <Foundation.Core.ModelElement.visibility xmi.value="public"/>
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+                  <Foundation.Core.Class.isActive xmi.value="false"/>
+                  <Foundation.Core.ModelElement.namespace>
+                    <Foundation.Core.Namespace xmi.idref="xmi.48"/>
+                  </Foundation.Core.ModelElement.namespace>
+                  <Foundation.Core.GeneralizableElement.generalization>
+                    <Foundation.Core.Generalization xmi.idref="xmi.54"/>
+                  </Foundation.Core.GeneralizableElement.generalization>
+                </Foundation.Core.Class>
+                <Foundation.Core.Interface xmi.id="xmi.62" xmi.uuid="3B29C6DE0000">
+                  <Foundation.Core.ModelElement.name>Interface</Foundation.Core.ModelElement.name>
+                  <Foundation.Core.ModelElement.visibility xmi.value="public"/>
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+                  <Foundation.Core.ModelElement.namespace>
+                    <Foundation.Core.Namespace xmi.idref="xmi.48"/>
+                  </Foundation.Core.ModelElement.namespace>
+                  <Foundation.Core.ModelElement.supplierDependency>
+                    <Foundation.Core.Dependency xmi.idref="xmi.51"/>
+                  </Foundation.Core.ModelElement.supplierDependency>
+                </Foundation.Core.Interface>
+                <Foundation.Core.Class xmi.id="xmi.57" xmi.uuid="3B29C8710064">
+                  <Foundation.Core.ModelElement.name>OtherClass</Foundation.Core.ModelElement.name>
+                  <Foundation.Core.ModelElement.visibility xmi.value="public"/>
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+                  <Foundation.Core.Class.isActive xmi.value="false"/>
+                  <Foundation.Core.ModelElement.namespace>
+                    <Foundation.Core.Namespace xmi.idref="xmi.48"/>
+                  </Foundation.Core.ModelElement.namespace>
+                  <Foundation.Core.ModelElement.clientDependency>
+                    <Foundation.Core.Dependency xmi.idref="xmi.52"/>
+                  </Foundation.Core.ModelElement.clientDependency>
+                </Foundation.Core.Class>
+                <Foundation.Core.Class xmi.id="xmi.63" xmi.uuid="3B29CB2903AC">
+                  <Foundation.Core.ModelElement.name>SomeClass</Foundation.Core.ModelElement.name>
+                  <Foundation.Core.ModelElement.visibility xmi.value="public"/>
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+                  <Foundation.Core.Class.isActive xmi.value="false"/>
+                  <Foundation.Core.ModelElement.namespace>
+                    <Foundation.Core.Namespace xmi.idref="xmi.48"/>
+                  </Foundation.Core.ModelElement.namespace>
+                </Foundation.Core.Class>
+                <Behavioral_Elements.Use_Cases.Actor xmi.id="xmi.64" xmi.uuid="3B56A0DC033B">
+                  <Foundation.Core.ModelElement.name>Actor</Foundation.Core.ModelElement.name>
+                  <Foundation.Core.ModelElement.visibility xmi.value="public"/>
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+                  <Foundation.Core.ModelElement.namespace>
+                    <Foundation.Core.Namespace xmi.idref="xmi.48"/>
+                  </Foundation.Core.ModelElement.namespace>
+                </Behavioral_Elements.Use_Cases.Actor>
+                <Foundation.Core.Usage xmi.id="xmi.50" xmi.uuid="3B29C72203A2">
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.ModelElement.namespace>
+                    <Foundation.Core.Namespace xmi.idref="xmi.48"/>
+                  </Foundation.Core.ModelElement.namespace>
+                  <Foundation.Core.Dependency.client>
+                    <Foundation.Core.ModelElement xmi.idref="xmi.49"/>
+                  </Foundation.Core.Dependency.client>
+                  <Foundation.Core.Dependency.supplier>
+                    <Foundation.Core.ModelElement xmi.idref="xmi.49"/>
+                  </Foundation.Core.Dependency.supplier>
+                </Foundation.Core.Usage>
+                <Foundation.Core.Abstraction xmi.id="xmi.51" xmi.uuid="3B29C6F203D4">
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.ModelElement.namespace>
+                    <Foundation.Core.Namespace xmi.idref="xmi.48"/>
+                  </Foundation.Core.ModelElement.namespace>
+                  <Foundation.Core.Dependency.client>
+                    <Foundation.Core.ModelElement xmi.idref="xmi.49"/>
+                  </Foundation.Core.Dependency.client>
+                  <Foundation.Core.Dependency.supplier>
+                    <Foundation.Core.ModelElement xmi.idref="xmi.62"/>
+                  </Foundation.Core.Dependency.supplier>
+                </Foundation.Core.Abstraction>
+                <Foundation.Core.Generalization xmi.id="xmi.54" xmi.uuid="3B29C6640186">
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.ModelElement.namespace>
+                    <Foundation.Core.Namespace xmi.idref="xmi.48"/>
+                  </Foundation.Core.ModelElement.namespace>
+                  <Foundation.Core.Generalization.child>
+                    <Foundation.Core.GeneralizableElement xmi.idref="xmi.61"/>
+                  </Foundation.Core.Generalization.child>
+                  <Foundation.Core.Generalization.parent>
+                    <Foundation.Core.GeneralizableElement xmi.idref="xmi.53"/>
+                  </Foundation.Core.Generalization.parent>
+                </Foundation.Core.Generalization>
+                <Foundation.Core.Usage xmi.id="xmi.52" xmi.uuid="3B29C88B0014">
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.ModelElement.namespace>
+                    <Foundation.Core.Namespace xmi.idref="xmi.48"/>
+                  </Foundation.Core.ModelElement.namespace>
+                  <Foundation.Core.Dependency.client>
+                    <Foundation.Core.ModelElement xmi.idref="xmi.57"/>
+                  </Foundation.Core.Dependency.client>
+                  <Foundation.Core.Dependency.supplier>
+                    <Foundation.Core.ModelElement xmi.idref="xmi.49"/>
+                  </Foundation.Core.Dependency.supplier>
+                </Foundation.Core.Usage>
+                <Foundation.Core.Association xmi.id="xmi.65">
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+                  <Foundation.Core.ModelElement.namespace>
+                    <Foundation.Core.Namespace xmi.idref="xmi.48"/>
+                  </Foundation.Core.ModelElement.namespace>
+                  <Foundation.Core.Association.connection>
+                    <Foundation.Core.AssociationEnd xmi.id="xmi.66">
+                      <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                      <Foundation.Core.AssociationEnd.isNavigable xmi.value="true"/>
+                      <Foundation.Core.AssociationEnd.aggregation xmi.value="none"/>
+                      <Foundation.Core.AssociationEnd.multiplicity>
+                        <Foundation.Data_Types.Multiplicity xmi.idref="xmi.11"/>
+                      </Foundation.Core.AssociationEnd.multiplicity>
+                      <Foundation.Core.AssociationEnd.association>
+                        <Foundation.Core.Association xmi.idref="xmi.65"/>
+                      </Foundation.Core.AssociationEnd.association>
+                      <Foundation.Core.AssociationEnd.type>
+                        <Foundation.Core.Classifier xmi.idref="xmi.57"/>
+                      </Foundation.Core.AssociationEnd.type>
+                    </Foundation.Core.AssociationEnd>
+                    <Foundation.Core.AssociationEnd xmi.id="xmi.67">
+                      <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                      <Foundation.Core.AssociationEnd.isNavigable xmi.value="true"/>
+                      <Foundation.Core.AssociationEnd.aggregation xmi.value="none"/>
+                      <Foundation.Core.AssociationEnd.multiplicity>
+                        <Foundation.Data_Types.Multiplicity xmi.idref="xmi.11"/>
+                      </Foundation.Core.AssociationEnd.multiplicity>
+                      <Foundation.Core.AssociationEnd.association>
+                        <Foundation.Core.Association xmi.idref="xmi.65"/>
+                      </Foundation.Core.AssociationEnd.association>
+                      <Foundation.Core.AssociationEnd.type>
+                        <Foundation.Core.Classifier xmi.idref="xmi.49"/>
+                      </Foundation.Core.AssociationEnd.type>
+                    </Foundation.Core.AssociationEnd>
+                  </Foundation.Core.Association.connection>
+                </Foundation.Core.Association>
+                <Foundation.Core.Constraint xmi.id="xmi.56">
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.Constraint.body>
+                    <Foundation.Data_Types.BooleanExpression xmi.id="xmi.68">
+                      <Foundation.Data_Types.Expression.language>Java</Foundation.Data_Types.Expression.language>
+                      <Foundation.Data_Types.Expression.body>None</Foundation.Data_Types.Expression.body>
+                    </Foundation.Data_Types.BooleanExpression>
+                  </Foundation.Core.Constraint.body>
+                  <Foundation.Core.ModelElement.namespace>
+                    <Foundation.Core.Namespace xmi.idref="xmi.48"/>
+                  </Foundation.Core.ModelElement.namespace>
+                  <Foundation.Core.Constraint.constrainedElement>
+                    <Foundation.Core.ModelElement xmi.idref="xmi.55"/>
+                  </Foundation.Core.Constraint.constrainedElement>
+                </Foundation.Core.Constraint>
+                <Foundation.Core.Association xmi.id="xmi.69">
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+                  <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+                  <Foundation.Core.ModelElement.namespace>
+                    <Foundation.Core.Namespace xmi.idref="xmi.48"/>
+                  </Foundation.Core.ModelElement.namespace>
+                  <Foundation.Core.Association.connection>
+                    <Foundation.Core.AssociationEnd xmi.id="xmi.70">
+                      <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                      <Foundation.Core.AssociationEnd.isNavigable xmi.value="true"/>
+                      <Foundation.Core.AssociationEnd.aggregation xmi.value="none"/>
+                      <Foundation.Core.AssociationEnd.multiplicity>
+                        <Foundation.Data_Types.Multiplicity xmi.idref="xmi.11"/>
+                      </Foundation.Core.AssociationEnd.multiplicity>
+                      <Foundation.Core.AssociationEnd.association>
+                        <Foundation.Core.Association xmi.idref="xmi.69"/>
+                      </Foundation.Core.AssociationEnd.association>
+                      <Foundation.Core.AssociationEnd.type>
+                        <Foundation.Core.Classifier xmi.idref="xmi.57"/>
+                      </Foundation.Core.AssociationEnd.type>
+                    </Foundation.Core.AssociationEnd>
+                    <Foundation.Core.AssociationEnd xmi.id="xmi.71">
+                      <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                      <Foundation.Core.AssociationEnd.isNavigable xmi.value="true"/>
+                      <Foundation.Core.AssociationEnd.aggregation xmi.value="none"/>
+                      <Foundation.Core.AssociationEnd.multiplicity>
+                        <Foundation.Data_Types.Multiplicity xmi.idref="xmi.11"/>
+                      </Foundation.Core.AssociationEnd.multiplicity>
+                      <Foundation.Core.AssociationEnd.association>
+                        <Foundation.Core.Association xmi.idref="xmi.69"/>
+                      </Foundation.Core.AssociationEnd.association>
+                      <Foundation.Core.AssociationEnd.type>
+                        <Foundation.Core.Classifier xmi.idref="xmi.49"/>
+                      </Foundation.Core.AssociationEnd.type>
+                    </Foundation.Core.AssociationEnd>
+                  </Foundation.Core.Association.connection>
+                </Foundation.Core.Association>
+              </Foundation.Core.Namespace.ownedElement>
+            </Model_Management.Package>
+            <Foundation.Core.Generalization xmi.id="xmi.29" xmi.uuid="3AE9876C02F8">
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.21"/>
+              </Foundation.Core.ModelElement.namespace>
+              <Foundation.Core.Generalization.child>
+                <Foundation.Core.GeneralizableElement xmi.idref="xmi.17"/>
+              </Foundation.Core.Generalization.child>
+              <Foundation.Core.Generalization.parent>
+                <Foundation.Core.GeneralizableElement xmi.idref="xmi.28"/>
+              </Foundation.Core.Generalization.parent>
+            </Foundation.Core.Generalization>
+            <Foundation.Extension_Mechanisms.Stereotype xmi.id="xmi.72">
+              <Foundation.Core.ModelElement.name>needs more</Foundation.Core.ModelElement.name>
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.21"/>
+              </Foundation.Core.ModelElement.namespace>
+              <Foundation.Extension_Mechanisms.Stereotype.extendedElement>
+                <Foundation.Core.ModelElement xmi.idref="xmi.36"/>
+              </Foundation.Extension_Mechanisms.Stereotype.extendedElement>
+            </Foundation.Extension_Mechanisms.Stereotype>
+            <Foundation.Core.Usage xmi.id="xmi.36" xmi.uuid="3AE988A00247">
+              <Foundation.Core.ModelElement.name>has much</Foundation.Core.ModelElement.name>
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.21"/>
+              </Foundation.Core.ModelElement.namespace>
+              <Foundation.Core.Dependency.client>
+                <Foundation.Core.ModelElement xmi.idref="xmi.17"/>
+              </Foundation.Core.Dependency.client>
+              <Foundation.Core.Dependency.supplier>
+                <Foundation.Core.ModelElement xmi.idref="xmi.40"/>
+              </Foundation.Core.Dependency.supplier>
+            </Foundation.Core.Usage>
+            <Foundation.Extension_Mechanisms.Stereotype xmi.id="xmi.73">
+              <Foundation.Core.ModelElement.name>realize</Foundation.Core.ModelElement.name>
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.21"/>
+              </Foundation.Core.ModelElement.namespace>
+              <Foundation.Extension_Mechanisms.Stereotype.extendedElement>
+                <Foundation.Core.ModelElement xmi.idref="xmi.37"/>
+                <Foundation.Core.ModelElement xmi.idref="xmi.51"/>
+              </Foundation.Extension_Mechanisms.Stereotype.extendedElement>
+            </Foundation.Extension_Mechanisms.Stereotype>
+            <Foundation.Core.Abstraction xmi.id="xmi.37" xmi.uuid="3AE987BB02B6">
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.21"/>
+              </Foundation.Core.ModelElement.namespace>
+              <Foundation.Core.Dependency.client>
+                <Foundation.Core.ModelElement xmi.idref="xmi.17"/>
+              </Foundation.Core.Dependency.client>
+              <Foundation.Core.Dependency.supplier>
+                <Foundation.Core.ModelElement xmi.idref="xmi.39"/>
+              </Foundation.Core.Dependency.supplier>
+            </Foundation.Core.Abstraction>
+            <Foundation.Core.Generalization xmi.id="xmi.30" xmi.uuid="3AE9877B01D8">
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.21"/>
+              </Foundation.Core.ModelElement.namespace>
+              <Foundation.Core.Generalization.child>
+                <Foundation.Core.GeneralizableElement xmi.idref="xmi.38"/>
+              </Foundation.Core.Generalization.child>
+              <Foundation.Core.Generalization.parent>
+                <Foundation.Core.GeneralizableElement xmi.idref="xmi.28"/>
+              </Foundation.Core.Generalization.parent>
+            </Foundation.Core.Generalization>
+            <Foundation.Core.Constraint xmi.id="xmi.74">
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.Constraint.body>
+                <Foundation.Data_Types.BooleanExpression xmi.id="xmi.75">
+                  <Foundation.Data_Types.Expression.language>Java</Foundation.Data_Types.Expression.language>
+                  <Foundation.Data_Types.Expression.body>None</Foundation.Data_Types.Expression.body>
+                </Foundation.Data_Types.BooleanExpression>
+              </Foundation.Core.Constraint.body>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.21"/>
+              </Foundation.Core.ModelElement.namespace>
+              <Foundation.Core.Constraint.constrainedElement>
+                <Foundation.Core.ModelElement xmi.idref="xmi.76"/>
+              </Foundation.Core.Constraint.constrainedElement>
+            </Foundation.Core.Constraint>
+            <Foundation.Core.Association xmi.id="xmi.77">
+              <Foundation.Core.ModelElement.name>teach</Foundation.Core.ModelElement.name>
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.21"/>
+              </Foundation.Core.ModelElement.namespace>
+              <Foundation.Core.Association.connection>
+                <Foundation.Core.AssociationEnd xmi.id="xmi.78">
+                  <Foundation.Core.ModelElement.name>Listener</Foundation.Core.ModelElement.name>
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.AssociationEnd.isNavigable xmi.value="true"/>
+                  <Foundation.Core.AssociationEnd.aggregation xmi.value="none"/>
+                  <Foundation.Core.AssociationEnd.multiplicity>
+                    <Foundation.Data_Types.Multiplicity xmi.idref="xmi.59"/>
+                  </Foundation.Core.AssociationEnd.multiplicity>
+                  <Foundation.Core.AssociationEnd.association>
+                    <Foundation.Core.Association xmi.idref="xmi.77"/>
+                  </Foundation.Core.AssociationEnd.association>
+                  <Foundation.Core.AssociationEnd.type>
+                    <Foundation.Core.Classifier xmi.idref="xmi.38"/>
+                  </Foundation.Core.AssociationEnd.type>
+                </Foundation.Core.AssociationEnd>
+                <Foundation.Core.AssociationEnd xmi.id="xmi.76">
+                  <Foundation.Core.ModelElement.name>Talker</Foundation.Core.ModelElement.name>
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.AssociationEnd.isNavigable xmi.value="false"/>
+                  <Foundation.Core.AssociationEnd.aggregation xmi.value="none"/>
+                  <Foundation.Core.AssociationEnd.multiplicity>
+                    <Foundation.Data_Types.Multiplicity xmi.idref="xmi.11"/>
+                  </Foundation.Core.AssociationEnd.multiplicity>
+                  <Foundation.Core.ModelElement.constraint>
+                    <Foundation.Core.Constraint xmi.idref="xmi.74"/>
+                  </Foundation.Core.ModelElement.constraint>
+                  <Foundation.Core.AssociationEnd.association>
+                    <Foundation.Core.Association xmi.idref="xmi.77"/>
+                  </Foundation.Core.AssociationEnd.association>
+                  <Foundation.Core.AssociationEnd.type>
+                    <Foundation.Core.Classifier xmi.idref="xmi.17"/>
+                  </Foundation.Core.AssociationEnd.type>
+                </Foundation.Core.AssociationEnd>
+              </Foundation.Core.Association.connection>
+            </Foundation.Core.Association>
+            <Foundation.Core.Association xmi.id="xmi.79">
+              <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+              <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+              <Foundation.Core.ModelElement.namespace>
+                <Foundation.Core.Namespace xmi.idref="xmi.21"/>
+              </Foundation.Core.ModelElement.namespace>
+              <Foundation.Core.Association.connection>
+                <Foundation.Core.AssociationEnd xmi.id="xmi.80">
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.AssociationEnd.isNavigable xmi.value="true"/>
+                  <Foundation.Core.AssociationEnd.aggregation xmi.value="composite"/>
+                  <Foundation.Core.AssociationEnd.multiplicity>
+                    <Foundation.Data_Types.Multiplicity xmi.idref="xmi.11"/>
+                  </Foundation.Core.AssociationEnd.multiplicity>
+                  <Foundation.Core.AssociationEnd.association>
+                    <Foundation.Core.Association xmi.idref="xmi.79"/>
+                  </Foundation.Core.AssociationEnd.association>
+                  <Foundation.Core.AssociationEnd.type>
+                    <Foundation.Core.Classifier xmi.idref="xmi.42"/>
+                  </Foundation.Core.AssociationEnd.type>
+                </Foundation.Core.AssociationEnd>
+                <Foundation.Core.AssociationEnd xmi.id="xmi.81">
+                  <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+                  <Foundation.Core.AssociationEnd.isNavigable xmi.value="true"/>
+                  <Foundation.Core.AssociationEnd.aggregation xmi.value="none"/>
+                  <Foundation.Core.AssociationEnd.multiplicity>
+                    <Foundation.Data_Types.Multiplicity xmi.idref="xmi.59"/>
+                  </Foundation.Core.AssociationEnd.multiplicity>
+                  <Foundation.Core.AssociationEnd.association>
+                    <Foundation.Core.Association xmi.idref="xmi.79"/>
+                  </Foundation.Core.AssociationEnd.association>
+                  <Foundation.Core.AssociationEnd.type>
+                    <Foundation.Core.Classifier xmi.idref="xmi.41"/>
+                  </Foundation.Core.AssociationEnd.type>
+                </Foundation.Core.AssociationEnd>
+              </Foundation.Core.Association.connection>
+            </Foundation.Core.Association>
+          </Foundation.Core.Namespace.ownedElement>
+        </Model_Management.Package>
+        <Model_Management.Subsystem xmi.id="xmi.82" xmi.uuid="3AE9873B03C3">
+          <Foundation.Core.ModelElement.name>Component View</Foundation.Core.ModelElement.name>
+          <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+          <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+          <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+          <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+          <Model_Management.Subsystem.isInstantiable xmi.value="false"/>
+          <Foundation.Core.ModelElement.namespace>
+            <Foundation.Core.Namespace xmi.idref="xmi.1"/>
+          </Foundation.Core.ModelElement.namespace>
+        </Model_Management.Subsystem>
+        <Foundation.Core.DataType xmi.id="xmi.24">
+          <Foundation.Core.ModelElement.name>long</Foundation.Core.ModelElement.name>
+          <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+          <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+          <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+          <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+          <Foundation.Core.ModelElement.namespace>
+            <Foundation.Core.Namespace xmi.idref="xmi.1"/>
+          </Foundation.Core.ModelElement.namespace>
+        </Foundation.Core.DataType>
+        <Foundation.Core.DataType xmi.id="xmi.25">
+          <Foundation.Core.ModelElement.name>int</Foundation.Core.ModelElement.name>
+          <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+          <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+          <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+          <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+          <Foundation.Core.ModelElement.namespace>
+            <Foundation.Core.Namespace xmi.idref="xmi.1"/>
+          </Foundation.Core.ModelElement.namespace>
+        </Foundation.Core.DataType>
+        <Foundation.Core.DataType xmi.id="xmi.26">
+          <Foundation.Core.ModelElement.name>String</Foundation.Core.ModelElement.name>
+          <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+          <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+          <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+          <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+          <Foundation.Core.ModelElement.namespace>
+            <Foundation.Core.Namespace xmi.idref="xmi.1"/>
+          </Foundation.Core.ModelElement.namespace>
+        </Foundation.Core.DataType>
+        <Foundation.Core.DataType xmi.id="xmi.27">
+          <Foundation.Core.ModelElement.name>Date</Foundation.Core.ModelElement.name>
+          <Foundation.Core.ModelElement.isSpecification xmi.value="false"/>
+          <Foundation.Core.GeneralizableElement.isRoot xmi.value="false"/>
+          <Foundation.Core.GeneralizableElement.isLeaf xmi.value="false"/>
+          <Foundation.Core.GeneralizableElement.isAbstract xmi.value="false"/>
+          <Foundation.Core.ModelElement.namespace>
+            <Foundation.Core.Namespace xmi.idref="xmi.1"/>
+          </Foundation.Core.ModelElement.namespace>
+        </Foundation.Core.DataType>
+      </Foundation.Core.Namespace.ownedElement>
+    </Model_Management.Model>
+  </XMI.content>
+</XMI>

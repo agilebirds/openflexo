@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<definitions name="addressMeister.com" targetNamespace="urn:addressMeister.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="urn:addressMeister.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+<types xmlns="http://schemas.xmlsoap.org/wsdl/">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:addressMeister.com">
+<complexType name="AddressResult">
+<all>
+<element name="status" type="xsd:int"/>
+<element name="errorCode" type="xsd:string"/>
+<element name="firstName" type="xsd:string"/>
+<element name="lastName" type="xsd:string"/>
+<element name="address" type="xsd:string"/>
+<element name="address2" type="xsd:string"/>
+<element name="city" type="xsd:string"/>
+<element name="state" type="xsd:string"/>
+<element name="zip" type="xsd:string"/>
+<element name="zip4" type="xsd:string"/>
+<element name="phoneAreaCode" type="xsd:string"/>
+</all>
+
+</complexType>
+</schema>
+</types>
+<portType name="addressMeister.comPort">
+<operation name="validateAddress">
+<input message="tns:validateAddressRequest"/>
+<output message="tns:validateAddressResponse"/>
+</operation>
+</portType>
+<binding name="addressMeister.comBinding" type="tns:addressMeister.comPort">
+<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+<operation name="validateAddress">
+<soap:operation soapAction="urn:addressMeister.com#soap_addressvalidator#validateAddress"/>
+<input>
+<soap:body use="encoded" namespace="urn:addressMeister.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+</input>
+<output>
+
+<soap:body use="encoded" namespace="urn:addressMeister.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+</output>
+</operation>
+</binding>
+<service name="addressMeister.comService">
+<documentation/>
+<port name="addressMeister.comPort" binding="tns:addressMeister.comBinding">
+<soap:address location="http://addressmeister.bizware.com/service/server.soap.2.php"/>
+</port>
+</service>
+<message name="validateAddressRequest">
+<part name="auth_key" type="xsd:string"/>
+<part name="first_name" type="xsd:string"/>
+<part name="last_name" type="xsd:string"/>
+<part name="address" type="xsd:string"/>
+<part name="address2" type="xsd:string"/>
+<part name="city" type="xsd:string"/>
+
+<part name="state" type="xsd:string"/>
+<part name="zip" type="xsd:string"/>
+<part name="zip4" type="xsd:string"/>
+</message>
+<message name="validateAddressResponse">
+<part name="return" type="tns:AddressResult"/>
+</message>
+</definitions>

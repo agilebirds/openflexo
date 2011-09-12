@@ -1,0 +1,573 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+  <html>
+    <head>
+      <title>XMLCoDe</title>
+    </head>
+    
+    <body>
+      <center>
+	<p>
+	</p>
+	<h1>XMLCoDe</h1>
+	<h2>A free implementation of an XML COder/DEcoder:<br>a Java XML serialization/deserialization tool</h2>
+      </center>
+      
+	<p>
+	</p>
+	<hr> 
+	<p>
+	</p>
+    <center>
+      <a href="index.html">Back to summary</a>
+    </center>
+    <p>
+    </p>
+
+    <center>
+      <h2>Getting started: writing a model (Java/XML mapping), a short reference guide</h2>
+    </center>
+    
+    <p><br>
+    </p>
+
+
+    <h3>
+      1. The best way to explain is to show an example
+    </h3>
+
+    <p>Here is an example of a model, a Java/XML mapping. This model is
+      written using XML language and looks a little bit like a XML schema.
+      The goal of that file is to define how to map Java world to XML world.
+    </p>
+    <p>
+      You'll see that it's easy.
+    </p>
+    <pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+
+&lt;model&gt; 
+
+  &lt;entity name="full.qualified.package.SellReport" xmlTag="SellReport"&gt; 
+    &lt;property name="vendor" xmlTag="Vendor"/&gt; 
+    &lt;property name="commands" xmlTag="Command" type="hashtable"/&gt; 
+  &lt;/entity&gt; 
+
+  &lt;entity name="full.qualified.package.Person" xmlTag="Person"&gt; 
+    &lt;property name="name" xmlTag="name"/&gt; 
+    &lt;property name="firstName" xmlTag="firstName"/&gt; 
+    &lt;property name="address" xmlTag="address"/&gt; 
+  &lt;/entity&gt; 
+
+  &lt;entity name="full.qualified.package.Vendor" xmlTag="Vendor"&gt; 
+    &lt;property name="vendorId" xmlTag="id" attribute="YES"/&gt; 
+  &lt;/entity&gt; 
+
+  &lt;entity name="full.qualified.package.Customer" xmlTag="Customer"/&gt; 
+
+  &lt;entity name="full.qualified.package.CommandIdentifier" xmlTag="CommandIdentifier"&gt; 
+    &lt;property name="identifier" xmlTag="identifier" attribute="YES"/&gt; 
+  &lt;/entity&gt; 
+
+  &lt;entity name="full.qualified.package.Command" xmlTag="Command"&gt; 
+    &lt;property name="commandIsAlreadyPaid" xmlTag="commandIsAlreadyPaid" attribute="YES"/&gt; 
+    &lt;property name="customer" xmlTag="Customer"/&gt; 
+    &lt;property name="date" xmlTag="date"/&gt; 
+    &lt;property name="articles" xmlTag="Movie,Album" type="vector"/&gt; 
+  &lt;/entity&gt; 
+
+  &lt;entity name="full.qualified.package.MultimediaArticle" xmlTag="MultimediaArticle" abstract="YES"&gt; 
+    &lt;property name="articleId" xmlTag="articleId" attribute="YES"/&gt; 
+    &lt;property name="price" xmlTag="price" attribute="YES"/&gt; 
+  &lt;/entity&gt; 
+
+  &lt;entity name="full.qualified.package.Album" xmlTag="Album"&gt; 
+    &lt;property name="author" xmlTag="author"/&gt; 
+    &lt;property name="title" xmlTag="title"/&gt; 
+    &lt;property name="description" text="YES"/&gt;
+    &lt;property name="dateReleased" xmlTag="date"/&gt; 
+  &lt;/entity&gt; 
+
+  &lt;entity name="full.qualified.package.Movie" xmlTag="Movie"&gt; 
+    &lt;property name="title" xmlTag="title"/&gt; 
+    &lt;property name="description" text="YES"/&gt;
+    &lt;property name="dateReleased" xmlTag="date"/&gt; 
+    &lt;property name="roles" xmlTag="Role" type="vector"/&gt; 
+    &lt;property name="category" xmlTag="cat"/&gt; 
+  &lt;/entity&gt; 
+
+  &lt;entity name="full.qualified.package.Role" xmlTag="Role"&gt; 
+    &lt;property name="roleName" xmlTag="name" attribute="YES"/&gt; 
+  &lt;/entity&gt; 
+
+&lt;/model&gt;
+
+  </pre>
+ 
+    <h3>
+      2. The structure of a XML model is following:
+    </h3>
+
+    <ul>
+
+      <li><p>After the classical XML header
+	<tt>&lt;?xml version="1.0" encoding="UTF-8"?&gt;</tt>
+	you have the <tt>&lt;model&gt;</tt>.</p>
+	<p>You may supply some attributes here
+	(see further in this documentation).
+	<ul>
+	<li><p><tt>handlesReferences</tt>: (<tt>yes|no|true|false</tt>): should references be handled ? 
+	(object graph, see <a href="mapping_graph_structures.html">Advanced feature: mapping graph structures</a>)</p></li>
+	<li><p><tt>serializationMode</tt>: (<tt>deepFirst|pseudoTree|orderedPseudoTree</tt>): 
+	see <a href="structured_serialization.html">Structured serialization: how to make your serialized stucture stable ?</a></p></li>
+	<li><p><tt>builder</tt>: define full qualified name of class to use as builder 
+	(see <a href="features.html#builders_and_finalizers">Builders and finalizers</a>)</p></li>
+	</ul>
+	</p></li>
+	
+      <li><p>Then you have a collection of <tt>&lt;entity&gt; </tt> tags, 
+	representing all the classes handled by this mapping.</p>
+	<p>
+	  Required attributes are:
+	<ul>
+	  <li><p><tt>name</tt>: defining the name of entity (the name of
+	    the matching class). Note that you have to specify here
+	    the full qualified class name.</p></li>
+	  <li><p><tt>xmlTag</tt>: defining the matching XML tag (not required if abstract entity)</p></li>
+	</ul></p>
+	<p>Some additionnal attributes may be added here:</p>
+	<ul>
+	  <li><p><tt>abstract</tt>: (<tt>yes|no|true|false</tt>), defining
+	the fact that this class could be or not instanciated (this is
+	the same semantic than Java).</p></li>
+	<li><p><tt>finalizer</tt>: define finalizer for this entity 
+	(see <a href="features.html#builders_and_finalizers">Builders and finalizers</a>)</p></li>
+	<li><p><tt>contexts</tt>: define contexts (String comma separated) 
+	(see <a href="advanced_mapping_definition.html">Advanced XML 
+	mapping definitions: contextual XML Tags</a>)</p></li>
+	</ul>
+      </li>
+
+      <li><p>Inside <tt>&lt;entity&gt; </tt> tags, you have a 
+	  collection of <tt>&lt;property&gt; </tt> tags, 
+	  representing all properties handled by this mapping at this
+	  class level.</p>
+	<p>
+	  Required attributes are:
+	<ul>
+	  <li><p><tt>name</tt>: defining the name of related property
+	      (the name of
+	      the matching field in your code, or the name that will be used
+	      for accessors methods).</p></li>
+	  <li><p><tt>xmlTag</tt>: defining the matching XML tag (Nota: 
+	    this attribute may not be required if <tt>text</tt> attribute
+	    is set to <tt>true</tt>, see below)</p></li>
+	</ul></p>
+	<p>Some additionnal attributes may be added here:</p>
+	<ul>
+	  <li><p><tt>attribute</tt>: (<tt>yes|no|true|false</tt>), defining
+	      the fact that this property should be coded as attribute
+	      (when not specified, default value is false, and property
+	      will be coded as an element)</p></li>
+	  <li><p><tt>text</tt>: (<tt>yes|no|true|false</tt>), defining
+	      the fact that this property should be coded as text in
+	      parent XML element. In this case, this property should
+	      be a primitive.When not specified, default value is false, 
+	      and property will be coded as an element.</p></li>
+	  <li><p><tt>type</tt>: (<tt>single|array|vector|hashtable</tt>), defining
+	      the type of that property (see 
+	      <a href="features.html#data_structures">Advanced data 
+		structures<a>).<br>
+		  In the case of a non-single property, 
+		  <tt>xmlTag</tt> not only define one
+		  XML tag, but a list of XML tags, separated by commas.
+	    </p></li>
+	  <li><p><tt>contains</tt>: define adressed types for this property
+			(see <a href="advanced_mapping_definition.html">Advanced 
+			XML mapping definitions: contextual XML Tags</a>)</p></li>
+	  <li><p><tt>context</tt>: define context for this property
+			(see <a href="advanced_mapping_definition.html">Advanced 
+			XML mapping definitions: contextual XML Tags</a>)</p></li>
+	<li><p><tt>primary</tt>: (<tt>yes|no|true|false</tt>): 
+	see <a href="structured_serialization.html">Structured serialization: how
+	 to make your serialized stucture stable ?</a></p></li>
+	<li><p><tt>key</tt>: key property (used for hashtable-like structures, 
+	see <a href="features.html#data_structures">Advanced data 
+		structures<a>)</li>
+	</ul>
+	<p>
+	  Note that only one of two attributes <tt>attribute</tt> and
+	  <tt>text</tt> could be set to true, and in this case, <tt>type</tt>
+	  attribute must be not specified or equals to <tt>single</tt>.
+	</p>
+ 	<p>
+	  Note that <tt>key</tt> and <tt>className</tt> are reserved 
+	  keywords, regarding to <tt>xmlTag</tt> attribute, since they
+	  are internally used.
+	</p>
+      </li>
+    </ul>
+
+     <h3>3. Accessors methods use scheme</h3>
+ 	<p>
+ 	  Now, we will see how to map XML Data on Java objects.
+ 	</p>
+ 	
+ 	<p>First solution is to declare Java classes with specified public fields</p>
+ 	
+ 	<p>For example, the XML mapping described above is describing mapping from/to Java object
+ 	according to following <tt>Person</tt> and <tt>Command</tt> classes:
+ 	
+ 	<pre>
+ 	public class Person implements XMLSerializable
+	{
+  		 public String name;
+   		 public String firstName;
+		 public String address;
+	}
+ 	</pre>
+ 	
+ 	<pre>
+	public class Command implements XMLSerializable
+	{
+  		 public boolean commandIsAlreadyPaid;
+   		 public ArticlesList articles;
+  		 public Customer customer;
+  		 public Date date;
+	}
+	</pre>
+
+	<p>Other classes may be defined the same way.</p>
+ 	
+ 	</p>
+ 	
+ 	<p>
+	  In the example shown above, all XML serializable classes use 
+	  <tt>public</tt> fields. That implementation was here very simple,
+	  just to show an basic example of coding/decoding processes. During
+	  these processes, the <tt>XMLCoder</tt> and <tt>XMLDecoder</tt>
+	  directly accessed to those fields to get and set values. Because
+	  instances of those objects are externaly accessed, those fields
+	  must be <tt>public</tt>.
+	</p>
+	<p>
+	  Many programmers will aggree with the fact that this implementation
+	  is very bad and could lead to serious security and inconsistency 
+	  problem.
+	</p>
+	<p>
+	  A good way to program a class is to provide a public API, which
+	  guarantee that the invokation of public methods (eventually field)
+	  let always the instances of those classes in a GOOD and CONSISTENT
+	  state. The example2 which come with this distribution show
+	  examples of classes (<tt>Command</tt> and <tt>SellReport</tt>)
+	  maintaining computed fields (eg. the total amount of the command
+	  which is computed from the contained article prices). In this case,
+	  accessing directely to articles data (add or remove article by
+	  accessing the <tt>Vector</tt> field) will desynchronize the field
+	  representing the total amount of the command. To avoid this problem,
+	  the programmers often provide some accessor method, in which the
+	  code to always maintain the object in a good and synchronized state.
+	</p>
+	<p>
+	  XMLCoDe uses preferably these accessors methods, if such methods
+	  are defined. That feature allow you to maintain all your XML
+	  serializable objects in a good and synchronized state.
+	</p>
+	<p>
+	  NB: your classes must define considered properties either as 
+	  public field, and/or with ALL accessors (see below for the list
+	  of accessors, considering the type of the property). In the case
+	  of public fields AND all accessors are defined, XMLCoDe will use
+	  accessors.
+	</p>
+	<p>
+	  For now, there is four native types of properties:
+	<ul>
+	  <li><p><b>Single types</b>: matching a unique value. Accessors of such
+	    properties are:<ul>
+	      <li><p><b>A unique GET method - </b> with following search order:<br>
+	      <tt>xxx()</tt>, <tt>_xxx()</tt>, <tt>getXxx()</tt> and
+              <tt>_getXxx()</tt>,<br> where <tt>xxx</tt> is the name of 
+	      considered property and Type value the considered property class name.</p>
+	      </li>
+	      <li><p><b>A unique SET method - </b> with following search order:<br>
+	      <tt>setXxx(Type value)</tt>, <tt>_setXxx(Type value)</tt>,<br> where
+	      <tt>xxx</tt> is the name of considered property and Type the
+	      considered property class name.</p>
+	      </p></li>
+	    </ul>
+	  </li>
+	  <li><p><b>Array types</b>: matching an array of values. Accessors of such
+	    properties are:<ul>
+	      <li><p><b>A unique GET method - </b> with following search order:<br>
+	      <tt>xxx()</tt>, <tt>_xxx()</tt>, <tt>getXxx()</tt> and
+              <tt>_getXxx()</tt>,<br> where <tt>xxx</tt> is the name of 
+	      considered property and Type value the considered property class name.</p>
+	      </li>
+	      <li><p><b>A unique SET method - </b> with following search order:<br>
+	      <tt>setXxx(Type value)</tt>, <tt>_setXxx(Type value)</tt>,<br> where
+	      <tt>xxx</tt> is the name of considered property and Type the
+	      considered property class name.</p>
+	      </p></li>
+	    </ul>
+	  </li>
+	  <li><p><b>Vector-like types</b>: matching a collection of values, 
+	      stored in a certain order. Accessors of such properties are:<ul>
+	      <li><p><b>A unique GET method - </b> with following search order:<br>
+	      <tt>xxx()</tt>, <tt>_xxx()</tt>, <tt>getXxx()</tt> and
+              <tt>_getXxx()</tt>,<br> where <tt>xxx</tt> is the name of 
+	      considered property and Type the considered property class name.</p>
+	      </li>
+	      <li><p><b>A unique SET method - </b> with following search order:<br>
+	      <tt>setXxx(Type value)</tt>, <tt>_setXxx(Type value)</tt>,<br> where
+	      <tt>xxx</tt> is the name of considered property and Type the 
+	      considered property class name.</p>
+	      </li>
+	      <li><p><b>A collection of ADD-TO methods - </b> methods 
+	      matching following:<br>
+	      <tt>addToXxx(Class1 object)</tt>, ... ,<tt>addToXxx(ClassN object)</tt>,<br>
+	      <tt>_addToXxx(Class1 object)</tt>, ... ,<tt>_addToXxx(ClassN object)</tt>,<br> where
+	      <tt>xxx</tt> is the name of considered property (with or
+	      without a terminal s) and Class1...ClassN the classes of attributes.<br>
+	      Note that you can define many ADD-TO methods, with different parameters
+	      type, depending on what you want to do. XMLCoDe will dynamically
+	      choose for you the most adapted method (implementation of a lookup
+	      algorithm), which is the most specialized one.</p>
+	      </li>
+	      <li><p><b>A collection of REMOVE-FROM methods - </b> methods 
+	      matching following:<br>
+	      <tt>removeFromXxx(Class1 object)</tt>, ... ,<tt>removeFromXxx(ClassN object)</tt>,<br>
+	      <tt>_removeFromXxx(Class1 object)</tt>, ... ,<tt>_removeFromXxx(ClassN object)</tt>,<br> where
+	      <tt>xxx</tt> is the name of considered property (with or
+	      without a terminal s) and Class1...ClassN the classes of attributes.<br>
+	      Note that you can define many REMOVE-FROM methods, with different parameters
+	      type, depending on what you want to do. XMLCoDe will dynamically
+	      choose for you the most adapted method (implementation of a lookup
+	      algorithm), which is the most specialized one.</p>
+	      </p></li>
+	    </ul>
+	  </li>
+	  <li><p><b>Hashtable-like types</b>: matching a collection of values, 
+	      stored using a key object. Accessors of such properties are:<ul>
+	      <li><p><b>A unique GET method - </b> with following search order:<br>
+	      <tt>xxx()</tt>, <tt>_xxx()</tt>, <tt>getXxx()</tt> and
+              <tt>_getXxx()</tt>,<br> where <tt>xxx</tt> is the name of 
+	      considered property and Type the considered property class name.</p>
+	      </li>
+	      <li><p><b>A unique SET method - </b> with following search order:<br>
+	      <tt>setXxx(Type value)</tt>, <tt>_setXxx(Type value)</tt>,<br> where
+	      <tt>xxx</tt> is the name of considered property and Type the 
+	      considered property class name.</p>
+	      </li>
+	      <li><p><b>A collection of SET-FOR-KEY methods - </b> methods 
+	      matching following:<br>
+	      <tt>setXXXForKey(Class1 object, Class1 key)</tt>, ... ,
+		  <tt>setXXXForKey(ClassN object, ClassM key)</tt>,<br>
+	      <tt>_setXXXForKey(Class1 object, Class1 key)</tt>, ... ,
+		  <tt>_setXXXForKey(ClassN object, ClassM key)</tt>,<br> where
+	      <tt>xxx</tt> is the name of considered property (with or
+	      without a terminal s) and Class1...ClassN the classes of objects
+	      and Class1...ClassM the classes of keys.<br>
+	      Note that you can define many SET-FOR-KEY methods, with different parameters
+	      type, depending on what you want to do. XMLCoDe will dynamically
+	      choose for you the most adapted method (implementation of a lookup
+	      algorithm), which is the most specialized one.</p>
+	      </li>
+	      <li><p><b>A collection of REMOVE-WITH-KEY methods - </b> methods 
+	      matching following:<br>
+	      <tt>removeXXXWithKey(Class1 key)</tt>, ... ,
+		  <tt>removeXXXWithKey(ClassN key)</tt>,<br>
+	      <tt>_removeXXXWithKey(Class1 key)</tt>, ... ,
+		  <tt>_removeXXXWithKey(ClassN key)</tt>,<br> where
+	      <tt>xxx</tt> is the name of considered property (with or
+	      without a terminal s) and Class1...ClassN the classes of keys.<br>
+	      Note that you can define many REMOVE-WITH-KEY methods, with different parameters
+	      type, depending on what you want to do. XMLCoDe will dynamically
+	      choose for you the most adapted method (implementation of a lookup
+	      algorithm), which is the most specialized one.</p>
+	      </p></li>
+	    </ul>
+
+	<p>
+	
+	According to this accessor-way properties definition, Command class is rather to be rewritten like this:
+	
+	<pre>
+public class Command implements XMLSerializable
+{
+
+    protected boolean commandIsAlreadyPaid;
+    protected Vector articles;
+    protected Customer customer;
+    protected Date date;
+
+    public Command()
+    {
+        super();
+    }
+
+     public boolean getCommandIsAlreadyPaid()
+    {
+        return commandIsAlreadyPaid;
+    }
+
+    public void setCommandIsAlreadyPaid(boolean aBoolean)
+    {
+        if (commandIsAlreadyPaid != aBoolean) {
+            if (commandIsAlreadyPaid) { // command was paid, set to unpaid
+                if (relatedSellReport != null) {
+                    relatedSellReport.removeFromPaidAmount(commandAmount);
+                    relatedSellReport.addToUnpaidAmount(commandAmount);
+                }
+            } else { // command was unpaid, set to paid
+                if (relatedSellReport != null) {
+                    relatedSellReport.removeFromUnpaidAmount(commandAmount);
+                    relatedSellReport.addToPaidAmount(commandAmount);
+                }
+            }
+        }
+
+        commandIsAlreadyPaid = aBoolean;
+    }
+
+    public Customer getCustomer()
+    {
+        return customer;
+    }
+
+    public void setCustomer(Customer v)
+    {
+        this.customer = v;
+    }
+
+    public Date getDate()
+    {
+        return date;
+    }
+
+    public void setDate(Date v)
+    {
+        this.date = v;
+    }
+
+    public Vector getArticles()
+    {
+        return articles;
+    }
+
+    public void setArticles(Vector v)
+    {
+        this.articles = v;
+    }
+
+    public void addToArticles(Movie anArticle)
+    {
+        System.out.println("addToArticles(Movie)");
+        articles.add(anArticle);
+    }
+
+    public void addToArticles(Object anArticle)
+    {
+        System.out.println("addToArticles(Object)");
+        System.out.println("Sorry, you can only add articles to command");
+        System.out.println("Your object is a " + anArticle.getClass().getName());
+    }
+
+    public void addToArticles(Album anArticle)
+    {
+        System.out.println("addToArticles(Album)");
+        articles.add(anArticle);
+    }
+
+    public void addToArticles(MultimediaArticle anArticle)
+    {
+        System.out.println("addToArticles(MultimediaArticle)");
+        articles.add(anArticle);
+    }
+
+    public void addToArticles(ReggaeAlbum anArticle)
+    {
+        System.out.println("addToArticles(ReggaeAlbum)");
+        articles.add(anArticle);
+    }
+
+    public void removeFromArticles(MultimediaArticle anArticle)
+    {
+        System.out.println("removeFromArticles(MultimediaArticle)");
+        articles.remove(anArticle);
+    }
+
+    public void removeFromArticles(Object anArticle)
+    {
+        System.out.println("removeFromArticles(Object)");
+        System.out.println("Sorry, you can only remove articles from command");
+    }
+
+}
+	</pre>
+	
+	Note that this code is available as example2 is source distribution.
+	
+	
+	<h3>
+      4. And now, use it:
+    </h3>
+	
+	</p>
+
+  Decoding process will be simpler as this:
+  <pre>
+    XMLMapping myMapping = new XMLMapping (exampleModelFile);
+    Command myCommand = (Command)XMLDecoder.decodeObjectWithMapping (myData, myMapping);
+  </pre>
+  or directly by specifying model file:
+  <pre>
+    SellReport mySellReport = (SellReport)XMLDecoder.decodeObjectWithMappingFile (myData, exampleModelFile);
+  </pre>
+  where <code>myData</code> is either a <code>String</code> or an <code>mInputStream</code> and 
+  <code>exampleModelFile</code> is a <code>File</code> representing <i>model file</i>.
+  <br>
+  In this example, a new instance of <code>yourpackage.SellReport</code> class is instancied
+  and automatically sets with values and newly created instances of others sub-classes and returned.
+  <br>
+  The reverse operation is as simpler just by doing:
+  <pre>
+    XMLMapping myMapping = new XMLMapping (exampleModelFile);
+    String result = XMLCoder.encodeObjectWithMapping (mySellReport, myMapping);
+  </pre>
+  or
+  <pre>
+    String result = XMLCoder.encodeObjectWithMappingFile (mySellReport, exampleModelFile);
+  </pre>
+  if you want to work with <code>String</code> objects,
+  <br>
+  but you can directly work with <code>OutputStream</code> objects, by doing:
+  <pre>
+    XMLMapping myMapping = new XMLMapping (exampleModelFile);
+    XMLCoder.encodeObjectWithMapping (mySellReport, myMapping, out);
+  </pre>
+  or
+  <pre>
+    XMLCoder.encodeObjectWithMappingFile (mySellReport, exampleModelFile, out);
+  </pre>
+  where <code>out</code> is a <code>OutputStream</code> object.
+	</p>
+
+
+ 	<p>
+	</p>
+    <center>
+      <a href="index.html">Back to summary</a>
+    </center>
+    <p>
+    </p>
+
+   <hr>
+    <address><a href="mailto:sylvain.guerin@enst-bretagne.fr">Sylvain Guerin</a></address>
+<!-- Created: Fri Dec  7 17:47:50 CET 2001 -->
+<!-- hhmts start -->
+Last modified: Wed Jan 24 12:17:54 CET 2007
+<!-- hhmts end -->
+  </body>
+</html>
+

@@ -1,0 +1,1169 @@
+	/* ====================================================*/
+	/* ======== Denali CSS Master stylesheet (v.3) ========*/
+	/* ========           C O N T E N T O          ========*/
+	/* ======== Created by Damien T. on 17/03/2004 ========*/
+	/* ======== Modified by Damien T. on 13/10/2004 =======*/
+	/* ====================================================*/
+	/* ====================================================*/
+	/* ================= Generic elements =================*/
+	/* ====================================================*/
+body {
+	background-color: #FFFFFF;
+	padding: 0px;
+	margin: 0px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+}
+
+a {
+	color: #CC3300;
+	text-decoration: none;
+}
+
+input,textarea,select {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+}
+
+select {
+	border: 1px solid #1B4180;
+}
+
+table {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+}
+
+form {
+	margin: 0;
+}
+
+img {
+	border: 0px solid #000000;
+}
+
+img.DLButton {
+	margin: 1px 5px 1px 5px;
+}
+
+span.DLButton {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+	color: #FFFFFF;
+	background-color: #1D4382;
+	padding: 1px 10px 2px 10px;
+	margin: 1px 5px 1px 5px;
+	height: 13px;
+}
+
+a.DLButton {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight: normal;
+	color: #FFFFFF;
+	background-color: #1D4382;
+	text-decoration: none;
+	padding: 1px 10px 2px 10px;
+	margin: 0px 5px 0px 5px;
+	height: 15px;
+}
+
+a.DLButton:hover, a.DLButton:visited{
+	color: #FFFFFF;
+}
+
+a.UserLoginLink{
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+a.LogoutLink{
+	text-decoration: none;
+	color: #FFFFFF;
+	padding: 2px 10px 2px 10px;
+	border: 1px solid #FFFFFF;
+}
+
+a.LogoutLink:hover{
+	text-decoration: none;
+	color: #1B4180;
+	padding: 2px 10px 2px 10px;
+	background-color: #A5B3CD;
+	border: 1px solid #FFFFFF;
+}
+
+
+/* ====================================================*/
+	/* =============== Errors & warnings ==================*/
+	/* ====================================================*/
+.DLError {
+	width: 100%;
+	background-color: #FF9999;
+	border: 1px solid #FF0000;
+	color: #000000;
+	font-size: 10px;
+	font-weight: bold;
+	padding: 5px;
+	margin: 10px 0px 10px 0px;
+}
+
+.DLWarning {
+	width: 100%;
+	background-color: #FFCC00;
+	border: 1px solid #666666;
+	color: #000000;
+	font-size: 10px;
+	font-weight: bold;
+	padding: 5px;
+	margin: 10px 0px 10px 0px;
+}
+
+/* ====================================================*/
+	/* ===================== Links ========================*/
+	/* ====================================================*/
+	/* ====================================================*/
+	/* ================= Form elements ====================*/
+	/* ====================================================*/
+.DLExtensible {
+	width: 100%;
+	border: 1px solid #1B4180;
+}
+
+.DLExtensible_ERROR {
+	width: 100%;
+	border: 1px solid #1B4180;
+	background-color: #FF9999;
+}
+
+.DLExtensible_MANDATORY {
+	width: 100%;
+	border: 2px solid #1B4180;
+}
+
+.DLNormal {
+	border: 1px solid #1B4180;
+}
+
+.DLNormal_ERROR {
+	border: 1px solid #1B4180;
+	background-color: #FF9999;
+}
+
+.DLNormal_MANDATORY {
+	border: 2px solid #1B4180;
+}
+
+.DLMedium {
+	width: 150px;
+	border: 1px solid #1B4180;
+}
+
+.DLMedium_ERROR {
+	width: 150px;
+	border: 1px solid #1B4180;
+	background-color: #FF9999;
+}
+
+.DLMedium_MANDATORY {
+	width: 150px;
+	border: 2px solid #1B4180;
+}
+
+.DLShort {
+	width: 30px;
+	border: 1px solid #1B4180;
+}
+
+.DLShort_ERROR {
+	width: 30px;
+	border: 1px solid #1B4180;
+	background-color: #FF9999;
+}
+
+.DLShort_MANDATORY {
+	width: 30px;
+	border: 2px solid #1B4180;
+}
+
+.DLTiny {
+	font-size: 8px;
+	width: 20px;
+	border: 1px solid #1B4180;
+	text-align: center;
+}
+
+.DLTiny_ERROR {
+	font-size: 8px;
+	width: 20px;
+	border: 1px solid #1B4180;
+	text-align: center;
+	background-color: #FF9999;
+}
+
+.DLTiny_MANDATORY {
+	font-size: 8px;
+	width: 20px;
+	border: 2px solid #1B4180;
+	text-align: center;
+}
+
+/* ====================================================*/
+	/* =================== Page elements ==================*/
+	/* ====================================================*/
+table.DLPage {
+	padding: 0px 0px 0px 0px;
+	width: 100%;
+	height: 100%;
+}
+
+td.DLPageHeader {
+	background-color: #1D4382;
+}
+
+td.DLPageSubHeader {
+	background-color: #FFFFFF;
+	padding: 5px 20px 20px 20px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+}
+
+td.DLPageBody {
+	background-color: #FFFFFF;
+	padding: 20px 20px 20px 20px;
+}
+
+td.DLPageFooter {
+	padding: 0px 10px 0px 10px;
+	background-color: #E7E8EC;
+	font-size: 10px;
+	color: #1B4180;
+}
+
+a.pageHeader {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 9px;
+	font-weight: bold;
+	color: #666666;
+	text-decoration: none;
+}
+
+a.pageHeader:hover {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 9px;
+	font-weight: bold;
+	color: #CC3300;
+	text-decoration: none;
+}
+
+.subMenuBar {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #FFFFFF;
+}
+
+.subMenuBar a,.subMenuBar a:link,.subMenuBar a:active,.subMenuBar a:visited
+	{
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+.subMenuBar a:hover {
+	color: #FF6600;
+	text-decoration: none;
+}
+
+/* ====================================================*/
+	/* ================== Popup elements ==================*/
+	/* ====================================================*/
+body.DLPopup {
+	background-color: #DFE7F6;
+	padding: 0px;
+	margin: 0px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+}
+
+table.DLPopupPage {
+	padding: 0px 0px 0px 0px;
+	width: 100%;
+	height: 100%;
+	border: 1px solid #1B4180;
+}
+
+td.DLPopupPageHeader {
+	border-bottom: 1px solid #1B4180;
+	padding: 2px 10px 2px 10px;
+	background-color: #91AAD0;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #1B4180;
+	height: 20px;
+}
+
+td.DLPopupPageBody {
+	background-color: #FFFFFF;
+	padding: 10px 10px 10px 10px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+}
+
+td.DLPopupPageFooter {
+	background-color: #91AAD0;
+	border-top: 1px solid #1B4180;
+	padding: 2px 10px 2px 10px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+	color: #1B4180;
+	height: 20px;
+}
+
+/* ====================================================*/
+	/* ================== Layer elements ==================*/
+	/* ====================================================*/
+table.DLLayer {
+	background-color: #DFE7F6;
+	padding: 0px 0px 0px 0px;
+	width: 100%;
+	height: 100%;
+	border: 1px solid #1B4180;
+}
+
+td.DLLayerHeader {
+	border-bottom: 1px solid #1B4180;
+	padding: 2px 5px 2px 5px;
+	background-color: #DFE7F6;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+	color: #000000;
+	height: 20;
+}
+
+td.DLLayerHeaderCloseButton {
+	border-left: 1px solid #1B4180;
+	border-bottom: 1px solid #1B4180;
+	padding: 2px 2px 2px 2px;
+	background-color: #DFE7F6;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+	color: #000000;
+	height: 20px;
+	width: 20px;
+	text-align: center;
+}
+
+td.DLLayerBody {
+	background-color: #FFFFFF;
+	padding: 5px 5px 5px 5px;
+}
+
+td.DLLayerFooter {
+	
+}
+
+/* ====================================================*/
+	/* ================== Block elements ==================*/
+	/* ====================================================*/
+table.DLBlock {
+	border: 1px solid #1B4180;
+	margin: 0px 0px 10px 0px;
+}
+
+table.DLTabFooter {
+	border-bottom: 1px solid #1B4180;
+	border-left: 1px solid #1B4180;
+	border-right: 1px solid #1B4180;
+	margin: 0px 0px 10px 0px;
+}
+
+td.DLBlockHeader {
+	border-bottom: 1px solid #1B4180;
+	padding: 0px 5px 0px 10px;
+	background-color: #91AAD0;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	color: #1D4382;
+	text-transform: uppercase;
+	height: 18px;
+}
+
+table.DLBlockHeader {
+	
+}
+
+td.DLBlockHeaderContent {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	color: #1D4382;
+	text-transform: uppercase;
+}
+
+td.DLBlockHeaderComment {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	color: #000000;
+}
+
+td.DLBlockTools {
+	border-bottom: 1px solid #1B4180;
+	padding: 5px 10px 5px 10px;
+	background-color: #E7E8EC;
+}
+
+table.DLBlockTools {
+	
+}
+
+td.DLBlockToolsContent {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+}
+
+table.DLBlockToolsContent {
+	
+}
+
+td.DLBlockToolsContentTableTitle {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+	font-weight: bold;
+	padding: 0px 5px 0px 0px;
+}
+
+td.DLBlockToolsContentTableContent {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+	padding: 0px 10px 0px 0px;
+}
+
+img.DLBlockToolsPreview {
+	border: 1px solid #1B4180;
+}
+
+div.DLBlockToolsGroup {
+	border: 1px solid #9999BB;
+	margin: 5px 5px 0px 5px;
+	padding: 0px 5px 5px 5px;
+	/*height: 55px;*/
+}
+
+div.DLBlockToolsLegend,span.DLBlockToolsLegend {
+	color: #9999BB;
+	background-color: #E7E8EC;
+	padding: 0px 5px 0px 5px;
+	position: relative;
+	top: -7px;
+	left: 0px;
+	font-weight: bold;
+	font-size: 10px;
+}
+
+td.DLBlockBody {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+	background-color: #FFFFFF;
+}
+
+table.DLBlockBody {
+	
+}
+
+td.DLBlockBodyTitle {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+	color: #000000;
+	padding: 2px 10px 2px 10px;
+	border-bottom: 1px solid #FFFFFF;
+}
+
+td.DLBlockBodyContent {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+	padding: 2px 10px 2px 10px;
+	border-bottom: 1px solid #FFFFFF;
+}
+
+td.DLBlockBodyComment {
+	font-size: 10px;
+	padding: 2px 10px 2px 10px;
+	border-bottom: 1px solid #FFFFFF;
+}
+
+td.DLBlockFooter {
+	border-top: 1px solid #1B4180;
+	padding: 0px 5px 0px 5px;
+	background-color: #D2D8EC; /*#E7E8EC;*/
+	height: 18px;
+	text-align: right;
+}
+
+td.DLBlockFooterLeft {
+	border-top: 1px solid #1B4180;
+	padding: 0px 5px 0px 5px;
+	background-color: #D2D8EC; /*#E7E8EC;*/
+	height: 18px;
+	text-align: left;
+}
+
+td.DLTabFooter {
+	padding: 0px 5px 0px 5px;
+	background-color: #D2D8EC; /*#E7E8EC;*/
+	height: 18px;
+	text-align: right;
+}
+
+table.DLBlockFooter {
+	
+}
+
+td.DLBlockFooterContent {
+
+}
+
+/* ====================================================*/
+	/* =================== List elements ==================*/
+	/* ====================================================*/
+table.DLList {
+	
+}
+
+td.DLListColumnTitle {
+	height: 20px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+	color: #000000;
+	background-color: #CFD5E3;
+	border-bottom: 1px solid #1B4180;
+	border-right: 1px solid #1B4180;
+	padding: 0px 5px 0px 5px;
+}
+
+td.DLListLastColumnTitle {
+	height: 20px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+	color: #000000;
+	background-color: #CFD5E3;
+	border-bottom: 1px solid #1B4180;
+	padding: 0px 5px 0px 5px;
+}
+
+a.DLListColumnTitle,a.DLListLastColumnTitle {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+	color: #000000;
+}
+
+td.DLListColumnTitle a,td.DLListLastColumnTitle a {
+	color: #000000;
+}
+
+td.DLListRowTitle {
+	height: 20px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+	color: #000000;
+	padding: 0px 5px 0px 5px;
+	border-bottom: 1px solid #FFFFFF;
+}
+
+td.DLListCell {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	height: 20px;
+	padding: 0px 5px 0px 5px;
+	border-right: 1px solid #1B4180;
+	border-bottom: 1px solid #FFFFFF;
+}
+
+td.DLListLastCell {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	height: 20px;
+	padding: 0px 5px 0px 5px;
+	border-bottom: 1px solid #FFFFFF;
+}
+
+td.DLSearchResultsCell {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	height: 20px;
+	padding: 0px 5px 0px 5px;
+	border-right: 1px solid #1B4180;
+}
+
+td.DLSearchResultsLastCell {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	height: 20px;
+	padding: 0px 5px 0px 5px;
+}
+
+tr.DLListRow1 {
+	background-color: #F7F6F9;
+}
+
+tr.DLListRow2 {
+	background-color: #F0F1F5; /*#E7E8EC;*/
+}
+
+tr.DLListRow1Warning {
+	background-color: #FFCC00;
+}
+
+tr.DLListRow2Warning {
+	background-color: #EFBC00;
+}
+
+tr.DLListRow1Error {
+	background-color: #FF9999;
+}
+
+tr.DLListRow2Error {
+	background-color: #EF8989;
+}
+
+tr.DLListRow1Over {
+	background-color: #E0E1FF;
+}
+
+tr.DLListRow2Over {
+	background-color: #E0E1FF; /*#E7E8EC;*/
+}
+
+
+/* ====================================================*/
+	/* ================= TREE CSS CLASSES =================*/
+	/* ====================================================*/
+.dtree {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #666666;
+	white-space: nowrap;
+}
+
+.dtree img {
+	border: 0px;
+	vertical-align: middle;
+}
+
+.dtree a {
+	color: #333333;
+	text-decoration: none;
+}
+
+.dtree a:visited {
+	color: #333333;
+	text-decoration: none;
+}
+
+.dtree a.node,.dtree a.nodeSel {
+	text-decoration: none;
+	white-space: nowrap;
+	padding: 1px 2px 1px 2px;
+}
+
+.dtree a.node:hover,.dtree a.nodeSel:hover {
+	color: #333333;
+	text-decoration: none;
+	background-color: #DFE7F6;
+}
+
+.dtree a.nodeSel {
+	text-decoration: none;
+	background-color: #DFE7F6;
+}
+
+.dtree .clip { /*overflow: hidden;*/
+	
+}
+
+/* ================================================== */
+	/* The following classes are used in JavaScript menus */
+	/* ================================================== */
+.menuItemLevel1TextMouseOut {
+	text-align: left;
+	padding-top: 5px;
+	padding-left: 8px;
+	text-decoration: none;
+	color: #FFFFFF;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+}
+
+.menuItemLevel1TextMouseOver {
+	text-align: left;
+	padding-top: 5px;
+	padding-left: 8px;
+	text-decoration: none;
+	color: #1B4180;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+}
+
+.menuItemLevel1BorderMouseOut {
+	border-right: 1px solid #FFFFFF;
+}
+
+.menuItemLevel1BorderMouseOver {
+	border-right: 1px solid #FFFFFF;
+}
+
+.menuItemOtherLevelsTextMouseOut {
+	padding-top: 2px;
+	padding-left: 8px;
+	text-align: left;
+	text-decoration: none;
+	color: #FFFFFF;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+}
+
+.menuItemOtherLevelsTextMouseOver {
+	padding-top: 2px;
+	padding-left: 8px;
+	text-align: left;
+	text-decoration: none;
+	color: #1B4180;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+}
+
+.menuItemOtherLevelsBorderMouseOut {
+	border: 1px solid #666666;
+}
+
+.menuItemOtherLevelsBorderMouseOver {
+	border: 1px solid #666666;
+}
+
+.lowText {
+	text-decoration: none;
+	color: #000000;
+	font: 12px Arial, Helvetica;
+}
+
+.highText {
+	text-decoration: none;
+	color: #FFFFFF;
+	font: 12px Arial, Helvetica;
+}
+
+.itemBorder {
+	border: 1px solid #666666;
+}
+
+.itemBorderBlank {
+	border: 1px solid #CCCCDD;
+}
+
+/* Delete these "button" styles if you're not using them */
+.buttonText {
+	text-decoration: none;
+	color: #FFCC99;
+	font: Bold 12px Arial, Helvetica;
+}
+
+.buttonHover {
+	text-decoration: none;
+	color: #99CCFF;
+	font: Bold 12px Arial, Helvetica;
+	padding: 1px;
+}
+
+.buttonBorder {
+	border: 1px outset #339966;
+}
+
+.buttonBorderOver {
+	border: 1px inset #CC9966;
+}
+
+/* ====================================================*/
+	/* ============ NON - REGULAR CSS CLASSES =============*/
+	/* ====================================================*/
+#loading {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	width: 150px;
+	height: 30px;
+	z-index: 500;
+	border: 1px solid #1B4180;
+	background-color: #E8EDD7;
+	layer-background-color: #E8EDD7;
+}
+
+#uploading {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	width: 150px;
+	height: 30px;
+	z-index: 500;
+	border: 1px solid #1B4180;
+	background-color: #E8EDD7;
+	layer-background-color: #E8EDD7;
+	visibility: hidden;
+}
+
+.loadingStyle {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #000000;
+}
+
+.menuItemName {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 9px;
+	font-weight: bold;
+	color: #666666;
+}
+
+.menuItemNameSelected {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 9px;
+	font-weight: bold;
+	color: #000000;
+}
+
+.selectedFolder {
+	background-color: #D1DCAF;
+}
+
+#elLayer {
+	position: absolute;
+	visibility: hidden;
+	left: 0;
+	top: 0;
+	layer-background-color: #eeeeee;
+	background-color: #eeeeee;
+	border-bottom: 1px black solid;
+	border-left: 1px black solid;
+	border-right: 1px black solid;
+	width: 400px;
+	cursor: move;
+	font-size: 10px;
+	font-family: Verdana, Helvetica, sans-serif;
+	filter: alpha(opacity =   70);
+	-moz-opacity: 0.7;
+	opacity: 0.7;
+}
+
+div.DLGroup {
+	border: 1px solid #1B4180;
+	margin: 1em 0em 1em 0em;
+	padding: 10px;
+}
+
+span.DLLegend {
+	color: #1B4180;
+	background-color: #FFFFFF;
+	padding: 0.5em;
+	position: relative;
+	top: -1.8em;
+	left: -0.4em;
+	font-weight: bold;
+	font-size: 10px;
+}
+
+/* ====================================================*/
+	/* =================== TABS ELEMENTS ==================*/
+	/* ====================================================*/
+table.DLTab {
+	border: 0px;
+	padding: 0px;
+	width: 100%;
+	margin: 0px;
+}
+
+#style1 table.DLTabHeader {
+	border: 0px;
+	padding: 0px;
+	width: 100%;
+}
+
+#style1 table.DLTabBody {
+	padding: 10px 10px 10px 10px;
+	background-color: #F4F6EB;
+	border: 1px solid #1B4180;
+	width: 100%;
+	spacing: 0px;
+}
+
+#style1 td.DLTabHeaderSelectedTab {
+	border-left: 1px solid #1B4180;
+	border-right: 1px solid #1B4180;
+	border-top: 1px solid #1B4180;
+	background-color: #AFBCD0; /*#91AAD0; */
+	padding: 5px 5px 5px 5px;
+	font-size: 11px;
+	font-weight: bold;
+	color: #1D4382;
+	text-transform: uppercase;
+	width: 80px;
+	text-align: center;
+}
+
+#style1 td.DLTabHeaderUnselectedTab {
+	border: 1px solid #1B4180;
+	background-color: white;
+	padding: 5px 5px 5px 5px;
+	font-size: 11px;
+	color: #666666;
+	text-transform: uppercase;
+	width: 80px;
+	text-align: center;
+}
+
+#style1 a.DLTabHeaderUnselectedTab {
+	color: #666666;
+}
+
+#style1 td.DLTabHeaderSmallSpacer {
+	border-bottom: 1px solid #1B4180;
+	width: 5px;
+}
+
+#style1 td.DLTabHeaderExtendSpacer {
+	border-bottom: 1px solid #1B4180;
+}
+
+#style1 td.DLTabBody {
+	padding: 10px 10px 0px 10px;
+	background-color: #AFBCD0; /*#91AAD0; */
+	border-left: 1px solid #1B4180;
+	border-right: 1px solid #1B4180;
+	border-bottom: 1px solid #1B4180;
+}
+
+div.DLTabHeaderSelectedTab {
+	background-color: #AFBCD0; /*#91AAD0; */
+	padding: 5px 5px 5px 5px;
+	font-size: 11px;
+	font-weight: bold;
+	color: #1D4382;
+	text-transform: uppercase;
+	width: 80px;
+	text-align: center;
+}
+
+div.DLTabHeaderUnselectedTab {
+	background-color: white;
+	padding: 5px 5px 5px 5px;
+	font-size: 11px;
+	color: #666666;
+	text-transform: uppercase;
+	width: 80px;
+	text-align: center;
+}
+
+.DLAutoCompleteMainContainer {
+	border: 1px solid #1B4180;
+	padding-left: 2px;
+	background-color: #FFFFFF;
+}
+
+.DLAutoCompleteSelected {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	background-color: #1B4180;
+	color: #FFFFFF;
+	padding-top: 1px;
+	padding-left: 5px;
+}
+
+.DLAutoCompleteUnselected {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	background-color: #FFFFFF;
+	color: #1B4180;
+	padding-top: 1px;
+	padding-left: 5px;
+}
+
+div.timeoutPopup{
+	position: absolute;
+	top:0px;
+	left:0px;
+	float: left;
+	text-align: center;
+	width: 100%;
+	display: none;
+}
+
+div.timeoutPopupContent{
+	position: relative;
+	z-index: 1;
+	top: 0px;
+	width: 230px;
+	background-color: #ffffff;
+	border: 5px solid #000000;
+	font-weight: bold;
+	padding: 10px 10px 10px 10px;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* ====================================================*/
+/* ================== Menu elements ===================*/
+/* ====================================================*/
+
+/* HORIZONTAL FREESTYLE MENU LAYOUT */
+
+/* All <ul> tags in the menu including the first level */
+.menulist, .menulist  ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+/* Submenus (<ul> tags) are hidden and absolutely positioned downwards from their parent */
+.menulist ul {
+	display: none;
+	position: absolute;
+	top: 1.0em; margin-top: 13px; /* I'm using ems and px to allow people to zoom their font */
+	left: -1px;
+	width: 150px;
+}
+
+/* Second and third etc. level submenus - position across from parent instead */
+.menulist ul ul {
+	top: -1px; margin-top: 0;
+	left: 148px;
+}
+
+/*
+ All menu items (<li> tags). 'float: left' lines them up horizontally, and they are
+ positioned relatively to correctly offset submenus. Also, they have overlapping borders.
+*/
+.menulist li {
+	float: left;
+	display: block;
+	position: relative;
+	border-right: 1px solid #FFFFFF;
+	margin-right: -1px;
+	color: #FFFFFF;
+	font-weight: bold;
+}
+
+/* Items in submenus - override float/border/margin from above, restoring default vertical style */
+.menulist ul li {
+	float: none;
+	margin: 0;
+	margin-bottom: -1px;
+	border: 1px solid #000000;
+	background: #1D4382;
+	padding: 0;
+	color: #FFFFFF;
+	font-weight: normal;
+	text-transform: none;
+}
+.menulist ul>li:last-child {
+	margin-bottom: 1px; /* Mozilla fix */
+}
+
+/* Links inside the menu */
+.menulist a {
+	display: block;
+	padding: 3px 20px;
+	color: #FFFFFF;
+	letter-spacing: 2px;
+	text-decoration: none;
+}
+
+/* Links inside the submenus */
+.menulist ul li a {
+	padding: 3px 10px;
+	letter-spacing: 0;
+}
+
+/* Lit  items: 'hover' is mouseover, 'highlighted' are parent items to visible menus */
+.menulist a:hover, .menulist a.highlighted:hover, .menulist a:focus {
+	color: #FFFFFF;
+	background: #FF8800;
+}
+.menulist a.highlighted {
+	color: #FFFFFF;
+	background: #FF8800;
+}
+
+/*
+ If you want per-item background images in your menu items, here's how to do it.
+ 1) Assign a unique ID tag to each link in your menu, like so: <a id="xyz" href="#">
+ 2) Copy and paste these next lines for each link you want to have an image:
+    .menulist a#xyz {
+      background-image: url(out.gif);
+    }
+    .menulist a#xyz:hover, .menulist a.highlighted#xyz, .menulist a:focus {
+     background-image: url(over.gif);
+    }
+*/
+
+/* Only style submenu indicators within submenus. */
+.menulist a .subind {
+	display: none;
+}
+.menulist ul a .subind {
+	display: block;
+	float: right;
+}
+
+
+/* 'Escaped Comment' hack for horizontal menubar width in IE5/Mac */
+.menulist a {
+	float: left;
+}
+.menulist ul a {
+	float: none;
+}
+/* \*/
+.menulist a {
+	float: none;
+}
+/* */
+
+
+/*
+ HACKS: IE/Win:
+ A small height on <li> and <a> tags and floating prevents gaps in menu.
+ * html affects <=IE6 and *:first-child+html affects IE7.
+ You may want to move these to browser-specific style sheets.
+*/
+*:first-child+html .menulist ul li {
+	float: left;
+	width: 100%;
+}
+
+* html .menulist ul li {
+	float: left;
+	height: 1%;
+}
+* html .menulist ul a {
+	height: 1%;
+}
+/* End Hacks */

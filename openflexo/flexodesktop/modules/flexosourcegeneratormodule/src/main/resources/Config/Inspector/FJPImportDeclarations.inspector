@@ -1,0 +1,18 @@
+<inspector title = "import_declarations">
+	<tab name="Basic" index="0">
+		<property_list name="importDeclarations" label="import_declarations" constraint="0">
+		  <param name="visible_row_count" value="10"/>
+		  <param name="row_height" value="20"/>
+		  <property_list_column name="icon" label="" widget="ICON">
+			<param name="column_width" value="20"/>
+			<param name="resizable" value="false"/>
+			<param name="display_title" value="false"/>
+		  </property_list_column>
+		  <property_list_column name="importDeclaration" label="import_declaration" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="300"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		</property_list>
+	</tab>
+	
+</inspector>

@@ -1,0 +1,55 @@
+<inspector title = "End Node" inheritsfrom="FlexoNode.inspector" inspectedClassName="ignore">
+
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="role" label="role" widget="DROPDOWN" constraint="2">
+            <param name = "format" value="name"/>
+            <param name = "dynamiclist" value="project.workflow.allRoles"/>
+        </property>
+        
+        <property name="documentationUrl" label="docUrl" widget="TEXT_FIELD" constraint="3"/>
+	<property name="linkedProcess" label="trigger_process" widget="CUSTOM" constraint="4">
+		<param name="className" value="org.openflexo.components.widget.ProcessInspectorWidget"/>
+	</property>
+	
+	</tab>
+	
+	<tab name="Doc" index="2">
+		<property name="index" label="index" widget="INTEGER" constraint="0"/>
+		<property name="acronym" label="acronym" widget="TEXT_FIELD" constraint="1">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+	</tab>
+	
+	<tab name="Activity Metrics" index="8" layout="DEFAULT" visibilityContext="METRICS">
+        <property_list name="metricsValues" label="metrics" constraint="0">
+          <param name="visible_row_count" value="5"/>
+          <param name="row_height" value="20"/>
+          <property_list_column name="metricsDefinition.name" label="name" widget="TEXT_FIELD">
+            <param name="tooltip" value="metricsDefinition.description"/>
+          </property_list_column>
+          <property_list_column name="this" label="value" widget="CUSTOM">
+            <param name="column_width" value="80"/>
+            <param name="resizable" value="true"/>
+            <param name="customRendering" value="true"/>
+            <param name="format" value="value.toString"/>
+            <param name="className" value="org.openflexo.components.widget.MetricsValueInspectorWidget"/>
+          </property_list_column>
+          <property_list_column name="unit" label="unit" widget="TEXT_FIELD">
+            <param name="column_width" value="50"/>
+            <param name="resizable" value="true"/>
+            <param name="isEditable" value="metricsDefinition.isUnitEditable"/>
+          </property_list_column>
+          <property_list_column name="description" label="additional_info" widget="TEXT_FIELD">
+            <param name="column_width" value="120"/>
+            <param name="resizable" value="true"/>
+          </property_list_column>
+          <property_list_action name="new" type="ADD" method="addMetrics"/>
+          <property_list_action name="delete" type="DELETE" method="deleteMetrics"/>
+        </property_list>
+    </tab>
+    
+	
+</inspector>

@@ -1,0 +1,54 @@
+<inspector title = "Method_(read_only)" inheritsfrom="DMROObject.inspector">
+	<tab name="Basic" index="0">
+		<property name="localizedName" label="name" widget="READ_ONLY_TEXT_FIELD" constraint="0"/>
+		<property name="returnType" label="return_type" widget="READ_ONLY_TEXT_FIELD" constraint="2">
+			<param name="className" value="org.openflexo.components.widget.DMTypeInspectorWidget"/>
+		</property>
+		<property_list name="parameters" label="parameters" constraint="3">
+		  <param name="visible_row_count" value="5"/>
+		  <param name="row_height" value="20"/>
+		  <property_list_column name="name" label="name" widget="TEXT_FIELD">
+			<param name="column_width" value="100"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="type" label="type" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="180"/>
+			<param name="resizable" value="true"/>
+			<param name="className" value="org.openflexo.components.widget.DMTypeInspectorWidget"/>
+			<param name="format" value="simplifiedStringRepresentation"/>
+		  </property_list_column>
+		  <property_list_column name="description" label="description" widget="TEXT_FIELD">
+			<param name="column_width" value="150"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_action name="new" type="ADD" method="createNewParameter"/>
+		  <property_list_action name="delete" type="DELETE" method="deleteParameter" isAvailable="isParameterDeletable"/>
+		</property_list>
+	</tab>
+		
+	<tab name="Advanced" index="1">
+		<property name="isStaticallyDefinedInTemplate" label="statically_defined_in_template" widget="READ_ONLY_CHECKBOX" constraint="0" help="Set to true if this property was statically defined in template during last model reinjection">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+	</tab>
+	<tab name="Code" index="3">
+		<property name="visibilityModifier.localizedName" label="access_modifier" widget="LABEL" constraint="1">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+ 		<property name="isAbstract" label="abstract_modifier" widget="READ_ONLY_CHECKBOX" constraint="2">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="isStatic" label="static_modifier" widget="READ_ONLY_CHECKBOX" constraint="3">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="isSynchronized" label="synchronized_modifier" widget="READ_ONLY_CHECKBOX" constraint="4">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="code" label="code" widget="JAVA_CODE" constraint="6">
+			<param name="readOnly" value="true"/>
+			<param name="rows" value="5"/>
+			<param name="columns" value="20"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+	</tab>
+</inspector>

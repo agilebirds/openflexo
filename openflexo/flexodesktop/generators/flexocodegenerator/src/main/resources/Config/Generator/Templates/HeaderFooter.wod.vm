@@ -1,0 +1,246 @@
+#**
+* HeaderFooter.wod.vm
+* Template for the whole HeaderFooter WOD to generate for an application.
+* The context contains the following keys:
+*  - project: the current project (FlexoProject)
+*  - projectGenerator: the current Project Generator (ProjectGenerator)
+*  - repository: the current target code repository (CGRepository)
+*  - generator: the current generator (HeaderFooterGenerator)
+*  - buttonsJava: the java code support previously generated with template HFButton.java.vm 
+*                 for all buttons appearing in the HeaderFooter (e.g. logout)
+*  - buttonsHtml: the html code support previously generated with template HFButton.html.vm 
+*                 for all buttons appearing in the HeaderFooter (e.g. logout)
+*  - buttonsWod: the wod code support previously generated with template HFButton.wod.vm 
+*                 for all buttons appearing in the HeaderFooter (e.g. logout)
+*#
+## $buttonsWod
+
+CONTENT: WOComponentContent { 
+}
+
+HEAD: WDLHead{
+    title = title;
+    cssArray = cssArray;
+    jsArray = jsArray;
+    useOldCSS = false;
+    /* application = "${generator.getProject().getCssSheet().getName()}";*/
+    usePrototypeJS = true;
+    useScriptaculousControlsJS = true;
+	metaKeywords = "FlexoBPM";
+    metaDescription = "This website is powered by FlexoBPM from Agile Birds sprl (www.flexoBPM.com).";
+}
+
+onLoadBody: WOString {
+    value = ^onLoadBody;
+}
+
+RecordTestLink: WOHyperlink {
+    directActionName = "ScenarioRecorderDA/openScenarioRecorderFrameset";
+    id = "recordLink";
+    target = "_top";
+    title = "Toggle test recording mode";
+}
+
+RecordTestImage: WOImage {
+    alt = "Toggle test recording mode";
+    framework = "ScenarioRecorder";
+    filename = "media-record-small.png";
+    class = "denaliButton";
+    id = "RecordTestImg";
+}
+
+hasRecorder: WOConditional {
+    condition = isRecorderFrameworkLoaded;
+}
+
+recInclURL: WOString {
+    value = recInclURL;
+}
+
+recExclURL: WOString {
+    value = recExclURL;
+}
+
+hasMenu: WOConditional{
+    condition = showMenu;
+}
+hasNoMenu: WOConditional{
+    condition = showMenu;
+    negate = true;
+}
+
+Div_PageHeader: WOGenericContainer {
+    elementName = "div";
+    id = "denaliPageHeader";
+    style = styleForPageHeader;
+}
+
+LOGO: WOImage {
+    alt = "Logo";
+    id = "logo";
+    filename = "$generator.findLogoName()";
+    #if( $generator.findLogoFramework() )
+    framework = "$generator.findLogoFramework()";
+    #end
+    class = "denaliLogo";
+}
+
+ShowLogoutLink: WOConditional {
+    condition = isLoggedIn;
+}
+
+LogoutLink: WOHyperlink {
+    directActionName = "DirectAction/logout";
+    id = "logoutLink";
+}
+
+LogoutButton: WDLButton {
+    imageName = "Icon_Logout";
+    title = "Logout";
+    id = "logoutIcon";
+}
+
+ShowCurrentUserLogin: WOConditional {
+    condition = isLoggedIn;
+}
+
+CurrentUserLogin: WOString {
+    value = session.currentUser.login;
+}
+
+#if( $project.getFlexoNavigationMenu().getUserProfilePageName() )
+UserProfilePageLink: WOHyperlink {
+    directActionName = "${project.getPrefix()}DA/userProfile?ci=$project.getFlexoNavigationMenu().getUserProfileOperation.getComponentInstance.getFlexoID()";
+    id = "userProfileLink";
+}
+
+#end
+
+CASCADINGMENU : WDLJSMenu{
+    menuElements = menuArray;
+}
+
+FOOTER: WDLFooter{
+	company = "www.flexobpm.com";
+	infoEmail = "support@flexobpm.com";
+	copyrightYear = 2010;
+	hideVersion = true;
+}
+
+#if($generator.isPrototype())
+	
+	Condition_MustSelectNextOperation: WOConditional {
+		condition = ^selectOperationMap;
+	}
+	
+	Popup_SelectNextOperation: WDLJSHiddenPopup {
+		uniqueIdentifier = "nextOperationSelectorId";
+        draggable = true;
+        resizable = true;
+		visible = true;
+		closeButton = true;
+		width = "600px;";
+	}
+	
+	Repetition_NextOperations: WORepetition {
+    	list = getNextOperationList;
+    	item = nextOperationItem;
+    }
+    
+    Link_SelectNextOperation: WDLMultiSubmitLink {
+    	value = nextOperationItem.key;
+    }
+    
+    String_NextOperation: WOString {
+    	value = nextOperationItem.value;
+		escapeHTML = false;
+    }
+	
+    WKF_JS_LINK: WOHyperlink {
+        href="#";
+        onclick= wkfJSOnclick;
+        id = "wkfJsLink";
+    }
+    
+    WKF_ICON: WOImage {
+        title = "Current information";
+        alt = "Current information";
+        framework = "DenaliWebResources";
+        filename = "wkf_icon.gif";
+        class = "denaliButton";
+        id = "wkfInfoIcon";
+    }
+    
+    WKF_INFO_POPUP: WDLJSHiddenPopup {
+        uniqueIdentifier = uniqueWKFID;
+        draggable = true;
+        resizable = true;
+    }
+    
+    ROLE: WOString{
+        value = session.workflowComponentInstance.role;
+    }
+    
+    STATUS: WOString{
+        value = session.getCurrentProcessBusinessData.status;
+    }
+    
+    PROCESS: WOString{
+        value = session.workflowComponentInstance.process.processName;
+    }
+    
+    ACTIVITY: WOString{
+        value = session.workflowComponentInstance.activity;
+    }
+    
+    OPERATION: WOString{
+        value = session.workflowComponentInstance.operation;
+    }
+    
+    Div_Role: WOGenericContainer {
+        elementName = "div";
+        style = styleForDivRole;
+    }
+#end
+#if($generator.isPrototype() || $repository.includeReader())
+    ShowHelpLink: WOConditional {
+        condition = currentPageHasHelp;
+    }
+
+    OpenHelpPopup: WDLJSModalWindow {
+        #if($generator.isPrototype() && !$repository.includeReader())
+        action = openHelpPopup;
+        #else
+        url = helpUrl;
+        #end
+        width = 800;
+        height = 600;
+        title = "help";
+        class = ^class;
+        windowName = "Help";
+    }
+    
+    HELP: WDLButton {
+        imageName = "Icon_Help";
+        title = "Status of the workflow";    
+        showLoadingLayer = false;
+        id = "helpIcon";
+    }
+#end
+
+#if(${project.getIsLocalized()})
+	Repetition_Languages: WORepetition {
+		list = getLanguages;
+		item = languageItem;
+	}
+	
+	Link_ChangeLanguage: WOHyperlink {
+		directActionName = "DirectAction/changeLanguage";
+		queryDictionary = getChangeLanguageQueryDictionary;
+		style = getLanguageLinkStyle;
+	}
+	
+	String_Language: WOString {
+		value = languageItem;
+	}
+#end

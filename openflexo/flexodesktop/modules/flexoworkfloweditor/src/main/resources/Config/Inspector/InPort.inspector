@@ -1,0 +1,7 @@
+<inspector title = "IN Port"  inheritsfrom ="AbstractInPort.inspector" inspectedClassName="org.openflexo.foundation.wkf.ws.InPort">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+	</tab>
+</inspector>

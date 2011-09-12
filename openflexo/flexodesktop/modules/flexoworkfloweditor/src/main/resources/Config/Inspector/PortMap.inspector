@@ -1,0 +1,71 @@
+<inspector title = "PortMap"  inheritsfrom ="WKFRepresentable.inspector" inspectedClassName="org.openflexo.foundation.wkf.ws.FlexoPortMap">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="name" label="name" widget="TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		</property>
+		<property name="isHidden" label="hide_port_map" help="Hides this portmap" widget="CHECKBOX" constraint="0"/>
+
+		<property name="hasInputMessage" label="has_input_message" widget="CHECKBOX" constraint="0" conditional="true=false"/>
+		<property name="hasOutputMessage" label="has_output_message" widget="CHECKBOX" constraint="0" conditional="true=false"/>
+		<property name="inputMessageDefinition.name" label="input_message" widget="READ_ONLY_TEXT_FIELD" constraint="1" depends="hasInputMessage" conditional="hasInputMessage=true">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		  <param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property_list name="inputMessageDefinition.entries" label="input_message" constraint="2" depends="hasInputMessage" conditional="hasInputMessage=true">
+		  <param name="displayLabel" value="false"/>
+		  <param name="visible_row_count" value="4"/>
+		  <param name="row_height" value="20"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		  <property_list_column name="variableName" label="name" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="80"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="type" label="type" widget="READ_ONLY_TEXT_FIELD">
+			<param name="format" value="name"/>
+			<param name="column_width" value="80"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="isMandatory" label="mandatory" widget="CHECKBOX">
+			<param name="column_width" value="30"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		</property_list>
+
+		<property name="outputMessageDefinition.name" label="output_message" widget="READ_ONLY_TEXT_FIELD" constraint="3" depends="hasOutputMessage" conditional="hasOutputMessage=true">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		  <param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property_list name="outputMessageDefinition.entries" label="output_message" constraint="4" depends="hasOutputMessage" conditional="hasOutputMessage=true">
+		  <param name="displayLabel" value="false"/>
+		  <param name="visible_row_count" value="4"/>
+		  <param name="row_height" value="20"/>
+		  <param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		  <property_list_column name="variableName" label="name" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="80"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="type" label="type" widget="READ_ONLY_TEXT_FIELD">
+			<param name="format" value="name"/>
+			<param name="column_width" value="80"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="isMandatory" label="mandatory" widget="CHECKBOX">
+			<param name="column_width" value="30"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		</property_list>
+	</tab>
+	
+	<tab name="Doc" index="2">
+		<property name="index" label="index" widget="INTEGER" constraint="0"/>
+	</tab>
+
+	<tab name="Graphics" index="4" layout="DEFAULT">
+	</tab>
+</inspector>

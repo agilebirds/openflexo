@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="twocols" dataClassName="org.openflexo.fge.view.widget.FIBBackgroundStyleSelector$BackgroundStyleFactory" font="SansSerif,0,11" width="320" height="250" name="BackgroundStylePanel">
+  <Panel layout="twocols" borderTitle="Panel" data="data.backgroundStyle" dataClassName="org.openflexo.fge.graphics.BackgroundStyle$None" constraints="twocols(location=center;index=0;expandVertically=false;expandHorizontally=true)" visible="(data.backgroundStyleType = &quot;NONE&quot;)" name="NoneBackgroundPanel">
+    <Label label="background" localize="true" constraints="twocols(location=left;index=0;expandHorizontally=true;expandVertically=false)">
+      <LocalizedDictionary />
+    </Label>
+    <DropDown format="object.name.toLowerCase" localize="true" valueChangedAction="controller.backgroundStyleChanged()" name="BackgroundStyleDropDown1" data="data.backgroundStyleType" constraints="twocols(location=right;index=1;expandVertically=false;expandHorizontally=false)" />
+  </Panel>
+  <Panel layout="twocols" borderTitle="Panel" data="data.backgroundStyle" dataClassName="org.openflexo.fge.graphics.BackgroundStyle$Color" constraints="twocols(location=center;index=1;expandVertically=false;expandHorizontally=true)" visible="(data.backgroundStyleType = &quot;COLOR&quot;)" name="ColorBackgroundPanel">
+    <Label label="background" localize="true" constraints="twocols(location=left;index=0;expandHorizontally=true;expandVertically=false)">
+      <LocalizedDictionary />
+    </Label>
+    <DropDown format="object.name.toLowerCase" localize="true" valueChangedAction="controller.backgroundStyleChanged()" name="BackgroundStyleDropDown2" data="data.backgroundStyleType" constraints="twocols(location=right;index=1;expandVertically=false;expandHorizontally=false)" />
+    <Label label="color" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=true;expandVertically=false)">
+      <LocalizedDictionary />
+    </Label>
+    <Color data="ColorBackgroundPanel.data.color" constraints="twocols(location=center;index=3;expandHorizontally=false;expandVertically=false)" localize="true" valueChangedAction="controller.parameterChanged()" />
+    <Label label="use_transparency" localize="true" constraints="twocols(location=left;index=4;expandVertically=false;expandHorizontally=true)">
+      <LocalizedDictionary />
+    </Label>
+    <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" borderTitle="Panel" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)">
+      <CheckBox selected="true" localize="true" valueChangedAction="controller.parameterChanged()" name="checkbox" data="data.backgroundStyle.useTransparency" constraints="flow(index=0)" />
+      <Label label="level" localize="true" constraints="flow(index=1)" visible="data.backgroundStyle.useTransparency">
+        <LocalizedDictionary />
+      </Label>
+      <Number minValue="0.0" maxValue="1.0" increment="0.05" numberType="FloatType" columns="3" data="data.backgroundStyle.transparencyLevel" constraints="flow(index=2)" visible="data.backgroundStyle.useTransparency" name="Integer" localize="true" valueChangedAction="controller.parameterChanged()" />
+    </Panel>
+    <LocalizedDictionary />
+  </Panel>
+  <Panel layout="twocols" borderTitle="Panel" data="data.backgroundStyle" dataClassName="org.openflexo.fge.graphics.BackgroundStyle$ColorGradient" constraints="twocols(location=center;index=2;expandVertically=false;expandHorizontally=true)" visible="(data.backgroundStyleType = &quot;COLOR_GRADIENT&quot;)" name="ColorGradientBackgroundPanel">
+    <Label label="background" localize="true" constraints="twocols(location=left;index=0;expandHorizontally=true;expandVertically=false)">
+      <LocalizedDictionary />
+    </Label>
+    <DropDown format="object.name.toLowerCase" localize="true" valueChangedAction="controller.backgroundStyleChanged()" name="BackgroundStyleDropDown3" data="data.backgroundStyleType" constraints="twocols(location=right;index=1;expandVertically=false;expandHorizontally=false)" />
+    <Label label="color_gradient" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=true;expandVertically=false)">
+      <LocalizedDictionary />
+    </Label>
+    <DropDown format="object.name.toLowerCase" localize="true" valueChangedAction="controller.parameterChanged()" name="dropdown" data="ColorGradientBackgroundPanel.data.direction" constraints="twocols(location=right;index=3;expandVertically=false;expandHorizontally=false)" />
+    <Label label="color1" localize="true" constraints="twocols(location=left;index=4;expandVertically=false;expandHorizontally=true)">
+      <LocalizedDictionary />
+    </Label>
+    <Color data="ColorGradientBackgroundPanel.data.color1" constraints="twocols(location=right;index=5;expandVertically=false;expandHorizontally=false)" localize="true" valueChangedAction="controller.parameterChanged()" />
+    <Label label="color2" localize="true" constraints="twocols(location=left;index=6;expandVertically=false;expandHorizontally=true)">
+      <LocalizedDictionary />
+    </Label>
+    <Color data="ColorGradientBackgroundPanel.data.color2" constraints="twocols(location=right;index=7;expandVertically=false;expandHorizontally=false)" localize="true" valueChangedAction="controller.parameterChanged()" />
+    <Label label="use_transparency" localize="true" constraints="twocols(location=left;index=8;expandVertically=false;expandHorizontally=true)">
+      <LocalizedDictionary />
+    </Label>
+    <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" borderTitle="Panel" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=false)">
+      <CheckBox selected="true" localize="true" valueChangedAction="controller.parameterChanged()" name="checkbox" data="data.backgroundStyle.useTransparency" constraints="flow(index=0)" />
+      <Label label="level" localize="true" constraints="flow(index=1)" visible="data.backgroundStyle.useTransparency">
+        <LocalizedDictionary />
+      </Label>
+      <Number minValue="0.0" maxValue="1.0" increment="0.05" numberType="FloatType" columns="3" data="data.backgroundStyle.transparencyLevel" constraints="flow(index=2)" visible="data.backgroundStyle.useTransparency" name="Integer" localize="true" valueChangedAction="controller.parameterChanged()" />
+    </Panel>
+    <LocalizedDictionary />
+  </Panel>
+  <Panel layout="twocols" borderTitle="Panel" data="data.backgroundStyle" dataClassName="org.openflexo.fge.graphics.BackgroundStyle$Texture" constraints="twocols(location=center;index=3;expandVertically=false;expandHorizontally=true)" visible="(data.backgroundStyleType = &quot;TEXTURE&quot;)" name="TextureBackgroundPanel">
+    <Label label="background" localize="true" constraints="twocols(location=left;index=0;expandHorizontally=true;expandVertically=false)">
+      <LocalizedDictionary />
+    </Label>
+    <DropDown format="object.name.toLowerCase" localize="true" valueChangedAction="controller.backgroundStyleChanged()" name="BackgroundStyleDropDown4" data="data.backgroundStyleType" constraints="twocols(location=right;index=1;expandVertically=false;expandHorizontally=false)" />
+    <Label label="texture" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=true;expandVertically=false)">
+      <LocalizedDictionary />
+    </Label>
+    <DropDown format="object.name.toLowerCase" icon="object.icon" localize="true" valueChangedAction="controller.parameterChanged()" name="dropdown" data="TextureBackgroundPanel.data.textureType" constraints="twocols(location=right;index=3;expandVertically=false;expandHorizontally=false)" showIcon="true" showText="false" />
+    <Label label="color1" localize="true" constraints="twocols(location=left;index=4;expandVertically=false;expandHorizontally=true)">
+      <LocalizedDictionary />
+    </Label>
+    <Color data="TextureBackgroundPanel.data.color1" constraints="twocols(location=right;index=5;expandVertically=false;expandHorizontally=false)" localize="true" valueChangedAction="controller.parameterChanged()" />
+    <Label label="color2" localize="true" constraints="twocols(location=left;index=6;expandVertically=false;expandHorizontally=true)">
+      <LocalizedDictionary />
+    </Label>
+    <Color data="TextureBackgroundPanel.data.color2" constraints="twocols(location=right;index=7;expandVertically=false;expandHorizontally=false)" localize="true" valueChangedAction="controller.parameterChanged()" />
+    <Label label="use_transparency" localize="true" constraints="twocols(location=left;index=8;expandVertically=false;expandHorizontally=true)">
+      <LocalizedDictionary />
+    </Label>
+    <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" borderTitle="Panel" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=false)">
+      <CheckBox selected="true" localize="true" valueChangedAction="controller.parameterChanged()" name="checkbox" data="data.backgroundStyle.useTransparency" constraints="flow(index=0)" />
+      <Label label="level" localize="true" constraints="flow(index=1)" visible="data.backgroundStyle.useTransparency">
+        <LocalizedDictionary />
+      </Label>
+      <Number minValue="0.0" maxValue="1.0" increment="0.05" numberType="FloatType" columns="3" data="data.backgroundStyle.transparencyLevel" constraints="flow(index=2)" visible="data.backgroundStyle.useTransparency" name="Integer" localize="true" valueChangedAction="controller.parameterChanged()" />
+    </Panel>
+  </Panel>
+  <Panel layout="twocols" borderTitle="Panel" data="data.backgroundStyle" dataClassName="org.openflexo.fge.graphics.BackgroundStyle$BackgroundImage" constraints="twocols(location=center;index=4;expandVertically=false;expandHorizontally=true)" visible="(data.backgroundStyleType = &quot;IMAGE&quot;)" name="ImageBackgroundPanel">
+    <Label label="background" localize="true" constraints="twocols(location=left;index=0;expandHorizontally=true;expandVertically=false)">
+      <LocalizedDictionary />
+    </Label>
+    <DropDown format="object.name.toLowerCase" localize="true" valueChangedAction="controller.backgroundStyleChanged()" name="BackgroundStyleDropDown5" data="data.backgroundStyleType" constraints="twocols(location=right;index=1;expandVertically=false;expandHorizontally=false)" />
+    <Label label="image" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=true;expandVertically=false)">
+      <LocalizedDictionary />
+    </Label>
+    <File mode="OpenMode" filter="" title="select_an_image" isDirectory="false" data="ImageBackgroundPanel.data.imageFile" constraints="twocols(location=right;index=3;expandVertically=false;expandHorizontally=false)" localize="true" valueChangedAction="controller.parameterChanged()" />
+    <Label label="background" localize="true" constraints="twocols(location=left;index=4;expandVertically=false;expandHorizontally=true)">
+      <LocalizedDictionary />
+    </Label>
+    <Label label="fit_to_shape" localize="true" constraints="twocols(location=left;index=6;expandHorizontally=true;expandVertically=false)">
+      <LocalizedDictionary />
+    </Label>
+    <CheckBox selected="true" localize="true" valueChangedAction="controller.parameterChanged()" name="checkbox" data="ImageBackgroundPanel.data.fitToShape" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=false)" />
+    <Label label="scale" localize="true" constraints="twocols(location=left;index=8;expandVertically=false;expandHorizontally=true)" visible="(!(ImageBackgroundPanel.data.fitToShape))">
+      <LocalizedDictionary />
+    </Label>
+    <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" borderTitle="Panel" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" visible="(!(ImageBackgroundPanel.data.fitToShape))">
+      <Label label="x" localize="true" constraints="flow(index=0)">
+        <LocalizedDictionary />
+      </Label>
+      <Number minValue="0" maxValue="1024" increment="0.2" numberType="DoubleType" columns="3" data="ImageBackgroundPanel.data.scaleX" constraints="flow(index=1)" name="Integer" localize="true" valueChangedAction="controller.parameterChanged()" />
+      <Label label="y" localize="true" constraints="flow(index=2)">
+        <LocalizedDictionary />
+      </Label>
+      <Number minValue="0" maxValue="1024" increment="0.2" numberType="DoubleType" columns="3" data="ImageBackgroundPanel.data.scaleY" constraints="flow(index=3)" name="Integer" localize="true" valueChangedAction="controller.parameterChanged()" />
+    </Panel>
+    <Label label="delta" localize="true" constraints="twocols(location=left;index=10;expandVertically=false;expandHorizontally=true)" visible="(!(ImageBackgroundPanel.data.fitToShape))">
+      <LocalizedDictionary />
+    </Label>
+    <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" borderTitle="Panel" constraints="twocols(location=right;index=11;expandHorizontally=true;expandVertically=false)" visible="(!(ImageBackgroundPanel.data.fitToShape))">
+      <Label label="x" localize="true" constraints="flow(index=0)">
+        <LocalizedDictionary />
+      </Label>
+      <Number minValue="-1024" maxValue="1024" increment="1" numberType="DoubleType" columns="3" data="ImageBackgroundPanel.data.deltaX" constraints="flow(index=1)" name="Integer" localize="true" valueChangedAction="controller.parameterChanged()" />
+      <Label label="y" localize="true" constraints="flow(index=2)">
+        <LocalizedDictionary />
+      </Label>
+      <Number minValue="-1024" maxValue="1024" increment="1" numberType="DoubleType" columns="3" data="ImageBackgroundPanel.data.deltaY" constraints="flow(index=3)" name="Integer" localize="true" valueChangedAction="controller.parameterChanged()" />
+    </Panel>
+    <Label label="use_transparency" localize="true" constraints="twocols(location=left;index=12;expandVertically=false;expandHorizontally=true)">
+      <LocalizedDictionary />
+    </Label>
+    <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" borderTitle="Panel" constraints="twocols(location=right;index=13;expandHorizontally=true;expandVertically=false)">
+      <CheckBox selected="true" localize="true" valueChangedAction="controller.parameterChanged()" name="checkbox" data="data.backgroundStyle.useTransparency" constraints="flow(index=0)" />
+      <Label label="level" localize="true" constraints="flow(index=1)" visible="data.backgroundStyle.useTransparency">
+        <LocalizedDictionary />
+      </Label>
+      <Number minValue="0.0" maxValue="1.0" increment="0.05" numberType="FloatType" columns="3" data="data.backgroundStyle.transparencyLevel" constraints="flow(index=2)" visible="data.backgroundStyle.useTransparency" name="Integer" localize="true" valueChangedAction="controller.parameterChanged()" />
+    </Panel>
+    <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" borderTitle="Panel" constraints="twocols(location=right;index=5;expandVertically=false;expandHorizontally=false)">
+      <DropDown format="object.name.toLowerCase" localize="true" name="dropdown" data="ImageBackgroundPanel.data.imageBackgroundType" constraints="flow(index=0)" />
+      <Color data="ImageBackgroundPanel.data.imageBackgroundColor" constraints="flow(index=1)" visible="(ImageBackgroundPanel.data.imageBackgroundType = &quot;OPAQUE&quot;)" localize="true" />
+    </Panel>
+    <LocalizedDictionary />
+  </Panel>
+  <Panel layout="flow" hGap="0" vGap="5" flowAlignment="CENTER" borderTitle="Panel" constraints="twocols(location=center;index=5;expandHorizontally=true;expandVertically=false)" name="ControlPanel">
+    <Button action="controller.apply()" buttonType="Trigger" label="apply" constraints="flow(index=0)" localize="true">
+      <LocalizedDictionary />
+    </Button>
+    <Button action="controller.cancel()" buttonType="Trigger" label="cancel" constraints="flow(index=1)" localize="true">
+      <LocalizedDictionary />
+    </Button>
+  </Panel>
+  <LocalizedDictionary>
+    <Localized key="background" lang="English">Background</Localized>
+    <Localized key="none" lang="English">None</Localized>
+    <Localized key="color" lang="English">Color</Localized>
+    <Localized key="color_gradient" lang="English">Color gradient</Localized>
+    <Localized key="texture" lang="English">Texture</Localized>
+    <Localized key="image" lang="English">Image</Localized>
+    <Localized key="use_transparency" lang="English">Use transparency</Localized>
+    <Localized key="level" lang="English">Level</Localized>
+    <Localized key="fit_to_shape" lang="English">Fit to shape</Localized>
+    <Localized key="x" lang="English">x</Localized>
+    <Localized key="y" lang="English">y</Localized>
+    <Localized key="apply" lang="English">Apply</Localized>
+    <Localized key="cancel" lang="English">Cancel</Localized>
+    <Localized key="background" lang="French">Arrière-plan</Localized>
+    <Localized key="none" lang="French">Aucun</Localized>
+    <Localized key="color" lang="French">Couleur</Localized>
+    <Localized key="color_gradient" lang="French">Gradient de couleurs</Localized>
+    <Localized key="texture" lang="French">Texture</Localized>
+    <Localized key="image" lang="French">Image</Localized>
+    <Localized key="use_transparency" lang="French">Utiliser la transparence</Localized>
+    <Localized key="level" lang="French">Niveau</Localized>
+    <Localized key="fit_to_shape" lang="French">Adapté à la forme</Localized>
+    <Localized key="x" lang="French">x</Localized>
+    <Localized key="y" lang="French">y</Localized>
+    <Localized key="apply" lang="French">Appliquer</Localized>
+    <Localized key="cancel" lang="French">Annuler</Localized>
+    <Localized key="background" lang="Dutch">Background</Localized>
+    <Localized key="none" lang="Dutch">None</Localized>
+    <Localized key="color" lang="Dutch">Color</Localized>
+    <Localized key="color_gradient" lang="Dutch">Color gradient</Localized>
+    <Localized key="texture" lang="Dutch">Texture</Localized>
+    <Localized key="image" lang="Dutch">Image</Localized>
+    <Localized key="use_transparency" lang="Dutch">Use transparency</Localized>
+    <Localized key="level" lang="Dutch">Level</Localized>
+    <Localized key="fit_to_shape" lang="Dutch">Fit to shape</Localized>
+    <Localized key="x" lang="Dutch">x</Localized>
+    <Localized key="y" lang="Dutch">y</Localized>
+    <Localized key="apply" lang="Dutch">Apply</Localized>
+    <Localized key="cancel" lang="Dutch">Cancel</Localized>
+  </LocalizedDictionary>
+  <Parameter name="controllerClassName" value="org.openflexo.fge.view.widget.FIBBackgroundStyleSelector$BackgroundStyleDetailsPanel$CustomFIBController" />
+</Panel>
+

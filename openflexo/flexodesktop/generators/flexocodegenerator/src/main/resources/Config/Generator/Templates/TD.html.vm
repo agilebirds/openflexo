@@ -1,0 +1,93 @@
+#*
+* Possibility to add properties that will be included as div param as such in top block header
+* class, position, top, bottom, left and right
+* Dom modif on August 2010
+*
+*#
+#if(!$widget.isSpannedTD())
+	#if(${widget.getPropertyNamed("class")})
+    	#set( $_class = ${widget.getPropertyNamed("class").getValue()})
+		#if(!$_class)
+			#set( $_class = "")
+		#end
+	#else
+		#set( $_class = $falseValue)	
+	#end
+	
+    #if(${widget.getPropertyNamed("width")})
+    	#set( $_wi = ${widget.getPropertyNamed("width").getValue()} )
+		#if($_wi)
+			#set( $_width = "width = ${_wi}")
+		#end
+	#else
+		#set( $_width = "")	
+	#end
+	
+    #if(${widget.getPropertyNamed("height")})
+    	#set( $_he = ${widget.getPropertyNamed("height").getValue()} )
+		#if($_he)
+			#set( $_height = "height = ${_he}")
+		#end
+	#else
+		#set( $_height = "")	
+	#end
+	
+	#if(${widget.getPropertyNamed("id")})
+		#set($_TDid = ${widget.getPropertyNamed("id").getValue()} )
+		#if($_TDid)
+			#set($_TDid = "id = $quote$_TDid$quote")
+		#end
+	#else
+		#set( $_TDid = "")
+	#end
+	
+	#if(${widget.getPropertyNamed("script")})
+     	#set( $_script = ${widget.getPropertyNamed("script").getValue()} )
+	#else
+		#set( $_script = "")
+	#end
+	
+	#set($setWidth = $falseValue)
+	## We can set the width if: the width has not been set yet for this column, this cell does not span horizontally and if we are not in the search block (because it would return 100% and smash the batch cell at the end of the row 
+    #if(!(${_width.length()} > 0) && !${htmlTableWidth.get(${widget.getXLocation()})} && ${widget.getColSpan()}==1 && !${widget.isSearchBlockToolTD()})
+        #set($setWidth = $trueValue)
+        ## some improvement could be done if the row is in a conditional but it gets complicated
+        #void($htmlTableWidth.put(${widget.getXLocation()},$trueValue))
+    #end
+    #if(${widget.getPropertyNamed("th")} ||  $widget.isHeaderCell() || ($widget.getTDCssType()  && ${widget.getTDCssType().getName()} == "DLListColumnTitle"))
+    	#set($tagName = "th")
+    #else
+    	#set($tagName = "td")
+    #end
+	
+	@single
+	<$tagName 
+		#if($widget.getColSpan()>1)colspan="$widget.getColSpan()";#end 
+		#if($widget.getRowSpan()>1)rowspan="$widget.getRowSpan()";#end
+		$!_width 
+		$!_height
+		$!_TDid
+		#if($_class)
+			class="$_class"
+		#else
+			#if ($widget.getTDCssType()) 
+				class="${widget.getTDCssType().getName()}" 
+				style="#if($setWidth) width: $widget.getPourcentageInString()%;#end
+				#if($widget.getVerticalAlignement())vertical-align: $widget.getVerticalAlignement();#end
+				#if($widget.getAlignement() && (!${widget.getAlignement().equals($r)})) text-align: $widget.getAlignement();#end"
+			#end
+		#end
+	>
+	@end
+    	#if(${_script.length()} > 0)
+    		$_script
+    	#end
+    	#renderSequence($widget.getSequenceWidget())
+	</$tagName>
+	
+	#if(${widget.repetition().getHasBatch()} && $widget.isSearchBlockToolTD())
+        <td class="denaliTdBlockTools">
+            <webobject name="${widget.getHTMLListDescriptor().getListName()}Batch"></webobject>
+        </td>
+    #end
+#end

@@ -1,0 +1,57 @@
+<config>
+	<context-values>
+		<resource path="src/main/resources/Config/Generator/Templates/FormActionItemForDefaultHyperlinkInPopup.java.vm">
+			<value key="generator" object-class="org.openflexo.generator.ie.OperationHyperlinkGenerator"/>
+		</resource>
+		<resource path="src/main/resources/Config/Generator/Templates/DropDown.java.vm">
+			<value key="widget" object-class="org.openflexo.foundation.ie.widget.IEDropDownWidget"/>
+		</resource>
+		<resource path="src/main/resources/Config/Generator/Templates/ConditionWod.vm">
+			<value key="widget" object-class="org.openflexo.foundation.ie.operator.ConditionalOperator"/>
+		</resource>
+		<resource path="src/main/resources/Config/Generator/Templates/HCWOApplication/DefaultApplicationConf.vm">
+			<value key="project" object-class="org.openflexo.foundation.rm.FlexoProject"/>
+		</resource>
+		<resource path="src/main/resources/Config/Generator/Templates/HTMLListJava.vm">
+			<value key="list" object-class="org.openflexo.foundation.ie.HTMLListDescriptor"/>
+		</resource>
+		<resource path="src/main/resources/Config/Generator/Templates/HCWOApplication/HTMLListJava.vm">
+			<value key="list" object-class="org.openflexo.foundation.ie.HTMLListDescriptor"/>
+		</resource>
+		<resource path="src/main/resources/Config/Generator/Templates/HCWOApplication/ApplicationConfProd.vm">
+			<value key="project" object-class="org.openflexo.foundation.rm.FlexoProject"/>
+		</resource>
+		<resource path="src/main/resources/Config/Generator/Templates/HCWOApplication/PopupLink.java.vm">
+			<value key="bd" object-class="org.openflexo.foundation.bindings.BindingDefinition"/>
+		</resource>
+		<resource path="src/main/resources/Config/Generator/Templates/PageInstanciation.vm">
+			<value key="ci" object-class="org.openflexo.foundation.ie.OperationComponentInstance"/>
+		</resource>
+		<resource path="src/main/resources/Config/Generator/Templates/Prototype/HTMLListJava.vm">
+			<value key="list" object-class="org.openflexo.foundation.ie.HTMLListDescriptor"/>
+			<value key="header" object-class="org.openflexo.foundation.ie.widget.IEHeaderWidget"/>
+		</resource>
+		<resource path="src/main/resources/Config/Generator/Templates/Component.jav.vm">
+			<value key="componentDefinition" object-class="org.openflexo.foundation.ie.cl.ComponentDefinition"/>
+		</resource>
+		<resource path="src/main/resources/Config/Generator/Templates/Constants.java.vm">
+			<value key="project" object-class="org.openflexo.foundation.rm.FlexoProject"/>
+		</resource>
+		<resource path="src/main/resources/Config/Generator/Templates/Prototype/HTMLListWod.vm">
+			<value key="list" object-class="org.openflexo.foundation.ie.HTMLListDescriptor"/>
+		</resource>
+		<resource path="src/main/resources/Config/Generator/Templates/DropDown.wod.vm">
+			<value key="widget" object-class="org.openflexo.foundation.ie.widget.IEDropDownWidget"/>
+		</resource>
+		<resource path="src/main/resources/Config/Generator/Templates/DMEntityPropertiesAccessors.java.vm">
+			<value key="dmprop" object-class="org.openflexo.foundation.dm.DMProperty"/>
+		</resource>
+		<resource path="src/main/resources/Config/Generator/Templates/ApplicationJava.vm">
+			<value key="project" object-class="org.openflexo.foundation.rm.FlexoProject"/>
+			<value key="process" object-class="org.openflexo.foundation.wkf.FlexoProcess"/>
+		</resource>
+		<resource path="src/main/resources/Config/Generator/Templates/HeaderFooter.java.vm">
+			<value key="project" object-class="org.openflexo.foundation.rm.FlexoProject"/>
+		</resource>
+	</context-values>
+</config>

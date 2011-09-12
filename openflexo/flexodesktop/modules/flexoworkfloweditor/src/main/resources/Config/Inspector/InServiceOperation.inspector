@@ -1,0 +1,57 @@
+<inspector title = "in_service_operation"  inheritsfrom ="ServiceOperation.inspector" inspectedClassName="org.openflexo.foundation.wkf.ws.ServiceOperation">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+	</tab>
+	
+	<tab name="Messages" index="2">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property_list name="inputMessageDefinition.entries" label="input_message" constraint="2">
+		  <param name="visible_row_count" value="4"/>
+		  <param name="row_height" value="20"/>
+		  <property_list_column name="variableName" label="name" widget="TEXT_FIELD">
+			<param name="column_width" value="100"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="type" label="type" widget="CUSTOM">
+			<param name="column_width" value="100"/>
+			<param name="resizable" value="true"/>
+			<param name="className" value="org.openflexo.components.widget.DMTypeInspectorWidget"/>
+			<param name="format" value="simplifiedStringRepresentation"/>
+			<param name="project" value="project"/>
+		  </property_list_column>
+		  <property_list_column name="isMandatory" label="mandatory" widget="CHECKBOX">
+			<param name="column_width" value="50"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_action name="new" type="ADD" method="inputMessageDefinition.createNewMessageEntry"/>
+		  <property_list_action name="delete" type="DELETE" method="inputMessageDefinition.deleteMessageEntry" isAvailable="inputMessageDefinition.isMessageEntryDeletable"/>	  
+		</property_list>
+	</tab>
+	<tab name="Data" index="3">
+		<property name="tabInputBindingDescription" label="description" widget="INFOLABEL"/>
+		<property_list name="inputMessageBindings.bindings" label="input_message_bindings" constraint="2">
+		  <param name="visible_row_count" value="4"/>
+		  <param name="row_height" value="20"/>
+		  <property_list_column name="bindingDefinition.variableName" label="port_entry" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="80"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="bindingDefinition.type" label="type" widget="CUSTOM">
+			<param name="className" value="org.openflexo.components.widget.DMTypeInspectorWidget"/>
+			<param name="format" value="name"/>
+			<param name="column_width" value="80"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="bindingValue" label="operation_entry" widget="CUSTOM">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="bindingDefinition"/>			
+			<param name="format" value="stringRepresentation"/>
+			<param name="column_width" value="150"/>
+		  </property_list_column>
+		</property_list>
+	</tab>
+</inspector>

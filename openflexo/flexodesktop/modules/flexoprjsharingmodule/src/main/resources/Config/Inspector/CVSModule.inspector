@@ -1,0 +1,20 @@
+<inspector title = "cvs_module">
+	<tab name="Basic" index="0">
+		<property name="fullQualifiedModuleName" label="module_name" widget="READ_ONLY_TEXT_FIELD" constraint="0">
+		</property>
+		<property name="CVSRepository.name" label="cvs_repository_name" widget="READ_ONLY_TEXT_FIELD" constraint="1">
+		</property>
+		<property name="CVSRepository.hostName" label="host_name" widget="READ_ONLY_TEXT_FIELD" constraint="2">
+		</property>
+		<property name="CVSRepository.repository" label="cvs_repository_path" widget="READ_ONLY_TEXT_FIELD" constraint="3">
+		</property>
+		<!--<property name="CVSRepository.port" label="port_number" widget="READ_ONLY_TEXT_FIELD" constraint="4" depends="CVSRepository.connectionType" conditional="CVSRepository.connectionType=ssh">
+		</property>
+		<property name="CVSRepository.connectionType" label="connection_type" widget="READ_ONLY_TEXT_FIELD" constraint="5">
+			<param name="format" value="name"/>
+		</property>-->
+		<property name="CVSRepository.userName" label="user_name" widget="READ_ONLY_TEXT_FIELD" constraint="6">
+		</property>
+	</tab>
+	
+</inspector>

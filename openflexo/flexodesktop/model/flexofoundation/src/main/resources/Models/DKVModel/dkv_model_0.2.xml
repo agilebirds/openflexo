@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Mapping model for navigation menu encoding version 1.0 -->
+
+<model builder="org.openflexo.foundation.xml.FlexoDKVModelBuilder" handlesReferences="yes"> 
+
+  <mapId>
+	  <map entityClass="org.openflexo.foundation.FlexoModelObject" identifierAccessor="serializationIdentifier"/>
+  </mapId>
+	
+
+  <entity name="org.openflexo.foundation.FlexoModelObject" abstract="YES" finalizer="finalizeDeserialization">
+  	<property name="userIdentifier" xmlTag="userID" attribute="YES" copyable="no" description="Unique ID of the user (used for team synchronization)"/>
+  	<property name="flexoID" xmlTag="flexoID" attribute="YES" copyable="no" description="Unique ID generated and maintained by Flexo"/>
+  	<property name="docFormat" xmlTag="docFormat" attribute="YES" description=""/>
+    <property name="dontGenerate" xmlTag="dontGenerate" attribute="YES" description="Check this box, if you don't want this node to generate documentation"/>
+    <property name="description" xmlTag="description" attribute="YES" description="Defines widget name"/>
+    <property name="hasSpecificDescriptions" xmlTag="useSpecificDescriptions" attribute="YES" description="Wheter the specific descriptions should be used in the generated documentation or not"/>
+    <property name="specificDescriptions" xmlTag="specificDescriptions" type="hashtable" description="Hashtable(String,String) that contains a name of a DocType as a key, and a description specific to that DocType as the value"/>
+    <property name="customProperties" contains="org.openflexo.foundation.FlexoProperty" type="vector" primary="yes"/>
+    <property name="dynamicProperties" xmlTag="?" type="unmappedAttributes" description="Hashtable(String,String) that contains dynamic properties (data that are not handled by application, but need to be stored in the context of back compatibility)"/>
+    <description>Root class for all objects of Flexo</description>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.FlexoProperty" xmlTag="FlexoProperty">
+     <property name="name" xmlTag="name" attribute="yes"/>
+     <property name="value" xmlTag="value" attribute="yes"/>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.dkv.DKVObject" abstract="YES" >
+    <description>Root class for all objects related to DomainKeyValue</description>
+  	<property name="name" xmlTag="name" attribute="YES" description="Name of this object"/>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.dkv.DKVModel" xmlTag="DKVModel">
+    <description>Root class for all domains of Flexo</description>
+    <property name="domains" xmlTag="Domain" type="vector" primary="yes" description=""/> 
+    <property name="languages" xmlTag="Language" type="vector" primary="yes" description=""/>     
+  </entity>
+  
+  <entity name="org.openflexo.foundation.dkv.Domain" xmlTag="Domain" finalizer="finalizeDeserialization">
+  	<property name="name" xmlTag="name" attribute="YES" description="name "/>
+  	<property name="keys" xmlTag="Key" type="vector" primary="yes" description="keys contained in this domain"/>
+  	<property name="values" contains="org.openflexo.foundation.dkv.Value" primary="yes" type="hashtable" key="fullyQualifiedName" description="Contains the list of Values this Domain contains"/> 
+  </entity>
+  
+  <entity name="org.openflexo.foundation.dkv.Key" xmlTag="Key">
+  	<property name="index" xmlTag="index"/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.dkv.Language" xmlTag="Language">
+   	<property name="isoCode" xmlTag="isoCode" description=""/>
+ 	<property name="isMain" xmlTag="isMain" description=""/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.dkv.Value" xmlTag="Value">
+	<property name="key" xmlTag="Key" description=""/>
+	<property name="language" xmlTag="Language" primary="no" description=""/>
+	<property name="value" xmlTag="value" attribute="YES" description=""/>
+  </entity>
+  
+</model>

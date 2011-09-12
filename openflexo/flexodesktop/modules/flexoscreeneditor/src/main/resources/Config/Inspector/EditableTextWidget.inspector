@@ -1,0 +1,32 @@
+<inspector title = "IEEditableTextWidget" inheritsfrom ="ControlWidget.inspector">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+		<property name="value" label="example_value" widget="TEXT_FIELD" constraint="2">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="tfcssClass" label="size" widget="DROPDOWN" constraint="3">
+		</property>
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+		
+	</tab>
+
+	<tab name="Doc" index="2" layout="DEFAULT">
+	</tab>
+
+	<tab name="Data" index="3" layout="DEFAULT">
+		<property name="bindingValue" label="binding_value" widget="CUSTOM" constraint="2" depends="fieldType">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="bindingValueDefinition"/>			
+			<param name="creates_entry" value="createsBindingVariable"/>			
+		</property>
+		<property name="bindingName" label="binding_name" widget="CUSTOM" constraint="3">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="bindingNameDefinition"/>			
+			<param name="creates_entry" value="createsBindingVariable"/>			
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+	</tab>
+
+</inspector>

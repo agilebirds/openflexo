@@ -1,0 +1,59 @@
+<inspector title = "cvs_file">
+	<tab name="Basic" index="0">
+		<property name="fileName" label="file_name" widget="READ_ONLY_TEXT_FIELD" constraint="0"/>
+		<property name="statusAsString" label="status" widget="READ_ONLY_TEXT_FIELD" constraint="1"/>
+		<property name="revision" label="revision" widget="READ_ONLY_TEXT_FIELD" constraint="2"/>
+		<property name="repositoryRevision" label="repository_revision" widget="READ_ONLY_TEXT_FIELD" constraint="3"/>
+		<property name="lastModifiedAsString" label="last_modified" widget="READ_ONLY_TEXT_FIELD" constraint="4"/>
+		<property name="isBinary" label="binary_file" widget="READ_ONLY_CHECKBOX" constraint="5"/>
+		<property name="description" label="description" widget="READ_ONLY_TEXT_AREA" constraint="6">
+			<param name="rows" value="5"/>
+		</property>
+	</tab>
+	
+	<tab name="Advanced" index="1">
+		<property name="repositoryFileName" label="repository_file_name" widget="READ_ONLY_TEXT_FIELD" constraint="0"/>
+		<property name="tag" label="sticky_tag" widget="READ_ONLY_TEXT_FIELD" constraint="1"/>
+		<property name="stickyInformation" label="sticky_information" widget="READ_ONLY_TEXT_FIELD" constraint="2"/>
+		<property name="options" label="sticky_options" widget="READ_ONLY_TEXT_FIELD" constraint="3"/>
+		<property name="stickyDateAsString" label="sticky_date" widget="READ_ONLY_TEXT_FIELD" constraint="4"/>
+		<property name="headRevision" label="head_revision" widget="READ_ONLY_TEXT_FIELD" constraint="5"/>
+		<property name="branch" label="branch" widget="READ_ONLY_TEXT_FIELD" constraint="6"/>
+		<property name="accessList" label="access_list" widget="READ_ONLY_TEXT_FIELD" constraint="7"/>
+		<property name="keywordSubstitution" label="keyword_substitution" widget="READ_ONLY_TEXT_FIELD" constraint="8"/>
+		<property name="locks" label="locks" widget="READ_ONLY_TEXT_FIELD" constraint="9"/>
+	</tab>
+	
+	<tab name="History" index="2">
+		<property_list name="orderedRevisions" label="revisions" constraint="0">
+		  <param name="visible_row_count" value="10"/>
+		  <param name="row_height" value="20"/>
+		  <property_list_column name="identifier" label="id" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="40"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="dateAsString" label="date" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="100"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="author" label="author" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="50"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="state" label="state" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="40"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="lines" label="lines" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="40"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="message" label="message" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="250"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_action name="retrieve_CVS_history" type="STATIC_ACTION" method="retrieveCVSHistory" isAvailable="isCVSHistoryRetrievable"/>
+		</property_list>
+	</tab>
+	
+</inspector>

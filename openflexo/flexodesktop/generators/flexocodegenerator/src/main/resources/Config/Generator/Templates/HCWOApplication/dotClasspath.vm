@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+#foreach( $path in $subPaths)
+    <classpathentry kind="src" path="$path"/>
+#end
+    <classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/JavaWOJSPServlet/JavaEOAccess/JavaEOControl/JavaFoundation/JavaJDBCAdaptor/JavaWebObjects/JavaWOExtensions/JavaXML"/>
+#foreach( $driver in ${project.getDataModel().findDriverFiles()} )
+  #if($driver)
+    <classpathentry kind="lib" path="lib/${driver.getName()}"/>
+  #end
+#end
+    <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+    <classpathentry combineaccessrules="false" kind="src" path="/DenaliConfigService-api"/>
+    <classpathentry combineaccessrules="false" kind="src" path="/DenaliDomainKeyValueService-api"/>
+    <classpathentry combineaccessrules="false" kind="src" path="/DenaliExceptionService-api"/>
+    <classpathentry combineaccessrules="false" kind="src" path="/DenaliFileMimeTypeService-api"/>
+    <classpathentry combineaccessrules="false" kind="src" path="/DenaliLanguageService-api"/>
+    <classpathentry combineaccessrules="false" kind="src" path="/DenaliLocalizationService-api"/>
+    <classpathentry combineaccessrules="false" kind="src" path="/DenaliMailService-api"/>
+    <classpathentry combineaccessrules="false" kind="src" path="/DenaliTabulatedFileService-api"/>
+    <classpathentry combineaccessrules="false" kind="src" path="/DenaliComponents"/>
+    <classpathentry combineaccessrules="false" kind="src" path="/DenaliConfigService"/>
+    <classpathentry combineaccessrules="false" kind="src" path="/DenaliCore"/>
+    <classpathentry combineaccessrules="false" kind="src" path="/DenaliDBUtils"/>
+    <classpathentry combineaccessrules="false" kind="src" path="/DenaliKeyValue"/>
+    <classpathentry combineaccessrules="false" kind="src" path="/DenaliEmail"/>
+    <classpathentry combineaccessrules="false" kind="src" path="/DenaliServiceManager"/>
+    <classpathentry combineaccessrules="false" kind="src" path="/DenaliUserService-api"/>
+    <classpathentry combineaccessrules="false" kind="src" path="/DenaliWebResources"/>
+    <classpathentry combineaccessrules="false" kind="src" path="/DenaliLogging"/>
+    <classpathentry combineaccessrules="false" kind="src" path="/DenaliFileGenerator"/>
+    <classpathentry combineaccessrules="false" kind="src" path="/DenaliExceptionHandling"/>
+    <classpathentry combineaccessrules="false" kind="src" path="/DenaliCountryService-api"/>
+    <classpathentry combineaccessrules="false" kind="src" path="/DenaliUserInCookieService-api"/>
+    <classpathentry combineaccessrules="false" kind="src" path="/DenaliResources-api"/>
+    <classpathentry combineaccessrules="false" kind="src" path="/DenaliFlexoCommons"/>
+    <classpathentry combineaccessrules="false" kind="src" path="/DenaliDBBusinessLogic"/>
+    <classpathentry kind="output" path="target/classes"/>
+</classpath>

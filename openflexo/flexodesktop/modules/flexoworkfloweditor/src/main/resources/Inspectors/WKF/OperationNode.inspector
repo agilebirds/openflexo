@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.node.OperationNode" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="8" title="Operation Metrics" layout="twocols" visible="controller.displayInspectorTabForContext(&quot;METRICS&quot;)" font="SansSerif,0,11" name="OperationMetricsTab">
+      <Label label="metrics" align="center" localize="true" name="MetricsValuesLabel" constraints="twocols(location=center;index=0;expandHorizontally=true;expandVertically=false)" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.MetricsValue" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.metricsValues" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=true)" name="MetricsValues" localize="true" manageDynamicModel="true">
+        <TextFieldColumn data="iterator.metricsDefinition.name" title="name" columnWidth="100" resizable="true" displayTitle="true" tooltip="iterator.metricsDefinition.description" />
+        <TextFieldColumn isEditable="iterator.metricsDefinition.isUnitEditable" data="iterator.unit" title="unit" columnWidth="50" resizable="true" displayTitle="true" />
+        <TextFieldColumn data="iterator.description" title="additional_info" columnWidth="120" resizable="true" displayTitle="true" />
+        <AddAction method="data.addMetrics" name="new" />
+        <RemoveAction method="data.deleteMetrics(selected)" name="delete" />
+      </Table>
+    </Tab>
+    <Tab index="5" title="Stats" layout="twocols" font="SansSerif,0,11" name="StatsTab">
+      <Label align="center" localize="true" name="StatisticsinfoLabel" data="data.statistics.infoLabel" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" width="200" height="60" />
+      <Label label="include_begin_end" localize="true" name="StatisticsincludeBeginEndNodeLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <CheckBox selected="false" localize="true" name="StatisticsincludeBeginEndNode" data="data.statistics.includeBeginEndNode" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" />
+      <Label label="# actions" localize="true" name="StatisticsactionCountLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = true)" />
+      <TextField passwd="false" readOnly="true" localize="true" name="StatisticsactionCount" data="data.statistics.actionCount.toString" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = true)" />
+      <Label label="# actions" localize="true" name="StatisticsrealActionCountLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = false)" />
+      <TextField passwd="false" readOnly="true" localize="true" name="StatisticsrealActionCount" data="data.statistics.realActionCount.toString" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = false)" />
+    </Tab>
+    <Tab index="3" title="Data" layout="twocols" font="SansSerif,0,11" name="DataTab">
+      <Label label="bindings" align="center" localize="true" name="ComponentInstancebindingsLabel" constraints="twocols(location=center;index=10;expandHorizontally=true;expandVertically=false)" visible="(data.operationComponent != null)" />
+      <Table iteratorClassName="org.openflexo.foundation.ie.ComponentInstanceBinding" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.componentInstance.bindings" constraints="twocols(location=right;index=11;expandHorizontally=true;expandVertically=true)" visible="(data.operationComponent != null)" name="ComponentInstancebindings" localize="true" manageDynamicModel="true">
+        <TextFieldColumn data="iterator.bindingDefinition.variableName" title="name" columnWidth="80" resizable="true" displayTitle="true" />
+        <CustomColumn componentClassName="org.openflexo.components.widget.DMTypeSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.bindingDefinition.type" format="object.simplifiedStringRepresentation" title="type" columnWidth="100" resizable="true" displayTitle="true">
+          <ColumnAssignment variable="component.project" value="iterator.project" />
+          <ColumnAssignment variable="component.owner" value="iterator" />
+        </CustomColumn>
+        <CheckBoxColumn data="iterator.bindingDefinition.isMandatory" title="mandatory" columnWidth="60" resizable="false" displayTitle="true" />
+        <CustomColumn componentClassName="org.openflexo.components.widget.binding.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.bindingValue" format="object.stringRepresentation" title="value" columnWidth="150" resizable="true" displayTitle="true">
+          <ColumnAssignment variable="component.bindingDefinition" value="iterator.bindingDefinition" />
+          <ColumnAssignment variable="component.bindable" value="iterator" />
+        </CustomColumn>
+        <AddAction method="data.componentInstance.createNewBinding" name="new" />
+        <RemoveAction method="data.componentInstance.deleteBinding(selected)" isAvailable="data.componentInstance.isBindingDeletable(selected)" name="delete" />
+      </Table>
+    </Tab>
+    <Tab index="2" title="Doc" layout="twocols" font="SansSerif,0,11" name="DocTab">
+      <Label label="acronym" localize="true" name="AcronymLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" />
+      <TextField passwd="false" localize="true" name="Acronym" data="data.acronym" constraints="twocols(location=right;index=13;expandHorizontally=true;expandVertically=false)">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </TextField>
+    </Tab>
+    <Tab index="1" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab">
+      <Label label="component_instance_id" localize="true" name="ComponentInstanceflexoIDLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
+      <TextField passwd="false" readOnly="true" localize="true" name="ComponentInstanceflexoID" data="data.componentInstance.flexoID.toString" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </TextField>
+      <Label label="css_sheet" localize="true" name="CssSheetLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
+      <DropDown format="object.name" localize="true" name="CssSheet" data="data.cssSheet" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" list="data.cssSheet.availableValues" iteratorClassName="org.openflexo.foundation.utils.FlexoCSS">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </DropDown>
+      <Label label="last_update" localize="true" name="LastUpdateAsStringLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
+      <TextField passwd="false" readOnly="true" localize="true" name="LastUpdateAsString" data="data.lastUpdateAsString" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=false)">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </TextField>
+    </Tab>
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label label="selectedTab" localize="true" name="TabComponentLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" visible="((data.operationComponent != null) &amp; (data.operationComponent.hasTabContainer = true))" />
+      <DropDown format="object.name" localize="true" name="TabComponent" data="data.tabComponent" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" visible="((data.operationComponent != null) &amp; (data.operationComponent.hasTabContainer = true))" list="data.availableTabs" iteratorClassName="org.openflexo.foundation.ie.cl.TabComponentDefinition" />
+      <Label label="is_synchronized" localize="true" name="IsSynchronizedLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
+      <CheckBox selected="false" localize="true" name="IsSynchronized" data="data.isSynchronized" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </CheckBox>
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Operation Metrics" lang="French">Métriques d'opération</Localized>
+    <Localized key="metrics" lang="English">Metrics</Localized>
+    <Localized key="metrics" lang="French">Métriques</Localized>
+    <Localized key="metrics" lang="Dutch">Metrics</Localized>
+    <Localized key="include_begin_end" lang="English">Include begin and end nodes</Localized>
+    <Localized key="include_begin_end" lang="French">Inclure les noeuds début et fin</Localized>
+    <Localized key="include_begin_end" lang="Dutch">Include begin and end nodes</Localized>
+    <Localized key="Data" lang="French">Donnée</Localized>
+    <Localized key="bindings" lang="English">Bindings</Localized>
+    <Localized key="bindings" lang="French">Liens</Localized>
+    <Localized key="bindings" lang="Dutch">Bindings</Localized>
+    <Localized key="acronym" lang="English">Acronym</Localized>
+    <Localized key="acronym" lang="French">Acronyme</Localized>
+    <Localized key="acronym" lang="Dutch">Acronym</Localized>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="component_instance_id" lang="English">Component instance ID</Localized>
+    <Localized key="component_instance_id" lang="French">ID de l'instance du composant</Localized>
+    <Localized key="component_instance_id" lang="Dutch">Component instance ID</Localized>
+    <Localized key="css_sheet" lang="English">CSS sheet</Localized>
+    <Localized key="css_sheet" lang="French">Feuille de style</Localized>
+    <Localized key="css_sheet" lang="Dutch">CSS sheet</Localized>
+    <Localized key="last_update" lang="English">Last update</Localized>
+    <Localized key="last_update" lang="French">Dernière mise à jour</Localized>
+    <Localized key="last_update" lang="Dutch">Last update</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="selectedTab" lang="English">Selected tab</Localized>
+    <Localized key="selectedTab" lang="French">Onglet sélectionné</Localized>
+    <Localized key="selectedTab" lang="Dutch">Selected tab</Localized>
+    <Localized key="is_synchronized" lang="English">Is synchronized</Localized>
+    <Localized key="is_synchronized" lang="French">Opération synchronisée</Localized>
+    <Localized key="is_synchronized" lang="Dutch">Is synchronized</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Operation Node" />
+</Panel>
+

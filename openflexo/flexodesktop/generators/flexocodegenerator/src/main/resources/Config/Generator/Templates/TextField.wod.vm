@@ -1,0 +1,164 @@
+#macro(nameForTextField)@single
+    #if(${widget.isInPopup()} || ${widget.isInRepetition()})
+        nameFor#capName()
+    #else 
+        "#name()"#end@end#end
+
+#set($simple = true)
+#if($generator.isPrototype() && !${widget.getBindingValue().isBindingValid()})
+	#if($widget.getIsAcceptableForAnyProcessInstanceDictionary())
+		#if(${widget.isInRepetition()})
+			#set($value = "${widget.repetition().getHTMLListDescriptor().getItemName()}.${widget.getProcessInstanceDictionaryKey()}")
+		#else
+			#set($value = "currentProcessBusinessData.${widget.getProcessInstanceDictionaryKey()}")
+		#end
+	#else
+		#set($value = "#name()")
+	#end
+#else
+#set($value = ${widget.getBindingValue().getWodStringRepresentation()})
+#end
+#set($css = "DLExtensible")
+#if($widget.getTfcssClass())
+ #set($css = ${widget.getTfcssClass().getName()})
+#end
+#if(${widget.getBindingValue().getBindingPathLastElement().isEOAttribute()})
+#set($maxLength = ${widget.getBindingValue().getBindingPathLastElement().getWidth()})
+#else
+#set($maxLength = -1)
+#end
+## Template
+#if ($widget.isDate())
+ #set($simple = false)
+#elseif($widget.isInteger())
+ #set($simple = false)
+#elseif($widget.isFloat())
+ #set($simple = false)
+#elseif($widget.isDouble())
+ #set($simple = false)
+#elseif($widget.isKV())
+ #set($simple = false)
+#else
+ #if($widget.getIsMandatory())
+  #set($simple = false)
+ #end
+#end
+#if(!$widget.isAutocomplete())
+#if($simple)
+#name(): WOTextField {
+    value = $value;
+    class = "$css";
+    name = #nameForTextField();
+    #tooltipAsTitle()
+    #if($maxLength && $maxLength>0)
+    maxlength = $maxLength;
+    #end
+    onChange = "hasChanged = true;";
+    #additionalBindings()
+}
+
+#elseif($widget.isKV()) ##simple
+#name(): WDLKeyValueTextField{
+    value = $value;
+    class = "$css";
+    domain = "${widget.getDomain().getName()}";
+    validationDic = #name()ValidationDic;
+    validationLabel = "#displayable_name()";
+    name = #nameForTextField();
+#if($widget.getIsMandatory())
+    min = 1;
+#end ##mandatory
+    #tooltipAsTitle()
+    onChange = "hasChanged = true;";
+    #additionalBindings()
+}
+    
+#elseif($widget.isInteger() || $widget.isFloat() || $widget.isDouble())##simple
+#name(): WDLJSNumberTextField {
+    value = ${value};
+    class = "$css";
+    validationDic = #name()ValidationDic;
+#if($widget.getIsMandatory())
+    isMandatory = true;
+#end ##mandatory
+    validationLabel = "#displayable_name()";
+    name = #nameForTextField();
+#if($widget.isFloat())
+    isFloat = true;
+#elseif($widget.isDouble())
+    isDouble = true;
+#end ##Float
+    max = $widget.getMax();
+    min = $widget.getMin();
+    #tooltipAsTitle()
+    onChange = "hasChanged = true;";
+    #if($maxLength && $maxLength>0)
+    max = $maxLength;
+    #end
+    #additionalBindings()
+}
+
+#elseif($widget.isDate())##simple
+#name(): WDLJSDateTextField {
+    value = ${value};
+    class = "DLNormal";
+    validationDic = #name()ValidationDic;
+#if($widget.getIsMandatory())
+    isMandatory = true;
+#end ##mandatory
+    validationLabel = "#displayable_name()";
+    name = #nameForTextField();
+    formatter = dateFormatter;
+    onChange = "hasChanged = true;";
+    #tooltipAsTitle()
+    #additionalBindings()
+}
+
+#else ##simple
+#name(): WDLRegExpTextField {
+    value = ${value};
+    class = "$css";
+    validationDic = #name()ValidationDic;
+    name = #nameForTextField();
+    validationLabel = "#displayable_name()";
+    #tooltipAsTitle()
+#if($widget.getIsMandatory())
+    isMandatory = true;
+#end ##mandatory
+#if($widget.isPhone())
+    pattern = "REG_EXP_PHONE";
+    readableFormat="REG_EXP_PHONE_READABLE";
+#elseif($widget.isEmail())
+    pattern = "REG_EXP_EMAIL";
+    readableFormat="REG_EXP_EMAIL_READABLE";
+#elseif($widget.isURL())
+    pattern = "REG_EXP_URL";
+    readableFormat="REG_EXP_URL_READABLE";
+#elseif($widget.isBank())
+    pattern = "REG_EXP_BANKACCOUNT";
+    readableFormat="REG_EXP_BANKACCOUNT_READABLE";
+#end ##isPhone
+    #if($maxLength>0)
+    max = $maxLength;
+    #end
+    onChange = "hasChanged = true;";
+    #additionalBindings()
+}
+
+#end ##simple
+#else ##!isAutocomplete
+#name(): #if($widget.getIsDynamic())WDLDynamicAutoComplete #else WDLAutoComplete #end {
+    value = $value;
+    textFieldClass = "DLExtensible";
+    name = #nameForTextField();
+    #tooltipAsTitle()
+#if(!$widget.getIsDynamic())
+    arrayOfValues = ${value}ArrayOfValues;
+#else
+    delim = ${value}Delim;
+    directAction = "${project.Prefix}AutoCompleteDA/${generator.getComponentGenerator().getComponentDefinition().getName()}_#name()AutoCompleteDirectAction";
+#end ##dynamic
+    #additionalBindings()
+}
+
+#end ##!isAutocomplete

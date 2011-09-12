@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model> 
+
+  <entity name="org.openflexo.xmlcode.examples.example2.SellReport" xmlTag="SellReport"> 
+    <property name="vendor" xmlTag="Vendor"/> 
+    <property name="commands" xmlTag="Command" type="hashtable"/> 
+  </entity> 
+
+  <entity name="org.openflexo.xmlcode.examples.example2.Person" xmlTag="Person"> 
+    <property name="name" xmlTag="name"/> 
+    <property name="firstName" xmlTag="firstName"/> 
+    <property name="address" xmlTag="address"/> 
+  </entity> 
+
+  <entity name="org.openflexo.xmlcode.examples.example2.Vendor" xmlTag="Vendor"> 
+    <property name="vendorId" xmlTag="id" attribute="YES"/> 
+  </entity> 
+
+  <entity name="org.openflexo.xmlcode.examples.example2.Customer" xmlTag="Customer"/> 
+
+  <entity name="org.openflexo.xmlcode.examples.example2.CommandIdentifier" xmlTag="CommandIdentifier"> 
+    <property name="identifier" xmlTag="identifier" attribute="YES"/> 
+  </entity> 
+
+  <entity name="org.openflexo.xmlcode.examples.example2.Command" xmlTag="Command"> 
+    <property name="commandIsAlreadyPaid" xmlTag="commandIsAlreadyPaid" attribute="YES"/> 
+    <property name="customer" xmlTag="Customer"/> 
+    <property name="date" xmlTag="date"/> 
+    <property name="articles" xmlTag="Movie,Album" type="vector"/> 
+  </entity> 
+
+  <entity name="org.openflexo.xmlcode.examples.example2.MultimediaArticle" xmlTag="MultimediaArticle" abstract="YES"> 
+    <property name="articleId" xmlTag="articleId" attribute="YES"/> 
+    <property name="price" xmlTag="price" attribute="YES"/> 
+  </entity> 
+
+  <entity name="org.openflexo.xmlcode.examples.example2.Album" xmlTag="Album"> 
+    <property name="author" xmlTag="author"/> 
+    <property name="title" xmlTag="title"/> 
+    <property name="description" text="YES"/>
+    <property name="dateReleased" xmlTag="date"/> 
+  </entity> 
+
+  <entity name="org.openflexo.xmlcode.examples.example2.Movie" xmlTag="Movie"> 
+    <property name="title" xmlTag="title"/> 
+    <property name="description" text="YES"/>
+    <property name="dateReleased" xmlTag="date"/> 
+    <property name="roles" xmlTag="Role" type="vector"/> 
+    <property name="category" xmlTag="cat"/> 
+  </entity> 
+
+  <entity name="org.openflexo.xmlcode.examples.example2.Role" xmlTag="Role"> 
+    <property name="roleName" xmlTag="name" attribute="YES"/> 
+  </entity> 
+
+</model>

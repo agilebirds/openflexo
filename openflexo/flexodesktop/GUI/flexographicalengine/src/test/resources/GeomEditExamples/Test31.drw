@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GeometricSet id="1">
+  <QuadCurve id="2" name="QuadCurve1">
+    <QuadCurveGraphicalRepresentation id="3" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="4" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="5" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="6" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </QuadCurveGraphicalRepresentation>
+    <QuadCurveWithThreePointsConstruction id="7">
+      <P1_ExplicitPointConstruction id="8" point="148.0,358.0" />
+      <CP_ExplicitPointConstruction id="9" point="215.0,212.0" />
+      <P2_ExplicitPointConstruction id="10" point="335.0,271.0" />
+    </QuadCurveWithThreePointsConstruction>
+    <Resulting_FGEQuadCurve id="11" p1="148.0,358.0" p2="335.0,271.0" cp="215.0,212.0" />
+  </QuadCurve>
+  <GeometricDrawingGraphicalRepresentation id="12" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" width="10000.0" height="10000.0" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255">
+    <TextStyle id="13" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+  </GeometricDrawingGraphicalRepresentation>
+</GeometricSet>
+

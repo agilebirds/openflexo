@@ -1,0 +1,118 @@
+#macro(renderBlockFooterButtons $_buttons)
+  #foreach($_b in $_buttons.getInnerWidgets())
+    <div class="denaliBlocFooterButton">
+    #render($_b)
+    </div>
+  #end
+#end
+#set($descriptor = $widget.getContainedDescriptor())
+#*
+* Possibility to add properties that will be included as div param as such in top block header
+* class, position, top, bottom, left and right
+* Dom modif on August 2010
+*
+*#
+
+#set($_needStyle = $falseValue)
+ #if(${widget.getPropertyNamed("class")})
+ 	#set( $_class = ${widget.getPropertyNamed("class").getValue()} )
+ #end
+ #if(${widget.getPropertyNamed("position")})
+ 	#set( $_p = ${widget.getPropertyNamed("position").getValue()} )
+ 	#set( $_position = "position: ${_p};")
+ #end
+ #if(${widget.getPropertyNamed("left")})
+ 	#set( $_le = ${widget.getPropertyNamed("left").getValue()} )
+ 	#set( $_left = "left: ${_le};")
+ 	#set( $_needStyle = $trueValue)
+ #end
+ #if(${widget.getPropertyNamed("right")})
+ 	#set( $_ri = ${widget.getPropertyNamed("right").getValue()} )
+ 	#set( $_right = "right: ${_ri};")
+ 	#set( $_needStyle = $trueValue)
+ #end
+ #if(${widget.getPropertyNamed("top")})
+ 	#set( $_to = ${widget.getPropertyNamed("top").getValue()} )
+ 	#set( $_top = "top: ${_to};")
+ 	#set( $_needStyle = $trueValue)
+ #end
+ #if(${widget.getPropertyNamed("bottom")})
+ 	#set( $_bo = ${widget.getPropertyNamed("bottom").getValue()} )
+ 	#set( $_bottom = "bottom: ${_bo};")
+ 	#set( $_needStyle = $trueValue)
+ #end
+  #if(${widget.getPropertyNamed("width")})
+ 	#set( $_wi = ${widget.getPropertyNamed("width").getValue()} )
+ 	#set( $_width = "width: ${_wi};")
+ 	#set( $_needStyle = $trueValue)
+ #end
+  #if(${widget.getPropertyNamed("height")})
+ 	#set( $_he = ${widget.getPropertyNamed("height").getValue()} )
+ 	#set( $_height = "height: ${_he};")
+    #set( $_needStyle = $trueValue)
+ #end
+#*
+* Modify the div if class, position, top, bottom, left or right poperties
+* this is needed to be able to superpose div
+* Modified by Dom in August 2010
+*#
+ @single   <div 
+ 				#if(${widget.getPropertyNamed("class")}) 
+ 					class="$_class"  
+ 				#else 
+ 					class="denaliBloc" 
+ 				#end id="$widget.getAnchor()" 
+ 				#if($_needStyle) style="$_position $!_left $!_right $!_top $!_bottom $!_width $!_height">
+ 				#else>
+ 				#end
+@end
+## we need to reset in case a bloc is included in a bloc to avoid having properties of top to be kept below
+#set( $_class = "")
+#set( $_position = "")
+#set( $_left = "")
+#set( $_right = "")
+#set( $_top = "")
+#set( $_bottom = "")	
+#set( $_width = "")	
+#set( $_height = "")	
+	
+    #if(!$widget.getHideTable())
+        <div class="denaliBlocHeader" id="id${widget.getFlexoID()}_header">
+            #if($descriptor)
+            <div class="denaliBlocTools" id="id${widget.getFlexoID()}_blocTools">
+                #if($descriptor.hasExcel())
+                    <webobject name="EXCELL_${descriptor.getListName()}_Hyperlink"><webobject name="EXCELL_${descriptor.getListName()}_BUTTON"></webobject></webobject>
+                #end
+                #if($descriptor.hasRefresh())
+                    <webobject name="REFRESH_${descriptor.getListName()}_Link"><webobject name="REFRESH_${descriptor.getListName()}_BUTTON"></webobject></webobject>
+                    <webobject name="REFRESH_${descriptor.getListName()}_HIDDEN"></webobject>
+                #end
+            </div>
+            #end
+            <h3 class="denaliBlocTitle">
+                <a href="javascript: void(0);" onclick="event.returnValue = false; return false;" #if(${widget.getJavascriptToolTip()})title="${widget.getJavascriptToolTip()}"#end>
+                    #if($project.getIsLocalized())
+                        <webobject name="Title_#name()"></webobject>
+                    #else
+                        $generator.escapeStringForHTML(${widget.getTitle()})
+                    #end
+                </a>
+            </h3>
+        </div>
+    #end
+    
+    <div class="denaliBlocContent" id="id${widget.getFlexoID()}_content">
+        #render($widget.getContent())
+    </div>
+    
+    #if(!$widget.getHideTable())
+    	<div class="denaliBlocFooter" id="id${widget.getFlexoID()}_footer">
+        	#if(${widget.getButtonList().size()}>0)
+        	#renderBlockFooterButtons(${widget.getButtonList()})
+        	#end
+            #if(${descriptor.getRepetitionOperator().getHasBatch()})
+                <webobject name="Batch_${descriptor.getListName()}"></webobject>
+            #end
+    	</div>
+    #end
+</div>

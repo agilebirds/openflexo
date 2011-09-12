@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.RoleList" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="0" title="Roles" layout="twocols" font="SansSerif,0,11" name="RolesTab">
+      <Label label="roles" align="center" localize="true" name="SortedRolesVectorLabel" constraints="twocols(location=center;index=0;expandHorizontally=true;expandVertically=false)" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.Role" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.sortedRolesVector" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=true)" name="SortedRolesVector" localize="true" manageDynamicModel="true">
+        <TextFieldColumn data="iterator.name" title="name" columnWidth="80" resizable="true" displayTitle="true" />
+        <TextFieldColumn data="iterator.description" title="description" columnWidth="100" resizable="true" displayTitle="true" />
+        <AddAction method="data.performAddRole" name="new" />
+        <RemoveAction method="data.performDeleteRole(selected)" isAvailable="data.isRoleDeletable(selected)" name="delete" />
+      </Table>
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Roles" lang="French">Rôles</Localized>
+    <Localized key="roles" lang="English">Roles</Localized>
+    <Localized key="roles" lang="French">Rôles</Localized>
+    <Localized key="roles" lang="Dutch">Roles</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="RoleList" />
+</Panel>
+

@@ -1,0 +1,15 @@
+#if(${widget.getDisplayLabel()} && ${widget.getLabelAlign()})
+	#if($project.getIsLocalized())
+		<webobject name="Label_#name()"></webobject>
+	#else
+		$!generator.escapeStringForHTML($widget.getButtonLabel())
+	#end
+#end
+<webobject name="#name()"></webobject>
+#if(${widget.getDisplayLabel()} && !${widget.getLabelAlign()})
+	#if($project.getIsLocalized())
+		<webobject name="Label_#name()"></webobject>
+	#else
+		$!generator.escapeStringForHTML($widget.getButtonLabel())
+	#end
+#end

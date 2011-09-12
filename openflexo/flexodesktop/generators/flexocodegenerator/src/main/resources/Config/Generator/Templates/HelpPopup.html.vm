@@ -1,0 +1,52 @@
+<webobject name = "headerFooter">
+	<webobject name = "FORM">
+		<webobject name = "HIDDEN_FORM"></webobject>
+		<webobject name = "hasParents">
+        	<strong>
+				Path:
+				<webobject name = "parents">
+					&gt;
+            		<webobject name = "itemParentLink">
+              			<webobject name = "itemParentName"></webobject>
+            		</webobject>
+          		</webobject>
+			</strong>
+		</webobject>
+		<div style="text-align: left;">
+			<webobject name = "List_Descriptions">
+				<h2><webobject name="String_ListDescriptionTitle"></webobject> description:</h2>
+				<webobject name="String_ListDescription"></webobject>
+			</webobject>
+		
+			<webobject name = "hasScreenshoot">
+				<h2>Screenshot:</h2>
+				<div style="text-align: center">
+					<webobject name = "screen"></webobject>
+				</div>
+	      	</webobject>
+	      	<webobject name = "hasButtons">
+	      		<h2>Actions:</h2>
+	      		<ul>
+			    	<webobject name = "buttonRep">
+			      		<li style="padding-bottom: 2px;">
+							<webobject name = "itemButtonIsImage">
+								<webobject name = "buttonImage"></webobject>
+			      			</webobject>
+							<webobject name = "itemButtonIsHyperlink">
+								<webobject name = "hyperlinkButtonView">
+									<webobject name = "hyperlinkButtonContent"></webobject>
+								</webobject>
+			      			</webobject>
+							<webobject name = "itemButtonIsCustom">
+								<span class = "denaliButton">
+									<webobject name = "customButtonView"></webobject>
+								</span>
+							</webobject>
+						</li>
+						<webobject name = "String_ButtonDescription"></webobject>
+					</webobject>
+				</ul>
+			</webobject>
+		</div>
+	</webobject>
+</webobject>

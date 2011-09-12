@@ -1,0 +1,111 @@
+<inspector title = "Operation Node" inheritsfrom ="FlexoNode.inspector" inspectedClassName="org.openflexo.foundation.wkf.node.OperationNode">
+
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="operationComponent" label="operation_component" widget="CUSTOM" constraint="1">
+			<param name="className" value="org.openflexo.components.widget.OperationComponentInspectorWidget"/>
+		</property>
+		<property name="tabComponent" label="selectedTab" widget="DROPDOWN" depends="operationComponent,operationComponent.wOComponent" conditional="(operationComponent!=null AND operationComponent.hasTabContainer=true)" constraint="2">
+			<param name="dynamiclist" value="availableTabs"/>
+			<param name="format" value="name"/>
+		</property>
+		
+		<property name="isSynchronized" label="is_synchronized" widget="CHECKBOX" constraint="2">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+		<property name="componentInstance.flexoID" label="component_instance_id" widget="READ_ONLY_TEXT_FIELD" constraint="0">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="cssSheet" label="css_sheet" widget="DROPDOWN" constraint="3">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="format" value="name"/>
+		</property>
+		<property name="lastUpdateAsString" label="last_update" widget="READ_ONLY_TEXT_FIELD" constraint="4">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+	</tab>
+	
+	<tab name="Doc" index="2">
+		<property name="acronym" label="acronym" widget="TEXT_FIELD" constraint="1">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+	</tab>
+	<tab name="Data" index="3">
+		<property_list name="componentInstance.bindings" label="bindings" depends="operationComponent" conditional="operationComponent!=null" constraint="5">
+		  <param name="visible_row_count" value="5"/>
+		  <param name="row_height" value="20"/>
+		  <property_list_column name="bindingDefinition.variableName" label="name" widget="TEXT_FIELD">
+			<param name="column_width" value="80"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="bindingDefinition.type" label="type" widget="CUSTOM">
+			<param name="column_width" value="100"/>
+			<param name="resizable" value="true"/>
+			<param name="className" value="org.openflexo.components.widget.DMTypeInspectorWidget"/>
+			<param name="format" value="simplifiedStringRepresentation"/>
+			<param name="project" value="project"/>
+		  </property_list_column>
+		  <property_list_column name="bindingDefinition.isMandatory" label="mandatory" widget="CHECKBOX">
+			<param name="column_width" value="60"/>
+			<param name="resizable" value="false"/>
+		  </property_list_column>
+		  <property_list_column name="bindingValue" label="value" widget="CUSTOM">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="bindingDefinition"/>			
+			<param name="format" value="stringRepresentation"/>
+			<param name="column_width" value="150"/>
+		  </property_list_column>
+		  <property_list_action name="new" type="ADD" method="componentInstance.createNewBinding"/>
+		  <property_list_action name="delete" type="DELETE" method="componentInstance.deleteBinding" isAvailable="componentInstance.isBindingDeletable"/>
+		</property_list>
+	</tab>
+	<tab name="Stats" index="5">
+		<property name="statistics.infoLabel" widget="LABEL" constraint="0">
+			<param name="align" value="center"/>
+			<param name="width" value="200"/>
+			<param name="height" value="60"/>
+		</property>
+		<property name="statistics.includeBeginEndNode" label="include_begin_end" widget="CHECKBOX" constraint="0">
+		</property>
+		<property name="statistics.actionCount" label="# actions" widget="READ_ONLY_TEXT_FIELD" depends="statistics,statistics.includeBeginEndNode" conditional="statistics.includeBeginEndNode=true" constraint="1">
+		</property>
+		<property name="statistics.realActionCount" label="# actions" widget="READ_ONLY_TEXT_FIELD" depends="statistics,statistics.includeBeginEndNode" conditional="statistics.includeBeginEndNode=false" constraint="1">
+		</property>
+		<property name="statistics.refresh" label="refresh" widget="BUTTON" constraint="14">
+		</property>
+	</tab>
+	
+    <tab name="Operation Metrics" index="8" layout="DEFAULT" visibilityContext="METRICS">
+        <property_list name="metricsValues" label="metrics" constraint="0">
+          <param name="visible_row_count" value="5"/>
+          <param name="row_height" value="20"/>
+          <property_list_column name="metricsDefinition.name" label="name" widget="TEXT_FIELD">
+            <param name="tooltip" value="metricsDefinition.description"/>
+          </property_list_column>
+          <property_list_column name="this" label="value" widget="CUSTOM">
+            <param name="column_width" value="80"/>
+            <param name="resizable" value="true"/>
+            <param name="customRendering" value="true"/>
+            <param name="format" value="value.toString"/>
+            <param name="className" value="org.openflexo.components.widget.MetricsValueInspectorWidget"/>
+          </property_list_column>
+          <property_list_column name="unit" label="unit" widget="TEXT_FIELD">
+            <param name="column_width" value="50"/>
+            <param name="resizable" value="true"/>
+            <param name="isEditable" value="metricsDefinition.isUnitEditable"/>
+          </property_list_column>
+          <property_list_column name="description" label="additional_info" widget="TEXT_FIELD">
+            <param name="column_width" value="120"/>
+            <param name="resizable" value="true"/>
+          </property_list_column>
+          <property_list_action name="new" type="ADD" method="addMetrics"/>
+          <property_list_action name="delete" type="DELETE" method="deleteMetrics"/>
+        </property_list>
+    </tab>
+	
+</inspector>

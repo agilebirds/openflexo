@@ -1,0 +1,39 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = "FUVC_VC_ID"; 
+            name = channelID; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = "FUVC_USER_ID"; 
+            name = userID; 
+            prototypeName = id; 
+        }
+    ); 
+    className = FCMNUserVC; 
+    classProperties = (userID, channelID, user, channel); 
+    externalName = "FCMN_USER_VC"; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {"_clientClassPropertyNames" = (userID, channelID, user, channel); }; 
+    name = FCMNUserVC; 
+    primaryKeyAttributes = (channelID, userID); 
+    relationships = (
+        {
+            destination = FCVerticalChannel; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = channelID; sourceAttribute = channelID; }); 
+            name = channel; 
+        }, 
+        {
+            destination = FCUser; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = userID; sourceAttribute = userID; }); 
+            name = user; 
+        }
+    ); 
+}

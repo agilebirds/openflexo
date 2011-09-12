@@ -1,0 +1,34 @@
+#macro(nameForInput)@single
+    #if(${widget.isInPopup()} || ${widget.isInRepetition()})
+        nameFor#capName()
+    #else 
+        "#name()"#end@end#end
+
+#if($generator.isPrototype() && !${widget.getBindingValue().isBindingValid()})
+	#if($widget.getIsAcceptableForAnyProcessInstanceDictionary())
+		#if(${widget.isInRepetition()})
+			#set($value = "${widget.repetition().getHTMLListDescriptor().getItemName()}.${widget.getProcessInstanceDictionaryKey()}")
+		#else
+			#set($value = "currentProcessBusinessData.${widget.getProcessInstanceDictionaryKey()}")
+		#end
+	#else
+		#set($value = "#name()")
+	#end
+#else
+	#set($value = ${widget.getBindingValue().getWodStringRepresentation()})
+#end
+#if($widget.getIsMandatory())
+#name(): WDLTextarea{
+    validationLabel = "#displayable_name()";
+    isMandatory = true;
+#else
+#name(): WOText{
+#end ## mandatory
+    value = $value;
+    class = "DLExtensible";
+    rows = ${widget.getRows()};
+    name = #nameForInput();
+    #tooltipAsTitle()
+    onChange = "hasChanged = true;";
+#additionalBindings()
+}

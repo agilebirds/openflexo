@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tab layout="DEFAULT">
+	<property name="generatedResourceModifiedChoice" label="when_a_resource_is_modified" widget="RADIOBUTTON_LIST" constraint="0">
+		<param name="format" value="localizedName"/>
+		<param name="columns" value="1"/>
+	</property>
+		<property name="validateBeforeGenerating" label="validate_before_generating" widget="CHECKBOX" constraint="1"/>
+		<property name="saveBeforeGenerating" label="save_before_generating" widget="CHECKBOX" constraint="2"/>
+		<property name="automaticallyDismissUnchangedFiles" label="automatically_dismiss_unchanged_files" widget="CHECKBOX" constraint="3"/>
+</tab>

@@ -1,0 +1,155 @@
+#*********
+* Macros *
+*********#
+#macro(valuesList)
+#foreach( $key in $widget.getValueList())#if (${foreach.index} > 0), #end"${generator.escapeStringForJava(${key.toString()})}"#end
+#end
+#************
+* Variables *
+************#
+#set($quotes = '"')
+#set($type = "String")
+#set($simple = true)
+#set($value = ${generator.escapeStringForJava($widget.getValue())})
+
+## Template
+#if ($widget.isDate())
+ #set($simple = false)
+ #set($type = "Date")
+ #if($widget.getValue())
+  #set($value = "new $type()")
+ #else
+  #set($value = "null")
+ #end
+#elseif($widget.isInteger())
+ #set($simple = false)
+ #set($type = "Integer")
+ #if($widget.getValue())
+  #set($value = "new $type($widget.getValue())")
+ #else
+  #set($value = "null")
+ #end
+#elseif($widget.isFloat())
+ #set($simple = false)
+ #set($type = "Float")
+ #if($widget.getValue())
+  #set($value = "new $type($widget.getValue())")
+ #else
+  #set($value = "null")
+ #end
+#elseif($widget.isDouble())
+ #set($simple = false)
+ #set($type = "Double")
+ #if($widget.getValue())
+  #set($value = "new $type($widget.getValue())")
+ #else
+  #set($value = "null")
+ #end
+#elseif($widget.isKV())
+ #set($simple = false)
+#else
+ #if($widget.getIsMandatory())
+  #set($simple = false)
+ #end
+ #if($widget.getValue())
+  #set($value = "$quotes${generator.escapeStringForJava($widget.getValue())}$quotes")
+ #else
+  #set($value = "null")
+ #end
+#end
+#if($generator.isPrototype())
+  #if(!${widget.getBindingValue().isBindingValid()} && !${widget.getIsAcceptableForAnyProcessInstanceDictionary()})
+  #getset($type "#name()" $value)
+  #end
+#end
+#if(!$simple)
+    #set ($validationDicName = "#name()ValidationDic")
+    #if(${widget.isInHTMLList()})
+    private NSMutableDictionary ${validationDicName}${widget.getHTMLListDescriptor().getListName()} = new NSMutableDictionary();
+
+    #set($code = "        ${validationDicName}${widget.getHTMLListDescriptor().getListName()}.removeAllObjects();$n")
+        
+    #void($listInstanciation.append($code))
+    
+    public NSDictionary $validationDicName() {
+        return (NSDictionary)${validationDicName}${widget.getHTMLListDescriptor().getListName()}.objectForKey($widget.getHTMLListDescriptor().getItemName());
+    }
+    
+    public void set${generator.capitalize($validationDicName)}(NSDictionary dic) {
+        if (dic!=null)
+            ${validationDicName}${widget.getHTMLListDescriptor().getListName()}.setObjectForKey(dic,${widget.getHTMLListDescriptor().getItemName()});
+        else
+            ${validationDicName}${widget.getHTMLListDescriptor().getListName()}.removeObjectForKey(${widget.getHTMLListDescriptor().getItemName()});
+    }
+#else
+    #void($validationDictionaries.add($validationDicName))
+    /** Validation dictionary for #name() textfield */
+    protected NSDictionary $validationDicName;
+#end
+#if($widget.isAutocomplete())
+#if($widget.getIsDynamic())
+/**
+    * This method is dynamically invoked by the AutoCompleteDA class when the auto complete component
+    * tries to retrieve the different possibilities according to the data the user has entered
+    */
+    public static WOActionResults #name()AutoCompleteDirectAction(WDLDirectAction da) {
+        // What is typed in the textfield so far.
+        String data = (String)da.request().formValueForKey("enteredData");
+        StringBuffer sb = new StringBuffer();
+        
+        Enumeration en = #name()StaticArrayOfValues().objectEnumerator();
+        while (en.hasMoreElements()) {
+            sb.append((String)en.nextElement());
+            if (en.hasMoreElements())
+                sb.append(#name()StaticDelim());
+        }
+        
+        WOResponse response = new WOResponse();
+        response.setContent(sb.toString());
+        response.setStatus(WOResponse.HTTP_STATUS_OK);
+        return response;        
+    }
+    
+    /**
+    * The delimitor that will be used in the javascript to split the returned String.<br>
+    * {@link #name()AutoCompleteDirectAction}
+    */
+    public String #name()Delim() {
+        return #name()StaticDelim();
+    }
+    
+    private static String #name()StaticDelim() {
+        return ";";
+    }
+#end ## dynamic
+    /** type: String */
+    private static NSArray #name()StaticArrayOfValues() {
+        return #name()ArrayOfValues;
+    }
+    
+    public NSArray #name()ArrayOfValues() {
+        return #name()StaticArrayOfValues();
+    }
+    
+    private static NSArray #name()ArrayOfValues = new NSArray(new Object[]{#valuesList()});
+
+#end ## autocomplete
+#end ##!simple
+
+#tooltipAsJavaMethod()
+
+#if(${widget.isInPopup()})
+    public String nameFor#capName()()
+    {
+        #if(${widget.isInRepetition()})
+            return "#name()" + uniqueIdentifierForName() + ${widget.getHTMLListDescriptor().getIndexName()};
+        #else
+            return "#name()" + uniqueIdentifierForName();
+        #end
+    }
+#elseif(${widget.isInRepetition()})
+    public String nameFor#capName()()
+    {
+        return "#name()" + ${widget.getHTMLListDescriptor().getIndexName()};
+    }
+#end

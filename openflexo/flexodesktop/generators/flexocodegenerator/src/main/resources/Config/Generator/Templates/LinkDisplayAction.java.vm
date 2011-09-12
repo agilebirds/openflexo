@@ -1,0 +1,72 @@
+#if($widget.getSubmitForm() || ${widget.isInRepetition()})
+	#buttonValue()
+	#if($generator.isPrototype())
+    	#linkDictionnary()
+    #end
+#else
+    /**
+    * Return the URL where the button #name() goes.
+    * @return the URL where the button #name() goes.
+    */
+    public String getUrlFor#capName()() {
+    #set($vector = $widget.getAllActionNodesLinkedToThisButton())
+    #void($generator.sortVectorOfModelObject($vector))
+    #foreach($action in $vector)
+        if (getOperationComponentInstanceID()==${action.getOperationNode().getComponentInstance().getFlexoID()}){ //${generator.getJavaString(${action.getOperationNode().getName()})}
+            #if( $action.getNextOperationsForAction().size()>0 )
+				#foreach($workflowPath in ${action.getNextOperationsForAction()})
+					#set($nextOp = ${workflowPath.getOperationNode()})
+					#if(!$nextop)
+    					#set($nextop = ${ci.getOperationNode()})
+					#end
+					#if($nextOp)
+						#set($nextci = ${nextOp.getComponentInstance()})
+						return @single ${nextci.getComponentDefinition().getName()}.getUrlForOperation${generator.getJavaString($!{nextci.getOperationNode().getName()},$trueValue)}_${nextci.getFlexoID()}(context()
+						#foreach($b in $nextci.getBindings())
+							#set($type = ${b.getBindingDefinition().getType().getBaseEntity()})
+							#if($b.getBindingValue() && ${b.getBindingValue().isStaticValue()})
+								, ${b.getBindingValue().getCodeStringRepresentation()}
+							#elseif($widget.isInRepetition() && $type == ${widget.getHTMLListDescriptor().getRepetitionOperator().getEntity()})
+								, globalIDForItemRowOf${widget.getHTMLListDescriptor().getListName()}()
+							#elseif(${componentDefinition.getBindingDefinitionTyped($type).getVariableName()})
+								#if($type.isDMEOEntity())
+									, #javaAccessor(${componentDefinition.getBindingDefinitionTyped($type).getProperty()}).__globalID()
+								#else
+									, get${generator.capitalize(${componentDefinition.getBindingDefinitionTyped($type).getVariableName()})}()
+								#end ## end of isDMEOEntity()
+							#else
+							, ${b.getBindingDefinition().getType().getDefaultValue()} 
+							#end
+						#end ## foreach bindings
+						#if($nextci.getComponentDefinition().getHasTabContainer())
+    						#if($action.getTabComponent() && $nextci.getComponentDefinition().getWOComponent().getTabWidgetForTabComponent($action.getTabComponent()))
+    							,"$nextci.getComponentDefinition().getWOComponent().getTabWidgetForTabComponent($action.getTabComponent()).getTabKeyForGenerator()"
+    						#else
+    							, null 
+    						#end
+						#end);@end
+        				#set ($entityFetched=false)
+        				#set($hasAtLeastOneOp = true)
+					#end
+				#end ## foreach nextoperations
+			#end ## end of if action.getNextOperationsForAction().size()>0
+			#if(!$hasAtLeastOneOp)
+				return "#";
+			#end
+		}
+	#end ## foreach action in vector
+		return "#";
+	}
+#end
+    
+public boolean show#capName()() {
+#set($vector = $widget.getAllActionNodesLinkedToThisButton())
+#void($generator.sortVectorOfModelObject($vector))
+#foreach($action in $vector)
+    #if($foreach.index>0)else #end if(getOperationComponentInstanceID()==#componentInstance(${action.getOperationNode().getComponentInstance()})) {
+        return $widget.isInstantiatedInOperation(${action.getOperationNode()});
+    }
+#end
+    return false;
+}
+#renderLinkContent($widget)

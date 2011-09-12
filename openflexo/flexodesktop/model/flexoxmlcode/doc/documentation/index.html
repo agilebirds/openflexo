@@ -1,0 +1,294 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+  <html>
+    <head>
+      <title>XMLCoDe</title>
+    </head>
+    
+    <body>
+      <center>
+	<p>
+	</p>
+	<h1>XMLCoDe</h1>
+	<h2>A free implementation of an XML COder/DEcoder:<br>a Java XML serialization/deserialization tool</h2>
+      </center>
+      
+	
+	<p>This package provides tools for easily and automatically serializing/deserializing Java objects 
+    to/from XML strings or streams. It provides a way to easily implement an XML persistent object model.
+    It features support for a scheme for accessors methods use, support for an advanced inheritance scheme, 
+    native support for array, vector, and hashtable data structures, as well as native support to 
+    serialize/deserialize graph structures (cross-referenced objects).</p>
+	
+	<p>Version 0.3 of this sofware was initially released under the <a href="http://www.gnu.org/licenses/gpl.html">Library GPL licence</a> and is available for
+	download on <a href="http://picolibre.enst-bretagne.fr/projects/xmlcode/">picolibre.enst-bretagne.fr/projects/xmlcode/</a></p>
+	
+	<p>Since this version, this library has been enhanced by many new powerfull features including:
+	<ul>
+	   <li>Support for graph-structure serialization/deserialization</li>
+	   <li>Support for builders and finalizers</li>
+	   <li>Support for using XMLCoDe as XML generator</li>
+	   <li>Many other new features, see <a href="features.html">Detailed review and discussion of main features</a></li>
+	</ul>
+	
+	<p>Version 1.0 including all those new features has been released under <a href="http://www.gnu.org/licenses/lgpl.html">Lesser GPL licence</a>
+	for a use in commercial software.</p>
+	
+	<p>Inquiries & questions to author of this software at <a href="mailto:sylvain.guerin@denali.be">sylvain.guerin@denali.be</a>
+	or at  <a href="mailto:info@denali.be">info@denali.be</a></p>
+	
+	<p>
+	</p>
+	<hr> 
+	<p>
+	</p>
+
+    <center>
+      <a href="#main_features">[Main features]</a> 
+      <a href="#tech_documentation">[Technical documentation]</a> 
+      <a href="#this_distribution">[This distribution]</a> 
+      <a href="#licensing_issues">[Licensing issues]</a> 
+      <a href="#compilation">[Compilation]</a> 
+      <a href="#running_examples">[Examples]</a> 
+      <a href="#installation">[Installation]</a> 
+    </center>
+
+	<p>
+	</p>
+	<hr> 
+	<p>
+	</p>
+
+
+      <h2><a name="main_features"/>Main features</h2>
+      
+      <ul>
+	
+	<li><p>This package provides tools for automatically serializing and 
+	    deserializing Java objects to/from XML strings and streams. In 
+	    other words, this package provides a way to easily implement a
+	    XML-persistant object model.
+	  </p></li>
+	<li><p>These operations are processed in a very easy and efficient 
+	    manner, without need to specify anything else.
+	  </p></li>
+	<li><p>Any object could be handled by this package, since
+	    objects need only implement an empty interface XMLSerializable.
+	  </p></li>
+	<li><p>To implement this, you need to define a external mapping model, where 
+	    the mapping between Java world and XML tags should be defined
+	    (you should also decide which data you want to serialize, in
+	    order to get a consistent model).<br>
+	    See <a href="../javadoc/index.html">package documentation</a>
+	    and example 1 for more explanations on that process. Soon an 
+	    'how-to' documentation.
+	  </p></li>
+	<li><p>This package supports an advanced object inheritance scheme.<br>
+	      See example 2 to show those issues.
+	  </p></li>
+	<li><p>This package supports accessors methods use scheme, which 
+	    allow you to automatically maintain a consistent object model.<br>
+	      See examples 1 & 2 to show those issues.
+	  </p></li>
+	<li><p>Advanced data structures vector and hashtable are natively 
+	    supported.<br>
+	      See example 2 to show examples of those data structures.
+	  </p></li>
+	<li><p>Other custom data structures could be easily supported 
+	    through use of accessors methods. (NB: those developpements are
+	    welcome to enhance the current XMLCoDe version).
+	  </p></li>
+        <li><p>This package works with/over parser and transformer 
+	  softwares.<br>
+	  <i>NOTA:  This distribution comes with an implementation of
+	    a parser software (JAXP1.1) and a transformer (Apache Xalan 
+	    Transformer) but you can easily change this for other software.</i>
+	  </p></li>
+	<li><p>See the <a href="features.html">detailed review and discussion
+	    of/on main features</a> for more informations.
+	  </p></li>
+      </ul>
+
+	<p>
+	</p>
+	<hr> 
+	<p>
+	</p>
+
+      <h2><a name="tech_documentation"/>Technical documentation</h2>
+      
+      <ul>
+      <li>
+      		<p><a href="features.html">Detailed review and discussion of main features</a></p>
+      		<p>This document review all general features provided by this library. This document should be read prior
+      		to all other documents, as it contains general informations to understand coding/decoding process.</p>
+      </li>
+      
+      <li>
+     		<p><a href="getting_started.html">Getting started: writing a model (Java/XML mapping), a short reference guide</a></p>
+     		<p>This document introduce you with a basic example to the writing of an XMLMapping and according Java classes.</p>
+      </li>
+      
+      <li>
+     		<p><a href="mapping_graph_structures.html">Advanced feature: mapping graph structures</a></p>
+     		<p>This document introduce you with internal scheme used by XMLCoDe to serialize and deserialize
+     		graph structures, by maintaining reference identifiers.</p>
+      </li>
+      
+      <li>
+     		<p><a href="advanced_mapping_definition.html">Advanced XML mapping definitions: contextual XML Tags</a></p>
+     		<p>This document introduce you with a more complex example 
+  			  of mapping definition in the context of graph structures. We will see here how to code 
+  			  complex data structures with graphs, and inheritance. We will see how contextual XML tags
+		      technique may be efficiently used to improve code maintainance.</p>
+      </li>
+      
+      <li>
+     		<p><a href="structured_serialization.html">Structured serialization: how to make your serialized stucture stable ?</a></p>
+     		<p>We saw in previous article that Flexo allows object graph serialization. We saw 
+     		that in some cases, serialization results are not really human-readable. Furthermore, 
+     		in the context of concurrent modifications (CVS context), conflicts resolution is difficult
+     		as serialized structure is not stable. This document deals with a way to ensume stable
+     		serialized structure.</p>
+      </li>
+      
+      <li>
+     		<p><a href="id_persistance.html">How to make identifier persistant when coding object graph structure ?</a></p>
+     		<p>When trying to work in a collaborative context, some problems may arise because identifiers used by
+    		XMLCoDe may change (and be unstable) as they are internally allocated by XMLCoDe. This document explain 
+    		how to resolve this problem by using custom identifiers, which might be stable in time.</p>
+      </li>
+    
+      <li>
+      		<p><a href="../javadoc/index.html">The package documentation</a></p>
+      		<p>You may also want to browse JavaDoc API documentation</p>
+      </li>
+      </ul>
+
+	<p>
+	</p>
+	<hr> 
+	<p>
+	</p>
+
+
+    <h2><a name="this_distribution"/>This distribution</h2>
+    
+    <p>The binary distribution is released as a jar file containing classes
+    defined in fr.enstb.xmlcode package (contains XMLCoder, XMLDecoder and XMLMapping classes).</p>
+
+    <p>If your Java
+    environment does not contain DOM-model nor JDOM-model, you might want to use following provided jars 
+    <a href="../distribution/lib/crimson.jar">crimson.jar</a> (see <a href="http://www.w3.org/DOM/">http://www.w3.org/DOM/</a>) 
+    and <a href="../distribution/lib/jdom-1.0.jar">jdom-1.0.jar</a>
+    (see <a href="http://www.jdom.org/">http://www.jdom.org/</a>)</p>
+ 
+    <p>To run examples you also may need JUnit library, also available with this software here: 
+    <a href="../distribution/lib/junit-3.8.1.jar">junit-3.8.1.jar</a>.</p>
+
+    <p>The source distribution contains all the sources. You need JDK to compile it. This source distribution 
+      contains also some examples.</p>
+ 
+    <p>The API documentation contains the Javadoc for XMLCoDe.</p>
+ 
+ 	<p>
+	<ul>
+	    <li><p>Download the source distribution <a href="../distribution/xmlcode-1.0-src.tar.gz">xmlcode-1.0-src.tar.gz</a></p></li>
+	    <li><p>Download the binary distribution <a href="../distribution/xmlcode-1.0.jar">xmlcode-1.0.jar</a></p></li>
+	    <li><p>Download Sax Parser jar <a href="../distribution/lib/crimson.jar">crimson.jar</a></p></li>
+	    <li><p>Download JDom library library jar <a href="../distribution/lib/jdom-1.0.jar">jdom-1.0.jar</a></p></li>
+	    <li><p>Download JUnit library jar <a href="../distribution/lib/junit-3.8.1.jar">junit-3.8.1.jar</a></p></li>
+	    <li><p>Download the javadoc api <a href="../distribution/xmlcode-1.0-api-doc.tar.gz">xmlcode-1.0-api-doc.tar.gz</a></p></li>
+	    <li><p>Consult the <a href="../javadoc/index.html">JavaDoc API</a></p></li>
+	</ul>
+	</p>
+
+ 
+	<p>
+	</p>
+	<hr> 
+	<p>
+	</p>
+
+    <h2><a name="licensing_issues"/>Licensing issues</h2>
+    
+  	    <p>XMLCoDe project - A free java implementation of an XML coder/decoder</p>
+  	    <p>Copyright (C) 2001-2007  Sylvain Guerin</p>
+
+		<p>This library is free software; you can redistribute it and/or
+		modify it under the terms of the GNU Lesser General Public
+		License as published by the Free Software Foundation; either
+		version 2.1 of the License, or (at your option) any later version.</p>
+
+		<p>This library is distributed in the hope that it will be useful,
+		but WITHOUT ANY WARRANTY; without even the implied warranty of
+		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+		Lesser General Public License for more details.</p>
+
+		<p>You should have received a copy of the GNU Lesser General Public
+		License along with this library; if not, write to the Free Software
+		Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA</p>
+
+	<p>
+	</p>
+	<hr> 
+	<p>
+	</p>
+
+    <h2><a name="compilation"/>Compilation</h2>
+    
+    <p>Compilation should be no problem (if you've downloaded the source and got a Java environment !) assuming that
+    your JDK environment contains DOM and JDOM or that those libraries are present in your classpath.</p>
+    
+    <p>If your Java
+    environment does not contain DOM-model nor JDOM-model, you might want to use following provided jars 
+    <a href="../distribution/lib/crimson.jar">crimson.jar</a> (see <a href="http://www.w3.org/DOM/">http://www.w3.org/DOM/</a>) 
+    and <a href="../distribution/lib/jdom-1.0.jar">jdom-1.0.jar</a>
+    (see <a href="http://www.jdom.org/">http://www.jdom.org/</a>)</p>
+    
+    <p>To run examples you also may need JUnit library, also available with this software here: <a href="../distribution/lib/junit-3.8.1.jar">junit-3.8.1.jar</a>.</p>
+    
+ 	<p>
+	</p>
+	<hr> 
+	<p>
+	</p>
+
+    <h2><a name="running_examples"/>Running examples</h2>
+    
+    <p>
+      There are five examples contained in this distribution. They are located
+      in the <tt>src/test/java/examples</tt> directory (example1, example2, example3, example4 and example5 
+      directories).</p> 
+      <p>Those examples are packaged as JUnit tests and assume that you've got JUnit library in your JDK environment.
+    </p>
+
+	<p>
+	</p>
+	<hr> 
+	<p>
+	</p>
+
+    <h2><a name="installation"/>Installation</h2>
+    
+    <p>
+      To use this library, you just have to set you classpath variable in order
+      to include <a href="../distribution/xmlcode-1.0.jar">xmlcode-1.0.jar</a>.
+    </p>
+    
+       <p>If your Java
+    environment does not contain DOM-model nor JDOM-model, don't forget to include following
+     provided jars in your classpath
+    <a href="../distribution/lib/crimson.jar">crimson.jar</a>
+    and <a href="../distribution/lib/jdom-1.0.jar">jdom-1.0.jar</a></p>
+ 
+    
+  
+    <hr>
+    <address><a href="mailto:sylvain.guerin@denali.be">Sylvain Guerin</a></address>
+<!-- Created: Fri Dec  7 17:47:50 CET 2001 -->
+<!-- hhmts start -->
+Last modified: Wed Jan 24 10:58:32 CET 2007
+<!-- hhmts end -->
+  </body>
+</html>
+

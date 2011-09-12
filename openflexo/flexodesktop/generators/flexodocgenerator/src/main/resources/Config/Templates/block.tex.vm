@@ -1,0 +1,145 @@
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (? extends DGLatexGenerator)
+* - object: the object for which we are generating the doc (FlexoModelObject)
+* - repository: the current repository for which we generate the doc (DGRepository)
+* - block: the block for which we are generating the doc (IETopComponent-->IEBlocWidget,IEHTMLTableWidget,IESequenceTab,IESequenceTopComponent)
+* - blockSectionLevel: the LaTeX section to use for this section (section, subsection, paragraph, subparagraph)
+* - widgetsToIgnore: the IEWidget objects to not describe in here
+*   N.B: the block must either be set before calling this template with the parse directive or with the provided velocity context
+*#
+
+#set($blockNumber = $block.getIndex()+1)
+#if(!${blockSectionLevel})#set($blockSectionLevel="subparagraph")#end
+#if(!${buttonsToIgnore})#set($buttonsToIgnore=${generator.getNewVector()})#end
+
+\${blockSectionLevel}{Block #if(${block.getTitle()})#escape(${block.getTitle()})#else \#$blockNumber #end}
+#set($count = 0)
+#foreach($button in ${block.getHyperlinks()})
+#if(!${widgetsToIgnore.contains($button)})#set($count = $count + 1)#end
+#end
+#if($count>0)
+Here is a description of the buttons available on this screen.\doitemsep
+\begin{itemize}
+#foreach($button in ${block.getHyperlinks()})
+#if(!$button.getDontGenerate() && !${widgetsToIgnore.contains($button)})
+\item\textbf{$generator.getImageString(${button})#if(${button.getFuncName()}): #format(${button} ${button.getFuncName()})#end}\nopagebreak
+\begin{itemize}
+\item Label: #format($button ${button.getCalculatedLabel()})
+\item Short desc.: #description($button)
+#if(${button.getBehavior()})\item Behavior: #format(${button} ${button.getBehavior()})#end
+#if(${button.getTooltip()})\item Tooltip: #prepare(${button.getTooltip()})#end
+#if(${button.getConfirmMessage()})\item Confirmation message: #prepare(${button.getConfirmMessage()})#end
+#if(${button.getPopupComponentDefinition()})\item This opens the following popup: \hyperlink{$generator.getReference(${button.getPopupComponentDefinition()})}{${button.getPopupComponentDefinition().getName()} p.\pageref*{$generator.getReference(${button.getPopupComponentDefinition()})}}#end
+\end{itemize}
+#end## end of if dont generate and ignore
+#end## end of foreach buttons
+\end{itemize}\myitemsep
+#else
+There are no buttons nor links in this block
+#end## end of if count>0
+
+Here are all the editable fields \medskip
+\begin{inputtable}
+#foreach($tf in ${block.getTextfields()})
+#if(!$tf.getDontGenerate() && !${widgetsToIgnore.contains($tf)})
+\inputrow
+  {$tf.getFlexoID()}
+  {\labeldescription
+    {#format($tf ${tf.getCalculatedLabel()})}
+    {#description($tf)}
+  }
+  {Textfield}
+  {#if($tf.isText()) #if($tf.getFormatType())${tf.getFormatType().getName()}#else Text#end #else ${tf.getFieldType().getName()} #end}
+  {#if($tf.getExampleValueIsDefaultValue())#format($tf $tf.getValue()) #end}
+  {#if($tf.getIsMandatory())Y #else N #end}
+  #end ## end if dont generate
+#end
+#foreach($ta in ${block.getTextareas()})
+#if(!$ta.getDontGenerate() && !${widgetsToIgnore.contains($ta)})
+\inputrow
+  {$ta.getFlexoID()}
+  {\labeldescription
+    {#format($ta ${ta.getCalculatedLabel()})}
+    {#description($ta)}
+  }
+  {Textarea}
+  {Text}
+  {#if($ta.getExampleValueIsDefaultValue())#format($ta $ta.getValue()) #end}
+  {#if($ta.getIsMandatory())Y #else N #end}
+  #end ## end if dont generate
+#end
+#foreach($dd in ${block.getDropdowns()})
+#if(!$dd.getDontGenerate() && !${widgetsToIgnore.contains($dd)})
+\inputrow
+  {$dd.getFlexoID()}
+  {\labeldescription
+    {#format($dd ${dd.getCalculatedLabel()})}
+    {#description($dd)}
+  }
+  {Dropdown}
+  {#if($dd.isDKV())Key-Value#else Text#end}
+  {#if($dd.isDKV() && $dd.getDomain())\hyperlink{$generator.getReference($dd.getDomain())}{${dd.getDomain().getName()}}#else #if($dd.getExampleValueIsDefaultValue())#list($dd.getValueList()) #end #end}
+  {}
+  #end ## end if dont generate
+#end
+#foreach($dd in ${block.getBrowsers()})
+#if(!$dd.getDontGenerate() && !${widgetsToIgnore.contains($dd)})
+\inputrow
+  {$dd.getFlexoID()}
+  {\labeldescription
+    {#format($dd ${dd.getCalculatedLabel()})}
+    {#description($dd)}
+  }
+  {Browser}
+  {#if($dd.isDKV())Key-Value#else Text#end}
+  {#if($dd.isDKV() && $dd.getDomain())\hyperlink{$generator.getReference($dd.getDomain())}{${dd.getDomain().getName()}}#else #if($dd.getExampleValueIsDefaultValue())#list($dd.getValueList()) #end #end}
+  {}
+  #end ## end if dont generate
+#end
+#foreach($cb in ${block.getCheckboxes()})
+#if(!$cb.getDontGenerate() && !${widgetsToIgnore.contains($cb)})
+\inputrow
+  {$cb.getFlexoID()}
+  {\labeldescription
+    {#format($cd ${cb.getCalculatedLabel()})}
+    {#description($cb)}
+  }
+  {Checkbox}
+  {Boolean}
+  {#if($cb.getExampleValueIsDefaultValue())$cb.getValue() #end}
+  {}
+  #end ## end if dont generate
+#end
+#foreach($rb in ${block.getRadios()})
+#if(!$rb.getDontGenerate() && !${widgetsToIgnore.contains($rb)})
+\inputrow
+  {$rb.getFlexoID()}
+  {\labeldescription
+    {#format($rb ${rb.getCalculatedLabel()})}
+    {#description($rb)}
+  }
+  {Radio button}
+  {Boolean}
+  {#if($rb.getExampleValueIsDefaultValue())$rb.getValue() #end}
+  {}
+  #end ## end if dont generate
+#end
+\end{inputtable}
+\medskip Here are all the non-editable fields:\nopagebreak
+\begin{outputtable}
+#foreach($s in ${block.getStrings()})
+#if(!$s.getDontGenerate() && !${widgetsToIgnore.contains($s)})
+\outputrow
+  {$s.getFlexoID()}
+  {\labeldescription
+    {#format($s $s.getCalculatedLabel())}
+    {#description($s)}
+  }
+  {#if(${s.getFieldType()})${s.getFieldType().getName()} #else Text #end}
+  {#format($s $s.getValue())}
+  #end ## end if dont generate
+#end
+\end{outputtable}

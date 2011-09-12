@@ -1,0 +1,12 @@
+#if($widget.getIsSortable())
+#set($key = "sortKey#capName()")
+    #if($widget.isInPopup())
+        public String $key()
+        {
+            return uniqueIdentifier()+"$key";
+        }
+    #else
+        public String $key = "$key";
+    #end
+#end
+#tooltipAsJavaMethod()

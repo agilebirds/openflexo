@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GeometricSet id="1">
+  <QuadCurve id="2" name="QuadCurve1">
+    <QuadCurveGraphicalRepresentation id="3" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="4" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="5" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="6" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </QuadCurveGraphicalRepresentation>
+    <QuadCurveWithThreePointsConstruction id="7">
+      <P1_ExplicitPointConstruction id="8" point="148.0,358.0" />
+      <CP_ExplicitPointConstruction id="9" point="215.0,212.0" />
+      <P2_ExplicitPointConstruction id="10" point="335.0,271.0" />
+    </QuadCurveWithThreePointsConstruction>
+    <Resulting_FGEQuadCurve id="11" p1="148.0,358.0" p2="335.0,271.0" cp="215.0,212.0" />
+  </QuadCurve>
+  <CubicCurve id="12" name="CubicCurve2">
+    <CubicCurveGraphicalRepresentation id="13" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="14" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="15" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="16" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </CubicCurveGraphicalRepresentation>
+    <CubicCurveWithFourPointsConstruction id="17">
+      <P1_ExplicitPointConstruction id="18" point="232.0,150.0" />
+      <CP1_ExplicitPointConstruction id="19" point="494.0,310.0" />
+      <CP2_ExplicitPointConstruction id="20" point="650.0,184.0" />
+      <P2_ExplicitPointConstruction id="21" point="473.0,150.0" />
+    </CubicCurveWithFourPointsConstruction>
+    <Resulting_FGECubicCurve id="22" p1="232.0,150.0" p2="473.0,150.0" cp1="494.0,310.0" cp2="650.0,184.0" />
+  </CubicCurve>
+  <GeometricDrawingGraphicalRepresentation id="23" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" width="10000.0" height="10000.0" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255">
+    <TextStyle id="24" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+  </GeometricDrawingGraphicalRepresentation>
+</GeometricSet>
+

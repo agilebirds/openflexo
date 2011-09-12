@@ -1,0 +1,7 @@
+<inspector title = "java_language_implementation" >
+	<tab name="Basic" index="0">
+		<property name="projectName" label="project_name" widget="TEXT_FIELD" constraint="0"/>
+		<property name="rootPackage" label="root_package" widget="TEXT_FIELD" constraint="2"/>
+		<property name="archiveName" label="archive_name" widget="TEXT_FIELD" constraint="4"/>
+	</tab>
+</inspector>

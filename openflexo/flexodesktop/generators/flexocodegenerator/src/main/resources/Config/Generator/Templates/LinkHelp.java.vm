@@ -1,0 +1,11 @@
+    public String #name()HiddenDivUniqueIdentifier()
+    {
+        return "#name()";
+    }
+    
+    public String #name()OnClickPopupButton()
+    {
+        return WDLJSHiddenPopup.showPopupJSString(#name()HiddenDivUniqueIdentifier());
+    }
+
+#renderLinkContent($widget)

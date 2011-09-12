@@ -1,0 +1,57 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = "VVC_CHANNEL_ID"; 
+            name = channelID; 
+            prototypeName = id; 
+        }, 
+        {columnName = "VVC_CREATION_DATE"; name = creationDate; prototypeName = date; }, 
+        {columnName = "VVC_END_DATE"; name = endDate; prototypeName = date; }, 
+        {columnName = "VVC_INDEX"; name = index; prototypeName = int; }, 
+        {columnName = "VVC_START_DATE"; name = startDate; prototypeName = date; }, 
+        {columnName = "VVC_STATUS"; name = statusKey; prototypeName = str10; }, 
+        {columnName = "VVC_UPDATE_DATE"; name = updateDate; prototypeName = date; }, 
+        {columnName = "VVC_UPDATOR"; name = updator; prototypeName = str100; }, 
+        {
+            allowsNull = N; 
+            columnName = "VVC_VIDEO_ID"; 
+            name = videoID; 
+            prototypeName = id; 
+        }
+    ); 
+    className = FCPubliVideoVerticalChannel; 
+    classProperties = (
+        channelID, 
+        videoID, 
+        index, 
+        channel, 
+        video, 
+        creationDate, 
+        updateDate, 
+        updator, 
+        startDate, 
+        endDate, 
+        statusKey
+    ); 
+    externalName = "FC_PUBLI_VIDEO_VERTICAL_CHANNEL"; 
+    fetchSpecificationDictionary = {}; 
+    name = FCPubliVideoVerticalChannel; 
+    primaryKeyAttributes = (videoID, channelID); 
+    relationships = (
+        {
+            destination = FCVerticalChannel; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = channelID; sourceAttribute = channelID; }); 
+            name = channel; 
+        }, 
+        {
+            destination = DLRVideo; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = videoID; sourceAttribute = videoID; }); 
+            name = video; 
+        }
+    ); 
+}

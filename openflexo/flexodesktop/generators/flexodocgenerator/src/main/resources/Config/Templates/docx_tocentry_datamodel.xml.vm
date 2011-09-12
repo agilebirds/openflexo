@@ -1,0 +1,19 @@
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (DefinitionsDocGenerator)
+* - repository: the current repository for which we generate the doc (DGRepository)
+* - level: the level to use in title.
+*#
+
+
+#foreach($model in ${project.getDataModel().getAllDMEOModel()})
+    #if(!$model.getDontGenerate())
+        #foreach($e in $model.getEntities())
+            #if(!${e.getDontGenerate()} && !${e.getRepository().getDontGenerate()})
+              #renderEOEntity($e $level)
+            #end
+        #end
+    #end
+#end

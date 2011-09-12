@@ -1,0 +1,462 @@
+#set($title=${repository.getDocTitle()})
+#set($customer=${repository.getCustomer()})
+#set($documentAuthor=${repository.getAuthor()})
+#set($documentVersion=${repository.getVersion()})
+#set($applicationName=${repository.getSystemName()})
+#if(!$title || $title.trim().length()==0)
+    #set($title = ${project.getName()})
+#end
+#if(!$customer)
+    #set($customer = "")
+#end
+#if(!$documentVersion)
+    #set($documentVersion = "")
+#end
+#if(!$documentAuthor)
+    #set($documentAuthor = "")
+#end
+#if(!$applicationName)
+    #set($applicationName = "")
+#end
+<w:sdt>
+  <w:sdtPr>
+    <w:id w:val="780446891"/>
+    <w:docPartObj>
+      <w:docPartGallery w:val="Cover Pages"/>
+      <w:docPartUnique/>
+    </w:docPartObj>
+  </w:sdtPr>
+  <w:sdtContent>
+    <w:p w:rsidR="00F53D6B" w:rsidRDefault="00F53D6B" w:rsidP="00062A78"/>
+    <w:tbl>
+      <w:tblPr>
+        <w:tblStyle w:val="TableGrid"/>
+        <w:tblpPr w:leftFromText="187" w:rightFromText="187" w:vertAnchor="page" w:horzAnchor="margin" w:tblpY="10006"/>
+        <w:tblOverlap w:val="never"/>
+        <w:tblW w:w="0" w:type="auto"/>
+        <w:tblBorders>
+          <w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+          <w:left w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+          <w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+          <w:right w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+          <w:insideH w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+          <w:insideV w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+        </w:tblBorders>
+        <w:tblCellMar>
+          <w:top w:w="115" w:type="dxa"/>
+          <w:left w:w="115" w:type="dxa"/>
+          <w:bottom w:w="72" w:type="dxa"/>
+          <w:right w:w="115" w:type="dxa"/>
+        </w:tblCellMar>
+        <w:tblLook w:val="04A0"/>
+      </w:tblPr>
+      <w:tblGrid>
+        <w:gridCol w:w="1289"/>
+        <w:gridCol w:w="2827"/>
+        <w:gridCol w:w="1461"/>
+        <w:gridCol w:w="4013"/>
+      </w:tblGrid>
+      <w:tr w:rsidR="00F53D6B" w:rsidTr="00F53D6B">
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:w="4116" w:type="dxa"/>
+            <w:gridSpan w:val="2"/>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p w:rsidR="00F53D6B" w:rsidRDefault="009863BF" w:rsidP="00F53D6B">
+            <w:pPr>
+              <w:pStyle w:val="NoSpacing"/>
+            </w:pPr>
+            <w:r>
+              <w:pict>
+                <v:group id="_x0000_s1097" style="width:183.65pt;height:18.5pt;mso-position-horizontal-relative:char;mso-position-vertical-relative:line" coordorigin="671,11589" coordsize="3673,370">
+                  <v:shapetype id="_x0000_t32" coordsize="21600,21600" o:spt="32" o:oned="t" path="m,l21600,21600e" filled="f">
+                    <v:path arrowok="t" fillok="f" o:connecttype="none"/>
+                    <o:lock v:ext="edit" shapetype="t"/>
+                  </v:shapetype>
+                  <v:shape id="_x0000_s1098" type="#_x0000_t32" style="position:absolute;left:1619;top:11959;width:2723;height:0;rotation:180" o:connectortype="straight" strokecolor="#438086 [3205]" strokeweight="1.5pt"/>
+                  <v:shape id="_x0000_s1099" type="#_x0000_t32" style="position:absolute;left:1621;top:11697;width:2723;height:0;rotation:180" o:connectortype="straight" strokecolor="#438086 [3205]" strokeweight="3pt"/>
+                  <v:shape id="_x0000_s1100" type="#_x0000_t32" style="position:absolute;left:1619;top:11589;width:2723;height:0;rotation:180" o:connectortype="straight" strokecolor="#438086 [3205]" strokeweight=".5pt"/>
+                  <v:shape id="_x0000_s1101" type="#_x0000_t32" style="position:absolute;left:671;top:11897;width:3666;height:0;rotation:180" o:connectortype="straight" strokecolor="#438086 [3205]"/>
+                  <v:shape id="_x0000_s1102" type="#_x0000_t32" style="position:absolute;left:677;top:11764;width:3666;height:0;rotation:180" o:connectortype="straight" strokecolor="#438086 [3205]" strokeweight=".25pt"/>
+                  <w10:wrap type="none" anchorx="margin" anchory="page"/>
+                  <w10:anchorlock/>
+                </v:group>
+              </w:pict>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:w="5474" w:type="dxa"/>
+            <w:gridSpan w:val="2"/>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p w:rsidR="00F53D6B" w:rsidRDefault="00F53D6B" w:rsidP="00F53D6B">
+            <w:pPr>
+              <w:pStyle w:val="NoSpacing"/>
+            </w:pPr>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr w:rsidR="00F53D6B" w:rsidTr="00F53D6B">
+        <w:trPr>
+          <w:trHeight w:val="1800"/>
+        </w:trPr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:w="9590" w:type="dxa"/>
+            <w:gridSpan w:val="4"/>
+            <w:tcMar>
+              <w:top w:w="115" w:type="dxa"/>
+              <w:left w:w="115" w:type="dxa"/>
+              <w:bottom w:w="72" w:type="dxa"/>
+              <w:right w:w="115" w:type="dxa"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p w:rsidR="00F53D6B" w:rsidRDefault="00F53D6B" w:rsidP="00F53D6B">
+            <w:pPr>
+              <w:pStyle w:val="NoSpacing"/>
+              <w:rPr>
+                <w:rFonts w:asciiTheme="majorHAnsi" w:hAnsiTheme="majorHAnsi"/>
+                <w:color w:val="3E3E67" w:themeColor="accent1" w:themeShade="BF"/>
+                <w:sz w:val="72"/>
+                <w:szCs w:val="72"/>
+              </w:rPr>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:asciiTheme="majorHAnsi" w:hAnsiTheme="majorHAnsi"/>
+                <w:color w:val="3E3E67" w:themeColor="accent1" w:themeShade="BF"/>
+                <w:sz w:val="72"/>
+                <w:szCs w:val="72"/>
+              </w:rPr>
+              <w:t>#escape($title)</w:t>
+            </w:r>
+          </w:p>
+          <w:p w:rsidR="00F53D6B" w:rsidRDefault="00F53D6B" w:rsidP="00F53D6B">
+            <w:pPr>
+              <w:pStyle w:val="NoSpacing"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:i/>
+                <w:color w:val="424456" w:themeColor="text2"/>
+                <w:sz w:val="28"/>
+                <w:szCs w:val="28"/>
+              </w:rPr>
+              <w:t>#escape($applicationName)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr w:rsidR="00F53D6B" w:rsidTr="00F53D6B">
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:w="1289" w:type="dxa"/>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p w:rsidR="00F53D6B" w:rsidRDefault="00F53D6B" w:rsidP="00F53D6B">
+            <w:pPr>
+              <w:pStyle w:val="NoSpacing"/>
+            </w:pPr>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:w="4288" w:type="dxa"/>
+            <w:gridSpan w:val="2"/>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p w:rsidR="00F53D6B" w:rsidRDefault="00F53D6B" w:rsidP="00F53D6B">
+            <w:pPr>
+              <w:pStyle w:val="NoSpacing"/>
+            </w:pPr>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:w="4013" w:type="dxa"/>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p w:rsidR="00F53D6B" w:rsidRDefault="009863BF" w:rsidP="00F53D6B">
+            <w:pPr>
+              <w:pStyle w:val="NoSpacing"/>
+            </w:pPr>
+            <w:r>
+              <w:pict>
+                <v:group id="_x0000_s1089" style="width:184.9pt;height:21.75pt;mso-position-horizontal-relative:char;mso-position-vertical-relative:line" coordorigin="7967,13811" coordsize="3698,435">
+                  <v:shape id="_x0000_s1090" type="#_x0000_t32" style="position:absolute;left:7978;top:13811;width:3686;height:0" o:connectortype="straight" strokecolor="#438086 [3205]" strokeweight="3pt"/>
+                  <v:shape id="_x0000_s1091" type="#_x0000_t32" style="position:absolute;left:7967;top:14117;width:1722;height:0" o:connectortype="straight" strokecolor="#438086 [3205]" strokeweight="2.25pt"/>
+                  <v:shape id="_x0000_s1092" type="#_x0000_t32" style="position:absolute;left:8936;top:14246;width:2723;height:0;rotation:180" o:connectortype="straight" strokecolor="#438086 [3205]" strokeweight="1.5pt"/>
+                  <v:shape id="_x0000_s1093" type="#_x0000_t32" style="position:absolute;left:8942;top:13984;width:2723;height:0;rotation:180" o:connectortype="straight" strokecolor="#438086 [3205]" strokeweight="3pt"/>
+                  <v:shape id="_x0000_s1094" type="#_x0000_t32" style="position:absolute;left:8942;top:13876;width:2713;height:1;flip:x y" o:connectortype="straight" strokecolor="#438086 [3205]" strokeweight=".5pt"/>
+                  <v:shape id="_x0000_s1095" type="#_x0000_t32" style="position:absolute;left:7967;top:14184;width:3686;height:0;rotation:180" o:connectortype="straight" strokecolor="#438086 [3205]"/>
+                  <v:shape id="_x0000_s1096" type="#_x0000_t32" style="position:absolute;left:7969;top:14051;width:3686;height:0;rotation:180" o:connectortype="straight" strokecolor="#438086 [3205]" strokeweight=".25pt"/>
+                  <w10:wrap type="none" anchorx="margin" anchory="margin"/>
+                  <w10:anchorlock/>
+                </v:group>
+              </w:pict>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr w:rsidR="00F53D6B" w:rsidTr="00F53D6B">
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:w="1289" w:type="dxa"/>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p w:rsidR="00F53D6B" w:rsidRDefault="00F53D6B" w:rsidP="00F53D6B">
+            <w:pPr>
+              <w:pStyle w:val="NoSpacing"/>
+            </w:pPr>
+            <w:r>
+              <w:t>#escape($documentVersion)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:w="4288" w:type="dxa"/>
+            <w:gridSpan w:val="2"/>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p w:rsidR="00F53D6B" w:rsidRDefault="00F53D6B" w:rsidP="00F53D6B">
+            <w:pPr>
+              <w:pStyle w:val="NoSpacing"/>
+            </w:pPr>
+            <w:r>
+              <w:t>$documentAuthor</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:w="4013" w:type="dxa"/>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p w:rsidR="00F53D6B" w:rsidRDefault="00F53D6B" w:rsidP="00F53D6B">
+            <w:pPr>
+              <w:pStyle w:val="NoSpacing"/>
+              <w:jc w:val="right"/>
+            </w:pPr>
+            <w:r>
+              <w:t>#displayFormattedToday()</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+    </w:tbl>
+    <w:p w:rsidR="00062A78" w:rsidRDefault="00062A78" w:rsidP="00062A78">
+      <w:pPr>
+        <w:pStyle w:val="Footer"/>
+        <w:rPr>
+          <w:sz w:val="16"/>
+          <w:szCs w:val="16"/>
+        </w:rPr>
+      </w:pPr>
+    </w:p>
+    <w:p w:rsidR="00062A78" w:rsidRDefault="00062A78" w:rsidP="00062A78">
+      <w:pPr>
+        <w:pStyle w:val="Footer"/>
+        <w:rPr>
+          <w:sz w:val="16"/>
+          <w:szCs w:val="16"/>
+        </w:rPr>
+      </w:pPr>
+    </w:p>
+    <w:p w:rsidR="00062A78" w:rsidRDefault="00062A78" w:rsidP="00062A78">
+      <w:pPr>
+        <w:pStyle w:val="Footer"/>
+        <w:rPr>
+          <w:sz w:val="16"/>
+          <w:szCs w:val="16"/>
+        </w:rPr>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:noProof/>
+          <w:sz w:val="16"/>
+          <w:szCs w:val="16"/>
+          <w:lang w:val="fr-BE" w:eastAsia="fr-BE"/>
+        </w:rPr>
+        
+        #if(${repository.getLogo()})
+			#set($drawingXmlStart = "<wp:anchor distT=${quote}0${quote} distB=${quote}0${quote} distL=${quote}114300${quote} distR=${quote}114300${quote} simplePos=${quote}0${quote} relativeHeight=${quote}251658240${quote} behindDoc=${quote}0${quote} locked=${quote}0${quote} layoutInCell=${quote}1${quote} allowOverlap=${quote}1${quote}><wp:simplePos x=${quote}0${quote} y=${quote}0${quote}/><wp:positionH relativeFrom=${quote}margin${quote}><wp:align>right</wp:align></wp:positionH><wp:positionV relativeFrom=${quote}margin${quote}><wp:posOffset>942975</wp:posOffset></wp:positionV>")
+			#set($drawingXmlAfterExtent = "<wp:wrapSquare wrapText=${quote}bothSides${quote}/>")
+			#set($drawingXmlEnd = "</wp:anchor>")
+			#renderImportedImageFileWithMaxSizeAndSpecificDrawingXml(${repository.getLogo().getImageName()} 150 150 $drawingXmlStart $drawingXmlAfterExtent $drawingXmlEnd)
+		#end
+      </w:r>
+    </w:p>
+    <w:p w:rsidR="00062A78" w:rsidRDefault="00062A78" w:rsidP="00062A78">
+      <w:pPr>
+        <w:pStyle w:val="Footer"/>
+        <w:rPr>
+          <w:sz w:val="16"/>
+          <w:szCs w:val="16"/>
+        </w:rPr>
+      </w:pPr>
+    </w:p>
+    <w:p w:rsidR="00062A78" w:rsidRDefault="00062A78" w:rsidP="00062A78">
+      <w:pPr>
+        <w:pStyle w:val="Footer"/>
+        <w:rPr>
+          <w:sz w:val="16"/>
+          <w:szCs w:val="16"/>
+        </w:rPr>
+      </w:pPr>
+    </w:p>
+    <w:p w:rsidR="00062A78" w:rsidRDefault="00062A78" w:rsidP="00062A78">
+      <w:pPr>
+        <w:pStyle w:val="Footer"/>
+        <w:rPr>
+          <w:sz w:val="16"/>
+          <w:szCs w:val="16"/>
+        </w:rPr>
+      </w:pPr>
+    </w:p>
+    <w:p w:rsidR="00062A78" w:rsidRDefault="00062A78" w:rsidP="00062A78">
+      <w:pPr>
+        <w:pStyle w:val="Footer"/>
+        <w:rPr>
+          <w:sz w:val="16"/>
+          <w:szCs w:val="16"/>
+        </w:rPr>
+      </w:pPr>
+    </w:p>
+    <w:p w:rsidR="00062A78" w:rsidRDefault="00062A78" w:rsidP="00062A78">
+      <w:pPr>
+        <w:pStyle w:val="Footer"/>
+        <w:rPr>
+          <w:sz w:val="16"/>
+          <w:szCs w:val="16"/>
+        </w:rPr>
+      </w:pPr>
+    </w:p>
+    <w:p w:rsidR="00062A78" w:rsidRDefault="00062A78" w:rsidP="00062A78">
+      <w:pPr>
+        <w:pStyle w:val="Footer"/>
+        <w:rPr>
+          <w:sz w:val="16"/>
+          <w:szCs w:val="16"/>
+        </w:rPr>
+      </w:pPr>
+    </w:p>
+    <w:p w:rsidR="00062A78" w:rsidRDefault="00062A78" w:rsidP="00062A78">
+      <w:pPr>
+        <w:pStyle w:val="Footer"/>
+        <w:rPr>
+          <w:sz w:val="16"/>
+          <w:szCs w:val="16"/>
+        </w:rPr>
+      </w:pPr>
+    </w:p>
+    <w:p w:rsidR="00062A78" w:rsidRDefault="00062A78" w:rsidP="00062A78">
+      <w:pPr>
+        <w:pStyle w:val="Footer"/>
+        <w:rPr>
+          <w:sz w:val="16"/>
+          <w:szCs w:val="16"/>
+        </w:rPr>
+      </w:pPr>
+    </w:p>
+    <w:p w:rsidR="00062A78" w:rsidRDefault="00062A78" w:rsidP="00062A78">
+      <w:pPr>
+        <w:pStyle w:val="Footer"/>
+        <w:rPr>
+          <w:sz w:val="16"/>
+          <w:szCs w:val="16"/>
+        </w:rPr>
+      </w:pPr>
+    </w:p>
+    <w:p w:rsidR="00062A78" w:rsidRDefault="00062A78" w:rsidP="00062A78">
+      <w:pPr>
+        <w:pStyle w:val="Footer"/>
+        <w:rPr>
+          <w:sz w:val="16"/>
+          <w:szCs w:val="16"/>
+        </w:rPr>
+      </w:pPr>
+    </w:p>
+    <w:p w:rsidR="00062A78" w:rsidRDefault="00062A78" w:rsidP="00062A78">
+      <w:pPr>
+        <w:pStyle w:val="Footer"/>
+        <w:rPr>
+          <w:sz w:val="16"/>
+          <w:szCs w:val="16"/>
+        </w:rPr>
+      </w:pPr>
+    </w:p>
+    <w:p w:rsidR="00062A78" w:rsidRDefault="00062A78" w:rsidP="00062A78">
+      <w:pPr>
+        <w:pStyle w:val="Footer"/>
+        <w:rPr>
+          <w:sz w:val="16"/>
+          <w:szCs w:val="16"/>
+        </w:rPr>
+      </w:pPr>
+    </w:p>
+    <w:p w:rsidR="00062A78" w:rsidRDefault="00062A78" w:rsidP="00062A78">
+      <w:pPr>
+        <w:pStyle w:val="Footer"/>
+        <w:rPr>
+          <w:sz w:val="16"/>
+          <w:szCs w:val="16"/>
+        </w:rPr>
+      </w:pPr>
+    </w:p>
+    <w:p w:rsidR="00062A78" w:rsidRDefault="00062A78" w:rsidP="00062A78">
+      <w:pPr>
+        <w:pStyle w:val="Footer"/>
+        <w:rPr>
+          <w:sz w:val="16"/>
+          <w:szCs w:val="16"/>
+        </w:rPr>
+      </w:pPr>
+    </w:p>
+    <w:p w:rsidR="00062A78" w:rsidRDefault="00062A78" w:rsidP="00062A78">
+      <w:pPr>
+        <w:pStyle w:val="Footer"/>
+        <w:rPr>
+          <w:sz w:val="16"/>
+          <w:szCs w:val="16"/>
+        </w:rPr>
+      </w:pPr>
+    </w:p>
+    <w:p w:rsidR="00062A78" w:rsidRDefault="00062A78" w:rsidP="00062A78">
+      <w:pPr>
+        <w:pStyle w:val="Footer"/>
+        <w:rPr>
+          <w:sz w:val="16"/>
+          <w:szCs w:val="16"/>
+        </w:rPr>
+      </w:pPr>
+    </w:p>
+    <w:p w:rsidR="00C8523B" w:rsidRPr="00062A78" w:rsidRDefault="001D0DC6" w:rsidP="00062A78">
+      <w:pPr>
+        <w:pStyle w:val="Footer"/>
+        <w:jc w:val="right"/>
+      </w:pPr>
+      <w:r w:rsidRPr="00F53D6B">
+        <w:rPr>
+          <w:sz w:val="16"/>
+          <w:szCs w:val="16"/>
+        </w:rPr>
+        <w:t xml:space="preserve">Document generated by </w:t>
+      </w:r>
+      <w:hyperlink r:id="rId4" w:history="1">
+        <w:r w:rsidRPr="00F53D6B">
+          <w:rPr>
+            <w:rStyle w:val="Hyperlink"/>
+            <w:sz w:val="16"/>
+            <w:szCs w:val="16"/>
+          </w:rPr>
+          <w:t>FlexoBPM</w:t>
+        </w:r>
+      </w:hyperlink>
+    </w:p>
+  </w:sdtContent>
+</w:sdt>

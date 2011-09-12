@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.node.ActivityNode" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="5" title="Stats" layout="twocols" font="SansSerif,0,11" name="StatsTab">
+      <Label align="center" localize="true" name="StatisticsinfoLabel" data="data.statistics.infoLabel" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" width="200" height="60" />
+      <Label label="include_begin_end" localize="true" name="StatisticsincludeBeginEndNodeLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
+      <CheckBox selected="false" localize="true" name="StatisticsincludeBeginEndNode" data="data.statistics.includeBeginEndNode" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" />
+      <Label label="# operations" localize="true" name="StatisticsrealOperationCountLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = false)" />
+      <TextField passwd="false" readOnly="true" localize="true" name="StatisticsrealOperationCount" data="data.statistics.realOperationCount.toString" constraints="twocols(location=right;index=11;expandHorizontally=true;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = false)" />
+      <Label label="# operations" localize="true" name="StatisticsoperationCountLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = true)" />
+      <TextField passwd="false" readOnly="true" localize="true" name="StatisticsoperationCount" data="data.statistics.operationCount.toString" constraints="twocols(location=right;index=11;expandHorizontally=true;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = true)" />
+      <Label label="# actions" localize="true" name="StatisticsactionCountLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = true)" />
+      <TextField passwd="false" readOnly="true" localize="true" name="StatisticsactionCount" data="data.statistics.actionCount.toString" constraints="twocols(location=right;index=13;expandHorizontally=true;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = true)" />
+      <Label label="# actions" localize="true" name="StatisticsrealActionCountLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = false)" />
+      <TextField passwd="false" readOnly="true" localize="true" name="StatisticsrealActionCount" data="data.statistics.realActionCount.toString" constraints="twocols(location=right;index=13;expandHorizontally=true;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = false)" />
+    </Tab>
+    <Tab index="1" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label label="task_type" localize="true" name="TaskTypeLabel" constraints="twocols(location=left;index=20;expandHorizontally=false;expandVertically=false)" />
+      <DropDown showReset="true" localize="true" name="TaskType" data="data.taskType" constraints="twocols(location=right;index=21;expandHorizontally=false;expandVertically=false)" iteratorClassName="org.openflexo.foundation.wkf.node.TaskType" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="include_begin_end" lang="English">Include begin and end nodes</Localized>
+    <Localized key="include_begin_end" lang="French">Inclure les noeuds début et fin</Localized>
+    <Localized key="include_begin_end" lang="Dutch">Include begin and end nodes</Localized>
+    <Localized key="# operations" lang="French"># opérations</Localized>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="task_type" lang="English">Task type</Localized>
+    <Localized key="task_type" lang="French">Type de tâche</Localized>
+    <Localized key="task_type" lang="Dutch">Task type</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Activity Node" />
+</Panel>
+

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Generation timestamp="${projectGenerator.generateTimestamp()}">
+	<File name="pom.xml" type="xml" symbolicPath="root">
+        <Template templateFile="pom.xml.vm" />
+    </File>
+</Generation>	

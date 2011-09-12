@@ -1,0 +1,42 @@
+<inspector title = "hibernate_attribute" >
+	<tab name="Basic" index="0">
+		<property name="name" label="propertyName" widget="TEXT_FIELD" constraint="1">
+			<param name="columns" value="10"/>
+		</property>
+		
+		<property name="columnName" label="columnName" widget="TEXT_FIELD" constraint="2">
+			<param name="columns" value="10"/>
+		</property>
+		
+		<property name="type" label="type" widget="DROPDOWN" constraint="3">
+			<param name="showReset" value="false"/>
+		</property>
+		
+		<property name="hibernateEnum" label="enum" widget="DROPDOWN" constraint="4" depends="type" conditional="type=ENUM">
+			<param name="dynamiclist" value="hibernateEntity.hibernateModel.hibernateEnumContainer.hibernateEnums"/>
+			<param name="showReset" value="false"/>
+			<param name="format" value="name"/>
+		</property>
+		
+		<property name="length" label="length" widget="INTEGER" constraint="5" depends="type" conditional="type=STRING">
+			<param name="columns" value="10"/>
+		</property>
+		
+		<property name="primaryKey" label="primaryKey" widget="CHECKBOX" constraint="6" />
+		<property name="notNull" label="notNull" widget="CHECKBOX" constraint="7" />
+		<property name="unique" label="unique" widget="CHECKBOX" constraint="8" />
+	</tab>
+	
+	<tab name="Advanced" index="1">
+		<property name="update" label="update" widget="CHECKBOX" constraint="1" />
+	</tab>
+	
+	<tab name="Doc" index="2" layout="DEFAULT">
+		<property name="specificDescriptions" label="specific_description" widget="CUSTOM" depends="project,hasSpecificDescriptions" constraint="3">
+			<param name="className" value="org.openflexo.components.widget.DescriptionInspectorWidget"/>
+			<param name="expandHorizontally" value="true"/>     <!-- Available horizontal space is "taken" by the dynamic component, when possible -->
+			<param name="expandVertically" value="true"/>     <!-- Available vertical space is "taken" by the dynamic component, when possible -->
+			<param name="useUltraLightWysiwyg" value="false"/>
+		</property>
+	</tab>
+</inspector>

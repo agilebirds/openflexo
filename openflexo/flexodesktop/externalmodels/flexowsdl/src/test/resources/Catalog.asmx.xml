@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.BriarpatchBasketry.com/Baskets/Catalog" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://www.BriarpatchBasketry.com/Baskets/Catalog" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This class contains methods to browse the on-line catalog.</wsdl:documentation>
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.BriarpatchBasketry.com/Baskets/Catalog">
+      <s:element name="GetBasketList">
+        <s:complexType/>
+      </s:element>
+      <s:element name="GetBasketListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetBasketListResult" type="tns:ArrayOfBasketList"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfBasketList">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="BasketList" nillable="true" type="tns:BasketList"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="BasketList">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="BasketID" type="s:int"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetBasketDetail">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="BasketID" type="s:int"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBasketDetailResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetBasketDetailResult" type="tns:BasketDetail"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="BasketDetail">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Type" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Size" type="s:string"/>
+          <s:element minOccurs="1" maxOccurs="1" name="Price" type="s:double"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Color1" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Color2" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="OverallColor" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Options" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetBasketListSoapIn">
+    <wsdl:part name="parameters" element="tns:GetBasketList"/>
+  </wsdl:message>
+  <wsdl:message name="GetBasketListSoapOut">
+    <wsdl:part name="parameters" element="tns:GetBasketListResponse"/>
+  </wsdl:message>
+  <wsdl:message name="GetBasketDetailSoapIn">
+    <wsdl:part name="parameters" element="tns:GetBasketDetail"/>
+  </wsdl:message>
+  <wsdl:message name="GetBasketDetailSoapOut">
+    <wsdl:part name="parameters" element="tns:GetBasketDetailResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="CatalogSoap">
+    <wsdl:operation name="GetBasketList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a list of all of the items in the catalog</wsdl:documentation>
+      <wsdl:input message="tns:GetBasketListSoapIn"/>
+      <wsdl:output message="tns:GetBasketListSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetBasketDetail">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get information about a particular basket</wsdl:documentation>
+      <wsdl:input message="tns:GetBasketDetailSoapIn"/>
+      <wsdl:output message="tns:GetBasketDetailSoapOut"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CatalogSoap" type="tns:CatalogSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="GetBasketList">
+      <soap:operation soapAction="http://www.BriarpatchBasketry.com/Baskets/Catalog/GetBasketList" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBasketDetail">
+      <soap:operation soapAction="http://www.BriarpatchBasketry.com/Baskets/Catalog/GetBasketDetail" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="CatalogSoap12" type="tns:CatalogSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="GetBasketList">
+      <soap12:operation soapAction="http://www.BriarpatchBasketry.com/Baskets/Catalog/GetBasketList" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBasketDetail">
+      <soap12:operation soapAction="http://www.BriarpatchBasketry.com/Baskets/Catalog/GetBasketDetail" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Catalog">
+    <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This class contains methods to browse the on-line catalog.</wsdl:documentation>
+    <wsdl:port name="CatalogSoap" binding="tns:CatalogSoap">
+      <soap:address location="http://www.briarpatchbasketry.com/Baskets/Tools/Catalog.asmx"/>
+    </wsdl:port>
+    <wsdl:port name="CatalogSoap12" binding="tns:CatalogSoap12">
+      <soap12:address location="http://www.briarpatchbasketry.com/Baskets/Tools/Catalog.asmx"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

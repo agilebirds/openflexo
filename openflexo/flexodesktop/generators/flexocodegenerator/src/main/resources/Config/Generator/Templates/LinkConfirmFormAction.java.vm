@@ -1,0 +1,53 @@
+        else if(hiddenFieldValue.startsWith(#upName())) {
+            if(includePopupInPage())
+                setValueForBinding(null, "hiddenFieldValue");
+            #if($widget.getIsValidatingForm())    
+                setValidationMessages();
+                if (hasValidationMessages())
+                {
+                    if(includePopupInPage())
+                        setValueForBinding(true, "displayPopupOnLoad");
+                    return null;
+                }
+            #else
+                resetValidationDictionaries();
+            #end
+            #customMethodCall($widget)
+			#if($generator.isPrototype())            
+				#saveChanges($widget)
+			#else
+				#saveBLChanges($widget)
+			#end            
+            #if($widget.getIsClosingPopup())
+				String href = getOpenerHref();
+				if(href != null) {
+    				setRedirectScript(href);
+                    return null;
+				}
+				
+                String confirmValue = getOpenerConfirmValue();
+                if(includePopupInPage())
+                {
+                    setValueForBinding(confirmValue, "hiddenFieldValue");
+                    return null;
+                }
+                else
+                {
+                    opener.setIsSubmitted();
+                    #if(!$generator.isPrototype())
+                        #foreach($bd in ${widget.getComponentDefinition().getBindingDefinitions()})
+                            #if($bd.getIsSettable())
+                                opener.set${generator.capitalize(${bd.getVariableName()})}(${bd.getProperty().getFieldName()});
+                            #end
+                        #end
+                    #end
+                    return WDLCloseWindow.createPageWithAnchor(context(), null, openerFormName, openerFieldName, confirmValue, openerAnchor);
+                }
+            #else
+                if(includePopupInPage())
+                {
+                    setValueForBinding(true, "displayPopupOnLoad");
+                }
+                return null;
+            #end
+        }

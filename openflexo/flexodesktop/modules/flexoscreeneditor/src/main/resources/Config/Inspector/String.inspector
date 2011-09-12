@@ -1,0 +1,35 @@
+<inspector title = "String" inheritsfrom ="NonEditableTextWidget.inspector">
+	
+	<tab name="Basic" index="0" layout="DEFAULT">
+		<property name="prototypeValues" label="example_values" widget="TEXT_FIELD" depends="fieldType" conditional="(fieldType!=KeyValue)" constraint="4" help="will be used if keyPath is also setted. separated by ;">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="fieldType" label="data_type" widget="DROPDOWN" constraint="5">
+			<param name="format" value="name"/>
+		</property>
+		<property name="domain" label="domain" widget="DROPDOWN" constraint="6" depends="fieldType" conditional="(fieldType=KeyValue)">;
+			<param name="dynamiclist" value="availableDomains"/>
+			<param name="format" value="name"/>
+		</property>
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+		<property name ="isHTML" label="isHTML" widget="CHECKBOX" constraint="7" depends="fieldType" conditional="fieldType=Text||fieldType=null">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+	</tab>
+
+	<tab name="Doc" index="2" layout="DEFAULT">
+	</tab>
+
+	<tab name="Data" index="3" layout="DEFAULT">
+<!--		<property name="keyPath" label="key_path" widget="TEXT_FIELD" constraint="2">
+			<param name="columns" value="10"/>
+		</property>-->
+		<property name="bindingValueWhenEmpty" label="binding_valueWhenEmpty" widget="TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+	</tab>
+
+</inspector>

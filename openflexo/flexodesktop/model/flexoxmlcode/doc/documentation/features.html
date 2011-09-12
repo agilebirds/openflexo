@@ -1,0 +1,762 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+  <html>
+    <head>
+      <title>XMLCoDe</title>
+    </head>
+    
+    <body>
+      <center>
+	<p>
+	</p>
+	<h1>XMLCoDe</h1>
+	<h2>A free implementation of an XML COder/DEcoder:<br>a Java XML serialization/deserialization tool</h2>
+      </center>
+      
+	<p>
+	</p>
+	<hr> 
+	<p>
+	</p>
+    <center>
+      <a href="index.html">Back to summary</a>
+    </center>
+    <p>
+    </p>
+
+    <center>
+      <h2>Detailed review and discussion of/on main features</h2>
+    </center>
+    
+    <ul>
+      <li>1. <a href="#goals">General goals and related applications</a></li>
+      <li>2. <a href="#context">Programming context</a></li>
+      <li>3. <a href="#how-to">How-to do it ?</a></li>
+      <li>4. <a href="#supported_types">Supported types</a></li>
+      <li>5. <a href="#inheritance">Inheritance</a></li>
+      <li>6. <a href="#accessors">Accessors methods use scheme</a></li>
+      <li>7. <a href="#data_structures">Advanced data structures</a></li>
+      <li>8. <a href="#graph_structures"> Object graph serialization/deserialization</a></li>
+      <li>9. <a href="#builders_and_finalizers">Builders and finalizers</a></li>
+      <li>10. <a href="#structured_serialization">Structured serialization</a></li>
+      <li>11. <a href="#persistent_identifiers">Persistent identifiers</a></li>
+      <li>12. <a href="#serialize_only">"Serialize-only" mappings: using XMLCoDe as an XML generator</a></li>
+      <li>13. <a href="#other_features">Some other new features and improvements of version 1.0 and later</a></li>
+      <li>14. <a href="#performance_issues">Performance issues</a></li>
+     </ul>
+ 
+   <ul>
+      <hr>
+
+      <li><a name="goals"/><h2>1. General goals and related applications</h2>
+	<p><i>
+	    This package provides tools for automatically serialize and 
+	    deserialize Java objects to/from XML strings and streams. In 
+	    other words, this package provides a way to easily implement a
+	    XML-persistant object model.</i>
+	</p>
+	<p>
+	  The most common use of this package will be a trivial 
+	  implementation of load/save features of application state, in
+	  a open and human-understoodable format (XML), readable/parsable
+	  with any other applications.<br>
+	  You can also use this package to formely communicate with other
+	  applications using XML open standard (cf. SOAP).<br>
+	  At this end, the serialization provided by this implementation
+	  is more formal, opened and extendable, efficient and safer than 
+	  the one offered through basic java serialization scheme.
+	</p>
+      </li>
+      
+      <hr>
+
+	<li><a name="context"/><h2>2. Programming context</h2>
+      <p><i>
+	    These operations are processed in a very easy and efficient 
+	    manner, without needed to specify anything else.<br>
+	    Any object could be handled by this package, since these
+	    objects should only implement an empty interface
+	    <tt>XMLSerializable</tt>.</i></p>
+      <p>
+	A very important feature of this package is the fact that the
+	objects you will serialize/deserialize don't have to implement
+	a special behaviour. In other words, you don't need to have your 
+	xml-serializable objects inheriting from a particular class 
+	(in the context of Java language, which doesn't allow multiple
+	inheritance, it would have been a severe limitation!).<br>
+	You just need to make your xml-serializable objects implementing
+	an empty interface <tt>XMLSerializable</tt>. This empty interface
+	means nothing and <b>imply no developments</b> except the fact 
+	that the developper thought to that problem and write somewhere
+	how the xml serialization should process (see below).
+      </p>
+      <p>
+	Note that all Java primitive, plus some common classes (eg <tt>String</tt>, <tt>Date</tt>, ...)
+	are automatically converted into/from XML strings.
+      </p>
+      </li>
+      
+      <hr>
+
+      <li><a name="how-to"/><h2>3. How-to do it ?</h2>
+      <p><i>
+	    To do so, you need to define a external mapping model, where 
+	    the mapping between Java world and XML tags should be defined
+	    (you should also decide which data you want to serialize, in
+	    order to get a consistent model).
+	</i></p>
+	<p>
+	  Suppose that you have following XML data (this example is extracted
+	  from example1, which comes with this distribution):
+	<pre>
+	  &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+	  &lt;command quantity="3" commandIsAlreadyPaid="yes"&gt; 
+	  &lt;customer&gt;
+	  &lt;name&gt;Ringle&lt;/name&gt;
+	  &lt;/customer&gt; 
+	  &lt;movie name="Alien"&gt;
+	  here comes a description of the movie
+	  &lt;date&gt;2001.09.18 AD at 09:54:58 AM CEST&lt;/date&gt; 
+	  &lt;cat&gt;Horror&lt;/cat&gt; 
+	  &lt;role name="Brett"&gt;&lt;/role&gt; 
+	  &lt;role name="Kane"&gt;&lt;/role&gt;
+	  &lt;role name="Dallas"&gt;&lt;/role&gt; 
+	  &lt;role name="Parker"&gt;&lt;/role&gt; 
+	  &lt;/movie&gt; 
+	  &lt;/command&gt;
+	</pre>
+	and that you will map it to following <code>objects</code>:
+	<pre>
+	  public class Command {
+	    public int qty;
+	    public boolean commandIsAlreadyPaid;
+	    public Movie movie;
+	    public Customer customer;
+	  }
+	  
+	  public class Movie {
+	    public String title;
+	    public String description;
+	    public Date dateReleased;
+	    public Vector roles;
+	    public String category;
+	  }
+	  
+	  public class Customer { 
+	    public String name;
+	  }
+	  
+	  public class Role {
+	    public String roleName;
+	  }
+	</pre>
+	
+	you will define a <i>model file</i> defining this mapping such as:
+	<pre>
+	  &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+	  &lt;model&gt; 
+	    &lt;entity name="yourpackage.Command" xmlTag="command"&gt; 
+	      &lt;property name="qty" xmlTag="quantity" attribute="YES"/&gt; 
+	      &lt;property name="commandIsAlreadyPaid" xmlTag="commandIsAlreadyPaid" attribute="YES"/&gt; 
+	      &lt;property name="movie" xmlTag="movie"/&gt; 
+	      &lt;property name="customer" xmlTag="customer"/&gt; 
+	    &lt;/entity&gt; 
+	    &lt;entity name="yourpackage.Customer" xmlTag="customer"&gt; 
+	      &lt;property name="name" xmlTag="name"/&gt; 
+	    &lt;/entity&gt; 
+	    &lt;entity name="yourpackage.Movie" xmlTag="movie"&gt; 
+	      &lt;property name="title" xmlTag="name" attribute="YES"/&gt; 
+	      &lt;property name="description" text="YES"/&gt;
+	      &lt;property name="dateReleased" xmlTag="date"/&gt; 
+	      &lt;property name="roles" xmlTag="role" type="vector"/&gt; 
+	      &lt;property name="category" xmlTag="cat"/&gt; 
+	    &lt;/entity&gt; 
+	    &lt;entity name="yourpackage.Role" xmlTag="role"&gt; 
+	      &lt;property name="roleName" xmlTag="name" attribute="YES"/&gt; 
+	    &lt;/entity&gt; 
+	  &lt;/model&gt;
+  </pre>
+ 
+  Decoding process will be simpler as this:
+  <pre>
+    XMLMapping myMapping = new XMLMapping (exampleModelFile);
+    Command myCommand = (Command)XMLDecoder.decodeObjectWithMapping (myData, myMapping);
+  </pre>
+  or directly by specifying model file:
+  <pre>
+    Command myCommand = (Command)XMLDecoder.decodeObjectWithMappingFile (myData, exampleModelFile);
+  </pre>
+  where <code>myData</code> is either a <code>String</code> or an <code>mInputStream</code> and 
+  <code>exampleModelFile</code> is a <code>File</code> representing <i>model file</i>.
+  <br>
+  In this example, a new instance of <code>yourpackage.Command</code> class is instancied
+  and automatically sets with values and newly created instances of others sub-classes 
+  (here <code>yourpackage.Command</code>,
+  <code>yourpackage.Movie</code>, <code>yourpackage.Customer</code> 
+  and <code>yourpackage.Role</code>) and returned.
+  <br>
+  The reverse operation is as simpler just by doing:
+  <pre>
+    XMLMapping myMapping = new XMLMapping (exampleModelFile);
+    String result = XMLCoder.encodeObjectWithMapping (myCommand, myMapping);
+  </pre>
+  or
+  <pre>
+    String result = XMLCoder.encodeObjectWithMappingFile (myCommand, exampleModelFile);
+  </pre>
+  if you want to work with <code>String</code> objects,
+  <br>
+  but you can directly work with <code>OutputStream</code> objects, by doing:
+  <pre>
+    XMLMapping myMapping = new XMLMapping (exampleModelFile);
+    XMLCoder.encodeObjectWithMapping (myCommand, myMapping, out);
+  </pre>
+  or
+  <pre>
+    XMLCoder.encodeObjectWithMappingFile (myCommand, exampleModelFile, out);
+  </pre>
+  where <code>out</code> is a <code>OutputStream</code> object.
+	</p>
+	<p>
+	  You can also consult <a href="getting_started.html">Writing a model (Java/XML mapping): a short reference guide</a>
+	</p>
+      </li>
+      
+      <hr>
+
+     <li><a name="supported_types"/><h2>4. Supported types</h2>
+      <p><i> 
+	  This package support natively many types. 
+	</i></p>
+      <p>
+	All natively supported types are (no need to write conversion 
+	methods nor specifying types):<ul>
+	<li>all the java primitives
+	(<tt>int</tt>, <tt>long</tt>,
+	<tt>short</tt>, <tt>double</tt>, <tt>float</tt>, 
+	<tt>boolean</tt>, <tt>byte</tt>, <tt>char</tt>)</li>
+	<li>Date (java.util.Date)</li> 
+	<li>String (java.lang.String)</li>
+	<li>File (java.io.File)</li>
+	<li>URL (java.net.URL)</li></ul>
+	</p>
+      <p>
+	<b>Array types are supported for objects</b> (XMLSerializable objects
+	or String/Date/URL/File primitives) <b>(ie: Java primitive arrays
+	not yet implemented)</b>. Simply add <tt>type="array"</tt> in your
+	property definition (see <a href="ref_guide.html">Writing a model 
+	  (Java/XML mapping): a short reference guide</a>)
+      </p>
+      <p>
+	If you need to use other types, you can:<ul>
+	<li><p>
+	  <b>Write conversion code from/to String by defining accessors methods 
+	  in your own classes</b><br>
+	  For example if you need to use MyType type, you can write:
+	  <pre>public class YourClass {
+
+    protected MyType foo;
+
+    public String getFooAsString() {
+      // write here some code to convert foo to String value
+    }
+
+    public void setFooAsString (String fooAsString) {
+      // write here some code to convert fooAsString to Foo value
+    }
+  }</pre>
+	  and declare property <tt>fooAsString</tt> in related model.</p>
+	</li>
+	<li><p>
+	  <b>Contribute to this software by writing some code</b>, it's very easy (!!!).</p>
+	</li></ul>
+      </p>
+      </li>
+
+      <hr>
+ 
+     <li><a name="inheritance"/><h2>5. Inheritance</h2>
+	<p><i> 
+	    This package support advanced object inheritance scheme. 
+	</i></p>
+	<p>
+	  This package support advanced object inheritance scheme, whose
+	  semantic matches Java semantic.
+	</p>
+	<p>
+	  The model definition provides a way to specify serialization 
+	  mapping between Java and XML at a particular object-inheritance
+	  level. Suppose you have two classes <tt>ClassA</tt> and 
+	  <tt>ClassB extends ClassA</tt>. You can defines some properties
+	  related to <tt>ClassA</tt> and some properties related to
+	  <tt>ClassB</tt>. We have following facts:
+	<ul>
+	  <li>The properties defined for <tt>ClassA</tt> will
+	    be automatically taken under account for <tt>ClassB</tt> for 
+	    serialization/deserialization process.</li>
+	  <li>The properties re-defined for <tt>ClassB</tt> will override
+	    the properties defined for <tt>ClassA</tt></li>
+	  <li>To works properly and avoid ambiguity, different properties
+	    must have different names AND different matching XML tags. 
+	    Same properties (in the context of inheritance and properties
+	    overriding) must have same names AND same XML tags.</li>
+	</ul></p>
+	<p>
+	  You can also manipulate classes not specifically defined in your
+	  model. The serialization process will take under account for
+	  mapping the most specialized super class defined in model.
+	</p>
+	<p>
+	  Native advanced data structures (vector-like properties and 
+	  hashtable-like properties, see below) could be overriden in 
+	  your code.
+	</p>
+	<p>
+	  The lookup process to dynamically choose the most specialized
+	  accessor method is redefined and matches Java
+	  semantic (see below for more informations on that feature).
+	</p>
+	</p>
+	<p><i>NOTA: Please refer to example 2 to show some implementations 
+	    of those issues.</i></p>
+      </li>
+
+      <hr>
+ 
+      <li><a name="accessors"/><h2>6. Accessors methods use scheme</h2>
+      <p><i> 
+	    This package support accessors methods use scheme, which 
+	    allow you to automatically maintain a consistent object model.<br>
+	</i></p>
+	<p>
+	  In the example shown above, all XML serializable classes use 
+	  <tt>public</tt> fields. That implementation was here very simple,
+	  just to show an basic example of coding/decoding processes. During
+	  these processes, the <tt>XMLCoder</tt> and <tt>XMLDecoder</tt>
+	  directly accessed to those fields to get and set values. Because
+	  instances of those objects are externaly accessed, those fields
+	  must be <tt>public</tt>.
+	</p>
+	<p>
+	  Many programmers will aggree with the fact that this implementation
+	  is very bad and could lead to serious security and inconsistency 
+	  problem.
+	</p>
+	<p>
+	  A good way to program a class is to provide a public API, which
+	  guarantee that the invokation of public methods (eventually field)
+	  let always the instances of those classes in a GOOD and CONSISTENT
+	  state. The example2 which come with this distribution show
+	  examples of classes (<tt>Command</tt> and <tt>SellReport</tt>)
+	  maintaining computed fields (eg. the total amount of the command
+	  which is computed from the contained article prices). In this case,
+	  accessing directely to articles data (add or remove article by
+	  accessing the <tt>Vector</tt> field) will desynchronize the field
+	  representing the total amount of the command. To avoid this problem,
+	  the programmers often provide some accessor method, in which the
+	  code to always maintain the object in a good and synchronized state.
+	</p>
+	<p>
+	  XMLCoDe uses preferably these accessors methods, if such methods
+	  are defined. That feature allow you to maintain all your XML
+	  serializable objects in a good and synchronized state.
+	</p>
+	<p>
+	  NB: your classes must define considered properties either as 
+	  public field, and/or with ALL accessors (see below for the list
+	  of accessors, considering the type of the property). In the case
+	  of public fields AND all accessors are defined, XMLCoDe will use
+	  accessors.
+	</p>
+	<p>
+	  For now, there is four native types of properties:
+	<ul>
+	  <li><p><b>Single types</b>: matching a unique value. Accessors of such
+	    properties are:<ul>
+	      <li><p><b>A unique GET method - </b> with following search order:<br>
+	      <tt>xxx()</tt>, <tt>_xxx()</tt>, <tt>getXxx()</tt> and
+              <tt>_getXxx()</tt>,<br> where <tt>xxx</tt> is the name of 
+	      considered property and Type value the considered property class name.</p>
+	      </li>
+	      <li><p><b>A unique SET method - </b> with following search order:<br>
+	      <tt>setXxx(Type value)</tt>, <tt>_setXxx(Type value)</tt>,<br> where
+	      <tt>xxx</tt> is the name of considered property and Type the
+	      considered property class name.</p>
+	      </p></li>
+	    </ul>
+	  </li>
+	  <li><p><b>Array types</b>: matching an array of values. Accessors of such
+	    properties are:<ul>
+	      <li><p><b>A unique GET method - </b> with following search order:<br>
+	      <tt>xxx()</tt>, <tt>_xxx()</tt>, <tt>getXxx()</tt> and
+              <tt>_getXxx()</tt>,<br> where <tt>xxx</tt> is the name of 
+	      considered property and Type value the considered property class name.</p>
+	      </li>
+	      <li><p><b>A unique SET method - </b> with following search order:<br>
+	      <tt>setXxx(Type value)</tt>, <tt>_setXxx(Type value)</tt>,<br> where
+	      <tt>xxx</tt> is the name of considered property and Type the
+	      considered property class name.</p>
+	      </p></li>
+	    </ul>
+	  </li>
+	  <li><p><b>Vector-like types</b>: matching a collection of values, 
+	      stored in a certain order. Accessors of such properties are:<ul>
+	      <li><p><b>A unique GET method - </b> with following search order:<br>
+	      <tt>xxx()</tt>, <tt>_xxx()</tt>, <tt>getXxx()</tt> and
+              <tt>_getXxx()</tt>,<br> where <tt>xxx</tt> is the name of 
+	      considered property and Type the considered property class name.</p>
+	      </li>
+	      <li><p><b>A unique SET method - </b> with following search order:<br>
+	      <tt>setXxx(Type value)</tt>, <tt>_setXxx(Type value)</tt>,<br> where
+	      <tt>xxx</tt> is the name of considered property and Type the 
+	      considered property class name.</p>
+	      </li>
+	      <li><p><b>A collection of ADD-TO methods - </b> methods 
+	      matching following:<br>
+	      <tt>addToXxx(Class1 object)</tt>, ... ,<tt>addToXxx(ClassN object)</tt>,<br>
+	      <tt>_addToXxx(Class1 object)</tt>, ... ,<tt>_addToXxx(ClassN object)</tt>,<br> where
+	      <tt>xxx</tt> is the name of considered property (with or
+	      without a terminal s) and Class1...ClassN the classes of attributes.<br>
+	      Note that you can define many ADD-TO methods, with different parameters
+	      type, depending on what you want to do. XMLCoDe will dynamically
+	      choose for you the most adapted method (implementation of a lookup
+	      algorithm), which is the most specialized one.</p>
+	      </li>
+	      <li><p><b>A collection of REMOVE-FROM methods - </b> methods 
+	      matching following:<br>
+	      <tt>removeFromXxx(Class1 object)</tt>, ... ,<tt>removeFromXxx(ClassN object)</tt>,<br>
+	      <tt>_removeFromXxx(Class1 object)</tt>, ... ,<tt>_removeFromXxx(ClassN object)</tt>,<br> where
+	      <tt>xxx</tt> is the name of considered property (with or
+	      without a terminal s) and Class1...ClassN the classes of attributes.<br>
+	      Note that you can define many REMOVE-FROM methods, with different parameters
+	      type, depending on what you want to do. XMLCoDe will dynamically
+	      choose for you the most adapted method (implementation of a lookup
+	      algorithm), which is the most specialized one.</p>
+	      </p></li>
+	    </ul>
+	  </li>
+	  <li><p><b>Hashtable-like types</b>: matching a collection of values, 
+	      stored using a key object. Accessors of such properties are:<ul>
+	      <li><p><b>A unique GET method - </b> with following search order:<br>
+	      <tt>xxx()</tt>, <tt>_xxx()</tt>, <tt>getXxx()</tt> and
+              <tt>_getXxx()</tt>,<br> where <tt>xxx</tt> is the name of 
+	      considered property and Type the considered property class name.</p>
+	      </li>
+	      <li><p><b>A unique SET method - </b> with following search order:<br>
+	      <tt>setXxx(Type value)</tt>, <tt>_setXxx(Type value)</tt>,<br> where
+	      <tt>xxx</tt> is the name of considered property and Type the 
+	      considered property class name.</p>
+	      </li>
+	      <li><p><b>A collection of SET-FOR-KEY methods - </b> methods 
+	      matching following:<br>
+	      <tt>setXXXForKey(Class1 object, Class1 key)</tt>, ... ,
+		  <tt>setXXXForKey(ClassN object, ClassM key)</tt>,<br>
+	      <tt>_setXXXForKey(Class1 object, Class1 key)</tt>, ... ,
+		  <tt>_setXXXForKey(ClassN object, ClassM key)</tt>,<br> where
+	      <tt>xxx</tt> is the name of considered property (with or
+	      without a terminal s) and Class1...ClassN the classes of objects
+	      and Class1...ClassM the classes of keys.<br>
+	      Note that you can define many SET-FOR-KEY methods, with different parameters
+	      type, depending on what you want to do. XMLCoDe will dynamically
+	      choose for you the most adapted method (implementation of a lookup
+	      algorithm), which is the most specialized one.</p>
+	      </li>
+	      <li><p><b>A collection of REMOVE-WITH-KEY methods - </b> methods 
+	      matching following:<br>
+	      <tt>removeXXXWithKey(Class1 key)</tt>, ... ,
+		  <tt>removeXXXWithKey(ClassN key)</tt>,<br>
+	      <tt>_removeXXXWithKey(Class1 key)</tt>, ... ,
+		  <tt>_removeXXXWithKey(ClassN key)</tt>,<br> where
+	      <tt>xxx</tt> is the name of considered property (with or
+	      without a terminal s) and Class1...ClassN the classes of keys.<br>
+	      Note that you can define many REMOVE-WITH-KEY methods, with different parameters
+	      type, depending on what you want to do. XMLCoDe will dynamically
+	      choose for you the most adapted method (implementation of a lookup
+	      algorithm), which is the most specialized one.</p>
+	      </p></li>
+	    </ul>
+	  </li>
+	</ul>
+	</p>
+ 	<p><i>NOTA: Please refer to example 1 & 2 to show some implementations 
+	    of those issues.</i></p>
+     </li>
+
+       
+      <hr>
+
+      <li><a name="data_structures"/><h2>7. Advanced data structures</h2>
+      <p>
+	<i> 
+	  Advanced data structures objects arrays, vector-like and 
+	  hashtable-like are natively supported.
+	</i>
+      </p>
+	<p><i>
+	  NOTA: See example 2 to show examples of those data structures.
+	</i></p>
+	<p>
+		An other kind of cardinality is now supported in 1.0 version: this
+		is the <tt>properties</tt> one. Objects could be stored in an hashtable-like structure
+		where key is used as XML tag, and value serialized like this:
+<pre>
+            &LT;nodeProperties&GT;
+              &LT;test5 className="java.util.Date"&GT;dd/MM/yy HH:mm,11/01/06 15:42&LT;/test5&GT;
+              &LT;test4 className="java.net.URL"&GT;http://picolibre.enst-bretagne.fr&LT;/test4&GT;
+              &LT;test3 className="java.lang.String"&GT;value3&LT;/test3&GT;
+              &LT;test2 className="java.io.File"&GT;/Users/sguerin/workspace/FlexoXMLCoDe/truc/essai&LT;/test2&GT;
+              &LT;test1 className="java.lang.String"&GT;value1&LT;/test1&GT;
+            &LT;/nodeProperties&GT
+</pre>
+		<i>NOTA: Please refer to example 4 to show an implementation example.</i>
+	</p>
+      <p>
+	Those 5 types of basic data structure should be enough to cover a lot
+	of application. But it may to cover all data structures.
+      </p>
+      <p>
+	This package is extensible by two ways.
+      <ul>
+	<li>You can handle your own data structures by using the accessors 
+	  methods (see above) which provide a way to hide XMLCoDe your own
+	  data structure. Inconvenients of such an approch is the fact that
+	  produced XML code may be more complex and that you will have to
+	  produce some more code in your accessors implementation.</li>
+	<li>The second approach is to extend XMLCoDe by adding native
+	  implementation of your own data structure. This should not be
+	  hard to do since hooks are not to many. In this case, please 
+	  send me an e-mail, because those developpements are welcome to 
+	  enhance current XMLCoDe version.
+	</li>
+      </ul>
+      </p>
+      </li>
+
+      <hr>
+
+      <li><a name="graph_structures"/><h2>8. Object graph serialization/deserialization</h2>
+      
+      <p>
+	  Since version 1.0, XMLCoDe can now serialize and deserialize object graph structures.
+      </p>
+      
+      <p>
+      Please refer to following documents for more explanation on that process:
+      <ul>
+      <li><a href="mapping_graph_structures.html">Advanced feature: mapping graph structures</a></li>
+      <li><a href="advanced_mapping_definition.html">Advanced XML mapping definitions: contextual XML Tags</a></li>
+      </ul>
+      </p>
+      
+     <hr>
+
+      <li><a name="builders_and_finalizers"/><h2>9. Builders and finalizer</h2>
+      
+      <p>You can use a builder to build your object during deserialization.</p>
+      
+      <p>This builder is an object (whatever type you want, subtype of <tt>java.lang.Object</tt>)
+      that you can propagate all along deserialization procees, to each object constructor.
+      Given a builder for a model, XMLCoDe will try to use constructor with a parameter
+      of supplied builder for each deserialized object. If no constructor is found, constructor
+      without parameter will be searched and used.</p>
+      
+      <p>The principle of that is to use a custom object to perform some initialization during
+      deserialization process</p>
+      
+      <p>  Decoding process require to initialize and supply a builder:
+  <pre>
+    XMLMapping myMapping = new XMLMapping (exampleModelFile);
+    Object myBuilder = .... <init your builder here>
+    Command myCommand = (Command)XMLDecoder.decodeObjectWithMapping (myData, myMapping, myBuilder);
+  </pre>
+  or directly by specifying model file:
+  <pre>
+    Command myCommand = (Command)XMLDecoder.decodeObjectWithMappingFile (myData, exampleModelFile, myBuilder);
+  </pre>
+  where <code>myData</code> is either a <code>String</code> or an <code>mInputStream</code> and 
+  <code>exampleModelFile</code> is a <code>File</code> representing <i>model file</i>.
+  <br>
+      </p>
+      
+      <p>
+      Finalizers are used at this end of serialization process. For each object on which a
+      finalizer is defined, corresponding method will be called at the end of deserialization
+      process. For example if you define: 
+      <pre>&LT;entity name="fr.enstb.xmlcode.examples.example4.Graph" xmlTag="Graph" finalizer="finalizeGraphSerialization"&GT;</pre>
+      You need to have <tt>finalizeGraphSerialization()</tt> (or <tt>finalizeGraphSerialization(Object builder)</tt>
+      if you defined a builder for your mapping) defined in your <tt>fr.enstb.xmlcode.examples.example4.Graph</tt> class.
+      </p>
+      
+	  <p>
+	  Here is an example of an XML mapping defining builders and finalizers.
+	     <pre>
+&LT;?xml version="1.0" encoding="UTF-8"?&GT;
+&LT;model handlesReferences="yes" builder="fr.enstb.xmlcode.examples.example4.GraphBuilder"&GT; 
+  &LT;entity name="fr.enstb.xmlcode.examples.example4.Graph" xmlTag="Graph" finalizer="finalizeGraphSerialization"&GT; 
+    &LT;property name="startNode" xmlTag="StartNode"/&GT; 
+  &LT;/entity&GT; 
+  &LT;entity name="fr.enstb.xmlcode.examples.example4.Node" xmlTag="Node,StartNode,OriginNode,DestinationNode"  finalizer="finalizeNodeSerialization"&GT; 
+    &LT;property name="edges" xmlTag="Edge" type="vector"/&GT; 
+    &LT;property name="nodeProperties" xmlTag="nodeProperties" type="properties"/&GT; 
+  &LT;/entity&GT; 
+  &LT;entity name="fr.enstb.xmlcode.examples.example4.Edge" xmlTag="Edge" finalizer="finalizeEdgeSerialization"&GT; 
+    &LT;property name="originNode" xmlTag="OriginNode"/&GT; 
+    &LT;property name="destinationNode" xmlTag="DestinationNode"/&GT; 
+  &LT;/entity&GT; 
+&LT;/model&GT;
+       </pre>
+ 
+      </p>
+      
+      	<p><i>
+	  NOTA: See example 4 to show examples of builders and finalizers.
+	</i></p>
+      
+      
+     <hr>
+
+      <li><a name="structured_serialization"/><h2>10. Structured serialization</h2>
+
+     <p>
+	  Since version 1.0, XMLCoDe can now serialize and deserialize object graph structures.
+	  In this context, many encoding strategies are available to structure output XML.
+      </p>
+      
+      <p>
+      Please refer to following documents for more explanation on that process:
+      <ul>
+      <li><a href="structured_serialization.html">Structured serialization: how to make your serialized stucture stable ?</a></li>
+      </ul>
+      </p>
+      
+    <hr>
+
+      <li><a name="persistent_identifiers"/><h2>11. Persistent identifiers</h2>
+
+     <p>
+	  When trying to work in a collaborative context, some problems may arise because identifiers used by
+    		XMLCoDe may change (and be unstable) as they are internally allocated by XMLCoDe. 
+    		XMLCoDe provide a way to resolve this problem by using custom identifiers, 
+    		which may be stable in time.
+      </p>
+      
+      <p>
+      Please refer to following documents for more explanation on that process:
+      <ul>
+      <li><a href="id_persistance.html">How to make identifier persistant when coding object graph structure ?</a></li>
+      </ul>
+      </p>
+      
+   <hr>
+
+      <li><a name="serialize_only"/><h2>12. "Serialize-only" mappings: using XMLCoDe as an XML generator</h2>
+
+     <p>
+	  Since version 1.0, it's now possible to use XMLCoDe in the context of XML generation
+	  only. The goal is to generate XML files without providing deserialization (ability
+	  to rebuild data structure from serialized XML data).
+      </p>
+ 
+      <p>
+      In this case, all properties are "read-only", and this is not mandatory to have "set"
+      accessors. By the way, composed properties are allowed, which means that you can supply
+      properies path, eg: <tt>foo1.foo2.myProperty</tt>.
+      </p>
+      
+      <p>
+      Here is an example of a mapping specifying XML generation from a Object1 class instance.
+      Precise <tt>serializeOnly="yes"</tt> as attribute for the model tag.
+<pre>
+&LT;?xml version="1.0" encoding="UTF-8"?&GT;
+
+&LT;model handlesReferences="no" serializeOnly="yes"&GT; 
+
+  &LT;entity name="package1.Object1" xmlTag="Object1"&GT;
+   &LT;property name="anAttribute.toString" xmlTag="attribute" attribute="yes"/&GT; 
+   &LT;property name="someObject2" xmlTag="Object2" type="vector"/&GT;
+  &LT;/entity&GT; 
+
+  &LT;entity name="package2.Object2" xmlTag="Object2"&GT;
+    &LT;property name="foo1.foo2.myProperty" xmlTag="myProperty" attribute="yes"/&GT; 
+    &LT;property name="content.text" xmlTag="text"/&GT; 
+   &LT;/entity&GT; 
+
+&LT;/model&GT;
+</pre>
+		Here for example in Object2 is searched a method <tt>foo1()</tt> or <tt>getFoo1()</tt> returning
+		an object having a method <tt>foo2()</tt> or <tt>getFoo2()</tt> having a method 
+		<tt>myProperty()</tt> or <tt>getMyProperty()</tt>.
+	  </p>
+      
+      <p><b>
+      Using this feature makes XMLCoDe a very good candidate for very high level of abstraction
+      XML generator from Java object. This is powerfull and efficient, as it provide a very good
+      level of abstraction. There is only one file (XML mapping) to declare, and 2 lines of
+      Java code !!!</b>.</p>
+      <p>You just need to code your own accessors in Java to access 
+      content of data you want to serialize.
+      </p>
+   <hr>
+
+      <li><a name="other_features"/><h2>13. Some other new features and improvements of version 1.0 and later</h2>
+      <p>
+	  <ul>
+	  <li>Better management of String conversions: XMLCoDe now use an internal transtyping 
+	  library to convert some values to/from String. To make a new type natively handled
+	  by XMLCoDe internal transtyping library, just use declare and register a new
+	  <tt>Converter</tt> in <tt>StringEncoder</tt> class. We have already built-in string
+	  conversions for many common types (Date, Number, File, Class, Point, etc...), but it's
+	  now easy to add some.</li>
+	  <li>JDom serialization: the use of a transformer is no more required as it was the
+	  case for previous releases, JDom now assume this responsability. Output XML is now
+	  much more cleaner and performances are better.</li>
+	  <li>Better management of exceptions</li>
+	  <li>Support for DocType (DTD)</li>
+	  </ul>
+      </p>
+      
+      <hr>
+
+      <li><a name="performance_issues"/><h2>14. Performance issues</h2>
+      <p>
+	<ul>
+	<li>The mapping building is a process which 
+	takes some CPU time, so it is recommanded to create an <tt>XMLMapping</tt> (or
+	related <tt>XMLCoder</tt> or <tt>XMLDecoder</tt>) once in the life of the 
+	application. Once this mapping is created, coding and decoding 
+	processes are quick and efficient and don't require too much CPU
+	resources (it's Java, he ?). Obviously, you can also re-build mappings dynamically.</li>
+	<li>If you don't want any human read your XML document, choose <b><tt>deepFirst</tt></b>
+	as serialization mode (see <a href="structured_serialization.html">Structured serialization: 
+	how to make your serialized stucture stable ?</a>)
+	</li>
+	</ul>
+      </p>
+    </li>
+    
+      </ul>
+
+
+
+ 
+
+
+
+	<p>
+	</p>
+    <center>
+      <a href="index.html">Back to summary</a>
+    </center>
+    <p>
+    </p>
+
+
+
+    <hr>
+    <address><a href="mailto:sylvain.guerin@enst-bretagne.fr">Sylvain Guerin</a></address>
+<!-- Created: Fri Dec  7 17:47:50 CET 2001 -->
+<!-- hhmts start -->
+Last modified: Wed Mar  6 13:40:05 CET 2002
+<!-- hhmts end -->
+  </body>
+</html>
+

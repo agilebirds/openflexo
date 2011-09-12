@@ -1,0 +1,10 @@
+{
+	"adaptorName" = "JDBC";
+	"entities" = (
+		{
+			"name" = "DLRBanner";
+			"className" = "DLRBanner";
+		}
+	);
+	"EOModelVersion" = "2.1";
+}

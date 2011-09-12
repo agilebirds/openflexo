@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://interpressfact.net/webservices/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" targetNamespace="http://interpressfact.net/webservices/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://interpressfact.net/webservices/">
+      <s:complexType name="getJoke">
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Category" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+	<s:element name="getJoke" nillable="true" type="tns:getJoke"/>
+ 
+      <s:element name="getJokeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getJokeResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="getJokeSoapIn">
+    <wsdl:part name="parameters" element="tns:getJoke" />
+  </wsdl:message>
+  <wsdl:message name="getJokeSoapOut">
+    <wsdl:part name="parameters" element="tns:getJokeResponse" />
+  </wsdl:message>
+  <wsdl:portType name="getJokeSoap">
+    <wsdl:operation name="getJoke">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Joke categories:&lt;br&gt;&lt;br&gt;Murphy's Laws - 7&lt;br&gt;Q&amp;A - 3&lt;br&gt;Unnatural Laws - 18&lt;br&gt;Cool Jokes - 6&lt;br&gt;Blondes - 2&lt;br&gt;Random(contains Adult) - 1&lt;br&gt;Lawyers - 5&lt;br&gt;Headlines - 8&lt;br&gt;Military - 9&lt;br&gt;Accidents - 4&lt;br&gt;Excuses - 10&lt;br&gt;Answering machine - 11&lt;br&gt;All categories - 0&lt;br&gt;&lt;br&gt;</documentation>
+      <wsdl:input message="tns:getJokeSoapIn" />
+      <wsdl:output message="tns:getJokeSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="getJokeSoap" type="tns:getJokeSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+    <wsdl:operation name="getJoke">
+      <soap:operation soapAction="http://interpressfact.net/webservices/getJoke" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="getJoke">
+    <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">&lt;a href='http://interpressfact.net'&gt;&lt;img src='http://www.interpressfact.net/webpage.files/logo.gif' border='0'&gt;&lt;/a&gt;&lt;br&gt;&lt;font color='#006600' size='3' face='Geneva, Arial, Helvetica, san-serif'&gt;Returns random joke every time this webservice is invoked.&lt;/font&gt;</documentation>
+    <wsdl:port name="getJokeSoap" binding="tns:getJokeSoap">
+      <soap:address location="http://www.interpressfact.net/Agriterra/interpressfact/webservices/getJoke.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

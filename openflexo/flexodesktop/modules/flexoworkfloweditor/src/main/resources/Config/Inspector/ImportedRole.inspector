@@ -1,0 +1,8 @@
+<inspector title = "Role (imported)" inheritsfrom ="ImportedModelObject.inspector" inspectedClassName="ignore">
+	<tab name="Basic" index="0">
+		<property name="color" label="color" widget="COLOR" constraint="1">
+            <param name="readOnly" value="true"/>
+        </property>
+	</tab>
+</inspector>
+

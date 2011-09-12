@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Mapping model for generated code encoding version 1.0 -->
+
+<model builder="org.openflexo.foundation.xml.FlexoTOCBuilder" handlesReferences="yes"> 
+
+   <mapId>
+	  <map entityClass="org.openflexo.foundation.FlexoModelObject" identifierAccessor="serializationIdentifier"/>
+  </mapId>
+	
+  <entity name="org.openflexo.foundation.FlexoModelObject" abstract="YES" finalizer="finalizeDeserialization">
+  	<property name="userIdentifier" xmlTag="userID" attribute="YES" copyable="no" description="Unique ID of the user (used for team synchronization)"/>
+  	<property name="flexoID" xmlTag="flexoID" attribute="YES" copyable="no" description="Unique ID generated and maintained by Flexo"/>
+  	<property name="docFormat" xmlTag="docFormat" attribute="YES" description=""/>
+    <property name="dontGenerate" xmlTag="dontGenerate" attribute="YES" description="Check this box, if you don't want this node to generate documentation"/>
+    <property name="description" xmlTag="description" attribute="YES" description="Defines widget name"/>
+    <property name="hasSpecificDescriptions" xmlTag="useSpecificDescriptions" attribute="YES" description="Wheter the specific descriptions should be used in the generated documentation or not"/>
+    <property name="specificDescriptions" xmlTag="specificDescriptions" type="hashtable" description="Hashtable(String,String) that contains a name of a DocType as a key, and a description specific to that DocType as the value"/>
+    <property name="customProperties" contains="org.openflexo.foundation.FlexoProperty" type="vector" primary="yes"/>
+    <property name="dynamicProperties" xmlTag="?" type="unmappedAttributes" description="Hashtable(String,String) that contains dynamic properties (data that are not handled by application, but need to be stored in the context of back compatibility)"/>
+    <description>Root class for all objects of Flexo</description>
+  </entity>
+
+  <entity name="org.openflexo.foundation.FlexoProperty" xmlTag="FlexoProperty">
+     <property name="name" xmlTag="name" attribute="yes"/>
+     <property name="value" xmlTag="value" attribute="yes"/>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.toc.TOCObject" abstract="yes">
+    <description>Abstract definition of TOC structure</description>
+   </entity>
+
+  <entity name="org.openflexo.foundation.toc.TOCData" xmlTag="TOCData">
+    <property name="repositories" xmlTag="TOCRepository" type="vector" primary="yes" description="TODO"/> 
+  </entity>
+  
+  <entity name="org.openflexo.foundation.toc.TOCRepository" xmlTag="TOCRepository">
+  	<property name="docTypeAsString" xmlTag="docType" attribute="yes"/>
+	<property name="docTitle" xmlTag="docTitle" attribute="yes"/>
+    <property name="customer" xmlTag="customer" attribute="yes" description="Name of the customer that will appear in the generated documentation"/>
+    <property name="version" xmlTag="version" attribute="yes" description="Version of this document"/>
+    <property name="author" xmlTag="author" attribute="yes"/>
+    <property name="reviewer" xmlTag="reviewer" attribute="yes"/>
+    <property name="systemName" xmlTag="systemName" attribute="yes"/>
+    <property name="systemVersion" xmlTag="systemVersion" attribute="yes"/>
+    <property name="useEmbeddedEvents" xmlTag="useEmbeddedEvents" attribute="yes"/>
+    <property name="logo" xmlTag="logo" attribute="yes"/>
+  </entity>
+	
+  <entity name="org.openflexo.foundation.toc.TOCEntry" xmlTag="TOCEntry">
+  	<description>Element of the hierarchy of a table of content</description>
+  	<property name="tocEntries" xmlTag="TOCEntry" primary="yes" type="vector" description="Sub elements of the hierarchy of a table of content"/>
+  	<property name="title" xmlTag="title" attribute="yes" description="The title of the entry of the table of content"/>
+  	<property name="objectReference" xmlTag="modelObject" attribute="yes" description="The associated flexo model object reference"/>
+  	<property name="identifier" xmlTag="identifier" attribute="yes" description="A unique identifier to be able to find back an automatically created entry."/>
+  	<property name="index" xmlTag="index" attribute="yes" description="The index order of this toc entry (they should be serialized correctly, but for sure, we add this argument)"/>
+  	<property name="isReadOnly" xmlTag="isReadOnly" attribute="yes" description="Wheter this entry can be edited or not"/>
+  	<property name="startOnANewPage" xmlTag="startOnANewPage" attribute="yes" description="this entry must start on a new page"/>
+  	<property name="includeStatusList" xmlTag="includeStatusList" attribute="yes" description="(relevant for processes)"/>
+  	<property name="subType" xmlTag="subType" attribute="yes" description="(relevant for processes)"/>
+  	<property name="recursionEnabled" xmlTag="recursionEnabled" attribute="yes" description="this entry may contains sub entries recursively deduced from the model (relevant for processes)"/>
+  	<property name="resourceName" xmlTag="resourceName" attribute="yes" description="The associated generated resource name (only if isReadOnly is true)"/>
+  	<property name="content" xmlTag="content" attribute="yes" description="The content of this table of content entry (only if isReadOnly is false)"/>
+  	<property name="lastUpdateDate" xmlTag="lastUpdate" attribute="yes" description="The last time this object was updated or one of its son"/>
+  </entity>
+	
+
+</model>

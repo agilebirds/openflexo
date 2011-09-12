@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 
+	xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+		http://www.springframework.org/schema/security 
+		http://www.springframework.org/schema/security/spring-security-3.0.xsd  
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-3.0.xsd  
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-3.0.xsd  
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.0.xsd" 
+	default-autowire="byName">
+
+	<bean id="dataSource" class="${template.getRootPackage()}.util.HibernateDataSource">
+		<property name="driverClassName"><value>${storage.getDriver()}</value></property>
+	</bean>
+	
+	<bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
+		<property name="dataSource" ref="dataSource" />
+		<property name="changeLog" value="classpath:dbchangelogs/db.changelog-master.xml" />
+	</bean>
+	<bean id="sessionFactory" class="${template.getRootPackage()}.util.HibernateSessionFactory" depends-on="liquibase" >
+		<property name="dataSource"><ref bean="dataSource"/></property>
+		<property name="hibernateProperties">
+			<props>
+				<!-- hibernate properties -->
+				<prop key="hibernate.hbm2ddl.auto">validate</prop>
+				<prop key="hibernate.cache.use_query_cache">false</prop>
+				<prop key="hibernate.format_sql">false</prop>
+			</props>
+		</property>
+		<property name="configLocation"><value>classpath:hibernate.cfg.xml</value></property>
+		<property name="entityInterceptor" ref="databaseCacheInvalidator" />
+#if(${storage.getType()} == "POSTGRES")
+		<property name="lobHandler">
+			<ref local="defaultLobHandler"/>
+		</property>
+#end
+	</bean>
+#if(${storage.getType()} == "POSTGRES")
+	<bean id="defaultLobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler" autowire="byName">
+		<property name="wrapAsLob" value="true" />
+	</bean>
+#end
+</beans>

@@ -1,0 +1,54 @@
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (TabDocGenerator)
+* - tab: the tab for which we are generating the doc (TabComponentDefinition)
+* - component: the component corresponding to the generated page (IETabComponent)
+* - repository: the current repository for which we generate the doc (DGRepository)
+*#
+\newpage
+#set($tab = $object)
+#set($component = $object.getWOComponent())
+\hypertarget{$generator.getReference($tab)}{}
+\subsubsection{Tab component: \emph{$tab.getName()}}
+\label{$generator.getReference($tab)}
+#description($tab)
+{
+\begin{center}
+#set($image = ${generator.screenshot($tab,$projectGenerator)})
+#set($ratio = ${generator.FULL_PAGE_RATIO()})
+#if($image.getIconWidth()<515 && $image.getIconHeight()<735)
+\includegraphics[scale=1.0]{${generator.screenshotName($tab,$projectGenerator)}}
+#else
+  #if($generator.getImageRatio($image)<$ratio)
+\includegraphics[width=\textwidth]{${generator.screenshotName($tab,$projectGenerator)}}
+  #else
+\includegraphics[height=\textheight]{${generator.screenshotName($tab,$projectGenerator)}}
+  #end
+#end
+\end{center}
+}
+@single
+#set($cds = $generator.getNewVector())
+#foreach($cd in ${project.getFlexoComponentLibrary().getAllComponentList()})
+#foreach($tabContainer in ${cd.getWOComponent().getAllTabContainers()})
+#foreach($tabWidget in $tabContainer.getAllNonSequenceWidget())
+#if(!$cds.contains($cd))$cds.addElement($cd)#end ## end of if !cds.contains()
+#end ## end of for each non-sequence widget(IETabWidget)
+#end ## end of for each tab containers
+#end @end## end of for each component
+#if ($cds.size()>0)
+This tab is used in the following pages:
+\begin{itemize}
+#foreach($cd in $cds)
+\item \hyperlink{$generator.getReference($cd)}{$cd.getName()}
+#end
+\end{itemize}
+#else
+Currently, there are no pages using this tab.
+#end ## end of if cds.size()>0
+#set($blockSectionLevel = "paragraph")
+#foreach($block in ${component.iterator()})
+#parse(${generator.getBlockTemplatePath()})
+#end ## end foreach block

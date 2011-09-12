@@ -1,0 +1,11 @@
+#name()Link : WDLMultiSubmitLink {
+    formName = formName;
+    fieldName = hiddenFieldName;
+    value = #name()Value;
+    #additionalBindings()
+    #tooltipAsTitle()
+    #if($widget.isCustomButton())
+    class = "denaliButton";
+    #end
+}
+#renderLinkContent($widget)

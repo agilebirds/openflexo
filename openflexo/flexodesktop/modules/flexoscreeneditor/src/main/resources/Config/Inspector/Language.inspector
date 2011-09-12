@@ -1,0 +1,11 @@
+<inspector title = "Language" inheritsfrom="DKVObject.inspector">
+	<tab name="Basic" index="0">
+		<property name="name" label="name" widget="READ_ONLY_TEXT_FIELD" constraint="1"/>
+		<property name="isMain" label="isMain" widget="CHECKBOX" constraint="2"/>
+		<property name="isoCode" label="iso_code" widget="TEXT_FIELD" constraint="3"/>
+	</tab>
+	
+	<tab name="Advanced" index="1">
+		
+	</tab>
+</inspector>

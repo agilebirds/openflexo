@@ -1,0 +1,10 @@
+#if(${widget.getOperator().getBindingConditional().isBindingValid()})
+	#set($wodRepresentation = ${widget.getOperator().getBindingConditional().getWodStringRepresentation()})
+	#if(!${widget.isInRepetition()} && $wodRepresentation != "true" && $wodRepresentation != "false")
+    	##Use an intermediate binding for condition to avoid change of condition during takevaluefromrequest
+    	##Set to the real binding is performed in append to response
+    	public Object #nameForWidget($widget);
+	#end
+#end
+
+#renderSequence($widget)

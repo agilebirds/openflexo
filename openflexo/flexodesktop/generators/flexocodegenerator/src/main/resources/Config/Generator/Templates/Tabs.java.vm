@@ -1,0 +1,87 @@
+public static final Vector<String> AVAILABLE_#upName() = new Vector<String>();
+#foreach($tabWidget in ${widget.getAllTabs()})
+public static final String #upNameForWidget($tabWidget) = "#upNameForWidget($tabWidget)";
+#end
+    static {
+        #foreach($tabWidget in ${widget.getAllTabs()})
+        AVAILABLE_#upName().add(#upNameForWidget($tabWidget));
+        #end
+    }
+    /**
+    * The tabsInfoArray is used by the differents WDLTabsComponents (i.e. WDLTabsHeaderFooter et WDLTabsConditional) to manage tabs. 
+    * It is possible to hide some tabs to the user by not adding the corresponding dictionary to the tabsInfoArray.
+    * @return NSArray of NSDictionary describing each Tab.
+    */
+    public NSArray #name()TabsInfoArray() {
+        NSMutableArray  #name()TabsInfoArray = new NSMutableArray();
+        #foreach($tabWidget in ${widget.getAllTabs()})
+            #if($tabWidget.isInConditional())
+                #set($_conditional = ${tabWidget.conditional()})
+                @single
+                    if(
+                        #if(${_conditional.getIsNegate()})
+                        !(
+                        #end
+                        #if((!${_conditional.getBindingConditional().getAccessedType().isPrimitive()}) && ${tabWidget.getConditionalOperator().javaConditionalValueStringIsNotPrimitive()})
+                            ${_conditional.javaConditionalValueString()}
+                            #if(${_conditional.getBindingConditional().getAccessedType()})!=null#end
+                            #if(${_conditional.getBindingConditional().getAccessedType().isBoolean()})
+                             && 
+                            #else
+                             )
+                            #end
+                        #end
+                        #if(${_conditional.getBindingConditional().getAccessedType().isBoolean()})
+                        ${_conditional.javaConditionalValueString()})
+                        #end
+                        #if(${_conditional.getIsNegate()})
+                          )
+                        #end 
+                @end
+			#end
+            
+			#if($project.getIsLocalized())
+				#name()TabsInfoArray.addObject(new NSDictionary(new Object[]{localizedString("#generateKey ($tabWidget 'value' $tabWidget.getTitle())"),#upNameForWidget($tabWidget),#if(${tabWidget.getTooltip()})localizedString("#generateKey ($tabWidget 'title' $tabWidget.getTooltip())")#else localizedString("#generateKey ($tabWidget 'title' $tabWidget.getTitle())")#end}, new Object[]{"title","key","toolTip"}));
+			#else
+				#name()TabsInfoArray.addObject(new NSDictionary(new Object[]{"${tabWidget.getTitle()}",#upNameForWidget($tabWidget),"#if(${tabWidget.getTooltip()})${tabWidget.getTooltip()}#else${tabWidget.getTitle()}#end"}, new Object[]{"title","key","toolTip"}));
+			#end
+        #end
+        return #name()TabsInfoArray;
+    }
+    
+    /**
+    * @return the KEY of the current selected tab
+    */
+    public String #name()SelectedTab(){
+        if(_current#capName()SelectedTab==null) {
+            NSArray a = #name()TabsInfoArray();
+            if (a.count()>0) {
+                NSDictionary d = (NSDictionary)a.objectAtIndex(0);
+                _current#capName()SelectedTab = (String)d.valueForKey("key");
+            }
+        }
+        return _current#capName()SelectedTab;
+    }
+    
+    public void set#capName()SelectedTab(String value){
+        if(AVAILABLE_#upName().contains(value))
+            _new#capName()SelectedTab = value;
+    }
+    #void($appendToResponse.append("if(_new#capName()SelectedTab != null) {$n _current#capName()SelectedTab = _new#capName()SelectedTab;$n _new#capName()SelectedTab = null;$n}"))
+    #foreach($tabWidget in ${widget.getAllTabs()})
+    public String #nameForWidget($tabWidget)TabKey() {
+        return #upNameForWidget($tabWidget);
+    }
+    #end
+    
+    #if($widget.isInPopup())
+    public String uniqueNameFor#capName()()
+    {
+        return uniqueIdentifier()+"#name()";
+    }
+    #end
+
+#renderSequence($widget)
+#renderSequence($widget.getButtons())
+    protected String _current#capName()SelectedTab = null;
+    protected String _new#capName()SelectedTab = null;

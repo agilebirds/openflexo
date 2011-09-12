@@ -1,0 +1,203 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY MyPizza "http://www.mybusiness.com/ontologies/MyPizza.owl#" >
+    <!ENTITY PizzaEditorCalc "http://www.denali.be/flexo/ontologies/Calcs/PizzaEditorCalc.owl#" >
+    <!ENTITY Ontology1231149415187 "http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#" >
+]>
+
+
+<rdf:RDF xmlns="http://www.mybusiness.com/ontologies/MyPizza.owl#"
+     xml:base="http://www.mybusiness.com/ontologies/MyPizza.owl"
+     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+     xmlns:PizzaEditorCalc="http://www.denali.be/flexo/ontologies/Calcs/PizzaEditorCalc.owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:Ontology1231149415187="http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#"
+     xmlns:MyPizza="http://www.mybusiness.com/ontologies/MyPizza.owl#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#">
+    <owl:Ontology rdf:about="">
+        <owl:imports rdf:resource="http://www.denali.be/flexo/ontologies/Calcs/PizzaEditor.owl"/>
+        <owl:imports rdf:resource="http://www.denali.be/flexo/ontologies/Calcs/PizzaIngredientEditor.owl"/>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.denali.be/flexo/ontologies/Calcs/PizzaEditorCalc.owl#oeHasBase -->
+
+    <owl:ObjectProperty rdf:about="&PizzaEditorCalc;oeHasBase"/>
+    
+
+
+    <!-- http://www.denali.be/flexo/ontologies/Calcs/PizzaEditorCalc.owl#oeHasTopping -->
+
+    <owl:ObjectProperty rdf:about="&PizzaEditorCalc;oeHasTopping"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.denali.be/flexo/ontologies/Calcs/PizzaEditorCalc.owl#OEMeatTopping -->
+
+    <owl:Class rdf:about="&PizzaEditorCalc;OEMeatTopping"/>
+    
+
+
+    <!-- http://www.denali.be/flexo/ontologies/Calcs/PizzaEditorCalc.owl#OENamedPizza -->
+
+    <owl:Class rdf:about="&PizzaEditorCalc;OENamedPizza"/>
+    
+
+
+    <!-- http://www.denali.be/flexo/ontologies/Calcs/PizzaEditorCalc.owl#OESeefoodTopping -->
+
+    <owl:Class rdf:about="&PizzaEditorCalc;OESeefoodTopping"/>
+    
+
+
+    <!-- http://www.denali.be/flexo/ontologies/Calcs/PizzaEditorCalc.owl#OEVegetableTopping -->
+
+    <owl:Class rdf:about="&PizzaEditorCalc;OEVegetableTopping"/>
+    
+
+
+    <!-- http://www.mybusiness.com/ontologies/MyPizza.owl#AmericanaPizza -->
+
+    <owl:Class rdf:about="#AmericanaPizza">
+        <rdfs:subClassOf rdf:resource="&PizzaEditorCalc;OENamedPizza"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&PizzaEditorCalc;oeHasTopping"/>
+                <owl:someValuesFrom rdf:resource="#TomatoTopping"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&PizzaEditorCalc;oeHasTopping"/>
+                <owl:someValuesFrom rdf:resource="&Ontology1231149415187;MozzarellaTopping"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&PizzaEditorCalc;oeHasBase"/>
+                <owl:someValuesFrom rdf:resource="&Ontology1231149415187;ThinAndCrispyBase"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&PizzaEditorCalc;oeHasTopping"/>
+                <owl:someValuesFrom rdf:resource="#SpicyBeefTopping"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.mybusiness.com/ontologies/MyPizza.owl#MargheritaPizza -->
+
+    <owl:Class rdf:about="#MargheritaPizza">
+        <rdfs:subClassOf rdf:resource="&PizzaEditorCalc;OENamedPizza"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&PizzaEditorCalc;oeHasTopping"/>
+                <owl:someValuesFrom rdf:resource="&Ontology1231149415187;MozzarellaTopping"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&PizzaEditorCalc;oeHasTopping"/>
+                <owl:someValuesFrom rdf:resource="#TomatoTopping"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&PizzaEditorCalc;oeHasBase"/>
+                <owl:someValuesFrom rdf:resource="&Ontology1231149415187;ThinAndCrispyBase"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.mybusiness.com/ontologies/MyPizza.owl#PrawnTopping -->
+
+    <owl:Class rdf:about="#PrawnTopping">
+        <rdfs:subClassOf rdf:resource="&PizzaEditorCalc;OESeefoodTopping"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.mybusiness.com/ontologies/MyPizza.owl#SalamiTopping -->
+
+    <owl:Class rdf:about="#SalamiTopping">
+        <rdfs:subClassOf rdf:resource="&PizzaEditorCalc;OEMeatTopping"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.mybusiness.com/ontologies/MyPizza.owl#SpicyBeefTopping -->
+
+    <owl:Class rdf:about="#SpicyBeefTopping">
+        <rdfs:subClassOf rdf:resource="&PizzaEditorCalc;OEMeatTopping"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.mybusiness.com/ontologies/MyPizza.owl#TomatoTopping -->
+
+    <owl:Class rdf:about="#TomatoTopping">
+        <rdfs:subClassOf rdf:resource="&PizzaEditorCalc;OEVegetableTopping"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.mybusiness.com/ontologies/MyPizza.owl#TunaTopping -->
+
+    <owl:Class rdf:about="#TunaTopping">
+        <rdfs:subClassOf rdf:resource="&PizzaEditorCalc;OESeefoodTopping"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#MozzarellaTopping -->
+
+    <owl:Class rdf:about="&Ontology1231149415187;MozzarellaTopping"/>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#ThinAndCrispyBase -->
+
+    <owl:Class rdf:about="&Ontology1231149415187;ThinAndCrispyBase"/>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 2.2.1.962) http://owlapi.sourceforge.net -->
+

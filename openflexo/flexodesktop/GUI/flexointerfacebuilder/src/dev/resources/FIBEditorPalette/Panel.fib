@@ -1,0 +1,4 @@
+<Panel border="titled" borderTitle="Panel" layout="border" width="80" height="60">
+	<Parameter name="x" value="10"/>
+	<Parameter name="y" value="10"/>
+</Panel>

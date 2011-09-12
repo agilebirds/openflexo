@@ -1,0 +1,22 @@
+<inspector title = "IEControlWidget" inheritsfrom ="InnerTableWidget.inspector">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+		<property name="exampleValueIsDefaultValue" label="exampleValueIsDefaultValue" help="If checked, then the example value(s) will be used as the default value(s)" widget="CHECKBOX" constraint="4">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+	</tab>
+
+	<tab name="Advanced" index="2" layout="DEFAULT">
+		<property name="isFilterForRepetition" label="is_filter_for" widget="DROPDOWN" constraint="3">
+			<param name="dynamiclist" value="wOComponent.allList"/>
+			<param name="format" value="name"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="bindingKeypath" label="binding_keypath" widget="CUSTOM" constraint="4" help="Helps you set the keypath this filter is for" depends="isFilterForRepetition" conditional="isFilterForRepetition!=null">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="bindingKeypathDefinition"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>			
+		</property>
+	</tab>
+
+</inspector>

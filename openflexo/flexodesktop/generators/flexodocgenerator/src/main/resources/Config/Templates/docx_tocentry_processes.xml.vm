@@ -1,0 +1,40 @@
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (DefinitionsDocGenerator)
+* - repository: the current repository for which we generate the doc (DGRepository)
+* - level: the level to use in title.
+*#
+#set($workflow = ${project.getWorkflow()})
+
+#if(${workflow.getSortedTopLevelProcesses().hasMoreElements()})
+	#renderScreenshotForObject(${workflow})
+#end
+
+#foreach($processNode in $workflow.getSortedTopLevelProcesses())
+    #if(!$processNode.getDontGenerate())
+	    #set($process = $processNode.getProcess())
+	    <w:p>
+		<w:r>
+			<w:pPr>
+  				<w:pageBreakBefore/>
+			</w:pPr>
+		</w:r>
+	    </w:p>
+	    #renderProcess($process $level)
+	#end
+#end 
+
+#foreach($process in $workflow.getSortedImportedProcesses())
+#if(!$process.getDontGenerate())
+		<w:p>
+			<w:r>
+				<w:pPr>
+  					<w:pageBreakBefore/>
+				</w:pPr>
+			</w:r>
+		</w:p>
+	#renderProcess($process $level)
+#end 
+#end 

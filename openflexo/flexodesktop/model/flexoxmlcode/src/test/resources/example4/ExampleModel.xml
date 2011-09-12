@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model handlesReferences="yes" builder="org.openflexo.xmlcode.examples.example4.GraphBuilder"> 
+  <entity name="org.openflexo.xmlcode.examples.example4.Graph" xmlTag="Graph" finalizer="finalizeGraphSerialization"> 
+    <property name="startNode" xmlTag="StartNode"/> 
+  </entity> 
+  <entity name="org.openflexo.xmlcode.examples.example4.Node" xmlTag="Node,StartNode,OriginNode,DestinationNode"  finalizer="finalizeNodeSerialization"> 
+    <property name="edges" xmlTag="Edge" type="vector"/> 
+    <property name="nodeProperties" xmlTag="nodeProperties" type="properties"/> 
+  </entity> 
+  <entity name="org.openflexo.xmlcode.examples.example4.Edge" xmlTag="Edge" finalizer="finalizeEdgeSerialization"> 
+    <property name="originNode" xmlTag="OriginNode"/> 
+    <property name="destinationNode" xmlTag="DestinationNode"/> 
+  </entity> 
+</model>

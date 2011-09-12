@@ -1,0 +1,2 @@
+#macro(testCommon)CommonHibernate#end
+#macro(testHibernate)Hibernate#end

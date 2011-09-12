@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GeometricSet id="1">
+  <Point id="2" name="Point5">
+    <PointGraphicalRepresentation id="3" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="4" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="5" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="6" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <ExplicitPointConstruction id="7" point="114.0,150.0" />
+    <Resulting_FGEPoint idref="8" />
+  </Point>
+  <Point id="9" name="Point6">
+    <PointGraphicalRepresentation id="10" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="11" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="12" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="13" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <ExplicitPointConstruction id="14" point="216.0,221.0" />
+    <Resulting_FGEPoint idref="15" />
+  </Point>
+  <Polylin id="16" name="Polylin7">
+    <PolylinGraphicalRepresentation id="17" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="18" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="19" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="20" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PolylinGraphicalRepresentation>
+    <RectPolylinWithStartAndEndAreaConstruction id="21" startOrientation="NORTH" endOrientation="WEST">
+      <Start_ObjectReference id="22">
+        <Reference_ExplicitPointConstruction idref="7" />
+      </Start_ObjectReference>
+      <End_ObjectReference id="23">
+        <Reference_ExplicitPointConstruction idref="14" />
+      </End_ObjectReference>
+    </RectPolylinWithStartAndEndAreaConstruction>
+    <Resulting_FGEPolylin id="24" className="org.openflexo.fge.geom.FGERectPolylin">
+      <FGEPoint id="8" x="114.0" y="150.0" />
+      <FGEPoint id="25" x="114.0" y="140.0" />
+      <FGEPoint id="26" x="165.0" y="140.0" />
+      <FGEPoint id="27" x="165.0" y="221.0" />
+      <FGEPoint id="15" x="216.0" y="221.0" />
+    </Resulting_FGEPolylin>
+  </Polylin>
+  <Point id="28" name="Point8">
+    <PointGraphicalRepresentation id="29" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="30" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="31" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="32" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <ExplicitPointConstruction id="33" point="148.0,484.0" />
+    <Resulting_FGEPoint idref="34" />
+  </Point>
+  <Point id="35" name="Point9">
+    <PointGraphicalRepresentation id="36" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="37" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="38" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="39" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <ExplicitPointConstruction id="40" point="206.0,418.0" />
+    <Resulting_FGEPoint idref="41" />
+  </Point>
+  <Polylin id="42" name="Polylin10">
+    <PolylinGraphicalRepresentation id="43" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="44" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="45" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="46" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PolylinGraphicalRepresentation>
+    <RectPolylinWithStartAndEndAreaConstruction id="47" startOrientation="NORTH" endOrientation="WEST">
+      <Start_ObjectReference id="48">
+        <Reference_ExplicitPointConstruction idref="40" />
+      </Start_ObjectReference>
+      <End_ObjectReference id="49">
+        <Reference_ExplicitPointConstruction idref="33" />
+      </End_ObjectReference>
+    </RectPolylinWithStartAndEndAreaConstruction>
+    <Resulting_FGEPolylin id="50" className="org.openflexo.fge.geom.FGERectPolylin">
+      <FGEPoint id="41" x="206.0" y="418.0" />
+      <FGEPoint id="51" x="206.0" y="408.0" />
+      <FGEPoint id="52" x="138.0" y="408.0" />
+      <FGEPoint id="53" x="138.0" y="484.0" />
+      <FGEPoint id="34" x="148.0" y="484.0" />
+    </Resulting_FGEPolylin>
+  </Polylin>
+  <Point id="54" name="Point11">
+    <PointGraphicalRepresentation id="55" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="56" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="57" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="58" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <ExplicitPointConstruction id="59" point="523.0,188.0" />
+    <Resulting_FGEPoint idref="60" />
+  </Point>
+  <Point id="61" name="Point1">
+    <PointGraphicalRepresentation id="62" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="63" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="64" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="65" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <ExplicitPointConstruction id="66" point="600.0,240.0" />
+    <Resulting_FGEPoint idref="67" />
+  </Point>
+  <Polylin id="68" name="Polylin2">
+    <PolylinGraphicalRepresentation id="69" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="70" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="71" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="72" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PolylinGraphicalRepresentation>
+    <RectPolylinWithStartAndEndAreaConstruction id="73" startOrientation="WEST" endOrientation="NORTH">
+      <Start_ObjectReference id="74">
+        <Reference_ExplicitPointConstruction idref="59" />
+      </Start_ObjectReference>
+      <End_ObjectReference id="75">
+        <Reference_ExplicitPointConstruction idref="66" />
+      </End_ObjectReference>
+    </RectPolylinWithStartAndEndAreaConstruction>
+    <Resulting_FGEPolylin id="76" className="org.openflexo.fge.geom.FGERectPolylin">
+      <FGEPoint id="60" x="523.0" y="188.0" />
+      <FGEPoint id="77" x="513.0" y="188.0" />
+      <FGEPoint id="78" x="513.0" y="214.0" />
+      <FGEPoint id="79" x="600.0" y="214.0" />
+      <FGEPoint id="67" x="600.0" y="240.0" />
+    </Resulting_FGEPolylin>
+  </Polylin>
+  <Point id="80" name="Point3">
+    <PointGraphicalRepresentation id="81" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="82" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="83" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="84" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <ExplicitPointConstruction id="85" point="488.0,545.0" />
+    <Resulting_FGEPoint idref="86" />
+  </Point>
+  <Point id="87" name="Point4">
+    <PointGraphicalRepresentation id="88" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="89" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="90" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="91" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <ExplicitPointConstruction id="92" point="549.0,492.0" />
+    <Resulting_FGEPoint idref="93" />
+  </Point>
+  <Polylin id="94" name="Polylin5">
+    <PolylinGraphicalRepresentation id="95" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="96" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="97" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="98" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PolylinGraphicalRepresentation>
+    <RectPolylinWithStartAndEndAreaConstruction id="99" startOrientation="WEST" endOrientation="NORTH">
+      <Start_ObjectReference id="100">
+        <Reference_ExplicitPointConstruction idref="92" />
+      </Start_ObjectReference>
+      <End_ObjectReference id="101">
+        <Reference_ExplicitPointConstruction idref="85" />
+      </End_ObjectReference>
+    </RectPolylinWithStartAndEndAreaConstruction>
+    <Resulting_FGEPolylin id="102" className="org.openflexo.fge.geom.FGERectPolylin">
+      <FGEPoint id="93" x="549.0" y="492.0" />
+      <FGEPoint id="103" x="488.0" y="492.0" />
+      <FGEPoint id="86" x="488.0" y="545.0" />
+    </Resulting_FGEPolylin>
+  </Polylin>
+  <Rectangle id="104" name="Rectangle13">
+    <RectangleGraphicalRepresentation id="105" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="106" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="107" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="108" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </RectangleGraphicalRepresentation>
+    <RectangleWithTwoPointsConstruction id="109" isFilled="false">
+      <P1_ExplicitPointConstruction id="110" point="93.0,266.0" />
+      <P2_ExplicitPointConstruction id="111" point="140.0,307.0" />
+    </RectangleWithTwoPointsConstruction>
+    <Resulting_FGERectangle id="112" x="93.0" y="266.0" width="47.0" height="41.0" isFilled="false" />
+  </Rectangle>
+  <Rectangle id="113" name="Rectangle14">
+    <RectangleGraphicalRepresentation id="114" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="115" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="116" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="117" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </RectangleGraphicalRepresentation>
+    <RectangleWithTwoPointsConstruction id="118" isFilled="false">
+      <P1_ExplicitPointConstruction id="119" point="193.0,310.0" />
+      <P2_ExplicitPointConstruction id="120" point="262.0,354.0" />
+    </RectangleWithTwoPointsConstruction>
+    <Resulting_FGERectangle id="121" x="193.0" y="310.0" width="69.0" height="44.0" isFilled="false" />
+  </Rectangle>
+  <Polylin id="122" name="Polylin15">
+    <PolylinGraphicalRepresentation id="123" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="124" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="125" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="126" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PolylinGraphicalRepresentation>
+    <RectPolylinWithStartAndEndAreaConstruction id="127" startOrientation="WEST" endOrientation="NORTH">
+      <Start_ObjectReference id="128">
+        <Reference_RectangleWithTwoPointsConstruction idref="118" />
+      </Start_ObjectReference>
+      <End_ObjectReference id="129">
+        <Reference_RectangleWithTwoPointsConstruction idref="109" />
+      </End_ObjectReference>
+    </RectPolylinWithStartAndEndAreaConstruction>
+    <Resulting_FGEPolylin id="130" className="org.openflexo.fge.geom.FGERectPolylin">
+      <FGEPoint id="131" x="193.0" y="332.0" />
+      <FGEPoint id="132" x="166.5" y="332.0" />
+      <FGEPoint id="133" x="166.5" y="256.0" />
+      <FGEPoint id="134" x="116.5" y="256.0" />
+      <FGEPoint id="135" x="116.5" y="266.0" />
+    </Resulting_FGEPolylin>
+  </Polylin>
+  <Rectangle id="136" name="Rectangle16">
+    <RectangleGraphicalRepresentation id="137" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="138" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="139" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="140" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </RectangleGraphicalRepresentation>
+    <RectangleWithTwoPointsConstruction id="141" isFilled="false">
+      <P1_ExplicitPointConstruction id="142" point="504.0,280.0" />
+      <P2_ExplicitPointConstruction id="143" point="583.0,324.0" />
+    </RectangleWithTwoPointsConstruction>
+    <Resulting_FGERectangle id="144" x="504.0" y="280.0" width="79.0" height="44.0" isFilled="false" />
+  </Rectangle>
+  <Rectangle id="145" name="Rectangle17">
+    <RectangleGraphicalRepresentation id="146" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="147" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="148" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="149" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </RectangleGraphicalRepresentation>
+    <RectangleWithTwoPointsConstruction id="150" isFilled="false">
+      <P1_ExplicitPointConstruction id="151" point="598.0,367.0" />
+      <P2_ExplicitPointConstruction id="152" point="683.0,399.0" />
+    </RectangleWithTwoPointsConstruction>
+    <Resulting_FGERectangle id="153" x="598.0" y="367.0" width="85.0" height="32.0" isFilled="false" />
+  </Rectangle>
+  <Polylin id="154" name="Polylin18">
+    <PolylinGraphicalRepresentation id="155" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="156" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="157" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="158" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PolylinGraphicalRepresentation>
+    <RectPolylinWithStartAndEndAreaConstruction id="159" startOrientation="WEST" endOrientation="NORTH">
+      <Start_ObjectReference id="160">
+        <Reference_RectangleWithTwoPointsConstruction idref="141" />
+      </Start_ObjectReference>
+      <End_ObjectReference id="161">
+        <Reference_RectangleWithTwoPointsConstruction idref="150" />
+      </End_ObjectReference>
+    </RectPolylinWithStartAndEndAreaConstruction>
+    <Resulting_FGEPolylin id="162" className="org.openflexo.fge.geom.FGERectPolylin">
+      <FGEPoint id="163" x="504.0" y="302.0" />
+      <FGEPoint id="164" x="494.0" y="302.0" />
+      <FGEPoint id="165" x="494.0" y="345.5" />
+      <FGEPoint id="166" x="640.5" y="345.5" />
+      <FGEPoint id="167" x="640.5" y="367.0" />
+    </Resulting_FGEPolylin>
+  </Polylin>
+  <Rectangle id="168" name="Rectangle19">
+    <RectangleGraphicalRepresentation id="169" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="170" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="171" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="172" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </RectangleGraphicalRepresentation>
+    <RectangleWithTwoPointsConstruction id="173" isFilled="false">
+      <P1_ExplicitPointConstruction id="174" point="219.0,528.0" />
+      <P2_ExplicitPointConstruction id="175" point="281.0,553.0" />
+    </RectangleWithTwoPointsConstruction>
+    <Resulting_FGERectangle id="176" x="219.0" y="528.0" width="62.0" height="25.0" isFilled="false" />
+  </Rectangle>
+  <Rectangle id="177" name="Rectangle20">
+    <RectangleGraphicalRepresentation id="178" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="179" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="180" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="181" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </RectangleGraphicalRepresentation>
+    <RectangleWithTwoPointsConstruction id="182" isFilled="false">
+      <P1_ExplicitPointConstruction id="183" point="122.0,544.0" />
+      <P2_ExplicitPointConstruction id="184" point="201.0,606.0" />
+    </RectangleWithTwoPointsConstruction>
+    <Resulting_FGERectangle id="185" x="122.0" y="544.0" width="79.0" height="62.0" isFilled="false" />
+  </Rectangle>
+  <Polylin id="186" name="Polylin21">
+    <PolylinGraphicalRepresentation id="187" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="188" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="189" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="190" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PolylinGraphicalRepresentation>
+    <RectPolylinWithStartAndEndAreaConstruction id="191" startOrientation="WEST" endOrientation="NORTH">
+      <Start_ObjectReference id="192">
+        <Reference_RectangleWithTwoPointsConstruction idref="182" />
+      </Start_ObjectReference>
+      <End_ObjectReference id="193">
+        <Reference_RectangleWithTwoPointsConstruction idref="173" />
+      </End_ObjectReference>
+    </RectPolylinWithStartAndEndAreaConstruction>
+    <Resulting_FGEPolylin id="194" className="org.openflexo.fge.geom.FGERectPolylin">
+      <FGEPoint id="195" x="122.0" y="575.0" />
+      <FGEPoint id="196" x="112.0" y="575.0" />
+      <FGEPoint id="197" x="112.0" y="518.0" />
+      <FGEPoint id="198" x="250.0" y="518.0" />
+      <FGEPoint id="199" x="250.0" y="528.0" />
+    </Resulting_FGEPolylin>
+  </Polylin>
+  <Rectangle id="200" name="Rectangle22">
+    <RectangleGraphicalRepresentation id="201" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="202" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="203" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="204" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </RectangleGraphicalRepresentation>
+    <RectangleWithTwoPointsConstruction id="205" isFilled="false">
+      <P1_ExplicitPointConstruction id="206" point="537.0,589.0" />
+      <P2_ExplicitPointConstruction id="207" point="591.0,612.0" />
+    </RectangleWithTwoPointsConstruction>
+    <Resulting_FGERectangle id="208" x="537.0" y="589.0" width="54.0" height="23.0" isFilled="false" />
+  </Rectangle>
+  <Rectangle id="209" name="Rectangle23">
+    <RectangleGraphicalRepresentation id="210" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="211" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="212" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="213" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </RectangleGraphicalRepresentation>
+    <RectangleWithTwoPointsConstruction id="214" isFilled="false">
+      <P1_ExplicitPointConstruction id="215" point="676.0,539.0" />
+      <P2_ExplicitPointConstruction id="216" point="744.0,618.0" />
+    </RectangleWithTwoPointsConstruction>
+    <Resulting_FGERectangle id="217" x="676.0" y="539.0" width="68.0" height="79.0" isFilled="false" />
+  </Rectangle>
+  <Polylin id="218" name="Polylin24">
+    <PolylinGraphicalRepresentation id="219" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="220" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="221" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="222" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PolylinGraphicalRepresentation>
+    <RectPolylinWithStartAndEndAreaConstruction id="223" startOrientation="WEST" endOrientation="NORTH">
+      <Start_ObjectReference id="224">
+        <Reference_RectangleWithTwoPointsConstruction idref="214" />
+      </Start_ObjectReference>
+      <End_ObjectReference id="225">
+        <Reference_RectangleWithTwoPointsConstruction idref="205" />
+      </End_ObjectReference>
+    </RectPolylinWithStartAndEndAreaConstruction>
+    <Resulting_FGEPolylin id="226" className="org.openflexo.fge.geom.FGERectPolylin">
+      <FGEPoint id="227" x="676.0" y="564.0" />
+      <FGEPoint id="228" x="564.0" y="564.0" />
+      <FGEPoint id="229" x="564.0" y="589.0" />
+    </Resulting_FGEPolylin>
+  </Polylin>
+  <GeometricDrawingGraphicalRepresentation id="230" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" width="10000.0" height="10000.0" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255">
+    <TextStyle id="231" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+  </GeometricDrawingGraphicalRepresentation>
+</GeometricSet>
+

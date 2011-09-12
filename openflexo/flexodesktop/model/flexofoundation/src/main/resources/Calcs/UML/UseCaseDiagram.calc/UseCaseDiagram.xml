@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OntologyCalc id="1" uri="http://www.agilebirds.com/flexo/ontologies/Calcs/UML/UseCaseDiagram.owl" owlFile="UseCaseDiagram.owl">
+  <description>Use case diagrams describe what a system does from the standpoint of an external observer. The emphasis is on what a system does rather than how.
+Use case diagrams are closely connected to scenarios. A scenario is an example of what happens when someone interacts with the system. Here is a scenario for a medical clinic.
+"A patient calls the clinic to make an appointment for a yearly checkup. The receptionist finds the nearest empty time slot in the appointment book and schedules the appointment for that time slot. "
+A use case is a summary of scenarios for a single task or goal. An actor is who or what initiates the events involved in that task. Actors are simply roles that people or objects play. The picture below is a Make Appointment use case for the medical clinic. The actor is a Patient. The connection between actor and use case is a communication association (or communication for short).</description>
+  <EditionPattern id="2" name="Actor">
+    <description>An actor specifies a role played by a user or any other system that interacts with the subject.</description>
+    <DropScheme id="3" target="top" name="DropNewActor" skipConfirmationPanel="false">
+      <Parameter id="4" name="name" label="name" widget="TEXT_FIELD" type="OntologyIndividual" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false" />
+      <Parameter id="5" name="uri" label="uri" widget="TEXT_FIELD" type="OntologyIndividual" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="name" />
+      <Parameter id="6" name="packageParameter" conceptURI="http://www.agilebirds.com/flexo/ontologies/UML/UML2.owl#Package" label="package" widget="CUSTOM" type="OntologyIndividual" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false" />
+      <DeclarePatternRole id="7" object="packageParameter" patternRole="package" />
+      <AddIndividual id="8" individualName="uri" conceptURI="http://www.agilebirds.com/flexo/ontologies/UML/UML2.owl#Actor" patternRole="actor" conditional="">
+        <DataPropertyAssertion id="9" dataPropertyURI="http://www.agilebirds.com/flexo/ontologies/UML/UML2.owl#name" value="name" />
+        <description>Actor individual being created and put in ontology</description>
+      </AddIndividual>
+      <AddObjectProperty id="10" object="actor" objectPropertyURI="http://www.agilebirds.com/flexo/ontologies/UML/UML2.owl#packagedElement" patternRole="packagedElement" subject="package" />
+      <AddShape id="11" container="container" patternRole="shape" conditional="">
+        <description>Add the shape</description>
+      </AddShape>
+    </DropScheme>
+    <ShapePatternRole id="12" boundPatternRole="actor" patternRole="shape">
+      <ShapeGraphicalRepresentation id="13" className="org.openflexo.ced.view.widget.EditionPatternPreviewShapeGR" x="104.0" y="36.0" width="40.0" height="47.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="actor" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="24.0" absoluteTextY="-8.0" textAlignment="CENTER">
+        <ForegroundStyle id="14" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ImageBackgroundStyle id="15" imageFile="Actor.gif" scaleX="1.1111111111111112" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="16" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="17" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="18" isRounded="false" arcSize="30.0" />
+        <TextStyle id="19" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <Label id="20" propertyURI="http://www.agilebirds.com/flexo/ontologies/UML/UML2.owl#name" type="UseOntologicProperty" />
+    </ShapePatternRole>
+    <OntologicObjectPatternRole id="21" ontologicObjectType="Individual" patternRole="package" />
+    <OntologicObjectPatternRole id="22" ontologicObjectType="Individual" patternRole="actor" />
+    <OntologicObjectPatternRole id="23" ontologicObjectType="OntologyStatement" patternRole="packagedElement" />
+    <Inspector id="24">
+      <tab id="25" name="Actor" index="0" />
+    </Inspector>
+  </EditionPattern>
+  <EditionPattern id="26" name="UseCase">
+    <description>A use case is the specification of a set of actions performed by a system, which yields an observable result that is, typically, of value for one or more actors or other stakeholders of the system.</description>
+    <ShapePatternRole id="27" patternRole="shape">
+      <ShapeGraphicalRepresentation id="28" className="org.openflexo.ced.view.widget.EditionPatternPreviewShapeGR" x="68.0" y="31.0" width="139.85915492957744" height="50.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+        <ForegroundStyle id="29" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="30" color="249,244,205" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="31" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="32" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <OvalShape id="33" />
+        <TextStyle id="34" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <Label id="35" type="UseOntologicProperty" />
+    </ShapePatternRole>
+    <Inspector id="36">
+      <tab id="37" name="UseCase" index="0" />
+    </Inspector>
+  </EditionPattern>
+</OntologyCalc>
+

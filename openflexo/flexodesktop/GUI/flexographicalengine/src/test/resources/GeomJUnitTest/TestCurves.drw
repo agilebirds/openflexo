@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GeometricSet id="1">
+  <Point id="2" name="Point1">
+    <PointGraphicalRepresentation id="3" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="4" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="5" noStroke="false" color="0,0,0" lineWidth="3.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="6" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <ExplicitPointConstruction id="7" point="100.0,350.0" />
+    <Resulting_FGEPoint id="8" x="100.0" y="350.0" />
+  </Point>
+  <Point id="9" name="Point2">
+    <PointGraphicalRepresentation id="10" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="11" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="12" noStroke="false" color="0,0,0" lineWidth="3.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="13" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <ExplicitPointConstruction id="14" point="223.0,137.0" />
+    <Resulting_FGEPoint id="15" x="223.0" y="137.0" />
+  </Point>
+  <Point id="16" name="Point3">
+    <PointGraphicalRepresentation id="17" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="18" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="19" noStroke="false" color="0,0,0" lineWidth="3.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="20" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <ExplicitPointConstruction id="21" point="412.0,153.0" />
+    <Resulting_FGEPoint id="22" x="412.0" y="153.0" />
+  </Point>
+  <Point id="23" name="Point4">
+    <PointGraphicalRepresentation id="24" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="25" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="26" noStroke="false" color="0,0,0" lineWidth="3.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="27" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <ExplicitPointConstruction id="28" point="459.0,418.0" />
+    <Resulting_FGEPoint id="29" x="459.0" y="418.0" />
+  </Point>
+  <Point id="30" name="Point5">
+    <PointGraphicalRepresentation id="31" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="32" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="33" noStroke="false" color="0,0,0" lineWidth="3.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="34" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <ExplicitPointConstruction id="35" point="683.0,452.0" />
+    <Resulting_FGEPoint id="36" x="683.0" y="452.0" />
+  </Point>
+  <Point id="37" name="Point6">
+    <PointGraphicalRepresentation id="38" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="39" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="40" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="41" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <PointMiddleOfTwoPointsConstruction id="42">
+      <P1_PointReference id="43">
+        <Reference_ExplicitPointConstruction idref="7" />
+      </P1_PointReference>
+      <P2_PointReference id="44">
+        <Reference_ExplicitPointConstruction idref="21" />
+      </P2_PointReference>
+    </PointMiddleOfTwoPointsConstruction>
+    <Resulting_FGEPoint id="45" x="256.0" y="251.5" />
+  </Point>
+  <Point id="46" name="Point7">
+    <PointGraphicalRepresentation id="47" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="48" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="49" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="50" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <SymetricPointConstruction id="51">
+      <P1_ControlPointReference id="52" cpName="point">
+        <Reference_PointGraphicalRepresentation idref="38" />
+      </P1_ControlPointReference>
+      <P2_PointReference id="53">
+        <Reference_ExplicitPointConstruction idref="14" />
+      </P2_PointReference>
+    </SymetricPointConstruction>
+    <Resulting_FGEPoint id="54" x="190.0" y="22.5" />
+  </Point>
+  <QuadCurve id="55" name="QuadCurve8">
+    <QuadCurveGraphicalRepresentation id="56" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="57" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="58" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="59" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </QuadCurveGraphicalRepresentation>
+    <QuadCurveWithThreePointsConstruction id="60">
+      <P1_PointReference id="61">
+        <Reference_ExplicitPointConstruction idref="7" />
+      </P1_PointReference>
+      <CP_ControlPointReference id="62" cpName="point">
+        <Reference_PointGraphicalRepresentation idref="47" />
+      </CP_ControlPointReference>
+      <P2_PointReference id="63">
+        <Reference_ExplicitPointConstruction idref="21" />
+      </P2_PointReference>
+    </QuadCurveWithThreePointsConstruction>
+    <Resulting_FGEQuadCurve id="64" p1="100.0,350.0" p2="412.0,153.0" cp="190.0,22.5" />
+  </QuadCurve>
+  <Point id="65" name="Point9">
+    <PointGraphicalRepresentation id="66" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="67" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="68" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="69" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <PointMiddleOfTwoPointsConstruction id="70">
+      <P1_PointReference id="71">
+        <Reference_ExplicitPointConstruction idref="14" />
+      </P1_PointReference>
+      <P2_PointReference id="72">
+        <Reference_ExplicitPointConstruction idref="28" />
+      </P2_PointReference>
+    </PointMiddleOfTwoPointsConstruction>
+    <Resulting_FGEPoint id="73" x="341.0" y="277.5" />
+  </Point>
+  <Point id="74" name="Point10">
+    <PointGraphicalRepresentation id="75" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="76" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="77" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="78" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <PointMiddleOfTwoPointsConstruction id="79">
+      <P1_PointReference id="80">
+        <Reference_ExplicitPointConstruction idref="21" />
+      </P1_PointReference>
+      <P2_PointReference id="81">
+        <Reference_ExplicitPointConstruction idref="35" />
+      </P2_PointReference>
+    </PointMiddleOfTwoPointsConstruction>
+    <Resulting_FGEPoint id="82" x="547.5" y="302.5" />
+  </Point>
+  <Point id="83" name="Point11">
+    <PointGraphicalRepresentation id="84" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="85" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="86" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="87" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <SymetricPointConstruction id="88">
+      <P1_ControlPointReference id="89" cpName="point">
+        <Reference_PointGraphicalRepresentation idref="75" />
+      </P1_ControlPointReference>
+      <P2_PointReference id="90">
+        <Reference_ExplicitPointConstruction idref="28" />
+      </P2_PointReference>
+    </SymetricPointConstruction>
+    <Resulting_FGEPoint id="91" x="370.5" y="533.5" />
+  </Point>
+  <QuadCurve id="92" name="QuadCurve12">
+    <QuadCurveGraphicalRepresentation id="93" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="94" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="95" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="96" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </QuadCurveGraphicalRepresentation>
+    <QuadCurveWithThreePointsConstruction id="97">
+      <P1_PointReference id="98">
+        <Reference_ExplicitPointConstruction idref="21" />
+      </P1_PointReference>
+      <CP_ControlPointReference id="99" cpName="point">
+        <Reference_PointGraphicalRepresentation idref="84" />
+      </CP_ControlPointReference>
+      <P2_PointReference id="100">
+        <Reference_ExplicitPointConstruction idref="35" />
+      </P2_PointReference>
+    </QuadCurveWithThreePointsConstruction>
+    <Resulting_FGEQuadCurve id="101" p1="412.0,153.0" p2="683.0,452.0" cp="370.5,533.5" />
+  </QuadCurve>
+  <Point id="102" name="Point13">
+    <PointGraphicalRepresentation id="103" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="104" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="105" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="106" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <SymetricPointConstruction id="107">
+      <P1_ControlPointReference id="108" cpName="point">
+        <Reference_PointGraphicalRepresentation idref="66" />
+      </P1_ControlPointReference>
+      <P2_PointReference id="109">
+        <Reference_ExplicitPointConstruction idref="21" />
+      </P2_PointReference>
+    </SymetricPointConstruction>
+    <Resulting_FGEPoint id="110" x="483.0" y="28.5" />
+  </Point>
+  <QuadCurve id="111" name="QuadCurve14">
+    <QuadCurveGraphicalRepresentation id="112" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="113" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="114" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="115" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </QuadCurveGraphicalRepresentation>
+    <QuadCurveWithThreePointsConstruction id="116">
+      <P1_PointReference id="117">
+        <Reference_ExplicitPointConstruction idref="14" />
+      </P1_PointReference>
+      <CP_ControlPointReference id="118" cpName="point">
+        <Reference_PointGraphicalRepresentation idref="103" />
+      </CP_ControlPointReference>
+      <P2_PointReference id="119">
+        <Reference_ExplicitPointConstruction idref="28" />
+      </P2_PointReference>
+    </QuadCurveWithThreePointsConstruction>
+    <Resulting_FGEQuadCurve id="120" p1="223.0,137.0" p2="459.0,418.0" cp="483.0,28.5" />
+  </QuadCurve>
+  <Point id="121" name="Point5">
+    <PointGraphicalRepresentation id="122" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="123" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="124" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="125" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <PointMiddleOfTwoPointsConstruction id="126">
+      <P1_ControlPointReference id="127" cpName="cp">
+        <Reference_QuadCurveGraphicalRepresentation idref="56" />
+      </P1_ControlPointReference>
+      <P2_PointReference id="128">
+        <Reference_ExplicitPointConstruction idref="21" />
+      </P2_PointReference>
+    </PointMiddleOfTwoPointsConstruction>
+    <Resulting_FGEPoint id="129" x="301.0" y="87.75" />
+  </Point>
+  <Point id="130" name="Point6">
+    <PointGraphicalRepresentation id="131" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="132" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="133" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="134" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <PointMiddleOfTwoPointsConstruction id="135">
+      <P1_ControlPointReference id="136" cpName="cp">
+        <Reference_QuadCurveGraphicalRepresentation idref="56" />
+      </P1_ControlPointReference>
+      <P2_PointReference id="137">
+        <Reference_ExplicitPointConstruction idref="7" />
+      </P2_PointReference>
+    </PointMiddleOfTwoPointsConstruction>
+    <Resulting_FGEPoint id="138" x="145.0" y="186.25" />
+  </Point>
+  <Segment id="139" name="Segment7">
+    <SegmentGraphicalRepresentation id="140" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="141" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="142" noStroke="false" color="204,204,204" lineWidth="0.6000000000000001" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="143" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </SegmentGraphicalRepresentation>
+    <SegmentWithTwoPointsConstruction id="144">
+      <P1_ControlPointReference id="145" cpName="point">
+        <Reference_PointGraphicalRepresentation idref="131" />
+      </P1_ControlPointReference>
+      <P2_ControlPointReference id="146" cpName="point">
+        <Reference_PointGraphicalRepresentation idref="122" />
+      </P2_ControlPointReference>
+    </SegmentWithTwoPointsConstruction>
+    <Resulting_FGESegment id="147" p1="145.0,186.25" p2="301.0,87.75" />
+  </Segment>
+  <Point id="148" name="Point8">
+    <PointGraphicalRepresentation id="149" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="150" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="151" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="152" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <PointMiddleOfTwoPointsConstruction id="153">
+      <P1_PointReference id="154">
+        <Reference_ExplicitPointConstruction idref="14" />
+      </P1_PointReference>
+      <P2_ControlPointReference id="155" cpName="cp">
+        <Reference_QuadCurveGraphicalRepresentation idref="112" />
+      </P2_ControlPointReference>
+    </PointMiddleOfTwoPointsConstruction>
+    <Resulting_FGEPoint id="156" x="353.0" y="82.75" />
+  </Point>
+  <Point id="157" name="Point9">
+    <PointGraphicalRepresentation id="158" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="159" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="160" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="161" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <PointMiddleOfTwoPointsConstruction id="162">
+      <P1_ControlPointReference id="163" cpName="cp">
+        <Reference_QuadCurveGraphicalRepresentation idref="112" />
+      </P1_ControlPointReference>
+      <P2_ControlPointReference id="164" cpName="p2">
+        <Reference_QuadCurveGraphicalRepresentation idref="112" />
+      </P2_ControlPointReference>
+    </PointMiddleOfTwoPointsConstruction>
+    <Resulting_FGEPoint id="165" x="471.0" y="223.25" />
+  </Point>
+  <Segment id="166" name="Segment10">
+    <SegmentGraphicalRepresentation id="167" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="168" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="169" noStroke="false" color="204,204,204" lineWidth="0.6000000000000001" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="170" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </SegmentGraphicalRepresentation>
+    <SegmentWithTwoPointsConstruction id="171">
+      <P1_ControlPointReference id="172" cpName="point">
+        <Reference_PointGraphicalRepresentation idref="149" />
+      </P1_ControlPointReference>
+      <P2_ControlPointReference id="173" cpName="point">
+        <Reference_PointGraphicalRepresentation idref="158" />
+      </P2_ControlPointReference>
+    </SegmentWithTwoPointsConstruction>
+    <Resulting_FGESegment id="174" p1="353.0,82.75" p2="471.0,223.25" />
+  </Segment>
+  <Point id="175" name="Point11">
+    <PointGraphicalRepresentation id="176" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="177" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="178" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="179" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <PointMiddleOfTwoPointsConstruction id="180">
+      <P1_PointReference id="181">
+        <Reference_ExplicitPointConstruction idref="21" />
+      </P1_PointReference>
+      <P2_ControlPointReference id="182" cpName="cp">
+        <Reference_QuadCurveGraphicalRepresentation idref="93" />
+      </P2_ControlPointReference>
+    </PointMiddleOfTwoPointsConstruction>
+    <Resulting_FGEPoint id="183" x="391.25" y="343.25" />
+  </Point>
+  <Point id="184" name="Point12">
+    <PointGraphicalRepresentation id="185" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="186" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="187" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="188" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <PointMiddleOfTwoPointsConstruction id="189">
+      <P1_ControlPointReference id="190" cpName="cp">
+        <Reference_QuadCurveGraphicalRepresentation idref="93" />
+      </P1_ControlPointReference>
+      <P2_PointReference id="191">
+        <Reference_ExplicitPointConstruction idref="35" />
+      </P2_PointReference>
+    </PointMiddleOfTwoPointsConstruction>
+    <Resulting_FGEPoint id="192" x="526.75" y="492.75" />
+  </Point>
+  <Segment id="193" name="Segment13">
+    <SegmentGraphicalRepresentation id="194" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="195" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="196" noStroke="false" color="204,204,204" lineWidth="0.6000000000000001" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="197" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </SegmentGraphicalRepresentation>
+    <SegmentWithTwoPointsConstruction id="198">
+      <P1_ControlPointReference id="199" cpName="point">
+        <Reference_PointGraphicalRepresentation idref="176" />
+      </P1_ControlPointReference>
+      <P2_ControlPointReference id="200" cpName="point">
+        <Reference_PointGraphicalRepresentation idref="185" />
+      </P2_ControlPointReference>
+    </SegmentWithTwoPointsConstruction>
+    <Resulting_FGESegment id="201" p1="391.25,343.25" p2="526.75,492.75" />
+  </Segment>
+  <CubicCurve id="202" name="CubicCurve14">
+    <CubicCurveGraphicalRepresentation id="203" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="204" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="205" noStroke="false" color="255,0,51" lineWidth="3.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="206" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </CubicCurveGraphicalRepresentation>
+    <CubicCurveWithFourPointsConstruction id="207">
+      <P1_PointReference id="208">
+        <Reference_ExplicitPointConstruction idref="14" />
+      </P1_PointReference>
+      <CP1_ControlPointReference id="209" cpName="p2">
+        <Reference_SegmentGraphicalRepresentation idref="140" />
+      </CP1_ControlPointReference>
+      <CP2_ControlPointReference id="210" cpName="p1">
+        <Reference_SegmentGraphicalRepresentation idref="167" />
+      </CP2_ControlPointReference>
+      <P2_PointReference id="211">
+        <Reference_ExplicitPointConstruction idref="21" />
+      </P2_PointReference>
+    </CubicCurveWithFourPointsConstruction>
+    <Resulting_FGECubicCurve id="212" p1="223.0,137.0" p2="412.0,153.0" cp1="301.0,87.75" cp2="353.0,82.75" />
+  </CubicCurve>
+  <CubicCurve id="213" name="CubicCurve15">
+    <CubicCurveGraphicalRepresentation id="214" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="215" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="216" noStroke="false" color="204,0,51" lineWidth="3.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="217" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </CubicCurveGraphicalRepresentation>
+    <CubicCurveWithFourPointsConstruction id="218">
+      <P1_PointReference id="219">
+        <Reference_ExplicitPointConstruction idref="21" />
+      </P1_PointReference>
+      <CP1_ControlPointReference id="220" cpName="p2">
+        <Reference_SegmentGraphicalRepresentation idref="167" />
+      </CP1_ControlPointReference>
+      <CP2_ControlPointReference id="221" cpName="p1">
+        <Reference_SegmentGraphicalRepresentation idref="194" />
+      </CP2_ControlPointReference>
+      <P2_PointReference id="222">
+        <Reference_ExplicitPointConstruction idref="28" />
+      </P2_PointReference>
+    </CubicCurveWithFourPointsConstruction>
+    <Resulting_FGECubicCurve id="223" p1="412.0,153.0" p2="459.0,418.0" cp1="471.0,223.25" cp2="391.25,343.25" />
+  </CubicCurve>
+  <QuadCurve id="224" name="QuadCurve16">
+    <QuadCurveGraphicalRepresentation id="225" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="226" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="227" noStroke="false" color="204,0,51" lineWidth="3.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="228" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </QuadCurveGraphicalRepresentation>
+    <QuadCurveWithThreePointsConstruction id="229">
+      <P1_ControlPointReference id="230" cpName="p1">
+        <Reference_QuadCurveGraphicalRepresentation idref="56" />
+      </P1_ControlPointReference>
+      <CP_ControlPointReference id="231" cpName="p1">
+        <Reference_SegmentGraphicalRepresentation idref="140" />
+      </CP_ControlPointReference>
+      <P2_PointReference id="232">
+        <Reference_ExplicitPointConstruction idref="14" />
+      </P2_PointReference>
+    </QuadCurveWithThreePointsConstruction>
+    <Resulting_FGEQuadCurve id="233" p1="100.0,350.0" p2="223.0,137.0" cp="145.0,186.25" />
+  </QuadCurve>
+  <QuadCurve id="234" name="QuadCurve17">
+    <QuadCurveGraphicalRepresentation id="235" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="236" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="237" noStroke="false" color="204,0,51" lineWidth="3.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="238" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </QuadCurveGraphicalRepresentation>
+    <QuadCurveWithThreePointsConstruction id="239">
+      <P1_PointReference id="240">
+        <Reference_ExplicitPointConstruction idref="28" />
+      </P1_PointReference>
+      <CP_ControlPointReference id="241" cpName="p2">
+        <Reference_SegmentGraphicalRepresentation idref="194" />
+      </CP_ControlPointReference>
+      <P2_PointReference id="242">
+        <Reference_ExplicitPointConstruction idref="35" />
+      </P2_PointReference>
+    </QuadCurveWithThreePointsConstruction>
+    <Resulting_FGEQuadCurve id="243" p1="459.0,418.0" p2="683.0,452.0" cp="526.75,492.75" />
+  </QuadCurve>
+  <GeometricDrawingGraphicalRepresentation id="244" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" width="10000.0" height="10000.0" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255">
+    <TextStyle id="245" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+  </GeometricDrawingGraphicalRepresentation>
+</GeometricSet>
+

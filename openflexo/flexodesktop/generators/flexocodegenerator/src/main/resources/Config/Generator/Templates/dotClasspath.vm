@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+    <classpathentry kind="src" path="src/main/java"/>
+	<classpathentry excluding="**" kind="src" path="src/main/resources"/>
+    <classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/JavaWOJSPServlet/JavaEOAccess/JavaEOControl/JavaFoundation/JavaJDBCAdaptor/JavaWebObjects/JavaWOExtensions/JavaXML"/>
+    #foreach( $file in ${project.listFrameworksToEmbed()})
+        #set($begin = 0) 
+    #set($end = ${file.getName().length()} - 10)
+    <classpathentry kind="lib" path="src/main/resources/${file.getName()}/Resources/Java/${file.getName().substring($begin, $end).toLowerCase()}.jar"/>
+#end
+    <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/denaliconfigservice_1.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/denalicountryservice_1.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/denalidomainkeyvalueservice_1.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/denaliexceptionservice_1.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/denalifilemimetypeservice_1.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/denalifileselectionservice_1.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/denaliflexocommons_1.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/denalilanguageservice_1.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/denalilocalizationservice_1.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/denalimailservice_1.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/denaliresources_1.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/denaliservicemanager_1.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/denalitabulatedfileservice_1.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/denaliuserincookieservice_1.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/denaliuserservice_1.3.0.jar"/>
+    <classpathentry kind="lib" path="src/main/resources/DenaliComponents.framework/Resources/Java/denalicomponents.jar" />
+    <classpathentry kind="lib" path="src/main/resources/DenaliCore.framework/Resources/Java/denalicore.jar" />
+    #if(!${projectGenerator.isPrototype()})
+    <classpathentry kind="lib" path="src/main/resources/DenaliDBUtils.framework/Resources/Java/denalidbutils.jar" />
+    #end
+    <classpathentry kind="lib" path="src/main/resources/DenaliEmail.framework/Resources/Java/denaliemail.jar" />
+    <classpathentry kind="lib" path="src/main/resources/DenaliWebResources.framework/Resources/Java/denaliwebresources.jar" />
+    <classpathentry kind="lib" path="src/main/resources/DenaliLogging.framework/Resources/Java/denalilogging.jar" />
+    <classpathentry kind="lib" path="src/main/resources/DenaliFileGenerator.framework/Resources/Java/denalifilegenerator.jar"/>
+    <classpathentry kind="lib" path="src/main/resources/DenaliExceptionHandling.framework/Resources/Java/denaliexceptionhandling.jar" />
+    <classpathentry kind="lib" path="src/main/resources/DenaliKeyValueInMemory.framework/Resources/Java/denalikeyvalueinmemory.jar" />
+    <classpathentry kind="lib" path="src/main/resources/DenaliFlexoProcessor.framework/Resources/Java/denaliflexoprocessor.jar" />
+    <classpathentry kind="output" path="target/classes"/>
+</classpath>

@@ -1,0 +1,67 @@
+#if(${generator.getEntityPackageName().length()} > 0)package ${generator.getEntityPackageName()};#end
+
+
+/**
+ * WorkflowComponentInstance class 
+ * 
+ * @author FlexoBPM Generator, Agile Birds sprl. (see www.FlexoBPM.com)
+ * @version 
+ */
+
+public enum WorkflowComponentInstance
+{
+	None(null, "", "", "")
+	#foreach( $process in ${project.getAllFlexoProcesses()} )
+        #foreach( $ci in $process.getAllComponentInstances())
+			#if(${ci.getOperationNode().getAbstractActivityNode().getRoleName()})
+				#set($role = "$quote$!generator.escapeStringForJava($!{ci.getOperationNode().getAbstractActivityNode().getRoleName()})$quote")
+			#else
+				#set($role = "$quote$quote")
+			#end
+			,ComponentInstance_${ci.getFlexoID()}(WorkflowProcess.${process.getProcessDictionaryKey()}, $role, @single"${ci.getOperationNode().getAbstractActivityNode().getName()}"@end, @single"${ci.getOperationNode().getName()}"@end)
+		#end
+	#end
+	;
+
+	public static WorkflowComponentInstance getWorkflowComponentInstance(long componentInstanceId) {
+		try {
+			return valueOf("ComponentInstance_" + componentInstanceId);
+		}
+		catch (Exception e) {
+			return null;
+		}
+	}
+
+	private WorkflowProcess process;
+	private String role;
+	private String activity;
+	private String operation;
+
+	private WorkflowComponentInstance(WorkflowProcess process, String role, String activity, String operation)
+	{
+		this.process = process;
+		this.role = role;
+		this.activity = activity;
+		this.operation = operation;
+	}
+
+	public WorkflowProcess getProcess()
+	{
+		return process;
+	}
+
+	public String getRole()
+	{
+		return role;
+	}
+
+	public String getActivity()
+	{
+		return activity;
+	}
+
+	public String getOperation()
+	{
+		return operation;
+	}
+}

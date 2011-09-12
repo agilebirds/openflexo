@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<IEOperationComponent id="MGZ_1573" userID="MGZ" flexoID="1573" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" isLocalized="false">
+  <IESequenceWidget id="MGZ_1574" userID="MGZ" flexoID="1574" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false">
+    <IEBloc id="MGZ_1581" title="Bloc2" hideTable="false" userID="MGZ" flexoID="1581" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="Bloc.inspector" index="1" isRootOfPartialComponent="false">
+	  <IEHTMLTable id="MGZ_1589" grid="false" noCSS="false" isShowingBorder="true" pourcentageWidths="1.0" userID="MGZ" flexoID="1589" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="HTMLTable.inspector" index="0" isRootOfPartialComponent="false">
+        <IESequenceTR id="MGZ_1593" userID="MGZ" flexoID="1593" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false">
+          <IETR id="MGZ_1596" rowIndex="0" userID="MGZ" flexoID="1596" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="TR.inspector" index="0" isRootOfPartialComponent="false">
+            <IESequenceTD id="MGZ_1600" userID="MGZ" flexoID="1600" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false">
+              <IETD id="MGZ_1603" isHidden="false" weightx="1.0" weighty="1.0" gridx="0" gridy="0" rowSpan="1" colSpan="1" xLocation="0" userID="MGZ" flexoID="1603" dontEscapeLatex="false" dontGenerate="false" description="" useSpecificDescriptions="false" inspector="TD.inspector" index="0" label="" isRootOfPartialComponent="false">
+                <IESequenceWidget id="MGZ_1607" userID="MGZ" flexoID="1607" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false">
+                  <IELabel id="MGZ_1778" value="Table of bloc 1" cssClass="DLBlockBodyTitle" userID="MGZ" flexoID="1778" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="Label.inspector" index="0" isRootOfPartialComponent="false" />
+                </IESequenceWidget>
+              </IETD>
+            </IESequenceTD>
+          </IETR>
+          <IETR id="MGZ_1631" rowIndex="1" userID="MGZ" flexoID="1631" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="TR.inspector" index="1" isRootOfPartialComponent="false">
+            <IESequenceTD id="MGZ_1635" userID="MGZ" flexoID="1635" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false">
+              <IETD id="MGZ_1638" isHidden="false" weightx="1.0" weighty="1.0" gridx="0" gridy="1" rowSpan="1" colSpan="1" xLocation="0" userID="MGZ" flexoID="1638" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="TD.inspector" index="0" isRootOfPartialComponent="false">
+                <IESequenceWidget id="MGZ_1642" userID="MGZ" flexoID="1642" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false" />
+              </IETD>
+            </IESequenceTD>
+          </IETR>
+        </IESequenceTR>
+      </IEHTMLTable>
+      <IESequenceWidget id="MGZ_1582" userID="MGZ" flexoID="1582" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false" />
+    </IEBloc>
+  </IESequenceWidget>
+</IEOperationComponent>
+

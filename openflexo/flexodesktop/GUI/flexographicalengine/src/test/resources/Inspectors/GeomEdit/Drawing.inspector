@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.fge.geomedit.FIBInspector" layout="border" dataClassName="org.openflexo.fge.geomedit.gr.GeometricDrawingGraphicalRepresentation" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="4" title="Edition" layout="twocols" font="SansSerif,0,11" name="EditionTab">
+      <Label label="selection_color" localize="true" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <Color data="data.selectionColor" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" localize="true" />
+      <Label label="focus_color" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
+      <Color data="data.focusColor" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" localize="true" />
+      <Label label="rectangle_selection_color" localize="true" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
+      <Color data="data.rectangleSelectingSelectionColor" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" localize="true" />
+    </Tab>
+    <Tab index="2" title="Background" layout="twocols" font="SansSerif,0,11" name="BackgroundTab">
+      <Label label="background_color" localize="true" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <Color data="data.backgroundColor" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" localize="true" />
+    </Tab>
+    <Tab index="0" title="Data" layout="twocols" font="SansSerif,0,11" name="DataTab">
+      <Label label="width" localize="true" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" columns="10" data="data.width" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" localize="true" />
+      <Label label="height" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
+      <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" columns="10" data="data.height" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" localize="true" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="selection_color" lang="English">Selection color</Localized>
+    <Localized key="selection_color" lang="French">Couleur de sélection</Localized>
+    <Localized key="selection_color" lang="Dutch">Selection color</Localized>
+    <Localized key="focus_color" lang="English">Focus color</Localized>
+    <Localized key="focus_color" lang="French">Couleur de focus</Localized>
+    <Localized key="focus_color" lang="Dutch">Focus color</Localized>
+    <Localized key="rectangle_selection_color" lang="English">Rectangle selection color</Localized>
+    <Localized key="rectangle_selection_color" lang="French">Couleur du rectangle de sélection</Localized>
+    <Localized key="rectangle_selection_color" lang="Dutch">Rectangle selection color</Localized>
+    <Localized key="background_color" lang="English">Background color</Localized>
+    <Localized key="background_color" lang="French">Couleur de l'arrière-plan</Localized>
+    <Localized key="background_color" lang="Dutch">Background color</Localized>
+    <Localized key="width" lang="English">Width</Localized>
+    <Localized key="width" lang="French">Largeur</Localized>
+    <Localized key="width" lang="Dutch">Width</Localized>
+    <Localized key="height" lang="English">Height</Localized>
+    <Localized key="height" lang="French">Hauteur</Localized>
+    <Localized key="height" lang="Dutch">Height</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Drawing" />
+</Panel>
+

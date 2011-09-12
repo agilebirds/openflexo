@@ -1,0 +1,26 @@
+<inspector title = "EOAttribute" inheritsfrom="DMEOProperty.inspector">
+	<tab name="Basic" index="0">
+		<hidden name="type"/> // Type cannot be edited directly, use prototype
+		<property name="isPrimaryKeyAttribute" label="is_primary_key_attribute" widget="CHECKBOX" constraint="4"/>
+		<property name="columnName" label="column" widget="TEXT_FIELD" constraint="5">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="prototype" label="prototype" widget="DROPDOWN" constraint="6">	
+			<param name="dynamiclist" value="DMModel.EOPrototypeRepository.prototypes"/>
+			<param name="format" value="name"/>
+		</property>
+	</tab>
+	
+	<tab name="Advanced" index="1">
+		<property name="allowsNull" label="allows_null" widget="CHECKBOX" constraint="3" help="true if null is allowed"/>
+		<property name="isUsedForLocking" label="used_for_locking" widget="CHECKBOX" constraint="4" help="true if null is allowed"/>
+		<property name="width" label="width" widget="INTEGER" constraint="5" help="width of field"/>
+		<property name="externalType" label="external_type" widget="TEXT_FIELD" constraint="6">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="valueType" label="value_type" widget="TEXT_FIELD" constraint="7">
+			<param name="columns" value="10"/>
+		</property>
+	</tab>
+
+</inspector>

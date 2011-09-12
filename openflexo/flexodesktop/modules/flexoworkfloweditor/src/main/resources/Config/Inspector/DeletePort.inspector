@@ -1,0 +1,7 @@
+<inspector title = "DELETE Port"  inheritsfrom ="AbstractInPort.inspector" inspectedClassName="org.openflexo.foundation.wkf.ws.DeletePort">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+	</tab>
+</inspector>

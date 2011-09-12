@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://www.stratago.com/RetailService" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" targetNamespace="http://www.stratago.com/RetailService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.stratago.com/RetailService">
+      <s:element name="Insert_Transactions">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="sales" type="tns:RetailSales"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="RetailSales">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="StartDateTime" type="s:dateTime"/>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Transactions" type="tns:RetailTransaction"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RetailTransaction">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:Transaction">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="unbounded" name="Items" type="tns:RetailTransactionItem"/>
+              <s:element minOccurs="0" maxOccurs="1" name="Customer" type="tns:RetailCustomer"/>
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="Transaction" abstract="true">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="StoreID" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="ID" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="TenderTypeID" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="TenderTypeName" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="SalesRepName" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="SalesRepID" type="s:string"/>
+          <s:element minOccurs="1" maxOccurs="1" name="Subtotal" type="s:double"/>
+          <s:element minOccurs="1" maxOccurs="1" name="TransactionDate" type="s:dateTime"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Coupon" type="tns:Promotion"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Promotion">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ID" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Code" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string"/>
+          <s:element minOccurs="1" maxOccurs="1" name="Creation" type="s:dateTime"/>
+          <s:element minOccurs="1" maxOccurs="1" name="Expiration" type="s:dateTime"/>
+          <s:element minOccurs="0" maxOccurs="1" name="TypeID" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="TypeName" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RetailTransactionItem">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:TransactionItem"/>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="TransactionItem" abstract="true">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ItemID" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="ItemName" type="s:string"/>
+          <s:element minOccurs="1" maxOccurs="1" name="ItemSubTotal" type="s:double"/>
+          <s:element minOccurs="1" maxOccurs="1" name="ItemQuantity" type="s:double"/>
+          <s:element minOccurs="0" maxOccurs="1" name="ItemDeptID" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="ItemDeptName" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="ItemClassID" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="ItemClassName" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="ItemTaxCodeID" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="ItemTaxCodeName" type="s:string"/>
+          <s:element minOccurs="1" maxOccurs="1" name="ItemTaxAmount" type="s:double"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RetailCustomer">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:Customer"/>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="Customer" abstract="true">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Account" type="s:string"/>
+          <s:element minOccurs="1" maxOccurs="1" name="Birthday" type="s:dateTime"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Business2TelephoneNumber" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="BusinessAddressCity" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="BusinessAddressCountry" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="BusinessAddressPostalCode" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="BusinessAddressState" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="BusinessAddressStreet" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="BusinessFaxNumber" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="BusinessHomePage" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="BusinessTelephoneNumber" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="CarTelephoneNumber" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Comment" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="CompanyName" type="s:string"/>
+          <s:element minOccurs="1" maxOccurs="1" name="CreationTime" type="s:dateTime"/>
+          <s:element minOccurs="0" maxOccurs="1" name="ID" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Email1Address" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Email2Address" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Email3Address" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string"/>
+          <s:element minOccurs="1" maxOccurs="1" name="Gender" type="tns:GenderTypes"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Home2TelephoneNumber" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="HomeAddressCity" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="HomeAddressCountry" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="HomeAddressPostalCode" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="HomeAddressState" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="HomeAddressStreet" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="HomeFaxNumber" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="HomeTelephoneNumber" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="JobTitle" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="LastName" type="s:string"/>
+          <s:element minOccurs="1" maxOccurs="1" name="LastVisit" type="s:dateTime"/>
+          <s:element minOccurs="0" maxOccurs="1" name="MiddleName" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="MobileTelephoneNumber" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="OtherAddressCity" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="OtherAddressCountry" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="OtherAddressPostalCode" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="OtherAddressState" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="OtherAddressStreet" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="OtherFaxNumber" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="OtherTelephoneNumber" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Spouse" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="StoreID" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Suffix" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="TTYTDDTelephoneNumber" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="GenderTypes">
+        <s:list>
+          <s:simpleType>
+            <s:restriction base="s:string">
+              <s:enumeration value="Female"/>
+              <s:enumeration value="Male"/>
+              <s:enumeration value="Unspecified"/>
+            </s:restriction>
+          </s:simpleType>
+        </s:list>
+      </s:simpleType>
+      <s:element name="Insert_TransactionsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Insert_TransactionsResult" type="s:boolean"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AuthHeader" type="tns:AuthHeader"/>
+      <s:complexType name="AuthHeader">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="strLogin" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="strPassword" type="s:string"/>
+          <s:element minOccurs="1" maxOccurs="1" name="intSerial" type="s:long"/>
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="Insert_TransactionsSoapIn">
+    <wsdl:part name="parameters" element="tns:Insert_Transactions"/>
+  </wsdl:message>
+  <wsdl:message name="Insert_TransactionsSoapOut">
+    <wsdl:part name="parameters" element="tns:Insert_TransactionsResponse"/>
+  </wsdl:message>
+  <wsdl:message name="Insert_TransactionsAuthHeader">
+    <wsdl:part name="AuthHeader" element="tns:AuthHeader"/>
+  </wsdl:message>
+  <wsdl:portType name="RetailServiceSoap">
+    <wsdl:operation name="Insert_Transactions">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Inserts a collection of transactions into a stratago.com account, returning a boolean value as to the success or failure of receiving those transactions.</documentation>
+      <wsdl:input message="tns:Insert_TransactionsSoapIn"/>
+      <wsdl:output message="tns:Insert_TransactionsSoapOut"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="RetailServiceSoap" type="tns:RetailServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <wsdl:operation name="Insert_Transactions">
+      <soap:operation soapAction="http://www.stratago.com/RetailService/Insert_Transactions" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:Insert_TransactionsAuthHeader" part="AuthHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="RetailService">
+    <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">This class contains methods and objects &lt;a href="/client/webservices/guide/retailserviceguide.aspx"&gt;(see Developer's Guide) &lt;/a&gt; for our retail customers.</documentation>
+    <wsdl:port name="RetailServiceSoap" binding="tns:RetailServiceSoap">
+      <soap:address location="http://www.stratago.com/client/webservices/retailservice.asmx"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

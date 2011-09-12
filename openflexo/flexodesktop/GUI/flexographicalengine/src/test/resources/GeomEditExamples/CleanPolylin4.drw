@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GeometricSet id="1">
+  <Polylin id="2" name="Polylin1">
+    <PolylinGraphicalRepresentation id="3" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="4" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="5" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="6" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PolylinGraphicalRepresentation>
+    <PolylinWithNPointsConstruction id="7">
+      <P_ExplicitPointConstruction id="8" point="164.0,322.0" />
+      <P_ExplicitPointConstruction id="9" point="176.0,378.0" />
+      <P_ExplicitPointConstruction id="10" point="409.0,366.0" />
+    </PolylinWithNPointsConstruction>
+    <Resulting_FGEPolylin id="11" className="org.openflexo.fge.geom.FGERectPolylin">
+      <FGEPoint id="12" x="164.0" y="322.0" />
+      <FGEPoint id="13" x="176.0" y="378.0" />
+      <FGEPoint id="14" x="409.0" y="366.0" />
+    </Resulting_FGEPolylin>
+  </Polylin>
+  <GeometricDrawingGraphicalRepresentation id="15" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" width="10000.0" height="10000.0" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255">
+    <TextStyle id="16" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+  </GeometricDrawingGraphicalRepresentation>
+</GeometricSet>
+

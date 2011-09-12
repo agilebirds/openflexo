@@ -1,0 +1,166 @@
+/*
+ * (c) Copyright 2010-2011 AgileBirds
+ *
+ * This file is part of OpenFlexo.
+ *
+ * OpenFlexo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenFlexo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+package org.openflexo.foundation.help;
+
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
+
+import org.jdom.CDATA;
+import org.jdom.Element;
+import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.ie.OperationComponentInstance;
+import org.openflexo.foundation.ie.widget.IEButtonWidget;
+import org.openflexo.foundation.ie.widget.IEHyperlinkWidget;
+import org.openflexo.foundation.rm.ScreenshotResource;
+import org.openflexo.foundation.wkf.node.ActionNode;
+import org.openflexo.foundation.wkf.node.OperationNode;
+
+
+public class HelpElementBuilder {
+
+	public static Element getHelpElement(ApplicationHelpEntryPoint helpEntryPoint){
+		Element reply = new Element("HelpEntry");
+		reply.setAttribute("flexoID", String.valueOf(helpEntryPoint.getFlexoID()));
+		reply.setAttribute("shortLabel", helpEntryPoint.getShortHelpLabel());
+		reply.setAttribute("longLabel", helpEntryPoint.getTypedHelpLabel());
+		reply.setAttribute("type",helpEntryPoint.getClass().getName());
+		ScreenshotResource screenshootResource = helpEntryPoint.getProject().getScreenshotResource(helpEntryPoint instanceof OperationNode?((OperationNode)helpEntryPoint).getAbstractActivityNode():(FlexoModelObject)helpEntryPoint, false);
+		if(screenshootResource!=null)
+			reply.setAttribute("screenshootName", screenshootResource.getFileName());
+		String parents = parentIDs(helpEntryPoint);
+		if(parents.length()>0)
+			reply.setAttribute("parents", parents);
+		
+		String childs = childIDs(helpEntryPoint);
+		if(childs.length()>0)
+			reply.setAttribute("childs", childs);
+		
+		Element d = buildDescriptionElement((FlexoModelObject)helpEntryPoint);
+		if(d!=null)reply.addContent(d);
+		
+		Element sd = buildSpecificDescriptionElement((FlexoModelObject)helpEntryPoint);
+		if(sd!=null)reply.addContent(sd);
+		
+		if(helpEntryPoint instanceof OperationNode){
+			Element buttons = buildButtonsElement((OperationNode)helpEntryPoint);
+			if(buttons!=null){
+				reply.addContent(buttons);
+			}
+		}
+		
+		return reply;
+	}
+	
+	private static Element buildButtonsElement(OperationNode helpEntryPoint) {
+		OperationComponentInstance ci = helpEntryPoint.getComponentInstance();
+		if(ci!=null && ci.getAllActionButtonPairs().keySet().size()>0){
+			Element reply = new Element("buttons");
+			Iterator<IEHyperlinkWidget> i = ci.getAllActionButtonPairs().keySet().iterator();
+			while(i.hasNext()){
+				Element action = new Element("action");
+				IEHyperlinkWidget b = i.next();
+				ActionNode actionNode = ci.getAllActionButtonPairs().get(b);
+				
+				Element d = buildDescriptionElement(actionNode);
+				if(d!=null)action.addContent(d);
+				
+				Element sd = buildSpecificDescriptionElement(actionNode);
+				if(sd!=null)action.addContent(sd);
+				
+				if(b.isCustomButton()) {
+					action.setAttribute("type", "Custom");
+					action.setAttribute("value", b.getValue()==null?"undefined":b.getValue());
+				} else if(b.isHyperlink()) {
+					action.setAttribute("type", "Hyperlink");
+					action.setAttribute("value", b.getValue()==null?"undefined":b.getValue());
+				} else if(b.isImageButton()) {
+					action.setAttribute("type", "Image");
+					action.setAttribute("imageName", ((IEButtonWidget)b).getFile().getImageName());
+					if(!((IEButtonWidget)b).isImportedImage()){
+						action.setAttribute("imageFramework","DenaliWebResources");
+					}
+				}
+				reply.addContent(action);
+			}
+			return reply;
+		}
+		return null;
+	}
+
+	private static Element buildSpecificDescriptionElement(FlexoModelObject o){
+		if(o.getSpecificDescriptions().keySet().size()>0){
+			Element specificDescriptions = new Element("specificDescriptions");
+			Enumeration<String> en = o.getSpecificDescriptions().keys();
+			while(en.hasMoreElements()){
+				String k = en.nextElement();
+				String help = o.getSpecificDescriptions().get(k);
+				Element e = new Element(k);
+				e.addContent(new CDATA(help));
+				specificDescriptions.addContent(e);
+			}
+			return specificDescriptions;
+		}
+		return null;
+	}
+	
+	private static Element buildDescriptionElement(FlexoModelObject o){
+		if(o.hasDescription()){
+			Element description = new Element("description");
+			description.addContent(new CDATA(o.getDescription()));
+			return description;
+		}
+		return null;
+	}
+	private static String parentIDs(ApplicationHelpEntryPoint helpEntryPoint){
+		StringBuffer reply = new StringBuffer("");
+		ApplicationHelpEntryPoint parent = helpEntryPoint.getParentHelpEntry();
+		while(parent!=null){
+			reply.append(parent.getFlexoID());
+			reply.append(",");
+			parent = parent.getParentHelpEntry();
+		}
+		if(reply.length()==0)return "";
+		String ids = reply.toString();
+		return ids.substring(0,ids.length()-1);
+	}
+	private static String childIDs(ApplicationHelpEntryPoint helpEntryPoint){
+		StringBuffer reply = new StringBuffer("");
+		List<ApplicationHelpEntryPoint> childs = helpEntryPoint.getChildsHelpObjects();
+		Iterator<ApplicationHelpEntryPoint> it = childs.iterator();
+		while (it.hasNext()) {
+			ApplicationHelpEntryPoint elem = it.next();
+			if(elem instanceof OperationNode){
+				if(((OperationNode)elem).getComponentInstance()!=null){
+					reply.append(((OperationNode)elem).getComponentInstance().getFlexoID());
+					reply.append(",");
+				}
+			}else{
+				reply.append(elem.getFlexoID());
+				reply.append(",");
+			}
+			
+		}
+		if(reply.length()==0)return "";
+		String ids = reply.toString();
+		return ids.substring(0,ids.length()-1);
+	}
+	
+}

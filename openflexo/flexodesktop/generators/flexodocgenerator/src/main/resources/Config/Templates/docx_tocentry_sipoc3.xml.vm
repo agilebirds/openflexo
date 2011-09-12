@@ -1,0 +1,168 @@
+#set($process = $object)
+
+#description($process)
+
+#renderScreenshotForObject($process)
+
+#metricsForNode($process)
+
+#statusesForNode($process)
+
+## role subsection
+## -----------------
+   #set($levelP = $level)
+<w:p>
+			<w:pPr>
+				<w:pStyle w:val="Heading${levelP}"/>
+			</w:pPr>
+			<w:r>
+				<w:t xml:space="preserve">Roles</w:t>
+			</w:r>
+</w:p>
+
+#set($workflow = ${project.getWorkflow()})
+#if(${workflow.getRoleList().getRoles().size()}>0 || ${workflow.getImportedRoleList().getRoles().size()}>0)
+	<w:p>
+		<w:r>
+			<w:t>The following roles are defined for this process:</w:t>
+		</w:r>
+   </w:p>
+	
+	#set($rolesTablesContents = $generator.getNewVector())
+	#foreach($role in ${workflow.getSortedRoles()})
+		#set($row = $generator.getNewVector())
+		#void($row.add("<w:p>#renderNameWithRPr($role '<w:b/>')</w:p>"))
+		#void($row.add("#description($role)"))
+		#void($rolesTablesContents.add($row))
+	#end
+	#foreach($role in ${workflow.getImportedRoleList().getSortedRoles()})
+		#set($row = $generator.getNewVector())
+        #void($row.add("<w:p>#renderNameWithRPr($role '<w:b/>')</w:p>"))
+		#void($row.add("#description($role)"))
+		#void($rolesTablesContents.add($row))
+	#end
+	
+	#renderDocxTable(["Role", "Description"] $rolesTablesContents)
+#end
+
+
+#foreach($node in ${process.getSortedMeaningFullActivitiesAndSubProcessNode()})
+## #foreach($node in ${process.getSortedSubProcessNode()})
+
+#*****
+* Added by Dom on September 2009 for Level					
+* Get tasks to document the SIPOC view of a process
+* S is for Supplier : origin of the Input,i.e. begin node or link event attached as input to the input doc
+* I is for Inputs: doc artifact pointing to the activity
+* P is for Process: list of activities of the Process
+* O is for Outputs: doc artifact coming from the activity
+* C is for Customers: destination of the Output,i.e. end node or link event attached as ouput to the output doc		
+*#				
+## Changed by Dom on March 16 2010
+	#if($node.isSubProcessNode())
+
+	                   #set($levelP = $level)
+                   		<w:p>
+			           			<w:pPr>
+				          			<w:pStyle w:val="Heading${levelP}"/>
+			           			</w:pPr>
+			           			<w:r>
+				           			<w:t xml:space="preserve">Activity Group: </w:t>
+			           			</w:r>
+								#renderName($node)
+                   		</w:p>
+					#if($node.getRole())
+					 <w:p>
+						<w:r>
+                           <w:t xml:space="preserve">Responsible role : </w:t>
+                       </w:r>
+					   #renderNameWithRPrAndAdditionalText(${node.getRole()} '<w:b/>' '.')
+                     </w:p>
+					#end
+					#description($node)
+## end of changes	
+		#if($node.getSubProcess())
+			#set($taskTableContents = $generator.getNewVector())
+			#set($majorRows = $generator.getNewVector())
+			#foreach($activityNode in ${node.getSubProcess().getSortedActivities()})
+				#set($firstTaskFlag = true)
+				#if((!$activityNode.getDontGenerate()) && $activityNode.isSubProcessNode())
+#** Change by Dom on March 16 2010
+*                   #set($levelP = $level)
+*                  		<w:p>			           			<w:pPr>
+*				          			<w:pStyle w:val="Heading${levelP}"/>
+*			           			</w:pPr>
+*			           			<w:r>
+*				           			<w:t xml:space="preserve">Activity Group: </w:t>
+*			           			</w:r>
+*								#renderName(${activityNode.getSubProcess()})
+*                  		</w:p>
+*					#if($activityNode.getRole())
+*					<w:p>
+*						<w:r>
+*                           <w:t xml:space="preserve">Responsible role : </w:t>
+*                       </w:r>
+*					   #renderNameWithRPrAndAdditionalText(${activityNode.getRole()} '<w:b/>' '.')
+*                   </w:p>
+*					#end
+*					#description($activityNode)		
+*#
+					#if($activityNode.getSubProcess())	
+						#foreach($taskNode in ${activityNode.getSubProcess().getSortedActivities()})
+						    #set($row = $generator.getNewVector())
+							#if((!$taskNode.getDontGenerate()) && $taskNode.isNormalNode())
+								#if($firstTaskFlag)
+                                    #void($row.add("<w:p>#renderName(${activityNode})</w:p>"))
+									#set($firstTaskFlag = false)
+									#void($majorRows.add($row))
+								#else
+									#void($row.add(""))
+								#end
+								#void($row.add("<w:p>#renderName(${taskNode})</w:p>"))
+								#if(${taskNode.getRole()})
+									#void($row.add("<w:p>#renderName(${taskNode.getRole()})</w:p>"))
+								#end
+								#void($taskTableContents.add($row))		
+				   			#end ## if do not generate
+						#end ## end of foreach taskNode		
+## Changed by Dom on March 16 2010						
+##					#else
+##						<w:p>
+##							<w:r>
+##                                <w:t xml:space="preserve">Process associated with Activity </w:t>
+##                            </w:r>
+##							#renderNameWithRPrAndAdditionalText(${activityNode} $null ' is not defined yet.')
+##						</w:p>
+					#end ## end of if activity is subprocess
+			    #end ## if do not generate activitynode
+			#end ## foreach activityNode
+			#if($taskTableContents.size() != 0)
+				#renderScreenshotForObject(${node.getSubProcess()})	
+				#renderDocxTable(["Activity", "Task", "Role"] $taskTableContents)	
+				<w:p><w:r><w:t> </w:t></w:r></w:p>	
+			#end ## if there is task
+		#end ## if node.getSubProcessNode
+## change by Dom on March 16 2010
+		#else
+				<w:p>
+					<w:r>
+                         <w:t xml:space="preserve">Process associated with Activity </w:t>
+                    </w:r>
+					#renderNameWithRPrAndAdditionalText(${node} $null ' is not defined yet.')
+				</w:p>
+## end of changes
+	#end ## if node.isSubProcessNode
+#end ## foreach sorted subProcess node
+
+#**
+* commented by DS September 17 2009 to avoid recursion in Level 3 target
+* There should be a test linked to a check box here
+
+#foreach($subProcessNode in $process.getProcessNode().getSortedSubprocesses())
+
+	#if(!$subProcessNode.getDontGenerate())
+	    #set($subProcess = $subProcessNode.getProcess())
+	    #renderProcess($subProcess $level)
+	#end
+#end
+*#

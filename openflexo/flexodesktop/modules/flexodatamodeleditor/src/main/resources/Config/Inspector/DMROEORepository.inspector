@@ -1,0 +1,7 @@
+<inspector title = "EORepository_(read_only)" inheritsfrom="DMRORepository.inspector">
+	<tab name="Basic" index="0">
+	</tab>
+	
+	<tab name="Advanced" index="1">
+	</tab>
+</inspector>

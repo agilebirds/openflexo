@@ -1,0 +1,70 @@
+#set($type = "Boolean")
+#set($name = "#name()")
+    /**
+     * This method returns the name of the checkboxes.
+     * It allows to create a Javascript to toggle the state of all the checkboxes.
+     */
+    public String #name()Name() {
+        return "#name()";
+    }
+#if(${widget.isInRepetition()})
+#set($rep = ${widget.repetition()})
+#set($descriptor = ${rep.getHTMLListDescriptor()})
+#set($itemName = ${descriptor.getItemName()})
+	#set($selectorName = "selected${generator.capitalize($itemName)}sBy#capName()From${descriptor.getRepetitionName()}")
+	#addMultiJavaSelectorVariableNameForRepetitionOp($rep $selectorName )
+    private NSMutableArray $selectorName  = new NSMutableArray();
+    
+    public boolean get#capName()() {
+        return selected${generator.capitalize($itemName)}sBy#capName()From${descriptor.getRepetitionName()}.containsObject($itemName);
+    }
+
+    public void set#capName()(boolean b) {
+        if (b) {
+            if(!selected${generator.capitalize($itemName)}sBy#capName()From${descriptor.getRepetitionName()}.containsObject($itemName))
+                selected${generator.capitalize($itemName)}sBy#capName()From${descriptor.getRepetitionName()}.addObject($itemName);
+        } else
+            selected${generator.capitalize($itemName)}sBy#capName()From${descriptor.getRepetitionName()}.removeObject($itemName);
+    }
+#else
+	#if(!${widget.getBindingChecked().isBindingValid()} && !${widget.getIsAcceptableForAnyProcessInstanceDictionary()})
+        /**
+        * ${generator.getJavaDocString($widget.getDescription())}<br>
+        * This boolean value determines wheter the radio button "#name()" is checked or not.
+        * This button belongs to the group named $widget.getGroupName().
+        */
+		#getset("Boolean" "#name()" ${widget.getValue()})
+	#else
+		#if(${widget.getBindingChecked().isBindingValid()})
+			#set($javaGetAccessor = ${widget.getBindingChecked().getJavaCodeStringRepresentation()})
+			#set($javaSetAccessor = ${widget.getBindingChecked().getSetterJavaCodeStringRepresentation("value")})
+		#else
+			#set($javaGetAccessor = "(Boolean)getCurrentProcessBusinessData().valueForKeyPath($quote${widget.getProcessInstanceDictionaryKey()}$quote)")
+			#set($javaSetAccessor = "getCurrentProcessBusinessData().takeValueForKey(value, $quote${widget.getProcessInstanceDictionaryKey()}$quote)")
+		#end
+		
+		public boolean get#capName()() {
+			Boolean value = $javaGetAccessor;
+			if(value == null)
+				value = ${widget.getValue()};
+			return value;
+		}
+		
+		public void set#capName()(boolean value) {
+			$javaSetAccessor;
+		}
+	#end
+#end
+
+#if(${widget.getSubmitForm()} && ${widget.isInPopup()})
+    public String onClick#capName()()
+    {
+        StringBuilder sb = new StringBuilder();
+        if(includePopupInPage())
+            sb.append("document."+formName()+"."+hiddenFieldName()+".value = '"+uniqueIdentifier()+"';");
+        sb.append("if(document."+formName()+".onsubmit!=null)document."+formName()+".onsubmit(); document.formName.submit();");        
+        return sb.toString();
+    }
+#end
+
+#tooltipAsJavaMethod()

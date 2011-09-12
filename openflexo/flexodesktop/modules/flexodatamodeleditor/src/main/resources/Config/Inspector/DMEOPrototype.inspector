@@ -1,0 +1,30 @@
+<inspector title = "EOPrototype" inheritsfrom="DMObject.inspector">
+	<tab name="Basic" index="0">
+		<property name="name" label="name" widget="TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		</property>
+		<property name="allowsNull" label="allows_null" widget="CHECKBOX" constraint="2" help="true if null is allowed"/>
+		<property name="width" label="width" widget="INTEGER" constraint="3" help="width of field"/>
+		<property name="externalType" label="external_type" widget="TEXT_FIELD" constraint="4">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="valueType" label="value_type" widget="TEXT_FIELD" constraint="5">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="type.name" label="class_name" widget="TEXT_FIELD" constraint="6">
+			<param name="columns" value="10"/>
+		</property>
+	</tab>
+	
+	<tab name="Advanced" index="1">
+	</tab>
+	<tab name="Doc" index="2">
+		<property name="description" label="description" widget="TEXT_AREA" constraint="1">
+			<param name="rows" value="10"/>
+		</property>
+		<property name="docFormat" label="docFormat" widget="DROPDOWN" help="Select a specific language if you used it explicitly in your description, otherwise leave this unset" constraint="2">
+			<param name="format" value="name"/>
+		</property>
+	</tab>
+</inspector>

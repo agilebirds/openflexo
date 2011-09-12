@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="border" dataClassName="org.openflexo.fib.editor.test.TestList$UserList" useScrollBar="false">
+  <Table iteratorClassName="org.openflexo.fib.editor.test.TestList$User" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="true" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.users" constraints="border(location=center;index=0)" useScrollBar="false" name="Table" localize="true" manageDynamicModel="true">
+    <TextFieldColumn data="iterator.firstName" title="first_name" columnWidth="100" resizable="true" displayTitle="true" name="textfield" />
+    <TextFieldColumn data="iterator.lastName" title="last_name" columnWidth="100" resizable="true" displayTitle="true" name="textfield" />
+    <TextFieldColumn data="iterator.email" title="email" columnWidth="200" resizable="true" displayTitle="true" name="textfield" />
+    <AddAction method="data.createNewUser" name="add_action" />
+    <RemoveAction method="data.deleteUser(selected)" name="delete_action" />
+    <LocalizedDictionary />
+  </Table>
+  <Panel layout="twocols" borderTitle="Panel" constraints="border(location=south;index=1)" useScrollBar="false">
+    <TextField columns="6" passwd="false" text="TextField" localize="true" data="Table.selected.firstName" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" useScrollBar="false" />
+    <Label label="firstName" localize="true" constraints="twocols(location=left;index=0;expandHorizontally=true;expandVertically=false)" useScrollBar="false" />
+    <Label label="lastName" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=true;expandVertically=false)" useScrollBar="false" />
+    <TextField columns="6" passwd="false" text="TextField" localize="true" data="Table.selected.lastName" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" useScrollBar="false" />
+    <Label label="email" localize="true" constraints="twocols(location=left;index=4;expandHorizontally=true;expandVertically=false)" useScrollBar="false" />
+    <TextField columns="6" passwd="false" text="TextField" localize="true" data="Table.selected.email" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" useScrollBar="false" />
+  </Panel>
+  <List visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="true" selectionMode="MultipleIntervalSelection" format="object.firstName" icon="object.icon" localize="true" manageDynamicModel="true" name="list" constraints="border(location=west;index=0)" useScrollBar="false" list="data.users" showIcon="true" iteratorClassName="org.openflexo.fib.editor.test.TestList$User" />
+  <LocalizedDictionary />
+</Panel>
+

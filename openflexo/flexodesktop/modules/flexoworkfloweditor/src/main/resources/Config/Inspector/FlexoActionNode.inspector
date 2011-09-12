@@ -1,0 +1,18 @@
+<inspector title = "FlexoAction Node" inheritsfrom="ActionNode.inspector" inspectedClassName="ignore">
+	<tab name="Basic" index="0">
+		<hidden name="actionType"/>
+		<hidden name="subProcess"/>
+		<property name="associatedButtonWidget" label="associated_button_widget" widget="DROPDOWN" constraint="8">
+			<param name="dynamiclist" value="operationNode.operationComponent.wOComponent.availableFlexoActions"/>
+			<param name="format" value="nameOrCalculatedLabel"/>
+		</property>
+<!--		<property name="bypassLogicalWorkFlow" label="bypass_logical_work_flow" widget="CHECKBOX" constraint="9"/>
+		<property name="displayProcess" label="Process" widget="CUSTOM" depends="bypassLogicalWorkFlow" conditional="bypassLogicalWorkFlow=true" constraint="10">
+            <param name="className" value="org.openflexo.components.widget.ProcessInspectorWidget"/>
+        </property>
+        <property name="displayOperation" label="Operation" widget="DROPDOWN" depends="bypassLogicalWorkFlow,displayProcess" conditional="displayProcess!=null and bypassLogicalWorkFlow=true" constraint="11">
+            <param name="dynamiclist" value="displayProcess.allOperationNodesWithComponent"/>
+            <param name="format" value="name"/>
+        </property>-->
+	</tab>
+</inspector>

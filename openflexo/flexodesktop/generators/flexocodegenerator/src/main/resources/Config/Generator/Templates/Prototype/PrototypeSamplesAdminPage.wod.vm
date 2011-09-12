@@ -1,0 +1,101 @@
+HEADER_FOOTER: $project.getPrefix()HeaderFooter {
+	title = "Prototype samples management";
+	onLoadBody = "setAlternateClassNames();";
+}
+
+FORM: WOForm {
+	action = formAction;
+	name = "formName";
+	enctype = "multipart/form-data";
+}
+
+HIDDEN_FORM: WOHiddenField {
+	name = hiddenFieldName;
+	value = hiddenFieldValue;
+}
+
+PAGE_DA: WOHiddenField {
+	name = "pageDA";
+	value = pageDA;
+}
+
+CONDITIONAL_VALIDATION: WOConditional {
+	condition = hasValidationMessages;
+}
+
+STRING_VALIDATION: WOString {
+	value = validationMessages;
+	escapeHTML = false;
+}
+
+CONDITIONAL_VALIDATION_WARNING: WOConditional {
+	condition = hasWarningValidationMessages;
+}
+
+STRING_VALIDATION_WARNING: WOString {
+	value = warningValidationMessages;
+	escapeHTML = false;
+}
+
+CONDITIONAL_CONFIRM_MESSAGES: WOConditional {
+	condition = hasConfirmMessages;
+}
+
+STRING_CONFIRM_MESSAGES: WOString {
+	value = confirmMessages;
+	escapeHTML = false;
+}
+
+Radio_DownloadDefault: WORadioButton {
+	checked = isRadioDownloadDefaultChecked;
+	name = "downloadType";
+}
+
+Radio_DownloadCurrentUsedForNewSession: WORadioButton {
+	checked = isRadioDownloadCurrentUsedForNewSession;
+	name = "downloadType";
+}
+
+Radio_DownloadCurrentStoredInSession: WORadioButton {
+	checked = isRadioDownloadCurrentStoredInSession;
+	name = "downloadType";
+}
+
+Button_Download: WDLMultiSubmitLink {
+	class = "denaliButton";
+	fieldName = hiddenFieldName;
+	value = getDownloadActionKey;
+	formName = formName;
+}
+
+Upload_SamplesFile: WOFileUpload {
+	filePath = localFilePath;
+	streamToFilePath = tempFilePath;
+	finalFilePath = finalTempFilePath;
+	class="DLNormal";
+	accept = ".zip";
+	overwrite = true;
+}
+
+Button_Upload: WDLMultiSubmitLink {
+	class = "denaliButton";
+	fieldName = hiddenFieldName;
+	value = getUploadActionKey;
+	formName = formName;
+}
+
+Button_SaveSessionState: WDLMultiSubmitLink {
+	class = "denaliButton";
+	fieldName = hiddenFieldName;
+	value = getSaveSessionStateActionKey;
+	formName = formName;
+	confirmPanelMessage = "Are you sure you want to use your current session state as starting point for all new session ?";
+}
+
+Button_RollbackDefaultState: WDLMultiSubmitLink {
+	class = "denaliButton";
+	fieldName = hiddenFieldName;
+	value = getRollbackDefaultStateActionKey;
+	formName = formName;
+	confirmPanelMessage = "Are you sure you want to rollback the samples used as starting point for new session to default ?";
+}

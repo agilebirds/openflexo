@@ -1,0 +1,3 @@
+#foreach($iw in $widget.getInnerWidgets())
+  #render($iw)
+#end

@@ -1,0 +1,63 @@
+/*
+ * (c) Copyright 2010-2011 AgileBirds
+ *
+ * This file is part of OpenFlexo.
+ *
+ * OpenFlexo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenFlexo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+package org.openflexo.logging;
+
+import java.util.logging.Handler;
+import java.util.logging.Logger;
+
+/**
+ * @author sguerin
+ * 
+ */
+public class FlexoLogger extends Logger
+{
+
+    public FlexoLogger(String name)
+    {
+        super(name, null);
+    }
+
+    public void unhandledException(Exception e)
+    {
+        System.out.println("unhandledException " + e);
+        FlexoLoggingHandler flexoLoggingHandler = getFlexoLoggingHandler();
+        if (flexoLoggingHandler != null) {
+            System.out.println("hop-1 " + e);
+            flexoLoggingHandler.publishUnhandledException(new java.util.logging.LogRecord(java.util.logging.Level.WARNING, "Unhandled exception occured: "
+                    + e.getClass().getName()), e);
+        } else {
+            System.out.println("hop-2 " + e);
+            warning("Unexpected exception occured: " + e.getClass().getName());
+        }
+    }
+
+    public FlexoLoggingHandler getFlexoLoggingHandler()
+    {
+        System.out.println("getFlexoLoggingHandler");
+        Handler[] handlers = getHandlers();
+        for (int i = 0; i < handlers.length; i++) {
+            System.out.println("Handler: " + handlers[i].getClass().getName());
+            if (handlers[i] instanceof FlexoLoggingHandler) {
+                return (FlexoLoggingHandler) handlers[i];
+            }
+        }
+        return null;
+    }
+}

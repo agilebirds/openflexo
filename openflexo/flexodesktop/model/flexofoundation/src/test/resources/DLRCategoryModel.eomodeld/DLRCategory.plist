@@ -1,0 +1,59 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = CATEGORYID; 
+            name = categoryID; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = CREATIONDATE; 
+            name = creationDate; 
+            prototypeName = date; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = CREATOR; 
+            name = creator; 
+            prototypeName = str100; 
+        }, 
+        {columnName = DESCRIPTION; name = description; prototypeName = str500; }, 
+        {columnName = FATHERID; name = fatherCategoryID; prototypeName = id; }, 
+        {allowsNull = N; columnName = NAME; name = name; prototypeName = str100; }, 
+        {columnName = NAMESPACE; name = nameSpace; prototypeName = str100; }
+    ); 
+    className = DLRCategory; 
+    classProperties = (
+        categoryID, 
+        name, 
+        nameSpace, 
+        description, 
+        fatherCategory, 
+        fatherCategoryID, 
+        children, 
+        creationDate, 
+        creator
+    ); 
+    externalName = DLRCategory; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {"_clientClassPropertyNames" = (); }; 
+    name = DLRCategory; 
+    primaryKeyAttributes = (categoryID); 
+    relationships = (
+        {
+            destination = DLRCategory; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = fatherCategoryID; sourceAttribute = categoryID; }); 
+            name = children; 
+        }, 
+        {
+            destination = DLRCategory; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = categoryID; sourceAttribute = fatherCategoryID; }); 
+            name = fatherCategory; 
+        }
+    ); 
+}

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GeometricSet id="1">
+  <ComplexCurve id="2" name="ComplexCurve1">
+    <ComplexCurveGraphicalRepresentation id="3" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="4" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="5" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="6" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </ComplexCurveGraphicalRepresentation>
+    <ComplexCurveWithNPointsConstruction id="7" closure="OPEN_NOT_FILLED">
+      <P_ExplicitPointConstruction id="8" point="115.0,304.0" />
+      <P_ExplicitPointConstruction id="9" point="208.0,246.0" />
+      <P_ExplicitPointConstruction id="10" point="371.0,258.0" />
+      <P_ExplicitPointConstruction id="11" point="417.0,363.0" />
+      <P_ExplicitPointConstruction id="12" point="578.0,429.0" />
+    </ComplexCurveWithNPointsConstruction>
+    <Resulting_FGEGeneralShape id="13" className="org.openflexo.fge.geom.FGEComplexCurve" closure="OPEN_NOT_FILLED">
+      <FGEQuadCurve id="14" p1="115.0,304.0" p2="208.0,246.0" cp="144.0,257.5" />
+      <FGECubicCurve id="15" p1="115.0,304.0" p2="371.0,258.0" cp1="272.0,234.5" cp2="318.75,228.75" />
+      <FGECubicCurve id="16" p1="115.0,304.0" p2="417.0,363.0" cp1="423.25,287.25" cp2="365.25,320.25" />
+      <FGEQuadCurve id="17" p1="115.0,304.0" p2="578.0,429.0" cp="468.75,405.75" />
+    </Resulting_FGEGeneralShape>
+  </ComplexCurve>
+  <GeometricDrawingGraphicalRepresentation id="18" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" width="10000.0" height="10000.0" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255">
+    <TextStyle id="19" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+  </GeometricDrawingGraphicalRepresentation>
+</GeometricSet>
+

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model> 
+  <entity name="org.openflexo.xmlcode.examples.example3.TestClass" xmlTag="test"> 
+    <property name="testFile" xmlTag="testFile"/> 
+    <property name="testURL" xmlTag="testURL" attribute="yes"/> 
+    <property name="testVector" xmlTag="string" type="vector"/> 
+    <property name="fileArray" xmlTag="file" type="array"/> 
+    <property name="fooArray" xmlTag="foo" type="array"/> 
+  </entity> 
+  <entity name="org.openflexo.xmlcode.examples.example3.Foo" xmlTag="foo"> 
+    <property name="intField" xmlTag="intField" attribute="yes"/> 
+    <property name="stringField" text="yes"/> 
+  </entity> 
+</model>

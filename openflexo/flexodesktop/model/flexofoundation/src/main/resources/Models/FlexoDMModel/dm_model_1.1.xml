@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Mapping model for process encoding version 1.0 -->
+
+<model builder="org.openflexo.foundation.xml.FlexoDMBuilder" handlesReferences="yes"> 
+
+  <entity name="org.openflexo.foundation.FlexoModelObject" abstract="YES" finalizer="finalizeDeserialization">
+  	<property name="flexoID" xmlTag="flexoID" attribute="YES" description="Unique ID generated and maintained by Flexo"/>
+    <description>Root class for all objects of Flexo</description>
+  </entity>
+
+  <entity name="org.openflexo.foundation.dm.DMObject" abstract="YES" finalizer="finalizeDeserialization">
+    <description>Abstract representation of an object involved in data model definition</description>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.dm.DMModel" xmlTag="DMModel">
+    <description>Represents the whole data model for the project</description>
+    <property name="name" xmlTag="name" attribute="YES" description="Name of data model"/> 
+    <property name="description" xmlTag="description" text="YES" description="Some description usefull for documentation generation"/> 
+    <property name="JDKRepository" xmlTag="JDKRepository" primary="yes" description="JDK repository"/> 
+    <property name="componentRepository" xmlTag="ComponentRepository" primary="yes" description="Components repository"/> 
+    <property name="processInstanceRepository" xmlTag="ProcessInstanceRepository" primary="yes" description="ProcessInstance repository"/> 
+    <property name="WORepository" xmlTag="WORepository" primary="yes" description="WebObjects common classes repository"/> 
+    <property name="EOPrototypeRepository" xmlTag="EOPrototypeRepository" primary="yes" description="EOPrototypes repository"/> 
+    <property name="executionModelRepository" xmlTag="ExecutionModelRepository" primary="yes" description="Execution model repository"/> 
+    <property name="projectRepositories" xmlTag="ProjectRepository" type="vector" primary="yes" description="Contains the list of ProjetRepositories related to this project"/> 
+    <property name="projectDatabaseRepositories" xmlTag="ProjectDatabaseRepository" primary="yes" type="vector" description="Contains the list of ProjectDatabaseRepositories related to this project"/> 
+    <property name="externalRepositories" xmlTag="ExternalRepository" primary="yes" type="vector" description="Contains the list of ExternalRepositories related to this project"/> 
+    <property name="denaliFoundationRepositories" xmlTag="DenaliFoundationRepository" primary="yes" type="vector" description="Contains the list of DenaliFoundationRepositories related to this project"/> 
+    <property name="externalDatabaseRepositories" xmlTag="ExternalDatabaseRepository" primary="yes" type="vector" description="Contains the list of ExternalDatabaseRepositories related to this project"/> 
+    <property name="thesaurusRepositories" xmlTag="ThesaurusRepository" primary="yes" type="vector" description="Contains the list of ThesaurusRepositories related to this project"/> 
+    <property name="thesaurusDatabaseRepositories" xmlTag="ThesaurusDatabaseRepository" primary="yes" type="vector" description="Contains the list of ThesaurusDatabaseRepositories related to this project"/> 
+  </entity>
+  
+  <entity name="org.openflexo.foundation.dm.DMRepository" abstract="YES">
+    <description>Represents a logical group of DMEntity sharing the same implementation</description>
+    <property name="name" xmlTag="name" attribute="YES" description="Name of repository"/> 
+    <property name="description" xmlTag="description" text="YES" description="Description of repository"/> 
+    <property name="entities" contains="org.openflexo.foundation.dm.DMEntity" primary="yes" type="hashtable" key="fullyQualifiedName" description="Contains the list of DMEntities this repository contains, stored in a hashtable where the key if the full-qualified name of the entity"/> 
+  </entity>
+
+  <entity name="org.openflexo.foundation.dm.eo.DMEORepository" abstract="YES">
+    <description>Represents a database implementation for a group of objects stored in a list of DMEOModel</description>
+    <property name="DMEOModels" xmlTag="DMEOModel" primary="yes" type="hashtable" key="name" description="Contains a list of DMEOModel, stored in a hashtable where the key if the full-qualified name of the EOModel"/> 
+  </entity>
+
+  <entity name="org.openflexo.foundation.dm.eo.DMEOModel" xmlTag="ParentDMEOModel,DMEOModel">
+    <description>Represents a database implementation for a group of objects (maps an EOModel)</description>
+    <property name="EOModelFile" xmlTag="EOModelFile" attribute="YES" description="EOModel file"/> 
+    <property name="description" xmlTag="description" text="YES" description="Description of EOModel"/> 
+  </entity>
+
+  <entity name="org.openflexo.foundation.dm.DenaliFoundationRepository" xmlTag="DenaliFoundationRepository">
+    <description>Represents a Denali library</description>
+   <property name="denaliFoundationDirectory" xmlTag="denaliFoundationDirectory" attribute="YES" description="Name of related repository directory"/> 
+  </entity>
+
+  <entity name="org.openflexo.foundation.dm.ExternalDatabaseRepository" xmlTag="ExternalDatabaseRepository">
+    <description>Represents a connexion to an already existing database (customer database for example)</description>
+  </entity>
+
+  <entity name="org.openflexo.foundation.dm.ProjectDatabaseRepository" xmlTag="ProjectDatabaseRepository">
+    <description>Represents a logical group of objects stored in a project database</description>
+    <property name="packageName" xmlTag="packageName" attribute="YES" description="Name of package"/> 
+  </entity>
+
+  <entity name="org.openflexo.foundation.dm.ThesaurusDatabaseRepository" xmlTag="ThesaurusDatabaseRepository">
+    <description>Represents a logical group of objects stored in a thesaurus database</description>
+  </entity>
+
+  <entity name="org.openflexo.foundation.dm.ComponentRepository" xmlTag="ComponentRepository">
+    <description>Represents a logical group of objects representing components used in the context of the project</description>
+  </entity>
+
+  <entity name="org.openflexo.foundation.dm.ProcessInstanceRepository" xmlTag="ProcessInstanceRepository">
+    <description>Represents a logical group of objects representing process instances used in the context of the project</description>
+  </entity>
+
+  <entity name="org.openflexo.foundation.dm.ExternalRepository" xmlTag="ExternalRepository">
+    <description>Represents a logical group of objects stored in an external jar file</description>
+    <property name="jarFile" xmlTag="jarFile" attribute="YES" description="Name of related JAR file"/> 
+  </entity>
+
+  <entity name="org.openflexo.foundation.dm.JDKRepository" xmlTag="JDKRepository">
+    <description>Represents a logical group of objects defined in common JDK implementation and used in the project</description>
+  </entity>
+
+  <entity name="org.openflexo.foundation.dm.eo.EOPrototypeRepository" xmlTag="EOPrototypeRepository">
+    <description>Stores all the EOPrototypes</description>
+  </entity>
+
+  <entity name="org.openflexo.foundation.dm.FlexoExecutionModelRepository" xmlTag="ExecutionModelRepository">
+    <description>Stores the execution model repository</description>
+  </entity>
+
+  <entity name="org.openflexo.foundation.dm.ProjectRepository" xmlTag="ProjectRepository">
+    <description>Represents a logical group of objects stored in only memory: their persistence is not assumed by a relational database </description>
+    <property name="packageName" xmlTag="packageName" attribute="YES" description="Name of package"/> 
+  </entity>
+
+  <entity name="org.openflexo.foundation.dm.ThesaurusRepository" xmlTag="ThesaurusRepository">
+    <description>Represents a logical group of objects stored in a non-database thesaurus</description>
+  </entity>
+
+  <entity name="org.openflexo.foundation.dm.WORepository" xmlTag="WORepository">
+    <description>Represents a logical group of objects used for WO scheme: contains WebObjects common classes</description>
+  </entity>
+
+  <entity name="org.openflexo.foundation.dm.DMEntity" xmlTag="ParentDMEntity,AccessedDMEntity,KeyDMEntity,DMEntity">
+    <description>Represents a class and its definition</description>
+    <property name="name" xmlTag="name" attribute="YES" description="Name of entity"/> 
+    <property name="description" xmlTag="description" text="YES" description="Description of entity"/> 
+    <property name="entityClassName" xmlTag="entityClassName" attribute="YES" description="Name of class representing entity"/> 
+    <property name="entityPackageName" xmlTag="entityPackageName" attribute="YES" description="Full-qualified package name"/> 
+    <property name="parentBaseEntity" xmlTag="ParentDMEntity,ParentDMEOEntity,ParentLoadableDMEntity,ParentComponentDMEntity,ParentProcessDMEntity,ParentJDKPrimitive" description="Defines parent entity"/> 
+    <property name="properties" xmlTag="DMProperty,DMEOAttribute,DMEORelationship,DMEOPrototype" primary="yes" type="hashtable" key="name" description="Contains the list of DMProperties attached to this entity, stored in a hashtable where the key if the name of the property"/> 
+    <property name="methods" xmlTag="DMMethod" primary="yes" type="hashtable" key="signature" description="Contains the list of DMMethods attached to this entity, stored in a hashtable where the key if the signature of the method"/> 
+    <property name="repository" contains="org.openflexo.foundation.dm.DMRepository" description="Repository where this entity is declared"/> 
+    <property name="isReadOnly" xmlTag="readOnly" attribute="YES" description="When set to true, means that this entity could not be modified"/> 
+  </entity>
+
+  <entity name="org.openflexo.foundation.dm.ComponentDMEntity" xmlTag="ParentComponentDMEntity,AccessedComponentDMEntity,KeyComponentDMEntity,ComponentDMEntity">
+    <description>Represents a component entity</description>
+    <property name="mandatoryBindingProperties" xmlTag="MandatoryDMProperty" type="vector" description="Properties that are mandatory in the context of related component bindings"/> 
+  </entity>
+  
+  <entity name="org.openflexo.foundation.dm.ProcessDMEntity" xmlTag="ParentProcessDMEntity,AccessedProcessDMEntity,KeyProcessDMEntity,ProcessDMEntity">
+    <description>Represents a component entity</description>
+  </entity>
+  
+
+  <entity name="org.openflexo.foundation.dm.LoadableDMEntity" xmlTag="ParentLoadableDMEntity,AccessedLoadableDMEntity,KeyLoadableDMEntity,LoadableDMEntity">
+    <description>Represents a class and its definition which is present in the class loader</description>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.dm.JDKPrimitive" xmlTag="ParentJDKPrimitive,AccessedJDKPrimitive,KeyJDKPrimitive,JDKPrimitive">
+    <description>Represents a class and its definition which is present in the class loader</description>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.dm.eo.DMEOEntity" xmlTag="ParentDMEOEntity,AccessedDMEOEntity,KeyDMEOEntity,DMEOEntity">
+    <description>Represents a class and its definition for objects stored in database</description>
+    <property name="DMEOModel" xmlTag="ParentDMEOModel" description="DMEOModel where this entity is registered"/> 
+  </entity>
+
+  <entity name="org.openflexo.foundation.dm.DMProperty" xmlTag="MandatoryDMProperty,DMProperty">
+    <description>Represents an accessor as a get/set key-value pair</description>
+    <property name="name" xmlTag="name" attribute="YES" description="Name of property"/> 
+    <property name="description" xmlTag="description" attribute="YES" description="Description of property"/> 
+    <property name="typeBaseEntity" xmlTag="AccessedDMEntity,AccessedLoadableDMEntity,AccessedDMEOEntity,AccessedJDKPrimitive,AccessedComponentDMEntity,AccessedProcessDMEntity" description="Target type (DMEntity) for this property"/> 
+    <property name="cardinality" xmlTag="cardinality" attribute="YES" description="Kind of cardinality (SINGLE, VECTOR, HASHTABLE, ARRAY)"/> 
+    <property name="isReadOnly" xmlTag="readOnly" attribute="YES" description="When set to true, means that this property cannot be modified"/> 
+    <property name="isSettable" xmlTag="settable" attribute="YES" description="When set to false, means that this property can only be read"/> 
+    <property name="implementationType" xmlTag="implementationType" attribute="YES" description="Implementation type (PUBLIC_ACCESSORS_PRIVATE_FIELD, PUBLIC_ACCESSORS_PROTECTED_FIELD, PUBLIC_FIELD)"/> 
+    <property name="fieldName" xmlTag="fieldName" attribute="YES" description="Name of field to use"/> 
+    <property name="keyTypeBaseEntity" xmlTag="KeyDMEntity,KeyLoadableDMEntity,KeyDMEOEntity,KeyJDKPrimitive,KeyComponentDMEntity,KeyProcessDMEntity" description="Target type (DMEntity) used as a key is cardinality of this property is hashtable"/> 
+    <property name="isUnderscoredAccessors" xmlTag="isUnderscoredAccessors" attribute="YES" description="True if underscore is to prepend to accessor names"/> 
+    <property name="getterCoreCode" xmlTag="getterCode" description="Getter code"/> 
+    <property name="setterCoreCode" xmlTag="setterCode" description="Setter code"/> 
+    <property name="additionAccessorCoreCode" xmlTag="additionAccessorCode" description="AdditionAccessor code"/> 
+    <property name="removalAccessorCoreCode" xmlTag="removingAccessorCode" description="RemovingAccessor code"/> 
+   </entity>
+  
+  <entity name="org.openflexo.foundation.dm.eo.DMEOProperty" abstract="yes">
+    <description>Represents an accessor as a get/set key-value pair mapping a data stored in a database</description>
+    <property name="columnName" xmlTag="columnName" attribute="YES" description="Name of column in related table"/> 
+    <property name="prototypeName" xmlTag="prototypeName" text="YES" description="Prototype name"/> 
+  </entity>
+  
+  <entity name="org.openflexo.foundation.dm.eo.DMEOAttribute" xmlTag="DMEOAttribute">
+    <description>Represents an accessor implemented as an attribute (field in a DB table)</description>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.dm.eo.DMEOPrototype" xmlTag="DMEOPrototype">
+    <description>Represents an EO Prototype</description>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.dm.eo.DMEORelationship" xmlTag="DMEORelationship">
+    <description>Represents an accessor implemented as a relationship (relationship between DB tables)</description>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.dm.DMMethod" xmlTag="DMMethod">
+    <description>Represents a method attached to an entity</description>
+    <property name="name" xmlTag="name" attribute="YES" description="Name of method"/> 
+    <property name="description" xmlTag="description" attribute="YES" description="Description of method"/> 
+    <property name="returnTypeBaseEntity" xmlTag="AccessedDMEntity,AccessedLoadableDMEntity,AccessedDMEOEntity,AccessedJDKPrimitive,AccessedComponentDMEntity,AccessedProcessDMEntity" description="Return type (DMEntity) for this method"/> 
+    <property name="parameters" xmlTag="DMParam" primary="yes" type="vector" description="Contains the list of parameters for this method"/> 
+    <property name="visibilityModifier" xmlTag="visibilityModifier" attribute="YES" description="Access modifier of method"/> 
+    <property name="isAbstract" xmlTag="isAbstract" attribute="YES" description="'abstract' modifier"/> 
+    <property name="isStatic" xmlTag="isStatic" attribute="YES" description="'static' modifier"/> 
+    <property name="isSynchronized" xmlTag="isSynchronized" attribute="YES" description="'synchronized' modifier"/> 
+    <property name="coreCode" xmlTag="code" description="Code for this method"/> 
+  </entity>
+  
+  <entity name="org.openflexo.foundation.dm.DMMethod$DMMethodParameter" xmlTag="DMParam">
+    <description>Represents a parameter of a method attached to an entity</description>
+    <property name="name" xmlTag="name" attribute="YES" description="Name of parameter"/> 
+    <property name="description" xmlTag="description" text="YES" description="Description of repository"/> 
+    <property name="typeBaseEntity" xmlTag="AccessedDMEntity,AccessedLoadableDMEntity,AccessedDMEOEntity,AccessedJDKPrimitive,AccessedComponentDMEntity,AccessedProcessDMEntity" description="Type (DMEntity) of this parameter"/> 
+  </entity>
+  
+  
+</model>

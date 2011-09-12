@@ -1,0 +1,23 @@
+<inspector title = "Dynamic Image" inheritsfrom ="Button.inspector">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+	   <hidden name="file"/>
+	   <hidden name="maintainAspectRatio"/>
+	   <hidden name="usePercentage"/>
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+	</tab>
+
+	<tab name="Doc" index="2" layout="DEFAULT">
+	</tab>
+
+	<tab name="Data" index="3" layout="DEFAULT">
+		<property name="bindingImageUrl" label="binding_image_url" widget="CUSTOM" constraint="3">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="bindingImageUrlDefinition"/>			
+			<param name="creates_entry" value="createsBindingVariable"/>			
+		</property>
+	</tab>
+
+</inspector>

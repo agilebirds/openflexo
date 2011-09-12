@@ -1,0 +1,47 @@
+<inspector title = "WKFRepresentable" inheritsfrom ="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.wkf.WKFObject">
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+	</tab>
+	<tab name="Graphics_BPE" index="20" layout="DEFAULT" visibilityContext="BPE">
+		<property name="x('bpe')" label="x" widget="DOUBLE" constraint="0">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="y('bpe')" label="y" widget="DOUBLE" constraint="1">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="width('bpe')" label="width" widget="DOUBLE" constraint="2">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="height('bpe')" label="height" widget="DOUBLE" constraint="3">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="bgColor('bpe')" label="back_color" widget="COLOR" constraint="4">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="textColor('bpe')" label="text_color" widget="COLOR" constraint="5">
+			<param name="columns" value="10"/>
+		</property>
+	</tab>
+
+	<tab name="Graphics_SWL" index="21" layout="DEFAULT" visibilityContext="SWL">
+		<property name="x('swl')" label="x" widget="DOUBLE" constraint="0">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="y('swl')" label="y" widget="DOUBLE" constraint="1">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="width('swl',80)" label="width" widget="DOUBLE" constraint="2">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="height('swl',40)" label="height" widget="DOUBLE" constraint="3">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="bgColor('swl')" label="back_color" widget="COLOR" constraint="4">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="textColor('swl')" label="text_color" widget="COLOR" constraint="5">
+			<param name="columns" value="10"/>
+		</property>
+	</tab>
+
+</inspector>

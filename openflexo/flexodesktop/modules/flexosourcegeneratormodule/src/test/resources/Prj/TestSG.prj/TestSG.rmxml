@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project id="SYL_413" name="TestSG" projectURI="http://www.agilebirds.com/projects/2011/2/TestSG_1297776219297" cssSheet="Contento" lastUniqueID="536" targetType="PROTOTYPE" creationDate="HH:mm:ss dd/MM/yyyy SSS,14:23:28 15/02/2011 596" creationUserId="SYL" projectDateFormat="%d/%m/%y" userID="SYL" flexoID="413" dontGenerate="false" useSpecificDescriptions="false">
+  <resourcesCount>41</resourcesCount>
+  No description
+  <ComponentLibrary id="SYL_COMPONENT_LIBRARY.TestSG" file="TestSG.wolib" userID="SYL" version="2.4">
+    <DependantResources id="SYL_COMPONENT_LIBRARY.TestSG_DR" />
+    <SynchronizedResources id="SYL_COMPONENT_LIBRARY.TestSG_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </ComponentLibrary>
+  <DataModel id="SYL_DATA_MODEL.TestSG" version="2.9" userID="SYL" file="DataModel/TestSG.dm">
+    <DependantResources id="SYL_DATA_MODEL.TestSG_DR">
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+      <JAR idref="SYL_JAR.JavaEOControl.jar" />
+      <JAR idref="SYL_JAR.JavaWebObjects.jar" />
+      <JAR idref="SYL_JAR.DenaliResourcesAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.DenaliLanguageServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliMailServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliFileMimeTypeServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliLocalizationServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliExceptionServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliConfigServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliRoleServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliUserInCookieServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliUserServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliCore.jar" />
+      <JAR idref="SYL_JAR.DenaliDBBusinessLogic.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_DATA_MODEL.TestSG_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+      <EOModel idref="SYL_EOMODEL.EOPrototypes.eomodeld" />
+      <EOModel idref="SYL_EOMODEL.FlexoExecutionModel.eomodeld" />
+    </SynchronizedResources>
+  </DataModel>
+  <DomainKeyValue id="SYL_DOMAIN_KEY_VALUE.TestSG" file="DomainKeyValue/TestSG.dkv" userID="SYL" version="0.2">
+    <DependantResources id="SYL_DOMAIN_KEY_VALUE.TestSG_DR" />
+    <SynchronizedResources id="SYL_DOMAIN_KEY_VALUE.TestSG_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </DomainKeyValue>
+  <EOModel id="SYL_EOMODEL.EOPrototypes.eomodeld" file="DataModel/EOPrototypes.eomodeld" userID="SYL">
+    <DependantResources id="SYL_EOMODEL.EOPrototypes.eomodeld_DR" />
+    <SynchronizedResources id="SYL_EOMODEL.EOPrototypes.eomodeld_SR">
+      <DataModel idref="SYL_DATA_MODEL.TestSG" />
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </EOModel>
+  <EOModel id="SYL_EOMODEL.FlexoExecutionModel.eomodeld" file="DataModel/FlexoExecutionModel.eomodeld" userID="SYL">
+    <DependantResources id="SYL_EOMODEL.FlexoExecutionModel.eomodeld_DR" />
+    <SynchronizedResources id="SYL_EOMODEL.FlexoExecutionModel.eomodeld_SR">
+      <DataModel idref="SYL_DATA_MODEL.TestSG" />
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </EOModel>
+  <GeneratedCode id="SYL_GENERATED_CODE.TestSG" file="GeneratedCode/TestSG.cg" userID="SYL" version="0.1">
+    <DependantResources id="SYL_GENERATED_CODE.TestSG_DR" />
+    <SynchronizedResources id="SYL_GENERATED_CODE.TestSG_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </GeneratedCode>
+  <GeneratedDoc id="SYL_GENERATED_DOC.TestSG" file="Documentation/TestSG.dg" userID="SYL" version="0.1">
+    <DependantResources id="SYL_GENERATED_DOC.TestSG_DR" />
+    <SynchronizedResources id="SYL_GENERATED_DOC.TestSG_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </GeneratedDoc>
+  <GeneratedSources id="SYL_GENERATED_SOURCES.TestSG" file="GeneratedSources/TestSG.sg" userID="SYL" version="0.1">
+    <DependantResources id="SYL_GENERATED_SOURCES.TestSG_DR" />
+    <SynchronizedResources id="SYL_GENERATED_SOURCES.TestSG_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+      <ImplementationModel idref="SYL_IMPLEMENTATION_MODEL.DefaultImplementationModel" />
+    </SynchronizedResources>
+  </GeneratedSources>
+  <ImplementationModel id="SYL_IMPLEMENTATION_MODEL.DefaultImplementationModel" name="DefaultImplementationModel" file="GeneratedSources/DefaultImplementationModel/DefaultImplementationModel.im" userID="SYL" version="0.1">
+    <DependantResources id="SYL_IMPLEMENTATION_MODEL.DefaultImplementationModel_DR" />
+    <SynchronizedResources id="SYL_IMPLEMENTATION_MODEL.DefaultImplementationModel_SR">
+      <GeneratedSources idref="SYL_GENERATED_SOURCES.TestSG" />
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </ImplementationModel>
+  <JAR id="SYL_JAR.DenaliConfigServiceAPI.jar" file="DataModel/DenaliConfigServiceAPI.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:32:14 15/02/2011 674">
+    <DependantResources id="SYL_JAR.DenaliConfigServiceAPI.jar_DR">
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliConfigServiceAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliCore.jar" file="DataModel/DenaliCore.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:32:14 15/02/2011 695">
+    <DependantResources id="SYL_JAR.DenaliCore.jar_DR">
+      <JAR idref="SYL_JAR.JavaWebObjects.jar" />
+      <JAR idref="SYL_JAR.DenaliExceptionServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliLanguageServiceAPI.jar" />
+      <JAR idref="SYL_JAR.JavaEOControl.jar" />
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.DenaliConfigServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliMailServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliLocalizationServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliFileMimeTypeServiceAPI.jar" />
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+      <JAR idref="SYL_JAR.DenaliResourcesAPI.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliCore.jar_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliDBBusinessLogic.jar" file="DataModel/DenaliDBBusinessLogic.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:32:14 15/02/2011 702">
+    <DependantResources id="SYL_JAR.DenaliDBBusinessLogic.jar_DR">
+      <JAR idref="SYL_JAR.JavaEOControl.jar" />
+      <JAR idref="SYL_JAR.DenaliCore.jar" />
+      <JAR idref="SYL_JAR.JavaWebObjects.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliDBBusinessLogic.jar_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliExceptionServiceAPI.jar" file="DataModel/DenaliExceptionServiceAPI.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:32:14 15/02/2011 670">
+    <DependantResources id="SYL_JAR.DenaliExceptionServiceAPI.jar_DR">
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.JavaWebObjects.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliExceptionServiceAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliFileMimeTypeServiceAPI.jar" file="DataModel/DenaliFileMimeTypeServiceAPI.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:32:14 15/02/2011 785">
+    <DependantResources id="SYL_JAR.DenaliFileMimeTypeServiceAPI.jar_DR">
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+      <JAR idref="SYL_JAR.JavaWebObjects.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliFileMimeTypeServiceAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliLanguageServiceAPI.jar" file="DataModel/DenaliLanguageServiceAPI.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:32:14 15/02/2011 649">
+    <DependantResources id="SYL_JAR.DenaliLanguageServiceAPI.jar_DR">
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliLanguageServiceAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliLocalizationServiceAPI.jar" file="DataModel/DenaliLocalizationServiceAPI.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:32:14 15/02/2011 783">
+    <DependantResources id="SYL_JAR.DenaliLocalizationServiceAPI.jar_DR">
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliLocalizationServiceAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliMailServiceAPI.jar" file="DataModel/DenaliMailServiceAPI.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:32:14 15/02/2011 652">
+    <DependantResources id="SYL_JAR.DenaliMailServiceAPI.jar_DR">
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliMailServiceAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliResourcesAPI.jar" file="DataModel/DenaliResourcesAPI.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:32:14 15/02/2011 641">
+    <DependantResources id="SYL_JAR.DenaliResourcesAPI.jar_DR">
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliResourcesAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliRoleServiceAPI.jar" file="DataModel/DenaliRoleServiceAPI.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:32:14 15/02/2011 678">
+    <DependantResources id="SYL_JAR.DenaliRoleServiceAPI.jar_DR">
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliRoleServiceAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliServiceManager.jar" file="DataModel/DenaliServiceManager.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:32:14 15/02/2011 645">
+    <DependantResources id="SYL_JAR.DenaliServiceManager.jar_DR" />
+    <SynchronizedResources id="SYL_JAR.DenaliServiceManager.jar_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliUserInCookieServiceAPI.jar" file="DataModel/DenaliUserInCookieServiceAPI.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:32:14 15/02/2011 762">
+    <DependantResources id="SYL_JAR.DenaliUserInCookieServiceAPI.jar_DR">
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.DenaliResourcesAPI.jar" />
+      <JAR idref="SYL_JAR.JavaWebObjects.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliUserInCookieServiceAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliUserServiceAPI.jar" file="DataModel/DenaliUserServiceAPI.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:32:14 15/02/2011 713">
+    <DependantResources id="SYL_JAR.DenaliUserServiceAPI.jar_DR">
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.JavaEOControl.jar" />
+      <JAR idref="SYL_JAR.DenaliResourcesAPI.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliUserServiceAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.JavaEOControl.jar" file="DataModel/JavaEOControl.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:32:14 15/02/2011 587">
+    <DependantResources id="SYL_JAR.JavaEOControl.jar_DR">
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.JavaEOControl.jar_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.JavaFoundation.jar" file="DataModel/JavaFoundation.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:32:14 15/02/2011 531">
+    <DependantResources id="SYL_JAR.JavaFoundation.jar_DR" />
+    <SynchronizedResources id="SYL_JAR.JavaFoundation.jar_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.JavaWebObjects.jar" file="DataModel/JavaWebObjects.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:32:14 15/02/2011 606">
+    <DependantResources id="SYL_JAR.JavaWebObjects.jar_DR">
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+      <JAR idref="SYL_JAR.JavaEOControl.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.JavaWebObjects.jar_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </JAR>
+  <NavigationMenu id="SYL_NAVIGATION_MENU.TestSG" file="TestSG.menu" userID="SYL" version="2.2">
+    <DependantResources id="SYL_NAVIGATION_MENU.TestSG_DR" />
+    <SynchronizedResources id="SYL_NAVIGATION_MENU.TestSG_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </NavigationMenu>
+  <Process id="SYL_PROCESS.TestSG" name="TestSG" file="Workflow/TestSG.xml" userID="SYL" version="6.0">
+    <DependantResources id="SYL_PROCESS.TestSG_DR">
+      <DataModel idref="SYL_DATA_MODEL.TestSG" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_PROCESS.TestSG_SR">
+      <Workflow idref="SYL_WORKFLOW.TestSG" />
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </Process>
+  <RMResource id="SYL_RM.TestSG" file="TestSG.rmxml" userID="SYL" version="4.1">
+    <DependantResources id="SYL_RM.TestSG_DR" />
+    <SynchronizedResources id="SYL_RM.TestSG_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+      <GeneratedCode idref="SYL_GENERATED_CODE.TestSG" />
+      <DataModel idref="SYL_DATA_MODEL.TestSG" />
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+      <JAR idref="SYL_JAR.JavaEOControl.jar" />
+      <JAR idref="SYL_JAR.JavaWebObjects.jar" />
+      <JAR idref="SYL_JAR.DenaliResourcesAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.DenaliLanguageServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliMailServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliFileMimeTypeServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliLocalizationServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliExceptionServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliConfigServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliRoleServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliUserInCookieServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliUserServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliCore.jar" />
+      <JAR idref="SYL_JAR.DenaliDBBusinessLogic.jar" />
+      <EOModel idref="SYL_EOMODEL.EOPrototypes.eomodeld" />
+      <EOModel idref="SYL_EOMODEL.FlexoExecutionModel.eomodeld" />
+      <ComponentLibrary idref="SYL_COMPONENT_LIBRARY.TestSG" />
+      <Workflow idref="SYL_WORKFLOW.TestSG" />
+      <Process idref="SYL_PROCESS.TestSG" />
+      <NavigationMenu idref="SYL_NAVIGATION_MENU.TestSG" />
+      <DomainKeyValue idref="SYL_DOMAIN_KEY_VALUE.TestSG" />
+      <GeneratedDoc idref="SYL_GENERATED_DOC.TestSG" />
+      <FlexoWebServerFileResource idref="SYL_WEBSERVER.001-Dialog.jpg" />
+      <FlexoWebServerFileResource idref="SYL_WEBSERVER.002-Information.jpg" />
+      <FlexoWebServerFileResource idref="SYL_WEBSERVER.003-FillForm.jpg" />
+      <FlexoWebServerFileResource idref="SYL_WEBSERVER.004-InformationComputer.jpg" />
+      <FlexoWebServerFileResource idref="SYL_WEBSERVER.005-AssemblyLine.jpg" />
+      <FlexoWebServerFileResource idref="SYL_WEBSERVER.006-FlexoServerVideo.jpg" />
+      <FlexoWebServerFileResource idref="SYL_WEBSERVER.007-Audio.jpg" />
+      <FlexoWebServerFileResource idref="SYL_WEBSERVER.agileMapping.jpg" />
+      <FlexoWebServerFileResource idref="SYL_WEBSERVER.objective-process.jpg" />
+      <FlexoWebServerFileResource idref="SYL_WEBSERVER.organisationStructure.jpg" />
+      <FlexoWebServerFileResource idref="SYL_WEBSERVER.process-mapping.jpg" />
+      <GeneratedSources idref="SYL_GENERATED_SOURCES.TestSG" />
+      <TOCResource idref="SYL_TOC_RESOURCE.TestSG" />
+      <ImplementationModel idref="SYL_IMPLEMENTATION_MODEL.DefaultImplementationModel" />
+    </SynchronizedResources>
+  </RMResource>
+  <TOCResource id="SYL_TOC_RESOURCE.TestSG" file="Documentation/TestSG.toc" userID="SYL" version="0.1">
+    <DependantResources id="SYL_TOC_RESOURCE.TestSG_DR" />
+    <SynchronizedResources id="SYL_TOC_RESOURCE.TestSG_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </TOCResource>
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.001-Dialog.jpg" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:23:38 15/02/2011 695" file="ImportedImages/001-Dialog.jpg">
+    <DependantResources id="SYL_WEBSERVER.001-Dialog.jpg_DR" />
+    <SynchronizedResources id="SYL_WEBSERVER.001-Dialog.jpg_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </FlexoWebServerFileResource>
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.002-Information.jpg" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:23:38 15/02/2011 798" file="ImportedImages/002-Information.jpg">
+    <DependantResources id="SYL_WEBSERVER.002-Information.jpg_DR" />
+    <SynchronizedResources id="SYL_WEBSERVER.002-Information.jpg_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </FlexoWebServerFileResource>
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.003-FillForm.jpg" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:23:38 15/02/2011 808" file="ImportedImages/003-FillForm.jpg">
+    <DependantResources id="SYL_WEBSERVER.003-FillForm.jpg_DR" />
+    <SynchronizedResources id="SYL_WEBSERVER.003-FillForm.jpg_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </FlexoWebServerFileResource>
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.004-InformationComputer.jpg" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:23:38 15/02/2011 814" file="ImportedImages/004-InformationComputer.jpg">
+    <DependantResources id="SYL_WEBSERVER.004-InformationComputer.jpg_DR" />
+    <SynchronizedResources id="SYL_WEBSERVER.004-InformationComputer.jpg_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </FlexoWebServerFileResource>
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.005-AssemblyLine.jpg" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:23:38 15/02/2011 827" file="ImportedImages/005-AssemblyLine.jpg">
+    <DependantResources id="SYL_WEBSERVER.005-AssemblyLine.jpg_DR" />
+    <SynchronizedResources id="SYL_WEBSERVER.005-AssemblyLine.jpg_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </FlexoWebServerFileResource>
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.006-FlexoServerVideo.jpg" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:23:38 15/02/2011 839" file="ImportedImages/006-FlexoServerVideo.jpg">
+    <DependantResources id="SYL_WEBSERVER.006-FlexoServerVideo.jpg_DR" />
+    <SynchronizedResources id="SYL_WEBSERVER.006-FlexoServerVideo.jpg_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </FlexoWebServerFileResource>
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.007-Audio.jpg" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:23:38 15/02/2011 852" file="ImportedImages/007-Audio.jpg">
+    <DependantResources id="SYL_WEBSERVER.007-Audio.jpg_DR" />
+    <SynchronizedResources id="SYL_WEBSERVER.007-Audio.jpg_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </FlexoWebServerFileResource>
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.agileMapping.jpg" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:23:38 15/02/2011 862" file="ImportedImages/agileMapping.jpg">
+    <DependantResources id="SYL_WEBSERVER.agileMapping.jpg_DR" />
+    <SynchronizedResources id="SYL_WEBSERVER.agileMapping.jpg_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </FlexoWebServerFileResource>
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.objective-process.jpg" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:23:38 15/02/2011 875" file="ImportedImages/objective-process.jpg">
+    <DependantResources id="SYL_WEBSERVER.objective-process.jpg_DR" />
+    <SynchronizedResources id="SYL_WEBSERVER.objective-process.jpg_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </FlexoWebServerFileResource>
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.organisationStructure.jpg" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:23:38 15/02/2011 885" file="ImportedImages/organisationStructure.jpg">
+    <DependantResources id="SYL_WEBSERVER.organisationStructure.jpg_DR" />
+    <SynchronizedResources id="SYL_WEBSERVER.organisationStructure.jpg_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </FlexoWebServerFileResource>
+  <FlexoWebServerFileResource id="SYL_WEBSERVER.process-mapping.jpg" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,14:23:38 15/02/2011 896" file="ImportedImages/process-mapping.jpg">
+    <DependantResources id="SYL_WEBSERVER.process-mapping.jpg_DR" />
+    <SynchronizedResources id="SYL_WEBSERVER.process-mapping.jpg_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+    </SynchronizedResources>
+  </FlexoWebServerFileResource>
+  <Workflow id="SYL_WORKFLOW.TestSG" version="2.4" userID="SYL" file="Workflow/TestSG.wkf">
+    <DependantResources id="SYL_WORKFLOW.TestSG_DR" />
+    <SynchronizedResources id="SYL_WORKFLOW.TestSG_SR">
+      <RMResource idref="SYL_RM.TestSG" />
+      <Process idref="SYL_PROCESS.TestSG" />
+    </SynchronizedResources>
+  </Workflow>
+  <DocType>Business,Technical,UserManual,Objectives</DocType>
+</Project>
+

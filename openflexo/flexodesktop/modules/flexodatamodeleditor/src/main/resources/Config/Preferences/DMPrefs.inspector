@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tab layout="DEFAULT">
+	<property name="preferedOutputDirectory" label="output_directory" widget="DIRECTORY" constraint="3"/>
+</tab>

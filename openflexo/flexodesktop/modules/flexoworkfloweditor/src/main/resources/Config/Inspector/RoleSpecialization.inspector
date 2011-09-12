@@ -1,0 +1,19 @@
+<inspector title = "Role specialization" inheritsfrom ="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.wkf.RoleSpecialization">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="annotation" label="annotation" widget="TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		</property>
+		<property name="role" label="role" widget="READ_ONLY_TEXT_FIELD" constraint="1">
+			<param name = "format" value="name"/>
+		</property>
+		<property name="parentRole" label="specialize" widget="READ_ONLY_TEXT_FIELD" constraint="2">
+			<param name = "format" value="name"/>
+		</property>
+	</tab>	
+	<tab name="Graphics" index="4">
+	</tab>
+</inspector>

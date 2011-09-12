@@ -1,0 +1,219 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+  <html>
+    <head>
+      <title>XMLCoDe</title>
+    </head>
+    
+    <body>
+      <center>
+	<p>
+	</p>
+	<h1>XMLCoDe</h1>
+	<h2>A free implementation of an XML COder/DEcoder:<br>a Java XML serialization/deserialization tool</h2>
+      </center>
+      
+	<p>
+	</p>
+	<hr> 
+	<p>
+	</p>
+    <center>
+      <a href="index.html">Back to summary</a>
+    </center>
+    <p>
+    </p>
+
+    <center>
+      <h2>Advanced feature: mapping graph structures</h2>
+    </center>
+    
+    <p><br>
+    </p>
+
+    <p>This document introduce you with internal scheme used by XMLCoDe to serialize and deserialize
+     graph structures, by maintaining reference identifiers.</p>
+
+
+    <h3>
+      Introduction
+    </h3>
+
+    <p>
+    	Suppose that you want to code a graph structure (this is generally the case when trying to serialize
+    	some Java objects). Without reference maintaining, you need to extract from object-graph a tree that 
+    	you will serialize as XML document. This is generally painfull, require a pre-processing,
+    	and lead to maintainance problems, as
+    	well as programming issues. When you need to deserialize again, you also have to rebuild all your lost
+    	references, which may lead to other maintainance and programming issues.
+    </p>
+  
+    <p>
+    	XMLCoDe can provide for you an efficient way to maintain references in an object graph, and thus coding
+    	what ever java model object you want without pre-processing.
+    </p>
+
+   <h3>
+      Lets see an example...
+    </h3>
+
+    <p>
+    	Suppose that you want to code this graph structure.
+    </p>
+  
+  	<p>
+  	<ul>
+  	<li><b><tt>Graph</tt></b>
+  	<ul><li>startNode : <tt>Node</tt></li></ul>
+  	</li>
+ 	<li><b><tt>Node</tt></b>
+  	<ul><li>edges : <tt>Vector</tt> of <tt>Edge</tt></li></ul>
+  	</li>
+ 	<li><b><tt>Edge</tt></b>
+  	<ul>
+  	<li>originNode : <tt>Node</tt></li>
+  	<li>destinationNode : <tt>Node</tt></li>
+  	</ul>
+  	</li>
+  	</ul>
+  	</p>
+  
+  	<p>Above model could be coded in Java like this:</p>
+  
+<pre>
+public class Graph implements XMLSerializable
+{
+    public Node startNode;
+}
+</pre>  
+  
+<pre>
+public class Node implements XMLSerializable
+{
+    public Vector edges;
+}
+</pre>  
+  
+<pre>
+public class Edge implements XMLSerializable
+{
+    public Node originNode;
+    public Node destinationNode;
+}
+</pre>  
+  
+      <h3>
+      Definition of a mapping allowing graph persistance
+    </h3>
+  
+    <p>
+    Following mapping may maintain XML persistance for this object model:
+    </p>
+    
+    <p>
+    <pre>
+&LT;?xml version="1.0" encoding="UTF-8"?&GT;
+&LT;model handlesReferences="yes"&GT; 
+  &LT;entity name="fr.enstb.xmlcode.examples.example4.Graph" xmlTag="Graph"&GT; 
+    &LT;property name="startNode" xmlTag="StartNode"/&GT; 
+  &LT;/entity&GT; 
+  &LT;entity name="fr.enstb.xmlcode.examples.example4.Node" xmlTag="Node,StartNode,OriginNode,DestinationNode"&GT; 
+    &LT;property name="edges" xmlTag="Edge" type="vector"/&GT; 
+  &LT;/entity&GT; 
+  &LT;entity name="fr.enstb.xmlcode.examples.example4.Edge" xmlTag="Edge"&GT; 
+    &LT;property name="originNode" xmlTag="OriginNode"/&GT; 
+    &LT;property name="destinationNode" xmlTag="DestinationNode"/&GT; 
+  &LT;/entity&GT; 
+&LT;/model&GT;
+       </pre> 
+    </p>
+
+	<p>
+	Maintaining automatic object references is as simpler as to define this attribute
+	<tt>handlesReferences="yes"</tt> in <tt>model</tt> entity. Knowing this, XMLCoDe will not try
+	to deeply serialize (which will fail here in an infinite loop), but will maintain references. Note that
+	default behaviour is <tt>handlesReferences="no"</tt>.
+	</p>
+	
+	<p>
+	Note that this example shows that some objects may be serialized/deserialized in different contexts.
+	<tt>Node</tt> entity
+	</p>
+
+	<h3>Data example</h3
+	
+	 <p>Suppose that we have to code following graph:</p>
+
+<pre>  
+Graph: start node is Node1
+Node: 1 with edges  [ Edge: Node: 1-Node: 2 ]  [ Edge: Node: 1-Node: 3 ] 
+Node: 2 with edges  [ Edge: Node: 2-Node: 3 ]  [ Edge: Node: 2-Node: 4 ] 
+Node: 3 with edges  [ Edge: Node: 3-Node: 4 ] 
+Node: 4 with edges 
+</pre>  
+  
+  <p>This graph is also represented on following figure:</p>
+  <img src="example_graph.jpg">
+  
+    <p>This graph will be serialized like this:</p>
+  
+<pre>  
+&LT;Graph id="1"&GT;
+  &LT;StartNode id="2"&GT;
+    &LT;Edge id="3"&GT;
+      &LT;OriginNode idref="2" /&GT;
+      &LT;DestinationNode id="4"&GT;
+        &LT;Edge id="5"&GT;
+          &LT;OriginNode idref="4" /&GT;
+          &LT;DestinationNode id="6"&GT;
+            &LT;Edge id="7"&GT;
+              &LT;OriginNode idref="6" /&GT;
+              &LT;DestinationNode id="8"&GT;
+                &LT;nodeProperties /&GT;
+              &LT;/DestinationNode&GT;
+            &LT;/Edge&GT;
+            &LT;nodeProperties /&GT;
+          &LT;/DestinationNode&GT;
+        &LT;/Edge&GT;
+        &LT;Edge id="9"&GT;
+          &LT;OriginNode idref="4" /&GT;
+          &LT;DestinationNode idref="8" /&GT;
+        &LT;/Edge&GT;
+        &LT;nodeProperties /&GT;
+      &LT;/DestinationNode&GT;
+    &LT;/Edge&GT;
+    &LT;Edge id="10"&GT;
+      &LT;OriginNode idref="2" /&GT;
+      &LT;DestinationNode idref="6" /&GT;
+    &LT;/Edge&GT;
+    &LT;nodeProperties /&GT;
+  &LT;/StartNode&GT;
+&LT;/Graph&GT;
+</pre>
+	
+	<p>NB1: This example is extracted from <b><tt>example4</tt></b> delivered in source distribution</p>
+	
+	<p>NB2: We see here that <tt>Node</tt> concept is mapped by many XML tags relating to context.
+	Those issues and some more complex concepts are explained in 
+	<a href="advanced_mapping_definition.html">Advanced XML mapping definitions: contextual XML Tags</a> where this discussion continue.</p>
+	
+	<p>NB3: Note that if this result is correct, this is not really human-understandable.
+	 See <a href="structured_serialization.html">Structured serialization: how to make your serialized stucture stable ?</a></p>
+	
+	
+ 	<p>
+	</p>
+    <center>
+      <a href="index.html">Back to summary</a>
+    </center>
+    <p>
+    </p>
+
+   <hr>
+    <address><a href="mailto:sylvain.guerin@enst-bretagne.fr">Sylvain Guerin</a></address>
+<!-- Created: Fri Dec  7 17:47:50 CET 2001 -->
+<!-- hhmts start -->
+Last modified: Wed Jan 24 12:17:54 CET 2007
+<!-- hhmts end -->
+  </body>
+</html>
+

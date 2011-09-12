@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.ontology.OntologyClass" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label label="name" localize="true" name="NameLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Name" data="data.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
+      <Label label="ontology_super_classes" align="center" localize="true" name="SuperClassesLabel" constraints="twocols(location=center;index=6;expandHorizontally=true;expandVertically=false)" />
+      <Table iteratorClassName="org.openflexo.foundation.ontology.OntologyClass" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.superClasses" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=true)" name="SuperClasses" localize="true" manageDynamicModel="true">
+        <IconColumn data="iterator.icon" title="" columnWidth="30" resizable="false" displayTitle="true" />
+        <LabelColumn data="iterator.name" title="URI" columnWidth="200" resizable="true" displayTitle="true" />
+      </Table>
+      <Label label="ontology_sub_classes" align="center" localize="true" name="SubClassesLabel" constraints="twocols(location=center;index=8;expandHorizontally=true;expandVertically=false)" />
+      <Table iteratorClassName="org.openflexo.foundation.ontology.OntologyClass" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.subClasses" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=true)" name="SubClasses" localize="true" manageDynamicModel="true">
+        <IconColumn data="iterator.icon" title="" columnWidth="30" resizable="false" displayTitle="true" />
+        <LabelColumn data="iterator.name" title="URI" columnWidth="200" resizable="true" displayTitle="true" />
+      </Table>
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="name" lang="English">Name</Localized>
+    <Localized key="name" lang="French">Nom</Localized>
+    <Localized key="name" lang="Dutch">Name</Localized>
+    <Localized key="ontology_super_classes" lang="English">Super classes</Localized>
+    <Localized key="ontology_super_classes" lang="French">Super classes</Localized>
+    <Localized key="ontology_super_classes" lang="Dutch">Super classes</Localized>
+    <Localized key="ontology_sub_classes" lang="English">Sub classes</Localized>
+    <Localized key="ontology_sub_classes" lang="French">Sub classes</Localized>
+    <Localized key="ontology_sub_classes" lang="Dutch">Sub classes</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Ontologic class" />
+</Panel>
+

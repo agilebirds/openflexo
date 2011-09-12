@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OperatorNode id="SYL_9499" operatorType="AND" userID="SYL" flexoID="9499" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" posiX="55" posiY="59" width="49" height="72" textColor="0,0,0" backColor="255,255,255" nodeName="AND" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="-1">
+  <NodeProperties />
+</OperatorNode>
+

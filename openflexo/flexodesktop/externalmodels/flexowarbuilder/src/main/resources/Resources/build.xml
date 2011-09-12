@@ -1,0 +1,18 @@
+<project name="project" default="checkout" basedir=".">
+
+    <!-- ============================================= -->
+    <!-- checkout project                                -->
+    <!-- Required parameters                           -->
+    <!-- param.base.dir the src directory              -->
+    <!-- classpath the classpath refid     			   -->
+    <!-- ============================================= -->
+	<target name="checkout">
+		<cvs command="checkout" cvsroot="192.168.169.11:/var/cvsroot"
+		cvsrsh="ssh" dest="/tmp/prototype/deploy/"
+		package="projects/template-project"/>
+		<move todir="/tmp/prototype/deploy/template-project">
+					<fileset dir="/tmp/prototype/deploy/projects/template-project" defaultexcludes="no"/>
+		</move>
+	</target>
+
+</project>

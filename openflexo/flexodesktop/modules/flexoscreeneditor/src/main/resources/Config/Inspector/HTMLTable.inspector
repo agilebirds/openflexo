@@ -1,0 +1,31 @@
+<inspector title = "HTMLTable" inheritsfrom ="InnerTableWidget.inspector">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+		<property name="colCount" label="cols" widget="INTEGER" constraint="2">
+		</property>
+		<property name="rowCount" label="rows" widget="INTEGER" constraint="3">
+		</property>
+		<property name="grid" label="grid_on" widget="CHECKBOX" constraint="4" help="grid around Cells">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="noCSS" label="no_css_for_row" widget="CHECKBOX" constraint="5" help="no alternate color for rows.">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="isShowingBorder" label="show_table_border" widget="CHECKBOX" constraint="6" help="no alternate color for rows."/>
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+	
+	<property name="pourcentageWidths" label="PourcentageWidths" widget="READ_ONLY_TEXT_FIELD" constraint="7">
+		<param name="visibleFor" value="MAINTAINER"/>
+	</property>
+		
+	</tab>
+
+	<tab name="Doc" index="2" layout="DEFAULT">
+	</tab>
+
+	<tab name="Data" index="3" layout="DEFAULT">
+	</tab>
+	
+</inspector>

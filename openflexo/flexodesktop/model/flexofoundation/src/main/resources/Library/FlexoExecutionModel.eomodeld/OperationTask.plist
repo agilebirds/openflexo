@@ -1,0 +1,68 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = "ACTIVITY_NODE_FLEXO_ID"; 
+            name = activityNodeFlexoID; 
+            prototypeName = id; 
+            valueType = l; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = "CREATION_DATE"; 
+            name = creationDate; 
+            prototypeName = date; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = "OPERATION_NODE_FLEXO_ID"; 
+            name = operationNodeFlexoID; 
+            prototypeName = id; 
+            valueType = l; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = "PROCESS_INSTANCE_ID"; 
+            name = processInstanceID; 
+            prototypeName = id; 
+        }
+    ); 
+    className = "org.openflexo.engine.db.OperationTask"; 
+    classProperties = (activityTask, creationDate, processInstance); 
+    externalName = "OPERATION_TASK"; 
+    fetchSpecificationDictionary = {}; 
+    name = OperationTask; 
+    primaryKeyAttributes = (operationNodeFlexoID, processInstanceID); 
+    relationships = (
+        {
+            destination = ActivityTask; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = (
+                {
+                    destinationAttribute = activityNodeFlexoID; 
+                    sourceAttribute = activityNodeFlexoID; 
+                }, 
+                {
+                    destinationAttribute = processInstanceID; 
+                    sourceAttribute = processInstanceID; 
+                }
+            ); 
+            name = activityTask; 
+            numberOfToManyFaultsToBatchFetch = 0; 
+        }, 
+        {
+            destination = ProcessInstance; 
+            isMandatory = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = (
+                {
+                    destinationAttribute = processInstanceID; 
+                    sourceAttribute = processInstanceID; 
+                }
+            ); 
+            name = processInstance; 
+        }
+    ); 
+}

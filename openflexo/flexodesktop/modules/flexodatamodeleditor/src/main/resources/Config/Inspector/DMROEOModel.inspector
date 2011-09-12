@@ -1,0 +1,31 @@
+<inspector title = "EOModel_(read_only)" inheritsfrom="DMROObject.inspector">
+	<tab name="Basic" index="0">
+		<property name="name" label="name" widget="READ_ONLY_TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		</property>
+		<property name="EOModelFile.name" label="eomodel_file" widget="READ_ONLY_TEXT_FIELD" constraint="3">
+			<param name="className" value="org.openflexo.components.widget.FlexoProjectFileInspectorWidget"/>
+		</property>
+		<property name="adaptorType.name" label="adaptor_type" widget="READ_ONLY_TEXT_FIELD" constraint="4"/>
+	
+	</tab>
+	
+	<tab name="Advanced" index="1">
+		<property name="databaseServer" label="database_server" widget="READ_ONLY_TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="username" label="user_name" widget="READ_ONLY_TEXT_FIELD" constraint="1">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="passwd" label="passwd" widget="READ_ONLY_TEXT_FIELD" constraint="2">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="plugin" label="plugin" widget="READ_ONLY_TEXT_FIELD" constraint="3">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="driver" label="driver" widget="READ_ONLY_TEXT_FIELD" constraint="4">
+			<param name="columns" value="10"/>
+		</property>
+	</tab>
+</inspector>

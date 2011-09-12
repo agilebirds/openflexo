@@ -1,0 +1,48 @@
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (PageDocGenerator)
+* - page: the page for which we are generating the doc (OperationComponentDefinition)
+* - component: the component corresponding to the generated page (IEPageComponent)
+* - repository: the current repository for which we generate the doc (DGRepository)
+*#
+\newpage
+#set($page = $object)
+#set($component = $object.getWOComponent())
+\hypertarget{$generator.getReference($page)}{}
+\subsection{Screen: \emph{$page.getName()}}
+\label{$generator.getReference($page)}
+#description($page)
+{
+\begin{center}
+#set($image = ${generator.screenshot($page,$projectGenerator)})
+#set($ratio = ${generator.FULL_PAGE_RATIO()})
+#if($image.getIconWidth()<515 && $image.getIconHeight()<735)
+\includegraphics[scale=1.0]{${generator.screenshotName($page,$projectGenerator)}}
+#else
+  #if($generator.getImageRatio($image)<$ratio)
+\includegraphics[width=\textwidth]{${generator.screenshotName($page,$projectGenerator)}}
+  #else
+\includegraphics[height=\textheight]{${generator.screenshotName($page,$projectGenerator)}}
+  #end
+#end
+\end{center}
+}
+#set($opCI = $page.getComponentInstances())
+#if($opCI.size()>0)
+This screen is used in the following operations:
+\begin{itemize}
+#foreach($ci in $opCI)
+   #if(${ci.getOperationNode()})
+\item Operation {\bf \hyperlink{$generator.getReference(${ci.getOperationNode()})}{#prepare(${ci.getOperationNode().getName()})}} in process ${ci.getOperationNode().getProcess().getName()}
+   #end
+#end ## end of foreach ci
+\end{itemize}
+#else
+Currently, there are no operation using this page.
+#end ## end of if opCI.size()>0
+#set($blockSectionLevel = "subsubsection")
+#foreach($block in ${component.iterator()})
+#parse(${generator.getBlockTemplatePath()})
+#end ## end foreach block

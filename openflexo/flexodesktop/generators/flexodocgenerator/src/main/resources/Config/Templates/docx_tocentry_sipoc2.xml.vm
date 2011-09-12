@@ -1,0 +1,214 @@
+#set($process = $object)
+#description($process)
+
+#renderScreenshotForObject($process)
+
+#metricsForNode($process)
+
+#statusesForNode($process)
+
+## role subsection
+## -----------------
+   #set($levelP = $level)
+<w:p>
+			<w:pPr>
+				<w:pStyle w:val="Heading${levelP}"/>
+			</w:pPr>
+			<w:r>
+				<w:t xml:space="preserve">Roles</w:t>
+			</w:r>
+</w:p>
+
+#set($workflow = ${project.getWorkflow()})
+#if(${workflow.getRoleList().getRoles().size()}>0 || ${workflow.getImportedRoleList().getRoles().size()}>0)
+	<w:p>
+		<w:r>
+			<w:t>The following roles are defined for this process:</w:t>
+		</w:r>
+   </w:p>
+	
+	#set($rolesTablesContents = $generator.getNewVector())
+	#foreach($role in ${workflow.getSortedRoles()})
+		#set($row = $generator.getNewVector())
+        #void($row.add("<w:p>#renderNameWithRPr($role '<w:b/>')</w:p>"))
+		#void($row.add("#description($role)"))
+		#void($rolesTablesContents.add($row))
+	#end
+	#foreach($role in ${workflow.getImportedRoleList().getSortedRoles()})
+		#set($row = $generator.getNewVector())
+        #void($row.add("<w:p>#renderNameWithRPr($role '<w:b/>')</w:p>"))
+		#void($row.add("#description($role)"))
+		#void($rolesTablesContents.add($row))
+	#end
+	
+	#renderDocxTable(["Role", "Description"] $rolesTablesContents)
+#end
+
+
+
+#foreach($node in ${process.getSortedMeaningFullActivitiesAndSubProcessNode()})
+#*
+* Get information to document the SIPOC view of a process
+* S is for Supplier : origin of the Input,i.e. begin node or link event attached as input to the input doc
+* I is for Inputs: doc artifact pointing to the activity
+* P is for Process: list of activities of the Process
+* O is for Outputs: doc artifact coming from the activity
+* C is for Customers: destination of the Output,i.e. end node or link event attached as ouput to the output doc		
+*#		
+			#set($sipocSuppliers = $generator.getNewVector())
+			#set($sipocInputs = $generator.getNewVector())
+			#set($sipocProcessActivities = $generator.getNewVector())
+			#set($sipocOutputs = $generator.getNewVector())
+			#set($sipocCustomers = $generator.getNewVector())
+
+## Get activity List *********************
+## ***************************************
+			#foreach($activityNode in ${node.getSubProcess().getSortedActivities()})
+				#if((!$activityNode.getDontGenerate()) && $activityNode.isNormalNode())
+          					#void($sipocProcessActivities.add($activityNode))
+			    #end
+			#end ## end of foreach activityNode
+
+					
+## Get Inputs and Outputs from Activity List
+## *****************************************
+
+			#foreach($activity in $sipocProcessActivities)
+				#getOriginNodes($activity $sipocInputs)
+			    #getDestinationNodes($activity $sipocOutputs)
+			               	
+  			#end ## end of foreach activity  		
+
+       	
+##				#getOriginNodes($node $sipocInputs)
+##			    #getDestinationNodes($node $sipocOutputs)
+
+#if(${sipocInputs.size()} > 0  || ${sipocOutputs.size()} > 0  || ${sipocProcessActivities.size()} > 0)
+   #set($levelP = $level)
+
+    <w:p>
+    	<w:pPr>
+    		<w:pStyle w:val="Heading${levelP}"/>
+    	</w:pPr>
+    	<w:r>
+    		<w:t xml:space="preserve">Activity Group: </w:t>
+    	</w:r>
+    	#renderName(${node.getSubProcess()})
+    </w:p>
+
+	#if($node.getRole())
+		<w:p>
+			<w:r>
+               <w:t xml:space="preserve">Responsible role : </w:t>
+           </w:r>
+		   #renderNameWithRPrAndAdditionalText(${node.getRole()} '<w:b/>' '.')
+       </w:p>
+	#end
+			
+#****** Dom 16 september 2009 for Level 2
+*****************************************
+*#
+			#description($node)
+##			#targetDescription($node "Level2")
+
+
+
+
+#end
+## Print Inputs
+##*****************
+   #set($levelPlus = $level + 1)
+	
+	#if(${sipocInputs.size()} > 0)
+		<w:p>
+			<w:pPr>
+				<w:pStyle w:val="Heading${levelPlus}"/>
+			</w:pPr>
+			<w:r>
+				<w:t xml:space="preserve">Inputs:</w:t>
+			</w:r>
+   	</w:p>
+		<w:p>
+			<w:r>
+				<w:t xml:space="preserve">The inputs of this group of activities come from external, internal and business triggers en from the following processes:
+##				De Inputs van dit activiteitenblok is afkomstig van de externe, interne, en business triggers en van de volgende proces/activiteitenblok:
+				</w:t>
+			</w:r>
+   	</w:p>
+	
+		#set($inputTableContents = $generator.getNewVector())
+		
+		
+		#foreach($input in $sipocInputs)
+			#set($sipocSuppliers = $generator.getNewVector())
+			#getOriginNodes($input $sipocSuppliers)
+##			<w:p><w:r><w:t> ***DEBUG***: nbr of suppliers: ${sipocSuppliers.size()} </w:t></w:r></w:p>
+			#set($row = $generator.getNewVector())
+			#void($row.add("<w:p>#renderName($input)</w:p>"))
+			#void($row.add("#foreach($supplier in $sipocSuppliers) <w:p>#renderName($supplier)</w:p> #end "))
+			#void($inputTableContents.add($row))
+		#end
+		#renderDocxTable(["Inputs", "From process"] $inputTableContents)
+		
+	#end
+	
+
+
+
+	
+## Print Activities
+##*****************
+
+	#if(${sipocProcessActivities.size()} > 0)
+		<w:p>
+			<w:pPr>
+				<w:pStyle w:val="Heading$levelPlus"/>
+			</w:pPr>
+			<w:r>
+				<w:t xml:space="preserve">Activities:</w:t>
+			</w:r>
+   	</w:p>
+
+		
+
+		
+			#set($bull = $generator.getNewVector())
+			#foreach($activity in $sipocProcessActivities)
+				#void($bull.add("#renderName($activity)"))
+			#end
+			#renderBullets($bull ${node.getFlexoID()})
+	#end
+
+
+## Print Outputs
+##*****************
+	#if(${sipocOutputs.size()} > 0)
+		<w:p>
+			<w:pPr>
+				<w:pStyle w:val="Heading$levelPlus"/>
+			</w:pPr>
+			<w:r>
+				<w:t xml:space="preserve">Outputs:</w:t>
+			</w:r>
+   	</w:p>
+		<w:p>
+			<w:r>
+				<w:t xml:space="preserve">Outputs of this process:
+##				Outputs van dit activiteitenblok: evaluatie van en transformatievoorstellen voor ICT-activa.
+				</w:t>
+			</w:r>
+   	</w:p>
+	
+		#set($tableContents = $generator.getNewVector())
+		#foreach($output in $sipocOutputs)
+			#set($sipocConsumers = $generator.getNewVector())
+			#getDestinationNodes($output $sipocConsumers)
+			#set($row = $generator.getNewVector())
+			#void($row.add("<w:p>#renderName(${output})</w:p>"))
+			#void($row.add(" #foreach($customer in $sipocConsumers) <w:p>#renderName(${customer})</w:p> #end "))
+			#void($tableContents.add($row))
+		#end
+		#renderDocxTable(["Outputs", "To process"] $tableContents)
+	#end
+
+#end

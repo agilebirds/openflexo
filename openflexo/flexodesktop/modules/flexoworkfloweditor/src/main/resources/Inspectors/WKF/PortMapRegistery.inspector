@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.ws.PortMapRegistery" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label label="hide_port_map_registery" localize="true" name="IsHiddenLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <CheckBox selected="false" tooltipText="Hides this portmap" localize="true" name="IsHidden" data="data.isHidden" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" />
+      <Label label="port_maps" align="center" localize="true" name="PortMapsLabel" constraints="twocols(location=center;index=2;expandHorizontally=true;expandVertically=false)" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.ws.FlexoPortMap" visibleRowCount="10" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.portMaps" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=true)" name="PortMaps" localize="true" manageDynamicModel="true">
+        <LabelColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" />
+        <CheckBoxColumn data="iterator.isHidden" title="hidden" columnWidth="25" resizable="true" displayTitle="true" />
+      </Table>
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="hide_port_map_registery" lang="English">Hide port map registery</Localized>
+    <Localized key="hide_port_map_registery" lang="French">Masquer le registre de port</Localized>
+    <Localized key="hide_port_map_registery" lang="Dutch">Hide port map registery</Localized>
+    <Localized key="port_maps" lang="English">port maps</Localized>
+    <Localized key="port_maps" lang="French">port maps</Localized>
+    <Localized key="port_maps" lang="Dutch">port maps</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="PortMap Registery" />
+</Panel>
+

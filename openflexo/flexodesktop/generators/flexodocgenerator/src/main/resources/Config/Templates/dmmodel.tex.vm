@@ -1,0 +1,53 @@
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (DataModelDocGenerator)
+* - object: the object for which we are generating the doc (DataModel)
+* - repository: the current repository for which we generate the doc (DGRepository)
+* - entry: the entry corresponding to the Data model.
+*#
+#if($entry)
+#subTocEntries($entry)
+#end
+This project contains the database model that will be defined in the following section.
+This model has been subdivided in the following models:
+\doitemsep
+\begin{description}
+#foreach($model in ${object.getAllDMEOModel()})
+#if(!$model.getDontGenerate())
+\model{\hyperlink{$generator.getReference($model)}
+{#escape(${model.getNameWithoutSuffix()}) p.\pageref*{$generator.getReference($model)}}}
+{#description($model)}
+#end ## end of dont generate
+#end
+\end{description}\myitemsep
+The following subsection will give the complete detail of each model.
+
+#foreach($model in ${object.getAllDMEOModel()})
+#if(!$model.getDontGenerate())
+\newpage
+\hypertarget{$generator.getReference($model)}{}\nopagebreak%
+\subsection{Model ${model.getNameWithoutSuffix()}}\nopagebreak%
+#description($model)
+\par This model contains the following entities:\nopagebreak%
+\begin{entities}
+#foreach($e in $model.getEntities())
+#if(!$e.getDontGenerate())
+\entity
+  {\hyperlink{$generator.getReference($e)}
+  {$e.getName()}}
+  {$!{e.getEOEntity().getExternalName()}}
+  {#description($e)}
+#end ## end of dont generate (entity)
+#end #* end of foreach entities *#\end{entities}
+We will now refined each entity in its own section.
+#foreach($e in $model.getEntities()) ## (2)
+#if(!$e.getDontGenerate())
+\input{$generator.realNameForEntityNoExt($e,$repository)}
+#end ## end of dont generate (entity)
+#end #* end of foreach entities (2) *#
+#end ## end of dont generate (model)
+#end ## end of foreach model
+
+

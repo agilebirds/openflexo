@@ -1,0 +1,102 @@
+import be.denali.core.woapp.WDLApplication;
+import be.denali.core.woapp.WDLDirectAction;
+import be.denali.core.woapp.WDLSession;
+import be.denali.language.DLLanguageInterface;
+import be.denali.user.NotAllowedToLoginException;
+
+import com.webobjects.appserver.*;
+import com.webobjects.foundation.NSArray;
+
+public class DirectAction extends WDLDirectAction {
+
+    public DirectAction(WORequest aRequest) {
+        super(aRequest);
+    }
+    
+    public WOActionResults loginPageAction() {
+        return Main.createPageForDirectAction(this);
+    }
+    
+    /**
+     * Try to login the user if a cookie is set.
+     * If not, return the loginAction.
+     * 
+     * @see WDLDirectAction#automaticLogin()
+     * @see DirectAction#loginPageAction()
+     * @return the after login page if it is possible to log automatically the user, or the login page otherwise.
+     */
+    @Override
+    public WOActionResults defaultAction() {
+        WOActionResults response = automaticLogin();
+        return (response == null) ? loginPageAction() : response;
+    }
+
+    /**
+     * Specify that all DA need a session except the login ones and the default one. 
+     * 
+     * @return the direct actions that need no session 
+     * @see be.denali.core.woapp.WDLDirectAction#directActionsWithNoSession()
+     */
+    @Override
+    public NSArray directActionsWithNoSession() {
+        return new NSArray(new Object[]{"loginPage","login","default"});
+    }
+    
+    /**
+     * Execute the login action, once the login form is submitted.
+     * 
+     * @return the after login page if the user is correctly identified, or the lagin page, if not.
+     * @see WDLDirectAction#login()
+     */
+    public WOActionResults loginAction() {
+        try {
+            WOActionResults response = login();
+            #if(!${project.getWorkflow().getRoleList().getRoles().isEmpty()} && $generator.isPrototype())
+            Object useRoleString = request().formValueForKey("useRole");
+            boolean useRole = (useRoleString != null) ? useRoleString.equals("true") : false;
+            if(useRole)
+            {
+                ${project.getPrefix()}Constants.Role role = ${project.getPrefix()}Constants.Role.getRole((String) request().formValueForKey("role"));
+                if(role!=null)
+                    ((${project.getPrefix()}UserServiceImpl.${project.getPrefix()}User)((Session)session()).currentUser()).setRole(role);
+            }
+            #end
+            return response;
+        } catch (NotAllowedToLoginException e) {
+            return Main.createPage(context(), (String)request().formValueForKey("pageDA"), e.getMessage());
+        }
+    }
+
+    /**
+     * Return the DA to call once the user is logged. 
+     * 
+     * @see be.denali.core.woapp.WDLDirectAction\#afterLoginDA()
+     */
+    @Override
+    public String afterLoginDA() {
+        return "#afterLoginDA()";
+    }
+    
+    /**
+     * Log the user out, terminate its session and delete its cookie.
+     * 
+     * @return the login page (DirectAction/loginPage)
+     * @see WDLDirectAction#logout()
+     */
+    public WOActionResults logoutAction() {
+        return logout();
+    }
+
+	#if(${project.getIsLocalized()})
+    	public WOActionResults changeLanguageAction() {
+    		String languageCode = (String) request().formValueForKey("language");
+        	if(languageCode != null && languageCode.length() > 0)
+        	{
+        		DLLanguageInterface language = WDLApplication.getLanguageService().getLanguage(languageCode);
+        		if(language != null)
+        			((WDLSession)session()).setLanguage(language);
+        	}
+        	return redirectUrl(getUrlFromDAString(context(), afterLoginDA())).generateResponse(); 
+    	}
+	#end
+}

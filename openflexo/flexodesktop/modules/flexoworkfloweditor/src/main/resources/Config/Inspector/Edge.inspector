@@ -1,0 +1,22 @@
+<inspector title = "Edge" inheritsfrom ="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.wkf.edge.WKFEdge">
+
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="name" label="name" widget="TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+		</property>
+	</tab>
+	
+	<tab name="Advanced" index="2" layout="DEFAULT">
+	</tab>
+
+    <tab name="Data" index="3">
+    </tab>
+
+	<tab name="Graphics" index="20" layout="DEFAULT">
+		
+	</tab>
+	
+</inspector>

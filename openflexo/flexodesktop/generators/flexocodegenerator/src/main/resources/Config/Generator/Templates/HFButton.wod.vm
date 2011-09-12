@@ -1,0 +1,4 @@
+$WOD_NAME:WOHyperlink {
+    href = ${BUTTON_NAME}Url;
+    class = "LogoutLink";
+}

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="twocols" hGap="5" vGap="5" flowAlignment="LEADING" border="empty">
+  <Panel layout="border" border="titled" borderTitle="Panel" constraints="twocols(location=left;index=1;alignmentY=0.5;alignmentX=0.5;expandHorizontally=false;expandVertically=false)" width="80" height="50" />
+  <Panel layout="border" border="titled" borderTitle="Ici" name="Le panel tout zarb" constraints="twocols(location=right;index=2;alignmentY=0.5;alignmentX=0.5;expandHorizontally=true;expandVertically=false)" width="80" height="50" />
+  <Panel layout="border" border="titled" borderTitle="Panel" constraints="twocols(location=center;index=3;alignmentY=0.5;alignmentX=0.5;expandHorizontally=true;expandVertically=true)" width="80" height="50" />
+  <Label label="label" align="left" constraints="twocols(location=center;index=4;alignmentY=0.5;alignmentX=0.5;expandHorizontally=true;expandVertically=false)" manageDynamicModel="false" />
+  <Panel layout="border" border="titled" borderTitle="Panel" constraints="twocols(location=center;index=0;expandHorizontally=true;expandVertically=false)" width="80" height="50" />
+</Panel>
+

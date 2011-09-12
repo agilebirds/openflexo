@@ -1,0 +1,391 @@
+## -*-xml-*-
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (DefinitionsDocGenerator)
+* - repository: the current repository for which we generate the doc (DGRepository)
+* - level: the level to use in title.
+* - objet: the flexo process to generate
+*#
+#macro(nodeTypeInTitle $node)
+	#if(${node.isOperatorNode()})
+			#if(${node.isTestNode()})
+				Test: 
+			#end
+	#elseif(${node.getClassNameKey()} == 'event_node')
+			Event: 
+	#else ##Is activity node
+		#if($node.isSubProcessNode())
+			#if($node.isFork())
+				Activity (parallel sub-process): 
+			#elseif($node.isLoop())
+				Activity (loop sub-process): 
+        	#elseif($node.isSingle())
+				Activity bloc: 
+			#elseif($a.isWSCall()) 
+				Activity  (WS call sub-process): 
+			#else
+				Activity (loop-single-instance sub-process):
+			#end
+		#else
+			Activity:
+		#end
+	#end
+#end
+
+#macro(activityMustBeDocumented $node $res)
+	#set($res=false)
+	#if(${node.isOperatorNode()})
+			#if(${node.isTestNode()})
+				#set($res=true)
+			#end
+	#elseif(${node.getClassNameKey()} == 'event_node')
+			#set($res=true) 
+	#else ##Is activity node
+		#if($node.isSubProcessNode())
+			#if($node.isFork())
+				#set($res=true) 
+			#elseif($node.isLoop())
+				#set($res=true) 
+        	#elseif($node.isSingle())
+				#set($res=true)
+			#elseif($a.isWSCall()) 
+				#set($res=true) 
+			#else
+				#set($res=true)
+			#end
+		#else
+			#set($res=true)
+		#end
+	#end
+	#if($node.getDontGenerate())
+		#set($res=false)
+	#end
+#end
+
+#set($process = $object)
+
+#if(!$process.isRootProcess())
+	#if(${process.getSubProcessNodes().size()}>0)
+		<w:p>
+			<w:r>
+				<w:t xml:space="preserve">This process is used in the following sub-process nodes:</w:t>
+            </w:r>
+        </w:p>
+		#foreach($sub in $process.getSubProcessNodes())
+			<w:p>
+				<w:r>
+					<w:tab/>
+					<w:t xml:space="preserve">- </w:t>
+				</w:r>
+				<w:hyperlink w:anchor="${generator.getReference($sub)}" w:history="1">
+					#renderNameWithRPr($sub '<w:rStyle w:val="Hyperlink"/>')
+				</w:hyperlink>
+				<w:r>
+    				<w:t xml:space="preserve"> located in the process </w:t>
+                </w:r>
+				<w:hyperlink w:anchor="${generator.getReference($sub.getProcess())}" w:history="1">
+					#renderNameWithRPr(${sub.getProcess()} '<w:rStyle w:val="Hyperlink"/>')
+				</w:hyperlink>
+            </w:p>
+		#end
+	#else
+		<w:p>
+			<w:r>
+				<w:t xml:space="preserve">This process is not used so far.</w:t>
+            </w:r>
+		</w:p>
+    #end
+#end
+
+	<w:p>
+		<w:r>
+			<w:rPr>
+				<w:pStyle w:val="Heading$level"/>
+				<w:b/>
+				<w:u w:val="single"/>
+			</w:rPr>
+			<w:t xml:space="preserve">Description:</w:t>
+		</w:r>
+	</w:p>
+	
+#description($process)
+
+#renderScreenshotForObject($process)
+
+#if(${process.hasSpecificDescriptionForKey('Objectives')})
+	<w:p>
+		<w:r>
+			<w:rPr>
+					<w:pStyle w:val="Heading$level"/>
+					<w:b/>
+					<w:u w:val="single"/>
+			</w:rPr>
+			<w:t xml:space="preserve">Objectives:</w:t>
+		</w:r>
+	</w:p>
+#renderSpecificDescription($process "Objectives")
+#end
+
+#metricsForNode($process)
+
+#getCurrentTocEntry($currentTocEntry)
+#if(${currentTocEntry.getIncludeStatusList()})
+    #statusesForNode($process)
+#end
+
+#if(!${repository.getTocRepository().getUseEmbeddedEvents()})
+	#if(${process.hasAtLeastOneEventToDocument()})
+		<w:p>
+			<w:r>
+				<w:rPr>
+					<w:pStyle w:val="Heading$level"/>
+					<w:b/>
+					<w:u w:val="single"/>
+				</w:rPr>
+    			<w:t xml:space="preserve">Events list:</w:t>
+    		</w:r>
+		</w:p>
+
+
+		
+		#set($eventTablesContents = $generator.getNewVector())
+    	#foreach($event in ${object.getSortedEvents()})
+			#if(!$event.getDontGenerate())
+        		#set($row = $generator.getNewVector())
+        		#void($row.add("<w:p>#renderNameWithRPr($event '<w:b/>')</w:p>"))
+        		#void($row.add("#description($event)"))
+        		#void($eventTablesContents.add($row))
+			#end
+    	#end
+    	
+    	#renderDocxTable(["Event", "Description"] $eventTablesContents)
+	#end
+	#set($nodeList = ${process.getSortedActivitiesAndOperators()})
+#else
+	#set($nodeList = ${process.getSortedActivitiesAndOperatorsWithEvents()})
+#end
+
+
+#foreach($node in $nodeList)
+	#if(!$node.getDontGenerate())
+		#if(${node.isOperatorNode()})
+			#if(${node.isTestNode()})
+				<w:p>
+            				<w:pPr>
+            					<w:pStyle w:val="Heading$level"/>
+            				</w:pPr>
+            				<w:r>
+            					<w:t xml:space="preserve">Test: </w:t>
+            				</w:r>
+					#renderName($node)
+                		</w:p>
+				#description($node)
+			#end
+		#elseif(${node.getClassNameKey()} == 'event_node')
+			<w:p>
+        		<w:pPr>
+        			<w:pStyle w:val="Heading$level"/>
+        		</w:pPr>
+        		<w:r>
+        			<w:t xml:space="preserve">Event: </w:t>
+        		</w:r>
+				#renderName($node)
+            		</w:p>
+			#description($node)
+		#else ##Is activity node
+			<w:p>
+        		<w:pPr>
+        			<w:pStyle w:val="Heading$level"/>
+        		</w:pPr>
+			#mkbookMark(${node.getFlexoID()} ${generator.getReference($node)})
+        		<w:r>
+					#if($node.isSubProcessNode())
+						#if($node.isFork())
+							<w:t xml:space="preserve">Parallel sub-process: </w:t>
+        				#elseif($node.isLoop())
+							<w:t xml:space="preserve">Loop sub-process: </w:t>
+        				#elseif($node.isSingle())
+ #**
+ * changed by DS august 12 2009
+ *#       				
+							<w:t xml:space="preserve">Sub-process: </w:t>
+        				#elseif($a.isWSCall()) 
+							<w:t xml:space="preserve">Activity  (WS call sub-process): </w:t>
+        				#else
+							<w:t xml:space="preserve">Activity (loop-single-instance sub-process): </w:t>
+						#end
+					#else
+						<w:t xml:space="preserve">Activity: </w:t>
+					#end
+        		</w:r>
+			#renderName($node)
+            		</w:p>
+			#if($node.isSubProcessNode())
+				#if($node.getSubProcess())
+ 				  #if(!$node.getSubProcess().getDontGenerate())
+					<w:p>
+						<w:r>
+                            	<w:t xml:space="preserve">This node uses the following process </w:t>
+                        </w:r>
+						<w:hyperlink w:anchor="${generator.getReference($node.getSubProcess())}" w:history="1">
+							#renderNameWithRPr(${node.getSubProcess()} '<w:rStyle w:val="Hyperlink"/>')
+						</w:hyperlink>
+                    </w:p>
+                  #end
+				#else
+					#getXmlParagraphWithContent("This node does not define which process it uses." $null)
+				#end
+			#end
+
+			#if($node.getRole())		
+				<w:p>
+						<w:r>
+						 		<w:rPr>
+									<w:pStyle w:val="Heading$level"/>
+									<w:b/>
+								<w:u w:val="single"/>
+								</w:rPr>
+                            				<w:t xml:space="preserve">Role: </w:t>
+                        </w:r>
+						#renderNameWithRPrAndAdditionalText(${node.getRole()} ' <w:b/>' '.')
+                    		</w:p>
+			#end
+			#if($node.getNewStatus())
+				<w:p>
+						<w:r>
+						 		<w:rPr>
+									<w:pStyle w:val="Heading$level"/>
+									<w:b/>
+								<w:u w:val="single"/>
+								</w:rPr>
+                            				<w:t xml:space="preserve">Status change: </w:t>
+                        </w:r>
+						#renderNameWithRPrAndAdditionalText(${node.getNewStatus()} ' <w:b/>' ' .')
+                </w:p>
+			#end
+			<w:p>
+				<w:r>
+					<w:rPr>
+						<w:pStyle w:val="Heading$level"/>
+						<w:b/>
+						<w:u w:val="single"/>
+					</w:rPr>
+					<w:t xml:space="preserve">Description:</w:t>
+				</w:r>
+			</w:p>
+
+			#description($node)
+
+			
+			
+						
+#**
+* input list  added by DS on January 18 2010
+*#
+			#set($sipocInputs = $generator.getNewVector())
+			#getOriginNodes($node $sipocInputs)
+			
+			#if(${sipocInputs.size()} > 0)
+				<w:p>
+					<w:r>
+						<w:rPr>
+								<w:pStyle w:val="Heading$level"/>
+								<w:b/>
+								<w:u w:val="single"/>
+						</w:rPr>
+						<w:t xml:space="preserve">Inputs:</w:t>
+					</w:r>
+   				</w:p>
+				#set($inputTableContents = $generator.getNewVector())
+				#foreach($input in $sipocInputs)
+					#set($sipocSuppliers = $generator.getNewVector())
+					#getOriginNodes($input $sipocSuppliers)
+##					<w:p><w:r><w:t> ***DEBUG***: nbr of suppliers: ${sipocSuppliers.size()} </w:t></w:r></w:p>
+					#set($row = $generator.getNewVector())
+                 			#void($row.add("<w:p>#renderName($input)</w:p>"))
+					#void($row.add("#foreach($supplier in $sipocSuppliers) <w:p>#renderName($supplier)</w:p> #end "))
+					#void($inputTableContents.add($row))
+				#end
+				#renderDocxTable(["Inputs", "Supplied from"] $inputTableContents)
+				<w:p> </w:p>
+			#end
+<!-- end of Input list -->		
+
+#**
+* ouput list  added by DS on January 18 2010
+*#
+			#set($sipocOutputs = $generator.getNewVector())
+			#getDestinationNodes($node $sipocOutputs)	
+			
+			#if(${sipocOutputs.size()} > 0)
+				<w:p>
+					<w:r>
+						<w:rPr>
+								<w:pStyle w:val="Heading$level"/>
+								<w:b/>
+								<w:u w:val="single"/>
+						</w:rPr>
+						<w:t xml:space="preserve">Outputs:</w:t>
+					</w:r>
+   				</w:p>
+				#set($tableContents = $generator.getNewVector())
+				#foreach($output in $sipocOutputs)
+					#set($sipocConsumers = $generator.getNewVector())
+					#getDestinationNodes($output $sipocConsumers)
+					#set($row = $generator.getNewVector())
+					#void($row.add("<w:p>#renderName(${output})</w:p>"))
+					#void($row.add(" #foreach($customer in $sipocConsumers) <w:p>#renderName(${customer})</w:p> #end "))
+					#void($tableContents.add($row))
+				#end
+				#renderDocxTable(["Outputs", "Consumed by"] $tableContents)
+   				<w:p>				</w:p>
+			#end		
+<!-- end of Output list -->			
+			
+			
+			
+			#if(${node.containsNormalNodes()}) 
+				#renderScreenshotForObject($node)
+			#end 
+
+			#if($node.mightHaveOperationPetriGraph())
+<!-- Begin of Operation list -->			
+				#set($operationTableContents = $generator.getNewVector())
+				#foreach($operation in ${node.getSortedOperationNodes()})
+					#if(!$operation.getDontGenerate())
+						#set($row = $generator.getNewVector())
+						#void($row.add("<w:p>#renderNameWithRPr($operation '<w:b/>')</w:p>"))
+						#void($row.add("#description($operation)"))
+						#if(${operation.hasWOComponent()})
+							#void($row.add("<w:p><w:hyperlink w:anchor=${quote}${generator.getReference(${operation.getComponentDefinition()})}${quote}><w:r><w:t xml:space=${quote}preserve${quote}>#escape(${operation.getWOComponentName()})</w:t></w:r></w:hyperlink></w:p>"))
+						#else
+							#void($row.add("#getXmlParagraphWithContent('none' $null)"))
+						#end
+						#void($row.add("#getXmlParagraphWithContent(${operation.getNewStatus().getName()} $null)"))
+						#void($operationTableContents.add($row))
+					#end	
+				#end
+				#if($operationTableContents.size() != 0)
+					#renderDocxTable(["Operation", "Description", "Screen", "Next Status"] $operationTableContents)
+				#end
+			#end
+<!-- end of Operation list -->			
+
+			#metricsForNode($node)
+
+        #end
+    #end
+#end
+
+#* DDW<!-- ddw Tue Mar 23 18:23:14 2010 -->
+Render the table of operation screens for this process
+
+#renderOperationsTable($process)
+*#
+
+#**
+* Recursion on subprocesses
+*#
+#renderProcessOrFolderChildren($process $level)

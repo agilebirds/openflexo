@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="flow" hGap="5" vGap="5" flowAlignment="LEADING" useScrollBar="false">
+  <Label label="1" localize="true" constraints="flow(index=0)" useScrollBar="false">
+    <LocalizedDictionary />
+  </Label>
+  <Label label="2" localize="true" constraints="flow(index=1)" useScrollBar="false">
+    <LocalizedDictionary />
+  </Label>
+  <LocalizedDictionary />
+</Panel>
+

@@ -1,0 +1,78 @@
+<inspector title = "Property_(read_only)" inheritsfrom="DMROObject.inspector">
+	<tab name="Basic" index="0">
+		<property name="name" label="name" widget="READ_ONLY_TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		</property>
+		<property name="type.name" label="type" widget="READ_ONLY_TEXT_FIELD" constraint="2">
+			<param name="className" value="org.openflexo.components.widget.DMTypeInspectorWidget"/>
+			<param name="readOnly" value="true"/>
+		</property>
+		<property name="cardinality.localizedName" label="cardinality" widget="READ_ONLY_TEXT_FIELD" constraint="3"/>
+	</tab>
+	
+	<tab name="Advanced" index="1">
+		<property name="isBindable" label="is_bindable" widget="READ_ONLY_CHECKBOX" constraint="1" depends="isComponentProperty,isStatic" conditional="isStatic=false AND isComponentProperty=true" help="Set to true if the value of this property can be defined by a binding"/>
+		<property name="isSettable" label="is_settable" widget="READ_ONLY_CHECKBOX" constraint="2" depends="isBindable,isStatic" conditional="isStatic=false AND isBindable=true" help="Set to true if this property is settable"/>
+		<property name="isStatic" label="static_modifier" widget="READ_ONLY_CHECKBOX" constraint="3"/>
+		<property name="isStaticallyDefinedInTemplate" label="statically_defined_in_template" widget="READ_ONLY_CHECKBOX" constraint="4" help="Set to true if this property was statically defined in template during last model reinjection"/>
+		<property name="keyType" label="key_type" widget="READ_ONLY_TEXT_FIELD" constraint="5" depends="cardinality" conditional="cardinality=HASHTABLE">
+			<param name="className" value="org.openflexo.components.widget.DMTypeInspectorWidget"/>
+		</property>
+	</tab>
+
+	<tab name="Code" index="3">
+		<property name="isCodeGenerationApplicable" label="" widget="READ_ONLY_CHECKBOX" constraint="0" depends="isCodeGenerationApplicable" conditional="true=false" >
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property> <!-- never displayed, just for conditionals -->
+		<property name="codeGenerationNotApplicableLabel" widget="LABEL" constraint="0" depends="isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=false">
+			<param name="displayLabel" value="false"/>
+			<param name="expandHorizontally" value="true"/> 
+			<param name="expandVertically" value="true"/>
+			<param name="widgetLayout" value="1COL"/>
+			<param name="align" value="center"/>
+			<param name="height" value="200"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		
+		<property name="implementationType.localizedName" label="implementation_type" widget="READ_ONLY_TEXT_FIELD" constraint="1" depends="isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=true">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="fieldName" label="field_name" widget="READ_ONLY_TEXT_FIELD" constraint="2" depends="implementationType,isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=true AND (implementationType=PUBLIC_ACCESSORS_PRIVATE_FIELD OR implementationType=PUBLIC_ACCESSORS_PROTECTED_FIELD)">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="isUnderscoredAccessors" label="prepend_underscore" widget="READ_ONLY_CHECKBOX" constraint="4" depends="implementationType,isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=true AND (implementationType=PUBLIC_ACCESSORS_PRIVATE_FIELD OR implementationType=PUBLIC_ACCESSORS_PROTECTED_FIELD OR implementationType=PUBLIC_ACCESSORS_ONLY)">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		
+		<property name="getterCode" label="getter_code" widget="JAVA_CODE" constraint="7" depends="implementationType,isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=true AND (implementationType=PUBLIC_ACCESSORS_PRIVATE_FIELD OR implementationType=PUBLIC_ACCESSORS_PROTECTED_FIELD OR implementationType=PUBLIC_ACCESSORS_ONLY)">
+			<param name="readOnly" value="true"/>
+			<param name="rows" value="5"/>
+			<param name="columns" value="20"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+
+		<property name="setterCode" label="setter_code" widget="JAVA_CODE" constraint="10" depends="isSettable,implementationType,isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=true AND isSettable=true AND (implementationType=PUBLIC_ACCESSORS_PRIVATE_FIELD OR implementationType=PUBLIC_ACCESSORS_PROTECTED_FIELD OR implementationType=PUBLIC_ACCESSORS_ONLY)">
+			<param name="readOnly" value="true"/>
+			<param name="rows" value="5"/>
+			<param name="columns" value="20"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+
+		<property name="additionCode" label="addition_code" widget="JAVA_CODE" constraint="13" depends="isSettable,implementationType,cardinality,isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=true AND (cardinality=HASHTABLE OR cardinality=VECTOR) AND isSettable=true AND (implementationType=PUBLIC_ACCESSORS_PRIVATE_FIELD OR implementationType=PUBLIC_ACCESSORS_PROTECTED_FIELD OR implementationType=PUBLIC_ACCESSORS_ONLY)">
+			<param name="readOnly" value="true"/>
+			<param name="rows" value="5"/>
+			<param name="columns" value="20"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+
+		<property name="removalCode" label="removal_code" widget="JAVA_CODE" constraint="16" depends="isSettable,implementationType,cardinality,isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=true AND (cardinality=HASHTABLE OR cardinality=VECTOR) AND isSettable=true AND (implementationType=PUBLIC_ACCESSORS_PRIVATE_FIELD OR implementationType=PUBLIC_ACCESSORS_PROTECTED_FIELD OR implementationType=PUBLIC_ACCESSORS_ONLY)">
+			<param name="readOnly" value="true"/>
+			<param name="rows" value="5"/>
+			<param name="columns" value="20"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+
+
+	</tab>
+</inspector>

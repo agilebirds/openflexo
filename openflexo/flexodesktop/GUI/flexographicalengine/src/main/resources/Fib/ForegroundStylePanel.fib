@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="twocols" dataClassName="org.openflexo.fge.graphics.ForegroundStyle" font="SansSerif,0,11" width="270" height="240" name="ForegroundStylePanel">
+  <Label label="no_stroke" constraints="twocols(location=left;index=0;expandVertically=false;expandHorizontally=true)">
+    <LocalizedDictionary />
+  </Label>
+  <CheckBox selected="true" name="checkbox" data="data.noStroke" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
+  <Label label="line_width" dataClassName="" constraints="twocols(location=left;index=2;expandVertically=false;expandHorizontally=true)" visible="(!(data.noStroke))">
+    <LocalizedDictionary />
+  </Label>
+  <Number minValue="0.1" maxValue="50" increment="0.1" numberType="DoubleType" columns="3" data="data.lineWidth" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" visible="(!(data.noStroke))" name="LineWidth" valueChangedAction="controller.parameterChanged()" />
+  <Label label="color" constraints="twocols(location=left;index=4;expandVertically=false;expandHorizontally=true)" visible="(!(data.noStroke))">
+    <LocalizedDictionary />
+  </Label>
+  <Color data="data.color" constraints="twocols(location=center;index=5;expandHorizontally=false;expandVertically=false)" visible="(!(data.noStroke))" valueChangedAction="controller.parameterChanged()" />
+  <Label label="join_style" constraints="twocols(location=left;index=6;expandVertically=false;expandHorizontally=true)" visible="(!(data.noStroke))">
+    <LocalizedDictionary />
+  </Label>
+  <DropDown format="object.name.toLowerCase" icon="object.icon" localize="true" valueChangedAction="controller.parameterChanged()" name="JoinStyleDropDown" data="data.joinStyle" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" visible="(!(data.noStroke))" showIcon="true" />
+  <Label label="cap_style" constraints="twocols(location=left;index=8;expandVertically=false;expandHorizontally=true)" visible="(!(data.noStroke))">
+    <LocalizedDictionary />
+  </Label>
+  <DropDown format="object.name.toLowerCase" icon="object.icon" localize="true" valueChangedAction="controller.parameterChanged()" name="CapStyleDropDown" data="data.capStyle" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" visible="(!(data.noStroke))" showIcon="true" />
+  <Label label="dash_style" constraints="twocols(location=left;index=10;expandVertically=false;expandHorizontally=true)" visible="(!(data.noStroke))">
+    <LocalizedDictionary />
+  </Label>
+  <DropDown format="object.name.toLowerCase" icon="object.icon" localize="true" valueChangedAction="controller.parameterChanged()" name="DashStyleDropDown" data="data.dashStyle" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" visible="(!(data.noStroke))" showIcon="true" showText="false" />
+  <Label label="use_transparency" constraints="twocols(location=left;index=12;expandVertically=false;expandHorizontally=true)" visible="(!(data.noStroke))">
+    <LocalizedDictionary />
+  </Label>
+  <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" borderTitle="Panel" constraints="twocols(location=right;index=13;expandVertically=false;expandHorizontally=true)" visible="(!(data.noStroke))">
+    <CheckBox selected="true" valueChangedAction="controller.parameterChanged()" name="checkbox" data="data.useTransparency" constraints="flow(index=0)" />
+    <Number minValue="0" maxValue="1" increment="0.05" numberType="DoubleType" columns="3" constraints="flow(index=1)" visible="data.useTransparency" name="TransparencyLevel" valueChangedAction="controller.parameterChanged()" />
+  </Panel>
+  <Panel layout="flow" hGap="0" vGap="5" flowAlignment="CENTER" borderTitle="Panel" constraints="twocols(location=center;index=14;expandVertically=false;expandHorizontally=true)">
+    <Button action="controller.apply()" buttonType="Trigger" label="apply" constraints="flow(index=0)">
+      <LocalizedDictionary />
+    </Button>
+    <Button action="controller.cancel()" buttonType="Trigger" label="cancel" constraints="flow(index=1)">
+      <LocalizedDictionary />
+    </Button>
+  </Panel>
+  <LocalizedDictionary>
+    <Localized key="no_stroke" lang="English">No stroke</Localized>
+    <Localized key="line_width" lang="English">Line width</Localized>
+    <Localized key="color" lang="English">Color</Localized>
+    <Localized key="join_style" lang="English">Join style</Localized>
+    <Localized key="cap_style" lang="English">Cap style</Localized>
+    <Localized key="dash_style" lang="English">Dash style</Localized>
+    <Localized key="use_transparency" lang="English">Use transparency</Localized>
+    <Localized key="apply" lang="English">Apply</Localized>
+    <Localized key="cancel" lang="English">Cancel</Localized>
+    <Localized key="no_stroke" lang="French">Pas de trait</Localized>
+    <Localized key="line_width" lang="French">Épaisseur de ligne</Localized>
+    <Localized key="color" lang="French">Couleur</Localized>
+    <Localized key="join_style" lang="French">Style de raccord</Localized>
+    <Localized key="cap_style" lang="French">Style du bout</Localized>
+    <Localized key="dash_style" lang="French">Style de pointillé</Localized>
+    <Localized key="use_transparency" lang="French">Utiliser la transparence</Localized>
+    <Localized key="apply" lang="French">Appliquer</Localized>
+    <Localized key="cancel" lang="French">Annuler</Localized>
+    <Localized key="no_stroke" lang="Dutch">No stroke</Localized>
+    <Localized key="line_width" lang="Dutch">Line width</Localized>
+    <Localized key="color" lang="Dutch">Color</Localized>
+    <Localized key="join_style" lang="Dutch">Join style</Localized>
+    <Localized key="cap_style" lang="Dutch">Cap style</Localized>
+    <Localized key="dash_style" lang="Dutch">Dash style</Localized>
+    <Localized key="use_transparency" lang="Dutch">Use transparency</Localized>
+    <Localized key="apply" lang="Dutch">Apply</Localized>
+    <Localized key="cancel" lang="Dutch">Cancel</Localized>
+    <Localized key="join_miter" lang="English">Join miter</Localized>
+    <Localized key="join_round" lang="English">Join round</Localized>
+    <Localized key="join_bevel" lang="English">Join bevel</Localized>
+    <Localized key="join_miter" lang="French">Raccord en onglet</Localized>
+    <Localized key="join_round" lang="French">Raccord arrondi</Localized>
+    <Localized key="join_bevel" lang="French">Raccord en biseau</Localized>
+    <Localized key="join_miter" lang="Dutch">Join miter</Localized>
+    <Localized key="join_round" lang="Dutch">Join round</Localized>
+    <Localized key="join_bevel" lang="Dutch">Join bevel</Localized>
+    <Localized key="cap_butt" lang="English">Cap butt</Localized>
+    <Localized key="cap_round" lang="English">Cap round</Localized>
+    <Localized key="cap_square" lang="English">Cap square</Localized>
+    <Localized key="plain_stroke" lang="English">Plain stroke</Localized>
+    <Localized key="small_dashes" lang="English">Small dashes</Localized>
+    <Localized key="medium_dashes" lang="English">Medium dashes</Localized>
+    <Localized key="medium_spaced_dashes" lang="English">Medium spaced dashes</Localized>
+    <Localized key="big_dashes" lang="English">Big dashes</Localized>
+    <Localized key="dots_dashes" lang="English">Dots dashes</Localized>
+    <Localized key="dot_lines_dashes" lang="English">Dot lines dashes</Localized>
+    <Localized key="cap_butt" lang="French">Bout en bouchon</Localized>
+    <Localized key="cap_round" lang="French">Bout arrondi</Localized>
+    <Localized key="cap_square" lang="French">Bout carré</Localized>
+    <Localized key="plain_stroke" lang="French">Trait plein</Localized>
+    <Localized key="small_dashes" lang="French">Ligne pointillée court</Localized>
+    <Localized key="medium_dashes" lang="French">Ligne pointillées moyen</Localized>
+    <Localized key="medium_spaced_dashes" lang="French">Tiret de tailles moyenne</Localized>
+    <Localized key="big_dashes" lang="French">Gros pointillés</Localized>
+    <Localized key="dots_dashes" lang="French">Ligne pointillée fine</Localized>
+    <Localized key="dot_lines_dashes" lang="French">Ligne pointillée alternée</Localized>
+    <Localized key="cap_butt" lang="Dutch">Cap butt</Localized>
+    <Localized key="cap_round" lang="Dutch">Cap round</Localized>
+    <Localized key="cap_square" lang="Dutch">Cap square</Localized>
+    <Localized key="plain_stroke" lang="Dutch">Plain stroke</Localized>
+    <Localized key="small_dashes" lang="Dutch">Small dashes</Localized>
+    <Localized key="medium_dashes" lang="Dutch">Medium dashes</Localized>
+    <Localized key="medium_spaced_dashes" lang="Dutch">Medium spaced dashes</Localized>
+    <Localized key="big_dashes" lang="Dutch">Big dashes</Localized>
+    <Localized key="dots_dashes" lang="Dutch">Dots dashes</Localized>
+    <Localized key="dot_lines_dashes" lang="Dutch">Dot lines dashes</Localized>
+  </LocalizedDictionary>
+  <Parameter name="controllerClassName" value="org.openflexo.fge.view.widget.FIBForegroundStyleSelector$ForegroundStyleDetailsPanel$CustomFIBController" />
+</Panel>
+

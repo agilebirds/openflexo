@@ -1,0 +1,64 @@
+package #getJavaPackage(${entity.getHibernateModel().getName()});
+
+import org.apache.commons.lang.builder.EqualsBuilder;
+
+/**
+ * ${entity.getDescription()}
+ *
+ * @author ${project.getAuthor()}
+ */
+
+public class ${entity.getName()} {
+
+#foreach($attribute in ${entity.getAttributes()})
+	private ${attribute.getName()} ${attribute.getName()};
+#end
+#if(!${entity.getRelations().isEmpty()})
+	// === relationships === //
+
+#foreach($relation in ${entity.getRelations()})
+#if(!${relation.getToMany()})
+	private ${relation.getDestination().getName()} ${relation.getName()};
+#end#end
+#foreach($relation in ${entity.getRelations()})
+#if(${relation.getToMany()})
+	private ${template.getReturnType($relation)} ${relation.getName()} = new ${template.getNewInstance($relation)}();
+#end#end
+
+#end
+
+#addToSpringContext("<coucou${entity.getName()}56100 />")
+	/** 
+	 * @Override
+	 */
+	@Override
+	public boolean equals(Object value) {
+		if (value == this) 
+			return true;
+		if (value == null || !(value instanceof ${entity.getName()}))
+			return false;
+		if (getId() != null && getId().equals(((${entity.getName()}) value).getId()))
+			return true;
+		return super.equals(obj);
+	}
+
+	/** 
+	 * @Override
+	 */
+	@Override
+	public String toString() {
+		return new StringBuilder("${entity.getName()}#").append(getId()).append("{")
+#set($first='0')
+#foreach( $attribute in ${entity.getAttributes()})#if(!${attribute.getPrimaryKey()})
+#if($first=='0') #set($first='1')			#else			.append(",")#end
+.append(${attribute.getName()})
+#end#end
+			.append("}").toString();
+	}
+
+	/* ==================== */
+	/* =  Getter / Setter = */
+	/* ==================== */
+
+	//TODO
+}

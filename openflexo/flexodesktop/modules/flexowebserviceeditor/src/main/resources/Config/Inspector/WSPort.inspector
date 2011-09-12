@@ -1,0 +1,8 @@
+<inspector title = "ws_operation"  inheritsfrom ="WSObject.inspector">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="name" label="name" widget="READ_ONLY_TEXT_FIELD" constraint="0"/>
+	</tab>
+</inspector>

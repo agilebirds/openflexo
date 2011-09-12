@@ -1,0 +1,30 @@
+#set($list = ${widget.getHTMLListDescriptor()})
+#if(!$list)
+	#set($list = ${widget.relatedRepetitionOperator().getHTMLListDescriptor()})
+#end
+#if(${list.getSortableHeaders().contains($widget)})
+#set($key = "sortKey#capName()")
+#name(): WDLAquaSortLink{
+    uniqueName = $key;
+    sortDictionary = ${widget.getRepetitionName()}SortDictionary;
+    id = "#name()";
+}
+#end
+
+#if(${widget.getBindingValue().isBindingValid()})
+Header_#name(): WOString {
+    value = ${widget.getBindingValue().getWodStringRepresentation()};
+}
+#elseif($project.getIsLocalized())
+#set($p = 'value')
+Header_#name(): ${project.getPrefix()}LocalizedString {
+    value = "#generateKey ($widget $p $widget.getValue())";
+}
+#end
+
+#if($project.getIsLocalized() && $widget.getTooltip() && !$widget.getTooltip().trim().equals(""))
+Header_#name()_Tooltip: WOGenericContainer {
+    elementName = "span";
+    #tooltipAsTitle()
+}
+#end

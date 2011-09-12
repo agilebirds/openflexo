@@ -1,0 +1,22 @@
+<inspector title = "Action Node" inheritsfrom="FlexoNode.inspector" inspectedClassName="org.openflexo.foundation.wkf.node.ActionNode">
+
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="actionType" label="action_type" widget="DROPDOWN" constraint="0">
+			<param name="format" value="name"/>
+		</property>
+		<property name="subProcess" label="sub_process" widget="DROPDOWN" constraint="0">
+			<param name="dynamiclist" value="process.workflow.allFlexoProcesses"/>
+			<param name="format" value="name"/>
+		</property>
+	</tab>
+	
+	<tab name="Advanced" index="1">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+	</tab>
+	
+</inspector>

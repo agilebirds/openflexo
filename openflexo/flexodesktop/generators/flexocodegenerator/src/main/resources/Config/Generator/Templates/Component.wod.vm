@@ -1,0 +1,110 @@
+#**
+* generator (CGGenerator): the component generator
+* component (IEWOComponent): the component being currently generated
+* project (FlexoProject): the current project
+* 
+* widgetStack (Stack): the Stack<IEWidget> of widgets
+* repetitionStack (Stack): the Stack<RepetitionOperator> of repetition
+*#
+#set($widget = $component.getRootSequence())
+#set($stack = $generator.getNewStack())
+#set($widgetStack = $generator.getNewStack())
+#set($repetitionStack = $generator.getNewStack())
+#set($extension = "wod")
+#set($trueValue = true)
+#if($componentDefinition.isPage())
+  #if($componentDefinition.isPopup())
+    #set($hfName = "WOSwitchComponent")
+    #set($formName = "WOSwitchComponent")
+  #else
+    #set($hfName = "$project.getPrefix()HeaderFooter")
+    #set($formName = "WOForm")
+  #end
+HEADER_FOOTER: $hfName {
+#if($componentDefinition.isPopup())
+    WOComponentName = headerFooterComponentName;
+#end
+    title = "${generator.getComponentDefinition().getComponentName()}";
+    helpKey = operationComponentInstanceID;
+    /*cssSheet = "${project.getCssSheet().getName()}MasterStyle.css"; Don t need to set css if it is the same as the application. Use this to specify another CSS*/
+    ##removed because of popup included in page which can need a date assistant #if($generator.getNeedDateAssistant())
+    needDateAssistant = true;
+    ## #end
+    onLoadBody = "setAlternateClassNames();";
+    operationURI = operationURI;
+    isDocGenerated = isDocGenerated;
+	#if($generator.isPrototype())
+		selectOperationMap = selectOperationMap;
+	#end
+}
+
+FORM: $formName {
+#if($componentDefinition.isPopup())
+    WOComponentName = formComponentName;
+#end
+    action = formAction;
+    name = "formName";
+}
+
+HIDDEN_FORM: WOHiddenField {
+    name = hiddenFieldName;
+    value = hiddenFieldValue;
+}
+#if($componentDefinition.isOperation())
+PAGE_DA: WOHiddenField {
+    name = "pageDA";
+    value = pageDA;
+}
+#else
+Condition_DontIncludePopupInPage: WOConditional{
+    condition = includePopupInPage;
+    negate = true;
+}
+
+Script_ClosePopup: WOString{
+    value = scriptClosePopup;
+}
+
+#end
+CONDITIONAL_VALIDATION: WOConditional {
+    condition = hasValidationMessages;
+}
+
+STRING_VALIDATION: WOString {
+    value = validationMessages;
+    escapeHTML= false;
+}
+
+CONDITIONAL_VALIDATION_WARNING: WOConditional {
+    condition = hasWarningValidationMessages;
+}
+
+STRING_VALIDATION_WARNING: WOString {
+    value = warningValidationMessages;
+    escapeHTML= false;
+}
+
+CONDITIONAL_CONFIRM_MESSAGES: WOConditional {
+    condition = hasConfirmMessages;
+}
+
+STRING_CONFIRM_MESSAGES: WOString {
+    value = confirmMessages;
+    escapeHTML= false;
+}
+#end
+#if($componentDefinition.isPopup())
+	Condition_HasRedirectScript: WOConditional {
+    	condition = redirectScript;
+    }
+    
+    Condition_HasNoRedirectScript: WOConditional {
+    	condition = redirectScript;
+    	negate = true;
+    }
+    
+    JS_RedirectScript: WOJavaScript {
+    	scriptString = redirectScript;
+    }
+#end
+#renderSequence($component.getRootSequence())

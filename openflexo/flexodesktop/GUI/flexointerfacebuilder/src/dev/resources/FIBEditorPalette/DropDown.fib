@@ -1,0 +1,5 @@
+<DropDown name="dropdown" showReset="false">
+	<Parameter name="x" value="30"/>
+	<Parameter name="y" value="105"/>
+	<Parameter name="isPaletteElement" value="true"/>
+</DropDown>

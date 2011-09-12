@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:hdr xmlns:ve="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml">
+  <w:tbl>
+    <w:tblPr>
+      <w:tblStyle w:val="TableGrid"/>
+      <w:tblW w:w="0" w:type="auto"/>
+      <w:tblLook w:val="04A0"/>
+    </w:tblPr>
+    <w:tblGrid>
+      <w:gridCol w:w="4750"/>
+      <w:gridCol w:w="4750"/>
+    </w:tblGrid>
+    <w:tr w:rsidR="00AD2128" w:rsidTr="00AD2128">
+      <w:tc>
+        <w:tcPr>
+          <w:tcW w:w="4750" w:type="dxa"/>
+          <w:tcBorders>
+            <w:top w:val="nil"/>
+            <w:left w:val="nil"/>
+            <w:bottom w:val="nil"/>
+            <w:right w:val="nil"/>
+          </w:tcBorders>
+        </w:tcPr>
+        <w:p w:rsidR="00AD2128" w:rsidRDefault="00AD2128">
+          <w:pPr>
+            <w:pStyle w:val="Header"/>
+          </w:pPr>
+          <w:r>
+            <w:t>#if(${repository.getCustomer()})#escape(${repository.getCustomer()})#end</w:t>
+          </w:r>
+        </w:p>
+      </w:tc>
+      <w:tc>
+        <w:tcPr>
+          <w:tcW w:w="4750" w:type="dxa"/>
+          <w:tcBorders>
+            <w:top w:val="nil"/>
+            <w:left w:val="nil"/>
+            <w:bottom w:val="nil"/>
+            <w:right w:val="nil"/>
+          </w:tcBorders>
+        </w:tcPr>
+        <w:p w:rsidR="00AD2128" w:rsidRDefault="00AD2128" w:rsidP="00AD2128">
+          <w:pPr>
+            <w:pStyle w:val="Header"/>
+            <w:jc w:val="right"/>
+          </w:pPr>
+          <w:r>
+            <w:t>#if(${repository.getSystemName()})#escape(${repository.getSystemName()})#end</w:t>
+          </w:r>
+        </w:p>
+      </w:tc>
+    </w:tr>
+  </w:tbl>
+  <w:p w:rsidR="00F53D6B" w:rsidRPr="00AD2128" w:rsidRDefault="00F53D6B">
+    <w:pPr>
+      <w:pStyle w:val="Header"/>
+      <w:pBdr>
+        <w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+      </w:pBdr>
+      <w:rPr>
+        <w:sz w:val="2"/>
+        <w:szCs w:val="2"/>
+      </w:rPr>
+    </w:pPr>
+  </w:p>
+</w:hdr>

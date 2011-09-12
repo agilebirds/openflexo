@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.edge.ExternalMessageInEdge" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="3" title="Data" layout="twocols" font="SansSerif,0,11" name="DataTab">
+      <Label label="accessed_instance" localize="true" name="AccessedProcessInstanceLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
+      <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" data="data.accessedProcessInstance" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=false)" name="AccessedProcessInstance" localize="true" manageDynamicModel="true">
+        <Assignment variable="component.bindingDefinition" value="data.accessedProcessInstanceBindingDefinition" />
+        <Assignment variable="component.bindable" value="data" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </Custom>
+    </Tab>
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab" />
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Data" lang="French">Donnée</Localized>
+    <Localized key="accessed_instance" lang="English">Accessed ProcessInstance</Localized>
+    <Localized key="accessed_instance" lang="French">Instance de processus accédé</Localized>
+    <Localized key="accessed_instance" lang="Dutch">Accessed ProcessInstance</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="External Message IN edge" />
+</Panel>
+

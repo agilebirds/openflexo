@@ -1,0 +1,16 @@
+CONTENT: WOComponentContent {
+}
+
+HEAD: WDLHead {
+    title = title;
+    cssArray = cssArray;
+    jsArray = jsArray;
+    useOldCSS = false;
+    application = "${generator.getProject().getCssSheet().getName()}";
+    usePrototypeJS = true;
+    useScriptaculousControlsJS = true;
+}
+
+onLoadBody: WOString {
+    value = ^onLoadBody;
+}

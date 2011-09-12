@@ -1,0 +1,133 @@
+
+.LB_overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #fff;
+	filter:alpha(opacity=60);
+	-moz-opacity: 0.6;
+	opacity: 0.6;
+	z-index: 9999;
+}
+
+.LB_window {
+	position: absolute;
+	/*background: #def3fb url(../images/common/bg_popup.gif) repeat-y;*/
+	background-color:#FFFFFF;
+	color:#000000;
+	display:none;
+	border: 3px solid #91AAD0;
+	z-index: 10000;
+	overflow: auto;
+}
+
+.LB_window #codebox {
+   width: 420px;
+   height: 80px;
+   margin: 0 65px 15px 65px;
+   border: 1px dotted #666;
+   overflow: auto;
+}
+.LB_window label {
+   margin: 0;
+}
+
+.LB_caption{
+	height:25px;
+	padding:10px 30px 10px 25px;
+	float:left;
+   width: 100%;
+}
+
+#LB_closeWindow{
+	
+	height:25px;
+	padding:10px 25px 10px 0;
+	float:right;
+}
+
+.LB_closeAjaxWindow{
+	cursor: move;
+	padding:5px 10px 7px 0;
+	margin-bottom:1px;
+	text-align:right;
+	height: 12px;
+	background-color: lightGrey;
+	border-bottom: 1px solid black;
+}
+
+.LB_closeAjaxWindow a{
+	cursor: pointer;
+}
+
+.LB_content{
+	overflow:auto;	
+}
+
+.LB_content div{
+	padding: 5px;
+}
+
+.LB_resize{
+   height: 10px;
+   width: 10px;
+   position: absolute;
+   bottom: 0;
+   right: 0;
+   cursor: nw-resize;
+}
+
+#ContainerPopup {
+	padding:15px 40px;
+	color:#666666;
+}
+
+div#PopupBox {
+	width: 446px;
+	background: url(../images/common/middle_box_background1.gif) top no-repeat;
+	padding: 10px;
+	color:#666666;
+	overflow:hidden;
+}
+
+div#PopupBoxClose {
+	width: 466px;
+	background: url(../images/common/middle_box_background2.gif) no-repeat;
+	height:7px;
+	margin-bottom:10px;
+	font-size:1px;
+}
+
+div.FriendsRowMember {
+	margin:0 13px 0 0;
+	padding: 5px 0;
+	float:left;
+}
+
+label.Friends {
+	float: left;
+	padding: 0 0 0 1px;
+	width: 48px;
+}
+
+label.FriendsMessage {
+	float: left;
+	padding: 0 0 0 1px;
+	width: 70px;
+}
+
+input.InputLarger, textarea.InputLarger, select.InputLarger {
+	width: 340px;
+	height:100px;
+	font-size:12px;
+	float:left;
+	border: 1px solid #7f9db9;
+}
+
+input.Friendsfield {
+	border:1px solid #7f9db9;
+	height:20px;
+	width:150px;
+}

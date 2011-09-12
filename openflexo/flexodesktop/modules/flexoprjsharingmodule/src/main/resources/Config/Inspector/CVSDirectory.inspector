@@ -1,0 +1,7 @@
+<inspector title = "cvs_directory">
+	<tab name="Basic" index="0">
+		<property name="fileName" label="directory_name" widget="READ_ONLY_TEXT_FIELD" constraint="0">
+		</property>
+	</tab>
+	
+</inspector>

@@ -1,0 +1,61 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = "VCB_BANNER_ID"; 
+            name = bannerID; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = "VCB_CHANNEL_ID"; 
+            name = channelID; 
+            prototypeName = id; 
+        }, 
+        {columnName = "VCB_CREATION_DATE"; name = creationDate; prototypeName = date; }, 
+        {columnName = "VCB_END_DATE"; name = endDate; prototypeName = date; }, 
+        {columnName = "VCB_INDEX"; name = index; prototypeName = int; }, 
+        {columnName = "VCB_PROMO_VIDEO_ID"; name = promoVideoID; prototypeName = id; }, 
+        {columnName = "VCB_START_DATE"; name = startDate; prototypeName = date; }, 
+        {columnName = "VCB_STATUS_KEY"; name = status; prototypeName = str10; }, 
+        {columnName = "VCB_TYPE_KEY"; name = typeKey; prototypeName = str10; }, 
+        {columnName = "VCB_UPDATE_DATE"; name = updateDate; prototypeName = date; }, 
+        {columnName = "VCB_UPDATOR"; name = updator; prototypeName = str100; }
+    ); 
+    className = FCPubliBanner; 
+    classProperties = (
+        bannerID, 
+        channelID, 
+        index, 
+        startDate, 
+        endDate, 
+        banner, 
+        channel, 
+        typeKey, 
+        creationDate, 
+        updateDate, 
+        updator, 
+        promoVideoID, 
+        status
+    ); 
+    externalName = "FC_PUBLI_BANNER"; 
+    fetchSpecificationDictionary = {}; 
+    name = FCPubliBanner; 
+    primaryKeyAttributes = (channelID, bannerID); 
+    relationships = (
+        {
+            destination = DLRBanner; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = bannerID; sourceAttribute = bannerID; }); 
+            name = banner; 
+        }, 
+        {
+            destination = FCVerticalChannel; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = channelID; sourceAttribute = channelID; }); 
+            name = channel; 
+        }
+    ); 
+}

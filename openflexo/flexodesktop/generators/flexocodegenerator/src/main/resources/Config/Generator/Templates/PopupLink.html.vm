@@ -1,0 +1,22 @@
+<webobject name="Condition_DontIncludePopupInPage">
+    <webobject name="Link_OpenPopup">
+        <webobject name="ButtonContent"></webobject>
+    </webobject>
+</webobject>
+<webobject name="Condition_IncludePopupInPage">
+    <webobject name="Link_DisplayHiddenDiv">
+        <webobject name="ButtonContent"></webobject>
+    </webobject>
+    <webobject name="HiddenDiv">
+        <webobject name="PopupContent"></webobject>
+        <webobject name="Hidden_PositionField"></webobject>
+    </webobject>
+    
+    <script type="text/javascript">
+    <!--
+        <webobject name="Script_onsubmit"></webobject>
+    
+        <webobject name="Script_ScrollIfNeeded"></webobject>
+    //-->
+    </script>
+</webobject>

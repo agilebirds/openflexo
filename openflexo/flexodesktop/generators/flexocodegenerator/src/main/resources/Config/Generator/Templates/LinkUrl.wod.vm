@@ -1,0 +1,22 @@
+#name()Link: WOHyperlink {
+  #if($widget.hasConfirmMessage())
+     #if($project.getIsLocalized())
+    onClick = onClickConfirmMessage#capName();
+     #else
+    onClick = "if (confirm('${widget.getJavascriptConfirmMessage()}')) return true;return false;";           
+     #end
+  #end
+
+#if(${widget.getBindingUrl()} && ${widget.getBindingUrl().isBindingValid()})
+    href = ${widget.getBindingUrl().getWodStringRepresentation()};
+#else
+    href = "#";
+#end
+#if($widget.isCustomButton())
+    class = "denaliButton";
+#end
+    id = "${widget.getFlexoID()}";
+    target = "_blank";
+    #tooltipAsTitle()
+}
+#renderLinkContent($widget)

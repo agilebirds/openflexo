@@ -1,0 +1,40 @@
+<Panel className="org.openflexo.fib.editor.controller.FIBInspector" 
+	   name="Inspector" 
+	   layout="border" 
+	   dataClassName="org.openflexo.fib.model.FIBContainer">
+	<Parameter name="title" value="Container"/>
+
+		<TabPanel name="Tab" constraints="border(location=center)">
+
+			<Tab name="BasicTab" title="Basic" index="0" layout="twocols" font="SansSerif,0,11" >
+			</Tab>		
+			
+			<Tab name="AdvancedTab" title="Components" index="1" layout="twocols" font="SansSerif,0,11" >
+
+				<Panel name="ComponentsPanel" border="empty" borderTitle="Components" layout="border" constraints="twocols(location=center;expandHorizontally=true;expandVertically=true)">
+					<Table name="ComponentsTable" iteratorClassName="org.openflexo.fib.model.FIBComponent"
+						data="data.subComponents"
+						constraints="border(location=center)"
+						visibleRowCount="5" rowHeight="18" font="SansSerif,0,11">
+						<NumberColumn numberType="IntegerType"
+							data="iterator.constraints.index" title="index" columnWidth="40"
+							resizable="false" />
+						<LabelColumn data="iterator.toString"
+							title="Component" columnWidth="200" resizable="true" />
+						<LabelColumn data="iterator.constraints.stringRepresentation"
+							title="Constraints" columnWidth="300" resizable="true" />
+						<CustomAction name="reorder_components" method="data.reorderComponents()" />
+					</Table>
+  					<Panel layout="box" hGap="5" vGap="5" boxLayoutAxis="Y_AXIS" border="empty" constraints="border(location=east)">
+   					    <Button name="firstButton" action="data.componentFirst(ComponentsTable.selected)" buttonType="Trigger" label="First" constraints="flow(index=0)" enable="((ComponentsTable.selected != null) &amp; (ComponentsTable.selected.constraints.index &gt; 0))"/>
+   					    <Button name="upButton" action="data.componentUp(ComponentsTable.selected)" buttonType="Trigger" label="Up" constraints="flow(index=0)" enable="((ComponentsTable.selected != null) &amp; (ComponentsTable.selected.constraints.index &gt; 0))"/>
+   					    <Button name="downButton" action="data.componentDown(ComponentsTable.selected)" buttonType="Trigger" label="Down" constraints="flow(index=0)" enable="((ComponentsTable.selected != null) &amp; (ComponentsTable.selected.constraints.index &lt; (data.subComponents.size-1)))"/>
+   					    <Button name="lastButton" action="data.componentLast(ComponentsTable.selected)" buttonType="Trigger" label="Last" constraints="flow(index=0)" enable="((ComponentsTable.selected != null) &amp; (ComponentsTable.selected.constraints.index &lt; (data.subComponents.size-1)))"/>
+	 			    </Panel>
+				</Panel>
+
+			</Tab>
+			
+		</TabPanel>
+
+</Panel>

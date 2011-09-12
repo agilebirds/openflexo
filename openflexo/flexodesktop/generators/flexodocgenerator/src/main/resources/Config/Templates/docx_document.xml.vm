@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:ve="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml">
+  <w:body>
+    
+	#render($null 1 "docx_document.xml.coverpage.vm" $null)
+    
+	<w:sdt>
+      <w:sdtPr>
+        <w:docPartObj>
+          <w:docPartGallery w:val="Table of Contents"/>
+          <w:docPartUnique/>
+        </w:docPartObj>
+      </w:sdtPr>
+      <w:sdtEndPr>
+        <w:rPr>
+          <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
+          <w:bCs w:val="0"/>
+          <w:color w:val="auto"/>
+          <w:sz w:val="20"/>
+          <w:szCs w:val="20"/>
+          <w:lang w:eastAsia="ja-JP"/>
+        </w:rPr>
+      </w:sdtEndPr>
+      <w:sdtContent>
+        <w:p>
+          <w:pPr>
+            <w:pStyle w:val="TOCHeading"/>
+          </w:pPr>
+          <w:r>
+            <w:t>Table of Contents</w:t>
+          </w:r>
+        </w:p>
+        <w:p>
+          <w:fldSimple w:instr=" TOC \o &quot;1-5&quot; \h \z \u ">
+            <w:r>
+              <w:rPr>
+                <w:b/>
+                <w:bCs/>
+                <w:noProof/>
+              </w:rPr>
+              <w:t>No table of contents entries found.</w:t>
+            </w:r>
+          </w:fldSimple>
+        </w:p>
+      </w:sdtContent>
+    </w:sdt>
+	
+	#render($null 1 "docx_revisionhistory.xml.vm" $null)
+	
+	#foreach($entry in ${repository.getTocRepository().getSortedTocEntries()})
+		#tocEntry($entry)
+	#end
+	
+	<w:sectPr w:rsidR="00303EA0" w:rsidSect="00C8523B">
+      <w:headerReference w:type="even" r:id="rId7"/>
+      <w:headerReference w:type="default" r:id="rId8"/>
+      <w:footerReference w:type="even" r:id="rId9"/>
+      <w:footerReference w:type="default" r:id="rId10"/>
+      <w:pgSz w:w="12240" w:h="15840"/>
+      <w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="720" w:footer="720" w:gutter="0"/>
+      <w:pgNumType w:start="0"/>
+      <w:cols w:space="720"/>
+      <w:titlePg/>
+      <w:docGrid w:linePitch="360"/>
+    </w:sectPr>
+  </w:body>
+</w:document>

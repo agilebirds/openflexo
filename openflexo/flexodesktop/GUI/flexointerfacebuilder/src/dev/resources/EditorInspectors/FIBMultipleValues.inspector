@@ -1,0 +1,48 @@
+<Panel className="org.openflexo.fib.editor.controller.FIBInspector" 
+	   name="Inspector" 
+	   layout="border" 
+	   dataClassName="org.openflexo.fib.model.FIBMultipleValues">
+	<Parameter name="title" value="Multiple Values Widget"/>
+
+		<TabPanel name="Tab" constraints="border(location=center)">
+
+			<Tab name="BasicTab" title="Basic" index="0" layout="twocols" font="SansSerif,0,11" >
+			
+				<Label label="list" constraints="twocols(location=left)"/>
+				<Custom data="data.list.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+					<Assignment variable="component.bindable" value="data"/>
+					<Assignment variable="component.bindingDefinition" value="data.LIST"/>
+				</Custom>
+		
+				<Label label="array" constraints="twocols(location=left)"/>
+				<Custom data="data.array.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+					<Assignment variable="component.bindable" value="data"/>
+					<Assignment variable="component.bindingDefinition" value="data.ARRAY"/>
+				</Custom>
+		
+				<Label label="iterator_class" constraints="twocols(location=left)" />
+				<Custom data="data.iteratorClass" componentClassName="org.openflexo.fib.utils.ClassSelector" 
+						constraints="twocols(location=right;expandHorizontally=true)" 
+						columns="15"/>
+
+			</Tab>
+						
+			<Tab name="AdvancedTab" title="Advanced" index="1" layout="twocols" font="SansSerif,0,11" >
+
+				<CheckBox data="data.showText" constraints="twocols(location=left)"/>
+				<Label label="show_text" constraints="twocols(location=right;expandHorizontally=true)"/>
+		
+				<CheckBox data="data.showIcon" constraints="twocols(location=left)"/>
+				<Label label="show_icon" constraints="twocols(location=right;expandHorizontally=true)"/>
+
+				<Label label="icon" constraints="twocols(location=left)" visible="data.showIcon"/>
+				<Custom data="data.icon.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15"  visible="data.showIcon">
+					<Assignment variable="component.bindable" value="data.formatter"/>
+					<Assignment variable="component.bindingDefinition" value="data.ICON"/>
+				</Custom>
+
+			</Tab>
+
+		</TabPanel>
+
+</Panel>

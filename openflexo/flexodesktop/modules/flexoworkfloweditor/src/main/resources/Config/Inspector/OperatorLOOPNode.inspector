@@ -1,0 +1,53 @@
+<inspector title = "LOOP operator" inheritsfrom="OperatorNode.inspector" inspectedClassName="org.openflexo.foundation.wkf.node.LOOPOperator">
+
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		
+	</tab>
+	
+	<tab name="Advanced" index="4">
+	</tab>
+	<tab name="Data" index="3">
+		<property name="loopType" label="loop_type" widget="DROPDOWN" constraint="2">
+			<param name="showReset" value="false"/>
+		</property>
+		<property name="condition" label="condition" widget="CUSTOM" constraint="3" depends="loopType" conditional="loopType=WHILE OR loopType=UNTIL">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="CONDITION_BINDING_DEFINITION"/>			
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+		</property>
+		<property name="iterator" label="iterator" widget="CUSTOM" constraint="4" depends="loopType" conditional="loopType=FOR_INCREMENT">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="ITERATOR_BINDING_DEFINITION"/>			
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+		</property>
+		<property name="beginValue" label="start_value" widget="CUSTOM" constraint="5" depends="loopType" conditional="loopType=FOR_INCREMENT">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="BEGIN_VALUE_BINDING_DEFINITION"/>			
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+		</property>
+		<property name="endValue" label="end_value" widget="CUSTOM" constraint="6" depends="loopType" conditional="loopType=FOR_INCREMENT">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="END_VALUE_BINDING_DEFINITION"/>			
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+		</property>
+		<property name="incrementValue" label="increment_value" widget="CUSTOM" constraint="7" depends="loopType" conditional="loopType=FOR_INCREMENT">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="INCREMENT_VALUE_BINDING_DEFINITION"/>			
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+		</property>
+		<property name="iterationCollection" label="collection" widget="CUSTOM" constraint="8" depends="loopType" conditional="loopType=FOR_COLLECTION">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="ITERATION_COLLECTION_BINDING_DEFINITION"/>			
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+		</property>
+		<property name="collectionItem" label="iterator" widget="CUSTOM" constraint="9" depends="loopType" conditional="loopType=FOR_COLLECTION">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="COLLECTION_ITEM_BINDING_DEFINITION"/>			
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+		</property>
+	</tab>
+	
+</inspector>

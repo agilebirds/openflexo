@@ -1,0 +1,61 @@
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (DefinitionsDocGenerator)
+* - repository: the current repository for which we generate the doc (DGRepository)
+* - level: the level to use in title.
+*#
+#set($role = $object)
+
+
+#if(${role.getChildLeaf().size()}>0)
+
+		<w:p>
+			<w:r>
+			<w:rPr>
+				<w:b/>
+				<w:u w:val="single"/>
+			</w:rPr>
+				<w:t xml:space="preserve">Organisational unit mission:</w:t>
+			</w:r>
+		</w:p>
+		#descriptionSimple($role)
+		
+		#if(${role.hasSpecificDescriptionForKey('Objectives')})
+		   <w:p>			
+				<w:r>
+					<w:rPr>
+						<w:b/>
+						<w:u w:val="single"/>
+					</w:rPr>
+					<w:t xml:space="preserve">Objectives:</w:t>
+				</w:r>
+			</w:p>
+		#renderSpecificDescription($role,"Objectives")
+		#end
+
+#else	## leaf node in role tree, i.e. role
+		<w:p>
+			<w:r>
+			<w:rPr>
+				<w:b/>
+				<w:u w:val="single"/>
+			</w:rPr>
+				<w:t xml:space="preserve">Role mission:</w:t>
+			</w:r>
+		</w:p>
+		#descriptionSimple($role)
+		#if(${role.hasSpecificDescriptionForKey('Objectives')})
+		   <w:p>			
+				<w:r>
+					<w:rPr>
+						<w:b/>
+						<w:u w:val="single"/>
+					</w:rPr>
+					<w:t xml:space="preserve">Objectives:</w:t>
+				</w:r>
+			</w:p>
+		#renderSpecificDescription($role,"Objectives")
+		#end
+#end

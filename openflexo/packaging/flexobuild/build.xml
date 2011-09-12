@@ -1,0 +1,276 @@
+<project name="project" default="package" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+	<path id="classpath">
+		<fileset dir="lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		<classpath refid="classpath" />
+	</taskdef>
+
+	<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant" classpathref="classpath" reverseLoader="true" />
+
+	<target name="deploy">
+		<property name="deploy" value="true" />
+		<property name="deployment.root.folder" value="~/dist"/>
+		<property name="deployment.server.name" value="hudson@server.capexpe.org" />
+		<property name="ssh.private.keyfile" value="${user.home}/.ssh/id_dsa" />
+		<property name="ssh.passphrase" value="" />
+		<tstamp>
+			<format property="nightly_folder" pattern="yyyy-MM-dd" />
+		</tstamp>
+		<antcall target="package" />
+	</target>
+
+	<target name="package">
+		<propertyregex property="flexo_version" input="${project.version}" regexp="-SNAPSHOT" replace="" />
+		<!-- ./target -->
+		<property name="flexobuild.work.dir" value="${project.build.directory}/flexobuild" />
+		<!-- ./target/flexobuild -->
+		<property name="artifact.dir" value="${flexobuild.work.dir}/checkedout-artifact" />
+		<!-- ./target/flexobuild/checkedout-artifact -->
+		<property name="dist.dir" value="${flexobuild.work.dir}/dist" />
+		<!-- ./target/flexobuild/build -->
+		<property name="mac.app.dir" value="${flexobuild.work.dir}/mac_apps" />
+		<tstamp>
+			<format property="build.id" pattern="yyyy-MM-dd.HHmm" />
+		</tstamp>
+		<delete dir="${mac.app.dir}" failonerror="false" />
+		<mkdir dir="${mac.app.dir}" />
+		<antcall target="packageCustomer" />
+		<antcall target="packageAnalyst" />
+		<antcall target="packageDeveloper" />
+		<antcall target="copyPackagesOnServer" />
+	</target>
+
+	<target name="packageCustomer">
+		<loadproperties srcfile="customer.properties" />
+		<antcall target="createPackage" />
+	</target>
+
+	<target name="packageAnalyst">
+		<loadproperties srcfile="analyst.properties" />
+		<antcall target="createPackage" />
+	</target>
+
+	<target name="packageDeveloper">
+		<loadproperties srcfile="developer.properties" />
+		<antcall target="createPackage" />
+	</target>
+
+	<target name="createPackage">
+		<antcall target="cleanTempDir" />
+		<property name="qualified_app_name" value="${product.name} ${productSuffix}" />
+		<property name="qualified_and_versioned_app_name" value="${qualified_app_name} ${flexo_version}" />
+		<!--<propertyregex property="package_name" input="${app_name} Setup" regexp="\s+" replace="_" global="true"/>-->
+		<property name="mac.app.dir.versioned" value="${mac.app.dir}/${versionType}" />
+		<property name="package_name" value="${qualified_and_versioned_app_name} Setup" />
+		<property name="build.properties" value="${flexobuild.work.dir}/build.properties" />
+		<property name="program.args" value="-userType ${userType}" />
+		<property name="vm.args" value="-Xmx512M" />
+		<echoproperties destfile="${build.properties}" />
+		<antcall target="checkoutArtifact" />
+		<antcall target="generateFlexoProperties" />
+		<antcall target="generateHelp" />
+		<antcall target="packageWindows" />
+		<antcall target="packageMacOSX" />
+	</target>
+
+	<target name="cleanTempDir">
+		<delete dir="${flexobuild.work.dir}" failonerror="false" />
+		<mkdir dir="${flexobuild.work.dir}" />
+		<delete dir="${dist.dir}" failonerror="false" />
+		<mkdir dir="${dist.dir}" />
+	</target>
+
+	<target name="checkoutArtifact">
+		<property name="maven.group.id" value="org.openflexo.packaging" />
+		<property name="maven.type" value="zip" />
+		<property name="maven.classifier" value="packaging" />
+		<property name="maven.artifact.name" value="${maven.artifact.id}-${project.version}-${maven.classifier}.${maven.type}" />
+		<artifact:dependencies filesetId="maven.artifact" addArtifactFileSetRefs="true">
+			<dependency groupId="${maven.group.id}" artifactId="${maven.artifact.id}" version="${project.version}" type="${maven.type}" classifier="${maven.classifier}" />
+		</artifact:dependencies>
+		<copy todir="${artifact.dir}">
+			<fileset refid="${maven.group.id}:${maven.artifact.id}:${maven.type}:${maven.classifier}" />
+			<mapper type="flatten" />
+		</copy>
+		<unzip src="${artifact.dir}/${maven.artifact.name}" dest="${dist.dir}" />
+		<antcall target="generateApplicationVersion" />
+	</target>
+
+	<target name="generateApplicationVersion">
+		<mkdir dir="${flexobuild.work.dir}/version/src/org/openflexo" />
+		<mkdir dir="${flexobuild.work.dir}/version/bin" />
+		<copy file="ApplicationVersion.java.tpl" tofile="${flexobuild.work.dir}/version/src/org/openflexo/ApplicationVersion.java" filtering="true" overwrite="true">
+			<filterset>
+				<filtersfile file="${build.properties}" />
+			</filterset>
+		</copy>
+		<javac srcdir="${flexobuild.work.dir}/version/src" destdir="${flexobuild.work.dir}/version/bin" target="${compiler.target}" fork="true" />
+		<jar destfile="${dist.dir}/lib/flexo-${project.version}.jar" update="true">
+			<fileset dir="${flexobuild.work.dir}/version/bin">
+				<include name="**/*.class" />
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="generateFlexoProperties">
+		<copy file="Flexo.properties.tpl" tofile="${dist.dir}/Config/Flexo.properties" filtering="true" overwrite="true">
+			<filterset>
+				<filtersfile file="${build.properties}" />
+			</filterset>
+		</copy>
+	</target>
+
+	<target name="generateHelp">
+		<artifact:dependencies pathId="flexoant">
+			<dependency groupId="org.openflexo" artifactId="flexoant" version="${project.version}" type="jar" />
+		</artifact:dependencies>
+		<taskdef name="generatehelp" classname="org.openflexo.ant.GenerateHelpSetTask">
+			<classpath>
+				<path refid="flexoant" />
+				<fileset dir="${dist.dir}/lib">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</taskdef>
+		<generatehelp resourceDir="${dist.dir}">
+			<language isocode="ENGLISH" title="FlexoToolSet Help">
+				<distribution name="${userType}" />
+			</language>
+			<language isocode="FRENCH" title="Aide-FlexoToolSet">
+				<distribution name="${userType}" />
+			</language>
+		</generatehelp>
+	</target>
+
+	<target name="packageWindows">
+		<antcall target="generateFlexoLauncher" />
+		<antcall target="generateInstallerScript" />
+		<antcall target="windowsPackaging" />
+	</target>
+
+	<target name="windowsPackaging">
+		<exec executable="makensis" failonerror="true">
+			<arg value="${flexobuild.work.dir}/flexoinstaller.nsi" />
+		</exec>
+	</target>
+
+	<target name="generateInstallerScript">
+		<copy file="Windows/flexoinstaller.nsi.tpl" tofile="${flexobuild.work.dir}/flexoinstaller.nsi" filtering="true" overwrite="true">
+			<filterset>
+				<filtersfile file="${build.properties}" />
+			</filterset>
+		</copy>
+	</target>
+
+	<target name="generateFlexoLauncher">
+		<copy file="Windows/flexolauncher.nsi.tpl" tofile="${flexobuild.work.dir}/flexolauncher.nsi" filtering="true" overwrite="true">
+			<filterset>
+				<filtersfile file="${build.properties}" />
+			</filterset>
+		</copy>
+		<exec executable="makensis" failonerror="true">
+			<arg value="${flexobuild.work.dir}/flexolauncher.nsi" />
+		</exec>
+	</target>
+
+	<target name="packageMacOSX">
+		<property name="java.stubfile" value="MacOS/JavaApplicationStub"/>
+		<chmod perm="a+x" file="${java.stubfile}"/>
+		<property name="relative_res_path" value="${qualified_and_versioned_app_name}.app/Contents/Icons" />
+		<taskdef name="jarbundler" classpath="lib/jarbundler-1.9.jar:lib/xercesImpl.jar:lib/xml-apis.jar:lib/jdom-1.1.jar" classname="net.sourceforge.jarbundler.JarBundler" />
+		<mkdir dir="${mac.app.dir.versioned}" />
+		<tstamp>
+			<format property="current.year" pattern="yyyy" />
+		</tstamp>
+		<jarbundler stubfile="${java.stubfile}" dir="${mac.app.dir.versioned}" name="${qualified_and_versioned_app_name}" mainclass="${main.class}" bundleid="${project.groupId}" signature="FLXO" version="${flexo_version}" jvmversion="1.6+" shortname="${product.name}" icon="${dist.dir}/Resources/${icon_mac_name}" arguments="${program.args}" infostring="${product.name} ${flexo_version}, (c) ${organization.name} ${current.year}" vmoptions="${vm.args}">
+			<javaproperty name="apple.awt.antialiasing" value="true" />
+			<javaproperty name="apple.awt.antialiasedtext" value="true" />
+			<javaproperty name="apple.laf.useScreenMenuBar" value="true" />
+			<jarfileset dir="${dist.dir}/lib">
+				<include name="*.jar" />
+			</jarfileset>
+			<documenttype name="FlexoBPM document" extensions="prj" iconFile="${dist.dir}/Icons/Flexo/FlexoDocument.icns" bundle="true" role="Editor" />
+			<documenttype name="FlexoBPM palette" extensions="iepalette" iconFile="${dist.dir}/Icons/Flexo/FlexoDocument2.icns" bundle="true" role="Editor" />
+		</jarbundler>
+		<copy todir="${mac.app.dir.versioned}/${relative_res_path}">
+			<fileset dir="${dist.dir}">
+				<exclude name="lib/*" />
+			</fileset>
+		</copy>
+		<antcall target="osx-packaging" />
+	</target>
+
+	<target name="osx-packaging">
+		<exec executable="chmod">
+			<arg value="a+x" />
+			<arg value="MacOS/make_dmg"/>
+		</exec>
+		<echo message="Launching make_dmg ${mac.app.dir.versioned} &quot;${project.build.directory}/${qualified_and_versioned_app_name}.dmg&quot; &quot;${qualified_and_versioned_app_name}&quot;"/>
+		<exec executable="MacOS/make_dmg">
+			<arg value="${mac.app.dir.versioned}" />
+			<arg value="${project.build.directory}/${qualified_and_versioned_app_name}.dmg" />
+			<arg value="${qualified_and_versioned_app_name}" />
+		</exec>
+	</target>
+
+	<target name="copyPackagesOnServer" if="deploy">
+		<antcall target="copyOnServerWindowsRelease" />
+		<antcall target="copyOnServerMacRelease"/>
+		<antcall target="copyOnServerWindowsNightly" />
+		<antcall target="copyOnServerMacNightly" />
+	</target>
+
+	<target name="copyOnServerWindowsRelease" unless="isNightly">
+		<property name="folder" value="${deployment.root.folder}/Windows/${flexo_version}" />
+		<antcall target="createRemoteFolder"/>
+		<scp todir="${deployment.server.name}:${folder}/" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}">
+			<fileset dir="${project.build.directory}">
+				<include name="*.exe" />
+			</fileset>
+		</scp>
+	</target>
+
+	<target name="copyOnServerMacRelease" unless="isNightly">
+		<property name="folder" value="${deployment.root.folder}/Mac/${flexo_version}" />
+		<antcall target="createRemoteFolder"/>
+		<scp todir="${deployment.server.name}:${folder}/" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}">
+			<fileset dir="${project.build.directory}" id="pkg">
+				<include name="*.dmg" />
+			</fileset>
+		</scp>
+	</target>
+
+	<target name="copyOnServerWindowsNightly" if="isNightly">
+		<property name="folder" value="${deployment.root.folder}/Windows/${flexo_version}/nightly/${nightly_folder}" />
+		<antcall target="createRemoteFolder"/>
+		<scp todir="${deployment.server.name}:${folder}/" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}">
+			<fileset dir="${project.build.directory}">
+				<include name="*.exe" />
+			</fileset>
+		</scp>
+	</target>
+
+	<target name="copyOnServerMacNightly" if="isNightly">
+		<property name="folder" value="${deployment.root.folder}/Mac/${flexo_version}/nightly/${nightly_folder}" />
+		<antcall target="createRemoteFolder"/>
+		<scp todir="${deployment.server.name}:${folder}/" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}" failonerror="false">
+			<fileset dir="${project.build.directory}" id="pkg">
+				<include name="*.dmg" />
+			</fileset>
+		</scp>
+	</target>
+
+	<target name="createRemoteFolder">
+		<exec executable="ssh" failonerror="false">
+			<arg value="-o StrictHostKeyChecking=no" />
+			<arg value="${deployment.server.name}" />
+			<arg value="mkdir -p" />
+			<arg value="${folder}" />
+		</exec>
+	</target>
+
+</project>

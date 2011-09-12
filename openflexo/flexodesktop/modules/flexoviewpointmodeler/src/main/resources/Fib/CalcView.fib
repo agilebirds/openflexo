@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="gridbag" border="empty" protectContent="false" name="main" dataClassName="org.openflexo.foundation.ontology.calc.OntologyCalc">
+  <Parameter name="controllerClassName" value="org.openflexo.view.controller.FlexoFIBController" />
+  <Panel layout="gridbag" border="empty" borderTitle="Panel" protectContent="false" dataClassName="" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=0;insetsTop=0;location=north;insetsBottom=0;weightY=0.10000000000000009;weightX=1.0;fill=both)">
+    <Label label="ontologic_calc" align="left" constraints="gridbag(insetsLeft=10;insetsRight=10;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" readOnly="false" manageDynamicModel="false" />
+    <TextField validateOnReturn="false" columns="6" passwd="false" text="TextField" data="data.name" constraints="gridbag(insetsLeft=0;insetsRight=10;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=1;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=1.0;fill=horizontal)" readOnly="false" manageDynamicModel="false" />
+    <Label label="uri" align="left" constraints="gridbag(insetsLeft=10;insetsRight=10;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=2;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" readOnly="false" manageDynamicModel="false" />
+    <TextField validateOnReturn="false" columns="6" passwd="false" text="TextField" data="data.calcURI" constraints="gridbag(insetsLeft=0;insetsRight=10;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=3;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=1.0;fill=horizontal)" readOnly="true" manageDynamicModel="false" />
+    <TextArea validateOnReturn="false" columns="6" rows="3" text="TextArea" data="data.description" constraints="gridbag(insetsLeft=10;insetsRight=10;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=4;gridWidth=0;insetsTop=5;location=center;insetsBottom=0;weightY=1.0;fill=both;weightX=1.0)" font="Lucida Grande,0,12" readOnly="false" manageDynamicModel="false" />
+  </Panel>
+  <Panel layout="gridbag" hGap="5" vGap="5" cols="2" rows="2" border="empty" borderTitle="Panel" protectContent="false" constraints="gridbag(insetsLeft=10;insetsRight=10;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=1;gridWidth=0;insetsTop=5;insetsBottom=0;weightY=1.0;fill=both;weightX=1.0)" width="80" height="60">
+    <Table iteratorClassName="org.openflexo.foundation.ontology.calc.CalcDrawingShema" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="false" selectionMode="MultipleIntervalSelection" name="ShemaTable" data="data.shemas" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=1.0;fill=vertical;weightX=0.0)" font="Lucida Grande,0,11" readOnly="false" manageDynamicModel="true">
+      <IconColumn name="icon" data="iterator.icon" title="icon" columnWidth="23" resizable="false" displayTitle="false" />
+      <LabelColumn name="label" data="iterator.name" title="shema" columnWidth="120" resizable="true" displayTitle="true" />
+      <LocalizedDictionary />
+    </Table>
+    <Image imageFile="../../../../../../../../InterfaceBuilder/src/dev/resources/FIBEditorPalette/Image.gif" sizeAdjustment="AdjustHeight" align="center" imageWidth="651" imageHeight="260" data="ShemaTable.selected.screenshotImage.image" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=1;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=1.0;fill=both;weightX=1.0)" width="300" height="180" readOnly="false" manageDynamicModel="false" />
+    <Table iteratorClassName="org.openflexo.foundation.ontology.calc.CalcPalette" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="false" selectionMode="MultipleIntervalSelection" name="PaletteTable" data="data.palettes" dataClassName="" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=2;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;fill=vertical;weightX=0.0)" font="Lucida Grande,0,11" readOnly="false" manageDynamicModel="true">
+      <IconColumn name="icon" data="iterator.icon" title="icon" columnWidth="23" resizable="false" displayTitle="false" />
+      <LabelColumn name="label" data="iterator.name" title="palette" columnWidth="120" resizable="true" displayTitle="true" />
+      <LocalizedDictionary />
+    </Table>
+    <Image imageFile="../../../../../../../../InterfaceBuilder/src/dev/resources/FIBEditorPalette/Image.gif" sizeAdjustment="AdjustHeight" align="center" imageWidth="200" imageHeight="200" data="PaletteTable.selected.screenshotImage.image" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=3;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;fill=vertical;weightX=0.0)" width="200" height="180" readOnly="false" manageDynamicModel="false" />
+  </Panel>
+  <Panel layout="gridbag" border="empty" borderTitle="Panel" protectContent="false" constraints="gridbag(insetsLeft=10;insetsRight=10;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=2;gridWidth=0;insetsTop=0;location=center;insetsBottom=0;weightY=1.0;weightX=1.0;fill=both)" width="80" height="60">
+    <Table iteratorClassName="org.openflexo.foundation.ontology.calc.EditionPattern" visibleRowCount="12" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="true" selectionMode="MultipleIntervalSelection" name="EditionPatternTable" data="data.editionPatterns" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=1.0;weightX=1.0;fill=both)" font="Lucida Grande,0,11" readOnly="false" manageDynamicModel="true">
+      <IconColumn data="iterator.icon" title="icon" columnWidth="30" resizable="false" displayTitle="false" />
+      <LabelColumn name="label" data="iterator.name" title="edition_pattern" columnWidth="150" resizable="true" displayTitle="true" />
+      <TextFieldColumn name="textfield" data="iterator.description" title="description" columnWidth="500" resizable="true" displayTitle="true" />
+    </Table>
+    <Table iteratorClassName="org.openflexo.foundation.ontology.calc.PatternRole" visibleRowCount="10" rowHeight="20" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="true" selectionMode="MultipleIntervalSelection" data="EditionPatternTable.selected.patternRoles" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=1;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=1.0;weightX=0.4;fill=both)" font="Lucida Grande,0,11" readOnly="false" manageDynamicModel="true">
+      <IconColumn name="icon" data="iterator.icon" title="icon" columnWidth="30" resizable="false" displayTitle="false" />
+      <LabelColumn data="iterator.patternRoleName" title="pattern_role" columnWidth="100" resizable="true" displayTitle="true" />
+      <LabelColumn data="iterator.type" title="kind" columnWidth="80" resizable="true" displayTitle="true" />
+      <LabelColumn data="iterator.preciseType" title="type" columnWidth="80" resizable="true" displayTitle="true" />
+    </Table>
+    <Custom componentClassName="org.openflexo.ced.view.widget.EditionPatternPreviewComponent" data="EditionPatternTable.selected" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=2;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=1.0;weightX=1.0;fill=both)" readOnly="false" manageDynamicModel="false">
+      <Assignment variable="component.selectionManager" value="controller.selectionManager" />
+    </Custom>
+  </Panel>
+  <LocalizedDictionary>
+    <Localized key="uri" lang="English">URI</Localized>
+    <Localized key="description" lang="English">Description</Localized>
+    <Localized key="kind" lang="English">Generic type</Localized>
+    <Localized key="type" lang="English">Type</Localized>
+    <Localized key="uri" lang="French">URI</Localized>
+    <Localized key="description" lang="French">Description</Localized>
+    <Localized key="kind" lang="French">Type générique</Localized>
+    <Localized key="type" lang="French">Type</Localized>
+    <Localized key="uri" lang="Dutch">URI</Localized>
+    <Localized key="description" lang="Dutch">Description</Localized>
+    <Localized key="kind" lang="Dutch">Type</Localized>
+    <Localized key="type" lang="Dutch">Type</Localized>
+    <Localized key="edition_pattern" lang="French">Edition pattern</Localized>
+    <Localized key="edition_pattern" lang="English">Edition pattern</Localized>
+    <Localized key="edition_patterns_declared_in_this_calc" lang="English">Edition patterns declared in this calc</Localized>
+    <Localized key="edition_patterns_declared_in_this_calc" lang="French">Edition patterns déclarés dans ce calque</Localized>
+    <Localized key="ontologic_calc" lang="French">Calque ontologique</Localized>
+    <Localized key="pattern_role" lang="French">Pattern role</Localized>
+    <Localized key="ontologic_calc" lang="English">Ontologic calc</Localized>
+    <Localized key="pattern_role" lang="English">Pattern role</Localized>
+  </LocalizedDictionary>
+</Panel>
+

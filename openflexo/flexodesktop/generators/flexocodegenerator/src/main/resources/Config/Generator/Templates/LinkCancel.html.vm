@@ -1,0 +1,3 @@
+<webobject NAME="#name()Link">
+#renderLinkContent($widget)
+</webobject>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model builder="org.openflexo.foundation.xml.FlexoWorkflowBuilder" handlesReferences="yes" serializationMode="pseudoTree"> 
+
+  <mapId>
+	  <map entityClass="org.openflexo.foundation.FlexoModelObject" identifierAccessor="serializationIdentifier"/>
+  </mapId>
+	
+  <entity name="org.openflexo.foundation.FlexoModelObject" abstract="YES" finalizer="finalizeDeserialization">
+  	<property name="userIdentifier" xmlTag="userID" attribute="YES" description="Unique ID of the user (used for team synchronization)"/>
+  	<property name="flexoID" xmlTag="flexoID" attribute="YES" description="Unique ID generated and maintained by Flexo"/>
+  	<property name="dontEscapeLatex" xmlTag="dontEscapeLatex" attribute="YES" description=""/>  	
+  	<property name="docFormat" xmlTag="docFormat" attribute="YES" description=""/>
+    <description>Root class for all objects of Flexo</description>
+  </entity>
+
+  <entity name="org.openflexo.foundation.wkf.FlexoWorkflow" xmlTag="FlexoWorkflow" finalizer="finalizeDeserialization">
+    <property name="workflowName" xmlTag="name" attribute="YES"/> 
+    <property name="topLevelNodeProcesses" contains="org.openflexo.foundation.wkf.FlexoProcessNode" type="vector" primary="yes"/> 
+    <property name="rootProcessNode" contains="org.openflexo.foundation.wkf.FlexoProcessNode" context="Root"/> 
+  </entity> 
+  
+  <entity name="org.openflexo.foundation.wkf.FlexoProcessNode" xmlTag="FlexoProcess" contexts="Root" finalizer="finalizeDeserialization">
+    <property name="processResourceName" xmlTag="name" attribute="YES"/> 
+    <property name="fileName" xmlTag="filename" attribute="YES"/> 
+    <property name="subProcesses" contains="org.openflexo.foundation.wkf.FlexoProcessNode" type="vector"/> 
+  </entity> 
+  
+</model>

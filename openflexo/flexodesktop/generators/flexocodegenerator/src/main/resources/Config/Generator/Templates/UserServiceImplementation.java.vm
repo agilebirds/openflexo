@@ -1,0 +1,149 @@
+import org.openflexo.resource.user.DLUserInterface;
+import org.openflexo.service.DLServiceManager;
+import org.openflexo.service.DLServiceNotAvailableException;
+import org.openflexo.user.DenaliUserServiceInterface;
+import org.openflexo.user.InvalidPasswordException;
+import org.openflexo.user.NotAllowedToLoginException;
+import org.openflexo.user.UnknowLoginException;
+
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
+/**
+ * @author denadmin
+ *
+ */
+public class ${project.getPrefix()}UserServiceImpl implements DenaliUserServiceInterface
+{
+    static {
+        DLServiceManager.getInstance().setService(new ${project.getPrefix()}UserServiceImpl(), DenaliUserServiceInterface.SERVICE_KEY);
+    }
+    
+    /**
+     * Overrides getUser
+     * @see org.openflexo.user.DenaliUserServiceInterface${sharp}getUser(java.lang.String, com.webobjects.eocontrol.EOEditingContext)
+     */
+    public DLUserInterface getUser(String userLogin, EOEditingContext ec)
+    {
+        return new ${project.getPrefix()}User(userLogin);
+    }
+
+    /**
+     * Overrides checkPassword
+     * @see org.openflexo.user.DenaliUserServiceInterface${sharp}checkPassword(java.lang.String, java.lang.String)
+     */
+    public void checkPassword(String userLogin, String userPassword) throws UnknowLoginException, InvalidPasswordException, NotAllowedToLoginException
+    {
+        #if(${generator.isPrototype()})
+            if (userLogin!=null && userPassword!=null && userLogin.equals(${project.getPrefix()}Config.getConfig().loginProto()))
+                if (userPassword.equals(${project.getPrefix()}Config.getConfig().passwordProto()))
+                    return;
+                else
+                    new InvalidPasswordException();
+           #else
+               if (userLogin!=null && userLogin.length() > 0 && userPassword!=null && userPassword.length() > 0)
+                return;
+        #end
+        
+        throw new UnknowLoginException();
+    }
+
+    /**
+     * Overrides serviceName
+     * @see org.openflexo.service.DLServiceInterface#serviceName()
+     */
+    public String serviceName()
+    {
+        return "${project.getPrefix()} User Service implementation";
+    }
+
+    /**
+     * Overrides serviceVersion
+     * @see org.openflexo.service.DLServiceInterface#serviceVersion()
+     */
+    public String serviceVersion()
+    {
+        return "1.0";
+    }
+
+    /**
+     * Overrides testConfig
+     * @see org.openflexo.service.DLServiceInterface#testConfig()
+     */
+    public void testConfig() throws DLServiceNotAvailableException
+    {
+        
+    }
+
+    /**
+     * Overrides initService
+     * @see org.openflexo.service.DLServiceInterface#initService()
+     */
+    public void initService()
+    {
+        
+    }
+
+    public class ${project.getPrefix()}User extends NSMutableDictionary implements DLUserInterface {
+
+        public ${project.getPrefix()}User(String userLogin) {
+            takeValueForKey(userLogin, "login");
+        }
+        
+        /**
+         * Overrides login
+         * @see org.openflexo.resource.user.DLUserInterface#login()
+         */
+        public String login()
+        {
+            return (String)valueForKey("login");
+        }
+
+        /**
+         * Overrides isSuperAdmin
+         * @see org.openflexo.resource.user.DLUserInterface#isSuperAdmin()
+         */
+        public boolean isSuperAdmin()
+        {
+        #if(!${project.getWorkflow().getRoleList().getRoles().isEmpty()} && $generator.isPrototype())
+            #if($generator.isPrototype())
+                return role()!=null && role() == ${project.getPrefix()}Constants.Role.ROLE_FULLACCESS;
+            #else
+                return role()!=null /*TODO: && role() == ${project.getPrefix()}Constants.Role.THESUPERADMINROLE*/;
+            #end
+        #else
+            return false;
+        #end
+        }
+
+        /**
+         * Overrides isVisitor
+         * @see org.openflexo.resource.user.DLUserInterface#isVisitor()
+         */
+        public boolean isVisitor()
+        {
+            return true;
+        }
+
+        /**
+         * Overrides infoDictionary
+         * @see org.openflexo.resource.user.DLUserInterface#infoDictionary()
+         */
+        public NSDictionary infoDictionary()
+        {
+            return new NSDictionary();
+        }
+#if(!${project.getWorkflow().getRoleList().getRoles().isEmpty()} && $generator.isPrototype())        
+        public ${project.getPrefix()}Constants.Role role()
+        {
+            return (${project.getPrefix()}Constants.Role)valueForKey("role");
+        }
+        
+        public void setRole(${project.getPrefix()}Constants.Role role)
+        {
+            takeValueForKey(role, "role");
+        }
+#end
+    }
+    
+}

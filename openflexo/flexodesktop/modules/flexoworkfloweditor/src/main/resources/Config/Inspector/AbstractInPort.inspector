@@ -1,0 +1,45 @@
+<inspector title = "AbstractInPort"  inheritsfrom ="Port.inspector" inspectedClassName="org.openflexo.foundation.wkf.ws.AbstractInPort">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+
+	</tab>
+	
+	<tab name="Advanced" index="1">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+	</tab>
+	
+	<tab name="Data" index="3">
+		<property name="inputMessageDefinition.name" label="input_message" widget="TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		  <param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+		</property>
+		<property_list name="inputMessageDefinition.entries" label="input_message" constraint="1">
+		  <param name="displayLabel" value="false"/>
+		  <param name="visible_row_count" value="4"/>
+		  <param name="row_height" value="20"/>
+		  <property_list_column name="variableName" label="name" widget="TEXT_FIELD">
+			<param name="column_width" value="50"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="type" label="type" widget="CUSTOM">
+			<param name="column_width" value="50"/>
+			<param name="resizable" value="true"/>
+			<param name="className" value="org.openflexo.components.widget.DMTypeInspectorWidget"/>
+			<param name="format" value="simplifiedStringRepresentation"/>
+			<param name="project" value="project"/>
+		  </property_list_column>
+		  <property_list_column name="isMandatory" label="mandatory" widget="CHECKBOX">
+			<param name="column_width" value="25"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_action name="new" type="ADD" method="inputMessageDefinition.createNewMessageEntry"/>
+		  <property_list_action name="delete" type="DELETE" method="inputMessageDefinition.deleteMessageEntry" isAvailable="inputMessageDefinition.isMessageEntryDeletable"/>
+		  <param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+		</property_list>
+	</tab>
+</inspector>

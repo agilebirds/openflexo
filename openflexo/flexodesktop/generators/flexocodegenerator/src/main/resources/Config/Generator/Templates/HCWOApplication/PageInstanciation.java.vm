@@ -1,0 +1,445 @@
+#macro(pageParameters $_component)
+@single
+#foreach($bd in $_component.getBindingDefinitions())
+    #if( ${bd.getType().isEOEntity()})
+        , EOGlobalID ${bd.getVariableName()}GlobalId
+    #else
+        , ${bd.getType().getBaseEntity().getEntityClassName()} ${bd.getVariableName()}
+    #end
+#end
+@end@
+#end
+
+#macro(pageParametersCall $_component)
+@single
+    #foreach($bd in $_component.getBindingDefinitions())
+        #if($bd.getType().isEOEntity())
+            , ${bd.getVariableName()}GlobalId
+        #else
+            , $bd.getVariableName()
+        #end
+    #end
+@end@
+#end
+
+#macro(findNextPageTab $_actionNode $_operationComponentInstance)
+    #if($_actionNode.getTabComponent() && $_operationComponentInstance.getComponentDefinition().getWOComponent().getTabWidgetForTabComponent($_actionNode.getTabComponent()))
+        #set($_tabWidget = $_operationComponentInstance.getComponentDefinition().getWOComponent().getTabWidgetForTabComponent($_actionNode.getTabComponent()))
+    #else ##There is no tab specified on the action... let's take a look at next operation preferred tab
+        #if(${_operationComponentInstance.getOperationNode().getTabComponent()} && $_operationComponentInstance.getComponentDefinition().getWOComponent().getTabWidgetForTabComponent(${_operationComponentInstance.getOperationNode().getTabComponent()}))
+            #set($_tabWidget = $_operationComponentInstance.getComponentDefinition().getWOComponent().getTabWidgetForTabComponent(${_operationComponentInstance.getOperationNode().getTabComponent()}))
+        #else ##There is no tab specified on the action, nor on the operation
+            #set($_tabWidget = ${_operationComponentInstance.getComponentDefinition().getWOComponent().getAllTabWidget().firstElement()})
+        #end 
+    #end
+    ${_tabWidget.getWOComponent().getName()}.#upNameForWidget($_tabWidget)
+#end
+
+#macro(createPage $_button1 $_ci $_nextci $_action)
+    #if(${_button1.isInRepetition()} && ${_button1.getHTMLListDescriptor().getRepetitionOperator().getEntity()})
+        //TODO: do something with this entity (insert, save, revert,... it if required)
+        ${_button1.getHTMLListDescriptor().getRepetitionOperator().getEntity().getEntityClassName()} ${_button1.getHTMLListDescriptor().getRepetitionOperator().getEntity().getEntityClassName().toLowerCase()} = #if(!${_button1.getWOComponent().equals(${_ci.getComponentDefinition().getWOComponent()})})${_button1.getWOComponent().getName()}.#end objectFromItem${generator.capitalize(${_button1.getHTMLListDescriptor().getListName()})}(hiddenFieldValue, BusinessLogicFactory.sameAs(${_button1.getHTMLListDescriptor().getItemProperty().getType().getName()}BusinessLogic.class, pageBusinessLogic));
+        #set($entityFetched = true)
+    #end
+    
+    @singlereturn ${_nextci.getComponentDefinition().getName()}.createPageForOperation${generator.getJavaString($!{nextci.getOperationNode().getName()},$trueValue)}_${_nextci.getFlexoID()}(context()
+        #foreach($b in $_nextci.getBindings())
+            #set($type = ${b.getBindingDefinition().getType().getBaseEntity()})
+            #if($b.getBindingValue() && $b.getBindingValue().isStaticValue())
+                , ${b.getBindingValue().getCodeStringRepresentation()}
+            #elseif($_button1.isInRepetition() && $type == ${_button1.getHTMLListDescriptor().getRepetitionOperator().getEntity()})
+                , globalIDFromItem${generator.capitalize(${_button1.getHTMLListDescriptor().getListName()})}(hiddenFieldValue)
+            #elseif(${componentDefinition.getBindingDefinitionTyped($type).getType().isEOEntity()})
+                , #javaAccessor(${componentDefinition.getBindingDefinitionTyped($type).getProperty()}).__globalID()
+            #elseif(${componentDefinition.getBindingDefinitionTyped($type).getProperty()})
+                , ${componentDefinition.getBindingDefinitionTyped($type).getProperty().getGetterName()}()
+            #else
+                , null 
+            #end
+        #end
+        #if($_nextci.getComponentDefinition().getHasTabContainer())
+            , #findNextPageTab($_action $_nextci)
+        #end
+        , null);
+    @end
+#end
+
+#macro(getUrlParametersFromDA)
+    #foreach($bindingDef in ${generator.getComponentDefinition().getBindingDefinitions()})
+        #if(!${bindingDef.getType()})
+            <null>
+                        #elseif(${bindingDef.getType().isString()})
+                String ${bindingDef.getVariableName()} = getStringValueForKey(directAction.request(),"${bindingDef.getVariableName()}");
+                        #elseif(${bindingDef.getType().isInteger()})
+                Integer ${bindingDef.getVariableName()} = getIntegerValueForKey(directAction.request(),"${bindingDef.getVariableName()}");
+                        #elseif(${bindingDef.getType().isDouble()})
+                Double ${bindingDef.getVariableName()} = getDoubleValueForKey(directAction.request(),"${bindingDef.getVariableName()}");
+                        #elseif(${bindingDef.getType().isChar()})
+                Character ${bindingDef.getVariableName()} = getCharacterValueForKey(directAction.request(),"${bindingDef.getVariableName()}");
+                        #elseif(${bindingDef.getType().isBooleanPrimitive()})
+                boolean ${bindingDef.getVariableName()} = booleanValueForKey(directAction.request(),"${bindingDef.getVariableName()}");
+                        #elseif(${bindingDef.getType().isBoolean()})
+                Boolean ${bindingDef.getVariableName()} = getBooleanValueForKey(directAction.request(),"${bindingDef.getVariableName()}");
+        #elseif(${bindingDef.getType().isEOEntity()})
+            EOKeyGlobalID ${bindingDef.getVariableName()}GlobalId = null;
+            #foreach($pkAttribute in ${bindingDef.getType().getBaseEntity().getPrimaryKeyAttributes()})
+                #if(${pkAttribute.getPrototype().getType().toString().equals("java.lang.Integer")})
+                    Integer ${bindingDef.getVariableName()}${pkAttribute.getName()} = null;
+                    try {${bindingDef.getVariableName()}${pkAttribute.getName()} = Integer.valueOf((String)directAction.request().formValueForKey("${bindingDef.getVariableName()}.${pkAttribute.getName()}"));} catch(Exception e) {}
+                 #else
+                    Object ${bindingDef.getVariableName()}${pkAttribute.getName()} = directAction.request().formValueForKey("${bindingDef.getVariableName()}.${pkAttribute.getName()}");
+                #end
+                 
+                #if(!$pksNotNull) 
+                    #set($pksNotNull = "${bindingDef.getVariableName()}${pkAttribute.getName()} != null")
+                #else 
+                    #set($pksNotNull = "$pksNotNull && ${bindingDef.getVariableName()}${pkAttribute.getName()} != null")
+                #end
+                    
+                #if(!$pksParam) 
+                    #set($pksParam = "${bindingDef.getVariableName()}${pkAttribute.getName()}")
+                #else 
+                    #set($pksParam = "$pksParam, ${bindingDef.getVariableName()}${pkAttribute.getName()}")
+                #end
+            #end
+
+            if($pksNotNull) {
+                ${bindingDef.getVariableName()}GlobalId = EOKeyGlobalID.globalIDWithEntityName("${bindingDef.getType().getName()}",new Object[]{$pksParam});
+            }
+        #end
+    #end
+#end
+
+#macro(getUrlParameters)
+    #foreach($bindingDef in ${generator.getComponentDefinition().getBindingDefinitions()})
+        #if(${bindingDef.getType()})
+            #if(${bindingDef.getType().isEOEntity()})
+                if(${bindingDef.getVariableName()}GlobalId != null)
+                {
+                    if(!${bindingDef.getVariableName()}GlobalId.isTemporary())
+                    {
+                        #set($i = 0)
+                        #foreach($pkAttribute in ${bindingDef.getType().getBaseEntity().getPrimaryKeyAttributes()})
+                            dic.setObjectForKey(((EOKeyGlobalID)${bindingDef.getVariableName()}GlobalId).keyValues()[$i], "${bindingDef.getVariableName()}.${pkAttribute.getName()}");
+                            #set($i = $i + 1)
+                        #end
+                    }
+                }
+            #elseif(${bindingDef.getType().isBooleanPrimitive()})
+                dic.setObjectForKey(${bindingDef.getVariableName()}?"true":"false", "${bindingDef.getVariableName()}");
+            #elseif(${bindingDef.getType().getBaseEntity().isPrimitiveType()})
+                dic.setObjectForKey(${bindingDef.getVariableName()}, "${bindingDef.getVariableName()}");
+            #else
+                if(${bindingDef.getVariableName()} != null)
+                    dic.setObjectForKey(${bindingDef.getVariableName()}, "${bindingDef.getVariableName()}");
+            #end
+        #end
+    #end
+#end
+
+#set($trueValue = true)
+#set($componentInstances = ${generator.getNewVector()})
+#void(${componentInstances.addAll(${componentDefinition.getComponentInstances()})})
+#void($generator.sortVectorOfModelObject($componentInstances))
+#if($componentDefinition.getHasTabContainer())
+#set($tabContainerTitle = "#capNameForWidget($componentDefinition.getWOComponent().getAllTabContainers().firstElement())")
+#end
+    private BusinessLogicEntityDM pageBusinessLogic;
+    
+    /**
+    * Returns <code>this</code> page initialized with arguments.
+    * @param context the context of the request-response loop.
+#foreach($bd in ${componentDefinition.getBindingDefinitions()})
+    * @param $bd.getVariableName() #if(${bd.getType().isEOEntity()})the current ${bd.getType().getName()}.#end
+    
+#end   
+    * @param ciID the component instance ID of the selected operation. This parameter can take one of the following values:<br>
+    * <ul>
+    #foreach($ci in $componentInstances)
+    * <li> $ci.getFlexoID() (Operation ${ci.getOperationNode().getName()})</li>
+    #end* </ul>
+    * 
+    * @return a ${woName} new page, initialized.
+    */
+    private static WOActionResults createPage(WOContext context #pageParameters($componentDefinition), long ciID, BusinessLogicCoreDM bl){
+@onereturn
+        // TODO: check arguments of this method
+        ${woName} nextPage = (${woName})WOApplication.application().pageWithName(${woName}.class.getName(), context);
+
+        if(bl==null) { 
+            nextPage.pageBusinessLogic = BusinessLogicFactory.forPage(BusinessLogicEntityDM.class, nextPage); 
+        } else {
+            nextPage.pageBusinessLogic = BusinessLogicFactory.sameAs(BusinessLogicEntityDM.class, bl);
+        }
+
+           #foreach($bd in ${componentDefinition.getBindingDefinitions()})
+               #if($bd.getType().isEOEntity())
+                 if(${bd.getVariableName()}GlobalId!=null){
+                    nextPage.${bd.getProperty().getFieldName()} = BusinessLogicFactory.sameAs(${bd.getTypeName()}BusinessLogic.class, nextPage.pageBusinessLogic).objectWithID(${bd.getVariableName()}GlobalId);
+                }
+               #else
+                nextPage.${bd.getProperty().getFieldName()} = $bd.getVariableName();
+               #end
+           #end
+        
+        if(!${project.getPrefix()}Util.hasNeededAccessRightForScreenClassName((NSKeyValueCoding)((Session)context.session()).currentUser(), "${woName}", ciID))
+            return WDLApplication.getExceptionHandlingService().unsuccessfulAction("Invalid access right", context);
+        //return WDLApplication.getExceptionHandlingService().unsuccessfulAction("Invalid parameters", context);
+
+        nextPage._componentInstanceID = ciID;
+        return nextPage;
+@end    }
+
+    /**
+    * This method is usually called from within a WDLDirectAction class with argument <code>this</code>.
+    * @param directAction a WDLDirectAction
+    * @return a ${woName} new page, initialized with values from a direct action.
+    */
+    public static WOActionResults createPageForDirectAction(WDLDirectAction directAction){
+        // 1.get values from the request
+        String componentInstanceID = (String)directAction.request().formValueForKey("ci");
+        if(componentInstanceID==null)
+			return directAction.pageNotFound("Missing parameter");
+        long ciID = 0;
+        try{
+            ciID = Long.valueOf(componentInstanceID).longValue();
+        }catch(NumberFormatException e){
+            return directAction.pageNotFound("Invalid parameter : "+componentInstanceID+" is an invalid value for direct action :"+directAction.request().uri().toString());
+        }
+        #if(${tabContainerTitle})
+        String selectedTab = (String)directAction.request().formValueForKey("tab");
+        #end
+        
+        #getUrlParametersFromDA()
+        // 2. Return the corresponding page
+        // If parameters and access rights are OK, return the proper page.
+        // If parameters are missing, return a pageNotFound (directAction.pageNotFound(String message)).
+        // If the user cannot access this page, return an accessDenied page (directAction.accessDenied(String message)).
+        #foreach($ci in $componentInstances)
+        #if($foreach.index>0)else#end if(ciID==#componentInstance($ci))
+            #if(${tabContainerTitle})
+            return createPageForOperation${generator.getJavaString($!{ci.getOperationNode().getName()},$trueValue)}_$ci.getFlexoID()(directAction.context() #pageParametersCall($componentDefinition),selectedTab, null);
+            #else
+            return createPageForOperation${generator.getJavaString($!{ci.getOperationNode().getName()},$trueValue)}_$ci.getFlexoID()(directAction.context() #pageParametersCall($componentDefinition), null);            
+            #end
+        #end
+        return directAction.pageNotFound("Invalid parameter : "+ciID+" is an invalid value for direct action :"+directAction.request().uri().toString()); 
+    }
+    
+#foreach($ci in $componentInstances)
+    /**
+     * Use this constructor to use this page in the context of the operation : 
+     * ${ci.getOperationNode().getName()}: #if(!${ci.getOperationNode().getDontEscapeLatex()})${generator.getJavaDocString(${ci.getOperationNode().getDescription()})}#end
+     *
+     * @param context the context of the request-response loop.
+#foreach($bd in ${ci.getComponentDefinition().getBindingDefinitions()})
+     * @param $bd.getVariableName() #if(${bd.getType().isEOEntity()})the current ${bd.getType().getName()}.#end
+     
+#end
+     #if(${tabContainerTitle})
+     * @param selectedTab the key of the selected tab
+     #end
+     * @return a new instance of the page ${woName} correctly initialized.
+     **/
+    #if(${tabContainerTitle})
+    public static WOActionResults createPageForOperation${generator.getJavaString($!{ci.getOperationNode().getName()},$trueValue)}_$ci.getFlexoID()(WOContext context #pageParameters($componentDefinition), String selectedTab, BusinessLogicCoreDM bl){
+        WOActionResults nextPage = createPage(context #pageParametersCall($componentDefinition), #componentInstance($ci), bl);
+        if(nextPage instanceof ${woName})                             
+            ((${woName})nextPage).set${tabContainerTitle}SelectedTab(selectedTab);
+    #else
+    public static WOActionResults createPageForOperation${generator.getJavaString($!{ci.getOperationNode().getName()},$trueValue)}_$ci.getFlexoID()(WOContext context #pageParameters($componentDefinition), BusinessLogicCoreDM bl){
+        WOActionResults nextPage = createPage(context #pageParametersCall($componentDefinition), #componentInstance($ci), bl);
+    #end
+        return nextPage;
+    }
+#end
+    /**
+     * Use it to retrieve the direct action url to invoke to instanciate this page in context the operation : 
+     *
+     * @param context the context of the request-response loop.
+#foreach($bd in ${ci.getComponentDefinition().getBindingDefinitions()})
+     * @param $bd.getVariableName() #if(${bd.getType().isEOEntity()})the current ${bd.getType().getName()}.#else #end $n
+#end
+     #if(${tabContainerTitle})
+     * @param selectedTab the key of the selected tab
+     #end
+     * @param ciID the component instance ID of the selected operation
+     * @return a new instance of the page ${woName} correctly initialized.
+     **/
+    #if(${tabContainerTitle})
+    public static String getUrlForOperation(WOContext context #pageParameters($componentDefinition), String selectedTab, long ciID){
+    #else
+    public static String getUrlForOperation(WOContext context #pageParameters($componentDefinition), long ciID){
+    #end
+        #foreach( $ci in $componentInstances )
+        if(ciID==$ci.getFlexoID()) // @single Equivalent to operation ${ci.getOperationNode().getName()}@end
+            #if( ${tabContainerTitle} )
+            return getUrlForOperation${generator.getJavaString(${ci.getOperationNode().getName()},$trueValue)}_$ci.getFlexoID()(context #pageParametersCall($componentDefinition), selectedTab);
+            #else
+            return getUrlForOperation${generator.getJavaString(${ci.getOperationNode().getName()},$trueValue)}_$ci.getFlexoID()(context #pageParametersCall($componentDefinition));
+            #end
+        #end
+        return null;
+    }
+
+
+#foreach($ci in $componentInstances)
+    /**
+    * Returns the url that opens this page in the context of operation :
+    * ${ci.getOperationNode().getName()}
+    * @return the url that opens this page.
+    */
+    #if(${tabContainerTitle})
+    public static String getUrlForOperation${generator.getJavaString(${ci.getOperationNode().getName()},$trueValue)}_$ci.getFlexoID()(WOContext context #pageParameters($componentDefinition), String selectedTab){
+    #else
+    public static String getUrlForOperation${generator.getJavaString(${ci.getOperationNode().getName()},$trueValue)}_$ci.getFlexoID()(WOContext context #pageParameters($componentDefinition)){
+    #end
+        NSMutableDictionary dic = new NSMutableDictionary();
+        dic.setObjectForKey($ci.getFlexoID(), "ci"); // @single Equivalent to operation ${ci.getOperationNode().getName()}@end
+        #if(${tabContainerTitle})
+        if(selectedTab!=null) dic.setObjectForKey(selectedTab,"tab");
+        #end
+        
+        #getUrlParameters()
+        return context.directActionURLForActionNamed("${project.getPrefix()}DA/open${woName}", dic);
+    }
+#end
+
+#set($hash = ${generator.getNewTreeMap()})
+
+#foreach($ci in $componentInstances)
+    /**
+     * This method is called by the general formAction method iff this page is in the context of the operation : 
+     * ${ci.getOperationNode().getName()}
+     #if(${ci.getOperationNode().getDescription()} && !${ci.getOperationNode().getDontEscapeLatex()})
+     * ${generator.getJavaDocString(${ci.getOperationNode().getDescription()})}
+     #end
+     * @return the response to the current request 
+     * @see $pageName#formAction()
+     */
+    private WOActionResults formAction$ci.getFlexoID()(){
+        #set ($clauseDelimitor = '')
+           #foreach($action in ${ci.getOperationNode().getAllActionNodes()} )
+            #set ($button = $action.getAssociatedButtonWidget())
+            #if($button && $button.getSubmitForm()) 
+                #if (!$button.isInRepetition()) 
+                    $clauseDelimitor
+                    if(hiddenFieldValue.equals(#if(!${button.getWOComponent().equals(${ci.getComponentDefinition().getWOComponent()})})${button.getWOComponent().getName()}.#end #upNameForWidget($button)))
+                    {
+                #else 
+                    $clauseDelimitor
+                    if(hiddenFieldValue.startsWith(#if(!${button.getWOComponent().equals(${ci.getComponentDefinition().getWOComponent()})})${button.getWOComponent().getName()}.#end #upNameForWidget($button)))
+                    {
+                #end
+                        #set($actionID = "${action.getName()}In${action.getOperationNode().getName()}_${action.getFlexoID()}")
+                        #set($actionID = "$generator.capitalize($generator.getJavaString($actionID))")
+                        #validationCode($button)
+                        #customMethodCall($button)
+                        return perform$actionID();
+                    }
+                #set($clauseDelimitor = 'else ')
+            #end ## End of button
+        #end
+        return null;
+    }
+    
+    #foreach($action in ${ci.getOperationNode().getAllActionNodes()})
+        #set($button1 = $action.getAssociatedButtonWidget())
+        #if($button1)
+            #if($button1.getSubmitForm())
+                /**
+                 * $button1.getCalculatedLabel() has been pressed (this is linked to
+                 * ${action.getProcess().getName().trim()}-->${action.getAbstractActivityNode().getName()}-->${action.getOperationNode().getName()}-->${action.getName().trim()})
+                #if(${action.getDescription()} && !${action.getDontEscapeLatex()})
+                 * ${generator.getJavaDocString(${action.getDescription()})}
+                #end
+                 * @return the response to the current request
+                 **/
+                #set($actionID = "${action.getName()}In${action.getOperationNode().getName()}_${action.getFlexoID()}")
+                #set($actionID = "$generator.capitalize($generator.getJavaString($actionID))")
+                private WOActionResults perform$actionID() {
+                    //TODO: insert here the business logic linked to this action node
+                    #set($workflowPathList = $action.getNextOperationsForAction())
+                    #foreach($workflowPath in $operationStatusMap.keySet())
+						#set($nextop = ${workflowPath.getOperationNode()})
+						#if($nextop)
+                            #set($nextci = $nextop.getComponentInstance())
+                            #set($entityFetched = false)
+                            #set($newStatus = ${operationStatusMap.get($nextop)})
+                            #if (${foreach.index}>0)/* #end ## If there are several next operations, then we write one down and comment all the other ones.
+                            #if($newStatus && ${action.getOperationNode().getBusinessDataBinding().getVariableName()})
+                                #set($importIBusiness = 'be.denali.flexo.commons.hcwo.IBusinessData')
+                                if(hasBinding("${action.getOperationNode().getBusinessDataBinding().getVariableName()}"))
+                                    (($importIBusiness)valueForBinding("${action.getOperationNode().getBusinessDataBinding().getVariableName()}")).setStatus("$newStatus.getName()");
+                            #end
+                            #saveBLChanges($button1)
+                            #createPage($button1 $ci $nextci $action)
+                            #if (${foreach.index}>0)*/ #end
+                        
+                            #set ($entityFetched=false)
+							#set($hasAtLeastOneOp = true)
+						#end
+					#end ## End of foreach nextoperation
+					#if(!$hasAtLeastOneOp)
+                        return null;
+					#end
+                }
+            #else
+                #if(!${hash.get($button1)})
+                    $!{hash.put(${button1},${generator.getNewVector()})}
+                #end
+                #if(${hash.get($button1).add($action)}) #end
+            #end ## end of if submitForm
+        #end ## end of if button
+    #end ## end of foreach actionnodes
+#end ## foreach component instances
+
+#*
+#foreach($button1 in $hash.keySet())        
+        /**
+        * Return the URL where the button $button1.getCalculatedLabel() goes.
+        * @return the URL where the button $button1.getCalculatedLabel() goes.
+        */
+        public String getUrlFor#capNameForWidget($button1)() {
+        #set($vector = $hash.get($button1))
+        #foreach($action in $vector)
+        if (_componentInstanceID==${action.getOperationNode().getComponentInstance().getFlexoID()}){ //${action.getOperationNode().getName()}
+            #if( $action.getNextOperationsForAction().size()>0 )
+                  #foreach($nextop in ${action.getNextOperationsForAction().keySet()})
+                #set($nextci = ${nextop.getComponentInstance()})
+            return @single ${nextci.getComponentDefinition().getName()}.getUrlForOperation${generator.getJavaString($!{nextci.getOperationNode().getName()},$trueValue)}_${nextci.getFlexoID()}(context()
+                #foreach($b in $nextci.getBindings())
+                    #set($type = ${b.getBindingDefinition().getType().getBaseEntity()})
+                    #if($b.getBindingValue() && ${b.getBindingValue().isStaticValue()})
+                      , ${b.getBindingValue().getCodeStringRepresentation()}
+                    #elseif($button1.isInRepetition() && $type == $button1.getHTMLListDescriptor().getRepetitionOperator().getEntity())
+                      , globalIDForItemRowOf${button1.getHTMLListDescriptor().getListName()}()
+                    #elseif(${componentDefinition.getBindingDefinitionTyped($type).getVariableName()})
+                      #if($type.isDMEOEntity())
+                      , #javaAccessor(${componentDefinition.getBindingDefinitionTyped($type).getProperty()}).__globalID()
+                      #else
+                      , get${generator.capitalize(${componentDefinition.getBindingDefinitionTyped($type).getVariableName()})}()
+                      #end ## end of isDMEOEntity()
+                    #else
+                    , null 
+                    #end
+                #end ## foreach bindings
+                #if($nextci.getComponentDefinition().getHasTabContainer())
+                  #if($action.getTabComponent() && $nextci.getComponentDefinition().getWOComponent().getTabWidgetForTabComponent($action.getTabComponent()))
+                    ,"$nextci.getComponentDefinition().getWOComponent().getTabWidgetForTabComponent($action.getTabComponent()).getTabKeyForGenerator()"
+                  #else
+                    , null 
+                  #end
+                #end);@end
+                #set ($entityFetched=false)
+                #end ## foreach nextoperations
+              #else
+                  return "#";
+              #end ## end of if action.getNextOperationsForAction().size()>0
+              }
+      #end ## foreach action in vector
+            return "#";
+        }
+#end
+*#
+    

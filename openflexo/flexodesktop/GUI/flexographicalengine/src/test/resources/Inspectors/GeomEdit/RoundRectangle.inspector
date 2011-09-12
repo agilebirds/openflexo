@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.fge.geomedit.FIBInspector" layout="border" dataClassName="org.openflexo.fge.geomedit.gr.RoundRectangleGraphicalRepresentation" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="0" title="Data" layout="twocols" font="SansSerif,0,11" name="DataTab">
+      <Label label="x" localize="true" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" data="data.drawable.x" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" localize="true" />
+      <Label label="y" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
+      <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" data="data.drawable.y" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" localize="true" />
+      <Label label="width" localize="true" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
+      <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" data="data.drawable.width" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" localize="true" />
+      <Label label="height" localize="true" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
+      <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" data="data.drawable.height" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" localize="true" />
+      <Label label="arc_width" localize="true" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
+      <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" data="data.drawable.arcWidth" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" localize="true" />
+      <Label label="arc_height" localize="true" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" />
+      <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" data="data.drawable.arcHeight" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" localize="true" />
+      <Label label="filled" localize="true" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" />
+      <CheckBox selected="false" localize="true" data="data.drawable.isFilled" constraints="twocols(location=right;index=13;expandHorizontally=false;expandVertically=false)" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="x" lang="English">Position x</Localized>
+    <Localized key="x" lang="French">Abscisse</Localized>
+    <Localized key="x" lang="Dutch">Position x</Localized>
+    <Localized key="y" lang="English">Position y</Localized>
+    <Localized key="y" lang="French">Ordonnée</Localized>
+    <Localized key="y" lang="Dutch">Position y</Localized>
+    <Localized key="width" lang="English">Width</Localized>
+    <Localized key="width" lang="French">Largeur</Localized>
+    <Localized key="width" lang="Dutch">Width</Localized>
+    <Localized key="height" lang="English">Height</Localized>
+    <Localized key="height" lang="French">Hauteur</Localized>
+    <Localized key="height" lang="Dutch">Height</Localized>
+    <Localized key="arc_width" lang="English">Arc width</Localized>
+    <Localized key="arc_width" lang="French">Largeur de l'arc</Localized>
+    <Localized key="arc_width" lang="Dutch">Arc width</Localized>
+    <Localized key="arc_height" lang="English">Arc height</Localized>
+    <Localized key="arc_height" lang="French">Hauteur de l'arc</Localized>
+    <Localized key="arc_height" lang="Dutch">Arc height</Localized>
+    <Localized key="filled" lang="English">Filled</Localized>
+    <Localized key="filled" lang="French">Plein</Localized>
+    <Localized key="filled" lang="Dutch">Filled</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Rectangle" />
+</Panel>
+

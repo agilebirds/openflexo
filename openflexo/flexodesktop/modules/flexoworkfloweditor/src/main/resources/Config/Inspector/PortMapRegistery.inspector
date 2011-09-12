@@ -1,0 +1,21 @@
+<inspector title = "PortMap Registery"  inheritsfrom ="WKFRepresentable.inspector" inspectedClassName="org.openflexo.foundation.wkf.ws.PortMapRegistery">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		
+		<property name="isHidden" label="hide_port_map_registery" help="Hides this portmap" widget="CHECKBOX" constraint="0"/>
+		<property_list name="portMaps" label="port_maps" constraint="1">
+		  <param name="visible_row_count" value="10"/>
+		  <param name="row_height" value="20"/>
+		  <property_list_column name="name" label="name" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="100"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="isHidden" label="hidden" widget="CHECKBOX">
+			<param name="column_width" value="25"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		</property_list>
+	</tab>
+</inspector>

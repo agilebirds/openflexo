@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<technologyModule
+	name="BpsLib"
+	version="1.0"
+	layer="TRANSVERSAL">
+	<!-- * Requiring a module means: I cannot work without this module, add it automatically when I'm added. Technically, -->
+	<!-- * the required module (and all its required modules) implementation and macro library will be added to the       -->
+	<!-- * velocity context of all generation performed by this module.                                                   -->
+	<!-- * I.E. <requiredModule name="Java" />                                                                            -->
+	<requiredModule name="Maven" />
+	<requiredModule name="Spring" />
+	<requiredModule name="Hibernate" />
+	
+	<!-- * To be compatible with another module means: I'm aware of this module existence, it needs some special behavior -->
+    <!-- * when my own module is used and I will handle it correctly. It can also be used to override the default         -->
+    <!-- * incompatibility with another module of the same layer.                                                         -->
+   	<!-- * Technically, the compatible module implementation and macro library will be added to the velocity context of   --> 
+    <!-- * all generation performed by this module.                                                                       -->
+    <!-- * I.E. <compatibleModule name="Spring" />                                                                        -->
+	
+	<!-- * To be incompatible with another module means: If you use this module and the incompatible one, it will not -->
+	<!-- * work correctly. By default, a module is incompatible with all other module of the same layer EXCEPT if the -->
+	<!-- * layer is TRANSVERSAL.                                                                                      -->
+	<!-- * I.E. <incompatibleModule name="C#" />                                                                      -->
+	<description>
+		This module specify the use of the BluePimento Library
+	</description>
+</technologyModule>	

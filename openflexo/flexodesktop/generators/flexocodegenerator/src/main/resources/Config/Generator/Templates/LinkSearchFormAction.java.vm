@@ -1,0 +1,24 @@
+#if($widget.isInPopup())
+        else if(hiddenFieldValue.equals(#upName() +(uniqueIdentifier()!=null?uniqueIdentifier():""))){
+#else    
+        else if(hiddenFieldValue.equals(#upName())){
+#end
+#if(${widget.getIsFilterForRepetition().getHTMLListDescriptor().getListName()})
+	${widget.getIsFilterForRepetition().getHTMLListDescriptor().getListName()}DisplayGroup=null;
+#else
+	##Use the first repetition in page
+	#set($repetitions = ${widget.getWOComponent().getAllRepetitionOperator()})
+	#if(${repetitions.size()} > 0)
+		${repetitions.get(0).getHTMLListDescriptor().getListName()}DisplayGroup=null;
+	#end
+#end
+            #if($widget.isInPopup())
+                if(includePopupInPage())
+                {
+                    setValueForBinding(null, "hiddenFieldValue");
+                       setValueForBinding(true, "displayPopupOnLoad");
+                }
+            #end
+            hiddenFieldValue=null;
+            return null;
+        }

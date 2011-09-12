@@ -1,0 +1,78 @@
+#**
+* This macro just makes a list of the name of the attributes separated by a comma.
+*#
+#macro(att_list $attributes)
+#foreach($a in $attributes)${a.getName()}#if($foreach.index>0),#end #end ## end foreach attributes
+#end
+#set($entity = $object)
+#if(${entity.getFlexoID()})
+	#mkbookMark(${entity.getFlexoID()} ${generator.getReference($entity)})
+#end
+
+#description($entity)
+
+<w:p w:rsidR="00A75F67" w:rsidRDefault="00A75F67">
+	<w:pPr><w:keepNext/></w:pPr>
+	<w:r>
+		<w:t xml:space="preserve">This entity contains the following attributes:</w:t>
+	</w:r>
+</w:p>
+#if(!$ENTITY_TABLE_HEADER)
+   #set($ENTITY_TABLE_HEADER = $generator.getNewVector())
+   #void($ENTITY_TABLE_HEADER.add("Name"))
+   #void($ENTITY_TABLE_HEADER.add("Column"))
+   #void($ENTITY_TABLE_HEADER.add("Type"))
+   #void($ENTITY_TABLE_HEADER.add("Width"))
+   #void($ENTITY_TABLE_HEADER.add("Description"))
+#end
+
+#set($ATTRIBUTE_TABLE_CONTENT = $generator.getNewVector())
+
+#foreach($attribute in $entity.getOrderedAttributes())
+#if(!$attribute.getDontGenerate())
+	#set($ATTRIBUTE_ROW = $generator.getNewVector())
+	#void($ATTRIBUTE_ROW.add("<w:p><w:pPr><w:keepNext/></w:pPr>#renderName($attribute)</w:p>"))
+	#void($ATTRIBUTE_ROW.add("<w:p><w:pPr><w:keepNext/></w:pPr><w:r><w:t>$attribute.getColumnName()</w:t></w:r></w:p>"))
+	#void($ATTRIBUTE_ROW.add("<w:p><w:pPr><w:keepNext/></w:pPr><w:r><w:t>$attribute.getJavaClassName()</w:t></w:r></w:p>"))
+	#void($ATTRIBUTE_ROW.add("<w:p><w:pPr><w:keepNext/></w:pPr><w:r><w:t>#if($attribute.getWidth()>0)$attribute.getWidth()#else - #end</w:t></w:r></w:p>"))
+	#void($ATTRIBUTE_ROW.add("#description($attribute)"))
+    #void($ATTRIBUTE_TABLE_CONTENT.add($ATTRIBUTE_ROW))
+#end ## end of dont generate
+#end
+
+#renderDocxTable($ENTITY_TABLE_HEADER $ATTRIBUTE_TABLE_CONTENT)
+<w:p/>
+#if(${entity.getOrderedRelationships().size()}>0)
+<w:p w:rsidR="00A75F67" w:rsidRDefault="00A75F67">
+	<w:pPr><w:keepNext/></w:pPr>
+	<w:r>
+		<w:t xml:space="preserve">This entity contains the following relationships:</w:t>
+	</w:r>
+</w:p>
+
+#if(!$ENTITY_REL_TABLE_HEADER)
+   #set($ENTITY_REL_TABLE_HEADER = $generator.getNewVector())
+   #void($ENTITY_REL_TABLE_HEADER.add("Name"))
+   #void($ENTITY_REL_TABLE_HEADER.add("Destination"))
+   #void($ENTITY_REL_TABLE_HEADER.add("Join-left"))
+   #void($ENTITY_REL_TABLE_HEADER.add("Join-right"))
+   #void($ENTITY_REL_TABLE_HEADER.add("Cardinality"))
+#end
+
+#set($REL_TABLE_CONTENT = $generator.getNewVector())
+
+#foreach($rel in $entity.getOrderedRelationships())
+#if(!$rel.getDontGenerate())
+	#set($ATTRIBUTE_ROW = $generator.getNewVector())
+	#void($ATTRIBUTE_ROW.add("<w:p><w:pPr><w:keepNext/></w:pPr>#renderName($rel)</w:p>"))
+	#void($ATTRIBUTE_ROW.add("<w:p><w:hyperlink w:anchor=${quote}${generator.getReference($rel.getDestinationEntity())}${quote} w:history=${quote}1${quote}><w:r><w:rPr><w:rStyle w:val=${quote}Hyperlink${quote}/></w:rPr><w:t xml:space=${quote}preserve${quote}>#escape(${rel.getDestinationEntity().getName()})</w:t></w:r></w:hyperlink></w:p>"))
+	#void($ATTRIBUTE_ROW.add("<w:p><w:pPr><w:keepNext/></w:pPr><w:r><w:t>#att_list(${rel.getEORelationship().getSourceAttributes()})</w:t></w:r></w:p>"))
+	#void($ATTRIBUTE_ROW.add("<w:p><w:pPr><w:keepNext/></w:pPr><w:r><w:t>#att_list(${rel.getEORelationship().getDestinationAttributes()})</w:t></w:r></w:p>"))
+	#void($ATTRIBUTE_ROW.add("<w:p><w:pPr><w:keepNext/></w:pPr><w:r><w:t>#if(${rel.getEORelationship().getIsToMany()} || ${rel.getEORelationship().getIsFlattened()})To many#else To one#end</w:t></w:r></w:p>"))
+    #void($REL_TABLE_CONTENT.add($ATTRIBUTE_ROW))
+#end ## end of dont generate
+#end
+
+#renderDocxTable($ENTITY_REL_TABLE_HEADER $REL_TABLE_CONTENT)
+<w:p/>
+#end

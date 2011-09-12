@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FaultThrower id="SYL_9587" nodeType="NORMAL" isWaiting="false" isSelfActivated="false" posiX="13" posiY="59" width="59" height="69" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="9587" dontEscapeLatex="false" dontGenerate="false" nodeName="THROW" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0">
+  <NodeProperties />
+</FaultThrower>
+

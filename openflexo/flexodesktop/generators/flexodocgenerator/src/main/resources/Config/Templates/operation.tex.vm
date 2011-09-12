@@ -1,0 +1,100 @@
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (OperationDocGenerator)
+* - operation: the operation for which we are generating the doc (OperationNode)
+* - repository: the current repository for which we generate the doc (DGRepository)
+*#
+
+#set($operation = $object)
+
+#**
+* This macro just makes a list of strings separated by a comma.
+*#
+#macro(list $vector)
+#foreach($v in $vector)${generator.splitOnUpperCase($v)}#if($foreach.index>0),#end #end ## end foreach attributes
+#end
+\hypertarget{$generator.getReference($operation)}{}
+\paragraph{#if(${operation.getAbstractActivityNode().isSubProcessNode()})Access-screen#else Operation#end: \emph{#escape(${operation.getName()})}}\label{${generator.getReference($operation)}}
+#description(${operation})
+\par \smallskip \textbf{User role:} #escape(${operation.getAbstractActivityNode().getRole().getName()})
+
+#if(${operation.hasWOComponent()})\par This operation uses the screen ${operation.getWOComponentName()}.
+#if(${operation.getTabOperationComponentInstance()})\par The default selected tab for this operation is the tab named ${operation.getTabComponentName()}#end%
+#if(${operation.getNewStatus()})\par When entering this operation, the status of the current process is set to #escape(${operation.getNewStatus().getName()}).#end
+\nopagebreak {
+\begin{center}
+#set($image = ${generator.screenshot($operation,$projectGenerator)})
+#set($ratio = ${generator.FULL_PAGE_RATIO()})
+#if($image.getIconWidth()<515 && $image.getIconHeight()<735)
+\includegraphics[scale=1.0]{${generator.screenshotName($operation,$projectGenerator)}}
+#else
+  #if($generator.getImageRatio($image)<$ratio)
+\includegraphics[width=\textwidth]{${generator.screenshotName($operation,$projectGenerator)}}
+  #else
+\includegraphics[height=\textheight]{${generator.screenshotName($operation,$projectGenerator)}}
+  #end
+#end
+\end{center}
+}%
+#description(${operation.getComponentDefinition()})
+Here are the actions of the operation:
+\setlength{\parskip}{0pt}
+#set($widgetsToIgnore = $generator.getNewVector())
+#set($actionCount = 0);
+#foreach($action in ${operation.getSortedActionNodes()})
+#if($action.getAssociatedButtonWidget() && !$action.getDontGenerate())
+#set($actionCount = $actionCount + 1)
+#end ## end of if associatedButtonWidget
+#end ## end of foreach actionNodes
+#if($actionCount>0)
+\doitemsep \begin{itemize}
+#foreach($action in ${operation.getSortedActionNodes()})
+#if($action.getAssociatedButtonWidget() && !$action.getDontGenerate())
+${widgetsToIgnore.addElement($action.getAssociatedButtonWidget())}
+\item\textbf{$generator.getImageString(${action.getAssociatedButtonWidget()})#if(${action.getAssociatedButtonWidget().getFuncName()}): #format(${action.getAssociatedButtonWidget()} ${action.getAssociatedButtonWidget().getFuncName()})#end}\nopagebreak
+\begin{itemize}
+\item Label: #format($action.getAssociatedButtonWidget() ${action.getAssociatedButtonWidget().getCalculatedLabel()})
+\item Short desc.: #description($action.getAssociatedButtonWidget())
+#if(${action.getAssociatedButtonWidget().getBehavior()})\item Behavior: #format(${action.getAssociatedButtonWidget()} ${action.getAssociatedButtonWidget().getBehavior()})#end
+#if(${action.getAssociatedButtonWidget().getTooltip()})\item Tooltip: #prepare(${action.getAssociatedButtonWidget().getTooltip()})#end
+#if(${action.getAssociatedButtonWidget().getConfirmMessage()})\item Confirmation message: #prepare(${action.getAssociatedButtonWidget().getConfirmMessage()})#end
+#if(${action.getAssociatedButtonWidget().PopupComponentDefinition()})\item This opens the following popup: \hyperlink{$generator.getReference(${action.getAssociatedButtonWidget().getPopupComponentDefinition()})}{${action.getAssociatedButtonWidget().getPopupComponentDefinition().getName()}~p.\pageref*{$generator.getReference(${action.getAssociatedButtonWidget().getPopupComponentDefinition()})}}#end
+#if(${action.getNewStatus()})\item \textbf{Status is set to ${action.getNewStatus().getName()}}#end
+\end{itemize}
+#end ## end of if associatedButtonWidget
+#end ## end of foreach actionNodes
+\end{itemize} \myitemsep
+#end ## end of if $actionCount>0
+
+#metricsForNode($operation) ## Only if there are metrics defined.
+
+#set($blockSectionLevel = "subparagraph")
+#foreach($block in ${operation.getWOComponent().getRealTopComponents()})
+#set($blockNumber = $block.getIndex()+1)
+#if($block.isTabContainer())
+#set($tabs = $generator.getNewVector())
+#foreach($tabWidget in ${block.getAllTabs().iterator()})
+#if($tabWidget.isShownInOperation($operation)) $tabs.addElement($tabWidget) #end
+#end ## end of foreach tabwidgets
+#if($tabs.size()>0)
+\subparagraph {The tab group #if($block.getLabel())#escape($block.getLabel())#else(Block \#$blockNumber)#end}
+The following tabs are shown:
+\begin{itemize}
+#foreach($tabWidget in $tabs)
+\item #escape($tabWidget.getTitle()): #description($tabWidget)\\
+More details available at \hyperlink{$generator.getReference(${tabWidget.getTabComponentDefinition()})}{${tabWidget.getTabComponentDefinition().getName()}~p.\pageref*{$generator.getReference(${tabWidget.getTabComponentDefinition()})}}
+#end ## end of foreach tabs
+\end{itemize}
+#else
+The tab group #if($block.getLabel())#escape($block.getLabel())#else(Block \#$blockNumber)#end is not shown in this operation.
+#end ## end of tabs size > 0 
+#foreach($tabWidget in ${block.getAllTabs().iterator()})
+#if($tabWidget.isShownInOperation($operation)) $tabs.addElement($tabWidget) #end
+#end ## end of foreach tabwidgets
+#else ## if block isTabContainer
+#parse(${generator.getBlockTemplatePath()})
+#end ## end of if isTabContainer
+#end ## end foreach block
+#end #* end of hasWOComponent *#

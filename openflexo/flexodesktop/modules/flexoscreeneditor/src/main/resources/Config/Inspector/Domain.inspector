@@ -1,0 +1,9 @@
+<inspector title = "Domain" inheritsfrom="DKVObject.inspector">
+	<tab name="Basic" index="0">
+		<property name="name" label="name" widget="TEXT_FIELD" constraint="1"/>
+	</tab>
+	
+	<tab name="Advanced" index="1">
+		
+	</tab>
+</inspector>

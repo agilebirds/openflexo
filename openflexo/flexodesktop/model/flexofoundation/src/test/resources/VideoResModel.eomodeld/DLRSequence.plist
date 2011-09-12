@@ -1,0 +1,66 @@
+{
+    attributes = (
+        {columnName = duration; name = duration; prototypeName = str20; }, 
+        {
+            allowsNull = N; 
+            columnName = sequenceID; 
+            name = sequenceID; 
+            prototypeName = int; 
+        }, 
+        {columnName = snapshotID; name = snapshotID; prototypeName = int; }, 
+        {columnName = summary; name = summary; prototypeName = str2000; }, 
+        {columnName = timeCodeIn; name = timeCodeIn; prototypeName = str100; }, 
+        {columnName = timeCodeOut; name = timeCodeOut; prototypeName = str100; }, 
+        {columnName = title; name = title; prototypeName = str100; }, 
+        {allowsNull = N; columnName = videoID; name = videoID; prototypeName = int; }
+    ); 
+    className = DLRSequence; 
+    classProperties = (
+        sequenceID, 
+        timeCodeIn, 
+        timeCodeOut, 
+        summary, 
+        duration, 
+        snapshotID, 
+        videoID, 
+        video, 
+        title, 
+        snapshotFile
+    ); 
+    externalName = DLRSequence; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (
+            sequenceID, 
+            timeCodeIn, 
+            timeCodeOut, 
+            summary, 
+            duration, 
+            snapshotID, 
+            videoID, 
+            video, 
+            title, 
+            snapshotFile
+        ); 
+    }; 
+    name = DLRSequence; 
+    primaryKeyAttributes = (sequenceID); 
+    relationships = (
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = DLRFile; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = fileID; sourceAttribute = snapshotID; }); 
+            name = snapshotFile; 
+        }, 
+        {
+            destination = DLRVideo; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = videoID; sourceAttribute = videoID; }); 
+            name = video; 
+        }
+    ); 
+}

@@ -1,0 +1,5 @@
+<TextArea text="TextArea" rows="3" columns="8">
+	<Parameter name="x" value="165"/>
+	<Parameter name="y" value="78"/>
+	<Parameter name="isPaletteElement" value="true"/>
+</TextArea>

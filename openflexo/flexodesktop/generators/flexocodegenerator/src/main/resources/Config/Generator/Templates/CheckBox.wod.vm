@@ -1,0 +1,16 @@
+#name(): WOCheckBox {
+    checked = #name();
+    name = #name()Name;
+    #tooltipAsTitle()
+#if($widget.getDisabled())
+    disabled = true;
+#end
+#if($widget.getSubmitForm())
+    #if($widget.isInPopup())
+        onClick = onClick#capName();
+    #else
+        onClick = "this.form.submit();";
+    #end
+#end
+    #additionalBindings()
+}

@@ -1,0 +1,65 @@
+<Panel className="org.openflexo.fib.editor.controller.FIBInspector" 
+	   name="Inspector" 
+	   layout="border" 
+	   dataClassName="org.openflexo.fib.model.FIBPanel">
+	<Parameter name="title" value="Panel"/>
+
+		<TabPanel name="Tab" constraints="border(location=center)">
+
+			<Tab name="BasicTab" title="Basic" index="0" layout="twocols" font="SansSerif,0,11" >
+			
+				<Panel name="LayoutPanel" border="titled" borderTitle="Layout" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)">
+				    <Label label="layout" constraints="twocols(location=left)"/>
+				    <DropDown data="data.layout" constraints="twocols(location=right)" showReset="false"/>
+				    <Label label="alignment" constraints="twocols(location=left)" visible="data.layout='flow'"/>
+				    <DropDown data="data.flowAlignment" constraints="twocols(location=right)" showReset="false" visible="data.layout='flow'"/>
+				    <Label label="axis" constraints="twocols(location=left)" visible="data.layout='box'"/>
+				    <DropDown data="data.boxLayoutAxis" constraints="twocols(location=right)" showReset="false" visible="data.layout='box'"/>
+					<Panel layout="flow" hGap="0" vGap="0" visible="(data.layout='flow') || (data.layout='grid')" constraints="twocols(location=center;expandHorizontally=true)">
+				        <Label label="hGap"/>
+				        <Number numberType="IntegerType" data="data.hGap" columns="3"/>
+				        <Label label="vGap"/>
+				        <Number numberType="IntegerType" data="data.vGap" columns="3"/>
+					</Panel>
+					<Panel layout="flow" hGap="0" vGap="0" visible="data.layout='grid'" constraints="twocols(location=center;expandHorizontally=true)">
+				        <Label label="columns"/>
+				        <Number numberType="IntegerType" data="data.cols" columns="3"/>
+				        <Label label="rows"/>
+				        <Number numberType="IntegerType" data="data.rows" columns="3"/>
+					</Panel>
+				</Panel>
+
+			</Tab>
+			
+			<Tab name="AdvancedTab" title="Components" index="1" layout="twocols" font="SansSerif,0,11" >
+			
+					<CheckBox data="data.protectContent" constraints="twocols(location=left)"/>
+					<Label label="protect_content_against_modifications" constraints="twocols(location=right)"/>
+			</Tab>
+			
+			<Tab name="GraphicsTab" title="Graphics" index="4" layout="twocols" font="SansSerif,0,11" >
+			
+ 				<Panel name="BorderPanel" border="titled" borderTitle="Border" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)">
+					<Label label="border" constraints="twocols(location=left)"/>
+					<Panel layout="flow" hGap="0" vGap="0" constraints="twocols(location=right)">
+					  <DropDown data="data.border" showReset="false"/>
+					  <Color data="data.borderColor" showReset="false" visible="data.border='line'"/>
+					  <TextField data="data.borderTitle" visible="data.border='titled'"/>
+					</Panel>
+					<Panel layout="flow" hGap="5" vGap="0" constraints="twocols(location=center;expandHorizontally=true)" visible="data.border='empty'">
+				        <Label label="top"/>
+				        <Number numberType="IntegerType" data="data.borderTop" columns="2"/>
+				        <Label label="left"/>
+				        <Number numberType="IntegerType" data="data.borderLeft" columns="2"/>
+				        <Label label="bottom"/>
+				        <Number numberType="IntegerType" data="data.borderBottom" columns="2"/>
+				        <Label label="right"/>
+				        <Number numberType="IntegerType" data="data.borderRight" columns="2"/>
+					</Panel>
+				</Panel>
+  			    
+ 			</Tab>
+			
+		</TabPanel>
+
+</Panel>

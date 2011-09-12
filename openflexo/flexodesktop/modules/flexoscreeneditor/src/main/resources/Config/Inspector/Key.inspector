@@ -1,0 +1,10 @@
+<inspector title = "Key" inheritsfrom="DKVObject.inspector">
+	<tab name="Basic" index="0">
+		<property name="name" label="name" widget="READ_ONLY_TEXT_FIELD" constraint="1"/>
+		<property name="index" label="index" widget="INTEGER" constraint="2"/>
+	</tab>
+	
+	<tab name="Advanced" index="1">
+		
+	</tab>
+</inspector>

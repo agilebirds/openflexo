@@ -1,0 +1,33 @@
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (ComponentLibraryDocGenerator)
+* - object: the object for which we are generating the doc (FlexoComponentLibrary)
+* - repository: the current repository for which we generate the doc (DGRepository)
+* - entry: the entry corresponding to the Component library.
+*#
+#if($entry)
+#subTocEntries($entry)
+#end
+\newpage
+\subsection{Tabs}
+\label{sec:tabdetails}
+#foreach($tab in ${project.getFlexoComponentLibrary().getSortedTabsComponentList()})
+    #if(!$tab.getDontGenerate())
+\input{${generator.realNameForComponentNoExt($tab, $repository)}}
+    #else
+% tab $tab.getName() is not generated
+    #end ## end of if dont generate
+#end ## end of foreach popups
+
+\newpage
+\subsection{Popups}
+\label{sec:popupdetails}
+#foreach($popup in ${project.getFlexoComponentLibrary().getSortedPopupsComponentList()})
+    #if(!$popup.getDontGenerate())
+\input{${generator.realNameForComponentNoExt($popup, $repository)}}
+    #else
+% popup $popup.getName() is not generated
+    #end ## end of if dont generate
+#end ## end of foreach popups

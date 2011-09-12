@@ -1,0 +1,28 @@
+<inspector title = "Shema" inspectedClassName="org.openflexo.foundation.ontology.calc.CalcDrawingShema">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+		<property name="name" label="name" widget="TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="calc.name" label="calc" widget="READ_ONLY_TEXT_FIELD" constraint="1">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="graphicalRepresentation.width" label="width" widget="DOUBLE" constraint="2">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="graphicalRepresentation.height" label="height" widget="DOUBLE" constraint="3">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="graphicalRepresentation.backgroundColor" label="background_color" widget="COLOR" constraint="4">
+			<param name="columns" value="10"/>
+		</property>
+	</tab>
+
+	<tab name="Advanced" index="2" layout="DEFAULT">
+	</tab>
+
+	<tab name="Graphics" index="10" layout="DEFAULT">
+		<property name="graphicalRepresentation.drawWorkingArea" label="draw_working_area" widget="CHECKBOX" constraint="5"/>
+	</tab>
+
+</inspector>

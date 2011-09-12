@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Generation timestamp="${projectGenerator.generateTimestamp()}">
+    <SymbolicPath name="root" kind="root" path="."/>
+    <SymbolicPath name="sources" kind="source" path="src/main/java"/>
+    <SymbolicPath name="resources" kind="resource" path="src/main/resources"/>
+    <SymbolicPath name="testsources" kind="testsource" path="src/test/java"/>
+    <SymbolicPath name="testresources" kind="testresource" path="src/test/resources"/>
+</Generation>	

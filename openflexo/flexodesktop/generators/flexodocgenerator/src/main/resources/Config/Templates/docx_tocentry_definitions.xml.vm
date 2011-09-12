@@ -1,0 +1,116 @@
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (DefinitionsDocGenerator)
+* - repository: the current repository for which we generate the doc (DGRepository)
+* - level: the level to use in title.
+*#
+<w:p>
+	<w:r>
+		<w:rPr>
+			<w:b/>
+        </w:rPr>
+		<w:tab/>
+        <w:t xml:space="preserve">- Process: </w:t>
+	</w:r>
+	<w:r>
+		<w:t xml:space="preserve">The process definition consists of a network of activities and their relationships, criteria to indicate the start and termination of the process, and information about the individual activities.</w:t>
+    </w:r>
+</w:p>
+<w:p>
+	<w:r>
+		<w:rPr>
+			<w:b/>
+        </w:rPr>
+		<w:tab/>
+        <w:t xml:space="preserve">- Activity: </w:t>
+	</w:r>
+	<w:r>
+		<w:t xml:space="preserve">A description of a piece of work that forms one logical step within a process.</w:t>
+    </w:r>
+</w:p>
+<w:p>
+	<w:r>
+		<w:rPr>
+			<w:b/>
+        </w:rPr>
+		<w:tab/>
+        <w:t xml:space="preserve">- Operation: </w:t>
+	</w:r>
+	<w:r>
+		<w:t xml:space="preserve">An Operation defined one step within an Activity and it's generally associated with a user interface.</w:t>
+    </w:r>
+</w:p>
+<w:p>
+	<w:r>
+		<w:rPr>
+			<w:b/>
+        </w:rPr>
+		<w:tab/>
+        <w:t xml:space="preserve">- Roles: </w:t>
+	</w:r>
+	<w:r>
+		<w:t xml:space="preserve">User role associated with an Activity. A user is associated with one or more role within a process.</w:t>
+    </w:r>
+</w:p>
+<w:p>
+	<w:r>
+		<w:rPr>
+			<w:b/>
+        </w:rPr>
+		<w:tab/>
+        <w:t xml:space="preserve">- Block: </w:t>
+	</w:r>
+	<w:r>
+		<w:t xml:space="preserve">A graphical limited area within a user interface, containing label, fields and actions.</w:t>
+    </w:r>
+</w:p>
+<w:p>
+	<w:r>
+		<w:rPr>
+			<w:b/>
+        </w:rPr>
+		<w:tab/>
+        <w:t xml:space="preserve">- Popup: </w:t>
+	</w:r>
+	<w:r>
+		<w:t xml:space="preserve">A user interface called from  another one and displayed over it.</w:t>
+    </w:r>
+</w:p>
+<w:p>
+	<w:r>
+		<w:rPr>
+			<w:b/>
+        </w:rPr>
+		<w:tab/>
+        <w:t xml:space="preserve">- Screen: </w:t>
+	</w:r>
+	<w:r>
+		<w:t xml:space="preserve">A graphical user interface, containing label, fields and actions for encoding data or monitoring the process instance execution.</w:t>
+    </w:r>
+</w:p>
+<w:p>
+	<w:r>
+		<w:rPr>
+			<w:b/>
+        </w:rPr>
+		<w:tab/>
+        <w:t xml:space="preserve">- Action: </w:t>
+	</w:r>
+	<w:r>
+		<w:t xml:space="preserve">The definition of the specific details  of navigating between screens and calling external services etc. associated with pushing on a screen button or an hyperlink.</w:t>
+    </w:r>
+</w:p>
+<w:p>
+	<w:r>
+		<w:rPr>
+			<w:b/>
+        </w:rPr>
+		<w:tab/>
+        <w:t xml:space="preserve">- Event: </w:t>
+	</w:r>
+	<w:r>
+		<w:t xml:space="preserve">Events can model the arrival or departure of an email the arrival of a timeout etc.</w:t>
+    </w:r>
+</w:p>

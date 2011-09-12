@@ -1,0 +1,14 @@
+<inspector title = "SWITCH operator" inheritsfrom="OperatorNode.inspector" inspectedClassName="org.openflexo.foundation.wkf.node.SWITCHOperator">
+
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		
+	</tab>
+	
+	<tab name="Advanced" index="4">
+	</tab>
+	
+	
+</inspector>

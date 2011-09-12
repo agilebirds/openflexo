@@ -1,0 +1,37 @@
+<inspector title = "Button" inheritsfrom ="Hyperlink.inspector">
+	<tab name="Basic" index="0" layout="DEFAULT">
+		<hidden name="value"/>
+		<hidden name="prototypeValues"/>
+		<hidden name="fieldType"/>
+		<hidden name="domain"/>
+		<hidden name="exampleValueIsDefaultValue"/>
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+		<hidden name ="isCustomButton"/>
+		<hidden name ="isHTML"/>
+		<hidden name="bindingKeypath"/>
+        <property name="file" label="image" widget="CUSTOM" constraint="3">
+            <param name="className" value="org.openflexo.components.widget.ImageFileInspectorWidget"/>
+        </property>
+        <property name="maintainAspectRatio" label="keep_aspect_ratio" widget="CHECKBOX" depends="usePercentage" conditional="usePercentage=false" constraint="13"/>
+        <property name="usePercentage" label="use_percentage" widget="CHECKBOX" constraint="14"/>
+        <property name="widthPercentage" label="width_percentage" widget="INTEGER" depends="usePercentage" conditional="usePercentage=true" constraint="15"/>
+        <property name="heightPercentage" label="height_percentage" widget="INTEGER" depends="usePercentage" conditional="usePercentage=true" constraint="16"/>
+        <property name="widthPixel" label="width_pixel" widget="INTEGER" depends="usePercentage" conditional="usePercentage=false" constraint="17"/>
+        <property name="heightPixel" label="height_pixel" widget="INTEGER" depends="usePercentage" conditional="usePercentage=false" constraint="18"/>
+		<property name="prototypeValues" label="example_values" widget="TEXT_FIELD" constraint="19" help="will be used if keyPath is also setted. separated by ;. For Flexo images, just use the postfix (Button_Save for Flexo/Flexo_Button_Save.gif).">
+			<param name="columns" value="10"/>
+		</property>
+	</tab>
+
+	<tab name="Doc" index="2" layout="DEFAULT">
+		<property name="funcName" label="function_name" widget="TEXT_FIELD" constraint="2"/>
+		<!--<property name="behavior" label="behavior" widget="TEXT_AREA" constraint="4">
+			<param name="height" value="48"/>
+		</property>-->
+	</tab>
+
+	<tab name="Bindings" index="3" layout="DEFAULT">
+	</tab>
+</inspector>

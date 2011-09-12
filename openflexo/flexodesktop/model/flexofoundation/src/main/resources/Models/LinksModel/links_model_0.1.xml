@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Mapping model for generated code encoding version 1.0 -->
+
+<model builder="org.openflexo.foundation.xml.FlexoLinksBuilder" handlesReferences="no"> 
+
+  <entity name="org.openflexo.foundation.FlexoModelObject" abstract="YES" finalizer="finalizeDeserialization">
+  	<!-- <property name="docFormat" xmlTag="docFormat" attribute="YES" description=""/> -->
+    <!-- <property name="dontGenerate" xmlTag="dontGenerate" attribute="YES" description="Check this box, if you don't want this node to generate documentation"/>
+    <property name="description" xmlTag="description" attribute="YES" description="Defines widget name"/>
+    <property name="hasSpecificDescriptions" xmlTag="useSpecificDescriptions" attribute="YES" description="Wheter the specific descriptions should be used in the generated documentation or not"/>
+    <property name="specificDescriptions" xmlTag="specificDescriptions" type="hashtable" description="Hashtable(String,String) that contains a name of a DocType as a key, and a description specific to that DocType as the value"/>
+    <property name="customProperties" contains="org.openflexo.foundation.FlexoProperty" type="vector" primary="yes"/> -->
+    <property name="dynamicProperties" xmlTag="?" type="unmappedAttributes" description="Hashtable(String,String) that contains dynamic properties (data that are not handled by application, but need to be stored in the context of back compatibility)"/>
+    <description>Root class for all objects of Flexo</description>
+  </entity>
+
+  <!--<entity name="org.openflexo.foundation.FlexoProperty" xmlTag="FlexoProperty">
+     <property name="name" xmlTag="name" attribute="yes"/>
+     <property name="value" xmlTag="value" attribute="yes"/>
+  </entity> -->
+
+  <entity name="org.openflexo.foundation.FlexoLink" xmlTag="FlexoLink">
+  	 <property name="object1" xmlTag="object1" attribute="yes"/>
+     <property name="object2" xmlTag="object2" attribute="yes"/>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.FlexoLinks" xmlTag="FlexoLinks">
+  	 <property name="links" xmlTag="FlexoLink" type="vector" primary="yes"/>
+  </entity>
+  
+</model>

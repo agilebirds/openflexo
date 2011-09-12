@@ -1,0 +1,50 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = "CREATION_DATE"; 
+            name = creationDate; 
+            prototypeName = date; 
+        }, 
+        {
+            columnName = "EDGE_FLEXO_ID"; 
+            name = edgeFlexoID; 
+            prototypeName = id; 
+            valueType = l; 
+        }, 
+        {
+            columnName = "PRECONDITION_FLEXO_ID"; 
+            name = preconditionFlexoID; 
+            prototypeName = id; 
+            valueType = l; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = "PROCESS_INSTANCE_ID"; 
+            name = processInstanceID; 
+            prototypeName = id; 
+        }, 
+        {allowsNull = N; columnName = "TOKEN_ID"; name = tokenID; prototypeName = id; }
+    ); 
+    className = "org.openflexo.engine.db.Token"; 
+    classProperties = (creationDate, edgeFlexoID, preconditionFlexoID, processInstance, tokenID); 
+    externalName = TOKEN; 
+    fetchSpecificationDictionary = {}; 
+    name = Token; 
+    primaryKeyAttributes = (tokenID); 
+    relationships = (
+        {
+            destination = ProcessInstance; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = (
+                {
+                    destinationAttribute = processInstanceID; 
+                    sourceAttribute = processInstanceID; 
+                }
+            ); 
+            name = processInstance; 
+        }
+    ); 
+}

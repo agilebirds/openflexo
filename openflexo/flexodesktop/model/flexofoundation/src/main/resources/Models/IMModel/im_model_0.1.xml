@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Mapping model for implementation model encoding version 1.0 -->
+
+<model builder="org.openflexo.foundation.xml.ImplementationModelBuilder" handlesReferences="yes"> 
+
+	<mapId>
+		<map entityClass="org.openflexo.foundation.FlexoModelObject" identifierAccessor="serializationIdentifier"/>
+	</mapId>
+	
+	<entity name="org.openflexo.foundation.FlexoModelObject" abstract="YES" finalizer="finalizeDeserialization">
+		<property name="userIdentifier" xmlTag="userID" copyable="no" attribute="YES" description="Unique ID of the user (used for team synchronization)"/>
+		<property name="flexoID" xmlTag="flexoID" copyable="no" attribute="YES" description="Unique ID generated and maintained by Flexo"/>
+		<property name="docFormat" xmlTag="docFormat" attribute="YES" description=""/>
+		<property name="dontGenerate" xmlTag="dontGenerate" attribute="YES" description="Check this box, if you don't want this node to generate documentation"/>
+		<property name="description" xmlTag="description" attribute="YES" description="Defines widget name"/>
+		<property name="hasSpecificDescriptions" xmlTag="useSpecificDescriptions" attribute="YES" description="Wheter the specific descriptions should be used in the generated documentation or not"/>
+		<property name="specificDescriptions" xmlTag="specificDescriptions" type="hashtable" description="Hashtable(String,String) that contains a name of a DocType as a key, and a description specific to that DocType as the value"/>
+		<property name="customProperties" contains="org.openflexo.foundation.FlexoProperty" type="vector" primary="yes"/>
+		<property name="dynamicProperties" xmlTag="?" type="unmappedAttributes" description="Hashtable(String,String) that contains dynamic properties (data that are not handled by application, but need to be stored in the context of back compatibility)"/>
+		<description>Root class for all objects of Flexo</description>
+ 	</entity>
+
+  	<entity name="org.openflexo.foundation.FlexoProperty" xmlTag="FlexoProperty">
+     	<property name="name" xmlTag="name" attribute="yes"/>
+     	<property name="value" xmlTag="value" attribute="yes"/>
+  	</entity>
+  
+  	<entity name="org.openflexo.foundation.sg.implmodel.ImplModelObject" abstract="yes">
+    	<description>Abstract definition of an object part of implementation model</description>
+    	<property name="name" xmlTag="name" attribute="yes"/>
+   	</entity>
+
+  	<entity name="org.openflexo.foundation.sg.implmodel.ImplementationModel" xmlTag="ImplementationModel">
+    	<description>Implementation model</description>
+    	<property name="technologyModules" contains="org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation" primary="yes" type="vector"/>
+	</entity>
+	
+	<entity name="org.openflexo.foundation.sg.implmodel.TechnologyModelObject" abstract="yes">
+    	<description>Abstract definition of an object part of technology module</description>
+    	<property name="name" xmlTag="name" attribute="yes"/>
+   	</entity>
+
+   	<!-- ************************************** TODO ****************************************** -->   
+	<!-- * ! All definitions below should be removed and externalized into appropriate jars ! * -->
+	<!-- ************************************************************************************** -->
+   
+   	<entity name="org.openflexo.tm.java.impl.JavaImplementation" xmlTag="JavaImplementation">
+		<property name="rootPackage" xmlTag="rootPackage" attribute="yes"/>
+		<property name="projectName" xmlTag="projectName" attribute="yes"/>
+		<property name="archiveName" xmlTag="archiveName" attribute="yes"/>
+	</entity>
+	
+	<entity name="org.openflexo.tm.spring.impl.SpringImplementation" xmlTag="SpringImplementation">
+ 	</entity>
+ 	
+ 	<entity name="org.openflexo.tm.postgres.impl.PostgresImplementation" xmlTag="PostgresImplementation">
+ 	</entity>
+ 	
+ 	<entity name="org.openflexo.tm.maven.impl.MavenImplementation" xmlTag="MavenImplementation">
+ 	</entity>
+ 	
+ 	<entity name="org.openflexo.tm.bpslib.impl.BpsLibImplementation" xmlTag="BpsLibImplementation">
+ 		<property name="includeMails" xmlTag="includeMails" attribute="yes"/>
+ 		<property name="includeLocalization" xmlTag="includeLocalization" attribute="yes"/>
+ 	</entity>
+ 	
+ 	<entity name="org.openflexo.tm.hibernate.impl.HibernateImplementation" xmlTag="HibernateImplementation">
+    	<property name="database" contains="org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation" primary="no"/>
+    	<property name="models" xmlTag="HibernateModel" type="vector" primary="yes"/>
+ 	</entity>
+ 	
+ 	<entity name="org.openflexo.tm.hibernate.impl.HibernateModel" xmlTag="HibernateModel">
+    	<property name="watchedRepositoryReference" xmlTag="watchedRepository" attribute="yes"/>
+    	<property name="entities" xmlTag="HibernateEntity" type="vector" primary="yes"/>
+    	<property name="hibernateEnumContainer" xmlTag="HibernateEnumContainer" primary="yes"/>
+ 	</entity>
+	
+ 	<entity name="org.openflexo.tm.hibernate.impl.HibernateEntity" xmlTag="HibernateEntity" contexts="father,children,destination">
+		<property name="tableName" xmlTag="tableName" attribute="yes"/>
+		<property name="optimisticLocking" xmlTag="optimisticLocking" attribute="yes"/>
+		<property name="father" contains="org.openflexo.tm.hibernate.impl.HibernateEntity" context="father" primary="no"/>
+		<property name="children" contains="org.openflexo.tm.hibernate.impl.HibernateEntity" context="children" type="vector" primary="no"/>
+		<property name="attributes" xmlTag="HibernateAttribute" type="vector" primary="yes"/>
+		<property name="relationships" xmlTag="HibernateRelationship" type="vector" primary="yes"/>
+	</entity>
+	
+	<entity name="org.openflexo.tm.hibernate.impl.HibernateAttribute" xmlTag="HibernateAttribute">
+	    <property name="primaryKey" xmlTag="primaryKey" attribute="yes"/>
+	    <property name="columnName" xmlTag="columnName" attribute="yes"/>
+	    <property name="type" xmlTag="type" attribute="yes"/>
+	    <property name="hibernateEnum" contains="org.openflexo.tm.hibernate.impl.HibernateEnum" context="enumAttributeType" primary="no"/>
+	    <property name="notNull" xmlTag="notNull" attribute="yes"/>
+	    <property name="unique" xmlTag="unique" attribute="yes"/>
+	    <property name="length" xmlTag="length" attribute="yes"/>
+	    <property name="update" xmlTag="update" attribute="yes"/>
+	</entity>
+	
+	<entity name="org.openflexo.tm.hibernate.impl.HibernateRelationship" xmlTag="HibernateRelationship" contexts="inverse">
+	    <property name="lazy" xmlTag="lazy" attribute="yes"/>
+	    <property name="notNull" xmlTag="notNull" attribute="yes"/>
+	    <property name="isInverse" xmlTag="isInverse" attribute="yes"/>
+	    <property name="toMany" xmlTag="toMany" attribute="yes"/>
+	    <property name="indexColumnName" xmlTag="indexColumnName" attribute="yes"/>
+	    <property name="cascadeTypes" xmlTag="cascadeType" type="vector" primary="yes"/>
+	    <property name="destination" contains="org.openflexo.tm.hibernate.impl.HibernateEntity" context="destination" primary="no"/>
+	    <property name="inverse" contains="org.openflexo.tm.hibernate.impl.HibernateRelationship" context="inverse" primary="no"/>
+	</entity>
+	
+	<entity name="org.openflexo.tm.hibernate.impl.HibernateEnumContainer" xmlTag="HibernateEnumContainer">
+		<property name="hibernateEnums" xmlTag="HibernateEnum" type="vector" primary="yes"/>
+	</entity>
+	
+	<entity name="org.openflexo.tm.hibernate.impl.HibernateEnum" xmlTag="HibernateEnum" contexts="enumAttributeType">
+		<property name="hibernateEnumValues" xmlTag="HibernateEnumValue" type="vector" primary="yes"/>
+	</entity>
+	
+	<entity name="org.openflexo.tm.hibernate.impl.HibernateEnumValue" xmlTag="HibernateEnumValue">
+	</entity>
+</model>

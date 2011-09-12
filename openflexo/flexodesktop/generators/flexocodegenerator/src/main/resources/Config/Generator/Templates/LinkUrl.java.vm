@@ -1,0 +1,8 @@
+#renderLinkContent($widget)
+#if($widget.hasConfirmMessage())
+     #if($project.getIsLocalized())
+     public String onClickConfirmMessage#capName()() {
+         return "if (confirm('"+confirmMessageForLink#capName()()+"')) return true; return false;";
+     }
+     #end
+#end

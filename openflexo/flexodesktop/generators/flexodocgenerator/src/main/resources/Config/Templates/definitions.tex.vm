@@ -1,0 +1,23 @@
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (DefinitionsDocGenerator)
+* - repository: the current repository for which we generate the doc (DGRepository)
+* - entry: the entry corresponding to the Definitions.
+*#
+\begin{itemize}
+  \item \labeldescription{Process} {The process definition consists of a network of activities and their relationships, criteria to indicate the start and termination of the process, and information about the individual activities.}
+  \item \labeldescription{Activity} {A description of a piece of work that forms one logical step within a process.}
+  \item \labeldescription{Operation} {An Operation defined one step within an Activity and it's generaly associated with a user interface.}
+  \item \labeldescription{Roles} {User role associated with an Activity. A user is associated with one or more role within a process.}
+  \item \labeldescription{Block} {A graphical limited area within a user interface, containing label, fields and actions.}
+  \item \labeldescription{Popup} {A user interface called from  another one and displayed over it.}
+  \item \labeldescription{Screen} {A graphical user interface, containing label, fields and actions for encoding data or monitoring the process instance execution.}
+  \item \labeldescription{Action} {The definition of the specific details  of navigating between screens and calling external services etc. associated with pushing on a screen button or an hyperlink.}
+  \item \labeldescription{Event} {Events can model the arrival or departure of an email the arrival of a timeout etc.}
+\end{itemize}
+
+#if($entry)
+#subTocEntries($entry)
+#end

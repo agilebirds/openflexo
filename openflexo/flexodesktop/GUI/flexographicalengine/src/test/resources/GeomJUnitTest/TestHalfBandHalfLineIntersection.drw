@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GeometricSet id="1">
+  <Line id="2" name="Line1">
+    <LineGraphicalRepresentation id="3" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="4" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="5" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="6" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </LineGraphicalRepresentation>
+    <HorizontalLineWithPointConstruction id="7">
+      <P_ExplicitPointConstruction id="8" point="311.0,237.0" />
+    </HorizontalLineWithPointConstruction>
+    <Resulting_FGELine id="9" p1="311.0,237.0" p2="411.0,237.0" />
+  </Line>
+  <Line id="10" name="Line2">
+    <LineGraphicalRepresentation id="11" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="12" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="13" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="14" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </LineGraphicalRepresentation>
+    <HorizontalLineWithPointConstruction id="15">
+      <P_ExplicitPointConstruction id="16" point="297.0,384.0" />
+    </HorizontalLineWithPointConstruction>
+    <Resulting_FGELine id="17" p1="297.0,384.0" p2="397.0,384.0" />
+  </Line>
+  <Line id="18" name="Line3">
+    <LineGraphicalRepresentation id="19" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="20" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="21" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="22" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </LineGraphicalRepresentation>
+    <VerticalLineWithPointConstruction id="23">
+      <P_ExplicitPointConstruction id="24" point="534.0,304.0" />
+    </VerticalLineWithPointConstruction>
+    <Resulting_FGELine id="25" p1="534.0,304.0" p2="534.0,404.0" />
+  </Line>
+  <HalfBand id="26" name="HalfBand4">
+    <HalfBandGraphicalRepresentation id="27" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="28" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="29" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="30" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </HalfBandGraphicalRepresentation>
+    <HalfBandWithLinesConstruction id="31">
+      <L1_LineReference id="32">
+        <Reference_HorizontalLineWithPointConstruction idref="7" />
+      </L1_LineReference>
+      <L2_LineReference id="33">
+        <Reference_HorizontalLineWithPointConstruction idref="15" />
+      </L2_LineReference>
+      <L_LineReference id="34">
+        <Reference_VerticalLineWithPointConstruction idref="23" />
+      </L_LineReference>
+      <P_ExplicitPointConstruction id="35" point="401.0,304.0" />
+    </HalfBandWithLinesConstruction>
+    <Resulting_FGEHalfBand id="36">
+      <HL1_FGEHalfLine id="37" p1="534.0,237.0" p2="311.0,237.0" />
+      <HL2_FGEHalfLine id="38" p1="534.0,384.0" p2="297.0,384.0" />
+    </Resulting_FGEHalfBand>
+  </HalfBand>
+  <Point id="39" name="Point5">
+    <PointGraphicalRepresentation id="40" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="41" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="42" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="43" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <ExplicitPointConstruction id="44" point="239.0,314.0" />
+    <Resulting_FGEPoint id="45" x="239.0" y="314.0" />
+  </Point>
+  <Line id="46" name="Line6">
+    <LineGraphicalRepresentation id="47" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="48" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="49" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="50" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </LineGraphicalRepresentation>
+    <HorizontalLineWithPointConstruction id="51">
+      <P_PointReference id="52">
+        <Reference_ExplicitPointConstruction idref="44" />
+      </P_PointReference>
+    </HorizontalLineWithPointConstruction>
+    <Resulting_FGELine id="53" p1="239.0,314.0" p2="339.0,314.0" />
+  </Line>
+  <Point id="54" name="Point7">
+    <PointGraphicalRepresentation id="55" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="56" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="57" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="58" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PointGraphicalRepresentation>
+    <SymetricPointConstruction id="59">
+      <P1_PointReference id="60">
+        <Reference_ExplicitPointConstruction idref="44" />
+      </P1_PointReference>
+      <P2_LineIntersectionPointConstruction id="61">
+        <L1_LineReference id="62">
+          <Reference_VerticalLineWithPointConstruction idref="23" />
+        </L1_LineReference>
+        <L2_LineReference id="63">
+          <Reference_HorizontalLineWithPointConstruction idref="51" />
+        </L2_LineReference>
+      </P2_LineIntersectionPointConstruction>
+    </SymetricPointConstruction>
+    <Resulting_FGEPoint id="64" x="829.0" y="314.0" />
+  </Point>
+  <HalfLine id="65" name="HalfLine8">
+    <HalfLineGraphicalRepresentation id="66" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="67" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="68" noStroke="false" color="51,255,255" lineWidth="5.8" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="69" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </HalfLineGraphicalRepresentation>
+    <HalfLineWithTwoPointsConstruction id="70">
+      <P1_PointReference id="71">
+        <Reference_ExplicitPointConstruction idref="44" />
+      </P1_PointReference>
+      <P2_ControlPointReference id="72" cpName="point">
+        <Reference_PointGraphicalRepresentation idref="55" />
+      </P2_ControlPointReference>
+    </HalfLineWithTwoPointsConstruction>
+    <Resulting_FGEHalfLine id="73" p1="239.0,314.0" p2="829.0,314.0" />
+  </HalfLine>
+  <ObjectIntersection id="74" name="ObjectIntersection9">
+    <ComputedAreaGraphicalRepresentation id="75" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="76" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="77" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="78" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </ComputedAreaGraphicalRepresentation>
+    <IntersectionConstruction id="79">
+      <Reference_ObjectReference id="80">
+        <Reference_HalfLineWithTwoPointsConstruction idref="70" />
+      </Reference_ObjectReference>
+      <Reference_ObjectReference id="81">
+        <Reference_HalfBandWithLinesConstruction idref="31" />
+      </Reference_ObjectReference>
+    </IntersectionConstruction>
+    <Resulting_FGESegment id="82" p1="239.0,314.0" p2="534.0,314.0" />
+  </ObjectIntersection>
+  <GeometricDrawingGraphicalRepresentation id="83" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" width="10000.0" height="10000.0" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255">
+    <TextStyle id="84" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+  </GeometricDrawingGraphicalRepresentation>
+</GeometricSet>
+

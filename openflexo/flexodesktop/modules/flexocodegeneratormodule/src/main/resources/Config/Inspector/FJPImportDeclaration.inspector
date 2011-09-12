@@ -1,0 +1,5 @@
+<inspector title = "import_declaration">
+	<tab name="Basic" index="0">
+		<property name="importDeclaration" label="import_declaration" widget="READ_ONLY_TEXT_FIELD" constraint="0"/>
+	</tab>
+</inspector>

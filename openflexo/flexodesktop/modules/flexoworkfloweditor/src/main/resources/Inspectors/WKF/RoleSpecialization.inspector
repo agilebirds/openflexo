@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.RoleSpecialization" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="4" title="Graphics" layout="twocols" font="SansSerif,0,11" name="GraphicsTab" />
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label label="annotation" localize="true" name="AnnotationLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <TextField validateOnReturn="true" columns="10" passwd="false" localize="true" name="Annotation" data="data.annotation" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
+      <Label label="role" localize="true" name="RoleLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
+      <TextField passwd="false" readOnly="true" format="object.name" localize="true" name="Role" data="data.role.toString" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" />
+      <Label label="specialize" localize="true" name="ParentRoleLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
+      <TextField passwd="false" readOnly="true" format="object.name" localize="true" name="ParentRole" data="data.parentRole.toString" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Graphics" lang="French">Graphisme</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="annotation" lang="English">Annotation</Localized>
+    <Localized key="annotation" lang="French">Annotation</Localized>
+    <Localized key="annotation" lang="Dutch">Annotation</Localized>
+    <Localized key="role" lang="English">Role</Localized>
+    <Localized key="role" lang="French">Rôle</Localized>
+    <Localized key="role" lang="Dutch">Role</Localized>
+    <Localized key="specialize" lang="English">Specialize</Localized>
+    <Localized key="specialize" lang="French">Spécialiser</Localized>
+    <Localized key="specialize" lang="Dutch">Specialize</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Role specialization" />
+</Panel>
+

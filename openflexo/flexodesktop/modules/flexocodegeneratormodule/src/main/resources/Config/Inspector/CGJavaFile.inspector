@@ -1,0 +1,12 @@
+<inspector title = "generated_code_file" inheritsfrom ="CGFile.inspector">
+	<tab name="Basic" index="0">
+	</tab>
+	
+	<tab name="Advanced" index="1">
+		<property name="lastModelReinjectingDateAsString" label="last_model_reinjected_on" widget="READ_ONLY_TEXT_FIELD" constraint="5"/>
+	</tab>
+
+	<tab name="Templates" index="2">
+	</tab>
+	
+</inspector>

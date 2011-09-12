@@ -1,0 +1,122 @@
+loginPixel: WOActiveImage {
+    href = "#";
+    filename = "pixel.gif";
+    class = "fieldf";
+    framework = "DenaliWebResources";
+    onload = "try{document.getElementById('login').focus();}catch(err){}";
+}
+
+cookieCheckbox: WOCheckBox {
+    name = "useCookie";
+    selection = useCookie;
+    id = "useCookie";
+    value = "true";
+    class = "fieldf";
+}
+
+restoreCheckbox: WOCheckBox {
+    name = "restorePage";
+    selection = restorePage;
+    id = "restorePage";
+    value = "true";
+    class = "fieldf";
+}
+
+#* #if($generator.isPrototype() && !${project.getWorkflow().getRoleList().getRoles().isEmpty()})
+useRoleCheckbox: WOCheckBox {
+    name = "useRole";
+    selection = useRole;
+    id = "useRole";
+    value = "true";
+    class = "fieldf";
+    onClick = "if(document.getElementById('roleLine').style.display == 'none') document.getElementById('roleLine').style.display = ''; else document.getElementById('roleLine').style.display = 'none';";
+}
+
+roleDropDown: WOPopUpButton {
+    list = rolesList;
+    name = "role";
+    selectedValue = selectedRole;
+    value = itemRole;
+    item = itemRole;
+    class = "DLMedium";
+    id = "role";
+}
+#end *#
+
+hasLoginError: WOConditional {
+    condition = loginCorrect;
+    negate = true;
+}
+
+hasNoValidSession: WOConditional {
+    condition = hasValidSession;
+    negate = true;
+}
+
+hasValidSession: WOConditional {
+    condition = hasValidSession;
+}
+
+allowCookie: WOConditional {
+    condition = allowCookie;
+}
+
+hasAfterLoginDA: WOConditional {
+    condition = hasAfterLoginDA;
+}    
+
+Form1: WOForm {
+    href = formHref;
+    name = "loginForm";
+        class = "denaliLoginPage";
+    id = "loginForm";    
+}
+
+logoutLink: WOHyperlink {
+    directActionName = "DirectAction/logout";
+    target = "_top";
+    id = "logoutLink";
+}
+
+currentLogin: WOString {
+    value = currentUser.login;
+}
+
+errorMsg: WOString {
+    value = errorMessage;
+}
+
+login: WOTextField {
+    value = login;
+    name = "login";
+    id = "login";
+    class =  "field";
+}
+
+
+password: WOPasswordField {
+    value = password;
+    name = "password";
+    id = "password";
+    class =  "field";
+}
+
+afterLoginDA: WOHiddenField {
+    name = "pageDA";
+    id = "pageDA";
+    value = afterLoginDA;
+}
+
+headerFooter: $project.getPrefix()HeaderFooter {
+    showMenu = false;
+    /* cssSheet = "${project.getCssSheet().getName()}MasterStyle.css";*/
+}
+
+loginButton: WOSubmitButton {
+    value = "Login";
+    title = "Login";
+    class = "denaliButton fieldf";
+    id = "loginButton";
+    name = "loginButton";
+    action = whatever; //VALID : any non-constant value is ok here, we submit to a DA anyway
+}

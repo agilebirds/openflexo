@@ -1,0 +1,9 @@
+<inspector title = "Imported ontology" inheritsfrom="Ontology.inspector" inspectedClassName="org.openflexo.foundation.ontology.ImportedOntology">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+	</tab>
+
+	<tab name="Advanced" index="2" layout="DEFAULT">
+	</tab>
+
+</inspector>

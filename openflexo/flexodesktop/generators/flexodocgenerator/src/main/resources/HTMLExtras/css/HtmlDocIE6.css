@@ -1,0 +1,19 @@
+#htmlDocUpperLeftColumn {
+	width: 103%;
+}
+
+#htmlDocLowerLeftColumn {
+	width: 100%;
+}
+
+#htmlDocRightColumn {
+	margin-left: 293px;
+}
+
+#htmlDocRightColumnHeader {
+	padding: 5px;
+}
+
+#htmlDocRightColumnContent {
+	width: 99%;
+}

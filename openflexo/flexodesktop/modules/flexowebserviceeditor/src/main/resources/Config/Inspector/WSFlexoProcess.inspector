@@ -1,0 +1,18 @@
+<inspector title = "ws_process" inheritsfrom ="ModelObject.inspector">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="name" label="name" widget="READ_ONLY_TEXT_FIELD" constraint="0"/>
+		
+		<property name="isWebService" label="is_web_service" widget="READ_ONLY_CHECKBOX" constraint="3"/>
+	</tab>
+	
+	<tab name="Advanced" index="1">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+	</tab>
+	
+</inspector>
+

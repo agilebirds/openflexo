@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model handlesReferences="no" serializeOnly="yes"> 
+
+
+  <entity name="org.openflexo.drm.helpset.DRMHelpSet" xmlTag="helpset">
+   <property name="version" xmlTag="version" attribute="yes"/> 
+   <property name="title" xmlTag="title"/> 
+  <property name="maps" xmlTag="maps"/>
+  <property name="views" xmlTag="view" type="vector"/> 
+  <property name="presentations" xmlTag="presentation" type="vector"/>
+  </entity> 
+
+  <entity name="org.openflexo.drm.helpset.DRMHelpSet$Maps" xmlTag="maps">
+    <property name="homeID" xmlTag="homeID"/> 
+    <property name="mapref" xmlTag="mapref"/> 
+  </entity> 
+
+  <entity name="org.openflexo.drm.helpset.DRMHelpSet$Maps$MapRef" xmlTag="mapref">
+    <property name="location" xmlTag="location" attribute="yes"/> 
+  </entity> 
+
+  <entity name="org.openflexo.drm.helpset.DRMHelpSet$View" xmlTag="view">
+    <property name="name" xmlTag="name"/> 
+    <property name="label" xmlTag="label"/> 
+    <property name="type" xmlTag="type"/> 
+    <property name="viewData" xmlTag="data"/> 
+  </entity> 
+
+  <entity name="org.openflexo.drm.helpset.DRMHelpSet$View$ViewData" xmlTag="data">
+    <property name="dataType" text="yes"/> 
+    <property name="engine" xmlTag="engine" attribute="yes"/> 
+  </entity> 
+
+  <entity name="org.openflexo.drm.helpset.DRMHelpSet$Presentation" xmlTag="presentation">
+    <property name="isDefault" xmlTag="default" attribute="yes"/> 
+    <property name="displayviewimages" xmlTag="displayviewimages" attribute="yes"/> 
+    <property name="name" xmlTag="name"/> 
+    <property name="size" xmlTag="size"/> 
+    <property name="location" xmlTag="location"/> 
+    <property name="title" xmlTag="title"/> 
+    <property name="image" xmlTag="image"/> 
+    <property name="toolbar" xmlTag="toolbar"/> 
+  </entity> 
+
+  <entity name="org.openflexo.drm.helpset.DRMHelpSet$Presentation$Size" xmlTag="size">
+    <property name="width" xmlTag="width" attribute="yes"/> 
+    <property name="height" xmlTag="height" attribute="yes"/> 
+  </entity> 
+
+  <entity name="org.openflexo.drm.helpset.DRMHelpSet$Presentation$Location" xmlTag="location">
+    <property name="x" xmlTag="x" attribute="yes"/> 
+    <property name="y" xmlTag="y" attribute="yes"/> 
+  </entity> 
+
+  <entity name="org.openflexo.drm.helpset.DRMHelpSet$Presentation$Toolbar" xmlTag="toolbar">
+    <property name="helpActions" xmlTag="helpaction" type="vector"/> 
+  </entity> 
+
+  <entity name="org.openflexo.drm.helpset.DRMHelpSet$Presentation$Toolbar$HelpAction" xmlTag="helpaction">
+    <property name="actionName" text="yes"/> 
+  </entity> 
+	
+</model>

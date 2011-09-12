@@ -1,0 +1,623 @@
+#macro(name)
+#nameForWidget($widget)#end
+
+#macro(capName)
+#capNameForWidget($widget)#end
+
+#macro(upName)
+#upNameForWidget($widget)#end
+
+#macro(nameForWidget $_widget)
+${_widget.getWOComponent().getUniqueNameForWidget($_widget)}#end
+
+#macro(capNameForWidget $_widget)
+${generator.capitalize(${_widget.getWOComponent().getUniqueNameForWidget($_widget)})}#end
+
+#macro(upNameForWidget $_widget)
+${_widget.getWOComponent().getUniqueNameForWidget($_widget).toUpperCase()}#end
+
+#macro(nameForNode $_node)
+#if(${_node.getClass().getName()}=="org.openflexo.foundation.wkf.FlexoProcess")
+${generator.getJavaString(${_node.getName()})}#else
+${_node.getProcess().getUniqueNameForNode($_node)}#end#end
+
+#macro(capNameForNode $_node)
+#if(${_node.getClass().getName()}=="org.openflexo.foundation.wkf.FlexoProcess")
+${generator.capitalize(${generator.getJavaString(${_node.getName()})})}#else
+${generator.capitalize(${_node.getProcess().getUniqueNameForNode($_node)})}#end#end
+
+#macro(upNameForNode $_node)
+#if(${_node.getClass().getName()}=="org.openflexo.foundation.wkf.FlexoProcess")
+${generator.getJavaString(${_node.getName()}).toUpperCase()}#else
+${_node.getProcess().getUniqueNameForNode($_node).toUpperCase()}#end#end
+
+#macro(name2)
+#set($result = ${widget.getWOComponent().getUniqueNameForWidget($widget)})
+#set($return = $result)
+#set($i = 0)
+#set($range = [0..100])
+#foreach($i in $range)
+  #if(!$component.getNameForWidgetMap().get($return) || $component.getNameForWidgetMap().get($return)==$widget)
+    #set($i = 100)
+  #else
+    #set($i = $i + 1)
+    #set($return = "$result$i")
+  #end
+#end
+$return#end
+
+#macro(capName2)
+#set($result = ${widget.getWOComponent().getUniqueNameForWidget($widget)})
+#set($return = $result)
+#set($i = 0)
+#set($range = [0..100])
+#foreach($i in $range)
+  #if(!$component.getNameForWidgetMap().get($return))
+    #set($i = 100)
+  #else
+    #set($i = $i + 1)
+    #set($return = "$result$i")
+  #end
+#end
+${generator.capitalize($return)}#end
+
+#macro(upName2)
+#set($result = ${widget.getWOComponent().getUniqueNameForWidget($widget)})
+#set($return = $result)
+#set($i = 0)
+#set($range = [0..100])
+#foreach($i in $range)
+  #if(!$component.getNameForWidgetMap().get($return))
+    #set($i = 100)
+  #else
+    #set($i = $i + 1)
+    #set($return = "$result$i")
+  #end
+#end
+$return.toUpperCase()#end
+
+#macro(buttonValue)
+    #if($componentDefinition.isOperation())private#else public#end static final String #upName() = "#upName()";    
+    public String #name()Value() {
+    #if ($widget.isInRepetition())
+		#if($generator.isPrototype())
+			return #upName() #if(${widget.getHTMLListDescriptor().getRepetitionOperator().getInferredListProcess()}) + (${widget.getHTMLListDescriptor().getItemName()}.getId() != null ? ${widget.getHTMLListDescriptor().getItemName()}.getId() : $quote$quote)#end; 
+		#elseif(${generator.pkAttributesForFetchedEntity().size()}!=1)
+			return #upName() + ${widget.getHTMLListDescriptor().getIndexName()};
+        #else
+			return #upName() + ${widget.getHTMLListDescriptor().getItemName()}.valueForKey("${generator.pkAttributesForFetchedEntity().firstElement().getName()}");
+        #end
+    #else
+        return #upName();
+    #end
+    }
+#end
+
+#macro(void $arg)#set($none = $arg)#end
+
+#macro(package)
+#if($entity)
+    #if(!${entity.isInDefaultPackage()})
+package ${entity.getEntityPackageName()};
+	#end
+#elseif(${generator.getEntityPackageName()} && ${generator.getEntityPackageName().length()} > 0)
+package ${generator.getEntityPackageName()};
+#end
+#end
+
+#macro(imports $_entity)
+import com.webobjects.eocontrol.*;
+import com.webobjects.eoaccess.*;
+import java.util.*;
+import be.denali.service.DLServiceManager;
+import be.denali.service.DLServiceNotAvailableException;
+import be.denali.tabulatedfile.DLTabulatedFileServiceInterface;
+#foreach($imp in $_entity.getAllNeededImports())
+import ${imp};
+#end
+#end
+
+#macro (javaAccessor $p)
+#if (!${p.hasAccessors()})
+  $p.getName()
+#else
+  ${p.getGetterName()}()
+#end
+#end
+
+#macro(displayable_name)
+  #if ($widget.getCalculatedLabel())
+${generator.escapeStringForJava($widget.getCalculatedLabel().trim())}#else
+#name()
+  #end
+#end
+
+#macro (localizedConfirmMessage $w)
+#if($w.hasConfirmMessage())
+    #if($project.getIsLocalized())
+    #set($p = 'confirmMessage')
+    public String confirmMessageForLink#capNameForWidget($w)(){
+        return WDLToolBox.javascriptVarialbeString(localizedString("#generateKey ($w $p $w.getJavascriptConfirmMessage())"));
+    }
+    #end
+#end
+#end
+
+#* prompts a variable and its getter *#
+#macro(get $type $name $value)
+    private $type $name=$value;
+    public $type get${generator.capitalize($name)}() {
+        return $name;
+    }
+#end
+
+#macro(getset $type $name $value)
+#if(!$registeredProperties.contains($name))
+  #void($registeredProperties.add($name))
+  #get($type $name $value)
+    public void set${generator.capitalize($name)}($type a${generator.capitalize($type)})     {
+        $name=a${generator.capitalize($type)};
+    }
+#end
+#end
+
+#macro(customMethodCall $clickedButton)
+#if($clickedButton.getCustomMethod() && ${clickedButton.getCustomMethod().isBindingValid()})    
+    ${clickedButton.getCustomMethod().getJavaCodeStringRepresentation()};
+#end
+#end
+
+#macro(validationCode $clickedButton)
+#if($clickedButton.getIsValidatingForm())    
+    setValidationMessages();
+    if (hasValidationMessages()) 
+        return null;
+#end
+#end
+
+#macro(saveChanges $clickedButton)
+#if($clickedButton.getIsSavingChanges())
+	#if(!$generator.isPrototype())
+        try {    
+            ec.saveChanges();
+        } catch(Exception e) {
+            ec.revert();
+            e.printStackTrace();
+            addToValidationMessages(e.getMessage());
+            return null;
+        }
+	#else
+		session().saveCurrentProcessBusinessData();
+		#if(${clickedButton.getWOComponent().getAllRepetitionOperator().size()} > 0)
+			Enumeration enSaveChanges;
+			#foreach($repetitionOperator in ${clickedButton.getWOComponent().getAllRepetitionOperator()})
+				#set($repetitionProcess = ${repetitionOperator.getHTMLListDescriptor().getRepetitionOperator().getInferredListProcess()})
+				#if($repetitionProcess)
+    				enSaveChanges = ${repetitionOperator.getHTMLListDescriptor().getDisplayGroupName()}().allObjects().objectEnumerator();
+                    while(enSaveChanges.hasMoreElements())
+                    {
+                    	ProcessBusinessData dic = (ProcessBusinessData) enSaveChanges.nextElement();
+                    	getBusinessDataStorage().saveProcessBusinessData(WorkflowProcess.${repetitionProcess.getProcessDictionaryKey()}.getBusinessDataClass(), dic);
+                    }
+				#end
+			#end
+		#end
+	#end
+#end
+#end
+
+#macro(saveBLChanges $clickedButton) 
+    #if($clickedButton.getIsSavingChanges())
+        try {
+            pageBusinessLogic.saveChanges();
+        } catch (Exception e) {
+            e.printStackTrace();
+            addToValidationMessages(e.getMessage());
+            return null;
+        }
+    #end
+#end
+
+#macro(additionalBindings)
+#set($hasID=false)
+#set($id='id')
+#foreach($binding in $widget.getAdditionalBindings())
+  #if($binding.getValue())
+    $binding.getVariableName() = $binding.getValue();
+    #set($hasID= $hasID || ${binding.getVariableName().toLowerCase().equals($id)})
+  #end
+#end
+#if(!$hasID && ${widget.generateJavascriptID()})
+    id ="${widget.getFlexoID()}";
+#end
+#end
+
+## This macro is used in the various *Link.wod.vm templates, to generate the
+## appropriate 'title' binding when a tooltip has been set on a link widget.
+#macro(tooltipAsTitle)
+    #if ($widget.getTooltip() && !$widget.getTooltip().trim().equals(""))
+        #if ($project.getIsLocalized())
+        title = ${generator.getJavaString("tooltipFor #name()")};
+        #else
+        title = "${widget.getJavascriptToolTip()}";
+        #end
+    #end
+#end
+
+#macro(tooltipAsJavaMethod)
+    #if ($widget.getTooltip() && !$widget.getTooltip().trim().equals("") && ${project.getIsLocalized()})
+        #set($p = 'tooltip')
+        public String ${generator.getJavaString("tooltipFor #name()")}(){
+            return WDLToolBox.javascriptVarialbeString(localizedString("#generateKey ($widget $p $widget.getTooltip())"));
+        }
+    #end
+#end
+
+#macro(bindingValues $_bindingList)
+  #foreach($_binding in $_bindingList) ## list of ComponentInstanceBinding
+    #if($_binding.getBindingValue())
+    ${_binding.getBindingDefinition().getVariableName()} = ${_binding.getBindingValue().getWodStringRepresentation()};
+    #end
+  #end
+#end
+
+#macro(passValueForBindings $cd )
+  #foreach($bd in $componentDefinition.getBindingDefinitions())
+    #if($bd.getIsSettable())
+  setValueForBinding(${bd.getVariableName()},"${bd.getVariableName()}");
+    #end
+  #end
+#end
+
+#macro(generateKey $flexoObject $propertyName $defaultValue)
+#set($result = ${generator.cleanLocalizationKey("${defaultValue}")})
+#if(!$result || ${result.length()} == 0)
+	#set($result = ${generator.cleanLocalizationKey("${propertyName}")})
+#end
+$result#end
+
+#macro(afterLoginDA)
+#set($sb = $generator.getNewStringBuilder())
+#set($ci = ${project.getFlexoNavigationMenu().getRootMenu().getOperation().getComponentInstance()})
+  #if(!$ci)
+    #set($v = ${project.getFlexoWorkflow().getRootFlexoProcess().getAllOperationNodesWithComponent()})
+    #if($v.size()>0)
+      #set($ci = ${v.firstElement().getComponentInstance()})
+    #end
+  #end
+  #if($ci)
+    #void(${sb.append($project.getPrefix())})
+    #void(${sb.append("DA/open")})
+    #void(${sb.append($ci.getComponentName())})
+    #void(${sb.append("?")})
+    #void($sb.append($generator.serializeHashtable($ci.getStaticBindingValues())))
+    #if(${ci.getComponentDefinition().getHasTabContainer()})
+      #if(${project.getFlexoNavigationMenu().getRootMenu().getTabMenuComponentInstance()})
+        #set($tabWidget = ${ci.getComponentDefinition().getWOComponent().getTabWidgetForTabComponent(${project.getFlexoNavigationMenu().getRootMenu().getTabMenuComponentInstance().getComponentDefinition()})})
+      #elseif(${ci.getOperationNode().getTabOperationComponentInstance()})
+        #set($tabWidget = ${ci.getComponentDefinition().getWOComponent().getTabWidgetForTabComponent(${ci.getOperationNode().getTabOperationComponentInstance().getComponentDefinition()})})      
+      #end
+      #if($tabWidget)
+        #void($sb.append("&tab="))
+        #void($sb.append("#upNameForWidget($tabWidget)"))
+      #end
+    #end
+${sb.toString().trim()}#else
+No after login DA possible #end#end
+
+#macro(commaQuoted $list)
+    #set($i=0)
+    #foreach($s in $list)
+        "$s"
+        #set($i=$i+1)
+        #if($i<${list.size()})
+            ,
+        #end
+    #end
+#end
+#macro(comma $list)
+    #set($i=0)
+    #foreach($s in $list)
+        $s
+        #set($i=$i+1)
+        #if($i<${list.size()})
+            ,
+        #end
+    #end
+#end
+
+#macro(linkDictionnary)
+	#if(${widget.getComponentDefinition().isOperation()})
+		#set($cis = ${widget.getComponentDefinition().getComponentInstances()})
+		#void($generator.sortVectorOfModelObject($cis))
+	#elseif(${widget.getComponentDefinition().isTab()})
+		#set($cis = ${widget.getComponentDefinition().getAllOperationComponentInstances()})
+		#void($generator.sortVectorOfModelObject($cis))
+	#end
+	private Map<Long, Map<String, String>> getNextOperationMapFor#capName()() {
+		Map<Long, Map<String, String>> nextOperationMapFor#capName() = new HashMap<Long, Map<String, String>>();
+		Map<String, String> nextOperationMapForComponentInstance;
+		#foreach($ci in $cis)
+			#set($action = ${ci.getOperationNode().getActionNodeForButton($widget)})
+			#if($action) ## there is an action in that operation associated to the current widget (IEHyperlinkWidget)
+				#set($workflowPathList = ${action.getNextOperationsForAction()})
+				
+				nextOperationMapForComponentInstance = new HashMap<String, String>();
+				nextOperationMapFor#capName().put(#componentInstance($ci), nextOperationMapForComponentInstance);
+				
+				#foreach($workflowPath in ${workflowPathList})
+					#set($op = ${workflowPath.getOperationNode()})
+					#if(!$op)
+						#set($op = ${ci.getOperationNode()})
+					#end
+					
+					#set($operationName = ${generator.getNewStringBuilder()})
+					#set($ifCondition = ${generator.getNewStringBuilder()})
+					#foreach($workflowCondition in ${workflowPath.getConditions()})
+						
+						#if(${workflowCondition.getConditionDescription()})
+    						#if(${operationName.length()} > 0)
+    							#void(${operationName.append(" AND ")})
+    						#end
+    						
+    						#void(${operationName.append("${workflowCondition.getConditionDescription()} = ")})
+    						#if(${workflowCondition.getIsPositiveEvaluation()})
+    							#void(${operationName.append("YES")})
+    						#else
+    							#void(${operationName.append("NO")})
+							#end
+						#end
+						
+						#if(${workflowCondition.getConditionBinding().isBindingValid()})
+							#if(${ifCondition.length()} > 0)
+    							#void(${ifCondition.append(" && ")})
+    						#end
+    						
+    						#if(!${workflowCondition.getIsPositiveEvaluation()})
+    							#void(${ifCondition.append("!")})
+							#end
+							
+							#set($businessDataMethodName = "${workflowCondition.getProcess().getBusinessDataProperty().getGetterName()}")
+							#set($businessDataClassName = "${workflowCondition.getProcess().getBusinessDataProperty().getType().getSimplifiedStringRepresentation()}")
+							
+							#set($ifConditionPart = ${workflowCondition.getConditionBinding().getJavaCodeStringRepresentation()})
+							#set($ifConditionPart = ${ifConditionPart.replace("getProcessInstance().${businessDataMethodName}()", "(($businessDataClassName)getCurrentProcessBusinessData())")})
+							#set($ifConditionPart = ${ifConditionPart.replace("getProcessInstance().", "")})
+    						#void(${ifCondition.append("($ifConditionPart)")})
+						#end
+					#end
+					
+					#if(${operationName.length()} > 0)
+						#void(${operationName.append(" then<br/> ")})
+					#end
+					
+					#void(${operationName.append("${op.getAbstractActivityNode().getName()} : ${op.getName()}")})
+                    #if(${op.getAbstractActivityNode().getRoleName()})
+					  #void(${operationName.append(" (${op.getAbstractActivityNode().getRoleName()})")})
+                    #end
+                    #set($opName = "$generator.escapeStringForJava($operationName.toString())")
+					
+                    #if(${workflowPathList.size()}>1)
+						#set($hidden = "#upName()+#componentInstance($op.getComponentInstance())")
+                    #else
+                        #set($hidden = "#upName()")
+					#end
+					#if(${widget.isInRepetition()})
+						#set($hidden = "$hidden #if(${widget.getHTMLListDescriptor().getRepetitionOperator().getInferredListProcess()}) + (${widget.getHTMLListDescriptor().getItemName()}.getId() != null ? ${widget.getHTMLListDescriptor().getItemName()}.getId() : $quote$quote)#end")
+					#end
+					
+					#if(${ifCondition.length()} > 0)
+						if($ifCondition)
+					#end
+					nextOperationMapForComponentInstance.put($hidden, "$opName");
+				#end
+			#end
+        #end
+        return nextOperationMapFor#capName();
+    }
+
+    public Map<String, String> getOperations#capName()() {
+        return getNextOperationMapFor#capName()().get(Long.valueOf(getOperationComponentInstanceID()));
+    }
+#end
+
+#macro(defPopupCreatePageArguments)
+    #foreach($bd in $componentDefinition.getBindingDefinitions())     
+        ${bd.getType().getBaseEntity().getEntityClassName()} ${bd.getVariableName()},
+    #end
+#end
+
+#macro(callPopupCreatePageArguments)
+    #foreach($bd in $componentDefinition.getBindingDefinitions())     
+        ${bd.getVariableName()}(),
+    #end
+#end
+
+#macro(componentInstance $_ci)
+${project.getPrefix()}Constants.#capNameForNode(${_ci.getOperationNode().getProcess()}).#capNameForNode(${_ci.getOperationNode().getAbstractActivityNode()}).#upNameForNode(${_ci.getOperationNode()})#end
+
+#macro(templateName $_widget $_stringBuilder)
+#if($_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IELabelWidget")
+    #void($_stringBuilder.append("Label"))
+#elseif($_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IEStringWidget")
+    #void($_stringBuilder.append("String"))
+#elseif($_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IEWysiwygWidget")
+    #void($_stringBuilder.append("Wysiwyg"))
+#elseif($_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IEHeaderWidget")
+    #void($_stringBuilder.append("Header"))
+#elseif($_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IEDynamicImage")
+    #void($_stringBuilder.append("DynamicImage"))
+#elseif($_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IECheckBoxWidget")
+    #void($_stringBuilder.append("CheckBox"))
+#elseif($_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IERadioButtonWidget")
+    #void($_stringBuilder.append("RadioButton"))
+#elseif($_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IETextAreaWidget")
+    #void($_stringBuilder.append("TextArea"))
+#elseif($_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IETextFieldWidget")
+    #void($_stringBuilder.append("TextField"))
+#elseif($_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IEDropDownWidget")
+    #void($_stringBuilder.append("DropDown"))
+#elseif($_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IEBrowserWidget")
+    #void($_stringBuilder.append("Browser"))
+#elseif($_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IEFileUploadWidget")
+    #void($_stringBuilder.append("FileUpload"))
+#elseif($_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IEBlocWidget")
+    #void($_stringBuilder.append("Block"))
+#elseif($_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IEBIRTWidget")
+    #void($_stringBuilder.append("BIRT"))
+#elseif($_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IEMultimediaWidget")
+    #void($_stringBuilder.append("Multimedia"))
+#elseif($_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IETabWidget")
+    #void($_stringBuilder.append("Tab"))
+#elseif($_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IEHyperlinkWidget")
+    #void($_stringBuilder.append("Link"))
+#elseif($_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IEButtonWidget")
+    #void($_stringBuilder.append("Link"))
+#elseif($_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IECustomButtonWidget")
+    #void($_stringBuilder.append("Link"))
+#elseif($_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IEHTMLTableWidget")
+    #void($_stringBuilder.append("HTMLTable"))
+#elseif($_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IETRWidget")
+    #void($_stringBuilder.append("TR"))
+#elseif($_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IETDWidget")
+    #void($_stringBuilder.append("TD"))
+#elseif($_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IESpanTDWidget")
+    #void($_stringBuilder.append("TD"))
+#elseif($_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IESequenceTab" && $_widget.isRoot())
+    #void($_stringBuilder.append("Tabs"))
+#elseif($_widget.getClass().getName().startsWith("org.openflexo.foundation.ie.widget.IESequence"))
+        #if($_widget.getOperator())
+            #if($_widget.hasOperatorConditional())
+                #void($_stringBuilder.append("ConditionalOperator"))
+            #else 
+                #void($_stringBuilder.append("RepetitionOperator"))
+            #end
+        #else
+            #void($_stringBuilder.append("Sequence"))
+        #end
+#else
+  #if($_widget)
+    #void($_stringBuilder.append("Unknown widget: ").append($_widget.getClass().getSimpleName()))
+  #else
+    #void($_stringBuilder.append("Unknown widget: ").append("Widget is null from ${widgetStack.peek().getClass().getSimpleName()}"))
+  #end
+#end
+#if(${_stringBuilder.append(".$extension").append(".vm")}) #end
+#end
+
+#macro(linkTemplateName $_widget $_stringBuilder)
+##Initialization
+#set($linkType = $_widget.getHyperlinkType())
+##switch
+#if(${widget.getPopupComponentDefinition().isWDLDateAssistant()})
+    #void($_stringBuilder.append("LinkDateAssistant"))
+#elseif(!$linkType)
+    #void($_stringBuilder.append("LinkSimple"))
+#elseif($linkType.isFlexoAction())
+    #void($_stringBuilder.append("LinkFlexoAction"))
+#elseif($linkType.isDisplayAction())
+    #void($_stringBuilder.append("LinkDisplayAction"))
+#elseif($linkType.isCancel())
+    #void($_stringBuilder.append("LinkCancel"))
+#elseif($linkType.isSearch())
+    #void($_stringBuilder.append("LinkSearch"))
+#elseif($linkType.isURL())
+    #void($_stringBuilder.append("LinkUrl"))
+#elseif($linkType.isConfirm())
+    #void($_stringBuilder.append("LinkConfirm"))
+#elseif($linkType.isMailto())
+    #void($_stringBuilder.append("LinkMailTo"))
+#elseif($linkType.isClientSideScript())
+    #void($_stringBuilder.append("LinkClientSideScript"))
+#elseif($linkType.isHelp())
+    #void($_stringBuilder.append("LinkHelp"))
+#elseif($linkType.isPrint())
+    #void($_stringBuilder.append("LinkPrint"))
+#elseif($linkType.isImage())
+    #void($_stringBuilder.append("LinkImage"))
+#else
+    #void($_stringBuilder.append($linkType.toString()))
+#end
+    #void(${_stringBuilder.append(".$extension").append(".vm")})
+#end
+
+#macro(linkContentTemplateName $_widget $_stringBuilder)
+#if($_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IEHyperlinkWidget" || $_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IECustomButtonWidget")
+    #void($_stringBuilder.append("HyperlinkString"))
+#elseif($_widget.getClass().getName() == "org.openflexo.foundation.ie.widget.IEButtonWidget")
+    #void($_stringBuilder.append("Button"))
+#end
+#void(${_stringBuilder.append(".$extension").append(".vm")})
+#end
+
+#macro(render $_widget)
+#if($_widget)
+  #set($t = $generator.getNewStringBuilder())
+  #templateName($_widget $t)
+  #set($_template = $generator.getTemplatePath($t.toString()))
+  #if($_template)
+    #void($widgetStack.push($widget))
+    #set($widget=$_widget)
+    #parse($_template)
+    #set($widget = $widgetStack.pop())
+    #end
+  #end
+#end
+
+#macro(renderSequence $_sequence)
+#if($_sequence)
+  #void($widgetStack.push($widget))
+  #set($widget=$_sequence)
+  #foreach($iw in $widget.getInnerWidgets())
+    #render($iw)
+  #end
+  #set($widget = $widgetStack.pop())#end
+#end
+
+#macro(renderLink $_link)
+#if($_link)
+#set($t = $generator.getNewStringBuilder())
+#linkTemplateName($_link $t)
+#set($_template = $generator.getTemplatePath($t.toString()))
+#if($_template)#void($widgetStack.push($widget))#set($widget=$_link)#parse($_template)#set($widget = $widgetStack.pop())#end#end
+#end
+
+#macro(renderLinkContent $_content)
+#if($_content)
+  #set($t = $generator.getNewStringBuilder())
+  #linkContentTemplateName($_content $t)
+  #set($_template = $generator.getTemplatePath($t.toString()))
+  #if($_template)#void($widgetStack.push($widget))#set($widget=$_content)#parse($_template)#set($widget = $widgetStack.pop())#end#end
+#end
+
+
+#macro(_getGlobalVariable $key $defaultValue $returnValue)#if(!${globalVariableMap.containsKey($key)})#void(${globalVariableMap.put($key, $defaultValue)})#end#set($returnValue = ${globalVariableMap.get($key)})#end
+#macro(_setGlobalVariable $key $value)#void(${globalVariableMap.put($key, $value)})#end
+
+#macro(getMultiJavaSelectorVariableNameByRepetitionId $returnValue)#_getGlobalVariable("javaMultiSelectorVariableNameByRepetitionId" $generator.getNewHashtable() $returnValue)#end
+#macro(addMultiJavaSelectorVariableNameForRepetitionOp $repetitionOperator $variableName)
+	#getMultiJavaSelectorVariableNameByRepetitionId($javaMultiSelectorVariableNameByRepetitionId)
+	#if($repetitionOperator && !${javaMultiSelectorVariableNameByRepetitionId.containsKey(${repetitionOperator.getFlexoID()})})
+		#void($javaMultiSelectorVariableNameByRepetitionId.put(${repetitionOperator.getFlexoID()}, $variableName))
+	#end
+#end
+#macro(getMultiJavaSelectorVariableNameForRepetitionOp $repetitionOperator $returnValue)
+	#getMultiJavaSelectorVariableNameByRepetitionId($javaMultiSelectorVariableNameByRepetitionId)
+	#if($repetitionOperator && ${javaMultiSelectorVariableNameByRepetitionId.containsKey(${repetitionOperator.getFlexoID()})})
+		#set($returnValue = ${javaMultiSelectorVariableNameByRepetitionId.get(${repetitionOperator.getFlexoID()})})
+	#end
+#end
+
+#macro(getSingleJavaSelectorVariableNameByRepetitionId $returnValue)#_getGlobalVariable("javaSingleSelectorVariableNameByRepetitionId" $generator.getNewHashtable() $returnValue)#end
+#macro(addSingleJavaSelectorVariableNameForRepetitionOp $repetitionOperator $variableName)
+	#getSingleJavaSelectorVariableNameByRepetitionId($javaSingleSelectorVariableNameByRepetitionId)
+	#if($repetitionOperator && !${javaSingleSelectorVariableNameByRepetitionId.containsKey(${repetitionOperator.getFlexoID()})})
+		#void($javaSingleSelectorVariableNameByRepetitionId.put(${repetitionOperator.getFlexoID()}, $variableName))
+	#end
+#end
+#macro(getSingleJavaSelectorVariableNameForRepetitionOp $repetitionOperator $returnValue)
+	#getSingleJavaSelectorVariableNameByRepetitionId($javaSingleSelectorVariableNameByRepetitionId)
+	#if($repetitionOperator && ${javaSingleSelectorVariableNameByRepetitionId.containsKey(${repetitionOperator.getFlexoID()})})
+		#set($returnValue = ${javaSingleSelectorVariableNameByRepetitionId.get(${repetitionOperator.getFlexoID()})})
+	#end
+#end

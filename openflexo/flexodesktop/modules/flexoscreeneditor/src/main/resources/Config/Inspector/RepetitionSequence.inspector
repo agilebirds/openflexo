@@ -1,0 +1,60 @@
+<inspector title = "Repetition">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+		<property name="operator.name" label="name" widget="TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="operator.excelButton" label="has_excel_button" widget="CHECKBOX" depends="parent,isInABlock" conditional="isInABlock=true" constraint="6" help="Check this if this list to be exportable to Excel."/>
+        <property name="operator.refreshButton" label="has_refresh_button" widget="CHECKBOX" depends="parent,isInABlock" conditional="isInABlock=true" constraint="7" help="Check this if this list can be refreshed."/>    
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+	    <property name="operator.listType" label="list_type" widget="DROPDOWN" constraint="1"/>
+  	    <property name="operator.fetchObjects" label="fetch_objects" widget="CHECKBOX" constraint="4" depends="operator,operator.listType" conditional="operator.listType=FETCH" help="if checked : will fetch objects instead of raw row."/>
+        <property name="operator.permanentFilter" label="permanent_filter" widget="DROPDOWN" constraint="5">
+        	<param name="format" value="name"/>
+        	<param name="dynamiclist" value="operator.availableQualifiers"/>
+        </property>
+        <property name="operator.hasBatch" label="has_batch" widget="CHECKBOX" constraint="6" help="if checked : will use a batch for the repetition."/>
+        <property name="operator.defaultBatchValue" label="elements_per_batch" widget="INTEGER" constraint="7" depends="operator,operator.hasBatch" conditional="operator.hasBatch=true" help="Default number of elements to show per batch">
+			<param name="columns" value="10"/>
+		</property>
+	</tab>
+	
+	<tab name="Doc" index="2" layout="DEFAULT">
+	    <hidden name="dontGenerate"/>
+	    <hidden name="description"/>
+	    <hidden name="specificDescriptions"/>
+	    <hidden name="docFormat"/>
+	    <property name="operator.dontGenerate" label="dont_generate" widget="CHECKBOX" constraint="0"/>
+		<property name="operator.label" label="label" widget="TEXT_FIELD" constraint="1"/>
+		<property name="operator.description" label="description" widget="TEXT_AREA" constraint="3">
+			<param name="rows" value="10"/>
+		</property>
+		<property name="operator.specificDescriptions" label="specific_description" widget="CUSTOM" depends="project.generatedDoc" constraints="3">
+			<param name="className" value="org.openflexo.components.widget.DescriptionInspectorWidget"/>
+			<param name="rows" value="4"/>
+		</property>
+		<property name="operator.docFormat" label="docFormat" widget="DROPDOWN" help="Select a specific language if you used it explicitly in your description, otherwise leave this unset" constraint="5">
+			<param name="operator.format" value="name"/>
+		</property>
+	</tab>
+
+	<tab name="Data" index="3" layout="DEFAULT">
+	    <property name="operator.contentType" label="content_type" widget="CUSTOM" constraint="0">
+			<param name="className" value="org.openflexo.components.widget.DMTypeInspectorWidget"/>
+		</property>
+	    <property name="operator.listAccessor" label="binding_list" widget="CUSTOM" constraint="1"  depends="operator,operator.listType,operator.contentType" conditional="operator.useListAccessor=true" help="Name of the java accessor for the list">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="operator.bindingListDefinition"/>			
+			<param name="creates_entry" value="operator.createsBindingVariable"/>			
+		</property>
+		<property name="operator.bindingItem" label="binding_item" widget="CUSTOM" constraint="2" depends="operator,operator.listType,operator.contentType" help="instance variable for the item">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="operator.bindingItemDefinition"/>			
+			<param name="creates_entry" value="operator.createsBindingVariable"/>			
+		</property>
+		<hidden name="additionalBindings"/>
+	</tab>
+
+</inspector>

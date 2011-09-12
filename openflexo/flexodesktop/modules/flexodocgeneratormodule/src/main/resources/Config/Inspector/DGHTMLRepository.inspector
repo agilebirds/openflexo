@@ -1,0 +1,10 @@
+<inspector title = "generated_doc_repository" inheritsfrom ="DGRepository.inspector">
+	<tab name="ZIP" index="3">
+		<property name="postProductName" label="zip_name" widget="TEXT_FIELD" constraint="1">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		</property>
+		<property name="postBuildDirectory" label="zip_install_directory" widget="DIRECTORY" constraint="2"/>
+	</tab>
+	
+</inspector>

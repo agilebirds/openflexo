@@ -1,0 +1,64 @@
+#macro(nameForInput)@single
+    #if(${widget.isInPopup()} || ${widget.isInRepetition()})
+        nameFor#capName()
+    #else 
+        "#name()"#end@end#end
+#if($generator.isPrototype() && !${widget.getBindingSelection().isBindingValid()})
+	#if($widget.getIsAcceptableForAnyProcessInstanceDictionary())
+		#if(${widget.isInRepetition()})
+			#set($selection = "${widget.repetition().getHTMLListDescriptor().getItemName()}.${widget.getProcessInstanceDictionaryKey()}")
+		#else
+			#set($selection = "currentProcessBusinessData.${widget.getProcessInstanceDictionaryKey()}")
+		#end
+	#else
+		#set($selection = "selectionOf#capName()")
+	#end
+#else
+	#set($selection = ${widget.getBindingSelection().getWodStringRepresentation()})
+#end
+#if(!$widget.isDKV())
+#name(): WOPopUpButton {
+      #if(${widget.getBindingList().isBindingValid()})
+    list = ${widget.getBindingList().getWodStringRepresentation()};
+      #else
+    list = listOf#capName();
+      #end
+  #if (!${widget.getBindingItem().isBindingValid()})
+    item = itemOf#capName();
+  #else
+    item = ${widget.getBindingItem().getWodStringRepresentation()};
+  #end    
+    selection = $selection;
+  #if(${widget.getBindingDisplayString().isBindingValid()})    
+    displayString = ${widget.getBindingDisplayString().getWodStringRepresentation()};
+  #end
+    name = #nameForInput();
+    class = "DLMedium";
+  #if($widget.getSubmitForm())
+      #if($widget.isInPopup())
+    onChange = onChange#capName();
+      #else
+    onChange = "this.form.submit();";
+      #end
+  #end
+#else
+#name(): WDLKeyValuePopup {
+    domain = "${widget.getDomainName()}";
+    selectedKey = $selection;
+    name = #nameForInput();
+    hasNewOption = ${widget.getHasNewOption()};
+    componentUniqueName = "#name()";
+    class = "DLMedium";
+    #if($widget.getBindingIsEdit().isBindingValid())
+    isEdit = ${widget.getBindingIsEdit().getWodStringRepresentation()};
+    #end
+    showLanguagePopup = ${widget.getHasNewOption()};
+    #if($widget.getSubmitForm())
+    submitOnChange = true;
+    #end
+#end
+#if(${widget.getBindingNoSelectionString().getWodStringRepresentation()})
+    noSelectionString = ${widget.getBindingNoSelectionString().getWodStringRepresentation()};
+#end
+    #additionalBindings()
+}

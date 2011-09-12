@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.node.SingleInstanceSubProcessNode" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="1" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label label="display_thumb" localize="true" name="DisplaySubProcessImageLabel" constraints="twocols(location=left;index=20;expandHorizontally=false;expandVertically=false)" />
+      <CheckBox selected="false" localize="true" name="DisplaySubProcessImage" data="data.displaySubProcessImage" constraints="twocols(location=right;index=21;expandHorizontally=false;expandVertically=false)" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="display_thumb" lang="English">DIsplay embeded subprocess</Localized>
+    <Localized key="display_thumb" lang="French">Afficher le sous-processus</Localized>
+    <Localized key="display_thumb" lang="Dutch">DIsplay embeded subprocess</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Single sub-process instance" />
+</Panel>
+

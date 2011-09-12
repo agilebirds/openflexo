@@ -1,0 +1,11 @@
+<inspector title = "templates">
+	<tab name="Basic" index="0">
+		<property name="helpText" label="helpText" widget="INFOLABEL" constraint="0"/>
+	</tab>
+	
+	<tab name="Advanced" index="1">
+	</tab>
+
+	
+	
+</inspector>

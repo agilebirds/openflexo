@@ -1,0 +1,17 @@
+<inspector title = "Data source" inheritsfrom ="Artefact.inspector" inspectedClassName="org.openflexo.foundation.wkf.WKFStockObject">
+
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+	</tab>
+
+	<tab name="Advanced" index="2" layout="DEFAULT">
+		<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+	</tab>
+	
+	<tab name="Graphics" index="20" layout="DEFAULT">
+		
+	</tab>
+	
+</inspector>

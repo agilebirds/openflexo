@@ -1,0 +1,50 @@
+<inspector title = "Self-executable activity node" inheritsfrom="ActivityNode.inspector" inspectedClassName="org.openflexo.foundation.wkf.node.SelfExecutableActivityNode">
+
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<!--<hidden name="role"/>-->
+	</tab>
+
+	<tab name="Advanced" index="2" layout="DEFAULT">
+		
+	</tab>
+	<tab name="Data" index="3" layout="DEFAULT">
+		<property name="executionPrimitive" label="execution_primitive" widget="CUSTOM" constraint="2">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="executionPrimitiveBindingDefinition"/>			
+			<param name="activate_compound_bindings" value="true"/>			
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+		</property>
+		<property_list name="assignments" label="assignments" constraint="3">
+		  <param name="displayLabel" value="true"/>
+		  <param name="visible_row_count" value="3"/>
+		  <param name="row_height" value="20"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+ 		  <property_list_column name="receiver" label="receiver" widget="CUSTOM">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="receiverBindingDefinition"/>			
+			<param name="format" value="stringRepresentation"/>
+			<param name="column_width" value="150"/>
+		  </property_list_column>
+		  <property_list_column name="assignLabel" label=" " widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="25"/>
+			<param name="resizable" value="false"/>
+			<param name="display_title" value="false"/>
+		  </property_list_column>
+		  <property_list_column name="value" label="value" widget="CUSTOM">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="valueBindingDefinition"/>			
+			<param name="format" value="stringRepresentation"/>
+			<param name="column_width" value="250"/>
+		  </property_list_column>
+		            <property_list_column name="description" label="description" widget="TEXT_FIELD">
+            <param name="column_width" value="250"/>
+          </property_list_column>
+		  <property_list_action name="new" type="ADD" method="createAssignement"/>
+		  <property_list_action name="delete" type="DELETE" method="deleteAssignement" isAvailable="isAssignementDeletable"/>
+		</property_list>
+	</tab>
+
+</inspector>

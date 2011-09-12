@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Graph id="1">
+  <StartNode id="2">
+    <Edge id="3">
+      <OriginNode idref="2" />
+      <DestinationNode id="4">
+        <Edge id="5">
+          <OriginNode idref="4" />
+          <DestinationNode id="6">
+            <Edge id="7">
+              <OriginNode idref="6" />
+              <DestinationNode id="8">
+                <nodeProperties />
+              </DestinationNode>
+            </Edge>
+            <nodeProperties />
+          </DestinationNode>
+        </Edge>
+        <Edge id="9">
+          <OriginNode idref="4" />
+          <DestinationNode idref="8" />
+        </Edge>
+        <nodeProperties />
+      </DestinationNode>
+    </Edge>
+    <Edge id="10">
+      <OriginNode idref="2" />
+      <DestinationNode idref="6" />
+    </Edge>
+    <nodeProperties />
+  </StartNode>
+</Graph>
+

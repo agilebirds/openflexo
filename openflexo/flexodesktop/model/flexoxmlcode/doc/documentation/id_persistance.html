@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+  <html>
+    <head>
+      <title>XMLCoDe</title>
+    </head>
+    
+    <body>
+      <center>
+	<p>
+	</p>
+	<h1>XMLCoDe</h1>
+	<h2>A free implementation of an XML COder/DEcoder:<br>a Java XML serialization/deserialization tool</h2>
+      </center>
+      
+	<p>
+	</p>
+	<hr> 
+	<p>
+	</p>
+    <center>
+      <a href="index.html">Back to summary</a>
+    </center>
+    <p>
+    </p>
+
+    <center>
+      <h2>How to make identifier persistant when coding object graph structure ?</h2>
+    </center>
+    
+    <p><br>
+    </p>
+
+     <h3>
+      1. Introduction
+    </h3>
+
+    <p>When trying to work in a collaborative context, some problems may arise because identifiers used by
+    XMLCoDe may change (and be unstable) as they are internally allocated by XMLCoDe.</p>
+    
+    <p>This document explain how to resolve this problem by using custom identifiers, which might be stable
+    in time.</p>
+  
+    <h3>
+      2. How does it work ?
+    </h3>
+
+    <p>The principle is to maintain identifiers used for serialization in the application layer using
+    XMLCoDe library.</p>
+	
+	<p>This means that if identifier allocation is delegates, it must be well done: if identifiers are not unique, 
+	deserialization will fail.</p>
+	
+    <h3>
+      3. An example
+    </h3>
+    
+	<p>We can for example supply this identifier mapping to XMLCoDe:
+<pre>
+&LT;model ... handlesReferences="YES" serializationMode="pseudoTree"&GT; 
+
+  &LT;mapId&GT;
+	  &LT;map entityClass="yourPackage1.ClassA" identifierAccessor="serializationIdentifierForClassA"/&GT;
+	  &LT;map entityClass="yourPackage2.ClassB" identifierAccessor="myIdentifier"/&GT;
+	  &LT;map entityClass="yourPackage3.ClassC" identifierAccessor="id"/&GT;
+  &LT;/mapId&GT;
+	
+  &LT;entity ...&GT;
+
+&LT;/model&GT; 
+</pre>
+	</p>
+	
+	  	<p>Above model suppose that:
+	  	<ul>
+	  	<li>This XML Mapping contains only objects inheriting from <tt>yourPackage1.ClassA</tt>,
+	  	 <tt>yourPackage2.ClassB</tt> or <tt>yourPackage3.ClassC</tt> (excepting all other objects
+	  	 which are trivially String-serializable (java primitives, and some common types like Strings).</li>
+	  	<li>Related classes contains methods such as:
+  
+<pre>
+package yourPackage1;
+
+public class ClassA implements XMLSerializable
+{
+    ...
+    public String getSerializationIdenfierForClassA() {
+    	return aString;
+    }
+    ...
+}
+
+
+package yourPackage2;
+
+public class ClassB implements XMLSerializable
+{
+    ...
+    public int getMyIdentifier() {
+    	return anInt;
+    }
+    ...
+}
+
+
+package yourPackage3;
+
+public class ClassC implements XMLSerializable
+{
+    ...
+    public long id() {
+    	return anId;
+    }
+    ...
+}
+</pre></li>
+</ul>  
+  </p>
+	
+	<p>NB1: note that identifiers could have many types (which should be trivially String-serializable,a
+	as XMLCoDe will use its internal transtyping library to convert those values to/from String)</p>
+	
+ 	<p>NB2: note that application layer must guarantee that all identifiers are unique regarding their
+ 	string serialization. They must also be unique regarding there range for all kind of objects that may
+ 	be serialized in a given document.</p>
+	
+ 	<p>NB3: If for a given object no identifier mapping is supplied, XMLCoDe will use its own identifiers
+ 	(internal long).</p>
+	
+	<h3>
+      4. Conclusion
+    </h3>
+    
+	<p>
+	This scheme allows to code XML documents which are stable in time, from iteration to iteration. In the
+	context of collaborative edition of XML documents generated with XMLCoDe, this scheme associated to
+	a <b><tt>pseudoTree</tt></b> serialization model will guarantee a proper serialization, supporting
+	merge facilities from external tools (CVS...)
+	</p>
+	
+ 	<p>
+	</p>
+    <center>
+      <a href="index.html">Back to summary</a>
+    </center>
+    <p>
+    </p>
+
+   <hr>
+    <address><a href="mailto:sylvain.guerin@enst-bretagne.fr">Sylvain Guerin</a></address>
+<!-- Created: Fri Dec  7 17:47:50 CET 2001 -->
+<!-- hhmts start -->
+Last modified: Wed Jan 24 12:17:54 CET 2007
+<!-- hhmts end -->
+  </body>
+</html>
+

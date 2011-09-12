@@ -1,0 +1,46 @@
+<inspector title = "TD" inheritsfrom ="Widget.inspector">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+		<!--<property name="TDCssType" label="css_type" widget="DROPDOWN" constraint="0">
+			<param name="format" value="name"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>-->
+		<property name="alignement" label="alignement" widget="CUSTOM" constraint="1">
+			<param name="className" value="org.openflexo.components.widget.IECellPositionWidget"/>
+		</property>
+		<property name="colSpan" label="col_span" widget="INTEGER" constraint="3">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="rowSpan" label="row_span" widget="INTEGER" constraint="4">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="percentage" label="width (%)" widget="INTEGER" constraint="5"/>
+		<property name="isHidden" label="is_hidden" widget="CHECKBOX" constraint="6">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<hidden name="tooltip"/>
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+
+		<property name="weightx" label="weight_x" widget="READ_ONLY_TEXT_FIELD" constraint="7">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="weighty" label="weight_y" widget="READ_ONLY_TEXT_FIELD" constraint="8">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="gridx" label="grid_x" widget="READ_ONLY_TEXT_FIELD" constraint="9">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="gridy" label="grid_y" widget="READ_ONLY_TEXT_FIELD" constraint="10">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+	</tab>
+
+	<tab name="Doc" index="2" layout="DEFAULT">
+	</tab>
+
+	<tab name="Data" index="3" layout="DEFAULT">
+	</tab>
+
+</inspector>

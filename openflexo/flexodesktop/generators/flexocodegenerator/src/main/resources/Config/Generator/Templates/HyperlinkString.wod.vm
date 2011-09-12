@@ -1,0 +1,58 @@
+#if($widget.getValue())
+    #set($example = $widget.getValue())
+#else
+    #set($example = "String example for string #name()")
+#end
+#set($example = ${generator.escapeStringForJava($example)})
+#if($generator.isPrototype() && !${widget.getBindingValue().isBindingValid()})
+	#if($widget.getIsAcceptableForAnyProcessInstanceDictionary())
+		#if(${widget.isInRepetition()})
+			#set($value = "${widget.repetition().getHTMLListDescriptor().getItemName()}.${widget.getProcessInstanceDictionaryKey()}")
+		#else
+			#set($value = "currentProcessBusinessData.${widget.getProcessInstanceDictionaryKey()}")
+		#end
+	#else
+		#set($value = "$quote$example$quote")
+		#set($isStaticValue = $true)
+	#end
+#else
+	#set($value = "${widget.getBindingValue().getWodStringRepresentation()}")
+#end
+
+#if(!$isStaticValue)
+    #if($widget.isDKVField())
+        #name(): WDLKeyValueString {
+            domain = "${widget.getDomainName()}";
+            key = $value;
+			valueWhenEmpty = #if(${widget.getBindingValueWhenEmpty()} && ${widget.getBindingValueWhenEmpty().trim().length()} > 0)"${widget.getBindingValueWhenEmpty()}"#else"&nbsp;"#end;
+        }
+    #else
+        #name(): WOString {
+            value = $value;
+                #if(${widget.getBindingValueWhenEmpty()} && ${widget.getBindingValueWhenEmpty().trim().length()} > 0)
+            valueWhenEmpty = "$widget.getBindingValueWhenEmpty()";
+                #else
+            valueWhenEmpty = "&nbsp;";
+                #end
+                #if($widget.getIsHTML())
+            escapeHTML=false;
+                #end
+                #if($widget.isDateField() && !${widget.findBindingNamed("formatter")} && !${widget.findBindingNamed("dateformat")})
+            formatter = dateFormatter;
+                #end
+            #additionalBindings()
+        }
+	#end
+#elseif($project.getIsLocalized())
+    #name(): ${project.getPrefix()}LocalizedString {
+        value = "#generateKey($widget 'value' $widget.getValue())";
+    }
+##ElseIf static and not localized, displayed directly in html
+#end
+
+#if(${widget.isInHTMLList()} && !${widget.repetition().getFetchObjects()})
+#name()Displayer: NotNullValueDisplayer {
+    value = $value;
+    valueWhenEmpty = #if(${widget.getBindingValueWhenEmpty()} && ${widget.getBindingValueWhenEmpty().trim().length()} > 0)"${widget.getBindingValueWhenEmpty()}"#else"&nbsp;"#end;
+}
+#end

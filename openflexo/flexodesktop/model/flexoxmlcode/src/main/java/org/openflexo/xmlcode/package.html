@@ -1,0 +1,135 @@
+  <BODY>
+    <p>Provides functionalities to automatically encode/decode directly 
+      from/to objects to/from XML Strings/Streams</p>
+    <br>
+    
+    <p>This package provides tools for easily and automatically serializing/deserializing Java objects 
+    to/from XML strings or streams. It provides a way to easily implement an XML persistent object model.
+    It features support for a scheme for accessors methods use, support for an advanced inheritance scheme, 
+    native support for array, vector, and hashtable data structures, as well as native support to 
+    serialize/deserialize graph structures (cross-referenced objects).</p>
+    
+    
+  Suppose that you have following XML data:<pre>
+  &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+  &lt;command quantity="3" commandIsAlreadyPaid="yes"&gt; 
+    &lt;customer&gt;
+      &lt;name&gt;Ringle&lt;/name&gt;
+    &lt;/customer&gt; 
+    &lt;movie name="Alien"&gt;
+      here comes a description of the movie
+      &lt;date&gt;2001.09.18 AD at 09:54:58 AM CEST&lt;/date&gt; 
+      &lt;cat&gt;Horror&lt;/cat&gt; 
+      &lt;role name="Brett"&gt;&lt;/role&gt; 
+      &lt;role name="Kane"&gt;&lt;/role&gt;
+      &lt;role name="Dallas"&gt;&lt;/role&gt; 
+      &lt;role name="Parker"&gt;&lt;/role&gt; 
+    &lt;/movie&gt; 
+  &lt;/command&gt;
+  </pre>
+  and that you will map it to following <code>objects</code>:
+ <pre>
+   public class Command {
+     public int qty;
+     public boolean commandIsAlreadyPaid;
+     public Movie movie;
+     public Customer customer;
+   }
+ 
+   public class Movie {
+     public String title;
+     public String description;
+     public Date dateReleased;
+     public Vector roles;
+     public String category;
+   }
+ 
+   public class Customer { 
+     public String name;
+   }
+ 
+   public class Role {
+     public String roleName;
+   }
+  </pre>
+ 
+  you will define a <i>model file</i> defining this mapping such as:
+  <pre>
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;model&gt; 
+      &lt;entity name="yourpackage.Command" xmlTag="command"&gt; 
+        &lt;property name="qty" xmlTag="quantity" attribute="YES"/&gt; 
+        &lt;property name="commandIsAlreadyPaid" xmlTag="commandIsAlreadyPaid" attribute="YES"/&gt; 
+        &lt;property name="movie" xmlTag="movie"/&gt; 
+        &lt;property name="customer" xmlTag="customer"/&gt; 
+      &lt;/entity&gt; 
+      &lt;entity name="yourpackage.Customer" xmlTag="customer"&gt; 
+        &lt;property name="name" xmlTag="name"/&gt; 
+      &lt;/entity&gt; 
+      &lt;entity name="yourpackage.Movie" xmlTag="movie"&gt; 
+        &lt;property name="title" xmlTag="name" attribute="YES"/&gt; 
+        &lt;property name="description" text="YES"/&gt;
+        &lt;property name="dateReleased" xmlTag="date"/&gt; 
+        &lt;property name="roles" xmlTag="role" type="vector"/&gt; 
+        &lt;property name="category" xmlTag="cat"/&gt; 
+      &lt;/entity&gt; 
+      &lt;entity name="yourpackage.Role" xmlTag="role"&gt; 
+        &lt;property name="roleName" xmlTag="name" attribute="YES"/&gt; 
+      &lt;/entity&gt; 
+    &lt;/model&gt;
+  </pre>
+ 
+  Decoding process will be simpler as this:
+  <pre>
+    XMLMapping myMapping = new XMLMapping (exampleModelFile);
+    Command myCommand = (Command)XMLDecoder.decodeObjectWithMapping (myData, myMapping);
+  </pre>
+  or directly by specifying model file:
+  <pre>
+    Command myCommand = (Command)XMLDecoder.decodeObjectWithMappingFile (myData, exampleModelFile);
+  </pre>
+  where <code>myData</code> is either a <code>String</code> or an <code>mInputStream</code> and 
+  <code>exampleModelFile</code> is a <code>File</code> representing <i>model file</i>.
+  <br>
+  In this example, a new instance of <code>yourpackage.Command</code> class is instancied
+  and automatically sets with values and newly created instances of others sub-classes 
+  (here <code>yourpackage.Command</code>,
+  <code>yourpackage.Movie</code>, <code>yourpackage.Customer</code> 
+  and <code>yourpackage.Role</code>) and returned.
+  <br>
+  The reverse operation is as simpler just by doing:
+  <pre>
+    XMLMapping myMapping = new XMLMapping (exampleModelFile);
+    String result = XMLCoder.encodeObjectWithMapping (myCommand, myMapping);
+  </pre>
+  or
+  <pre>
+    String result = XMLCoder.encodeObjectWithMappingFile (myCommand, exampleModelFile);
+  </pre>
+  if you want to work with <code>String</code> objects,
+  <br>
+  but you can directly work with <code>OutputStream</code> objects, by doing:
+  <pre>
+    XMLMapping myMapping = new XMLMapping (exampleModelFile);
+    XMLCoder.encodeObjectWithMapping (myCommand, myMapping, out);
+  </pre>
+  or
+  <pre>
+    XMLCoder.encodeObjectWithMappingFile (myCommand, exampleModelFile, out);
+  </pre>
+  where <code>out</code> is a <code>OutputStream</code> object.
+  <br>
+  <p>Some remarks on that process:<ul>
+  <li>This code is based on SAX parser (JAX1.1)</li>
+  <li>All valid types (interpreted and manipulated as it) are
+      all the java primitives (<code>int</code>, 
+  <code>long</code>, <code>short</code>, <code>double</code>, <code>float</code>, 
+  <code>boolean</code>, <code>byte</code>, <code>char</code>) and some other common object (eg. 
+  {@link java.util.Date}, {@link java.lang.String},...). More custom needs could be easily implemented.</li>
+  </ul></p>
+   See README file which should be in this distribution to 
+   see how to compile and run this example
+
+   @author <a href="mailto:sylvain.guerin@denali.be">Sylvain Guerin</a>
+ 
+  </BODY>

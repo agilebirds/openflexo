@@ -1,0 +1,16 @@
+<inspector title = "Label" inheritsfrom ="NonEditableTextWidget.inspector">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+	</tab>
+
+	<tab name="Doc" index="2" layout="DEFAULT">
+	</tab>
+
+	<tab name="Data" index="3" layout="DEFAULT">
+		<hidden name="binding_value"/>
+	</tab>
+	
+</inspector>

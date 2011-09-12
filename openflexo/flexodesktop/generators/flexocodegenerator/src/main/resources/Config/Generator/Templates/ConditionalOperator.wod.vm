@@ -1,0 +1,17 @@
+#name(): WOConditional {
+#if(${widget.getOperator().getBindingConditional().isBindingValid()})
+	#set($wodRepresentation = ${widget.getOperator().getBindingConditional().getWodStringRepresentation()})
+	#if(!${widget.isInRepetition()} && $wodRepresentation != "true" && $wodRepresentation != "false")
+		condition = #nameForWidget($widget); //Use an intermediate binding for condition to avoid change of condition during takevaluefromrequest
+	#else
+		condition = $wodRepresentation;
+	#end
+#else
+    condition = true; // Undefined binding
+#end
+#if(${widget.getOperator().getIsNegate()})
+    negate = true;
+#end    
+}
+
+#renderSequence($widget)

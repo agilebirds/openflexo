@@ -1,0 +1,46 @@
+<inspector title = "java_class">
+	<tab name="Basic" index="0">
+	</tab>
+	
+	<tab name="Modifiers" index="1">
+		<property name="isPublic" label="public_modifier" widget="READ_ONLY_CHECKBOX" constraint="0"/>
+		<property name="isProtected" label="protected_modifier" widget="READ_ONLY_CHECKBOX" constraint="1"/>
+		<property name="isPrivate" label="private_modifier" widget="READ_ONLY_CHECKBOX" constraint="2"/>
+		<property name="isFinal" label="final_modifier" widget="READ_ONLY_CHECKBOX" constraint="3"/>
+		<property name="isStatic" label="static_modifier" widget="READ_ONLY_CHECKBOX" constraint="4"/>
+		<property name="isSynchronized" label="synchronized_modifier" widget="READ_ONLY_CHECKBOX" constraint="5"/>
+		<property name="isNative" label="native_modifier" widget="READ_ONLY_CHECKBOX" constraint="6"/>
+		<property name="isTransient" label="transient_modifier" widget="READ_ONLY_CHECKBOX" constraint="7"/>
+		<property name="isStrictfp" label="strictfp_modifier" widget="READ_ONLY_CHECKBOX" constraint="8"/>
+		<property name="isVolatile" label="volatile_modifier" widget="READ_ONLY_CHECKBOX" constraint="9"/>
+	</tab>
+	
+	<tab name="Code" index="2">
+		<property name="lineNumber" label="line_number" widget="READ_ONLY_INTEGER" constraint="0"/>
+	</tab>
+
+	<tab name="Javadoc" index="3">
+		<property name="javadoc.comment" label="javadoc_comment" widget="TEXT_AREA" constraint="0">
+			<param name="rows" value="3"/>
+			<param name="columns" value="40"/>
+		</property>
+		<property_list name="javadoc.docletTags" label="doclet_tags" constraint="1">
+		  <param name="visible_row_count" value="5"/>
+		  <param name="row_height" value="20"/>
+		  <property_list_column name="name" label="name" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="150"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="value" label="value" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="400"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		</property_list>
+		<property name="javadoc.stringRepresentation" label="javadoc_source" widget="JAVA_CODE" constraint="2">
+			<param name="rows" value="8"/>
+			<param name="columns" value="40"/>
+		</property>
+
+	</tab>
+	
+</inspector>

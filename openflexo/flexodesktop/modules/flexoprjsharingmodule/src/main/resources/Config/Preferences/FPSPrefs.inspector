@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tab layout="DEFAULT">
+	<property name="examplePrefValue" label="example_value" widget="CHECKBOX" constraint="1"/>
+	<property name="useXMLMerge" label="use_xml_merge" widget="CHECKBOX" constraint="2"/>
+</tab>
+	

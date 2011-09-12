@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Mapping model for generated code encoding version 1.0 -->
+
+<model builder="org.openflexo.foundation.xml.FlexoTOCBuilder"> 
+
+  <entity name="org.openflexo.foundation.toc.TOCData" xmlTag="TOCData">
+    <property name="repositories" xmlTag="TOCRepository" type="vector" primary="yes" description="TODO"/> 
+  </entity>
+  
+  <entity name="org.openflexo.foundation.toc.TOCRepository" xmlTag="TOCRepository">
+  	<property name="userIdentifier" xmlTag="userID" attribute="YES" description="Unique ID of the user (used for team synchronization)"/>
+  	<property name="flexoID" xmlTag="flexoID" attribute="YES" description="Unique ID generated and maintained by Flexo"/>
+  	<property name="docTypeAsString" xmlTag="docType" attribute="yes"/>
+  	<property name="title" xmlTag="title" attribute="yes" description="The title of the entry of the table of content"/>
+  </entity>
+	
+</model>

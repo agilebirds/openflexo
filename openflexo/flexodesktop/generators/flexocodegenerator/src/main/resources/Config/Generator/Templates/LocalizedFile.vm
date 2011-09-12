@@ -1,0 +1,23 @@
+{
+#set($localizations = ${generator.getNewTreeMap()})
+#set($quote = '"')
+#set( $flexoObjectList = ${project.getFlexoComponentLibrary().getAllTranslatableItems()})
+@single
+        #foreach($flexoObject in $flexoObjectList.keys())
+            #set( $propList = ${flexoObjectList.get($flexoObject)} )
+            #foreach($prop in $propList.keys())
+                #set( $value = ${propList.get($prop)} )
+                #set( $key = "${generator.getPrefix()}_#generateKey($flexoObject $prop $value)")
+                #set( $value = ${toolbox.convertStringToJavaString($value)} )
+                #void(${localizations.put($key, $value)})
+            #end
+        #end
+
+    #void(${localizations.put("${generator.getPrefix()}_AnyRepetition_NoItemToDisplay", "No item to display.")})
+    #void(${localizations.put("${generator.getPrefix()}_AnyRepetition_Refresh", "Refresh")})
+    #void(${localizations.put("${generator.getPrefix()}_AnyRepetition_ExcelExport", "Export")})
+@end
+#foreach($entry in ${localizations.entrySet()})
+    "${entry.getKey()}" = "${entry.getValue()}";
+#end
+}

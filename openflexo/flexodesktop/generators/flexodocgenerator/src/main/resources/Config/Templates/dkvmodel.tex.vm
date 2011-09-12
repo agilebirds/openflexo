@@ -1,0 +1,40 @@
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (DKVModelDocGenerator)
+* - object: the object for which we are generating the doc (DKVModel)
+* - repository: the current repository for which we generate the doc (DGRepository)
+*#
+
+#set($dkv = $object)
+
+#*
+This project contains the following domains that will be defined in the following section.
+
+\begin{itemize}
+#foreach($domain in $dkv.getDomains())
+\item \hyperlink{$generator.getReference($domain)}{$domain.getName()}#if($domain.getDescription()): $domain.getDescription()#end
+#end*# ## end of foreach domains
+#*\end{itemize}*#
+
+#set($columnWidth = 10/${object.getLanguages().size()})
+#set($numberOfCols = ${object.getLanguages().size()} + 1)
+#foreach($domain in $dkv.getDomains())
+#if(!$domain.getDontGenerate())
+\hypertarget{$generator.getReference($domain)}{}
+\subsection{#escape($domain.getName())}
+#description($domain)
+\begin{center}
+\begin{longtable}
+{|>{\bfseries}p{5cm}#foreach($l in $domain.getLanguages()) |p{${columnWidth}cm}#end|}
+\hline\hline
+\textbf{Key}#foreach($l in $domain.getLanguages())&\textbf{$l.getName()}#end\\
+\hline\hline\endhead\multicolumn{$numberOfCols}{|r|}{(continued on next page)}\\ \hline \endfoot \endlastfoot
+#foreach($key in $domain.getSortedKeys())
+$key.getName() #foreach($l in $domain.getLanguages()) & $!{domain.getValue($key,$l).getValue()}#end\\\hline
+#end ## end of foreach keys
+\end{longtable}
+\end{center}
+#end ## end of dont generate
+#end ## end of foreach domains

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlexoProcess id="BMA_393" name="Merge" operationGenSubPath="/src" pageGenSubPath="/src" popupGenSubPath="/src" superClassGenSubPath="/src" tabGenSubPath="/src" isWebService="false" docIndex="1" userID="BMA" flexoID="393" dontEscapeLatex="false" dontGenerate="false" description="No description" useSpecificDescriptions="false" posiX="0" posiY="0" width="0" height="0" textColor="0,0,0" backColor="255,255,255">
+  <RoleList id="BMA_396" userID="BMA" flexoID="396" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" />
+  <DeadLineList id="BMA_399" userID="BMA" flexoID="399" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" />
+  <StatusList id="BMA_397" DefaultStatus="Merge.STATUS.Default" userID="BMA" flexoID="397" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+    <Status id="BMA_398" docIndex="1" userID="BMA" flexoID="398" dontEscapeLatex="false" dontGenerate="false" description="No description" useSpecificDescriptions="false">
+      <label>Default</label>
+    </Status>
+  </StatusList>
+  <ActivityPetriGraph id="BMA_400" isVisible="true" posiX="0" posiY="0" width="0" height="0" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="400" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+    <ActivityNode id="BMA_401" nodeType="BEGIN" isWaiting="false" isSelfActivated="false" posiX="30" posiY="200" width="60" height="65" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="401" dontEscapeLatex="false" dontGenerate="true" useSpecificDescriptions="false" nodeName="BEGIN" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="1" roleTextColor="128,128,128">
+      <OutgoingTokenEdge id="BMA_436" postConditionType="TOKEN" tokenIncrem="1" openInPopup="false" posiX="87" posiY="28" width="0" height="0" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="436" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inducedLocation="0,0" deducedLocation="44,95" inducedDeducedLocation="0,0" delay="0">
+        <StartActivityNode idref="BMA_401" />
+        <NextFlexoPreCondition idref="BMA_435" />
+        <PostConditionProperties />
+      </OutgoingTokenEdge>
+      <NodeProperties />
+    </ActivityNode>
+    <ActivityNode id="BMA_403" nodeType="END" isWaiting="false" isSelfActivated="false" posiX="500" posiY="200" width="60" height="65" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="403" dontEscapeLatex="false" dontGenerate="true" useSpecificDescriptions="false" nodeName="END" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="2" roleTextColor="128,128,128">
+      <FlexoPreCondition id="BMA_452" fixedLocation="6" initTokenNbr="0" userID="BMA" flexoID="452" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" posiX="10" posiY="25" width="0" height="0" textColor="0,0,0" backColor="255,255,255">
+        <AttachedActivityNode idref="BMA_403" />
+        <AttachedBeginOperationNode idref="BMA_443" />
+        <IncomingTokenEdge idref="BMA_453" />
+        <PreConditionProperties />
+      </FlexoPreCondition>
+      <NodeProperties />
+      <OperationPetriGraph id="BMA_442" isVisible="false" posiX="395" posiY="325" width="270" height="100" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="442" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+        <OperationNode id="BMA_443" isSynchronized="false" componentTextColor="128,128,128" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,12:08:35 26/11/2007 565" nodeType="BEGIN" isWaiting="false" isSelfActivated="false" posiX="10" posiY="10" width="60" height="65" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="443" dontEscapeLatex="false" dontGenerate="true" useSpecificDescriptions="false" nodeName="BEGIN" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="1">
+          <OutgoingTokenEdge id="BMA_451" postConditionType="TOKEN" tokenIncrem="1" openInPopup="false" posiX="120" posiY="28" width="0" height="0" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="451" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inducedLocation="72,93" deducedLocation="73,95" inducedDeducedLocation="25,162" delay="0">
+            <StartOperationNode idref="BMA_443" />
+            <NextFlexoPreCondition idref="BMA_450" />
+            <PostConditionProperties />
+          </OutgoingTokenEdge>
+          <NodeProperties />
+        </OperationNode>
+        <OperationNode id="BMA_444" isSynchronized="true" componentTextColor="128,128,128" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,12:08:35 26/11/2007 561" nodeType="END" isWaiting="false" isSelfActivated="false" posiX="200" posiY="10" width="60" height="65" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="444" dontEscapeLatex="false" dontGenerate="true" useSpecificDescriptions="false" nodeName="END" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="2">
+          <ActionPetriGraph id="BMA_445" isVisible="false" posiX="490" posiY="460" width="270" height="100" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="445" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+            <ActionNode id="BMA_446" actionType="DEFAULT" associatedButtonFlexoID="-1" displayProcessFlexoID="-1" displayOperationFlexoID="-1" nodeType="BEGIN" isWaiting="false" isSelfActivated="false" posiX="10" posiY="10" width="60" height="65" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="446" dontEscapeLatex="false" dontGenerate="true" useSpecificDescriptions="false" nodeName="BEGIN" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="1">
+              <OutgoingTokenEdge id="BMA_449" postConditionType="TOKEN" tokenIncrem="1" openInPopup="false" posiX="120" posiY="26" width="0" height="0" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="449" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inducedLocation="73,95" deducedLocation="0,0" inducedDeducedLocation="0,0" delay="0">
+                <StartActionNode idref="BMA_446" />
+                <NextFlexoPreCondition idref="BMA_448" />
+                <PostConditionProperties />
+              </OutgoingTokenEdge>
+              <NodeProperties />
+            </ActionNode>
+            <ActionNode id="BMA_447" actionType="DEFAULT" associatedButtonFlexoID="-1" displayProcessFlexoID="-1" displayOperationFlexoID="-1" nodeType="END" isWaiting="false" isSelfActivated="false" posiX="200" posiY="10" width="60" height="65" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="447" dontEscapeLatex="false" dontGenerate="true" useSpecificDescriptions="false" nodeName="END" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="2">
+              <FlexoPreCondition id="BMA_448" fixedLocation="6" initTokenNbr="0" userID="BMA" flexoID="448" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" posiX="7" posiY="25" width="0" height="0" textColor="0,0,0" backColor="255,255,255">
+                <AttachedActionNode idref="BMA_447" />
+                <IncomingTokenEdge idref="BMA_449" />
+                <PreConditionProperties />
+              </FlexoPreCondition>
+              <NodeProperties />
+            </ActionNode>
+          </ActionPetriGraph>
+          <FlexoPreCondition id="BMA_450" fixedLocation="6" initTokenNbr="0" userID="BMA" flexoID="450" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" posiX="7" posiY="25" width="0" height="0" textColor="0,0,0" backColor="255,255,255">
+            <AttachedOperationNode idref="BMA_444" />
+            <AttachedBeginActionNode idref="BMA_446" />
+            <IncomingTokenEdge idref="BMA_451" />
+            <PreConditionProperties />
+          </FlexoPreCondition>
+          <NodeProperties />
+        </OperationNode>
+      </OperationPetriGraph>
+    </ActivityNode>
+    <ActivityNode id="BMA_425" nodeType="NORMAL" isWaiting="false" isSelfActivated="false" posiX="164" posiY="201" width="99" height="67" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="425" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" nodeName="Activity" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="3" roleTextColor="128,128,128">
+      <FlexoPreCondition id="BMA_435" fixedLocation="6" initTokenNbr="0" userID="BMA" flexoID="435" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" posiX="1" posiY="20" width="0" height="0" textColor="0,0,0" backColor="255,255,255">
+        <AttachedActivityNode idref="BMA_425" />
+        <AttachedBeginOperationNode idref="BMA_433" />
+        <IncomingTokenEdge idref="BMA_436" />
+        <PreConditionProperties />
+      </FlexoPreCondition>
+      <OutgoingTokenEdge id="BMA_441" postConditionType="TOKEN" tokenIncrem="1" openInPopup="false" posiX="132" posiY="29" width="0" height="0" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="441" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inducedLocation="0,0" deducedLocation="77,103" inducedDeducedLocation="0,0" delay="0">
+        <StartActivityNode idref="BMA_425" />
+        <NextFlexoPreCondition idref="BMA_440" />
+        <PostConditionProperties />
+      </OutgoingTokenEdge>
+      <NodeProperties />
+      <OperationPetriGraph id="BMA_432" isVisible="true" posiX="59" posiY="326" width="270" height="100" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="432" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+        <OperationNode id="BMA_433" isSynchronized="false" componentTextColor="128,128,128" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,12:08:54 26/11/2007 873" nodeType="BEGIN" isWaiting="false" isSelfActivated="false" posiX="10" posiY="10" width="60" height="65" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="433" dontEscapeLatex="false" dontGenerate="true" useSpecificDescriptions="false" nodeName="BEGIN" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="1">
+          <NodeProperties />
+        </OperationNode>
+        <OperationNode id="BMA_434" isSynchronized="false" componentTextColor="128,128,128" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,12:08:54 26/11/2007 873" nodeType="END" isWaiting="false" isSelfActivated="false" posiX="200" posiY="10" width="60" height="65" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="434" dontEscapeLatex="false" dontGenerate="true" useSpecificDescriptions="false" nodeName="END" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="2">
+          <NodeProperties />
+        </OperationNode>
+        <OperationNode id="BMA_456" isSynchronized="false" componentTextColor="128,128,128" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,12:08:54 26/11/2007 874" nodeType="NORMAL" isWaiting="false" isSelfActivated="false" posiX="80" posiY="20" width="103" height="67" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="456" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" nodeName="Operation" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="3">
+          <OperationComponentInstance id="BMA_465" componentName="Screen1" userID="BMA" flexoID="465" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" />
+          <NodeProperties />
+        </OperationNode>
+      </OperationPetriGraph>
+    </ActivityNode>
+    <ActivityNode id="BMA_429" nodeType="NORMAL" isWaiting="false" isSelfActivated="false" posiX="339" posiY="204" width="100" height="67" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="429" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" nodeName="Activity-1" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="4" roleTextColor="128,128,128">
+      <FlexoPreCondition id="BMA_440" fixedLocation="6" initTokenNbr="0" userID="BMA" flexoID="440" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" posiX="1" posiY="21" width="0" height="0" textColor="0,0,0" backColor="255,255,255">
+        <AttachedActivityNode idref="BMA_429" />
+        <AttachedBeginOperationNode idref="BMA_438" />
+        <IncomingTokenEdge idref="BMA_441" />
+        <PreConditionProperties />
+      </FlexoPreCondition>
+      <OutgoingTokenEdge id="BMA_453" postConditionType="TOKEN" tokenIncrem="1" openInPopup="false" posiX="130" posiY="25" width="0" height="0" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="453" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inducedLocation="0,0" deducedLocation="70,99" inducedDeducedLocation="0,0" delay="0">
+        <StartActivityNode idref="BMA_429" />
+        <NextFlexoPreCondition idref="BMA_452" />
+        <PostConditionProperties />
+      </OutgoingTokenEdge>
+      <NodeProperties />
+      <OperationPetriGraph id="BMA_437" isVisible="false" posiX="234" posiY="329" width="270" height="100" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="437" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+        <OperationNode id="BMA_438" isSynchronized="false" componentTextColor="128,128,128" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,12:08:31 26/11/2007 274" nodeType="BEGIN" isWaiting="false" isSelfActivated="false" posiX="10" posiY="10" width="60" height="65" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="438" dontEscapeLatex="false" dontGenerate="true" useSpecificDescriptions="false" nodeName="BEGIN" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="1">
+          <NodeProperties />
+        </OperationNode>
+        <OperationNode id="BMA_439" isSynchronized="false" componentTextColor="128,128,128" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,12:08:31 26/11/2007 279" nodeType="END" isWaiting="false" isSelfActivated="false" posiX="200" posiY="10" width="60" height="65" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="439" dontEscapeLatex="false" dontGenerate="true" useSpecificDescriptions="false" nodeName="END" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="2">
+          <NodeProperties />
+        </OperationNode>
+      </OperationPetriGraph>
+    </ActivityNode>
+  </ActivityPetriGraph>
+  <ProcessProperties />
+  <PortRegistery id="BMA_402" isVisible="false" posiX="80" posiY="20" width="250" height="60" textColor="0,0,0" backColor="255,255,255" userID="BMA" flexoID="402" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" />
+</FlexoProcess>
+

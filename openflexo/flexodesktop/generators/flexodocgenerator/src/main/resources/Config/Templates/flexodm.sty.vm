@@ -1,0 +1,31 @@
+\RequirePackage{longtable}
+
+\newcommand{\model}[2]{\item[\textbf{#1}: ] #2}
+
+\newenvironment{entities}{\begin{center}\begin{longtable}{|p{3.7cm}|p{4cm}|p{7cm}|}
+\hline\hline
+\textbf{Name}&\textbf{Table name}&\textbf{Description}\\
+\hline\hline\endhead\multicolumn{3}{|r|}{(continued on next page)}\\\hline\endfoot\endlastfoot}{
+\end{longtable}
+\end{center}
+}
+\newcommand{\entity}[3]{#1& #2& #3\\\hline}
+
+\newenvironment{attributes}[1]{\begin{center}\begin{longtable}{|p{3cm}|p{3cm}|p{2.3cm}|c|p{5cm}|}
+\hline\hline\multicolumn{5}{|p{14.7cm}|}{#1}\\\hline
+\textbf{Name}&\textbf{Column name}&\textbf{Type}&\textbf{Width}&\textbf{Comment}\\
+\hline\hline\endhead\multicolumn{5}{|r|}{(continued on next page)}\\\hline\endfoot\endlastfoot}{
+\end{longtable}
+\end{center}
+}
+
+\newcommand{\attribute}[5]{#1& #2& #3& #4& #5\\\hline}
+
+\newenvironment{relationships}{\begin{center}\begin{longtable}{|p{3.3cm}|p{3.3cm}|p{3cm}|p{3cm}|p{1.6cm}|}
+\hline\hline
+\textbf{Name}&\textbf{Entity}&\textbf{Source}&\textbf{Destination}&\textbf{Type}\\
+\hline\hline\endhead\multicolumn{5}{|r|}{(continued on next page)}\\\hline\endfoot\endlastfoot}{
+\end{longtable}
+\end{center}
+}
+\newcommand{\relationship}[5]{#1& #2& #3& #4& #5\\\hline}

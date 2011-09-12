@@ -1,0 +1,80 @@
+<inspector title = "Transtyper" inheritsfrom="DMObject.inspector">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="name" label="name" widget="TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		</property>
+		<property name="returnedType" label="returned_type" widget="CUSTOM" constraint="1">
+			<param name="className" value="org.openflexo.components.widget.DMTypeInspectorWidget"/>
+		</property>
+		<property name="baseEntity.name" label="base_entity" widget="READ_ONLY_TEXT_FIELD" depends="returnedType" constraint="2"/>
+		<property_list name="entries" label="entries_defined_for_this_transtyper" constraint="3">
+		  <param name="visible_row_count" value="3"/>
+		  <param name="row_height" value="20"/>
+		  <property_list_column name="icon" label="" widget="ICON">
+			<param name="column_width" value="30"/>
+			<param name="resizable" value="false"/>
+		  </property_list_column>
+		  <property_list_column name="name" label="name" widget="TEXT_FIELD">
+			<param name="column_width" value="100"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="type" label="type" widget="CUSTOM">
+			<param name="column_width" value="150"/>
+			<param name="resizable" value="true"/>
+			<param name="className" value="org.openflexo.components.widget.DMTypeInspectorWidget"/>
+			<param name="format" value="simplifiedStringRepresentation"/>
+			<param name="project" value="project"/>
+		  </property_list_column>
+		  <property_list_column name="description" label="description" widget="TEXT_FIELD">
+			<param name="column_width" value="200"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_action name="add_entry" type="ADD" method="addEntry" isAvailable="addEntryEnabled"/>
+		  <property_list_action name="remove_entry" type="DELETE" method="removeEntry" isAvailable="removeEntryEnabled"/>
+		</property_list>
+
+	</tab>
+	
+	<tab name="Transtyping" index="2">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>		
+		
+		<property name="allowsMappingDefinition" label="allows_mapping_definition" widget="READ_ONLY_CHECKBOX" constraint="0" depends="returnedType"/>
+		<property name="isMappingDefined" label="define_data_mapping" widget="CHECKBOX" constraint="1" depends="returnedType,allowsMappingDefinition" conditional="allowsMappingDefinition=true" />
+		
+		<property_list name="values" label="data_mapping" depends="allowsMappingDefinition,isMappingDefined" conditional="allowsMappingDefinition=true AND isMappingDefined=true" constraint="2">
+		  <param name="displayLabel" value="false"/>
+		  <param name="visible_row_count" value="4"/>
+		  <param name="row_height" value="20"/>
+		<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		  <property_list_column name="name" label="name" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="80"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="propertyValue" label="value" widget="CUSTOM">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="bindingDefinition"/>			
+			<param name="format" value="stringRepresentation"/>
+			<param name="column_width" value="200"/>
+		  </property_list_column>
+		</property_list>
+	</tab>
+
+	<tab name="Code" index="3">
+		
+		<property name="sourceCode" label="source_code" widget="CUSTOM" constraint="0">
+			<param name="className" value="org.openflexo.components.widget.JavaSourceCodeInspectorWidget"/>
+			<param name="rows" value="5"/>
+			<param name="columns" value="20"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		
+	</tab>
+
+
+</inspector>

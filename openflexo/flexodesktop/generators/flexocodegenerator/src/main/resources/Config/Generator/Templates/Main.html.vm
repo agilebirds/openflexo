@@ -1,0 +1,61 @@
+<webobject name="headerFooter">
+    <webobject name="Form1">
+        
+        <noscript>
+            JavaScript is required. It seems to be disabled on your computer.
+        </noscript>
+    
+        <webobject name="hasLoginError">
+            <p class="denaliError"><webobject name="errorMsg"></webobject></p>
+        </webobject>
+    
+            <webobject name="hasNoValidSession">
+                <p>
+                    <label for="login">User name</label>
+                    <webobject name="login"></webobject>
+                </p>
+            </webobject>
+            <webobject name="hasValidSession"> 
+                <p>
+                    You are already signed in as <em><webobject name="currentLogin"></webobject></em><br />
+                    You can <webobject name="logoutLink">logout</webobject> or enter again your password
+                </p>
+            </webobject>
+            <p>
+                <label for="password">Password</label>
+                <webobject name="password"></webobject>
+            </p>
+            <webobject name="allowCookie">
+                <p>
+                    <webobject name="cookieCheckbox"></webobject>
+                    <label for="useCookie" class="labelRight" >Use cookie</label>
+                </p>
+            </webobject>
+            <webobject name="hasAfterLoginDA">
+                <p>
+                    <webobject name="restoreCheckbox"></webobject>
+                    <label for="restorePage" class="labelRight" >Restore page</label>
+                </p>
+            </webobject>
+#*            #if($generator.isPrototype() && !${project.getWorkflow().getRoleList().getRoles().isEmpty()})
+                <p>
+                    <webobject name="useRoleCheckbox"></webobject>
+                    <label for="useRole" class="labelRight" >Use specific role</label>
+                </p>
+                
+                <p id="roleLine" style="display: none;">
+                    <label for="role">Role</label>
+                    <webobject name="roleDropDown"></webobject>
+                </p>
+            #end *#
+            <br/><br/>    
+            <p>
+                <webobject name="loginButton">Submit</webobject>
+                <webobject name="loginPixel"></webobject>         
+            </p>
+         <p style="display: none;">
+            <webobject name="afterLoginDA"></webobject>
+            </p>
+        <hr class="clear" />
+    </webobject>
+</webobject>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="gridbag" dataClassName="org.openflexo.foundation.ontology.action.AddShema" font="Lucida Grande,0,11" width="800" height="500" name="main">
+  <Label label="create_new_ontologic_shema" align="center" localize="true" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=0;insetsTop=20;insetsBottom=20;weightY=0.0;fill=horizontal;weightX=1.0)" font="Lucida Grande,1,15">
+    <LocalizedDictionary />
+  </Label>
+  <Label label="new_shema_name" localize="true" constraints="gridbag(insetsLeft=10;insetsRight=10;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=1;gridWidth=1;insetsTop=0;insetsBottom=10;weightY=0.0;fill=none;weightX=0.0)">
+    <LocalizedDictionary />
+  </Label>
+  <TextField columns="6" passwd="false" text="TextField" localize="true" name="ShemaNameTextField" data="data.newShemaName" constraints="gridbag(insetsLeft=0;insetsRight=20;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=2;gridWidth=0;insetsTop=0;insetsBottom=10;weightY=0.0;fill=horizontal;weightX=1.0)" />
+  <TextArea columns="6" rows="2" text="TextArea" data="CalcBrowser.selected.description" constraints="gridbag(insetsLeft=0;insetsRight=10;gridHeight=1;padY=0;padX=0;anchor=center;gridY=2;gridX=1;index=4;gridWidth=0;insetsTop=0;insetsBottom=10;weightY=0.2;fill=both;weightX=1.0)" localize="true" enable="data.useCalc" />
+  <Panel layout="border" borderTitle="Panel" constraints="gridbag(insetsLeft=0;insetsRight=10;gridHeight=1;padY=0;padX=0;anchor=center;gridY=3;gridX=1;index=5;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=1.0;fill=both;weightX=1.0)">
+    <Image imageFile="../../../../../../../../../../InterfaceBuilder/src/dev/resources/FIBEditorPalette/Image.gif" sizeAdjustment="FitToAvailableSizeRespectRatio" align="center" imageWidth="400" imageHeight="32" localize="true" enable="data.useCalc" data="ShemaTable.selected.screenshotImage.image" constraints="border(location=center;index=0)" />
+    <Table iteratorClassName="org.openflexo.foundation.ontology.calc.CalcDrawingShema" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="SingleSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="CalcBrowser.selected.shemas" constraints="border(location=east;index=0)" name="ShemaTable" localize="true" enable="data.useCalc" manageDynamicModel="true">
+      <IconColumn data="iterator.icon" title="icon" columnWidth="30" resizable="false" displayTitle="false" name="icon" />
+      <LabelColumn data="iterator.name" title="label" columnWidth="120" resizable="true" displayTitle="true" name="label" />
+      <LocalizedDictionary />
+    </Table>
+  </Panel>
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=6;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=1.0;fill=horizontal)">
+    <CheckBox negate="true" selected="true" localize="true" name="NoCalcCheckBox" data="data.useCalc" constraints="flow(index=0)" />
+    <Label label="create_ontologic_shema_without_ontologic_calc" localize="true" constraints="flow(index=1)">
+      <LocalizedDictionary />
+    </Label>
+  </Panel>
+  <Label label="label" align="center" localize="true" data="data.errorMessage" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=7;gridWidth=0;insetsTop=10;insetsBottom=0;weightY=0.0;weightX=1.0;fill=horizontal)" visible="(!(data.isValid))">
+    <Dependancy componentName="CalcBrowser" />
+    <Dependancy componentName="ShemaNameTextField" />
+    <Dependancy componentName="NoCalcCheckBox" />
+    <LocalizedDictionary />
+  </Label>
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=8;gridWidth=0;insetsTop=10;insetsBottom=0;weightY=0.0;weightX=1.0;fill=horizontal)">
+    <Button action="controller.validateAndDispose()" buttonType="Trigger" label="validate" constraints="flow(index=0)" font="Lucida Grande,0,13" localize="true" enable="data.isValid">
+      <Dependancy componentName="CalcBrowser" />
+      <Dependancy componentName="ShemaNameTextField" />
+      <Dependancy componentName="NoCalcCheckBox" />
+      <LocalizedDictionary />
+    </Button>
+    <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="Cancel" constraints="flow(index=1)" font="Lucida Grande,0,13" localize="true">
+      <LocalizedDictionary />
+    </Button>
+  </Panel>
+  <Browser root="data.project.resourceCenter.retrieveCalcLibrary" iteratorClassName="org.openflexo.foundation.ontology.calc.OntologyCalc" visibleRowCount="3" rowHeight="18" boundToSelectionManager="false" selectionMode="DiscontiguousTreeSelection" selected="data.calc" showFooter="false" rootVisible="true" showRootsHandle="true" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" borderSelectionColor="26,96,206" constraints="gridbag(insetsLeft=10;insetsRight=10;gridHeight=2;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=3;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=1.0;weightX=0.0;fill=both)" width="260" height="100" name="CalcBrowser" localize="true" enable="data.useCalc" manageDynamicModel="true">
+    <BrowserElement dataClassName="org.openflexo.foundation.ontology.calc.CalcLibrary" label="&quot;Calc Library&quot;" icon="calcLibrary.icon" isEditable="false" filtered="false" defaultVisible="true" name="calcLibrary">
+      <Children data="calcLibrary.rootFolder.children" name="folders" />
+      <Children data="calcLibrary.rootFolder.calcs" name="calcs" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.ontology.calc.CalcFolder" label="calcFolder.name" icon="calcFolder.icon" isEditable="false" filtered="false" defaultVisible="true" name="calcFolder">
+      <Children data="calcFolder.children" name="folders" />
+      <Children data="calcFolder.calcs" name="calcs" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.ontology.calc.OntologyCalc" label="ontologyCalc.name" icon="ontologyCalc.icon" isEditable="false" filtered="false" defaultVisible="true" name="ontologyCalc" />
+  </Browser>
+  <LocalizedDictionary>
+    <Localized key="uri" lang="English">URI</Localized>
+    <Localized key="description" lang="English">Description</Localized>
+    <Localized key="uri" lang="French">URI</Localized>
+    <Localized key="description" lang="French">Description</Localized>
+    <Localized key="uri" lang="Dutch">URI</Localized>
+    <Localized key="description" lang="Dutch">Description</Localized>
+    <Localized key="edition_pattern" lang="French">Edition pattern</Localized>
+    <Localized key="ontologic_calc" lang="French">Calque ontologique</Localized>
+    <Localized key="edition_pattern" lang="English">Edition pattern</Localized>
+    <Localized key="ontologic_calc" lang="English">Ontologic calc</Localized>
+    <Localized key="validate" lang="English">Validate</Localized>
+    <Localized key="label" lang="English">Label</Localized>
+    <Localized key="validate" lang="French">Valider</Localized>
+    <Localized key="label" lang="French">Label</Localized>
+    <Localized key="Cancel" lang="French">Annuler</Localized>
+    <Localized key="validate" lang="Dutch">Validate</Localized>
+    <Localized key="label" lang="Dutch">Label</Localized>
+    <Localized key="create_new_ontologic_shema" lang="French">Créer un nouveau schéma ontologique</Localized>
+    <Localized key="create_new_ontologic_shema" lang="English">Create new ontologic shema</Localized>
+    <Localized key="create_ontologic_shema_without_ontologic_calc" lang="French">Créer un schéma ontologique sans relation avec un calque ontoloique</Localized>
+    <Localized key="create_ontologic_shema_without_ontologic_calc" lang="English">Create new ontologic shema without ontologic calc</Localized>
+    <Localized key="new_shema_name" lang="French">Nom du nouveau schéma</Localized>
+    <Localized key="new_shema_name" lang="English">New schema name</Localized>
+    <Localized key="no_shema_name_defined" lang="English">Please supply a name for newly created shema</Localized>
+    <Localized key="no_ontologic_calc_defined" lang="English">Please choose an ontologic calc</Localized>
+    <Localized key="no_folder_defined" lang="English">No folder defined</Localized>
+    <Localized key="a_shema_with_that_name_already_exists" lang="English">A shema with that name already exist. Please choose another name</Localized>
+    <Localized key="no_shema_name_defined" lang="French">Aucun nom défini pour ce nouveau schéma</Localized>
+    <Localized key="no_ontologic_calc_defined" lang="French">Veuillez choisir un calque ontologique</Localized>
+    <Localized key="no_folder_defined" lang="French">Pas de dossier sélectionné</Localized>
+    <Localized key="a_shema_with_that_name_already_exists" lang="French">Ce nom de schéma est déjà utilisé, veuillez en choisir un autre.</Localized>
+  </LocalizedDictionary>
+</Panel>
+

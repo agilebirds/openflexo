@@ -1,0 +1,28 @@
+#if($generator.isPrototype())
+  #if(!${widget.getBindingValue().isBindingValid()} && !${widget.getIsAcceptableForAnyProcessInstanceDictionary()})
+	#set($type="String")
+	#if($widget.getValue())
+		#set($value = "$quote${generator.escapeStringForJava($widget.getValue())}$quote")
+	#else
+		#set($value = "null")
+	#end
+	#getset($type "#name()" $value)
+  #end
+#end
+#tooltipAsJavaMethod()
+
+#if($widget.isInPopup())
+    public String nameFor#capName()()
+    {
+        #if(${widget.isInRepetition()})
+            return "#name()" + uniqueIdentifierForName() + ${widget.getHTMLListDescriptor().getIndexName()};
+        #else
+            return "#name()" + uniqueIdentifierForName();
+        #end
+    }
+#elseif(${widget.isInRepetition()})
+    public String nameFor#capName()()
+    {
+        return "#name()" + ${widget.getHTMLListDescriptor().getIndexName()};
+    }
+#end

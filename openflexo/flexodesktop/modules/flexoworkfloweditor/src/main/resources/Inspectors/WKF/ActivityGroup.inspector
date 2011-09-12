@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.ActivityGroup" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="20" title="Graphics" layout="twocols" font="SansSerif,0,11" name="GraphicsTab">
+      <Label label="background_color" localize="true" name="ColorLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" />
+      <Color data="data.color" constraints="twocols(location=right;index=13;expandHorizontally=false;expandVertically=false)" name="Color" localize="true" />
+    </Tab>
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label label="name" localize="true" name="GroupNameLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <TextField passwd="false" localize="true" name="GroupName" data="data.groupName" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Graphics" lang="French">Graphisme</Localized>
+    <Localized key="background_color" lang="English">Background color</Localized>
+    <Localized key="background_color" lang="French">Couleur de l'arrière-plan</Localized>
+    <Localized key="background_color" lang="Dutch">Background color</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="name" lang="English">Name</Localized>
+    <Localized key="name" lang="French">Nom</Localized>
+    <Localized key="name" lang="Dutch">Name</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Activity Group" />
+</Panel>
+

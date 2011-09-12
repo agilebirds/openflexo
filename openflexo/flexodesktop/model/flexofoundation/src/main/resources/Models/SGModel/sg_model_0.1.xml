@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Mapping model for generated sources encoding version 1.0 -->
+
+<model builder="org.openflexo.foundation.xml.GeneratedSourcesBuilder" handlesReferences="yes"> 
+
+   <mapId>
+	  <map entityClass="org.openflexo.foundation.FlexoModelObject" identifierAccessor="serializationIdentifier"/>
+  </mapId>
+	
+  <entity name="org.openflexo.foundation.FlexoModelObject" abstract="YES" finalizer="finalizeDeserialization">
+  	<property name="userIdentifier" xmlTag="userID" copyable="no" attribute="YES" description="Unique ID of the user (used for team synchronization)"/>
+  	<property name="flexoID" xmlTag="flexoID" copyable="no" attribute="YES" description="Unique ID generated and maintained by Flexo"/>
+  	<property name="docFormat" xmlTag="docFormat" attribute="YES" description=""/>
+    <property name="dontGenerate" xmlTag="dontGenerate" attribute="YES" description="Check this box, if you don't want this node to generate documentation"/>
+    <property name="description" xmlTag="description" attribute="YES" description="Defines widget name"/>
+    <property name="hasSpecificDescriptions" xmlTag="useSpecificDescriptions" attribute="YES" description="Wheter the specific descriptions should be used in the generated documentation or not"/>
+    <property name="specificDescriptions" xmlTag="specificDescriptions" type="hashtable" description="Hashtable(String,String) that contains a name of a DocType as a key, and a description specific to that DocType as the value"/>
+    <property name="customProperties" contains="org.openflexo.foundation.FlexoProperty" type="vector" primary="yes"/>
+    <property name="dynamicProperties" xmlTag="?" type="unmappedAttributes" description="Hashtable(String,String) that contains dynamic properties (data that are not handled by application, but need to be stored in the context of back compatibility)"/>
+    <description>Root class for all objects of Flexo</description>
+  </entity>
+
+  <entity name="org.openflexo.foundation.FlexoProperty" xmlTag="FlexoProperty">
+     <property name="name" xmlTag="name" attribute="yes"/>
+     <property name="value" xmlTag="value" attribute="yes"/>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.cg.CGObject" abstract="yes">
+    <description>Abstract definition of CG structure</description>
+   </entity>
+
+  <entity name="org.openflexo.foundation.cg.GeneratedOutput" abstract="YES">
+    <description>Structure of all generated ouput</description>
+    <property name="generatedRepositories" xmlTag="SourceRepository" type="vector" primary="yes" description="TODO"/> 
+  </entity>
+
+  <entity name="org.openflexo.foundation.sg.GeneratedSources" xmlTag="GeneratedSources">
+    <description>Structure of all generated documentation</description>
+    <property name="implementationModels" xmlTag="ImplementationModel" type="vector" primary="yes"/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.cg.GenerationRepository" abstract="YES">
+    <property name="name" xmlTag="srcRepositoryIdentifier" attribute="yes"/>
+    <property name="displayName" xmlTag="name" attribute="yes"/>
+    <property name="symbolicDirectories" xmlTag="CGSymbolicDirectory" type="hashtable" key="name" primary="yes"/> 
+    <property name="files" xmlTag="CGFile" type="vector" primary="yes"/> 
+    <property name="preferredTemplateRepositoryName" xmlTag="preferredTemplateRepository" attribute="yes"/> 
+    <property name="releases" xmlTag="CGRelease" type="vector" primary="yes"/>
+    <property name="format" xmlTag="format" attribute="yes" description="The target format (technology, language) of this repository"/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.sg.SourceRepository" xmlTag="SourceRepository">
+    <description>Structure of a generated source repository</description>
+    <property name="implementationModelName" xmlTag="implementationModelName" attribute="yes"/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.cg.CGSymbolicDirectory" xmlTag="CGSymbolicDirectory">
+    <description>Symbolic directory</description>
+    <property name="name" xmlTag="name" attribute="yes"/> 
+    <property name="directory" xmlTag="directory" attribute="yes"/> 
+   </entity>
+
+  <entity name="org.openflexo.foundation.cg.CGFile" xmlTag="CGFile">
+    <description>Structure of a generated code file</description>
+    <property name="symbolicDirectoryName" xmlTag="symbolicDirectoryName" attribute="yes"/>
+    <property name="markedAsDoNotGenerate" xmlTag="markedAsDoNotGenerate" attribute="yes"/> 
+    <property name="resourceName" xmlTag="resourceName" attribute="yes"/>
+    <property name="usedTemplates" xmlTag="usedTemplates" type="vector"/> 
+  </entity>
+
+  <entity name="org.openflexo.foundation.cg.version.CGRelease" xmlTag="CGRelease">
+    <description>Generated code release</description>
+    <property name="name" xmlTag="name" attribute="yes"/> 
+    <property name="date" xmlTag="date" attribute="yes"/> 
+    <property name="versionIdentifier" xmlTag="version" attribute="yes"/> 
+    <property name="userId" xmlTag="usedId" attribute="yes"/> 
+   </entity>
+
+  <entity name="org.openflexo.foundation.sg.implmodel.ImplementationModelDefinition" xmlTag="ImplementationModel">
+    <description>Implementation model</description>
+    <property name="name" xmlTag="name" attribute="yes"/>
+   </entity>
+
+</model>

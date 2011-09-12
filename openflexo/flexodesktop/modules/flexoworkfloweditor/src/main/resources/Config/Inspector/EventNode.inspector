@@ -1,0 +1,47 @@
+<inspector title = "Event Node" inheritsfrom="Node.inspector" inspectedClassName="org.openflexo.foundation.wkf.node.EventNode">
+    
+    <tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		
+		<property name="documentationUrl" label="docUrl" widget="TEXT_FIELD" depends="isStartOrEnd" conditional="isStartOrEnd=true" constraint="3"/>
+	    <property name="linkedProcess" label="trigger_process" widget="CUSTOM" depends="isStartOrEnd" conditional="isStartOrEnd=true" constraint="4">
+			<param name="className" value="org.openflexo.components.widget.ProcessInspectorWidget"/>
+		</property>
+		<property name="newStatus" label="new_status" widget="DROPDOWN" constraint="7">
+			<param name="dynamiclist" value="process.statusList.allAvailableStatus"/>
+			<param name="format" value="nameAndProcess"/>
+		</property>
+		<property name="dateBinding" label="date" widget="CUSTOM" depends="isTriggerTimer" conditional="isTriggerTimer=true" constraint="5">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+            <param name="binding_definition" value="dateBindingDefinition"/>          
+            <param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+		</property>
+		<property name="delay" label="delay" widget="CUSTOM" depends="isTriggerTimer" conditional="isTriggerTimer=true" constraint="6">
+			<param name="className" value="org.openflexo.components.widget.DurationInspectorWidget"/>
+		</property>
+		
+		
+		<property name="fromAddress" label="from" widget="TEXT_FIELD" depends="isMessageSent" conditional="isMessageSent=true" constraint="5">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="toAddress" label="to" widget="TEXT_FIELD" depends="isMessageSent" conditional="isMessageSent=true" constraint="6">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="mailSubject" label="subject" widget="TEXT_FIELD" depends="isMessageSent" conditional="isMessageSent=true" constraint="7">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="mailBody" label="body" widget="TEXT_AREA" depends="isMessageSent" conditional="isMessageSent=true" constraint="8">
+			<param name="rows" value="8"/>
+		</property>
+	</tab>
+	
+    <tab name="Advanced" index="1">
+         <property name="role" label="representation_role" widget="DROPDOWN" depends="isInRootPetriGraph" conditional="isInRootPetriGraph=true" constraint="2">
+            <param name = "format" value="name"/>
+            <param name = "dynamiclist" value="project.workflow.allRoles"/>
+         </property>
+    </tab>
+    
+</inspector>

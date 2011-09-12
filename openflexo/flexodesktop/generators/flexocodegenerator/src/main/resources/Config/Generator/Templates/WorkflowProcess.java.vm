@@ -1,0 +1,187 @@
+#package()
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
+
+import ${projectGenerator.getProcessBusinessDataBaseEntity().getFullQualifiedName()};
+
+
+/**
+ * WorkflowProcess class 
+ * 
+ * @author FlexoBPM Generator, Agile Birds sprl. (see www.FlexoBPM.com)
+ * @version 
+ */
+@SuppressWarnings("serial")
+public enum WorkflowProcess
+{
+	#foreach( $process in ${project.getAllFlexoProcesses()} )
+		#set($isNotFirstStatus = $false)
+		#if($isNotFirstProcess),#end
+		${process.getProcessDictionaryKey()}(
+			"${toolbox.convertStringToJavaString(${process.getName()})}", 
+			WorkflowBusinessData.${process.getBusinessDataDictionaryKey()},
+			#if(${process.getParentProcess()})${process.getParentProcess().getProcessDictionaryKey()}#else null#end, 
+			new String[]{#foreach($status in ${process.getStatusList().elements()})#if($isNotFirstStatus),#end"${toolbox.convertStringToJavaString(${status.getName()})}"#set($isNotFirstStatus = $true)#end},
+			#if(${process.getStatusList().getDefaultStatus().getName()})"${toolbox.convertStringToJavaString(${process.getStatusList().getDefaultStatus().getName()})}"#else null#end
+		)
+		#set($isNotFirstProcess = $true)
+	#end
+	;
+	
+	public static WorkflowProcess getWorkflowProcess(String processKey)
+	{
+		try {
+			return valueOf(processKey);
+		}
+		catch (Exception e) {
+			return null;
+		}
+	}
+	
+	private String processName;
+	private WorkflowBusinessData businessDataClass;
+	private WorkflowProcess parentProcess;
+	private Vector<String> statuses;
+	private String defaultStatus;
+
+	private WorkflowProcess(String processName, WorkflowBusinessData businessDataClass, WorkflowProcess parentProcess, String[] statuses, String defaultStatus)
+	{
+		this.processName = processName;
+		this.businessDataClass = businessDataClass;
+		this.parentProcess = parentProcess;
+		this.statuses = new Vector<String>(Arrays.asList(statuses));
+		this.defaultStatus = defaultStatus;
+	}
+
+	public String getProcessName()
+	{
+		return processName;
+	}
+
+	public WorkflowBusinessData getBusinessDataClass()
+	{
+		return businessDataClass;
+	}
+
+	public WorkflowProcess getParentProcess()
+	{
+		return parentProcess;
+	}
+	
+	public Set<WorkflowProcess> getChildProcesses() {
+        Set<WorkflowProcess> possibleChildren = new HashSet<WorkflowProcess>();
+        for (WorkflowProcess process : WorkflowProcess.values()) {
+            if (process.getParentProcess() == this) {
+                possibleChildren.add(process);
+            }
+        }
+
+        return possibleChildren;
+    }
+
+	public Vector<String> getStatuses()
+	{
+		return statuses;
+	}
+	
+	public String getDefaultStatus()
+	{
+		return defaultStatus;
+	}
+	
+	public static enum WorkflowBusinessData {
+		#set($isFirst = $true)
+		#foreach($businessDataKey in ${generator.getAllBusinessDataKeys()} )
+			#if(!$isFirst),#end
+			$businessDataKey(
+				${generator.getDMEntityForBusinessData($businessDataKey).getFullQualifiedName()}.class,
+				new LinkedHashMap<String, Class<? extends Object>>()
+            	{
+            		{
+            			#foreach($entry in ${generator.getKeysTypeForBusinessData($businessDataKey).entrySet()})
+            				put("$entry.getKey()",  ${entry.getValue().getName()}.class);
+            			#end
+            		}
+            	}
+			)
+			#set($isFirst = $false)
+		#end;
+		
+		public static WorkflowBusinessData getWorkflowBusinessData(String businessDataKey)
+        {
+        	try {
+        		return valueOf(businessDataKey);
+        	}
+        	catch (Exception e) {
+        		return null;
+        	}
+        }
+		
+        private Class<? extends ProcessBusinessData> classToInstanciate;
+		private Map<String, Class<? extends Object>> processBusinessDataKeyTypes;
+
+        private WorkflowBusinessData(Class<? extends ProcessBusinessData> classToInstanciate, Map<String, Class<? extends Object>> processBusinessDataKeyTypes) {
+            this.classToInstanciate = classToInstanciate;
+			this.processBusinessDataKeyTypes = processBusinessDataKeyTypes;
+        }
+
+        public String getBusinessDataClassKey() {
+            return name();
+        }
+        
+        public ProcessBusinessData createNewProcessBusinessData(BusinessDataStorage businessDataStorage)
+        {
+			ProcessBusinessData processBusinessData;
+        	try
+			{
+				processBusinessData = classToInstanciate.newInstance();
+				Date timestamp = new Date();
+				processBusinessData.setCreationDate(timestamp);
+				processBusinessData.setLastUpdateDate(timestamp);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				processBusinessData =  new ProcessBusinessData();
+			}
+			
+			processBusinessData.setBusinessDataStorage(businessDataStorage);
+			return processBusinessData;
+        }
+		
+		public Map<String, Class<? extends Object>> getProcessBusinessDataKeyTypes()
+		{
+			return processBusinessDataKeyTypes;
+		}
+		
+		public Set<WorkflowBusinessData> getAllPossibleChildren()
+		{
+			Set<WorkflowBusinessData> possibleChildren = new HashSet<WorkflowBusinessData>();
+			for(WorkflowProcess process : WorkflowProcess.values())
+			{
+				if(process.getParentProcess() != null && process.getParentProcess().getBusinessDataClass() == this)
+					possibleChildren.add(process.getBusinessDataClass());
+			}
+			
+			return possibleChildren;
+		}
+		
+		public Set<WorkflowProcess> getAllPossibleWorkflowProcess()
+		{
+			Set<WorkflowProcess> possibleProcesses = new HashSet<WorkflowProcess>();
+			for(WorkflowProcess process : WorkflowProcess.values())
+			{
+				if(process.getBusinessDataClass() == this)
+					possibleProcesses.add(process);
+			}
+			
+			return possibleProcesses;
+		}
+	}
+}

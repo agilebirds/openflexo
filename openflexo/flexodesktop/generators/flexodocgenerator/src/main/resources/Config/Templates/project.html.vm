@@ -1,0 +1,83 @@
+#macro(generateImportScriptForProcess $process)
+	<script type="text/javascript" prefixDirectoryPath="" src="processes/${generator.nameForProcessNoExt($process, $repository)}.js"></script>
+	#foreach($folder in ${process.getProcessNode().getSortedFolders()})
+		#generateImportScriptForFolder($folder)
+	#end
+	#foreach($subProcessNode in ${process.getProcessNode().getSortedOrphanSubprocesses()})
+    	#generateImportScriptForProcess($subProcessNode.getProcess())
+    #end
+#end
+
+#macro(generateImportScriptForFolder $folder)
+	#void(${allFolders.add($folder)})
+	#foreach($subFolder in ${folder.getSortedFolders()})
+		#generateImportScriptForFolder($subFolder)
+	#end
+	#foreach($subProcessNode in ${folder.getProcesses()})
+    	#generateImportScriptForProcess($subProcessNode.getProcess())
+    #end
+#end
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Functional specification: ${project.getName()}</title>
+
+        <link rel="stylesheet" href="resources/css/HtmlDoc.css" type="text/css"></link>
+        <link rel="stylesheet" href="resources/css/dtree.css" type="text/css"></link>
+        <link rel="stylesheet" href="resources/css/litbox.css" type="text/css"></link>
+        <!--[if lte IE 6]>
+            <link rel="stylesheet" href="resources/css/HtmlDocIE6.css" type="text/css" />
+        <![endif]-->
+
+        <script type="text/javascript" src="resources/scripts/prototype.js"></script>
+        <script type="text/javascript" src="resources/scripts/effects.js"></script>
+        <script type="text/javascript" src="resources/scripts/controls.js"></script>
+        <script type="text/javascript" src="resources/scripts/resize.js"></script>
+        <script type="text/javascript" src="resources/scripts/dragdrop.js"></script>
+        <script type="text/javascript" src="resources/scripts/DenaliJavaScript.js"></script>
+        <script type="text/javascript" src="resources/scripts/dtree.js"></script>
+        <script type="text/javascript" src="resources/scripts/litbox.js"></script>
+        <script type="text/javascript" src="resources/scripts/scrollbrowse.js"></script>
+        <script type="text/javascript" src="resources/scripts/flexoreader.js"></script>
+        
+		#set($allFolders = ${generator.getNewVector()})
+        <!-- Import here all processes js -->
+        #foreach($processNode in ${project.getWorkflow().getSortedTopLevelProcesses()})
+        	#generateImportScriptForProcess($processNode.getProcess())
+        #end
+        
+		<!-- Import here all process folders js -->
+		#foreach($folder in $allFolders)
+			<script type="text/javascript" prefixDirectoryPath="" src="processes/${generator.nameForProcessFolderNoExt($folder, $repository)}.js"></script>
+		#end
+    </head>
+    <body>
+        <div id="htmlDocPage">
+            <div id="htmlDocLeftColumn">
+                <div id="htmlDocUpperLeftColumn">
+                	<div id="htmlDocUpperLeftColumnHeader">
+	                </div>
+	
+	                <div id="htmlDocUpperLeftColumnContent">
+	                </div>
+                </div>
+                <div id="htmlDocLowerLeftColumn">
+                </div>
+            </div>
+            <div id="htmlDocRightColumn">
+                <div id="htmlDocRightColumnHeader">
+                </div>
+
+                <div id="htmlDocRightColumnContent">
+                </div>
+            </div>
+        </div>
+        
+        <script type="text/javascript">
+        	FlexoReader.render();
+        </script>
+    </body>
+</html>

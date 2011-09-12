@@ -1,0 +1,25 @@
+    /** Holds the path of the file on the user's computer (beware that IE gives you an absolute path while Firefox only gives you the file name.)*/
+    protected String #name()FilePath;
+    /** Holds the system file path where the uploaded file is located */
+    protected String #name()FinalFilePath;
+    
+    public String #name()TempFilePath() {
+        if (#name()FinalFilePath==null) {
+            try {
+                #name()FinalFilePath = File.createTempFile(getClass().getSimpleName(),"#name()").getAbsolutePath();
+            } catch(IOException e) {
+                if (logger.isLoggable(Level.WARNING))
+                    logger.warning("IOException occured: "+e.getMessage()+". Set level to FINE on logger named '" + logger.getName() + "' to see stacktrace.");
+                if (logger.isLoggable(Level.FINE))
+                    logger.log(Level.FINE, "NumberFormatException occured: " + e.getMessage(), e);
+            }
+        }
+        return #name()FinalFilePath;
+    }
+    
+    private File #name()File() {
+        if (#name()FinalFilePath!=null)
+            return new File(#name()FinalFilePath);
+        return null; 
+    }
+    

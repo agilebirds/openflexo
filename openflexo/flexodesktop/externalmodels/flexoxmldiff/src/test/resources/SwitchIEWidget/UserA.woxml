@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<IEOperationComponent id="VDE_13617" userID="VDE" flexoID="13617" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" isLocalized="false">
+  <IESequenceWidget id="VDE_13618" userID="VDE" flexoID="13618" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false">
+    <IEHTMLTable id="VDE_13997" grid="false" noCSS="false" isShowingBorder="true" pourcentageWidths="0.25;0.25;0.25;0.25" userID="VDE" flexoID="13997" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="HTMLTable.inspector" index="0" isRootOfPartialComponent="false">
+      <IESequenceTR id="VDE_14002" userID="VDE" flexoID="14002" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false">
+        <IETR id="VDE_14005" rowIndex="0" userID="VDE" flexoID="14005" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="TR.inspector" index="0" isRootOfPartialComponent="false">
+          <IESequenceTD id="VDE_14009" userID="VDE" flexoID="14009" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false">
+            <IETD id="VDE_14012" isHidden="false" weightx="1.0" weighty="1.0" gridx="0" gridy="0" rowSpan="1" colSpan="1" xLocation="0" userID="VDE" flexoID="14012" dontEscapeLatex="false" dontGenerate="false" description="" useSpecificDescriptions="false" inspector="TD.inspector" index="0" label="" isRootOfPartialComponent="false">
+              <IESequenceWidget id="VDE_14016" userID="VDE" flexoID="14016" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false">
+                <IETextField id="VDE_14145" field_type="Date" min="0" max="2147483647" size="0" isDynamic="false" tfcssClass="DLExtensible" isMandatory="false" userID="VDE" flexoID="14145" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" disabled="false" exampleValueIsDefaultValue="false" inspector="TextField.inspector" index="0" isRootOfPartialComponent="false" />
+                <IEButton id="VDE_14149" imageName="_Icon_Calendar.gif" isMandatoryFlexoAction="false" userID="VDE" flexoID="14149" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" blank="false" isClosingPopup="false" isSubmittingOpener="true" isValidatingForm="true" isSavingChanges="false" submitForm="false" includePopupInPage="true" inspector="Button.inspector" index="1" isRootOfPartialComponent="false">
+                  <PopupComponentInstance id="VDE_14157" userID="VDE" flexoID="14157" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" componentName="WDLDateAssistant" />
+                </IEButton>
+              </IESequenceWidget>
+            </IETD>
+            <IETD id="VDE_14019" isHidden="false" weightx="1.0" weighty="1.0" gridx="1" gridy="0" rowSpan="1" colSpan="1" xLocation="1" userID="VDE" flexoID="14019" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="TD.inspector" index="1" isRootOfPartialComponent="false">
+              <IESequenceWidget id="VDE_14023" userID="VDE" flexoID="14023" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false" />
+            </IETD>
+            <IETD id="VDE_14026" isHidden="false" weightx="1.0" weighty="1.0" gridx="2" gridy="0" rowSpan="1" colSpan="1" xLocation="2" userID="VDE" flexoID="14026" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="TD.inspector" index="2" isRootOfPartialComponent="false">
+              <IESequenceWidget id="VDE_14030" userID="VDE" flexoID="14030" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false" />
+            </IETD>
+            <IETD id="VDE_14033" isHidden="false" weightx="1.0" weighty="1.0" gridx="3" gridy="0" rowSpan="1" colSpan="1" xLocation="3" userID="VDE" flexoID="14033" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="TD.inspector" index="3" isRootOfPartialComponent="false">
+              <IESequenceWidget id="VDE_14037" userID="VDE" flexoID="14037" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false" />
+            </IETD>
+          </IESequenceTD>
+        </IETR>
+        <IETR id="VDE_14040" rowIndex="1" userID="VDE" flexoID="14040" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="TR.inspector" index="1" isRootOfPartialComponent="false">
+          <IESequenceTD id="VDE_14044" userID="VDE" flexoID="14044" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false">
+            <IETD id="VDE_14047" isHidden="false" weightx="1.0" weighty="1.0" gridx="0" gridy="1" rowSpan="1" colSpan="1" xLocation="0" userID="VDE" flexoID="14047" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="TD.inspector" index="0" isRootOfPartialComponent="false">
+              <IESequenceWidget id="VDE_14051" userID="VDE" flexoID="14051" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false" />
+            </IETD>
+            <IETD id="VDE_14054" isHidden="false" weightx="1.0" weighty="1.0" gridx="1" gridy="1" rowSpan="1" colSpan="1" xLocation="1" userID="VDE" flexoID="14054" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="TD.inspector" index="1" isRootOfPartialComponent="false">
+              <IESequenceWidget id="VDE_14058" userID="VDE" flexoID="14058" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false" />
+            </IETD>
+            <IETD id="VDE_14061" isHidden="false" weightx="1.0" weighty="1.0" gridx="2" gridy="1" rowSpan="1" colSpan="1" xLocation="2" userID="VDE" flexoID="14061" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="TD.inspector" index="2" isRootOfPartialComponent="false">
+              <IESequenceWidget id="VDE_14065" userID="VDE" flexoID="14065" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false" />
+            </IETD>
+            <IETD id="VDE_14068" isHidden="false" weightx="1.0" weighty="1.0" gridx="3" gridy="1" rowSpan="1" colSpan="1" xLocation="3" userID="VDE" flexoID="14068" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="TD.inspector" index="3" isRootOfPartialComponent="false">
+              <IESequenceWidget id="VDE_14072" userID="VDE" flexoID="14072" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false" />
+            </IETD>
+          </IESequenceTD>
+        </IETR>
+        <IETR id="VDE_14075" rowIndex="2" userID="VDE" flexoID="14075" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="TR.inspector" index="2" isRootOfPartialComponent="false">
+          <IESequenceTD id="VDE_14079" userID="VDE" flexoID="14079" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false">
+            <IETD id="VDE_14082" isHidden="false" weightx="1.0" weighty="1.0" gridx="0" gridy="2" rowSpan="1" colSpan="1" xLocation="0" userID="VDE" flexoID="14082" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="TD.inspector" index="0" isRootOfPartialComponent="false">
+              <IESequenceWidget id="VDE_14086" userID="VDE" flexoID="14086" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false" />
+            </IETD>
+            <IETD id="VDE_14089" isHidden="false" weightx="1.0" weighty="1.0" gridx="1" gridy="2" rowSpan="1" colSpan="1" xLocation="1" userID="VDE" flexoID="14089" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="TD.inspector" index="1" isRootOfPartialComponent="false">
+              <IESequenceWidget id="VDE_14093" userID="VDE" flexoID="14093" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false" />
+            </IETD>
+            <IETD id="VDE_14096" isHidden="false" weightx="1.0" weighty="1.0" gridx="2" gridy="2" rowSpan="1" colSpan="1" xLocation="2" userID="VDE" flexoID="14096" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="TD.inspector" index="2" isRootOfPartialComponent="false">
+              <IESequenceWidget id="VDE_14100" userID="VDE" flexoID="14100" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false" />
+            </IETD>
+            <IETD id="VDE_14103" isHidden="false" weightx="1.0" weighty="1.0" gridx="3" gridy="2" rowSpan="1" colSpan="1" xLocation="3" userID="VDE" flexoID="14103" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="TD.inspector" index="3" isRootOfPartialComponent="false">
+              <IESequenceWidget id="VDE_14107" userID="VDE" flexoID="14107" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false" />
+            </IETD>
+          </IESequenceTD>
+        </IETR>
+        <IETR id="VDE_14110" rowIndex="3" userID="VDE" flexoID="14110" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="TR.inspector" index="3" isRootOfPartialComponent="false">
+          <IESequenceTD id="VDE_14114" userID="VDE" flexoID="14114" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false">
+            <IETD id="VDE_14117" isHidden="false" weightx="1.0" weighty="1.0" gridx="0" gridy="3" rowSpan="1" colSpan="1" xLocation="0" userID="VDE" flexoID="14117" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="TD.inspector" index="0" isRootOfPartialComponent="false">
+              <IESequenceWidget id="VDE_14121" userID="VDE" flexoID="14121" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false" />
+            </IETD>
+            <IETD id="VDE_14124" isHidden="false" weightx="1.0" weighty="1.0" gridx="1" gridy="3" rowSpan="1" colSpan="1" xLocation="1" userID="VDE" flexoID="14124" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="TD.inspector" index="1" isRootOfPartialComponent="false">
+              <IESequenceWidget id="VDE_14128" userID="VDE" flexoID="14128" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false" />
+            </IETD>
+            <IETD id="VDE_14131" isHidden="false" weightx="1.0" weighty="1.0" gridx="2" gridy="3" rowSpan="1" colSpan="1" xLocation="2" userID="VDE" flexoID="14131" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="TD.inspector" index="2" isRootOfPartialComponent="false">
+              <IESequenceWidget id="VDE_14135" userID="VDE" flexoID="14135" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false" />
+            </IETD>
+            <IETD id="VDE_14138" isHidden="false" weightx="1.0" weighty="1.0" gridx="3" gridy="3" rowSpan="1" colSpan="1" xLocation="3" userID="VDE" flexoID="14138" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="TD.inspector" index="3" isRootOfPartialComponent="false">
+              <IESequenceWidget id="VDE_14142" userID="VDE" flexoID="14142" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false" />
+            </IETD>
+          </IESequenceTD>
+        </IETR>
+      </IESequenceTR>
+    </IEHTMLTable>
+  </IESequenceWidget>
+</IEOperationComponent>
+

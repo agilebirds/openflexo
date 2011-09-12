@@ -1,0 +1,44 @@
+## -*-xml-*-
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (DefinitionsDocGenerator)
+* - repository: the current repository for which we generate the doc (DGRepository)
+* - level: the level to use in title.
+* - objet: the process folder to generate
+*#
+
+#set($processFolder = $object)
+
+	<w:p>
+		<w:r>
+			<w:rPr>
+				<w:pStyle w:val="Heading$level"/>
+				<w:b/>
+				<w:u w:val="single"/>
+			</w:rPr>
+			<w:t xml:space="preserve">Description:</w:t>
+		</w:r>
+	</w:p>
+	
+#description($processFolder)
+
+#if(${processFolder.hasSpecificDescriptionForKey('Objectives')})
+	<w:p>
+		<w:r>
+			<w:rPr>
+				<w:pStyle w:val="Heading$level"/>
+				<w:b/>
+				<w:u w:val="single"/>
+			</w:rPr>
+			<w:t xml:space="preserve">Objectives:</w:t>
+		</w:r>
+	</w:p>
+#renderSpecificDescription($processFolder "Objectives")
+#end
+
+#**
+* Recursion on subprocesses and folders
+*#
+#renderProcessOrFolderChildren($processFolder $level)

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OperatorNode id="SYL_9503" operatorType="SWITCH" userID="SYL" flexoID="9503" dontEscapeLatex="false" dontGenerate="false" posiX="199" posiY="0" width="60" height="72" textColor="0,0,0" backColor="255,255,255" nodeName="SWITCH" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0">
+  <NodeProperties />
+</OperatorNode>
+

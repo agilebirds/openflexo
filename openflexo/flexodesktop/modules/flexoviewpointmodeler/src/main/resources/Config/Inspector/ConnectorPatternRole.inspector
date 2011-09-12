@@ -1,0 +1,120 @@
+<inspector title = "Connector Pattern Role" inheritsfrom="PatternRole.inspector" inspectedClassName="org.openflexo.foundation.ontology.calc.ConnectorPatternRole">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+	
+		<property name="graphicalRepresentation.foreground" label="foreground" widget="CUSTOM" constraint="10">
+			<param name="className" value="org.openflexo.fge.view.widget.ForegroundStyleInspectorWidget"/>
+		</property>
+		<property name="graphicalRepresentation.textStyle" label="text_style" widget="CUSTOM" constraint="11">
+			<param name="className" value="org.openflexo.fge.view.widget.TextStyleInspectorWidget"/>
+		</property>
+		<property name="graphicalRepresentation.connectorType" label="connector_type" widget="DROPDOWN" constraint="20">
+			<param name="formatter" value="name"/>
+			<param name="columns" value="10"/>
+			<param name="showReset" value="false"/>
+		</property>
+		<property name="graphicalRepresentation.connector.lineConnectorType" label="line_connector_type" widget="DROPDOWN" constraint="21" depends="graphicalRepresentation.connectorType" conditional="graphicalRepresentation.connectorType=LINE">
+			<param name="columns" value="10"/>
+			<param name="showReset" value="false"/>
+		</property>
+		<property name="graphicalRepresentation.connector.areBoundsAdjustable" label="adjustable_bounds" widget="CHECKBOX" constraint="22" depends="graphicalRepresentation.connectorType" conditional="graphicalRepresentation.connectorType=CURVE">
+			<param name="columns" value="10"/>
+		</property>
+
+		<property name="graphicalRepresentation.connector.rectPolylinConstraints" label="constraints" widget="DROPDOWN" constraint="23" depends="graphicalRepresentation.connectorType" conditional="graphicalRepresentation.connectorType=RECT_POLYLIN">
+			<param name="columns" value="10"/>
+			<param name="showReset" value="false"/>
+		</property>
+		<property name="graphicalRepresentation.connector.startOrientation" label="start_orientation" widget="DROPDOWN" constraint="24" depends="graphicalRepresentation.connector.rectPolylinConstraints" conditional="graphicalRepresentation.connector.rectPolylinConstraints=ORIENTATIONS_FIXED OR graphicalRepresentation.connector.rectPolylinConstraints=START_ORIENTATION_FIXED">
+			<param name="showIcon" value="true"/>
+			<param name="showReset" value="false"/>
+		</property>
+
+		<property name="graphicalRepresentation.connector.endOrientation" label="end_orientation" widget="DROPDOWN" constraint="25" depends="graphicalRepresentation.connector.rectPolylinConstraints" conditional="graphicalRepresentation.connector.rectPolylinConstraints=ORIENTATIONS_FIXED OR graphicalRepresentation.connector.rectPolylinConstraints=END_ORIENTATION_FIXED">
+			<param name="showIcon" value="true"/>
+			<param name="showReset" value="false"/>
+		</property>
+
+		<property name="graphicalRepresentation.connector.straightLineWhenPossible" label="straight_when_possible" widget="CHECKBOX" constraint="26" depends="graphicalRepresentation.connectorType" conditional="graphicalRepresentation.connectorType=RECT_LINE OR graphicalRepresentation.connectorType=RECT_POLYLIN">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="graphicalRepresentation.connector.adjustability" label="adjustability" widget="DROPDOWN" constraint="27" depends="graphicalRepresentation.connectorType" conditional="graphicalRepresentation.connectorType=RECT_POLYLIN">
+			<param name="showReset" value="false"/>
+		</property>
+		<property name="graphicalRepresentation.connector.isStartingLocationFixed" label="start_location_fixed" widget="CHECKBOX" constraint="28" depends="graphicalRepresentation.connectorType" conditional="graphicalRepresentation.connectorType=RECT_POLYLIN">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="graphicalRepresentation.connector.isEndingLocationFixed" label="end_location_fixed" widget="CHECKBOX" constraint="29" depends="graphicalRepresentation.connectorType" conditional="graphicalRepresentation.connectorType=RECT_POLYLIN">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="graphicalRepresentation.connector.isStartingLocationDraggable" label="start_location_draggable" widget="CHECKBOX" constraint="30" depends="graphicalRepresentation.connectorType" conditional="graphicalRepresentation.connectorType=RECT_POLYLIN">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="graphicalRepresentation.connector.isEndingLocationDraggable" label="end_location_draggable" widget="CHECKBOX" constraint="31" depends="graphicalRepresentation.connectorType" conditional="graphicalRepresentation.connectorType=RECT_POLYLIN">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="graphicalRepresentation.connector.isRounded" label="rounded" widget="CHECKBOX" constraint="33" depends="graphicalRepresentation.connectorType" conditional="graphicalRepresentation.connectorType=RECT_POLYLIN">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="graphicalRepresentation.connector.arcSize" label="arc_size_(pixels)" widget="INTEGER" constraint="34" depends="graphicalRepresentation.connectorType" conditional="graphicalRepresentation.connectorType=RECT_POLYLIN">
+			<param name="columns" value="10"/>
+		</property>
+		
+		<property name="graphicalRepresentation.startSymbol" label="start_symbol" widget="DROPDOWN" constraint="40">
+			<param name="showIcon" value="true"/>
+			<param name="showReset" value="false"/>
+		</property>
+
+		<property name="graphicalRepresentation.startSymbolSize" label="start_symbol_size" widget="DOUBLE" constraint="41" depends="graphicalRepresentation.startSymbol" conditional="graphicalRepresentation.startSymbol != NONE">
+			<param name="minimum" value="0.1"/>
+			<param name="maximum" value="100.0"/>
+			<param name="increment" value="1.0"/>
+		</property>
+
+		<property name="graphicalRepresentation.middleSymbol" label="middle_symbol" widget="DROPDOWN" constraint="42">
+			<param name="showIcon" value="true"/>
+			<param name="showReset" value="false"/>
+		</property>
+
+		<property name="graphicalRepresentation.middleSymbolSize" label="middle_symbol_size" widget="DOUBLE" constraint="43" depends="graphicalRepresentation.middleSymbol" conditional="graphicalRepresentation.middleSymbol != NONE">
+			<param name="minimum" value="0.1"/>
+			<param name="maximum" value="100.0"/>
+			<param name="increment" value="1.0"/>
+		</property>
+
+		<property name="graphicalRepresentation.endSymbol" label="end_symbol" widget="DROPDOWN" constraint="44">
+			<param name="showIcon" value="true"/>
+			<param name="showReset" value="false"/>
+		</property>
+
+		<property name="graphicalRepresentation.endSymbolSize" label="end_symbol_size" widget="DOUBLE" constraint="45" depends="graphicalRepresentation.endSymbol" conditional="graphicalRepresentation.endSymbol != NONE">
+			<param name="minimum" value="0.1"/>
+			<param name="maximum" value="100.0"/>
+			<param name="increment" value="1.0"/>
+		</property>
+
+
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+		<property name="graphicalRepresentation.layer" label="layer" widget="INTEGER" constraint="11">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="graphicalRepresentation.absoluteTextX" label="absolute_text_x" widget="DOUBLE" constraint="12">
+			<param name="increment" value="1"/>
+		</property>
+		<property name="graphicalRepresentation.absoluteTextY" label="absolute_text_y" widget="DOUBLE" constraint="13">
+			<param name="increment" value="1"/>
+		</property>
+		<property name="graphicalRepresentation.connector.pixelOverlap" label="overlap_(pixels)" widget="INTEGER" constraint="32" depends="graphicalRepresentation.connectorType" conditional="graphicalRepresentation.connectorType=RECT_POLYLIN">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="graphicalRepresentation.relativeMiddleSymbolLocation" label="middle_location" widget="DOUBLE" constraint="46" >
+			<param name="minimum" value="0.0"/>
+			<param name="maximum" value="1.0"/>
+			<param name="increment" value="0.05"/>
+		</property>
+	</tab>
+
+
+</inspector>

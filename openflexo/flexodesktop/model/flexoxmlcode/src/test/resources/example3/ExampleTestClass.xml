@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test testURL="http://picolibre.enst-bretagne.fr"> 
+  <testFile>/home/user/XMLCoDe</testFile>
+  <string>this</string>
+  <string>is</string>
+  <string>a</string>
+  <string>test</string>
+  <file>/home/user/aFile.xml</file>
+  <file>/home/user/anOtherFile.xml</file>
+  <foo intField="1">foo1</foo>
+  <foo intField="7">foo7</foo>
+  <foo intField="9">foo9</foo>
+</test>

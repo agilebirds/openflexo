@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.node.AbstractActivityNode" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="8" title="Activity Metrics" layout="twocols" visible="controller.displayInspectorTabForContext(&quot;METRICS&quot;)" font="SansSerif,0,11" name="ActivityMetricsTab">
+      <Label label="metrics" align="center" localize="true" name="MetricsValuesLabel" constraints="twocols(location=center;index=0;expandHorizontally=true;expandVertically=false)" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.MetricsValue" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.metricsValues" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=true)" name="MetricsValues" localize="true" manageDynamicModel="true">
+        <TextFieldColumn data="iterator.metricsDefinition.name" title="name" columnWidth="100" resizable="true" displayTitle="true" tooltip="iterator.metricsDefinition.description" />
+        <TextFieldColumn isEditable="iterator.metricsDefinition.isUnitEditable" data="iterator.unit" title="unit" columnWidth="50" resizable="true" displayTitle="true" />
+        <TextFieldColumn data="iterator.description" title="additional_info" columnWidth="120" resizable="true" displayTitle="true" />
+        <AddAction method="data.addMetrics" name="new" />
+        <RemoveAction method="data.deleteMetrics(selected)" name="delete" />
+      </Table>
+    </Tab>
+    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
+    <Tab index="1" title="Doc" layout="twocols" font="SansSerif,0,11" name="DocTab">
+      <Label label="acronym" localize="true" name="AcronymLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
+      <TextField passwd="false" localize="true" name="Acronym" data="data.acronym" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </TextField>
+    </Tab>
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label label="roleR" localize="true" name="RoleLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
+      <DropDown format="object.nameForInspector" localize="true" name="Role" data="data.role" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" list="data.project.workflow.allAssignableRoles" iteratorClassName="org.openflexo.foundation.wkf.Role" />
+      <Label label="roleA" localize="true" name="RoleALabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
+      <DropDown format="object.nameForInspector" localize="true" name="RoleA" data="data.roleA" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" list="data.project.workflow.allAssignableRoles" iteratorClassName="org.openflexo.foundation.wkf.Role" />
+      <Label label="roleC" align="center" localize="true" name="ConsultedRolesLabel" constraints="twocols(location=center;index=8;expandHorizontally=true;expandVertically=false)" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.Role" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.consultedRoles" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=true)" name="ConsultedRoles" localize="true" manageDynamicModel="true">
+        <LabelColumn data="iterator.nameForInspector" title="role" columnWidth="100" resizable="true" displayTitle="true" />
+        <AddAction method="data.addConsultedRole" name="add" />
+        <RemoveAction method="data.removeConsultedRole(selected)" name="remove" />
+      </Table>
+      <Label label="roleI" align="center" localize="true" name="InformedRolesLabel" constraints="twocols(location=center;index=10;expandHorizontally=true;expandVertically=false)" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.Role" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.informedRoles" constraints="twocols(location=right;index=11;expandHorizontally=true;expandVertically=true)" name="InformedRoles" localize="true" manageDynamicModel="true">
+        <LabelColumn data="iterator.nameForInspector" title="role" columnWidth="100" resizable="true" displayTitle="true" />
+        <AddAction method="data.addInformedRole" name="add" />
+        <RemoveAction method="data.removeInformedRole(selected)" name="remove" />
+      </Table>
+      <Label label="css_sheet" localize="true" name="CssSheetLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" />
+      <DropDown format="object.name" localize="true" name="CssSheet" data="data.cssSheet" constraints="twocols(location=right;index=13;expandHorizontally=false;expandVertically=false)" list="data.cssSheet.availableValues" iteratorClassName="org.openflexo.foundation.utils.FlexoCSS">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </DropDown>
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Activity Metrics" lang="French">Métrique d'activité</Localized>
+    <Localized key="metrics" lang="English">Metrics</Localized>
+    <Localized key="metrics" lang="French">Métriques</Localized>
+    <Localized key="metrics" lang="Dutch">Metrics</Localized>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="acronym" lang="English">Acronym</Localized>
+    <Localized key="acronym" lang="French">Acronyme</Localized>
+    <Localized key="acronym" lang="Dutch">Acronym</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="roleR" lang="English">Role (Responsible)</Localized>
+    <Localized key="roleR" lang="French">Role (Responsabilité)</Localized>
+    <Localized key="roleR" lang="Dutch">Role (Responsible)</Localized>
+    <Localized key="roleA" lang="English">Role (Accountable)</Localized>
+    <Localized key="roleA" lang="French">Rôle (Autorité)</Localized>
+    <Localized key="roleA" lang="Dutch">Role (Accountable)</Localized>
+    <Localized key="roleC" lang="English">Role (Consulted)</Localized>
+    <Localized key="roleC" lang="French">Rôle (Consulté)</Localized>
+    <Localized key="roleC" lang="Dutch">Role (Consulted)</Localized>
+    <Localized key="roleI" lang="English">Role (Informed)</Localized>
+    <Localized key="roleI" lang="French">Role (Informé)</Localized>
+    <Localized key="roleI" lang="Dutch">Role (Informed)</Localized>
+    <Localized key="css_sheet" lang="English">CSS sheet</Localized>
+    <Localized key="css_sheet" lang="French">Feuille de style</Localized>
+    <Localized key="css_sheet" lang="Dutch">CSS sheet</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="AbstractActivityNode" />
+</Panel>
+

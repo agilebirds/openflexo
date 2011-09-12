@@ -1,0 +1,46 @@
+<inspector title = "Bounding box" inheritsfrom ="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.wkf.WKFAnnotation">
+
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="text" label="text" widget="TEXT_AREA" constraint="0"/>
+	</tab>
+
+	<tab name="Advanced" index="2" layout="DEFAULT">
+		<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+	</tab>
+	
+	<tab name="Graphics" index="20" layout="DEFAULT">
+		<property name="textColor" label="text_color" widget="COLOR" constraint="0">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="textFont" label="text_font" widget="FONT" constraint="1">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="textAlignment" label="text_alignment" widget="DROPDOWN" constraint="2">
+			<param name="formatter" value="name"/>
+			<param name="columns" value="10"/>
+			<param name="showReset" value="false"/>
+			<param name="type" value="org.openflexo.fge.GraphicalRepresentation$TextAlignment"/>
+		</property>
+		<property name="dashStyle" label="dash_style" widget="DROPDOWN" constraint="3">
+			<param name="formatter" value="name"/>
+			<param name="columns" value="10"/>
+			<param name="showReset" value="false"/>
+			<param name="showIcon" value="true"/>
+			<param name="type" value="org.openflexo.fge.graphics.ForegroundStyle$DashStyle"/>
+		</property>
+		<property name="borderColor" label="border_color" widget="COLOR" constraint="4">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="isRounded" label="rounded_corners" widget="CHECKBOX" constraint="5">
+		</property>
+		<property name="isSolidBackground" label="solid_background" widget="CHECKBOX" constraint="6">
+		</property>
+		<property name="backgroundColor" label="background_color" widget="COLOR" constraint="7">
+			<param name="columns" value="10"/>
+		</property>
+	</tab>
+	
+</inspector>

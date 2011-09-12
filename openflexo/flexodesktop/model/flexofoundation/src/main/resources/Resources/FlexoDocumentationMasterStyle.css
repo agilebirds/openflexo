@@ -1,0 +1,59 @@
+
+body {
+	font-family:"Helvetica Neue", "Arial", sans-serif;
+	font-size:10pt;
+	font-size-adjust:none;
+	font-stretch:normal;
+	font-style:normal;
+	font-variant:normal;
+	font-weight:normal;
+	line-height:1.88889;
+	margin:0pt;
+	padding:0pt;
+}
+
+h1 {	font-family: "Helvetica Neue", "Arial", sans-serif;	font-size: 18px;	font-weight: bold;	color: #000000;}
+h2 {	font-family: "Helvetica Neue", "Arial", sans-serif;	font-size: 15px;	font-weight: bold;	color: #000000;	border-bottom: 1px solid #C6EC8C;
+	text-indent: 20px;}
+h3 {
+	font-family: "Helvetica Neue", "Arial", sans-serif;
+	font-size: 13px;
+	font-weight: bold;
+	color: #000000;
+	text-indent: 40px;
+}
+
+h4 {
+	font-family: "Helvetica Neue", "Arial", sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+	color: #000000;
+	border-bottom: 1px solid #C6EC8C;
+	text-indent: 60px;
+}
+
+/**************** Wysiwyg styles tests ****************/
+.no-style {
+	background-color: none;
+	color: black;
+	text-decoration: none;
+	font-weight: normal;
+	font-style: normal;
+}
+
+.highlight {
+	background-color: yellow;
+}
+
+.blue {
+	color: blue;
+}
+
+.track-change-old {
+	color: red;
+	text-decoration: underline;
+}
+.track-change-green {
+	color: green;
+	text-decoration: underline;
+}

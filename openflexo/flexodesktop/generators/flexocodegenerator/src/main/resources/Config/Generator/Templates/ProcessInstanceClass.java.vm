@@ -1,0 +1,15 @@
+#package()
+
+import be.denali.flexo.engine.db.ProcessInstance;
+
+#imports($entity)
+ /**
+ * @author FlexoBPM Generator, Agile Birds sprl. (see www.FlexoBPM.com)
+ */
+ public class $entity.getName() extends #if($entity.getParentBaseEntity()) $entity.getParentBaseEntity().getName()#else Object#end{
+
+    public $entity.getName()() {
+        super();
+    }
+    
+}

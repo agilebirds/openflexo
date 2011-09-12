@@ -1,0 +1,201 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY FlexoConceptsOntology "http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#" >
+]>
+
+
+<rdf:RDF xmlns="http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#"
+     xml:base="http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:FlexoConceptsOntology="http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#">
+    <owl:Ontology rdf:about=""/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#inRelationWith -->
+
+    <owl:ObjectProperty rdf:about="#inRelationWith">
+        <rdfs:domain rdf:resource="#FlexoConcept"/>
+        <rdfs:range rdf:resource="#FlexoConcept"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#linkedToConcept -->
+
+    <owl:ObjectProperty rdf:about="#linkedToConcept">
+        <rdf:type rdf:resource="&owl;InverseFunctionalProperty"/>
+        <rdfs:range rdf:resource="#FlexoConcept"/>
+        <rdfs:domain rdf:resource="#FlexoModelObject"/>
+        <owl:inverseOf rdf:resource="#linkedToModel"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#linkedToModel -->
+
+    <owl:ObjectProperty rdf:about="#linkedToModel">
+        <rdfs:domain rdf:resource="#FlexoConcept"/>
+        <rdfs:range rdf:resource="#FlexoModelObject"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#className -->
+
+    <owl:DatatypeProperty rdf:about="#className">
+        <rdfs:domain rdf:resource="#FlexoModelObject"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#flexoID -->
+
+    <owl:DatatypeProperty rdf:about="#flexoID">
+        <rdfs:domain rdf:resource="#FlexoModelObject"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#resourceName -->
+
+    <owl:DatatypeProperty rdf:about="#resourceName">
+        <rdfs:domain rdf:resource="#FlexoModelObject"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#FlexoActivity -->
+
+    <owl:Class rdf:about="#FlexoActivity">
+        <rdfs:subClassOf rdf:resource="#FlexoProcessElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#FlexoConcept -->
+
+    <owl:Class rdf:about="#FlexoConcept">
+        <rdfs:subClassOf rdf:resource="&owl;Thing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#FlexoEvent -->
+
+    <owl:Class rdf:about="#FlexoEvent">
+        <rdfs:subClassOf rdf:resource="#FlexoProcessElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#FlexoModelObject -->
+
+    <owl:Class rdf:about="#FlexoModelObject">
+        <rdfs:subClassOf rdf:resource="&owl;Thing"/>
+        <rdfs:comment xml:lang="en"
+            >This concept address all objects that could be found in operational FlexoModel. This concept doesn&#39;t include abstract ontological concepts.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#FlexoOperation -->
+
+    <owl:Class rdf:about="#FlexoOperation">
+        <rdfs:subClassOf rdf:resource="#FlexoProcessElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#FlexoProcess -->
+
+    <owl:Class rdf:about="#FlexoProcess">
+        <rdfs:subClassOf rdf:resource="#FlexoModelObject"/>
+        <rdfs:comment xml:lang="en"
+            >This concept represents a Flexo Process</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#FlexoProcessElement -->
+
+    <owl:Class rdf:about="#FlexoProcessElement">
+        <rdfs:subClassOf rdf:resource="#FlexoModelObject"/>
+        <rdfs:comment xml:lang="en"
+            >This concept covers all elements that can be found inside a Flexo Process.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#FlexoProcessFolder -->
+
+    <owl:Class rdf:about="#FlexoProcessFolder">
+        <rdfs:subClassOf rdf:resource="#FlexoModelObject"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#FlexoRole -->
+
+    <owl:Class rdf:about="#FlexoRole">
+        <rdfs:subClassOf rdf:resource="#FlexoModelObject"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.w3.org/2002/07/owl#Thing -->
+
+    <owl:Class rdf:about="&owl;Thing"/>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 2.2.1.1138) http://owlapi.sourceforge.net -->
+

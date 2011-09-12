@@ -1,0 +1,341 @@
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+import java.util.zip.ZipOutputStream;
+
+import be.denali.core.woapp.WDLDirectAction;
+
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
+
+import ${projectGenerator.getProcessBusinessDataBaseEntity().getFullQualifiedName()};
+#if(${projectGenerator.getWorkflowClassPackage()})
+	import ${projectGenerator.getWorkflowClassPackage()}.*;
+	import ${projectGenerator.getWorkflowClassPackage()}.WorkflowProcess.WorkflowBusinessData;
+#end
+
+@SuppressWarnings("serial")
+public class PrototypeSamplesAdminPage extends ${generator.getProject().getDataModel().getWORepository().getCustomComponentEntity().getClassName()}
+{
+	public enum DownloadType {DEFAULT, CURRENT_USED_FOR_NEW_SESSION, CURRENT_STORED_IN_SESSION;
+    }
+
+    private DownloadType downloadType = DownloadType.CURRENT_USED_FOR_NEW_SESSION;
+    private final String DOWNLOADACTIONKEY = "DOWNLOAD";
+    private final String ROLLBACKDEFAULTSTATEACTIONKEY = "ROLLBACKDEFAULT";
+    private final String SAVESESSIONSTATEACTIONKEY = "SAVESESSION";
+    private final String UPLOADACTIONKEY = "UPLOADACTIONKEY";
+    public String finalTempFilePath;
+    public String localFilePath;
+    public String pageDA;
+    public String tempFilePath;
+
+    public PrototypeSamplesAdminPage(WOContext context) {
+        super(context);
+    }
+
+    public static PrototypeSamplesAdminPage createPage(WOContext context) {
+        PrototypeSamplesAdminPage nextPage = (PrototypeSamplesAdminPage) WOApplication.application()
+                                                                                      .pageWithName(PrototypeSamplesAdminPage.class.getName(),
+                context);
+        nextPage.session().setWorkflowComponentInstance(WorkflowComponentInstance.None);
+        nextPage.tempFilePath = nextPage.session().getNewTempFile().getAbsolutePath();
+        return nextPage;
+    }
+
+    public static WOActionResults createPageForDirectAction(WDLDirectAction directAction) {
+        return createPage(directAction.context());
+    }
+
+    public static String getUrl(WOContext context) {
+        NSMutableDictionary dic = new NSMutableDictionary();
+        return context.directActionURLForActionNamed("${project.getPrefix()}DA/openPrototypeSamplesAdminPage", dic);
+    }
+
+    public void appendToResponse(WOResponse r, WOContext c) {
+        hiddenFieldValue = null;
+        pageDA = getUrl(context());
+        super.appendToResponse(r, c);
+        validationMessages = null;
+        confirmMessages = null;
+        warningValidationMessages = null;
+        localFilePath = null;
+        session().deleteTempFiles();
+    }
+
+    public void takeValuesFromRequest(WORequest r, WOContext c) {
+        super.takeValuesFromRequest(r, c);
+    }
+
+    public WOActionResults formAction() {
+        if (hiddenFieldValue == null) {
+            return null;
+        }
+
+        if (hiddenFieldValue.equals(getDownloadActionKey())) {
+            byte[] result = getDownloadSamplesZipBytes();
+            if (result != null) {
+                validationMessages = null;
+                confirmMessages = null;
+                warningValidationMessages = null;
+                return ${project.getPrefix()}Util.actionResultForDownloadBytes(result, "prototySamples.zip", "zip");
+            }
+            return null;
+        }
+
+        if (hiddenFieldValue.equals(getSaveSessionStateActionKey())) {
+            writeSessionSamplesState(null);
+            return null;
+        }
+
+        if (hiddenFieldValue.equals(getRollbackDefaultStateActionKey())) {
+            deleteCustomSamples();
+            session().reset();
+            return null;
+        }
+
+        if (hiddenFieldValue.equals(getUploadActionKey())) {
+            if ((localFilePath == null) || !localFilePath.toLowerCase().endsWith(".zip")) {
+                addToValidationMessages("Please specify a zip file to upload");
+                return null;
+            }
+
+            unzipUploadedFileAndStoreItInSession();
+            addToConfirmMessages(
+                "Samples loaded successfully into current session. Pay attention that your new samples are ONLY stored in your current session.");
+            addToConfirmMessages("You can then review your changes by navigating on the prototype.");
+            addToConfirmMessages("IF YOU WANT TO USE THEM FOR ANY NEW SESSION PLEASE PRESS THE SAVE SESSION STATE BUTTON.");
+            return null;
+        }
+
+        return null;
+    }
+
+    public boolean isRadioDownloadDefaultChecked() {
+        return downloadType == DownloadType.DEFAULT;
+    }
+
+    public void setIsRadioDownloadDefaultChecked(boolean value) {
+        if (value) {
+            downloadType = DownloadType.DEFAULT;
+        }
+    }
+
+    public boolean isRadioDownloadCurrentUsedForNewSession() {
+        return downloadType == DownloadType.CURRENT_USED_FOR_NEW_SESSION;
+    }
+
+    public void setIsRadioDownloadCurrentUsedForNewSession(boolean value) {
+        if (value) {
+            downloadType = DownloadType.CURRENT_USED_FOR_NEW_SESSION;
+        }
+    }
+
+    public boolean isRadioDownloadCurrentStoredInSession() {
+        return downloadType == DownloadType.CURRENT_STORED_IN_SESSION;
+    }
+
+    public void setIsRadioDownloadCurrentStoredInSession(boolean value) {
+        if (value) {
+            downloadType = DownloadType.CURRENT_STORED_IN_SESSION;
+        }
+    }
+
+    public String getDownloadActionKey() {
+        return DOWNLOADACTIONKEY;
+    }
+
+    public String getSaveSessionStateActionKey() {
+        return SAVESESSIONSTATEACTIONKEY;
+    }
+
+    public String getRollbackDefaultStateActionKey() {
+        return ROLLBACKDEFAULTSTATEACTIONKEY;
+    }
+
+    public String getUploadActionKey() {
+        return UPLOADACTIONKEY;
+    }
+
+    public long getOperationComponentInstanceID() {
+        return 0;
+    }
+
+    /****************************************/
+    /****************************************/
+    /****************************************/
+
+    private void writeSessionSamplesState(String folderPath) {
+        Map<WorkflowBusinessData, Vector<? extends ProcessBusinessData>> processBusinessDataSamples = new HashMap<WorkflowBusinessData, Vector<? extends ProcessBusinessData>>();
+        for (WorkflowBusinessData workflowBusinessData : WorkflowBusinessData.values()) {
+            Vector<? extends ProcessBusinessData> samplesInDictionary = session().getBusinessDataStorage().getAllBusinessDataSamples(workflowBusinessData);
+            processBusinessDataSamples.put(workflowBusinessData, samplesInDictionary);
+        }
+
+        writeSamplesState(folderPath, processBusinessDataSamples);
+    }
+
+    private void writeSamplesState(String folderPath, Map<WorkflowBusinessData, Vector<? extends ProcessBusinessData>> processBusinessDataSamples) {
+        for (WorkflowBusinessData workflowBusinessData : processBusinessDataSamples.keySet()) {
+            Vector<? extends ProcessBusinessData> samplesInDictionary = processBusinessDataSamples.get(workflowBusinessData);
+            List<List<String>> samplesInList = new ArrayList<List<String>>();
+
+            //Fill keys
+            List<String> firstLine = new ArrayList<String>();
+            samplesInList.add(firstLine);
+			firstLine.add(ProcessBusinessData.PROCESSINSTANCE_ID_KEY);
+            for (String key : workflowBusinessData.getProcessBusinessDataKeyTypes().keySet())
+                firstLine.add(key);
+
+            for (ProcessBusinessData dic : samplesInDictionary) {
+                List<String> line = new ArrayList<String>();
+                samplesInList.add(line);
+                for (String key : firstLine) {
+                    Object value = dic.objectForKey(key);
+                    String valueString;
+
+                    if (value instanceof Date) {
+                        valueString = BusinessDataStorage.dateFormatter.format((Date) value);
+                    } else if (value != null) {
+                        valueString = value.toString();
+                    } else {
+                        valueString = "";
+                    }
+
+                    line.add(valueString);
+                }
+            }
+
+            String csv = BusinessDataStorage.getCsv(samplesInList);
+
+            File file = new File(session().getBusinessDataStorage().getPrototypeSamplesFilePath(folderPath, workflowBusinessData));
+            if (file.exists()) {
+                file.delete();
+            } else if (!file.getParentFile().exists()) {
+                if (!file.getParentFile().mkdirs()) {
+                    addToValidationMessages("Cannot create directory '" + file.getParentFile().getPath() + "': check access right !");
+                    return;
+                }
+            }
+
+            try {
+                FileOutputStream fileOutputStream = new FileOutputStream(file);
+                try {
+                    fileOutputStream.write(csv.getBytes("Windows-1252"));
+                    addToConfirmMessages("Business data '" + workflowBusinessData.name() + "' successfully written on '" + file.getPath() + "'");
+                } finally {
+                    fileOutputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                addToValidationMessages("Cannot write file '" + file.getPath() + "': " + e.getMessage());
+            }
+        }
+    }
+
+    private void deleteCustomSamples() {
+        File folder = new File(${project.getPrefix()}Config.getConfig().getPrototypeSamplesFolderPath());
+        if (folder.exists()) {
+            ${project.getPrefix()}Util.deleteFile(folder);
+            addToConfirmMessages("Samples rollbacked to default one");
+        } else {
+            addToConfirmMessages("Default samples were already used");
+        }
+    }
+
+    private byte[] getDownloadSamplesZipBytes() {
+        Map<WorkflowBusinessData, Vector<? extends ProcessBusinessData>> processInstancesSamples = new HashMap<WorkflowBusinessData, Vector<? extends ProcessBusinessData>>();
+        for (WorkflowBusinessData workflowBusinessData : WorkflowBusinessData.values()) {
+            Vector<? extends ProcessBusinessData> samplesInDictionary;
+
+            switch (downloadType) {
+            case CURRENT_STORED_IN_SESSION:
+                samplesInDictionary = session().getBusinessDataStorage().getAllBusinessDataSamples(workflowBusinessData);;
+                break;
+
+            case DEFAULT:
+                samplesInDictionary = session().getBusinessDataStorage().loadProcessInstanceSamples(workflowBusinessData, true);
+                break;
+
+            case CURRENT_USED_FOR_NEW_SESSION:default:
+                samplesInDictionary = session().getBusinessDataStorage().loadProcessInstanceSamples(workflowBusinessData);
+                break;
+            }
+
+            processInstancesSamples.put(workflowBusinessData, samplesInDictionary);
+        }
+
+        File tmpDirectory = session().getNewTempDirectory();
+        writeSamplesState(tmpDirectory.getPath(), processInstancesSamples);
+
+        ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
+        try {
+            ZipOutputStream zipOutputStream = new ZipOutputStream(byteArrayStream);
+            try {
+                ${project.getPrefix()}Util.zipDir(tmpDirectory.getAbsolutePath().length() + 1, tmpDirectory, zipOutputStream);
+            } finally {
+                zipOutputStream.close();
+            }
+            return byteArrayStream.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+            addToValidationMessages("Cannot create zip file for download : " + e.getMessage());
+        }
+
+        return null;
+    }
+
+    private void unzipUploadedFileAndStoreItInSession() {
+        File tmpFolder = session().getNewTempDirectory();
+        File zipFile = new File(finalTempFilePath);
+        try {
+            ${project.getPrefix()}Util.unzip(zipFile, tmpFolder.getPath());
+
+            //Move all files from sub folder into root folder.
+            for (File subFile : tmpFolder.listFiles()) {
+                if (subFile.isDirectory()) {
+                    copyDirToDir(subFile, tmpFolder);
+                }
+            }
+
+            //ok unzip succeeded, load process samples into session
+            session().getBusinessDataStorage().reset();
+			for (WorkflowBusinessData workflowBusinessData : WorkflowBusinessData.values()) {
+				session().getBusinessDataStorage().loadCustomBusinessDataSamplesArray(workflowBusinessData, session().getBusinessDataStorage().loadProcessInstanceSamples(workflowBusinessData, false, tmpFolder.getPath()));
+			}
+        } catch (Exception e) {
+            e.printStackTrace();
+            addToValidationMessages("Cannot extract uploaded zip file: " + e.getMessage());
+        }
+    }
+
+    private void copyDirToDir(File srcDir, File destDir)
+        throws IOException {
+        File[] fileArray = srcDir.listFiles();
+        for (int i = 0; i < fileArray.length; i++) {
+            File curFile = fileArray[i];
+            if (curFile.isDirectory()) {
+                copyDirToDir(curFile, destDir);
+                continue;
+            }
+
+            File destFile = new File(destDir, curFile.getName());
+            ${project.getPrefix()}Util.copyFileToFile(curFile, destFile);
+        }
+    }
+}

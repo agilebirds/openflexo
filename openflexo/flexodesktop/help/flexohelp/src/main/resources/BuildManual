@@ -1,0 +1,5 @@
+#!/bin/bash
+
+dossierCourant=`pwd`
+echo "Builing manual for "$dossierCourant
+jar -cvf $dossierCourant/Help/FlexoManual.jar $dossierCourant/Help/*

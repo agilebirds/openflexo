@@ -1,0 +1,69 @@
+<inspector title = "Post-condition" inheritsfrom ="Edge.inspector" inspectedClassName="org.openflexo.foundation.wkf.edge.FlexoPostCondition">
+
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+        <property name="isDefaultFlow" label="is_default_flow" widget="CHECKBOX" depends="isConditional,canBeDefaultFlow" conditional="canBeDefaultFlow=true" constraint="3"/>
+        <property name="isConditional" label="has_condition" widget="CHECKBOX" depends="isDefaultFlow,canBeConditional" conditional="canBeConditional=true" constraint="4"/>
+        <property name="isImplicitConditional" label="has_condition" widget="CHECKBOX" depends="isDefaultFlow,canBeConditional,isStartingFromOr" conditional="isStartingFromOr=true AND isDefaultFlow=false" constraint="4">
+        	<param name="readOnly" value="true"/>
+        </property>
+        <property name="conditionDescription" label="condition_description" widget="WYSIWYG_ULTRA_LIGHT" depends="isDefaultFlow,isConditional,canBeConditional,isStartingFromOr" conditional="(isConditional=true AND canBeConditional=true) OR (isStartingFromOr=true AND isDefaultFlow=false)" constraint="5"/>      
+		<!--<property name="delay" label="delay" widget="CUSTOM" depends="isConditional" conditional="isConditional=false" constraint="5">
+			<param name="className" value="org.openflexo.components.widget.DurationInspectorWidget"/>
+		</property>-->
+        <property name="isPositiveEvaluation" label="matches_positive_evaluation" widget="CHECKBOX" depends="startOperatorIsIfNode" conditional="startOperatorIsIfNode=true" constraint="6"/>
+	</tab>
+	
+	<tab name="Advanced" index="2" layout="DEFAULT">
+		<property name="isGenericOutput" label="isGenericOutput" widget="CHECKBOX" constraint="1"/>
+		<!--<property name="edgeRepresentation" label="edge_representation" widget="DROPDOWN" constraint="2">
+            <param name="formatter" value="name"/>
+            <param name="columns" value="10"/>
+            <param name="showReset" value="false"/>
+            <param name="showIcon" value="true"/>
+        </property>-->
+	</tab>
+
+    <tab name="Data" index="3">
+        <property name="conditionPrimitive" label="condition" widget="CUSTOM" depends="isConditional" conditional="isConditional=true" constraint="2">
+            <param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+            <param name="binding_definition" value="conditionPrimitiveBindingDefinition"/>          
+            <param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+        </property>
+    </tab>
+
+	<tab name="Graphics" index="20" layout="DEFAULT">
+		<property name="hideWhenInduced" label="hide_when_induced" widget="CHECKBOX" constraint="7"/>
+	</tab>
+	
+    <tab name="Edge Metrics" index="6" layout="DEFAULT" visibilityContext="METRICS">
+        <property_list name="metricsValues" label="metrics" constraint="0">
+          <param name="visible_row_count" value="5"/>
+          <param name="row_height" value="20"/>
+          <property_list_column name="metricsDefinition.name" label="name" widget="TEXT_FIELD">
+            <param name="tooltip" value="metricsDefinition.description"/>
+          </property_list_column>
+          <property_list_column name="this" label="value" widget="CUSTOM">
+            <param name="column_width" value="80"/>
+            <param name="resizable" value="true"/>
+            <param name="customRendering" value="true"/>
+            <param name="format" value="value.toString"/>
+            <param name="className" value="org.openflexo.components.widget.MetricsValueInspectorWidget"/>
+          </property_list_column>
+          <property_list_column name="unit" label="unit" widget="TEXT_FIELD">
+            <param name="column_width" value="50"/>
+            <param name="resizable" value="true"/>
+            <param name="isEditable" value="metricsDefinition.isUnitEditable"/>
+          </property_list_column>
+          <property_list_column name="description" label="additional_info" widget="TEXT_FIELD">
+            <param name="column_width" value="120"/>
+            <param name="resizable" value="true"/>
+          </property_list_column>
+          <property_list_action name="new" type="ADD" method="addMetrics"/>
+          <property_list_action name="delete" type="DELETE" method="deleteMetrics"/>
+        </property_list>
+    </tab>
+
+</inspector>

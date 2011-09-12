@@ -1,0 +1,266 @@
+#package()
+
+import java.util.Date;
+import be.denali.flexo.commons.hcwo.IBusinessData;
+import java.lang.reflect.Method;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
+#if(${projectGenerator.getWorkflowClassPackage()})
+	import ${projectGenerator.getWorkflowClassPackage()}.*;
+	import ${projectGenerator.getWorkflowClassPackage()}.WorkflowProcess.WorkflowBusinessData;
+#end
+#imports($entity)
+ /**
+ * @author FlexoBPM Generator, Agile Birds sprl. (see www.FlexoBPM.com)
+ */
+ public class ${entity.getName()} extends NSMutableDictionary implements IBusinessData{
+
+	public static final String PROCESSINSTANCE_ID_KEY = "${projectGenerator.getPrototypeProcessInstance_Id_Key()}";
+	public static final String PROCESSINSTANCE_STATUS_KEY = "${projectGenerator.getPrototypeProcessInstance_Status_Key()}";
+	public static final String PROCESSINSTANCE_CREATIONDATE_KEY = "${projectGenerator.getPrototypeProcessInstance_CreationDate_Key()}";
+	public static final String PROCESSINSTANCE_LASTUPDATEDATE_KEY = "${projectGenerator.getPrototypeProcessInstance_LastUpdateDate_Key()}";
+	
+	protected BusinessDataStorage businessDataStorage;
+ 
+	public ${entity.getName()}()
+	{
+		super();
+	}
+	
+	public ${entity.getName()}(${entity.getName()} other)
+	{
+		super(other);
+		this.businessDataStorage = other.businessDataStorage;
+	}
+	
+	public void setBusinessDataStorage(BusinessDataStorage businessDataStorage)
+	{
+		this.businessDataStorage = businessDataStorage;
+	}
+	
+    public ${entity.getName()} ${entity.getRepository().getParentProcessBusinessDataGetterName()}(String processKey)
+	{
+		return getParentBusinessData(WorkflowProcess.getWorkflowProcess(processKey));
+	}
+	
+	public ${entity.getName()} getParentBusinessData(WorkflowProcess workflowProcess)
+	{
+		ProcessBusinessData parent = (ProcessBusinessData) objectForKey(workflowProcess.name() + "BusinessData");
+        Integer parentId = (Integer) valueForKey(workflowProcess.name() + "BusinessDataId");
+
+        if(parent != null && (parentId == null || parentId.equals(parent.getId())))
+        	return parent;
+        
+        if (parentId != null) {
+            parent = businessDataStorage.getBusinessDataSample(workflowProcess.getBusinessDataClass(), parentId);
+            setObjectForKey(parent, workflowProcess.name() + "BusinessData");
+        }
+
+        return parent;
+	}
+	
+    public ${entity.getName()} getAncestorBusinessData(WorkflowProcess workflowProcess) {
+    	
+    	if(getParentBusinessData(workflowProcess) != null)
+    		return getParentBusinessData(workflowProcess);
+    	
+    	for(WorkflowProcess childProcess : workflowProcess.getChildProcesses())
+    	{
+    		${entity.getName()} ancestorBusinessData = getAncestorBusinessData(childProcess);
+    		if(ancestorBusinessData != null)
+    			return ancestorBusinessData;
+    	}
+    	
+    	return null;
+    }
+	
+	public void setParentProcessBusinessData(WorkflowProcess workflowProcess, ${entity.getName()} parentBusinessData)
+	{
+		setObjectForKey(parentBusinessData, workflowProcess.name() + "BusinessData");
+		if(parentBusinessData.getId() != null)
+			setObjectForKey(parentBusinessData.getId(), workflowProcess.name() + "BusinessDataId");
+		else
+        	removeObjectForKey(workflowProcess.name() + "BusinessDataId");
+	}
+	
+	public Vector<? extends ${entity.getName()}> ${entity.getRepository().getChildrenProcessBusinessDataGetterName()}(String childProcessKey) {
+    	return getChildrenBusinessData(WorkflowProcess.getWorkflowProcess(childProcessKey));
+    }
+	
+	public Vector<? extends ${entity.getName()}> getChildrenBusinessData(WorkflowProcess childWorkflowProcess) {
+   	 	Vector<${entity.getName()}> children = (Vector<${entity.getName()}>) objectForKey(childWorkflowProcess.name() + "BusinessData");
+
+        if (children == null) {
+       	 	children = new Vector<${entity.getName()}>();
+       	 	Vector<? extends ${entity.getName()}> allPossibleChildren = businessDataStorage.getAllBusinessDataSamples(childWorkflowProcess.getBusinessDataClass());
+
+            for (ProcessBusinessData child : allPossibleChildren) {
+                ProcessBusinessData childParent = child.getParentBusinessData(childWorkflowProcess.getParentProcess());
+                if (childParent != null && childParent.getId() == getId()) {
+               	 	child.setObjectForKey(this, childWorkflowProcess.getParentProcess().name() + "BusinessData");
+               	 	children.add(child);
+                }
+            }
+            
+            setObjectForKey(children, childWorkflowProcess.name() + "BusinessData");
+        }
+
+        return children;
+   }
+
+    public Vector<? extends ${entity.getName()}> getDescendantsBusinessData(WorkflowProcess currentWorkflowProcess, WorkflowProcess childWorkflowProcess) {
+        Vector<? extends ${entity.getName()}> children = businessDataStorage.getAllBusinessDataSamples(childWorkflowProcess.getBusinessDataClass());
+        Vector<${entity.getName()}> results = new Vector<${entity.getName()}>();
+
+        for (ProcessBusinessData child : children) {
+            ProcessBusinessData childAncestor = child.getAncestorBusinessData(currentWorkflowProcess);
+            if ((childAncestor != null) && (childAncestor.getId() == getId())) {
+                results.add(child);
+            }
+        }
+
+        return results;
+    }
+	
+	public Integer getId()
+	{
+		return (Integer) objectForKey(PROCESSINSTANCE_ID_KEY);
+	}
+	
+	public void setId(Integer id)
+	{
+		setObjectForKey(id, PROCESSINSTANCE_ID_KEY);
+	}
+	
+	public String status()
+	{
+		 return (String) objectForKey(PROCESSINSTANCE_STATUS_KEY);
+	}
+
+    public void setStatus(String status)
+	{
+		 setObjectForKey(status, PROCESSINSTANCE_STATUS_KEY);
+	}
+	
+	public Date getCreationDate()
+	{
+		 return (Date) objectForKey(PROCESSINSTANCE_CREATIONDATE_KEY);
+	}
+
+    public void setCreationDate(Date creationDate)
+	{
+		 setObjectForKey(creationDate, PROCESSINSTANCE_CREATIONDATE_KEY);
+	}
+	
+	public Date getLastUpdateDate()
+	{
+		 return (Date) objectForKey(PROCESSINSTANCE_LASTUPDATEDATE_KEY);
+	}
+
+    public void setLastUpdateDate(Date updateDate)
+	{
+		 setObjectForKey(updateDate, PROCESSINSTANCE_LASTUPDATEDATE_KEY);
+	}
+	
+	@Override
+    public ProcessBusinessData clone()
+    {
+    	try
+		{
+			return this.getClass().getConstructor(this.getClass()).newInstance(this);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+    }
+	
+	@Override
+    public Object valueForKey(String key) {
+    	String methodName = "get" + key.substring(0, 1).toUpperCase() + (key.length() > 1 ? key.substring(1) : "");
+    	Method method = null;
+    	try
+    	{
+    		method = this.getClass().getMethod(methodName);
+    	}
+    	catch(Exception e) {}
+    	
+    	if(method == null)
+    	{
+    		try
+        	{
+    			methodName = key.substring(0, 1).toLowerCase() + (key.length() > 1 ? key.substring(1) : "");
+        		method = this.getClass().getMethod(methodName);
+        	}
+    		catch(Exception e) {}
+    	}
+    	
+    	if(method != null)
+    	{
+			try
+			{
+				return method.invoke(this);
+			}
+			catch (Exception e)
+			{
+			}
+    	}
+    	
+        return objectForKey(key);
+    }
+
+	@Override
+	public Object valueForKeyPath(String keyPath)
+	{
+		Object flattenedKeyPresent = valueForKey(keyPath);
+		if (flattenedKeyPresent != null)
+			return flattenedKeyPresent;
+		else
+			return NSKeyValueCodingAdditions.DefaultImplementation.valueForKeyPath(this, keyPath);
+	}
+	
+    @Override
+    public void takeValueForKey(Object object, String key) {
+    	
+    	String methodName = "set" + key.substring(0, 1).toUpperCase() + (key.length() > 1 ? key.substring(1) : "");
+    	Method method = null;
+    	try
+    	{
+    		method = this.getClass().getMethod(methodName, object.getClass());
+    	}
+    	catch(Exception e) {}
+    	
+    	if(method == null)
+    	{
+    		try
+        	{
+    			methodName = key.substring(0, 1).toLowerCase() + (key.length() > 1 ? key.substring(1) : "");
+        		method = this.getClass().getMethod(methodName, object.getClass());
+        	}
+    		catch(Exception e) {}
+    	}
+    	
+    	if(method != null)
+    	{
+			try
+			{
+				method.invoke(this, object);
+				return;
+			}
+			catch (Exception e)
+			{
+			}
+    	}
+    	
+    	setObjectForKey(object, key);
+    }
+
+    @Override
+    public void setObjectForKey(Object object, Object key) {
+        if (object != null) {
+            super.setObjectForKey(object, key);
+        } else {
+            removeObjectForKey(key);
+        }
+    }
+}

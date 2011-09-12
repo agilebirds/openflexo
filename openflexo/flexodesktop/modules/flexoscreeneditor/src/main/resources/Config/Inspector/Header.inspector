@@ -1,0 +1,18 @@
+<inspector title = "List Header" inheritsfrom ="NonEditableTextWidget.inspector">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+		<property name="isSortable" label="is_sortable" widget="CHECKBOX" constraint="4"/>
+		<property name="isSorted" label="is_sorted" widget="CHECKBOX" constraint="5"/>
+		<property name="defaultDescending" label="descending_sort" widget="CHECKBOX" constraint="6" help="Descending: Z...A, 31/12/2004...01/01/2003"/>
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+	</tab>
+
+	<tab name="Doc" index="2" layout="DEFAULT">
+	</tab>
+
+	<tab name="Data" index="3" layout="DEFAULT">
+	</tab>
+
+</inspector>

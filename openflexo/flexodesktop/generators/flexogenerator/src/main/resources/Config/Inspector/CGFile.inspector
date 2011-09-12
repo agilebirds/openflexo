@@ -1,0 +1,51 @@
+<inspector title = "generated_code_file">
+	<tab name="Basic" index="0">
+		<property name="fileName" label="name" widget="READ_ONLY_TEXT_FIELD" constraint="0"/>
+		<property name="description" label="description" widget="TEXT_AREA" constraint="1">
+			<param name="rows" value="10"/>
+		</property>
+		<property name="pathName" label="path" widget="READ_ONLY_TEXT_FIELD" constraint="2"/>
+		<property name="markedAsDoNotGenerate" label="exclude_from_generation" widget="CHECKBOX" constraint="4" help="true if it needs to be ignored when generating"/>
+	</tab>
+	
+	<tab name="Advanced" index="1">
+	    <property name="generationStatus" label="status" widget="READ_ONLY_TEXT_FIELD" constraint="0"/>
+		<property name="memoryLastGenerationDateAsString" label="last_generated_on" widget="READ_ONLY_TEXT_FIELD" constraint="0"/>
+		<property name="lastGenerationDateAsString" label="last_written_to_disk_on" widget="READ_ONLY_TEXT_FIELD" constraint="1"/>
+		<property name="diskLastModifiedDateAsString" label="disk_modified_date" widget="READ_ONLY_TEXT_FIELD" constraint="2"/>
+		<property name="lastAcceptingDateAsString" label="last_accepted_on" widget="READ_ONLY_TEXT_FIELD" constraint="3"/>
+		<property name="lastGenerationCheckedDateAsString" label="last_generation_checked_on" widget="READ_ONLY_TEXT_FIELD" constraint="4"/>
+		<property name="lastUpdateAsString" label="last_update" widget="READ_ONLY_TEXT_FIELD" constraint="6"/>
+		<property name="needsUpdateReason" label="needs_update_reason" widget="READ_ONLY_TEXT_AREA" constraint="7"/>
+	</tab>
+
+	<tab name="Templates" index="2">
+		<property name="isCodeGenerationAvailable" label="generated" widget="READ_ONLY_CHECKBOX" constraint="0"/>
+		<property_list name="resource.generator.usedTemplates" label="requires_following_templates" constraint="1" depends="isCodeGenerationAvailable" conditional="isCodeGenerationAvailable=true">
+		  <param name="visible_row_count" value="3"/>
+		  <param name="row_height" value="20"/>
+		  <property_list_column name="templateIcon" label="connected" widget="ICON">
+			<param name="column_width" value="25"/>
+			<param name="resizable" value="false"/>
+			<param name="display_title" value="false"/>
+		  </property_list_column>
+		  <property_list_column name="relativePathWithoutSetPrefix" label="file_name" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="100"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="repository.name" label="repository" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="100"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="set.name" label="set" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="100"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_action name="show" type="ACTION" method="showTemplate" isAvailable="isShowable"/>
+		  <property_list_action name="redefine" type="ACTION" method="redefineTemplate" isAvailable="isApplicationTemplate"/>
+		  <property_list_action name="edit" type="ACTION" method="editTemplate" isAvailable="isCustomTemplate"/>
+
+		</property_list>
+	</tab>
+	
+</inspector>

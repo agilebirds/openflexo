@@ -1,0 +1,17 @@
+## -*-xml-*-
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (DefinitionsDocGenerator)
+* - repository: the current repository for which we generate the doc (DGRepository)
+* - level: the level to use in title.
+* - objet: the flexo process to generate
+*#
+
+#set($process = $object)
+
+#* DDW<!-- ddw Tue Mar 23 18:23:14 2010 -->
+Render the table of operation with hyperlink to associated screens for this process
+*#
+#renderOperationsTable($process)

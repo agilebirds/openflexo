@@ -1,0 +1,28 @@
+<inspector title = "Rectangle" inheritsfrom="Object.inspector" inspectedClassName="org.openflexo.fge.geomedit.gr.RoundRectangleGraphicalRepresentation">
+
+	<tab name="Data" index="0" layout="DEFAULT">
+
+	<property name="drawable.x" label="x" widget="DOUBLE" constraint="10">
+		<param name="increment" value="1"/>
+	</property>
+	<property name="drawable.y" label="y" widget="DOUBLE" constraint="11">
+		<param name="increment" value="1"/>
+	</property>
+	<property name="drawable.width" label="width" widget="DOUBLE" constraint="12">
+		<param name="increment" value="1"/>
+	</property>
+	<property name="drawable.height" label="height" widget="DOUBLE" constraint="13">
+		<param name="increment" value="1"/>
+	</property>
+	<property name="drawable.arcWidth" label="arc_width" widget="DOUBLE" constraint="14">
+		<param name="increment" value="1"/>
+	</property>
+	<property name="drawable.arcHeight" label="arc_height" widget="DOUBLE" constraint="15">
+		<param name="increment" value="1"/>
+	</property>
+	<property name="drawable.isFilled" label="filled" widget="CHECKBOX" constraint="20">
+	</property>
+	
+	</tab>
+
+</inspector>

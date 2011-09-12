@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SellReport>
+  <Vendor id="2">
+    <name>John</name>
+    <firstName>Smith</firstName>
+    <address>2 baker st.</address>
+  </Vendor>
+  <Command commandIsAlreadyPaid="true">
+    <Customer>
+      <name>Scott</name>
+      <firstName>Hamilton</firstName>
+      <address>21 jump st.</address>
+    </Customer>
+    <Movie articleId="387" price="12.3">
+      <title>Alien</title>
+      Here comes a description of Alien
+      <Role name="Brett" />
+      <Role name="Kane" />
+      <cat>Horror</cat>
+    </Movie>
+    <Movie articleId="351" price="11.95">
+      <title>Star wars</title>
+      A wonderfull movie
+      <cat>SF</cat>
+    </Movie>
+    <Album articleId="780" price="7.95">
+      <author>Pink floyd</author>
+      <title>The wall</title>
+      Here is the description of the album
+    </Album>
+    <key>
+      <CommandIdentifier identifier="YUZ-7856" />
+    </key>
+  </Command>
+  <Command commandIsAlreadyPaid="false">
+    <Customer>
+      <name>Martin</name>
+      <firstName>Heusse</firstName>
+    </Customer>
+    <Album className="org.openflexo.xmlcode.examples.example2.ReggaeAlbum" articleId="227" price="8.99">
+      <author>Bob Marley and the wailers</author>
+      <title>Legend</title>
+      The legend of Bob Marley
+    </Album>
+    <key>
+      <CommandIdentifier identifier="SQI-1288" />
+    </key>
+  </Command>
+</SellReport>
+

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GeometricSet id="1">
+  <Line id="2" name="L1">
+    <LineGraphicalRepresentation id="3" text="L1" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="18.0" absoluteTextY="6.0" isVisible="true" layer="10">
+      <TextStyle id="4" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="5" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="6" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </LineGraphicalRepresentation>
+    <LineWithTwoPointsConstruction id="7">
+      <P1_ExplicitPointConstruction id="8" point="182.0,288.0" />
+      <P2_ExplicitPointConstruction id="9" point="435.0,90.0" />
+    </LineWithTwoPointsConstruction>
+  </Line>
+  <Line id="10" name="L2">
+    <LineGraphicalRepresentation id="11" text="L2" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="14.0" absoluteTextY="46.0" isVisible="true" layer="10">
+      <TextStyle id="12" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="13" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="14" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </LineGraphicalRepresentation>
+    <OrthogonalLineWithPointConstruction id="15">
+      <L_LineReference id="16">
+        <Reference_LineWithTwoPointsConstruction idref="7" />
+      </L_LineReference>
+      <P_ExplicitPointConstruction id="17" point="416.13852813852816,327.3376623376623" />
+    </OrthogonalLineWithPointConstruction>
+  </Line>
+  <Ellips id="18" name="Ellips1">
+    <EllipsGraphicalRepresentation id="19" text="Ellips1" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="192.0" absoluteTextY="49.0" isVisible="true" layer="10">
+      <TextStyle id="20" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="21" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="22" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </EllipsGraphicalRepresentation>
+    <CircleWithCenterAndPointConstruction id="23" isFilled="false">
+      <Center_LineIntersectionPointConstruction id="24">
+        <L1_LineReference id="25">
+          <Reference_OrthogonalLineWithPointConstruction idref="15" />
+        </L1_LineReference>
+        <L2_LineReference id="26">
+          <Reference_LineWithTwoPointsConstruction idref="7" />
+        </L2_LineReference>
+      </Center_LineIntersectionPointConstruction>
+      <P_PointReference id="27">
+        <Reference_ExplicitPointConstruction idref="9" />
+      </P_PointReference>
+    </CircleWithCenterAndPointConstruction>
+  </Ellips>
+  <GeometricDrawingGraphicalRepresentation id="28" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" width="10000.0" height="10000.0" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255">
+    <TextStyle id="29" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+  </GeometricDrawingGraphicalRepresentation>
+</GeometricSet>
+

@@ -1,0 +1,63 @@
+<inspector title = "Data model" inheritsfrom="DMObject.inspector">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="helpText" widget="LABEL">
+			<param name="displayLabel" value="false"/>
+			<param name="expandHorizontally" value="true"/> 
+			<param name="expandVertically" value="true"/>
+			<param name="widgetLayout" value="1COL"/>
+			<param name="width" value="200"/>
+			<param name="height" value="200"/>
+		</property>
+	</tab>
+	
+	<tab name="Advanced" index="1">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+	
+		<property name="globalDefaultConnectionString" label="default_connection_string" widget="TEXT_FIELD" constraint="3">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="globalDefaultUsername" label="default_username" widget="TEXT_FIELD" constraint="4">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="globalDefaultPassword" label="default_password" widget="TEXT_FIELD" constraint="5">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+	</tab>
+	
+	<tab name="Code" index="2">
+		<property name="EOCodeGenerationAvailable" label="eo_code_generation_available" widget="READ_ONLY_CHECKBOX" constraint="0">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="EOCodeGenerationActivated" label="eo_code_generation_activated" widget="READ_ONLY_CHECKBOX" constraint="1" depends="EOCodeGenerationAvailable" conditional="EOCodeGenerationAvailable=true">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="activateEOCodeGeneration" label="activate_eo_code_generation" widget="BUTTON" constraint="2" depends="EOCodeGenerationAvailable,EOCodeGenerationActivated" conditional="EOCodeGenerationAvailable=true AND EOCodeGenerationActivated=false">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="desactivateEOCodeGeneration" label="desactivate_eo_code_generation" widget="BUTTON" constraint="3" depends="EOCodeGenerationAvailable,EOCodeGenerationActivated" conditional="EOCodeGenerationAvailable=true AND EOCodeGenerationActivated=true">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+	</tab>
+
+	<tab name="Stats" index="3">
+		<property name="statistics.infoLabel" widget="LABEL" constraint="0">
+			<param name="align" value="center"/>
+			<param name="width" value="200"/>
+			<param name="height" value="60"/>
+		</property>
+		<property name="statistics.eoEntityCount" label="# entities" widget="READ_ONLY_TEXT_FIELD" constraint="1">
+		</property>
+		<property name="statistics.eoAttributeCount" label="# attributes" widget="READ_ONLY_TEXT_FIELD" constraint="2">
+		</property>
+		<property name="statistics.eoRelationshipCount" label="# relationships" widget="READ_ONLY_TEXT_FIELD" constraint="3">
+		</property>
+		<property name="statistics.refresh" label="refresh" widget="BUTTON" constraint="14">
+		</property>
+	</tab>
+	
+</inspector>

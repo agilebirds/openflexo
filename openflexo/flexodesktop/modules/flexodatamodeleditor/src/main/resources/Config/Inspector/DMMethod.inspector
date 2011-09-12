@@ -1,0 +1,66 @@
+<inspector title = "Method" inheritsfrom="DMObject.inspector">
+	<tab name="Basic" index="0">
+		<property name="name" label="name" widget="TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		</property>
+		<property name="returnType" label="return_type" widget="CUSTOM" constraint="2">
+			<param name="className" value="org.openflexo.components.widget.DMTypeInspectorWidget"/>
+		</property>
+		<property_list name="parameters" label="parameters" constraint="3">
+		  <param name="visible_row_count" value="5"/>
+		  <param name="row_height" value="20"/>
+		  <property_list_column name="name" label="name" widget="TEXT_FIELD">
+			<param name="column_width" value="100"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="type" label="type" widget="CUSTOM">
+			<param name="column_width" value="180"/>
+			<param name="resizable" value="true"/>
+			<param name="className" value="org.openflexo.components.widget.DMTypeInspectorWidget"/>
+			<param name="format" value="simplifiedStringRepresentation"/>
+		  </property_list_column>
+		  <property_list_column name="description" label="description" widget="TEXT_FIELD">
+			<param name="column_width" value="150"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_action name="new" type="ADD" method="createNewParameter"/>
+		  <property_list_action name="delete" type="DELETE" method="deleteParameter" isAvailable="isParameterDeletable"/>
+		</property_list>
+		
+	</tab>
+	
+	<tab name="Advanced" index="1">
+		<property name="isStaticallyDefinedInTemplate" label="statically_defined_in_template" widget="READ_ONLY_CHECKBOX" constraint="0" help="Set to true if this property was statically defined in template during last model reinjection"/>
+	</tab>
+
+	<tab name="Code" index="3">
+		<property name="visibilityModifier" label="access_modifier" widget="DROPDOWN" constraint="1">
+			<param name="format" value="localizedName"/>
+		</property>
+		<property name="isAbstract" label="abstract_modifier" widget="CHECKBOX" constraint="2" depends="isStatic" conditional="isStatic=false"/>
+		<property name="isStatic" label="static_modifier" widget="CHECKBOX" constraint="3" depends="isAbstract" conditional="isAbstract=false"/>
+		<property name="isSynchronized" label="synchronized_modifier" widget="CHECKBOX" constraint="4"/>
+
+		<property name="sourceCode" label="code" widget="CUSTOM" constraint="7">
+			<param name="className" value="org.openflexo.components.widget.JavaSourceCodeInspectorWidget"/>
+			<param name="rows" value="5"/>
+			<param name="columns" value="20"/>
+		</property>
+
+		<!--<property name="hasParseErrors" label="has_parse_errors" widget="READ_ONLY_CHECKBOX" constraint="5" depends="code" conditional="code=false"/>
+		<property name="parseErrorWarning" widget="LABEL" constraint="6" depends="hasParseErrors" conditional="hasParseErrors=true">
+			<param name="displayLabel" value="false"/>
+			<param name="expandHorizontally" value="true"/> 
+			<param name="widgetLayout" value="1COL"/>
+			<param name="align" value="CENTER"/>
+		</property>
+		<property name="code" label="code" widget="JAVA_CODE" constraint="7">
+			<param name="readOnly" value="false"/>
+			<param name="rows" value="5"/>
+			<param name="columns" value="20"/>
+		</property>-->
+		
+	</tab>
+
+</inspector>

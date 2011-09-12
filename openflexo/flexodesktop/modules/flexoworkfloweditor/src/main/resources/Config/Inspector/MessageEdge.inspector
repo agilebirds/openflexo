@@ -1,0 +1,82 @@
+<inspector title = "Message edge" inheritsfrom ="PostCondition.inspector" inspectedClassName="org.openflexo.foundation.wkf.edge.MessageEdge">
+
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>		
+	</tab>
+	
+	<tab name="Data" index="3">
+		<property name="hasInputMessage" label="has_input_message" widget="CHECKBOX" constraint="0" conditional="true=false"/>
+		<property name="hasOutputMessage" label="has_output_message" widget="CHECKBOX" constraint="0" conditional="true=false"/>
+		<property name="inputMessage.name" label="input_message" widget="READ_ONLY_TEXT_FIELD" constraint="0" depends="hasInputMessage" conditional="hasInputMessage=true">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		  <param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+		</property>
+		<property_list name="inputMessage.bindings" label="input_message" constraint="1" depends="hasInputMessage" conditional="hasInputMessage=true">
+		  <param name="displayLabel" value="false"/>
+		  <param name="visible_row_count" value="4"/>
+		  <param name="row_height" value="20"/>
+		  <param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+		  <property_list_column name="bindingDefinition.variableName" label="name" widget="TEXT_FIELD">
+			<param name="column_width" value="80"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="bindingDefinition.type" label="type" widget="CUSTOM">
+			<param name="className" value="org.openflexo.components.widget.DMTypeInspectorWidget"/>
+			<param name="format" value="simplifiedStringRepresentation"/>
+			<param name="column_width" value="80"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="bindingDefinition.isMandatory" label="mandatory" widget="CHECKBOX">
+			<param name="column_width" value="30"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="bindingValue" label="value" widget="CUSTOM">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="bindingDefinition"/>			
+			<param name="format" value="stringRepresentation"/>
+			<param name="column_width" value="150"/>
+		  </property_list_column>
+		  <property_list_action name="new" type="ADD" method="inputMessage.createNewBinding"/>
+		  <property_list_action name="delete" type="DELETE" method="inputMessage.deleteBinding" isAvailable="inputMessage.isBindingDeletable"/>
+		</property_list>
+
+		<property name="outputMessage.name" label="output_message" widget="READ_ONLY_TEXT_FIELD" constraint="2" depends="hasOutputMessage" conditional="hasOutputMessage=true">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		  <param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+		</property>
+		<property_list name="outputMessage.bindings" label="output_message" constraint="3" depends="hasOutputMessage" conditional="hasOutputMessage=true">
+		  <param name="displayLabel" value="false"/>
+		  <param name="visible_row_count" value="4"/>
+		  <param name="row_height" value="20"/>
+		  <param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+		  <property_list_column name="bindingDefinition.variableName" label="name" widget="TEXT_FIELD">
+			<param name="column_width" value="80"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="bindingDefinition.type" label="type" widget="CUSTOM">
+			<param name="className" value="org.openflexo.components.widget.DMTypeInspectorWidget"/>
+			<param name="format" value="name"/>
+			<param name="column_width" value="80"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="bindingDefinition.isMandatory" label="mandatory" widget="CHECKBOX">
+			<param name="column_width" value="30"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="bindingValue" label="value" widget="CUSTOM">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="bindingDefinition"/>			
+			<param name="format" value="stringRepresentation"/>
+			<param name="column_width" value="150"/>
+		  </property_list_column>
+		  <property_list_action name="new" type="ADD" method="outputMessage.createNewBinding"/>
+		  <property_list_action name="delete" type="DELETE" method="outputMessage.deleteBinding" isAvailable="outputMessage.isBindingDeletable"/>
+		</property_list>
+
+	</tab>
+
+</inspector>

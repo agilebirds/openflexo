@@ -1,0 +1,13 @@
+<inspector title = "WebService call" inheritsfrom="SubProcessNode.inspector" inspectedClassName="org.openflexo.foundation.wkf.node.WSCallSubProcessNode">
+
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+		
+	</tab>
+
+</inspector>

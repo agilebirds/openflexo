@@ -1,0 +1,17 @@
+#name()Link : WDLMailToComponent{
+    #if(${widget.getBindingMailToAdress().getWodStringRepresentation()})
+        emailAddress=${widget.getBindingMailToAdress().getWodStringRepresentation()};
+    #end
+    #if($widget.getBindingMailSubject().getWodStringRepresentation())
+        subject=${widget.getBindingMailSubject().getWodStringRepresentation()};
+    #end
+    #if($widget.getBindingMailBody().getWodStringRepresentation())
+        body=${widget.getBindingMailBody().getWodStringRepresentation()};
+    #end
+    id = "${widget.getFlexoID()}";
+    #tooltipAsTitle()
+    #if($widget.isCustomButton())
+    class = "denaliButton";
+    #end
+}
+#renderLinkContent($widget)

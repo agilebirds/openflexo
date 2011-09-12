@@ -1,0 +1,10 @@
+**/*.eomodeld~/
+**/*.woa/**
+**/*.framework/**
+**/*.prj/**/*
+**/*.history/**/*
+*.prj/**/*
+*.eomodeld~/**
+*.woa/**
+*.framework/**
+*.history/**/*

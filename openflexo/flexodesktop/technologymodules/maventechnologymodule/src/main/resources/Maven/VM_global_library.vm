@@ -1,0 +1,63 @@
+#macro(buildMavenDependency $returnedDependency $groupId $artifactId $version $scope)
+	#set($returnedDependency = ${mavenImplementation.buildMavenDependency($groupId, $artifactId, $version, $scope)})
+#end
+#macro(addMavenDependency $groupId $artifactId $version $scope)
+	#buildMavenDependency($returnedDependency $groupId $artifactId $version $scope)
+	#addMavenDependencyObject($returnedDependency)
+#end
+#macro(addMavenDependencyObject $dependency)
+	#void(${projectGenerator.addCrossModuleDataInMap(${mavenImplementation.getTechnologyModuleDefinition()}, ${generator}, "dependencies", "${dependency.getGroupId()}.${dependency.getArtifactId()}", $dependency)})
+#end
+#macro(renderAddedMavenDependencies)
+	#foreach($dependency in ${generator.getModuleGenerator().getModuleData("dependencies").values()})
+		#renderMavenDependency($dependency)
+	#end
+#end
+#macro(renderMavenDependency $dependency)
+	<dependency>
+		<groupId>${dependency.getGroupId()}</groupId>
+		<artifactId>${dependency.getArtifactId()}</artifactId>
+		<version>${dependency.getVersion()}</version>
+        #if(${dependency.getScope()})
+        	<scope>${dependency.getScope()}</scope>
+        #end
+		#if(${dependency.getExclusions().size()}>0)			
+			<exclusions>
+				#foreach($exclusion in ${dependency.getExclusions()})				
+					<exclusion>
+						<groupId>${exclusion.getGroupId()}</groupId>
+						<artifactId>${exclusion.getArtifactId()}</artifactId>
+					</exclusion>
+				#end
+			</exclusions>
+		#end
+	</dependency>
+#end
+
+#macro(addMavenRepository $id $name $url $isSnapshot $layout)
+	#set($xml = ${generator.getNewStringBuilder()})
+	#void(${xml.append("<repository>")})
+	#void(${xml.append("<id>$id</id>")})
+	#void(${xml.append("<name>$name</name>")})
+	#void(${xml.append("<url>$url</url>")})
+	#if($layout)
+		#void(${xml.append("<layout>$layout</layout>")})
+	#else
+		#void(${xml.append("<layout>default</layout>")})
+	#end
+	#if($isSnapshot)
+		#void(${xml.append("<snapshots><enabled>true</enabled></snapshots>")})
+		#void(${xml.append("<releases><updatePolicy>always</updatePolicy></releases>")})
+	#else
+		#void(${xml.append("<snapshots><enabled>false</enabled></snapshots>")})
+		#void(${xml.append("<releases><updatePolicy>never</updatePolicy></releases>")})
+	#end
+	#void(${xml.append("</repository>")})
+	#void(${projectGenerator.addCrossModuleDataInMap(${mavenImplementation.getTechnologyModuleDefinition()}, ${generator}, "repositories", ${url}, ${xml.toString()})})
+#end
+#macro(renderAddedMavenRepositories)
+	#foreach($xml in ${generator.getModuleGenerator().getModuleData("repositories").values()})
+		$xml
+	#end
+#end
+

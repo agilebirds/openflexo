@@ -1,0 +1,13 @@
+<inspector title = "service_interface"  inspectedClassName="org.openflexo.foundation.wkf.ws.ServiceInterface">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		
+		<property name="name" label="name" widget="TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		</property>
+		
+	</tab>
+</inspector>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+        <wo wocomponentcontent="true" class="${componentDefinition.getName()}Link">
+        <binding name="confirmValue"/>
+		<binding name="href"/>
+        <binding name="hiddenFieldName"/>
+        <binding name="anchor"/>
+        <binding name="includePopupInPage"/>
+        <binding name="hiddenFieldValue"/>
+        <binding name="uniqueIdentifier"/>
+	#if(!${generator.isPrototype()})
+		<binding name="businessLogicCoreDM"/>
+	#end
+    #foreach($bd in $componentDefinition.getBindingDefinitions())
+        <binding name="${bd.getVariableName()}"/>
+        #if($bd.getIsMandatory() && !$generator.isPrototype())
+        <validation message="&apos;${bd.getVariableName()}&apos; is a mandatory binding">
+            <unbound name="${bd.getVariableName()}"/>
+        </validation>
+           #end
+        #if($bd.getIsSettable())
+        <validation message="'${bd.getVariableName()}' must be bound to a settable value">
+            <unsettable name="${bd.getVariableName()}"/>
+        </validation>
+        #end
+    #end
+        </wo>
+</wodefinitions>

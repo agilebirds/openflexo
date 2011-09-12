@@ -1,0 +1,7 @@
+<inspector title = "Cubic curve" inheritsfrom="Object.inspector" inspectedClassName="org.openflexo.fge.geomedit.gr.CubicCurveGraphicalRepresentation">
+
+	<tab name="Data" index="0" layout="DEFAULT">
+
+ 	</tab>
+
+</inspector>

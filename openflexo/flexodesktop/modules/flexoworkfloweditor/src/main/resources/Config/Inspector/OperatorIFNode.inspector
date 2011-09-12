@@ -1,0 +1,27 @@
+<inspector title = "IF operator" inheritsfrom="OperatorNode.inspector" inspectedClassName="org.openflexo.foundation.wkf.node.IFOperator">
+
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="newStatusForPositiveEvaluation" label="status_for_positive_evaluation" widget="DROPDOWN" constraint="4">
+            <param name="dynamiclist" value="process.statusList.allAvailableStatus"/>
+            <param name="format" value="nameAndProcess"/>
+        </property>
+        <property name="newStatusForNegativeEvaluation" label="status_for_negative_evaluation" widget="DROPDOWN" constraint="5">
+            <param name="dynamiclist" value="process.statusList.allAvailableStatus"/>
+            <param name="format" value="nameAndProcess"/>
+        </property>
+	</tab>
+	
+	<tab name="Advanced" index="4">
+	</tab>
+	<tab name="Data" index="3">
+		<property name="conditionPrimitive" label="condition" widget="CUSTOM" constraint="2">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="conditionPrimitiveBindingDefinition"/>			
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+		</property>
+	</tab>
+	
+</inspector>

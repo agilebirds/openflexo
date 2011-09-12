@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Generation timestamp="${projectGenerator.generateTimestamp()}">
+	<File name="applicationContext-Hibernate.xml" type="text" symbolicPath="webapp" relativePath="WEB-INF">
+    	<Template templateFile="applicationContextHibernate.xml.vm"/>
+    </File>
+    #foreach($model in ${hibernateImplementation.getModels()})
+		#foreach($entity in ${model.getEntities()})
+        	<File name="${entity.getName()}" type="java" symbolicPath="sources" relativePath="#getJavaPackagePath(${model.getName()})">
+            	<Template templateFile="pojo.java.vm">
+					<Context name="entity" value="${entity.makeReference()}"/>
+            	</Template>
+            </File>
+		#end
+	#end
+</Generation>	
+#addToSpringContext("<import resource=${quote}applicationContext-Hibernate.xml$quote />")

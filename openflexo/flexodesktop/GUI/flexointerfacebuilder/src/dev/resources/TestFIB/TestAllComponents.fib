@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="border" useScrollBar="false">
+  <Panel layout="twocols" border="titled" borderTitle="Panel" constraints="border(location=north)" width="80" height="260" useScrollBar="false">
+    <Label label="A label" localize="true" constraints="twocols(location=left;index=0;expandHorizontally=true;expandVertically=false)" useScrollBar="false">
+      <LocalizedDictionary />
+    </Label>
+    <TextField columns="6" passwd="false" text="TextField" localize="true" constraints="twocols(location=right;index=1;expandVertically=false;expandHorizontally=true)" useScrollBar="false" />
+    <CheckBox selected="true" localize="true" name="checkbox" constraints="twocols(location=left;index=2;expandHorizontally=true;expandVertically=false)" useScrollBar="false" />
+    <Label label="A check box" localize="true" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" useScrollBar="false" />
+ 	<Custom/>
+    <LocalizedDictionary />
+  </Panel>
+  <LocalizedDictionary />
+</Panel>
+

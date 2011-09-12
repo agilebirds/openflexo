@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Mapping model for navigation menu encoding version 1.0 -->
+
+<model builder="org.openflexo.foundation.xml.FlexoWSLibraryBuilder" handlesReferences="yes"> 
+
+  <mapId>
+	  <map entityClass="org.openflexo.foundation.FlexoModelObject" identifierAccessor="serializationIdentifier"/>
+  </mapId>
+	
+  <entity name="org.openflexo.foundation.FlexoModelObject" abstract="YES" finalizer="finalizeDeserialization">
+  	<property name="userIdentifier" xmlTag="userID" attribute="YES" copyable="no" description="Unique ID of the user (used for team synchronization)"/>
+  	<property name="flexoID" xmlTag="flexoID" attribute="YES" copyable="no" description="Unique ID generated and maintained by Flexo"/>
+  	<property name="dontEscapeLatex" xmlTag="dontEscapeLatex" attribute="YES" description=""/>
+  	<property name="docFormat" xmlTag="docFormat" attribute="YES" description=""/>
+    <property name="dontGenerate" xmlTag="dontGenerate" attribute="YES" description="Check this box, if you don't want this node to generate documentation"/>
+    <property name="description" xmlTag="description" attribute="YES" description="Defines widget name"/>
+    <property name="hasSpecificDescriptions" xmlTag="useSpecificDescriptions" attribute="YES" description="Wheter the specific descriptions should be used in the generated documentation or not"/>
+    <property name="specificDescriptions" xmlTag="specificDescriptions" type="hashtable" description="Hashtable(String,String) that contains a name of a DocType as a key, and a description specific to that DocType as the value"/>
+    <property name="customProperties" contains="org.openflexo.foundation.FlexoProperty" type="vector" primary="yes"/>
+    <property name="dynamicProperties" xmlTag="?" type="unmappedAttributes" description="Hashtable(String,String) that contains dynamic properties (data that are not handled by application, but need to be stored in the context of back compatibility)"/>
+    <description>Root class for all objects of Flexo</description>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.FlexoProperty" xmlTag="FlexoProperty">
+     <property name="name" xmlTag="name" attribute="yes"/>
+     <property name="value" xmlTag="value" attribute="yes"/>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.ws.WSObject" abstract="YES" >
+    <description>Root class for all objects related to WebService</description>
+  	<property name="name" xmlTag="name" attribute="YES" description="Name of this object"/>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.ws.FlexoWSLibrary" xmlTag="WSLibrary">
+    <description>Root class for all WebServices of Flexo</description>
+    <property name="ExternalWSServices" xmlTag="ExternalWSService" type="vector" primary="yes" description=""/> 
+    <property name="InternalWSServices" xmlTag="InternalWSService" type="vector" primary="yes" description=""/>    
+  </entity>
+  
+  <entity name="org.openflexo.foundation.ws.WSService" abstract="YES">
+  	<property name="name" xmlTag="name" attribute="YES" description="name "/>
+  	<property name="targetNamespace" xmlTag="targetNamespace" attribute="YES" description="targetNamespace of the elements defined by this WebService"/>
+  	<property name="WSDLFile" xmlTag="WSDLFile" attribute="YES" description="Name of related WSDL file"/> 
+  	<property name="WSPortTypes" xmlTag="WSPortType" type="vector" primary="yes" description="processes contained in this WebService Group"/>
+  	<property name="WSRepositories" xmlTag="WSRepository" type="vector" primary="yes" description="repositories used by this webservice group"/> 
+  </entity>
+  
+  <entity name="org.openflexo.foundation.ws.ExternalWSService" xmlTag="ExternalWSService">
+  </entity>
+  
+  <entity name="org.openflexo.foundation.ws.InternalWSService" xmlTag="InternalWSService">
+  </entity>
+  
+  <entity name="org.openflexo.foundation.ws.WSPortType" xmlTag="WSPortType">
+  	<property name="name" attribute="YES" xmlTag="name" description=""/>
+  	<property name="processName" attribute="YES" xmlTag="processName" description=""/>
+  	<property name="interfaceName" attribute="YES" xmlTag="interfaceName" description=""/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.ws.WSRepository" xmlTag="WSRepository">
+   	<property name="name" xmlTag="name" attribute="YES" description=""/>
+  </entity>
+  
+</model>

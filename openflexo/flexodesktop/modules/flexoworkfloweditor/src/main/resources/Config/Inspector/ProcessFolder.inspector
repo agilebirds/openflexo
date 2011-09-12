@@ -1,0 +1,22 @@
+<inspector title = "ProcessFolder" inheritsfrom ="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.wkf.ProcessFolder">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="name" label="name" widget="TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		</property>
+	</tab>
+	
+	<tab name="Advanced" index="1">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+	</tab>
+	<tab name="Doc" index="2">
+		<property name="index" label="index" widget="INTEGER" constraint="0"/>
+	</tab>
+	
+</inspector>
+

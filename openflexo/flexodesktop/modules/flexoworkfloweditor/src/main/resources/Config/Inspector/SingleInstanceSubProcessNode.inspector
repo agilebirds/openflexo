@@ -1,0 +1,14 @@
+<inspector title = "Single sub-process instance" inheritsfrom="SubProcessNode.inspector" inspectedClassName="org.openflexo.foundation.wkf.node.SingleInstanceSubProcessNode">
+
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="displaySubProcessImage" label="display_thumb" widget="CHECKBOX" constraint="10"/>
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+		
+	</tab>
+
+</inspector>

@@ -1,0 +1,321 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<definitions  name ='certServices'   targetNamespace = 'http://sqldata.com/schema/certService.wsdl'
+	 xmlns:tns='http://sqldata.com/schema/certService.wsdl' 
+	 xmlns:xsd='http://www.w3.org/2001/XMLSchema' 
+	 xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' 
+	 xmlns:typens='http://sqldata.com/schema/certService.xsd' 
+	 xmlns:wsdl='http://schemas.xmlsoap.org/wsdl/'
+	 xmlns:dime='http://schemas.xmlsoap.org/ws/2002/04/dime/wsdl/'
+	 xmlns='http://schemas.xmlsoap.org/wsdl/' 
+	xmlns:myExt='http://denali.be/partExtension/'>
+  <types>
+    <schema targetNamespace='http://sqldata.com/schema/certService.xsd'
+      xmlns='http://www.w3.org/2001/XMLSchema'
+      xmlns:wsdl='http://schemas.xmlsoap.org/wsdl/'
+      xmlns:SOAP-ENC='http://schemas.xmlsoap.org/soap/encoding/'
+      elementFormDefault='qualified'>
+	<simpleType name="AuthMethod">
+		<xsd:restriction base='xsd:string'>
+			<enumeration value="password"/>
+			<enumeration value="digest"/>
+			<enumeration value="certificate"/>
+			<enumeration value="SAML"/>
+		</xsd:restriction>
+	</simpleType>
+	<simpleType name="RevokeReason">
+		<xsd:restriction base='xsd:string'>
+			<enumeration value="unspecified"/>
+			<enumeration value="keyCompromised"/>
+			<enumeration value="affiliationChanged"/>
+			<enumeration value="superseded"/>
+			<enumeration value="cessationOfOperation"/>
+			<enumeration value="certificateHold"/>
+			<enumeration value="removeFromCRL"/>
+		</xsd:restriction>
+	</simpleType>
+	<simpleType name="CertPurpose">
+		<xsd:restriction base='xsd:string'>
+			<enumeration value="any"/>
+			<enumeration value="sslclient"/>
+			<enumeration value="sslserver"/>
+			<enumeration value="smimesign"/>
+			<enumeration value="smimeencrypt"/>
+			<enumeration value="crlsign"/>
+		</xsd:restriction>
+	</simpleType>
+	<simpleType name="CertType">
+		<xsd:restriction base='xsd:string'>
+			<enumeration value="PEM"/>
+			<enumeration value="PKCS12"/>
+		</xsd:restriction>
+	</simpleType>
+	<simpleType name="SearchType">
+		<xsd:restriction base='xsd:string'>
+			<enumeration value="Name"/>
+			<enumeration value="Serial"/>
+			<enumeration value="Holder"/>
+			<enumeration value="Status"/>
+			<enumeration value="Organization"/>
+			<enumeration value="CommonName"/>
+			<enumeration value="Email"/>
+		</xsd:restriction>
+	</simpleType>
+	<simpleType name="PasswordType">
+		<xsd:restriction base='xsd:string'/>
+	</simpleType>
+	<simpleType name="LongString">
+		<xsd:restriction base='xsd:string'>
+			<maxlength value="500"/>
+		</xsd:restriction>
+	</simpleType>
+	<complexType name="SearchResults">
+		<sequence>
+            <any />
+		</sequence>
+        </complexType>
+    </schema>
+  </types>
+  <message name='Issue'>
+    <part name='userId' type='xsd:string' myExt:value='SQLData'/>
+    <part name='credential' type='typens:PasswordType' myExt:value='test'/>
+    <part name='certType' type='typens:CertType'/>
+    <part name='countryName' type='xsd:string' myExt:value='US'/>
+    <part name='stateOrProvinceName' type='xsd:string'/>
+    <part name='organizationName' type='xsd:string'/>
+    <part name='organizationalUnitName' type='xsd:string'/>
+    <part name='commonName' type='xsd:string'/>
+    <part name='emailAddress' type='xsd:string'/>
+    <part name='keySecret' type='typens:PasswordType'/>
+  </message>
+  <message name='IssueResponse'>
+    <part name='return' type='xsd:string'/>
+  </message>
+  <message name='GenerateRequest'>
+    <part name='userId' type='xsd:string' myExt:value='SQLData'/>
+    <part name='credential' type='typens:PasswordType' myExt:value='test'/>
+    <part name='certType' type='typens:CertType'/>
+    <part name='countryName' type='xsd:string' myExt:value='US'/>
+    <part name='stateOrProvinceName' type='xsd:string'/>
+    <part name='organizationName' type='xsd:string'/>
+    <part name='organizationalUnitName' type='xsd:string'/>
+    <part name='commonName' type='xsd:string'/>
+    <part name='emailAddress' type='xsd:string'/>
+    <part name='KeySecret' type='typens:PasswordType'/>
+  </message>
+  <message name='GenerateRequestResponse'>
+    <part name='return' type='xsd:string'/>
+  </message>
+  <message name='SignCSR'>
+    <part name='userId' type='xsd:string' myExt:value='SQLData'/>
+    <part name='credential' type='typens:PasswordType' myExt:value='test'/>
+    <part name='CSR' type='typens:LongString'/>
+  </message>
+  <message name='SignCSRResponse'>
+    <part name='return' type='xsd:string'/>
+  </message>
+  <message name='Revoke'>
+    <part name='userId' type='xsd:string' myExt:value='SQLData'/>
+    <part name='credential' type='typens:PasswordType' myExt:value='test'/>
+    <part name='certFile' type='xsd:string'/>
+    <part name='reason' type='typens:RevokeReason'/>
+  </message>
+  <message name='RevokeResponse'>
+    <part name='return' type='xsd:string'/>
+  </message>
+  <message name='Validate'>
+    <part name='userId' type='xsd:string' myExt:value='SQLData'/>
+    <part name='credential' type='typens:PasswordType' myExt:value='test'/>
+	<part name='certificate' type='typens:LongString'/>
+	<part name='purpose' type='typens:CertPurpose'/>
+  </message>
+  <message name='ValidateResponse'>
+    <part name='return' type='xsd:string'/>
+  </message>
+  <message name='Search'>
+    <part name='userId' type='xsd:string' myExt:value='SQLData'/>
+    <part name='credential' type='typens:PasswordType' myExt:value='test'/>
+	<part name='searchType' type='typens:SearchType'/>
+	<part name='searchText' type='xsd:string'/>
+	<part name='rowId' type='xsd:integer' myExt:value='0'/>
+	<part name='maxRows' type='xsd:integer' myExt:value='200'/>
+  </message>
+  <message name='SearchResponse'>
+    <part name='return' type='typens:SearchResults'/>
+  </message>
+  <message name='ParseX509'>
+    <part name='userId' type='xsd:string'/>
+    <part name='credential' type='typens:PasswordType'/>
+	<part name='X509' type='typens:LongString'/>
+  </message>
+  <message name='ParseX509Response'>
+    <part name='return' type='xsd:string'/>
+  </message>
+  <message name='GenerateCRL'>
+    <part name='userId' type='xsd:string' myExt:value='SQLData'/>
+    <part name='credential' type='typens:PasswordType' myExt:value='test'/>
+  </message>
+  <message name='GenerateCRLResponse'>
+    <part name='return' type='xsd:string'/>
+  </message>
+  <message name='Enroll'>
+    <part name='EmailAddress' type='xsd:string'/>
+    <part name='FirstName' type='xsd:string'/>
+    <part name='LastName' type='xsd:string'/>
+    <part name='Address' type='xsd:string'/>
+    <part name='City' type='xsd:string'/>
+    <part name='StateOrProvince' type='xsd:string'/>
+    <part name='PostalCode' type='xsd:string'/>
+    <part name='Country' type='xsd:string' myExt:value='USA'/>
+    <part name='CompanyName' type='xsd:string'/>
+    <part name='Title' type='xsd:string'/>
+    <part name='WorkPhone' type='xsd:string'/>
+    <part name='FaxNumber' type='xsd:string'/>
+    <part name='Password' type='typens:PasswordType'/>
+  </message>
+  <message name='EnrollResponse'>
+    <part name='return' type='xsd:string'/>
+  </message>
+  <portType name='CertServicePortType'>
+    <operation name='Issue' >
+      <documentation>Issue a certificate from the CA. All parameters are required. The service returns a signed certificate and the private key encrypted using the keySecret.
+	  </documentation>
+      <input message='tns:Issue' />
+      <output message='tns:IssueResponse' />
+    </operation>
+    <operation name='GenerateRequest'>
+      <documentation>Generate a Certificate Signing Request (CSR) and a public/private key pair. 
+	  </documentation>
+      <input message='tns:GenerateRequest' />
+      <output message='tns:GenerateRequestResponse' />
+    </operation>
+    <operation name='SignCSR'>
+      <documentation>Sign a certificate signing request
+	  </documentation>
+      <input message='tns:SignCSR' />
+      <output message='tns:SignCSRResponse' />
+    </operation>
+    <operation name='Validate'>
+      <documentation>Validate a certificate.</documentation>
+      <input message='tns:Validate' />
+      <output message='tns:ValidateResponse' />
+    </operation>
+    <operation name='Search'>
+      <documentation>Search for certificates issued by the CA.</documentation>
+      <input message='tns:Search' />
+      <output message='tns:SearchResponse' />
+    </operation>
+    <operation name='ParseX509'>
+      <documentation>Parse an X509 certificate.</documentation>
+      <input message='tns:ParseX509' />
+      <output message='tns:ParseX509Response' />
+    </operation>
+    <operation name='Revoke'>
+      <documentation>Revoke a certificate 
+	  </documentation>
+      <input message='tns:Revoke' />
+      <output message='tns:RevokeResponse' />
+    </operation>
+    <operation name='GenerateCRL'>
+      <documentation>Generate a Certificate Revocation List in PEM format
+	  </documentation>
+      <input message='tns:GenerateCRL' />
+      <output message='tns:GenerateCRLResponse' />
+    </operation>
+    <operation name='Enroll'>
+      <documentation>Register as a user of the PKI service. You account is not valid until the admin approves it.
+	  </documentation>
+      <input message='tns:Enroll' />
+      <output message='tns:EnrollResponse' />
+    </operation>
+  </portType>
+  <binding name='CertServiceBinding' type='tns:CertServicePortType' >
+    <soap:binding style='rpc' transport='http://schemas.xmlsoap.org/soap/http' />
+    <operation name='Issue' >
+      <soap:operation soapAction='' />
+      <input>
+        <soap:body use='encoded' namespace='http://neien.org/schema/cdxSecurity.xsd'  encodingStyle='http://schemas.xmlsoap.org/soap/encoding/' />
+      </input>
+      <output>
+        <soap:body use='encoded' namespace='http://neien.org/schema/cdxSecurity.xsd'  encodingStyle='http://schemas.xmlsoap.org/soap/encoding/' />
+      </output>
+    </operation>
+    <operation name='GenerateRequest' >
+      <soap:operation soapAction='' />
+      <input>
+        <soap:body use='encoded' namespace='http://neien.org/schema/cdxSecurity.xsd'  encodingStyle='http://schemas.xmlsoap.org/soap/encoding/' />
+      </input>
+      <output>
+        <soap:body use='encoded' namespace='http://neien.org/schema/cdxSecurity.xsd'  encodingStyle='http://schemas.xmlsoap.org/soap/encoding/' />
+      </output>
+    </operation>
+    <operation name='SignCSR' >
+      <soap:operation soapAction='' />
+      <input>
+        <soap:body use='encoded' namespace='http://neien.org/schema/cdxSecurity.xsd'  encodingStyle='http://schemas.xmlsoap.org/soap/encoding/' />
+      </input>
+      <output>
+        <soap:body use='encoded' namespace='http://neien.org/schema/cdxSecurity.xsd'  encodingStyle='http://schemas.xmlsoap.org/soap/encoding/' />
+      </output>
+    </operation>
+    <operation name='Revoke' >
+      <soap:operation soapAction='' />
+      <input>
+        <soap:body use='encoded' namespace='http://neien.org/schema/cdxSecurity.xsd'  encodingStyle='http://schemas.xmlsoap.org/soap/encoding/' />
+      </input>
+      <output>
+        <soap:body use='encoded' namespace='http://neien.org/schema/cdxSecurity.xsd'  encodingStyle='http://schemas.xmlsoap.org/soap/encoding/' />
+      </output>
+	 </operation>
+    <operation name='Validate' >
+      <soap:operation soapAction='' />
+      <input>
+        <soap:body use='encoded' namespace='http://neien.org/schema/cdxSecurity.xsd'  encodingStyle='http://schemas.xmlsoap.org/soap/encoding/' />
+      </input>
+      <output>
+        <soap:body use='encoded' namespace='http://neien.org/schema/cdxSecurity.xsd'  encodingStyle='http://schemas.xmlsoap.org/soap/encoding/' />
+      </output>
+    </operation>
+    <operation name='Search' >
+      <soap:operation soapAction='' />
+      <input>
+        <soap:body use='encoded' namespace='http://neien.org/schema/cdxSecurity.xsd'  encodingStyle='http://schemas.xmlsoap.org/soap/encoding/' />
+      </input>
+      <output>
+        <soap:body use='encoded' namespace='http://neien.org/schema/cdxSecurity.xsd'  encodingStyle='http://schemas.xmlsoap.org/soap/encoding/' />
+      </output>
+    </operation>
+    <operation name='ParseX509' >
+      <soap:operation soapAction='' />
+      <input>
+        <soap:body use='encoded' namespace='http://neien.org/schema/cdxSecurity.xsd'  encodingStyle='http://schemas.xmlsoap.org/soap/encoding/' />
+      </input>
+      <output>
+        <soap:body use='encoded' namespace='http://neien.org/schema/cdxSecurity.xsd'  encodingStyle='http://schemas.xmlsoap.org/soap/encoding/' />
+      </output>
+    </operation>
+    <operation name='GenerateCRL' >
+      <soap:operation soapAction='' />
+      <input>
+        <soap:body use='encoded' namespace='http://neien.org/schema/cdxSecurity.xsd'  encodingStyle='http://schemas.xmlsoap.org/soap/encoding/' />
+      </input>
+      <output>
+        <soap:body use='encoded' namespace='http://neien.org/schema/cdxSecurity.xsd'  encodingStyle='http://schemas.xmlsoap.org/soap/encoding/' />
+      </output>
+    </operation>
+    <operation name='Enroll' >
+      <soap:operation soapAction='' />
+      <input>
+        <soap:body use='encoded' namespace='http://neien.org/schema/cdxSecurity.xsd'  encodingStyle='http://schemas.xmlsoap.org/soap/encoding/' />
+      </input>
+      <output>
+        <soap:body use='encoded' namespace='http://neien.org/schema/cdxSecurity.xsd'  encodingStyle='http://schemas.xmlsoap.org/soap/encoding/' />
+      </output>
+    </operation>
+  </binding>
+  <service name='SQLData PKI Service' >
+    <documentation>A set of PKI services</documentation>
+    <port name='CertServicePortType' binding='tns:CertServiceBinding' >
+      <soap:address location='http://www.soapclient.com/xml/certService.wsdl' />
+    </port>
+  </service>
+</definitions>

@@ -1,0 +1,12 @@
+\item <HEADER_NAME> : <DESCRIPTION>
+<GEN_IF(IS_SORTED)>
+<GEN_IF(SORT)>
+	This column has <SORT_TYPE> sort.
+</GEN_IF(SORT)>
+</GEN_IF(IS_SORTED)>
+<GEN_IF(!IS_SORTED)>
+<GEN_IF(SORT)>
+	This column can be sorted, it has <SORT_TYPE> sort.
+</GEN_IF(SORT)>
+</GEN_IF(!IS_SORTED)>
+The datas displayed in this column are bound to the following keypath: <KEYPATH>.

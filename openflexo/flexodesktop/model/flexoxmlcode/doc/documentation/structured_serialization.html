@@ -1,0 +1,579 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+  <html>
+    <head>
+      <title>XMLCoDe</title>
+    </head>
+    
+    <body>
+      <center>
+	<p>
+	</p>
+	<h1>XMLCoDe</h1>
+	<h2>A free implementation of an XML COder/DEcoder:<br>a Java XML serialization/deserialization tool</h2>
+      </center>
+      
+	<p>
+	</p>
+	<hr> 
+	<p>
+	</p>
+    <center>
+      <a href="index.html">Back to summary</a>
+    </center>
+    <p>
+    </p>
+
+    <center>
+      <h2>Structured serialization: how to make your serialized stucture stable ?</h2>
+    </center>
+    
+    <p><br>
+    </p>
+
+     <h3>
+      1. Introduction
+    </h3>
+
+    <p>We saw in previous article that Flexo allows object graph serialization.</p>
+  
+    <p>We saw that in some cases, serialization results are not really human-readable.</p>
+  
+    <p>Furthermore, in the context of concurrent modifications (CVS context), conflicts resolution is difficult as serialized structure is not stable.</p>
+  
+    <p>This document deals with a way to ensume stable serialized structure.</p>
+  
+    <h3>
+      2. Context
+    </h3>
+
+     <p>
+    	We are still dealing with following graph structure:
+    </p>
+  
+  	<p>
+  	<ul>
+  	<li><b><tt>Graph</tt></b>
+ 	<ul>
+ 	<li>identifier : <tt>int</tt></li>
+  	<li>nodes : <tt>Vector</tt> of <tt>Node</tt></li>
+  	</ul>
+  	</li>
+ 	<li><b><tt>Node</tt></b>
+  	<ul>
+ 	<li>identifier : <tt>int</tt></li>
+  	<li>preConditions : <tt>Vector</tt> of <tt>PreCondition</tt></li>
+  	<li>outgoingEdges : <tt>Vector</tt> of <tt>Edge</tt></li>
+  	</ul>
+  	</li>
+	<li><b><tt>PreCondition</tt></b>
+  	<ul>
+ 	<li>identifier : <tt>int</tt></li>
+  	<li>attachedNode : <tt>Node</tt></li>
+  	<li>incomingEdges : <tt>Vector</tt> of <tt>Edge</tt></li>
+  	</ul>
+  	</li>
+ 	<li><b><tt>Edge</tt> (abstract class)</b>
+  	<ul>
+ 	<li>identifier : <tt>int</tt></li>
+  	<li>originNode : <tt>Node</tt></li>
+  	<li>destinationPreCondition : <tt>PreCondition</tt></li>
+  	</ul>
+  	</li>
+ 	<li><b><tt>Edge1</tt></b> extends <b><tt>Edge</tt></b></li>
+ 	<li><b><tt>Edge2</tt></b> extends <b><tt>Edge</tt></b></li>
+  	</ul>
+  	</p>
+  
+  
+  	<p>Above model could be coded in Java like this:</p>
+  
+<pre>
+public class Graph implements XMLSerializable
+{
+    public Node startNode;
+}
+</pre>  
+  
+<pre>
+public class Node implements XMLSerializable
+{
+    public Vector edges;
+}
+</pre>  
+  
+<pre>
+public class Edge implements XMLSerializable
+{
+    public Node originNode;
+    public Node destinationNode;
+}
+</pre>  
+  
+    <h3>
+      3. The problem
+    </h3>
+  
+    <p>
+    We saw in previous article that such model could be serialized/deserialized with following XML mapping:
+    </p>
+    
+    <p>
+    <pre>
+&LT;?xml version="1.0" encoding="UTF-8"?>
+&LT;model handlesReferences="yes"&GT;
+	 
+  &LT;entity name="fr.enstb.xmlcode.examples.example5.Graph" xmlTag="Graph"&GT; 
+    &LT;property name="nodes" xmlTag="Node" type="vector"/&GT; 
+  &LT;/entity&GT; 
+	
+  &LT;entity name="fr.enstb.xmlcode.examples.example5.Node" xmlTag="Node" contexts="Attached,Origin"&GT;
+    &LT;property name="identifier" xmlTag="identifier" attribute="yes"/&GT; 
+    &LT;property name="preConditions" contains="fr.enstb.xmlcode.examples.example5.PreCondition"  type="vector" context="Attached"/&GT;
+    &LT;property name="outgoingEdges" contains="fr.enstb.xmlcode.examples.example5.Edge"  type="vector" context="Outgoing"/&GT;
+  &LT;/entity&GT; 
+	
+
+&LT;entity name="fr.enstb.xmlcode.examples.example5.PreCondition" xmlTag="PreCondition" contexts="Attached,Destination" &GT;
+    &LT;property name="identifier" xmlTag="identifier" attribute="yes"/&GT; 
+    &LT;property name="attachedNode" contains="fr.enstb.xmlcode.examples.example5.Node" context="Attached"/&GT;
+    &LT;property name="incomingEdges" contains="fr.enstb.xmlcode.examples.example5.Edge"  type="vector" context="Incoming"/&GT;
+  &LT;/entity&GT; 
+	
+  &LT;entity name="fr.enstb.xmlcode.examples.example5.Edge" abstract="yes" contexts="Outgoing,Incoming" &GT;
+    &LT;property name="identifier" xmlTag="identifier" attribute="yes"/&GT; 
+    &LT;property name="originNode" contains="fr.enstb.xmlcode.examples.example5.Node" context="Origin"/&GT;
+    &LT;property name="destinationPreCondition" contains="fr.enstb.xmlcode.examples.example5.PreCondition" context="Destination"/&GT;
+   &LT;/entity&GT; 
+	
+  &LT;entity name="fr.enstb.xmlcode.examples.example5.Edge1" xmlTag="Edge1"/&GT; 
+	
+  &LT;entity name="fr.enstb.xmlcode.examples.example5.Edge2" xmlTag="Edge2"/&GT; 
+	
+&LT;/model&GT;
+       </pre> 
+    </p>
+
+	<p>
+	With this mapping, when we try to serialize following graph:
+	</p>
+	
+	<p>
+<pre> 
+Graph ==============================================================================
+Node:1
+ [ Edge1: 11 from Node:1 to PreCondition:6 ] 
+ [ Edge2: 12 from Node:1 to PreCondition:7 ] 
+ [ Edge2: 13 from Node:1 to PreCondition:8 ] 
+ [ Edge1: 14 from Node:1 to PreCondition:8 ] 
+Node:2
+ [ PreCondition 6 attached to node id 2 receiving edges : 11 ]
+ [ Edge1: 15 from Node:2 to PreCondition:9 ] 
+Node:3
+ [ PreCondition 7 attached to node id 3 receiving edges : 12 ]
+ [ Edge1: 16 from Node:3 to PreCondition:10 ] 
+Node:4
+ [ PreCondition 8 attached to node id 4 receiving edges : 13,14 ]
+ [ Edge2: 17 from Node:4 to PreCondition:10 ] 
+Node:5
+ [ PreCondition 9 attached to node id 5 receiving edges : 15 ]
+ [ PreCondition 10 attached to node id 5 receiving edges : 16,17 ]
+======================================================================================
+</pre> 
+	<i>(Logs extracted from <b><tt>example5</tt></b> provided in this distribution)</i>
+    </p>
+
+	 <p>We obtain this:</p>
+
+<p>
+<pre>  
+&LT;?xml version="1.0" encoding="UTF-8"?&GT;
+&LT;Graph id="1"&GT;
+  &LT;Node id="2" identifier="1"&GT;
+    &LT;OutgoingEdge1 id="3" identifier="11"&GT;
+      &LT;OriginNode idref="2" /&GT;
+      &LT;DestinationPreCondition id="4" identifier="6"&GT;
+        &LT;AttachedNode id="5" identifier="2"&GT;
+          &LT;AttachedPreCondition idref="4" /&GT;
+          &LT;OutgoingEdge1 id="6" identifier="15"&GT;
+            &LT;OriginNode idref="5" /&GT;
+            &LT;DestinationPreCondition id="7" identifier="9"&GT;
+              &LT;AttachedNode id="8" identifier="5"&GT;
+                &LT;AttachedPreCondition idref="7" /&GT;
+                &LT;AttachedPreCondition id="9" identifier="10"&GT;
+                  &LT;AttachedNode idref="8" /&GT;
+                  &LT;IncomingEdge1 id="10" identifier="16"&GT;
+                    &LT;OriginNode id="11" identifier="3"&GT;
+                      &LT;AttachedPreCondition id="12" identifier="7"&GT;
+                        &LT;AttachedNode idref="11" /&GT;
+                        &LT;IncomingEdge2 id="13" identifier="12"&GT;
+                          &LT;OriginNode idref="2" /&GT;
+                          &LT;DestinationPreCondition idref="12" /&GT;
+                        &LT;/IncomingEdge2&GT;
+                      &LT;/AttachedPreCondition&GT;
+                      &LT;OutgoingEdge1 idref="10" /&GT;
+                    &LT;/OriginNode&GT;
+                    &LT;DestinationPreCondition idref="9" /&GT;
+                  &LT;/IncomingEdge1&GT;
+                  &LT;IncomingEdge2 id="14" identifier="17"&GT;
+                    &LT;OriginNode id="15" identifier="4"&GT;
+                      &LT;AttachedPreCondition id="16" identifier="8"&GT;
+                        &LT;AttachedNode idref="15" /&GT;
+                        &LT;IncomingEdge2 id="17" identifier="13"&GT;
+                          &LT;OriginNode idref="2" /&GT;
+                          &LT;DestinationPreCondition idref="16" /&GT;
+                        &LT;/IncomingEdge2&GT;
+                        &LT;IncomingEdge1 id="18" identifier="14"&GT;
+                          &LT;OriginNode idref="2" /&GT;
+                          &LT;DestinationPreCondition idref="16" /&GT;
+                        &LT;/IncomingEdge1&GT;
+                      &LT;/AttachedPreCondition&GT;
+                      &LT;OutgoingEdge2 idref="14" /&GT;
+                    &LT;/OriginNode&GT;
+                    &LT;DestinationPreCondition idref="9" /&GT;
+                  &LT;/IncomingEdge2&GT;
+                &LT;/AttachedPreCondition&GT;
+              &LT;/AttachedNode&GT;
+              &LT;IncomingEdge1 idref="6" /&GT;
+            &LT;/DestinationPreCondition&GT;
+          &LT;/OutgoingEdge1&GT;
+        &LT;/AttachedNode&GT;
+        &LT;IncomingEdge1 idref="3" /&GT;
+      &LT;/DestinationPreCondition&GT;
+    &LT;/OutgoingEdge1&GT;
+    &LT;OutgoingEdge2 idref="13" /&GT;
+    &LT;OutgoingEdge2 idref="17" /&GT;
+    &LT;OutgoingEdge1 idref="18" /&GT;
+  &LT;/Node&GT;
+  &LT;Node idref="5" /&GT;
+  &LT;Node idref="11" /&GT;
+  &LT;Node idref="15" /&GT;
+  &LT;Node idref="8" /&GT;
+&LT;/Graph&GT;
+</pre>
+</p>	
+	<p>This result is correct, this is not really human-understandable.</p>
+	
+	<p>We understand that this result comes from the recursive algorithm implemented in XMLCoDe.
+	When XMLCoDe needs to serialize an object, it first look if this object is not serialized 
+	somewhere in the document. If this is the case, XMLCoDe just encodes something like
+	<tt>&LT;tag idref="anId"/&GT;</tt>. Otherwise, the object is deeply serialized: <tt>&LT;tag id="aNewId"&GT;...&LT;/tag&GT;</tt>.
+	This rule is recursively applied.</p>
+	
+	<p>Thus we explore the data structure "deep-first".</p>
+	
+	<p>Advantages of this algorithm are those:
+	<ul>
+	<li>Implementation is easy</li>
+	<li>Good performances when deserializing: because we never have to reference a not-already
+	deserialized object: thus we don't need to explore the document when trying to rebuild
+	object graph strucure.</li>
+	</ul></p>
+	
+	<p>Disdvantages of this algorithm are those:
+	<ul>
+	<li>Except developper, no human can read and edit by hand such a document</li>
+	<li>It's not possible for a file-merge tool to work on such files: this is a big problem
+	in the context of concurrent edition (CVS).</li>
+	</ul></p>
+	
+	<h3>
+      4. The theory
+    </h3>
+  
+    <p>
+    We are facing the problem of an object graph to serialize.
+    </p>
+    
+    <p>
+    This graph is composed of nodes which are coded like entities (cf &LT;entity/&GT;) in the mapping
+    definition file, and of edges coded like properties or relation (cf &LT;property/&GT;) in 
+ 	mapping definition file. 
+ 	</p>
+ 	
+ 	<p>
+ 	The idea is to associate to each edge (property or relationship) a boolean property 
+ 	defining related edge to be primary or not. A primary relationship is the one which will be 
+ 	chosen with the highest priority to deeply serialize objects.
+ 	</p>
+ 	
+ 	<p>
+ 	It means that sub-graph extracted from global graph to serialize, containing all nodes and
+ 	only properties defined as primary should be considered as a tree. It's the responsability 
+ 	of the developper (XML mapping conceptor) to define which relationships are primary or not.
+ 	</p>
+    
+    <p>
+    <b>An XML mapping is consistant if and only if whatever be the object to serialize, sub-graph
+    extracted from graph to serialize containing all node but only the properties flagged as 
+    primary is a tree.</b>
+    </p>
+    
+    <p>
+ 	Note that a wrong XML mapping conception (not enough or too many primary properties, or
+ 	duplicated or inconsistant primary flags) is not a big problem, since serialization and
+ 	deserialization scheme will continue to work without errors (but serialization will be not
+ 	very stable).
+ 	<ul>
+ 	<li>If access to a given object of the graph is perform by properties which none is declared
+ 	as primary, first property will be chosen as primary.</li>
+ 	<li>If access to a given object of the graph is perform by many properties declared
+ 	as primary, first property will be arbitrary chosen as primary.</li>
+ 	</ul>
+ 	</p>
+ 	
+ 	<p>
+ 	Principle of this algorithm is to see our object graph as a tree, encode as primary all 
+ 	relationships contained in this tree, and consider after all other relationships. 
+ 	</p>
+	
+	<h3>
+      5. The implementation
+    </h3>
+  
+    <p>
+    We can now choose, when writing XML mapping, an option defining which serialization scheme
+    should be applied. Available scheme are those:
+    <ul>
+    <li><b><tt>DEEP_FIRST</tt></b>: this scheme is the most efficient: it should be used whenever
+    performances are required
+    <li><b><tt>PSEUDO_TREE</tt></b>: this scheme is the implementation of above algorithm: object 
+    graph is serialized using a tree defined by primary relationships (properties)
+    <li><b><tt>ORDERED_PSEUDO_TREE</tt></b>: this scheme is derived from the previous one, which
+    additionnaly provide identifier ordering.
+    </ul>
+    </p>
+ 
+ 	<p>
+ 	If not precised, <b><tt>DEEP_FIRST</tt></b> is the default option.
+ 	</p>
+ 	
+ 	<p>
+ 	A property <tt>serializationMode</tt> has been added in <tt>&LT;model&GT;</tt> tag. This
+ 	property defines serialization scheme to apply. We have following modes:
+ 	<ul>
+ 	<li><tt>deepFirst</tt></li>
+ 	<li><tt>pseudoTree</tt></li>
+ 	<li><tt>orderedPseudoTree</tt></li>
+ 	</ul>
+ 	</p>
+ 	
+ 	<p>
+ 	Example:
+<pre>
+&LT;model handlesReferences="yes" serializationMode="pseudoTree"&GT;
+</pre>
+	Don't forget to precise that XMLCoDe should maintain references, by precising <tt>handlesReferences="yes"</tt>
+  	</p>
+ 	
+  	<p>
+ 	If you want to define a primary property:
+<pre>
+&LT;property name="nodes" xmlTag="Node" type="vector" primary="yes"/&GT;
+</pre>
+  	</p>
+ 
+ 	<h3>
+      6. Examples
+    </h3>
+  
+ 	<p>
+ 	Following mapping encodes the same graph as described above. Only serialization mode has been precised, as well
+ 	as some <tt>primary="yes"</tt>:
+<pre>
+&LT;?xml version="1.0" encoding="UTF-8"?>
+&LT;model handlesReferences="yes" serializationMode="pseudoTree"&GT;
+	 
+  &LT;entity name="fr.enstb.xmlcode.examples.example5.Graph" xmlTag="Graph"&GT; 
+    &LT;property name="nodes" xmlTag="Node" type="vector" primary="yes"/&GT; 
+  &LT;/entity&GT; 
+	
+  &LT;entity name="fr.enstb.xmlcode.examples.example5.Node" xmlTag="Node" contexts="Attached,Origin"&GT;
+    &LT;property name="identifier" xmlTag="identifier" attribute="yes"/&GT; 
+    &LT;property name="preConditions" contains="fr.enstb.xmlcode.examples.example5.PreCondition"  type="vector" context="Attached" primary="yes"/&GT;
+    &LT;property name="outgoingEdges" contains="fr.enstb.xmlcode.examples.example5.Edge"  type="vector" context="Outgoing" primary="yes"/&GT;
+  &LT;/entity&GT; 
+	
+
+&LT;entity name="fr.enstb.xmlcode.examples.example5.PreCondition" xmlTag="PreCondition" contexts="Attached,Destination" &GT;
+    &LT;property name="identifier" xmlTag="identifier" attribute="yes"/&GT; 
+    &LT;property name="attachedNode" contains="fr.enstb.xmlcode.examples.example5.Node" context="Attached"/&GT;
+    &LT;property name="incomingEdges" contains="fr.enstb.xmlcode.examples.example5.Edge"  type="vector" context="Incoming" primary="no"/&GT;
+  &LT;/entity&GT; 
+	
+  &LT;entity name="fr.enstb.xmlcode.examples.example5.Edge" abstract="yes" contexts="Outgoing,Incoming" &GT;
+    &LT;property name="identifier" xmlTag="identifier" attribute="yes"/&GT; 
+    &LT;property name="originNode" contains="fr.enstb.xmlcode.examples.example5.Node" context="Origin"/&GT;
+    &LT;property name="destinationPreCondition" contains="fr.enstb.xmlcode.examples.example5.PreCondition" context="Destination"/&GT;
+   &LT;/entity&GT; 
+	
+  &LT;entity name="fr.enstb.xmlcode.examples.example5.Edge1" xmlTag="Edge1"/&GT; 
+	
+  &LT;entity name="fr.enstb.xmlcode.examples.example5.Edge2" xmlTag="Edge2"/&GT; 
+	
+&LT;/model&GT;
+</pre>
+  	</p>
+ 	
+  	<p>
+ 	Trying to encode with this mapping build following result:
+<pre>
+&LT;?xml version="1.0" encoding="UTF-8"?&GT;
+&LT;Graph id="1"&GT;
+  &LT;Node id="2" identifier="1"&GT;
+    &LT;OutgoingEdge1 id="3" identifier="11"&GT;
+      &LT;OriginNode idref="2" /&GT;
+      &LT;DestinationPreCondition idref="4" /&GT;
+    &LT;/OutgoingEdge1&GT;
+    &LT;OutgoingEdge2 id="13" identifier="12"&GT;
+      &LT;OriginNode idref="2" /&GT;
+      &LT;DestinationPreCondition idref="12" /&GT;
+    &LT;/OutgoingEdge2&GT;
+    &LT;OutgoingEdge2 id="17" identifier="13"&GT;
+      &LT;OriginNode idref="2" /&GT;
+      &LT;DestinationPreCondition idref="16" /&GT;
+    &LT;/OutgoingEdge2&GT;
+    &LT;OutgoingEdge1 id="18" identifier="14"&GT;
+      &LT;OriginNode idref="2" /&GT;
+      &LT;DestinationPreCondition idref="16" /&GT;
+    &LT;/OutgoingEdge1&GT;
+  &LT;/Node&GT;
+  &LT;Node id="5" identifier="2"&GT;
+    &LT;AttachedPreCondition id="4" identifier="6"&GT;
+      &LT;AttachedNode idref="5" /&GT;
+      &LT;IncomingEdge1 idref="3" /&GT;
+    &LT;/AttachedPreCondition&GT;
+    &LT;OutgoingEdge1 id="6" identifier="15"&GT;
+      &LT;OriginNode idref="5" /&GT;
+      &LT;DestinationPreCondition idref="7" /&GT;
+    &LT;/OutgoingEdge1&GT;
+  &LT;/Node&GT;
+  &LT;Node id="11" identifier="3"&GT;
+    &LT;AttachedPreCondition id="12" identifier="7"&GT;
+      &LT;AttachedNode idref="11" /&GT;
+      &LT;IncomingEdge2 idref="13" /&GT;
+    &LT;/AttachedPreCondition&GT;
+    &LT;OutgoingEdge1 id="10" identifier="16"&GT;
+      &LT;OriginNode idref="11" /&GT;
+      &LT;DestinationPreCondition idref="9" /&GT;
+    &LT;/OutgoingEdge1&GT;
+  &LT;/Node&GT;
+  &LT;Node id="15" identifier="4"&GT;
+    &LT;AttachedPreCondition id="16" identifier="8"&GT;
+      &LT;AttachedNode idref="15" /&GT;
+      &LT;IncomingEdge2 idref="17" /&GT;
+      &LT;IncomingEdge1 idref="18" /&GT;
+    &LT;/AttachedPreCondition&GT;
+    &LT;OutgoingEdge2 id="14" identifier="17"&GT;
+      &LT;OriginNode idref="15" /&GT;
+      &LT;DestinationPreCondition idref="9" /&GT;
+    &LT;/OutgoingEdge2&GT;
+  &LT;/Node&GT;
+  &LT;Node id="8" identifier="5"&GT;
+    &LT;AttachedPreCondition id="7" identifier="9"&GT;
+      &LT;AttachedNode idref="8" /&GT;
+      &LT;IncomingEdge1 idref="6" /&GT;
+    &LT;/AttachedPreCondition&GT;
+    &LT;AttachedPreCondition id="9" identifier="10"&GT;
+      &LT;AttachedNode idref="8" /&GT;
+      &LT;IncomingEdge1 idref="10" /&GT;
+      &LT;IncomingEdge2 idref="14" /&GT;
+    &LT;/AttachedPreCondition&GT;
+  &LT;/Node&GT;
+&LT;/Graph&GT;
+</pre>
+	(Which you ould compare with the above one: magical he ?)
+  	</p>
+ 	
+ 	<p>
+ 	We can now decide to respect id appearing ordering be writing:
+<pre>
+&LT;model handlesReferences="yes" serializationMode="orderedPseudoTree"&GT;
+</pre>
+  	</p>
+ 	
+ 	<p>
+ 	And we get following result:
+<pre>
+<?xml version="1.0" encoding="UTF-8"?>
+&LT;Graph id="1"&GT;
+  &LT;Node id="2" identifier="1"&GT;
+    &LT;OutgoingEdge1 id="3" identifier="11"&GT;
+      &LT;OriginNode idref="2" /&GT;
+      &LT;DestinationPreCondition idref="8" /&GT;
+    &LT;/OutgoingEdge1&GT;
+    &LT;OutgoingEdge2 id="4" identifier="12"&GT;
+      &LT;OriginNode idref="2" /&GT;
+      &LT;DestinationPreCondition idref="11" /&GT;
+    &LT;/OutgoingEdge2&GT;
+    &LT;OutgoingEdge2 id="5" identifier="13"&GT;
+      &LT;OriginNode idref="2" /&GT;
+      &LT;DestinationPreCondition idref="14" /&GT;
+    &LT;/OutgoingEdge2&GT;
+    &LT;OutgoingEdge1 id="6" identifier="14"&GT;
+      &LT;OriginNode idref="2" /&GT;
+      &LT;DestinationPreCondition idref="14" /&GT;
+    &LT;/OutgoingEdge1&GT;
+  &LT;/Node&GT;
+  &LT;Node id="7" identifier="2"&GT;
+    &LT;AttachedPreCondition id="8" identifier="6"&GT;
+      &LT;AttachedNode idref="7" /&GT;
+      &LT;IncomingEdge1 idref="3" /&GT;
+    &LT;/AttachedPreCondition&GT;
+    &LT;OutgoingEdge1 id="9" identifier="15"&GT;
+      &LT;OriginNode idref="7" /&GT;
+      &LT;DestinationPreCondition idref="17" /&GT;
+    &LT;/OutgoingEdge1&GT;
+  &LT;/Node&GT;
+  &LT;Node id="10" identifier="3"&GT;
+    &LT;AttachedPreCondition id="11" identifier="7"&GT;
+      &LT;AttachedNode idref="10" /&GT;
+      &LT;IncomingEdge2 idref="4" /&GT;
+    &LT;/AttachedPreCondition&GT;
+    &LT;OutgoingEdge1 id="12" identifier="16"&GT;
+      &LT;OriginNode idref="10" /&GT;
+      &LT;DestinationPreCondition idref="18" /&GT;
+    &LT;/OutgoingEdge1&GT;
+  &LT;/Node&GT;
+  &LT;Node id="13" identifier="4"&GT;
+    &LT;AttachedPreCondition id="14" identifier="8"&GT;
+      &LT;AttachedNode idref="13" /&GT;
+      &LT;IncomingEdge2 idref="5" /&GT;
+      &LT;IncomingEdge1 idref="6" /&GT;
+    &LT;/AttachedPreCondition&GT;
+    &LT;OutgoingEdge2 id="15" identifier="17"&GT;
+      &LT;OriginNode idref="13" /&GT;
+      &LT;DestinationPreCondition idref="18" /&GT;
+    &LT;/OutgoingEdge2&GT;
+  &LT;/Node&GT;
+  &LT;Node id="16" identifier="5"&GT;
+    &LT;AttachedPreCondition id="17" identifier="9"&GT;
+      &LT;AttachedNode idref="16" /&GT;
+      &LT;IncomingEdge1 idref="9" /&GT;
+    &LT;/AttachedPreCondition&GT;
+    &LT;AttachedPreCondition id="18" identifier="10"&GT;
+      &LT;AttachedNode idref="16" /&GT;
+      &LT;IncomingEdge1 idref="12" /&GT;
+      &LT;IncomingEdge2 idref="15" /&GT;
+    &LT;/AttachedPreCondition&GT;
+  &LT;/Node&GT;
+&LT;/Graph&GT;
+</pre>
+	</p>
+ 	
+ 	<p>
+	</p>
+    <center>
+      <a href="index.html">Back to summary</a>
+    </center>
+    <p>
+    </p>
+
+   <hr>
+    <address><a href="mailto:sylvain.guerin@enst-bretagne.fr">Sylvain Guerin</a></address>
+<!-- Created: Fri Dec  7 17:47:50 CET 2001 -->
+<!-- hhmts start -->
+Last modified: Wed Jan 24 12:17:54 CET 2007
+<!-- hhmts end -->
+  </body>
+</html>
+

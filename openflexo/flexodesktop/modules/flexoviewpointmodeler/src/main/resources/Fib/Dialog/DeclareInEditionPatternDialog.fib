@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="gridbag" border="empty" protectContent="false" dataClassName="org.openflexo.foundation.ontology.calc.action.DeclareInEditionPattern" width="450" height="186">
+  <Label label="declare_in_edition_pattern" align="center" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=0;insetsTop=20;insetsBottom=20;weightY=0.0;weightX=1.0;fill=horizontal)" font="Lucida Grande,1,15" readOnly="false" manageDynamicModel="false" />
+  <Label label="please_choose_an_edition_pattern" align="center" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=1;gridWidth=0;insetsTop=0;insetsBottom=15;weightY=0.0;weightX=0.0;fill=horizontal)" font="Lucida Grande,2,11" readOnly="false" manageDynamicModel="false">
+    <LocalizedDictionary />
+  </Label>
+  <Label label="edition_pattern" align="right" constraints="gridbag(insetsLeft=20;insetsRight=10;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=2;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" readOnly="false" manageDynamicModel="false" />
+  <DropDown showReset="false" data="data.editionPattern" constraints="gridbag(insetsLeft=0;insetsRight=20;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=3;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;fill=horizontal;weightX=1.0)" name="EditionPatternDropDown" list="data.focusedObject.calc.editionPatterns" readOnly="false" format="object.name" manageDynamicModel="true" />
+  <Label label="pattern_role" align="right" constraints="gridbag(insetsLeft=0;insetsRight=10;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=4;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=horizontal)" readOnly="false" manageDynamicModel="false">
+    <LocalizedDictionary />
+  </Label>
+  <DropDown showReset="false" data="data.patternRole" constraints="gridbag(insetsLeft=0;insetsRight=20;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=5;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=1.0;fill=horizontal)" name="PatternRoleDropDown" list="EditionPatternDropDown.data.patternRoles" readOnly="false" manageDynamicModel="false" />
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" border="empty" borderTitle="Panel" borderTop="10" protectContent="false" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=6;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;fill=both;weightX=1.0)">
+    <Button action="controller.validateAndDispose()" buttonType="Trigger" label="validate" constraints="flow(index=0)" readOnly="false" enable="data.isValid" manageDynamicModel="false">
+      <Dependancy componentName="EditionPatternDropDown" />
+      <Dependancy componentName="PatternRoleDropDown" />
+    </Button>
+    <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" constraints="flow(index=1)" readOnly="false" manageDynamicModel="false" />
+  </Panel>
+  <LocalizedDictionary>
+    <Localized key="validate" lang="English">Validate</Localized>
+    <Localized key="cancel" lang="English">Cancel</Localized>
+    <Localized key="validate" lang="French">Valider</Localized>
+    <Localized key="cancel" lang="French">Annuler</Localized>
+    <Localized key="validate" lang="Dutch">Validate</Localized>
+    <Localized key="cancel" lang="Dutch">Cancel</Localized>
+    <Localized key="declare_in_edition_pattern" lang="French">Déclarer dans un Edition Pattern</Localized>
+    <Localized key="declare_in_edition_pattern" lang="English">Declare in Edition Pattern</Localized>
+    <Localized key="edition_pattern" lang="French">Edition pattern</Localized>
+    <Localized key="edition_pattern" lang="English">Edition pattern</Localized>
+    <Localized key="pattern_role" lang="French">Pattern role</Localized>
+    <Localized key="pattern_role" lang="English">Pattern role</Localized>
+    <Localized key="please_choose_an_edition_pattern" lang="French">Veuillez choisir un Edition Pattern</Localized>
+    <Localized key="please_choose_an_edition_pattern" lang="English">Please choose an edition pattern</Localized>
+  </LocalizedDictionary>
+</Panel>
+

@@ -1,0 +1,29 @@
+
+    The Flexo model encourages the modularity and the reusability by the 
+    notion of subprocesses, i.e. sub-sequences of <i>activities</i> or 
+    sub-processes that can be reused at different place in the workflow. <i>Sub-processes</i> 
+    are organized in a hierarchy. Each <i>sub-process</i> has a <i>father 
+    sub-process</i> from which it inherits variables, role and status 
+    definition. There are three types of sub-processes:
+
+    <ol>
+      <li>
+        The <b>simple sub-process </b>regroups a set of <i>activities</i>. 
+        They acts a subroutines and could be replaced by its set of activities.
+      </li>
+      <li>
+        The <b>parallel sub-process</b> executes several copies of the 
+        sequence of activities in parallel. Parallel sub-processes create 
+        embedded business data context that can be different for every 
+        instance executed in parallel.
+      </li>
+      <li>
+        The <b>sequential sub-process</b> executes the sequence of activities 
+        several times in sequence. Sequential sub-processes create a different 
+        embedded data context for each instances performed in sequence.
+      </li>
+    </ol>
+    <p>
+      &#160;
+    </p>
+  

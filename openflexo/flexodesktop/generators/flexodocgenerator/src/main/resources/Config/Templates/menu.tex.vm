@@ -1,0 +1,28 @@
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (MenuDocGenerator)
+* - object: the object for which we are generating the doc (FlexoNavigationMenu)
+* - repository: the current repository for which we generate the doc (DGRepository)
+*#
+
+#set($menu = $object)
+
+#macro(menuItemDoc $item)
+
+\item #format($item $item.getMenuLabel()) #if($item.getProcess()) goes to \hyperlink{$generator.getReference($item.getProcess())}{#escape(${item.getProcess().getName()})}%
+#if($item.getOperation())on the operation \hyperlink{$generator.getReference(${item.getOperation()})}{#escape(${item.getOperation().getName()}) p.\pageref*{$generator.getReference($item.getProcess())}}#end #else is unbound #end
+#if(${item.getSubItems().size()}>0)
+\begin{itemize}
+#foreach($sub in ${item.getSubItems()})
+#menuItemDoc($sub)
+#end
+\end{itemize} #end
+#end
+
+The menu is based on the following achitecture:
+
+\begin{itemize}
+#menuItemDoc($menu.getRootMenu())
+\end{itemize}

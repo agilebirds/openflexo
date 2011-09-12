@@ -1,0 +1,5 @@
+<Label label="label">
+	<Parameter name="x" value="10"/>
+	<Parameter name="y" value="80"/>
+	<Parameter name="isPaletteElement" value="true"/>
+</Label>

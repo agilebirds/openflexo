@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<IEOperationComponent id="MGZ_1573" userID="MGZ" flexoID="1573" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" isLocalized="false">
+  <IESequenceWidget id="MGZ_1574" userID="MGZ" flexoID="1574" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false">
+    <IEBloc id="MGZ_1581" title="Bloc2" hideTable="false" userID="MGZ" flexoID="1581" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inspector="Bloc.inspector" index="1" isRootOfPartialComponent="false">
+      <IESequenceWidget id="MGZ_1582" userID="MGZ" flexoID="1582" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" index="0" isRootOfPartialComponent="false" />
+    </IEBloc>
+  </IESequenceWidget>
+</IEOperationComponent>
+

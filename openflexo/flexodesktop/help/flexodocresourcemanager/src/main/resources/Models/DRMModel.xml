@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model builder="org.openflexo.drm.DRMBuilder" handlesReferences="yes" serializationMode="pseudoTree"> 
+
+  <mapId>
+      <map entityClass="org.openflexo.drm.DRMObject" identifierAccessor="serializationIdentifier"/>
+  </mapId>
+
+  <entity name="org.openflexo.drm.DRMObject" abstract="yes" finalizer="finalizeDeserialization">
+  </entity> 
+
+  <entity name="org.openflexo.drm.DocResourceCenter" xmlTag="DocResourceCenter">
+   <property name="languages" xmlTag="Language" type="vector"/> 
+   <property name="authors" xmlTag="Author" type="vector"/> 
+   <property name="rootFolder" xmlTag="DocItemFolder"/> 
+  </entity> 
+
+  <entity name="org.openflexo.drm.Language" xmlTag="Language">
+   <property name="identifier" xmlTag="identifier" attribute="yes"/> 
+   <property name="name" xmlTag="name" attribute="yes"/> 
+  </entity> 
+
+  <entity name="org.openflexo.drm.Author" xmlTag="Author">
+   <property name="identifier" xmlTag="identifier" attribute="yes"/> 
+   <property name="fullName" xmlTag="fullName" attribute="yes"/> 
+   <property name="email" xmlTag="email" attribute="yes"/> 
+  </entity> 
+
+  <entity name="org.openflexo.drm.DocItemFolder" xmlTag="DocItemFolder">
+   <property name="primaryDocItemId" xmlTag="primaryDocItemId" attribute="yes"/> 
+   <property name="identifier" xmlTag="identifier" attribute="yes"/> 
+   <property name="description" xmlTag="description"/> 
+   <property name="childFolders" xmlTag="DocItemFolder" type="vector" primary="yes"/> 
+   <property name="items" xmlTag="DocItem" type="vector" primary="yes"/> 
+  </entity> 
+  
+  <entity name="org.openflexo.drm.DocItem" xmlTag="DocItem" contexts="InheritanceChild,EmbeddingChild,RelatedTo">
+   <property name="identifier" xmlTag="identifier" attribute="yes"/> 
+   <property name="isEmbedded" xmlTag="embedded" attribute="yes"/> 
+   <property name="isHidden" xmlTag="hidden" attribute="yes"/> 
+   <property name="description" xmlTag="description"/> 
+   <property name="inheritanceChildItems" contains="org.openflexo.drm.DocItem" context="InheritanceChild" type="vector"/> 
+   <property name="embeddingChildItems" contains="org.openflexo.drm.DocItem" context="EmbeddingChild" type="vector"/> 
+   <property name="relatedToItems" contains="org.openflexo.drm.DocItem" context="RelatedTo" type="vector"/> 
+   <property name="titles" xmlTag="title" type="hashtable"/> 
+   <property name="versions" xmlTag="DocItemVersion" type="vector"/> 
+   <property name="actions" xmlTag="DocItemAction" type="vector" primary="yes"/> 
+  </entity> 
+  
+  <entity name="org.openflexo.drm.DocItemVersion" xmlTag="DocItemVersion">
+   <property name="languageId" xmlTag="languageId" attribute="yes"/> 
+   <property name="version" xmlTag="version" attribute="yes"/> 
+  </entity> 
+
+  <entity name="org.openflexo.drm.DocItemAction" xmlTag="DocItemAction">
+   <property name="authorId" xmlTag="authorId" attribute="yes"/> 
+   <property name="actionDate" xmlTag="actionDate" attribute="yes"/> 
+   <property name="actionType" xmlTag="actionType" attribute="yes"/> 
+   <property name="version" xmlTag="DocItemVersion" primary="yes"/> 
+   <property name="note" xmlTag="note"/> 
+ </entity> 
+
+</model>

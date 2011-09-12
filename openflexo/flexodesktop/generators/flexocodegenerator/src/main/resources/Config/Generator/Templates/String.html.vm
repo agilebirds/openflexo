@@ -1,0 +1,9 @@
+#if($widget.isInHTMLList() && !${widget.getHTMLListDescriptor().getRepetitionOperator().getFetchObjects()})
+    <webobject name="#name()Displayer">
+#end
+	<span class="${widget.getTextCSSClass().getName()}">
+		<webobject name="#name()"></webobject>
+	</span>
+#if($widget.isInHTMLList() && !${widget.getHTMLListDescriptor().getRepetitionOperator().getFetchObjects()})
+    </webobject>
+#end

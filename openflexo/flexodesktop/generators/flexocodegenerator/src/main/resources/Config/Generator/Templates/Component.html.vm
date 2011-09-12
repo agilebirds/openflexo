@@ -1,0 +1,58 @@
+#**
+* generator (CGGenerator): the component generator
+* component (IEWOComponent): the component being currently generated
+* project (FlexoProject): the current project
+* 
+* widgetStack (Stack): the Stack<IEWidget> of widgets
+* repetitionStack (Stack): the Stack<RepetitionOperator> of repetition
+*#
+#set($widget = $component.getRootSequence())
+#set($stack = $generator.getNewStack())
+#set($widgetStack = $generator.getNewStack())
+#set($repetitionStack = $generator.getNewStack())
+#set($htmlTableWidth = $generator.getNewHashtable())
+#set($extension = "html")
+#set($trueValue = true)
+#if($componentDefinition.isPage())
+<webobject name="HEADER_FOOTER">
+	#if($componentDefinition.isPopup())
+		<webobject name="Condition_HasRedirectScript">
+    		<webobject name="JS_RedirectScript" />
+    	</webobject>
+		<webobject name="Condition_HasNoRedirectScript">
+	#end
+    <webobject name="CONDITIONAL_VALIDATION">
+        <p class="denaliError"><webobject name="STRING_VALIDATION"></webobject></p>
+    </webobject>
+    
+    <webobject name="CONDITIONAL_VALIDATION_WARNING">
+        <p class="denaliWarning"><webobject name="STRING_VALIDATION_WARNING"></webobject></p>
+    </webobject>
+    
+    <webobject name="CONDITIONAL_CONFIRM_MESSAGES">
+        <p class="denaliConfirm"><webobject name="STRING_CONFIRM_MESSAGES"></webobject></p>
+    </webobject>
+    
+    <webobject name="FORM">
+        <script type="text/javascript">
+            var hasChanged = false; //Holds wheter the value of any field of this page has been changed or not.
+        </script>
+    #if($componentDefinition.isPopup())
+        <webobject name="Condition_DontIncludePopupInPage">
+            <webobject name="HIDDEN_FORM"></webobject>
+        </webobject>
+    #elseif($componentDefinition.isOperation())
+        <webobject name="HIDDEN_FORM"></webobject>
+    #end
+#end
+#renderSequence($component.getRootSequence())
+#if($componentDefinition.isPage())
+    #if($componentDefinition.isOperation())
+        <webobject name="PAGE_DA"></webobject>
+	#end
+	#if($componentDefinition.isPopup())
+		</webobject>
+	#end
+    </webobject>
+</webobject>
+#end

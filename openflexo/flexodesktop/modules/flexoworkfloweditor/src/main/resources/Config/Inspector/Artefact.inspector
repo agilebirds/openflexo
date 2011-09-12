@@ -1,0 +1,72 @@
+<inspector title = "Artefact" inheritsfrom ="WKFRepresentable.inspector" inspectedClassName="org.openflexo.foundation.wkf.WKFArtefact">
+
+	<tab name="Basic" index="0">
+		<property name="text" label="text" widget="TEXT_AREA" constraint="0"/>
+	</tab>
+	
+	<tab name="Advanced" index="2" layout="DEFAULT">
+	</tab>
+
+    <tab name="Data" index="3">
+    </tab>
+    
+    <tab name="Artefact Metrics" index="8" layout="DEFAULT" visibilityContext="METRICS">
+        <property_list name="metricsValues" label="metrics" constraint="0">
+          <param name="visible_row_count" value="5"/>
+          <param name="row_height" value="20"/>
+          <property_list_column name="metricsDefinition.name" label="name" widget="TEXT_FIELD">
+            <param name="tooltip" value="metricsDefinition.description"/>
+          </property_list_column>
+          <property_list_column name="this" label="value" widget="CUSTOM">
+            <param name="column_width" value="80"/>
+            <param name="resizable" value="true"/>
+            <param name="customRendering" value="true"/>
+            <param name="format" value="value.toString"/>
+            <param name="className" value="org.openflexo.components.widget.MetricsValueInspectorWidget"/>
+          </property_list_column>
+          <property_list_column name="unit" label="unit" widget="TEXT_FIELD">
+            <param name="column_width" value="50"/>
+            <param name="resizable" value="true"/>
+            <param name="isEditable" value="metricsDefinition.isUnitEditable"/>
+          </property_list_column>
+          <property_list_column name="description" label="additional_info" widget="TEXT_FIELD">
+            <param name="column_width" value="120"/>
+            <param name="resizable" value="true"/>
+          </property_list_column>
+          <property_list_action name="new" type="ADD" method="addMetrics"/>
+          <property_list_action name="delete" type="DELETE" method="deleteMetrics"/>
+        </property_list>
+    </tab>
+
+	<tab name="Graphics_BPE" index="20" layout="DEFAULT" visibilityContext="BPE">
+		<hidden name="textColor('bpe')"/>
+		<property name="textColor" label="text_color" widget="COLOR" constraint="6">
+			<param name="columns" value="10"/>
+		</property>
+		<!--<property name="textFont" label="text_font" widget="FONT" constraint="7">
+			<param name="columns" value="10"/>
+		</property>-->
+		<property name="textAlignment" label="text_alignment" widget="DROPDOWN" constraint="8">
+			<param name="formatter" value="name"/>
+			<param name="columns" value="10"/>
+			<param name="showReset" value="false"/>
+			<param name="type" value="org.openflexo.fge.GraphicalRepresentation$TextAlignment"/>
+		</property>
+	</tab>
+	
+	<tab name="Graphics_SWL" index="21" layout="DEFAULT" visibilityContext="SWL">
+		<hidden name="textColor('swl')"/>
+		<property name="textColor" label="text_color" widget="COLOR" constraint="6">
+			<param name="columns" value="10"/>
+		</property>
+		<!--<property name="textFont" label="text_font" widget="FONT" constraint="7">
+			<param name="columns" value="10"/>
+		</property>-->
+		<property name="textAlignment" label="text_alignment" widget="DROPDOWN" constraint="8">
+			<param name="formatter" value="name"/>
+			<param name="columns" value="10"/>
+			<param name="showReset" value="false"/>
+			<param name="type" value="org.openflexo.fge.GraphicalRepresentation$TextAlignment"/>
+		</property>
+	</tab>
+</inspector>

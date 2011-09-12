@@ -1,0 +1,31 @@
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+    <webobject name="HEAD"></webobject>
+    
+    <body class="denaliPopup">
+    
+        <div id="denaliPage">
+            <div id="denaliPageBody">
+                <webobject name="CONTENT"></webobject>
+            </div>
+        </div>
+        
+        <script type="text/javascript">
+        <!--
+            <webobject name="onLoadBody"></webobject>;
+            setAlternateClassNames();
+            this.window.focus();
+            if (window.innerHeight) 
+                setTimeout('if (window.innerHeight<document.height)this.window.resizeBy(0,document.height-window.innerHeight);',50); 
+            else {
+                if ((document.body.clientHeight) < document.getElementById('denaliPageBody').offsetHeight)
+                    this.window.resizeBy(0,document.getElementById('denaliPageBody').offsetHeight-document.body.clientHeight);
+            }
+        //-->
+        </script>
+    </body>
+</html>

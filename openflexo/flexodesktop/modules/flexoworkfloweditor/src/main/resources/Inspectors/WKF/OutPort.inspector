@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.ws.OutPort" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="3" title="Data" layout="twocols" font="SansSerif,0,11" name="DataTab">
+      <Label label="output_message" localize="true" name="OutputMessageDefinitionnameLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <TextField validateOnReturn="true" columns="10" passwd="false" localize="true" name="OutputMessageDefinitionname" data="data.outputMessageDefinition.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+      </TextField>
+      <Table iteratorClassName="org.openflexo.foundation.wkf.ws.MessageEntry" visibleRowCount="4" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.outputMessageDefinition.entries" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=true)" name="OutputMessageDefinitionentries" localize="true" manageDynamicModel="true">
+        <TextFieldColumn data="iterator.variableName" title="name" columnWidth="100" resizable="true" displayTitle="true" />
+        <CustomColumn componentClassName="org.openflexo.components.widget.DMTypeSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.type" format="object.simplifiedStringRepresentation" title="type" columnWidth="100" resizable="true" displayTitle="true">
+          <ColumnAssignment variable="component.project" value="iterator.project" />
+          <ColumnAssignment variable="component.owner" value="iterator" />
+        </CustomColumn>
+        <CheckBoxColumn data="iterator.isMandatory" title="mandatory" columnWidth="50" resizable="true" displayTitle="true" />
+        <AddAction method="data.outputMessageDefinition.createNewMessageEntry" name="new" />
+        <RemoveAction method="data.outputMessageDefinition.deleteMessageEntry(selected)" isAvailable="data.outputMessageDefinition.isMessageEntryDeletable(selected)" name="delete" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+      </Table>
+    </Tab>
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab" />
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Data" lang="French">Donnée</Localized>
+    <Localized key="output_message" lang="English">Output message</Localized>
+    <Localized key="output_message" lang="French">Message de sortie</Localized>
+    <Localized key="output_message" lang="Dutch">Output message</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="OUT Port" />
+</Panel>
+

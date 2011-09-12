@@ -1,0 +1,98 @@
+{
+    attributes = (
+        {
+            columnName = "DATA_CLASS_ID"; 
+            name = businessDataClassID; 
+            prototypeName = id; 
+        }, 
+        {
+            columnName = "BUSINESS_DATA_CLASS_NAME"; 
+            name = businessDataClassName; 
+            prototypeName = str100; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = "CREATION_DATE"; 
+            name = creationDate; 
+            prototypeName = date; 
+        }, 
+        {
+            columnName = "PARENT_PROCESS_INSTANCE_ID"; 
+            name = parentID; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = "PROCESS_FLEXO_ID"; 
+            name = processFlexoID; 
+            prototypeName = id; 
+            valueType = l; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = "PROCESS_INSTANCE_ID"; 
+            name = processInstanceID; 
+            prototypeName = id; 
+        }, 
+        {columnName = STATUS; name = status; prototypeName = str20; }
+    ); 
+    className = "org.openflexo.engine.db.ProcessInstance"; 
+    classProperties = (
+        activityTasks, 
+        businessDataClassID, 
+        businessDataClassName, 
+        creationDate, 
+        parentProcessInstance, 
+        processFlexoID, 
+        status, 
+        subProcessInstances, 
+        tokens
+    ); 
+    externalName = "PROCESS_INSTANCE"; 
+    fetchSpecificationDictionary = {}; 
+    name = ProcessInstance; 
+    primaryKeyAttributes = (processInstanceID); 
+    relationships = (
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = ActivityTask; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = (
+                {
+                    destinationAttribute = processInstanceID; 
+                    sourceAttribute = processInstanceID; 
+                }
+            ); 
+            name = activityTasks; 
+        }, 
+        {
+            destination = ProcessInstance; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = processInstanceID; sourceAttribute = parentID; }); 
+            name = parentProcessInstance; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = ProcessInstance; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = parentID; sourceAttribute = processInstanceID; }); 
+            name = subProcessInstances; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = Token; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = (
+                {
+                    destinationAttribute = processInstanceID; 
+                    sourceAttribute = processInstanceID; 
+                }
+            ); 
+            name = tokens; 
+        }
+    ); 
+}

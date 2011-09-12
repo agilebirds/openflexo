@@ -1,0 +1,1218 @@
+<w:p>
+	<w:r>
+		<w:br w:type="page"/>
+	</w:r>
+</w:p>
+		<w:p w:rsidR="00576B86" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E">
+			<w:pPr>
+				<w:pStyle w:val="Heading1" />
+				<w:rPr>
+					<w:lang w:val="en-GB" />
+				</w:rPr>
+			</w:pPr>
+			<w:r w:rsidRPr="00C343B9">
+				<w:rPr>
+					<w:lang w:val="en-GB" />
+				</w:rPr>
+				<w:t>Revision history</w:t>
+			</w:r>
+			<w:bookmarkEnd w:id="0" />
+		</w:p>
+		<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E">
+			<w:pPr>
+				<w:rPr>
+					<w:lang w:val="en-GB" />
+				</w:rPr>
+			</w:pPr>
+		</w:p>
+		<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+			w:rsidP="000A312E">
+			<w:pPr>
+				<w:tabs>
+					<w:tab w:val="right" w:pos="9498" />
+				</w:tabs>
+				<w:rPr>
+					<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+					<w:lang w:val="en-GB" />
+				</w:rPr>
+			</w:pPr>
+		</w:p>
+		<w:tbl>
+			<w:tblPr>
+				<w:tblW w:w="9356" w:type="dxa" />
+				<w:tblInd w:w="108" w:type="dxa" />
+				<w:tblBorders>
+					<w:top w:val="single" w:sz="4" w:space="0" w:color="auto" />
+					<w:left w:val="single" w:sz="4" w:space="0" w:color="auto" />
+					<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto" />
+					<w:right w:val="single" w:sz="4" w:space="0" w:color="auto" />
+					<w:insideH w:val="single" w:sz="4" w:space="0" w:color="auto" />
+					<w:insideV w:val="single" w:sz="4" w:space="0" w:color="auto" />
+				</w:tblBorders>
+				<w:tblLook w:val="0000" />
+			</w:tblPr>
+			<w:tblGrid>
+				<w:gridCol w:w="3119" />
+				<w:gridCol w:w="6237" />
+			</w:tblGrid>
+			<w:tr w:rsidR="000A312E" w:rsidRPr="00C343B9">
+				<w:trPr>
+					<w:trHeight w:val="499" />
+				</w:trPr>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3119" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="00470629"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:tabs>
+								<w:tab w:val="right" w:pos="9498" />
+							</w:tabs>
+							<w:spacing w:before="120" />
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:eastAsia="Arial Unicode MS"
+									w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" w:eastAsia="ko-KR" />
+							</w:rPr>
+						</w:pPr>
+						<w:r w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t>PROJECT</w:t>
+						</w:r>
+						<w:r w:rsidR="000A312E" w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t>:</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="6237" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="0065585D"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:pStyle w:val="Tekst1T1" />
+							<w:tabs>
+								<w:tab w:val="clear" w:pos="1134" />
+								<w:tab w:val="clear" w:pos="1701" />
+							</w:tabs>
+							<w:spacing w:before="60" />
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:sz w:val="24" />
+								<w:szCs w:val="24" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+						<w:r w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:sz w:val="24" />
+								<w:szCs w:val="24" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t>#if(${repository.getSystemName()})#escape(${repository.getSystemName()})#end</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+			</w:tr>
+			<w:tr w:rsidR="000A312E" w:rsidRPr="00C343B9">
+				<w:trPr>
+					<w:trHeight w:val="499" />
+				</w:trPr>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3119" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="00470629"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:tabs>
+								<w:tab w:val="right" w:pos="9498" />
+							</w:tabs>
+							<w:spacing w:before="120" />
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+						<w:r w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t>DESCRIPTION</w:t>
+						</w:r>
+						<w:r w:rsidR="000A312E" w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t>:</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="6237" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="00470629" w:rsidRPr="00C343B9" w:rsidRDefault="00470629"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:spacing w:before="60" />
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:spacing w:before="60" />
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+			</w:tr>
+		</w:tbl>
+		<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+			w:rsidP="000A312E">
+			<w:pPr>
+				<w:rPr>
+					<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+					<w:lang w:val="en-GB" />
+				</w:rPr>
+			</w:pPr>
+		</w:p>
+		<w:tbl>
+			<w:tblPr>
+                <w:tblW w:w="9356" w:type="dxa"/>
+                <w:tblInd w:w="108" w:type="dxa"/>
+                <w:tblBorders>
+                  <w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+                  <w:left w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+                  <w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+                  <w:right w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+                  <w:insideH w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+                  <w:insideV w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+                </w:tblBorders>
+                <w:tblLook w:val="01E0"/>
+            </w:tblPr>
+			<w:tblGrid>
+				<w:gridCol w:w="3119" />
+				<w:gridCol w:w="3118" />
+				<w:gridCol w:w="3119" />
+			</w:tblGrid>
+			<w:tr w:rsidR="000A312E" w:rsidRPr="00C343B9">
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3119" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="00470629"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+						<w:r w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t>Document Revision</w:t>
+						</w:r>
+						<w:r w:rsidR="000A312E" w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t xml:space="preserve">: </w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3118" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="00470629"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+						<w:r w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t>Date</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3119" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="00470629"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+						<w:r w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t xml:space="preserve">Change </w:t>
+						</w:r>
+						<w:proofErr w:type="spellStart" />
+						<w:r w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t>Status</w:t>
+						</w:r>
+						<w:proofErr w:type="spellEnd" />
+						<w:r w:rsidR="000A312E" w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t>:</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+			</w:tr>
+			<w:tr w:rsidR="000A312E" w:rsidRPr="00C343B9">
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3119" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="00470629"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+						<w:proofErr w:type="spellStart" />
+						<w:r w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t>Vers</w:t>
+						</w:r>
+						<w:proofErr w:type="spellEnd" />
+						<w:r w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t xml:space="preserve"> 0.1</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3118" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+						<w:r w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t>4/08/2009</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3119" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+						<w:r w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t>-</w:t>
+						</w:r>
+						<w:proofErr w:type="gramStart" />
+						<w:r w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t>draft</w:t>
+						</w:r>
+						<w:proofErr w:type="gramEnd" />
+					</w:p>
+				</w:tc>
+			</w:tr>
+			<w:tr w:rsidR="000A312E" w:rsidRPr="00C343B9">
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3119" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3118" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3119" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+			</w:tr>
+			<w:tr w:rsidR="000A312E" w:rsidRPr="00C343B9">
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3119" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3118" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3119" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+			</w:tr>
+			<w:tr w:rsidR="000A312E" w:rsidRPr="00C343B9">
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3119" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3118" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3119" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+			</w:tr>
+		</w:tbl>
+		<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+			w:rsidP="000A312E">
+			<w:pPr>
+				<w:rPr>
+					<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+					<w:lang w:val="en-GB" />
+				</w:rPr>
+			</w:pPr>
+		</w:p>
+		<w:tbl>
+			<w:tblPr>
+                <w:tblW w:w="9356" w:type="dxa"/>
+                <w:tblInd w:w="108" w:type="dxa"/>
+                <w:tblBorders>
+                  <w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+                  <w:left w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+                  <w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+                  <w:right w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+                  <w:insideH w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+                  <w:insideV w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+                </w:tblBorders>
+                <w:tblLook w:val="01E0"/>
+            </w:tblPr>
+			<w:tblGrid>
+				<w:gridCol w:w="3119" />
+				<w:gridCol w:w="1843" />
+				<w:gridCol w:w="1317" />
+				<w:gridCol w:w="3077" />
+			</w:tblGrid>
+			<w:tr w:rsidR="000A312E" w:rsidRPr="00C343B9">
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3119" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="00470629"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+						<w:r w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t>Authors</w:t>
+						</w:r>
+						<w:r w:rsidR="000A312E" w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t>:</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="1843" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="00470629"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+						<w:r w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t>Function</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="1317" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="00470629"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+						<w:r w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t>Date</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3077" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="00470629"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+						<w:r w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t>Signature</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+			</w:tr>
+			<w:tr w:rsidR="000A312E" w:rsidRPr="00C343B9">
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3119" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="00470629"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+						<w:r w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t>xxx</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="1843" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="00470629"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+						<w:r w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t>xxx</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="1317" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="00470629"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+						<w:r w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t></w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3077" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+			</w:tr>
+			<w:tr w:rsidR="000A312E" w:rsidRPr="00C343B9">
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3119" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="1843" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="1317" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3077" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+			</w:tr>
+			<w:tr w:rsidR="000A312E" w:rsidRPr="00C343B9">
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3119" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="1843" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="1317" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3077" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+			</w:tr>
+		</w:tbl>
+		<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+			w:rsidP="000A312E">
+			<w:pPr>
+				<w:rPr>
+					<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+					<w:lang w:val="en-GB" />
+				</w:rPr>
+			</w:pPr>
+		</w:p>
+		<w:tbl>
+			<w:tblPr>
+                <w:tblW w:w="9356" w:type="dxa"/>
+                <w:tblInd w:w="108" w:type="dxa"/>
+                <w:tblBorders>
+                  <w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+                  <w:left w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+                  <w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+                  <w:right w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+                  <w:insideH w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+                  <w:insideV w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+                </w:tblBorders>
+                <w:tblLayout w:type="fixed"/>
+                <w:tblLook w:val="01E0"/>
+            </w:tblPr>
+			<w:tblGrid>
+				<w:gridCol w:w="3119" />
+				<w:gridCol w:w="1843" />
+				<w:gridCol w:w="1317" />
+				<w:gridCol w:w="3077" />
+			</w:tblGrid>
+			<w:tr w:rsidR="000A312E" w:rsidRPr="00C343B9">
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3119" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="00470629"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+						<w:r w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t>Reviewers</w:t>
+						</w:r>
+						<w:r w:rsidR="000A312E" w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t>:</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="1843" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="00470629"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+						<w:r w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t>Function</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="1317" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="00470629"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+						<w:r w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t>Date</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3077" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="00470629"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+						<w:r w:rsidRPr="00C343B9">
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:b />
+								<w:bCs />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+							<w:t>Signature</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+			</w:tr>
+			<w:tr w:rsidR="000A312E" w:rsidRPr="00C343B9">
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3119" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="1843" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="1317" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3077" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+			</w:tr>
+			<w:tr w:rsidR="000A312E" w:rsidRPr="00C343B9">
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3119" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="1843" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="1317" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3077" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+			</w:tr>
+			<w:tr w:rsidR="000A312E" w:rsidRPr="00C343B9">
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3119" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="1843" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="1317" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="3077" w:type="dxa" />
+					</w:tcPr>
+					<w:p w:rsidR="000A312E" w:rsidRPr="00C343B9" w:rsidRDefault="000A312E"
+						w:rsidP="000A312E">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Arial" />
+								<w:lang w:val="en-GB" />
+							</w:rPr>
+						</w:pPr>
+					</w:p>
+				</w:tc>
+			</w:tr>
+		</w:tbl>
+		<w:p w:rsidR="00576B86" w:rsidRPr="00C343B9" w:rsidRDefault="009B4207">
+			<w:pPr>
+				<w:rPr>
+					<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" />
+					<w:lang w:val="en-GB" />
+				</w:rPr>
+			</w:pPr>
+			<w:r w:rsidRPr="00C343B9">
+				<w:rPr>
+					<w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" />
+					<w:lang w:val="en-GB" />
+				</w:rPr>
+				<w:br w:type="page" />
+			</w:r>
+		</w:p>

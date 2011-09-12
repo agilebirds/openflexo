@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="twocols" dataClassName="org.openflexo.fge.graphics.TextStyle" font="SansSerif,0,11" width="300" height="140" name="TextStylePanel">
+  <Label label="background" localize="true" constraints="twocols(location=left;index=4;expandHorizontally=true;expandVertically=false)">
+    <LocalizedDictionary />
+  </Label>
+  <Label label="orientation" localize="true" dataClassName="" constraints="twocols(location=left;index=6;expandHorizontally=true;expandVertically=false)" visible="(!(data.noStroke))">
+    <LocalizedDictionary />
+  </Label>
+  <Number minValue="-180" maxValue="180" increment="5" numberType="IntegerType" columns="3" data="data.orientation" constraints="twocols(location=right;index=7;expandVertically=false;expandHorizontally=false)" name="LineWidth" localize="true" valueChangedAction="controller.parameterChanged()" />
+  <Panel layout="flow" hGap="0" vGap="5" flowAlignment="CENTER" borderTitle="Panel" constraints="twocols(location=center;index=8;expandHorizontally=true;expandVertically=false)">
+    <Button action="controller.apply()" buttonType="Trigger" label="apply" constraints="flow(index=0)" localize="true">
+      <LocalizedDictionary />
+    </Button>
+    <Button action="controller.cancel()" buttonType="Trigger" label="cancel" constraints="flow(index=1)" localize="true">
+      <LocalizedDictionary />
+    </Button>
+  </Panel>
+  <Panel layout="flow" hGap="-1" vGap="1" flowAlignment="LEADING" borderTitle="Panel" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)">
+    <Color data="data.backgroundColor" constraints="flow(index=0)" visible="data.isBackgroundColored" localize="true" />
+    <CheckBox negate="true" selected="true" localize="true" name="checkbox" data="data.isBackgroundColored" constraints="flow(index=1)" />
+    <Label label="transparent" localize="true" constraints="flow(index=2)">
+      <LocalizedDictionary />
+    </Label>
+  </Panel>
+  <Label label="foreground" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=true;expandVertically=false)">
+    <LocalizedDictionary />
+  </Label>
+  <Label label="font" localize="true" constraints="twocols(location=left;index=0;expandHorizontally=true;expandVertically=false)">
+    <LocalizedDictionary />
+  </Label>
+  <Font sampleText="Sample for this font" data="data.font" constraints="twocols(location=right;index=1;expandVertically=false;expandHorizontally=false)" localize="true" />
+  <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="Panel" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)">
+    <Color data="data.color" constraints="flow(index=0)" localize="true" />
+  </Panel>
+  <LocalizedDictionary>
+    <Localized key="font" lang="English">Font</Localized>
+    <Localized key="color" lang="English">Color</Localized>
+    <Localized key="orientation" lang="English">Orientation</Localized>
+    <Localized key="apply" lang="English">Apply</Localized>
+    <Localized key="cancel" lang="English">Cancel</Localized>
+    <Localized key="font" lang="French">Police</Localized>
+    <Localized key="color" lang="French">Couleur</Localized>
+    <Localized key="orientation" lang="French">Orientation</Localized>
+    <Localized key="apply" lang="French">Appliquer</Localized>
+    <Localized key="cancel" lang="French">Annuler</Localized>
+    <Localized key="font" lang="Dutch">Font</Localized>
+    <Localized key="color" lang="Dutch">Color</Localized>
+    <Localized key="orientation" lang="Dutch">Orientation</Localized>
+    <Localized key="apply" lang="Dutch">Apply</Localized>
+    <Localized key="cancel" lang="Dutch">Cancel</Localized>
+    <Localized key="background" lang="English">Background</Localized>
+    <Localized key="background" lang="French">Arrière-plan</Localized>
+    <Localized key="background" lang="Dutch">Background</Localized>
+  </LocalizedDictionary>
+  <Parameter name="controllerClassName" value="org.openflexo.fge.view.widget.FIBTextStyleSelector$TextStyleDetailsPanel$CustomFIBController" />
+</Panel>
+

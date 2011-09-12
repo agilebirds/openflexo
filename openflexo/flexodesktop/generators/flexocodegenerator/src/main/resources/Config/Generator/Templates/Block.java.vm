@@ -1,0 +1,17 @@
+#render($widget.getContent())
+#render($widget.getButtonList())
+#set($descriptor = $widget.getContainedDescriptor())
+#if($project.getIsLocalized())
+    #if(${descriptor.getRepetitionOperator().refreshButton()})
+        public String tooltipForRefresh${generator.capitalize($descriptor.getListName())}(){
+            return WDLToolBox.javascriptVarialbeString(localizedString("AnyRepetition_Refresh"));
+        }
+    #end
+    
+    #if(${descriptor.getRepetitionOperator().excelButton()})
+        public String tooltipForExcelExport${generator.capitalize($descriptor.getListName())}(){
+            return WDLToolBox.javascriptVarialbeString(localizedString("AnyRepetition_ExcelExport"));
+        }
+    #end
+#end
+

@@ -1,0 +1,55 @@
+<inspector title = "Entity_(read_only)" inheritsfrom="DMROObject.inspector">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="name" label="name" widget="READ_ONLY_TEXT_FIELD" constraint="0"/>
+		<property name="entityClassName" label="class_name" widget="READ_ONLY_TEXT_FIELD" constraint="2">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		</property>
+		<property name="entityPackageName" label="package_name" widget="READ_ONLY_TEXT_FIELD" constraint="3"/>
+		<property name="parentType" label="parent_type" widget="READ_ONLY_TEXT_FIELD" constraint="4"/>
+		<property_list name="typeVariables" label="type_variables" constraint="5">
+		  <param name="visible_row_count" value="3"/>
+		  <param name="row_height" value="20"/>
+		  <property_list_column name="name" label="name" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="50"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="bounds" label="extends" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="100"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="description" label="description" widget="TEXT_FIELD">
+			<param name="column_width" value="200"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		</property_list>
+
+	</tab>
+	
+	<tab name="Advanced" index="1">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="isInterface" label="is_interface" widget="READ_ONLY_CHECKBOX" constraint="5" depends="isEnumeration" conditional="isEnumeration=false"/>
+		<property name="isEnumeration" label="is_enumeration" widget="READ_ONLY_CHECKBOX" constraint="6" depends="isInterface" conditional="isInterface=false"/>
+		<property_list name="implementedTypes" label="implemented_types" constraint="3">
+		  <param name="visible_row_count" value="3"/>
+		  <param name="row_height" value="20"/>
+		  <property_list_column name="icon" label="" widget="ICON">
+			<param name="column_width" value="30"/>
+			<param name="resizable" value="false"/>
+		  </property_list_column>
+		  <property_list_column name="this" label="implements" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="270"/>
+			<param name="resizable" value="true"/>
+			<param name="className" value="org.openflexo.components.widget.DMTypeInspectorWidget"/>
+			<param name="format" value="simplifiedStringRepresentation"/>
+			<param name="project" value="project"/>
+			<param name="readOnly" value="true"/>
+		  </property_list_column>
+		</property_list>
+	</tab>
+</inspector>

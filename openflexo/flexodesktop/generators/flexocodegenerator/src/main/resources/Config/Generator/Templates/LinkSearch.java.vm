@@ -1,0 +1,5 @@
+#buttonValue()
+#renderLinkContent($widget)
+#set($t = "LinkSearchFormAction.java.vm")
+#set($c = "#parse(${generator.getTemplatePath($t)})")
+#void($formAction.append($c))

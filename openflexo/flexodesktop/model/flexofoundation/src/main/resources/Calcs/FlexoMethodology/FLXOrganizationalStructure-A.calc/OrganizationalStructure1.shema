@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Shema id="1" name="OrganizationalStructure1">
+  <DrawingGraphicalRepresentation id="2" className="org.openflexo.ced.drawingshema.CalcDrawingShemaGR" width="1000.0" height="1000.0" drawWorkingArea="true" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+    <TextStyle id="3" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+  </DrawingGraphicalRepresentation>
+  <description>First example of what can be described using this calc</description>
+  <ContainedShape id="4" name="HR Department">
+    <ShapeGraphicalRepresentation id="5" className="org.openflexo.ced.drawingshema.CalcDrawingShapeGR" x="35.0" y="48.0" width="630.582191780822" height="617.5409836065573" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="HR Department" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="313.0" absoluteTextY="28.0" textAlignment="CENTER">
+      <ForegroundStyle id="6" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="7" color="221,249,221" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="8" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="9" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="10" isRounded="true" arcSize="20.0" />
+      <TextStyle id="11" font="Lucida Sans,1,13" color="0,102,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+    <ContainedShape id="12" name="The HR department has the mission of providing the entreprise with a&#xA;sufficient number of employees whose competence, motivation,&#xA;performance and salary are compatible with the economical objectives&#xA;of the enterprise. The HR department should also make sure that this&#xA;is being carried on in a positive social climate allowing the enterprise&#xA;to fulfill its mission">
+      <ShapeGraphicalRepresentation id="13" className="org.openflexo.ced.drawingshema.CalcDrawingShapeGR" x="79.0" y="52.0" width="451.3122482514457" height="95.94394500264414" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="2" isFloatingLabel="false" text="The HR department has the mission of providing the entreprise with a&#xA;sufficient number of employees whose competence, motivation,&#xA;performance and salary are compatible with the economical objectives&#xA;of the enterprise. The HR department should also make sure that this&#xA;is being carried on in a positive social climate allowing the enterprise&#xA;to fulfill its mission" isMultilineAllowed="true" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+        <ForegroundStyle id="14" noStroke="false" color="153,153,153" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="15" color="255,255,255" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="16" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="17" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="18" isRounded="true" arcSize="10.0" />
+        <TextStyle id="19" font="Microsoft Sans Serif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShape>
+    <ContainedShape id="20" name="HR Manager">
+      <ShapeGraphicalRepresentation id="21" className="org.openflexo.ced.drawingshema.CalcDrawingShapeGR" x="65.0" y="205.0" width="30.33870967741936" height="36.9873689868315" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="2" isFloatingLabel="true" text="HR Manager" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="22.0" absoluteTextY="-11.0" textAlignment="CENTER">
+        <ForegroundStyle id="22" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ImageBackgroundStyle id="23" imageFile="People.gif" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="24" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="25" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="26" isRounded="false" arcSize="30.0" />
+        <TextStyle id="27" font="Lucida Sans,1,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShape>
+    <ContainedShape id="28" name="The position Human Resources Manager could be described as follows :&#xA;ensure a consistant and an active Human Resource Management.&#xA;It offers an HR policy in line with needs and resources of the Employer.&#xA;He is responsible for managing the payroll for all employees. It represents&#xA;his employer with social partners and professional associations.">
+      <ShapeGraphicalRepresentation id="29" className="org.openflexo.ced.drawingshema.CalcDrawingShapeGR" x="175.0" y="172.0" width="380.90807799442894" height="78.72396987151085" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="2" isFloatingLabel="false" text="The position Human Resources Manager could be described as follows :&#xA;ensure a consistant and an active Human Resource Management.&#xA;It offers an HR policy in line with needs and resources of the Employer.&#xA;He is responsible for managing the payroll for all employees. It represents&#xA;his employer with social partners and professional associations." isMultilineAllowed="true" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+        <ForegroundStyle id="30" noStroke="false" color="102,102,102" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="31" color="247,221,221" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="32" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="33" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="34" isRounded="true" arcSize="10.0" />
+        <TextStyle id="35" font="Microsoft Sans Serif,0,10" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShape>
+    <ContainedConnector id="36">
+      <ConnectorGraphicalRepresentation id="37" className="org.openflexo.ced.drawingshema.CalcDrawingConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="NONE" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+        <ForegroundStyle id="38" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <StartShapeGraphicalRepresentation idref="21" />
+        <EndShapeGraphicalRepresentation idref="29" />
+        <LineConnector id="39" lineConnectorType="MINIMAL_LENGTH" />
+        <TextStyle id="40" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ConnectorGraphicalRepresentation>
+      <FromShape idref="20" />
+      <ToShape idref="28" />
+    </ContainedConnector>
+    <ContainedShape id="41" name="Develop and implements the HR policy">
+      <ShapeGraphicalRepresentation id="42" className="org.openflexo.ced.drawingshema.CalcDrawingShapeGR" x="178.0" y="268.0" width="214.92890995260663" height="29.34426229508197" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="2" isFloatingLabel="false" text="Develop and implements the HR policy" isMultilineAllowed="true" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+        <ForegroundStyle id="43" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="44" color="102,102,102" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="45" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="46" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="47" isRounded="true" arcSize="15.0" />
+        <TextStyle id="48" font="Microsoft Sans Serif,0,10" color="255,255,255" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShape>
+    <ContainedShape id="49" name="Supervise the HR Employees in executing the HR mission">
+      <ShapeGraphicalRepresentation id="50" className="org.openflexo.ced.drawingshema.CalcDrawingShapeGR" x="180.0" y="306.0" width="296.89605734767025" height="29.34426229508197" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="2" isFloatingLabel="false" text="Supervise the HR Employees in executing the HR mission" isMultilineAllowed="true" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+        <ForegroundStyle id="51" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="52" color="102,102,102" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="53" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="54" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="55" isRounded="true" arcSize="15.0" />
+        <TextStyle id="56" font="Microsoft Sans Serif,0,10" color="255,255,255" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShape>
+    <ContainedShape id="57" name="Set the policy for recruitment and carreer management of employees">
+      <ShapeGraphicalRepresentation id="58" className="org.openflexo.ced.drawingshema.CalcDrawingShapeGR" x="179.0" y="346.0" width="351.91964285714283" height="29.34426229508197" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="2" isFloatingLabel="false" text="Set the policy for recruitment and carreer management of employees" isMultilineAllowed="true" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+        <ForegroundStyle id="59" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="60" color="102,102,102" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="61" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="62" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="63" isRounded="true" arcSize="15.0" />
+        <TextStyle id="64" font="Microsoft Sans Serif,0,10" color="255,255,255" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShape>
+    <ContainedConnector id="65" name="task">
+      <ConnectorGraphicalRepresentation id="66" className="org.openflexo.ced.drawingshema.CalcDrawingConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" text="task" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="35.0" absoluteTextY="-11.0" textAlignment="CENTER">
+        <ForegroundStyle id="67" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <StartShapeGraphicalRepresentation idref="21" />
+        <EndShapeGraphicalRepresentation idref="42" />
+        <RectPolylinConnector id="68" rectPolylinConstraints="NONE" straightLineWhenPossible="true" adjustability="AUTO_LAYOUT" startOrientation="SOUTH" endOrientation="WEST" isRounded="false" arcSize="10" isStartingLocationFixed="false" isEndingLocationFixed="false" isStartingLocationDraggable="false" isEndingLocationDraggable="false" />
+        <TextStyle id="69" font="Microsoft Sans Serif,0,10" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ConnectorGraphicalRepresentation>
+      <FromShape idref="20" />
+      <ToShape idref="41" />
+    </ContainedConnector>
+    <ContainedConnector id="70" name="task">
+      <ConnectorGraphicalRepresentation id="71" className="org.openflexo.ced.drawingshema.CalcDrawingConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" text="task" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="53.0" absoluteTextY="-11.0" textAlignment="CENTER">
+        <ForegroundStyle id="72" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <StartShapeGraphicalRepresentation idref="21" />
+        <EndShapeGraphicalRepresentation idref="50" />
+        <RectPolylinConnector id="73" rectPolylinConstraints="NONE" straightLineWhenPossible="true" adjustability="AUTO_LAYOUT" startOrientation="SOUTH" endOrientation="WEST" isRounded="false" arcSize="10" isStartingLocationFixed="false" isEndingLocationFixed="false" isStartingLocationDraggable="false" isEndingLocationDraggable="false" />
+        <TextStyle id="74" font="Microsoft Sans Serif,0,10" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ConnectorGraphicalRepresentation>
+      <FromShape idref="20" />
+      <ToShape idref="49" />
+    </ContainedConnector>
+    <ContainedConnector id="75" name="task">
+      <ConnectorGraphicalRepresentation id="76" className="org.openflexo.ced.drawingshema.CalcDrawingConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" text="task" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="65.0" absoluteTextY="-2.0" textAlignment="CENTER">
+        <ForegroundStyle id="77" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <StartShapeGraphicalRepresentation idref="21" />
+        <EndShapeGraphicalRepresentation idref="58" />
+        <RectPolylinConnector id="78" rectPolylinConstraints="NONE" straightLineWhenPossible="true" adjustability="AUTO_LAYOUT" startOrientation="SOUTH" endOrientation="WEST" isRounded="false" arcSize="10" isStartingLocationFixed="false" isEndingLocationFixed="false" isStartingLocationDraggable="false" isEndingLocationDraggable="false" />
+        <TextStyle id="79" font="Microsoft Sans Serif,0,10" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ConnectorGraphicalRepresentation>
+      <FromShape idref="20" />
+      <ToShape idref="57" />
+    </ContainedConnector>
+    <ContainedShape id="80" name="HRCarrer">
+      <ShapeGraphicalRepresentation id="81" className="org.openflexo.ced.drawingshema.CalcDrawingShapeGR" x="35.0" y="411.0" width="174.77091556381086" height="128.66062085803978" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="2" isFloatingLabel="true" text="HRCarrer" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="92.21588185477789" absoluteTextY="17.72513948583785" textAlignment="CENTER">
+        <ForegroundStyle id="82" noStroke="false" color="255,204,204" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="83" color="252,227,227" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="84" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="85" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="86" isRounded="true" arcSize="20.0" />
+        <TextStyle id="87" font="Lucida Sans,1,13" color="153,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShape>
+    <ContainedShape id="88" name="HR Administrative">
+      <ShapeGraphicalRepresentation id="89" className="org.openflexo.ced.drawingshema.CalcDrawingShapeGR" x="231.0" y="411.0" width="170.75342465753425" height="129.67213114754097" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="2" isFloatingLabel="true" text="HR Administrative" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="90.0" absoluteTextY="20.0" textAlignment="CENTER">
+        <ForegroundStyle id="90" noStroke="false" color="255,153,255" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="91" color="250,214,250" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="92" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="93" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="94" isRounded="true" arcSize="20.0" />
+        <TextStyle id="95" font="Lucida Sans,1,13" color="102,0,102" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShape>
+    <ContainedShape id="96" name="HR Communication">
+      <ShapeGraphicalRepresentation id="97" className="org.openflexo.ced.drawingshema.CalcDrawingShapeGR" x="421.0" y="409.0" width="176.7123287671233" height="131.63934426229508" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="2" isFloatingLabel="true" text="HR Communication" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="99.0" absoluteTextY="17.0" textAlignment="CENTER">
+        <ForegroundStyle id="98" noStroke="false" color="204,204,255" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="99" color="218,252,252" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="100" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="101" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="102" isRounded="true" arcSize="20.0" />
+        <TextStyle id="103" font="Lucida Sans,1,13" color="0,0,153" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShape>
+    <ContainedShape id="104" name="Carrer">
+      <ShapeGraphicalRepresentation id="105" className="org.openflexo.ced.drawingshema.CalcDrawingShapeGR" x="56.0" y="558.0" width="146.87953016172827" height="40.3013698630137" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="2" isFloatingLabel="false" text="Carrer" isMultilineAllowed="true" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+        <ForegroundStyle id="106" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="107" color="204,0,51" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="108" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="109" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="110" isRounded="true" arcSize="20.0" />
+        <TextStyle id="111" font="Lucida Sans,1,9" color="255,255,255" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShape>
+    <ContainedShape id="112" name="Administrative side of HR">
+      <ShapeGraphicalRepresentation id="113" className="org.openflexo.ced.drawingshema.CalcDrawingShapeGR" x="249.0" y="558.0" width="146.87953016172827" height="40.3013698630137" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="2" isFloatingLabel="false" text="Administrative side of HR" isMultilineAllowed="true" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+        <ForegroundStyle id="114" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="115" color="204,0,51" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="116" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="117" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="118" isRounded="true" arcSize="20.0" />
+        <TextStyle id="119" font="Lucida Sans,1,9" color="255,255,255" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShape>
+    <ContainedShape id="120" name="Communication">
+      <ShapeGraphicalRepresentation id="121" className="org.openflexo.ced.drawingshema.CalcDrawingShapeGR" x="441.0" y="557.0" width="146.87953016172827" height="40.3013698630137" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="2" isFloatingLabel="false" text="Communication" isMultilineAllowed="true" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+        <ForegroundStyle id="122" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="123" color="204,0,51" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="124" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="125" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="126" isRounded="true" arcSize="20.0" />
+        <TextStyle id="127" font="Lucida Sans,1,9" color="255,255,255" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShape>
+  </ContainedShape>
+</Shema>
+

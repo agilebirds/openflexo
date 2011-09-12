@@ -1,0 +1,54 @@
+<inspector title = "Sub Process Node" inheritsfrom="AbstractActivityNode.inspector" inspectedClassName="org.openflexo.foundation.wkf.node.SubProcessNode">
+
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<!--<property name="type" label="type" widget="DROPDOWN" constraint="2">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name = "format" value="name"/>
+		</property>-->
+		<property name="subProcess" label="sub_process" widget="CUSTOM" constraint="3">
+			<param name="className" value="org.openflexo.components.widget.ProcessInspectorWidget"/>
+			<param name="isSelectable" value="isAcceptableAsSubProcess"/>
+		</property>
+		<!--<property name="subProcess" label="sub_process" widget="DROPDOWN" constraint="3">
+			<param name="dynamiclist" value="process.subProcesses"/>
+			<param name="format" value="name"/>
+		</property>-->
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+		
+	</tab>
+    <tab name="Stats" index="5">
+        <property name="statistics.infoLabel" widget="LABEL" constraint="0">
+            <param name="align" value="center"/>
+            <param name="width" value="200"/>
+            <param name="height" value="60"/>
+        </property>
+        <property name="statistics.includeBeginEndNode" label="include_begin_end" widget="CHECKBOX" constraint="1">
+        </property>
+        <property name="subProcess.statistics.activityCount" label="# activities_in_process" widget="READ_ONLY_TEXT_FIELD" depends="statistics,statistics.includeBeginEndNode,hasSubProcess" conditional="statistics.includeBeginEndNode=true and hasSubProcess=true" constraint="2">
+        </property>
+        <property name="subProcess.statistics.realActivityCount" label="# activities_in_process" widget="READ_ONLY_TEXT_FIELD" depends="statistics,statistics.includeBeginEndNode,hasSubProcess" conditional="statistics.includeBeginEndNode=false and hasSubProcess=true" constraint="2">
+        </property>
+        <property name="subProcess.statistics.operationCount" label="# operations_in_process" widget="READ_ONLY_TEXT_FIELD" depends="statistics,statistics.includeBeginEndNode,hasSubProcess" conditional="statistics.includeBeginEndNode=true and hasSubProcess=true" constraint="3">
+        </property>     
+        <property name="subProcess.statistics.realOperationCount" label="# operations_in_process" widget="READ_ONLY_TEXT_FIELD" depends="statistics,statistics.includeBeginEndNode,hasSubProcess" conditional="statistics.includeBeginEndNode=false and hasSubProcess=true" constraint="3">
+        </property>
+        <property name="subProcess.statistics.actionCount" label="# actions_in_process" widget="READ_ONLY_TEXT_FIELD" depends="statistics,statistics.includeBeginEndNode,hasSubProcess" conditional="statistics.includeBeginEndNode=true and hasSubProcess=true" constraint="4">
+        </property>
+        <property name="subProcess.statistics.realActionCount" label="# actions_in_process" widget="READ_ONLY_TEXT_FIELD" depends="statistics,statistics.includeBeginEndNode,hasSubProcess" conditional="statistics.includeBeginEndNode=false and hasSubProcess=true" constraint="4">
+        </property>
+        <property name="statistics.operationCount" label="# monitoring_operations" widget="READ_ONLY_TEXT_FIELD" depends="statistics,statistics.includeBeginEndNode,mightHaveOperationPetriGraph" conditional="statistics.includeBeginEndNode=true and mightHaveOperationPetriGraph=true" constraint="5">
+        </property> 
+        <property name="statistics.realOperationCount" label="# monitoring_operations" widget="READ_ONLY_TEXT_FIELD" depends="statistics,statistics.includeBeginEndNode,mightHaveOperationPetriGraph" conditional="statistics.includeBeginEndNode=false and mightHaveOperationPetriGraph=true" constraint="5">
+        </property>     
+        <property name="statistics.actionCount" label="# monitoring_actions" widget="READ_ONLY_TEXT_FIELD" depends="statistics,statistics.includeBeginEndNode,mightHaveOperationPetriGraph" conditional="statistics.includeBeginEndNode=true and mightHaveOperationPetriGraph=true" constraint="6">
+        </property>
+        <property name="statistics.realActionCount" label="# monitoring_actions" widget="READ_ONLY_TEXT_FIELD" depends="statistics,statistics.includeBeginEndNode,mightHaveOperationPetriGraph" conditional="statistics.includeBeginEndNode=false and mightHaveOperationPetriGraph=true" constraint="6">
+        </property>		
+	</tab>
+
+</inspector>

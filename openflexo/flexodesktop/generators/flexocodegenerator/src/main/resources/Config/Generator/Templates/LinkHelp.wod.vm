@@ -1,0 +1,17 @@
+#name()Link: WOHyperlink {
+    href = "#";
+    #tooltipAsTitle()
+#if($widget.isCustomButton())
+    class="denaliButton";
+#end
+    onclick = #name()OnClickPopupButton;
+}
+
+#name()HiddenDiv: WDLJSHiddenPopup {
+    uniqueIdentifier = #name()HiddenDivUniqueIdentifier;
+    draggable = true;
+    resizable = true;
+    closeButton = true;
+}
+
+#renderLinkContent($widget)

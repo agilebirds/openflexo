@@ -1,0 +1,5 @@
+<inspector title = "package_declaration">
+	<tab name="Basic" index="0">
+		<property name="package" label="package_name" widget="READ_ONLY_TEXT_FIELD" constraint="0"/>
+	</tab>
+</inspector>

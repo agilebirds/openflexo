@@ -1,0 +1,13 @@
+#name(): WOImage {
+    #if (${widget.getUsePercentage()})
+    width = "${widget.getPercentage()}%";
+    height = "${widget.getPercentage()}%";
+    #elseif(!${widget.isOriginalSize()})
+    width = "${widget.getWidthPixel()}";
+    height = "${widget.getHeightPixel()}";
+    #end
+    border = 0;
+    #tooltipAsTitle()
+    filename = "${widget.getImageName()}";
+    align = "middle";
+}

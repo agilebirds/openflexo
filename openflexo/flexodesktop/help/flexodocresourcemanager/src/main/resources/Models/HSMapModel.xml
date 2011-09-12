@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model handlesReferences="no" serializeOnly="yes"> 
+
+  <entity name="org.openflexo.drm.helpset.HSMap" xmlTag="map">
+   <property name="version" xmlTag="version" attribute="yes"/> 
+   <property name="entries" xmlTag="mapID" type="vector"/>
+  </entity> 
+
+  <entity name="org.openflexo.drm.helpset.HSMap$HSMapEntry" xmlTag="mapID">
+     <property name="target" xmlTag="target" attribute="yes"/> 
+    <property name="url" xmlTag="url" attribute="yes"/> 
+  </entity> 
+
+</model>

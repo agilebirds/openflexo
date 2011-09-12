@@ -1,0 +1,86 @@
+<inspector title = "Project" inspectedClassName="org.openflexo.foundation.rm.FlexoProject">
+	
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="projectName" label="name" widget="READ_ONLY_TEXT_FIELD" constraint="0"/>
+		<property name="projectDirectory" label="location" widget="READ_ONLY_TEXT_FIELD" constraint="1"/>
+		<property name="projectDescription" label="description" widget="TEXT_AREA" constraint="2">
+			<param name="height" value="200"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="flexoWorkflow.rootProcess" label="root_process" widget="DROPDOWN" depend="flexoWorkflow" constraint="3">
+			<param name="dynamiclist" value="flexoWorkflow.topLevelFlexoProcesses"/>
+			<param name="showReset" value="false"/>
+			<param name="format" value="name"/>
+		</property>
+		<property name="targetType" label="target" widget="DROPDOWN" constraint="5">
+			<param name="format" value="name"/>
+			<param name="showReset" value="false"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="cssSheet" label="css_sheet" widget="DROPDOWN" constraint="6">
+			<param name="format" value="name"/>
+			<param name="showReset" value="false"/>
+		</property>
+		<property name="projectDateFormat" label="date_format" widget="DROPDOWN" constraint="7">
+			<param name="format" value="displayString"/>
+		</property>
+		<property name="creationDateAsString" label="creation_date" widget="READ_ONLY_TEXT_FIELD" constraint="8"/>
+		<property name="creationUserId" label="creation_user_id" widget="READ_ONLY_TEXT_FIELD" constraint="9">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+	</tab>
+	
+	<tab name="Stats" index="2">
+		<property name="statistics.infoLabel" widget="LABEL" constraint="0">
+			<param name="align" value="center"/>
+			<param name="width" value="200"/>
+			<param name="height" value="60"/>
+		</property>
+		<!-- Insert here label WKF-->
+		<property name="statistics.includeBeginEndNode" label="include_begin_end" widget="CHECKBOX" constraint="1">
+		</property>
+		<property name="statistics.processCount" label="# processes" widget="READ_ONLY_TEXT_FIELD" constraint="2">
+		</property>
+		<property name="statistics.activityCount" label="# activities" widget="READ_ONLY_TEXT_FIELD" depends="statistics" conditional="statistics.includeBeginEndNode=true" constraint="3">
+		</property>
+		<property name="statistics.realActivityCount" label="# activities" widget="READ_ONLY_TEXT_FIELD" depends="statistics" conditional="statistics.includeBeginEndNode=false" constraint="3">
+		</property>
+		<property name="statistics.operationCount" label="# operations" widget="READ_ONLY_TEXT_FIELD" depends="statistics" conditional="statistics.includeBeginEndNode=true" constraint="4">
+		</property>		
+		<property name="statistics.realOperationCount" label="# operations" widget="READ_ONLY_TEXT_FIELD" depends="statistics" conditional="statistics.includeBeginEndNode=false" constraint="4">
+		</property>
+		<property name="statistics.actionCount" label="# actions" widget="READ_ONLY_TEXT_FIELD" depends="statistics" conditional="statistics.includeBeginEndNode=true" constraint="5">
+		</property>
+		<property name="statistics.realActionCount" label="# actions" widget="READ_ONLY_TEXT_FIELD" depends="statistics" conditional="statistics.includeBeginEndNode=false" constraint="5">
+		</property>
+		<!-- Insert here label CL-->
+		<property name="statistics.pageCount" label="# screens" widget="READ_ONLY_TEXT_FIELD" constraint="7">
+		</property>
+		<property name="statistics.popupCount" label="# popups" widget="READ_ONLY_TEXT_FIELD" constraint="8">
+		</property>
+		<property name="statistics.tabCount" label="# tabs" widget="READ_ONLY_TEXT_FIELD" constraint="9">
+		</property>
+		<!-- Insert here label DM-->
+		<property name="statistics.eoEntityCount" label="# entities" widget="READ_ONLY_TEXT_FIELD" constraint="11">
+		</property>
+		<property name="statistics.eoAttributeCount" label="# attributes" widget="READ_ONLY_TEXT_FIELD" constraint="12">
+		</property>
+		<property name="statistics.eoRelationshipCount" label="# relationships" widget="READ_ONLY_TEXT_FIELD" constraint="13">
+		</property>
+		
+		<group name="button" constraint="14">
+			<param name = "layout" value="center"/>
+			<property name="statistics.refresh" label="refresh" widget="BUTTON" constraint="1">
+			</property>
+			<property name="statistics.excel" label="excel" widget="BUTTON" constraint="2">
+				<param name="action" value="project_excel_export"/>
+			</property>
+		</group>
+
+	</tab>
+	
+</inspector>
+

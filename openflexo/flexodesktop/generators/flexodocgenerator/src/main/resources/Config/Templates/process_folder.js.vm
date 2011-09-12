@@ -1,0 +1,62 @@
+#macro(getCreateDivDescriptionFunctionForFolder $node)
+    function(fatherDiv, flexoNode)
+    {
+        var descDiv = document.createElement('div');
+        descDiv.id = DESCRIPTION_PREFIX + flexoNode.id;
+        descDiv.style.display = 'none';
+        
+        /*HEADER*/
+        var h2Element = document.createElement('h2');
+        h2Element.appendChild(document.createTextNode('${node.getEnglishClassName()}: '));
+        var spanH2ContentElement = document.createElement('span');
+        spanH2ContentElement.className = 'htmlDocHContent';
+        spanH2ContentElement.innerHTML = flexoNode.name;
+        h2Element.appendChild(spanH2ContentElement);
+        
+        descDiv.appendChild(h2Element);
+        
+        /*DESCRIPTION*/
+        var divDescriptionElement = document.createElement('div');
+        divDescriptionElement.innerHTML = '<p><strong>Description:</strong></p>';
+        divDescriptionElement.innerHTML = divDescriptionElement.innerHTML + '${generator.escapeStringForJS("${node.getFullDescriptionWithOnlyBodyContent(${repository.getDocType().getName()})}")}';
+        
+        descDiv.appendChild(divDescriptionElement);
+        fatherDiv.appendChild(descDiv);
+        
+        return descDiv;
+    }
+#end
+
+#set($processFolder = $object)
+
+function initProcessFolder${processFolder.getFlexoID()}()
+{
+    var fctCreateDivDescription = null;
+    var fctCreateContent = null;
+    
+	#if(!${processFolder.getDontGenerate()})
+        fctCreateDivDescription = #getCreateDivDescriptionFunctionForFolder($processFolder)
+        #set($uri=${processFolder.getURI()})
+		#set($name=${generator.escapeStringForHTML(${processFolder.getName()}, true)})
+		#set($index = ${processFolder.getIndex()})
+		var flexoNode = new FlexoNode('$uri', '$name', LEVEL_OTHER, TYPE_PROCESSFOLDER, $index, fctCreateDivDescription, null);
+		var childIds = @single[
+			#foreach($childProcessNode in ${processFolder.getAllDirectSubProcessNodes()})
+				#if($foreach.index),#end
+				'${childProcessNode.getProcess().getURI()}'
+			#end
+		];@end
+		#if(${processFolder.getParent().getProcess().getURI()})
+			#set($fatherNodeId = "'${processFolder.getParent().getProcess().getURI()}'")
+		#elseif(${processFolder.getParent().getURI()})
+			#set($fatherNodeId = "'${processFolder.getParent().getURI()}'")
+		#else
+			#set($fatherNodeId = "null")
+		#end
+		
+        FlexoReader.insertFolder(flexoNode, $fatherNodeId, childIds);
+	#end
+}
+
+initProcessFolder${processFolder.getFlexoID()}();
+

@@ -1,0 +1,48 @@
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (DMEOEntityDocGenerator)
+* - object: the object for which we are generating the doc (DMEOEntity)
+* - repository: the current repository for which we generate the doc (DGRepository)
+*#
+#if($entry)
+#subTocEntries($entry)
+#end
+#set($entity = $object)
+#**
+* This macro just makes a list of the name of the attributes separated by a comma.
+*#
+#macro(att_list $attributes)
+#foreach($a in $attributes)${generator.splitOnUpperCase(${a.getName()})}#if($foreach.index>0),#end #end ## end foreach attributes
+#end
+
+\hypertarget{$generator.getReference($entity)}{}\nopagebreak%
+#if(!$entry)\subsubsection{Entity: $entity.getName()}\nopagebreak%#end
+#description($entity) \nopagebreak%
+\par This entity contains the following attributes:\nopagebreak%
+\begin{attributes}{$entity.getName() #if($entity.getExternalName()) - $entity.getExternalName()#end}
+#foreach($attribute in $entity.getOrderedAttributes())
+#if(!$attribute.getDontGenerate())
+\attribute
+  {${generator.splitOnUpperCase($attribute.getName())}}
+  {${generator.splitOnUpperCase($attribute.getColumnName())}}
+  {${generator.splitOnUpperCase($attribute.getJavaClassName())}}
+  {#if($attribute.getWidth()>0)$attribute.getWidth()#else - #end}
+  {#description($attribute)}
+#end ## end of dont generate
+#end
+\end{attributes}
+\par This entity contains the following relationships:\nopagebreak%
+\begin{relationships}
+#foreach($rel in $entity.getOrderedRelationships())
+#if(!$rel.getDontGenerate())
+\relationship
+  {${generator.splitOnUpperCase(${rel.getName()})}}
+  {#if(${rel.getDestinationEntity()})\hyperlink{$generator.getReference(${rel.getDestinationEntity()})}{${generator.splitOnUpperCase(${rel.getDestinationEntity().getName()})}}#end}
+  {#att_list(${rel.getEORelationship().getSourceAttributes()})}
+  {#att_list(${rel.getEORelationship().getDestinationAttributes()})}
+  {#if(${rel.getEORelationship().getIsToMany()} || ${rel.getEORelationship().getIsFlattened()})To many#else To one#end}
+#end ## end of dont generate
+#end
+\end{relationships}

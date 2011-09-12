@@ -1,0 +1,13 @@
+<inspector title = "BIRT Widget" inheritsfrom ="InnerTableWidget.inspector">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+    	<property name="graphType" label="graph_type" widget="DROPDOWN" constraint="1">
+    	   <param name="showReset" value="false"/>
+    	</property>
+        <property name="usePercentage" label="use_percentage" widget="CHECKBOX" constraint="14"/>
+        <property name="percentage" label="percentage" depends="usePercentage" conditional="usePercentage=true" widget="INTEGER" constraint="15"/>
+        <property name="widthPixel" label="width_pixel" widget="INTEGER" depends="usePercentage" conditional="usePercentage=false" constraint="17"/>
+        <property name="heightPixel" label="height_pixel" widget="INTEGER" depends="usePercentage" conditional="usePercentage=false" constraint="18"/>
+	</tab>
+
+</inspector>

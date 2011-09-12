@@ -1,0 +1,23 @@
+#macro(eventName)
+    #if(${widget.getClientSideEventType()})
+    ${widget.getClientSideEventType().getName()} #else
+    onclick #end
+#end
+
+#name()Link : WOHyperlink {
+    href = "#";
+#if(${widget.getBindingScriptMethod().isBindingValid()})
+    #eventName() = ${widget.getBindingScriptMethod().getWodStringRepresentation()};
+#else ##Here we try to put some intelligence to guess that the link is a select all link in a list
+  #if($widget.seemsToBeASelectAllLink())
+        #* WARNING: Be careful to change the following if IECheckBoxGenerator.getName(IECheckBoxWidget check) is modified *#
+    onclick = "toggleCheckboxGroup('#nameForWidget(${widget.getRelatedCheckBox()})Name');";
+  #end
+#end
+    id = "#name()";
+#if($widget.isCustomButton())
+    class="denaliButton";
+#end
+    #tooltipAsTitle()
+}
+#renderLinkContent($widget)

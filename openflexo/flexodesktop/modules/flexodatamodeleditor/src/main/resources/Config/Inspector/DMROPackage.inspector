@@ -1,0 +1,14 @@
+<inspector title = "Package_(read_only)" inheritsfrom="DMROObject.inspector">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="localizedName" label="name" widget="READ_ONLY_TEXT_FIELD" constraint="0"/>
+	</tab>	
+	<tab name="Advanced" index="1">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+	</tab>
+
+</inspector>

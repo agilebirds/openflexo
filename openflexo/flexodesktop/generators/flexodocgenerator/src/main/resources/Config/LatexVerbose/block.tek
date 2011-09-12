@@ -1,0 +1,23 @@
+\block{\textsc{<BLOCK_NAME>}}
+{\itshape <BLOCK_DESCRIPTION>}
+<GEN_IF(ACTION)>
+\par \medskip This screen area contains the following functions:\nopagebreak
+\setlength{\parskip}{0pt}
+\begin{actiontable}
+<ACTION_LIST>\end{actiontable} \setlength{\parskip}{\parskipBU}
+</GEN_IF(ACTION)>
+<GEN_IF(!ACTION)>
+%\par This screen area does not contain any functions.
+</GEN_IF(!ACTION)>
+<GEN_IF(LIST)>
+\begin{lists}
+<LIST>\end{lists}</GEN_IF(LIST)>
+<GEN_IF(!LIST)></GEN_IF(!LIST)>
+<GEN_IF(POPUP)>
+\par \medskip This screen area uses the following popups:\nopagebreak
+\begin{popups}
+<POPUP_LIST>\end{popups}
+</GEN_IF(POPUP)>
+<GEN_IF(!POPUP)>
+%\par This screen area does not contain any popups.
+</GEN_IF(!POPUP)>

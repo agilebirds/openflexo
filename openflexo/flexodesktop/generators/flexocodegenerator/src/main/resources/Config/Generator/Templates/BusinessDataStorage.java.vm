@@ -1,0 +1,499 @@
+#package()
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
+
+import com.webobjects.appserver.WOApplication;
+
+import ${generator.getEntityPackageName()}.WorkflowProcess.WorkflowBusinessData;
+import ${projectGenerator.getProcessBusinessDataBaseEntity().getFullQualifiedName()};
+
+/**
+ * BusinessDataStorage class 
+ * 
+ * @author FlexoBPM Generator, Agile Birds sprl. (see www.FlexoBPM.com)
+ * @version 
+ */
+public class BusinessDataStorage {
+	
+	public static final SimpleDateFormat dateFormatter = new SimpleDateFormat("d/M/y H:m");
+	private Map<WorkflowProcess, ProcessBusinessData> currentProcessBusinessDataByKey = new HashMap<WorkflowProcess, ProcessBusinessData>();
+	private Map<WorkflowBusinessData, LinkedHashMap<Integer, ProcessBusinessData>> businessDataSamples = new HashMap<WorkflowBusinessData, LinkedHashMap<Integer, ProcessBusinessData>>();
+					
+	private String prototypeSamplesFolderPath;
+	
+	public BusinessDataStorage(String prototypeSamplesFolderPath)
+	{
+		this.prototypeSamplesFolderPath = prototypeSamplesFolderPath;
+	}
+					
+	public void reset() {
+		currentProcessBusinessDataByKey = new HashMap<WorkflowProcess, ProcessBusinessData>();
+		businessDataSamples = new HashMap<WorkflowBusinessData, LinkedHashMap<Integer, ProcessBusinessData>>();
+    }
+	
+	public void reset(WorkflowProcess workflowProcess)
+    {
+    	currentProcessBusinessDataByKey.remove(workflowProcess);
+    	businessDataSamples.remove(workflowProcess.getBusinessDataClass());
+    }
+	
+    public ProcessBusinessData getCurrentProcessBusinessData(WorkflowProcess workflowProcess) {
+		if(workflowProcess == null)
+			return null;
+	
+        ProcessBusinessData processBusinessData = currentProcessBusinessDataByKey.get(workflowProcess);
+        if (processBusinessData == null) {
+			if(getAllBusinessDataSamples(workflowProcess.getBusinessDataClass()).size() > 0)
+                processBusinessData = getAllBusinessDataSamplesMap(workflowProcess.getBusinessDataClass()).values().iterator().next().clone();
+			else
+				processBusinessData = createNewProcessBusinessData(workflowProcess);
+            
+			currentProcessBusinessDataByKey.put(workflowProcess, processBusinessData);
+        }
+		
+        return processBusinessData;
+    }
+	
+    public void setCurrentProcessBusinessData(WorkflowProcess workflowProcess, ProcessBusinessData processBusinessData) {
+        currentProcessBusinessDataByKey.put(workflowProcess, processBusinessData);
+		
+		//Set also parent processes as current process business data
+		if(processBusinessData != null && workflowProcess.getParentProcess() != null)
+		{
+			ProcessBusinessData parent = processBusinessData.getParentBusinessData(workflowProcess.getParentProcess());
+			setCurrentProcessBusinessData(workflowProcess.getParentProcess(), parent);
+		}
+    }
+
+    public void setCurrentProcessBusinessData(WorkflowProcess workflowProcess, int processId) {
+		ProcessBusinessData processBusinessData = getBusinessDataSample(workflowProcess.getBusinessDataClass(), processId);
+	
+        if (processBusinessData == null) {
+            setCurrentProcessBusinessData(workflowProcess, null);
+        } else {
+            setCurrentProcessBusinessData(workflowProcess, processBusinessData);
+        }
+    }
+	
+	public ProcessBusinessData createNewProcessBusinessData(WorkflowProcess workflowProcess) {
+		ProcessBusinessData newProcessBusinessData = workflowProcess.getBusinessDataClass().createNewProcessBusinessData(this);
+		newProcessBusinessData.setStatus(workflowProcess.getDefaultStatus());
+		
+		if(workflowProcess.getParentProcess() != null)
+		{
+			if(currentProcessBusinessDataByKey.get(workflowProcess.getParentProcess()) != null)
+				newProcessBusinessData.setParentProcessBusinessData(workflowProcess.getParentProcess(), currentProcessBusinessDataByKey.get(workflowProcess.getParentProcess()));
+			else
+			{
+				Vector<? extends ProcessBusinessData> parentList = getAllBusinessDataSamples(workflowProcess.getParentProcess().getBusinessDataClass());
+				if(parentList.size() > 0)
+					newProcessBusinessData.setParentProcessBusinessData(workflowProcess.getParentProcess(), parentList.lastElement());
+			}
+			
+		}
+			
+		return newProcessBusinessData;
+	}
+	
+	public void saveCurrentProcessBusinessData(WorkflowProcess workflowProcess)
+	{
+		ProcessBusinessData processBusinessData = currentProcessBusinessDataByKey.get(workflowProcess);
+		if(processBusinessData != null)
+			saveProcessBusinessData(workflowProcess.getBusinessDataClass(), processBusinessData);
+	}
+	
+	public void saveProcessBusinessData(WorkflowBusinessData workflowBusinessData, ProcessBusinessData processBusinessData) {
+    	saveProcessBusinessData(workflowBusinessData, processBusinessData, true, true);
+    }
+    
+    public void saveProcessBusinessData(WorkflowBusinessData workflowBusinessData, ProcessBusinessData processBusinessData, boolean saveChildren, boolean saveParent) {
+        Integer id = processBusinessData.getId();
+        LinkedHashMap<Integer, ProcessBusinessData> samples = getAllBusinessDataSamplesMap(workflowBusinessData);
+        if (id == null) { //New instance
+            processBusinessData.setId(getNextIdForBusinessData(workflowBusinessData));
+        }
+		else
+		{ //Existing instance -> update last update date
+			processBusinessData.setLastUpdateDate(new Date());
+		}
+
+        //Save also fetched parent / children process business data
+        Set<String> keysToRemove = new HashSet<String>();
+        Enumeration<?> en = processBusinessData.keyEnumerator();
+        while (en.hasMoreElements()) {
+            String key = (String) en.nextElement();
+            if (processBusinessData.objectForKey(key) instanceof ProcessBusinessData && WorkflowBusinessData.getWorkflowBusinessData(key) != null) {
+                ProcessBusinessData parent = (ProcessBusinessData) processBusinessData.objectForKey(key);
+                if(saveParent)
+                	saveProcessBusinessData(WorkflowBusinessData.getWorkflowBusinessData(key), parent, false, true);
+                processBusinessData.setObjectForKey(parent.getId(), key + "Id");
+                keysToRemove.add(key);
+            }
+            if (processBusinessData.objectForKey(key) instanceof Vector<?>) {
+            	
+            	Vector<?> list = (Vector<?>) processBusinessData.objectForKey(key);
+                
+                for(Object possibleChild : list)
+                {
+                	if(possibleChild instanceof ProcessBusinessData)
+                	{
+                		keysToRemove.add(key);
+                    	if(saveChildren)
+                    		saveProcessBusinessData(WorkflowBusinessData.getWorkflowBusinessData(key), (ProcessBusinessData) possibleChild, true, false);
+                	}
+                }
+            }
+        }
+        
+        for(String key : keysToRemove)
+        	processBusinessData.removeObjectForKey(key);
+
+        samples.put(processBusinessData.getId(), processBusinessData.clone());
+    }
+	
+	private int getNextIdForBusinessData(WorkflowBusinessData workflowBusinessData)
+	{
+		int newId = 1;
+		for(Integer businessDataId : getAllBusinessDataSamplesMap(workflowBusinessData).keySet())
+		{
+			if(businessDataId != null && businessDataId >= newId)
+				newId = businessDataId+1;
+		}
+		
+		return newId;
+	}	
+	
+	public void deleteCurrentProcessBusinessData(WorkflowProcess workflowProcess)
+	{
+		ProcessBusinessData processBusinessData = currentProcessBusinessDataByKey.get(workflowProcess);
+		if(processBusinessData != null)
+			deleteProcessBusinessData(workflowProcess.getBusinessDataClass(), processBusinessData);
+	}
+	
+	
+	public void deleteProcessBusinessData(WorkflowBusinessData workflowBusinessData, ProcessBusinessData processBusinessData) {
+		if(processBusinessData != null)
+		{
+    		if(processBusinessData.getId() != null)
+    			deleteProcessBusinessData(workflowBusinessData, processBusinessData.getId());
+    		else
+			{
+    			for(WorkflowProcess workflowProcess : workflowBusinessData.getAllPossibleWorkflowProcess())
+        		{
+        			if(currentProcessBusinessDataByKey.get(workflowProcess) == processBusinessData)
+        				setCurrentProcessBusinessData(workflowProcess, null);
+        		}
+			}
+		}
+	}
+	
+	public void deleteProcessBusinessData(WorkflowBusinessData workflowBusinessData, int id) {
+	
+		//Delete associated children
+		for(WorkflowBusinessData childWorkflowBusinessData : workflowBusinessData.getAllPossibleChildren())
+		{
+			for(ProcessBusinessData businessData : getAllBusinessDataSamples(childWorkflowBusinessData))
+			{
+				for(WorkflowProcess workflowProcess : childWorkflowBusinessData.getAllPossibleWorkflowProcess())
+				{
+					ProcessBusinessData parent = businessData.getParentBusinessData(workflowProcess.getParentProcess());
+					if(parent != null && parent.getId() == id)
+					{
+						deleteProcessBusinessData(childWorkflowBusinessData, businessData.getId());
+						break;
+					}
+				}
+			}
+		}
+		
+		getAllBusinessDataSamplesMap(workflowBusinessData).remove(id);
+	
+		for(WorkflowProcess workflowProcess : workflowBusinessData.getAllPossibleWorkflowProcess())
+		{
+			if(currentProcessBusinessDataByKey.get(workflowProcess) != null && currentProcessBusinessDataByKey.get(workflowProcess).getId() != null && currentProcessBusinessDataByKey.get(workflowProcess).getId() == id)
+				setCurrentProcessBusinessData(workflowProcess, null);
+		}
+	}
+	
+	public void setCurrentProcessBusinessDataStatus(WorkflowProcess workflowProcess, String status) {
+		//Change current process businessData status AND save only the status in samples
+		ProcessBusinessData processBusinessData = currentProcessBusinessDataByKey.get(workflowProcess);
+		if(processBusinessData != null)
+		{
+    		processBusinessData.setStatus(status);
+    		
+			if(processBusinessData.getId() != null)
+			{
+    			ProcessBusinessData savedBusinessData = getAllBusinessDataSamplesMap(workflowProcess.getBusinessDataClass()).get(processBusinessData.getId());
+        		savedBusinessData.setStatus(status);
+			}
+		}
+	}
+	
+	public ProcessBusinessData getBusinessDataSample(WorkflowBusinessData workflowBusinessData, int id)
+	{
+		LinkedHashMap<Integer, ProcessBusinessData> map = getAllBusinessDataSamplesMap(workflowBusinessData);
+		if(map.containsKey(id))
+			return map.get(id).clone();
+		return null;
+	}
+	
+	public Vector<? extends ProcessBusinessData> getAllBusinessDataSamples(WorkflowBusinessData workflowBusinessData) {
+		
+		LinkedHashMap<Integer, ProcessBusinessData> map = getAllBusinessDataSamplesMap(workflowBusinessData);
+		Vector<ProcessBusinessData> results = new Vector<ProcessBusinessData>();
+		
+		for(ProcessBusinessData businessData : map.values())
+			results.add(businessData.clone());
+
+        return results;
+    }
+	
+	private LinkedHashMap<Integer, ProcessBusinessData> getAllBusinessDataSamplesMap(WorkflowBusinessData workflowBusinessData) {
+        if (businessDataSamples.get(workflowBusinessData) == null)
+            businessDataSamples.put(workflowBusinessData, createBusinessDataSamplesMap(loadProcessInstanceSamples(workflowBusinessData)));
+
+        return businessDataSamples.get(workflowBusinessData);
+    }
+	
+	public void loadCustomBusinessDataSamplesArray(WorkflowBusinessData workflowBusinessData, List<? extends ProcessBusinessData> sampleArray) {
+    	businessDataSamples.put(workflowBusinessData, createBusinessDataSamplesMap(sampleArray));
+    }
+	
+	private LinkedHashMap<Integer, ProcessBusinessData> createBusinessDataSamplesMap(List<? extends ProcessBusinessData> list)
+	{
+		LinkedHashMap<Integer, ProcessBusinessData> map = new LinkedHashMap<Integer, ProcessBusinessData>();
+    	for(ProcessBusinessData businessData : list)
+    		map.put(businessData.getId(), businessData);
+			
+		return map;
+	}
+	
+	public String getPrototypeSamplesFilePath(WorkflowProcess.WorkflowBusinessData workflowBusinessData) {
+    	return getPrototypeSamplesFilePath(null, workflowBusinessData);
+    }
+    
+    public String getPrototypeSamplesFilePath(String folderPath, WorkflowProcess.WorkflowBusinessData workflowBusinessData) {
+    	return (folderPath == null ? prototypeSamplesFolderPath : folderPath) + "/" + workflowBusinessData.getBusinessDataClassKey() + ".csv";
+    }
+	
+	/****************************************/
+    /****************************************/
+    /****************************************/
+	
+	public Vector<? extends ProcessBusinessData> loadProcessInstanceSamples(WorkflowProcess.WorkflowBusinessData workflowBusinessData) {
+        return loadProcessInstanceSamples(workflowBusinessData, false);
+    }
+
+    public Vector<? extends ProcessBusinessData> loadProcessInstanceSamples(WorkflowProcess.WorkflowBusinessData workflowBusinessData, boolean useOnlyDefault) {
+        return loadProcessInstanceSamples(workflowBusinessData, useOnlyDefault, null);
+    }
+
+    public Vector<? extends ProcessBusinessData> loadProcessInstanceSamples(WorkflowProcess.WorkflowBusinessData workflowBusinessData, boolean useOnlyDefault, String folderPath) {
+        Vector<ProcessBusinessData> result = new Vector<ProcessBusinessData>();
+
+        byte[] processCsvBytes = null;
+        if (!useOnlyDefault) {
+            File processSampleFile = new File(getPrototypeSamplesFilePath(folderPath, workflowBusinessData));
+            if (processSampleFile.exists()) {
+                try {
+                    FileInputStream fileInputStream = new FileInputStream(processSampleFile);
+                    try {
+                        ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+                        byte[] buffer = new byte[1024];
+                        int read;
+                        while ((read = fileInputStream.read(buffer)) != -1)
+                            byteArray.write(buffer, 0, read);
+                        byteArray.close();
+                        processCsvBytes = byteArray.toByteArray();
+                    } finally {
+                        fileInputStream.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        if (processCsvBytes == null) {
+            processCsvBytes = WOApplication.application().resourceManager()
+                                           .bytesForResourceNamed("processsamples/" + workflowBusinessData.getBusinessDataClassKey() + ".csv", null, null);
+        }
+
+        if (processCsvBytes != null) {
+            try {
+                String processCsvString = new String(processCsvBytes, "Windows-1252");
+                List<List<String>> csvResult = parseCsv(processCsvString);
+
+                for (int i = 1; i < csvResult.size(); i++) //Skip 1st row (keys)
+                 {
+                	ProcessBusinessData processBusinessData = workflowBusinessData.createNewProcessBusinessData(this);
+                    for (int j = 0; (j < csvResult.get(i).size()) && (j < csvResult.get(0).size()); j++) {
+                        String key = csvResult.get(0).get(j);
+                        String valueString = csvResult.get(i).get(j);
+
+                        Class<?extends Object> valueType;
+                        if (ProcessBusinessData.PROCESSINSTANCE_ID_KEY.equals(key)) {
+                            valueType = java.lang.Integer.class;
+                        } else {
+                            valueType = workflowBusinessData.getProcessBusinessDataKeyTypes().get(key);
+                        }
+
+                        if (valueType != null) {
+                            Object value = null;
+
+                            try {
+                                if (valueString.length() == 0) {
+                                    value = null;
+                                } else if (valueType == java.lang.Long.class) {
+                                    value = java.lang.Long.parseLong(valueString);
+                                } else if (valueType == java.lang.Float.class) {
+                                    value = java.lang.Float.parseFloat(valueString);
+                                } else if (valueType == java.lang.Integer.class) {
+                                    value = java.lang.Integer.parseInt(valueString);
+                                } else if (valueType == java.lang.Boolean.class) {
+                                    value = java.lang.Boolean.parseBoolean(valueString);
+                                } else if (valueType == java.util.Date.class) {
+                                    value = dateFormatter.parse(valueString);
+                                } else {
+                                    value = valueString;
+                                }
+
+                                if (value != null) {
+                                	processBusinessData.setObjectForKey(value, key);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                    if (processBusinessData.getId() == null) {
+                    	processBusinessData.setId(i - 1);
+                    }
+
+                    result.add(processBusinessData);
+                }
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
+    }
+	
+	public static String escapeStringForCsv(String s) {
+    	if (s==null)
+    		return null;
+		return s.replaceAll("\"", "\"\"");
+	}
+    
+    public static String getCsvLine(List<String> list)
+    {
+    	List<List<String>> tmp = new ArrayList<List<String>>();
+    	tmp.add(list);
+    	return getCsv(tmp);
+    }
+    
+    public static String getCsv(List<List<String>> list)
+    {
+		StringBuilder sb = new StringBuilder();
+    	
+    	boolean isFirstLine = true;
+    	for(List<String> line : list)
+    	{
+    		if(!isFirstLine)
+    			sb.append("\n");
+    		
+    		boolean isFirstValue = true;
+    		for(String value : line)
+    		{
+    			if(!isFirstValue)
+    				sb.append(";");
+    			if(value != null && value.length() > 0)
+    				sb.append("\"" + escapeStringForCsv(value) + "\"");
+    			isFirstValue = false;
+    		}
+    		
+    		isFirstLine = false;
+    	}
+    	
+    	return sb.toString();
+    }
+	
+	public static List<String> parseCsvLine(String csvLine) {
+        List<List<String>> result = parseCsv(csvLine);
+        
+        if(result.size() > 0)
+        	return result.get(0);
+        
+        return new ArrayList<String>();
+    }
+
+    public static List<List<String>> parseCsv(String csvString) {
+    	csvString = csvString != null ? csvString.trim() : null;
+    	List<List<String>> result = new ArrayList<List<String>>();
+        
+        if(csvString == null || csvString.length() == 0)
+        	return result;
+        
+        char separator;
+        if (csvString.indexOf(';')==-1 && csvString.indexOf(',')>-1)
+        	separator = ',';
+        else
+        	separator = ';';
+
+        List<String> line = new ArrayList<String>();
+        StringBuilder currentValue = new StringBuilder();
+        boolean isInsideQuote = false;
+        boolean wasInsideQuote = false;
+        for (int i = 0; i < csvString.length(); i++) {
+            if (!wasInsideQuote && csvString.charAt(i) == '"' && (isInsideQuote || currentValue.toString().trim().length() == 0)) {
+                if (isInsideQuote && ((i + 1) < csvString.length()) && (csvString.charAt(i + 1) == '"')) { //Double quote, escape
+                    i++;
+                } else {
+                	if(isInsideQuote)
+                		wasInsideQuote = true;
+                	else
+                		currentValue = new StringBuilder();
+                    isInsideQuote = !isInsideQuote;
+                    continue;
+                }
+            } else if ((csvString.charAt(i) == separator || csvString.charAt(i) == '\n') && !isInsideQuote) {
+            	line.add(currentValue.toString());
+                currentValue = new StringBuilder();
+                wasInsideQuote = false;
+                if (csvString.charAt(i) == '\n')
+                {
+                	result.add(line);
+                	line = new ArrayList<String>();
+                }
+                continue;
+            }
+
+            if(!wasInsideQuote && csvString.charAt(i) != '\r')
+            	currentValue.append(csvString.charAt(i));
+        }
+
+        if (result.size() > 0 || currentValue.length() > 0 || line.size() > 0) {
+        	line.add(currentValue.toString());
+        	result.add(line);
+        }
+
+        return result;
+    }
+}

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<groupId>org.openflexo</groupId>
+		<artifactId>flexodesktop</artifactId>
+		<version>1.4.4-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>externalmodels</artifactId>
+	<name>External Models</name>
+	<packaging>pom</packaging>
+	<modules>
+		<module>flexobpel</module>
+		<module>flexocrazybean</module>
+		<module>flexodocxparser</module>
+		<module>flexoexecutionmodel</module>
+		<module>flexojavacvs</module>
+		<module>flexojavaparser</module>
+		<module>flexoprjsharing</module>
+		<module>flexowarbuilder</module>
+		<module>flexowsdl</module>
+		<module>flexoxmldiff</module>
+	</modules>
+</project>
+

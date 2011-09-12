@@ -1,0 +1,294 @@
+		<w:tbl>
+			<w:tblPr>
+				<w:tblStyle w:val="MediumList2-Accent1" />
+				<w:tblW w:w="4335" w:type="pct" />
+				<w:jc w:val="center" />
+				<w:tblLook w:val="04A0" />
+			</w:tblPr>
+			<w:tblGrid>
+				<w:gridCol w:w="1511" />
+				<w:gridCol w:w="833" />
+				<w:gridCol w:w="1512" />
+				<w:gridCol w:w="1726" />
+				<w:gridCol w:w="1801" />
+			</w:tblGrid>
+			<w:tr w:rsidR="00C6320A">
+				<w:trPr>
+					<w:cnfStyle w:val="100000000000" />
+					<w:jc w:val="center" />
+				</w:trPr>
+				<w:tc>
+					<w:tcPr>
+						<w:cnfStyle w:val="001000000100" />
+						<w:tcW w:w="1023" w:type="pct" />
+						<w:noWrap />
+					</w:tcPr>
+					<w:p w:rsidR="00C6320A" w:rsidRDefault="00C6320A" w:rsidP="00F6777C">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+								<w:sz w:val="22" />
+								<w:szCs w:val="22" />
+							</w:rPr>
+						</w:pPr>
+						<w:r>
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+								<w:sz w:val="22" />
+								<w:szCs w:val="22" />
+							</w:rPr>
+							<w:t>Fields</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="564" w:type="pct" />
+					</w:tcPr>
+					<w:p w:rsidR="00C6320A" w:rsidRDefault="00C6320A" w:rsidP="00F6777C">
+						<w:pPr>
+							<w:jc w:val="center" />
+							<w:cnfStyle w:val="100000000000" />
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+								<w:sz w:val="22" />
+								<w:szCs w:val="22" />
+							</w:rPr>
+						</w:pPr>
+						<w:r>
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+								<w:sz w:val="22" />
+								<w:szCs w:val="22" />
+							</w:rPr>
+							<w:t>ID</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="1024" w:type="pct" />
+					</w:tcPr>
+					<w:p w:rsidR="00C6320A" w:rsidRDefault="00C6320A" w:rsidP="00F6777C">
+						<w:pPr>
+							<w:jc w:val="center" />
+							<w:cnfStyle w:val="100000000000" />
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+								<w:sz w:val="22" />
+								<w:szCs w:val="22" />
+							</w:rPr>
+						</w:pPr>
+						<w:r>
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+								<w:sz w:val="22" />
+								<w:szCs w:val="22" />
+							</w:rPr>
+							<w:t>Type</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="1169" w:type="pct" />
+					</w:tcPr>
+					<w:p w:rsidR="00C6320A" w:rsidRDefault="00C6320A" w:rsidP="00F6777C">
+						<w:pPr>
+							<w:jc w:val="center" />
+							<w:cnfStyle w:val="100000000000" />
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+								<w:sz w:val="22" />
+								<w:szCs w:val="22" />
+							</w:rPr>
+						</w:pPr>
+						<w:r>
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+								<w:sz w:val="22" />
+								<w:szCs w:val="22" />
+							</w:rPr>
+							<w:t>Data</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="1221" w:type="pct" />
+					</w:tcPr>
+					<w:p w:rsidR="00C6320A" w:rsidRDefault="00C6320A" w:rsidP="00F6777C">
+						<w:pPr>
+							<w:jc w:val="center" />
+							<w:cnfStyle w:val="100000000000" />
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+								<w:sz w:val="22" />
+								<w:szCs w:val="22" />
+							</w:rPr>
+						</w:pPr>
+						<w:r>
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+								<w:sz w:val="22" />
+								<w:szCs w:val="22" />
+							</w:rPr>
+							<w:t>Validation &amp; rules</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+			</w:tr>
+			
+#foreach($field in $fieldList)
+	#if(!$button.getDontGenerate())
+			<w:tr w:rsidR="00C6320A">
+				<w:trPr>
+					<w:cnfStyle w:val="000000100000" />
+					<w:jc w:val="center" />
+				</w:trPr>
+				<w:tc>
+					<w:tcPr>
+						<w:cnfStyle w:val="001000000000" />
+						<w:tcW w:w="1023" w:type="pct" />
+						<w:noWrap />
+					</w:tcPr>
+					<w:p w:rsidR="00C6320A" w:rsidRDefault="00C6320A" w:rsidP="00F6777C">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+							</w:rPr>
+						</w:pPr>
+						<w:r>
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+							</w:rPr>
+							<w:t>${field.getLabel()}</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="564" w:type="pct" />
+					</w:tcPr>
+					<w:p w:rsidR="00C6320A" w:rsidRDefault="00C6320A" w:rsidP="00F6777C">
+						<w:pPr>
+							<w:jc w:val="center" />
+							<w:cnfStyle w:val="000000100000" />
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+							</w:rPr>
+						</w:pPr>
+						<w:r>
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+							</w:rPr>
+							<w:t>${field.getFlexoID()}</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="1024" w:type="pct" />
+					</w:tcPr>
+					<w:p w:rsidR="00C6320A" w:rsidRDefault="00C6320A" w:rsidP="00F6777C">
+						<w:pPr>
+							<w:jc w:val="center" />
+							<w:cnfStyle w:val="000000100000" />
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+							</w:rPr>
+						</w:pPr>
+						<w:proofErr w:type="gramStart" />
+						<w:r>
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+							</w:rPr>
+							<w:t>${field.getFieldType()}</w:t>
+						</w:r>
+						<w:proofErr w:type="gramEnd" />
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="1169" w:type="pct" />
+					</w:tcPr>
+					<w:p w:rsidR="00C6320A" w:rsidRDefault="00C6320A" w:rsidP="00F6777C">
+						<w:pPr>
+							<w:jc w:val="center" />
+							<w:cnfStyle w:val="000000100000" />
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+							</w:rPr>
+						</w:pPr>
+						<w:r>
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+							</w:rPr>
+							<w:t>-</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="1221" w:type="pct" />
+					</w:tcPr>
+					<w:p w:rsidR="00C6320A" w:rsidRDefault="00C6320A" w:rsidP="00F6777C">
+						<w:pPr>
+							<w:jc w:val="center" />
+							<w:cnfStyle w:val="000000100000" />
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+							</w:rPr>
+						</w:pPr>
+						<w:r>
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+							</w:rPr>
+							<w:t>#if(${field.getIsMandatory()})Mandatory#else - #end</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+			</w:tr>
+		#end ##$!field.getDontGenerate
+	#end ##foreach field in fieldList
+		</w:tbl>

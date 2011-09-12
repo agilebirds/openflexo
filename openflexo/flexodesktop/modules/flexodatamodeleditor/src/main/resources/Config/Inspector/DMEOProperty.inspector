@@ -1,0 +1,20 @@
+<inspector title = "EOProperty" inheritsfrom="DMProperty.inspector">
+	<tab name="Basic" index="0">
+	</tab>
+	
+	<tab name="Advanced" index="1">
+		<property name="isClassProperty" label="is_class_property" widget="CHECKBOX" constraint="2" help="true if this is a class property"/>
+		<hidden name="isStatic"/>
+	</tab>
+
+	
+	<tab name="Code" index="3">
+		<property name="isCodeGenerationAvailable" label="" widget="READ_ONLY_CHECKBOX" constraint="0" depends="isCodeGenerationAvailable" conditional="true=false" >
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property> <!-- never displayed, just for conditionals -->
+		<property name="activateEOCodeGeneration" label="activate_eo_code_generation" widget="BUTTON" constraint="2" depends="isCodeGenerationApplicable,isCodeGenerationAvailable" conditional="isCodeGenerationApplicable=false AND isCodeGenerationAvailable=true">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+	</tab>
+
+</inspector>

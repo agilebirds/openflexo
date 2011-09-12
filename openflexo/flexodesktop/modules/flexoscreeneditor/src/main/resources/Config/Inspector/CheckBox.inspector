@@ -1,0 +1,32 @@
+<inspector title = "CheckBox" inheritsfrom ="ControlWidget.inspector">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+		<property name="value" label="default_value" widget="CHECKBOX" constraint="0"/>
+		<hidden name="exampleValueIsDefaultValue"/>
+		<property name="submitForm" label="reload_on_change" widget="CHECKBOX" constraint="4" help="true if the page has to be reloaded when we change the value."/>
+		<property name="disabled" label="disabled" widget="CHECKBOX" constraint="3"/>
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+		
+	</tab>
+
+	<tab name="Doc" index="2" layout="DEFAULT">
+		<property name="funcName" label="function_name" widget="TEXT_FIELD" constraint="2">		
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="behavior" label="behavior" widget="TEXT_AREA" constraint="4">
+			<param name="height" value="64"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+	</tab>
+
+	<tab name="Data" index="3" layout="DEFAULT">
+		<property name="bindingChecked" label="binding_checked" widget="CUSTOM" constraint="3">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="bindingCheckedDefinition"/>			
+			<param name="creates_entry" value="createsBindingVariable"/>			
+		</property>
+	</tab>
+
+</inspector>

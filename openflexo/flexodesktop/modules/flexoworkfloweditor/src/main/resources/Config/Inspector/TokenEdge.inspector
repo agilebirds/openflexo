@@ -1,0 +1,12 @@
+<inspector title = "Token edge" inheritsfrom ="PostCondition.inspector" inspectedClassName="org.openflexo.foundation.wkf.edge.TokenEdge">
+
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="tokenIncrem" label="increment" widget="INTEGER" constraint="2">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+	</tab>
+	
+</inspector>

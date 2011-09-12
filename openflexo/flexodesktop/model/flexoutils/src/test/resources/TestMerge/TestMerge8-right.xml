@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlexoProcess id="FLX_1056" name="TestFPS7398" operationGenSubPath="/src" pageGenSubPath="/src" popupGenSubPath="/src" superClassGenSubPath="/src" tabGenSubPath="/src" isWebService="false" docIndex="1" userID="FLX" flexoID="1056" dontEscapeLatex="false" posiX="0" posiY="0" width="0" height="0" textColor="0,0,0" backColor="255,255,255" dontGenerate="false">
+  No description
+  <RoleList id="FLX_1057" userID="FLX" flexoID="1057" dontEscapeLatex="false" dontGenerate="false" />
+  <DeadLineList id="FLX_1060" userID="FLX" flexoID="1060" dontEscapeLatex="false" dontGenerate="false" />
+  <StatusList id="FLX_1058" DefaultStatus="TestFPS7398.STATUS.Default" userID="FLX" flexoID="1058" dontEscapeLatex="false" dontGenerate="false">
+    <Status id="FLX_1059" userID="FLX" flexoID="1059" dontEscapeLatex="false" dontGenerate="false">
+      <label>Default</label>
+      <description>No description</description>
+    </Status>
+  </StatusList>
+  <ActivityPetriGraph id="FLX_1061" isVisible="true" posiX="0" posiY="0" width="0" height="0" textColor="0,0,0" backColor="255,255,255" userID="FLX" flexoID="1061" dontEscapeLatex="false" dontGenerate="false">
+    <ActivityNode id="FLX_1062" nodeType="BEGIN" isWaiting="false" isSelfActivated="false" posiX="30" posiY="200" width="60" height="65" textColor="0,0,0" backColor="255,255,255" userID="FLX" flexoID="1062" dontEscapeLatex="false" dontGenerate="true" nodeName="BEGIN" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" roleTextColor="128,128,128" docIndex="1">
+      <NodeProperties />
+    </ActivityNode>
+    <ActivityNode id="FLX_1064" nodeType="END" isWaiting="false" isSelfActivated="false" posiX="500" posiY="200" width="60" height="65" textColor="0,0,0" backColor="255,255,255" userID="FLX" flexoID="1064" dontEscapeLatex="false" dontGenerate="true" nodeName="END" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" roleTextColor="128,128,128" docIndex="2">
+      <NodeProperties />
+    </ActivityNode>
+    <SubProcessNode id="FLX_1094" subProcessName="TestSubProcess" type="FORK" nodeType="NORMAL" isWaiting="false" isSelfActivated="false" posiX="200" posiY="300" width="168" height="99" textColor="0,0,0" backColor="255,255,255" userID="FLX" flexoID="1094" dontEscapeLatex="false" dontGenerate="false" nodeName="TestSubProcess" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" roleTextColor="128,128,128" docIndex="3">
+      <PortMapRegistery id="FLX_1095" orientation="0" posiX="79" posiY="0" width="0" height="0" textColor="0,0,0" backColor="255,204,102" userID="FLX" flexoID="1095" dontEscapeLatex="false" dontGenerate="false" />
+      <NodeProperties>
+        <reinitialisation className="java.lang.Boolean">false</reinitialisation>
+      </NodeProperties>
+      <OperationPetriGraph id="FLX_1097" isVisible="true" posiX="20" posiY="235" width="270" height="177" textColor="0,0,0" backColor="255,255,255" userID="FLX" flexoID="1097" dontEscapeLatex="false" dontGenerate="false">
+        <OperationNode id="FLX_1098" isSynchronized="false" componentTextColor="128,128,128" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,16:43:54 06/02/2007 310" docIndex="1" nodeType="BEGIN" isWaiting="false" isSelfActivated="false" posiX="10" posiY="10" width="60" height="65" textColor="0,0,0" backColor="255,255,255" userID="FLX" flexoID="1098" dontEscapeLatex="false" dontGenerate="true" nodeName="BEGIN" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0">
+          <NodeProperties />
+        </OperationNode>
+        <OperationNode id="FLX_1099" isSynchronized="false" componentTextColor="128,128,128" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,16:43:54 06/02/2007 310" docIndex="2" nodeType="END" isWaiting="false" isSelfActivated="false" posiX="200" posiY="20" width="60" height="65" textColor="0,0,0" backColor="255,255,255" userID="FLX" flexoID="1099" dontEscapeLatex="false" dontGenerate="true" nodeName="END" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0">
+          <NodeProperties />
+        </OperationNode>
+        <OperationNode id="FLX_1101" isSynchronized="false" componentTextColor="128,128,128" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,16:43:54 06/02/2007 461" docIndex="3" nodeType="NORMAL" isWaiting="false" isSelfActivated="false" posiX="100" posiY="100" width="99" height="67" textColor="0,0,0" backColor="255,255,255" userID="FLX" flexoID="1101" dontEscapeLatex="false" dontGenerate="false" nodeName="TestOperation1" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0">
+          <OperationComponentInstance id="FLX_1109" componentName="Operation1" userID="FLX" flexoID="1109" dontEscapeLatex="false" />
+          <NodeProperties />
+        </OperationNode>
+      </OperationPetriGraph>
+    </SubProcessNode>
+    <SubProcessNode id="FLX_2940" subProcessName="TestSubProcess2" type="FORK" nodeType="NORMAL" isWaiting="false" isSelfActivated="false" posiX="300" posiY="150" width="168" height="99" textColor="0,0,0" backColor="255,255,255" userID="FLX" flexoID="2940" dontEscapeLatex="false" dontGenerate="false" nodeName="TestSubProcess2" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" roleTextColor="128,128,128" docIndex="4">
+      <PortMapRegistery id="FLX_2941" orientation="0" posiX="79" posiY="0" width="0" height="0" textColor="0,0,0" backColor="255,204,102" userID="FLX" flexoID="2941" dontEscapeLatex="false" dontGenerate="false" />
+      <NodeProperties>
+        <reinitialisation className="java.lang.Boolean">false</reinitialisation>
+      </NodeProperties>
+    </SubProcessNode>
+    <SubProcessNode id="FLX_3148" subProcessName="TestSubProcess3" type="FORK" nodeType="NORMAL" isWaiting="false" isSelfActivated="false" posiX="300" posiY="150" width="168" height="99" textColor="0,0,0" backColor="255,255,255" userID="FLX" flexoID="3148" dontEscapeLatex="false" dontGenerate="false" nodeName="TestSubProcess3" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" roleTextColor="128,128,128" docIndex="5">
+      <PortMapRegistery id="FLX_3149" orientation="0" posiX="79" posiY="0" width="0" height="0" textColor="0,0,0" backColor="255,204,102" userID="FLX" flexoID="3149" dontEscapeLatex="false" dontGenerate="false" />
+      <NodeProperties>
+        <reinitialisation className="java.lang.Boolean">false</reinitialisation>
+      </NodeProperties>
+    </SubProcessNode>
+  </ActivityPetriGraph>
+  <ProcessProperties />
+  <PortRegistery id="FLX_1063" isVisible="false" posiX="80" posiY="20" width="250" height="60" textColor="0,0,0" backColor="255,255,255" userID="FLX" flexoID="1063" dontEscapeLatex="false" dontGenerate="false" />
+</FlexoProcess>

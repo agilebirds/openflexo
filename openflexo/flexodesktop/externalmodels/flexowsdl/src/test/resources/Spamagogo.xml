@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<wsdl:definitions targetNamespace="http://soap.spamagogo.com:8080/axis/services/Spamagogo" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://soap.spamagogo.com:8080/axis/services/Spamagogo" xmlns:intf="http://soap.spamagogo.com:8080/axis/services/Spamagogo" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><wsdl:types><schema targetNamespace="http://soap.spamagogo.com:8080/axis/services/Spamagogo" xmlns="http://www.w3.org/2001/XMLSchema"><import namespace="http://schemas.xmlsoap.org/soap/encoding/"/><complexType name="ArrayOf_xsd_int"><complexContent><restriction base="soapenc:Array"><attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:int[]"/></restriction></complexContent></complexType><complexType name="ArrayOf_xsd_anyType"><complexContent><restriction base="soapenc:Array"><attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:anyType[]"/></restriction></complexContent></complexType><complexType name="ArrayOf_xsd_string"><complexContent><restriction base="soapenc:Array"><attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:string[]"/></restriction></complexContent></complexType><complexType name="ArrayOfArrayOf_xsd_string"><complexContent><restriction base="soapenc:Array"><attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:string[][]"/></restriction></complexContent></complexType><complexType name="ArrayOfArrayOf_xsd_anyType"><complexContent><restriction base="soapenc:Array"><attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:anyType[][]"/></restriction></complexContent></complexType></schema></wsdl:types>
+  <wsdl:message name="giveFeedbackIdRequest">
+    <wsdl:part name="in0" type="xsd:string"/>
+    <wsdl:part name="in1" type="xsd:string"/>
+    <wsdl:part name="in2" type="xsd:int"/>
+    <wsdl:part name="in3" type="xsd:int"/>
+  </wsdl:message>
+  <wsdl:message name="giveMultipleFeedbackIdRequest">
+    <wsdl:part name="in0" type="xsd:string"/>
+    <wsdl:part name="in1" type="xsd:string"/>
+    <wsdl:part name="in2" type="impl:ArrayOf_xsd_int"/>
+    <wsdl:part name="in3" type="impl:ArrayOf_xsd_int"/>
+  </wsdl:message>
+  <wsdl:message name="createUserHashedResponse">
+    <wsdl:part name="createUserHashedReturn" type="xsd:int"/>
+  </wsdl:message>
+  <wsdl:message name="checkSpamOutlookRequest">
+    <wsdl:part name="in0" type="xsd:string"/>
+    <wsdl:part name="in1" type="xsd:string"/>
+    <wsdl:part name="in2" type="xsd:string"/>
+    <wsdl:part name="in3" type="xsd:string"/>
+    <wsdl:part name="in4" type="xsd:string"/>
+    <wsdl:part name="in5" type="xsd:string"/>
+  </wsdl:message>
+  <wsdl:message name="getDisplayMotdRequest">
+  </wsdl:message>
+  <wsdl:message name="setVersionRequest">
+    <wsdl:part name="in0" type="xsd:string"/>
+    <wsdl:part name="in1" type="xsd:string"/>
+    <wsdl:part name="in2" type="xsd:string"/>
+  </wsdl:message>
+  <wsdl:message name="setVersionResponse">
+    <wsdl:part name="setVersionReturn" type="xsd:int"/>
+  </wsdl:message>
+  <wsdl:message name="getMotdRequest">
+  </wsdl:message>
+  <wsdl:message name="spamCheckMultiRequest">
+    <wsdl:part name="in0" type="xsd:string"/>
+    <wsdl:part name="in1" type="xsd:string"/>
+    <wsdl:part name="in2" type="impl:ArrayOfArrayOf_xsd_string"/>
+    <wsdl:part name="in3" type="impl:ArrayOf_xsd_string"/>
+  </wsdl:message>
+  <wsdl:message name="getDetailedClientVersionResponse">
+    <wsdl:part name="getDetailedClientVersionReturn" type="impl:ArrayOf_xsd_int"/>
+  </wsdl:message>
+  <wsdl:message name="checkSpamForRequest">
+    <wsdl:part name="in0" type="xsd:string"/>
+    <wsdl:part name="in1" type="xsd:string"/>
+    <wsdl:part name="in2" type="impl:ArrayOf_xsd_string"/>
+    <wsdl:part name="in3" type="xsd:string"/>
+    <wsdl:part name="in4" type="xsd:string"/>
+  </wsdl:message>
+  <wsdl:message name="checkSpamOutlookMultiRequest">
+    <wsdl:part name="in0" type="xsd:string"/>
+    <wsdl:part name="in1" type="xsd:string"/>
+    <wsdl:part name="in2" type="impl:ArrayOf_xsd_string"/>
+    <wsdl:part name="in3" type="impl:ArrayOf_xsd_string"/>
+    <wsdl:part name="in4" type="impl:ArrayOf_xsd_string"/>
+    <wsdl:part name="in5" type="impl:ArrayOf_xsd_string"/>
+  </wsdl:message>
+  <wsdl:message name="giveMultipleFeedbackIdResponse">
+    <wsdl:part name="giveMultipleFeedbackIdReturn" type="impl:ArrayOf_xsd_int"/>
+  </wsdl:message>
+  <wsdl:message name="getDetailedClientVersionRequest">
+    <wsdl:part name="in0" type="xsd:string"/>
+  </wsdl:message>
+  <wsdl:message name="checkSpamRequest">
+    <wsdl:part name="in0" type="xsd:string"/>
+    <wsdl:part name="in1" type="xsd:string"/>
+    <wsdl:part name="in2" type="impl:ArrayOf_xsd_string"/>
+    <wsdl:part name="in3" type="xsd:string"/>
+  </wsdl:message>
+  <wsdl:message name="createUserRequest">
+    <wsdl:part name="in0" type="xsd:string"/>
+    <wsdl:part name="in1" type="xsd:string"/>
+    <wsdl:part name="in2" type="xsd:string"/>
+    <wsdl:part name="in3" type="xsd:boolean"/>
+  </wsdl:message>
+  <wsdl:message name="getMotdResponse">
+    <wsdl:part name="getMotdReturn" type="xsd:string"/>
+  </wsdl:message>
+  <wsdl:message name="spamCheckMultiResponse">
+    <wsdl:part name="spamCheckMultiReturn" type="impl:ArrayOfArrayOf_xsd_anyType"/>
+  </wsdl:message>
+  <wsdl:message name="echoStringRequest">
+    <wsdl:part name="in0" type="xsd:string"/>
+  </wsdl:message>
+  <wsdl:message name="giveMultipleFeedbackUidlResponse">
+    <wsdl:part name="giveMultipleFeedbackUidlReturn" type="impl:ArrayOf_xsd_int"/>
+  </wsdl:message>
+  <wsdl:message name="createUserResponse">
+    <wsdl:part name="createUserReturn" type="xsd:int"/>
+  </wsdl:message>
+  <wsdl:message name="giveFeedbackUidlRequest">
+    <wsdl:part name="in0" type="xsd:string"/>
+    <wsdl:part name="in1" type="xsd:string"/>
+    <wsdl:part name="in2" type="xsd:string"/>
+    <wsdl:part name="in3" type="xsd:int"/>
+  </wsdl:message>
+  <wsdl:message name="spamCheckResponse">
+    <wsdl:part name="spamCheckReturn" type="impl:ArrayOf_xsd_anyType"/>
+  </wsdl:message>
+  <wsdl:message name="getUpdateStringRequest">
+    <wsdl:part name="in0" type="xsd:string"/>
+  </wsdl:message>
+  <wsdl:message name="giveFeedbackIdResponse">
+    <wsdl:part name="giveFeedbackIdReturn" type="xsd:int"/>
+  </wsdl:message>
+  <wsdl:message name="getUpdateStringResponse">
+    <wsdl:part name="getUpdateStringReturn" type="xsd:string"/>
+  </wsdl:message>
+  <wsdl:message name="getDecisionResponse">
+    <wsdl:part name="getDecisionReturn" type="impl:ArrayOf_xsd_anyType"/>
+  </wsdl:message>
+  <wsdl:message name="getDisplayMotdResponse">
+    <wsdl:part name="getDisplayMotdReturn" type="xsd:string"/>
+  </wsdl:message>
+  <wsdl:message name="spamCheckRequest">
+    <wsdl:part name="in0" type="xsd:string"/>
+    <wsdl:part name="in1" type="xsd:string"/>
+    <wsdl:part name="in2" type="impl:ArrayOf_xsd_string"/>
+    <wsdl:part name="in3" type="xsd:string"/>
+  </wsdl:message>
+  <wsdl:message name="createUserHashedRequest">
+    <wsdl:part name="in0" type="xsd:string"/>
+    <wsdl:part name="in1" type="xsd:string"/>
+    <wsdl:part name="in2" type="xsd:string"/>
+  </wsdl:message>
+  <wsdl:message name="checkSpamOutlookResponse">
+    <wsdl:part name="checkSpamOutlookReturn" type="xsd:int"/>
+  </wsdl:message>
+  <wsdl:message name="checkSpamOutlookMultiResponse">
+    <wsdl:part name="checkSpamOutlookMultiReturn" type="impl:ArrayOf_xsd_int"/>
+  </wsdl:message>
+  <wsdl:message name="echoStringResponse">
+    <wsdl:part name="echoStringReturn" type="xsd:string"/>
+  </wsdl:message>
+  <wsdl:message name="getReasonForDecisionResponse">
+    <wsdl:part name="getReasonForDecisionReturn" type="impl:ArrayOf_xsd_anyType"/>
+  </wsdl:message>
+  <wsdl:message name="checkSpamForResponse">
+    <wsdl:part name="checkSpamForReturn" type="impl:ArrayOf_xsd_anyType"/>
+  </wsdl:message>
+  <wsdl:message name="getReasonForDecisionRequest">
+    <wsdl:part name="in0" type="xsd:string"/>
+    <wsdl:part name="in1" type="xsd:string"/>
+    <wsdl:part name="in2" type="xsd:string"/>
+  </wsdl:message>
+  <wsdl:message name="checkSpamResponse">
+    <wsdl:part name="checkSpamReturn" type="impl:ArrayOf_xsd_anyType"/>
+  </wsdl:message>
+  <wsdl:message name="getTimeResponse">
+    <wsdl:part name="getTimeReturn" type="xsd:long"/>
+  </wsdl:message>
+  <wsdl:message name="getTimeRequest">
+    <wsdl:part name="in0" type="xsd:string"/>
+  </wsdl:message>
+  <wsdl:message name="giveFeedbackUidlResponse">
+    <wsdl:part name="giveFeedbackUidlReturn" type="xsd:int"/>
+  </wsdl:message>
+  <wsdl:message name="giveMultipleFeedbackUidlRequest">
+    <wsdl:part name="in0" type="xsd:string"/>
+    <wsdl:part name="in1" type="xsd:string"/>
+    <wsdl:part name="in2" type="impl:ArrayOf_xsd_string"/>
+    <wsdl:part name="in3" type="impl:ArrayOf_xsd_int"/>
+  </wsdl:message>
+  <wsdl:message name="getDecisionRequest">
+    <wsdl:part name="in0" type="xsd:string"/>
+    <wsdl:part name="in1" type="xsd:string"/>
+    <wsdl:part name="in2" type="xsd:string"/>
+  </wsdl:message>
+  <wsdl:portType name="Spamagogo">
+    <wsdl:operation name="getTime" parameterOrder="in0">
+      <wsdl:input message="impl:getTimeRequest" name="getTimeRequest"/>
+      <wsdl:output message="impl:getTimeResponse" name="getTimeResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="createUser" parameterOrder="in0 in1 in2 in3">
+      <wsdl:input message="impl:createUserRequest" name="createUserRequest"/>
+      <wsdl:output message="impl:createUserResponse" name="createUserResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="setVersion" parameterOrder="in0 in1 in2">
+      <wsdl:input message="impl:setVersionRequest" name="setVersionRequest"/>
+      <wsdl:output message="impl:setVersionResponse" name="setVersionResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="echoString" parameterOrder="in0">
+      <wsdl:input message="impl:echoStringRequest" name="echoStringRequest"/>
+      <wsdl:output message="impl:echoStringResponse" name="echoStringResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="getMotd">
+      <wsdl:input message="impl:getMotdRequest" name="getMotdRequest"/>
+      <wsdl:output message="impl:getMotdResponse" name="getMotdResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="getUpdateString" parameterOrder="in0">
+      <wsdl:input message="impl:getUpdateStringRequest" name="getUpdateStringRequest"/>
+      <wsdl:output message="impl:getUpdateStringResponse" name="getUpdateStringResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="getDisplayMotd">
+      <wsdl:input message="impl:getDisplayMotdRequest" name="getDisplayMotdRequest"/>
+      <wsdl:output message="impl:getDisplayMotdResponse" name="getDisplayMotdResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="createUserHashed" parameterOrder="in0 in1 in2">
+      <wsdl:input message="impl:createUserHashedRequest" name="createUserHashedRequest"/>
+      <wsdl:output message="impl:createUserHashedResponse" name="createUserHashedResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="getDetailedClientVersion" parameterOrder="in0">
+      <wsdl:input message="impl:getDetailedClientVersionRequest" name="getDetailedClientVersionRequest"/>
+      <wsdl:output message="impl:getDetailedClientVersionResponse" name="getDetailedClientVersionResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="getReasonForDecision" parameterOrder="in0 in1 in2">
+      <wsdl:input message="impl:getReasonForDecisionRequest" name="getReasonForDecisionRequest"/>
+      <wsdl:output message="impl:getReasonForDecisionResponse" name="getReasonForDecisionResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="getDecision" parameterOrder="in0 in1 in2">
+      <wsdl:input message="impl:getDecisionRequest" name="getDecisionRequest"/>
+      <wsdl:output message="impl:getDecisionResponse" name="getDecisionResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="giveMultipleFeedbackUidl" parameterOrder="in0 in1 in2 in3">
+      <wsdl:input message="impl:giveMultipleFeedbackUidlRequest" name="giveMultipleFeedbackUidlRequest"/>
+      <wsdl:output message="impl:giveMultipleFeedbackUidlResponse" name="giveMultipleFeedbackUidlResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="giveFeedbackUidl" parameterOrder="in0 in1 in2 in3">
+      <wsdl:input message="impl:giveFeedbackUidlRequest" name="giveFeedbackUidlRequest"/>
+      <wsdl:output message="impl:giveFeedbackUidlResponse" name="giveFeedbackUidlResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="giveMultipleFeedbackId" parameterOrder="in0 in1 in2 in3">
+      <wsdl:input message="impl:giveMultipleFeedbackIdRequest" name="giveMultipleFeedbackIdRequest"/>
+      <wsdl:output message="impl:giveMultipleFeedbackIdResponse" name="giveMultipleFeedbackIdResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="giveFeedbackId" parameterOrder="in0 in1 in2 in3">
+      <wsdl:input message="impl:giveFeedbackIdRequest" name="giveFeedbackIdRequest"/>
+      <wsdl:output message="impl:giveFeedbackIdResponse" name="giveFeedbackIdResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="checkSpamOutlookMulti" parameterOrder="in0 in1 in2 in3 in4 in5">
+      <wsdl:input message="impl:checkSpamOutlookMultiRequest" name="checkSpamOutlookMultiRequest"/>
+      <wsdl:output message="impl:checkSpamOutlookMultiResponse" name="checkSpamOutlookMultiResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="checkSpamOutlook" parameterOrder="in0 in1 in2 in3 in4 in5">
+      <wsdl:input message="impl:checkSpamOutlookRequest" name="checkSpamOutlookRequest"/>
+      <wsdl:output message="impl:checkSpamOutlookResponse" name="checkSpamOutlookResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="checkSpam" parameterOrder="in0 in1 in2 in3">
+      <wsdl:input message="impl:checkSpamRequest" name="checkSpamRequest"/>
+      <wsdl:output message="impl:checkSpamResponse" name="checkSpamResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="checkSpamFor" parameterOrder="in0 in1 in2 in3 in4">
+      <wsdl:input message="impl:checkSpamForRequest" name="checkSpamForRequest"/>
+      <wsdl:output message="impl:checkSpamForResponse" name="checkSpamForResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="spamCheckMulti" parameterOrder="in0 in1 in2 in3">
+      <wsdl:input message="impl:spamCheckMultiRequest" name="spamCheckMultiRequest"/>
+      <wsdl:output message="impl:spamCheckMultiResponse" name="spamCheckMultiResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="spamCheck" parameterOrder="in0 in1 in2 in3">
+      <wsdl:input message="impl:spamCheckRequest" name="spamCheckRequest"/>
+      <wsdl:output message="impl:spamCheckResponse" name="spamCheckResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SpamagogoSoapBinding" type="impl:Spamagogo">
+    <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getTime">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getTimeRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://spam" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="getTimeResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.spamagogo.com:8080/axis/services/Spamagogo" use="encoded"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createUser">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="createUserRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://spam" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="createUserResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.spamagogo.com:8080/axis/services/Spamagogo" use="encoded"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="setVersion">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="setVersionRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://spam" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="setVersionResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.spamagogo.com:8080/axis/services/Spamagogo" use="encoded"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoString">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="echoStringRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://spam" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="echoStringResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.spamagogo.com:8080/axis/services/Spamagogo" use="encoded"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMotd">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getMotdRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://spam" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="getMotdResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.spamagogo.com:8080/axis/services/Spamagogo" use="encoded"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getUpdateString">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getUpdateStringRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://spam" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="getUpdateStringResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.spamagogo.com:8080/axis/services/Spamagogo" use="encoded"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDisplayMotd">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getDisplayMotdRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://spam" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="getDisplayMotdResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.spamagogo.com:8080/axis/services/Spamagogo" use="encoded"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createUserHashed">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="createUserHashedRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://spam" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="createUserHashedResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.spamagogo.com:8080/axis/services/Spamagogo" use="encoded"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDetailedClientVersion">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getDetailedClientVersionRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://spam" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="getDetailedClientVersionResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.spamagogo.com:8080/axis/services/Spamagogo" use="encoded"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getReasonForDecision">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getReasonForDecisionRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://spam" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="getReasonForDecisionResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.spamagogo.com:8080/axis/services/Spamagogo" use="encoded"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDecision">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getDecisionRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://spam" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="getDecisionResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.spamagogo.com:8080/axis/services/Spamagogo" use="encoded"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="giveMultipleFeedbackUidl">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="giveMultipleFeedbackUidlRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://spam" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="giveMultipleFeedbackUidlResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.spamagogo.com:8080/axis/services/Spamagogo" use="encoded"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="giveFeedbackUidl">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="giveFeedbackUidlRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://spam" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="giveFeedbackUidlResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.spamagogo.com:8080/axis/services/Spamagogo" use="encoded"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="giveMultipleFeedbackId">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="giveMultipleFeedbackIdRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://spam" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="giveMultipleFeedbackIdResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.spamagogo.com:8080/axis/services/Spamagogo" use="encoded"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="giveFeedbackId">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="giveFeedbackIdRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://spam" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="giveFeedbackIdResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.spamagogo.com:8080/axis/services/Spamagogo" use="encoded"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="checkSpamOutlookMulti">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="checkSpamOutlookMultiRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://spam" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="checkSpamOutlookMultiResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.spamagogo.com:8080/axis/services/Spamagogo" use="encoded"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="checkSpamOutlook">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="checkSpamOutlookRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://spam" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="checkSpamOutlookResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.spamagogo.com:8080/axis/services/Spamagogo" use="encoded"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="checkSpam">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="checkSpamRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://spam" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="checkSpamResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.spamagogo.com:8080/axis/services/Spamagogo" use="encoded"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="checkSpamFor">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="checkSpamForRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://spam" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="checkSpamForResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.spamagogo.com:8080/axis/services/Spamagogo" use="encoded"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="spamCheckMulti">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="spamCheckMultiRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://spam" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="spamCheckMultiResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.spamagogo.com:8080/axis/services/Spamagogo" use="encoded"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="spamCheck">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="spamCheckRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://spam" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="spamCheckResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.spamagogo.com:8080/axis/services/Spamagogo" use="encoded"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SpamagogoService">
+    <wsdl:port binding="impl:SpamagogoSoapBinding" name="Spamagogo">
+      <wsdlsoap:address location="http://soap.spamagogo.com:8080/axis/services/Spamagogo"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,14 @@
+{
+    attributes = (
+        {columnName = "FUVI_CODE"; name = code; prototypeName = str10; }, 
+        {columnName = "FUVI_DATE"; name = requestDate; prototypeName = date; }, 
+        {columnName = "FUVI_USER_ID"; name = userID; prototypeName = id; }, 
+        {columnName = "FUVI_FORMAT_ID"; name = videoFormatID; prototypeName = id; }
+    ); 
+    className = FCMNUserVideoFormat; 
+    classProperties = (userID, videoFormatID, requestDate, code); 
+    externalName = "FCMN_USER_FORMAT"; 
+    fetchSpecificationDictionary = {}; 
+    name = FCMNUserVideoFormat; 
+    primaryKeyAttributes = (userID, videoFormatID); 
+}

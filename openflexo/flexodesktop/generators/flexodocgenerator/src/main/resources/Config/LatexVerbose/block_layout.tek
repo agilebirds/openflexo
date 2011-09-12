@@ -1,0 +1,29 @@
+\block {<BLOCK_NAME>}
+{\itshape <BLOCK_DESCRIPTION>}
+<GEN_IF(INPUT)>
+\medskip This screen area contains the following editable fields:\nopagebreak
+\begin{inputtable}
+<INPUT_LIST>\end{inputtable}
+</GEN_IF(INPUT)>
+<GEN_IF(!INPUT)>
+%\par This screen area does not contain any editable fields.
+</GEN_IF(!INPUT)>
+<GEN_IF(LIST)>
+\begin{lists}
+<LIST>\end{lists}</GEN_IF(LIST)>
+<GEN_IF(!LIST)></GEN_IF(!LIST)>
+<GEN_IF(OUTPUT)>
+\par \medskip This screen area contains the following non-editable fields:\nopagebreak
+\begin{outputtable}
+<OUTPUT_LIST>\end{outputtable}\par
+</GEN_IF(OUTPUT)>
+<GEN_IF(!OUTPUT)>
+%\par This screen area does not contain any display fields.
+</GEN_IF(!OUTPUT)>
+<GEN_IF(DROPDOWN_LIST)>
+\par \medskip Here is the content of the dropdown listed hereabove.
+\doitemsep
+\begin{description}
+<DROPDOWN_LIST>\end{description}
+\myitemsep
+</GEN_IF(DROPDOWN_LIST)>

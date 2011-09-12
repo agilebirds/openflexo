@@ -1,0 +1,149 @@
+<inspector title = "Process" inheritsfrom ="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.wkf.FlexoProcess">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="name" label="name" widget="TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		</property>
+		<property name="parentProcess" label="parent_process" widget="CUSTOM" constraint="2">
+			<param name="className" value="org.openflexo.components.widget.ProcessInspectorWidget"/>
+			<param name="isSelectable" value="isAcceptableAsParentProcess"/>
+		</property>
+		<!--<property name="isWebService" label="is_web_service" widget="CHECKBOX" constraint="3"/>-->
+		<property name="cssSheet" label="css_sheet" widget="DROPDOWN" constraint="4">
+			<param name="format" value="name"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+	</tab>
+	
+	<tab name="Advanced" index="1">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="businessDataVariableName" label="variable_name" widget="TEXT_FIELD" constraint="1">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+		</property>
+		<property name="businessDataType" label="variable_type" widget="CUSTOM" constraint="2">
+			<param name="className" value="org.openflexo.components.widget.DMEntityInspectorWidget"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+		</property>
+	</tab>
+	<tab name="Doc" index="2">
+	    <property name="graphicalPropertyForKey('preferredRepresentation')" label="preferred_representation" widget="DROPDOWN" constraint="-1">
+	        <param name="type" value="org.openflexo.wkf.WKFModule$ProcessRepresentation"/>
+	    </property>
+		<property name="index" label="index" widget="INTEGER" constraint="0" depends="processNode.parentFolder" conditional="processNode.parentFolder=null"/>
+		<property name="vectorIndex" label="index" widget="INTEGER" constraint="0" depends="processNode.parentFolder" conditional="processNode.parentFolder!=null"/>
+	</tab>
+	
+	<tab name="Status" index="4">
+		<property_list name="sortedStatusesVector" label="statuses_for_process" constraint="0">
+		  <param name="visible_row_count" value="5"/>
+		  <param name="row_height" value="20"/>
+		  <property_list_column name="name" label="name" widget="TEXT_FIELD">
+			<param name="column_width" value="80"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="description" label="description" widget="TEXT_FIELD">
+			<param name="column_width" value="120"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_action name="new" type="ADD" method="addStatus"/>
+		  <property_list_action name="delete" type="DELETE" method="deleteStatus" isAvailable="statusList.isStatusDeletable"/>
+		</property_list>
+		<property name="statusList.defaultStatus" label="default_status" widget="DROPDOWN" constraint="1">
+			<param name="dynamiclist" value="statusList.status"/>
+			<param name="format" value="name"/>
+		</property>
+		
+	</tab>
+	
+	<tab name="Stats" index="6">
+		<property name="statistics.infoLabel" widget="LABEL" constraint="0">
+			<param name="align" value="center"/>
+			<param name="width" value="200"/>
+			<param name="height" value="60"/>
+		</property>
+		<property name="statistics.includeBeginEndNode" label="include_begin_end" widget="CHECKBOX" constraint="0">
+		</property>
+		<property name="statistics.activityCount" label="# activities_in_process" widget="READ_ONLY_TEXT_FIELD" depends="statistics,statistics.includeBeginEndNode" conditional="statistics.includeBeginEndNode=true" constraint="1">
+		</property>
+		<property name="statistics.realActivityCount" label="# activities_in_process" widget="READ_ONLY_TEXT_FIELD" depends="statistics,statistics.includeBeginEndNode" conditional="statistics.includeBeginEndNode=false" constraint="1">
+		</property>
+		<property name="statistics.operationCount" label="# operations_in_process" widget="READ_ONLY_TEXT_FIELD" depends="statistics,statistics.includeBeginEndNode" conditional="statistics.includeBeginEndNode=true" constraint="2">
+		</property>		
+		<property name="statistics.realOperationCount" label="# operations_in_process" widget="READ_ONLY_TEXT_FIELD" depends="statistics,statistics.includeBeginEndNode" conditional="statistics.includeBeginEndNode=false" constraint="2">
+		</property>
+		<property name="statistics.actionCount" label="# actions_in_process" widget="READ_ONLY_TEXT_FIELD" depends="statistics,statistics.includeBeginEndNode" conditional="statistics.includeBeginEndNode=true" constraint="3">
+		</property>
+		<property name="statistics.realActionCount" label="# actions_in_process" widget="READ_ONLY_TEXT_FIELD" depends="statistics,statistics.includeBeginEndNode" conditional="statistics.includeBeginEndNode=false" constraint="3">
+		</property>
+		<group name="button" constraint="4">
+			<param name = "layout" value="center"/>
+			<property name="statistics.refresh" label="refresh" widget="BUTTON" constraint="1">
+			</property>
+		</group>
+	</tab>
+	
+	<tab name="Graphics_BPE" index="20" layout="DEFAULT" visibilityContext="BPE">
+		<property name="width('bpe')" label="width" widget="DOUBLE" constraint="2">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="height('bpe')" label="height" widget="DOUBLE" constraint="3">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="textColor('bpe')" label="text_color" widget="COLOR" constraint="4">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="bgColor('bpe')" label="back_color" widget="COLOR" constraint="5">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="isAlignedOnGrid('bpe')" label="aligned_on_grid" widget="CHECKBOX" constraint="6"/>
+		<property name="gridSize('bpe')" label="grid_size" widget="INTEGER" constraint="7"/>
+	</tab>
+
+	<tab name="Graphics_SWL" index="21" layout="DEFAULT" visibilityContext="SWL">
+		<property name="width('swl')" label="width" widget="DOUBLE" constraint="2">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="textColor('swl')" label="text_color" widget="COLOR" constraint="4">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="bgColor('swl')" label="back_color" widget="COLOR" constraint="5">
+			<param name="columns" value="10"/>
+		</property>
+	</tab>
+
+    <tab name="Process Metrics" index="8" layout="DEFAULT" visibilityContext="METRICS">
+        <property_list name="metricsValues" label="metrics" constraint="0">
+          <param name="visible_row_count" value="5"/>
+          <param name="row_height" value="20"/>
+          <property_list_column name="metricsDefinition.name" label="name" widget="TEXT_FIELD">
+            <param name="tooltip" value="metricsDefinition.description"/>
+          </property_list_column>
+          <property_list_column name="this" label="value" widget="CUSTOM">
+            <param name="column_width" value="80"/>
+            <param name="resizable" value="true"/>
+            <param name="customRendering" value="true"/>
+            <param name="format" value="value.toString"/>
+            <param name="className" value="org.openflexo.components.widget.MetricsValueInspectorWidget"/>
+          </property_list_column>
+          <property_list_column name="unit" label="unit" widget="TEXT_FIELD">
+            <param name="column_width" value="50"/>
+            <param name="resizable" value="true"/>
+            <param name="isEditable" value="metricsDefinition.isUnitEditable"/>
+          </property_list_column>
+          <property_list_column name="description" label="additional_info" widget="TEXT_FIELD">
+            <param name="column_width" value="120"/>
+            <param name="resizable" value="true"/>
+          </property_list_column>
+          <property_list_action name="new" type="ADD" method="addMetrics"/>
+          <property_list_action name="delete" type="DELETE" method="deleteMetrics"/>
+        </property_list>
+    </tab>
+</inspector>
+

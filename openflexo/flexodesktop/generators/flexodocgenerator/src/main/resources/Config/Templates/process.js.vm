@@ -1,0 +1,584 @@
+#macro(getNodeLevel $node)@single
+	#if(${node.getLevel()} == "PROCESS")
+        LEVEL_PROCESS
+    #elseif(${node.getLevel()} == "ACTIVITY")
+        LEVEL_ACTIVITY
+    #elseif(${node.getLevel()} == "OPERATION")
+        LEVEL_OPERATION
+    #elseif(${node.getLevel()} == "ACTION")
+        LEVEL_ACTION
+    #else
+        LEVEL_OTHER
+    #end
+@end#end
+
+#macro(getNodeType $node)@single
+    #if(${node.isArtefact()})
+		TYPE_ARTEFACT
+    #elseif(${node.getClassNameKey()} == "flexo_project")
+        TYPE_PROJECT
+    #elseif(${node.getClassNameKey()} == "flexo_process")
+        #if($node.isTopLevelProcess())
+            TYPE_PROCESS
+        #else
+            TYPE_SUBPROCESS
+        #end
+    #elseif(${node.getClassNameKey()} == "activity_node")
+        #if(${node.isBeginNode()})
+            TYPE_ACTIVITYBEGIN
+        #elseif(${node.isEndNode()})
+            TYPE_ACTIVITYEND
+        #elseif(${node.isSelfExecutableNode()})
+            TYPE_ACTIVITYSELFEXECUTABLE
+        #elseif(${node.isSubProcessNode()})
+            TYPE_ACTIVITYSUBPROCESS
+        #else
+            TYPE_ACTIVITY
+        #end
+    #elseif(${node.getClassNameKey()} == "sub_process_node")
+        TYPE_ACTIVITYSUBPROCESS
+    #elseif(${node.getClassNameKey()} == "operator_node")
+        #if(${node.isAndNode()})
+            TYPE_OPERATORAND
+        #elseif(${node.isOrNode()})
+            TYPE_OPERATOROR
+        #elseif(${node.isTestNode()})
+            TYPE_OPERATORIF
+        #elseif(${node.isLoopNode()})
+            TYPE_OPERATORLOOP
+        #elseif(${node.isSwitchNode()})
+            TYPE_OPERATORSWITCH
+        #else
+            TYPE_OPERATOR
+        #end
+    #elseif(${node.getClassNameKey()} == "operation_node")
+        #if(${node.isBeginNode()})
+            TYPE_OPERATIONBEGIN
+        #elseif(${node.isEndNode()})
+            TYPE_OPERATIONEND
+        #elseif(${node.isSelfExecutableNode()})
+            TYPE_OPERATIONSELFEXECUTABLE
+        #else
+            TYPE_OPERATION
+        #end
+    #elseif(${node.getClassNameKey()} == "event_node")
+		
+        #if(${node.isCancelHandler()})
+            TYPE_EVENTCANCELHANDLER
+        #elseif(${node.isCancelThrower()})
+            TYPE_EVENTCANCELTHROWER
+        #elseif(${node.isErrorHandler()})
+            TYPE_EVENTFAULTHANDLER
+        #elseif(${node.isErrorThrower()})
+            TYPE_EVENTFAULTTHROWER
+        #elseif(${node.isCompensateHandler()})
+			TYPE_EVENTCOMPENSATEHANDLER
+		#elseif(${node.isCompensateThrower()})
+			TYPE_EVENTCOMPENSATETHROWER
+        #elseif(${node.isMessageReceive()})
+            TYPE_EVENTMAILIN
+        #elseif(${node.isMessageSent()})
+            TYPE_EVENTMAILOUT
+        #elseif(${node.isTimeOut()})
+            TYPE_EVENTTIMEOUT
+        #elseif(${node.isTimer()})
+            TYPE_EVENTTIMER
+        #elseif(${node.isStart()})
+            TYPE_START_EVENT
+        #elseif(${node.isEnd()})
+            TYPE_END_EVENT
+		#else
+            TYPE_EVENT
+		#end
+	#else
+            TYPE_EVENT
+    #end
+
+@end#end
+
+#macro(getMailOutLitbox $_node)
+	@single
+                new LITBox('
+					<div>
+						<table width=\'95%\'>
+							<tr>
+								<td class=\'htmlDocTdMailTitle\' width=\'10%\'>From:</td>
+								<td class=\'htmlDocTdMailContent\' width=\'90%\'>
+									#if(${_node.getFromAddress()})
+										${generator.escapeStringForHTML(${_node.getFromAddress()})}
+									#else 
+										&nbsp;
+									#end
+								</td>
+							</tr>
+							<tr>
+								<td class=\'htmlDocTdMailTitle\'>To:</td>
+								<td class=\'htmlDocTdMailContent\'>
+									#if(${_node.getToAddress()})
+										${generator.escapeStringForHTML(${_node.getToAddress()})}
+									#else
+										&nbsp;
+									#end
+								</td>
+							</tr>
+							<tr>
+								<td class=\'htmlDocTdMailTitle\'>Subject:</td>
+								<td class=\'htmlDocTdMailContent\'>
+									#if(${_node.getMailSubject()})
+										${generator.escapeStringForHTML(${_node.getMailSubject()})}
+									#else 
+										&nbsp;
+									#end
+								</td>
+							</tr>
+							<tr>
+								<td class=\'htmlDocTdMailTitle\'>Body:</td>
+								<td class=\'htmlDocTdMailContent\' height=\'290px\'>
+									#if(${_node.getMailBody()})
+										${generator.escapeStringForHTML(${_node.getMailBody()})}
+									#else 
+										&nbsp;
+									#end
+								</td>
+							</tr>
+						</table>
+					</div>'
+					, {type: 'html',
+					   height: 480,
+					   width: 600,
+					   draggable: true,
+					   resizable: true,
+					   overlay: false,
+					   opacity:1}
+					 ); @end
+#end
+
+#macro(getCreateDivDescriptionFunction $node)
+    function(fatherDiv, flexoNode)
+    {
+        var descDiv = document.createElement('div');
+        descDiv.id = DESCRIPTION_PREFIX + flexoNode.id;
+        descDiv.style.display = 'none';
+        
+        /*HEADER*/
+        var h2Element = document.createElement('h2');
+        h2Element.appendChild(document.createTextNode('${node.getEnglishClassName()}: '));
+        var spanH2ContentElement = document.createElement('span');
+        spanH2ContentElement.className = 'htmlDocHContent';
+        spanH2ContentElement.innerHTML = flexoNode.name;
+        h2Element.appendChild(spanH2ContentElement);
+        
+        descDiv.appendChild(h2Element);
+        
+        /*ROLE*/
+        #if(${node.getRoleName()})
+            var h3RoleElement = document.createElement('h3');
+            h3RoleElement.appendChild(document.createTextNode('Role: '));
+            var spanH3RoleContentElement = document.createElement('span');
+            spanH3RoleContentElement.className = 'htmlDocHContent';
+            spanH3RoleContentElement.innerHTML = '${generator.escapeStringForHTML(${node.getRoleName()})}';
+            h3RoleElement.appendChild(spanH3RoleContentElement);
+            
+            descDiv.appendChild(h3RoleElement);
+        #end
+        
+        /*DESCRIPTION*/
+        var divDescriptionElement = document.createElement('div');
+        divDescriptionElement.innerHTML = '<p><strong>Description:</strong></p>';
+        divDescriptionElement.innerHTML = divDescriptionElement.innerHTML + '${generator.escapeStringForJS("${node.getFullDescriptionWithOnlyBodyContent(${repository.getDocType().getName()})}")}';
+        
+        #if(${node.getLevel()} == "OPERATION" && ${node.hasWOComponent()})
+            var pScreenElement = document.createElement('p');
+            pScreenElement.innerHTML = '<strong>Screen: </strong>';
+            #set($screenShot = ${generator.screenshot($node, $projectGenerator)})
+            var aScreenElement = document.createElement('a');
+            aScreenElement.href = 'javascript: void(0);';
+            aScreenElement.onclick = function() { new LITBox('<div><img src=\'' +FlexoReader.getPrefixDirectoryPath('processes/${generator.nameForProcessNoExt($process, $repository)}.js')+ '${generator.screenshotName($node, $projectGenerator)}.png\' width=\'${screenShot.getIconWidth()}\' height=\'${screenShot.getIconHeight()}\'></img></div>', {type: 'html', height: ${screenShot.getIconHeight()}+50, width: ${screenShot.getIconWidth()}+50, draggable: true, resizable: true, overlay: false, opacity:1});};
+            aScreenElement.innerHTML = '${generator.escapeStringForHTML(${node.getWOComponent().getName()})}';
+            pScreenElement.appendChild(aScreenElement);
+            
+            divDescriptionElement.appendChild(pScreenElement);
+        #end
+        #if(${node.isMessageSent()})
+            var pMailElement = document.createElement('p');
+            var aMailElement = document.createElement('a');
+            aMailElement.href = 'javascript: void(0);';
+            aMailElement.onclick = function() { #getMailOutLitbox($node)};
+            aMailElement.appendChild(document.createTextNode('View mail'));
+            pMailElement.appendChild(aMailElement);
+            
+            divDescriptionElement.appendChild(pMailElement);
+        #end
+        #if(${node.getMetricsValues()} && !${node.getMetricsValues().isEmpty()})
+            var divMetricsElement = document.createElement('div');
+            divMetricsElement.className = 'htmlDocMetrics';
+            
+            var divMetricsElementContent = '<table border="1">';
+            #foreach($metricValue in ${node.getMetricsValues()})
+                #if(${metricValue.getMetricsDefinition().getName()} && ${metricValue.getValue()})
+                divMetricsElementContent = divMetricsElementContent + 
+						'<tr title="#if(${metricValue.getDescription()})${metricValue.getDescription()}#end">'+
+							'<td>${generator.escapeStringForHTML(${metricValue.getMetricsDefinition().getName()})}</td>'+
+							'<td>${generator.escapeStringForHTML(${metricValue.getValue().toString()})}'+
+							'#if(${metricValue.getUnit()})${metricValue.getUnit()}#end'
+						'</td></tr>';
+                #end
+            #end
+            divMetricsElementContent = divMetricsElementContent + '</table>';
+            
+            divMetricsElement.innerHTML = divMetricsElementContent;
+            divDescriptionElement.appendChild(divMetricsElement);
+        #end
+        
+        descDiv.appendChild(divDescriptionElement);
+        fatherDiv.appendChild(descDiv);
+        
+        return descDiv;
+    }
+#end
+
+#macro(generatesArea $node $trimInfo)
+	#set($scale = 1.0)
+	#if($processRepresentation.BASIC_PROCESS_EDITOR)
+		#set($scale =$process.getScale($processRepresentation.BASIC_PROCESS_EDITOR, 1.0))
+	#elseif($processRepresentation.SWIMMING_LANE_EDITOR)
+		#set($scale =$process.getScale($processRepresentation.SWIMMING_LANE_EDITOR, 1.0))
+	#end
+    #set($nodeGraphicalRepresentation = $processRepresentation.getGraphicalRepresentation($node))
+    #set($shadow = 0)
+    #if($nodeGraphicalRepresentation.getShadowStyle())
+        #set($shadow = ${nodeGraphicalRepresentation.getShadowStyle().getShadowDepth()}*$scale)
+    #end
+    #set($x1 = $nodeGraphicalRepresentation.getLocationInDrawing().getX()*$scale - $trimInfo.getX() - 1)
+    #set($y1 = $nodeGraphicalRepresentation.getLocationInDrawing().getY()*$scale - $trimInfo.getY() - 1)
+    #set($x2 = $x1+$nodeGraphicalRepresentation.getWidth()*$scale + $shadow + 2)
+    #set($y2 = $y1+$nodeGraphicalRepresentation.getHeight()*$scale + $shadow + 2)
+    
+    #if($node.isSubProcessNode() && !${node.getDontGenerate()})
+        
+        #set($expandingRect = $nodeGraphicalRepresentation.getExpandingRect())
+        #set($x1Plus = $x1 + $nodeGraphicalRepresentation.getWidth() * $expandingRect.getX()*$scale)
+        #set($y1Plus = $y1 + $nodeGraphicalRepresentation.getHeight() * $expandingRect.getY()*$scale)
+        #set($x2Plus = $x1Plus + $nodeGraphicalRepresentation.getWidth() * $expandingRect.getWidth()*$scale + 2)
+        #set($y2Plus = $y1Plus + $nodeGraphicalRepresentation.getHeight() * $expandingRect.getHeight()*$scale + 2)
+        
+        #set($x1Plus = ${generator.getNumberAsInteger($x1Plus)})
+        #set($x2Plus = ${generator.getNumberAsInteger($x2Plus)})
+        #set($y1Plus = ${generator.getNumberAsInteger($y1Plus)})
+        #set($y2Plus = ${generator.getNumberAsInteger($y2Plus)})
+        
+        areaElement = document.createElement('area');
+        areaElement.className = 'htmlDocAreaPlus';
+        areaElement.name = AREA_PREFIX + '${node.getURI()}' + AREAPLUS_SUFIX;
+        areaElement.shape = 'rect';
+        areaElement.href = 'javascript:void(0);';
+        areaElement.coords = '$x1Plus,$y1Plus,$x2Plus,$y2Plus';
+		#if(${node.getSubProcess()})
+        areaElement.title = 'Expand ' + '${generator.escapeStringForJS(${node.getName()})}';
+        areaElement.onclick = function(event)
+        {
+            FlexoReader.select('${node.getSubProcess().getURI()}');
+            
+            if(!event)
+                event = window.event;
+            
+            event.cancelBubble = true;
+            event.returnValue = false;
+            return false;
+        }
+        #else
+		areaElement.title = 'No sub process defined for this node';
+		#end
+        if(isIE6())
+            areaElement.onfocus = function() {this.blur();}
+            
+        mapElement.appendChild(areaElement);
+    #end
+    
+    areaElement = document.createElement('area');
+    areaElement.name = AREA_PREFIX + '${node.getURI()}';
+    areaElement.shape = 'rect';
+    areaElement.href = 'javascript:void(0);';
+    areaElement.coords = (${generator.getNumberAsInteger($x1)} + areaOffset) + ',${generator.getNumberAsInteger($y1)},' +(${generator.getNumberAsInteger($x2)} + areaOffset)+ ',${generator.getNumberAsInteger($y2)}';
+    
+    #if(!${node.getDontGenerate()} || ${node.getLinkedProcess()} || ${node.getDocumentationUrl()})
+        areaElement.className = 'htmlDocArea';
+        areaElement.title = '${generator.escapeStringForJS(${node.getName()})}';
+        
+        if(isIE6())
+            areaElement.onfocus = function() {this.blur();}
+        #if(!${node.getDontGenerate()})
+        areaElement.onclick = function(event) 
+        {
+            FlexoReader.select('${node.getURI()}');
+            
+            if(!event)
+                event = window.event;
+            
+            #if(${node.getLevel()} == "OPERATION" && ${node.hasWOComponent()})
+                #set($screenShot = ${generator.screenshot($node, $projectGenerator)})
+                if(event.shiftKey)
+                    new LITBox('<div><img src=\'' +FlexoReader.getPrefixDirectoryPath('processes/${generator.nameForProcessNoExt($process, $repository)}.js')+ '${generator.screenshotName($node, $projectGenerator)}.png\' width=\'${screenShot.getIconWidth()}\' height=\'${screenShot.getIconHeight()}\'></img></div>', {type: 'html', height: ${screenShot.getIconHeight()}+50, width: ${screenShot.getIconWidth()}+50, draggable: true, resizable: true, overlay: false, opacity:1});
+            #end
+            
+            event.cancelBubble = true;
+            event.returnValue = false;
+            return false;
+        }
+		#end
+		#if(${node.getPropertyNamed("readerImage").getValue()})
+		areaElement.ondblclick = function(event)
+            {
+			@single
+                FlexoReader.currentLitbox = new LITBox('<table class="procedure">
+					            <tr><th class="procedure"><img src="${node.getPropertyNamed("readerImage").getValue()}"/></th></tr>
+								<tr><td class="procedureFooter"><input TYPE="BUTTON" value="Close" onclick="FlexoReader.currentLitbox.remove();FlexoReader.currentLitbox=null;"></td></tr>
+							</table>',
+				{type: 'html', height: 'auto', width: 'auto', draggable: true, resizable: true, overlay: false, opacity:1});
+			@end
+			}
+		#elseif(${node.getLinkedProcess()})
+			areaElement.ondblclick = function(event)
+            {
+                FlexoReader.open('${node.getLinkedProcess().getURI()}');
+                FlexoReader.select('${node.getLinkedProcess().getURI()}');
+
+                if(!event)
+                    event = window.event;
+                
+                event.cancelBubble = true;
+                event.returnValue = false;
+                return false;
+            }
+		#elseif(${node.getDocumentationUrl()})
+			
+			areaElement.ondblclick = function(event)
+            {
+                window.open('${node.getDocumentationUrl()}');
+                
+                if(!event)
+                    event = window.event;
+                
+                event.cancelBubble = true;
+                event.returnValue = false;
+                return false;
+            }
+		#elseif(${node.isMessageSent()})
+			areaElement.ondblclick = function(event)
+            {
+				#getMailOutLitbox($node)
+            }
+		#else
+			#set($pg = ${node.getOperationPetriGraph()})
+			#if(!$pg)
+				#set($pg = ${node.getExecutionPetriGraph()})
+			#end
+			#if(${pg.hasOtherNodesThanBeginEndNodes()})
+			
+            areaElement.ondblclick = function(event)
+            {
+                FlexoReader.open('${node.getURI()}');
+                
+                if(!event)
+                    event = window.event;
+                
+                event.cancelBubble = true;
+                event.returnValue = false;
+                return false;
+            }
+			#else
+			areaElement.ondblclick = function(event)
+            {
+			@single
+                FlexoReader.currentLitbox = new LITBox('<table class="procedure">
+					            <tr><th class="procedure">$!{generator.escapeStringForJS(${generator.escapeStringForHTML(${node.getName()})})}</th></tr>
+								<tr><td class="procedure">$!{generator.escapeStringForJS("${node.getFullDescriptionWithOnlyBodyContent(${repository.getDocType().getName()})}")}</td></tr>
+								<tr><td class="procedureFooter"><input TYPE="BUTTON" value="Close" onclick="FlexoReader.currentLitbox.remove();FlexoReader.currentLitbox=null;"></td></tr>
+							</table>',
+				{type: 'html', height: 'auto', width: 'auto', draggable: true, resizable: true, overlay: false, opacity:1});
+			@end
+            }
+			#end
+		#end
+    #else
+        areaElement.className = 'notGeneratedHtmlDocArea';
+        areaElement.title = 'N/A';
+    #end
+    
+    mapElement.appendChild(areaElement);
+#end
+
+#macro(getCreateContentFunction $node)
+    #if(${node.getLevel()} == "PROCESS" || (${node.getLevel()} == "ACTIVITY" && (${node.getOperationPetriGraph()} || ${node.getExecutionPetriGraph()})) || ${node.isArtefact()})
+        function(fatherDiv, flexoNode)
+        {
+            #set($screenShot = "")
+            #set($trimInfo = "")
+			#set($screenshotName = "")
+			#if(${node.isArtefact()})
+				#set($screenShot = ${generator.screenshot($node.getParentPetriGraph().getContainer(), $projectGenerator)})
+				#set($trimInfo = ${project.getScreenshotResource($node.getParentPetriGraph().getContainer(), true).getTrimInfo()})
+				#set($screenshotName = ${generator.screenshotName($node.getParentPetriGraph().getContainer(), $projectGenerator)})
+			#else
+				#set($screenShot = ${generator.screenshot($node, $projectGenerator)})
+				#set($trimInfo = ${project.getScreenshotResource($node, true).getTrimInfo()})
+				#set($screenshotName = ${generator.screenshotName($node, $projectGenerator)})
+			#end
+            var imgElement = document.createElement('img');
+            imgElement.id = CONTENT_PREFIX + flexoNode.id;
+            imgElement.src = FlexoReader.getPrefixDirectoryPath('processes/${generator.nameForProcessNoExt($process, $repository)}.js') + '${screenshotName}.png';
+            imgElement.width = '${generator.getNumberAsInteger(${trimInfo.getWidth()})}';
+            imgElement.height = '${generator.getNumberAsInteger(${trimInfo.getHeight()})}';
+            imgElement.useMap = '#' + MAP_PREFIX + flexoNode.id;
+            imgElement.style.display = 'none';
+            imgElement.style.width = '${generator.getNumberAsInteger(${trimInfo.getWidth()})}px';
+            imgElement.style.height = '${generator.getNumberAsInteger(${trimInfo.getHeight()})}px';
+            
+            var mapElement = document.createElement('map');
+            mapElement.id = MAP_PREFIX + flexoNode.id;
+            mapElement.name = MAP_PREFIX + flexoNode.id;
+            
+            var areaElement;
+            var areaOffset = 0;
+            if(isIE6())
+                areaOffset = 4;
+            
+            #if(${node.getLevel()} == "ACTIVITY" && (${node.getOperationPetriGraph()} || ${node.getExecutionPetriGraph()}))
+                
+                #if(${node.getOperationPetriGraph()})
+                    #foreach($subNode in ${node.getOperationPetriGraph().getNodes()})
+                        #generatesArea($subNode $trimInfo)
+                    #end
+                    #foreach($subNode in ${node.getOperationPetriGraph().getArtefacts()})
+                        #generatesArea($subNode $trimInfo)
+                    #end
+                    #set($petriGraphRepresentation = ${processRepresentation.getGraphicalRepresentation(${node.getOperationPetriGraph()})})
+                #elseif(${node.getExecutionPetriGraph()})
+                    #foreach($subNode in ${node.getExecutionPetriGraph().getNodes()})
+                        #generatesArea($subNode $trimInfo)
+                    #end
+                    #foreach($subNode in ${node.getExecutionPetriGraph().getArtefacts()})
+                        #generatesArea($subNode $trimInfo)
+                    #end
+                    #set($petriGraphRepresentation = ${processRepresentation.getGraphicalRepresentation(${node.getExecutionPetriGraph()})})
+                #end
+                
+                #set($x1 = ${petriGraphRepresentation.getLocationInDrawing().getX()} + ${petriGraphRepresentation.getWidth()} - 20 - $trimInfo.getX())
+                #set($y1 = ${petriGraphRepresentation.getLocationInDrawing().getY()} + 5 - $trimInfo.getY())
+                #set($x2 = $x1 + 15)
+                #set($y2 = $y1 + 15)
+                
+                //Area for close
+                areaElement = document.createElement('area');
+                areaElement.shape = 'rect';
+                areaElement.title = 'close';
+                areaElement.href = 'javascript:void(0);';
+                areaElement.coords = '${generator.getNumberAsInteger($x1)},${generator.getNumberAsInteger($y1)},${generator.getNumberAsInteger($x2)},${generator.getNumberAsInteger($y2)}';
+                if(isIE6())
+                    areaElement.onfocus = function() {this.blur();}
+                areaElement.onclick = function(event)
+                {
+                    FlexoReader.close();
+                    
+                    if(!event)
+                        event = window.event;
+                    
+                    event.cancelBubble = true;
+                    event.returnValue = false;
+                    return false;
+                }
+                mapElement.appendChild(areaElement);
+                
+                //Area to avoid close on operation level
+                
+                #set($x1 = ${petriGraphRepresentation.getLocationInDrawing().getX()} - $trimInfo.getX())
+                #set($y1 = ${petriGraphRepresentation.getLocationInDrawing().getY()} - $trimInfo.getY())
+                #set($x2 = $x1 + ${petriGraphRepresentation.getWidth()})
+                #set($y2 = $y1 + ${petriGraphRepresentation.getHeight()})
+                
+                areaElement = document.createElement('area');
+                areaElement.shape = 'rect';
+                areaElement.style.cursor = 'default';
+                areaElement.href = 'javascript:void(0);';
+                areaElement.coords = '${generator.getNumberAsInteger($x1)},${generator.getNumberAsInteger($y1)},${generator.getNumberAsInteger($x2)},${generator.getNumberAsInteger($y2)}';
+                if(isIE6())
+                    areaElement.onfocus = function() {this.blur();}
+                areaElement.onclick = function(event)
+                {
+                    if(!event)
+                        event = window.event;
+                    
+                    event.cancelBubble = true;
+                    event.returnValue = false;
+                    return false;
+                }
+                mapElement.appendChild(areaElement);
+            #elseif(${node.getLevel()} == "PROCESS" && ${node.getActivityPetriGraph()})
+                #foreach($subNode in ${node.getActivityPetriGraph().getNodes()})
+                    #generatesArea($subNode $trimInfo)
+                #end
+                #foreach($subNode in ${node.getActivityPetriGraph().getArtefacts()})
+                    #generatesArea($subNode $trimInfo)
+                #end
+            #end
+            
+            fatherDiv.appendChild(imgElement);
+            fatherDiv.appendChild(mapElement);
+            
+            return imgElement;
+        }
+    #else
+        null;
+    #end
+#end
+
+#macro(generateNodesCreation $node $fatherNodeId)
+
+    #if(!${node.getDontGenerate()})
+        fctCreateDivDescription = #getCreateDivDescriptionFunction($node)
+        fctCreateContent = #getCreateContentFunction($node)
+        #set($uri=${node.getURI()})
+		#set($name=${generator.escapeStringForHTML(${node.getName()}, true)})
+		#set($index = 0)
+		#if(!${node.isArtefact()})
+			#set($index=${node.getIndex()})
+		#end
+        FlexoReader.addNode2(new FlexoNode('$uri', '$name', #getNodeLevel($node), #getNodeType($node), $index, fctCreateDivDescription, fctCreateContent), #if($fatherNodeId)'$fatherNodeId'#else null#end, #if(${node.isArtefact()}  ||  ${node.getClassNameKey()} == "operator_node"  ||  ${node.getClassNameKey()} == "activity_node" || ${node.oneAncestorIsNotGenerated()}) false #else true #end);
+        
+        #if(${node.getLevel()} == "ACTIVITY" && ${node.getOperationPetriGraph()})
+            #foreach($subNode in ${node.getOperationPetriGraph().getNodes()})
+                #generateNodesCreation($subNode ${node.getURI()})
+			#end
+			#foreach($subNode in ${node.getOperationPetriGraph().getArtefacts()})
+                #generateNodesCreation($subNode ${node.getURI()})
+            #end
+        #elseif(${node.getLevel()} == "ACTIVITY" && ${node.getExecutionPetriGraph()})
+            #foreach($subNode in ${node.getExecutionPetriGraph().getNodes()})
+                #generateNodesCreation($subNode ${node.getURI()})
+            #end
+            #foreach($subNode in ${node.getExecutionPetriGraph().getArtefacts()})
+                #generateNodesCreation($subNode ${node.getURI()})
+            #end
+        #elseif(${node.getLevel()} == "PROCESS" && ${node.getActivityPetriGraph()})
+            #foreach($subNode in ${node.getActivityPetriGraph().getNodes()})
+                #generateNodesCreation($subNode ${node.getURI()})
+            #end
+            #foreach($subNode in ${node.getActivityPetriGraph().getArtefacts()})
+                #generateNodesCreation($subNode ${node.getURI()})
+            #end
+        #end
+    #end
+#end
+
+#set($process = $object)
+
+function initProcess${process.getFlexoID()}()
+{
+    var fctCreateDivDescription = null;
+    var fctCreateContent = null;
+    
+    #generateNodesCreation($process ${process.getParentProcess().getURI()})
+}
+
+initProcess${process.getFlexoID()}();
+

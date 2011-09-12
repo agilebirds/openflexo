@@ -1,0 +1,3 @@
+    public String get${JAVA_BUTTON_NAME}Url(){
+        return ${CLASSNAME}.getUrl(context()#if($TAB),$TAB#end);
+    }

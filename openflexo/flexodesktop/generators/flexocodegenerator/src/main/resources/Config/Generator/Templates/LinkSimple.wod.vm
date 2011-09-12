@@ -1,0 +1,35 @@
+#if($widget.getPopupComponentDefinition())
+  #set($woName = "${widget.getPopupComponentDefinition().getName()}PopupLink")
+#elseif($widget.getIsSubmittingOpener())
+  #set($woName = "WDLMultiSubmitLink")
+#else
+  #set($woName = "WOHyperlink")
+#end
+#name()Link: $woName {
+    componentInstanceID = operationComponentInstanceID;
+#if($widget.getPopupComponentDefinition() || $widget.getIsSubmittingOpener())
+    value=#name()Value;
+#end
+    #tooltipAsTitle()
+#if($anchor)
+    anchor = "$anchor";
+#end
+#if($widget.isCustomButton())
+    class="denaliButton";
+#end
+#if(${widget.getIncludePopupInPage()})
+    hiddenFieldValue = hiddenFieldValue;
+    includePopupInPage = true;
+    #if(${widget.isInRepetition()})
+    uniqueIdentifier = ${widget.repetition().getHTMLListDescriptor().getIndexName()};
+    #end
+#end
+#if($widget.getPopupComponentDefinition())
+  #foreach($binding in ${widget.getPopupComponentInstance().getBindings()})
+    #if(${binding.getBindingValue()})
+    ${binding.getBindingDefinitionName()} = ${binding.getBindingValue().getWodStringRepresentation()};
+    #end
+  #end
+#end
+}
+#renderLinkContent($widget)

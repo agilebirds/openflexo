@@ -1,0 +1,4 @@
+#if($widget.getPopupComponentDefinition() || $widget.getIsSubmittingOpener())
+    #buttonValue()
+#end
+#renderLinkContent($widget)

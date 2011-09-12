@@ -1,0 +1,7 @@
+<inspector title = "Band" inheritsfrom="Object.inspector" inspectedClassName="org.openflexo.fge.geomedit.gr.BandGraphicalRepresentation">
+
+	<tab name="Data" index="0" layout="DEFAULT">
+
+	</tab>
+
+</inspector>

@@ -1,0 +1,442 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY FlexoConceptsOntology "http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#" >
+    <!ENTITY FLXOperationalStructure "http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOperationalStructure.owl#" >
+    <!ENTITY FLXOrganizationalStructure "http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#" >
+]>
+
+
+<rdf:RDF xmlns="http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOperationalStructure.owl#"
+     xml:base="http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOperationalStructure.owl"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+     xmlns:FLXOrganizationalStructure="http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:FLXOperationalStructure="http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOperationalStructure.owl#"
+     xmlns:FlexoConceptsOntology="http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#">
+    <owl:Ontology rdf:about="">
+        <owl:imports rdf:resource="http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl"/>
+        <owl:imports rdf:resource="http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl"/>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <owl:AnnotationProperty rdf:about="#Remark"/>
+    <owl:AnnotationProperty rdf:about="#BestPractice"/>
+    <owl:AnnotationProperty rdf:about="&FLXOrganizationalStructure;example"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#inRelationWith -->
+
+    <owl:ObjectProperty rdf:about="&FlexoConceptsOntology;inRelationWith"/>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#linkedToModel -->
+
+    <owl:ObjectProperty rdf:about="&FlexoConceptsOntology;linkedToModel"/>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOperationalStructure.owl#hasRole -->
+
+    <owl:ObjectProperty rdf:about="#hasRole">
+        <rdfs:subPropertyOf rdf:resource="&FlexoConceptsOntology;inRelationWith"/>
+        <rdfs:domain rdf:resource="#Process"/>
+        <rdfs:range rdf:resource="#Role"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOperationalStructure.owl#involvedInProcess -->
+
+    <owl:ObjectProperty rdf:about="#involvedInProcess">
+        <rdfs:subPropertyOf rdf:resource="&FlexoConceptsOntology;inRelationWith"/>
+        <owl:inverseOf rdf:resource="#hasRole"/>
+        <rdfs:range rdf:resource="#Process"/>
+        <rdfs:domain rdf:resource="#Role"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#hasObjective -->
+
+    <owl:ObjectProperty rdf:about="&FLXOrganizationalStructure;hasObjective"/>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOperationalStructure.owl#hasObjective -->
+
+    <owl:ObjectProperty rdf:about="#hasObjective">
+        <rdfs:subPropertyOf rdf:resource="&FlexoConceptsOntology;inRelationWith"/>
+        <rdfs:domain rdf:resource="#MacroProcess"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOperationalStructure.owl#isManagedBy -->
+
+    <owl:ObjectProperty rdf:about="#isManagedBy">
+        <rdfs:subPropertyOf rdf:resource="&FlexoConceptsOntology;inRelationWith"/>
+        <rdfs:domain rdf:resource="#MacroProcess"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOperationalStructure.owl#linkedToProcess -->
+
+    <owl:ObjectProperty rdf:about="#linkedToProcess">
+        <rdfs:range rdf:resource="&FlexoConceptsOntology;FlexoProcess"/>
+        <rdfs:subPropertyOf rdf:resource="&FlexoConceptsOntology;linkedToModel"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOperationalStructure.owl#linkedToProcessFolder -->
+
+    <owl:ObjectProperty rdf:about="#linkedToProcessFolder">
+        <rdfs:range rdf:resource="&FlexoConceptsOntology;FlexoProcessFolder"/>
+        <rdfs:subPropertyOf rdf:resource="&FlexoConceptsOntology;linkedToModel"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOperationalStructure.owl#linkedToRole -->
+
+    <owl:ObjectProperty rdf:about="#linkedToRole">
+        <rdfs:subPropertyOf rdf:resource="&FlexoConceptsOntology;linkedToModel"/>
+        <rdfs:range rdf:resource="#Role"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOperationalStructure.owl#parentOrganizationalUnit -->
+
+    <owl:ObjectProperty rdf:about="#parentOrganizationalUnit">
+        <rdfs:subPropertyOf rdf:resource="&FlexoConceptsOntology;inRelationWith"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOperationalStructure.owl#subOrganizationalUnit -->
+
+    <owl:ObjectProperty rdf:about="#subOrganizationalUnit">
+        <rdfs:subPropertyOf rdf:resource="&FlexoConceptsOntology;inRelationWith"/>
+        <owl:inverseOf rdf:resource="#parentOrganizationalUnit"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOperationalStructure.owl#description -->
+
+    <owl:DatatypeProperty rdf:about="#description">
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOperationalStructure.owl#macroProcessDescription -->
+
+    <owl:DatatypeProperty rdf:about="#macroProcessDescription">
+        <rdfs:label xml:lang="en"
+            >a short text explaining what the macro-process does</rdfs:label>
+        <FLXOrganizationalStructure:example xml:lang="en"
+            >e.g.: Human Resources administration involves a lot of administrative tasks that usually requires several levels of autorisation and validations.</FLXOrganizationalStructure:example>
+        <rdfs:subPropertyOf rdf:resource="#description"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOperationalStructure.owl#macroProcessName -->
+
+    <owl:DatatypeProperty rdf:about="#macroProcessName">
+        <rdfs:label xml:lang="en"
+            >identifies the macro-process in an unique way</rdfs:label>
+        <BestPractice xml:lang="en">Substantive</BestPractice>
+        <FLXOrganizationalStructure:example xml:lang="en"
+            >e.g.: HR administration, HR Career</FLXOrganizationalStructure:example>
+        <rdfs:subPropertyOf rdf:resource="#name"/>
+        <rdfs:domain rdf:resource="#MacroProcess"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOperationalStructure.owl#name -->
+
+    <owl:DatatypeProperty rdf:about="#name">
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOperationalStructure.owl#processDescription -->
+
+    <owl:DatatypeProperty rdf:about="#processDescription">
+        <rdfs:label xml:lang="en"
+            >a short text explaining what the process does</rdfs:label>
+        <FLXOrganizationalStructure:example xml:lang="en"
+            >e.g.: When an employee asks for a vacation, he/she has to follow a strict process that involves several levels of authorization.</FLXOrganizationalStructure:example>
+        <rdfs:subPropertyOf rdf:resource="#description"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOperationalStructure.owl#processName -->
+
+    <owl:DatatypeProperty rdf:about="#processName">
+        <rdfs:label xml:lang="en"
+            >identifies the process in an unique way</rdfs:label>
+        <BestPractice xml:lang="en">Verb-Noun</BestPractice>
+        <FLXOrganizationalStructure:example xml:lang="en"
+            >e.g.: Request vacation, Establish Payroll, ...</FLXOrganizationalStructure:example>
+        <rdfs:subPropertyOf rdf:resource="#name"/>
+        <rdfs:domain rdf:resource="#Process"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOperationalStructure.owl#roleDescription -->
+
+    <owl:DatatypeProperty rdf:about="#roleDescription">
+        <rdfs:label xml:lang="en"
+            >a short text explaining what the role performs in the proces</rdfs:label>
+        <FLXOrganizationalStructure:example xml:lang="en"
+            >HR Manager develops and implements the HR policy. He/she also supervises the HR Employee in executing the HR mission</FLXOrganizationalStructure:example>
+        <rdfs:subPropertyOf rdf:resource="#description"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOperationalStructure.owl#roleName -->
+
+    <owl:DatatypeProperty rdf:about="#roleName">
+        <rdfs:label xml:lang="en"
+            >Identifies the role in a unique way</rdfs:label>
+        <FLXOrganizationalStructure:example xml:lang="en"
+            >HR Manager, HR Employee</FLXOrganizationalStructure:example>
+        <BestPractice xml:lang="en"
+            >substantive optionally with a complement</BestPractice>
+        <rdfs:subPropertyOf rdf:resource="#name"/>
+        <rdfs:domain rdf:resource="#Role"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#FlexoConcept -->
+
+    <owl:Class rdf:about="&FlexoConceptsOntology;FlexoConcept"/>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#FlexoProcess -->
+
+    <owl:Class rdf:about="&FlexoConceptsOntology;FlexoProcess"/>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#FlexoProcessFolder -->
+
+    <owl:Class rdf:about="&FlexoConceptsOntology;FlexoProcessFolder"/>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#FlexoRole -->
+
+    <owl:Class rdf:about="&FlexoConceptsOntology;FlexoRole"/>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOperationalStructure.owl#OperationalConcept -->
+
+    <owl:Class rdf:about="#OperationalConcept">
+        <rdfs:subClassOf rdf:resource="&FlexoConceptsOntology;FlexoConcept"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#Objective -->
+
+    <owl:Class rdf:about="&FLXOrganizationalStructure;Objective"/>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOperationalStructure.owl#MacroProcess -->
+
+    <owl:Class rdf:about="#MacroProcess">
+        <rdfs:label xml:lang="en"
+            >A macro-process is a collection of processes.</rdfs:label>
+        <rdfs:subClassOf rdf:resource="#OperationalConcept"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&FLXOrganizationalStructure;hasObjective"/>
+                <owl:someValuesFrom rdf:resource="&FLXOrganizationalStructure;Objective"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#linkedToProcessFolder"/>
+                <owl:onClass rdf:resource="&FlexoConceptsOntology;FlexoProcessFolder"/>
+                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#macroProcessDescription"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#macroProcessName"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment xml:lang="en"
+            >A macro-process has no reality and does not exist in any organization unit. It is a pedagogical concept allowing to better grasp WHAT is performed by the organizational units.</rdfs:comment>
+        <rdfs:comment xml:lang="en"
+            >A macro-process represents a high level decomposition of the activities executed by an organization unit.</rdfs:comment>
+        <rdfs:comment xml:lang="en"
+            >The implementation of the macro-processes contributes &#8211; in general &#8211; to the realization of several objectives.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOperationalStructure.owl#Process -->
+
+    <owl:Class rdf:about="#Process">
+        <rdfs:label xml:lang="en"
+            >A set of correlated activities that transforms input elements into output elements.</rdfs:label>
+        <rdfs:subClassOf rdf:resource="#OperationalConcept"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&FLXOrganizationalStructure;hasObjective"/>
+                <owl:onClass rdf:resource="&FLXOrganizationalStructure;Objective"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#processName"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#linkedToProcess"/>
+                <owl:onClass rdf:resource="&FlexoConceptsOntology;FlexoProcess"/>
+                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#processDescription"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment xml:lang="en"
+            >A process has a reality and exists within an organization unit (OU). It organizes the work of the ACTORS to reach the OBJECTIVES assigned to the OU by the direction.</rdfs:comment>
+        <rdfs:comment xml:lang="en"
+            >A process represents a low level decomposition of the activities performed by an organisation unit.</rdfs:comment>
+        <rdfs:comment xml:lang="en"
+            >The implementation of a process contribute to the realization of only one objective.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOperationalStructure.owl#Role -->
+
+    <owl:Class rdf:about="#Role">
+        <rdfs:label xml:lang="en"
+            >A set of responsabilities (ex. Decide, Execute...) given to one or several
+actors within the course of the process.</rdfs:label>
+        <rdfs:subClassOf rdf:resource="#OperationalConcept"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#roleName"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#linkedToRole"/>
+                <owl:onClass rdf:resource="&FlexoConceptsOntology;FlexoRole"/>
+                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#roleDescription"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <Remark xml:lang="en"
+            >Notions of Role and Actor:
+- an actor is a person holding one or several roles
+- a role can by hold by one or several actors</Remark>
+        <Remark xml:lang="en"
+            >The notions of Role and Position should not be confused:
+- a position is an administrative concept associated with a work contract between an organization unit and an employee</Remark>
+    </owl:Class>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 2.2.1.1138) http://owlapi.sourceforge.net -->
+

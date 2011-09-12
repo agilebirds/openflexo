@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://BenMacBook.local:3001/cgi-bin/WebObjects/DNLServerApplication.woa/ws/PPMWebService" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://BenMacBook.local:3001/cgi-bin/WebObjects/DNLServerApplication.woa/ws/PPMWebService" xmlns:intf="http://BenMacBook.local:3001/cgi-bin/WebObjects/DNLServerApplication.woa/ws/PPMWebService" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://www.flexoserver.com/ppm" xmlns:tns2="http://lang.java" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)--><wsdl:types><schema targetNamespace="http://www.flexoserver.com/ppm" xmlns="http://www.w3.org/2001/XMLSchema"><import namespace="http://xml.apache.org/xml-soap"/><import namespace="http://BenMacBook.local:3001/cgi-bin/WebObjects/DNLServerApplication.woa/ws/PPMWebService"/><import namespace="http://lang.java"/><import namespace="http://schemas.xmlsoap.org/soap/encoding/"/><complexType name="PPMRole"><sequence><element name="businessDescription" nillable="true" type="soapenc:string"/><element name="generalDescription" nillable="true" type="soapenc:string"/><element name="name" nillable="true" type="soapenc:string"/><element name="rgbColor" nillable="true" type="soapenc:string"/><element name="technicalDescription" nillable="true" type="soapenc:string"/><element name="uri" nillable="true" type="soapenc:string"/><element name="userManualDescription" nillable="true" type="soapenc:string"/><element name="versionUri" nillable="true" type="soapenc:string"/></sequence></complexType><complexType name="ArrayOf_tns1_PPMRole"><complexContent><restriction base="soapenc:Array"><attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:PPMRole[]"/></restriction></complexContent></complexType><complexType name="PPMWebServiceAuthentificationException"><sequence><element name="cause" nillable="true" type="xsd:anyType"/><element name="message" nillable="true" type="soapenc:string"/></sequence></complexType><complexType name="PPMProcess"><sequence><element name="businessDescription" nillable="true" type="soapenc:string"/><element name="generalDescription" nillable="true" type="soapenc:string"/><element name="name" nillable="true" type="soapenc:string"/><element name="parentProcess" nillable="true" type="tns1:PPMProcess"/><element name="screenshoot" nillable="true" type="soapenc:base64Binary"/><element name="subProcesses" nillable="true" type="tns1:ArrayOf_tns1_PPMProcess"/><element name="technicalDescription" nillable="true" type="soapenc:string"/><element name="uri" nillable="true" type="soapenc:string"/><element name="userManualDescription" nillable="true" type="soapenc:string"/><element name="versionUri" nillable="true" type="soapenc:string"/></sequence></complexType><complexType name="ArrayOf_tns1_PPMProcess"><complexContent><restriction base="soapenc:Array"><attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:PPMProcess[]"/></restriction></complexContent></complexType><complexType name="CLProjectDescriptor"><sequence><element name="currentEditSessionOwner" nillable="true" type="soapenc:string"/><element name="currentLastVersion" nillable="true" type="soapenc:string"/><element name="currentLastVersionCreationDate" nillable="true" type="xsd:dateTime"/><element name="lastUploader" nillable="true" type="soapenc:string"/><element name="projectID" type="xsd:int"/><element name="projectName" nillable="true" type="soapenc:string"/><element name="uploadAllowed" type="xsd:boolean"/></sequence></complexType><complexType name="ArrayOf_tns3_CLProjectDescriptor"><complexContent><restriction base="soapenc:Array"><attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:CLProjectDescriptor[]"/></restriction></complexContent></complexType></schema><schema targetNamespace="http://BenMacBook.local:3001/cgi-bin/WebObjects/DNLServerApplication.woa/ws/PPMWebService" xmlns="http://www.w3.org/2001/XMLSchema"><import namespace="http://xml.apache.org/xml-soap"/><import namespace="http://www.flexoserver.com/ppm"/><import namespace="http://lang.java"/><import namespace="http://schemas.xmlsoap.org/soap/encoding/"/><complexType name="ArrayOf_soapenc_string"><complexContent><restriction base="soapenc:Array"><attribute ref="soapenc:arrayType" wsdl:arrayType="soapenc:string[]"/></restriction></complexContent></complexType></schema></wsdl:types>
+  <wsdl:message name="getAvailableProjectsResponse">
+    <wsdl:part name="getAvailableProjectsReturn" type="tns1:ArrayOf_tns3_CLProjectDescriptor"/>
+  </wsdl:message>
+  <wsdl:message name="getScreenshootRequest">
+    <wsdl:part name="login" type="soapenc:string"/>
+    <wsdl:part name="md5Password" type="soapenc:string"/>
+    <wsdl:part name="processVersionURI" type="soapenc:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="refreshRolesRequest">
+    <wsdl:part name="login" type="soapenc:string"/>
+    <wsdl:part name="md5Password" type="soapenc:string"/>
+    <wsdl:part name="uris" type="impl:ArrayOf_soapenc_string"/>
+  </wsdl:message>
+  <wsdl:message name="refreshRolesResponse">
+    <wsdl:part name="refreshRolesReturn" type="tns1:ArrayOf_tns1_PPMRole"/>
+  </wsdl:message>
+  <wsdl:message name="getAvailableProjectsRequest">
+
+    <wsdl:part name="login" type="soapenc:string"/>
+    <wsdl:part name="md5Password" type="soapenc:string"/>
+  </wsdl:message>
+  <wsdl:message name="getProcessesRequest">
+    <wsdl:part name="login" type="soapenc:string"/>
+    <wsdl:part name="md5Password" type="soapenc:string"/>
+  </wsdl:message>
+  <wsdl:message name="getRolesResponse">
+    <wsdl:part name="getRolesReturn" type="tns1:ArrayOf_tns1_PPMRole"/>
+
+  </wsdl:message>
+  <wsdl:message name="getScreenshootResponse">
+    <wsdl:part name="getScreenshootReturn" type="soapenc:base64Binary"/>
+  </wsdl:message>
+  <wsdl:message name="refreshProcessesResponse">
+    <wsdl:part name="refreshProcessesReturn" type="tns1:ArrayOf_tns1_PPMProcess"/>
+  </wsdl:message>
+  <wsdl:message name="getRolesRequest">
+    <wsdl:part name="login" type="soapenc:string"/>
+
+    <wsdl:part name="md5Password" type="soapenc:string"/>
+  </wsdl:message>
+  <wsdl:message name="PPMWebServiceAuthentificationException">
+    <wsdl:part name="fault" type="tns1:PPMWebServiceAuthentificationException"/>
+  </wsdl:message>
+  <wsdl:message name="uploadPrjResponse">
+    <wsdl:part name="uploadPrjReturn" type="soapenc:string"/>
+  </wsdl:message>
+  <wsdl:message name="getProcessesResponse">
+
+    <wsdl:part name="getProcessesReturn" type="tns1:ArrayOf_tns1_PPMProcess"/>
+  </wsdl:message>
+  <wsdl:message name="uploadPrjRequest">
+    <wsdl:part name="targetProject" type="tns1:CLProjectDescriptor"/>
+    <wsdl:part name="zip" type="apachesoap:DataHandler"/>
+    <wsdl:part name="uploadComment" type="soapenc:string"/>
+    <wsdl:part name="login" type="soapenc:string"/>
+  </wsdl:message>
+  <wsdl:message name="refreshProcessesRequest">
+
+    <wsdl:part name="login" type="soapenc:string"/>
+    <wsdl:part name="md5Password" type="soapenc:string"/>
+    <wsdl:part name="uris" type="impl:ArrayOf_soapenc_string"/>
+  </wsdl:message>
+  <wsdl:portType name="PPMWebService">
+    <wsdl:operation name="getRoles" parameterOrder="login md5Password">
+      <wsdl:input message="impl:getRolesRequest" name="getRolesRequest"/>
+      <wsdl:output message="impl:getRolesResponse" name="getRolesResponse"/>
+      <wsdl:fault message="impl:PPMWebServiceAuthentificationException" name="PPMWebServiceAuthentificationException"/>
+
+    </wsdl:operation>
+    <wsdl:operation name="getProcesses" parameterOrder="login md5Password">
+      <wsdl:input message="impl:getProcessesRequest" name="getProcessesRequest"/>
+      <wsdl:output message="impl:getProcessesResponse" name="getProcessesResponse"/>
+      <wsdl:fault message="impl:PPMWebServiceAuthentificationException" name="PPMWebServiceAuthentificationException"/>
+    </wsdl:operation>
+    <wsdl:operation name="getScreenshoot" parameterOrder="login md5Password processVersionURI">
+      <wsdl:input message="impl:getScreenshootRequest" name="getScreenshootRequest"/>
+      <wsdl:output message="impl:getScreenshootResponse" name="getScreenshootResponse"/>
+
+      <wsdl:fault message="impl:PPMWebServiceAuthentificationException" name="PPMWebServiceAuthentificationException"/>
+    </wsdl:operation>
+    <wsdl:operation name="refreshProcesses" parameterOrder="login md5Password uris">
+      <wsdl:input message="impl:refreshProcessesRequest" name="refreshProcessesRequest"/>
+      <wsdl:output message="impl:refreshProcessesResponse" name="refreshProcessesResponse"/>
+      <wsdl:fault message="impl:PPMWebServiceAuthentificationException" name="PPMWebServiceAuthentificationException"/>
+    </wsdl:operation>
+    <wsdl:operation name="refreshRoles" parameterOrder="login md5Password uris">
+      <wsdl:input message="impl:refreshRolesRequest" name="refreshRolesRequest"/>
+
+      <wsdl:output message="impl:refreshRolesResponse" name="refreshRolesResponse"/>
+      <wsdl:fault message="impl:PPMWebServiceAuthentificationException" name="PPMWebServiceAuthentificationException"/>
+    </wsdl:operation>
+    <wsdl:operation name="getAvailableProjects" parameterOrder="login md5Password">
+      <wsdl:input message="impl:getAvailableProjectsRequest" name="getAvailableProjectsRequest"/>
+      <wsdl:output message="impl:getAvailableProjectsResponse" name="getAvailableProjectsResponse"/>
+      <wsdl:fault message="impl:PPMWebServiceAuthentificationException" name="PPMWebServiceAuthentificationException"/>
+    </wsdl:operation>
+    <wsdl:operation name="uploadPrj" parameterOrder="targetProject zip uploadComment login">
+
+      <wsdl:input message="impl:uploadPrjRequest" name="uploadPrjRequest"/>
+      <wsdl:output message="impl:uploadPrjResponse" name="uploadPrjResponse"/>
+      <wsdl:fault message="impl:PPMWebServiceAuthentificationException" name="PPMWebServiceAuthentificationException"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PPMWebServiceSoapBinding" type="impl:PPMWebService">
+    <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getRoles">
+      <wsdlsoap:operation soapAction=""/>
+
+      <wsdl:input name="getRolesRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.ppm.denali.be" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="getRolesResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://BenMacBook.local:3001/cgi-bin/WebObjects/DNLServerApplication.woa/ws/PPMWebService" use="encoded"/>
+      </wsdl:output>
+      <wsdl:fault name="PPMWebServiceAuthentificationException">
+        <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PPMWebServiceAuthentificationException" namespace="http://BenMacBook.local:3001/cgi-bin/WebObjects/DNLServerApplication.woa/ws/PPMWebService" use="encoded"/>
+      </wsdl:fault>
+
+    </wsdl:operation>
+    <wsdl:operation name="getProcesses">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getProcessesRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.ppm.denali.be" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="getProcessesResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://BenMacBook.local:3001/cgi-bin/WebObjects/DNLServerApplication.woa/ws/PPMWebService" use="encoded"/>
+      </wsdl:output>
+
+      <wsdl:fault name="PPMWebServiceAuthentificationException">
+        <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PPMWebServiceAuthentificationException" namespace="http://BenMacBook.local:3001/cgi-bin/WebObjects/DNLServerApplication.woa/ws/PPMWebService" use="encoded"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getScreenshoot">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getScreenshootRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.ppm.denali.be" use="encoded"/>
+      </wsdl:input>
+
+      <wsdl:output name="getScreenshootResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://BenMacBook.local:3001/cgi-bin/WebObjects/DNLServerApplication.woa/ws/PPMWebService" use="encoded"/>
+      </wsdl:output>
+      <wsdl:fault name="PPMWebServiceAuthentificationException">
+        <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PPMWebServiceAuthentificationException" namespace="http://BenMacBook.local:3001/cgi-bin/WebObjects/DNLServerApplication.woa/ws/PPMWebService" use="encoded"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="refreshProcesses">
+      <wsdlsoap:operation soapAction=""/>
+
+      <wsdl:input name="refreshProcessesRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.ppm.denali.be" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="refreshProcessesResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://BenMacBook.local:3001/cgi-bin/WebObjects/DNLServerApplication.woa/ws/PPMWebService" use="encoded"/>
+      </wsdl:output>
+      <wsdl:fault name="PPMWebServiceAuthentificationException">
+        <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PPMWebServiceAuthentificationException" namespace="http://BenMacBook.local:3001/cgi-bin/WebObjects/DNLServerApplication.woa/ws/PPMWebService" use="encoded"/>
+      </wsdl:fault>
+
+    </wsdl:operation>
+    <wsdl:operation name="refreshRoles">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="refreshRolesRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.ppm.denali.be" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="refreshRolesResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://BenMacBook.local:3001/cgi-bin/WebObjects/DNLServerApplication.woa/ws/PPMWebService" use="encoded"/>
+      </wsdl:output>
+
+      <wsdl:fault name="PPMWebServiceAuthentificationException">
+        <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PPMWebServiceAuthentificationException" namespace="http://BenMacBook.local:3001/cgi-bin/WebObjects/DNLServerApplication.woa/ws/PPMWebService" use="encoded"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAvailableProjects">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getAvailableProjectsRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.ppm.denali.be" use="encoded"/>
+      </wsdl:input>
+
+      <wsdl:output name="getAvailableProjectsResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://BenMacBook.local:3001/cgi-bin/WebObjects/DNLServerApplication.woa/ws/PPMWebService" use="encoded"/>
+      </wsdl:output>
+      <wsdl:fault name="PPMWebServiceAuthentificationException">
+        <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PPMWebServiceAuthentificationException" namespace="http://BenMacBook.local:3001/cgi-bin/WebObjects/DNLServerApplication.woa/ws/PPMWebService" use="encoded"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="uploadPrj">
+      <wsdlsoap:operation soapAction=""/>
+
+      <wsdl:input name="uploadPrjRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.ppm.denali.be" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="uploadPrjResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://BenMacBook.local:3001/cgi-bin/WebObjects/DNLServerApplication.woa/ws/PPMWebService" use="encoded"/>
+      </wsdl:output>
+      <wsdl:fault name="PPMWebServiceAuthentificationException">
+        <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PPMWebServiceAuthentificationException" namespace="http://BenMacBook.local:3001/cgi-bin/WebObjects/DNLServerApplication.woa/ws/PPMWebService" use="encoded"/>
+      </wsdl:fault>
+
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PPMWebService">
+    <wsdl:port binding="impl:PPMWebServiceSoapBinding" name="PPMWebService">
+      <wsdlsoap:address location="http://BenMacBook.local:3001/cgi-bin/WebObjects/DNLServerApplication.woa/ws/PPMWebService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

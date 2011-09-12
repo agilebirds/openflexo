@@ -1,0 +1,18 @@
+#package()
+#imports($entity)
+ /**
+ * @author FlexoBPM Generator, Agile Birds sprl. (see www.FlexoBPM.com)
+ */
+ public class $entity.getEntityClassName() extends #if($entity.getParentBaseEntity()) $entity.getParentBaseEntity().getName()#else #if(${entity.isBusinessDataClass()}) ${projectGenerator.getProcessBusinessDataBaseEntity().getFullQualifiedName()} #end#end{
+
+    public $entity.getEntityClassName()() {
+        super();
+    }
+    
+	#if(${entity.isBusinessDataClass()}) 
+		public ${entity.getName()}(${entity.getName()} other)
+    	{
+    		super(other);
+    	}
+	#end
+}

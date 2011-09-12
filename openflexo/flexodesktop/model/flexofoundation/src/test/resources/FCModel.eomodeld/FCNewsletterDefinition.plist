@@ -1,0 +1,176 @@
+{
+	"classProperties" = (
+		"newsletterDefID",
+		"newsletters",
+		"testNewsletterID",
+		"categoryID",
+		"name",
+		"subject",
+		"htmlContent",
+		"textContent",
+		"contentType",
+		"creationDate",
+		"creator",
+		"updateDate",
+		"updator",
+		"period",
+		"nextSendDate",
+		"needConfirmation",
+		"status",
+		"newsletterTest",
+		"language",
+		"firstSendDate",
+		"lastSendDate",
+		"addRecipients",
+		"eventCode"
+	);
+	"className" = "FCNewsletterDefinition";
+	"primaryKeyAttributes" = (
+		"newsletterDefID"
+	);
+	"externalName" = "FC_NEWSLETTER_DEFINITION";
+	"attributes" = (
+		{
+			"columnName" = "NLDEF_CATID";
+			"name" = "categoryID";
+			"prototypeName" = "id";
+			"allowsNull" = "N";
+		},
+		{
+			"columnName" = "NLDEF_TYPE";
+			"name" = "contentType";
+			"prototypeName" = "str100";
+		},
+		{
+			"columnName" = "NLDEF_CREATIONDATE";
+			"name" = "creationDate";
+			"prototypeName" = "date";
+			"allowsNull" = "N";
+		},
+		{
+			"columnName" = "NLDEF_CREATOR";
+			"name" = "creator";
+			"prototypeName" = "str50";
+		},
+		{
+			"columnName" = "NLDEF_HTML";
+			"name" = "htmlContent";
+			"prototypeName" = "clob";
+		},
+		{
+			"columnName" = "NLDEF_NAME";
+			"name" = "name";
+			"prototypeName" = "str200";
+		},
+		{
+			"columnName" = "NLDEF_EVENTCODE";
+			"name" = "eventCode";
+			"prototypeName" = "str10";
+		},
+		{
+			"columnName" = "NLDEF_CONFIRME";
+			"name" = "needConfirmation";
+			"prototypeName" = "boolean";
+		},
+		{
+			"columnName" = "NLDEF_ID";
+			"name" = "newsletterDefID";
+			"prototypeName" = "id";
+			"allowsNull" = "N";
+		},
+		{
+			"columnName" = "NLDEF_NEXTDATE";
+			"name" = "nextSendDate";
+			"prototypeName" = "date";
+		},
+		{
+			"columnName" = "NLDEF_PERIOD";
+			"name" = "period";
+			"prototypeName" = "int";
+		},
+		{
+			"columnName" = "NLDEF_ADDRECIPIENTS";
+			"name" = "addRecipients";
+			"prototypeName" = "clob";
+		},
+		{
+			"columnName" = "NLDEF_STATUS";
+			"name" = "status";
+			"prototypeName" = "str20";
+		},
+		{
+			"columnName" = "NLDEF_SUBJECT";
+			"name" = "subject";
+			"prototypeName" = "str200";
+		},
+		{
+			"columnName" = "NLDEF_TESTNL_ID";
+			"name" = "testNewsletterID";
+			"prototypeName" = "id";
+		},
+		{
+			"columnName" = "NLDEF_TEXT";
+			"name" = "textContent";
+			"prototypeName" = "clob";
+		},
+		{
+			"columnName" = "NLDEF_UPDATEDATE";
+			"name" = "updateDate";
+			"prototypeName" = "date";
+		},
+		{
+			"columnName" = "NLDEF_UPDATOR";
+			"name" = "updator";
+			"prototypeName" = "str50";
+		},
+		{
+			"columnName" = "NLDEF_LANGUAGE";
+			"name" = "language";
+			"prototypeName" = "str10";
+		},
+		{
+			"columnName" = "NLDEF_FIRSTDATE";
+			"name" = "firstSendDate";
+			"prototypeName" = "date";
+		},
+		{
+			"columnName" = "NLDEF_LASTDATE";
+			"name" = "lastSendDate";
+			"prototypeName" = "date";
+		}
+	);
+	"relationships" = (
+		{
+			"joinSemantic" = "EOInnerJoin";
+			"joins" = (
+				{
+					"sourceAttribute" = "newsletterDefID";
+					"destinationAttribute" = "newsletterDefID";
+				}
+			);
+			"name" = "MNNewsletters";
+			"isToMany" = "Y";
+			"destination" = "FCMNNLDefNL";
+		},
+		{
+			"joinSemantic" = "EOInnerJoin";
+			"joins" = (
+				{
+					"sourceAttribute" = "testNewsletterID";
+					"destinationAttribute" = "newsletterID";
+				}
+			);
+			"name" = "newsletterTest";
+			"isToMany" = "N";
+			"destination" = "Newsletter";
+		},
+		{
+			definition = "MNNewsletters.newsletter";
+			"joinSemantic" = "EOInnerJoin";
+			"name" = "newsletters";
+			internalInfo = {"_nameInObjectStore" = "MNNewsletters_newsletter"; }; 
+		}
+	);
+	"name" = "FCNewsletterDefinition";
+	"fetchSpecificationDictionary" = {};
+}

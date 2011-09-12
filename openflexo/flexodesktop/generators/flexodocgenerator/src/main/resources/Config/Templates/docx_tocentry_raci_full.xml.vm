@@ -1,0 +1,45 @@
+#**
+This variant applies from the root process.
+*#
+##<w:p><w:r><w:t>*** DEBUG DDW*** Entering docx_tocentry_raci_full.xml</w:t></w:r></w:p>
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (DefinitionsDocGenerator)
+* - repository: the current repository for which we generate the doc (DGRepository)
+* - level: the level to use in title.
+*#
+
+#set($workflow = ${project.getFlexoWorkflow()})
+## output common table header
+#set($roles=${workflow.getSortedRoles()})
+#set($roleCount = ${workflow.getRoleList().size()})
+#if($roleCount > 0)
+    <w:tbl>
+    #set($rootProcess= ${workflow.getRootProcess()})
+    #set($colWidth = 6760/$roleCount)
+    #set($nbLine = $colWidth/340)
+    #raciTableHeader($roles $roleCount $rootProcess $colWidth $nbLine)
+    <!-- loop on processes -->
+    #foreach($processNode in ${workflow.getSortedTopLevelProcesses()})
+    <!--  processNode: $processNode -->
+        #if(!$processNode.getDontGenerate())
+    	    #set($process = $processNode.getProcess())
+    	    #renderRaciBody($process $level)
+    #else
+    	<!-- ignored-->
+        #end
+    #end 
+    <!-- loop on imported processes -->
+    #foreach($process in ${workflow.getSortedImportedProcesses()})
+    <!-- process: $process -->
+    #if(!$process.getDontGenerate())
+    	#renderRaciBody($process $level)
+    #else
+    	<!-- ignored-->
+    #end ##if
+    #end ##foreach
+    </w:tbl>
+#end
+

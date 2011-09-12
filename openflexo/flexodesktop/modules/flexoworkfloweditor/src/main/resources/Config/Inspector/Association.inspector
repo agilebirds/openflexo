@@ -1,0 +1,7 @@
+<inspector title = "Association" inheritsfrom ="Edge.inspector" inspectedClassName="org.openflexo.foundation.wkf.edge.WKFAssociation">
+
+	<tab name="Basic" index="0">
+		<property name="arrow" label="arrow" widget="DROPDOWN" constraint="2"/>
+	</tab>
+
+</inspector>

@@ -1,0 +1,488 @@
+#macro(excelRow $excel_accessor $column_name $header)
+#if( $excel_accessor )
+    #if($project.getIsLocalized())
+          #set($p = 'value')
+        array.addObject(new NSDictionary(new Object[] {localizedString("#generateKey ($header.getWOComponent() $header $p $column_name)"),"$excel_accessor"}, new Object[] {"label","key"}));
+    #else
+        array.addObject(new NSDictionary(new Object[] {"$column_name","$excel_accessor"}, new Object[] {"label","key"}));
+    #end
+#else
+        // array.addObject(new NSDictionary(new Object[] {"$column_name", TODO: "String accessor"}, new Object[] {"label","key"}));
+#end
+#end
+
+#macro(appendToResponse)
+#if(${generator.isPrototype()} || $list.isFetchingDMEOEntity())
+## The append to response has to read list info, and to check if we need to refresh the list
+    ${list.getListName()}ReadQueryListDictionary();
+    // Refresh the display group only if needed.
+    ${list.getListName()}Refresh();
+	#if(${operator.getHasBatch()})
+        if(${list.getListName()}ShowAllObjects) ${list.getListName()}CurrentBatchIndex = 0;
+        ${list.getListName()}DisplayGroup().setShowAllObjects(${list.getListName()}ShowAllObjects);
+        // Need to be set here, because the content of the list must not change during the Response-Request loop
+        ${list.getListName()}DisplayGroup().setNumberOfObjectsPerBatch(${list.getListName()}NumberOfObjectsPerBatch);
+        ${list.getListName()}DisplayGroup().setCurrentBatchIndex(${list.getListName()}CurrentBatchIndex);
+	#end
+    #if ($list.hasRefresh())
+        ${list.getListName()}NeedRefreshValue = null;
+    #end
+#end
+#end
+
+#macro(takeValuesFromRequest)
+#if(${generator.isPrototype()} || $list.isFetchingDMEOEntity())
+    #if ($list.hasRefresh())
+        if(${list.getListName()}NeedRefreshValue!=null && ${list.getListName()}NeedRefreshValue.equals("REFRESH")) {
+            // Refresh button clicked
+            ${list.getListName()}NeedRefresh = true;
+        }
+    #end
+        ${list.getListName()}WriteQueryListDictionary();
+#end
+#end
+
+#macro(keypath $tmp)@single
+#set($start = ${tmp.indexOf('.')} +1)
+${tmp.substring($start)}@end#end
+
+#macro(qualifier $filterWidget)
+	
+	#set($isFilterBoolean = false)
+	#if(${filterWidget.getClass().getName()} == "org.openflexo.foundation.ie.widget.IERadioButtonWidget" || ${filterWidget.getClass().getName()} == "org.openflexo.foundation.ie.widget.IECheckBoxWidget")
+		#set($filterWidgetName = "#nameForWidget($filterWidget)") 
+		#set($fieldName = "get${generator.capitalize($filterWidgetName)}()")
+		#set($isFilterBoolean = true)
+	#elseif(${filterWidget.getMainBinding().isBindingValid()})
+		#set($fieldName = $filterWidget.getMainBinding().getJavaCodeStringRepresentation())
+		#set($isFilterBoolean = $filterWidget.getMainBinding().getAccessedType().isBoolean())
+	#elseif(${filterWidget.getClass().getName()} == "org.openflexo.foundation.ie.widget.IEDropDownWidget")
+		#set($fieldName = "selectionOf#capNameForWidget($filterWidget)")
+	#elseif(${filterWidget.getClass().getName()} == "org.openflexo.foundation.ie.widget.IETextFieldWidget" || ${filterWidget.getClass().getName()} == "org.openflexo.foundation.ie.widget.IETextAreaWidget")
+		#set($fieldName = "get#capNameForWidget($filterWidget)()")
+	#end
+	
+	#if($fieldName)
+    	#if(${filterWidget.isText()})
+    		#set($operator = "caseinsensitivelike")
+    		if (${fieldName} != null && !${fieldName}.trim().equals("")) {
+    			 String filter = ${fieldName};
+    			 if (${fieldName}.indexOf("*") == -1) filter = "*" + ${fieldName} + "*";
+    				#set($fieldName = "filter")
+    	#else
+    		#if(${filterWidget.getOperator()})
+    			#set($operator = ${filterWidget.getOperator().getSign()})
+    		#else
+    			#set($operator = "=")
+			#end
+			#if($isFilterBoolean)
+				if ($fieldName == true){
+			#else
+				if ($fieldName != null){
+			#end
+    	#end
+    		
+    	#if(${filterWidget.getBindingKeypath().isBindingValid()})
+    		array.addObject(EOQualifier.qualifierWithQualifierFormat("#keypath(${filterWidget.getBindingKeypath().getWodStringRepresentation()}) $operator %@", new NSArray($fieldName)));
+    	#else
+    		#set($generatedFilterKey = ${filterWidget.getProcessInstanceDictionaryKey()})
+			#if(${inferredListProcess})
+        		if(WorkflowProcess.${inferredListProcess.getProcessDictionaryKey()}.getBusinessDataClass().getProcessBusinessDataKeyTypes().containsKey("$generatedFilterKey")) {
+        			array.addObject(EOQualifier.qualifierWithQualifierFormat("$generatedFilterKey $operator %@", new NSArray($fieldName)));
+        		}
+			#elseif(${generatedFilterKey.toLowerCase()} != "searchfor")
+				array.addObject(EOQualifier.qualifierWithQualifierFormat("$generatedFilterKey $operator %@", new NSArray($fieldName)));
+			#end
+    		#if(${filterWidget.isText()} && (${inferredListProcess} || ${generatedFilterKey.toLowerCase()} == "searchfor"))
+				#if(${inferredListProcess})
+					else {
+					//The listed process doesn't contains the generatedFilterKey "$generatedFilterKey" -> as the widget is a textfield with type string, filter on all displayed String in the repetition
+				#end
+				NSMutableArray arrayOr = new NSMutableArray();
+				#foreach($td in ${list.getRepeatedSequenceTR().getAllTD()})
+					#foreach($widgetInTd in ${td.getAllEmbeddedIEObjects(true)})
+						#if(${widgetInTd.getIsAcceptableForAnyProcessInstanceDictionary()} && (!${inferredListProcess} || ${inferredListProcess.getProcessInstanceDictionaryType($widgetInTd).getName()} == "java.lang.String"))
+							#if(${widgetInTd.getMainBinding().isBindingValid()})
+								#set($generatedFilterKey = "#keypath(${widgetInTd.getMainBinding().getWodStringRepresentation()})")
+							#else
+								#set($generatedFilterKey = ${widgetInTd.getProcessInstanceDictionaryKey()})
+								#if(${inferredListProcess})
+									if(WorkflowProcess.${inferredListProcess.getProcessDictionaryKey()}.getBusinessDataClass().getProcessBusinessDataKeyTypes().containsKey("$generatedFilterKey"))
+								#end
+							#end
+							arrayOr.addObject(EOQualifier.qualifierWithQualifierFormat("$generatedFilterKey $operator %@", new NSArray($fieldName)));
+						#end
+					#end
+				#end
+				
+				if(arrayOr.count() > 0)
+					array.addObject(new EOOrQualifier(arrayOr));
+				#if(${inferredListProcess})
+					}
+				#end
+    		#end
+    	#end
+    	}##end if(fieldName != null)
+	#end ##End #if($fieldName)
+#end ## End of qualifier macro
+
+#set($operator = $widget.getOperator())
+#void($repetitionStack.push($operator))
+#void($stack.push($listInstanciation))
+#void($stack.push($buttons))
+#set($buttons = $generator.getNewVector())
+#set($listInstanciation = $generator.getNewStringBuilder())
+#renderSequence($widget)
+#set($operator = $repetitionStack.pop())
+#set($list = $operator.getHTMLListDescriptor())
+#if($list) ## We have a display group
+    private WDLDisplayGroup ${list.getDisplayGroupName()};
+    public int ${list.getIndexName()};
+	#if(${generator.isPrototype()})
+		#set($inferredListProcess =  ${operator.getInferredListProcess()})
+	#end
+	#if($inferredListProcess)
+		public#if(${inferredListProcess.getBusinessDataType()}) ${inferredListProcess.getBusinessDataType().getName()}#else ProcessBusinessData#end $list.getItemName();
+	#else
+		public #if(${operator.getItemType().getName()})${operator.getItemType().getName()}#else NSKeyValueCoding #end $list.getItemName();
+	#end
+    public String ${list.getListName()}NeedRefreshValue;
+    private boolean ${list.getListName()}NeedRefresh;
+    private int ${list.getListName()}SortSize=1;
+	#if(${operator.getHasBatch()})
+        public int ${list.getListName()}NumberOfObjectsPerBatch = ${operator.getDefaultBatchValue()};
+        public int ${list.getListName()}CurrentBatchIndex = 1;
+        public boolean ${list.getListName()}ShowAllObjects = false;
+	#end
+    #set($atr = "#appendToResponse()")
+    #set($tvfr = "#takeValuesFromRequest()")
+    #void($appendToResponse.append($atr))
+    #void($takeValuesFromRequest.append($tvfr))
+    /**
+    * $list.getListName()
+    * @return the WDLDisplayGroup to be used in list ${list.getListName()}.
+    */
+    public WDLDisplayGroup ${list.getDisplayGroupName()}(){
+        if(${list.getDisplayGroupName()}==null){
+            ${list.getDisplayGroupName()} = new WDLDisplayGroup();
+    #if($generator.isPrototype() || (${list.getRepetitionOperator().getListType().name()} == "ACCESSOR" && ${list.getRepetitionOperator().getListAccessor().isBindingValid()}))
+        #if(${list.getRepetitionOperator().getListType().name()} != "ACCESSOR" || !${list.getRepetitionOperator().getListAccessor().isBindingValid()})
+            ${list.getDisplayGroupName()}.setObjectArray(${list.getListName()}PrototypeArray());
+        #else
+            ${list.getDisplayGroupName()}.setObjectArray(${list.getRepetitionOperator().getListAccessor().getJavaCodeStringRepresentation()});
+        #end
+            ${list.getDisplayGroupName()}.setQualifier(${list.getListName()}Qualifier());
+        #if($list.hasSort())
+            ${list.getDisplayGroupName()}.setSortOrderings(${list.getListName()}SortOrderings());
+        #end
+            ${list.getDisplayGroupName()}.updateDisplayedObjects();
+    #else             
+            ${list.getDisplayGroupName()}.setEditingContext(ec);
+            ${list.getDisplayGroupName()}.setFetchSpecification(${list.getListName()}FetchSpecification());
+        #if(${list.getRepetitionOperator().getEntity().getPrimaryKeyAttributes().size()}==1)            
+            ${list.getDisplayGroupName()}.setCountKey("${list.getRepetitionOperator().getEntity().getPrimaryKeyAttributes().get(0).getColumnName()}");
+        #end
+    #end
+            ${list.getDisplayGroupName()}.setHasCount(true);
+		#if(!${operator.getHasBatch()})
+			${list.getDisplayGroupName()}.setNumberOfObjectsPerBatch(-1);
+		#end
+            $!listInstanciation
+        }
+        return ${list.getDisplayGroupName()};
+    }
+    
+    #if(!$generator.isPrototype())
+        #if(${list.isFetchingDMEOEntity()})
+    public EOFetchSpecification ${list.getListName()}FetchSpecification() {
+        EOFetchSpecification fs = new EOFetchSpecification(${list.getRepetitionOperator().getEntity().getEntityClassName()}.modelName(), ${list.getListName()}Qualifier(), ${list.getListName()}SortOrderings());
+            #if(!$operator.getFetchObjects())
+        fs.setRawRowKeyPaths(${list.getListName()}RawRowKeyPaths());
+            #end
+        return fs;
+    }
+            #if(!$operator.getFetchObjects())    
+    private NSArray ${list.getListName()}RawRowKeyPaths() {
+              #set($size=$list.getRawRowKeyPaths().size())
+        return new NSArray(new Object[] {#foreach($keypath in $list.getRawRowKeyPaths())"$keypath" #if ($foreach.index+1<$size), #end#end});
+    }
+            #end
+            #if(!${list.getRepetitionOperator().getFetchObjects()})
+    private EOEntity ${list.getListName()}EOEntity() {
+        return EOModelGroup.defaultGroup().entityNamed(${list.getRepetitionOperator().getEntity().getEntityClassName()}.modelName());
+    }
+            #end
+    @SuppressWarnings("unused")
+    private EOGlobalID globalIDForItemRowOf${list.getListName()}() {
+            #if(${list.getRepetitionOperator().getFetchObjects()})
+        return ((${list.getRepetitionOperator().getEntity().getEntityClassName()})${list.getItemName()}).__globalID();
+            #else
+        return ${list.getListName()}EOEntity().globalIDForRow((NSDictionary)${list.getItemName()});
+            #end
+    }
+    
+    public static ${list.getRepetitionOperator().getEntity().getEntityClassName()} objectFromItem${generator.capitalize(${list.getListName()})}(String hiddenValue, Session session, EOEditingContext ec) {
+        @onereturn if(hiddenValue==null)return null;
+        if (ec == null) {
+            ec = new WDLEditingContext();
+            session.registerEC(ec);
+        }
+            #foreach($button in $buttons)
+                #if($widget.getSubmitForm())
+        if(hiddenValue.startsWith(#upNameForWidget($button))){
+                    #if($list.isFetchingDMEOEntityWithIntegerPK())
+            return ${list.getRepetitionOperator().getEntity().getEntityClassName()}.objectWithID(Integer.valueOf(hiddenValue.substring(#upNameForWidget($button).length())), ec);            
+                    #else
+            return ${list.getRepetitionOperator().getEntity().getEntityClassName()}.objectWithID(hiddenValue.substring(#upNameForWidget($button).length()), ec);            
+                    #end
+            }
+                #end
+            #end        
+        return null;
+    @end}
+        #end
+    #elseif(${list.getRepetitionOperator().getListType().name()} != "ACCESSOR" || !${list.getRepetitionOperator().getListAccessor().isBindingValid()})
+        private NSArray ${list.getListName()}PrototypeArray(){
+            NSMutableArray prototypeArray = new NSMutableArray();
+    		#if($inferredListProcess)
+        		for(ProcessBusinessData dic : session().getBusinessDataStorage().getAllBusinessDataSamples(WorkflowBusinessData.${inferredListProcess.getBusinessDataDictionaryKey()}))
+        			prototypeArray.addObject(dic);
+    		#else
+        		NSMutableDictionary item;
+                #set($hashtable = ${generator.getNewHashtable()})
+                #set($maxValues = 0)
+                #foreach($tr in ${list.getRepeatedSequenceTR().getAllTR()})
+                    #foreach($td in ${tr.colsEnumeration()})
+                        #foreach($w in ${td.getSequenceWidget().getAllNonSequenceWidget()})
+                            #set($key = ${w.getProcessInstanceDictionaryKey()})
+    						#if($key)
+                                #set($prototypeValues = ${w.getValueList()})
+    							#if(!$prototypeValues)
+    								#set($prototypeValues = ${generator.getNewVector()})
+    							#end
+                                #void(${hashtable.put($key, $prototypeValues)})
+                                #if($maxValues < ${prototypeValues.size()})
+                                    #set($maxValues = ${prototypeValues.size()})
+                                #end
+                            #end
+                        #end
+                    #end
+                #end
+        
+                #if($maxValues > 0)
+                    #set($maxValues = $maxValues - 1)
+                #end
+                        
+                #foreach($i in [0..$maxValues])
+                    item = new NSMutableDictionary();
+                    prototypeArray.addObject(item);
+                    #foreach($key in ${hashtable.keys()})
+                        #if(${hashtable.get("$key").size()} > $i)
+    						#set($value = ${hashtable.get($key).get($i)})
+                        #elseif(${hashtable.get("$key").size()} > 0)
+    						#set($lastIndex = ${hashtable.get($key).size()} - 1);
+    						#set($value = ${hashtable.get($key).get($lastIndex)})
+    					#else
+    						#set($value = "")
+    					#end
+    					#if(${value.getClass().getName()} == "java.lang.String")
+    						item.setObjectForKey("${toolbox.convertStringToJavaString($value)}", "$key");
+    					#elseif(${value.getClass().getName()} == "java.util.Date")
+    						item.setObjectForKey(new Date(${value.getTime()}l), "$key");
+    					#elseif(${value.getClass().getName()} == "java.lang.Double")
+    						item.setObjectForKey(${value}d, "$key");
+    					#elseif(${value.getClass().getName()} == "java.lang.Float")
+    						item.setObjectForKey(${value}f, "$key");
+    					#else
+    						item.setObjectForKey(${value}, "$key");
+    					#end
+                    #end
+    			#end
+    		#end
+    			
+    			
+            return prototypeArray;
+        }
+    #end ## End of if(!isPrototype)
+
+    public EOQualifier ${list.getListName()}Qualifier() {
+		#set($filters = $operator.getFilterWidgets())
+		NSMutableArray array = new NSMutableArray();
+		#if($operator.getPermanentFilterMethodSignature())
+			array.addObject($operator.getPermanentFilterMethodSignature());
+		#end
+		#if($filters.size()>0)
+			#if($generator.isPrototype())
+				#foreach($filter in $filters)
+					#qualifier($filter)
+				#end
+			#end
+		#end
+		if (array.count()>0)
+			return new EOAndQualifier(array);
+		else
+			return null;
+    }
+    
+    public NSArray ${list.getListName()}SortOrderings(){
+#if($list.hasSort())
+        return WDLAquaSortLink.sortOrderingArray(${list.getListName()}SortDictionary(),${list.getListName()}SortSize);
+#else
+        // add sort here, if needed.
+        return null;
+#end
+    }
+    
+    /**
+    * Refresh the WDLDisplayGroup if needed (qualifier has changed or sort has changed or needRefresh)
+    */
+    public void ${list.getListName()}Refresh(){
+    #if ($list.hasSort())
+        // Sort has changed ?
+        boolean sortHasChanged = WDLAquaSortLink.sortOrderingsHasChanged(${list.getListName()}SortDictionary());
+        // if no sort selected (sortArray.count==0), use default sorting
+        if(sortHasChanged && ((NSArray)${list.getListName()}SortDictionary().valueForKey("sortArray")).count()==0)
+            _${list.getListName()}SortDictionary = null;
+    #else
+        boolean sortHasChanged = false;
+    #end
+        if(sortHasChanged || ${list.getListName()}NeedRefresh){
+                ${list.getListName()}NeedRefresh = false;
+                ${list.getDisplayGroupName()} = null; // => will refresh the display group.
+			#if(${operator.getHasBatch()})
+                ${list.getListName()}CurrentBatchIndex = 0;
+			#end
+        }
+    }
+    
+    #if($widget.isInPopup())
+    public String ${list.getListName()}Name()
+    {
+          return uniqueIdentifier()+"${list.getListName()}Name";
+    }
+    #else
+    public String ${list.getListName()}Name="${list.getListName()}Name";
+    #end
+    
+    #if($list.hasSort())
+    private NSMutableDictionary _${list.getListName()}SortDictionary;
+    
+    public NSMutableDictionary ${list.getListName()}SortDictionary(){
+        if(_${list.getListName()}SortDictionary==null) {
+            _${list.getListName()}SortDictionary = new NSMutableDictionary();
+            _${list.getListName()}SortDictionary.setObjectForKey(new NSMutableArray(),"sortArray");
+            _${list.getListName()}SortDictionary.setObjectForKey(Boolean.TRUE,"hasChanged");
+            // TODO: use correct sortKeyPath
+            //WDLAquaSortLink.addSortKeyToDictionary(_${list.getListName()}SortDictionary,uniqueName,isAcending,defaultAscending,caseInsensitive,isSorted,sortKeyPath)
+        #foreach($header in $list.getSortableHeaders())
+            #if(${header.getSortedWidget()})
+                #set($key = "sortKey#capNameForWidget($header)")
+				
+				#if(${header.getSortedWidget().getMainBinding().isBindingValid()})
+					#set($filterKey = "#keypath(${header.getSortedWidget().getMainBinding().getWodStringRepresentation()})")
+				#else
+					#set($filterKey = ${header.getSortedWidget().getProcessInstanceDictionaryKey()})
+				#end
+				
+            	WDLAquaSortLink.addSortKeyToDictionary(_${list.getListName()}SortDictionary,$key#if($header.isInPopup())()#end,$header.getDefaultAscending(),$header.getDefaultAscending(),$header.getCaseSensitive(),$header.getIsSorted(), "${filterKey}");
+            #end
+        #end ## End of foreach sortable headers
+        }
+        return _${list.getListName()}SortDictionary;
+    }
+    #end
+    #if(${generator.isPrototype()} || $list.isFetchingDMEOEntity())
+    private void ${list.getListName()}WriteQueryListDictionary(){
+        #if($widget.isInPopup())
+        if(includePopupInPage())
+            return;
+        #end
+        NSMutableDictionary queryListDictionary = new NSMutableDictionary();
+		#if(${operator.getHasBatch()})
+            queryListDictionary.setObjectForKey(Boolean.valueOf(${list.getListName()}ShowAllObjects),"showAllObjects");
+            queryListDictionary.setObjectForKey(Integer.valueOf(${list.getListName()}CurrentBatchIndex),"currentBatchIndex");
+            queryListDictionary.setObjectForKey(Integer.valueOf(${list.getListName()}NumberOfObjectsPerBatch),"numberOfObjectsPerBatch");
+		#end
+        #if($list.hasSort())
+        queryListDictionary.setObjectForKey(${list.getListName()}SortDictionary(),"sortDictionary");
+        #end
+        ((WDLSession)session()).sessionInfo().setObjectForKey(queryListDictionary,"${list.getListName()}_${operator.getFlexoID()}_QLD");
+        // set user preferences...
+    }
+
+    private void ${list.getListName()}ReadQueryListDictionary(){
+        #if($widget.isInPopup())
+        if(includePopupInPage())
+            return;
+        #end
+        NSDictionary queryListDictionary = (NSDictionary)((WDLSession)session()).sessionInfo().valueForKey("${list.getListName()}_${operator.getFlexoID()}_QLD");
+        if(queryListDictionary!=null){
+			#if(${operator.getHasBatch()})
+                ${list.getListName()}ShowAllObjects = ((Boolean)queryListDictionary.valueForKey("showAllObjects")).booleanValue();
+                ${list.getListName()}CurrentBatchIndex = ((Integer)queryListDictionary.valueForKey("currentBatchIndex")).intValue();
+                ${list.getListName()}NumberOfObjectsPerBatch = ((Integer)queryListDictionary.valueForKey("numberOfObjectsPerBatch")).intValue();
+			#end
+        #if($list.hasSort())
+            _${list.getListName()}SortDictionary = (NSMutableDictionary)queryListDictionary.objectForKey("sortDictionary");
+        #end
+        }
+        else {
+            // init from user preferences ...
+        }
+    }
+    #end
+    public boolean ${list.getListName()}HasResults(){
+        return ${list.getDisplayGroupName()}().displayedObjects().count()>0;
+    }
+
+    #if($list.hasExcel())
+    public WOActionResults ${list.getListName()}Export() {
+        // objects
+        boolean showAllObjects = ${list.getDisplayGroupName()}().showAllObjects();
+        ${list.getDisplayGroupName()}().setShowAllObjects(true);
+        NSArray objects = ${list.getDisplayGroupName()}().displayedObjects();
+        ${list.getDisplayGroupName()}().setShowAllObjects(showAllObjects);
+        
+        // column array
+        NSMutableArray array = new NSMutableArray();
+        // array.addObject(new NSDictionary(new Object[] {"$COLUMN_NAME","$EXCELL_ACCESSOR"}, new Object[] {"label","java"}));
+        #foreach($header in $list.getHeaders())
+            #excelRow("${list.findWidgetMatchingHeader($header).getProcessInstanceDictionaryKey()}" $header.getValue() $header)
+        #end
+        try {
+            DLTabulatedFileServiceInterface excelGenerator = (DLTabulatedFileServiceInterface)DLServiceManager.getInstance().getService(DLTabulatedFileServiceInterface.SERVICE_KEY);
+            return excelGenerator.export("${list.getListName()}.xls", objects, array, "${list.getItemName()}", this);
+        } catch (DLServiceNotAvailableException e) {
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.warning("DLServiceNotAvailableException: " + e.getMessage() + ". Set level to FINE on logger named '" +
+                    logger.getName() + "' to see stacktrace.");
+            }
+            if (logger.isLoggable(Level.FINE)) {
+                logger.log(Level.FINE, "DLServiceNotAvailableException: " + e.getMessage(), e);
+            }
+            WOResponse response = new WOResponse();
+            response.setContent("The excel export service is unavailable at this time. Please try again later or contact your administrator.");
+            response.setStatus(WOResponse.HTTP_STATUS_OK);
+            return response;
+        }
+    }
+    #end ## End of hasExcel()
+
+    #if(${list.hasRefresh()})
+    public String ${list.getListName()}RefreshHiddenFieldName()
+    {
+        #if($widget.isInPopup())
+            return ${list.getListName()}Name() + "_NEED_REFRESH";
+        #else
+            return ${list.getListName()}Name + "_NEED_REFRESH";
+        #end
+    }
+    #end ## End of hasRefresh()
+#else
+    #if(!${operator.getBindingItem()})
+    protected Object itemOf#capName();
+    #end
+    protected int indexOf#capName();
+#end ## End of if($list)
+#set($buttons = $stack.pop())
+#set($listInstanciation = $stack.pop())

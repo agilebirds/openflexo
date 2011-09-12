@@ -1,0 +1,211 @@
+<?xml version="1.0"?>
+<wsdl:definitions targetNamespace="http://webservices.wolfram.com/services/Integrator/Integrate.m" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wolfram="http://www.wolfram.com/XML/" xmlns:mathml="http://www.w3.org/1998/Math/MathML" xmlns:ns1="http://webservices.wolfram.com/services/Integrator/Integrate.m">
+ <wsdl:types>
+  <xsd:schema targetNamespace="http://webservices.wolfram.com/services/Integrator/Integrate.m">
+   <xsd:import namespace="http://www.w3.org/1998/Math/MathML"/>
+   <xsd:import namespace="http://www.wolfram.com/XML/"/>
+   <xsd:element name="IntegrateExpressionReturn" type="ns1:IntegrateExpressionReturn"/>
+   <xsd:complexType name="IntegrateExpressionReturn">
+    <xsd:sequence>
+     <xsd:element name="element" type="wolfram:Expression"/>
+    </xsd:sequence>
+   </xsd:complexType>
+   <xsd:element name="IntegrateExpression" type="ns1:IntegrateExpression"/>
+   <xsd:complexType name="IntegrateExpression">
+    <xsd:sequence>
+     <xsd:element name="expr" type="wolfram:Expression"/>
+    </xsd:sequence>
+   </xsd:complexType>
+   <xsd:element name="IntegrateExpressionToGIFReturn" type="ns1:IntegrateExpressionToGIFReturn"/>
+   <xsd:complexType name="IntegrateExpressionToGIFReturn">
+    <xsd:sequence>
+     <xsd:element name="element" type="xsd:base64Binary"/>
+    </xsd:sequence>
+   </xsd:complexType>
+   <xsd:element name="IntegrateExpressionToGIF" type="ns1:IntegrateExpressionToGIF"/>
+   <xsd:complexType name="IntegrateExpressionToGIF">
+    <xsd:sequence>
+     <xsd:element name="expr" type="wolfram:Expression"/>
+    </xsd:sequence>
+   </xsd:complexType>
+   <xsd:element name="IntegrateMathMLReturn" type="ns1:IntegrateMathMLReturn"/>
+   <xsd:complexType name="IntegrateMathMLReturn">
+    <xsd:sequence>
+     <xsd:element name="element" type="mathml:math.type"/>
+    </xsd:sequence>
+   </xsd:complexType>
+   <xsd:element name="IntegrateMathML" type="ns1:IntegrateMathML"/>
+   <xsd:complexType name="IntegrateMathML">
+    <xsd:sequence>
+     <xsd:element name="mathml" type="mathml:math.type"/>
+    </xsd:sequence>
+   </xsd:complexType>
+   <xsd:element name="IntegrateMathMLToGIFReturn" type="ns1:IntegrateMathMLToGIFReturn"/>
+   <xsd:complexType name="IntegrateMathMLToGIFReturn">
+    <xsd:sequence>
+     <xsd:element name="element" type="xsd:base64Binary"/>
+    </xsd:sequence>
+   </xsd:complexType>
+   <xsd:element name="IntegrateMathMLToGIF" type="ns1:IntegrateMathMLToGIF"/>
+   <xsd:complexType name="IntegrateMathMLToGIF">
+    <xsd:sequence>
+     <xsd:element name="mathml2" type="mathml:math.type"/>
+    </xsd:sequence>
+   </xsd:complexType>
+   <xsd:element name="IntegrateStringReturn" type="ns1:IntegrateStringReturn"/>
+   <xsd:complexType name="IntegrateStringReturn">
+    <xsd:sequence>
+     <xsd:element name="element" type="xsd:string"/>
+    </xsd:sequence>
+   </xsd:complexType>
+   <xsd:element name="IntegrateString" type="ns1:IntegrateString"/>
+   <xsd:complexType name="IntegrateString">
+    <xsd:sequence>
+     <xsd:element name="str" type="xsd:string"/>
+    </xsd:sequence>
+   </xsd:complexType>
+   <xsd:element name="IntegrateStringToGIFReturn" type="ns1:IntegrateStringToGIFReturn"/>
+   <xsd:complexType name="IntegrateStringToGIFReturn">
+    <xsd:sequence>
+     <xsd:element name="element" type="xsd:base64Binary"/>
+    </xsd:sequence>
+   </xsd:complexType>
+   <xsd:element name="IntegrateStringToGIF" type="ns1:IntegrateStringToGIF"/>
+   <xsd:complexType name="IntegrateStringToGIF">
+    <xsd:sequence>
+     <xsd:element name="str" type="xsd:string"/>
+    </xsd:sequence>
+   </xsd:complexType>
+  </xsd:schema>
+ </wsdl:types>
+ <wsdl:message name="IntegrateExpressionRequest">
+  <wsdl:part element="ns1:IntegrateExpression" name="part"/>
+ </wsdl:message>
+ <wsdl:message name="IntegrateExpressionResponse">
+  <wsdl:part element="ns1:IntegrateExpressionReturn" name="IntegrateExpressionReturn"/>
+ </wsdl:message>
+ <wsdl:message name="IntegrateExpressionToGIFRequest">
+  <wsdl:part element="ns1:IntegrateExpressionToGIF" name="part"/>
+ </wsdl:message>
+ <wsdl:message name="IntegrateExpressionToGIFResponse">
+  <wsdl:part element="ns1:IntegrateExpressionToGIFReturn" name="IntegrateExpressionToGIFReturn"/>
+ </wsdl:message>
+ <wsdl:message name="IntegrateMathMLRequest">
+  <wsdl:part element="ns1:IntegrateMathML" name="part"/>
+ </wsdl:message>
+ <wsdl:message name="IntegrateMathMLResponse">
+  <wsdl:part element="ns1:IntegrateMathMLReturn" name="IntegrateMathMLReturn"/>
+ </wsdl:message>
+ <wsdl:message name="IntegrateMathMLToGIFRequest">
+  <wsdl:part element="ns1:IntegrateMathMLToGIF" name="part"/>
+ </wsdl:message>
+ <wsdl:message name="IntegrateMathMLToGIFResponse">
+  <wsdl:part element="ns1:IntegrateMathMLToGIFReturn" name="IntegrateMathMLToGIFReturn"/>
+ </wsdl:message>
+ <wsdl:message name="IntegrateStringRequest">
+  <wsdl:part element="ns1:IntegrateString" name="part"/>
+ </wsdl:message>
+ <wsdl:message name="IntegrateStringResponse">
+  <wsdl:part element="ns1:IntegrateStringReturn" name="IntegrateStringReturn"/>
+ </wsdl:message>
+ <wsdl:message name="IntegrateStringToGIFRequest">
+  <wsdl:part element="ns1:IntegrateStringToGIF" name="part"/>
+ </wsdl:message>
+ <wsdl:message name="IntegrateStringToGIFResponse">
+  <wsdl:part element="ns1:IntegrateStringToGIFReturn" name="IntegrateStringToGIFReturn"/>
+ </wsdl:message>
+ <wsdl:portType name="IntegrateServicePortType">
+  <wsdl:operation name="IntegrateExpression">
+   <wsdl:documentation>Integrates an equation with respect to x.     The function is passed in as an InputForm Expression and the result is an    InputForm Expression.</wsdl:documentation>
+   <wsdl:input message="ns1:IntegrateExpressionRequest" name="IntegrateExpressionRequest"/>
+   <wsdl:output message="ns1:IntegrateExpressionResponse" name="IntegrateExpressionResponse"/>
+  </wsdl:operation>
+  <wsdl:operation name="IntegrateExpressionToGIF">
+   <wsdl:documentation>Integrates an equation with respect to x.     The function is passed in as an InputForm Expression and the result is a    GIF.</wsdl:documentation>
+   <wsdl:input message="ns1:IntegrateExpressionToGIFRequest" name="IntegrateExpressionToGIFRequest"/>
+   <wsdl:output message="ns1:IntegrateExpressionToGIFResponse" name="IntegrateExpressionToGIFResponse"/>
+  </wsdl:operation>
+  <wsdl:operation name="IntegrateMathML">
+   <wsdl:documentation>Integrates an equation with respect to x.     The function is passed in as an MathML and the result is MathML.</wsdl:documentation>
+   <wsdl:input message="ns1:IntegrateMathMLRequest" name="IntegrateMathMLRequest"/>
+   <wsdl:output message="ns1:IntegrateMathMLResponse" name="IntegrateMathMLResponse"/>
+  </wsdl:operation>
+  <wsdl:operation name="IntegrateMathMLToGIF">
+   <wsdl:documentation>Integrates an equation with respect to x.     The function is passed in as MathML and the result is a GIF.</wsdl:documentation>
+   <wsdl:input message="ns1:IntegrateMathMLToGIFRequest" name="IntegrateMathMLToGIFRequest"/>
+   <wsdl:output message="ns1:IntegrateMathMLToGIFResponse" name="IntegrateMathMLToGIFResponse"/>
+  </wsdl:operation>
+  <wsdl:operation name="IntegrateString">
+   <wsdl:documentation>Integrates an equation with respect to x.     The function is passed in as an InputForm string and the result is an    InputForm string.</wsdl:documentation>
+   <wsdl:input message="ns1:IntegrateStringRequest" name="IntegrateStringRequest"/>
+   <wsdl:output message="ns1:IntegrateStringResponse" name="IntegrateStringResponse"/>
+  </wsdl:operation>
+  <wsdl:operation name="IntegrateStringToGIF">
+   <wsdl:documentation>Integrates an equation with respect to x.     The function is passed in as an InputForm string and the result is a GIF.</wsdl:documentation>
+   <wsdl:input message="ns1:IntegrateStringToGIFRequest" name="IntegrateStringToGIFRequest"/>
+   <wsdl:output message="ns1:IntegrateStringToGIFResponse" name="IntegrateStringToGIFResponse"/>
+  </wsdl:operation>
+ </wsdl:portType>
+ <wsdl:binding name="IntegrateServiceBinding" type="ns1:IntegrateServicePortType">
+  <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+  <wsdl:operation name="IntegrateExpression">
+   <wsdlsoap:operation soapAction=""/>
+   <wsdl:input name="IntegrateExpressionRequest">
+    <wsdlsoap:body use="literal"/>
+   </wsdl:input>
+   <wsdl:output name="IntegrateExpressionResponse">
+    <wsdlsoap:body use="literal"/>
+   </wsdl:output>
+  </wsdl:operation>
+  <wsdl:operation name="IntegrateExpressionToGIF">
+   <wsdlsoap:operation soapAction=""/>
+   <wsdl:input name="IntegrateExpressionToGIFRequest">
+    <wsdlsoap:body use="literal"/>
+   </wsdl:input>
+   <wsdl:output name="IntegrateExpressionToGIFResponse">
+    <wsdlsoap:body use="literal"/>
+   </wsdl:output>
+  </wsdl:operation>
+  <wsdl:operation name="IntegrateMathML">
+   <wsdlsoap:operation soapAction=""/>
+   <wsdl:input name="IntegrateMathMLRequest">
+    <wsdlsoap:body use="literal"/>
+   </wsdl:input>
+   <wsdl:output name="IntegrateMathMLResponse">
+    <wsdlsoap:body use="literal"/>
+   </wsdl:output>
+  </wsdl:operation>
+  <wsdl:operation name="IntegrateMathMLToGIF">
+   <wsdlsoap:operation soapAction=""/>
+   <wsdl:input name="IntegrateMathMLToGIFRequest">
+    <wsdlsoap:body use="literal"/>
+   </wsdl:input>
+   <wsdl:output name="IntegrateMathMLToGIFResponse">
+    <wsdlsoap:body use="literal"/>
+   </wsdl:output>
+  </wsdl:operation>
+  <wsdl:operation name="IntegrateString">
+   <wsdlsoap:operation soapAction=""/>
+   <wsdl:input name="IntegrateStringRequest">
+    <wsdlsoap:body use="literal"/>
+   </wsdl:input>
+   <wsdl:output name="IntegrateStringResponse">
+    <wsdlsoap:body use="literal"/>
+   </wsdl:output>
+  </wsdl:operation>
+  <wsdl:operation name="IntegrateStringToGIF">
+   <wsdlsoap:operation soapAction=""/>
+   <wsdl:input name="IntegrateStringToGIFRequest">
+    <wsdlsoap:body use="literal"/>
+   </wsdl:input>
+   <wsdl:output name="IntegrateStringToGIFResponse">
+    <wsdlsoap:body use="literal"/>
+   </wsdl:output>
+  </wsdl:operation>
+ </wsdl:binding>
+ <wsdl:service name="IntegrateServiceService">
+  <wsdl:port binding="ns1:IntegrateServiceBinding" name="IntegrateServicePort">
+   <wsdlsoap:address location="http://webservices.wolfram.com/services/Integrator/Integrate.m"/>
+  </wsdl:port>
+ </wsdl:service>
+</wsdl:definitions>

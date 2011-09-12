@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GeometricSet id="1">
+  <Polylin id="2" name="Polylin1">
+    <PolylinGraphicalRepresentation id="3" displayLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" isVisible="true" layer="10">
+      <TextStyle id="4" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="5" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <TexturedBackgroundStyle id="6" color1="255,0,0" color2="255,255,255" textureType="TEXTURE1" useTransparency="false" transparencyLevel="0.5" />
+    </PolylinGraphicalRepresentation>
+    <PolylinWithNPointsConstruction id="7">
+      <P_ExplicitPointConstruction id="8" point="108.0,372.0" />
+      <P_ExplicitPointConstruction id="9" point="271.0,330.0" />
+      <P_ExplicitPointConstruction id="10" point="311.0,124.0" />
+      <P_ExplicitPointConstruction id="11" point="482.0,158.0" />
+      <P_ExplicitPointConstruction id="12" point="591.0,312.0" />
+      <P_ExplicitPointConstruction id="13" point="259.0,403.0" />
+    </PolylinWithNPointsConstruction>
+    <Resulting_FGEPolylin id="14" className="org.openflexo.fge.geom.FGERectPolylin">
+      <FGEPoint id="15" x="108.0" y="372.0" />
+      <FGEPoint id="16" x="271.0" y="330.0" />
+      <FGEPoint id="17" x="311.0" y="124.0" />
+      <FGEPoint id="18" x="482.0" y="158.0" />
+      <FGEPoint id="19" x="591.0" y="312.0" />
+      <FGEPoint id="20" x="259.0" y="403.0" />
+    </Resulting_FGEPolylin>
+  </Polylin>
+  <GeometricDrawingGraphicalRepresentation id="21" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" width="10000.0" height="10000.0" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255">
+    <TextStyle id="22" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+  </GeometricDrawingGraphicalRepresentation>
+</GeometricSet>
+

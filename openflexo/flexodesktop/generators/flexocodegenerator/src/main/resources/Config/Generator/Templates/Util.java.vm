@@ -1,0 +1,436 @@
+import be.denali.cookie.DLUserInCookieServiceInterface;
+import be.denali.core.utils.WDLLog;
+import be.denali.core.woapp.WDLApplication;
+import be.denali.domainkeyvalue.DLDomainKeyValueServiceInterface;
+import java.text.DateFormatSymbols;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Enumeration;
+import java.util.Locale;
+import java.util.Hashtable;
+import java.util.Vector;
+import java.util.List;
+import java.util.Date;
+import java.util.ArrayList;
+import be.denali.service.DLServiceManager;
+import java.util.logging.Level;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.zip.Deflater;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.FileInputStream;
+
+import com.webobjects.foundation.NSData;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+
+/**
+ * This class contains some convenience static methods.
+ * 
+ * @author FlexoBPM Generator, Agile Birds sprl. (see www.FlexoBPM.com)
+ * @version 
+ */
+public class ${PREFIX}Util
+{
+    @SuppressWarnings("unused")
+    private static final java.util.logging.Logger _logger = ${PREFIX}Util.getLogger(${PREFIX}Util.class);
+
+    public static final String RETURNED_URL_KEY = "formActionReturnedUrl";
+
+    public static final String WOACTION_RESULTS_KEY = "WOACTION_RESULTS_KEY";
+	
+	private static SimpleDateFormat dateFormatter;
+
+    /**
+     * Returns the login of the current user.
+     *
+     * @param context the context of the request-response loop.
+     * @return the login of the current user.
+     */
+    public static String currentUserLogin(WOContext context)
+    {
+        return WDLApplication.currentUser(context).login();
+    }
+
+    /**
+     * Returns a String with the default format for this project.
+     * 
+     * @param date the date to format.
+     * @return a String with the default format for this project.
+     */
+    public static String formattedDate(Date date)
+    {
+        return getDateFormatter().format(date);
+    }
+
+    /**
+     * Returns a date formatter.
+     *
+     * @return a date formatter.
+     */
+    public static DateFormat getDateFormatter()
+    {
+        if (dateFormatter == null) {
+            dateFormatter = new SimpleDateFormat(${PREFIX}Config.getConfig().getDateFormat(),new DateFormatSymbols(Locale.getDefault()));
+        }
+        return dateFormatter;
+    }
+
+    /**
+     * Returns a logger for this class, in this framework.
+     * 
+     * @param aClass
+     *            the selected class.
+     * @return a logger for this class, in this framework.
+     */
+    public static java.util.logging.Logger getLogger(Class aClass)
+    {
+        return WDLLog.getLoggerForFrameworkAndClass("${PREFIX}Application", aClass);
+    }
+
+    public static DLUserInCookieServiceInterface getUserInCookieService(){
+        try {
+            return (DLUserInCookieServiceInterface)DLServiceManager.getInstance().getService(DLUserInCookieServiceInterface.SERVICE_KEY);
+        } catch(Exception e) {
+            return null;
+        }
+    }
+    
+    public static DLDomainKeyValueServiceInterface getDKVService() {
+        try{
+            return (DLDomainKeyValueServiceInterface)DLServiceManager.getInstance().getService(DLDomainKeyValueServiceInterface.SERVICE_KEY);
+        }catch(Exception e){
+            #if($generator.isPrototype())
+        		DLDomainKeyValueServiceInterface service = new DKVInMemoryService();
+	            DLServiceManager.getInstance().setService(service, DLDomainKeyValueServiceInterface.SERVICE_KEY);
+	            return service;
+        	#else
+            	return null;
+            #end
+        }
+    }
+	
+	public static WOActionResults actionResultForDownloadBytes(byte[] content, String fileName, String contentType) 
+    {
+    	if(content!=null)
+    	{
+	    	WOResponse comp = new WOResponse();     
+	    	comp.disableClientCaching();   
+	    	comp.removeHeadersForKey("Cache-Control");    
+	    	comp.removeHeadersForKey("pragma");     
+	    	comp.setHeader("application/"+contentType,"content-type");     
+	    	comp.setHeader(""+content.length, "content-length");
+	    	comp.setHeader("attachment;filename=\""+fileName+"\"", "content-disposition");   
+	    	comp.setContent(new NSData(content));
+	
+	    	return comp;
+    	}
+    	return null;
+    }
+    
+#if(!${project.getWorkflow().getRoleList().getRoles().isEmpty()} && $generator.isPrototype())    
+    #set($enumRolePath = "${PREFIX}Constants.Role")
+    private static Hashtable<String, ${enumRolePath}[]> _accessRightHashTable;
+       
+    public static boolean hasNeededAccessRightForScreenClassName(NSKeyValueCoding user, String screenClassName, Long ciID){
+        if(_accessRightHashTable==null)initAccessRightHashTable();
+       
+        ${enumRolePath}[] allowedRoles = _accessRightHashTable.get(screenClassName+ (ciID!=null?"_"+ciID:""));
+       
+        if(allowedRoles==null)
+            #if(${generator.isPrototype()})
+                return true;
+            #else
+                return false;
+            #end            
+        
+        try
+        {
+            Object role = user.valueForKey("role");
+            
+            if(role instanceof String)
+                role = ${enumRolePath}.getRole((String)role);
+                
+            if(role==null || !(role instanceof ${enumRolePath}))
+                #if(${generator.isPrototype()})
+                    return true;
+                #else
+                    return false;
+                #end  
+                
+            if(((${enumRolePath})role).containsOneOfRoles(allowedRoles))
+                return true;
+        }
+        catch(NSKeyValueCoding.UnknownKeyException e)
+        {
+            _logger.log(Level.WARNING, "Cannot check access right as " +user.getClass()+ " doesn't contain a method getRole()");
+        }
+       
+        return false;
+    }
+   
+    public static boolean hasNeededAccessRightForScreenClassNameAndObject(NSKeyValueCoding user, String screenClassName, long ciID, Object object){
+
+        if(hasNeededAccessRightForScreenClassName(user, screenClassName, ciID))
+            return true;
+   
+        #foreach($cd in $project.getAllInstanciatedOperationComponentDefinition())
+            if("${cd.getName()}".equals(screenClassName)){
+                   return false;
+            }
+        #end
+               
+        return false;
+    }
+   
+    private static void initAccessRightHashTable(){
+        _accessRightHashTable = new Hashtable<String, ${enumRolePath}[]>();
+        
+        NSDictionary dic = ${PREFIX}Config.getConfig().getAccessRightsDefinition();
+        
+        String key;
+        NSArray values;
+        Vector<${enumRolePath}> roles;
+        ${enumRolePath} role;
+        Enumeration en = dic.allKeys().objectEnumerator();
+        while(en.hasMoreElements())
+        {
+            key = (String) en.nextElement();
+            
+            values = (NSArray) dic.valueForKey(key);
+            roles = new Vector<${enumRolePath}>();
+            Enumeration enValues = values.objectEnumerator();
+            while(enValues.hasMoreElements())
+            {
+                role = ${enumRolePath}.getRole((String) enValues.nextElement());
+                if(role!=null)
+                    roles.add(role);
+            }
+            
+            _accessRightHashTable.put(key, roles.toArray(new ${enumRolePath}[0]));
+        }
+    }
+    
+    public static void reloadAccessRights()
+    {
+        initAccessRightHashTable();
+    }
+#end
+	
+	public static void deleteFile(File file)
+    {
+    	if(file.isDirectory())
+    	{
+    		for(File subFile : file.listFiles())
+    			deleteFile(subFile);
+    	}
+		
+    	file.delete();
+    }
+
+#if($generator.isPrototype()) 
+	private static final void copyInputStream(InputStream in, OutputStream out)
+        throws IOException {
+        try {
+            byte[] buffer = new byte[4096];
+            int len;
+            while ((len = in.read(buffer)) >= 0)
+                out.write(buffer, 0, len);
+        } finally {
+            in.close();
+            out.close();
+        }
+    }
+
+    public static final void unzip(File zip, File outputDir)
+        throws ZipException, IOException {
+        Enumeration<?> entries;
+        outputDir = outputDir.getCanonicalFile();
+        if (!outputDir.exists()) {
+            boolean b = outputDir.mkdirs();
+            if (!b) {
+                throw new IllegalArgumentException("Could not create dir " + outputDir.getAbsolutePath());
+            }
+        }
+        if (!outputDir.isDirectory()) {
+            throw new IllegalArgumentException(outputDir.getAbsolutePath() + "is not a directory or is not writeable!");
+        }
+
+        ZipFile zipFile;
+        zipFile = new ZipFile(zip);
+        entries = zipFile.entries();
+        while (entries.hasMoreElements()) {
+            ZipEntry entry = (ZipEntry) entries.nextElement();
+            if (entry.isDirectory()) {
+                // Assume directories are stored parents first then
+                // children.
+                // This is not robust, just for demonstration purposes.
+                (new File(outputDir, entry.getName().replace('\\', '/'))).mkdirs();
+                continue;
+            }
+
+            File outputFile = new File(outputDir, entry.getName().replace('\\', '/'));
+            createNewFile(outputFile);
+            try {
+                copyInputStream(zipFile.getInputStream(entry), new BufferedOutputStream(new FileOutputStream(outputFile)));
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.err.println("Could not extract: " + outputFile.getAbsolutePath() + " maybe some files contains invalid characters.");
+            }
+        }
+        zipFile.close();
+    }
+
+    public static void unzip(File zip, String outputDirPath) throws ZipException, IOException {
+        File outputDir = new File(outputDirPath);
+        unzip(zip, outputDir);
+    }
+
+    public static void makeZip(File zipOutput, File fileToZip)
+        throws IOException {
+        createNewFile(zipOutput);
+
+        ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipOutput));
+        zos.setLevel(Deflater.DEFAULT_COMPRESSION);
+        try {
+            if (fileToZip.isDirectory()) {
+                zipDir(fileToZip.getParentFile().getAbsolutePath().length() + 1, fileToZip, zos);
+            } else {
+                zipFile(fileToZip, zos);
+            }
+        } finally {
+            zos.close();
+        }
+    }
+
+    /**
+	 * This method makes a zip on the outputsream <code>zos</code>out of the given <code>dirToZip</code>
+	 * @param dirToZip the directory to zip
+	 * @param zos the output stream where to write the zip data
+	 * @throws IOException
+	 */
+	public static void zipDir(File dirToZip, ZipOutputStream zos) throws IOException {
+		zipDir(dirToZip.getParentFile().getAbsolutePath().length()+1,dirToZip, zos);
+	}
+    
+    public static void zipDir(int pathPrefixSize, File dirToZip, ZipOutputStream zos)
+        throws IOException {
+        String[] dirList = dirToZip.list();
+        for (int i = 0; i < dirList.length; i++) {
+            File f = new File(dirToZip, dirList[i]);
+            if (f.isDirectory()) {
+                zipDir(pathPrefixSize, f, zos);
+            } else {
+                zipFile(pathPrefixSize, f, zos);
+            }
+        }
+    }
+    
+    /**
+	 * This method makes a zip on the outputsream <code>zos</code>out of the given <code>fileToZip</code>
+	 * @param fileToZip the file to zip
+	 * @param zos the output stream where to write the zip data
+	 * @throws IOException
+	 */
+
+	public static void zipFile(File fileToZip, ZipOutputStream zos) throws IOException {
+		zipFile(fileToZip.getParentFile().getAbsolutePath().length()+1,fileToZip, zos);
+	}
+
+    public static void zipFile(int pathPrefixSize, File fileToZip, ZipOutputStream zos)
+        throws IOException {
+        if (!fileToZip.exists()) {
+            return;
+        }
+
+        byte[] readBuffer = new byte[4096];
+        int bytesIn = 0;
+        FileInputStream fis = new FileInputStream(fileToZip);
+        try {
+            ZipEntry anEntry = new ZipEntry(fileToZip.getAbsolutePath().substring(pathPrefixSize).replace('\\', '/'));
+            // place the zip entry in the ZipOutputStream object
+            zos.putNextEntry(anEntry);
+            // now write the content of the file to the ZipOutputStream
+            while ((bytesIn = fis.read(readBuffer)) != -1) {
+                zos.write(readBuffer, 0, bytesIn);
+            }
+        } finally {
+            fis.close();
+        }
+    }
+
+    public static void createEmptyZip(File zip) throws IOException {
+        ZipOutputStream zos = null;
+        try {
+            createNewFile(zip);
+            zos = new ZipOutputStream(new FileOutputStream(zip));
+
+            ZipEntry entry = new ZipEntry("");
+            zos.putNextEntry(entry);
+        } finally {
+            if (zos != null) {
+                zos.close();
+            }
+        }
+    }
+    
+    public static boolean createNewFile(File newFile) throws IOException
+    {
+    	boolean ret = false;
+    	if (!newFile.exists()) {
+            if (!newFile.getParentFile().exists()) {
+                ret = newFile.getParentFile().mkdirs();
+                if (!ret) {
+                	newFile = newFile.getCanonicalFile();
+                	ret = newFile.getParentFile().mkdirs();
+                }
+                if (!ret) {
+                	System.err.println("WARNING: cannot create directory: "+newFile.getParent()+" createNewFile(File)");
+                }
+            }
+            try {
+				ret=newFile.createNewFile();
+			} catch (IOException e) {
+				newFile = newFile.getCanonicalFile();
+				ret=newFile.createNewFile();
+				if (!ret) {
+                	System.err.println("WARNING: cannot create file: "+newFile.getAbsolutePath()+" createNewFile(File)");
+                }
+			}
+        }
+    	return ret;
+    }
+	
+	public static void copyFileToFile(File curFile, File newFile) throws IOException
+    {
+        FileInputStream is = new FileInputStream(curFile);
+        try {
+            createNewFile(newFile);
+            FileOutputStream os = new FileOutputStream(newFile);
+            try {
+                while (is.available() > 0) {
+                    byte[] byteArray = new byte[is.available()];
+                    is.read(byteArray);
+                    os.write(byteArray);
+                }
+                os.flush();
+            } finally {
+                os.close();
+            }
+        } finally {
+            is.close();
+        }
+    }
+#end
+}

@@ -1,0 +1,61 @@
+import com.webobjects.foundation.*;
+import com.webobjects.appserver.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.eoaccess.*;
+import be.denali.core.woapp.WDLComponent;
+
+/**
+ * @author FlexoBPM Generator, Agile Birds sprl. (see www.FlexoBPM.com)
+ */
+@SuppressWarnings("serial")
+public class ${WOCOMPONENTNAME} extends WDLComponent{
+
+    //==========================================================================
+    //============================= Constructor ================================
+    //==========================================================================
+
+    public ${WOCOMPONENTNAME}(WOContext context){
+        super(context);
+    }
+
+    public boolean synchronizesVariablesWithBindings(){
+        return false;
+    }
+
+    public void appendToResponse(WOResponse r, WOContext c){
+        // Add initialisation of the variables here
+        super.appendToResponse(r,c);
+    }
+
+    public void takeValuesFromRequest(WORequest r, WOContext c){
+        super.takeValuesFromRequest(r,c);
+        // Get values after a form submit here.
+    }
+
+    public String title(){
+        if(hasBinding("title")) return (String)valueForBinding("title");
+        else return "${PREFIX}"; 
+    }
+    
+    /** 
+    * @return array of needed css urls
+    */
+    public NSArray cssArray(){
+        if (hasBinding("cssSheet")) {
+            return new NSArray(urlForResourceNamed("DenaliWebResources",(String)valueForBinding("cssSheet")));
+        } else
+            return null;
+    }
+    
+    /** 
+    * @return array of needed js urls
+    */
+    public NSArray jsArray(){
+        // return null;
+        NSMutableArray array = new NSMutableArray();
+        if(hasBinding("needDateAssistant"))
+            array.addObject(urlForResourceNamed("DenaliWebResources","CalendarPopup.js"));
+        return array;
+    }
+        
+}

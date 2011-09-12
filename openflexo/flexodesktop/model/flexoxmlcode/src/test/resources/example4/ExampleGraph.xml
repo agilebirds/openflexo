@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Graph id="1">
+  <StartNode id="2">
+    <Edge id="3">
+      <OriginNode idref="2"/>
+      <DestinationNode id="4">
+        <Edge id="5">
+          <OriginNode idref="4"/>
+          <DestinationNode id="6">
+            <Edge id="7">
+              <OriginNode idref="6"/>
+              <DestinationNode id="8">
+                <nodeProperties>
+                  <test5 className="java.util.Date">dd/MM/yy HH:mm,11/01/06 15:42</test5>
+                  <test4 className="java.net.URL">http://picolibre.enst-bretagne.fr</test4>
+                  <test3 className="java.lang.String">value3</test3>
+                </nodeProperties>
+              </DestinationNode>
+            </Edge>
+            <nodeProperties>
+              <test5 className="java.util.Date">dd/MM/yy HH:mm,11/01/06 15:42</test5>
+              <test4 className="java.net.URL">http://picolibre.enst-bretagne.fr</test4>
+              <test3 className="java.lang.String">value3</test3>
+              <test2 className="java.io.File">/Users/sguerin/workspace/FlexoXMLCoDe/truc/essai</test2>
+              <test1 className="java.lang.String">value1</test1>
+            </nodeProperties>
+          </DestinationNode>
+        </Edge>
+        <Edge id="9">
+          <OriginNode idref="4"/>
+          <DestinationNode idref="8"/>
+        </Edge>
+        <nodeProperties>
+          <test2 className="java.io.File">/Users/sguerin/workspace/FlexoXMLCoDe/truc/essai</test2>
+          <test1 className="java.lang.String">value1</test1>
+        </nodeProperties>
+      </DestinationNode>
+    </Edge>
+    <Edge id="10">
+      <OriginNode idref="2"/>
+      <DestinationNode idref="6"/>
+    </Edge>
+    <nodeProperties/>
+  </StartNode>
+</Graph>
+

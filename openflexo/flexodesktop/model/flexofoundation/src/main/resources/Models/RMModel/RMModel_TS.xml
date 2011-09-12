@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model builder="org.openflexo.foundation.rm.FlexoProjectBuilder" handlesReferences="YES" serializationMode="pseudoTree"> 
+
+  <mapId>
+	  <map entityClass="org.openflexo.foundation.FlexoModelObject" identifierAccessor="serializationIdentifier"/>
+	  <map entityClass="org.openflexo.foundation.rm.FlexoResource" identifierAccessor="serializationIdentifier"/>
+	  <map entityClass="org.openflexo.foundation.rm.FlexoResource$LastSynchronizedWithResourceEntry" identifierAccessor="serializationIdentifier"/>
+  </mapId>
+	
+  <entity name="org.openflexo.foundation.FlexoModelObject" abstract="YES" finalizer="finalizeDeserialization">
+  	<property name="userIdentifier" xmlTag="userID" attribute="YES" description="Unique ID of the user (used for team synchronization)"/>
+  	<property name="flexoID" xmlTag="flexoID" attribute="YES" description="Unique ID generated and maintained by Flexo"/>
+  	<property name="dontEscapeLatex" xmlTag="dontEscapeLatex" attribute="YES" description=""/>
+  	<property name="docFormat" xmlTag="docFormat" attribute="YES" description=""/>
+    <property name="description" xmlTag="description" attribute="YES" description="Defines widget name"/>
+    <property name="specificDescriptions" xmlTag="specificDescriptions" type="hashtable" description="Hashtable(String,String) that contains a name of a DocType as a key, and a description specific to that DocType as the value"/>
+    <description>Root class for all objects of Flexo</description>
+  </entity>
+
+  <entity name="org.openflexo.foundation.rm.FlexoProject" xmlTag="Project" finalizer="finalizeDeserialization">
+    <property name="projectName" xmlTag="name" attribute="YES"/> 
+    <property name="serializationResources" contains="org.openflexo.foundation.rm.FlexoResource" type="hashtable" key="resourceIdentifier" primary="yes"/> 
+   </entity> 
+  
+  <entity name="org.openflexo.foundation.rm.FlexoResource" xmlTag="FlexoResource">
+  	<property name="userIdentifier" xmlTag="userID" attribute="YES" description="Unique ID of the user (used for team synchronization)"/>
+	<property name="lastSynchronizedForResources" xmlTag="LastSynchronizedWithResourceEntry" type="hashtable" key="resource"/>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.rm.FlexoFileResource" xmlTag="FlexoFileResource">
+	<property name="resourceFile" xmlTag="file" attribute="YES"/>
+	<property name="lastWrittenOnDisk" xmlTag="lastWrittenOnDisk" attribute="YES"/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.rm.FlexoStorageResource" xmlTag="FlexoStorageResource">
+    <property name="lastKnownMemoryUpdate" xmlTag="lastKnownMemoryUpdate" attribute="YES"/>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.rm.FlexoResource$LastSynchronizedWithResourceEntry" xmlTag="LastSynchronizedWithResourceEntry">
+	<property name="date" xmlTag="date" attribute="YES"/>
+	<property name="resource" contains="org.openflexo.foundation.rm.FlexoResource" primary="no"/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.rm.FlexoProcessResource" xmlTag="FlexoProcessResource">
+    <property name="name" xmlTag="name" attribute="YES"/> 	
+  </entity>
+
+  <entity name="org.openflexo.foundation.rm.FlexoComponentResource" xmlTag="FlexoComponentResource">
+    <property name="name" xmlTag="name" attribute="YES"/> 	
+  </entity>
+
+  <entity name="org.openflexo.foundation.rm.FlexoOEShemaResource" xmlTag="Shema">
+	 <property name="name" xmlTag="name" attribute="YES"/> 	
+  </entity>
+
+  <entity name="org.openflexo.foundation.rm.ScreenshotResource" xmlTag="Screenshot">
+  </entity>
+
+  <entity name="org.openflexo.foundation.rm.cg.CGRepositoryFileResource" abstract="yes" genericTypingStoredIn="resourceClassName">
+ 	<property name="name" xmlTag="name" attribute="YES"/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.rm.cg.ASCIIFileResource" abstract="yes">
+  </entity>
+
+  <entity name="org.openflexo.foundation.rm.cg.JavaFileResource" xmlTag="JavaFileResource">
+  </entity>
+
+  <entity name="org.openflexo.foundation.rm.cg.WOFileResource" xmlTag="WOFileResource">
+  </entity>
+
+  <entity name="org.openflexo.foundation.rm.cg.APIFileResource" xmlTag="APIFileResource">
+  </entity>
+  
+  <entity name="org.openflexo.foundation.rm.cg.PListFileResource" xmlTag="PListFileResource">
+  </entity>
+  <!-- 
+  <entity name="org.openflexo.foundation.rm.cg.PListFileResource" xmlTag="EOModelPListFileResource">
+  </entity>
+   -->
+  <entity name="org.openflexo.foundation.rm.cg.LatexFileResource" xmlTag="LatexFileResource">
+  </entity>
+  <entity name="org.openflexo.foundation.rm.FlexoWebServerFileResource" xmlTag="FlexoWebServerFileResource">
+  </entity>
+  <entity name="org.openflexo.foundation.rm.cg.TextFileResource" xmlTag="TextFileResource">
+	<property name="fileType" xmlTag="fileType" attribute="YES"/>
+	<property name="resourceFormat" xmlTag="fileFormat" attribute="YES"/>
+   </entity>
+	
+	<entity name="org.openflexo.foundation.rm.FlexoCopiedResource" xmlTag="CopiedResource">
+   </entity>
+   
+   	<entity name="org.openflexo.foundation.rm.cg.CopyOfFlexoResource" xmlTag="CopyOfFlexoResource">
+   </entity>
+   
+      	<entity name="org.openflexo.foundation.rm.cg.CopyOfFileResource" xmlTag="CopyOfFileResource">
+   </entity>
+	
+	<entity name="org.openflexo.foundation.rm.FlexoTOCResource" xmlTag="TOCResource"/>
+</model>
+  

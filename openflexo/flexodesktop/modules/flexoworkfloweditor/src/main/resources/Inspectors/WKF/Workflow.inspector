@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.FlexoWorkflow" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab">
+      <Label label="flexo_id" localize="true" name="FlexoIDLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <TextField passwd="false" readOnly="true" localize="true" name="FlexoID" data="data.flexoID.toString" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </TextField>
+    </Tab>
+    <Tab index="1" title="Metrics Definition" layout="twocols" visible="controller.displayInspectorTabForContext(&quot;METRICS&quot;)" font="SansSerif,0,11" name="MetricsDefinitionTab">
+      <Label label="process_metrics" align="center" localize="true" name="ProcessMetricsDefinitionsLabel" constraints="twocols(location=center;index=0;expandHorizontally=true;expandVertically=false)" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.MetricsDefinition" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.processMetricsDefinitions" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=true)" name="ProcessMetricsDefinitions" localize="true" manageDynamicModel="true">
+        <TextFieldColumn data="iterator.name" title="value" columnWidth="100" resizable="true" displayTitle="true" />
+        <DropDownColumn data="iterator.type" title="type" columnWidth="100" resizable="true" displayTitle="true" />
+        <TextFieldColumn isEditable="iterator.isUnitEditable" data="iterator.unit" title="unit" columnWidth="50" resizable="true" displayTitle="true" />
+        <TextFieldColumn data="iterator.description" title="description" columnWidth="120" resizable="true" displayTitle="true" />
+        <CheckBoxColumn data="iterator.alwaysDefined" title="alwaysDefined" columnWidth="100" resizable="true" displayTitle="true" />
+        <AddAction method="data.addProcessMetricsDefinition" name="new" />
+        <RemoveAction method="data.deleteMetricsDefinition(selected)" name="delete" />
+      </Table>
+      <Label label="activity_metrics" align="center" localize="true" name="ActivityMetricsDefinitionsLabel" constraints="twocols(location=center;index=2;expandHorizontally=true;expandVertically=false)" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.MetricsDefinition" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.activityMetricsDefinitions" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=true)" name="ActivityMetricsDefinitions" localize="true" manageDynamicModel="true">
+        <TextFieldColumn data="iterator.name" title="value" columnWidth="100" resizable="true" displayTitle="true" />
+        <DropDownColumn data="iterator.type" title="type" columnWidth="100" resizable="true" displayTitle="true" />
+        <TextFieldColumn isEditable="iterator.isUnitEditable" data="iterator.unit" title="unit" columnWidth="50" resizable="true" displayTitle="true" />
+        <TextFieldColumn data="iterator.description" title="description" columnWidth="120" resizable="true" displayTitle="true" />
+        <CheckBoxColumn data="iterator.alwaysDefined" title="alwaysDefined" columnWidth="100" resizable="true" displayTitle="true" />
+        <AddAction method="data.addActivityMetricsDefinition" name="new" />
+        <RemoveAction method="data.deleteMetricsDefinition(selected)" name="delete" />
+      </Table>
+      <Label label="operation_metrics" align="center" localize="true" name="OperationMetricsDefinitionsLabel" constraints="twocols(location=center;index=4;expandHorizontally=true;expandVertically=false)" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.MetricsDefinition" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.operationMetricsDefinitions" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=true)" name="OperationMetricsDefinitions" localize="true" manageDynamicModel="true">
+        <TextFieldColumn data="iterator.name" title="value" columnWidth="100" resizable="true" displayTitle="true" />
+        <DropDownColumn data="iterator.type" title="type" columnWidth="100" resizable="true" displayTitle="true" />
+        <TextFieldColumn isEditable="iterator.isUnitEditable" data="iterator.unit" title="unit" columnWidth="50" resizable="true" displayTitle="true" />
+        <TextFieldColumn data="iterator.description" title="description" columnWidth="120" resizable="true" displayTitle="true" />
+        <CheckBoxColumn data="iterator.alwaysDefined" title="alwaysDefined" columnWidth="100" resizable="true" displayTitle="true" />
+        <AddAction method="data.addOperationMetricsDefinition" name="new" />
+        <RemoveAction method="data.deleteMetricsDefinition(selected)" name="delete" />
+      </Table>
+      <Label label="edge_metrics" align="center" localize="true" name="EdgeMetricsDefinitionsLabel" constraints="twocols(location=center;index=6;expandHorizontally=true;expandVertically=false)" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.MetricsDefinition" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.edgeMetricsDefinitions" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=true)" name="EdgeMetricsDefinitions" localize="true" manageDynamicModel="true">
+        <TextFieldColumn data="iterator.name" title="value" columnWidth="100" resizable="true" displayTitle="true" />
+        <DropDownColumn data="iterator.type" title="type" columnWidth="100" resizable="true" displayTitle="true" />
+        <TextFieldColumn isEditable="iterator.isUnitEditable" data="iterator.unit" title="unit" columnWidth="50" resizable="true" displayTitle="true" />
+        <TextFieldColumn data="iterator.description" title="description" columnWidth="120" resizable="true" displayTitle="true" />
+        <CheckBoxColumn data="iterator.alwaysDefined" title="alwaysDefined" columnWidth="100" resizable="true" displayTitle="true" />
+        <AddAction method="data.addEdgeMetricsDefinition" name="new" />
+        <RemoveAction method="data.deleteMetricsDefinition(selected)" name="delete" />
+      </Table>
+      <Label label="artefact_metrics" align="center" localize="true" name="ArtefactMetricsDefinitionsLabel" constraints="twocols(location=center;index=8;expandHorizontally=true;expandVertically=false)" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.MetricsDefinition" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.artefactMetricsDefinitions" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=true)" name="ArtefactMetricsDefinitions" localize="true" manageDynamicModel="true">
+        <TextFieldColumn data="iterator.name" title="value" columnWidth="100" resizable="true" displayTitle="true" />
+        <DropDownColumn data="iterator.type" title="type" columnWidth="100" resizable="true" displayTitle="true" />
+        <TextFieldColumn isEditable="iterator.isUnitEditable" data="iterator.unit" title="unit" columnWidth="50" resizable="true" displayTitle="true" />
+        <TextFieldColumn data="iterator.description" title="description" columnWidth="120" resizable="true" displayTitle="true" />
+        <CheckBoxColumn data="iterator.alwaysDefined" title="alwaysDefined" columnWidth="100" resizable="true" displayTitle="true" />
+        <AddAction method="data.addArtefactMetricsDefinition" name="new" />
+        <RemoveAction method="data.deleteMetricsDefinition(selected)" name="delete" />
+      </Table>
+    </Tab>
+    <Tab index="0" title="Graphics" layout="twocols" font="SansSerif,0,11" name="GraphicsTab">
+      <Label label="name" localize="true" name="WorkflowNameLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
+      <TextField passwd="false" localize="true" name="WorkflowName" data="data.workflowName" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" />
+      <Label label="use_transparency" localize="true" name="UseTransparencyLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
+      <CheckBox selected="false" localize="true" name="UseTransparency" data="data.useTransparency" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" />
+      <Label label="show_shadows" localize="true" name="ShowShadowsLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
+      <CheckBox selected="false" localize="true" name="ShowShadows" data="data.showShadows" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" />
+      <Label label="show_wo_name" localize="true" name="ShowWONameLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" />
+      <CheckBox selected="false" localize="true" name="ShowWOName" data="data.showWOName" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" />
+      <Label label="activity_node_font" localize="true" name="ActivityFontLabel" constraints="twocols(location=left;index=14;expandHorizontally=false;expandVertically=false)" />
+      <Font sampleText="activity_node_label" data="data.activityFont.font" constraints="twocols(location=right;index=15;expandHorizontally=false;expandVertically=false)" name="ActivityFont" localize="true" />
+      <Label label="operation_node_font" localize="true" name="OperationFontLabel" constraints="twocols(location=left;index=16;expandHorizontally=false;expandVertically=false)" />
+      <Font sampleText="operation_node_label" data="data.operationFont.font" constraints="twocols(location=right;index=17;expandHorizontally=false;expandVertically=false)" name="OperationFont" localize="true" />
+      <Label label="action_node_font" localize="true" name="ActionFontLabel" constraints="twocols(location=left;index=18;expandHorizontally=false;expandVertically=false)" />
+      <Font sampleText="action_node_label" data="data.actionFont.font" constraints="twocols(location=right;index=19;expandHorizontally=false;expandVertically=false)" name="ActionFont" localize="true" />
+      <Label label="event_node_font" localize="true" name="EventFontLabel" constraints="twocols(location=left;index=20;expandHorizontally=false;expandVertically=false)" />
+      <Font sampleText="event_node_label" data="data.eventFont.font" constraints="twocols(location=right;index=21;expandHorizontally=false;expandVertically=false)" name="EventFont" localize="true" />
+      <Label label="artefact_font" localize="true" name="ArtefactFontLabel" constraints="twocols(location=left;index=22;expandHorizontally=false;expandVertically=false)" />
+      <Font sampleText="artefact_label" data="data.artefactFont.font" constraints="twocols(location=right;index=23;expandHorizontally=false;expandVertically=false)" name="ArtefactFont" localize="true" />
+      <Label label="edge_font" localize="true" name="EdgeFontLabel" constraints="twocols(location=left;index=24;expandHorizontally=false;expandVertically=false)" />
+      <Font sampleText="edge_label" data="data.edgeFont.font" constraints="twocols(location=right;index=25;expandHorizontally=false;expandVertically=false)" name="EdgeFont" localize="true" />
+      <Label label="role_font" localize="true" name="RoleFontLabel" constraints="twocols(location=left;index=26;expandHorizontally=false;expandVertically=false)" />
+      <Font sampleText="role_name_label" data="data.roleFont.font" constraints="twocols(location=right;index=27;expandHorizontally=false;expandVertically=false)" name="RoleFont" localize="true" />
+      <Label label="component_font" localize="true" name="ComponentFontLabel" constraints="twocols(location=left;index=28;expandHorizontally=false;expandVertically=false)" />
+      <Font sampleText="component_name_label" data="data.componentFont.font" constraints="twocols(location=right;index=29;expandHorizontally=false;expandVertically=false)" name="ComponentFont" localize="true" />
+      <Label label="connector_representation" localize="true" name="ConnectorRepresentationLabel" constraints="twocols(location=left;index=30;expandHorizontally=false;expandVertically=false)" />
+      <DropDown format="object.name" localize="true" name="ConnectorRepresentation" data="data.connectorRepresentation" constraints="twocols(location=right;index=31;expandHorizontally=false;expandVertically=false)" width="150" showIcon="true" iteratorClassName="org.openflexo.wkf.processeditor.gr.EdgeGR$EdgeRepresentation" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="flexo_id" lang="English">FlexoBPM ID</Localized>
+    <Localized key="flexo_id" lang="French">FlexoBPM ID</Localized>
+    <Localized key="flexo_id" lang="Dutch">FlexoBPM ID</Localized>
+    <Localized key="Metrics Definition" lang="English">Metric Definition</Localized>
+    <Localized key="Metrics Definition" lang="French">Définition des métriques</Localized>
+    <Localized key="Metrics Definition" lang="Dutch">Metric Definition</Localized>
+    <Localized key="process_metrics" lang="English">Process metrics</Localized>
+    <Localized key="process_metrics" lang="French">Métriques de processus</Localized>
+    <Localized key="process_metrics" lang="Dutch">Process metrics</Localized>
+    <Localized key="activity_metrics" lang="English">Activity metrics</Localized>
+    <Localized key="activity_metrics" lang="French">Métriques d'activité</Localized>
+    <Localized key="activity_metrics" lang="Dutch">Activity metrics</Localized>
+    <Localized key="operation_metrics" lang="English">Operation metrics</Localized>
+    <Localized key="operation_metrics" lang="French">Métriques d'opération</Localized>
+    <Localized key="operation_metrics" lang="Dutch">Operation metrics</Localized>
+    <Localized key="edge_metrics" lang="English">Edge metrics</Localized>
+    <Localized key="edge_metrics" lang="French">Métrique d'arête</Localized>
+    <Localized key="edge_metrics" lang="Dutch">Edge metrics</Localized>
+    <Localized key="artefact_metrics" lang="English">artefact metrics</Localized>
+    <Localized key="artefact_metrics" lang="French">Metriques d'artefact</Localized>
+    <Localized key="artefact_metrics" lang="Dutch">artefact metrics</Localized>
+    <Localized key="Graphics" lang="French">Graphisme</Localized>
+    <Localized key="name" lang="English">Name</Localized>
+    <Localized key="name" lang="French">Nom</Localized>
+    <Localized key="name" lang="Dutch">Name</Localized>
+    <Localized key="use_transparency" lang="English">Use transparency</Localized>
+    <Localized key="use_transparency" lang="French">Utiliser la transparence</Localized>
+    <Localized key="use_transparency" lang="Dutch">Use transparency</Localized>
+    <Localized key="show_shadows" lang="English">Show shadows</Localized>
+    <Localized key="show_shadows" lang="French">Afficher les ombres</Localized>
+    <Localized key="show_shadows" lang="Dutch">Show shadows</Localized>
+    <Localized key="show_wo_name" lang="English">Show screen name</Localized>
+    <Localized key="show_wo_name" lang="French">Voir le nom de l'écran</Localized>
+    <Localized key="show_wo_name" lang="Dutch">Show screen name</Localized>
+    <Localized key="activity_node_font" lang="English">Activity node font</Localized>
+    <Localized key="activity_node_font" lang="French">Police des noeuds 'Activité'</Localized>
+    <Localized key="activity_node_font" lang="Dutch">Activity node font</Localized>
+    <Localized key="operation_node_font" lang="English">Operation nodes font</Localized>
+    <Localized key="operation_node_font" lang="French">Police des noeuds 'Opération'</Localized>
+    <Localized key="operation_node_font" lang="Dutch">Operation nodes font</Localized>
+    <Localized key="action_node_font" lang="English">Action nodes font</Localized>
+    <Localized key="action_node_font" lang="French">Police des noeuds 'Action'</Localized>
+    <Localized key="action_node_font" lang="Dutch">Action nodes font</Localized>
+    <Localized key="event_node_font" lang="English">Event nodes font</Localized>
+    <Localized key="event_node_font" lang="French">Police des noeuds 'Evénement'</Localized>
+    <Localized key="event_node_font" lang="Dutch">Event nodes font</Localized>
+    <Localized key="artefact_font" lang="English">Artefact font</Localized>
+    <Localized key="artefact_font" lang="French">Police d'artefact</Localized>
+    <Localized key="artefact_font" lang="Dutch">Artefact font</Localized>
+    <Localized key="edge_font" lang="English">Edge font</Localized>
+    <Localized key="edge_font" lang="French">Police d'arête</Localized>
+    <Localized key="edge_font" lang="Dutch">Edge font</Localized>
+    <Localized key="role_font" lang="English">Roles font</Localized>
+    <Localized key="role_font" lang="French">Police du label des rôles</Localized>
+    <Localized key="role_font" lang="Dutch">Roles font</Localized>
+    <Localized key="component_font" lang="English">Screen font</Localized>
+    <Localized key="component_font" lang="French">Police des écrans</Localized>
+    <Localized key="component_font" lang="Dutch">Screen font</Localized>
+    <Localized key="connector_representation" lang="English">Edge representation</Localized>
+    <Localized key="connector_representation" lang="French">Représentation des arêtes</Localized>
+    <Localized key="connector_representation" lang="Dutch">Edge representation</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Workflow" />
+</Panel>
+

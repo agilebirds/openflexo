@@ -1,0 +1,77 @@
+<wsdl:definitions targetNamespace="http://NED.local:5555/cgi-bin/WebObjects/I6DocWSApplication.woa/ws/I6DocWS" xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:apachesoap="http://xml.apache.org/xml-soap"
+	xmlns:impl="http://NED.local:5555/cgi-bin/WebObjects/I6DocWSApplication.woa/ws/I6DocWS"
+	xmlns:intf="http://NED.local:5555/cgi-bin/WebObjects/I6DocWSApplication.woa/ws/I6DocWS"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:tns1="http://DefaultNamespace"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	
+	<wsdl:types>
+		<schema targetNamespace="http://DefaultNamespace" xmlns="http://www.w3.org/2001/XMLSchema">
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+			<complexType name="Book">
+				<sequence>
+					<element name="title" nillable="true" type="xsd:string"/>
+					<element name="authors" nillable="true" type="xsd:string"/>
+					<element name="euroPaperPrice" type="xsd:float"/>
+					<element name="smallDescription" nillable="true" type="xsd:string"/>
+				</sequence>
+			</complexType>
+			<complexType name="InvalidEditorException"><sequence/></complexType>
+			<element name="InvalidEditorException" nillable="true" type="tns1:InvalidEditorException"/>
+			<complexType name="I6RuntimeException"><sequence/></complexType>
+			<element name="I6RuntimeException" nillable="true" type="tns1:I6RuntimeException"/>
+			<complexType name="ArrayOf_tns1_Book">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:Book[]"/>
+					</restriction>
+				</complexContent>
+			</complexType>
+			<element name="ArrayOf_tns1_Book" nillable="true" type="tns1:ArrayOf_tns1_Book"/>
+		</schema>
+	</wsdl:types>
+  
+    <wsdl:message name="I6RuntimeException">
+		<wsdl:part name="fault" type="tns1:I6RuntimeException"/>
+	</wsdl:message>
+	<wsdl:message name="InvalidEditorException">
+		<wsdl:part name="fault" type="tns1:InvalidEditorException"/>
+	</wsdl:message>
+	<wsdl:message name="getNewBooksFromEditorRequest">
+			<wsdl:part name="limit" type="xsd:int"/>
+			<wsdl:part name="editorID" type="xsd:int"/>
+			<wsdl:part name="password" type="xsd:string"/>
+	</wsdl:message>
+	<wsdl:message name="getNewBooksFromEditorResponse">
+		<wsdl:part name="getNewBooksFromEditorReturn" type="tns1:ArrayOf_tns1_Book"/>
+	</wsdl:message>
+
+	<wsdl:portType name="I6DocWS">
+		<wsdl:operation name="getNewBooksFromEditor" parameterOrder="limit editorID password">
+			<wsdl:input message="impl:getNewBooksFromEditorRequest" name="getNewBooksFromEditorRequest"/>
+			<wsdl:output message="impl:getNewBooksFromEditorResponse" name="getNewBooksFromEditorResponse"/>
+			<wsdl:fault message="impl:InvalidEditorException" name="InvalidEditorException"/>
+			<wsdl:fault message="impl:I6RuntimeException" name="I6RuntimeException"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="I6DocWSSoapBinding" type="impl:I6DocWS">
+		<wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="getNewBooksFromEditor">
+			<wsdlsoap:operation soapAction=""/>
+			<wsdl:input name="getNewBooksFromEditorRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://NED.local:5555/cgi-bin/WebObjects/I6DocWSApplication.woa/ws/I6DocWS" use="encoded"/>
+			</wsdl:input>
+			<wsdl:output name="getNewBooksFromEditorResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://NED.local:5555/cgi-bin/WebObjects/I6DocWSApplication.woa/ws/I6DocWS" use="encoded"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+  <wsdl:service name="I6DocWS">
+    <wsdl:port binding="impl:I6DocWSSoapBinding" name="I6DocWS">
+      <wsdlsoap:address location="http://NED.local:5555/cgi-bin/WebObjects/I6DocWSApplication.woa/ws/I6DocWS"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

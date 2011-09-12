@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.fge.geomedit.FIBInspector" layout="border" dataClassName="org.openflexo.fge.geomedit.gr.SegmentGraphicalRepresentation" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="0" title="Data" layout="twocols" font="SansSerif,0,11" name="DataTab">
+      <Label label="x1" localize="true" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" data="data.drawable.x1" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" localize="true" />
+      <Label label="y1" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
+      <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" data="data.drawable.y1" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" localize="true" />
+      <Label label="x2" localize="true" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
+      <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" data="data.drawable.x2" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" localize="true" />
+      <Label label="y2" localize="true" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
+      <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" data="data.drawable.y2" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" localize="true" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary />
+  <Parameter name="title" value="Segment" />
+</Panel>
+

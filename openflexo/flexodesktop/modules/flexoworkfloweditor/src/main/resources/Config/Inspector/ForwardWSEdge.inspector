@@ -1,0 +1,9 @@
+<inspector title = "Forward WS edge" inheritsfrom ="MessageEdge.inspector" inspectedClassName="org.openflexo.foundation.wkf.edge.ForwardWSEdge">
+
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>		
+	</tab>
+	
+</inspector>

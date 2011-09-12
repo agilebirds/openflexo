@@ -1,0 +1,14 @@
+#name()Tabs : WDLTabsHeaderFooter {
+    tabsInfoArray= #name()TabsInfoArray;
+    formName = "formName";
+    javascript = false;
+    selectedTab = #name()SelectedTab;
+#if($widget.isInPopup())
+    uniqueName = uniqueNameFor#capName();
+#else
+    uniqueName = "#name()";
+#end
+}
+
+#renderSequence($widget)
+#renderSequence($widget.getButtons())

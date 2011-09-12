@@ -1,0 +1,9 @@
+#macro(generatePropertiesForProcess $process)
+${generator.escapeStringForProperties(${process.getURI()})}=processes/${generator.escapeStringForProperties(${generator.nameForProcessNoExt($process, $repository)})}.js
+	#foreach($subProcessNode in ${process.getProcessNode().getSortedSubprocesses()})
+    	#generatePropertiesForProcess($subProcessNode.getProcess())
+    #end
+#end
+#foreach($processNode in ${project.getWorkflow().getSortedTopLevelProcesses()})
+	#generatePropertiesForProcess($processNode.getProcess())
+#end

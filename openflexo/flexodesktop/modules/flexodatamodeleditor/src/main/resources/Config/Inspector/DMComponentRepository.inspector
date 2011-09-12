@@ -1,0 +1,20 @@
+<inspector title = "ComponentRepository" inheritsfrom="DMRepository.inspector">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		
+		<hidden name="name"/>
+		<property name="localizedName" label="name" widget="READ_ONLY_TEXT_FIELD" constraint="0">
+		</property>
+		
+	</tab>
+	
+	<tab name="Advanced" index="1">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+	</tab>
+	<tab name="Doc" index="2">
+	</tab>
+</inspector>

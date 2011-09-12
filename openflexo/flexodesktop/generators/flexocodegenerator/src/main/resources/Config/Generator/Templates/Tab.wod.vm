@@ -1,0 +1,15 @@
+#void($widgetStack.push($widget))
+#set($widget = $widget.getRootParent())
+#set($name = "#name()")
+#set($widget = $widgetStack.pop())
+#name()TabsConditional : WDLTabsConditional {
+    javascript = false;
+    selectedTab = ${name}SelectedTab;
+    headerName = "$generator.escapeStringForJava(${widget.getTitle()})";
+    tabKey = #name()TabKey;
+}
+
+#name() : ${widget.getTabComponentDefinition().getComponentName()}{
+#bindingValues(${widget.getComponentInstance().getBindings()}) ## list of ComponentInstanceBinding
+    hiddenFieldName = hiddenFieldName;
+}

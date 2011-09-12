@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+        <wo wocomponentcontent="false" class="$componentDefinition.getName()">
+        <binding name="hiddenFieldName"/>
+#foreach($bd in $componentDefinition.getBindingDefinitions())
+        <binding name="${bd.getVariableName()}"/>
+           #if($bd.getIsMandatory() && !$generator.isPrototype())
+        <validation message="&apos;${bd.getVariableName()}&apos; is a mandatory binding">
+            <unbound name="${bd.getVariableName()}"/>
+        </validation>
+             #if($bd.getIsSettable())
+        <validation message="'${bd.getVariableName()}' must be bound to a settable value">
+            <unsettable name="${bd.getVariableName()}"/>
+        </validation>
+             #end
+           #end
+        #end
+        </wo>
+</wodefinitions>

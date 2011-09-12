@@ -1,0 +1,42 @@
+#if(!${widget.isDKV()})
+    #name() : WOBrowser {
+        multiple = true;
+    	
+    	#if(${widget.getBindingList().isBindingValid()})
+    		list = ${widget.getBindingList().getWodStringRepresentation()};
+    	#else
+    		list = #name()List;
+    	#end
+    	#if(${widget.getBindingSelection().isBindingValid()})
+    		selections = ${widget.getBindingSelection().getWodStringRepresentation()};
+        #else
+    		selections = #name()Selection;
+    	#end
+    	#if(${widget.getBindingItem().isBindingValid()})
+    		item = ${widget.getBindingItem().getWodStringRepresentation()};
+    	#else
+    		item = itemOf#capName();
+    	#end
+    	#if(${widget.getBindingDisplayString().isBindingValid()})    
+    		displayString = ${widget.getBindingDisplayString().getWodStringRepresentation()};
+        #end
+    	class = "DLExtensible";
+        size = $widget.getVisibleRows();
+        #tooltipAsTitle()
+        #additionalBindings()
+    }
+#else
+	#name() : WDLKeyValueBrowser {
+        multiple = true;
+		domain = "${widget.getDomainName()}";
+		#if(${widget.getBindingSelection().isBindingValid()})
+    		selectedKeys = ${widget.getBindingSelection().getWodStringRepresentation()};
+        #else
+    		selectedKeys = #name()Selection;
+		#end
+		class = "DLExtensible";
+		size = $widget.getVisibleRows();
+        #tooltipAsTitle()
+        #additionalBindings()
+	}
+#end

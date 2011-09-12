@@ -1,0 +1,182 @@
+#**
+* HeaderFooter.html.vm
+* Template for the whole HeaderFooter HTML to generate for an application.
+* The context contains the following keys:
+*  - project: the current project (FlexoProject)
+*  - projectGenerator: the current Project Generator (ProjectGenerator)
+*  - repository: the current target code repository (CGRepository)
+*  - generator: the current generator (HeaderFooterGenerator)
+*  - buttonsJava: the java code support previously generated with template HFButton.java.vm 
+*                 for all buttons appearing in the HeaderFooter (e.g. logout)
+*  - buttonsHtml: the html code support previously generated with template HFButton.html.vm 
+*                 for all buttons appearing in the HeaderFooter (e.g. logout)
+*  - buttonsWod: the wod code support previously generated with template HFButton.wod.vm 
+*                 for all buttons appearing in the HeaderFooter (e.g. logout)
+*#
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <webobject name="HEAD"></webobject>
+    <body>
+        <div id="denaliPage">
+            <webobject name="Div_PageHeader">
+                <webobject name="LOGO"></webobject>
+                <div class="denaliLogo" style="height: 25px;"></div>
+                #if($generator.isPrototype())
+                    <webobject name="ShowLogoutLink">
+                        <webobject name="Div_Role">
+                            <webobject name="ROLE"></webobject>
+                        </webobject>
+                    </webobject>
+                #end
+            </webobject>
+            
+            <div id="denaliPageMenuAction">    
+                <p>
+                    <webobject name="ShowCurrentUserLogin">
+                        #if(${project.getFlexoNavigationMenu().getUserProfilePageName()})
+                            <webobject name="UserProfilePageLink"><webobject name="CurrentUserLogin"></webobject></webobject>
+                        #else
+                            <webobject name="CurrentUserLogin"></webobject>                
+                        #end
+                    </webobject>
+                    
+                    <webobject name="ShowLogoutLink">
+                        <webobject name="LogoutLink">
+                            <webobject name="LogoutButton"></webobject>
+                        </webobject>
+                        #if($generator.isPrototype())
+                            <webobject name="WKF_JS_LINK">
+                                <webobject name="WKF_ICON"></webobject>
+                            </webobject>
+						#end
+						#if(${project.getIsLocalized()})
+							<webobject name="Repetition_Languages">
+								|&nbsp;
+								<webobject name="Link_ChangeLanguage">
+									<webobject name="String_Language"/>
+                                </webobject>
+							</webobject>
+						#end
+                    </webobject>
+                    <webobject name="hasNoMenu">$!{BUTTONS}</webobject>
+                    
+                    #if($generator.isPrototype() || $repository.includeReader())
+                        <webobject name="ShowHelpLink">
+                            <webobject name="OpenHelpPopup">
+                                <webobject name="HELP"></webobject>
+                            </webobject>
+                        </webobject>
+                        <webobject name="hasRecorder">
+                        <webobject name="RecordTestLink">
+                            <webobject name="RecordTestImage"></webobject>
+                        </webobject>
+                        <script language="Javascript">
+                            var link = this.document.getElementById("recordLink");
+                            if(top == this.window) {
+                                
+                                link.href = "<webobject name="recInclURL"></webobject>";
+                            } else {
+                                link.href = "<webobject name="recExclURL"></webobject>";
+                            }
+                        </script>
+                       </webobject>
+                    #end
+                </p>
+            </div>
+            
+            <webobject name="hasMenu">
+            <div id="denaliPageMenu">
+                <webobject name="CASCADINGMENU"></webobject>
+            </div>
+            
+            </webobject>
+              
+            <div id="denaliPageBody">
+                <webobject name="CONTENT"></webobject>
+                
+                #if($generator.isPrototype()) 
+					<webobject name="Condition_MustSelectNextOperation">
+						<webobject name="Popup_SelectNextOperation">
+							<div class="denaliBloc" style="border: none;">
+                                <div class="denaliBlocHeader" style="border: 1px solid;">
+                                    <h3 class="denaliBlocTitle">
+                                        <a href="javascript:void(0);" onclick="return false;" >
+                                            Please select the next operation
+                                        </a>
+                                    </h3>
+                                </div>
+                                <div class="denaliBlocContent">
+                                	<p>This action is linked to more than one possible operation. Please select the next operation for this action</p>
+                                	<ul>
+	                                	<webobject name="Repetition_NextOperations">
+	                                		<li>
+	                                			<webobject name="Link_SelectNextOperation">
+	                                				<webobject name="String_NextOperation" />
+	                                			</webobject>
+	                                		</li>
+	                                	</webobject>
+	                                </ul>
+                                </div>
+                            </div>
+						</webobject>
+					</webobject>
+					
+                    <webobject name="ShowCurrentUserLogin">
+                        <webobject name="WKF_INFO_POPUP">
+                            <div class="denaliBloc" id="ANCHOR78864">
+                                <div class="denaliBlocHeader">
+                                    <h3 class="denaliBlocTitle">
+                                        <a href="#ANCHOR78864" onclick="return false;" >
+                                            Information
+                                        </a>
+                                    </h3>
+                                </div>
+                                <div class="denaliBlocContent">
+                                    <table class="denaliHTMLTable" WIDTH=300>
+                                        <tr><td class="DLBlockBodyTitle" WIDTH=50>Role:</td><td><webobject NAME="ROLE"></webobject></td></tr>
+                                        <tr><td class="DLBlockBodyTitle" WIDTH=50>Status:</td><td><webobject NAME="STATUS"></webobject></td></tr>
+                                        <tr><td class="DLBlockBodyTitle" WIDTH=50>Process:</td><td><webobject NAME="PROCESS"></webobject></td></tr>
+                                        <tr><td class="DLBlockBodyTitle" WIDTH=50>Activity:</td><td><webobject NAME="ACTIVITY"></webobject></td></tr>
+                                        <tr><td class="DLBlockBodyTitle" WIDTH=50>Operation:</td><td><webobject NAME="OPERATION"></webobject></td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </webobject>
+                     </webobject>
+                #end
+            </div>
+            
+            <webobject name="FOOTER">
+                #if($generator.isPrototype())
+                    <webobject name="ShowCurrentUserLogin">
+                        <dl>
+                            <dt>Role:</dt>
+                            <dd><webobject name="ROLE"></webobject></dd>
+                            
+                            <dt>Status:</dt>
+                            <dd><webobject name="STATUS"></webobject></dd>
+                            
+                            <dt>Process:</dt>
+                            <dd><webobject name="PROCESS"></webobject></dd>
+                            
+                            <dt>Activity:</dt>
+                            <dd><webobject name="ACTIVITY"></webobject></dd>
+                            
+                            <dt>Operation:</dt>
+                            <dd><webobject name="OPERATION"></webobject></dd>
+                        </dl>
+                    </webobject>
+                #end
+            </webobject>
+        </div>
+        
+        <script type="text/javascript">
+        <!--
+            <webobject name="onLoadBody"></webobject>
+        //-->
+        </script>
+    </body>
+</html>

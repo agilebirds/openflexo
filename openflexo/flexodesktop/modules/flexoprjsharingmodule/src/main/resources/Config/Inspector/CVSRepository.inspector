@@ -1,0 +1,29 @@
+<inspector title = "cvs_repository">
+	<tab name="Basic" index="0">
+		<property name="name" label="cvs_repository_name" widget="TEXT_FIELD" constraint="0">
+			<param name="validateOnReturn" value="true"/>
+		</property>
+		<property name="hostName" label="host_name" widget="TEXT_FIELD" constraint="1">
+			<param name="validateOnReturn" value="true"/>
+		</property>
+		<property name="repository" label="cvs_repository_path" widget="TEXT_FIELD" constraint="2">
+			<param name="validateOnReturn" value="true"/>
+		</property>
+		<property name="port" label="port_number" widget="INTEGER" constraint="3" depends="connectionType" conditional="connectionType=ssh">
+		</property>
+		<property name="connectionType" label="connection_type" widget="DROPDOWN" constraint="4">
+			<param name="format" value="name"/>
+		</property>
+		<property name="userName" label="user_name" widget="TEXT_FIELD" constraint="5">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		</property>
+		<property name="password" label="password" widget="TEXT_FIELD" constraint="6">
+			<param name="password" value="true"/>
+			<param name="validateOnReturn" value="true"/>
+		</property>
+		<property name="storePassword" label="store_password" widget="CHECKBOX" constraint="7">
+		</property>
+	</tab>
+	
+</inspector>

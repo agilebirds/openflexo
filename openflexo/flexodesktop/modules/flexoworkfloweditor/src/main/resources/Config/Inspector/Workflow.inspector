@@ -1,0 +1,136 @@
+<inspector title="Workflow" inspectedClassName="org.openflexo.foundation.wkf.FlexoWorkflow">
+	 <tab name="Graphics" index="0" layout="DEFAULT">
+		<property name="workflowName" label="name" widget="TEXT_FIELD" constraint="1"/>
+		<property name="useTransparency" label="use_transparency" widget="CHECKBOX" constraint="3"/>
+		<property name="showShadows" label="show_shadows" widget="CHECKBOX" constraint="4"/>
+		<property name="showWOName" label="show_wo_name" widget="CHECKBOX" constraint="5"/>
+		<property name="activityFont" label="activity_node_font" widget="FONT" constraint="7">
+			<param name="sampleText" value="activity_node_label"/>
+		</property>
+		<property name="operationFont" label="operation_node_font" widget="FONT" constraint="8">
+			<param name="sampleText" value="operation_node_label"/>
+		</property>
+		<property name="actionFont" label="action_node_font" widget="FONT" constraint="9">
+			<param name="sampleText" value="action_node_label"/>
+		</property>
+		<property name="eventFont" label="event_node_font" widget="FONT" constraint="10">
+			<param name="sampleText" value="event_node_label"/>
+		</property>
+		<property name="artefactFont" label="artefact_font" widget="FONT" constraint="11">
+			<param name="sampleText" value="artefact_label"/>
+		</property>
+		<property name="edgeFont" label="edge_font" widget="FONT" constraint="12">
+			<param name="sampleText" value="edge_label"/>
+		</property>
+		<property name="roleFont" label="role_font" widget="FONT" constraint="13">
+			<param name="sampleText" value="role_name_label"/>
+		</property>
+		<property name="componentFont" label="component_font" widget="FONT" constraint="14">
+			<param name="sampleText" value="component_name_label"/>
+		</property>
+	    <property name="connectorRepresentation" label="connector_representation" widget="DROPDOWN" constraint="15">
+	        <param name="formatter" value="name"/>
+	        <param name="columns" value="10"/>
+	        <param name="showReset" value="false"/>
+	        <param name="showIcon" value="true"/>
+	        <param name="type" value="org.openflexo.wkf.processeditor.gr.EdgeGR$EdgeRepresentation"/>
+	    </property>
+	 </tab>
+	<tab name="Metrics Definition" index="1" layout="DEFAULT" visibilityContext="METRICS">
+		<property_list name="processMetricsDefinitions" label="process_metrics" constraint="0">
+          <param name="visible_row_count" value="5"/>
+          <param name="row_height" value="20"/>
+          <property_list_column name="name" label="value" widget="TEXT_FIELD"/>
+          <property_list_column name="type" label="type" widget="DROPDOWN"/>
+          <property_list_column name="unit" label="unit" widget="TEXT_FIELD">
+            <param name="column_width" value="50"/>
+            <param name="resizable" value="true"/>
+            <param name="isEditable" value="isUnitEditable"/>
+          </property_list_column>
+          <property_list_column name="description" label="description" widget="TEXT_FIELD">
+            <param name="column_width" value="120"/>
+            <param name="resizable" value="true"/>
+          </property_list_column>
+          <property_list_column name="alwaysDefined" label="alwaysDefined" widget="CHECKBOX"/>
+          <property_list_action name="new" type="ADD" method="addProcessMetricsDefinition"/>
+          <property_list_action name="delete" type="DELETE" method="deleteMetricsDefinition"/>
+        </property_list>
+		<property_list name="activityMetricsDefinitions" label="activity_metrics" constraint="1">
+          <param name="visible_row_count" value="5"/>
+          <param name="row_height" value="20"/>
+          <property_list_column name="name" label="value" widget="TEXT_FIELD"/>
+          <property_list_column name="type" label="type" widget="DROPDOWN"/>
+          <property_list_column name="unit" label="unit" widget="TEXT_FIELD">
+            <param name="column_width" value="50"/>
+            <param name="resizable" value="true"/>
+            <param name="isEditable" value="isUnitEditable"/>
+          </property_list_column>
+          <property_list_column name="description" label="description" widget="TEXT_FIELD">
+            <param name="column_width" value="120"/>
+            <param name="resizable" value="true"/>
+          </property_list_column>
+          <property_list_column name="alwaysDefined" label="alwaysDefined" widget="CHECKBOX"/>
+          <property_list_action name="new" type="ADD" method="addActivityMetricsDefinition"/>
+          <property_list_action name="delete" type="DELETE" method="deleteMetricsDefinition"/>
+        </property_list>
+		<property_list name="operationMetricsDefinitions" label="operation_metrics" constraint="2">
+          <param name="visible_row_count" value="5"/>
+          <param name="row_height" value="20"/>
+          <property_list_column name="name" label="value" widget="TEXT_FIELD"/>
+          <property_list_column name="type" label="type" widget="DROPDOWN"/>
+          <property_list_column name="unit" label="unit" widget="TEXT_FIELD">
+            <param name="column_width" value="50"/>
+            <param name="resizable" value="true"/>
+            <param name="isEditable" value="isUnitEditable"/>
+          </property_list_column>
+          <property_list_column name="description" label="description" widget="TEXT_FIELD">
+            <param name="column_width" value="120"/>
+            <param name="resizable" value="true"/>
+          </property_list_column>
+          <property_list_column name="alwaysDefined" label="alwaysDefined" widget="CHECKBOX"/>
+          <property_list_action name="new" type="ADD" method="addOperationMetricsDefinition"/>
+          <property_list_action name="delete" type="DELETE" method="deleteMetricsDefinition"/>
+        </property_list>
+		<property_list name="edgeMetricsDefinitions" label="edge_metrics" constraint="3">
+          <param name="visible_row_count" value="5"/>
+          <param name="row_height" value="20"/>
+          <property_list_column name="name" label="value" widget="TEXT_FIELD"/>
+          <property_list_column name="type" label="type" widget="DROPDOWN"/>
+          <property_list_column name="unit" label="unit" widget="TEXT_FIELD">
+            <param name="column_width" value="50"/>
+            <param name="resizable" value="true"/>
+            <param name="isEditable" value="isUnitEditable"/>
+          </property_list_column>
+          <property_list_column name="description" label="description" widget="TEXT_FIELD">
+            <param name="column_width" value="120"/>
+            <param name="resizable" value="true"/>
+          </property_list_column>
+          <property_list_column name="alwaysDefined" label="alwaysDefined" widget="CHECKBOX"/>
+          <property_list_action name="new" type="ADD" method="addEdgeMetricsDefinition"/>
+          <property_list_action name="delete" type="DELETE" method="deleteMetricsDefinition"/>
+        </property_list>
+        <property_list name="artefactMetricsDefinitions" label="artefact_metrics" constraint="4">
+          <param name="visible_row_count" value="5"/>
+          <param name="row_height" value="20"/>
+          <property_list_column name="name" label="value" widget="TEXT_FIELD"/>
+          <property_list_column name="type" label="type" widget="DROPDOWN"/>
+          <property_list_column name="unit" label="unit" widget="TEXT_FIELD">
+            <param name="column_width" value="50"/>
+            <param name="resizable" value="true"/>
+            <param name="isEditable" value="isUnitEditable"/>
+          </property_list_column>
+          <property_list_column name="description" label="description" widget="TEXT_FIELD">
+            <param name="column_width" value="120"/>
+            <param name="resizable" value="true"/>
+          </property_list_column>
+          <property_list_column name="alwaysDefined" label="alwaysDefined" widget="CHECKBOX"/>
+          <property_list_action name="new" type="ADD" method="addArtefactMetricsDefinition"/>
+          <property_list_action name="delete" type="DELETE" method="deleteMetricsDefinition"/>
+        </property_list>
+	</tab>
+	<tab name="Advanced" index="2" layout="DEFAULT">
+		<property name="flexoID" label="flexo_id" widget="READ_ONLY_TEXT_FIELD" constraint="0">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+	</tab>
+</inspector>

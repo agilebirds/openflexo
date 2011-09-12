@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlexoWorkflow id="SYL_392" name="TestExecutionModel" userID="SYL" flexoID="392" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+  <FlexoProcess id="SYL_404" name="TestExecutionModel" userID="SYL" flexoID="404" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+    <FlexoProcess id="SYL_129735" name="SubProcess" userID="SYL" flexoID="129735" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" />
+    <FlexoProcess id="SYL_678064" name="CheapestFlightService" userID="SYL" flexoID="678064" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" />
+    <FlexoProcess id="SYL_680239" name="ExempleBen" userID="SYL" flexoID="680239" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" />
+  </FlexoProcess>
+  <RootFlexoProcess idref="SYL_404" />
+</FlexoWorkflow>
+

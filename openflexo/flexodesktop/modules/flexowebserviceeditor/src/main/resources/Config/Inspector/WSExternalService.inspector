@@ -1,0 +1,2 @@
+<inspector title = "ws_external_ws_service" inheritsfrom="WSService.inspector">
+</inspector>

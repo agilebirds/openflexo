@@ -1,0 +1,61 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = "ACTIVITY_NODE_FLEXO_ID"; 
+            name = activityNodeFlexoID; 
+            prototypeName = id; 
+            valueType = l; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = "CREATION_DATE"; 
+            name = creationDate; 
+            prototypeName = date; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = "PROCESS_INSTANCE_ID"; 
+            name = processInstanceID; 
+            prototypeName = id; 
+        }
+    ); 
+    className = "org.openflexo.engine.db.ActivityTask"; 
+    classProperties = (creationDate, operationTasks, processInstance); 
+    externalName = "ACTIVITY_TASK"; 
+    fetchSpecificationDictionary = {}; 
+    name = ActivityTask; 
+    primaryKeyAttributes = (activityNodeFlexoID, processInstanceID); 
+    relationships = (
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = OperationTask; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = (
+                {
+                    destinationAttribute = activityNodeFlexoID; 
+                    sourceAttribute = activityNodeFlexoID; 
+                }, 
+                {
+                    destinationAttribute = processInstanceID; 
+                    sourceAttribute = processInstanceID; 
+                }
+            ); 
+            name = operationTasks; 
+        }, 
+        {
+            destination = ProcessInstance; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = (
+                {
+                    destinationAttribute = processInstanceID; 
+                    sourceAttribute = processInstanceID; 
+                }
+            ); 
+            name = processInstance; 
+        }
+    ); 
+}

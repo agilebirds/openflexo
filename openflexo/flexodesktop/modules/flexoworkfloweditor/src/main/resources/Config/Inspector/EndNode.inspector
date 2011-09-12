@@ -1,0 +1,11 @@
+<inspector title = "End Node" inheritsfrom="FlexoNode.inspector" inspectedClassName="ignore">
+
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+	</tab>
+	<tab name="Doc" index="2">
+		<property name="index" label="index" widget="INTEGER" constraint="0"/>
+	</tab>
+</inspector>

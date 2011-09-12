@@ -1,0 +1,264 @@
+		<w:tbl>
+			<w:tblPr>
+				<w:tblStyle w:val="MediumList2-Accent1" />
+				<w:tblW w:w="4231" w:type="pct" />
+				<w:jc w:val="center" />
+				<w:tblLook w:val="04A0" />
+			</w:tblPr>
+			<w:tblGrid>
+				<w:gridCol w:w="1412" />
+				<w:gridCol w:w="731" />
+				<w:gridCol w:w="1724" />
+				<w:gridCol w:w="1986" />
+				<w:gridCol w:w="1353" />
+			</w:tblGrid>
+			<w:tr w:rsidR="003C1000">
+				<w:trPr>
+					<w:cnfStyle w:val="100000000000" />
+					<w:jc w:val="center" />
+				</w:trPr>
+				<w:tc>
+					<w:tcPr>
+						<w:cnfStyle w:val="001000000100" />
+						<w:tcW w:w="1005" w:type="pct" />
+						<w:noWrap />
+					</w:tcPr>
+					<w:p w:rsidR="003C1000" w:rsidRDefault="003C1000" w:rsidP="00797377">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+								<w:sz w:val="22" />
+								<w:szCs w:val="22" />
+							</w:rPr>
+						</w:pPr>
+						<w:r>
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+								<w:sz w:val="22" />
+								<w:szCs w:val="22" />
+							</w:rPr>
+							<w:t>Buttons</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="532" w:type="pct" />
+					</w:tcPr>
+					<w:p w:rsidR="003C1000" w:rsidRDefault="003C1000" w:rsidP="00797377">
+						<w:pPr>
+							<w:jc w:val="center" />
+							<w:cnfStyle w:val="100000000000" />
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+								<w:sz w:val="22" />
+								<w:szCs w:val="22" />
+							</w:rPr>
+						</w:pPr>
+						<w:r>
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+								<w:sz w:val="22" />
+								<w:szCs w:val="22" />
+							</w:rPr>
+							<w:t>ID</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="1221" w:type="pct" />
+					</w:tcPr>
+					<w:p w:rsidR="003C1000" w:rsidRDefault="003C1000" w:rsidP="00797377">
+						<w:pPr>
+							<w:jc w:val="center" />
+							<w:cnfStyle w:val="100000000000" />
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+								<w:sz w:val="22" />
+								<w:szCs w:val="22" />
+							</w:rPr>
+						</w:pPr>
+						<w:r>
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+								<w:sz w:val="22" />
+								<w:szCs w:val="22" />
+							</w:rPr>
+							<w:t>Action</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="1403" w:type="pct" />
+					</w:tcPr>
+					<w:p w:rsidR="003C1000" w:rsidRDefault="003C1000" w:rsidP="00797377">
+						<w:pPr>
+							<w:jc w:val="center" />
+							<w:cnfStyle w:val="100000000000" />
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+								<w:sz w:val="22" />
+								<w:szCs w:val="22" />
+							</w:rPr>
+						</w:pPr>
+						<w:r>
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+								<w:sz w:val="22" />
+								<w:szCs w:val="22" />
+							</w:rPr>
+							<w:t>Behavior</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="839" w:type="pct" />
+					</w:tcPr>
+					<w:p w:rsidR="003C1000" w:rsidRDefault="003C1000" w:rsidP="00797377">
+						<w:pPr>
+							<w:jc w:val="center" />
+							<w:cnfStyle w:val="100000000000" />
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+								<w:sz w:val="22" />
+								<w:szCs w:val="22" />
+							</w:rPr>
+						</w:pPr>
+						<w:r>
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+								<w:color w:val="auto" />
+								<w:sz w:val="22" />
+								<w:szCs w:val="22" />
+							</w:rPr>
+							<w:t>Requirement</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+			</w:tr>
+#foreach($button in $buttonList)
+	#if(!$button.getDontGenerate())
+			<w:tr w:rsidR="003C1000">
+				<w:trPr>
+					<w:cnfStyle w:val="000000100000" />
+					<w:jc w:val="center" />
+				</w:trPr>
+				<w:tc>
+					<w:tcPr>
+						<w:cnfStyle w:val="001000000000" />
+						<w:tcW w:w="1005" w:type="pct" />
+						<w:noWrap />
+					</w:tcPr>
+					<w:p w:rsidR="003C1000" w:rsidRDefault="003C1000" w:rsidP="00EF2D92">
+						<w:pPr>
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+							</w:rPr>
+						</w:pPr>
+						<w:r>
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+							</w:rPr>
+							<w:t>${button.getLabel()}</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="532" w:type="pct" />
+					</w:tcPr>
+					<w:p w:rsidR="003C1000" w:rsidRDefault="003C1000" w:rsidP="00797377">
+						<w:pPr>
+							<w:jc w:val="center" />
+							<w:cnfStyle w:val="000000100000" />
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+							</w:rPr>
+						</w:pPr>
+						<w:r>
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+							</w:rPr>
+							<w:t>${button.getFlexoID()}</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="1221" w:type="pct" />
+					</w:tcPr>
+					<w:p w:rsidR="003C1000" w:rsidRDefault="003C1000" w:rsidP="00797377">
+						<w:pPr>
+							<w:jc w:val="center" />
+							<w:cnfStyle w:val="000000100000" />
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+							</w:rPr>
+						</w:pPr>
+						<w:r>
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+							</w:rPr>
+							<w:t>${button.getHelpMessage()}</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="1403" w:type="pct" />
+					</w:tcPr>
+					#description($button)
+				</w:tc>
+				<w:tc>
+					<w:tcPr>
+						<w:tcW w:w="839" w:type="pct" />
+					</w:tcPr>
+					<w:p w:rsidR="003C1000" w:rsidRDefault="003C1000" w:rsidP="00797377">
+						<w:pPr>
+							<w:jc w:val="center" />
+							<w:cnfStyle w:val="000000100000" />
+							<w:rPr>
+								<w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+									w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+							</w:rPr>
+						</w:pPr>
+						<w:r w:rsidRPr="00172C68">
+							<w:rPr>
+								<w:highlight w:val="green" />
+							</w:rPr>
+							<w:t>-</w:t>
+						</w:r>
+					</w:p>
+				</w:tc>
+			</w:tr>
+		#end ##$!button.getDontGenerate
+	#end ##foreach button in buttonList
+		</w:tbl>

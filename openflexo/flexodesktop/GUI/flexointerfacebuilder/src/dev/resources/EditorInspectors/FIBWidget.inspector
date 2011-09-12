@@ -1,0 +1,90 @@
+<Panel className="org.openflexo.fib.editor.controller.FIBInspector" 
+	   name="Inspector" 
+	   layout="border" 
+	   dataClassName="org.openflexo.fib.model.FIBWidget">
+	<Parameter name="title" value="Widget"/>
+
+		<TabPanel name="Tab" constraints="border(location=center)">
+
+			<Tab name="BasicTab" title="Basic" index="0" layout="twocols" font="SansSerif,0,11" >
+			
+				<Label label="enable" constraints="twocols(location=left)"/>
+				<Custom data="data.enable.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+					<Assignment variable="component.bindable" value="data"/>
+					<Assignment variable="component.bindingDefinition" value="data.ENABLE"/>
+				</Custom>
+		
+				<Label label="format" constraints="twocols(location=left)"/>
+				<Custom data="data.format.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+					<Assignment variable="component.bindable" value="data.formatter"/>
+					<Assignment variable="component.bindingDefinition" value="data.FORMAT"/>
+				</Custom>
+		
+				<CheckBox data="data.localize" constraints="twocols(location=left)"/>
+				<Label label="localize_component" constraints="twocols(location=right;expandHorizontally=true)"/>
+
+				<CheckBox data="data.readOnly" constraints="twocols(location=left)" columns="15"/>
+				<Label label="read_only_component" constraints="twocols(location=right;expandHorizontally=true)"/>
+
+			</Tab>
+
+			<Tab name="ControlsTab" title="Controls" index="2" layout="twocols" font="SansSerif,0,11" >
+			
+				<Label label="click_action" constraints="twocols(location=left)"/>
+				<Custom data="data.clickAction.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+					<Assignment variable="component.bindable" value="data"/>
+					<Assignment variable="component.bindingDefinition" value="data.CLICK_ACTION"/>
+				</Custom>
+
+				<Label label="double_click_action" constraints="twocols(location=left)"/>
+				<Custom data="data.doubleClickAction.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+					<Assignment variable="component.bindable" value="data"/>
+					<Assignment variable="component.bindingDefinition" value="data.DOUBLE_CLICK_ACTION"/>
+				</Custom>
+
+				<Label label="value_changed" constraints="twocols(location=left)"/>
+				<Custom data="data.valueChangedAction.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+					<Assignment variable="component.bindable" value="data"/>
+					<Assignment variable="component.bindingDefinition" value="data.VALUE_CHANGED_ACTION"/>
+				</Custom>
+
+				<CheckBox data="data.manageDynamicModel" constraints="twocols(location=left)" columns="15"/>
+				<Label label="dynamic_model" constraints="twocols(location=right;expandHorizontally=true)"/>
+				
+			</Tab>
+						
+			<Tab name="DocumentationTab" title="Doc" index="6" layout="twocols" font="SansSerif,0,11" >
+				<Label label="tooltip" constraints="twocols(location=left)"/>
+				<Custom data="data.tooltip.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+					<Assignment variable="component.bindable" value="data"/>
+					<Assignment variable="component.bindingDefinition" value="data.TOOLTIP"/>
+				</Custom>
+				<Label label="tooltip_text" constraints="twocols(location=left)"/>
+				<TextField data="data.tooltipText" constraints="twocols(location=right;expandHorizontally=true)" columns="15"/>
+			</Tab>
+
+		</TabPanel>
+
+  <LocalizedDictionary>
+    <Localized key="enable" lang="English">Enable</Localized>
+    <Localized key="format" lang="English">Format</Localized>
+    <Localized key="enable" lang="French">Activer</Localized>
+    <Localized key="format" lang="French">Format</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="enable" lang="Dutch">Enable</Localized>
+    <Localized key="format" lang="Dutch">Format</Localized>
+    <Localized key="dynamic_model" lang="French">Modèle dynamique</Localized>
+    <Localized key="localize_component" lang="French">Localiser le composant</Localized>
+    <Localized key="read_only_component" lang="French">Composant en lecture seule</Localized>
+    <Localized key="value_changed" lang="French">Valeur changée</Localized>
+    <Localized key="value_changed" lang="English">Value changed</Localized>
+    <Localized key="dynamic_model" lang="English">Dynamic model</Localized>
+    <Localized key="localize_component" lang="English">Localize component</Localized>
+    <Localized key="read_only_component" lang="English">Read-only component</Localized>
+    <Localized key="value_changed" lang="Dutch">Value changed</Localized>
+    <Localized key="read_only_component" lang="Dutch">Read-only component</Localized>
+    <Localized key="localize_component" lang="Dutch">Localize component</Localized>
+    <Localized key="dynamic_model" lang="Dutch">Dynamic model</Localized>
+  </LocalizedDictionary>
+
+</Panel>

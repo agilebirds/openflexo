@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<TITLE>
+Sub-process
+</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Sub-process</H1>
+<HR>
+
+    The Flexo model encourages the modularity and the reusability by the 
+    notion of subprocesses, i.e. sub-sequences of activities or sub-processes 
+    that can be reused at different place in the workflow. Subprocesses are 
+    organized in a hierarchy. Each subprocess has a father sub-process from 
+    which it inherits variables, role and status definition. There are three 
+    types of sub-processes:
+
+    <ol>
+      <li>
+        The <b>simple sub-process </b>regroups a set of activities. They acts 
+        a subroutines and could be replaced by its set of activities.
+      </li>
+      <li>
+        The <b>parallel sub-process</b> executes several copies of the 
+        sequence of activities in parallel. Parallel sub-processes create 
+        embedded business data context that can be different for every 
+        instance executed in parallel.
+      </li>
+      <li>
+        The <b>sequential sub-process</b> executes the sequence of activities 
+        several times in sequence. Sequential sub-processes create a different 
+        embedded data context for each instances performed in sequence.
+      </li>
+    </ol>
+    <p>
+      &#160;
+    </p>
+  
+<H2>defaultStatus attribute</H2>
+
+    Default status.
+  
+<H2>Status List attribute</H2>
+
+    List of associated status.
+  
+<H2>roleList attributes</H2>
+
+    List of associated roles.
+  
+<H2>businessDataType attribute</H2>
+
+    Type of associated Business Data.
+  
+<H2>BusinessDataVariableName attribute</H2>
+
+    Name of the associated Business data variable.
+  
+<H2>Name attribute</H2>
+
+    
+  
+<H2>isWebService attribute</H2>
+
+    Has the subprocess to be exported and reused as a web service or an API?
+  
+<HR>
+<p><b>Contained items</b> <a href="FlexoProcess-operationGenSubPath.html">FlexoProcess-operationGenSubPath</a>, <a href="FlexoProcess-pageGenSubPath.html">FlexoProcess-pageGenSubPath</a>, <a href="FlexoProcess-superClassGenSubPath.html">FlexoProcess-superClassGenSubPath</a>, <a href="FlexoProcess-popupGenSubPath.html">FlexoProcess-popupGenSubPath</a>, <a href="FlexoProcess-tabGenSubPath.html">FlexoProcess-tabGenSubPath</a>, <a href="FlexoProcess-dontGenerate.html">FlexoProcess-dontGenerate</a>, <a href="FlexoProcess-description.html">FlexoProcess-description</a>, <a href="FlexoProcess-docFormat.html">FlexoProcess-docFormat</a>, <a href="FlexoProcess-flexoID.html">FlexoProcess-flexoID</a>, <a href="FlexoProcess-interactiveParentProcess.html">FlexoProcess-interactiveParentProcess</a></p>
+</BODY>
+</HTML>

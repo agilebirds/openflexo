@@ -1,0 +1,7 @@
+#name() :WOFileUpload {
+    filePath = #name()FilePath;
+    streamToFilePath = #name()TempFilePath;
+    finalFilePath = #name()FinalFilePath;
+    name = "#name()";
+    id = "#name()";
+}

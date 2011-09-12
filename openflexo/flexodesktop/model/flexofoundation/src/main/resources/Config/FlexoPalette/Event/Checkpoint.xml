@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Checkpoint id="SYL_9585" posiX="51" posiY="113" width="91" height="72" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="9585" dontEscapeLatex="false" dontGenerate="false" nodeName="CHECKPOINT" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" nodeType="NORMAL" isWaiting="false" isSelfActivated="false">
+  <NodeProperties />
+</Checkpoint>
+

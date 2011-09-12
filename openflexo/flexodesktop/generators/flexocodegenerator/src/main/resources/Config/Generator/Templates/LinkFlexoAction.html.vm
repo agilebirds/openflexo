@@ -1,0 +1,5 @@
+<webobject name="#name()Condition">
+    <webobject name="#name()Link">
+        #renderLinkContent($widget)
+    </webobject>
+</webobject>

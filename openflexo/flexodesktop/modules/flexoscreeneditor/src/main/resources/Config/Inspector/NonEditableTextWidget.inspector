@@ -1,0 +1,26 @@
+<inspector title = "IENonEditableTextWidget" inheritsfrom ="InnerTableWidget.inspector">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+		<property name="value" label="value" widget="TEXT_FIELD" constraint="2">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		</property>
+		<property name="textCSSClass" label="text_css_class" widget="DROPDOWN" constraint="98">
+		</property>
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+	</tab>
+
+	<tab name="Doc" index="2" layout="DEFAULT">
+	</tab>
+
+	<tab name="Data" index="3" layout="DEFAULT">
+		<property name="bindingValue" label="binding_value" widget="CUSTOM" constraint="0" depends="fieldType">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="bindingValueDefinition"/>			
+			<param name="creates_entry" value="createsBindingVariable"/>			
+		</property>
+	</tab>
+
+</inspector>

@@ -1,0 +1,38 @@
+<inspector title = "Activity Node" inheritsfrom="AbstractActivityNode.inspector" inspectedClassName="org.openflexo.foundation.wkf.node.ActivityNode">
+
+	<tab name="Basic" index="0">
+		<property name="taskType" label="task_type" widget="DROPDOWN" constraint="10">
+	        <param name="showReset" value="true"/>
+		</property>
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+		
+	</tab>
+    <tab name="Stats" index="5">
+        <property name="statistics.infoLabel" widget="LABEL" constraint="0">
+            <param name="align" value="center"/>
+            <param name="width" value="200"/>
+            <param name="height" value="60"/>
+        </property>
+        <property name="statistics.includeBeginEndNode" label="include_begin_end" widget="CHECKBOX" constraint="1">
+        </property>
+        <property name="statistics.operationCount" label="# operations" widget="READ_ONLY_TEXT_FIELD" depends="statistics,statistics.includeBeginEndNode" conditional="statistics.includeBeginEndNode=true" constraint="5">
+        </property> 
+        <property name="statistics.realOperationCount" label="# operations" widget="READ_ONLY_TEXT_FIELD" depends="statistics,statistics.includeBeginEndNode" conditional="statistics.includeBeginEndNode=false" constraint="5">
+        </property>     
+        <property name="statistics.actionCount" label="# actions" widget="READ_ONLY_TEXT_FIELD" depends="statistics,statistics.includeBeginEndNode" conditional="statistics.includeBeginEndNode=true" constraint="6">
+        </property>
+        <property name="statistics.realActionCount" label="# actions" widget="READ_ONLY_TEXT_FIELD" depends="statistics,statistics.includeBeginEndNode" conditional="statistics.includeBeginEndNode=false" constraint="6">
+        </property>
+        <group name="buttons" constraint="10">
+            <param name = "layout" value="center"/>
+            <property name="refreshStatistics" label="refresh" widget="BUTTON" constraint="1">
+            </property>
+        </group>
+    </tab>
+
+</inspector>

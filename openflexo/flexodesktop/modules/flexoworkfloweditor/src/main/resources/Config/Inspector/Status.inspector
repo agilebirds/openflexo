@@ -1,0 +1,17 @@
+<inspector title = "Status" inheritsfrom ="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.wkf.Status">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="name" label="name" widget="TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		</property>
+	</tab>
+	
+	<tab name="Advanced" index="2" layout="DEFAULT">
+	</tab>
+	<tab name="Doc" index="1">
+		<property name="index" label="index" widget="INTEGER" constraint="0"/>
+	</tab>	
+</inspector>

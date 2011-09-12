@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.edge.TokenEdge" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label label="increment" localize="true" name="TokenIncremLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
+      <Number numberType="IntegerType" data="data.tokenIncrem" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" name="TokenIncrem" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </Number>
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="increment" lang="English">Increment</Localized>
+    <Localized key="increment" lang="French">Incrément</Localized>
+    <Localized key="increment" lang="Dutch">Increment</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Token edge" />
+</Panel>
+

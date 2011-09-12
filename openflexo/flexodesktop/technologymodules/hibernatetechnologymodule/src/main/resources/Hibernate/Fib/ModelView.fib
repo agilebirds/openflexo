@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="gridbag" dataClassName="org.openflexo.tm.hibernate.impl.HibernateModel" font="Lucida Grande,0,11" width="800" height="750" name="main">
+  <Panel layout="border" border="titled" borderTitle="Entities" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=1;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=1.0;fill=both;weightX=1.0)" width="80" height="60">
+    <Table iteratorClassName="org.openflexo.tm.hibernate.impl.HibernateEntity" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="true" selectionMode="MultipleIntervalSelection" data="data.entities" constraints="border(location=center;index=0)" name="EntitiesTable" localize="true" manageDynamicModel="true">
+      <IconColumn data="controller.getIconForHibernateObject(iterator)" title="icon" columnWidth="30" resizable="false" displayTitle="false" name="icon" />
+      <TextFieldColumn data="iterator.name" title="Class name" columnWidth="200" resizable="true" displayTitle="true" />
+      <LabelColumn data="iterator.father.name" title="Parent" columnWidth="100" resizable="true" displayTitle="true" name="label" />
+      <TextFieldColumn data="iterator.description" title="Description" columnWidth="100" resizable="true" displayTitle="true" name="textfield" />
+      <AddAction method="controller.performCreateEntity" name="add_action" />
+      <RemoveAction method="selected.delete()" name="delete_action" />
+      <LocalizedDictionary />
+    </Table>
+  </Panel>
+  <Panel layout="border" border="titled" borderTitle="Attributes" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=1;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=1.0;fill=both;weightX=1.0)" width="80" height="60">
+    <Table iteratorClassName="org.openflexo.tm.hibernate.impl.HibernateAttribute" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="true" selectionMode="MultipleIntervalSelection" data="EntitiesTable.selected.attributes" constraints="border(location=center;index=0)" localize="true" manageDynamicModel="true">
+      <IconColumn data="controller.getIconForHibernateObject(iterator)" title="icon" columnWidth="30" resizable="false" displayTitle="false" name="icon" />
+      <TextFieldColumn data="iterator.name" title="Property name" columnWidth="100" resizable="true" displayTitle="true" />
+      <DropDownColumn data="iterator.type" title="Type" columnWidth="100" resizable="true" displayTitle="true" name="dropdown" />
+      <CheckBoxColumn data="iterator.primaryKey" title="PK" columnWidth="50" resizable="true" displayTitle="true" name="checkbox" />
+      <CheckBoxColumn data="iterator.notNull" title="Not null" columnWidth="50" resizable="true" displayTitle="true" name="checkbox" />
+      <CheckBoxColumn data="iterator.unique" title="Unique" columnWidth="50" resizable="true" displayTitle="true" name="checkbox" />
+      <AddAction method="controller.performCreateAttribute(EntitiesTable.selected)" name="add_action" />
+      <RemoveAction method="selected.delete()" name="delete_action" />
+      <LocalizedDictionary />
+    </Table>
+  </Panel>
+  <Panel layout="border" border="titled" borderTitle="Relationships" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=2;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=1.0;fill=both;weightX=1.0)" width="80" height="60">
+    <Table iteratorClassName="org.openflexo.tm.hibernate.impl.HibernateRelationship" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="true" selectionMode="MultipleIntervalSelection" data="EntitiesTable.selected.relationships" constraints="border(location=center;index=0)" localize="true" manageDynamicModel="true">
+      <IconColumn data="controller.getIconForHibernateObject(iterator)" title="icon" columnWidth="30" resizable="false" displayTitle="false" name="icon" />
+      <TextFieldColumn data="iterator.nameOrBuiltAutomaticOne" title="Property name" columnWidth="100" resizable="true" displayTitle="true" />
+      <DropDownColumn list="data.entities" data="iterator.destination" format="object.name" title="Destination" columnWidth="100" resizable="true" displayTitle="true" name="dropdown" />
+      <CheckBoxColumn data="iterator.toMany" title="To many" columnWidth="50" resizable="true" displayTitle="true" name="checkbox" />
+      <CheckBoxColumn data="iterator.notNull" title="Not null" columnWidth="50" resizable="true" displayTitle="true" name="checkbox" />
+      <CheckBoxColumn data="iterator.hasInverse" title="Has inverse" columnWidth="50" resizable="true" displayTitle="true" name="checkbox" />
+      <AddAction method="controller.performCreateRelationship(EntitiesTable.selected)" name="add_action" />
+      <RemoveAction method="selected.delete()" name="delete_action" />
+      <LocalizedDictionary />
+    </Table>
+  </Panel>
+  <LocalizedDictionary />
+  <Parameter name="controllerClassName" value="org.openflexo.tm.hibernate.gui.controller.HibernateModelController" />
+</Panel>
+

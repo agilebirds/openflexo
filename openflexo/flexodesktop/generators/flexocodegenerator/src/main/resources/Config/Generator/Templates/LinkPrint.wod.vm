@@ -1,0 +1,10 @@
+#name(): WOHyperlink {
+    href = "#";
+    #tooltipAsTitle()
+#if($widget.isCustomButton())
+    class="denaliButton";
+#end
+    onclick = "window.print();";
+}
+
+#renderLinkContent($widget)

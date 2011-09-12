@@ -1,0 +1,9 @@
+<inspector title = "Internal Message IN edge" inheritsfrom ="MessageEdge.inspector" inspectedClassName="org.openflexo.foundation.wkf.edge.InternalMessageInEdge">
+
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>		
+	</tab>
+	
+</inspector>

@@ -1,0 +1,32 @@
+<inspector title = "WORepository" inheritsfrom="DMRepository.inspector">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		
+		<hidden name="name"/>
+		<property name="localizedName" label="name" widget="READ_ONLY_TEXT_FIELD" constraint="0">
+		</property>
+		
+		<property name="customApplicationEntity" label="application_entity" widget="CUSTOM" constraint="3">
+			<param name="className" value="org.openflexo.components.widget.DMEntityInspectorWidget"/>
+		</property>
+		<property name="customSessionEntity" label="session_entity" widget="CUSTOM" constraint="3">
+			<param name="className" value="org.openflexo.components.widget.DMEntityInspectorWidget"/>
+		</property>
+		<property name="customDirectActionEntity" label="directaction_entity" widget="CUSTOM" constraint="3">
+			<param name="className" value="org.openflexo.components.widget.DMEntityInspectorWidget"/>
+		</property>
+		<property name="customComponentEntity" label="defaultcomponent_entity" widget="CUSTOM" constraint="3">
+			<param name="className" value="org.openflexo.components.widget.DMEntityInspectorWidget"/>
+		</property>
+	</tab>
+	
+	<tab name="Advanced" index="1">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+	</tab>
+	<tab name="Doc" index="2">
+	</tab>
+</inspector>

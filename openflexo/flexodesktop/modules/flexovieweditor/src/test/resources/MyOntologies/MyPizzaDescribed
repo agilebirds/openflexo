@@ -1,0 +1,175 @@
+Class MyPizza:TomatoTopping 
+  is a sub-class of Class PizzaEditorCalc:OEVegetableTopping 
+Class PizzaEditorCalc:OESeefoodTopping 
+  is a sub-class of Class Ontology1231149415187:SeefoodTopping 
+  is a sub-class of Class FlexoConceptsOntology:FlexoConcept 
+  is a super-class of Class MyPizza:TunaTopping 
+  is a super-class of Class MyPizza:PrawnTopping 
+Class MyPizza:TunaTopping 
+  is a sub-class of Class PizzaEditorCalc:OESeefoodTopping 
+Class MyPizza:AmericanaPizza 
+  is a sub-class of Anonymous restriction with ID a-0
+    on property PizzaEditorCalc:oeHasTopping
+    some values from Class MyPizza:SpicyBeefTopping 
+  is a sub-class of Anonymous restriction with ID a-1
+    on property PizzaEditorCalc:oeHasBase
+    some values from Class Ontology1231149415187:ThinAndCrispyBase 
+  is a sub-class of Anonymous restriction with ID a-2
+    on property PizzaEditorCalc:oeHasTopping
+    some values from Class Ontology1231149415187:MozzarellaTopping 
+  is a sub-class of Anonymous restriction with ID a-3
+    on property PizzaEditorCalc:oeHasTopping
+    some values from Class MyPizza:TomatoTopping 
+  is a sub-class of Class PizzaEditorCalc:OENamedPizza 
+Class MyPizza:MargheritaPizza 
+  is a sub-class of Anonymous restriction with ID a-4
+    on property PizzaEditorCalc:oeHasBase
+    some values from Class Ontology1231149415187:ThinAndCrispyBase 
+  is a sub-class of Anonymous restriction with ID a-5
+    on property PizzaEditorCalc:oeHasTopping
+    some values from Class MyPizza:TomatoTopping 
+  is a sub-class of Anonymous restriction with ID a-6
+    on property PizzaEditorCalc:oeHasTopping
+    some values from Class Ontology1231149415187:MozzarellaTopping 
+  is a sub-class of Class PizzaEditorCalc:OENamedPizza 
+Class MyPizza:PrawnTopping 
+  is a sub-class of Class PizzaEditorCalc:OESeefoodTopping 
+Class MyPizza:SalamiTopping 
+  is a sub-class of Class PizzaEditorCalc:OEMeatTopping 
+Class MyPizza:SpicyBeefTopping 
+  is a sub-class of Class PizzaEditorCalc:OEMeatTopping 
+Class PizzaEditorCalc:OENamedPizza 
+  is a sub-class of Class Ontology1231149415187:NamedPizza 
+  is a sub-class of Class FlexoConceptsOntology:FlexoConcept 
+  is a super-class of Class MyPizza:MargheritaPizza 
+  is a super-class of Class MyPizza:AmericanaPizza 
+Class Ontology1231149415187:MozzarellaTopping 
+  is a sub-class of Class Ontology1231149415187:CheeseTopping 
+Class PizzaEditorCalc:OEMeatTopping 
+  is a sub-class of Class Ontology1231149415187:MeatTopping 
+  is a sub-class of Class FlexoConceptsOntology:FlexoConcept 
+  is a super-class of Class MyPizza:SpicyBeefTopping 
+  is a super-class of Class MyPizza:SalamiTopping 
+Class Ontology1231149415187:ThinAndCrispyBase 
+  is a sub-class of Class Ontology1231149415187:PizzaBase 
+Class PizzaEditorCalc:OEVegetableTopping 
+  is a sub-class of Class Ontology1231149415187:VegetableTopping 
+  is a sub-class of Class FlexoConceptsOntology:FlexoConcept 
+  is a super-class of Class MyPizza:TomatoTopping 
+Class Ontology1231149415187:VegetableTopping 
+  is a sub-class of Class Ontology1231149415187:PizzaTopping 
+  is a super-class of Class PizzaEditorCalc:OEVegetableTopping 
+  is a super-class of Class Ontology1231149415187:OnionTopping 
+  is a super-class of Class Ontology1231149415187:OliveTopping 
+  is a super-class of Class Ontology1231149415187:MushroomTopping 
+  is a super-class of Class Ontology1231149415187:CaperTopping 
+Class Ontology1231149415187:SeefoodTopping 
+  is a sub-class of Class Ontology1231149415187:PizzaTopping 
+  is a super-class of Class PizzaEditorCalc:OESeefoodTopping 
+  is a super-class of Class Ontology1231149415187:AnchovyTopping 
+Class Ontology1231149415187:MeatTopping 
+  is a sub-class of Class Ontology1231149415187:PizzaTopping 
+  is a super-class of Class PizzaEditorCalc:OEMeatTopping 
+  is a super-class of Class Ontology1231149415187:PepperoniTopping 
+  is a super-class of Class Ontology1231149415187:HamTopping 
+Class FlexoConceptsOntology:FlexoConcept 
+  is a sub-class of Class FlexoConceptsOntology:Prout 
+  is a super-class of Class PizzaEditorCalc:OEVegetableTopping 
+  is a super-class of Class PizzaEditorCalc:OESeefoodTopping 
+  is a super-class of Class PizzaEditorCalc:OEMeatTopping 
+  is a super-class of Class PizzaEditorCalc:OENamedPizza 
+Class owl:Thing 
+  is a super-class of Class FlexoConceptsOntology:Prout 
+  is a super-class of Class FlexoConceptsOntology:FlexoModelObject 
+  is a super-class of Class Ontology1231149415187:PizzaConcept 
+  is a super-class of Class Products:Product 
+Class FlexoConceptsOntology:Prout 
+  is a sub-class of Class owl:Thing 
+  is a super-class of Class FlexoConceptsOntology:FlexoConcept 
+Class FlexoConceptsOntology:FlexoModelObject 
+  is a sub-class of Class owl:Thing 
+Class Ontology1231149415187:PizzaConcept 
+  is a sub-class of Class owl:Thing 
+  is a super-class of Class Ontology1231149415187:PizzaTopping 
+  is a super-class of Class Ontology1231149415187:PizzaBase 
+  is a super-class of Class Ontology1231149415187:Pizza 
+Class Ontology1231149415187:Pizza 
+  is a sub-class of Anonymous restriction with ID a-7
+    on property Ontology1231149415187:hasBase
+    some values from Class Ontology1231149415187:PizzaBase 
+  is a sub-class of Class Ontology1231149415187:PizzaConcept 
+  is a sub-class of Class Products:Food 
+  is a super-class of Class Ontology1231149415187:NamedPizza 
+Class Ontology1231149415187:PepperoniTopping 
+  is a sub-class of Class Ontology1231149415187:MeatTopping 
+Class Ontology1231149415187:NamedPizza 
+  is a sub-class of Class Ontology1231149415187:Pizza 
+  is a super-class of Class PizzaEditorCalc:OENamedPizza 
+Class Ontology1231149415187:PizzaBase 
+  is a sub-class of Class Ontology1231149415187:PizzaConcept 
+  is a super-class of Class Ontology1231149415187:ThinAndCrispyBase 
+  is a super-class of Class Ontology1231149415187:DeepPanBase 
+Class Ontology1231149415187:MushroomTopping 
+  is a sub-class of Class Ontology1231149415187:VegetableTopping 
+Class Ontology1231149415187:CaperTopping 
+  is a sub-class of Class Ontology1231149415187:VegetableTopping 
+Class Ontology1231149415187:ParmezanTopping 
+  is a sub-class of Class Ontology1231149415187:CheeseTopping 
+Class Ontology1231149415187:OnionTopping 
+  is a sub-class of Class Ontology1231149415187:VegetableTopping 
+Class Ontology1231149415187:OliveTopping 
+  is a sub-class of Class Ontology1231149415187:VegetableTopping 
+Class Ontology1231149415187:DeepPanBase 
+  is a sub-class of Class Ontology1231149415187:PizzaBase 
+Class Ontology1231149415187:AnchovyTopping 
+  is a sub-class of Class Ontology1231149415187:SeefoodTopping 
+Class Ontology1231149415187:HamTopping 
+  is a sub-class of Class Ontology1231149415187:MeatTopping 
+Class Ontology1231149415187:CheeseTopping 
+  is a sub-class of Class Ontology1231149415187:PizzaTopping 
+  is a super-class of Class Ontology1231149415187:ParmezanTopping 
+  is a super-class of Class Ontology1231149415187:MozzarellaTopping 
+Class Ontology1231149415187:PizzaTopping 
+  is a sub-class of Class Ontology1231149415187:PizzaConcept 
+  is a super-class of Class Ontology1231149415187:VegetableTopping 
+  is a super-class of Class Ontology1231149415187:SeefoodTopping 
+  is a super-class of Class Ontology1231149415187:MeatTopping 
+  is a super-class of Class Ontology1231149415187:CheeseTopping 
+Class Products:Food 
+  is a sub-class of Class Products:Product 
+  is a super-class of Class Ontology1231149415187:Pizza 
+Class Products:Product 
+  is a sub-class of Class owl:Thing 
+  is a super-class of Class Products:Food 
+Anonymous restriction with ID a-4
+    on property PizzaEditorCalc:oeHasBase
+    some values from Class Ontology1231149415187:ThinAndCrispyBase 
+  is a super-class of Class MyPizza:MargheritaPizza 
+Anonymous restriction with ID a-5
+    on property PizzaEditorCalc:oeHasTopping
+    some values from Class MyPizza:TomatoTopping 
+  is a super-class of Class MyPizza:MargheritaPizza 
+Anonymous restriction with ID a-6
+    on property PizzaEditorCalc:oeHasTopping
+    some values from Class Ontology1231149415187:MozzarellaTopping 
+  is a super-class of Class MyPizza:MargheritaPizza 
+Anonymous restriction with ID a-0
+    on property PizzaEditorCalc:oeHasTopping
+    some values from Class MyPizza:SpicyBeefTopping 
+  is a super-class of Class MyPizza:AmericanaPizza 
+Anonymous restriction with ID a-1
+    on property PizzaEditorCalc:oeHasBase
+    some values from Class Ontology1231149415187:ThinAndCrispyBase 
+  is a super-class of Class MyPizza:AmericanaPizza 
+Anonymous restriction with ID a-2
+    on property PizzaEditorCalc:oeHasTopping
+    some values from Class Ontology1231149415187:MozzarellaTopping 
+  is a super-class of Class MyPizza:AmericanaPizza 
+Anonymous restriction with ID a-3
+    on property PizzaEditorCalc:oeHasTopping
+    some values from Class MyPizza:TomatoTopping 
+  is a super-class of Class MyPizza:AmericanaPizza 
+Anonymous restriction with ID a-7
+    on property Ontology1231149415187:hasBase
+    some values from Class Ontology1231149415187:PizzaBase 
+  is a super-class of Class Ontology1231149415187:Pizza 

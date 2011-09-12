@@ -1,0 +1,21 @@
+WSDL Test ok
+
+-serverSoap: ok.
+-anagram: ok
+-berreWeather: ok
+-quiz: ok
+-i6doc: ok
+-getJoke: ok
+-spammagogo
+
+WSDLTest NOT ok
+
+
+proverbs: import externe, xml.apache.org/xml-soap not found
+containerTracking: import externe
+integrate: import externe
+retail-service: data import (arrays, date)
+
+country-info-service: arrays max-unboud
+catalog: arrays max-unbound
+x-release: data enumeration

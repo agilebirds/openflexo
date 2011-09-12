@@ -1,0 +1,64 @@
+#render($widget.getContent())
+#render($widget.getButtonList())
+
+#set($descriptor = $widget.getContainedDescriptor())
+#if(${descriptor})
+#if(${descriptor.getRepetitionOperator().getHasBatch()})
+Batch_${descriptor.getListName()}: WDLAquaBatchDisplayNoForm {
+    displayGroup = ${descriptor.getListName()}DisplayGroup;
+    name = ${descriptor.getListName()}Name;
+    numberOfObjectsPerBatch = ${descriptor.getListName()}NumberOfObjectsPerBatch;
+    currentBatchIndex = ${descriptor.getListName()}CurrentBatchIndex;
+    objectName = "ref";
+    objectNamePlural = "refs";
+    isShowingHeader = false;
+    displayOnOneLine = true;
+    anchor = "${widget.getAnchor()}";
+}
+#end
+  #if(${descriptor.getRepetitionOperator().excelButton()})
+EXCELL_${descriptor.getListName()}_Hyperlink: WOHyperlink {
+    action = ${descriptor.getListName()}Export;
+    #if($project.getIsLocalized())
+    title = tooltipForExcelExport${generator.capitalize($descriptor.getListName())};
+    #else
+    title = "Export";
+    #end
+}
+
+EXCELL_${descriptor.getListName()}_BUTTON: WDLButton {
+    imageName = "Icon_Excel";
+}
+  #end
+
+  #if(${descriptor.getRepetitionOperator().refreshButton()})
+REFRESH_${descriptor.getListName()}_Link: WDLMultiSubmitLink {
+    fieldName = ${descriptor.getListName()}RefreshHiddenFieldName;
+    formName = formName;
+    #tooltipAsTitle()
+    #if($project.getIsLocalized())
+    title = tooltipForRefresh${generator.capitalize($descriptor.getListName())};
+    #else
+    title = "Refresh";
+    #end
+    value = "REFRESH";
+    id = "REFRESH_LINK$widget.getFlexoID()";
+}
+
+REFRESH_${descriptor.getListName()}_BUTTON: WDLButton {
+    imageName = "Icon_Refresh";
+}
+
+REFRESH_${descriptor.getListName()}_HIDDEN: WOHiddenField {
+    name = ${descriptor.getListName()}RefreshHiddenFieldName;
+    value = ${descriptor.getListName()}NeedRefreshValue;
+}
+  #end
+#end
+
+#if($project.getIsLocalized())
+#set($p = 'title')
+Title_#name(): ${project.getPrefix()}LocalizedString {
+    value = "#generateKey ($widget $p $widget.getTitle())";
+}
+#end

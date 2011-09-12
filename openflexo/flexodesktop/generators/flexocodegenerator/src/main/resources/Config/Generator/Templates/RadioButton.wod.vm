@@ -1,0 +1,17 @@
+#name() : WORadioButton {
+    checked = #name();
+    name = $widget.getGroupName()GroupName;
+    #if($widget.getSubmitForm())
+        #if($widget.isInPopup())
+            onClick = onClick#capName();
+        #else
+            onClick = "this.form.submit();";
+        #end
+    #end
+    #additionalBindings()
+}
+#if($project.getIsLocalized())
+    Label_#name(): ${project.getPrefix()}LocalizedString {
+        value = "#generateKey ($widget 'value' $widget.getButtonLabel())";
+    }
+#end

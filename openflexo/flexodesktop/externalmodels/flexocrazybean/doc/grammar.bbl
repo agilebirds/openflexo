@@ -1,0 +1,15 @@
+\begin{thebibliography}{1}
+
+\bibitem{ocl}
+Klasse Objecten, \url{http://www.klasse.nl/ocl/index.html}.
+\newblock {\em OCL: the standard constraint language of the UML}, 2001.
+
+\bibitem{rose}
+Rational, \url{http://www.rational.com/products/rose/index.jsp}.
+\newblock {\em Rational Rose}, 2001.
+
+\bibitem{javacc}
+WebGain, \url{http://www.webgain.com/products/metamata/java_doc.html}.
+\newblock {\em Java Compiler Compiler}, 2001.
+
+\end{thebibliography}

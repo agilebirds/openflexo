@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Palette id="1" index="1" name="MissionObjectives">
+  <PaletteElement id="2" name="&lt;Mission&gt;&#xA;Describe here the mission of &#xA;organizational unit." editionPattern="OrganizationUnitMission">
+    <Parameter id="3" name="missionURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="4" name="missionDescription" value="" />
+    <Parameter id="5" name="missionName" value="Mission" />
+    <ShapeGraphicalRepresentation id="6" className="org.openflexo.ced.palette.PaletteElementGR" x="28.683431952662716" y="13.0" width="194.39349112426038" height="53.96615547329458" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="&lt;Mission&gt;&#xA;Describe here the mission of &#xA;organizational unit." isMultilineAllowed="true" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+      <ForegroundStyle id="7" noStroke="false" color="153,153,153" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="8" color="255,255,255" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="9" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="10" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="11" isRounded="true" arcSize="10.0" />
+      <TextStyle id="12" font="Lucida Sans,0,10" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <PaletteElement id="13" name="&lt;Objective&gt;&#xA;Describe here the objective&#xA;of organization unit" editionPattern="OrganizationUnitObjective">
+    <Parameter id="14" name="objectiveName" value="Objective" />
+    <Parameter id="15" name="objectiveURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="16" name="objectiveDescription" value="" />
+    <ShapeGraphicalRepresentation id="17" className="org.openflexo.ced.palette.PaletteElementGR" x="27.695266272189343" y="83.0" width="195.39053254437871" height="40.3013698630137" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="&lt;Objective&gt;&#xA;Describe here the objective&#xA;of organization unit" isMultilineAllowed="true" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+      <ForegroundStyle id="18" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="19" color="204,0,51" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="20" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="21" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="22" isRounded="true" arcSize="20.0" />
+      <TextStyle id="23" font="Lucida Sans,1,9" color="255,255,255" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <PaletteElement id="24" name="Position" editionPattern="OrganizationUnitPosition">
+    <Parameter id="25" name="positionName" value="Position" />
+    <Parameter id="26" name="positionURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="27" name="positionDescription" value="" />
+    <ShapeGraphicalRepresentation id="28" className="org.openflexo.ced.palette.PaletteElementGR" x="43.0" y="143.0" width="30.33870967741936" height="36.9873689868315" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="Position" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="20.0" absoluteTextY="46.0" textAlignment="CENTER">
+      <ForegroundStyle id="29" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ImageBackgroundStyle id="30" imageFile="People.gif" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="31" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="32" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="33" isRounded="false" arcSize="30.0" />
+      <TextStyle id="34" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <PaletteElement id="35" name="&lt;Mission&gt;&#xA;Describe here the&#xA;mission of position" editionPattern="PositionMission">
+    <Parameter id="36" name="missionName" value="Mission" />
+    <Parameter id="37" name="missionURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="38" name="missionDescription" value="" />
+    <ShapeGraphicalRepresentation id="39" className="org.openflexo.ced.palette.PaletteElementGR" x="95.60363636363635" y="144.0" width="132.48000000000002" height="50.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="&lt;Mission&gt;&#xA;Describe here the&#xA;mission of position" isMultilineAllowed="true" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+      <ForegroundStyle id="40" noStroke="false" color="102,102,102" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="41" color="247,221,221" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="42" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="43" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="44" isRounded="true" arcSize="10.0" />
+      <TextStyle id="45" font="Lucida Sans,0,9" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <PaletteElement id="46" name="&lt;Task&gt; Describe here position task" editionPattern="PositionTask">
+    <Parameter id="47" name="taskName" value="Task" />
+    <Parameter id="48" name="taskURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="49" name="taskDescription" value="" />
+    <ShapeGraphicalRepresentation id="50" className="org.openflexo.ced.palette.PaletteElementGR" x="30.0" y="214.0" width="200.0" height="29.34426229508197" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="&lt;Task&gt; Describe here position task" isMultilineAllowed="true" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+      <ForegroundStyle id="51" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="52" color="102,102,102" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="53" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="54" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="55" isRounded="true" arcSize="15.0" />
+      <TextStyle id="56" font="Lucida Sans,0,9" color="255,255,255" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <DrawingGraphicalRepresentation id="57" className="org.openflexo.ced.palette.PaletteGR" width="260.0" height="300.0" drawWorkingArea="true" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+    <TextStyle id="58" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+  </DrawingGraphicalRepresentation>
+</Palette>
+

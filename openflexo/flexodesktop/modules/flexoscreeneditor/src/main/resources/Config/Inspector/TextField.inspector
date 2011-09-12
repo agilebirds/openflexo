@@ -1,0 +1,33 @@
+<inspector title = "TextField" inheritsfrom ="EditableTextWidget.inspector">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+		<property name="fieldType" label="field_type" widget="DROPDOWN" constraint="4">
+			<param name="format" value="name"/>
+			<param name = "dynamiclist" value="availableFieldType"/>
+		</property>
+		<property name="formatType" label="format_type" widget="DROPDOWN" depends="fieldType" conditional="fieldType=Text" constraint="5">
+			<param name="format" value="name"/>
+		</property>
+		<property name="name" label="name" widget="TEXT_FIELD" constraint="6" depends="formatType" conditional="fieldType=Text AND formatType=AutoComplete"/>
+		<property name="min" label="minimum" widget="INTEGER" constraint="5" depends="fieldType" conditional="fieldType=Integer OR fieldType=Float"/>
+		<property name="max" label="maximum" widget="INTEGER" constraint="6" depends="fieldType" conditional="fieldType=Integer OR fieldType=Float"/>
+		<property name="isMandatory" label="is_mandatory" widget="CHECKBOX" constraint="7" depends="formatType" conditional="formatType!=AutoComplete"/>
+		<property name="isDynamic" label="is_dynamic" widget="CHECKBOX" constraint="8" depends="formatType" conditional="fieldType=Text AND formatType=AutoComplete"/>
+		<property name="values" label="values" widget="TEXT_FIELD" constraint="9" depends="formatType" conditional="fieldType=Text AND formatType=AutoComplete"/>
+		
+	</tab>
+
+   <tab name="Advanced" index="1" layout="DEFAULT">
+       <property name="operator" label="operator" widget="DROPDOWN" constraint="4" help="Select the operator to use when filtering the list" depends="isFilterForRepetition,fieldType" conditional="(isFilterForRepetition!=null AND (fieldType=Integer OR fieldType=Date OR fieldType=Float))">
+           <param name="format" value="sign"/>
+       </property>      
+   </tab>
+
+
+	<tab name="Doc" index="2" layout="DEFAULT">
+	</tab>
+
+	<tab name="Data" index="3" layout="DEFAULT">
+	</tab>
+	
+</inspector>

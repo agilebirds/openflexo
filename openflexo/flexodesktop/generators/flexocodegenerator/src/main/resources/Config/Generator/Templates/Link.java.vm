@@ -1,0 +1,5 @@
+#void($buttons.add($widget))
+#if($widget.hasConfirmMessage())
+    #void($widgetNeedingConfirmMessage.add($widget))
+#end
+#renderLink($widget)

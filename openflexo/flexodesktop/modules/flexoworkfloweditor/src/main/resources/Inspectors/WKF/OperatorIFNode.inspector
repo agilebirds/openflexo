@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.node.IFOperator" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="4" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
+    <Tab index="3" title="Data" layout="twocols" font="SansSerif,0,11" name="DataTab">
+      <Label label="condition" localize="true" name="ConditionPrimitiveLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
+      <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" data="data.conditionPrimitive" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" name="ConditionPrimitive" localize="true" manageDynamicModel="true">
+        <Assignment variable="component.bindingDefinition" value="data.conditionPrimitiveBindingDefinition" />
+        <Assignment variable="component.bindable" value="data" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+      </Custom>
+    </Tab>
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label label="status_for_positive_evaluation" localize="true" name="NewStatusForPositiveEvaluationLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
+      <DropDown format="object.nameAndProcess" localize="true" name="NewStatusForPositiveEvaluation" data="data.newStatusForPositiveEvaluation" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" list="data.process.statusList.allAvailableStatus" iteratorClassName="org.openflexo.foundation.wkf.Status" />
+      <Label label="status_for_negative_evaluation" localize="true" name="NewStatusForNegativeEvaluationLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" />
+      <DropDown format="object.nameAndProcess" localize="true" name="NewStatusForNegativeEvaluation" data="data.newStatusForNegativeEvaluation" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" list="data.process.statusList.allAvailableStatus" iteratorClassName="org.openflexo.foundation.wkf.Status" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="Data" lang="French">Donnée</Localized>
+    <Localized key="condition" lang="English">Condition</Localized>
+    <Localized key="condition" lang="French">Condition</Localized>
+    <Localized key="condition" lang="Dutch">Condition</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="status_for_positive_evaluation" lang="English">Status for positive evaluation</Localized>
+    <Localized key="status_for_positive_evaluation" lang="French">Status si l'évaluation est négative</Localized>
+    <Localized key="status_for_positive_evaluation" lang="Dutch">Status for positive evaluation</Localized>
+    <Localized key="status_for_negative_evaluation" lang="English">Status for negative evaluation</Localized>
+    <Localized key="status_for_negative_evaluation" lang="French">Statut si l'évaluation est positive</Localized>
+    <Localized key="status_for_negative_evaluation" lang="Dutch">Status for negative evaluation</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="IF operator" />
+</Panel>
+

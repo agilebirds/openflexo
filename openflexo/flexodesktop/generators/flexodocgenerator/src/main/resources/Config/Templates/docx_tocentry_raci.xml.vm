@@ -1,0 +1,6 @@
+#**
+This variant assumes that a real process  has been chosen
+*#
+#set($process = $object)
+## <w:p><w:r><w:t>*** DEBUG DDW*** Entering docx_tocentry_raci.xml</w:t></w:r></w:p>
+#raciTable($process)

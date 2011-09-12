@@ -1,0 +1,24 @@
+<inspector title = "FlattenedEORelationship" inheritsfrom="DMEOProperty.inspector">
+	<tab name="Basic" index="0">
+		<property name="isToMany" label="is_to_many" widget="READ_ONLY_CHECKBOX" constraint="4" help="true if this is a to-many relationship"/>
+		<property name="flattenRelationshipDefinition" label="relationship_definition" widget="CUSTOM" constraint="5">
+			<param name="className" value="org.openflexo.components.widget.FlattenRelationshipDefinitionSelectorInspectorWidget"/>
+			<param name="source_entity" value="entity"/>
+		</property>
+	</tab>
+	
+	<tab name="Advanced" index="1">
+		<property name="deleteRule" label="delete_rule" widget="DROPDOWN" constraint="3" help="delete rule type">
+			<param name="format" value="localizedName"/>
+		</property>
+		<property name="joinSemantic" label="join_semantic" widget="DROPDOWN" constraint="4" help="join semantic">
+			<param name="format" value="localizedName"/>
+		</property>
+		<property name="isMandatory" label="is_mandatory" widget="CHECKBOX" constraint="5" help="true if this is mandatory"/>
+		<property name="ownsDestination" label="owns_destination" widget="CHECKBOX" constraint="6" help="true if owns destination"/>
+		<property name="propagatesPrimaryKey" label="propagates_primary_key" widget="CHECKBOX" constraint="7" help="true if primary key must be propagated"/>
+		<property name="numberOfToManyFaultsToBatchFetch" label="faults_to_batch_fetch" widget="INTEGER" constraint="8" help="numberOfToManyFaultsToBatchFetch"/>
+
+	</tab>
+
+</inspector>

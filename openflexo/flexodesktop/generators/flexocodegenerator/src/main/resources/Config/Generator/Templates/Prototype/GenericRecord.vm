@@ -1,0 +1,418 @@
+#macro( gettersetter $attrib )
+  #if( $attrib.getIsClassProperty() )
+    /** #if($attrib.getDescription() && $attrib.getDescription().length() > 0 )
+     * ${generator.getJavaDocString($attrib.getDescription())} #end
+     * @return $attrib.getName()
+     */
+    public $attrib.getJavaClassName() $attrib.getName()(){
+        return ($attrib.getJavaClassName())storedValueForKey("$attrib.getName()");
+    }
+
+    #if( !$attrib.getIsReadOnly())
+    public void set$attrib.getCapitalizedName()($attrib.getJavaClassName() value){
+        takeStoredValueForKey(value,"$attrib.getName()");
+    }
+
+    #end
+  #end
+#end
+#macro( toManyGetter $rel)
+
+    public NSArray $rel.getName()(){
+        return (NSArray)storedValueForKey("$rel.getName()");
+    }
+#end
+#macro( manyToManySetter $rel )
+#set( $inv=$rel.getInverse() )
+
+    public void set$rel.getCapitalizedName()(NSMutableArray value) {
+		#if($inv.getIsClassProperty())
+        try{
+            java.util.Enumeration en = $rel.getName()().objectEnumerator();
+            while(en.hasMoreElements()){
+                (($rel.getDestinationEntity().getEntityClassName())en.nextElement()).removeFrom$inv.getCapitalizedName()(this);
+            }
+         } catch(Exception e) {
+             //should not happen
+         }
+		 #end
+         takeStoredValueForKey(value, "$rel.getName()");
+		 #if($inv.getIsClassProperty())
+         try {
+             java.util.Enumeration en = value.objectEnumerator();
+             while(en.hasMoreElements()){
+                  (($rel.getDestinationEntity().getEntityClassName())en.nextElement()).addTo$inv.getCapitalizedName()(this);
+             }
+         } catch(Exception e) {
+             //should not happen
+             e.printStackTrace();
+         }
+		 #end
+    }
+#end
+#macro( oneToManySetter $rel )
+
+    public void set$rel.getCapitalizedName()(NSMutableArray value){
+        takeStoredValueForKey(value,"$rel.getName()");
+    }
+#end
+#macro( toManyAddRemove $rel)
+
+    public void addTo$rel.getCapitalizedName()($rel.getDestinationEntity().getEntityClassName() value){
+        includeObjectIntoPropertyWithKey(value, "$rel.getName()");
+    }
+
+    public void removeFrom$rel.getCapitalizedName()($rel.getDestinationEntity().getEntityClassName() value){
+        excludeObjectFromPropertyWithKey(value, "$rel.getName()");
+    }
+#end
+#macro( toManyHas $rel )
+
+    public boolean has$rel.getCapitalizedName()(){
+        return $rel.getName()().count()>0;
+    }
+#end
+#*
+entity is a DMEOEntity
+rel is a DMEORelationship
+produce : code about rel to insert in addInDB code
+*#
+#macro ( addInDB $rel )
+  #if($rel.getIsClassProperty())
+    #if($rel.getInverse())
+      #if(!$rel.getIsToMany() && $rel.getInverse().getIsToMany())
+        if($rel.getName()()!=null)
+            $rel.getName()().addTo$rel.getInverse().getCapitalizedName()(this);
+      #end
+    #end
+  #end
+#end
+#macro( toOneGetter $rel )
+
+    public $rel.getDestinationEntity().getEntityClassName() $rel.getName()(){
+        return ($rel.getDestinationEntity().getEntityClassName())storedValueForKey("$rel.getName()");
+    }
+#end
+#macro( toOneSetter $rel)
+
+    public void set$rel.getCapitalizedName()($rel.getDestinationEntity().getEntityClassName() value){
+        if(value!=null){
+            if (value.editingContext()==null) // addInDB should be called on value before setting it
+                throw new IllegalStateException("Editing context is null for value in relationship '$rel.getName()'");
+            if (value.editingContext()!=editingContext())
+                throw new IllegalStateException("Editing context of object is different from editing context of the value in relationship '$rel.getName()'");
+        }
+        #if( $rel.getInverse() )
+          #set( $inv=$rel.getInverse() )
+            if(value != $rel.getName()()){
+          #if( $rel.getIsManyTo() && $inv.getIsClassProperty())
+                if($rel.getName()()!=null) $rel.getName()().removeFrom$inv.getCapitalizedName()(this);
+          #end
+                takeStoredValueForKey(value, "$rel.getName()");
+          #if( $rel.getIsManyTo() && $inv.getIsClassProperty())
+                if($rel.getName()()!=null) $rel.getName()().addTo$inv.getCapitalizedName()(this);
+          #end
+            }
+        #else
+        takeStoredValueForKey(value, "$rel.getName()");
+        #end
+    }
+#end
+#macro( toOneHas $rel )
+
+    public boolean has$rel.getCapitalizedName()(){
+        return $rel.getName()()!=null;
+    }
+#end
+
+#macro (qualString $name $upName)
+    public static EOQualifier qualifierFor${upName}Like(String pattern, boolean caseSensitive){
+        if(caseSensitive)return EOQualifier.qualifierWithQualifierFormat("$name like %@",new NSArray(pattern));
+        return EOQualifier.qualifierWithQualifierFormat("$name caseinsensitivelike %@",new NSArray(pattern));
+    }
+
+    public static EOQualifier qualifierFor${upName}Equals(String pattern){
+        return EOQualifier.qualifierWithQualifierFormat("$name = %@",new NSArray(pattern));
+    }
+
+    public static NSArray objectsWith${upName}Like(String pattern, boolean caseSensitive, EOEditingContext ec){
+        return objectsWithQualifier(qualifierFor${upName}Like(pattern,caseSensitive),ec);
+    }
+
+    public static NSArray objectsWith${upName}Equals(String pattern, EOEditingContext ec){
+        return objectsWithQualifier(qualifierFor${upName}Equals(pattern),ec);
+    }
+
+#end
+#macro (qualNumber $name $upName)
+    public static EOQualifier qualifierFor${upName}Equals(Number number){
+        return EOQualifier.qualifierWithQualifierFormat("$name = %@",new NSArray(number));
+    }
+
+    public static NSArray objectsWith${upName}Equals(Number number, EOEditingContext ec){
+        return objectsWithQualifier(qualifierFor${upName}Equals(number),ec);
+    }
+
+#end
+#macro( qualifiers $att )
+  #if(!($att.getPrototype().getName().equals("boolean")))
+    #if($att.getJavaClassName().equals("String"))
+      #qualString($att.getName() $att.getCapitalizedName())
+    #end
+    #if($att.getJavaClassName().equals("Number"))
+      #qualNumber($att.getName() $att.getCapitalizedName())
+    #end
+    #if($att.getJavaClassName().equals("Integer"))
+      #qualNumber($att.getName() $att.getCapitalizedName())
+    #end
+  #end
+#end
+/**
+ * class for entity $entity.getEntityClassName().
+ */
+#macro(contructorArgs $attList $relList)
+  #foreach($att in $attList)#if($foreach.index>0), #end$att.getJavaClassName() $att.getName()#end #if($attList.size()>0 && $relList.size()>0) , #end #foreach($rel in $relList)#if(!$rel.getIsToMany())#if($foreach.index>0), #end$rel.getDestinationEntity().getName() #else, NSMutableArray #end $rel.getName()#end
+#end
+#macro( constructorSetter $attList $relList)
+  #foreach($att in $attList)
+        obj.set$att.getCapitalizedName()($att.getName());
+  #end
+  #foreach($rel in $relList)
+        obj.set$rel.getCapitalizedName()($rel.getName());
+  #end
+#end
+#package()
+ import com.webobjects.foundation.*;
+ import com.webobjects.eocontrol.*;
+ import com.webobjects.eoaccess.*;
+ import java.util.*;
+#if(${entity.isBusinessDataClass()}) 
+ import be.denali.flexo.commons.hcwo.IBusinessData;     
+#end
+#imports($entity)
+ /**
+ * This class is used to access the table: $entity.getExternalName()
+ * @author FlexoBPM Generator, Agile Birds sprl. (see www.FlexoBPM.com)
+ */
+ public class $entity.getEntityClassName() extends WDLGenericRecord#if(${entity.isBusinessDataClass()}) implements IBusinessData #end{
+
+    /**
+     *  Static constructor for entity class.
+     *  @return a new instance of $entity.getName()
+     */
+     #if($entity.getEOEntity().attributeNamed("creator"))
+    public static $entity.getEntityClassName() new$entity.getEntityClassName()(String creatorLogin) {
+        $entity.getEntityClassName() obj = new $entity.getEntityClassName()();
+        #if($entity.getEOEntity().attributeNamed("creationDate"))
+        obj.setCreationDate(new NSTimestamp());
+        #end
+        obj.setCreator(creatorLogin);
+        return obj;
+    }
+    #else
+    public static $entity.getEntityClassName() new$entity.getEntityClassName()() {
+        $entity.getEntityClassName() obj = new $entity.getEntityClassName()();
+        #if($entity.getEOEntity().attributeNamed("creationDate"))
+        obj.setCreationDate(new NSTimestamp());
+        #end
+        return obj;
+    }
+    #end
+    public $entity.getEntityClassName()() {
+        super();
+    }
+
+    /**
+    * @param ec an editing context.
+    * @return NSArray of $entity.getEntityClassName() containing all instances of $entity.getEntityClassName() stored in the ec.
+    */
+    public static NSArray allObjects(EOEditingContext ec){
+        EOFetchSpecification fs =  new EOFetchSpecification(modelName(),null,null);
+        return ec.objectsWithFetchSpecification(fs);
+    }
+
+    public static $entity.getEntityClassName() objectWithID(Object objectID, EOEditingContext ec){
+        EOGlobalID gid = EOKeyGlobalID.globalIDWithEntityName(modelName(),new Object[]{objectID});
+        $entity.getEntityClassName() answer = ($entity.getEntityClassName())ec.objectForGlobalID(gid);
+        if(answer==null){
+            answer = fetchObjectWithID(objectID,ec);
+        }
+        return answer;
+    }
+    
+    public static $entity.getEntityClassName() objectWithID(EOGlobalID gid, EOEditingContext ec){
+        return ($entity.getEntityClassName())ec.faultForGlobalID(gid,ec);
+    }
+
+    public static $entity.getEntityClassName() fetchObjectWithID(Object objectID, EOEditingContext ec){
+        EOQualifier qual = EOQualifier.qualifierWithQualifierFormat("$primaryKeyAttributeName=%@",new NSArray(objectID));
+        EOFetchSpecification fs = new EOFetchSpecification(modelName(),qual,null);
+        NSArray array = ec.objectsWithFetchSpecification(fs);
+        if (array.count() == 0) return null;
+        return ($entity.getEntityClassName())array.objectAtIndex(0);
+    }
+    
+    public static String modelName(){
+        return "$entity.getName()";
+    }
+    
+    public static EOEntity getEntity(){
+        return EOModelGroup.globalModelGroup().entityNamed("${entity.getName()}");
+    }
+        
+    public static NSArray objectsWithQualifierAndSortOrder(EOQualifier qual, NSArray sortOrderings, EOEditingContext ec){
+        EOFetchSpecification fs =  new EOFetchSpecification(modelName(),qual,sortOrderings);
+        return ec.objectsWithFetchSpecification(fs);
+    }
+    
+    public static NSArray objectsWithQualifier(EOQualifier qual, EOEditingContext ec){
+        return objectsWithQualifierAndSortOrder(qual,null,ec);
+    }
+    
+    public void addInDB(EOEditingContext ec){
+        ec.insertObject(this);
+        #foreach( $rel in $manyToOneInversable )
+          #if($rel.getInverse().getIsClassProperty())
+        if($rel.getName()()!=null)
+            $rel.getName()().addTo$rel.getInverse().getCapitalizedName()(this);
+          #end
+        #end
+    }
+
+    public void removeFromDB(){
+        EOEditingContext ec = editingContext();
+      #if( $entity.hasNullify() || $entity.hasCascade() )
+            Enumeration en;
+          #end
+          #foreach( $itemRel in $entity.getOrderedEORelationship() )
+            #set( $rel=$entity.getRelationships().get($itemRel) )
+        #if ($rel.getIsClassProperty() )
+          #if( $rel.getIsToMany() )
+            #if( $rel.isNullify() && $rel.getInverse() )
+              #set( $inv=$rel.getInverse() )
+              #if( $inv.getIsClassProperty() )
+                #if( $rel.getIsManyTo())
+        en = new NSArray($rel.getName()()).objectEnumerator();
+        while(en.hasMoreElements()){
+            (($rel.getDestinationEntity().getEntityClassName())en.nextElement()).removeFrom$inv.getCapitalizedName()(this);
+        }
+                #else
+        en = new NSArray($rel.getName()()).objectEnumerator();
+        while(en.hasMoreElements()){
+            (($rel.getDestinationEntity().getEntityClassName())en.nextElement()).set$inv.getCapitalizedName()(null);
+        }
+                #end
+              #end
+            #end
+            #if( $rel.isCascade() )
+        // Delete rule is cascade
+        // TODO: check is the cascade rule is not also in the $rel.getDestinationEntity().getEntityClassName() class. It could cause errors.
+        en = new NSArray($rel.getName()()).objectEnumerator();
+        while(en.hasMoreElements()){
+            (($rel.getDestinationEntity().getEntityClassName())en.nextElement()).removeFromDB();
+        }
+            #end
+            #if( $rel.isDeny() )
+        // Delete rule is deny
+        // TODO: if $rel.getName()() is not empty, the removeFromDB should not be called ! 
+        if($rel.getName()().count()>0) throw new IllegalStateException("$rel.getName() must be empty to allow deletion of ${entity.getEntityClassName()}");
+            #end
+            #if( $rel.isNoAction() )
+        // No delete action for $rel.getName().
+            #end
+          #else ##rel is to one
+            #if( $rel.isNullify() && $rel.getInverse() )
+              #set( $inv=$rel.getInverse() )
+              #if( $inv.getIsClassProperty() )
+        // Delete rule is nullify
+                #if( $rel.getIsManyTo())
+        if($rel.getName()()!=null)$rel.getName()().removeFrom$inv.getCapitalizedName()(this);
+                #else
+        if($rel.getName()()!=null)$rel.getName()().set$inv.getCapitalizedName()(null);
+                #end
+              #end
+            #end
+            #if( $rel.isCascade() )
+        // Delete rule is cascade
+        if($rel.getName()()!=null) $rel.getName()().removeFromDB();
+            #end
+            #if( $rel.isDeny() )
+        // Delete rule is deny
+            // TODO: if $rel.getName()() is not null, the removeFromDB should not be called ! 
+        if($rel.getName()()!=null) throw new IllegalStateException("$rel.getName() must be empty to allow deletion of ${entity.getEntityClassName()}");
+            #end
+            #if( $rel.isNoAction() )
+        // No delete rule for $rel.getName()(). 
+            #end
+          #end
+        #end
+      #end
+        ec.deleteObject(this);
+    }
+
+    #if(!$entity.getEOEntity().attributeNamed("status") && ${entity.getProperty("status")})
+    public String status() {
+      return getStatus();
+    }
+    #end
+    
+    public void save(String userLogin){
+        #if($entity.getEOEntity().attributeNamed("updateDate"))
+        setUpdateDate(new NSTimestamp());
+        #end
+        if(userLogin!=null){
+            #if($entity.getEOEntity().attributeNamed("updater"))
+            setUpdater(userLogin);
+            #end
+            #if($entity.getEOEntity().attributeNamed("updator"))
+            setUpdator(userLogin);
+            #end
+        }
+        if(editingContext()!=null){
+                EOObjectStore ec = editingContext();
+                while(ec instanceof EOEditingContext){
+                    ((EOEditingContext)ec).saveChanges();
+                    ec = ((EOEditingContext)ec).parentObjectStore();
+                }
+        }
+    }
+    
+#foreach( $itemAttribute in $entity.getOrderedEOAttributes() )
+  #gettersetter($entity.getAttributes().get($itemAttribute) )
+#end
+#foreach( $itemRel in $entity.getOrderedEORelationship() )
+  #set( $rel=$entity.getRelationships().get($itemRel) )
+  #if ($rel.getIsClassProperty())
+    #if( $rel.getDescription().length() > 0 )
+    /**
+     * $rel.getDescription()
+     * @return $rel.getName()
+     */
+    #end
+    #set( $isFlatten = !($rel.getDestinationEntity()))
+    #if( ${rel.getIsToMany()} || ${isFlatten} )
+      #toManyGetter($rel)
+      #if( !$rel.getIsReadOnly())
+        #if( $rel.getIsManyTo() || $isFlatten )
+          #manyToManySetter($rel)
+        #else
+          #oneToManySetter($rel)
+        #end
+        #toManyAddRemove($rel)
+      #end
+      #toManyHas($rel)
+    #else
+      #toOneGetter($rel)
+      #if( !$rel.getIsReadOnly())
+        #toOneSetter($rel)
+      #end
+      #toOneHas($rel)
+    #end
+  #end
+#end
+    
+    #foreach( $itemAttribute in $entity.getOrderedAttributes() )
+      #set($attrib=$entity.getAttributes().get($itemAttribute) )
+      #qualifiers($attrib)
+    #end
+}

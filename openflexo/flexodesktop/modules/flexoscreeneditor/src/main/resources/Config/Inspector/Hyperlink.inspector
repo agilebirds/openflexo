@@ -1,0 +1,133 @@
+<inspector title = "Hyperlink" inheritsfrom ="ControlWidget.inspector">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+		<property name="name" label="name" widget="TEXT_FIELD" constraint="1"/>
+		<property name="value" label="value" widget="TEXT_FIELD" constraint="2">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		</property>
+		<property name="prototypeValues" label="examples_values" widget="TEXT_FIELD" depends="hyperlinkType,fieldType" conditional="hyperlinkType!=HELP and fieldType!=KeyValue" constraint="3">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="fieldType" label="field_type" widget="DROPDOWN" depends="hyperlinkType" conditional="hyperlinkType!=HELP" constraint="5">
+			<param name="format" value="name"/>
+		</property>
+		<property name="domain" label="domain" widget="DROPDOWN" depends="fieldType,hyperlinkType" conditional="(fieldType=KeyValue)" constraint="7">;
+			<param name="dynamiclist" value="availableDomains"/>
+			<param name="format" value="name"/>
+		</property>		
+		<property name="hyperlinkType" label="hyperlink_type" widget="DROPDOWN" constraint="8">	
+			<param name = "dynamiclist" value="availableHyperlinks"/>
+		</property>
+		<property name="url" label="url" widget="TEXT_FIELD" depends="hyperlinkType" conditional="hyperlinkType=URL" constraint="9">
+		    <param name="validateOnReturn" value="true"/>
+		</property>
+		<property name="isMandatoryFlexoAction" label="is_mandatory_flexo_action" widget="CHECKBOX" depends="hyperlinkType" conditional="hyperlinkType=FlexoAction OR hyperlinkType=DisplayAction" constraint="10"/>
+		<property name="popupComponentDefinition" label="popup" widget="DROPDOWN" constraint="11" help="The popup (WOComponent Name) that will confirm the action." depends="isInPopup,hyperlinkType" conditional="(isInPopup=false AND (hyperlinkType=Submit OR hyperlinkType=Save OR hyperlinkType=New OR hyperlinkType=null OR hyperlinkType=FlexoAction OR hyperlinkType=DisplayAction)">
+			<param name="dynamiclist" value="availablePopups"/>
+			<param name="format" value="name"/>
+		</property>
+		<property name="dateTextfield" label="date_field" widget="DROPDOWN" constraint="12" depends="popupComponentDefinition,hyperlinkType" conditional="popupComponentDefinition=WDLDateAssistant AND (hyperlinkType=Submit OR hyperlinkType=Save OR hyperlinkType=New OR hyperlinkType=null OR hyperlinkType=FlexoAction OR hyperlinkType=DisplayAction)">
+			<param name="dynamiclist" value="wOComponent.allDateTextfields"/>
+			<param name="format" value="calculatedLabel"/>
+		</property>
+		<property name="isClosingPopup" label="isClosingPopup" widget="CHECKBOX" depends="isInPopup,hyperlinkType" conditional="isInPopup=true AND hyperlinkType!=HELP AND hyperlinkType!=IMAGE" constraint="15"/>
+		<property name="confirmMessage" label="confirmMessage" widget="TEXT_AREA" constraint="20" depends="hyperlinkType" conditional="((hyperlinkType!=ClientSideScript OR hyperlinkType!=URL OR hyperlinkType!=Mail-to) and hyperlinkType!=HELP)"/>	
+		<property name="helpMessage" label="help_message" widget="WYSIWYG_ULTRA_LIGHT" constraint="21" depends="hyperlinkType" conditional="(hyperlinkType=HELP)"/>	
+        	
+	</tab>
+
+	<tab name="Doc" index="1" layout="DEFAULT">
+		<property name="funcName" label="function_name" widget="TEXT_FIELD" constraint="2">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+	</tab>
+
+	<tab name="Advanced" index="2" layout="DEFAULT">
+		<property name="isCustomButton" label="isCustom" widget="CHECKBOX" constraint="4"/>
+		<hidden name="bindingKeypath"/>
+		<property name="openInNewWindow" label="open_in_new_window" widget="CHECKBOX" constraint="5" help="true if the link will open a new window." depends="hyperlinkType" conditional="hyperlinkType=URL"/>
+		<property name ="isHTML" label="isHTML" widget="CHECKBOX" constraint="6" depends="fieldType" conditional="fieldType=Text||fieldType=null">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="submitForm" label="submit_form" widget="CHECKBOX" constraint="8" help="true if the link will open a new window." depends="hyperlinkType" conditional="hyperlinkType=DisplayAction OR hyperlinkType=FlexoAction"/>
+		<property name="isValidatingForm" label="validate_form" widget="CHECKBOX" constraint="9" depends="hyperlinkType,submitForm" conditional="hyperlinkType=null OR hyperlinkType=Confirm  OR ((hyperlinkType=FlexoAction OR hyperlinkType=DisplayAction) AND submitForm=true)"/>
+		<property name="isSavingChanges" label="save_changes" widget="CHECKBOX" constraint="10" depends="hyperlinkType,submitForm" conditional="hyperlinkType=null OR hyperlinkType=Confirm  OR ((hyperlinkType=FlexoAction OR hyperlinkType=DisplayAction) AND submitForm=true)"/>
+		<property name="customMethod" label="custom_method" widget="CUSTOM" constraint="11" depends="hyperlinkType,submitForm" conditional="hyperlinkType=null OR hyperlinkType=Confirm  OR ((hyperlinkType=FlexoAction OR hyperlinkType=DisplayAction) AND submitForm=true)">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="customMethodBindingDefinition"/>			
+			<param name="activate_compound_bindings" value="true"/>			
+		</property>
+		<property name="isSubmittingOpener" label="isSubmittingOpener" widget="CHECKBOX" constraint="13" depends="hyperlinkType,popupComponentDefinition" conditional="popupComponentDefinition!=null AND popupComponentDefinition.isHelper=false AND (hyperlinkType!=FlexoAction AND hyperlinkType!=displayAction)">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="includePopupInPage" label="include_popup_in_page" widget="CHECKBOX" constraint="12" depends="popupComponentDefinition,isInPopup,hyperlinkType" conditional="popupComponentDefinition!=null AND popupComponentDefinition.isHelper=false AND (isInPopup=false AND (hyperlinkType=Submit OR hyperlinkType=Save OR hyperlinkType=New OR hyperlinkType=null OR hyperlinkType=FlexoAction OR hyperlinkType=DisplayAction)"/>
+	</tab>
+
+	<tab name="Data" index="3" layout="DEFAULT">
+		<property name="bindingValue" label="binding_value" widget="CUSTOM" constraint="0">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="bindingValueDefinition"/>			
+			<param name="creates_entry" value="createsBindingVariable"/>			
+		</property>
+		<property name="bindingValueWhenEmpty" label="binding_valueWhenEmpty" widget="TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="bindingUrl" label="binding_url" widget="CUSTOM" constraint="1" depends="hyperlinkType" conditional="hyperlinkType=URL">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="bindingUrlDefinition"/>			
+			<param name="creates_entry" value="createsBindingVariable"/>			
+		</property>
+		<property name="bindingMailToAdress" label="binding_mail_to" widget="CUSTOM" constraint="2" depends="hyperlinkType" conditional="hyperlinkType=Mail-to">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="bindingMailToAdressDefinition"/>			
+			<param name="creates_entry" value="createsBindingVariable"/>			
+		</property>
+		
+		<property name="bindingMailSubject" label="binding_mail_subject" widget="CUSTOM" constraint="3" depends="hyperlinkType" conditional="hyperlinkType=Mail-to">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="bindingMailSubjectDefinition"/>			
+			<param name="creates_entry" value="createsBindingVariable"/>			
+		</property>
+		
+		<property name="bindingMailBody" label="binding_mail_body" widget="CUSTOM" constraint="4" depends="hyperlinkType" conditional="hyperlinkType=Mail-to">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="bindingMailBodyDefinition"/>			
+			<param name="creates_entry" value="createsBindingVariable"/>			
+		</property>
+		
+		<property name="clientSideEventType" label="client_side_event" widget="DROPDOWN" constraint="6" depends="hyperlinkType" conditional="hyperlinkType=ClientSideScript"/>	
+		<property name="bindingScriptMethod" label="client_side_script_code" widget="CUSTOM" constraint="7" depends="hyperlinkType" conditional="hyperlinkType=ClientSideScript">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="bindingClientSideScriptDefinition"/>			
+			<param name="creates_entry" value="createsBindingVariable"/>			
+		</property>
+		<property_list name="popupComponentInstance.bindings" label="popup_bindings" constraint="9" depends="popupComponentDefinition" conditional="popupComponentDefinition!=null">
+		  <param name="visible_row_count" value="5"/>
+		  <param name="row_height" value="20"/>
+		  <property_list_column name="bindingDefinition.variableName" label="name" widget="TEXT_FIELD">
+			<param name="column_width" value="80"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="bindingDefinition.type" label="type" widget="CUSTOM">
+			<param name="className" value="org.openflexo.components.widget.DMTypeInspectorWidget"/>
+			<param name="format" value="name"/>
+			<param name="column_width" value="80"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="bindingDefinition.isMandatory" label="mandatory" widget="CHECKBOX">
+			<param name="column_width" value="30"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="bindingValue" label="value" widget="CUSTOM">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="bindingDefinition"/>			
+			<param name="format" value="stringRepresentation"/>
+			<param name="column_width" value="150"/>
+		  </property_list_column>
+		  <property_list_action name="new" type="ADD" method="popupComponentInstance.createNewBinding"/>
+		  <property_list_action name="delete" type="DELETE" method="popupComponentInstance.deleteBinding" isAvailable="popupComponentInstance.isBindingDeletable"/>
+		</property_list>
+	</tab>
+</inspector>

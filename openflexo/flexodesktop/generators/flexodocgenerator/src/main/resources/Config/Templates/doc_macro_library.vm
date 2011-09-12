@@ -1,0 +1,182 @@
+#*
+* _object must be a FlexoModelObject
+* If the description has been set on the current object, it is ouput as
+* the description possibly concatenated with a specific description 
+* entered for the current Documentation type. Escaping is peformed according
+* to the Documentation Format introduced
+*# 
+#macro(description $_object)
+#if(!$_object.getDontEscapeLatex())
+$generator.convertHTML2Latex(${_object.getDescription()})#if(${_object.getHasSpecificDescriptions()})
+$generator.convertHTML2Latex(${_object.getSpecificDescriptions().get($repository.getDocType().getName())})#end #else
+$!{_object.getDescription()}#if(${_object.getHasSpecificDescriptions()})
+$!{_object.getSpecificDescriptions().get($repository.getDocType().getName())}#end #end
+#end
+
+#*
+* _object must be a FlexoModelObject
+* If the specific description has been set on the current object for the current doc targert, it is ouput as
+* the specific description for the current Documentation type. Escaping is peformed according
+* to the Documentation Format introduced
+*# 
+#macro(specificDescription $_object)
+#if(!$_object.getDontEscapeLatex())
+#if(${_object.getHasSpecificDescriptions()})
+$generator.convertHTML2Latex(${_object.getSpecificDescriptions().get($repository.getDocType().getName())})#end #else
+#if(${_object.getHasSpecificDescriptions()})
+$!{_object.getSpecificDescriptions().get($repository.getDocType().getName())}#end #end
+#end
+
+#*
+* _object must be a FlexoModelObject
+* If the description has been set on the current object, it is ouput as
+* the specific Business description 
+* entered for the current Documentation type. Escaping is peformed according
+* to the Documentation Format introduced
+*# 
+
+#macro(businessDescription $_object)
+#if(!$_object.getDontEscapeLatex())
+#if(${_object.getHasSpecificDescriptions()})
+$generator.convertHTML2Latex(${_object.getSpecificDescriptions().get("Business")})#end #else
+#if(${_object.getHasSpecificDescriptions()})
+$!{_object.getSpecificDescriptions().get("Business")}#end #end
+#end
+
+#*
+* _object must be a FlexoModelObject
+* If the description has been set on the current object, it is ouput as
+* the specific Business description 
+* entered for the current Documentation type. Escaping is peformed according
+* to the Documentation Format introduced
+*# 
+
+#macro(technicalDescription $_object)
+#if(!$_object.getDontEscapeLatex())
+#if(${_object.getHasSpecificDescriptions()})
+$generator.convertHTML2Latex(${_object.getSpecificDescriptions().get("Technical")})#end #else
+#if(${_object.getHasSpecificDescriptions()})
+$!{_object.getSpecificDescriptions().get("Technical")}#end #end
+#end
+
+#macro(userManualDescription $_object)
+#if(!$_object.getDontEscapeLatex())
+#if(${_object.getHasSpecificDescriptions()})
+$generator.convertHTML2Latex(${_object.getSpecificDescriptions().get("UserManual")})#end #else
+#if(${_object.getHasSpecificDescriptions()})
+$!{_object.getSpecificDescriptions().get("UserManual")}#end #end
+#end
+
+#*
+* _object must be an IEWidget
+* If the tooltip has been set on the current Widget, it is ouput as:
+* Tooltip: the_tooltip_of_the_widget
+*# 
+#macro(tooltip $_object)
+#if($_object.getTooltip())Tooltip: $_object.getTooltip()#end#end
+
+#*
+* _object must be a FlexoModelObject
+* _text the text that possibly needs to be formatted
+* If the doc format has been set to LaTeX, then escaping is not performed,
+* but for any other format, LaTeX escaping will be performed automatically
+*# 
+
+#macro(format $_object $_text)
+#if (!$_object.getDontEscapeLatex())
+$generator.convertHTML2Latex($_text)#else
+$!_text#end
+#end
+
+#*
+* _text the text that must be formatted
+* This macro escapes automatically the text passed as an argument to make it LaTeX compatible
+*# 
+
+#macro(prepare $_text)
+$generator.convertHTML2Latex($_text)#end
+
+#*
+* _text the text that must be formatted
+* This macro escapes automatically the regular text passed as an argument to make it LaTeX compatible,
+* and cleans up whitespace characters (replaced by one single space). 
+*# 
+#macro(escape $_text)
+$!generator.prepareJavaStringForLatex($generator.removeAllWhiteCharacters($_text))#end
+
+#macro(tocEntry $_entry)
+#if(${_entry.getStartOnANewPage()})\newpage#end
+\hypertarget{$_entry.getValidReference()}{}
+#if(${_entry.getLevel()}==1)
+\section{${generator.prepareJavaStringForLatex(${_entry.getTitle()})}}
+#elseif(${_entry.getLevel()}==2)
+\subsection{${generator.prepareJavaStringForLatex(${_entry.getTitle()})}}
+#elseif(${_entry.getLevel()}==3)
+\subsubsection{${generator.prepareJavaStringForLatex(${_entry.getTitle()})}}
+#elseif(${_entry.getLevel()}==4)
+\paragraph{${generator.prepareJavaStringForLatex(${_entry.getTitle()})}}
+#else
+\subparagraph{${generator.prepareJavaStringForLatex(${_entry.getTitle()})}}
+#end
+#if(!${_entry.isReadOnly()})
+${generator.convertHTML2Latex($_entry.getContent())}
+#subTocEntries($_entry)
+#elseif($projectGenerator.getLatexFileResourceNameForEntry($_entry))
+\input{$projectGenerator.getLatexFileResourceNameForEntry($_entry)}
+#end
+#end
+
+#macro(subTocEntries $_entry)
+#foreach($_subEntry in $_entry.getSortedTocEntries())
+#tocEntry($_subEntry)
+#end
+#end
+
+#macro(adaptiveTitleLevel $_entry $_increment)
+#set($_adaptedLevel=${_entry.getLevel()}+$_increment)
+#if($_adaptedLevel == 1)
+\section #elseif($_adaptedLevel == 2)
+\subsection #elseif($_adaptedLevel == 3)
+\subsubsection #elseif($_adaptedLevel == 4)
+\paragraph #else
+\subparagraph #end #end
+
+#*
+* This macro outputs a table environment with the metrics, with an introduction text.
+* node: the node for which to print metrics (ProcessNode, ActivityNode or OperationNode).
+*# 
+#macro(metricsForNode $node)
+#set($metrics = $generator.getNewVector())
+#foreach($metricValue in ${node.getMetricsValues()})
+    #if(${metricValue.getMetricsDefinition().getName()} && ${metricValue.hasValue()})
+$metrics.addElement($metricValue)
+    #end
+#end
+#if(${node.getMetricsValues()} && $metrics.size()>0)
+@single
+\par 
+This 
+#if(${node.getLevel()} == "PROCESS")
+process
+#elseif(${node.getLevel()} == "ACTIVITY")
+activity
+#elseif(${node.getLevel()} == "OPERATION")
+operation
+#else
+node
+#end
+has the following metrics:\\
+@end
+\begin{tabularx}{\textwidth}{|l|l|X|}
+\cline{1-3}
+Name & Value & Additional Information \\
+\cline{1-3}
+#foreach($metricValue in $metrics)
+    #escape(${metricValue.getMetricsDefinition().getName()}) & #escape(${metricValue.getValue().toString()}) #if(${metricValue.getUnit()})#escape(${metricValue.getUnit()})#end & #if(${metricValue.getDescription()} && ${metricValue.getDescription().trim().length()} > 0)#escape(${metricValue.getDescription()})#end \\
+#end
+\cline{1-3}
+\end{tabularx}
+#end ##of if hasMetrics
+#end
+
+#macro(empty $arg)#set($none = $arg)#end

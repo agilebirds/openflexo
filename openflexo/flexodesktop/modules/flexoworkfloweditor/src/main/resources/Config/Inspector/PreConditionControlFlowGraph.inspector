@@ -1,0 +1,30 @@
+<inspector title = "Precondition workflow execution" inspectedClassName="ignore">
+
+	 <tab name="Execution" index="0">
+		<property name="execution.infoLabel" widget="LABEL" constraint="0" depends="execution.edge">
+			<param name="align" value="center"/>
+			<param name="width" value="200"/>
+			<param name="height" value="60"/>
+		</property>
+		<property name="flexoID" label="flexo_id" widget="READ_ONLY_TEXT_FIELD" constraint="1">
+		</property>
+		<property name="name" label="precondition_name" widget="READ_ONLY_TEXT_FIELD" constraint="2">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="execution.edge" label="entering_edge" widget="DROPDOWN" constraint="3">
+			<param name = "format" value="derivedNameFromStartingObject"/>
+			<param name = "dynamiclist" value="execution.allEdges"/>
+			<param name = "showReset" value="false"/>
+		</property>
+		<property name="execution.formattedCode" label="java_code" widget="JAVA_CODE" constraint="4" depends="execution.refresh,execution.edge">
+			<param name="readOnly" value="true"/>
+			<param name="rows" value="5"/>
+			<param name="columns" value="20"/>
+		</property>
+		<group name="button" constraint="5">
+			<param name = "layout" value="center"/>
+			<property name="execution.refresh" label="refresh" widget="BUTTON" constraint="1"/>
+		</group>
+	</tab>
+
+</inspector>

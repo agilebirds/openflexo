@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.FlexoProcess" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="21" title="Graphics_SWL" layout="twocols" visible="controller.displayInspectorTabForContext(&quot;SWL&quot;)" font="SansSerif,0,11" name="GraphicsSWLTab">
+      <Label label="width" localize="true" name="WidthswlLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
+      <Number numberType="DoubleType" columns="10" data="data.getWidth(&quot;swl&quot;)" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" name="Widthswl" localize="true" />
+      <Label label="text_color" localize="true" name="TextColorswlLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
+      <Color data="data.getTextColor(&quot;swl&quot;)" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" name="TextColorswl" localize="true" />
+      <Label label="back_color" localize="true" name="BgColorswlLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" />
+      <Color data="data.getBgColor(&quot;swl&quot;)" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" name="BgColorswl" localize="true" />
+    </Tab>
+    <Tab index="20" title="Graphics_BPE" layout="twocols" visible="controller.displayInspectorTabForContext(&quot;BPE&quot;)" font="SansSerif,0,11" name="GraphicsBPETab">
+      <Label label="width" localize="true" name="WidthbpeLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
+      <Number numberType="DoubleType" columns="10" data="data.getWidth(&quot;bpe&quot;)" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" name="Widthbpe" localize="true" />
+      <Label label="height" localize="true" name="HeightbpeLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
+      <Number numberType="DoubleType" columns="10" data="data.getHeight(&quot;bpe&quot;)" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" name="Heightbpe" localize="true" />
+      <Label label="text_color" localize="true" name="TextColorbpeLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
+      <Color data="data.getTextColor(&quot;bpe&quot;)" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" name="TextColorbpe" localize="true" />
+      <Label label="back_color" localize="true" name="BgColorbpeLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" />
+      <Color data="data.getBgColor(&quot;bpe&quot;)" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" name="BgColorbpe" localize="true" />
+      <Label label="aligned_on_grid" localize="true" name="IsAlignedOnGridbpeLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" />
+      <CheckBox selected="false" localize="true" name="IsAlignedOnGridbpe" data="data.getIsAlignedOnGrid(&quot;bpe&quot;)" constraints="twocols(location=right;index=13;expandHorizontally=false;expandVertically=false)" />
+      <Label label="grid_size" localize="true" name="GridSizebpeLabel" constraints="twocols(location=left;index=14;expandHorizontally=false;expandVertically=false)" />
+      <Number numberType="IntegerType" data="data.getGridSize(&quot;bpe&quot;)" constraints="twocols(location=right;index=15;expandHorizontally=false;expandVertically=false)" name="GridSizebpe" localize="true" />
+    </Tab>
+    <Tab index="8" title="Process Metrics" layout="twocols" visible="controller.displayInspectorTabForContext(&quot;METRICS&quot;)" font="SansSerif,0,11" name="ProcessMetricsTab">
+      <Label label="metrics" align="center" localize="true" name="MetricsValuesLabel" constraints="twocols(location=center;index=0;expandHorizontally=true;expandVertically=false)" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.MetricsValue" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.metricsValues" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=true)" name="MetricsValues" localize="true" manageDynamicModel="true">
+        <TextFieldColumn data="iterator.metricsDefinition.name" title="name" columnWidth="100" resizable="true" displayTitle="true" tooltip="iterator.metricsDefinition.description" />
+        <TextFieldColumn isEditable="iterator.metricsDefinition.isUnitEditable" data="iterator.unit" title="unit" columnWidth="50" resizable="true" displayTitle="true" />
+        <TextFieldColumn data="iterator.description" title="additional_info" columnWidth="120" resizable="true" displayTitle="true" />
+        <AddAction method="data.addMetrics" name="new" />
+        <RemoveAction method="data.deleteMetrics(selected)" name="delete" />
+      </Table>
+    </Tab>
+    <Tab index="6" title="Stats" layout="twocols" font="SansSerif,0,11" name="StatsTab">
+      <Label align="center" localize="true" name="StatisticsinfoLabel" data="data.statistics.infoLabel" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" width="200" height="60" />
+      <Label label="include_begin_end" localize="true" name="StatisticsincludeBeginEndNodeLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <CheckBox selected="false" localize="true" name="StatisticsincludeBeginEndNode" data="data.statistics.includeBeginEndNode" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" />
+      <Label label="# activities_in_process" localize="true" name="StatisticsactivityCountLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = true)" />
+      <TextField passwd="false" readOnly="true" localize="true" name="StatisticsactivityCount" data="data.statistics.activityCount.toString" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = true)" />
+      <Label label="# activities_in_process" localize="true" name="StatisticsrealActivityCountLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = false)" />
+      <TextField passwd="false" readOnly="true" localize="true" name="StatisticsrealActivityCount" data="data.statistics.realActivityCount.toString" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = false)" />
+      <Label label="# operations_in_process" localize="true" name="StatisticsrealOperationCountLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = false)" />
+      <TextField passwd="false" readOnly="true" localize="true" name="StatisticsrealOperationCount" data="data.statistics.realOperationCount.toString" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = false)" />
+      <Label label="# operations_in_process" localize="true" name="StatisticsoperationCountLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = true)" />
+      <TextField passwd="false" readOnly="true" localize="true" name="StatisticsoperationCount" data="data.statistics.operationCount.toString" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = true)" />
+      <Label label="# actions_in_process" localize="true" name="StatisticsactionCountLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = true)" />
+      <TextField passwd="false" readOnly="true" localize="true" name="StatisticsactionCount" data="data.statistics.actionCount.toString" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = true)" />
+      <Label label="# actions_in_process" localize="true" name="StatisticsrealActionCountLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = false)" />
+      <TextField passwd="false" readOnly="true" localize="true" name="StatisticsrealActionCount" data="data.statistics.realActionCount.toString" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = false)" />
+    </Tab>
+    <Tab index="4" title="Status" layout="twocols" font="SansSerif,0,11" name="StatusTab">
+      <Label label="statuses_for_process" align="center" localize="true" name="SortedStatusesVectorLabel" constraints="twocols(location=center;index=0;expandHorizontally=true;expandVertically=false)" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.Status" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.sortedStatusesVector" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=true)" name="SortedStatusesVector" localize="true" manageDynamicModel="true">
+        <TextFieldColumn data="iterator.name" title="name" columnWidth="80" resizable="true" displayTitle="true" />
+        <TextFieldColumn data="iterator.description" title="description" columnWidth="120" resizable="true" displayTitle="true" />
+        <AddAction method="data.addStatus" name="new" />
+        <RemoveAction method="data.deleteStatus(selected)" isAvailable="data.statusList.isStatusDeletable(selected)" name="delete" />
+      </Table>
+      <Label label="default_status" localize="true" name="StatusListdefaultStatusLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
+      <DropDown format="object.name" localize="true" name="StatusListdefaultStatus" data="data.statusList.defaultStatus" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" list="data.statusList.status" iteratorClassName="org.openflexo.foundation.wkf.Status" />
+    </Tab>
+    <Tab index="2" title="Doc" layout="twocols" font="SansSerif,0,11" name="DocTab">
+      <Label label="preferred_representation" localize="true" name="GraphicalPropertyForKeypreferredRepresentationLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" />
+      <DropDown localize="true" name="GraphicalPropertyForKeypreferredRepresentation" data="data._graphicalPropertyForKey(&quot;preferredRepresentation&quot;)" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" iteratorClassName="org.openflexo.wkf.WKFModule$ProcessRepresentation" />
+      <Label label="index" localize="true" name="IndexLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" visible="(data.processNode.parentFolder = null)" />
+      <Number numberType="IntegerType" data="data.index" constraints="twocols(location=right;index=13;expandHorizontally=false;expandVertically=false)" visible="(data.processNode.parentFolder = null)" name="Index" localize="true" />
+      <Label label="index" localize="true" name="VectorIndexLabel" constraints="twocols(location=left;index=14;expandHorizontally=false;expandVertically=false)" visible="(data.processNode.parentFolder != null)" />
+      <Number numberType="IntegerType" data="data.vectorIndex" constraints="twocols(location=right;index=15;expandHorizontally=false;expandVertically=false)" visible="(data.processNode.parentFolder != null)" name="VectorIndex" localize="true" />
+    </Tab>
+    <Tab index="1" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab">
+      <Label label="variable_name" localize="true" name="BusinessDataVariableNameLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
+      <TextField validateOnReturn="true" columns="10" passwd="false" localize="true" name="BusinessDataVariableName" data="data.businessDataVariableName" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+      </TextField>
+    </Tab>
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label label="name" localize="true" name="NameLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <TextField validateOnReturn="true" columns="10" passwd="false" localize="true" name="Name" data="data.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
+      <Label label="parent_process" localize="true" name="ParentProcessLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
+      <Custom componentClassName="org.openflexo.components.widget.FIBProcessSelector" data="data.parentProcess" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" name="ParentProcess" localize="true" manageDynamicModel="true">
+        <Assignment variable="component.selectableCondition" value="&quot;data.isAcceptableAsParentProcess(ParentProcess.customComponent.candidateValue)&quot;" />
+        <Assignment variable="component.project" value="data.project" />
+      </Custom>
+      <Label label="css_sheet" localize="true" name="CssSheetLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
+      <DropDown format="object.name" localize="true" name="CssSheet" data="data.cssSheet" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" list="data.cssSheet.availableValues" iteratorClassName="org.openflexo.foundation.utils.FlexoCSS">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </DropDown>
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Graphics_SWL" lang="English">Graphics</Localized>
+    <Localized key="Graphics_SWL" lang="French">Graphisme</Localized>
+    <Localized key="Graphics_SWL" lang="Dutch">Graphics</Localized>
+    <Localized key="width" lang="English">Width</Localized>
+    <Localized key="width" lang="French">Largeur</Localized>
+    <Localized key="width" lang="Dutch">Width</Localized>
+    <Localized key="text_color" lang="English">Text color</Localized>
+    <Localized key="text_color" lang="French">Couleur du texte</Localized>
+    <Localized key="text_color" lang="Dutch">Text color</Localized>
+    <Localized key="back_color" lang="English">Background color</Localized>
+    <Localized key="back_color" lang="French">Couleur de l'arrière-plan</Localized>
+    <Localized key="back_color" lang="Dutch">Background color</Localized>
+    <Localized key="Graphics_BPE" lang="English">Graphics</Localized>
+    <Localized key="Graphics_BPE" lang="French">Graphisme</Localized>
+    <Localized key="Graphics_BPE" lang="Dutch">Graphics</Localized>
+    <Localized key="height" lang="English">Height</Localized>
+    <Localized key="height" lang="French">Hauteur</Localized>
+    <Localized key="height" lang="Dutch">Height</Localized>
+    <Localized key="aligned_on_grid" lang="English">Aligned on grid</Localized>
+    <Localized key="aligned_on_grid" lang="French">Aligné sur la grille</Localized>
+    <Localized key="aligned_on_grid" lang="Dutch">Aligned on grid</Localized>
+    <Localized key="grid_size" lang="English">Grid size</Localized>
+    <Localized key="grid_size" lang="French">Taille de la grille</Localized>
+    <Localized key="grid_size" lang="Dutch">Grid size</Localized>
+    <Localized key="Process Metrics" lang="English">Process metrics</Localized>
+    <Localized key="Process Metrics" lang="French">Métriques du processus</Localized>
+    <Localized key="Process Metrics" lang="Dutch">Process metrics</Localized>
+    <Localized key="metrics" lang="English">Metrics</Localized>
+    <Localized key="metrics" lang="French">Métriques</Localized>
+    <Localized key="metrics" lang="Dutch">Metrics</Localized>
+    <Localized key="include_begin_end" lang="English">Include begin and end nodes</Localized>
+    <Localized key="include_begin_end" lang="French">Inclure les noeuds début et fin</Localized>
+    <Localized key="include_begin_end" lang="Dutch">Include begin and end nodes</Localized>
+    <Localized key="# activities_in_process" lang="English"># activities in process</Localized>
+    <Localized key="# activities_in_process" lang="French"># activités dans le processus</Localized>
+    <Localized key="# activities_in_process" lang="Dutch"># activities in process</Localized>
+    <Localized key="# operations_in_process" lang="English"># operations in process</Localized>
+    <Localized key="# operations_in_process" lang="French"># opérations dans le processus</Localized>
+    <Localized key="# operations_in_process" lang="Dutch"># operations in process</Localized>
+    <Localized key="# actions_in_process" lang="English"># actions in process</Localized>
+    <Localized key="# actions_in_process" lang="French"># actions dans le processus</Localized>
+    <Localized key="# actions_in_process" lang="Dutch"># actions in process</Localized>
+    <Localized key="Status" lang="French">Statut</Localized>
+    <Localized key="statuses_for_process" lang="English">Status defined for the process</Localized>
+    <Localized key="statuses_for_process" lang="French">Statuts définis pour le processus</Localized>
+    <Localized key="statuses_for_process" lang="Dutch">Status defined for the process</Localized>
+    <Localized key="default_status" lang="English">Default status</Localized>
+    <Localized key="default_status" lang="French">Statut par défaut</Localized>
+    <Localized key="default_status" lang="Dutch">Default status</Localized>
+    <Localized key="preferred_representation" lang="English">Preferred representation</Localized>
+    <Localized key="preferred_representation" lang="French">Représentation préferrée</Localized>
+    <Localized key="preferred_representation" lang="Dutch">Preferred representation</Localized>
+    <Localized key="index" lang="English">Index</Localized>
+    <Localized key="index" lang="French">Index</Localized>
+    <Localized key="index" lang="Dutch">Index</Localized>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="variable_name" lang="English">Variable name</Localized>
+    <Localized key="variable_name" lang="French">Nom de la variable</Localized>
+    <Localized key="variable_name" lang="Dutch">Variable name</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="name" lang="English">Name</Localized>
+    <Localized key="name" lang="French">Nom</Localized>
+    <Localized key="name" lang="Dutch">Name</Localized>
+    <Localized key="parent_process" lang="English">Parent process</Localized>
+    <Localized key="parent_process" lang="French">Processus parent</Localized>
+    <Localized key="parent_process" lang="Dutch">Parent process</Localized>
+    <Localized key="css_sheet" lang="English">CSS sheet</Localized>
+    <Localized key="css_sheet" lang="French">Feuille de style</Localized>
+    <Localized key="css_sheet" lang="Dutch">CSS sheet</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Process" />
+</Panel>
+

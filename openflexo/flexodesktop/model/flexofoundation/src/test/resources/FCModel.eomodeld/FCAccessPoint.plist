@@ -1,0 +1,76 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = "AP_ID"; 
+            name = accessPointID; 
+            prototypeName = id; 
+        }, 
+        {columnName = "AP_ADD_INFO"; name = additionalInfo; prototypeName = str2000; }, 
+        {columnName = "AP_BG_COLOR"; name = bgColor; prototypeName = str10; }, 
+        {columnName = "AP_CREATION_DATE"; name = creationDate; prototypeName = date; }, 
+        {columnName = "AP_FOLDER_ID"; name = folderID; prototypeName = int; }, 
+        {columnName = "AP_FONT_COLOR"; name = fontColor; prototypeName = str10; }, 
+        {columnName = "AP_NAME"; name = name; prototypeName = str100; }, 
+        {columnName = "AP_OWNER_ID"; name = ownerID; prototypeName = id; }, 
+        {columnName = "AP_STDVC_ID"; name = stdVcID; prototypeName = id; }, 
+        {columnName = "AP_TYPE_KEY"; name = typeKey; prototypeName = str10; }, 
+        {columnName = "AP_UPDATE_DATE"; name = updateDate; prototypeName = date; }, 
+        {columnName = "AP_UPDATOR"; name = updator; prototypeName = str100; }
+    ); 
+    className = FCAccessPoint; 
+    classProperties = (
+        accessPointID, 
+        additionalInfo, 
+        name, 
+        typeKey, 
+        ownerID, 
+        stdVcID, 
+        updator, 
+        creationDate, 
+        updateDate, 
+        owner, 
+        bgColor, 
+        fontColor, 
+        folderID
+    ); 
+    externalName = "FC_ACCESS_POINT"; 
+    fetchSpecificationDictionary = {}; 
+    name = FCAccessPoint; 
+    primaryKeyAttributes = (accessPointID); 
+    relationships = (
+        {
+            definition = "manyChannels.channel"; 
+            internalInfo = {"_nameInObjectStore" = "manyChannels_channels"; }; 
+            joinSemantic = EOInnerJoin; 
+            name = channels; 
+        }, 
+        {
+            destination = FCAccessChannel; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = accessPointID; sourceAttribute = accessPointID; }); 
+            name = manyChannels; 
+        }, 
+        {
+            destination = FCPubliVideoAccessPoint; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = accessPointID; sourceAttribute = accessPointID; }); 
+            name = manyVideos; 
+        }, 
+        {
+            destination = FCUser; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = userID; sourceAttribute = ownerID; }); 
+            name = owner; 
+        }, 
+        {
+            definition = "manyVideos.video"; 
+            internalInfo = {"_nameInObjectStore" = "manyVideos_video"; }; 
+            joinSemantic = EOInnerJoin; 
+            name = videos; 
+        }
+    ); 
+}

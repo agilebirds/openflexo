@@ -1,0 +1,126 @@
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (DefinitionsDocGenerator)
+* - repository: the current repository for which we generate the doc (DGRepository)
+* - level: the level to use in title.
+*#
+#set($workflow = ${project.getWorkflow()})
+
+
+
+
+	<w:p>
+      	<w:r>
+				<w:t xml:space="preserve">Table of roles used in processes associated with Organizational Units. </w:t>
+		</w:r>
+	</w:p>
+	<w:p>
+      	<w:r>
+      		<w:rPr>
+					<w:b/>
+			</w:rPr>
+				<w:t xml:space="preserve">Best practice:</w:t>
+	  	</w:r>
+	    <w:r>
+				<w:t xml:space="preserve"> always use a substantive for the role name sometimes associated with a complement (e.g. Writer, Project Manager, Order Manager, ...). </w:t>
+  		</w:r>
+	</w:p>
+  
+  
+#if(${workflow.getRoleList().getRoles().size()}>0)
+		#renderScreenshotForObject(${workflow.getRoleList()})
+#end
+
+#if(${workflow.getRoleList().getRoots().size()}>0)
+	#foreach($role in ${workflow.getRoleList().getRoots()})
+		<w:p>
+			<w:pPr>
+				<w:pStyle w:val="Heading$level"/>
+			</w:pPr>
+			<w:r>
+				<w:t xml:space="preserve">Root: </w:t>
+			</w:r>
+			#renderName($role)
+		</w:p>
+		<w:p>
+			<w:r>
+			<w:rPr>
+				<w:pStyle w:val="Heading$level"/>
+				<w:b/>
+				<w:u w:val="single"/>
+			</w:rPr>
+				<w:t xml:space="preserve">Mission:</w:t>
+			</w:r>
+		</w:p>
+		#descriptionSimple($role)
+
+		#set($newLevel = $level + 1)
+		#printChildRoleTable($role)
+		#printOrgUnits($role $newLevel)
+	#end
+#end
+
+	
+#macro(printChildRoleTable $_parentRole)
+	#set($rolesTablesContents = $generator.getNewVector())
+	#if(${_parentRole.getChildLeaf().size()}>0)
+		<w:p>
+			<w:r>
+				<w:rPr>
+				</w:rPr>
+				<w:t xml:space="preserve">Here is the list of associated roles:</w:t>
+			</w:r>
+		</w:p>
+		#foreach($role in ${_parentRole.getChildLeaf()})
+			#set($row = $generator.getNewVector())
+			#void($row.add("<w:p>#renderNameWithRPr($role '<w:b/>')</w:p>"))
+			#void($row.add("#description($role)"))
+			#void($rolesTablesContents.add($row))
+		#end
+		#renderDocxTable(["Role", "Mission"] $rolesTablesContents)
+	#end
+#end
+
+#macro(printOrgUnits $_parentRole $_level)
+	#foreach($subOrgUnit in ${_parentRole.getChildNonLeaf()})
+		<w:p>
+			<w:pPr>
+				<w:pStyle w:val="Heading$_level"/>
+			</w:pPr>
+			<w:r>
+				<w:t xml:space="preserve">ORGANISATIONAL UNIT: </w:t>
+			</w:r>
+			#renderName($subOrgUnit)
+		</w:p>
+		<w:p>
+			<w:r>
+			<w:rPr>
+				<w:pStyle w:val="Heading$level"/>
+				<w:b/>
+				<w:u w:val="single"/>
+			</w:rPr>
+				<w:t xml:space="preserve">Mission:</w:t>
+			</w:r>
+		</w:p>
+		#descriptionSimple($subOrgUnit)
+		
+		#if(${subOrgUnit.hasSpecificDescriptionForKey('Objectives')})
+		   <w:p>			
+				<w:r>
+					<w:rPr>
+						<w:b/>
+						<w:u w:val="single"/>
+					</w:rPr>
+					<w:t xml:space="preserve">Objectives:</w:t>
+				</w:r>
+			</w:p>
+		    #renderSpecificDescription($subOrgUnit,"Objectives")
+		#end
+	
+		#set($newLevel2 = $_level + 1)
+		#printChildRoleTable($subOrgUnit)
+		#printOrgUnits($subOrgUnit $newLevel2)
+	#end
+#end

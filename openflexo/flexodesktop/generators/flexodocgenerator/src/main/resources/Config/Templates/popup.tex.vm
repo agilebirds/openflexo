@@ -1,0 +1,54 @@
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (PopupDocGenerator)
+* - popup: the popup for which we are generating the doc (PopupComponentDefinition)
+* - component: the component corresponding to the generated popup (IEPopupComponent)
+* - repository: the current repository for which we generate the doc (DGRepository)
+*#
+
+#**
+* This macro just makes a list of strings separated by a comma.
+*#
+#macro(list $vector)
+#foreach($v in $vector)${generator.splitOnUpperCase($v)}#if($foreach.index>0),#end #end ## end foreach attributes
+#end
+
+#set($popup = $object)
+#set($component = $object.getWOComponent())
+#set($wdlDate = "WDLDateAssistant")
+\hypertarget{$generator.getReference($popup)}{}
+\subsubsection{Popup component: \emph{$popup.getName()}}
+\label{$generator.getReference($popup)}
+#if(!${popup.getName().equals($wdlDate)})
+#description($popup)
+{
+\begin{center}
+#set($image = ${generator.screenshot($popup,$projectGenerator)})
+#set($ratio = ${generator.FULL_PAGE_RATIO()})
+#if($image.getIconWidth()<515 && $image.getIconHeight()<735)
+\includegraphics[scale=1.0]{${generator.screenshotName($popup,$projectGenerator)}}
+#else
+  #if($generator.getImageRatio($image)<$ratio)
+\includegraphics[width=\textwidth]{${generator.screenshotName($popup,$projectGenerator)}}
+  #else
+\includegraphics[height=\textheight]{${generator.screenshotName($popup,$projectGenerator)}}
+  #end
+#end
+\end{center}
+}
+#else
+This popup helps the user to select a valid date in a calendar.
+{
+\begin{center}
+  \scalebox{0.5}{
+    \includegraphics{Figures/WDLDateAssistant}
+  }
+\end{center}
+}
+#end## end of if popup==WDLDateAssistant
+#set($blockSectionLevel = "paragraph")
+#foreach($block in ${component.iterator()})
+#parse(${generator.getBlockTemplatePath()})
+#end ## end foreach block

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.ws.ServiceOperation" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="3" title="Data" layout="twocols" font="SansSerif,0,11" name="DataTab">
+      <Label label="input_message_bindings" align="center" localize="true" name="InputMessageBindingsbindingsLabel" constraints="twocols(location=center;index=4;expandHorizontally=true;expandVertically=false)" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.ws.ServiceMessageEntryBinding" visibleRowCount="4" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.inputMessageBindings.bindings" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=true)" name="InputMessageBindingsbindings" localize="true" manageDynamicModel="true">
+        <LabelColumn data="iterator.bindingDefinition.variableName" title="port_entry" columnWidth="80" resizable="true" displayTitle="true" />
+        <CustomColumn componentClassName="org.openflexo.components.widget.DMTypeSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.bindingDefinition.type" format="object.name" title="type" columnWidth="80" resizable="true" displayTitle="true">
+          <ColumnAssignment variable="component.owner" value="iterator" />
+        </CustomColumn>
+        <CustomColumn componentClassName="org.openflexo.components.widget.binding.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.bindingValue" format="object.stringRepresentation" title="operation_entry" columnWidth="150" resizable="true" displayTitle="true">
+          <ColumnAssignment variable="component.bindingDefinition" value="iterator.bindingDefinition" />
+          <ColumnAssignment variable="component.bindable" value="iterator" />
+        </CustomColumn>
+      </Table>
+    </Tab>
+    <Tab index="2" title="Messages" layout="twocols" font="SansSerif,0,11" name="MessagesTab">
+      <Label label="input_message" align="center" localize="true" name="InputMessageDefinitionentriesLabel" constraints="twocols(location=center;index=4;expandHorizontally=true;expandVertically=false)" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.ws.MessageEntry" visibleRowCount="4" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.inputMessageDefinition.entries" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=true)" name="InputMessageDefinitionentries" localize="true" manageDynamicModel="true">
+        <TextFieldColumn data="iterator.variableName" title="name" columnWidth="100" resizable="true" displayTitle="true" />
+        <CustomColumn componentClassName="org.openflexo.components.widget.DMTypeSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.type" format="object.simplifiedStringRepresentation" title="type" columnWidth="100" resizable="true" displayTitle="true">
+          <ColumnAssignment variable="component.project" value="iterator.project" />
+          <ColumnAssignment variable="component.owner" value="iterator" />
+        </CustomColumn>
+        <CheckBoxColumn data="iterator.isMandatory" title="mandatory" columnWidth="50" resizable="true" displayTitle="true" />
+        <AddAction method="data.inputMessageDefinition.createNewMessageEntry" name="new" />
+        <RemoveAction method="data.inputMessageDefinition.deleteMessageEntry(selected)" isAvailable="data.inputMessageDefinition.isMessageEntryDeletable(selected)" name="delete" />
+      </Table>
+    </Tab>
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab" />
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Data" lang="French">Donnée</Localized>
+    <Localized key="input_message_bindings" lang="English">Input message bindings</Localized>
+    <Localized key="input_message_bindings" lang="French">Liens des messages d'entrées</Localized>
+    <Localized key="input_message_bindings" lang="Dutch">Input message bindings</Localized>
+    <Localized key="input_message" lang="English">Input message</Localized>
+    <Localized key="input_message" lang="French">Message d'entrée</Localized>
+    <Localized key="input_message" lang="Dutch">Input message</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="in_service_operation" />
+</Panel>
+

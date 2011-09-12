@@ -1,0 +1,170 @@
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (DGLatexGenerator)
+* - object: the object for which we are generating the doc (FlexoProcess)
+* - repository: the current repository for which we generate the doc (DGRepository)
+*#
+#if($entry)
+#subTocEntries($entry)
+#end
+#set($process = $object)
+#if(!$process.isRootProcess())\newpage #end
+\hypertarget{$generator.getReference($process)}{}%
+#if(!$entry)\subsection{#if($process.isRootProcess())Project#else Process #end: \emph{#escape($process.getName())}}#end
+\label{$generator.getReference($process)}
+    #if(!$process.isRootProcess())
+        #if(${process.getSubProcessNodes().size()}>0)
+This process is used in the following sub-process nodes:
+\begin{itemize}
+            #foreach($sub in $process.getSubProcessNodes())
+    \item \hyperlink{$generator.getReference($sub)}{#escape($sub.getName())} located in the process \hyperlink{$generator.getReference($sub.getProcess())}{#escape(${sub.getProcess().getName()})}
+            #end ## end for each sub process nodes
+\end{itemize}
+        #else
+This process is not used so far.
+        #end ## subProcessNodes>0
+    #end
+#description($process)
+{
+\begin{center}
+#set($image = ${generator.screenshot($process,$projectGenerator)})
+#set($ratio = ${generator.FULL_PAGE_RATIO()})
+#if($image.getIconWidth()<515 && $image.getIconHeight()<735)
+\includegraphics[scale=1.0]{${generator.screenshotName($process,$projectGenerator)}}
+#else
+  #if($generator.getImageRatio($image)<$ratio)
+\includegraphics[width=\textwidth]{${generator.screenshotName($process,$projectGenerator)}}
+  #else
+\includegraphics[height=\textheight]{${generator.screenshotName($process,$projectGenerator)}}
+  #end
+#end
+\end{center}
+}
+#if(${object.hasAtLeastOneStatusToDocument()})
+#if($entry)#adaptiveTitleLevel($entry 1)#else\subsubsection#end{Status list: \emph{process #escape($process.getName())}}
+\begin{flexostatuses}
+    #foreach($status in ${object.getSortedStatuses()})
+        #if(!$status.getDontGenerate())
+\flexostatus{#format($status $status.getName())}{#description($status)}
+        #end
+    #end ## end of foreach status
+\end{flexostatuses}
+#end ## end of object.hasAtLeastOneStatusToDocument
+
+#metricsForNode($process) ## Only if there are metrics defined.
+
+#if(!${repository.getTocRepository().getUseEmbeddedEvents()})
+    #if(${object.hasAtLeastOneEventToDocument()})
+        #if($entry)#adaptiveTitleLevel($entry 1)#else\subsubsection#end{Events list: \emph{process #escape($process.getName())}}
+        \begin{flexoevents}
+            #foreach($event in ${object.getSortedEvents()})
+                #if(!$event.getDontGenerate())
+                    #set($desc="#description($event)")
+                    #if($desc.trim().length()>0)
+            \flexoevent{#format($event $event.getName())}{$desc}
+                    #end
+                #end
+            #end ## end of foreach event
+        \end{flexoevents}
+    #end ## end of object.hasAtLeastOneEventToDocument
+#end ## end of repository.getTocRepository().getUseEmbeddedEvents()
+#set($nodeList = "")
+#if(${repository.getTocRepository().getUseEmbeddedEvents()})
+#set($nodeList = ${process.getSortedActivitiesAndOperatorsWithEvents()})
+#else
+#set($nodeList = ${process.getSortedActivitiesAndOperators()})
+#end
+#set ($startActivityOnANewPage = true)
+#foreach($a in $nodeList)
+    #if(!$a.getDontGenerate())
+		#if(${a.isOperatorNode()})
+			#if(${a.isTestNode()})
+            #set($desc="#description($a)")
+            #if($desc.trim().length()>0)
+#if($startActivityOnANewPage)\newpage#end
+\hypertarget{$generator.getReference($a)}{}
+#if($entry)#adaptiveTitleLevel($entry 1)#else\subsubsection#end{Test: \emph{#escape($a.getName())}}
+$desc
+            #end
+			#end ##end of a is Test node
+			#set ($startActivityOnANewPage = false)
+		#elseif(${a.getClassNameKey()} == 'event_node') ## is a event node
+        #set($desc="#description($a)")
+             #if($desc.trim().length()>0)
+#if($entry)#adaptiveTitleLevel($entry 1)#else\subsubsection#end{Event: \emph{#escape($a.getName())}}
+$desc
+	         #set ($startActivityOnANewPage = false)
+             #end
+		#else ##end of a is operator node, start case of a is activity node
+#if($startActivityOnANewPage)\newpage#end
+\hypertarget{$generator.getReference($a)}{}
+#if($entry)#adaptiveTitleLevel($entry 1)#else\subsubsection#end{Activity #if($a.isSubProcessNode())(#if($a.isFork())parallel#elseif($a.isLoop())loop#elseif($a.isSingle()) single #elseif($a.isWSCall()) WS call #else loop (single-instance) #end sub-process)#end: \emph{#escape($a.getName())}}
+#if(${a.getRole()})Role : \hyperlink{ROLELIST}{\textbf{${a.getRole().getName()}}}\\
+#end
+		#if($a.isSubProcessNode())
+            #if($a.getSubProcess())
+This node uses the following process \hyperlink{$generator.getReference($a.getSubProcess())}{#escape(${a.getSubProcess().getName()})  p.\pageref*{$generator.getReference($a.getSubProcess())}}
+            #else
+This node does not define which process it uses.
+            #end
+        #end ## end of if isSubProcessNode (2)
+#if($a.getStatus())When entering this activity, the status of this process is set to #escape(${a.getStatus().getName()})\\
+#end
+#description($a)
+#if(${a.containsNormalNodes()})
+	#set ($startActivityOnANewPage = true)
+{
+\begin{center}
+#set($image = ${generator.screenshot($a,$projectGenerator)})
+#if($image.getIconWidth()<515 && $image.getIconHeight()<735)
+\includegraphics[scale=1.0]{${generator.screenshotName($a,$projectGenerator)}}
+#else
+  #if($generator.getImageRatio($image)<$ratio)
+\includegraphics[width=\textwidth]{${generator.screenshotName($a,$projectGenerator)}}
+  #else
+\includegraphics[height=\textheight]{${generator.screenshotName($a,$projectGenerator)}}
+  #end
+#end
+\end{center}
+}
+#else
+	#set ($startActivityOnANewPage = false)
+#end
+#metricsForNode($a) ## Only if there are metrics defined.
+
+    #if($a.mightHaveOperationPetriGraph())
+        #set($operations = $generator.getNewVector())
+        #foreach($operation in ${a.getSortedOperationNodes()})
+                #if(!$operation.getDontGenerate())
+                #empty($operations.add($operation))
+                #end
+        #end ## end of foreach operations
+
+        #if(${operations.size()}>0)
+#if($entry)#adaptiveTitleLevel($entry 2){Operations}#else\par \vspace{5mm}This activity is composed of the following operations:#end
+\begin{flexooperations}
+            #foreach($operation in ${operations})
+\input{$generator.realNameForOperationNoExt($operation,$repository)}
+            #end ## end of foreach operations
+\end{flexooperations}
+        #end ## end of operationNodes.size()>0
+    #end ## end of a.mightHaveOperationPetriGraph()    
+		#end ##end of else clause a is operator node
+    #end ## end of if dont generate activity
+#end ## end of foreach activities
+
+## if required : let's iterate over sub processes
+#if(${entry.isDocSubType()})
+#if(${entry.getRecursionEnabled()})
+#foreach($process in $process.getSortedSubProcesses())
+    #if(!$process.getDontGenerate())
+\input{${generator.realNameForProcessNoExt($process, $repository)}}
+    #else
+% process $process.getName() is not generated
+    #end ## end of if dont generate
+#end ## end of foreach sorted processes
+#end
+#end
+ 

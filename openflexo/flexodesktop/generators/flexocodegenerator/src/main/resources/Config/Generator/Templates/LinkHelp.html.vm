@@ -1,0 +1,6 @@
+<webobject name="#name()Link">
+#renderLinkContent($widget)
+</webobject>
+<webobject name="#name()HiddenDiv">
+$!widget.getHelpMessage()
+</webobject>

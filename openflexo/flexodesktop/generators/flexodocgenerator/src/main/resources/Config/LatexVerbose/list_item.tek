@@ -1,0 +1,9 @@
+\listitem{<LIST_NAME>}
+\begin{itemize}
+<GEN_IF(EXCEL)>
+\item The list can be exported in an Excel file (.xls file).
+</GEN_IF(EXCEL)>
+\item The list contains the following columns: <HEADERS>
+\item The following columns are sortable: <SORTABLE>\\
+\hspace{5cm}Default sort is set on <DEFAULT_SORT>
+\end{itemize}

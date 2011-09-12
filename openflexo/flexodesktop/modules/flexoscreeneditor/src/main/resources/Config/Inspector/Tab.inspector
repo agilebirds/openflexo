@@ -1,0 +1,63 @@
+<inspector title = "Tab" inheritsfrom ="Widget.inspector">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+		<property name="title" label="title" widget="TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="reusableComponentInstance.name" label="wo_component_name" widget="READ_ONLY_TEXT_FIELD" constraint="1">
+			<param name="columns" value="10"/>
+		</property>
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+		<property name="key" label="key" widget="TEXT_FIELD" constraint="3">
+			<param name="columns" value="10"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+	</tab>
+
+	<tab name="Doc" index="2" layout="DEFAULT">
+	</tab>
+
+	<tab name="Data" index="3" layout="DEFAULT">
+		<!--<property name="javaCondition" label="java_condition" widget="TEXT_FIELD" constraint="4" help="java condition code (in the parent page), return true if the tab content must be visible">
+			<param name="columns" value="10"/>
+		</property>-->
+		<property_list name="componentInstance.bindings" label="bindings" constraint="5">
+		  <param name="visible_row_count" value="5"/>
+		  <param name="row_height" value="20"/>
+		  <property_list_column name="bindingDefinition.variableName" label="name" widget="TEXT_FIELD">
+			<param name="column_width" value="80"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="bindingDefinition.type" label="type" widget="CUSTOM">
+			<param name="column_width" value="100"/>
+			<param name="resizable" value="true"/>
+			<param name="className" value="org.openflexo.components.widget.DMTypeInspectorWidget"/>
+			<param name="format" value="simplifiedStringRepresentation"/>
+			<param name="project" value="project"/>
+		  </property_list_column>
+
+		  <!--<property_list_column name="bindingDefinition.type" label="type" widget="CUSTOM">
+			<param name="className" value="org.openflexo.components.widget.DMTypeInspectorWidget"/>
+			<param name="format" value="name"/>
+			<param name="column_width" value="80"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>-->
+		  <property_list_column name="bindingDefinition.isMandatory" label="mandatory" widget="CHECKBOX">
+			<param name="column_width" value="30"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="bindingValue" label="value" widget="CUSTOM">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="bindingDefinition"/>			
+			<param name="format" value="stringRepresentation"/>
+			<param name="column_width" value="150"/>
+		  </property_list_column>
+		  <property_list_action name="new" type="ADD" method="componentInstance.createNewBinding"/>
+		  <property_list_action name="delete" type="DELETE" method="componentInstance.deleteBinding" isAvailable="componentInstance.isBindingDeletable"/>
+		</property_list>
+		
+	</tab>
+
+</inspector>

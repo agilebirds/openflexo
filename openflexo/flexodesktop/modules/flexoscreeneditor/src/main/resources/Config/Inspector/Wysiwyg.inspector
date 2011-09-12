@@ -1,0 +1,21 @@
+<inspector title = "Wysiwyg" inheritsfrom ="NonEditableTextWidget.inspector">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+        <property name="value" label="html" widget="WYSIWYG_ULTRA_LIGHT" constraint="2">
+            <param name="expandHorizontally" value="true"/>     <!-- Available horizontal space is "taken" by the dynamic component, when possible -->
+            <param name="expandVertically" value="true"/>     <!-- Available vertical space is "taken" by the dynamic component, when possible -->
+        </property>
+		<hidden name="textCSSClass"/>
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+	</tab>
+
+	<tab name="Doc" index="2" layout="DEFAULT">
+	</tab>
+
+	<tab name="Data" index="3" layout="DEFAULT">
+		<hidden name="bindingValue"/>
+	</tab>
+
+</inspector>

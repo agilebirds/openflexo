@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.node.FlexoPreCondition" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label label="name" localize="true" name="NameLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <TextField columns="10" passwd="false" localize="true" name="Name" data="data.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
+      <Label label="init_token_number" localize="true" name="InitTokenNbrLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
+      <Number numberType="IntegerType" data="data.initTokenNbr" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" name="InitTokenNbr" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </Number>
+      <Label label="trigger_level" localize="true" name="TriggerLevelLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
+      <Number numberType="IntegerType" data="data.triggerLevel" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" name="TriggerLevel" localize="true" />
+      <Label label="attached_begin_node" localize="true" name="AttachedBeginNodeLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" />
+      <DropDown format="object.name" localize="true" name="AttachedBeginNode" data="data.attachedBeginNode" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" list="data.availableBeginNodes" iteratorClassName="org.openflexo.foundation.wkf.node.FlexoNode" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="name" lang="English">Name</Localized>
+    <Localized key="name" lang="French">Nom</Localized>
+    <Localized key="name" lang="Dutch">Name</Localized>
+    <Localized key="init_token_number" lang="English">Initial token number</Localized>
+    <Localized key="init_token_number" lang="French">Nombre de jetons initiaux</Localized>
+    <Localized key="init_token_number" lang="Dutch">Initial token number</Localized>
+    <Localized key="trigger_level" lang="English">Trigger level</Localized>
+    <Localized key="trigger_level" lang="French">Seuil de déclenchement</Localized>
+    <Localized key="trigger_level" lang="Dutch">Trigger level</Localized>
+    <Localized key="attached_begin_node" lang="English">Attached BEGIN node</Localized>
+    <Localized key="attached_begin_node" lang="French">Noeud DEBUT correspondant</Localized>
+    <Localized key="attached_begin_node" lang="Dutch">Attached BEGIN node</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="PreCondition" />
+</Panel>
+

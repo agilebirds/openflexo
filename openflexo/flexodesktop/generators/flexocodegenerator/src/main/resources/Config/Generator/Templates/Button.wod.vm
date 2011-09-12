@@ -1,0 +1,37 @@
+#set($imageName = ${widget.getImageName()})
+#set($isWDLButton = ${imageName.startsWith("_")})
+#if ($imageName.indexOf("ProgressIcon_") > -1)
+    #set($imageFileName = $imageFileName.replace("ProgressIcon_", "Icon_Progress"))
+#end
+#if($isWDLButton)
+  #set($compName = "WDLButton")
+  #set($end = ${imageName.length()})
+  #set($end = $end - 4)
+  #set($imageName = $imageName.substring(1,$end)) ## Removes the starting '_' and the extension (.png or .gif or .jpg)
+#else
+  #set($compName = "WOImage")
+#end
+#name(): $compName {
+    #if (${widget.getUsePercentage()})
+    width = "${widget.getWidthPercentage()}%";
+    height = "${widget.getHeightPercentage()}%";
+    #elseif(!${widget.isOriginalSize()})
+    width = "${widget.getWidthPixel()}";
+    height = "${widget.getHeightPixel()}";
+    #end
+    border = 0;
+    #tooltipAsTitle()
+    #if($isWDLButton)
+    imageName = "$imageName";
+    #else
+    filename = "$imageName";
+    #end
+    #if(!$widget.isImportedImage())
+    framework = "DenaliWebResources";
+    #end
+    class = "denaliButton";
+    align = "middle";
+    #if($widget.isInPopup() || ${widget.isInRepetition()})
+    id = idFor#capName();
+    #end
+}

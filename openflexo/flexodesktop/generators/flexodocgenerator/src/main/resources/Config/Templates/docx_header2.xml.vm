@@ -1,0 +1,73 @@
+#set($title=${repository.getDocTitle()})
+#if(!$title || $title.trim().length()==0)
+    #set($title = ${project.getName()})
+#end
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:hdr xmlns:ve="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml">
+  <w:tbl>
+    <w:tblPr>
+      <w:tblStyle w:val="TableGrid"/>
+      <w:tblW w:w="0" w:type="auto"/>
+      <w:tblBorders>
+        <w:top w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+        <w:left w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+        <w:bottom w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+        <w:right w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+        <w:insideH w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+        <w:insideV w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+      </w:tblBorders>
+      <w:tblLook w:val="04A0"/>
+    </w:tblPr>
+    <w:tblGrid>
+      <w:gridCol w:w="4750"/>
+      <w:gridCol w:w="4750"/>
+    </w:tblGrid>
+    <w:tr w:rsidR="00AD2128" w:rsidTr="00AD2128">
+      <w:tc>
+        <w:tcPr>
+          <w:tcW w:w="4750" w:type="dxa"/>
+        </w:tcPr>
+        <w:p w:rsidR="00AD2128" w:rsidRDefault="00AD2128" w:rsidP="00AD2128">
+          <w:pPr>
+            <w:pStyle w:val="Header"/>
+            <w:tabs>
+              <w:tab w:val="clear" w:pos="4320"/>
+              <w:tab w:val="clear" w:pos="8640"/>
+              <w:tab w:val="left" w:pos="1095"/>
+            </w:tabs>
+            <w:jc w:val="both"/>
+          </w:pPr>
+          <w:r>
+            <w:t>#if(${repository.getVersion()})#escape(${repository.getVersion()})#end</w:t>
+          </w:r>
+        </w:p>
+      </w:tc>
+      <w:tc>
+        <w:tcPr>
+          <w:tcW w:w="4750" w:type="dxa"/>
+        </w:tcPr>
+        <w:p w:rsidR="00AD2128" w:rsidRDefault="00AD2128" w:rsidP="00AD2128">
+          <w:pPr>
+            <w:pStyle w:val="Header"/>
+            <w:jc w:val="right"/>
+          </w:pPr>
+          <w:r>
+            <w:t>#escape($title)</w:t>
+          </w:r>
+        </w:p>
+      </w:tc>
+    </w:tr>
+  </w:tbl>
+  <w:p w:rsidR="00AD2128" w:rsidRPr="00AD2128" w:rsidRDefault="00AD2128" w:rsidP="00AD2128">
+    <w:pPr>
+      <w:pStyle w:val="Header"/>
+      <w:pBdr>
+        <w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+      </w:pBdr>
+      <w:rPr>
+        <w:sz w:val="2"/>
+        <w:szCs w:val="2"/>
+      </w:rPr>
+    </w:pPr>
+  </w:p>
+</w:hdr>

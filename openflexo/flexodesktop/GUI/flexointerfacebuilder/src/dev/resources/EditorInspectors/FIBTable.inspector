@@ -1,0 +1,245 @@
+<Panel className="org.openflexo.fib.editor.controller.FIBInspector"
+	name="Inspector" layout="border" dataClassName="org.openflexo.fib.model.FIBTable">
+	<Parameter name="title" value="Table" />
+
+	<TabPanel name="Tab" constraints="border(location=center)">
+
+		<Tab name="BasicTab" title="Basic" index="0" layout="twocols" font="SansSerif,0,11" >
+
+			<Label label="iterator_class" constraints="twocols(location=left)" />
+			<Custom data="data.iteratorClass" componentClassName="org.openflexo.fib.utils.ClassSelector" 
+					constraints="twocols(location=right;expandHorizontally=true)" 
+					columns="15"/>
+
+			<Label label="visible_row_count" constraints="twocols(location=left)" />
+			<Number numberType="IntegerType" data="data.visibleRowCount"
+				minValue="1" maxValue="100" increment="1" columns="3"
+				constraints="twocols(location=right)" />
+
+			<Label label="row_height" constraints="twocols(location=left)" />
+			<Number numberType="IntegerType" data="data.rowHeight"
+				minValue="5" maxValue="100" increment="1" columns="3"
+				constraints="twocols(location=right)" />
+
+		</Tab>
+
+		<Tab name="AdvancedTab" title="Table" index="1" layout="twocols" font="SansSerif,0,11" >
+
+			<TabPanel constraints="twocols(location=center;expandHorizontally=true;expandVertically=true)">
+				<Tab title="Columns" index="0" layout="border">
+					<Table name="ColumnsTable" iteratorClassName="org.openflexo.fib.model.FIBTableColumn"
+						data="data.columns"
+						constraints="border(location=center)"
+						visibleRowCount="5" rowHeight="18" font="SansSerif,0,11">
+						<TextFieldColumn name="title" data="iterator.title"
+							title="title" columnWidth="200" resizable="true" />
+						<LabelColumn name="type" data="iterator.columnType"
+							title="type" columnWidth="150" resizable="true" />
+						<CheckBoxColumn name="resizable" data="iterator.resizable"
+							title="Resize" columnWidth="50" resizable="false" />
+						<CheckBoxColumn name="displayTitle" data="iterator.displayTitle"
+							title="title" columnWidth="50" resizable="false" />
+						<NumberColumn name="columnWidth" numberType="IntegerType"
+							data="iterator.columnWidth" title="width" columnWidth="100"
+							resizable="true" />
+						<CustomColumn name="visibleValue" title="Data"
+							data="iterator.data.binding" componentClassName="org.openflexo.fib.utils.BindingSelector"
+							columnWidth="300" constraints="twocols(location=right;expandHorizontally=true)"
+							columns="15">
+							<ColumnAssignment variable="component.bindable"
+								value="iterator" />
+							<ColumnAssignment variable="component.bindingDefinition"
+								value="iterator.DATA" />
+						</CustomColumn>
+						<AddAction name="new_label_column" method="data.createLabelColumn()" />
+						<AddAction name="new_textfield_column" method="data.createTextFieldColumn()" />
+						<AddAction name="new_checkbox_column" method="data.createCheckBoxColumn()" />
+						<AddAction name="new_dropdown_column" method="data.createDropDownColumn()" />
+						<AddAction name="new_number_column" method="data.createNumberColumn()" />
+						<AddAction name="new_icon_column" method="data.createIconColumn()" />
+						<AddAction name="new_custom_column" method="data.createCustomColumn()" />
+						<RemoveAction name="delete_column" method="data.deleteColumn(selected)" />
+						<CustomAction name="move_to_top" method="data.moveToTop(selected)" available="((selected != null) &amp; (selected.index > 0))"/>
+						<CustomAction name="move_up" method="data.moveUp(selected)" />
+						<CustomAction name="move_down" method="data.moveDown(selected)" />
+						<CustomAction name="move_to_bottom" method="data.moveToBottom(selected)" />
+					</Table>
+				</Tab>
+				<Tab title="Actions" index="1" layout="border">
+					<Table name="ActionsTable" iteratorClassName="org.openflexo.fib.model.FIBTableAction"
+						data="data.actions"
+						constraints="border(location=center)"
+						visibleRowCount="5" rowHeight="18" font="SansSerif,0,11">
+						<TextFieldColumn name="name" data="iterator.name"
+							title="action" columnWidth="200" resizable="true" />
+						<LabelColumn name="type" data="iterator.actionType"
+							title="type" columnWidth="80" resizable="true" />
+						<CustomColumn name="visibleValue" title="method"
+							data="iterator.method.binding" componentClassName="org.openflexo.fib.utils.BindingSelector"
+							columnWidth="300" constraints="twocols(location=right;expandHorizontally=true)"
+							columns="15">
+							<ColumnAssignment variable="component.bindable"
+								value="iterator" />
+							<ColumnAssignment variable="component.bindingDefinition"
+								value="iterator.METHOD" />
+						</CustomColumn>
+						<CustomColumn name="visibleValue" title="available"
+							data="iterator.isAvailable.binding" componentClassName="org.openflexo.fib.utils.BindingSelector"
+							columnWidth="300" constraints="twocols(location=right;expandHorizontally=true)"
+							columns="15">
+							<ColumnAssignment variable="component.bindable"
+								value="iterator" />
+							<ColumnAssignment variable="component.bindingDefinition"
+								value="iterator.IS_AVAILABLE" />
+						</CustomColumn>
+						<AddAction name="new_add_action" method="data.createAddAction()" />
+						<AddAction name="new_remove_action" method="data.createRemoveAction()" />
+						<AddAction name="new_custom_action" method="data.createCustomAction()" />
+						<RemoveAction name="delete_action" method="data.deleteAction(selected)" />
+					</Table>
+				</Tab>
+
+			</TabPanel>
+
+			<CheckBox data="data.autoSelectFirstRow" constraints="twocols(location=left)" />
+			<Label label="select_first_row" constraints="twocols(location=right)" />
+
+			<CheckBox data="data.createNewRowOnClick" constraints="twocols(location=left)" />
+			<Label label="create_new_row_on_click" constraints="twocols(location=right)" />
+
+			<CheckBox data="data.showFooter" constraints="twocols(location=left)"/>
+			<Label label="show_footer" constraints="twocols(location=right)"/>
+
+		</Tab>
+
+		<Tab name="ControlsTab" title="Controls" index="2" layout="twocols" font="SansSerif,0,11" >
+
+			<Label label="selected" constraints="twocols(location=left)"/>
+			<Custom data="data.selected.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+				<Assignment variable="component.bindable" value="data"/>
+				<Assignment variable="component.bindingDefinition" value="data.selectedBindingDefinition"/>
+			</Custom>
+		
+			<CheckBox data="data.boundToSelectionManager" constraints="twocols(location=left)" />
+			<Label label="bound_to_selection_manager" constraints="twocols(location=right)" />
+
+			<Label label="selectionMode" constraints="twocols(location=left)" />
+			<DropDown data="data.selectionMode" showReset="false" constraints="twocols(location=right)" />
+
+		</Tab>
+			
+		<Tab name="GraphicsTab" title="Graphics" index="4" layout="twocols" font="SansSerif,0,11" >
+
+  		   <Panel layout="border" border="titled" borderTitle="table_colors" constraints="twocols(location=center;index=0;expandHorizontally=true;expandVertically=false)">
+   		     <Panel layout="gridbag" hGap="5" vGap="5" cols="2" rows="3" borderTitle="Panel" constraints="border(location=center)">
+    		      <Label label="bg_selection_color" align="right" localize="true" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=0;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=horizontal)" />
+        		  <Color data="data.backgroundSelectionColor" constraints="gridbag(insetsLeft=5;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=1;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true" />
+        		  <Label label="text_selection_color" align="right" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=2;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=horizontal)" />
+        	      <Color data="data.textSelectionColor" constraints="gridbag(insetsLeft=5;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=3;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true" />
+        		  <Label label="bg_sec_selection_color" align="right" localize="true" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=4;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=horizontal)" />
+           		  <Color data="data.backgroundSecondarySelectionColor" constraints="gridbag(insetsLeft=5;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=5;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true" />
+       		      <Label label="text_non_selectionColor" align="right" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=6;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=horizontal)" />
+        		  <Color data="data.textNonSelectionColor" constraints="gridbag(insetsLeft=5;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=7;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true" />
+        		  <Label label="bg_non_selection_color" align="right" localize="true" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=8;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=horizontal)" />
+        		  <Color data="data.backgroundNonSelectionColor" constraints="gridbag(insetsLeft=5;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=9;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true" />
+       		 </Panel>
+    	  </Panel>
+
+		</Tab>
+			
+	</TabPanel>
+
+  <LocalizedDictionary>
+    <Localized key="title" lang="English">Title</Localized>
+    <Localized key="type" lang="English">Type</Localized>
+    <Localized key="width" lang="English">Width</Localized>
+    <Localized key="move_up" lang="English">Move up</Localized>
+    <Localized key="move_down" lang="English">Move down</Localized>
+    <Localized key="method" lang="English">Method</Localized>
+    <Localized key="delete_action" lang="English">Delete action</Localized>
+    <Localized key="title" lang="French">Titre</Localized>
+    <Localized key="type" lang="French">Type</Localized>
+    <Localized key="width" lang="French">Largeur</Localized>
+    <Localized key="Data" lang="French">Donnée</Localized>
+    <Localized key="move_up" lang="French">Remonter</Localized>
+    <Localized key="move_down" lang="French">Descendre</Localized>
+    <Localized key="method" lang="French">Méthode</Localized>
+    <Localized key="delete_action" lang="French">Supprimer l'action</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="Graphics" lang="French">Graphisme</Localized>
+    <Localized key="title" lang="Dutch">Title</Localized>
+    <Localized key="type" lang="Dutch">Type</Localized>
+    <Localized key="width" lang="Dutch">Width</Localized>
+    <Localized key="move_up" lang="Dutch">Move up</Localized>
+    <Localized key="move_down" lang="Dutch">Move down</Localized>
+    <Localized key="method" lang="Dutch">Method</Localized>
+    <Localized key="delete_action" lang="Dutch">Delete action</Localized>
+    <Localized key="action" lang="French">Action</Localized>
+    <Localized key="available" lang="French">Disponibilité</Localized>
+    <Localized key="bg_non_selection_color" lang="French">Arrière plan</Localized>
+    <Localized key="bg_sec_selection_color" lang="French">Arrière plan sélectionné</Localized>
+    <Localized key="bg_selection_color" lang="French">Arrière plan sélectionné</Localized>
+    <Localized key="bg_non_selection_color" lang="English">Background</Localized>
+    <Localized key="bg_sec_selection_color" lang="English">Selection background</Localized>
+    <Localized key="bg_selection_color" lang="English">Selection background</Localized>
+    <Localized key="bg_selection_color" lang="Dutch">Selection background</Localized>
+    <Localized key="bg_sec_selection_color" lang="Dutch">Selection background</Localized>
+    <Localized key="bg_non_selection_color" lang="Dutch">Background</Localized>
+    <Localized key="bound_to_selection_manager" lang="French">Connecté à un gestionnaire de sélection</Localized>
+    <Localized key="create_new_row_on_click" lang="French">Créer une nouvelle ligne si click</Localized>
+    <Localized key="Columns" lang="French">Colonnes</Localized>
+    <Localized key="Controls" lang="French">Contrôles</Localized>
+    <Localized key="delete_column" lang="French">Supprimer la colonne</Localized>
+    <Localized key="iterator_class" lang="French">Classe de l'itérateur</Localized>
+    <Localized key="move_to_bottom" lang="French">En dernier</Localized>
+    <Localized key="move_to_top" lang="French">En premier</Localized>
+    <Localized key="new_add_action" lang="French">Créer une action AJOUT</Localized>
+    <Localized key="new_checkbox_column" lang="French">Colonne CHECKBOX</Localized>
+    <Localized key="new_custom_action" lang="French">Créer une action CUSTOM</Localized>
+    <Localized key="new_custom_column" lang="French">Colonne CUSTOM</Localized>
+    <Localized key="new_dropdown_column" lang="French">Colonne DROPDOWN</Localized>
+    <Localized key="new_icon_column" lang="French">Colonne ICONE</Localized>
+    <Localized key="new_label_column" lang="French">Colonne LABEL</Localized>
+    <Localized key="new_number_column" lang="French">Colonne NUMBER</Localized>
+    <Localized key="new_remove_action" lang="French">Créer une action REMOVE</Localized>
+    <Localized key="new_textfield_column" lang="French">Colonne TEXTFIELD</Localized>
+    <Localized key="row_height" lang="French">Hauteur de ligne</Localized>
+    <Localized key="select_first_row" lang="French">Sélectionner la première ligne</Localized>
+    <Localized key="selected" lang="French">Sélection</Localized>
+    <Localized key="selectionMode" lang="French">Mode de sélection</Localized>
+    <Localized key="show_footer" lang="French">Voir le pied de table</Localized>
+    <Localized key="text_non_selectionColor" lang="French">Texte non sélectionné</Localized>
+    <Localized key="text_selection_color" lang="French">Texte sélectionné</Localized>
+    <Localized key="visible_row_count" lang="French">Nombre de lignes visibles</Localized>
+    <Localized key="action" lang="English">Action</Localized>
+    <Localized key="available" lang="English">Available</Localized>
+    <Localized key="bound_to_selection_manager" lang="English">Bound to selection manager</Localized>
+    <Localized key="create_new_row_on_click" lang="English">Create new row on click</Localized>
+    <Localized key="delete_column" lang="English">Delete column</Localized>
+    <Localized key="iterator_class" lang="English">Iterator class</Localized>
+    <Localized key="move_to_bottom" lang="English">Move to bottom</Localized>
+    <Localized key="move_to_top" lang="English">Move to top</Localized>
+    <Localized key="new_add_action" lang="English">New ADD action</Localized>
+    <Localized key="new_custom_action" lang="English">New CUSTOM action</Localized>
+    <Localized key="new_remove_action" lang="English">New DELETE action</Localized>
+    <Localized key="new_checkbox_column" lang="English">Column CHECKBOX</Localized>
+    <Localized key="new_custom_column" lang="English">Column CUSTOM</Localized>
+    <Localized key="new_dropdown_column" lang="English">Column DROPDOWN</Localized>
+    <Localized key="new_icon_column" lang="English">Column ICONE</Localized>
+    <Localized key="new_label_column" lang="English">Column LABEL</Localized>
+    <Localized key="new_number_column" lang="English">Column NUMBER</Localized>
+    <Localized key="new_textfield_column" lang="English">Column TEXTFIELD</Localized>
+    <Localized key="new_checkbox_column" lang="Dutch">Column CHECKBOX</Localized>
+    <Localized key="row_height" lang="English">Row height</Localized>
+    <Localized key="select_first_row" lang="English">Select first row</Localized>
+    <Localized key="selected" lang="English">Selected</Localized>
+    <Localized key="selectionMode" lang="English">Selection mode</Localized>
+    <Localized key="show_footer" lang="English">Show footer</Localized>
+    <Localized key="text_non_selectionColor" lang="English">Non selected text</Localized>
+    <Localized key="text_selection_color" lang="English">Selected text</Localized>
+    <Localized key="visible_row_count" lang="English">Visible row count</Localized>
+    <Localized key="table_colors" lang="English">Table colors</Localized>
+    <Localized key="table_colors" lang="French">Couleurs de la table</Localized>
+  </LocalizedDictionary>
+
+</Panel>

@@ -1,0 +1,102 @@
+<project name="$project.getPrefix()Application" default="build" basedir=".">
+    <!-- Lot of settings for this task are defined in the "build.properties" file -->
+    <property file="build.properties"/>
+    <!-- NEW CVS TASKS -->
+    <!-- compile classes -->
+    <target name="java">
+        <path id="classpath">
+            <pathelement path="../${dollar}{project.dir}/${build.output.java.dir}"/>
+        </path>
+        <ant dir="." antfile="../${dollar}{project.dir}/${dollar}{project.buildscripts.dir}/woapp-project.xml" target="java">
+            <property name="param.woapp.dir" value="."/>
+            <property name="param.output.java.dir" value="${classes.dir}"/>
+            <property name="param.src.java.dir" value="${src.dir}"/>
+            <property name="param.api.dir" value="../${dollar}{project.dir}/${build.output.dist.api.dir}"/> 
+            <property name="param.build.output.dir" value="../${dollar}{project.dir}/${build.output.build.dir}"/>
+            <reference refid="classpath" torefid="classpath"/>
+        </ant>
+    </target>
+    <!-- Build WebObject Application -->
+    <!-- For more settings please edit the "build.properties" file     -->
+    <!-- Here are properties that could be modified via the file       -->
+    <!--      webxml.woroot :     Path where WebObjects is installed on -->
+    <!--                     deployed server.                        -->
+    <!--       webxml.customcontent : Part added at the end of web.xml    -->
+    <!--        webxml.appmode : WebObjects Applicaiton mode             -->
+    <!--                        (Development or Deployment)            -->
+    <target name="build">
+        <ant dir="."
+        antfile="../${dollar}{project.dir}/${dollar}{project.buildscripts.dir}/woapp-project.xml"
+        target="build">
+            <property name="param.woapp.dir" value="."/>
+            <property name="param.output.java.dir" value="${classes.dir}"/>
+            <property name="param.build.output.dir" value="../${dollar}{project.dir}/${build.output.build.dir}"/>
+            <property name="param.output.woapp.dir" value="../${dollar}{project.dir}/${build.output.woapp.dir}"/>
+            <property name="param.api.dir" value="../${dollar}{project.dir}/${build.output.dist.api.dir}"/>   
+            <property name="param.output.ws.dir" value="../${dollar}{project.dir}/${build.output.ws.dir}"/>
+            <property name="param.resources.dir" value="${resources.dir}"/>
+            <property name="param.components.dir" value="${components.dir}"/>
+            <property name="param.ws.dir" value="${ws.dir}"/>
+        </ant>
+    </target>
+
+    <!-- ========================================== -->
+    <!-- ========================================== -->
+    <!-- Build all.                                 -->
+    <!-- ========================================== -->
+    <target name="all" depends="version,java,build,post-configure">
+    </target>
+    <!-- ============================================= -->
+    <!-- Run tests.                                    -->
+    <!-- ============================================= -->
+    <target name="test">
+    </target>
+    <!-- ========================================== -->
+    <!-- Build dist.                                 -->
+    <!-- ========================================== -->
+    <target name="dist">
+        <ant dir="."
+        antfile="../${dollar}{project.dir}/${dollar}{project.buildscripts.dir}/woapp-project.xml"
+        target="dist">
+            <property name="param.dist.dir" value="../${dollar}{project.dir}/${build.output.dist.war.dir}"/>
+            <property name="param.lib.dir" value="../${dollar}{project.dir}/${dollar}{project.libraries.dir}"/>
+            <property name="param.output.woapp.dir" value="../${dollar}{project.dir}/${build.output.woapp.dir}"/>
+        <property name="param.build.output.dir" value="../${dollar}{project.dir}/${build.output.build.dir}"/>
+            <property name="param.output.ws.dir" value="../${dollar}{project.dir}/${build.output.ws.dir}"/>
+        </ant>
+    </target>
+    
+    <target name="configure" depends="version">
+        <ant antfile="../${dollar}{project.dir}/${dollar}{project.buildscripts.dir}/woapp-project.xml"
+                target="set.database">
+             <property name="param.output.frameworks.dir" value="../${dollar}{project.dir}/${build.output.frameworks.dir}"/>
+               <property name="param.dist.dir" value="../${dollar}{project.dir}/${build.output.dist.dir}"/>
+        </ant>
+    </target>
+    
+    <target name="post-configure">
+        <ant antfile="../${dollar}{project.dir}/${dollar}{project.buildscripts.dir}/woapp-project.xml"
+                target="post-configure">
+               <property name="param.output.woapp.dir" value="../${dollar}{project.dir}/${build.output.woapp.dir}"/>
+        </ant>
+    </target>
+    
+    <!-- ========================================== -->
+    <!-- Version dist.                                 -->
+    <!-- ========================================== -->
+    <target name="version">
+        <ant dir="."
+        antfile="../${dollar}{project.dir}/${dollar}{project.buildscripts.dir}/woapp-project.xml"
+        target="version">
+                <property name="version.framework" value="DenaliCore"/>
+                <property name="version.path" value="${src.dir}/be/denali/core/version"/>
+                <property name="version.package" value="be.denali.core.version"/>
+        </ant>
+    </target>
+    
+    <target name="clean">
+        <ant dir="."
+        antfile="../${dollar}{project.dir}/${dollar}{project.buildscripts.dir}/woapp-project.xml"
+        target="clean"/>
+    </target>
+</project>

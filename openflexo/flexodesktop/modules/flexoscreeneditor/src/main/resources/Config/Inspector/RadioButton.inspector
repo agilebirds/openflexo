@@ -1,0 +1,32 @@
+<inspector title = "RadioButton" inheritsfrom ="CheckBox.inspector">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+		<property name="groupName" label="group_name"  widget="TEXT_FIELD" constraint="0"/>
+		<property name="buttonLabel" label="label" widget="TEXT_FIELD" constraint="1"/>
+		<property name="displayLabel" label="displayLabel" widget="CHECKBOX" constraint="2"/>		
+		<property name="labelAlign" label="alignement" widget="CHECKBOX" constraint="3">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+		<property name="value" label="default_value" widget="CHECKBOX" constraint="4"/>
+    	<property name="useOneNameForAllRadios" label="use_one_name_for_all_radios" widget="CHECKBOX" constraint="5">
+    		<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+    	</property>
+		<property name="disabled" label="disabled" widget="CHECKBOX" constraint="6"/>
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+		
+	</tab>
+
+	<tab name="Doc" index="2" layout="DEFAULT">
+	</tab>
+
+	<tab name="Data" index="3" layout="DEFAULT">
+		<property name="bindingChecked" label="binding_checked" widget="CUSTOM" constraint="3">
+			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
+			<param name="binding_definition" value="bindingCheckedDefinition"/>			
+			<param name="creates_entry" value="createsBindingVariable"/>			
+		</property>
+	</tab>
+
+</inspector>

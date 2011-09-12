@@ -1,0 +1,12 @@
+<inspector title = "AbstractInnerTableWidget" inheritsfrom ="Widget.inspector">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+	</tab>
+	<tab name="Doc" index="1" layout="DEFAULT">
+	</tab>
+	<tab name="Advanced" index="2" layout="DEFAULT">
+	</tab>
+	<tab name="Data" index="3" layout="DEFAULT">
+	</tab>
+
+</inspector>

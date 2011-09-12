@@ -1,0 +1,21 @@
+<Panel className="org.openflexo.fib.editor.controller.FIBInspector" 
+	   name="Inspector" 
+	   layout="border" 
+	   dataClassName="org.openflexo.fib.model.FIBTab">
+	<Parameter name="title" value="Tab pane"/>
+
+		<TabPanel name="Tab" constraints="border(location=center)">
+
+			<Tab name="BasicTab" title="Basic" index="0" layout="twocols" font="SansSerif,0,11" >
+			
+				<Label label="title" constraints="twocols(location=left)"/>
+				<TextField data="data.title" constraints="twocols(location=right;expandHorizontally=true)"/>
+
+				<Label label="index" constraints="twocols(location=left)"/>
+				<Number data="data.index" constraints="twocols(location=right)"/>
+
+			</Tab>
+			
+		</TabPanel>
+
+</Panel>

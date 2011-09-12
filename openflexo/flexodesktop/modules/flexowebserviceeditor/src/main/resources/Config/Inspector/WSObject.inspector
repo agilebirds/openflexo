@@ -1,0 +1,19 @@
+<inspector title = "ws_object" inheritsfrom="ModelObject.inspector">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+	</tab>
+	
+	<tab name="Advanced" index="1">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="description" label="description" widget="TEXT_AREA" constraint="2">
+			<param name="rows" value="10"/>
+		</property>
+		<property name="docFormat" label="docFormat" widget="DROPDOWN" help="Select a specific language if you used it explicitly in your description, otherwise leave this unset" constraint="3">
+			<param name="format" value="name"/>
+		</property>
+	</tab>
+</inspector>

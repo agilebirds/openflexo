@@ -1,0 +1,17 @@
+\hypertarget{ROLELIST}{}
+#if(${object.getRoleList().getRoles().size()}>0 || ${workflow.getImportedRoleList().getRoles().size()}>0)
+#if($entry)#adaptiveTitleLevel($entry 1)#else\subsubsection#end{Roles: \emph{${object.getRootProcess().getName()}}}
+\par{The following roles are defined for this process:}
+\begin{flexoroles}
+    #foreach($role in ${object.getSortedRoles()})
+        #if(!$role.getDontGenerate())
+\flexorole{#format($role $role.getName())}{#description($role)}
+        #end
+    #end ## end of foreach roles
+    #foreach($role in ${object.getImportedRoleList().getSortedRoles()})
+        #if(!$role.getDontGenerate())
+\flexorole{#format($role $role.getName())}{#description($role)}
+        #end
+    #end ## end of foreach roles
+\end{flexoroles}
+#end ## end of roles.size()>0

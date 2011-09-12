@@ -1,0 +1,17 @@
+<inspector title = "Ontology Library" inheritsfrom="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.ontology.OntologyLibrary">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+		<property name="helpText" widget="LABEL">
+			<param name="displayLabel" value="false"/>
+			<param name="expandHorizontally" value="true"/> 
+			<param name="expandVertically" value="true"/>
+			<param name="widgetLayout" value="1COL"/>
+			<param name="width" value="200"/>
+			<param name="height" value="200"/>
+		</property>
+	</tab>
+
+	<tab name="Advanced" index="2" layout="DEFAULT">
+	</tab>
+
+</inspector>

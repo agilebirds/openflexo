@@ -1,0 +1,51 @@
+#set($list = ${widget.getHTMLListDescriptor()})
+#if(!$list)
+	#set($list = ${widget.relatedRepetitionOperator().getHTMLListDescriptor()})
+#end
+#if(${list.getSortableHeaders().contains($widget)})
+<webobject name="#name()">
+    #if($project.getIsLocalized())
+        #if ($widget.getTooltip() && !$widget.getTooltip().trim().equals(""))
+            <webobject name="Header_#name()_Tooltip">
+        #end
+        <webobject name="Header_#name()"></webobject>
+        #if ($widget.getTooltip() && !$widget.getTooltip().trim().equals(""))
+            </webobject>
+        #end
+    #else
+        #if ($widget.getTooltip() && !$widget.getTooltip().trim().equals(""))
+            <span title="${widget.getJavascriptToolTip()}">
+		#end
+		#if(${widget.getBindingValue().isBindingValid()})
+			 <webobject name="Header_#name()"></webobject>
+		#else
+			$!generator.escapeStringForHTML($widget.getValue())
+		#end
+        #if ($widget.getTooltip() && !$widget.getTooltip().trim().equals(""))
+            </span>
+        #end
+    #end
+</webobject>
+#else
+     #if($project.getIsLocalized())
+        #if ($widget.getTooltip() && !$widget.getTooltip().trim().equals(""))
+            <webobject name="Header_#name()_Tooltip">
+        #end
+        <webobject name="Header_#name()"></webobject>
+        #if ($widget.getTooltip() && !$widget.getTooltip().trim().equals(""))
+            </webobject>
+        #end
+    #else
+        #if ($widget.getTooltip() && !$widget.getTooltip().trim().equals(""))
+            <span title="${widget.getJavascriptToolTip()}">
+        #end
+        #if(${widget.getBindingValue().isBindingValid()})
+			 <webobject name="Header_#name()"></webobject>
+		#else
+			$!generator.escapeStringForHTML($widget.getValue())
+		#end
+        #if ($widget.getTooltip() && !$widget.getTooltip().trim().equals(""))
+            </span>
+        #end
+    #end
+#end

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<command quantity="3" commandIsAlreadyPaid="yes"> 
+  <customer>
+    <name>Ringle</name>
+  </customer> 
+  <movie name="Alien">
+    here comes a description of the movie
+    <date>2001.09.18 AD at 09:54:58 AM CEST</date> 
+    <cat>Horror</cat> 
+    <role name="Brett"></role> 
+    <role name="Kane"></role>
+    <role name="Dallas"></role> 
+    <role name="Parker"></role> 
+    <role name="Lambert"></role> 
+    <role name="Ash"></role> 
+    <role name="Ripley"></role>  
+  </movie> 
+</command>

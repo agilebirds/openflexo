@@ -1,0 +1,15 @@
+#if($widget.isInHTMLList() && !${widget.getHTMLListDescriptor().getRepetitionOperator().getFetchObjects()})
+    <webobject name="#name()Displayer">
+#end
+#if(!${widget.getBindingValue().isBindingValid()} && !${widget.getIsAcceptableForAnyProcessInstanceDictionary()} )
+    #if($project.getIsLocalized())
+        <webobject name="#name()"></webobject>
+    #else
+       $generator.escapeStringForHTML($widget.getValue())
+	#end
+#else
+<webobject name="#name()"></webobject>
+#end
+#if($widget.isInHTMLList() && !${widget.getHTMLListDescriptor().getRepetitionOperator().getFetchObjects()})
+    </webobject>
+#end

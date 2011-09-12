@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.node.ActionNode" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="1" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label label="action_type" localize="true" name="ActionTypeLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <DropDown format="object.name" localize="true" name="ActionType" data="data.actionType" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" list="data.actionType.availableValues" iteratorClassName="org.openflexo.foundation.wkf.node.ActionType" />
+      <Label label="sub_process" localize="true" name="SubProcessLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <DropDown format="object.name" localize="true" name="SubProcess" data="data.subProcess" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" list="data.process.workflow.allFlexoProcesses" iteratorClassName="org.openflexo.foundation.wkf.FlexoProcess" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="action_type" lang="English">Action type</Localized>
+    <Localized key="action_type" lang="French">Type d'Action</Localized>
+    <Localized key="action_type" lang="Dutch">Action type</Localized>
+    <Localized key="sub_process" lang="English">Sub process</Localized>
+    <Localized key="sub_process" lang="French">Sous-processus</Localized>
+    <Localized key="sub_process" lang="Dutch">Sub process</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Action Node" />
+</Panel>
+

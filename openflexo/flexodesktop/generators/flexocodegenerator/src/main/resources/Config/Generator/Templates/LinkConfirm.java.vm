@@ -1,0 +1,9 @@
+    private static final String #upName() = "#upName()";
+    
+    public String #name()Value() {
+        return #upName()+(uniqueIdentifier()!=null?uniqueIdentifier():"");
+    }
+    #set($t = "LinkConfirmFormAction.java.vm")
+    #set($c = "#parse(${generator.getTemplatePath($t)})")
+    #void($formAction.append($c))
+    #renderLinkContent($widget)

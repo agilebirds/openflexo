@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model handlesReferences="yes" serializationMode="pseudoTree">
+
+	<entity name="org.openflexo.sg.generationdef.GenerationDefinition" xmlTag="Generation">
+		<property name="timestamp" xmlTag="timestamp" attribute="YES" />
+		<property name="symbolicPaths" xmlTag="SymbolicPath" type="vector"/>
+		<property name="files" xmlTag="File" type="vector"/>
+	</entity>
+
+	<entity name="org.openflexo.sg.generationdef.SymbolicPathEntry" xmlTag="SymbolicPath">
+		<property name="kind" xmlTag="kind" attribute="YES" />
+		<property name="name" xmlTag="name" attribute="YES" />
+		<property name="path" xmlTag="path" attribute="YES" />
+	</entity>
+
+	<entity name="org.openflexo.sg.generationdef.FileEntry" xmlTag="File">
+		<property name="name" xmlTag="name" attribute="YES" />
+		<property name="symbolicPath" xmlTag="symbolicPath" attribute="YES" />
+		<property name="relativePath" xmlTag="relativePath" attribute="YES" />
+		<property name="format" xmlTag="type" attribute="YES" />
+		<property name="template" xmlTag="Template"/>
+	</entity>
+
+	<entity name="org.openflexo.sg.generationdef.TemplateEntry" xmlTag="Template">
+		<property name="templateFile" xmlTag="templateFile" attribute="YES" />
+		<property name="contexts" xmlTag="Context" type="vector"/>
+	</entity>
+
+	<entity name="org.openflexo.sg.generationdef.ContextEntry" xmlTag="Context">
+		<property name="name" xmlTag="name" attribute="YES" />
+		<property name="value" xmlTag="value" attribute="YES" />
+	</entity>
+
+</model>

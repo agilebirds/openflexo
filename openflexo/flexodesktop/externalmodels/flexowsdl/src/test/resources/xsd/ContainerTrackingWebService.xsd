@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:mstns="http://tempuri.org/ContainerInquiryHistory.xsd" xmlns="http://tempuri.org/ContainerInquiryHistory.xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://tempuri.org/ContainerInquiryHistory.xsd" id="ContainerInquiryHistory" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element msdata:IsDataSet="true" msdata:UseCurrentLocale="true" name="ContainerInquiryHistory">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="contHistOut">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" name="EQUIPMENT_NO" type="xs:string" />
+              <xs:element minOccurs="0" name="SHIPLINE" type="xs:string" />
+              <xs:element minOccurs="0" name="DISPOSITION" type="xs:string" />
+              <xs:element minOccurs="0" name="GENERAL_LOC" type="xs:string" />
+              <xs:element minOccurs="0" name="SLOT" type="xs:string" />
+              <xs:element minOccurs="0" name="VESSEL" type="xs:string" />
+              <xs:element minOccurs="0" name="VOYAGE" type="xs:string" />
+              <xs:element minOccurs="0" name="DIRECTION" type="xs:string" />
+              <xs:element minOccurs="0" name="BROKER" type="xs:string" />
+              <xs:element minOccurs="0" name="CARRIER" type="xs:string" />
+              <xs:element minOccurs="0" name="COMMODITY_TYPE" type="xs:string" />
+              <xs:element minOccurs="0" name="HAZARD_CODE" type="xs:string" />
+              <xs:element minOccurs="0" name="STATUS" type="xs:string" />
+              <xs:element minOccurs="0" name="ARRIVAL_TYPE" type="xs:string" />
+              <xs:element minOccurs="0" name="PORT" type="xs:string" />
+              <xs:element minOccurs="0" name="ARRIVAL_DATE_TIME" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="NET_WEIGHT" type="xs:int" />
+              <xs:element minOccurs="0" name="TARE_WEIGHT" type="xs:int" />
+              <xs:element minOccurs="0" name="MOVE_ACCUM" type="xs:int" />
+              <xs:element minOccurs="0" name="LAST_MV_DATE_TIME" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="DELV_ORD_DATE" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="PICKUP_DATE" type="xs:string" />
+              <xs:element minOccurs="0" name="RECD" type="xs:string" />
+              <xs:element minOccurs="0" name="STIN" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="STOT" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="SSOR" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="SSOP" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="CONSIGNEE" type="xs:string" />
+              <xs:element minOccurs="0" name="CONSIGNEE_CITY" type="xs:string" />
+              <xs:element minOccurs="0" name="CONSIGNEE_STATE" type="xs:string" />
+              <xs:element minOccurs="0" name="SHIPPER" type="xs:string" />
+              <xs:element minOccurs="0" name="SHIPPER_CITY" type="xs:string" />
+              <xs:element minOccurs="0" name="SHIPPER_STATE" type="xs:string" />
+              <xs:element minOccurs="0" name="DESCRIPTION" type="xs:string" />
+              <xs:element minOccurs="0" name="REMARKS" type="xs:string" />
+              <xs:element minOccurs="0" name="SEAL_NOW" type="xs:string" />
+              <xs:element minOccurs="0" name="SEAL_IN" type="xs:string" />
+              <xs:element minOccurs="0" name="TRRL" type="xs:string" />
+              <xs:element minOccurs="0" name="BOOKING_NO" type="xs:string" />
+              <xs:element minOccurs="0" name="CHASSIS" type="xs:string" />
+              <xs:element minOccurs="0" name="CHASSIS_IN" type="xs:string" />
+              <xs:element minOccurs="0" name="SIZE" type="xs:string" />
+              <xs:element minOccurs="0" name="HEIGHT" type="xs:string" />
+              <xs:element minOccurs="0" name="TYPE" type="xs:string" />
+              <xs:element minOccurs="0" name="CHASSIS_SIZE" type="xs:string" />
+              <xs:element minOccurs="0" name="OKTM" type="xs:string" />
+              <xs:element minOccurs="0" name="CUSTOMS_INSP" type="xs:string" />
+              <xs:element minOccurs="0" name="NOBO" type="xs:short" />
+              <xs:element minOccurs="0" name="BLSR" type="xs:short" />
+              <xs:element minOccurs="0" name="BCER" type="xs:short" />
+              <xs:element minOccurs="0" name="BUCR" type="xs:short" />
+              <xs:element minOccurs="0" name="PASS_DATE_TIME" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="PRO_NO" type="xs:string" />
+              <xs:element minOccurs="0" name="RAIL" type="xs:string" />
+              <xs:element minOccurs="0" name="UPDN" type="xs:short" />
+              <xs:element minOccurs="0" name="TERM_CODE" type="xs:string" />
+              <xs:element minOccurs="0" name="STOWAGE_LOC" type="xs:string" />
+              <xs:element minOccurs="0" name="POOL_CODE" type="xs:string" />
+              <xs:element minOccurs="0" name="BOLN" type="xs:string" />
+              <xs:element minOccurs="0" name="TIR" type="xs:string" />
+              <xs:element minOccurs="0" name="ARR_TERM" type="xs:string" />
+              <xs:element minOccurs="0" name="MR_CODE" type="xs:string" />
+              <xs:element minOccurs="0" name="FEEDER_PORT" type="xs:string" />
+              <xs:element minOccurs="0" name="SCALE_WGT" type="xs:int" />
+              <xs:element minOccurs="0" name="TRACTOR_TARE" type="xs:int" />
+              <xs:element minOccurs="0" name="INV_DATE_TIME" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="BUN_FLAG" type="xs:string" />
+              <xs:element minOccurs="0" name="BUN_DATE_TIME" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="CUSTOM_ENTRY" type="xs:string" />
+              <xs:element minOccurs="0" name="FUM_CODE" type="xs:string" />
+              <xs:element minOccurs="0" name="FUM_DATE_TIME" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="DO_REF_NO" type="xs:string" />
+              <xs:element minOccurs="0" name="HAZD_FLAG" type="xs:string" />
+              <xs:element minOccurs="0" name="UN_IMCODE" type="xs:string" />
+              <xs:element minOccurs="0" name="VESS_IN" type="xs:string" />
+              <xs:element minOccurs="0" name="VIP_NO" type="xs:string" />
+              <xs:element minOccurs="0" name="TERM_TO_TERM" type="xs:string" />
+              <xs:element minOccurs="0" name="BOOKED" type="xs:string" />
+              <xs:element minOccurs="0" name="TRAIN_NO" type="xs:string" />
+              <xs:element minOccurs="0" name="TRAIN_HUB" type="xs:string" />
+              <xs:element minOccurs="0" name="SENN" type="xs:string" />
+              <xs:element minOccurs="0" name="LDEV" type="xs:short" />
+              <xs:element minOccurs="0" name="TRN_DATE_TIME" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="DATE_BILLED" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="DATE_REPORTED" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="PARTY_CODES" type="xs:string" />
+              <xs:element minOccurs="0" name="USER_CODE" type="xs:string" />
+              <xs:element minOccurs="0" name="PROGRAM_NO" type="xs:string" />
+              <xs:element minOccurs="0" name="DEPART_DATE_TIME" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="NEW_REVNUE" type="xs:string" />
+              <xs:element minOccurs="0" name="TARF" type="xs:string" />
+              <xs:element minOccurs="0" name="MISC" type="xs:string" />
+              <xs:element minOccurs="0" name="PORTNO" type="xs:string" />
+              <xs:element minOccurs="0" name="EXPAND01" type="xs:string" />
+              <xs:element minOccurs="0" name="EXPAND02" type="xs:string" />
+              <xs:element minOccurs="0" name="SVC_DATE_TIME" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="PROGRAM_DESC" type="xs:string" />
+              <xs:element minOccurs="0" name="HREW" type="xs:string" />
+              <xs:element minOccurs="0" name="HLINK" type="xs:string" />
+              <xs:element msdata:AutoIncrement="true" name="ID" type="xs:int" />
+              <xs:element minOccurs="0" name="CHASTARE" type="xs:string" />
+              <xs:element minOccurs="0" name="CARRIERCHAS" type="xs:string" />
+              <xs:element minOccurs="0" name="SCAC" type="xs:string" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique msdata:PrimaryKey="true" name="ContainerInquiryHistoryKey1">
+      <xs:selector xpath=".//mstns:contHistOut" />
+      <xs:field xpath="mstns:ID" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>

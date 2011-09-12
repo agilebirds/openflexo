@@ -1,0 +1,289 @@
+<Panel className="org.openflexo.fib.editor.controller.FIBInspector"
+	name="Inspector" layout="border" dataClassName="org.openflexo.fib.model.FIBBrowser">
+	<Parameter name="title" value="Browser" />
+
+	<TabPanel name="Tab" constraints="border(location=center)">
+
+		<Tab name="BasicTab" title="Basic" index="0" layout="twocols" font="SansSerif,0,11" useScrollBar="true">
+
+			<Label label="root" constraints="twocols(location=left)"/>
+			<Custom data="data.root.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+				<Assignment variable="component.bindable" value="data"/>
+				<Assignment variable="component.bindingDefinition" value="data.rootBindingDefinition"/>
+			</Custom>
+		
+			<Label label="iterator_class" constraints="twocols(location=left)" />
+			<Custom data="data.iteratorClass" componentClassName="org.openflexo.fib.utils.ClassSelector" 
+					constraints="twocols(location=right;expandHorizontally=true)" 
+					columns="15"/>
+
+			<Label label="visible_row_count" constraints="twocols(location=left)" />
+			<Number numberType="IntegerType" data="data.visibleRowCount"
+				minValue="1" maxValue="100" increment="1" columns="3"
+				constraints="twocols(location=right)" />
+
+			<Label label="row_height" constraints="twocols(location=left)" />
+			<Number numberType="IntegerType" data="data.rowHeight"
+				minValue="5" maxValue="100" increment="1" columns="3"
+				constraints="twocols(location=right)" />
+
+			<CheckBox data="data.showFooter" constraints="twocols(location=left)"/>
+			<Label label="show_footer" constraints="twocols(location=right;expandHorizontally=true)"/>
+
+			<CheckBox data="data.rootVisible" constraints="twocols(location=left)"/>
+			<Label label="root_visible" constraints="twocols(location=right;expandHorizontally=true)"/>
+
+			<CheckBox data="data.showRootsHandle" constraints="twocols(location=left)"/>
+			<Label label="show_roots_handle" constraints="twocols(location=right;expandHorizontally=true)"/>
+
+		</Tab>
+		
+		<Tab name="AdvancedTab" title="Browser" index="1" layout="twocols" font="SansSerif,0,11" >
+
+					<Table name="ElementsTable" iteratorClassName="org.openflexo.fib.model.FIBBrowserElement"
+						data="data.elements"
+						constraints="twocols(location=center;expandHorizontally=true;expandVertically=true)"
+						visibleRowCount="8" rowHeight="18" font="SansSerif,0,11">
+						<IconColumn name="icon" data="iterator.imageIcon"
+							columnWidth="20" resizable="false" />
+						<TextFieldColumn name="name" data="iterator.name"
+							title="name" columnWidth="100" resizable="true" />
+						<LabelColumn name="class" data="iterator.dataClass"
+							title="class" columnWidth="200" resizable="true" />
+						<AddAction name="new_element" method="data.createElement()" />
+						<RemoveAction name="delete_element" method="data.deleteElement(selected)" />
+						<CustomAction name="move_to_top" method="data.moveToTop(selected)" available="((selected != null) &amp; (selected.index > 0))"/>
+						<CustomAction name="move_up" method="data.moveUp(selected)"  available="((selected != null) &amp; (selected.index > 0))"/>
+						<CustomAction name="move_down" method="data.moveDown(selected)"  available="((selected != null) &amp; (selected.index > 0))"/>
+						<CustomAction name="move_to_bottom" method="data.moveToBottom(selected)"  available="((selected != null) &amp; (selected.index > 0))"/>
+					</Table>
+
+				<TabPanel name="ElementDetailsPanel" 
+						dataClassName="org.openflexo.fib.model.FIBBrowserElement"
+						data="ElementsTable.selected"
+						constraints="twocols(location=center;expandHorizontally=true;expandVertically=true)"
+						font="SansSerif,0,12"
+						visible="ElementsTable.selected != null">
+
+				<Tab name="DetailsBasicTab" title="Basic" index="0" layout="twocols" font="SansSerif,0,11">
+
+						<Label label="name" constraints="twocols(location=left)" />
+						<TextField data="ElementsTable.selected.name"
+						    		constraints="twocols(location=right;expandHorizontally=true)"
+									columns="15" />
+				
+						<Label label="class_name" constraints="twocols(location=left)" />
+						<Custom data="ElementsTable.selected.dataClass" componentClassName="org.openflexo.fib.utils.ClassSelector" 
+								constraints="twocols(location=right;expandHorizontally=true)" 
+								columns="15"/>
+
+
+						<Label label="label" constraints="twocols(location=left)"/>
+						<Custom data="ElementsTable.selected.label.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+							<Assignment variable="component.bindable" value="ElementsTable.selected.iterator"/>
+							<Assignment variable="component.bindingDefinition" value="ElementsTable.selected.LABEL"/>
+						</Custom>
+
+						<Label label="icon" constraints="twocols(location=left)"/>
+						<Custom data="ElementsTable.selected.icon.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+							<Assignment variable="component.bindable" value="ElementsTable.selected.iterator"/>
+							<Assignment variable="component.bindingDefinition" value="ElementsTable.selected.ICON"/>
+						</Custom>
+
+						<Label label="icon_file" constraints="twocols(location=left)" />
+						<File data="ElementsTable.selected.imageIconFile"
+									constraints="twocols(location=right;expandHorizontally=true)" 
+									mode="OpenMode"/>
+									
+				</Tab>
+
+				<Tab name="DetailsAdvancedTab" title="Advanced" index="1" layout="twocols" font="SansSerif,0,11">
+
+						<Label label="tooltip" constraints="twocols(location=left)"/>
+						<Custom data="ElementsTable.selected.tooltip.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+							<Assignment variable="component.bindable" value="ElementsTable.selected.iterator"/>
+							<Assignment variable="component.bindingDefinition" value="ElementsTable.selected.TOOLTIP"/>
+						</Custom>
+
+						<Label label="enabled" constraints="twocols(location=left)"/>
+						<Custom data="ElementsTable.selected.enabled.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+							<Assignment variable="component.bindable" value="ElementsTable.selected.iterator"/>
+							<Assignment variable="component.bindingDefinition" value="ElementsTable.selected.ENABLED"/>
+						</Custom>
+
+						<Label label="visible" constraints="twocols(location=left)"/>
+						<Custom data="ElementsTable.selected.visible.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+							<Assignment variable="component.bindable" value="ElementsTable.selected.iterator"/>
+							<Assignment variable="component.bindingDefinition" value="ElementsTable.selected.VISIBLE"/>
+						</Custom>
+
+						<Label label="is_label_editable" constraints="twocols(location=left)" />
+						<Panel layout="border" constraints="twocols(location=right;expandHorizontally=true)">
+							<CheckBox data="ElementsTable.selected.isEditable" constraints="border(location=west)"/>
+							<Custom data="ElementsTable.selected.editableLabel.binding" visible="ElementsTable.selected.isEditable" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="border(location=center)" columns="15">
+								<Assignment variable="component.bindable" value="ElementsTable.selected.iterator"/>
+								<Assignment variable="component.bindingDefinition" value="ElementsTable.selected.EDITABLE_LABEL"/>
+							</Custom>
+						</Panel>
+						
+						<Label label="filtered" constraints="twocols(location=left)" />
+						<Panel layout="flow" hGap="5" vGap="0" constraints="twocols(location=right;expandHorizontally=true)">
+							<CheckBox data="ElementsTable.selected.filtered"/>
+							<Label label="visible_at_start_up" visible="ElementsTable.selected.filtered" />
+							<CheckBox data="ElementsTable.selected.defaultVisible" visible="ElementsTable.selected.filtered"/>
+						</Panel>
+
+						<Label label="use_specific_font" constraints="twocols(location=left)" />
+						<Panel layout="flow" hGap="5" vGap="0" constraints="twocols(location=right;expandHorizontally=true)">
+							<CheckBox data="ElementsTable.selected.hasSpecificFont"/>
+							<Font data="ElementsTable.selected.font" visible="ElementsTable.selected.hasSpecificFont"/>
+						</Panel>
+
+				</Tab>
+
+				<Tab name="ChildrenTab" title="Children" index="2" layout="border" font="SansSerif,0,11" >
+
+				<Table name="ChildrenTable" iteratorClassName="org.openflexo.fib.model.FIBBrowserElement$FIBBrowserElementChildren"
+						data="ElementsTable.selected.children"
+						constraints="border(location=center)"
+						visibleRowCount="4" rowHeight="18" font="SansSerif,0,11">
+						<IconColumn name="icon" data="iterator.imageIcon"
+							columnWidth="20" resizable="false" />
+						<TextFieldColumn name="name" data="iterator.name"
+							title="name" columnWidth="100" resizable="true" />
+						<CustomColumn name="data" title="data"
+							data="iterator.data.binding" 
+							componentClassName="org.openflexo.fib.utils.BindingSelector"
+							columnWidth="200">
+							<ColumnAssignment variable="component.bindable"
+								value="iterator.browserElement.iterator" />
+							<ColumnAssignment variable="component.bindingDefinition"
+								value="iterator.DATA" />
+						</CustomColumn>
+						<CustomColumn name="visible" title="visible"
+							data="iterator.visible.binding" 
+							componentClassName="org.openflexo.fib.utils.BindingSelector"
+							columnWidth="200">
+							<ColumnAssignment variable="component.bindable"
+								value="iterator.browserElement.iterator" />
+							<ColumnAssignment variable="component.bindingDefinition"
+								value="iterator.VISIBLE" />
+						</CustomColumn>
+						<AddAction name="new_children" method="ElementsTable.selected.createChildren()" />
+						<RemoveAction name="delete_children" method="ElementsTable.selected.deleteChildren(selected)" />
+						<CustomAction name="move_to_top" method="ElementsTable.selected.moveToTop(selected)" available="((selected != null) &amp; (selected.index > 0))"/>
+						<CustomAction name="move_up" method="ElementsTable.selected.moveUp(selected)"  available="((selected != null) &amp; (selected.index > 0))"/>
+						<CustomAction name="move_down" method="ElementsTable.selected.moveDown(selected)"  available="((selected != null) &amp; (selected.index > 0))"/>
+						<CustomAction name="move_to_bottom" method="ElementsTable.selected.moveToBottom(selected)"  available="((selected != null) &amp; (selected.index > 0))"/>
+					</Table>
+
+				</Tab>
+
+				<Tab name="ActionTab" title="Actions" index="3" layout="border" font="SansSerif,0,11" >
+				
+					<Table name="ActionsTable" iteratorClassName="org.openflexo.fib.model.FIBBrowserAction"
+						data="ElementsTable.selected.actions"
+						constraints="border(location=center)"
+						visibleRowCount="5" rowHeight="18" font="SansSerif,0,11">
+						<TextFieldColumn name="name" data="iterator.name"
+							title="action" columnWidth="200" resizable="true" />
+						<LabelColumn name="type" data="iterator.actionType"
+							title="type" columnWidth="80" resizable="true" />
+						<CustomColumn name="visibleValue" title="method"
+							data="iterator.method.binding" componentClassName="org.openflexo.fib.utils.BindingSelector"
+							columnWidth="300" constraints="twocols(location=right;expandHorizontally=true)"
+							columns="15">
+							<ColumnAssignment variable="component.bindable"
+								value="iterator" />
+							<ColumnAssignment variable="component.bindingDefinition"
+								value="iterator.METHOD" />
+						</CustomColumn>
+						<CustomColumn name="visibleValue" title="available"
+							data="iterator.isAvailable.binding" componentClassName="org.openflexo.fib.utils.BindingSelector"
+							columnWidth="300" constraints="twocols(location=right;expandHorizontally=true)"
+							columns="15">
+							<ColumnAssignment variable="component.bindable"
+								value="iterator" />
+							<ColumnAssignment variable="component.bindingDefinition"
+								value="iterator.IS_AVAILABLE" />
+						</CustomColumn>
+						<AddAction name="new_add_action" method="ElementsTable.selected.createAddAction()" />
+						<AddAction name="new_remove_action" method="ElementsTable.selected.createRemoveAction()" />
+						<AddAction name="new_custom_action" method="ElementsTable.selected.createCustomAction()" />
+						<RemoveAction name="delete_action" method="ElementsTable.selected.deleteAction(selected)" />
+					</Table>
+					
+				</Tab>
+
+	</TabPanel>
+
+
+		</Tab>
+
+		<!-- <Tab name="AdvancedTab" title="Advanced" index="2" layout="twocols" font="SansSerif,0,11" >
+
+
+
+			<Label label="text_selection_color" constraints="twocols(location=left)" />
+			<Color data="data.textSelectionColor" constraints="twocols(location=right)" />
+
+			<Label label="text_non_selectionColor" constraints="twocols(location=left)" />
+			<Color data="data.textNonSelectionColor" constraints="twocols(location=right)" />
+
+			<Label label="bg_selection_color" constraints="twocols(location=left)" />
+			<Color data="data.backgroundSelectionColor" constraints="twocols(location=right)" />
+
+			<Label label="bg_sec_selection_color" constraints="twocols(location=left)" />
+			<Color data="data.backgroundSecondarySelectionColor" constraints="twocols(location=right)" />
+
+			<Label label="bg_non_selection_color" constraints="twocols(location=left)" />
+			<Color data="data.backgroundNonSelectionColor" constraints="twocols(location=right)" />
+
+			<Label label="border_selection_color" constraints="twocols(location=left)" />
+			<Color data="data.borderSelectionColor" constraints="twocols(location=right)" />
+
+ 		</Tab> -->
+
+		<Tab name="ControlsTab" title="Controls" index="2" layout="twocols" font="SansSerif,0,11" >
+
+			<Label label="selected" constraints="twocols(location=left)"/>
+			<Custom data="data.selected.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
+				<Assignment variable="component.bindable" value="data"/>
+				<Assignment variable="component.bindingDefinition" value="data.selectedBindingDefinition"/>
+			</Custom>
+				
+			<CheckBox data="data.boundToSelectionManager" constraints="twocols(location=left)" />
+			<Label label="bound_to_selection_manager" constraints="twocols(location=right)" />
+
+			<Label label="selectionMode" constraints="twocols(location=left)" />
+			<DropDown data="data.selectionMode" showReset="false" constraints="twocols(location=right)" />
+
+		</Tab>
+			
+		<Tab name="LayoutTab" title="Layout" index="3" layout="twocols" font="SansSerif,0,11" >
+		</Tab>
+			
+		<Tab name="GraphicsTab" title="Graphics" index="4" layout="twocols" font="SansSerif,0,11" >
+
+  		   <Panel layout="border" border="titled" borderTitle="browser_colors" constraints="twocols(location=center;index=0;expandHorizontally=true;expandVertically=false)">
+   		     <Panel layout="gridbag" hGap="5" vGap="5" cols="2" rows="3" borderTitle="Panel" constraints="border(location=center)">
+    		      <Label label="bg_selection_color" align="right" localize="true" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=0;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=horizontal)" />
+        		  <Color data="data.backgroundSelectionColor" constraints="gridbag(insetsLeft=5;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=1;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true" />
+        		  <Label label="text_selection_color" align="right" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=2;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=horizontal)" />
+        	      <Color data="data.textSelectionColor" constraints="gridbag(insetsLeft=5;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=3;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true" />
+        		  <Label label="bg_sec_selection_color" align="right" localize="true" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=4;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=horizontal)" />
+           		  <Color data="data.backgroundSecondarySelectionColor" constraints="gridbag(insetsLeft=5;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=5;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true" />
+       		      <Label label="text_non_selectionColor" align="right" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=6;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=horizontal)" />
+        		  <Color data="data.textNonSelectionColor" constraints="gridbag(insetsLeft=5;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=7;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true" />
+        		  <Label label="bg_non_selection_color" align="right" localize="true" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=8;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=horizontal)" />
+        		  <Color data="data.backgroundNonSelectionColor" constraints="gridbag(insetsLeft=5;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=9;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true" />
+        		  <Label label="border_selection_color" align="right" localize="true" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=10;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=horizontal)" />
+        		  <Color data="data.borderSelectionColor" constraints="gridbag(insetsLeft=5;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=11;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true" />
+       		 </Panel>
+    	  </Panel>
+
+		</Tab>
+
+	</TabPanel>
+
+</Panel>

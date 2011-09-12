@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="gridbag" dataClassName="org.openflexo.foundation.sg.implmodel.ImplementationModel" width="800" height="750" name="main">
+  <Panel layout="border" border="titled" borderTitle="Technology modules" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=1;insetsTop=14;insetsBottom=15;weightY=1.0;weightX=1.0;fill=both)" width="80" height="60">
+    <Table iteratorClassName="org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="true" selectionMode="MultipleIntervalSelection" data="data.technologyModules" constraints="border(location=center;index=0)" localize="true" manageDynamicModel="true">
+      <LabelColumn data="iterator.technologyModuleDefinition.technologyLayer" title="Layer" columnWidth="100" resizable="true" displayTitle="true" name="label" />
+      <LabelColumn data="iterator.technologyModuleDefinition.name" title="Name" columnWidth="100" resizable="true" displayTitle="true" name="label" />
+      <RemoveAction method="selected.delete()" name="delete_action" />
+      <AddAction method="controller.performAddTechnologyModule()" name="add_action" />
+      <LocalizedDictionary />
+    </Table>
+  </Panel>
+  <LocalizedDictionary>
+    <Localized key="bl_layer_description" lang="French">bl_layer_description</Localized>
+    <Localized key="bl_layer_description" lang="English">&lt;html&gt;In this layer is encoded all the &lt;br&gt;business logic defined for the&lt;br&gt;modelized application&lt;/html&gt;</Localized>
+    <Localized key="business_logic_layer" lang="English">Business Logic layer</Localized>
+    <Localized key="dao_layer" lang="English">DAO layer</Localized>
+    <Localized key="database_layer" lang="English">Database layer</Localized>
+    <Localized key="gui_layer" lang="English">GUI layer</Localized>
+    <Localized key="gui_top_layer" lang="English">GUI top layer</Localized>
+    <Localized key="implementation_model" lang="English">Implementation model</Localized>
+    <Localized key="orm_layer" lang="English">ORM layer</Localized>
+    <Localized key="orm_layer_description" lang="English">&lt;html&gt;Provides object-relational&lt;br&gt;mapping technology&lt;/html&gt;</Localized>
+    <Localized key="login" lang="English">Login</Localized>
+    <Localized key="login" lang="French">Identifiant</Localized>
+    <Localized key="login" lang="Dutch">Login</Localized>
+    <Localized key="gui_top_layer_description" lang="English">&lt;html&gt;Provides top-level interactive&lt;br&gt;component technology&lt;/html&gt;</Localized>
+    <Localized key="login_technology" lang="English">Login technology</Localized>
+    <Localized key="programming_language" lang="English">Programming language</Localized>
+    <Localized key="security_technology" lang="English">Security technology</Localized>
+    <Localized key="transaction_technology" lang="English">Transaction technology</Localized>
+    <Localized key="transaction_technology" lang="French">Transaction technology</Localized>
+    <Localized key="security_technology" lang="French">Security technology</Localized>
+    <Localized key="container_technology" lang="French">Container technology</Localized>
+    <Localized key="container_technology" lang="English">Container technology</Localized>
+    <Localized key="dao_layer_description" lang="English">&lt;html&gt;This layer implements data&lt;br&gt;access object&lt;/html&gt;</Localized>
+    <Localized key="db_layer_description" lang="English">Built-in database technology</Localized>
+    <Localized key="gui_layer_description" lang="English">&lt;html&gt;This layer defines which Graphical&lt;br&gt;User Interface technology to use&lt;/html&gt;</Localized>
+    <Localized key="implementation_model" lang="French">Modèle d'implémentation</Localized>
+    <Localized key="implementation_model" lang="Dutch">Implementation Model</Localized>
+    <Localized key="localization" lang="French">Localisation</Localized>
+    <Localized key="localization" lang="English">Localization</Localized>
+  </LocalizedDictionary>
+  <Parameter name="controllerClassName" value="org.openflexo.sgmodule.view.ImplementationModelFibController" />
+</Panel>
+

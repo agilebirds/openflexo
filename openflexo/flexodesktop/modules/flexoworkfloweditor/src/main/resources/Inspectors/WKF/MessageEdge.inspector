@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.edge.MessageEdge" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="3" title="Data" layout="twocols" font="SansSerif,0,11" name="DataTab">
+      <Label label="has_output_message" localize="true" name="HasOutputMessageLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" visible="false" />
+      <CheckBox selected="false" localize="true" name="HasOutputMessage" data="data.hasOutputMessage" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" visible="false" />
+      <Label label="has_input_message" localize="true" name="HasInputMessageLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" visible="false" />
+      <CheckBox selected="false" localize="true" name="HasInputMessage" data="data.hasInputMessage" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" visible="false" />
+      <Label label="input_message" localize="true" name="InputMessagenameLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" visible="(data.hasInputMessage = true)" />
+      <TextField validateOnReturn="true" columns="10" passwd="false" readOnly="true" localize="true" name="InputMessagename" data="data.inputMessage.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" visible="(data.hasInputMessage = true)">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+      </TextField>
+      <Table iteratorClassName="org.openflexo.foundation.wkf.ws.MessageEntryBinding" visibleRowCount="4" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.inputMessage.bindings" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=true)" visible="(data.hasInputMessage = true)" name="InputMessagebindings" localize="true" manageDynamicModel="true">
+        <TextFieldColumn data="iterator.bindingDefinition.variableName" title="name" columnWidth="80" resizable="true" displayTitle="true" />
+        <CustomColumn componentClassName="org.openflexo.components.widget.DMTypeSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.bindingDefinition.type" format="object.simplifiedStringRepresentation" title="type" columnWidth="80" resizable="true" displayTitle="true">
+          <ColumnAssignment variable="component.owner" value="iterator" />
+        </CustomColumn>
+        <CheckBoxColumn data="iterator.bindingDefinition.isMandatory" title="mandatory" columnWidth="30" resizable="true" displayTitle="true" />
+        <CustomColumn componentClassName="org.openflexo.components.widget.binding.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.bindingValue" format="object.stringRepresentation" title="value" columnWidth="150" resizable="true" displayTitle="true">
+          <ColumnAssignment variable="component.bindingDefinition" value="iterator.bindingDefinition" />
+          <ColumnAssignment variable="component.bindable" value="iterator" />
+        </CustomColumn>
+        <AddAction method="data.inputMessage.createNewBinding" name="new" />
+        <RemoveAction method="data.inputMessage.deleteBinding(selected)" isAvailable="data.inputMessage.isBindingDeletable(selected)" name="delete" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+      </Table>
+      <Label label="output_message" localize="true" name="OutputMessagenameLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" visible="(data.hasOutputMessage = true)" />
+      <TextField validateOnReturn="true" columns="10" passwd="false" readOnly="true" localize="true" name="OutputMessagename" data="data.outputMessage.name" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" visible="(data.hasOutputMessage = true)">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+      </TextField>
+      <Table iteratorClassName="org.openflexo.foundation.wkf.ws.MessageEntryBinding" visibleRowCount="4" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.outputMessage.bindings" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=true)" visible="(data.hasOutputMessage = true)" name="OutputMessagebindings" localize="true" manageDynamicModel="true">
+        <TextFieldColumn data="iterator.bindingDefinition.variableName" title="name" columnWidth="80" resizable="true" displayTitle="true" />
+        <CustomColumn componentClassName="org.openflexo.components.widget.DMTypeSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.bindingDefinition.type" format="object.name" title="type" columnWidth="80" resizable="true" displayTitle="true">
+          <ColumnAssignment variable="component.owner" value="iterator" />
+        </CustomColumn>
+        <CheckBoxColumn data="iterator.bindingDefinition.isMandatory" title="mandatory" columnWidth="30" resizable="true" displayTitle="true" />
+        <CustomColumn componentClassName="org.openflexo.components.widget.binding.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.bindingValue" format="object.stringRepresentation" title="value" columnWidth="150" resizable="true" displayTitle="true">
+          <ColumnAssignment variable="component.bindingDefinition" value="iterator.bindingDefinition" />
+          <ColumnAssignment variable="component.bindable" value="iterator" />
+        </CustomColumn>
+        <AddAction method="data.outputMessage.createNewBinding" name="new" />
+        <RemoveAction method="data.outputMessage.deleteBinding(selected)" isAvailable="data.outputMessage.isBindingDeletable(selected)" name="delete" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+      </Table>
+    </Tab>
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab" />
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Data" lang="French">Donnée</Localized>
+    <Localized key="has_output_message" lang="English">Has output message</Localized>
+    <Localized key="has_output_message" lang="French">Envoie un message</Localized>
+    <Localized key="has_output_message" lang="Dutch">Has output message</Localized>
+    <Localized key="has_input_message" lang="English">Has input message</Localized>
+    <Localized key="has_input_message" lang="French">Reçoit un message</Localized>
+    <Localized key="has_input_message" lang="Dutch">Has input message</Localized>
+    <Localized key="input_message" lang="English">Input message</Localized>
+    <Localized key="input_message" lang="French">Message d'entrée</Localized>
+    <Localized key="input_message" lang="Dutch">Input message</Localized>
+    <Localized key="output_message" lang="English">Output message</Localized>
+    <Localized key="output_message" lang="French">Message de sortie</Localized>
+    <Localized key="output_message" lang="Dutch">Output message</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Message edge" />
+</Panel>
+

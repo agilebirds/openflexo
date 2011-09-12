@@ -1,0 +1,17 @@
+#tooltipAsJavaMethod()
+
+#if($widget.isInPopup())
+    public String idFor#capName()()
+    {
+        #if(${widget.isInRepetition()})
+            return "#name()" + uniqueIdentifierForName() + ${widget.getHTMLListDescriptor().getIndexName()};
+        #else
+            return "#name()" + uniqueIdentifierForName();
+        #end
+    }
+#elseif(${widget.isInRepetition()})
+    public String idFor#capName()()
+    {
+        return "#name()" + ${widget.getHTMLListDescriptor().getIndexName()};
+    }
+#end

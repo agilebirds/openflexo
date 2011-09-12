@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project id="SYL_468" name="TestRoles" cssSheet="NewContento" lastUniqueID="131962" targetType="PROTOTYPE" creationDate="HH:mm:ss dd/MM/yyyy SSS,15:39:18 15/04/2008 936" creationUserId="SYL" projectDateFormat="%d/%m/%y" userID="SYL" flexoID="468" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+  <resourcesCount>30</resourcesCount>
+  No description
+  <ComponentLibrary id="SYL_COMPONENT_LIBRARY.TestRoles" file="TestRoles.wolib" userID="SYL" version="2.3">
+    <DependantResources id="SYL_COMPONENT_LIBRARY.TestRoles_DR" />
+    <SynchronizedResources id="SYL_COMPONENT_LIBRARY.TestRoles_SR">
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </ComponentLibrary>
+  <DataModel id="SYL_DATA_MODEL.TestRoles" version="2.7" userID="SYL" file="DataModel/TestRoles.dm">
+    <DependantResources id="SYL_DATA_MODEL.TestRoles_DR">
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+      <JAR idref="SYL_JAR.JavaEOControl.jar" />
+      <JAR idref="SYL_JAR.JavaWebObjects.jar" />
+      <JAR idref="SYL_JAR.DenaliResourcesAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.DenaliLanguageServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliMailServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliFileMimeTypeServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliLocalizationServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliExceptionServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliConfigServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliRoleServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliUserInCookieServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliUserServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliCore.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_DATA_MODEL.TestRoles_SR">
+      <RMResource idref="SYL_RM.TestRoles" />
+      <EOModel idref="SYL_EOMODEL.EOPrototypes.eomodeld" />
+      <EOModel idref="SYL_EOMODEL.FlexoExecutionModel.eomodeld" />
+    </SynchronizedResources>
+  </DataModel>
+  <DomainKeyValue id="SYL_DOMAIN_KEY_VALUE.TestRoles" file="DomainKeyValue/TestRoles.dkv" userID="SYL" version="0.2">
+    <DependantResources id="SYL_DOMAIN_KEY_VALUE.TestRoles_DR" />
+    <SynchronizedResources id="SYL_DOMAIN_KEY_VALUE.TestRoles_SR">
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </DomainKeyValue>
+  <EOModel id="SYL_EOMODEL.EOPrototypes.eomodeld" userID="SYL" file="DataModel/EOPrototypes.eomodeld">
+    <DependantResources id="SYL_EOMODEL.EOPrototypes.eomodeld_DR" />
+    <SynchronizedResources id="SYL_EOMODEL.EOPrototypes.eomodeld_SR">
+      <DataModel idref="SYL_DATA_MODEL.TestRoles" />
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </EOModel>
+  <EOModel id="SYL_EOMODEL.FlexoExecutionModel.eomodeld" userID="SYL" file="DataModel/FlexoExecutionModel.eomodeld">
+    <DependantResources id="SYL_EOMODEL.FlexoExecutionModel.eomodeld_DR" />
+    <SynchronizedResources id="SYL_EOMODEL.FlexoExecutionModel.eomodeld_SR">
+      <DataModel idref="SYL_DATA_MODEL.TestRoles" />
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </EOModel>
+  <GeneratedDoc id="SYL_GENERATED_DOC.TestRoles" file="Documentation/TestRoles.dg" userID="SYL" version="0.1">
+    <DependantResources id="SYL_GENERATED_DOC.TestRoles_DR" />
+    <SynchronizedResources id="SYL_GENERATED_DOC.TestRoles_SR">
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </GeneratedDoc>
+  <JAR id="SYL_JAR.DenaliConfigServiceAPI.jar" file="DataModel/DenaliConfigServiceAPI.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:43:17 17/04/2008 851">
+    <DependantResources id="SYL_JAR.DenaliConfigServiceAPI.jar_DR">
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliConfigServiceAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliCore.jar" file="DataModel/DenaliCore.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:43:17 17/04/2008 984">
+    <DependantResources id="SYL_JAR.DenaliCore.jar_DR">
+      <JAR idref="SYL_JAR.JavaWebObjects.jar" />
+      <JAR idref="SYL_JAR.DenaliExceptionServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliLanguageServiceAPI.jar" />
+      <JAR idref="SYL_JAR.JavaEOControl.jar" />
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.DenaliConfigServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliMailServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliLocalizationServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliFileMimeTypeServiceAPI.jar" />
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+      <JAR idref="SYL_JAR.DenaliResourcesAPI.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliCore.jar_SR">
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliExceptionServiceAPI.jar" file="DataModel/DenaliExceptionServiceAPI.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:43:17 17/04/2008 846">
+    <DependantResources id="SYL_JAR.DenaliExceptionServiceAPI.jar_DR">
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.JavaWebObjects.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliExceptionServiceAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliFileMimeTypeServiceAPI.jar" file="DataModel/DenaliFileMimeTypeServiceAPI.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:43:17 17/04/2008 301">
+    <DependantResources id="SYL_JAR.DenaliFileMimeTypeServiceAPI.jar_DR">
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+      <JAR idref="SYL_JAR.JavaWebObjects.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliFileMimeTypeServiceAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliLanguageServiceAPI.jar" file="DataModel/DenaliLanguageServiceAPI.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:43:17 17/04/2008 083">
+    <DependantResources id="SYL_JAR.DenaliLanguageServiceAPI.jar_DR">
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliLanguageServiceAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliLocalizationServiceAPI.jar" file="DataModel/DenaliLocalizationServiceAPI.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:43:17 17/04/2008 840">
+    <DependantResources id="SYL_JAR.DenaliLocalizationServiceAPI.jar_DR">
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliLocalizationServiceAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliMailServiceAPI.jar" file="DataModel/DenaliMailServiceAPI.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:43:17 17/04/2008 297">
+    <DependantResources id="SYL_JAR.DenaliMailServiceAPI.jar_DR">
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliMailServiceAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliResourcesAPI.jar" file="DataModel/DenaliResourcesAPI.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:43:17 17/04/2008 999">
+    <DependantResources id="SYL_JAR.DenaliResourcesAPI.jar_DR">
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliResourcesAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliRoleServiceAPI.jar" file="DataModel/DenaliRoleServiceAPI.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,15:39:23 15/04/2008 619">
+    <DependantResources id="SYL_JAR.DenaliRoleServiceAPI.jar_DR">
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliRoleServiceAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliServiceManager.jar" file="DataModel/DenaliServiceManager.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:43:17 17/04/2008 081">
+    <DependantResources id="SYL_JAR.DenaliServiceManager.jar_DR" />
+    <SynchronizedResources id="SYL_JAR.DenaliServiceManager.jar_SR">
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliUserInCookieServiceAPI.jar" file="DataModel/DenaliUserInCookieServiceAPI.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,15:39:23 15/04/2008 651">
+    <DependantResources id="SYL_JAR.DenaliUserInCookieServiceAPI.jar_DR">
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.DenaliResourcesAPI.jar" />
+      <JAR idref="SYL_JAR.JavaWebObjects.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliUserInCookieServiceAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.DenaliUserServiceAPI.jar" file="DataModel/DenaliUserServiceAPI.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,15:39:23 15/04/2008 688">
+    <DependantResources id="SYL_JAR.DenaliUserServiceAPI.jar_DR">
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.JavaEOControl.jar" />
+      <JAR idref="SYL_JAR.DenaliResourcesAPI.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.DenaliUserServiceAPI.jar_SR">
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.JavaEOControl.jar" file="DataModel/JavaEOControl.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:43:17 17/04/2008 641">
+    <DependantResources id="SYL_JAR.JavaEOControl.jar_DR">
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.JavaEOControl.jar_SR">
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.JavaFoundation.jar" file="DataModel/JavaFoundation.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:43:17 17/04/2008 291">
+    <DependantResources id="SYL_JAR.JavaFoundation.jar_DR" />
+    <SynchronizedResources id="SYL_JAR.JavaFoundation.jar_SR">
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </JAR>
+  <JAR id="SYL_JAR.JavaWebObjects.jar" file="DataModel/JavaWebObjects.jar" userID="SYL" lastImportDate="HH:mm:ss dd/MM/yyyy SSS,10:43:17 17/04/2008 832">
+    <DependantResources id="SYL_JAR.JavaWebObjects.jar_DR">
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+      <JAR idref="SYL_JAR.JavaEOControl.jar" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_JAR.JavaWebObjects.jar_SR">
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </JAR>
+  <NavigationMenu id="SYL_NAVIGATION_MENU.TestRoles" file="TestRoles.menu" userID="SYL" version="2.2">
+    <DependantResources id="SYL_NAVIGATION_MENU.TestRoles_DR" />
+    <SynchronizedResources id="SYL_NAVIGATION_MENU.TestRoles_SR">
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </NavigationMenu>
+  <Process id="SYL_PROCESS.BioEmergence" name="BioEmergence" file="Workflow/BioEmergence.xml" userID="SYL" version="4.0">
+    <DependantResources id="SYL_PROCESS.BioEmergence_DR">
+      <DataModel idref="SYL_DATA_MODEL.TestRoles" />
+      <ComponentLibrary idref="SYL_COMPONENT_LIBRARY.TestRoles" />
+      <Process idref="SYL_PROCESS.NewProcess" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_PROCESS.BioEmergence_SR">
+      <Workflow idref="SYL_WORKFLOW.TestRoles" />
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </Process>
+  <Process id="SYL_PROCESS.NewProcess" name="NewProcess" file="Workflow/NewProcess.xml" userID="SYL" version="4.0">
+    <DependantResources id="SYL_PROCESS.NewProcess_DR">
+      <DataModel idref="SYL_DATA_MODEL.TestRoles" />
+      <ComponentLibrary idref="SYL_COMPONENT_LIBRARY.TestRoles" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_PROCESS.NewProcess_SR">
+      <Workflow idref="SYL_WORKFLOW.TestRoles" />
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </Process>
+  <Process id="SYL_PROCESS.PhoneCall" name="PhoneCall" file="Workflow/PhoneCall.xml" userID="SYL" version="4.0">
+    <DependantResources id="SYL_PROCESS.PhoneCall_DR">
+      <DataModel idref="SYL_DATA_MODEL.TestRoles" />
+      <ComponentLibrary idref="SYL_COMPONENT_LIBRARY.TestRoles" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_PROCESS.PhoneCall_SR">
+      <Workflow idref="SYL_WORKFLOW.TestRoles" />
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </Process>
+  <Process id="SYL_PROCESS.Standardiste" name="Standardiste" file="Workflow/Standardiste.xml" userID="SYL" version="4.0">
+    <DependantResources id="SYL_PROCESS.Standardiste_DR">
+      <DataModel idref="SYL_DATA_MODEL.TestRoles" />
+      <ComponentLibrary idref="SYL_COMPONENT_LIBRARY.TestRoles" />
+      <Process idref="SYL_PROCESS.PhoneCall" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_PROCESS.Standardiste_SR">
+      <Workflow idref="SYL_WORKFLOW.TestRoles" />
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </Process>
+  <Process id="SYL_PROCESS.TestRoles" name="TestRoles" file="Workflow/TestRoles.xml" userID="SYL" version="4.0">
+    <DependantResources id="SYL_PROCESS.TestRoles_DR">
+      <DataModel idref="SYL_DATA_MODEL.TestRoles" />
+      <ComponentLibrary idref="SYL_COMPONENT_LIBRARY.TestRoles" />
+    </DependantResources>
+    <SynchronizedResources id="SYL_PROCESS.TestRoles_SR">
+      <Workflow idref="SYL_WORKFLOW.TestRoles" />
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </Process>
+  <RMResource id="SYL_RM.TestRoles" file="TestRoles.rmxml" userID="SYL" version="3.5">
+    <DependantResources id="SYL_RM.TestRoles_DR" />
+    <SynchronizedResources id="SYL_RM.TestRoles_SR">
+      <RMResource idref="SYL_RM.TestRoles" />
+      <DataModel idref="SYL_DATA_MODEL.TestRoles" />
+      <JAR idref="SYL_JAR.JavaFoundation.jar" />
+      <JAR idref="SYL_JAR.JavaEOControl.jar" />
+      <JAR idref="SYL_JAR.JavaWebObjects.jar" />
+      <JAR idref="SYL_JAR.DenaliResourcesAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliServiceManager.jar" />
+      <JAR idref="SYL_JAR.DenaliLanguageServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliMailServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliFileMimeTypeServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliLocalizationServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliExceptionServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliConfigServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliRoleServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliUserInCookieServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliUserServiceAPI.jar" />
+      <JAR idref="SYL_JAR.DenaliCore.jar" />
+      <EOModel idref="SYL_EOMODEL.EOPrototypes.eomodeld" />
+      <EOModel idref="SYL_EOMODEL.FlexoExecutionModel.eomodeld" />
+      <Workflow idref="SYL_WORKFLOW.TestRoles" />
+      <ComponentLibrary idref="SYL_COMPONENT_LIBRARY.TestRoles" />
+      <Process idref="SYL_PROCESS.TestRoles" />
+      <NavigationMenu idref="SYL_NAVIGATION_MENU.TestRoles" />
+      <DomainKeyValue idref="SYL_DOMAIN_KEY_VALUE.TestRoles" />
+      <GeneratedDoc idref="SYL_GENERATED_DOC.TestRoles" />
+      <TOCResource idref="SYL_TOC_RESOURCE.TestRoles" />
+      <Process idref="SYL_PROCESS.BioEmergence" />
+      <Process idref="SYL_PROCESS.NewProcess" />
+      <Process idref="SYL_PROCESS.Standardiste" />
+      <Process idref="SYL_PROCESS.PhoneCall" />
+    </SynchronizedResources>
+  </RMResource>
+  <TOCResource id="SYL_TOC_RESOURCE.TestRoles" file="Documentation/TestRoles.toc" userID="SYL" version="0.1">
+    <DependantResources id="SYL_TOC_RESOURCE.TestRoles_DR" />
+    <SynchronizedResources id="SYL_TOC_RESOURCE.TestRoles_SR">
+      <RMResource idref="SYL_RM.TestRoles" />
+    </SynchronizedResources>
+  </TOCResource>
+  <Workflow id="SYL_WORKFLOW.TestRoles" version="2.0" userID="SYL" file="Workflow/TestRoles.wkf">
+    <DependantResources id="SYL_WORKFLOW.TestRoles_DR" />
+    <SynchronizedResources id="SYL_WORKFLOW.TestRoles_SR">
+      <RMResource idref="SYL_RM.TestRoles" />
+      <Process idref="SYL_PROCESS.TestRoles" />
+      <Process idref="SYL_PROCESS.BioEmergence" />
+      <Process idref="SYL_PROCESS.NewProcess" />
+      <Process idref="SYL_PROCESS.Standardiste" />
+      <Process idref="SYL_PROCESS.PhoneCall" />
+    </SynchronizedResources>
+  </Workflow>
+  <DocType>Business,Technical,UserManual</DocType>
+</Project>
+

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.edge.FlexoPostCondition" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="20" title="Graphics" layout="twocols" font="SansSerif,0,11" name="GraphicsTab">
+      <Label label="hide_when_induced" localize="true" name="HideWhenInducedLabel" constraints="twocols(location=left;index=14;expandHorizontally=false;expandVertically=false)" />
+      <CheckBox selected="false" localize="true" name="HideWhenInduced" data="data.hideWhenInduced" constraints="twocols(location=right;index=15;expandHorizontally=false;expandVertically=false)" />
+    </Tab>
+    <Tab index="6" title="Edge Metrics" layout="twocols" visible="controller.displayInspectorTabForContext(&quot;METRICS&quot;)" font="SansSerif,0,11" name="EdgeMetricsTab">
+      <Label label="metrics" align="center" localize="true" name="MetricsValuesLabel" constraints="twocols(location=center;index=0;expandHorizontally=true;expandVertically=false)" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.MetricsValue" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.metricsValues" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=true)" name="MetricsValues" localize="true" manageDynamicModel="true">
+        <TextFieldColumn data="iterator.metricsDefinition.name" title="name" columnWidth="100" resizable="true" displayTitle="true" tooltip="iterator.metricsDefinition.description" />
+        <TextFieldColumn isEditable="iterator.metricsDefinition.isUnitEditable" data="iterator.unit" title="unit" columnWidth="50" resizable="true" displayTitle="true" />
+        <TextFieldColumn data="iterator.description" title="additional_info" columnWidth="120" resizable="true" displayTitle="true" />
+        <AddAction method="data.addMetrics" name="new" />
+        <RemoveAction method="data.deleteMetrics(selected)" name="delete" />
+      </Table>
+    </Tab>
+    <Tab index="3" title="Data" layout="twocols" font="SansSerif,0,11" name="DataTab">
+      <Label label="condition" localize="true" name="ConditionPrimitiveLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" visible="(data.isConditional = true)" />
+      <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" data="data.conditionPrimitive" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" visible="(data.isConditional = true)" name="ConditionPrimitive" localize="true" manageDynamicModel="true">
+        <Assignment variable="component.bindingDefinition" value="data.conditionPrimitiveBindingDefinition" />
+        <Assignment variable="component.bindable" value="data" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+      </Custom>
+    </Tab>
+    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab">
+      <Label label="isGenericOutput" localize="true" name="IsGenericOutputLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
+      <CheckBox selected="false" localize="true" name="IsGenericOutput" data="data.isGenericOutput" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" />
+    </Tab>
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label label="is_default_flow" localize="true" name="IsDefaultFlowLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" visible="(data.canBeDefaultFlow = true)" />
+      <CheckBox selected="false" localize="true" name="IsDefaultFlow" data="data.isDefaultFlow" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" visible="(data.canBeDefaultFlow = true)" />
+      <Label label="has_condition" localize="true" name="IsImplicitConditionalLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" visible="((data.isStartingFromOr = true) &amp; (data.isDefaultFlow = false))" />
+      <CheckBox selected="false" localize="true" name="IsImplicitConditional" data="data.isImplicitConditional" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" visible="((data.isStartingFromOr = true) &amp; (data.isDefaultFlow = false))" />
+      <Label label="has_condition" localize="true" name="IsConditionalLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" visible="(data.canBeConditional = true)" />
+      <CheckBox selected="false" localize="true" name="IsConditional" data="data.isConditional" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" visible="(data.canBeConditional = true)" />
+      <Label label="matches_positive_evaluation" localize="true" name="IsPositiveEvaluationLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" visible="(data.startOperatorIsIfNode = true)" />
+      <CheckBox selected="false" localize="true" name="IsPositiveEvaluation" data="data.isPositiveEvaluation" constraints="twocols(location=right;index=13;expandHorizontally=false;expandVertically=false)" visible="(data.startOperatorIsIfNode = true)" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Graphics" lang="French">Graphisme</Localized>
+    <Localized key="hide_when_induced" lang="English">Hide when induced</Localized>
+    <Localized key="hide_when_induced" lang="French">Masquée si induite</Localized>
+    <Localized key="hide_when_induced" lang="Dutch">Hide when induced</Localized>
+    <Localized key="Edge Metrics" lang="French">Métrique d'arête</Localized>
+    <Localized key="metrics" lang="English">Metrics</Localized>
+    <Localized key="metrics" lang="French">Métriques</Localized>
+    <Localized key="metrics" lang="Dutch">Metrics</Localized>
+    <Localized key="Data" lang="French">Donnée</Localized>
+    <Localized key="condition" lang="English">Condition</Localized>
+    <Localized key="condition" lang="French">Condition</Localized>
+    <Localized key="condition" lang="Dutch">Condition</Localized>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="is_default_flow" lang="English">Is default flow</Localized>
+    <Localized key="is_default_flow" lang="French">Flux par défaut</Localized>
+    <Localized key="is_default_flow" lang="Dutch">Is default flow</Localized>
+    <Localized key="has_condition" lang="English">Has condition</Localized>
+    <Localized key="has_condition" lang="French">Est conditionnel</Localized>
+    <Localized key="has_condition" lang="Dutch">Has condition</Localized>
+    <Localized key="matches_positive_evaluation" lang="English">Matches positive evaluation</Localized>
+    <Localized key="matches_positive_evaluation" lang="French">Correspond à une évaluation positive</Localized>
+    <Localized key="matches_positive_evaluation" lang="Dutch">Matches positive evaluation</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Post-condition" />
+</Panel>
+

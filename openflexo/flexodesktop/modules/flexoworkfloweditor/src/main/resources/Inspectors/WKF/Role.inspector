@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.Role" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="21" title="Graphics_SWL" layout="twocols" visible="controller.displayInspectorTabForContext(&quot;SWL&quot;)" font="SansSerif,0,11" name="GraphicsSWLTab">
+      <Label label="swimming_lane_number" localize="true" name="IntegerParameterswlNb1Label" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <Number minValue="1" maxValue="255" increment="1" numberType="IntegerType" columns="10" data="data.getIntegerParameter(&quot;swl_nb&quot;,1)" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" name="IntegerParameterswlNb1" localize="true" />
+      <Label label="swimming_lane_height" localize="true" name="IntegerParameterswlHeight80Label" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
+      <Number minValue="30" maxValue="1000" increment="1" numberType="IntegerType" columns="10" data="data.getIntegerParameter(&quot;swl_height&quot;,80)" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" name="IntegerParameterswlHeight80" localize="true" />
+      <Label label="index" localize="true" name="IntegerParameterswlIndex80Label" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
+      <Number minValue="0" maxValue="255" increment="1" numberType="IntegerType" columns="10" data="data.getIntegerParameter(&quot;swl_index&quot;,80)" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" name="IntegerParameterswlIndex80" localize="true" />
+      <Label label="text_color" localize="true" name="TextColorswlLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" />
+      <Color data="data.getTextColor(&quot;swl&quot;)" constraints="twocols(location=right;index=13;expandHorizontally=false;expandVertically=false)" name="TextColorswl" localize="true" />
+      <Label label="back_color" localize="true" name="ColorLabel" constraints="twocols(location=left;index=14;expandHorizontally=false;expandVertically=false)" />
+      <Color data="data.color" constraints="twocols(location=right;index=15;expandHorizontally=false;expandVertically=false)" name="Color" localize="true" />
+    </Tab>
+    <Tab index="2" title="Doc" layout="twocols" font="SansSerif,0,11" name="DocTab">
+      <Label label="index" localize="true" name="IndexLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <Number numberType="IntegerType" data="data.index" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" name="Index" localize="true" />
+    </Tab>
+    <Tab index="1" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab">
+      <Label label="flexo_id" localize="true" name="FlexoIDLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <TextField passwd="false" readOnly="true" localize="true" name="FlexoID" data="data.flexoID.toString" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
+    </Tab>
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label label="name" localize="true" name="NameLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <TextField validateOnReturn="true" columns="10" passwd="false" localize="true" name="Name" data="data.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
+      <Label label="color" localize="true" name="ColorLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
+      <Color data="data.color" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" name="Color" localize="true" />
+      <Label label="system_role" localize="true" name="IsSystemRoleLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
+      <CheckBox selected="false" localize="true" name="IsSystemRole" data="data.isSystemRole" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" />
+      <Label label="is_assignable" localize="true" name="IsAssignableLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
+      <CheckBox selected="false" localize="true" name="IsAssignable" data="data.isAssignable" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" />
+      <Label label="specializes_following_roles" align="center" localize="true" name="RoleSpecializationsLabel" constraints="twocols(location=center;index=8;expandHorizontally=true;expandVertically=false)" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.RoleSpecialization" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.roleSpecializations" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=true)" name="RoleSpecializations" localize="true" manageDynamicModel="true">
+        <LabelColumn data="iterator.parentRole.name" title="name" columnWidth="80" resizable="true" displayTitle="true" />
+        <TextFieldColumn data="iterator.annotation" title="Annotation" columnWidth="150" resizable="true" displayTitle="true" />
+        <AddAction method="data.performAddRoleSpecialization" name="new" />
+        <RemoveAction method="data.performDeleteRoleSpecialization(selected)" isAvailable="data.isRoleSpecializationDeletable(selected)" name="delete" />
+      </Table>
+    </Tab>
+    <Tab index="22" title="Graphics" layout="twocols" visible="controller.displayInspectorTabForContext(&quot;ROLE_EDITOR&quot;)" font="SansSerif,0,11" name="GraphicsTab">
+      <Label label="x" localize="true" name="XdefaultLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
+      <Number numberType="DoubleType" columns="10" data="data.getX(&quot;default&quot;)" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" name="Xdefault" localize="true" />
+      <Label label="y" localize="true" name="YdefaultLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
+      <Number numberType="DoubleType" columns="10" data="data.getY(&quot;default&quot;)" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" name="Ydefault" localize="true" />
+      <Label label="width" localize="true" name="WidthdefaultLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
+      <Number numberType="DoubleType" columns="10" data="data.getWidth(&quot;default&quot;)" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" name="Widthdefault" localize="true" />
+      <Label label="height" localize="true" name="HeightdefaultLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" />
+      <Number numberType="DoubleType" columns="10" data="data.getHeight(&quot;default&quot;)" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" name="Heightdefault" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+      </Number>
+      <Label label="text_color" localize="true" name="TextColordefaultLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" />
+      <Color data="data.getTextColor(&quot;default&quot;)" constraints="twocols(location=right;index=13;expandHorizontally=false;expandVertically=false)" name="TextColordefault" localize="true" />
+      <Label label="back_color" localize="true" name="ColorLabel" constraints="twocols(location=left;index=14;expandHorizontally=false;expandVertically=false)" />
+      <Color data="data.color" constraints="twocols(location=right;index=15;expandHorizontally=false;expandVertically=false)" name="Color" localize="true" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Graphics_SWL" lang="English">Graphics</Localized>
+    <Localized key="Graphics_SWL" lang="French">Graphisme</Localized>
+    <Localized key="Graphics_SWL" lang="Dutch">Graphics</Localized>
+    <Localized key="swimming_lane_number" lang="English">Number of swin lanes</Localized>
+    <Localized key="swimming_lane_number" lang="French">Nombre de couloirs</Localized>
+    <Localized key="swimming_lane_number" lang="Dutch">Number of swin lanes</Localized>
+    <Localized key="swimming_lane_height" lang="English">Swim lane height</Localized>
+    <Localized key="swimming_lane_height" lang="French">Hauteur d'un couloir</Localized>
+    <Localized key="swimming_lane_height" lang="Dutch">Swim lane height</Localized>
+    <Localized key="index" lang="English">Index</Localized>
+    <Localized key="index" lang="French">Index</Localized>
+    <Localized key="index" lang="Dutch">Index</Localized>
+    <Localized key="text_color" lang="English">Text color</Localized>
+    <Localized key="text_color" lang="French">Couleur du texte</Localized>
+    <Localized key="text_color" lang="Dutch">Text color</Localized>
+    <Localized key="back_color" lang="English">Background color</Localized>
+    <Localized key="back_color" lang="French">Couleur de l'arrière-plan</Localized>
+    <Localized key="back_color" lang="Dutch">Background color</Localized>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="flexo_id" lang="English">FlexoBPM ID</Localized>
+    <Localized key="flexo_id" lang="French">FlexoBPM ID</Localized>
+    <Localized key="flexo_id" lang="Dutch">FlexoBPM ID</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="name" lang="English">Name</Localized>
+    <Localized key="name" lang="French">Nom</Localized>
+    <Localized key="name" lang="Dutch">Name</Localized>
+    <Localized key="color" lang="English">Color</Localized>
+    <Localized key="color" lang="French">Couleur</Localized>
+    <Localized key="color" lang="Dutch">Color</Localized>
+    <Localized key="system_role" lang="English">System role</Localized>
+    <Localized key="system_role" lang="French">Rôle système</Localized>
+    <Localized key="system_role" lang="Dutch">System role</Localized>
+    <Localized key="specializes_following_roles" lang="English">This role is specializing following roles</Localized>
+    <Localized key="specializes_following_roles" lang="French">Ce rôle spécialise les rôles suivants</Localized>
+    <Localized key="specializes_following_roles" lang="Dutch">This role is specializing following roles</Localized>
+    <Localized key="Graphics" lang="French">Graphisme</Localized>
+    <Localized key="x" lang="English">Position x</Localized>
+    <Localized key="x" lang="French">Abscisse</Localized>
+    <Localized key="x" lang="Dutch">Position x</Localized>
+    <Localized key="y" lang="English">Position y</Localized>
+    <Localized key="y" lang="French">Ordonnée</Localized>
+    <Localized key="y" lang="Dutch">Position y</Localized>
+    <Localized key="width" lang="English">Width</Localized>
+    <Localized key="width" lang="French">Largeur</Localized>
+    <Localized key="width" lang="Dutch">Width</Localized>
+    <Localized key="height" lang="English">Height</Localized>
+    <Localized key="height" lang="French">Hauteur</Localized>
+    <Localized key="height" lang="Dutch">Height</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Role" />
+</Panel>
+

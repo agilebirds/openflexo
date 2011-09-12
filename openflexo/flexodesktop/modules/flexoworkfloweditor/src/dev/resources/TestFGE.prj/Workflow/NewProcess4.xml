@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlexoProcess id="SYL_387239" name="NewProcess4" isWebService="false" docIndex="5" userID="SYL" flexoID="387239" dontEscapeLatex="false" dontGenerate="false" description="No description" useSpecificDescriptions="false" posiX="0.0" posiY="0.0" width="0.0" height="0.0" textColor="0,0,0" backColor="255,255,255">
+  <StatusList id="SYL_387241" DefaultStatus="NewProcess4.STATUS.Default" userID="SYL" flexoID="387241" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+    <Status id="SYL_387242" docIndex="1" userID="SYL" flexoID="387242" dontEscapeLatex="false" dontGenerate="true" description="No description" useSpecificDescriptions="false">
+      <label>Default</label>
+    </Status>
+  </StatusList>
+  <ActivityPetriGraph id="SYL_387243" userID="SYL" flexoID="387243" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" posiX="0.0" posiY="0.0" width="0.0" height="0.0" textColor="0,0,0" backColor="255,255,255" isVisible="true">
+    <ActivityNode id="SYL_387244" nodeType="BEGIN" isWaiting="false" isSelfActivated="false" posiX="30.0" posiY="200.0" width="60.0" height="65.0" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="387244" dontEscapeLatex="false" dontGenerate="true" useSpecificDescriptions="false" nodeName="BEGIN" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="1" roleTextColor="128,128,128">
+      <FlexoPreCondition id="SYL_387271" fixedLocation="6" initTokenNbr="0" triggerLevel="1" userID="SYL" flexoID="387271" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" posiX="7.0" posiY="25.0" width="0.0" height="0.0" textColor="0,0,0" backColor="255,255,255">
+        <AttachedActivityNode idref="SYL_387244" />
+        <AttachedBeginOperationNode idref="SYL_387252" />
+        <IncomingInternalMessageInEdge id="SYL_387273" posiX="-28.0" posiY="88.0" width="0.0" height="0.0" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="387273" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inducedLocation="0,0" deducedLocation="-14,164" inducedDeducedLocation="0,0" labelPosition="0,0">
+          <NextFlexoPreCondition idref="SYL_387271" />
+          <InputMessageBindings id="SYL_387285" posiX="-30.0" posiY="20.0" width="0.0" height="0.0" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="387285" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" />
+          <PostConditionProperties />
+          <StartNewPort idref="SYL_387249" />
+        </IncomingInternalMessageInEdge>
+        <PreConditionProperties />
+      </FlexoPreCondition>
+      <NodeProperties />
+      <OperationPetriGraph id="SYL_387251" userID="SYL" flexoID="387251" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" posiX="20.0" posiY="325.0" width="270.0" height="100.0" textColor="0,0,0" backColor="255,255,255" isVisible="false">
+        <OperationNode id="SYL_387252" isSynchronized="false" componentTextColor="128,128,128" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,10:46:43 04/06/2008 001" nodeType="BEGIN" isWaiting="false" isSelfActivated="false" posiX="10.0" posiY="10.0" width="60.0" height="65.0" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="387252" dontEscapeLatex="false" dontGenerate="true" useSpecificDescriptions="false" nodeName="BEGIN" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="1">
+          <OutgoingTokenEdge id="SYL_387260" postConditionType="TOKEN" tokenIncrem="1" openInPopup="false" posiX="120.0" posiY="28.0" width="0.0" height="0.0" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="387260" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inducedLocation="119,94" deducedLocation="73,95" inducedDeducedLocation="72,162" labelPosition="0,0">
+            <NextFlexoPreCondition idref="SYL_387259" />
+            <StartOperationNode idref="SYL_387252" />
+            <PostConditionProperties />
+          </OutgoingTokenEdge>
+          <NodeProperties />
+        </OperationNode>
+        <OperationNode id="SYL_387253" isSynchronized="true" componentTextColor="128,128,128" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,10:46:43 04/06/2008 765" nodeType="END" isWaiting="false" isSelfActivated="false" posiX="200.0" posiY="10.0" width="60.0" height="65.0" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="387253" dontEscapeLatex="false" dontGenerate="true" useSpecificDescriptions="false" nodeName="END" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="2">
+          <ActionPetriGraph id="SYL_387254" isVisible="false" userID="SYL" flexoID="387254" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" posiX="115.0" posiY="460.0" width="270.0" height="100.0" textColor="0,0,0" backColor="255,255,255">
+            <ActionNode id="SYL_387255" actionType="DEFAULT" associatedButtonFlexoID="-1" displayProcessFlexoID="-1" displayOperationFlexoID="-1" nodeType="BEGIN" isWaiting="false" isSelfActivated="false" posiX="10.0" posiY="10.0" width="60.0" height="65.0" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="387255" dontEscapeLatex="false" dontGenerate="true" useSpecificDescriptions="false" nodeName="BEGIN" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="1">
+              <OutgoingTokenEdge id="SYL_387258" postConditionType="TOKEN" tokenIncrem="1" openInPopup="false" posiX="120.0" posiY="26.0" width="0.0" height="0.0" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="387258" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inducedLocation="73,95" deducedLocation="0,0" inducedDeducedLocation="0,0" labelPosition="0,0">
+                <NextFlexoPreCondition idref="SYL_387257" />
+                <StartActionNode idref="SYL_387255" />
+                <PostConditionProperties />
+              </OutgoingTokenEdge>
+              <NodeProperties />
+            </ActionNode>
+            <ActionNode id="SYL_387256" actionType="DEFAULT" associatedButtonFlexoID="-1" displayProcessFlexoID="-1" displayOperationFlexoID="-1" nodeType="END" isWaiting="false" isSelfActivated="false" posiX="200.0" posiY="10.0" width="60.0" height="65.0" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="387256" dontEscapeLatex="false" dontGenerate="true" useSpecificDescriptions="false" nodeName="END" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="2">
+              <FlexoPreCondition id="SYL_387257" fixedLocation="6" initTokenNbr="0" triggerLevel="1" userID="SYL" flexoID="387257" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" posiX="7.0" posiY="25.0" width="0.0" height="0.0" textColor="0,0,0" backColor="255,255,255">
+                <AttachedActionNode idref="SYL_387256" />
+                <IncomingTokenEdge idref="SYL_387258" />
+                <PreConditionProperties />
+              </FlexoPreCondition>
+              <NodeProperties />
+            </ActionNode>
+          </ActionPetriGraph>
+          <FlexoPreCondition id="SYL_387259" fixedLocation="6" initTokenNbr="0" triggerLevel="1" userID="SYL" flexoID="387259" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" posiX="7.0" posiY="25.0" width="0.0" height="0.0" textColor="0,0,0" backColor="255,255,255">
+            <AttachedOperationNode idref="SYL_387253" />
+            <AttachedBeginActionNode idref="SYL_387255" />
+            <IncomingTokenEdge idref="SYL_387260" />
+            <PreConditionProperties />
+          </FlexoPreCondition>
+          <NodeProperties />
+        </OperationNode>
+      </OperationPetriGraph>
+    </ActivityNode>
+    <ActivityNode id="SYL_387246" nodeType="END" isWaiting="false" isSelfActivated="false" posiX="500.0" posiY="200.0" width="60.0" height="65.0" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="387246" dontEscapeLatex="false" dontGenerate="true" useSpecificDescriptions="false" nodeName="END" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="2" roleTextColor="128,128,128">
+      <FlexoPreCondition id="SYL_387272" fixedLocation="6" initTokenNbr="0" triggerLevel="1" userID="SYL" flexoID="387272" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" posiX="7.0" posiY="25.0" width="0.0" height="0.0" textColor="0,0,0" backColor="255,255,255">
+        <AttachedActivityNode idref="SYL_387246" />
+        <AttachedBeginOperationNode idref="SYL_387262" />
+        <IncomingInternalMessageInEdge id="SYL_387274" posiX="72.0" posiY="84.0" width="0.0" height="0.0" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="387274" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inducedLocation="0,0" deducedLocation="28,158" inducedDeducedLocation="0,0" labelPosition="0,0">
+          <NextFlexoPreCondition idref="SYL_387272" />
+          <InputMessageBindings id="SYL_387287" posiX="-30.0" posiY="20.0" width="0.0" height="0.0" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="387287" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" />
+          <PostConditionProperties />
+          <StartDeletePort idref="SYL_387250" />
+        </IncomingInternalMessageInEdge>
+        <PreConditionProperties />
+      </FlexoPreCondition>
+      <NodeProperties />
+      <OperationPetriGraph id="SYL_387261" userID="SYL" flexoID="387261" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" posiX="395.0" posiY="325.0" width="270.0" height="100.0" textColor="0,0,0" backColor="255,255,255" isVisible="false">
+        <OperationNode id="SYL_387262" isSynchronized="false" componentTextColor="128,128,128" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,10:46:43 04/06/2008 006" nodeType="BEGIN" isWaiting="false" isSelfActivated="false" posiX="10.0" posiY="10.0" width="60.0" height="65.0" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="387262" dontEscapeLatex="false" dontGenerate="true" useSpecificDescriptions="false" nodeName="BEGIN" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="1">
+          <OutgoingTokenEdge id="SYL_387270" postConditionType="TOKEN" tokenIncrem="1" openInPopup="false" posiX="120.0" posiY="28.0" width="0.0" height="0.0" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="387270" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inducedLocation="72,93" deducedLocation="73,95" inducedDeducedLocation="25,162" labelPosition="0,0">
+            <NextFlexoPreCondition idref="SYL_387269" />
+            <StartOperationNode idref="SYL_387262" />
+            <PostConditionProperties />
+          </OutgoingTokenEdge>
+          <NodeProperties />
+        </OperationNode>
+        <OperationNode id="SYL_387263" isSynchronized="true" componentTextColor="128,128,128" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,10:46:43 04/06/2008 766" nodeType="END" isWaiting="false" isSelfActivated="false" posiX="200.0" posiY="10.0" width="60.0" height="65.0" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="387263" dontEscapeLatex="false" dontGenerate="true" useSpecificDescriptions="false" nodeName="END" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="2">
+          <ActionPetriGraph id="SYL_387264" isVisible="false" userID="SYL" flexoID="387264" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" posiX="490.0" posiY="460.0" width="270.0" height="100.0" textColor="0,0,0" backColor="255,255,255">
+            <ActionNode id="SYL_387265" actionType="DEFAULT" associatedButtonFlexoID="-1" displayProcessFlexoID="-1" displayOperationFlexoID="-1" nodeType="BEGIN" isWaiting="false" isSelfActivated="false" posiX="10.0" posiY="10.0" width="60.0" height="65.0" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="387265" dontEscapeLatex="false" dontGenerate="true" useSpecificDescriptions="false" nodeName="BEGIN" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="1">
+              <OutgoingTokenEdge id="SYL_387268" postConditionType="TOKEN" tokenIncrem="1" openInPopup="false" posiX="120.0" posiY="26.0" width="0.0" height="0.0" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="387268" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" inducedLocation="73,95" deducedLocation="0,0" inducedDeducedLocation="0,0" labelPosition="0,0">
+                <NextFlexoPreCondition idref="SYL_387267" />
+                <StartActionNode idref="SYL_387265" />
+                <PostConditionProperties />
+              </OutgoingTokenEdge>
+              <NodeProperties />
+            </ActionNode>
+            <ActionNode id="SYL_387266" actionType="DEFAULT" associatedButtonFlexoID="-1" displayProcessFlexoID="-1" displayOperationFlexoID="-1" nodeType="END" isWaiting="false" isSelfActivated="false" posiX="200.0" posiY="10.0" width="60.0" height="65.0" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="387266" dontEscapeLatex="false" dontGenerate="true" useSpecificDescriptions="false" nodeName="END" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="2">
+              <FlexoPreCondition id="SYL_387267" fixedLocation="6" initTokenNbr="0" triggerLevel="1" userID="SYL" flexoID="387267" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" posiX="7.0" posiY="25.0" width="0.0" height="0.0" textColor="0,0,0" backColor="255,255,255">
+                <AttachedActionNode idref="SYL_387266" />
+                <IncomingTokenEdge idref="SYL_387268" />
+                <PreConditionProperties />
+              </FlexoPreCondition>
+              <NodeProperties />
+            </ActionNode>
+          </ActionPetriGraph>
+          <FlexoPreCondition id="SYL_387269" fixedLocation="6" initTokenNbr="0" triggerLevel="1" userID="SYL" flexoID="387269" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" posiX="7.0" posiY="25.0" width="0.0" height="0.0" textColor="0,0,0" backColor="255,255,255">
+            <AttachedOperationNode idref="SYL_387263" />
+            <AttachedBeginActionNode idref="SYL_387265" />
+            <IncomingTokenEdge idref="SYL_387270" />
+            <PreConditionProperties />
+          </FlexoPreCondition>
+          <NodeProperties />
+        </OperationNode>
+      </OperationPetriGraph>
+    </ActivityNode>
+  </ActivityPetriGraph>
+  <ProcessProperties />
+  <PortRegistery id="SYL_387245" isVisible="true" userID="SYL" flexoID="387245" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" posiX="110.0" posiY="49.0" width="416.0" height="92.0" textColor="0,0,0" backColor="255,255,255">
+    <NewPort id="SYL_387249" posiX="10.0" posiY="11.0" width="84.0" height="62.0" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="387249" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" nodeName="NewInstance" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="1">
+      <OutgoingInternalMessageInEdge idref="SYL_387273" />
+      <InputMessageDefinition id="SYL_387284" userID="SYL" flexoID="387284" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+        <label>Input message name</label>
+      </InputMessageDefinition>
+      <NodeProperties />
+    </NewPort>
+    <DeletePort id="SYL_387250" posiX="310.0" posiY="16.0" width="96.0" height="62.0" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="387250" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" nodeName="DeleteInstance" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="2">
+      <OutgoingInternalMessageInEdge idref="SYL_387274" />
+      <InputMessageDefinition id="SYL_387286" userID="SYL" flexoID="387286" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+        <label>Input message name</label>
+      </InputMessageDefinition>
+      <NodeProperties />
+    </DeletePort>
+    <InPort id="SYL_387289" posiX="107.0" posiY="15.0" width="47.0" height="67.0" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="387289" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" nodeName="InPort" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="3">
+      <InputMessageDefinition id="SYL_387292" userID="SYL" flexoID="387292" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+        <label>Input message name</label>
+      </InputMessageDefinition>
+      <NodeProperties />
+    </InPort>
+    <InOutPort id="SYL_387299" posiX="233.0" posiY="10.0" width="67.0" height="69.0" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="387299" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" nodeName="InOutPort" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="5">
+      <InputMessageDefinition id="SYL_387302" userID="SYL" flexoID="387302" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+        <label>Input message name</label>
+      </InputMessageDefinition>
+      <NodeProperties />
+      <OutputMessageDefinition id="SYL_387303" userID="SYL" flexoID="387303" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+        <label>Output message name</label>
+      </OutputMessageDefinition>
+    </InOutPort>
+    <OutPort id="SYL_387294" posiX="169.0" posiY="13.0" width="58.0" height="69.0" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="387294" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" nodeName="OutPort" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="4">
+      <NodeProperties />
+      <OutputMessageDefinition id="SYL_387297" userID="SYL" flexoID="387297" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+        <label>Output message name</label>
+      </OutputMessageDefinition>
+    </OutPort>
+  </PortRegistery>
+</FlexoProcess>
+

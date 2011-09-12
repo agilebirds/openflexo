@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlexoComponentLibrary id="SYL_427" userID="SYL" flexoID="427" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+  <FlexoComponentFolder id="SYL_428" componentPrefix="TES" docIndex="1" userID="SYL" flexoID="428" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+    <folderName>TestFGE</folderName>
+    <FlexoComponentFolder id="SYL_429" componentPrefix="TES" docIndex="1" userID="SYL" flexoID="429" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+      <folderName>Utils</folderName>
+      <PopupComponentDefinition id="SYL_430" userID="SYL" flexoID="430" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" name="WDLKeyValueAssistant" canBeGenerated="true" hasTabContainer="false" docIndex="2" />
+      <PopupComponentDefinition id="SYL_433" userID="SYL" flexoID="433" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" name="WDLDateAssistant" canBeGenerated="true" hasTabContainer="false" docIndex="1" />
+    </FlexoComponentFolder>
+    <OperationComponentDefinition id="SYL_643827" userID="SYL" flexoID="643827" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" name="Screen" canBeGenerated="true" hasTabContainer="false" docIndex="1" />
+  </FlexoComponentFolder>
+</FlexoComponentLibrary>
+

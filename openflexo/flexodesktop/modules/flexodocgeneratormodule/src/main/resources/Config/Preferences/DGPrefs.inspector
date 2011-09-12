@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tab layout="DEFAULT">
+<property name="saveBeforeGenerating" label="save_before_generating" widget="CHECKBOX" constraint="0"/>
+	<property name="automaticallyDismissUnchangedFiles" label="automatically_dismiss_unchanged_files" widget="CHECKBOX" constraint="1"/>
+	<property name="latexCommand" label="latex_command" widget="TEXT_FIELD" constraint="2">
+	   <param name="validateOnReturn" value="true"/>
+	</property>
+	<property name="openPDF" label="automatically_open_PDF" widget="CHECKBOX" constraint="3"/>
+	<property name="generatedResourceModifiedChoice" label="when_a_resource_is_modified" widget="RADIOBUTTON_LIST" constraint="4">
+		<param name="staticlist" value="ASK,IGNORE,ACCEPT"/>
+		<param name="ignorechoicelist" value="true"/>
+		<param name="format" value="localizedName"/>
+		<param name="columns" value="1"/>
+	</property>
+</tab>
+	

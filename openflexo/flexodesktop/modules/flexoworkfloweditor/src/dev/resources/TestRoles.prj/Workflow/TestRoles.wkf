@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlexoWorkflow id="SYL_414" name="TestRoles" userID="SYL" flexoID="414" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+  <FlexoProcess id="SYL_425" name="TestRoles" userID="SYL" flexoID="425" dontEscapeLatex="false" dontGenerate="false" description="" useSpecificDescriptions="false" />
+  <FlexoProcess id="SYL_69396" name="BioEmergence" userID="SYL" flexoID="69396" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+    <FlexoProcess id="SYL_69436" name="NewProcess" userID="SYL" flexoID="69436" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" />
+  </FlexoProcess>
+  <FlexoProcess id="SYL_69533" name="Standardiste" userID="SYL" flexoID="69533" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+    <FlexoProcess id="SYL_69581" name="PhoneCall" userID="SYL" flexoID="69581" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" />
+  </FlexoProcess>
+  <RootFlexoProcess idref="SYL_425" />
+  <RoleList id="SYL_949" userID="SYL" flexoID="949" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+    <Role id="SYL_109969" color="255,0,0" label="User" systemRole="false" posiX="381" posiY="63" docIndex="1" userID="SYL" flexoID="109969" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" />
+    <Role id="SYL_109970" color="0,255,0" label="Vendor" systemRole="false" posiX="342" posiY="180" docIndex="2" userID="SYL" flexoID="109970" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+      <RoleSpecialization id="SYL_109978" userID="SYL" flexoID="109978" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+        <Role idref="SYL_109969" />
+      </RoleSpecialization>
+    </Role>
+    <Role id="SYL_109971" color="255,200,0" label="Customer" systemRole="false" posiX="150" posiY="164" docIndex="3" userID="SYL" flexoID="109971" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+      <RoleSpecialization id="SYL_109977" userID="SYL" flexoID="109977" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+        <Role idref="SYL_109969" />
+      </RoleSpecialization>
+    </Role>
+    <Role id="SYL_109972" color="255,0,255" label="Admin" systemRole="false" posiX="553" posiY="243" docIndex="4" userID="SYL" flexoID="109972" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+      <RoleSpecialization id="SYL_109979" userID="SYL" flexoID="109979" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+        <Role idref="SYL_109969" />
+      </RoleSpecialization>
+    </Role>
+    <Role id="SYL_109973" color="255,255,102" label="FrenchCustomer" systemRole="false" posiX="31" posiY="259" docIndex="5" userID="SYL" flexoID="109973" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+      <RoleSpecialization id="SYL_109975" userID="SYL" flexoID="109975" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+        <Role idref="SYL_109971" />
+      </RoleSpecialization>
+    </Role>
+    <Role id="SYL_109974" color="204,153,0" label="BelgianCustomer" systemRole="false" posiX="261" posiY="262" docIndex="6" userID="SYL" flexoID="109974" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+      <RoleSpecialization id="SYL_109976" userID="SYL" flexoID="109976" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+        <Role idref="SYL_109971" />
+      </RoleSpecialization>
+    </Role>
+    <Role id="SYL_109980" color="0,102,255" label="Customer admin" systemRole="false" posiX="153" posiY="392" docIndex="7" userID="SYL" flexoID="109980" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+      <RoleSpecialization id="SYL_109982" userID="SYL" flexoID="109982" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+        <Role idref="SYL_109973" />
+      </RoleSpecialization>
+      <RoleSpecialization id="SYL_109983" userID="SYL" flexoID="109983" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+        <Role idref="SYL_109974" />
+      </RoleSpecialization>
+      <RoleSpecialization id="SYL_109986" userID="SYL" flexoID="109986" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+        <Role idref="SYL_109972" />
+      </RoleSpecialization>
+    </Role>
+    <Role id="SYL_109981" color="0,204,204" label="VendorAdmin" systemRole="false" posiX="394" posiY="399" docIndex="8" userID="SYL" flexoID="109981" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+      <RoleSpecialization id="SYL_109984" userID="SYL" flexoID="109984" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+        <Role idref="SYL_109970" />
+      </RoleSpecialization>
+      <RoleSpecialization id="SYL_109987" userID="SYL" flexoID="109987" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+        <Role idref="SYL_109972" />
+      </RoleSpecialization>
+    </Role>
+    <Role id="SYL_109985" color="128,128,128" label="System" systemRole="true" posiX="49" posiY="54" docIndex="9" userID="SYL" flexoID="109985" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" />
+    <Role id="SYL_109988" color="0,102,102" label="SystemAdmin" systemRole="false" posiX="267" posiY="533" docIndex="10" userID="SYL" flexoID="109988" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+      <RoleSpecialization id="SYL_109989" userID="SYL" flexoID="109989" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+        <Role idref="SYL_109980" />
+      </RoleSpecialization>
+      <RoleSpecialization id="SYL_109990" userID="SYL" flexoID="109990" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+        <Role idref="SYL_109981" />
+      </RoleSpecialization>
+    </Role>
+  </RoleList>
+</FlexoWorkflow>
+

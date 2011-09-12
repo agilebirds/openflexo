@@ -1,0 +1,22 @@
+<inspector title = "EOPrototype_(read_only)" inheritsfrom="DMROObject.inspector">
+	<tab name="Basic" index="0">
+		<property name="name" label="name" widget="READ_ONLY_TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		</property>
+		<property name="allowsNull" label="allows_null" widget="READ_ONLY_TEXT_FIELD" constraint="2" help="true if null is allowed"/>
+		<property name="width" label="width" widget="READ_ONLY_TEXT_FIELD" constraint="3" help="width of field"/>
+		<property name="externalType" label="external_type" widget="READ_ONLY_TEXT_FIELD" constraint="4">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="valueType" label="value_type" widget="READ_ONLY_TEXT_FIELD" constraint="5">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="type.name" label="class_name" widget="READ_ONLY_TEXT_FIELD" constraint="6">
+			<param name="columns" value="10"/>
+		</property>
+	</tab>
+	
+	<tab name="Advanced" index="1">
+	</tab>
+</inspector>

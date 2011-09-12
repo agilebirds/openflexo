@@ -1,0 +1,18 @@
+#macro(renderTabFooterButtons $_buttons)
+  #foreach($_b in $_buttons.getInnerWidgets())
+    <div class="denaliTabsFooterButton">
+    #render($_b)
+    </div>
+  #end
+#end
+<div class="denaliTabs">
+<webobject name="#name()Tabs">
+    #renderSequence($widget)
+</webobject>
+<div class="denaliTabsFooter">
+#if(${widget.getButtons().size()}>0)
+    #renderTabFooterButtons(${widget.getButtons()})
+    <div class="clear" ></div>
+#end
+</div>
+</div>

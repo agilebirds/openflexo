@@ -1,0 +1,16 @@
+{
+    DenaliCore = {
+        configurationName = "DEV";
+        applicationStyle = "${generator.getProject().getCssSheet().getName()}";
+    };
+    
+    $project.getPrefix() = {
+        /*afterLoginDA = "#afterLoginDA()";*/
+        login = #if(${repository.getPrototypeLogin()})"${generator.escapeStringForJava(${repository.getPrototypeLogin()})}"#else"demo"#end;
+        password = #if(${repository.getPrototypePassword()})"${generator.escapeStringForJava(${repository.getPrototypePassword()})}"#else"omed"#end;
+		#if(${generator.isPrototype()})
+		#set($appName = ${repository.getWarName().replaceAll("\\W", "")})
+		prototypeSamplesFolderPath = "/home/protosamples/$appName";
+		#end
+    };
+}

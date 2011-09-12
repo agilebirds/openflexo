@@ -1,0 +1,18 @@
+<inspector title = "symbolic_directory">
+	<tab name="Basic" index="0">
+		<property name="name" label="name" widget="TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		</property>
+		<property name="description" label="description" widget="TEXT_AREA" constraint="1">
+			<param name="rows" value="10"/>
+		</property>
+		<property name="directory" label="directory" widget="CUSTOM" constraint="2">
+			<param name="className" value="org.openflexo.components.widget.FlexoProjectFileInspectorWidget"/>
+		</property>
+	</tab>
+	
+	<tab name="Advanced" index="1">
+	</tab>
+
+</inspector>

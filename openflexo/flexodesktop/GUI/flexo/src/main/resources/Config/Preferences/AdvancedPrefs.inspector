@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tab layout="DEFAULT">
+	<property name="browserFont" label="browser_font" widget="FONT" constraint="4"/>
+	<property name="synchronizedBrowser" label="synchronized_browser" widget="CHECKBOX" constraint="5">
+		<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+	</property>
+	<property name="hideFilteredObjects" label="hide_non_bindable" widget="CHECKBOX" constraint="6">
+		<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+	</property>
+	<property name="lastVisitedDirectory" label="last_visited_directory" widget="DIRECTORY" constraint="7"/>
+	<property name="eclipseWorkspaceDirectory" label="workspace_directory" widget="DIRECTORY" constraint="8">
+		<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+	</property>
+	<property name="closeOnMouseOut" label="close_popups_when_mouse_leaves_popup" widget="CHECKBOX" constraint="10">
+		<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+	</property>
+	<property name="hightlightUncommentedItem" label="hightlight_uncommented_item" widget="CHECKBOX" constraint="11">
+		<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+	</property>
+	<property name="enableUndoManager" label="enable_undo_manager" widget="CHECKBOX" constraint="12">
+		<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+	</property>
+	<property name="undoLevels" label="undo_levels" widget="INTEGER" constraint="13">
+		<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+	</property>
+	<property name="lookAndFeel" label="look_and_feel" widget="DROPDOWN" constraint="14">
+		<param name="format" value="name"/>
+		<param name="showReset" value="false"/>
+	</property>
+	<property name="useDefaultProxySettings" label="use_default_proxy" widget="CHECKBOX" constraint="15"/>
+	<property name="noProxy" label="no_proxy" widget="CHECKBOX" depends="useDefaultProxySettings" conditional="useDefaultProxySettings=false" constraint="16"/>
+	<property name="proxyHost" label="http_proxy_host" widget="TEXT_FIELD" depends="useDefaultProxySettings,noProxy" conditional="useDefaultProxySettings=false and noProxy=false" constraint="17">
+	   <param name="validateOnReturn" value="true"/>
+	</property>
+	<property name="proxyPort" label="http_proxy_port" widget="INTEGER" depends="useDefaultProxySettings,noProxy" conditional="useDefaultProxySettings=false and noProxy=false" constraint="18">
+	   <param name="validateOnReturn" value="true"/>
+	</property>
+	<property name="sProxyHost" label="https_proxy_host" widget="TEXT_FIELD" depends="useDefaultProxySettings,noProxy" conditional="useDefaultProxySettings=false and noProxy=false" constraint="19">
+	   <param name="validateOnReturn" value="true"/>
+	</property>
+	<property name="sProxyPort" label="https_proxy_port" widget="INTEGER" depends="useDefaultProxySettings,noProxy" conditional="useDefaultProxySettings=false and noProxy=false" constraint="20">
+	   <param name="validateOnReturn" value="true"/>
+	</property>
+	<group name="button" constraint="20">
+		<param name = "layout" value="right"/>
+		<property name="redetectProxySettings" label="redetect_proxy_settings" depends="useDefaultProxySettings,noProxy" conditional="useDefaultProxySettings=false and noProxy=false" widget="BUTTON" constraint="1">
+		</property>
+	</group>
+	<property name="proxyLogin" label="proxy_login" widget="TEXT_FIELD" depends="useDefaultProxySettings,noProxy" conditional="useDefaultProxySettings=false and noProxy=false" constraint="21">
+	   <param name="validateOnReturn" value="true"/>
+	</property>
+	<property name="proxyPassword" label="proxy_password" widget="TEXT_FIELD" depends="useDefaultProxySettings,noProxy" conditional="useDefaultProxySettings=false and noProxy=false" constraint="22">
+	   <param name="validateOnReturn" value="true"/>
+	   <param name="password" value="true"/>
+	</property>
+	<property name="bugReportDirectActionUrl" label="bugReportDirectActionUrl" widget="TEXT_FIELD" constraint="1">
+		<param name="validateOnReturn" value="true"/>
+	</property>
+	<property name="webServiceUrl" label="web_service_url" widget="TEXT_FIELD" constraint="23">
+	   <param name="validateOnReturn" value="true"/>
+	</property>
+	<property name="rememberAndDontAskWebServiceParamsAnymore" label="web_service_remember_and_dont_ask_params_anymore" widget="CHECKBOX" constraint="24"/>
+</tab>

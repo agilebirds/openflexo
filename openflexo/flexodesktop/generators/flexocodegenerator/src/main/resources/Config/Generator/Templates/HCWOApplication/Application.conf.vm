@@ -1,0 +1,30 @@
+{
+    $project.getPrefix() = {
+        afterLoginDA = "${projectGenerator.getAfterLoginDA()}";
+    };
+    
+    DenaliDBUtils = {
+        globalDefaultConnectionDictionary = {
+                username = "${project.getDataModel().getGlobalDefaultUsername()}";
+                password = "$!{project.getDataModel().getGlobalDefaultPassword()}";
+                URL = "${project.getDataModel().getGlobalDefaultConnectionString()}";
+        };
+        #foreach($dmeomodel in ${project.getDataModel().getAllDMEOModel()})
+        #if( $dmeomodel.getDatabaseServer().length()>0 )
+        #if( $dmeomodel.isNotPrototypes() )
+        $dmeomodel.getNameWithoutSuffix() = {
+                username = "$dmeomodel.getUsername()";
+                password = "$!dmeomodel.getPasswd()";
+                URL = "$dmeomodel.getDatabaseServer()";
+        };
+        #end
+        #end
+        #end
+    };
+    
+    DenaliCore = {
+        configurationName = "DEV";
+        applicationStyle = "${generator.getProject().getCssSheet().getName()}";
+    };
+    
+}

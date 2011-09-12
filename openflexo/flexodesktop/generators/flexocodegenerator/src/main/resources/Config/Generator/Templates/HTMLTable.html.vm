@@ -1,0 +1,21 @@
+#*
+* Possibility to add properties that will be included as div param as such in top block header
+* class, position, top, bottom, left and right
+* Dom modif on August 2010
+*
+*#
+ #if(${widget.getPropertyNamed("class")})
+ 	#set( $_class = ${widget.getPropertyNamed("class").getValue()} )
+ #end
+ 
+#void($stack.push($htmlTableWidth))
+#set($htmlTableWidth = $generator.getNewHashtable())
+#if($widget.getNoCSS())
+  <table id="id$widget.getFlexoID()">
+#else
+  <table #if(${widget.getPropertyNamed("class")}) class="$_class" #else class="denaliHTMLTable" #end id="id$widget.getFlexoID()">
+#end
+#set( $_class = "")
+#renderSequence($widget.getSequenceTR())    
+</table>
+#set($htmlTableWidth=$stack.pop())

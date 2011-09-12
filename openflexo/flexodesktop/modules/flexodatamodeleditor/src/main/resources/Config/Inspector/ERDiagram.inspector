@@ -1,0 +1,29 @@
+<inspector title = "Entity-relationship diagram" inheritsfrom="DMObject.inspector">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="name" label="name" widget="TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		</property>
+		<!--<property name="repository" label="repository" widget="CUSTOM" constraint="1">
+			<param name="className" value="org.openflexo.components.widget.DMRepositoryInspectorWidget"/>
+		</property>-->
+		<property name="entities" label="entities_declared_in_this_diagram" widget="CUSTOM" constraint="2">
+			<param name="className" value="org.openflexo.components.widget.MultipleObjectInspectorWidget"/>
+			<param name="rootObject" value="dataModel"/>
+			<param name="isSelectable">
+				<param name="DM_ENTITY" value="true"/>
+				<param name="DM_EOENTITY" value="true"/>
+			</param>
+			<param name="visibility">
+				<param name="DM_PROPERTY" value="HIDE"/>
+				<param name="DM_EOATTRIBUTE" value="HIDE"/>
+				<param name="DM_EORELATIONSHIP" value="HIDE"/>
+				<param name="DM_METHOD" value="HIDE"/>
+				<param name="DM_TRANSTYPER" value="HIDE"/>
+			</param>
+		</property>
+	</tab>
+</inspector>

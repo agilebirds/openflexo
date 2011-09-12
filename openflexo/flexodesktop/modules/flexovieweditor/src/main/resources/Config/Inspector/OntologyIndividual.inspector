@@ -1,0 +1,22 @@
+<inspector title = "Ontologic individual" inheritsfrom="OntologyObject.inspector" inspectedClassName="org.openflexo.foundation.ontology.OntologyIndividual">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+		<property name="name" label="name" widget="READ_ONLY_TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+		</property>
+		<property_list name="superClasses" label="ontology_super_classes" constraint="3">
+			<param name="visible_row_count" value="3" />
+			<param name="row_height" value="20" />
+			<property_list_column name="icon" label=""
+				widget="ICON">
+				<param name="column_width" value="30" />
+				<param name="resizable" value="false" />
+			</property_list_column>
+			<property_list_column name="name" label="URI"
+				widget="READ_ONLY_TEXT_FIELD">
+				<param name="column_width" value="200" />
+				<param name="resizable" value="true" />
+			</property_list_column>
+		</property_list>
+	</tab>
+</inspector>

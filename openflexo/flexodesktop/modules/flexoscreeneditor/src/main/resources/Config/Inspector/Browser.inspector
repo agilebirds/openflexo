@@ -1,0 +1,23 @@
+<inspector title = "Browser" inheritsfrom ="DropDown.inspector">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+		<hidden name="value"/>
+		<property name="visibleRows" label="rows" widget="INTEGER" constraint="3"/>
+		<hidden name="submitForm" />
+		<hidden name="exampleValueIsDefaultValue" />
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+	    
+	</tab>
+
+	<tab name="Doc" index="2" layout="DEFAULT">
+		
+	</tab>
+
+	<tab name="Data" index="3" layout="DEFAULT">
+ 		
+ 		
+	</tab>
+	
+</inspector>

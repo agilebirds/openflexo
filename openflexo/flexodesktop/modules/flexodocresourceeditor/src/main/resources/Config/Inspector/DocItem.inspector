@@ -1,0 +1,22 @@
+<inspector title = "DocItem">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+		<property name="identifier" label="identifier" widget="READ_ONLY_TEXT_FIELD" constraint="0"/>
+		<property name="description" label="description" widget="TEXT_AREA" constraint="1">
+			<param name="rows" value="10"/>
+		</property>
+		<property name="docFormat" label="docFormat" widget="DROPDOWN" help="Select a specific language if you used it explicitly in your description, otherwise leave this unset" constraint="2">
+			<param name="format" value="name"/>
+		</property>
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+	</tab>
+
+	<tab name="Doc" index="2" layout="DEFAULT">
+	</tab>
+
+	<tab name="Data" index="3" layout="DEFAULT">
+	</tab>
+
+</inspector>

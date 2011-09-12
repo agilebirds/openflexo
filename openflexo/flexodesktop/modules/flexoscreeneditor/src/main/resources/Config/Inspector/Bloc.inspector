@@ -1,0 +1,22 @@
+<inspector title = "Block" inheritsfrom ="Widget.inspector">
+
+	<tab name="Basic" index="0" layout="DEFAULT">
+		<property name="title" label="title" widget="TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+		</property>
+		<hidden name="tooltip"/>
+	</tab>
+
+	<tab name="Advanced" index="1" layout="DEFAULT">
+		<property name="hideTable" label="hide_table" widget="CHECKBOX" constraint="2">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		</property>
+	</tab>
+
+	<tab name="Doc" index="2" layout="DEFAULT">
+	</tab>
+
+	<tab name="Data" index="3" layout="DEFAULT">
+	</tab>
+
+</inspector>

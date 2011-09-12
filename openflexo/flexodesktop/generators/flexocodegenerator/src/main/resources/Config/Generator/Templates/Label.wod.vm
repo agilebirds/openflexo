@@ -1,0 +1,25 @@
+#set($value = $widget.getValue())
+#if(!$value)
+    #set($value = "Label_$widget.getFlexoID()")
+#end        
+#if($value.indexOf('<')>-1)
+    #set($value = $value.replace("&", "&amp;"))
+#end
+#if ($value.indexOf('<')>-1)
+    #set($value = $value.replace("<", "&lt"))
+#end
+#if ($value.indexOf('<')>-1)
+    #set($value = $value.replace(">", "&gt"))
+#end
+#if($project.getIsLocalized())
+    #set($p = 'value')
+    Label_#name(): ${project.getPrefix()}LocalizedString {
+        value = "#generateKey ($widget $p $widget.getValue())";
+    }
+    #if ($widget.getTooltip() && !$widget.getTooltip().trim().equals(""))
+    Label_#name()_Tooltip: WOGenericContainer{
+        elementName = "span";
+        #tooltipAsTitle()
+    }
+    #end
+#end

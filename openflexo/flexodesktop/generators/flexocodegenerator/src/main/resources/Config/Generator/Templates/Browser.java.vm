@@ -1,0 +1,79 @@
+#macro(valuesList)
+#foreach($value in ${widget.getValueList()})#if (${foreach.index} > 0), #end"${generator.escapeStringForJava(${value})}"#end
+#end
+
+## 1) The item
+#if(!$widget.isDKV() && !${widget.getBindingItem().isBindingValid()})
+	public String itemOf#capName();
+#end
+
+## 2) The selection
+#if(!${widget.getBindingSelection().isBindingValid()})
+	 #if(!${widget.getIsAcceptableForAnyProcessInstanceDictionary()})
+        private NSArray #name()Selection = new NSArray();
+        
+        public NSArray get#capName()Selection()
+        {
+            return #name()Selection;
+        }
+        
+        public void set#capName()Selection(List selected)
+        {
+            #name()Selection = new NSArray(selected, false);
+        }
+	 #else
+		public NSArray get#capName()Selection()
+        {
+            return new NSArray(BusinessDataStorage.parseCsvLine((String)getCurrentProcessBusinessData().valueForKey("${widget.getProcessInstanceDictionaryKey()}")), false);
+        }
+        
+        public void set#capName()Selection(List selected)
+        {
+            getCurrentProcessBusinessData().setObjectForKey(BusinessDataStorage.getCsvLine(selected), "${widget.getProcessInstanceDictionaryKey()}");
+        }
+	 #end
+#end
+
+
+## 3) The list
+#if(!${widget.isDKV()} && !${widget.getBindingList().isBindingValid()})
+
+	#if(${widget.getDropdownType().isDBList()} && ${widget.getBindingItem().isBindingValid()})
+		#set($type = ${widget.getBindingItem().getBindingPathLastElement().getType().getName()})
+		private NSArray #name()List = null;
+			
+		public NSArray get#capName()List()
+        {
+			if(#name()List == null)
+			{
+				#name()List = new NSArray(getBusinessDataStorage().getAllBusinessDataSamples(WorkflowBusinessData.${toolbox.cleanStringForProcessDictionaryKey($type)}), false);
+			}
+			
+			return #name()List;
+		}
+	#else
+		private NSArray #name()List = new NSArray(new String[]{#valuesList()});
+        
+        public NSArray get#capName()List()
+        {
+    		#if(${widget.isStatusList()})
+    			#if(${widget.isInRepetition()})
+    				#set($inferredListProcess =  ${widget.getHTMLListDescriptor().getRepetitionOperator().getInferredListProcess()})
+    			#elseif(${widget.getIsFilterForRepetition()})
+    				#set($inferredListProcess =  ${widget.getIsFilterForRepetition().getInferredListProcess()})
+    			#end
+    			#if($inferredListProcess)
+    				Vector<String> results = WorkflowProcess.${inferredListProcess.getProcessDictionaryKey()}.getStatuses();
+    			#else
+    				Vector<String> results = statusList();
+    			#end
+    			if(results.size() == 0)
+    				return #name()List;
+    			return new NSArray(results, false);
+    		#else
+    			return #name()List;
+    		#end
+        }
+	#end
+#end
+

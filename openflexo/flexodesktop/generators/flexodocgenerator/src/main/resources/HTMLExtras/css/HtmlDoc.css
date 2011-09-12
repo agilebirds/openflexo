@@ -1,0 +1,256 @@
+html {
+	overflow: hidden;
+}
+
+body {
+	background-color: #FFFFFF;
+	padding: 0;
+	margin: 0;
+	color: #000000;
+	min-height: 100%;
+	width: 100%;
+	height: 100%;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+}
+
+#htmlDocPage {
+	width: 100%;
+	height: 100%;
+	min-height: 100%;
+	position: absolute;
+	overflow: hidden;
+}
+
+#htmlDocLeftColumn {
+	width: 280px;
+	height: 100%;
+	border-right: 2px solid black;
+	position: absolute;
+	left: 0px;
+}
+
+/*
+Be careful, if you change the padding or the border vertical, you will need to adapt the javascript functions 
+resizeLowerLeftColumnAccordingToUpperOne()
+And
+resizeVertical()
+*/
+#htmlDocUpperLeftColumn {
+	height: 50%;
+	overflow-y: scroll;
+	overflow-x: auto;
+	border-bottom: 2px solid black;
+}
+
+#htmlDocUpperLeftColumnHeader {
+	border-bottom: 1px solid black;
+	background-color: lightGrey;
+	height: 20px;
+	padding: 8px;
+	text-align: center;
+}
+
+#htmlDocUpperLeftColumnHeader input {
+	height: 14px;
+	width: 90%;
+	font-size: 10px;
+	font-style: italic;
+}
+
+#htmlDocUpperLeftColumnContent {
+	padding: 5px;
+}
+
+/*
+Be careful, if you change the padding or the border vertical, you will need to adapt the javascript functions 
+resizeLowerLeftColumnAccordingToUpperOne()
+And
+resizeVertical()
+*/
+#htmlDocLowerLeftColumn {
+	height: 50%;
+	overflow-y: scroll;
+	overflow-x: auto;
+	padding: 5px;
+}
+
+#htmlDocRightColumn {
+	overflow: hidden;
+	height: 100%;
+	margin-left: 282px;
+	position: relative;
+}
+
+#htmlDocRightColumnHeader {
+	border-bottom: 1px solid black;
+	background-color: lightGrey;
+	height: 20px;
+	padding: 8px;
+}
+
+#htmlDocRightColumnHeader div.htmlDocRightColumnHeaderLeft {
+	float: left;
+	width: 40%;
+	white-space: nowrap;
+}
+
+#htmlDocRightColumnHeader div.htmlDocRightColumnHeaderLeft img {
+	cursor: pointer;
+}
+
+#htmlDocRightColumnHeader div.htmlDocRightColumnHeaderRight {
+	float: right;
+	width: 60%;
+	text-align: right;
+	white-space: nowrap;
+}
+
+#htmlDocRightColumnContent {
+	position: relative;
+	padding: 5px;
+	overflow-y: scroll;
+	overflow-x: auto;
+	height: 95%;
+}
+
+img {
+	border: none;
+}
+
+h2 {
+	font-size: 15px;
+}
+
+h3 {
+	font-size: 13px;
+}
+
+span.htmlDocHContent {
+	font-weight: normal;
+	font-style: italic;
+}
+
+h2 span.htmlDocHContent {
+	font-size: 13px;
+}
+
+h3 span.htmlDocHContent {
+	font-size: 11px;
+}
+
+div.htmlDocSelectionDiv {
+	border: 1px dashed red;
+	position: absolute;
+	cursor: pointer;
+}
+
+div.htmlDocSelectionDiv div {
+	border: none;
+	position: absolute;
+	cursor: pointer;
+}
+
+td.htmlDocTdMailTitle {
+	text-align: right;
+	vertical-align: top;
+	font-weight: bold;
+	padding-right: 5px;
+	padding-bottom: 5px;
+}
+
+td.htmlDocTdMailContent {
+	vertical-align: top;
+	border: 1px solid black;
+	padding: 1px 5px;
+}
+
+div.htmlDocMetrics {
+	padding: 20px 5px 20px 5px;
+}
+
+div.htmlDocMetrics table {
+	width: 80%;
+}
+
+div.htmlDocLowerLeftColumnInfo {
+	float: right;
+	cursor: pointer;
+}
+
+ul.htmlDocDocumentList {
+	padding-left: 15px;
+	margin-left: 0px;
+}
+
+ul.htmlDocDocumentList li {
+	white-space: nowrap;
+}
+
+/* PROCEDURE */
+table.procedure {
+	width: 100%;
+}
+
+th.procedure {
+	background-color: rgb(178,191,215);
+	font-weight: bold;
+	text-align: center;
+	color: white;
+}
+
+td.procedure {
+	
+}
+
+td.procedureFooter {
+	text-align: right;
+	background-color: rgb(178,191,215);
+}
+
+/* AUTOCOMPLETE */
+
+div.autocomplete {
+  	width: 300px;
+  	background: #fff;
+  	display: inline;
+  	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+}
+ 
+div.autocomplete ul {
+  	border: 1px solid #888;
+  	margin: 0;
+  	padding: 0;
+  	width: 100%;
+  	list-style-type: none;
+}
+ 
+div.autocomplete ul li {
+  	margin: 0;
+  	padding: 3px;
+  	cursor:pointer;
+  	background: none;
+  	vertical-align: middle;
+  	clear: both;
+}
+
+div.autocomplete ul li div {
+	float: left;
+	width: 25px;
+	text-align: center;
+}
+ 
+div.autocomplete ul li.selected { 
+  	background-color: #eaf6fb; 
+}
+ 
+div.autocomplete ul strong.highlight { 
+  	color: #800; 
+  	margin: 0;
+  	padding: 0;
+}
+
+area.notGeneratedHtmlDocArea {
+	cursor: not-allowed;
+}

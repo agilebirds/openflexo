@@ -1,0 +1,117 @@
+{
+	"classProperties" = (
+		"associatedLink",
+		"bannerID",
+		"description",
+		"fileID",
+		"filePath",
+		"height",
+		"name",
+		"sourceURL",
+		"tooltip",
+		"type",
+		"width",
+		"htmlCode",
+		"updateDate",
+		"updator",
+		"creationDate",
+		"creator",
+		"status"
+	);
+	"className" = "DLRBanner";
+	"primaryKeyAttributes" = (
+		"bannerID"
+	);
+	"externalName" = "BANNER";
+	"attributes" = (
+		{
+			"columnName" = "BANNER_LINK";
+			"name" = "associatedLink";
+			"prototypeName" = "str2000";
+		},
+		{
+			"columnName" = "BANNER_ID";
+			"name" = "bannerID";
+			"prototypeName" = "id";
+			"allowsNull" = "N";
+		},
+		{
+			"columnName" = "BANNER_CR_DATE";
+			"name" = "creationDate";
+			"prototypeName" = "date";
+		},
+		{
+			"columnName" = "BANNER_CREATOR";
+			"name" = "creator";
+			"prototypeName" = "str100";
+		},
+		{
+			"columnName" = "BANNER_DESCRIPTION";
+			"name" = "description";
+			"prototypeName" = "str2000";
+		},
+		{
+			"columnName" = "BANNER_FILE_ID";
+			"name" = "fileID";
+			"prototypeName" = "str200";
+		},
+		{
+			"columnName" = "BANNER_FILE_PATH";
+			"name" = "filePath";
+			"prototypeName" = "str200";
+		},
+		{
+			"columnName" = "BANNER_HEIGHT";
+			"name" = "height";
+			"prototypeName" = "int";
+		},
+		{
+			"columnName" = "BANNER_HTML_CODE";
+			"name" = "htmlCode";
+			"prototypeName" = "str2000";
+		},
+		{
+			"columnName" = "BANNER_NAME";
+			"name" = "name";
+			"prototypeName" = "str200";
+		},
+		{
+			"columnName" = "BANNER_SRC_URL";
+			"name" = "sourceURL";
+			"prototypeName" = "str2000";
+		},
+		{
+			"columnName" = "BANNER_TOOLTIP";
+			"name" = "tooltip";
+			"prototypeName" = "str200";
+		},
+		{
+			"columnName" = "BANNER_TYPE";
+			"name" = "type";
+			"prototypeName" = "str10";
+		},
+		{
+			"columnName" = "BANNER_UP_DATE";
+			"name" = "updateDate";
+			"prototypeName" = "date";
+		},
+		{
+			"columnName" = "BANNER_UPDATOR";
+			"name" = "updator";
+			"prototypeName" = "str100";
+		},
+		{
+			"columnName" = "BANNER_WIDTH";
+			"name" = "width";
+			"prototypeName" = "int";
+		},
+		{
+			"columnName" = "BANNER_STATUS";
+			"name" = "status";
+			"prototypeName" = "str10";
+			"allowsNull" = "Y";
+		}
+	);
+	"name" = "DLRBanner";
+	"fetchSpecificationDictionary" = {};
+}

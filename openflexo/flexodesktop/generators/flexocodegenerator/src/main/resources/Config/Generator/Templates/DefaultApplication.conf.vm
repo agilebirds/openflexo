@@ -1,0 +1,56 @@
+{
+    DenaliCore = {
+        mainProjectID= "$project.getPrefix()";/* Internal use */
+        defaultLanguage = "${project.getDKVModel().getMainLanguage().getIsoCode()}"; /* Iso code */
+        applicationStyle = "${generator.getProject().getCssSheet().getName()}";
+        permanentPageCacheSize = "5";
+        pageCacheSize = 5; /* Number of pages the server holds for a user */
+        sessionTimeOut = 14400; /* time of inactivity in seconds before a session expires (does not overwrite Tomcat session timeout!) */
+    };
+    
+    DenaliComponents = {
+        defaultDateFormat = "%d-%b-%Y"; /* This means that dates should look like this: 12-Oct-2005 */
+    };
+        
+    DenaliCountry = {
+        loadCountryAndLanguagesAtStart = false;
+    };
+    
+    DenaliLocalization = {
+        localizationFiles = {
+            frameworks = (
+                #foreach($lg in ${project.getDKVModel().getLanguages()})
+                    #if(${lg.getIsoCode()} && ${lg.getIsoCode()} != "")
+                        #if($isNotFirst),#end{
+                            name="DenaliCore";
+                            files=(WDLLocalization${lg.getIsoCode()});
+                        }
+                        ,{
+                            name="DenaliCore";
+                            files=(DLLocalization${lg.getIsoCode()});
+                        }
+                        ,{
+                            name="DenaliCore";
+                            files=(WDLValidationLocalization${lg.getIsoCode()});
+                        }
+                        #set($isNotFirst = true)
+                    #end
+                #end
+            );
+            application = 
+                (
+                #set($isNotFirst = false)
+                @single
+                #foreach($lg in ${project.getDKVModel().getLanguages()})
+                    #if(${lg.getIsoCode()} && ${lg.getIsoCode()} != "")
+                        #if($isNotFirst),#end
+                        "${lg.getIsoCode()}"
+                        #set($isNotFirst = true)
+                    #end
+                #end
+                @end
+                );
+        };
+    };
+    
+}

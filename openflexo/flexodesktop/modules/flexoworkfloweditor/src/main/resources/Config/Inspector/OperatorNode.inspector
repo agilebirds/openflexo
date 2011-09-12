@@ -1,0 +1,19 @@
+<inspector title = "Operator Node" inheritsfrom="Node.inspector" inspectedClassName="org.openflexo.foundation.wkf.node.OperatorNode">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<!-- Operators are immutable now -->
+		<!--<property name="operatorType" label="operator_type" widget="DROPDOWN" constraint="1">
+			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="format" value="name"/>
+		</property>-->
+	</tab>
+	<tab name="Advanced" index="1">
+	     <property name="role" label="representation_role" widget="DROPDOWN" depends="isInRootPetriGraph" conditional="isInRootPetriGraph=true" constraint="2">
+	        <param name = "format" value="name"/>
+            <param name = "dynamiclist" value="project.workflow.allRoles"/>
+	     </property>
+	</tab>
+	
+</inspector>

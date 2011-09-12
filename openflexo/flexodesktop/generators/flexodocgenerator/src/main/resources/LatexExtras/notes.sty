@@ -1,0 +1,127 @@
+%% Time-stamp: <2004-04-21 10:31:51 ddw>
+\usepackage{ifthen}
+%% Create counter initialized to 1 for notes
+\newcounter{notesnum}\stepcounter{notesnum}
+\newcounter{usernotesnum}\stepcounter{usernotesnum}
+%% Create counter initialized to 0 for questions 
+%%(to automatically detect if the question list has to be created
+\newcounter{questnum}
+%\newcommand{\allnotes}{Notes on pages:}
+%\newcommand{\thisnoteref}{}
+%% Define what a note looks like
+\newcommand{\note}[2][]{\addcontentsline{lon}{note}{Note \thenotesnum (#1)}
+\begin{quotation}
+%  \renewcommand{\thisnoteref}{note:\notesnum}
+%  \label{\thisnoteref}
+%  \renewcommand{\allnotes}{\allnotes\ P-\pageref{\thisnoteref}}
+  \underline{\textbf{Note \thenotesnum:}}\marginpar{\small(N\thenotesnum)\\[-1mm]{\tiny{\emph{#1}}}} \emph{#2} \underline{\textbf{EndNote.}}
+\end{quotation}\stepcounter{notesnum}}
+
+\newenvironment{longnote}[1][]{ %
+\addcontentsline{lon}{note}{Note \thenotesnum (#1)}
+  \begin{quotation}
+    \underline{\textbf{Note \thenotesnum:}} \marginpar{\small(N\thenotesnum)\\[-1mm]{\tiny{\emph{#1}}}}
+
+    \begin{itshape}
+      }{ %
+    \end{itshape}
+    \underline{\textbf{EndNote.}}
+  \end{quotation}
+  \stepcounter{notesnum}}
+
+%% \newcommand{\questionrep}[3][]{\question[#1]{#2}
+%%   \begin{center}
+%%     \fbox{\begin{minipage}{0.7\textwidth}\texttt{#3}\end{minipage}}
+%% \end{center}
+%% }
+
+\newcommand{\question}[2][]{
+\stepcounter{questnum}
+\addcontentsline{lon}{note}{Question \thequestnum}
+\addtocontents{loq}{\protect\qpres{\thepage}{\thequestnum}{#2}}
+\begin{quote}
+  %\marginpar{\raisebox{-18pt}{\small(Q\thequestnum{})}}
+  \marginpar{\raisebox{-27pt}{\includegraphics[width=0.9cm]{Figures/question}\small\thequestnum}}
+  \underline{\textbf{Question \thequestnum:}} \emph{#2}
+\end{quote}}
+\newcommand{\questionrep}[3][]{
+\stepcounter{questnum}
+\addcontentsline{lon}{note}{Question
+    \thequestnum ~(answered)}
+\addtocontents{loq}{\protect\qpresx{\thepage}{\thequestnum}{#3}{#2}}
+\begin{quote}
+  \marginpar{\raisebox{-18pt}{\small(Q\thequestnum{})}}
+  \underline{\textbf{Question \thequestnum:}} \emph{#2}
+  \begin{center}
+    \fbox{\begin{minipage}{0.7\textwidth}\texttt{#3}\end{minipage}}
+  \end{center}
+\end{quote}}
+
+\newcommand{\showquestion}[1]{#1}
+\newcommand{\showanswer}[1]{#1}
+\newcommand{\shownoanswer}[1][-- no answer --]{#1}
+\newcommand{\qpres}[3]{\qpresx{#1}{#2}{none}{#3}}
+\newcommand{\qpresx}[4]{ %dummy1 dummy2}
+   \begin{description}
+   \item[Page #1 :] \mbox{}
+     \begin{description}
+     \item[Question #2:] \showquestion{#4}
+     \item[Answer:] \ifthenelse{\equal{#3}{none}}{\shownoanswer{}}{\showanswer{#3}}
+   \end{description}
+   \end{description}
+ }
+\newcommand*\l@question{\@dottedtocline{1}{1.5em}{2.3em}}
+\newcommand{\questionsfulllist}{
+    \if@twocolumn
+      \@restonecoltrue\onecolumn
+    \else
+      \@restonecolfalse
+    \fi
+%    \chapter*{#1
+%        \@mkboth{%
+%           \MakeUppercase{#1}}{\MakeUppercase{#1}}}%
+    \@starttoc{loq}%
+    \if@restonecol\twocolumn\fi
+}
+
+% define a user note environment The argument is a title for the
+%  note.
+% The intention is to acquire the reader attention to some important
+%  remark in the text
+\newsavebox{\thisbox}
+\newenvironment{usernote}[2][\textwidth]{ %
+\addcontentsline{lon}{note}{(\theusernotesnum) #2}
+\begin{lrbox}{\thisbox}
+\begin{minipage}{0.8#1}
+    \textbf{\theusernotesnum:} \textbf{#2}\par 
+
+    \begin{itshape}
+      }{ %
+    \end{itshape}
+\end{minipage}
+
+\end{lrbox}\begin{center}\fboxrule=4pt\fboxsep=10pt\fbox{\usebox{\thisbox}}\end{center}\stepcounter{usernotesnum}}
+
+% define what it takes to obtain a list of all the notes (give that
+% most of them (execpt for usernotes) should be resolved before
+% publishing...
+
+\newcommand*\l@note{\@dottedtocline{1}{1.5em}{2.3em}}
+\newcommand\tableofnotes[1]{%
+    \if@twocolumn
+      \@restonecoltrue\onecolumn
+    \else
+      \@restonecolfalse
+    \fi
+%    \chapter*{#1
+%        \@mkboth{%
+%           \MakeUppercase{#1}}{\MakeUppercase{#1}}}%
+    \@starttoc{lon}%
+    \if@restonecol\twocolumn\fi
+    }
+
+% TODO command printed in the margin
+\newboolean{showtodo}
+\setboolean{showtodo}{true}
+\newcommand{\todo}{\ifthenelse{\boolean{showtodo}}{\marginpar{\textbf{\textcolor{red}{(TODO)}}}}{}}
+

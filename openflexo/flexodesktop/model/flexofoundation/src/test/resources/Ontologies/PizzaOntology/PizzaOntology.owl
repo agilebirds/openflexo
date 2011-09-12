@@ -1,0 +1,324 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY Products "http://www.denali.be/flexo/ontologies/Products.owl#" >
+    <!ENTITY Ontology1231149415187 "http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#" >
+]>
+
+
+<rdf:RDF xmlns="http://www.denali.be/flexo/ontologies/PizzaOntology.owl#"
+     xml:base="http://www.denali.be/flexo/ontologies/PizzaOntology/PizzaOntology.owl"
+     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+     xmlns:Products="http://www.denali.be/flexo/ontologies/Products.owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:Ontology1231149415187="http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#">
+    <owl:Ontology rdf:about="">
+        <owl:imports rdf:resource="http://www.denali.be/flexo/ontologies/Products/Products.owl"/>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#hasBase -->
+
+    <owl:ObjectProperty rdf:about="&Ontology1231149415187;hasBase">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <rdfs:domain rdf:resource="&Ontology1231149415187;Pizza"/>
+        <rdfs:range rdf:resource="&Ontology1231149415187;PizzaBase"/>
+        <rdfs:subPropertyOf rdf:resource="&Ontology1231149415187;hasIngredient"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#hasIngredient -->
+
+    <owl:ObjectProperty rdf:about="&Ontology1231149415187;hasIngredient">
+        <rdf:type rdf:resource="&owl;TransitiveProperty"/>
+        <owl:inverseOf rdf:resource="&Ontology1231149415187;isIngredientOf"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#hasTopping -->
+
+    <owl:ObjectProperty rdf:about="&Ontology1231149415187;hasTopping">
+        <rdfs:domain rdf:resource="&Ontology1231149415187;Pizza"/>
+        <rdfs:range rdf:resource="&Ontology1231149415187;PizzaTopping"/>
+        <rdfs:subPropertyOf rdf:resource="&Ontology1231149415187;hasIngredient"/>
+        <owl:inverseOf rdf:resource="&Ontology1231149415187;isToppingOf"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#isBaseOf -->
+
+    <owl:ObjectProperty rdf:about="&Ontology1231149415187;isBaseOf">
+        <rdfs:range rdf:resource="&Ontology1231149415187;Pizza"/>
+        <rdfs:domain rdf:resource="&Ontology1231149415187;PizzaBase"/>
+        <owl:inverseOf rdf:resource="&Ontology1231149415187;hasBase"/>
+        <rdfs:subPropertyOf rdf:resource="&Ontology1231149415187;isIngredientOf"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#isIngredientOf -->
+
+    <owl:ObjectProperty rdf:about="&Ontology1231149415187;isIngredientOf">
+        <rdf:type rdf:resource="&owl;TransitiveProperty"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#isToppingOf -->
+
+    <owl:ObjectProperty rdf:about="&Ontology1231149415187;isToppingOf">
+        <rdfs:range rdf:resource="&Ontology1231149415187;Pizza"/>
+        <rdfs:domain rdf:resource="&Ontology1231149415187;PizzaTopping"/>
+        <rdfs:subPropertyOf rdf:resource="&Ontology1231149415187;isIngredientOf"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.denali.be/flexo/ontologies/Products.owl#Food -->
+
+    <owl:Class rdf:about="&Products;Food"/>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#AnchovyTopping -->
+
+    <owl:Class rdf:about="&Ontology1231149415187;AnchovyTopping">
+        <rdfs:subClassOf rdf:resource="&Ontology1231149415187;SeefoodTopping"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#CaperTopping -->
+
+    <owl:Class rdf:about="&Ontology1231149415187;CaperTopping">
+        <rdfs:subClassOf rdf:resource="&Ontology1231149415187;VegetableTopping"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#CheeseTopping -->
+
+    <owl:Class rdf:about="&Ontology1231149415187;CheeseTopping">
+        <rdfs:subClassOf rdf:resource="&Ontology1231149415187;PizzaTopping"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#DeepPanBase -->
+
+    <owl:Class rdf:about="&Ontology1231149415187;DeepPanBase">
+        <rdfs:subClassOf rdf:resource="&Ontology1231149415187;PizzaBase"/>
+        <owl:disjointWith rdf:resource="&Ontology1231149415187;ThinAndCrispyBase"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#HamTopping -->
+
+    <owl:Class rdf:about="&Ontology1231149415187;HamTopping">
+        <rdfs:subClassOf rdf:resource="&Ontology1231149415187;MeatTopping"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#MeatTopping -->
+
+    <owl:Class rdf:about="&Ontology1231149415187;MeatTopping">
+        <rdfs:subClassOf rdf:resource="&Ontology1231149415187;PizzaTopping"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#MozzarellaTopping -->
+
+    <owl:Class rdf:about="&Ontology1231149415187;MozzarellaTopping">
+        <rdfs:subClassOf rdf:resource="&Ontology1231149415187;CheeseTopping"/>
+        <owl:disjointWith rdf:resource="&Ontology1231149415187;ParmezanTopping"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#MushroomTopping -->
+
+    <owl:Class rdf:about="&Ontology1231149415187;MushroomTopping">
+        <rdfs:subClassOf rdf:resource="&Ontology1231149415187;VegetableTopping"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#NamedPizza -->
+
+    <owl:Class rdf:about="&Ontology1231149415187;NamedPizza">
+        <rdfs:subClassOf rdf:resource="&Ontology1231149415187;Pizza"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#OliveTopping -->
+
+    <owl:Class rdf:about="&Ontology1231149415187;OliveTopping">
+        <rdfs:subClassOf rdf:resource="&Ontology1231149415187;VegetableTopping"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#OnionTopping -->
+
+    <owl:Class rdf:about="&Ontology1231149415187;OnionTopping">
+        <rdfs:subClassOf rdf:resource="&Ontology1231149415187;VegetableTopping"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#ParmezanTopping -->
+
+    <owl:Class rdf:about="&Ontology1231149415187;ParmezanTopping">
+        <rdfs:subClassOf rdf:resource="&Ontology1231149415187;CheeseTopping"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#PepperoniTopping -->
+
+    <owl:Class rdf:about="&Ontology1231149415187;PepperoniTopping">
+        <rdfs:subClassOf rdf:resource="&Ontology1231149415187;MeatTopping"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#Pizza -->
+
+    <owl:Class rdf:about="&Ontology1231149415187;Pizza">
+        <rdfs:subClassOf rdf:resource="&Products;Food"/>
+        <rdfs:subClassOf rdf:resource="&Ontology1231149415187;PizzaConcept"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&Ontology1231149415187;hasBase"/>
+                <owl:someValuesFrom rdf:resource="&Ontology1231149415187;PizzaBase"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#PizzaBase -->
+
+    <owl:Class rdf:about="&Ontology1231149415187;PizzaBase">
+        <rdfs:subClassOf rdf:resource="&Ontology1231149415187;PizzaConcept"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#PizzaConcept -->
+
+    <owl:Class rdf:about="&Ontology1231149415187;PizzaConcept">
+        <rdfs:subClassOf rdf:resource="&owl;Thing"/>
+        <rdfs:comment>Les concepts</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#PizzaTopping -->
+
+    <owl:Class rdf:about="&Ontology1231149415187;PizzaTopping">
+        <rdfs:subClassOf rdf:resource="&Ontology1231149415187;PizzaConcept"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#SeefoodTopping -->
+
+    <owl:Class rdf:about="&Ontology1231149415187;SeefoodTopping">
+        <rdfs:subClassOf rdf:resource="&Ontology1231149415187;PizzaTopping"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#ThinAndCrispyBase -->
+
+    <owl:Class rdf:about="&Ontology1231149415187;ThinAndCrispyBase">
+        <rdfs:subClassOf rdf:resource="&Ontology1231149415187;PizzaBase"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#VegetableTopping -->
+
+    <owl:Class rdf:about="&Ontology1231149415187;VegetableTopping">
+        <rdfs:subClassOf rdf:resource="&Ontology1231149415187;PizzaTopping"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.w3.org/2002/07/owl#Thing -->
+
+    <owl:Class rdf:about="&owl;Thing"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // General axioms
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="&Ontology1231149415187;Pizza"/>
+            <rdf:Description rdf:about="&Ontology1231149415187;PizzaBase"/>
+            <rdf:Description rdf:about="&Ontology1231149415187;PizzaTopping"/>
+        </owl:members>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="&Ontology1231149415187;CaperTopping"/>
+            <rdf:Description rdf:about="&Ontology1231149415187;MushroomTopping"/>
+            <rdf:Description rdf:about="&Ontology1231149415187;OliveTopping"/>
+            <rdf:Description rdf:about="&Ontology1231149415187;OnionTopping"/>
+        </owl:members>
+    </rdf:Description>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 2.2.1.962) http://owlapi.sourceforge.net -->
+

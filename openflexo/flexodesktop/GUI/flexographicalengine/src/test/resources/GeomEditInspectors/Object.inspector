@@ -1,0 +1,51 @@
+<inspector title = "Object" inheritsfrom="Common.inspector" inspectedClassName="org.openflexo.fge.geomedit.gr.GeometricObjectGraphicalRepresentation">
+
+	<tab name="Data" index="0" layout="DEFAULT">
+
+	 <!--	<property name="drawable.name" label="name" widget="TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+		</property>
+
+		<property name="drawable.description" label="description" widget="TEXT_AREA" constraint="100">
+		</property> -->
+
+		<property name="layer" label="layer" widget="INTEGER" constraint="1">
+			<param name="columns" value="10"/>
+		</property>
+
+		<property name="isVisible" label="is_visible" widget="CHECKBOX" constraint="2">
+		</property>
+		
+
+	</tab>
+
+	<tab name="Graphics" index="3" layout="DEFAULT">
+		
+		<property name="foreground" label="foreground" widget="CUSTOM" constraint="0">
+			<param name="className" value="org.openflexo.fge.view.widget.ForegroundStyleInspectorWidget"/>
+		</property>
+		<property name="background" label="background" widget="CUSTOM" constraint="1">
+			<param name="className" value="org.openflexo.fge.view.widget.BackgroundStyleInspectorWidget"/>
+		</property>
+
+		<property name="displayLabel" label="display_label" widget="CHECKBOX" constraint="3">
+			<param name="columns" value="10"/>
+		</property>
+		<property name="absoluteTextX" label="absolute_text_x" widget="DOUBLE" constraint="11">
+			<param name="increment" value="1"/>
+		</property>
+		<property name="absoluteTextY" label="absolute_text_y" widget="DOUBLE" constraint="12">
+			<param name="increment" value="1"/>
+		</property>
+	</tab>
+
+
+	<tab name="Edition" index="4" layout="DEFAULT">
+	</tab>
+
+	<!--  <tab name="Construction" index="5" layout="DEFAULT">
+		<property name="drawable.construction.toString" label="construction" widget="TEXT_AREA" constraint="0">
+		</property> 
+	</tab> -->
+
+</inspector>

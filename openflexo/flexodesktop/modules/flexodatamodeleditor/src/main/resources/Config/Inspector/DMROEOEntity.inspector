@@ -1,0 +1,14 @@
+<inspector title = "EOEntity_(read_only)" inheritsfrom="DMROEntity.inspector">
+	<tab name="Basic" index="0">
+		<property name="externalName" label="external_name" widget="READ_ONLY_TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		</property>
+		<hidden name="typeVariables"/>
+	</tab>
+	
+	<tab name="Advanced" index="1">
+		<hidden name="isInterface"/>
+		<hidden name="isEnumeration"/>
+	</tab>
+</inspector>

@@ -1,0 +1,19 @@
+<inspector title = "service_operation" inheritsfrom ="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.wkf.ws.ServiceOperation">
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+		<property name="name" label="name" widget="TEXT_FIELD" constraint="0">
+			<param name="columns" value="10"/>
+			<param name="validateOnReturn" value="true"/>
+		</property>
+		<property name="port" label="port" widget="CUSTOM" constraint="4">
+			<param name="className" value="org.openflexo.components.widget.FlexoPortInspectorWidget"/>
+			<param name="process" value="serviceInterface.process"/>
+			<param name="format" value="name"/>
+			<param name="column_width" value="100"/>
+			<param name="resizable" value="true"/>
+		</property>
+	</tab>
+	
+</inspector>

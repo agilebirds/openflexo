@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<definitions xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="urn:BerreWeather" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="urn:BerreWeather">
+<types><xsd:schema targetNamespace="urn:BerreWeather">
+ <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+ <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/"/>
+ <xsd:complexType name="WeatherReport">
+  <xsd:all>
+   <xsd:element name="UTC" type="xsd:string"/>
+   <xsd:element name="Local" type="xsd:string"/>
+   <xsd:element name="Barometer" type="xsd:string"/>
+   <xsd:element name="Temperature" type="xsd:string"/>
+   <xsd:element name="DewPoint" type="xsd:string"/>
+   <xsd:element name="Wind" type="xsd:string"/>
+   <xsd:element name="Direction" type="xsd:string"/>
+   <xsd:element name="Gust" type="xsd:string"/>
+   <xsd:element name="Sky" type="xsd:string"/>
+   <xsd:element name="RelativeHumidity" type="xsd:string"/>
+   <xsd:element name="ReportStatus" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="ForecastReport">
+  <xsd:all>
+   <xsd:element name="UTC" type="xsd:string"/>
+   <xsd:element name="Local" type="xsd:string"/>
+   <xsd:element name="Valid" type="xsd:string"/>
+   <xsd:element name="Wind" type="xsd:string"/>
+   <xsd:element name="Direction" type="xsd:string"/>
+   <xsd:element name="Gust" type="xsd:string"/>
+   <xsd:element name="Sky" type="xsd:string"/>
+   <xsd:element name="ReportStatus" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+</xsd:schema>
+</types>
+<message name="GetWeatherRequest"><part name="City" type="xsd:string"/></message>
+<message name="GetWeatherResponse"><part name="Weather" type="tns:WeatherReport"/></message>
+<message name="GetForecastRequest"><part name="City" type="xsd:string"/></message>
+<message name="GetForecastResponse"><part name="Forecast" type="tns:ForecastReport"/></message>
+<portType name="BerreWeatherPortType"><operation name="GetWeather"><documentation>Get weather report for major cities around the Etang de Berre. &lt;font color="red"&gt;Currently, only 'Marignane' and 'Istres' cities are supported.&lt;/font&gt; Thank you for your comprehension. NB.: Use http://www.mindreef.net in order to test this WebService.</documentation><input message="tns:GetWeatherRequest"/><output message="tns:GetWeatherResponse"/></operation><operation name="GetForecast"><documentation>Get forecast report for major cities around the Etang de Berre.</documentation><input message="tns:GetForecastRequest"/><output message="tns:GetForecastResponse"/></operation></portType>
+<binding name="BerreWeatherBinding" type="tns:BerreWeatherPortType"><soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/><operation name="GetWeather"><soap:operation soapAction="urn:BerreWeather#GetWeather" style="rpc"/><input><soap:body use="encoded" namespace="urn:BerreWeather" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input><output><soap:body use="encoded" namespace="urn:BerreWeather" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output></operation><operation name="GetForecast"><soap:operation soapAction="urn:BerreWeather#GetWeather" style="rpc"/><input><soap:body use="encoded" namespace="urn:BerreWeather" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input><output><soap:body use="encoded" namespace="urn:BerreWeather" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output></operation></binding>
+<service name="BerreWeather"><port name="BerreWeatherPort" binding="tns:BerreWeatherBinding"><soap:address location="http://www.severalways.org/WS/BerreWeather/BerreWeather.php"/></port></service>
+</definitions>

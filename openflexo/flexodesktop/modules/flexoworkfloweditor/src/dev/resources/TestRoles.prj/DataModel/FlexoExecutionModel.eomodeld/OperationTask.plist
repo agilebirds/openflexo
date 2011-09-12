@@ -1,0 +1,59 @@
+{
+    attributes = (
+        {
+            columnName = "ACTIVITY_TASK_ID"; 
+            name = activityTaskIDImp; 
+            prototypeName = id; 
+        }, 
+        {columnName = "CREATION_DATE"; name = creationDateImp; prototypeName = date; }, 
+        {
+            columnName = "OPERATION_NODE_ID"; 
+            name = operationNodeIDImp; 
+            prototypeName = id; 
+            valueType = l; 
+        }, 
+        {
+            columnName = "OPERATION_NODE_VERSION"; 
+            name = operationNodeVersionImp; 
+            prototypeName = str50; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = "OPERATION_TASK_ID"; 
+            name = operationTaskIDImp; 
+            prototypeName = id; 
+        }, 
+        {columnName = "UPDATE_DATE"; name = updateDateImp; prototypeName = date; }
+    ); 
+    className = "org.openflexo.engine.db.OperationTask"; 
+    classProperties = (
+        activityTaskIDImp, 
+        creationDateImp, 
+        operationNodeIDImp, 
+        operationNodeVersionImp, 
+        operationTaskIDImp, 
+        updateDateImp, 
+        activityTaskImp
+    ); 
+    externalName = "OPERATION_TASK"; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {"_clientClassPropertyNames" = (id); }; 
+    name = OperationTask; 
+    primaryKeyAttributes = (operationTaskIDImp); 
+    relationships = (
+        {
+            destination = ActivityTask; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = (
+                {
+                    destinationAttribute = activityTaskIDImp; 
+                    sourceAttribute = activityTaskIDImp; 
+                }
+            ); 
+            name = activityTaskImp; 
+            numberOfToManyFaultsToBatchFetch = 0; 
+        }
+    ); 
+}

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Graph id="1">
+  <Node id="2" identifier="1">
+    <OutgoingEdge1 id="3" identifier="11">
+      <OriginNode idref="2" />
+      <DestinationPreCondition id="4" identifier="6">
+        <AttachedNode id="5" identifier="2">
+          <AttachedPreCondition idref="4" />
+          <OutgoingEdge1 id="6" identifier="15">
+            <OriginNode idref="5" />
+            <DestinationPreCondition id="7" identifier="9">
+              <AttachedNode id="8" identifier="5">
+                <AttachedPreCondition idref="7" />
+                <AttachedPreCondition id="9" identifier="10">
+                  <AttachedNode idref="8" />
+                  <IncomingEdge1 id="10" identifier="16">
+                    <OriginNode id="11" identifier="3">
+                      <AttachedPreCondition id="12" identifier="7">
+                        <AttachedNode idref="11" />
+                        <IncomingEdge2 id="13" identifier="12">
+                          <OriginNode idref="2" />
+                          <DestinationPreCondition idref="12" />
+                        </IncomingEdge2>
+                      </AttachedPreCondition>
+                      <OutgoingEdge1 idref="10" />
+                    </OriginNode>
+                    <DestinationPreCondition idref="9" />
+                  </IncomingEdge1>
+                  <IncomingEdge2 id="14" identifier="17">
+                    <OriginNode id="15" identifier="4">
+                      <AttachedPreCondition id="16" identifier="8">
+                        <AttachedNode idref="15" />
+                        <IncomingEdge2 id="17" identifier="13">
+                          <OriginNode idref="2" />
+                          <DestinationPreCondition idref="16" />
+                        </IncomingEdge2>
+                        <IncomingEdge1 id="18" identifier="14">
+                          <OriginNode idref="2" />
+                          <DestinationPreCondition idref="16" />
+                        </IncomingEdge1>
+                      </AttachedPreCondition>
+                      <OutgoingEdge2 idref="14" />
+                    </OriginNode>
+                    <DestinationPreCondition idref="9" />
+                  </IncomingEdge2>
+                </AttachedPreCondition>
+              </AttachedNode>
+              <IncomingEdge1 idref="6" />
+            </DestinationPreCondition>
+          </OutgoingEdge1>
+        </AttachedNode>
+        <IncomingEdge1 idref="3" />
+      </DestinationPreCondition>
+    </OutgoingEdge1>
+    <OutgoingEdge2 idref="13" />
+    <OutgoingEdge2 idref="17" />
+    <OutgoingEdge1 idref="18" />
+  </Node>
+  <Node idref="5" />
+  <Node idref="11" />
+  <Node idref="15" />
+  <Node idref="8" />
+</Graph>

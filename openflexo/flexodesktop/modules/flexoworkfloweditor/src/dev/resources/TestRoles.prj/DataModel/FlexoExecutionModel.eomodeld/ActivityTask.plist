@@ -1,0 +1,72 @@
+{
+    attributes = (
+        {
+            columnName = "ACTIVITY_NODE_ID"; 
+            name = activityNodeIDImp; 
+            prototypeName = id; 
+            valueType = l; 
+        }, 
+        {
+            columnName = "ACTIVITY_NODE_VERSION"; 
+            name = activityNodeVersionImp; 
+            prototypeName = str50; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = "ACTIVITY_TASK_ID"; 
+            name = activityTaskIDImp; 
+            prototypeName = id; 
+        }, 
+        {columnName = "CREATION_DATE"; name = creationDateImp; prototypeName = date; }, 
+        {
+            columnName = "PROCESS_INSTANCE_ID"; 
+            name = processInstanceIDImp; 
+            prototypeName = id; 
+        }, 
+        {columnName = "UPDATE_DATE"; name = updateDateImp; prototypeName = date; }
+    ); 
+    className = "org.openflexo.engine.db.ActivityTask"; 
+    classProperties = (
+        activityNodeIDImp, 
+        activityNodeVersionImp, 
+        activityTaskIDImp, 
+        creationDateImp, 
+        processInstanceIDImp, 
+        updateDateImp, 
+        operationTasksImp, 
+        processInstanceImp
+    ); 
+    externalName = "ACTIVITY_TASK"; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {"_clientClassPropertyNames" = (Attribute); }; 
+    name = ActivityTask; 
+    primaryKeyAttributes = (activityTaskIDImp); 
+    relationships = (
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = OperationTask; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = (
+                {
+                    destinationAttribute = activityTaskIDImp; 
+                    sourceAttribute = activityTaskIDImp; 
+                }
+            ); 
+            name = operationTasksImp; 
+        }, 
+        {
+            destination = ProcessInstance; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = (
+                {
+                    destinationAttribute = processInstanceIDImp; 
+                    sourceAttribute = processInstanceIDImp; 
+                }
+            ); 
+            name = processInstanceImp; 
+        }
+    ); 
+}

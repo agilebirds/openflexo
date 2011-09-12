@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlexoWorkflow id="SYL_414" name="TestFGE" userID="SYL" flexoID="414" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+  <FlexoProcess id="SYL_426" name="TestFGE" userID="SYL" flexoID="426" dontEscapeLatex="false" dontGenerate="false" description="" useSpecificDescriptions="false">
+    <FlexoProcess id="SYL_119941" name="NewProcess" userID="SYL" flexoID="119941" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" />
+    <FlexoProcess id="SYL_136254" name="NewProcess2" userID="SYL" flexoID="136254" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" />
+    <FlexoProcess id="SYL_375063" name="NewProcess3" userID="SYL" flexoID="375063" dontEscapeLatex="false" docFormat="Plain text" dontGenerate="false" useSpecificDescriptions="false" />
+    <FlexoProcess id="SYL_387247" name="NewProcess4" userID="SYL" flexoID="387247" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" />
+  </FlexoProcess>
+  <RootFlexoProcess idref="SYL_426" />
+  <RoleList id="FLX_106882" userID="FLX" flexoID="106882" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false">
+    <Role id="SYL_309958" color="255,0,0" label="Admin" systemRole="false" posiX="475" posiY="179" docIndex="1" userID="SYL" flexoID="309958" dontEscapeLatex="false" docFormat="Plain text" dontGenerate="false" useSpecificDescriptions="false">
+      <RoleSpecialization id="SYL_309960" userID="SYL" flexoID="309960" dontEscapeLatex="false" docFormat="Plain text" dontGenerate="false" useSpecificDescriptions="false">
+        <Role idref="SYL_309959" />
+      </RoleSpecialization>
+    </Role>
+    <Role id="SYL_309959" color="0,255,0" label="User" systemRole="false" posiX="328" posiY="53" docIndex="2" userID="SYL" flexoID="309959" dontEscapeLatex="false" docFormat="Plain text" dontGenerate="false" useSpecificDescriptions="false" />
+    <Role id="SYL_681486" color="0,0,255" label="Customer" systemRole="false" posiX="258" posiY="181" docIndex="3" userID="SYL" flexoID="681486" dontEscapeLatex="false" docFormat="Plain text" dontGenerate="false" useSpecificDescriptions="false">
+      <RoleSpecialization id="SYL_696319" userID="SYL" flexoID="696319" dontEscapeLatex="false" docFormat="Plain text" dontGenerate="false" useSpecificDescriptions="false">
+        <Role idref="SYL_309959" />
+      </RoleSpecialization>
+    </Role>
+    <Role id="SYL_696318" color="192,192,192" label="System" systemRole="true" posiX="104" posiY="73" docIndex="4" userID="SYL" flexoID="696318" dontEscapeLatex="false" docFormat="Plain text" dontGenerate="false" useSpecificDescriptions="false" />
+  </RoleList>
+</FlexoWorkflow>
+

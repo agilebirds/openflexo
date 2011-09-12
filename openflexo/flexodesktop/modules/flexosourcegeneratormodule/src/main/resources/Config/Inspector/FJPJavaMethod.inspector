@@ -1,0 +1,38 @@
+<inspector title = "java_method" inheritsfrom="FJPJavaEntity.inspector">
+	<tab name="Basic" index="0">
+		<property name="name" label="name" widget="READ_ONLY_TEXT_FIELD" constraint="0"/>
+		<property name="callSignature" label="call_signature" widget="READ_ONLY_TEXT_FIELD" constraint="1"/>
+		<property name="isConstructor" label="constructor" widget="READ_ONLY_CHECKBOX" constraint="2"/>
+		<property_list name="parameters" label="parameters" constraint="3">
+		  <param name="visible_row_count" value="5"/>
+		  <param name="row_height" value="20"/>
+		  <property_list_column name="typeAsString" label="type" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="200"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		  <property_list_column name="name" label="name" widget="READ_ONLY_TEXT_FIELD">
+			<param name="column_width" value="300"/>
+			<param name="resizable" value="true"/>
+		  </property_list_column>
+		</property_list>
+		<property name="returnAsString" label="return_type" widget="READ_ONLY_TEXT_FIELD" constraint="4" depends="isConstructor" conditional="isConstructor=false"/>
+		<property name="exceptionsAsString" label="exceptions" widget="READ_ONLY_TEXT_FIELD" constraint="5"/>
+	</tab>
+	
+	<tab name="Modifiers" index="1">
+	</tab>
+	
+	<tab name="Code" index="2">
+		<property name="declarationSignature" label="declaration_signature" widget="JAVA_CODE" constraint="2">
+			<param name="rows" value="2"/>
+			<param name="columns" value="40"/>
+		</property>
+		<property name="sourceCode" label="source_code" widget="JAVA_CODE" constraint="3">
+			<param name="rows" value="10"/>
+			<param name="columns" value="40"/>
+		</property>
+	</tab>
+
+	<tab name="Javadoc" index="3">
+	</tab>
+</inspector>

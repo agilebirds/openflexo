@@ -1,0 +1,13 @@
+<inspector title = "cvs_repository_list">
+	<tab name="Basic" index="0">
+		<property name="helpText" label="helpText" widget="INFOLABEL" constraint="0">
+		<param name="displayLabel" value="false"/>
+        </property>
+	</tab>
+	
+	<tab name="Advanced" index="1">
+	</tab>
+
+	
+	
+</inspector>

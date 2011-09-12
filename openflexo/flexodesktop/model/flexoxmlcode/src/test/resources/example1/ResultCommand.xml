@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<command quantity="3" commandIsAlreadyPaid="true">
+  <movie name="Alien">
+    here comes a description of the movie
+    <role name="Brett" />
+    <role name="Kane" />
+    <role name="Dallas" />
+    <role name="Parker" />
+    <role name="Lambert" />
+    <role name="Ash" />
+    <role name="Ripley" />
+    <cat>Horror</cat>
+  </movie>
+  <customer>
+    <name>Ringle</name>
+  </customer>
+</command>
+

@@ -1,0 +1,5 @@
+<inspector title = "java_source_file">
+	<tab name="Basic" index="0">
+		<property name="fileName" label="file_name" widget="READ_ONLY_TEXT_FIELD" constraint="0"/>
+	</tab>
+</inspector>

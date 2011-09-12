@@ -1,0 +1,180 @@
+import java.util.Vector;
+
+/**
+* This class is intended to contain all the constants of an application
+* The developper should add all its constants below and use them as much
+* as possible. If necessary, the developper must add a non-static accessor to a constants
+* on a component in order to make a binding.
+*
+* @author FlexoBPM Generator, Agile Birds sprl. (see www.FlexoBPM.com)
+*/
+public class ${prefix}Constants {
+
+    public static final String TRUE_VALUE = "t";
+    
+    public static final String FALSE_VALUE = "f";
+    #set($roleNames = ${generator.getNewVector()})
+	#foreach($role in ${project.getWorkflow().getAllSortedRoles()})
+        #set($roleName = ${generator.getJavaString($role.getName()).toUpperCase()})
+        #if(!($roleNames.contains($roleName)))
+        ${roleNames.addElement($roleName)}
+        #end
+	#end
+    #if(${roleNames.size()} > 0)
+    public static enum Role {
+        @single
+        #foreach($role in $roleNames)
+            #if($previousRole),#end
+            ROLE_$role(new Role[]{})
+            #set($previousRole = $role)
+        #end
+        #set($previousRole = $false)
+        #if($generator.isPrototype())
+            , ROLE_FULLACCESS(new Role[]{
+            #foreach($role in $roleNames)
+                #if($previousRole),#end
+                ROLE_$role
+                #set($previousRole = $role)
+            #end
+            })
+        #end; @end
+        
+        public static Role getRole(String role) {
+            try {
+                return Role.valueOf(role);
+            } catch(Exception e) {
+                return null;
+            }
+        }
+        
+        private Role[] subRoles;
+        
+        private Role(Role[] subRoles) {
+            if(subRoles!=null)
+                this.subRoles = subRoles;
+            else
+                this.subRoles = new Role[]{};
+        }
+        
+        public boolean containsRole(Role role) {
+            if(role==this)
+                return true;
+            for(Role subRole : subRoles) {
+                if(subRole.containsRole(role))
+                    return true;
+            }
+            return false;
+        }
+        
+        public boolean containsOneOfRoles(Role[] roles) {
+            for(Role role : roles) {
+                if(containsRole(role))
+                    return true;
+            }
+            return false;
+        }
+        
+        public Vector<Role> getAccessibleRoles() {
+            Vector<Role> vector = new Vector<Role>();
+            vector.add(this);
+            for (Role subRole : subRoles) {
+                vector.addAll(subRole.getAccessibleRoles());
+            }
+            return vector;
+        }
+        
+        public Vector<Role> getNotAccessibleRoles() {
+            Vector<Role> vector = new Vector<Role>();
+            Vector<Role> accessibleRoles = getAccessibleRoles();
+            for(Role role : Role.values()) {
+                if(!accessibleRoles.contains(role))
+                    vector.add(role);
+            }
+            return vector;
+        }
+        
+        public Vector<String> getAccessibleRolesAsString() {
+            Vector<String> vector = new Vector<String>();
+            for(Role role : getAccessibleRoles())
+                vector.add(role.toString());
+            return vector;
+        }
+        
+        public Vector<String> getNotAccessibleRolesAsString() {
+            Vector<String> vector = new Vector<String>();
+            for(Role role : getNotAccessibleRoles())
+                vector.add(role.toString());
+            return vector;
+        }
+    }
+    #end
+    
+    #foreach($process in $project.getFlexoWorkflow().getSortedProcesses())
+        
+    /**
+    * Process ${generator.getJavaDocString(${process.getName()})}
+    * #if(!$process.getDontEscapeLatex())
+    * ${generator.getJavaDocString(${process.getDescription()})}
+    #end *
+    * @author FlexoBPM Generator, Agile Birds sprl. (see www.FlexoBPM.com)
+    */    
+    public static class #capNameForNode($process) {
+    
+        #foreach($status in $process.getSortedStatuses())
+        public static final String STATUS_${generator.getJavaString(${status.getName()}).toUpperCase()}="$status.getName()";
+        #end
+        
+        #foreach($act in ${process.getAllEmbeddedAbstractActivityNodes()})
+        #if($act.hasWOComponent())
+        /**
+        * Activity ${generator.getJavaDocString(${act.getName()})}
+        * #if(!$act.getDontEscapeLatex())
+        * ${generator.getJavaDocString(${act.getDescription()})}
+        #end*
+        * @author FlexoBPM Generator, Agile Birds sprl. (see www.FlexoBPM.com)
+        */
+        public static class #capNameForNode($act) {
+            #foreach($op in ${act.getAllEmbeddedSortedOperationNodes()})
+                #if($op.hasWOComponent())
+            /**
+            * Component instance id for the operation ${generator.getJavaDocString(${op.getName()})}
+            * #if(!$op.getDontEscapeLatex())
+            * ${generator.getJavaDocString(${op.getDescription()})}
+              #end*
+            */
+            public static final long #upNameForNode($op) = $op.getComponentInstance().getFlexoID();
+            public static final String #upNameForNode($op)_URI = "$op.getURI()";
+            #set($isDocGenerated = !${op.getDontGenerateRecursive()})
+            public static final boolean #upNameForNode($op)_ISDOCGENERATED = $isDocGenerated;
+                #end
+            #end
+        }
+        #end
+        #end
+    }
+    #end
+    
+    
+    public static class DKVDomains {
+    #foreach($domain in ${project.getDKVModel().getDomains()})
+        /**
+        * #if(!$domain.getDontEscapeLatex())
+        * ${generator.getJavaDocString(${domain.getDescription()})}
+    #end*
+        */ 
+        public static class ${generator.capitalize(${generator.getJavaString(${domain.getName()})})} {
+
+            public static final String DOMAIN_NAME = "${domain.getName()}";
+        
+        #foreach($key in $domain.getKeys())
+            /**
+             * #if(!$key.getDontEscapeLatex())
+             * ${generator.getJavaDocString(${key.getDescription()})}
+         #end*
+             */
+            public static final String DKV_${generator.getJavaString(${key.getName()}).toUpperCase()} = "$key.getName()";        
+        #end
+        }
+    #end
+    }
+}

@@ -1,0 +1,13 @@
+<inspector title = "Annotation" inheritsfrom="Artefact.inspector" inspectedClassName="org.openflexo.foundation.wkf.WKFAnnotation">
+
+	<tab name="Basic" index="0">
+		<layout name ="DEFAULT">
+			<param name="aLayoutParamName" value="aLayoutParamValue"/>
+		</layout>
+	</tab>
+
+	<tab name="Advanced" index="2" layout="DEFAULT">
+		<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+	</tab>
+	
+</inspector>

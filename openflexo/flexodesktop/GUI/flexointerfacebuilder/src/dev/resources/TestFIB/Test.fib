@@ -1,0 +1,57 @@
+<Panel name="1" layout="border" dataClassName="org.openflexo.fib.editor.test.Coucou">
+
+	<Panel name="1.1" layout="flow" constraints="border(location=north)">
+		<Label label="name"/>
+		<TextField name="Base" data="data.name"/>
+		<TextField name="Test1" data="data.name.toUpperCase"/>
+		<TextField name="Test2" data="data.name.substring(2,4)"/>
+		<TextField name="Test3" data="data.name.toUpperCase.substring(0,1)+data.name.substring(1)+' (was '+data.name+')'" columns="30"/>
+	</Panel>
+
+	<TabPanel name="1.2" constraints="border(location=center)">
+
+		<Tab name="1.2.1" title="Description" index="1" layout="flow">
+			<Panel name="1.2.1.1" layout="flow">
+				<Label label="description"/>
+				<TextArea data="data.description"/>
+			</Panel>
+		</Tab>
+		
+		<Tab name="1.2.2" title="Prouts" index="2" layout="border">
+			<Panel name="1.2.2.1" layout="flow" constraints="border(location=north)">
+				<CheckBox name="Checkbox" data="data.showProuts"/>
+				<Label label="show"/>
+			</Panel>
+			<Table name="LaTableDesProuts" iteratorClassName="org.openflexo.fib.editor.test.Prout" data="data.prouts" constraints="border(location=center)" visible="data.showProuts=true" visibleRowCount="5" rowHeight="20">
+				<TextFieldColumn name="name" data="iterator.name" title="name" columnWidth="100" resizable="true"/>
+				<TextFieldColumn name="description" data="iterator.description" title="description" columnWidth="350" resizable="true" />
+				<AddAction name="make_new_prout" method="data.createNewProut()" isAvailable="data.isProutAddable()"/>
+	    		<RemoveAction name="delete_prout" method="data.deleteProut(selected)" isAvailable="data.isProutDeletable(selected)"/>
+			</Table>
+			<Panel name="Details" layout="border" constraints="border(location=south)" visible="data.showProuts=true" >
+			    <Panel name="1.2.2.3.1" layout="twocols" constraints="border(location=west)">
+					<Label label="name" constraints="twocols(location=left)"/>
+					<TextField name="DetailedName" data="LaTableDesProuts.selected.name" constraints="twocols(location=right)"/>
+					<Label label="description" constraints="twocols(location=left)"/>
+					<TextArea name="DetailedDescription" data="LaTableDesProuts.selected.description" constraints="twocols(location=right)"/>
+			    </Panel>
+			    <Table name="1.2.2.3.2" iteratorClassName="org.openflexo.fib.editor.test.Toto" data="LaTableDesProuts.selected.totoList" constraints="border(location=center)" visibleRowCount="5" rowHeight="20">
+				    <TextFieldColumn name="name" data="iterator.name" title="name" columnWidth="100" resizable="true"/>
+				    <TextFieldColumn name="description" data="iterator.description" title="description" columnWidth="350" resizable="true" />
+			    </Table>
+			</Panel>
+		</Tab>
+		
+	</TabPanel>
+
+	<Panel name="1.3" layout="flow" constraints="border(location=south)">
+		<Label label="Some numbers"/>
+		<Number name="Byte" numberType="ByteType" data="data.testByte"/>
+		<Number name="Short" numberType="ShortType" data="data.testShort"/>
+		<Number name="Integer" numberType="IntegerType" data="data.testInteger"/>
+		<Number name="Long" numberType="LongType" data="data.testLong"/>
+		<Number name="Float" numberType="FloatType" data="data.testFloat"/>
+		<Number name="Double" numberType="DoubleType" data="data.testDouble"/>
+	</Panel>
+
+</Panel>

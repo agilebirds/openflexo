@@ -1,0 +1,187 @@
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (ProjectDocGenerator)
+* - object: the object for which we are generating the doc (FlexoProject)
+* - repository: the current repository for which we generate the doc (DGRepository)
+*#
+
+\documentclass[a4paper,11pt]{article}
+\renewcommand{\familydefault}{\sfdefault}
+
+\usepackage[a4paper, width=16.1cm, height=23cm]{geometry}
+\usepackage{ucs}
+\usepackage[utf8]{inputenc}
+\usepackage{eurosym}
+%\usepackage[ddmmyyyy]{datetime}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{array}
+
+\hypersetup{%
+urlcolor=blue,
+colorlinks=true,
+linkcolor=blue,
+}%
+
+\usepackage{notes}
+\usepackage{flexolist}
+\usepackage{flexodm}
+\usepackage{datetime}
+
+\usepackage{multirow}
+
+\usepackage{calc}
+
+\usepackage{ifthen}
+
+\usepackage{titlesec}
+
+\newcommand{\systemname}{#escape(${repository.getSystemName()})}
+\newcommand{\systemversion}{V #escape(${repository.getSystemVersion()})}
+\newcommand{\documentname}{#escape($repository.getDocTitle())}
+\newcommand{\projectname}{\emph{\documentname}}
+\newcommand{\documentdate}{\today}
+\newcommand*{\DOT}{.}
+\renewenvironment {figure}[1][]{\par\begin{minipage}{1\linewidth}}{\end{minipage}}
+\newcounter{myfig}%[subsection]
+\setcounter{myfig}{0}
+\renewcommand {\caption}[2][]{\refstepcounter{myfig}\vspace{-8mm}\begin{center}\textbf{Figure \themyfig: }#2\end{center}}
+
+\RequirePackage{color}
+    \newcommand{\custombutton}[2][${projectGenerator.getMainColor()}]{
+  \colorbox[rgb]{#1}{
+    \textcolor[rgb]{1,1,1}{
+      \mbox{}
+      \hspace{1pt}
+      {\footnotesize\textsf{\textbf{
+      #2
+      }}}
+      \mbox{}
+    }
+  }
+}
+\newcommand{\bluehyperlink}[1]{
+    \textcolor[rgb]{0,0,1}{#1}
+}
+\setboolean{showtodo}{false}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{1pt}
+
+\renewcommand{\doccustomer}{#escape($repository.getCustomer())}
+\renewcommand{\doctitle}{#escape($repository.getDocTitle())}
+\renewcommand{\docversion}{#escape($repository.getVersion())}
+\renewcommand{\softversion}{na}
+\renewcommand{\docudate}{\today}
+\renewcommand{\docuauthor}{#escape($repository.getAuthor())}
+\renewcommand{\docreviewer}{#escape($repository.getReviewer())}
+\renewcommand{\reviewdate}{--}
+\renewcommand{\docref}{\documentname.tex\_\docversion}
+\newcommand{\doctitleShort}{Functional Specification}
+\newcommand{\doctitleShortb}{\projectname{}}
+\renewcommand{\doctitle}{\doctitleShort - \doctitleShortb}
+\setlength{\parindent}{0pt}
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{5}
+\DeclareGraphicsExtensions{.png,.jpg,.pdf}
+%\sloppy
+\usepackage{array}
+\LTpre=0pt \LTpost=0.25\smallskipamount
+\graphicspath{{./,./Figures,./ImportedImages}} %Insert here the different directories where figures should be found. Just add the path's inside a pair of braces {}
+%The following code set the showscreenshots boolean to true. 
+%Set it to false if you don't want to show the screenshots in this document.
+\newif \ifshowscreenshots \showscreenshotstrue
+
+\newif \ifgenerate \generatefalse
+
+%Date format to display only the year
+\newdateformat{yeardate}{\THEYEAR}
+
+\newcommand{\definition}{\marginpar{\raisebox{-18pt}{\includegraphics[width=1cm]{Figures/definition}}}}
+\newcommand{\warning}{\marginpar{\raisebox{-20pt}{\includegraphics[width=1cm]{Figures/warning}}}}
+
+\titleformat{\section}[hang]{\raggedleft\LARGE\sffamily\bfseries}{\thesection.}{.5em}{}[\medskip\hrule]
+\titleformat{\subsection}[hang]{\Large\sffamily\bfseries}{\thesubsection.}{.5em}{}[]
+\titleformat{\subsubsection}[hang]{\large\sffamily\bfseries}{\thesubsubsection.}{.5em}{}[]
+#set($logoPath="denali-logo")
+#if(${repository.getLogo().getImageName()})
+#set($logoPath="${repository.getLogo().getImageName()}")
+#set($lastIndex = $logoPath.lastIndexOf("/")+1)
+#set($lastDotIndex = $logoPath.lastIndexOf("."))
+#set($logoPath=$logoPath.substring($lastIndex,$lastDotIndex))
+#if(${repository.getLogo().getImageName().toLowerCase().endsWith(".gif")})
+    #set($logoPath="CONVERTED-GIF$logoPath")
+#end
+\renewcommand{\denalilogo}{\includegraphics[width=3cm]{Figures/$logoPath}}
+#end
+
+\begin{document}
+\makeatletter
+\begingroup
+\let\ps@plain\ps@empty
+\pagestyle{empty}
+\denalititlepage
+
+\tableofcontents
+\clearpage
+\endgroup
+\makeatother
+\myitemsep
+
+% --------- Header/footer ----------
+\thispagestyle{fancy}
+\pagestyle{fancy}%Very important to place it here because it affects the \leftmark and \rightmark formatting.
+% If this is put in front of the table of contents it will look
+% rather funny so refrain from doing that.
+\addtolength{\topmargin}{-10pt}
+\setlength{\parindent}{0em}
+\setlength{\headsep}{25pt}
+\newlength{\parskipBU}
+\setlength{\parskipBU}{\parskip}
+\setlength{\headheight}{42pt}
+\setlength{\textheight}{670pt}
+\setlength{\footskip}{40pt}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.5pt}
+\fancyhead{}
+\fancyfoot{}
+
+\renewcommand{\sectionmark}[1]{\markboth{#1}{}} 
+
+% Here follows the four parameters you should only need
+% to change to have a beautifull header footer!
+\newcommand{\headerlogo}{Figures/$logoPath}
+\newcommand{\footerlogo}{Figures/denali-logo}
+\newsavebox{\logobox}
+\savebox{\logobox}{\includegraphics[height=\headheight]{\headerlogo}}
+\newsavebox{\denalilogofooter}
+\savebox{\denalilogofooter}{\includegraphics[height=0.4cm]{\footerlogo}}
+\newlength{\logowidth}
+\settowidth{\logowidth}{\usebox{\logobox}}
+\newlength\headerleftcol
+\setlength\headerleftcol{\logowidth}
+\newlength\headerlogovoffset
+\setlength\headerlogovoffset{0mm}
+% End manual parameters
+\newlength\headerrightcol
+\setlength\headerrightcol{48mm}
+\newlength\headermidcol
+\setlength\headermidcol{\linewidth-\tabcolsep*6-(\headerleftcol+\headerrightcol)-1pt}
+
+\fancyhead[C]{
+    \begin{tabularx}{\linewidth}{p{\headerleftcol}lr}
+    \multirow{2}{0pt}[\headerlogovoffset]{\usebox{\logobox}} &  \makebox[\headermidcol][l]{\textbf{\projectname{}}} & \makebox[\headerrightcol][r]{\leftmark} \\
+    \cline{2-3}
+    &  \raisebox{-2pt}{\textbf{\doctitleShort}} & \raisebox{-2pt}{\thepage{}} \\
+    \end{tabularx}
+}
+\fancyfoot[L]{\small Generated with \emph{FlexoBPM Tool Set} from Denali S.A. \yeardate\today{} \raisebox{0mm}{ \small \usebox{\denalilogofooter}} }
+\fancyfoot[R]{\small Version: \docversion}
+#foreach($entry in ${repository.getTocRepository().getSortedTocEntries()})
+#tocEntry($entry)
+#end
+\end{document}

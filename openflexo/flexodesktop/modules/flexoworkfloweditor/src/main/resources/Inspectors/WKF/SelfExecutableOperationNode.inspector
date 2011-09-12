@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.node.SelfExecutableOperationNode" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="4" title="Data" layout="twocols" font="SansSerif,0,11" name="DataTab" />
+    <Tab index="3" title="Data" layout="twocols" font="SansSerif,0,11" name="DataTab">
+      <Label label="execution_primitive" localize="true" name="ExecutionPrimitiveLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
+      <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" data="data.executionPrimitive" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" name="ExecutionPrimitive" localize="true" manageDynamicModel="true">
+        <Assignment variable="component.bindingDefinition" value="data.executionPrimitiveBindingDefinition" />
+        <Assignment variable="component.allowsCompoundBindings" value="true" />
+        <Assignment variable="component.bindable" value="data" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+      </Custom>
+      <Label label="assignments" align="center" localize="true" name="AssignmentsLabel" constraints="twocols(location=center;index=6;expandHorizontally=true;expandVertically=false)" />
+      <Table iteratorClassName="org.openflexo.foundation.bindings.BindingAssignment" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.assignments" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=true)" name="Assignments" localize="true" manageDynamicModel="true">
+        <CustomColumn componentClassName="org.openflexo.components.widget.binding.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.receiver" format="object.stringRepresentation" title="receiver" columnWidth="150" resizable="true" displayTitle="true">
+          <ColumnAssignment variable="component.bindingDefinition" value="iterator.receiverBindingDefinition" />
+          <ColumnAssignment variable="component.bindable" value="iterator" />
+        </CustomColumn>
+        <LabelColumn data="iterator.assignLabel" title=" " columnWidth="25" resizable="false" displayTitle="false" />
+        <CustomColumn componentClassName="org.openflexo.components.widget.binding.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.value" format="object.stringRepresentation" title="value" columnWidth="250" resizable="true" displayTitle="true">
+          <ColumnAssignment variable="component.bindingDefinition" value="iterator.valueBindingDefinition" />
+          <ColumnAssignment variable="component.bindable" value="iterator" />
+        </CustomColumn>
+        <TextFieldColumn data="iterator.description" title="description" columnWidth="250" resizable="true" displayTitle="true" />
+        <AddAction method="data.createAssignement" name="new" />
+        <RemoveAction method="data.deleteAssignement(selected)" isAvailable="data.isAssignementDeletable(selected)" name="delete" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+      </Table>
+    </Tab>
+    <Tab index="1" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab" />
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Data" lang="French">Donnée</Localized>
+    <Localized key="execution_primitive" lang="English">Execution primitive</Localized>
+    <Localized key="execution_primitive" lang="French">Primitive d'exécution</Localized>
+    <Localized key="execution_primitive" lang="Dutch">Execution primitive</Localized>
+    <Localized key="assignments" lang="English">Assignments</Localized>
+    <Localized key="assignments" lang="French">Assignations</Localized>
+    <Localized key="assignments" lang="Dutch">Assignments</Localized>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Self-executable operation node" />
+</Panel>
+

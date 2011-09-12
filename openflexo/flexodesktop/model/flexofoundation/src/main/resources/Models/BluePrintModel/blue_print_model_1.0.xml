@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model handlesReferences="yes" serializeOnly="yes"> 
+
+  <description>This is the model for blue print encoding, version 1.0</description>
+  
+  <mapId>
+	  <map entityClass="org.openflexo.foundation.FlexoModelObject" identifierAccessor="serializationIdentifier"/>
+  </mapId>
+	
+  <entity name="org.openflexo.foundation.FlexoModelObject" abstract="YES" finalizer="finalizeDeserialization">
+  	<property name="userIdentifier" xmlTag="userID" attribute="YES" description="Unique ID of the user (used for team synchronization)"/>
+  	<property name="flexoID" xmlTag="flexoID" attribute="YES" description="Unique ID generated and maintained by Flexo"/>
+ 	<property name="docFormat" xmlTag="docFormat" attribute="YES" description=""/>
+    <property name="dontGenerate" xmlTag="dontGenerate" attribute="YES" description="Check this box, if you don't want this node to generate documentation"/>
+    <description>Root class for all objects of Flexo</description>
+  </entity>
+  
+  
+  <entity name="org.openflexo.dg.BluePrint" xmlTag="BluePrint">
+    <description>Blue print of the project</description>
+    <property name="rootProcessDocumentation" xmlTag="ProcessDocumentation" description="Root process"/> 
+  </entity>
+  
+  <entity name="org.openflexo.dg.ProcessDocumentation" xmlTag="ProcessDocumentation">
+    <description>Documentation related to a process</description>
+    <property name="process" xmlTag="Process" description="Related process"/> 
+    <property name="activities" xmlTag="Activity" type="vector" description="Activities of this process"/> 
+    <property name="subProcesses" xmlTag="ProcessDocumentation" type="vector" description="Sub-processes of this process"/> 
+  </entity>
+  
+  <entity name="org.openflexo.foundation.wkf.FlexoProcess" xmlTag="Process">
+    <description>This represents a Flexo process or sub-process.</description>
+    <property name="name" xmlTag="name" attribute="YES" description="Name of the process"/> 
+    <property name="description" xmlTag="description" text="YES" description="TODO"/> 
+	<property name="roleList" xmlTag="RoleList" description="TODO"/>
+	<property name="deadLineList" xmlTag="DeadLineList" description="TODO"/>
+	<property name="statusList" xmlTag="StatusList" description="TODO"/>
+	<property name="activityPetriGraph.allActivityNodes" xmlTag="Activity" description="TODO" type="vector"/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.wkf.RoleList" xmlTag="RoleList">
+    <description>Represents all the roles that are accessible in the context of enclosing process
+		</description>
+ 	<property name="roles" xmlTag="Role" type="vector" primary="yes" description="List of roles that are contained inside this RoleList"/>
+  </entity>
+    
+   <entity name="org.openflexo.foundation.wkf.Role" xmlTag="Role">
+    <description>TODO</description>
+ 	<property name="color" xmlTag="color" description="Color of role that will be used in Workflow Editor to represents related activity"/>
+ 	<property name="name" xmlTag="label" description="Name of this role"/>
+ 	<property name="description" xmlTag="description" description="Description for this role"/>
+  </entity>
+  
+   <entity name="org.openflexo.foundation.wkf.DeadLineList" xmlTag="DeadLineList">
+    <description>TODO</description>
+ 	<property name="deadLines" xmlTag="DeadLine" type="vector" primary="yes" description="TODO"/>
+  </entity>
+  
+   <entity name="org.openflexo.foundation.wkf.DeadLine" xmlTag="DeadLine">
+    <description>TODO</description>
+ 	<property name="name" xmlTag="label" description="TODO"/>
+ 	<property name="description" xmlTag="description" description="TODO"/>
+  </entity>
+  
+   <entity name="org.openflexo.foundation.wkf.StatusList" xmlTag="StatusList">
+    <description>TODO</description>
+ 	<property name="status" xmlTag="Status" type="vector" primary="yes" description="TODO"/>
+  </entity>
+  
+   <entity name="org.openflexo.foundation.wkf.Status" xmlTag="Status">
+    <description>TODO</description>
+ 	<property name="name" xmlTag="label" description="TODO"/>
+ 	<property name="description" xmlTag="description" description="TODO"/>
+  </entity>
+  
+
+  <entity name="org.openflexo.foundation.wkf.node.ActivityNode" xmlTag="Activity">
+    <description>TODO</description>
+    <property name="nodeName" xmlTag="nodeName" attribute="YES" description="TODO"/> 
+    <property name="description" xmlTag="description" text="YES" description="TODO"/> 
+    <property name="role.name" xmlTag="Role" description="TODO"/> 
+    <property name="status.name" xmlTag="Status" description="TODO"/>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.node.SubProcessNode" xmlTag="SubProcess">
+    <description>TODO</description>
+    <property name="nodeName" xmlTag="nodeName" attribute="YES" description="TODO"/> 
+    <property name="description" xmlTag="description" text="YES" description="TODO"/> 
+    <property name="role.name" xmlTag="Role" description="TODO"/> 
+    <property name="status.name" xmlTag="Status" description="TODO"/>
+  </entity> 
+
+  <entity name="org.openflexo.foundation.wkf.node.OperationNode" xmlTag="Operation">
+    <description>TODO</description>
+     <property name="nodeName" xmlTag="nodeName" attribute="YES" description="TODO"/> 
+     <property name="description" xmlTag="description" text="YES" description="TODO"/> 
+     <property name="WOComponentName" xmlTag="WOComponentName" attribute="YES" description="TODO"/> 
+  </entity> 
+
+</model>
+

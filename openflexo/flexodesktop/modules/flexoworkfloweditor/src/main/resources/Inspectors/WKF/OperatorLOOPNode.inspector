@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.node.LOOPOperator" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="4" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
+    <Tab index="3" title="Data" layout="twocols" font="SansSerif,0,11" name="DataTab">
+      <Label label="loop_type" localize="true" name="LoopTypeLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
+      <DropDown localize="true" name="LoopType" data="data.loopType" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" iteratorClassName="org.openflexo.foundation.wkf.node.LoopType" />
+      <Label label="condition" localize="true" name="ConditionLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" visible="((data.loopType = &quot;WHILE&quot;) | (data.loopType = &quot;UNTIL&quot;))" />
+      <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" data="data.condition" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=false)" visible="((data.loopType = &quot;WHILE&quot;) | (data.loopType = &quot;UNTIL&quot;))" name="Condition" localize="true" manageDynamicModel="true">
+        <Assignment variable="component.bindingDefinition" value="data.CONDITION_BINDING_DEFINITION" />
+        <Assignment variable="component.bindable" value="data" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+      </Custom>
+      <Label label="iterator" localize="true" name="IteratorLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" visible="(data.loopType = &quot;FOR_INCREMENT&quot;)" />
+      <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" data="data.iterator" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=false)" visible="(data.loopType = &quot;FOR_INCREMENT&quot;)" name="Iterator" localize="true" manageDynamicModel="true">
+        <Assignment variable="component.bindingDefinition" value="data.ITERATOR_BINDING_DEFINITION" />
+        <Assignment variable="component.bindable" value="data" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+      </Custom>
+      <Label label="start_value" localize="true" name="BeginValueLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" visible="(data.loopType = &quot;FOR_INCREMENT&quot;)" />
+      <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" data="data.beginValue" constraints="twocols(location=right;index=11;expandHorizontally=true;expandVertically=false)" visible="(data.loopType = &quot;FOR_INCREMENT&quot;)" name="BeginValue" localize="true" manageDynamicModel="true">
+        <Assignment variable="component.bindingDefinition" value="data.BEGIN_VALUE_BINDING_DEFINITION" />
+        <Assignment variable="component.bindable" value="data" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+      </Custom>
+      <Label label="end_value" localize="true" name="EndValueLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" visible="(data.loopType = &quot;FOR_INCREMENT&quot;)" />
+      <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" data="data.endValue" constraints="twocols(location=right;index=13;expandHorizontally=true;expandVertically=false)" visible="(data.loopType = &quot;FOR_INCREMENT&quot;)" name="EndValue" localize="true" manageDynamicModel="true">
+        <Assignment variable="component.bindingDefinition" value="data.END_VALUE_BINDING_DEFINITION" />
+        <Assignment variable="component.bindable" value="data" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+      </Custom>
+      <Label label="increment_value" localize="true" name="IncrementValueLabel" constraints="twocols(location=left;index=14;expandHorizontally=false;expandVertically=false)" visible="(data.loopType = &quot;FOR_INCREMENT&quot;)" />
+      <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" data="data.incrementValue" constraints="twocols(location=right;index=15;expandHorizontally=true;expandVertically=false)" visible="(data.loopType = &quot;FOR_INCREMENT&quot;)" name="IncrementValue" localize="true" manageDynamicModel="true">
+        <Assignment variable="component.bindingDefinition" value="data.INCREMENT_VALUE_BINDING_DEFINITION" />
+        <Assignment variable="component.bindable" value="data" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+      </Custom>
+      <Label label="collection" localize="true" name="IterationCollectionLabel" constraints="twocols(location=left;index=16;expandHorizontally=false;expandVertically=false)" visible="(data.loopType = &quot;FOR_COLLECTION&quot;)" />
+      <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" data="data.iterationCollection" constraints="twocols(location=right;index=17;expandHorizontally=true;expandVertically=false)" visible="(data.loopType = &quot;FOR_COLLECTION&quot;)" name="IterationCollection" localize="true" manageDynamicModel="true">
+        <Assignment variable="component.bindingDefinition" value="data.ITERATION_COLLECTION_BINDING_DEFINITION" />
+        <Assignment variable="component.bindable" value="data" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+      </Custom>
+      <Label label="iterator" localize="true" name="CollectionItemLabel" constraints="twocols(location=left;index=18;expandHorizontally=false;expandVertically=false)" visible="(data.loopType = &quot;FOR_COLLECTION&quot;)" />
+      <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" data="data.collectionItem" constraints="twocols(location=right;index=19;expandHorizontally=true;expandVertically=false)" visible="(data.loopType = &quot;FOR_COLLECTION&quot;)" name="CollectionItem" localize="true" manageDynamicModel="true">
+        <Assignment variable="component.bindingDefinition" value="data.COLLECTION_ITEM_BINDING_DEFINITION" />
+        <Assignment variable="component.bindable" value="data" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+      </Custom>
+    </Tab>
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab" />
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="Data" lang="French">Donnée</Localized>
+    <Localized key="loop_type" lang="English">Loop type</Localized>
+    <Localized key="loop_type" lang="French">Type de boucle</Localized>
+    <Localized key="loop_type" lang="Dutch">Loop type</Localized>
+    <Localized key="condition" lang="English">Condition</Localized>
+    <Localized key="condition" lang="French">Condition</Localized>
+    <Localized key="condition" lang="Dutch">Condition</Localized>
+    <Localized key="iterator" lang="French">iterateur</Localized>
+    <Localized key="start_value" lang="English">Start value</Localized>
+    <Localized key="start_value" lang="French">Valeur de départ</Localized>
+    <Localized key="start_value" lang="Dutch">Start value</Localized>
+    <Localized key="end_value" lang="English">End value</Localized>
+    <Localized key="end_value" lang="French">Valeur de fin</Localized>
+    <Localized key="end_value" lang="Dutch">End value</Localized>
+    <Localized key="increment_value" lang="English">Increment value</Localized>
+    <Localized key="increment_value" lang="French">Valeur d'incrément</Localized>
+    <Localized key="increment_value" lang="Dutch">Increment value</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="LOOP operator" />
+</Panel>
+

@@ -1,0 +1,22 @@
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (ReadersGuideDocGenerator)
+* - repository: the current repository for which we generate the doc (DGRepository)
+* - entry: the entry corresponding to the Reader's guide.
+*#
+This section documents the functional behaviors of the process by listing the processes, activities and operations of the underlying model.
+The functional behaviors and their associated workflows are indeed modelled in the Flexo four level model structure: Process \textgreater Activity \textgreater Operation \textgreater Action
+\begin{itemize}
+\item \emph{Processes} are associated with Business data. A process define a network of \emph{activities} and can be instanciated within another process through a \emph{sub-process node}. A \emph{sub-process node} is graphically represented as rounded square with a plus sign inside \raisebox{-4mm}{\includegraphics[width=1.5cm]{Figures/process}}. Clicking on the plus sign opens up the definition of the associated process, i.e. a network of \emph{activities}.
+\item \emph{Activities} are associated with roles. They represented the partitioning of the tasks according to the different actors. The sequence of activities is associated with the sequence of actors that will successively work on the file (or process instance). They are represented graphically by a rounded and colored square \raisebox{-2mm}{\includegraphics[width=2cm]{Figures/activity}} where the color represented the associated role.
+\item \emph{Operations} represent the tasks associated with an activity. They are usually associated with screens. They are graphically represented by a  square \raisebox{-2mm}{\includegraphics[width=2cm]{Figures/operation}}.
+\item \emph{Actions} model the specific details  of navigating between screens and calling external services etc.
+They are not shown in the level of details covered by this Business requirement specification.
+\item \emph{Events} such as arrival or departure of an email can also be modelled and represented graphically.
+\end{itemize}
+
+#if($entry)
+#subTocEntries($entry)
+#end

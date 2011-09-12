@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tab layout="DEFAULT">
+	<!--
+	<property name="showBrowserInWKF" label="show_browser" widget="CHECKBOX" constraint="0"/>
+	-->
+	<property name="showLeanTabs" label="show_lean_tabs" widget="CHECKBOX" constraint="0"/>
+	<property name="useSimpleEventPalette" label="use_simple_event_palette" widget="CHECKBOX" constraint="1"/>
+	<property name="alignOnGrid" label="align_on_grid_by_default" widget="CHECKBOX" constraint="2"/>
+	<property name="showGrid" label="show_grid" widget="CHECKBOX" constraint="3"/>
+	<property name="gridSize" label="default_grid_size" widget="INTEGER" constraint="4"/>
+	<property name="preferenceMessage" widget="INFOLABEL" constraint="5">
+	   <param name="displayLabel" value="false"/>
+	</property>
+	<property name="useTransparency" label="use_transparency" widget="CHECKBOX" constraint="6"/>
+	<property name="showShadows" label="show_shadows" widget="CHECKBOX" constraint="7"/>
+	<property name="showWONameInWKF" label="show_wo_name" widget="CHECKBOX" constraint="8"/>
+	<!--<property name="showMessagesInWKF" label="show_messages" widget="CHECKBOX" constraint="9"/>-->
+	<property name="activityNodeFont" label="activity_node_font" widget="FONT" constraint="10">
+		<param name="sampleText" value="activity_node_label"/>
+	</property>
+	<property name="operationNodeFont" label="operation_node_font" widget="FONT" constraint="11">
+		<param name="sampleText" value="operation_node_label"/>
+	</property>
+	<property name="actionNodeFont" label="action_node_font" widget="FONT" constraint="12">
+		<param name="sampleText" value="action_node_label"/>
+	</property>
+	<property name="eventNodeFont" label="event_node_font" widget="FONT" constraint="13">
+		<param name="sampleText" value="event_node_label"/>
+	</property>
+	<property name="artefactFont" label="artefact_font" widget="FONT" constraint="15">
+		<param name="sampleText" value="artefact_label"/>
+	</property>
+	<property name="edgeFont" label="edge_font" widget="FONT" constraint="16">
+		<param name="sampleText" value="edge_label"/>
+	</property>
+	<property name="roleFont" label="role_font" widget="FONT" constraint="17">
+		<param name="sampleText" value="role_name_label"/>
+	</property>
+	<property name="componentFont" label="component_font" widget="FONT" constraint="18">
+		<param name="sampleText" value="component_name_label"/>
+	</property>
+    <property name="connectorRepresentation" label="connector_representation" widget="DROPDOWN" constraint="19">
+        <param name="formatter" value="name"/>
+        <param name="columns" value="10"/>
+        <param name="showReset" value="false"/>
+        <param name="showIcon" value="true"/>
+    </property>
+    <property name="actionConnectorRepresentationInfo" widget="LABEL" constraint="20">
+        <param name="displayLabel" value="false"/>
+        <param name="align" value="right"/>
+    </property>
+    <property name="connectorAdjustability" label="connector_adjustability" widget="DROPDOWN" constraint="21">
+        <param name="formatter" value="name"/>
+        <param name="columns" value="10"/>
+        <param name="showReset" value="false"/>
+        <param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+    </property>
+<!--    <property name="activityConnector" label="activity_edge_representation" widget="DROPDOWN" constraint="22">
+        <param name="formatter" value="name"/>
+        <param name="columns" value="10"/>
+        <param name="showReset" value="false"/>
+        <param name="showIcon" value="true"/>
+    </property>
+    <property name="operationConnector" label="operation_edge_representation" widget="DROPDOWN" constraint="23">
+        <param name="formatter" value="name"/>
+        <param name="columns" value="10"/>
+        <param name="showReset" value="false"/>
+        <param name="showIcon" value="true"/>
+    </property>
+    <property name="actionConnector" label="action_edge_representation" widget="DROPDOWN" constraint="24">
+        <param name="formatter" value="name"/>
+        <param name="columns" value="10"/>
+        <param name="showReset" value="false"/>
+        <param name="showIcon" value="true"/>
+    </property> -->
+    	<property name="screenshotQuality" label="screenshotQuality (100=top quality)" widget="INTEGER" constraint="25"/>
+    
+</tab>
+	

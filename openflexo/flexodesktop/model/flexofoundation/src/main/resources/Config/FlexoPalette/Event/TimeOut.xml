@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TimeOut id="SYL_9591" nodeType="NORMAL" isWaiting="false" isSelfActivated="false" posiX="59" posiY="3" width="76" height="69" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="9591" dontEscapeLatex="false" dontGenerate="false" nodeName="TIME-OUT" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0">
+  <NodeProperties />
+</TimeOut>
+

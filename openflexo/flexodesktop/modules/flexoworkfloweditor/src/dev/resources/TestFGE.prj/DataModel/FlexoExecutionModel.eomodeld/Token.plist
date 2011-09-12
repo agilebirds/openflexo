@@ -1,0 +1,52 @@
+{
+    attributes = (
+        {columnName = "CREATION_DATE"; name = creationDateImp; prototypeName = date; }, 
+        {
+            columnName = "CURRENT_POSITION_ID"; 
+            name = currentPositionObjectIDImp; 
+            prototypeName = id; 
+            valueType = l; 
+        }, 
+        {columnName = "EDGE_ID"; name = edgeIDImp; prototypeName = id; valueType = l; }, 
+        {
+            columnName = "PROCESS_INSTANCE_ID"; 
+            name = processInstanceIDImp; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = "TOKEN_ID"; 
+            name = tokenIDImp; 
+            prototypeName = id; 
+        }
+    ); 
+    className = "org.openflexo.engine.db.Token"; 
+    classProperties = (
+        creationDateImp, 
+        currentPositionObjectIDImp, 
+        tokenIDImp, 
+        processInstanceIDImp, 
+        processInstanceImp, 
+        edgeIDImp
+    ); 
+    externalName = TOKEN; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {"_clientClassPropertyNames" = (id); }; 
+    name = Token; 
+    primaryKeyAttributes = (tokenIDImp); 
+    relationships = (
+        {
+            destination = ProcessInstance; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = (
+                {
+                    destinationAttribute = processInstanceIDImp; 
+                    sourceAttribute = processInstanceIDImp; 
+                }
+            ); 
+            name = processInstanceImp; 
+        }
+    ); 
+}
