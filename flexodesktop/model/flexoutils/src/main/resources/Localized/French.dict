@@ -1,5 +1,5 @@
 #French
-#Fri Jun 24 17:42:26 CEST 2011
+#Tue Sep 13 14:13:54 CEST 2011
 =
 \ =\ 
 \ into\ =\ dans 
@@ -3389,6 +3389,7 @@ no_edition=Pas d'\u00E9dition
 no_file=no_file
 no_files_found_as_trivially_mergable=Aucun fichiers trivialement mergable trouv\u00E9
 no_files_selected=Aucun fichier s\u00E9lectionn\u00E9
+no_font_selected=no_font_selected
 no_help_for_this_part=Aucun aide contextuelle disponible
 no_hierarchy_mode=no_hierarchy_mode
 no_history_yet=Pas d'historique disponible

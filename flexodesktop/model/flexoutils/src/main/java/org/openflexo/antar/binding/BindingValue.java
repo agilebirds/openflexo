@@ -290,7 +290,7 @@ public class BindingValue extends AbstractBinding
 			if (element.getDeclaringClass() == null 
 					|| TypeUtils.getBaseClass(currentType) == null
 					|| !TypeUtils.isClassAncestorOf(element.getDeclaringClass(),TypeUtils.getBaseClass(currentType))) {
-				//System.out.println("Ca ne va pas: "+element.getDeclaringClass()+" "+TypeUtils.getBaseClass(currentType));
+				//System.out.println("Mismatched: "+element.getDeclaringClass()+" "+TypeUtils.getBaseClass(currentType));
 				return false;				
 			}
 			if (!element.isBindingValid())
@@ -663,7 +663,11 @@ public class BindingValue extends AbstractBinding
 					//System.out.println("Object is null while applying "+((KeyValueProperty)element).getName());
 					return null;
 				}
-				if (element instanceof KeyValueProperty) {
+				returned = element.evaluateBinding(returned, context);
+				
+				/*if (element instanceof KeyValueProperty) {
+					returned = element.evaluate(returned, context);
+					
 					returned = KeyValueDecoder.objectForKey(returned,((KeyValueProperty)element).getName());
 					//if (debug) System.out.println("returned="+returned+" after "+((KeyValueProperty)element).getName());
 				}
@@ -673,7 +677,7 @@ public class BindingValue extends AbstractBinding
 				}
 				else {
 					logger.warning("Unexpected: "+element);
-				}
+				}*/
 			}
 			return returned;
 		}

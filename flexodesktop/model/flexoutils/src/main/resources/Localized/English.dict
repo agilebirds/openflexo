@@ -1,5 +1,5 @@
 #English
-#Fri Jun 24 17:42:26 CEST 2011
+#Tue Sep 13 14:13:54 CEST 2011
 =
 \ =\ 
 \ into\ =\ into 
@@ -3393,6 +3393,7 @@ no_edition=No edition
 no_file=no_file
 no_files_found_as_trivially_mergable=No file found as trivially mergable
 no_files_selected=No files selected
+no_font_selected=no_font_selected
 no_help_for_this_part=No available help for this
 no_hierarchy_mode=no_hierarchy_mode
 no_history_yet=No history yet

@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Vector;
@@ -143,6 +144,11 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D>
 		_controller = controller;
 		drawing = aDrawing;
 		aDrawing.getDrawingGraphicalRepresentation().updateBindingModel();
+		Iterator<GraphicalRepresentation> it = aDrawing.getDrawingGraphicalRepresentation().allContainedGRIterator();
+		while (it.hasNext()) {
+			GraphicalRepresentation subComponent = it.next();
+			subComponent.updateBindingModel();
+		}
 		contents = new Hashtable<GraphicalRepresentation, FGEView>();
 		graphics = new FGEDrawingGraphics(
 				drawing.getDrawingGraphicalRepresentation());

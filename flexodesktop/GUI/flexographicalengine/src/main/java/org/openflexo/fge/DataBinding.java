@@ -238,6 +238,7 @@ public class DataBinding implements StringConvertable<DataBinding>
 					if (fullVariable.indexOf(".") > 0) {
 						String identifier = fullVariable.substring(0,fullVariable.indexOf("."));
 						String parameter = fullVariable.substring(fullVariable.indexOf(".")+1);
+						System.out.println("Identifier="+identifier+" Parameter="+parameter);
 						Iterator<GraphicalRepresentation> allComponents = rootComponent.allGRIterator();
 						while (allComponents.hasNext()) {
 							GraphicalRepresentation<?> next = allComponents.next();

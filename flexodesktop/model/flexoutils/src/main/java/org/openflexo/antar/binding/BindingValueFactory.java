@@ -308,7 +308,8 @@ public class BindingValueFactory extends StringEncoder.Converter<BindingValue>
 							return null;
 						}                           
 						//nextElement = KeyValueLibrary.getKeyValueProperty(currentType, nextTokenName);
-						nextElement = _bindingFactory.getBindingPathElement(currentElement, nextTokenName);
+						//nextElement = _bindingFactory.getBindingPathElement(currentElement, nextTokenName);
+						nextElement = currentElement.getBindingPathElement(nextTokenName);
 						/*if (currentType instanceof Class
 								&& ((Class)currentType).isPrimitive()) {
 							currentType = TypeUtils.fromPrimitive((Class)currentType);

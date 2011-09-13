@@ -103,6 +103,7 @@ public class MyDrawingController extends DrawingController<EditedDrawing>
 	{
 		father.addToChilds(aShape);
 		//getDrawing().addDrawable(aShape, contextualMenuInvoker.getDrawable());
+		aShape.getGraphicalRepresentation().resetToDefaultIdentifier();
 	}
 	
 	public void addNewConnector(MyConnector aConnector)

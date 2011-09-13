@@ -29,11 +29,11 @@ public interface BindingFactory
 
 	public void setStaticBindingFactory(StaticBindingFactory staticBindingFactory);
 
-	public BindingPathElement getBindingPathElement(BindingPathElement father, String propertyName);
+	/*public BindingPathElement getBindingPathElement(BindingPathElement father, String propertyName);
 
 	public List<? extends BindingPathElement> getAccessibleBindingPathElements(BindingPathElement father);
 
-	public List<? extends BindingPathElement> getAccessibleCompoundBindingPathElements(BindingPathElement father);
+	public List<? extends BindingPathElement> getAccessibleCompoundBindingPathElements(BindingPathElement father);*/
 
 	public BindingVariable makeBindingVariable(Bindable container, String variableName, Type type);
 
