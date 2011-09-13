@@ -6,9 +6,9 @@
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="1"/>
 </listAttribute>
-<stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.maven.ide.eclipse.launchconfig.classpathProvider"/>
+<stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.m2e.launchconfig.classpathProvider"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.openflexo.fge.geomedit.GeomEdit"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="flexographicalengine"/>
-<stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.maven.ide.eclipse.launchconfig.sourcepathProvider"/>
+<stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.m2e.launchconfig.sourcepathProvider"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Djava.util.logging.config.file=${workspace_loc:flexoutils}/src/main/resources/Config/logging.properties -Xverify:all -Xmx512m -Dapple.laf.useScreenMenuBar=true -Xdock:name=&quot;Flexo&quot; -Xdock:icon=${workspace_loc:flexo}/src/main/resources/Resources/LogoFlexo.gif"/>
 </launchConfiguration>
