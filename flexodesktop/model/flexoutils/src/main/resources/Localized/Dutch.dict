@@ -1,5 +1,5 @@
 #Dutch
-#Tue Sep 13 14:13:54 CEST 2011
+#Wed Sep 14 00:17:58 CEST 2011
 =
 \ =\ 
 \ into\ =\ into 
@@ -91,6 +91,7 @@ Activity\ Group=Activity Group
 Activity\ Metrics=Activity Metrics
 Activity\ Node=Activity Node
 Activity\ Node\ workflow\ execution=Activity Node workflow execution
+Actor=Actor
 Add\ data\ assertion=Add data assertion
 Add\ object\ assertion=Add object assertion
 Added=Added
@@ -1123,6 +1124,7 @@ bug_reports_editor=Bug reports editor
 bug_reports_viewer=Bug reports viewer
 build_editor=Build editor
 build_new_object=Build new object
+build_view=build_view
 build_war=Build war
 building_dependancies_for_resource=Building dependancies for resource
 building_main_path=Building main path
@@ -2804,6 +2806,7 @@ informations=Information
 inheritance_child_items=More specialized items
 init_module_controller=Initializing module controller
 init_token_number=Initial token number
+init_view=init_view
 initial_wo_name=Initial screen name
 initialisation_expression=Initialization expression
 inner=inner
@@ -2946,6 +2949,7 @@ isocode_must_be_defined_description=A language isocode identifie a language acco
 isocode_must_unique=ISO code must be unique
 isocode_must_unique_description=ISO code must be unique
 it_is_used_in\:=It is used in\:
+italic=italic
 item_class_name=Item class name
 item_icon=item icon
 item_variable=Item variable
@@ -3127,6 +3131,7 @@ loading_flexo_application=Loading FlexoBPM Tool Set
 loading_flexo_application_suite=Loading FlexoBPM Tool Set
 loading_from_disk=Loading from disk
 loading_inspectors=Loading inspectors...
+loading_interface...=loading_interface...
 loading_menus=loading menus
 loading_module=Loading module...
 loading_process=Loading process

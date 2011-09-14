@@ -1,5 +1,5 @@
 #French
-#Tue Sep 13 14:13:54 CEST 2011
+#Wed Sep 14 00:17:58 CEST 2011
 =
 \ =\ 
 \ into\ =\ dans 
@@ -91,6 +91,7 @@ Activity\ Group=Groupe d'activit\u00E9s
 Activity\ Metrics=M\u00E9trique d'activit\u00E9
 Activity\ Node=Noeud Activit\u00E9
 Activity\ Node\ workflow\ execution=Exc\u00E9cution du workflow, noeud d'activit\u00E9
+Actor=Actor
 Add\ data\ assertion=Add data assertion
 Add\ object\ assertion=Add object assertion
 Added=Ajout\u00E9
@@ -1120,6 +1121,7 @@ bug_reports_editor=Editeur de rapports d'anomalie
 bug_reports_viewer=Editeur de rapports d'anomalie
 build_editor=Initialisation de l'\u00E9diteur
 build_new_object=Construction du nouvel objet
+build_view=build_view
 build_war=Construction du war
 building_dependancies_for_resource=Calcul des d\u00E9pendances pour la resource
 building_main_path=Construction du cheming principal
@@ -2799,6 +2801,7 @@ informations=Informations
 inheritance_child_items=El\u00E9ments sp\u00E9cialisant ce concept
 init_module_controller=Initialisation du contr\u00F4leur du module
 init_token_number=Nombre de jetons initiaux
+init_view=init_view
 initial_wo_name=Nom initial de l'\u00E9cran
 initialisation_expression=Expression d'initialisation
 inner=inner
@@ -2941,6 +2944,7 @@ isocode_must_be_defined_description=L\u2019ISO 639-1 (ICS n\u00B0 01.140.20) est
 isocode_must_unique=Le code ISO d'un langage doit \u00EAtre unique
 isocode_must_unique_description=Le code ISO d'un langage doit \u00EAtre unique
 it_is_used_in\:=Il est utilis\u00E9 dans\:
+italic=italic
 item_class_name=Classe de l'item
 item_icon=ic\u00F4ne de l'item
 item_variable=Variable de l'item
@@ -3122,6 +3126,7 @@ loading_flexo_application=Chargement du FlexoBPM Application Set
 loading_flexo_application_suite=Chargement du FlexoBPM Application Set
 loading_from_disk=Chargement depuis le disque
 loading_inspectors=Chargement des inspecteurs...
+loading_interface...=loading_interface...
 loading_menus=chargement des menus
 loading_module=Chargement du module
 loading_process=Chargement du process

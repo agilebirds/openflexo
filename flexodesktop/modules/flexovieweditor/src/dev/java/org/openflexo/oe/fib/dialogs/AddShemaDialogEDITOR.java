@@ -40,6 +40,7 @@ public class AddShemaDialogEDITOR extends ProjectDialogEDITOR {
 			{
 				FlexoEditor editor = loadProject(new FileResource("Prj/TestOE.prj"));
 				FlexoProject project = editor.getProject();
+				System.out.println("Calcs:"+project.getResourceCenter().retrieveCalcLibrary().getCalcs());
 				AddShema action = AddShema.actionType.makeNewAction(project.getShemaLibrary(), null,editor);
 				return makeArray(action);
 			}

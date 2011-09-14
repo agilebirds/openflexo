@@ -14,4 +14,55 @@
 		<module>flexobusinessplus</module>
 		<module>flexoenterprise</module>
 	</modules>
+	<profiles>
+		<profile>
+			<id>mac-osx</id>
+			<activation>
+				<os>
+					<family>mac</family>
+				</os>
+			</activation>
+			<properties>
+			     <vm.args>-Xmx1G -Xdock:name=Flexo -Dapple.laf.useScreenMenuBar=true</vm.args>
+			</properties>
+		</profile>
+		<profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                 <vm.args>-Xmx1G -Dswing.defaultlaf=com.sun.java.swing.plaf.windows.WindowsLookAndFeel</vm.args>
+            </properties>
+        </profile>
+	</profiles>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>exec-maven-plugin</artifactId>
+					<version>1.1</version>
+					<executions>
+					<execution>
+            <id></id>
+            <phase>verify</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <inherited>false</inherited>
+            <configuration>
+            </configuration>
+          </execution>
+					</executions>
+					<configuration>
+						<mainClass>org.openflexo.Application</mainClass>
+                        
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 </project>

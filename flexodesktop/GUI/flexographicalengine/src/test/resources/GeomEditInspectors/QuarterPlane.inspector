@@ -1,7 +1,0 @@
-<inspector title = "Quarter-Plane" inheritsfrom="Object.inspector" inspectedClassName="org.openflexo.fge.geomedit.gr.QuarterPlaneGraphicalRepresentation">
-
-	<tab name="Data" index="0" layout="DEFAULT">
-
-	</tab>
-
-</inspector>
