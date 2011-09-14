@@ -95,7 +95,7 @@ public class Flexo {
 			}
 
 		} else {
-			if (System.getProperty("user.dir").indexOf("Flexo") == -1) {
+			if (System.getProperty("user.dir").toLowerCase().indexOf("flexo") == -1) {
 				ResourceLocator.resetFlexoResourceLocation(new File(System.getProperty("user.dir")));
 				return System.getProperty("user.dir");
 			}
