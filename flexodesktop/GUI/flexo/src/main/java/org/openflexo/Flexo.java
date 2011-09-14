@@ -76,8 +76,8 @@ public class Flexo {
 				}
 				Method m = fileManager.getDeclaredMethod("getResource", new Class[] { String.class, String.class });
 				String s = (String) m.invoke(null, "English.dict", "Localized");
-				s = s.substring((System.getProperty("user.dir")).length() + 1);
-				s = s.substring(0, s.length() - ("Localized/English.dict".length()));
+				s = s.substring(System.getProperty("user.dir").length() + 1);
+				s = s.substring(0, s.length() - "Localized/English.dict".length());
 				ResourceLocator.resetFlexoResourceLocation(new File(s));
 				return s;
 			} catch (SecurityException e) {
@@ -95,7 +95,7 @@ public class Flexo {
 			}
 
 		} else {
-			if (System.getProperty("user.dir").indexOf("Flexo") == -1) {
+			if (System.getProperty("user.dir").toUpperCase().indexOf("FLEXO") == -1) {
 				ResourceLocator.resetFlexoResourceLocation(new File(System.getProperty("user.dir")));
 				return System.getProperty("user.dir");
 			}
