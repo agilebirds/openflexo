@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 import org.openflexo.toolbox.ToolBox;
 
 // test
+// test2
 public class KeyValueProperty implements SimplePathElement 
 {
 
