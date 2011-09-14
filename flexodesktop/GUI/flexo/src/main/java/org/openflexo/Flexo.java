@@ -76,8 +76,8 @@ public class Flexo {
 				}
 				Method m = fileManager.getDeclaredMethod("getResource", new Class[] { String.class, String.class });
 				String s = (String) m.invoke(null, "English.dict", "Localized");
-				s = s.substring((System.getProperty("user.dir")).length() + 1);
-				s = s.substring(0, s.length() - ("Localized/English.dict".length()));
+				s = s.substring(System.getProperty("user.dir").length() + 1);
+				s = s.substring(0, s.length() - "Localized/English.dict".length());
 				ResourceLocator.resetFlexoResourceLocation(new File(s));
 				return s;
 			} catch (SecurityException e) {
