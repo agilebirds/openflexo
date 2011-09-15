@@ -80,7 +80,7 @@ public class TestLoadJar extends FlexoDMTestCase
 		_editor = FlexoResourceManager.initializeNewProject(_projectDirectory,EDITOR_FACTORY,null);
 		_project = _editor.getProject();
 		logger.info("Project has been SUCCESSFULLY created");
-		assertNotNull(_project.getDataModel().getEntityNamed("org.openflexo.core.woapp.WDLComponent"));
+		assertNotNull(_project.getDataModel().getEntityNamed("be.denali.core.woapp.WDLComponent"));
 	}
 
     /**
