@@ -24,9 +24,10 @@ import java.lang.reflect.Type;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.toolbox.ToolBox;
 
-public class MethodDefinition implements ComplexPathElement {
+public class MethodDefinition extends KeyValueBindingImpl implements ComplexPathElement {
 
 	private static final Logger logger = Logger.getLogger(MethodDefinition.class.getPackage().getName());
 
@@ -225,5 +226,10 @@ public class MethodDefinition implements ComplexPathElement {
     {
     	return false;
     }
-    
+ 
+    @Override
+    public Object evaluateBinding(Object target, BindingEvaluationContext context)
+    {
+     	return null;
+    }
 }

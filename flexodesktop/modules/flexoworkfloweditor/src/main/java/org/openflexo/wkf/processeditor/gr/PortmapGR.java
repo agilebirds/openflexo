@@ -147,7 +147,7 @@ public class PortmapGR extends AbstractNodeGR<FlexoPortMap> {
 		}
 	}
 
-	protected int getIndex() {
+	protected int getPortmapIndex() {
 		if (observedContainer == null) {
 			return 0;
 		}
@@ -165,7 +165,7 @@ public class PortmapGR extends AbstractNodeGR<FlexoPortMap> {
 		if (observedContainer == null) {
 			return;
 		}
-		int index = getIndex();
+		int index = getPortmapIndex();
 
 		setLocationConstraints(LocationConstraints.AREA_CONSTRAINED);
 		if (orientation == SimplifiedCardinalDirection.NORTH) {

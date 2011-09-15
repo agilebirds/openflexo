@@ -47,7 +47,8 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
-import org.openflexo.antar.binding.BindingVariableImpl;
+import org.openflexo.fge.GRBindingFactory.ComponentPathElement;
+import org.openflexo.fge.GRBindingFactory.ComponentsBindingVariable;
 import org.openflexo.fge.GRVariable.GRVariableType;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
@@ -459,6 +460,7 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 		else {
 			int index = getParentGraphicalRepresentation().getContainedGraphicalRepresentations().indexOf(this);
 			if (getParentGraphicalRepresentation().getParentGraphicalRepresentation() == null) {
+				//logger.info("retrieveDefaultIdentifier return "+index);
 				return "object_"+index;
 			}
 			else {
@@ -642,6 +644,11 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 		return orderedGRList.indexOf(this);
 	}
 
+	public int getIndex()
+	{
+		return getLayerOrder();
+	}
+	
 	public Object getContainer() {
 		if (drawing == null) {
 			return null;
@@ -1265,11 +1272,13 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 	}
 
 	public void notifyDrawableAdded(GraphicalRepresentation<?> addedGR) {
+		addedGR.updateBindingModel();
 		setChanged();
 		notifyObservers(new GraphicalRepresentationAdded(addedGR));
 	}
 
 	public void notifyDrawableRemoved(GraphicalRepresentation<?> removedGR) {
+		removedGR.updateBindingModel();
 		setChanged();
 		notifyObservers(new GraphicalRepresentationRemoved(removedGR));
 	}
@@ -1860,10 +1869,14 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 	@Override
 	public BindingModel getBindingModel()
 	{
-		if (isRootGraphicalRepresentation()) {
+		if (_bindingModel == null) {
+			createBindingModel();
+		}
+		return _bindingModel;
+		/*if (isRootGraphicalRepresentation()) {
 			return _bindingModel;
 		}
-		return getRootGraphicalRepresentation().getBindingModel();
+		return getRootGraphicalRepresentation().getBindingModel();*/
 	}
 
 	@Override
@@ -1875,22 +1888,25 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 	public void updateBindingModel()
 	{
 		logger.fine("updateBindingModel()");
-		if (getRootGraphicalRepresentation() != null) {
+		/*if (getRootGraphicalRepresentation() != null) {
 			getRootGraphicalRepresentation()._bindingModel = null;
 			getRootGraphicalRepresentation().createBindingModel();
-		}
+		}*/
+		createBindingModel();
 	}
 
 	private void createBindingModel()
 	{
 		_bindingModel = new BindingModel();
 
-		_bindingModel.addToBindingVariables(new GRBindingVariable(this));
+		_bindingModel.addToBindingVariables(new GRBindingFactory.ComponentPathElement("this",this));
+		if (getParentGraphicalRepresentation() != null) _bindingModel.addToBindingVariables(new GRBindingFactory.ComponentPathElement("parent",getParentGraphicalRepresentation()));
+		_bindingModel.addToBindingVariables(new ComponentsBindingVariable(this));
 
 		Iterator<GraphicalRepresentation> it = allContainedGRIterator();
 		while (it.hasNext()) {
 			GraphicalRepresentation subComponent = it.next();
-			_bindingModel.addToBindingVariables(new GRBindingVariable(subComponent));
+			//_bindingModel.addToBindingVariables(new ComponentBindingVariable(subComponent));
 			subComponent.notifiedBindingModelRecreated();
 		}
 
@@ -1900,33 +1916,21 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 	@Override
 	public Object getValue(BindingVariable variable)
 	{
-		GRBindingVariable bv = (GRBindingVariable)getBindingModel().bindingVariableNamed(variable.getVariableName());
-		if (bv == null) {
-			logger.warning("Could not find component named "+variable);
-			return null;
+		BindingVariable bv = getBindingModel().bindingVariableNamed(variable.getVariableName());
+		/*if (bv instanceof ComponentBindingVariable) {
+			return ((ComponentBindingVariable) bv).getReference();
+		}
+		else*/ if (bv instanceof ComponentPathElement) {
+			return ((ComponentPathElement) bv).getComponent();
+		}
+		else if (bv instanceof ComponentsBindingVariable) {
+			return getRootGraphicalRepresentation();
 		}
 		else {
-			return bv.gr;
+			logger.warning("Could not find variable named "+variable);
+			return null;
 		}
 	}
-
-	protected static class GRBindingVariable extends BindingVariableImpl
-	{
-
-		private GraphicalRepresentation<?> gr;
-
-		public GRBindingVariable(GraphicalRepresentation<?> gr)
-		{
-			super(gr.getRootGraphicalRepresentation(), gr.getIdentifier(), gr.getClass());
-			this.gr = gr;
-		}
-
-		GraphicalRepresentation<?> getGraphicalRepresentation()
-		{
-			return gr;
-		}
-	}
-
 
 	public void notifiedBindingModelRecreated()
 	{
