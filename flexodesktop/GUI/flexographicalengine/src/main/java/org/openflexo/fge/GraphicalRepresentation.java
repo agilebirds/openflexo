@@ -322,6 +322,17 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 		return isDeleted;
 	}
 
+	public GRParameter parameterWithName(String parameterName)
+	{
+		if (parameterName == null) return null;
+		for (GRParameter param : getAllParameters()) {
+			if (param.name().equals(parameterName)) {
+				return param;
+			}
+		}
+		return null;
+	}
+	
 	public Vector<GRParameter> getAllParameters()
 	{
 		Vector<GRParameter> returned = new Vector<GRParameter>();

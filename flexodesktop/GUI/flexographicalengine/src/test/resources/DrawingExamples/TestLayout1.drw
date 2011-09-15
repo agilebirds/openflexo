@@ -4,7 +4,7 @@
     <TextStyle id="3" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
   </MyDrawingGraphicalRepresentation>
   <Shape id="4">
-    <MyShapeGraphicalRepresentation id="5" identifier="LeCarreRouge" text="RECTANGLE" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" x="100.0" y="100.0" width="543.9322407045009" height="446.981334640317" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false">
+    <MyShapeGraphicalRepresentation id="5" identifier="LeCarreRouge" text="RECTANGLE" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" x="100.0" y="100.0" width="744.907656555773" height="407.98292752659194" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false">
       <TextStyle id="6" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       <Variable id="7" name="nom" value="value" type="String" />
       <Variable id="8" name="unEntier" value="0" type="Integer" />
@@ -16,7 +16,7 @@
       <RectangleShape id="14" isRounded="false" arcSize="30.0" />
     </MyShapeGraphicalRepresentation>
     <Shape id="15">
-      <MyShapeGraphicalRepresentation id="16" identifier="object_0_0" text="SQUARE" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" x="10.0" y="133.33333333333334" width="480.0" height="133.33333333333334" isVisible="true" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" layer="1" isFloatingLabel="false" xConstraints="10" yConstraints="(LeCarreRouge.height / 3)" widthConstraints="(object_0.width - 20)" heightConstraints="(object_0.height / 3)">
+      <MyShapeGraphicalRepresentation id="16" identifier="object_0_0" text="SQUARE" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" x="10.0" y="135.99430917553065" width="523.9322407045009" height="148.99377821343901" isVisible="true" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" layer="1" isFloatingLabel="false" xConstraints="10" yConstraints="(parent.height / 3)" widthConstraints="(parent.width - 20)" heightConstraints="(parent.height / 3)">
         <TextStyle id="17" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
         <ForegroundStyle id="18" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
         <ColorBackgroundStyle id="19" color="255,255,0" useTransparency="false" transparencyLevel="0.5" />
