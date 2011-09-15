@@ -21,6 +21,7 @@ package org.openflexo.antar.binding;
 
 import java.lang.reflect.Type;
 
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.toolbox.ToolBox;
 
 /**
@@ -29,7 +30,7 @@ import org.openflexo.toolbox.ToolBox;
  * @author sguerin
  * 
  */
-public class BindingVariableImpl implements BindingVariable
+public class BindingVariableImpl extends KeyValueBindingImpl implements BindingVariable
 {
 
     private Bindable container;
@@ -135,4 +136,9 @@ public class BindingVariableImpl implements BindingVariable
     	return super.equals(obj);
     }
     
+    @Override
+    public Object evaluateBinding(Object target, BindingEvaluationContext context) 
+    {
+    	return target;
+    }
  }

@@ -141,7 +141,10 @@ public class DefaultBindingFactory extends StringEncoder.Converter<AbstractBindi
 		return new BindingVariableImpl(container, variableName, type);
 	}
 
+	/*public BindingPathElement getBindingPathElement(BindingPathElement father, String propertyName)
+=======
 	public BindingPathElement getBindingPathElement(BindingPathElement father, String propertyName)
+>>>>>>> 96d56824629beeecbab39baadbb1b529e95acf14
 	{
 		if (father.getType() != null) {
 			if (TypeUtils.getBaseClass(father.getType()) == null) {
@@ -189,6 +192,6 @@ public class DefaultBindingFactory extends StringEncoder.Converter<AbstractBindi
 		}
 		return null;
 		
-	}
+	}*/
 
 }
