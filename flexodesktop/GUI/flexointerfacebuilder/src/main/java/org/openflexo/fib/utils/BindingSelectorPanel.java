@@ -1429,14 +1429,11 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel
 						if (TypeUtils.isResolved(columnElement
 								.getResultingType())
 								&& _bindingSelector.getBindable() != null) {
-							if (_bindingSelector.getBindable()
+							if (columnElement.getElement().getAccessibleBindingPathElements().size() > 0) {
+							/*if (_bindingSelector.getBindable()
 									.getBindingFactory()
 									.getAccessibleBindingPathElements(
-											columnElement.getElement()).size() > 0) {
-								// if
-								// (KeyValueLibrary.getAccessibleProperties(resultingType).size()
-								// > 0) {
-								// setIcon(label, ARROW_RIGHT_ICON, list);
+											columnElement.getElement()).size() > 0) {*/
 							} else {
 								if ((_bindingSelector.getBindingDefinition() != null)
 										&& (_bindingSelector
@@ -1584,15 +1581,13 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel
 				return;
 
 			// _accessibleProperties.addAll(KeyValueLibrary.getAccessibleProperties(_type));
-			_accessibleProperties.addAll(_bindingSelector.getBindable()
-					.getBindingFactory().getAccessibleBindingPathElements(
-							_element));
+			//_accessibleProperties.addAll(_bindingSelector.getBindable().getBindingFactory().getAccessibleBindingPathElements(_element));
+			_accessibleProperties.addAll(_element.getAccessibleBindingPathElements());
 
 			if (BindingSelectorPanel.this._bindingSelector.editionMode == EditionMode.COMPOUND_BINDING) {
 				// _accessibleMethods.addAll(KeyValueLibrary.getAccessibleMethods(_type));
-				_accessibleProperties.addAll(_bindingSelector.getBindable()
-						.getBindingFactory()
-						.getAccessibleCompoundBindingPathElements(_element));
+				//_accessibleProperties.addAll(_bindingSelector.getBindable().getBindingFactory().getAccessibleCompoundBindingPathElements(_element));
+				_accessibleProperties.addAll(_element.getAccessibleCompoundBindingPathElements());
 			}
 
 			for (BindingPathElement p : _accessibleProperties) {
@@ -1767,11 +1762,12 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel
 							if (TypeUtils.isResolved(columnElement
 									.getResultingType())
 									&& _bindingSelector.getBindable() != null) {
-								if (_bindingSelector.getBindable()
+								if (columnElement.getElement().getAccessibleBindingPathElements().size() > 0) {
+								/*if (_bindingSelector.getBindable()
 										.getBindingFactory()
 										.getAccessibleBindingPathElements(
 												columnElement.getElement())
-										.size() > 0) {
+										.size() > 0) {*/
 									setIcon(label,
 											FIBIconLibrary.ARROW_RIGHT_ICON,
 											list);
