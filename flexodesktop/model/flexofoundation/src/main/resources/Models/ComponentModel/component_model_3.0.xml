@@ -29,7 +29,7 @@
     <property name="mainColor" xmlTag="mainColor" attribute="YES" description="Defines component background color"/> 
     <property name="textColor" xmlTag="textColor" attribute="YES" description="Defines component text color"/> 
     <property name="helpText" xmlTag="helpText" attribute="YES" description="Defines component help"/> 
-    <property name="isLocalized" xmlTag="isLocalized" attribute="YES"/> 
+    <!--<property name="isLocalized" xmlTag="isLocalized" attribute="YES"/> -->
     <!--<property name="description" xmlTag="description" attribute="YES" description="Defines component description"/> Stored in WOLib only -->
     <property name="rootSequence" xmlTag="IESequenceWidget"/>
     <property name="lastUpdate" xmlTag = "lastUpdate" attribute="yes" description="Last update date of this object. Used for optimistic dependancy checking."/> 

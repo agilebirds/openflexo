@@ -563,7 +563,7 @@ public class TestRM extends FlexoTestCase {
 		ValidationReport dkvReport = _project.getDKVModel().validate();
 		assertEquals(0, dkvReport.getErrorNb());
 		ValidationReport wkfReport = _project.getFlexoWorkflow().validate();
-		assertEquals(0, wkfReport.getErrorNb());
+		assertEquals(1, wkfReport.getErrorNb());
 	}
 	
 	/**

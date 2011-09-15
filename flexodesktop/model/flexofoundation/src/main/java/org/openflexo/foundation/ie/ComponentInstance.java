@@ -323,7 +323,7 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
             _componentDefinition = aComponentDefinition;
             _componentDefinition.addObserver(this);
             if (!(this instanceof DummyComponentInstance))
-            	_componentDefinition.addToComponentInstances(this);
+            	_componentDefinition.addToComponentInstances(this,notify);
             if (logger.isLoggable(Level.FINE))
                 logger.fine("Adding " + this + " as observer of " + _componentDefinition);
             if (notify)

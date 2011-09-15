@@ -813,10 +813,14 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 	}
 
 	public void addToComponentInstances(ComponentInstance instance) {
+		addToComponentInstances(instance,true);
+	}
+
+    public void addToComponentInstances(ComponentInstance instance, boolean notify) {
 		if (!componentInstances.contains(instance) && !(instance instanceof DummyComponentInstance)) {
 			if (!instance.getXMLResourceData().getFlexoXMLFileResource().isConverting()) {
 				componentInstances.add(instance);
-				setChanged();
+				if(notify)setChanged();
 			} else
 				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Found resource converting, ignoring component instance");
