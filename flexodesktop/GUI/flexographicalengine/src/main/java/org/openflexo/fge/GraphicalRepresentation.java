@@ -350,7 +350,7 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 	public void setsWith(GraphicalRepresentation<?> gr) {
 		if (gr instanceof GraphicalRepresentation) {
 			for (Parameters p : Parameters.values()) {
-				if (p != Parameters.mouseClickControls && p != Parameters.mouseDragControls) {
+				if (p != Parameters.identifier && p != Parameters.mouseClickControls && p != Parameters.mouseDragControls) {
 					_setParameterValueWith(p, gr);
 				}
 			}
@@ -1878,7 +1878,7 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 	private BindingModel _bindingModel = null;
 
 	@Override
-	public BindingModel getBindingModel()
+	public final BindingModel getBindingModel()
 	{
 		if (_bindingModel == null) {
 			createBindingModel();

@@ -332,6 +332,7 @@ public abstract class FlexoOntology extends OntologyObject {
 
 		for (Iterator i = getOntModel().listClasses();  i.hasNext(); ) {
 			OntClass ontClass =(OntClass)i.next();
+			//logger.info(">>>>> Load class "+ontClass);
 			if (ontClass.getURI() != null) {
 				if (_library.getClass(ontClass.getURI()) == null) {
 					// Concept not yet known, assume that this concept is declared in this ontology
@@ -608,13 +609,22 @@ public abstract class FlexoOntology extends OntologyObject {
 		needsReordering = false;
 	}
 
-
-	public void loadWhenUnloaded()
+	/**
+	 * Force load ontology when unloaded
+	 * @return flag indicating if loading was performed
+	 */
+	public boolean loadWhenUnloaded()
 	{
 		if (!isLoaded && !isLoading) {
 			isLoading = true;
+			//logger.info("Perform load "+getURI());
 			load();
 			isLoading = false;
+			return true;
+		}
+		else {
+			//logger.info("Skip loading"+getURI());
+			return false;
 		}
 	}
 
@@ -623,6 +633,10 @@ public abstract class FlexoOntology extends OntologyObject {
 		return isLoaded;
 	}
 
+	public boolean isLoading() {
+		return isLoading;
+	}
+	
 	private static void handleResource(OntResource resource,Hashtable<OntResource,String> renamedResources,Hashtable<String,OntResource> renamedURI)
 	{
 		for (StmtIterator j = resource.listProperties(); j.hasNext();)
@@ -695,6 +709,7 @@ public abstract class FlexoOntology extends OntologyObject {
 
 	protected void load()
 	{
+		logger.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% "+ontologyURI);
 		logger.info("Try to load ontology "+ontologyURI);
 
 		ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, _library, null);

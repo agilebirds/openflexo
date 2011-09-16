@@ -40,12 +40,16 @@ public class CalcViewEDITOR {
 				FlexoResourceCenter resourceCenter = ModuleLoader.getFlexoResourceCenter(true);
 				OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
 				CalcLibrary calcLibrary = resourceCenter.retrieveCalcLibrary();
-				OntologyCalc calc1 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/flexo/ontologies/Calcs/BasicOrganizationTreeEditor.owl");
+				
+				OntologyCalc calc1 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/flexo/ontologies/Calcs/Tests/BasicOrganizationTreeEditor.owl");
 				calc1.loadWhenUnloaded();
-				OntologyCalc calc2 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/flexo/ontologies/Calcs/FLXOrganizationalStructure-A.owl");
+				
+				OntologyCalc calc2 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/flexo/ontologies/Calcs/FlexoMethodology/FLXOrganizationalStructure-A.owl");
 				calc2.loadWhenUnloaded();
-				OntologyCalc calc3 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/flexo/ontologies/Calcs/BasicOntology.owl");
+
+				OntologyCalc calc3 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/flexo/ontologies/Calcs/Basic/BasicOntology.owl");
 				calc3.loadWhenUnloaded();
+				
 				return makeArray(calc1,calc2,calc3);
 			}
 			@Override

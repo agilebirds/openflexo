@@ -4188,7 +4188,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			}
 			 resourceCenter = new LocalResourceCenterImplementation(file);
 		}
-		logger.info("return resourceCenter " + resourceCenter + " for project " + Integer.toHexString(hashCode()));
+		//logger.info("return resourceCenter " + resourceCenter + " for project " + Integer.toHexString(hashCode()));
 		return resourceCenter;
 	 }
 

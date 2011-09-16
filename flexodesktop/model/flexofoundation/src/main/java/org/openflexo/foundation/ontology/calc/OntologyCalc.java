@@ -30,6 +30,7 @@ import org.jdom.JDOMException;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.ImportedOntology;
+import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.calc.CalcPalette.RelativePathFileConverter;
 import org.openflexo.foundation.ontology.calc.dm.CalcDrawingShemaInserted;
@@ -282,8 +283,11 @@ public class OntologyCalc extends CalcObject {
 	
 	protected void load()
 	{
-		logger.info("Try to load ontology "+calcURI);
+		//logger.info("------------------------------------------------- "+calcURI);
+		logger.info("Try to load ViewPoint "+calcURI);
 
+		//logger.info("calcOntology="+calcOntology.getURI());
+		//logger.info(calcOntology.getURI()+" isLoaded="+calcOntology.isLoaded()+" isLoading="+calcOntology.isLoading());
 		calcOntology.loadWhenUnloaded();
 		
 		if (getLocalizedDictionary() != null) {
@@ -292,8 +296,11 @@ public class OntologyCalc extends CalcObject {
 		
 		isLoaded = true;
 		
-		logger.info("Loaded ontology "+calcURI);
-		
+		/*logger.info("Loaded ViewPoint "+calcURI);
+		for (OntologyClass clazz : getOntologyLibrary().getAllClasses()) {
+			System.out.println("Found: "+clazz);
+		}*/
+
 	}
 
 	

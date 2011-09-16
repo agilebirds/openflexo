@@ -19,9 +19,13 @@
  */
 package org.openflexo.icon;
 
+import java.util.logging.Logger;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
+import org.openflexo.foundation.ie.IEObject;
+import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.toolbox.ImageIconResource;
 
 /**
@@ -32,6 +36,8 @@ import org.openflexo.toolbox.ImageIconResource;
  */
 public class SEIconLibrary extends IconLibrary {
 
+	private static final Logger logger = Logger.getLogger(SEIconLibrary.class.getPackage().getName());
+	
 	// Module icons
 	public static final ImageIcon IE_ACTIVE_ICON = new ImageIconResource("Icons/SE/IE_A_Small.gif");
 	public static final ImageIcon IE_UNACTIVE_ICON = new ImageIconResource("Icons/SE/IE_NA_Small.gif");
@@ -116,6 +122,12 @@ public class SEIconLibrary extends IconLibrary {
 	public static final ImageIcon MENUITEM_ICON = new ImageIconResource("Icons/Model/SE/Small_HEADER.gif");
 	public static final ImageIcon SMALL_MULTIMEDIA = new ImageIconResource("Icons/Model/SE/Small_MULTIMEDIA.gif");
 	public static final ImageIcon REUSABLEWIDGET_ICON = new ImageIconResource("Icons/Model/SE/ReusableComponent.gif");
+
+	public static ImageIcon iconForObject(IEObject object)
+	{
+		logger.warning("iconForObject(IEObject) not implemented yet");
+		return null;
+	}
 
 
 }
