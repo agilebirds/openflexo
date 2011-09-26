@@ -66,9 +66,17 @@ public class LinkScheme extends EditionScheme {
 	public OntologyClass getFromTargetClass()
 	{
 		if (StringUtils.isEmpty(_getFromTarget())) {
+			logger.warning("Empty target class "+_getFromTarget());
 			return null;
 		}
-		return getOntologyLibrary().getClass(_getFromTarget());
+		OntologyClass returned = getOntologyLibrary().getClass(_getFromTarget());
+		if (returned == null) {
+			logger.warning("Cannot find class "+_getFromTarget());
+			/*for (OntologyClass clazz : getOntologyLibrary().getAllClasses()) {
+				System.out.println("Found: "+clazz);
+			}*/
+		}
+		return returned;
 	}
 	
 	public void setFromTargetClass(OntologyClass targetClass)

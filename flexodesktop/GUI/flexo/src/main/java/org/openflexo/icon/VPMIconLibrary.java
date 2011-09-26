@@ -19,8 +19,38 @@
  */
 package org.openflexo.icon;
 
+import java.util.logging.Logger;
+
 import javax.swing.ImageIcon;
 
+import org.openflexo.foundation.ontology.DataPropertyStatement;
+import org.openflexo.foundation.ontology.calc.ActionScheme;
+import org.openflexo.foundation.ontology.calc.CalcDrawingConnector;
+import org.openflexo.foundation.ontology.calc.CalcDrawingShape;
+import org.openflexo.foundation.ontology.calc.CalcDrawingShema;
+import org.openflexo.foundation.ontology.calc.CalcFolder;
+import org.openflexo.foundation.ontology.calc.CalcLibrary;
+import org.openflexo.foundation.ontology.calc.CalcLibraryObject;
+import org.openflexo.foundation.ontology.calc.CalcPalette;
+import org.openflexo.foundation.ontology.calc.CalcPaletteElement;
+import org.openflexo.foundation.ontology.calc.ConnectorPatternRole;
+import org.openflexo.foundation.ontology.calc.DataPropertyAssertion;
+import org.openflexo.foundation.ontology.calc.DropScheme;
+import org.openflexo.foundation.ontology.calc.EditionAction;
+import org.openflexo.foundation.ontology.calc.EditionPattern;
+import org.openflexo.foundation.ontology.calc.EditionPatternParameter;
+import org.openflexo.foundation.ontology.calc.FlexoModelObjectPatternRole;
+import org.openflexo.foundation.ontology.calc.LinkScheme;
+import org.openflexo.foundation.ontology.calc.LocalizedDictionary;
+import org.openflexo.foundation.ontology.calc.ObjectPropertyAssertion;
+import org.openflexo.foundation.ontology.calc.OntologicObjectPatternRole;
+import org.openflexo.foundation.ontology.calc.OntologyCalc;
+import org.openflexo.foundation.ontology.calc.PaletteElementPatternParameter;
+import org.openflexo.foundation.ontology.calc.PrimitivePatternRole;
+import org.openflexo.foundation.ontology.calc.ShapePatternRole;
+import org.openflexo.foundation.ontology.calc.ShemaPatternRole;
+import org.openflexo.foundation.wkf.WKFObject;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ImageIconResource;
 
 /**
@@ -30,6 +60,8 @@ import org.openflexo.toolbox.ImageIconResource;
  *
  */
 public class VPMIconLibrary extends IconLibrary {
+
+	private static final Logger logger = Logger.getLogger(VPMIconLibrary.class.getPackage().getName());
 
 	// Module icons
 	public static final ImageIcon CED_ACTIVE_ICON = new ImageIconResource("Icons/VPM/CED_A_Small.gif");
@@ -65,5 +97,69 @@ public class VPMIconLibrary extends IconLibrary {
 	public static final ImageIconResource EXAMPLE_DIAGRAM_ICON = new ImageIconResource("Icons/Model/VPM/ExampleDiagram.gif");
 	public static final ImageIconResource CALC_SHAPE_ICON = new ImageIconResource("Icons/Model/VPM/ShapeIcon.gif");
 	public static final ImageIconResource CALC_CONNECTOR_ICON = new ImageIconResource("Icons/Model/VPM/ConnectorIcon.gif");
+
+	public static ImageIcon iconForObject(CalcLibraryObject object)
+	{
+		if (object instanceof CalcFolder) return FOLDER_ICON;
+		else if (object instanceof CalcLibrary) return CALC_LIBRARY_ICON;
+		else if (object instanceof CalcPalette) return CALC_PALETTE_ICON;
+		else if (object instanceof CalcPaletteElement) return CALC_SHAPE_ICON;
+		else if (object instanceof DataPropertyAssertion) return OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON;
+		else if (object instanceof ObjectPropertyAssertion) return OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON;
+		else if (object instanceof CalcDrawingConnector) return CALC_CONNECTOR_ICON;
+		else if (object instanceof CalcDrawingShape) return CALC_SHAPE_ICON;
+		else if (object instanceof CalcDrawingShema) return EXAMPLE_DIAGRAM_ICON;
+		else if (object instanceof EditionAction) return EDITION_PATTERN_ACTION_ICON;
+		else if (object instanceof EditionPattern) return EDITION_PATTERN_ICON;
+		else if (object instanceof EditionPatternParameter) return EDITION_PATTERN_PARAMETER_ICON;
+		else if (object instanceof ActionScheme) return ACTION_SCHEME_ICON;
+		else if (object instanceof DropScheme) return DROP_SCHEME_ICON;
+		else if (object instanceof LinkScheme) return LINK_SCHEME_ICON;
+		else if (object instanceof OntologyCalc) return CALC_ICON;
+		else if (object instanceof PaletteElementPatternParameter) return EDITION_PATTERN_PARAMETER_ICON;
+		else if (object instanceof FlexoModelObjectPatternRole) {
+			switch (((FlexoModelObjectPatternRole) object).getFlexoModelObjectType()) {
+			case Process:
+				return WKFIconLibrary.PROCESS_ICON;
+			case ProcessFolder:
+				return WKFIconLibrary.PROCESS_FOLDER_ICON;
+			case Role:
+				return WKFIconLibrary.ROLE_ICON;
+			case Activity:
+				return WKFIconLibrary.ACTIVITY_NODE_ICON;
+			case Operation:
+				return WKFIconLibrary.OPERATION_NODE_ICON;
+			case Action:
+				return WKFIconLibrary.ACTION_NODE_ICON;
+			case Event:
+				return WKFIconLibrary.EVENT_ICON;
+			default:
+				return null;
+			}
+		}
+		else if (object instanceof ConnectorPatternRole) return CALC_CONNECTOR_ICON;
+		else if (object instanceof ShapePatternRole) return CALC_SHAPE_ICON;
+		else if (object instanceof ShemaPatternRole) return EXAMPLE_DIAGRAM_ICON;
+		else if (object instanceof PrimitivePatternRole) return UNKNOWN_ICON;
+		else if (object instanceof OntologicObjectPatternRole) {
+			switch (((OntologicObjectPatternRole) object).getOntologicObjectType()) {
+			case Class:
+				return OntologyIconLibrary.ONTOLOGY_CLASS_ICON;
+			case Individual:
+				return OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON;
+			case ObjectProperty:
+				return OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON;
+			case DataProperty:
+				return OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON;
+			case OntologyStatement:
+				return OntologyIconLibrary.ONTOLOGY_STATEMENT_ICON;
+			default:
+				return null;
+			}
+		}
+		else if (object instanceof LocalizedDictionary) return LOCALIZATION_ICON;
+		logger.warning("No icon for "+object.getClass());
+		return UNKNOWN_ICON;
+	}
 
 }

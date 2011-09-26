@@ -20,6 +20,7 @@
 package org.openflexo.fge;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -27,6 +28,7 @@ import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.AbstractBinding.TargetObject;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.Variable;
@@ -223,11 +225,35 @@ public class DataBinding implements StringConvertable<DataBinding>
 	{
 		if (binding == null) return;
 
-		logger.info("Searching dependancies for "+this);
+		//logger.info("Searching dependancies for "+this);
 
-		Vector<Expression> primitives;
-		try {
-			primitives = Expression.extractPrimitives(binding.getStringRepresentation());
+		GraphicalRepresentation<?> component = getOwner();
+		List<TargetObject> targetList = binding.getTargetObjects(owner);
+		if (targetList != null) {
+			for (TargetObject o : targetList) {
+				//System.out.println("> "+o.target+" for "+o.propertyName);
+				if (o.target instanceof GraphicalRepresentation) {
+					GraphicalRepresentation<?> c = (GraphicalRepresentation)o.target;
+					GRParameter param = c.parameterWithName(o.propertyName);
+					//logger.info("OK, found "+getBindingAttribute()+" of "+getOwner()+" depends of "+param+" , "+c);
+					try {
+						component.declareDependantOf(c,getBindingAttribute(),param);
+					} catch (DependancyLoopException e) {
+						logger.warning("DependancyLoopException raised while declaring dependancy (data lookup)"
+								+"in the context of binding: "+binding.getStringRepresentation()
+								+" component: "+component
+								+" dependancy: "+c
+								+" identifier: "+c.getIdentifier()
+								+" message: "+e.getMessage());
+					}
+				}
+			}
+		}
+
+		//Vector<Expression> primitives;
+		//try {
+
+		/*primitives = Expression.extractPrimitives(binding.getStringRepresentation());
 
 			GraphicalRepresentation component = getOwner();
 			GraphicalRepresentation rootComponent = component.getRootGraphicalRepresentation();
@@ -238,6 +264,8 @@ public class DataBinding implements StringConvertable<DataBinding>
 					if (fullVariable.indexOf(".") > 0) {
 						String identifier = fullVariable.substring(0,fullVariable.indexOf("."));
 						String parameter = fullVariable.substring(fullVariable.indexOf(".")+1);
+						logger.info("identifier="+identifier);
+						logger.info("parameter="+parameter);
 						Iterator<GraphicalRepresentation> allComponents = rootComponent.allGRIterator();
 						while (allComponents.hasNext()) {
 							GraphicalRepresentation<?> next = allComponents.next();
@@ -275,7 +303,7 @@ public class DataBinding implements StringConvertable<DataBinding>
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
+*/
 	}
 
 	public GRParameter getBindingAttribute()

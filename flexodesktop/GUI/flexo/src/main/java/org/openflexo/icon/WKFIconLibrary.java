@@ -19,9 +19,13 @@
  */
 package org.openflexo.icon;
 
+import java.util.logging.Logger;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
+import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.node.EventNode;
 import org.openflexo.foundation.wkf.node.EventNode.EVENT_TYPE;
 import org.openflexo.foundation.wkf.ws.DeletePort;
@@ -34,6 +38,7 @@ import org.openflexo.foundation.wkf.ws.OutPort;
 import org.openflexo.foundation.wkf.ws.PortMapRegistery;
 import org.openflexo.foundation.wkf.ws.ServiceOperation;
 import org.openflexo.toolbox.ImageIconResource;
+import org.openflexo.view.controller.FlexoFIBController;
 
 /**
  * Utility class containing all icons used in context of WKFModule
@@ -42,6 +47,8 @@ import org.openflexo.toolbox.ImageIconResource;
  *
  */
 public class WKFIconLibrary extends IconLibrary {
+
+	private static final Logger logger = Logger.getLogger(WKFIconLibrary.class.getPackage().getName());
 
 	// Module icons
 	public static final ImageIconResource WKF_ACTIVE_ICON = new ImageIconResource("Icons/WKF/WKF_A_Small.gif");
@@ -507,6 +514,10 @@ public class WKFIconLibrary extends IconLibrary {
 		}
 	}
 
-
+	public static ImageIcon iconForObject(WKFObject object)
+	{
+		logger.warning("iconForObject(WKFObject) not implemented yet");
+		return null;
+	}
 
 }

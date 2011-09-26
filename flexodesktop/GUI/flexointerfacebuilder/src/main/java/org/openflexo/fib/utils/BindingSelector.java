@@ -1199,6 +1199,10 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 	{
 		if (getBindable() != null) {
 			BindingFactory factory = getBindable().getBindingFactory();
+			if (factory == null) {
+				logger.info("OK, je tiens le probleme, factory=null");
+				logger.info("bindable="+getBindable());
+			}
 			factory.setWarnOnFailure(false);
 			factory.setBindable(getBindable());
 			AbstractBinding returned = factory.convertFromString(stringValue);

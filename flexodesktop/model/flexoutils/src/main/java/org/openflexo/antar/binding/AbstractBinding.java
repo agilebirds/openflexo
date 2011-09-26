@@ -189,6 +189,8 @@ public abstract class AbstractBinding implements Bindable, Cloneable, StringConv
 
 	/**
 	 * Build and return a list of target objects (the current object path computed from supplied context)
+	 * Those objects are the one which are involved in the computation of this binding
+	 * for the supplied context
 	 * @param context
 	 * @return
 	 */

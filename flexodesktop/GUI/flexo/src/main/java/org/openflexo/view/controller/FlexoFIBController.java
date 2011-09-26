@@ -21,6 +21,8 @@ package org.openflexo.view.controller;
 
 import java.util.logging.Logger;
 
+import javax.swing.ImageIcon;
+
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.foundation.DataModification;
@@ -28,6 +30,15 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
+import org.openflexo.foundation.ie.IEObject;
+import org.openflexo.foundation.ontology.AbstractOntologyObject;
+import org.openflexo.foundation.ontology.OntologyObject;
+import org.openflexo.foundation.ontology.calc.CalcLibraryObject;
+import org.openflexo.foundation.wkf.WKFObject;
+import org.openflexo.icon.OntologyIconLibrary;
+import org.openflexo.icon.SEIconLibrary;
+import org.openflexo.icon.VPMIconLibrary;
+import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.selection.SelectionManager;
 
 
@@ -105,4 +116,21 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 		}
 	}
 
+	public ImageIcon iconForObject(FlexoModelObject object)
+	{
+		if (object instanceof WKFObject) {
+			return WKFIconLibrary.iconForObject((WKFObject)object);
+		}
+		else if (object instanceof IEObject) {
+			return SEIconLibrary.iconForObject((IEObject)object);
+		}
+		else if (object instanceof CalcLibraryObject) {
+			return VPMIconLibrary.iconForObject((CalcLibraryObject)object);
+		}
+		else if (object instanceof AbstractOntologyObject) {
+			return OntologyIconLibrary.iconForObject((AbstractOntologyObject)object);
+		}
+		logger.warning("Sorry, no icon defined for "+object.getClass());
+		return null;
+	}
 }

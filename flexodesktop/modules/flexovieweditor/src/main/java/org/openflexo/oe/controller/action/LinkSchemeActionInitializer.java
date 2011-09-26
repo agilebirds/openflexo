@@ -61,6 +61,7 @@ public class LinkSchemeActionInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, LinkSchemeAction action)
 			{
+				logger.info("On est la action.escapeParameterRetrievingWhenValid="+action.escapeParameterRetrievingWhenValid);
 				return ParametersRetriever.retrieveParameters(action,action.escapeParameterRetrievingWhenValid);
 			}
 		};
