@@ -74,8 +74,9 @@ public abstract class CGTemplateSet extends CGTemplateObject {
 	}
 
 	private CGTemplateFolder retrieveFolder(String folderPath) {
-		if (StringUtils.isEmpty(folderPath))
+		if (StringUtils.isEmpty(folderPath)) {
 			return getRootFolder();
+		}
 		StringTokenizer st = new StringTokenizer(folderPath, "/" + File.separator);
 		CGTemplateFolder current = getRootFolder();
 		while (st.hasMoreElements()) {
@@ -93,8 +94,9 @@ public abstract class CGTemplateSet extends CGTemplateObject {
 
 	@Override
 	public void update() {
-		if (isUpdating)
+		if (isUpdating) {
 			return;
+		}
 		// logger.info("********** Updating templates for directory "+_directory.getAbsolutePath());
 		try {
 			Set<String> previousKnownTemplates = new HashSet<String>(templates.keySet());
@@ -103,26 +105,31 @@ public abstract class CGTemplateSet extends CGTemplateObject {
 
 			if (newTemplates != null) {
 				for (CGTemplate template : newTemplates) {
-					String relativePath = template.getRelativePath();
+					String relativePath = template.getRelativePathWithoutSetPrefix();
 					if (templates.get(relativePath) == null) {
 						// logger.info(">>>> Adding file "+file.getAbsolutePath()+" relative path = "+relativePath);
 						templates.put(relativePath, template);
 						registerTemplate(template);
 					}
-					if (previousKnownTemplates.contains(relativePath))
+					if (previousKnownTemplates.contains(relativePath)) {
 						previousKnownTemplates.remove(relativePath);
+					}
 				}
 			}
 
 			for (String templateRelativePath : previousKnownTemplates) {
 				CGTemplate template = templates.get(templateRelativePath);
 				if (template == null)
+				{
 					continue; // GPO: see bug 1007011 (this should not happen because I prevented recursion from happening with flag isUpdating, but I leave this just to be really sure that no NPE
+				}
 				// will occur)
-				if (!template.isDeleted())
+				if (!template.isDeleted()) {
 					template.delete();
-				if (logger.isLoggable(Level.INFO))
+				}
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Removing " + templateRelativePath);
+				}
 				templates.remove(templateRelativePath);
 				unregisterTemplate(template);
 			}

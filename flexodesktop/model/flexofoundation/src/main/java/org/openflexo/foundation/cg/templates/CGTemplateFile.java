@@ -25,8 +25,6 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
-
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileUtils;
@@ -40,7 +38,7 @@ public class CGTemplateFile extends CGTemplate {
 	private String fileContent = null;
 	private TemplateFileContentEditor _templateFileContentEditor;
 	private String _additionalPath = null;
-	
+
 	// Template last update
 	private Date _lastUpdate;
 
@@ -57,7 +55,7 @@ public class CGTemplateFile extends CGTemplate {
 			_lastUpdate = new Date(0);
 		}
 	}
-	
+
 	public File getTemplateFile()
 	{
 		return _templateFile;
@@ -67,24 +65,28 @@ public class CGTemplateFile extends CGTemplate {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getRelativePath() 
+	public String getRelativePath()
 	{
 		if (getSet() instanceof TargetSpecificCGTemplateSet) {
-			return ((TargetSpecificCGTemplateSet) getSet()).getTargetType().getName() + "/" + getAdditionalPath() + getTemplateName();
+			return ((TargetSpecificCGTemplateSet) getSet()).getTargetType().getName() + "/" + getRelativePathWithoutSetPrefix();
 		}
+		return getRelativePathWithoutSetPrefix();
+	}
+
+	public String getRelativePathWithoutSetPrefix() {
 		return getAdditionalPath() + getTemplateName();
 	}
 
 	private String getAdditionalPath()
 	{
-		return (StringUtils.isEmpty(_additionalPath) ? "" : _additionalPath);
+		return StringUtils.isEmpty(_additionalPath) ? "" : _additionalPath;
 	}
 
 	public boolean isEdited()
 	{
-		return (_templateFileContentEditor != null);
+		return _templateFileContentEditor != null;
 	}
-	
+
 	public void edit(TemplateFileContentEditor templateFileContentEditor)
 	{
 		_templateFileContentEditor = templateFileContentEditor;
@@ -94,7 +96,7 @@ public class CGTemplateFile extends CGTemplate {
 	}
 
 	public void save()
-	{		
+	{
 		try {
 			synchronized(this) {
 				FileUtils.saveToFile(getTemplateFile(), getEditedContent());
@@ -109,7 +111,7 @@ public class CGTemplateFile extends CGTemplate {
 	}
 
 	public void cancelEdition()
-	{		
+	{
 		_templateFileContentEditor.setEditedContent(getContent());
 		_templateFileContentEditor = null;
 		setChanged(false);
@@ -132,21 +134,22 @@ public class CGTemplateFile extends CGTemplate {
 		return fileContent;
 	}
 
-	public String getEditedContent() 
+	public String getEditedContent()
 	{
-		if (_templateFileContentEditor != null)
+		if (_templateFileContentEditor != null) {
 			return _templateFileContentEditor.getEditedContent();
-		else
+		} else {
 			return getContent();
+		}
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void update(boolean forceUpdate) 
+	public void update(boolean forceUpdate)
 	{
-		if (forceUpdate || fileContent == null || (getIsVersionOnDiskSeemsNewer())) {
+		if (forceUpdate || fileContent == null || getIsVersionOnDiskSeemsNewer()) {
 			// Then reload
 			try {
 				logger.info("Load content for "+getTemplateFile().getAbsolutePath());
@@ -176,7 +179,7 @@ public class CGTemplateFile extends CGTemplate {
 	public String getTemplateName() {
 		return getTemplateFile().getName();
 	}
-	
+
 	public interface TemplateFileContentEditor
 	{
 		public String getEditedContent();
@@ -184,7 +187,7 @@ public class CGTemplateFile extends CGTemplate {
 	}
 
 	@Override
-	public String getInspectorName() 
+	public String getInspectorName()
 	{
 		return Inspectors.GENERATORS.CG_TEMPLATE_FILE;
 	}
@@ -193,7 +196,7 @@ public class CGTemplateFile extends CGTemplate {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Date getLastUpdate() 
+	public Date getLastUpdate()
 	{
 		return _lastUpdate;
 	}
@@ -206,25 +209,27 @@ public class CGTemplateFile extends CGTemplate {
 		_lastUpdate = new Date();
 		// Do this to reset dependant resources cache, in order to get up-to_date
 		// needsGeneration information on generated resources
-        getProject().notifyResourceStatusChanged(null);
+		getProject().notifyResourceStatusChanged(null);
 	}
-	
-    @Override
+
+	@Override
 	public final void delete()
-    {
-    	if (getRepository().isApplicationRepository()) {
-    		if (logger.isLoggable(Level.SEVERE))
+	{
+		if (getRepository().isApplicationRepository()) {
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Cannot delete an application template!: "+getTemplateFile().getAbsolutePath());
-    		return;
-    	}
-        if (getTemplateFile()!=null && getTemplateFile().exists())
-            getTemplateFile().delete();
-        //_templateFile = null;
-        super.delete();
-        getRepository().refresh();
-        setChanged();
-        notifyObservers(new TemplateDeleted(this));
-        deleteObservers();
-    }
+			}
+			return;
+		}
+		if (getTemplateFile()!=null && getTemplateFile().exists()) {
+			getTemplateFile().delete();
+		}
+		//_templateFile = null;
+		super.delete();
+		getRepository().refresh();
+		setChanged();
+		notifyObservers(new TemplateDeleted(this));
+		deleteObservers();
+	}
 
 }

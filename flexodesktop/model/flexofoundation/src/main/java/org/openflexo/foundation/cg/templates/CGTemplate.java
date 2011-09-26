@@ -130,11 +130,11 @@ public abstract class CGTemplate extends CGTemplateObject {
 	 */
 	public FileFormat getFileFormat() {
 		String name = getTemplateName().toLowerCase();
-		
+
 		if(name.endsWith(".vm")) {
 			name = name.substring(0, name.length() - 3);
 		}
-		
+
 		String extension = name.substring(name.lastIndexOf(".")+1);
 		FileFormat returned = FileFormat.getDefaultFileFormatByExtension(extension);
 		if (returned == FileFormat.UNKNOWN) {
@@ -209,5 +209,7 @@ public abstract class CGTemplate extends CGTemplateObject {
 			return o1.getTemplateName().compareToIgnoreCase(o2.getTemplateName());
 		}
 	}
+
+	public abstract String getRelativePathWithoutSetPrefix();
 
 }

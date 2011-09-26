@@ -53,176 +53,187 @@ import org.openflexo.logging.FlexoLogger;
 public class TemplateLocator extends FlexoMemoryResource
 {
 
-    private static final Logger logger = FlexoLogger.getLogger(TemplateLocator.class.getPackage().getName());
+	private static final Logger logger = FlexoLogger.getLogger(TemplateLocator.class.getPackage().getName());
 
-    private FlexoProject project;
+	private FlexoProject project;
 
-    private TargetType target;
+	private TargetType target;
 
-    private Vector<CGTemplateSet> _templateDirectories;
+	private Vector<CGTemplateSet> _templateDirectories;
 
 	private Hashtable<String, CGTemplate> _templateTable;
 
-    private CGTemplates _templates;
+	private CGTemplates _templates;
 
-    private AbstractProjectGenerator _projectGenerator;
+	private AbstractProjectGenerator _projectGenerator;
 
-    /**
-     * Constructor used for XML Serialization: never try to instanciate resource
-     * from this constructor
-     *
-     * @param builder
-     */
-    public TemplateLocator(FlexoProjectBuilder builder)
-    {
-        super(builder.project);
-    }
+	/**
+	 * Constructor used for XML Serialization: never try to instanciate resource
+	 * from this constructor
+	 *
+	 * @param builder
+	 */
+	public TemplateLocator(FlexoProjectBuilder builder)
+	{
+		super(builder.project);
+	}
 
-    public TemplateLocator(CGTemplates templates, AbstractProjectGenerator projectGenerator)
-    {
-        super(templates.getProject());
-        _templateDirectories = null;
+	public TemplateLocator(CGTemplates templates, AbstractProjectGenerator projectGenerator)
+	{
+		super(templates.getProject());
+		_templateDirectories = null;
 		_templateTable = new Hashtable<String, CGTemplate>();
-        _templates = templates;
-        _projectGenerator = projectGenerator;
-        rebuildDependancies();
-    }
+		_templates = templates;
+		_projectGenerator = projectGenerator;
+		rebuildDependancies();
+	}
 
-    public void notifyTemplateModified()
-    {
-        logger.info("********* Clear TemplateLocator cache !!!!!!!!!!! for "+getFullyQualifiedName());
-        _templateTable.clear();
-        _templateDirectories = null;
-        lastUpdate = new Date();
-    }
+	public void notifyTemplateModified()
+	{
+		logger.info("********* Clear TemplateLocator cache !!!!!!!!!!! for "+getFullyQualifiedName());
+		_templateTable.clear();
+		_templateDirectories = null;
+		lastUpdate = new Date();
+	}
 
 	public CGTemplate templateWithName(String templateRelativePath) throws TemplateNotFoundException
-    {
-		if (templateRelativePath.startsWith("/"))
+	{
+		if (templateRelativePath.startsWith("/")) {
 			templateRelativePath = templateRelativePath.substring(1);
+		}
 
 		CGTemplate returned = _templateTable.get(templateRelativePath);
-        if (returned == null) {
+		if (returned == null) {
 			returned = searchForTemplate(templateRelativePath);
-            if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info(templateRelativePath + "=" + returned.getRelativePath() + "[" + returned.getSet().getName() + "]");
+			}
 			_templateTable.put(templateRelativePath, returned);
-        }
-        return returned;
-    }
+		}
+		return returned;
+	}
 
 	@SuppressWarnings("unchecked")
 	private CGTemplate searchForTemplate(String templateRelativePath) throws TemplateNotFoundException
-    {
+	{
 		Enumeration<CGTemplateSet> en = templateDirectories().elements();
-        CGTemplateSet set = null;
-        while (en.hasMoreElements()) {
-            set = en.nextElement();
-            //logger.info("search in "+set.getDirectory().getAbsolutePath());
+		CGTemplateSet set = null;
+		while (en.hasMoreElements()) {
+			set = en.nextElement();
+			//logger.info("search in "+set.getDirectory().getAbsolutePath());
 			CGTemplate answer = set.getTemplate(templateRelativePath);
-            if (answer != null)
-                return answer;
-        }
-        // Template not found : build explicit error message.
+			if (answer != null) {
+				return answer;
+			}
+		}
+		// Template not found : build explicit error message.
 		en = templateDirectories().elements();
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("Searched directories are:\n");
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("Searched directories are:\n");
 		logger.info("Templates not found :" + templateRelativePath);
 		throw new TemplateNotFoundException(templateRelativePath, buffer.toString(), _projectGenerator);
-    }
+	}
 
-    /**
-     * search order is : - prj/Templates/GENERATION_TARGET - prj/Templates -
-     * Flexo/Config/Generator/Templates/GENERATION_TARGET -
-     * Flexo/Config/Generator/Templates/
-     */
+	/**
+	 * search order is : - prj/Templates/GENERATION_TARGET - prj/Templates -
+	 * Flexo/Config/Generator/Templates/GENERATION_TARGET -
+	 * Flexo/Config/Generator/Templates/
+	 */
 	private Vector<CGTemplateSet> templateDirectories()
-    {
+	{
 		if (_templateDirectories == null || this.project != _projectGenerator.getProject() || this.target != _projectGenerator.getTarget()) {
 			this.project = _projectGenerator.getProject();
 			this.target = _projectGenerator.getTarget();
-            _templateDirectories = new Vector<CGTemplateSet>();
+			_templateDirectories = new Vector<CGTemplateSet>();
 			CustomCGTemplateRepository customRepository = _projectGenerator.getRepository() != null ? _projectGenerator.getRepository().getPreferredTemplateRepository() : null;
-             if (customRepository != null) {
-            	if (target != null && customRepository.getTemplateSetForTarget(target) != null) {
-            		_templateDirectories.add(customRepository.getTemplateSetForTarget(target));
-            	}
-                _templateDirectories.add(customRepository.getCommonTemplates());
-            }
+			if (customRepository != null) {
+				if (target != null && customRepository.getTemplateSetForTarget(target) != null) {
+					_templateDirectories.add(customRepository.getTemplateSetForTarget(target));
+				}
+				_templateDirectories.add(customRepository.getCommonTemplates());
+			}
 
-            CGTemplateRepository applicationRepository = _templates.getApplicationRepository();
-            if (target != null && applicationRepository.getTemplateSetForTarget(target) != null) {
-                _templateDirectories.add(applicationRepository.getTemplateSetForTarget(target));
-            }
-            _templateDirectories.add(applicationRepository.getCommonTemplates());
-        }
-        return _templateDirectories;
-    }
+			CGTemplateRepository applicationRepository = _templates.getApplicationRepository();
+			if (target != null && applicationRepository.getTemplateSetForTarget(target) != null) {
+				_templateDirectories.add(applicationRepository.getTemplateSetForTarget(target));
+			}
+			_templateDirectories.add(applicationRepository.getCommonTemplates());
+		}
+		return _templateDirectories;
+	}
 
-    private Date lastUpdate = new Date();
+	private Date lastUpdate = new Date();
 
-    @Override
+	@Override
 	public Date getLastUpdate()
-    {
-        return lastUpdate;
-    }
+	{
+		return lastUpdate;
+	}
 
-    @Override
+	@Override
 	public String getName()
-    {
-        if ((_projectGenerator == null) || (_projectGenerator.getRepository() == null))
-            return null;
-        if (_projectGenerator.getTarget() != null)
-        	return _projectGenerator.getTarget().getName()+"."+_projectGenerator.getRepository().getName();
-        return _projectGenerator.getRepository().getName();
-    }
+	{
+		if (_projectGenerator == null || _projectGenerator.getRepository() == null) {
+			return null;
+		}
+		if (_projectGenerator.getTarget() != null) {
+			return _projectGenerator.getTarget().getName()+"."+_projectGenerator.getRepository().getName();
+		}
+		return _projectGenerator.getRepository().getName();
+	}
 
-    @Override
+	@Override
 	public ResourceType getResourceType()
-    {
-        return ResourceType.CG_TEMPLATES;
-    }
+	{
+		return ResourceType.CG_TEMPLATES;
+	}
 
 	@SuppressWarnings("unchecked")
 	public boolean needsUpdateForResource(GenerationAvailableFileResource resource)
-    {
-        Date requestDate = resource.getLastUpdate();
-        return needsUpdateForGenerator(requestDate, (Generator<? extends FlexoModelObject, ? extends GenerationRepository>) resource.getGenerator());
-    }
+	{
+		Date requestDate = resource.getLastUpdate();
+		return needsUpdateForGenerator(requestDate, (Generator<? extends FlexoModelObject, ? extends GenerationRepository>) resource.getGenerator());
+	}
 
-    /**
-     * @param requestDate
-     * @param generator
-     * @return
-     */
-    public boolean needsUpdateForGenerator(Date requestDate, Generator<? extends FlexoModelObject, ? extends GenerationRepository> generator)
-    {
-        if (generator == null)
-            return false;
+	/**
+	 * @param requestDate
+	 * @param generator
+	 * @return
+	 */
+	public boolean needsUpdateForGenerator(Date requestDate, Generator<? extends FlexoModelObject, ? extends GenerationRepository> generator)
+	{
+		if (generator == null) {
+			return false;
+		}
 		for (CGTemplate template : generator.getUsedTemplates()) {
-            if (template.getLastUpdate().after(requestDate)) {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("template " + template + "/" + template.getLastUpdate() + " AFTER " + requestDate);
-                return true;
-            }
-        }
+			if (template.getLastUpdate().after(requestDate)) {
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("template " + template + "/" + template.getLastUpdate() + " AFTER " + requestDate);
+				}
+				return true;
+			}
+		}
 		return false;
-    }
+	}
 
-    public boolean needsRegenerationBecauseOfTemplateChange(Generator<? extends FlexoModelObject, ? extends GenerationRepository> generator)
-    {
-        if (generator == null) return false;
+	public boolean needsRegenerationBecauseOfTemplateChange(Generator<? extends FlexoModelObject, ? extends GenerationRepository> generator)
+	{
+		if (generator == null) {
+			return false;
+		}
 		for (CGTemplate template : generator.getUsedTemplates()) {
-            try {
-				CGTemplate file = searchForTemplate(template.getRelativePath());
-                if (file!=template)
-                    return true;
-            } catch (TemplateNotFoundException e) {
-                if (logger.isLoggable(Level.WARNING))
+			try {
+				CGTemplate file = searchForTemplate(template.getRelativePathWithoutSetPrefix());
+				if (file!=template) {
+					return true;
+				}
+			} catch (TemplateNotFoundException e) {
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Template not found: " + template.getTemplateName());
-            }
-        }
-        return false;
-    }
+				}
+			}
+		}
+		return false;
+	}
 
 }

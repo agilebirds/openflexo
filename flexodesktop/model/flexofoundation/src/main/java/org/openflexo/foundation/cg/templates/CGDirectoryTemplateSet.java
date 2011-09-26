@@ -43,6 +43,11 @@ public abstract class CGDirectoryTemplateSet extends CGTemplateSet {
 		_recursive = recursive;
 	}
 
+	@Override
+	public CGTemplateFile getTemplate(String templateRelativePath) {
+		return (CGTemplateFile) super.getTemplate(templateRelativePath);
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -53,7 +58,7 @@ public abstract class CGDirectoryTemplateSet extends CGTemplateSet {
 			files = _directory.listFiles(new FileFilter() {
 				@Override
 				public boolean accept(File file) {
-					return (file.isFile() && !(file.getName().endsWith("CVS")));
+					return file.isFile() && !file.getName().endsWith("CVS");
 				}
 			});
 		} else {
@@ -80,8 +85,9 @@ public abstract class CGDirectoryTemplateSet extends CGTemplateSet {
 		Vector<File> v = new Vector<File>();
 		appendAllTemplateFiles(_directory, v);
 		File[] returned = new File[v.size()];
-		for (int i = 0; i < v.size(); i++)
+		for (int i = 0; i < v.size(); i++) {
 			returned[i] = v.get(i);
+		}
 		return returned;
 	}
 
@@ -89,7 +95,7 @@ public abstract class CGDirectoryTemplateSet extends CGTemplateSet {
 		for (File f : directory.listFiles(new FileFilter() {
 			@Override
 			public boolean accept(File file) {
-				return (file.isFile() && !(file.getName().endsWith("CVS")));
+				return file.isFile() && !file.getName().endsWith("CVS");
 			}
 		})) {
 			v.add(f);
@@ -97,7 +103,7 @@ public abstract class CGDirectoryTemplateSet extends CGTemplateSet {
 		for (File f : directory.listFiles(new FileFilter() {
 			@Override
 			public boolean accept(File file) {
-				return (file.isDirectory() && !(file.getName().endsWith("CVS")));
+				return file.isDirectory() && !file.getName().endsWith("CVS");
 			}
 		})) {
 			appendAllTemplateFiles(f, v);

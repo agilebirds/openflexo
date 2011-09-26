@@ -25,7 +25,6 @@ import java.util.Date;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.IOUtils;
-
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileUtils;
@@ -49,12 +48,14 @@ public class CGTemplateJarResource extends CGTemplate {
 		this.resourcePath = resourcePath;
 
 		this.relativePath = resourcePath;
-		if (this.relativePath.startsWith("/"))
+		if (this.relativePath.startsWith("/")) {
 			this.relativePath = this.relativePath.substring(1);
+		}
 
 		if (folderPath != null) {
-			if (folderPath.startsWith("/"))
+			if (folderPath.startsWith("/")) {
 				folderPath = folderPath.substring(1);
+			}
 
 			this.relativePath = folderPath + (folderPath.endsWith("/") ? "" : "/") + this.relativePath;
 		}
@@ -103,6 +104,11 @@ public class CGTemplateJarResource extends CGTemplate {
 	@Override
 	public String getRelativePath() {
 		return relativePath;
+	}
+
+	@Override
+	public String getRelativePathWithoutSetPrefix() {
+		return getRelativePath();
 	}
 
 	/**

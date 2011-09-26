@@ -311,7 +311,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 			CGTemplate template = templateWithName(templateRelativePath);
 
 			Velocity.setApplicationAttribute("templateLocator", getTemplateLocator());
-			Velocity.mergeTemplate(template.getRelativePath(), "UTF-8", velocityContext, sw);
+			Velocity.mergeTemplate(template.getRelativePathWithoutSetPrefix(), "UTF-8", velocityContext, sw);
 			Velocity.setApplicationAttribute("templateLocator", null);
 
 		} catch (TemplateNotFoundException e) {
@@ -344,7 +344,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 
 	protected boolean hasProgressWindow()
 	{
-		return ((getAction() != null) && (getAction().getFlexoProgress() != null));
+		return getAction() != null && getAction().getFlexoProgress() != null;
 	}
 
 	protected void refreshProgressWindow(String stepName, boolean localize)
@@ -353,7 +353,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("************** refreshProgressWindow: "+stepName);
 			}
-			getAction().getFlexoProgress().setProgress((localize?FlexoLocalization.localizedForKey(stepName):stepName));
+			getAction().getFlexoProgress().setProgress(localize?FlexoLocalization.localizedForKey(stepName):stepName);
 		}
 	}
 
@@ -373,7 +373,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine(">>>>>>>>>>>>> refreshSecondaryProgressWindow: "+stepName);
 			}
-			getAction().getFlexoProgress().setSecondaryProgress((localize?FlexoLocalization.localizedForKey(stepName):stepName));
+			getAction().getFlexoProgress().setSecondaryProgress(localize?FlexoLocalization.localizedForKey(stepName):stepName);
 		}
 	}
 
@@ -487,7 +487,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 	public boolean isCodeAlreadyGenerated()
 	{
 		if (this instanceof IFlexoResourceGenerator) {
-			return (((IFlexoResourceGenerator)this).getGeneratedCode() != null);
+			return ((IFlexoResourceGenerator)this).getGeneratedCode() != null;
 		}
 		// Not significant
 		return true;
@@ -520,7 +520,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 				}
 			}
 		}
-		return (needsRegenerationBecauseOfTemplateUpdated() || needsRegenerationBecauseOfTemplateChange() || !isCodeAlreadyGenerated());
+		return needsRegenerationBecauseOfTemplateUpdated() || needsRegenerationBecauseOfTemplateChange() || !isCodeAlreadyGenerated();
 	}
 
 	/**
@@ -570,9 +570,9 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification)
 	{
-		if ((dataModification instanceof TemplateFileChanged) || (dataModification instanceof TemplateFileEditionCancelled)
-				|| (dataModification instanceof TemplateFileEdited) || (dataModification instanceof TemplateFileRedefined)
-				|| (dataModification instanceof TemplateFileSaved)|| (dataModification instanceof TemplateDeleted)) {
+		if (dataModification instanceof TemplateFileChanged || dataModification instanceof TemplateFileEditionCancelled
+				|| dataModification instanceof TemplateFileEdited || dataModification instanceof TemplateFileRedefined
+				|| dataModification instanceof TemplateFileSaved|| dataModification instanceof TemplateDeleted) {
 			setChanged();
 			notifyObservers(dataModification);
 		}
