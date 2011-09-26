@@ -32,7 +32,7 @@
         {columnName = STATUS; name = statusImp; prototypeName = int; }, 
         {columnName = "UPDATE_DATE"; name = updateDateImp; prototypeName = date; }
     ); 
-    className = "org.openflexo.engine.db.ProcessInstance"; 
+    className = "be.denali.flexo.engine.db.ProcessInstance"; 
     classProperties = (
         parentProcessInstanceImp, 
         parentIDImp, 

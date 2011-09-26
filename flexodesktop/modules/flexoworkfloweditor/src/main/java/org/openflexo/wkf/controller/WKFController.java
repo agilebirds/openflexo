@@ -709,7 +709,7 @@ PrintManagingController {
 
 	public void notifyUseSimpleEventPaletteHasChanged() {
 		JOptionPane.showMessageDialog(getPreferencesWindow(),
-				FlexoLocalization.localizedForKey("You must restart FlexoBPM to enable this change."),
+				FlexoLocalization.localizedForKey("You must restart OpenFlexo to enable this change."),
 				FlexoLocalization.localizedForKey("Restart required"),
 				JOptionPane.INFORMATION_MESSAGE);
 	}

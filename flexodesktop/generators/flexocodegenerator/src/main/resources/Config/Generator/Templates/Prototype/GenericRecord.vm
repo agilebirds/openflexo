@@ -192,7 +192,7 @@ produce : code about rel to insert in addInDB code
 #imports($entity)
  /**
  * This class is used to access the table: $entity.getExternalName()
- * @author FlexoBPM Generator, Agile Birds sprl. (see www.FlexoBPM.com)
+ * @author OpenFlexo Generator, Agile Birds sprl. (see www.OpenFlexo.com)
  */
  public class $entity.getEntityClassName() extends WDLGenericRecord#if(${entity.isBusinessDataClass()}) implements IBusinessData #end{
 

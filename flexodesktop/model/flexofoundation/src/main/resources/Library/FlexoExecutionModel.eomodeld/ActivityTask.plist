@@ -20,7 +20,7 @@
             prototypeName = id; 
         }
     ); 
-    className = "org.openflexo.engine.db.ActivityTask"; 
+    className = "be.denali.flexo.engine.db.ActivityTask"; 
     classProperties = (creationDate, operationTasks, processInstance); 
     externalName = "ACTIVITY_TASK"; 
     fetchSpecificationDictionary = {}; 

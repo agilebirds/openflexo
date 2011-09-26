@@ -214,7 +214,7 @@ public class FlexoExecutionModelRepository extends DMEORepository
 
     public DMEOEntity getProcessInstanceEntity()
     {
-        DMEOEntity returned = (DMEOEntity) getDMEntity("org.openflexo.engine.db.ProcessInstance");
+        DMEOEntity returned = (DMEOEntity) getDMEntity("be.denali.flexo.engine.db.ProcessInstance");
 //        if (returned == null) {
 //            // Try with default package
 //            returned = (DMEOEntity) getDMEntity(getDefaultPackage(), "ProcessInstance");
@@ -228,12 +228,12 @@ public class FlexoExecutionModelRepository extends DMEORepository
 
     public DMEOEntity getActivityTaskEntity()
     {
-        return (DMEOEntity) getDMEntity("org.openflexo.engine.db.ActivityTask");
+        return (DMEOEntity) getDMEntity("be.denali.flexo.engine.db.ActivityTask");
     }
 
     public DMEOEntity getOperationTaskEntity()
     {
-        return (DMEOEntity) getDMEntity("org.openflexo.engine.db.OperationTask");
+        return (DMEOEntity) getDMEntity("be.denali.flexo.engine.db.OperationTask");
     }
 
     /**

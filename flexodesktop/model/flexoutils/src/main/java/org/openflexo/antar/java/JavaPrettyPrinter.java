@@ -212,7 +212,7 @@ public class JavaPrettyPrinter extends PrettyPrinter {
 			sb.append("package ").append(aClass.getGroupName()).append(";").append(StringUtils.LINE_SEPARATOR)
 					.append(StringUtils.LINE_SEPARATOR);
 		}
-		sb.append("import org.openflexo.engine.*;").append(StringUtils.LINE_SEPARATOR).append(StringUtils.LINE_SEPARATOR);
+		sb.append("import be.denali.flexo.engine.*;").append(StringUtils.LINE_SEPARATOR).append(StringUtils.LINE_SEPARATOR);
 
 		if (aClass.getComment() != null && !aClass.getComment().trim().equals("")) {
 			sb.append(makeJavadocComment(aClass.getComment()));

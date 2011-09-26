@@ -193,8 +193,8 @@
 			<jarfileset dir="${dist.dir}/lib">
 				<include name="*.jar" />
 			</jarfileset>
-			<documenttype name="FlexoBPM document" extensions="prj" iconFile="${dist.dir}/Icons/Flexo/FlexoDocument.icns" bundle="true" role="Editor" />
-			<documenttype name="FlexoBPM palette" extensions="iepalette" iconFile="${dist.dir}/Icons/Flexo/FlexoDocument2.icns" bundle="true" role="Editor" />
+			<documenttype name="OpenFlexo document" extensions="prj" iconFile="${dist.dir}/Icons/Flexo/FlexoDocument.icns" bundle="true" role="Editor" />
+			<documenttype name="OpenFlexo palette" extensions="iepalette" iconFile="${dist.dir}/Icons/Flexo/FlexoDocument2.icns" bundle="true" role="Editor" />
 		</jarbundler>
 		<copy todir="${mac.app.dir.versioned}/${relative_res_path}">
 			<fileset dir="${dist.dir}">

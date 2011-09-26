@@ -20,7 +20,7 @@
             prototypeName = id; 
         }
     ); 
-    className = "org.openflexo.engine.db.Token"; 
+    className = "be.denali.flexo.engine.db.Token"; 
     classProperties = (
         creationDateImp, 
         currentPositionObjectIDImp, 

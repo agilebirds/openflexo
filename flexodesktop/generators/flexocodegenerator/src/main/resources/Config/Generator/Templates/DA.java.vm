@@ -6,7 +6,7 @@ import be.denali.core.woapp.WDLDirectAction;
 /**
  * This class contains the direct actions to access the page of 
  * ${prefix}Application
- * @author FlexoBPM Generator, Agile Birds sprl. (see www.FlexoBPM.com)
+ * @author OpenFlexo Generator, Agile Birds sprl. (see www.OpenFlexo.com)
  */
 public class ${prefix}DA extends WDLDirectAction {
 

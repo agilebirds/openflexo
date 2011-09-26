@@ -17,6 +17,6 @@
   <dc:creator>#escape($author)</dc:creator>
   <cp:keywords></cp:keywords>
   <dc:description></dc:description>
-  <cp:lastModifiedBy>FlexoBPM</cp:lastModifiedBy>
+  <cp:lastModifiedBy>OpenFlexo</cp:lastModifiedBy>
   <cp:revision>2</cp:revision>
 </cp:coreProperties>

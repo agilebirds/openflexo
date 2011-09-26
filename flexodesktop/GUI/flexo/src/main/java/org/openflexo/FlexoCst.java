@@ -57,7 +57,7 @@ public class FlexoCst extends ColorCst
 
     public static final FlexoVersion BUSINESS_APPLICATION_VERSION = new FlexoVersion(ApplicationVersion.BUSINESS_APPLICATION_VERSION);
 
-    public static final String BUSINESS_APPLICATION_VERSION_NAME = "FlexoBPM "
+    public static final String BUSINESS_APPLICATION_VERSION_NAME = "OpenFlexo "
             + BUSINESS_APPLICATION_VERSION;
 
     public static final String OUTPUT_FILES_ENCODING = "UTF-8";

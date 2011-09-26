@@ -21,6 +21,7 @@ package org.openflexo.toolbox;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -36,6 +37,8 @@ import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.filefilter.FileFilterUtils;
+
 /**
  * Some File utilities
  *
@@ -47,19 +50,19 @@ public class FileUtils {
 		REPLACE, REPLACE_OLD_ONLY, IGNORE_EXISTING
 	}
 
-    public static final String BAD_CHARACTERS_FOR_FILE_NAME_REG_EXP = "[\"|\\?\\*/<>:\\\\]|[^\\p{ASCII}]";
+	public static final String BAD_CHARACTERS_FOR_FILE_NAME_REG_EXP = "[\"|\\?\\*/<>:\\\\]|[^\\p{ASCII}]";
 
-    public static final String GOOD_CHARACTERS_REG_EXP = "[^\"|\\?\\*/<>:\\\\]|[\\p{ASCII}]";
+	public static final String GOOD_CHARACTERS_REG_EXP = "[^\"|\\?\\*/<>:\\\\]|[\\p{ASCII}]";
 
 	public static final Pattern BAD_CHARACTERS_FOR_FILE_NAME_PATTERN = Pattern.compile(BAD_CHARACTERS_FOR_FILE_NAME_REG_EXP);
 
-    private static final String NO_BLANK_NO_SLASH = "[^ /\\\\:\\*\\?\"<>|]";
+	private static final String NO_BLANK_NO_SLASH = "[^ /\\\\:\\*\\?\"<>|]";
 
-    private static final String SLASH = "(/|\\\\)";
+	private static final String SLASH = "(/|\\\\)";
 
-    private static final String NO_SLASH = "[^/\\\\:\\*\\?\"<>|]";
+	private static final String NO_SLASH = "[^/\\\\:\\*\\?\"<>|]";
 
-    private static final String UNACCEPTABLE_CHARS = "[:\\*\\?\"<>|]|[^\\p{ASCII}]";
+	private static final String UNACCEPTABLE_CHARS = "[:\\*\\?\"<>|]|[^\\p{ASCII}]";
 
 	private static final Pattern UNACCEPTABLE_CHARS_PATTERN = Pattern.compile(UNACCEPTABLE_CHARS);
 
@@ -70,79 +73,83 @@ public class FileUtils {
 	public static final String VALID_FILE_NAME_REGEXP = SLASH + "?(" + NO_BLANK_NO_SLASH + "(" + NO_SLASH + "+?" + NO_BLANK_NO_SLASH + "|" + NO_BLANK_NO_SLASH + "*?)(" + SLASH + "(" + NO_BLANK_NO_SLASH + "*?|" + NO_BLANK_NO_SLASH + NO_SLASH + "+?)" + NO_BLANK_NO_SLASH + ")*)+" + SLASH + "?";
 
 	public static byte[] getBytes(File f) {
-        byte[] b = new byte[(int) f.length()];
-        FileInputStream fis;
-        try {
-            fis = new FileInputStream(f);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
-        try {
-            fis.read(b);
-            return b;
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fis.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
+		byte[] b = new byte[(int) f.length()];
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(f);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+		try {
+			fis.read(b);
+			return b;
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				fis.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
 
 	public static void copyDirFromDirToDir(String srcName, File srcParentDir, File destDir) throws IOException {
 		copyDirFromDirToDir(srcName, srcParentDir, destDir, CopyStrategy.REPLACE);
 	}
 
 	public static void copyDirFromDirToDir(String srcName, File srcParentDir, File destDir, CopyStrategy stragtegy) throws IOException {
-        copyDirToDir(new File(srcParentDir, srcName), destDir);
-    }
+		copyDirToDir(new File(srcParentDir, srcName), destDir);
+	}
 
 	public static File copyDirToDir(File src, File dest) throws IOException {
 		return copyDirToDir(src, dest, CopyStrategy.REPLACE);
 	}
 
 	public static File copyDirToDir(File src, File dest, CopyStrategy strategy) throws IOException {
-        File newDir = new File(dest, src.getName());
-        newDir.mkdirs();
-        copyContentDirToDir(src, newDir, strategy);
-        return newDir;
-    }
+		File newDir = new File(dest, src.getName());
+		newDir.mkdirs();
+		copyContentDirToDir(src, newDir, strategy);
+		return newDir;
+	}
 
 	public static void copyDirFromDirToDirIncludingCVSFiles(String srcName, File srcParentDir, File destDir) throws IOException {
-        copyDirToDirIncludingCVSFiles(new File(srcParentDir, srcName), destDir);
-    }
+		copyDirToDirIncludingCVSFiles(new File(srcParentDir, srcName), destDir);
+	}
 
 	public static File copyDirToDirIncludingCVSFiles(File src, File dest) throws IOException {
-        File newDir = new File(dest, src.getName());
-        newDir.mkdirs();
-        copyContentDirToDirIncludingCVSFiles(src, newDir);
-        return newDir;
-    }
+		File newDir = new File(dest, src.getName());
+		newDir.mkdirs();
+		copyContentDirToDirIncludingCVSFiles(src, newDir);
+		return newDir;
+	}
 
 	public static void copyContentDirToDir(File src, File dest) throws IOException {
 		copyContentDirToDir(src, dest, CopyStrategy.REPLACE);
 	}
 
 	public static void copyContentDirToDir(File src, File dest, CopyStrategy strategy) throws IOException {
+		copyContentDirToDir(src, dest, strategy, FileFilterUtils.trueFileFilter());
+	}
+
+	public static void copyContentDirToDir(File src, File dest, CopyStrategy strategy, FileFilter fileFilter) throws IOException {
 		if (!src.exists()) {
-    		return;
+			return;
 		}
 		if (!dest.exists()) {
-            dest.mkdirs();
+			dest.mkdirs();
 		}
-        File[] fileArray = src.listFiles();
-        for (int i = 0; i < fileArray.length; i++) {
-            File curFile = fileArray[i];
-            if (curFile.isDirectory() && !curFile.getName().equals("CVS")) {
-                copyDirFromDirToDir(curFile.getName(), src, dest, strategy);
-            } else if (curFile.isFile()) {
-            	File destFile = new File(dest,curFile.getName());
-            	if (destFile.exists()) {
-            		switch (strategy) {
+		File[] fileArray = src.listFiles();
+		for (int i = 0; i < fileArray.length; i++) {
+			File curFile = fileArray[i];
+			if (curFile.isDirectory() && !curFile.getName().equals("CVS") && fileFilter.accept(curFile)) {
+				copyContentDirToDir(curFile, new File(dest, curFile.getName()), strategy, fileFilter);
+			} else if (curFile.isFile() && fileFilter.accept(curFile)) {
+				File destFile = new File(dest,curFile.getName());
+				if (destFile.exists()) {
+					switch (strategy) {
 					case IGNORE_EXISTING:
 						continue;
 					case REPLACE_OLD_ONLY:
@@ -152,116 +159,116 @@ public class FileUtils {
 					default:
 						break;
 					}
-            	}
-                copyFileToFile(curFile, destFile);
-            }
-        }
-    }
+				}
+				copyFileToFile(curFile, destFile);
+			}
+		}
+	}
 
 	public static void copyContentDirToDirIncludingCVSFiles(File src, File dest) throws IOException {
 		if (!src.exists()) {
-    		return;
+			return;
 		}
 		if (!dest.exists()) {
-            dest.mkdirs();
+			dest.mkdirs();
 		}
-        File[] fileArray = src.listFiles();
-        for (int i = 0; i < fileArray.length; i++) {
-            File curFile = fileArray[i];
-            if (curFile.isDirectory()) {
-                copyDirFromDirToDirIncludingCVSFiles(curFile.getName(), src, dest);
-            } else if (curFile.isFile()) {
-                FileInputStream is = new FileInputStream(curFile);
-                try {
-                    copyFileToDir(is, curFile.getName(), dest);
-                } finally {
-                    is.close();
-                }
-            }
-        }
-    }
+		File[] fileArray = src.listFiles();
+		for (int i = 0; i < fileArray.length; i++) {
+			File curFile = fileArray[i];
+			if (curFile.isDirectory()) {
+				copyDirFromDirToDirIncludingCVSFiles(curFile.getName(), src, dest);
+			} else if (curFile.isFile()) {
+				FileInputStream is = new FileInputStream(curFile);
+				try {
+					copyFileToDir(is, curFile.getName(), dest);
+				} finally {
+					is.close();
+				}
+			}
+		}
+	}
 
 	public static boolean createNewFile(File newFile) throws IOException {
-    	boolean ret = false;
-    	if (!newFile.exists()) {
-            if (!newFile.getParentFile().exists()) {
-                ret = newFile.getParentFile().mkdirs();
-                if (!ret) {
-                	newFile = newFile.getCanonicalFile();
-                	ret = newFile.getParentFile().mkdirs();
-                }
-                if (!ret) {
+		boolean ret = false;
+		if (!newFile.exists()) {
+			if (!newFile.getParentFile().exists()) {
+				ret = newFile.getParentFile().mkdirs();
+				if (!ret) {
+					newFile = newFile.getCanonicalFile();
+					ret = newFile.getParentFile().mkdirs();
+				}
+				if (!ret) {
 					System.err
-							.println("WARNING: cannot create directory: " + newFile.getParent() + " createNewFile(File)[" + FileUtils.class
-									.getName() + "]");
-                }
-            }
-            try {
+					.println("WARNING: cannot create directory: " + newFile.getParent() + " createNewFile(File)[" + FileUtils.class
+							.getName() + "]");
+				}
+			}
+			try {
 				ret=newFile.createNewFile();
 			} catch (IOException e) {
 				newFile = newFile.getCanonicalFile();
 				ret=newFile.createNewFile();
 				if (!ret) {
 					System.err
-							.println("WARNING: cannot create file: " + newFile.getAbsolutePath() + " createNewFile(File)[" + FileUtils.class
-									.getName() + "]");
-                }
+					.println("WARNING: cannot create file: " + newFile.getAbsolutePath() + " createNewFile(File)[" + FileUtils.class
+							.getName() + "]");
+				}
 			}
-        }
-    	return ret;
-    }
+		}
+		return ret;
+	}
 
 	public static void copyFileToFile(File curFile, File newFile) throws IOException {
-        FileInputStream is = new FileInputStream(curFile);
-        try {
-            createNewFile(newFile);
-            FileOutputStream os = new FileOutputStream(newFile);
-            try {
-                while (is.available() > 0) {
-                    byte[] byteArray = new byte[is.available()];
-                    is.read(byteArray);
-                    os.write(byteArray);
-                }
-                os.flush();
-            } finally {
-                os.close();
-            }
-        } finally {
-            is.close();
-        }
-    }
+		FileInputStream is = new FileInputStream(curFile);
+		try {
+			createNewFile(newFile);
+			FileOutputStream os = new FileOutputStream(newFile);
+			try {
+				while (is.available() > 0) {
+					byte[] byteArray = new byte[is.available()];
+					is.read(byteArray);
+					os.write(byteArray);
+				}
+				os.flush();
+			} finally {
+				os.close();
+			}
+		} finally {
+			is.close();
+		}
+	}
 
 	public static File copyFileToDir(FileInputStream is, String newFileName, File dest) throws IOException {
-        File newFile = new File(dest, newFileName);
-        createNewFile(newFile);
-        FileOutputStream os = new FileOutputStream(newFile);
-        try {
-            while (is.available() > 0) {
-                byte[] byteArray = new byte[is.available()];
-                is.read(byteArray);
-                os.write(byteArray);
-            }
-            os.flush();
-        } finally {
-            os.close();
-        }
-        return newFile;
-    }
+		File newFile = new File(dest, newFileName);
+		createNewFile(newFile);
+		FileOutputStream os = new FileOutputStream(newFile);
+		try {
+			while (is.available() > 0) {
+				byte[] byteArray = new byte[is.available()];
+				is.read(byteArray);
+				os.write(byteArray);
+			}
+			os.flush();
+		} finally {
+			os.close();
+		}
+		return newFile;
+	}
 
-    public static File copyFileToDir(File src, File dest) throws IOException {
-        return copyFileToDir(new FileInputStream(src), src.getName(), dest);
-    }
+	public static File copyFileToDir(File src, File dest) throws IOException {
+		return copyFileToDir(new FileInputStream(src), src.getName(), dest);
+	}
 
 	public static void saveToFile(File dest, byte[] b) throws IOException {
-        createNewFile(dest);
-        FileOutputStream fos = new FileOutputStream(dest);
-        try {
-            fos.write(b);
-            fos.flush();
-        } finally {
-            fos.close();
-        }
-    }
+		createNewFile(dest);
+		FileOutputStream fos = new FileOutputStream(dest);
+		try {
+			fos.write(b);
+			fos.flush();
+		} finally {
+			fos.close();
+		}
+	}
 
 	private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
@@ -271,7 +278,7 @@ public class FileUtils {
 			return !"CVS".equals(name);
 		}
 	};
-	
+
 	public static final FilenameFilter JARFileNameFilter = new FilenameFilter() {
 		@Override
 		public boolean accept(File dir, String name) {
@@ -285,36 +292,36 @@ public class FileUtils {
 
 	public static void saveToFile(File dest, String fileContent, String encoding) throws IOException {
 		createNewFile(dest);
-        FileOutputStream fos = new FileOutputStream(dest);
-        BufferedReader bufferedReader = new BufferedReader(new StringReader(fileContent));
-        OutputStreamWriter fw = new OutputStreamWriter(fos, Charset.forName(encoding!=null ? encoding : "UTF-8"));
-        String line = null;
-        try {
-        	while ((line = bufferedReader.readLine()) != null) {
-        		fw.write(line);
-        		fw.write(LINE_SEPARATOR);
-        	}
-            fw.flush();
-        } finally {
+		FileOutputStream fos = new FileOutputStream(dest);
+		BufferedReader bufferedReader = new BufferedReader(new StringReader(fileContent));
+		OutputStreamWriter fw = new OutputStreamWriter(fos, Charset.forName(encoding!=null ? encoding : "UTF-8"));
+		String line = null;
+		try {
+			while ((line = bufferedReader.readLine()) != null) {
+				fw.write(line);
+				fw.write(LINE_SEPARATOR);
+			}
+			fw.flush();
+		} finally {
 			if (fos != null) {
-        		fos.close();
+				fos.close();
 			}
 			if (fw != null) {
-        		fw.close();
-        }
-    }
+				fw.close();
+			}
+		}
 	}
 
 	public static void saveToFile(String fileName, String fileContent, File dir, String fileExtention) throws IOException {
 		File dest = new File(dir.getAbsolutePath() + "/" + fileName + "." + fileExtention);
-        saveToFile(dest, fileContent);
-    }
+		saveToFile(dest, fileContent);
+	}
 
 	public static void saveToFile(String fileName, String fileContent, File dir) throws IOException {
-        File dest = new File(dir.getAbsolutePath() + "/" + fileName);
-        saveToFile(dest, fileContent);
-    }
-	
+		File dest = new File(dir.getAbsolutePath() + "/" + fileName);
+		saveToFile(dest, fileContent);
+	}
+
 	public static void saveToFile(File file, InputStream is) throws IOException {
 		FileOutputStream fos = new FileOutputStream(file);
 		try {
@@ -333,13 +340,13 @@ public class FileUtils {
 	}
 
 	public static String fileContents(File aFile, String encoding) throws IOException {
-        FileInputStream fis = new FileInputStream(aFile);
-        try {
+		FileInputStream fis = new FileInputStream(aFile);
+		try {
 			return fileContents(fis, encoding);
-        } finally {
-            fis.close();
-        }
-    }
+		} finally {
+			fis.close();
+		}
+	}
 
 	public static String fileContents(InputStream inputStream, String encoding) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, encoding != null ? encoding : "UTF-8"));
@@ -352,39 +359,39 @@ public class FileUtils {
 		return sb.toString();
 	}
 
-    /**
-     * @param file
-     * @return
-     */
+	/**
+	 * @param file
+	 * @return
+	 */
 	public static boolean recursiveDeleteFile(File file) {
-        if (file.isDirectory()) {
-            File[] fileArray = file.listFiles();
-            boolean returned = true;
-            for (int i = 0; i < fileArray.length; i++) {
-                File curFile = fileArray[i];
-                if (recursiveDeleteFile(curFile) == false) {
-                    returned = false;
-                }
-            }
+		if (file.isDirectory()) {
+			File[] fileArray = file.listFiles();
+			boolean returned = true;
+			for (int i = 0; i < fileArray.length; i++) {
+				File curFile = fileArray[i];
+				if (recursiveDeleteFile(curFile) == false) {
+					returned = false;
+				}
+			}
 			return returned && file.delete();
-        } else {
-            return file.delete();
-        }
-    }
+		} else {
+			return file.delete();
+		}
+	}
 
-    /**
-     * @param file
-     */
+	/**
+	 * @param file
+	 */
 	/*
 	 * public static void removeSystemFile(File file) { if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) try { Runtime.getRuntime().exec(
 	 * "attrib -S \"" + file.getAbsolutePath() + "\""); } catch (IOException e) { e.printStackTrace(); } catch (Exception e) {
 	 * e.printStackTrace(); }
 	 * 
 	 * }
-*/
+	 */
 	public static String convertBackslashesToSlash(String fileName) {
-        return fileName.replaceAll("\\\\", "/");
-    }
+		return fileName.replaceAll("\\\\", "/");
+	}
 
 	public static int countFilesInDirectory(File directory, boolean recursive) {
 		if (!directory.isDirectory() || !directory.exists()) {
@@ -405,44 +412,44 @@ public class FileUtils {
 		return count;
 	}
 
-    /**
+	/**
 	 * Recursive computing of last modified date (deep check for contained files)
-     *
-     * @param file
-     * @return
-     */
+	 *
+	 * @param file
+	 * @return
+	 */
 	public static Date getDiskLastModifiedDate(File file) {
 		if (file == null || !file.exists()) {
 			return new Date(0);
 		}
-        if (file.isFile()) {
-        	return new Date(file.lastModified());
-        } else {
-        	File[] fileArray = file.listFiles();
-            Date returned = new Date(file.lastModified());
+		if (file.isFile()) {
+			return new Date(file.lastModified());
+		} else {
+			File[] fileArray = file.listFiles();
+			Date returned = new Date(file.lastModified());
 			if (fileArray == null) {
-            	return returned;
+				return returned;
 			}
 			if (fileArray.length > 0) {
 				returned = new Date(0); // the lastModified() takes into account contained files and directories (but we want to ignore
-										// everything related to CVS)
+				// everything related to CVS)
 			}
-            for (int i = 0; i < fileArray.length; i++) {
-                File curFile = fileArray[i];
+			for (int i = 0; i < fileArray.length; i++) {
+				File curFile = fileArray[i];
 				if (curFile.isDirectory() && curFile.getName().equals("CVS")) {
-                	continue;
+					continue;
 				}
 				if (curFile.isFile() && curFile.getName().equals(".cvsignore")) {
-                	continue;
+					continue;
 				}
-                Date d = getDiskLastModifiedDate(curFile);
-                if (d.after(returned)) {
-                    returned = d;
-                }
-            }
-            return returned;
-        }
-    }
+				Date d = getDiskLastModifiedDate(curFile);
+				if (d.after(returned)) {
+					returned = d;
+				}
+			}
+			return returned;
+		}
+	}
 
 	public static void main(String[] args) {
 		File file = new File("C:\\Documents and Settings\\gpolet.DENALI\\Desktop\\Workers Remittances-19-02-09.prj");
@@ -455,11 +462,11 @@ public class FileUtils {
 		for (File file2 : files) {
 			System.err.println(file2.getAbsolutePath());
 		}
-    }
+	}
 
 	public static boolean isStringValidForFileName(String s) {
 		return s != null && !UNACCEPTABLE_CHARS_PATTERN.matcher(s).find() && s.matches(VALID_FILE_NAME_REGEXP);
-    }
+	}
 
 	public static String removeNonASCIIAndPonctuationAndBadFileNameChars(String s){
 		if(s.lastIndexOf(".")>0){
@@ -480,48 +487,48 @@ public class FileUtils {
 		s = s.replaceAll("[^\\w]+", "-");
 		return s;
 	}
-    /**
-     * @param componentName
-     * @return
-     */
+	/**
+	 * @param componentName
+	 * @return
+	 */
 	public static String getValidFileName(String fileName) {
-        StringBuffer sb = new StringBuffer();
-        Matcher m = UNACCEPTABLE_SLASH_PATTERN.matcher(fileName);
-        while (m.find()) {
-            m.appendReplacement(sb, "/");
-        }
-        m.appendTail(sb);
-        m = UNACCEPTABLE_CHARS_PATTERN.matcher(sb.toString());
-        sb = new StringBuffer();
-        while (m.find()) {
-            m.appendReplacement(sb, "_");
-        }
-        m.appendTail(sb);
-        return sb.toString();
-    }
+		StringBuffer sb = new StringBuffer();
+		Matcher m = UNACCEPTABLE_SLASH_PATTERN.matcher(fileName);
+		while (m.find()) {
+			m.appendReplacement(sb, "/");
+		}
+		m.appendTail(sb);
+		m = UNACCEPTABLE_CHARS_PATTERN.matcher(sb.toString());
+		sb = new StringBuffer();
+		while (m.find()) {
+			m.appendReplacement(sb, "_");
+		}
+		m.appendTail(sb);
+		return sb.toString();
+	}
 
-    /**
-     * @param dir
-     */
+	/**
+	 * @param dir
+	 */
 	public static void deleteDir(File dir) {
-        if (!dir.isDirectory()) {
+		if (!dir.isDirectory()) {
 			System.err.println("Tried to delete a directory but file is not a directory: " + dir.getAbsolutePath());
-            return;
-        }
-        File[] f = dir.listFiles();
+			return;
+		}
+		File[] f = dir.listFiles();
 		if (f == null) {
-            return;
+			return;
 		}
-        for (int i = 0; i < f.length; i++) {
-            File file = f[i];
+		for (int i = 0; i < f.length; i++) {
+			File file = f[i];
 			if (file.isDirectory()) {
-                deleteDir(file);
+				deleteDir(file);
 			} else {
-                file.delete();
-        }
+				file.delete();
+			}
 		}
-        dir.delete();
-    }
+		dir.delete();
+	}
 
 	/**
 	 * Recursively deletes all the files of the specified directory. Directories themselves are not removed.
@@ -535,27 +542,27 @@ public class FileUtils {
 	public static void deleteFilesInDir(File dir, boolean keepCVSTags) {
 		if (!dir.isDirectory()) {
 			System.err.println("Tried to delete a directory but file is not a directory: " + dir.getAbsolutePath());
-            return;
-        }
+			return;
+		}
 		if (keepCVSTags && dir.getName().equals("CVS")) {
 			System.err.println("Tried to delete CVS directory but keepCVSTags flag is true!");
 			return;
 		}
 
-        File[] f = dir.listFiles();
+		File[] f = dir.listFiles();
 		if (f == null) {
-            return;
+			return;
 		}
-        for (int i = 0; i < f.length; i++) {
-            File file = f[i];
-            if (file.isDirectory()) {
+		for (int i = 0; i < f.length; i++) {
+			File file = f[i];
+			if (file.isDirectory()) {
 				if (!file.getName().equals("CVS") || !keepCVSTags) {
-            		deleteFilesInDir(file,keepCVSTags);
-            }
+					deleteFilesInDir(file,keepCVSTags);
+				}
 			} else {
-                file.delete();
-        }
-	}
+				file.delete();
+			}
+		}
 	}
 
 	public static boolean directoryContainsFile(File directory, File file) {
@@ -568,9 +575,9 @@ public class FileUtils {
 		return false;
 	}
 
-    /**
-     *
-     */
+	/**
+	 *
+	 */
 
 	public static void makeFileHidden(File f) {
 		if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
@@ -581,14 +588,14 @@ public class FileUtils {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-	}
+		}
 	}
 
-    /**
-     *
-     */
+	/**
+	 *
+	 */
 
-	 public static void unmakeFileHidden(File f) {
+	public static void unmakeFileHidden(File f) {
 		if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
 			try {
 				Runtime.getRuntime().exec("attrib -H \"" + f.getAbsolutePath() + "\"");
@@ -597,23 +604,23 @@ public class FileUtils {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-	}
+		}
 	}
 
 
-    /**
-     * @param desktopIni
-     */
+	/**
+	 * @param desktopIni
+	 */
 	public static void makeFileSystem(File f) {
 		if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
-            try {
+			try {
 				Runtime.getRuntime().exec("attrib +S \"" + f.getAbsolutePath() + "\"");
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-    }
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -628,7 +635,7 @@ public class FileUtils {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-	}
+		}
 	}
 
 	public static boolean isFileContainedIn(File aFile, File ancestorFile) {
@@ -642,44 +649,44 @@ public class FileUtils {
 		return false;
 	}
 
-    /**
-     * @param file
-     * @param wd
-     * @return
-     * @throws IOException
-     */
+	/**
+	 * @param file
+	 * @param wd
+	 * @return
+	 * @throws IOException
+	 */
 	public static String makeFilePathRelativeToDir(File file, File dir) throws IOException {
-        file = file.getCanonicalFile();
-        dir = dir.getCanonicalFile();
-        String d = dir.getCanonicalPath().replace('\\', '/');
-        String f = file.getCanonicalPath().replace('\\', '/');
-        int i = 0;
+		file = file.getCanonicalFile();
+		dir = dir.getCanonicalFile();
+		String d = dir.getCanonicalPath().replace('\\', '/');
+		String f = file.getCanonicalPath().replace('\\', '/');
+		int i = 0;
 		while (i < d.length() && i < f.length() && d.charAt(i) == f.charAt(i)) {
-            i++;
+			i++;
 		}
-        String common = d.substring(0, i);
-        if (!new File(common).exists()) {
-            if (common.indexOf('/')>-1) {
-                common = common.substring(0,common.lastIndexOf('/')+1);
-            }
-            if (!new File(common).exists()) {
-                System.err.println("WARNING\tNothing in common between\n"+file.getAbsolutePath()+" and\n"+dir.getAbsolutePath());
-                return file.getAbsolutePath();
-            }
-        }
-        File commonFather = new File(common);
-        File parentDir = dir;
-        StringBuilder sb = new StringBuilder();
-        while(parentDir!=null && !commonFather.equals(parentDir)) {
-            sb.append("../");
-            parentDir = parentDir.getParentFile();
-        }
-        sb.append(f.substring(common.length()));
+		String common = d.substring(0, i);
+		if (!new File(common).exists()) {
+			if (common.indexOf('/')>-1) {
+				common = common.substring(0,common.lastIndexOf('/')+1);
+			}
+			if (!new File(common).exists()) {
+				System.err.println("WARNING\tNothing in common between\n"+file.getAbsolutePath()+" and\n"+dir.getAbsolutePath());
+				return file.getAbsolutePath();
+			}
+		}
+		File commonFather = new File(common);
+		File parentDir = dir;
+		StringBuilder sb = new StringBuilder();
+		while(parentDir!=null && !commonFather.equals(parentDir)) {
+			sb.append("../");
+			parentDir = parentDir.getParentFile();
+		}
+		sb.append(f.substring(common.length()));
 		if (sb.charAt(0) == '/') {
-            return sb.substring(1);
+			return sb.substring(1);
 		}
-        return sb.toString();
-    }
+		return sb.toString();
+	}
 
 	public static File createTempFile(InputStream in) {
 		File tempFile;
@@ -712,8 +719,8 @@ public class FileUtils {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+			}
 		}
-	}
 	}
 
 	/**
@@ -750,7 +757,7 @@ public class FileUtils {
 				files.addAll(listFilesRecursively(file, filter));
 			} else if (filter.accept(dir, file.getName())) {
 				files.add(file);
-		}
+			}
 		}
 		return files;
 	}

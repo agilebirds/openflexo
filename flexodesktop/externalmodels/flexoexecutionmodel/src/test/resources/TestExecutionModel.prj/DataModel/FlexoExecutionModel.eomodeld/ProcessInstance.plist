@@ -36,7 +36,7 @@
         }, 
         {columnName = STATUS; name = status; prototypeName = str20; }
     ); 
-    className = "org.openflexo.engine.db.ProcessInstance"; 
+    className = "be.denali.flexo.engine.db.ProcessInstance"; 
     classProperties = (
         activityTasks, 
         businessDataClassID, 

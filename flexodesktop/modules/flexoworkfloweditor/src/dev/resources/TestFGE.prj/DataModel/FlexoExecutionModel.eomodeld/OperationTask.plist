@@ -25,7 +25,7 @@
         }, 
         {columnName = "UPDATE_DATE"; name = updateDateImp; prototypeName = date; }
     ); 
-    className = "org.openflexo.engine.db.OperationTask"; 
+    className = "be.denali.flexo.engine.db.OperationTask"; 
     classProperties = (
         activityTaskIDImp, 
         creationDateImp, 

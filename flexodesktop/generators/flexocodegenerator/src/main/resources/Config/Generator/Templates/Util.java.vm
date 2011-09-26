@@ -38,7 +38,7 @@ import com.webobjects.foundation.NSKeyValueCoding;
 /**
  * This class contains some convenience static methods.
  * 
- * @author FlexoBPM Generator, Agile Birds sprl. (see www.FlexoBPM.com)
+ * @author OpenFlexo Generator, Agile Birds sprl. (see www.OpenFlexo.com)
  * @version 
  */
 public class ${PREFIX}Util

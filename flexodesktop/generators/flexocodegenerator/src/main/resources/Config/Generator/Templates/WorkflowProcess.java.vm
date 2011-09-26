@@ -14,7 +14,7 @@ import ${projectGenerator.getProcessBusinessDataBaseEntity().getFullQualifiedNam
 /**
  * WorkflowProcess class 
  * 
- * @author FlexoBPM Generator, Agile Birds sprl. (see www.FlexoBPM.com)
+ * @author OpenFlexo Generator, Agile Birds sprl. (see www.OpenFlexo.com)
  * @version 
  */
 @SuppressWarnings("serial")

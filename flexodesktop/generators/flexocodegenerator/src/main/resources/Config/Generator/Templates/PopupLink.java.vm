@@ -15,7 +15,7 @@ import java.util.logging.Level;
  * <br><b>binding</b>: confirmValue (or value) (String): The value submitted when the popup is confirmed.
  * <br><b>binding</b>: hiddenFieldName (String): The name of the field for the confirmValue. Usually, it is the form hiddenFieldName
  * <br><b>binding</b>: anchor (String): The name of the anchor of the opener page.
- * @author FlexoBPM Generator, Agile Birds sprl. (see www.FlexoBPM.com)
+ * @author OpenFlexo Generator, Agile Birds sprl. (see www.OpenFlexo.com)
  * 
  */
 public class ${componentDefinition.getName()}PopupLink extends WDLComponent implements IFlexoComponent {

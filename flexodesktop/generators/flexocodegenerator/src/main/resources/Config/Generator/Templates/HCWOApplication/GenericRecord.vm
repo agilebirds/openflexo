@@ -280,7 +280,7 @@ produce : code about rel to insert in addInDB code
  * #if(!$entity.getDontEscapeLatex())
  * $generator.getJavaDocString($entity.getDescription())
  #end* 
- * @author FlexoBPM Generator, Agile Birds sprl. (see www.FlexoBPM.com)
+ * @author OpenFlexo Generator, Agile Birds sprl. (see www.OpenFlexo.com)
  */
  
 @SuppressWarnings("serial")

@@ -90,9 +90,9 @@
   </TabPanel>
   <LocalizedDictionary>
     <Localized key="Advanced" lang="French">Avancé</Localized>
-    <Localized key="flexo_id" lang="English">FlexoBPM ID</Localized>
-    <Localized key="flexo_id" lang="French">FlexoBPM ID</Localized>
-    <Localized key="flexo_id" lang="Dutch">FlexoBPM ID</Localized>
+    <Localized key="flexo_id" lang="English">OpenFlexo ID</Localized>
+    <Localized key="flexo_id" lang="French">OpenFlexo ID</Localized>
+    <Localized key="flexo_id" lang="Dutch">OpenFlexo ID</Localized>
     <Localized key="Metrics Definition" lang="English">Metric Definition</Localized>
     <Localized key="Metrics Definition" lang="French">Définition des métriques</Localized>
     <Localized key="Metrics Definition" lang="Dutch">Metric Definition</Localized>

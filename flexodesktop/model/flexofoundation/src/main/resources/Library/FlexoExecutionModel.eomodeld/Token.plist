@@ -26,7 +26,7 @@
         }, 
         {allowsNull = N; columnName = "TOKEN_ID"; name = tokenID; prototypeName = id; }
     ); 
-    className = "org.openflexo.engine.db.Token"; 
+    className = "be.denali.flexo.engine.db.Token"; 
     classProperties = (creationDate, edgeFlexoID, preconditionFlexoID, processInstance, tokenID); 
     externalName = TOKEN; 
     fetchSpecificationDictionary = {}; 

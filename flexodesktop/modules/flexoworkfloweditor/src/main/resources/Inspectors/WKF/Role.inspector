@@ -75,9 +75,9 @@
     <Localized key="back_color" lang="French">Couleur de l'arrière-plan</Localized>
     <Localized key="back_color" lang="Dutch">Background color</Localized>
     <Localized key="Advanced" lang="French">Avancé</Localized>
-    <Localized key="flexo_id" lang="English">FlexoBPM ID</Localized>
-    <Localized key="flexo_id" lang="French">FlexoBPM ID</Localized>
-    <Localized key="flexo_id" lang="Dutch">FlexoBPM ID</Localized>
+    <Localized key="flexo_id" lang="English">OpenFlexo ID</Localized>
+    <Localized key="flexo_id" lang="French">OpenFlexo ID</Localized>
+    <Localized key="flexo_id" lang="Dutch">OpenFlexo ID</Localized>
     <Localized key="Basic" lang="French">Basique</Localized>
     <Localized key="name" lang="English">Name</Localized>
     <Localized key="name" lang="French">Nom</Localized>

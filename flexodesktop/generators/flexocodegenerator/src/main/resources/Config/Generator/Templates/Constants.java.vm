@@ -6,7 +6,7 @@ import java.util.Vector;
 * as possible. If necessary, the developper must add a non-static accessor to a constants
 * on a component in order to make a binding.
 *
-* @author FlexoBPM Generator, Agile Birds sprl. (see www.FlexoBPM.com)
+* @author OpenFlexo Generator, Agile Birds sprl. (see www.OpenFlexo.com)
 */
 public class ${prefix}Constants {
 
@@ -116,7 +116,7 @@ public class ${prefix}Constants {
     * #if(!$process.getDontEscapeLatex())
     * ${generator.getJavaDocString(${process.getDescription()})}
     #end *
-    * @author FlexoBPM Generator, Agile Birds sprl. (see www.FlexoBPM.com)
+    * @author OpenFlexo Generator, Agile Birds sprl. (see www.OpenFlexo.com)
     */    
     public static class #capNameForNode($process) {
     
@@ -131,7 +131,7 @@ public class ${prefix}Constants {
         * #if(!$act.getDontEscapeLatex())
         * ${generator.getJavaDocString(${act.getDescription()})}
         #end*
-        * @author FlexoBPM Generator, Agile Birds sprl. (see www.FlexoBPM.com)
+        * @author OpenFlexo Generator, Agile Birds sprl. (see www.OpenFlexo.com)
         */
         public static class #capNameForNode($act) {
             #foreach($op in ${act.getAllEmbeddedSortedOperationNodes()})

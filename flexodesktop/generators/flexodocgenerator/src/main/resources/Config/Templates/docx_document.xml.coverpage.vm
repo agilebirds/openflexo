@@ -454,7 +454,7 @@
             <w:sz w:val="16"/>
             <w:szCs w:val="16"/>
           </w:rPr>
-          <w:t>FlexoBPM</w:t>
+          <w:t>OpenFlexo</w:t>
         </w:r>
       </w:hyperlink>
     </w:p>

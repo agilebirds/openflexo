@@ -1,7 +1,7 @@
 #package()
 #imports($entity)
  /**
- * @author FlexoBPM Generator, Agile Birds sprl. (see www.FlexoBPM.com)
+ * @author OpenFlexo Generator, Agile Birds sprl. (see www.OpenFlexo.com)
  */
  public class $entity.getEntityClassName() extends #if($entity.getParentBaseEntity()) $entity.getParentBaseEntity().getName()#else #if(${entity.isBusinessDataClass()}) ${projectGenerator.getProcessBusinessDataBaseEntity().getFullQualifiedName()} #end#end{
 

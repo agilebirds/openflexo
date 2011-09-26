@@ -26,8 +26,8 @@ HEAD: WDLHead{
     /* application = "${generator.getProject().getCssSheet().getName()}";*/
     usePrototypeJS = true;
     useScriptaculousControlsJS = true;
-	metaKeywords = "FlexoBPM";
-    metaDescription = "This website is powered by FlexoBPM from Agile Birds sprl (www.flexoBPM.com).";
+	metaKeywords = "OpenFlexo";
+    metaDescription = "This website is powered by OpenFlexo from Agile Birds sprl (www.flexoBPM.com).";
 }
 
 onLoadBody: WOString {

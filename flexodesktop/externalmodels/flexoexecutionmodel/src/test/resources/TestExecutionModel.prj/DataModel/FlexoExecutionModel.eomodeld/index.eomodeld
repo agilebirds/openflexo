@@ -263,13 +263,13 @@
         username = "FLEXO_TEST"; 
     }; 
     entities = (
-        {className = "org.openflexo.engine.db.ActivityTask"; name = ActivityTask; }, 
-        {className = "org.openflexo.engine.db.OperationTask"; name = OperationTask; }, 
+        {className = "be.denali.flexo.engine.db.ActivityTask"; name = ActivityTask; }, 
+        {className = "be.denali.flexo.engine.db.OperationTask"; name = OperationTask; }, 
         {
-            className = "org.openflexo.engine.db.ProcessInstance"; 
+            className = "be.denali.flexo.engine.db.ProcessInstance"; 
             name = ProcessInstance; 
         }, 
-        {className = "org.openflexo.engine.db.Token"; name = Token; }
+        {className = "be.denali.flexo.engine.db.Token"; name = Token; }
     ); 
     userInfo = {
         "_EntityModeler" = {
