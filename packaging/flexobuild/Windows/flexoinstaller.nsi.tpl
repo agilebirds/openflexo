@@ -41,8 +41,10 @@ ReserveFile "${NSISDIR}\Plugins\System.dll"
 # Variables
 Var StartMenuGroup
 
-!define MUI_FINISHPAGE_RUN "$INSTDIR\${EXE_FILE}"
+!define MUI_FINISHPAGE_RUN
 !define MUI_FINISHPAGE_RUN_TEXT "Launch ${PRODUCTNAME}"
+!define MUI_FINISHPAGE_RUN_FUNCTION "LaunchApp"
+!insertmacro MUI_PAGE_FINISH
 
 # Installer pages
 !insertmacro MUI_PAGE_WELCOME
@@ -186,6 +188,10 @@ Function un.onInit
     !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuGroup
     !insertmacro MUI_UNGETLANGUAGE
     !insertmacro SELECT_UNSECTION Main ${UNSEC0000}
+FunctionEnd
+
+Function LaunchApp
+  ExecShell "" "$DESKTOP\${PRODUCT_NAME}.lnk"
 FunctionEnd
 
 # Installer Language Strings
