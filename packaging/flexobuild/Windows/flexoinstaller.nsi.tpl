@@ -156,10 +156,10 @@ SectionEnd
 
 Section -un.post UNSEC0001
     DeleteRegKey HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)"
-    Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\${PRODUCT_NAME}.lnk" "$INSTDIR\${EXE_FILE}"
-    Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\$(^UninstallLink).lnk" $INSTDIR\uninstall.exe
-    Delete /REBOOTOK "$DESKTOP\${PRODUCT_NAME}.lnk" "$INSTDIR\${EXE_FILE}"
-    Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\$(^UninstallLink).lnk"
+    Delete "$SMPROGRAMS\$StartMenuGroup\${PRODUCT_NAME}.lnk"
+    Delete "$SMPROGRAMS\$StartMenuGroup\$(^UninstallLink).lnk" 
+    Delete "$DESKTOP\${PRODUCT_NAME}.lnk"
+    Delete "$SMPROGRAMS\$StartMenuGroup\$(^UninstallLink).lnk"
     Delete /REBOOTOK $INSTDIR\uninstall.exe
     DeleteRegValue HKLM "${REGKEY}" StartMenuGroup
     DeleteRegValue HKLM "${REGKEY}" Path
