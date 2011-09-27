@@ -46,8 +46,6 @@ import org.openflexo.foundation.ie.dm.table.WidgetRemovedFromTable;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 
-import junit.framework.Assert;
-
 /**
  * Widget representing an HTML Table
  * 
@@ -109,29 +107,32 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
 
             // Now we fill the table so that there are no holes inside of it.
             int colCount = getMaxColCount();
-            for (int i = 0; i < getRowCount(); i++)
-                for (int j = 0; j < colCount; j++) {
+            for (int i = 0; i < getRowCount(); i++) {
+				for (int j = 0; j < colCount; j++) {
                     IETDWidget td = getTDAt(i, j);
                     if (td == null) {
                         getTR(i).insertEmptyTDAtCol(j);
                     }
                 }
+			}
             initPourcentageArray();
 
             // Let's check that all percentages are correct
             if (pourcentageArray.size() < colCount) {
-                if (logger.isLoggable(Level.INFO))
-                    logger.info("Percentage array is to small: " + pourcentageArray.size() + " colcount=" + colCount);
+                if (logger.isLoggable(Level.INFO)) {
+					logger.info("Percentage array is to small: " + pourcentageArray.size() + " colcount=" + colCount);
+				}
                 int size = pourcentageArray.size();
                 for (int i = size; i < colCount; i++) {
                     double newColPourcentage = 1.0d / (pourcentageArray.size() + 1);
-                    double oldColIncrement = (-1.0d) * newColPourcentage / (pourcentageArray.size());
+                    double oldColIncrement = -1.0d * newColPourcentage / pourcentageArray.size();
                     applyIncrementToCols(oldColIncrement, true);
                     pourcentageArray.add(new Double(newColPourcentage));
                 }
             } else if (pourcentageArray.size() > colCount) {
-                if (logger.isLoggable(Level.INFO))
-                    logger.info("Percentage array is to big: " + pourcentageArray.size() + " colcount=" + colCount);
+                if (logger.isLoggable(Level.INFO)) {
+					logger.info("Percentage array is to big: " + pourcentageArray.size() + " colcount=" + colCount);
+				}
                 while (pourcentageArray.size() > colCount) {
                     Double d = pourcentageArray.lastElement();
                     pourcentageArray.remove(d);
@@ -196,8 +197,9 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
         int retval = 0;
         for (int i = 0; i < getRowCount(); i++) {
             IETRWidget tr = getTR(i);
-            if (tr.getColCount() > retval)
-                retval = tr.getColCount();
+            if (tr.getColCount() > retval) {
+				retval = tr.getColCount();
+			}
         }
         return retval;
     }
@@ -232,8 +234,9 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
         Enumeration en = pourcentageArray.elements();
         while (en.hasMoreElements()) {
             buf.append(((Double) en.nextElement()).doubleValue());
-            if (en.hasMoreElements())
-                buf.append(";");
+            if (en.hasMoreElements()) {
+				buf.append(";");
+			}
         }
         _pourcentageWidths = buf.toString();
     }
@@ -270,23 +273,26 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
             IETDWidget td = getTDAt(i, col);
             if (td instanceof IESpanTDWidget) {
                 IETDWidget sp = ((IESpanTDWidget) td).getSpanner();
-                if (!spanners.contains(sp))
-                    spanners.add(sp);
+                if (!spanners.contains(sp)) {
+					spanners.add(sp);
+				}
             }
-            if (td != null)
-                td.makeRealDelete(true);
-            else if (logger.isLoggable(Level.SEVERE))
-                logger.severe("Could not delete TD at (" + i + "," + col + "). XML:\n" + getXMLRepresentation());
+            if (td != null) {
+				td.makeRealDelete(true);
+			} else if (logger.isLoggable(Level.SEVERE)) {
+				logger.severe("Could not delete TD at (" + i + "," + col + "). XML:\n" + getXMLRepresentation());
+			}
         }
         Enumeration<IETDWidget> en = spanners.elements();
         while (en.hasMoreElements()) {
             IETDWidget td = en.nextElement();
-            if (!td.isDeleted())
-                td.descreaseColSpanCausedByColumnDeletion();
+            if (!td.isDeleted()) {
+				td.descreaseColSpanCausedByColumnDeletion();
+			}
         }
         reIndexTable();
         int newColCount = getColCount();
-        double removedColPourcentage = (pourcentageArray.get(col)).doubleValue();
+        double removedColPourcentage = pourcentageArray.get(col).doubleValue();
         double oldColIncrement = removedColPourcentage / newColCount;
         pourcentageArray.remove(col);
         applyIncrementToCols(oldColIncrement, true);
@@ -310,20 +316,23 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
             IETDWidget td = tr.getTD(i);
             if (td instanceof IESpanTDWidget) {
                 IETDWidget sp = ((IESpanTDWidget) td).getSpanner();
-                if (!spanners.contains(sp))
-                    spanners.add(sp);
+                if (!spanners.contains(sp)) {
+					spanners.add(sp);
+				}
             }
-            if (td != null)
-                td.makeRealDelete(true);
-            else if (logger.isLoggable(Level.SEVERE))
-                logger.severe("Could not delete TD at (" + tr + "," + i + "). XML:\n" + getXMLRepresentation());
+            if (td != null) {
+				td.makeRealDelete(true);
+			} else if (logger.isLoggable(Level.SEVERE)) {
+				logger.severe("Could not delete TD at (" + tr + "," + i + "). XML:\n" + getXMLRepresentation());
+			}
 
         }
         Enumeration<IETDWidget> en = spanners.elements();
         while (en.hasMoreElements()) {
             IETDWidget td = en.nextElement();
-            if (!td.isDeleted())
-                td.decreaseRowSpanCausedByRowDeletion();
+            if (!td.isDeleted()) {
+				td.decreaseRowSpanCausedByRowDeletion();
+			}
         }
         reIndexRows();
         setChanged();
@@ -342,8 +351,9 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
                 IETDWidget item = getTDAt(row, i);
                 if (item instanceof IESpanTDWidget) {
                     if (!((IESpanTDWidget) item).isOnRowSide()) {
-                        if (!spanners.contains(((IESpanTDWidget) item).getSpanner()))
-                            spanners.add(((IESpanTDWidget) item).getSpanner());
+                        if (!spanners.contains(((IESpanTDWidget) item).getSpanner())) {
+							spanners.add(((IESpanTDWidget) item).getSpanner());
+						}
                     }
                 }
             }
@@ -361,10 +371,11 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
         while (en1.hasMoreElements()) {
             ITableRow item = en1.nextElement();
             if (item instanceof IETRWidget) {
-                if (((IETRWidget) item).getRowIndex() < row)
-                    index = ((IETRWidget) item).getIndex() + 1;
-                else
-                    break;
+                if (((IETRWidget) item).getRowIndex() < row) {
+					index = ((IETRWidget) item).getIndex() + 1;
+				} else {
+					break;
+				}
             }
         }
         // Watch out that next line launches a notification while the model is
@@ -384,16 +395,18 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
         for (int i = 0; i < rowCount; i++) {
             IETDWidget td = getTDAt(i, col);
             if (td instanceof IESpanTDWidget) {
-                if (!((IESpanTDWidget) td).isOnColSide())
-                    if (!spanners.contains(((IESpanTDWidget) td).getSpanner()))
-                        spanners.add(((IESpanTDWidget) td).getSpanner());
+                if (!((IESpanTDWidget) td).isOnColSide()) {
+					if (!spanners.contains(((IESpanTDWidget) td).getSpanner())) {
+						spanners.add(((IESpanTDWidget) td).getSpanner());
+					}
+				}
             }
         }
 
         // We adjust column width so that there is room for the new column
         int newColCount = getColCount() + 1;
         double newColPourcentage = 1.0d / newColCount;
-        double oldColIncrement = (-1.0d) * newColPourcentage / (newColCount - 1);
+        double oldColIncrement = -1.0d * newColPourcentage / (newColCount - 1);
         applyIncrementToCols(oldColIncrement, false);
         pourcentageArray.insertElementAt(new Double(newColPourcentage), col);
         checkAndFixColumnWidth();
@@ -416,12 +429,14 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
 
     public void setPercentageForTD(double percentage, IETDWidget td) throws InvalidPercentage
     {
-        if (!isPercentageAcceptable(td, (int) (percentage * 100)))
-            throw new InvalidPercentage((int) (percentage * 100));
+        if (!isPercentageAcceptable(td, (int) (percentage * 100))) {
+			throw new InvalidPercentage((int) (percentage * 100));
+		}
         int col = td.getXLocation();
         if (col > pourcentageArray.size()) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Tried to set a new percentage on a column that does not exist");
+            if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Tried to set a new percentage on a column that does not exist");
+			}
             return;
         }
         if (percentage > 1) {
@@ -468,14 +483,16 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
     {
         if (td.getXLocation() + 1 == getColCount()) {
             double leftPercentage = getPourcentage(0, td.getXLocation());
-            if (newPercentage > td.getPercentage() && ((newPercentage - td.getPercentage()) > (leftPercentage * 100) - getColCount() - 1))
-                return false;
+            if (newPercentage > td.getPercentage() && newPercentage - td.getPercentage() > leftPercentage * 100 - getColCount() - 1) {
+				return false;
+			}
         } else {
             double leftPercentage = (int)(getPourcentage(td.getXLocation() + 1, getColCount() - td.getXLocation()-1)*100);
             leftPercentage/=100;
             if (newPercentage > td.getPercentage()
-                    && ((newPercentage - td.getPercentage()) > (leftPercentage * 100) - getColCount() + td.getXLocation()))
-                return false;
+                    && newPercentage - td.getPercentage() > leftPercentage * 100 - getColCount() + td.getXLocation()) {
+				return false;
+			}
         }
         return true;
     }
@@ -489,16 +506,18 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
     {
         initPourcentageArray();
         for (int i = 0; i < pourcentageArray.size(); i++) {
-            Double newVal = new Double((pourcentageArray.get(i)).doubleValue() + d);
+            Double newVal = new Double(pourcentageArray.get(i).doubleValue() + d);
             pourcentageArray.set(i, newVal);
         }
         for (int i = 0; i < pourcentageArray.size(); i++) {
             Double newVal = pourcentageArray.get(i);
-            if (newVal<0.01)
-                pourcentageArray.set(i, newVal);
+            if (newVal<0.01) {
+				pourcentageArray.set(i, newVal);
+			}
         }
-        if (checkAndFix)
-        	checkAndFixColumnWidth();
+        if (checkAndFix) {
+			checkAndFixColumnWidth();
+		}
         notifyDisplayNeedsRefresh();
         notifyPercentageChangeFromColToCol(0, getColCount());
     }
@@ -508,8 +527,9 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
         // If there are too small values we set them to the minimum: 0.01
         for (int i = 0; i < pourcentageArray.size(); i++) {
             Double d = pourcentageArray.get(i);
-            if (d < 0.01)
-                pourcentageArray.set(i, 0.01);
+            if (d < 0.01) {
+				pourcentageArray.set(i, 0.01);
+			}
         }
 
         // We check that the sum of percentages equals to 1.
@@ -521,17 +541,18 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
             sum -= 1;
             for (int i = pourcentageArray.size() - 1; i >= 0 && sum != 0; i--) {
                 double d = pourcentageArray.get(i);
-                if ((d - 0.01) > sum) {
+                if (d - 0.01 > sum) {
                     pourcentageArray.set(i, d - sum);
                     sum = 0;
                 } else {
-                    sum -= (d - 0.01);
+                    sum -= d - 0.01;
                     pourcentageArray.set(i, 0.01);
                 }
             }
         } else {
-            if (logger.isLoggable(Level.SEVERE))
-                logger.severe("This table has no columns, I will attempt to remove it.");
+            if (logger.isLoggable(Level.SEVERE)) {
+				logger.severe("This table has no columns, I will attempt to remove it.");
+			}
             removeFromContainer();
         }
     }
@@ -570,16 +591,18 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
 
     public void setColCount(int colCount) throws ColumnIsNotEmpty, ColCountCannotBeZeroOrNegative
     {
-    	if (colCount<1)
-    		throw new ColCountCannotBeZeroOrNegative();
+    	if (colCount<1) {
+			throw new ColCountCannotBeZeroOrNegative();
+		}
         if (getColCount() > colCount) {
             int previousColCount = getColCount() + 1;
             while (getColCount() > colCount && previousColCount > getColCount()) {
                 previousColCount = getColCount();
                 if (columnIsEmpty(getColCount() - 1)) {
                 	IETDWidget td = getTDAt(0, getColCount() - 1);
-                	if (!td.isDeleted())
-                        td.deleteCol();
+                	if (!td.isDeleted()) {
+						td.deleteCol();
+					}
                 } else {
                 	setChanged();
                 	notifyObserversAsReentrantModification(new IEDataModification("colCount",previousColCount,getColCount()));
@@ -590,8 +613,9 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
             while (getColCount() < colCount) {
             	insertCol(getColCount());
             }
-        } else if (logger.isLoggable(Level.INFO))
-            logger.info("Setting colcount to " + colCount + " and it is already the case");
+        } else if (logger.isLoggable(Level.INFO)) {
+			logger.info("Setting colcount to " + colCount + " and it is already the case");
+		}
     }
 
     /**
@@ -605,8 +629,9 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
 
     public void setRowCount(int rowCount) throws RowIsNotEmpty, RowCountCannotBeZeroOrNegative
     {
-    	if (rowCount<1)
-    		throw new RowCountCannotBeZeroOrNegative();
+    	if (rowCount<1) {
+			throw new RowCountCannotBeZeroOrNegative();
+		}
         if (getRowCount() > rowCount) {
             int previousRowcount = getRowCount() + 1;
             while (getRowCount() > rowCount && previousRowcount > getRowCount()) {
@@ -626,8 +651,9 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
                	// Used editor will be null
                	insertRow(getTDAt(getRowCount() - 1, 0).tr().getSequenceTR(), getRowCount());
             }
-        } else if (logger.isLoggable(Level.INFO))
-            logger.info("Setting rowCount to " + rowCount + " and it is already the case");
+        } else if (logger.isLoggable(Level.INFO)) {
+			logger.info("Setting rowCount to " + rowCount + " and it is already the case");
+		}
 
     }
 
@@ -655,20 +681,24 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
      */
     public boolean isColFree(int col, int startRow, int endRow)
     {
-        if (col > getColCount() - 1)
-            return false;
+        if (col > getColCount() - 1) {
+			return false;
+		}
         for (int i = startRow; i < endRow + 1; i++) {
             IETDWidget td = null;
             td = getTDAt(i, col);
             if (td == null) {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("This is weird. I could not find TD at (" + i + "," + col + ")");
+                if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("This is weird. I could not find TD at (" + i + "," + col + ")");
+				}
                 continue;
             }
-            if (td instanceof IESpanTDWidget)
-                return false;
-            if (!td.isEmpty() || td.getRowSpan() > 1 || td.getColSpan() > 1)
-                return false;
+            if (td instanceof IESpanTDWidget) {
+				return false;
+			}
+            if (!td.isEmpty() || td.getRowSpan() > 1 || td.getColSpan() > 1) {
+				return false;
+			}
         }
         return true;
     }
@@ -689,8 +719,9 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
     {
         Vector<IETDWidget> answer = new Vector<IETDWidget>();
         for (int i = startRow; i < endRow + 1; i++) {
-            if (getTDAt(i, col) != null)
-                answer.add(getTDAt(i, col));
+            if (getTDAt(i, col) != null) {
+				answer.add(getTDAt(i, col));
+			}
         }
         return answer;
     }
@@ -706,20 +737,24 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
 
     public boolean isRowFree(int row, int startCol, int endCol)
     {
-        if (row > (_sequenceTR.getWidgetCount() - 1))
-            return false;
+        if (row > _sequenceTR.getWidgetCount() - 1) {
+			return false;
+		}
         for (int i = startCol; i < endCol + 1; i++) {
             IETDWidget td = null;
             td = getTDAt(row, i);
             if (td == null) {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("This is weird. Could not find TD located at (" + row + "," + i + ")");
+                if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("This is weird. Could not find TD located at (" + row + "," + i + ")");
+				}
                 continue;
             }
-            if (td instanceof IESpanTDWidget)
-                return false;
-            if (!td.isEmpty() || td.getRowSpan() > 1 || td.getColSpan() > 1)
-                return false;
+            if (td instanceof IESpanTDWidget) {
+				return false;
+			}
+            if (!td.isEmpty() || td.getRowSpan() > 1 || td.getColSpan() > 1) {
+				return false;
+			}
         }
         return true;
     }
@@ -728,8 +763,9 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
     {
         Vector<IETDWidget> answer = new Vector<IETDWidget>();
         for (int i = startCol; i < endCol + 1; i++) {
-            if (getTDAt(row, i) != null)
-                answer.add(getTDAt(row, i));
+            if (getTDAt(row, i) != null) {
+				answer.add(getTDAt(row, i));
+			}
         }
         return answer;
     }
@@ -755,8 +791,9 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
      */
     public IETDWidget getTDAt(int row, int col)
     {
-        if (getTR(row) == null)
-            return null;
+        if (getTR(row) == null) {
+			return null;
+		}
         return getTR(row).getTD(col);
     }
 
@@ -833,8 +870,9 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
 
     public void setIsShowingBorder(boolean v)
     {
-        if (v == _isShowingBorder)
-            return;
+        if (v == _isShowingBorder) {
+			return;
+		}
 
         _isShowingBorder = v;
         setChanged();
@@ -888,7 +926,7 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
         initPourcentageArray();
         double reply = 0.0d;
         for (int i = start; i < start + length; i++) {
-            reply = reply + (pourcentageArray.get(i)).doubleValue();
+            reply = reply + pourcentageArray.get(i).doubleValue();
         }
         return reply;
     }
@@ -910,19 +948,21 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
         double td1increment = p1 / td1Width;
         double td2increment = -1 * p1 / td2Width;
         
-        if (!isPercentageAcceptable(td1, (int) (td1.getPourcentage()+p1*100)))
-        	return;
-        if (!isPercentageAcceptable(td2, (int) (td2.getPourcentage()-p1*100)))
-        	return;	
+        if (!isPercentageAcceptable(td1, (int) (td1.getPourcentage()+p1*100))) {
+			return;
+		}
+        if (!isPercentageAcceptable(td2, (int) (td2.getPourcentage()-p1*100))) {
+			return;
+		}	
         	
         
         for (int i = 0; i < td1Width; i++) {
             pourcentageArray.set(td1.getXLocation() + i, new Double(td1increment
-                    + (pourcentageArray.get(td1.getXLocation() + i)).doubleValue()));
+                    + pourcentageArray.get(td1.getXLocation() + i).doubleValue()));
         }
         for (int i = 0; i < td2Width; i++) {
             pourcentageArray.set(td2.getXLocation() + i, new Double(td2increment
-                    + (pourcentageArray.get(td2.getXLocation())).doubleValue()));
+                    + pourcentageArray.get(td2.getXLocation()).doubleValue()));
         }
         udatePourcentageWidths();
         notifyDisplayNeedsRefresh();
@@ -938,11 +978,12 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
         for (int i = 0; i < rowCount; i++) {
             for (int j = 0; j < colCount; j++) {
                 IETDWidget td = getTDAt(i, j);
-                if (td != null)
-                    td.notifyDisplayNeedsRefresh();
-                else {
-                    if (logger.isLoggable(Level.WARNING))
-                        logger.warning("This is weird. Could not find TD located at (" + i + "," + j + ")");
+                if (td != null) {
+					td.notifyDisplayNeedsRefresh();
+				} else {
+                    if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("This is weird. Could not find TD located at (" + i + "," + j + ")");
+					}
                     continue;
                 }
             }
@@ -970,12 +1011,13 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
             for (int j = startCol; j < endCol; j++) {
                 IETDWidget td = getTDAt(i, j);
                 if (td == null) {
-                    if (logger.isLoggable(Level.WARNING))
-                        logger.warning("This is weird. I could not find TD located at (" + i + "," + j + ")");
+                    if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("This is weird. I could not find TD located at (" + i + "," + j + ")");
+					}
                     continue;
-                } else if (td instanceof IESpanTDWidget)
-                    continue;
-                else {
+                } else if (td instanceof IESpanTDWidget) {
+					continue;
+				} else {
                     td.notifyDisplayNeedsRefresh();
                 }
             }
@@ -1010,8 +1052,9 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
         span.setXLocation(col);
         IETRWidget tr = _sequenceTR.getTRAtRow(row);
         if (tr == null) {
-            if (logger.isLoggable(Level.INFO))
-                logger.info("Could not find tr at row " + row + ". I will create it");
+            if (logger.isLoggable(Level.INFO)) {
+				logger.info("Could not find tr at row " + row + ". I will create it");
+			}
             tr = new IETRWidget(getWOComponent(), getSequenceTR(), false, getProject());
             tr.setRowIndex(row);
             ((IESequenceTR) td.tr().getParent()).addToInnerWidgets(tr);
@@ -1024,7 +1067,7 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
         if (previous == null) {
             tr.getSequenceTD().insertElementAt(span, 0);
         } else {
-            (previous.getParent()).insertElementAt(span, previous.getIndex() + 1);
+            previous.getParent().insertElementAt(span, previous.getIndex() + 1);
         }
     }
 
@@ -1089,42 +1132,31 @@ public class IEHTMLTableWidget extends IEWidget implements ExtensibleWidget, IET
     
     @Override
     public void setWOComponent(IEWOComponent woComponent) {
-    	if(noWOChange(woComponent))return;
+    	if(noWOChange(woComponent)) {
+			return;
+		}
     	super.setWOComponent(woComponent);
     	if (_sequenceTR!=null)
-    		_sequenceTR.setWOComponent(woComponent);// This call is very important because it will update the WOComponent components cache
+		 {
+			_sequenceTR.setWOComponent(woComponent);// This call is very important because it will update the WOComponent components cache
+		}
     }
     
     @Override
     public boolean areComponentInstancesValid() {
-    	if (_sequenceTR!=null)
-    		return _sequenceTR.areComponentInstancesValid();
-    	else
-    		return true;
+    	if (_sequenceTR!=null) {
+			return _sequenceTR.areComponentInstancesValid();
+		} else {
+			return true;
+		}
 }
     @Override
     public void removeInvalidComponentInstances() {
-    	if (_sequenceTR!=null)
-    		_sequenceTR.removeInvalidComponentInstances();    	
+    	if (_sequenceTR!=null) {
+			_sequenceTR.removeInvalidComponentInstances();
+		}    	
     }
     
-    public void assertIsValid(){
-    	Assert.assertNotNull(getProject());
-    	int rowCount = getRowCount();
-    	int colCount = getColCount();
-    	for(int i=0;i<rowCount;i++){
-    		if(getTR(i)==null){
-    			System.out.println("Here we have a null TR. Breakpoint it");
-    		}
-    		System.out.println(getTR(i).getRowIndex()+"=="+i);
-    		if(getTR(i).getRowIndex()==0 && i==2){
-    			System.out.println("will fail. Breakpoint it");
-    		}
-    		//Assert.assertTrue(getTR(i).getRowIndex()==i);
-    		Assert.assertTrue(getTR(i).getColCount()==colCount);
-    	}
-    }
-
     /**
      * Overrides getTitle
      * @see org.openflexo.foundation.ie.IETopComponent#getTitle()

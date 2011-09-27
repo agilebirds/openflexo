@@ -29,15 +29,10 @@ import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
 
-
+import junit.framework.Assert;
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 
-import org.openflexo.foundation.DefaultFlexoEditor;
-import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -112,29 +107,29 @@ import org.openflexo.toolbox.ToolBox;
 public abstract class FlexoTestCase extends TestCase
 {
 
-	
-	
-    private static final Logger logger = FlexoLogger.getLogger(FlexoTestCase.class.getPackage().getName());
 
-    static {
-    	try {
+
+	private static final Logger logger = FlexoLogger.getLogger(FlexoTestCase.class.getPackage().getName());
+
+	static {
+		try {
 			FlexoLoggingManager.initialize();
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-    }
-    
-    
-    protected static final FlexoEditorFactory EDITOR_FACTORY = new FlexoEditorFactory() {
+	}
+
+
+	protected static final FlexoEditorFactory EDITOR_FACTORY = new FlexoEditorFactory() {
 		@Override
 		public DefaultFlexoEditor makeFlexoEditor(FlexoProject project) {
 			return new FlexoTestEditor(project);
 		}
-    };
+	};
 
-    public static class FlexoTestEditor extends DefaultFlexoEditor {
+	public static class FlexoTestEditor extends DefaultFlexoEditor {
 		public FlexoTestEditor(FlexoProject project) {
 			super(project);
 		}
@@ -157,47 +152,52 @@ public abstract class FlexoTestCase extends TestCase
 		}
 	}
 
-    public FlexoTestCase() {
-    	logger.severe("Here is the system property : "+System.getProperty("flexo.resources.location"));
-		if(System.getProperty("flexo.resources.location")!=null)
+	public FlexoTestCase() {
+		logger.severe("Here is the system property : "+System.getProperty("flexo.resources.location"));
+		if(System.getProperty("flexo.resources.location")!=null) {
 			ResourceLocator.resetFlexoResourceLocation(new File(System.getProperty("flexo.resources.location")));
+		}
 	}
-    public FlexoTestCase(String name)
-    {
+	public FlexoTestCase(String name)
+	{
 		super(name);
 		logger.severe("Here is the system property : "+System.getProperty("flexo.resources.location"));
-		if(System.getProperty("flexo.resources.location")!=null)
+		if(System.getProperty("flexo.resources.location")!=null) {
 			ResourceLocator.resetFlexoResourceLocation(new File(System.getProperty("flexo.resources.location")));
+		}
 		FlexoObject.initialize();
 	}
 
-    public File getResource(String resourceRelativeName)
-    {
-        File retval = new File("src/test/resources",resourceRelativeName);
-        if (retval.exists())
-            return retval;
-        retval = new File("../FlexoFoundation/src/test/resources",resourceRelativeName);
-        if (retval.exists())
-            return retval;
-        retval = new File("tmp/tests/FlexoResources/",resourceRelativeName);
-        if (retval.exists())
-            return retval;
-        else
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Could not find resource "+resourceRelativeName);
-        return null;
-    }
+	public File getResource(String resourceRelativeName)
+	{
+		File retval = new File("src/test/resources",resourceRelativeName);
+		if (retval.exists()) {
+			return retval;
+		}
+		retval = new File("../FlexoFoundation/src/test/resources",resourceRelativeName);
+		if (retval.exists()) {
+			return retval;
+		}
+		retval = new File("tmp/tests/FlexoResources/",resourceRelativeName);
+		if (retval.exists()) {
+			return retval;
+		} else
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Could not find resource "+resourceRelativeName);
+			}
+		return null;
+	}
 
 	protected FlexoEditor createProject(String projectName)
 	{
 		return createProject(projectName,null);
 	}
-	
+
 	protected FlexoEditor createProject(String projectName, FlexoResourceCenter resourceCenter)
 	{
 		ToolBox.setPlatform();
-        FlexoLoggingManager.forceInitialize();
-        File _projectDirectory = null;
+		FlexoLoggingManager.forceInitialize();
+		File _projectDirectory = null;
 		try {
 			File tempFile = File.createTempFile(projectName, "");
 			_projectDirectory = new File (tempFile.getParentFile(),tempFile.getName()+".prj");
@@ -211,15 +211,15 @@ public abstract class FlexoTestCase extends TestCase
 		FlexoEditor reply = FlexoResourceManager.initializeNewProject(_projectDirectory,EDITOR_FACTORY,resourceCenter);
 		logger.info("Project has been SUCCESSFULLY created");
 		try {
-            reply.getProject().setProjectName(_projectIdentifier/*projectName*/);
-            reply.getProject().saveModifiedResources(null);
-        } catch (InvalidNameException e) {
-            e.printStackTrace();
-            fail();
-        } catch (SaveResourceException e) {
-            e.printStackTrace();
-            fail();
-        }
+			reply.getProject().setProjectName(_projectIdentifier/*projectName*/);
+			reply.getProject().saveModifiedResources(null);
+		} catch (InvalidNameException e) {
+			e.printStackTrace();
+			fail();
+		} catch (SaveResourceException e) {
+			e.printStackTrace();
+			fail();
+		}
 		return reply;
 	}
 
@@ -245,9 +245,9 @@ public abstract class FlexoTestCase extends TestCase
 			e.printStackTrace();
 			fail();
 		} catch (InvalidNameException e) {
-            e.printStackTrace();
-            fail();
-        }
+			e.printStackTrace();
+			fail();
+		}
 		return null;
 	}
 
@@ -373,10 +373,11 @@ public abstract class FlexoTestCase extends TestCase
 		assertTrue(addComponentFolder.hasActionExecutionSucceeded());
 		FlexoComponentFolder reply = editor.getProject().getFlexoComponentLibrary().getFlexoComponentFolderWithName(folderName);
 		assertNotNull(reply);
-		if(parentFolder!=null)	
+		if(parentFolder!=null) {
 			assertEquals(parentFolder, reply.getParent());
-		else
+		} else {
 			assertEquals(editor.getProject().getFlexoComponentLibrary().getRootFolder(), reply.getParent());
+		}
 		return reply;
 	}
 
@@ -389,12 +390,30 @@ public abstract class FlexoTestCase extends TestCase
 		return bloc1;
 	}
 
+	public static void assertHTMLTableIsValid(IEHTMLTableWidget table) {
+		Assert.assertNotNull(table.getProject());
+		int rowCount = table.getRowCount();
+		int colCount = table.getColCount();
+		for (int i = 0; i < rowCount; i++) {
+			if (table.getTR(i) == null) {
+				System.out.println("Here we have a null TR. Breakpoint it");
+			}
+			System.out.println(table.getTR(i).getRowIndex() + "==" + i);
+			if (table.getTR(i).getRowIndex() == 0 && i == 2) {
+				System.out.println("will fail. Breakpoint it");
+			}
+			// Assert.assertTrue(getTR(i).getRowIndex()==i);
+			Assert.assertTrue(table.getTR(i).getColCount() == colCount);
+		}
+
+	}
+
 	protected static IEHTMLTableWidget dropTableInBloc(IEBlocWidget bloc1, FlexoEditor editor) {
 		DropIEElement dropTable = DropIEElement.createTableInBloc(bloc1, editor);
 		assertTrue(dropTable.doAction().hasActionExecutionSucceeded());
 		IEHTMLTableWidget table = (IEHTMLTableWidget)dropTable.getDroppedWidget();
 		assertNotNull(table);
-		table.assertIsValid();
+		assertHTMLTableIsValid(table);
 		return table;
 	}
 
@@ -403,7 +422,7 @@ public abstract class FlexoTestCase extends TestCase
 		assertTrue(dropIEWidget.doAction().hasActionExecutionSucceeded());
 		IEWidget widget = dropIEWidget.getDroppedWidget();
 		assertNotNull(widget);
-		table.assertIsValid();
+		assertHTMLTableIsValid(table);
 		return widget;
 	}
 
@@ -450,34 +469,39 @@ public abstract class FlexoTestCase extends TestCase
 		}
 		return property;
 	}
-	
+
 	public static DMEOEntity createDMEOEntity(FlexoEditor editor, DMEOModel model, String name) {
 		CreateDMEOEntity eoEntity = CreateDMEOEntity.actionType.makeNewAction(model, null, editor);
 		eoEntity.doAction();
-		if (!eoEntity.hasActionExecutionSucceeded())
+		if (!eoEntity.hasActionExecutionSucceeded()) {
 			fail("Could not create EOEntity");
+		}
 		DMEOEntity e = eoEntity.getNewEntity();
-		if (name!=null)
+		if (name!=null) {
 			try {
 				e.setName(name);
 			} catch (InvalidNameException e1) {
 				e1.printStackTrace();
 				fail("Entity name '"+name+"' is invalid!");
 			}
+		}
 		return e;
 	}
 
 	public static DMEOModel createDMEOModel(FlexoEditor editor, DMEORepository rep, String modelName) {
-		if (modelName==null)
+		if (modelName==null) {
 			modelName = "MyEOModel";
-		if (!modelName.endsWith(".eomodeld"))
+		}
+		if (!modelName.endsWith(".eomodeld")) {
 			modelName+=".eomodeld";
+		}
 		CreateDMEOModel eoModel = CreateDMEOModel.actionType.makeNewAction(rep, null, editor);
 		eoModel.setEOModelFile(new File(modelName));
 		eoModel.setAdaptorType(DMEOAdaptorType.JDBC);
 		eoModel.doAction();
-		if (!eoModel.hasActionExecutionSucceeded())
+		if (!eoModel.hasActionExecutionSucceeded()) {
 			fail("Could not create EOModel.");
+		}
 		return eoModel.getNewDMEOModel();
 	}
 
@@ -489,8 +513,9 @@ public abstract class FlexoTestCase extends TestCase
 		rep.setRepositoryType(CreateDMRepository.PROJECT_DATABASE_REPOSITORY);
 		rep.setNewRepositoryName(repName);
 		rep.doAction();
-		if (!rep.hasActionExecutionSucceeded())
+		if (!rep.hasActionExecutionSucceeded()) {
 			fail("Could not create database repository.");
+		}
 		return (DMEORepository) rep.getNewRepository();
 	}
 
@@ -531,7 +556,7 @@ public abstract class FlexoTestCase extends TestCase
 		assertNotNull(action.getObject());
 		assertEquals(((SubProcessNode)action.getObject()).getProcess(), parentProcess);
 		assertEquals(((SubProcessNode)action.getObject()).getSubProcess(), subProcess);
-		
+
 		return (SubProcessNode)action.getObject();
 	}
 
@@ -594,8 +619,9 @@ public abstract class FlexoTestCase extends TestCase
 
 	public static OperationNode createOperationNode(String operationNodeName,AbstractActivityNode activityNode,int x,int y,FlexoEditor editor)
 	{
-		if (activityNode.getOperationPetriGraph() == null)
+		if (activityNode.getOperationPetriGraph() == null) {
 			openOperationLevel(activityNode,editor);
+		}
 		OperationNode reply = (OperationNode)createNode(activityNode.getOperationPetriGraph(), x, y, operationNodeName, WKFElementType.NORMAL_OPERATION,editor);
 		assertNotNull(reply);
 		assertEquals(reply.getProcess(), activityNode.getProcess());
@@ -605,25 +631,28 @@ public abstract class FlexoTestCase extends TestCase
 
 	public static OperationNode createBeginOperationNode(String operationNodeName,AbstractActivityNode activityNode,int x,int y,FlexoEditor editor)
 	{
-		if (activityNode.getOperationPetriGraph() == null)
+		if (activityNode.getOperationPetriGraph() == null) {
 			openOperationLevel(activityNode,editor);
+		}
 		return (OperationNode)createNode(activityNode.getOperationPetriGraph(), x, y, operationNodeName, WKFElementType.BEGIN_OPERATION,editor);
 	}
 
 	public static OperationNode createEndOperationNode(String operationNodeName,AbstractActivityNode activityNode,int x,int y,FlexoEditor editor)
 	{
-		if (activityNode.getOperationPetriGraph() == null)
+		if (activityNode.getOperationPetriGraph() == null) {
 			openOperationLevel(activityNode,editor);
+		}
 		return (OperationNode)createNode(activityNode.getOperationPetriGraph(), x, y, operationNodeName, WKFElementType.END_OPERATION,editor);
 	}
 
 	public static OperationNode createSelfExcutableOperationNode(String operationNodeName,AbstractActivityNode activityNode,int x,int y,FlexoEditor editor)
 	{
-		if (activityNode.getOperationPetriGraph() == null)
+		if (activityNode.getOperationPetriGraph() == null) {
 			openOperationLevel(activityNode,editor);
+		}
 		return (OperationNode)createNode(activityNode.getOperationPetriGraph(), x, y, operationNodeName, WKFElementType.SELF_EXECUTABLE_OPERATION,editor);
 	}
-	
+
 	public static FlexoPreCondition createPreCondition(FlexoNode attachedToNode, FlexoNode attachedBeginNode, FlexoEditor editor) {
 		CreatePreCondition create = CreatePreCondition.actionType.makeNewAction(attachedToNode, null, editor);
 		create.setAttachedBeginNode(attachedBeginNode);
@@ -631,12 +660,12 @@ public abstract class FlexoTestCase extends TestCase
 		assertNotNull(create.getNewPreCondition());
 		return create.getNewPreCondition();
 	}
-	
+
 	public static FlexoPetriGraph createPetriGraph(FatherNode father, FlexoEditor editor) {
-		 CreatePetriGraph create = CreatePetriGraph.actionType.makeNewAction(father, null, editor);
-		 create.doAction();
-		 assertNotNull(father.getContainedPetriGraph());
-		 return father.getContainedPetriGraph();
+		CreatePetriGraph create = CreatePetriGraph.actionType.makeNewAction(father, null, editor);
+		create.doAction();
+		assertNotNull(father.getContainedPetriGraph());
+		return father.getContainedPetriGraph();
 	}
 
 	public static void openOperationLevel(AbstractActivityNode activityNode,FlexoEditor editor){
@@ -650,59 +679,67 @@ public abstract class FlexoTestCase extends TestCase
 	}
 
 	public static ActionNode createBeginActionNode(String actionNodeName,OperationNode operationNode,int x,int y,FlexoEditor editor){
-		if (operationNode.getActionPetriGraph() == null)
+		if (operationNode.getActionPetriGraph() == null) {
 			openActionLevel(operationNode,editor);
+		}
 		return (ActionNode)createNode(operationNode.getActionPetriGraph(), x, y, actionNodeName, WKFElementType.BEGIN_ACTION,editor);
 	}
 
 	public static ActionNode createEndActionNode(String actionNodeName,OperationNode operationNode,int x,int y,FlexoEditor editor){
-		if (operationNode.getActionPetriGraph() == null)
+		if (operationNode.getActionPetriGraph() == null) {
 			openActionLevel(operationNode,editor);
+		}
 		return (ActionNode)createNode(operationNode.getActionPetriGraph(), x, y, actionNodeName, WKFElementType.END_ACTION,editor);
 	}
 
 	public static ActionNode createFlexoActionNode(String actionNodeName,OperationNode operationNode,int x,int y,FlexoEditor editor)
 	{
-		if (operationNode.getActionPetriGraph() == null)
+		if (operationNode.getActionPetriGraph() == null) {
 			openActionLevel(operationNode,editor);
+		}
 		return (ActionNode)createNode(operationNode.getActionPetriGraph(), x, y, actionNodeName, WKFElementType.FLEXO_ACTION,editor);
 	}
 
 	public static ActionNode createSelfActivatedActionNode(String actionNodeName,OperationNode operationNode,int x,int y,FlexoEditor editor)
 	{
-		if (operationNode.getActionPetriGraph() == null)
+		if (operationNode.getActionPetriGraph() == null) {
 			openActionLevel(operationNode,editor);
+		}
 		return (ActionNode)createNode(operationNode.getActionPetriGraph(), x, y, actionNodeName, WKFElementType.END_ACTIVITY,editor);
 	}
 
 	public static ActionNode createSelfExecutableActionNode(String actionNodeName,OperationNode operationNode,int x,int y,FlexoEditor editor)
 	{
-		if (operationNode.getActionPetriGraph() == null)
+		if (operationNode.getActionPetriGraph() == null) {
 			openActionLevel(operationNode,editor);
+		}
 		return (ActionNode)createNode(operationNode.getActionPetriGraph(), x, y, actionNodeName, WKFElementType.SELF_EXECUTABLE_ACTION,editor);
 	}
 
 	@Deprecated
 	public static ActionNode createNextPageActionNode(String actionNodeName,OperationNode operationNode,int x,int y,FlexoEditor editor)
 	{
-		if (operationNode.getActionPetriGraph() == null)
+		if (operationNode.getActionPetriGraph() == null) {
 			openActionLevel(operationNode,editor);
+		}
 		return (ActionNode)createNode(operationNode.getActionPetriGraph(), x, y, actionNodeName, null,editor);
 	}
 
 	@Deprecated
 	public static ActionNode createCreateSubProcessActionNode(String actionNodeName,OperationNode operationNode,int x,int y,FlexoEditor editor)
 	{
-		if (operationNode.getActionPetriGraph() == null)
+		if (operationNode.getActionPetriGraph() == null) {
 			openActionLevel(operationNode,editor);
+		}
 		return (ActionNode)createNode(operationNode.getActionPetriGraph(), x, y, actionNodeName, null,editor);
 	}
 
 	@Deprecated
 	public static ActionNode createExecuteSubProcessActionNode(String actionNodeName,OperationNode operationNode,int x,int y,FlexoEditor editor)
 	{
-		if (operationNode.getActionPetriGraph() == null)
+		if (operationNode.getActionPetriGraph() == null) {
 			openActionLevel(operationNode,editor);
+		}
 		return (ActionNode)createNode(operationNode.getActionPetriGraph(), x, y, actionNodeName, null,editor);
 	}
 
