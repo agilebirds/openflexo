@@ -20,15 +20,17 @@
 package org.openflexo.fib.view.widget;
 
 import java.awt.ComponentOrientation;
+import java.awt.event.FocusEvent;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JSpinner;
+import javax.swing.JSpinner.DefaultEditor;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
-import javax.swing.JSpinner.DefaultEditor;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -75,15 +77,16 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 			{
 				if (e.getSource() == valueChooser && !ignoreTextfieldChanges) {
 					updateModelFromWidget();
-				}                       
+				}
 			}
 		});
 		valueChooser.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		JComponent editor = valueChooser.getEditor();
 		if (editor instanceof DefaultEditor) {
 			((DefaultEditor)editor).getTextField().setHorizontalAlignment(SwingConstants.LEFT);
-			if(ToolBox.getPLATFORM()!=ToolBox.MACOS)
+			if(ToolBox.getPLATFORM()!=ToolBox.MACOS) {
 				((DefaultEditor)editor).getTextField().setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 0));
+			}
 		}
 
 		if (model.getColumns() != null) {
@@ -95,11 +98,24 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 
 		if (isReadOnly()){
 			valueChooser.setEnabled(false);
-		} 
+		}
 
 		getJComponent().addFocusListener(this);
-
+		getTextField().addFocusListener(this);
 		updateFont();
+	}
+
+	@Override
+	public void focusGained(FocusEvent event) {
+		super.focusGained(event);
+		if (event.getSource() == getTextField()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					getTextField().selectAll();
+				}
+			});
+		}
 	}
 
 	protected abstract SpinnerNumberModel makeSpinnerModel();
@@ -122,7 +138,7 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 			}
 			else {
 				try {
-					currentValue = getValue(); 
+					currentValue = getValue();
 				}
 				catch(ClassCastException e) {
 					logger.warning("ClassCastException: "+e.getMessage());
@@ -155,10 +171,11 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 	public synchronized boolean updateModelFromWidget()
 	{
 		if (notEquals(getValue(), getEditedValue())) {
-			if (isReadOnly())
+			if (isReadOnly()) {
 				return false;
+			}
 			modelUpdating = true;
-			setValue(getEditedValue());        
+			setValue(getEditedValue());
 			modelUpdating = false;
 			return true;
 		}
@@ -177,12 +194,12 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 		return valueChooser;
 	}
 
-	public JFormattedTextField getTextField() 
+	public JFormattedTextField getTextField()
 	{
 		JComponent editor = valueChooser.getEditor();
 		if (editor instanceof JSpinner.DefaultEditor) {
 			return ((JSpinner.DefaultEditor)editor).getTextField();
-		} 
+		}
 		return null;
 	}
 
@@ -195,7 +212,7 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 		}
 
 		@Override
-		protected SpinnerNumberModel makeSpinnerModel() 
+		protected SpinnerNumberModel makeSpinnerModel()
 		{
 			Byte min = getWidget().retrieveMinValue().byteValue();
 			Byte max = getWidget().retrieveMaxValue().byteValue();
@@ -215,10 +232,10 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 		}
 
 		@Override
-		protected Byte getEditedValue() 
+		protected Byte getEditedValue()
 		{
 			return ((Number)valueChooser.getValue()).byteValue();
-		}	
+		}
 
 		@Override
 		public int getDefaultColumns() {
@@ -233,7 +250,7 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 		}
 
 		@Override
-		protected SpinnerNumberModel makeSpinnerModel() 
+		protected SpinnerNumberModel makeSpinnerModel()
 		{
 			Short min = getWidget().retrieveMinValue().shortValue();
 			Short max = getWidget().retrieveMaxValue().shortValue();
@@ -253,7 +270,7 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 		}
 
 		@Override
-		protected Short getEditedValue() 
+		protected Short getEditedValue()
 		{
 			return ((Number)valueChooser.getValue()).shortValue();
 		}
@@ -271,7 +288,7 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 		}
 
 		@Override
-		protected SpinnerNumberModel makeSpinnerModel() 
+		protected SpinnerNumberModel makeSpinnerModel()
 		{
 			Integer min = getWidget().retrieveMinValue().intValue();
 			Integer max = getWidget().retrieveMaxValue().intValue();
@@ -287,12 +304,14 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 		@Override
 		public Integer getDefaultValue()
 		{
-			if (getWidget().getMinValue() != null && getWidget().getMinValue().intValue() > 0) return getWidget().getMinValue().intValue();
+			if (getWidget().getMinValue() != null && getWidget().getMinValue().intValue() > 0) {
+				return getWidget().getMinValue().intValue();
+			}
 			return new Integer(0);
 		}
 
 		@Override
-		protected Integer getEditedValue() 
+		protected Integer getEditedValue()
 		{
 			return ((Number)valueChooser.getValue()).intValue();
 		}
@@ -310,7 +329,7 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 		}
 
 		@Override
-		protected SpinnerNumberModel makeSpinnerModel() 
+		protected SpinnerNumberModel makeSpinnerModel()
 		{
 			Long min = getWidget().retrieveMinValue().longValue();
 			Long max = getWidget().retrieveMaxValue().longValue();
@@ -330,7 +349,7 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 		}
 
 		@Override
-		protected Long getEditedValue() 
+		protected Long getEditedValue()
 		{
 			return ((Number)valueChooser.getValue()).longValue();
 		}
@@ -348,7 +367,7 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 		}
 
 		@Override
-		protected SpinnerNumberModel makeSpinnerModel() 
+		protected SpinnerNumberModel makeSpinnerModel()
 		{
 			float min = getWidget().retrieveMinValue().floatValue();
 			float max = getWidget().retrieveMaxValue().floatValue();
@@ -368,7 +387,7 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 		}
 
 		@Override
-		protected Float getEditedValue() 
+		protected Float getEditedValue()
 		{
 			return ((Number)valueChooser.getValue()).floatValue();
 		}
@@ -386,7 +405,7 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 		}
 
 		@Override
-		protected SpinnerNumberModel makeSpinnerModel() 
+		protected SpinnerNumberModel makeSpinnerModel()
 		{
 			Double min = getWidget().retrieveMinValue().doubleValue();
 			Double max = getWidget().retrieveMaxValue().doubleValue();
@@ -406,7 +425,7 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 		}
 
 		@Override
-		protected Double getEditedValue() 
+		protected Double getEditedValue()
 		{
 			return ((Number)valueChooser.getValue()).doubleValue();
 		}
