@@ -137,7 +137,7 @@ public class Flexo {
 		if (!isDev) {
 			remapStandardOuputs();
 		}
-
+		ResourceLocator.printDirectoriesSearchOrder(System.err);
 		try {
 			DenaliSecurityProvider.insertSecurityProvider();
 		} catch (Exception e) {

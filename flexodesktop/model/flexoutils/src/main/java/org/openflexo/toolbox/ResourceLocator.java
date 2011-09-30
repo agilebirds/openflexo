@@ -21,6 +21,7 @@ package org.openflexo.toolbox;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
@@ -97,6 +98,13 @@ public class ResourceLocator {
 	public static void resetFlexoResourceLocation(File newLocation) {
 		preferredResourcePath = newLocation;
 		directoriesSearchOrder = null;
+	}
+
+	public static void printDirectoriesSearchOrder(PrintStream out) {
+		out.println("Direcrtories search order is:");
+		for (File file : getDirectoriesSearchOrder()) {
+			out.println(file.getAbsolutePath());
+		}
 	}
 
 	private static Vector<File> getDirectoriesSearchOrder() {
