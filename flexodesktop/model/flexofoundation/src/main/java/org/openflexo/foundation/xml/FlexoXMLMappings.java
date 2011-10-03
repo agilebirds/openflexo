@@ -73,479 +73,479 @@ import org.xml.sax.SAXException;
 public class FlexoXMLMappings
 {
 
-    protected static final Logger logger = Logger.getLogger(FlexoXMLMappings.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(FlexoXMLMappings.class.getPackage().getName());
 
-    //private boolean isInitialized = false;
+	//private boolean isInitialized = false;
 
-    private ModelVersions modelVersions = null;
+	private ModelVersions modelVersions = null;
 
-    public FlexoXMLMappings() {
-    	initialize();
+	public FlexoXMLMappings() {
+		initialize();
 	}
 
-    // Public API
+	// Public API
 
-    public XMLMapping getRMMapping()
-    {
-        return getMappingForClass(FlexoProject.class);
-    }
+	public XMLMapping getRMMapping()
+	{
+		return getMappingForClass(FlexoProject.class);
+	}
 
-    public XMLMapping getLinksMapping()
-    {
-    	return getMappingForClass(FlexoLinks.class);
-    }
+	public XMLMapping getLinksMapping()
+	{
+		return getMappingForClass(FlexoLinks.class);
+	}
 
-    public XMLMapping getWKFMapping()
-    {
-        return getMappingForClass(FlexoProcess.class);
-    }
+	public XMLMapping getWKFMapping()
+	{
+		return getMappingForClass(FlexoProcess.class);
+	}
 
-    public XMLMapping getWorkflowMapping()
-    {
-        return getMappingForClass(FlexoWorkflow.class);
-    }
+	public XMLMapping getWorkflowMapping()
+	{
+		return getMappingForClass(FlexoWorkflow.class);
+	}
 
-    public XMLMapping getIEMapping()
-    {
-        return getMappingForClass(IEWOComponent.class);
-    }
+	public XMLMapping getIEMapping()
+	{
+		return getMappingForClass(IEWOComponent.class);
+	}
 
-    public XMLMapping getDMMapping()
-    {
-        return getMappingForClass(DMModel.class);
-    }
+	public XMLMapping getDMMapping()
+	{
+		return getMappingForClass(DMModel.class);
+	}
 
-    public XMLMapping getComponentLibraryMapping()
-    {
-        return getMappingForClass(FlexoComponentLibrary.class);
-    }
+	public XMLMapping getComponentLibraryMapping()
+	{
+		return getMappingForClass(FlexoComponentLibrary.class);
+	}
 
-    public XMLMapping getShemaLibraryMapping()
-    {
-        return getMappingForClass(OEShemaLibrary.class);
-    }
+	public XMLMapping getShemaLibraryMapping()
+	{
+		return getMappingForClass(OEShemaLibrary.class);
+	}
 
-    public XMLMapping getShemaMapping()
-    {
-        return getMappingForClass(OEShema.class);
-    }
+	public XMLMapping getShemaMapping()
+	{
+		return getMappingForClass(OEShema.class);
+	}
 
-    public XMLMapping getGeneratedCodeMapping()
-    {
-        return getMappingForClass(GeneratedOutput.class);
-    }
+	public XMLMapping getGeneratedCodeMapping()
+	{
+		return getMappingForClass(GeneratedOutput.class);
+	}
 
-    public XMLMapping getGeneratedSourcesMapping()
-    {
-        return getMappingForClass(GeneratedSources.class);
-    }
+	public XMLMapping getGeneratedSourcesMapping()
+	{
+		return getMappingForClass(GeneratedSources.class);
+	}
 
-    public XMLMapping getImplementationModelMapping()
-    {
-        return getMappingForClass(ImplementationModel.class);
-    }
+	public XMLMapping getImplementationModelMapping()
+	{
+		return getMappingForClass(ImplementationModel.class);
+	}
 
-    public XMLMapping getNavigationMenuMapping()
-    {
-        return getMappingForClass(FlexoNavigationMenu.class);
-    }
+	public XMLMapping getNavigationMenuMapping()
+	{
+		return getMappingForClass(FlexoNavigationMenu.class);
+	}
 
-    public XMLMapping getTOCMapping()
-    {
-        return getMappingForClass(TOCData.class);
-    }
+	public XMLMapping getTOCMapping()
+	{
+		return getMappingForClass(TOCData.class);
+	}
 
-    public XMLMapping getWSMapping()
-    {
-        return getMappingForClass(FlexoWSLibrary.class);
-    }
+	public XMLMapping getWSMapping()
+	{
+		return getMappingForClass(FlexoWSLibrary.class);
+	}
 
-    /**
-     * Returns all available versions for given class, ordered in ascendant
-     * order
-     */
-    public FlexoVersion[] getAvailableVersionsForClass(Class aClass)
-    {
-        if (modelVersions != null) {
-            ClassModels modelsForClass =  modelVersions.classModels.get(aClass.getName());
-            if (modelsForClass != null) {
-                return modelsForClass.getAvailableVersions();
-            }
-        }
-        if (logger.isLoggable(Level.WARNING)) {
+	/**
+	 * Returns all available versions for given class, ordered in ascendant
+	 * order
+	 */
+	public FlexoVersion[] getAvailableVersionsForClass(Class aClass)
+	{
+		if (modelVersions != null) {
+			ClassModels modelsForClass =  modelVersions.classModels.get(aClass.getName());
+			if (modelsForClass != null) {
+				return modelsForClass.getAvailableVersions();
+			}
+		}
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Could not find latest model file version for class " + aClass.getName());
 		}
-        return null;
-    }
+		return null;
+	}
 
-    public XMLMapping getMappingForClass(Class aClass)
-    {
-        return getMappingForClassAndVersion(aClass, getLatestVersionForClass(aClass));
-    }
+	public XMLMapping getMappingForClass(Class aClass)
+	{
+		return getMappingForClassAndVersion(aClass, getLatestVersionForClass(aClass));
+	}
 
-    public XMLMapping getMappingForClassAndVersion(Class aClass, FlexoVersion version)
-    {
-    	ClassModelVersion cmv = getClassModelVersion(aClass, version);
-        if (cmv != null) {
-            return cmv.getMapping();
-        }
-        if (logger.isLoggable(Level.WARNING)) {
+	public XMLMapping getMappingForClassAndVersion(Class aClass, FlexoVersion version)
+	{
+		ClassModelVersion cmv = getClassModelVersion(aClass, version);
+		if (cmv != null) {
+			return cmv.getMapping();
+		}
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Could not find model file for class " + aClass.getName() + " and version " + version);
 		}
-        return null;
-    }
+		return null;
+	}
 
-    public ClassModels getModelsForClass(Class aClass)
-    {
-    	return modelVersions.classModels.get(aClass.getName());
-    }
+	public ClassModels getModelsForClass(Class aClass)
+	{
+		return modelVersions.classModels.get(aClass.getName());
+	}
 
-    public ClassModelVersion getClassModelVersion(Class aClass, FlexoVersion version)
-    {
-        if (modelVersions != null) {
-            if (logger.isLoggable(Level.FINE)) {
+	public ClassModelVersion getClassModelVersion(Class aClass, FlexoVersion version)
+	{
+		if (modelVersions != null) {
+			if (logger.isLoggable(Level.FINE)) {
 				logger.finest("Searching ClassModelFlexoVersion for class " + aClass.getName());
 			}
-            ClassModels modelsForClass = getModelsForClass(aClass);
-            if (modelsForClass != null) {
-                if (logger.isLoggable(Level.FINE)) {
+			ClassModels modelsForClass = getModelsForClass(aClass);
+			if (modelsForClass != null) {
+				if (logger.isLoggable(Level.FINE)) {
 					logger.finest("Searching ClassModelFlexoVersion for version " + version);
 				}
-                ClassModelVersion foundFlexoVersion = modelsForClass.classModelVersions.get(version);
-                if (foundFlexoVersion != null) {
-                    return foundFlexoVersion;
-                }
-            }
-        }
-        if (logger.isLoggable(Level.WARNING)) {
+				ClassModelVersion foundFlexoVersion = modelsForClass.classModelVersions.get(version);
+				if (foundFlexoVersion != null) {
+					return foundFlexoVersion;
+				}
+			}
+		}
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Could not find model file for class " + aClass.getName() + " and version " + version);
 		}
-        return null;
-    }
+		return null;
+	}
 
-    public FlexoVersion getLatestVersionForClass(Class aClass)
-    {
-        if ((modelVersions != null) && (aClass != null)) {
-            ClassModels modelsForClass =  modelVersions.classModels.get(aClass.getName());
-            if (modelsForClass != null) {
-                return modelsForClass.latestVersion;
-            }
-        }
-        return null;
-    }
+	public FlexoVersion getLatestVersionForClass(Class aClass)
+	{
+		if (modelVersions != null && aClass != null) {
+			ClassModels modelsForClass =  modelVersions.classModels.get(aClass.getName());
+			if (modelsForClass != null) {
+				return modelsForClass.latestVersion;
+			}
+		}
+		return null;
+	}
 
-    public FlexoVersion getVersionForClassAndRelease(Class aClass, FlexoVersion releaseVersion)
-    {
-        if ((modelVersions != null) && (aClass != null)) {
-            ReleaseModels modelsForRelease = modelVersions.releaseModels.get(releaseVersion);
-            if (modelsForRelease != null) {
-              	if (modelsForRelease.classModels.get(aClass.getName()) != null) {
+	public FlexoVersion getVersionForClassAndRelease(Class aClass, FlexoVersion releaseVersion)
+	{
+		if (modelVersions != null && aClass != null) {
+			ReleaseModels modelsForRelease = modelVersions.releaseModels.get(releaseVersion);
+			if (modelsForRelease != null) {
+				if (modelsForRelease.classModels.get(aClass.getName()) != null) {
 					return modelsForRelease.classModels.get(aClass.getName()).version;
 				}
-            }
-        }
-        return null;
-    }
+			}
+		}
+		return null;
+	}
 
-    private static final Vector<FlexoVersion> _releaseVersions = new Vector<FlexoVersion>();
+	private static final Vector<FlexoVersion> _releaseVersions = new Vector<FlexoVersion>();
 
-    public static Vector<FlexoVersion> getReleaseVersions()
-    {
-    	if (_releaseVersions.size()==0) {
-    		for (ReleaseModels rm : new FlexoXMLMappings().modelVersions.releaseModels.values()) {
-    			_releaseVersions.add(rm.identifier);
-    		}
-    		Collections.sort(_releaseVersions,FlexoVersion.comparator);
-    	}
-    	return _releaseVersions;
-    }
+	public static Vector<FlexoVersion> getReleaseVersions()
+	{
+		if (_releaseVersions.size()==0) {
+			for (ReleaseModels rm : new FlexoXMLMappings().modelVersions.releaseModels.values()) {
+				_releaseVersions.add(rm.identifier);
+			}
+			Collections.sort(_releaseVersions,FlexoVersion.comparator);
+		}
+		return _releaseVersions;
+	}
 
-    public static final FlexoVersion latestRelease() {
-    	return getReleaseVersions().lastElement();
-    }
+	public static final FlexoVersion latestRelease() {
+		return getReleaseVersions().lastElement();
+	}
 
-    private static XMLMapping getVersionningModel()
-    {
-        // File flexoFoundationDirectory = getFlexoFoundationDirectory();
-        // File versionningModelFile = new File (flexoFoundationDirectory,
-        // "Models/FlexoVersionningModel.xml");
-        File versionningModelFile = new FileResource("Models/VersionningModel.xml");
-        try {
-            return new XMLMapping(versionningModelFile);
-        } catch (InvalidModelException e) {
-            // Warns about the exception
-            if (logger.isLoggable(Level.WARNING)) {
+	private static XMLMapping getVersionningModel()
+	{
+		// File flexoFoundationDirectory = getFlexoFoundationDirectory();
+		// File versionningModelFile = new File (flexoFoundationDirectory,
+		// "Models/FlexoVersionningModel.xml");
+		File versionningModelFile = new FileResource("Models/VersionningModel.xml");
+		try {
+			return new XMLMapping(versionningModelFile);
+		} catch (InvalidModelException e) {
+			// Warns about the exception
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
 			}
-            e.printStackTrace();
-        } catch (IOException e) {
-            // Warns about the exception
-            if (logger.isLoggable(Level.WARNING)) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// Warns about the exception
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
 			}
-            e.printStackTrace();
-        } catch (SAXException e) {
-            // Warns about the exception
-            if (logger.isLoggable(Level.WARNING)) {
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// Warns about the exception
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
 			}
-            e.printStackTrace();
-        } catch (ParserConfigurationException e) {
-            // Warns about the exception
-            if (logger.isLoggable(Level.WARNING)) {
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			// Warns about the exception
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
 			}
-            e.printStackTrace();
-        }
-        return null;
-    }
+			e.printStackTrace();
+		}
+		return null;
+	}
 
-    public void initialize()
-    {
-        // Register all declared string converters
-        FlexoObject.initialize();
-        // The next line ensure that the FlexoVersion converter is well registered by XMLCoDe
-        FlexoVersion registerMyConverter = new FlexoVersion("1.0");
-        registerMyConverter.toString();
-        // File flexoFoundationDirectory = getFlexoFoundationDirectory();
-        // File modelFlexoVersionFile = new File (flexoFoundationDirectory,
-        // "Models/ModelFlexoVersions.xml");
-        File modelFlexoVersionFile = new FileResource("Models/ModelVersions.xml");
-        try {
-        	modelVersions = (ModelVersions) XMLDecoder.decodeObjectWithMapping(new FileInputStream(modelFlexoVersionFile),
-            		getVersionningModel());
-            Iterator<ClassModels> i=modelVersions.classModels.values().iterator();
-            while (i.hasNext()) {
-                ClassModels cm = i.next();
-                if (cm.getAvailableVersions().length==0){
-                    if (logger.isLoggable(Level.WARNING)) {
+	public void initialize()
+	{
+		// Register all declared string converters
+		FlexoObject.initialize();
+		// The next line ensure that the FlexoVersion converter is well registered by XMLCoDe
+		FlexoVersion registerMyConverter = new FlexoVersion("1.0");
+		registerMyConverter.toString();
+		// File flexoFoundationDirectory = getFlexoFoundationDirectory();
+		// File modelFlexoVersionFile = new File (flexoFoundationDirectory,
+		// "Models/ModelFlexoVersions.xml");
+		File modelFlexoVersionFile = new FileResource("Models/ModelVersions.xml");
+		try {
+			modelVersions = (ModelVersions) XMLDecoder.decodeObjectWithMapping(new FileInputStream(modelFlexoVersionFile),
+					getVersionningModel());
+			Iterator<ClassModels> i=modelVersions.classModels.values().iterator();
+			while (i.hasNext()) {
+				ClassModels cm = i.next();
+				if (cm.getAvailableVersions().length==0){
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("There are no available versions for "+cm.name);
 					}
-                    continue;
-                }
-                FlexoVersion biggest=cm.getAvailableVersions()[0];
-                for (int j = 0; j < cm.availableFlexoVersions.length; j++) {
-                    FlexoVersion v = cm.availableFlexoVersions[j];
-                    if (v.isGreaterThan(biggest)) {
+					continue;
+				}
+				FlexoVersion biggest=cm.getAvailableVersions()[0];
+				for (int j = 0; j < cm.availableFlexoVersions.length; j++) {
+					FlexoVersion v = cm.availableFlexoVersions[j];
+					if (v.isGreaterThan(biggest)) {
 						biggest = v;
 					}
-                }
-                if (!cm.latestVersion.equals(biggest)) {
+				}
+				if (!cm.latestVersion.equals(biggest)) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("The latest version is "+cm.latestVersion+" but the greatest version is "+biggest+ " for class model named "+cm.name);
 					}
 				}
-            }
-        } catch (InvalidXMLDataException e) {
-            // Warns about the exception
-            if (logger.isLoggable(Level.WARNING)) {
+			}
+		} catch (InvalidXMLDataException e) {
+			// Warns about the exception
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
 			}
-            e.printStackTrace();
-        } catch (InvalidObjectSpecificationException e) {
-            // Warns about the exception
-            if (logger.isLoggable(Level.WARNING)) {
+			e.printStackTrace();
+		} catch (InvalidObjectSpecificationException e) {
+			// Warns about the exception
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
 			}
-            e.printStackTrace();
-        } catch (AccessorInvocationException e) {
-            // Warns about the exception
-            if (logger.isLoggable(Level.WARNING)) {
+			e.printStackTrace();
+		} catch (AccessorInvocationException e) {
+			// Warns about the exception
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
 			}
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            // Warns about the exception
-            if (logger.isLoggable(Level.WARNING)) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// Warns about the exception
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
 			}
-            e.printStackTrace();
-        } catch (JDOMException e) {
-            // Warns about the exception
-            if (logger.isLoggable(Level.WARNING)) {
+			e.printStackTrace();
+		} catch (JDOMException e) {
+			// Warns about the exception
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
 			}
-            e.printStackTrace();
-        } catch (InvalidModelException e) {
-            // Warns about the exception
-            logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-            e.printStackTrace();
-        } catch (IOException e) {
-            // Warns about the exception
-            logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-            e.printStackTrace();
-        }
+			e.printStackTrace();
+		} catch (InvalidModelException e) {
+			// Warns about the exception
+			logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+			e.printStackTrace();
+		} catch (IOException e) {
+			// Warns about the exception
+			logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+			e.printStackTrace();
+		}
 
-        if (logger.isLoggable(Level.FINE)) {
+		if (logger.isLoggable(Level.FINE)) {
 			for (ReleaseModels release : modelVersions.releaseModels.values()) {
 				logger.fine("Release "+release.identifier);
 				for (ReleaseClassModel cm : release.classModels.values()) {
-			       	logger.fine("Class "+cm.name+" version: "+cm.version);
+					logger.fine("Class "+cm.name+" version: "+cm.version);
 				}
 			}
 		}
-    }
+	}
 
-    public static class ModelVersions implements XMLSerializable
-    {
-        /**
-         * Hashtable where are stored ClassModels objects related to key
-         * ClassModels.className
-         */
-        public Hashtable<String,ClassModels> classModels = new Hashtable<String, ClassModels>();
+	public static class ModelVersions implements XMLSerializable
+	{
+		/**
+		 * Hashtable where are stored ClassModels objects related to key
+		 * ClassModels.className
+		 */
+		public Hashtable<String,ClassModels> classModels = new Hashtable<String, ClassModels>();
 
-        /**
-         * Hashtable where are stored ClassModels objects related to key
-         * ReleaseModels.identifier
-         */
-        public Hashtable<FlexoVersion,ReleaseModels> releaseModels = new Hashtable<FlexoVersion, ReleaseModels>();
-    }
+		/**
+		 * Hashtable where are stored ClassModels objects related to key
+		 * ReleaseModels.identifier
+		 */
+		public Hashtable<FlexoVersion,ReleaseModels> releaseModels = new Hashtable<FlexoVersion, ReleaseModels>();
+	}
 
-    public static class ReleaseModels implements XMLSerializable
-    {
-         public FlexoVersion identifier;
+	public static class ReleaseModels implements XMLSerializable
+	{
+		public FlexoVersion identifier;
 
-         /**
-          * Hashtable where are stored ReleaseClassModel objects related to key
-          * ReleaseClassModel.name
-          */
-         public Hashtable<String,ReleaseClassModel> classModels = new Hashtable<String, ReleaseClassModel>();
-    }
+		/**
+		 * Hashtable where are stored ReleaseClassModel objects related to key
+		 * ReleaseClassModel.name
+		 */
+		public Hashtable<String,ReleaseClassModel> classModels = new Hashtable<String, ReleaseClassModel>();
+	}
 
-    public static class ReleaseClassModel implements XMLSerializable
-    {
-        public String name;
+	public static class ReleaseClassModel implements XMLSerializable
+	{
+		public String name;
 
-        public FlexoVersion version;
-    }
+		public FlexoVersion version;
+	}
 
-    public static class ClassModels implements XMLSerializable
-    {
-        public String name;
+	public static class ClassModels implements XMLSerializable
+	{
+		public String name;
 
-        public FlexoVersion latestVersion;
+		public FlexoVersion latestVersion;
 
-        protected FlexoVersion[] availableFlexoVersions;
+		protected FlexoVersion[] availableFlexoVersions;
 
-        /**
-         * Hashtable where are stored ClassModelFlexoVersion objects related to key
-         * ClassModelFlexoVersion.id
-         */
-        public Hashtable<String,ClassModelVersion> classModelVersions = new Hashtable<String,ClassModelVersion>();
+		/**
+		 * Hashtable where are stored ClassModelFlexoVersion objects related to key
+		 * ClassModelFlexoVersion.id
+		 */
+		public Hashtable<String,ClassModelVersion> classModelVersions = new Hashtable<String,ClassModelVersion>();
 
-        /**
-         * Return all available versions, ordered in ascendant order
-         *
-         * @return
-         */
-        public FlexoVersion[] getAvailableVersions()
-        {
-            if (availableFlexoVersions == null) {
-                Vector<FlexoVersion> availableFlexoVersionsVector = new Vector<FlexoVersion>();
-                for (Enumeration e = classModelVersions.elements(); e.hasMoreElements();) {
-                    ClassModelVersion next = (ClassModelVersion) e.nextElement();
-                    availableFlexoVersionsVector.add(next.version);
-                }
-                Collections.sort(availableFlexoVersionsVector, FlexoVersion.comparator);
-                availableFlexoVersions = new FlexoVersion[availableFlexoVersionsVector.size()];
-                for (int i = 0; i < availableFlexoVersionsVector.size(); i++) {
-                    availableFlexoVersions[i] =  availableFlexoVersionsVector.elementAt(i);
-                }
-            }
-            return availableFlexoVersions;
-        }
+		/**
+		 * Return all available versions, ordered in ascendant order
+		 *
+		 * @return
+		 */
+		public FlexoVersion[] getAvailableVersions()
+		{
+			if (availableFlexoVersions == null) {
+				Vector<FlexoVersion> availableFlexoVersionsVector = new Vector<FlexoVersion>();
+				for (Enumeration<ClassModelVersion> e = classModelVersions.elements(); e.hasMoreElements();) {
+					ClassModelVersion next = e.nextElement();
+					availableFlexoVersionsVector.add(next.version);
+				}
+				Collections.sort(availableFlexoVersionsVector, FlexoVersion.comparator);
+				availableFlexoVersions = new FlexoVersion[availableFlexoVersionsVector.size()];
+				for (int i = 0; i < availableFlexoVersionsVector.size(); i++) {
+					availableFlexoVersions[i] =  availableFlexoVersionsVector.elementAt(i);
+				}
+			}
+			return availableFlexoVersions;
+		}
 
-    }
+	}
 
-     public static class ClassModelVersion implements XMLSerializable
-    {
-        public FlexoVersion version;
+	public static class ClassModelVersion implements XMLSerializable
+	{
+		public FlexoVersion version;
 
-        public File modelFile;
+		public File modelFile;
 
-        public boolean needsManualConversion = false;
+		public boolean needsManualConversion = false;
 
-        public FlexoVersion toVersion = null;
+		public FlexoVersion toVersion = null;
 
-        private XMLMapping mapping = null;
+		private XMLMapping mapping = null;
 
-        protected File getModelFile()
-        {
-            // return new
-            // File(getFlexoFoundationDirectory(),"Models"+File.separator+modelFile.getPath());
-            return new FileResource("Models" + File.separator + modelFile.getPath());
-        }
+		protected File getModelFile()
+		{
+			// return new
+			// File(getFlexoFoundationDirectory(),"Models"+File.separator+modelFile.getPath());
+			return new FileResource("Models/" + modelFile.getPath());
+		}
 
-        @Override
-        public String toString() {
-        	return "ClassModelVersion: file "+modelFile+" version "+version;
-        }
+		@Override
+		public String toString() {
+			return "ClassModelVersion: file "+modelFile+" version "+version;
+		}
 
-        public XMLMapping getMapping()
-        {
-            if (mapping == null) {
-                if (getModelFile().exists() && !(getModelFile().isDirectory())) {
-                    try {
-                        mapping = new XMLMapping(getModelFile());
-                    } catch (InvalidModelException e) {
-                        // Warns about the exception
-                        if (logger.isLoggable(Level.WARNING)) {
+		public XMLMapping getMapping()
+		{
+			if (mapping == null) {
+				if (getModelFile().exists() && !getModelFile().isDirectory()) {
+					try {
+						mapping = new XMLMapping(getModelFile());
+					} catch (InvalidModelException e) {
+						// Warns about the exception
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Model version " + version + ", exception raised: " + e.getClass().getName()
-                                    + ". See console for details. (File is " + getModelFile().getAbsolutePath() + ")");
+									+ ". See console for details. (File is " + getModelFile().getAbsolutePath() + ")");
 						}
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        // Warns about the exception
-                        if (logger.isLoggable(Level.WARNING)) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						// Warns about the exception
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.(File is "
-                                    + getModelFile().getAbsolutePath() + ")\"");
+									+ getModelFile().getAbsolutePath() + ")\"");
 						}
-                        e.printStackTrace();
-                    } catch (SAXException e) {
-                        // Warns about the exception
-                        if (logger.isLoggable(Level.WARNING)) {
+						e.printStackTrace();
+					} catch (SAXException e) {
+						// Warns about the exception
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.(File is "
-                                    + getModelFile().getAbsolutePath() + ")\"");
+									+ getModelFile().getAbsolutePath() + ")\"");
 						}
-                        e.printStackTrace();
-                    } catch (ParserConfigurationException e) {
-                        // Warns about the exception
-                        if (logger.isLoggable(Level.WARNING)) {
+						e.printStackTrace();
+					} catch (ParserConfigurationException e) {
+						// Warns about the exception
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.(File is "
-                                    + getModelFile().getAbsolutePath() + ")\"");
+									+ getModelFile().getAbsolutePath() + ")\"");
 						}
-                        e.printStackTrace();
-                    }
-                } else {
-                    if (logger.isLoggable(Level.WARNING)) {
+						e.printStackTrace();
+					}
+				} else {
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Model file " + getModelFile().getAbsolutePath() + " doesn't exist or is not a File");
 					}
-                }
-            }
-            return mapping;
-        }
-    }
+				}
+			}
+			return mapping;
+		}
+	}
 
-    /**
-     * @return
-     */
-    public XMLMapping getDKVMapping()
-    {
-        return getMappingForClass(DKVModel.class);
-    }
+	/**
+	 * @return
+	 */
+	public XMLMapping getDKVMapping()
+	{
+		return getMappingForClass(DKVModel.class);
+	}
 
-    private static final ClassModelVersion rmTSModelVersion = new ClassModelVersion() {
-    	@Override
-        protected File getModelFile()
-        {
-          return new FileResource("Models/RMModel/RMModel_TS.xml");
-        }
-    };
+	private static final ClassModelVersion rmTSModelVersion = new ClassModelVersion() {
+		@Override
+		protected File getModelFile()
+		{
+			return new FileResource("Models/RMModel/RMModel_TS.xml");
+		}
+	};
 
-    public static XMLMapping getRMTSMapping()
-    {
-    	return rmTSModelVersion.getMapping();
-    }
+	public static XMLMapping getRMTSMapping()
+	{
+		return rmTSModelVersion.getMapping();
+	}
 
 	public static ClassModelVersion getRMTSModelVersion()
 	{

@@ -42,7 +42,7 @@ ReserveFile "${NSISDIR}\Plugins\System.dll"
 Var StartMenuGroup
 
 !define MUI_FINISHPAGE_RUN
-!define MUI_FINISHPAGE_RUN_TEXT "Launch (^Name)"
+!define MUI_FINISHPAGE_RUN_TEXT "Launch @product.name@ @productSuffix@"
 !define MUI_FINISHPAGE_RUN_FUNCTION "LaunchApp"
 
 # Installer pages
