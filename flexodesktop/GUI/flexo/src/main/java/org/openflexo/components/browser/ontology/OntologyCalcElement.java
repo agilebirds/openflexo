@@ -22,10 +22,10 @@ package org.openflexo.components.browser.ontology;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.ontology.calc.CalcDrawingShema;
-import org.openflexo.foundation.ontology.calc.CalcPalette;
-import org.openflexo.foundation.ontology.calc.EditionPattern;
-import org.openflexo.foundation.ontology.calc.OntologyCalc;
+import org.openflexo.foundation.viewpoint.CalcDrawingShema;
+import org.openflexo.foundation.viewpoint.CalcPalette;
+import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.OntologyCalc;
 
 
 /**

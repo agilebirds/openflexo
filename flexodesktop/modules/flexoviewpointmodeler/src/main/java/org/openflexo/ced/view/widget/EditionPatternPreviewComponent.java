@@ -32,8 +32,8 @@ import org.openflexo.fib.controller.FIBSelectable;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.calc.EditionPattern;
-import org.openflexo.foundation.ontology.calc.PatternRole;
+import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.swing.CustomPopup.ApplyCancelListener;
 

@@ -22,9 +22,9 @@ package org.openflexo.components.browser.ontology;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.ontology.shema.OEShemaDefinition;
-import org.openflexo.foundation.ontology.shema.OEShemaFolder;
-import org.openflexo.foundation.ontology.shema.OEShemaLibrary;
+import org.openflexo.foundation.view.OEShemaDefinition;
+import org.openflexo.foundation.view.OEShemaFolder;
+import org.openflexo.foundation.view.OEShemaLibrary;
 
 
 /**

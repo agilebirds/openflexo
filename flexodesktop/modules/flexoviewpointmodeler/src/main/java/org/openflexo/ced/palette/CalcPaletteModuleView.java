@@ -24,8 +24,8 @@ import java.util.logging.Logger;
 
 import javax.swing.JPanel;
 import org.openflexo.ced.controller.CalcPerspective;
-import org.openflexo.foundation.ontology.calc.CalcPalette;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.viewpoint.CalcPalette;
 import org.openflexo.view.ModuleView;
 
 public class CalcPaletteModuleView extends JPanel implements ModuleView<CalcPalette> {

@@ -30,8 +30,8 @@ import javax.swing.event.ChangeListener;
 
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.ontology.calc.CalcPalette;
-import org.openflexo.foundation.ontology.shema.OEShema;
+import org.openflexo.foundation.view.OEShema;
+import org.openflexo.foundation.viewpoint.CalcPalette;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.oe.controller.OEController;
 import org.openflexo.selection.SelectionManagingDrawingController;

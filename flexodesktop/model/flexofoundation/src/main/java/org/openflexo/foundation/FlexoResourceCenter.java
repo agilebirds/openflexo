@@ -22,8 +22,8 @@ package org.openflexo.foundation;
 import java.io.File;
 
 import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.calc.CalcLibrary;
-import org.openflexo.foundation.ontology.calc.OntologyCalc;
+import org.openflexo.foundation.viewpoint.CalcLibrary;
+import org.openflexo.foundation.viewpoint.OntologyCalc;
 
 
 public interface FlexoResourceCenter {

@@ -53,8 +53,8 @@ import org.openflexo.foundation.action.ActionMenu;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.EditionPatternReference;
-import org.openflexo.foundation.ontology.action.ActionSchemeActionType;
-import org.openflexo.foundation.ontology.calc.ActionScheme;
+import org.openflexo.foundation.view.action.ActionSchemeActionType;
+import org.openflexo.foundation.viewpoint.ActionScheme;
 import org.openflexo.toolbox.ToolBox;
 
 

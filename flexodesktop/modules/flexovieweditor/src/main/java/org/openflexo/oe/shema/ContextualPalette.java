@@ -41,15 +41,15 @@ import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEView;
 import org.openflexo.foundation.ontology.AbstractOntologyObject;
 import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.action.AddShape;
-import org.openflexo.foundation.ontology.action.DropSchemeAction;
-import org.openflexo.foundation.ontology.calc.CalcPalette;
-import org.openflexo.foundation.ontology.calc.CalcPaletteElement;
-import org.openflexo.foundation.ontology.calc.DropScheme;
-import org.openflexo.foundation.ontology.calc.EditionPattern;
-import org.openflexo.foundation.ontology.calc.EditionScheme;
-import org.openflexo.foundation.ontology.shema.OEShape;
-import org.openflexo.foundation.ontology.shema.OEShemaObject;
+import org.openflexo.foundation.view.OEShape;
+import org.openflexo.foundation.view.OEShemaObject;
+import org.openflexo.foundation.view.action.AddShape;
+import org.openflexo.foundation.view.action.DropSchemeAction;
+import org.openflexo.foundation.viewpoint.CalcPalette;
+import org.openflexo.foundation.viewpoint.CalcPaletteElement;
+import org.openflexo.foundation.viewpoint.DropScheme;
+import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.localization.FlexoLocalization;
 
 public class ContextualPalette extends DrawingPalette {

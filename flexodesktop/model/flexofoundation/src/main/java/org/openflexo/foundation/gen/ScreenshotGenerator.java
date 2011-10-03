@@ -41,7 +41,7 @@ import org.openflexo.foundation.FlexoXMLSerializableObject;
 import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
-import org.openflexo.foundation.ontology.shema.OEShema;
+import org.openflexo.foundation.view.OEShema;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.RoleList;

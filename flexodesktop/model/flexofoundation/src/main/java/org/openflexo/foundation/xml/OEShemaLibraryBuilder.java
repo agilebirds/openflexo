@@ -21,9 +21,9 @@ package org.openflexo.foundation.xml;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.calc.CalcLibrary;
-import org.openflexo.foundation.ontology.shema.OEShemaLibrary;
 import org.openflexo.foundation.rm.FlexoOEShemaLibraryResource;
+import org.openflexo.foundation.view.OEShemaLibrary;
+import org.openflexo.foundation.viewpoint.CalcLibrary;
 
 
 /**

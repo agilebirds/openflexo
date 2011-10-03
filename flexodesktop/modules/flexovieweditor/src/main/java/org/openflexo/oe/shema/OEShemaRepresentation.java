@@ -29,10 +29,10 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.ontology.shema.OEConnector;
-import org.openflexo.foundation.ontology.shema.OEShape;
-import org.openflexo.foundation.ontology.shema.OEShema;
-import org.openflexo.foundation.ontology.shema.OEShemaObject;
+import org.openflexo.foundation.view.OEConnector;
+import org.openflexo.foundation.view.OEShape;
+import org.openflexo.foundation.view.OEShema;
+import org.openflexo.foundation.view.OEShemaObject;
 
 
 public class OEShemaRepresentation extends DefaultDrawing<OEShema> implements GraphicalFlexoObserver, OEShemaConstants {

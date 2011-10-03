@@ -19,7 +19,7 @@
  */
 package org.openflexo.foundation.ontology.dm;
 
-import org.openflexo.foundation.ontology.shema.OEShemaDefinition;
+import org.openflexo.foundation.view.OEShemaDefinition;
 
 /**
  * @author gpolet

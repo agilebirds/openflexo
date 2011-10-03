@@ -30,7 +30,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
-import org.openflexo.foundation.ontology.calc.CalcDrawingConnector;
+import org.openflexo.foundation.viewpoint.CalcDrawingConnector;
 import org.openflexo.toolbox.ToolBox;
 
 

@@ -28,7 +28,7 @@ import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.ontology.calc.action.DeclareInEditionPattern;
+import org.openflexo.foundation.viewpoint.action.DeclareInEditionPattern;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 

@@ -38,10 +38,10 @@ import org.openflexo.view.controller.FlexoController;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.ontology.action.AddShemaFolder;
-import org.openflexo.foundation.ontology.shema.OEShemaDefinition;
-import org.openflexo.foundation.ontology.shema.OEShemaFolder;
-import org.openflexo.foundation.ontology.shema.OEShemaLibrary;
+import org.openflexo.foundation.view.OEShemaDefinition;
+import org.openflexo.foundation.view.OEShemaFolder;
+import org.openflexo.foundation.view.OEShemaLibrary;
+import org.openflexo.foundation.view.action.AddShemaFolder;
 
 public class AddShemaFolderInitializer extends ActionInitializer {
 

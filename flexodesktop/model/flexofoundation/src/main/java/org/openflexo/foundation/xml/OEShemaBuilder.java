@@ -19,9 +19,9 @@
  */
 package org.openflexo.foundation.xml;
 
-import org.openflexo.foundation.ontology.shema.OEShema;
-import org.openflexo.foundation.ontology.shema.OEShemaDefinition;
 import org.openflexo.foundation.rm.FlexoOEShemaResource;
+import org.openflexo.foundation.view.OEShema;
+import org.openflexo.foundation.view.OEShemaDefinition;
 
 /**
  * Please comment this class

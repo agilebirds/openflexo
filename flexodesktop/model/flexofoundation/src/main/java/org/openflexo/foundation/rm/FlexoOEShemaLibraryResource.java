@@ -23,11 +23,11 @@ import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.shema.OEShemaLibrary;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.foundation.view.OEShemaLibrary;
 import org.openflexo.foundation.xml.OEShemaLibraryBuilder;
 import org.openflexo.localization.FlexoLocalization;
 

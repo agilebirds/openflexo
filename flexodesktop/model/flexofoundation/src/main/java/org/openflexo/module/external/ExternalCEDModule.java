@@ -21,8 +21,8 @@ package org.openflexo.module.external;
 
 import javax.swing.JComponent;
 
-import org.openflexo.foundation.ontology.calc.CalcDrawingShema;
-import org.openflexo.foundation.ontology.calc.CalcPalette;
+import org.openflexo.foundation.viewpoint.CalcDrawingShema;
+import org.openflexo.foundation.viewpoint.CalcPalette;
 
 
 

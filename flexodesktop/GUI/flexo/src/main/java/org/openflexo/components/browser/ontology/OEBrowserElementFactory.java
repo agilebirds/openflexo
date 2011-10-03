@@ -32,21 +32,21 @@ import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyStatement;
 import org.openflexo.foundation.ontology.ProjectOntology;
-import org.openflexo.foundation.ontology.calc.CalcDrawingConnector;
-import org.openflexo.foundation.ontology.calc.CalcDrawingShape;
-import org.openflexo.foundation.ontology.calc.CalcDrawingShema;
-import org.openflexo.foundation.ontology.calc.CalcFolder;
-import org.openflexo.foundation.ontology.calc.CalcLibrary;
-import org.openflexo.foundation.ontology.calc.CalcPalette;
-import org.openflexo.foundation.ontology.calc.CalcPaletteElement;
-import org.openflexo.foundation.ontology.calc.EditionPattern;
-import org.openflexo.foundation.ontology.calc.OntologyCalc;
-import org.openflexo.foundation.ontology.shema.OEConnector;
-import org.openflexo.foundation.ontology.shema.OEShape;
-import org.openflexo.foundation.ontology.shema.OEShema;
-import org.openflexo.foundation.ontology.shema.OEShemaDefinition;
-import org.openflexo.foundation.ontology.shema.OEShemaFolder;
-import org.openflexo.foundation.ontology.shema.OEShemaLibrary;
+import org.openflexo.foundation.view.OEConnector;
+import org.openflexo.foundation.view.OEShape;
+import org.openflexo.foundation.view.OEShema;
+import org.openflexo.foundation.view.OEShemaDefinition;
+import org.openflexo.foundation.view.OEShemaFolder;
+import org.openflexo.foundation.view.OEShemaLibrary;
+import org.openflexo.foundation.viewpoint.CalcDrawingConnector;
+import org.openflexo.foundation.viewpoint.CalcDrawingShape;
+import org.openflexo.foundation.viewpoint.CalcDrawingShema;
+import org.openflexo.foundation.viewpoint.CalcFolder;
+import org.openflexo.foundation.viewpoint.CalcLibrary;
+import org.openflexo.foundation.viewpoint.CalcPalette;
+import org.openflexo.foundation.viewpoint.CalcPaletteElement;
+import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.OntologyCalc;
 
 
 public class OEBrowserElementFactory implements BrowserElementFactory

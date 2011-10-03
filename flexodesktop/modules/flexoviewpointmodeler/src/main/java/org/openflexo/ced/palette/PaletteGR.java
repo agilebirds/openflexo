@@ -26,9 +26,9 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.ontology.calc.CalcPalette;
-import org.openflexo.foundation.ontology.calc.dm.CalcPaletteElementInserted;
-import org.openflexo.foundation.ontology.calc.dm.CalcPaletteElementRemoved;
+import org.openflexo.foundation.viewpoint.CalcPalette;
+import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementInserted;
+import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementRemoved;
 
 
 public class PaletteGR extends DrawingGraphicalRepresentation<CalcPalette> implements GraphicalFlexoObserver {

@@ -28,9 +28,9 @@ import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.ontology.calc.CalcPaletteElement;
-import org.openflexo.foundation.ontology.calc.dm.CalcPaletteElementInserted;
-import org.openflexo.foundation.ontology.calc.dm.CalcPaletteElementRemoved;
+import org.openflexo.foundation.viewpoint.CalcPaletteElement;
+import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementInserted;
+import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementRemoved;
 import org.openflexo.toolbox.ToolBox;
 
 

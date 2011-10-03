@@ -25,9 +25,9 @@ import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.ontology.calc.EditionPattern;
-import org.openflexo.foundation.ontology.calc.dm.PatternRoleInserted;
-import org.openflexo.foundation.ontology.calc.dm.PatternRoleRemoved;
+import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.dm.PatternRoleInserted;
+import org.openflexo.foundation.viewpoint.dm.PatternRoleRemoved;
 
 
 public class EditionPatternPreviewShemaGR extends DrawingGraphicalRepresentation<EditionPattern> implements GraphicalFlexoObserver, EditionPatternPreviewConstants {

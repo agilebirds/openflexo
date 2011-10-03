@@ -24,8 +24,8 @@ package org.openflexo.components.browser.ontology;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.ontology.shema.OEConnector;
-import org.openflexo.foundation.ontology.shema.OEShemaObject;
+import org.openflexo.foundation.view.OEConnector;
+import org.openflexo.foundation.view.OEShemaObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 

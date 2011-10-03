@@ -37,7 +37,7 @@ import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.ontology.calc.action.AddCalcPaletteElement;
+import org.openflexo.foundation.viewpoint.action.AddCalcPaletteElement;
 
 public class AddCalcPaletteElementInitializer extends ActionInitializer {
 

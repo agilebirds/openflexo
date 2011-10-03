@@ -29,12 +29,12 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.ontology.calc.ConnectorPatternRole;
-import org.openflexo.foundation.ontology.calc.EditionPattern;
-import org.openflexo.foundation.ontology.calc.GraphicalRepresentationChanged;
-import org.openflexo.foundation.ontology.calc.PatternRole;
-import org.openflexo.foundation.ontology.calc.ShapePatternRole;
-import org.openflexo.foundation.ontology.calc.PatternRole.PatternRoleType;
+import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
+import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.GraphicalRepresentationChanged;
+import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.ShapePatternRole;
+import org.openflexo.foundation.viewpoint.PatternRole.PatternRoleType;
 
 
 public class EditionPatternPreviewRepresentation extends DefaultDrawing<EditionPattern> implements GraphicalFlexoObserver, EditionPatternPreviewConstants {

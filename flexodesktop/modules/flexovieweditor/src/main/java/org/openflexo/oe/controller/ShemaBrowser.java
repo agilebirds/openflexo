@@ -20,7 +20,7 @@
 package org.openflexo.oe.controller;
 
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.shema.OEShema;
+import org.openflexo.foundation.view.OEShema;
 
 class ShemaBrowser extends OEBrowser
 {

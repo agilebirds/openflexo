@@ -34,7 +34,7 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.ced.controller.CEDController;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.ontology.calc.action.AddEditionPattern;
+import org.openflexo.foundation.viewpoint.action.AddEditionPattern;
 
 public class AddEditionPatternInitializer extends ActionInitializer {
 

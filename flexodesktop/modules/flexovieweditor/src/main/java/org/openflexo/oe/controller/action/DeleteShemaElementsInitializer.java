@@ -30,7 +30,7 @@ import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.ontology.action.DeleteShemaElements;
+import org.openflexo.foundation.view.action.DeleteShemaElements;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.oe.OECst;
 import org.openflexo.view.controller.ActionInitializer;

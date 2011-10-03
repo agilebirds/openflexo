@@ -39,9 +39,9 @@ import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.foundation.ontology.action.AddShema;
-import org.openflexo.foundation.ontology.shema.OEShemaDefinition.DuplicateShemaNameException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
+import org.openflexo.foundation.view.OEShemaDefinition.DuplicateShemaNameException;
+import org.openflexo.foundation.view.action.AddShema;
 
 
 public class AddShemaInitializer extends ActionInitializer {

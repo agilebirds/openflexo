@@ -38,14 +38,14 @@ import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseDragControl;
-import org.openflexo.foundation.ontology.calc.AddConnector;
-import org.openflexo.foundation.ontology.calc.CalcDrawingConnector;
-import org.openflexo.foundation.ontology.calc.ConnectorPatternRole;
-import org.openflexo.foundation.ontology.calc.EditionAction;
-import org.openflexo.foundation.ontology.calc.LabelRepresentation;
-import org.openflexo.foundation.ontology.calc.LinkScheme;
-import org.openflexo.foundation.ontology.calc.LabelRepresentation.LabelRepresentationType;
-import org.openflexo.foundation.ontology.calc.action.AddCalcDrawingConnector;
+import org.openflexo.foundation.viewpoint.AddConnector;
+import org.openflexo.foundation.viewpoint.CalcDrawingConnector;
+import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
+import org.openflexo.foundation.viewpoint.EditionAction;
+import org.openflexo.foundation.viewpoint.LabelRepresentation;
+import org.openflexo.foundation.viewpoint.LinkScheme;
+import org.openflexo.foundation.viewpoint.LabelRepresentation.LabelRepresentationType;
+import org.openflexo.foundation.viewpoint.action.AddCalcDrawingConnector;
 import org.openflexo.localization.FlexoLocalization;
 
 public class DrawEdgeControl extends MouseDragControl {

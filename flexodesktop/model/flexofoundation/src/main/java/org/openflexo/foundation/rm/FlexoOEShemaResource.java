@@ -22,8 +22,6 @@ package org.openflexo.foundation.rm;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.shema.OEShema;
-import org.openflexo.foundation.ontology.shema.OEShemaDefinition;
 import org.openflexo.foundation.rm.FlexoProject.FlexoIDMustBeUnique.DuplicateObjectIDIssue;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
@@ -31,6 +29,8 @@ import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationReport;
+import org.openflexo.foundation.view.OEShema;
+import org.openflexo.foundation.view.OEShemaDefinition;
 import org.openflexo.foundation.xml.OEShemaBuilder;
 
 

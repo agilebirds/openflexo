@@ -21,7 +21,7 @@ package org.openflexo.module.external;
 
 import javax.swing.JComponent;
 
-import org.openflexo.foundation.ontology.shema.OEShema;
+import org.openflexo.foundation.view.OEShema;
 
 
 

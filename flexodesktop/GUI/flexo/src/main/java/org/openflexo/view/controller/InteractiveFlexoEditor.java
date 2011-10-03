@@ -43,11 +43,11 @@ import org.openflexo.foundation.action.FlexoActionUndoInitializer;
 import org.openflexo.foundation.action.FlexoActionVisibleCondition;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.FlexoAction.ExecutionStatus;
-import org.openflexo.foundation.ontology.action.ActionSchemeActionType;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.utils.FlexoDocFormat;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProgressFactory;
+import org.openflexo.foundation.view.action.ActionSchemeActionType;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.module.FlexoModule;
 

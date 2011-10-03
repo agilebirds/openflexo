@@ -36,7 +36,7 @@ import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.foundation.ontology.action.LinkSchemeAction;
+import org.openflexo.foundation.view.action.LinkSchemeAction;
 
 
 public class LinkSchemeActionInitializer extends ActionInitializer {

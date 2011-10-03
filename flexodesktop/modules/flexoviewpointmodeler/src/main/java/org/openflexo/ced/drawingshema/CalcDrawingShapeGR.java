@@ -29,11 +29,11 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
-import org.openflexo.foundation.ontology.calc.CalcDrawingShape;
-import org.openflexo.foundation.ontology.calc.dm.CalcDrawingConnectorInserted;
-import org.openflexo.foundation.ontology.calc.dm.CalcDrawingConnectorRemoved;
-import org.openflexo.foundation.ontology.calc.dm.CalcDrawingShapeInserted;
-import org.openflexo.foundation.ontology.calc.dm.CalcDrawingShapeRemoved;
+import org.openflexo.foundation.viewpoint.CalcDrawingShape;
+import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorInserted;
+import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorRemoved;
+import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeInserted;
+import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeRemoved;
 import org.openflexo.toolbox.ToolBox;
 
 

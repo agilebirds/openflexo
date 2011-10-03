@@ -36,15 +36,15 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.ontology.AbstractOntologyObject;
 import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.calc.CalcDrawingObject;
-import org.openflexo.foundation.ontology.calc.CalcPalette;
-import org.openflexo.foundation.ontology.calc.CalcPaletteElement;
-import org.openflexo.foundation.ontology.calc.DropScheme;
-import org.openflexo.foundation.ontology.calc.EditionPattern;
-import org.openflexo.foundation.ontology.calc.action.AddCalcDrawingShape;
-import org.openflexo.foundation.ontology.calc.dm.CalcPaletteElementInserted;
-import org.openflexo.foundation.ontology.calc.dm.CalcPaletteElementRemoved;
-import org.openflexo.foundation.ontology.shema.OEShape;
+import org.openflexo.foundation.view.OEShape;
+import org.openflexo.foundation.viewpoint.CalcDrawingObject;
+import org.openflexo.foundation.viewpoint.CalcPalette;
+import org.openflexo.foundation.viewpoint.CalcPaletteElement;
+import org.openflexo.foundation.viewpoint.DropScheme;
+import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.action.AddCalcDrawingShape;
+import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementInserted;
+import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementRemoved;
 import org.openflexo.localization.FlexoLocalization;
 
 public class ContextualPalette extends DrawingPalette implements GraphicalFlexoObserver {

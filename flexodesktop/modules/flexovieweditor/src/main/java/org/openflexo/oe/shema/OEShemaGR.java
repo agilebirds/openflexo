@@ -26,11 +26,11 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.ontology.shema.ConnectorInserted;
-import org.openflexo.foundation.ontology.shema.ConnectorRemoved;
-import org.openflexo.foundation.ontology.shema.OEShema;
-import org.openflexo.foundation.ontology.shema.ShapeInserted;
-import org.openflexo.foundation.ontology.shema.ShapeRemoved;
+import org.openflexo.foundation.view.ConnectorInserted;
+import org.openflexo.foundation.view.ConnectorRemoved;
+import org.openflexo.foundation.view.OEShema;
+import org.openflexo.foundation.view.ShapeInserted;
+import org.openflexo.foundation.view.ShapeRemoved;
 import org.openflexo.foundation.xml.OEShemaBuilder;
 
 

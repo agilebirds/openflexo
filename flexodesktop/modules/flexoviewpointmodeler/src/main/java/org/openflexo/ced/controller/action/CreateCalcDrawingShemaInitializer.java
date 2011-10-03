@@ -30,7 +30,7 @@ import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.ontology.calc.action.CreateCalcDrawingShema;
+import org.openflexo.foundation.viewpoint.action.CreateCalcDrawingShema;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;

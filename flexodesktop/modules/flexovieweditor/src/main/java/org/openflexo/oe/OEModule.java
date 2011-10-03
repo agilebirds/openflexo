@@ -34,7 +34,7 @@ import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.shema.OEShema;
+import org.openflexo.foundation.view.OEShema;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.FlexoModule;

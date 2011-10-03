@@ -30,8 +30,8 @@ import org.openflexo.foundation.LocalResourceCenterImplementation;
 import org.openflexo.foundation.dkv.TestPopulateDKV;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.FlexoOntology.OntologyNotFoundException;
-import org.openflexo.foundation.ontology.calc.OntologyCalc;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.viewpoint.OntologyCalc;
 import org.openflexo.foundation.wkf.FlexoProcess;
 
 

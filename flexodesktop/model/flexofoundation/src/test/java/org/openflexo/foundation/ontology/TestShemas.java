@@ -24,11 +24,11 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.dkv.TestPopulateDKV;
-import org.openflexo.foundation.ontology.action.AddShema;
-import org.openflexo.foundation.ontology.action.AddShemaFolder;
-import org.openflexo.foundation.ontology.shema.OEShemaFolder;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.foundation.view.OEShemaFolder;
+import org.openflexo.foundation.view.action.AddShema;
+import org.openflexo.foundation.view.action.AddShemaFolder;
 
 
 public class TestShemas extends FlexoTestCase{

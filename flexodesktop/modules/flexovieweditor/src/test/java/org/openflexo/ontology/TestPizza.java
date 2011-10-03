@@ -28,7 +28,7 @@ import java.util.Iterator;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.calc.CalcLibrary;
+import org.openflexo.foundation.viewpoint.CalcLibrary;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.toolbox.FileResource;
 

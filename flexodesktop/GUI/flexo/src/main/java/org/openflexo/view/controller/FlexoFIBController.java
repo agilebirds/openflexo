@@ -33,7 +33,7 @@ import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ontology.AbstractOntologyObject;
 import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.calc.CalcLibraryObject;
+import org.openflexo.foundation.viewpoint.CalcLibraryObject;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.icon.SEIconLibrary;

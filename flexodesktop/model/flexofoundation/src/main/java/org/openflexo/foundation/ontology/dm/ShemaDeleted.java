@@ -19,9 +19,9 @@
  */
 package org.openflexo.foundation.ontology.dm;
 
-import org.openflexo.foundation.ontology.shema.OEShemaDefinition;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.RMNotification;
+import org.openflexo.foundation.view.OEShemaDefinition;
 
 public class ShemaDeleted extends OEDataModification implements RMNotification
 {

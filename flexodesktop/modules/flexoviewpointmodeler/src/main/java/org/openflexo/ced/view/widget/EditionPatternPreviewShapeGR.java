@@ -30,8 +30,8 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
-import org.openflexo.foundation.ontology.calc.ShapePatternRole;
-import org.openflexo.foundation.ontology.calc.LabelRepresentation.LabelRepresentationType;
+import org.openflexo.foundation.viewpoint.ShapePatternRole;
+import org.openflexo.foundation.viewpoint.LabelRepresentation.LabelRepresentationType;
 
 
 public class EditionPatternPreviewShapeGR extends ShapeGraphicalRepresentation<ShapePatternRole> implements GraphicalFlexoObserver, EditionPatternPreviewConstants {

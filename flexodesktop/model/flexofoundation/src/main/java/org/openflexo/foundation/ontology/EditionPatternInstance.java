@@ -25,9 +25,9 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.ontology.EditionPatternReference.ActorReference;
-import org.openflexo.foundation.ontology.calc.EditionPattern;
-import org.openflexo.foundation.ontology.calc.PatternRole;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.logging.FlexoLogger;
 
 public class EditionPatternInstance extends FlexoObservable {

@@ -19,8 +19,8 @@
  */
 package org.openflexo.foundation.ontology.dm;
 
-import org.openflexo.foundation.ontology.shema.OEShemaDefinition;
-import org.openflexo.foundation.ontology.shema.OEShemaFolder;
+import org.openflexo.foundation.view.OEShemaDefinition;
+import org.openflexo.foundation.view.OEShemaFolder;
 
 /**
  * Notify that a new ComponentDefinition has been inserted in a

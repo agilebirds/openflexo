@@ -21,7 +21,7 @@ package org.openflexo.ced.controller;
 
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
-import org.openflexo.foundation.ontology.calc.OntologyCalc;
+import org.openflexo.foundation.viewpoint.OntologyCalc;
 
 
 class CalcBrowser extends CEDBrowser

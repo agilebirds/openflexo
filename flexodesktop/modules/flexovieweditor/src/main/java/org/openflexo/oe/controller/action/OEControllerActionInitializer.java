@@ -21,7 +21,7 @@ package org.openflexo.oe.controller.action;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.action.ActionSchemeActionType;
+import org.openflexo.foundation.view.action.ActionSchemeActionType;
 import org.openflexo.oe.controller.OEController;
 import org.openflexo.oe.controller.OESelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;

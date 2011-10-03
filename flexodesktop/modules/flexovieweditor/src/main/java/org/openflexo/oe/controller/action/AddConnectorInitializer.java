@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.ontology.action.AddConnector;
+import org.openflexo.foundation.view.action.AddConnector;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;

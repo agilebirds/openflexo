@@ -22,7 +22,7 @@ package org.openflexo.ced.view.widget;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.view.DrawingView;
-import org.openflexo.foundation.ontology.calc.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.selection.SelectionManagingDrawingController;
 

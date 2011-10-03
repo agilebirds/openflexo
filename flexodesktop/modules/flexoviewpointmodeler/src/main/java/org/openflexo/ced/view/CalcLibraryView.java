@@ -26,9 +26,9 @@ import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.controller.FIBTableDynamicModel;
 import org.openflexo.fib.model.listener.FIBMouseClickListener;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.calc.CalcLibrary;
-import org.openflexo.foundation.ontology.calc.EditionPattern;
-import org.openflexo.foundation.ontology.calc.OntologyCalc;
+import org.openflexo.foundation.viewpoint.CalcLibrary;
+import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.OntologyCalc;
 import org.openflexo.view.FIBModuleView;
 
 

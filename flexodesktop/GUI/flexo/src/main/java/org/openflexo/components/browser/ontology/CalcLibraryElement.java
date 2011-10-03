@@ -23,9 +23,9 @@ package org.openflexo.components.browser.ontology;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.ontology.calc.CalcFolder;
-import org.openflexo.foundation.ontology.calc.CalcLibrary;
-import org.openflexo.foundation.ontology.calc.OntologyCalc;
+import org.openflexo.foundation.viewpoint.CalcFolder;
+import org.openflexo.foundation.viewpoint.CalcLibrary;
+import org.openflexo.foundation.viewpoint.OntologyCalc;
 import org.openflexo.localization.FlexoLocalization;
 
 /**

@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.foundation.ontology.calc.action.DeleteEditionPattern;
+import org.openflexo.foundation.viewpoint.action.DeleteEditionPattern;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;

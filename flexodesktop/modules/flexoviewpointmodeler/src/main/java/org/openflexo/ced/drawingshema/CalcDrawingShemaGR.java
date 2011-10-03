@@ -27,11 +27,11 @@ import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.ontology.calc.CalcDrawingShema;
-import org.openflexo.foundation.ontology.calc.dm.CalcDrawingConnectorInserted;
-import org.openflexo.foundation.ontology.calc.dm.CalcDrawingConnectorRemoved;
-import org.openflexo.foundation.ontology.calc.dm.CalcDrawingShapeInserted;
-import org.openflexo.foundation.ontology.calc.dm.CalcDrawingShapeRemoved;
+import org.openflexo.foundation.viewpoint.CalcDrawingShema;
+import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorInserted;
+import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorRemoved;
+import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeInserted;
+import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeRemoved;
 
 
 public class CalcDrawingShemaGR extends DrawingGraphicalRepresentation<CalcDrawingShema> implements GraphicalFlexoObserver, CalcDrawingShemaConstants {

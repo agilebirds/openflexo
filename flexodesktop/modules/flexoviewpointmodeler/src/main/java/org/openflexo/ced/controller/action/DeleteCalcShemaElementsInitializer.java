@@ -35,7 +35,7 @@ import org.openflexo.view.controller.FlexoController;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.ontology.calc.action.DeleteCalcShemaElements;
+import org.openflexo.foundation.viewpoint.action.DeleteCalcShemaElements;
 
 public class DeleteCalcShemaElementsInitializer extends ActionInitializer {
 

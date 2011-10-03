@@ -28,8 +28,8 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
-import org.openflexo.foundation.ontology.calc.ConnectorPatternRole;
-import org.openflexo.foundation.ontology.calc.LabelRepresentation.LabelRepresentationType;
+import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
+import org.openflexo.foundation.viewpoint.LabelRepresentation.LabelRepresentationType;
 
 
 public class EditionPatternPreviewConnectorGR extends ConnectorGraphicalRepresentation<ConnectorPatternRole> implements GraphicalFlexoObserver,EditionPatternPreviewConstants {

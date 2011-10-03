@@ -19,10 +19,10 @@
  */
 package org.openflexo.foundation.ontology.dm;
 
-import org.openflexo.foundation.ontology.shema.OEShemaDefinition;
 import org.openflexo.foundation.rm.FlexoOEShemaResource;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.RMNotification;
+import org.openflexo.foundation.view.OEShemaDefinition;
 
 /**
  * Notify that a Shema has been renamed

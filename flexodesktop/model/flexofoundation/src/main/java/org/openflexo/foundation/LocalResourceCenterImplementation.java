@@ -26,9 +26,9 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyFolder;
 import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.calc.CalcFolder;
-import org.openflexo.foundation.ontology.calc.CalcLibrary;
-import org.openflexo.foundation.ontology.calc.OntologyCalc;
+import org.openflexo.foundation.viewpoint.CalcFolder;
+import org.openflexo.foundation.viewpoint.CalcLibrary;
+import org.openflexo.foundation.viewpoint.OntologyCalc;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 

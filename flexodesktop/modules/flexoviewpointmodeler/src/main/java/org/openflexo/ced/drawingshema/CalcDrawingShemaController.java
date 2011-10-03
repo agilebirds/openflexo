@@ -34,10 +34,10 @@ import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.ontology.calc.CalcDrawingShema;
-import org.openflexo.foundation.ontology.calc.CalcPalette;
-import org.openflexo.foundation.ontology.calc.dm.CalcPaletteInserted;
-import org.openflexo.foundation.ontology.calc.dm.CalcPaletteRemoved;
+import org.openflexo.foundation.viewpoint.CalcDrawingShema;
+import org.openflexo.foundation.viewpoint.CalcPalette;
+import org.openflexo.foundation.viewpoint.dm.CalcPaletteInserted;
+import org.openflexo.foundation.viewpoint.dm.CalcPaletteRemoved;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManagingDrawingController;
 

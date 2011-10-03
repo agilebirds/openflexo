@@ -26,7 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.openflexo.ced.controller.CalcPerspective;
-import org.openflexo.foundation.ontology.calc.CalcDrawingShema;
+import org.openflexo.foundation.viewpoint.CalcDrawingShema;
 import org.openflexo.view.ModuleView;
 
 

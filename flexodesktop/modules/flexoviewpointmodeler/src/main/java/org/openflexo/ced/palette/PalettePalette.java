@@ -37,8 +37,8 @@ import org.openflexo.fge.graphics.ShadowStyle;
 import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.ontology.calc.CalcPalette;
-import org.openflexo.foundation.ontology.calc.action.AddCalcPaletteElement;
+import org.openflexo.foundation.viewpoint.CalcPalette;
+import org.openflexo.foundation.viewpoint.action.AddCalcPaletteElement;
 
 
 public class PalettePalette extends DrawingPalette {

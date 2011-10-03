@@ -29,10 +29,10 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.ontology.calc.CalcDrawingConnector;
-import org.openflexo.foundation.ontology.calc.CalcDrawingObject;
-import org.openflexo.foundation.ontology.calc.CalcDrawingShape;
-import org.openflexo.foundation.ontology.calc.CalcDrawingShema;
+import org.openflexo.foundation.viewpoint.CalcDrawingConnector;
+import org.openflexo.foundation.viewpoint.CalcDrawingObject;
+import org.openflexo.foundation.viewpoint.CalcDrawingShape;
+import org.openflexo.foundation.viewpoint.CalcDrawingShema;
 
 
 public class CalcDrawingShemaRepresentation extends DefaultDrawing<CalcDrawingShema> implements GraphicalFlexoObserver, CalcDrawingShemaConstants {

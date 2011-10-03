@@ -25,8 +25,8 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.openflexo.foundation.ontology.shema.OEShema;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.view.OEShema;
 import org.openflexo.oe.controller.ShemaPerspective;
 import org.openflexo.view.ModuleView;
 

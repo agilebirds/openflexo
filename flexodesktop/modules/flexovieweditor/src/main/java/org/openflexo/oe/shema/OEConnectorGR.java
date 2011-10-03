@@ -29,7 +29,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
-import org.openflexo.foundation.ontology.shema.OEConnector;
+import org.openflexo.foundation.view.OEConnector;
 import org.openflexo.foundation.xml.OEShemaBuilder;
 import org.openflexo.toolbox.ToolBox;
 

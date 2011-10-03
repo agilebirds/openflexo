@@ -24,7 +24,7 @@ import javax.swing.JTabbedPane;
 
 import org.openflexo.ced.controller.CEDController;
 import org.openflexo.fge.view.DrawingView;
-import org.openflexo.foundation.ontology.calc.CalcPalette;
+import org.openflexo.foundation.viewpoint.CalcPalette;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManagingDrawingController;
 

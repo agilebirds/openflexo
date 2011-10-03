@@ -24,8 +24,8 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.foundation.ontology.shema.OEShape;
-import org.openflexo.foundation.ontology.shema.OEShemaObject;
+import org.openflexo.foundation.view.OEShape;
+import org.openflexo.foundation.view.OEShemaObject;
 import org.openflexo.localization.FlexoLocalization;
 
 /**

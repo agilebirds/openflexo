@@ -33,8 +33,8 @@ import org.openflexo.view.controller.FlexoController;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.ontology.action.AddShape;
-import org.openflexo.foundation.ontology.shema.OEShemaObject;
+import org.openflexo.foundation.view.OEShemaObject;
+import org.openflexo.foundation.view.action.AddShape;
 
 
 public class AddShapeInitializer extends ActionInitializer {

@@ -41,8 +41,8 @@ import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.foundation.ontology.action.DropSchemeAction;
-import org.openflexo.foundation.ontology.shema.OEShape;
+import org.openflexo.foundation.view.OEShape;
+import org.openflexo.foundation.view.action.DropSchemeAction;
 
 
 public class DropSchemeActionInitializer extends ActionInitializer {
