@@ -45,7 +45,6 @@ import org.openflexo.inspector.selection.InspectorSelection;
 import org.openflexo.inspector.selection.UniqueSelection;
 import org.openflexo.inspector.widget.DenaliWidget;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.ToolBox;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLDecoder;
@@ -120,7 +119,7 @@ public class InspectorController implements Observer, AbstractController
 
 	public boolean hasInstance()
 	{
-		return (_instance != null);
+		return _instance != null;
 	}
 
 	public InspectorWindow createInspectorWindow(JFrame frame)
@@ -146,11 +145,7 @@ public class InspectorController implements Observer, AbstractController
 
 	public InspectorWindow createInspectorWindow(JFrame frame, JMenuBar menuBar)
 	{
-		InspectorWindow returned = createInspectorWindow(frame);
-		if (ToolBox.getPLATFORM()==ToolBox.MACOS) {
-			returned.setJMenuBar(menuBar);
-		}
-		return returned;
+		return createInspectorWindow(frame);
 	}
 
 	public XMLMapping getInspectorMapping()
