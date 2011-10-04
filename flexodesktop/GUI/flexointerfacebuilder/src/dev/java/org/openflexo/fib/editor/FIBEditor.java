@@ -19,14 +19,21 @@
  */
 package org.openflexo.fib.editor;
 
-import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
+import java.util.prefs.Preferences;
 
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -35,6 +42,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -55,6 +63,7 @@ import org.openflexo.localization.LocalizedDelegate;
 import org.openflexo.localization.LocalizedDelegateImplementation;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
+import org.openflexo.swing.ComponentBoundSaver;
 import org.openflexo.swing.FlexoFileChooser;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.ToolBox;
@@ -67,6 +76,122 @@ import org.openflexo.xmlcode.XMLCoder;
 
 
 public class FIBEditor implements FIBGenericEditor {
+
+	public static class FIBPreferences {
+
+		private static final String FIB = "FIB";
+
+		public static final String FRAME = "Frame";
+		public static final String PALETTE = "Palette";
+		public static final String INSPECTOR = "Inspector";
+		public static final String LAST_DIR = "LastDirectory";
+		public static final String LAST_FILES_COUNT = "LAST_FILES_COUNT";
+		public static final String LAST_FILE = "LAST_FILE";
+
+		private static final Preferences prefs = Preferences.userRoot().node(FIB);
+		private static final StringEncoder encoder = new StringEncoder();
+
+		private static Rectangle getPreferredBounds(String key, Rectangle def) {
+			String s = prefs.get(key, encoder._encodeObject(def));
+			if (s == null) {
+				return def;
+			}
+			return encoder._decodeObject(s, Rectangle.class);
+		}
+
+		public static void addPreferenceChangeListener(PreferenceChangeListener pcl) {
+			prefs.addPreferenceChangeListener(pcl);
+		}
+
+		public static void removePreferenceChangeListener(PreferenceChangeListener pcl) {
+			prefs.removePreferenceChangeListener(pcl);
+		}
+
+		private static void setPreferredBounds(String key, Rectangle value) {
+			prefs.put(key, encoder._encodeObject(value));
+		}
+
+		private static File getPreferredFile(String key, File def) {
+			String s = prefs.get(key, encoder._encodeObject(def));
+			if (s == null) {
+				return def;
+			}
+			return encoder._decodeObject(s, File.class);
+		}
+
+		private static void setPreferredFile(String key, File value) {
+			prefs.put(key, encoder._encodeObject(value));
+		}
+
+		public static Rectangle getFrameBounds() {
+			return getPreferredBounds(FRAME, new Rectangle(0, 0, 1000, 800));
+		}
+
+		public static void setFrameBounds(Rectangle bounds) {
+			setPreferredBounds(FRAME, bounds);
+		}
+
+		public static Rectangle getInspectorBounds() {
+			return getPreferredBounds(INSPECTOR, new Rectangle(1000, 400, 400, 400));
+		}
+
+		public static void setInspectorBounds(Rectangle bounds) {
+			setPreferredBounds(INSPECTOR, bounds);
+		}
+
+		public static Rectangle getPaletteBounds() {
+			return getPreferredBounds(PALETTE, new Rectangle(1000, 0, 400, 400));
+		}
+
+		public static void setPaletteBounds(Rectangle bounds) {
+			setPreferredBounds(PALETTE, bounds);
+		}
+
+		public static File getLastDirectory() {
+			return getPreferredFile(LAST_DIR, new FileResource("TestFIB"));
+		}
+
+		public static void setLastDirectory(File file) {
+			setPreferredFile(LAST_DIR, file);
+		}
+
+		public static int getLastFileCount() {
+			return prefs.getInt(LAST_FILES_COUNT, 10);
+		}
+
+		public static void setLastFileCount(int count) {
+			prefs.putInt(LAST_FILES_COUNT, count);
+		}
+
+		public static List<File> getLastFiles() {
+			List<File> list = new ArrayList<File>();
+			for (int i = 0; i < getLastFileCount(); i++) {
+				File file = getPreferredFile(LAST_FILE + i, null);
+				if (file != null) {
+					list.add(file);
+				}
+			}
+			return list;
+		}
+
+		public static void setLastFiles(List<File> files) {
+			for (int i = 0; i < files.size(); i++) {
+				setPreferredFile(LAST_FILE + i, files.get(i));
+			}
+		}
+
+		public static void setLastFile(File file) {
+			List<File> files = getLastFiles();
+			if (files.contains(files)) {
+				files.remove(file);
+			} else if (files.size() == 10) {
+				files.remove(9);
+			}
+			files.add(0, file);
+			setLastFiles(files);
+			setLastDirectory(file.getParentFile());
+		}
+	}
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditor.class.getPackage().getName());
 
@@ -176,7 +301,14 @@ public class FIBEditor implements FIBGenericEditor {
 	{
 		super();
 		frame = new JFrame();
-		frame.setPreferredSize(new Dimension(1000,800));
+		frame.setBounds(FIBPreferences.getFrameBounds());
+		new ComponentBoundSaver(frame) {
+
+			@Override
+			public void saveBounds(Rectangle bounds) {
+				FIBPreferences.setFrameBounds(bounds);
+			}
+		};
 		fileChooser = new FlexoFileChooser(frame);
 		fileChooser.setFileFilter(new FileFilter() {
 
@@ -190,7 +322,7 @@ public class FIBEditor implements FIBGenericEditor {
 				return f.isDirectory() || f.getName().endsWith(".fib") || f.getName().endsWith(".inspector");
 			}
 		});
-		fileChooser.setCurrentDirectory(new FileResource("TestFIB"));
+		fileChooser.setCurrentDirectory(FIBPreferences.getLastDirectory());
 
 		inspector = new FIBInspectorController(frame);
 
@@ -199,6 +331,8 @@ public class FIBEditor implements FIBGenericEditor {
 	}
 
 	private MainPanel mainPanel;
+
+	private MenuBar menuBar;
 
 	private void updateFrameTitle()
 	{
@@ -210,179 +344,30 @@ public class FIBEditor implements FIBGenericEditor {
 		frame.setTitle("Flexo Interface Builder Editor");
 		mainPanel = new MainPanel();
 
-		JMenuBar mb = new JMenuBar();
-		JMenu fileMenu = new JMenu(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,"file"));
-		JMenu editMenu = new JMenu(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,"edit"));
-		JMenu toolsMenu = new JMenu(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,"tools"));
-		JMenu helpMenu = new JMenu(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,"help"));
+		menuBar = new MenuBar();
 
 
-		JMenuItem newItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,"new_interface"));
-		newItem.addActionListener(new ActionListener() {
+
+
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		frame.addWindowListener(new WindowAdapter() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				newFIB();
-			}
-		});
-
-		JMenuItem loadItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,"open_interface"));
-		loadItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				loadFIB();
-			}
-		});
-
-		JMenuItem saveItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,"save_interface"));
-		saveItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				saveFIB();
-			}
-		});
-
-		JMenuItem saveAsItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,"save_interface_as"));
-		saveAsItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				saveFIBAs();
-			}
-		});
-
-		JMenuItem closeItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,"close_interface"));
-		closeItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				closeFIB();
-			}
-		});
-
-
-		JMenuItem quitItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,"quit"));
-		quitItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void windowClosing(WindowEvent e) {
 				quit();
 			}
 		});
-
-		JMenuItem testInterfaceItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,"test_interface"));
-		testInterfaceItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				testFIB();
-			}
-		});
-
-		JMenuItem componentLocalizationItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,"component_localization"));
-		componentLocalizationItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				localizeFIB();
-			}
-		});
-
-
-
-
-		fileMenu.add(newItem);
-		fileMenu.add(loadItem);
-		fileMenu.add(saveItem);
-		fileMenu.add(saveAsItem);
-		fileMenu.add(closeItem);
-		fileMenu.addSeparator();
-		fileMenu.add(testInterfaceItem);
-		fileMenu.add(componentLocalizationItem);
-		JMenu languagesItem = new JMenu(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,"switch_to_language"));
-		for (Language lang : Language.availableValues()) {
-			JMenuItem languageItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,lang.getName()));
-			final Language language = lang;
-			languageItem.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					switchToLanguage(language);
-				}
-			});
-			languagesItem.add(languageItem);
-		}
-		fileMenu.add(languagesItem);
-		fileMenu.addSeparator();
-		fileMenu.add(quitItem);
-
-		JMenuItem inspectItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,"inspect"));
-		inspectItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				getInspector().setVisible(true);
-			}
-		});
-
-		JMenuItem logsItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,"logs"));
-		logsItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				FlexoLoggingManager.showLoggingViewer();
-			}
-		});
-
-		JMenuItem localizedItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,"localized_editor"));
-		localizedItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				FlexoLocalization.showLocalizedEditor();
-			}
-		});
-
-		JMenuItem displayFileItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,"display_file"));
-		displayFileItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					logger.info("Getting this " + XMLCoder.encodeObjectWithMapping(editedFIB.fibComponent, FIBLibrary.getFIBMapping(),StringEncoder.getDefaultInstance()));
-				} catch (InvalidObjectSpecificationException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (InvalidModelException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (AccessorInvocationException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (DuplicateSerializationIdentifierException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		});
-
-		toolsMenu.add(inspectItem);
-		toolsMenu.add(logsItem);
-		toolsMenu.add(localizedItem);
-		toolsMenu.add(displayFileItem);
-
-		mb.add(fileMenu);
-		mb.add(editMenu);
-		mb.add(toolsMenu);
-		mb.add(helpMenu);
-
-		frame.setJMenuBar(mb);
-
-
+		frame.setJMenuBar(menuBar);
 		frame.getContentPane().add(mainPanel);
-
 		frame.validate();
-		frame.pack();
-
-		/*inspector.getWindow().setLocation(1010,400);
-		inspector.getWindow().setPreferredSize(new Dimension(300,300));
-		inspector.getWindow().setVisible(true);*/
-
 		frame.setVisible(true);
-
 	}
 
 	public void quit()
 	{
+
+		// TODO: Check if a component needs to be saved.
+		/*for(FIBEditor.EditedFIB c: mainPanel.editedComponents) {
+		}*/
 		frame.dispose();
 		System.exit(0);
 	}
@@ -409,16 +394,16 @@ public class FIBEditor implements FIBGenericEditor {
 	{
 		if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
 			File fibFile = fileChooser.getSelectedFile();
-
-			FIBComponent fibComponent = FIBLibrary.instance().retrieveFIBComponent(fibFile,false);
-
-			EditedFIB newEditedFIB = new EditedFIB(fibFile.getName(), fibFile, fibComponent);
-
-			editorController = new FIBEditorController(fibComponent,this);
-
-			mainPanel.newEditedComponent(newEditedFIB, editorController);
-
+			loadFIB(fibFile);
 		}
+	}
+
+	public void loadFIB(File fibFile) {
+		FIBPreferences.setLastFile(fibFile);
+		FIBComponent fibComponent = FIBLibrary.instance().retrieveFIBComponent(fibFile, false);
+		EditedFIB newEditedFIB = new EditedFIB(fibFile.getName(), fibFile, fibComponent);
+		editorController = new FIBEditorController(fibComponent, this);
+		mainPanel.newEditedComponent(newEditedFIB, editorController);
 	}
 
 	public void saveFIB()
@@ -510,6 +495,238 @@ public class FIBEditor implements FIBGenericEditor {
 	public JFrame getFrame()
 	{
 		return frame;
+	}
+
+	public class MenuBar extends JMenuBar implements PreferenceChangeListener {
+		private JMenu fileMenu;
+
+		private JMenu editMenu;
+
+		private JMenu toolsMenu;
+
+		private JMenu helpMenu;
+
+		private JMenuItem newItem;
+
+		private JMenuItem loadItem;
+
+		private JMenuItem saveItem;
+
+		private JMenuItem saveAsItem;
+
+		private JMenuItem closeItem;
+
+		private JMenuItem quitItem;
+
+		private JMenu languagesItem;
+
+		private JMenuItem inspectItem;
+
+		private JMenuItem logsItem;
+
+		private JMenuItem localizedItem;
+
+		private JMenuItem displayFileItem;
+
+		private JMenuItem testInterfaceItem;
+
+		private JMenuItem componentLocalizationItem;
+
+		private JMenu openRecent;
+
+		public MenuBar() {
+			fileMenu = new JMenu(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "file"));
+			editMenu = new JMenu(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "edit"));
+			toolsMenu = new JMenu(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "tools"));
+			helpMenu = new JMenu(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "help"));
+
+			newItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "new_interface"));
+			newItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					newFIB();
+				}
+			});
+
+			loadItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "open_interface"));
+			loadItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					loadFIB();
+				}
+			});
+
+			openRecent = new JMenu(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "open_recent"));
+			FIBPreferences.addPreferenceChangeListener(this);
+			updateOpenRecent();
+			saveItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "save_interface"));
+			saveItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					saveFIB();
+				}
+			});
+
+			saveAsItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "save_interface_as"));
+			saveAsItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					saveFIBAs();
+				}
+			});
+
+			closeItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "close_interface"));
+			closeItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					closeFIB();
+				}
+			});
+
+			quitItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "quit"));
+			quitItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					quit();
+				}
+			});
+			testInterfaceItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "test_interface"));
+			testInterfaceItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					testFIB();
+				}
+			});
+
+			componentLocalizationItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,
+					"component_localization"));
+			componentLocalizationItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					localizeFIB();
+				}
+			});
+
+			fileMenu.add(newItem);
+			fileMenu.add(loadItem);
+			fileMenu.add(openRecent);
+			fileMenu.add(saveItem);
+			fileMenu.add(saveAsItem);
+			fileMenu.add(closeItem);
+			fileMenu.addSeparator();
+			fileMenu.add(testInterfaceItem);
+			fileMenu.add(componentLocalizationItem);
+			languagesItem = new JMenu(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "switch_to_language"));
+			for (Language lang : Language.availableValues()) {
+				JMenuItem languageItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, lang.getName()));
+				final Language language = lang;
+				languageItem.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						switchToLanguage(language);
+					}
+				});
+				languagesItem.add(languageItem);
+			}
+			fileMenu.add(languagesItem);
+			fileMenu.addSeparator();
+			fileMenu.add(quitItem);
+
+			inspectItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "inspect"));
+			inspectItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					getInspector().setVisible(true);
+				}
+			});
+
+			logsItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "logs"));
+			logsItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					FlexoLoggingManager.showLoggingViewer();
+				}
+			});
+
+			localizedItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "localized_editor"));
+			localizedItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					FlexoLocalization.showLocalizedEditor();
+				}
+			});
+
+			displayFileItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "display_file"));
+			displayFileItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					try {
+						logger.info("Getting this "
+								+ XMLCoder.encodeObjectWithMapping(editedFIB.fibComponent, FIBLibrary.getFIBMapping(),
+										StringEncoder.getDefaultInstance()));
+					} catch (InvalidObjectSpecificationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (InvalidModelException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (AccessorInvocationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (DuplicateSerializationIdentifierException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
+
+			toolsMenu.add(inspectItem);
+			toolsMenu.add(logsItem);
+			toolsMenu.add(localizedItem);
+			toolsMenu.add(displayFileItem);
+
+			add(fileMenu);
+			add(editMenu);
+			add(toolsMenu);
+			add(helpMenu);
+		}
+
+		private boolean willUpdate = false;
+
+		@Override
+		public void preferenceChange(PreferenceChangeEvent evt) {
+			if (evt.getKey().startsWith(FIBPreferences.LAST_FILE)) {
+				if (willUpdate) {
+					return;
+				} else {
+					willUpdate = true;
+				}
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						willUpdate = false;
+						updateOpenRecent();
+					}
+				});
+			}
+		}
+
+		private void updateOpenRecent() {
+			openRecent.removeAll();
+			List<File> files = FIBPreferences.getLastFiles();
+			openRecent.setEnabled(files.size()!=0);
+			for (final File file : files) {
+				JMenuItem item = new JMenuItem(file.getName());
+				item.setToolTipText(file.getAbsolutePath());
+				item.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						loadFIB(file);
+					}
+				});
+				openRecent.add(item);
+			}
+		}
 	}
 
 	public class MainPanel extends JTabbedPane implements ChangeListener

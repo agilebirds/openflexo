@@ -14,29 +14,41 @@ import javax.swing.JPopupMenu;
 import org.openflexo.fib.editor.controller.EditorAction.ActionAvailability;
 import org.openflexo.fib.editor.controller.EditorAction.ActionPerformer;
 import org.openflexo.fib.model.BorderLayoutConstraints;
+import org.openflexo.fib.model.BorderLayoutConstraints.BorderLayoutLocation;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBContainer;
 import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.model.FIBPanel;
-import org.openflexo.fib.model.BorderLayoutConstraints.BorderLayoutLocation;
 import org.openflexo.fib.model.FIBPanel.Border;
 import org.openflexo.fib.model.FIBPanel.Layout;
 import org.openflexo.logging.FlexoLogger;
 
-public class ContextualMenu 
+public class ContextualMenu
 {
 	private static final Logger logger = FlexoLogger.getLogger(ContextualMenu.class.getPackage().getName());
 
 	private FIBEditorController editorController;
 	private Hashtable<EditorAction,PopupMenuItem> actions;
 	private JPopupMenu menu;
-	
-	public ContextualMenu(FIBEditorController anEditorController) 
+
+	public ContextualMenu(FIBEditorController anEditorController)
 	{
 		this.editorController = anEditorController;
 		actions = new Hashtable<EditorAction, PopupMenuItem>();
 		menu = new JPopupMenu();
-		
+
+		addToActions(new EditorAction("Inspect", null, new ActionPerformer() {
+			@Override
+			public FIBModelObject performAction(FIBModelObject object) {
+				editorController.getEditor().getInspector().setVisible(true);
+				return object;
+			}
+		}, new ActionAvailability() {
+			@Override
+			public boolean isAvailableFor(FIBModelObject object) {
+				return object != null;
+			}
+		}));
 		addToActions(new EditorAction("Delete", FIBEditorIconLibrary.DELETE_ICON, new ActionPerformer() {
 			@Override
 			public FIBModelObject performAction(FIBModelObject object) {
@@ -73,19 +85,19 @@ public class ContextualMenu
 		}, new ActionAvailability() {
 			@Override
 			public boolean isAvailableFor(FIBModelObject object) {
-				return (object instanceof FIBComponent)
-				&& ((FIBComponent)object).getParent() != null;
+				return object instanceof FIBComponent
+						&& ((FIBComponent)object).getParent() != null;
 			}
 		}));
-}
-	
+	}
+
 	public void addToActions(EditorAction action)
 	{
 		PopupMenuItem newMenuItem = new PopupMenuItem(action);
 		menu.add(newMenuItem);
 		actions.put(action,newMenuItem);
 	}
-	
+
 	public void displayPopupMenu(FIBModelObject object,Component invoker, MouseEvent e)
 	{
 		for (EditorAction action : actions.keySet()) {
@@ -94,13 +106,13 @@ public class ContextualMenu
 		}
 		menu.show(invoker, e.getPoint().x, e.getPoint().y);
 	}
-	
+
 	class PopupMenuItem extends JMenuItem
 	{
 		private FIBModelObject object;
 		private EditorAction action;
-		
-		public PopupMenuItem(EditorAction anAction) 
+
+		public PopupMenuItem(EditorAction anAction)
 		{
 			super(anAction.getActionName(),anAction.getActionIcon());
 			this.action = anAction;
@@ -108,24 +120,26 @@ public class ContextualMenu
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					FIBModelObject selectThis = action.getPerformer().performAction(object);
-					if (selectThis instanceof FIBComponent) editorController.setSelectedObject((FIBComponent)selectThis);
+					if (selectThis instanceof FIBComponent) {
+						editorController.setSelectedObject((FIBComponent)selectThis);
+					}
 				}
 			});
 		}
-		
+
 		public FIBModelObject getObject()
 		{
 			return object;
 		}
 
-		public void setObject(FIBModelObject object) 
+		public void setObject(FIBModelObject object)
 		{
 			this.object = object;
 			setVisible(action.getAvailability().isAvailableFor(object));
 		}
 
 	}
-	
+
 
 
 }

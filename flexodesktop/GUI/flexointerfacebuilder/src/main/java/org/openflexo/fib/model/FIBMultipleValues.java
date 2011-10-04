@@ -26,15 +26,15 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.GenericArrayTypeImpl;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.binding.WilcardTypeImpl;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 
 
 public abstract class FIBMultipleValues extends FIBWidget {
- 
+
 	private static final Logger logger = Logger.getLogger(FIBMultipleValues.class.getPackage().getName());
 
 	public static enum Parameters implements FIBModelAttribute
@@ -62,24 +62,31 @@ public abstract class FIBMultipleValues extends FIBWidget {
 		}
 	};
 
+	private BindingDefinition DATA = new BindingDefinition("data", Object.class, BindingDefinitionType.GET_SET, false) {
+		@Override
+		public Type getType() {
+			return getDataType();
+		};
+	};
+
 	public String staticList;
-	
+
 	private DataBinding list;
 	private DataBinding array;
 
 	private Class iteratorClass;
 	private Class expectedIteratorClass;
-	
+
 	public boolean showIcon = false;
 	public boolean showText = true;
 
 	public FIBMultipleValues()
-    {
-	}  
-	
+	{
+	}
+
 	private Type LIST_BINDING_TYPE;
 	private Type ARRAY_BINDING_TYPE;
-	
+
 	private Type getListBindingType()
 	{
 		if (LIST_BINDING_TYPE == null) {
@@ -87,7 +94,7 @@ public abstract class FIBMultipleValues extends FIBWidget {
 		}
 		return LIST_BINDING_TYPE;
 	}
-	
+
 	private Type getArrayBindingType()
 	{
 		if (ARRAY_BINDING_TYPE == null) {
@@ -97,53 +104,63 @@ public abstract class FIBMultipleValues extends FIBWidget {
 	}
 
 
-	public DataBinding getList() 
+	public DataBinding getList()
 	{
-		if (list == null) list = new DataBinding(this,Parameters.list,LIST);
+		if (list == null) {
+			list = new DataBinding(this,Parameters.list,LIST);
+		}
 		return list;
 	}
 
-	public void setList(DataBinding list) 
+	public void setList(DataBinding list)
 	{
 		list.setOwner(this);
 		list.setBindingAttribute(Parameters.list);
 		list.setBindingDefinition(LIST);
 		this.list = list;
 	}
-	
-	public DataBinding getArray() 
+
+	public DataBinding getArray()
 	{
-		if (array == null) array = new DataBinding(this,Parameters.array,ARRAY);
+		if (array == null) {
+			array = new DataBinding(this,Parameters.array,ARRAY);
+		}
 		return array;
 	}
 
-	public void setArray(DataBinding array) 
+	public void setArray(DataBinding array)
 	{
 		array.setOwner(this);
 		array.setBindingAttribute(Parameters.array);
 		array.setBindingDefinition(ARRAY);
 		this.array = array;
 	}
-	
+
 	@Override
-	public void finalizeDeserialization() 
+	public void finalizeDeserialization()
 	{
 		super.finalizeDeserialization();
-		if (list != null) list.finalizeDeserialization();
-		if (array != null) array.finalizeDeserialization();
+		if (list != null) {
+			list.finalizeDeserialization();
+		}
+		if (array != null) {
+			array.finalizeDeserialization();
+		}
 	}
 
 	public Class getIteratorClass()
 	{
 		if (iteratorClass == null) {
-			if (expectedIteratorClass != null) return expectedIteratorClass;
-			else return Object.class;	
+			if (expectedIteratorClass != null) {
+				return expectedIteratorClass;
+			} else {
+				return Object.class;
+			}
 		}
 		return iteratorClass;
-
 	}
-	
-	public void setIteratorClass(Class iteratorClass) 
+
+	public void setIteratorClass(Class iteratorClass)
 	{
 		FIBAttributeNotification<Class> notification = requireChange(
 				Parameters.iteratorClass, iteratorClass);
@@ -154,35 +171,43 @@ public abstract class FIBMultipleValues extends FIBWidget {
 			hasChanged(notification);
 		}
 	}
-	
-	
-	/*@Override
-	public Type getDataType() 
+
+
+	@Override
+	public Type getDataType()
 	{
-		if (iteratorClass != null) return iteratorClass;
+		if (iteratorClass != null) {
+			return iteratorClass;
+		}
 		return super.getDataType();
-	}*/
-	
+	}
+
 	@Override
 	public Type getFormattedObjectType()
 	{
-		if (iteratorClass != null) return iteratorClass;
+		if (iteratorClass != null) {
+			return iteratorClass;
+		}
 		return getDataType();
 	}
 
+	@Override
+	public BindingDefinition getDataBindingDefinition() {
+		return DATA;
+	}
 
 	/*@Override
-	public final Type getDefaultDataClass() 
+	public final Type getDefaultDataClass()
 	{
 		return getIteratorClass();
 	}*/
-	
+
 	@Override
-	public final Type getDefaultDataClass() 
+	public final Type getDefaultDataClass()
 	{
 		return Object.class;
 	}
-	
+
 	@Override
 	public void notifyBindingChanged(DataBinding binding)
 	{
@@ -190,7 +215,7 @@ public abstract class FIBMultipleValues extends FIBWidget {
 		if (binding == getList()) {
 			if (getList() != null && getList().getBinding() != null) {
 				Type accessedType = getList().getBinding().getAccessedType();
-				if (accessedType instanceof ParameterizedType 
+				if (accessedType instanceof ParameterizedType
 						&& ((ParameterizedType)accessedType).getActualTypeArguments().length > 0) {
 					Class newIteratorClass = TypeUtils.getBaseClass(((ParameterizedType)accessedType).getActualTypeArguments()[0]);
 					if (getIteratorClass() == null || !TypeUtils.isClassAncestorOf(newIteratorClass,getIteratorClass())) {

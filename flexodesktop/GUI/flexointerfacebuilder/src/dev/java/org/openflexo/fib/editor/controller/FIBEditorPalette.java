@@ -20,9 +20,9 @@
 package org.openflexo.fib.editor.controller;
 
 import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.dnd.DragSource;
 import java.awt.dnd.DragSourceContext;
@@ -37,9 +37,11 @@ import javax.swing.JPanel;
 
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.editor.FIBEditor;
+import org.openflexo.fib.editor.FIBEditor.FIBPreferences;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.utils.FIBIconLibrary;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.swing.ComponentBoundSaver;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.ToolBox;
 
@@ -59,16 +61,16 @@ public class FIBEditorPalette extends JDialog {
 
 	public DragSourceContext dragSourceContext;
 
-	public FIBEditorPalette(JFrame frame) 
+	public FIBEditorPalette(JFrame frame)
 	{
 		super(frame,"Palette",false);
 
 		paletteContent = new JPanel(null);
-		paletteContent.setPreferredSize(new Dimension(415,375));
 
 		File dir = new FileResource("FIBEditorPalette");
-		
-		for (File f : dir.listFiles(new FilenameFilter() {		
+
+		for (File f : dir.listFiles(new FilenameFilter() {
+			@Override
 			public boolean accept(File dir, String name) {
 				return name.endsWith(".fib");
 			}
@@ -82,10 +84,17 @@ public class FIBEditorPalette extends JDialog {
 				logger.warning("Not found: "+f.getAbsolutePath());
 			}
 		}
-		
+
 		getContentPane().add(paletteContent);
-		setLocation(1210,0);
-		pack();
+		setBounds(FIBPreferences.getPaletteBounds());
+		new ComponentBoundSaver(this) {
+
+			@Override
+			public void saveBounds(Rectangle bounds) {
+				FIBPreferences.setPaletteBounds(bounds);
+			}
+		};
+		validate();
 
 	}
 

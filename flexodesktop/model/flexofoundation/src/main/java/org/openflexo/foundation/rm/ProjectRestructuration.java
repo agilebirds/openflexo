@@ -35,6 +35,44 @@ import org.openflexo.foundation.ie.cl.PopupComponentDefinition;
  */
 public class ProjectRestructuration {
 
+
+	private static final String OELIB_EXTENSION = ".oelib";
+
+	private static final String OWL_EXTENSION = ".owl";
+
+	private static final String WS_EXTENSION = ".ws";
+
+	private static final String DKV_EXTENSION = ".dkv";
+
+	private static final String DM_EXTENSION = ".dm";
+
+	private static final String XML_EXTENSION = ".xml";
+
+	private static final String LINKS_EXTENSION = ".links";
+
+	private static final String MENU_EXTENSION = ".menu";
+
+	private static final String TOC_EXTENSION = ".toc";
+
+	private static final String DG_EXTENSION = ".dg";
+
+	private static final String SG_EXTENSION = ".sg";
+
+	private static final String CG_EXTENSION = ".cg";
+
+	private static final String WOLIB_EXTENSION = ".wolib";
+
+	private static final String WKF_EXTENSION = ".wkf";
+
+	private static final String RM_EXTENSION = ".rmxml";
+
+	private static final String TS_EXTENSION = ".rmxml.ts";
+
+	public static final String[] FILE_EXTENSIONS = { WKF_EXTENSION, WOLIB_EXTENSION, CG_EXTENSION, DG_EXTENSION, SG_EXTENSION,
+			TOC_EXTENSION, MENU_EXTENSION, LINKS_EXTENSION, XML_EXTENSION, DM_EXTENSION, DKV_EXTENSION, WS_EXTENSION, OWL_EXTENSION,
+			OELIB_EXTENSION,
+		RM_EXTENSION, TS_EXTENSION };
+
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ProjectRestructuration.class.getPackage().getName());
 
@@ -389,8 +427,9 @@ public class ProjectRestructuration {
 
 	public static File getExpectedImportedObjectsDirectory(File projectDirectory) {
 		File returned = new File(projectDirectory, IMPORTED_OBJECTS_DIR);
-		if (!returned.exists())
+		if (!returned.exists()) {
 			returned.mkdirs();
+		}
 		return returned;
 	}
 
@@ -467,7 +506,7 @@ public class ProjectRestructuration {
 	}
 
 
-	
+
 	public static File getExpectedGeneratedDocDirectory(File projectDirectory) {
 		File returned = new File(projectDirectory, ProjectRestructuration.GENERATED_DOC_DIR);
 		if (!returned.exists()) {
@@ -481,18 +520,19 @@ public class ProjectRestructuration {
 		String relativePath;
 		if (component instanceof PopupComponentDefinition) {
 			relativePath = POPUPS_DIR;
-		} else
+		} else {
 			relativePath = "";
+		}
 
 		return new File(getExpectedComponentsDirectory(projectDirectory), relativePath);
 	}
 
 	public static File getExpectedWorkflowFile(FlexoProject project, String workflowName) {
-		return new File(getExpectedWorkflowDirectory(project.getProjectDirectory()), workflowName + ".wkf");
+		return new File(getExpectedWorkflowDirectory(project.getProjectDirectory()), workflowName + WKF_EXTENSION);
 	}
 
 	public static String getWOComponentLibraryFileName(FlexoProject project) {
-		return project.getProjectName() + ".wolib";
+		return project.getProjectName() + WOLIB_EXTENSION;
 	}
 
 	public static File getExpectedComponentLibFile(FlexoProject project) {
@@ -500,15 +540,15 @@ public class ProjectRestructuration {
 	}
 
 	public static String getGeneratedCodeFileName(FlexoProject project) {
-		return project.getProjectName() + ".cg";
+		return project.getProjectName() + CG_EXTENSION;
 	}
 
 	public static String getGeneratedSourcesFileName(FlexoProject project) {
-		return project.getProjectName() + ".sg";
+		return project.getProjectName() + SG_EXTENSION;
 	}
-	
+
 	public static String getGeneratedDocFileName(FlexoProject project) {
-		return project.getProjectName() + ".dg";
+		return project.getProjectName() + DG_EXTENSION;
 	}
 
 	public static String getImportedRoleLibraryFileName(FlexoProject project) {
@@ -524,11 +564,7 @@ public class ProjectRestructuration {
 	}
 
 	public static String getTOCFileName(FlexoProject project) {
-		return project.getProjectName() + ".toc";
-	}
-
-	public static String getTHFileName(FlexoProject project) {
-		return project.getProjectName() + ".th";
+		return project.getProjectName() + TOC_EXTENSION;
 	}
 
 	public static File getExpectedGeneratedCodeFile(FlexoProject project) {
@@ -547,12 +583,8 @@ public class ProjectRestructuration {
 		return new File(getExpectedGeneratedDocDirectory(project.getProjectDirectory()), getTOCFileName(project));
 	}
 
-	public static File getExpectedTHFile(FlexoProject project) {
-		return new File(getExpectedSKOSDirectory(project.getProjectDirectory()), getTHFileName(project));
-	}
-
 	public static String getFlexoNavigationMenuFileName(FlexoProject project) {
-		return project.getProjectName() + ".menu";
+		return project.getProjectName() + MENU_EXTENSION;
 	}
 
 	public static File getExpectedNavigationMenuFile(FlexoProject project) {
@@ -560,7 +592,7 @@ public class ProjectRestructuration {
 	}
 
 	public static String getFlexoLinksFileName(FlexoProject project) {
-		return project.getProjectName() + ".links";
+		return project.getProjectName() + LINKS_EXTENSION;
 	}
 
 	public static File getExpectedLinksFile(FlexoProject project) {
@@ -568,27 +600,27 @@ public class ProjectRestructuration {
 	}
 
 	public static File getExpectedProcessFile(FlexoProject project, String processName) {
-		return new File(getExpectedWorkflowDirectory(project.getProjectDirectory()), processName + ".xml");
+		return new File(getExpectedWorkflowDirectory(project.getProjectDirectory()), processName + XML_EXTENSION);
 	}
 
 	public static File getExpectedDataModelFile(FlexoProject project, String dataModelName) {
-		return new File(getExpectedDataModelDirectory(project.getProjectDirectory()), dataModelName + ".dm");
+		return new File(getExpectedDataModelDirectory(project.getProjectDirectory()), dataModelName + DM_EXTENSION);
 	}
 
 	public static File getExpectedDKVModelFile(FlexoProject project, String dkvName) {
-		return new File(getExpectedDomainKeyValueModelDirectory(project.getProjectDirectory()), dkvName + ".dkv");
+		return new File(getExpectedDomainKeyValueModelDirectory(project.getProjectDirectory()), dkvName + DKV_EXTENSION);
 	}
 
 	public static File getExpectedWSLibraryFile(FlexoProject project, String wslibName) {
-		return new File(getExpectedWSLibraryDirectory(project.getProjectDirectory()), wslibName + ".ws");
+		return new File(getExpectedWSLibraryDirectory(project.getProjectDirectory()), wslibName + WS_EXTENSION);
 	}
 
 	public static File getExpectedProjectOntologyFile(FlexoProject project, String ontologyName) {
-		return new File(getExpectedOntologyDirectory(project.getProjectDirectory()), ontologyName + ".owl");
+		return new File(getExpectedOntologyDirectory(project.getProjectDirectory()), ontologyName + OWL_EXTENSION);
 	}
 
 	public static String getShemaLibraryFileName(FlexoProject project) {
-		return project.getProjectName() + ".oelib";
+		return project.getProjectName() + OELIB_EXTENSION;
 	}
 
 	public static File getExpectedShemaLibFile(FlexoProject project) {

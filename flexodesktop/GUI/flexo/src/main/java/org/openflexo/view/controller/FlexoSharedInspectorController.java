@@ -30,7 +30,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JFrame;
-import javax.swing.JMenuBar;
 
 import org.openflexo.GeneralPreferences;
 import org.openflexo.ch.DefaultInspectorHelpDelegate;
@@ -67,15 +66,16 @@ public class FlexoSharedInspectorController extends FlexoInspectorController {
 	{
 		this(controller.new FlexoControllerInspectorDelegate(),
 				new DefaultInspectorHelpDelegate(DocResourceManager.instance()),
-				controller.getFlexoFrame(), controller.getInspectorMenuBar());
+ controller
+				.getFlexoFrame());
 		setInspectorNotFoundHandler(controller);
 		loadAllCustomInspectors(controller.getProject());
 	}
 
-	private FlexoSharedInspectorController(InspectorDelegate inspectorDelegate, HelpDelegate helpDelegate, JFrame frame, JMenuBar menuBar)
+	private FlexoSharedInspectorController(InspectorDelegate inspectorDelegate, HelpDelegate helpDelegate, JFrame frame)
 	{
 		super(inspectorDelegate, helpDelegate);
-		_inspectorWindow = createInspectorWindow(frame, menuBar);
+		_inspectorWindow = createInspectorWindow(frame);
 		Rectangle bounds = GeneralPreferences.getBoundForFrameWithID("Inspector");
 		if (bounds != null) {
 			// In case we remove a screen (if you go from 3 to 2 screen, go to hell, that's all you deserve ;-))
@@ -198,7 +198,7 @@ public class FlexoSharedInspectorController extends FlexoInspectorController {
 
 	public boolean hasSharedInstance()
 	{
-		return (_sharedInstance != null);
+		return _sharedInstance != null;
 	}
 
 	public void resetInstance() {

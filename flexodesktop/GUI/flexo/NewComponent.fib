@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="border" dataClassName="org.openflexo.foundation.FlexoModelObject">
+  <Panel layout="gridbag" hGap="5" vGap="5" cols="2" rows="2" border="titled" borderTitle="Panel" constraints="border(location=center)" width="80" height="60">
+    <TextArea columns="8" rows="3" text="TextArea" data="data.description" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=north;gridY=0;gridX=0;index=0;gridWidth=1;insetsTop=0;y=0;x=0;insetsBottom=0;weightY=1.0;fill=both;weightX=1.0)" />
+    <TextArea columns="8" rows="3" text="TextArea" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=2;gridX=0;index=1;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=1.0;weightX=1.0;fill=both)" localize="true" />
+    <Panel layout="border" border="titled" borderTitle="Panel" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=1;gridX=0;index=2;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=horizontal)">
+      <CheckBox selected="true" localize="true" name="checkbox" constraints="border(location=west)" />
+      <Color constraints="border(location=center)" localize="true" />
+      <LocalizedDictionary />
+    </Panel>
+    <LocalizedDictionary />
+  </Panel>
+  <LocalizedDictionary />
+</Panel>
+
