@@ -32,19 +32,19 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.viewpoint.CalcObject;
-import org.openflexo.foundation.viewpoint.CalcPalette;
-import org.openflexo.foundation.viewpoint.OntologyCalc;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
+import org.openflexo.foundation.viewpoint.ViewPointPalette;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
-public class CreateCalcPalette extends FlexoAction<CreateCalcPalette,OntologyCalc,CalcObject> 
+public class CreateCalcPalette extends FlexoAction<CreateCalcPalette,ViewPoint,ViewPointObject> 
 {
 
 	private static final Logger logger = Logger.getLogger(CreateCalcPalette.class.getPackage().getName());
 
-	public static FlexoActionType<CreateCalcPalette,OntologyCalc,CalcObject> actionType 
-	= new FlexoActionType<CreateCalcPalette,OntologyCalc,CalcObject> (
+	public static FlexoActionType<CreateCalcPalette,ViewPoint,ViewPointObject> actionType 
+	= new FlexoActionType<CreateCalcPalette,ViewPoint,ViewPointObject> (
 			"create_new_palette",
 			FlexoActionType.newMenu,
 			FlexoActionType.defaultGroup,
@@ -54,19 +54,19 @@ public class CreateCalcPalette extends FlexoAction<CreateCalcPalette,OntologyCal
 		 * Factory method
 		 */
 		@Override
-		public CreateCalcPalette makeNewAction(OntologyCalc focusedObject, Vector<CalcObject> globalSelection, FlexoEditor editor) 
+		public CreateCalcPalette makeNewAction(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) 
 		{
 			return new CreateCalcPalette(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(OntologyCalc object, Vector<CalcObject> globalSelection) 
+		protected boolean isVisibleForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) 
 		{
 			return object != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(OntologyCalc object, Vector<CalcObject> globalSelection) 
+		protected boolean isEnabledForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) 
 		{
 			return object != null;
 		}
@@ -74,7 +74,7 @@ public class CreateCalcPalette extends FlexoAction<CreateCalcPalette,OntologyCal
 	};
 
 	static {
-		FlexoModelObject.addActionForClass (CreateCalcPalette.actionType, OntologyCalc.class);
+		FlexoModelObject.addActionForClass (CreateCalcPalette.actionType, ViewPoint.class);
 	}
 
 
@@ -82,9 +82,9 @@ public class CreateCalcPalette extends FlexoAction<CreateCalcPalette,OntologyCal
 	public String description;
 	public Object graphicalRepresentation;
 
-	private CalcPalette _newPalette;
+	private ViewPointPalette _newPalette;
 
-	CreateCalcPalette (OntologyCalc focusedObject, Vector<CalcObject> globalSelection, FlexoEditor editor)
+	CreateCalcPalette (ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor)
 	{
 		super(actionType, focusedObject, globalSelection, editor);
 	}
@@ -94,9 +94,9 @@ public class CreateCalcPalette extends FlexoAction<CreateCalcPalette,OntologyCal
 	{
 		logger.info ("Add calc palette");  	
 
-		_newPalette = CalcPalette.newCalcPalette(
+		_newPalette = ViewPointPalette.newCalcPalette(
 				getFocusedObject(), 
-				new File(getFocusedObject().getCalcDirectory(),newPaletteName+".palette"),
+				new File(getFocusedObject().getViewPointDirectory(),newPaletteName+".palette"),
 				graphicalRepresentation);
 		_newPalette.setDescription(description);
 		getFocusedObject().addToCalcPalettes(_newPalette);
@@ -110,7 +110,7 @@ public class CreateCalcPalette extends FlexoAction<CreateCalcPalette,OntologyCal
 		return null;
 	}
 
-	public CalcPalette getNewPalette() 
+	public ViewPointPalette getNewPalette() 
 	{
 		return _newPalette;
 	}

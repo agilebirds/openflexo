@@ -29,11 +29,11 @@ import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.view.OEShape;
-import org.openflexo.foundation.view.OEShema;
-import org.openflexo.foundation.view.OEShemaObject;
+import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.viewpoint.AddShape;
-import org.openflexo.foundation.viewpoint.CalcPaletteElement;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 import org.openflexo.foundation.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 
@@ -68,15 +68,15 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction>
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) 
 		{
-			return (object instanceof OEShemaObject);
+			return (object instanceof ViewObject);
 		}
 
 	};
 
-	private OEShemaObject _parent;
-	private CalcPaletteElement _paletteElement;
+	private ViewObject _parent;
+	private ViewPointPaletteElement _paletteElement;
 	private DropScheme _dropScheme;
-	private OEShape _newShape;
+	private ViewShape _newShape;
 	
 	public boolean escapeParameterRetrievingWhenValid = false;
 
@@ -104,19 +104,19 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction>
 		
 	}
 
-	public OEShemaObject getParent()
+	public ViewObject getParent()
 	{
 		if (_parent == null) {
-			if (getFocusedObject() instanceof OEShape) {
-				_parent = (OEShape)getFocusedObject();
-			} else if (getFocusedObject() instanceof OEShema) {
-				_parent = (OEShema)getFocusedObject();
+			if (getFocusedObject() instanceof ViewShape) {
+				_parent = (ViewShape)getFocusedObject();
+			} else if (getFocusedObject() instanceof View) {
+				_parent = (View)getFocusedObject();
 			} 
 		}
 		return _parent;
 	}
 
-	public void setParent(OEShemaObject parent) 
+	public void setParent(ViewObject parent) 
 	{
 		_parent = parent;
 	}
@@ -137,12 +137,12 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction>
 		return getDropScheme();
 	}
 
-	public CalcPaletteElement getPaletteElement() 
+	public ViewPointPaletteElement getPaletteElement() 
 	{
 		return _paletteElement;
 	}
 
-	public void setPaletteElement(CalcPaletteElement paletteElement)
+	public void setPaletteElement(ViewPointPaletteElement paletteElement)
 	{
 		_paletteElement = paletteElement;
 	}
@@ -158,7 +158,7 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction>
 		_graphicalRepresentation = graphicalRepresentation;
 	}
 
-	public OEShape getNewShape()
+	public ViewShape getNewShape()
 	{
 		return _newShape;
 	}
@@ -170,15 +170,15 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction>
 	}
 
 	@Override
-	protected OEShema retrieveOEShema()
+	protected View retrieveOEShema()
 	{
 		if (getParent() != null) return getParent().getShema();
-		if (getFocusedObject() instanceof OEShemaObject) return ((OEShemaObject)getFocusedObject()).getShema();
+		if (getFocusedObject() instanceof ViewObject) return ((ViewObject)getFocusedObject()).getShema();
 		return null;
 	}
 
 	@Override
-	protected OEShape performAddShape(AddShape action)
+	protected ViewShape performAddShape(AddShape action)
 	{
 		_newShape = super.performAddShape(action);
 		return _newShape;

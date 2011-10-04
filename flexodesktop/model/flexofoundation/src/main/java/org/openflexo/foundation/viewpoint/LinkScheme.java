@@ -44,7 +44,7 @@ public class LinkScheme extends EditionScheme {
 	@Override
 	public String getInspectorName() 
 	{
-		return Inspectors.CED.LINK_SCHEME_INSPECTOR;
+		return Inspectors.VPM.LINK_SCHEME_INSPECTOR;
 	}
 
 	public String _getFromTarget() {

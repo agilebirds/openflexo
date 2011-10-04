@@ -26,17 +26,17 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.viewpoint.CalcObject;
-import org.openflexo.foundation.viewpoint.CalcPaletteElement;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 
 
-public class DeleteCalcPaletteElement extends FlexoAction<DeleteCalcPaletteElement,CalcPaletteElement,CalcObject> 
+public class DeleteCalcPaletteElement extends FlexoAction<DeleteCalcPaletteElement,ViewPointPaletteElement,ViewPointObject> 
 {
 
 	private static final Logger logger = Logger.getLogger(DeleteCalcPaletteElement.class.getPackage().getName());
 
-	public static FlexoActionType<DeleteCalcPaletteElement,CalcPaletteElement,CalcObject> actionType 
-	= new FlexoActionType<DeleteCalcPaletteElement,CalcPaletteElement,CalcObject> (
+	public static FlexoActionType<DeleteCalcPaletteElement,ViewPointPaletteElement,ViewPointObject> actionType 
+	= new FlexoActionType<DeleteCalcPaletteElement,ViewPointPaletteElement,ViewPointObject> (
 			"delete_palette_element",
 			FlexoActionType.editGroup,
 			FlexoActionType.DELETE_ACTION_TYPE) {
@@ -45,19 +45,19 @@ public class DeleteCalcPaletteElement extends FlexoAction<DeleteCalcPaletteEleme
 		 * Factory method
 		 */
 		@Override
-		public DeleteCalcPaletteElement makeNewAction(CalcPaletteElement focusedObject, Vector<CalcObject> globalSelection, FlexoEditor editor) 
+		public DeleteCalcPaletteElement makeNewAction(ViewPointPaletteElement focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) 
 		{
 			return new DeleteCalcPaletteElement(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CalcPaletteElement object, Vector<CalcObject> globalSelection) 
+		protected boolean isVisibleForSelection(ViewPointPaletteElement object, Vector<ViewPointObject> globalSelection) 
 		{
 			return object != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CalcPaletteElement object, Vector<CalcObject> globalSelection) 
+		protected boolean isEnabledForSelection(ViewPointPaletteElement object, Vector<ViewPointObject> globalSelection) 
 		{
 			return object != null;
 		}
@@ -65,11 +65,11 @@ public class DeleteCalcPaletteElement extends FlexoAction<DeleteCalcPaletteEleme
 	};
 
 	static {
-		FlexoModelObject.addActionForClass (DeleteCalcPaletteElement.actionType, CalcPaletteElement.class);
+		FlexoModelObject.addActionForClass (DeleteCalcPaletteElement.actionType, ViewPointPaletteElement.class);
 	}
 
 
-	DeleteCalcPaletteElement (CalcPaletteElement focusedObject, Vector<CalcObject> globalSelection, FlexoEditor editor)
+	DeleteCalcPaletteElement (ViewPointPaletteElement focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor)
 	{
 		super(actionType, focusedObject, globalSelection, editor);
 	}

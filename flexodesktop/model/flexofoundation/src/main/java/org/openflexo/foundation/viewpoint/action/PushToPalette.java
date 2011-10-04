@@ -26,21 +26,21 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.viewpoint.CalcDrawingObject;
-import org.openflexo.foundation.viewpoint.CalcDrawingShape;
-import org.openflexo.foundation.viewpoint.CalcPalette;
-import org.openflexo.foundation.viewpoint.CalcPaletteElement;
+import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
+import org.openflexo.foundation.viewpoint.ViewPointPalette;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.toolbox.StringUtils;
 
 
-public class PushToPalette extends FlexoAction<PushToPalette,CalcDrawingShape,CalcDrawingObject> 
+public class PushToPalette extends FlexoAction<PushToPalette,ExampleDrawingShape,ExampleDrawingObject> 
 {
 
     private static final Logger logger = Logger.getLogger(PushToPalette.class.getPackage().getName());
     
-    public static FlexoActionType<PushToPalette,CalcDrawingShape,CalcDrawingObject>  actionType 
-    = new FlexoActionType<PushToPalette,CalcDrawingShape,CalcDrawingObject> (
+    public static FlexoActionType<PushToPalette,ExampleDrawingShape,ExampleDrawingObject>  actionType 
+    = new FlexoActionType<PushToPalette,ExampleDrawingShape,ExampleDrawingObject> (
     		"push_to_palette",
 			FlexoActionType.defaultGroup,
 			FlexoActionType.NORMAL_ACTION_TYPE) {
@@ -49,19 +49,19 @@ public class PushToPalette extends FlexoAction<PushToPalette,CalcDrawingShape,Ca
          * Factory method
          */
         @Override
-		public PushToPalette makeNewAction(CalcDrawingShape focusedObject, Vector<CalcDrawingObject> globalSelection, FlexoEditor editor) 
+		public PushToPalette makeNewAction(ExampleDrawingShape focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) 
         {
             return new PushToPalette(focusedObject, globalSelection, editor);
         }
 
         @Override
-		protected boolean isVisibleForSelection(CalcDrawingShape shape, Vector<CalcDrawingObject> globalSelection) 
+		protected boolean isVisibleForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) 
         {
             return true;
         }
 
         @Override
-		protected boolean isEnabledForSelection(CalcDrawingShape shape, Vector<CalcDrawingObject> globalSelection) 
+		protected boolean isEnabledForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) 
         {
             return (shape != null && shape.getCalc().getPalettes().size() > 0);
         }
@@ -69,17 +69,17 @@ public class PushToPalette extends FlexoAction<PushToPalette,CalcDrawingShape,Ca
     };
     
 	static {
-		FlexoModelObject.addActionForClass (PushToPalette.actionType, CalcDrawingShape.class);
+		FlexoModelObject.addActionForClass (PushToPalette.actionType, ExampleDrawingShape.class);
 	}
 
 	public Object graphicalRepresentation;
-	public CalcPalette palette;
+	public ViewPointPalette palette;
 	public EditionPattern editionPattern;
 	public String newElementName;
 
-	private CalcPaletteElement _newPaletteElement;
+	private ViewPointPaletteElement _newPaletteElement;
 
-	PushToPalette (CalcDrawingShape focusedObject, Vector<CalcDrawingObject> globalSelection, FlexoEditor editor)
+	PushToPalette (ExampleDrawingShape focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor)
     {
         super(actionType, focusedObject, globalSelection, editor);
     }
@@ -99,7 +99,7 @@ public class PushToPalette extends FlexoAction<PushToPalette,CalcDrawingShape,Ca
     	 }
      }
 
-    public CalcPaletteElement getNewPaletteElement()
+    public ViewPointPaletteElement getNewPaletteElement()
 	{
 		return _newPaletteElement;
 	}

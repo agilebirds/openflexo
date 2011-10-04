@@ -90,7 +90,7 @@ public class AddIsAProperty extends AddProperty {
 	@Override
 	public String getInspectorName() 
 	{
-		return Inspectors.CED.ADD_IS_A_PROPERTY_INSPECTOR;
+		return Inspectors.VPM.ADD_IS_A_PROPERTY_INSPECTOR;
 	}
 
 	@Override

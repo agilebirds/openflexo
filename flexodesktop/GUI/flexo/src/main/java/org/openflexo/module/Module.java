@@ -74,13 +74,13 @@ public abstract class Module implements IModule {
 
 	public static final Module WSE_MODULE = new WSE();
 
-	public static final Module OE_MODULE = new OE();
+	public static final Module VE_MODULE = new VE();
 
 	public static final Module DRE_MODULE = new DRE();
 
 	public static final Module FPS_MODULE = new FPS();
 
-	public static final Module CED_MODULE = new CED();
+	public static final Module VPM_MODULE = new VPM();
 
 	public static final Module SG_MODULE = new SG();
 
@@ -88,7 +88,7 @@ public abstract class Module implements IModule {
 
 	public static final Module XXX_MODULE = new XXX();
 
-	private static final Module[] knownsModules = { WKF_MODULE, IE_MODULE, DE_MODULE, DM_MODULE, CG_MODULE, SG_MODULE, DG_MODULE, WSE_MODULE, OE_MODULE, DRE_MODULE, FPS_MODULE, CED_MODULE /*
+	private static final Module[] knownsModules = { WKF_MODULE, IE_MODULE, DE_MODULE, DM_MODULE, CG_MODULE, SG_MODULE, DG_MODULE, WSE_MODULE, VE_MODULE, DRE_MODULE, FPS_MODULE, VPM_MODULE /*
 	 * ,
 	 * XXX_MODULE
 	 */};
@@ -873,20 +873,20 @@ public abstract class Module implements IModule {
 		}
 	}
 
-	protected static class OE extends Module {
+	protected static class VE extends Module {
 		@Override
 		protected String getRelativeDirectory() {
-			return "modules/flexoontologyeditor";
+			return "modules/flexovieweditor";
 		}
 
 		@Override
 		public String getClassName() {
-			return "org.openflexo.oe.OEModule";
+			return "org.openflexo.ve.VEModule";
 		}
 
 		@Override
 		public String getHelpTopic() {
-			return "oe";
+			return "ve";
 		}
 
 		@Override
@@ -901,7 +901,7 @@ public abstract class Module implements IModule {
 		 */
 		@Override
 		public ImageIcon getActiveIcon() {
-			return VEIconLibrary.OE_ACTIVE_ICON;
+			return VEIconLibrary.VE_ACTIVE_ICON;
 		}
 
 		/**
@@ -911,7 +911,7 @@ public abstract class Module implements IModule {
 		 */
 		@Override
 		public ImageIcon getUnactiveIcon() {
-			return VEIconLibrary.OE_UNACTIVE_ICON;
+			return VEIconLibrary.VE_UNACTIVE_ICON;
 		}
 
 		/**
@@ -921,7 +921,7 @@ public abstract class Module implements IModule {
 		 */
 		@Override
 		public ImageIcon getSelectedIcon() {
-			return VEIconLibrary.OE_SELECTED_ICON;
+			return VEIconLibrary.VE_SELECTED_ICON;
 		}
 
 		/**
@@ -931,7 +931,7 @@ public abstract class Module implements IModule {
 		 */
 		@Override
 		public ImageIcon getBigActiveIcon() {
-			return VEIconLibrary.OE_BIG_ACTIVE_ICON;
+			return VEIconLibrary.VE_BIG_ACTIVE_ICON;
 		}
 
 		/**
@@ -941,7 +941,7 @@ public abstract class Module implements IModule {
 		 */
 		@Override
 		public ImageIcon getBigUnactiveIcon() {
-			return VEIconLibrary.OE_BIG_UNACTIVE_ICON;
+			return VEIconLibrary.VE_BIG_UNACTIVE_ICON;
 		}
 
 		/**
@@ -951,21 +951,21 @@ public abstract class Module implements IModule {
 		 */
 		@Override
 		public ImageIcon getBigSelectedIcon() {
-			return VEIconLibrary.OE_BIG_SELECTED_ICON;
+			return VEIconLibrary.VE_BIG_SELECTED_ICON;
 		}
 
-		public static final String OE_MODULE_SHORT_NAME = "OE";
+		public static final String VE_MODULE_SHORT_NAME = "VE";
 
-		public static final String OE_MODULE_NAME = "oe_module_name";
+		public static final String VE_MODULE_NAME = "ve_module_name";
 
 		@Override
 		public String getName() {
-			return OE_MODULE_NAME;
+			return VE_MODULE_NAME;
 		}
 
 		@Override
 		public String getShortName() {
-			return OE_MODULE_SHORT_NAME;
+			return VE_MODULE_SHORT_NAME;
 		}
 	}
 
@@ -1161,20 +1161,20 @@ public abstract class Module implements IModule {
 		}
 	}
 
-	protected static class CED extends Module {
+	protected static class VPM extends Module {
 		@Override
 		protected String getRelativeDirectory() {
-			return "modules/flexocalceditor";
+			return "modules/flexoviewpointmodeller";
 		}
 
 		@Override
 		public String getClassName() {
-			return "org.openflexo.ced.CEDModule";
+			return "org.openflexo.vpm.VPMModule";
 		}
 
 		@Override
 		public String getHelpTopic() {
-			return "ced";
+			return "vpm";
 		}
 
 		@Override
@@ -1189,7 +1189,7 @@ public abstract class Module implements IModule {
 		 */
 		@Override
 		public ImageIcon getActiveIcon() {
-			return VPMIconLibrary.CED_ACTIVE_ICON;
+			return VPMIconLibrary.VPM_ACTIVE_ICON;
 		}
 
 		/**
@@ -1199,7 +1199,7 @@ public abstract class Module implements IModule {
 		 */
 		@Override
 		public ImageIcon getUnactiveIcon() {
-			return VPMIconLibrary.CED_UNACTIVE_ICON;
+			return VPMIconLibrary.VPM_UNACTIVE_ICON;
 		}
 
 		/**
@@ -1209,7 +1209,7 @@ public abstract class Module implements IModule {
 		 */
 		@Override
 		public ImageIcon getSelectedIcon() {
-			return VPMIconLibrary.CED_SELECTED_ICON;
+			return VPMIconLibrary.VPM_SELECTED_ICON;
 		}
 
 		/**
@@ -1219,7 +1219,7 @@ public abstract class Module implements IModule {
 		 */
 		@Override
 		public ImageIcon getBigActiveIcon() {
-			return VPMIconLibrary.CED_BIG_ACTIVE_ICON;
+			return VPMIconLibrary.VPM_BIG_ACTIVE_ICON;
 		}
 
 		/**
@@ -1229,7 +1229,7 @@ public abstract class Module implements IModule {
 		 */
 		@Override
 		public ImageIcon getBigUnactiveIcon() {
-			return VPMIconLibrary.CED_BIG_UNACTIVE_ICON;
+			return VPMIconLibrary.VPM_BIG_UNACTIVE_ICON;
 		}
 
 		/**
@@ -1239,21 +1239,21 @@ public abstract class Module implements IModule {
 		 */
 		@Override
 		public ImageIcon getBigSelectedIcon() {
-			return VPMIconLibrary.CED_BIG_SELECTED_ICON;
+			return VPMIconLibrary.VPM_BIG_SELECTED_ICON;
 		}
 
-		public static final String CED_MODULE_SHORT_NAME = "CED";
+		public static final String VPM_MODULE_SHORT_NAME = "VPM";
 
-		public static final String CED_MODULE_NAME = "ced_module_name";
+		public static final String VPM_MODULE_NAME = "vpm_module_name";
 
 		@Override
 		public String getName() {
-			return CED_MODULE_NAME;
+			return VPM_MODULE_NAME;
 		}
 
 		@Override
 		public String getShortName() {
-			return CED_MODULE_SHORT_NAME;
+			return VPM_MODULE_SHORT_NAME;
 		}
 	}
 

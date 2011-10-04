@@ -1,4 +1,4 @@
-<inspector title = "Shema" inheritsfrom="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.ontology.shema.OEShema">
+<inspector title = "Shema" inheritsfrom="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.view.View">
 
 	<tab name="Basic" index="0" layout="DEFAULT">
 		<property name="name" label="name" widget="TEXT_FIELD" constraint="0">

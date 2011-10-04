@@ -38,7 +38,7 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 	@Override
 	public String getInspectorName() 
 	{
-		return Inspectors.CED.OBJECT_PROPERTY_ASSERTION_INSPECTOR;
+		return Inspectors.VPM.OBJECT_PROPERTY_ASSERTION_INSPECTOR;
 	}
 
 	public void _setObjectPropertyURI(String objectPropertyURI)

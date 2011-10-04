@@ -141,7 +141,7 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.foundation.validation.ValidationRule;
-import org.openflexo.foundation.view.OEShemaLibrary;
+import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternConverter;
 import org.openflexo.foundation.wkf.FlexoImportedProcessLibrary;
@@ -1260,7 +1260,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	public FlexoOEShemaLibraryResource getFlexoShemaLibraryResource(boolean createIfNotExist) {
 		FlexoOEShemaLibraryResource returned = (FlexoOEShemaLibraryResource) resourceForKey(ResourceType.OE_SHEMA_LIBRARY, getProjectName());
 		if ((returned == null) && createIfNotExist) {
-			OEShemaLibrary.createNewShemaLibrary(this);
+			ViewLibrary.createNewShemaLibrary(this);
 			return getFlexoShemaLibraryResource();
 		}
 		return returned;
@@ -1511,17 +1511,17 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		return getFlexoComponentLibraryResource().getResourceData();
 	}
 
-	public OEShemaLibrary getShemaLibrary() {
+	public ViewLibrary getShemaLibrary() {
 		return getShemaLibrary(true);
 	}
 
-	public OEShemaLibrary getShemaLibrary(boolean createIfNotExist) {
+	public ViewLibrary getShemaLibrary(boolean createIfNotExist) {
 		if (getFlexoShemaLibraryResource(createIfNotExist) == null) {
 			if (createIfNotExist) {
 				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Create ShemaLibrary");
 				}
-				OEShemaLibrary.createNewShemaLibrary(this);
+				ViewLibrary.createNewShemaLibrary(this);
 			} else {
 				return null;
 			}

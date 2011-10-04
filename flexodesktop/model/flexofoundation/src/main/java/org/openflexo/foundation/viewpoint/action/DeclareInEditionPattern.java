@@ -26,22 +26,22 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.viewpoint.CalcDrawingConnector;
-import org.openflexo.foundation.viewpoint.CalcDrawingObject;
-import org.openflexo.foundation.viewpoint.CalcDrawingShape;
+import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
+import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ShapePatternRole;
 
 
-public class DeclareInEditionPattern extends FlexoAction<DeclareInEditionPattern,CalcDrawingObject,CalcDrawingObject> 
+public class DeclareInEditionPattern extends FlexoAction<DeclareInEditionPattern,ExampleDrawingObject,ExampleDrawingObject> 
 {
 
     private static final Logger logger = Logger.getLogger(DeclareInEditionPattern.class.getPackage().getName());
     
-    public static FlexoActionType<DeclareInEditionPattern,CalcDrawingObject,CalcDrawingObject>  actionType 
-    = new FlexoActionType<DeclareInEditionPattern,CalcDrawingObject,CalcDrawingObject> (
+    public static FlexoActionType<DeclareInEditionPattern,ExampleDrawingObject,ExampleDrawingObject>  actionType 
+    = new FlexoActionType<DeclareInEditionPattern,ExampleDrawingObject,ExampleDrawingObject> (
     		"declare_in_edition_pattern",
 			FlexoActionType.defaultGroup,
 			FlexoActionType.NORMAL_ACTION_TYPE) {
@@ -50,19 +50,19 @@ public class DeclareInEditionPattern extends FlexoAction<DeclareInEditionPattern
          * Factory method
          */
         @Override
-		public DeclareInEditionPattern makeNewAction(CalcDrawingObject focusedObject, Vector<CalcDrawingObject> globalSelection, FlexoEditor editor) 
+		public DeclareInEditionPattern makeNewAction(ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) 
         {
             return new DeclareInEditionPattern(focusedObject, globalSelection, editor);
         }
 
         @Override
-		protected boolean isVisibleForSelection(CalcDrawingObject shape, Vector<CalcDrawingObject> globalSelection) 
+		protected boolean isVisibleForSelection(ExampleDrawingObject shape, Vector<ExampleDrawingObject> globalSelection) 
         {
             return true;
         }
 
         @Override
-		protected boolean isEnabledForSelection(CalcDrawingObject shape, Vector<CalcDrawingObject> globalSelection) 
+		protected boolean isEnabledForSelection(ExampleDrawingObject shape, Vector<ExampleDrawingObject> globalSelection) 
         {
             return (shape != null && shape.getCalc().getEditionPatterns().size() > 0);
         }
@@ -70,15 +70,15 @@ public class DeclareInEditionPattern extends FlexoAction<DeclareInEditionPattern
     };
     
 	static {
-		FlexoModelObject.addActionForClass (DeclareInEditionPattern.actionType, CalcDrawingShape.class);
-		FlexoModelObject.addActionForClass (DeclareInEditionPattern.actionType, CalcDrawingConnector.class);
+		FlexoModelObject.addActionForClass (DeclareInEditionPattern.actionType, ExampleDrawingShape.class);
+		FlexoModelObject.addActionForClass (DeclareInEditionPattern.actionType, ExampleDrawingConnector.class);
 	}
 
 
 	private EditionPattern editionPattern;
 	private PatternRole patternRole;
 
-	DeclareInEditionPattern (CalcDrawingObject focusedObject, Vector<CalcDrawingObject> globalSelection, FlexoEditor editor)
+	DeclareInEditionPattern (ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor)
     {
         super(actionType, focusedObject, globalSelection, editor);
     }
@@ -105,8 +105,8 @@ public class DeclareInEditionPattern extends FlexoAction<DeclareInEditionPattern
     	return (getFocusedObject() != null 
    			 && editionPattern != null
 			 && patternRole != null
-			 && ((patternRole instanceof ShapePatternRole && getFocusedObject() instanceof CalcDrawingShape) 
-					 || (patternRole instanceof ConnectorPatternRole && getFocusedObject() instanceof CalcDrawingConnector)));
+			 && ((patternRole instanceof ShapePatternRole && getFocusedObject() instanceof ExampleDrawingShape) 
+					 || (patternRole instanceof ConnectorPatternRole && getFocusedObject() instanceof ExampleDrawingConnector)));
     }
 
 	public EditionPattern getEditionPattern()

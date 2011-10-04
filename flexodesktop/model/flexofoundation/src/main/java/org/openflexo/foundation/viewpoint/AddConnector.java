@@ -23,7 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.view.OEShape;
+import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.action.LinkSchemeAction;
@@ -48,7 +48,7 @@ public class AddConnector extends AddShemaElementAction<ConnectorPatternRole> {
 	@Override
 	public String getInspectorName() 
 	{
-		return Inspectors.CED.ADD_CONNECTOR_INSPECTOR;
+		return Inspectors.VPM.ADD_CONNECTOR_INSPECTOR;
 	}
 	
 
@@ -100,23 +100,23 @@ public class AddConnector extends AddShemaElementAction<ConnectorPatternRole> {
 		return availableFromToShapeValues;
 	}
 
-	public OEShape getFromShape(EditionSchemeAction action)
+	public ViewShape getFromShape(EditionSchemeAction action)
 	{
 		if (action instanceof LinkSchemeAction && _getFromShape() == null) 
 			return ((LinkSchemeAction)action).getFromShape();
 		if (action instanceof DropSchemeAction && _getFromShape() == null 
-				&& ((DropSchemeAction)action).getParent() instanceof OEShape) 
-			return (OEShape)((DropSchemeAction)action).getParent();
+				&& ((DropSchemeAction)action).getParent() instanceof ViewShape) 
+			return (ViewShape)((DropSchemeAction)action).getParent();
 		return retrieveOEShape(_getFromShape(), action);
 	}
 	
-	public OEShape getToShape(EditionSchemeAction action)
+	public ViewShape getToShape(EditionSchemeAction action)
 	{
 		if (action instanceof LinkSchemeAction && _getToShape() == null) 
 			return ((LinkSchemeAction)action).getToShape();
 		if (action instanceof DropSchemeAction && _getToShape() == null 
-				&& ((DropSchemeAction)action).getParent() instanceof OEShape) 
-			return (OEShape)((DropSchemeAction)action).getParent();
+				&& ((DropSchemeAction)action).getParent() instanceof ViewShape) 
+			return (ViewShape)((DropSchemeAction)action).getParent();
 		return retrieveOEShape(_getToShape(), action);
 	}
 

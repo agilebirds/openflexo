@@ -26,18 +26,18 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.view.OEConnector;
-import org.openflexo.foundation.view.OEShape;
-import org.openflexo.foundation.view.OEShemaObject;
+import org.openflexo.foundation.view.ViewConnector;
+import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.view.ViewObject;
 
 
-public class AddConnector extends FlexoAction<AddConnector,OEShape,OEShemaObject> 
+public class AddConnector extends FlexoAction<AddConnector,ViewShape,ViewObject> 
 {
 
     private static final Logger logger = Logger.getLogger(AddConnector.class.getPackage().getName());
     
-    public static FlexoActionType<AddConnector,OEShape,OEShemaObject>  actionType 
-    = new FlexoActionType<AddConnector,OEShape,OEShemaObject> (
+    public static FlexoActionType<AddConnector,ViewShape,ViewObject>  actionType 
+    = new FlexoActionType<AddConnector,ViewShape,ViewObject> (
     		"add_connector",
     		FlexoActionType.newMenu,
 			FlexoActionType.defaultGroup,
@@ -47,19 +47,19 @@ public class AddConnector extends FlexoAction<AddConnector,OEShape,OEShemaObject
          * Factory method
          */
         @Override
-		public AddConnector makeNewAction(OEShape focusedObject, Vector<OEShemaObject> globalSelection, FlexoEditor editor) 
+		public AddConnector makeNewAction(ViewShape focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) 
         {
             return new AddConnector(focusedObject, globalSelection, editor);
         }
 
         @Override
-		protected boolean isVisibleForSelection(OEShape shape, Vector<OEShemaObject> globalSelection) 
+		protected boolean isVisibleForSelection(ViewShape shape, Vector<ViewObject> globalSelection) 
         {
             return true;
         }
 
         @Override
-		protected boolean isEnabledForSelection(OEShape shape, Vector<OEShemaObject> globalSelection) 
+		protected boolean isEnabledForSelection(ViewShape shape, Vector<ViewObject> globalSelection) 
         {
             return (shape != null);
         }
@@ -67,18 +67,18 @@ public class AddConnector extends FlexoAction<AddConnector,OEShape,OEShemaObject
     };
     
 	static {
-		FlexoModelObject.addActionForClass (AddConnector.actionType, OEShape.class);
+		FlexoModelObject.addActionForClass (AddConnector.actionType, ViewShape.class);
 	}
 
 
-	private OEShape _fromShape;
-	private OEShape _toShape;
+	private ViewShape _fromShape;
+	private ViewShape _toShape;
 	private String annotation;
-	private OEConnector _newConnector;
+	private ViewConnector _newConnector;
 
 	private boolean automaticallyCreateConnector = false;
 
-	AddConnector (OEShape focusedObject, Vector<OEShemaObject> globalSelection, FlexoEditor editor)
+	AddConnector (ViewShape focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor)
     {
         super(actionType, focusedObject, globalSelection, editor);
     }
@@ -90,10 +90,10 @@ public class AddConnector extends FlexoAction<AddConnector,OEShape,OEShemaObject
     	 if (getFocusedObject() != null 
     			 && getFromShape() != null
     			 && getToShape() != null)  {
-    		 OEShemaObject parent = OEShemaObject.getFirstCommonAncestor(getFromShape(), getToShape());
+    		 ViewObject parent = ViewObject.getFirstCommonAncestor(getFromShape(), getToShape());
     		 logger.info("Parent="+parent);
     		 if (parent == null) throw new IllegalArgumentException("No common ancestor");
-    		 _newConnector = new OEConnector(getFromShape().getShema(),getFromShape(),getToShape());
+    		 _newConnector = new ViewConnector(getFromShape().getShema(),getFromShape(),getToShape());
     		 _newConnector.setDescription(annotation);
     		 parent.addToChilds(_newConnector);
     	 }
@@ -102,28 +102,28 @@ public class AddConnector extends FlexoAction<AddConnector,OEShape,OEShemaObject
     	 }
      }
 
-    public OEShape getToShape() 
+    public ViewShape getToShape() 
     {
         return _toShape;
     }
 
-    public void setToShape(OEShape aShape) 
+    public void setToShape(ViewShape aShape) 
     {
     	_toShape = aShape;
     }
 
-	public OEShape getFromShape() 
+	public ViewShape getFromShape() 
 	{
 		if (_fromShape == null) return getFocusedObject();
 		return _fromShape;
 	}
 
-	public void setFromShape(OEShape fromShape)
+	public void setFromShape(ViewShape fromShape)
 	{
 		_fromShape = fromShape;
 	}
 
-	public OEConnector getConnector() 
+	public ViewConnector getConnector() 
 	{
 		return _newConnector;
 	}

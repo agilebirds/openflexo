@@ -116,7 +116,7 @@ public class AddRestriction extends AddProperty {
 	@Override
 	public String getInspectorName() 
 	{
-		return Inspectors.CED.ADD_RESTRICTION_INSPECTOR;
+		return Inspectors.VPM.ADD_RESTRICTION_INSPECTOR;
 	}
 
 	public String _getRestrictionType() {

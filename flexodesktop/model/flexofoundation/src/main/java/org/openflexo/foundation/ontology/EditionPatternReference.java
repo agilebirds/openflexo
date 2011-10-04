@@ -32,7 +32,7 @@ import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
-import org.openflexo.foundation.xml.OEShemaBuilder;
+import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.xmlcode.XMLMapping;
 
@@ -61,7 +61,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 	}
 	
 	// Constructor used during deserialization
-	public EditionPatternReference(OEShemaBuilder builder) 
+	public EditionPatternReference(VEShemaBuilder builder) 
 	{
 		this(builder.getProject());
 	    initializeDeserialization(builder);
@@ -193,7 +193,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		}
 		
 		// Constructor used during deserialization
-		public ConceptActorReference(OEShemaBuilder builder) 
+		public ConceptActorReference(VEShemaBuilder builder) 
 		{
 			super(builder.getProject());
 		    initializeDeserialization(builder);
@@ -250,7 +250,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		}
 		
 		// Constructor used during deserialization
-		public ObjectPropertyStatementActorReference(OEShemaBuilder builder) 
+		public ObjectPropertyStatementActorReference(VEShemaBuilder builder) 
 		{
 			super(builder.getProject());
 		    initializeDeserialization(builder);
@@ -310,7 +310,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		}
 		
 		// Constructor used during deserialization
-		public RestrictionStatementActorReference(OEShemaBuilder builder) 
+		public RestrictionStatementActorReference(VEShemaBuilder builder) 
 		{
 			super(builder.getProject());
 		    initializeDeserialization(builder);
@@ -371,7 +371,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		}
 		
 		// Constructor used during deserialization
-		public SubClassStatementActorReference(OEShemaBuilder builder) 
+		public SubClassStatementActorReference(VEShemaBuilder builder) 
 		{
 			super(builder.getProject());
 		    initializeDeserialization(builder);
@@ -427,7 +427,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		}
 
 		// Constructor used during deserialization
-		public ModelObjectActorReference(OEShemaBuilder builder) 
+		public ModelObjectActorReference(VEShemaBuilder builder) 
 		{
 			super(builder.getProject());
 		    initializeDeserialization(builder);

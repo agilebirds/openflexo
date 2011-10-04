@@ -41,7 +41,7 @@ import org.openflexo.foundation.FlexoXMLSerializableObject;
 import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
-import org.openflexo.foundation.view.OEShema;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.RoleList;
@@ -101,8 +101,8 @@ public class ScreenshotGenerator
         	return getImageNameForRoleList((RoleList)o);
         else if (o instanceof FlexoWorkflow)
         	return getImageNameForWorkflow((FlexoWorkflow)o);
-        else if (o instanceof OEShema) {
-        	return getImageNameForShema((OEShema)o);
+        else if (o instanceof View) {
+        	return getImageNameForShema((View)o);
         }
         return null;
     }
@@ -203,7 +203,7 @@ public class ScreenshotGenerator
      * @param process
      * @return
      */
-    private static String getImageNameForShema(OEShema shema)
+    private static String getImageNameForShema(View shema)
     {
         return getImageNameForShema(shema.getName() + shema.getFlexoID());
     }
@@ -214,7 +214,7 @@ public class ScreenshotGenerator
      */
     private static String getImageNameForShema(String shemaName)
     {
-        return OEShema.getTypeName() + "-" + formatImageName(shemaName);
+        return View.getTypeName() + "-" + formatImageName(shemaName);
     }
 
     private static String formatImageName(String imageName)
@@ -258,7 +258,7 @@ public class ScreenshotGenerator
 				dmModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader()
 						.getDMModuleInstance() : null;
 			}
-			else if (object instanceof OEShema) {
+			else if (object instanceof View) {
 				oeModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader()
 						.getOEModuleInstance() : null;
 			}
@@ -285,8 +285,8 @@ public class ScreenshotGenerator
 								.getComponentDefinition().getWOComponent());
 					} else if (object instanceof ERDiagram) {
 						c = dmModule.createScreenshotForObject((ERDiagram)object);
-					} else if (object instanceof OEShema) {
-						c = oeModule.createScreenshotForShema((OEShema)object);
+					} else if (object instanceof View) {
+						c = oeModule.createScreenshotForShema((View)object);
 					}
 					if (c == null) {
 						if (logger.isLoggable(Level.WARNING))

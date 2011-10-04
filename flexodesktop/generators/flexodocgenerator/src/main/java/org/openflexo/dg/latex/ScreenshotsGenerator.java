@@ -35,8 +35,8 @@ import org.openflexo.foundation.rm.FlexoCopiedResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
-import org.openflexo.foundation.view.OEShema;
-import org.openflexo.foundation.view.OEShemaDefinition;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.RoleList;
@@ -135,9 +135,9 @@ public class ScreenshotsGenerator extends AbstractCompoundGenerator<FlexoProject
 
 		//Now the OEShemas
 		if (getProject().getFlexoShemaLibraryResource(false) != null && getProject().getResourceCenter() != null) {
-			Enumeration<OEShemaDefinition> en5 = getProject().getShemaLibrary().retrieveAllShemas().elements();
+			Enumeration<ViewDefinition> en5 = getProject().getShemaLibrary().retrieveAllShemas().elements();
 			while (en5.hasMoreElements()) {
-				OEShemaDefinition sd = en5.nextElement();
+				ViewDefinition sd = en5.nextElement();
 				FlexoCopiedResource cdCopy = getResourceForShema(sd.getShema(), true);
 				resources.add(cdCopy);
 				newGenerators.put(cdCopy, (CopiedResourceGenerator) cdCopy.getGenerator());
@@ -202,7 +202,7 @@ public class ScreenshotsGenerator extends AbstractCompoundGenerator<FlexoProject
 		return getResourceForFlexoModelObject(cd, createIfNull);
 	}
 
-	private FlexoCopiedResource getResourceForShema(OEShema sd, boolean createIfNull)
+	private FlexoCopiedResource getResourceForShema(View sd, boolean createIfNull)
 	{
 		return getResourceForFlexoModelObject(sd, createIfNull);
 	}
@@ -259,7 +259,7 @@ public class ScreenshotsGenerator extends AbstractCompoundGenerator<FlexoProject
 			return getResourceForFlexoModelObject(o, false);
 		} else if (o instanceof FlexoWorkflow) {
 			return getResourceForFlexoModelObject(o, false);
-		} else if (o instanceof OEShema) {
+		} else if (o instanceof View) {
 			return getResourceForFlexoModelObject(o, false);
 		}
 		return null;

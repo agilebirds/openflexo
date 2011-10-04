@@ -46,8 +46,8 @@ public class ShapePatternRole extends GraphicalElementPatternRole {
 	{
 		if (getGraphicalRepresentation() == null) {
 			// Try to find one somewhere
-			for (CalcPalette palette : getCalc().getPalettes()) {
-				for (CalcPaletteElement e : palette.getElements()) {
+			for (ViewPointPalette palette : getCalc().getPalettes()) {
+				for (ViewPointPaletteElement e : palette.getElements()) {
 					if (e.getEditionPattern() == getEditionPattern()) {
 						setGraphicalRepresentation(e.getGraphicalRepresentation());
 					}

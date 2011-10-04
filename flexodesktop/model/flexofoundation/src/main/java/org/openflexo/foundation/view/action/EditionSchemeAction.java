@@ -40,10 +40,10 @@ import org.openflexo.foundation.ontology.RestrictionStatement;
 import org.openflexo.foundation.ontology.SubClassStatement;
 import org.openflexo.foundation.ontology.RestrictionStatement.RestrictionType;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.view.OEConnector;
-import org.openflexo.foundation.view.OEShape;
-import org.openflexo.foundation.view.OEShema;
-import org.openflexo.foundation.view.OEShemaObject;
+import org.openflexo.foundation.view.ViewConnector;
+import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.viewpoint.AddClass;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.AddIsAProperty;
@@ -106,7 +106,7 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 
 	public abstract EditionPatternInstance getEditionPatternInstance();
 
-	protected abstract OEShema retrieveOEShema();
+	protected abstract View retrieveOEShema();
 	
 	protected abstract Object getOverridenGraphicalRepresentation(); 
 
@@ -120,7 +120,7 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 			if (action.evaluateCondition(parameterValues)) {
 				if (action instanceof org.openflexo.foundation.viewpoint.AddShape) {
 					logger.info("Add shape with patternRole="+action.getPatternRole());
-					OEShape newShape = performAddShape((org.openflexo.foundation.viewpoint.AddShape)action);
+					ViewShape newShape = performAddShape((org.openflexo.foundation.viewpoint.AddShape)action);
 					if (newShape != null) {
 						getEditionPatternInstance().setObjectForPatternRole(newShape, action.getPatternRole());
 						performedActions.put(action,newShape);
@@ -128,7 +128,7 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 				}
 				else if (action instanceof org.openflexo.foundation.viewpoint.AddConnector) {
 					logger.info("Add connector with patternRole="+action.getPatternRole());
-					OEConnector newConnector = performAddConnector((org.openflexo.foundation.viewpoint.AddConnector)action);
+					ViewConnector newConnector = performAddConnector((org.openflexo.foundation.viewpoint.AddConnector)action);
 					if (newConnector != null) {
 						getEditionPatternInstance().setObjectForPatternRole(newConnector, action.getPatternRole());
 						performedActions.put(action,newConnector);
@@ -188,7 +188,7 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 				}
 				else if (action instanceof org.openflexo.foundation.viewpoint.AddShema) {
 					logger.info("Add shema with patternRole="+action.getPatternRole());
-					OEShema newShema = performAddShema((org.openflexo.foundation.viewpoint.AddShema)action);
+					View newShema = performAddShema((org.openflexo.foundation.viewpoint.AddShema)action);
 					if (newShema != null) {
 						getEditionPatternInstance().setObjectForPatternRole(newShema, action.getPatternRole());
 						performedActions.put(action,newShema);
@@ -227,13 +227,13 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 		// Finalize shape creation at the end to be sure labels are now correctely bound
 		for (EditionAction action : performedActions.keySet()) {
 			if (action instanceof org.openflexo.foundation.viewpoint.AddShape) {
-				finalizePerformAddShape((org.openflexo.foundation.viewpoint.AddShape)action,(OEShape)performedActions.get(action));
+				finalizePerformAddShape((org.openflexo.foundation.viewpoint.AddShape)action,(ViewShape)performedActions.get(action));
 			}
 			if (action instanceof org.openflexo.foundation.viewpoint.AddConnector) {
-				finalizePerformAddConnector((org.openflexo.foundation.viewpoint.AddConnector)action,(OEConnector)performedActions.get(action));
+				finalizePerformAddConnector((org.openflexo.foundation.viewpoint.AddConnector)action,(ViewConnector)performedActions.get(action));
 			}
 			if (action instanceof org.openflexo.foundation.viewpoint.AddShema) {
-				finalizePerformAddShema((org.openflexo.foundation.viewpoint.AddShema)action,(OEShema)performedActions.get(action));
+				finalizePerformAddShema((org.openflexo.foundation.viewpoint.AddShema)action,(View)performedActions.get(action));
 			}
 		}
 		
@@ -247,9 +247,9 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 		}
 	}
 
-	protected OEShape performAddShape(org.openflexo.foundation.viewpoint.AddShape action)
+	protected ViewShape performAddShape(org.openflexo.foundation.viewpoint.AddShape action)
 	{
-		OEShape newShape = new OEShape(retrieveOEShema());
+		ViewShape newShape = new ViewShape(retrieveOEShema());
 		
 		// If an overriden graphical representation is defined, use it
 		if (getOverridenGraphicalRepresentation() != null) 
@@ -264,14 +264,14 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 		
 		//logger.info("container="+action.getContainer());
 		
-		OEShemaObject container = action.getContainer(this);
+		ViewObject container = action.getContainer(this);
 		
 		container.addToChilds(newShape);   
 		logger.info("Added shape "+newShape+" under "+container);
 		return newShape;
 	}
 
-	protected OEShape finalizePerformAddShape(org.openflexo.foundation.viewpoint.AddShape action, OEShape newShape)
+	protected ViewShape finalizePerformAddShape(org.openflexo.foundation.viewpoint.AddShape action, ViewShape newShape)
 	{
 		// We need to renotify here because if label is bound to a semantic. In this case, 
 		// while beeing created, shape didn't have sufficient data to retrieve a label
@@ -427,12 +427,12 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 		return object;
 	}
 	
-	protected OEConnector performAddConnector(org.openflexo.foundation.viewpoint.AddConnector action)
+	protected ViewConnector performAddConnector(org.openflexo.foundation.viewpoint.AddConnector action)
 	{
-		OEShape fromShape = action.getFromShape(this);
-		OEShape toShape = action.getToShape(this);
-		OEConnector newConnector = new OEConnector(fromShape.getShema(),fromShape,toShape);
-		OEShemaObject parent = OEShemaObject.getFirstCommonAncestor(fromShape, toShape);
+		ViewShape fromShape = action.getFromShape(this);
+		ViewShape toShape = action.getToShape(this);
+		ViewConnector newConnector = new ViewConnector(fromShape.getShema(),fromShape,toShape);
+		ViewObject parent = ViewObject.getFirstCommonAncestor(fromShape, toShape);
 		if (parent == null) throw new IllegalArgumentException("No common ancestor");
 
 		// If an overriden graphical representation is defined, use it
@@ -453,7 +453,7 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 		return newConnector;
 	}
 
-	protected OEConnector finalizePerformAddConnector(org.openflexo.foundation.viewpoint.AddConnector action, OEConnector newConnector)
+	protected ViewConnector finalizePerformAddConnector(org.openflexo.foundation.viewpoint.AddConnector action, ViewConnector newConnector)
 	{
 		// We need to renotify here because if label is bound to a semantic. In this case, 
 		// while beeing created, shape didn't have sufficient data to retrieve a label
@@ -523,16 +523,16 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 		return restrictionStatement;
 	}
 
-	protected OEShema performAddShema(org.openflexo.foundation.viewpoint.AddShema action)
+	protected View performAddShema(org.openflexo.foundation.viewpoint.AddShema action)
 	{
-		OEShema initialShema = retrieveOEShema();
-		AddShema addShemaAction = AddShema.actionType.makeNewEmbeddedAction(initialShema.getShemaDefinition().getFolder(), null, this);
-		addShemaAction.newShemaName = action.getShemaName(this);
+		View initialShema = retrieveOEShema();
+		AddView addShemaAction = AddView.actionType.makeNewEmbeddedAction(initialShema.getShemaDefinition().getFolder(), null, this);
+		addShemaAction.newViewName = action.getShemaName(this);
 		addShemaAction.calc = initialShema.getCalc();
 		addShemaAction.setFolder(initialShema.getShemaDefinition().getFolder());
 		addShemaAction.doAction();
 		if (addShemaAction.hasActionExecutionSucceeded()) {
-			OEShema newShema = addShemaAction.getNewShema().getShema();
+			View newShema = addShemaAction.getNewShema().getShema();
 			ShapePatternRole shapePatternRole = action.retrieveShapePatternRole();
 			if (shapePatternRole == null) {
 				logger.warning("Sorry, shape pattern role is undefined");
@@ -540,9 +540,9 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 			}
 			logger.info("Shape pattern role: "+shapePatternRole);
 			EditionPatternInstance newEditionPatternInstance = getProject().makeNewEditionPatternInstance(getEditionPattern());
-			OEShape newShape = new OEShape(newShema);
-			if (getEditionPatternInstance().getPatternActor(shapePatternRole) instanceof OEShape) {
-				OEShape primaryShape = (OEShape)getEditionPatternInstance().getPatternActor(shapePatternRole);
+			ViewShape newShape = new ViewShape(newShema);
+			if (getEditionPatternInstance().getPatternActor(shapePatternRole) instanceof ViewShape) {
+				ViewShape primaryShape = (ViewShape)getEditionPatternInstance().getPatternActor(shapePatternRole);
 				newShape.setGraphicalRepresentation(primaryShape.getGraphicalRepresentation());
 			}
 			else if (shapePatternRole.getGraphicalRepresentation() != null) {
@@ -568,7 +568,7 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 		return null;
 	}
 
-	protected OEShema finalizePerformAddShema(org.openflexo.foundation.viewpoint.AddShema action, OEShema newShema)
+	protected View finalizePerformAddShema(org.openflexo.foundation.viewpoint.AddShema action, View newShema)
 	{
 		return newShema;
 	}
@@ -583,17 +583,17 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 
 	private void pourNePasOublier() 
 	{
-		String FLEXO_CONCEPTS_URI = "http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl";
+		String FLEXO_CONCEPTS_URI = "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl";
 		String FLEXO_MODEL_OBJECT = FLEXO_CONCEPTS_URI+"#FlexoModelObject";
 		String LINKED_TO_MODEL_PROPERTY = FLEXO_CONCEPTS_URI+"#linkedToModel";
 		String CLASS_NAME_PROPERTY = FLEXO_CONCEPTS_URI+"#className";
 		String FLEXO_ID_PROPERTY = FLEXO_CONCEPTS_URI+"#flexoID";
 		String RESOURCE_NAME_PROPERTY = FLEXO_CONCEPTS_URI+"#resourceName";
 
-		String BOT_URI = "http://www.agilebirds.com/flexo/ontologies/OrganizationTree/BasicOrganizationTree.owl";
+		String BOT_URI = "http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl";
 		String COMPANY_NAME = BOT_URI+"#companyName";
 
-		String BOT_EDITOR_URI = "http://www.agilebirds.com/flexo/ontologies/Calcs/BasicOrganizationTreeEditor.owl";
+		String BOT_EDITOR_URI = "http://www.agilebirds.com/openflexo/ViewPoints/BasicOrganizationTreeEditor.owl";
 		String BOT_COMPANY = BOT_EDITOR_URI+"#BOTCompany";
 
 		OntModel ontModel = getProject().getProjectOntology().getOntModel();

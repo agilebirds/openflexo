@@ -30,18 +30,18 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.viewpoint.CalcObject;
-import org.openflexo.foundation.viewpoint.CalcPalette;
-import org.openflexo.foundation.viewpoint.CalcPaletteElement;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
+import org.openflexo.foundation.viewpoint.ViewPointPalette;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 
 
-public class AddCalcPaletteElement extends FlexoAction<AddCalcPaletteElement,CalcPalette,CalcObject> 
+public class AddCalcPaletteElement extends FlexoAction<AddCalcPaletteElement,ViewPointPalette,ViewPointObject> 
 {
 
 	private static final Logger logger = Logger.getLogger(AddCalcPaletteElement.class.getPackage().getName());
 
-	public static FlexoActionType<AddCalcPaletteElement,CalcPalette,CalcObject> actionType 
-	= new FlexoActionType<AddCalcPaletteElement,CalcPalette,CalcObject> (
+	public static FlexoActionType<AddCalcPaletteElement,ViewPointPalette,ViewPointObject> actionType 
+	= new FlexoActionType<AddCalcPaletteElement,ViewPointPalette,ViewPointObject> (
 			"add_new_palette_element",
 			FlexoActionType.newMenu,
 			FlexoActionType.defaultGroup,
@@ -51,19 +51,19 @@ public class AddCalcPaletteElement extends FlexoAction<AddCalcPaletteElement,Cal
 		 * Factory method
 		 */
 		@Override
-		public AddCalcPaletteElement makeNewAction(CalcPalette focusedObject, Vector<CalcObject> globalSelection, FlexoEditor editor) 
+		public AddCalcPaletteElement makeNewAction(ViewPointPalette focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) 
 		{
 			return new AddCalcPaletteElement(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CalcPalette object, Vector<CalcObject> globalSelection) 
+		protected boolean isVisibleForSelection(ViewPointPalette object, Vector<ViewPointObject> globalSelection) 
 		{
 			return object != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CalcPalette object, Vector<CalcObject> globalSelection) 
+		protected boolean isEnabledForSelection(ViewPointPalette object, Vector<ViewPointObject> globalSelection) 
 		{
 			return object != null;
 		}
@@ -71,15 +71,15 @@ public class AddCalcPaletteElement extends FlexoAction<AddCalcPaletteElement,Cal
 	};
 
 	static {
-		FlexoModelObject.addActionForClass (AddCalcPaletteElement.actionType, CalcPalette.class);
+		FlexoModelObject.addActionForClass (AddCalcPaletteElement.actionType, ViewPointPalette.class);
 	}
 
 
 	private String _newElementName;
-	private CalcPaletteElement _newElement;
+	private ViewPointPaletteElement _newElement;
 	private Object _graphicalRepresentation;
 
-	AddCalcPaletteElement (CalcPalette focusedObject, Vector<CalcObject> globalSelection, FlexoEditor editor)
+	AddCalcPaletteElement (ViewPointPalette focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor)
 	{
 		super(actionType, focusedObject, globalSelection, editor);
 	}
@@ -99,7 +99,7 @@ public class AddCalcPaletteElement extends FlexoAction<AddCalcPaletteElement,Cal
 		return null;
 	}
 
-	public CalcPaletteElement getNewElement() 
+	public ViewPointPaletteElement getNewElement() 
 	{
 		return _newElement;
 	}

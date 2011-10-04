@@ -46,7 +46,7 @@ public class AddShema extends EditionAction<ShemaPatternRole> {
 	@Override
 	public String getInspectorName() 
 	{
-		return Inspectors.CED.ADD_SHEMA_INSPECTOR;
+		return Inspectors.VPM.ADD_SHEMA_INSPECTOR;
 	}
 
 	public String _getShemaName()

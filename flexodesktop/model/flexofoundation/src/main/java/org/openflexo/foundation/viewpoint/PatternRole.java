@@ -27,7 +27,7 @@ import org.openflexo.foundation.Inspectors;
  * @author sylvain
  *
  */
-public abstract class PatternRole extends CalcObject {
+public abstract class PatternRole extends ViewPointObject {
 
 	public static enum PatternRoleType
 	{
@@ -72,7 +72,7 @@ public abstract class PatternRole extends CalcObject {
 	}
 
 	@Override
-	public OntologyCalc getCalc() 
+	public ViewPoint getCalc() 
 	{
 		if (getEditionPattern() != null) {
 			return getEditionPattern().getCalc();
@@ -106,11 +106,11 @@ public abstract class PatternRole extends CalcObject {
 	public String getInspectorName() 
 	{
 		if (getType() == PatternRoleType.Shape) {
-			return Inspectors.CED.SHAPE_PATTERN_ROLE_INSPECTOR;
+			return Inspectors.VPM.SHAPE_PATTERN_ROLE_INSPECTOR;
 		} else if (getType() == PatternRoleType.Connector) {
-			return Inspectors.CED.CONNECTOR_PATTERN_ROLE_INSPECTOR;
+			return Inspectors.VPM.CONNECTOR_PATTERN_ROLE_INSPECTOR;
 		} else {
-			return Inspectors.CED.PATTERN_ROLE_INSPECTOR;
+			return Inspectors.VPM.PATTERN_ROLE_INSPECTOR;
 		}
 	}
 	

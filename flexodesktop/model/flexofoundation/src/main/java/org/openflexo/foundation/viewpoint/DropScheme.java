@@ -43,7 +43,7 @@ public class DropScheme extends EditionScheme {
 	@Override
 	public String getInspectorName() 
 	{
-		return Inspectors.CED.DROP_SCHEME_INSPECTOR;
+		return Inspectors.VPM.DROP_SCHEME_INSPECTOR;
 	}
 
 	public String _getTarget() 

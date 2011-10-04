@@ -64,7 +64,7 @@ public class AddClass extends AddConcept {
 	@Override
 	public String getInspectorName() 
 	{
-		return Inspectors.CED.ADD_CLASS_INSPECTOR;
+		return Inspectors.VPM.ADD_CLASS_INSPECTOR;
 	}
 
 	@Override

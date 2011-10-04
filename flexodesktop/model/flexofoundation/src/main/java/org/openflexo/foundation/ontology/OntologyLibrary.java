@@ -64,12 +64,12 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 	//public static OntologyLibrary INSTANCE;
 	
 	//public static final File ONTOLOGY_LIBRARY_DIR = new FileResource("Ontologies");
-	//public static final String FLEXO_ONTOLOGY_ROOT_URI = "http://www.agilebirds.com/flexo/ontologies";
+	//public static final String FLEXO_ONTOLOGY_ROOT_URI = "http://www.agilebirds.com/openflexo/ontologies";
 
 	public static final String RDFS_ONTOLOGY_URI = "http://www.w3.org/2000/01/rdf-schema";
 	public static final String RDF_ONTOLOGY_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns";
 	public static final String OWL_ONTOLOGY_URI = "http://www.w3.org/2002/07/owl";
-	public static final String FLEXO_CONCEPT_ONTOLOGY_URI = "http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl";
+	public static final String FLEXO_CONCEPT_ONTOLOGY_URI = "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl";
 
 	public OntologyClass THING;
 
@@ -562,7 +562,7 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 	@Override
 	public String getInspectorName() 
 	{
-		return Inspectors.OE.ONTOLOGY_LIBRARY_INSPECTOR;
+		return Inspectors.VE.ONTOLOGY_LIBRARY_INSPECTOR;
 	}
 	
 	public Vector<OntologyObjectProperty> getRootObjectProperties() 

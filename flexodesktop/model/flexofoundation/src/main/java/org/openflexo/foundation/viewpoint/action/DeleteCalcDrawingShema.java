@@ -26,17 +26,17 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.viewpoint.CalcDrawingShema;
-import org.openflexo.foundation.viewpoint.CalcObject;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
 
 
-public class DeleteCalcDrawingShema extends FlexoAction<DeleteCalcDrawingShema,CalcDrawingShema,CalcObject> 
+public class DeleteCalcDrawingShema extends FlexoAction<DeleteCalcDrawingShema,ExampleDrawingShema,ViewPointObject> 
 {
 
 	private static final Logger logger = Logger.getLogger(DeleteCalcDrawingShema.class.getPackage().getName());
 
-	public static FlexoActionType<DeleteCalcDrawingShema,CalcDrawingShema,CalcObject> actionType 
-	= new FlexoActionType<DeleteCalcDrawingShema,CalcDrawingShema,CalcObject> (
+	public static FlexoActionType<DeleteCalcDrawingShema,ExampleDrawingShema,ViewPointObject> actionType 
+	= new FlexoActionType<DeleteCalcDrawingShema,ExampleDrawingShema,ViewPointObject> (
 			"delete_calc_drawing_shema",
 			FlexoActionType.editGroup,
 			FlexoActionType.DELETE_ACTION_TYPE) {
@@ -45,19 +45,19 @@ public class DeleteCalcDrawingShema extends FlexoAction<DeleteCalcDrawingShema,C
 		 * Factory method
 		 */
 		@Override
-		public DeleteCalcDrawingShema makeNewAction(CalcDrawingShema focusedObject, Vector<CalcObject> globalSelection, FlexoEditor editor) 
+		public DeleteCalcDrawingShema makeNewAction(ExampleDrawingShema focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) 
 		{
 			return new DeleteCalcDrawingShema(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CalcDrawingShema object, Vector<CalcObject> globalSelection) 
+		protected boolean isVisibleForSelection(ExampleDrawingShema object, Vector<ViewPointObject> globalSelection) 
 		{
 			return object != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CalcDrawingShema object, Vector<CalcObject> globalSelection) 
+		protected boolean isEnabledForSelection(ExampleDrawingShema object, Vector<ViewPointObject> globalSelection) 
 		{
 			return object != null;
 		}
@@ -65,11 +65,11 @@ public class DeleteCalcDrawingShema extends FlexoAction<DeleteCalcDrawingShema,C
 	};
 
 	static {
-		FlexoModelObject.addActionForClass (DeleteCalcDrawingShema.actionType, CalcDrawingShema.class);
+		FlexoModelObject.addActionForClass (DeleteCalcDrawingShema.actionType, ExampleDrawingShema.class);
 	}
 
 
-	DeleteCalcDrawingShema (CalcDrawingShema focusedObject, Vector<CalcObject> globalSelection, FlexoEditor editor)
+	DeleteCalcDrawingShema (ExampleDrawingShema focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor)
 	{
 		super(actionType, focusedObject, globalSelection, editor);
 	}

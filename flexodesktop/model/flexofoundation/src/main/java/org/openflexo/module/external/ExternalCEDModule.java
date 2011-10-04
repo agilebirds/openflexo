@@ -21,8 +21,8 @@ package org.openflexo.module.external;
 
 import javax.swing.JComponent;
 
-import org.openflexo.foundation.viewpoint.CalcDrawingShema;
-import org.openflexo.foundation.viewpoint.CalcPalette;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.viewpoint.ViewPointPalette;
 
 
 
@@ -36,8 +36,8 @@ import org.openflexo.foundation.viewpoint.CalcPalette;
  */
 public interface ExternalCEDModule extends ExternalModule
 {
-    public JComponent createScreenshotForShema(CalcDrawingShema shema);
-    public JComponent createScreenshotForPalette(CalcPalette palette);
+    public JComponent createScreenshotForShema(ExampleDrawingShema shema);
+    public JComponent createScreenshotForPalette(ViewPointPalette palette);
     public float getScreenshotQuality();
     public void finalizeScreenshotGeneration();
 

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Palette id="1" index="0" name="OrganizationalUnit">
+  <PaletteElement id="2" name="Root Organizational Unit" editionPattern="RootOrganizationUnit">
+    <Parameter id="3" name="organizationUnitName" value="Enterprise" />
+    <Parameter id="4" name="organizationUnitURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="5" name="organizationUnitDescription" value="" />
+    <Parameter id="6" name="organizationUnit" value="" />
+    <ShapeGraphicalRepresentation id="7" className="org.openflexo.vpm.palette.PaletteElementGR" x="5.0" y="5.0" width="240.9845823095823" height="98.25401878083719" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="Root Organizational Unit" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="122.0" absoluteTextY="13.0" textAlignment="CENTER">
+      <ForegroundStyle id="8" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="9" color="229,229,251" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="10" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="11" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="12" isRounded="true" arcSize="20.0" />
+      <TextStyle id="13" font="Lucida Sans,1,13" color="0,51,204" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <PaletteElement id="14" name="Sub Org Unit" editionPattern="OrganizationUnit">
+    <Parameter id="15" name="organizationUnitName" value="&lt;organization unit&gt;" />
+    <Parameter id="16" name="organizationUnitURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="17" name="organizationUnitDescription" value="" />
+    <ShapeGraphicalRepresentation id="18" className="org.openflexo.vpm.palette.PaletteElementGR" x="132.0" y="174.0" width="113.15068493150686" height="47.049180327868854" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="Sub Org Unit" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="59.314446002805056" absoluteTextY="13.0" textAlignment="CENTER">
+      <ForegroundStyle id="19" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="20" color="250,214,250" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="21" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="22" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="23" isRounded="true" arcSize="20.0" />
+      <TextStyle id="24" font="Lucida Sans,1,13" color="102,0,102" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <PaletteElement id="25" name="Sub Org Unit" editionPattern="OrganizationUnit">
+    <Parameter id="26" name="organizationUnitName" value="&lt;organization unit&gt;" />
+    <Parameter id="27" name="organizationUnitURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="28" name="organizationUnitDescription" value="" />
+    <ShapeGraphicalRepresentation id="29" className="org.openflexo.vpm.palette.PaletteElementGR" x="131.0" y="115.0" width="115.13698630136989" height="47.049180327868854" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="Sub Org Unit" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="60.35568022440394" absoluteTextY="13.0" textAlignment="CENTER">
+      <ForegroundStyle id="30" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="31" color="252,227,227" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="32" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="33" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="34" isRounded="true" arcSize="20.0" />
+      <TextStyle id="35" font="Lucida Sans,1,13" color="153,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <PaletteElement id="36" name="Sub Org Unit" editionPattern="OrganizationUnit">
+    <Parameter id="37" name="organizationUnitName" value="&lt;organization unit&gt;" />
+    <Parameter id="38" name="organizationUnitURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="39" name="organizationUnitDescription" value="" />
+    <ShapeGraphicalRepresentation id="40" className="org.openflexo.vpm.palette.PaletteElementGR" x="132.0" y="233.0" width="112.15753424657535" height="47.049180327868854" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="Sub Org Unit" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="57.87517531556803" absoluteTextY="11.0" textAlignment="CENTER">
+      <ForegroundStyle id="41" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="42" color="255,213,203" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="43" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="44" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="45" isRounded="true" arcSize="20.0" />
+      <TextStyle id="46" font="Lucida Sans,1,13" color="102,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <PaletteElement id="47" name="Sub Org Unit" editionPattern="OrganizationUnit">
+    <Parameter id="48" name="organizationUnitName" value="&lt;organization unit&gt;" />
+    <Parameter id="49" name="organizationUnitURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="50" name="organizationUnitDescription" value="" />
+    <ShapeGraphicalRepresentation id="51" className="org.openflexo.vpm.palette.PaletteElementGR" x="4.0" y="174.0" width="119.10958904109592" height="47.049180327868854" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="Sub Org Unit" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="62.438148667601695" absoluteTextY="13.0" textAlignment="CENTER">
+      <ForegroundStyle id="52" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="53" color="247,247,213" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="54" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="55" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="56" isRounded="true" arcSize="20.0" />
+      <TextStyle id="57" font="Lucida Sans,1,13" color="102,102,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <PaletteElement id="58" name="Sub Org Unit" editionPattern="OrganizationUnit">
+    <Parameter id="59" name="organizationUnitName" value="&lt;organization unit&gt;" />
+    <Parameter id="60" name="organizationUnitURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="61" name="organizationUnitDescription" value="" />
+    <ShapeGraphicalRepresentation id="62" className="org.openflexo.vpm.palette.PaletteElementGR" x="5.0" y="233.0" width="118.1164383561644" height="47.049180327868854" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="Sub Org Unit" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="61.917531556802246" absoluteTextY="13.0" textAlignment="CENTER">
+      <ForegroundStyle id="63" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="64" color="218,252,252" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="65" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="66" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="67" isRounded="true" arcSize="20.0" />
+      <TextStyle id="68" font="Lucida Sans,1,13" color="0,0,153" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <PaletteElement id="69" name="Sub Org Unit" editionPattern="OrganizationUnit">
+    <Parameter id="70" name="organizationUnitName" value="&lt;organization unit&gt;" />
+    <Parameter id="71" name="organizationUnitURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="72" name="organizationUnitDescription" value="" />
+    <ShapeGraphicalRepresentation id="73" className="org.openflexo.vpm.palette.PaletteElementGR" x="4.0" y="115.0" width="118.1164383561644" height="47.049180327868854" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="Sub Org Unit" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="61.917531556802246" absoluteTextY="13.0" textAlignment="CENTER">
+      <ForegroundStyle id="74" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="75" color="221,249,221" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="76" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="77" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="78" isRounded="true" arcSize="20.0" />
+      <TextStyle id="79" font="Lucida Sans,1,13" color="0,102,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <DrawingGraphicalRepresentation id="80" className="org.openflexo.vpm.palette.PaletteGR" width="260.0" height="300.0" drawWorkingArea="true" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+    <TextStyle id="81" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+  </DrawingGraphicalRepresentation>
+</Palette>
+

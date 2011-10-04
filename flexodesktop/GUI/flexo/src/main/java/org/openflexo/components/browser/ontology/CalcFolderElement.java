@@ -22,8 +22,8 @@ package org.openflexo.components.browser.ontology;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.viewpoint.CalcFolder;
-import org.openflexo.foundation.viewpoint.OntologyCalc;
+import org.openflexo.foundation.viewpoint.ViewPointFolder;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 
 
 /**
@@ -35,7 +35,7 @@ import org.openflexo.foundation.viewpoint.OntologyCalc;
 public class CalcFolderElement extends BrowserElement
 {
 
-    protected CalcFolderElement(CalcFolder folder, ProjectBrowser browser, BrowserElement parent)
+    protected CalcFolderElement(ViewPointFolder folder, ProjectBrowser browser, BrowserElement parent)
     {
         super(folder, BrowserElementType.CALC_FOLDER, browser, parent);
     }
@@ -43,10 +43,10 @@ public class CalcFolderElement extends BrowserElement
     @Override
 	protected void buildChildrenVector()
     {
-       	for (CalcFolder subFolder : getFolder().getChildren()) {
+       	for (ViewPointFolder subFolder : getFolder().getChildren()) {
        		addToChilds(subFolder);
        	}
-       	for (OntologyCalc calc : getFolder().getCalcs()) {
+       	for (ViewPoint calc : getFolder().getViewPoints()) {
        		addToChilds(calc);
        	}
      }
@@ -57,9 +57,9 @@ public class CalcFolderElement extends BrowserElement
         return getFolder().getName();
     }
 
-    protected CalcFolder getFolder()
+    protected ViewPointFolder getFolder()
     {
-        return (CalcFolder) getObject();
+        return (ViewPointFolder) getObject();
     }
 
 }

@@ -22,7 +22,7 @@ package org.openflexo.components.browser.ontology;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.viewpoint.CalcPaletteElement;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 
 
 /**
@@ -34,7 +34,7 @@ import org.openflexo.foundation.viewpoint.CalcPaletteElement;
 public class CalcPaletteElementBrowserElement extends BrowserElement
 {
 
-    protected CalcPaletteElementBrowserElement(CalcPaletteElement element, ProjectBrowser browser, BrowserElement parent)
+    protected CalcPaletteElementBrowserElement(ViewPointPaletteElement element, ProjectBrowser browser, BrowserElement parent)
     {
         super(element, BrowserElementType.ONTOLOGY_CALC_PALETTE_ELEMENT, browser, parent);
     }
@@ -50,9 +50,9 @@ public class CalcPaletteElementBrowserElement extends BrowserElement
         return getCalcElement().getName();
     }
 
-    protected CalcPaletteElement getCalcElement()
+    protected ViewPointPaletteElement getCalcElement()
     {
-        return (CalcPaletteElement) getObject();
+        return (ViewPointPaletteElement) getObject();
     }
 
 }

@@ -146,7 +146,7 @@ public class AddIndividual extends AddConcept {
 	@Override
 	public String getInspectorName() 
 	{
-		return Inspectors.CED.ADD_INDIVIDUAL_INSPECTOR;
+		return Inspectors.VPM.ADD_INDIVIDUAL_INSPECTOR;
 	}
 
 	@Override

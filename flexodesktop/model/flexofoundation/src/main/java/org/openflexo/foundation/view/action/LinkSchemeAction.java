@@ -29,10 +29,10 @@ import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.view.OEConnector;
-import org.openflexo.foundation.view.OEShape;
-import org.openflexo.foundation.view.OEShema;
-import org.openflexo.foundation.view.OEShemaObject;
+import org.openflexo.foundation.view.ViewConnector;
+import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.viewpoint.AddConnector;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.LinkScheme;
@@ -68,14 +68,14 @@ public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction>
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) 
 		{
-			return (object instanceof OEShemaObject);
+			return (object instanceof ViewObject);
 		}
 
 	};
 
-	private OEShape _fromShape;
-	private OEShape _toShape;
-	private OEConnector _newConnector;
+	private ViewShape _fromShape;
+	private ViewShape _toShape;
+	private ViewConnector _newConnector;
 
 	private LinkScheme _linkScheme;
 	
@@ -132,7 +132,7 @@ public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction>
 		_graphicalRepresentation = graphicalRepresentation;
 	}
 
-	public OEConnector getNewConnector()
+	public ViewConnector getNewConnector()
 	{
 		return _newConnector;
 	}
@@ -144,33 +144,33 @@ public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction>
 	}
 
 
-	public OEShape getFromShape() {
+	public ViewShape getFromShape() {
 		return _fromShape;
 	}
 
-	public void setFromShape(OEShape fromShape) {
+	public void setFromShape(ViewShape fromShape) {
 		_fromShape = fromShape;
 	}
 
-	public OEShape getToShape() {
+	public ViewShape getToShape() {
 		return _toShape;
 	}
 
-	public void setToShape(OEShape toShape) {
+	public void setToShape(ViewShape toShape) {
 		_toShape = toShape;
 	}
 
 	@Override
-	protected OEShema retrieveOEShema()
+	protected View retrieveOEShema()
 	{
 		if (getFromShape() != null) return getFromShape().getShema();
 		if (getToShape() != null) return getToShape().getShema();
-		if (getFocusedObject() instanceof OEShemaObject) return ((OEShemaObject)getFocusedObject()).getShema();
+		if (getFocusedObject() instanceof ViewObject) return ((ViewObject)getFocusedObject()).getShema();
 		return null;
 	}
 	
 	@Override
-	protected OEConnector performAddConnector(AddConnector action)
+	protected ViewConnector performAddConnector(AddConnector action)
 	{
 		_newConnector = super.performAddConnector(action);
 		return _newConnector;

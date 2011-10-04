@@ -92,7 +92,7 @@ public abstract class OntologyStatement extends AbstractOntologyObject implement
 	@Override
 	public final String getInspectorName()
 	{
-		return Inspectors.OE.ONTOLOGY_STATEMENT_INSPECTOR;
+		return Inspectors.VE.ONTOLOGY_STATEMENT_INSPECTOR;
 	}
 
 	@Override

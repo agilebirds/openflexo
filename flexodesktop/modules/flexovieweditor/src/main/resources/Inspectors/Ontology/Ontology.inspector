@@ -13,7 +13,7 @@
       <CheckBox selected="false" readOnly="true" localize="true" name="IsReadOnly" data="data.isReadOnly" constraints="twocols(location=right;index=27;expandHorizontally=false;expandVertically=false)" />
       <Label label="imported_ontologies" align="center" localize="true" name="ImportedOntologiesLabel" constraints="twocols(location=center;index=28;expandHorizontally=true;expandVertically=false)" visible="(data.isLoaded = true)" />
       <Table iteratorClassName="org.openflexo.foundation.ontology.FlexoOntology" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.importedOntologies" constraints="twocols(location=right;index=29;expandHorizontally=true;expandVertically=true)" visible="(data.isLoaded = true)" name="ImportedOntologies" localize="true" manageDynamicModel="true">
-        <IconColumn data="iterator.icon" title="" columnWidth="30" resizable="false" displayTitle="true" />
+        <IconColumn data="controller.iconForObject(iterator)" title="" columnWidth="30" resizable="false" displayTitle="true" />
         <LabelColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" />
         <LabelColumn data="iterator.URI" title="uri" columnWidth="150" resizable="true" displayTitle="true" />
       </Table>

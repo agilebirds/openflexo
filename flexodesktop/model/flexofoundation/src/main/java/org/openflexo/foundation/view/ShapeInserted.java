@@ -30,15 +30,15 @@ import org.openflexo.foundation.ontology.dm.OEDataModification;
 public class ShapeInserted extends OEDataModification
 {
 
-    private OEShemaObject _parent;
+    private ViewObject _parent;
 
-    public ShapeInserted(OEShape shape, OEShemaObject parent)
+    public ShapeInserted(ViewShape shape, ViewObject parent)
     {
         super(null, shape);
         _parent = parent;
     }
 
-    public OEShemaObject getParent()
+    public ViewObject getParent()
     {
         return _parent;
     }

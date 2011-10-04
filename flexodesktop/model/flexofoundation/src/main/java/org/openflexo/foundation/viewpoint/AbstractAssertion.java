@@ -28,7 +28,7 @@ import org.openflexo.antar.expr.UnresolvedExpressionException;
 import org.openflexo.antar.expr.parser.ParseException;
 
 
-public abstract class AbstractAssertion extends CalcObject {
+public abstract class AbstractAssertion extends ViewPointObject {
 
 	private AddIndividual _action;
 	private String conditional;
@@ -50,7 +50,7 @@ public abstract class AbstractAssertion extends CalcObject {
 	}
 	
 	@Override
-	public OntologyCalc getCalc() 
+	public ViewPoint getCalc() 
 	{
 		return getAction().getCalc();
 	}

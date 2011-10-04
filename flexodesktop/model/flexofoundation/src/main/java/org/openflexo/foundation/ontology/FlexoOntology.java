@@ -106,7 +106,7 @@ public abstract class FlexoOntology extends OntologyObject {
 		logger.info("Register ontology "+anURI+ " file: "+owlFile);
 
 		ontologyURI = anURI;
-		if (owlFile.exists()) {
+		if (owlFile != null && owlFile.exists()) {
 			name = findOntologyName(owlFile);
 		}
 		if (name == null) {

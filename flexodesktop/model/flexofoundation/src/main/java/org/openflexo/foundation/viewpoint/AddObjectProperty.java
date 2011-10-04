@@ -114,7 +114,7 @@ public class AddObjectProperty extends AddProperty {
 	@Override
 	public String getInspectorName() 
 	{
-		return Inspectors.CED.ADD_OBJECT_PROPERTY_INSPECTOR;
+		return Inspectors.VPM.ADD_OBJECT_PROPERTY_INSPECTOR;
 	}
 
 	@Override

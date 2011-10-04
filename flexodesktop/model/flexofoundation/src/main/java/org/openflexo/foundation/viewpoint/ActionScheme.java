@@ -50,7 +50,7 @@ public class ActionScheme extends EditionScheme {
 	@Override
 	public String getInspectorName() 
 	{
-		return Inspectors.CED.ACTION_SCHEME_INSPECTOR;
+		return Inspectors.VPM.ACTION_SCHEME_INSPECTOR;
 	}
 
 	public String getConditional() 

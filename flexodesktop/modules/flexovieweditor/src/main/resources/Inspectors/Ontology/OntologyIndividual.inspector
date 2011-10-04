@@ -6,7 +6,7 @@
       <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Name" data="data.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
       <Label label="ontology_super_classes" align="center" localize="true" name="SuperClassesLabel" constraints="twocols(location=center;index=6;expandHorizontally=true;expandVertically=false)" />
       <Table iteratorClassName="org.openflexo.foundation.ontology.OntologyClass" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.superClasses" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=true)" name="SuperClasses" localize="true" manageDynamicModel="true">
-        <IconColumn data="iterator.icon" title="" columnWidth="30" resizable="false" displayTitle="true" />
+        <IconColumn data="controller.iconForObject(iterator)" title="" columnWidth="30" resizable="false" displayTitle="true" />
         <LabelColumn data="iterator.name" title="URI" columnWidth="200" resizable="true" displayTitle="true" />
       </Table>
     </Tab>

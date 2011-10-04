@@ -32,19 +32,19 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.viewpoint.CalcDrawingShema;
-import org.openflexo.foundation.viewpoint.CalcObject;
-import org.openflexo.foundation.viewpoint.OntologyCalc;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
-public class CreateCalcDrawingShema extends FlexoAction<CreateCalcDrawingShema,OntologyCalc,CalcObject> 
+public class CreateCalcDrawingShema extends FlexoAction<CreateCalcDrawingShema,ViewPoint,ViewPointObject> 
 {
 
 	private static final Logger logger = Logger.getLogger(CreateCalcDrawingShema.class.getPackage().getName());
 
-	public static FlexoActionType<CreateCalcDrawingShema,OntologyCalc,CalcObject> actionType 
-	= new FlexoActionType<CreateCalcDrawingShema,OntologyCalc,CalcObject> (
+	public static FlexoActionType<CreateCalcDrawingShema,ViewPoint,ViewPointObject> actionType 
+	= new FlexoActionType<CreateCalcDrawingShema,ViewPoint,ViewPointObject> (
 			"create_new_drawing",
 			FlexoActionType.newMenu,
 			FlexoActionType.defaultGroup,
@@ -54,19 +54,19 @@ public class CreateCalcDrawingShema extends FlexoAction<CreateCalcDrawingShema,O
 		 * Factory method
 		 */
 		@Override
-		public CreateCalcDrawingShema makeNewAction(OntologyCalc focusedObject, Vector<CalcObject> globalSelection, FlexoEditor editor) 
+		public CreateCalcDrawingShema makeNewAction(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) 
 		{
 			return new CreateCalcDrawingShema(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(OntologyCalc object, Vector<CalcObject> globalSelection) 
+		protected boolean isVisibleForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) 
 		{
 			return object != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(OntologyCalc object, Vector<CalcObject> globalSelection) 
+		protected boolean isEnabledForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) 
 		{
 			return object != null;
 		}
@@ -74,7 +74,7 @@ public class CreateCalcDrawingShema extends FlexoAction<CreateCalcDrawingShema,O
 	};
 
 	static {
-		FlexoModelObject.addActionForClass (CreateCalcDrawingShema.actionType, OntologyCalc.class);
+		FlexoModelObject.addActionForClass (CreateCalcDrawingShema.actionType, ViewPoint.class);
 	}
 
 
@@ -82,9 +82,9 @@ public class CreateCalcDrawingShema extends FlexoAction<CreateCalcDrawingShema,O
 	public String description;
 	public Object graphicalRepresentation;
 
-	private CalcDrawingShema _newShema;
+	private ExampleDrawingShema _newShema;
 
-	CreateCalcDrawingShema (OntologyCalc focusedObject, Vector<CalcObject> globalSelection, FlexoEditor editor)
+	CreateCalcDrawingShema (ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor)
 	{
 		super(actionType, focusedObject, globalSelection, editor);
 	}
@@ -94,9 +94,9 @@ public class CreateCalcDrawingShema extends FlexoAction<CreateCalcDrawingShema,O
 	{
 		logger.info ("Add calc shema");  	
 
-		_newShema = CalcDrawingShema.newShema(
+		_newShema = ExampleDrawingShema.newShema(
 				getFocusedObject(), 
-				new File(getFocusedObject().getCalcDirectory(),newShemaName+".shema"),
+				new File(getFocusedObject().getViewPointDirectory(),newShemaName+".shema"),
 				graphicalRepresentation);
 		_newShema.setDescription(description);
 		getFocusedObject().addToCalcShemas(_newShema);
@@ -110,7 +110,7 @@ public class CreateCalcDrawingShema extends FlexoAction<CreateCalcDrawingShema,O
 		return null;
 	}
 
-	public CalcDrawingShema getNewShema()
+	public ExampleDrawingShema getNewShema()
 	{
 		return _newShema;
 	}

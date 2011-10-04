@@ -46,7 +46,7 @@ public class GoToAction extends EditionAction {
 	@Override
 	public String getInspectorName() 
 	{
-		return Inspectors.CED.GO_TO_OBJECT_INSPECTOR;
+		return Inspectors.VPM.GO_TO_OBJECT_INSPECTOR;
 	}
 
 	public String _getTargetObject()

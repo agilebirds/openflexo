@@ -30,15 +30,15 @@ import org.openflexo.foundation.ontology.dm.OEDataModification;
 public class ShapeRemoved extends OEDataModification
 {
 
-    private OEShemaObject _parent;
+    private ViewObject _parent;
 
-    public ShapeRemoved(OEShape shape, OEShemaObject parent)
+    public ShapeRemoved(ViewShape shape, ViewObject parent)
     {
         super(shape, null);
         _parent = parent;
     }
 
-    public OEShemaObject getParent()
+    public ViewObject getParent()
     {
         return _parent;
     }

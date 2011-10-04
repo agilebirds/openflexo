@@ -50,7 +50,7 @@ public class ImportedOntology extends FlexoOntology {
 	@Override
 	public String getInspectorName() 
 	{
-		return Inspectors.OE.IMPORTED_ONTOLOGY_INSPECTOR;
+		return Inspectors.VE.IMPORTED_ONTOLOGY_INSPECTOR;
 	}
 	
 	@Override

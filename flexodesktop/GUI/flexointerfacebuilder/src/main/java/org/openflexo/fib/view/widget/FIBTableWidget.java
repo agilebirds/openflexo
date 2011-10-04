@@ -443,7 +443,12 @@ implements TableModelListener, FIBSelectable
 	@Override
 	public boolean mayRepresent(Object o)
 	{
-		if (getValue() != null) return getValue().contains(o);
+		try {
+			if (getValue() != null) return getValue().contains(o);
+		}
+		catch (ClassCastException e) {
+			logger.warning("ClassCastException in FIBTableWidget: "+e.getMessage());
+		}
 		return false;
 	}
 

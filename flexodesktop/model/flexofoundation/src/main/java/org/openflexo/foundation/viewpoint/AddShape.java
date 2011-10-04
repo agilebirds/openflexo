@@ -23,7 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.view.OEShemaObject;
+import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 
@@ -46,7 +46,7 @@ public class AddShape extends AddShemaElementAction<ShapePatternRole> {
 	@Override
 	public String getInspectorName() 
 	{
-		return Inspectors.CED.ADD_SHAPE_INSPECTOR;
+		return Inspectors.VPM.ADD_SHAPE_INSPECTOR;
 	}
 
 	public String getContainer() 
@@ -88,7 +88,7 @@ public class AddShape extends AddShemaElementAction<ShapePatternRole> {
 	}
 
 	
-	public OEShemaObject getContainer(EditionSchemeAction action)
+	public ViewObject getContainer(EditionSchemeAction action)
 	{
 		if (action instanceof DropSchemeAction && getContainer() == null) {
 			return ((DropSchemeAction)action).getParent();

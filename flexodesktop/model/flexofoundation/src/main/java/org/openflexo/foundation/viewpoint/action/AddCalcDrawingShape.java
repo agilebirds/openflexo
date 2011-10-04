@@ -28,18 +28,18 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.foundation.viewpoint.CalcDrawingObject;
-import org.openflexo.foundation.viewpoint.CalcDrawingShape;
-import org.openflexo.foundation.viewpoint.CalcDrawingShema;
+import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 
 
-public class AddCalcDrawingShape extends FlexoAction<AddCalcDrawingShape,CalcDrawingObject,CalcDrawingObject> 
+public class AddCalcDrawingShape extends FlexoAction<AddCalcDrawingShape,ExampleDrawingObject,ExampleDrawingObject> 
 {
 
 	private static final Logger logger = Logger.getLogger(AddCalcDrawingShape.class.getPackage().getName());
 
-	public static FlexoActionType<AddCalcDrawingShape,CalcDrawingObject,CalcDrawingObject> actionType 
-	= new FlexoActionType<AddCalcDrawingShape,CalcDrawingObject,CalcDrawingObject> (
+	public static FlexoActionType<AddCalcDrawingShape,ExampleDrawingObject,ExampleDrawingObject> actionType 
+	= new FlexoActionType<AddCalcDrawingShape,ExampleDrawingObject,ExampleDrawingObject> (
 			"add_new_shape",
 			FlexoActionType.newMenu,
 			FlexoActionType.defaultGroup,
@@ -49,40 +49,40 @@ public class AddCalcDrawingShape extends FlexoAction<AddCalcDrawingShape,CalcDra
 		 * Factory method
 		 */
 		@Override
-		public AddCalcDrawingShape makeNewAction(CalcDrawingObject focusedObject, Vector<CalcDrawingObject> globalSelection, FlexoEditor editor) 
+		public AddCalcDrawingShape makeNewAction(ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) 
 		{
 			return new AddCalcDrawingShape(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CalcDrawingObject object, Vector<CalcDrawingObject> globalSelection) 
+		protected boolean isVisibleForSelection(ExampleDrawingObject object, Vector<ExampleDrawingObject> globalSelection) 
 		{
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CalcDrawingObject object, Vector<CalcDrawingObject> globalSelection) 
+		protected boolean isEnabledForSelection(ExampleDrawingObject object, Vector<ExampleDrawingObject> globalSelection) 
 		{
-			return (object instanceof CalcDrawingShema 
-					|| object instanceof CalcDrawingShape);
+			return (object instanceof ExampleDrawingShema 
+					|| object instanceof ExampleDrawingShape);
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass (AddCalcDrawingShape.actionType, CalcDrawingShema.class);
-		FlexoModelObject.addActionForClass (AddCalcDrawingShape.actionType, CalcDrawingShape.class);
+		FlexoModelObject.addActionForClass (AddCalcDrawingShape.actionType, ExampleDrawingShema.class);
+		FlexoModelObject.addActionForClass (AddCalcDrawingShape.actionType, ExampleDrawingShape.class);
 	}
 
 
 
-	private CalcDrawingShape _newShape;
+	private ExampleDrawingShape _newShape;
 	public String newShapeName;
-	private CalcDrawingObject _parent;
+	private ExampleDrawingObject _parent;
 	public Object graphicalRepresentation;
 	public boolean nameSetToNull = false;
 
-	AddCalcDrawingShape (CalcDrawingObject focusedObject, Vector<CalcDrawingObject> globalSelection, FlexoEditor editor)
+	AddCalcDrawingShape (ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor)
 	{
 		super(actionType, focusedObject, globalSelection, editor);
 	}
@@ -99,7 +99,7 @@ public class AddCalcDrawingShape extends FlexoAction<AddCalcDrawingShape,CalcDra
 			throw new InvalidParametersException("shape name is undefined");
 		}
 
-		_newShape = new CalcDrawingShape();
+		_newShape = new ExampleDrawingShape();
 		if (graphicalRepresentation != null) _newShape.setGraphicalRepresentation(graphicalRepresentation);
 
 		_newShape.setName(newShapeName);
@@ -108,24 +108,24 @@ public class AddCalcDrawingShape extends FlexoAction<AddCalcDrawingShape,CalcDra
 		logger.info("Added shape "+_newShape+" under "+getParent());
 	}
 
-	public CalcDrawingShape getNewShape() 
+	public ExampleDrawingShape getNewShape() 
 	{
 		return _newShape;
 	}
 
-	public CalcDrawingObject getParent()
+	public ExampleDrawingObject getParent()
 	{
 		if (_parent == null) {
-			if (getFocusedObject() instanceof CalcDrawingShape) {
+			if (getFocusedObject() instanceof ExampleDrawingShape) {
 				_parent = getFocusedObject();
-			} else if (getFocusedObject() instanceof CalcDrawingShema) {
+			} else if (getFocusedObject() instanceof ExampleDrawingShema) {
 				_parent = getFocusedObject();
 			} 
 		}
 		return _parent;
 	}
 
-	public void setParent(CalcDrawingObject parent) 
+	public void setParent(ExampleDrawingObject parent) 
 	{
 		_parent = parent;
 	}

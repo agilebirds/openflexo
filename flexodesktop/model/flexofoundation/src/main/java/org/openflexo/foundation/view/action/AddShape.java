@@ -30,18 +30,18 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.view.OEShape;
-import org.openflexo.foundation.view.OEShema;
-import org.openflexo.foundation.view.OEShemaObject;
+import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewObject;
 
 
-public class AddShape extends FlexoAction<AddShape,OEShemaObject,OEShemaObject> 
+public class AddShape extends FlexoAction<AddShape,ViewObject,ViewObject> 
 {
 
 	private static final Logger logger = Logger.getLogger(AddShape.class.getPackage().getName());
 
-	public static FlexoActionType<AddShape,OEShemaObject,OEShemaObject> actionType 
-	= new FlexoActionType<AddShape,OEShemaObject,OEShemaObject> (
+	public static FlexoActionType<AddShape,ViewObject,ViewObject> actionType 
+	= new FlexoActionType<AddShape,ViewObject,ViewObject> (
 			"add_new_shape",
 			FlexoActionType.newMenu,
 			FlexoActionType.defaultGroup,
@@ -51,40 +51,40 @@ public class AddShape extends FlexoAction<AddShape,OEShemaObject,OEShemaObject>
 		 * Factory method
 		 */
 		@Override
-		public AddShape makeNewAction(OEShemaObject focusedObject, Vector<OEShemaObject> globalSelection, FlexoEditor editor) 
+		public AddShape makeNewAction(ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) 
 		{
 			return new AddShape(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(OEShemaObject object, Vector<OEShemaObject> globalSelection) 
+		protected boolean isVisibleForSelection(ViewObject object, Vector<ViewObject> globalSelection) 
 		{
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(OEShemaObject object, Vector<OEShemaObject> globalSelection) 
+		protected boolean isEnabledForSelection(ViewObject object, Vector<ViewObject> globalSelection) 
 		{
-			return (object instanceof OEShema 
-					|| object instanceof OEShape);
+			return (object instanceof View 
+					|| object instanceof ViewShape);
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass (AddShape.actionType, OEShema.class);
-		FlexoModelObject.addActionForClass (AddShape.actionType, OEShape.class);
+		FlexoModelObject.addActionForClass (AddShape.actionType, View.class);
+		FlexoModelObject.addActionForClass (AddShape.actionType, ViewShape.class);
 	}
 
 
 
-	private OEShape _newShape;
+	private ViewShape _newShape;
 	private String _newShapeName;
-	private OEShemaObject _parent;
+	private ViewObject _parent;
 	private Object _graphicalRepresentation;
 	private boolean nameSetToNull = false;
 
-	AddShape (OEShemaObject focusedObject, Vector<OEShemaObject> globalSelection, FlexoEditor editor)
+	AddShape (ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor)
 	{
 		super(actionType, focusedObject, globalSelection, editor);
 	}
@@ -101,7 +101,7 @@ public class AddShape extends FlexoAction<AddShape,OEShemaObject,OEShemaObject>
 			throw new InvalidParameterException("shema name is undefined");
 		}
 
-		_newShape = new OEShape(getParent().getShema());
+		_newShape = new ViewShape(getParent().getShema());
 		if (getGraphicalRepresentation() != null) _newShape.setGraphicalRepresentation(getGraphicalRepresentation());
 
 		_newShape.setName(getNewShapeName());
@@ -116,24 +116,24 @@ public class AddShape extends FlexoAction<AddShape,OEShemaObject,OEShemaObject>
 		return null;
 	}
 
-	public OEShape getNewShape() 
+	public ViewShape getNewShape() 
 	{
 		return _newShape;
 	}
 
-	public OEShemaObject getParent()
+	public ViewObject getParent()
 	{
 		if (_parent == null) {
-			if (getFocusedObject() instanceof OEShape) {
+			if (getFocusedObject() instanceof ViewShape) {
 				_parent = getFocusedObject();
-			} else if (getFocusedObject() instanceof OEShema) {
+			} else if (getFocusedObject() instanceof View) {
 				_parent = getFocusedObject();
 			} 
 		}
 		return _parent;
 	}
 
-	public void setParent(OEShemaObject parent) 
+	public void setParent(ViewObject parent) 
 	{
 		_parent = parent;
 	}

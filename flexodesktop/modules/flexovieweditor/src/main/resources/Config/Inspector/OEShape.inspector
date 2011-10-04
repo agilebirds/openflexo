@@ -1,4 +1,4 @@
-<inspector title = "Shape" inheritsfrom="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.ontology.shema.OEShape">
+<inspector title = "Shape" inheritsfrom="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.view.ViewShape">
 
 	<tab name="Basic" index="0" layout="DEFAULT">
 		<property name="name" label="name" widget="TEXT_FIELD" constraint="0" depends="labelIsBoundToOntologicConcept" conditional="labelIsBoundToOntologicConcept=FALSE">

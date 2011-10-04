@@ -33,10 +33,12 @@ import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ontology.AbstractOntologyObject;
 import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.viewpoint.CalcLibraryObject;
+import org.openflexo.foundation.view.AbstractViewObject;
+import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.icon.SEIconLibrary;
+import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.selection.SelectionManager;
@@ -124,13 +126,16 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 		else if (object instanceof IEObject) {
 			return SEIconLibrary.iconForObject((IEObject)object);
 		}
-		else if (object instanceof CalcLibraryObject) {
-			return VPMIconLibrary.iconForObject((CalcLibraryObject)object);
+		else if (object instanceof ViewPointLibraryObject) {
+			return VPMIconLibrary.iconForObject((ViewPointLibraryObject)object);
+		}
+		else if (object instanceof AbstractViewObject) {
+			return VEIconLibrary.iconForObject((AbstractViewObject)object);
 		}
 		else if (object instanceof AbstractOntologyObject) {
 			return OntologyIconLibrary.iconForObject((AbstractOntologyObject)object);
 		}
-		logger.warning("Sorry, no icon defined for "+object.getClass());
+		logger.warning("Sorry, no icon defined for "+object+(object!=null?object.getClass():""));
 		return null;
 	}
 }

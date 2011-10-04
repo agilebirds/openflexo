@@ -41,7 +41,7 @@ public class DataPropertyAssertion extends AbstractAssertion {
 	@Override
 	public String getInspectorName() 
 	{
-		return Inspectors.CED.DATA_PROPERTY_ASSERTION_INSPECTOR;
+		return Inspectors.VPM.DATA_PROPERTY_ASSERTION_INSPECTOR;
 	}
 
 	public OntologyProperty getOntologyProperty()
