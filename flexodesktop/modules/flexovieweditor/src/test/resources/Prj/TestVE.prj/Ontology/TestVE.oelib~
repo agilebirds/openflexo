@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ShemaLibrary id="SYL_440" userID="SYL" flexoID="440" dontGenerate="false" useSpecificDescriptions="false">
+  <ShemaFolder id="SYL_441" docIndex="1" userID="SYL" flexoID="441" dontGenerate="false" useSpecificDescriptions="false">
+    <folderName>TestVE</folderName>
+  </ShemaFolder>
+</ShemaLibrary>
+
