@@ -37,7 +37,7 @@ public class OntologyViewEDITOR {
 			public Object[] getData() {
 				FlexoResourceCenter resourceCenter = ModuleLoader.getFlexoResourceCenter();
 				OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
-				FlexoOntology ontology1 = ontologyLibrary.getOntology("http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl");
+				FlexoOntology ontology1 = ontologyLibrary.getOntology("http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl");
 				ontology1.loadWhenUnloaded();
 				FlexoOntology ontology2 = ontologyLibrary.getOntology("http://www.w3.org/2004/02/skos/core");
 				ontology2.loadWhenUnloaded();

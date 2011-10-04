@@ -27,14 +27,14 @@ import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.viewpoint.CalcDrawingShema;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorRemoved;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeRemoved;
 
 
-public class CalcDrawingShemaGR extends DrawingGraphicalRepresentation<CalcDrawingShema> implements GraphicalFlexoObserver, CalcDrawingShemaConstants {
+public class CalcDrawingShemaGR extends DrawingGraphicalRepresentation<ExampleDrawingShema> implements GraphicalFlexoObserver, CalcDrawingShemaConstants {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(CalcDrawingShemaGR.class.getPackage().getName());
@@ -75,7 +75,7 @@ public class CalcDrawingShemaGR extends DrawingGraphicalRepresentation<CalcDrawi
 		return (CalcDrawingShemaRepresentation)super.getDrawing();
 	}
 	
-	public CalcDrawingShema getShema()
+	public ExampleDrawingShema getShema()
 	{
 		if (getDrawing() != null)
 			return getDrawing().getShema();

@@ -1,4 +1,4 @@
-<inspector title = "Pattern Role" inheritsfrom="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.ontology.calc.PatternRole">
+<inspector title = "Pattern Role" inheritsfrom="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.viewpoint.PatternRole">
 
 	<tab name="Basic" index="0" layout="DEFAULT">
 		<property name="patternRoleName" label="pattern_role_name" widget="TEXT_FIELD" constraint="0">

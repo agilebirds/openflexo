@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label label="flexo_model_object_type" localize="true" name="FlexoModelObjectTypeLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" visible="(data.type = &quot;FlexoModelObject&quot;)" />
+      <DropDown localize="true" name="FlexoModelObjectType" data="data.flexoModelObjectType" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" visible="(data.type = &quot;FlexoModelObject&quot;)" width="150" iteratorClassName="org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole$FlexoModelObjectType" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Model Object Pattern Role" />
+</Panel>
+

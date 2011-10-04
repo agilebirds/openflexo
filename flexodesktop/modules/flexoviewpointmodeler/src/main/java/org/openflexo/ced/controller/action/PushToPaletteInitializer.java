@@ -93,7 +93,7 @@ public class PushToPaletteInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, PushToPalette action)
 			{
-				getController().setCurrentEditedObjectAsModuleView(action.palette,getController().CALC_PERSPECTIVE);
+				getController().setCurrentEditedObjectAsModuleView(action.palette,getController().VIEW_POINT_PERSPECTIVE);
 				getController().getSelectionManager().setSelectedObject(action.getNewPaletteElement());
 				return true;
 			}

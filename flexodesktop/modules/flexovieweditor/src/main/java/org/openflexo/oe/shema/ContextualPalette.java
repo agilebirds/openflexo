@@ -41,12 +41,12 @@ import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEView;
 import org.openflexo.foundation.ontology.AbstractOntologyObject;
 import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.view.OEShape;
-import org.openflexo.foundation.view.OEShemaObject;
+import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.action.AddShape;
 import org.openflexo.foundation.view.action.DropSchemeAction;
-import org.openflexo.foundation.viewpoint.CalcPalette;
-import org.openflexo.foundation.viewpoint.CalcPaletteElement;
+import org.openflexo.foundation.viewpoint.ViewPointPalette;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 import org.openflexo.foundation.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
@@ -56,17 +56,17 @@ public class ContextualPalette extends DrawingPalette {
 
 	private static final Logger logger = Logger.getLogger(ContextualPalette.class.getPackage().getName());
 
-	private CalcPalette _calcPalette;
+	private ViewPointPalette _calcPalette;
 	
-	public ContextualPalette(CalcPalette calcPalette)
+	public ContextualPalette(ViewPointPalette viewPointPalette)
 	{
-		super((int)((DrawingGraphicalRepresentation)calcPalette.getGraphicalRepresentation()).getWidth(),
-				(int)((DrawingGraphicalRepresentation)calcPalette.getGraphicalRepresentation()).getHeight(),
-				calcPalette.getName());
+		super((int)((DrawingGraphicalRepresentation)viewPointPalette.getGraphicalRepresentation()).getWidth(),
+				(int)((DrawingGraphicalRepresentation)viewPointPalette.getGraphicalRepresentation()).getHeight(),
+				viewPointPalette.getName());
 		
-		_calcPalette = calcPalette;
+		_calcPalette = viewPointPalette;
 		
-		for (CalcPaletteElement element : calcPalette.getElements()) {
+		for (ViewPointPaletteElement element : viewPointPalette.getElements()) {
 			addElement(makePaletteElement(element));
 		}
 		
@@ -87,8 +87,8 @@ public class ContextualPalette extends DrawingPalette {
 			if (dropScheme.isTopTarget() && target instanceof DrawingGraphicalRepresentation) {
 				returned.add(dropScheme);
 			}
-			if (target.getDrawable() instanceof OEShape) {
-				OEShape targetShape = (OEShape)target.getDrawable();
+			if (target.getDrawable() instanceof ViewShape) {
+				ViewShape targetShape = (ViewShape)target.getDrawable();
 				AbstractOntologyObject targetObject = targetShape.getLinkedConcept();
 				if (targetObject instanceof OntologyObject && dropScheme.isValidTarget((OntologyObject)targetObject)) {
 					returned.add(dropScheme);
@@ -104,8 +104,8 @@ public class ContextualPalette extends DrawingPalette {
 			if (es instanceof DropScheme) {
 				DropScheme dropScheme = (DropScheme)es;
 				if (dropScheme.isTopTarget() && target instanceof DrawingGraphicalRepresentation) return true;
-				if (target.getDrawable() instanceof OEShape) {
-					OEShape targetShape = (OEShape)target.getDrawable();
+				if (target.getDrawable() instanceof ViewShape) {
+					ViewShape targetShape = (ViewShape)target.getDrawable();
 					AbstractOntologyObject targetObject = targetShape.getLinkedConcept();
 					if (targetObject instanceof OntologyObject 
 							&& dropScheme.isValidTarget((OntologyObject)targetObject)) return true;
@@ -118,7 +118,7 @@ public class ContextualPalette extends DrawingPalette {
 
 
 	
-	private PaletteElement makePaletteElement(final CalcPaletteElement element) 
+	private PaletteElement makePaletteElement(final ViewPointPaletteElement element) 
 	{
 		final PaletteElementGraphicalRepresentation gr 
 		= new PaletteElementGraphicalRepresentation((ShapeGraphicalRepresentation)element.getGraphicalRepresentation(),null,getPaletteDrawing());
@@ -141,9 +141,9 @@ public class ContextualPalette extends DrawingPalette {
 			{
 				logger.info("Dragging "+getGraphicalRepresentation()+" with text "+getGraphicalRepresentation().getText());
 
-				if (containerGR.getDrawable() instanceof OEShemaObject) {
+				if (containerGR.getDrawable() instanceof ViewObject) {
 					
-					final OEShemaObject container = (OEShemaObject)containerGR.getDrawable();
+					final ViewObject container = (ViewObject)containerGR.getDrawable();
 					
 					//final ShapeGraphicalRepresentation<?> shapeGR = getGraphicalRepresentation().clone();
 					final ShapeGraphicalRepresentation<?> shapeGR = new OEShapeGR(null,null);

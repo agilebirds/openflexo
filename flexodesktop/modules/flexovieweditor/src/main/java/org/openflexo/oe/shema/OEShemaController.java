@@ -30,8 +30,8 @@ import javax.swing.event.ChangeListener;
 
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.view.OEShema;
-import org.openflexo.foundation.viewpoint.CalcPalette;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.oe.controller.OEController;
 import org.openflexo.selection.SelectionManagingDrawingController;
@@ -43,9 +43,9 @@ public class OEShemaController extends SelectionManagingDrawingController<OEShem
 	private CommonPalette _commonPalette;
 	private EditorToolbox _toolbox;
 	private OEShemaModuleView _moduleView;
-	private Hashtable<CalcPalette,ContextualPalette> _contextualPalettes;
+	private Hashtable<ViewPointPalette,ContextualPalette> _contextualPalettes;
 	
-	public OEShemaController(OEController controller, OEShema shema)
+	public OEShemaController(OEController controller, View shema)
 	{
 		super(new OEShemaRepresentation(shema),controller.getSelectionManager());
 		
@@ -55,9 +55,9 @@ public class OEShemaController extends SelectionManagingDrawingController<OEShem
 		registerPalette(_commonPalette);
 		activatePalette(_commonPalette);
 		
-		_contextualPalettes = new Hashtable<CalcPalette,ContextualPalette>();
+		_contextualPalettes = new Hashtable<ViewPointPalette,ContextualPalette>();
 		if (shema.getCalc() != null) {
-			for (CalcPalette palette : shema.getCalc().getPalettes()) {
+			for (ViewPointPalette palette : shema.getCalc().getPalettes()) {
 				ContextualPalette contextualPalette = new ContextualPalette(palette);
 				_contextualPalettes.put(palette,contextualPalette);
 				registerPalette(contextualPalette);
@@ -110,15 +110,15 @@ public class OEShemaController extends SelectionManagingDrawingController<OEShem
 	
 	private JTabbedPane paletteView;
 	
-	private Vector<CalcPalette> orderedPalettes;
+	private Vector<ViewPointPalette> orderedPalettes;
 	
 	public JTabbedPane getPaletteView()
 	{
 		if (paletteView == null) {
 			paletteView = new JTabbedPane();
-			orderedPalettes = new Vector<CalcPalette>(_contextualPalettes.keySet());
+			orderedPalettes = new Vector<ViewPointPalette>(_contextualPalettes.keySet());
 			Collections.sort(orderedPalettes);
-			for (CalcPalette palette : orderedPalettes) {
+			for (ViewPointPalette palette : orderedPalettes) {
 				paletteView.add(palette.getName(),(_contextualPalettes.get(palette)).getPaletteView());
 			}
 			paletteView.add(FlexoLocalization.localizedForKey("Common",getCommonPalette().getPaletteView()),getCommonPalette().getPaletteView());
@@ -149,7 +149,7 @@ public class OEShemaController extends SelectionManagingDrawingController<OEShem
 		return _toolbox;
 	}
 	
-	public OEShema getShema()
+	public View getShema()
 	{
 		return getDrawing().getShema();
 	}

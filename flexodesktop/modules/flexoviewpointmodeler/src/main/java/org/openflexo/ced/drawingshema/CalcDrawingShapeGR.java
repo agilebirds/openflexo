@@ -29,7 +29,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
-import org.openflexo.foundation.viewpoint.CalcDrawingShape;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorRemoved;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeInserted;
@@ -37,7 +37,7 @@ import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeRemoved;
 import org.openflexo.toolbox.ToolBox;
 
 
-public class CalcDrawingShapeGR extends ShapeGraphicalRepresentation<CalcDrawingShape> implements GraphicalFlexoObserver, CalcDrawingShemaConstants {
+public class CalcDrawingShapeGR extends ShapeGraphicalRepresentation<ExampleDrawingShape> implements GraphicalFlexoObserver, CalcDrawingShemaConstants {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(CalcDrawingShapeGR.class.getPackage().getName());
@@ -51,7 +51,7 @@ public class CalcDrawingShapeGR extends ShapeGraphicalRepresentation<CalcDrawing
 		super(ShapeType.RECTANGLE,null,null);
 	}
 
-	public CalcDrawingShapeGR(CalcDrawingShape aShape, Drawing<?> aDrawing) 
+	public CalcDrawingShapeGR(ExampleDrawingShape aShape, Drawing<?> aDrawing) 
 	{
 		super(ShapeType.RECTANGLE, aShape, aDrawing);
 
@@ -78,7 +78,7 @@ public class CalcDrawingShapeGR extends ShapeGraphicalRepresentation<CalcDrawing
 		return (CalcDrawingShemaRepresentation)super.getDrawing();
 	}
 	
-	public CalcDrawingShape getCalcDrawingShape()
+	public ExampleDrawingShape getCalcDrawingShape()
 	{
 		return getDrawable();
 	}

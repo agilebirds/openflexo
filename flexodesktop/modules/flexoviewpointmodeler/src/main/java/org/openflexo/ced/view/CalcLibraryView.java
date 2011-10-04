@@ -21,14 +21,14 @@ package org.openflexo.ced.view;
 
 import org.openflexo.ced.CEDCst;
 import org.openflexo.ced.controller.CEDController;
-import org.openflexo.ced.controller.CalcPerspective;
+import org.openflexo.ced.controller.ViewPointPerspective;
 import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.controller.FIBTableDynamicModel;
 import org.openflexo.fib.model.listener.FIBMouseClickListener;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.viewpoint.CalcLibrary;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.OntologyCalc;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.view.FIBModuleView;
 
 
@@ -38,12 +38,12 @@ import org.openflexo.view.FIBModuleView;
  * @author sguerin
  * 
  */
-public class CalcLibraryView extends FIBModuleView<CalcLibrary> implements FIBMouseClickListener
+public class CalcLibraryView extends FIBModuleView<ViewPointLibrary> implements FIBMouseClickListener
 {
 
-	public CalcLibraryView(CalcLibrary calcLibrary, CEDController controller)
+	public CalcLibraryView(ViewPointLibrary viewPointLibrary, CEDController controller)
 	{
-		super(calcLibrary,controller,CEDCst.CALC_LIBRARY_VIEW_FIB);        
+		super(viewPointLibrary,controller,CEDCst.CALC_LIBRARY_VIEW_FIB);        
 	}
 
 	@Override
@@ -53,9 +53,9 @@ public class CalcLibraryView extends FIBModuleView<CalcLibrary> implements FIBMo
 	}
 
 	@Override
-	public CalcPerspective getPerspective() 
+	public ViewPointPerspective getPerspective() 
 	{
-		return getFlexoController().CALC_PERSPECTIVE;
+		return getFlexoController().VIEW_POINT_PERSPECTIVE;
 	}
 
  	@Override
@@ -65,7 +65,7 @@ public class CalcLibraryView extends FIBModuleView<CalcLibrary> implements FIBMo
 				&& ((FIBTableDynamicModel)data).selected instanceof FlexoModelObject
 				&& clickCount == 2) {
 			FlexoModelObject o = (FlexoModelObject)((FIBTableDynamicModel)data).selected;
-			if (o instanceof OntologyCalc || o instanceof EditionPattern) {
+			if (o instanceof ViewPoint || o instanceof EditionPattern) {
 				getFlexoController().selectAndFocusObject(o);
 			}
 		}

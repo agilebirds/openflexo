@@ -22,7 +22,7 @@ package org.openflexo.ced.fib.dialogs;
 import java.io.File;
 
 import org.openflexo.ced.CEDCst;
-import org.openflexo.ced.CEDModule;
+import org.openflexo.ced.VPMModule;
 import org.openflexo.ced.controller.CEDController;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 
@@ -37,7 +37,7 @@ public class ReviewUnsavedCalcEditorDialogEDITOR {
 			{
 				CEDController controller = null;
 				try {
-					CEDModule module = new CEDModule();
+					VPMModule module = new VPMModule();
 					controller = module.getCEDController();
 				} catch (Exception e) {
 					// TODO Auto-generated catch block

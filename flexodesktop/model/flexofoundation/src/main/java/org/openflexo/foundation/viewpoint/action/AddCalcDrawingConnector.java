@@ -26,18 +26,18 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.viewpoint.CalcDrawingConnector;
-import org.openflexo.foundation.viewpoint.CalcDrawingObject;
-import org.openflexo.foundation.viewpoint.CalcDrawingShape;
+import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
+import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 
 
-public class AddCalcDrawingConnector extends FlexoAction<AddCalcDrawingConnector,CalcDrawingShape,CalcDrawingObject> 
+public class AddCalcDrawingConnector extends FlexoAction<AddCalcDrawingConnector,ExampleDrawingShape,ExampleDrawingObject> 
 {
 
     private static final Logger logger = Logger.getLogger(AddCalcDrawingConnector.class.getPackage().getName());
     
-    public static FlexoActionType<AddCalcDrawingConnector,CalcDrawingShape,CalcDrawingObject>  actionType 
-    = new FlexoActionType<AddCalcDrawingConnector,CalcDrawingShape,CalcDrawingObject> (
+    public static FlexoActionType<AddCalcDrawingConnector,ExampleDrawingShape,ExampleDrawingObject>  actionType 
+    = new FlexoActionType<AddCalcDrawingConnector,ExampleDrawingShape,ExampleDrawingObject> (
     		"add_connector",
     		FlexoActionType.newMenu,
 			FlexoActionType.defaultGroup,
@@ -47,19 +47,19 @@ public class AddCalcDrawingConnector extends FlexoAction<AddCalcDrawingConnector
          * Factory method
          */
         @Override
-		public AddCalcDrawingConnector makeNewAction(CalcDrawingShape focusedObject, Vector<CalcDrawingObject> globalSelection, FlexoEditor editor) 
+		public AddCalcDrawingConnector makeNewAction(ExampleDrawingShape focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) 
         {
             return new AddCalcDrawingConnector(focusedObject, globalSelection, editor);
         }
 
         @Override
-		protected boolean isVisibleForSelection(CalcDrawingShape shape, Vector<CalcDrawingObject> globalSelection) 
+		protected boolean isVisibleForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) 
         {
             return true;
         }
 
         @Override
-		protected boolean isEnabledForSelection(CalcDrawingShape shape, Vector<CalcDrawingObject> globalSelection) 
+		protected boolean isEnabledForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) 
         {
             return (shape != null);
         }
@@ -67,19 +67,19 @@ public class AddCalcDrawingConnector extends FlexoAction<AddCalcDrawingConnector
     };
     
 	static {
-		FlexoModelObject.addActionForClass (AddCalcDrawingConnector.actionType, CalcDrawingShape.class);
+		FlexoModelObject.addActionForClass (AddCalcDrawingConnector.actionType, ExampleDrawingShape.class);
 	}
 
 
-	private CalcDrawingShape _fromShape;
-	public CalcDrawingShape toShape;
+	private ExampleDrawingShape _fromShape;
+	public ExampleDrawingShape toShape;
 	public String newConnectorName;
 	public String annotation;
 	public Object graphicalRepresentation;
 
-	private CalcDrawingConnector _newConnector;
+	private ExampleDrawingConnector _newConnector;
 
-	AddCalcDrawingConnector (CalcDrawingShape focusedObject, Vector<CalcDrawingObject> globalSelection, FlexoEditor editor)
+	AddCalcDrawingConnector (ExampleDrawingShape focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor)
     {
         super(actionType, focusedObject, globalSelection, editor);
     }
@@ -91,10 +91,10 @@ public class AddCalcDrawingConnector extends FlexoAction<AddCalcDrawingConnector
     	 if (getFocusedObject() != null 
     			 && getFromShape() != null
     			 && toShape != null)  {
-    		 CalcDrawingObject parent = CalcDrawingObject.getFirstCommonAncestor(getFromShape(), toShape);
+    		 ExampleDrawingObject parent = ExampleDrawingObject.getFirstCommonAncestor(getFromShape(), toShape);
     		 logger.info("Parent="+parent);
     		 if (parent == null) throw new IllegalArgumentException("No common ancestor");
-    		 _newConnector = new CalcDrawingConnector(getFromShape(),toShape);
+    		 _newConnector = new ExampleDrawingConnector(getFromShape(),toShape);
     		 if (graphicalRepresentation != null) _newConnector.setGraphicalRepresentation(graphicalRepresentation);
     		 _newConnector.setName(newConnectorName);
     		 _newConnector.setDescription(annotation);
@@ -105,18 +105,18 @@ public class AddCalcDrawingConnector extends FlexoAction<AddCalcDrawingConnector
     	 }
      }
 
-	public CalcDrawingShape getFromShape() 
+	public ExampleDrawingShape getFromShape() 
 	{
 		if (_fromShape == null) return getFocusedObject();
 		return _fromShape;
 	}
 
-	public void setFromShape(CalcDrawingShape fromShape)
+	public void setFromShape(ExampleDrawingShape fromShape)
 	{
 		_fromShape = fromShape;
 	}
 
-	public CalcDrawingConnector getNewConnector() 
+	public ExampleDrawingConnector getNewConnector() 
 	{
 		return _newConnector;
 	}

@@ -35,24 +35,24 @@ import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.ImportedOntology;
 import org.openflexo.foundation.ontology.FlexoOntology.OntologyNotFoundException;
 import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.viewpoint.CalcFolder;
-import org.openflexo.foundation.viewpoint.CalcLibrary;
-import org.openflexo.foundation.viewpoint.CalcLibraryObject;
-import org.openflexo.foundation.viewpoint.CalcObject;
-import org.openflexo.foundation.viewpoint.OntologyCalc;
+import org.openflexo.foundation.viewpoint.ViewPointFolder;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
 
 
-public class CreateOntologyCalc extends FlexoAction<CreateOntologyCalc,CalcLibraryObject,CalcObject> 
+public class CreateOntologyCalc extends FlexoAction<CreateOntologyCalc,ViewPointLibraryObject,ViewPointObject> 
 {
 
 	private static final Logger logger = Logger.getLogger(CreateOntologyCalc.class.getPackage().getName());
 
-	public static FlexoActionType<CreateOntologyCalc,CalcLibraryObject,CalcObject> actionType 
-	= new FlexoActionType<CreateOntologyCalc,CalcLibraryObject,CalcObject> (
+	public static FlexoActionType<CreateOntologyCalc,ViewPointLibraryObject,ViewPointObject> actionType 
+	= new FlexoActionType<CreateOntologyCalc,ViewPointLibraryObject,ViewPointObject> (
 			"create_ontology_calc",
 			FlexoActionType.newMenu,
 			FlexoActionType.defaultGroup,
@@ -62,19 +62,19 @@ public class CreateOntologyCalc extends FlexoAction<CreateOntologyCalc,CalcLibra
 		 * Factory method
 		 */
 		@Override
-		public CreateOntologyCalc makeNewAction(CalcLibraryObject focusedObject, Vector<CalcObject> globalSelection, FlexoEditor editor) 
+		public CreateOntologyCalc makeNewAction(ViewPointLibraryObject focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) 
 		{
 			return new CreateOntologyCalc(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CalcLibraryObject object, Vector<CalcObject> globalSelection) 
+		protected boolean isVisibleForSelection(ViewPointLibraryObject object, Vector<ViewPointObject> globalSelection) 
 		{
 			return object != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CalcLibraryObject object, Vector<CalcObject> globalSelection) 
+		protected boolean isEnabledForSelection(ViewPointLibraryObject object, Vector<ViewPointObject> globalSelection) 
 		{
 			return object != null;
 		}
@@ -82,8 +82,8 @@ public class CreateOntologyCalc extends FlexoAction<CreateOntologyCalc,CalcLibra
 	};
 
 	static {
-		FlexoModelObject.addActionForClass (CreateOntologyCalc.actionType, CalcLibrary.class);
-		FlexoModelObject.addActionForClass (CreateOntologyCalc.actionType, CalcFolder.class);
+		FlexoModelObject.addActionForClass (CreateOntologyCalc.actionType, ViewPointLibrary.class);
+		FlexoModelObject.addActionForClass (CreateOntologyCalc.actionType, ViewPointFolder.class);
 	}
 
 
@@ -91,14 +91,14 @@ public class CreateOntologyCalc extends FlexoAction<CreateOntologyCalc,CalcLibra
 	private String _newCalcURI;
 	private String _newCalcDescription;
 	private File _ontologyFile;
-	private CalcFolder _calcFolder;
-	private OntologyCalc _newCalc;
+	private ViewPointFolder _calcFolder;
+	private ViewPoint _newCalc;
 
 	public Vector<ImportedOntology> importedOntologies = new Vector<ImportedOntology>();
 	
 	private boolean createsOntology = false;
 	
-	CreateOntologyCalc (CalcLibraryObject focusedObject, Vector<CalcObject> globalSelection, FlexoEditor editor)
+	CreateOntologyCalc (ViewPointLibraryObject focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor)
 	{
 		super(actionType, focusedObject, globalSelection, editor);
 	}
@@ -108,7 +108,7 @@ public class CreateOntologyCalc extends FlexoAction<CreateOntologyCalc,CalcLibra
 	{
 		logger.info ("Create new calc");  	
 
-		CalcLibrary calcLibrary = getFocusedObject().getCalcLibrary();
+		ViewPointLibrary viewPointLibrary = getFocusedObject().getViewPointLibrary();
 		
 		File newCalcDir = getCalcDir();
 		
@@ -128,11 +128,11 @@ public class CreateOntologyCalc extends FlexoAction<CreateOntologyCalc,CalcLibra
 		}
 				
 		// Instanciate new Calc
-		_newCalc = OntologyCalc.newOntologyCalc(getBaseName(),getNewCalcURI(),getOntologyFile(),newCalcDir,calcLibrary,getCalcFolder());
+		_newCalc = ViewPoint.newViewPoint(getBaseName(),getNewCalcURI(),getOntologyFile(),newCalcDir,viewPointLibrary,getCalcFolder());
 		_newCalc.setDescription(getNewCalcDescription());
 		
 		// And register it to the library
-		calcLibrary.registerCalc(_newCalc);
+		viewPointLibrary.registerViewPoint(_newCalc);
 	}
 	
 	private ImportedOntology buildOntology()
@@ -207,23 +207,23 @@ public class CreateOntologyCalc extends FlexoAction<CreateOntologyCalc,CalcLibra
 		}
 	}
 	
-	public CalcFolder getCalcFolder() 
+	public ViewPointFolder getCalcFolder() 
 	{
 		if (_calcFolder == null) {
-			if (getFocusedObject() instanceof CalcFolder) {
-				return _calcFolder = (CalcFolder)getFocusedObject();
+			if (getFocusedObject() instanceof ViewPointFolder) {
+				return _calcFolder = (ViewPointFolder)getFocusedObject();
 			}
-			else if (getFocusedObject() instanceof CalcLibrary) {
-				return _calcFolder = ((CalcLibrary)getFocusedObject()).getRootFolder();
+			else if (getFocusedObject() instanceof ViewPointLibrary) {
+				return _calcFolder = ((ViewPointLibrary)getFocusedObject()).getRootFolder();
 			}
 			return null;
 		}
 		return _calcFolder;
 	}
 
-	public void setCalcFolder(CalcFolder calcFolder) 
+	public void setCalcFolder(ViewPointFolder viewPointFolder) 
 	{
-		_calcFolder = calcFolder;
+		_calcFolder = viewPointFolder;
 	}
 
 	public boolean isNewCalcNameValid()
@@ -261,7 +261,7 @@ public class CreateOntologyCalc extends FlexoAction<CreateOntologyCalc,CalcLibra
 		return isNewCalcNameValid() && isNewCalcURIValid() && getOntologyFile() != null;
 	}
 
-	public OntologyCalc getNewCalc()
+	public ViewPoint getNewCalc()
 	{
 		return _newCalc;
 	}

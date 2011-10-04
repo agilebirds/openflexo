@@ -56,7 +56,7 @@ public final class CEDPreferences extends ModulePreferences
     
     public CEDPreferences()
     {
-        super(Module.CED_MODULE);
+        super(Module.VPM_MODULE);
     }
     
     public static void reset() 

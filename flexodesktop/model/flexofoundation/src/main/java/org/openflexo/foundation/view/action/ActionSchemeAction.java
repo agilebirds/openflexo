@@ -25,8 +25,8 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
-import org.openflexo.foundation.view.OEShema;
-import org.openflexo.foundation.view.OEShemaObject;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.viewpoint.ActionScheme;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 
@@ -75,9 +75,9 @@ public class ActionSchemeAction extends EditionSchemeAction<ActionSchemeAction> 
 	}
 
 	@Override
-	protected OEShema retrieveOEShema()
+	protected View retrieveOEShema()
 	{
-		if (getFocusedObject() instanceof OEShemaObject) return ((OEShemaObject)getFocusedObject()).getShema();
+		if (getFocusedObject() instanceof ViewObject) return ((ViewObject)getFocusedObject()).getShema();
 		return null;
 	}
 

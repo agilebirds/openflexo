@@ -1,4 +1,4 @@
-<inspector title = "Palette element" inspectedClassName="org.openflexo.foundation.ontology.calc.CalcPaletteElement">
+<inspector title = "Palette element" inspectedClassName="org.openflexo.foundation.viewpoint.ViewPointPaletteElement">
 
 	<tab name="Semantic" index="0" layout="DEFAULT">
 		<property name="name" label="name" widget="TEXT_FIELD" constraint="0">

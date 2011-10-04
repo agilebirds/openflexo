@@ -19,8 +19,20 @@
  */
 package org.openflexo.icon;
 
+import java.util.logging.Logger;
+
 import javax.swing.ImageIcon;
 
+import org.openflexo.foundation.view.AbstractViewObject;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewConnector;
+import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.view.ViewFolder;
+import org.openflexo.foundation.view.ViewLibrary;
+import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.viewpoint.ViewPointFolder;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
 import org.openflexo.toolbox.ImageIconResource;
 
 /**
@@ -31,13 +43,15 @@ import org.openflexo.toolbox.ImageIconResource;
  */
 public class VEIconLibrary extends IconLibrary {
 
+	private static final Logger logger = Logger.getLogger(VEIconLibrary.class.getPackage().getName());
+
 	// Module icons
-	public static final ImageIcon OE_ACTIVE_ICON = new ImageIconResource("Icons/VE/OE_A_Small.gif");
-	public static final ImageIcon OE_UNACTIVE_ICON = new ImageIconResource("Icons/VE/OE_NA_Small.gif");
-	public static final ImageIcon OE_SELECTED_ICON = new ImageIconResource("Icons/VE/OE_S_Small.gif");
-	public static final ImageIcon OE_BIG_ACTIVE_ICON = new ImageIconResource("Icons/VE/OE_A.gif");
-	public static final ImageIcon OE_BIG_UNACTIVE_ICON = new ImageIconResource("Icons/VE/OE_NA.gif");
-	public static final ImageIcon OE_BIG_SELECTED_ICON = new ImageIconResource("Icons/VE/OE_S.gif");
+	public static final ImageIcon VE_ACTIVE_ICON = new ImageIconResource("Icons/VE/OE_A_Small.gif");
+	public static final ImageIcon VE_UNACTIVE_ICON = new ImageIconResource("Icons/VE/OE_NA_Small.gif");
+	public static final ImageIcon VE_SELECTED_ICON = new ImageIconResource("Icons/VE/OE_S_Small.gif");
+	public static final ImageIcon VE_BIG_ACTIVE_ICON = new ImageIconResource("Icons/VE/OE_A.gif");
+	public static final ImageIcon VE_BIG_UNACTIVE_ICON = new ImageIconResource("Icons/VE/OE_NA.gif");
+	public static final ImageIcon VE_BIG_SELECTED_ICON = new ImageIconResource("Icons/VE/OE_S.gif");
 
 	// Perspective icons
 	public static final ImageIcon VE_OP_ACTIVE_ICON = new ImageIconResource("Icons/VE/OntologyPerspective_A.gif");
@@ -46,9 +60,23 @@ public class VEIconLibrary extends IconLibrary {
 	public static final ImageIcon VE_SP_SELECTED_ICON = new ImageIconResource("Icons/VE/ShemaPerspective_S.gif");
 	
 	// Model icons
-	public static final ImageIconResource OE_SHEMA_LIBRARY_ICON = new ImageIconResource("Icons/Model/VE/OEShemaLibrary.gif");
-	public static final ImageIconResource OE_SHEMA_ICON = new ImageIconResource("Icons/Model/VE/OEShema.gif");
-	public static final ImageIconResource OE_SHAPE_ICON = new ImageIconResource("Icons/Model/VE/OEShape.gif");
-	public static final ImageIconResource OE_CONNECTOR_ICON = new ImageIconResource("Icons/Model/VE/OEConnector.gif");
+	public static final ImageIconResource VIEW_LIBRARY_ICON = new ImageIconResource("Icons/Model/VE/OEShemaLibrary.gif");
+	public static final ImageIconResource VIEW_ICON = new ImageIconResource("Icons/Model/VE/OEShema.gif");
+	public static final ImageIconResource SHAPE_ICON = new ImageIconResource("Icons/Model/VE/OEShape.gif");
+	public static final ImageIconResource CONNECTOR_ICON = new ImageIconResource("Icons/Model/VE/OEConnector.gif");
 
+	public static final ImageIconResource UNKNOWN_ICON = new ImageIconResource("Icons/Model/VPM/UnknownIcon.gif");
+
+	public static ImageIcon iconForObject(AbstractViewObject object)
+	{
+		if (object instanceof View) return VIEW_ICON;
+		else if (object instanceof ViewConnector) return CONNECTOR_ICON;
+		else if (object instanceof ViewShape) return SHAPE_ICON;
+		else if (object instanceof ViewLibrary) return VIEW_LIBRARY_ICON;
+		else if (object instanceof ViewDefinition) return VIEW_ICON;
+		else if (object instanceof ViewFolder) return FOLDER_ICON;
+		logger.warning("No icon for "+object.getClass());
+		return UNKNOWN_ICON;
+	}
+	
 }

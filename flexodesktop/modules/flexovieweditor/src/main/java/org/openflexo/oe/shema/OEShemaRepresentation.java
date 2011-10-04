@@ -29,29 +29,29 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.view.OEConnector;
-import org.openflexo.foundation.view.OEShape;
-import org.openflexo.foundation.view.OEShema;
-import org.openflexo.foundation.view.OEShemaObject;
+import org.openflexo.foundation.view.ViewConnector;
+import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewObject;
 
 
-public class OEShemaRepresentation extends DefaultDrawing<OEShema> implements GraphicalFlexoObserver, OEShemaConstants {
+public class OEShemaRepresentation extends DefaultDrawing<View> implements GraphicalFlexoObserver, OEShemaConstants {
 
 	private static final Logger logger = Logger.getLogger(OEShemaRepresentation.class.getPackage().getName());
 	
 	private OEShemaGR graphicalRepresentation;
 	
-	private Hashtable<OEShape,OEShapeGR> shapesGR;
-	private Hashtable<OEConnector,OEConnectorGR> connectorsGR;
+	private Hashtable<ViewShape,OEShapeGR> shapesGR;
+	private Hashtable<ViewConnector,OEConnectorGR> connectorsGR;
 
-	public OEShemaRepresentation(OEShema aShema)
+	public OEShemaRepresentation(View aShema)
 	{
 		super(aShema);
 		//graphicalRepresentation = new DrawingGraphicalRepresentation<OEShema>(this);
 		//graphicalRepresentation.addToMouseClickControls(new OEShemaController.ShowContextualMenuControl());
 		
-		shapesGR = new Hashtable<OEShape,OEShapeGR>();
-		connectorsGR = new Hashtable<OEConnector,OEConnectorGR>();
+		shapesGR = new Hashtable<ViewShape,OEShapeGR>();
+		connectorsGR = new Hashtable<ViewConnector,OEConnectorGR>();
 		
 		aShema.addObserver(this);
 		
@@ -72,23 +72,23 @@ public class OEShemaRepresentation extends DefaultDrawing<OEShema> implements Gr
  		buildGraphicalObjectsHierarchyFor(getShema());
 	}
 	
-	private void buildGraphicalObjectsHierarchyFor(OEShemaObject parent)
+	private void buildGraphicalObjectsHierarchyFor(ViewObject parent)
 	{
-		for (OEShemaObject child : parent.getChilds()) {
-			if (!(child instanceof OEConnector)) {
+		for (ViewObject child : parent.getChilds()) {
+			if (!(child instanceof ViewConnector)) {
 				addDrawable(child, parent);
 				buildGraphicalObjectsHierarchyFor(child);
 			}
 		}
-		for (OEShemaObject child : parent.getChilds()) {
-			if (child instanceof OEConnector) {
+		for (ViewObject child : parent.getChilds()) {
+			if (child instanceof ViewConnector) {
 				addDrawable(child, parent);
 				buildGraphicalObjectsHierarchyFor(child);
 			}
 		}
 	}
 	
-	public OEShema getShema()
+	public View getShema()
 	{
 		return getModel();
 	}
@@ -162,8 +162,8 @@ public class OEShemaRepresentation extends DefaultDrawing<OEShema> implements Gr
 	@Override
 	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable)
 	{
-		if (aDrawable instanceof OEShape) {
-			OEShape shape = (OEShape)aDrawable;
+		if (aDrawable instanceof ViewShape) {
+			ViewShape shape = (ViewShape)aDrawable;
 			OEShapeGR returned = shapesGR.get(shape);
 			if (returned == null) {
 				returned = buildGraphicalRepresentation(shape);
@@ -171,8 +171,8 @@ public class OEShemaRepresentation extends DefaultDrawing<OEShema> implements Gr
 			}
 			return (GraphicalRepresentation<O>)returned;
 		}
-		else if (aDrawable instanceof OEConnector) {
-			OEConnector connector = (OEConnector)aDrawable;
+		else if (aDrawable instanceof ViewConnector) {
+			ViewConnector connector = (ViewConnector)aDrawable;
 			OEConnectorGR returned = connectorsGR.get(connector);
 			if (returned == null) {
 				returned = buildGraphicalRepresentation(connector);
@@ -185,7 +185,7 @@ public class OEShemaRepresentation extends DefaultDrawing<OEShema> implements Gr
 	}
 
 
-	private OEConnectorGR buildGraphicalRepresentation(OEConnector connector)
+	private OEConnectorGR buildGraphicalRepresentation(ViewConnector connector)
 	{
 		if (connector.getGraphicalRepresentation() instanceof ConnectorGraphicalRepresentation) {
 			OEConnectorGR graphicalRepresentation = new OEConnectorGR(connector,this);
@@ -200,7 +200,7 @@ public class OEShemaRepresentation extends DefaultDrawing<OEShema> implements Gr
 		return graphicalRepresentation;
 	}
 
-	private OEShapeGR buildGraphicalRepresentation(OEShape shape)
+	private OEShapeGR buildGraphicalRepresentation(ViewShape shape)
 	{
 		if (shape.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 			OEShapeGR graphicalRepresentation = new OEShapeGR(shape,this);

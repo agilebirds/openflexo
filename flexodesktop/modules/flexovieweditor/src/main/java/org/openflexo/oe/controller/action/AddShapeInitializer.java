@@ -33,7 +33,7 @@ import org.openflexo.view.controller.FlexoController;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.view.OEShemaObject;
+import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.action.AddShape;
 
 
@@ -63,7 +63,7 @@ public class AddShapeInitializer extends ActionInitializer {
 						&& (action.getParent() != null))
 					return true;
 
-				OEShemaObject parent = action.getParent();
+				ViewObject parent = action.getParent();
 				if (parent != null) {
 						action.setNewShapeName(FlexoController.askForString(FlexoLocalization.localizedForKey("name_for_new_shape")));
 					return true;
@@ -89,7 +89,7 @@ public class AddShapeInitializer extends ActionInitializer {
 	@Override
 	protected Icon getEnabledIcon() 
 	{
-		return VEIconLibrary.OE_SHAPE_ICON;
+		return VEIconLibrary.SHAPE_ICON;
 	}
 
 

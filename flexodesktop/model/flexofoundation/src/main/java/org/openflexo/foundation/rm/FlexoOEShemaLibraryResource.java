@@ -27,7 +27,7 @@ import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
-import org.openflexo.foundation.view.OEShemaLibrary;
+import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.xml.OEShemaLibraryBuilder;
 import org.openflexo.localization.FlexoLocalization;
 
@@ -36,7 +36,7 @@ import org.openflexo.localization.FlexoLocalization;
  * 
  * @author sylvain
  */
-public class FlexoOEShemaLibraryResource extends FlexoXMLStorageResource<OEShemaLibrary> implements Serializable
+public class FlexoOEShemaLibraryResource extends FlexoXMLStorageResource<ViewLibrary> implements Serializable
 {
 
 	private static final Logger logger = Logger.getLogger(FlexoOEShemaLibraryResource.class.getPackage().getName());
@@ -84,7 +84,7 @@ public class FlexoOEShemaLibraryResource extends FlexoXMLStorageResource<OEShema
         setResourceFile(shemaLibraryFile);
     }
 
-    public FlexoOEShemaLibraryResource(FlexoProject aProject, OEShemaLibrary lib,
+    public FlexoOEShemaLibraryResource(FlexoProject aProject, ViewLibrary lib,
             FlexoProjectFile shemaLibFile) throws InvalidFileNameException
     {
         this(aProject, shemaLibFile);
@@ -128,14 +128,14 @@ public class FlexoOEShemaLibraryResource extends FlexoXMLStorageResource<OEShema
     @Override
 	public Class getResourceDataClass()
     {
-        return OEShemaLibrary.class;
+        return ViewLibrary.class;
     }
 
     @Override
-	public OEShemaLibrary performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler)
+	public ViewLibrary performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler)
             throws LoadXMLResourceException, ProjectLoadingCancelledException, MalformedXMLException
     {
-    	OEShemaLibrary library;
+    	ViewLibrary library;
         if (progress != null) {
             progress.setProgress(FlexoLocalization.localizedForKey("loading_shema_library"));
         }
@@ -170,7 +170,7 @@ public class FlexoOEShemaLibraryResource extends FlexoXMLStorageResource<OEShema
     {
         if (logger.isLoggable(Level.INFO))
             logger.info("instanciateNewBuilder in FlexoComponentLibraryResource");
-        OEShemaLibraryBuilder builder = new OEShemaLibraryBuilder(this,getProject().getResourceCenter().retrieveCalcLibrary());
+        OEShemaLibraryBuilder builder = new OEShemaLibraryBuilder(this,getProject().getResourceCenter().retrieveViewPointLibrary());
         builder.shemaLibrary = _resourceData;
         return builder;
     }

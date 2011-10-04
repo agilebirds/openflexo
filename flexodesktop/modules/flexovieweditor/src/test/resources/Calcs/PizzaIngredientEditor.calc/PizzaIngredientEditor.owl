@@ -7,25 +7,25 @@
     <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
     <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
     <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
-    <!ENTITY FlexoConceptsOntology "http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#" >
-    <!ENTITY PizzaEditorCalc "http://www.agilebirds.com/flexo/ontologies/Calcs/PizzaEditorCalc.owl#" >
+    <!ENTITY FlexoConceptsOntology "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#" >
+    <!ENTITY PizzaEditorCalc "http://www.agilebirds.com/openflexo/ViewPoints/PizzaEditorCalc.owl#" >
     <!ENTITY Ontology1231149415187 "http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#" >
 ]>
 
 
-<rdf:RDF xmlns="http://www.agilebirds.com/flexo/ontologies/Calcs/PizzaEditorCalc.owl#"
-     xml:base="http://www.agilebirds.com/flexo/ontologies/Calcs/PizzaIngredientEditor.owl"
+<rdf:RDF xmlns="http://www.agilebirds.com/openflexo/ViewPoints/PizzaEditorCalc.owl#"
+     xml:base="http://www.agilebirds.com/openflexo/ViewPoints/PizzaIngredientEditor.owl"
      xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
-     xmlns:PizzaEditorCalc="http://www.agilebirds.com/flexo/ontologies/Calcs/PizzaEditorCalc.owl#"
+     xmlns:PizzaEditorCalc="http://www.agilebirds.com/openflexo/ViewPoints/PizzaEditorCalc.owl#"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:Ontology1231149415187="http://www.semanticweb.org/ontologies/2009/0/Ontology1231149415187.owl#"
-     xmlns:FlexoConceptsOntology="http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#"
+     xmlns:FlexoConceptsOntology="http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:owl="http://www.w3.org/2002/07/owl#">
     <owl:Ontology rdf:about="">
-        <owl:imports rdf:resource="http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl"/>
-        <owl:imports rdf:resource="http://www.agilebirds.com/flexo/ontologies/PizzaOntology/PizzaOntology.owl"/>
+        <owl:imports rdf:resource="http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl"/>
+        <owl:imports rdf:resource="http://www.agilebirds.com/openflexo/ontologies/PizzaOntology/PizzaOntology.owl"/>
     </owl:Ontology>
     
 
@@ -41,7 +41,7 @@
     
 
 
-    <!-- http://www.agilebirds.com/flexo/ontologies/Calcs/PizzaEditorCalc.owl#OEMeatTopping -->
+    <!-- http://www.agilebirds.com/openflexo/ViewPoints/PizzaEditorCalc.owl#OEMeatTopping -->
 
     <owl:Class rdf:about="&PizzaEditorCalc;OEMeatTopping">
         <rdfs:subClassOf rdf:resource="&FlexoConceptsOntology;FlexoConcept"/>
@@ -50,7 +50,7 @@
     
 
 
-    <!-- http://www.agilebirds.com/flexo/ontologies/Calcs/PizzaEditorCalc.owl#OESeefoodTopping -->
+    <!-- http://www.agilebirds.com/openflexo/ViewPoints/PizzaEditorCalc.owl#OESeefoodTopping -->
 
     <owl:Class rdf:about="&PizzaEditorCalc;OESeefoodTopping">
         <rdfs:subClassOf rdf:resource="&FlexoConceptsOntology;FlexoConcept"/>
@@ -59,7 +59,7 @@
     
 
 
-    <!-- http://www.agilebirds.com/flexo/ontologies/Calcs/PizzaEditorCalc.owl#OEVegetableTopping -->
+    <!-- http://www.agilebirds.com/openflexo/ViewPoints/PizzaEditorCalc.owl#OEVegetableTopping -->
 
     <owl:Class rdf:about="&PizzaEditorCalc;OEVegetableTopping">
         <rdfs:subClassOf rdf:resource="&FlexoConceptsOntology;FlexoConcept"/>
@@ -68,7 +68,7 @@
     
 
 
-    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#FlexoConcept -->
+    <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#FlexoConcept -->
 
     <owl:Class rdf:about="&FlexoConceptsOntology;FlexoConcept"/>
     

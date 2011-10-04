@@ -32,11 +32,11 @@ import org.openflexo.localization.Language;
 import org.openflexo.localization.LocalizedDelegate;
 
 
-public class LocalizedDictionary extends CalcObject implements LocalizedDelegate {
+public class LocalizedDictionary extends ViewPointObject implements LocalizedDelegate {
 
 	private static final Logger logger = Logger.getLogger(LocalizedDictionary.class.getPackage().getName());
 
-	private OntologyCalc _calc;
+	private ViewPoint _calc;
 	private Vector<LocalizedEntry> _entries;
 	private final Hashtable<Language,Hashtable<String,String>> _values;
 	private Vector<DynamicEntry> dynamicEntries = null;
@@ -48,12 +48,12 @@ public class LocalizedDictionary extends CalcObject implements LocalizedDelegate
 	}
 
 	@Override
-	public OntologyCalc getCalc() 
+	public ViewPoint getCalc() 
 	{
 		return _calc;
 	}
 
-	public void setCalc(OntologyCalc calc) 
+	public void setCalc(ViewPoint calc) 
 	{
 		_calc = calc;
 	}

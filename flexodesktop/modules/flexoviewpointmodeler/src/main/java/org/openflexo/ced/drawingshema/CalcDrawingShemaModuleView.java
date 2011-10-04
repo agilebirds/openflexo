@@ -25,12 +25,12 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.openflexo.ced.controller.CalcPerspective;
-import org.openflexo.foundation.viewpoint.CalcDrawingShema;
+import org.openflexo.ced.controller.ViewPointPerspective;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 import org.openflexo.view.ModuleView;
 
 
-public class CalcDrawingShemaModuleView extends JPanel implements ModuleView<CalcDrawingShema> {
+public class CalcDrawingShemaModuleView extends JPanel implements ModuleView<ExampleDrawingShema> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(CalcDrawingShemaModuleView.class.getPackage().getName());
@@ -65,13 +65,13 @@ public class CalcDrawingShemaModuleView extends JPanel implements ModuleView<Cal
 	}
 
 	@Override
-	public CalcPerspective getPerspective() 
+	public ViewPointPerspective getPerspective() 
 	{
-		return getController().getCEDController().CALC_PERSPECTIVE;
+		return getController().getCEDController().VIEW_POINT_PERSPECTIVE;
 	}
 
 	@Override
-	public CalcDrawingShema getRepresentedObject() 
+	public ExampleDrawingShema getRepresentedObject() 
 	{
 		return _controller.getShema();
 	}

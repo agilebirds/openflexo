@@ -81,7 +81,7 @@ public class CreateCalcDrawingShemaInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, CreateCalcDrawingShema action)
 			{
-				getController().setCurrentEditedObjectAsModuleView(action.getNewShema(),getController().CALC_PERSPECTIVE);
+				getController().setCurrentEditedObjectAsModuleView(action.getNewShema(),getController().VIEW_POINT_PERSPECTIVE);
 				return true;
 			}
 		};

@@ -29,12 +29,12 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
-import org.openflexo.foundation.view.OEConnector;
+import org.openflexo.foundation.view.ViewConnector;
 import org.openflexo.foundation.xml.OEShemaBuilder;
 import org.openflexo.toolbox.ToolBox;
 
 
-public class OEConnectorGR extends ConnectorGraphicalRepresentation<OEConnector> implements GraphicalFlexoObserver,OEShemaConstants {
+public class OEConnectorGR extends ConnectorGraphicalRepresentation<ViewConnector> implements GraphicalFlexoObserver,OEShemaConstants {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(OEConnectorGR.class.getPackage().getName());
@@ -48,7 +48,7 @@ public class OEConnectorGR extends ConnectorGraphicalRepresentation<OEConnector>
 		this(null,null);
 	}
 
-	public OEConnectorGR(OEConnector aConnector, Drawing<?> aDrawing) 
+	public OEConnectorGR(ViewConnector aConnector, Drawing<?> aDrawing) 
 	{
 		super(ConnectorType.LINE,
 				aDrawing != null ? (ShapeGraphicalRepresentation<?>)aDrawing.getGraphicalRepresentation(aConnector.getStartShape()) : null,
@@ -73,7 +73,7 @@ public class OEConnectorGR extends ConnectorGraphicalRepresentation<OEConnector>
 		super.delete();
 	}
 
-	public OEConnector getOEConnector()
+	public ViewConnector getOEConnector()
 	{
 		return getDrawable();
 	}

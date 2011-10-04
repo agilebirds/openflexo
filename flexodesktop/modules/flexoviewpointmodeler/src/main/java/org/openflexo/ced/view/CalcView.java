@@ -21,15 +21,15 @@ package org.openflexo.ced.view;
 
 import org.openflexo.ced.CEDCst;
 import org.openflexo.ced.controller.CEDController;
-import org.openflexo.ced.controller.CalcPerspective;
+import org.openflexo.ced.controller.ViewPointPerspective;
 import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.controller.FIBTableDynamicModel;
 import org.openflexo.fib.model.listener.FIBMouseClickListener;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.viewpoint.CalcDrawingShema;
-import org.openflexo.foundation.viewpoint.CalcPalette;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.OntologyCalc;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.view.FIBModuleView;
 
 
@@ -39,14 +39,14 @@ import org.openflexo.view.FIBModuleView;
  * @author sguerin
  * 
  */
-public class CalcView extends FIBModuleView<OntologyCalc> implements FIBMouseClickListener
+public class CalcView extends FIBModuleView<ViewPoint> implements FIBMouseClickListener
 {
 
-   public CalcView(OntologyCalc ontologyCalc, CEDController controller)
+   public CalcView(ViewPoint viewPoint, CEDController controller)
     {
-        super(ontologyCalc,controller,CEDCst.CALC_VIEW_FIB);
+        super(viewPoint,controller,CEDCst.CALC_VIEW_FIB);
         
-		controller.manageResource(ontologyCalc);
+		controller.manageResource(viewPoint);
    }
 
     @Override
@@ -56,9 +56,9 @@ public class CalcView extends FIBModuleView<OntologyCalc> implements FIBMouseCli
     }
     
      @Override
-	public CalcPerspective getPerspective() 
+	public ViewPointPerspective getPerspective() 
     {
-    	return getFlexoController().CALC_PERSPECTIVE;
+    	return getFlexoController().VIEW_POINT_PERSPECTIVE;
     }
      
  	@Override
@@ -68,10 +68,10 @@ public class CalcView extends FIBModuleView<OntologyCalc> implements FIBMouseCli
 				&& ((FIBTableDynamicModel)data).selected instanceof FlexoModelObject
 				&& clickCount == 2) {
 			FlexoModelObject o = (FlexoModelObject)((FIBTableDynamicModel)data).selected;
-			if (o instanceof OntologyCalc 
+			if (o instanceof ViewPoint 
 					|| o instanceof EditionPattern
-					|| o instanceof CalcDrawingShema
-					|| o instanceof CalcPalette) {
+					|| o instanceof ExampleDrawingShema
+					|| o instanceof ViewPointPalette) {
 				getFlexoController().selectAndFocusObject(o);
 			}
 		}

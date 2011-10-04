@@ -24,8 +24,8 @@ package org.openflexo.components.browser.ontology;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.viewpoint.CalcDrawingObject;
-import org.openflexo.foundation.viewpoint.CalcDrawingShape;
+import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
@@ -38,7 +38,7 @@ import org.openflexo.toolbox.StringUtils;
 public class CalcDrawingShapeBrowserElement extends BrowserElement
 {
 
-    protected CalcDrawingShapeBrowserElement(CalcDrawingShape shape, ProjectBrowser browser, BrowserElement parent)
+    protected CalcDrawingShapeBrowserElement(ExampleDrawingShape shape, ProjectBrowser browser, BrowserElement parent)
     {
         super(shape, BrowserElementType.ONTOLOGY_CALC_DRAWING_SHAPE, browser, parent);
     }
@@ -46,7 +46,7 @@ public class CalcDrawingShapeBrowserElement extends BrowserElement
     @Override
 	protected void buildChildrenVector()
     {
-    	for (CalcDrawingObject element : getShape().getChilds()) {
+    	for (ExampleDrawingObject element : getShape().getChilds()) {
     		addToChilds(element);
     	}
     }
@@ -58,9 +58,9 @@ public class CalcDrawingShapeBrowserElement extends BrowserElement
         return getShape().getName();
     }
 
-    protected CalcDrawingShape getShape()
+    protected ExampleDrawingShape getShape()
     {
-        return (CalcDrawingShape) getObject();
+        return (ExampleDrawingShape) getObject();
     }
 
 }

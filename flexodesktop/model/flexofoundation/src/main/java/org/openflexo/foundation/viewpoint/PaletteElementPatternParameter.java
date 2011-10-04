@@ -23,10 +23,10 @@ package org.openflexo.foundation.viewpoint;
 
 
 
-public class PaletteElementPatternParameter extends CalcObject {
+public class PaletteElementPatternParameter extends ViewPointObject {
 
 	private EditionPatternParameter _parameter;
-	private CalcPaletteElement _element;
+	private ViewPointPaletteElement _element;
 	private String name;
 	private String value;
 	
@@ -87,7 +87,7 @@ public class PaletteElementPatternParameter extends CalcObject {
 	}
 	
 	@Override
-	public OntologyCalc getCalc() 
+	public ViewPoint getCalc() 
 	{
 		if (getElement() != null) {
 			return getElement().getCalc();
@@ -95,12 +95,12 @@ public class PaletteElementPatternParameter extends CalcObject {
 		return null;
 	}
 
-	public void setElement(CalcPaletteElement element) 
+	public void setElement(ViewPointPaletteElement element) 
 	{
 		_element = element;
 	}
 
-	public CalcPaletteElement getElement() 
+	public ViewPointPaletteElement getElement() 
 	{
 		return _element;
 	}

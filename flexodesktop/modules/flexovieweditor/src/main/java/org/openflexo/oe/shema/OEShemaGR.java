@@ -28,13 +28,13 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.view.ConnectorInserted;
 import org.openflexo.foundation.view.ConnectorRemoved;
-import org.openflexo.foundation.view.OEShema;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ShapeInserted;
 import org.openflexo.foundation.view.ShapeRemoved;
 import org.openflexo.foundation.xml.OEShemaBuilder;
 
 
-public class OEShemaGR extends DrawingGraphicalRepresentation<OEShema> implements GraphicalFlexoObserver, OEShemaConstants {
+public class OEShemaGR extends DrawingGraphicalRepresentation<View> implements GraphicalFlexoObserver, OEShemaConstants {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(OEShemaGR.class.getPackage().getName());
@@ -75,7 +75,7 @@ public class OEShemaGR extends DrawingGraphicalRepresentation<OEShema> implement
 		return (OEShemaRepresentation)super.getDrawing();
 	}
 	
-	public OEShema getShema()
+	public View getShema()
 	{
 		return getDrawing().getShema();
 	}

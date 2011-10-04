@@ -36,7 +36,7 @@ import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShadowStyle;
 import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
-import org.openflexo.foundation.view.OEShemaObject;
+import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.action.AddShape;
 
 
@@ -189,9 +189,9 @@ public class CommonPalette extends DrawingPalette {
 			@Override
 			public boolean elementDragged(GraphicalRepresentation containerGR, FGEPoint dropLocation)
 			{
-				if (containerGR.getDrawable() instanceof OEShemaObject) {
+				if (containerGR.getDrawable() instanceof ViewObject) {
 					
-					OEShemaObject container = (OEShemaObject)containerGR.getDrawable();
+					ViewObject container = (ViewObject)containerGR.getDrawable();
 					
 					ShapeGraphicalRepresentation<?> shapeGR = getGraphicalRepresentation().clone();
 					shapeGR.setIsSelectable(true);

@@ -25,8 +25,8 @@ import org.openflexo.ced.CEDCst;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.calc.CalcLibrary;
-import org.openflexo.foundation.ontology.calc.OntologyCalc;
+import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.module.ModuleLoader;
 
 
@@ -39,15 +39,15 @@ public class CalcViewEDITOR {
 			public Object[] getData() {
 				FlexoResourceCenter resourceCenter = ModuleLoader.getFlexoResourceCenter(true);
 				OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
-				CalcLibrary calcLibrary = resourceCenter.retrieveCalcLibrary();
+				ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
 				
-				OntologyCalc calc1 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/flexo/ontologies/Calcs/Tests/BasicOrganizationTreeEditor.owl");
+				ViewPoint calc1 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl");
 				calc1.loadWhenUnloaded();
 				
-				OntologyCalc calc2 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/flexo/ontologies/Calcs/FlexoMethodology/FLXOrganizationalStructure-A.owl");
+				ViewPoint calc2 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl");
 				calc2.loadWhenUnloaded();
 
-				OntologyCalc calc3 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/flexo/ontologies/Calcs/Basic/BasicOntology.owl");
+				ViewPoint calc3 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
 				calc3.loadWhenUnloaded();
 				
 				return makeArray(calc1,calc2,calc3);

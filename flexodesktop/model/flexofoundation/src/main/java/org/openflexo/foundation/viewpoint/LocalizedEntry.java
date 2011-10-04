@@ -22,7 +22,7 @@ package org.openflexo.foundation.viewpoint;
 
 
 
-public class LocalizedEntry extends CalcObject {
+public class LocalizedEntry extends ViewPointObject {
 
 	private LocalizedDictionary _dictionary;
 	
@@ -55,7 +55,7 @@ public class LocalizedEntry extends CalcObject {
 	}
 	
 	@Override
-	public OntologyCalc getCalc() 
+	public ViewPoint getCalc() 
 	{
 		return getLocalizedDictionary().getCalc();
 	}

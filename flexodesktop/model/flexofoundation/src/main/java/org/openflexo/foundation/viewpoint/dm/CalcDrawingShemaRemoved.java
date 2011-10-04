@@ -20,8 +20,8 @@
 package org.openflexo.foundation.viewpoint.dm;
 
 import org.openflexo.foundation.ontology.dm.OEDataModification;
-import org.openflexo.foundation.viewpoint.CalcDrawingShema;
-import org.openflexo.foundation.viewpoint.OntologyCalc;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 
 /**
  * Notify that a new shema has been added
@@ -32,21 +32,21 @@ import org.openflexo.foundation.viewpoint.OntologyCalc;
 public class CalcDrawingShemaRemoved extends OEDataModification
 {
 
-    private OntologyCalc _parent;
+    private ViewPoint _parent;
 
-    public CalcDrawingShemaRemoved(CalcDrawingShema shema, OntologyCalc parent)
+    public CalcDrawingShemaRemoved(ExampleDrawingShema shema, ViewPoint parent)
     {
         super(shema, null);
         _parent = parent;
     }
 
     @Override
-    public CalcDrawingShema oldValue()
+    public ExampleDrawingShema oldValue()
     {
-     	return (CalcDrawingShema)super.oldValue();
+     	return (ExampleDrawingShema)super.oldValue();
     }
     
-    public OntologyCalc getParent()
+    public ViewPoint getParent()
     {
         return _parent;
     }

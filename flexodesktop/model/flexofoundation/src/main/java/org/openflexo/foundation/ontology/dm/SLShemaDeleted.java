@@ -19,7 +19,7 @@
  */
 package org.openflexo.foundation.ontology.dm;
 
-import org.openflexo.foundation.view.OEShemaDefinition;
+import org.openflexo.foundation.view.ViewDefinition;
 
 /**
  * @author gpolet
@@ -30,7 +30,7 @@ public class SLShemaDeleted extends OEDataModification
     /**
      * 
      */
-    public SLShemaDeleted(OEShemaDefinition def)
+    public SLShemaDeleted(ViewDefinition def)
     {
         super("shemaDeleted", def, def);
     }

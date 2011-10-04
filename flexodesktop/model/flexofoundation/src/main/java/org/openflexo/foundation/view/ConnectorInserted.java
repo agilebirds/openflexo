@@ -30,19 +30,19 @@ import org.openflexo.foundation.ontology.dm.OEDataModification;
 public class ConnectorInserted extends OEDataModification
 {
 
-    public ConnectorInserted(OEConnector connector)
+    public ConnectorInserted(ViewConnector connector)
     {
         super(null, connector);
     }
 
-	public OEShape getFromShape()
+	public ViewShape getFromShape()
 	{
-		return ((OEConnector)newValue()).getStartShape();
+		return ((ViewConnector)newValue()).getStartShape();
 	}
 
-	public OEShape getToShape() 
+	public ViewShape getToShape() 
 	{
-		return ((OEConnector)newValue()).getEndShape();
+		return ((ViewConnector)newValue()).getEndShape();
 	}
 
  

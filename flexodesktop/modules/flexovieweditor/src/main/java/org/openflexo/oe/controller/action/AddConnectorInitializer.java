@@ -93,7 +93,7 @@ public class AddConnectorInitializer extends ActionInitializer {
 	@Override
 	protected Icon getEnabledIcon() 
 	{
-		return VEIconLibrary.OE_CONNECTOR_ICON;
+		return VEIconLibrary.CONNECTOR_ICON;
 	}
 
 

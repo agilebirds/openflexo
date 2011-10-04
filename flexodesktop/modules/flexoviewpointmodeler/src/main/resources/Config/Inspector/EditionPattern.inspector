@@ -1,4 +1,4 @@
-<inspector title = "Edition Pattern" inheritsfrom="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.ontology.calc.EditionPattern">
+<inspector title = "Edition Pattern" inheritsfrom="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.viewpoint.EditionPattern">
 
 	<tab name="Basic" index="0" layout="DEFAULT">
 		<property name="name" label="name" widget="TEXT_FIELD" constraint="0">

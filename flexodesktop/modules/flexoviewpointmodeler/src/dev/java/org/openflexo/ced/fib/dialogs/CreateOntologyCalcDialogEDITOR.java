@@ -24,8 +24,8 @@ import java.io.File;
 import org.openflexo.ced.CEDCst;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoResourceCenter;
-import org.openflexo.foundation.ontology.calc.CalcLibrary;
-import org.openflexo.foundation.ontology.calc.action.CreateOntologyCalc;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.action.CreateOntologyCalc;
 import org.openflexo.module.ModuleLoader;
 
 
@@ -39,7 +39,7 @@ public class CreateOntologyCalcDialogEDITOR {
 			public Object[] getData() 
 			{
 				FlexoResourceCenter resourceCenter = ModuleLoader.getFlexoResourceCenter(true);
-				CalcLibrary calcLibrary = resourceCenter.retrieveCalcLibrary();
+				ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
 				CreateOntologyCalc action = CreateOntologyCalc.actionType.makeNewAction(calcLibrary, null,null);
 				return makeArray(action);
 			}

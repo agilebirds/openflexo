@@ -20,8 +20,8 @@
 package org.openflexo.foundation.viewpoint.dm;
 
 import org.openflexo.foundation.ontology.dm.OEDataModification;
-import org.openflexo.foundation.viewpoint.CalcDrawingObject;
-import org.openflexo.foundation.viewpoint.CalcDrawingShape;
+import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 
 /**
  * Notify that a new element has been added to palette
@@ -32,15 +32,15 @@ import org.openflexo.foundation.viewpoint.CalcDrawingShape;
 public class CalcDrawingShapeInserted extends OEDataModification
 {
 
-    private CalcDrawingObject _parent;
+    private ExampleDrawingObject _parent;
 
-    public CalcDrawingShapeInserted(CalcDrawingShape element, CalcDrawingObject parent)
+    public CalcDrawingShapeInserted(ExampleDrawingShape element, ExampleDrawingObject parent)
     {
         super(null, element);
         _parent = parent;
     }
 
-    public CalcDrawingObject getParent()
+    public ExampleDrawingObject getParent()
     {
         return _parent;
     }

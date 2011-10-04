@@ -36,10 +36,10 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.ontology.AbstractOntologyObject;
 import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.view.OEShape;
-import org.openflexo.foundation.viewpoint.CalcDrawingObject;
-import org.openflexo.foundation.viewpoint.CalcPalette;
-import org.openflexo.foundation.viewpoint.CalcPaletteElement;
+import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
+import org.openflexo.foundation.viewpoint.ViewPointPalette;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 import org.openflexo.foundation.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.action.AddCalcDrawingShape;
@@ -51,24 +51,24 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 
 	private static final Logger logger = Logger.getLogger(ContextualPalette.class.getPackage().getName());
 
-	private CalcPalette _calcPalette;
+	private ViewPointPalette _calcPalette;
 	
-	public ContextualPalette(CalcPalette calcPalette)
+	public ContextualPalette(ViewPointPalette viewPointPalette)
 	{
-		super((int)((DrawingGraphicalRepresentation)calcPalette.getGraphicalRepresentation()).getWidth(),
-				(int)((DrawingGraphicalRepresentation)calcPalette.getGraphicalRepresentation()).getHeight(),
-				calcPalette.getName());
+		super((int)((DrawingGraphicalRepresentation)viewPointPalette.getGraphicalRepresentation()).getWidth(),
+				(int)((DrawingGraphicalRepresentation)viewPointPalette.getGraphicalRepresentation()).getHeight(),
+				viewPointPalette.getName());
 		
-		_calcPalette = calcPalette;
+		_calcPalette = viewPointPalette;
 		
-		for (CalcPaletteElement element : calcPalette.getElements()) {
+		for (ViewPointPaletteElement element : viewPointPalette.getElements()) {
 			addElement(makePaletteElement(element));
 		}
 		
 		makePalettePanel();
 		getPaletteView().revalidate();
 		
-		calcPalette.addObserver(this);
+		viewPointPalette.addObserver(this);
 	}
 	
 	@Override
@@ -98,11 +98,11 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 		}
 	}
 	
-	protected ContextualPaletteElement getContextualPaletteElement(CalcPaletteElement element)
+	protected ContextualPaletteElement getContextualPaletteElement(ViewPointPaletteElement element)
 	{
 		for (PaletteElement e : elements) {
 			if (e instanceof ContextualPaletteElement 
-					&& ((ContextualPaletteElement)e).calcPaletteElement == element) 
+					&& ((ContextualPaletteElement)e).viewPointPaletteElement == element) 
 				return (ContextualPaletteElement)e;
 		}
 		return null;
@@ -122,8 +122,8 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 			if (dropScheme.isTopTarget() && target instanceof DrawingGraphicalRepresentation) {
 				returned.add(dropScheme);
 			}
-			if (target.getDrawable() instanceof OEShape) {
-				OEShape targetShape = (OEShape)target.getDrawable();
+			if (target.getDrawable() instanceof ViewShape) {
+				ViewShape targetShape = (ViewShape)target.getDrawable();
 				AbstractOntologyObject targetObject = targetShape.getLinkedConcept();
 				if (targetObject instanceof OntologyObject && dropScheme.isValidTarget((OntologyObject)targetObject)) {
 					returned.add(dropScheme);
@@ -133,20 +133,20 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 		return returned;
 	}
 
-	private ContextualPaletteElement makePaletteElement(final CalcPaletteElement element) 
+	private ContextualPaletteElement makePaletteElement(final ViewPointPaletteElement element) 
 	{
 		return new ContextualPaletteElement(element);
 	}
 
 	protected class ContextualPaletteElement implements PaletteElement
 	{
-		private CalcPaletteElement calcPaletteElement;
+		private ViewPointPaletteElement viewPointPaletteElement;
 		private PaletteElementGraphicalRepresentation gr;
 		
-		public ContextualPaletteElement(CalcPaletteElement aPaletteElement)
+		public ContextualPaletteElement(ViewPointPaletteElement aPaletteElement)
 		{
-			calcPaletteElement = aPaletteElement;
-			gr  = new PaletteElementGraphicalRepresentation((ShapeGraphicalRepresentation)calcPaletteElement.getGraphicalRepresentation(),null,getPaletteDrawing());
+			viewPointPaletteElement = aPaletteElement;
+			gr  = new PaletteElementGraphicalRepresentation((ShapeGraphicalRepresentation)viewPointPaletteElement.getGraphicalRepresentation(),null,getPaletteDrawing());
 			gr.setText(aPaletteElement.getName());
 			gr.setDrawable(this);
 		}
@@ -160,9 +160,9 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 		@Override
 		public boolean elementDragged(GraphicalRepresentation containerGR, FGEPoint dropLocation)
 		{
-			if (containerGR.getDrawable() instanceof CalcDrawingObject) {
+			if (containerGR.getDrawable() instanceof ExampleDrawingObject) {
 
-				CalcDrawingObject container = (CalcDrawingObject)containerGR.getDrawable();
+				ExampleDrawingObject container = (ExampleDrawingObject)containerGR.getDrawable();
 
 				ShapeGraphicalRepresentation<?> shapeGR = getGraphicalRepresentation().clone();
 				shapeGR.setIsSelectable(true);

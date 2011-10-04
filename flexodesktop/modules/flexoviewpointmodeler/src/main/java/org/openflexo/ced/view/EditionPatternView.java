@@ -21,7 +21,7 @@ package org.openflexo.ced.view;
 
 import org.openflexo.ced.CEDCst;
 import org.openflexo.ced.controller.CEDController;
-import org.openflexo.ced.controller.CalcPerspective;
+import org.openflexo.ced.controller.ViewPointPerspective;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.view.FIBModuleView;
 
@@ -50,8 +50,8 @@ public class EditionPatternView extends FIBModuleView<EditionPattern>
     }
     
      @Override
-	public CalcPerspective getPerspective() 
+	public ViewPointPerspective getPerspective() 
     {
-    	return getFlexoController().CALC_PERSPECTIVE;
+    	return getFlexoController().VIEW_POINT_PERSPECTIVE;
     }
 }

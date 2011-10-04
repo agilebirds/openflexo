@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewPoint id="1" uri="http://www.agilebirds.com/openflexo/ViewPoints/SKOS/SKOSThesaurusEditor.owl" owlFile="SKOSThesaurusEditor.owl">
+  <description>This calc is intented to be used as a Basic Thesaurus editor, whose underlying used language is SKOS (Simple Knowlege Organization System) and which is an RDF vocabulary for describing the basic structure and content of concept schemes such as thesauri, classification schemes, subject heading lists, taxonomies, 'folksonomies', other types of controlled vocabulary, and also concept schemes embedded in glossaries and terminologies.</description>
+  <EditionPattern id="2" name="ConceptScheme">
+    <description>Allows to define concept scheme</description>
+    <DropScheme id="3" target="top" name="DropConceptSchemeAtTopLevel" skipConfirmationPanel="false">
+      <Parameter id="4" name="conceptSchemeName" label="concept_scheme_name" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+        <description>Allow to enter concept scheme name while dropping concept scheme</description>
+      </Parameter>
+      <Parameter id="5" name="conceptSchemeURI" label="uri" widget="TEXT_FIELD" defaultValue="MyConceptScheme" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="conceptSchemeName">
+        <description>Allow to enter (unique) name used in Ontology</description>
+      </Parameter>
+      <Parameter id="6" name="preferedLabel" label="preferred_label" widget="LOCALIZED_TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+        <description>Allow to enter prefered label</description>
+      </Parameter>
+      <Parameter id="7" name="alternativeLabel" label="alternative_label" widget="LOCALIZED_TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+        <description>Allow to enter alternative label</description>
+      </Parameter>
+      <AddIndividual id="8" individualName="conceptSchemeURI" patternRole="conceptScheme" conceptURI="http://www.w3.org/2004/02/skos/core#ConceptScheme">
+        <DataPropertyAssertion id="9" dataPropertyURI="http://www.w3.org/2000/01/rdf-schema#label" value="conceptSchemeName" />
+        <DataPropertyAssertion id="10" dataPropertyURI="http://www.w3.org/2004/02/skos/core#prefLabel" value="preferedLabel" />
+        <DataPropertyAssertion id="11" dataPropertyURI="http://www.w3.org/2004/02/skos/core#altLabel" value="alternativeLabel" />
+      </AddIndividual>
+      <AddShape id="12" patternRole="shape" />
+    </DropScheme>
+    <OntologicObjectPatternRole id="13" patternRole="conceptScheme" type="OntologicObject" ontologicObjectType="Individual">
+      <Label id="14" type="UseOntologicProperty" />
+      <ShapeGraphicalRepresentation id="15" className="org.openflexo.ced.palette.PaletteElementGR" x="67.0" y="31.0" width="113.92949967511372" height="41.14754098360656" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="Concept Scheme" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+        <ForegroundStyle id="16" noStroke="false" color="204,0,51" lineWidth="1.6" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorGradientBackgroundStyle id="17" color1="255,102,102" color2="255,255,255" direction="SOUTH_EAST_NORTH_WEST" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="18" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="19" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="20" isRounded="true" arcSize="20.0" />
+        <TextStyle id="21" font="Lucida Sans,1,11" color="102,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </OntologicObjectPatternRole>
+    <ShapePatternRole id="22" patternRole="shape" boundPatternRole="conceptScheme" type="Shape">
+      <Label id="23" propertyURI="http://www.w3.org/2000/01/rdf-schema#label" type="UseOntologicProperty" />
+      <ShapeGraphicalRepresentation id="24" className="org.openflexo.ced.view.widget.EditionPatternPreviewShapeGR" x="175.0" y="40.0" width="113.92949967511372" height="41.14754098360656" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="conceptScheme" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+        <ForegroundStyle id="25" noStroke="false" color="204,0,51" lineWidth="1.6" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorGradientBackgroundStyle id="26" color1="255,102,102" color2="255,255,255" direction="SOUTH_EAST_NORTH_WEST" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="27" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="28" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="29" isRounded="true" arcSize="20.0" />
+        <TextStyle id="30" font="Lucida Sans,1,11" color="102,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ShapePatternRole>
+    <Inspector id="31">
+      <tab id="32" name="SKOS Concept Scheme" index="0">
+        <property_list id="33" patternRole="conceptScheme" name="annotationStatements" label="SKOS_annotations" widget="TABLE" constraint="1" createNewRowOnClick="true">
+          <param id="34" name="visible_row_count" value="5" />
+          <param id="35" name="row_height" value="20" />
+          <property_list_column id="36" name="icon" label="" widget="ICON" constraint="0">
+            <param id="37" name="resizable" value="false" />
+            <param id="38" name="column_width" value="30" />
+          </property_list_column>
+          <property_list_column id="39" name="property.name" label="property" widget="READ_ONLY_TEXT_FIELD" constraint="0">
+            <param id="40" name="resizable" value="true" />
+            <param id="41" name="column_width" value="100" />
+          </property_list_column>
+          <property_list_column id="42" name="stringValue" label="value" widget="TEXT_FIELD" constraint="0">
+            <param id="43" name="resizable" value="true" />
+            <param id="44" name="column_width" value="350" />
+          </property_list_column>
+          <property_list_column id="45" name="language" label="lang" widget="DROPDOWN" constraint="0">
+            <param id="46" name="dynamiclist" value="allLanguages" />
+            <param id="47" name="showReset" value="false" />
+            <param id="48" name="resizable" value="false" />
+            <param id="49" name="format" value="name" />
+            <param id="50" name="column_width" value="80" />
+          </property_list_column>
+          <property_list_action id="51" name="make_new_comment_annotation" type="ADD" method="createNewCommentAnnotation()" isAvailable="isAnnotationAddable()" />
+          <property_list_action id="52" name="make_new_label_annotation" type="ADD" method="createNewLabelAnnotation()" isAvailable="isAnnotationAddable()" />
+          <property_list_action id="53" name="new_preferred_label" type="ADD" method="createNewAnnotation('http://www.w3.org/2004/02/skos/core#prefLabel')" isAvailable="isAnnotationAddable()" />
+          <property_list_action id="54" name="new_alternative_label" type="ADD" method="createNewAnnotation('http://www.w3.org/2004/02/skos/core#altLabel')" isAvailable="isAnnotationAddable()" />
+          <property_list_action id="55" name="new_hidden_label" type="ADD" method="createNewAnnotation('http://www.w3.org/2004/02/skos/core#hiddenLabel')" isAvailable="isAnnotationAddable()" />
+          <property_list_action id="56" name="new_note" type="ADD" method="createNewAnnotation('http://www.w3.org/2004/02/skos/core#note')" isAvailable="isAnnotationAddable()" />
+          <property_list_action id="57" name="new_change_note" type="ADD" method="createNewAnnotation('http://www.w3.org/2004/02/skos/core#changeNote')" isAvailable="isAnnotationAddable()" />
+          <property_list_action id="58" name="new_definition" type="ADD" method="createNewAnnotation('http://www.w3.org/2004/02/skos/core#definition')" isAvailable="isAnnotationAddable()" />
+          <property_list_action id="59" name="new_editorial_note" type="ADD" method="createNewAnnotation('http://www.w3.org/2004/02/skos/core#editorialNote')" isAvailable="isAnnotationAddable()" />
+          <property_list_action id="60" name="new_example" type="ADD" method="createNewAnnotation('http://www.w3.org/2004/02/skos/core#example')" isAvailable="isAnnotationAddable()" />
+          <property_list_action id="61" name="new_history_note" type="ADD" method="createNewAnnotation('http://www.w3.org/2004/02/skos/core#historyNote')" isAvailable="isAnnotationAddable()" />
+          <property_list_action id="62" name="new_scope_note" type="ADD" method="createNewAnnotation('http://www.w3.org/2004/02/skos/core#scopeNote')" isAvailable="isAnnotationAddable()" />
+          <property_list_action id="63" name="delete_annotation" type="DELETE" method="deleteAnnotation(this)" isAvailable="isAnnotationDeletable(this)" />
+        </property_list>
+        <property_list id="64" patternRole="conceptScheme" name="semanticStatements" label="semantic_statements" widget="TABLE" constraint="2" createNewRowOnClick="true">
+          <param id="65" name="visible_row_count" value="5" />
+          <param id="66" name="row_height" value="20" />
+          <property_list_column id="67" name="icon" label="" widget="ICON" constraint="0">
+            <param id="68" name="resizable" value="false" />
+            <param id="69" name="column_width" value="30" />
+          </property_list_column>
+          <property_list_column id="70" name="toString" label="statement" widget="READ_ONLY_TEXT_FIELD" constraint="0">
+            <param id="71" name="resizable" value="true" />
+            <param id="72" name="column_width" value="200" />
+          </property_list_column>
+        </property_list>
+        <property id="73" patternRole="conceptScheme" name="name" label="concept_scheme_name" widget="TEXT_FIELD" constraint="0">
+          <param id="74" name="columns" value="10" />
+        </property>
+      </tab>
+    </Inspector>
+  </EditionPattern>
+  <EditionPattern id="75" name="Concept">
+    <description>Allows to define concept</description>
+    <DropScheme id="76" target="top" name="DropConceptAtTopLevel" skipConfirmationPanel="false">
+      <Parameter id="77" name="conceptName" label="concept_name" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+        <description>Allow to enter concept scheme name while dropping concept scheme</description>
+      </Parameter>
+      <Parameter id="78" name="conceptURI" label="uri" widget="TEXT_FIELD" defaultValue="MyConcept" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="conceptName">
+        <description>Allow to enter (unique) name used in Ontology</description>
+      </Parameter>
+      <Parameter id="79" name="conceptScheme" conceptURI="http://www.w3.org/2004/02/skos/core#ConceptScheme" label="concept_scheme" widget="CUSTOM" type="OntologyIndividual" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+        <description>Allow to specify concept scheme</description>
+      </Parameter>
+      <Parameter id="80" name="preferedLabel" label="preferred_label" widget="LOCALIZED_TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+        <description>Allow to enter prefered label</description>
+      </Parameter>
+      <Parameter id="81" name="alternativeLabel" label="alternative_label" widget="LOCALIZED_TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+        <description>Allow to enter alternative label</description>
+      </Parameter>
+      <AddIndividual id="82" individualName="conceptURI" patternRole="concept" conceptURI="http://www.w3.org/2004/02/skos/core#Concept">
+        <DataPropertyAssertion id="83" dataPropertyURI="http://www.w3.org/2000/01/rdf-schema#label" value="conceptName" />
+        <DataPropertyAssertion id="84" dataPropertyURI="http://www.w3.org/2004/02/skos/core#prefLabel" value="preferedLabel" />
+        <DataPropertyAssertion id="85" dataPropertyURI="http://www.w3.org/2004/02/skos/core#altLabel" value="alternativeLabel" />
+        <ObjectPropertyAssertion id="86" objectPropertyURI="http://www.w3.org/2004/02/skos/core#inScheme" object="conceptScheme" />
+      </AddIndividual>
+      <AddShape id="87" patternRole="shape" />
+    </DropScheme>
+    <OntologicObjectPatternRole id="88" patternRole="concept" type="OntologicObject" ontologicObjectType="Individual">
+      <ShapeGraphicalRepresentation id="89" className="org.openflexo.ced.palette.PaletteElementGR" x="87.0" y="119.0" width="62.88593750000001" height="34.26229508196721" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="Concept" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+        <ForegroundStyle id="90" noStroke="false" color="102,102,255" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorGradientBackgroundStyle id="91" color1="204,204,255" color2="255,255,255" direction="SOUTH_EAST_NORTH_WEST" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="92" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="93" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="94" isRounded="true" arcSize="20.0" />
+        <TextStyle id="95" font="Lucida Sans,0,11" color="0,0,102" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </OntologicObjectPatternRole>
+    <ShapePatternRole id="96" patternRole="shape" boundPatternRole="concept" type="Shape">
+      <Label id="97" propertyURI="http://www.w3.org/2000/01/rdf-schema#label" type="UseOntologicProperty" />
+      <ShapeGraphicalRepresentation id="98" className="org.openflexo.ced.view.widget.EditionPatternPreviewShapeGR" x="161.0" y="39.73770491803279" width="62.88593750000001" height="34.26229508196721" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+        <ForegroundStyle id="99" noStroke="false" color="102,102,255" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorGradientBackgroundStyle id="100" color1="204,204,255" color2="255,255,255" direction="SOUTH_EAST_NORTH_WEST" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="101" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="102" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="103" isRounded="true" arcSize="20.0" />
+        <TextStyle id="104" font="Lucida Sans,0,11" color="0,0,102" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ShapePatternRole>
+    <Inspector id="105">
+      <tab id="106" name="SKOS Concept" index="0">
+        <property id="107" patternRole="concept" name="name" label="concept_name" widget="TEXT_FIELD" constraint="0">
+          <param id="108" name="columns" value="10" />
+        </property>
+        <property_list id="109" patternRole="concept" name="semanticStatements" label="semantic_statements" widget="TABLE" constraint="2" createNewRowOnClick="true">
+          <param id="110" name="visible_row_count" value="5" />
+          <param id="111" name="row_height" value="20" />
+          <property_list_column id="112" name="icon" label="" widget="ICON" constraint="0">
+            <param id="113" name="resizable" value="false" />
+            <param id="114" name="column_width" value="30" />
+          </property_list_column>
+          <property_list_column id="115" name="toString" label="statement" widget="READ_ONLY_TEXT_FIELD" constraint="0">
+            <param id="116" name="resizable" value="true" />
+            <param id="117" name="column_width" value="200" />
+          </property_list_column>
+        </property_list>
+        <property_list id="118" patternRole="concept" name="annotationStatements" label="SKOS_annotations" widget="TABLE" constraint="1" createNewRowOnClick="true">
+          <param id="119" name="visible_row_count" value="5" />
+          <param id="120" name="row_height" value="20" />
+          <property_list_column id="121" name="icon" label="" widget="ICON" constraint="0">
+            <param id="122" name="resizable" value="false" />
+            <param id="123" name="column_width" value="30" />
+          </property_list_column>
+          <property_list_column id="124" name="property.name" label="property" widget="READ_ONLY_TEXT_FIELD" constraint="0">
+            <param id="125" name="resizable" value="true" />
+            <param id="126" name="column_width" value="100" />
+          </property_list_column>
+          <property_list_column id="127" name="stringValue" label="value" widget="TEXT_FIELD" constraint="0">
+            <param id="128" name="resizable" value="true" />
+            <param id="129" name="column_width" value="350" />
+          </property_list_column>
+          <property_list_column id="130" name="language" label="lang" widget="DROPDOWN" constraint="0">
+            <param id="131" name="dynamiclist" value="allLanguages" />
+            <param id="132" name="showReset" value="false" />
+            <param id="133" name="resizable" value="false" />
+            <param id="134" name="format" value="name" />
+            <param id="135" name="column_width" value="80" />
+          </property_list_column>
+          <property_list_action id="136" name="make_new_comment_annotation" type="ADD" method="createNewCommentAnnotation()" isAvailable="isAnnotationAddable()" />
+          <property_list_action id="137" name="make_new_label_annotation" type="ADD" method="createNewLabelAnnotation()" isAvailable="isAnnotationAddable()" />
+          <property_list_action id="138" name="new_preferred_label" type="ADD" method="createNewAnnotation('http://www.w3.org/2004/02/skos/core#prefLabel')" isAvailable="isAnnotationAddable()" />
+          <property_list_action id="139" name="new_alternative_label" type="ADD" method="createNewAnnotation('http://www.w3.org/2004/02/skos/core#altLabel')" isAvailable="isAnnotationAddable()" />
+          <property_list_action id="140" name="new_hidden_label" type="ADD" method="createNewAnnotation('http://www.w3.org/2004/02/skos/core#hiddenLabel')" isAvailable="isAnnotationAddable()" />
+          <property_list_action id="141" name="new_note" type="ADD" method="createNewAnnotation('http://www.w3.org/2004/02/skos/core#note')" isAvailable="isAnnotationAddable()" />
+          <property_list_action id="142" name="new_change_note" type="ADD" method="createNewAnnotation('http://www.w3.org/2004/02/skos/core#changeNote')" isAvailable="isAnnotationAddable()" />
+          <property_list_action id="143" name="new_definition" type="ADD" method="createNewAnnotation('http://www.w3.org/2004/02/skos/core#definition')" isAvailable="isAnnotationAddable()" />
+          <property_list_action id="144" name="new_editorial_note" type="ADD" method="createNewAnnotation('http://www.w3.org/2004/02/skos/core#editorialNote')" isAvailable="isAnnotationAddable()" />
+          <property_list_action id="145" name="new_example" type="ADD" method="createNewAnnotation('http://www.w3.org/2004/02/skos/core#example')" isAvailable="isAnnotationAddable()" />
+          <property_list_action id="146" name="new_history_note" type="ADD" method="createNewAnnotation('http://www.w3.org/2004/02/skos/core#historyNote')" isAvailable="isAnnotationAddable()" />
+          <property_list_action id="147" name="new_scope_note" type="ADD" method="createNewAnnotation('http://www.w3.org/2004/02/skos/core#scopeNote')" isAvailable="isAnnotationAddable()" />
+          <property_list_action id="148" name="delete" type="DELETE" method="deleteAnnotation(this)" isAvailable="isAnnotationDeletable(this)" />
+        </property_list>
+      </tab>
+    </Inspector>
+  </EditionPattern>
+  <EditionPattern id="149" name="ConceptToConceptSchemeRelationship">
+    <description>Allows to define link between a concept and a concept scheme</description>
+    <LinkScheme id="150" fromTarget="http://www.w3.org/2004/02/skos/core#Concept" toTarget="http://www.w3.org/2004/02/skos/core#ConceptScheme" name="LinkAConceptToAConceptScheme" skipConfirmationPanel="false">
+      <Parameter id="151" name="makeInverseRelationship" label="make_inverse_relationship" widget="CHECKBOX" defaultValue="true" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+        <description>When set to true, indicates that inverse relationship must be defined</description>
+      </Parameter>
+      <AddObjectProperty id="152" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#topConceptOf" subject="fromTarget" patternRole="topConceptOf" />
+      <AddObjectProperty id="153" object="fromTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#hasTopConcept" subject="toTarget" patternRole="hasTopConcept" conditional="makeInverseRelationship=true" />
+      <AddConnector id="154" patternRole="connector" />
+    </LinkScheme>
+    <OntologicObjectPatternRole id="155" patternRole="topConceptOf" type="OntologicObject" ontologicObjectType="OntologyStatement" />
+    <OntologicObjectPatternRole id="156" patternRole="hasTopConcept" type="OntologicObject" ontologicObjectType="OntologyStatement" />
+    <ConnectorPatternRole id="157" patternRole="connector" boundPatternRole="topConceptOf" type="Connector">
+      <Label id="158" text="top concept of" type="StaticValue" />
+      <ConnectorGraphicalRepresentation id="159" className="org.openflexo.ced.view.widget.EditionPatternPreviewConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="3.0" absoluteTextY="-13.0" textAlignment="CENTER">
+        <ForegroundStyle id="160" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <StartShapeGraphicalRepresentation id="161" className="org.openflexo.ced.view.widget.EditionPatternConnectorFromArtefactGR" x="80.0" y="58.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+          <ForegroundStyle id="162" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="163" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="164" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="165" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <CircleShape id="166" />
+          <TextStyle id="167" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </StartShapeGraphicalRepresentation>
+        <EndShapeGraphicalRepresentation id="168" className="org.openflexo.ced.view.widget.EditionPatternConnectorToArtefactGR" x="350.0" y="58.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+          <ForegroundStyle id="169" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="170" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="171" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="172" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <CircleShape id="173" />
+          <TextStyle id="174" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </EndShapeGraphicalRepresentation>
+        <LineConnector id="175" lineConnectorType="MINIMAL_LENGTH" />
+        <TextStyle id="176" font="Lucida Sans,0,9" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ConnectorGraphicalRepresentation>
+      <ArtifactFromShapeGraphicalRepresentation idref="161" />
+      <ArtifactToShapeGraphicalRepresentation idref="168" />
+    </ConnectorPatternRole>
+    <Inspector id="177">
+      <tab id="178" index="0" />
+    </Inspector>
+  </EditionPattern>
+  <EditionPattern id="179" name="ConceptSpecialization">
+    <description>Allows to define link between a concept and a other concept with a specialization semantic</description>
+    <LinkScheme id="180" fromTarget="http://www.w3.org/2004/02/skos/core#Concept" toTarget="http://www.w3.org/2004/02/skos/core#Concept" name="SpecializeAConcept" skipConfirmationPanel="false">
+      <Parameter id="181" name="match" label="match" widget="CHECKBOX" defaultValue="false" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+        <description>When set to true, indicates that broadMatch property should be used</description>
+      </Parameter>
+      <Parameter id="182" name="makeInverseRelationship" label="make_inverse_relationship" widget="CHECKBOX" defaultValue="true" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+        <description>When set to true, indicates that inverse relationship must be defined</description>
+      </Parameter>
+      <AddObjectProperty id="183" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#broader" subject="fromTarget" patternRole="broader" conditional="match=false" />
+      <AddObjectProperty id="184" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#broadMatch" subject="fromTarget" patternRole="broadMatch" conditional="match=true" />
+      <AddObjectProperty id="185" object="fromTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#narrower" subject="toTarget" patternRole="narrower" conditional="match=false &amp; makeInverseRelationship=true" />
+      <AddObjectProperty id="186" object="fromTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#narrowMatch" subject="toTarget" patternRole="narrowMatch" conditional="match=true &amp; makeInverseRelationship=true" />
+      <AddConnector id="187" patternRole="broaderConnector" conditional="match=false" />
+      <AddConnector id="188" patternRole="broadMatchConnector" conditional="match=true" />
+    </LinkScheme>
+    <OntologicObjectPatternRole id="189" patternRole="broader" type="OntologicObject" ontologicObjectType="OntologyStatement" />
+    <OntologicObjectPatternRole id="190" patternRole="broadMatch" type="OntologicObject" ontologicObjectType="OntologyStatement" />
+    <OntologicObjectPatternRole id="191" patternRole="narrower" type="OntologicObject" ontologicObjectType="OntologyStatement" />
+    <OntologicObjectPatternRole id="192" patternRole="narrowMatch" type="OntologicObject" ontologicObjectType="OntologyStatement" />
+    <ConnectorPatternRole id="193" patternRole="broaderConnector" boundPatternRole="broader" type="Connector">
+      <Label id="194" text="broader" type="StaticValue" />
+      <ConnectorGraphicalRepresentation id="195" className="org.openflexo.ced.view.widget.EditionPatternPreviewConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="-4.0" absoluteTextY="-13.0" textAlignment="CENTER">
+        <ForegroundStyle id="196" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <StartShapeGraphicalRepresentation id="197" className="org.openflexo.ced.view.widget.EditionPatternConnectorFromArtefactGR" x="79.0" y="33.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+          <ForegroundStyle id="198" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="199" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="200" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="201" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <CircleShape id="202" />
+          <TextStyle id="203" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </StartShapeGraphicalRepresentation>
+        <EndShapeGraphicalRepresentation id="204" className="org.openflexo.ced.view.widget.EditionPatternConnectorToArtefactGR" x="345.0" y="34.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+          <ForegroundStyle id="205" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="206" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="207" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="208" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <CircleShape id="209" />
+          <TextStyle id="210" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </EndShapeGraphicalRepresentation>
+        <LineConnector id="211" lineConnectorType="MINIMAL_LENGTH" />
+        <TextStyle id="212" font="Lucida Sans,0,9" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ConnectorGraphicalRepresentation>
+      <ArtifactFromShapeGraphicalRepresentation idref="197" />
+      <ArtifactToShapeGraphicalRepresentation idref="204" />
+    </ConnectorPatternRole>
+    <ConnectorPatternRole id="213" patternRole="broadMatchConnector" boundPatternRole="broadMatch" type="Connector">
+      <Label id="214" text="broad match" type="StaticValue" />
+      <ConnectorGraphicalRepresentation id="215" className="org.openflexo.ced.view.widget.EditionPatternPreviewConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="-5.0" absoluteTextY="-13.0" textAlignment="CENTER">
+        <ForegroundStyle id="216" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <StartShapeGraphicalRepresentation id="217" className="org.openflexo.ced.view.widget.EditionPatternConnectorFromArtefactGR" x="80.0" y="80.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+          <ForegroundStyle id="218" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="219" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="220" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="221" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <CircleShape id="222" />
+          <TextStyle id="223" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </StartShapeGraphicalRepresentation>
+        <EndShapeGraphicalRepresentation id="224" className="org.openflexo.ced.view.widget.EditionPatternConnectorToArtefactGR" x="350.0" y="81.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+          <ForegroundStyle id="225" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="226" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="227" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="228" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <CircleShape id="229" />
+          <TextStyle id="230" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </EndShapeGraphicalRepresentation>
+        <LineConnector id="231" lineConnectorType="MINIMAL_LENGTH" />
+        <TextStyle id="232" font="Lucida Sans,0,9" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ConnectorGraphicalRepresentation>
+      <ArtifactFromShapeGraphicalRepresentation idref="217" />
+      <ArtifactToShapeGraphicalRepresentation idref="224" />
+    </ConnectorPatternRole>
+    <Inspector id="233">
+      <tab id="234" index="0" />
+    </Inspector>
+  </EditionPattern>
+  <EditionPattern id="235" name="ConceptGeneralization">
+    <description>Allows to define link between a concept and a other concept with a specialization semantic</description>
+    <LinkScheme id="236" fromTarget="http://www.w3.org/2004/02/skos/core#Concept" toTarget="http://www.w3.org/2004/02/skos/core#Concept" name="GeneralizeAConcept" skipConfirmationPanel="false">
+      <Parameter id="237" name="match" label="match" widget="CHECKBOX" defaultValue="false" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+        <description>When set to true, indicates that broadMatch property should be used</description>
+      </Parameter>
+      <Parameter id="238" name="makeInverseRelationship" label="make_inverse_relationship" widget="CHECKBOX" defaultValue="true" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+        <description>When set to true, indicates that inverse relationship must be defined</description>
+      </Parameter>
+      <AddObjectProperty id="239" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#narrower" subject="fromTarget" patternRole="narrower" conditional="match=false" />
+      <AddObjectProperty id="240" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#narrowMatch" subject="fromTarget" patternRole="narrowMatch" conditional="match=true" />
+      <AddObjectProperty id="241" object="fromTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#broader" subject="toTarget" patternRole="broader" conditional="match=false &amp; makeInverseRelationship=true" />
+      <AddObjectProperty id="242" object="fromTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#broadMatch" subject="toTarget" patternRole="broadMatch" conditional="match=true &amp; makeInverseRelationship=true" />
+      <AddConnector id="243" patternRole="narrowerConnector" conditional="match=false" />
+      <AddConnector id="244" patternRole="narrowMatchConnector" conditional="match=true" />
+    </LinkScheme>
+    <OntologicObjectPatternRole id="245" patternRole="narrower" type="OntologicObject" ontologicObjectType="OntologyStatement" />
+    <OntologicObjectPatternRole id="246" patternRole="narrowMatch" type="OntologicObject" ontologicObjectType="OntologyStatement" />
+    <OntologicObjectPatternRole id="247" patternRole="broader" type="OntologicObject" ontologicObjectType="OntologyStatement" />
+    <OntologicObjectPatternRole id="248" patternRole="broadMatch" type="OntologicObject" ontologicObjectType="OntologyStatement" />
+    <ConnectorPatternRole id="249" patternRole="narrowerConnector" boundPatternRole="narrower" type="Connector">
+      <Label id="250" text="narrower" type="StaticValue" />
+      <ConnectorGraphicalRepresentation id="251" className="org.openflexo.ced.view.widget.EditionPatternPreviewConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="-4.0" absoluteTextY="-12.0" textAlignment="CENTER">
+        <ForegroundStyle id="252" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <StartShapeGraphicalRepresentation id="253" className="org.openflexo.ced.view.widget.EditionPatternConnectorFromArtefactGR" x="80.0" y="37.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+          <ForegroundStyle id="254" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="255" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="256" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="257" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <CircleShape id="258" />
+          <TextStyle id="259" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </StartShapeGraphicalRepresentation>
+        <EndShapeGraphicalRepresentation id="260" className="org.openflexo.ced.view.widget.EditionPatternConnectorToArtefactGR" x="343.0" y="36.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+          <ForegroundStyle id="261" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="262" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="263" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="264" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <CircleShape id="265" />
+          <TextStyle id="266" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </EndShapeGraphicalRepresentation>
+        <LineConnector id="267" lineConnectorType="MINIMAL_LENGTH" />
+        <TextStyle id="268" font="Lucida Sans,0,9" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ConnectorGraphicalRepresentation>
+      <ArtifactFromShapeGraphicalRepresentation idref="253" />
+      <ArtifactToShapeGraphicalRepresentation idref="260" />
+    </ConnectorPatternRole>
+    <ConnectorPatternRole id="269" patternRole="narrowMatchConnector" boundPatternRole="narrowMatch" type="Connector">
+      <Label id="270" text="narrow match" type="StaticValue" />
+      <ConnectorGraphicalRepresentation id="271" className="org.openflexo.ced.view.widget.EditionPatternPreviewConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="-2.0" absoluteTextY="-12.0" textAlignment="CENTER">
+        <ForegroundStyle id="272" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <StartShapeGraphicalRepresentation id="273" className="org.openflexo.ced.view.widget.EditionPatternConnectorFromArtefactGR" x="80.0" y="80.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+          <ForegroundStyle id="274" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="275" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="276" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="277" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <CircleShape id="278" />
+          <TextStyle id="279" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </StartShapeGraphicalRepresentation>
+        <EndShapeGraphicalRepresentation id="280" className="org.openflexo.ced.view.widget.EditionPatternConnectorToArtefactGR" x="346.0" y="81.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+          <ForegroundStyle id="281" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="282" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="283" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="284" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <CircleShape id="285" />
+          <TextStyle id="286" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </EndShapeGraphicalRepresentation>
+        <LineConnector id="287" lineConnectorType="MINIMAL_LENGTH" />
+        <TextStyle id="288" font="Lucida Sans,0,9" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ConnectorGraphicalRepresentation>
+      <ArtifactFromShapeGraphicalRepresentation idref="273" />
+      <ArtifactToShapeGraphicalRepresentation idref="280" />
+    </ConnectorPatternRole>
+    <Inspector id="289">
+      <tab id="290" index="0" />
+    </Inspector>
+  </EditionPattern>
+  <EditionPattern id="291" name="ConceptRelatedRelationship">
+    <description>Allows to define link between a concept and a other concept with a "related-to" semantic</description>
+    <LinkScheme id="292" fromTarget="http://www.w3.org/2004/02/skos/core#Concept" toTarget="http://www.w3.org/2004/02/skos/core#Concept" name="MakeTwoConceptRelatedToEachOther" skipConfirmationPanel="false">
+      <Parameter id="293" name="match" label="match" widget="CHECKBOX" defaultValue="false" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+        <description>When set to true, indicates that relatedMatch property should be used</description>
+      </Parameter>
+      <AddObjectProperty id="294" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#related" subject="fromTarget" patternRole="related1" conditional="match=false" />
+      <AddObjectProperty id="295" object="fromTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#related" subject="toTarget" patternRole="related2" conditional="match=false" />
+      <AddObjectProperty id="296" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#relatedMatch" subject="fromTarget" patternRole="relatedMatch1" conditional="match=true" />
+      <AddObjectProperty id="297" object="fromTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#relatedMatch" subject="toTarget" patternRole="relatedMatch2" conditional="match=true" />
+      <AddConnector id="298" patternRole="relatedConnector" conditional="match=false" />
+      <AddConnector id="299" patternRole="relatedMatchConnector" conditional="match=true" />
+    </LinkScheme>
+    <OntologicObjectPatternRole id="300" patternRole="related1" type="OntologicObject" ontologicObjectType="OntologyStatement" />
+    <OntologicObjectPatternRole id="301" patternRole="related2" type="OntologicObject" ontologicObjectType="OntologyStatement" />
+    <OntologicObjectPatternRole id="302" patternRole="relatedMatch1" type="OntologicObject" ontologicObjectType="OntologyStatement" />
+    <OntologicObjectPatternRole id="303" patternRole="relatedMatch2" type="OntologicObject" ontologicObjectType="OntologyStatement">
+      <Label id="304" type="UseOntologicProperty" />
+    </OntologicObjectPatternRole>
+    <ConnectorPatternRole id="305" patternRole="relatedConnector" boundPatternRole="related1" type="Connector">
+      <Label id="306" text="related" type="StaticValue" />
+      <ConnectorGraphicalRepresentation id="307" className="org.openflexo.ced.view.widget.EditionPatternPreviewConnectorGR" isVisible="true" layer="64" startSymbol="ARROW" endSymbol="ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="1.0" absoluteTextY="-12.0" textAlignment="CENTER">
+        <ForegroundStyle id="308" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="MEDIUM_SPACED_DASHES" useTransparency="false" transparencyLevel="0.5" />
+        <StartShapeGraphicalRepresentation id="309" className="org.openflexo.ced.view.widget.EditionPatternConnectorFromArtefactGR" x="81.0" y="39.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+          <ForegroundStyle id="310" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="311" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="312" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="313" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <CircleShape id="314" />
+          <TextStyle id="315" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </StartShapeGraphicalRepresentation>
+        <EndShapeGraphicalRepresentation id="316" className="org.openflexo.ced.view.widget.EditionPatternConnectorToArtefactGR" x="348.0" y="38.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+          <ForegroundStyle id="317" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="318" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="319" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="320" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <CircleShape id="321" />
+          <TextStyle id="322" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </EndShapeGraphicalRepresentation>
+        <LineConnector id="323" lineConnectorType="MINIMAL_LENGTH" />
+        <TextStyle id="324" font="Lucida Sans,0,9" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ConnectorGraphicalRepresentation>
+      <ArtifactFromShapeGraphicalRepresentation idref="309" />
+      <ArtifactToShapeGraphicalRepresentation idref="316" />
+    </ConnectorPatternRole>
+    <ConnectorPatternRole id="325" patternRole="relatedMatchConnector" boundPatternRole="relatedMatch1" type="Connector">
+      <Label id="326" text="related match" type="StaticValue" />
+      <ConnectorGraphicalRepresentation id="327" className="org.openflexo.ced.view.widget.EditionPatternPreviewConnectorGR" isVisible="true" layer="64" startSymbol="ARROW" endSymbol="ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="1.0" absoluteTextY="-12.0" textAlignment="CENTER">
+        <ForegroundStyle id="328" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="MEDIUM_SPACED_DASHES" useTransparency="false" transparencyLevel="0.5" />
+        <StartShapeGraphicalRepresentation id="329" className="org.openflexo.ced.view.widget.EditionPatternConnectorFromArtefactGR" x="80.0" y="80.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+          <ForegroundStyle id="330" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="331" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="332" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="333" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <CircleShape id="334" />
+          <TextStyle id="335" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </StartShapeGraphicalRepresentation>
+        <EndShapeGraphicalRepresentation id="336" className="org.openflexo.ced.view.widget.EditionPatternConnectorToArtefactGR" x="350.0" y="81.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+          <ForegroundStyle id="337" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="338" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="339" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="340" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <CircleShape id="341" />
+          <TextStyle id="342" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </EndShapeGraphicalRepresentation>
+        <LineConnector id="343" lineConnectorType="MINIMAL_LENGTH" />
+        <TextStyle id="344" font="Lucida Sans,0,9" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ConnectorGraphicalRepresentation>
+      <ArtifactFromShapeGraphicalRepresentation idref="329" />
+      <ArtifactToShapeGraphicalRepresentation idref="336" />
+    </ConnectorPatternRole>
+    <Inspector id="345">
+      <tab id="346" index="0" />
+    </Inspector>
+  </EditionPattern>
+  <LocalizedDictionary id="347">
+    <Localized id="348" key="preferred_label" lang="en">Preferred label</Localized>
+    <Localized id="349" key="alternative_label" lang="en">Alternative label</Localized>
+    <Localized id="350" key="new_preferred_label" lang="en">Preferred label</Localized>
+    <Localized id="351" key="new_alternative_label" lang="en">Alternative label</Localized>
+    <Localized id="352" key="new_hidden_label" lang="en">Hidden label</Localized>
+    <Localized id="353" key="new_note" lang="en">Note</Localized>
+    <Localized id="354" key="new_change_note" lang="en">Change note</Localized>
+    <Localized id="355" key="new_definition" lang="en">Definition</Localized>
+    <Localized id="356" key="new_editorial_note" lang="en">Editorial note</Localized>
+    <Localized id="357" key="new_example" lang="en">Example</Localized>
+    <Localized id="358" key="new_history_note" lang="en">History Note</Localized>
+    <Localized id="359" key="new_scope_note" lang="en">Scope note</Localized>
+    <Localized id="360" key="concept_scheme" lang="en">Concept scheme</Localized>
+    <Localized id="361" key="concept_name" lang="en">Concept name</Localized>
+    <Localized id="362" key="concept_scheme_name" lang="en">Concept scheme name</Localized>
+    <Localized id="363" key="SKOS_annotations" lang="en">SKOS annotations</Localized>
+    <Localized id="364" key="LinkAConceptToAConceptScheme" lang="en">Is top concept of</Localized>
+    <Localized id="365" key="MakeTwoConceptRelatedToEachOther" lang="en">Make both concepts related to each other</Localized>
+    <Localized id="366" key="GeneralizeAConcept" lang="en">Generalize concept</Localized>
+    <Localized id="367" key="SpecializeAConcept" lang="en">Specialize concept</Localized>
+    <Localized id="368" key="ConceptScheme" lang="en">Concept scheme</Localized>
+    <Localized id="369" key="Concept" lang="en">Concept</Localized>
+    <Localized id="370" key="ConceptRelatedRelationship" lang="en">'Related to' relationship</Localized>
+    <Localized id="371" key="ConceptGeneralization" lang="en">Concept Generalization</Localized>
+    <Localized id="372" key="ConceptSpecialization" lang="en">Concept Specialization</Localized>
+    <Localized id="373" key="ConceptToConceptSchemeRelationship" lang="en">'Top concept' relationship</Localized>
+  </LocalizedDictionary>
+</ViewPoint>
+

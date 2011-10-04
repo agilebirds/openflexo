@@ -35,7 +35,7 @@ import org.openflexo.xmlcode.StringEncoder;
 import com.ibm.icu.util.StringTokenizer;
 
 
-public class EditionPattern extends CalcObject implements StringConvertable<EditionPattern> {
+public class EditionPattern extends ViewPointObject implements StringConvertable<EditionPattern> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(EditionPattern.class.getPackage().getName());
 
@@ -45,7 +45,7 @@ public class EditionPattern extends CalcObject implements StringConvertable<Edit
 	private Vector<EditionScheme> editionSchemes;
 	private EditionPatternInspector inspector;
 	
-	private OntologyCalc _calc;
+	private ViewPoint _calc;
 
 	@Override
 	public String getDescription() {
@@ -333,12 +333,12 @@ public class EditionPattern extends CalcObject implements StringConvertable<Edit
 
 
 	@Override
-	public OntologyCalc getCalc() 
+	public ViewPoint getCalc() 
 	{
 		return _calc;
 	}
 
-	public void setCalc(OntologyCalc calc) 
+	public void setCalc(ViewPoint calc) 
 	{
 		_calc = calc;
 	}
@@ -367,7 +367,7 @@ public class EditionPattern extends CalcObject implements StringConvertable<Edit
 			StringTokenizer st = new StringTokenizer(value,"#");
 			if (st.hasMoreElements()) {
 				calcURI = st.nextToken();
-				OntologyCalc calc = _resourceCenter.retrieveCalcLibrary().getOntologyCalc(calcURI);
+				ViewPoint calc = _resourceCenter.retrieveViewPointLibrary().getOntologyCalc(calcURI);
 				if (calc == null) {
 					logger.warning("Could not find calc "+calcURI);
 				}
@@ -389,7 +389,7 @@ public class EditionPattern extends CalcObject implements StringConvertable<Edit
 		@Override
 		public String convertToString(EditionPattern value) 
 		{
-			return value.getCalc().getCalcURI()+"#"+value.getName();
+			return value.getCalc().getViewPointURI()+"#"+value.getName();
 		}
 	}
 	
@@ -397,7 +397,7 @@ public class EditionPattern extends CalcObject implements StringConvertable<Edit
 	   @Override
 	public EditionPatternConverter getConverter()
 	    {
-		   return getCalcLibrary().editionPatternConverter;
+		   return getViewPointLibrary().editionPatternConverter;
 		   
 		   /*if (getProject()!=null)
 			   return getProject().getEditionPatternConverter();

@@ -48,8 +48,8 @@ public class OECst
     public static File ONTOLOGY_VIEW_FIB = new FileResource("Fib/OntologyView.fib");
     
     // Shema edition
-    public static File ADD_SHEMA_DIALOG_FIB = new FileResource("Fib/Dialog/AddShemaDialog.fib");
-    public static File DELETE_SHEMA_ELEMENTS_DIALOG_FIB = new FileResource("Fib/Dialog/DeleteShemaElementsDialog.fib");
+    public static File ADD_VIEW_DIALOG_FIB = new FileResource("Fib/Dialog/AddViewDialog.fib");
+    public static File DELETE_VIEW_ELEMENTS_DIALOG_FIB = new FileResource("Fib/Dialog/DeleteViewElementsDialog.fib");
  
     // Ontology edition
     public static File CREATE_ONTOLOGY_CLASS_DIALOG_FIB = new FileResource("Fib/Dialog/CreateOntologyClassDialog.fib");

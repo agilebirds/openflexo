@@ -85,7 +85,7 @@ public class CreateCalcPaletteInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, CreateCalcPalette action)
 			{
-				getController().setCurrentEditedObjectAsModuleView(action.getNewPalette(),getController().CALC_PERSPECTIVE);
+				getController().setCurrentEditedObjectAsModuleView(action.getNewPalette(),getController().VIEW_POINT_PERSPECTIVE);
 				return true;
 			}
 		};

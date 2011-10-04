@@ -33,7 +33,7 @@ import org.openflexo.toolbox.StringUtils;
 
 import com.ibm.icu.util.StringTokenizer;
 
-public class EditionPatternParameter extends CalcObject {
+public class EditionPatternParameter extends ViewPointObject {
 
 	public static enum WidgetType
 	{
@@ -97,7 +97,7 @@ public class EditionPatternParameter extends CalcObject {
 	}
 
 	@Override
-	public OntologyCalc getCalc() 
+	public ViewPoint getCalc() 
 	{
 		return getScheme().getCalc();
 	}
@@ -179,7 +179,7 @@ public class EditionPatternParameter extends CalcObject {
 		return defaultValue;
 	}
 
-	public String getDefaultValue(CalcPaletteElement element) 
+	public String getDefaultValue(ViewPointPaletteElement element) 
 	{
 		//System.out.println("Default value for "+element.getName()+" ???");
 		if (getUsePaletteLabelAsDefaultValue() && (element != null)) {

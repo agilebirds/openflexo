@@ -38,7 +38,7 @@ import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.view.OEShape;
+import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.AddConnector;
 import org.openflexo.foundation.view.action.LinkSchemeAction;
 import org.openflexo.foundation.viewpoint.LinkScheme;
@@ -78,8 +78,8 @@ public class DrawEdgeControl extends MouseDragControl {
 				Vector<LinkScheme> availableConnectors = new Vector<LinkScheme>();
 				if (fromShape != null && toShape != null) {
 					// Lets look if we match a CalcPaletteConnector
-					final OEShape from = fromShape.getDrawable();
-					final OEShape to = toShape.getDrawable();
+					final ViewShape from = fromShape.getDrawable();
+					final ViewShape to = toShape.getDrawable();
 					if (from.getShema().getCalc() != null
 							&& from.getLinkedConcept() instanceof OntologyObject
 							&& to.getLinkedConcept() instanceof OntologyObject ) {

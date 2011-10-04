@@ -23,12 +23,12 @@ import java.awt.BorderLayout;
 import java.util.logging.Logger;
 
 import javax.swing.JPanel;
-import org.openflexo.ced.controller.CalcPerspective;
+import org.openflexo.ced.controller.ViewPointPerspective;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.viewpoint.CalcPalette;
+import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.view.ModuleView;
 
-public class CalcPaletteModuleView extends JPanel implements ModuleView<CalcPalette> {
+public class CalcPaletteModuleView extends JPanel implements ModuleView<ViewPointPalette> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(CalcPaletteModuleView.class.getPackage().getName());
@@ -59,9 +59,9 @@ public class CalcPaletteModuleView extends JPanel implements ModuleView<CalcPale
 	}
 
 	@Override
-	public CalcPerspective getPerspective() 
+	public ViewPointPerspective getPerspective() 
 	{
-		return getController().getCEDController().CALC_PERSPECTIVE;
+		return getController().getCEDController().VIEW_POINT_PERSPECTIVE;
 	}
 
 	public FlexoProject getProject() 
@@ -70,7 +70,7 @@ public class CalcPaletteModuleView extends JPanel implements ModuleView<CalcPale
 	}
 
 	@Override
-	public CalcPalette getRepresentedObject() 
+	public ViewPointPalette getRepresentedObject() 
 	{
 		return _controller.getCalcPalette();
 	}

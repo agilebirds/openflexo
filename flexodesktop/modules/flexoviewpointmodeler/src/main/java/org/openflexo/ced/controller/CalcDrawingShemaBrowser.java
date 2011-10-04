@@ -21,30 +21,30 @@ package org.openflexo.ced.controller;
 
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
-import org.openflexo.foundation.viewpoint.CalcDrawingShema;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 
 
 class CalcDrawingShemaBrowser extends CEDBrowser
 {
-	private CalcDrawingShema representedShema = null;
+	private ExampleDrawingShema representedShema = null;
 	
 	protected CalcDrawingShemaBrowser(CEDController controller)
 	{
 		super(controller);
 	}
 
-	protected CalcDrawingShema getRepresentedShema() 
+	protected ExampleDrawingShema getRepresentedShema() 
 	{
 		return representedShema;
 	}
 
-	protected void setRepresentedShema(CalcDrawingShema representedShema) 
+	protected void setRepresentedShema(ExampleDrawingShema representedShema) 
 	{
 		this.representedShema = representedShema;
 	}
 
     @Override
-	public CalcDrawingShema getDefaultRootObject()
+	public ExampleDrawingShema getDefaultRootObject()
     {
     	return representedShema;
     }

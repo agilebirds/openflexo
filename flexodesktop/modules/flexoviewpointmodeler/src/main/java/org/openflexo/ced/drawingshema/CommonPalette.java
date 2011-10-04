@@ -37,7 +37,7 @@ import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShadowStyle;
 import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
-import org.openflexo.foundation.viewpoint.CalcDrawingObject;
+import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
 import org.openflexo.foundation.viewpoint.action.AddCalcDrawingShape;
 import org.openflexo.localization.FlexoLocalization;
 
@@ -190,9 +190,9 @@ public class CommonPalette extends DrawingPalette {
 			@Override
 			public boolean elementDragged(GraphicalRepresentation containerGR, FGEPoint dropLocation)
 			{
-				if (containerGR.getDrawable() instanceof CalcDrawingObject) {
+				if (containerGR.getDrawable() instanceof ExampleDrawingObject) {
 					
-					CalcDrawingObject container = (CalcDrawingObject)containerGR.getDrawable();
+					ExampleDrawingObject container = (ExampleDrawingObject)containerGR.getDrawable();
 					
 					ShapeGraphicalRepresentation<?> shapeGR = getGraphicalRepresentation().clone();
 					shapeGR.setIsSelectable(true);

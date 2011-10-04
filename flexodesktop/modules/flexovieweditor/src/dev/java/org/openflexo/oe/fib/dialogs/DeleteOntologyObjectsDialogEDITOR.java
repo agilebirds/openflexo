@@ -40,7 +40,7 @@ public class DeleteOntologyObjectsDialogEDITOR {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			public Object[] getData() 
 			{
-				String URI = "http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl";
+				String URI = "http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl";
 				FlexoResourceCenter resourceCenter = ModuleLoader.getFlexoResourceCenter();
 				OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
 				FlexoOntology ontology = ontologyLibrary.getOntology(URI);

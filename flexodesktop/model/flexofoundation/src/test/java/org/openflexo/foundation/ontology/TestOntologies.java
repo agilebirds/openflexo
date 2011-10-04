@@ -31,7 +31,7 @@ import org.openflexo.foundation.dkv.TestPopulateDKV;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.FlexoOntology.OntologyNotFoundException;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.viewpoint.OntologyCalc;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.wkf.FlexoProcess;
 
 
@@ -120,7 +120,7 @@ public class TestOntologies extends FlexoTestCase{
 	{
 		log("test3ImportOntologies()");
 				
-		FlexoOntology basicOrganizationTreeOntology = _project.getProjectOntologyLibrary().getOntology("http://www.agilebirds.com/flexo/ontologies/OrganizationTree/BasicOrganizationTree.owl");
+		FlexoOntology basicOrganizationTreeOntology = _project.getProjectOntologyLibrary().getOntology("http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl");
 		assertNotNull(basicOrganizationTreeOntology);
 		
 		try {
@@ -139,14 +139,14 @@ public class TestOntologies extends FlexoTestCase{
 	{
 		log("test4loadCalcsAndImportSomeCalc()");
 
-		logger.info("CalcLibrary: "+_resourceCenter.retrieveCalcLibrary());
-		logger.info("All calcs: "+_resourceCenter.retrieveCalcLibrary().getCalcs());
+		logger.info("CalcLibrary: "+_resourceCenter.retrieveViewPointLibrary());
+		logger.info("All calcs: "+_resourceCenter.retrieveViewPointLibrary().getViewPoints());
 
-		OntologyCalc basicOrganizationTreeEditorCalc = _resourceCenter.retrieveCalcLibrary().getOntologyCalc("http://www.agilebirds.com/flexo/ontologies/Calcs/BasicOrganizationTreeEditor.owl");
+		ViewPoint basicOrganizationTreeEditorCalc = _resourceCenter.retrieveViewPointLibrary().getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/BasicOrganizationTreeEditor.owl");
 		logger.info("Le calc: "+basicOrganizationTreeEditorCalc);
 		basicOrganizationTreeEditorCalc.loadWhenUnloaded();
 
-		OntologyCalc thesaurusEditorCalc = _resourceCenter.retrieveCalcLibrary().getOntologyCalc("http://www.agilebirds.com/flexo/ontologies/Calcs/ThesaurusEditor.owl");
+		ViewPoint thesaurusEditorCalc = _resourceCenter.retrieveViewPointLibrary().getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/ThesaurusEditor.owl");
 		logger.info("Le calc: "+thesaurusEditorCalc);
 		thesaurusEditorCalc.loadWhenUnloaded();
 		
@@ -168,17 +168,17 @@ public class TestOntologies extends FlexoTestCase{
 	{
 		log("test5ManuallyEditOntology()");
 
-		String FLEXO_CONCEPTS_URI = "http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl";
+		String FLEXO_CONCEPTS_URI = "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl";
 		String FLEXO_MODEL_OBJECT = FLEXO_CONCEPTS_URI+"#FlexoModelObject";
 		String LINKED_TO_MODEL_PROPERTY = FLEXO_CONCEPTS_URI+"#linkedToModel";
 		String CLASS_NAME_PROPERTY = FLEXO_CONCEPTS_URI+"#className";
 		String FLEXO_ID_PROPERTY = FLEXO_CONCEPTS_URI+"#flexoID";
 		String RESOURCE_NAME_PROPERTY = FLEXO_CONCEPTS_URI+"#resourceName";
 
-		String BOT_URI = "http://www.agilebirds.com/flexo/ontologies/OrganizationTree/BasicOrganizationTree.owl";
+		String BOT_URI = "http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl";
 		String COMPANY_NAME = BOT_URI+"#companyName";
 
-		String BOT_EDITOR_URI = "http://www.agilebirds.com/flexo/ontologies/Calcs/BasicOrganizationTreeEditor.owl";
+		String BOT_EDITOR_URI = "http://www.agilebirds.com/openflexo/ViewPoints/BasicOrganizationTreeEditor.owl";
 		String BOT_COMPANY = BOT_EDITOR_URI+"#BOTCompany";
 		
 		OntModel ontModel = _project.getProjectOntology().getOntModel();

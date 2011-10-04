@@ -24,7 +24,7 @@ import javax.swing.JTabbedPane;
 
 import org.openflexo.ced.controller.CEDController;
 import org.openflexo.fge.view.DrawingView;
-import org.openflexo.foundation.viewpoint.CalcPalette;
+import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManagingDrawingController;
 
@@ -34,7 +34,7 @@ public class CalcPaletteController extends SelectionManagingDrawingController<Ca
 	private PalettePalette _commonPalette;
 	private CalcPaletteModuleView _moduleView;
 		
-	public CalcPaletteController(CEDController controller, CalcPalette palette, boolean readOnly)
+	public CalcPaletteController(CEDController controller, ViewPointPalette palette, boolean readOnly)
 	{
 		super(new CalcPaletteRepresentation(palette,readOnly),controller.getSelectionManager());
 		_controller = controller;
@@ -54,7 +54,7 @@ public class CalcPaletteController extends SelectionManagingDrawingController<Ca
 		if (_controller!=null) {
 			if (getDrawingView()!=null && _moduleView != null)
 				_controller.removeModuleView(_moduleView);
-			_controller.CALC_PERSPECTIVE.removeFromControllers(this);
+			_controller.VIEW_POINT_PERSPECTIVE.removeFromControllers(this);
 		}
 		super.delete();
 	}
@@ -94,7 +94,7 @@ public class CalcPaletteController extends SelectionManagingDrawingController<Ca
 		return paletteView;
 	}
 
-	public CalcPalette getCalcPalette()
+	public ViewPointPalette getCalcPalette()
 	{
 		return getDrawing().getModel();
 	}

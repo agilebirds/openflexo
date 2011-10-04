@@ -43,11 +43,11 @@ import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.validation.ValidationModel;
-import org.openflexo.foundation.viewpoint.CalcDrawingShema;
-import org.openflexo.foundation.viewpoint.CalcLibrary;
-import org.openflexo.foundation.viewpoint.CalcPalette;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.OntologyCalc;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.inspector.InspectableObject;
@@ -83,10 +83,10 @@ public class CEDController extends FlexoController implements SelectionManagingC
 	private final CEDSelectionManager _selectionManager;
 
 	private final FlexoResourceCenter resourceCenter;
-	private final CalcLibrary calcLibrary;
+	private final ViewPointLibrary viewPointLibrary;
 	private final OntologyLibrary baseOntologyLibrary;
 
-    public final CalcPerspective CALC_PERSPECTIVE;
+    public final ViewPointPerspective VIEW_POINT_PERSPECTIVE;
     public final OntologyPerspective ONTOLOGY_PERSPECTIVE;
     
 	// ================================================
@@ -101,7 +101,7 @@ public class CEDController extends FlexoController implements SelectionManagingC
 		super(module.getEditor(),module);
 
 		resourceCenter = ModuleLoader.getFlexoResourceCenter();
-		calcLibrary = resourceCenter.retrieveCalcLibrary();
+		viewPointLibrary = resourceCenter.retrieveViewPointLibrary();
 		baseOntologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
 		
 		_cedMenuBar = (CEDMenuBar)createAndRegisterNewMenuBar();
@@ -113,17 +113,17 @@ public class CEDController extends FlexoController implements SelectionManagingC
 		
 		_selectionManager = new CEDSelectionManager(this);
 
-		addToPerspectives(CALC_PERSPECTIVE = new CalcPerspective(this));
+		addToPerspectives(VIEW_POINT_PERSPECTIVE = new ViewPointPerspective(this));
 		addToPerspectives(ONTOLOGY_PERSPECTIVE = new OntologyPerspective(this));
 
-		setDefaultPespective(CALC_PERSPECTIVE);
+		setDefaultPespective(VIEW_POINT_PERSPECTIVE);
 
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run()
 			{
 				switchToPerspective(getDefaultPespective());
-				selectAndFocusObject(calcLibrary);
+				selectAndFocusObject(viewPointLibrary);
 			}
 		});
 
@@ -242,29 +242,29 @@ public class CEDController extends FlexoController implements SelectionManagingC
 	{
 		logger.info("selectAndFocusObject "+object);
 		setCurrentEditedObjectAsModuleView(object);
-		if (getCurrentPerspective() == CALC_PERSPECTIVE) {
-			if (object instanceof CalcLibrary) {
-				CalcLibrary cl = (CalcLibrary)object;
-				if (cl.getCalcs().size() > 0) {
-					getSelectionManager().setSelectedObject(cl.getCalcs().firstElement());
+		if (getCurrentPerspective() == VIEW_POINT_PERSPECTIVE) {
+			if (object instanceof ViewPointLibrary) {
+				ViewPointLibrary cl = (ViewPointLibrary)object;
+				if (cl.getViewPoints().size() > 0) {
+					getSelectionManager().setSelectedObject(cl.getViewPoints().firstElement());
 				} 
 			}
 			if (object instanceof ImportedOntology) {
 				ImportedOntology ontology = (ImportedOntology)object;
-				CALC_PERSPECTIVE.focusOnOntology(ontology);
+				VIEW_POINT_PERSPECTIVE.focusOnOntology(ontology);
 				if (ontology.getClasses().size()>0) {
 					getSelectionManager().setSelectedObject(ontology.getClasses().firstElement());
 				}
 			}
-			else if (object instanceof CalcDrawingShema) {
-				CALC_PERSPECTIVE.focusOnShema((CalcDrawingShema)object);
+			else if (object instanceof ExampleDrawingShema) {
+				VIEW_POINT_PERSPECTIVE.focusOnShema((ExampleDrawingShema)object);
 			}
-			if (object instanceof CalcPalette) {
-				CALC_PERSPECTIVE.focusOnPalette((CalcPalette)object);
+			if (object instanceof ViewPointPalette) {
+				VIEW_POINT_PERSPECTIVE.focusOnPalette((ViewPointPalette)object);
 			}
-			if (object instanceof OntologyCalc) {
-				OntologyCalc calc = (OntologyCalc)object;
-				CALC_PERSPECTIVE.focusOnCalc(calc);
+			if (object instanceof ViewPoint) {
+				ViewPoint calc = (ViewPoint)object;
+				VIEW_POINT_PERSPECTIVE.focusOnCalc(calc);
 				if (calc.getEditionPatterns().size() > 0) {
 					getSelectionManager().setSelectedObject(calc.getEditionPatterns().firstElement());
 				} 
@@ -295,14 +295,14 @@ public class CEDController extends FlexoController implements SelectionManagingC
 	public String getWindowTitleforObject(FlexoModelObject object) 
 	{
 		//System.out.println("getWindowTitleforObject() "+object+" perspective="+getCurrentPerspective());
-		if (object instanceof CalcLibrary) {
+		if (object instanceof ViewPointLibrary) {
 			return FlexoLocalization.localizedForKey("calc_library");
 		}
 		if (object instanceof OntologyLibrary) {
 			return FlexoLocalization.localizedForKey("ontology_library");
 		}
-		if (getCurrentPerspective() == CALC_PERSPECTIVE) {
-			return CALC_PERSPECTIVE.getWindowTitleforObject(object);
+		if (getCurrentPerspective() == VIEW_POINT_PERSPECTIVE) {
+			return VIEW_POINT_PERSPECTIVE.getWindowTitleforObject(object);
 		}
 		if (getCurrentPerspective() == ONTOLOGY_PERSPECTIVE) {
 			return ONTOLOGY_PERSPECTIVE.getWindowTitleforObject(object);
@@ -315,9 +315,9 @@ public class CEDController extends FlexoController implements SelectionManagingC
 		return resourceCenter;
 	}
 
-	public CalcLibrary getCalcLibrary()
+	public ViewPointLibrary getCalcLibrary()
 	{
-		return calcLibrary;
+		return viewPointLibrary;
 	}
 
 	public OntologyLibrary getBaseOntologyLibrary()
@@ -385,13 +385,13 @@ public class CEDController extends FlexoController implements SelectionManagingC
 			if (resource instanceof ImportedOntology) {
 				return OntologyIconLibrary.ONTOLOGY_ICON;
 			}
-			else if (resource instanceof OntologyCalc) {
+			else if (resource instanceof ViewPoint) {
 				return VPMIconLibrary.CALC_ICON;
 			}
-			else if (resource instanceof CalcPalette) {
+			else if (resource instanceof ViewPointPalette) {
 				return VPMIconLibrary.CALC_PALETTE_ICON;
 			}
-			else if (resource instanceof CalcDrawingShema) {
+			else if (resource instanceof ExampleDrawingShema) {
 				return VPMIconLibrary.EXAMPLE_DIAGRAM_ICON;
 			}
 			return VPMIconLibrary.UNKNOWN_ICON;
@@ -435,14 +435,14 @@ public class CEDController extends FlexoController implements SelectionManagingC
 					if (resource instanceof ImportedOntology) {
 						((ImportedOntology)resource).save();
 					}
-					else if (resource instanceof OntologyCalc) {
-						((OntologyCalc)resource).save();
+					else if (resource instanceof ViewPoint) {
+						((ViewPoint)resource).save();
 					}
-					else if (resource instanceof CalcPalette) {
-						((CalcPalette)resource).save();
+					else if (resource instanceof ViewPointPalette) {
+						((ViewPointPalette)resource).save();
 					}
-					else if (resource instanceof CalcDrawingShema) {
-						((CalcDrawingShema)resource).save();
+					else if (resource instanceof ExampleDrawingShema) {
+						((ExampleDrawingShema)resource).save();
 					}
 				} catch (SaveResourceException e) {
 					e.printStackTrace();

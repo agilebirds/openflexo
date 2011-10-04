@@ -28,7 +28,7 @@ import org.openflexo.foundation.ontology.PropertyStatement;
 import org.openflexo.foundation.ontology.RestrictionStatement;
 
 
-public class LabelRepresentation extends CalcObject {
+public class LabelRepresentation extends ViewPointObject {
 
 	public enum LabelRepresentationType
 	{
@@ -84,7 +84,7 @@ public class LabelRepresentation extends CalcObject {
 	}
 	
 	@Override
-	public OntologyCalc getCalc() 
+	public ViewPoint getCalc() 
 	{
 		return getPatternRole().getCalc();
 	}

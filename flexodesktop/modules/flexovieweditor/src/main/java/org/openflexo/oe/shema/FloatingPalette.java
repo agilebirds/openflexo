@@ -60,9 +60,9 @@ import org.openflexo.fge.view.FGEPaintManager;
 import org.openflexo.fge.view.ShapeView;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.view.OEConnector;
-import org.openflexo.foundation.view.OEShape;
-import org.openflexo.foundation.view.OEShemaObject;
+import org.openflexo.foundation.view.ViewConnector;
+import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.action.AddConnector;
 import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.foundation.view.action.LinkSchemeAction;
@@ -87,7 +87,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 	}
 
 	private OEShapeGR shapeGR;
-	private OEShemaObject target;
+	private ViewObject target;
 
 	private FGERoundRectangle roleRect;
 	private FGERectangle edgeRect;
@@ -114,7 +114,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 
 	private SimplifiedCardinalDirection orientation;
 
-	public FloatingPalette(OEShapeGR shapeGR, OEShemaObject target, SimplifiedCardinalDirection orientation)
+	public FloatingPalette(OEShapeGR shapeGR, ViewObject target, SimplifiedCardinalDirection orientation)
 	{
 		super(shapeGR, makeRoundRect(shapeGR,orientation));
 		this.shapeGR = shapeGR;
@@ -286,7 +286,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 					dropPoint.y=0;
 				Point p = GraphicalRepresentation.convertPoint(controller.getDrawingGraphicalRepresentation(), dropPoint, targetGR, controller.getScale());
 				FGEPoint dropLocation = new FGEPoint(p.x/controller.getScale(),p.y/controller.getScale());
-				OEShape to = null;
+				ViewShape to = null;
 				
 				switch (mode) {
 				case CREATE_SHAPE_AND_LINK:
@@ -349,11 +349,11 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 		
 	}
 	
-	private void askAndApplyLinkScheme(final FGEPoint dropLocation, final OEShape to)
+	private void askAndApplyLinkScheme(final FGEPoint dropLocation, final ViewShape to)
 	{
 		Vector<LinkScheme> availableConnectors = new Vector<LinkScheme>();
 			// Lets look if we match a CalcPaletteConnector
-			final OEShape from = shapeGR.getDrawable();
+			final ViewShape from = shapeGR.getDrawable();
 			if (from.getShema().getCalc() != null
 					&& from.getLinkedConcept() instanceof OntologyObject 
 					&& to.getLinkedConcept() instanceof OntologyObject ) {
@@ -442,7 +442,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 
 	protected void applyDropAndLinkScheme(DropScheme dropScheme, LinkScheme linkScheme, FGEPoint dropLocation)
 	{		
-		OEShape newShape = createNewShape(dropLocation,target,dropScheme);
+		ViewShape newShape = createNewShape(dropLocation,target,dropScheme);
 		
 		if (newShape != null) {
 			createNewConnector(shapeGR.getDrawable(),newShape,linkScheme);
@@ -484,7 +484,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 		currentDraggingLocationInDrawingView = null;
 	}
 
-	private OEShape createNewShape(FGEPoint dropLocation, OEShemaObject container, DropScheme dropScheme) 
+	private ViewShape createNewShape(FGEPoint dropLocation, ViewObject container, DropScheme dropScheme) 
 	{
 
 		DropSchemeAction dropSchemeAction = DropSchemeAction.actionType.makeNewAction(
@@ -516,7 +516,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 		return dropSchemeAction.getNewShape();
 	}
 
-	private OEConnector createNewConnector(OEShape from, OEShape to, LinkScheme linkScheme) 
+	private ViewConnector createNewConnector(ViewShape from, ViewShape to, LinkScheme linkScheme) 
 	{
 
 		LinkSchemeAction linkSchemeAction = LinkSchemeAction.actionType.makeNewAction(

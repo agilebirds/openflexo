@@ -56,7 +56,7 @@ public final class OEPreferences extends ModulePreferences
     
     public OEPreferences()
     {
-        super(Module.OE_MODULE);
+        super(Module.VE_MODULE);
     }
     
     @Override

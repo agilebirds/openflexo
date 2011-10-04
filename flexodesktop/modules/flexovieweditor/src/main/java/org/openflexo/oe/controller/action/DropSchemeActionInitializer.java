@@ -41,7 +41,7 @@ import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.foundation.view.OEShape;
+import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.DropSchemeAction;
 
 
@@ -81,7 +81,7 @@ public class DropSchemeActionInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, DropSchemeAction action)
 			{
-				OEShape shape = action.getNewShape();
+				ViewShape shape = action.getNewShape();
 				if (shape.getParent() != action.getParent()) {
 					OEShapeGR parentGR = (OEShapeGR)shape.getParent().getGraphicalRepresentation();
 					OEShapeGR expectedGR = (OEShapeGR)action.getParent().getGraphicalRepresentation();
@@ -117,7 +117,7 @@ public class DropSchemeActionInitializer extends ActionInitializer {
 	@Override
 	protected Icon getEnabledIcon() 
 	{
-		return VEIconLibrary.OE_SHAPE_ICON;
+		return VEIconLibrary.SHAPE_ICON;
 	}
 
 

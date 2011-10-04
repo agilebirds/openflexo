@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<OntologyCalc uri="http://www.agilebirds.com/flexo/ontologies/Calcs/PizzaIngredientEditor.owl"> 
+<OntologyCalc uri="http://www.agilebirds.com/openflexo/ViewPoints/PizzaIngredientEditor.owl"> 
 	
 	<description>This calc allows to define pizzas ingredients</description>
 	

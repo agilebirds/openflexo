@@ -29,18 +29,18 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.viewpoint.CalcObject;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.OntologyCalc;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 
 
-public class AddEditionPattern extends FlexoAction<AddEditionPattern,OntologyCalc,CalcObject> 
+public class AddEditionPattern extends FlexoAction<AddEditionPattern,ViewPoint,ViewPointObject> 
 {
 
 	private static final Logger logger = Logger.getLogger(AddEditionPattern.class.getPackage().getName());
 
-	public static FlexoActionType<AddEditionPattern,OntologyCalc,CalcObject> actionType 
-	= new FlexoActionType<AddEditionPattern,OntologyCalc,CalcObject> (
+	public static FlexoActionType<AddEditionPattern,ViewPoint,ViewPointObject> actionType 
+	= new FlexoActionType<AddEditionPattern,ViewPoint,ViewPointObject> (
 			"add_new_edition_pattern",
 			FlexoActionType.newMenu,
 			FlexoActionType.defaultGroup,
@@ -50,19 +50,19 @@ public class AddEditionPattern extends FlexoAction<AddEditionPattern,OntologyCal
 		 * Factory method
 		 */
 		@Override
-		public AddEditionPattern makeNewAction(OntologyCalc focusedObject, Vector<CalcObject> globalSelection, FlexoEditor editor) 
+		public AddEditionPattern makeNewAction(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) 
 		{
 			return new AddEditionPattern(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(OntologyCalc object, Vector<CalcObject> globalSelection) 
+		protected boolean isVisibleForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) 
 		{
 			return object != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(OntologyCalc object, Vector<CalcObject> globalSelection) 
+		protected boolean isEnabledForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) 
 		{
 			return object != null;
 		}
@@ -70,14 +70,14 @@ public class AddEditionPattern extends FlexoAction<AddEditionPattern,OntologyCal
 	};
 
 	static {
-		FlexoModelObject.addActionForClass (AddEditionPattern.actionType, OntologyCalc.class);
+		FlexoModelObject.addActionForClass (AddEditionPattern.actionType, ViewPoint.class);
 	}
 
 
 	private String _newEditionPatternName;
 	private EditionPattern _newEditionPattern;
 
-	AddEditionPattern (OntologyCalc focusedObject, Vector<CalcObject> globalSelection, FlexoEditor editor)
+	AddEditionPattern (ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor)
 	{
 		super(actionType, focusedObject, globalSelection, editor);
 	}

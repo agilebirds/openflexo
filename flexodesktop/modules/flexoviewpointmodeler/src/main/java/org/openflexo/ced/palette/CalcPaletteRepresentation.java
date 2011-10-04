@@ -28,27 +28,27 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.viewpoint.CalcPalette;
-import org.openflexo.foundation.viewpoint.CalcPaletteElement;
+import org.openflexo.foundation.viewpoint.ViewPointPalette;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 
 
-public class CalcPaletteRepresentation extends DefaultDrawing<CalcPalette> implements GraphicalFlexoObserver {
+public class CalcPaletteRepresentation extends DefaultDrawing<ViewPointPalette> implements GraphicalFlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(CalcPaletteRepresentation.class.getPackage().getName());
 	
 	private PaletteGR paletteGR;
 
-	private Hashtable<CalcPaletteElement,PaletteElementGR> paletteElementsGR;
+	private Hashtable<ViewPointPaletteElement,PaletteElementGR> paletteElementsGR;
 	
 	private Boolean ignoreNotifications = true;
 
 	private boolean readOnly = false;
 
-	public CalcPaletteRepresentation(CalcPalette aPalette, boolean readOnly)
+	public CalcPaletteRepresentation(ViewPointPalette aPalette, boolean readOnly)
 	{
 		super(aPalette);
 		
-		paletteElementsGR = new Hashtable<CalcPaletteElement, PaletteElementGR>();
+		paletteElementsGR = new Hashtable<ViewPointPaletteElement, PaletteElementGR>();
 		
 		this.readOnly = readOnly;
 		//graphicalRepresentation = new DrawingGraphicalRepresentation<OEShema>(this);
@@ -97,14 +97,14 @@ public class CalcPaletteRepresentation extends DefaultDrawing<CalcPalette> imple
  		buildGraphicalObjectsHierarchyFor(getPalette());
 	}
 
-	private void buildGraphicalObjectsHierarchyFor(CalcPalette parent)
+	private void buildGraphicalObjectsHierarchyFor(ViewPointPalette parent)
 	{
-		for (CalcPaletteElement child : parent.getElements()) {
+		for (ViewPointPaletteElement child : parent.getElements()) {
 			addDrawable(child, parent);
 		}
 	}
 
-	public CalcPalette getPalette()
+	public ViewPointPalette getPalette()
 	{
 		return getModel();
 	}
@@ -122,8 +122,8 @@ public class CalcPaletteRepresentation extends DefaultDrawing<CalcPalette> imple
 	@Override
 	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable)
 	{
-		if (aDrawable instanceof CalcPaletteElement) {
-			CalcPaletteElement element = (CalcPaletteElement)aDrawable;
+		if (aDrawable instanceof ViewPointPaletteElement) {
+			ViewPointPaletteElement element = (ViewPointPaletteElement)aDrawable;
 			PaletteElementGR returned = paletteElementsGR.get(element);
 			if (returned == null) {
 				returned = buildGraphicalRepresentation(element);
@@ -136,7 +136,7 @@ public class CalcPaletteRepresentation extends DefaultDrawing<CalcPalette> imple
 		return null;
 	}
 	
-	private PaletteElementGR buildGraphicalRepresentation(CalcPaletteElement element)
+	private PaletteElementGR buildGraphicalRepresentation(ViewPointPaletteElement element)
 	{
 			if (element.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 				PaletteElementGR graphicalRepresentation = new PaletteElementGR(element,this);

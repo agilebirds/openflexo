@@ -1,4 +1,4 @@
-<inspector title = "Connector" inspectedClassName="org.openflexo.foundation.ontology.calc.CalcDrawingConnector">
+<inspector title = "Connector" inspectedClassName="org.openflexo.foundation.viewpoint.ExampleDrawingConnector">
 
 	<tab name="Connector" index="1" layout="DEFAULT">
 		<property name="graphicalRepresentation.text" label="text" widget="TEXT_FIELD" constraint="0">

@@ -25,14 +25,14 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.foundation.ontology.DataPropertyStatement;
 import org.openflexo.foundation.viewpoint.ActionScheme;
-import org.openflexo.foundation.viewpoint.CalcDrawingConnector;
-import org.openflexo.foundation.viewpoint.CalcDrawingShape;
-import org.openflexo.foundation.viewpoint.CalcDrawingShema;
-import org.openflexo.foundation.viewpoint.CalcFolder;
-import org.openflexo.foundation.viewpoint.CalcLibrary;
-import org.openflexo.foundation.viewpoint.CalcLibraryObject;
-import org.openflexo.foundation.viewpoint.CalcPalette;
-import org.openflexo.foundation.viewpoint.CalcPaletteElement;
+import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.viewpoint.ViewPointFolder;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
+import org.openflexo.foundation.viewpoint.ViewPointPalette;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.DropScheme;
@@ -44,7 +44,7 @@ import org.openflexo.foundation.viewpoint.LinkScheme;
 import org.openflexo.foundation.viewpoint.LocalizedDictionary;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
-import org.openflexo.foundation.viewpoint.OntologyCalc;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.PaletteElementPatternParameter;
 import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
 import org.openflexo.foundation.viewpoint.ShapePatternRole;
@@ -64,16 +64,16 @@ public class VPMIconLibrary extends IconLibrary {
 	private static final Logger logger = Logger.getLogger(VPMIconLibrary.class.getPackage().getName());
 
 	// Module icons
-	public static final ImageIcon CED_ACTIVE_ICON = new ImageIconResource("Icons/VPM/CED_A_Small.gif");
-	public static final ImageIcon CED_UNACTIVE_ICON = new ImageIconResource("Icons/VPM/CED_NA_Small.gif");
-	public static final ImageIcon CED_SELECTED_ICON = new ImageIconResource("Icons/VPM/CED_S_Small.gif");
-	public static final ImageIcon CED_BIG_ACTIVE_ICON = new ImageIconResource("Icons/VPM/CED_A.gif");
-	public static final ImageIcon CED_BIG_UNACTIVE_ICON = new ImageIconResource("Icons/VPM/CED_NA.gif");
-	public static final ImageIcon CED_BIG_SELECTED_ICON = new ImageIconResource("Icons/VPM/CED_S.gif");
+	public static final ImageIcon VPM_ACTIVE_ICON = new ImageIconResource("Icons/VPM/CED_A_Small.gif");
+	public static final ImageIcon VPM_UNACTIVE_ICON = new ImageIconResource("Icons/VPM/CED_NA_Small.gif");
+	public static final ImageIcon VPM_SELECTED_ICON = new ImageIconResource("Icons/VPM/CED_S_Small.gif");
+	public static final ImageIcon VPM_BIG_ACTIVE_ICON = new ImageIconResource("Icons/VPM/CED_A.gif");
+	public static final ImageIcon VPM_BIG_UNACTIVE_ICON = new ImageIconResource("Icons/VPM/CED_NA.gif");
+	public static final ImageIcon VPM_BIG_SELECTED_ICON = new ImageIconResource("Icons/VPM/CED_S.gif");
 
 	// Perspective icons
-	public static final ImageIcon VPM_ACTIVE_ICON = new ImageIconResource("Icons/VPM/CalcPerspective_A.gif");
-	public static final ImageIcon VPM_SELECTED_ICON = new ImageIconResource("Icons/VPM/CalcPerspective_S.gif");
+	public static final ImageIcon VPM_VPE_ACTIVE_ICON = new ImageIconResource("Icons/VPM/CalcPerspective_A.gif");
+	public static final ImageIcon VPM_VPE_SELECTED_ICON = new ImageIconResource("Icons/VPM/CalcPerspective_S.gif");
 	public static final ImageIcon VPM_OP_ACTIVE_ICON = new ImageIconResource("Icons/VPM/OntologyPerspective_A.gif");
 	public static final ImageIcon VPM_OP_SELECTED_ICON = new ImageIconResource("Icons/VPM/OntologyPerspective_S.gif");
 	
@@ -98,24 +98,24 @@ public class VPMIconLibrary extends IconLibrary {
 	public static final ImageIconResource CALC_SHAPE_ICON = new ImageIconResource("Icons/Model/VPM/ShapeIcon.gif");
 	public static final ImageIconResource CALC_CONNECTOR_ICON = new ImageIconResource("Icons/Model/VPM/ConnectorIcon.gif");
 
-	public static ImageIcon iconForObject(CalcLibraryObject object)
+	public static ImageIcon iconForObject(ViewPointLibraryObject object)
 	{
-		if (object instanceof CalcFolder) return FOLDER_ICON;
-		else if (object instanceof CalcLibrary) return CALC_LIBRARY_ICON;
-		else if (object instanceof CalcPalette) return CALC_PALETTE_ICON;
-		else if (object instanceof CalcPaletteElement) return CALC_SHAPE_ICON;
+		if (object instanceof ViewPointFolder) return FOLDER_ICON;
+		else if (object instanceof ViewPointLibrary) return CALC_LIBRARY_ICON;
+		else if (object instanceof ViewPointPalette) return CALC_PALETTE_ICON;
+		else if (object instanceof ViewPointPaletteElement) return CALC_SHAPE_ICON;
 		else if (object instanceof DataPropertyAssertion) return OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON;
 		else if (object instanceof ObjectPropertyAssertion) return OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON;
-		else if (object instanceof CalcDrawingConnector) return CALC_CONNECTOR_ICON;
-		else if (object instanceof CalcDrawingShape) return CALC_SHAPE_ICON;
-		else if (object instanceof CalcDrawingShema) return EXAMPLE_DIAGRAM_ICON;
+		else if (object instanceof ExampleDrawingConnector) return CALC_CONNECTOR_ICON;
+		else if (object instanceof ExampleDrawingShape) return CALC_SHAPE_ICON;
+		else if (object instanceof ExampleDrawingShema) return EXAMPLE_DIAGRAM_ICON;
 		else if (object instanceof EditionAction) return EDITION_PATTERN_ACTION_ICON;
 		else if (object instanceof EditionPattern) return EDITION_PATTERN_ICON;
 		else if (object instanceof EditionPatternParameter) return EDITION_PATTERN_PARAMETER_ICON;
 		else if (object instanceof ActionScheme) return ACTION_SCHEME_ICON;
 		else if (object instanceof DropScheme) return DROP_SCHEME_ICON;
 		else if (object instanceof LinkScheme) return LINK_SCHEME_ICON;
-		else if (object instanceof OntologyCalc) return CALC_ICON;
+		else if (object instanceof ViewPoint) return CALC_ICON;
 		else if (object instanceof PaletteElementPatternParameter) return EDITION_PATTERN_PARAMETER_ICON;
 		else if (object instanceof FlexoModelObjectPatternRole) {
 			switch (((FlexoModelObjectPatternRole) object).getFlexoModelObjectType()) {

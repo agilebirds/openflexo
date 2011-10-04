@@ -47,7 +47,7 @@ import org.openflexo.foundation.param.TextFieldAndLabelParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.CalcPaletteElement;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 import org.openflexo.foundation.viewpoint.EditionPatternParameter;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionPatternParameter.CustomType;
@@ -66,7 +66,7 @@ public class ParametersRetriever {
 
 	private Vector<URIParameter> uriParametersList;
 	private Hashtable<EditionPatternParameter,ParameterDefinition> paramHash;
-	protected CalcPaletteElement paletteElement;
+	protected ViewPointPaletteElement paletteElement;
 	
 	public static boolean retrieveParameters(final EditionSchemeAction<?> action, boolean skipDialogWhenPossible)
 	{

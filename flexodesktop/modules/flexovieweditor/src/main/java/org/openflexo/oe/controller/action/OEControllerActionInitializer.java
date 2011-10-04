@@ -65,13 +65,13 @@ public class OEControllerActionInitializer extends ControllerActionInitializer {
         (new OESetPropertyInitializer(this)).init();
 
         // Shema library perspective
-        (new AddShemaInitializer(this)).init();
-        (new AddShemaFolderInitializer(this)).init();
+        (new AddViewInitializer(this)).init();
+        (new AddViewFolderInitializer(this)).init();
  
         // Shema perspective
         (new AddShapeInitializer(this)).init();
         (new AddConnectorInitializer(this)).init();
-        (new DeleteShemaElementsInitializer(this)).init();
+        (new DeleteViewElementsInitializer(this)).init();
         (new DropSchemeActionInitializer(this)).init();
         (new LinkSchemeActionInitializer(this)).init();
         (new ActionSchemeActionInitializer(this)).initForClass(ActionSchemeActionType.class);

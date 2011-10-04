@@ -33,7 +33,7 @@ import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.view.ConnectorInserted;
 import org.openflexo.foundation.view.ConnectorRemoved;
-import org.openflexo.foundation.view.OEShape;
+import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.ShapeInserted;
 import org.openflexo.foundation.view.ShapeRemoved;
 import org.openflexo.foundation.xml.OEShemaBuilder;
@@ -41,7 +41,7 @@ import org.openflexo.toolbox.ConcatenedList;
 import org.openflexo.toolbox.ToolBox;
 
 
-public class OEShapeGR extends ShapeGraphicalRepresentation<OEShape> implements GraphicalFlexoObserver, OEShemaConstants {
+public class OEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implements GraphicalFlexoObserver, OEShemaConstants {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(OEShapeGR.class.getPackage().getName());
@@ -55,7 +55,7 @@ public class OEShapeGR extends ShapeGraphicalRepresentation<OEShape> implements 
 		this(null,null);
 	}
 
-	public OEShapeGR(OEShape aShape, Drawing<?> aDrawing) 
+	public OEShapeGR(ViewShape aShape, Drawing<?> aDrawing) 
 	{
 		super(ShapeType.RECTANGLE, aShape, aDrawing);
 
@@ -85,7 +85,7 @@ public class OEShapeGR extends ShapeGraphicalRepresentation<OEShape> implements 
 		return (OEShemaRepresentation)super.getDrawing();
 	}
 	
-	public OEShape getOEShape()
+	public ViewShape getOEShape()
 	{
 		return getDrawable();
 	}

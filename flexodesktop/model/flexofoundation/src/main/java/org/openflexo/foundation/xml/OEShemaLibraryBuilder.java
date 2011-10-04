@@ -22,8 +22,8 @@ package org.openflexo.foundation.xml;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.rm.FlexoOEShemaLibraryResource;
-import org.openflexo.foundation.view.OEShemaLibrary;
-import org.openflexo.foundation.viewpoint.CalcLibrary;
+import org.openflexo.foundation.view.ViewLibrary;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 
 
 /**
@@ -36,13 +36,13 @@ public class OEShemaLibraryBuilder extends FlexoBuilder<FlexoOEShemaLibraryResou
     @SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(OEShemaLibraryBuilder.class.getPackage().getName());
 
-    public OEShemaLibrary shemaLibrary;
-    public CalcLibrary calcLibrary;
+    public ViewLibrary shemaLibrary;
+    public ViewPointLibrary viewPointLibrary;
 
-    public OEShemaLibraryBuilder(FlexoOEShemaLibraryResource library, CalcLibrary calcLibrary)
+    public OEShemaLibraryBuilder(FlexoOEShemaLibraryResource library, ViewPointLibrary viewPointLibrary)
     {
         super(library);
-        this.calcLibrary = calcLibrary;
+        this.viewPointLibrary = viewPointLibrary;
     }
 
 }

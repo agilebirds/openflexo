@@ -29,15 +29,15 @@ import org.openflexo.antar.expr.UnresolvedExpressionException;
 import org.openflexo.antar.expr.parser.ParseException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.view.OEShape;
-import org.openflexo.foundation.view.OEShemaObject;
+import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.action.LinkSchemeAction;
 import org.openflexo.toolbox.StringUtils;
 
 
-public abstract class EditionAction<R extends PatternRole> extends CalcObject {
+public abstract class EditionAction<R extends PatternRole> extends ViewPointObject {
 
 	private static final Logger logger = Logger.getLogger(EditionAction.class.getPackage().getName());
 
@@ -100,7 +100,7 @@ public abstract class EditionAction<R extends PatternRole> extends CalcObject {
 	}
 
 	@Override
-	public OntologyCalc getCalc() 
+	public ViewPoint getCalc() 
 	{
 		return getScheme().getCalc();
 	}
@@ -198,8 +198,8 @@ public abstract class EditionAction<R extends PatternRole> extends CalcObject {
 			
 			LinkSchemeAction linkSchemeAction = (LinkSchemeAction)action;
 
-			OEShape fromContext = linkSchemeAction.getFromShape();
-			OEShape toContext = linkSchemeAction.getToShape();
+			ViewShape fromContext = linkSchemeAction.getFromShape();
+			ViewShape toContext = linkSchemeAction.getToShape();
 
 			if (identifier.equals(FROM_TARGET) && (fromContext.getLinkedConcept() instanceof OntologyObject)) {
 				return (OntologyObject)fromContext.getLinkedConcept();
@@ -220,26 +220,26 @@ public abstract class EditionAction<R extends PatternRole> extends CalcObject {
 			
 			DropSchemeAction dropSchemeAction = (DropSchemeAction)action;
 
-			if (identifier.equals(CONTAINER) && (dropSchemeAction.getParent() instanceof OEShape)) {
-				OEShape container = (OEShape)dropSchemeAction.getParent();
+			if (identifier.equals(CONTAINER) && (dropSchemeAction.getParent() instanceof ViewShape)) {
+				ViewShape container = (ViewShape)dropSchemeAction.getParent();
 				return (OntologyObject)container.getLinkedConcept();
 			}
 
-			if (identifier.equals(CONTAINER_OF_CONTAINER) && (dropSchemeAction.getParent().getParent() instanceof OEShape)) {
-				OEShape container = (OEShape)dropSchemeAction.getParent().getParent();
+			if (identifier.equals(CONTAINER_OF_CONTAINER) && (dropSchemeAction.getParent().getParent() instanceof ViewShape)) {
+				ViewShape container = (ViewShape)dropSchemeAction.getParent().getParent();
 				return (OntologyObject)container.getLinkedConcept();
 			}
 
 			if (identifier.equals(CONTAINER_CONCEPT) 
-					&& (dropSchemeAction.getParent() instanceof OEShape)
-					&& (((OEShape)dropSchemeAction.getParent()).getLinkedConcept() instanceof OntologyObject)) {
-				return (OntologyObject)((OEShape)dropSchemeAction.getParent()).getLinkedConcept();
+					&& (dropSchemeAction.getParent() instanceof ViewShape)
+					&& (((ViewShape)dropSchemeAction.getParent()).getLinkedConcept() instanceof OntologyObject)) {
+				return (OntologyObject)((ViewShape)dropSchemeAction.getParent()).getLinkedConcept();
 			}
 
 			if (identifier.equals(CONTAINER_OF_CONTAINER_CONCEPT) 
-					&& (dropSchemeAction.getParent().getParent() instanceof OEShape)
-					&& (((OEShape)dropSchemeAction.getParent().getParent()).getLinkedConcept() instanceof OntologyObject)) {
-				return (OntologyObject)((OEShape)dropSchemeAction.getParent().getParent()).getLinkedConcept();
+					&& (dropSchemeAction.getParent().getParent() instanceof ViewShape)
+					&& (((ViewShape)dropSchemeAction.getParent().getParent()).getLinkedConcept() instanceof OntologyObject)) {
+				return (OntologyObject)((ViewShape)dropSchemeAction.getParent().getParent()).getLinkedConcept();
 			}
 }
 		
@@ -284,11 +284,11 @@ public abstract class EditionAction<R extends PatternRole> extends CalcObject {
 			
 			DropSchemeAction dropSchemeAction = (DropSchemeAction)action;
 
-			if (identifier.equals(CONTAINER) && (dropSchemeAction.getParent() instanceof OEShape)) {
+			if (identifier.equals(CONTAINER) && (dropSchemeAction.getParent() instanceof ViewShape)) {
 				return dropSchemeAction.getParent();
 				}
 
-			if (identifier.equals(CONTAINER_OF_CONTAINER) && (dropSchemeAction.getParent().getParent() instanceof OEShape)) {
+			if (identifier.equals(CONTAINER_OF_CONTAINER) && (dropSchemeAction.getParent().getParent() instanceof ViewShape)) {
 				return dropSchemeAction.getParent().getParent();
 			}
 		}
@@ -377,30 +377,30 @@ public abstract class EditionAction<R extends PatternRole> extends CalcObject {
 			DropSchemeAction dropSchemeAction = (DropSchemeAction)action;
 
 			if (identifier.equals(CONTAINER) 
-					&& (dropSchemeAction.getParent() instanceof OEShape)) {
+					&& (dropSchemeAction.getParent() instanceof ViewShape)) {
 				return dropSchemeAction.getParent();
 			}
 
 			if (identifier.equals(CONTAINER_OF_CONTAINER) 
-					&& (dropSchemeAction.getParent().getParent() instanceof OEShape)) {
+					&& (dropSchemeAction.getParent().getParent() instanceof ViewShape)) {
 				return dropSchemeAction.getParent().getParent();
 			}
 
 			if (identifier.equals(CONTAINER_CONCEPT) 
-					&& (dropSchemeAction.getParent() instanceof OEShape)) {
-				return ((OEShape)dropSchemeAction.getParent()).getLinkedConcept();
+					&& (dropSchemeAction.getParent() instanceof ViewShape)) {
+				return ((ViewShape)dropSchemeAction.getParent()).getLinkedConcept();
 			}
 
 			if (identifier.equals(CONTAINER_OF_CONTAINER_CONCEPT) 
-					&& (dropSchemeAction.getParent().getParent() instanceof OEShape)) {
-				return ((OEShape)dropSchemeAction.getParent().getParent()).getLinkedConcept();
+					&& (dropSchemeAction.getParent().getParent() instanceof ViewShape)) {
+				return ((ViewShape)dropSchemeAction.getParent().getParent()).getLinkedConcept();
 			}
 		}
 		
 		return null;
 	}
 
-	protected OEShape retrieveOEShape(String identifier, EditionSchemeAction action)
+	protected ViewShape retrieveOEShape(String identifier, EditionSchemeAction action)
 	{
 		if (identifier == null) {
 			return null;
@@ -408,16 +408,16 @@ public abstract class EditionAction<R extends PatternRole> extends CalcObject {
 
 		if (identifier != null) {
 			Object value = action.getParameterValues().get(identifier);
-			if (value instanceof OEShape) {
-				return (OEShape)value;
+			if (value instanceof ViewShape) {
+				return (ViewShape)value;
 			}
 		}
 
 		if (action.getEditionPatternInstance() != null) {
 			FlexoModelObject object
 			= action.getEditionPatternInstance().getPatternActor(identifier);
-			if (object instanceof OEShape) {
-				return (OEShape)object;
+			if (object instanceof ViewShape) {
+				return (ViewShape)object;
 			} else {
 				logger.warning("Unexpected "+object);
 			}
@@ -442,20 +442,20 @@ public abstract class EditionAction<R extends PatternRole> extends CalcObject {
 			DropSchemeAction dropSchemeAction = (DropSchemeAction)action;
 
 			if (identifier.equals(CONTAINER) 
-					&& (dropSchemeAction.getParent() instanceof OEShape)) {
-				return (OEShape)dropSchemeAction.getParent();
+					&& (dropSchemeAction.getParent() instanceof ViewShape)) {
+				return (ViewShape)dropSchemeAction.getParent();
 			}
 
 			if (identifier.equals(CONTAINER_OF_CONTAINER) 
-					&& (dropSchemeAction.getParent().getParent() instanceof OEShape)) {
-				return (OEShape)dropSchemeAction.getParent().getParent();
+					&& (dropSchemeAction.getParent().getParent() instanceof ViewShape)) {
+				return (ViewShape)dropSchemeAction.getParent().getParent();
 			}
 		}
 		
 		return null;
 	}
 
-	protected OEShemaObject retrieveOEShemaObject(String identifier, EditionSchemeAction action)
+	protected ViewObject retrieveOEShemaObject(String identifier, EditionSchemeAction action)
 	{
 		if (identifier == null) {
 			return null;
@@ -463,16 +463,16 @@ public abstract class EditionAction<R extends PatternRole> extends CalcObject {
 
 		if (identifier != null) {
 			Object value = action.getParameterValues().get(identifier);
-			if (value instanceof OEShemaObject) {
-				return (OEShemaObject)value;
+			if (value instanceof ViewObject) {
+				return (ViewObject)value;
 			}
 		}
 
 		if (action.getEditionPatternInstance() != null) {
 			FlexoModelObject object
 			= action.getEditionPatternInstance().getPatternActor(identifier);
-			if (object instanceof OEShemaObject) {
-				return (OEShemaObject)object;
+			if (object instanceof ViewObject) {
+				return (ViewObject)object;
 			} else {
 				logger.warning("Unexpected "+object);
 			}

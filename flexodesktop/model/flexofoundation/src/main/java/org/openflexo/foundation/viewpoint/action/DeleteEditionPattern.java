@@ -29,17 +29,17 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.viewpoint.CalcObject;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 
 
-public class DeleteEditionPattern extends FlexoAction<DeleteEditionPattern,EditionPattern,CalcObject> 
+public class DeleteEditionPattern extends FlexoAction<DeleteEditionPattern,EditionPattern,ViewPointObject> 
 {
 
 	private static final Logger logger = Logger.getLogger(DeleteEditionPattern.class.getPackage().getName());
 
-	public static FlexoActionType<DeleteEditionPattern,EditionPattern,CalcObject> actionType 
-	= new FlexoActionType<DeleteEditionPattern,EditionPattern,CalcObject> (
+	public static FlexoActionType<DeleteEditionPattern,EditionPattern,ViewPointObject> actionType 
+	= new FlexoActionType<DeleteEditionPattern,EditionPattern,ViewPointObject> (
 			"delete_edition_pattern",
 			FlexoActionType.editGroup,
 			FlexoActionType.DELETE_ACTION_TYPE) {
@@ -48,19 +48,19 @@ public class DeleteEditionPattern extends FlexoAction<DeleteEditionPattern,Editi
 		 * Factory method
 		 */
 		@Override
-		public DeleteEditionPattern makeNewAction(EditionPattern focusedObject, Vector<CalcObject> globalSelection, FlexoEditor editor) 
+		public DeleteEditionPattern makeNewAction(EditionPattern focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) 
 		{
 			return new DeleteEditionPattern(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(EditionPattern object, Vector<CalcObject> globalSelection) 
+		protected boolean isVisibleForSelection(EditionPattern object, Vector<ViewPointObject> globalSelection) 
 		{
 			return object != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(EditionPattern object, Vector<CalcObject> globalSelection) 
+		protected boolean isEnabledForSelection(EditionPattern object, Vector<ViewPointObject> globalSelection) 
 		{
 			return object != null;
 		}
@@ -72,7 +72,7 @@ public class DeleteEditionPattern extends FlexoAction<DeleteEditionPattern,Editi
 	}
 
 
-	DeleteEditionPattern (EditionPattern focusedObject, Vector<CalcObject> globalSelection, FlexoEditor editor)
+	DeleteEditionPattern (EditionPattern focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor)
 	{
 		super(actionType, focusedObject, globalSelection, editor);
 	}

@@ -21,7 +21,7 @@ package org.openflexo.module.external;
 
 import javax.swing.JComponent;
 
-import org.openflexo.foundation.view.OEShema;
+import org.openflexo.foundation.view.View;
 
 
 
@@ -36,7 +36,7 @@ import org.openflexo.foundation.view.OEShema;
  */
 public interface ExternalOEModule extends ExternalModule
 {
-    public JComponent createScreenshotForShema(OEShema shema);
+    public JComponent createScreenshotForShema(View shema);
      public float getScreenshotQuality();
     public void finalizeScreenshotGeneration();
 

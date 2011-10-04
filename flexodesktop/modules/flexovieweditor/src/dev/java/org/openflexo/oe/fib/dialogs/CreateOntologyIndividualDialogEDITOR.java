@@ -40,7 +40,7 @@ public class CreateOntologyIndividualDialogEDITOR {
 			{
 				FlexoResourceCenter resourceCenter = ModuleLoader.getFlexoResourceCenter();
 				OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
-				FlexoOntology ontology = ontologyLibrary.getOntology("http://www.agilebirds.com/flexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl");
+				FlexoOntology ontology = ontologyLibrary.getOntology("http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl");
 				CreateOntologyIndividual action = CreateOntologyIndividual.actionType.makeNewAction(ontology, null,null);
 				return makeArray(action);
 			}

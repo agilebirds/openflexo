@@ -692,11 +692,11 @@ public final class ModuleLoader implements IModuleLoader {
 	}
 
 	public static ExternalCEDModule getCEDModule() {
-		return (ExternalCEDModule) getModuleInstance(Module.CED_MODULE);
+		return (ExternalCEDModule) getModuleInstance(Module.VPM_MODULE);
 	}
 
 	public static ExternalOEModule getOEModule() {
-		return (ExternalOEModule) getModuleInstance(Module.OE_MODULE);
+		return (ExternalOEModule) getModuleInstance(Module.VE_MODULE);
 	}
 
 	public static WelcomePanel getWelcomePanel() {

@@ -26,27 +26,27 @@
      <property name="value" xmlTag="value" attribute="yes"/>
   </entity>
   
-  <entity name="org.openflexo.foundation.ontology.shema.OESLObject" abstract="YES" finalizer="finalizeDeserialization">
+  <entity name="org.openflexo.foundation.view.ViewLibraryObject" abstract="YES" finalizer="finalizeDeserialization">
     <description>Root class for all objects coding the shema library</description>
   </entity>
 
-  <entity name="org.openflexo.foundation.ontology.shema.OEShemaLibrary" abstract="NO" xmlTag="ShemaLibrary">
+  <entity name="org.openflexo.foundation.view.ViewLibrary" abstract="NO" xmlTag="ShemaLibrary">
     <description>Repository for shema folders and shemas</description>
     <property name="rootFolder" xmlTag="ShemaFolder" description="TODO"/> 
    </entity>
 
-  <entity name="org.openflexo.foundation.ontology.shema.OEShemaFolder" abstract="NO" xmlTag="ShemaFolder">
+  <entity name="org.openflexo.foundation.view.ViewFolder" abstract="NO" xmlTag="ShemaFolder">
     <description>Folder for shema folders and shemas</description>
     <property name="name" xmlTag="folderName" description="TODO"/> 
     <property name="subFolders" xmlTag="ShemaFolder" type="vector" primary="yes" description="TODO"/> 
-    <property name="shemas" contains="org.openflexo.foundation.ontology.shema.OEShemaDefinition" type="vector" primary="yes" description="TODO"/>
+    <property name="shemas" contains="org.openflexo.foundation.view.ViewDefinition" type="vector" primary="yes" description="TODO"/>
    	<property name="index" xmlTag = "docIndex" attribute="yes"/>
   </entity>  
 
 	
  <!-- Definitions for shemas -->
 
-  <entity name="org.openflexo.foundation.ontology.shema.OEShemaDefinition" xmlTag="Shema">
+  <entity name="org.openflexo.foundation.view.ViewDefinition" xmlTag="Shema">
     <description>TODO</description>
  	<property name="name" xmlTag="name" attribute="YES" description="TODO"/>
     <property name="calcURI" xmlTag="calcURI" attribute="YES"/>

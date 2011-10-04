@@ -109,7 +109,7 @@ public class AddCalcPaletteElementInitializer extends ActionInitializer {
 	@Override
 	protected Icon getEnabledIcon() 
 	{
-		return VEIconLibrary.OE_SHAPE_ICON;
+		return VEIconLibrary.SHAPE_ICON;
 	}
 
 

@@ -26,12 +26,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.view.OEShema;
+import org.openflexo.foundation.view.View;
 import org.openflexo.oe.controller.ShemaPerspective;
 import org.openflexo.view.ModuleView;
 
 
-public class OEShemaModuleView extends JPanel implements ModuleView<OEShema> {
+public class OEShemaModuleView extends JPanel implements ModuleView<View> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(OEShemaModuleView.class.getPackage().getName());
@@ -73,7 +73,7 @@ public class OEShemaModuleView extends JPanel implements ModuleView<OEShema> {
 	}
 
 	@Override
-	public OEShema getRepresentedObject() 
+	public View getRepresentedObject() 
 	{
 		return _controller.getShema();
 	}

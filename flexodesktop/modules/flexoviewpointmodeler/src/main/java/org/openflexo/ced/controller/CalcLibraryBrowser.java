@@ -54,7 +54,7 @@ class CalcLibraryBrowser extends CEDBrowser
     @Override
 	public FlexoModelObject getDefaultRootObject()
     {
-        return ModuleLoader.getFlexoResourceCenter().retrieveCalcLibrary();
+        return ModuleLoader.getFlexoResourceCenter().retrieveViewPointLibrary();
     }
 
 

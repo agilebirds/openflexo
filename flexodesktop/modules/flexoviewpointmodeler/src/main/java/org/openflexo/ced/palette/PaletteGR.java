@@ -26,12 +26,12 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.viewpoint.CalcPalette;
+import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementRemoved;
 
 
-public class PaletteGR extends DrawingGraphicalRepresentation<CalcPalette> implements GraphicalFlexoObserver {
+public class PaletteGR extends DrawingGraphicalRepresentation<ViewPointPalette> implements GraphicalFlexoObserver {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(PaletteGR.class.getPackage().getName());
@@ -80,7 +80,7 @@ public class PaletteGR extends DrawingGraphicalRepresentation<CalcPalette> imple
 		return (CalcPaletteRepresentation)super.getDrawing();
 	}
 	
-	public CalcPalette getPalette()
+	public ViewPointPalette getPalette()
 	{
 		return getDrawing().getPalette();
 	}

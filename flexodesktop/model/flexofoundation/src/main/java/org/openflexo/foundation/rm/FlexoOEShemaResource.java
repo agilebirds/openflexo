@@ -29,8 +29,8 @@ import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationReport;
-import org.openflexo.foundation.view.OEShema;
-import org.openflexo.foundation.view.OEShemaDefinition;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.xml.OEShemaBuilder;
 
 
@@ -40,7 +40,7 @@ import org.openflexo.foundation.xml.OEShemaBuilder;
  * @author sguerin
  * 
  */
-public class FlexoOEShemaResource extends FlexoXMLStorageResource<OEShema>
+public class FlexoOEShemaResource extends FlexoXMLStorageResource<View>
 {
 
 	
@@ -88,29 +88,29 @@ public class FlexoOEShemaResource extends FlexoXMLStorageResource<OEShema>
         setChanged();
     }
     
-    public void setResourceData(OEShema shema)
+    public void setResourceData(View shema)
     {
     	_resourceData = shema;
     }
 
-    public OEShema getShema()
+    public View getShema()
     {
         return getResourceData();
     }
 
-    public OEShema getShema(FlexoProgress progress)
+    public View getShema(FlexoProgress progress)
     {
         return getResourceData(progress);
     }
 
-    public final OEShema createNewShema() 
+    public final View createNewShema() 
     {
     	return getShemaDefinition().createNewShema();
     }
 
-    private OEShemaDefinition _shemaDefinition;
+    private ViewDefinition _shemaDefinition;
 
-    public OEShemaDefinition getShemaDefinition()
+    public ViewDefinition getShemaDefinition()
     {
         if (_shemaDefinition == null) {
         	_shemaDefinition = getProject().getShemaLibrary().getShemaNamed(getName());
@@ -120,9 +120,9 @@ public class FlexoOEShemaResource extends FlexoXMLStorageResource<OEShema>
     }
  
     @Override
-	public OEShema performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadXMLResourceException, FlexoFileNotFoundException, ProjectLoadingCancelledException, MalformedXMLException
+	public View performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadXMLResourceException, FlexoFileNotFoundException, ProjectLoadingCancelledException, MalformedXMLException
     {
-    	OEShema shema;
+    	View shema;
         if (logger.isLoggable(Level.FINE))
             logger.fine("Loading shema " + getName());
         try {
@@ -168,7 +168,7 @@ public class FlexoOEShemaResource extends FlexoXMLStorageResource<OEShema>
     @Override
 	public Class getResourceDataClass()
     {
-        return OEShema.class;
+        return View.class;
     }
 
     /**

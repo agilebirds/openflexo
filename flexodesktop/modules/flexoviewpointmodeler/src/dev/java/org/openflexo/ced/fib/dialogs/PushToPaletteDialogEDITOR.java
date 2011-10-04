@@ -24,11 +24,11 @@ import java.io.File;
 import org.openflexo.ced.CEDCst;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoResourceCenter;
-import org.openflexo.foundation.ontology.calc.CalcDrawingShape;
-import org.openflexo.foundation.ontology.calc.CalcDrawingShema;
-import org.openflexo.foundation.ontology.calc.CalcLibrary;
-import org.openflexo.foundation.ontology.calc.OntologyCalc;
-import org.openflexo.foundation.ontology.calc.action.PushToPalette;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.action.PushToPalette;
 import org.openflexo.module.ModuleLoader;
 
 
@@ -42,11 +42,11 @@ public class PushToPaletteDialogEDITOR {
 			public Object[] getData() 
 			{
 				FlexoResourceCenter resourceCenter = ModuleLoader.getFlexoResourceCenter(true);
-				CalcLibrary calcLibrary = resourceCenter.retrieveCalcLibrary();
-				OntologyCalc calc1 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/flexo/ontologies/Calcs/BasicOrganizationTreeEditor.owl");
+				ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
+				ViewPoint calc1 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/BasicOrganizationTreeEditor.owl");
 				calc1.loadWhenUnloaded();
-				CalcDrawingShema shema = calc1.getShemas().firstElement();
-				CalcDrawingShape shape = (CalcDrawingShape)shema.getChilds().firstElement();
+				ExampleDrawingShema shema = calc1.getShemas().firstElement();
+				ExampleDrawingShape shape = (ExampleDrawingShape)shema.getChilds().firstElement();
 				PushToPalette action = PushToPalette.actionType.makeNewAction(shape, null,null);
 				return makeArray(action);
 			}

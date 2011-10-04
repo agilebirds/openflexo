@@ -233,7 +233,7 @@ extends AbstractAction implements KeyValueCoding {
  
     public Icon getEnabledIcon(FlexoEditor editor) 
     {
-        if (getActionType() != null) {
+        if (getActionType() != null && editor != null) {
         	return editor.getEnabledIconFor(getActionType());
         }
         return null;
@@ -241,7 +241,7 @@ extends AbstractAction implements KeyValueCoding {
 
     public Icon getDisabledIcon(FlexoEditor editor) 
     {
-        if (getActionType() != null) {
+        if (getActionType() != null && editor != null) {
         	return editor.getDisabledIconFor(getActionType());
         }
         return null;

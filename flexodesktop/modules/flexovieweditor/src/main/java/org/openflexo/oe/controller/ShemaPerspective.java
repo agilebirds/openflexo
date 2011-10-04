@@ -32,10 +32,10 @@ import org.openflexo.components.browser.view.BrowserView.SelectionPolicy;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.ImportedOntology;
 import org.openflexo.foundation.ontology.ProjectOntology;
-import org.openflexo.foundation.view.OEObject;
-import org.openflexo.foundation.view.OEShema;
-import org.openflexo.foundation.view.OEShemaDefinition;
-import org.openflexo.foundation.view.OEShemaLibrary;
+import org.openflexo.foundation.view.AbstractViewObject;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.oe.OECst;
@@ -48,7 +48,7 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-public class ShemaPerspective extends FlexoPerspective<OEObject>
+public class ShemaPerspective extends FlexoPerspective<AbstractViewObject>
 {
 
 	private final OEController _controller;
@@ -59,7 +59,7 @@ public class ShemaPerspective extends FlexoPerspective<OEObject>
 	private final OEBrowserView shemaBrowserView;
 
 
-	private final Hashtable<OEShema,OEShemaController> _controllers;
+	private final Hashtable<View,OEShemaController> _controllers;
 	private final Hashtable<OEShemaController,JSplitPane> _splitPaneForProcess;
 
 	private final JSplitPane splitPane;
@@ -76,15 +76,15 @@ public class ShemaPerspective extends FlexoPerspective<OEObject>
 	{
 		super("shema_perspective");
 		_controller = controller;
-		_controllers = new Hashtable<OEShema, OEShemaController>();
+		_controllers = new Hashtable<View, OEShemaController>();
 		_splitPaneForProcess = new Hashtable<OEShemaController, JSplitPane>();
 		_browser = new ShemaLibraryBrowser(controller);
 		_browserView = new OEBrowserView(_browser, _controller, SelectionPolicy.ParticipateToSelection) {
 			@Override
 			public void treeDoubleClick(FlexoModelObject object) {
 				super.treeDoubleClick(object);
-				if (object instanceof OEShema) {
-		    		focusOnShema((OEShema)object);
+				if (object instanceof View) {
+		    		focusOnShema((View)object);
 				}
 			}
 
@@ -108,7 +108,7 @@ public class ShemaPerspective extends FlexoPerspective<OEObject>
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
 	}
 
-	public void focusOnShema(OEShema shema)
+	public void focusOnShema(View shema)
 	{
 		shemaBrowser.deleteBrowserListener(_browserView);
 		shemaBrowser.setRepresentedShema(shema);
@@ -139,10 +139,10 @@ public class ShemaPerspective extends FlexoPerspective<OEObject>
 	}
 
 	@Override
-	public OEObject getDefaultObject(FlexoModelObject proposedObject)
+	public AbstractViewObject getDefaultObject(FlexoModelObject proposedObject)
 	{
-		if (proposedObject instanceof OEShema) {
-			return (OEShema)proposedObject;
+		if (proposedObject instanceof View) {
+			return (View)proposedObject;
 		}
 		return proposedObject.getProject().getShemaLibrary();
 	}
@@ -150,20 +150,20 @@ public class ShemaPerspective extends FlexoPerspective<OEObject>
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object)
 	{
-		return (object instanceof OEObject);
+		return (object instanceof AbstractViewObject);
 	}
 
 
 	@Override
-	public ModuleView<? extends OEObject> createModuleViewForObject(OEObject object, FlexoController controller)
+	public ModuleView<? extends AbstractViewObject> createModuleViewForObject(AbstractViewObject object, FlexoController controller)
 	{
-		if (object instanceof OEShema) {
-			return getControllerForShema((OEShema)object).getModuleView();
+		if (object instanceof View) {
+			return getControllerForShema((View)object).getModuleView();
 		}
-		if (object instanceof OEShemaDefinition) {
-			return getControllerForShema(((OEShemaDefinition)object).getShema()).getModuleView();
+		if (object instanceof ViewDefinition) {
+			return getControllerForShema(((ViewDefinition)object).getShema()).getModuleView();
 		}
-		return new EmptyPanel<OEObject>(controller,this,object);
+		return new EmptyPanel<AbstractViewObject>(controller,this,object);
 	}
 
 	@Override
@@ -201,7 +201,7 @@ public class ShemaPerspective extends FlexoPerspective<OEObject>
 		return null;
 	}
 
-	public OEShemaController getControllerForShema(OEShema shema)
+	public OEShemaController getControllerForShema(View shema)
 	{
 		OEShemaController returned = _controllers.get(shema);
 		if (returned == null) {
@@ -230,14 +230,14 @@ public class ShemaPerspective extends FlexoPerspective<OEObject>
 		if (object == null) {
 			return FlexoLocalization.localizedForKey("no_selection");
 		}
-		if (object instanceof OEShemaLibrary) {
+		if (object instanceof ViewLibrary) {
 			return FlexoLocalization.localizedForKey("shema_library");
 		}
-		if (object instanceof OEShemaDefinition) {
-			return ((OEShemaDefinition) object).getName();
+		if (object instanceof ViewDefinition) {
+			return ((ViewDefinition) object).getName();
 		}
-		if (object instanceof OEShema) {
-			return ((OEShema) object).getName();
+		if (object instanceof View) {
+			return ((View) object).getName();
 		}
 		if (object instanceof ProjectOntology) {
 			return FlexoLocalization.localizedForKey("project_ontology");

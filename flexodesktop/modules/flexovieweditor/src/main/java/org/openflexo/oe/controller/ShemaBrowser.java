@@ -20,23 +20,23 @@
 package org.openflexo.oe.controller;
 
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.view.OEShema;
+import org.openflexo.foundation.view.View;
 
 class ShemaBrowser extends OEBrowser
 {
-	private OEShema representedShema = null;
+	private View representedShema = null;
 	
 	protected ShemaBrowser(OEController controller)
 	{
 		super(controller);
 	}
 
-	protected OEShema getRepresentedShema() 
+	protected View getRepresentedShema() 
 	{
 		return representedShema;
 	}
 
-	protected void setRepresentedShema(OEShema representedShema) 
+	protected void setRepresentedShema(View representedShema) 
 	{
 		this.representedShema = representedShema;
 	}

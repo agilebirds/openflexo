@@ -20,8 +20,8 @@
 package org.openflexo.foundation.xml;
 
 import org.openflexo.foundation.rm.FlexoOEShemaResource;
-import org.openflexo.foundation.view.OEShema;
-import org.openflexo.foundation.view.OEShemaDefinition;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewDefinition;
 
 /**
  * Please comment this class
@@ -32,16 +32,16 @@ import org.openflexo.foundation.view.OEShemaDefinition;
 public class OEShemaBuilder extends FlexoBuilder<FlexoOEShemaResource>
 {
 
-    public OEShema shema = null;
+    public View shema = null;
     
-    public OEShemaDefinition shemaDefinition;
+    public ViewDefinition shemaDefinition;
     
     /**
      * Use this constructor to build an Operation Component
      * 
      * @param componentDefinition
      */
-    public OEShemaBuilder(OEShemaDefinition def, FlexoOEShemaResource resource)
+    public OEShemaBuilder(ViewDefinition def, FlexoOEShemaResource resource)
     {
         super(resource);
         this.shemaDefinition = def;

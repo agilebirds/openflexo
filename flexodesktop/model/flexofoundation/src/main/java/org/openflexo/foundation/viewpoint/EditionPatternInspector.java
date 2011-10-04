@@ -40,14 +40,14 @@ public class EditionPatternInspector extends InspectorModel implements Inspectab
 		_editionPattern = editionPattern;
 	}
 
-	public OntologyCalc getCalc() 
+	public ViewPoint getCalc() 
 	{
 		return getEditionPattern().getCalc();
 	}
 
-	public CalcLibrary getCalcLibrary() 
+	public ViewPointLibrary getCalcLibrary() 
 	{
-		return getCalc().getCalcLibrary();
+		return getCalc().getViewPointLibrary();
 	}
 
 	@Override

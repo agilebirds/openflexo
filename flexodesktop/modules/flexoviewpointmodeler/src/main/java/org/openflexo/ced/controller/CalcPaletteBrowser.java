@@ -21,30 +21,30 @@ package org.openflexo.ced.controller;
 
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
-import org.openflexo.foundation.viewpoint.CalcPalette;
+import org.openflexo.foundation.viewpoint.ViewPointPalette;
 
 
 class CalcPaletteBrowser extends CEDBrowser
 {
-	private CalcPalette representedPalette = null;
+	private ViewPointPalette representedPalette = null;
 	
 	protected CalcPaletteBrowser(CEDController controller)
 	{
 		super(controller);
 	}
 
-	protected CalcPalette getRepresentedPalette() 
+	protected ViewPointPalette getRepresentedPalette() 
 	{
 		return representedPalette;
 	}
 
-	protected void setRepresentedPalette(CalcPalette representedPalette) 
+	protected void setRepresentedPalette(ViewPointPalette representedPalette) 
 	{
 		this.representedPalette = representedPalette;
 	}
 
     @Override
-	public CalcPalette getDefaultRootObject()
+	public ViewPointPalette getDefaultRootObject()
     {
     	return representedPalette;
     }

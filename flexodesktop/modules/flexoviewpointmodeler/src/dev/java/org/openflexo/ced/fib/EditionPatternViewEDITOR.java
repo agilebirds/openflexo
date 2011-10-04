@@ -25,8 +25,8 @@ import org.openflexo.ced.CEDCst;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.calc.CalcLibrary;
-import org.openflexo.foundation.ontology.calc.OntologyCalc;
+import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.module.ModuleLoader;
 
 
@@ -41,40 +41,40 @@ public class EditionPatternViewEDITOR {
 			{
 				FlexoResourceCenter resourceCenter = ModuleLoader.getFlexoResourceCenter(true);
 				OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
-				CalcLibrary calcLibrary = resourceCenter.retrieveCalcLibrary();
+				ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
 
 				Object[] returned = new Object[12];
 				
-				OntologyCalc calc1 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/flexo/ontologies/Calcs/Tests/BasicOrganizationTreeEditor.owl");
+				ViewPoint calc1 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl");
 				calc1.loadWhenUnloaded();
 				returned[0] = calc1.getEditionPattern("Employee");
 				returned[1] = calc1.getEditionPattern("BOTDepartment");
 				
-				OntologyCalc calc2 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/flexo/ontologies/Calcs/FlexoMethodology/FLXOrganizationalStructure-A.owl");
+				ViewPoint calc2 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl");
 				calc2.loadWhenUnloaded();
 				returned[2] = calc2.getEditionPattern("RootOrganizationUnit");
 				returned[3] = calc2.getEditionPattern("PositionMission");
 
-				OntologyCalc calc3 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/flexo/ontologies/Calcs/Basic/BasicOntology.owl");
+				ViewPoint calc3 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
 				calc3.loadWhenUnloaded();
 				returned[4] = calc3.getEditionPattern("Concept");
 				returned[5] = calc3.getEditionPattern("IsARelationship");
 				returned[6] = calc3.getEditionPattern("HasRelationship");
 				
-				OntologyCalc calc4 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/flexo/ontologies/Calcs/SKOS/SKOSThesaurusEditor.owl");
+				ViewPoint calc4 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/SKOS/SKOSThesaurusEditor.owl");
 				calc4.loadWhenUnloaded();
 				returned[7] = calc4.getEditionPattern("Concept");
 				
-				OntologyCalc calc5 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/flexo/ontologies/Calcs/UML/UseCaseDiagram.owl");
+				ViewPoint calc5 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/UML/UseCaseDiagram.owl");
 				calc5.loadWhenUnloaded();
 				returned[8] = calc5.getEditionPattern("Actor");
 				
-				OntologyCalc calc6 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/flexo/ontologies/Calcs/FlexoMethodology/FLXOrganizationalStructure-B.owl");
+				ViewPoint calc6 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-B.owl");
 				calc6.loadWhenUnloaded();
 				returned[9] = calc6.getEditionPattern("LinkOrganizationUnitToParentOrganizationUnit");
 				returned[10] = calc6.getEditionPattern("LinkPositionToOrganizationUnit");
 
-				OntologyCalc calc7 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/flexo/ontologies/Calcs/UML/PackageDiagram.owl");
+				ViewPoint calc7 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/UML/PackageDiagram.owl");
 				calc7.loadWhenUnloaded();
 				returned[11] = calc7.getEditionPattern("ImportPackage");
 				

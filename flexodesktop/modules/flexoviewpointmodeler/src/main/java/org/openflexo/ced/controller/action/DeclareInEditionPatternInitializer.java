@@ -78,7 +78,7 @@ public class DeclareInEditionPatternInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, DeclareInEditionPattern action)
 			{
-				getController().setCurrentEditedObjectAsModuleView(action.getEditionPattern(),getController().CALC_PERSPECTIVE);
+				getController().setCurrentEditedObjectAsModuleView(action.getEditionPattern(),getController().VIEW_POINT_PERSPECTIVE);
 				getController().getSelectionManager().setSelectedObject(action.getPatternRole());
 				return true;
 			}

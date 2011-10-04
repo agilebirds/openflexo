@@ -21,30 +21,30 @@ package org.openflexo.ced.controller;
 
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
-import org.openflexo.foundation.viewpoint.OntologyCalc;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 
 
 class CalcBrowser extends CEDBrowser
 {
-	private OntologyCalc representedCalc = null;
+	private ViewPoint representedCalc = null;
 	
 	protected CalcBrowser(CEDController controller)
 	{
 		super(controller);
 	}
 
-	protected OntologyCalc getRepresentedObject() 
+	protected ViewPoint getRepresentedObject() 
 	{
 		return representedCalc;
 	}
 
-	protected void setRepresentedObject(OntologyCalc representedCalc) 
+	protected void setRepresentedObject(ViewPoint representedCalc) 
 	{
 		this.representedCalc = representedCalc;
 	}
 
     @Override
-	public OntologyCalc getDefaultRootObject()
+	public ViewPoint getDefaultRootObject()
     {
     	return representedCalc;
     }

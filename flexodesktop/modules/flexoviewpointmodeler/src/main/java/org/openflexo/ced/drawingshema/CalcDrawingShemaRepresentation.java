@@ -29,13 +29,13 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.viewpoint.CalcDrawingConnector;
-import org.openflexo.foundation.viewpoint.CalcDrawingObject;
-import org.openflexo.foundation.viewpoint.CalcDrawingShape;
-import org.openflexo.foundation.viewpoint.CalcDrawingShema;
+import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
+import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 
 
-public class CalcDrawingShemaRepresentation extends DefaultDrawing<CalcDrawingShema> implements GraphicalFlexoObserver, CalcDrawingShemaConstants {
+public class CalcDrawingShemaRepresentation extends DefaultDrawing<ExampleDrawingShema> implements GraphicalFlexoObserver, CalcDrawingShemaConstants {
 
 	private static final Logger logger = Logger.getLogger(CalcDrawingShemaRepresentation.class.getPackage().getName());
 	
@@ -43,12 +43,12 @@ public class CalcDrawingShemaRepresentation extends DefaultDrawing<CalcDrawingSh
 	
 	private Boolean ignoreNotifications = true;
 	
-	private Hashtable<CalcDrawingShape,CalcDrawingShapeGR> shapesGR;
-	private Hashtable<CalcDrawingConnector,CalcDrawingConnectorGR> connectorsGR;
+	private Hashtable<ExampleDrawingShape,CalcDrawingShapeGR> shapesGR;
+	private Hashtable<ExampleDrawingConnector,CalcDrawingConnectorGR> connectorsGR;
 
 	private boolean readOnly = false;
 	
-	public CalcDrawingShemaRepresentation(CalcDrawingShema aShema, boolean readOnly)
+	public CalcDrawingShemaRepresentation(ExampleDrawingShema aShema, boolean readOnly)
 	{
 		super(aShema);
 		
@@ -56,8 +56,8 @@ public class CalcDrawingShemaRepresentation extends DefaultDrawing<CalcDrawingSh
 		//graphicalRepresentation = new DrawingGraphicalRepresentation<OEShema>(this);
 		//graphicalRepresentation.addToMouseClickControls(new OEShemaController.ShowContextualMenuControl());
 		
-		shapesGR = new Hashtable<CalcDrawingShape, CalcDrawingShapeGR>();
-		connectorsGR = new Hashtable<CalcDrawingConnector, CalcDrawingConnectorGR>();
+		shapesGR = new Hashtable<ExampleDrawingShape, CalcDrawingShapeGR>();
+		connectorsGR = new Hashtable<ExampleDrawingConnector, CalcDrawingConnectorGR>();
 		
 		aShema.addObserver(this);
 		
@@ -101,25 +101,25 @@ public class CalcDrawingShemaRepresentation extends DefaultDrawing<CalcDrawingSh
  		buildGraphicalObjectsHierarchyFor(getShema());
 	}
 	
-	private void buildGraphicalObjectsHierarchyFor(CalcDrawingObject parent)
+	private void buildGraphicalObjectsHierarchyFor(ExampleDrawingObject parent)
 	{
 		//logger.info("buildGraphicalObjectsHierarchyFor "+parent);
 		
-		for (CalcDrawingObject child : parent.getChilds()) {
-			if (!(child instanceof CalcDrawingConnector)) {
+		for (ExampleDrawingObject child : parent.getChilds()) {
+			if (!(child instanceof ExampleDrawingConnector)) {
 				addDrawable(child, parent);
 				buildGraphicalObjectsHierarchyFor(child);
 			}
 		}
-		for (CalcDrawingObject child : parent.getChilds()) {
-			if (child instanceof CalcDrawingConnector) {
+		for (ExampleDrawingObject child : parent.getChilds()) {
+			if (child instanceof ExampleDrawingConnector) {
 				addDrawable(child, parent);
 				buildGraphicalObjectsHierarchyFor(child);
 			}
 		}
 	}
 	
-	public CalcDrawingShema getShema()
+	public ExampleDrawingShema getShema()
 	{
 		return getModel();
 	}
@@ -137,8 +137,8 @@ public class CalcDrawingShemaRepresentation extends DefaultDrawing<CalcDrawingSh
 	@Override
 	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable)
 	{
-		if (aDrawable instanceof CalcDrawingShape) {
-			CalcDrawingShape shape = (CalcDrawingShape)aDrawable;
+		if (aDrawable instanceof ExampleDrawingShape) {
+			ExampleDrawingShape shape = (ExampleDrawingShape)aDrawable;
 			CalcDrawingShapeGR returned = shapesGR.get(shape);
 			if (returned == null) {
 				returned = buildGraphicalRepresentation(shape);
@@ -146,8 +146,8 @@ public class CalcDrawingShemaRepresentation extends DefaultDrawing<CalcDrawingSh
 			}
 			return (GraphicalRepresentation<O>)returned;
 		}
-		else if (aDrawable instanceof CalcDrawingConnector) {
-			CalcDrawingConnector connector = (CalcDrawingConnector)aDrawable;
+		else if (aDrawable instanceof ExampleDrawingConnector) {
+			ExampleDrawingConnector connector = (ExampleDrawingConnector)aDrawable;
 			CalcDrawingConnectorGR returned = connectorsGR.get(connector);
 			if (returned == null) {
 				returned = buildGraphicalRepresentation(connector);
@@ -159,7 +159,7 @@ public class CalcDrawingShemaRepresentation extends DefaultDrawing<CalcDrawingSh
 		return null;
 	}
 
-	private CalcDrawingConnectorGR buildGraphicalRepresentation(CalcDrawingConnector connector)
+	private CalcDrawingConnectorGR buildGraphicalRepresentation(ExampleDrawingConnector connector)
 	{
 		if (connector.getGraphicalRepresentation() instanceof ConnectorGraphicalRepresentation) {
 			CalcDrawingConnectorGR graphicalRepresentation = new CalcDrawingConnectorGR(connector,this);
@@ -174,7 +174,7 @@ public class CalcDrawingShemaRepresentation extends DefaultDrawing<CalcDrawingSh
 		return graphicalRepresentation;
 	}
 
-	private CalcDrawingShapeGR buildGraphicalRepresentation(CalcDrawingShape shape)
+	private CalcDrawingShapeGR buildGraphicalRepresentation(ExampleDrawingShape shape)
 	{
 		if (shape.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 			CalcDrawingShapeGR graphicalRepresentation = new CalcDrawingShapeGR(shape,this);

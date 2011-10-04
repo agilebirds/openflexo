@@ -27,65 +27,65 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
-import org.openflexo.foundation.viewpoint.CalcDrawingConnector;
-import org.openflexo.foundation.viewpoint.CalcDrawingObject;
-import org.openflexo.foundation.viewpoint.CalcDrawingShape;
+import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
+import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 
 
-public class DeleteCalcShemaElements extends FlexoUndoableAction<DeleteCalcShemaElements,CalcDrawingObject,CalcDrawingObject>
+public class DeleteCalcShemaElements extends FlexoUndoableAction<DeleteCalcShemaElements,ExampleDrawingObject,ExampleDrawingObject>
 {
 
     private static final Logger logger = Logger.getLogger(DeleteCalcShemaElements.class.getPackage().getName());
 
-    public static FlexoActionType<DeleteCalcShemaElements,CalcDrawingObject,CalcDrawingObject> actionType 
-    = new FlexoActionType<DeleteCalcShemaElements,CalcDrawingObject,CalcDrawingObject>(
+    public static FlexoActionType<DeleteCalcShemaElements,ExampleDrawingObject,ExampleDrawingObject> actionType 
+    = new FlexoActionType<DeleteCalcShemaElements,ExampleDrawingObject,ExampleDrawingObject>(
     		"delete", FlexoActionType.editGroup, FlexoActionType.DELETE_ACTION_TYPE) {
 
         /**
          * Factory method
          */
         @Override
-		public DeleteCalcShemaElements makeNewAction(CalcDrawingObject focusedObject, Vector<CalcDrawingObject> globalSelection, FlexoEditor editor)
+		public DeleteCalcShemaElements makeNewAction(ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor)
         {
             return new DeleteCalcShemaElements(focusedObject, globalSelection,editor);
         }
 
         @Override
-		protected boolean isVisibleForSelection(CalcDrawingObject object, Vector<CalcDrawingObject> globalSelection)
+		protected boolean isVisibleForSelection(ExampleDrawingObject object, Vector<ExampleDrawingObject> globalSelection)
         {
             return true;
         }
 
         @Override
-		protected boolean isEnabledForSelection(CalcDrawingObject focusedObject, Vector<CalcDrawingObject> globalSelection)
+		protected boolean isEnabledForSelection(ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection)
         {
-        	Vector<CalcDrawingObject> objectsToDelete = objectsToDelete(focusedObject,globalSelection);
+        	Vector<ExampleDrawingObject> objectsToDelete = objectsToDelete(focusedObject,globalSelection);
         	return (objectsToDelete.size() > 0);
          }
 
     };
 
 	static {
-		FlexoModelObject.addActionForClass (DeleteCalcShemaElements.actionType, CalcDrawingShape.class);
-		FlexoModelObject.addActionForClass (DeleteCalcShemaElements.actionType, CalcDrawingConnector.class);
+		FlexoModelObject.addActionForClass (DeleteCalcShemaElements.actionType, ExampleDrawingShape.class);
+		FlexoModelObject.addActionForClass (DeleteCalcShemaElements.actionType, ExampleDrawingConnector.class);
 	}
 
-	protected static Vector<CalcDrawingObject> objectsToDelete(CalcDrawingObject focusedObject, Vector<CalcDrawingObject> globalSelection)
+	protected static Vector<ExampleDrawingObject> objectsToDelete(ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection)
 	{
-		Vector<CalcDrawingObject> allSelection = new Vector<CalcDrawingObject>();
+		Vector<ExampleDrawingObject> allSelection = new Vector<ExampleDrawingObject>();
         if (globalSelection == null || !globalSelection.contains(focusedObject)) {
         	allSelection.add(focusedObject);
         }
         if (globalSelection != null) {
-        	for (CalcDrawingObject o : globalSelection) {
+        	for (ExampleDrawingObject o : globalSelection) {
         		allSelection.add(o);
         	}
         }
         
-		Vector<CalcDrawingObject> returned = new Vector<CalcDrawingObject>();
-    	for (CalcDrawingObject o : allSelection) {
+		Vector<ExampleDrawingObject> returned = new Vector<ExampleDrawingObject>();
+    	for (ExampleDrawingObject o : allSelection) {
     		boolean isContainedByAnOtherObject = false;
-    	   	for (CalcDrawingObject potentielContainer : allSelection) {
+    	   	for (ExampleDrawingObject potentielContainer : allSelection) {
         		if (potentielContainer != o && o.isContainedIn(potentielContainer)) {
         			isContainedByAnOtherObject = true;
         			break;
@@ -98,7 +98,7 @@ public class DeleteCalcShemaElements extends FlexoUndoableAction<DeleteCalcShema
 	}
 	
 	
-	protected DeleteCalcShemaElements(CalcDrawingObject focusedObject, Vector<CalcDrawingObject> globalSelection, FlexoEditor editor)
+	protected DeleteCalcShemaElements(ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor)
     {
         super(actionType, focusedObject, globalSelection,editor);
         logger.info("Created DeleteCalcShemaElements action focusedObject="+focusedObject+"globalSelection="+globalSelection);
@@ -110,7 +110,7 @@ public class DeleteCalcShemaElements extends FlexoUndoableAction<DeleteCalcShema
         if (logger.isLoggable(Level.INFO)) logger.info("DeleteCalcShemaElements");
         if (logger.isLoggable(Level.INFO)) logger.info("selection is: " + getGlobalSelection());
         if (logger.isLoggable(Level.INFO)) logger.info("selection to delete is: " + getObjectsToDelete());
-        for (CalcDrawingObject o : getObjectsToDelete()) {
+        for (ExampleDrawingObject o : getObjectsToDelete()) {
         	o.delete();
         }
     }
@@ -127,9 +127,9 @@ public class DeleteCalcShemaElements extends FlexoUndoableAction<DeleteCalcShema
         logger.warning("REDO DELETE not implemented yet !");
     }
 
-    private Vector<CalcDrawingObject> _objectsToDelete;
+    private Vector<ExampleDrawingObject> _objectsToDelete;
 
-    public Vector<CalcDrawingObject> getObjectsToDelete()
+    public Vector<ExampleDrawingObject> getObjectsToDelete()
     {
     	if (_objectsToDelete == null) {
     		_objectsToDelete = objectsToDelete(getFocusedObject(), getGlobalSelection());

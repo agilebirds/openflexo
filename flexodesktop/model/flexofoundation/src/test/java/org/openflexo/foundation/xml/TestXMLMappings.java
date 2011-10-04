@@ -33,8 +33,8 @@ import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
 import org.openflexo.foundation.ie.menu.FlexoNavigationMenu;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.toc.TOCData;
-import org.openflexo.foundation.view.OEShema;
-import org.openflexo.foundation.view.OEShemaLibrary;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.ws.FlexoWSLibrary;
@@ -120,12 +120,12 @@ public class TestXMLMappings extends FlexoTestCase
 
 	public void testShemaLibraryMappings()
 	{
-		checkClassModels(OEShemaLibrary.class);
+		checkClassModels(ViewLibrary.class);
 	}
 
 	public void testShemaMappings()
 	{
-		checkClassModels(OEShema.class);
+		checkClassModels(View.class);
 	}
 
 	public void testGeneratedCodeMappings()

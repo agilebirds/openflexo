@@ -193,17 +193,17 @@ public class ProjectOntology extends FlexoOntology implements StorageResourceDat
 
 	private void pourNePasOublier() 
 	{
-		String FLEXO_CONCEPTS_URI = "http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl";
+		String FLEXO_CONCEPTS_URI = "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl";
 		String FLEXO_MODEL_OBJECT = FLEXO_CONCEPTS_URI+"#FlexoModelObject";
 		String LINKED_TO_MODEL_PROPERTY = FLEXO_CONCEPTS_URI+"#linkedToModel";
 		String CLASS_NAME_PROPERTY = FLEXO_CONCEPTS_URI+"#className";
 		String FLEXO_ID_PROPERTY = FLEXO_CONCEPTS_URI+"#flexoID";
 		String RESOURCE_NAME_PROPERTY = FLEXO_CONCEPTS_URI+"#resourceName";
 
-		String BOT_URI = "http://www.agilebirds.com/flexo/ontologies/OrganizationTree/BasicOrganizationTree.owl";
+		String BOT_URI = "http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl";
 		String COMPANY_NAME = BOT_URI+"#companyName";
 
-		String BOT_EDITOR_URI = "http://www.agilebirds.com/flexo/ontologies/Calcs/BasicOrganizationTreeEditor.owl";
+		String BOT_EDITOR_URI = "http://www.agilebirds.com/openflexo/ViewPoints/BasicOrganizationTreeEditor.owl";
 		String BOT_COMPANY = BOT_EDITOR_URI+"#BOTCompany";
 		
 		OntModel ontModel = getProject().getProjectOntology().getOntModel();

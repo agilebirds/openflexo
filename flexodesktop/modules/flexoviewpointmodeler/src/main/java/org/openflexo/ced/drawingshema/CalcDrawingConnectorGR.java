@@ -30,11 +30,11 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
-import org.openflexo.foundation.viewpoint.CalcDrawingConnector;
+import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
 import org.openflexo.toolbox.ToolBox;
 
 
-public class CalcDrawingConnectorGR extends ConnectorGraphicalRepresentation<CalcDrawingConnector> implements GraphicalFlexoObserver,CalcDrawingShemaConstants {
+public class CalcDrawingConnectorGR extends ConnectorGraphicalRepresentation<ExampleDrawingConnector> implements GraphicalFlexoObserver,CalcDrawingShemaConstants {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(CalcDrawingConnectorGR.class.getPackage().getName());
@@ -48,7 +48,7 @@ public class CalcDrawingConnectorGR extends ConnectorGraphicalRepresentation<Cal
 		super(ConnectorType.LINE,null,null,null,null);
 	}
 
-	public CalcDrawingConnectorGR(CalcDrawingConnector aConnector, Drawing<?> aDrawing) 
+	public CalcDrawingConnectorGR(ExampleDrawingConnector aConnector, Drawing<?> aDrawing) 
 	{
 		super(ConnectorType.LINE,
 				aDrawing != null ? (ShapeGraphicalRepresentation<?>)aDrawing.getGraphicalRepresentation(aConnector.getStartShape()) : null,
@@ -80,7 +80,7 @@ public class CalcDrawingConnectorGR extends ConnectorGraphicalRepresentation<Cal
 		return (CalcDrawingShemaRepresentation)super.getDrawing();
 	}
 	
-	public CalcDrawingConnector getCalcDrawingConnector()
+	public ExampleDrawingConnector getCalcDrawingConnector()
 	{
 		return getDrawable();
 	}
