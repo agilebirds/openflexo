@@ -90,7 +90,7 @@ public class MethodCall extends KeyValueBindingImpl  implements ComplexPathEleme
 	public Type getType()
     {
         if (_method != null) {
-            return _method.getReturnType();
+            return _method.getGenericReturnType();
         }
         return null;
     }
