@@ -82,7 +82,7 @@ public class VEModule extends FlexoModule implements ExternalOEModule
 		super(projectEditor);
 		setFlexoController(new OEController(projectEditor,this));
 		getOEController().loadRelativeWindows();
-		OEPreferences.init(getOEController());
+		VEPreferences.init(getOEController());
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
 
 		// Put here a code to display default view
@@ -115,7 +115,7 @@ public class VEModule extends FlexoModule implements ExternalOEModule
 	@Override
 	public float getScreenshotQuality()
 	{
-		float reply = Float.valueOf(OEPreferences.getScreenshotQuality())/100f;
+		float reply = Float.valueOf(VEPreferences.getScreenshotQuality())/100f;
 		if(reply>1) {
 			return 1f;
 		}

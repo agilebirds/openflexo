@@ -27,7 +27,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.action.AddView;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.ve.OECst;
+import org.openflexo.ve.VECst;
 
 
 public class AddViewDialogEDITOR extends ProjectDialogEDITOR {
@@ -44,7 +44,7 @@ public class AddViewDialogEDITOR extends ProjectDialogEDITOR {
 				return makeArray(action);
 			}
 			public File getFIBFile() {
-				return OECst.ADD_VIEW_DIALOG_FIB;
+				return VECst.ADD_VIEW_DIALOG_FIB;
 			}
 		};
 		editor.launch();

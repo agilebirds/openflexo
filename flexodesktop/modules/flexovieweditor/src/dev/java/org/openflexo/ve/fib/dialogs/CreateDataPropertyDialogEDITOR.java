@@ -27,7 +27,7 @@ import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.action.CreateDataProperty;
 import org.openflexo.module.ModuleLoader;
-import org.openflexo.ve.OECst;
+import org.openflexo.ve.VECst;
 
 
 public class CreateDataPropertyDialogEDITOR {
@@ -45,7 +45,7 @@ public class CreateDataPropertyDialogEDITOR {
 				return makeArray(action);
 			}
 			public File getFIBFile() {
-				return OECst.CREATE_DATA_PROPERTY_DIALOG_FIB;
+				return VECst.CREATE_DATA_PROPERTY_DIALOG_FIB;
 			}
 		};
 		editor.launch();

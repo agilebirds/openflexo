@@ -27,7 +27,7 @@ import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.action.CreateOntologyIndividual;
 import org.openflexo.module.ModuleLoader;
-import org.openflexo.ve.OECst;
+import org.openflexo.ve.VECst;
 
 
 public class CreateOntologyIndividualDialogEDITOR {
@@ -45,7 +45,7 @@ public class CreateOntologyIndividualDialogEDITOR {
 				return makeArray(action);
 			}
 			public File getFIBFile() {
-				return OECst.CREATE_ONTOLOGY_INDIVIDUAL_FIB;
+				return VECst.CREATE_ONTOLOGY_INDIVIDUAL_FIB;
 			}
 		};
 		editor.launch();
