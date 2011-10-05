@@ -35,10 +35,11 @@ public class NewPackageConverter {
 	private boolean convertFile(File file) {
 		try {
 			String content = org.openflexo.toolbox.FileUtils.fileContents(file);
-			content = filter(content, BE_DENALI_FLEXO); // be.denali.flexo* --> org.openflexo*
-			content = filter(content, BE_DENALI); // be.denali --> org.openflexo
-			content = filter(content, BE_AB_FLEXO); // be.agilebirds.flexo* --> org.openflexo*
-			content = filter(content, BE_AB); // be.agilebirds --> org.openflexo
+			if (file.getName().endsWith(ProjectRestructuration.DM_EXTENSION)) {
+				content = convertDMContentToNewPackage(content);
+			} else {
+				content = convertContentToNewPackage(content);
+			}
 			org.openflexo.toolbox.FileUtils.copyFileToFile(file, new File(file.getParentFile(),file.getName()+".~~"));
 			org.openflexo.toolbox.FileUtils.saveToFile(file, content);
 		} catch (IOException e) {
@@ -48,15 +49,56 @@ public class NewPackageConverter {
 		return true;
 	}
 
+	private static String convertDMContentToNewPackage(String content) {
+		String JDK = "JDKRepository";
+		String COMPONENT="ComponentRepository";
+		String PROCESS_BUSINESS_DATA="ProcessBusinessDataRepository";
+		String PROCESS_INSTANCE="ProcessInstanceRepository";
+		content = convertDMContentToNewPackage(content, JDK);
+		content = convertDMContentToNewPackage(content, COMPONENT);
+		content = convertDMContentToNewPackage(content, PROCESS_BUSINESS_DATA);
+		content = convertDMContentToNewPackage(content, PROCESS_INSTANCE);
+		return content;
+	}
+
+	private static String convertDMContentToNewPackage(String content, String repository_tag_name) {
+		StringBuilder sb = new StringBuilder(content.length());
+		int lastAppended = 0;
+		int index = content.indexOf(repository_tag_name);
+		while (index > -1) {
+			int endIndex = content.indexOf(repository_tag_name, index + repository_tag_name.length());
+			sb.append(content, lastAppended, index);
+			sb.append(convertContentToNewPackage(content.substring(index, endIndex)));
+			lastAppended = endIndex;
+			index = content.indexOf(repository_tag_name, endIndex + repository_tag_name.length());
+		}
+		return sb.append(content, lastAppended, content.length()).toString();
+	}
+
+	public static String convertContentToNewPackage(String content) {
+		content = filter(content, BE_DENALI_FLEXO); // be.denali.flexo* --> org.openflexo*
+		content = filter(content, BE_DENALI); // be.denali --> org.openflexo
+		content = filter(content, BE_AB_FLEXO); // be.agilebirds.flexo* --> org.openflexo*
+		content = filter(content, BE_AB); // be.agilebirds --> org.openflexo
+		return content;
+	}
+
 	private static String filter(String content, String packagePrefix) {
 		int lastAppendedIndex = 0;
 		// be.denali.flexo* --> org.openflexo*
 		StringBuilder sb = new StringBuilder(content.length());
 		for (int i = 0; i < content.length(); i++) {
-			if (content.regionMatches(i, packagePrefix, 0, packagePrefix.length())) {
+			if (content.regionMatches(i, packagePrefix, 0, packagePrefix.length())
+					&& !content.regionMatches(i + packagePrefix.length(), ".engine", 0, 7)) {
 				sb.append(content, lastAppendedIndex, i);
 				sb.append(ORG_OF);
-				if (content.charAt(i + packagePrefix.length()) != '.') {
+				char c = content.charAt(i + packagePrefix.length());
+				switch (c) {
+				case '"': // in DM when this is the end of the package attribute we don't need to put a '.'
+					break;
+				case '.': // If there is already a dot, then don't add one.
+					break;
+				default:
 					sb.append('.');
 				}
 				i = i + packagePrefix.length() - 1;
@@ -68,9 +110,9 @@ public class NewPackageConverter {
 	}
 
 	public static void main(String[] args) {
-		String s = "coucou be.denali.flexo.zut\nmachin be.denali.flexobrol bidule";
+		String s = "coucou be.denali.flexo.zut\nmachin be.denali.flexobrol bidule\nbe.denali.flexo.engine\n<JDKRepository id=\"12354\">\nblabla be.denali.coucou\nbe.denali.engine.db.ProcessInstance\n</JDKRepository>";
 		System.err.println(s);
-		System.err.println(filter(s, BE_DENALI_FLEXO));
+		System.err.println(convertDMContentToNewPackage(s));
 	}
 
 }

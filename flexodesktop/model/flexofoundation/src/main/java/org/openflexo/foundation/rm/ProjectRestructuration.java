@@ -36,41 +36,41 @@ import org.openflexo.foundation.ie.cl.PopupComponentDefinition;
 public class ProjectRestructuration {
 
 
-	private static final String OELIB_EXTENSION = ".oelib";
+	public static final String OELIB_EXTENSION = ".oelib";
 
-	private static final String OWL_EXTENSION = ".owl";
+	public static final String OWL_EXTENSION = ".owl";
 
-	private static final String WS_EXTENSION = ".ws";
+	public static final String WS_EXTENSION = ".ws";
 
-	private static final String DKV_EXTENSION = ".dkv";
+	public static final String DKV_EXTENSION = ".dkv";
 
-	private static final String DM_EXTENSION = ".dm";
+	public static final String DM_EXTENSION = ".dm";
 
-	private static final String XML_EXTENSION = ".xml";
+	public static final String XML_EXTENSION = ".xml";
 
-	private static final String LINKS_EXTENSION = ".links";
+	public static final String LINKS_EXTENSION = ".links";
 
-	private static final String MENU_EXTENSION = ".menu";
+	public static final String MENU_EXTENSION = ".menu";
 
-	private static final String TOC_EXTENSION = ".toc";
+	public static final String TOC_EXTENSION = ".toc";
 
-	private static final String DG_EXTENSION = ".dg";
+	public static final String DG_EXTENSION = ".dg";
 
-	private static final String SG_EXTENSION = ".sg";
+	public static final String SG_EXTENSION = ".sg";
 
-	private static final String CG_EXTENSION = ".cg";
+	public static final String CG_EXTENSION = ".cg";
 
-	private static final String WOLIB_EXTENSION = ".wolib";
+	public static final String WOLIB_EXTENSION = ".wolib";
 
-	private static final String WKF_EXTENSION = ".wkf";
+	public static final String WKF_EXTENSION = ".wkf";
 
-	private static final String RM_EXTENSION = ".rmxml";
+	public static final String RM_EXTENSION = ".rmxml";
 
-	private static final String TS_EXTENSION = ".rmxml.ts";
+	public static final String TS_EXTENSION = ".rmxml.ts";
 
 	public static final String[] DOT_FILE_EXTENSIONS = { WKF_EXTENSION, WOLIB_EXTENSION, CG_EXTENSION, DG_EXTENSION, SG_EXTENSION,
-			TOC_EXTENSION, MENU_EXTENSION, LINKS_EXTENSION, XML_EXTENSION, DM_EXTENSION, DKV_EXTENSION, WS_EXTENSION, OWL_EXTENSION,
-			OELIB_EXTENSION,
+		TOC_EXTENSION, MENU_EXTENSION, LINKS_EXTENSION, XML_EXTENSION, DM_EXTENSION, DKV_EXTENSION, WS_EXTENSION, OWL_EXTENSION,
+		OELIB_EXTENSION,
 		RM_EXTENSION, TS_EXTENSION };
 
 	public static final String[] FILE_EXTENSIONS;
