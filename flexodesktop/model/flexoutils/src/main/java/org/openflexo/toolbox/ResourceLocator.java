@@ -149,7 +149,7 @@ public class ResourceLocator {
 					File file1 = new File(f.getAbsolutePath() + "/src/main/resources");
 					File file2 = new File(f.getAbsolutePath() + "/src/test/resources");
 					File file3 = new File(f.getAbsolutePath() + "/src/dev/resources");
-					File file4 = new File(f.getAbsolutePath());
+					// File file4 = new File(f.getAbsolutePath());
 					if (logger.isLoggable(Level.FINE)) {
 						logger.info("Adding directory " + file1.getAbsolutePath());
 					}
@@ -159,9 +159,9 @@ public class ResourceLocator {
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Adding directory " + file3.getAbsolutePath());
 					}
-					if (logger.isLoggable(Level.FINE)) {
+					/*if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Adding directory " + file4.getAbsolutePath());
-					}
+					}*/
 					if (file1.exists()) {
 						files.add(file1);
 					}
@@ -171,9 +171,9 @@ public class ResourceLocator {
 					if (file3.exists()) {
 						files.add(file3);
 					}
-					if (file4.exists()) {
+					/*if (file4.exists()) {
 						files.add(file4);
-					}
+					}*/
 				} else if (f.isDirectory()) {
 					findAllFlexoProjects(f, files);
 				}
