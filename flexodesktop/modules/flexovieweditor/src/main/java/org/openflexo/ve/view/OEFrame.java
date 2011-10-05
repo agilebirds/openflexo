@@ -31,7 +31,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.ve.OECst;
+import org.openflexo.ve.VECst;
 import org.openflexo.ve.controller.OEController;
 import org.openflexo.ve.controller.OEKeyEventListener;
 import org.openflexo.ve.view.menu.OEMenuBar;
@@ -73,7 +73,7 @@ public class OEFrame extends FlexoFrame
         _oeController = controller;
         _oeMenuBar = menuBar;
         _oeKeyEventListener = wkfKeyEventListener;
-        setSize(OECst.DEFAULT_MAINFRAME_WIDTH, OECst.DEFAULT_MAINFRAME_HEIGHT);
+        setSize(VECst.DEFAULT_MAINFRAME_WIDTH, VECst.DEFAULT_MAINFRAME_HEIGHT);
         updateTitle();
         getContentPane().setLayout(new BorderLayout());
         // You may observe here some model objects

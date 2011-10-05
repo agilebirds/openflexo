@@ -26,7 +26,7 @@ import javax.swing.Icon;
 
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.ve.OECst;
+import org.openflexo.ve.VECst;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
@@ -67,7 +67,7 @@ public class AddViewInitializer extends ActionInitializer {
 			public boolean run(ActionEvent e, AddView action)
 			{
 				FIBDialog dialog = FIBDialog.instanciateComponent(
-						OECst.ADD_VIEW_DIALOG_FIB,
+						VECst.ADD_VIEW_DIALOG_FIB,
 						action, null, true);
 				return (dialog.getStatus() == Status.VALIDATED);
 

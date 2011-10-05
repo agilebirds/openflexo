@@ -39,7 +39,7 @@ import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.utils.FlexoSplitPaneLocationSaver;
-import org.openflexo.ve.OECst;
+import org.openflexo.ve.VECst;
 import org.openflexo.ve.shema.VEShemaController;
 import org.openflexo.ve.shema.VEShemaModuleView;
 import org.openflexo.ve.view.OEBrowserView;
@@ -277,7 +277,7 @@ public class ShemaPerspective extends FlexoPerspective<AbstractViewObject>
 					getCurrentShemaModuleView().getController().getPaletteView(),
 					_controller.getDisconnectedDocInspectorPanel());
 			splitPaneWithPalettesAndDocInspectorPanel.setResizeWeight(0);
-			splitPaneWithPalettesAndDocInspectorPanel.setDividerLocation(OECst.PALETTE_DOC_SPLIT_LOCATION);
+			splitPaneWithPalettesAndDocInspectorPanel.setDividerLocation(VECst.PALETTE_DOC_SPLIT_LOCATION);
 			_splitPaneForProcess.put(getCurrentShemaModuleView().getController(),splitPaneWithPalettesAndDocInspectorPanel);
 		}
 		if (splitPaneWithPalettesAndDocInspectorPanel.getBottomComponent() == null) {
