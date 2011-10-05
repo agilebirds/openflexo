@@ -210,13 +210,14 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 	   List returned = new ArrayList();
 	   for (FIBBrowserElementChildren children : browserElementDefinition.getChildren()) {
 		   if (children.isMultipleAccess()) {
-			   // System.out.println("add all children for "+browserElementDefinition.getName()+" children "+children.getName()+" data="+children.getData());
-			   // System.out.println("Obtain "+getChildrenListFor(children, object));
+			   //System.out.println("add all children for "+browserElementDefinition.getName()+" children "+children.getName()+" data="+children.getData());
+			   //System.out.println("Obtain "+getChildrenListFor(children, object));
 			   returned.addAll(getChildrenListFor(children, object));
 		   }
 		   else {
-			   // System.out.println("add children for "+browserElementDefinition.getName()+" children "+children.getName()+" data="+children.getData());
-			   // System.out.println("Obtain "+getChildrenFor(children, object));
+			   //System.out.println("add children for "+browserElementDefinition.getName()+" children "+children.getName()+" data="+children.getData());
+			   //System.out.println("Obtain "+getChildrenFor(children, object));
+			   //System.out.println("accessed type="+children.getAccessedType());
 			   returned.add(getChildrenFor(children, object));
 		   }
 	   }

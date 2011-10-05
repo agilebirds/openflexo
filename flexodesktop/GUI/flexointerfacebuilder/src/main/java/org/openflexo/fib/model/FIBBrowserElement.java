@@ -663,11 +663,17 @@ public class FIBBrowserElement extends FIBModelObject {
 		
 		public boolean isMultipleAccess()
 		{
+			/*System.out.println("This="+this);
+			System.out.println("getAccessedType()="+getAccessedType());
+			System.out.println("TypeUtils.isClassAncestorOf(List.class, TypeUtils.getBaseClass(accessedType))="+TypeUtils.isClassAncestorOf(List.class, TypeUtils.getBaseClass(getAccessedType())));
+			System.out.println("accessedType instanceof ParameterizedType="+(getAccessedType() instanceof ParameterizedType));
+			System.out.println("((ParameterizedType)accessedType).getActualTypeArguments().length > 0="+(((ParameterizedType)getAccessedType()).getActualTypeArguments().length > 0));*/
 			Type accessedType = getAccessedType();
 			return accessedType != null
 				&& TypeUtils.isClassAncestorOf(List.class, TypeUtils.getBaseClass(accessedType))
 				&& accessedType instanceof ParameterizedType 
 				&& ((ParameterizedType)accessedType).getActualTypeArguments().length > 0;
+			// ??? Too restrictive: type might be undefined, eg List
 		}
 
 		public Class getBaseClass()

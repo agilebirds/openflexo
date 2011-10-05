@@ -413,6 +413,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 		
 		public void update(boolean recursively)
 		{
+			//logger.info("**************** update() "+this);
 			if (browserElementType == null) {
 				logger.warning("Not element type registered for "+representedObject);
 				return;
@@ -435,7 +436,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 				oldChildren.add(c);
 			}
 			boolean isEnabled = browserElementType.isEnabled(representedObject);
-			List newChildrenObjects = (isEnabled ? browserElementType.getChildrenFor(representedObject) : new Vector());
+			List newChildrenObjects = /*(isEnabled ?*/ browserElementType.getChildrenFor(representedObject) /*: new Vector())*/;
 			int index = 0;
 			
 			
