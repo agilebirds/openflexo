@@ -1,5 +1,5 @@
 #Dutch
-#Tue Oct 04 13:46:13 CEST 2011
+#Tue Oct 04 17:16:49 CEST 2011
 =
 \ =\ 
 \ into\ =\ into 
@@ -1101,6 +1101,8 @@ bloc_body_title=Body title
 bloc_widget=Block widget
 blur=Blur
 body=Body
+bold=bold
+bold_italic=bold_italic
 boolean=Boolean
 border=border
 border_color=Bordercolor
@@ -2950,6 +2952,7 @@ isocode_must_be_defined_description=A language isocode identifie a language acco
 isocode_must_unique=ISO code must be unique
 isocode_must_unique_description=ISO code must be unique
 it_is_used_in\:=It is used in\:
+italic=italic
 item_class_name=Item class name
 item_icon=item icon
 item_variable=Item variable
