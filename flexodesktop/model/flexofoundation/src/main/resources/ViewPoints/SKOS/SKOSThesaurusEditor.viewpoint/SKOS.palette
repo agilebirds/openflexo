@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Palette id="1" index="0" name="SKOS">
+  <PaletteElement id="2" name="Concept Scheme" editionPattern="ConceptScheme">
+    <Parameter id="3" name="conceptSchemeName" value="My Concept Scheme" />
+    <Parameter id="4" name="conceptSchemeURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="5" name="preferedLabel" value="" />
+    <Parameter id="6" name="alternativeLabel" value="" />
+    <ShapeGraphicalRepresentation id="7" className="org.openflexo.vpm.palette.PaletteElementGR" x="63.0" y="32.0" width="113.92949967511372" height="41.14754098360656" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="Concept Scheme" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+      <ForegroundStyle id="8" noStroke="false" color="204,0,51" lineWidth="1.6" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorGradientBackgroundStyle id="9" color1="255,102,102" color2="255,255,255" direction="SOUTH_EAST_NORTH_WEST" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="10" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="11" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="12" isRounded="true" arcSize="20.0" />
+      <TextStyle id="13" font="Lucida Sans,1,11" color="102,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <PaletteElement id="14" name="Concept" editionPattern="Concept">
+    <Parameter id="15" name="conceptName" value="My Concept" />
+    <Parameter id="16" name="preferedLabel" value="" />
+    <Parameter id="17" name="alternativeLabel" value="" />
+    <Parameter id="18" name="conceptURI" value="&lt; Computed URI &gt;" />
+    <Parameter id="19" name="conceptScheme" value="" />
+    <ShapeGraphicalRepresentation id="20" className="org.openflexo.vpm.palette.PaletteElementGR" x="87.0" y="119.0" width="62.88593750000001" height="34.26229508196721" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="Concept" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+      <ForegroundStyle id="21" noStroke="false" color="102,102,255" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorGradientBackgroundStyle id="22" color1="204,204,255" color2="255,255,255" direction="SOUTH_EAST_NORTH_WEST" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="23" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="24" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="25" isRounded="true" arcSize="20.0" />
+      <TextStyle id="26" font="Lucida Sans,0,11" color="0,0,102" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <DrawingGraphicalRepresentation id="27" className="org.openflexo.vpm.palette.PaletteGR" width="260.0" height="300.0" drawWorkingArea="true" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+    <TextStyle id="28" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+  </DrawingGraphicalRepresentation>
+</Palette>
+

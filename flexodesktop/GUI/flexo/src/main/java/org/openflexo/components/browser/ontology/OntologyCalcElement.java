@@ -22,10 +22,10 @@ package org.openflexo.components.browser.ontology;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.ontology.calc.CalcDrawingShema;
-import org.openflexo.foundation.ontology.calc.CalcPalette;
-import org.openflexo.foundation.ontology.calc.EditionPattern;
-import org.openflexo.foundation.ontology.calc.OntologyCalc;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.viewpoint.ViewPointPalette;
+import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 
 
 /**
@@ -37,7 +37,7 @@ import org.openflexo.foundation.ontology.calc.OntologyCalc;
 public class OntologyCalcElement extends BrowserElement
 {
 
-    protected OntologyCalcElement(OntologyCalc calc, ProjectBrowser browser, BrowserElement parent)
+    protected OntologyCalcElement(ViewPoint calc, ProjectBrowser browser, BrowserElement parent)
     {
         super(calc, BrowserElementType.ONTOLOGY_CALC, browser, parent);
     }
@@ -49,10 +49,10 @@ public class OntologyCalcElement extends BrowserElement
        	for (EditionPattern ep : getCalc().getEditionPatterns()) {
        		addToChilds(ep);
        	}
-       	for (CalcDrawingShema shema : getCalc().getShemas()) {
+       	for (ExampleDrawingShema shema : getCalc().getShemas()) {
        		addToChilds(shema);
        	}
-       	for (CalcPalette palette : getCalc().getPalettes()) {
+       	for (ViewPointPalette palette : getCalc().getPalettes()) {
        		addToChilds(palette);
        	}
      }
@@ -63,9 +63,9 @@ public class OntologyCalcElement extends BrowserElement
         return getCalc().getName();
     }
 
-    protected OntologyCalc getCalc()
+    protected ViewPoint getCalc()
     {
-        return (OntologyCalc) getObject();
+        return (ViewPoint) getObject();
     }
 
 }

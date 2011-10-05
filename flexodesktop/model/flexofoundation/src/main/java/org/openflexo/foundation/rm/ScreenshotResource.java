@@ -48,9 +48,9 @@ import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.cl.TabComponentDefinition;
 import org.openflexo.foundation.ie.dm.ComponentNameChanged;
-import org.openflexo.foundation.ontology.shema.OEShema;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.utils.FlexoProjectFile;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.RoleList;
@@ -180,7 +180,7 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
         	ret.setSource(o);
         } else if (o instanceof FlexoWorkflow) {
         	ret.setSource(o);
-        } else if (o instanceof OEShema) {
+        } else if (o instanceof View) {
         	ret.setSource(o);
         } else {
             logger.warning("Could not create screenshot for " + o);

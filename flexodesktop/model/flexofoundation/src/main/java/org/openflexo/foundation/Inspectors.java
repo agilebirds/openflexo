@@ -67,9 +67,9 @@ public class Inspectors {
 
 	public static final WKFCGInspectors WKF_CG = new WKFCGInspectors();
 
-	public static final OEInspectors OE = new OEInspectors();
+	public static final VEInspectors VE = new VEInspectors();
 
-	public static final CEDInspectors CED = new CEDInspectors();
+	public static final VPMInspectors VPM = new VPMInspectors();
 
 	public static final XXXInspectors XXX = new XXXInspectors();
 
@@ -854,7 +854,7 @@ public class Inspectors {
 	// =============================== OE Inspectors ============================
 	// ==========================================================================
 
-	public static class OEInspectors extends DefaultInspectorGroup {
+	public static class VEInspectors extends DefaultInspectorGroup {
 		@Override
 		public String getName() {
 			return "OE";
@@ -894,7 +894,7 @@ public class Inspectors {
 	// =============================== OE Inspectors ============================
 	// ==========================================================================
 
-	public static class CEDInspectors extends DefaultInspectorGroup {
+	public static class VPMInspectors extends DefaultInspectorGroup {
 		@Override
 		public String getName() {
 			return "CED";

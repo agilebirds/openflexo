@@ -24,11 +24,11 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.dkv.TestPopulateDKV;
-import org.openflexo.foundation.ontology.action.AddShema;
-import org.openflexo.foundation.ontology.action.AddShemaFolder;
-import org.openflexo.foundation.ontology.shema.OEShemaFolder;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.foundation.view.ViewFolder;
+import org.openflexo.foundation.view.action.AddView;
+import org.openflexo.foundation.view.action.AddViewFolder;
 
 
 public class TestShemas extends FlexoTestCase{
@@ -82,15 +82,15 @@ public class TestShemas extends FlexoTestCase{
 		log("test2CreateFolders()");
 
 		logger.info("Hop "+_project.getShemaLibrary());
-		AddShemaFolder addFolder1 = AddShemaFolder.actionType.makeNewAction(_project.getShemaLibrary(), null, _editor);
+		AddViewFolder addFolder1 = AddViewFolder.actionType.makeNewAction(_project.getShemaLibrary(), null, _editor);
 		addFolder1.setNewFolderName("Folder1");
 		addFolder1.doAction();
 		
-		AddShemaFolder addFolder2 = AddShemaFolder.actionType.makeNewAction(_project.getShemaLibrary(), null, _editor);
+		AddViewFolder addFolder2 = AddViewFolder.actionType.makeNewAction(_project.getShemaLibrary(), null, _editor);
 		addFolder2.setNewFolderName("Folder2");
 		addFolder2.doAction();
 		
-		AddShemaFolder addFolder3 = AddShemaFolder.actionType.makeNewAction(addFolder2.getNewFolder(), null, _editor);
+		AddViewFolder addFolder3 = AddViewFolder.actionType.makeNewAction(addFolder2.getNewFolder(), null, _editor);
 		addFolder3.setNewFolderName("Folder3");
 		addFolder3.doAction();
 		
@@ -112,12 +112,12 @@ public class TestShemas extends FlexoTestCase{
 	{
 		log("test3CreateShema()");
 
-		OEShemaFolder folder3 = _project.getShemaLibrary().getFolderWithName("Folder3");
+		ViewFolder folder3 = _project.getShemaLibrary().getFolderWithName("Folder3");
 		
 		logger.info("Hop "+folder3);
 		
-		AddShema addShema = AddShema.actionType.makeNewAction(folder3, null, _editor);
-		addShema.newShemaName = "TestShema";
+		AddView addShema = AddView.actionType.makeNewAction(folder3, null, _editor);
+		addShema.newViewName = "TestShema";
 		addShema.doAction();
 		
 		try {

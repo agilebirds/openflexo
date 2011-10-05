@@ -22,8 +22,8 @@ package org.openflexo.components.browser.ontology;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.ontology.shema.OEShema;
-import org.openflexo.foundation.ontology.shema.OEShemaObject;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewObject;
 
 
 /**
@@ -35,7 +35,7 @@ import org.openflexo.foundation.ontology.shema.OEShemaObject;
 public class OEShemaElement extends BrowserElement
 {
 
-    protected OEShemaElement(OEShema shema, ProjectBrowser browser, BrowserElement parent)
+    protected OEShemaElement(View shema, ProjectBrowser browser, BrowserElement parent)
     {
         super(shema, BrowserElementType.OE_SHEMA, browser, parent);
     }
@@ -43,7 +43,7 @@ public class OEShemaElement extends BrowserElement
     @Override
 	protected void buildChildrenVector()
     {
-    	for (OEShemaObject o : getShema().getChilds()) {
+    	for (ViewObject o : getShema().getChilds()) {
     		addToChilds(o);
     	}
      }
@@ -54,9 +54,9 @@ public class OEShemaElement extends BrowserElement
         return getShema().getName();
     }
 
-    protected OEShema getShema()
+    protected View getShema()
     {
-        return (OEShema) getObject();
+        return (View) getObject();
     }
 
 }

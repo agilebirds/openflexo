@@ -22,17 +22,17 @@ package org.openflexo.foundation;
 import java.io.File;
 
 import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.calc.CalcLibrary;
-import org.openflexo.foundation.ontology.calc.OntologyCalc;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 
 
 public interface FlexoResourceCenter {
 
 	public OntologyLibrary retrieveBaseOntologyLibrary();
 	
-	public CalcLibrary retrieveCalcLibrary();
+	public ViewPointLibrary retrieveViewPointLibrary();
 	
-	public OntologyCalc getOntologyCalc(String ontologyCalcUri);
+	public ViewPoint getOntologyCalc(String ontologyCalcUri);
 
 	public File getNewCalcSandboxDirectory();
 	

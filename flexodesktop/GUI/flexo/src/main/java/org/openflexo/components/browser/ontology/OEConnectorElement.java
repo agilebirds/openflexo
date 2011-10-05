@@ -24,8 +24,8 @@ package org.openflexo.components.browser.ontology;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.ontology.shema.OEConnector;
-import org.openflexo.foundation.ontology.shema.OEShemaObject;
+import org.openflexo.foundation.view.ViewConnector;
+import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
@@ -38,7 +38,7 @@ import org.openflexo.toolbox.StringUtils;
 public class OEConnectorElement extends BrowserElement
 {
 
-	protected OEConnectorElement(OEConnector connector, ProjectBrowser browser, BrowserElement parent)
+	protected OEConnectorElement(ViewConnector connector, ProjectBrowser browser, BrowserElement parent)
 	{
 		super(connector, BrowserElementType.OE_CONNECTOR, browser, parent);
 	}
@@ -46,7 +46,7 @@ public class OEConnectorElement extends BrowserElement
 	@Override
 	protected void buildChildrenVector()
 	{
-		for (OEShemaObject o : getConnector().getChilds()) {
+		for (ViewObject o : getConnector().getChilds()) {
 			addToChilds(o);
 		}
 	}
@@ -57,9 +57,9 @@ public class OEConnectorElement extends BrowserElement
 		return StringUtils.isEmpty(getConnector().getName()) ? "<"+FlexoLocalization.localizedForKey("connector")+">" : getConnector().getName();
 	}
 
-	protected OEConnector getConnector()
+	protected ViewConnector getConnector()
 	{
-		return (OEConnector) getObject();
+		return (ViewConnector) getObject();
 	}
 
 }

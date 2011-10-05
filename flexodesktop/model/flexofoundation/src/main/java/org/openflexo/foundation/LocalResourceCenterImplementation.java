@@ -26,9 +26,9 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyFolder;
 import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.calc.CalcFolder;
-import org.openflexo.foundation.ontology.calc.CalcLibrary;
-import org.openflexo.foundation.ontology.calc.OntologyCalc;
+import org.openflexo.foundation.viewpoint.ViewPointFolder;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 
@@ -37,30 +37,30 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 
 	protected static final Logger logger = Logger.getLogger(LocalResourceCenterImplementation.class.getPackage().getName());
 
-	public static final File CALC_LIBRARY_DIR = new FileResource("Calcs");
+	public static final File CALC_LIBRARY_DIR = new FileResource("ViewPoints");
 	public static final File ONTOLOGY_LIBRARY_DIR = new FileResource("Ontologies");
-	public static final String FLEXO_ONTOLOGY_ROOT_URI = "http://www.agilebirds.com/flexo/ontologies";
+	public static final String FLEXO_ONTOLOGY_ROOT_URI = "http://www.agilebirds.com/openflexo/ontologies";
 
 	private File localDirectory;
 	private OntologyLibrary baseOntologyLibrary;
-	private CalcLibrary calcLibrary;
-	private File newCalcSandboxDirectory;
+	private ViewPointLibrary viewPointLibrary;
+	private File newViewPointSandboxDirectory;
 
 	
 	public LocalResourceCenterImplementation(File resourceCenterDirectory) {
 		super();
 		localDirectory = resourceCenterDirectory;
-		newCalcSandboxDirectory = new File(resourceCenterDirectory, "Calcs");
+		newViewPointSandboxDirectory = new File(resourceCenterDirectory, "ViewPoints");
 	}
 
 	public static LocalResourceCenterImplementation instanciateNewLocalResourceCenterImplementation(File resourceCenterDirectory) {
-		copyCalcs(CALC_LIBRARY_DIR, resourceCenterDirectory);
+		copyViewPoints(CALC_LIBRARY_DIR, resourceCenterDirectory);
 		copyOntologies(ONTOLOGY_LIBRARY_DIR, resourceCenterDirectory);
 		return new LocalResourceCenterImplementation(resourceCenterDirectory);
 	}
 
-	private static void copyCalcs(File calcDir, File resourceCenterDirectory) {
-		File resourceCenterCalcDirectory = new File(resourceCenterDirectory, "Calcs");
+	private static void copyViewPoints(File calcDir, File resourceCenterDirectory) {
+		File resourceCenterCalcDirectory = new File(resourceCenterDirectory, "ViewPoints");
 		if (!resourceCenterCalcDirectory.exists()) {
 			resourceCenterCalcDirectory.mkdir();
 		}
@@ -99,8 +99,8 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 	}
 
 	@Override
-	public OntologyCalc getOntologyCalc(String ontologyCalcUri) {
-		return retrieveCalcLibrary().getOntologyCalc(ontologyCalcUri);
+	public ViewPoint getOntologyCalc(String ontologyCalcUri) {
+		return retrieveViewPointLibrary().getOntologyCalc(ontologyCalcUri);
 	}
 
 	@Override
@@ -126,12 +126,12 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 	}
 
 	@Override
-	public CalcLibrary retrieveCalcLibrary() {
-		if (calcLibrary == null) {
-			calcLibrary = new CalcLibrary(this, retrieveBaseOntologyLibrary());
-			findCalcs(new File(localDirectory, "Calcs"),calcLibrary.getRootFolder());
+	public ViewPointLibrary retrieveViewPointLibrary() {
+		if (viewPointLibrary == null) {
+			viewPointLibrary = new ViewPointLibrary(this, retrieveBaseOntologyLibrary());
+			findViewPoints(new File(localDirectory, "ViewPoints"),viewPointLibrary.getRootFolder());
 		}
-		return calcLibrary;
+		return viewPointLibrary;
 	}
 
 	private void findOntologies(File dir, String baseUri, OntologyFolder folder) {
@@ -155,27 +155,27 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 		}
 	}
 
-	private void findCalcs(File dir, CalcFolder folder) 
+	private void findViewPoints(File dir, ViewPointFolder folder) 
 	{
 		if (!dir.exists()) {
 			dir.mkdirs();
 		}
 		if (dir.listFiles().length == 0) {
-			copyCalcs(CALC_LIBRARY_DIR, dir.getParentFile());
+			copyViewPoints(CALC_LIBRARY_DIR, dir.getParentFile());
 		}
 		for (File f : dir.listFiles()) {
-			if (f.isDirectory() && f.getName().endsWith(".calc")) {
-				calcLibrary.importCalc(f,folder);
+			if (f.isDirectory() && f.getName().endsWith(".viewpoint")) {
+				viewPointLibrary.importViewPoint(f,folder);
 			} else if (f.isDirectory() && !f.getName().equals("CVS")) {
-				CalcFolder newFolder = new CalcFolder(f.getName(), folder,calcLibrary);
-				findCalcs(f,newFolder);
+				ViewPointFolder newFolder = new ViewPointFolder(f.getName(), folder,viewPointLibrary);
+				findViewPoints(f,newFolder);
 			}
 		}
 	}
 
 	@Override
 	public File getNewCalcSandboxDirectory() {
-		return newCalcSandboxDirectory;
+		return newViewPointSandboxDirectory;
 	}
 
 	@Override

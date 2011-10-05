@@ -72,7 +72,7 @@ public class ProjectElement extends BrowserElement
 
 		if (ModuleLoader.getFlexoResourceCenter(false) != null) {
 			addToChilds(ModuleLoader.getFlexoResourceCenter().retrieveBaseOntologyLibrary());
-			addToChilds(ModuleLoader.getFlexoResourceCenter().retrieveCalcLibrary());
+			addToChilds(ModuleLoader.getFlexoResourceCenter().retrieveViewPointLibrary());
 		}
 
 		/*if (getProject().getOntologyLibrary(false)!=null)

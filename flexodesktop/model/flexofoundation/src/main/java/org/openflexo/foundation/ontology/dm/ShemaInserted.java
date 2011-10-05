@@ -19,8 +19,8 @@
  */
 package org.openflexo.foundation.ontology.dm;
 
-import org.openflexo.foundation.ontology.shema.OEShemaDefinition;
-import org.openflexo.foundation.ontology.shema.OEShemaFolder;
+import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.view.ViewFolder;
 
 /**
  * Notify that a new ComponentDefinition has been inserted in a
@@ -32,15 +32,15 @@ import org.openflexo.foundation.ontology.shema.OEShemaFolder;
 public class ShemaInserted extends OEDataModification
 {
 
-    private OEShemaFolder _folder;
+    private ViewFolder _folder;
 
-    public ShemaInserted(OEShemaDefinition shema, OEShemaFolder folder)
+    public ShemaInserted(ViewDefinition shema, ViewFolder folder)
     {
         super(null, shema);
         _folder = folder;
     }
 
-    public OEShemaFolder getOEShemaFolder()
+    public ViewFolder getOEShemaFolder()
     {
         return _folder;
     }

@@ -60,9 +60,9 @@ public class OntologyObjectProperty extends OntologyProperty implements Comparab
 	public String getInspectorName()
 	{
 		if (getIsReadOnly()) {
-			return Inspectors.OE.ONTOLOGY_OBJECT_PROPERTY_READ_ONLY_INSPECTOR; // read-only
+			return Inspectors.VE.ONTOLOGY_OBJECT_PROPERTY_READ_ONLY_INSPECTOR; // read-only
 		} else {
-			return Inspectors.OE.ONTOLOGY_OBJECT_PROPERTY_INSPECTOR;
+			return Inspectors.VE.ONTOLOGY_OBJECT_PROPERTY_INSPECTOR;
 		}
 	}
 

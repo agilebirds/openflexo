@@ -22,7 +22,7 @@ package org.openflexo.components.browser.ontology;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.ontology.shema.OEShemaDefinition;
+import org.openflexo.foundation.view.ViewDefinition;
 
 
 /**
@@ -34,7 +34,7 @@ import org.openflexo.foundation.ontology.shema.OEShemaDefinition;
 public class ShemaDefinitionElement extends BrowserElement
 {
 
-    protected ShemaDefinitionElement(OEShemaDefinition definition, ProjectBrowser browser, BrowserElement parent)
+    protected ShemaDefinitionElement(ViewDefinition definition, ProjectBrowser browser, BrowserElement parent)
     {
         super(definition, BrowserElementType.OE_SHEMA_DEFINITION, browser, parent);
     }
@@ -51,9 +51,9 @@ public class ShemaDefinitionElement extends BrowserElement
         return getShema().getName();
     }
 
-    protected OEShemaDefinition getShema()
+    protected ViewDefinition getShema()
     {
-        return (OEShemaDefinition) getObject();
+        return (ViewDefinition) getObject();
     }
 
 }

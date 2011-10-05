@@ -42,12 +42,12 @@ import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
 import org.openflexo.foundation.ie.menu.FlexoNavigationMenu;
-import org.openflexo.foundation.ontology.shema.OEShema;
-import org.openflexo.foundation.ontology.shema.OEShemaLibrary;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.sg.GeneratedSources;
 import org.openflexo.foundation.sg.implmodel.ImplementationModel;
 import org.openflexo.foundation.toc.TOCData;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.ws.FlexoWSLibrary;
@@ -122,12 +122,12 @@ public class FlexoXMLMappings
 
 	public XMLMapping getShemaLibraryMapping()
 	{
-		return getMappingForClass(OEShemaLibrary.class);
+		return getMappingForClass(ViewLibrary.class);
 	}
 
 	public XMLMapping getShemaMapping()
 	{
-		return getMappingForClass(OEShema.class);
+		return getMappingForClass(View.class);
 	}
 
 	public XMLMapping getGeneratedCodeMapping()

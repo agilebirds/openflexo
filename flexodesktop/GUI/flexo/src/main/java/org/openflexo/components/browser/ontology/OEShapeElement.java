@@ -24,8 +24,8 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.foundation.ontology.shema.OEShape;
-import org.openflexo.foundation.ontology.shema.OEShemaObject;
+import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.localization.FlexoLocalization;
 
 /**
@@ -37,7 +37,7 @@ import org.openflexo.localization.FlexoLocalization;
 public class OEShapeElement extends BrowserElement
 {
 
-	protected OEShapeElement(OEShape shape, ProjectBrowser browser, BrowserElement parent)
+	protected OEShapeElement(ViewShape shape, ProjectBrowser browser, BrowserElement parent)
 	{
 		super(shape, BrowserElementType.OE_SHAPE, browser, parent);
 	}
@@ -45,7 +45,7 @@ public class OEShapeElement extends BrowserElement
 	@Override
 	protected void buildChildrenVector()
 	{
-		for (OEShemaObject o : getShape().getChilds()) {
+		for (ViewObject o : getShape().getChilds()) {
 			addToChilds(o);
 		}
 	}
@@ -62,9 +62,9 @@ public class OEShapeElement extends BrowserElement
 		return "???";
 	}
 
-	protected OEShape getShape()
+	protected ViewShape getShape()
 	{
-		return (OEShape) getObject();
+		return (ViewShape) getObject();
 	}
 
 }

@@ -32,21 +32,21 @@ import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyStatement;
 import org.openflexo.foundation.ontology.ProjectOntology;
-import org.openflexo.foundation.ontology.calc.CalcDrawingConnector;
-import org.openflexo.foundation.ontology.calc.CalcDrawingShape;
-import org.openflexo.foundation.ontology.calc.CalcDrawingShema;
-import org.openflexo.foundation.ontology.calc.CalcFolder;
-import org.openflexo.foundation.ontology.calc.CalcLibrary;
-import org.openflexo.foundation.ontology.calc.CalcPalette;
-import org.openflexo.foundation.ontology.calc.CalcPaletteElement;
-import org.openflexo.foundation.ontology.calc.EditionPattern;
-import org.openflexo.foundation.ontology.calc.OntologyCalc;
-import org.openflexo.foundation.ontology.shema.OEConnector;
-import org.openflexo.foundation.ontology.shema.OEShape;
-import org.openflexo.foundation.ontology.shema.OEShema;
-import org.openflexo.foundation.ontology.shema.OEShemaDefinition;
-import org.openflexo.foundation.ontology.shema.OEShemaFolder;
-import org.openflexo.foundation.ontology.shema.OEShemaLibrary;
+import org.openflexo.foundation.view.ViewConnector;
+import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.view.ViewFolder;
+import org.openflexo.foundation.view.ViewLibrary;
+import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.viewpoint.ViewPointFolder;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.ViewPointPalette;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
+import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 
 
 public class OEBrowserElementFactory implements BrowserElementFactory
@@ -82,50 +82,50 @@ public class OEBrowserElementFactory implements BrowserElementFactory
         else if (object instanceof OntologyStatement) {
         	return new OntologyStatementElement((OntologyStatement) object, browser,parent);
         }
-        else if (object instanceof CalcLibrary) {
-        	return new CalcLibraryElement((CalcLibrary) object, browser,parent);
+        else if (object instanceof ViewPointLibrary) {
+        	return new CalcLibraryElement((ViewPointLibrary) object, browser,parent);
         }
-        else if (object instanceof CalcFolder) {
-        	return new CalcFolderElement((CalcFolder) object, browser,parent);
+        else if (object instanceof ViewPointFolder) {
+        	return new CalcFolderElement((ViewPointFolder) object, browser,parent);
         }
-        else if (object instanceof OntologyCalc) {
-        	return new OntologyCalcElement((OntologyCalc) object, browser,parent);
+        else if (object instanceof ViewPoint) {
+        	return new OntologyCalcElement((ViewPoint) object, browser,parent);
         }
         else if (object instanceof EditionPattern) {
         	return new EditionPatternElement((EditionPattern) object, browser,parent);
         }
-        else if (object instanceof CalcPalette) {
-        	return new CalcPaletteBrowserElement((CalcPalette) object, browser,parent);
+        else if (object instanceof ViewPointPalette) {
+        	return new CalcPaletteBrowserElement((ViewPointPalette) object, browser,parent);
         }
-        else if (object instanceof CalcPaletteElement) {
-        	return new CalcPaletteElementBrowserElement((CalcPaletteElement) object, browser,parent);
+        else if (object instanceof ViewPointPaletteElement) {
+        	return new CalcPaletteElementBrowserElement((ViewPointPaletteElement) object, browser,parent);
         }
-        else if (object instanceof CalcDrawingShema) {
-        	return new CalcDrawingShemaBrowserElement((CalcDrawingShema) object, browser,parent);
+        else if (object instanceof ExampleDrawingShema) {
+        	return new CalcDrawingShemaBrowserElement((ExampleDrawingShema) object, browser,parent);
         }
-        else if (object instanceof CalcDrawingShape) {
-        	return new CalcDrawingShapeBrowserElement((CalcDrawingShape) object, browser,parent);
+        else if (object instanceof ExampleDrawingShape) {
+        	return new CalcDrawingShapeBrowserElement((ExampleDrawingShape) object, browser,parent);
         }
-        else if (object instanceof CalcDrawingConnector) {
-        	return new CalcDrawingConnectorBrowserElement((CalcDrawingConnector) object, browser,parent);
+        else if (object instanceof ExampleDrawingConnector) {
+        	return new CalcDrawingConnectorBrowserElement((ExampleDrawingConnector) object, browser,parent);
         }
-       else if (object instanceof OEShemaLibrary) {
-        	return new ShemaLibraryElement((OEShemaLibrary) object, browser,parent);
+       else if (object instanceof ViewLibrary) {
+        	return new ShemaLibraryElement((ViewLibrary) object, browser,parent);
         }
-        else if (object instanceof OEShemaFolder) {
-        	return new ShemaFolderElement((OEShemaFolder) object, browser,parent);
+        else if (object instanceof ViewFolder) {
+        	return new ShemaFolderElement((ViewFolder) object, browser,parent);
         }
-        else if (object instanceof OEShemaDefinition) {
-        	return new ShemaDefinitionElement((OEShemaDefinition) object, browser,parent);
+        else if (object instanceof ViewDefinition) {
+        	return new ShemaDefinitionElement((ViewDefinition) object, browser,parent);
         }
-        else if (object instanceof OEShema) {
-        	return new OEShemaElement((OEShema) object, browser,parent);
+        else if (object instanceof View) {
+        	return new OEShemaElement((View) object, browser,parent);
         }
-        else if (object instanceof OEShape) {
-        	return new OEShapeElement((OEShape) object, browser,parent);
+        else if (object instanceof ViewShape) {
+        	return new OEShapeElement((ViewShape) object, browser,parent);
         }
-        else if (object instanceof OEConnector) {
-        	return new OEConnectorElement((OEConnector) object, browser,parent);
+        else if (object instanceof ViewConnector) {
+        	return new OEConnectorElement((ViewConnector) object, browser,parent);
         }
 
         return null;

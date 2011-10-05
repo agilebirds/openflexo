@@ -19,10 +19,10 @@
  */
 package org.openflexo.foundation.ontology.dm;
 
-import org.openflexo.foundation.ontology.shema.OEShemaDefinition;
 import org.openflexo.foundation.rm.FlexoOEShemaResource;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.RMNotification;
+import org.openflexo.foundation.view.ViewDefinition;
 
 /**
  * Notify that a Shema has been renamed
@@ -33,15 +33,15 @@ import org.openflexo.foundation.rm.RMNotification;
 public class ShemaNameChanged extends OEDataModification implements RMNotification
 {
 
-    public OEShemaDefinition shema;
+    public ViewDefinition shema;
 
-    public ShemaNameChanged(OEShemaDefinition shema, String oldName, String newName)
+    public ShemaNameChanged(ViewDefinition shema, String oldName, String newName)
     {
         super(oldName, newName);
         this.shema = shema;
     }
 
-    public ShemaNameChanged(String propertyName, OEShemaDefinition component, String oldName, String newName)
+    public ShemaNameChanged(String propertyName, ViewDefinition component, String oldName, String newName)
     {
         super(propertyName, oldName, newName);
         this.shema = component;

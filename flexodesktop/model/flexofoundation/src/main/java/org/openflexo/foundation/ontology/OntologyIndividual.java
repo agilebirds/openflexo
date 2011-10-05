@@ -141,9 +141,9 @@ public class OntologyIndividual extends OntologyObject implements Comparable<Ont
 	public String getInspectorName()
 	{
 		if (getIsReadOnly()) {
-			return Inspectors.OE.ONTOLOGY_INDIVIDUAL_READ_ONLY_INSPECTOR; // read-only
+			return Inspectors.VE.ONTOLOGY_INDIVIDUAL_READ_ONLY_INSPECTOR; // read-only
 		} else {
-			return Inspectors.OE.ONTOLOGY_INDIVIDUAL_INSPECTOR;
+			return Inspectors.VE.ONTOLOGY_INDIVIDUAL_INSPECTOR;
 		}
 	}
 

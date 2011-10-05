@@ -19,7 +19,7 @@
  */
 package org.openflexo.foundation.ontology.dm;
 
-import org.openflexo.foundation.ontology.shema.OEShemaDefinition;
+import org.openflexo.foundation.view.ViewDefinition;
 
 /**
  * Notify that Shema has been loaded
@@ -29,9 +29,9 @@ import org.openflexo.foundation.ontology.shema.OEShemaDefinition;
 public class ShemaLoaded extends OEDataModification
 {
 
-    public OEShemaDefinition loadedShema;
+    public ViewDefinition loadedShema;
 
-    public ShemaLoaded(OEShemaDefinition shema)
+    public ShemaLoaded(ViewDefinition shema)
     {
         super(shema, null);
         loadedShema = shema;

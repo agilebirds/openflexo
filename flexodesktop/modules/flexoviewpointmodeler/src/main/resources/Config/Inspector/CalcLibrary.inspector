@@ -1,4 +1,4 @@
-<inspector title = "Calc Library" inheritsfrom="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.ontology.calc.CalcLibrary">
+<inspector title = "Calc Library" inheritsfrom="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.viewpoint.ViewPointLibrary">
 
 	<tab name="Basic" index="0" layout="DEFAULT">
 		<property name="helpText" widget="LABEL">

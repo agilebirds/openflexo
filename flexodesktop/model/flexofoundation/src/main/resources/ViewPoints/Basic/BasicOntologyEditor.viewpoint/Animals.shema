@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Shema id="1" name="Animals">
+  <DrawingGraphicalRepresentation id="2" className="org.openflexo.vpm.drawingshema.CalcDrawingShemaGR" width="1000.0" height="1000.0" drawWorkingArea="true" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+    <TextStyle id="3" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+  </DrawingGraphicalRepresentation>
+  <description>Shows an example on a animal semantic network</description>
+  <ContainedShape id="4" name="Mammal">
+    <ShapeGraphicalRepresentation id="5" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="219.0" y="255.0" width="85.484375" height="36.22950819672131" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="Mammal" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+      <ForegroundStyle id="6" noStroke="false" color="0,51,255" lineWidth="1.6" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="7" color="204,255,255" useTransparency="true" transparencyLevel="0.5" />
+      <Border id="8" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="9" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="10" isRounded="true" arcSize="20.0" />
+      <TextStyle id="11" font="Lucida Sans,0,11" color="0,51,102" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </ContainedShape>
+  <ContainedShape id="12" name="Vertebrate">
+    <ShapeGraphicalRepresentation id="13" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="104.0" y="148.0" width="85.484375" height="36.22950819672131" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="Vertebrate" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+      <ForegroundStyle id="14" noStroke="false" color="0,51,255" lineWidth="1.6" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="15" color="204,255,255" useTransparency="true" transparencyLevel="0.5" />
+      <Border id="16" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="17" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="18" isRounded="true" arcSize="20.0" />
+      <TextStyle id="19" font="Lucida Sans,0,11" color="0,51,102" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </ContainedShape>
+  <ContainedConnector id="20" name="is a">
+    <ConnectorGraphicalRepresentation id="21" className="org.openflexo.vpm.drawingshema.CalcDrawingConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" text="is a" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="-18.0" absoluteTextY="1.0" textAlignment="CENTER">
+      <ForegroundStyle id="22" noStroke="false" color="0,102,0" lineWidth="1.2" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartShapeGraphicalRepresentation idref="5" />
+      <EndShapeGraphicalRepresentation idref="13" />
+      <LineConnector id="23" lineConnectorType="MINIMAL_LENGTH" />
+      <TextStyle id="24" font="Lucida Sans,0,10" color="0,153,51" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ConnectorGraphicalRepresentation>
+    <FromShape idref="4" />
+    <ToShape idref="12" />
+  </ContainedConnector>
+  <ContainedShape id="25" name="Cat">
+    <ShapeGraphicalRepresentation id="26" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="330.0" y="127.0" width="85.484375" height="36.22950819672131" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="Cat" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+      <ForegroundStyle id="27" noStroke="false" color="0,51,255" lineWidth="1.6" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="28" color="204,255,255" useTransparency="true" transparencyLevel="0.5" />
+      <Border id="29" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="30" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="31" isRounded="true" arcSize="20.0" />
+      <TextStyle id="32" font="Lucida Sans,0,11" color="0,51,102" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </ContainedShape>
+  <ContainedConnector id="33" name="is a">
+    <ConnectorGraphicalRepresentation id="34" className="org.openflexo.vpm.drawingshema.CalcDrawingConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" text="is a" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="-14.0" absoluteTextY="-18.0" textAlignment="CENTER">
+      <ForegroundStyle id="35" noStroke="false" color="0,102,0" lineWidth="1.2" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartShapeGraphicalRepresentation idref="26" />
+      <EndShapeGraphicalRepresentation idref="5" />
+      <LineConnector id="36" lineConnectorType="MINIMAL_LENGTH" />
+      <TextStyle id="37" font="Lucida Sans,0,10" color="0,153,51" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ConnectorGraphicalRepresentation>
+    <FromShape idref="25" />
+    <ToShape idref="4" />
+  </ContainedConnector>
+  <ContainedShape id="38" name="Hair">
+    <ShapeGraphicalRepresentation id="39" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="468.0" y="193.0" width="85.484375" height="36.22950819672131" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="Hair" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+      <ForegroundStyle id="40" noStroke="false" color="0,51,255" lineWidth="1.6" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="41" color="204,255,255" useTransparency="true" transparencyLevel="0.5" />
+      <Border id="42" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="43" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="44" isRounded="true" arcSize="20.0" />
+      <TextStyle id="45" font="Lucida Sans,0,11" color="0,51,102" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </ContainedShape>
+  <ContainedConnector id="46" name="has">
+    <ConnectorGraphicalRepresentation id="47" className="org.openflexo.vpm.drawingshema.CalcDrawingConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" text="has" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="11.0" absoluteTextY="-11.0" textAlignment="CENTER">
+      <ForegroundStyle id="48" noStroke="false" color="255,153,0" lineWidth="1.2000000000000002" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartShapeGraphicalRepresentation idref="26" />
+      <EndShapeGraphicalRepresentation idref="39" />
+      <LineConnector id="49" lineConnectorType="MINIMAL_LENGTH" />
+      <TextStyle id="50" font="Lucida Sans,0,10" color="204,102,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ConnectorGraphicalRepresentation>
+    <FromShape idref="25" />
+    <ToShape idref="38" />
+  </ContainedConnector>
+  <ContainedShape id="51" name="Bear">
+    <ShapeGraphicalRepresentation id="52" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="363.0" y="267.0" width="85.484375" height="36.22950819672131" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="Bear" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+      <ForegroundStyle id="53" noStroke="false" color="0,51,255" lineWidth="1.6" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="54" color="204,255,255" useTransparency="true" transparencyLevel="0.5" />
+      <Border id="55" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="56" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="57" isRounded="true" arcSize="20.0" />
+      <TextStyle id="58" font="Lucida Sans,0,11" color="0,51,102" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </ContainedShape>
+  <ContainedConnector id="59" name="has">
+    <ConnectorGraphicalRepresentation id="60" className="org.openflexo.vpm.drawingshema.CalcDrawingConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" text="has" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="21.0" absoluteTextY="6.0" textAlignment="CENTER">
+      <ForegroundStyle id="61" noStroke="false" color="204,102,0" lineWidth="1.2000000000000002" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartShapeGraphicalRepresentation idref="52" />
+      <EndShapeGraphicalRepresentation idref="39" />
+      <LineConnector id="62" lineConnectorType="MINIMAL_LENGTH" />
+      <TextStyle id="63" font="Lucida Sans,0,10" color="204,102,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ConnectorGraphicalRepresentation>
+    <FromShape idref="51" />
+    <ToShape idref="38" />
+  </ContainedConnector>
+  <ContainedConnector id="64" name="is a">
+    <ConnectorGraphicalRepresentation id="65" className="org.openflexo.vpm.drawingshema.CalcDrawingConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" text="is a" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="2.0" absoluteTextY="-13.0" textAlignment="CENTER">
+      <ForegroundStyle id="66" noStroke="false" color="0,102,0" lineWidth="1.2" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartShapeGraphicalRepresentation idref="52" />
+      <EndShapeGraphicalRepresentation idref="5" />
+      <LineConnector id="67" lineConnectorType="MINIMAL_LENGTH" />
+      <TextStyle id="68" font="Lucida Sans,0,10" color="0,153,51" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ConnectorGraphicalRepresentation>
+    <FromShape idref="51" />
+    <ToShape idref="4" />
+  </ContainedConnector>
+  <ContainedShape id="69" name="Whale">
+    <ShapeGraphicalRepresentation id="70" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="371.0" y="383.0" width="85.484375" height="36.22950819672131" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="Whale" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+      <ForegroundStyle id="71" noStroke="false" color="0,51,255" lineWidth="1.6" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="72" color="204,255,255" useTransparency="true" transparencyLevel="0.5" />
+      <Border id="73" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="74" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="75" isRounded="true" arcSize="20.0" />
+      <TextStyle id="76" font="Lucida Sans,0,11" color="0,51,102" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </ContainedShape>
+  <ContainedConnector id="77" name="is a">
+    <ConnectorGraphicalRepresentation id="78" className="org.openflexo.vpm.drawingshema.CalcDrawingConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" text="is a" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="18.0" absoluteTextY="2.0" textAlignment="CENTER">
+      <ForegroundStyle id="79" noStroke="false" color="0,102,0" lineWidth="1.2" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartShapeGraphicalRepresentation idref="70" />
+      <EndShapeGraphicalRepresentation idref="5" />
+      <LineConnector id="80" lineConnectorType="MINIMAL_LENGTH" />
+      <TextStyle id="81" font="Lucida Sans,0,10" color="0,153,51" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ConnectorGraphicalRepresentation>
+    <FromShape idref="69" />
+    <ToShape idref="4" />
+  </ContainedConnector>
+  <ContainedShape id="82" name="Animal">
+    <ShapeGraphicalRepresentation id="83" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="50.0" y="305.0" width="85.484375" height="36.22950819672131" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="Animal" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+      <ForegroundStyle id="84" noStroke="false" color="0,51,255" lineWidth="1.6" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="85" color="204,255,255" useTransparency="true" transparencyLevel="0.5" />
+      <Border id="86" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="87" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="88" isRounded="true" arcSize="20.0" />
+      <TextStyle id="89" font="Lucida Sans,0,11" color="0,51,102" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </ContainedShape>
+  <ContainedConnector id="90" name="is a">
+    <ConnectorGraphicalRepresentation id="91" className="org.openflexo.vpm.drawingshema.CalcDrawingConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" text="is a" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="-8.0" absoluteTextY="-10.0" textAlignment="CENTER">
+      <ForegroundStyle id="92" noStroke="false" color="0,102,0" lineWidth="1.2" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartShapeGraphicalRepresentation idref="5" />
+      <EndShapeGraphicalRepresentation idref="83" />
+      <LineConnector id="93" lineConnectorType="MINIMAL_LENGTH" />
+      <TextStyle id="94" font="Lucida Sans,0,10" color="0,153,51" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ConnectorGraphicalRepresentation>
+    <FromShape idref="4" />
+    <ToShape idref="82" />
+  </ContainedConnector>
+  <ContainedShape id="95" name="Fish">
+    <ShapeGraphicalRepresentation id="96" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="15.0" y="392.0" width="85.484375" height="36.22950819672131" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="Fish" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+      <ForegroundStyle id="97" noStroke="false" color="0,51,255" lineWidth="1.6" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="98" color="204,255,255" useTransparency="true" transparencyLevel="0.5" />
+      <Border id="99" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="100" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="101" isRounded="true" arcSize="20.0" />
+      <TextStyle id="102" font="Lucida Sans,0,11" color="0,51,102" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </ContainedShape>
+  <ContainedConnector id="103" name="is a">
+    <ConnectorGraphicalRepresentation id="104" className="org.openflexo.vpm.drawingshema.CalcDrawingConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" text="is a" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="-21.0" absoluteTextY="-3.0" textAlignment="CENTER">
+      <ForegroundStyle id="105" noStroke="false" color="0,102,0" lineWidth="1.2" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartShapeGraphicalRepresentation idref="96" />
+      <EndShapeGraphicalRepresentation idref="83" />
+      <LineConnector id="106" lineConnectorType="MINIMAL_LENGTH" />
+      <TextStyle id="107" font="Lucida Sans,0,10" color="0,153,51" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ConnectorGraphicalRepresentation>
+    <FromShape idref="95" />
+    <ToShape idref="82" />
+  </ContainedConnector>
+  <ContainedShape id="108" name="Water">
+    <ShapeGraphicalRepresentation id="109" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="195.0" y="391.0" width="85.484375" height="36.22950819672131" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="Water" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+      <ForegroundStyle id="110" noStroke="false" color="0,51,255" lineWidth="1.6" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="111" color="204,255,255" useTransparency="true" transparencyLevel="0.5" />
+      <Border id="112" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="113" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="114" isRounded="true" arcSize="20.0" />
+      <TextStyle id="115" font="Lucida Sans,0,11" color="0,51,102" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </ContainedShape>
+  <ContainedConnector id="116" name="lives in">
+    <ConnectorGraphicalRepresentation id="117" className="org.openflexo.vpm.drawingshema.CalcDrawingConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" text="lives in" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="-6.0" absoluteTextY="8.0" textAlignment="CENTER">
+      <ForegroundStyle id="118" noStroke="false" color="204,0,51" lineWidth="1.2000000000000002" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartShapeGraphicalRepresentation idref="96" />
+      <EndShapeGraphicalRepresentation idref="109" />
+      <LineConnector id="119" lineConnectorType="MINIMAL_LENGTH" />
+      <TextStyle id="120" font="Lucida Sans,0,10" color="204,0,51" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ConnectorGraphicalRepresentation>
+    <FromShape idref="95" />
+    <ToShape idref="108" />
+  </ContainedConnector>
+  <ContainedConnector id="121" name="lives in">
+    <ConnectorGraphicalRepresentation id="122" className="org.openflexo.vpm.drawingshema.CalcDrawingConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" text="lives in" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="23.0" absoluteTextY="2.0" textAlignment="CENTER">
+      <ForegroundStyle id="123" noStroke="false" color="204,0,51" lineWidth="1.2000000000000002" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartShapeGraphicalRepresentation idref="70" />
+      <EndShapeGraphicalRepresentation idref="109" />
+      <LineConnector id="124" lineConnectorType="MINIMAL_LENGTH" />
+      <TextStyle id="125" font="Lucida Sans,0,10" color="204,0,51" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ConnectorGraphicalRepresentation>
+    <FromShape idref="69" />
+    <ToShape idref="108" />
+  </ContainedConnector>
+</Shema>
+

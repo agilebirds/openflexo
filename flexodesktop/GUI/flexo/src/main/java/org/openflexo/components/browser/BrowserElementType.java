@@ -112,21 +112,6 @@ import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyStatement;
 import org.openflexo.foundation.ontology.ProjectOntology;
-import org.openflexo.foundation.ontology.calc.CalcDrawingConnector;
-import org.openflexo.foundation.ontology.calc.CalcDrawingShape;
-import org.openflexo.foundation.ontology.calc.CalcDrawingShema;
-import org.openflexo.foundation.ontology.calc.CalcFolder;
-import org.openflexo.foundation.ontology.calc.CalcLibrary;
-import org.openflexo.foundation.ontology.calc.CalcPalette;
-import org.openflexo.foundation.ontology.calc.CalcPaletteElement;
-import org.openflexo.foundation.ontology.calc.EditionPattern;
-import org.openflexo.foundation.ontology.calc.OntologyCalc;
-import org.openflexo.foundation.ontology.shema.OEConnector;
-import org.openflexo.foundation.ontology.shema.OEShape;
-import org.openflexo.foundation.ontology.shema.OEShema;
-import org.openflexo.foundation.ontology.shema.OEShemaDefinition;
-import org.openflexo.foundation.ontology.shema.OEShemaFolder;
-import org.openflexo.foundation.ontology.shema.OEShemaLibrary;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.sg.GeneratedSources;
 import org.openflexo.foundation.sg.SourceRepository;
@@ -135,6 +120,21 @@ import org.openflexo.foundation.sg.implmodel.TechnologyModelObject;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCRepository;
+import org.openflexo.foundation.view.ViewConnector;
+import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.view.ViewFolder;
+import org.openflexo.foundation.view.ViewLibrary;
+import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
+import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.viewpoint.ViewPointFolder;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.ViewPointPalette;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
+import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.wkf.DeadLine;
 import org.openflexo.foundation.wkf.DeadLineList;
 import org.openflexo.foundation.wkf.FlexoImportedProcessLibrary;
@@ -370,21 +370,21 @@ public enum BrowserElementType {
 	ONTOLOGY_DATA_PROPERTY("ontology_data_property",OntologyDataProperty.class,OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON),
 	ONTOLOGY_OBJECT_PROPERTY("ontology_object_property",OntologyObjectProperty.class,OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON),
 	ONTOLOGY_STATEMENT("ontology_statement",OntologyStatement.class,OntologyIconLibrary.ONTOLOGY_STATEMENT_ICON),
-	CALC_LIBRARY("calc_library",CalcLibrary.class,VPMIconLibrary.CALC_LIBRARY_ICON),
-	CALC_FOLDER("calc_folder",CalcFolder.class,IconLibrary.FOLDER_ICON),
-	ONTOLOGY_CALC("calc",OntologyCalc.class,VPMIconLibrary.CALC_ICON),
+	CALC_LIBRARY("calc_library",ViewPointLibrary.class,VPMIconLibrary.CALC_LIBRARY_ICON),
+	CALC_FOLDER("calc_folder",ViewPointFolder.class,IconLibrary.FOLDER_ICON),
+	ONTOLOGY_CALC("calc",ViewPoint.class,VPMIconLibrary.CALC_ICON),
 	EDITION_PATTERN("edition_pattern",EditionPattern.class,VPMIconLibrary.EDITION_PATTERN_ICON),
-	ONTOLOGY_CALC_PALETTE("palette",CalcPalette.class,VPMIconLibrary.CALC_PALETTE_ICON),
-	ONTOLOGY_CALC_PALETTE_ELEMENT("palette_element",CalcPaletteElement.class,VEIconLibrary.OE_SHAPE_ICON),
-	ONTOLOGY_CALC_DRAWING_SHEMA("calc_drawing_shema",CalcDrawingShema.class,VPMIconLibrary.EXAMPLE_DIAGRAM_ICON),
-	ONTOLOGY_CALC_DRAWING_SHAPE("calc_drawing_shape",CalcDrawingShape.class,VPMIconLibrary.CALC_SHAPE_ICON),
-	ONTOLOGY_CALC_DRAWING_CONNECTOR("calc_drawing_connector",CalcDrawingConnector.class,VPMIconLibrary.CALC_CONNECTOR_ICON),
-	OE_SHEMA_LIBRARY("shema_library",OEShemaLibrary.class,VEIconLibrary.OE_SHEMA_LIBRARY_ICON),
-	OE_SHEMA_FOLDER("shema_folder",OEShemaFolder.class,IconLibrary.FOLDER_ICON),
-	OE_SHEMA_DEFINITION("shema",OEShemaDefinition.class,VEIconLibrary.OE_SHEMA_ICON),
-	OE_SHEMA ("shema",OEShema.class,VEIconLibrary.OE_SHEMA_ICON),
-	OE_SHAPE("oe_shape",OEShape.class,VEIconLibrary.OE_SHAPE_ICON),
-	OE_CONNECTOR ("oe_connector",OEConnector.class,VEIconLibrary.OE_CONNECTOR_ICON),
+	ONTOLOGY_CALC_PALETTE("palette",ViewPointPalette.class,VPMIconLibrary.CALC_PALETTE_ICON),
+	ONTOLOGY_CALC_PALETTE_ELEMENT("palette_element",ViewPointPaletteElement.class,VEIconLibrary.SHAPE_ICON),
+	ONTOLOGY_CALC_DRAWING_SHEMA("calc_drawing_shema",ExampleDrawingShema.class,VPMIconLibrary.EXAMPLE_DIAGRAM_ICON),
+	ONTOLOGY_CALC_DRAWING_SHAPE("calc_drawing_shape",ExampleDrawingShape.class,VPMIconLibrary.CALC_SHAPE_ICON),
+	ONTOLOGY_CALC_DRAWING_CONNECTOR("calc_drawing_connector",ExampleDrawingConnector.class,VPMIconLibrary.CALC_CONNECTOR_ICON),
+	OE_SHEMA_LIBRARY("shema_library",ViewLibrary.class,VEIconLibrary.VIEW_LIBRARY_ICON),
+	OE_SHEMA_FOLDER("shema_folder",ViewFolder.class,IconLibrary.FOLDER_ICON),
+	OE_SHEMA_DEFINITION("shema",ViewDefinition.class,VEIconLibrary.VIEW_ICON),
+	OE_SHEMA ("shema",View.class,VEIconLibrary.VIEW_ICON),
+	OE_SHAPE("oe_shape",ViewShape.class,VEIconLibrary.SHAPE_ICON),
+	OE_CONNECTOR ("oe_connector",ViewConnector.class,VEIconLibrary.CONNECTOR_ICON),
 	UNKNOWN_OBJECT("unknown_object",FlexoModelObject.class,IconLibrary.QUESTION_ICON);
 
 	static final Logger logger = Logger.getLogger(BrowserElementType.class.getPackage().getName());

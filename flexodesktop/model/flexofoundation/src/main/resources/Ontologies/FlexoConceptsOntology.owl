@@ -7,18 +7,18 @@
     <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
     <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
     <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
-    <!ENTITY FlexoConceptsOntology "http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#" >
+    <!ENTITY FlexoConceptsOntology "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#" >
 ]>
 
 
-<rdf:RDF xmlns="http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#"
-     xml:base="http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl"
+<rdf:RDF xmlns="http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#"
+     xml:base="http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-     xmlns:FlexoConceptsOntology="http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#">
+     xmlns:FlexoConceptsOntology="http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#">
     <owl:Ontology rdf:about=""/>
     
 
@@ -34,7 +34,7 @@
     
 
 
-    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#inRelationWith -->
+    <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#inRelationWith -->
 
     <owl:ObjectProperty rdf:about="#inRelationWith">
         <rdfs:domain rdf:resource="#FlexoConcept"/>
@@ -43,7 +43,7 @@
     
 
 
-    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#linkedToConcept -->
+    <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#linkedToConcept -->
 
     <owl:ObjectProperty rdf:about="#linkedToConcept">
         <rdf:type rdf:resource="&owl;InverseFunctionalProperty"/>
@@ -54,7 +54,7 @@
     
 
 
-    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#linkedToModel -->
+    <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#linkedToModel -->
 
     <owl:ObjectProperty rdf:about="#linkedToModel">
         <rdfs:domain rdf:resource="#FlexoConcept"/>
@@ -74,7 +74,7 @@
     
 
 
-    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#className -->
+    <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#className -->
 
     <owl:DatatypeProperty rdf:about="#className">
         <rdfs:domain rdf:resource="#FlexoModelObject"/>
@@ -83,7 +83,7 @@
     
 
 
-    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#flexoID -->
+    <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#flexoID -->
 
     <owl:DatatypeProperty rdf:about="#flexoID">
         <rdfs:domain rdf:resource="#FlexoModelObject"/>
@@ -92,7 +92,7 @@
     
 
 
-    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#resourceName -->
+    <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#resourceName -->
 
     <owl:DatatypeProperty rdf:about="#resourceName">
         <rdfs:domain rdf:resource="#FlexoModelObject"/>
@@ -112,7 +112,7 @@
     
 
 
-    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#FlexoActivity -->
+    <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#FlexoActivity -->
 
     <owl:Class rdf:about="#FlexoActivity">
         <rdfs:subClassOf rdf:resource="#FlexoProcessElement"/>
@@ -120,7 +120,7 @@
     
 
 
-    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#FlexoConcept -->
+    <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#FlexoConcept -->
 
     <owl:Class rdf:about="#FlexoConcept">
         <rdfs:subClassOf rdf:resource="&owl;Thing"/>
@@ -128,7 +128,7 @@
     
 
 
-    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#FlexoEvent -->
+    <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#FlexoEvent -->
 
     <owl:Class rdf:about="#FlexoEvent">
         <rdfs:subClassOf rdf:resource="#FlexoProcessElement"/>
@@ -136,7 +136,7 @@
     
 
 
-    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#FlexoModelObject -->
+    <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#FlexoModelObject -->
 
     <owl:Class rdf:about="#FlexoModelObject">
         <rdfs:subClassOf rdf:resource="&owl;Thing"/>
@@ -146,7 +146,7 @@
     
 
 
-    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#FlexoOperation -->
+    <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#FlexoOperation -->
 
     <owl:Class rdf:about="#FlexoOperation">
         <rdfs:subClassOf rdf:resource="#FlexoProcessElement"/>
@@ -154,7 +154,7 @@
     
 
 
-    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#FlexoProcess -->
+    <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#FlexoProcess -->
 
     <owl:Class rdf:about="#FlexoProcess">
         <rdfs:subClassOf rdf:resource="#FlexoModelObject"/>
@@ -164,7 +164,7 @@
     
 
 
-    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#FlexoProcessElement -->
+    <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#FlexoProcessElement -->
 
     <owl:Class rdf:about="#FlexoProcessElement">
         <rdfs:subClassOf rdf:resource="#FlexoModelObject"/>
@@ -174,7 +174,7 @@
     
 
 
-    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#FlexoProcessFolder -->
+    <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#FlexoProcessFolder -->
 
     <owl:Class rdf:about="#FlexoProcessFolder">
         <rdfs:subClassOf rdf:resource="#FlexoModelObject"/>
@@ -182,7 +182,7 @@
     
 
 
-    <!-- http://www.agilebirds.com/flexo/ontologies/FlexoConceptsOntology.owl#FlexoRole -->
+    <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#FlexoRole -->
 
     <owl:Class rdf:about="#FlexoRole">
         <rdfs:subClassOf rdf:resource="#FlexoModelObject"/>

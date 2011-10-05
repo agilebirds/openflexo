@@ -1,10 +1,10 @@
-<inspector title = "Ontology calc" inheritsfrom="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.ontology.calc.OntologyCalc">
+<inspector title = "Ontology calc" inheritsfrom="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.viewpoint.ViewPoint">
 
 	<tab name="Basic" index="0" layout="DEFAULT">
 		<property name="name" label="name" widget="READ_ONLY_TEXT_FIELD" constraint="0">
 			<param name="columns" value="10"/>
 		</property>
-		<property name="calcURI" label="uri" widget="READ_ONLY_TEXT_FIELD" constraint="1">
+		<property name="viewPointURI" label="uri" widget="READ_ONLY_TEXT_FIELD" constraint="1">
 			<param name="columns" value="10"/>
 		</property>
 	</tab>

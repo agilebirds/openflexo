@@ -20,7 +20,7 @@
 package org.openflexo.foundation.ontology.dm;
 
 import org.openflexo.foundation.ie.dm.IEDataModification;
-import org.openflexo.foundation.ontology.shema.OEShemaFolder;
+import org.openflexo.foundation.view.ViewFolder;
 
 /**
  * @author gpolet
@@ -32,7 +32,7 @@ public class ShemaFolderDeleted extends IEDataModification
     /**
      * @param sub
      */
-    public ShemaFolderDeleted(OEShemaFolder sub)
+    public ShemaFolderDeleted(ViewFolder sub)
     {
         super(sub, null);
     }

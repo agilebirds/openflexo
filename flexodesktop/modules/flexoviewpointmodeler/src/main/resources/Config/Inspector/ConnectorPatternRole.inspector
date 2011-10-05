@@ -1,4 +1,4 @@
-<inspector title = "Connector Pattern Role" inheritsfrom="PatternRole.inspector" inspectedClassName="org.openflexo.foundation.ontology.calc.ConnectorPatternRole">
+<inspector title = "Connector Pattern Role" inheritsfrom="PatternRole.inspector" inspectedClassName="org.openflexo.foundation.viewpoint.ConnectorPatternRole">
 
 	<tab name="Basic" index="0" layout="DEFAULT">
 	

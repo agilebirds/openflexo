@@ -1,4 +1,4 @@
-<inspector title = "Shape" inspectedClassName="org.openflexo.foundation.ontology.calc.CalcDrawingShape">
+<inspector title = "Shape" inspectedClassName="org.openflexo.foundation.viewpoint.ExampleDrawingShape">
 
 	<tab name="Basic" index="0" layout="DEFAULT">
 		<property name="graphicalRepresentation.text" label="text" widget="TEXT_FIELD" constraint="0">

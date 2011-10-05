@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ShemaLibrary id="SYL_440" userID="SYL" flexoID="440" dontGenerate="false" useSpecificDescriptions="false">
+  <ShemaFolder id="SYL_441" docIndex="1" userID="SYL" flexoID="441" dontGenerate="false" useSpecificDescriptions="false">
+    <folderName>TestVE</folderName>
+    <Shema id="SYL_538" name="BasicOrganization" calcURI="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl" docIndex="1" userID="SYL" flexoID="538" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+  </ShemaFolder>
+</ShemaLibrary>
+

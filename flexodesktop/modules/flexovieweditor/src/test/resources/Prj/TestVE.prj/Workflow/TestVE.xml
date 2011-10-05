@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlexoProcess id="SYL_418" name="TestVE" isWebService="false" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,10:46:01 04/10/2011 409" isDeletedOnServer="false" userID="SYL" flexoID="418" dontGenerate="false" useSpecificDescriptions="false">
+  <StatusList id="SYL_419" DefaultStatus="TestVE.STATUS.Default" userID="SYL" flexoID="419" dontGenerate="false" useSpecificDescriptions="false">
+    <Status id="SYL_420" userID="SYL" flexoID="420" dontGenerate="true" useSpecificDescriptions="false" docIndex="1">
+      <label>Default</label>
+    </Status>
+  </StatusList>
+  <ActivityPetriGraph id="SYL_421" userID="SYL" flexoID="421" dontGenerate="false" useSpecificDescriptions="false">
+    <GraphicalProperties>
+      <visible className="java.lang.Boolean">true</visible>
+    </GraphicalProperties>
+    <EventNode id="SYL_422" eventType="Start" trigger="NONE" isCatching="true" userID="SYL" flexoID="422" dontGenerate="true" useSpecificDescriptions="false" docIndex="1" nodeName="Start">
+      <GraphicalProperties>
+        <posx_bpe className="java.lang.Double">15.0</posx_bpe>
+        <posy_bpe className="java.lang.Double">200.0</posy_bpe>
+      </GraphicalProperties>
+      <IncomingInternalMessageInEdge idref="SYL_423" />
+    </EventNode>
+    <EventNode id="SYL_428" eventType="End" trigger="NONE" isCatching="true" userID="SYL" flexoID="428" dontGenerate="true" useSpecificDescriptions="false" docIndex="2" nodeName="End">
+      <GraphicalProperties>
+        <posx_bpe className="java.lang.Double">650.0</posx_bpe>
+        <posy_bpe className="java.lang.Double">200.0</posy_bpe>
+      </GraphicalProperties>
+      <IncomingInternalMessageInEdge idref="SYL_429" />
+      <OutgoingInternalMessageOutEdge id="SYL_434" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="434" dontGenerate="false" useSpecificDescriptions="false" name="Process terminated">
+        <OutputMessageBindings id="SYL_435" userID="SYL" flexoID="435" dontGenerate="false" useSpecificDescriptions="false" />
+        <Metrics id="SYL_436" metricsDefinition="WORKFLOW.TestVE#SYL_386" userID="SYL" flexoID="436" dontGenerate="false" useSpecificDescriptions="false" />
+        <StartEventNode idref="SYL_428" />
+        <EndOutPort idref="SYL_437" />
+      </OutgoingInternalMessageOutEdge>
+    </EventNode>
+  </ActivityPetriGraph>
+  <PortRegistery id="SYL_439" isVisible="false" userID="SYL" flexoID="439" dontGenerate="false" useSpecificDescriptions="false">
+    <NewPort id="SYL_426" userID="SYL" flexoID="426" dontGenerate="false" useSpecificDescriptions="false" docIndex="0" nodeName="NewInstance">
+      <OutgoingInternalMessageInEdge id="SYL_423" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="423" dontGenerate="false" useSpecificDescriptions="false">
+        <InputMessageBindings id="SYL_424" userID="SYL" flexoID="424" dontGenerate="false" useSpecificDescriptions="false" />
+        <Metrics id="SYL_425" metricsDefinition="WORKFLOW.TestVE#SYL_386" userID="SYL" flexoID="425" dontGenerate="false" useSpecificDescriptions="false" />
+        <StartNewPort idref="SYL_426" />
+        <EndEventNode idref="SYL_422" />
+      </OutgoingInternalMessageInEdge>
+      <InputMessageDefinition id="SYL_427" userID="SYL" flexoID="427" dontGenerate="false" useSpecificDescriptions="false">
+        <label>Input message name</label>
+      </InputMessageDefinition>
+    </NewPort>
+    <DeletePort id="SYL_432" userID="SYL" flexoID="432" dontGenerate="false" useSpecificDescriptions="false" docIndex="1" nodeName="DeleteInstance">
+      <OutgoingInternalMessageInEdge id="SYL_429" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="429" dontGenerate="false" useSpecificDescriptions="false">
+        <InputMessageBindings id="SYL_430" userID="SYL" flexoID="430" dontGenerate="false" useSpecificDescriptions="false" />
+        <Metrics id="SYL_431" metricsDefinition="WORKFLOW.TestVE#SYL_386" userID="SYL" flexoID="431" dontGenerate="false" useSpecificDescriptions="false" />
+        <StartDeletePort idref="SYL_432" />
+        <EndEventNode idref="SYL_428" />
+      </OutgoingInternalMessageInEdge>
+      <InputMessageDefinition id="SYL_433" userID="SYL" flexoID="433" dontGenerate="false" useSpecificDescriptions="false">
+        <label>Input message name</label>
+      </InputMessageDefinition>
+    </DeletePort>
+    <OutPort id="SYL_437" userID="SYL" flexoID="437" dontGenerate="false" useSpecificDescriptions="false" docIndex="2" nodeName="OutPort">
+      <IncomingInternalMessageOutEdge idref="SYL_434" />
+      <OutputMessageDefinition id="SYL_438" userID="SYL" flexoID="438" dontGenerate="false" useSpecificDescriptions="false">
+        <label>Output message name</label>
+      </OutputMessageDefinition>
+    </OutPort>
+    <GraphicalProperties>
+      <visible className="java.lang.Boolean">false</visible>
+    </GraphicalProperties>
+  </PortRegistery>
+</FlexoProcess>
+

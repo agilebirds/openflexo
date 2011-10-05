@@ -24,9 +24,10 @@ import java.util.logging.Logger;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.view.controller.FlexoFIBController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
-public class FIBInspectorController extends FIBController {
+public class FIBInspectorController extends FlexoFIBController {
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBInspectorController.class.getPackage().getName());
 

@@ -23,9 +23,9 @@ package org.openflexo.components.browser.ontology;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.ontology.calc.CalcFolder;
-import org.openflexo.foundation.ontology.calc.CalcLibrary;
-import org.openflexo.foundation.ontology.calc.OntologyCalc;
+import org.openflexo.foundation.viewpoint.ViewPointFolder;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.localization.FlexoLocalization;
 
 /**
@@ -37,7 +37,7 @@ import org.openflexo.localization.FlexoLocalization;
 public class CalcLibraryElement extends BrowserElement
 {
 
-    protected CalcLibraryElement(CalcLibrary library, ProjectBrowser browser, BrowserElement parent)
+    protected CalcLibraryElement(ViewPointLibrary library, ProjectBrowser browser, BrowserElement parent)
     {
         super(library, BrowserElementType.CALC_LIBRARY, browser, parent);
     }
@@ -45,10 +45,10 @@ public class CalcLibraryElement extends BrowserElement
     @Override
 	protected void buildChildrenVector()
     {
-      	for (CalcFolder subFolder : getCalcLibrary().getRootFolder().getChildren()) {
+      	for (ViewPointFolder subFolder : getCalcLibrary().getRootFolder().getChildren()) {
        		addToChilds(subFolder);
        	}
-       	for (OntologyCalc calc : getCalcLibrary().getRootFolder().getCalcs()) {
+       	for (ViewPoint calc : getCalcLibrary().getRootFolder().getViewPoints()) {
        		addToChilds(calc);
        	}
     }
@@ -56,12 +56,12 @@ public class CalcLibraryElement extends BrowserElement
     @Override
 	public String getName()
     {
-        return FlexoLocalization.localizedForKey("calc_library");
+        return FlexoLocalization.localizedForKey("view_point_library");
     }
 
-    protected CalcLibrary getCalcLibrary()
+    protected ViewPointLibrary getCalcLibrary()
     {
-        return (CalcLibrary) getObject();
+        return (ViewPointLibrary) getObject();
     }
 
 }

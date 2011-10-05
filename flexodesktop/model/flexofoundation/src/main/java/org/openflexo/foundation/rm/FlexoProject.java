@@ -119,9 +119,6 @@ import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.ontology.ProjectOntology;
 import org.openflexo.foundation.ontology.ProjectOntologyLibrary;
-import org.openflexo.foundation.ontology.calc.EditionPattern;
-import org.openflexo.foundation.ontology.calc.EditionPattern.EditionPatternConverter;
-import org.openflexo.foundation.ontology.shema.OEShemaLibrary;
 import org.openflexo.foundation.rm.FlexoResource.DependancyAlgorithmScheme;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.sg.GeneratedSources;
@@ -144,6 +141,9 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.foundation.view.ViewLibrary;
+import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternConverter;
 import org.openflexo.foundation.wkf.FlexoImportedProcessLibrary;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
@@ -1260,7 +1260,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	public FlexoOEShemaLibraryResource getFlexoShemaLibraryResource(boolean createIfNotExist) {
 		FlexoOEShemaLibraryResource returned = (FlexoOEShemaLibraryResource) resourceForKey(ResourceType.OE_SHEMA_LIBRARY, getProjectName());
 		if ((returned == null) && createIfNotExist) {
-			OEShemaLibrary.createNewShemaLibrary(this);
+			ViewLibrary.createNewShemaLibrary(this);
 			return getFlexoShemaLibraryResource();
 		}
 		return returned;
@@ -1511,17 +1511,17 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		return getFlexoComponentLibraryResource().getResourceData();
 	}
 
-	public OEShemaLibrary getShemaLibrary() {
+	public ViewLibrary getShemaLibrary() {
 		return getShemaLibrary(true);
 	}
 
-	public OEShemaLibrary getShemaLibrary(boolean createIfNotExist) {
+	public ViewLibrary getShemaLibrary(boolean createIfNotExist) {
 		if (getFlexoShemaLibraryResource(createIfNotExist) == null) {
 			if (createIfNotExist) {
 				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Create ShemaLibrary");
 				}
-				OEShemaLibrary.createNewShemaLibrary(this);
+				ViewLibrary.createNewShemaLibrary(this);
 			} else {
 				return null;
 			}

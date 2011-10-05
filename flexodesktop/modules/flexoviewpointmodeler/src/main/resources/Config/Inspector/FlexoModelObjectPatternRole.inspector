@@ -1,4 +1,4 @@
-<inspector title = "Model Object Pattern Role" inheritsfrom="PatternRole.inspector" inspectedClassName="org.openflexo.foundation.ontology.calc.FlexoModelObjectPatternRole">
+<inspector title = "Model Object Pattern Role" inheritsfrom="PatternRole.inspector" inspectedClassName="org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole">
 
 	<tab name="Basic" index="0" layout="DEFAULT">
 		<property name="flexoModelObjectType" label="flexo_model_object_type" widget="DROPDOWN" constraint="3" depends="type" conditional="type=FlexoModelObject">
