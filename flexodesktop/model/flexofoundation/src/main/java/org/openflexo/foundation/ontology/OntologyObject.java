@@ -547,4 +547,29 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 	   return (getFlexoOntology().getIsReadOnly());
    }
  
+   public boolean isOntology()
+   {
+	   return false;
+   }
+   
+   public boolean isOntologyClass()
+   {
+	   return false;
+   }
+   
+   public boolean isOntologyIndividual()
+   {
+	   return false;
+   }
+   
+   public boolean isOntologyObjectProperty()
+   {
+	   return false;
+   }
+   
+   public boolean isOntologyDataProperty()
+   {
+	   return false;
+   }
+   
 }

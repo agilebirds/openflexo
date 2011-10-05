@@ -29,7 +29,7 @@ import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.action.DeleteOntologyObjects;
 import org.openflexo.module.ModuleLoader;
-import org.openflexo.ve.OECst;
+import org.openflexo.ve.VECst;
 
 
 public class DeleteOntologyObjectsDialogEDITOR {
@@ -54,7 +54,7 @@ public class DeleteOntologyObjectsDialogEDITOR {
 				return makeArray(action);
 			}
 			public File getFIBFile() {
-				return OECst.DELETE_ONTOLOGY_OBJECTS_DIALOG_FIB;
+				return VECst.DELETE_ONTOLOGY_OBJECTS_DIALOG_FIB;
 			}
 		};
 		editor.launch();

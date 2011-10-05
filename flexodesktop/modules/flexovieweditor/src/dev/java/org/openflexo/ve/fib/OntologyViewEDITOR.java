@@ -26,7 +26,7 @@ import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.module.ModuleLoader;
-import org.openflexo.ve.OECst;
+import org.openflexo.ve.VECst;
 
 
 public class OntologyViewEDITOR {
@@ -46,7 +46,7 @@ public class OntologyViewEDITOR {
 				return makeArray(ontology1,ontology2,ontology3);
 			}
 			public File getFIBFile() {
-				return OECst.ONTOLOGY_VIEW_FIB;
+				return VECst.ONTOLOGY_VIEW_FIB;
 			}
 		};
 		editor.launch();

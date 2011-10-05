@@ -405,5 +405,12 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser,JTree,Object> imp
 		//logger.fine("treeStructureChanged "+e);
 	}
 
+    @Override
+	public void updateDataObject(Object aDataObject)
+    {
+     	super.updateDataObject(aDataObject);
+     	getBrowserModel().fireTreeRestructured();
+    }
+    
 
 }

@@ -35,12 +35,12 @@ import org.openflexo.ve.controller.OEController;
  * @author yourname
  * 
  */
-public final class OEPreferences extends ModulePreferences
+public final class VEPreferences extends ModulePreferences
 {
     
-    private static final Logger logger = Logger.getLogger(OEPreferences.class.getPackage().getName());
+    private static final Logger logger = Logger.getLogger(VEPreferences.class.getPackage().getName());
     
-    private static final Class OE_PREFERENCES = OEPreferences.class;
+    private static final Class OE_PREFERENCES = VEPreferences.class;
     
 	protected static final String SCREENSHOT_QUALITY = "screenshotQuality";
 
@@ -54,7 +54,7 @@ public final class OEPreferences extends ModulePreferences
         preferences(OE_PREFERENCES);
     }
     
-    public OEPreferences()
+    public VEPreferences()
     {
         super(Module.VE_MODULE);
     }

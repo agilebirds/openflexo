@@ -29,7 +29,7 @@ import org.openflexo.toolbox.FileResource;
  * 
  * @author sylvain
  */
-public class OECst
+public class VECst
 {
 
     public static final String DEFAULT_OE_BROWSER_WINDOW_TITLE = "ontology_browser";

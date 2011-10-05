@@ -20,7 +20,7 @@
 package org.openflexo.ve.view;
 
 import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.ve.OECst;
+import org.openflexo.ve.VECst;
 import org.openflexo.ve.controller.OEController;
 import org.openflexo.view.FIBModuleView;
 import org.openflexo.view.FlexoPerspective;
@@ -39,7 +39,7 @@ public class OntologyView extends FIBModuleView<FlexoOntology>
 	
     public OntologyView(FlexoOntology ontology, OEController controller, FlexoPerspective<? super FlexoOntology> perspective)
     {
-        super(ontology,controller,OECst.ONTOLOGY_VIEW_FIB);
+        super(ontology,controller,VECst.ONTOLOGY_VIEW_FIB);
         declaredPerspective = perspective;
     }
 

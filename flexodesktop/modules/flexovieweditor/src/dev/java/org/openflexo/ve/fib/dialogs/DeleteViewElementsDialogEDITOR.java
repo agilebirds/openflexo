@@ -31,7 +31,7 @@ import org.openflexo.foundation.view.ViewElement;
 import org.openflexo.foundation.view.action.DeleteViewElements;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.ve.OECst;
+import org.openflexo.ve.VECst;
 
 
 public class DeleteViewElementsDialogEDITOR extends ProjectDialogEDITOR {
@@ -61,7 +61,7 @@ public class DeleteViewElementsDialogEDITOR extends ProjectDialogEDITOR {
 				return makeArray(action);
 			}
 			public File getFIBFile() {
-				return OECst.DELETE_VIEW_ELEMENTS_DIALOG_FIB;
+				return VECst.DELETE_VIEW_ELEMENTS_DIALOG_FIB;
 			}
 		};
 		editor.launch();

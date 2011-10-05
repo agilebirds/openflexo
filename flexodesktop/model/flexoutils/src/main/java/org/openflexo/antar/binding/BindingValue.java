@@ -269,6 +269,16 @@ public class BindingValue extends AbstractBinding
 		}
 
 		return _bindingPath.getResultingTypeAtIndex(_bindingPath.size()-1);
+		
+		/*Type returned = _bindingPath.getResultingTypeAtIndex(_bindingPath.size()-1);
+		if (returned.equals(Vector.class)) {
+			System.out.println("OK, je l'ai pour "+this);
+			System.out.println("BV: "+_bindingVariable+" of "+_bindingVariable.getType());
+			for (int i=0; i<_bindingPath.size(); i++) {
+				System.out.println("index "+i+" : "+_bindingPath.getResultingTypeAtIndex(i)+" for "+_bindingPath.get(i));
+			}
+		}
+		return returned;*/
 
 	}
 

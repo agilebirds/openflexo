@@ -38,6 +38,7 @@ import org.openflexo.xmlcode.AccessorInvocationException;
 @Deprecated 
 public class EditionPatternPropertyModel extends PropertyModel {
 
+	//foo
     private static final Logger logger = Logger.getLogger(PropertyModel.class.getPackage().getName());
 
  	private String patternRole;

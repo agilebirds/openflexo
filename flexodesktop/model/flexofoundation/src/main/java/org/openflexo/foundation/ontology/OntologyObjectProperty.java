@@ -95,5 +95,9 @@ public class OntologyObjectProperty extends OntologyProperty implements Comparab
 		return "Object property "+getName();
 	}
 
+	public boolean isOntologyObjectProperty()
+	{
+		return true;
+	}
 
 }

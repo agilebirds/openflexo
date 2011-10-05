@@ -1,5 +1,5 @@
 #French
-#Tue Oct 04 13:46:13 CEST 2011
+#Tue Oct 04 17:16:49 CEST 2011
 =
 \ =\ 
 \ into\ =\ dans 
@@ -1098,6 +1098,8 @@ bloc_body_title=Titre
 bloc_widget=El\u00E9ment graphique de type bloc
 blur=Flou
 body=Corps
+bold=bold
+bold_italic=bold_italic
 boolean=Bool\u00E9en
 border=border
 border_color=Couleur du bord
@@ -2945,6 +2947,7 @@ isocode_must_be_defined_description=L\u2019ISO 639-1 (ICS n\u00B0 01.140.20) est
 isocode_must_unique=Le code ISO d'un langage doit \u00EAtre unique
 isocode_must_unique_description=Le code ISO d'un langage doit \u00EAtre unique
 it_is_used_in\:=Il est utilis\u00E9 dans\:
+italic=italic
 item_class_name=Classe de l'item
 item_icon=ic\u00F4ne de l'item
 item_variable=Variable de l'item
