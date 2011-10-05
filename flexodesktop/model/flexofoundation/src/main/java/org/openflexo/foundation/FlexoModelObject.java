@@ -1359,9 +1359,9 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
  				for (EditionPatternReference ref : getEditionPatternReferences()) {
  					EditionPatternInspector inspector = ref.getEditionPattern().getInspector();
  					if (inspector != null) {
- 						for (Integer i : inspector.getTabs().keySet()) {
+ 						/*for (Integer i : inspector.getTabs().keySet()) {
  							_tabList.add(inspector.getTabs().get(i));
- 						}
+ 						}*/
  					}
  				}
  			}

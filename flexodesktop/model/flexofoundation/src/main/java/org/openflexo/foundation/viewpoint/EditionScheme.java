@@ -28,6 +28,7 @@ import org.openflexo.logging.FlexoLogger;
 
 public abstract class EditionScheme extends ViewPointObject {
 
+	//
 	protected static final Logger logger = FlexoLogger.getLogger(EditionScheme.class.getPackage().getName());
 
 	public static enum EditionSchemeType

@@ -1,6 +1,15 @@
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.ontology.OntologyDataProperty;
+import org.openflexo.foundation.ontology.OntologyIndividual;
+import org.openflexo.foundation.ontology.OntologyObjectProperty;
+import org.openflexo.foundation.ontology.OntologyStatement;
 import org.openflexo.localization.FlexoLocalization;
+
+import com.hp.hpl.jena.ontology.DatatypeProperty;
+import com.hp.hpl.jena.ontology.Individual;
+import com.hp.hpl.jena.ontology.ObjectProperty;
 
 public class OntologicObjectPatternRole extends PatternRole {
 
@@ -54,4 +63,25 @@ public class OntologicObjectPatternRole extends PatternRole {
 			}
 	}
 	
+	public Class<?> getAccessedClass()
+	{
+		if (ontologicObjectType == null) {
+			return null;
+		}
+		switch (ontologicObjectType) {
+		case Class:
+			return OntologyClass.class;
+		case Individual:
+			return OntologyIndividual.class;
+		case ObjectProperty:
+			return OntologyObjectProperty.class;
+		case DataProperty:
+			return OntologyDataProperty.class;
+		case OntologyStatement:
+			return OntologyStatement.class;
+		default:
+			return null;
+		}
+	}
+
 }

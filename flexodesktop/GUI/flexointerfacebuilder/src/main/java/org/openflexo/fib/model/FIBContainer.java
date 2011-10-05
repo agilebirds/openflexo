@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 
 import javax.swing.tree.TreeNode;
 
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.model.FIBPanel.Layout;
 
 
@@ -45,6 +46,15 @@ public abstract class FIBContainer extends FIBComponent {
 	{
 		subComponents = new Vector<FIBComponent>();
 	}
+	
+	/*public Class getDataClass()
+	{
+		// This was added to return a class when data is defined
+		if (super.getDataClass() == null && getData() != null && getData().isValid()) {
+			return TypeUtils.getBaseClass(getData().getBinding().getAccessedType());
+		}
+		return super.getDataClass();
+	}*/
 	
 	public Vector<FIBComponent> getSubComponents()
 	{

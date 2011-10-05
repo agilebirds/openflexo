@@ -114,5 +114,9 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole {
 		return null;
 	}
 	
-
+	public Class<?> getAccessedClass()
+	{
+		return Object.class;
+	}
+	
 }

@@ -19,17 +19,36 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.inspector.InspectableObject;
-import org.openflexo.inspector.model.InspectorModel;
-import org.openflexo.inspector.model.PropertyModel;
-import org.openflexo.inspector.model.TabModel;
+import java.util.Vector;
 
-// TODO: Use FIB instead as soon as possible
-@Deprecated 
-public class EditionPatternInspector extends InspectorModel implements InspectableObject {
+import org.openflexo.foundation.viewpoint.dm.InspectorEntryInserted;
+import org.openflexo.foundation.viewpoint.dm.InspectorEntryRemoved;
 
+/**
+ * Represents inspector associated with an Edition Pattern
+ * 
+ * @author sylvain
+ *
+ */
+public class EditionPatternInspector extends ViewPointObject {
+
+	private String name;
 	private EditionPattern _editionPattern;
+	private Vector<InspectorEntry> entries;
 	
+	public static EditionPatternInspector makeEditionPatternInspector(EditionPattern ep)
+	{
+		EditionPatternInspector returned = new EditionPatternInspector();
+		ep.setInspector(returned);
+		return returned;
+	}
+	
+	public EditionPatternInspector() 
+	{
+		super();
+		entries = new Vector<InspectorEntry>();
+	}
+
 	public EditionPattern getEditionPattern() 
 	{
 		return _editionPattern;
@@ -42,7 +61,9 @@ public class EditionPatternInspector extends InspectorModel implements Inspectab
 
 	public ViewPoint getCalc() 
 	{
-		return getEditionPattern().getCalc();
+		if (getEditionPattern() != null)
+			return getEditionPattern().getCalc();
+		return null;
 	}
 
 	public ViewPointLibrary getCalcLibrary() 
@@ -56,39 +77,42 @@ public class EditionPatternInspector extends InspectorModel implements Inspectab
 		return null;
 	}
 
-	public TabModel getDefaultTabModel()
+	public Vector<InspectorEntry> getEntries() 
 	{
-		if (getTabs().size() == 0) makeDefaultTabModel(null);
-		return getTabs().elements().nextElement();
-	}
-	
-	private TabModel makeDefaultTabModel(EditionPattern ep)
-	{
-		TabModel newTabModel = new TabModel();
-		if (ep != null) newTabModel.name = ep.getName();
-		newTabModel.index = 0;
-		setTabForKey(newTabModel, 0);
-		return newTabModel;
-	}
-	
-	public static EditionPatternInspector makeEditionPatternInspector(EditionPattern ep)
-	{
-		EditionPatternInspector returned = new EditionPatternInspector();
-		returned.makeDefaultTabModel(ep);
-		ep.setInspector(returned);
-		return returned;
+		return entries;
 	}
 
-	public void finalizeInspectorDeserialization()
+	public void setEntries(Vector<InspectorEntry> someEntries)
 	{
-		for (String k : getDefaultTabModel().getProperties().keySet()) {
-			PropertyModel p = getDefaultTabModel().getProperties().get(k);
-			if (p instanceof EditionPatternPropertyModel) ((EditionPatternPropertyModel) p).setInspector(this);
-			if (p instanceof EditionPatternPropertyListModel) ((EditionPatternPropertyListModel) p).setInspector(this);
-		}
+		entries = someEntries;
+	}
+
+	public void addToEntries(InspectorEntry anEntry)
+	{
+		anEntry.setInspector(this);
+		entries.add(anEntry);
+		setChanged();
+		notifyObservers(new InspectorEntryInserted(anEntry, this));
+	}
+
+	public void removeFromEntries(InspectorEntry anEntry)
+	{
+		anEntry.setInspector(null);
+		entries.remove(anEntry);
+		setChanged();
+		notifyObservers(new InspectorEntryRemoved(anEntry, this));
 	}
 	
-	public EditionPatternPropertyModel createNewProperty()
+	public TextFieldInspectorEntry createNewTextField()
+	{
+		TextFieldInspectorEntry newEntry = new TextFieldInspectorEntry();
+		newEntry.setLabel("new_entry");
+		newEntry.setPatternRole(getEditionPattern().getPatternRoles().size() > 0 ? getEditionPattern().getPatternRoles().firstElement() : null);
+		addToEntries(newEntry);
+		return newEntry;
+	}
+	
+	/*public EditionPatternPropertyModel createNewProperty()
 	{
 		EditionPatternPropertyModel newProperty = new EditionPatternPropertyModel();
 		newProperty.setInspector(this);
@@ -126,6 +150,6 @@ public class EditionPatternInspector extends InspectorModel implements Inspectab
 	{
 		getDefaultTabModel().removePropertyWithKey(property.getKey());
 		return property;
-	}
+	}*/
 	
  }

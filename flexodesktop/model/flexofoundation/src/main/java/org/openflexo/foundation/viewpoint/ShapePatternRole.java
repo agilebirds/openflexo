@@ -56,5 +56,9 @@ public class ShapePatternRole extends GraphicalElementPatternRole {
 		}
 	}
 
+	public Class<?> getAccessedClass()
+	{
+		return Object.class;
+	}
 
 }

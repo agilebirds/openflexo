@@ -130,6 +130,6 @@ public abstract class PatternRole extends ViewPointObject {
 	{
 	}
 	
-
+	public abstract Class<?> getAccessedClass();
 
 }
