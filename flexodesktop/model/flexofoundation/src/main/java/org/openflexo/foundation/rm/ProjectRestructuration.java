@@ -68,10 +68,20 @@ public class ProjectRestructuration {
 
 	private static final String TS_EXTENSION = ".rmxml.ts";
 
-	public static final String[] FILE_EXTENSIONS = { WKF_EXTENSION, WOLIB_EXTENSION, CG_EXTENSION, DG_EXTENSION, SG_EXTENSION,
+	public static final String[] DOT_FILE_EXTENSIONS = { WKF_EXTENSION, WOLIB_EXTENSION, CG_EXTENSION, DG_EXTENSION, SG_EXTENSION,
 			TOC_EXTENSION, MENU_EXTENSION, LINKS_EXTENSION, XML_EXTENSION, DM_EXTENSION, DKV_EXTENSION, WS_EXTENSION, OWL_EXTENSION,
 			OELIB_EXTENSION,
 		RM_EXTENSION, TS_EXTENSION };
+
+	public static final String[] FILE_EXTENSIONS;
+
+	static {
+		int i = 0;
+		FILE_EXTENSIONS = new String[DOT_FILE_EXTENSIONS.length];
+		for (String ext : DOT_FILE_EXTENSIONS) {
+			FILE_EXTENSIONS[i++] = ext.substring(1);
+		}
+	}
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ProjectRestructuration.class.getPackage().getName());

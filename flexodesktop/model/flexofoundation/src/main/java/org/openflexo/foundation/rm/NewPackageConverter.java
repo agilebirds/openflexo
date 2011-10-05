@@ -48,7 +48,7 @@ public class NewPackageConverter {
 		return true;
 	}
 
-	private String filter(String content, String packagePrefix) {
+	private static String filter(String content, String packagePrefix) {
 		int lastAppendedIndex = 0;
 		// be.denali.flexo* --> org.openflexo*
 		StringBuilder sb = new StringBuilder(content.length());
@@ -56,13 +56,21 @@ public class NewPackageConverter {
 			if (content.regionMatches(i, packagePrefix, 0, packagePrefix.length())) {
 				sb.append(content, lastAppendedIndex, i);
 				sb.append(ORG_OF);
-				if (content.charAt(i + packagePrefix.length() + 1) != '.') {
+				if (content.charAt(i + packagePrefix.length()) != '.') {
 					sb.append('.');
 				}
 				i = i + packagePrefix.length() - 1;
+				lastAppendedIndex = i + 1;
 			}
 		}
+		sb.append(content, lastAppendedIndex, content.length());
 		return sb.toString();
+	}
+
+	public static void main(String[] args) {
+		String s = "coucou be.denali.flexo.zut\nmachin be.denali.flexobrol bidule";
+		System.err.println(s);
+		System.err.println(filter(s, BE_DENALI_FLEXO));
 	}
 
 }
