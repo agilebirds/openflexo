@@ -443,7 +443,6 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 
 	public void finalizeEditionPatternDeserialization()
 	{
-		getInspector().finalizeInspectorDeserialization();
 		for (EditionScheme es : getEditionSchemes()) {
 			es.finalizeEditionSchemeDeserialization();
 		}

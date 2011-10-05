@@ -17,4 +17,8 @@ public class ShemaPatternRole extends PatternRole {
 		return FlexoLocalization.localizedForKey("shema");
 	}
 
+	public Class<?> getAccessedClass()
+	{
+		return Object.class;
+	}
 }

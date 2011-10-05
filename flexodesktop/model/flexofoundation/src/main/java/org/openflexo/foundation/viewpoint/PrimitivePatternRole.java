@@ -54,5 +54,25 @@ public class PrimitivePatternRole extends PatternRole {
 			}
 	}
 	
-
+	public Class<?> getAccessedClass()
+	{
+		if (primitiveType == null) {
+			return null;
+		}
+		switch (primitiveType) {
+		case String:
+			return String.class;
+		case LocalizedString:
+			return String.class;
+		case Boolean:
+			return Boolean.class;
+		case Integer:
+			return Integer.TYPE;
+		case Float:
+			return Float.TYPE;
+		default:
+			return null;
+		}
+	}
+	
 }

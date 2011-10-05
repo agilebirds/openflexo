@@ -322,8 +322,8 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 				for (EditionPatternParameter p : es.getParameters()) {
 					checkAndRegisterLocalized(p.getLabel());
 				}
-				for (PropertyModel prop : ep.getInspector().getDefaultTabModel().getOrderedProperties()) {
-					checkAndRegisterLocalized(prop.label);
+				for (InspectorEntry entry : ep.getInspector().getEntries()) {
+					checkAndRegisterLocalized(entry.getLabel());
 				}
 			}
 		}
