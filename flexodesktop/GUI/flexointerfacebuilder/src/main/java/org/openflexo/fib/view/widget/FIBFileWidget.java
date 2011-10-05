@@ -25,7 +25,6 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JButton;
@@ -40,7 +39,6 @@ import org.openflexo.fib.view.FIBWidgetView;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.FlexoFileChooser;
 import org.openflexo.toolbox.StringUtils;
-import org.openflexo.toolbox.ToolBox;
 
 /**
  * Represents a widget able to edit a File, or a String representing a File or a
@@ -73,11 +71,11 @@ public class FIBFileWidget extends FIBWidgetView<FIBFile,JTextField,File> {
     {
         super(model,controller);
 
-        mode = (model.mode != null ? model.mode : FIBFile.FileMode.OpenMode);
+        mode = model.mode != null ? model.mode : FIBFile.FileMode.OpenMode;
         filter = model.filter;
         title = model.title;
         isDirectory = model.isDirectory;
-        defaultDirectory = (model.defaultDirectory != null ? model.defaultDirectory : new File(System.getProperty("user.dir")));
+        defaultDirectory = model.defaultDirectory != null ? model.defaultDirectory : new File(System.getProperty("user.dir"));
         
         	
        _mySmallPanel = new JPanel(new BorderLayout());
@@ -135,16 +133,6 @@ public class FIBFileWidget extends FIBWidgetView<FIBFile,JTextField,File> {
                 }
                 configureFileChooser(chooser);
                 
-        		boolean parentWasAlwaysOnTop = false;
-        		if (ToolBox.getPLATFORM()==ToolBox.MACOS) {
-	        		if (parent != null && parent.isAlwaysOnTop()) {
-	        			if (logger.isLoggable(Level.FINE))
-	        				logger.fine("Found parent AlwaysOnTopState to true for "+parent);
-	        			parentWasAlwaysOnTop = true;
-	        			parent.setAlwaysOnTop(false);
-	        		}
-        		}
-        		
         		switch (mode) {
 				case OpenMode:
 	               	if (chooser.showOpenDialog(_chooseButton) == JFileChooser.APPROVE_OPTION) {
@@ -178,10 +166,6 @@ public class FIBFileWidget extends FIBWidgetView<FIBFile,JTextField,File> {
 				default:
 					break;
 				}
-        		
-                 if (parent!=null && parentWasAlwaysOnTop) {
-                	parent.setAlwaysOnTop(true);
-                }
             }
         });
     }
@@ -200,8 +184,11 @@ public synchronized boolean updateWidgetFromModel()
    {
 	   if (notEquals(getValue(), _file)) {
 		   widgetUpdating = true;
-		   if (getValue() instanceof File) setFile(getValue());
-		   else if (getValue() == null) setFile(null);
+		   if (getValue() instanceof File) {
+			setFile(getValue());
+		} else if (getValue() == null) {
+			setFile(null);
+		}
 		   widgetUpdating = false;
 		   return true;
 	   }

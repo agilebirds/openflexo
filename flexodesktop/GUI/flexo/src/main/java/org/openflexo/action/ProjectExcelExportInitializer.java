@@ -75,18 +75,12 @@ public class ProjectExcelExportInitializer extends ActionInitializer
             @Override
             public boolean run(ActionEvent event, ProjectExcelExportAction action)
             {
-                if (FlexoModule.getActiveModule()!=null) {
-					FlexoModule.getActiveModule().getFlexoController().dismountWindowsOnTop(null);
-				}
                 JFileChooser chooser = new JFileChooser();
                 chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 chooser.setSelectedFile(new File(System.getProperty("user.home"), action.getFocusedObject()
                         .getProjectName()
                         + ".csv"));
                 int ret = chooser.showSaveDialog(getActiveModuleFrame());
-                if (FlexoModule.getActiveModule()!=null) {
-					FlexoModule.getActiveModule().getFlexoController().remountWindowsOnTop();
-				}
                 if (ret == JFileChooser.APPROVE_OPTION) {
                     action.getFocusedObject().getStatistics().refresh();
                     String s = action.getFocusedObject().getStatistics().excel();

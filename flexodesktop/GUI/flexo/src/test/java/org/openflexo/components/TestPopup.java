@@ -109,7 +109,6 @@ public class TestPopup {
 			}
 		});
 		panel.add(button,BorderLayout.NORTH);*/
-		dialog.setAlwaysOnTop(false);
 		dialog.pack();
 		dialog.setVisible(true);
 	}

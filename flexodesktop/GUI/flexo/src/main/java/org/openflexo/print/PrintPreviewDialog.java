@@ -42,7 +42,6 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-
 import org.openflexo.foundation.gen.ScreenshotGenerator;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
@@ -94,7 +93,7 @@ public class PrintPreviewDialog extends FlexoDialog {
             @Override
 			public void stateChanged(ChangeEvent e) {
                 if (slider.getValue() > 0) {
-                    _printableComponent.getPrintableDelegate().setScale(((double)slider.getValue())/100);
+                    _printableComponent.getPrintableDelegate().setScale((double)slider.getValue()/100);
                     update();
                     _printableComponent.getPrintableDelegate().refresh();
                 }
@@ -141,7 +140,7 @@ public class PrintPreviewDialog extends FlexoDialog {
             @Override
 			public void stateChanged(ChangeEvent e) {
                 if (previewScaleSlider.getValue() > 0) {
-                    _printableComponent.getPrintableDelegate().setPreviewScale(((double)previewScaleSlider.getValue())/100);
+                    _printableComponent.getPrintableDelegate().setPreviewScale((double)previewScaleSlider.getValue()/100);
                     update();
                     _printableComponent.getPrintableDelegate().refresh();
                 }
@@ -261,7 +260,6 @@ public class PrintPreviewDialog extends FlexoDialog {
         contentPane.add(bottomPanel,BorderLayout.SOUTH);
         getRootPane().setDefaultButton(printButton);
         getContentPane().add(contentPane);
-        setAlwaysOnTop(false);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         validate();
         pack();
@@ -299,30 +297,34 @@ public class PrintPreviewDialog extends FlexoDialog {
     	
     	File dest = null;
         int returnVal = chooser.showSaveDialog(null);
-        if (returnVal == JFileChooser.CANCEL_OPTION)
-            return;
+        if (returnVal == JFileChooser.CANCEL_OPTION) {
+			return;
+		}
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             if (isValidProjectName(chooser.getSelectedFile().getName())) {
                 dest = chooser.getSelectedFile();
-                if (!(dest.getName().toLowerCase().endsWith(".png"))) {
+                if (!dest.getName().toLowerCase().endsWith(".png")) {
                     dest = new File(dest.getAbsolutePath() + ".png");
                 }
             } else {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Invalid file name. The following characters are not allowed: "
+                if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Invalid file name. The following characters are not allowed: "
                             + FileUtils.BAD_CHARACTERS_FOR_FILE_NAME_REG_EXP);
+				}
                 FlexoController.notify(FlexoLocalization.localizedForKey("file_name_cannot_contain_\\___&_#_{_}_[_]_%_~"));
             }
         } else {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("No project specified !");
+            if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("No project specified !");
+			}
         }
 
         ScreenshotGenerator.ScreenshotImage image = ScreenshotGenerator.getImage(getPrintableComponent().getFlexoModelObject());
         
         try{
-        	if (!dest.exists())
-        		FileUtils.createNewFile(dest);
+        	if (!dest.exists()) {
+				FileUtils.createNewFile(dest);
+			}
         	ImageIO.write(image.image, "png", dest);
         }catch (Exception e) {
         	e.printStackTrace();

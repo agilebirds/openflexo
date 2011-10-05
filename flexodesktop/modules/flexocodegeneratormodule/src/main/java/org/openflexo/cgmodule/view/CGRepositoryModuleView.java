@@ -133,12 +133,10 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
                 fileChooser.setCurrentDirectory(codeRepository.getDirectory());
                 fileChooser.setDialogType(JFileChooser.CUSTOM_DIALOG);
                 fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                controller.dismountWindowsOnTop(null);
                 int returnVal = fileChooser.showDialog(FlexoLocalization.localizedForKey("select"));
                 if(returnVal == JFileChooser.APPROVE_OPTION) {
                 	codeRepository.setDirectory(fileChooser.getSelectedFile());
                 }
-                controller.remountWindowsOnTop();
             }
         });
         firstPanel.add(chooseFileButton);
@@ -170,12 +168,10 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
                 fileChooser.setCurrentDirectory(codeRepository.getWarDirectory());
                 fileChooser.setDialogType(JFileChooser.CUSTOM_DIALOG);
                 fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                controller.dismountWindowsOnTop(null);
                 int returnVal = fileChooser.showDialog(FlexoLocalization.localizedForKey("select"));
                 if(returnVal == JFileChooser.APPROVE_OPTION) {
                 	codeRepository.setWarDirectory(fileChooser.getSelectedFile());
                 }
-                controller.remountWindowsOnTop();
             }
         });
         secondPanel.add(chooseWarLocationButton);
@@ -211,12 +207,10 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
                     fileChooser.setCurrentDirectory(codeRepository.getReaderRepository().getDirectory());
                     fileChooser.setDialogType(JFileChooser.CUSTOM_DIALOG);
                     fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                    controller.dismountWindowsOnTop(null);
                     int returnVal = fileChooser.showDialog(FlexoLocalization.localizedForKey("select"));
                     if(returnVal == JFileChooser.APPROVE_OPTION) {
                     	codeRepository.getReaderRepository().setDirectory(fileChooser.getSelectedFile());
                     }
-                    controller.remountWindowsOnTop();
                 }
             });
         }
@@ -294,11 +288,11 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
  	@Override
 	public void update(FlexoObservable observable, DataModification dataModification)
 	{
-		if ((observable == codeRepository) || (observable == codeRepository.getReaderRepository())) {
-			if ((dataModification.propertyName() != null) && dataModification.propertyName().equals("warDirectory")){
+		if (observable == codeRepository || observable == codeRepository.getReaderRepository()) {
+			if (dataModification.propertyName() != null && dataModification.propertyName().equals("warDirectory")){
 				chooseWarLocationButton.setText(codeRepository.getWarDirectory()!=null?codeRepository.getWarDirectory().getAbsolutePath():FlexoLocalization.localizedForKey("undefined"));
 			} 
-			else if ((dataModification.propertyName() != null) && dataModification.propertyName().equals("directory")){
+			else if (dataModification.propertyName() != null && dataModification.propertyName().equals("directory")){
 		        chooseFileButton.setText(codeRepository.getDirectory()!=null?codeRepository.getDirectory().getAbsolutePath():FlexoLocalization.localizedForKey("undefined"));
 			}
 			else if (dataModification instanceof LogAdded) {

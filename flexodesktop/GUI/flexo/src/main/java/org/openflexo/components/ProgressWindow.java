@@ -190,7 +190,7 @@ public class ProgressWindow extends JDialog implements FlexoProgress
 		getContentPane().add(mainPane);
 		setSize(610, 292);
 		Dimension dim = null;
-		if ((getActiveModuleFrame()==null) || !getActiveModuleFrame().isVisible()) {
+		if (getActiveModuleFrame()==null || !getActiveModuleFrame().isVisible()) {
 			dim = Toolkit.getDefaultToolkit().getScreenSize();
 			setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
 		} else {
@@ -198,11 +198,6 @@ public class ProgressWindow extends JDialog implements FlexoProgress
 		}
 		getRootPane().setBorder(BorderFactory.createRaisedBevelBorder());
 		pack();
-		if ((ToolBox.getPLATFORM()==ToolBox.MACOS) && (initOwner==null)) {
-			setAlwaysOnTop(true);
-		} else {
-			setAlwaysOnTop(false);
-		}
 		setVisible(true);
 		toFront();
 		paintImmediately();

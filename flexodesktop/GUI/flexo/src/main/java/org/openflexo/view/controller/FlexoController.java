@@ -27,7 +27,6 @@ import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.HeadlessException;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -499,7 +498,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		if(FlexoModule.isRunningTest()) {
 			return true;
 		}
-		return (ask(msg) == JOptionPane.YES_OPTION);
+		return ask(msg) == JOptionPane.YES_OPTION;
 	}
 
 	public static int confirmYesNoCancel(String localizedMessage) {
@@ -672,7 +671,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	@Override
 	public boolean handleException(InspectableObject inspectable, String propertyName, Object value, Throwable exception)
 	{
-		if ((inspectable instanceof FlexoProcess) && (exception instanceof DuplicateResourceException)) {
+		if (inspectable instanceof FlexoProcess && exception instanceof DuplicateResourceException) {
 			if (propertyName.equals("name")) {
 				boolean isOK = false;
 				while (!isOK) {
@@ -692,7 +691,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 				}
 				return true;
 			}
-		} else if ((inspectable instanceof OperationNode) && (exception instanceof DuplicateResourceException)) {
+		} else if (inspectable instanceof OperationNode && exception instanceof DuplicateResourceException) {
 			if (propertyName.equals("WOComponentName")) {
 				boolean isOK = false;
 				while (!isOK) {
@@ -715,7 +714,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 				}
 				return true;
 			}
-		} else if ((inspectable instanceof ComponentDefinition) && (exception instanceof DuplicateResourceException)) {
+		} else if (inspectable instanceof ComponentDefinition && exception instanceof DuplicateResourceException) {
 			if (propertyName.equals("name")) {
 				boolean isOK = false;
 				while (!isOK) {
@@ -738,7 +737,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 				return true;
 			}
 		} else if ((inspectable instanceof IEWOComponent || inspectable instanceof ComponentDefinition)
-				&& (exception instanceof InvalidNameException)) {
+				&& exception instanceof InvalidNameException) {
 			if (propertyName.equals("name")) {
 				notify(FlexoLocalization.localizedForKey("invalid_component_name"));
 				return true;
@@ -860,7 +859,6 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		if (parentComponent == null) {
 			if (ProgressWindow.hasInstance()) {
 				parentComponent = ProgressWindow.instance();
-				ProgressWindow.instance().setAlwaysOnTop(false);
 			}
 		}
 		final Component parent = parentComponent;
@@ -907,7 +905,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 			pane.setInitialValue(initialValue);
 		}
 
-		pane.setComponentOrientation(((parentComponent == null) ? getRootFrame() : parentComponent).getComponentOrientation());
+		pane.setComponentOrientation((parentComponent == null ? getRootFrame() : parentComponent).getComponentOrientation());
 
 		pane.setMessageType(messageType);
 		final JDialog dialog = pane.createDialog(parentComponent, title);
@@ -923,12 +921,8 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 				}
 			}
 		});
-		dialog.setAlwaysOnTop(true);
 		dialog.validate();
 		dialog.pack();
-		if (FlexoModule.getActiveModule() != null) {
-			FlexoModule.getActiveModule().getFlexoController().dismountWindowsOnTop(dialog.getBounds());
-		}
 		Window window = null;
 		if (parentComponent instanceof Window) {
 			window = (Window) parentComponent;
@@ -964,12 +958,6 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		dialog.setVisible(true);
 		// pane.selectInitialValue();
 		dialog.dispose();
-		if (FlexoModule.getActiveModule() != null) {
-			FlexoModule.getActiveModule().getFlexoController().remountWindowsOnTop();
-		}
-		if (ProgressWindow.hasInstance()) {
-			ProgressWindow.instance().setAlwaysOnTop(true);
-		}
 		Object selectedValue = pane.getValue();
 
 		if (selectedValue == null) {
@@ -1087,10 +1075,10 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	}
 
 	private static String showInputDialog(Component parentComponent, Object message, String title, int messageType)
-	throws HeadlessException
-	{
+			throws HeadlessException
+			{
 		return (String) showInputDialog(parentComponent, message, title, messageType, null, null, null);
-	}
+			}
 
 	private static Object showInputDialog(Component parentComponent, Object message, String title, int messageType, Icon icon,
 			Object[] selectionValues, Object initialSelectionValue) throws HeadlessException
@@ -1098,7 +1086,6 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		if (parentComponent == null) {
 			if (ProgressWindow.hasInstance()) {
 				parentComponent = ProgressWindow.instance();
-				ProgressWindow.instance().setAlwaysOnTop(false);
 			}
 		}
 		Object[] availableOptions = new Object[] { FlexoLocalization.localizedForKey("OK"), FlexoLocalization.localizedForKey("cancel") };
@@ -1107,7 +1094,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		pane.setWantsInput(true);
 		pane.setSelectionValues(selectionValues);
 		pane.setInitialSelectionValue(initialSelectionValue);
-		pane.setComponentOrientation(((parentComponent == null) ? getRootFrame() : parentComponent).getComponentOrientation());
+		pane.setComponentOrientation((parentComponent == null ? getRootFrame() : parentComponent).getComponentOrientation());
 		pane.setMessageType(messageType);
 		JDialog dialog = pane.createDialog(parentComponent, title);
 		pane.selectInitialValue();
@@ -1118,18 +1105,10 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 			dialog.setLocation((dim.width - dialog.getSize().width) / 2, (dim.height - dialog.getSize().height) / 2);
 		}
-		if (FlexoModule.getActiveModule() != null) {
-			FlexoModule.getActiveModule().getFlexoController().dismountWindowsOnTop(dialog.getBounds());
-		}
 
 		dialog.setVisible(true);
 		dialog.dispose();
-		if (FlexoModule.getActiveModule() != null) {
-			FlexoModule.getActiveModule().getFlexoController().remountWindowsOnTop();
-		}
-		if (ProgressWindow.hasInstance()) {
-			ProgressWindow.instance().setAlwaysOnTop(true);
-		}
+
 		Object val = pane.getValue();
 
 		for (int counter = 0, maxCounter = availableOptions.length; counter < maxCounter; counter++) {
@@ -1431,7 +1410,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	public final ModuleView setCurrentEditedObjectAsModuleView(FlexoModelObject object)
 	{
 		//logger.info("************** setCurrentEditedObjectAsModuleView "+object);
-		if ((getCurrentDisplayedObjectAsModuleView() != object) && (getMainPane() != null)) {
+		if (getCurrentDisplayedObjectAsModuleView() != object && getMainPane() != null) {
 			// Little block to change the currentPerspective if the
 			if (!hasViewForObjectAndPerspective(object, getCurrentPerspective())) {
 				if (hasViewForObjectAndPerspective(object, getDefaultPespective())) {
@@ -1461,7 +1440,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 
 				getFlexoFrame().updateTitle();
 				getFlexoFrame().setVisible(true);
-				if ((this instanceof SelectionManagingController) && (object != null)) {
+				if (this instanceof SelectionManagingController && object != null) {
 					((SelectionManagingController) this).getSelectionManager().setSelectedObject(object);
 				}
 
@@ -1817,101 +1796,6 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 
 	}
 
-	private InspectorWindow dismountedWindow;
-
-	//private int dismountedWindowState = -1;
-
-	private final Object mutex = new Object();
-	private Point dismountedWindowLocation;
-
-	public void dismountWindowsOnTop(Rectangle bounds)
-	{
-		synchronized (mutex) {
-
-			dismountedWindow = FlexoModule.getActiveModule() != null?
-					FlexoModule.getActiveModule().getFlexoController().getInspectorWindow(): null;
-					if (dismountedWindow != null) {
-						if (dismountedWindow.isVisible()) {
-							if (bounds==null) {
-								bounds = FlexoModule.getActiveModule()!=null?FlexoModule
-										.getActiveModule().getFlexoFrame().getBounds():new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
-							}
-							FlexoModule.getActiveModule().getFlexoController().getSharedInspectorController().setBoundsSaverEnabled(false);
-							Rectangle dwBounds = dismountedWindow.getBounds();
-							if (dwBounds.intersects(bounds)) {
-								// We need to move it
-								dismountedWindowLocation = dismountedWindow.getLocationOnScreen();
-								Rectangle intersection = dwBounds.intersection(bounds);
-								if (intersection.height<intersection.width) {
-									// We move it vertically
-									if (dwBounds.getCenterY()<bounds.getCenterY()) {
-										// Move Up
-										int yOffset = dwBounds.y+dwBounds.height-bounds.y-bounds.height;
-										if (yOffset<0) {
-											yOffset = 0;
-										}
-										dismountedWindow.setLocation(dismountedWindowLocation.x, dismountedWindowLocation.y-intersection.height-yOffset);
-									} else {
-										// Move Down
-										int yOffset = bounds.y-dwBounds.y;
-										if (yOffset<0) {
-											yOffset = 0;
-										}
-										dismountedWindow.setLocation(dismountedWindowLocation.x, dismountedWindowLocation.y+intersection.height+yOffset);
-									}
-
-								} else {
-									// We move it horizontally
-									if (dwBounds.getCenterX()>bounds.getCenterX()) {
-										// Move Right
-										int xOffset = bounds.x-dwBounds.x;
-										if (xOffset<0) {
-											xOffset = 0;
-										}
-										dismountedWindow.setLocation(dismountedWindowLocation.x+intersection.width+xOffset, dismountedWindowLocation.y);
-									} else {
-										// Move Left
-										int xOffset = dwBounds.x+dwBounds.width-bounds.x-bounds.width;
-										if (xOffset<0) {
-											xOffset = 0;
-										}
-										dismountedWindow.setLocation(dismountedWindowLocation.x-intersection.width-xOffset, dismountedWindowLocation.y);
-									}
-								}
-							}
-						}
-						/*dismountedWindowState = dismountedWindow.getExtendedState();
-						dismountedWindow.setAlwaysOnTop(false);
-						dismountedWindow.setExtendedState(Frame.ICONIFIED
-								& dismountedWindowState);*/
-					}
-		}
-		if (ProgressWindow.hasInstance()) {
-			ProgressWindow.instance().setAlwaysOnTop(false);
-		}
-	}
-
-	public void remountWindowsOnTop()
-	{
-		synchronized (mutex) {
-			if (dismountedWindow != null) {
-				FlexoModule.getActiveModule().getFlexoController().getSharedInspectorController().setBoundsSaverEnabled(true);
-				if (dismountedWindowLocation!=null) {
-					dismountedWindow.setLocation(dismountedWindowLocation);
-				}
-				dismountedWindowLocation = null;
-				/* dismountedWindow.setExtendedState(dismountedWindowState);
-				dismountedWindow.setAlwaysOnTop(GeneralPreferences
-						.getInspectorAlwaysOnTop());*/
-			}
-			dismountedWindow = null;
-			//dismountedWindowState = -1;
-		}
-		if (ProgressWindow.hasInstance()) {
-			ProgressWindow.instance().setAlwaysOnTop(true);
-		}
-	}
-
 	public void dispose() {
 		if (this instanceof SelectionManagingController) {
 			if (((SelectionManagingController)this).getSelectionManager()!=null) {
@@ -2013,8 +1897,8 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 			}, parameters);
 			if (dialog.getStatus() == AskParametersDialog.VALIDATE)
 			{
-				webServiceUrl = ((String) dialog.parameterValueWithName("webserviceurl"));
-				webServiceLogin = ((String) dialog.parameterValueWithName("login"));
+				webServiceUrl = (String) dialog.parameterValueWithName("webserviceurl");
+				webServiceLogin = (String) dialog.parameterValueWithName("login");
 				try {
 					String password = (String) dialog.parameterValueWithName("password");
 					if (oldMD5Password==null || !oldMD5Password.equals(password)) {
@@ -2064,10 +1948,10 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 
 	public void handleWSException(RemoteException e) {
 		if (e.getCause() instanceof TooManyFailedAttemptException) {
-			throw ((TooManyFailedAttemptException)e.getCause());
+			throw (TooManyFailedAttemptException)e.getCause();
 		}
 		if (e.getCause() instanceof CancelException) {
-			throw ((CancelException)e.getCause());
+			throw (CancelException)e.getCause();
 		}
 		if (logger.isLoggable(Level.SEVERE)) {
 			logger.log(Level.SEVERE,"An error ocurred "+(e.getMessage()==null?"no message":e.getMessage()),e);
@@ -2077,13 +1961,13 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 			if (e.getMessage().indexOf("Location")>-1) {
 				location = e.getMessage().substring(e.getMessage().indexOf("Location")+9).trim();
 			}
-			FlexoController.notify(FlexoLocalization.localizedForKey("could_not_connect_to_web_sevice")+": "+FlexoLocalization.localizedForKey("the_url_seems_incorrect")+(location!=null?("\n"+FlexoLocalization.localizedForKey("try_with_this_one")+" "+location):""));
+			FlexoController.notify(FlexoLocalization.localizedForKey("could_not_connect_to_web_sevice")+": "+FlexoLocalization.localizedForKey("the_url_seems_incorrect")+(location!=null?"\n"+FlexoLocalization.localizedForKey("try_with_this_one")+" "+location:""));
 			return;
 		}
 		if (e instanceof PPMWebServiceAuthentificationException) {
 			handleWSException((PPMWebServiceAuthentificationException)e);
 		} else if (e.getCause() instanceof ConnectException) {
-			FlexoController.notify(FlexoLocalization.localizedForKey("connection_error")+(e.getCause().getMessage()!=null?(" ("+e.getCause().getMessage()+")"):""));
+			FlexoController.notify(FlexoLocalization.localizedForKey("connection_error")+(e.getCause().getMessage()!=null?" ("+e.getCause().getMessage()+")":""));
 		} else if (e.getMessage()!=null && "(500)Apple WebObjects".equals(e.getMessage()) || e.getMessage().startsWith("No such operation")) {
 			FlexoController.notify(FlexoLocalization.localizedForKey("could_not_connect_to_web_sevice")+": "+FlexoLocalization.localizedForKey("the_url_seems_incorrect"));
 		} else if (e.toString()!=null && e.toString().startsWith("javax.net.ssl.SSLHandshakeException")) {
@@ -2111,8 +1995,8 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	}
 
 	private boolean isWSUrlValid(final String wsURL) {
-		return wsURL!=null && ((wsURL.toLowerCase().startsWith("http://") && wsURL.charAt(7)!='/')
-				|| (wsURL.toLowerCase().startsWith("https://") && wsURL.charAt(8)!='/'));
+		return wsURL!=null && (wsURL.toLowerCase().startsWith("http://") && wsURL.charAt(7)!='/'
+				|| wsURL.toLowerCase().startsWith("https://") && wsURL.charAt(8)!='/');
 	}
 
 	private boolean urlSeemsIncorrect(String wsURL) {

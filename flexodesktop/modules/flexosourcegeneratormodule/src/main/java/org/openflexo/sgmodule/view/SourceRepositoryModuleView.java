@@ -238,10 +238,10 @@ public class SourceRepositoryModuleView extends JPanel implements ModuleView<Sou
 	public void update(FlexoObservable observable, DataModification dataModification)
 	{
 		if (observable == sourceRepository /*|| observable == sourceRepository.getReaderRepository()*/) {
-			if ((dataModification.propertyName() != null) && dataModification.propertyName().equals("warDirectory")){
+			if (dataModification.propertyName() != null && dataModification.propertyName().equals("warDirectory")){
 				//chooseWarLocationButton.setText(sourceRepository.getWarDirectory()!=null?sourceRepository.getWarDirectory().getAbsolutePath():FlexoLocalization.localizedForKey("undefined"));
 			} 
-			else if ((dataModification.propertyName() != null) && dataModification.propertyName().equals("directory")){
+			else if (dataModification.propertyName() != null && dataModification.propertyName().equals("directory")){
 		        chooseFileButton.setText(sourceRepository.getDirectory()!=null?sourceRepository.getDirectory().getAbsolutePath():FlexoLocalization.localizedForKey("undefined"));
 			}
 			else if (dataModification instanceof LogAdded) {
@@ -381,12 +381,10 @@ public class SourceRepositoryModuleView extends JPanel implements ModuleView<Sou
 	                fileChooser.setCurrentDirectory(sourceRepository.getDirectory());
 	                fileChooser.setDialogType(JFileChooser.CUSTOM_DIALOG);
 	                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-	                controller.dismountWindowsOnTop(null);
 	                int returnVal = fileChooser.showDialog(FlexoLocalization.localizedForKey("select"));
 	                if(returnVal == JFileChooser.APPROVE_OPTION) {
 	                	sourceRepository.setDirectory(fileChooser.getSelectedFile());
 	                }
-	                controller.remountWindowsOnTop();
 	            }
 	        });
 

@@ -35,12 +35,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import org.openflexo.swing.FlexoFileChooser;
-import org.openflexo.toolbox.ToolBox;
-
 import org.openflexo.inspector.AbstractController;
 import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.swing.FlexoFileChooser;
 
 /**
  * Represents a widget able to edit a File, or a String representing a File or a
@@ -80,9 +78,13 @@ public class FileEditWidget extends DenaliWidget{
         super(model,controller);
 
         if (model.hasValueForParameter(MODE)) {
-        	if (model.getValueForParameter(MODE).equalsIgnoreCase(OPEN)) mode = OPEN_MODE;
-        	else if (model.getValueForParameter(MODE).equalsIgnoreCase(SAVE)) mode = SAVE_MODE;
-        	else mode = OPEN_MODE;
+        	if (model.getValueForParameter(MODE).equalsIgnoreCase(OPEN)) {
+				mode = OPEN_MODE;
+			} else if (model.getValueForParameter(MODE).equalsIgnoreCase(SAVE)) {
+				mode = SAVE_MODE;
+			} else {
+				mode = OPEN_MODE;
+			}
         } else {
         	mode = DEFAULT_MODE;
         }
@@ -144,15 +146,6 @@ public class FileEditWidget extends DenaliWidget{
                 }
                 configureFileChooser(chooser);
                 
-        		boolean parentWasAlwaysOnTop = false;
-        		if (ToolBox.getPLATFORM()==ToolBox.MACOS) {
-	        		if (parent != null && parent.isAlwaysOnTop()) {
-	        			if (logger.isLoggable(Level.FINE))
-	        				logger.fine("Found parent AlwaysOnTopState to true for "+parent);
-	        			parentWasAlwaysOnTop = true;
-	        			parent.setAlwaysOnTop(false);
-	        		}
-        		}
                 if (mode == OPEN_MODE) {
                 	if (chooser.showOpenDialog(_chooseButton) == JFileChooser.APPROVE_OPTION) {
                 		// a dir has been picked...
@@ -179,10 +172,6 @@ public class FileEditWidget extends DenaliWidget{
                 	} else {
                 		// cancelled, return.
                 	}
-                }
-                
-                if (parent!=null && parentWasAlwaysOnTop) {
-                	parent.setAlwaysOnTop(true);
                 }
             }
         });
@@ -216,8 +205,9 @@ public class FileEditWidget extends DenaliWidget{
             } else if (typeIsStringConvertable()) {
                 setFile(new File(getTypeConverter().convertToString(object)));
             } else {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Property " + _propertyModel.name + " is supposed to be a File or a String, not a " + object);
+                if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Property " + _propertyModel.name + " is supposed to be a File or a String, not a " + object);
+				}
             }
         }
 		widgetUpdating = false;
@@ -229,8 +219,9 @@ public class FileEditWidget extends DenaliWidget{
     @Override
 	public synchronized void updateModelFromWidget()
     {
-        if (logger.isLoggable(Level.FINE))
-            logger.finer("updateModelFromWidget() file=" + _file + " getType()=" + getType());
+        if (logger.isLoggable(Level.FINE)) {
+			logger.finer("updateModelFromWidget() file=" + _file + " getType()=" + getType());
+		}
         if (_file != null) {
             if (typeIsStringConvertable()) {
                 setObjectValue(getTypeConverter().convertFromString(_file.getAbsolutePath()));

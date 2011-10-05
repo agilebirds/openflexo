@@ -161,12 +161,10 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
                 fileChooser.setCurrentDirectory(codeRepository.getDirectory());
                 fileChooser.setDialogType(JFileChooser.CUSTOM_DIALOG);
                 fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                controller.dismountWindowsOnTop(null);
                 int returnVal = fileChooser.showDialog(FlexoLocalization.localizedForKey("select"));
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     codeRepository.setDirectory(fileChooser.getSelectedFile());
                 }
-                controller.remountWindowsOnTop();
             }
         });
         northPanel.add(chooseFileButton);
@@ -219,14 +217,12 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
                 fileChooser.setCurrentDirectory(codeRepository.getPostBuildDirectory());
                 fileChooser.setDialogType(JFileChooser.CUSTOM_DIALOG);
                 fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                controller.dismountWindowsOnTop(null);
                 int returnVal = fileChooser.showDialog(FlexoLocalization.localizedForKey("select"));
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     codeRepository.setPostBuildDirectory(fileChooser.getSelectedFile());
                     chooseWarLocationButton.setText(codeRepository.getPostBuildDirectory() != null ? codeRepository.getPostBuildDirectory().getAbsolutePath()
                             : FlexoLocalization.localizedForKey("undefined"));
                 }
-                controller.remountWindowsOnTop();
             }
         });
         buttonPanel.add(chooseWarLocationButton);
@@ -424,10 +420,10 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 	public void update(FlexoObservable observable, DataModification dataModification)
     {
         if (observable == codeRepository) {
-            if ((dataModification.propertyName() != null) && dataModification.propertyName().equals("pdfDirectory")) {
+            if (dataModification.propertyName() != null && dataModification.propertyName().equals("pdfDirectory")) {
                 chooseWarLocationButton.setText(codeRepository.getPostBuildDirectory() != null ? codeRepository.getPostBuildDirectory()
                         .getAbsolutePath() : FlexoLocalization.localizedForKey("undefined"));
-            } else if ((dataModification.propertyName() != null) && dataModification.propertyName().equals("directory")) {
+            } else if (dataModification.propertyName() != null && dataModification.propertyName().equals("directory")) {
                 chooseFileButton.setText(codeRepository.getDirectory() != null ? codeRepository.getDirectory().getAbsolutePath()
                         : FlexoLocalization.localizedForKey("undefined"));
             } else if (dataModification instanceof LogAdded) {
@@ -482,7 +478,7 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
         if (!isListening) {
             if (projectGenerator == null) {
                 Enumeration<ProjectDocGenerator> en = controller.getProjectGenerators();
-                while (en.hasMoreElements() && (projectGenerator == null)) {
+                while (en.hasMoreElements() && projectGenerator == null) {
                     ProjectDocGenerator pdg = en.nextElement();
                     if (pdg.getRepository() == codeRepository) {
 						projectGenerator = pdg;

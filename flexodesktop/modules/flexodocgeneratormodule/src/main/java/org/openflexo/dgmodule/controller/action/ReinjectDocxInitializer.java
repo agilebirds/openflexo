@@ -26,12 +26,6 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
 
-import org.openflexo.swing.FlexoFileChooser;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
-
 import org.openflexo.dg.action.ReinjectDocx;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -39,6 +33,10 @@ import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.swing.FlexoFileChooser;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class ReinjectDocxInitializer extends ActionInitializer<ReinjectDocx, CGObject, CGObject>
 {
@@ -68,9 +66,7 @@ public class ReinjectDocxInitializer extends ActionInitializer<ReinjectDocx, CGO
 				fileChooser.setFileFilterAsString("*.docx");
 				fileChooser.setDialogType(JFileChooser.CUSTOM_DIALOG);
 				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				getController().dismountWindowsOnTop(null);
 				int returnVal = fileChooser.showDialog(FlexoLocalization.localizedForKey("select"));
-				getController().remountWindowsOnTop();
 				if (returnVal == JFileChooser.APPROVE_OPTION)
 				{
 					action.setDocxToReinject(fileChooser.getSelectedFile());

@@ -51,25 +51,17 @@ public class SaveDialog extends JOptionPane
     public SaveDialog(Component parent, FlexoProject project)
     {
         this.project = project;
-        if(FlexoModule.getActiveModule()!=null)
-            FlexoModule.getActiveModule().getFlexoController().dismountWindowsOnTop(null);
         retval = JOptionPane.showConfirmDialog(parent, FlexoLocalization.localizedForKey("project_has_unsaved_changes") + "\n"
                 + FlexoLocalization.localizedForKey("would_you_like_to_save_the_changes?"), FlexoLocalization
                 .localizedForKey("exiting_flexo"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-        if(FlexoModule.getActiveModule()!=null)
-            FlexoModule.getActiveModule().getFlexoController().remountWindowsOnTop();
     }
 
     public SaveDialog(Component parent, FlexoProject project, FlexoModule module)
     {
         this.project = project;
-        if(FlexoModule.getActiveModule()!=null)
-            FlexoModule.getActiveModule().getFlexoController().dismountWindowsOnTop(null);
         retval = JOptionPane.showConfirmDialog(parent, FlexoLocalization.localizedForKey("project_has_unsaved_changes") + "\n"
                 + FlexoLocalization.localizedForKey("would_you_like_to_save_the_changes?"), FlexoLocalization.localizedForKey("exiting ")
                 + module.getName(), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-        if(FlexoModule.getActiveModule()!=null)
-            FlexoModule.getActiveModule().getFlexoController().remountWindowsOnTop();
     }
 
     public int getRetval()
@@ -82,8 +74,9 @@ public class SaveDialog extends JOptionPane
         if (project != null) {
             project.save(progress);
         } else {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Project is null");
+            if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Project is null");
+			}
         }
     }
 }

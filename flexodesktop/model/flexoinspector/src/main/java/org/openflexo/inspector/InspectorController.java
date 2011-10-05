@@ -422,15 +422,6 @@ public class InspectorController implements Observer, AbstractController
 		return false;
 	}
 
-	public void setInspectorWindowsAlwaysOnTop(boolean alwaysOnTop)
-	{
-		for (InspectingWidget i : _inspectingWidgets) {
-			if (i instanceof InspectorWindow) {
-				((InspectorWindow)i).setAlwaysOnTop(alwaysOnTop);
-			}
-		}
-	}
-
 	@Override
 	public InspectorDelegate getDelegate()
 	{
