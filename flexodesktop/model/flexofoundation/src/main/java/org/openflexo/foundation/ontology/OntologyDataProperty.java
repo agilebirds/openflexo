@@ -113,5 +113,9 @@ public class OntologyDataProperty extends OntologyProperty implements Comparable
 		return "Datatype property "+getName();
 	}
 
+	public boolean isOntologyDataProperty()
+	{
+		return true;
+	}
 
 }

@@ -221,5 +221,10 @@ public class OntologyIndividual extends OntologyObject implements Comparable<Ont
 		return "Individual "+getName()+extendsLabel;
 	}
 
+	public boolean isOntologyIndividual()
+	{
+		return true;
+	}
+
 
 }

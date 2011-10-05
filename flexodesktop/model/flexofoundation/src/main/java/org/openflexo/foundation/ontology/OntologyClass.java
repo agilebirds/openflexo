@@ -322,5 +322,10 @@ public class OntologyClass extends OntologyObject implements Comparable<Ontology
 		return "Class "+getName()+extendsLabel;
 	}
 
+	public boolean isOntologyClass()
+	{
+		return true;
+	}
+
 
 }

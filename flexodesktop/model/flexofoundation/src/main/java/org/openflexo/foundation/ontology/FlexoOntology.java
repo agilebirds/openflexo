@@ -1182,4 +1182,10 @@ public abstract class FlexoOntology extends OntologyObject {
 		return o;
 	}
 
+	public boolean isOntology()
+	{
+		return true;
+	}
+
+
 }
