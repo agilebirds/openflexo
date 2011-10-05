@@ -278,7 +278,7 @@ public final class ModuleLoader implements IModuleLoader {
 				userType.getIdentifier());
 		if (selectAndOpenProject) {
 			Module firstLaunchedModule = null;
-			while (firstLaunchedModule == null || (firstLaunchedModule.requireProject() && currentProject == null)) {
+			while (firstLaunchedModule == null || firstLaunchedModule.requireProject() && currentProject == null) {
 				firstLaunchedModule = chooseProjectAndStartingModule();
 				if (!isLoaded(firstLaunchedModule)) {// It basically means that a module could not be loaded.
 					if (currentProject != null) {
@@ -347,7 +347,7 @@ public final class ModuleLoader implements IModuleLoader {
 				.getModule(GeneralPreferences.getFavoriteModuleName()) : null;
 				boolean newProject = false;
 
-				while (firstLaunchedModule == null || (firstLaunchedModule.requireProject() && projectDirectory == null)) {
+				while (firstLaunchedModule == null || firstLaunchedModule.requireProject() && projectDirectory == null) {
 					// logger.info("firstLaunchedModule="+firstLaunchedModule);
 					// logger.info("projectDirectory="+projectDirectory);
 					WelcomeDialog welcomeDialog = new WelcomeDialog();
@@ -643,11 +643,11 @@ public final class ModuleLoader implements IModuleLoader {
 	}
 
 	public static boolean isAvailable(Module module) {
-		return (_availableModules.contains(module));
+		return _availableModules.contains(module);
 	}
 
 	public static boolean isLoaded(Module module) {
-		return (_modules.get(module) != null);
+		return _modules.get(module) != null;
 	}
 
 	public static boolean isActive(Module module) {
@@ -669,7 +669,7 @@ public final class ModuleLoader implements IModuleLoader {
 			}
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning(("Sorry, module " + module.getName() + " not available."));
+				logger.warning("Sorry, module " + module.getName() + " not available.");
 			}
 			return null;
 		}
@@ -814,14 +814,14 @@ public final class ModuleLoader implements IModuleLoader {
 		}
 
 		for (Enumeration<FlexoModule> en = ModuleLoader.loadedModules(); en.hasMoreElements();) {
-			(en.nextElement()).moduleWillClose();
+			en.nextElement().moduleWillClose();
 		}
-		if ((ModuleLoader.allowsDocSubmission()) && (!ModuleLoader.isAvailable(Module.DRE_MODULE)) && (DocResourceManager.instance()
-				.getSessionSubmissions().size() > 0)) {
+		if (ModuleLoader.allowsDocSubmission() && !ModuleLoader.isAvailable(Module.DRE_MODULE) && DocResourceManager.instance()
+				.getSessionSubmissions().size() > 0) {
 			if (FlexoController
 					.confirm(FlexoLocalization.localizedForKey("you_have_submitted_documentation_without_having_saved_report") + "\n" + FlexoLocalization
 							.localizedForKey("would_you_like_to_save_your_submissions"))) {
-				(new ToolsMenu.SaveDocSubmissionAction()).actionPerformed(null);
+				new ToolsMenu.SaveDocSubmissionAction().actionPerformed(null);
 			}
 		}
 		if (ModuleLoader.isAvailable(Module.DRE_MODULE)) {
@@ -982,8 +982,8 @@ public final class ModuleLoader implements IModuleLoader {
 			return null;
 		}
 		if (FlexoResourceManager.needsRestructuring(projectDirectory)) {
-			restructureProjectHierarchy = (FlexoController.ask(FlexoLocalization
-					.localizedForKey("do_you_want_the_hierarchy_project_to_be_restructured")) == JOptionPane.YES_OPTION);
+			restructureProjectHierarchy = FlexoController.ask(FlexoLocalization
+					.localizedForKey("do_you_want_the_hierarchy_project_to_be_restructured")) == JOptionPane.YES_OPTION;
 		}
 		FlexoVersion previousFlexoVersion = getVersion(projectDirectory);
 		if (!isProjectOpenable(projectDirectory)) {
@@ -1231,7 +1231,7 @@ public final class ModuleLoader implements IModuleLoader {
 	 */
 	private static boolean isProjectOpenable(File projectDirectory) {
 		FlexoVersion version = getVersion(projectDirectory);
-		if (version != null && (version.major == 1 && version.minor < 3)) {
+		if (version != null && version.major == 1 && version.minor < 3) {
 			FlexoController.notify(FlexoLocalization.localizedForKey("project_is_too_old_please_use_intermediary_versions"));
 			return false;
 		}
@@ -1458,8 +1458,8 @@ public final class ModuleLoader implements IModuleLoader {
 			try {
 				ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"), 1);
 				getProject().saveAs(projectDirectory, ProgressWindow.instance(),
-						(FlexoCst.BUSINESS_APPLICATION_VERSION.equals(versionParam.getValue()) ? null : versionParam.getValue()), true,
-						true);
+						FlexoCst.BUSINESS_APPLICATION_VERSION.equals(versionParam.getValue()) ? null : versionParam.getValue(), true,
+								true);
 				GeneralPreferences.addToLastOpenedProjects(projectDirectory);
 				ProgressWindow.hideProgressWindow();
 			} catch (SaveResourceException e) {
@@ -1730,10 +1730,11 @@ public final class ModuleLoader implements IModuleLoader {
 
 	public static FlexoResourceCenter getFlexoResourceCenter(boolean createIfNotExist) {
 		if (flexoResourceCenter == null && createIfNotExist) {
-			if (GeneralPreferences.getLocalResourceCenterDirectory() == null || (!GeneralPreferences.getLocalResourceCenterDirectory()
-					.exists())) {
+			if (GeneralPreferences.getLocalResourceCenterDirectory() == null || !GeneralPreferences.getLocalResourceCenterDirectory()
+					.exists()) {
 				if (isDevelopperRelease() || isMaintainerRelease()) {
 					AskLocalResourceCenterDirectory data = new AskLocalResourceCenterDirectory();
+					data.setLocalResourceDirectory(new File(System.getProperty("user.home"), "Library/Flexo/FlexoResourceCenter"));
 					FIBDialog dialog = FIBDialog.instanciateComponent(AskLocalResourceCenterDirectory.FIB_FILE, data, null, true);
 					switch (dialog.getStatus()) {
 					case VALIDATED:
