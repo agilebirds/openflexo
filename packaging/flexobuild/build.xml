@@ -68,7 +68,6 @@
 		<property name="package_name" value="${qualified_and_versioned_app_name} Setup" />
 		<property name="build.properties" value="${flexobuild.work.dir}/build.properties" />
 		<property name="program.args" value="-userType ${userType}" />
-		<property name="vm.args" value="-Xmx512M" />
 		<echoproperties destfile="${build.properties}" />
 		<antcall target="checkoutArtifact" />
 		<antcall target="generateFlexoProperties" />
