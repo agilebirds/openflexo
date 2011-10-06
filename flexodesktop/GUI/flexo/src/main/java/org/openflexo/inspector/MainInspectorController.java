@@ -40,6 +40,9 @@ import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.container.FIBTabPanelView;
+import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.ontology.EditionPatternReference;
+import org.openflexo.foundation.viewpoint.EditionPatternInspector;
 import org.openflexo.inspector.selection.EmptySelection;
 import org.openflexo.inspector.selection.InspectorSelection;
 import org.openflexo.inspector.selection.MultipleSelection;
@@ -103,7 +106,8 @@ public class MainInspectorController implements Observer, ChangeListener {
 		inspectorDialog.setVisible(true);
 	}
 
-	public void loadDirectory(File dir) {
+	public void loadDirectory(File dir) 
+	{
 		logger.info("Directory: " + dir);
 		logger.info("Exists: " + dir.exists());
 		if (!dir.exists()) {
@@ -196,7 +200,23 @@ public class MainInspectorController implements Observer, ChangeListener {
 			if (newInspector != currentInspector) {
 				switchToInspector(newInspector);
 			}
+			if (object instanceof FlexoModelObject) {
+				updateEditionPatternReferences(newInspector,(FlexoModelObject)object);
+			}
 			currentInspectorView.getController().setDataObject(object);
+		}
+	}
+	
+	private void updateEditionPatternReferences(FIBInspector inspector, FlexoModelObject object)
+	{
+		if (inspector.updateEditionPatternReferences(object)) {
+			FIBView view = viewForInspector(inspector);
+			FIBController controller = view.getController();
+			FIBTabPanelView tabPanelView = (FIBTabPanelView)controller.viewForComponent(inspector.getTabPanel());
+			tabPanelView.updateLayout();
+		}
+		else {
+			// Nothing change: nice !!!
 		}
 	}
 
@@ -234,7 +254,7 @@ public class MainInspectorController implements Observer, ChangeListener {
 		}
 
 		// System.out.println("switchToInspector() "+newInspector);
-		FIBView view = inspectorViews.get(newInspector);
+		FIBView view = viewForInspector(newInspector);
 		if (view != null) {
 			currentInspectorView = view;
 			rootPane.removeAll();
@@ -261,6 +281,11 @@ public class MainInspectorController implements Observer, ChangeListener {
 		}
 	}
 
+	private FIBView viewForInspector(FIBInspector inspector)
+	{
+		return inspectorViews.get(inspector);
+	}
+	
 	protected FIBInspector inspectorForObject(Object object) {
 		if (object == null) {
 			return null;

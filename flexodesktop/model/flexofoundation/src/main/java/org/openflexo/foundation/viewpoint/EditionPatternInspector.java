@@ -32,7 +32,7 @@ import org.openflexo.foundation.viewpoint.dm.InspectorEntryRemoved;
  */
 public class EditionPatternInspector extends ViewPointObject {
 
-	private String name;
+	private String inspectorTitle;
 	private EditionPattern _editionPattern;
 	private Vector<InspectorEntry> entries;
 	
@@ -75,6 +75,16 @@ public class EditionPatternInspector extends ViewPointObject {
 	public String getInspectorName() 
 	{
 		return null;
+	}
+
+	public String getInspectorTitle()
+	{
+		return inspectorTitle;
+	}
+
+	public void setInspectorTitle(String inspectorTitle)
+	{
+		this.inspectorTitle = inspectorTitle;
 	}
 
 	public Vector<InspectorEntry> getEntries() 
