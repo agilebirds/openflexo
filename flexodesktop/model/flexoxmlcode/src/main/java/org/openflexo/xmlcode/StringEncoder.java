@@ -730,6 +730,14 @@ public class StringEncoder
 				return null;
 			}
 			try {
+				if (value.equals("boolean")) return Boolean.TYPE;
+				if (value.equals("int")) return Integer.TYPE;
+				if (value.equals("short")) return Short.TYPE;
+				if (value.equals("long")) return Long.TYPE;
+				if (value.equals("float")) return Float.TYPE;
+				if (value.equals("double")) return Double.TYPE;
+				if (value.equals("byte")) return Byte.TYPE;
+				if (value.equals("char")) return Character.TYPE;
 				return Class.forName(value);
 			} catch (ClassNotFoundException e) {
 				// Warns about the exception
