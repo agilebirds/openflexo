@@ -169,6 +169,7 @@ public class DeclarePatternRole extends EditionAction<PatternRole> {
 			}
 			else if (getScheme().getParameter(_getObject()) != null) {
 				EditionPatternParameter p = getScheme().getParameter(_getObject());
+				if (p == null) return;
 				switch (p.getWidget()) {
 				case TEXT_FIELD:
 					setPatternRoleType(PatternRoleType.Primitive);
