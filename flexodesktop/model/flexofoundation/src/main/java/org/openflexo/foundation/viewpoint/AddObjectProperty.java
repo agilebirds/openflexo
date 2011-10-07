@@ -117,16 +117,6 @@ public class AddObjectProperty extends AddProperty {
 		return Inspectors.VPM.ADD_OBJECT_PROPERTY_INSPECTOR;
 	}
 
-	@Override
-	public OntologicObjectPatternRole getPatternRole() {
-		try {
-			return super.getPatternRole();
-		} catch (ClassCastException e) {
-			logger.warning("Unexpected pattern role type");
-			setPatternRole(null);
-			return null;
-		}
-	}
 	
 	@Override
 	protected void updatePatternRoleType()

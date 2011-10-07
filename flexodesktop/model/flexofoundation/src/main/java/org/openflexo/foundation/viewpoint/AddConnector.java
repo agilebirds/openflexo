@@ -126,4 +126,24 @@ public class AddConnector extends AddShemaElementAction<ConnectorPatternRole> {
 		return "AddConnector "+Integer.toHexString(hashCode())+" patternRole="+getPatternRole();
 	}
 	
+	@Override
+	public ConnectorPatternRole getPatternRole() {
+		try {
+			return super.getPatternRole();
+		} catch (ClassCastException e) {
+			logger.warning("Unexpected pattern role type");
+			setPatternRole(null);
+			return null;
+		}
+	}
+	
+	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
+	// Need to be fixed in KeyValueProperty.java
+	@Override
+	public void setPatternRole(ConnectorPatternRole patternRole) 
+	{
+		super.setPatternRole(patternRole);
+	}
+	
+
 }
