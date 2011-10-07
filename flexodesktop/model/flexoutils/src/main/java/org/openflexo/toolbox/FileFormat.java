@@ -33,7 +33,7 @@ public abstract class FileFormat implements StringConvertable<FileFormat> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(FileFormat.class.getPackage().getName());
 
-	public static FileFormat UNKNOWN = new FileFormat(null,null) {
+	public static final FileFormat UNKNOWN = new FileFormat(null, null) {
 		@Override
 		public boolean isBinary() {
 			return false;
@@ -43,24 +43,25 @@ public abstract class FileFormat implements StringConvertable<FileFormat> {
 			return false;
 		}
 	};
-	
-	public static DirectoryFormat UNKNOWN_DIRECTORY = new DirectoryFormat(null,null);
-	public static BinaryFileFormat UNKNOWN_BINARY_FILE = new BinaryFileFormat(null,null);
-	public static TextFileFormat UNKNOWN_ASCII_FILE = new TextFileFormat(null,null,TextSyntax.Plain);
-	public static ImageFileFormat UNKNOWN_IMAGE_FILE = new ImageFileFormat(null,null);
-	
-	public static TextFileFormat TEXT, SYSTEM, XML, OWL, API, WSDL, BPEL, XSD, WOD, DOCXML, ANT, HTML, JS, JAVA, LATEX, PLIST, SQL, CSS;
-	public static BinaryFileFormat JAR, ZIP;
-	public static ImageFileFormat GIF,JPG,PNG;
-	public static DirectoryFormat EOMODEL,WO;
-	
+
+	public static final DirectoryFormat UNKNOWN_DIRECTORY = new DirectoryFormat(null, null);
+	public static final BinaryFileFormat UNKNOWN_BINARY_FILE = new BinaryFileFormat(null, null);
+	public static final TextFileFormat UNKNOWN_ASCII_FILE = new TextFileFormat(null, null, TextSyntax.Plain);
+	public static final ImageFileFormat UNKNOWN_IMAGE_FILE = new ImageFileFormat(null, null);
+
+	public static final TextFileFormat TEXT, SYSTEM, XML, OWL, API, WSDL, BPEL, XSD, WOD, DOCXML, ANT, HTML, JS, JAVA, LATEX, PLIST, SQL,
+			CSS;
+	public static final BinaryFileFormat JAR, ZIP;
+	public static final ImageFileFormat GIF, JPG, PNG;
+	public static final DirectoryFormat EOMODEL, WO;
+
 	static {
-		_fileFormats = new Hashtable<String,FileFormat>(); 
-		_fileFormatsByExtensions = new Hashtable<String,List<FileFormat>>(); 
-		
+		_fileFormats = new Hashtable<String,FileFormat>();
+		_fileFormatsByExtensions = new Hashtable<String,List<FileFormat>>();
+
 		TEXT = registerTextFileFormat("TXT","text/plain",TextSyntax.Plain,"txt","text");
 		SYSTEM = registerTextFileFormat("SYSTEM","text/plain",TextSyntax.Plain);
-		
+
 		XML = registerTextFileFormat("XML","text/xml",TextSyntax.XML,"xml");
 		OWL = registerTextFileFormat("OWL","text/owl",TextSyntax.XML,"owl");
 		API = registerTextFileFormat("API","text/api",TextSyntax.XML,"api");
@@ -70,7 +71,7 @@ public abstract class FileFormat implements StringConvertable<FileFormat> {
 		WOD = registerTextFileFormat("WOD","text/wod",TextSyntax.XML,"wod");
 		DOCXML = registerTextFileFormat("DOCXML","text/docxml",TextSyntax.XML,"docx");
 		ANT = registerTextFileFormat("ANT","text/ant",TextSyntax.XML,"ant");
-		
+
 		HTML = registerTextFileFormat("HTML","text/html",TextSyntax.HTML,"html","htm");
 		JS = registerTextFileFormat("JS","text/javascript",TextSyntax.JavaScript,"js");
 		JAVA = registerTextFileFormat("JAVA","text/java",TextSyntax.Java,"java","jav");
@@ -89,7 +90,7 @@ public abstract class FileFormat implements StringConvertable<FileFormat> {
 		JPG = registerImageFileFormat("JPG","image/jpeg","jpeg","jpg");
 		PNG = registerImageFileFormat("PNG","image/png","png");
 	}
-	
+
 	public static enum TextSyntax
 	{
 		Plain,
@@ -102,12 +103,12 @@ public abstract class FileFormat implements StringConvertable<FileFormat> {
 		PList,
 		SQL
 	}
-	
+
 	public static TextFileFormat registerTextFileFormat(String formatId, String mimeType, String... extensions)
 	{
 		return registerTextFileFormat(formatId,mimeType,null,extensions);
 	}
-	
+
 	public static TextFileFormat registerTextFileFormat(String formatId, String mimeType, TextSyntax syntax, String... extensions)
 	{
 		if (_fileFormats.get(formatId) != null) {
@@ -127,7 +128,7 @@ public abstract class FileFormat implements StringConvertable<FileFormat> {
 		}
 		return returned;
 	}
-	
+
 	public static DirectoryFormat registerDirectoryFormat(String formatId, String mimeType, String... extensions)
 	{
 		if (_fileFormats.get(formatId) != null) {
@@ -147,7 +148,7 @@ public abstract class FileFormat implements StringConvertable<FileFormat> {
 		}
 		return returned;
 	}
-	
+
 	public static BinaryFileFormat registerBinaryFileFormat(String formatId, String mimeType, String... extensions)
 	{
 		if (_fileFormats.get(formatId) != null) {
@@ -167,7 +168,7 @@ public abstract class FileFormat implements StringConvertable<FileFormat> {
 		}
 		return returned;
 	}
-	
+
 	public static ImageFileFormat registerImageFileFormat(String formatId, String mimeType, String... extensions)
 	{
 		if (_fileFormats.get(formatId) != null) {
@@ -187,7 +188,7 @@ public abstract class FileFormat implements StringConvertable<FileFormat> {
 		}
 		return returned;
 	}
-	
+
 	public static FileFormat getFileFormat(String formatIdentifier)
 	{
 		FileFormat returned = _fileFormats.get(formatIdentifier);
@@ -199,9 +200,15 @@ public abstract class FileFormat implements StringConvertable<FileFormat> {
 				return _fileFormats.get(id);
 			}
 		}
+		if (formatIdentifier.equals("File/ASCII")) {
+			return TEXT;
+		}
+		if (formatIdentifier.equals("File/XML")) {
+			return XML;
+		}
 		return UNKNOWN;
 	}
-	
+
 	public static List<FileFormat> getFileFormatByExtension(String extension)
 	{
 		List<FileFormat> returned = _fileFormatsByExtensions.get(extension);
@@ -218,7 +225,7 @@ public abstract class FileFormat implements StringConvertable<FileFormat> {
 		_fileFormatsByExtensions.put(extension,newVector);
 		return newVector;
 	}
-	
+
 	public static FileFormat getDefaultFileFormatByExtension(String extension)
 	{
 		List<FileFormat> list = getFileFormatByExtension(extension);
@@ -227,7 +234,7 @@ public abstract class FileFormat implements StringConvertable<FileFormat> {
 		}
 		return UNKNOWN;
 	}
-	
+
 	public static void registerExtension(String extension, FileFormat fileFormat)
 	{
 		List<FileFormat> returned = _fileFormatsByExtensions.get(extension);
@@ -245,10 +252,10 @@ public abstract class FileFormat implements StringConvertable<FileFormat> {
 			fileFormat.extensions.add(extension);
 		}
 	}
-	
-	private static Hashtable<String,FileFormat> _fileFormats; 
-	private static Hashtable<String,List<FileFormat>> _fileFormatsByExtensions; 
-	
+
+	private static Hashtable<String,FileFormat> _fileFormats;
+	private static Hashtable<String,List<FileFormat>> _fileFormatsByExtensions;
+
 	private final String identifier;
 	private final String mimeType;
 	private final List<String> extensions;
@@ -263,7 +270,7 @@ public abstract class FileFormat implements StringConvertable<FileFormat> {
 	public static class TextFileFormat extends FileFormat
 	{
 		private final TextSyntax syntax;
-		
+
 		private TextFileFormat(String identifier, String mimeType,TextSyntax syntax) {
 			super(identifier,mimeType);
 			this.syntax = syntax;
@@ -277,13 +284,13 @@ public abstract class FileFormat implements StringConvertable<FileFormat> {
 		public boolean isBinary() {
 			return false;
 		}
-		
+
 		@Override
 		public boolean isImage() {
 			return false;
 		}
 	}
-	
+
 	public static class BinaryFileFormat extends FileFormat
 	{
 		private BinaryFileFormat(String identifier, String mimeType) {
@@ -294,13 +301,13 @@ public abstract class FileFormat implements StringConvertable<FileFormat> {
 		public boolean isBinary() {
 			return true;
 		}
-		
+
 		@Override
 		public boolean isImage() {
 			return false;
 		}
 	}
-	
+
 	public static class ImageFileFormat extends FileFormat
 	{
 		private ImageFileFormat(String identifier, String mimeType) {
@@ -311,30 +318,30 @@ public abstract class FileFormat implements StringConvertable<FileFormat> {
 		public boolean isBinary() {
 			return true;
 		}
-		
+
 		@Override
 		public boolean isImage() {
 			return true;
 		}
 	}
-	
+
 	public static class DirectoryFormat extends FileFormat
 	{
 		private DirectoryFormat(String identifier, String mimeType) {
 			super(identifier,mimeType);
 		}
-		
+
 		@Override
 		public boolean isBinary() {
 			return false;
 		}
-		
+
 		@Override
 		public boolean isImage() {
 			return false;
 		}
 	}
-	
+
 	public abstract boolean isBinary();
 
 	public abstract boolean isImage();
@@ -343,8 +350,8 @@ public abstract class FileFormat implements StringConvertable<FileFormat> {
 	public String toString() {
 		return identifier+"-"+mimeType;
 	}
-	
- 	public String getIdentifier() {
+
+	public String getIdentifier() {
 		return identifier;
 	}
 
@@ -357,11 +364,11 @@ public abstract class FileFormat implements StringConvertable<FileFormat> {
 	}
 
 	@Override
-	public StringEncoder.Converter<FileFormat> getConverter() 
+	public StringEncoder.Converter<FileFormat> getConverter()
 	{
 		return fileFormatConverter;
 	}
-	
+
 	public static final StringEncoder.Converter<FileFormat> fileFormatConverter = new Converter<FileFormat>(FileFormat.class) {
 
 		@Override
@@ -376,7 +383,7 @@ public abstract class FileFormat implements StringConvertable<FileFormat> {
 			return value.getIdentifier();
 		}
 
-	    };
+	};
 
 
 }

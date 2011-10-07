@@ -29,19 +29,45 @@ public class NewPackageConverter {
 				return false;
 			}
 		}
+		Collection<File> templates = FileUtils.listFiles(projectDirectory, new String[] { "vm" }, true);
+		for (File template : templates) {
+			if (!convertTemplate(template)) {
+				return false;
+			}
+		}
 		return true;
 	}
 
 	private boolean convertFile(File file) {
 		try {
 			String content = org.openflexo.toolbox.FileUtils.fileContents(file);
+			org.openflexo.toolbox.FileUtils.saveToFile(new File(file.getParentFile(), file.getName() + ".~~"), content);
 			if (file.getName().endsWith(ProjectRestructuration.DM_EXTENSION)) {
 				content = convertDMContentToNewPackage(content);
 			} else {
 				content = convertContentToNewPackage(content);
 			}
-			org.openflexo.toolbox.FileUtils.copyFileToFile(file, new File(file.getParentFile(),file.getName()+".~~"));
 			org.openflexo.toolbox.FileUtils.saveToFile(file, content);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	private boolean convertTemplate(File template) {
+		try {
+			String content = org.openflexo.toolbox.FileUtils.fileContents(template);
+			content = filter(content, BE_DENALI_FLEXO); // be.denali.flexo* --> org.openflexo*
+			content = filter(content, BE_AB_FLEXO); // be.agilebirds.flexo* --> org.openflexo*
+			content = filter(content, BE_AB); // be.agilebirds --> org.openflexo
+			content = content.replace("$velocityCount", "$foreach.count");
+			content = content.replace("${velocityCount}", "${foreach.count}");
+			if (template.getName().equals("LocalizedFile.vm")) {
+				content = content.replace("\\\"", "${quote}");
+			}
+			org.openflexo.toolbox.FileUtils.copyFileToFile(template, new File(template.getParentFile(), template.getName() + ".~~"));
+			org.openflexo.toolbox.FileUtils.saveToFile(template, content);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
@@ -83,13 +109,15 @@ public class NewPackageConverter {
 		return content;
 	}
 
+
 	private static String filter(String content, String packagePrefix) {
 		int lastAppendedIndex = 0;
 		// be.denali.flexo* --> org.openflexo*
 		StringBuilder sb = new StringBuilder(content.length());
 		for (int i = 0; i < content.length(); i++) {
 			if (content.regionMatches(i, packagePrefix, 0, packagePrefix.length())
-					&& !content.regionMatches(i + packagePrefix.length(), ".engine", 0, 7)) {
+					&& !content.regionMatches(i + packagePrefix.length(), ".engine", 0, 7)
+					&& !content.regionMatches(i + packagePrefix.length(), ".commons", 0, 8)) {
 				sb.append(content, lastAppendedIndex, i);
 				sb.append(ORG_OF);
 				char c = content.charAt(i + packagePrefix.length());
