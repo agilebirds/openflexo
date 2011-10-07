@@ -316,7 +316,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 		if (returned != null) {
 			if (returned.getParent() != null) {
 				if (!returned.getParent().equals(father)) {
-					logger.warning("Found object at different places in browser: "+representedObject);
+					//logger.warning("Found object at different places in browser: "+representedObject);
 				}
 			}
 			else if (father != null) {
