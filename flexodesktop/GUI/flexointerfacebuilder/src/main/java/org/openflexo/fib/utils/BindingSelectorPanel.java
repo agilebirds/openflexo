@@ -73,11 +73,11 @@ import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingValue;
 import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.antar.binding.MethodCall;
+import org.openflexo.antar.binding.MethodCall.MethodCallArgument;
 import org.openflexo.antar.binding.MethodDefinition;
 import org.openflexo.antar.binding.StaticBinding;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.binding.Typed;
-import org.openflexo.antar.binding.MethodCall.MethodCallArgument;
 import org.openflexo.fib.utils.BindingSelector.EditionMode;
 import org.openflexo.fib.utils.table.AbstractModel;
 import org.openflexo.fib.utils.table.BindingValueColumn;
@@ -418,16 +418,19 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel
 		};
 		_connectButton = _controlPanel.addButton("connect",
 				new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 						BindingSelectorPanel.this._bindingSelector.apply();
 					}
 				});
 		_cancelButton = _controlPanel.addButton("cancel", new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				BindingSelectorPanel.this._bindingSelector.cancel();
 			}
 		});
 		_resetButton = _controlPanel.addButton("reset", new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				BindingSelectorPanel.this._bindingSelector
 						.setEditedObject(null);
@@ -437,6 +440,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel
 		if (_bindingSelector.areBindingExpressionsAllowed()) {
 			_expressionButton = _controlPanel.addButton("expression",
 					new ActionListener() {
+						@Override
 						public void actionPerformed(ActionEvent e) {
 							if (BindingSelectorPanel.this._bindingSelector
 									.getEditedObject() != null) {
@@ -467,6 +471,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel
 					.createEmptyBorder());
 			showHideCompoundBindingsButton
 					.addActionListener(new ActionListener() {
+						@Override
 						public void actionPerformed(ActionEvent e) {
 							if (BindingSelectorPanel.this._bindingSelector.editionMode == EditionMode.COMPOUND_BINDING) {
 								BindingSelectorPanel.this._bindingSelector
@@ -959,6 +964,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel
 					if (i + 2 == getVisibleColsCount()) {
 						final JList l = makeNewJList();
 						SwingUtilities.invokeLater(new Runnable() {
+							@Override
 							public void run() {
 								Rectangle r = SwingUtilities.convertRectangle(
 										l, l.getBounds(), _browserPanel);
@@ -1347,6 +1353,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel
 			fireModelChanged();
 		}
 
+		@Override
 		public int getSize() {
 			if (getFilter() == null && !_bindingSelector._hideFilteredObjects)
 				return getUnfilteredSize();
@@ -1371,6 +1378,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel
 			return returned;
 		}
 
+		@Override
 		public BindingColumnElement getElementAt(int index) {
 			if (getFilter() == null && !_bindingSelector._hideFilteredObjects)
 				return getUnfilteredElementAt(index);
@@ -1429,11 +1437,11 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel
 						if (TypeUtils.isResolved(columnElement
 								.getResultingType())
 								&& _bindingSelector.getBindable() != null) {
-							if (columnElement.getElement().getAccessibleBindingPathElements().size() > 0) {
-							/*if (_bindingSelector.getBindable()
+							//if (columnElement.getElement().getAccessibleBindingPathElements().size() > 0) {
+							if (_bindingSelector.getBindable()
 									.getBindingFactory()
 									.getAccessibleBindingPathElements(
-											columnElement.getElement()).size() > 0) {*/
+											columnElement.getElement()).size() > 0) {
 							} else {
 								if ((_bindingSelector.getBindingDefinition() != null)
 										&& (_bindingSelector
@@ -1581,13 +1589,13 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel
 				return;
 
 			// _accessibleProperties.addAll(KeyValueLibrary.getAccessibleProperties(_type));
-			//_accessibleProperties.addAll(_bindingSelector.getBindable().getBindingFactory().getAccessibleBindingPathElements(_element));
-			_accessibleProperties.addAll(_element.getAccessibleBindingPathElements());
+			_accessibleProperties.addAll(_bindingSelector.getBindable().getBindingFactory().getAccessibleBindingPathElements(_element));
+			//_accessibleProperties.addAll(_element.getAccessibleBindingPathElements());
 
 			if (BindingSelectorPanel.this._bindingSelector.editionMode == EditionMode.COMPOUND_BINDING) {
 				// _accessibleMethods.addAll(KeyValueLibrary.getAccessibleMethods(_type));
-				//_accessibleProperties.addAll(_bindingSelector.getBindable().getBindingFactory().getAccessibleCompoundBindingPathElements(_element));
-				_accessibleProperties.addAll(_element.getAccessibleCompoundBindingPathElements());
+				_accessibleProperties.addAll(_bindingSelector.getBindable().getBindingFactory().getAccessibleCompoundBindingPathElements(_element));
+				//_accessibleProperties.addAll(_element.getAccessibleCompoundBindingPathElements());
 			}
 
 			for (BindingPathElement p : _accessibleProperties) {
@@ -1616,6 +1624,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel
 			return null;
 		}
 
+		@Override
 		public void update(Observable observable, Object dataModification) {
 			/*
 			 * if(((dataModification instanceof PropertyRegistered ||
@@ -1762,12 +1771,12 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel
 							if (TypeUtils.isResolved(columnElement
 									.getResultingType())
 									&& _bindingSelector.getBindable() != null) {
-								if (columnElement.getElement().getAccessibleBindingPathElements().size() > 0) {
-								/*if (_bindingSelector.getBindable()
+								//if (columnElement.getElement().getAccessibleBindingPathElements().size() > 0) {
+								if (_bindingSelector.getBindable()
 										.getBindingFactory()
 										.getAccessibleBindingPathElements(
 												columnElement.getElement())
-										.size() > 0) {*/
+										.size() > 0) {
 									setIcon(label,
 											FIBIconLibrary.ARROW_RIGHT_ICON,
 											list);
@@ -1920,6 +1929,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel
 		return _controlPanel;
 	}
 
+	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		if (e.getValueIsAdjusting())
 			return;
@@ -2016,6 +2026,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel
 				_bindingSelector.openPopup();
 				if (requestFocus) {
 					SwingUtilities.invokeLater(new Runnable() {
+						@Override
 						public void run() {
 							BindingSelectorPanel.this._bindingSelector
 									.getTextField().requestFocus();
@@ -2174,6 +2185,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel
 						.setText(validPath + commonBeginningPath + ".");
 			alreadyAutocompleted = true;
 			SwingUtilities.invokeLater(new Runnable() {
+				@Override
 				public void run() {
 					BindingSelectorPanel.this._bindingSelector.getTextField()
 							.requestFocus();

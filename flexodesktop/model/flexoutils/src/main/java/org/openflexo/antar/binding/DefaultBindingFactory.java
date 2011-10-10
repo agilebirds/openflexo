@@ -4,6 +4,7 @@
 package org.openflexo.antar.binding;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -11,6 +12,8 @@ import org.openflexo.xmlcode.StringEncoder;
 
 public class DefaultBindingFactory extends StringEncoder.Converter<AbstractBinding> implements BindingFactory
 {
+
+	private static List<BindingPathElement> EMPTY_LIST = new ArrayList<BindingPathElement>();
 
 	boolean warnOnFailure = true;
 
@@ -35,6 +38,7 @@ public class DefaultBindingFactory extends StringEncoder.Converter<AbstractBindi
 		this.staticBindingFactory = staticBindingFactory;
 	}
 
+	@Override
 	public void setBindable(Bindable bindable)
 	{
 		bindingValueFactory.setBindable(bindable);
@@ -42,6 +46,7 @@ public class DefaultBindingFactory extends StringEncoder.Converter<AbstractBindi
 		staticBindingFactory.setBindable(bindable);
 	}
 
+	@Override
 	public void setWarnOnFailure(boolean aFlag)
 	{
 		warnOnFailure = aFlag;
@@ -104,42 +109,102 @@ public class DefaultBindingFactory extends StringEncoder.Converter<AbstractBindi
 		return "???";
 	}
 
+	@Override
 	public BindingValueFactory getBindingValueFactory() 
 	{
 		return bindingValueFactory;
 	}
 
+	@Override
 	public void setBindingValueFactory(BindingValueFactory bindingValueFactory) 
 	{
 		this.bindingValueFactory = bindingValueFactory;
 		bindingValueFactory.setBindingFactory(this);
 	}
 
+	@Override
 	public BindingExpressionFactory getBindingExpressionFactory() 
 	{
 		return bindingExpressionFactory;
 	}
 
+	@Override
 	public void setBindingExpressionFactory(
 			BindingExpressionFactory bindingExpressionFactory) 
 	{
 		this.bindingExpressionFactory = bindingExpressionFactory;
 	}
 
+	@Override
 	public StaticBindingFactory getStaticBindingFactory() 
 	{
 		return staticBindingFactory;
 	}
 
+	@Override
 	public void setStaticBindingFactory(StaticBindingFactory staticBindingFactory) 
 	{
 		this.staticBindingFactory = staticBindingFactory;
 	}
 
+	@Override
 	public BindingVariable makeBindingVariable(Bindable container, String variableName, Type type)
 	{
 		return new BindingVariableImpl(container, variableName, type);
 	}
 
+	@Override
+	public BindingPathElement getBindingPathElement(BindingPathElement father, String propertyName)
+	{
+		if (father instanceof FinalBindingPathElement) return null;
+		if (father.getType() != null) {
+			if (TypeUtils.getBaseClass(father.getType()) == null) {
+				return null;
+			}               
+			Type currentType = father.getType();
+			if (currentType instanceof Class
+					&& ((Class)currentType).isPrimitive()) {
+				currentType = TypeUtils.fromPrimitive((Class)currentType);
+			}
+			return KeyValueLibrary.getKeyValueProperty(currentType, propertyName);			
+		}
+		return null;
+	}
+
+	@Override
+	public List<? extends BindingPathElement> getAccessibleBindingPathElements(BindingPathElement father)
+	{
+		if (father instanceof FinalBindingPathElement) return EMPTY_LIST;
+		if (father.getType() != null) {
+			if (TypeUtils.getBaseClass(father.getType()) == null) {
+				return null;
+			}               
+			Type currentType = father.getType();
+			if (currentType instanceof Class
+					&& ((Class)currentType).isPrimitive()) {
+				currentType = TypeUtils.fromPrimitive((Class)currentType);
+			}
+			return KeyValueLibrary.getAccessibleProperties(currentType);			
+		}
+		return null;
+	}
+
+	@Override
+	public List<? extends BindingPathElement> getAccessibleCompoundBindingPathElements(BindingPathElement father)
+	{
+		if (father instanceof FinalBindingPathElement) return EMPTY_LIST;
+		if (father.getType() != null) {
+			if (TypeUtils.getBaseClass(father.getType()) == null) {
+				return null;
+			}               
+			Type currentType = father.getType();
+			if (currentType instanceof Class
+					&& ((Class)currentType).isPrimitive()) {
+				currentType = TypeUtils.fromPrimitive((Class)currentType);
+			}
+			return KeyValueLibrary.getAccessibleMethods(currentType);			
+		}
+		return null;
+	}
 
 }

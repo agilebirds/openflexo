@@ -20,7 +20,6 @@
 package org.openflexo.antar.binding;
 
 import java.lang.reflect.Type;
-import java.util.List;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 
@@ -47,10 +46,10 @@ public interface BindingPathElement extends Typed
 	
     public Object evaluateBinding(Object target, BindingEvaluationContext context);
     
-	public BindingPathElement getBindingPathElement(String propertyName);
+	/*public BindingPathElement getBindingPathElement(String propertyName);
 
 	public List<? extends BindingPathElement> getAccessibleBindingPathElements();
 
-	public List<? extends BindingPathElement> getAccessibleCompoundBindingPathElements();
+	public List<? extends BindingPathElement> getAccessibleCompoundBindingPathElements();*/
 
 }
