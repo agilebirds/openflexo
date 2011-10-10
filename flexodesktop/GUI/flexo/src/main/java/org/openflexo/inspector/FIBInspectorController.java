@@ -21,8 +21,10 @@ package org.openflexo.inspector;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fib.controller.FIBController;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.viewpoint.InspectorEntry.EditionPatternPathElement;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.view.controller.FlexoFIBController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
@@ -48,6 +50,7 @@ public class FIBInspectorController extends FlexoFIBController {
 		return false;
 	}
 
+	@Override
 	public InteractiveFlexoEditor getEditor()
 	{
 		return editor;
@@ -58,4 +61,14 @@ public class FIBInspectorController extends FlexoFIBController {
 		this.editor = editor;
 	}
 
+	@Override
+	public Object getValue(BindingVariable variable) 
+	{
+		if (variable instanceof EditionPatternPathElement) {
+			if (getDataObject() instanceof FlexoModelObject) {
+				return ((FlexoModelObject)getDataObject()).getEditionPatternReferences().get(((EditionPatternPathElement) variable).getIndex());
+			}
+		}
+		return super.getValue(variable);
+	}
 }

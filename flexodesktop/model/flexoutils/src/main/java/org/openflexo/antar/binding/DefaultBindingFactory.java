@@ -7,11 +7,13 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.openflexo.xmlcode.StringEncoder;
 
 public class DefaultBindingFactory extends StringEncoder.Converter<AbstractBinding> implements BindingFactory
 {
+	static final Logger logger = Logger.getLogger(DefaultBindingFactory.class.getPackage().getName());
 
 	private static List<BindingPathElement> EMPTY_LIST = new ArrayList<BindingPathElement>();
 

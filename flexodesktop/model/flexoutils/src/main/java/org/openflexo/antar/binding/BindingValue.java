@@ -30,7 +30,6 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.MethodCall.MethodCallArgument;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.KeyValueCoder;
-import org.openflexo.xmlcode.KeyValueDecoder;
 
 
 /**
@@ -297,9 +296,9 @@ public class BindingValue extends AbstractBinding
 
 		for (int i=0; i<_bindingPath.size(); i++) {
 			BindingPathElement element = _bindingPath.elementAt(i);
-			if (element.getDeclaringClass() == null 
+			if (i>0 && (element.getDeclaringClass() == null
 					|| TypeUtils.getBaseClass(currentType) == null
-					|| !TypeUtils.isClassAncestorOf(element.getDeclaringClass(),TypeUtils.getBaseClass(currentType))) {
+					|| !TypeUtils.isClassAncestorOf(element.getDeclaringClass(),TypeUtils.getBaseClass(currentType)))) {
 				//System.out.println("Mismatched: "+element.getDeclaringClass()+" "+TypeUtils.getBaseClass(currentType));
 				return false;				
 			}
@@ -720,7 +719,7 @@ public class BindingValue extends AbstractBinding
 		for (BindingPathElement element : getBindingPath()) {
 			if (element != getBindingPath().lastElement()) {
 				//System.out.println("Apply "+element);
-				if (element instanceof KeyValueProperty) {
+				/*if (element instanceof KeyValueProperty) {
 					current = KeyValueDecoder.objectForKey(current,((KeyValueProperty)element).getName());
 				}
 				else if (element instanceof MethodCall) {
@@ -728,7 +727,8 @@ public class BindingValue extends AbstractBinding
 				}
 				else {
 					logger.warning("Unexpected: "+element);
-				}
+				}*/
+				current = element.evaluateBinding(current, context);
 				if (current == null) {
 					return returned;
 				}
@@ -762,8 +762,9 @@ public class BindingValue extends AbstractBinding
 		
 		try {
 			for (BindingPathElement element : getBindingPath()) {
-				//System.out.println("Apply "+element);
-				if (element instanceof KeyValueProperty) {
+				returned.add(new TargetObject(current, element.getLabel()));
+				current = element.evaluateBinding(current, context);
+				/*if (element instanceof KeyValueProperty) {
 					returned.add(new TargetObject(current, ((KeyValueProperty)element).getName()));
 					current = KeyValueDecoder.objectForKey(current,((KeyValueProperty)element).getName());
 				}
@@ -773,7 +774,7 @@ public class BindingValue extends AbstractBinding
 				}
 				else {
 					logger.warning("Unexpected: "+element);
-				}
+				}*/
 				if (current == null) {
 					return returned;
 				}
@@ -797,7 +798,8 @@ public class BindingValue extends AbstractBinding
 		for (BindingPathElement element : getBindingPath()) {
 			if (element != getBindingPath().lastElement()) {
 				//System.out.println("Apply "+element);
-				if (element instanceof KeyValueProperty) {
+				returned = element.evaluateBinding(returned, context);
+				/*if (element instanceof KeyValueProperty) {
 					returned = KeyValueDecoder.objectForKey(returned,((KeyValueProperty)element).getName());
 				}
 				else if (element instanceof MethodCall) {
@@ -805,7 +807,7 @@ public class BindingValue extends AbstractBinding
 				}
 				else {
 					logger.warning("Unexpected: "+element);
-				}
+				}*/
 				if (returned == null) {
 					logger.warning("Null value when executing setBindingValue() for "+getStringRepresentation());
 					return null;
@@ -839,7 +841,8 @@ public class BindingValue extends AbstractBinding
 			for (BindingPathElement element : getBindingPath()) {
 				if (element != getBindingPath().lastElement()) {
 					//System.out.println("Apply "+element);
-					if (element instanceof KeyValueProperty) {
+					returned = element.evaluateBinding(returned, context);
+					/*if (element instanceof KeyValueProperty) {
 						returned = KeyValueDecoder.objectForKey(returned,((KeyValueProperty)element).getName());
 					}
 					else if (element instanceof MethodCall) {
@@ -847,7 +850,7 @@ public class BindingValue extends AbstractBinding
 					}
 					else {
 						logger.warning("Unexpected: "+element);
-					}
+					}*/
 					if (returned == null) {
 						logger.warning("Null value when executing setBindingValue() for "+getStringRepresentation());
 						return;

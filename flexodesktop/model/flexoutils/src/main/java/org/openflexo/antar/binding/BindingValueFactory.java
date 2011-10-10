@@ -9,6 +9,7 @@ import java.util.Enumeration;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingValue.DecodingPreProcessor;
 import org.openflexo.antar.expr.DefaultExpressionParser;
@@ -20,6 +21,8 @@ import org.openflexo.xmlcode.StringEncoder;
 
 public class BindingValueFactory extends StringEncoder.Converter<BindingValue>
 {
+	private static final Logger logger = Logger.getLogger(BindingValueFactory.class.getPackage().getName());
+
 	boolean warnOnFailure = true;
 
 	private Bindable _bindable;
@@ -232,16 +235,18 @@ public class BindingValueFactory extends StringEncoder.Converter<BindingValue>
 		}
 	}
 
+	private boolean debug = false;
+	
 	@Override
 	public BindingValue convertFromString(String aValue)
 	{
 
-		//boolean debug = (aValue.startsWith("data.dateBindingDefinition"));
-		/*if (debug) {
+		//boolean debug = (aValue.startsWith("BasicOntologyEditor_Concept_0.concept"));
+		if (debug) {
 			System.out.println("OK, decoding BindingValue "+aValue);
 			System.out.println("_bindable="+_bindable);
 			System.out.println("binding model ="+_bindable.getBindingModel());
-		}*/
+		}
 		if (BindingValue.logger.isLoggable(Level.FINE))
 			BindingValue.logger.fine("Decode " + aValue);
 
@@ -264,6 +269,7 @@ public class BindingValueFactory extends StringEncoder.Converter<BindingValue>
 			PathTokenizer st = new PathTokenizer(value);
 			if (st.hasMoreTokens()) {
 				String bindingVariableName = st.nextToken();
+				if (debug) System.out.println("bindingVariableName="+bindingVariableName);
 				if (_bindable == null) {
 					if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure)
 						BindingValue.logger.warning(("Could not decode BindingValue '" + value + "' : no declared bindable !"));
@@ -286,6 +292,7 @@ public class BindingValueFactory extends StringEncoder.Converter<BindingValue>
 				} else {
 					if (BindingValue.logger.isLoggable(Level.FINE))
 						BindingValue.logger.fine("Found binding variable "+bv);
+					if (debug) System.out.println("Found binding variable "+bv);
 					BindingPathElement currentElement = bv;
 					Type currentType = bv.getType();
 					if (currentType == null) {
@@ -299,7 +306,7 @@ public class BindingValueFactory extends StringEncoder.Converter<BindingValue>
 						String nextTokenName = st.nextToken();
 						if (BindingValue.logger.isLoggable(Level.FINE))
 							BindingValue.logger.fine("nextTokenName="+nextTokenName+" currentType="+currentType);
-						//if (debug) System.out.println("nextTokenName="+nextTokenName+" currentType="+currentType);
+						if (debug) System.out.println("nextTokenName="+nextTokenName+" currentType="+currentType);
 						BindingPathElement nextElement;
 						if (TypeUtils.getBaseClass(currentType) == null) {
 							if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure)
@@ -322,13 +329,18 @@ public class BindingValueFactory extends StringEncoder.Converter<BindingValue>
 							nextElement = tryToDecodeAsMethodCall(returned, currentType, nextTokenName);
 						}
 						if (nextElement == null) {
+							if (debug) System.out.println("cannot find next element");
+							if (debug) logger.info("cannot find next element for "+aValue+" factory="+_bindingFactory);
 							if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure)
 								BindingValue.logger.warning(("Could not decode BindingValue '" + value
 										+ "' : cannot find property nor method matching '" + nextTokenName + "' for type "
 										+ currentType + " !"));
 							return null;
 						} else {
+							if (debug) System.out.println("added to binding path "+nextElement);
+							if (debug) logger.info("found next element for "+aValue+" factory="+_bindingFactory);
 							currentType = returned.addBindingPathElement(nextElement);
+							if (debug) logger.info("type="+returned.getAccessedType());
 							//returned.addBindingPathElement(nextElement);
 							//currentType = nextElement.getType();
 							if (currentType == null) {
@@ -340,8 +352,15 @@ public class BindingValueFactory extends StringEncoder.Converter<BindingValue>
 						}
 						currentElement = nextElement;
 					}
+					
+					if (debug) logger.info("Tout va bien pour decoder "+aValue);
+					
 					// Before to receive its owner, we set to knonwn bindable, in order to check validity
 					returned.setOwner(_bindable);
+
+					if (debug) logger.info("Je mets le bindable "+_bindable);
+					if (debug) logger.info("Et c'est bon ? "+returned.isBindingValidWithoutBindingDefinition());
+
 					if (returned.isBindingValidWithoutBindingDefinition()) {
 						returned._isConnected = true;
 						return returned;

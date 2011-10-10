@@ -52,4 +52,8 @@ public class FIBComponentDynamicModel<T> {
 		return component;
 	}
 	
+	@Override
+	public String toString() {
+		return "FIBComponentDynamicModel,data="+getData();
+	}
 }
