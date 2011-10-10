@@ -35,7 +35,6 @@ import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DefaultBindingFactory;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.foundation.ontology.EditionPatternReference;
-import org.openflexo.foundation.ontology.OntologyProperty;
 
 
 /**
@@ -66,11 +65,10 @@ public abstract class InspectorEntry extends ViewPointObject implements Bindable
 	}
 
 	private EditionPatternInspector inspector;
+	private String name;
 	private String label;
-	private PatternRole patternRole;
 	private BindingModel _bindingModel;
-	
-	private OntologyProperty ontologyProperty;
+	private boolean readOnly;
 	
 	private InspectorDataBinding data;
 	private InspectorDataBinding conditional;
@@ -123,35 +121,9 @@ public abstract class InspectorEntry extends ViewPointObject implements Bindable
 	}
 
 
-	public PatternRole getPatternRole() 
-	{
-		return patternRole;
-	}
-
-
-	public void setPatternRole(PatternRole patternRole) 
-	{
-		this.patternRole = patternRole;
-	}
-
-	public OntologyProperty getOntologyProperty() 
-	{
-		return ontologyProperty;
-	}
-
-	public void setOntologyProperty(OntologyProperty ontologyProperty) 
-	{
-		this.ontologyProperty = ontologyProperty;
-	}
-
 	public boolean isSingleEntry()
 	{
 		return true;
-	}
-	
-	public boolean isOntologicConcept()
-	{
-		return getPatternRole() instanceof OntologicObjectPatternRole;
 	}
 	
 	public void notifyBindingChanged(InspectorDataBinding binding)
@@ -190,6 +162,24 @@ public abstract class InspectorEntry extends ViewPointObject implements Bindable
 		}	
 	}
 
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public boolean getIsReadOnly() {
+		return readOnly;
+	}
+
+	public void setIsReadOnly(boolean readOnly) {
+		this.readOnly = readOnly;
+	}
+	
 	public InspectorDataBinding getData() 
 	{
 		if (data == null) data = new InspectorDataBinding(this,InspectorBindingAttribute.data,getDataBindingDefinition());
@@ -391,6 +381,6 @@ public abstract class InspectorEntry extends ViewPointObject implements Bindable
 			return index;
 		}
 	}
-	
+
 
 }

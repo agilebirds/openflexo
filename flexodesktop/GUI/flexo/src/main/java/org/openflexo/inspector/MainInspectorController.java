@@ -41,8 +41,8 @@ import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.container.FIBTabPanelView;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.EditionPatternReference;
-import org.openflexo.foundation.viewpoint.EditionPatternInspector;
+import org.openflexo.foundation.view.ViewConnector;
+import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.inspector.selection.EmptySelection;
 import org.openflexo.inspector.selection.InspectorSelection;
 import org.openflexo.inspector.selection.MultipleSelection;
@@ -203,6 +203,16 @@ public class MainInspectorController implements Observer, ChangeListener {
 			if (object instanceof FlexoModelObject) {
 				updateEditionPatternReferences(newInspector,(FlexoModelObject)object);
 			}
+			if (object instanceof FlexoModelObject
+					&& (object instanceof ViewShape
+						|| object instanceof ViewConnector) && ((FlexoModelObject)object).getEditionPatternReferences().size() > 0) {
+					String newTitle = ((FlexoModelObject)object).getEditionPatternReferences().firstElement().getEditionPattern().getInspector().getInspectorTitle();
+					logger.info("Set new title: "+newTitle);
+					inspectorDialog.setTitle(newTitle);
+			}
+			else {
+				inspectorDialog.setTitle(newInspector.getParameter("title"));
+			}
 			currentInspectorView.getController().setDataObject(object);
 		}
 	}
@@ -263,7 +273,8 @@ public class MainInspectorController implements Observer, ChangeListener {
 			rootPane.validate();
 			rootPane.repaint();
 			currentInspector = newInspector;
-			inspectorDialog.setTitle(newInspector.getParameter("title"));
+			//logger.info("reset title to "+newInspector.getParameter("title"));dsqqsd
+			//inspectorDialog.setTitle(newInspector.getParameter("title"));
 			tabPanelView = (FIBTabPanelView) currentInspectorView
 			.getController().viewForComponent(
 					currentInspector.getTabPanel());

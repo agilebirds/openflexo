@@ -471,100 +471,39 @@
       </Tab>
       <Tab index="1" title="inspector" layout="gridbag" borderTitle="EditionScheme" protectContent="true" data="data.inspector" dataClassName="org.openflexo.foundation.viewpoint.EditionPatternInspector" constraints="border(location=center;index=1)" width="80" height="60" name="InspectorTab">
         <Table iteratorClassName="org.openflexo.foundation.viewpoint.InspectorEntry" visibleRowCount="7" rowHeight="18" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="InspectorTab.data.entries" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=0;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=1;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=both)" name="InspectorPropertyTable" localize="true" manageDynamicModel="true">
-          <TextFieldColumn data="iterator.label" title="textfield" columnWidth="150" resizable="true" displayTitle="true" name="textfield" />
+          <TextFieldColumn data="iterator.label" title="label" columnWidth="120" resizable="true" displayTitle="true" name="textfield" />
           <LabelColumn data="iterator.widgetName" title="widget" columnWidth="100" resizable="true" displayTitle="true" name="label" />
-          <AddAction method="data.inspector.createNewTextField" name="add_textfield_property" />
-          <AddAction method="data.inspector.createNewTableProperty" name="add_table_property" />
-          <RemoveAction method="data.inspector.deleteProperty(selected)" name="delete_property" />
+          <AddAction method="data.inspector.createNewTextField" name="add_textfield" />
+          <AddAction method="data.inspector.createNewTableProperty" name="add_table" />
+          <RemoveAction method="data.inspector.deleteProperty(selected)" name="delete" />
+          <AddAction method="data.inspector.createNewTextArea" name="add_textarea" />
+          <AddAction method="data.inspector.createNewInteger" name="add_integer" />
+          <AddAction method="data.inspector.createNewCheckbox" name="add_checkbox" />
         </Table>
         <Panel layout="border" borderTitle="Simple property" data="InspectorPropertyTable.selected" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=0;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=2;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=1.0;fill=both;weightX=1.0)" visible="(InspectorPropertyTable.selected = null)" name="EmptyPanel">
           <Label label="please_select_an_entry" align="center" localize="true" constraints="border(location=center)">
             <LocalizedDictionary />
           </Label>
         </Panel>
-        <Panel layout="twocols" borderTitle="Simple property" borderLeft="5" borderRight="3" data="InspectorPropertyTable.selected" dataClassName="org.openflexo.foundation.viewpoint.InspectorEntry" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=0;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=3;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=1.0;fill=both;weightX=1.0)" visible="InspectorPropertyTable.selected.isEditionPatternProperty" width="300" height="162" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="SingleEntryPanel">
-          <Label label="label" localize="true" constraints="twocols(location=left;index=0;expandVertically=false;expandHorizontally=true)" />
-          <TextField columns="6" passwd="false" text="TextField" localize="true" data="SingleEntryPanel.data.label" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
-          <Label label="pattern_role" localize="true" constraints="twocols(location=left;index=2;expandVertically=false;expandHorizontally=true)" />
-          <DropDown format="object.name" localize="true" name="dropdown" data="SingleEntryPanel.data.patternRole" constraints="twocols(location=right;index=3;expandVertically=false;expandHorizontally=true)" list="data.patternRoles" iteratorClassName="org.openflexo.foundation.viewpoint.PatternRole" />
-          <Label label="property" localize="true" constraints="twocols(location=left;index=4;expandVertically=false;expandHorizontally=true)" />
-          <Custom componentClassName="org.openflexo.components.widget.OntologyPropertySelector" data="SingleEntryPanel.data.ontologyProperty" constraints="twocols(location=right;index=5;anchor=center;weightY=0.0;insetsLeft=0;weightX=1.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=horizontal;insetsRight=0;gridY=-1;gridX=-1;gridWidth=0;expandHorizontally=true;expandVertically=false)" localize="true" manageDynamicModel="true">
-            <Assignment variable="component.ontologyLibrary" value="data.ontologyLibrary" />
-            <Assignment variable="component.defaultWidth" value="350" />
-            <Assignment variable="component.defaultHeight" value="250" />
-            <Assignment variable="component.hierarchicalMode" value="false" />
-          </Custom>
+        <Panel layout="twocols" borderLeft="5" borderRight="3" data="InspectorPropertyTable.selected" dataClassName="org.openflexo.foundation.viewpoint.InspectorEntry" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=0;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=3;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=1.0;fill=both;weightX=1.0)" visible="InspectorPropertyTable.selected.isEditionPatternProperty" width="300" height="162" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="EntryPanel">
+          <Label label="name" localize="true" constraints="twocols(location=left;index=0;expandVertically=false;expandHorizontally=true)" />
+          <TextField columns="7" passwd="false" text="TextField" localize="true" data="EntryPanel.data.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
+          <Label label="label" localize="true" constraints="twocols(location=left;index=2;expandVertically=false;expandHorizontally=true)" />
+          <TextField columns="6" passwd="false" text="TextField" localize="true" data="EntryPanel.data.label" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" />
+          <Label label="read_only" localize="true" constraints="twocols(location=left;index=4;expandVertically=false;expandHorizontally=true)" />
+          <CheckBox selected="true" localize="true" name="checkbox" data="EntryPanel.data.isReadOnly" constraints="twocols(location=right;index=5;anchor=center;weightY=0.0;insetsLeft=0;weightX=1.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=horizontal;insetsRight=0;gridY=-1;gridX=-1;gridWidth=0;expandHorizontally=true;expandVertically=false)" />
           <Label label="data" localize="true" name="data2" constraints="twocols(location=left;index=6;expandVertically=false;expandHorizontally=false)" />
-          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="SingleEntryPanel.data.data.binding" constraints="twocols(location=right;index=7;expandVertically=false;expandHorizontally=true)" name="dataValue" localize="true" manageDynamicModel="true">
-            <Assignment variable="component.bindable" value="SingleEntryPanel.data" />
-            <Assignment variable="component.bindingDefinition" value="SingleEntryPanel.data.dataBindingDefinition" />
+          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="EntryPanel.data.data.binding" constraints="twocols(location=right;index=7;expandVertically=false;expandHorizontally=true)" name="conditionalValue" localize="true" manageDynamicModel="true">
+            <Assignment variable="component.bindable" value="EntryPanel.data" />
+            <Assignment variable="component.bindingDefinition" value="EntryPanel.data.dataBindingDefinition" />
           </Custom>
           <Label label="conditional" localize="true" name="conditional" constraints="twocols(location=left;index=8;expandVertically=false;expandHorizontally=false)" />
-          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="SingleEntryPanel.data.conditional.binding" constraints="twocols(location=right;index=9;expandVertically=false;expandHorizontally=true)" name="conditionalValue" localize="true" manageDynamicModel="true">
-            <Assignment variable="component.bindable" value="SingleEntryPanel.data" />
-            <Assignment variable="component.bindingDefinition" value="SingleEntryPanel.data.conditionalBindingDefinition" />
+          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="EntryPanel.data.conditional.binding" constraints="twocols(location=right;index=9;expandVertically=false;expandHorizontally=true)" name="conditionalValue" localize="true" manageDynamicModel="true">
+            <Assignment variable="component.bindable" value="EntryPanel.data" />
+            <Assignment variable="component.bindingDefinition" value="EntryPanel.data.conditionalBindingDefinition" />
           </Custom>
-          <TextArea columns="6" rows="2" text="TextArea" data="SingleEntryPanel.data.description" constraints="twocols(location=center;index=10;expandVertically=true;expandHorizontally=true)" localize="true" />
+          <TextArea columns="6" rows="2" text="TextArea" data="EntryPanel.data.description" constraints="twocols(location=center;index=10;expandVertically=true;expandHorizontally=true)" localize="true" />
           <LocalizedDictionary />
-        </Panel>
-        <Panel layout="twocols" borderTitle="Property list" protectContent="true" data="InspectorPropertyTable.selected" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=0;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=4;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=1.0;fill=both;weightX=1.0)" visible="InspectorPropertyTable.selected.isEditionPatternPropertyList" name="MultipleEntryPanel">
-          <Label label="label" localize="true" constraints="twocols(location=left;index=0;expandHorizontally=true;expandVertically=false)" />
-          <TextField columns="6" passwd="false" text="TextField" localize="true" data="PropertyListPanel.data.label" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
-          <Label label="pattern_role" localize="true" constraints="twocols(location=left;index=2;expandVertically=false;expandHorizontally=true)" />
-          <DropDown localize="true" name="dropdown" data="PropertyListPanel.data.patternRole" constraints="twocols(location=right;index=3;expandVertically=false;expandHorizontally=true)" list="data.availablePatternRoleNames" iteratorClassName="java.lang.String" />
-          <Label label="data" localize="true" constraints="twocols(location=left;index=4;expandVertically=false;expandHorizontally=true)" visible="(PropertyListPanel.data.patternRoleReference.type = &quot;OntologicObject&quot;)" />
-          <Panel layout="gridbag" constraints="twocols(location=center;index=5;expandHorizontally=true;expandVertically=false)">
-            <CheckBox selected="false" localize="true" manageDynamicModel="true" name="UsePropertyCheckbox2" data="PropertyListPanel.data.isOntologyProperty" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;fill=none;weightX=0.0)" />
-            <Label label="use_property" localize="true" constraints="gridbag(location=left;index=1;anchor=center;weightY=0.0;insetsLeft=0;weightX=0.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=none;insetsRight=5;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=true;expandVertically=false)" />
-            <Custom componentClassName="org.openflexo.components.widget.OntologyPropertySelector" data="PropertyListPanel.data.ontologyProperty" constraints="gridbag(location=right;index=2;anchor=center;weightY=0.0;insetsLeft=0;weightX=1.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=horizontal;insetsRight=0;gridY=-1;gridX=-1;gridWidth=0;expandHorizontally=true;expandVertically=false)" visible="UsePropertyCheckbox2.data" localize="true" manageDynamicModel="true">
-              <Assignment variable="component.ontologyLibrary" value="data.ontologyLibrary" />
-              <Assignment variable="component.defaultWidth" value="350" />
-              <Assignment variable="component.defaultHeight" value="250" />
-              <Assignment variable="component.hierarchicalMode" value="false" />
-            </Custom>
-            <TextField passwd="false" localize="true" data="PropertyListPanel.data.data" constraints="gridbag(location=right;index=3;anchor=center;weightY=0.0;insetsLeft=0;weightX=1.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=horizontal;insetsRight=0;gridY=-1;gridX=-1;gridWidth=0;expandHorizontally=true;expandVertically=false)" visible="(!(UsePropertyCheckbox2.data))" />
-          </Panel>
-          <Label label="index" localize="true" constraints="twocols(location=left;index=6;expandVertically=false;expandHorizontally=true)" />
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" data="PropertyListPanel.data.constraint" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" name="Integer" localize="true" />
-          <Label label="conditional" localize="true" constraints="twocols(location=left;index=8;expandVertically=false;expandHorizontally=true)" />
-          <TextField columns="6" passwd="false" text="TextField" localize="true" data="PropertyListPanel.data.conditional" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=false)" />
-          <TabPanel constraints="twocols(location=center;index=10;expandHorizontally=true;expandVertically=true)" width="100" height="70">
-            <Tab index="1" title="columns" layout="gridbag" protectContent="true">
-              <Table iteratorClassName="org.openflexo.inspector.model.PropertyListColumn" visibleRowCount="5" rowHeight="18" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="PropertyListPanel.data.columns" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=0;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=1.0;weightX=1.0;fill=both)" name="PropertyListColumnTable" localize="true" manageDynamicModel="true">
-                <TextFieldColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" name="textfield" />
-                <TextFieldColumn data="iterator.label" title="label" columnWidth="100" resizable="true" displayTitle="true" name="textfield" />
-                <DropDownColumn list="iterator.availableWidgetValues" data="iterator.widget" title="widget" columnWidth="100" resizable="true" displayTitle="true" name="dropdown" />
-                <NumberColumn numberType="IntegerType" data="iterator.columnWidth" title="width" columnWidth="50" resizable="false" displayTitle="true" name="number" />
-                <CheckBoxColumn data="iterator.isResizable" title="resiz." columnWidth="50" resizable="false" displayTitle="true" name="checkbox" />
-                <CheckBoxColumn data="iterator.displayTitle" title="title" columnWidth="50" resizable="false" displayTitle="true" name="checkbox" />
-                <AddAction method="PropertyListPanel.data.createColumn" name="add_column" />
-                <RemoveAction method="PropertyListPanel.data.deleteColumn(selected)" name="delete_column" />
-              </Table>
-              <Panel layout="twocols" borderTitle="Panel" borderLeft="5" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=0;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=1;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=1.0;weightX=1.0;fill=both)" width="300" height="28">
-                <Label label="label" localize="true" constraints="twocols(location=left;index=2;expandVertically=false;expandHorizontally=false)" />
-                <Label label="name" localize="true" constraints="twocols(location=left;index=0;expandVertically=false;expandHorizontally=true)" />
-                <TextField columns="6" passwd="false" text="TextField" localize="true" data="PropertyListColumnTable.selected.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
-                <TextField columns="6" passwd="false" text="TextField" localize="true" data="PropertyListColumnTable.selected.label" constraints="twocols(location=right;index=3;expandVertically=false;expandHorizontally=true)" />
-                <Label label="widget" localize="true" constraints="twocols(location=left;index=4;expandVertically=false;expandHorizontally=true)" />
-                <DropDown localize="true" name="dropdown" data="PropertyListColumnTable.selected.widget" constraints="twocols(location=right;index=5;expandVertically=false;expandHorizontally=true)" list="PropertyListColumnTable.selected.availableWidgetValues" iteratorClassName="java.lang.String" />
-                <Label label="dynamic_list" localize="true" constraints="twocols(location=left;index=6;expandVertically=false;expandHorizontally=true)" visible="(PropertyListColumnTable.selected.widget = &quot;DROPDOWN&quot;)" />
-                <TextField columns="6" passwd="false" text="TextField" localize="true" data="PropertyListColumnTable.selected.dynamicList" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=false)" visible="(PropertyListColumnTable.selected.widget = &quot;DROPDOWN&quot;)" />
-                <Label label="format" localize="true" constraints="twocols(location=left;index=8;expandVertically=false;expandHorizontally=true)" visible="(PropertyListColumnTable.selected.widget = &quot;DROPDOWN&quot;)" />
-                <TextField columns="6" passwd="false" text="TextField" localize="true" data="PropertyListColumnTable.selected.format" constraints="twocols(location=right;index=9;expandVertically=false;expandHorizontally=true)" visible="(PropertyListColumnTable.selected.widget = &quot;DROPDOWN&quot;)" />
-                <TextArea columns="6" rows="2" text="TextArea" data="PropertyListColumnTable.selected.help" constraints="twocols(location=center;index=10;expandHorizontally=true;expandVertically=true)" localize="true" />
-              </Panel>
-            </Tab>
-            <Tab index="2" title="actions" layout="gridbag" protectContent="true">
-              <Table iteratorClassName="org.openflexo.inspector.model.PropertyListAction" visibleRowCount="5" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="PropertyListPanel.data.actions" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=0;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=1.0;weightX=1.0;fill=both)" name="PropertyListActionTable" localize="true" manageDynamicModel="true">
-                <TextFieldColumn data="iterator.name" title="name" columnWidth="150" resizable="true" displayTitle="true" name="textfield" />
-                <DropDownColumn list="iterator.availableActionType" data="iterator.type" title="type" columnWidth="50" resizable="true" displayTitle="true" name="dropdown" />
-                <TextFieldColumn data="iterator.getMethod" title="method" columnWidth="500" resizable="true" displayTitle="true" name="textfield" />
-                <TextFieldColumn data="iterator.getIsAvailable" title="available" columnWidth="300" resizable="true" displayTitle="true" name="textfield" />
-                <AddAction method="PropertyListPanel.data.createAction" name="add_action" />
-                <RemoveAction method="PropertyListPanel.data.deleteAction(selected)" name="delete_action" />
-              </Table>
-            </Tab>
-          </TabPanel>
         </Panel>
         <Panel layout="border" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="Panel" borderTop="2" borderBottom="3" constraints="gridbag(insetsLeft=0;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=0;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=horizontal)">
           <Label label="inspector_name" localize="true" constraints="border(location=west;index=0)" font="Lucida Grande,0,13">

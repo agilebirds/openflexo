@@ -39,6 +39,7 @@ public class EditionPatternInspector extends ViewPointObject {
 	public static EditionPatternInspector makeEditionPatternInspector(EditionPattern ep)
 	{
 		EditionPatternInspector returned = new EditionPatternInspector();
+		returned.setInspectorTitle(ep.getName());
 		ep.setInspector(returned);
 		return returned;
 	}
@@ -59,6 +60,7 @@ public class EditionPatternInspector extends ViewPointObject {
 		_editionPattern = editionPattern;
 	}
 
+	@Override
 	public ViewPoint getCalc() 
 	{
 		if (getEditionPattern() != null)
@@ -77,6 +79,7 @@ public class EditionPatternInspector extends ViewPointObject {
 		return null;
 	}
 
+	@Override
 	public String getInspectorTitle()
 	{
 		return inspectorTitle;
@@ -116,50 +119,37 @@ public class EditionPatternInspector extends ViewPointObject {
 	public TextFieldInspectorEntry createNewTextField()
 	{
 		TextFieldInspectorEntry newEntry = new TextFieldInspectorEntry();
-		newEntry.setLabel("new_entry");
-		newEntry.setPatternRole(getEditionPattern().getPatternRoles().size() > 0 ? getEditionPattern().getPatternRoles().firstElement() : null);
+		newEntry.setName("textfield");
+		newEntry.setLabel("textfield");
 		addToEntries(newEntry);
 		return newEntry;
 	}
 	
-	/*public EditionPatternPropertyModel createNewProperty()
+	public TextAreaInspectorEntry createNewTextArea()
 	{
-		EditionPatternPropertyModel newProperty = new EditionPatternPropertyModel();
-		newProperty.setInspector(this);
-		newProperty.label = "newProperty";
-		newProperty.setPatternRoleReference(getEditionPattern().getPatternRoles().size() > 0 ? getEditionPattern().getPatternRoles().firstElement() : null);
-		newProperty.constraint = getDefaultTabModel().getProperties().size();
-		newProperty.name = "data";
-		int index = 1;
-		while (getDefaultTabModel().getProperties().get(newProperty.getKey()) != null) {
-			newProperty.name = "data"+index;
-			index++;
-		}
-		getDefaultTabModel().setPropertyForKey(newProperty, newProperty.getKey());
-		return newProperty;
+		TextAreaInspectorEntry newEntry = new TextAreaInspectorEntry();
+		newEntry.setName("textarea");
+		newEntry.setLabel("textarea");
+		addToEntries(newEntry);
+		return newEntry;
 	}
 	
-	public EditionPatternPropertyListModel createNewTableProperty()
+	public IntegerInspectorEntry createNewInteger()
 	{
-		EditionPatternPropertyListModel newProperty = new EditionPatternPropertyListModel();
-		newProperty.setInspector(this);
-		newProperty.label = "newProperty";
-		newProperty.setPatternRoleReference(getEditionPattern().getPatternRoles().size() > 0 ? getEditionPattern().getPatternRoles().firstElement() : null);
-		newProperty.constraint = getDefaultTabModel().getProperties().size();
-		newProperty.name = "data";
-		int index = 1;
-		while (getDefaultTabModel().getProperties().get(newProperty.getKey()) != null) {
-			newProperty.name = "data"+index;
-			index++;
-		}
-		getDefaultTabModel().setPropertyForKey(newProperty, newProperty.getKey());
-		return newProperty;
+		IntegerInspectorEntry newEntry = new IntegerInspectorEntry();
+		newEntry.setName("integer");
+		newEntry.setLabel("integer");
+		addToEntries(newEntry);
+		return newEntry;
 	}
 	
-	public PropertyModel deleteProperty(PropertyModel property)
+	public CheckboxInspectorEntry createNewCheckbox()
 	{
-		getDefaultTabModel().removePropertyWithKey(property.getKey());
-		return property;
-	}*/
+		CheckboxInspectorEntry newEntry = new CheckboxInspectorEntry();
+		newEntry.setName("checkbox");
+		newEntry.setLabel("checkbox");
+		addToEntries(newEntry);
+		return newEntry;
+	}
 	
  }
