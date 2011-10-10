@@ -28,7 +28,7 @@ import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.viewpoint.action.CreateCalcDrawingShema;
+import org.openflexo.foundation.viewpoint.action.CreateExampleDrawing;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -42,7 +42,7 @@ public class CreateCalcDrawingShemaInitializer extends ActionInitializer {
 
 	CreateCalcDrawingShemaInitializer(CEDControllerActionInitializer actionInitializer)
 	{
-		super(CreateCalcDrawingShema.actionType,actionInitializer);
+		super(CreateExampleDrawing.actionType,actionInitializer);
 	}
 
 	@Override
@@ -58,15 +58,15 @@ public class CreateCalcDrawingShemaInitializer extends ActionInitializer {
 	}
 	
 	@Override
-	protected FlexoActionInitializer<CreateCalcDrawingShema> getDefaultInitializer() 
+	protected FlexoActionInitializer<CreateExampleDrawing> getDefaultInitializer() 
 	{
-		return new FlexoActionInitializer<CreateCalcDrawingShema>() {
+		return new FlexoActionInitializer<CreateExampleDrawing>() {
 			@Override
-			public boolean run(ActionEvent e, CreateCalcDrawingShema action)
+			public boolean run(ActionEvent e, CreateExampleDrawing action)
 			{
 				
 				FIBDialog dialog = FIBDialog.instanciateComponent(
-						CEDCst.CREATE_CALC_DRAWING_SHEMA_DIALOG_FIB,
+						CEDCst.CREATE_EXAMPLE_DRAWING_DIALOG_FIB,
 						action, null, true);
 				return (dialog.getStatus() == Status.VALIDATED);
 			}
@@ -75,11 +75,11 @@ public class CreateCalcDrawingShemaInitializer extends ActionInitializer {
 	
 
 	@Override
-	protected FlexoActionFinalizer<CreateCalcDrawingShema> getDefaultFinalizer() 
+	protected FlexoActionFinalizer<CreateExampleDrawing> getDefaultFinalizer() 
 	{
-		return new FlexoActionFinalizer<CreateCalcDrawingShema>() {
+		return new FlexoActionFinalizer<CreateExampleDrawing>() {
 			@Override
-			public boolean run(ActionEvent e, CreateCalcDrawingShema action)
+			public boolean run(ActionEvent e, CreateExampleDrawing action)
 			{
 				getController().setCurrentEditedObjectAsModuleView(action.getNewShema(),getController().VIEW_POINT_PERSPECTIVE);
 				return true;

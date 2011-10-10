@@ -170,6 +170,7 @@ public class DeclarePatternRole extends EditionAction<PatternRole> {
 			else if (getScheme().getParameter(_getObject()) != null) {
 				EditionPatternParameter p = getScheme().getParameter(_getObject());
 				if (p == null) return;
+				if (p.getWidget() == null) return;
 				switch (p.getWidget()) {
 				case TEXT_FIELD:
 					setPatternRoleType(PatternRoleType.Primitive);
@@ -200,6 +201,7 @@ public class DeclarePatternRole extends EditionAction<PatternRole> {
 					((PrimitivePatternRole)getPatternRole()).setPrimitiveType(PrimitiveType.Float);
 					break;
 				case CUSTOM:
+					if (p.getCustomType() == null) return;
 					switch (p.getCustomType()) {
 					case OntologyIndividual:
 						setPatternRoleType(PatternRoleType.OntologicObject);

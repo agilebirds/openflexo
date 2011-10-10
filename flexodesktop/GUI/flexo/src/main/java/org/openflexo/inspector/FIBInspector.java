@@ -23,8 +23,10 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.Bindable;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.ComponentConstraints;
+import org.openflexo.fib.model.DataBinding;
 import org.openflexo.fib.model.FIBLabel;
 import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.fib.model.FIBTab;
@@ -33,9 +35,11 @@ import org.openflexo.fib.model.FIBTextField;
 import org.openflexo.fib.model.TwoColsLayoutConstraints;
 import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternInspector;
+import org.openflexo.foundation.viewpoint.InspectorDataBinding;
 import org.openflexo.foundation.viewpoint.InspectorEntry;
 import org.openflexo.foundation.viewpoint.TextFieldInspectorEntry;
 import org.openflexo.xmlcode.AccessorInvocationException;
@@ -163,10 +167,10 @@ public class FIBInspector extends FIBPanel {
 		tabsForEP.clear();
 		
 		if (object.getEditionPatternReferences() != null) {
-			for (EditionPatternReference ref : object.getEditionPatternReferences()) {
+			for (int refIndex = 0; refIndex<object.getEditionPatternReferences().size(); refIndex++) {
+				EditionPatternReference ref = object.getEditionPatternReferences().get(refIndex);
 				EditionPatternInspector inspector = ref.getEditionPattern().getInspector();
-				logger.info("OK, je rajoute un tab "+ref.getEditionPattern().getInspector().getInspectorTitle());
-				FIBTab newTab = makeFIBTab(ref.getEditionPattern());
+				FIBTab newTab = makeFIBTab(ref.getEditionPattern(),refIndex);
 				currentEditionPatterns.add(ref.getEditionPattern());
 				tabsForEP.put(ref.getEditionPattern(),newTab);
 				getTabPanel().addToSubComponents(newTab);
@@ -177,19 +181,30 @@ public class FIBInspector extends FIBPanel {
 
 	}
  			
-	private FIBTab makeFIBTab(EditionPattern ep)
+	private FIBTab makeFIBTab(EditionPattern ep,int refIndex)
 	{
 		FIBTab newTab = new FIBTab();
 		newTab.setTitle(ep.getInspector().getInspectorTitle());
 		newTab.setIndex(-1);
 		newTab.setLayout(Layout.twocols);
+		newTab.setDataClass(EditionPatternInstance.class);
+		//newTab.setData(new DataBinding("data.editionPatternReferences.get["+refIndex+"].editionPatternInstance"));
+		newTab.setData(new DataBinding("data.editionPatternReferences.firstElement.editionPatternInstance"));
+		newTab.setName("Prout");
 		int index = 0;
-		for (InspectorEntry entry : ep.getInspector().getEntries()) {
+		for (final InspectorEntry entry : ep.getInspector().getEntries()) {
 			FIBLabel label = new FIBLabel();
 			label.setLabel(entry.getLabel());
 			newTab.addToSubComponents(label,new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false, index++));
 			if (entry instanceof TextFieldInspectorEntry) {
 				FIBTextField tf = new FIBTextField();
+				//tf.setData(new DataBinding("Prout.data.stringValue(\""+entry.getLabel()+"\")"));
+				tf.setData(new DataBinding("Prout.data."+entry.getData().toString()) {
+					@Override
+					public Bindable getBindable() {
+						return entry;
+					}
+				});
 				newTab.addToSubComponents(tf,new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index++));
 			}
 			else {

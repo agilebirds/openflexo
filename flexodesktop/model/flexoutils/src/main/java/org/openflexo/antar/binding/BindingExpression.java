@@ -766,7 +766,12 @@ public class BindingExpression extends AbstractBinding {
 			evaluatedExpression = expression.evaluate(evaluationContext);
 		} catch (TypeMismatchException e) {
 			//e.printStackTrace();
-			logger.warning("TypeMismatchException while evaluating "+getStringRepresentation()+" "+e.getMessage());
+			// SGU: I dont have time to resolve this now, but want a clean console
+			// TODO: please reactivate this warning and resolve issues here !!!
+			if (!TypeMismatchException_WARNING) {
+				logger.warning("TypeMismatchException while evaluating "+getStringRepresentation()+" "+e.getMessage());
+				TypeMismatchException_WARNING = true;
+			}
 		}
 		
 		//System.out.println("evaluatedExpression="+evaluatedExpression);
@@ -775,6 +780,8 @@ public class BindingExpression extends AbstractBinding {
 		
     	return null;
    }
+    
+    public static boolean TypeMismatchException_WARNING = false;
     
     @Override
 	public void setBindingValue(Object value, BindingEvaluationContext context)
@@ -883,7 +890,12 @@ public class BindingExpression extends AbstractBinding {
 			evaluatedExpression = expression.evaluate(evaluationContext);
 		} catch (TypeMismatchException e) {
 			//e.printStackTrace();
-			logger.warning("TypeMismatchException while evaluating "+getStringRepresentation()+" "+e.getMessage());
+			// SGU: I dont have time to resolve this now, but want a clean console
+			// TODO: please reactivate this warning and resolve issues here !!!
+			if (!TypeMismatchException_WARNING) {
+				logger.warning("TypeMismatchException while evaluating "+getStringRepresentation()+" "+e.getMessage());
+				TypeMismatchException_WARNING = true;
+			}
 		}
 		
 		return returned;

@@ -40,10 +40,11 @@ import org.openflexo.foundation.ontology.OntologyProperty;
  * @author sylvain
  *
  */
-public abstract class InspectorEntry extends ViewPointObject implements Bindable, BindingEvaluationContext {
+public abstract class InspectorEntry extends ViewPointObject implements Bindable  {
 
 	static final Logger logger = Logger.getLogger(InspectorEntry.class.getPackage().getName());
 
+	
 	public static BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
 	private BindingDefinition DATA;
 	
@@ -214,13 +215,6 @@ public abstract class InspectorEntry extends ViewPointObject implements Bindable
 	}
 	
 
-	@Override
-	public Object getValue(BindingVariable variable) 
-	{
-		logger.warning("Prout ici, faut faire un truc...");
-		return null;
-	}
-	
 	private static DefaultBindingFactory BINDING_FACTORY = new DefaultBindingFactory();
 
 	public static enum InspectorBindingAttribute

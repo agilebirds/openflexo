@@ -141,57 +141,5 @@ public class DefaultBindingFactory extends StringEncoder.Converter<AbstractBindi
 		return new BindingVariableImpl(container, variableName, type);
 	}
 
-	/*public BindingPathElement getBindingPathElement(BindingPathElement father, String propertyName)
-=======
-	public BindingPathElement getBindingPathElement(BindingPathElement father, String propertyName)
->>>>>>> 96d56824629beeecbab39baadbb1b529e95acf14
-	{
-		if (father.getType() != null) {
-			if (TypeUtils.getBaseClass(father.getType()) == null) {
-				return null;
-			}               
-			Type currentType = father.getType();
-			if (currentType instanceof Class
-					&& ((Class)currentType).isPrimitive()) {
-				currentType = TypeUtils.fromPrimitive((Class)currentType);
-			}
-			return KeyValueLibrary.getKeyValueProperty(currentType, propertyName);			
-		}
-		return null;
-	}
-
-	public List<? extends BindingPathElement> getAccessibleBindingPathElements(BindingPathElement father)
-	{
-		if (father.getType() != null) {
-			if (TypeUtils.getBaseClass(father.getType()) == null) {
-				return null;
-			}               
-			Type currentType = father.getType();
-			if (currentType instanceof Class
-					&& ((Class)currentType).isPrimitive()) {
-				currentType = TypeUtils.fromPrimitive((Class)currentType);
-			}
-			return KeyValueLibrary.getAccessibleProperties(currentType);			
-		}
-		return null;
-		
-	}
-
-	public List<? extends BindingPathElement> getAccessibleCompoundBindingPathElements(BindingPathElement father)
-	{
-		if (father.getType() != null) {
-			if (TypeUtils.getBaseClass(father.getType()) == null) {
-				return null;
-			}               
-			Type currentType = father.getType();
-			if (currentType instanceof Class
-					&& ((Class)currentType).isPrimitive()) {
-				currentType = TypeUtils.fromPrimitive((Class)currentType);
-			}
-			return KeyValueLibrary.getAccessibleMethods(currentType);			
-		}
-		return null;
-		
-	}*/
 
 }

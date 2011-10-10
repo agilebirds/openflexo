@@ -43,6 +43,8 @@
 	<entity name="org.openflexo.foundation.viewpoint.InspectorEntry" abstract="yes">
 		<property name="label" xmlTag="label" attribute="YES" />
 		<property name="patternRole" contains="org.openflexo.foundation.viewpoint.PatternRole"/>
+		<property name="data" xmlTag="data" attribute="YES" />
+		<property name="conditional" xmlTag="conditional" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.TextFieldInspectorEntry" xmlTag="TextField">

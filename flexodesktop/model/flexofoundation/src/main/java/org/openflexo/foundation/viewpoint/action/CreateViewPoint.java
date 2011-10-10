@@ -46,14 +46,14 @@ import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
 
 
-public class CreateOntologyCalc extends FlexoAction<CreateOntologyCalc,ViewPointLibraryObject,ViewPointObject> 
+public class CreateViewPoint extends FlexoAction<CreateViewPoint,ViewPointLibraryObject,ViewPointObject> 
 {
 
-	private static final Logger logger = Logger.getLogger(CreateOntologyCalc.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(CreateViewPoint.class.getPackage().getName());
 
-	public static FlexoActionType<CreateOntologyCalc,ViewPointLibraryObject,ViewPointObject> actionType 
-	= new FlexoActionType<CreateOntologyCalc,ViewPointLibraryObject,ViewPointObject> (
-			"create_ontology_calc",
+	public static FlexoActionType<CreateViewPoint,ViewPointLibraryObject,ViewPointObject> actionType 
+	= new FlexoActionType<CreateViewPoint,ViewPointLibraryObject,ViewPointObject> (
+			"create_view_point",
 			FlexoActionType.newMenu,
 			FlexoActionType.defaultGroup,
 			FlexoActionType.ADD_ACTION_TYPE) {
@@ -62,9 +62,9 @@ public class CreateOntologyCalc extends FlexoAction<CreateOntologyCalc,ViewPoint
 		 * Factory method
 		 */
 		@Override
-		public CreateOntologyCalc makeNewAction(ViewPointLibraryObject focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) 
+		public CreateViewPoint makeNewAction(ViewPointLibraryObject focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) 
 		{
-			return new CreateOntologyCalc(focusedObject, globalSelection, editor);
+			return new CreateViewPoint(focusedObject, globalSelection, editor);
 		}
 
 		@Override
@@ -82,8 +82,8 @@ public class CreateOntologyCalc extends FlexoAction<CreateOntologyCalc,ViewPoint
 	};
 
 	static {
-		FlexoModelObject.addActionForClass (CreateOntologyCalc.actionType, ViewPointLibrary.class);
-		FlexoModelObject.addActionForClass (CreateOntologyCalc.actionType, ViewPointFolder.class);
+		FlexoModelObject.addActionForClass (CreateViewPoint.actionType, ViewPointLibrary.class);
+		FlexoModelObject.addActionForClass (CreateViewPoint.actionType, ViewPointFolder.class);
 	}
 
 
@@ -98,7 +98,7 @@ public class CreateOntologyCalc extends FlexoAction<CreateOntologyCalc,ViewPoint
 	
 	private boolean createsOntology = false;
 	
-	CreateOntologyCalc (ViewPointLibraryObject focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor)
+	CreateViewPoint (ViewPointLibraryObject focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor)
 	{
 		super(actionType, focusedObject, globalSelection, editor);
 	}
@@ -229,7 +229,7 @@ public class CreateOntologyCalc extends FlexoAction<CreateOntologyCalc,ViewPoint
 	public boolean isNewCalcNameValid()
 	{
 		if (StringUtils.isEmpty(getNewCalcName())) {
-			errorMessage = "please_supply_valid_calc_name";
+			errorMessage = "please_supply_valid_view_point_name";
 			return false;
 		}
 		return true;
@@ -274,12 +274,11 @@ public class CreateOntologyCalc extends FlexoAction<CreateOntologyCalc,ViewPoint
 	private File getCalcDir()
 	{
 		String baseName = getBaseName();
-		return new File(getCalcFolder().getExpectedPath(),baseName+".calc");
+		return new File(getCalcFolder().getExpectedPath(),baseName+".viewpoint");
 	}
 	
 	public void createOntology()
 	{
-		System.out.println("createOntology() !!!");
 		createsOntology = true;
 		_ontologyFile = new File(getCalcDir(),getBaseName()+".owl");
 	}

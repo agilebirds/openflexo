@@ -19,22 +19,15 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding;
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingFactory;
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
-import org.openflexo.antar.binding.AbstractBinding.TargetObject;
-import org.openflexo.antar.expr.Expression;
-import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.antar.expr.Variable;
-import org.openflexo.antar.expr.parser.ParseException;
 import org.openflexo.foundation.viewpoint.InspectorEntry.InspectorBindingAttribute;
 import org.openflexo.xmlcode.StringConvertable;
+import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
 
@@ -55,6 +48,7 @@ public class InspectorDataBinding implements StringConvertable<InspectorDataBind
 		@Override
 		public InspectorDataBinding convertFromString(String value) 
 		{
+			System.out.println("Hop, voila un "+value);
 			return new InspectorDataBinding(value);
 		}
 
@@ -226,7 +220,7 @@ public class InspectorDataBinding implements StringConvertable<InspectorDataBind
 
 		//logger.info("Searching dependancies for "+this);
 
-		InspectorEntry component = getOwner();
+		/*InspectorEntry component = getOwner();
 		List<TargetObject> targetList = binding.getTargetObjects(owner);
 		if (targetList != null) {
 			for (TargetObject o : targetList) {
@@ -235,7 +229,7 @@ public class InspectorDataBinding implements StringConvertable<InspectorDataBind
 					InspectorEntry c = (InspectorEntry)o.target;
 					InspectorBindingAttribute param = InspectorBindingAttribute.valueOf(o.propertyName);
 					logger.info("OK, found "+getBindingAttribute()+" of "+getOwner()+" depends of "+param+" , "+c);
-					/*try {
+					try {
 						component.declareDependantOf(c,getBindingAttribute(),param);
 					} catch (DependancyLoopException e) {
 						logger.warning("DependancyLoopException raised while declaring dependancy (data lookup)"
@@ -243,10 +237,10 @@ public class InspectorDataBinding implements StringConvertable<InspectorDataBind
 								+" component: "+component
 								+" dependancy: "+c
 								+" message: "+e.getMessage());
-					}*/
+					}
 				}
 			}
-		}
+		}*/
 
 		//Vector<Expression> primitives;
 		//try {
