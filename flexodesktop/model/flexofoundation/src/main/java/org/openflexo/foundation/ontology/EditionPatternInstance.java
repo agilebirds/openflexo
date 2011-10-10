@@ -22,6 +22,8 @@ package org.openflexo.foundation.ontology;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.ontology.EditionPatternReference.ActorReference;
@@ -146,4 +148,14 @@ public class EditionPatternInstance extends FlexoObservable {
 		actors.remove(key);
 	}
 
+	/*public String getStringValue(String inspectorEntryKey)
+	{
+		return "GET string value for "+inspectorEntryKey;
+	}
+	
+	public void setStringValue(String inspectorEntryKey, String value)
+	{
+		System.out.println("SET string value for "+inspectorEntryKey+" value: "+value);
+	}*/
+	
 }

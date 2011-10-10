@@ -31,13 +31,13 @@ import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 
 
-public class AddCalcDrawingConnector extends FlexoAction<AddCalcDrawingConnector,ExampleDrawingShape,ExampleDrawingObject> 
+public class AddExampleDrawingConnector extends FlexoAction<AddExampleDrawingConnector,ExampleDrawingShape,ExampleDrawingObject> 
 {
 
-    private static final Logger logger = Logger.getLogger(AddCalcDrawingConnector.class.getPackage().getName());
+    private static final Logger logger = Logger.getLogger(AddExampleDrawingConnector.class.getPackage().getName());
     
-    public static FlexoActionType<AddCalcDrawingConnector,ExampleDrawingShape,ExampleDrawingObject>  actionType 
-    = new FlexoActionType<AddCalcDrawingConnector,ExampleDrawingShape,ExampleDrawingObject> (
+    public static FlexoActionType<AddExampleDrawingConnector,ExampleDrawingShape,ExampleDrawingObject>  actionType 
+    = new FlexoActionType<AddExampleDrawingConnector,ExampleDrawingShape,ExampleDrawingObject> (
     		"add_connector",
     		FlexoActionType.newMenu,
 			FlexoActionType.defaultGroup,
@@ -47,9 +47,9 @@ public class AddCalcDrawingConnector extends FlexoAction<AddCalcDrawingConnector
          * Factory method
          */
         @Override
-		public AddCalcDrawingConnector makeNewAction(ExampleDrawingShape focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) 
+		public AddExampleDrawingConnector makeNewAction(ExampleDrawingShape focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) 
         {
-            return new AddCalcDrawingConnector(focusedObject, globalSelection, editor);
+            return new AddExampleDrawingConnector(focusedObject, globalSelection, editor);
         }
 
         @Override
@@ -67,7 +67,7 @@ public class AddCalcDrawingConnector extends FlexoAction<AddCalcDrawingConnector
     };
     
 	static {
-		FlexoModelObject.addActionForClass (AddCalcDrawingConnector.actionType, ExampleDrawingShape.class);
+		FlexoModelObject.addActionForClass (AddExampleDrawingConnector.actionType, ExampleDrawingShape.class);
 	}
 
 
@@ -79,7 +79,7 @@ public class AddCalcDrawingConnector extends FlexoAction<AddCalcDrawingConnector
 
 	private ExampleDrawingConnector _newConnector;
 
-	AddCalcDrawingConnector (ExampleDrawingShape focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor)
+	AddExampleDrawingConnector (ExampleDrawingShape focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor)
     {
         super(actionType, focusedObject, globalSelection, editor);
     }

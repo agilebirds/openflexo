@@ -11,7 +11,7 @@ A use case is a summary of scenarios for a single task or goal. An actor is who 
       <Parameter id="5" name="uri" label="uri" widget="TEXT_FIELD" type="OntologyIndividual" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="name" />
       <Parameter id="6" name="packageParameter" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" label="package" widget="CUSTOM" type="OntologyIndividual" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false" />
       <DeclarePatternRole id="7" object="packageParameter" patternRole="package" />
-      <AddIndividual id="8" individualName="uri" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Actor" patternRole="actor" conditional="">
+      <AddIndividual id="8" individualName="uri" patternRole="actor" conditional="" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Actor">
         <DataPropertyAssertion id="9" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#name" value="name" />
         <description>Actor individual being created and put in ontology</description>
       </AddIndividual>
@@ -20,7 +20,7 @@ A use case is a summary of scenarios for a single task or goal. An actor is who 
         <description>Add the shape</description>
       </AddShape>
     </DropScheme>
-    <ShapePatternRole id="12" boundPatternRole="actor" patternRole="shape">
+    <ShapePatternRole id="12" patternRole="shape" boundPatternRole="actor">
       <ShapeGraphicalRepresentation id="13" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="104.0" y="36.0" width="40.0" height="47.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="actor" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="24.0" absoluteTextY="-8.0" textAlignment="CENTER">
         <ForegroundStyle id="14" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
         <ImageBackgroundStyle id="15" imageFile="Actor.gif" scaleX="1.1111111111111112" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
@@ -34,26 +34,111 @@ A use case is a summary of scenarios for a single task or goal. An actor is who 
     <OntologicObjectPatternRole id="21" ontologicObjectType="Individual" patternRole="package" />
     <OntologicObjectPatternRole id="22" ontologicObjectType="Individual" patternRole="actor" />
     <OntologicObjectPatternRole id="23" ontologicObjectType="OntologyStatement" patternRole="packagedElement" />
-    <Inspector id="24">
-      <tab id="25" name="Actor" index="0" />
-    </Inspector>
+    <Inspector id="24" inspectorTitle="" />
   </EditionPattern>
-  <EditionPattern id="26" name="UseCase">
+  <EditionPattern id="25" name="UseCase">
     <description>A use case is the specification of a set of actions performed by a system, which yields an observable result that is, typically, of value for one or more actors or other stakeholders of the system.</description>
-    <ShapePatternRole id="27" patternRole="shape">
-      <ShapeGraphicalRepresentation id="28" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="68.0" y="31.0" width="139.85915492957744" height="50.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
-        <ForegroundStyle id="29" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="30" color="249,244,205" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="31" top="5" bottom="5" left="5" right="5" />
-        <ShadowStyle id="32" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <OvalShape id="33" />
-        <TextStyle id="34" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    <DropScheme id="26" target="top" name="DropNewUseCase" skipConfirmationPanel="false">
+      <Parameter id="27" name="name" label="name" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false" />
+      <Parameter id="28" name="uri" label="uri" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="name" />
+      <Parameter id="29" name="packageParameter" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" label="packageParameter" widget="CUSTOM" type="OntologyIndividual" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false" />
+      <DeclarePatternRole id="30" object="packageParameter" patternRole="package" />
+      <AddIndividual id="31" individualName="uri" patternRole="useCase" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#UseCase">
+        <DataPropertyAssertion id="32" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#name" value="name" />
+      </AddIndividual>
+      <AddObjectProperty id="33" object="useCase" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#packagedElement" patternRole="packagedElement" subject="package" />
+      <AddShape id="34" container="container" patternRole="shape" conditional="" />
+    </DropScheme>
+    <ShapePatternRole id="35" patternRole="shape" boundPatternRole="useCase">
+      <ShapeGraphicalRepresentation id="36" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="68.0" y="31.0" width="139.85915492957744" height="50.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+        <ForegroundStyle id="37" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="38" color="249,244,205" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="39" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="40" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <OvalShape id="41" />
+        <TextStyle id="42" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ShapeGraphicalRepresentation>
-      <Label id="35" type="UseOntologicProperty" />
+      <Label id="43" propertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#name" type="UseOntologicProperty" />
     </ShapePatternRole>
-    <Inspector id="36">
-      <tab id="37" name="UseCase" index="0" />
-    </Inspector>
+    <OntologicObjectPatternRole id="44" ontologicObjectType="Individual" patternRole="package" />
+    <OntologicObjectPatternRole id="45" ontologicObjectType="Individual" patternRole="useCase" />
+    <OntologicObjectPatternRole id="46" ontologicObjectType="OntologyStatement" patternRole="packagedElement" />
+    <Inspector id="47" />
+  </EditionPattern>
+  <EditionPattern id="48" name="ActorUseCaseAssociation">
+    <LinkScheme id="49" fromTarget="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Actor" toTarget="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#UseCase" name="associateActorToUseCase" skipConfirmationPanel="false">
+      <description>Associate actor to a use case</description>
+      <Parameter id="50" name="packageParameter" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" label="package" widget="CUSTOM" type="OntologyIndividual" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false" />
+      <Parameter id="51" name="associationURI" label="association_uri" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="&quot;association&quot;" />
+      <Parameter id="52" name="actorPropertyURI" label="actor_property_uri" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="&quot;actorProperty&quot;" />
+      <Parameter id="53" name="useCasePropertyURI" label="use_case_property_uri" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="&quot;useCaseProperty&quot;" />
+      <DeclarePatternRole id="54" object="fromTarget.concept" patternRole="actor" />
+      <DeclarePatternRole id="55" object="toTarget.concept" patternRole="useCase" />
+      <DeclarePatternRole id="56" object="packageParameter" patternRole="package" conditional="" />
+      <AddIndividual id="57" individualName="associationURI" patternRole="association" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Association" />
+      <AddObjectProperty id="58" object="association" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#packagedElement" patternRole="packagedElement" subject="package" />
+      <AddIndividual id="59" individualName="actorPropertyURI" patternRole="actorProperty" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Property">
+        <ObjectPropertyAssertion id="60" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#association" object="association" />
+        <ObjectPropertyAssertion id="61" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#type" object="actor" />
+      </AddIndividual>
+      <AddIndividual id="62" individualName="useCasePropertyURI" patternRole="useCaseProperty" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Property">
+        <ObjectPropertyAssertion id="63" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#association" object="association" />
+        <ObjectPropertyAssertion id="64" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#type" object="useCase" />
+      </AddIndividual>
+      <AddObjectProperty id="65" object="actorProperty" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#ownedEnd" patternRole="ownedEndForActor" subject="association" />
+      <AddObjectProperty id="66" object="useCaseProperty" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#ownedEnd" patternRole="ownedEndForUseCase" subject="association" />
+      <AddConnector id="67" fromShape="fromTarget" toShape="toTarget" patternRole="connector" conditional="" />
+    </LinkScheme>
+    <ConnectorPatternRole id="68" patternRole="connector">
+      <ConnectorGraphicalRepresentation id="69" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="NONE" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" text="" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+        <ForegroundStyle id="70" noStroke="false" color="102,102,102" lineWidth="2.100000001490116" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <StartShapeGraphicalRepresentation id="71" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="73.0" y="60.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+          <ForegroundStyle id="72" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="73" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="74" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="75" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <CircleShape id="76" />
+          <TextStyle id="77" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </StartShapeGraphicalRepresentation>
+        <EndShapeGraphicalRepresentation id="78" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="343.0" y="60.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+          <ForegroundStyle id="79" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="80" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="81" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="82" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <CircleShape id="83" />
+          <TextStyle id="84" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </EndShapeGraphicalRepresentation>
+        <LineConnector id="85" lineConnectorType="MINIMAL_LENGTH" />
+        <TextStyle id="86" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ConnectorGraphicalRepresentation>
+      <ArtifactFromShapeGraphicalRepresentation id="87" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="73.0" y="60.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+        <ForegroundStyle id="88" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="89" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="90" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="91" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <CircleShape id="92" />
+        <TextStyle id="93" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ArtifactFromShapeGraphicalRepresentation>
+      <ArtifactToShapeGraphicalRepresentation id="94" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="343.0" y="60.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+        <ForegroundStyle id="95" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="96" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="97" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="98" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <CircleShape id="99" />
+        <TextStyle id="100" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ArtifactToShapeGraphicalRepresentation>
+      <Label id="101" text="" type="StaticValue" />
+    </ConnectorPatternRole>
+    <OntologicObjectPatternRole id="102" ontologicObjectType="Individual" patternRole="actor" />
+    <OntologicObjectPatternRole id="103" ontologicObjectType="Individual" patternRole="useCase" />
+    <OntologicObjectPatternRole id="104" ontologicObjectType="Individual" patternRole="association" />
+    <OntologicObjectPatternRole id="105" ontologicObjectType="Individual" patternRole="package" />
+    <OntologicObjectPatternRole id="106" ontologicObjectType="OntologyStatement" patternRole="packagedElement" />
+    <OntologicObjectPatternRole id="107" ontologicObjectType="Individual" patternRole="actorProperty" />
+    <OntologicObjectPatternRole id="108" ontologicObjectType="Individual" patternRole="useCaseProperty" />
+    <OntologicObjectPatternRole id="109" ontologicObjectType="OntologyStatement" patternRole="ownedEndForActor" />
+    <OntologicObjectPatternRole id="110" ontologicObjectType="OntologyStatement" patternRole="ownedEndForUseCase" />
+    <Inspector id="111" />
   </EditionPattern>
 </ViewPoint>
 

@@ -24,9 +24,10 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding;
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingFactory;
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.Function;
 import org.openflexo.antar.expr.TypeMismatchException;
@@ -77,8 +78,11 @@ public class DataBinding implements StringConvertable<DataBinding>
 	private BindingDefinition bindingDefinition;
 	private AbstractBinding binding;
 
+	//private Exception newIntanceException;
+	
 	public DataBinding(FIBModelObject owner, FIBModelAttribute attribute, BindingDefinition df) 
 	{
+		//newIntanceException = new Exception("Create instance with owner "+owner);
 		setOwner(owner);
 		setBindingAttribute(attribute);
 		setBindingDefinition(df);
@@ -86,6 +90,7 @@ public class DataBinding implements StringConvertable<DataBinding>
 
 	public DataBinding(String unparsed) 
 	{
+		//newIntanceException = new Exception("Create instance with "+unparsed);
 		unparsedBinding = unparsed;
 	}
 
@@ -202,6 +207,16 @@ public class DataBinding implements StringConvertable<DataBinding>
 		binding = null;
 	}
 
+	public Bindable getBindable()
+	{
+		return getOwner();
+	}
+	
+	public BindingFactory getBindingFactory()
+	{
+		return getBindable().getBindingFactory();
+	}
+	
 	public FIBModelObject getOwner() {
 		return owner;
 	}
@@ -222,9 +237,9 @@ public class DataBinding implements StringConvertable<DataBinding>
 		}*/
 		
 		//System.out.println("BindingModel: "+getOwner().getBindingModel());
-		if (getOwner() != null) {
-			BindingFactory factory = getOwner().getBindingFactory();
-			factory.setBindable(getOwner());
+		if (getBindable() != null) {
+			BindingFactory factory = getBindingFactory();
+			factory.setBindable(getBindable());
 			binding = factory.convertFromString(getUnparsedBinding());
 			binding.setBindingDefinition(getBindingDefinition());
 			//System.out.println(">>>>>>>>>>>>>> Binding: "+binding.getStringRepresentation()+" owner="+binding.getOwner());
@@ -235,14 +250,14 @@ public class DataBinding implements StringConvertable<DataBinding>
 			if (!silentMode) {
 				logger.warning("Binding not valid: "+binding+" for owner "+getOwner()+" context="+(getOwner()!=null?(getOwner()).getRootComponent():null));
 				// Dev note: Uncomment following to get more informations
-				/*logger.warning("Binding not valid: "+binding+" for owner "+getOwner()+" context="+(getOwner()!=null?(getOwner()).getRootComponent():null));			logger.info("BindingModel="+getOwner().getBindingModel());
-				binding.debugIsBindingValid();
-				BindingExpression.logger.setLevel(Level.FINE);
-				binding = AbstractBinding.abstractBindingConverter.convertFromString(getUnparsedBinding());
-				binding.setBindingDefinition(getBindingDefinition());
-				binding.isBindingValid();
+				//logger.warning("Binding not valid: "+binding+" for owner "+getOwner()+" context="+(getOwner()!=null?(getOwner()).getRootComponent():null));			logger.info("BindingModel="+getOwner().getBindingModel());
+				//binding.debugIsBindingValid();
+				//BindingExpression.logger.setLevel(Level.FINE);
+				//binding = AbstractBinding.abstractBindingConverter.convertFromString(getUnparsedBinding());
+				//binding.setBindingDefinition(getBindingDefinition());
+				//binding.isBindingValid();
 				//(new Exception("prout")).printStackTrace();
-				System.exit(-1);*/
+				//System.exit(-1);
 			}
 		}
 

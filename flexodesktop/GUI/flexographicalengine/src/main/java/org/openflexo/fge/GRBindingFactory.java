@@ -7,18 +7,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.antar.binding.DefaultBindingFactory;
-import org.openflexo.antar.binding.FinalBindingPathElementImpl;
+import org.openflexo.antar.binding.FinalBindingPathElement;
 import org.openflexo.antar.binding.KeyValueLibrary;
 import org.openflexo.antar.binding.KeyValueProperty;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.binding.TypeUtils;
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.GraphicalRepresentation.Parameters;
 import org.openflexo.toolbox.ToolBox;
@@ -77,7 +77,7 @@ public class GRBindingFactory extends DefaultBindingFactory {
 		return EMPTY_LIST;
 	}*/
 	
-	public static class VariableBindingPathElement extends FinalBindingPathElementImpl implements SimplePathElement
+	public static class VariableBindingPathElement implements SimplePathElement,FinalBindingPathElement
 	{
 		private GRVariable variable;
 		
@@ -181,24 +181,6 @@ public class GRBindingFactory extends DefaultBindingFactory {
 		public Vector<ComponentPathElement> getComponents() {
 			return components;
 		}
-		
-		public BindingPathElement getBindingPathElement(String propertyName)
-		{
-			for (ComponentPathElement c : getComponents()) {
-				if (propertyName.equals(c.getLabel())) return c;
-			}
-			return null;
-		}
-		
-		public List<? extends BindingPathElement> getAccessibleBindingPathElements()
-		{
-			return getComponents();
-		}
-
-		public List<? extends BindingPathElement> getAccessibleCompoundBindingPathElements()
-		{
-			return EMPTY_LIST;
-		}
 
 	}
 
@@ -280,37 +262,6 @@ public class GRBindingFactory extends DefaultBindingFactory {
 			return pathElementName;
 		}
 		
-		public BindingPathElement getBindingPathElement(String propertyName) 
-		{
-			if (propertyName.equals("index")) return getIndex();
-			if (propertyName.equals("parent")) return getParent();
-			for (GRParameter p : allowedPropertiesInBindings) {
-				if (isAllowedProperty(propertyName))
-					return KeyValueLibrary.getKeyValueProperty(getType(), propertyName);			
-			}
-			return variables.get(propertyName);
-		}
-
-		public List<? extends BindingPathElement> getAccessibleBindingPathElements() 
-		{
-			List<BindingPathElement> returned = new ArrayList<BindingPathElement>();
-			if (!getComponent().isRootGraphicalRepresentation()) {
-				returned.add(getIndex());
-				returned.add(getParent());
-			}
-			List<? extends BindingPathElement> all = KeyValueLibrary.getAccessibleProperties(getType());
-			for (BindingPathElement bpe : all) {
-				if (isAllowedProperty(((KeyValueProperty)bpe).getName())) returned.add(bpe);
-			}
-			returned.addAll(variables.values());
-			return returned;
-		}
-		
-		@Override
-		public List<? extends BindingPathElement> getAccessibleCompoundBindingPathElements() 
-		{
-			return EMPTY_LIST;
-		}
 		
 		@Override
 		public Object evaluateBinding(Object target, BindingEvaluationContext context) 
@@ -319,7 +270,7 @@ public class GRBindingFactory extends DefaultBindingFactory {
 		}
 	}
 	
-	public static class IndexPathElement extends FinalBindingPathElementImpl implements SimplePathElement
+	public static class IndexPathElement implements SimplePathElement,FinalBindingPathElement
 	{
 		private GraphicalRepresentation gr;
 		
@@ -371,7 +322,63 @@ public class GRBindingFactory extends DefaultBindingFactory {
 		public Object evaluateBinding(Object target, BindingEvaluationContext context) 
 		{
 			return gr.getIndex();
-		}
-		
+		}	
 	}
+	
+	@Override
+	public BindingPathElement getBindingPathElement(BindingPathElement father, String propertyName)
+	{
+		if (father instanceof ComponentsBindingVariable) {
+			for (ComponentPathElement c : ((ComponentsBindingVariable)father).getComponents()) {
+				if (propertyName.equals(c.getLabel())) return c;
+			}
+			return null;
+		}
+		else if (father instanceof ComponentPathElement) {
+			if (propertyName.equals("index")) return ((ComponentPathElement)father).getIndex();
+			if (propertyName.equals("parent")) return ((ComponentPathElement)father).getParent();
+			for (GRParameter p : allowedPropertiesInBindings) {
+				if (isAllowedProperty(propertyName))
+					return KeyValueLibrary.getKeyValueProperty(((ComponentPathElement)father).getType(), propertyName);			
+			}
+			return ((ComponentPathElement)father).variables.get(propertyName);
+		}
+		return super.getBindingPathElement(father, propertyName);
+	}
+
+	@Override
+	public List<? extends BindingPathElement> getAccessibleBindingPathElements(BindingPathElement father)
+	{
+		if (father instanceof ComponentsBindingVariable) {
+			return ((ComponentsBindingVariable)father).getComponents();
+		}
+		else if (father instanceof ComponentPathElement) {
+			List<BindingPathElement> returned = new ArrayList<BindingPathElement>();
+			if (!((ComponentPathElement)father).getComponent().isRootGraphicalRepresentation()) {
+				returned.add(((ComponentPathElement)father).getIndex());
+				returned.add(((ComponentPathElement)father).getParent());
+			}
+			List<? extends BindingPathElement> all = KeyValueLibrary.getAccessibleProperties(((ComponentPathElement)father).getType());
+			for (BindingPathElement bpe : all) {
+				if (isAllowedProperty(((KeyValueProperty)bpe).getName())) returned.add(bpe);
+			}
+			returned.addAll(((ComponentPathElement)father).variables.values());
+			return returned;
+		}
+		return super.getAccessibleBindingPathElements(father);
+	}
+
+	@Override
+	public List<? extends BindingPathElement> getAccessibleCompoundBindingPathElements(BindingPathElement father)
+	{
+		if (father instanceof ComponentsBindingVariable) {
+			return EMPTY_LIST;
+		}
+		else if (father instanceof ComponentPathElement) {
+			return EMPTY_LIST;
+		}
+		return super.getAccessibleCompoundBindingPathElements(father);
+	}
+
+
 }

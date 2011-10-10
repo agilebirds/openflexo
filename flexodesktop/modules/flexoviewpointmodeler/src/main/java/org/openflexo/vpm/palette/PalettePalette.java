@@ -38,7 +38,7 @@ import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
-import org.openflexo.foundation.viewpoint.action.AddCalcPaletteElement;
+import org.openflexo.foundation.viewpoint.action.AddPaletteElement;
 
 
 public class PalettePalette extends DrawingPalette {
@@ -205,7 +205,7 @@ public class PalettePalette extends DrawingPalette {
 					shapeGR.setLayer(containerGR.getLayer()+1);
 					shapeGR.setAllowToLeaveBounds(true);
 					
-					AddCalcPaletteElement action = AddCalcPaletteElement.actionType.makeNewAction(
+					AddPaletteElement action = AddPaletteElement.actionType.makeNewAction(
 							container, null,  _editor);
 					action.setGraphicalRepresentation(shapeGR);
 					

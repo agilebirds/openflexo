@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.foundation.viewpoint.action.DeleteCalcDrawingShema;
+import org.openflexo.foundation.viewpoint.action.DeleteExampleDrawing;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -35,7 +35,7 @@ public class DeleteCalcDrawingShemaInitializer extends ActionInitializer {
 
 	DeleteCalcDrawingShemaInitializer(CEDControllerActionInitializer actionInitializer)
 	{
-		super(DeleteCalcDrawingShema.actionType,actionInitializer);
+		super(DeleteExampleDrawing.actionType,actionInitializer);
 	}
 
 	@Override

@@ -156,17 +156,6 @@ public class AddRestriction extends AddProperty {
 	}
 
 	@Override
-	public OntologicObjectPatternRole getPatternRole() {
-		try {
-			return super.getPatternRole();
-		} catch (ClassCastException e) {
-			logger.warning("Unexpected pattern role type");
-			setPatternRole(null);
-			return null;
-		}
-	}
-	
-	@Override
 	protected void updatePatternRoleType()
 	{
 		if (getPatternRole() == null) {

@@ -28,7 +28,7 @@ import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.viewpoint.action.CreateCalcPalette;
+import org.openflexo.foundation.viewpoint.action.CreateViewPointPalette;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -43,7 +43,7 @@ public class CreateCalcPaletteInitializer extends ActionInitializer {
 
 	CreateCalcPaletteInitializer(CEDControllerActionInitializer actionInitializer)
 	{
-		super(CreateCalcPalette.actionType,actionInitializer);
+		super(CreateViewPointPalette.actionType,actionInitializer);
 	}
 
 	@Override
@@ -60,17 +60,17 @@ public class CreateCalcPaletteInitializer extends ActionInitializer {
 	
 
 	@Override
-	protected FlexoActionInitializer<CreateCalcPalette> getDefaultInitializer() 
+	protected FlexoActionInitializer<CreateViewPointPalette> getDefaultInitializer() 
 	{
-		return new FlexoActionInitializer<CreateCalcPalette>() {
+		return new FlexoActionInitializer<CreateViewPointPalette>() {
 			@Override
-			public boolean run(ActionEvent e, CreateCalcPalette action)
+			public boolean run(ActionEvent e, CreateViewPointPalette action)
 			{
 				
 				action.graphicalRepresentation = makePaletteGraphicalRepresentation();
 				
 				FIBDialog dialog = FIBDialog.instanciateComponent(
-						CEDCst.CREATE_CALC_PALETTE_DIALOG_FIB,
+						CEDCst.CREATE_PALETTE_DIALOG_FIB,
 						action, null, true);
 				return (dialog.getStatus() == Status.VALIDATED);
 			}
@@ -79,11 +79,11 @@ public class CreateCalcPaletteInitializer extends ActionInitializer {
 	
 
 	@Override
-	protected FlexoActionFinalizer<CreateCalcPalette> getDefaultFinalizer() 
+	protected FlexoActionFinalizer<CreateViewPointPalette> getDefaultFinalizer() 
 	{
-		return new FlexoActionFinalizer<CreateCalcPalette>() {
+		return new FlexoActionFinalizer<CreateViewPointPalette>() {
 			@Override
-			public boolean run(ActionEvent e, CreateCalcPalette action)
+			public boolean run(ActionEvent e, CreateViewPointPalette action)
 			{
 				getController().setCurrentEditedObjectAsModuleView(action.getNewPalette(),getController().VIEW_POINT_PERSPECTIVE);
 				return true;

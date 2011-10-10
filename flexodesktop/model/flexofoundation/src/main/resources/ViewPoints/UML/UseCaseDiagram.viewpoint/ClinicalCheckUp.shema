@@ -130,7 +130,7 @@
   </ContainedConnector>
   <ContainedConnector id="88">
     <ConnectorGraphicalRepresentation id="89" className="org.openflexo.vpm.drawingshema.CalcDrawingConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="NONE" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
-      <ForegroundStyle id="90" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ForegroundStyle id="90" noStroke="false" color="102,102,102" lineWidth="2.100000001490116" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
       <StartShapeGraphicalRepresentation idref="5" />
       <EndShapeGraphicalRepresentation idref="29" />
       <LineConnector id="91" lineConnectorType="MINIMAL_LENGTH" />

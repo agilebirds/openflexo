@@ -35,8 +35,8 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
-import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBButton;
 import org.openflexo.fib.model.FIBCheckBox;
@@ -181,7 +181,8 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		if (variable.getVariableName().equals("controller")) {
 			return this;
 		}
-		return null;
+		
+		return variable.evaluateBinding(null,this);
 	}
 	
 	public FIBComponent getRootComponent()
@@ -601,6 +602,7 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 	
 	protected class DefaultFIBViewFactory implements FIBViewFactory
 	{
+		@Override
 		public FIBView makeContainer(FIBContainer fibContainer)
 		{
 			if (fibContainer instanceof FIBTab) {
@@ -615,6 +617,7 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 			return null;
 		}
 
+		@Override
 		public FIBWidgetView makeWidget(FIBWidget fibWidget)
 		{
 			if (fibWidget instanceof FIBTextField) {

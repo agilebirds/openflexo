@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.foundation.viewpoint.action.DeleteCalcPaletteElement;
+import org.openflexo.foundation.viewpoint.action.DeletePaletteElement;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -35,7 +35,7 @@ public class DeleteCalcPaletteElementInitializer extends ActionInitializer {
 
 	DeleteCalcPaletteElementInitializer(CEDControllerActionInitializer actionInitializer)
 	{
-		super(DeleteCalcPaletteElement.actionType,actionInitializer);
+		super(DeletePaletteElement.actionType,actionInitializer);
 	}
 
 	@Override

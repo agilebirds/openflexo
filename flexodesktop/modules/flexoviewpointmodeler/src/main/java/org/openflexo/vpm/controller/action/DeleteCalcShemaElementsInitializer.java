@@ -35,7 +35,7 @@ import org.openflexo.view.controller.FlexoController;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.viewpoint.action.DeleteCalcShemaElements;
+import org.openflexo.foundation.viewpoint.action.DeleteExampleDrawingElements;
 
 public class DeleteCalcShemaElementsInitializer extends ActionInitializer {
 
@@ -43,7 +43,7 @@ public class DeleteCalcShemaElementsInitializer extends ActionInitializer {
 
 	DeleteCalcShemaElementsInitializer(CEDControllerActionInitializer actionInitializer)
 	{
-		super(DeleteCalcShemaElements.actionType,actionInitializer);
+		super(DeleteExampleDrawingElements.actionType,actionInitializer);
 	}
 	
 	@Override
@@ -53,11 +53,11 @@ public class DeleteCalcShemaElementsInitializer extends ActionInitializer {
 	}
 	
 	@Override
-	protected FlexoActionInitializer<DeleteCalcShemaElements> getDefaultInitializer() 
+	protected FlexoActionInitializer<DeleteExampleDrawingElements> getDefaultInitializer() 
 	{
-		return new FlexoActionInitializer<DeleteCalcShemaElements>() {
+		return new FlexoActionInitializer<DeleteExampleDrawingElements>() {
             @Override
-			public boolean run(ActionEvent e, DeleteCalcShemaElements action)
+			public boolean run(ActionEvent e, DeleteExampleDrawingElements action)
             {
             	return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_delete_those_objects"));
              }
@@ -65,11 +65,11 @@ public class DeleteCalcShemaElementsInitializer extends ActionInitializer {
 	}
 
      @Override
-	protected FlexoActionFinalizer<DeleteCalcShemaElements> getDefaultFinalizer() 
+	protected FlexoActionFinalizer<DeleteExampleDrawingElements> getDefaultFinalizer() 
 	{
-		return new FlexoActionFinalizer<DeleteCalcShemaElements>() {
+		return new FlexoActionFinalizer<DeleteExampleDrawingElements>() {
             @Override
-			public boolean run(ActionEvent e, DeleteCalcShemaElements action)
+			public boolean run(ActionEvent e, DeleteExampleDrawingElements action)
             {
                 if (getControllerActionInitializer().getCEDController().getSelectionManager().getLastSelectedObject()!=null
                 		&& getControllerActionInitializer().getCEDController().getSelectionManager().getLastSelectedObject().isDeleted())
@@ -96,7 +96,7 @@ public class DeleteCalcShemaElementsInitializer extends ActionInitializer {
 	public void init()
 	{
         super.init();
-        getControllerActionInitializer().registerAction(DeleteCalcShemaElements.actionType,KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0));
+        getControllerActionInitializer().registerAction(DeleteExampleDrawingElements.actionType,KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0));
 	}
 	
 

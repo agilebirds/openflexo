@@ -28,7 +28,7 @@ import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.viewpoint.action.CreateOntologyCalc;
+import org.openflexo.foundation.viewpoint.action.CreateViewPoint;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -42,7 +42,7 @@ public class CreateOntologyCalcInitializer extends ActionInitializer {
 
 	CreateOntologyCalcInitializer(CEDControllerActionInitializer actionInitializer)
 	{
-		super(CreateOntologyCalc.actionType,actionInitializer);
+		super(CreateViewPoint.actionType,actionInitializer);
 	}
 
 	@Override
@@ -52,14 +52,14 @@ public class CreateOntologyCalcInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionInitializer<CreateOntologyCalc> getDefaultInitializer() 
+	protected FlexoActionInitializer<CreateViewPoint> getDefaultInitializer() 
 	{
-		return new FlexoActionInitializer<CreateOntologyCalc>() {
+		return new FlexoActionInitializer<CreateViewPoint>() {
 			@Override
-			public boolean run(ActionEvent e, CreateOntologyCalc action)
+			public boolean run(ActionEvent e, CreateViewPoint action)
 			{
 				FIBDialog dialog = FIBDialog.instanciateComponent(
-						CEDCst.CREATE_ONTOLOGY_CALC_DIALOG_FIB,
+						CEDCst.CREATE_VIEW_POINT_DIALOG_FIB,
 						action, null, true);
 				return (dialog.getStatus() == Status.VALIDATED);
 			}
@@ -68,11 +68,11 @@ public class CreateOntologyCalcInitializer extends ActionInitializer {
 	
 
 	@Override
-	protected FlexoActionFinalizer<CreateOntologyCalc> getDefaultFinalizer() 
+	protected FlexoActionFinalizer<CreateViewPoint> getDefaultFinalizer() 
 	{
-		return new FlexoActionFinalizer<CreateOntologyCalc>() {
+		return new FlexoActionFinalizer<CreateViewPoint>() {
 			@Override
-			public boolean run(ActionEvent e, CreateOntologyCalc action)
+			public boolean run(ActionEvent e, CreateViewPoint action)
 			{
 				((CEDController)getController()).getSelectionManager().setSelectedObject(action.getNewCalc());
 				return true;

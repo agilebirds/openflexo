@@ -150,11 +150,13 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 
 	public EditionPattern getEditionPattern()
 	{
+		if (getScheme() == null) return null;
 		return getScheme().getEditionPattern();
 	}
 	
 	public R getPatternRole()
 	{
+		if (getEditionPattern() == null) return null;
 		return (R)getEditionPattern().getPatternRole(_getPatternRoleName());
 	}
 

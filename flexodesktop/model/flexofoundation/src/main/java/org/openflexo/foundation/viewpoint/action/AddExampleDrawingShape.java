@@ -33,13 +33,13 @@ import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 
 
-public class AddCalcDrawingShape extends FlexoAction<AddCalcDrawingShape,ExampleDrawingObject,ExampleDrawingObject> 
+public class AddExampleDrawingShape extends FlexoAction<AddExampleDrawingShape,ExampleDrawingObject,ExampleDrawingObject> 
 {
 
-	private static final Logger logger = Logger.getLogger(AddCalcDrawingShape.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(AddExampleDrawingShape.class.getPackage().getName());
 
-	public static FlexoActionType<AddCalcDrawingShape,ExampleDrawingObject,ExampleDrawingObject> actionType 
-	= new FlexoActionType<AddCalcDrawingShape,ExampleDrawingObject,ExampleDrawingObject> (
+	public static FlexoActionType<AddExampleDrawingShape,ExampleDrawingObject,ExampleDrawingObject> actionType 
+	= new FlexoActionType<AddExampleDrawingShape,ExampleDrawingObject,ExampleDrawingObject> (
 			"add_new_shape",
 			FlexoActionType.newMenu,
 			FlexoActionType.defaultGroup,
@@ -49,9 +49,9 @@ public class AddCalcDrawingShape extends FlexoAction<AddCalcDrawingShape,Example
 		 * Factory method
 		 */
 		@Override
-		public AddCalcDrawingShape makeNewAction(ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) 
+		public AddExampleDrawingShape makeNewAction(ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) 
 		{
-			return new AddCalcDrawingShape(focusedObject, globalSelection, editor);
+			return new AddExampleDrawingShape(focusedObject, globalSelection, editor);
 		}
 
 		@Override
@@ -70,8 +70,8 @@ public class AddCalcDrawingShape extends FlexoAction<AddCalcDrawingShape,Example
 	};
 
 	static {
-		FlexoModelObject.addActionForClass (AddCalcDrawingShape.actionType, ExampleDrawingShema.class);
-		FlexoModelObject.addActionForClass (AddCalcDrawingShape.actionType, ExampleDrawingShape.class);
+		FlexoModelObject.addActionForClass (AddExampleDrawingShape.actionType, ExampleDrawingShema.class);
+		FlexoModelObject.addActionForClass (AddExampleDrawingShape.actionType, ExampleDrawingShape.class);
 	}
 
 
@@ -82,7 +82,7 @@ public class AddCalcDrawingShape extends FlexoAction<AddCalcDrawingShape,Example
 	public Object graphicalRepresentation;
 	public boolean nameSetToNull = false;
 
-	AddCalcDrawingShape (ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor)
+	AddExampleDrawingShape (ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor)
 	{
 		super(actionType, focusedObject, globalSelection, editor);
 	}

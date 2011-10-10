@@ -96,6 +96,25 @@ public class AddShape extends AddShemaElementAction<ShapePatternRole> {
 		return retrieveOEShemaObject(getContainer(), action);
 	}
 	
+	@Override
+	public ShapePatternRole getPatternRole() {
+		try {
+			return super.getPatternRole();
+		} catch (ClassCastException e) {
+			logger.warning("Unexpected pattern role type");
+			setPatternRole(null);
+			return null;
+		}
+	}
+	
+	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
+	// Need to be fixed in KeyValueProperty.java
+	@Override
+	public void setPatternRole(ShapePatternRole patternRole) 
+	{
+		super.setPatternRole(patternRole);
+	}
+	
 
 
 }
