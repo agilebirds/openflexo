@@ -8,6 +8,8 @@ import org.apache.commons.io.FileUtils;
 
 public class NewPackageConverter {
 
+	private static final String[] AT_TAGS = { "single", "onereturn", "end" };
+
 	private static final String BE_DENALI_FLEXO = "be.denali.flexo";
 	private static final String BE_DENALI = "be.denali";
 	private static final String BE_AB_FLEXO = "be.agilebirds.flexo";
@@ -61,8 +63,9 @@ public class NewPackageConverter {
 			content = filter(content, BE_DENALI_FLEXO); // be.denali.flexo* --> org.openflexo*
 			content = filter(content, BE_AB_FLEXO); // be.agilebirds.flexo* --> org.openflexo*
 			content = filter(content, BE_AB); // be.agilebirds --> org.openflexo
-			content = content.replace("$velocityCount", "$foreach.count");
-			content = content.replace("${velocityCount}", "${foreach.count}");
+			content = content.replace("$velocityCount", "${foreach.index}");
+			content = content.replace("${velocityCount}", "${foreach.index}");
+			content = fixAt(content);
 			if (template.getName().equals("LocalizedFile.vm")) {
 				content = content.replace("\\\"", "${quote}");
 			}
@@ -75,6 +78,28 @@ public class NewPackageConverter {
 		return true;
 	}
 
+	private static String fixAt(String content) {
+		// single, onereturn, end
+		int lastAppendedIndex = 0;
+		// be.denali.flexo* --> org.openflexo*
+		StringBuilder sb = new StringBuilder(content.length());
+		for (int i = 0; i < content.length(); i++) {
+			if (content.charAt(i)=='@' && i>0&& !Character.isWhitespace(content.charAt(i-1))) {
+				boolean needsWhitespace =false;
+				for (String tag : AT_TAGS) {
+					needsWhitespace |= content.regionMatches(i + 1, tag, 0, tag.length());
+				}
+				if (needsWhitespace) {
+					sb.append(content, lastAppendedIndex, i);
+					sb.append('~');
+					lastAppendedIndex = i;
+				}
+			}
+		}
+		sb.append(content, lastAppendedIndex, content.length());
+		return sb.toString();
+	}
+
 	private static String convertDMContentToNewPackage(String content) {
 		String JDK = "JDKRepository";
 		String COMPONENT="ComponentRepository";
@@ -84,6 +109,8 @@ public class NewPackageConverter {
 		content = convertDMContentToNewPackage(content, COMPONENT);
 		content = convertDMContentToNewPackage(content, PROCESS_BUSINESS_DATA);
 		content = convertDMContentToNewPackage(content, PROCESS_INSTANCE);
+		content = filter(content, BE_AB_FLEXO); // be.agilebirds.flexo* --> org.openflexo*
+		content = filter(content, BE_AB); // be.agilebirds --> org.openflexo
 		return content;
 	}
 
@@ -138,9 +165,11 @@ public class NewPackageConverter {
 	}
 
 	public static void main(String[] args) {
-		String s = "coucou be.denali.flexo.zut\nmachin be.denali.flexobrol bidule\nbe.denali.flexo.engine\n<JDKRepository id=\"12354\">\nblabla be.denali.coucou\nbe.denali.engine.db.ProcessInstance\n</JDKRepository>";
+		/*String s = "coucou be.denali.flexo.zut\nmachin be.denali.flexobrol bidule\nbe.denali.flexo.engine\n<JDKRepository id=\"12354\">\nblabla be.denali.coucou\nbe.denali.engine.db.ProcessInstance\n</JDKRepository>";
 		System.err.println(s);
-		System.err.println(convertDMContentToNewPackage(s));
+		System.err.println(convertDMContentToNewPackage(s));*/
+		String s = "#macro()@single siuerhfoer eorifi er #end@end #macro()\n@single siuerhfoer eorifi er #end\t@end";
+		System.err.println(fixAt(s));
 	}
 
 }
