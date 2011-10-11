@@ -400,6 +400,11 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		return getProjectGenerator().getTemplateLocator();
 	}
 
+	public String getTemplatePath(String templateName) {
+		// Legacy method for backward compatibility
+		return templateName;
+	}
+
 	public CGTemplate templateWithName(String templateRelativePath) throws TemplateNotFoundException
 	{
 		CGTemplate templateFile = getTemplateLocator().templateWithName(templateRelativePath);
