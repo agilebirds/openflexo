@@ -68,6 +68,7 @@ public abstract class OntologicObjectPatternRolePathElement extends PatternRoleP
 				return ((OntologyObject)target).getName();
 			}
 		};
+		allProperties.add(uriNameProperty);
 		uriProperty = new FinalBindingPathElementImpl("uri",OntologyObject.class,String.class,false,"uri_as_supplied_in_ontology") {
 			@Override
 			public Object evaluateBinding(Object target, BindingEvaluationContext context) 
@@ -75,7 +76,6 @@ public abstract class OntologicObjectPatternRolePathElement extends PatternRoleP
 				return ((OntologyObject)target).getURI();
 			}
 		};
-		allProperties.add(uriNameProperty);
 		allProperties.add(uriProperty);
 	}
 

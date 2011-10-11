@@ -48,14 +48,24 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 	private final Vector<PropertyStatement> _annotationStatements;
 	private final Vector<ObjectPropertyStatement> _annotationObjectsStatements;
 	private final Vector<OntologyStatement> _semanticStatements;
-	
-	
+
+	private boolean domainsAndRangesAreUpToDate = false;
+	private boolean domainsAndRangesAreRecursivelyUpToDate = false;
+	private Vector<OntologyProperty> declaredPropertiesTakingMySelfAsRange;
+	private Vector<OntologyProperty> declaredPropertiesTakingMySelfAsDomain;
+	protected Vector<OntologyProperty> propertiesTakingMySelfAsRange;
+	protected Vector<OntologyProperty> propertiesTakingMySelfAsDomain;
+
 	public OntologyObject() 
 	{
 		_statements = new Vector<OntologyStatement>();
 		_semanticStatements = new Vector<OntologyStatement>();
 		_annotationStatements = new Vector<PropertyStatement>();
 		_annotationObjectsStatements = new Vector<ObjectPropertyStatement>();
+		propertiesTakingMySelfAsRange = new Vector<OntologyProperty>();
+		propertiesTakingMySelfAsDomain = new Vector<OntologyProperty>();
+		declaredPropertiesTakingMySelfAsRange = new Vector<OntologyProperty>();
+		declaredPropertiesTakingMySelfAsDomain = new Vector<OntologyProperty>();
 	}
 	
 	protected abstract void update();
@@ -572,4 +582,72 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 	   return false;
    }
    
+  
+   protected void updateDomainsAndRanges()
+   {
+	   domainsAndRangesAreUpToDate = false;
+	   domainsAndRangesAreRecursivelyUpToDate = false;
+   }
+
+   public Vector<OntologyProperty> getDeclaredPropertiesTakingMySelfAsRange()
+   {
+	   if (!domainsAndRangesAreUpToDate) 
+		   searchRangeAndDomains();
+	   return declaredPropertiesTakingMySelfAsRange;
+   }
+
+   public Vector<OntologyProperty> getDeclaredPropertiesTakingMySelfAsDomain() 
+   {
+	   if (!domainsAndRangesAreUpToDate) 
+		   searchRangeAndDomains();
+	   return declaredPropertiesTakingMySelfAsDomain;
+   }
+   
+   public Vector<OntologyProperty> getPropertiesTakingMySelfAsRange()
+   {
+	   if (!domainsAndRangesAreRecursivelyUpToDate) 
+		   recursivelySearchRangeAndDomains();
+	   return propertiesTakingMySelfAsRange;
+   }
+
+   public Vector<OntologyProperty> getPropertiesTakingMySelfAsDomain() 
+   {
+	   if (!domainsAndRangesAreRecursivelyUpToDate) 
+		   recursivelySearchRangeAndDomains();
+	   return propertiesTakingMySelfAsDomain;
+   }
+   
+   private void searchRangeAndDomains()
+   {
+	   declaredPropertiesTakingMySelfAsRange.clear();
+	   declaredPropertiesTakingMySelfAsDomain.clear();
+	   searchRangeAndDomains(declaredPropertiesTakingMySelfAsRange,declaredPropertiesTakingMySelfAsDomain,getFlexoOntology());
+	   domainsAndRangesAreUpToDate = true;
+   }
+   
+   protected void recursivelySearchRangeAndDomains()
+   {
+	   propertiesTakingMySelfAsRange.clear();
+	   propertiesTakingMySelfAsDomain.clear();
+	   propertiesTakingMySelfAsRange.addAll(declaredPropertiesTakingMySelfAsRange);
+	   propertiesTakingMySelfAsDomain.addAll(declaredPropertiesTakingMySelfAsDomain);
+	   domainsAndRangesAreRecursivelyUpToDate = true;
+   }
+   
+   private  void searchRangeAndDomains(Vector<OntologyProperty> rangeProperties, Vector<OntologyProperty> domainProperties, FlexoOntology ontology)
+   {
+	   for (OntologyProperty p : ontology.getObjectProperties()) {
+		   if (p.getRange() != null && p.getRange().equals(this)) rangeProperties.add(p);
+		   if (p.getDomain() != null && p.getDomain().equals(this)) domainProperties.add(p);
+	   }
+	   for (OntologyProperty p : ontology.getDataProperties()) {
+		   if (p.getRange() != null && p.getRange().equals(this)) rangeProperties.add(p);
+		   if (p.getDomain() != null && p.getDomain().equals(this)) domainProperties.add(p);
+	   }
+	   for (FlexoOntology o : ontology.getImportedOntologies()) {
+		   searchRangeAndDomains(rangeProperties,domainProperties,o);
+	   }
+   }
+   
+ 
 }

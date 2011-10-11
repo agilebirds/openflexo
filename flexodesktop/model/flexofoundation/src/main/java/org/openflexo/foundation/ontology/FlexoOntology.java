@@ -584,24 +584,28 @@ public abstract class FlexoOntology extends OntologyObject {
 	{
 		orderedClasses.clear();
 		for (OntologyClass aClass : classes.values()) {
+			aClass.updateDomainsAndRanges();
 			orderedClasses.add(aClass);
 		}
 		Collections.sort(orderedClasses);
 
 		orderedIndividuals.clear();
 		for (OntologyIndividual anIndividual : individuals.values()) {
+			anIndividual.updateDomainsAndRanges();
 			orderedIndividuals.add(anIndividual);
 		}
 		Collections.sort(orderedIndividuals);
 
 		orderedDataProperties.clear();
 		for (OntologyDataProperty property : dataProperties.values()) {
+			property.updateDomainsAndRanges();
 			orderedDataProperties.add(property);
 		}
 		Collections.sort(orderedDataProperties);
 
 		orderedObjectProperties.clear();
 		for (OntologyObjectProperty property : objectProperties.values()) {
+			property.updateDomainsAndRanges();
 			orderedObjectProperties.add(property);
 		}
 		Collections.sort(orderedObjectProperties);
@@ -1182,6 +1186,7 @@ public abstract class FlexoOntology extends OntologyObject {
 		return o;
 	}
 
+	@Override
 	public boolean isOntology()
 	{
 		return true;

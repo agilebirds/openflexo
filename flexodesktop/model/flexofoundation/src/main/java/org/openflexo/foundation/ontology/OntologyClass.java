@@ -322,10 +322,34 @@ public class OntologyClass extends OntologyObject implements Comparable<Ontology
 		return "Class "+getName()+extendsLabel;
 	}
 
+	@Override
 	public boolean isOntologyClass()
 	{
 		return true;
 	}
 
-
+	@Override
+	protected void recursivelySearchRangeAndDomains()
+	{
+		super.recursivelySearchRangeAndDomains();
+		Vector<OntologyClass> alreadyComputed = new Vector<OntologyClass>();
+		for (OntologyClass aClass : getSuperClasses()) {
+			_appendRangeAndDomains(aClass, alreadyComputed);
+		}
+	}
+	
+	private void _appendRangeAndDomains(OntologyClass superClass, Vector<OntologyClass> alreadyComputed)
+	{
+		if (alreadyComputed.contains(superClass)) return;
+		alreadyComputed.add(superClass);
+		for (OntologyProperty p : superClass.getDeclaredPropertiesTakingMySelfAsDomain()) {
+			if (!propertiesTakingMySelfAsDomain.contains(p)) propertiesTakingMySelfAsDomain.add(p);
+		}
+		for (OntologyProperty p : superClass.getDeclaredPropertiesTakingMySelfAsRange()) {
+			if (!propertiesTakingMySelfAsRange.contains(p)) propertiesTakingMySelfAsRange.add(p);
+		}
+		for (OntologyClass superSuperClass : superClass.getSuperClasses()) {
+			_appendRangeAndDomains(superSuperClass, alreadyComputed);
+		}
+	}
 }

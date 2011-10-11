@@ -71,9 +71,9 @@ public class RangeStatement extends OntologyStatement {
 	public String toString() 
 	{
 		if (isString()) {
-			return getSubject().getName()+" has range (to) string";
+			return getSubject().getName()+" has range string";
 		}
-		return getSubject().getName()+" has range (to) "+(getRange() != null ? getRange().getName() : "<NOT_FOUND:"+getStatement().getObject()+">");
+		return getSubject().getName()+" has range "+(getRange() != null ? getRange().getName() : "<NOT_FOUND:"+getStatement().getObject()+">");
 	}
 
 	public boolean isString() 
@@ -81,4 +81,10 @@ public class RangeStatement extends OntologyStatement {
 		return isString;
 	}
 
+	public String getStringRepresentation()
+	{
+		if (isString()) return "String";
+		else if (getRange() != null) return getRange().getName();
+		return "";
+	}
 }

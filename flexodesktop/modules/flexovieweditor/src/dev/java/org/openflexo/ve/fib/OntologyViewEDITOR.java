@@ -34,6 +34,7 @@ public class OntologyViewEDITOR {
 	public static void main(String[] args)
 	{
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
+			@Override
 			public Object[] getData() {
 				FlexoResourceCenter resourceCenter = ModuleLoader.getFlexoResourceCenter();
 				OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
@@ -43,8 +44,11 @@ public class OntologyViewEDITOR {
 				ontology2.loadWhenUnloaded();
 				FlexoOntology ontology3 = ontologyLibrary.getOntology("http://www.w3.org/2002/07/owl");
 				ontology3.loadWhenUnloaded();
-				return makeArray(ontology1,ontology2,ontology3);
+				FlexoOntology ontology4 = ontologyLibrary.getOntology("http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl");
+				ontology4.loadWhenUnloaded();
+				return makeArray(ontology1,ontology2,ontology3,ontology4);
 			}
+			@Override
 			public File getFIBFile() {
 				return VECst.ONTOLOGY_VIEW_FIB;
 			}
