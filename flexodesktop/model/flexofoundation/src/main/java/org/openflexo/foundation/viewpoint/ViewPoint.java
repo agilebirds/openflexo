@@ -52,6 +52,10 @@ public class ViewPoint extends ViewPointObject {
 
 	private static final Logger logger = Logger.getLogger(ViewPoint.class.getPackage().getName());
 
+	static {
+		StringEncoder.getDefaultInstance()._addConverter(InspectorDataBinding.CONVERTER);
+	}
+
 	private String name;
 	private String viewPointURI;
 	private String description;

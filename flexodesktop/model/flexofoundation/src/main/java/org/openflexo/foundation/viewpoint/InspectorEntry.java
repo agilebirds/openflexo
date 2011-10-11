@@ -19,6 +19,8 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.Type;
+import java.util.Hashtable;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding;
@@ -28,9 +30,11 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingVariable;
-import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.antar.binding.DefaultBindingFactory;
+import org.openflexo.antar.binding.SimplePathElement;
+import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.ontology.OntologyProperty;
 
 
@@ -40,10 +44,11 @@ import org.openflexo.foundation.ontology.OntologyProperty;
  * @author sylvain
  *
  */
-public abstract class InspectorEntry extends ViewPointObject implements Bindable, BindingEvaluationContext {
+public abstract class InspectorEntry extends ViewPointObject implements Bindable  {
 
 	static final Logger logger = Logger.getLogger(InspectorEntry.class.getPackage().getName());
 
+	
 	public static BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
 	private BindingDefinition DATA;
 	
@@ -181,7 +186,7 @@ public abstract class InspectorEntry extends ViewPointObject implements Bindable
 	{
 		_bindingModel = new BindingModel();
 		for (PatternRole role : getEditionPattern().getPatternRoles()) {
-			_bindingModel.addToBindingVariables(new BindingVariableImpl(this, role.getName(), role.getAccessedClass()));
+			_bindingModel.addToBindingVariables(new PatternRolePathElement(role));
 		}	
 	}
 
@@ -214,20 +219,178 @@ public abstract class InspectorEntry extends ViewPointObject implements Bindable
 	}
 	
 
-	@Override
-	public Object getValue(BindingVariable variable) 
-	{
-		logger.warning("Prout ici, faut faire un truc...");
-		return null;
-	}
-	
-	private static DefaultBindingFactory BINDING_FACTORY = new DefaultBindingFactory();
-
 	public static enum InspectorBindingAttribute
 	{
 		data,
 		conditional
 	}
 
+	private static DefaultBindingFactory BINDING_FACTORY = new DefaultBindingFactory() {
+		@Override
+		public BindingPathElement getBindingPathElement(BindingPathElement father, String propertyName) {
+			if (father instanceof EditionPatternPathElement) {
+				EditionPattern ep = ((EditionPatternPathElement) father).editionPattern;
+				PatternRole pr = ep.getPatternRole(propertyName);
+				if (pr != null) {
+					return ((EditionPatternPathElement) father).getPatternRolePathElement(pr);
+				}
+				else {
+					logger.warning("Not found pattern role: "+propertyName);
+				}
+			}
+			return super.getBindingPathElement(father, propertyName);
+		}
+	};
+
+	public static class PatternRolePathElement implements SimplePathElement, BindingVariable
+	{
+		private PatternRole patternRole;
+		
+		public PatternRolePathElement(PatternRole aPatternRole)
+		{
+			this.patternRole = aPatternRole;
+		}
+		
+		@Override
+		public Class getDeclaringClass() {
+			return EditionPattern.class;
+		}
+
+		@Override
+		public Type getType() {
+			return patternRole.getAccessedClass();
+		}
+
+		@Override
+		public String getSerializationRepresentation() {
+			return patternRole.getName();
+		}
+
+		@Override
+		public boolean isBindingValid() {
+			return true;
+		}
+
+		@Override
+		public String getLabel() {
+			return getSerializationRepresentation();
+		}
+
+		@Override
+		public String getTooltipText(Type resultingType) {
+			return patternRole.getDescription();
+		}
+
+		@Override
+		public boolean isSettable() {
+			return false;
+		}
+
+		@Override
+		public Bindable getContainer() {
+			//return patternRole.getEditionPattern();
+			return null;
+		}
+
+		@Override
+		public String getVariableName() {
+			return patternRole.getName();
+		}
+		
+		
+		@Override
+		public Object evaluateBinding(Object target, BindingEvaluationContext context) 
+		{
+			if (target instanceof EditionPatternReference) {
+				return ((EditionPatternReference) target).getEditionPatternInstance().getPatternActor(patternRole);
+			}
+			logger.warning("Unexpected call to evaluateBinding() target="+target+" context="+context);
+ 			return null;
+		}
+	}
+	
+	public static class EditionPatternPathElement implements BindingVariable
+	{
+		private EditionPattern editionPattern;
+		private int index;
+		private Hashtable<PatternRole,PatternRolePathElement> patternRoleElements;
+		
+		public EditionPatternPathElement(EditionPattern anEditionPattern, int index)
+		{
+			this.editionPattern = anEditionPattern;
+			this.index = index;
+			patternRoleElements = new Hashtable<PatternRole, InspectorEntry.PatternRolePathElement>();
+			for (PatternRole pr : editionPattern.getPatternRoles()) {
+				patternRoleElements.put(pr,new PatternRolePathElement(pr));
+			}
+		}
+		
+		public PatternRolePathElement getPatternRolePathElement(PatternRole pr)
+		{
+			return patternRoleElements.get(pr);
+		}
+		
+		@Override
+		public Class getDeclaringClass() {
+			return null;
+		}
+
+		@Override
+		public Type getType() {
+			return EditionPattern.class;
+		}
+
+		@Override
+		public String getSerializationRepresentation() {
+			return editionPattern.getCalc().getName()+"_"+editionPattern.getName()+"_"+index;
+		}
+
+		@Override
+		public boolean isBindingValid() {
+			return true;
+		}
+
+		@Override
+		public String getLabel() {
+			return getSerializationRepresentation();
+		}
+
+		@Override
+		public String getTooltipText(Type resultingType) {
+			return editionPattern.getDescription();
+		}
+
+		@Override
+		public boolean isSettable() {
+			return false;
+		}
+
+		@Override
+		public Bindable getContainer() {
+			//return patternRole.getEditionPattern();
+			return null;
+		}
+
+		@Override
+		public String getVariableName() {
+			return getSerializationRepresentation();
+		}
+				
+		@Override
+		public Object evaluateBinding(Object target, BindingEvaluationContext context) 
+		{
+			logger.info("evaluateBinding EditionPatternPathElement with target="+target+" context="+context);
+ 			return null;
+		}
+
+		public EditionPattern getEditionPattern() {
+			return editionPattern;
+		}
+
+		public int getIndex() {
+			return index;
+		}
+	}
+	
 
 }

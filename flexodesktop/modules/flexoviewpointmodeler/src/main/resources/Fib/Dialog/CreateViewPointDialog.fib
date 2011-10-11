@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="gridbag" dataClassName="org.openflexo.foundation.viewpoint.action.CreateViewPoint" controllerClassName="org.openflexo.view.controller.FlexoFIBController">
+  <Label label="creates_new_view_point" align="center" localize="true" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=0;insetsTop=20;insetsBottom=20;weightY=0.0;weightX=1.0;fill=horizontal)" font="Lucida Grande,1,15" />
+  <Label label="view_point_name" align="right" localize="true" constraints="gridbag(insetsLeft=20;insetsRight=10;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=1;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
+  <TextField columns="40" passwd="false" text="TextField" localize="true" name="CalcNameTextField" data="data.newCalcName" constraints="gridbag(insetsLeft=0;insetsRight=20;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=2;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=1.0;fill=horizontal)">
+    <Dependancy componentName="OntologyFileSelector" />
+  </TextField>
+  <Label label="view_point_uri" align="right" localize="true" constraints="gridbag(insetsLeft=20;insetsRight=10;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=3;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
+  <TextField columns="6" passwd="false" text="TextField" localize="true" name="CalcURITextField" data="data.newCalcURI" constraints="gridbag(insetsLeft=0;insetsRight=20;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=4;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=1.0;fill=horizontal)">
+    <Dependancy componentName="OntologyFileSelector" />
+  </TextField>
+  <Label label="label" localize="true" data="data.errorMessage" constraints="gridbag(insetsLeft=0;insetsRight=24;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=5;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;fill=none;weightX=0.0)" visible="(!((data.isNewCalcNameValid &amp; data.isNewCalcURIValid)))" font="Dialog,2,10" foregroundColor="255,0,0">
+    <Dependancy componentName="CalcNameTextField" />
+    <Dependancy componentName="CalcURITextField" />
+    <LocalizedDictionary />
+  </Label>
+  <Label label="ontology_file" align="right" localize="true" constraints="gridbag(insetsLeft=20;insetsRight=10;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=6;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
+  <File mode="OpenMode" filter="*.owl" title="Please select an ontology to import as calc ontology" isDirectory="false" data="data.ontologyFile" constraints="gridbag(insetsLeft=0;insetsRight=20;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=7;gridWidth=0;insetsTop=0;insetsBottom=6;weightY=0.0;weightX=1.0;fill=horizontal)" name="OntologyFileSelector" localize="true">
+    <Dependancy componentName="CreatesOntologyButton" />
+  </File>
+  <Label label="imported_ontologies" localize="true" constraints="gridbag(insetsLeft=20;insetsRight=10;gridHeight=1;padY=0;padX=0;anchor=north_east;gridY=-1;gridX=-1;index=8;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;fill=none;weightX=0.0)">
+    <LocalizedDictionary />
+  </Label>
+  <Table iteratorClassName="org.openflexo.foundation.ontology.ImportedOntology" visibleRowCount="5" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.importedOntologies" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=9;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=1.0;fill=both;weightX=1.0)" localize="true" manageDynamicModel="true">
+    <IconColumn data="controller.iconForObject(iterator)" title="icon" columnWidth="20" resizable="false" displayTitle="false" name="icon" />
+    <LabelColumn data="iterator.uRI" title="imported_ontologies" columnWidth="100" resizable="true" displayTitle="true" name="label" />
+    <AddAction method="data.addToImportedOntologies(OntologySelector.data)" isAvailable="(OntologySelector.data != null)" name="add_action" />
+    <RemoveAction method="data.removeFromImportedOntologies(selected)" name="delete_action" />
+    <Dependancy componentName="ImportOntologyButton" />
+    <LocalizedDictionary />
+  </Table>
+  <Label label="" localize="true" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=north_east;gridY=-1;gridX=-1;index=10;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;fill=none;weightX=0.0)">
+    <LocalizedDictionary />
+  </Label>
+  <Panel layout="border" borderTitle="Panel" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=11;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;fill=horizontal;weightX=1.0)">
+    <Button action="data.createOntology()" buttonType="Trigger" label="creates_ontology" constraints="border(location=east;index=0)" name="CreatesOntologyButton" localize="true" enable="(data.isNewCalcNameValid &amp; data.isNewCalcURIValid)">
+      <Dependancy componentName="CalcURITextField" />
+      <LocalizedDictionary />
+    </Button>
+    <Button action="data.addToImportedOntologies(OntologySelector.data)" buttonType="Trigger" label="import_ontology" constraints="border(location=west;index=1)" name="ImportOntologyButton" localize="true" enable="(OntologySelector.data != null)">
+      <LocalizedDictionary />
+    </Button>
+    <Custom componentClassName="org.openflexo.components.widget.OntologySelector" constraints="border(location=center;index=2)" name="OntologySelector" localize="true" manageDynamicModel="true">
+      <Assignment variable="component.ontologyLibrary" value="data.calcFolder.viewPointLibrary.ontologyLibrary" />
+    </Custom>
+    <LocalizedDictionary />
+  </Panel>
+  <Label label="description" align="right" localize="true" constraints="gridbag(insetsLeft=20;insetsRight=10;gridHeight=1;padY=0;padX=0;anchor=north_east;gridY=-1;gridX=-1;index=12;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
+  <TextArea columns="6" rows="5" text="TextArea" data="data.newCalcDescription" constraints="gridbag(insetsLeft=0;insetsRight=20;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=13;gridWidth=0;insetsTop=0;insetsBottom=20;weightY=1.0;weightX=1.0;fill=both)" localize="true" />
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=14;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;fill=both;weightX=1.0)">
+    <Button action="controller.validateAndDispose()" buttonType="Trigger" label="validate" constraints="flow(index=0)" localize="true" enable="data.isValid">
+      <Dependancy componentName="CalcNameTextField" />
+      <Dependancy componentName="OntologyFileSelector" />
+    </Button>
+    <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" constraints="flow(index=1)" localize="true" />
+  </Panel>
+  <LocalizedDictionary>
+    <Localized key="description" lang="English">Description</Localized>
+    <Localized key="validate" lang="English">Validate</Localized>
+    <Localized key="cancel" lang="English">Cancel</Localized>
+    <Localized key="description" lang="French">Description</Localized>
+    <Localized key="validate" lang="French">Valider</Localized>
+    <Localized key="cancel" lang="French">Annuler</Localized>
+    <Localized key="description" lang="Dutch">Description</Localized>
+    <Localized key="validate" lang="Dutch">Validate</Localized>
+    <Localized key="cancel" lang="Dutch">Cancel</Localized>
+    <Localized key="calc_name" lang="French">Nom du calque ontologique</Localized>
+    <Localized key="creates_new_ontologic_calc" lang="French">Créer un nouveau calque ontologique</Localized>
+    <Localized key="calc_uri" lang="French">URI du calque</Localized>
+    <Localized key="ontology_file" lang="French">Fichier contenant l'ontologie à utiliser</Localized>
+    <Localized key="calc_name" lang="English">Ontologic calc name</Localized>
+    <Localized key="calc_uri" lang="English">Calc URI</Localized>
+    <Localized key="creates_new_ontologic_calc" lang="English">Creates new ontologic calc</Localized>
+    <Localized key="ontology_file" lang="English">Ontology file</Localized>
+    <Localized key="imported_ontologies" lang="English">Imported ontologies</Localized>
+    <Localized key="delete_action" lang="English">Delete action</Localized>
+    <Localized key="imported_ontologies" lang="French">Ontologies importées</Localized>
+    <Localized key="delete_action" lang="French">Supprimer l'action</Localized>
+    <Localized key="imported_ontologies" lang="Dutch">Imported ontologies</Localized>
+    <Localized key="delete_action" lang="Dutch">Delete action</Localized>
+    <Localized key="add_action" lang="French">add_action</Localized>
+    <Localized key="creates_ontology" lang="French">Créer l'ontologie</Localized>
+    <Localized key="creates_ontology" lang="English">Creates ontology</Localized>
+    <Localized key="import_ontology" lang="French">Importer</Localized>
+    <Localized key="import_ontology" lang="Dutch">Import</Localized>
+    <Localized key="import_ontology" lang="English">Import</Localized>
+    <Localized key="please_supply_valid_view_point_name" lang="French">Veuillez entrer un nom de point de vue valide</Localized>
+    <Localized key="please_supply_valid_view_point_name" lang="English">Please supply valid view point name</Localized>
+    <Localized key="please_supply_valid_uri" lang="French">Veuillez entrer une URI de point de vue valide</Localized>
+    <Localized key="please_supply_valid_uri" lang="English">Please supply valid URI</Localized>
+    <Localized key="malformed_uri" lang="French">URI mal formée (une uri valide soit posséder la terminaison .owl)</Localized>
+    <Localized key="malformed_uri" lang="English">Malformed URI (valid uri must end with .owl)</Localized>
+    <Localized key="creates_new_view_point" lang="French">Créer un nouveau point de vue</Localized>
+    <Localized key="creates_new_view_point" lang="English">Creates new view point</Localized>
+    <Localized key="view_point_name" lang="French">Nom du point de vue</Localized>
+    <Localized key="view_point_name" lang="English">View point name</Localized>
+    <Localized key="view_point_uri" lang="French">URI du point de vue</Localized>
+    <Localized key="view_point_uri" lang="English">View point URI</Localized>
+  </LocalizedDictionary>
+</Panel>
+

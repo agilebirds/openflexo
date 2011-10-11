@@ -22,33 +22,31 @@ package org.openflexo.vpm.fib.dialogs;
 import java.io.File;
 
 import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.foundation.FlexoResourceCenter;
-import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.foundation.viewpoint.action.CreateCalcDrawingShema;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.vpm.CEDCst;
+import org.openflexo.vpm.VPMModule;
+import org.openflexo.vpm.controller.CEDController;
 
 
-public class CreateCalcDrawingShemaDialogEDITOR {
+public class SaveViewPointModelerDialogEDITOR {
 
 	
 	public static void main(String[] args)
 	{
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			@Override
 			public Object[] getData() 
 			{
-				FlexoResourceCenter resourceCenter = ModuleLoader.getFlexoResourceCenter(true);
-				ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
-				ViewPoint calc1 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/BasicOrganizationTreeEditor.owl");
-				calc1.loadWhenUnloaded();
-				CreateCalcDrawingShema action = CreateCalcDrawingShema.actionType.makeNewAction(calc1, null,null);
-				return makeArray(action);
+				CEDController controller = null;
+				try {
+					VPMModule module = new VPMModule();
+					controller = module.getCEDController();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return makeArray(controller);
 			}
-			@Override
 			public File getFIBFile() {
-				return CEDCst.CREATE_CALC_DRAWING_SHEMA_DIALOG_FIB;
+				return CEDCst.SAVE_VPM_DIALOG_FIB;
 			}
 		};
 		editor.launch();

@@ -22,31 +22,30 @@ package org.openflexo.vpm.fib.dialogs;
 import java.io.File;
 
 import org.openflexo.fib.editor.FIBAbstractEditor;
+import org.openflexo.foundation.FlexoResourceCenter;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.action.CreateViewPoint;
+import org.openflexo.module.ModuleLoader;
 import org.openflexo.vpm.CEDCst;
-import org.openflexo.vpm.VPMModule;
-import org.openflexo.vpm.controller.CEDController;
 
 
-public class ReviewUnsavedCalcEditorDialogEDITOR {
+public class CreateViewPointDialogEDITOR {
 
 	
 	public static void main(String[] args)
 	{
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
+			@Override
 			public Object[] getData() 
 			{
-				CEDController controller = null;
-				try {
-					VPMModule module = new VPMModule();
-					controller = module.getCEDController();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				return makeArray(controller);
+				FlexoResourceCenter resourceCenter = ModuleLoader.getFlexoResourceCenter(true);
+				ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
+				CreateViewPoint action = CreateViewPoint.actionType.makeNewAction(calcLibrary, null,null);
+				return makeArray(action);
 			}
+			@Override
 			public File getFIBFile() {
-				return CEDCst.REVIEW_UNSAVED_CALC_EDITOR_DIALOG_FIB;
+				return CEDCst.CREATE_VIEW_POINT_DIALOG_FIB;
 			}
 		};
 		editor.launch();

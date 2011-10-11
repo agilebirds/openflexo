@@ -84,6 +84,16 @@ public class FIBDialog extends JDialog {
     	}
     }
 
+    @Override
+    public void setVisible(boolean b) 
+    {
+    	super.setVisible(b);
+    	if (!b) {
+        	if (_visibleDialog == this) {
+        		_visibleDialog = null;
+        	}
+    	}
+    }
 
 	public static FIBDialog instanciateComponent(File componentFile, Object data, JFrame frame, boolean modal)
 	{

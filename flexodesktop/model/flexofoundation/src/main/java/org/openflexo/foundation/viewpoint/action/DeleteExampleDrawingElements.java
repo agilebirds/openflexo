@@ -32,22 +32,22 @@ import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 
 
-public class DeleteCalcShemaElements extends FlexoUndoableAction<DeleteCalcShemaElements,ExampleDrawingObject,ExampleDrawingObject>
+public class DeleteExampleDrawingElements extends FlexoUndoableAction<DeleteExampleDrawingElements,ExampleDrawingObject,ExampleDrawingObject>
 {
 
-    private static final Logger logger = Logger.getLogger(DeleteCalcShemaElements.class.getPackage().getName());
+    private static final Logger logger = Logger.getLogger(DeleteExampleDrawingElements.class.getPackage().getName());
 
-    public static FlexoActionType<DeleteCalcShemaElements,ExampleDrawingObject,ExampleDrawingObject> actionType 
-    = new FlexoActionType<DeleteCalcShemaElements,ExampleDrawingObject,ExampleDrawingObject>(
+    public static FlexoActionType<DeleteExampleDrawingElements,ExampleDrawingObject,ExampleDrawingObject> actionType 
+    = new FlexoActionType<DeleteExampleDrawingElements,ExampleDrawingObject,ExampleDrawingObject>(
     		"delete", FlexoActionType.editGroup, FlexoActionType.DELETE_ACTION_TYPE) {
 
         /**
          * Factory method
          */
         @Override
-		public DeleteCalcShemaElements makeNewAction(ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor)
+		public DeleteExampleDrawingElements makeNewAction(ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor)
         {
-            return new DeleteCalcShemaElements(focusedObject, globalSelection,editor);
+            return new DeleteExampleDrawingElements(focusedObject, globalSelection,editor);
         }
 
         @Override
@@ -66,8 +66,8 @@ public class DeleteCalcShemaElements extends FlexoUndoableAction<DeleteCalcShema
     };
 
 	static {
-		FlexoModelObject.addActionForClass (DeleteCalcShemaElements.actionType, ExampleDrawingShape.class);
-		FlexoModelObject.addActionForClass (DeleteCalcShemaElements.actionType, ExampleDrawingConnector.class);
+		FlexoModelObject.addActionForClass (DeleteExampleDrawingElements.actionType, ExampleDrawingShape.class);
+		FlexoModelObject.addActionForClass (DeleteExampleDrawingElements.actionType, ExampleDrawingConnector.class);
 	}
 
 	protected static Vector<ExampleDrawingObject> objectsToDelete(ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection)
@@ -98,7 +98,7 @@ public class DeleteCalcShemaElements extends FlexoUndoableAction<DeleteCalcShema
 	}
 	
 	
-	protected DeleteCalcShemaElements(ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor)
+	protected DeleteExampleDrawingElements(ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor)
     {
         super(actionType, focusedObject, globalSelection,editor);
         logger.info("Created DeleteCalcShemaElements action focusedObject="+focusedObject+"globalSelection="+globalSelection);

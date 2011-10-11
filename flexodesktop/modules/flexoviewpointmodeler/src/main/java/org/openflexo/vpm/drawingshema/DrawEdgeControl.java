@@ -45,7 +45,7 @@ import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.LabelRepresentation;
 import org.openflexo.foundation.viewpoint.LinkScheme;
 import org.openflexo.foundation.viewpoint.LabelRepresentation.LabelRepresentationType;
-import org.openflexo.foundation.viewpoint.action.AddCalcDrawingConnector;
+import org.openflexo.foundation.viewpoint.action.AddExampleDrawingConnector;
 import org.openflexo.localization.FlexoLocalization;
 
 public class DrawEdgeControl extends MouseDragControl {
@@ -141,7 +141,7 @@ public class DrawEdgeControl extends MouseDragControl {
 
 		private void performAddDefaultConnector(DrawingController<?> controller)
 		{
-			AddCalcDrawingConnector action = AddCalcDrawingConnector.actionType.makeNewAction(fromShape.getDrawable(), null,((CalcDrawingShemaController)controller).getCEDController().getEditor());
+			AddExampleDrawingConnector action = AddExampleDrawingConnector.actionType.makeNewAction(fromShape.getDrawable(), null,((CalcDrawingShemaController)controller).getCEDController().getEditor());
 			action.toShape = toShape.getDrawable();
 
 			ConnectorGraphicalRepresentation<?> connectorGR = new ConnectorGraphicalRepresentation<ExampleDrawingConnector>();
@@ -165,7 +165,7 @@ public class DrawEdgeControl extends MouseDragControl {
 
 		private void performAddConnector(DrawingController<?> controller,ConnectorGraphicalRepresentation<?> connectorGR, String text)
 		{
-			AddCalcDrawingConnector action = AddCalcDrawingConnector.actionType.makeNewAction(fromShape.getDrawable(), null,((CalcDrawingShemaController)controller).getCEDController().getEditor());
+			AddExampleDrawingConnector action = AddExampleDrawingConnector.actionType.makeNewAction(fromShape.getDrawable(), null,((CalcDrawingShemaController)controller).getCEDController().getEditor());
 			action.toShape = toShape.getDrawable();
 			action.graphicalRepresentation = connectorGR;
 			action.newConnectorName = text;

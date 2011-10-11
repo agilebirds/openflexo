@@ -32,11 +32,10 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.tree.TreeNode;
 
 import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
-import org.openflexo.antar.binding.TypeUtils;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.view.FIBView;
@@ -483,7 +482,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		return current;
 	}
 	
-	private BindingModel _bindingModel = null;
+	protected BindingModel _bindingModel = null;
 	
 	@Override
 	public BindingModel getBindingModel() 
@@ -504,7 +503,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}
 	}
 	
-	private void createBindingModel()
+	protected void createBindingModel()
 	{
 		_bindingModel = new BindingModel();
 		

@@ -17,43 +17,14 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fib.controller;
+package org.openflexo.antar.binding;
 
-import org.openflexo.fib.model.FIBComponent;
+/**
+ * Implemented by all path elements flagged as final (no children)
+ * 
+ * @author sylvain
+ *
+ */
+public interface FinalBindingPathElement extends BindingPathElement {
 
-public class FIBComponentDynamicModel<T> {
-
-	private FIBComponent component;
-	public boolean isVisible;
-	private T data;
-	
-	public FIBComponentDynamicModel(T data)
-	{
-		this.data = data;
-	}
-	
-	public void delete()
-	{
-		data = null;
-	}
-
-	public T getData()
-	{
-		return data;
-	}
-
-	public void setData(T data)
-	{
-		this.data = data;
-	}
-	
-	public FIBComponent getComponent()
-	{
-		return component;
-	}
-	
-	@Override
-	public String toString() {
-		return "FIBComponentDynamicModel,data="+getData();
-	}
 }

@@ -19,9 +19,27 @@
  */
 package org.openflexo.inspector;
 
+import java.util.Hashtable;
+import java.util.Vector;
+import java.util.logging.Logger;
+
+import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.fib.FIBLibrary;
+import org.openflexo.fib.model.DataBinding;
+import org.openflexo.fib.model.FIBLabel;
 import org.openflexo.fib.model.FIBPanel;
+import org.openflexo.fib.model.FIBTab;
 import org.openflexo.fib.model.FIBTabPanel;
+import org.openflexo.fib.model.FIBTextField;
+import org.openflexo.fib.model.TwoColsLayoutConstraints;
+import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
+import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.ontology.EditionPatternReference;
+import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionPatternInspector;
+import org.openflexo.foundation.viewpoint.InspectorEntry;
+import org.openflexo.foundation.viewpoint.InspectorEntry.EditionPatternPathElement;
+import org.openflexo.foundation.viewpoint.TextFieldInspectorEntry;
 import org.openflexo.xmlcode.AccessorInvocationException;
 import org.openflexo.xmlcode.Cloner;
 import org.openflexo.xmlcode.DuplicateSerializationIdentifierException;
@@ -32,6 +50,8 @@ import org.openflexo.xmlcode.XMLCoder;
 
 
 public class FIBInspector extends FIBPanel {
+
+	static final Logger logger = Logger.getLogger(FIBInspector.class.getPackage().getName());
 
 	private boolean superInspectorWereAppened = false;
 	
@@ -103,4 +123,110 @@ public class FIBInspector extends FIBPanel {
 		return "Error ???";
 	}
 	
+	/**
+	 * This method looks after object's EditionPattern references
+	 * to know if we need to structurally change inspector by adding or
+	 * removing tabs, which all correspond to one and only one EditionPattern
+	 * 
+	 * @param object
+	 * @return
+	 */
+	protected boolean updateEditionPatternReferences(FlexoModelObject object)
+	{
+		boolean needsChanges = false;
+		
+		if (object.getEditionPatternReferences() == null) {
+			needsChanges = (currentEditionPatterns.size() > 0);
+		}
+		else {
+			if (currentEditionPatterns.size() != object.getEditionPatternReferences().size()) {
+				needsChanges = true;
+			}
+			else {
+				for (int i=0; i<currentEditionPatterns.size(); i++) {
+					if (currentEditionPatterns.get(i) != object.getEditionPatternReferences().get(i).getEditionPattern()) {
+						needsChanges = true;
+						break;
+					}
+				}
+			}
+		}
+		
+		if (!needsChanges) {
+			// No changes detected, i can return
+			return false;
+		}
+		
+		for (FIBTab tab : tabsForEP.values()) {
+			getTabPanel().removeFromSubComponents(tab);
+		}
+				
+		currentEditionPatterns.clear();
+		tabsForEP.clear();
+		
+		if (object.getEditionPatternReferences() != null) {
+			for (int refIndex = 0; refIndex<object.getEditionPatternReferences().size(); refIndex++) {
+				EditionPatternReference ref = object.getEditionPatternReferences().get(refIndex);
+				EditionPatternInspector inspector = ref.getEditionPattern().getInspector();
+				FIBTab newTab = makeFIBTab(ref.getEditionPattern(),refIndex);
+				currentEditionPatterns.add(ref.getEditionPattern());
+				tabsForEP.put(ref.getEditionPattern(),newTab);
+				getTabPanel().addToSubComponents(newTab);
+			}
+			updateBindingModel();
+		}
+		
+		return true;
+
+	}
+	
+	
+	@Override
+	protected void createBindingModel() 
+	{
+		super.createBindingModel();
+		for (int i=0; i<currentEditionPatterns.size(); i++) {
+			EditionPattern ep = currentEditionPatterns.get(i);
+			_bindingModel.addToBindingVariables(new EditionPatternPathElement(ep,i));
+		}
+	}
+ 			
+	private FIBTab makeFIBTab(EditionPattern ep,int refIndex)
+	{
+		FIBTab newTab = new FIBTab();
+		newTab.setTitle(ep.getInspector().getInspectorTitle());
+		newTab.setIndex(-1);
+		newTab.setLayout(Layout.twocols);
+		//newTab.setDataClass(EditionPatternInstance.class);
+		//newTab.setData(new DataBinding("data.editionPatternReferences.get["+refIndex+"].editionPatternInstance"));
+		//newTab.setData(new DataBinding("data.editionPatternReferences.firstElement.editionPatternInstance"));
+		String epIdentifier = ep.getCalc().getName()+"_"+ep.getName()+"_"+refIndex;
+		newTab.setName(epIdentifier+"Panel");
+		int index = 0;
+		for (final InspectorEntry entry : ep.getInspector().getEntries()) {
+			FIBLabel label = new FIBLabel();
+			label.setLabel(entry.getLabel());
+			newTab.addToSubComponents(label,new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false, index++));
+			if (entry instanceof TextFieldInspectorEntry) {
+				FIBTextField tf = new FIBTextField();
+				//tf.setData(new DataBinding("Prout.data.stringValue(\""+entry.getLabel()+"\")"));
+				tf.setData(new DataBinding(epIdentifier+"."+entry.getData().toString()) {
+					@Override
+					public BindingFactory getBindingFactory() {
+						return entry.getBindingFactory();
+					}
+				});
+				newTab.addToSubComponents(tf,new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index++));
+			}
+			else {
+				FIBLabel unknown = new FIBLabel();
+				unknown.setLabel("???");
+				newTab.addToSubComponents(unknown,new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index++));
+			}
+		}
+		return newTab;
+	}
+	
+	private Vector<EditionPattern> currentEditionPatterns = new Vector<EditionPattern>();
+	private Hashtable<EditionPattern,FIBTab> tabsForEP = new Hashtable<EditionPattern, FIBTab>();
 }

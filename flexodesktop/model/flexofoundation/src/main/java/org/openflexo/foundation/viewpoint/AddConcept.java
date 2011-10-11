@@ -19,10 +19,15 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.logging.Logger;
+
 import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.logging.FlexoLogger;
 
 
 public abstract class AddConcept extends EditionAction<OntologicObjectPatternRole> {
+
+	protected static final Logger logger = FlexoLogger.getLogger(AddConcept.class.getPackage().getName());
 
 	public AddConcept() {
 	}
@@ -57,5 +62,25 @@ public abstract class AddConcept extends EditionAction<OntologicObjectPatternRol
 		return project.getOntologyLibrary().getOntologyObject(getConceptURI());
 	}*/
 	
+	@Override
+	public OntologicObjectPatternRole getPatternRole() {
+		try {
+			return super.getPatternRole();
+		} catch (ClassCastException e) {
+			logger.warning("Unexpected pattern role type");
+			setPatternRole(null);
+			return null;
+		}
+	}
+	
+	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
+	// Need to be fixed in KeyValueProperty.java
+	@Override
+	public void setPatternRole(OntologicObjectPatternRole patternRole) 
+	{
+		super.setPatternRole(patternRole);
+	}
+	
+
 	
 }

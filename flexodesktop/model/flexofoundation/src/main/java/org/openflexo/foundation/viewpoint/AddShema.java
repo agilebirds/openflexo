@@ -91,6 +91,15 @@ public class AddShema extends EditionAction<ShemaPatternRole> {
 		}
 	}
 	
+	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
+	// Need to be fixed in KeyValueProperty.java
+	@Override
+	public void setPatternRole(ShemaPatternRole patternRole) {
+		super.setPatternRole(patternRole);
+	}
+	
+
+	
 	@Override
 	protected void updatePatternRoleType()
 	{

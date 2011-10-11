@@ -32,20 +32,20 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
+import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
-public class CreateCalcDrawingShema extends FlexoAction<CreateCalcDrawingShema,ViewPoint,ViewPointObject> 
+public class CreateViewPointPalette extends FlexoAction<CreateViewPointPalette,ViewPoint,ViewPointObject> 
 {
 
-	private static final Logger logger = Logger.getLogger(CreateCalcDrawingShema.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(CreateViewPointPalette.class.getPackage().getName());
 
-	public static FlexoActionType<CreateCalcDrawingShema,ViewPoint,ViewPointObject> actionType 
-	= new FlexoActionType<CreateCalcDrawingShema,ViewPoint,ViewPointObject> (
-			"create_new_drawing",
+	public static FlexoActionType<CreateViewPointPalette,ViewPoint,ViewPointObject> actionType 
+	= new FlexoActionType<CreateViewPointPalette,ViewPoint,ViewPointObject> (
+			"create_new_palette",
 			FlexoActionType.newMenu,
 			FlexoActionType.defaultGroup,
 			FlexoActionType.ADD_ACTION_TYPE) {
@@ -54,9 +54,9 @@ public class CreateCalcDrawingShema extends FlexoAction<CreateCalcDrawingShema,V
 		 * Factory method
 		 */
 		@Override
-		public CreateCalcDrawingShema makeNewAction(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) 
+		public CreateViewPointPalette makeNewAction(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) 
 		{
-			return new CreateCalcDrawingShema(focusedObject, globalSelection, editor);
+			return new CreateViewPointPalette(focusedObject, globalSelection, editor);
 		}
 
 		@Override
@@ -74,17 +74,17 @@ public class CreateCalcDrawingShema extends FlexoAction<CreateCalcDrawingShema,V
 	};
 
 	static {
-		FlexoModelObject.addActionForClass (CreateCalcDrawingShema.actionType, ViewPoint.class);
+		FlexoModelObject.addActionForClass (CreateViewPointPalette.actionType, ViewPoint.class);
 	}
 
 
-	public String newShemaName;
+	public String newPaletteName;
 	public String description;
 	public Object graphicalRepresentation;
 
-	private ExampleDrawingShema _newShema;
+	private ViewPointPalette _newPalette;
 
-	CreateCalcDrawingShema (ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor)
+	CreateViewPointPalette (ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor)
 	{
 		super(actionType, focusedObject, globalSelection, editor);
 	}
@@ -92,15 +92,15 @@ public class CreateCalcDrawingShema extends FlexoAction<CreateCalcDrawingShema,V
 	@Override
 	protected void doAction(Object context) throws DuplicateResourceException,NotImplementedException,InvalidParameterException
 	{
-		logger.info ("Add calc shema");  	
+		logger.info ("Add calc palette");  	
 
-		_newShema = ExampleDrawingShema.newShema(
+		_newPalette = ViewPointPalette.newCalcPalette(
 				getFocusedObject(), 
-				new File(getFocusedObject().getViewPointDirectory(),newShemaName+".shema"),
+				new File(getFocusedObject().getViewPointDirectory(),newPaletteName+".palette"),
 				graphicalRepresentation);
-		_newShema.setDescription(description);
-		getFocusedObject().addToCalcShemas(_newShema);
-		_newShema.save();
+		_newPalette.setDescription(description);
+		getFocusedObject().addToCalcPalettes(_newPalette);
+		_newPalette.save();
 		
 	}
 
@@ -110,9 +110,9 @@ public class CreateCalcDrawingShema extends FlexoAction<CreateCalcDrawingShema,V
 		return null;
 	}
 
-	public ExampleDrawingShema getNewShema()
+	public ViewPointPalette getNewPalette() 
 	{
-		return _newShema;
+		return _newPalette;
 	}
 
 	private String nameValidityMessage = EMPTY_NAME;
@@ -128,11 +128,11 @@ public class CreateCalcDrawingShema extends FlexoAction<CreateCalcDrawingShema,V
 	
 	public boolean isNameValid()
 	{
-		if (StringUtils.isEmpty(newShemaName)) {
+		if (StringUtils.isEmpty(newPaletteName)) {
 			nameValidityMessage = EMPTY_NAME;
 			return false;
 		}
-		else if (getFocusedObject().getShema(newShemaName) != null) {
+		else if (getFocusedObject().getPalette(newPaletteName) != null) {
 			nameValidityMessage = DUPLICATED_NAME;
 			return false;
 		}
@@ -141,5 +141,4 @@ public class CreateCalcDrawingShema extends FlexoAction<CreateCalcDrawingShema,V
 			return true;
 		}
 	}
-
 }

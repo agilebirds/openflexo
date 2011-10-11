@@ -35,13 +35,13 @@ import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 
 
-public class AddCalcPaletteElement extends FlexoAction<AddCalcPaletteElement,ViewPointPalette,ViewPointObject> 
+public class AddPaletteElement extends FlexoAction<AddPaletteElement,ViewPointPalette,ViewPointObject> 
 {
 
-	private static final Logger logger = Logger.getLogger(AddCalcPaletteElement.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(AddPaletteElement.class.getPackage().getName());
 
-	public static FlexoActionType<AddCalcPaletteElement,ViewPointPalette,ViewPointObject> actionType 
-	= new FlexoActionType<AddCalcPaletteElement,ViewPointPalette,ViewPointObject> (
+	public static FlexoActionType<AddPaletteElement,ViewPointPalette,ViewPointObject> actionType 
+	= new FlexoActionType<AddPaletteElement,ViewPointPalette,ViewPointObject> (
 			"add_new_palette_element",
 			FlexoActionType.newMenu,
 			FlexoActionType.defaultGroup,
@@ -51,9 +51,9 @@ public class AddCalcPaletteElement extends FlexoAction<AddCalcPaletteElement,Vie
 		 * Factory method
 		 */
 		@Override
-		public AddCalcPaletteElement makeNewAction(ViewPointPalette focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) 
+		public AddPaletteElement makeNewAction(ViewPointPalette focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) 
 		{
-			return new AddCalcPaletteElement(focusedObject, globalSelection, editor);
+			return new AddPaletteElement(focusedObject, globalSelection, editor);
 		}
 
 		@Override
@@ -71,7 +71,7 @@ public class AddCalcPaletteElement extends FlexoAction<AddCalcPaletteElement,Vie
 	};
 
 	static {
-		FlexoModelObject.addActionForClass (AddCalcPaletteElement.actionType, ViewPointPalette.class);
+		FlexoModelObject.addActionForClass (AddPaletteElement.actionType, ViewPointPalette.class);
 	}
 
 
@@ -79,7 +79,7 @@ public class AddCalcPaletteElement extends FlexoAction<AddCalcPaletteElement,Vie
 	private ViewPointPaletteElement _newElement;
 	private Object _graphicalRepresentation;
 
-	AddCalcPaletteElement (ViewPointPalette focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor)
+	AddPaletteElement (ViewPointPalette focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor)
 	{
 		super(actionType, focusedObject, globalSelection, editor);
 	}

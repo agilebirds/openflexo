@@ -25,12 +25,12 @@ import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.foundation.viewpoint.action.CreateCalcPalette;
+import org.openflexo.foundation.viewpoint.action.CreateViewPointPalette;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.vpm.CEDCst;
 
 
-public class CreateCalcPaletteDialogEDITOR {
+public class CreatePaletteDialogEDITOR {
 
 	
 	public static void main(String[] args)
@@ -43,12 +43,12 @@ public class CreateCalcPaletteDialogEDITOR {
 				ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
 				ViewPoint calc1 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/BasicOrganizationTreeEditor.owl");
 				calc1.loadWhenUnloaded();
-				CreateCalcPalette action = CreateCalcPalette.actionType.makeNewAction(calc1, null,null);
+				CreateViewPointPalette action = CreateViewPointPalette.actionType.makeNewAction(calc1, null,null);
 				return makeArray(action);
 			}
 			@Override
 			public File getFIBFile() {
-				return CEDCst.CREATE_CALC_PALETTE_DIALOG_FIB;
+				return CEDCst.CREATE_PALETTE_DIALOG_FIB;
 			}
 		};
 		editor.launch();

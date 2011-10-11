@@ -292,7 +292,7 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 		OntologyIndividual newIndividual;
 		try {
 			newIndividual = getProject().getProjectOntology().createOntologyIndividual(individualName,father);
-			logger.info("Added individual "+newIndividual.getName()+" as "+father);
+			logger.info("********* Added individual "+newIndividual.getName()+" as "+father);
 			/*OntologyClass uneAutreClasses = getProject().getProjectOntology().createOntologyClass("UneClasseCommeCa", (OntologyClass)father);
 			OntologyIndividual unAutreIndividual = getProject().getProjectOntology().createOntologyIndividual("UnAutreIndividual", (OntologyClass)father);
 			OntologyObjectProperty objProp = getProject().getOntologyLibrary().getObjectProperty(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI+"#"+"inRelationWith");
@@ -310,10 +310,9 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 	{
 		for (DataPropertyAssertion dataPropertyAssertion : action.getDataAssertions()) {
 			if (dataPropertyAssertion.evaluateCondition(parameterValues)) {
-				//System.out.println("dataPropertyAssertion="+dataPropertyAssertion);
-				//System.out.println("dataPropertyAssertion.getDataPropertyURI()="+dataPropertyAssertion.getDataPropertyURI());
+				logger.info("DataPropertyAssertion="+dataPropertyAssertion);
 				OntologyProperty property = dataPropertyAssertion.getOntologyProperty();
-				//System.out.println("property="+property);
+				logger.info("Property="+property);
 				Object value = getParameterValues().get(dataPropertyAssertion.getValueParameter().getName());
 				if (value instanceof String) {
 					newIndividual.getOntResource().addProperty(
@@ -356,10 +355,11 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 		}
 		for (ObjectPropertyAssertion objectPropertyAssertion : action.getObjectAssertions()) {
 			if (objectPropertyAssertion.evaluateCondition(parameterValues)) {
+				logger.info("ObjectPropertyAssertion="+objectPropertyAssertion);
 				OntologyProperty property = objectPropertyAssertion.getOntologyProperty();
+				logger.info("Property="+property);
 				OntologyObject assertionObject = objectPropertyAssertion.getAssertionObject(this);					
-				//logger.info("Now handle object propertyt assertion "+property);
-				//logger.info("assertionObject="+assertionObject);
+				logger.info("assertionObject="+assertionObject);
 				/*OntologyObject assertionObject = null;
 					Object value = null;
 					if (objectPropertyAssertion.getObject() != null) value = getParameterValues().get(objectPropertyAssertion.getObject());
@@ -367,7 +367,11 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 					if (assertionObject == null && getParent() instanceof OEShape) 
 						assertionObject = objectPropertyAssertion.getAssertionObject((OEShape)getParent(),editionPatternInstance);*/
 				if (assertionObject != null) {
+					logger.info("OK, je le fais");
 					newIndividual.getOntResource().addProperty(property.getOntProperty(), assertionObject.getOntResource());
+				}
+				else {
+					logger.info("mon assertion objet est null");
 				}
 			}
 		}

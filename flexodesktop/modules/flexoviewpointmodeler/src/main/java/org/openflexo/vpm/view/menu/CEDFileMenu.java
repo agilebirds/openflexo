@@ -89,7 +89,7 @@ public class CEDFileMenu extends FileMenu
     {
    		getCEDController().reviewModifiedResources();
 		FIBDialog dialog = FIBDialog.instanciateComponent(
-				CEDCst.REVIEW_UNSAVED_CALC_EDITOR_DIALOG_FIB,
+				CEDCst.REVIEW_UNSAVED_VPM_DIALOG_FIB,
 				getCEDController(), null, true);
 		if (dialog.getStatus() == Status.VALIDATED) {
 	   		getCEDController().saveModified();
@@ -108,7 +108,7 @@ public class CEDFileMenu extends FileMenu
     {
    		getCEDController().reviewModifiedResources();
 		FIBDialog dialog = FIBDialog.instanciateComponent(
-				CEDCst.REVIEW_UNSAVED_CALC_EDITOR_DIALOG_FIB,
+				CEDCst.REVIEW_UNSAVED_VPM_DIALOG_FIB,
 				getCEDController(), null, true);
 		if (dialog.getStatus() == Status.VALIDATED) {
 	   		getCEDController().saveModified();
@@ -119,7 +119,7 @@ public class CEDFileMenu extends FileMenu
     {
    		getCEDController().reviewModifiedResources();
 		FIBDialog dialog = FIBDialog.instanciateComponent(
-				CEDCst.SAVE_CALC_EDITOR_DIALOG_FIB,
+				CEDCst.SAVE_VPM_DIALOG_FIB,
 				getCEDController(), null, true);
 		if (dialog.getStatus() == Status.VALIDATED) {
 	   		getCEDController().saveModified();

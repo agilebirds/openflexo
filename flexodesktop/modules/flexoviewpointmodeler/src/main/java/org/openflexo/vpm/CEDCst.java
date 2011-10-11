@@ -54,14 +54,14 @@ public class CEDCst
     
     // General components
     public static File ONTOLOGY_VIEW_FIB = new FileResource("Fib/OntologyView.fib");
-    public static File CALC_LIBRARY_VIEW_FIB = new FileResource("Fib/CalcLibraryView.fib");
-    public static File CALC_VIEW_FIB = new FileResource("Fib/CalcView.fib");
+    public static File CALC_LIBRARY_VIEW_FIB = new FileResource("Fib/ViewPointLibraryView.fib");
+    public static File CALC_VIEW_FIB = new FileResource("Fib/ViewPointView.fib");
     public static File EDITION_PATTERN_VIEW_FIB = new FileResource("Fib/EditionPatternView.fib");
 
     // Calc edition
-    public static File CREATE_CALC_DRAWING_SHEMA_DIALOG_FIB = new FileResource("Fib/Dialog/CreateCalcDrawingShemaDialog.fib");
-    public static File CREATE_CALC_PALETTE_DIALOG_FIB = new FileResource("Fib/Dialog/CreateCalcPaletteDialog.fib");
-    public static File CREATE_ONTOLOGY_CALC_DIALOG_FIB = new FileResource("Fib/Dialog/CreateOntologyCalcDialog.fib");
+    public static File CREATE_EXAMPLE_DRAWING_DIALOG_FIB = new FileResource("Fib/Dialog/CreateExampleDrawingDialog.fib");
+    public static File CREATE_PALETTE_DIALOG_FIB = new FileResource("Fib/Dialog/CreatePaletteDialog.fib");
+    public static File CREATE_VIEW_POINT_DIALOG_FIB = new FileResource("Fib/Dialog/CreateViewPointDialog.fib");
     public static File DECLARE_IN_EDITION_PATTERN_DIALOG_FIB = new FileResource("Fib/Dialog/DeclareInEditionPatternDialog.fib");
     public static File PUSH_TO_PALETTE_DIALOG_FIB = new FileResource("Fib/Dialog/PushToPaletteDialog.fib");
 
@@ -73,7 +73,7 @@ public class CEDCst
     public static File CREATE_OBJECT_PROPERTY_DIALOG_FIB = new FileResource("Fib/Dialog/CreateObjectPropertyDialog.fib");
    
     // Saving operations
-    public static File REVIEW_UNSAVED_CALC_EDITOR_DIALOG_FIB = new FileResource("Fib/Dialog/ReviewUnsavedCalcEditorDialog.fib");
-    public static File SAVE_CALC_EDITOR_DIALOG_FIB = new FileResource("Fib/Dialog/SaveCalcEditorDialog.fib");
+    public static File REVIEW_UNSAVED_VPM_DIALOG_FIB = new FileResource("Fib/Dialog/ReviewUnsavedViewPointModelerDialog.fib");
+    public static File SAVE_VPM_DIALOG_FIB = new FileResource("Fib/Dialog/SaveViewPointModelerDialog.fib");
 
 }

@@ -37,7 +37,7 @@ import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.viewpoint.action.AddCalcPaletteElement;
+import org.openflexo.foundation.viewpoint.action.AddPaletteElement;
 
 public class AddCalcPaletteElementInitializer extends ActionInitializer {
 
@@ -45,7 +45,7 @@ public class AddCalcPaletteElementInitializer extends ActionInitializer {
 
 	AddCalcPaletteElementInitializer(CEDControllerActionInitializer actionInitializer)
 	{
-		super(AddCalcPaletteElement.actionType,actionInitializer);
+		super(AddPaletteElement.actionType,actionInitializer);
 	}
 
 	@Override
@@ -55,11 +55,11 @@ public class AddCalcPaletteElementInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionInitializer<AddCalcPaletteElement> getDefaultInitializer() 
+	protected FlexoActionInitializer<AddPaletteElement> getDefaultInitializer() 
 	{
-		return new FlexoActionInitializer<AddCalcPaletteElement>() {
+		return new FlexoActionInitializer<AddPaletteElement>() {
 			@Override
-			public boolean run(ActionEvent e, AddCalcPaletteElement action)
+			public boolean run(ActionEvent e, AddPaletteElement action)
 			{
 				/*if (action.getNewElementName() != null && (action.getFocusedObject() != null))
 					return true;*/
@@ -94,11 +94,11 @@ public class AddCalcPaletteElementInitializer extends ActionInitializer {
 
 
 	@Override
-	protected FlexoActionFinalizer<AddCalcPaletteElement> getDefaultFinalizer() 
+	protected FlexoActionFinalizer<AddPaletteElement> getDefaultFinalizer() 
 	{
-		return new FlexoActionFinalizer<AddCalcPaletteElement>() {
+		return new FlexoActionFinalizer<AddPaletteElement>() {
 			@Override
-			public boolean run(ActionEvent e, AddCalcPaletteElement action)
+			public boolean run(ActionEvent e, AddPaletteElement action)
 			{
 				((CEDController)getController()).getSelectionManager().setSelectedObject(action.getNewElement());
 				return true;
