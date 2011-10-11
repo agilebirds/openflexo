@@ -26,8 +26,6 @@ import java.util.logging.Logger;
 import org.apache.velocity.util.introspection.Info;
 import org.apache.velocity.util.introspection.UberspectImpl;
 import org.apache.velocity.util.introspection.VelMethod;
-import org.apache.velocity.util.introspection.VelPropertyGet;
-
 import org.openflexo.logging.FlexoLogger;
 
 public class FlexoVelocityIntrospector extends UberspectImpl {
@@ -42,8 +40,9 @@ public class FlexoVelocityIntrospector extends UberspectImpl {
         }
         
         //Allow to use the 'magic' methods provided by Velocity on array (ex. get(x))
-        if(obj instanceof Object[])
-        	return super.getMethod(obj, methodName, args, i);
+        if(obj instanceof Object[]) {
+			return super.getMethod(obj, methodName, args, i);
+		}
 
         Class objClass = obj.getClass();
         
@@ -59,8 +58,9 @@ public class FlexoVelocityIntrospector extends UberspectImpl {
         		}
         	}
         	
-        	if (logger.isLoggable(Level.INFO))
+        	if (logger.isLoggable(Level.INFO)) {
 				logger.info("Method '"+methodName+"' could not be found on "+objClass.getName()+" called in "+i.getTemplateName()+" at line "+i.getLine()+" column "+i.getColumn());
+			}
         	return null;
         }
         // Fix a bug in security manager of JDK1.5 where access to a public method of a non-visible inherited class is refused although it
@@ -68,41 +68,11 @@ public class FlexoVelocityIntrospector extends UberspectImpl {
         try {
 			m.setAccessible(true);
 		} catch (SecurityException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.log(Level.WARNING, "Security exception for method: "+objClass+"."+methodName, e);
-		}
-        return (m != null) ? new VelMethodImpl(m) : null;
-	}
-	
-	
-	@Override
-	public VelPropertyGet getPropertyGet(Object obj, String identifier, Info i) throws Exception 
-	{
-		Class objClass = obj.getClass();
-		
-		try
-		{
-			try
-			{
-				return new FlexoVelocityPropertyGet(objClass, identifier);
-			}
-			catch(NoSuchFieldException e)
-			{
-				if (objClass == Class.class)
-					return new FlexoVelocityPropertyGet((Class)obj, identifier);
 			}
 		}
-		catch(NoSuchFieldException e)
-		{
-			if (logger.isLoggable(Level.INFO))
-				logger.info("Field '"+identifier+"' could not be found on "+objClass.getName()+" called in "+i.getTemplateName()+" at line "+i.getLine()+" column "+i.getColumn());
-		}
-		catch (SecurityException e) 
-		{
-			if (logger.isLoggable(Level.WARNING))
-				logger.log(Level.WARNING, "Security exception for field: "+objClass+"."+identifier, e);
-		}
-		
-		return null;
+        return m != null ? new VelMethodImpl(m) : null;
 	}
+	
 }
