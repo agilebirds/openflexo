@@ -38,7 +38,6 @@ import org.apache.axis.Message;
 import org.apache.axis.MessageContext;
 import org.apache.axis.encoding.Base64;
 import org.apache.axis.handlers.BasicHandler;
-
 import org.openflexo.logging.FlexoLogger;
 
 
@@ -52,8 +51,9 @@ public class HTTPUrlConnectionSender extends BasicHandler {
 	@Override
 	public void invoke(MessageContext context) throws AxisFault {
 		try {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("URLConnection sender invoked for "+context.getStrProp(MessageContext.TRANS_URL));
+			}
 			URL targetURL = new URL(context.getStrProp(MessageContext.TRANS_URL));
 			HttpURLConnection connection = createHttpConnection(context, targetURL);
 			prepareContext(context);
@@ -89,8 +89,9 @@ public class HTTPUrlConnectionSender extends BasicHandler {
 		SOAPMessage message = context.getRequestMessage();
 
 		// SOAPAction
-		if (message.saveRequired())
+		if (message.saveRequired()) {
 			message.saveChanges();
+		}
 		String soapAction = context.useSOAPAction() ? context.getSOAPActionURI() : "";
 		message.getMimeHeaders().setHeader("SOAPAction", "\"" + soapAction + "\"");
 
@@ -99,8 +100,9 @@ public class HTTPUrlConnectionSender extends BasicHandler {
 		String password = context.getPassword();
 
 		if (username != null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Setting credentials for username "+username);
+			}
 			String credentials = username + ":" + password;
 			credentials = Base64.encode(credentials.getBytes());
 			message.getMimeHeaders().setHeader(HTTPConstants.HEADER_AUTHORIZATION, "Basic " + credentials);
@@ -109,8 +111,9 @@ public class HTTPUrlConnectionSender extends BasicHandler {
 
 	private void send(MessageContext context, HttpURLConnection connection) throws IOException, SOAPException {
 		writeMimeHeaders(context, connection);
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("About to connect to: '"+connection.getURL()+"'.");
+		}
 		OutputStream os = connection.getOutputStream();
 		context.getRequestMessage().writeTo(os);
 		os.flush();
@@ -147,10 +150,11 @@ public class HTTPUrlConnectionSender extends BasicHandler {
 		MimeHeaders headers = getMimeHeaders(connection);
 
 		InputStream is = null;
-		if (isSuccess)
+		if (isSuccess) {
 			is = connection.getInputStream();
-		else
+		} else {
 			is = connection.getErrorStream();
+		}
 
 		Message message = new Message(is, false, headers);
 		message.setMessageType(Message.RESPONSE);
@@ -165,7 +169,7 @@ public class HTTPUrlConnectionSender extends BasicHandler {
 
 		if (statusCode > 199 && statusCode <300) {
 			// SOAP return OK. so fall through
-			context.setProperty(HTTPConstants.MC_HTTP_STATUS_CODE, new Integer(statusCode));
+			context.setProperty(HTTPConstants.MC_HTTP_STATUS_CODE, Integer.valueOf(statusCode));
 			context.setProperty(HTTPConstants.MC_HTTP_STATUS_CODE, statusMessage);
 		} else {
 			if (statusCode >= 500) {

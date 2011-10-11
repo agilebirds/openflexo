@@ -34,8 +34,6 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import org.openflexo.ColorCst;
-import org.openflexo.FlexoCst;
-
 import org.openflexo.inspector.InspectorModelView;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ToolBox;
@@ -48,89 +46,90 @@ import org.openflexo.toolbox.ToolBox;
 public class PreferencesWindow extends JFrame
 {
 
-    public PreferencesWindow(JMenuBar menubar)
-    {
-        super();
-        if(ToolBox.getPLATFORM().equals(ToolBox.MACOS))
-        	setJMenuBar(menubar);
-        getContentPane().setLayout(new BorderLayout());
-        setSize(PREFERENCES_WINDOW_WIDTH, PREFERENCES_WINDOW_HEIGHT);
-        setLocation(752, 405);
-        reset();
-        setFocusable(true);
-   }
+	public PreferencesWindow(JMenuBar menubar)
+	{
+		super();
+		if (ToolBox.getPLATFORM().equals(ToolBox.MACOS)) {
+			setJMenuBar(menubar);
+		}
+		getContentPane().setLayout(new BorderLayout());
+		setSize(PREFERENCES_WINDOW_WIDTH, PREFERENCES_WINDOW_HEIGHT);
+		setLocation(752, 405);
+		reset();
+		setFocusable(true);
+	}
 
-    public static final int PREFERENCES_WINDOW_WIDTH = 475;
+	public static final int PREFERENCES_WINDOW_WIDTH = 475;
 
-    public static final int PREFERENCES_WINDOW_HEIGHT = 500;
+	public static final int PREFERENCES_WINDOW_HEIGHT = 500;
 
-    public void reset()
-    {
-        if (_currentScrollPane != null) {
-            getContentPane().remove(_currentScrollPane);
-        }
-        setTitle("Preferences");
-        getContentPane().setBackground(ColorCst.GUI_BACK_COLOR);
-        getContentPane().add(_nothingToInspectLabel, BorderLayout.CENTER);
-    }
+	public void reset()
+	{
+		if (_currentScrollPane != null) {
+			getContentPane().remove(_currentScrollPane);
+		}
+		setTitle("Preferences");
+		getContentPane().setBackground(ColorCst.GUI_BACK_COLOR);
+		getContentPane().add(_nothingToInspectLabel, BorderLayout.CENTER);
+	}
 
-    public void setTabPanel(InspectorModelView tabPanel)
-    {
-        if (_currentScrollPane != null) {
-            getContentPane().remove(_currentScrollPane);
-        } else {
-            getContentPane().remove(_nothingToInspectLabel);
-        }
-        _currentScrollPane = getScrollPane(tabPanel);
-        getContentPane().add(_currentScrollPane, BorderLayout.CENTER);
-        getContentPane().add(getButtonPanel(), BorderLayout.SOUTH);
-        getContentPane().validate();
-        currentTabPanel = tabPanel;
-    }
+	public void setTabPanel(InspectorModelView tabPanel)
+	{
+		if (_currentScrollPane != null) {
+			getContentPane().remove(_currentScrollPane);
+		} else {
+			getContentPane().remove(_nothingToInspectLabel);
+		}
+		_currentScrollPane = getScrollPane(tabPanel);
+		getContentPane().add(_currentScrollPane, BorderLayout.CENTER);
+		getContentPane().add(getButtonPanel(), BorderLayout.SOUTH);
+		getContentPane().validate();
+		currentTabPanel = tabPanel;
+	}
 
-    private JScrollPane getScrollPane(JComponent content)
-    {
-        JScrollPane answer = new JScrollPane(content);
-        //content.setPreferredSize(new Dimension(getSize().height - 100, getSize().width - 20));
-        return answer;
-    }
+	private JScrollPane getScrollPane(JComponent content)
+	{
+		JScrollPane answer = new JScrollPane(content);
+		//content.setPreferredSize(new Dimension(getSize().height - 100, getSize().width - 20));
+		return answer;
+	}
 
-    protected JPanel getButtonPanel()
-    {
-        if (_buttonPanel == null) {
-            _buttonPanel = buttonPanel();
-        }
-        return _buttonPanel;
-    }
+	protected JPanel getButtonPanel()
+	{
+		if (_buttonPanel == null) {
+			_buttonPanel = buttonPanel();
+		}
+		return _buttonPanel;
+	}
 
-    private JPanel buttonPanel()
-    {
-        JPanel answer = new JPanel(new FlowLayout());
-        _saveButton = new JButton();
-        _saveButton.setText(FlexoLocalization.localizedForKey("save_preferences", _saveButton));
-        _saveButton.addActionListener(new ActionListener() {
-            @Override
+	private JPanel buttonPanel()
+	{
+		JPanel answer = new JPanel(new FlowLayout());
+		_saveButton = new JButton();
+		_saveButton.setText(FlexoLocalization.localizedForKey("save_preferences", _saveButton));
+		_saveButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e)
-            {
-                FlexoPreferences.savePreferences(true);
-                _saveButton.setEnabled(false);
-                _revertButton.setEnabled(false);
-                setVisible(false);
-            }
-        });
-        _revertButton = new JButton();
-        _revertButton.setText(FlexoLocalization.localizedForKey("revert_to_saved", _revertButton));
-        _revertButton.addActionListener(new ActionListener() {
-            @Override
+			{
+				FlexoPreferences.savePreferences(true);
+				_saveButton.setEnabled(false);
+				_revertButton.setEnabled(false);
+				setVisible(false);
+			}
+		});
+		_revertButton = new JButton();
+		_revertButton.setText(FlexoLocalization.localizedForKey("revert_to_saved", _revertButton));
+		_revertButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e)
-            {
-                FlexoPreferences.revertToSaved();
-                _saveButton.setEnabled(false);
-                _revertButton.setEnabled(false);
-                setVisible(false);
-            }
-        });
-        /*
+			{
+				FlexoPreferences.revertToSaved();
+				_saveButton.setEnabled(false);
+				_revertButton.setEnabled(false);
+				setVisible(false);
+			}
+		});
+		/*
         _closeButton = new JButton();
         _closeButton.setText(FlexoLocalization.localizedForKey("close_window", _closeButton));
         _closeButton.addActionListener(new ActionListener() {
@@ -139,33 +138,33 @@ public class PreferencesWindow extends JFrame
                 setVisible(false);
             }
         });*/
-        answer.add(_saveButton);
-        answer.add(_revertButton);
-        //answer.add(_closeButton);
-        _saveButton.setEnabled(false);
-        _revertButton.setEnabled(false);
-        return answer;
-    }
+		answer.add(_saveButton);
+		answer.add(_revertButton);
+		//answer.add(_closeButton);
+		_saveButton.setEnabled(false);
+		_revertButton.setEnabled(false);
+		return answer;
+	}
 
-    public void enableSaveAndRevertButtons()
-    {
-        if (_saveButton != null && _revertButton != null) {
-            _saveButton.setEnabled(true);
-            _revertButton.setEnabled(true);
-        }
-    }
+	public void enableSaveAndRevertButtons()
+	{
+		if (_saveButton != null && _revertButton != null) {
+			_saveButton.setEnabled(true);
+			_revertButton.setEnabled(true);
+		}
+	}
 
-    public InspectorModelView currentTabPanel;
+	public InspectorModelView currentTabPanel;
 
-    private JScrollPane _currentScrollPane;
+	private JScrollPane _currentScrollPane;
 
-    private JPanel _buttonPanel;
+	private JPanel _buttonPanel;
 
-    JButton _saveButton;
+	JButton _saveButton;
 
-    JButton _revertButton;
+	JButton _revertButton;
 
-    //private JButton _closeButton;
+	//private JButton _closeButton;
 
-    private static JLabel _nothingToInspectLabel = new JLabel("No preferences !", SwingConstants.CENTER);
+	private static JLabel _nothingToInspectLabel = new JLabel("No preferences !", SwingConstants.CENTER);
 }

@@ -202,7 +202,6 @@ public class FlexoApplication {
 				if (_preprocessor != null) {
 					_preprocessor.preprocessEvent(e);
 				}
-
 				super.dispatchEvent(e);
 
 				// if (e instanceof SunDropTargetEvent) { logger.info("dispatchEvent() "+e+" in "+e.getSource()); }
@@ -240,10 +239,10 @@ public class FlexoApplication {
 							message = "InvalidParametersException: " + exception.getMessage() + ". Edit a bug report ?";
 						} else if (exception instanceof NotImplementedException) {
 							message = FlexoLocalization.localizedForKey("feature_not_implemented:_") + exception.getMessage() + " " + FlexoLocalization
-							.localizedForKey("would_you_like_to_send_a_report");
+									.localizedForKey("would_you_like_to_send_a_report");
 						} else {
 							message = FlexoLocalization.localizedForKey("unexpected_exception_occured") + " " + FlexoLocalization
-							.localizedForKey("would_you_like_to_send_a_report");
+									.localizedForKey("would_you_like_to_send_a_report");
 						}
 					} catch (RuntimeException e3) {// This catch is here in case the localization layer has crashed
 						e3.printStackTrace();
@@ -367,12 +366,12 @@ public class FlexoApplication {
 			}
 
 			// See Bug DS-016
-			if ((bug instanceof ArrayIndexOutOfBoundsException) && (msg.indexOf("SunDisplayChanger") != -1)) {
+			if (bug instanceof ArrayIndexOutOfBoundsException && msg.indexOf("SunDisplayChanger") != -1) {
 				return true;
 			}
 
 			// An other swing known bug !
-			if ((bug instanceof ClassCastException) && (msg.indexOf("apple.laf.AquaImageFactory.drawTextBorder") != -1)) {
+			if (bug instanceof ClassCastException && msg.indexOf("apple.laf.AquaImageFactory.drawTextBorder") != -1) {
 				return true;
 			}
 
