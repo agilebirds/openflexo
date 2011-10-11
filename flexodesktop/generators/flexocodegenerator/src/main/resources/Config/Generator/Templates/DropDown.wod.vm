@@ -1,8 +1,8 @@
-#macro(nameForInput)@single
+#macro(nameForInput)~@single
     #if(${widget.isInPopup()} || ${widget.isInRepetition()})
         nameFor#capName()
     #else 
-        "#name()"#end@end#end
+        "#name()"#end~@end#end
 #if($generator.isPrototype() && !${widget.getBindingSelection().isBindingValid()})
 	#if($widget.getIsAcceptableForAnyProcessInstanceDictionary())
 		#if(${widget.isInRepetition()})

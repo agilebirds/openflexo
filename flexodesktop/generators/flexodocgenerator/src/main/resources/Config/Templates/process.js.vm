@@ -1,4 +1,4 @@
-#macro(getNodeLevel $node)@single
+#macro(getNodeLevel $node)~@single
 	#if(${node.getLevel()} == "PROCESS")
         LEVEL_PROCESS
     #elseif(${node.getLevel()} == "ACTIVITY")
@@ -12,7 +12,7 @@
     #end
 @end#end
 
-#macro(getNodeType $node)@single
+#macro(getNodeType $node)~@single
     #if(${node.isArtefact()})
 		TYPE_ARTEFACT
     #elseif(${node.getClassNameKey()} == "flexo_project")

@@ -272,7 +272,7 @@
     public static String getUrlForOperation(WOContext context #pageParameters($componentDefinition), long ciID){
     #end
         #foreach( $ci in $componentInstances )
-        if(ciID==$ci.getFlexoID()) // @single Equivalent to operation ${ci.getOperationNode().getName()}@end
+        if(ciID==$ci.getFlexoID()) // @single Equivalent to operation ${ci.getOperationNode().getName()}~@end
             #if( ${tabContainerTitle} )
             return getUrlForOperation${generator.getJavaString(${ci.getOperationNode().getName()},$trueValue)}_$ci.getFlexoID()(context #pageParametersCall($componentDefinition), selectedTab);
             #else
@@ -295,7 +295,7 @@
     public static String getUrlForOperation${generator.getJavaString(${ci.getOperationNode().getName()},$trueValue)}_$ci.getFlexoID()(WOContext context #pageParameters($componentDefinition)){
     #end
         NSMutableDictionary dic = new NSMutableDictionary();
-        dic.setObjectForKey($ci.getFlexoID(), "ci"); // @single Equivalent to operation ${ci.getOperationNode().getName()}@end
+        dic.setObjectForKey($ci.getFlexoID(), "ci"); // @single Equivalent to operation ${ci.getOperationNode().getName()}~@end
         #if(${tabContainerTitle})
         if(selectedTab!=null) dic.setObjectForKey(selectedTab,"tab");
         #end
@@ -430,7 +430,7 @@
                   #else
                     , null 
                   #end
-                #end);@end
+                #end);~@end
                 #set ($entityFetched=false)
                 #end ## foreach nextoperations
               #else

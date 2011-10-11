@@ -1,10 +1,10 @@
-#macro(_nameForTextField)@single
+#macro(_nameForTextField)~@single
     #set($originalWidget = $widget)
     #set($widget = $widget.getDateTextfield())
     #if($widget.isInPopup() || ${widget.isInRepetition()})
         nameFor#capName()
     #else 
-        "#name()"#end@end#set($widget = $originalWidget)#end
+        "#name()"#end~@end#set($widget = $originalWidget)#end
 
 #name()Link: WDLDateAssistantLink {
     fieldName = #_nameForTextField();

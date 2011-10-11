@@ -1,8 +1,8 @@
-#macro(nameForTextField)@single
+#macro(nameForTextField)~@single
     #if(${widget.isInPopup()} || ${widget.isInRepetition()})
         nameFor#capName()
     #else 
-        "#name()"#end@end#end
+        "#name()"#end~@end#end
 
 #set($simple = true)
 #if($generator.isPrototype() && !${widget.getBindingValue().isBindingValid()})

@@ -80,7 +80,7 @@
                       #else
                         , null 
                       #end
-                    #end));@end
+                    #end));~@end
                     return redirect; *#
                 @singlereturn ${_nextci.getComponentDefinition().getName()}.createPageForOperation${generator.getJavaString($!{nextci.getOperationNode().getName()},$trueValue)}_${_nextci.getFlexoID()}(context()
                 #foreach($b in $_nextci.getBindings())
@@ -99,7 +99,7 @@
                 #end
                 #if($_nextci.getComponentDefinition().getHasTabContainer())
                     , #findNextPageTab($_action $_nextci)
-                #end,ec);@end
+                #end,ec);~@end
 #end
 
 #macro(createPagePrototype $_button1 $_ci $_nextci $_action)
@@ -120,7 +120,7 @@
                 #end
                 #if($_nextci.getComponentDefinition().getHasTabContainer())
                   , #findNextPageTab($_action $_nextci)
-                #end,ec);@end
+                #end,ec);~@end
 #end
 
 #macro(getUrlParametersFromDA)
@@ -223,7 +223,7 @@
     * @param ciID the component instance ID of the selected operation. This parameter can take one of the following values:<br>
     * <ul>
     #foreach($ci in $componentInstances)
-    * <li> $ci.getFlexoID() (Operation @single${ci.getOperationNode().getName()})</li>@end
+    * <li> $ci.getFlexoID() (Operation @single${ci.getOperationNode().getName()})</li>~@end
     #end* </ul>
     * 
     * @return a ${entity.getClassName()} new page, initialized.
@@ -351,7 +351,7 @@
     public static String getUrlForOperation(WOContext context #pageParameters($componentDefinition), long ciID){
     #end
         #foreach($ci in $componentInstances)
-        if(ciID==#componentInstance($ci)) // @single Equivalent to operation ${ci.getOperationNode().getName()}@end
+        if(ciID==#componentInstance($ci)) // @single Equivalent to operation ${ci.getOperationNode().getName()}~@end
             #if(${tabContainerTitle})
             return getUrlForOperation${generator.getJavaString(${ci.getOperationNode().getName()},$trueValue)}_$ci.getFlexoID()(context #pageParametersCall($componentDefinition), selectedTab);
             #else
@@ -374,7 +374,7 @@
     public static String getUrlForOperation${generator.getJavaString(${ci.getOperationNode().getName()},$trueValue)}_$ci.getFlexoID()(WOContext context #pageParameters($componentDefinition)){
     #end
         NSMutableDictionary dic = new NSMutableDictionary();
-        dic.setObjectForKey(#componentInstance($ci), "ci"); // @single Equivalent to operation ${ci.getOperationNode().getName()}@end
+        dic.setObjectForKey(#componentInstance($ci), "ci"); // @single Equivalent to operation ${ci.getOperationNode().getName()}~@end
         #if(${tabContainerTitle})
         if(selectedTab!=null) 
             dic.setObjectForKey(selectedTab,"tab");
@@ -390,7 +390,7 @@
 #foreach($ci in $componentInstances)
     /**
      * This method is called by the general formAction method iff this page is in the context of the operation : 
-     * @single${ci.getOperationNode().getName()}@end
+     * @single${ci.getOperationNode().getName()}~@end
      #if(${ci.getOperationNode().getDescription()} && !${ci.getOperationNode().getDontEscapeLatex()})
      * ${generator.getJavaDocString(${ci.getOperationNode().getDescription()})}
      #end
@@ -451,7 +451,7 @@
 			#if($button1.getSubmitForm() || ${button1.isInRepetition()})
                 /**
                  * $button1.getCalculatedLabel() has been pressed (this is linked to
-                 * @single${action.getProcess().getName().trim()}-->${action.getAbstractActivityNode().getName()}-->${action.getOperationNode().getName()}-->${action.getName().trim()})@end
+                 * @single${action.getProcess().getName().trim()}-->${action.getAbstractActivityNode().getName()}-->${action.getOperationNode().getName()}-->${action.getName().trim()})~@end
                 #if( ${action.getDescription()} && !${action.getDontEscapeLatex()})
                  * ${generator.getJavaDocString(${action.getDescription()})}
                 #end

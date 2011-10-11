@@ -1,3 +1,4 @@
+#set($isStaticValue = $false)
 #if($widget.getValue())
     #set($example = $widget.getValue())
 #else

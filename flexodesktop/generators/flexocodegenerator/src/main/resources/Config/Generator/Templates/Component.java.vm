@@ -362,7 +362,7 @@ public class $woName extends #if($entity.getParentBaseEntity())$entity.getParent
         $formAction.toString()
   #if($componentDefinition.isOperation())
      #foreach($ci in $componentDefinition.getComponentInstances())
-        #if(${foreach.index}>0)else#end if (getOperationComponentInstanceID() == #componentInstance($ci)) {// @single Equivalent to operation ${ci.getOperationNode().getName()}@end
+        #if(${foreach.index}>0)else#end if (getOperationComponentInstanceID() == #componentInstance($ci)) {// @single Equivalent to operation ${ci.getOperationNode().getName()}~@end
             return formAction$ci.getFlexoID()();
         }
      #end

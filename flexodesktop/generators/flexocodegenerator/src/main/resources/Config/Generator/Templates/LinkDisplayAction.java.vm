@@ -44,7 +44,7 @@
     						#else
     							, null 
     						#end
-						#end);@end
+						#end);~@end
         				#set ($entityFetched=false)
         				#set($hasAtLeastOneOp = true)
 					#end

@@ -42,9 +42,9 @@
 #end
 #end
 
-#macro(keypath $tmp)@single
+#macro(keypath $tmp)~@single
 #set($start = ${tmp.indexOf('.')} +1)
-${tmp.substring($start)}@end#end
+${tmp.substring($start)}~@end#end
 
 #macro(qualifier $filterWidget)
 	

@@ -45,7 +45,7 @@ function initProcessFolder${processFolder.getFlexoID()}()
 				#if($foreach.index),#end
 				'${childProcessNode.getProcess().getURI()}'
 			#end
-		];@end
+		];~@end
 		#if(${processFolder.getParent().getProcess().getURI()})
 			#set($fatherNodeId = "'${processFolder.getParent().getProcess().getURI()}'")
 		#elseif(${processFolder.getParent().getURI()})

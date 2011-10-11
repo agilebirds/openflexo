@@ -18,7 +18,7 @@ public enum WorkflowComponentInstance
 			#else
 				#set($role = "$quote$quote")
 			#end
-			,ComponentInstance_${ci.getFlexoID()}(WorkflowProcess.${process.getProcessDictionaryKey()}, $role, @single"${ci.getOperationNode().getAbstractActivityNode().getName()}"@end, @single"${ci.getOperationNode().getName()}"@end)
+			,ComponentInstance_${ci.getFlexoID()}(WorkflowProcess.${process.getProcessDictionaryKey()}, $role, @single"${ci.getOperationNode().getAbstractActivityNode().getName()}"~@end, @single"${ci.getOperationNode().getName()}"~@end)
 		#end
 	#end
 	;
