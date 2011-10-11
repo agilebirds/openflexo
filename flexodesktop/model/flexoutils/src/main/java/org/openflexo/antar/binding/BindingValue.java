@@ -168,8 +168,9 @@ public class BindingValue extends AbstractBinding
 
 		if ((getBindingDefinition() != null) && (getBindingDefinition().getIsSettable())) {
 			if ((getBindingPathLastElement() == null)
-					|| (!(getBindingPathLastElement() instanceof KeyValueProperty))
-					|| (!((KeyValueProperty)getBindingPathLastElement()).isSettable())) {
+					/*|| (!(getBindingPathLastElement() instanceof KeyValueProperty))
+					|| (!((KeyValueProperty)getBindingPathLastElement()).isSettable())) {*/
+					|| (!(getBindingPathLastElement()).isSettable())) {
 				if (logger.isLoggable(Level.FINE))
 					logger.fine("Invalid binding because binding definition declared as settable and definition cannot satisfy it");
 				return false;
@@ -225,8 +226,9 @@ public class BindingValue extends AbstractBinding
 
 		if ((getBindingDefinition() != null) && (getBindingDefinition().getIsSettable())) {
 			if ((getBindingPathLastElement() == null)
-					|| (!(getBindingPathLastElement() instanceof KeyValueProperty))
-					|| (!((KeyValueProperty)getBindingPathLastElement()).isSettable())) {
+					/*|| (!(getBindingPathLastElement() instanceof KeyValueProperty))
+					|| (!((KeyValueProperty)getBindingPathLastElement()).isSettable())) {*/
+					|| (!(getBindingPathLastElement()).isSettable())) {
 				logger.info("Invalid binding because binding definition declared as settable and definition cannot satisfy it");
 				return false;
 			}

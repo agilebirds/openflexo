@@ -17,25 +17,25 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.viewpoint;
+package org.openflexo.foundation.viewpoint.inspector;
 
 /**
- * Represents an inspector entry for a check box (boolean value)
+ * Represents an inspector entry for an integer
  * 
  * @author sylvain
  *
  */
-public class CheckboxInspectorEntry extends InspectorEntry {
+public class IntegerInspectorEntry extends InspectorEntry {
 
 	@Override
 	public Class getDefaultDataClass()
 	{
-		return Boolean.class;
+		return Integer.class;
 	}
 
 	@Override
 	public String getWidgetName() 
 	{
-		return "Checkbox";
+		return "Integer";
 	}
 }

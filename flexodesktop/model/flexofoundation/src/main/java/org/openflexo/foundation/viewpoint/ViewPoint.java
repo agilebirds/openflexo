@@ -37,6 +37,7 @@ import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaRemoved;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteRemoved;
+import org.openflexo.foundation.viewpoint.inspector.InspectorDataBinding;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.xmlcode.AccessorInvocationException;

@@ -27,10 +27,9 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
-import org.openflexo.xmlcode.KeyValueDecoder;
 
 
-public class MethodCall extends KeyValueBindingImpl  implements ComplexPathElement {
+public class MethodCall extends Observable  implements ComplexPathElement {
 
 	static final Logger logger = Logger.getLogger(MethodCall.class.getPackage().getName());
 
@@ -55,7 +54,8 @@ public class MethodCall extends KeyValueBindingImpl  implements ComplexPathEleme
         setMethod(method);
      }
     
-    public Object evaluateBinding(Object target, BindingEvaluationContext context)
+    @Override
+	public Object evaluateBinding(Object target, BindingEvaluationContext context)
     {
     	Object[] args = new Object[_args.size()];
     	int i=0;

@@ -21,9 +21,9 @@ package org.openflexo.foundation.viewpoint.dm;
 
 import org.openflexo.foundation.ontology.dm.OEDataModification;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.EditionPatternInspector;
-import org.openflexo.foundation.viewpoint.InspectorEntry;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
+import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 
 public class InspectorEntryInserted extends OEDataModification
 {

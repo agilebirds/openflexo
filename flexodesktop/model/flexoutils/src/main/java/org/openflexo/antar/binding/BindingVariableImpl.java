@@ -20,6 +20,7 @@
 package org.openflexo.antar.binding;
 
 import java.lang.reflect.Type;
+import java.util.Observable;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.toolbox.ToolBox;
@@ -30,7 +31,7 @@ import org.openflexo.toolbox.ToolBox;
  * @author sguerin
  * 
  */
-public class BindingVariableImpl extends KeyValueBindingImpl implements BindingVariable
+public class BindingVariableImpl extends Observable implements BindingVariable
 {
 
     private Bindable container;
@@ -47,7 +48,8 @@ public class BindingVariableImpl extends KeyValueBindingImpl implements BindingV
         this.type = type;
     }
     
-    public Bindable getContainer(){
+    @Override
+	public Bindable getContainer(){
     	return container;
     }
 
@@ -62,7 +64,8 @@ public class BindingVariableImpl extends KeyValueBindingImpl implements BindingV
     	this.type = type;
     }
 
-    public String getVariableName()
+    @Override
+	public String getVariableName()
     {
         return variableName;
     }
@@ -96,12 +99,14 @@ public class BindingVariableImpl extends KeyValueBindingImpl implements BindingV
 		return true;
 	}
 	
-    public String getLabel()
+    @Override
+	public String getLabel()
     {
     	return getVariableName();
     }
     
-    public String getTooltipText(Type resultingType)
+    @Override
+	public String getTooltipText(Type resultingType)
     {
 		String returned = "<html>";
 		String resultingTypeAsString;

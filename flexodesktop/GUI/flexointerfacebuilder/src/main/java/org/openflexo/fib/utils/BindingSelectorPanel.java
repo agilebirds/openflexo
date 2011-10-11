@@ -72,6 +72,7 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingValue;
 import org.openflexo.antar.binding.BindingVariableImpl;
+import org.openflexo.antar.binding.FinalBindingPathElement;
 import org.openflexo.antar.binding.MethodCall;
 import org.openflexo.antar.binding.MethodCall.MethodCallArgument;
 import org.openflexo.antar.binding.MethodDefinition;
@@ -1051,6 +1052,10 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel
 		// Set connect button state
 		_connectButton.setEnabled((binding != null)
 				&& (binding.isBindingValid()));
+		/*if (!binding.isBindingValid()) {
+			logger.info("Binding NOT valid: "+binding);
+			binding.debugIsBindingValid();
+		}*/
 		if ((binding != null) && (binding.isBindingValid())) {
 			if (ToolBox.getPLATFORM() == ToolBox.MACOS)
 				_connectButton.setSelected(true);
@@ -1751,7 +1756,8 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel
 					// TypeUtils.getBaseClass(columnElement.getResultingType());
 					Type resultingType = columnElement.getResultingType();
 					label.setText(columnElement.getLabel());
-					setIcon(label, FIBIconLibrary.ARROW_RIGHT_ICON, list);
+					if (!(columnElement.getElement() instanceof FinalBindingPathElement)) 
+						setIcon(label, FIBIconLibrary.ARROW_RIGHT_ICON, list);
 					if (columnElement.getElement().getType() != null) {
 						label.setToolTipText(columnElement.getTooltipText());
 					} else {

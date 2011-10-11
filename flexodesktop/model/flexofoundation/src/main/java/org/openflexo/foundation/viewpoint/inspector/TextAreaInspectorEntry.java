@@ -17,25 +17,25 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.viewpoint;
+package org.openflexo.foundation.viewpoint.inspector;
 
 /**
- * Represents an inspector entry for an integer
+ * Represents an inspector entry for a text area
  * 
  * @author sylvain
  *
  */
-public class IntegerInspectorEntry extends InspectorEntry {
+public class TextAreaInspectorEntry extends InspectorEntry {
 
 	@Override
 	public Class getDefaultDataClass()
 	{
-		return Integer.class;
+		return String.class;
 	}
 
 	@Override
 	public String getWidgetName() 
 	{
-		return "Integer";
+		return "TextArea";
 	}
 }

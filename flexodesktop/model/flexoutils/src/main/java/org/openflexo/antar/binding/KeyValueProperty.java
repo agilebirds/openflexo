@@ -23,6 +23,7 @@ package org.openflexo.antar.binding;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.Observable;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
@@ -30,7 +31,7 @@ import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.xmlcode.KeyValueDecoder;
 
-public class KeyValueProperty extends KeyValueBindingImpl implements SimplePathElement 
+public class KeyValueProperty extends Observable implements SimplePathElement 
 {
 
 	static final Logger logger = Logger.getLogger(BindingValue.class.getPackage().getName());
@@ -386,7 +387,8 @@ public class KeyValueProperty extends KeyValueBindingImpl implements SimplePathE
 		return true;
 	}
 
-    public boolean isSettable() 
+    @Override
+	public boolean isSettable() 
     {
 		return settable;
 	}
@@ -397,11 +399,13 @@ public class KeyValueProperty extends KeyValueBindingImpl implements SimplePathE
     	return "KeyValueProperty: "+(declaringClass != null ? declaringClass.getSimpleName() : declaringType)+"."+name;
     }
 
-    public String getLabel()
+    @Override
+	public String getLabel()
     {
     	return getName();
     }
     
+	@Override
 	public String getTooltipText(Type resultingType)
 	{
 		String returned = "<html>";
