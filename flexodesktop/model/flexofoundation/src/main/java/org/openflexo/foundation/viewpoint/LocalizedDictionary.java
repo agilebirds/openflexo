@@ -27,7 +27,6 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
-import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.localization.LocalizedDelegate;

@@ -27,9 +27,9 @@ public abstract class AddShemaElementAction<R extends PatternRole> extends Editi
 	public AddShemaElementAction() {
 	}
 		
-	@Override
+	/*@Override
 	protected void updatePatternRoleType()
 	{
-	}
+	}*/
 
 }

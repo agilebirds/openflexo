@@ -27,7 +27,6 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry.InspectorBindingAttribute;
 import org.openflexo.xmlcode.StringConvertable;
-import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
 
@@ -48,7 +47,6 @@ public class InspectorDataBinding implements StringConvertable<InspectorDataBind
 		@Override
 		public InspectorDataBinding convertFromString(String value) 
 		{
-			System.out.println("Hop, voila un "+value);
 			return new InspectorDataBinding(value);
 		}
 

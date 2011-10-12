@@ -3,6 +3,7 @@ package org.openflexo.foundation.viewpoint.inspector;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.Bindable;
@@ -10,30 +11,57 @@ import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.foundation.ontology.EditionPatternReference;
+import org.openflexo.foundation.viewpoint.ClassPatternRole;
+import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.IndividualPatternRole;
+import org.openflexo.foundation.viewpoint.IsAStatementPatternRole;
+import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
+import org.openflexo.foundation.viewpoint.ObjectPropertyStatementPatternRole;
 import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.RestrictionStatementPatternRole;
+import org.openflexo.foundation.viewpoint.inspector.OntologicObjectPatternRolePathElement.IsAStatementPatternRolePathElement;
+import org.openflexo.foundation.viewpoint.inspector.OntologicObjectPatternRolePathElement.ObjectPropertyStatementPatternRolePathElement;
+import org.openflexo.foundation.viewpoint.inspector.OntologicObjectPatternRolePathElement.OntologicClassPatternRolePathElement;
+import org.openflexo.foundation.viewpoint.inspector.OntologicObjectPatternRolePathElement.OntologicDataPropertyPatternRolePathElement;
+import org.openflexo.foundation.viewpoint.inspector.OntologicObjectPatternRolePathElement.OntologicIndividualPatternRolePathElement;
+import org.openflexo.foundation.viewpoint.inspector.OntologicObjectPatternRolePathElement.OntologicObjectPropertyPatternRolePathElement;
+import org.openflexo.foundation.viewpoint.inspector.OntologicObjectPatternRolePathElement.RestrictionStatementPatternRolePathElement;
 
 public class PatternRolePathElement implements SimplePathElement, BindingVariable
 {
+	private static final Logger logger = Logger.getLogger(PatternRolePathElement.class.getPackage().getName());
+
 	private static List<BindingPathElement> EMPTY_LIST = new ArrayList<BindingPathElement>();
 
 	public static PatternRolePathElement makePatternRolePathElement(PatternRole pr)
 	{
 		if (pr instanceof OntologicObjectPatternRole) {
-			switch (((OntologicObjectPatternRole) pr).getOntologicObjectType()) {
-			case Class:
-				return new OntologicObjectPatternRolePathElement.OntologicClassPatternRolePathElement((OntologicObjectPatternRole)pr);
-			case Individual:
-				return new OntologicObjectPatternRolePathElement.OntologicIndividualPatternRolePathElement((OntologicObjectPatternRole)pr);
-			case ObjectProperty:
-				return new OntologicObjectPatternRolePathElement.OntologicObjectPropertyPatternRolePathElement((OntologicObjectPatternRole)pr);
-			case DataProperty:
-				return new OntologicObjectPatternRolePathElement.OntologicDataPropertyPatternRolePathElement((OntologicObjectPatternRole)pr);
-			case OntologyStatement:
-				return new OntologicObjectPatternRolePathElement.OntologicStatementPatternRolePathElement((OntologicObjectPatternRole)pr);
-			default:
-				return new PatternRolePathElement(pr);
+			if (pr instanceof ClassPatternRole) {
+				return new OntologicClassPatternRolePathElement((ClassPatternRole)pr);
+			}
+			if (pr instanceof IndividualPatternRole) {
+				return new OntologicIndividualPatternRolePathElement((IndividualPatternRole)pr);
+			}
+			if (pr instanceof ObjectPropertyPatternRole) {
+				return new OntologicObjectPropertyPatternRolePathElement((ObjectPropertyPatternRole)pr);
+			}
+			if (pr instanceof DataPropertyPatternRole) {
+				return new OntologicDataPropertyPatternRolePathElement((DataPropertyPatternRole)pr);
+			}
+			if (pr instanceof IsAStatementPatternRole) {
+				return new IsAStatementPatternRolePathElement((IsAStatementPatternRole)pr);
+			}
+			if (pr instanceof ObjectPropertyStatementPatternRole) {
+				return new ObjectPropertyStatementPatternRolePathElement((ObjectPropertyStatementPatternRole)pr);
+			}
+			if (pr instanceof RestrictionStatementPatternRole) {
+				return new RestrictionStatementPatternRolePathElement((RestrictionStatementPatternRole)pr);
+			}
+			else {
+				logger.warning("Unexpected "+pr);
+				return null;
 			}
 		}
 		else {

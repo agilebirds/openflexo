@@ -82,11 +82,11 @@ public class GoToAction extends EditionAction {
 	}
 
 
-	@Override
+	/*@Override
 	protected void updatePatternRoleType()
 	{
 		// Not relevant
-	}
+	}*/
 
 
 }

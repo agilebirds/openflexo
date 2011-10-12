@@ -22,10 +22,9 @@ package org.openflexo.foundation.viewpoint;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole.OntologicObjectType;
 
 
-public class AddClass extends AddConcept {
+public class AddClass extends AddConcept<ClassPatternRole> {
 
 	private static final Logger logger = Logger.getLogger(AddClass.class.getPackage().getName());
 
@@ -67,13 +66,11 @@ public class AddClass extends AddConcept {
 		return Inspectors.VPM.ADD_CLASS_INSPECTOR;
 	}
 
-	@Override
+	/*@Override
 	protected void updatePatternRoleType()
 	{
 		if (getPatternRole() == null) {
 			return;
 		}
-		
-		getPatternRole().setOntologicObjectType(OntologicObjectType.Class);
-	}
+	}*/
 }

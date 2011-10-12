@@ -26,11 +26,10 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole.OntologicObjectType;
 
 
 
-public class AddRestriction extends AddProperty {
+public class AddRestriction extends AddProperty<RestrictionStatementPatternRole> {
 
 	private static final Logger logger = Logger.getLogger(AddRestriction.class.getPackage().getName());
 
@@ -155,13 +154,11 @@ public class AddRestriction extends AddProperty {
 		cardinality = param.getName();
 	}
 
-	@Override
+	/*@Override
 	protected void updatePatternRoleType()
 	{
 		if (getPatternRole() == null) {
 			return;
 		}
-		
-		getPatternRole().setOntologicObjectType(OntologicObjectType.OntologyStatement);
-	}
+	}*/
 }

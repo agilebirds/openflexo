@@ -29,6 +29,8 @@ import org.openflexo.foundation.ontology.dm.OntologyObjectStatementsChanged;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
+import org.openflexo.xmlcode.StringConvertable;
+import org.openflexo.xmlcode.StringEncoder.Converter;
 
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntResource;
@@ -39,9 +41,32 @@ import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 
-public abstract class OntologyObject extends AbstractOntologyObject implements InspectableObject {
+public abstract class OntologyObject extends AbstractOntologyObject implements InspectableObject, StringConvertable<OntologyObject> {
 
 	private static final Logger logger = Logger.getLogger(OntologyObject.class.getPackage().getName());
+
+	public static class OntologyObjectConverter extends Converter<OntologyObject>
+	{
+		private OntologyLibrary _ontologyLibrary;
+		
+		public OntologyObjectConverter(OntologyLibrary ontologyLibrary) 
+		{
+			super(OntologyObject.class);
+			_ontologyLibrary = ontologyLibrary;
+		}
+
+		@Override
+		public OntologyObject convertFromString(String value) 
+		{
+			return _ontologyLibrary.getOntologyObject(value);
+		}
+
+		@Override
+		public String convertToString(OntologyObject value) 
+		{
+			return value.getURI();
+		};
+	}
 
 
 	private final Vector<OntologyStatement> _statements;
@@ -66,6 +91,13 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 		propertiesTakingMySelfAsDomain = new Vector<OntologyProperty>();
 		declaredPropertiesTakingMySelfAsRange = new Vector<OntologyProperty>();
 		declaredPropertiesTakingMySelfAsDomain = new Vector<OntologyProperty>();
+	}
+	
+	@Override
+	public OntologyObjectConverter getConverter() 
+	{
+		if (getOntologyLibrary() != null) return getOntologyLibrary().getOntologyObjectConverter();
+		return null;
 	}
 	
 	protected abstract void update();

@@ -88,9 +88,34 @@
 		<property name="flexoModelObjectType" xmlTag="flexoModelObjectType" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.OntologicObjectPatternRole" xmlTag="OntologicObjectPatternRole">
-		<property name="ontologicObjectType" xmlTag="ontologicObjectType" attribute="YES" />
+	<entity name="org.openflexo.foundation.viewpoint.OntologicObjectPatternRole" abstract="yes">
 	</entity>
+
+	<entity name="org.openflexo.foundation.viewpoint.PropertyPatternRole" abstract="yes">
+	</entity>
+
+	<entity name="org.openflexo.foundation.viewpoint.StatementPatternRole" abstract="yes">
+	</entity>
+
+	<entity name="org.openflexo.foundation.viewpoint.ClassPatternRole" xmlTag="ClassPatternRole">
+		<property name="conceptURI" xmlTag="ontologicType" attribute="YES" />
+	</entity>
+
+	<entity name="org.openflexo.foundation.viewpoint.IndividualPatternRole" xmlTag="IndividualPatternRole">
+		<property name="conceptURI" xmlTag="ontologicType" attribute="YES" />
+	</entity>
+
+	<entity name="org.openflexo.foundation.viewpoint.DataPropertyPatternRole" xmlTag="DataPropertyPatternRole"/>
+
+	<entity name="org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole" xmlTag="ObjectPropertyPatternRole"/>
+
+	<entity name="org.openflexo.foundation.viewpoint.IsAStatementPatternRole" xmlTag="IsAStatementPatternRole"/>
+
+	<entity name="org.openflexo.foundation.viewpoint.ObjectPropertyStatementPatternRole" xmlTag="ObjectPropertyStatementPatternRole">
+		<property name="objectPropertyURI" xmlTag="objectProperty" attribute="YES" />
+	</entity>
+
+	<entity name="org.openflexo.foundation.viewpoint.RestrictionStatementPatternRole" xmlTag="RestrictionStatementPatternRole"/>
 
 	<entity name="org.openflexo.foundation.viewpoint.PrimitivePatternRole" xmlTag="PrimitivePatternRole">
 		<property name="primitiveType" xmlTag="primitiveType" attribute="YES" />

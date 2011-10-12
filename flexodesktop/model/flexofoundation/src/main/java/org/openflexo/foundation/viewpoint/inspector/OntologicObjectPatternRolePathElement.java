@@ -9,13 +9,18 @@ import org.openflexo.antar.binding.FinalBindingPathElementImpl;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.ontology.OntologyStatement;
+import org.openflexo.foundation.viewpoint.ClassPatternRole;
+import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
+import org.openflexo.foundation.viewpoint.IndividualPatternRole;
+import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
+import org.openflexo.foundation.viewpoint.PropertyPatternRole;
 
 public abstract class OntologicObjectPatternRolePathElement extends PatternRolePathElement
 {
 	public static class OntologicClassPatternRolePathElement extends OntologicObjectPatternRolePathElement
 	{
-		public OntologicClassPatternRolePathElement(OntologicObjectPatternRole aPatternRole) 
+		public OntologicClassPatternRolePathElement(ClassPatternRole aPatternRole) 
 		{
 			super(aPatternRole);
 		}
@@ -23,7 +28,7 @@ public abstract class OntologicObjectPatternRolePathElement extends PatternRoleP
 
 	public static class OntologicIndividualPatternRolePathElement extends OntologicObjectPatternRolePathElement
 	{
-		public OntologicIndividualPatternRolePathElement(OntologicObjectPatternRole aPatternRole) 
+		public OntologicIndividualPatternRolePathElement(IndividualPatternRole aPatternRole) 
 		{
 			super(aPatternRole);
 		}
@@ -31,7 +36,7 @@ public abstract class OntologicObjectPatternRolePathElement extends PatternRoleP
 
 	public static abstract class OntologicPropertyPatternRolePathElement extends OntologicObjectPatternRolePathElement
 	{
-		public OntologicPropertyPatternRolePathElement(OntologicObjectPatternRole aPatternRole) 
+		public OntologicPropertyPatternRolePathElement(PropertyPatternRole aPatternRole) 
 		{
 			super(aPatternRole);
 		}
@@ -39,7 +44,7 @@ public abstract class OntologicObjectPatternRolePathElement extends PatternRoleP
 
 	public static class OntologicDataPropertyPatternRolePathElement extends OntologicPropertyPatternRolePathElement
 	{
-		public OntologicDataPropertyPatternRolePathElement(OntologicObjectPatternRole aPatternRole) 
+		public OntologicDataPropertyPatternRolePathElement(DataPropertyPatternRole aPatternRole) 
 		{
 			super(aPatternRole);
 		}
@@ -47,7 +52,7 @@ public abstract class OntologicObjectPatternRolePathElement extends PatternRoleP
 
 	public static class OntologicObjectPropertyPatternRolePathElement extends OntologicPropertyPatternRolePathElement
 	{
-		public OntologicObjectPropertyPatternRolePathElement(OntologicObjectPatternRole aPatternRole) 
+		public OntologicObjectPropertyPatternRolePathElement(ObjectPropertyPatternRole aPatternRole) 
 		{
 			super(aPatternRole);
 		}
@@ -99,9 +104,7 @@ public abstract class OntologicObjectPatternRolePathElement extends PatternRoleP
 	{
 		private FinalBindingPathElementImpl displayableRepresentation;		
 		private FinalBindingPathElementImpl subject;
-		private FinalBindingPathElementImpl predicate;	
-		private FinalBindingPathElementImpl object;
-		private List<BindingPathElement> allProperties;
+		protected List<BindingPathElement> allProperties;
 
 		public OntologicStatementPatternRolePathElement(OntologicObjectPatternRole aPatternRole) 
 		{
@@ -111,7 +114,7 @@ public abstract class OntologicObjectPatternRolePathElement extends PatternRoleP
 				@Override
 				public Object evaluateBinding(Object target, BindingEvaluationContext context) 
 				{
-					return ((OntologyStatement)target).getName();
+					return ((OntologyStatement)target).getDisplayableDescription();
 				}
 			};
 			subject = new FinalBindingPathElementImpl("subject",OntologyStatement.class,OntologyObject.class,false,"subject_of_statement") {
@@ -121,6 +124,25 @@ public abstract class OntologicObjectPatternRolePathElement extends PatternRoleP
 					return ((OntologyStatement)target).getSubject();
 				}
 			};
+			allProperties.add(displayableRepresentation);
+			allProperties.add(subject);
+		}
+		
+		@Override
+		public List<BindingPathElement> getAllProperties() 
+		{
+			return allProperties;
+		}
+	}
+
+	public static class IsAStatementPatternRolePathElement extends OntologicStatementPatternRolePathElement
+	{
+		private FinalBindingPathElementImpl predicate;	
+		private FinalBindingPathElementImpl object;
+
+		public IsAStatementPatternRolePathElement(OntologicObjectPatternRole aPatternRole) 
+		{
+			super(aPatternRole);
 			predicate = new FinalBindingPathElementImpl("predicate",OntologyStatement.class,OntologyProperty.class,false,"predicate_of_statement") {
 				@Override
 				public Object evaluateBinding(Object target, BindingEvaluationContext context) 
@@ -136,17 +158,68 @@ public abstract class OntologicObjectPatternRolePathElement extends PatternRoleP
 					return null;
 				}
 			};
-			allProperties.add(displayableRepresentation);
-			allProperties.add(subject);
 			allProperties.add(predicate);
 			allProperties.add(object);
 		}
 		
-		@Override
-		public List<BindingPathElement> getAllProperties() 
+	}
+
+	public static class ObjectPropertyStatementPatternRolePathElement extends OntologicStatementPatternRolePathElement
+	{
+		private FinalBindingPathElementImpl predicate;	
+		private FinalBindingPathElementImpl object;
+
+		public ObjectPropertyStatementPatternRolePathElement(OntologicObjectPatternRole aPatternRole) 
 		{
-			return allProperties;
+			super(aPatternRole);
+			predicate = new FinalBindingPathElementImpl("predicate",OntologyStatement.class,OntologyProperty.class,false,"predicate_of_statement") {
+				@Override
+				public Object evaluateBinding(Object target, BindingEvaluationContext context) 
+				{
+					return ((OntologyStatement)target).getPredicate();
+				}
+			};
+			object = new FinalBindingPathElementImpl("object",OntologyStatement.class,Object.class,false,"object_of_statement") {
+				@Override
+				public Object evaluateBinding(Object target, BindingEvaluationContext context) 
+				{
+					// TODO
+					return null;
+				}
+			};
+			allProperties.add(predicate);
+			allProperties.add(object);
 		}
+		
+	}
+
+	public static class RestrictionStatementPatternRolePathElement extends OntologicStatementPatternRolePathElement
+	{
+		private FinalBindingPathElementImpl predicate;	
+		private FinalBindingPathElementImpl object;
+
+		public RestrictionStatementPatternRolePathElement(OntologicObjectPatternRole aPatternRole) 
+		{
+			super(aPatternRole);
+			predicate = new FinalBindingPathElementImpl("predicate",OntologyStatement.class,OntologyProperty.class,false,"predicate_of_statement") {
+				@Override
+				public Object evaluateBinding(Object target, BindingEvaluationContext context) 
+				{
+					return ((OntologyStatement)target).getPredicate();
+				}
+			};
+			object = new FinalBindingPathElementImpl("object",OntologyStatement.class,Object.class,false,"object_of_statement") {
+				@Override
+				public Object evaluateBinding(Object target, BindingEvaluationContext context) 
+				{
+					// TODO
+					return null;
+				}
+			};
+			allProperties.add(predicate);
+			allProperties.add(object);
+		}
+		
 	}
 
 

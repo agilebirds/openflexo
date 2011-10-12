@@ -189,10 +189,58 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		return newPatternRole;
 	}
 	
-	public OntologicObjectPatternRole createOntologicObjectPatternRole()
+	public ClassPatternRole createClassPatternRole()
 	{
-		OntologicObjectPatternRole newPatternRole = new OntologicObjectPatternRole();
-		newPatternRole.setPatternRoleName("object");
+		ClassPatternRole newPatternRole = new ClassPatternRole();
+		newPatternRole.setPatternRoleName("class");
+		addToPatternRoles(newPatternRole);
+		return newPatternRole;
+	}
+	
+	public IndividualPatternRole createIndividualPatternRole()
+	{
+		IndividualPatternRole newPatternRole = new IndividualPatternRole();
+		newPatternRole.setPatternRoleName("individual");
+		addToPatternRoles(newPatternRole);
+		return newPatternRole;
+	}
+	
+	public ObjectPropertyPatternRole createObjectPropertyPatternRole()
+	{
+		ObjectPropertyPatternRole newPatternRole = new ObjectPropertyPatternRole();
+		newPatternRole.setPatternRoleName("property");
+		addToPatternRoles(newPatternRole);
+		return newPatternRole;
+	}
+	
+	public DataPropertyPatternRole createDataPropertyPatternRole()
+	{
+		DataPropertyPatternRole newPatternRole = new DataPropertyPatternRole();
+		newPatternRole.setPatternRoleName("property");
+		addToPatternRoles(newPatternRole);
+		return newPatternRole;
+	}
+	
+	public IsAStatementPatternRole createIsAStatementPatternRole()
+	{
+		IsAStatementPatternRole newPatternRole = new IsAStatementPatternRole();
+		newPatternRole.setPatternRoleName("fact");
+		addToPatternRoles(newPatternRole);
+		return newPatternRole;
+	}
+	
+	public ObjectPropertyStatementPatternRole createObjectPropertyStatementPatternRole()
+	{
+		ObjectPropertyStatementPatternRole newPatternRole = new ObjectPropertyStatementPatternRole();
+		newPatternRole.setPatternRoleName("fact");
+		addToPatternRoles(newPatternRole);
+		return newPatternRole;
+	}
+	
+	public RestrictionStatementPatternRole createRestrictionStatementPatternRole()
+	{
+		RestrictionStatementPatternRole newPatternRole = new RestrictionStatementPatternRole();
+		newPatternRole.setPatternRoleName("fact");
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}

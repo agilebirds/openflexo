@@ -33,7 +33,13 @@ public abstract class PatternRole extends ViewPointObject {
 	{
 		Shape,
 		Connector,
-		OntologicObject,
+		Individual,
+		Class,
+		ObjectProperty,
+		DataProperty,
+		IsAStatement,
+		ObjectPropertyStatement,
+		RestrictionStatement,
 		FlexoModelObject,
 		Shema,
 		Primitive
