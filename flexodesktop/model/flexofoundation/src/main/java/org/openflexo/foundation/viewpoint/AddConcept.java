@@ -32,37 +32,10 @@ public abstract class AddConcept<R extends OntologicObjectPatternRole> extends E
 	public AddConcept() {
 	}
 	
-	private String conceptURI;
-
-	public String _getConceptURI()
-	{
-		return conceptURI;
-	}
-
-	public void _setConceptURI(String conceptURI) 
-	{
-		this.conceptURI = conceptURI;
-	}
+	public abstract OntologyClass getOntologyClass();
 	
-	public OntologyClass getOntologyClass()
-	{
-		getCalc().loadWhenUnloaded();
-		if (getPatternRole() != null) {
-			if (getPatternRole() instanceof IndividualPatternRole) {
-				((IndividualPatternRole)getPatternRole()).setOntologicType(getOntologyLibrary().getClass(_getConceptURI()));
-			}
-			else if (getPatternRole() instanceof ClassPatternRole) {
-				((ClassPatternRole)getPatternRole()).setOntologicType(getOntologyLibrary().getClass(_getConceptURI()));
-			}
-		}
-		return getOntologyLibrary().getClass(_getConceptURI());
-	}
+	public abstract void setOntologyClass(OntologyClass ontologyClass);
 	
-	public void setOntologyClass(OntologyClass ontologyClass)
-	{
-		conceptURI = (ontologyClass != null ? ontologyClass.getURI() : null);
-	}
-
 	/*public OntologyObject getOntologyObject(FlexoProject project)
 	{
 		getCalc().loadWhenUnloaded();

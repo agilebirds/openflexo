@@ -220,7 +220,6 @@
 
 	<entity name="org.openflexo.foundation.viewpoint.AddConcept"
 		abstract="yes">
-		<property name="conceptURI" xmlTag="conceptURI" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.AddIndividual"
@@ -247,8 +246,6 @@
 	<entity name="org.openflexo.foundation.viewpoint.AddObjectPropertyStatement"
 		xmlTag="AddObjectPropertyStatement">
 		<property name="object" xmlTag="object" attribute="YES" />
-		<property name="objectPropertyURI" xmlTag="objectPropertyURI"
-			attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.AddIsAStatement"

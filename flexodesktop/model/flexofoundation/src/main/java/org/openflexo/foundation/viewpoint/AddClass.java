@@ -22,6 +22,7 @@ package org.openflexo.foundation.viewpoint;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.ontology.OntologyClass;
 
 
 public class AddClass extends AddConcept<ClassPatternRole> {
@@ -59,6 +60,21 @@ public class AddClass extends AddConcept<ClassPatternRole> {
 		newClassName = param.getName();
 	}
 	
+	@Override
+	public OntologyClass getOntologyClass()
+	{
+		if (getPatternRole() != null) 
+			return getPatternRole().getOntologicType();
+		return null;
+	}
+	
+	@Override
+	public void setOntologyClass(OntologyClass ontologyClass)
+	{
+		if (getPatternRole() != null) 
+			getPatternRole().setOntologicType(ontologyClass);
+	}
+
 
 	@Override
 	public String getInspectorName() 

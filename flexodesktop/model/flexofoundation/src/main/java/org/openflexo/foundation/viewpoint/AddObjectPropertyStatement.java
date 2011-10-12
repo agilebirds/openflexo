@@ -33,7 +33,6 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 
 	private static final Logger logger = Logger.getLogger(AddObjectPropertyStatement.class.getPackage().getName());
 
-	private String objectPropertyURI;
 	private String object;
 	
 	public AddObjectPropertyStatement() {
@@ -45,33 +44,17 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 		return EditionActionType.AddObjectProperty;
 	}
 	
-	public String _getObjectPropertyURI()
-	{
-		return objectPropertyURI;
-	}
-
-	public void _setObjectPropertyURI(String objectPropertyURI) 
-	{
-		this.objectPropertyURI = objectPropertyURI;
-	}
-
 	public OntologyProperty getObjectProperty()
 	{
-		getCalc().loadWhenUnloaded();
-		if (getPatternRole() != null) {
-			if (getPatternRole() instanceof ObjectPropertyStatementPatternRole) {
-				getPatternRole().setObjectProperty(getOntologyLibrary().getProperty(_getObjectPropertyURI()));
-			}
-			else if (getPatternRole() instanceof ObjectPropertyStatementPatternRole) {
-				getPatternRole().setObjectProperty(getOntologyLibrary().getProperty(_getObjectPropertyURI()));
-			}
-		}
-		return getOntologyLibrary().getObjectProperty(_getObjectPropertyURI());
+		if (getPatternRole() != null) 
+			return getPatternRole().getObjectProperty();
+		return null;
 	}
 	
 	public void setObjectProperty(OntologyProperty p)
 	{
-		_setObjectPropertyURI(p != null ? p.getURI() : null);
+		if (getPatternRole() != null) 
+			getPatternRole().setObjectProperty(p);
 	}
 	
 	public String _getObject()

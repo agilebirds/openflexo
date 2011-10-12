@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.logging.FlexoLogger;
 
 
@@ -48,6 +49,21 @@ public class AddIndividual extends AddConcept<IndividualPatternRole> {
 		return EditionActionType.AddIndividual;
 	}
 	
+	@Override
+	public OntologyClass getOntologyClass()
+	{
+		if (getPatternRole() != null) 
+			return getPatternRole().getOntologicType();
+		return null;
+	}
+	
+	@Override
+	public void setOntologyClass(OntologyClass ontologyClass)
+	{
+		if (getPatternRole() != null) 
+			getPatternRole().setOntologicType(ontologyClass);
+	}
+
 	public String _getIndividualName() 
 	{
 		return individualName;
