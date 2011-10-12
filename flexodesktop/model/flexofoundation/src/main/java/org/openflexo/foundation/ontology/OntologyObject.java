@@ -653,7 +653,7 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
    {
 	   declaredPropertiesTakingMySelfAsRange.clear();
 	   declaredPropertiesTakingMySelfAsDomain.clear();
-	   searchRangeAndDomains(declaredPropertiesTakingMySelfAsRange,declaredPropertiesTakingMySelfAsDomain,getFlexoOntology());
+	   searchRangeAndDomains(declaredPropertiesTakingMySelfAsRange,declaredPropertiesTakingMySelfAsDomain,getFlexoOntology(),new Vector<FlexoOntology>());
 	   domainsAndRangesAreUpToDate = true;
    }
    
@@ -666,8 +666,10 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 	   domainsAndRangesAreRecursivelyUpToDate = true;
    }
    
-   private  void searchRangeAndDomains(Vector<OntologyProperty> rangeProperties, Vector<OntologyProperty> domainProperties, FlexoOntology ontology)
+   private  void searchRangeAndDomains(Vector<OntologyProperty> rangeProperties, Vector<OntologyProperty> domainProperties, FlexoOntology ontology, Vector<FlexoOntology> alreadyDone)
    {
+	   if (alreadyDone.contains(ontology)) return;
+	   alreadyDone.add(ontology);
 	   for (OntologyProperty p : ontology.getObjectProperties()) {
 		   if (p.getRange() != null && p.getRange().equals(this)) rangeProperties.add(p);
 		   if (p.getDomain() != null && p.getDomain().equals(this)) domainProperties.add(p);
@@ -677,7 +679,7 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 		   if (p.getDomain() != null && p.getDomain().equals(this)) domainProperties.add(p);
 	   }
 	   for (FlexoOntology o : ontology.getImportedOntologies()) {
-		   searchRangeAndDomains(rangeProperties,domainProperties,o);
+		   searchRangeAndDomains(rangeProperties,domainProperties,o,alreadyDone);
 	   }
    }
    
