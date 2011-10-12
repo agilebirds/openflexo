@@ -31,6 +31,7 @@ public class AllCGTests
 
     public static Test suite()
     {
+    	System.out.println("Test Git");
         TestSuite suite = new TestSuite("Tests for Code Generator");
          //$JUnit-BEGIN$
         suite.addTestSuite(TestCG.class);

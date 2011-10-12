@@ -51,7 +51,6 @@ public class TestFileChoosing {
 	 */
 	public static void main(String[] args) 
 	{
-		System.out.println("polo");
 		final JFrame dialog = new JFrame();
 			
 			JButton closeButton = new JButton("Close");
