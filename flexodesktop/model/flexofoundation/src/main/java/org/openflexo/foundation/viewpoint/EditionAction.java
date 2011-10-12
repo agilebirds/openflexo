@@ -55,9 +55,10 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 	{
 		AddClass,
 		AddIndividual,
-		AddObjectProperty,
-		AddIsAProperty,
-		AddRestriction,
+		AddObjectPropertyStatement,
+		AddDataPropertyStatement,
+		AddIsAStatement,
+		AddRestrictionStatement,
 		AddConnector,
 		AddShape,
 		AddShema,

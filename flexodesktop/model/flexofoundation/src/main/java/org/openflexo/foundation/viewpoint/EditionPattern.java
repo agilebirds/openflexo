@@ -237,6 +237,14 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		return newPatternRole;
 	}
 	
+	public DataPropertyStatementPatternRole createDataPropertyStatementPatternRole()
+	{
+		DataPropertyStatementPatternRole newPatternRole = new DataPropertyStatementPatternRole();
+		newPatternRole.setPatternRoleName("fact");
+		addToPatternRoles(newPatternRole);
+		return newPatternRole;
+	}
+	
 	public RestrictionStatementPatternRole createRestrictionStatementPatternRole()
 	{
 		RestrictionStatementPatternRole newPatternRole = new RestrictionStatementPatternRole();

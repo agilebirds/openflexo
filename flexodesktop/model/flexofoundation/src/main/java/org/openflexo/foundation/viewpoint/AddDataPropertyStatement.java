@@ -23,75 +23,90 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.OntologyObject;
+import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 
 
 
-public class AddIsAStatement extends AddStatement<IsAStatementPatternRole> {
+public class AddDataPropertyStatement extends AddStatement<DataPropertyStatementPatternRole> {
 
-	private static final Logger logger = Logger.getLogger(AddIsAStatement.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(AddDataPropertyStatement.class.getPackage().getName());
 
-	private String father;
+	private String value;
 	
-	public AddIsAStatement() {
+	public AddDataPropertyStatement() {
 	}
 	
 	@Override
 	public EditionActionType getEditionActionType()
 	{
-		return EditionActionType.AddIsAStatement;
+		return EditionActionType.AddDataPropertyStatement;
 	}
 	
-	public String _getFather()
+	public OntologyProperty getDataProperty()
 	{
-		return father;
+		if (getPatternRole() != null) 
+			return getPatternRole().getDataProperty();
+		return null;
 	}
 	
-	public void _setFather(String anObject)
+	public void setDataProperty(OntologyProperty p)
 	{
-		father = anObject;
+		if (getPatternRole() != null) 
+			getPatternRole().setDataProperty(p);
 	}
 	
-	private Vector<String> availableFatherValues = null;
-	
-	public Vector<String> getAvailableFatherValues()
+	public String _getValue()
 	{
-		if (availableFatherValues == null) {
-			availableFatherValues = new Vector<String>();
+		return value;
+	}
+	
+	public void _setValue(String aValue)
+	{
+		value = aValue;
+	}
+	
+	private Vector<String> availableObjectValues = null;
+	
+	public Vector<String> getAvailableObjectValues()
+	{
+		if (availableObjectValues == null) {
+			availableObjectValues = new Vector<String>();
 			switch (getScheme().getEditionSchemeType()) {
 			case DropScheme:
-				availableFatherValues.add(EditionAction.CONTAINER);
-				availableFatherValues.add(EditionAction.CONTAINER_OF_CONTAINER);
+				availableObjectValues.add(EditionAction.CONTAINER);
+				availableObjectValues.add(EditionAction.CONTAINER_OF_CONTAINER);
 				break;
 			case LinkScheme:
-				availableFatherValues.add(EditionAction.FROM_TARGET);
-				availableFatherValues.add(EditionAction.TO_TARGET);
+				availableObjectValues.add(EditionAction.FROM_TARGET);
+				availableObjectValues.add(EditionAction.TO_TARGET);
 				break;
 			default:
 				break;
 			}
 			for (PatternRole pr : getEditionPattern().getPatternRoles()) {
-				availableFatherValues.add(pr.getPatternRoleName());
+				availableObjectValues.add(pr.getPatternRoleName());
 			}
 			for (EditionPatternParameter p : getScheme().getParameters()) {
-				availableFatherValues.add(p.getName());
+				availableObjectValues.add(p.getName());
 			}
 		}
-		return availableFatherValues;
+		return availableObjectValues;
 	}
-	
-	public OntologyObject getPropertyFather(EditionSchemeAction action)
+
+	public Object getValue(EditionSchemeAction action)
 	{
-		return retrieveOntologyObject(_getFather(), action);
+		return retrieveObject(_getValue(), action);
 	}
-	
+
+
 	@Override
 	public String getInspectorName() 
 	{
-		return Inspectors.VPM.ADD_IS_A_PROPERTY_INSPECTOR;
+		return Inspectors.VPM.ADD_OBJECT_PROPERTY_INSPECTOR;
 	}
 
+	
 	/*@Override
 	protected void updatePatternRoleType()
 	{
@@ -99,5 +114,5 @@ public class AddIsAStatement extends AddStatement<IsAStatementPatternRole> {
 			return;
 		}
 	}*/
-		
+
 }

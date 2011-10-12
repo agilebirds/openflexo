@@ -44,7 +44,7 @@ public class AddRestrictionStatement extends AddStatement<RestrictionStatementPa
 	@Override
 	public EditionActionType getEditionActionType()
 	{
-		return EditionActionType.AddRestriction;
+		return EditionActionType.AddRestrictionStatement;
 	}
 	
 

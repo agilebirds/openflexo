@@ -13,6 +13,7 @@ import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.ClassPatternRole;
 import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
+import org.openflexo.foundation.viewpoint.DataPropertyStatementPatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.IsAStatementPatternRole;
@@ -21,6 +22,7 @@ import org.openflexo.foundation.viewpoint.ObjectPropertyStatementPatternRole;
 import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.RestrictionStatementPatternRole;
+import org.openflexo.foundation.viewpoint.inspector.OntologicObjectPatternRolePathElement.DataPropertyStatementPatternRolePathElement;
 import org.openflexo.foundation.viewpoint.inspector.OntologicObjectPatternRolePathElement.IsAStatementPatternRolePathElement;
 import org.openflexo.foundation.viewpoint.inspector.OntologicObjectPatternRolePathElement.ObjectPropertyStatementPatternRolePathElement;
 import org.openflexo.foundation.viewpoint.inspector.OntologicObjectPatternRolePathElement.OntologicClassPatternRolePathElement;
@@ -55,6 +57,9 @@ public class PatternRolePathElement implements SimplePathElement, BindingVariabl
 			}
 			if (pr instanceof ObjectPropertyStatementPatternRole) {
 				return new ObjectPropertyStatementPatternRolePathElement((ObjectPropertyStatementPatternRole)pr);
+			}
+			if (pr instanceof DataPropertyStatementPatternRole) {
+				return new DataPropertyStatementPatternRolePathElement((DataPropertyStatementPatternRole)pr);
 			}
 			if (pr instanceof RestrictionStatementPatternRole) {
 				return new RestrictionStatementPatternRolePathElement((RestrictionStatementPatternRole)pr);

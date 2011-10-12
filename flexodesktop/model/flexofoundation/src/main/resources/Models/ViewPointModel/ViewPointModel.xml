@@ -115,6 +115,10 @@
 		<property name="objectPropertyURI" xmlTag="objectProperty" attribute="YES" />
 	</entity>
 
+	<entity name="org.openflexo.foundation.viewpoint.DataPropertyStatementPatternRole" xmlTag="DataPropertyStatementPatternRole">
+		<property name="dataPropertyURI" xmlTag="dataProperty" attribute="YES" />
+	</entity>
+
 	<entity name="org.openflexo.foundation.viewpoint.RestrictionStatementPatternRole" xmlTag="RestrictionStatementPatternRole"/>
 
 	<entity name="org.openflexo.foundation.viewpoint.PrimitivePatternRole" xmlTag="PrimitivePatternRole">
@@ -246,6 +250,11 @@
 	<entity name="org.openflexo.foundation.viewpoint.AddObjectPropertyStatement"
 		xmlTag="AddObjectPropertyStatement">
 		<property name="object" xmlTag="object" attribute="YES" />
+	</entity>
+
+	<entity name="org.openflexo.foundation.viewpoint.AddDataPropertyStatement"
+		xmlTag="AddDataPropertyStatement">
+		<property name="value" xmlTag="value" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.AddIsAStatement"

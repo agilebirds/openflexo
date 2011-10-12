@@ -41,7 +41,7 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 	@Override
 	public EditionActionType getEditionActionType()
 	{
-		return EditionActionType.AddObjectProperty;
+		return EditionActionType.AddObjectPropertyStatement;
 	}
 	
 	public OntologyProperty getObjectProperty()
