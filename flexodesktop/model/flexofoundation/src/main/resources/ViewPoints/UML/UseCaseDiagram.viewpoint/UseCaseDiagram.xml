@@ -15,7 +15,7 @@ A use case is a summary of scenarios for a single task or goal. An actor is who 
         <DataPropertyAssertion id="9" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#name" value="name" />
         <description>Actor individual being created and put in ontology</description>
       </AddIndividual>
-      <AddObjectProperty id="10" object="actor" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#packagedElement" patternRole="packagedElement" subject="package" />
+      <AddObjectPropertyStatement id="10" object="actor" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#packagedElement" patternRole="packagedElement" subject="package" />
       <AddShape id="11" container="container" patternRole="shape" conditional="">
         <description>Add the shape</description>
       </AddShape>
@@ -46,7 +46,7 @@ A use case is a summary of scenarios for a single task or goal. An actor is who 
       <AddIndividual id="31" individualName="uri" patternRole="useCase" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#UseCase">
         <DataPropertyAssertion id="32" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#name" value="name" />
       </AddIndividual>
-      <AddObjectProperty id="33" object="useCase" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#packagedElement" patternRole="packagedElement" subject="package" />
+      <AddObjectPropertyStatement id="33" object="useCase" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#packagedElement" patternRole="packagedElement" subject="package" />
       <AddShape id="34" container="container" patternRole="shape" conditional="" />
     </DropScheme>
     <ShapePatternRole id="35" patternRole="shape" boundPatternRole="useCase">
@@ -76,7 +76,7 @@ A use case is a summary of scenarios for a single task or goal. An actor is who 
       <DeclarePatternRole id="55" object="toTarget.concept" patternRole="useCase" />
       <DeclarePatternRole id="56" object="packageParameter" patternRole="package" conditional="" />
       <AddIndividual id="57" individualName="associationURI" patternRole="association" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Association" />
-      <AddObjectProperty id="58" object="association" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#packagedElement" patternRole="packagedElement" subject="package" />
+      <AddObjectPropertyStatement id="58" object="association" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#packagedElement" patternRole="packagedElement" subject="package" />
       <AddIndividual id="59" individualName="actorPropertyURI" patternRole="actorProperty" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Property">
         <ObjectPropertyAssertion id="60" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#association" object="association" />
         <ObjectPropertyAssertion id="61" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#type" object="actor" />
@@ -85,8 +85,8 @@ A use case is a summary of scenarios for a single task or goal. An actor is who 
         <ObjectPropertyAssertion id="63" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#association" object="association" />
         <ObjectPropertyAssertion id="64" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#type" object="useCase" />
       </AddIndividual>
-      <AddObjectProperty id="65" object="actorProperty" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#ownedEnd" patternRole="ownedEndForActor" subject="association" />
-      <AddObjectProperty id="66" object="useCaseProperty" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#ownedEnd" patternRole="ownedEndForUseCase" subject="association" />
+      <AddObjectPropertyStatement id="65" object="actorProperty" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#ownedEnd" patternRole="ownedEndForActor" subject="association" />
+      <AddObjectPropertyStatement id="66" object="useCaseProperty" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#ownedEnd" patternRole="ownedEndForUseCase" subject="association" />
       <AddConnector id="67" fromShape="fromTarget" toShape="toTarget" patternRole="connector" conditional="" />
     </LinkScheme>
     <ConnectorPatternRole id="68" patternRole="connector">

@@ -30,7 +30,7 @@
   <EditionPattern id="19" name="IsARelationship">
     <description>Allows to define 'isA' link between two concepts</description>
     <LinkScheme id="20" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/BasicOntology.owl#Concept" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/BasicOntology.owl#Concept" name="LinkTwoConceptByIsARelationShip" skipConfirmationPanel="false">
-      <AddIsAProperty id="21" father="toTarget" patternRole="isA" subject="fromTarget" />
+      <AddIsAPropertyStatement id="21" father="toTarget" patternRole="isA" subject="fromTarget" />
       <AddConnector id="22" patternRole="connector" />
     </LinkScheme>
     <IsAStatementPatternRole id="23" patternRole="isA" />
@@ -71,7 +71,7 @@
       <Parameter id="48" name="cardinality" label="cardinality" widget="INTEGER" defaultValue="1" usePaletteLabelAsDefaultValue="false" uniqueURI="false" conditional="(restrictionType='Exact') | (restrictionType='Min') | (restrictionType='Max')">
         <description>Cardinality for restriction</description>
       </Parameter>
-      <AddRestriction id="49" object="toTarget" propertyURI="http://www.agilebirds.com/openflexo/ViewPoints/BasicOntology.owl#has" restrictionType="restrictionType" cardinality="cardinality" patternRole="has" subject="fromTarget" />
+      <AddRestrictionStatement id="49" object="toTarget" propertyURI="http://www.agilebirds.com/openflexo/ViewPoints/BasicOntology.owl#has" restrictionType="restrictionType" cardinality="cardinality" patternRole="has" subject="fromTarget" />
       <AddConnector id="50" patternRole="connector" />
     </LinkScheme>
     <RestrictionStatementPatternRole id="51" patternRole="has" />

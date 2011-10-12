@@ -257,23 +257,23 @@ public abstract class EditionScheme extends ViewPointObject {
 		return newAction;
 	}
 
-	public AddObjectProperty createAddObjectPropertyAction()
+	public AddObjectPropertyStatement createAddObjectPropertyAction()
 	{
-		AddObjectProperty newAction = new AddObjectProperty();
+		AddObjectPropertyStatement newAction = new AddObjectPropertyStatement();
 		addToActions(newAction);
 		return newAction;
 	}
 
-	public AddIsAProperty createAddIsAPropertyAction()
+	public AddIsAStatement createAddIsAPropertyAction()
 	{
-		AddIsAProperty newAction = new AddIsAProperty();
+		AddIsAStatement newAction = new AddIsAStatement();
 		addToActions(newAction);
 		return newAction;
 	}
 
-	public AddRestriction createAddRestrictionAction()
+	public AddRestrictionStatement createAddRestrictionAction()
 	{
-		AddRestriction newAction = new AddRestriction();
+		AddRestrictionStatement newAction = new AddRestrictionStatement();
 		addToActions(newAction);
 		return newAction;
 	}

@@ -83,8 +83,8 @@
       <Parameter id="50" name="makeInverseRelationship" label="make_inverse_relationship" widget="CHECKBOX" defaultValue="true" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>When set to true, indicates that inverse relationship must be defined</description>
       </Parameter>
-      <AddObjectProperty id="51" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#topConceptOf" patternRole="topConceptOf" subject="fromTarget" />
-      <AddObjectProperty id="52" object="fromTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#hasTopConcept" patternRole="hasTopConcept" conditional="makeInverseRelationship=true" subject="toTarget" />
+      <AddObjectPropertyStatement id="51" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#topConceptOf" patternRole="topConceptOf" subject="fromTarget" />
+      <AddObjectPropertyStatement id="52" object="fromTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#hasTopConcept" patternRole="hasTopConcept" conditional="makeInverseRelationship=true" subject="toTarget" />
       <AddConnector id="53" patternRole="connector" />
     </LinkScheme>
     <ObjectPropertyStatementPatternRole id="54" objectProperty="http://www.w3.org/2004/02/skos/core#topConceptOf" patternRole="topConceptOf" />
@@ -126,10 +126,10 @@
       <Parameter id="80" name="makeInverseRelationship" label="make_inverse_relationship" widget="CHECKBOX" defaultValue="true" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>When set to true, indicates that inverse relationship must be defined</description>
       </Parameter>
-      <AddObjectProperty id="81" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#broader" patternRole="broader" conditional="match=false" subject="fromTarget" />
-      <AddObjectProperty id="82" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#broadMatch" patternRole="broadMatch" conditional="match=true" subject="fromTarget" />
-      <AddObjectProperty id="83" object="fromTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#narrower" patternRole="narrower" conditional="match=false &amp; makeInverseRelationship=true" subject="toTarget" />
-      <AddObjectProperty id="84" object="fromTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#narrowMatch" patternRole="narrowMatch" conditional="match=true &amp; makeInverseRelationship=true" subject="toTarget" />
+      <AddObjectPropertyStatement id="81" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#broader" patternRole="broader" conditional="match=false" subject="fromTarget" />
+      <AddObjectPropertyStatement id="82" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#broadMatch" patternRole="broadMatch" conditional="match=true" subject="fromTarget" />
+      <AddObjectPropertyStatement id="83" object="fromTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#narrower" patternRole="narrower" conditional="match=false &amp; makeInverseRelationship=true" subject="toTarget" />
+      <AddObjectPropertyStatement id="84" object="fromTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#narrowMatch" patternRole="narrowMatch" conditional="match=true &amp; makeInverseRelationship=true" subject="toTarget" />
       <AddConnector id="85" patternRole="broaderConnector" conditional="match=false" />
       <AddConnector id="86" patternRole="broadMatchConnector" conditional="match=true" />
     </LinkScheme>
@@ -200,10 +200,10 @@
       <Parameter id="135" name="makeInverseRelationship" label="make_inverse_relationship" widget="CHECKBOX" defaultValue="true" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>When set to true, indicates that inverse relationship must be defined</description>
       </Parameter>
-      <AddObjectProperty id="136" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#narrower" patternRole="narrower" conditional="match=false" subject="fromTarget" />
-      <AddObjectProperty id="137" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#narrowMatch" patternRole="narrowMatch" conditional="match=true" subject="fromTarget" />
-      <AddObjectProperty id="138" object="fromTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#broader" patternRole="broader" conditional="match=false &amp; makeInverseRelationship=true" subject="toTarget" />
-      <AddObjectProperty id="139" object="fromTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#broadMatch" patternRole="broadMatch" conditional="match=true &amp; makeInverseRelationship=true" subject="toTarget" />
+      <AddObjectPropertyStatement id="136" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#narrower" patternRole="narrower" conditional="match=false" subject="fromTarget" />
+      <AddObjectPropertyStatement id="137" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#narrowMatch" patternRole="narrowMatch" conditional="match=true" subject="fromTarget" />
+      <AddObjectPropertyStatement id="138" object="fromTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#broader" patternRole="broader" conditional="match=false &amp; makeInverseRelationship=true" subject="toTarget" />
+      <AddObjectPropertyStatement id="139" object="fromTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#broadMatch" patternRole="broadMatch" conditional="match=true &amp; makeInverseRelationship=true" subject="toTarget" />
       <AddConnector id="140" patternRole="narrowerConnector" conditional="match=false" />
       <AddConnector id="141" patternRole="narrowMatchConnector" conditional="match=true" />
     </LinkScheme>
@@ -271,10 +271,10 @@
       <Parameter id="189" name="match" label="match" widget="CHECKBOX" defaultValue="false" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>When set to true, indicates that relatedMatch property should be used</description>
       </Parameter>
-      <AddObjectProperty id="190" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#related" patternRole="related1" conditional="match=false" subject="fromTarget" />
-      <AddObjectProperty id="191" object="fromTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#related" patternRole="related2" conditional="match=false" subject="toTarget" />
-      <AddObjectProperty id="192" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#relatedMatch" patternRole="relatedMatch1" conditional="match=true" subject="fromTarget" />
-      <AddObjectProperty id="193" object="fromTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#relatedMatch" patternRole="relatedMatch2" conditional="match=true" subject="toTarget" />
+      <AddObjectPropertyStatement id="190" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#related" patternRole="related1" conditional="match=false" subject="fromTarget" />
+      <AddObjectPropertyStatement id="191" object="fromTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#related" patternRole="related2" conditional="match=false" subject="toTarget" />
+      <AddObjectPropertyStatement id="192" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#relatedMatch" patternRole="relatedMatch1" conditional="match=true" subject="fromTarget" />
+      <AddObjectPropertyStatement id="193" object="fromTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#relatedMatch" patternRole="relatedMatch2" conditional="match=true" subject="toTarget" />
       <AddConnector id="194" patternRole="relatedConnector" conditional="match=false" />
       <AddConnector id="195" patternRole="relatedMatchConnector" conditional="match=true" />
     </LinkScheme>

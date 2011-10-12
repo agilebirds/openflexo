@@ -191,8 +191,8 @@ BOTSubDepartment type, with a Shape connected to it.</description>
       <Parameter id="113" name="makeInverseRelationship" label="make_inverse_relationship" widget="CHECKBOX" defaultValue="true" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>When set to true, indicates that inverse relationship must be defined</description>
       </Parameter>
-      <AddObjectProperty id="114" object="toTarget" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isResponsibleOf" patternRole="isResponsibleOf" subject="fromTarget" />
-      <AddObjectProperty id="115" object="fromTarget" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isUnderResponsabilityOf" patternRole="isUnderResponsabilityOf" conditional="makeInverseRelationship=true" subject="toTarget" />
+      <AddObjectPropertyStatement id="114" object="toTarget" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isResponsibleOf" patternRole="isResponsibleOf" subject="fromTarget" />
+      <AddObjectPropertyStatement id="115" object="fromTarget" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isUnderResponsabilityOf" patternRole="isUnderResponsabilityOf" conditional="makeInverseRelationship=true" subject="toTarget" />
       <AddConnector id="116" patternRole="connector" />
     </LinkScheme>
     <ObjectPropertyStatementPatternRole id="117" objectProperty="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isResponsibleOf" patternRole="isResponsibleOf" />

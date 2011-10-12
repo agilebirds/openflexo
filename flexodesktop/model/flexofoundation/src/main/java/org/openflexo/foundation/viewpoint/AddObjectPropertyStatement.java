@@ -29,14 +29,14 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 
 
 
-public class AddObjectProperty extends AddProperty<ObjectPropertyStatementPatternRole> {
+public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyStatementPatternRole> {
 
-	private static final Logger logger = Logger.getLogger(AddObjectProperty.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(AddObjectPropertyStatement.class.getPackage().getName());
 
 	private String objectPropertyURI;
 	private String object;
 	
-	public AddObjectProperty() {
+	public AddObjectPropertyStatement() {
 	}
 	
 	@Override

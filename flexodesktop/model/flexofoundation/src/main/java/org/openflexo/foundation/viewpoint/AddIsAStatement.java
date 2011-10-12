@@ -28,13 +28,13 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 
 
 
-public class AddIsAProperty extends AddProperty<IsAStatementPatternRole> {
+public class AddIsAStatement extends AddStatement<IsAStatementPatternRole> {
 
-	private static final Logger logger = Logger.getLogger(AddIsAProperty.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(AddIsAStatement.class.getPackage().getName());
 
 	private String father;
 	
-	public AddIsAProperty() {
+	public AddIsAStatement() {
 	}
 	
 	@Override

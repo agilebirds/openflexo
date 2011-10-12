@@ -29,16 +29,16 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 
 
 
-public class AddRestriction extends AddProperty<RestrictionStatementPatternRole> {
+public class AddRestrictionStatement extends AddStatement<RestrictionStatementPatternRole> {
 
-	private static final Logger logger = Logger.getLogger(AddRestriction.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(AddRestrictionStatement.class.getPackage().getName());
 
 	private String propertyURI;
 	private String object;
 	private String restrictionType;
 	private String cardinality;
 	
-	public AddRestriction() {
+	public AddRestrictionStatement() {
 	}
 	
 	@Override

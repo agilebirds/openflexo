@@ -55,8 +55,8 @@
       <description>Allows to define a hierarchical link between an organization unit and a parent organization unit</description>
       <DeclarePatternRole id="31" object="fromTarget" patternRole="childOrganizationUnit" />
       <DeclarePatternRole id="32" object="toTarget" patternRole="parentOrganizationUnit" />
-      <AddObjectProperty id="33" object="toTarget" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#hasParentOrgUnit" patternRole="dependsOfOrganizationUnit" subject="fromTarget" />
-      <AddObjectProperty id="34" object="fromTarget" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#hasSubOrgUnit" patternRole="hasSubOrganizationUnit" subject="toTarget" />
+      <AddObjectPropertyStatement id="33" object="toTarget" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#hasParentOrgUnit" patternRole="dependsOfOrganizationUnit" subject="fromTarget" />
+      <AddObjectPropertyStatement id="34" object="fromTarget" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#hasSubOrgUnit" patternRole="hasSubOrganizationUnit" subject="toTarget" />
       <AddConnector id="35" patternRole="connector" />
     </LinkScheme>
     <IndividualPatternRole id="36" ontologicType="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#OrganizationalUnit" patternRole="childOrganizationUnit" />
@@ -129,8 +129,8 @@
       <description>Allows to define a hierarchical link between an organization unit and a parent organization unit</description>
       <DeclarePatternRole id="83" object="fromTarget" patternRole="position" />
       <DeclarePatternRole id="84" object="toTarget" patternRole="organizationUnit" />
-      <AddObjectProperty id="85" object="toTarget" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#isInvolvedInOrganizationUnit" patternRole="isInvolvedInOrganizationUnit" subject="fromTarget" />
-      <AddObjectProperty id="86" object="fromTarget" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#containsPosition" patternRole="containsPosition" subject="toTarget" />
+      <AddObjectPropertyStatement id="85" object="toTarget" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#isInvolvedInOrganizationUnit" patternRole="isInvolvedInOrganizationUnit" subject="fromTarget" />
+      <AddObjectPropertyStatement id="86" object="fromTarget" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#containsPosition" patternRole="containsPosition" subject="toTarget" />
       <AddConnector id="87" patternRole="connector" />
     </LinkScheme>
     <IndividualPatternRole id="88" ontologicType="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#OrganizationalUnit" patternRole="organizationUnit" />

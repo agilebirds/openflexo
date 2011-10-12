@@ -27,13 +27,13 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 
 
 
-public abstract class AddProperty<R extends OntologicObjectPatternRole> extends EditionAction<R> {
+public abstract class AddStatement<R extends OntologicObjectPatternRole> extends EditionAction<R> {
 
-	private static final Logger logger = Logger.getLogger(AddProperty.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(AddStatement.class.getPackage().getName());
 
 	private String subject;
 	
-	public AddProperty() {
+	public AddStatement() {
 	}
 	
 	public String _getSubject()

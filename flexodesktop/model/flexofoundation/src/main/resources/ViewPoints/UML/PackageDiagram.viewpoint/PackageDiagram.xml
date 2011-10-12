@@ -44,7 +44,7 @@ One package depends on another if changes in the other could possibly force chan
       <AddIndividual id="25" individualName="uri" patternRole="packageImport" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#PackageImport">
         <ObjectPropertyAssertion id="26" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#importedPackage" object="importedPackage" />
       </AddIndividual>
-      <AddObjectProperty id="27" object="packageImport" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#packageImport" patternRole="import" subject="package" />
+      <AddObjectPropertyStatement id="27" object="packageImport" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#packageImport" patternRole="import" subject="package" />
       <AddConnector id="28" fromShape="fromTarget" toShape="toTarget" patternRole="connector" />
     </LinkScheme>
     <IndividualPatternRole id="29" ontologicType="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" patternRole="package" />

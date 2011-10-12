@@ -61,7 +61,7 @@
         <DataPropertyAssertion id="33" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#organizationUnitDescription" value="organizationUnitDescription" />
         <ObjectPropertyAssertion id="34" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#hasParentOrgUnit" object="container" />
       </AddIndividual>
-      <AddObjectProperty id="35" object="organizationUnit" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#hasSubOrgUnit" patternRole="hasSubOrgUnit" subject="container" />
+      <AddObjectPropertyStatement id="35" object="organizationUnit" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#hasSubOrgUnit" patternRole="hasSubOrgUnit" subject="container" />
       <AddShape id="36" patternRole="shape" />
     </DropScheme>
     <IndividualPatternRole id="37" ontologicType="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#OrganizationalUnit" patternRole="organizationUnit" />
@@ -95,7 +95,7 @@
         <DataPropertyAssertion id="55" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#missionName" value="missionName" />
         <DataPropertyAssertion id="56" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#missionDescription" value="missionDescription" />
       </AddIndividual>
-      <AddObjectProperty id="57" object="mission" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#hasOrgUnitMission" patternRole="hasOrgUnitMission" subject="container" />
+      <AddObjectPropertyStatement id="57" object="mission" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#hasOrgUnitMission" patternRole="hasOrgUnitMission" subject="container" />
       <AddShape id="58" patternRole="shape" />
     </DropScheme>
     <IndividualPatternRole id="59" ontologicType="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#OrganizationalUnitMission" patternRole="mission" />
@@ -129,7 +129,7 @@
         <DataPropertyAssertion id="77" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#objectiveName" value="objectiveName" />
         <DataPropertyAssertion id="78" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#objectiveDescription" value="objectiveDescription" />
       </AddIndividual>
-      <AddObjectProperty id="79" object="objective" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#hasObjective" patternRole="hasObjective" subject="container" />
+      <AddObjectPropertyStatement id="79" object="objective" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#hasObjective" patternRole="hasObjective" subject="container" />
       <AddShape id="80" patternRole="shape" />
     </DropScheme>
     <IndividualPatternRole id="81" ontologicType="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#Objective" patternRole="objective" />
@@ -164,7 +164,7 @@
         <DataPropertyAssertion id="100" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#positionDescription" value="positionDescription" />
         <ObjectPropertyAssertion id="101" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#isInvolvedInOrganizationUnit" object="container" />
       </AddIndividual>
-      <AddObjectProperty id="102" object="position" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#containsPosition" patternRole="containsPosition" subject="container" />
+      <AddObjectPropertyStatement id="102" object="position" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#containsPosition" patternRole="containsPosition" subject="container" />
       <AddShape id="103" patternRole="shape" />
     </DropScheme>
     <IndividualPatternRole id="104" ontologicType="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#Position" patternRole="position" />
@@ -198,7 +198,7 @@
         <DataPropertyAssertion id="122" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#missionName" value="missionName" />
         <DataPropertyAssertion id="123" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#missionDescription" value="missionDescription" />
       </AddIndividual>
-      <AddObjectProperty id="124" object="mission" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#hasPositionMission" patternRole="hasPositionMission" subject="container" />
+      <AddObjectPropertyStatement id="124" object="mission" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#hasPositionMission" patternRole="hasPositionMission" subject="container" />
       <AddShape id="125" container="container.container" patternRole="shape" />
       <AddConnector id="126" fromShape="container" toShape="shape" patternRole="hasPositionMissionConnector" />
     </DropScheme>
@@ -251,7 +251,7 @@
         <DataPropertyAssertion id="158" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#taskName" value="taskName" />
         <DataPropertyAssertion id="159" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#taskDescription" value="taskDescription" />
       </AddIndividual>
-      <AddObjectProperty id="160" object="task" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#hasTask" patternRole="hasTask" subject="container" />
+      <AddObjectPropertyStatement id="160" object="task" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#hasTask" patternRole="hasTask" subject="container" />
       <AddShape id="161" container="container.container" patternRole="shape" />
       <AddConnector id="162" fromShape="container" toShape="shape" patternRole="hasTaskConnector" />
     </DropScheme>
