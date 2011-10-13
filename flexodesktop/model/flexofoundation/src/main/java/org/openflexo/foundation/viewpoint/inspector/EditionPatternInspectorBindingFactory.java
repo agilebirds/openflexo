@@ -31,6 +31,12 @@ public final class EditionPatternInspectorBindingFactory extends DefaultBindingF
 			}
 			return null;
 		}
+		else if (father instanceof StatementPathElement) {
+			for (BindingPathElement prop : ((StatementPathElement)father).getAllProperties()) {
+				if (prop.getLabel().equals(propertyName)) return prop;
+			}
+			return null;
+		}
 		return super.getBindingPathElement(father, propertyName);
 	}
 
@@ -43,6 +49,9 @@ public final class EditionPatternInspectorBindingFactory extends DefaultBindingF
 		else if (father instanceof PatternRolePathElement) {
 			return ((PatternRolePathElement) father).getAllProperties();
 		}
+		else if (father instanceof StatementPathElement) {
+			return ((StatementPathElement) father).getAllProperties();
+		}
 		return super.getAccessibleBindingPathElements(father);
 	}
 	
@@ -53,6 +62,9 @@ public final class EditionPatternInspectorBindingFactory extends DefaultBindingF
 			return EMPTY_LIST;
 		}
 		else if (father.getType() instanceof PatternRolePathElement) {
+			return EMPTY_LIST;
+		}
+		else if (father.getType() instanceof StatementPathElement) {
 			return EMPTY_LIST;
 		}
 		return super.getAccessibleCompoundBindingPathElements(father);

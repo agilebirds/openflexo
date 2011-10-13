@@ -2,11 +2,15 @@ package org.openflexo.foundation.viewpoint.inspector;
 
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.FinalBindingPathElementImpl;
+import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyObject;
+import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.ontology.OntologyStatement;
 import org.openflexo.foundation.viewpoint.ClassPatternRole;
@@ -22,6 +26,50 @@ import org.openflexo.foundation.viewpoint.RestrictionStatementPatternRole;
 
 public abstract class OntologicObjectPatternRolePathElement extends PatternRolePathElement
 {
+	private static final Logger logger = Logger.getLogger(OntologicObjectPatternRolePathElement.class.getPackage().getName());
+
+	private FinalBindingPathElementImpl uriNameProperty;
+	private FinalBindingPathElementImpl uriProperty;
+	protected List<BindingPathElement> allProperties;
+	
+	public OntologicObjectPatternRolePathElement(OntologicObjectPatternRole aPatternRole) 
+	{
+		super(aPatternRole);
+		allProperties = new Vector<BindingPathElement>();
+		uriNameProperty = new FinalBindingPathElementImpl("uriName",TypeUtils.getBaseClass(getType()),String.class,true,"uri_name_as_supplied_in_ontology") {
+			@Override
+			public Object evaluateBinding(Object target, BindingEvaluationContext context) 
+			{
+				return ((OntologyObject)target).getName();
+			}
+		};
+		allProperties.add(uriNameProperty);
+		uriProperty = new FinalBindingPathElementImpl("uri",TypeUtils.getBaseClass(getType()),String.class,false,"uri_as_supplied_in_ontology") {
+			@Override
+			public Object evaluateBinding(Object target, BindingEvaluationContext context) 
+			{
+				return ((OntologyObject)target).getURI();
+			}
+		};
+		allProperties.add(uriProperty);
+	}
+
+	public BindingPathElement getUriNameProperty() 
+	{
+		return uriNameProperty;
+	}
+
+	public BindingPathElement getUriProperty() 
+	{
+		return uriProperty;
+	}
+
+	@Override
+	public List<BindingPathElement> getAllProperties() 
+	{
+		return allProperties;
+	}
+	
 	public static class OntologicClassPatternRolePathElement extends OntologicObjectPatternRolePathElement
 	{
 		public OntologicClassPatternRolePathElement(ClassPatternRole aPatternRole) 
@@ -32,9 +80,25 @@ public abstract class OntologicObjectPatternRolePathElement extends PatternRoleP
 
 	public static class OntologicIndividualPatternRolePathElement extends OntologicObjectPatternRolePathElement
 	{
+		Vector<StatementPathElement> accessibleStatements;
+		
 		public OntologicIndividualPatternRolePathElement(IndividualPatternRole aPatternRole) 
 		{
 			super(aPatternRole);
+			accessibleStatements = new Vector<StatementPathElement>();
+			for (final OntologyProperty property : aPatternRole.getOntologicType().getPropertiesTakingMySelfAsDomain()) {
+				StatementPathElement propertyPathElement = null;
+				if (property instanceof OntologyObjectProperty) {
+					propertyPathElement = new ObjectPropertyStatementPathElement(this, (OntologyObjectProperty)property);
+				}
+				else if (property instanceof OntologyDataProperty) {
+					propertyPathElement = new DataPropertyStatementPathElement(this, (OntologyDataProperty)property);
+				}
+				if (propertyPathElement != null) {
+					accessibleStatements.add(propertyPathElement);
+					allProperties.add(propertyPathElement);
+				}
+			}
 		}
 	}
 
@@ -62,48 +126,6 @@ public abstract class OntologicObjectPatternRolePathElement extends PatternRoleP
 		}
 	}
 
-	private FinalBindingPathElementImpl uriNameProperty;
-	private FinalBindingPathElementImpl uriProperty;
-	private List<BindingPathElement> allProperties;
-	
-	public OntologicObjectPatternRolePathElement(OntologicObjectPatternRole aPatternRole) 
-	{
-		super(aPatternRole);
-		allProperties = new Vector<BindingPathElement>();
-		uriNameProperty = new FinalBindingPathElementImpl("uriName",OntologyObject.class,String.class,true,"uri_name_as_supplied_in_ontology") {
-			@Override
-			public Object evaluateBinding(Object target, BindingEvaluationContext context) 
-			{
-				return ((OntologyObject)target).getName();
-			}
-		};
-		allProperties.add(uriNameProperty);
-		uriProperty = new FinalBindingPathElementImpl("uri",OntologyObject.class,String.class,false,"uri_as_supplied_in_ontology") {
-			@Override
-			public Object evaluateBinding(Object target, BindingEvaluationContext context) 
-			{
-				return ((OntologyObject)target).getURI();
-			}
-		};
-		allProperties.add(uriProperty);
-	}
-
-	public BindingPathElement getUriNameProperty() 
-	{
-		return uriNameProperty;
-	}
-
-	public BindingPathElement getUriProperty() 
-	{
-		return uriProperty;
-	}
-
-	@Override
-	public List<BindingPathElement> getAllProperties() 
-	{
-		return allProperties;
-	}
-	
 	public static class OntologicStatementPatternRolePathElement extends PatternRolePathElement
 	{
 		private FinalBindingPathElementImpl displayableRepresentation;		
