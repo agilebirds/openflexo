@@ -20,13 +20,20 @@
 package org.openflexo.foundation.viewpoint.inspector;
 
 import java.util.Vector;
+import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.Bindable;
+import org.openflexo.antar.binding.BindingFactory;
+import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.DefaultBindingFactory;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.dm.InspectorEntryInserted;
 import org.openflexo.foundation.viewpoint.dm.InspectorEntryRemoved;
+import org.openflexo.logging.FlexoLogger;
 
 /**
  * Represents inspector associated with an Edition Pattern
@@ -34,12 +41,16 @@ import org.openflexo.foundation.viewpoint.dm.InspectorEntryRemoved;
  * @author sylvain
  *
  */
-public class EditionPatternInspector extends ViewPointObject {
+public class EditionPatternInspector extends ViewPointObject implements Bindable {
+
+	private static final Logger logger = FlexoLogger.getLogger(EditionPatternInspector.class.getPackage().toString());
 
 	private String inspectorTitle;
 	private EditionPattern _editionPattern;
 	private Vector<InspectorEntry> entries;
 	
+	private BindingModel _bindingModel;
+
 	public static EditionPatternInspector makeEditionPatternInspector(EditionPattern ep)
 	{
 		EditionPatternInspector returned = new EditionPatternInspector();
@@ -156,4 +167,34 @@ public class EditionPatternInspector extends ViewPointObject {
 		return newEntry;
 	}
 	
+	@Override
+	public BindingFactory getBindingFactory() 
+	{
+		return BINDING_FACTORY;
+	}
+	
+	@Override
+	public BindingModel getBindingModel() 
+	{
+			if (_bindingModel == null) createBindingModel();
+			return _bindingModel;
+	}
+	
+	public void updateBindingModel()
+	{
+		logger.fine("updateBindingModel()");
+		_bindingModel = null;
+		createBindingModel();
+	}
+	
+	private void createBindingModel()
+	{
+		_bindingModel = new BindingModel();
+		for (PatternRole role : getEditionPattern().getPatternRoles()) {
+			_bindingModel.addToBindingVariables(PatternRolePathElement.makePatternRolePathElement(role));
+		}	
+	}
+
+	private static DefaultBindingFactory BINDING_FACTORY = new EditionPatternInspectorBindingFactory();
+
  }

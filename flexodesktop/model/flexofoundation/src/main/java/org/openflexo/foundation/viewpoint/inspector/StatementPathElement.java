@@ -7,8 +7,9 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.foundation.ontology.OntologyObject;
 
-public abstract class StatementPathElement implements SimplePathElement
+public abstract class StatementPathElement<T> implements SimplePathElement<OntologyObject,T>
 {
 	private static final Logger logger = Logger.getLogger(StatementPathElement.class.getPackage().getName());
 

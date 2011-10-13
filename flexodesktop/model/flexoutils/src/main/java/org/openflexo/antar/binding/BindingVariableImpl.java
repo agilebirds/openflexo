@@ -31,16 +31,16 @@ import org.openflexo.toolbox.ToolBox;
  * @author sguerin
  * 
  */
-public class BindingVariableImpl extends Observable implements BindingVariable
+public class BindingVariableImpl<E extends Bindable,T> extends Observable implements BindingVariable<E,T>
 {
 
-    private Bindable container;
+    private E container;
 
     private String variableName;
  
     private Type type;
     
-    public BindingVariableImpl(Bindable container, String variableName, Type type)
+    public BindingVariableImpl(E container, String variableName, Type type)
     {
         super();
         this.container = container;
@@ -49,7 +49,7 @@ public class BindingVariableImpl extends Observable implements BindingVariable
     }
     
     @Override
-	public Bindable getContainer(){
+	public E getContainer(){
     	return container;
     }
 
@@ -82,9 +82,9 @@ public class BindingVariableImpl extends Observable implements BindingVariable
     }
 
 	@Override
-	public Class getDeclaringClass() 
+	public Class<E> getDeclaringClass() 
 	{
-		return getContainer().getClass();
+		return (Class<E>)getContainer().getClass();
 	}
 
 	@Override
@@ -142,8 +142,14 @@ public class BindingVariableImpl extends Observable implements BindingVariable
     }
     
     @Override
-    public Object evaluateBinding(Object target, BindingEvaluationContext context) 
+    public T getBindingValue(E target, BindingEvaluationContext context) 
     {
-    	return target;
+    	return (T)target;
+    }
+    
+    @Override
+    public void setBindingValue(T value, E target, BindingEvaluationContext context) 
+    {
+    	// Not settable
     }
  }

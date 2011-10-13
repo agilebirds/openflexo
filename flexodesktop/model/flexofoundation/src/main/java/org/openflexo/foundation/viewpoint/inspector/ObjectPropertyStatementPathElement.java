@@ -13,12 +13,12 @@ import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.PropertyStatement;
 
-public class ObjectPropertyStatementPathElement extends StatementPathElement
+public class ObjectPropertyStatementPathElement extends StatementPathElement<OntologyObject>
 {
 	private static final Logger logger = Logger.getLogger(ObjectPropertyStatementPathElement.class.getPackage().getName());
 
-	private FinalBindingPathElementImpl uriNameProperty;
-	private FinalBindingPathElementImpl uriProperty;
+	private FinalBindingPathElementImpl<OntologyObject,String> uriNameProperty;
+	private FinalBindingPathElementImpl<OntologyObject,String> uriProperty;
 	
 	private OntologyObjectProperty ontologyProperty;
 	
@@ -26,20 +26,35 @@ public class ObjectPropertyStatementPathElement extends StatementPathElement
 	{
 		super(aParent);
 		ontologyProperty = anOntologyProperty;
-		uriNameProperty = new FinalBindingPathElementImpl("uriName",TypeUtils.getBaseClass(getType()),String.class,true,"uri_name_as_supplied_in_ontology") {
+		uriNameProperty = new FinalBindingPathElementImpl<OntologyObject,String>("uriName",TypeUtils.getBaseClass(getType()),String.class,true,"uri_name_as_supplied_in_ontology") {
 			@Override
-			public Object evaluateBinding(Object target, BindingEvaluationContext context) 
+			public String getBindingValue(OntologyObject target, BindingEvaluationContext context) 
 			{
-				return ((OntologyObject)target).getName();
+				return target.getName();
+			}
+			@Override
+			public void setBindingValue(String value, OntologyObject target, BindingEvaluationContext context) {
+				try {
+		    		logger.info("Rename URI of object "+target+" with "+value);
+					target.setName(value);
+				} catch (Exception e) {
+					logger.warning("Unhandled exception: "+e);
+					e.printStackTrace();
+				}
 			}
 		};
 		allProperties.add(uriNameProperty);
-		uriProperty = new FinalBindingPathElementImpl("uri",TypeUtils.getBaseClass(getType()),String.class,false,"uri_as_supplied_in_ontology") {
+		uriProperty = new FinalBindingPathElementImpl<OntologyObject,String>("uri",TypeUtils.getBaseClass(getType()),String.class,false,"uri_as_supplied_in_ontology") {
 			@Override
-			public Object evaluateBinding(Object target, BindingEvaluationContext context) 
+			public String getBindingValue(OntologyObject target, BindingEvaluationContext context) 
 			{
-				return ((OntologyObject)target).getURI();
+				return target.getURI();
 			}
+		    @Override
+		    public void setBindingValue(String value, OntologyObject target, BindingEvaluationContext context) 
+		    {
+		    	// not relevant because not settable
+		    }
 		};
 		allProperties.add(uriProperty);
 	}
@@ -79,7 +94,7 @@ public class ObjectPropertyStatementPathElement extends StatementPathElement
 	}
 
 	@Override
-	public OntologyIndividual evaluateBinding(Object target, BindingEvaluationContext context) 
+	public OntologyObject getBindingValue(OntologyObject target, BindingEvaluationContext context) 
 	{
 		if (target instanceof OntologyIndividual) {
 			OntologyIndividual individual = (OntologyIndividual)target;
@@ -87,15 +102,7 @@ public class ObjectPropertyStatementPathElement extends StatementPathElement
 			if (statement == null) 
 				return null;
 			if (statement instanceof ObjectPropertyStatement) {
-				OntologyObject returned = ((ObjectPropertyStatement) statement).getStatementObject();
-				if (returned instanceof OntologyIndividual) 
-					return (OntologyIndividual)returned;
-				else if (returned == null) 
-					return null;
-				else {
-					logger.warning("Unexpected value "+returned+" while evaluateBinding()");
-					return null;
-				}
+				return ((ObjectPropertyStatement) statement).getStatementObject();
 			}
 			else {
 				logger.warning("Unexpected statement "+statement+" while evaluateBinding()");
@@ -108,5 +115,10 @@ public class ObjectPropertyStatementPathElement extends StatementPathElement
 		}
 	}
 	
+	@Override
+	public void setBindingValue(OntologyObject value, OntologyObject target, BindingEvaluationContext context) 
+	{
+		logger.warning("Implement me");
+	}
 
 }

@@ -6,15 +6,13 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
-import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.SimplePathElement;
-import org.openflexo.foundation.ontology.EditionPatternReference;
+import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.ClassPatternRole;
 import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.DataPropertyStatementPatternRole;
-import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.IsAStatementPatternRole;
 import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
@@ -31,13 +29,13 @@ import org.openflexo.foundation.viewpoint.inspector.OntologicObjectPatternRolePa
 import org.openflexo.foundation.viewpoint.inspector.OntologicObjectPatternRolePathElement.OntologicObjectPropertyPatternRolePathElement;
 import org.openflexo.foundation.viewpoint.inspector.OntologicObjectPatternRolePathElement.RestrictionStatementPatternRolePathElement;
 
-public class PatternRolePathElement implements SimplePathElement, BindingVariable
+public class PatternRolePathElement<T> implements SimplePathElement<EditionPatternInstance,T>, BindingVariable<EditionPatternInstance,T>
 {
 	private static final Logger logger = Logger.getLogger(PatternRolePathElement.class.getPackage().getName());
 
 	private static List<BindingPathElement> EMPTY_LIST = new ArrayList<BindingPathElement>();
 
-	public static PatternRolePathElement makePatternRolePathElement(PatternRole pr)
+	public static PatternRolePathElement<?> makePatternRolePathElement(PatternRole pr)
 	{
 		if (pr instanceof OntologicObjectPatternRole) {
 			if (pr instanceof ClassPatternRole) {
@@ -82,8 +80,9 @@ public class PatternRolePathElement implements SimplePathElement, BindingVariabl
 	}
 	
 	@Override
-	public Class getDeclaringClass() {
-		return EditionPattern.class;
+	public Class<EditionPatternInstance> getDeclaringClass() 
+	{
+		return EditionPatternInstance.class;
 	}
 
 	@Override
@@ -117,7 +116,7 @@ public class PatternRolePathElement implements SimplePathElement, BindingVariabl
 	}
 
 	@Override
-	public Bindable getContainer() {
+	public EditionPatternInstance getContainer() {
 		//return patternRole.getEditionPattern();
 		return null;
 	}
@@ -129,13 +128,15 @@ public class PatternRolePathElement implements SimplePathElement, BindingVariabl
 	
 	
 	@Override
-	public Object evaluateBinding(Object target, BindingEvaluationContext context) 
+	public T getBindingValue(EditionPatternInstance target, BindingEvaluationContext context) 
 	{
-		if (target instanceof EditionPatternReference) {
-			return ((EditionPatternReference) target).getEditionPatternInstance().getPatternActor(patternRole);
-		}
-		InspectorEntry.logger.warning("Unexpected call to evaluateBinding() target="+target+" context="+context);
-		return null;
+		return (T)target.getPatternActor(patternRole);
+	}
+	
+	@Override
+	public void setBindingValue(T value, EditionPatternInstance target,BindingEvaluationContext context)
+	{
+		// not settable
 	}
 	
 	public List<BindingPathElement> getAllProperties() 

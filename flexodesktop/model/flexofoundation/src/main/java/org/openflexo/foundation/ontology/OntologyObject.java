@@ -343,6 +343,25 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 	}
 	
 	/**
+	 * Return all statement related to supplied property
+	 * @param property
+	 * @return
+	 */
+	public Vector<DataPropertyStatement> getDataPropertyStatements(OntologyDataProperty property)
+	{
+		Vector<DataPropertyStatement> returned = new Vector<DataPropertyStatement>();
+		for (OntologyStatement statement : getStatements()) {
+			if (statement instanceof DataPropertyStatement) {
+				DataPropertyStatement s = (DataPropertyStatement)statement;
+				if (s.getProperty() == property) {
+					returned.add(s);
+				}
+			}
+		}
+		return returned;
+	}
+	
+	/**
 	 * Return first found statement related to supplied property
 	 * @param property
 	 * @return
@@ -352,6 +371,22 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 		Vector<PropertyStatement> returned = getPropertyStatements(property);
 		if (returned.size() > 0) {
 			return returned.firstElement();
+		}
+		return null;
+	}
+	
+	/**
+	 * Return statement related to supplied property and value
+	 * @param property
+	 * @return
+	 */
+	public DataPropertyStatement getDataPropertyStatement(OntologyDataProperty property, Object value)
+	{
+		Vector<DataPropertyStatement> returned = getDataPropertyStatements(property);
+		for (DataPropertyStatement statement : returned) {
+			if (statement.getValue().equals(value)) {
+				return statement;
+			}
 		}
 		return null;
 	}
@@ -576,6 +611,15 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 			   language.getTag());
 	   updateOntologyStatements();
 	   return getPropertyStatement(property, value, language);
+   }
+
+   public DataPropertyStatement addDataPropertyStatement (OntologyDataProperty property, Object value)
+   {
+	   getOntResource().addLiteral(
+			   property.getOntProperty(), 
+			   value);
+	   updateOntologyStatements();
+	   return getDataPropertyStatement(property, value);
    }
 
    public void removePropertyStatement (PropertyStatement statement)

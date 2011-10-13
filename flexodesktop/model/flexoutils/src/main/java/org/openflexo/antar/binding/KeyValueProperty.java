@@ -29,9 +29,10 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.toolbox.ToolBox;
+import org.openflexo.xmlcode.KeyValueCoder;
 import org.openflexo.xmlcode.KeyValueDecoder;
 
-public class KeyValueProperty extends Observable implements SimplePathElement 
+public class KeyValueProperty extends Observable implements SimplePathElement<Object,Object> 
 {
 
 	static final Logger logger = Logger.getLogger(BindingValue.class.getPackage().getName());
@@ -425,8 +426,15 @@ public class KeyValueProperty extends Observable implements SimplePathElement
 	}
 
 	@Override
-    public Object evaluateBinding(Object target, BindingEvaluationContext context)
+    public Object getBindingValue(Object target, BindingEvaluationContext context)
 	{
-		return 	KeyValueDecoder.objectForKey( target,getName());
+		return 	KeyValueDecoder.objectForKey(target,getName());
 	}
+	
+    @Override
+	public void setBindingValue(Object value, Object target, BindingEvaluationContext context)
+    {
+		KeyValueCoder.setObjectForKey(target,value,getName());
+    }
+
 }

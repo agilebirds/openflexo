@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 
 
-public class MethodCall extends Observable  implements ComplexPathElement {
+public class MethodCall extends Observable  implements ComplexPathElement<Object,Object> {
 
 	static final Logger logger = Logger.getLogger(MethodCall.class.getPackage().getName());
 
@@ -55,38 +55,6 @@ public class MethodCall extends Observable  implements ComplexPathElement {
      }
     
     @Override
-	public Object evaluateBinding(Object target, BindingEvaluationContext context)
-    {
-    	Object[] args = new Object[_args.size()];
-    	int i=0;
-		//System.out.println("Invoke method "+_method+" on class "+_method.getDeclaringClass());
-		
-		for (MethodCallArgument a : _args) {
-    		args[i] = TypeUtils.castTo(a.getBinding().getBindingValue(context),_method.getGenericParameterTypes()[i]);
-    		//System.out.println("arg"+i+"="+args[i]+" of "+args[i].getClass().getSimpleName());
-    		i++;
-    	}
-    	try {
-			return _method.invoke(target, args);
-		} catch (IllegalArgumentException e) {
-			logger.warning("While evaluating method "+_method+" exception occured: "+e.getMessage());
-    		logger.info("object = "+target);
-			for (i=0; i<_args.size(); i++) {
-	    		logger.info("arg["+i+"] = "+args[i]);
-	    	}
-			//e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-    	
-    }
-    
-     @Override
 	public Type getType()
     {
         if (_method != null) {
@@ -217,9 +185,50 @@ public class MethodCall extends Observable  implements ComplexPathElement {
     @Override
     public boolean isSettable()
     {
+    	// TODO MethodCall with all other params as constants are also settable !!!!
     	return false;
     }
 
+    @Override
+	public Object getBindingValue(Object target, BindingEvaluationContext context)
+    {
+    	Object[] args = new Object[_args.size()];
+    	int i=0;
+		//System.out.println("Invoke method "+_method+" on class "+_method.getDeclaringClass());
+		
+		for (MethodCallArgument a : _args) {
+    		args[i] = TypeUtils.castTo(a.getBinding().getBindingValue(context),_method.getGenericParameterTypes()[i]);
+    		//System.out.println("arg"+i+"="+args[i]+" of "+args[i].getClass().getSimpleName());
+    		i++;
+    	}
+    	try {
+			return _method.invoke(target, args);
+		} catch (IllegalArgumentException e) {
+			logger.warning("While evaluating method "+_method+" exception occured: "+e.getMessage());
+    		logger.info("object = "+target);
+			for (i=0; i<_args.size(); i++) {
+	    		logger.info("arg["+i+"] = "+args[i]);
+	    	}
+			//e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+    	
+    }
+    
+    @Override
+    public void setBindingValue(Object value, Object target,
+    		BindingEvaluationContext context) 
+    {
+		// TODO MethodCall with all other params as constants are also settable !!!!
+		logger.warning("Please implement me !!!");    	
+    }
+    
     public class MethodCallArgument extends Observable
     {
      	private final String paramName;

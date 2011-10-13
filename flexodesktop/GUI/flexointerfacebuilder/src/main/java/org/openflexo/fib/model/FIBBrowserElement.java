@@ -32,10 +32,10 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.antar.binding.TypeUtils;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.fib.model.FIBBrowserAction.FIBAddAction;
 import org.openflexo.fib.model.FIBBrowserAction.FIBCustomAction;
 import org.openflexo.fib.model.FIBBrowserAction.FIBRemoveAction;
@@ -384,7 +384,7 @@ public class FIBBrowserElement extends FIBModelObject {
 		private void createFormatterBindingModel()
 		{
 			iteratorBindingModel = new BindingModel(FIBBrowserElement.this.getBindingModel());
-			iteratorBindingModel.addToBindingVariables(new BindingVariableImpl(this, "object", Object.class) {
+			iteratorBindingModel.addToBindingVariables(new BindingVariableImpl<FIBBrowserElementIterator,Object>(this, "object", Object.class) {
 				@Override
 				public Type getType()
 				{

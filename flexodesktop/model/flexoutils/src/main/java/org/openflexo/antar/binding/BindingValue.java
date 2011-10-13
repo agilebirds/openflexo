@@ -29,7 +29,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.MethodCall.MethodCallArgument;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
-import org.openflexo.xmlcode.KeyValueCoder;
 
 
 /**
@@ -674,7 +673,7 @@ public class BindingValue extends AbstractBinding
 					//System.out.println("Object is null while applying "+((KeyValueProperty)element).getName());
 					return null;
 				}
-				returned = element.evaluateBinding(returned, context);
+				returned = element.getBindingValue(returned, context);
 				
 				/*if (element instanceof KeyValueProperty) {
 					returned = element.evaluate(returned, context);
@@ -730,7 +729,7 @@ public class BindingValue extends AbstractBinding
 				else {
 					logger.warning("Unexpected: "+element);
 				}*/
-				current = element.evaluateBinding(current, context);
+				current = element.getBindingValue(current, context);
 				if (current == null) {
 					return returned;
 				}
@@ -765,7 +764,7 @@ public class BindingValue extends AbstractBinding
 		try {
 			for (BindingPathElement element : getBindingPath()) {
 				returned.add(new TargetObject(current, element.getLabel()));
-				current = element.evaluateBinding(current, context);
+				current = element.getBindingValue(current, context);
 				/*if (element instanceof KeyValueProperty) {
 					returned.add(new TargetObject(current, ((KeyValueProperty)element).getName()));
 					current = KeyValueDecoder.objectForKey(current,((KeyValueProperty)element).getName());
@@ -800,7 +799,7 @@ public class BindingValue extends AbstractBinding
 		for (BindingPathElement element : getBindingPath()) {
 			if (element != getBindingPath().lastElement()) {
 				//System.out.println("Apply "+element);
-				returned = element.evaluateBinding(returned, context);
+				returned = element.getBindingValue(returned, context);
 				/*if (element instanceof KeyValueProperty) {
 					returned = KeyValueDecoder.objectForKey(returned,((KeyValueProperty)element).getName());
 				}
@@ -843,7 +842,7 @@ public class BindingValue extends AbstractBinding
 			for (BindingPathElement element : getBindingPath()) {
 				if (element != getBindingPath().lastElement()) {
 					//System.out.println("Apply "+element);
-					returned = element.evaluateBinding(returned, context);
+					returned = element.getBindingValue(returned, context);
 					/*if (element instanceof KeyValueProperty) {
 						returned = KeyValueDecoder.objectForKey(returned,((KeyValueProperty)element).getName());
 					}
@@ -865,16 +864,11 @@ public class BindingValue extends AbstractBinding
 				return;
 			}
 			
-			//System.out.println("returned="+returned);
-			//System.out.println("lastElement="+getBindingPath().lastElement());
+			//logger.info("returned="+returned);
+			//logger.info("lastElement="+getBindingPath().lastElement());
 
-			
-			if (getBindingPath().lastElement() instanceof KeyValueProperty) {
-				KeyValueCoder.setObjectForKey(returned, value, ((KeyValueProperty)getBindingPath().lastElement()).getName());
-			}
-			else if (getBindingPath().lastElement() instanceof MethodCall) {
-				// TODO MethodCall with all other params as constants are also settable !!!!
-				logger.warning("Please implement me !!!");
+			if (getBindingPath().lastElement().isSettable()) {
+				getBindingPath().lastElement().setBindingValue(value, returned, context);
 			}
 			else {
 				logger.warning("Binding "+getStringRepresentation()+" is not settable");
@@ -892,7 +886,9 @@ public class BindingValue extends AbstractBinding
 	@Override
 	public boolean isSettable()
 	{
-		if (getBindingPath().lastElement() instanceof KeyValueProperty) {
+		return getBindingPath().lastElement().isSettable();
+		
+	/*	if (getBindingPath().lastElement() instanceof KeyValueProperty) {
 			return ((KeyValueProperty)getBindingPath().lastElement()).isSettable();
 		}
 		if (getBindingPath().lastElement() instanceof MethodCall) {
@@ -902,7 +898,7 @@ public class BindingValue extends AbstractBinding
 		}
 		else {
 			return false;
-		}
+		}*/
 	}
 
 

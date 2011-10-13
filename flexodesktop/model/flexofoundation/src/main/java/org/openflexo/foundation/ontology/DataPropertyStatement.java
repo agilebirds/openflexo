@@ -87,6 +87,12 @@ public class DataPropertyStatement extends PropertyStatement {
 		return getProperty().isAnnotationProperty();
 	}
 
+	@Override
+	public OntologyDataProperty getPredicate() 
+	{
+		return (OntologyDataProperty)super.getPredicate();
+	}
+	
 	public Object getValue()
 	{
 		if (getDataType() != null && getLiteral() != null) {

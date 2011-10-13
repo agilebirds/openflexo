@@ -1,6 +1,7 @@
 package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.ontology.DataPropertyStatement;
+import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
 
 public class DataPropertyStatementPatternRole extends StatementPatternRole {
@@ -36,7 +37,7 @@ public class DataPropertyStatementPatternRole extends StatementPatternRole {
 		this.dataPropertyURI = dataPropertyURI;
 	}
 
-	public OntologyProperty getDataProperty()
+	public OntologyDataProperty getDataProperty()
 	{
 		getCalc().loadWhenUnloaded();
 		return getOntologyLibrary().getDataProperty(_getDataPropertyURI());

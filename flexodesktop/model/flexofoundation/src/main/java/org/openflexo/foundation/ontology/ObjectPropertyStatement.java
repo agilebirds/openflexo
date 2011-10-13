@@ -54,6 +54,12 @@ public class ObjectPropertyStatement extends PropertyStatement {
 	}
 
 	@Override
+	public OntologyObjectProperty getPredicate() 
+	{
+		return (OntologyObjectProperty)super.getPredicate();
+	}
+	
+	@Override
 	public Literal getLiteral() 
 	{
 		return literal;

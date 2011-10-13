@@ -22,21 +22,23 @@ package org.openflexo.antar.binding;
 import java.lang.reflect.Type;
 import java.util.Observable;
 
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+
 /**
  * Implemented by all path elements flagged as final (no children)
  * 
  * @author sylvain
  *
  */
-public abstract class FinalBindingPathElementImpl extends Observable implements FinalBindingPathElement {
+public abstract class FinalBindingPathElementImpl<E,T> extends Observable implements FinalBindingPathElement<E,T> {
 
 	private String label;
 	private Type type;
-	private Class declaringClass;
+	private Class<E> declaringClass;
 	private boolean settable = false;
 	private String tooltipText;
 
-	public FinalBindingPathElementImpl(String label, Class declaringClass, Type type, boolean isSettable, String tooltipText) 
+	public FinalBindingPathElementImpl(String label, Class<E> declaringClass, Type type, boolean isSettable, String tooltipText) 
 	{
 		super();
 		this.label = label;
@@ -47,7 +49,7 @@ public abstract class FinalBindingPathElementImpl extends Observable implements 
 	}
 
 	@Override
-	public Class getDeclaringClass() 
+	public Class<E> getDeclaringClass() 
 	{
 		return declaringClass;
 	}
@@ -88,4 +90,10 @@ public abstract class FinalBindingPathElementImpl extends Observable implements 
 		return settable;
 	}
 
-}
+	@Override
+	public abstract T getBindingValue(E target, BindingEvaluationContext context);
+	
+    @Override
+    public abstract void setBindingValue(T value, E target, BindingEvaluationContext context);
+
+ }

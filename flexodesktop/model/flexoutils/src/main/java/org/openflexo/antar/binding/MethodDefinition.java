@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.toolbox.ToolBox;
 
-public class MethodDefinition extends Observable implements ComplexPathElement {
+public class MethodDefinition extends Observable implements ComplexPathElement<Object,Object> {
 
 	private static final Logger logger = Logger.getLogger(MethodDefinition.class.getPackage().getName());
 
@@ -231,8 +231,16 @@ public class MethodDefinition extends Observable implements ComplexPathElement {
     }
  
     @Override
-    public Object evaluateBinding(Object target, BindingEvaluationContext context)
+    public Object getBindingValue(Object target, BindingEvaluationContext context)
     {
+    	// Not relevant
      	return null;
     }
+    
+    @Override
+    public void setBindingValue(Object value, Object target, BindingEvaluationContext context) 
+    {
+    	// Not relevant
+    }
+
 }

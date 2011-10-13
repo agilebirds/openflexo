@@ -26,13 +26,13 @@ public final class EditionPatternInspectorBindingFactory extends DefaultBindingF
 			}
 		}
 		else if (father instanceof PatternRolePathElement) {
-			for (BindingPathElement prop : ((PatternRolePathElement)father).getAllProperties()) {
+			for (BindingPathElement prop : ((PatternRolePathElement<?>)father).getAllProperties()) {
 				if (prop.getLabel().equals(propertyName)) return prop;
 			}
 			return null;
 		}
 		else if (father instanceof StatementPathElement) {
-			for (BindingPathElement prop : ((StatementPathElement)father).getAllProperties()) {
+			for (BindingPathElement prop : ((StatementPathElement<?>)father).getAllProperties()) {
 				if (prop.getLabel().equals(propertyName)) return prop;
 			}
 			return null;

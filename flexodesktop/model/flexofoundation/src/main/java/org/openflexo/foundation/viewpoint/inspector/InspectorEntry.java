@@ -27,9 +27,7 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.antar.binding.DefaultBindingFactory;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 
@@ -70,7 +68,6 @@ public abstract class InspectorEntry extends ViewPointObject implements Bindable
 	private EditionPatternInspector inspector;
 	private String name;
 	private String label;
-	private BindingModel _bindingModel;
 	private boolean readOnly;
 	
 	private InspectorDataBinding data;
@@ -138,34 +135,6 @@ public abstract class InspectorEntry extends ViewPointObject implements Bindable
 	}
 
 	@Override
-	public BindingFactory getBindingFactory() 
-	{
-		return BINDING_FACTORY;
-	}
-	
-	@Override
-	public BindingModel getBindingModel() 
-	{
-			if (_bindingModel == null) createBindingModel();
-			return _bindingModel;
-	}
-	
-	public void updateBindingModel()
-	{
-		logger.fine("updateBindingModel()");
-		_bindingModel = null;
-		createBindingModel();
-	}
-	
-	private void createBindingModel()
-	{
-		_bindingModel = new BindingModel();
-		for (PatternRole role : getEditionPattern().getPatternRoles()) {
-			_bindingModel.addToBindingVariables(PatternRolePathElement.makePatternRolePathElement(role));
-		}	
-	}
-
-	@Override
 	public String getName() {
 		return name;
 	}
@@ -218,7 +187,18 @@ public abstract class InspectorEntry extends ViewPointObject implements Bindable
 		conditional
 	}
 
-	private static DefaultBindingFactory BINDING_FACTORY = new EditionPatternInspectorBindingFactory();
+	@Override
+	public BindingFactory getBindingFactory() 
+	{
+		return getInspector().getBindingFactory();
+	}
+	
+	@Override
+	public BindingModel getBindingModel() 
+	{
+		return getInspector().getBindingModel();
+	}
+	
 
 
 }

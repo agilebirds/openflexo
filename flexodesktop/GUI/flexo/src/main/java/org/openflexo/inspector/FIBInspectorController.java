@@ -66,7 +66,7 @@ public class FIBInspectorController extends FlexoFIBController {
 	{
 		if (variable instanceof EditionPatternPathElement) {
 			if (getDataObject() instanceof FlexoModelObject) {
-				return ((FlexoModelObject)getDataObject()).getEditionPatternReferences().get(((EditionPatternPathElement) variable).getIndex());
+				return ((FlexoModelObject)getDataObject()).getEditionPatternReferences().get(((EditionPatternPathElement) variable).getIndex()).getEditionPatternInstance();
 			}
 		}
 		return super.getValue(variable);

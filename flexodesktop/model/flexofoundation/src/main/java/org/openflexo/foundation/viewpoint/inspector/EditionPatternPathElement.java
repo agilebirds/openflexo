@@ -3,23 +3,29 @@ package org.openflexo.foundation.viewpoint.inspector;
 import java.lang.reflect.Type;
 import java.util.Hashtable;
 import java.util.Vector;
+import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
 
-public class EditionPatternPathElement implements BindingVariable
+public class EditionPatternPathElement<E extends Bindable,FlexoModelObject> implements BindingVariable<E,EditionPatternInstance>
 {
+	static final Logger logger = Logger.getLogger(EditionPatternPathElement.class.getPackage().getName());
+
 	EditionPattern editionPattern;
 	private int index;
 	private Hashtable<PatternRole,PatternRolePathElement> patternRoleElements;
 	private Vector<PatternRolePathElement> allPatternRoleElements;
+	private Class<E> declaringClass;
 	
-	public EditionPatternPathElement(EditionPattern anEditionPattern, int index)
+	public EditionPatternPathElement(EditionPattern anEditionPattern, int index, Class<E> declaringClass)
 	{
 		this.editionPattern = anEditionPattern;
+		this.declaringClass = declaringClass;
 		this.index = index;
 		patternRoleElements = new Hashtable<PatternRole, PatternRolePathElement>();
 		allPatternRoleElements = new Vector<PatternRolePathElement>();
@@ -41,13 +47,14 @@ public class EditionPatternPathElement implements BindingVariable
 	}
 	
 	@Override
-	public Class getDeclaringClass() {
-		return null;
+	public Class<E> getDeclaringClass() 
+	{
+		return declaringClass;
 	}
 
 	@Override
 	public Type getType() {
-		return EditionPattern.class;
+		return EditionPatternInstance.class;
 	}
 
 	@Override
@@ -76,7 +83,7 @@ public class EditionPatternPathElement implements BindingVariable
 	}
 
 	@Override
-	public Bindable getContainer() {
+	public E getContainer() {
 		//return patternRole.getEditionPattern();
 		return null;
 	}
@@ -87,11 +94,17 @@ public class EditionPatternPathElement implements BindingVariable
 	}
 			
 	@Override
-	public Object evaluateBinding(Object target, BindingEvaluationContext context) 
+	public EditionPatternInstance getBindingValue(E target, BindingEvaluationContext context) 
 	{
-		InspectorEntry.logger.info("evaluateBinding EditionPatternPathElement with target="+target+" context="+context);
+		if (target != null) logger.info("TODO: evaluateBinding EditionPatternPathElement with target="+target+" context="+context);
 		return null;
 	}
+
+    @Override
+    public void setBindingValue(EditionPatternInstance value, E target, BindingEvaluationContext context) 
+    {
+    	// Not settable
+    }
 
 	public EditionPattern getEditionPattern() {
 		return editionPattern;

@@ -207,7 +207,6 @@ public class MainInspectorController implements Observer, ChangeListener {
 					&& (object instanceof ViewShape
 						|| object instanceof ViewConnector) && ((FlexoModelObject)object).getEditionPatternReferences().size() > 0) {
 					String newTitle = ((FlexoModelObject)object).getEditionPatternReferences().firstElement().getEditionPattern().getInspector().getInspectorTitle();
-					logger.info("Set new title: "+newTitle);
 					inspectorDialog.setTitle(newTitle);
 			}
 			else {

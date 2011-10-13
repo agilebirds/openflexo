@@ -195,7 +195,7 @@ public class FIBInspector extends FIBPanel {
 		super.createBindingModel();
 		for (int i=0; i<currentEditionPatterns.size(); i++) {
 			EditionPattern ep = currentEditionPatterns.get(i);
-			_bindingModel.addToBindingVariables(new EditionPatternPathElement(ep,i));
+			_bindingModel.addToBindingVariables(new EditionPatternPathElement(ep,i,getDataClass()));
 		}
 	}
  		
@@ -203,11 +203,13 @@ public class FIBInspector extends FIBPanel {
 	{
 		if (entry instanceof TextFieldInspectorEntry) {
 			FIBTextField tf = new FIBTextField();
+			tf.validateOnReturn = true; // Avoid to many ontologies manipulations
 			newTab.addToSubComponents(tf,new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
 			return tf;
 		}
 		else if (entry instanceof TextAreaInspectorEntry) {
 			FIBTextArea ta = new FIBTextArea();
+			ta.validateOnReturn = true; // Avoid to many ontologies manipulations
 			newTab.addToSubComponents(ta,new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, true, index));
 			return ta;
 		}
