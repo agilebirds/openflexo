@@ -25,18 +25,6 @@ import com.hp.hpl.jena.ontology.DatatypeProperty;
 
 public class OntologyDataProperty extends OntologyProperty implements Comparable<OntologyDataProperty> {
 
-	//public OntologyClass domain;
-	//public OntologyClass range;
-	
-	
-	public enum PropertyDataType
-	{
-		String,
-		Integer
-	}
-	
-	private PropertyDataType dataType;
-
 	protected OntologyDataProperty(DatatypeProperty aDataProperty, FlexoOntology ontology)
 	{
 		super(aDataProperty,ontology);
@@ -96,23 +84,23 @@ public class OntologyDataProperty extends OntologyProperty implements Comparable
 		return false;
 	}
 
-	public PropertyDataType getDataType()
+	public OntologicDataType getDataType()
 	{
-		return dataType;
-	}
-
-	public void setDataType(PropertyDataType dataType)
-	{
-		this.dataType = dataType;
+		if (getRangeStatement() != null) return getRangeStatement().getDataType();
+		return null;
 	}
 
 	@Override
 	public String getDisplayableDescription()
 	{
-		// TODO display domain and range
-		return "Datatype property "+getName();
+		return "<html>Datatype property <b>"+getName()+"</b><br>"
+				+"<i>"+getURI()+"</i><br>"
+				+"Domain: "+(getDomain()!=null?getDomain().getURI():"?")+"<br>"
+				+"Range: "+(getDataType()!=null?getDataType().toString():"?")+"<br>"
+				+"</html>";
 	}
 
+	@Override
 	public boolean isOntologyDataProperty()
 	{
 		return true;

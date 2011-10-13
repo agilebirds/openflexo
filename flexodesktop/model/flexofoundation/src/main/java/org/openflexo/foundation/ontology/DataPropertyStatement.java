@@ -62,6 +62,13 @@ public class DataPropertyStatement extends PropertyStatement {
 		return property;
 	}
 
+	public OntologicDataType getDataType()
+	{
+		if (getProperty() != null)
+			return property.getDataType();
+		return null;
+	}
+
 	@Override
 	public Literal getLiteral() 
 	{
@@ -80,5 +87,28 @@ public class DataPropertyStatement extends PropertyStatement {
 		return getProperty().isAnnotationProperty();
 	}
 
+	public Object getValue()
+	{
+		if (getDataType() != null && getLiteral() != null) {
+			return getDataType().valueFromLiteral(getLiteral());
+		}
+		return null;
+	}
+	
+	/**
+	 * Creates a new Statement equals to this one with a new value
+	 * 
+	 * @param anObject
+	 */
+	public final void setValue(Object aValue)
+	{
+		// Take care to this point: this object will disappear and be replaced by a new one
+		// during updateOntologyStatements() !!!!!
+
+		//logger.info("Change object from="+getStatementObject().getURI()+" to="+anObject.getURI());
+		getSubject().removePropertyStatement(this);
+		getSubject().getOntResource().addLiteral(getProperty().getOntProperty(), aValue);
+		getSubject().updateOntologyStatements();
+	}
 
 }

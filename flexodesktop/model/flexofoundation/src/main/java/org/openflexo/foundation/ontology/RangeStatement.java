@@ -29,20 +29,22 @@ public class RangeStatement extends OntologyStatement {
 	private static final Logger logger = Logger.getLogger(RangeStatement.class.getPackage().getName());
 
 	public static final String RANGE_URI = "http://www.w3.org/2000/01/rdf-schema#range";
-	public static final String STRING_URI = "http://www.w3.org/2001/XMLSchema#string";
 	
 	private OntologyObject range;
+	private OntologicDataType dataType;
 	
-	private boolean isString = false;
-	// TODO handle other datatype
-	
+	public OntologicDataType getDataType() {
+		return dataType;
+	}
+
 	public RangeStatement(OntologyObject subject, Statement s)
 	{
 		super(subject,s);
 		if (s.getObject() instanceof Resource) {
 			range = getOntologyLibrary().getOntologyObject(((Resource)s.getObject()).getURI());
-			if (((Resource)s.getObject()).getURI() != null)
-				isString = ((Resource)s.getObject()).getURI().equals(STRING_URI);
+			if (((Resource)s.getObject()).getURI() != null) {
+				dataType = OntologicDataType.fromURI(((Resource)s.getObject()).getURI());
+			}
 		}
 		else {
 			logger.warning("RangeStatement: object is not a Resource !");
@@ -70,21 +72,18 @@ public class RangeStatement extends OntologyStatement {
 	@Override
 	public String toString() 
 	{
-		if (isString()) {
-			return getSubject().getName()+" has range string";
+		if (getDataType() != null) {
+			return getSubject().getName()+" has range "+getDataType().getURI();
 		}
 		return getSubject().getName()+" has range "+(getRange() != null ? getRange().getName() : "<NOT_FOUND:"+getStatement().getObject()+">");
 	}
 
-	public boolean isString() 
-	{
-		return isString;
-	}
-
 	public String getStringRepresentation()
 	{
-		if (isString()) return "String";
-		else if (getRange() != null) return getRange().getName();
+		if (getDataType() != null) {
+			return getDataType().toString();
+		}
+		if (getRange() != null) return getRange().getName();
 		return "";
 	}
 }

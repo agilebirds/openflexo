@@ -87,8 +87,11 @@ public class OntologyObjectProperty extends OntologyProperty implements Comparab
 	@Override
 	public String getDisplayableDescription()
 	{
-		// TODO display domain and range
-		return "Object property "+getName();
+		return "<html>Object property <b>"+getName()+"</b><br>"
+				+"<i>"+getURI()+"</i><br>"
+				+"Domain: "+(getDomain()!=null?getDomain().getURI():"?")+"<br>"
+				+"Range: "+(getRange()!=null?getRange().getURI():"?")+"<br>"
+				+"</html>";
 	}
 
 	@Override

@@ -87,7 +87,7 @@ public class ObjectPropertyStatement extends PropertyStatement {
 	/**
 	 * Creates a new Statement equals to this one with a new Object value
 	 * 
-	 * @param aValue
+	 * @param anObject
 	 */
 	public final void setStatementObject(OntologyObject anObject)
 	{
