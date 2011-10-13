@@ -44,6 +44,12 @@
       <property name="objectURI" xmlTag="objectURI" attribute="YES" description=""/>
   </entity>
 
+  <entity name="org.openflexo.foundation.ontology.EditionPatternReference$DataPropertyStatementActorReference" xmlTag="DataPropertyStatementActorReference">
+      <property name="subjectURI" xmlTag="subjectURI" attribute="YES" description=""/>
+      <property name="dataPropertyURI" xmlTag="dataPropertyURI" attribute="YES" description=""/>
+      <property name="value" xmlTag="value" attribute="YES" description=""/>
+  </entity>
+
   <entity name="org.openflexo.foundation.ontology.EditionPatternReference$SubClassStatementActorReference" xmlTag="SubClassStatementActorReference">
       <property name="subjectURI" xmlTag="subjectURI" attribute="YES" description=""/>
       <property name="parentURI" xmlTag="parentURI" attribute="YES" description=""/>

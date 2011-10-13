@@ -64,7 +64,7 @@ public class DomainStatement extends OntologyStatement {
 	@Override
 	public String toString() 
 	{
-		return getSubject().getName()+" has domain (from) "+(getDomain() != null ? getDomain().getName() : "<NOT_FOUND:"+getStatement().getObject()+">");
+		return getSubject().getName()+" has domain "+(getDomain() != null ? getDomain().getName() : "<NOT_FOUND:"+getStatement().getObject()+">");
 	}
 
 }

@@ -31,6 +31,7 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.TemporaryFlexoModelObject;
+import org.openflexo.foundation.ontology.OntologyObject.OntologyObjectConverter;
 import org.openflexo.foundation.ontology.dm.OntologyClassInserted;
 import org.openflexo.foundation.ontology.dm.OntologyClassRemoved;
 import org.openflexo.foundation.ontology.dm.OntologyDataPropertyInserted;
@@ -92,6 +93,8 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 	private OntologyLibrary parentOntologyLibrary = null;
 	
 	private OntologyFolder rootFolder;
+	
+	private OntologyObjectConverter ontologyObjectConverter;
 
 	public OntologyLibrary(FlexoResourceCenter resourceCenter, OntologyLibrary parentOntologyLibrary)
 	{
@@ -101,6 +104,7 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 			this.parentOntologyLibrary = parentOntologyLibrary;
 			parentOntologyLibrary.addObserver(this);
 		}
+		ontologyObjectConverter = new OntologyObjectConverter(this);
 		//INSTANCE = this;
 		//_project = project;
 		ontologies = new Hashtable<String,FlexoOntology>();
@@ -113,6 +117,11 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		
 		rootFolder = new OntologyFolder("root", null,this);
 
+	}
+	
+	public OntologyObjectConverter getOntologyObjectConverter()
+	{
+		return ontologyObjectConverter;
 	}
 	
 	public FlexoResourceCenter getResourceCenter()
@@ -409,6 +418,17 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		if (returned != null) return returned;
 		returned = getDataProperty(objectURI);
 		if (returned != null) return returned;
+		
+		if (returned == null && objectURI.indexOf("#") > 0) {
+			// Maybe required ontology is not loaded ???
+			// This is an other chance to get it
+			String ontologyURI = objectURI.substring(0,objectURI.indexOf("#"));
+			FlexoOntology o = getOntology(ontologyURI);
+			if (o != null && !o.isLoaded() && !o.isLoading()) {
+				o.loadWhenUnloaded();
+				return getOntologyObject(objectURI);
+			}
+		}
 		
 		if (parentOntologyLibrary != null) return parentOntologyLibrary.getOntologyObject(objectURI);
 		

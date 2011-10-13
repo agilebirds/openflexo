@@ -182,7 +182,7 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 			return this;
 		}
 		
-		return variable.evaluateBinding(null,this);
+		return variable.getBindingValue(null,this);
 	}
 	
 	public FIBComponent getRootComponent()

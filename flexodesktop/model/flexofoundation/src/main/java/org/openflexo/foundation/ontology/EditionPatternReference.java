@@ -105,6 +105,9 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 			else if (o instanceof ObjectPropertyStatement) {
 				actors.put(role, new ObjectPropertyStatementActorReference((ObjectPropertyStatement)o,role));
 			}
+			else if (o instanceof DataPropertyStatement) {
+				actors.put(role, new DataPropertyStatementActorReference((DataPropertyStatement)o,role));
+			}
 			else if (o instanceof SubClassStatement) {
 				actors.put(role, new SubClassStatementActorReference((SubClassStatement)o,role));
 			}
@@ -287,6 +290,66 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 			}
 			if (statement == null) {
 				logger.warning("Could not retrieve object "+objectURI);
+			}
+			return statement;
+		}
+	}
+
+	public static class DataPropertyStatementActorReference extends ActorReference 
+	{
+		public DataPropertyStatement statement;
+		public String subjectURI;
+		public String dataPropertyURI;
+		public String value;
+		
+		public DataPropertyStatementActorReference(DataPropertyStatement o,String aPatternRole) 
+		{
+			super(o.getProject());
+			patternRole = aPatternRole;
+			statement = o;
+			subjectURI = o.getSubject().getURI();
+			value = o.getLiteral().toString();
+			dataPropertyURI = o.getProperty().getURI();
+		}
+		
+		// Constructor used during deserialization
+		public DataPropertyStatementActorReference(VEShemaBuilder builder) 
+		{
+			super(builder.getProject());
+		    initializeDeserialization(builder);
+		}	
+		
+		// Constructor used during deserialization
+		public DataPropertyStatementActorReference(FlexoProcessBuilder builder) 
+		{
+			super(builder.getProject());
+		    initializeDeserialization(builder);
+		}	
+		
+		@Override
+		public String getClassNameKey() 
+		{
+			return "data_property_statement_actor_reference";
+		}
+		
+		@Override
+		public String getFullyQualifiedName() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+		@Override
+		public DataPropertyStatement retrieveObject()
+		{
+			if (statement == null) {
+				getProject().getProjectOntology().loadWhenUnloaded();
+				OntologyObject subject = getProject().getProjectOntologyLibrary().getOntologyObject(subjectURI);
+				OntologyDataProperty property = getProject().getProjectOntologyLibrary().getDataProperty(dataPropertyURI);
+				statement = subject.getDataPropertyStatement(property);
+				//logger.info("Found statement: "+statement);
+			}
+			if (statement == null) {
+				logger.warning("Could not retrieve object "+value);
 			}
 			return statement;
 		}

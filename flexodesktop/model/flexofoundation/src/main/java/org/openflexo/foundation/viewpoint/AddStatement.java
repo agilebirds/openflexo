@@ -27,13 +27,13 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 
 
 
-public abstract class AddProperty extends EditionAction<OntologicObjectPatternRole> {
+public abstract class AddStatement<R extends OntologicObjectPatternRole> extends EditionAction<R> {
 
-	private static final Logger logger = Logger.getLogger(AddProperty.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(AddStatement.class.getPackage().getName());
 
 	private String subject;
 	
-	public AddProperty() {
+	public AddStatement() {
 	}
 	
 	public String _getSubject()
@@ -80,7 +80,7 @@ public abstract class AddProperty extends EditionAction<OntologicObjectPatternRo
 	}
 
 	@Override
-	public OntologicObjectPatternRole getPatternRole() {
+	public R getPatternRole() {
 		try {
 			return super.getPatternRole();
 		} catch (ClassCastException e) {
@@ -93,7 +93,7 @@ public abstract class AddProperty extends EditionAction<OntologicObjectPatternRo
 	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
 	// Need to be fixed in KeyValueProperty.java
 	@Override
-	public void setPatternRole(OntologicObjectPatternRole patternRole) 
+	public void setPatternRole(R patternRole) 
 	{
 		super.setPatternRole(patternRole);
 	}

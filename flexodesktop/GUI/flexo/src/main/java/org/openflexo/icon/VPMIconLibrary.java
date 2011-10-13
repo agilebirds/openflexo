@@ -23,34 +23,35 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.foundation.ontology.DataPropertyStatement;
 import org.openflexo.foundation.viewpoint.ActionScheme;
+import org.openflexo.foundation.viewpoint.ClassPatternRole;
+import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
+import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
+import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
+import org.openflexo.foundation.viewpoint.DropScheme;
+import org.openflexo.foundation.viewpoint.EditionAction;
+import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionPatternParameter;
 import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole;
+import org.openflexo.foundation.viewpoint.IndividualPatternRole;
+import org.openflexo.foundation.viewpoint.LinkScheme;
+import org.openflexo.foundation.viewpoint.LocalizedDictionary;
+import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
+import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
+import org.openflexo.foundation.viewpoint.PaletteElementPatternParameter;
+import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
+import org.openflexo.foundation.viewpoint.ShapePatternRole;
+import org.openflexo.foundation.viewpoint.ShemaPatternRole;
+import org.openflexo.foundation.viewpoint.StatementPatternRole;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointFolder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
-import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
-import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
-import org.openflexo.foundation.viewpoint.DropScheme;
-import org.openflexo.foundation.viewpoint.EditionAction;
-import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.EditionPatternParameter;
-import org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole;
-import org.openflexo.foundation.viewpoint.LinkScheme;
-import org.openflexo.foundation.viewpoint.LocalizedDictionary;
-import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
-import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
-import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.PaletteElementPatternParameter;
-import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
-import org.openflexo.foundation.viewpoint.ShapePatternRole;
-import org.openflexo.foundation.viewpoint.ShemaPatternRole;
-import org.openflexo.foundation.wkf.WKFObject;
-import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ImageIconResource;
 
 /**
@@ -141,22 +142,11 @@ public class VPMIconLibrary extends IconLibrary {
 		else if (object instanceof ShapePatternRole) return CALC_SHAPE_ICON;
 		else if (object instanceof ShemaPatternRole) return EXAMPLE_DIAGRAM_ICON;
 		else if (object instanceof PrimitivePatternRole) return UNKNOWN_ICON;
-		else if (object instanceof OntologicObjectPatternRole) {
-			switch (((OntologicObjectPatternRole) object).getOntologicObjectType()) {
-			case Class:
-				return OntologyIconLibrary.ONTOLOGY_CLASS_ICON;
-			case Individual:
-				return OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON;
-			case ObjectProperty:
-				return OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON;
-			case DataProperty:
-				return OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON;
-			case OntologyStatement:
-				return OntologyIconLibrary.ONTOLOGY_STATEMENT_ICON;
-			default:
-				return null;
-			}
-		}
+		else if (object instanceof ClassPatternRole) return OntologyIconLibrary.ONTOLOGY_CLASS_ICON;
+		else if (object instanceof IndividualPatternRole) return OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON;
+		else if (object instanceof ObjectPropertyPatternRole) return OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON;
+		else if (object instanceof DataPropertyPatternRole) return OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON;
+		else if (object instanceof StatementPatternRole) return OntologyIconLibrary.ONTOLOGY_STATEMENT_ICON;
 		else if (object instanceof LocalizedDictionary) return LOCALIZATION_ICON;
 		logger.warning("No icon for "+object.getClass());
 		return UNKNOWN_ICON;

@@ -25,9 +25,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariableImpl;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 
 
 public abstract class FIBTableColumn extends FIBModelObject {
@@ -254,7 +254,7 @@ public abstract class FIBTableColumn extends FIBModelObject {
 		private void createFormatterBindingModel()
 		{
 			formatterBindingModel = new BindingModel();
-			formatterBindingModel.addToBindingVariables(new BindingVariableImpl(this, "object", Object.class) {
+			formatterBindingModel.addToBindingVariables(new BindingVariableImpl<FIBFormatter,Object>(this, "object", Object.class) {
 				@Override
 				public Type getType()
 				{

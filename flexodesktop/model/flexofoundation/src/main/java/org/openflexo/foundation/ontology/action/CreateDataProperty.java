@@ -32,6 +32,7 @@ import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyObject;
+import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
@@ -78,7 +79,7 @@ public class CreateDataProperty extends FlexoAction<CreateDataProperty,OntologyO
 	public String description;
 	public OntologyDataProperty parentProperty;
 	public OntologyClass domainClass;
-	public OntologyDataProperty.PropertyDataType dataType;
+	public OntologicDataType dataType;
 	
 	
 	public String validURILabel;

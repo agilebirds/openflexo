@@ -37,6 +37,9 @@ public abstract class OntologyProperty extends OntologyObject {
 	private String name;
 	private final OntProperty ontProperty;
 	
+	private DomainStatement domainStatement;
+	private RangeStatement rangeStatement;
+
 	private final Vector<OntologyProperty> superProperties; 
 	private final Vector<OntologyProperty> subProperties; 
 
@@ -214,5 +217,59 @@ public abstract class OntologyProperty extends OntologyObject {
 	{
 		return isAnnotationProperty;
 	}
+	
+	@Override
+	public void updateOntologyStatements()
+	{
+		super.updateOntologyStatements();
+		for (OntologyStatement s : getSemanticStatements()) {
+			if (s instanceof DomainStatement) {
+				domainStatement = (DomainStatement)s;
+			}
+			if (s instanceof RangeStatement) {
+				rangeStatement = (RangeStatement)s;
+			}
+		}
+	}
 
+	public DomainStatement getDomainStatement() 
+	{
+		if (domainStatement == null) {
+			for (OntologyProperty p : getSuperProperties()) {
+				DomainStatement d = p.getDomainStatement();
+				if (d != null) return d;
+			}
+			return null;
+		}
+		return domainStatement;
+	}
+
+	public RangeStatement getRangeStatement() 
+	{
+		if (rangeStatement == null) {
+			for (OntologyProperty p : getSuperProperties()) {
+				RangeStatement r = p.getRangeStatement();
+				if (r != null) return r;
+			}
+			return null;
+		}
+		return rangeStatement;
+	}
+	
+	public OntologyObject getDomain() 
+	{
+		if (getDomainStatement() == null) {
+			return null;
+		}
+		return getDomainStatement().getDomain();
+	}
+
+	public OntologyObject getRange() 
+	{
+		if (getRangeStatement() == null) {
+			return null;
+		}
+		return getRangeStatement().getRange();
+	}
+	
 }

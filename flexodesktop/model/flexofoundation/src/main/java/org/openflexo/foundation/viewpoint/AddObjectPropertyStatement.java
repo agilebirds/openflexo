@@ -26,45 +26,35 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole.OntologicObjectType;
 
 
 
-public class AddObjectProperty extends AddProperty {
+public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyStatementPatternRole> {
 
-	private static final Logger logger = Logger.getLogger(AddObjectProperty.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(AddObjectPropertyStatement.class.getPackage().getName());
 
-	private String objectPropertyURI;
 	private String object;
 	
-	public AddObjectProperty() {
+	public AddObjectPropertyStatement() {
 	}
 	
 	@Override
 	public EditionActionType getEditionActionType()
 	{
-		return EditionActionType.AddObjectProperty;
+		return EditionActionType.AddObjectPropertyStatement;
 	}
 	
-	public String _getObjectPropertyURI()
-	{
-		return objectPropertyURI;
-	}
-
-	public void _setObjectPropertyURI(String objectPropertyURI) 
-	{
-		this.objectPropertyURI = objectPropertyURI;
-	}
-
 	public OntologyProperty getObjectProperty()
 	{
-		getCalc().loadWhenUnloaded();
-		return getOntologyLibrary().getObjectProperty(_getObjectPropertyURI());
+		if (getPatternRole() != null) 
+			return getPatternRole().getObjectProperty();
+		return null;
 	}
 	
 	public void setObjectProperty(OntologyProperty p)
 	{
-		_setObjectPropertyURI(p != null ? p.getURI() : null);
+		if (getPatternRole() != null) 
+			getPatternRole().setObjectProperty(p);
 	}
 	
 	public String _getObject()
@@ -118,14 +108,12 @@ public class AddObjectProperty extends AddProperty {
 	}
 
 	
-	@Override
+	/*@Override
 	protected void updatePatternRoleType()
 	{
 		if (getPatternRole() == null) {
 			return;
 		}
-		
-		getPatternRole().setOntologicObjectType(OntologicObjectType.OntologyStatement);
-	}
+	}*/
 
 }

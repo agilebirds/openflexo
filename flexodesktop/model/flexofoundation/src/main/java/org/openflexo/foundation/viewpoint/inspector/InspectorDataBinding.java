@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.viewpoint;
+package org.openflexo.foundation.viewpoint.inspector;
 
 import java.util.logging.Logger;
 
@@ -25,9 +25,8 @@ import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingFactory;
-import org.openflexo.foundation.viewpoint.InspectorEntry.InspectorBindingAttribute;
+import org.openflexo.foundation.viewpoint.inspector.InspectorEntry.InspectorBindingAttribute;
 import org.openflexo.xmlcode.StringConvertable;
-import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
 
@@ -48,7 +47,6 @@ public class InspectorDataBinding implements StringConvertable<InspectorDataBind
 		@Override
 		public InspectorDataBinding convertFromString(String value) 
 		{
-			System.out.println("Hop, voila un "+value);
 			return new InspectorDataBinding(value);
 		}
 

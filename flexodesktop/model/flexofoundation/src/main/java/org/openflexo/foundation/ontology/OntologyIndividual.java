@@ -221,10 +221,35 @@ public class OntologyIndividual extends OntologyObject implements Comparable<Ont
 		return "Individual "+getName()+extendsLabel;
 	}
 
+	@Override
 	public boolean isOntologyIndividual()
 	{
 		return true;
 	}
 
+	@Override
+	protected void recursivelySearchRangeAndDomains()
+	{
+		super.recursivelySearchRangeAndDomains();
+		Vector<OntologyClass> alreadyComputed = new Vector<OntologyClass>();
+		for (OntologyClass aClass : getSuperClasses()) {
+			_appendRangeAndDomains(aClass, alreadyComputed);
+		}
+	}
+	
+	private void _appendRangeAndDomains(OntologyClass superClass, Vector<OntologyClass> alreadyComputed)
+	{
+		if (alreadyComputed.contains(superClass)) return;
+		alreadyComputed.add(superClass);
+		for (OntologyProperty p : superClass.getDeclaredPropertiesTakingMySelfAsDomain()) {
+			if (!propertiesTakingMySelfAsDomain.contains(p)) propertiesTakingMySelfAsDomain.add(p);
+		}
+		for (OntologyProperty p : superClass.getDeclaredPropertiesTakingMySelfAsRange()) {
+			if (!propertiesTakingMySelfAsRange.contains(p)) propertiesTakingMySelfAsRange.add(p);
+		}
+		for (OntologyClass superSuperClass : superClass.getSuperClasses()) {
+			_appendRangeAndDomains(superSuperClass, alreadyComputed);
+		}
+	}
 
 }

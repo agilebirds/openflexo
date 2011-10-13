@@ -29,11 +29,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.toolbox.EmptyVector;
-import org.openflexo.toolbox.HTMLUtils;
-import org.openflexo.ws.client.PPMWebService.PPMObject;
-import org.openflexo.xmlcode.StringEncoder;
-
 import org.openflexo.foundation.action.AddFlexoProperty;
 import org.openflexo.foundation.action.DeleteFlexoProperty;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -49,13 +44,16 @@ import org.openflexo.foundation.utils.FlexoDocFormat;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.EditionPatternInspector;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.inspector.model.TabModel;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.toolbox.EmptyVector;
+import org.openflexo.toolbox.HTMLUtils;
+import org.openflexo.ws.client.PPMWebService.PPMObject;
+import org.openflexo.xmlcode.StringEncoder;
 
 
 
@@ -1349,7 +1347,13 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		addToEditionPatternReferences(newReference);
 	}
 	
-    private Vector<TabModel> _tabList;
+	@Deprecated
+ 	public Vector<TabModel> inspectionExtraTabs()
+	{
+ 		return null;
+	}
+ 	
+   /* private Vector<TabModel> _tabList;
     
  	public Vector<TabModel> inspectionExtraTabs()
 	{
@@ -1359,15 +1363,15 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
  				for (EditionPatternReference ref : getEditionPatternReferences()) {
  					EditionPatternInspector inspector = ref.getEditionPattern().getInspector();
  					if (inspector != null) {
- 						/*for (Integer i : inspector.getTabs().keySet()) {
- 							_tabList.add(inspector.getTabs().get(i));
- 						}*/
+ 						//for (Integer i : inspector.getTabs().keySet()) {
+ 						//	_tabList.add(inspector.getTabs().get(i));
+ 						//}
  					}
  				}
  			}
  		}
 		return _tabList;
-	}
+	}*/
 
     public String getInspectorTitle()
     {
