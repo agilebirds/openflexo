@@ -352,9 +352,11 @@ public class TypeUtils {
 		}
 	
 		if (aType instanceof WildcardType) {
+			if (anOtherType instanceof WildcardType) {
+				// If two wildcards, perform check on both upper bounds
+				return isTypeAssignableFrom(((WildcardType)aType).getUpperBounds()[0],((WildcardType)anOtherType).getUpperBounds()[0],permissive);
+			}
 			// Perform check on first upper bound only
-			//logger.info("Called "+aType+" isAssignableFrom("+anOtherType+")");
-			//logger.info("Call "+((WildcardType)aType).getUpperBounds()[0]+" isAssignableFrom("+anOtherType+") return "+isTypeAssignableFrom(((WildcardType)aType).getUpperBounds()[0],anOtherType,permissive));
 			return isTypeAssignableFrom(((WildcardType)aType).getUpperBounds()[0],anOtherType,permissive);
 		}
 

@@ -44,16 +44,16 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGERoundRectangle;
 import org.openflexo.fge.geom.FGEShape;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.graphics.BackgroundStyle;
+import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.FGEGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.notifications.ObjectResized;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEPaintManager;
@@ -61,8 +61,8 @@ import org.openflexo.fge.view.ShapeView;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.view.ViewConnector;
-import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.AddConnector;
 import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.foundation.view.action.LinkSchemeAction;
@@ -71,9 +71,9 @@ import org.openflexo.foundation.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.LinkScheme;
+import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ShapePatternRole;
-import org.openflexo.foundation.viewpoint.PatternRole.PatternRoleType;
 import org.openflexo.localization.FlexoLocalization;
 
 public class FloatingPalette extends ControlArea<FGERoundRectangle> implements Observer {
@@ -460,7 +460,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 			for (PatternRole role : ep.getPatternRoles()) {
 				if (role instanceof ShapePatternRole 
 						&& ((ShapePatternRole)role).getBoundPatternRole() != null
-						&& ((ShapePatternRole)role).getBoundPatternRole().getType() == PatternRoleType.OntologicObject) {
+						&& ((ShapePatternRole)role).getBoundPatternRole() instanceof OntologicObjectPatternRole) {
 					// This is a good candidate, but...
 					for (DropScheme ds : ep.getDropSchemes()) {
 						EditionAction action = ds.getAction(((ShapePatternRole)role).getBoundPatternRole());

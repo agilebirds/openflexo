@@ -29,8 +29,8 @@ import org.openflexo.antar.expr.UnresolvedExpressionException;
 import org.openflexo.antar.expr.parser.ParseException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.action.LinkSchemeAction;
@@ -55,9 +55,10 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 	{
 		AddClass,
 		AddIndividual,
-		AddObjectProperty,
-		AddIsAProperty,
-		AddRestriction,
+		AddObjectPropertyStatement,
+		AddDataPropertyStatement,
+		AddIsAStatement,
+		AddRestrictionStatement,
 		AddConnector,
 		AddShape,
 		AddShema,
@@ -163,10 +164,11 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 	public void setPatternRole(R patternRole) 
 	{
 		_setPatternRoleName((patternRole != null) && (patternRole.getPatternRoleName() != null) ? patternRole.getPatternRoleName() : null);
-		updatePatternRoleType();
+		//updatePatternRoleType();
 	}
 
-	protected abstract void updatePatternRoleType();
+	@Deprecated
+	protected final void updatePatternRoleType() {}
 
 	public int getIndex()
 	{

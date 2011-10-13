@@ -100,10 +100,13 @@ public class AddShema extends EditionAction<ShemaPatternRole> {
 	
 
 	
-	@Override
+	/*@Override
 	protected void updatePatternRoleType()
 	{
-	}
+		if (getPatternRole() == null) {
+			return;
+		}
+	}*/
 
 	public String _getShapePatternRole()
 	{

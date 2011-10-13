@@ -46,9 +46,9 @@ import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.viewpoint.AddClass;
 import org.openflexo.foundation.viewpoint.AddIndividual;
-import org.openflexo.foundation.viewpoint.AddIsAProperty;
-import org.openflexo.foundation.viewpoint.AddObjectProperty;
-import org.openflexo.foundation.viewpoint.AddRestriction;
+import org.openflexo.foundation.viewpoint.AddIsAStatement;
+import org.openflexo.foundation.viewpoint.AddObjectPropertyStatement;
+import org.openflexo.foundation.viewpoint.AddRestrictionStatement;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.DeclarePatternRole;
 import org.openflexo.foundation.viewpoint.EditionAction;
@@ -150,9 +150,9 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 						performedActions.put(action,newClass);
 					}
 				}
-				else if (action instanceof AddObjectProperty) {
+				else if (action instanceof AddObjectPropertyStatement) {
 					logger.info("Add object property with patternRole="+action.getPatternRole());
-					ObjectPropertyStatement statement = performAddObjectProperty((org.openflexo.foundation.viewpoint.AddObjectProperty)action);
+					ObjectPropertyStatement statement = performAddObjectProperty((org.openflexo.foundation.viewpoint.AddObjectPropertyStatement)action);
 					if (statement != null) {
 						getEditionPatternInstance().setObjectForPatternRole(statement, action.getPatternRole());
 						performedActions.put(action,statement);
@@ -161,17 +161,17 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 						logger.warning("Could not perform AddObjectProperty for role "+action.getPatternRole());
 					}
 				}
-				else if (action instanceof AddIsAProperty) {
+				else if (action instanceof AddIsAStatement) {
 					logger.info("Add isA property with patternRole="+action.getPatternRole());
-					SubClassStatement statement = performAddIsAProperty((AddIsAProperty)action);
+					SubClassStatement statement = performAddIsAProperty((AddIsAStatement)action);
 					if (statement != null) {
 						getEditionPatternInstance().setObjectForPatternRole(statement, action.getPatternRole());
 						performedActions.put(action,statement);
 					}
 				}
-				else if (action instanceof AddRestriction) {
+				else if (action instanceof AddRestrictionStatement) {
 					logger.info("Add restriction with patternRole="+action.getPatternRole());
-					RestrictionStatement statement = performAddRestriction((AddRestriction)action);
+					RestrictionStatement statement = performAddRestriction((AddRestrictionStatement)action);
 					if (statement != null) {
 						getEditionPatternInstance().setObjectForPatternRole(statement, action.getPatternRole());
 						performedActions.put(action,statement);
@@ -205,14 +205,14 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 			else if (action instanceof AddClass) {
 				finalizePerformAddClass((AddClass)action,(OntologyClass)performedActions.get(action));
 			}
-			else if (action instanceof AddObjectProperty) {
-				finalizePerformAddObjectProperty((AddObjectProperty)action,(ObjectPropertyStatement)performedActions.get(action));
+			else if (action instanceof AddObjectPropertyStatement) {
+				finalizePerformAddObjectProperty((AddObjectPropertyStatement)action,(ObjectPropertyStatement)performedActions.get(action));
 			}
-			else if (action instanceof AddIsAProperty) {
-				finalizePerformAddIsAProperty((AddIsAProperty)action,(SubClassStatement)performedActions.get(action));
+			else if (action instanceof AddIsAStatement) {
+				finalizePerformAddIsAProperty((AddIsAStatement)action,(SubClassStatement)performedActions.get(action));
 			}
-			else if (action instanceof AddRestriction) {
-				finalizePerformAddRestriction((AddRestriction)action,(RestrictionStatement)performedActions.get(action));
+			else if (action instanceof AddRestrictionStatement) {
+				finalizePerformAddRestriction((AddRestrictionStatement)action,(RestrictionStatement)performedActions.get(action));
 			}
 			else if (action instanceof DeclarePatternRole) {
 				FlexoModelObject declaredObject = performDeclarePatternRole((DeclarePatternRole)action);
@@ -398,7 +398,7 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 		return newClass;
 	}
 
-	protected ObjectPropertyStatement performAddObjectProperty(AddObjectProperty action)
+	protected ObjectPropertyStatement performAddObjectProperty(AddObjectPropertyStatement action)
 	{
 		OntologyObjectProperty property = (OntologyObjectProperty)action.getObjectProperty();
 		OntologyObject subject = action.getPropertySubject(this);
@@ -411,7 +411,7 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 		return subject.getObjectPropertyStatement(property);
 	}
 
-	protected ObjectPropertyStatement finalizePerformAddObjectProperty(AddObjectProperty action,
+	protected ObjectPropertyStatement finalizePerformAddObjectProperty(AddObjectPropertyStatement action,
 			ObjectPropertyStatement objectPropertyStatement) 
 	{
 		return objectPropertyStatement;
@@ -468,7 +468,7 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 		return newConnector;
 	}
 
-	protected SubClassStatement performAddIsAProperty(AddIsAProperty action)
+	protected SubClassStatement performAddIsAProperty(AddIsAStatement action)
 	{
 		OntologyObject subject = action.getPropertySubject(this);
 		OntologyObject father = action.getPropertyFather(this);
@@ -485,14 +485,14 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 		return null;
 	}
 
-	protected SubClassStatement finalizePerformAddIsAProperty(AddIsAProperty action,
+	protected SubClassStatement finalizePerformAddIsAProperty(AddIsAStatement action,
 			SubClassStatement subClassStatement) 
 	{
 		return subClassStatement;
 	}
 
 
-	protected RestrictionStatement performAddRestriction(AddRestriction action)
+	protected RestrictionStatement performAddRestriction(AddRestrictionStatement action)
 	{
 		//System.out.println("Add restriction");
 		
@@ -521,7 +521,7 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 		return null;
 	}
 
-	protected RestrictionStatement finalizePerformAddRestriction(AddRestriction action,
+	protected RestrictionStatement finalizePerformAddRestriction(AddRestrictionStatement action,
 			RestrictionStatement restrictionStatement) 
 	{
 		return restrictionStatement;

@@ -178,6 +178,7 @@ public class FIBTextFieldWidget extends FIBWidgetView<FIBTextField,JTextField,St
     	if (notEquals(getValue(), _textField.getText())) {
     		modelUpdating = true;
     		if (logger.isLoggable(Level.FINE)) logger.fine("updateModelFromWidget() in TextFieldWidget");
+    		//logger.info("setValue with "+_textField.getText());
     		setValue(_textField.getText());
     		modelUpdating = false;
     		return true;

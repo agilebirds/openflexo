@@ -25,23 +25,22 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole.OntologicObjectType;
 
 
 
-public class AddIsAProperty extends AddProperty {
+public class AddIsAStatement extends AddStatement<IsAStatementPatternRole> {
 
-	private static final Logger logger = Logger.getLogger(AddIsAProperty.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(AddIsAStatement.class.getPackage().getName());
 
 	private String father;
 	
-	public AddIsAProperty() {
+	public AddIsAStatement() {
 	}
 	
 	@Override
 	public EditionActionType getEditionActionType()
 	{
-		return EditionActionType.AddIsAProperty;
+		return EditionActionType.AddIsAStatement;
 	}
 	
 	public String _getFather()
@@ -93,13 +92,12 @@ public class AddIsAProperty extends AddProperty {
 		return Inspectors.VPM.ADD_IS_A_PROPERTY_INSPECTOR;
 	}
 
-	@Override
+	/*@Override
 	protected void updatePatternRoleType()
 	{
 		if (getPatternRole() == null) {
 			return;
-		}		
-		getPatternRole().setOntologicObjectType(OntologicObjectType.OntologyStatement);
-	}
+		}
+	}*/
 		
 }

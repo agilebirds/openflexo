@@ -22,12 +22,13 @@ package org.openflexo.antar.binding;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Hashtable;
+import java.util.Observable;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.toolbox.ToolBox;
 
-public class MethodDefinition extends KeyValueBindingImpl implements ComplexPathElement {
+public class MethodDefinition extends Observable implements ComplexPathElement<Object,Object> {
 
 	private static final Logger logger = Logger.getLogger(MethodDefinition.class.getPackage().getName());
 
@@ -198,11 +199,13 @@ public class MethodDefinition extends KeyValueBindingImpl implements ComplexPath
 			return true;
 	}
 
-    public String getLabel()
+    @Override
+	public String getLabel()
     {
     	return getSimplifiedSignature();
     }
     
+	@Override
 	public String getTooltipText(Type resultingType)
 	{
 		String returned = "<html>";
@@ -228,8 +231,16 @@ public class MethodDefinition extends KeyValueBindingImpl implements ComplexPath
     }
  
     @Override
-    public Object evaluateBinding(Object target, BindingEvaluationContext context)
+    public Object getBindingValue(Object target, BindingEvaluationContext context)
     {
+    	// Not relevant
      	return null;
     }
+    
+    @Override
+    public void setBindingValue(Object value, Object target, BindingEvaluationContext context) 
+    {
+    	// Not relevant
+    }
+
 }

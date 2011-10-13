@@ -23,61 +23,47 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole.OntologicObjectType;
 
 
 
-public class AddRestriction extends AddProperty {
+public class AddDataPropertyStatement extends AddStatement<DataPropertyStatementPatternRole> {
 
-	private static final Logger logger = Logger.getLogger(AddRestriction.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(AddDataPropertyStatement.class.getPackage().getName());
 
-	private String propertyURI;
-	private String object;
-	private String restrictionType;
-	private String cardinality;
+	private String value;
 	
-	public AddRestriction() {
+	public AddDataPropertyStatement() {
 	}
 	
 	@Override
 	public EditionActionType getEditionActionType()
 	{
-		return EditionActionType.AddRestriction;
+		return EditionActionType.AddDataPropertyStatement;
 	}
 	
-
-	public String _getPropertyURI()
+	public OntologyProperty getDataProperty()
 	{
-		return propertyURI;
-	}
-
-	public void _setPropertyURI(String propertyURI) 
-	{
-		this.propertyURI = propertyURI;
-	}
-
-	public OntologyProperty getObjectProperty()
-	{
-		getCalc().loadWhenUnloaded();
-		return getOntologyLibrary().getObjectProperty(_getPropertyURI());
+		if (getPatternRole() != null) 
+			return getPatternRole().getDataProperty();
+		return null;
 	}
 	
-	public void setObjectProperty(OntologyProperty p)
+	public void setDataProperty(OntologyProperty p)
 	{
-		_setPropertyURI(p != null ? p.getURI() : null);
-	}
-
-	public String _getObject()
-	{
-		return object;
+		if (getPatternRole() != null) 
+			getPatternRole().setDataProperty(p);
 	}
 	
-	public void _setObject(String anObject)
+	public String _getValue()
 	{
-		object = anObject;
+		return value;
+	}
+	
+	public void _setValue(String aValue)
+	{
+		value = aValue;
 	}
 	
 	private Vector<String> availableObjectValues = null;
@@ -108,60 +94,25 @@ public class AddRestriction extends AddProperty {
 		return availableObjectValues;
 	}
 
-	public OntologyObject getPropertyObject(EditionSchemeAction action)
+	public Object getValue(EditionSchemeAction action)
 	{
-		return retrieveOntologyObject(_getObject(), action);
+		return retrieveObject(_getValue(), action);
 	}
+
 
 	@Override
 	public String getInspectorName() 
 	{
-		return Inspectors.VPM.ADD_RESTRICTION_INSPECTOR;
+		return Inspectors.VPM.ADD_OBJECT_PROPERTY_INSPECTOR;
 	}
 
-	public String _getRestrictionType() {
-		return restrictionType;
-	}
-
-	public void _setRestrictionType(String restrictionType) {
-		this.restrictionType = restrictionType;
-	}
 	
-	public EditionPatternParameter getRestrictionTypeParameter()
-	{
-		return getScheme().getParameter(restrictionType);
-	}
-	
-	public void setRestrictionTypeParameter(EditionPatternParameter param)
-	{
-		restrictionType = param.getName();
-	}
-
-	public String _getCardinality() {
-		return cardinality;
-	}
-
-	public void _setCardinality(String cardinality) {
-		this.cardinality = cardinality;
-	}
-
-	public EditionPatternParameter getCardinalityParameter()
-	{
-		return getScheme().getParameter(cardinality);
-	}
-	
-	public void setCardinalityParameter(EditionPatternParameter param)
-	{
-		cardinality = param.getName();
-	}
-
-	@Override
+	/*@Override
 	protected void updatePatternRoleType()
 	{
 		if (getPatternRole() == null) {
 			return;
 		}
-		
-		getPatternRole().setOntologicObjectType(OntologicObjectType.OntologyStatement);
-	}
+	}*/
+
 }

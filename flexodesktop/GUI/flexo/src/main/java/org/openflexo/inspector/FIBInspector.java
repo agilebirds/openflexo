@@ -26,20 +26,28 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.DataBinding;
+import org.openflexo.fib.model.FIBCheckBox;
 import org.openflexo.fib.model.FIBLabel;
+import org.openflexo.fib.model.FIBNumber;
+import org.openflexo.fib.model.FIBNumber.NumberType;
 import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.fib.model.FIBTab;
 import org.openflexo.fib.model.FIBTabPanel;
+import org.openflexo.fib.model.FIBTextArea;
 import org.openflexo.fib.model.FIBTextField;
+import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.fib.model.TwoColsLayoutConstraints;
 import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.EditionPatternInspector;
-import org.openflexo.foundation.viewpoint.InspectorEntry;
-import org.openflexo.foundation.viewpoint.InspectorEntry.EditionPatternPathElement;
-import org.openflexo.foundation.viewpoint.TextFieldInspectorEntry;
+import org.openflexo.foundation.viewpoint.inspector.CheckboxInspectorEntry;
+import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
+import org.openflexo.foundation.viewpoint.inspector.EditionPatternPathElement;
+import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
+import org.openflexo.foundation.viewpoint.inspector.IntegerInspectorEntry;
+import org.openflexo.foundation.viewpoint.inspector.TextAreaInspectorEntry;
+import org.openflexo.foundation.viewpoint.inspector.TextFieldInspectorEntry;
 import org.openflexo.xmlcode.AccessorInvocationException;
 import org.openflexo.xmlcode.Cloner;
 import org.openflexo.xmlcode.DuplicateSerializationIdentifierException;
@@ -187,10 +195,43 @@ public class FIBInspector extends FIBPanel {
 		super.createBindingModel();
 		for (int i=0; i<currentEditionPatterns.size(); i++) {
 			EditionPattern ep = currentEditionPatterns.get(i);
-			_bindingModel.addToBindingVariables(new EditionPatternPathElement(ep,i));
+			_bindingModel.addToBindingVariables(new EditionPatternPathElement(ep,i,getDataClass()));
 		}
 	}
- 			
+ 		
+	private FIBWidget makeWidget(InspectorEntry entry, FIBTab newTab, int index)
+	{
+		if (entry instanceof TextFieldInspectorEntry) {
+			FIBTextField tf = new FIBTextField();
+			tf.validateOnReturn = true; // Avoid to many ontologies manipulations
+			newTab.addToSubComponents(tf,new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+			return tf;
+		}
+		else if (entry instanceof TextAreaInspectorEntry) {
+			FIBTextArea ta = new FIBTextArea();
+			ta.validateOnReturn = true; // Avoid to many ontologies manipulations
+			newTab.addToSubComponents(ta,new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, true, index));
+			return ta;
+		}
+		else if (entry instanceof CheckboxInspectorEntry) {
+			FIBCheckBox cb = new FIBCheckBox();
+			newTab.addToSubComponents(cb,new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+			return cb;
+		}
+		else if (entry instanceof IntegerInspectorEntry) {
+			FIBNumber number = new FIBNumber();
+			number.setNumberType(NumberType.IntegerType);
+			newTab.addToSubComponents(number,new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+			return number;
+		}
+		else {
+			FIBLabel unknown = new FIBLabel();
+			unknown.setLabel("???");
+			newTab.addToSubComponents(unknown,new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index));
+			return unknown;
+		}
+	}
+	
 	private FIBTab makeFIBTab(EditionPattern ep,int refIndex)
 	{
 		FIBTab newTab = new FIBTab();
@@ -207,22 +248,15 @@ public class FIBInspector extends FIBPanel {
 			FIBLabel label = new FIBLabel();
 			label.setLabel(entry.getLabel());
 			newTab.addToSubComponents(label,new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false, index++));
-			if (entry instanceof TextFieldInspectorEntry) {
-				FIBTextField tf = new FIBTextField();
-				//tf.setData(new DataBinding("Prout.data.stringValue(\""+entry.getLabel()+"\")"));
-				tf.setData(new DataBinding(epIdentifier+"."+entry.getData().toString()) {
-					@Override
-					public BindingFactory getBindingFactory() {
-						return entry.getBindingFactory();
-					}
-				});
-				newTab.addToSubComponents(tf,new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index++));
-			}
-			else {
-				FIBLabel unknown = new FIBLabel();
-				unknown.setLabel("???");
-				newTab.addToSubComponents(unknown,new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false, index++));
-			}
+			FIBWidget widget = makeWidget(entry, newTab, index++);
+			widget.setData(new DataBinding(epIdentifier+"."+entry.getData().toString()) {
+				@Override
+				public BindingFactory getBindingFactory() {
+					return entry.getBindingFactory();
+				}
+			});
+			widget.setReadOnly(entry.getIsReadOnly());
+
 		}
 		return newTab;
 	}
