@@ -24,8 +24,12 @@ import java.util.Iterator;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.dm.DuplicateMethodSignatureException;
 import org.openflexo.foundation.ontology.dm.OntologyObjectStatementsChanged;
+import org.openflexo.foundation.ontology.dm.URIChanged;
+import org.openflexo.foundation.ontology.dm.URINameChanged;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
@@ -40,6 +44,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+import com.hp.hpl.jena.util.ResourceUtils;
 
 public abstract class OntologyObject extends AbstractOntologyObject implements InspectableObject, StringConvertable<OntologyObject> {
 
@@ -81,8 +86,24 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 	protected Vector<OntologyProperty> propertiesTakingMySelfAsRange;
 	protected Vector<OntologyProperty> propertiesTakingMySelfAsDomain;
 
-	public OntologyObject() 
+	private  String uri;
+	private String name;
+	private final FlexoOntology _ontology;
+
+	public OntologyObject(OntResource ontResource, FlexoOntology ontology) 
 	{
+		super();
+
+		_ontology = ontology;
+		if (ontResource != null) {
+			uri = ontResource.getURI();
+			if (uri.indexOf("#") > -1) {
+				name = uri.substring(uri.indexOf("#")+1);
+			} else {
+				name = uri;
+			}
+		}
+
 		_statements = new Vector<OntologyStatement>();
 		_semanticStatements = new Vector<OntologyStatement>();
 		_annotationStatements = new Vector<PropertyStatement>();
@@ -103,12 +124,63 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 	protected abstract void update();
 
 	@Override
-	public abstract String getURI();
-	
+	public String getURI()
+	{
+		return uri;
+	}
+
 	@Override
-	public abstract FlexoOntology getFlexoOntology();
+	public FlexoOntology getFlexoOntology()
+	{
+		return _ontology;
+	}
+
+	@Override
+	public String getName()
+	{
+		return name;
+	}
+
+	@Override
+	public abstract void setName(String aName);
+		
+	protected <R extends OntResource> R renameURI(String newName, R resource, Class<R> resourceClass)
+	{
+		String oldURI = getURI();
+		String oldName = getName();
+		String newURI;
+		if (getURI().indexOf("#") > -1) {
+			newURI = getURI().substring(0,getURI().indexOf("#")+1)+newName;
+		} else {
+			newURI = newName;
+		}
+		logger.info("Rename object "+getURI()+" to "+newURI);
+		R returned = (R) (ResourceUtils.renameResource(resource, newURI).as(resourceClass));
+		_setOntResource(returned);
+		name = newName;
+		uri = newURI;
+		getFlexoOntology().renameObject(this, oldURI, newURI);
+		update();
+		setChanged();
+		notifyObservers(new NameChanged(oldName,newName));
+		setChanged();
+		notifyObservers(new URINameChanged(oldName,newName));
+		setChanged();
+		notifyObservers(new URIChanged(oldURI,newURI));
+		for (EditionPatternReference ref : getEditionPatternReferences()) {
+			EditionPatternInstance i = ref.getEditionPatternInstance();
+			for (FlexoModelObject o : i.getActors().values()) {
+				if (o.getXMLResourceData() != null && !o.getXMLResourceData().getFlexoResource().isModified()) {
+					o.getXMLResourceData().setIsModified();
+				}
+			}
+		}
+		return returned;
+	}
 	
 	public abstract OntResource getOntResource();
+	
+	protected abstract void _setOntResource(OntResource r);
 	
 	public Resource getResource()
 	{
@@ -726,6 +798,13 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 		   searchRangeAndDomains(rangeProperties,domainProperties,o,alreadyDone);
 	   }
    }
-   
- 
+
+   @Override
+   public Vector<EditionPatternReference> getEditionPatternReferences() 
+   {
+	   if (getProject() != null) 
+		   getProject()._retrievePendingEditionPatternReferences(this);
+	   return super.getEditionPatternReferences();
+   }
+
 }

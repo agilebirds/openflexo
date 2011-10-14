@@ -12,6 +12,8 @@ import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.PropertyStatement;
+import org.openflexo.foundation.ontology.dm.URIChanged;
+import org.openflexo.foundation.ontology.dm.URINameChanged;
 
 public class ObjectPropertyStatementPathElement extends StatementPathElement<OntologyObject>
 {
@@ -26,7 +28,7 @@ public class ObjectPropertyStatementPathElement extends StatementPathElement<Ont
 	{
 		super(aParent);
 		ontologyProperty = anOntologyProperty;
-		uriNameProperty = new FinalBindingPathElementImpl<OntologyObject,String>("uriName",TypeUtils.getBaseClass(getType()),String.class,true,"uri_name_as_supplied_in_ontology") {
+		uriNameProperty = new FinalBindingPathElementImpl<OntologyObject,String>(URINameChanged.URI_NAME_KEY,TypeUtils.getBaseClass(getType()),String.class,true,"uri_name_as_supplied_in_ontology") {
 			@Override
 			public String getBindingValue(OntologyObject target, BindingEvaluationContext context) 
 			{
@@ -44,7 +46,7 @@ public class ObjectPropertyStatementPathElement extends StatementPathElement<Ont
 			}
 		};
 		allProperties.add(uriNameProperty);
-		uriProperty = new FinalBindingPathElementImpl<OntologyObject,String>("uri",TypeUtils.getBaseClass(getType()),String.class,false,"uri_as_supplied_in_ontology") {
+		uriProperty = new FinalBindingPathElementImpl<OntologyObject,String>(URIChanged.URI_KEY,TypeUtils.getBaseClass(getType()),String.class,false,"uri_as_supplied_in_ontology") {
 			@Override
 			public String getBindingValue(OntologyObject target, BindingEvaluationContext context) 
 			{

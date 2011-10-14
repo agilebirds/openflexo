@@ -37,13 +37,13 @@ import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.ontology.RestrictionStatement;
-import org.openflexo.foundation.ontology.SubClassStatement;
 import org.openflexo.foundation.ontology.RestrictionStatement.RestrictionType;
+import org.openflexo.foundation.ontology.SubClassStatement;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.view.ViewConnector;
-import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewConnector;
 import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.viewpoint.AddClass;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.AddIsAStatement;
@@ -355,11 +355,11 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 		}
 		for (ObjectPropertyAssertion objectPropertyAssertion : action.getObjectAssertions()) {
 			if (objectPropertyAssertion.evaluateCondition(parameterValues)) {
-				logger.info("ObjectPropertyAssertion="+objectPropertyAssertion);
+				//logger.info("ObjectPropertyAssertion="+objectPropertyAssertion);
 				OntologyProperty property = objectPropertyAssertion.getOntologyProperty();
-				logger.info("Property="+property);
+				//logger.info("Property="+property);
 				OntologyObject assertionObject = objectPropertyAssertion.getAssertionObject(this);					
-				logger.info("assertionObject="+assertionObject);
+				//logger.info("assertionObject="+assertionObject);
 				/*OntologyObject assertionObject = null;
 					Object value = null;
 					if (objectPropertyAssertion.getObject() != null) value = getParameterValues().get(objectPropertyAssertion.getObject());
@@ -367,15 +367,18 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 					if (assertionObject == null && getParent() instanceof OEShape) 
 						assertionObject = objectPropertyAssertion.getAssertionObject((OEShape)getParent(),editionPatternInstance);*/
 				if (assertionObject != null) {
-					logger.info("OK, je le fais");
 					newIndividual.getOntResource().addProperty(property.getOntProperty(), assertionObject.getOntResource());
 				}
 				else {
-					logger.info("mon assertion objet est null");
+					//logger.info("assertion objet is null");
 				}
 			}
 		}
 		newIndividual.updateOntologyStatements();
+		
+		// Register reference
+		newIndividual.registerEditionPatternReference(getEditionPatternInstance(), action.getPatternRole());		
+		
 		return newIndividual;
 	}
 
@@ -395,6 +398,10 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 
 	protected OntologyClass finalizePerformAddClass(AddClass action, OntologyClass newClass)
 	{
+
+		// Register reference
+		newClass.registerEditionPatternReference(getEditionPatternInstance(), action.getPatternRole());		
+
 		return newClass;
 	}
 
@@ -412,9 +419,9 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 	}
 
 	protected ObjectPropertyStatement finalizePerformAddObjectProperty(AddObjectPropertyStatement action,
-			ObjectPropertyStatement objectPropertyStatement) 
+			ObjectPropertyStatement newObjectPropertyStatement) 
 	{
-		return objectPropertyStatement;
+		return newObjectPropertyStatement;
 	}
 	
 	protected FlexoModelObject performDeclarePatternRole(DeclarePatternRole action)
@@ -425,9 +432,10 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 	protected FlexoModelObject finalizePerformDeclarePatternRole(DeclarePatternRole action)
 	{
 		FlexoModelObject object = (FlexoModelObject)action.getDeclaredObject(this);
-		if (!(object instanceof OntologyObject)) {
-			object.registerEditionPatternReference(getEditionPatternInstance(), action.getPatternRole());		
-		}
+
+		// Register reference
+		object.registerEditionPatternReference(getEditionPatternInstance(), action.getPatternRole());		
+		
 		return object;
 	}
 	
@@ -562,9 +570,7 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 					FlexoModelObject patternActor = getEditionPatternInstance().getPatternActor(role);
 					logger.info("Duplicate pattern actor for role "+role+" value="+patternActor);
 					newEditionPatternInstance.setObjectForPatternRole(patternActor,role);
-					if (!(patternActor instanceof OntologyObject)) {
-						patternActor.registerEditionPatternReference(newEditionPatternInstance,role);		
-					}
+					patternActor.registerEditionPatternReference(newEditionPatternInstance,role);		
 				}
 			}
 			return newShema;
