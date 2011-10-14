@@ -55,7 +55,9 @@ import javax.swing.filechooser.FileView;
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.DocType;
+import org.openflexo.foundation.DocType.DefaultDocType;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.FlexoLinks;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
@@ -64,19 +66,17 @@ import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.LocalResourceCenterImplementation;
 import org.openflexo.foundation.TemporaryFlexoModelObject;
-import org.openflexo.foundation.DocType.DefaultDocType;
-import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.bindings.AbstractBinding;
-import org.openflexo.foundation.bindings.BindingAssignment;
-import org.openflexo.foundation.bindings.WKFBindingDefinition;
-import org.openflexo.foundation.bindings.WidgetBindingDefinition;
 import org.openflexo.foundation.bindings.AbstractBinding.AbstractBindingStringConverter;
+import org.openflexo.foundation.bindings.BindingAssignment;
 import org.openflexo.foundation.bindings.BindingAssignment.BindingAssignmentStringConverter;
 import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.bindings.BindingExpression.BindingExpressionStringConverter;
 import org.openflexo.foundation.bindings.BindingValue.BindingValueStringConverter;
 import org.openflexo.foundation.bindings.StaticBinding.StaticBindingStringConverter;
 import org.openflexo.foundation.bindings.TranstypedBinding.TranstypedBindingStringConverter;
+import org.openflexo.foundation.bindings.WKFBindingDefinition;
+import org.openflexo.foundation.bindings.WidgetBindingDefinition;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CannotRemoveLastDocType;
 import org.openflexo.foundation.cg.DocTypeAdded;
@@ -109,14 +109,16 @@ import org.openflexo.foundation.ie.menu.FlexoNavigationMenu;
 import org.openflexo.foundation.ie.palette.FlexoIEBIRTPalette;
 import org.openflexo.foundation.ie.palette.FlexoIEBasicPalette;
 import org.openflexo.foundation.ie.palette.FlexoIECustomImagePalette;
+import org.openflexo.foundation.ie.palette.FlexoIECustomImagePalette.FlexoIECustomImage;
 import org.openflexo.foundation.ie.palette.FlexoIECustomWidgetPalette;
 import org.openflexo.foundation.ie.palette.FlexoIEImagePalette;
-import org.openflexo.foundation.ie.palette.FlexoIECustomImagePalette.FlexoIECustomImage;
 import org.openflexo.foundation.ie.palette.FlexoIEImagePalette.FlexoIEImage;
 import org.openflexo.foundation.ie.util.DateFormatType;
 import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
+import org.openflexo.foundation.ontology.EditionPatternReference.ConceptActorReference;
+import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.ProjectOntology;
 import org.openflexo.foundation.ontology.ProjectOntologyLibrary;
 import org.openflexo.foundation.rm.FlexoResource.DependancyAlgorithmScheme;
@@ -144,6 +146,7 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternConverter;
+import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.wkf.FlexoImportedProcessLibrary;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
@@ -171,8 +174,8 @@ import org.openflexo.toolbox.WRLocator;
 import org.openflexo.toolbox.ZipUtils;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.XMLMapping;
 import org.openflexo.xmlcode.StringEncoder.Converter;
+import org.openflexo.xmlcode.XMLMapping;
 
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
@@ -4211,5 +4214,44 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		 this.testRole = testRole;
 	 }
 
+	 /**
+	  * This method is called while deserializing EditionPatternReference instances
+	  * Because this storage is distributed, we have to build partial knowledge,
+	  * as resources are being loaded.
+	  * 
+	  * @param conceptURI
+	  * @param actorReference
+	  */
+	 public void _addToPendingEditionPatternReferences(String conceptURI,ConceptActorReference actorReference)
+	 {
+		 System.out.println("OK, j'enregistre le concept "+conceptURI+" associe a la reference "+actorReference);
+		 logger.info("Registering as pending pattern object reference: "+conceptURI);
+		 Vector<ConceptActorReference> values = pendingEditionPatternReferences.get(conceptURI);
+		 if (values == null) {
+			 values = new Vector<ConceptActorReference>();
+			 pendingEditionPatternReferences.put(conceptURI, values);
+		 }
+		 values.add(actorReference);
+	 }
+	 
+	 private Hashtable<String,Vector<ConceptActorReference>> pendingEditionPatternReferences = new Hashtable<String, Vector<ConceptActorReference>>();
 
+	 public void _retrievePendingEditionPatternReferences(OntologyObject object)
+	 {
+		 Vector<ConceptActorReference> values = pendingEditionPatternReferences.get(object.getURI());
+		 if (values == null) {
+			 // No pending EditionPattern references for object
+			 return;
+		 }
+		 else {
+			 for (ConceptActorReference actorReference : values) {
+				 EditionPatternInstance instance = actorReference.getPatternReference().getEditionPatternInstance();
+				 PatternRole pr = actorReference.getPatternReference().getEditionPattern().getPatternRole(actorReference.patternRole);
+				 logger.info("Retrieve Edition Pattern Instance "+instance+" for "+object+" role="+pr);
+				 object.registerEditionPatternReference(instance,pr);
+			 }
+			 values.clear();
+		 }
+	 }
+	 
 }

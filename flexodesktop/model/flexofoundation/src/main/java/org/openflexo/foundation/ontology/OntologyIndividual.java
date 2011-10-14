@@ -23,33 +23,27 @@ import java.text.Collator;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Vector;
+import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
+import com.hp.hpl.jena.ontology.OntResource;
 
 public class OntologyIndividual extends OntologyObject implements Comparable<OntologyIndividual> {
 
-	private final FlexoOntology _ontology;
-	private final String uri;
-	private String name;
-	private final Individual individual;
+	private static final Logger logger = Logger.getLogger(OntologyIndividual.class.getPackage().getName());
+
+	private Individual individual;
 
 	private final Vector<OntologyClass> superClasses; 
 
 	protected OntologyIndividual(Individual anIndividual, FlexoOntology ontology)
 	{
-		super();
-		_ontology = ontology;
-		uri = anIndividual.getURI();
+		super(anIndividual,ontology);
 		individual = anIndividual;
 		superClasses = new Vector<OntologyClass>();
-		if (uri.indexOf("#") > -1) {
-			name = uri.substring(uri.indexOf("#")+1);
-		} else {
-			name = uri;
-		}
 	}
 
 	protected void init()
@@ -75,6 +69,39 @@ public class OntologyIndividual extends OntologyObject implements Comparable<Ont
 		updateSuperClasses();
 	}
 
+	/*@Override
+	public void setName(String aName)
+	{
+		String oldURI = getURI();
+		String oldName = getName();
+		String newURI;
+		if (getURI().indexOf("#") > -1) {
+			newURI = getURI().substring(0,getURI().indexOf("#")+1)+aName;
+		} else {
+			newURI = aName;
+		}
+		logger.info("Rename individual "+getURI()+" to "+newURI);
+		individual = (Individual) (ResourceUtils.renameResource(individual, newURI).as(Individual.class));
+		_updateNameAndURIAfterRenaming(aName,newURI);
+		getFlexoOntology().renameIndividual(this, oldURI, newURI);
+		update();
+		setChanged();
+		notifyObservers(new NameChanged(oldName,aName));
+		logger.info("Les references: "+getEditionPatternReferences());
+	}*/
+
+	@Override
+	public void setName(String aName)
+	{
+		renameURI(aName,individual,Individual.class);
+	}
+	
+	@Override
+	protected void _setOntResource(OntResource r)
+	{
+		individual = (Individual)r;
+	}
+
 	private void updateSuperClasses()
 	{
 		//superClasses.clear();
@@ -98,24 +125,6 @@ public class OntologyIndividual extends OntologyObject implements Comparable<Ont
 	public Vector<OntologyClass> getSuperClasses()
 	{
 		return superClasses;
-	}
-
-	@Override
-	public String getURI()
-	{
-		return uri;
-	}
-
-	@Override
-	public String getName()
-	{
-		return name;
-	}
-
-	@Override
-	public FlexoOntology getFlexoOntology()
-	{
-		return _ontology;
 	}
 
 	@Override

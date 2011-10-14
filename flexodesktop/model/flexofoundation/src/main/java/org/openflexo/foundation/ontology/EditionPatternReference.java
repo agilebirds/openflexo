@@ -53,7 +53,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		super();
 		actors = new Hashtable<String,ActorReference>();		
 	}
-
+	
 	private EditionPatternReference(FlexoProject project) 
 	{
 		this();
@@ -85,6 +85,16 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 	}
 	
 	@Override
+	public void finalizeDeserialization(Object builder) {
+		super.finalizeDeserialization(builder);
+		System.out.println("Called finalizeDeserialization() for EditionPatternReference ");
+		for (ActorReference ref : actors.values()) {
+			if (ref instanceof ConceptActorReference)
+				getProject()._addToPendingEditionPatternReferences(((ConceptActorReference) ref)._getObjectURI(), (ConceptActorReference)ref);
+		}
+	}
+
+	@Override
 	public void delete()
 	{
 		logger.warning("TODO: implements EditionPatternReference deletion !");
@@ -100,22 +110,22 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 			//System.out.println("> role : "+role);
 			FlexoModelObject o = _editionPatternInstance.getActors().get(role);
 			if (o instanceof OntologyObject) {
-				actors.put(role, new ConceptActorReference((OntologyObject)o,role));
+				actors.put(role, new ConceptActorReference((OntologyObject)o,role,this));
 			}
 			else if (o instanceof ObjectPropertyStatement) {
-				actors.put(role, new ObjectPropertyStatementActorReference((ObjectPropertyStatement)o,role));
+				actors.put(role, new ObjectPropertyStatementActorReference((ObjectPropertyStatement)o,role,this));
 			}
 			else if (o instanceof DataPropertyStatement) {
-				actors.put(role, new DataPropertyStatementActorReference((DataPropertyStatement)o,role));
+				actors.put(role, new DataPropertyStatementActorReference((DataPropertyStatement)o,role,this));
 			}
 			else if (o instanceof SubClassStatement) {
-				actors.put(role, new SubClassStatementActorReference((SubClassStatement)o,role));
+				actors.put(role, new SubClassStatementActorReference((SubClassStatement)o,role,this));
 			}
 			else if (o instanceof ObjectRestrictionStatement) {
-				actors.put(role, new RestrictionStatementActorReference((ObjectRestrictionStatement)o,role));
+				actors.put(role, new RestrictionStatementActorReference((ObjectRestrictionStatement)o,role,this));
 			}
 			else {
-				actors.put(role, new ModelObjectActorReference(o,role));
+				actors.put(role, new ModelObjectActorReference(o,role,this));
 			}
 		}
 	}
@@ -154,6 +164,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 	{
 		public String patternRole;
 		private FlexoProject _project;
+		private EditionPatternReference _patternReference;
 		
 		protected ActorReference(FlexoProject project) 
 		{
@@ -181,15 +192,27 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		}
 
 		public abstract FlexoModelObject retrieveObject();
+
+		public EditionPatternReference getPatternReference() 
+		{
+			return _patternReference;
+		}
+
+		public void setPatternReference(EditionPatternReference _patternReference) 
+		{
+			this._patternReference = _patternReference;
+		}
+		
 	}
 
 	public static class ConceptActorReference extends ActorReference 
 	{
-		public OntologyObject object;
-		public String objectURI;
+		private OntologyObject object;
+		private String objectURI;
 		
-		public ConceptActorReference(OntologyObject o,String aPatternRole) {
+		public ConceptActorReference(OntologyObject o,String aPatternRole, EditionPatternReference ref) {
 			super(o.getProject());
+			setPatternReference(ref);
 			patternRole = aPatternRole;
 			object = o;
 			objectURI = o.getURI();
@@ -233,6 +256,19 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 			}
 			return object;
 		}
+
+		public String _getObjectURI() {
+			if (object != null) return object.getURI();
+			return objectURI;
+		}
+
+		public void _setObjectURI(String objectURI) {
+			this.objectURI = objectURI;
+		}
+
+		public OntologyObject getObject() {
+			return object;
+		}
 	}
 	
 	public static class ObjectPropertyStatementActorReference extends ActorReference 
@@ -242,9 +278,10 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		public String objectPropertyURI;
 		public String objectURI;
 		
-		public ObjectPropertyStatementActorReference(ObjectPropertyStatement o,String aPatternRole) 
+		public ObjectPropertyStatementActorReference(ObjectPropertyStatement o,String aPatternRole, EditionPatternReference ref) 
 		{
 			super(o.getProject());
+			setPatternReference(ref);
 			patternRole = aPatternRole;
 			statement = o;
 			subjectURI = o.getSubject().getURI();
@@ -302,9 +339,10 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		public String dataPropertyURI;
 		public String value;
 		
-		public DataPropertyStatementActorReference(DataPropertyStatement o,String aPatternRole) 
+		public DataPropertyStatementActorReference(DataPropertyStatement o,String aPatternRole, EditionPatternReference ref) 
 		{
 			super(o.getProject());
+			setPatternReference(ref);
 			patternRole = aPatternRole;
 			statement = o;
 			subjectURI = o.getSubject().getURI();
@@ -362,9 +400,10 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		public String propertyURI;
 		public String objectURI;
 		
-		public RestrictionStatementActorReference(ObjectRestrictionStatement o,String aPatternRole) 
+		public RestrictionStatementActorReference(ObjectRestrictionStatement o,String aPatternRole, EditionPatternReference ref) 
 		{
 			super(o.getProject());
+			setPatternReference(ref);
 			patternRole = aPatternRole;
 			statement = o;
 			subjectURI = o.getSubject().getURI();
@@ -424,9 +463,10 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		public String subjectURI;
 		public String parentURI;
 		
-		public SubClassStatementActorReference(SubClassStatement o,String aPatternRole) 
+		public SubClassStatementActorReference(SubClassStatement o,String aPatternRole, EditionPatternReference ref) 
 		{
 			super(o.getProject());
+			setPatternReference(ref);
 			patternRole = aPatternRole;
 			statement = o;
 			subjectURI = o.getSubject().getURI();
@@ -481,9 +521,10 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		public FlexoModelObject object;
 		public FlexoModelObjectReference objectReference;
 		
-		public ModelObjectActorReference(FlexoModelObject o,String aPatternRole) 
+		public ModelObjectActorReference(FlexoModelObject o,String aPatternRole, EditionPatternReference ref) 
 		{
 			super(o.getProject());
+			setPatternReference(ref);
 			patternRole = aPatternRole;
 			object = o;
 			objectReference = new FlexoModelObjectReference(getProject(), o);
@@ -598,6 +639,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 	public void setActorForKey(ActorReference o, String key)
 	{
 		actors.put(key,o);
+		o.setPatternReference(this);
 	}
 
 	public void removeActorWithKey(String key)
