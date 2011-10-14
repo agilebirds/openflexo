@@ -28,6 +28,8 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.dm.DuplicateMethodSignatureException;
 import org.openflexo.foundation.ontology.dm.OntologyObjectStatementsChanged;
+import org.openflexo.foundation.ontology.dm.URIChanged;
+import org.openflexo.foundation.ontology.dm.URINameChanged;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
@@ -161,6 +163,10 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 		update();
 		setChanged();
 		notifyObservers(new NameChanged(oldName,newName));
+		setChanged();
+		notifyObservers(new URINameChanged(oldName,newName));
+		setChanged();
+		notifyObservers(new URIChanged(oldURI,newURI));
 		for (EditionPatternReference ref : getEditionPatternReferences()) {
 			EditionPatternInstance i = ref.getEditionPatternInstance();
 			for (FlexoModelObject o : i.getActors().values()) {

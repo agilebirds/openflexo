@@ -19,6 +19,8 @@ import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.ontology.OntologyStatement;
 import org.openflexo.foundation.ontology.RestrictionStatement;
+import org.openflexo.foundation.ontology.dm.URIChanged;
+import org.openflexo.foundation.ontology.dm.URINameChanged;
 import org.openflexo.foundation.viewpoint.ClassPatternRole;
 import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.DataPropertyStatementPatternRole;
@@ -42,7 +44,7 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 	{
 		super(aPatternRole);
 		allProperties = new Vector<BindingPathElement>();
-		uriNameProperty = new FinalBindingPathElementImpl<T,String>("uriName",TypeUtils.getBaseClass(getType()),String.class,true,"uri_name_as_supplied_in_ontology") {
+		uriNameProperty = new FinalBindingPathElementImpl<T,String>(URINameChanged.URI_NAME_KEY,TypeUtils.getBaseClass(getType()),String.class,true,"uri_name_as_supplied_in_ontology") {
 			@Override
 			public String getBindingValue(T target, BindingEvaluationContext context) 
 			{
@@ -61,7 +63,7 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 		    }
 		};
 		allProperties.add(uriNameProperty);
-		uriProperty = new FinalBindingPathElementImpl<T,String>("uri",TypeUtils.getBaseClass(getType()),String.class,false,"uri_as_supplied_in_ontology") {
+		uriProperty = new FinalBindingPathElementImpl<T,String>(URIChanged.URI_KEY,TypeUtils.getBaseClass(getType()),String.class,false,"uri_as_supplied_in_ontology") {
 			@Override
 			public String getBindingValue(T target, BindingEvaluationContext context) 
 			{
