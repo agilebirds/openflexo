@@ -176,26 +176,49 @@ public class XMLDeserializer {
 			else if (p.getXMLElement() != null) {
 				XMLElement propertyXMLElement = p.getXMLElement();
 				//System.out.println("Handle element "+p);
-				Iterator<MatchingElement> matchingElements = elementsMatchingHandledXMLTags(node,p);
-				switch (p.getCardinality()) {
-				case SINGLE:
-					if (matchingElements.hasNext()) {
-						MatchingElement matchingElement = matchingElements.next();
-						//System.out.println("SINGLE, "+matchingElement);
-						Object value = buildObjectFromNodeAndModelEntity(matchingElement.element,matchingElement.modelEntity);
-						handler.invokeSetter(p, value);
+				if (p.getAccessedEntity() != null) {
+					Iterator<MatchingElement> matchingElements = elementsMatchingHandledXMLTags(node,p);
+					switch (p.getCardinality()) {
+					case SINGLE:
+						if (matchingElements.hasNext()) {
+							MatchingElement matchingElement = matchingElements.next();
+							//System.out.println("SINGLE, "+matchingElement);
+							Object value = buildObjectFromNodeAndModelEntity(matchingElement.element,matchingElement.modelEntity);
+							handler.invokeSetter(p, value);
+						}
+						break;
+					case LIST:
+						while (matchingElements.hasNext()) {
+							MatchingElement matchingElement = matchingElements.next();
+							//System.out.println("LIST, "+matchingElement);
+							Object value = buildObjectFromNodeAndModelEntity(matchingElement.element,matchingElement.modelEntity);
+							handler.invokeAdder(p, value);
+						}
+						break;
+					default:
+						break;
 					}
-					break;
-				case LIST:
-					while (matchingElements.hasNext()) {
-						MatchingElement matchingElement = matchingElements.next();
-						//System.out.println("LIST, "+matchingElement);
-						Object value = buildObjectFromNodeAndModelEntity(matchingElement.element,matchingElement.modelEntity);
-						handler.invokeAdder(p, value);
+				} else if (stringEncoder.isConvertable(p.getType())) {
+					// TODO: deserialize string convertable elements.
+					List<Element> elements = node.getContent(new ElementFilter(p.getXMLElement().xmlTag()));
+					for (Element element : elements) {
+						Object value;
+						try {
+							value = stringEncoder.fromString(p.getType(), element.getText());
+						} catch (InvalidDataException e) {
+							throw new InvalidXMLDataException("'" + element.getText() + "' cannot be converted to " + p.getType().getName());
+						}
+						switch (p.getCardinality()) {
+						case SINGLE:
+							handler.invokeSetter(p, value);
+							break;
+						case LIST:
+							handler.invokeAdder(p, value);
+							break;
+						default:
+							break;
+						}
 					}
-					break;
-				default:
-					break;
 				}
 			}
 		}
@@ -222,14 +245,16 @@ public class XMLDeserializer {
 	{
 		ArrayList<MatchingElement> returned = new ArrayList<MatchingElement>();
 		String contextString = modelProperty.getXMLElement() != null ? modelProperty.getXMLElement().context() : "";
-		for (ModelEntity entity : modelProperty.getAccessedEntity().getAllDescendantsAndMe()) {
-			if (entity.getXMLElement() != null || stringEncoder.isConvertable(entity.getImplementedInterface())) { // Only consider
-				// "XML-concrete"
-				// entities and string
-				// convertable entities
-				List<Element> elements = node.getContent(new ElementFilter(contextString + entity.getXMLTag()));
-				for (Element element : elements) {
-					returned.add(new MatchingElement(element, entity));
+		if(modelProperty.getAccessedEntity()!=null) {
+			for (ModelEntity entity : modelProperty.getAccessedEntity().getAllDescendantsAndMe()) {
+				if (entity.getXMLElement() != null || stringEncoder.isConvertable(entity.getImplementedInterface())) { // Only consider
+					// "XML-concrete"
+					// entities and string
+					// convertable entities
+					List<Element> elements = node.getContent(new ElementFilter(contextString + entity.getXMLTag()));
+					for (Element element : elements) {
+						returned.add(new MatchingElement(element, entity));
+					}
 				}
 			}
 		}

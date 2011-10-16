@@ -133,6 +133,10 @@ public class ModelEntity<I> extends ProxyFactory {
 		}
 	}
 
+	// Guillaume: this method is deprecated because we are considering to allow multiple-inheritance within the model
+	// Therefore, we should try to limit the number of invokers of this method to reduce the refactoring that will occur when PAMELA
+	// will support multiple-inheritance.
+	@Deprecated
 	public ModelEntity<? super I> getSuperEntity() throws ModelDefinitionException {
 		if (superEntity == null) {
 			if (superImplementedInterface != null) {
