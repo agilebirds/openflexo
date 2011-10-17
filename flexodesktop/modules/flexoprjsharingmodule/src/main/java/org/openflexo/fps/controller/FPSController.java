@@ -159,7 +159,7 @@ public class FPSController extends FlexoController implements SelectionManagingC
 
 		_consoleView = new ConsoleView();
 
-		_repositories.loadStoredRepositoryLocation(FlexoPreferences.getPrefsDirectory());
+		_repositories.loadStoredRepositoryLocation(FlexoPreferences.getApplicationDataDirectory());
 
 		_footer.refresh();
 
