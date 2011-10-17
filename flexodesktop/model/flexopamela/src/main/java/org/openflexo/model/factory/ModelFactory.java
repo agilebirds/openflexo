@@ -42,7 +42,11 @@ public class ModelFactory {
 	public <I> I newInstance(Class<I> implementedInterface, Object... args) {
 		try {
 			ModelEntity<I> entity = getModelEntity(implementedInterface);
-			return entity.newInstance(args);
+			if (entity != null) {
+				return entity.newInstance(args);
+			} else {
+				throw new ModelExecutionException("Unknown entity '"+implementedInterface.getName()+"'! Did you forget to import it or to annotated it with @ModelEntity?");
+			}
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -31,9 +32,9 @@ import org.openflexo.model.xml.InvalidDataException;
 
 public class ProxyMethodHandler<I> implements MethodHandler {
 
-	private Map<Object, Object> values;
+	private Map<String, Object> values;
 	private boolean deleted = false;
-	private Map<Object, Object> oldValues;
+	private Map<String, Object> oldValues;
 	private ModelEntity<I> modelEntity;
 
 	private I object;
@@ -49,6 +50,7 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 	private static Method DISABLE_NOTIFICATIONS;
 	private static Method CLONE_OBJECT;
 	private static Method CLONE_OBJECT_WITH_CONTEXT;
+	private static Method TO_STRING;
 
 	static {
 		try {
@@ -60,6 +62,7 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 			PERFORM_SUPER_FINDER = AccessibleProxyObject.class.getMethod("performSuperFinder", Object.class);
 			ENABLE_NOTIFICATIONS = AccessibleProxyObject.class.getMethod("enableNotifications");
 			DISABLE_NOTIFICATIONS = AccessibleProxyObject.class.getMethod("disableNotifications");
+			TO_STRING = Object.class.getMethod("toString");
 			CLONE_OBJECT = CloneableProxyObject.class.getMethod("cloneObject");
 			CLONE_OBJECT_WITH_CONTEXT = CloneableProxyObject.class.getMethod("cloneObject",Array.newInstance(Object.class,0).getClass());
 		} catch (SecurityException e) {
@@ -74,7 +77,7 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 	public ProxyMethodHandler(ModelEntity<I> modelEntity)
 	{
 		this.modelEntity = modelEntity;
-		values = new HashMap<Object, Object>(modelEntity.getDeclaredPropertiesSize(), 1.0f);
+		values = new HashMap<String, Object>(modelEntity.getDeclaredPropertiesSize(), 1.0f);
 	}
 
 	public I getObject()
@@ -146,8 +149,7 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 
 		Finder finder = method.getAnnotation(Finder.class);
 		if (finder != null) {
-			internallyInvokeFinder(finder, args);
-			return null;
+			return internallyInvokeFinder(finder, args);
 		}
 
 		if (method.equals(PERFORM_SUPER_GETTER)) {
@@ -184,6 +186,9 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 		else if (method.equals(CLONE_OBJECT_WITH_CONTEXT)) {
 			return cloneObject(args);
 		}
+		else if (method.equals(TO_STRING)) {
+			return internallyInvokeToString();
+		}
 
 		System.err.println("Cannot handle method "+method);
 		return null;
@@ -216,7 +221,7 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 		deleted = true;
 		Stack<String> deletedProperties = new Stack<String>();
 		// 1. We make a copy of all the values
-		oldValues = new HashMap<Object, Object>(values);
+		oldValues = new HashMap<String, Object>(values);
 		ModelEntity<? super I> entity = getModelEntity();
 		while (entity != null) {
 			// 2. We invoke all the deleters of the embedded properties
@@ -699,7 +704,7 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 	}
 
 	private boolean isObjectAttributeEquals(Object o, String attribute, Object value) throws ModelDefinitionException {
-		ProxyMethodHandler<?> handler = getModelFactory().getHandler(object);
+		ProxyMethodHandler<?> handler = getModelFactory().getHandler(o);
 		if (handler != null) {
 			Object attributeValue = handler.invokeGetter(attribute);
 			return isEqual(attributeValue, value);
@@ -1273,5 +1278,42 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 		clipboard.consume();
 	}
 
+	@Override
+	public String toString() {
+		return internallyInvokeToString();
+	}
+
+	private String internallyInvokeToString() {
+		StringBuilder sb = new StringBuilder();
+		List<String> variables = new ArrayList<String>(values.keySet());
+		Collections.sort(variables);
+		for (String var : variables) {
+			Object obj = values.get(var);
+			String s = null;
+			if (obj != null) {
+				s = indent(obj.toString(), var.length() + 1);
+			}
+			sb.append(var).append("=").append(s).append('\n');
+		}
+		return sb.toString();
+	}
+
+	private static String indent(String s, int indent) {
+		if (indent > 0 && s != null) {
+			String[] split = s.split("\n\r");
+			if (split.length > 1) {
+				StringBuilder sb = new StringBuilder();
+				for (String string : split) {
+					// TODO: optimize this
+					for (int i = 0; i < indent; i++) {
+						sb.append(' ');
+					}
+					sb.append(string).append('\n');
+				}
+				return sb.toString();
+			}
+		}
+		return s;
+	}
 
 }
