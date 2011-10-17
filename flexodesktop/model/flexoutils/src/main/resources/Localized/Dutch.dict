@@ -1,5 +1,5 @@
 #Dutch
-#Fri Oct 07 19:09:21 CEST 2011
+#Mon Oct 17 12:27:41 CEST 2011
 =
 \ =\ 
 \ into\ =\ into 
@@ -2444,6 +2444,7 @@ flexo_project=OpenFlexo project
 flexo_projects=FLEXO projects
 flexo_resource_accessor_name=OpenFlexo resource accessor name
 flexo_resource_class_name=OpenFlexo resource class name
+flexo_server_instance_url=flexo_server_instance_url
 flexo_tool_set_lite=FlexoToolSet lite
 flexo_tool_set_pro=FlexoToolSet pro
 flexo_tool_set_server=FlexoToolSet server
@@ -3220,6 +3221,7 @@ mandatory_bindings_must_have_a_value_description=Mandatory bindings must have a 
 mandatory_boolean_bindings_must_have_a_value=mandatory boolean bindings must have a value
 mandatory_boolean_bindings_must_have_a_value_description=mandatory boolean bindings must have a value description
 manual=manual
+manual_entry=Manual entry
 mapping_definition_is_allowed_as_HTML=<html>Mapping definition is allowed for simple types. <br>You might define your own data mapping.</html>
 mapping_definition_is_not_allowed_as_HTML=<html>Mapping definition is not allowed for such type. <br>You will have to define mapping in custom code.</html>
 mapping_will_be_later_encoded=Mapping will be later encoded
@@ -4387,7 +4389,7 @@ semantic_statements=Semantic statements
 send=send
 send_bug=Send Bug
 send_incident_timeout=Incident sending has timed out.
-send_project_to_flexo_server=Send project to Flexo server
+send_project_to_flexo_server=Send project to OpenFlexo server
 sending_checkout_request=Sending checkout request
 sequence=sequence
 service=service
