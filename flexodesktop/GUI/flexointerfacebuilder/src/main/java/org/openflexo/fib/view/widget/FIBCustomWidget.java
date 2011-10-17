@@ -26,8 +26,8 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBCustomDynamicModel;
 import org.openflexo.fib.controller.FIBSelectable;
@@ -189,8 +189,13 @@ implements ApplyCancelListener, BindingEvaluationContext
 			//logger.info("updateWidgetFromModel() with "+getValue());
 			if (customComponent != null) {
 
-				customComponent.setEditedObject(getValue());
-				customComponent.setRevertValue(getValue());		
+				try {
+					customComponent.setEditedObject(getValue());
+					customComponent.setRevertValue(getValue());	
+				} 
+				catch (ClassCastException e) {
+					logger.warning("Unexpected exception in "+customComponent+": "+e.getMessage());
+				}
 
 				for (FIBCustomAssignment assign : getWidget().getAssignments()) {
 					DataBinding variableDB = assign.getVariable();

@@ -17,12 +17,23 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.viewpoint;
+package org.openflexo.foundation.viewpoint.inspector;
 
 import java.util.Vector;
+import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.Bindable;
+import org.openflexo.antar.binding.BindingFactory;
+import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.DefaultBindingFactory;
+import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.dm.InspectorEntryInserted;
 import org.openflexo.foundation.viewpoint.dm.InspectorEntryRemoved;
+import org.openflexo.logging.FlexoLogger;
 
 /**
  * Represents inspector associated with an Edition Pattern
@@ -30,15 +41,20 @@ import org.openflexo.foundation.viewpoint.dm.InspectorEntryRemoved;
  * @author sylvain
  *
  */
-public class EditionPatternInspector extends ViewPointObject {
+public class EditionPatternInspector extends ViewPointObject implements Bindable {
+
+	private static final Logger logger = FlexoLogger.getLogger(EditionPatternInspector.class.getPackage().toString());
 
 	private String inspectorTitle;
 	private EditionPattern _editionPattern;
 	private Vector<InspectorEntry> entries;
 	
+	private BindingModel _bindingModel;
+
 	public static EditionPatternInspector makeEditionPatternInspector(EditionPattern ep)
 	{
 		EditionPatternInspector returned = new EditionPatternInspector();
+		returned.setInspectorTitle(ep.getName());
 		ep.setInspector(returned);
 		return returned;
 	}
@@ -59,6 +75,7 @@ public class EditionPatternInspector extends ViewPointObject {
 		_editionPattern = editionPattern;
 	}
 
+	@Override
 	public ViewPoint getCalc() 
 	{
 		if (getEditionPattern() != null)
@@ -77,6 +94,7 @@ public class EditionPatternInspector extends ViewPointObject {
 		return null;
 	}
 
+	@Override
 	public String getInspectorTitle()
 	{
 		return inspectorTitle;
@@ -116,50 +134,67 @@ public class EditionPatternInspector extends ViewPointObject {
 	public TextFieldInspectorEntry createNewTextField()
 	{
 		TextFieldInspectorEntry newEntry = new TextFieldInspectorEntry();
-		newEntry.setLabel("new_entry");
-		newEntry.setPatternRole(getEditionPattern().getPatternRoles().size() > 0 ? getEditionPattern().getPatternRoles().firstElement() : null);
+		newEntry.setName("textfield");
+		newEntry.setLabel("textfield");
 		addToEntries(newEntry);
 		return newEntry;
 	}
 	
-	/*public EditionPatternPropertyModel createNewProperty()
+	public TextAreaInspectorEntry createNewTextArea()
 	{
-		EditionPatternPropertyModel newProperty = new EditionPatternPropertyModel();
-		newProperty.setInspector(this);
-		newProperty.label = "newProperty";
-		newProperty.setPatternRoleReference(getEditionPattern().getPatternRoles().size() > 0 ? getEditionPattern().getPatternRoles().firstElement() : null);
-		newProperty.constraint = getDefaultTabModel().getProperties().size();
-		newProperty.name = "data";
-		int index = 1;
-		while (getDefaultTabModel().getProperties().get(newProperty.getKey()) != null) {
-			newProperty.name = "data"+index;
-			index++;
-		}
-		getDefaultTabModel().setPropertyForKey(newProperty, newProperty.getKey());
-		return newProperty;
+		TextAreaInspectorEntry newEntry = new TextAreaInspectorEntry();
+		newEntry.setName("textarea");
+		newEntry.setLabel("textarea");
+		addToEntries(newEntry);
+		return newEntry;
 	}
 	
-	public EditionPatternPropertyListModel createNewTableProperty()
+	public IntegerInspectorEntry createNewInteger()
 	{
-		EditionPatternPropertyListModel newProperty = new EditionPatternPropertyListModel();
-		newProperty.setInspector(this);
-		newProperty.label = "newProperty";
-		newProperty.setPatternRoleReference(getEditionPattern().getPatternRoles().size() > 0 ? getEditionPattern().getPatternRoles().firstElement() : null);
-		newProperty.constraint = getDefaultTabModel().getProperties().size();
-		newProperty.name = "data";
-		int index = 1;
-		while (getDefaultTabModel().getProperties().get(newProperty.getKey()) != null) {
-			newProperty.name = "data"+index;
-			index++;
-		}
-		getDefaultTabModel().setPropertyForKey(newProperty, newProperty.getKey());
-		return newProperty;
+		IntegerInspectorEntry newEntry = new IntegerInspectorEntry();
+		newEntry.setName("integer");
+		newEntry.setLabel("integer");
+		addToEntries(newEntry);
+		return newEntry;
 	}
 	
-	public PropertyModel deleteProperty(PropertyModel property)
+	public CheckboxInspectorEntry createNewCheckbox()
 	{
-		getDefaultTabModel().removePropertyWithKey(property.getKey());
-		return property;
-	}*/
+		CheckboxInspectorEntry newEntry = new CheckboxInspectorEntry();
+		newEntry.setName("checkbox");
+		newEntry.setLabel("checkbox");
+		addToEntries(newEntry);
+		return newEntry;
+	}
 	
+	@Override
+	public BindingFactory getBindingFactory() 
+	{
+		return BINDING_FACTORY;
+	}
+	
+	@Override
+	public BindingModel getBindingModel() 
+	{
+			if (_bindingModel == null) createBindingModel();
+			return _bindingModel;
+	}
+	
+	public void updateBindingModel()
+	{
+		logger.fine("updateBindingModel()");
+		_bindingModel = null;
+		createBindingModel();
+	}
+	
+	private void createBindingModel()
+	{
+		_bindingModel = new BindingModel();
+		for (PatternRole role : getEditionPattern().getPatternRoles()) {
+			_bindingModel.addToBindingVariables(PatternRolePathElement.makePatternRolePathElement(role));
+		}	
+	}
+
+	private static DefaultBindingFactory BINDING_FACTORY = new EditionPatternInspectorBindingFactory();
+
  }

@@ -23,10 +23,6 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole.FlexoModelObjectType;
-import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole.OntologicObjectType;
-import org.openflexo.foundation.viewpoint.PatternRole.PatternRoleType;
-import org.openflexo.foundation.viewpoint.PrimitivePatternRole.PrimitiveType;
 
 
 
@@ -100,7 +96,7 @@ public class DeclarePatternRole extends EditionAction<PatternRole> {
 	}
 
 	// Called in case of pattern role is of wrong type
-	private void setPatternRoleType(PatternRoleType type)
+	/*private void setPatternRoleType(PatternRoleType type)
 	{
 		if ((getPatternRole() != null) && (getPatternRole().getType() == type)) {
 			return; // Everything is fine
@@ -136,9 +132,9 @@ public class DeclarePatternRole extends EditionAction<PatternRole> {
 		}
 		
 		setPatternRole(newPatternRole);
-	}
+	}*/
 	
-	@Override
+/*	@Override
 	protected void updatePatternRoleType()
 	{
 		if (getPatternRole() == null) {
@@ -220,6 +216,6 @@ public class DeclarePatternRole extends EditionAction<PatternRole> {
 				}
 			}
 		}
-	}	
+	}	*/
 
 }

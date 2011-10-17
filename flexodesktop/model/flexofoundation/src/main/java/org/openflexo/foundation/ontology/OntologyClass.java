@@ -23,18 +23,19 @@ import java.text.Collator;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Vector;
+import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
+import com.hp.hpl.jena.ontology.OntResource;
 
 public class OntologyClass extends OntologyObject implements Comparable<OntologyClass> {
 
-	private final FlexoOntology _ontology;
-	private String uri;
-	private String name;
-	private final OntClass ontClass;
+	private static final Logger logger = Logger.getLogger(OntologyClass.class.getPackage().getName());
+
+	private OntClass ontClass;
 
 	private final Vector<OntologyClass> superClasses; 
 	private final Vector<OntologyClass> subClasses; 
@@ -42,20 +43,11 @@ public class OntologyClass extends OntologyObject implements Comparable<Ontology
 	
 	protected OntologyClass(OntClass anOntClass, FlexoOntology ontology)
 	{
-		super();
-		_ontology = ontology;
+		super(anOntClass,ontology);
 		superClasses = new Vector<OntologyClass>();
 		subClasses = new Vector<OntologyClass>();
 		individuals = new Vector<OntologyIndividual>();
-		if (anOntClass != null) {
-			uri = anOntClass.getURI();
-		}
 		ontClass = anOntClass;
-		if (uri.indexOf("#") > -1) {
-			name = uri.substring(uri.indexOf("#")+1);
-		} else {
-			name = uri;
-		}
 	}
 
 	protected void init()
@@ -81,6 +73,19 @@ public class OntologyClass extends OntologyObject implements Comparable<Ontology
 		updateOntologyStatements();
 		updateSuperClasses();
 		updateSubClasses();
+	}
+
+	@Override
+	public void setName(String aName)
+	{
+		renameURI(aName,ontClass,OntClass.class);
+	}
+	
+
+	@Override
+	protected void _setOntResource(OntResource r)
+	{
+		ontClass = (OntClass)r;
 	}
 
 	private void updateSuperClasses()
@@ -136,24 +141,6 @@ public class OntologyClass extends OntologyObject implements Comparable<Ontology
 		}
 	}
 	
-	@Override
-	public String getURI()
-	{
-		return uri;
-	}
-
-	@Override
-	public String getName()
-	{
-		return name;
-	}
-
-	@Override
-	public FlexoOntology getFlexoOntology()
-	{
-		return _ontology;
-	}
-
 	@Override
 	public String getClassNameKey()
 	{
@@ -322,10 +309,34 @@ public class OntologyClass extends OntologyObject implements Comparable<Ontology
 		return "Class "+getName()+extendsLabel;
 	}
 
+	@Override
 	public boolean isOntologyClass()
 	{
 		return true;
 	}
 
-
+	@Override
+	protected void recursivelySearchRangeAndDomains()
+	{
+		super.recursivelySearchRangeAndDomains();
+		Vector<OntologyClass> alreadyComputed = new Vector<OntologyClass>();
+		for (OntologyClass aClass : getSuperClasses()) {
+			_appendRangeAndDomains(aClass, alreadyComputed);
+		}
+	}
+	
+	private void _appendRangeAndDomains(OntologyClass superClass, Vector<OntologyClass> alreadyComputed)
+	{
+		if (alreadyComputed.contains(superClass)) return;
+		alreadyComputed.add(superClass);
+		for (OntologyProperty p : superClass.getDeclaredPropertiesTakingMySelfAsDomain()) {
+			if (!propertiesTakingMySelfAsDomain.contains(p)) propertiesTakingMySelfAsDomain.add(p);
+		}
+		for (OntologyProperty p : superClass.getDeclaredPropertiesTakingMySelfAsRange()) {
+			if (!propertiesTakingMySelfAsRange.contains(p)) propertiesTakingMySelfAsRange.add(p);
+		}
+		for (OntologyClass superSuperClass : superClass.getSuperClasses()) {
+			_appendRangeAndDomains(superSuperClass, alreadyComputed);
+		}
+	}
 }

@@ -17,25 +17,22 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.viewpoint;
+package org.openflexo.foundation.ontology.dm;
 
 /**
- * Represents an inspector entry for a text field
+ * Please comment this class
  * 
- * @author sylvain
- *
+ * @author sguerin
+ * 
  */
-public class TextFieldInspectorEntry extends InspectorEntry {
+public class URIChanged extends OEDataModification
+{
 
-	@Override
-	public Class getDefaultDataClass()
-	{
-		return String.class;
-	}
+	public static final String URI_KEY = "uri";
+	
+    public URIChanged(Object oldValue, Object newValue)
+    {
+        super(URI_KEY, oldValue, newValue);
+    }
 
-	@Override
-	public String getWidgetName() 
-	{
-		return "TextField";
-	}
 }

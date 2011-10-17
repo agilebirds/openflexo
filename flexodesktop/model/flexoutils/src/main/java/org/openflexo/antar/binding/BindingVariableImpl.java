@@ -20,6 +20,7 @@
 package org.openflexo.antar.binding;
 
 import java.lang.reflect.Type;
+import java.util.Observable;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.toolbox.ToolBox;
@@ -30,16 +31,16 @@ import org.openflexo.toolbox.ToolBox;
  * @author sguerin
  * 
  */
-public class BindingVariableImpl extends KeyValueBindingImpl implements BindingVariable
+public class BindingVariableImpl<E extends Bindable,T> extends Observable implements BindingVariable<E,T>
 {
 
-    private Bindable container;
+    private E container;
 
     private String variableName;
  
     private Type type;
     
-    public BindingVariableImpl(Bindable container, String variableName, Type type)
+    public BindingVariableImpl(E container, String variableName, Type type)
     {
         super();
         this.container = container;
@@ -47,7 +48,8 @@ public class BindingVariableImpl extends KeyValueBindingImpl implements BindingV
         this.type = type;
     }
     
-    public Bindable getContainer(){
+    @Override
+	public E getContainer(){
     	return container;
     }
 
@@ -62,7 +64,8 @@ public class BindingVariableImpl extends KeyValueBindingImpl implements BindingV
     	this.type = type;
     }
 
-    public String getVariableName()
+    @Override
+	public String getVariableName()
     {
         return variableName;
     }
@@ -79,9 +82,9 @@ public class BindingVariableImpl extends KeyValueBindingImpl implements BindingV
     }
 
 	@Override
-	public Class getDeclaringClass() 
+	public Class<E> getDeclaringClass() 
 	{
-		return getContainer().getClass();
+		return (Class<E>)getContainer().getClass();
 	}
 
 	@Override
@@ -96,12 +99,14 @@ public class BindingVariableImpl extends KeyValueBindingImpl implements BindingV
 		return true;
 	}
 	
-    public String getLabel()
+    @Override
+	public String getLabel()
     {
     	return getVariableName();
     }
     
-    public String getTooltipText(Type resultingType)
+    @Override
+	public String getTooltipText(Type resultingType)
     {
 		String returned = "<html>";
 		String resultingTypeAsString;
@@ -137,8 +142,14 @@ public class BindingVariableImpl extends KeyValueBindingImpl implements BindingV
     }
     
     @Override
-    public Object evaluateBinding(Object target, BindingEvaluationContext context) 
+    public T getBindingValue(E target, BindingEvaluationContext context) 
     {
-    	return target;
+    	return (T)target;
+    }
+    
+    @Override
+    public void setBindingValue(T value, E target, BindingEvaluationContext context) 
+    {
+    	// Not settable
     }
  }

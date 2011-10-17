@@ -46,9 +46,9 @@ import org.openflexo.xmlcode.InvalidModelException;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.InvalidXMLDataException;
 import org.openflexo.xmlcode.StringEncoder;
+import org.openflexo.xmlcode.StringEncoder.Converter;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
-import org.openflexo.xmlcode.StringEncoder.Converter;
 
 
 public class ViewPointPalette extends ViewPointObject implements Comparable<ViewPointPalette> {

@@ -31,6 +31,7 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.TemporaryFlexoModelObject;
+import org.openflexo.foundation.ontology.OntologyObject.OntologyObjectConverter;
 import org.openflexo.foundation.ontology.dm.OntologyClassInserted;
 import org.openflexo.foundation.ontology.dm.OntologyClassRemoved;
 import org.openflexo.foundation.ontology.dm.OntologyDataPropertyInserted;
@@ -40,6 +41,7 @@ import org.openflexo.foundation.ontology.dm.OntologyIndividualInserted;
 import org.openflexo.foundation.ontology.dm.OntologyIndividualRemoved;
 import org.openflexo.foundation.ontology.dm.OntologyObjectPropertyInserted;
 import org.openflexo.foundation.ontology.dm.OntologyObjectPropertyRemoved;
+import org.openflexo.foundation.ontology.dm.OntologyObjectRenamed;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
@@ -92,6 +94,8 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 	private OntologyLibrary parentOntologyLibrary = null;
 	
 	private OntologyFolder rootFolder;
+	
+	private OntologyObjectConverter ontologyObjectConverter;
 
 	public OntologyLibrary(FlexoResourceCenter resourceCenter, OntologyLibrary parentOntologyLibrary)
 	{
@@ -101,6 +105,7 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 			this.parentOntologyLibrary = parentOntologyLibrary;
 			parentOntologyLibrary.addObserver(this);
 		}
+		ontologyObjectConverter = new OntologyObjectConverter(this);
 		//INSTANCE = this;
 		//_project = project;
 		ontologies = new Hashtable<String,FlexoOntology>();
@@ -113,6 +118,11 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		
 		rootFolder = new OntologyFolder("root", null,this);
 
+	}
+	
+	public OntologyObjectConverter getOntologyObjectConverter()
+	{
+		return ontologyObjectConverter;
 	}
 	
 	public FlexoResourceCenter getResourceCenter()
@@ -410,6 +420,17 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		returned = getDataProperty(objectURI);
 		if (returned != null) return returned;
 		
+		if (returned == null && objectURI.indexOf("#") > 0) {
+			// Maybe required ontology is not loaded ???
+			// This is an other chance to get it
+			String ontologyURI = objectURI.substring(0,objectURI.indexOf("#"));
+			FlexoOntology o = getOntology(ontologyURI);
+			if (o != null && !o.isLoaded() && !o.isLoading()) {
+				o.loadWhenUnloaded();
+				return getOntologyObject(objectURI);
+			}
+		}
+		
 		if (parentOntologyLibrary != null) return parentOntologyLibrary.getOntologyObject(objectURI);
 		
 		return null;
@@ -477,7 +498,16 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		notifyObservers(new OntologyClassRemoved(aClass));
 	}
 
-
+	protected void renameClass(OntologyClass object, String oldURI, String newURI)
+	{
+		classes.remove(oldURI);		
+		classes.put(object.getURI(), object);		
+		if (_allClasses != null) _allClasses.clear();
+		_allClasses = null;
+		setChanged();
+		notifyObservers(new OntologyObjectRenamed(object, oldURI, newURI));
+	}
+	
 	public OntologyIndividual getIndividual(String individualURI)
 	{
 		if (individualURI == null) return null;
@@ -505,6 +535,16 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		notifyObservers(new OntologyIndividualRemoved(anIndividual));
 	}
 
+	protected void renameIndividual(OntologyIndividual object, String oldURI, String newURI)
+	{
+		individuals.remove(oldURI);		
+		individuals.put(object.getURI(), object);		
+		if (_allIndividuals != null) _allIndividuals.clear();
+		_allIndividuals = null;
+		setChanged();
+		notifyObservers(new OntologyObjectRenamed(object, oldURI, newURI));
+	}
+	
 	public OntologyDataProperty getDataProperty(String propertyURI)
 	{
 		if (propertyURI == null) return null;
@@ -532,6 +572,16 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		notifyObservers(new OntologyDataPropertyRemoved(aProperty));
 	}
 
+	protected void renameDataProperty(OntologyDataProperty object, String oldURI, String newURI)
+	{
+		dataProperties.remove(oldURI);		
+		dataProperties.put(object.getURI(), object);		
+		if (_allDataProperties != null) _allDataProperties.clear();
+		_allDataProperties = null;
+		setChanged();
+		notifyObservers(new OntologyObjectRenamed(object, oldURI, newURI));
+	}
+	
 	public OntologyObjectProperty getObjectProperty(String propertyURI)
 	{
 		if (propertyURI == null) return null;
@@ -559,6 +609,16 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		notifyObservers(new OntologyObjectPropertyRemoved(aProperty));
 	}
 
+	protected void renameObjectProperty(OntologyObjectProperty object, String oldURI, String newURI)
+	{
+		objectProperties.remove(oldURI);		
+		objectProperties.put(object.getURI(), object);		
+		if (_allObjectProperties != null) _allObjectProperties.clear();
+		_allObjectProperties = null;
+		setChanged();
+		notifyObservers(new OntologyObjectRenamed(object, oldURI, newURI));
+	}
+	
 	@Override
 	public String getInspectorName() 
 	{

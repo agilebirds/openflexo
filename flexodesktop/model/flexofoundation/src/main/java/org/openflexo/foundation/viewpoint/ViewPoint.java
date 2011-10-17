@@ -30,7 +30,6 @@ import org.jdom.JDOMException;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.ImportedOntology;
-import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.viewpoint.ViewPointPalette.RelativePathFileConverter;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaInserted;
@@ -44,17 +43,13 @@ import org.openflexo.xmlcode.InvalidModelException;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.InvalidXMLDataException;
 import org.openflexo.xmlcode.StringEncoder;
+import org.openflexo.xmlcode.StringEncoder.Converter;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
-import org.openflexo.xmlcode.StringEncoder.Converter;
 
 public class ViewPoint extends ViewPointObject {
 
 	private static final Logger logger = Logger.getLogger(ViewPoint.class.getPackage().getName());
-
-	static {
-		StringEncoder.getDefaultInstance()._addConverter(InspectorDataBinding.CONVERTER);
-	}
 
 	private String name;
 	private String viewPointURI;

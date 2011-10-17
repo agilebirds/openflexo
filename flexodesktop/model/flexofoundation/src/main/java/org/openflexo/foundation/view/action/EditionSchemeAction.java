@@ -37,18 +37,18 @@ import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.ontology.RestrictionStatement;
-import org.openflexo.foundation.ontology.SubClassStatement;
 import org.openflexo.foundation.ontology.RestrictionStatement.RestrictionType;
+import org.openflexo.foundation.ontology.SubClassStatement;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.view.ViewConnector;
-import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewConnector;
 import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.viewpoint.AddClass;
 import org.openflexo.foundation.viewpoint.AddIndividual;
-import org.openflexo.foundation.viewpoint.AddIsAProperty;
-import org.openflexo.foundation.viewpoint.AddObjectProperty;
-import org.openflexo.foundation.viewpoint.AddRestriction;
+import org.openflexo.foundation.viewpoint.AddIsAStatement;
+import org.openflexo.foundation.viewpoint.AddObjectPropertyStatement;
+import org.openflexo.foundation.viewpoint.AddRestrictionStatement;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.DeclarePatternRole;
 import org.openflexo.foundation.viewpoint.EditionAction;
@@ -150,9 +150,9 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 						performedActions.put(action,newClass);
 					}
 				}
-				else if (action instanceof AddObjectProperty) {
+				else if (action instanceof AddObjectPropertyStatement) {
 					logger.info("Add object property with patternRole="+action.getPatternRole());
-					ObjectPropertyStatement statement = performAddObjectProperty((org.openflexo.foundation.viewpoint.AddObjectProperty)action);
+					ObjectPropertyStatement statement = performAddObjectProperty((org.openflexo.foundation.viewpoint.AddObjectPropertyStatement)action);
 					if (statement != null) {
 						getEditionPatternInstance().setObjectForPatternRole(statement, action.getPatternRole());
 						performedActions.put(action,statement);
@@ -161,17 +161,17 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 						logger.warning("Could not perform AddObjectProperty for role "+action.getPatternRole());
 					}
 				}
-				else if (action instanceof AddIsAProperty) {
+				else if (action instanceof AddIsAStatement) {
 					logger.info("Add isA property with patternRole="+action.getPatternRole());
-					SubClassStatement statement = performAddIsAProperty((AddIsAProperty)action);
+					SubClassStatement statement = performAddIsAProperty((AddIsAStatement)action);
 					if (statement != null) {
 						getEditionPatternInstance().setObjectForPatternRole(statement, action.getPatternRole());
 						performedActions.put(action,statement);
 					}
 				}
-				else if (action instanceof AddRestriction) {
+				else if (action instanceof AddRestrictionStatement) {
 					logger.info("Add restriction with patternRole="+action.getPatternRole());
-					RestrictionStatement statement = performAddRestriction((AddRestriction)action);
+					RestrictionStatement statement = performAddRestriction((AddRestrictionStatement)action);
 					if (statement != null) {
 						getEditionPatternInstance().setObjectForPatternRole(statement, action.getPatternRole());
 						performedActions.put(action,statement);
@@ -205,14 +205,14 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 			else if (action instanceof AddClass) {
 				finalizePerformAddClass((AddClass)action,(OntologyClass)performedActions.get(action));
 			}
-			else if (action instanceof AddObjectProperty) {
-				finalizePerformAddObjectProperty((AddObjectProperty)action,(ObjectPropertyStatement)performedActions.get(action));
+			else if (action instanceof AddObjectPropertyStatement) {
+				finalizePerformAddObjectProperty((AddObjectPropertyStatement)action,(ObjectPropertyStatement)performedActions.get(action));
 			}
-			else if (action instanceof AddIsAProperty) {
-				finalizePerformAddIsAProperty((AddIsAProperty)action,(SubClassStatement)performedActions.get(action));
+			else if (action instanceof AddIsAStatement) {
+				finalizePerformAddIsAProperty((AddIsAStatement)action,(SubClassStatement)performedActions.get(action));
 			}
-			else if (action instanceof AddRestriction) {
-				finalizePerformAddRestriction((AddRestriction)action,(RestrictionStatement)performedActions.get(action));
+			else if (action instanceof AddRestrictionStatement) {
+				finalizePerformAddRestriction((AddRestrictionStatement)action,(RestrictionStatement)performedActions.get(action));
 			}
 			else if (action instanceof DeclarePatternRole) {
 				FlexoModelObject declaredObject = performDeclarePatternRole((DeclarePatternRole)action);
@@ -355,11 +355,11 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 		}
 		for (ObjectPropertyAssertion objectPropertyAssertion : action.getObjectAssertions()) {
 			if (objectPropertyAssertion.evaluateCondition(parameterValues)) {
-				logger.info("ObjectPropertyAssertion="+objectPropertyAssertion);
+				//logger.info("ObjectPropertyAssertion="+objectPropertyAssertion);
 				OntologyProperty property = objectPropertyAssertion.getOntologyProperty();
-				logger.info("Property="+property);
+				//logger.info("Property="+property);
 				OntologyObject assertionObject = objectPropertyAssertion.getAssertionObject(this);					
-				logger.info("assertionObject="+assertionObject);
+				//logger.info("assertionObject="+assertionObject);
 				/*OntologyObject assertionObject = null;
 					Object value = null;
 					if (objectPropertyAssertion.getObject() != null) value = getParameterValues().get(objectPropertyAssertion.getObject());
@@ -367,15 +367,18 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 					if (assertionObject == null && getParent() instanceof OEShape) 
 						assertionObject = objectPropertyAssertion.getAssertionObject((OEShape)getParent(),editionPatternInstance);*/
 				if (assertionObject != null) {
-					logger.info("OK, je le fais");
 					newIndividual.getOntResource().addProperty(property.getOntProperty(), assertionObject.getOntResource());
 				}
 				else {
-					logger.info("mon assertion objet est null");
+					//logger.info("assertion objet is null");
 				}
 			}
 		}
 		newIndividual.updateOntologyStatements();
+		
+		// Register reference
+		newIndividual.registerEditionPatternReference(getEditionPatternInstance(), action.getPatternRole());		
+		
 		return newIndividual;
 	}
 
@@ -395,10 +398,14 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 
 	protected OntologyClass finalizePerformAddClass(AddClass action, OntologyClass newClass)
 	{
+
+		// Register reference
+		newClass.registerEditionPatternReference(getEditionPatternInstance(), action.getPatternRole());		
+
 		return newClass;
 	}
 
-	protected ObjectPropertyStatement performAddObjectProperty(AddObjectProperty action)
+	protected ObjectPropertyStatement performAddObjectProperty(AddObjectPropertyStatement action)
 	{
 		OntologyObjectProperty property = (OntologyObjectProperty)action.getObjectProperty();
 		OntologyObject subject = action.getPropertySubject(this);
@@ -411,10 +418,10 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 		return subject.getObjectPropertyStatement(property);
 	}
 
-	protected ObjectPropertyStatement finalizePerformAddObjectProperty(AddObjectProperty action,
-			ObjectPropertyStatement objectPropertyStatement) 
+	protected ObjectPropertyStatement finalizePerformAddObjectProperty(AddObjectPropertyStatement action,
+			ObjectPropertyStatement newObjectPropertyStatement) 
 	{
-		return objectPropertyStatement;
+		return newObjectPropertyStatement;
 	}
 	
 	protected FlexoModelObject performDeclarePatternRole(DeclarePatternRole action)
@@ -425,9 +432,10 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 	protected FlexoModelObject finalizePerformDeclarePatternRole(DeclarePatternRole action)
 	{
 		FlexoModelObject object = (FlexoModelObject)action.getDeclaredObject(this);
-		if (!(object instanceof OntologyObject)) {
-			object.registerEditionPatternReference(getEditionPatternInstance(), action.getPatternRole());		
-		}
+
+		// Register reference
+		object.registerEditionPatternReference(getEditionPatternInstance(), action.getPatternRole());		
+		
 		return object;
 	}
 	
@@ -468,7 +476,7 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 		return newConnector;
 	}
 
-	protected SubClassStatement performAddIsAProperty(AddIsAProperty action)
+	protected SubClassStatement performAddIsAProperty(AddIsAStatement action)
 	{
 		OntologyObject subject = action.getPropertySubject(this);
 		OntologyObject father = action.getPropertyFather(this);
@@ -485,14 +493,14 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 		return null;
 	}
 
-	protected SubClassStatement finalizePerformAddIsAProperty(AddIsAProperty action,
+	protected SubClassStatement finalizePerformAddIsAProperty(AddIsAStatement action,
 			SubClassStatement subClassStatement) 
 	{
 		return subClassStatement;
 	}
 
 
-	protected RestrictionStatement performAddRestriction(AddRestriction action)
+	protected RestrictionStatement performAddRestriction(AddRestrictionStatement action)
 	{
 		//System.out.println("Add restriction");
 		
@@ -521,7 +529,7 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 		return null;
 	}
 
-	protected RestrictionStatement finalizePerformAddRestriction(AddRestriction action,
+	protected RestrictionStatement finalizePerformAddRestriction(AddRestrictionStatement action,
 			RestrictionStatement restrictionStatement) 
 	{
 		return restrictionStatement;
@@ -562,9 +570,7 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 					FlexoModelObject patternActor = getEditionPatternInstance().getPatternActor(role);
 					logger.info("Duplicate pattern actor for role "+role+" value="+patternActor);
 					newEditionPatternInstance.setObjectForPatternRole(patternActor,role);
-					if (!(patternActor instanceof OntologyObject)) {
-						patternActor.registerEditionPatternReference(newEditionPatternInstance,role);		
-					}
+					patternActor.registerEditionPatternReference(newEditionPatternInstance,role);		
 				}
 			}
 			return newShema;

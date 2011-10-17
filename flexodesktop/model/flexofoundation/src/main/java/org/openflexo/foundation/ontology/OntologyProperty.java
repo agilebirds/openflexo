@@ -27,16 +27,17 @@ import java.util.logging.Logger;
 
 import com.hp.hpl.jena.ontology.ConversionException;
 import com.hp.hpl.jena.ontology.OntProperty;
+import com.hp.hpl.jena.ontology.OntResource;
 
 public abstract class OntologyProperty extends OntologyObject {
 
 	private static final Logger logger = Logger.getLogger(OntologyProperty.class.getPackage().getName());
 
-	private final FlexoOntology _ontology;
-	private final String uri;
-	private String name;
-	private final OntProperty ontProperty;
+	private OntProperty ontProperty;
 	
+	private DomainStatement domainStatement;
+	private RangeStatement rangeStatement;
+
 	private final Vector<OntologyProperty> superProperties; 
 	private final Vector<OntologyProperty> subProperties; 
 
@@ -44,18 +45,11 @@ public abstract class OntologyProperty extends OntologyObject {
 
 	protected OntologyProperty(OntProperty anOntProperty, FlexoOntology ontology)
 	{
-		super();
-		_ontology = ontology;
-		uri = anOntProperty.getURI();
+		super(anOntProperty,ontology);
 		ontProperty = anOntProperty;
 		superProperties = new Vector<OntologyProperty>();
 		subProperties = new Vector<OntologyProperty>();
 		isAnnotationProperty = anOntProperty.isAnnotationProperty();
-		if (uri.indexOf("#") > -1) {
-			name = uri.substring(uri.indexOf("#")+1);
-		} else {
-			name = uri;
-		}
 	}
 	
 	protected void init()
@@ -75,21 +69,15 @@ public abstract class OntologyProperty extends OntologyObject {
 
 
 	@Override
-	public String getURI()
+	public void setName(String aName)
 	{
-		return uri;
+		ontProperty = renameURI(aName,ontProperty,OntProperty.class);
 	}
 	
 	@Override
-	public String getName() 
+	protected void _setOntResource(OntResource r)
 	{
-		return name;
-	}
-	
-	@Override
-	public FlexoOntology getFlexoOntology()
-	{
-		return _ontology;
+		ontProperty = (OntProperty)r;
 	}
 
 	public static final Comparator<OntologyProperty> COMPARATOR = new Comparator<OntologyProperty>() {
@@ -214,5 +202,59 @@ public abstract class OntologyProperty extends OntologyObject {
 	{
 		return isAnnotationProperty;
 	}
+	
+	@Override
+	public void updateOntologyStatements()
+	{
+		super.updateOntologyStatements();
+		for (OntologyStatement s : getSemanticStatements()) {
+			if (s instanceof DomainStatement) {
+				domainStatement = (DomainStatement)s;
+			}
+			if (s instanceof RangeStatement) {
+				rangeStatement = (RangeStatement)s;
+			}
+		}
+	}
 
+	public DomainStatement getDomainStatement() 
+	{
+		if (domainStatement == null) {
+			for (OntologyProperty p : getSuperProperties()) {
+				DomainStatement d = p.getDomainStatement();
+				if (d != null) return d;
+			}
+			return null;
+		}
+		return domainStatement;
+	}
+
+	public RangeStatement getRangeStatement() 
+	{
+		if (rangeStatement == null) {
+			for (OntologyProperty p : getSuperProperties()) {
+				RangeStatement r = p.getRangeStatement();
+				if (r != null) return r;
+			}
+			return null;
+		}
+		return rangeStatement;
+	}
+	
+	public OntologyObject getDomain() 
+	{
+		if (getDomainStatement() == null) {
+			return null;
+		}
+		return getDomainStatement().getDomain();
+	}
+
+	public OntologyObject getRange() 
+	{
+		if (getRangeStatement() == null) {
+			return null;
+		}
+		return getRangeStatement().getRange();
+	}
+	
 }

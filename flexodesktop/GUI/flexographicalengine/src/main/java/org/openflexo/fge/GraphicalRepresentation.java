@@ -1910,8 +1910,8 @@ implements XMLSerializable, Bindable, BindingEvaluationContext, Cloneable, FGECo
 	{
 		_bindingModel = new BindingModel();
 
-		_bindingModel.addToBindingVariables(new GRBindingFactory.ComponentPathElement("this",this));
-		if (getParentGraphicalRepresentation() != null) _bindingModel.addToBindingVariables(new GRBindingFactory.ComponentPathElement("parent",getParentGraphicalRepresentation()));
+		_bindingModel.addToBindingVariables(new GRBindingFactory.ComponentPathElement("this",this,this));
+		if (getParentGraphicalRepresentation() != null) _bindingModel.addToBindingVariables(new GRBindingFactory.ComponentPathElement("parent",getParentGraphicalRepresentation(),this));
 		_bindingModel.addToBindingVariables(new ComponentsBindingVariable(this));
 
 		Iterator<GraphicalRepresentation> it = allContainedGRIterator();

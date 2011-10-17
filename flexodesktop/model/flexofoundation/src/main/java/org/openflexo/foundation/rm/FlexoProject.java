@@ -117,6 +117,8 @@ import org.openflexo.foundation.ie.util.DateFormatType;
 import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
+import org.openflexo.foundation.ontology.EditionPatternReference.ConceptActorReference;
+import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.ProjectOntology;
 import org.openflexo.foundation.ontology.ProjectOntologyLibrary;
 import org.openflexo.foundation.rm.FlexoResource.DependancyAlgorithmScheme;
@@ -144,6 +146,7 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternConverter;
+import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.wkf.FlexoImportedProcessLibrary;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
@@ -4229,5 +4232,44 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		 this.testRole = testRole;
 	 }
 
+	 /**
+	  * This method is called while deserializing EditionPatternReference instances
+	  * Because this storage is distributed, we have to build partial knowledge,
+	  * as resources are being loaded.
+	  * 
+	  * @param conceptURI
+	  * @param actorReference
+	  */
+	 public void _addToPendingEditionPatternReferences(String conceptURI,ConceptActorReference actorReference)
+	 {
+		 System.out.println("OK, j'enregistre le concept "+conceptURI+" associe a la reference "+actorReference);
+		 logger.info("Registering as pending pattern object reference: "+conceptURI);
+		 Vector<ConceptActorReference> values = pendingEditionPatternReferences.get(conceptURI);
+		 if (values == null) {
+			 values = new Vector<ConceptActorReference>();
+			 pendingEditionPatternReferences.put(conceptURI, values);
+		 }
+		 values.add(actorReference);
+	 }
+	 
+	 private Hashtable<String,Vector<ConceptActorReference>> pendingEditionPatternReferences = new Hashtable<String, Vector<ConceptActorReference>>();
 
+	 public void _retrievePendingEditionPatternReferences(OntologyObject object)
+	 {
+		 Vector<ConceptActorReference> values = pendingEditionPatternReferences.get(object.getURI());
+		 if (values == null) {
+			 // No pending EditionPattern references for object
+			 return;
+		 }
+		 else {
+			 for (ConceptActorReference actorReference : values) {
+				 EditionPatternInstance instance = actorReference.getPatternReference().getEditionPatternInstance();
+				 PatternRole pr = actorReference.getPatternReference().getEditionPattern().getPatternRole(actorReference.patternRole);
+				 logger.info("Retrieve Edition Pattern Instance "+instance+" for "+object+" role="+pr);
+				 object.registerEditionPatternReference(instance,pr);
+			 }
+			 values.clear();
+		 }
+	 }
+	 
 }

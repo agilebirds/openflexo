@@ -53,6 +53,7 @@ import org.openflexo.foundation.ontology.dm.OntologyIndividualInserted;
 import org.openflexo.foundation.ontology.dm.OntologyIndividualRemoved;
 import org.openflexo.foundation.ontology.dm.OntologyObjectPropertyInserted;
 import org.openflexo.foundation.ontology.dm.OntologyObjectPropertyRemoved;
+import org.openflexo.foundation.ontology.dm.OntologyObjectRenamed;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.SaveResourceException;
 
@@ -103,6 +104,8 @@ public abstract class FlexoOntology extends OntologyObject {
 
 	public FlexoOntology(String anURI, File owlFile, OntologyLibrary library)
 	{
+		super(null,null);
+		
 		logger.info("Register ontology "+anURI+ " file: "+owlFile);
 
 		ontologyURI = anURI;
@@ -236,6 +239,23 @@ public abstract class FlexoOntology extends OntologyObject {
 	public String getName()
 	{
 		return name;
+	}
+
+	@Override
+	public void setName(String aName)
+	{
+		String newURI;
+		if (getURI().indexOf("#") > -1) {
+			newURI = getURI().substring(0,getURI().indexOf("#"))+aName;
+		} else {
+			newURI = aName;
+		}
+		logger.warning("Rename ontology "+getURI()+" to "+newURI+" not implemented yet");
+	}
+	
+	@Override
+	protected void _setOntResource(OntResource r) {
+		// not relevant	
 	}
 
 	public OntModel getOntModel()
@@ -477,6 +497,25 @@ public abstract class FlexoOntology extends OntologyObject {
 		return aClass;
 	}
 
+	protected void renameClass(OntologyClass object, String oldURI, String newURI)
+	{
+		if (classes.get(oldURI) == object) {
+			classes.remove(oldURI);
+			classes.put(newURI,object);
+		}
+		else if (classes.get(oldURI) == null) {
+			logger.warning("Inconsistent data in Ontology: rename invoked for non previously-existant ontology class");
+			classes.put(newURI,object);
+		}
+		else {
+			logger.severe("Inconsistent data in Ontology: rename invoked while found an other class than the one renamed");
+		}
+		needsReordering = true;
+		setChanged();
+		notifyObservers(new OntologyObjectRenamed(object, oldURI, newURI));
+		getOntologyLibrary().renameClass(object, oldURI, newURI);
+	}
+	
 	protected OntologyIndividual makeNewIndividual(Individual individual)
 	{
 		OntologyIndividual anIndividual = new OntologyIndividual(individual,this);
@@ -500,6 +539,25 @@ public abstract class FlexoOntology extends OntologyObject {
 		return anIndividual;
 	}
 
+	protected void renameIndividual(OntologyIndividual object, String oldURI, String newURI)
+	{
+		if (individuals.get(oldURI) == object) {
+			individuals.remove(oldURI);
+			individuals.put(newURI,object);
+		}
+		else if (individuals.get(oldURI) == null) {
+			logger.warning("Inconsistent data in Ontology: rename invoked for non previously-existant ontology individual");
+			individuals.put(newURI,object);
+		}
+		else {
+			logger.severe("Inconsistent data in Ontology: rename invoked while found an other individual than the one renamed");
+		}
+		needsReordering = true;
+		setChanged();
+		notifyObservers(new OntologyObjectRenamed(object, oldURI, newURI));
+		getOntologyLibrary().renameIndividual(object, oldURI, newURI);
+	}
+	
 	protected OntologyDataProperty makeNewDataProperty(DatatypeProperty ontProperty)
 	{
 		OntologyDataProperty property = new OntologyDataProperty(ontProperty,this);
@@ -523,6 +581,25 @@ public abstract class FlexoOntology extends OntologyObject {
 		return aProperty;
 	}
 
+	protected void renameDataProperty(OntologyDataProperty object, String oldURI, String newURI)
+	{
+		if (dataProperties.get(oldURI) == object) {
+			dataProperties.remove(oldURI);
+			dataProperties.put(newURI,object);
+		}
+		else if (dataProperties.get(oldURI) == null) {
+			logger.warning("Inconsistent data in Ontology: rename invoked for non previously-existant ontology data property");
+			dataProperties.put(newURI,object);
+		}
+		else {
+			logger.severe("Inconsistent data in Ontology: rename invoked while found an other data property than the one renamed");
+		}
+		needsReordering = true;
+		setChanged();
+		notifyObservers(new OntologyObjectRenamed(object, oldURI, newURI));
+		getOntologyLibrary().renameDataProperty(object, oldURI, newURI);
+	}
+	
 	protected OntologyObjectProperty makeNewObjectProperty(OntProperty ontProperty)
 	{
 		OntologyObjectProperty property = new OntologyObjectProperty(ontProperty,this);
@@ -544,6 +621,44 @@ public abstract class FlexoOntology extends OntologyObject {
 		setChanged();
 		notifyObservers(new OntologyObjectPropertyRemoved(aProperty));
 		return aProperty;
+	}
+
+	protected void renameObjectProperty(OntologyObjectProperty object, String oldURI, String newURI)
+	{
+		if (objectProperties.get(oldURI) == object) {
+			objectProperties.remove(oldURI);
+			objectProperties.put(newURI,object);
+		}
+		else if (objectProperties.get(oldURI) == null) {
+			logger.warning("Inconsistent data in Ontology: rename invoked for non previously-existant ontology object property");
+			objectProperties.put(newURI,object);
+		}
+		else {
+			logger.severe("Inconsistent data in Ontology: rename invoked while found an other object property than the one renamed");
+		}
+		needsReordering = true;
+		setChanged();
+		notifyObservers(new OntologyObjectRenamed(object, oldURI, newURI));
+		getOntologyLibrary().renameObjectProperty(object, oldURI, newURI);
+	}
+	
+	protected void renameObject(OntologyObject object, String oldURI, String newURI)
+	{
+		if (object instanceof OntologyIndividual) {
+			renameIndividual((OntologyIndividual)object, oldURI, newURI);
+		}
+		else if (object instanceof OntologyClass) {
+			renameClass((OntologyClass)object, oldURI, newURI);
+		}
+		else if (object instanceof OntologyDataProperty) {
+			renameDataProperty((OntologyDataProperty)object, oldURI, newURI);
+		}
+		else if (object instanceof OntologyObjectProperty) {
+			renameObjectProperty((OntologyObjectProperty)object, oldURI, newURI);
+		}
+		else {
+			logger.warning("Unexpected object "+object);
+		}
 	}
 
 	public Vector<OntologyClass> getClasses()
@@ -584,24 +699,28 @@ public abstract class FlexoOntology extends OntologyObject {
 	{
 		orderedClasses.clear();
 		for (OntologyClass aClass : classes.values()) {
+			aClass.updateDomainsAndRanges();
 			orderedClasses.add(aClass);
 		}
 		Collections.sort(orderedClasses);
 
 		orderedIndividuals.clear();
 		for (OntologyIndividual anIndividual : individuals.values()) {
+			anIndividual.updateDomainsAndRanges();
 			orderedIndividuals.add(anIndividual);
 		}
 		Collections.sort(orderedIndividuals);
 
 		orderedDataProperties.clear();
 		for (OntologyDataProperty property : dataProperties.values()) {
+			property.updateDomainsAndRanges();
 			orderedDataProperties.add(property);
 		}
 		Collections.sort(orderedDataProperties);
 
 		orderedObjectProperties.clear();
 		for (OntologyObjectProperty property : objectProperties.values()) {
+			property.updateDomainsAndRanges();
 			orderedObjectProperties.add(property);
 		}
 		Collections.sort(orderedObjectProperties);
@@ -1182,6 +1301,7 @@ public abstract class FlexoOntology extends OntologyObject {
 		return o;
 	}
 
+	@Override
 	public boolean isOntology()
 	{
 		return true;

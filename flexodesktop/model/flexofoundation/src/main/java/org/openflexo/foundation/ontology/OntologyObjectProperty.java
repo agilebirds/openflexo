@@ -24,10 +24,6 @@ import org.openflexo.foundation.Inspectors;
 import com.hp.hpl.jena.ontology.OntProperty;
 
 public class OntologyObjectProperty extends OntologyProperty implements Comparable<OntologyObjectProperty> {
-
-	public OntologyClass domain;
-	public OntologyClass range;
-
 	
 	protected OntologyObjectProperty(OntProperty anObjectProperty, FlexoOntology ontology)
 	{
@@ -91,10 +87,14 @@ public class OntologyObjectProperty extends OntologyProperty implements Comparab
 	@Override
 	public String getDisplayableDescription()
 	{
-		// TODO display domain and range
-		return "Object property "+getName();
+		return "<html>Object property <b>"+getName()+"</b><br>"
+				+"<i>"+getURI()+"</i><br>"
+				+"Domain: "+(getDomain()!=null?getDomain().getURI():"?")+"<br>"
+				+"Range: "+(getRange()!=null?getRange().getURI():"?")+"<br>"
+				+"</html>";
 	}
 
+	@Override
 	public boolean isOntologyObjectProperty()
 	{
 		return true;

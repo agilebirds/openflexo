@@ -20,11 +20,11 @@
 package org.openflexo.antar.binding;
 
 /**
- * Implemented by all path elements flagged as final (no children)
+ * Default implementation for path elements flagged as final (no children)
  * 
  * @author sylvain
  *
  */
-public interface FinalBindingPathElement extends BindingPathElement {
+public interface FinalBindingPathElement<E,T> extends SimplePathElement<E,T> {
 
 }

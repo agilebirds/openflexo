@@ -29,9 +29,9 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.AbstractBinding.TargetObject;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.DataBinding;
 import org.openflexo.fib.model.FIBAttributeNotification;
@@ -212,13 +212,17 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		   if (children.isMultipleAccess()) {
 			   //System.out.println("add all children for "+browserElementDefinition.getName()+" children "+children.getName()+" data="+children.getData());
 			   //System.out.println("Obtain "+getChildrenListFor(children, object));
-			   returned.addAll(getChildrenListFor(children, object));
+			   List<?> childrenObjects = getChildrenListFor(children, object);
+			   // Might be null if some visibility was declared
+			   if (childrenObjects != null) returned.addAll(childrenObjects);
 		   }
 		   else {
 			   //System.out.println("add children for "+browserElementDefinition.getName()+" children "+children.getName()+" data="+children.getData());
 			   //System.out.println("Obtain "+getChildrenFor(children, object));
 			   //System.out.println("accessed type="+children.getAccessedType());
-			   returned.add(getChildrenFor(children, object));
+			   Object childrenObject = getChildrenFor(children, object);
+			   // Might be null if some visibility was declared
+			   if (childrenObject != null) returned.add(childrenObject);
 		   }
 	   }
 	   return returned;
@@ -229,6 +233,13 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
    {
 	   if (children.getData().isSet()) {
 		   iteratorObject = object;
+		   if (children.getVisible().isSet()) {
+			   boolean visible = (Boolean)children.getVisible().getBindingValue(this);
+			   if (!visible) {
+				   // Finally we dont want to see it
+				   return null;
+			   }
+		   }
 		   return children.getData().getBindingValue(this);
 	   }
 	   else {
@@ -240,6 +251,13 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
    {
 	   if (children.getData().isSet() && children.isMultipleAccess()) {
 		   iteratorObject = object;
+		   if (children.getVisible().isSet()) {
+			   boolean visible = (Boolean)children.getVisible().getBindingValue(this);
+			   if (!visible) {
+				   // Finally we dont want to see it
+				   return null;
+			   }
+		   }
 		   return (List<?>)children.getData().getBindingValue(this);
 	   }
 	   else {

@@ -32,6 +32,7 @@ import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternConverter;
+import org.openflexo.foundation.viewpoint.inspector.InspectorDataBinding;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.xmlcode.InvalidModelException;
 import org.openflexo.xmlcode.StringEncoder;
@@ -72,6 +73,9 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 		}*/
 		
 		rootFolder = new ViewPointFolder("root", null,this);
+
+		StringEncoder.getDefaultInstance()._addConverter(InspectorDataBinding.CONVERTER);
+		StringEncoder.getDefaultInstance()._addConverter(anOntologyLibrary.getOntologyObjectConverter());
 
 	}
 

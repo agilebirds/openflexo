@@ -25,36 +25,17 @@ import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.logging.FlexoLogger;
 
 
-public abstract class AddConcept extends EditionAction<OntologicObjectPatternRole> {
+public abstract class AddConcept<R extends OntologicObjectPatternRole> extends EditionAction<R> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(AddConcept.class.getPackage().getName());
 
 	public AddConcept() {
 	}
 	
-	private String conceptURI;
-
-	public String _getConceptURI()
-	{
-		return conceptURI;
-	}
-
-	public void _setConceptURI(String conceptURI) 
-	{
-		this.conceptURI = conceptURI;
-	}
+	public abstract OntologyClass getOntologyClass();
 	
-	public OntologyClass getOntologyClass()
-	{
-		getCalc().loadWhenUnloaded();
-		return getOntologyLibrary().getClass(_getConceptURI());
-	}
+	public abstract void setOntologyClass(OntologyClass ontologyClass);
 	
-	public void setOntologyClass(OntologyClass ontologyClass)
-	{
-		conceptURI = (ontologyClass != null ? ontologyClass.getURI() : null);
-	}
-
 	/*public OntologyObject getOntologyObject(FlexoProject project)
 	{
 		getCalc().loadWhenUnloaded();
@@ -63,7 +44,7 @@ public abstract class AddConcept extends EditionAction<OntologicObjectPatternRol
 	}*/
 	
 	@Override
-	public OntologicObjectPatternRole getPatternRole() {
+	public R getPatternRole() {
 		try {
 			return super.getPatternRole();
 		} catch (ClassCastException e) {
@@ -76,7 +57,7 @@ public abstract class AddConcept extends EditionAction<OntologicObjectPatternRol
 	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
 	// Need to be fixed in KeyValueProperty.java
 	@Override
-	public void setPatternRole(OntologicObjectPatternRole patternRole) 
+	public void setPatternRole(R patternRole) 
 	{
 		super.setPatternRole(patternRole);
 	}

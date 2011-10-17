@@ -33,8 +33,8 @@ import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.GraphicalRepresentationChanged;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole.PatternRoleType;
+import org.openflexo.foundation.viewpoint.ShapePatternRole;
 
 
 public class EditionPatternPreviewRepresentation extends DefaultDrawing<EditionPattern> implements GraphicalFlexoObserver, EditionPatternPreviewConstants {
@@ -197,17 +197,15 @@ public class EditionPatternPreviewRepresentation extends DefaultDrawing<EditionP
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) 
 	{
-		System.out.println("Hop, je recois la notification "+dataModification);
+		logger.info("Receiving notification "+dataModification);
 		if (dataModification instanceof GraphicalRepresentationChanged) {
 			PatternRole patternRole = ((GraphicalRepresentationChanged)dataModification).getPatternRole();
 			if (patternRole.getType() == PatternRoleType.Shape) {
-				System.out.println("Je remplace la shape");
 				EditionPatternPreviewShapeGR returned = shapesGR.get(patternRole);
 				if (returned != null) returned.delete();
 				shapesGR.remove(patternRole);
 			}
 			else if (patternRole.getType() == PatternRoleType.Connector) {
-				System.out.println("Je remplace le connecteur");
 				EditionPatternPreviewConnectorGR returned = connectorsGR.get(patternRole);
 				if (returned != null) returned.delete();
 				connectorsGR.remove(patternRole);

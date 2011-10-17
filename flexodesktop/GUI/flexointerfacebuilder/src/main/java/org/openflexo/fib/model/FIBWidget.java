@@ -27,10 +27,10 @@ import javax.swing.tree.TreeNode;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBComponentDynamicModel;
 
@@ -313,7 +313,7 @@ public abstract class FIBWidget extends FIBComponent {
 		private void createFormatterBindingModel()
 		{
 			formatterBindingModel = new BindingModel(FIBWidget.this.getBindingModel());
-			formatterBindingModel.addToBindingVariables(new BindingVariableImpl(this, "object", Object.class) {
+			formatterBindingModel.addToBindingVariables(new BindingVariableImpl<FIBFormatter,Object>(this, "object", Object.class) {
 				@Override
 				public Type getType()
 				{
