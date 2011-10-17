@@ -30,7 +30,7 @@ public class GRBindingFactory extends DefaultBindingFactory {
 
 	private static GRParameter[] allowedPropertiesInBindings
 	= { Parameters.layer, Parameters.text, Parameters.relativeTextX, Parameters.relativeTextY,
-		Parameters.absoluteTextX, Parameters.absoluteTextY, Parameters.isVisible, 
+		Parameters.absoluteTextX, Parameters.absoluteTextY, Parameters.isVisible,
 		ShapeGraphicalRepresentation.Parameters.x, ShapeGraphicalRepresentation.Parameters.y,
 		ShapeGraphicalRepresentation.Parameters.width, ShapeGraphicalRepresentation.Parameters.height,
 		ShapeGraphicalRepresentation.Parameters.minimalWidth, ShapeGraphicalRepresentation.Parameters.minimalHeight,
@@ -39,7 +39,7 @@ public class GRBindingFactory extends DefaultBindingFactory {
 	private static List<BindingPathElement> EMPTY_LIST = new ArrayList<BindingPathElement>();
 
 	/*@Override
-	public BindingPathElement getBindingPathElement(BindingPathElement father, String propertyName) 
+	public BindingPathElement getBindingPathElement(BindingPathElement father, String propertyName)
 	{
 		if (father instanceof ComponentsBindingVariable) {
 			for (ComponentPathElement c : ((ComponentsBindingVariable) father).getComponents()) {
@@ -54,7 +54,7 @@ public class GRBindingFactory extends DefaultBindingFactory {
 	}
 
 	@Override
-	public List<? extends BindingPathElement> getAccessibleBindingPathElements(BindingPathElement father) 
+	public List<? extends BindingPathElement> getAccessibleBindingPathElements(BindingPathElement father)
 	{
 		if (father instanceof ComponentsBindingVariable) {
 			return ((ComponentsBindingVariable) father).getComponents();
@@ -64,45 +64,50 @@ public class GRBindingFactory extends DefaultBindingFactory {
 		}
 		return EMPTY_LIST;
 	}*/
-	
+
 	private static boolean isAllowedProperty(String propertyName)
 	{
 		for (GRParameter p : allowedPropertiesInBindings) {
-			if (propertyName.equals(p.name()))
+			if (propertyName.equals(p.name())) {
 				return true;
+			}
 		}
 		return false;
 	}
-	
+
 	/*@Override
 	public List<? extends BindingPathElement> getAccessibleCompoundBindingPathElements(BindingPathElement father)
 	{
 		return EMPTY_LIST;
 	}*/
-	
+
 	public static class VariableBindingPathElement implements SimplePathElement<GraphicalRepresentation<?>,Object>,FinalBindingPathElement<GraphicalRepresentation<?>,Object>
 	{
 		private GRVariable variable;
-		
-		public VariableBindingPathElement(GRVariable variable) 
+
+		public VariableBindingPathElement(GRVariable variable)
 		{
 			this.variable = variable;
 		}
-		
+
 		@Override
-		public Class<? extends GraphicalRepresentation<?>> getDeclaringClass() 
-		{
-			return (Class<? extends GraphicalRepresentation<?>>) GraphicalRepresentation.class;
+		public Class<? extends GraphicalRepresentation<?>> getDeclaringClass() {
+			try {
+				return (Class<? extends GraphicalRepresentation<?>>) Class.forName(GraphicalRepresentation.class.getName());
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+				return null;
+			}
 		}
 
 		@Override
-		public String getSerializationRepresentation() 
+		public String getSerializationRepresentation()
 		{
 			return variable.getName();
 		}
 
 		@Override
-		public Type getType() 
+		public Type getType()
 		{
 			return variable.getType().getType();
 		}
@@ -112,15 +117,15 @@ public class GRBindingFactory extends DefaultBindingFactory {
 		{
 			return true;
 		}
-		
+
 		@Override
-		public String getLabel() 
+		public String getLabel()
 		{
 			return variable.getName();
 		}
-		
+
 		@Override
-		public String getTooltipText(Type resultingType) 
+		public String getTooltipText(Type resultingType)
 		{
 			String returned = "<html>";
 			String resultingTypeAsString;
@@ -137,26 +142,26 @@ public class GRBindingFactory extends DefaultBindingFactory {
 			returned += "</html>";
 			return returned;
 		}
-		
-	    @Override
-	    public boolean isSettable()
-	    {
-	    	return true;
-	    }
-	    
-	    @Override
-	    public Object getBindingValue(GraphicalRepresentation<?> target, BindingEvaluationContext context)
-	    {
- 	    	return variable.getValue();
-	    }
-	    
-	    @Override
-	    public void setBindingValue(Object value, GraphicalRepresentation<?> target, BindingEvaluationContext context) 
-	    {
-	    	logger.info("Please implement me");
-	    }
+
+		@Override
+		public boolean isSettable()
+		{
+			return true;
+		}
+
+		@Override
+		public Object getBindingValue(GraphicalRepresentation<?> target, BindingEvaluationContext context)
+		{
+			return variable.getValue();
+		}
+
+		@Override
+		public void setBindingValue(Object value, GraphicalRepresentation<?> target, BindingEvaluationContext context)
+		{
+			logger.info("Please implement me");
+		}
 	}
-	
+
 	/**
 	 * Modelize a binding variable which is an access to all components
 	 * in the whole hierarchy
@@ -169,7 +174,7 @@ public class GRBindingFactory extends DefaultBindingFactory {
 
 		private GraphicalRepresentation<?> owner;
 		private Vector<ComponentPathElement> components;
- 
+
 		public ComponentsBindingVariable(GraphicalRepresentation<?> owner)
 		{
 			super(owner, "components", new ParameterizedTypeImpl(Vector.class, GraphicalRepresentation.class));
@@ -200,25 +205,26 @@ public class GRBindingFactory extends DefaultBindingFactory {
 		private IndexPathElement index;
 		private Hashtable<String,VariableBindingPathElement> variables;
 		private E container;
-		
+
 		public ComponentPathElement(String pathElementName, GraphicalRepresentation<?> gr, E container)
 		{
 			this.pathElementName = pathElementName;
 			this.gr = gr;
 			this.container = container;
 			index = new IndexPathElement(gr);
-			if (gr.getParentGraphicalRepresentation() != null) 
+			if (gr.getParentGraphicalRepresentation() != null) {
 				parent = new ComponentPathElement<GraphicalRepresentation<?>>("parent", gr.getParentGraphicalRepresentation(),gr);
+			}
 			variables = new Hashtable<String, GRBindingFactory.VariableBindingPathElement>();
 			for (GRVariable v : getComponent().getVariables()) {
 				variables.put(v.getName(), new VariableBindingPathElement(v));
 			}
 		}
-		
+
 		public IndexPathElement getIndex() {
 			return index;
 		}
-		
+
 		public ComponentPathElement<GraphicalRepresentation<?>> getParent() {
 			return parent;
 		}
@@ -226,7 +232,7 @@ public class GRBindingFactory extends DefaultBindingFactory {
 		public GraphicalRepresentation<?> getComponent() {
 			return gr;
 		}
-		
+
 		@Override
 		public Class<E> getDeclaringClass() {
 			return (Class<E>)container.getClass();
@@ -272,35 +278,35 @@ public class GRBindingFactory extends DefaultBindingFactory {
 		public String getVariableName() {
 			return pathElementName;
 		}
-		
-		
+
+
 		@Override
-		public GraphicalRepresentation<?> getBindingValue(E target, BindingEvaluationContext context) 
+		public GraphicalRepresentation<?> getBindingValue(E target, BindingEvaluationContext context)
 		{
- 			return gr;
+			return gr;
 		}
-		
-	    @Override
-	    public void setBindingValue(GraphicalRepresentation<?> value, E target, BindingEvaluationContext context) 
-	    {
-	    	// Not settable
-	    }
+
+		@Override
+		public void setBindingValue(GraphicalRepresentation<?> value, E target, BindingEvaluationContext context)
+		{
+			// Not settable
+		}
 
 	}
-	
+
 	public static class IndexPathElement implements SimplePathElement<GraphicalRepresentation<?>,Integer>,FinalBindingPathElement<GraphicalRepresentation<?>,Integer>
 	{
 		private GraphicalRepresentation<?> gr;
-		
+
 		public IndexPathElement(GraphicalRepresentation<?> gr)
 		{
 			this.gr = gr;
 		}
-		
+
 		public GraphicalRepresentation<?> getComponent() {
 			return gr;
 		}
-		
+
 		@Override
 		public Class getDeclaringClass() {
 			return gr.getClass();
@@ -335,35 +341,42 @@ public class GRBindingFactory extends DefaultBindingFactory {
 		public boolean isSettable() {
 			return false;
 		}
-		
+
 		@Override
-		public Integer getBindingValue(GraphicalRepresentation<?> target, BindingEvaluationContext context) 
+		public Integer getBindingValue(GraphicalRepresentation<?> target, BindingEvaluationContext context)
 		{
 			return gr.getIndex();
-		}	
+		}
 
-	    @Override
-	    public void setBindingValue(Integer value, GraphicalRepresentation<?> target, BindingEvaluationContext context) 
-	    {
-	    	// Not settable
-	    }
+		@Override
+		public void setBindingValue(Integer value, GraphicalRepresentation<?> target, BindingEvaluationContext context)
+		{
+			// Not settable
+		}
 	}
-	
+
 	@Override
 	public BindingPathElement getBindingPathElement(BindingPathElement father, String propertyName)
 	{
 		if (father instanceof ComponentsBindingVariable) {
 			for (ComponentPathElement<?> c : ((ComponentsBindingVariable)father).getComponents()) {
-				if (propertyName.equals(c.getLabel())) return c;
+				if (propertyName.equals(c.getLabel())) {
+					return c;
+				}
 			}
 			return null;
 		}
 		else if (father instanceof ComponentPathElement) {
-			if (propertyName.equals("index")) return ((ComponentPathElement<?>)father).getIndex();
-			if (propertyName.equals("parent")) return ((ComponentPathElement<?>)father).getParent();
+			if (propertyName.equals("index")) {
+				return ((ComponentPathElement<?>)father).getIndex();
+			}
+			if (propertyName.equals("parent")) {
+				return ((ComponentPathElement<?>)father).getParent();
+			}
 			for (GRParameter p : allowedPropertiesInBindings) {
-				if (isAllowedProperty(propertyName))
-					return KeyValueLibrary.getKeyValueProperty(((ComponentPathElement<?>)father).getType(), propertyName);			
+				if (isAllowedProperty(propertyName)) {
+					return KeyValueLibrary.getKeyValueProperty(((ComponentPathElement<?>)father).getType(), propertyName);
+				}
 			}
 			return ((ComponentPathElement<?>)father).variables.get(propertyName);
 		}
@@ -384,7 +397,9 @@ public class GRBindingFactory extends DefaultBindingFactory {
 			}
 			List<? extends BindingPathElement> all = KeyValueLibrary.getAccessibleProperties(((ComponentPathElement<?>)father).getType());
 			for (BindingPathElement bpe : all) {
-				if (isAllowedProperty(((KeyValueProperty)bpe).getName())) returned.add(bpe);
+				if (isAllowedProperty(((KeyValueProperty)bpe).getName())) {
+					returned.add(bpe);
+				}
 			}
 			returned.addAll(((ComponentPathElement<?>)father).variables.values());
 			return returned;
