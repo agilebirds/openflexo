@@ -19,8 +19,6 @@ import java.util.Stack;
 
 import javassist.util.proxy.MethodHandler;
 
-import org.flexo.model.FlexoModelObject;
-import org.flexo.model.TokenEdge;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Deleter;
 import org.openflexo.model.annotations.Finder;
@@ -387,15 +385,6 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 
 	private Object invokeGetterForSingleCardinality(ModelProperty<? super I> property)
 	{
-		if (property.getReturnedValue() != null) {
-			// TODO: implement this
-			// En attendant d'avoir le framework antar.bindings a notre disposition, ici c'est juste pour tester
-			if (property.getReturnedValue().value().equals("startNode.process")) {
-				if (((TokenEdge)getObject()).getStartNode() != null) {
-					return ((TokenEdge)getObject()).getStartNode().getProcess();
-				}
-			}
-		}
 		Object returned = values.get(property.getPropertyIdentifier());
 		if (returned != null) {
 			return returned;
@@ -1109,9 +1098,10 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 				case FACTORY:
 					if (p.getStrategyTypeFactory().equals("deriveName()")) {
 						// TODO: just to test
+						// TODO: implement this properly!
 						//System.out.println("TODO: implement this (FACTORY whine cloning)");
-						Object factoredValue = ((FlexoModelObject)getObject()).deriveName();
-						clonedObjectHandler.invokeSetter(p,factoredValue);
+						// Object factoredValue = ((FlexoModelObject)getObject()).deriveName();
+						// clonedObjectHandler.invokeSetter(p,factoredValue);
 					}
 					break;
 				case IGNORE:
