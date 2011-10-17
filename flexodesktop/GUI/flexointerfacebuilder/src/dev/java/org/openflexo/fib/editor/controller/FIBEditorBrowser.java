@@ -51,6 +51,7 @@ import org.openflexo.fib.model.FIBLabel;
 import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.model.FIBNumber;
 import org.openflexo.fib.model.FIBPanel;
+import org.openflexo.fib.model.FIBRadioButtonList;
 import org.openflexo.fib.model.FIBRemovingNotification;
 import org.openflexo.fib.model.FIBTabPanel;
 import org.openflexo.fib.model.FIBTable;
@@ -64,33 +65,33 @@ public class FIBEditorBrowser implements TreeSelectionListener, Observer {
 	private final FIBComponentTreeModel treeModel;
 	private final JScrollPane scrollPane;
 	private final FIBEditorController controller;
-	
-	public FIBEditorBrowser(FIBComponent fibComponent, FIBEditorController controller) 
+
+	public FIBEditorBrowser(FIBComponent fibComponent, FIBEditorController controller)
 	{
 		super();
-		
+
 		this.controller = controller;
-		
+
 		controller.addObserver(this);
-		
+
 		treeModel = new FIBComponentTreeModel(fibComponent);
 		/*treeModel.addTreeModelListener(new TreeModelListener() {
-			
+
 			public void treeStructureChanged(TreeModelEvent e)
 			{
 				System.out.println("treeStructureChanged "+e.getTreePath());
 			}
-			
+
 			public void treeNodesRemoved(TreeModelEvent e)
 			{
 				System.out.println("treeNodesRemoved "+e.getTreePath());
 			}
-			
+
 			public void treeNodesInserted(TreeModelEvent e)
 			{
 				System.out.println("treeNodesInserted "+e.getTreePath());
 			}
-			
+
 			public void treeNodesChanged(TreeModelEvent e)
 			{
 				System.out.println("treeNodesChanged "+e.getTreePath());
@@ -98,11 +99,11 @@ public class FIBEditorBrowser implements TreeSelectionListener, Observer {
 		});*/
 		tree = new JTree(treeModel);
 		tree.setFocusable(true);
-	
+
 		tree.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				if (e.isPopupTrigger() || (e.getButton()==MouseEvent.BUTTON3)) {
+				if (e.isPopupTrigger() || e.getButton()==MouseEvent.BUTTON3) {
 					Object node = tree.getLastSelectedPathComponent();
 					if (node instanceof FIBModelObject) {
 						getController().getContextualMenu().displayPopupMenu((FIBModelObject)node, tree, e);
@@ -110,41 +111,41 @@ public class FIBEditorBrowser implements TreeSelectionListener, Observer {
 				}
 			}
 		});
-		
-		tree.setCellRenderer(new DefaultTreeCellRenderer() {
-		    @Override
-			public Component getTreeCellRendererComponent(JTree tree, Object value,
-					  boolean sel,
-					  boolean expanded,
-					  boolean leaf, int row,
-					  boolean hasFocus) {
-		    	Component returned = super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-		    	if ((returned instanceof DefaultTreeCellRenderer) && (value instanceof FIBComponent)) {
-		    		((DefaultTreeCellRenderer)returned).setIcon(iconFor((FIBComponent)value));
-		    		((DefaultTreeCellRenderer)returned).setText(textFor((FIBComponent)value));
-		    	}
-		    	//System.out.println("value="+value+" returned="+returned);
-		    	return returned;
-		    }
-		});
-		
-	    tree.getSelectionModel().setSelectionMode
-	            (TreeSelectionModel.SINGLE_TREE_SELECTION);
 
-	    //Listen for when the selection changes.
-	    tree.addTreeSelectionListener(this);
-	    
-	    tree.setPreferredSize(new Dimension(300,600));
+		tree.setCellRenderer(new DefaultTreeCellRenderer() {
+			@Override
+			public Component getTreeCellRendererComponent(JTree tree, Object value,
+					boolean sel,
+					boolean expanded,
+					boolean leaf, int row,
+					boolean hasFocus) {
+				Component returned = super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+				if (returned instanceof DefaultTreeCellRenderer && value instanceof FIBComponent) {
+					((DefaultTreeCellRenderer)returned).setIcon(iconFor((FIBComponent)value));
+					((DefaultTreeCellRenderer)returned).setText(textFor((FIBComponent)value));
+				}
+				//System.out.println("value="+value+" returned="+returned);
+				return returned;
+			}
+		});
+
+		tree.getSelectionModel().setSelectionMode
+		(TreeSelectionModel.SINGLE_TREE_SELECTION);
+
+		//Listen for when the selection changes.
+		tree.addTreeSelectionListener(this);
+
+		tree.setPreferredSize(new Dimension(300,600));
 
 		scrollPane = new JScrollPane(tree);
 
 	}
-	
+
 	public FIBEditorController getController()
 	{
 		return controller;
 	}
-	
+
 	private ImageIcon iconFor(FIBComponent component)
 	{
 		if (component.isRootComponent()) {
@@ -169,11 +170,13 @@ public class FIBEditorBrowser implements TreeSelectionListener, Observer {
 			return FIBEditorIconLibrary.NUMBER_ICON;
 		} else if (component instanceof FIBDropDown) {
 			return FIBEditorIconLibrary.DROPDOWN_ICON;
+		} else if (component instanceof FIBRadioButtonList) {
+			return FIBEditorIconLibrary.RADIOBUTTON_ICON;
 		}
 		return null;
-		
+
 	}
-	
+
 	private String textFor(FIBComponent component)
 	{
 		if (component.getName() != null) {
@@ -197,18 +200,20 @@ public class FIBEditorBrowser implements TreeSelectionListener, Observer {
 	public JScrollPane getScrollPane() {
 		return scrollPane;
 	}
-	
-	public void valueChanged(TreeSelectionEvent e) 
+
+	@Override
+	public void valueChanged(TreeSelectionEvent e)
 	{
 		Object node = tree.getLastSelectedPathComponent();
 
 		if (node instanceof FIBComponent) {
 			controller.setSelectedObject((FIBComponent)node);
 		}
-		
+
 	}
-	
-	public void update(Observable o, Object notification) 
+
+	@Override
+	public void update(Observable o, Object notification)
 	{
 		if (notification instanceof FIBEditorNotification) {
 			if (notification instanceof SelectedObjectChange) {
@@ -221,7 +226,7 @@ public class FIBEditorBrowser implements TreeSelectionListener, Observer {
 			}
 		}
 	}
-	
+
 	private TreePath pathForObject(FIBComponent o)
 	{
 		if (o.getParent() != null) {
@@ -230,17 +235,17 @@ public class FIBEditorBrowser implements TreeSelectionListener, Observer {
 			return new TreePath(o);
 		}
 	}
-	
+
 	class FIBComponentTreeModel extends DefaultTreeModel implements Observer
 	{
 		private final Hashtable<FIBModelObject,Boolean> contents;
-		
+
 		public FIBComponentTreeModel(FIBComponent component)
 		{
 			super(component);
 			contents = new Hashtable<FIBModelObject,Boolean>();
 		}
-		
+
 		@Override
 		public FIBModelObject getRoot()
 		{
@@ -248,7 +253,7 @@ public class FIBEditorBrowser implements TreeSelectionListener, Observer {
 			ensureObjectIsRegistered(returned);
 			return returned;
 		}
-		
+
 		@Override
 		public Object getChild(Object parent, int index)
 		{
@@ -256,19 +261,20 @@ public class FIBEditorBrowser implements TreeSelectionListener, Observer {
 			ensureObjectIsRegistered(returned);
 			return returned;
 		}
-		
+
 		private void ensureObjectIsRegistered(FIBModelObject o)
 		{
 			if (o != null) {
-			if (contents.get(o) == null) {
-				contents.put(o,true);
-				o.addObserver(this);
-				//System.out.println("addObserver() for "+o);
-			}
+				if (contents.get(o) == null) {
+					contents.put(o,true);
+					o.addObserver(this);
+					//System.out.println("addObserver() for "+o);
+				}
 			}
 			// else already registered, do nothing
 		}
-		
+
+		@Override
 		public void update(Observable o, Object arg)
 		{
 			if (o instanceof FIBModelObject) {
