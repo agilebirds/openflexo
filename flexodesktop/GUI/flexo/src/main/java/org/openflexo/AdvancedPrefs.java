@@ -60,10 +60,12 @@ public class AdvancedPrefs extends ContextPreferences
 
 	protected static final String BUG_REPORT_URL_KEY = "openFlexoBugReportURL";
 
+	protected static final String WEB_SERVICE_INSTANCE = "webServiceInstance";
 	protected static final String WEB_SERVICE_URL_KEY = "webServiceUrl";
 	protected static final String WEB_SERVICE_LOGIN_KEY = "webServiceLogin";
 	protected static final String WEB_SERVICE_PWD_KEY = "webServicePwd";
 	protected static final String WEB_SERVICE_REMEMBERANDDONTASKPARAMSANYMORE_KEY = "rememberAndDontAskWebServiceParamsAnymore";
+	protected static final String FLEXO_SERVER_INSTANCE_URL = "flexoserver_instance_url";
 
 	protected static final String ENABLE_UNDO_MANAGER = "enableUndoManager";
 
@@ -634,6 +636,32 @@ public class AdvancedPrefs extends ContextPreferences
 		}
 		getPreferences().setProperty(PROXY_PASSWORD, proxyPassword);
 		applyProxySettings();
+	}
+
+	public static String getFlexoServerInstanceURL() {
+		String answer = getPreferences().getProperty(FLEXO_SERVER_INSTANCE_URL);
+		if (answer==null || answer.trim().isEmpty()) {
+			setFlexoServerInstanceURL("http://flexoserverinstances.openflexo.com");
+			return getFlexoServerInstanceURL();
+		}
+		return answer;
+	}
+
+	public static void setFlexoServerInstanceURL(String url) {
+		getPreferences().setProperty(FLEXO_SERVER_INSTANCE_URL, url);
+	}
+
+	public static String getWebServiceInstance() {
+		String answer = getPreferences().getProperty(WEB_SERVICE_INSTANCE);
+		if (answer == null || answer.trim().isEmpty()) {
+			setWebServiceInstance("prod");
+			return getWebServiceInstance();
+		}
+		return answer;
+	}
+
+	public static void setWebServiceInstance(String wsInstanceID) {
+		getPreferences().setProperty(WEB_SERVICE_INSTANCE, wsInstanceID);
 	}
 
 }

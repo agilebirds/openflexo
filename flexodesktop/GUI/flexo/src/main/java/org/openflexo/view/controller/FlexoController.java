@@ -70,10 +70,11 @@ import javax.xml.rpc.ServiceException;
 
 import org.openflexo.AdvancedPrefs;
 import org.openflexo.GeneralPreferences;
-import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.components.validation.ConsistencyCheckDialog;
 import org.openflexo.fib.FIBLibrary;
+import org.openflexo.fib.controller.FIBController.Status;
+import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
@@ -84,10 +85,6 @@ import org.openflexo.foundation.action.SetPropertyAction;
 import org.openflexo.foundation.dm.DuplicateClassNameException;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
-import org.openflexo.foundation.param.CheckboxParameter;
-import org.openflexo.foundation.param.ParameterDefinition;
-import org.openflexo.foundation.param.ParametersModel;
-import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.utils.FlexoProgress;
@@ -108,6 +105,8 @@ import org.openflexo.inspector.MainInspectorController;
 import org.openflexo.inspector.selection.EmptySelection;
 import org.openflexo.kvc.KeyValueCoding;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.model.factory.ModelDefinitionException;
+import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.prefs.FlexoPreferences;
@@ -124,6 +123,7 @@ import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.FlexoRelativeWindow;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.WebServiceURLDialog.PPMWSClientParameter;
 import org.openflexo.view.listener.FlexoKeyEventListener;
 import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.view.palette.FlexoPalette;
@@ -1856,53 +1856,40 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	}
 
 	public PPMWebServiceClient getWSClient(boolean forceDialog) {
-
-		String webServiceUrl = AdvancedPrefs.getWebServiceUrl();
-		String webServiceLogin = AdvancedPrefs.getWebServiceLogin();
-		String webServiceMd5Pwd = AdvancedPrefs.getWebServiceMd5Password();
-		String oldMD5Password = webServiceMd5Pwd;
-		boolean rememberAndDontAskWebServiceParamsAnymore = AdvancedPrefs.getRememberAndDontAskWebServiceParamsAnymore();
-
-		if(forceDialog ||!rememberAndDontAskWebServiceParamsAnymore || webServiceUrl==null || webServiceLogin==null || webServiceMd5Pwd==null || !isWSUrlValid(webServiceUrl)|| urlSeemsIncorrect(webServiceUrl))
+		ModelFactory factory = new ModelFactory();
+		try {
+			factory.importClass(PPMWSClientParameter.class);
+		} catch (ModelDefinitionException e) {
+			// It sucks but it seems that a developer left a crappy thing.
+			e.printStackTrace();
+		}
+		FlexoServerInstance instance = FlexoServerInstanceManager.getInstance().getAddressBook()
+				.getInstanceWithID(AdvancedPrefs.getWebServiceInstance());
+		PPMWSClientParameter params = factory.newInstance(PPMWSClientParameter.class);
+		params.setWSInstance(instance);
+		params.setWSLogin(AdvancedPrefs.getWebServiceLogin());
+		params.setWSPassword(AdvancedPrefs.getWebServiceMd5Password());
+		params.setWSURL(AdvancedPrefs.getWebServiceUrl());
+		params.setRemember(AdvancedPrefs.getRememberAndDontAskWebServiceParamsAnymore());
+		if (params.getWSInstance() != null && !params.getWSInstance().getID().equals(FlexoServerInstance.OTHER_ID)) {
+			params.setWSURL(params.getWSInstance().getWSURL());
+		}
+		String oldMD5Password = params.getWSPassword();
+		if (forceDialog || !params.getRemember() || params.getWSURL() == null || params.getWSLogin() == null
+				|| params.getWSPassword() == null || !isWSUrlValid(params.getWSURL()) || urlSeemsIncorrect(params.getWSURL()))
 		{
-			ParameterDefinition[] parameters = new ParameterDefinition[4];
-			final TextFieldParameter wsURL = new TextFieldParameter("webserviceurl", "web_service_url", webServiceUrl);
-			parameters[0] = wsURL;
-			parameters[1] = new TextFieldParameter("login", "web_service_login", webServiceLogin);
-			TextFieldParameter pwdParam = new TextFieldParameter("password", "web_service_password", webServiceMd5Pwd);
-			pwdParam.setIsPassword(true);
-			pwdParam.setColumns(75);
-			parameters[2] = pwdParam;
-			parameters[3] = new CheckboxParameter("rememberanddontaskparamsanymore", "web_service_remember_and_dont_ask_params_anymore", rememberAndDontAskWebServiceParamsAnymore);
-			AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), FlexoLocalization.localizedForKey("import_roles"), FlexoLocalization.localizedForKey("enter_parameters_for_import_roles"),
-					new AskParametersDialog.ValidationCondition() {
+			WebServiceURLDialog data = new WebServiceURLDialog();
+			data.setClientParameter(params);
+			FIBDialog dialog = FIBDialog.instanciateComponent(WebServiceURLDialog.FIB_FILE, data, getFlexoFrame(), true);
 
-				@Override
-				public boolean isValid(ParametersModel model) {
-					if (wsURL.getValue()==null || wsURL.getValue().trim().length()==0) {
-						errorMessage=FlexoLocalization.localizedForKey("web_service_url_cannot_be_empty");
-						return false;
-					}
-					if (!isWSUrlValid(wsURL.getValue())) {
-						errorMessage=FlexoLocalization.localizedForKey("web_service_url_must_start_with_https://_or_http://");
-						return false;
-					}
-					if (urlSeemsIncorrect(wsURL.getValue())) {
-						errorMessage=FlexoLocalization.localizedForKey("web_service_url_seems_incorrect");
-						return false;
-					}
-					errorMessage=null;
-					return true;
+			if (dialog.getStatus() == Status.VALIDATED) {
+				if (params.getWSInstance() != null && !params.getWSInstance().getID().equals(FlexoServerInstance.OTHER_ID)) {
+					params.setWSURL(params.getWSInstance().getWSURL());
 				}
-			}, parameters);
-			if (dialog.getStatus() == AskParametersDialog.VALIDATE)
-			{
-				webServiceUrl = (String) dialog.parameterValueWithName("webserviceurl");
-				webServiceLogin = (String) dialog.parameterValueWithName("login");
 				try {
-					String password = (String) dialog.parameterValueWithName("password");
+					String password = params.getWSPassword();
 					if (oldMD5Password==null || !oldMD5Password.equals(password)) {
-						webServiceMd5Pwd = ToolBox.getMd5Hash(password);
+						params.setWSPassword(ToolBox.getMd5Hash(params.getWSPassword()));
 					}
 				} catch (NoSuchAlgorithmException e1) {
 					e1.printStackTrace();
@@ -1911,18 +1898,19 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 					AdvancedPrefs.save();
 					return null;
 				}
-
-				rememberAndDontAskWebServiceParamsAnymore = (Boolean) dialog.parameterValueWithName("rememberanddontaskparamsanymore");
-				if (webServiceUrl!=null) {
-					AdvancedPrefs.setWebServiceUrl(webServiceUrl);
+				if (params.getWSInstance() != null) {
+					AdvancedPrefs.setWebServiceInstance(params.getWSInstance().getID());
 				}
-				if (webServiceLogin!=null) {
-					AdvancedPrefs.setWebServiceLogin(webServiceLogin);
+				if (params.getWSURL() != null) {
+					AdvancedPrefs.setWebServiceUrl(params.getWSURL());
 				}
-				if (webServiceMd5Pwd!=null) {
-					AdvancedPrefs.setWebServiceMd5Password(webServiceMd5Pwd);
+				if (params.getWSLogin() != null) {
+					AdvancedPrefs.setWebServiceLogin(params.getWSLogin());
 				}
-				AdvancedPrefs.setRememberAndDontAskWebServiceParamsAnymore(rememberAndDontAskWebServiceParamsAnymore);
+				if (params.getWSLogin() != null) {
+					AdvancedPrefs.setWebServiceMd5Password(params.getWSLogin());
+				}
+				AdvancedPrefs.setRememberAndDontAskWebServiceParamsAnymore(params.getRemember());
 				AdvancedPrefs.save();
 			} else {
 				return null;
@@ -1933,7 +1921,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 
 		PPMWebServiceClient client = null;
 		try {
-			client = new PPMWebServiceClient(webServiceUrl,webServiceLogin,webServiceMd5Pwd);
+			client = new PPMWebServiceClient(params.getWSURL(), params.getWSLogin(), params.getWSPassword());
 		} catch (ServiceException e1) {
 			e1.printStackTrace();
 			FlexoController.notify(e1.getMessage());

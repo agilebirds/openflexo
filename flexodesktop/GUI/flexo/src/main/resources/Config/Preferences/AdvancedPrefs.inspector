@@ -61,4 +61,7 @@
 	   <param name="validateOnReturn" value="true"/>
 	</property>
 	<property name="rememberAndDontAskWebServiceParamsAnymore" label="web_service_remember_and_dont_ask_params_anymore" widget="CHECKBOX" constraint="24"/>
+	<property name="flexoServerInstanceURL" label="flexo_server_instance_url" widget="TEXT_FIELD" constraint="25">
+	   <param name="validateOnReturn" value="true"/>
+	</property>
 </tab>

@@ -139,7 +139,7 @@ public abstract class UserType extends FlexoObject
 
 	public abstract ImageIcon getIconImage();
 
-	protected static class Developer extends UserType
+	public static class Developer extends UserType
 	{
 
 		@Override
