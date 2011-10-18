@@ -38,6 +38,17 @@ public class GRBindingFactory extends DefaultBindingFactory {
 
 	private static List<BindingPathElement> EMPTY_LIST = new ArrayList<BindingPathElement>();
 
+	private static Class<? extends GraphicalRepresentation<?>> DECLARING_CLASS;
+
+	static {
+		try {
+			DECLARING_CLASS = (Class<? extends GraphicalRepresentation<?>>) Class.forName(GraphicalRepresentation.class.getName());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			DECLARING_CLASS = null;
+		}
+	}
+
 	/*@Override
 	public BindingPathElement getBindingPathElement(BindingPathElement father, String propertyName)
 	{
@@ -92,12 +103,7 @@ public class GRBindingFactory extends DefaultBindingFactory {
 
 		@Override
 		public Class<? extends GraphicalRepresentation<?>> getDeclaringClass() {
-			try {
-				return (Class<? extends GraphicalRepresentation<?>>) Class.forName(GraphicalRepresentation.class.getName());
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-				return null;
-			}
+			return DECLARING_CLASS;
 		}
 
 		@Override
