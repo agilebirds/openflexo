@@ -25,7 +25,7 @@ import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingFactory;
-import org.openflexo.foundation.viewpoint.inspector.InspectorEntry.InspectorBindingAttribute;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
@@ -62,13 +62,13 @@ public class InspectorDataBinding implements StringConvertable<InspectorDataBind
 		return CONVERTER;
 	}
 
-	private InspectorEntry owner;
+	private ViewPointObject owner;
 	private InspectorBindingAttribute bindingAttribute;
 	private String unparsedBinding;
 	private BindingDefinition bindingDefinition;
 	private AbstractBinding binding;
 
-	public InspectorDataBinding(InspectorEntry owner, InspectorBindingAttribute attribute, BindingDefinition df) 
+	public InspectorDataBinding(ViewPointObject owner, InspectorBindingAttribute attribute, BindingDefinition df) 
 	{
 		setOwner(owner);
 		setBindingAttribute(attribute);
@@ -176,11 +176,11 @@ public class InspectorDataBinding implements StringConvertable<InspectorDataBind
 		this.unparsedBinding = unparsedBinding;
 	}
 
-	public InspectorEntry getOwner() {
+	public ViewPointObject getOwner() {
 		return owner;
 	}
 
-	public void setOwner(InspectorEntry owner)
+	public void setOwner(ViewPointObject owner)
 	{
 		this.owner = owner;
 	}

@@ -23,28 +23,24 @@ import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
 
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.AbstractOntologyObject;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
-import org.openflexo.foundation.viewpoint.LabelRepresentation;
-import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.localization.FlexoLocalization;
 
 
-public abstract class ViewElement extends ViewObject implements Bindable {
+public abstract class ViewElement extends ViewObject implements Bindable, BindingEvaluationContext {
 
     private static final Logger logger = Logger.getLogger(ViewElement.class.getPackage().getName());
 
-    private EditionPatternInstance editionPatternInstance; 
-    
 	/**
      * Constructor invoked during deserialization
      * 
@@ -108,67 +104,24 @@ public abstract class ViewElement extends ViewObject implements Bindable {
 
     public boolean labelIsBoundToOntologicConcept()
     {
-    	return (getLinkedConcept() != null) && (getPatternRole() != null);
+    	return (getPatternRole() != null);
     }
     
     protected String getOntologicConceptLabelValue()
     {
-    	if (labelIsBoundToOntologicConcept()) {
-    		LabelRepresentation lr = getPatternRole().getLabelRepresentation();
-    		if (lr == null) {
-				return null;
-			}
-    		//if (lr.isStaticText()) return lr.getText();
-    		return lr.getDynamicValue(getLinkedConcept());
-    	}
-    	return null;
+    	if (getPatternRole() != null)
+    		return (String)getPatternRole().getLabel().getBindingValue(this);
+     	return null;
     }
     
     protected void setOntologicConceptLabelValue(String aValue)
     {
-    	if (labelIsBoundToOntologicConcept()) {
-    		LabelRepresentation lr = getPatternRole().getLabelRepresentation();
-       		if (lr == null) {
-				return;
-			}
-    		//if (lr.isStaticText()) return;
-    		lr.setDynamicValue(getLinkedConcept(),aValue);
-    	}
+    	if (getPatternRole() != null && getPatternRole().getReadOnlyLabel())
+    		getPatternRole().getLabel().setBindingValue(aValue,this);
      }
     
-	public AbstractOntologyObject getLinkedConcept()
-	{
-		if (getEditionPatternInstance() == null) {
-			return null;
-		}
-		if (getEditionPattern() == null) {
-			return null;
-		}
-		if (getPatternRole() == null) {
-			return null;
-		}
-		if (getPatternRole().getBoundPatternRole() == null) {
-			return null;
-		}
-		FlexoModelObject actor = getEditionPatternInstance().getPatternActor(getPatternRole().getBoundPatternRole());
-		if (actor instanceof AbstractOntologyObject) {
-			return (AbstractOntologyObject)actor;
-		} else {
-			return null;
-		}
-	}
-	
-	public String getLinkedConceptURI()
-	{
-		if (getLinkedConcept() != null) {
-			return getLinkedConcept().getURI();
-		}
-		return null;
-	}
-
 	public EditionPattern getEditionPattern() 
 	{
-		//System.out.println("pattern instance = "+getEditionPatternInstance());
 		if (getEditionPatternInstance() != null) {
 			return getEditionPatternInstance().getPattern();
 		}
@@ -187,64 +140,18 @@ public abstract class ViewElement extends ViewObject implements Bindable {
 	
 	public EditionPatternReference getEditionPatternReference() 
 	{
-		return getEditionPatternReference(_getEditionPatternIdentifier(),_getEditionPatternInstanceId());
+		// Default behaviour is to have only one EditionPattern
+		if (getEditionPatternReferences().size() > 0)
+			return getEditionPatternReferences().firstElement();
+		return null;
 	}
 
 	public EditionPatternInstance getEditionPatternInstance() 
 	{
-		if (editionPatternInstance == null) {
-			//System.out.println("_editionPatternIdentifier="+_editionPatternIdentifier);
-    		if (_editionPatternIdentifier != null) {
-    			EditionPatternReference ref = getEditionPatternReference(_editionPatternIdentifier,_editionPatternInstanceId);
-    			//System.out.println("ref="+ref);
-    			if (ref != null) {
-					editionPatternInstance = ref.getEditionPatternInstance();
-				}
-    		}
-    	}
-		return editionPatternInstance;
+		if (getEditionPatternReference() != null) return getEditionPatternReference().getEditionPatternInstance();
+		return null;
 	}
 
-	private String _editionPatternIdentifier;
-	private long _editionPatternInstanceId;
-	
-	// Used while serializing/deserializing
-	public String _getEditionPatternIdentifier() 
-	{
-		if (getEditionPatternInstance() != null) {
-			return getEditionPatternInstance().getPattern().getName();
-		}
-		return _editionPatternIdentifier;
-	}
-
-	// Used while serializing/deserializing
-	public void _setEditionPatternIdentifier(String editionPatternIdentifier)
-	{
-		_editionPatternIdentifier = editionPatternIdentifier;
-	}
-
-	// Used while serializing/deserializing
-	public long _getEditionPatternInstanceId() 
-	{
-		if (getEditionPatternInstance() != null) {
-			return getEditionPatternInstance().getInstanceId();
-		}
-		return _editionPatternInstanceId;
-	}
-
-	// Used while serializing/deserializing
-	public void _setEditionPatternInstanceId(long id)
-	{
-		_editionPatternInstanceId = id;
-	}
-
-	@Override
-	public void registerEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole patternRole)
-	{
-		super.registerEditionPatternReference(editionPatternInstance,patternRole);
-		_editionPatternIdentifier = editionPatternInstance.getPattern().getName();
-		_editionPatternInstanceId = editionPatternInstance.getInstanceId();
-	}
 
     @Override
 	public String getInspectorTitle()
@@ -265,6 +172,13 @@ public abstract class ViewElement extends ViewObject implements Bindable {
 	@Override
 	public BindingModel getBindingModel() {
 		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public Object getValue(BindingVariable variable) 
+	{
+		logger.info("Tiens, que dois je repondre alors qu'on me demande pour "+variable);
 		return null;
 	}
 }

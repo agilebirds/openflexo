@@ -43,7 +43,7 @@ import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.inspector.CheckboxInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
-import org.openflexo.foundation.viewpoint.inspector.EditionPatternPathElement;
+import org.openflexo.foundation.viewpoint.inspector.EditionPatternInstancePathElement;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.IntegerInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.TextAreaInspectorEntry;
@@ -195,7 +195,7 @@ public class FIBInspector extends FIBPanel {
 		super.createBindingModel();
 		for (int i=0; i<currentEditionPatterns.size(); i++) {
 			EditionPattern ep = currentEditionPatterns.get(i);
-			_bindingModel.addToBindingVariables(new EditionPatternPathElement(ep,i,getDataClass()));
+			_bindingModel.addToBindingVariables(new EditionPatternInstancePathElement(ep,i,getDataClass()));
 		}
 	}
  		

@@ -4,12 +4,12 @@
   <EditionPattern id="2" name="Concept">
     <description>Allows to define concept.</description>
     <DropScheme id="3" target="top" name="DropConceptAtTopLevel" skipConfirmationPanel="false">
-      <Parameter id="4" name="conceptName" label="concept_name" widget="TEXT_FIELD" defaultValue="concept" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      <TextFieldParameter id="4" name="conceptName" label="concept_name" widget="TEXT_FIELD" defaultValue="concept" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Allow to enter concept name while dropping concept</description>
-      </Parameter>
-      <Parameter id="5" name="conceptURI" label="uri" widget="TEXT_FIELD" defaultValue="MyConcept" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="conceptName">
+      </TextFieldParameter>
+      <URIParameter id="5" name="conceptURI" label="uri" widget="TEXT_FIELD" defaultValue="MyConcept" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="conceptName">
         <description>Allow to enter (unique) name used in Ontology</description>
-      </Parameter>
+      </URIParameter>
       <AddClass id="6" newClassName="conceptURI" patternRole="concept" conceptURI="http://www.agilebirds.com/openflexo/ViewPoints/BasicOntology.owl#Concept" />
       <AddShape id="7" patternRole="shape" />
     </DropScheme>
@@ -65,12 +65,12 @@
   <EditionPattern id="45" name="HasRelationship">
     <description>Allows to define 'has' link between two concepts</description>
     <LinkScheme id="46" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/BasicOntology.owl#Concept" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/BasicOntology.owl#Concept" name="LinkTwoConceptByHasRelationShip" skipConfirmationPanel="false">
-      <Parameter id="47" name="restrictionType" label="restriction_type" widget="DROPDOWN" values="Some,Only,Exact,Min,Max" defaultValue="Some" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      <DropDownParameter id="47" name="restrictionType" label="restriction_type" widget="DROPDOWN" values="Some,Only,Exact,Min,Max" defaultValue="Some" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Kind of restriction</description>
-      </Parameter>
-      <Parameter id="48" name="cardinality" label="cardinality" widget="INTEGER" defaultValue="1" usePaletteLabelAsDefaultValue="false" uniqueURI="false" conditional="(restrictionType='Exact') | (restrictionType='Min') | (restrictionType='Max')">
+      </DropDownParameter>
+      <IntegerParameter id="48" name="cardinality" label="cardinality" widget="INTEGER" defaultValue="1" usePaletteLabelAsDefaultValue="false" uniqueURI="false" conditional="(restrictionType='Exact') | (restrictionType='Min') | (restrictionType='Max')">
         <description>Cardinality for restriction</description>
-      </Parameter>
+      </IntegerParameter>
       <AddRestrictionStatement id="49" object="toTarget" propertyURI="http://www.agilebirds.com/openflexo/ViewPoints/BasicOntology.owl#has" restrictionType="restrictionType" cardinality="cardinality" patternRole="has" subject="fromTarget" />
       <AddConnector id="50" patternRole="connector" />
     </LinkScheme>

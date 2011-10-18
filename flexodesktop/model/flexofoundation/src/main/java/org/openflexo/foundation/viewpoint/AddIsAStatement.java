@@ -19,12 +19,14 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.inspector.InspectorDataBinding;
 
 
 
@@ -32,8 +34,6 @@ public class AddIsAStatement extends AddStatement<IsAStatementPatternRole> {
 
 	private static final Logger logger = Logger.getLogger(AddIsAStatement.class.getPackage().getName());
 
-	private String father;
-	
 	public AddIsAStatement() {
 	}
 	
@@ -43,47 +43,9 @@ public class AddIsAStatement extends AddStatement<IsAStatementPatternRole> {
 		return EditionActionType.AddIsAStatement;
 	}
 	
-	public String _getFather()
-	{
-		return father;
-	}
-	
-	public void _setFather(String anObject)
-	{
-		father = anObject;
-	}
-	
-	private Vector<String> availableFatherValues = null;
-	
-	public Vector<String> getAvailableFatherValues()
-	{
-		if (availableFatherValues == null) {
-			availableFatherValues = new Vector<String>();
-			switch (getScheme().getEditionSchemeType()) {
-			case DropScheme:
-				availableFatherValues.add(EditionAction.CONTAINER);
-				availableFatherValues.add(EditionAction.CONTAINER_OF_CONTAINER);
-				break;
-			case LinkScheme:
-				availableFatherValues.add(EditionAction.FROM_TARGET);
-				availableFatherValues.add(EditionAction.TO_TARGET);
-				break;
-			default:
-				break;
-			}
-			for (PatternRole pr : getEditionPattern().getPatternRoles()) {
-				availableFatherValues.add(pr.getPatternRoleName());
-			}
-			for (EditionPatternParameter p : getScheme().getParameters()) {
-				availableFatherValues.add(p.getName());
-			}
-		}
-		return availableFatherValues;
-	}
-	
 	public OntologyObject getPropertyFather(EditionSchemeAction action)
 	{
-		return retrieveOntologyObject(_getFather(), action);
+		return (OntologyObject)getFather().getBindingValue(action);
 	}
 	
 	@Override
@@ -92,12 +54,28 @@ public class AddIsAStatement extends AddStatement<IsAStatementPatternRole> {
 		return Inspectors.VPM.ADD_IS_A_PROPERTY_INSPECTOR;
 	}
 
-	/*@Override
-	protected void updatePatternRoleType()
+	private InspectorDataBinding father;
+	
+	private BindingDefinition FATHER = new BindingDefinition("father", OntologyObject.class, BindingDefinitionType.GET, false);
+	
+	public BindingDefinition getFatherBindingDefinition()
 	{
-		if (getPatternRole() == null) {
-			return;
-		}
-	}*/
+		return FATHER;
+	}
+
+	public InspectorDataBinding getFather() 
+	{
+		if (father == null) father = new InspectorDataBinding(this,EditionActionBindingAttribute.father,getFatherBindingDefinition());
+		return father;
+	}
+
+	public void setFather(InspectorDataBinding father) 
+	{
+		father.setOwner(this);
+		father.setBindingAttribute(EditionActionBindingAttribute.father);
+		father.setBindingDefinition(getFatherBindingDefinition());
+		this.father = father;
+	}
+
 		
 }

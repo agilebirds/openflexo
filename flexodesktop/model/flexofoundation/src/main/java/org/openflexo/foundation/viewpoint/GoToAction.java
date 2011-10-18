@@ -68,7 +68,7 @@ public class GoToAction extends EditionAction {
 			for (PatternRole pr : getEditionPattern().getPatternRoles()) {
 				availableTargetObjectValues.add(pr.getPatternRoleName());
 			}
-			for (EditionPatternParameter p : getScheme().getParameters()) {
+			for (EditionSchemeParameter p : getScheme().getParameters()) {
 				availableTargetObjectValues.add(p.getName());
 			}
 		}

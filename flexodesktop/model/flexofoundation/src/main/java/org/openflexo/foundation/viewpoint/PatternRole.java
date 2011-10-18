@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
 
 /**
@@ -138,5 +139,12 @@ public abstract class PatternRole extends ViewPointObject {
 	}
 	
 	public abstract Class<?> getAccessedClass();
+
+	@Override
+	public BindingModel getBindingModel() 
+	{
+		return getEditionPattern().getBindingModel();
+	}
+
 
 }

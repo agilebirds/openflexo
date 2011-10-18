@@ -250,6 +250,19 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 	{
 		return rootFolder;
 	}
+
+	public EditionPattern getEditionPattern(String editionPatternURI) 
+	{
+		if (editionPatternURI.indexOf("#") > -1) {
+			String viewPointURI = editionPatternURI.substring(0,editionPatternURI.indexOf("#"));
+			ViewPoint vp = getOntologyCalc(viewPointURI);
+			if (vp != null) {
+				return vp.getEditionPattern(editionPatternURI.substring(editionPatternURI.indexOf("#")+1));
+			}
+		} 
+		logger.warning("Cannot find edition pattern:"+editionPatternURI);
+		return null;
+	}
 	
 
 }

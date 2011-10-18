@@ -19,13 +19,15 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.antar.binding.BindingModel;
+
 
 
 
 
 public class PaletteElementPatternParameter extends ViewPointObject {
 
-	private EditionPatternParameter _parameter;
+	private EditionSchemeParameter _parameter;
 	private ViewPointPaletteElement _element;
 	private String name;
 	private String value;
@@ -33,11 +35,11 @@ public class PaletteElementPatternParameter extends ViewPointObject {
 	public PaletteElementPatternParameter() {
 	}
 	
-	public PaletteElementPatternParameter(EditionPatternParameter p) {
+	public PaletteElementPatternParameter(EditionSchemeParameter p) {
 		this();
 		_parameter = p;
 		setName(p.getName());
-		setValue(p.getDefaultValue());
+		setValue(p.getDefaultValue().toString());
 	}
 	
 
@@ -56,7 +58,7 @@ public class PaletteElementPatternParameter extends ViewPointObject {
 	public String getValue()
 	{
 		if (getParameter() != null) {
-			if (getParameter().getUniqueURI()) {
+			if (getParameter() instanceof URIParameter) {
 				return "< Computed URI >";
 			}
 			if (getParameter().getUsePaletteLabelAsDefaultValue()) {
@@ -81,7 +83,7 @@ public class PaletteElementPatternParameter extends ViewPointObject {
 	public boolean isEditable()
 	{
 		if (getParameter() != null) {
-			return !getParameter().getUniqueURI() && !getParameter().getUsePaletteLabelAsDefaultValue();
+			return !(getParameter() instanceof URIParameter) && !getParameter().getUsePaletteLabelAsDefaultValue();
 		}
 		return true;
 	}
@@ -105,13 +107,18 @@ public class PaletteElementPatternParameter extends ViewPointObject {
 		return _element;
 	}
 
-	public EditionPatternParameter getParameter() {
+	public EditionSchemeParameter getParameter() {
 		return _parameter;
 	}
 
-	public void setParameter(EditionPatternParameter parameter) {
+	public void setParameter(EditionSchemeParameter parameter) {
 		_parameter = parameter;
 	}
 	
+	@Override
+	public BindingModel getBindingModel() 
+	{
+		return getCalc().getBindingModel();
+	}
 
 }

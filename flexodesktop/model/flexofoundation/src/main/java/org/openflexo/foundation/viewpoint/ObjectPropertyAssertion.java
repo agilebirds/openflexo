@@ -92,7 +92,7 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 			for (PatternRole pr : getAction().getEditionPattern().getPatternRoles()) {
 				availableObjectValues.add(pr.getPatternRoleName());
 			}
-			for (EditionPatternParameter p : getAction().getScheme().getParameters()) {
+			for (EditionSchemeParameter p : getAction().getScheme().getParameters()) {
 				availableObjectValues.add(p.getName());
 			}
 		}

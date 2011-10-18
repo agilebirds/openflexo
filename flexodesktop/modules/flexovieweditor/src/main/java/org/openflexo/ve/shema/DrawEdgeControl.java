@@ -32,12 +32,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
-
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseDragControl;
-import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.AddConnector;
 import org.openflexo.foundation.view.action.LinkSchemeAction;
@@ -81,12 +79,12 @@ public class DrawEdgeControl extends MouseDragControl {
 					final ViewShape from = fromShape.getDrawable();
 					final ViewShape to = toShape.getDrawable();
 					if (from.getShema().getCalc() != null
-							&& from.getLinkedConcept() instanceof OntologyObject
-							&& to.getLinkedConcept() instanceof OntologyObject ) {
+							&& from.getEditionPattern() != null
+							&& to.getEditionPattern() != null) {
 						availableConnectors =
 							from.getShema().getCalc().getConnectorsMatching(
-									(OntologyObject)from.getLinkedConcept(),
-									(OntologyObject)to.getLinkedConcept());
+									from.getEditionPattern(),
+									to.getEditionPattern());
 
 					}
 

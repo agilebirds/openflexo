@@ -23,7 +23,6 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.LinkScheme;
 import org.openflexo.foundation.viewpoint.ViewPoint;
@@ -181,18 +180,14 @@ public class ViewShape extends ViewElement {
 	@Override
 	public String getDisplayableDescription()
 	{
-		return "Shape"+(getLinkedConcept() != null ? " representing "+getLinkedConcept().getDisplayableDescription() : "");
+		return "Shape"+(getEditionPattern() != null ? " representing "+getEditionPattern() : "");
 	}
 
 	private Vector<LinkScheme> availableLinkSchemeFromThisShape = null;
 	
 	public Vector<LinkScheme> getAvailableLinkSchemeFromThisShape()
 	{
-		if (getLinkedConcept() == null) {
-			return null;
-		}
-
-		if (!(getLinkedConcept() instanceof OntologyObject)) {
+		if (getEditionPattern() == null) {
 			return null;
 		}
 
@@ -208,7 +203,7 @@ public class ViewShape extends ViewElement {
 
 			for (EditionPattern ep : calc.getEditionPatterns()) {
 				for (LinkScheme ls : ep.getLinkSchemes()) {
-					if (ls.getFromTargetClass().isSuperConceptOf((OntologyObject)getLinkedConcept())) {
+					if (ls.getFromTargetEditionPattern() == getEditionPattern()) {
 						// This candidate is acceptable
 						availableLinkSchemeFromThisShape.add(ls);
 					}

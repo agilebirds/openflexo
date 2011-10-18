@@ -22,7 +22,6 @@ package org.openflexo.vpm.drawingshema;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
@@ -34,14 +33,12 @@ import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.ontology.AbstractOntologyObject;
-import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.viewpoint.DropScheme;
+import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
-import org.openflexo.foundation.viewpoint.DropScheme;
-import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.action.AddExampleDrawingShape;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementRemoved;
@@ -124,8 +121,7 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 			}
 			if (target.getDrawable() instanceof ViewShape) {
 				ViewShape targetShape = (ViewShape)target.getDrawable();
-				AbstractOntologyObject targetObject = targetShape.getLinkedConcept();
-				if (targetObject instanceof OntologyObject && dropScheme.isValidTarget((OntologyObject)targetObject)) {
+				if (dropScheme.isValidTarget(targetShape.getEditionPattern())) {
 					returned.add(dropScheme);
 				}
 			}

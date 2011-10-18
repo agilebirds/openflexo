@@ -27,6 +27,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.Vector;
+import java.util.logging.Logger;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -39,16 +40,16 @@ import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.foundation.viewpoint.AddConnector;
-import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
 import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.viewpoint.EditionAction;
-import org.openflexo.foundation.viewpoint.LabelRepresentation;
+import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
 import org.openflexo.foundation.viewpoint.LinkScheme;
-import org.openflexo.foundation.viewpoint.LabelRepresentation.LabelRepresentationType;
 import org.openflexo.foundation.viewpoint.action.AddExampleDrawingConnector;
 import org.openflexo.localization.FlexoLocalization;
 
 public class DrawEdgeControl extends MouseDragControl {
+
+	private static final Logger logger = Logger.getLogger(DrawEdgeControl.class.getPackage().getName());
 
 	protected Point currentDraggingLocationInDrawingView = null;
 	protected boolean drawEdge = false;
@@ -94,14 +95,8 @@ public class DrawEdgeControl extends MouseDragControl {
 									for (EditionAction a : linkScheme.getActions()) {
 										if (a instanceof AddConnector) {
 											ConnectorPatternRole patternRole = ((AddConnector)a).getPatternRole();
-											LabelRepresentation labelRepresentation = patternRole.getLabelRepresentation();
-											String text = "";
-											if (labelRepresentation.getType() == LabelRepresentationType.StaticValue) {
-												text = labelRepresentation.getText();
-											}
-											else {
-												text = patternRole.getEditionPattern().getName();
-											}
+											logger.warning("Implement this !!!");
+											String text = (String)patternRole.getLabel().getBindingValue(null);
 											performAddConnector(controller, 
 													(ConnectorGraphicalRepresentation<?>) patternRole.getGraphicalRepresentation(),
 													text);

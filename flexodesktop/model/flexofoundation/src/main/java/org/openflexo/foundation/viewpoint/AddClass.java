@@ -21,16 +21,17 @@ package org.openflexo.foundation.viewpoint;
 
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.viewpoint.inspector.InspectorDataBinding;
 
 
 public class AddClass extends AddConcept<ClassPatternRole> {
 
 	private static final Logger logger = Logger.getLogger(AddClass.class.getPackage().getName());
 
-	private String newClassName;
-	
 	public AddClass() {
 	}
 	
@@ -38,26 +39,6 @@ public class AddClass extends AddConcept<ClassPatternRole> {
 	public EditionActionType getEditionActionType()
 	{
 		return EditionActionType.AddClass;
-	}
-	
-	public String _getNewClassName() 
-	{
-		return newClassName;
-	}
-
-	public void _setNewClassName(String aClassName) 
-	{
-		this.newClassName = aClassName;
-	}
-	
-	public EditionPatternParameter getNewClassNameParameter()
-	{
-		return getScheme().getParameter(newClassName);
-	}
-	
-	public void setNewClassNameParameter(EditionPatternParameter param)
-	{
-		newClassName = param.getName();
 	}
 	
 	@Override
@@ -89,4 +70,29 @@ public class AddClass extends AddConcept<ClassPatternRole> {
 			return;
 		}
 	}*/
+
+	private InspectorDataBinding className;
+	
+	private BindingDefinition CLASS_NAME = new BindingDefinition("className", String.class, BindingDefinitionType.GET, false);
+	
+	public BindingDefinition getClassNameBindingDefinition()
+	{
+		return CLASS_NAME;
+	}
+
+	public InspectorDataBinding getClassName() 
+	{
+		if (className == null) className = new InspectorDataBinding(this,EditionActionBindingAttribute.className,getClassNameBindingDefinition());
+		return className;
+	}
+
+	public void setClassName(InspectorDataBinding className) 
+	{
+		className.setOwner(this);
+		className.setBindingAttribute(EditionActionBindingAttribute.className);
+		className.setBindingDefinition(getClassNameBindingDefinition());
+		this.className = className;
+	}
+
+
 }

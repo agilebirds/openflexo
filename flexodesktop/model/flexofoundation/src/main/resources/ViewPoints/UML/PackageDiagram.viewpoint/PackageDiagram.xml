@@ -9,8 +9,8 @@ A package can have one or more profile applications to indicate which profiles h
 Package specializes TemplateableElement and PackageableElement specializes ParameterableElement to specify that a package can be used as a template and a PackageableElement as a template parameter.</description>
     <DropScheme id="3" target="top" name="drop" skipConfirmationPanel="false">
       <description>Drop a package at top level</description>
-      <Parameter id="4" name="name" label="package_name" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false" />
-      <Parameter id="5" name="uri" label="uri" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="name" />
+      <TextFieldParameter id="4" name="name" label="package_name" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false" />
+      <URIParameter id="5" name="uri" label="uri" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="name" />
       <AddIndividual id="6" individualName="uri" patternRole="package" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package">
         <DataPropertyAssertion id="7" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#name" value="name" />
         <description>Individual of type Package is added to ontology</description>
@@ -38,7 +38,7 @@ Package specializes TemplateableElement and PackageableElement specializes Param
 A package import is a relationship that allows the use of unqualified names to refer to package members from other namespaces.
 One package depends on another if changes in the other could possibly force changes in the first.</description>
     <LinkScheme id="21" fromTarget="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" toTarget="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" name="ImportPackage" skipConfirmationPanel="false">
-      <Parameter id="22" name="uri" label="uri" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="&quot;PackageImport&quot;" conditional="" />
+      <URIParameter id="22" name="uri" label="uri" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="&quot;PackageImport&quot;" conditional="" />
       <DeclarePatternRole id="23" object="fromTarget.concept" patternRole="package" />
       <DeclarePatternRole id="24" object="toTarget.concept" patternRole="importedPackage" />
       <AddIndividual id="25" individualName="uri" patternRole="packageImport" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#PackageImport">

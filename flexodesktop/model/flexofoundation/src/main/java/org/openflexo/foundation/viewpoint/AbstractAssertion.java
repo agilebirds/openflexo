@@ -21,6 +21,7 @@ package org.openflexo.foundation.viewpoint;
 
 import java.util.Hashtable;
 
+import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.expr.DefaultExpressionParser;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.TypeMismatchException;
@@ -85,5 +86,17 @@ public abstract class AbstractAssertion extends ViewPointObject {
 		}
 		return false;
 	}
+
+	public EditionPattern getEditionPattern()
+	{
+		return getScheme().getEditionPattern();
+	}
+	
+	@Override
+	public BindingModel getBindingModel() 
+	{
+		return getEditionPattern().getBindingModel();
+	}
+
 
 }

@@ -6,15 +6,15 @@
  This is the root level in the scope of the project.</description>
     <DropScheme id="3" target="top" name="DropRootOrganizationUnitAtTopLevel" label="create_root_organization_unit" skipConfirmationPanel="false">
       <description>Create a root organization unit</description>
-      <Parameter id="4" name="organizationUnitName" label="organization_unit_name" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      <TextFieldParameter id="4" name="organizationUnitName" label="organization_unit_name" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Allow to enter organization unit name while dropping concept</description>
-      </Parameter>
-      <Parameter id="5" name="organizationUnitURI" label="uri" widget="TEXT_FIELD" defaultValue="MyOrganizationUnit" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="organizationUnitName">
+      </TextFieldParameter>
+      <URIParameter id="5" name="organizationUnitURI" label="uri" widget="TEXT_FIELD" defaultValue="MyOrganizationUnit" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="organizationUnitName">
         <description>Allow to enter (unique) individual name used in Ontology</description>
-      </Parameter>
-      <Parameter id="6" name="organizationUnitDescription" label="organization_unit_description" widget="TEXT_AREA" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      </URIParameter>
+      <TextAreaParameter id="6" name="organizationUnitDescription" label="organization_unit_description" widget="TEXT_AREA" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Allow to enter a short description of the organization unit</description>
-      </Parameter>
+      </TextAreaParameter>
       <AddIndividual id="7" individualName="organizationUnitURI" patternRole="organizationUnit" conceptURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#RootOrganizationalUnit">
         <DataPropertyAssertion id="8" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#organizationUnitName" value="organizationUnitName" />
         <DataPropertyAssertion id="9" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#organizationUnitDescription" value="organizationUnitDescription" />
@@ -23,9 +23,9 @@
     </DropScheme>
     <DropScheme id="11" target="top" name="DrawRootOrganizationUnitAtTopLevel" label="choose_and_draw_root_organization_unit" skipConfirmationPanel="false">
       <description>Display a root organization unit</description>
-      <Parameter id="12" name="organizationUnit" conceptURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#RootOrganizationalUnit" label="concept_scheme" widget="CUSTOM" type="OntologyIndividual" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      <IndividualParameter id="12" name="organizationUnit" conceptURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#RootOrganizationalUnit" label="concept_scheme" widget="CUSTOM" type="OntologyIndividual" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Allow to choose existing root organization unit</description>
-      </Parameter>
+      </IndividualParameter>
       <DeclarePatternRole id="13" object="organizationUnit" patternRole="organizationUnit" />
       <AddShape id="14" patternRole="shape" />
     </DropScheme>
@@ -47,15 +47,15 @@
     <description>Allows to define an organization unit inside an other organization unit.</description>
     <DropScheme id="27" target="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#OrganizationalUnit" name="DropOrganizationUnitInOrganizationUnit" skipConfirmationPanel="false">
       <description>Create a new organization unit inside parent organization unit</description>
-      <Parameter id="28" name="organizationUnitName" label="organization_unit_name" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      <TextFieldParameter id="28" name="organizationUnitName" label="organization_unit_name" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Allow to enter organization unit name while dropping concept</description>
-      </Parameter>
-      <Parameter id="29" name="organizationUnitURI" label="uri" widget="TEXT_FIELD" defaultValue="MyOrganizationUnit" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="organizationUnitName">
+      </TextFieldParameter>
+      <URIParameter id="29" name="organizationUnitURI" label="uri" widget="TEXT_FIELD" defaultValue="MyOrganizationUnit" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="organizationUnitName">
         <description>Allow to enter (unique) individual name used in Ontology</description>
-      </Parameter>
-      <Parameter id="30" name="organizationUnitDescription" label="organization_unit_description" widget="TEXT_AREA" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      </URIParameter>
+      <TextAreaParameter id="30" name="organizationUnitDescription" label="organization_unit_description" widget="TEXT_AREA" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Allow to enter a short description of the organization unit</description>
-      </Parameter>
+      </TextAreaParameter>
       <AddIndividual id="31" individualName="organizationUnitURI" patternRole="organizationUnit" conceptURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#OrganizationalUnit">
         <DataPropertyAssertion id="32" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#organizationUnitName" value="organizationUnitName" />
         <DataPropertyAssertion id="33" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#organizationUnitDescription" value="organizationUnitDescription" />
@@ -82,15 +82,15 @@
   <EditionPattern id="49" name="OrganizationUnitMission">
     <description>Allows to define a mission for an organization unit</description>
     <DropScheme id="50" target="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#OrganizationalUnit" name="DropMissionInOrganizationUnit" skipConfirmationPanel="false">
-      <Parameter id="51" name="missionName" label="mission" widget="TEXT_FIELD" defaultValue="Mission" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      <TextFieldParameter id="51" name="missionName" label="mission" widget="TEXT_FIELD" defaultValue="Mission" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Allow to enter short name for mission</description>
-      </Parameter>
-      <Parameter id="52" name="missionURI" label="uri" widget="TEXT_FIELD" defaultValue="MyMission" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="missionName">
+      </TextFieldParameter>
+      <URIParameter id="52" name="missionURI" label="uri" widget="TEXT_FIELD" defaultValue="MyMission" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="missionName">
         <description>Allow to enter (unique) individual name used in Ontology</description>
-      </Parameter>
-      <Parameter id="53" name="missionDescription" label="mission_description" widget="TEXT_AREA" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      </URIParameter>
+      <TextAreaParameter id="53" name="missionDescription" label="mission_description" widget="TEXT_AREA" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Allow to enter a short description for the organization unit mission</description>
-      </Parameter>
+      </TextAreaParameter>
       <AddIndividual id="54" individualName="missionURI" patternRole="mission" conceptURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#OrganizationalUnitMission">
         <DataPropertyAssertion id="55" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#missionName" value="missionName" />
         <DataPropertyAssertion id="56" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#missionDescription" value="missionDescription" />
@@ -116,15 +116,15 @@
   <EditionPattern id="71" name="OrganizationUnitObjective">
     <description>Allows to define an objective for an organization unit</description>
     <DropScheme id="72" target="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#OrganizationalUnit" name="DropObjectiveInOrganizationUnit" skipConfirmationPanel="false">
-      <Parameter id="73" name="objectiveName" label="objective" widget="TEXT_FIELD" defaultValue="Objective" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      <TextFieldParameter id="73" name="objectiveName" label="objective" widget="TEXT_FIELD" defaultValue="Objective" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Allow to enter short name for objective</description>
-      </Parameter>
-      <Parameter id="74" name="objectiveURI" label="uri" widget="TEXT_FIELD" defaultValue="MyObjective" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="objectiveName">
+      </TextFieldParameter>
+      <URIParameter id="74" name="objectiveURI" label="uri" widget="TEXT_FIELD" defaultValue="MyObjective" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="objectiveName">
         <description>Allow to enter (unique) individual name used in Ontology</description>
-      </Parameter>
-      <Parameter id="75" name="objectiveDescription" label="objective_description" widget="TEXT_AREA" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      </URIParameter>
+      <TextAreaParameter id="75" name="objectiveDescription" label="objective_description" widget="TEXT_AREA" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Allow to enter a short description for the organization unit objective</description>
-      </Parameter>
+      </TextAreaParameter>
       <AddIndividual id="76" individualName="objectiveURI" patternRole="objective" conceptURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#Objective">
         <DataPropertyAssertion id="77" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#objectiveName" value="objectiveName" />
         <DataPropertyAssertion id="78" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#objectiveDescription" value="objectiveDescription" />
@@ -150,15 +150,15 @@
   <EditionPattern id="93" name="OrganizationUnitPosition">
     <description>Allows to add a position for an organization unit</description>
     <DropScheme id="94" target="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#OrganizationalUnit" name="DropPositionInOrganizationUnit" skipConfirmationPanel="false">
-      <Parameter id="95" name="positionName" label="position" widget="TEXT_FIELD" defaultValue="Position" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      <TextFieldParameter id="95" name="positionName" label="position" widget="TEXT_FIELD" defaultValue="Position" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Allow to enter short name for position</description>
-      </Parameter>
-      <Parameter id="96" name="positionURI" label="uri" widget="TEXT_FIELD" defaultValue="MyPosition" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="positionName">
+      </TextFieldParameter>
+      <URIParameter id="96" name="positionURI" label="uri" widget="TEXT_FIELD" defaultValue="MyPosition" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="positionName">
         <description>Allow to enter (unique) individual name used in Ontology</description>
-      </Parameter>
-      <Parameter id="97" name="positionDescription" label="position_description" widget="TEXT_AREA" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      </URIParameter>
+      <TextAreaParameter id="97" name="positionDescription" label="position_description" widget="TEXT_AREA" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Allow to enter a short description for the organization unit position</description>
-      </Parameter>
+      </TextAreaParameter>
       <AddIndividual id="98" individualName="positionURI" patternRole="position" conceptURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#Position">
         <DataPropertyAssertion id="99" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#positionName" value="positionName" />
         <DataPropertyAssertion id="100" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#positionDescription" value="positionDescription" />
@@ -185,15 +185,15 @@
   <EditionPattern id="116" name="PositionMission">
     <description>Allows to define a position mission</description>
     <DropScheme id="117" target="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#Position" name="DropPositionMissionForPosition" skipConfirmationPanel="false">
-      <Parameter id="118" name="missionName" label="mission" widget="TEXT_FIELD" defaultValue="Mission" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      <TextFieldParameter id="118" name="missionName" label="mission" widget="TEXT_FIELD" defaultValue="Mission" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Allow to enter short name for mission</description>
-      </Parameter>
-      <Parameter id="119" name="missionURI" label="uri" widget="TEXT_FIELD" defaultValue="MyMission" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="missionName">
+      </TextFieldParameter>
+      <URIParameter id="119" name="missionURI" label="uri" widget="TEXT_FIELD" defaultValue="MyMission" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="missionName">
         <description>Allow to enter (unique) individual name used in Ontology</description>
-      </Parameter>
-      <Parameter id="120" name="missionDescription" label="mission_description" widget="TEXT_AREA" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      </URIParameter>
+      <TextAreaParameter id="120" name="missionDescription" label="mission_description" widget="TEXT_AREA" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Allow to enter a short description for the position mission</description>
-      </Parameter>
+      </TextAreaParameter>
       <AddIndividual id="121" individualName="missionURI" patternRole="mission" conceptURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#PositionMission">
         <DataPropertyAssertion id="122" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#missionName" value="missionName" />
         <DataPropertyAssertion id="123" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#missionDescription" value="missionDescription" />
@@ -238,15 +238,15 @@
   <EditionPattern id="152" name="PositionTask">
     <description>Allows to define a position task</description>
     <DropScheme id="153" target="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#Position" name="DropTaskForPosition" skipConfirmationPanel="false">
-      <Parameter id="154" name="taskName" label="task" widget="TEXT_FIELD" defaultValue="Task" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      <TextFieldParameter id="154" name="taskName" label="task" widget="TEXT_FIELD" defaultValue="Task" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Allow to enter short name for task</description>
-      </Parameter>
-      <Parameter id="155" name="taskURI" label="uri" widget="TEXT_FIELD" defaultValue="MyTask" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="taskName">
+      </TextFieldParameter>
+      <URIParameter id="155" name="taskURI" label="uri" widget="TEXT_FIELD" defaultValue="MyTask" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="taskName">
         <description>Allow to enter (unique) individual name used in Ontology</description>
-      </Parameter>
-      <Parameter id="156" name="taskDescription" label="task_description" widget="TEXT_AREA" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      </URIParameter>
+      <TextAreaParameter id="156" name="taskDescription" label="task_description" widget="TEXT_AREA" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Allow to enter a short description for the position task</description>
-      </Parameter>
+      </TextAreaParameter>
       <AddIndividual id="157" individualName="taskURI" patternRole="task" conceptURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#Task">
         <DataPropertyAssertion id="158" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#taskName" value="taskName" />
         <DataPropertyAssertion id="159" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#taskDescription" value="taskDescription" />

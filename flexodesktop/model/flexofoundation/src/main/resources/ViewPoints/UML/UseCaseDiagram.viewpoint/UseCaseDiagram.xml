@@ -7,9 +7,9 @@ A use case is a summary of scenarios for a single task or goal. An actor is who 
   <EditionPattern id="2" name="Actor">
     <description>An actor specifies a role played by a user or any other system that interacts with the subject.</description>
     <DropScheme id="3" target="top" name="DropNewActor" skipConfirmationPanel="false">
-      <Parameter id="4" name="name" label="name" widget="TEXT_FIELD" type="OntologyIndividual" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false" />
-      <Parameter id="5" name="uri" label="uri" widget="TEXT_FIELD" type="OntologyIndividual" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="name" />
-      <Parameter id="6" name="packageParameter" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" label="package" widget="CUSTOM" type="OntologyIndividual" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false" />
+      <TextFieldParameter id="4" name="name" label="name" widget="TEXT_FIELD" type="OntologyIndividual" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false" />
+      <URIParameter id="5" name="uri" label="uri" widget="TEXT_FIELD" type="OntologyIndividual" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="name" />
+      <IndividualParameter id="6" name="packageParameter" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" label="package" widget="CUSTOM" type="OntologyIndividual" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false" />
       <DeclarePatternRole id="7" object="packageParameter" patternRole="package" />
       <AddIndividual id="8" individualName="uri" patternRole="actor" conditional="" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Actor">
         <DataPropertyAssertion id="9" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#name" value="name" />
@@ -39,9 +39,9 @@ A use case is a summary of scenarios for a single task or goal. An actor is who 
   <EditionPattern id="25" name="UseCase">
     <description>A use case is the specification of a set of actions performed by a system, which yields an observable result that is, typically, of value for one or more actors or other stakeholders of the system.</description>
     <DropScheme id="26" target="top" name="DropNewUseCase" skipConfirmationPanel="false">
-      <Parameter id="27" name="name" label="name" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false" />
-      <Parameter id="28" name="uri" label="uri" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="name" />
-      <Parameter id="29" name="packageParameter" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" label="packageParameter" widget="CUSTOM" type="OntologyIndividual" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false" />
+      <TextFieldParameter id="27" name="name" label="name" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false" />
+      <URIParameter id="28" name="uri" label="uri" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="name" />
+      <IndividualParameter id="29" name="packageParameter" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" label="packageParameter" widget="CUSTOM" type="OntologyIndividual" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false" />
       <DeclarePatternRole id="30" object="packageParameter" patternRole="package" />
       <AddIndividual id="31" individualName="uri" patternRole="useCase" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#UseCase">
         <DataPropertyAssertion id="32" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#name" value="name" />
@@ -68,10 +68,10 @@ A use case is a summary of scenarios for a single task or goal. An actor is who 
   <EditionPattern id="48" name="ActorUseCaseAssociation">
     <LinkScheme id="49" fromTarget="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Actor" toTarget="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#UseCase" name="associateActorToUseCase" skipConfirmationPanel="false">
       <description>Associate actor to a use case</description>
-      <Parameter id="50" name="packageParameter" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" label="package" widget="CUSTOM" type="OntologyIndividual" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false" />
-      <Parameter id="51" name="associationURI" label="association_uri" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="&quot;association&quot;" />
-      <Parameter id="52" name="actorPropertyURI" label="actor_property_uri" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="&quot;actorProperty&quot;" />
-      <Parameter id="53" name="useCasePropertyURI" label="use_case_property_uri" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="&quot;useCaseProperty&quot;" />
+      <IndividualParameter id="50" name="packageParameter" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" label="package" widget="CUSTOM" type="OntologyIndividual" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false" />
+      <URIParameter id="51" name="associationURI" label="association_uri" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="&quot;association&quot;" />
+      <URIParameter id="52" name="actorPropertyURI" label="actor_property_uri" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="&quot;actorProperty&quot;" />
+      <URIParameter id="53" name="useCasePropertyURI" label="use_case_property_uri" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="&quot;useCaseProperty&quot;" />
       <DeclarePatternRole id="54" object="fromTarget.concept" patternRole="actor" />
       <DeclarePatternRole id="55" object="toTarget.concept" patternRole="useCase" />
       <DeclarePatternRole id="56" object="packageParameter" patternRole="package" conditional="" />

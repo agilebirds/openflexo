@@ -4,18 +4,18 @@
   <EditionPattern id="2" name="ConceptScheme">
     <description>Allows to define concept scheme</description>
     <DropScheme id="3" target="top" name="DropConceptSchemeAtTopLevel" skipConfirmationPanel="false">
-      <Parameter id="4" name="conceptSchemeName" label="concept_scheme_name" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      <TextFieldParameter id="4" name="conceptSchemeName" label="concept_scheme_name" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Allow to enter concept scheme name while dropping concept scheme</description>
-      </Parameter>
-      <Parameter id="5" name="conceptSchemeURI" label="uri" widget="TEXT_FIELD" defaultValue="MyConceptScheme" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="conceptSchemeName">
+      </TextFieldParameter>
+      <URIParameter id="5" name="conceptSchemeURI" label="uri" widget="TEXT_FIELD" defaultValue="MyConceptScheme" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="conceptSchemeName">
         <description>Allow to enter (unique) name used in Ontology</description>
-      </Parameter>
-      <Parameter id="6" name="preferedLabel" label="preferred_label" widget="LOCALIZED_TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      </URIParameter>
+      <TextFieldParameter id="6" name="preferedLabel" label="preferred_label" widget="LOCALIZED_TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Allow to enter prefered label</description>
-      </Parameter>
-      <Parameter id="7" name="alternativeLabel" label="alternative_label" widget="LOCALIZED_TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      </TextFieldParameter>
+      <TextFieldParameter id="7" name="alternativeLabel" label="alternative_label" widget="LOCALIZED_TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Allow to enter alternative label</description>
-      </Parameter>
+      </TextFieldParameter>
       <AddIndividual id="8" individualName="conceptSchemeURI" patternRole="conceptScheme" conceptURI="http://www.w3.org/2004/02/skos/core#ConceptScheme">
         <DataPropertyAssertion id="9" dataPropertyURI="http://www.w3.org/2000/01/rdf-schema#label" value="conceptSchemeName" />
         <DataPropertyAssertion id="10" dataPropertyURI="http://www.w3.org/2004/02/skos/core#prefLabel" value="preferedLabel" />
@@ -40,21 +40,21 @@
   <EditionPattern id="24" name="Concept">
     <description>Allows to define concept</description>
     <DropScheme id="25" target="top" name="DropConceptAtTopLevel" skipConfirmationPanel="false">
-      <Parameter id="26" name="conceptName" label="concept_name" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      <TextFieldParameter id="26" name="conceptName" label="concept_name" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Allow to enter concept scheme name while dropping concept scheme</description>
-      </Parameter>
-      <Parameter id="27" name="conceptURI" label="uri" widget="TEXT_FIELD" defaultValue="MyConcept" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="conceptName">
+      </TextFieldParameter>
+      <URIParameter id="27" name="conceptURI" label="uri" widget="TEXT_FIELD" defaultValue="MyConcept" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="conceptName">
         <description>Allow to enter (unique) name used in Ontology</description>
-      </Parameter>
-      <Parameter id="28" name="conceptScheme" conceptURI="http://www.w3.org/2004/02/skos/core#ConceptScheme" label="concept_scheme" widget="CUSTOM" type="OntologyIndividual" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      </URIParameter>
+      <IndividualParameter id="28" name="conceptScheme" conceptURI="http://www.w3.org/2004/02/skos/core#ConceptScheme" label="concept_scheme" widget="CUSTOM" type="OntologyIndividual" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Allow to specify concept scheme</description>
-      </Parameter>
-      <Parameter id="29" name="preferedLabel" label="preferred_label" widget="LOCALIZED_TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      </IndividualParameter>
+      <TextFieldParameter id="29" name="preferedLabel" label="preferred_label" widget="LOCALIZED_TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Allow to enter prefered label</description>
-      </Parameter>
-      <Parameter id="30" name="alternativeLabel" label="alternative_label" widget="LOCALIZED_TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      </TextFieldParameter>
+      <TextFieldParameter id="30" name="alternativeLabel" label="alternative_label" widget="LOCALIZED_TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Allow to enter alternative label</description>
-      </Parameter>
+      </TextFieldParameter>
       <AddIndividual id="31" individualName="conceptURI" patternRole="concept" conceptURI="http://www.w3.org/2004/02/skos/core#Concept">
         <DataPropertyAssertion id="32" dataPropertyURI="http://www.w3.org/2000/01/rdf-schema#label" value="conceptName" />
         <DataPropertyAssertion id="33" dataPropertyURI="http://www.w3.org/2004/02/skos/core#prefLabel" value="preferedLabel" />
@@ -80,9 +80,9 @@
   <EditionPattern id="48" name="ConceptToConceptSchemeRelationship">
     <description>Allows to define link between a concept and a concept scheme</description>
     <LinkScheme id="49" fromTarget="http://www.w3.org/2004/02/skos/core#Concept" toTarget="http://www.w3.org/2004/02/skos/core#ConceptScheme" name="LinkAConceptToAConceptScheme" skipConfirmationPanel="false">
-      <Parameter id="50" name="makeInverseRelationship" label="make_inverse_relationship" widget="CHECKBOX" defaultValue="true" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      <CheckBoxParameter id="50" name="makeInverseRelationship" label="make_inverse_relationship" widget="CHECKBOX" defaultValue="true" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>When set to true, indicates that inverse relationship must be defined</description>
-      </Parameter>
+      </CheckBoxParameter>
       <AddObjectPropertyStatement id="51" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#topConceptOf" patternRole="topConceptOf" subject="fromTarget" />
       <AddObjectPropertyStatement id="52" object="fromTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#hasTopConcept" patternRole="hasTopConcept" conditional="makeInverseRelationship=true" subject="toTarget" />
       <AddConnector id="53" patternRole="connector" />
@@ -120,12 +120,12 @@
   <EditionPattern id="77" name="ConceptSpecialization">
     <description>Allows to define link between a concept and a other concept with a specialization semantic</description>
     <LinkScheme id="78" fromTarget="http://www.w3.org/2004/02/skos/core#Concept" toTarget="http://www.w3.org/2004/02/skos/core#Concept" name="SpecializeAConcept" skipConfirmationPanel="false">
-      <Parameter id="79" name="match" label="match" widget="CHECKBOX" defaultValue="false" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      <CheckBoxParameter id="79" name="match" label="match" widget="CHECKBOX" defaultValue="false" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>When set to true, indicates that broadMatch property should be used</description>
-      </Parameter>
-      <Parameter id="80" name="makeInverseRelationship" label="make_inverse_relationship" widget="CHECKBOX" defaultValue="true" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      </CheckBoxParameter>
+      <CheckBoxParameter id="80" name="makeInverseRelationship" label="make_inverse_relationship" widget="CHECKBOX" defaultValue="true" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>When set to true, indicates that inverse relationship must be defined</description>
-      </Parameter>
+      </CheckBoxParameter>
       <AddObjectPropertyStatement id="81" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#broader" patternRole="broader" conditional="match=false" subject="fromTarget" />
       <AddObjectPropertyStatement id="82" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#broadMatch" patternRole="broadMatch" conditional="match=true" subject="fromTarget" />
       <AddObjectPropertyStatement id="83" object="fromTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#narrower" patternRole="narrower" conditional="match=false &amp; makeInverseRelationship=true" subject="toTarget" />
@@ -194,12 +194,12 @@
   <EditionPattern id="132" name="ConceptGeneralization">
     <description>Allows to define link between a concept and a other concept with a specialization semantic</description>
     <LinkScheme id="133" fromTarget="http://www.w3.org/2004/02/skos/core#Concept" toTarget="http://www.w3.org/2004/02/skos/core#Concept" name="GeneralizeAConcept" skipConfirmationPanel="false">
-      <Parameter id="134" name="match" label="match" widget="CHECKBOX" defaultValue="false" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      <CheckBoxParameter id="134" name="match" label="match" widget="CHECKBOX" defaultValue="false" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>When set to true, indicates that broadMatch property should be used</description>
-      </Parameter>
-      <Parameter id="135" name="makeInverseRelationship" label="make_inverse_relationship" widget="CHECKBOX" defaultValue="true" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      </CheckBoxParameter>
+      <CheckBoxParameter id="135" name="makeInverseRelationship" label="make_inverse_relationship" widget="CHECKBOX" defaultValue="true" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>When set to true, indicates that inverse relationship must be defined</description>
-      </Parameter>
+      </CheckBoxParameter>
       <AddObjectPropertyStatement id="136" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#narrower" patternRole="narrower" conditional="match=false" subject="fromTarget" />
       <AddObjectPropertyStatement id="137" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#narrowMatch" patternRole="narrowMatch" conditional="match=true" subject="fromTarget" />
       <AddObjectPropertyStatement id="138" object="fromTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#broader" patternRole="broader" conditional="match=false &amp; makeInverseRelationship=true" subject="toTarget" />
@@ -268,9 +268,9 @@
   <EditionPattern id="187" name="ConceptRelatedRelationship">
     <description>Allows to define link between a concept and a other concept with a "related-to" semantic</description>
     <LinkScheme id="188" fromTarget="http://www.w3.org/2004/02/skos/core#Concept" toTarget="http://www.w3.org/2004/02/skos/core#Concept" name="MakeTwoConceptRelatedToEachOther" skipConfirmationPanel="false">
-      <Parameter id="189" name="match" label="match" widget="CHECKBOX" defaultValue="false" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      <CheckBoxParameter id="189" name="match" label="match" widget="CHECKBOX" defaultValue="false" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>When set to true, indicates that relatedMatch property should be used</description>
-      </Parameter>
+      </CheckBoxParameter>
       <AddObjectPropertyStatement id="190" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#related" patternRole="related1" conditional="match=false" subject="fromTarget" />
       <AddObjectPropertyStatement id="191" object="fromTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#related" patternRole="related2" conditional="match=false" subject="toTarget" />
       <AddObjectPropertyStatement id="192" object="toTarget" objectPropertyURI="http://www.w3.org/2004/02/skos/core#relatedMatch" patternRole="relatedMatch1" conditional="match=true" subject="fromTarget" />

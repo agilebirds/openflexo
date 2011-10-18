@@ -64,12 +64,12 @@ public class DataPropertyAssertion extends AbstractAssertion {
 		value = aValue;
 	}
 
-	public EditionPatternParameter getValueParameter()
+	public EditionSchemeParameter getValueParameter()
 	{
 		return getScheme().getParameter(value);
 	}
 	
-	public void setValueParameter(EditionPatternParameter param)
+	public void setValueParameter(EditionSchemeParameter param)
 	{
 		if (param != null) {
 			value = param.getName();

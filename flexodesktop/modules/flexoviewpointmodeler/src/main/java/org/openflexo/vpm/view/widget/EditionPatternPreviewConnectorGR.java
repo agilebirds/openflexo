@@ -29,7 +29,6 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
-import org.openflexo.foundation.viewpoint.LabelRepresentation.LabelRepresentationType;
 
 
 public class EditionPatternPreviewConnectorGR extends ConnectorGraphicalRepresentation<ConnectorPatternRole> implements GraphicalFlexoObserver,EditionPatternPreviewConstants {
@@ -111,14 +110,7 @@ public class EditionPatternPreviewConnectorGR extends ConnectorGraphicalRepresen
 	public String getText()
 	{
 		if (getPatternRole() != null) {
-			if (getPatternRole().getLabelRepresentation() != null
-					&& getPatternRole().getLabelRepresentation().getType() != null
-					&& getPatternRole().getLabelRepresentation().getType() == LabelRepresentationType.StaticValue) {
-				return getPatternRole().getLabelRepresentation().getText();
-			}
-			else if (getPatternRole().getBoundPatternRole() != null) {
-				return getPatternRole().getBoundPatternRole().getPatternRoleName();
-			}
+			if (getPatternRole().getLabel() != null) return getPatternRole().getLabel().toString();
 			return getPatternRole().getPatternRoleName();
 		}
 		return null;

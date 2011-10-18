@@ -22,16 +22,17 @@ package org.openflexo.foundation.viewpoint;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.viewpoint.inspector.InspectorDataBinding;
 import org.openflexo.logging.FlexoLogger;
 
 
 public class AddIndividual extends AddConcept<IndividualPatternRole> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(AddIndividual.class.getPackage().getName());
-
-	private String individualName;
 	
 	private Vector<DataPropertyAssertion> dataAssertions;
 	private Vector<ObjectPropertyAssertion> objectAssertions;
@@ -62,26 +63,6 @@ public class AddIndividual extends AddConcept<IndividualPatternRole> {
 	{
 		if (getPatternRole() != null) 
 			getPatternRole().setOntologicType(ontologyClass);
-	}
-
-	public String _getIndividualName() 
-	{
-		return individualName;
-	}
-
-	public void _setIndividualName(String individualName) 
-	{
-		this.individualName = individualName;
-	}
-	
-	public EditionPatternParameter getIndividualNameParameter()
-	{
-		return getScheme().getParameter(individualName);
-	}
-	
-	public void setIndividualNameParameter(EditionPatternParameter param)
-	{
-		individualName = param.getName();
 	}
 	
 	public Vector<DataPropertyAssertion> getDataAssertions() 
@@ -171,5 +152,29 @@ public class AddIndividual extends AddConcept<IndividualPatternRole> {
 			return;
 		}
 	}*/
+	
+	private InspectorDataBinding individualName;
+	
+	private BindingDefinition INDIVIDUAL_NAME = new BindingDefinition("individualName", String.class, BindingDefinitionType.GET, false);
+	
+	public BindingDefinition getIndividualNameBindingDefinition()
+	{
+		return INDIVIDUAL_NAME;
+	}
+
+	public InspectorDataBinding getIndividualName() 
+	{
+		if (individualName == null) individualName = new InspectorDataBinding(this,EditionActionBindingAttribute.individualName,getIndividualNameBindingDefinition());
+		return individualName;
+	}
+
+	public void setIndividualName(InspectorDataBinding individualName) 
+	{
+		individualName.setOwner(this);
+		individualName.setBindingAttribute(EditionActionBindingAttribute.individualName);
+		individualName.setBindingDefinition(getIndividualNameBindingDefinition());
+		this.individualName = individualName;
+	}
+
 
 }

@@ -68,7 +68,7 @@ public class AddShema extends EditionAction<ShemaPatternRole> {
 			for (PatternRole pr : getEditionPattern().getPatternRoles()) {
 				availableShemaNameValues.add(pr.getPatternRoleName());
 			}
-			for (EditionPatternParameter p : getScheme().getParameters()) {
+			for (EditionSchemeParameter p : getScheme().getParameters()) {
 				availableShemaNameValues.add(p.getName());
 			}
 		}

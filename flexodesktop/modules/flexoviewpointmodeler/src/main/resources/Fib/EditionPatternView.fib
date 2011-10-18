@@ -43,33 +43,31 @@
           <Panel layout="gridbag" data="PatternRoleTable.selected" dataClassName="org.openflexo.foundation.viewpoint.ShapePatternRole" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=0;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=0;insetsTop=0;y=0;x=0;insetsBottom=0;weightY=1.0;weightX=1.0;fill=both)" visible="(PatternRoleTable.selected.type = &quot;Shape&quot;)" name="ShapePatternRole">
             <Label label="pattern_role" localize="true" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=0;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
             <TextField columns="6" passwd="false" text="TextField" localize="true" data="ShapePatternRole.data.patternRoleName" constraints="gridbag(insetsLeft=5;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=1;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=1.0;fill=horizontal)" />
-            <Label label="bound_to" align="right" localize="true" constraints="gridbag(location=left;index=2;anchor=east;weightY=0.0;insetsLeft=0;weightX=0.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=none;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=true;expandVertically=false)" />
-            <DropDown localize="true" data="ShapePatternRole.data.boundPatternRole" constraints="gridbag(location=right;index=3;anchor=center;weightY=0.0;insetsLeft=0;weightX=1.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=horizontal;insetsRight=0;gridY=-1;gridX=-1;gridWidth=0;expandHorizontally=true;expandVertically=false)" list="data.patternRoles" iteratorClassName="org.openflexo.foundation.viewpoint.PatternRole" />
-            <Label label="label" align="right" localize="true" constraints="gridbag(location=left;index=4;anchor=east;weightY=0.0;insetsLeft=0;weightX=0.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=none;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=true;expandVertically=false)" />
-            <Panel layout="gridbag" hGap="5" vGap="5" flowAlignment="LEADING" constraints="gridbag(location=right;index=5;anchor=center;weightY=0.0;insetsLeft=0;weightX=1.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=horizontal;insetsRight=0;gridY=-1;gridX=-1;gridWidth=0;expandHorizontally=true;expandVertically=false)">
-              <DropDown localize="true" data="ShapePatternRole.data.retrieveLabelRepresentation.type" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;fill=horizontal;weightX=0.1)" iteratorClassName="org.openflexo.foundation.viewpoint.LabelRepresentation$LabelRepresentationType" />
-              <TextField columns="6" passwd="false" text="TextField" localize="true" data="ShapePatternRole.data.retrieveLabelRepresentation.text" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=1;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=1.0;fill=horizontal)" visible="(ShapePatternRole.data.retrieveLabelRepresentation.type = &quot;StaticValue&quot;)" />
-              <Custom componentClassName="org.openflexo.components.widget.OntologyPropertySelector" data="ShapePatternRole.data.retrieveLabelRepresentation.ontologyProperty" constraints="gridbag(location=right;index=2;anchor=center;weightY=0.0;insetsLeft=0;weightX=1.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=horizontal;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=true;expandVertically=false)" visible="(ShapePatternRole.data.retrieveLabelRepresentation.type = &quot;UseOntologicProperty&quot;)" localize="true" manageDynamicModel="true">
-                <Assignment variable="component.ontologyLibrary" value="data.ontologyLibrary" />
-                <Assignment variable="component.defaultHeight" value="200" />
-                <Assignment variable="component.hierarchicalMode" value="false" />
+            <Label label="label" align="right" localize="true" constraints="gridbag(location=left;index=2;anchor=east;weightY=0.0;insetsLeft=0;weightX=0.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=none;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=true;expandVertically=false)" />
+            <Panel layout="gridbag" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="Panel" constraints="gridbag(location=right;index=3;anchor=center;weightY=0.0;insetsLeft=6;weightX=1.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=horizontal;insetsRight=7;gridY=-1;gridX=-1;gridWidth=0;expandHorizontally=true;expandVertically=false)">
+              <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="ShapePatternRole.data.label.binding" constraints="gridbag(location=center;index=0;anchor=center;weightY=0.0;insetsLeft=0;weightX=1.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=horizontal;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=true;expandVertically=false)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="ShapePatternRole.data" />
+                <Assignment variable="component.bindingDefinition" value="ShapePatternRole.data.labelBindingDefinition" />
               </Custom>
+              <CheckBox selected="true" localize="true" name="checkbox" data="ShapePatternRole.data.readOnlyLabel" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=1;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;fill=none;weightX=0.0)" />
+              <Label label="read_only" localize="true" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=2;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;fill=none;weightX=0.0)">
+                <LocalizedDictionary />
+              </Label>
             </Panel>
           </Panel>
           <Panel layout="gridbag" data="PatternRoleTable.selected" dataClassName="org.openflexo.foundation.viewpoint.ConnectorPatternRole" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=0;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=1;gridWidth=0;insetsTop=0;y=0;x=0;insetsBottom=0;weightY=1.0;weightX=1.0;fill=both)" visible="(PatternRoleTable.selected.type = &quot;Connector&quot;)" name="ConnectorPatternRole">
             <Label label="pattern_role" localize="true" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=east;gridY=-1;gridX=-1;index=0;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
             <TextField columns="6" passwd="false" text="TextField" localize="true" data="ConnectorPatternRole.data.patternRoleName" constraints="gridbag(insetsLeft=5;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=1;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=1.0;fill=horizontal)" />
-            <Label label="bound_to" align="right" localize="true" constraints="gridbag(location=left;index=2;anchor=east;weightY=0.0;insetsLeft=0;weightX=0.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=none;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=true;expandVertically=false)" />
-            <DropDown localize="true" data="ConnectorPatternRole.data.boundPatternRole" constraints="gridbag(location=right;index=3;anchor=center;weightY=0.0;insetsLeft=0;weightX=1.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=horizontal;insetsRight=0;gridY=-1;gridX=-1;gridWidth=0;expandHorizontally=true;expandVertically=false)" list="data.patternRoles" iteratorClassName="org.openflexo.foundation.viewpoint.PatternRole" />
-            <Label label="label" align="right" localize="true" constraints="gridbag(location=left;index=4;anchor=east;weightY=0.0;insetsLeft=0;weightX=0.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=none;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=true;expandVertically=false)" />
-            <Panel layout="gridbag" hGap="5" vGap="5" flowAlignment="LEADING" constraints="gridbag(location=right;index=5;anchor=center;weightY=0.0;insetsLeft=0;weightX=1.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=horizontal;insetsRight=0;gridY=-1;gridX=-1;gridWidth=0;expandHorizontally=true;expandVertically=false)">
-              <DropDown localize="true" data="ConnectorPatternRole.data.retrieveLabelRepresentation.type" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;fill=horizontal;weightX=0.1)" iteratorClassName="org.openflexo.foundation.viewpoint.LabelRepresentation$LabelRepresentationType" />
-              <TextField columns="6" passwd="false" text="TextField" localize="true" data="ConnectorPatternRole.data.retrieveLabelRepresentation.text" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=1;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=1.0;fill=horizontal)" visible="(ConnectorPatternRole.data.retrieveLabelRepresentation.type = &quot;StaticValue&quot;)" />
-              <Custom componentClassName="org.openflexo.components.widget.OntologyPropertySelector" data="ConnectorPatternRole.data.retrieveLabelRepresentation.ontologyProperty" constraints="gridbag(location=right;index=2;anchor=center;weightY=0.0;insetsLeft=0;weightX=1.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=horizontal;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=true;expandVertically=false)" visible="(ConnectorPatternRole.data.retrieveLabelRepresentation.type = &quot;UseOntologicProperty&quot;)" localize="true" manageDynamicModel="true">
-                <Assignment variable="component.ontologyLibrary" value="data.ontologyLibrary" />
-                <Assignment variable="component.defaultHeight" value="200" />
-                <Assignment variable="component.hierarchicalMode" value="false" />
+            <Label label="label" align="right" localize="true" constraints="gridbag(location=left;index=2;anchor=east;weightY=0.0;insetsLeft=0;weightX=0.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=none;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=true;expandVertically=false)" />
+            <Panel layout="gridbag" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="Panel" constraints="gridbag(location=right;index=3;anchor=center;weightY=0.0;insetsLeft=6;weightX=1.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=horizontal;insetsRight=7;gridY=-1;gridX=-1;gridWidth=0;expandHorizontally=true;expandVertically=false)">
+              <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="ConnectorPatternRole.data.label.binding" constraints="gridbag(location=center;index=0;anchor=center;weightY=0.0;insetsLeft=0;weightX=1.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=horizontal;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=true;expandVertically=false)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="ConnectorPatternRole.data" />
+                <Assignment variable="component.bindingDefinition" value="ConnectorPatternRole.data.labelBindingDefinition" />
               </Custom>
+              <CheckBox selected="true" localize="true" name="checkbox" data="ConnectorPatternRole.data.readOnlyLabel" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=1;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;fill=none;weightX=0.0)" />
+              <Label label="read_only" localize="true" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=2;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;fill=none;weightX=0.0)">
+                <LocalizedDictionary />
+              </Label>
             </Panel>
           </Panel>
           <Panel layout="gridbag" borderTitle="Panel" borderLeft="5" borderRight="5" data="PatternRoleTable.selected" dataClassName="org.openflexo.foundation.viewpoint.IndividualPatternRole" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=0;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=2;gridWidth=0;insetsTop=0;y=0;x=0;insetsBottom=0;weightY=1.0;weightX=1.0;fill=both)" visible="(PatternRoleTable.selected.type = &quot;Individual&quot;)" name="IndividualPatternRole">
@@ -186,11 +184,9 @@
               <TextField columns="6" passwd="false" text="TextField" localize="true" data="DropSchemePanel.data.name" constraints="twocols(location=right;index=1;anchor=center;weightY=0.0;insetsLeft=0;weightX=0.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=none;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=true;expandVertically=false)" />
               <Label label="target" align="right" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=true;expandVertically=false)" />
               <Panel layout="gridbag" borderTitle="Panel" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)">
-                <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="DropSchemePanel.data.targetClass" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;fill=horizontal;weightX=1.0)" visible="(!(DropSchemePanel.data.topTarget))" localize="true" manageDynamicModel="true">
-                  <Assignment variable="component.ontologyLibrary" value="DropSchemePanel.data.ontologyLibrary" />
-                </Custom>
                 <CheckBox selected="true" localize="true" name="checkbox" data="DropSchemePanel.data.topTarget" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=1;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;fill=none;weightX=0.0)" />
                 <Label label="top_level" localize="true" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=2;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;fill=horizontal;weightX=0.01)" />
+                <DropDown format="object.name" localize="true" name="dropdown" data="DropSchemePanel.data.targetEditionPattern" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=1.0;fill=horizontal)" visible="(!(DropSchemePanel.data.topTarget))" list="data.calc.editionPatterns" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" />
               </Panel>
               <Label label="description" align="right" localize="true" constraints="twocols(location=left;index=4;expandVertically=false;expandHorizontally=true)" />
               <TextArea columns="6" rows="2" text="TextArea" data="DropSchemePanel.data.description" constraints="twocols(location=center;index=5;expandHorizontally=true;expandVertically=true)" localize="true" />
@@ -199,13 +195,9 @@
               <Label label="link_scheme" align="right" localize="true" constraints="twocols(location=left;index=0;anchor=center;weightY=0.0;insetsLeft=0;weightX=0.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=none;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=false;expandVertically=false)" />
               <TextField columns="6" passwd="false" localize="true" data="LinkSchemePanel.data.name" constraints="twocols(location=right;index=1;anchor=center;weightY=0.0;insetsLeft=0;weightX=0.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=none;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=true;expandVertically=false)" />
               <Label label="from" align="right" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=true;expandVertically=false)" />
-              <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="LinkSchemePanel.data.fromTargetClass" constraints="twocols(location=right;index=3;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true">
-                <Assignment variable="component.ontologyLibrary" value="LinkSchemePanel.data.ontologyLibrary" />
-              </Custom>
+                <DropDown format="object.name" localize="true" name="dropdown" data="LinkSchemePanel.data.fromTargetEditionPattern" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" list="data.calc.editionPatterns" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" />
               <Label label="to" align="right" localize="true" constraints="twocols(location=left;index=4;expandHorizontally=true;expandVertically=false)" />
-              <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="LinkSchemePanel.data.toTargetClass" constraints="twocols(location=right;index=5;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true">
-                <Assignment variable="component.ontologyLibrary" value="LinkSchemePanel.data.ontologyLibrary" />
-              </Custom>
+                <DropDown format="object.name" localize="true" name="dropdown" data="LinkSchemePanel.data.toTargetEditionPattern" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" list="data.calc.editionPatterns" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" />
               <Label label="description" localize="true" constraints="twocols(location=left;index=6;expandHorizontally=true;expandVertically=false)" />
               <TextArea columns="6" rows="2" data="LinkSchemePanel.data.description" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=true)" localize="true" />
             </Panel>
@@ -213,7 +205,10 @@
               <Label label="action_scheme" align="right" localize="true" constraints="twocols(location=left;index=0;anchor=center;weightY=0.0;insetsLeft=0;weightX=0.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=none;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=false;expandVertically=false)" />
               <TextField columns="6" passwd="false" localize="true" data="ActionSchemePanel.data.name" constraints="twocols(location=right;index=1;anchor=center;weightY=0.0;insetsLeft=0;weightX=0.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=none;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=true;expandVertically=false)" />
               <Label label="conditional" align="right" localize="true" constraints="twocols(location=left;index=2;anchor=center;weightY=0.0;insetsLeft=0;weightX=0.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=none;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=false;expandVertically=false)" />
-              <TextField columns="6" passwd="false" localize="true" data="ActionSchemePanel.data.conditional" constraints="twocols(location=right;index=3;anchor=center;weightY=0.0;insetsLeft=0;weightX=0.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=none;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=true;expandVertically=false)" />
+              <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="ActionSchemePanel.data.conditional.binding" constraints="twocols(location=right;index=3;anchor=center;weightY=0.0;insetsLeft=0;weightX=0.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=none;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=true;expandVertically=false)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="ActionSchemePanel.data" />
+                <Assignment variable="component.bindingDefinition" value="ActionSchemePanel.data.conditionalBindingDefinition" />
+              </Custom>
               <Label label="description" localize="true" constraints="twocols(location=left;index=4;expandHorizontally=true;expandVertically=false)" />
               <TextArea columns="6" rows="2" data="LinkSchemePanel.data.description" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=true)" localize="true" />
             </Panel>
@@ -221,58 +216,71 @@
         </Panel>
         <TabPanel name="EditionSchemePanel" data="EditionSchemeTable.selected" dataClassName="org.openflexo.foundation.viewpoint.EditionScheme" constraints="border(location=center;index=0)">
           <Tab index="0" title="parameters" layout="gridbag" hGap="5" vGap="5" cols="2" rows="1" borderTitle="Parameters" borderTop="10" constraints="border(location=north;index=0)" name="ParametersPanel">
-            <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="Panel" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=0;gridX=0;index=0;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=horizontal)" visible="(EditionSchemePanel.data.parameters.size = 0)">
+            <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="Panel" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=0;gridX=0;index=0;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=horizontal)">
               <CheckBox selected="true" localize="true" name="checkbox" data="EditionSchemePanel.data.skipConfirmationPanel" constraints="flow(index=0)" />
-              <Label label="skip_confirmation_panel_as_no_parameters_are_defined" localize="true" constraints="flow(index=1)">
+              <Label label="skip_confirmation_panel_when_possible" localize="true" constraints="flow(index=1)">
                 <LocalizedDictionary />
               </Label>
             </Panel>
-            <Panel layout="twocols" borderTitle="Panel" borderLeft="5" protectContent="true" data="ParametersTable.selected" dataClassName="org.openflexo.foundation.viewpoint.EditionPatternParameter" constraints="gridbag(location=center;index=2;anchor=center;weightY=1.0;y=0;insetsLeft=0;weightX=1.0;x=1;insetsTop=0;gridHeight=0;padY=0;padX=0;insetsBottom=0;fill=both;insetsRight=0;gridY=0;gridX=1;gridWidth=1)" width="400" height="200" name="ParametersDetailsPanel">
+            <Panel layout="twocols" borderTitle="Panel" borderLeft="5" protectContent="true" data="ParametersTable.selected" dataClassName="org.openflexo.foundation.viewpoint.EditionSchemeParameter" constraints="gridbag(location=center;index=2;anchor=center;weightY=1.0;y=0;insetsLeft=0;weightX=1.0;x=1;insetsTop=0;gridHeight=0;padY=0;padX=0;insetsBottom=0;fill=both;insetsRight=0;gridY=0;gridX=1;gridWidth=1)" width="400" height="200" name="ParametersDetailsPanel">
               <Label label="name" align="right" localize="true" constraints="twocols(location=left;index=0;expandHorizontally=true;expandVertically=false)" />
               <TextField columns="6" passwd="false" text="TextField" localize="true" data="ParametersDetailsPanel.data.name" constraints="twocols(location=right;index=1;expandVertically=false;expandHorizontally=true)" />
               <Label label="label" align="right" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=true;expandVertically=false)" />
               <TextField columns="6" passwd="false" text="TextField" localize="true" data="ParametersDetailsPanel.data.label" constraints="twocols(location=right;index=3;expandVertically=false;expandHorizontally=true)" />
               <Label label="conditional" align="right" localize="true" constraints="twocols(location=left;index=4;expandVertically=false;expandHorizontally=true)" />
-              <TextField columns="6" passwd="false" text="TextField" localize="true" data="ParametersDetailsPanel.data.conditional" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" />
-              <Label label="uri" align="right" localize="true" constraints="twocols(location=left;index=6;expandVertically=false;expandHorizontally=true)" visible="(ParametersDetailsPanel.data.widget = &quot;TEXT_FIELD&quot;)" />
-              <Panel layout="border" hGap="5" vGap="0" flowAlignment="LEADING" borderTitle="Panel" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=false)" visible="(ParametersDetailsPanel.data.widget = &quot;TEXT_FIELD&quot;)">
-                <CheckBox selected="true" localize="true" name="checkbox" data="ParametersDetailsPanel.data.uniqueURI" constraints="border(location=west;index=0)" />
-                <TextField columns="6" passwd="false" text="TextField" localize="true" data="ParametersDetailsPanel.data.base" constraints="border(location=center;index=1)" visible="ParametersDetailsPanel.data.uniqueURI" />
-              </Panel>
-              <Label label="type" align="right" localize="true" constraints="twocols(location=left;index=8;expandVertically=false;expandHorizontally=true)" visible="(ParametersDetailsPanel.data.widget = &quot;CUSTOM&quot;)" />
-              <DropDown localize="true" name="dropdown" data="ParametersDetailsPanel.data.customType" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=false)" visible="(ParametersDetailsPanel.data.widget = &quot;CUSTOM&quot;)" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPatternParameter$CustomType" />
-              <Label label="concept_uri" localize="true" constraints="twocols(location=left;index=10;expandHorizontally=true;expandVertically=false)" visible="((ParametersDetailsPanel.data.widget = &quot;CUSTOM&quot;) &amp; (ParametersDetailsPanel.data.customType = &quot;OntologyIndividual&quot;))" />
-              <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="ParametersDetailsPanel.data.concept" constraints="twocols(location=right;index=11;expandVertically=false;expandHorizontally=true)" visible="((ParametersDetailsPanel.data.widget = &quot;CUSTOM&quot;) &amp; (ParametersDetailsPanel.data.customType = &quot;OntologyIndividual&quot;))" localize="true" manageDynamicModel="true">
-                <Assignment variable="component.ontologyLibrary" value="ParametersDetailsPanel.data.ontologyLibrary" />
-                <Assignment variable="component.defaultHeight" value="200" />
+              <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="ParametersDetailsPanel.data.conditional.binding" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" name="conditionalValue" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="ParametersDetailsPanel.data" />
+                <Assignment variable="component.bindingDefinition" value="ParametersDetailsPanel.data.conditionalBindingDefinition" />
               </Custom>
-              <Label label="values" localize="true" constraints="twocols(location=left;index=12;expandHorizontally=true;expandVertically=false)" visible="(ParametersDetailsPanel.data.widget = &quot;DROPDOWN&quot;)" />
-              <TextField columns="6" passwd="false" text="TextField" localize="true" data="ParametersDetailsPanel.data.values" constraints="twocols(location=right;index=13;expandVertically=false;expandHorizontally=true)" visible="(ParametersDetailsPanel.data.widget = &quot;DROPDOWN&quot;)" />
-              <Label label="default value" align="right" localize="true" constraints="twocols(location=left;index=14;expandVertically=false;expandHorizontally=true)" />
-              <Panel layout="gridbag" hGap="0" vGap="0" flowAlignment="LEADING" constraints="twocols(location=center;index=15;expandHorizontally=true;expandVertically=false)">
-                <TextField columns="6" passwd="false" text="TextField" localize="true" data="ParametersDetailsPanel.data.defaultValue" constraints="gridbag(location=right;index=0;anchor=east;weightY=0.0;y=0;insetsLeft=0;weightX=1.0;x=0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=both;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=true;expandVertically=false)" visible="(ParametersDetailsPanel.data.usePaletteLabelAsDefaultValue = false)" />
+              <Label label="base_uri" align="right" localize="true" constraints="twocols(location=left;index=6;expandVertically=false;expandHorizontally=true)" visible="(ParametersDetailsPanel.data.widget = &quot;URI&quot;)" />
+              <Panel layout="border" hGap="5" vGap="0" flowAlignment="LEADING" borderTitle="Panel" data="ParametersDetailsPanel.data" dataClassName="org.openflexo.foundation.viewpoint.URIParameter" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=false)" visible="(ParametersDetailsPanel.data.widget = &quot;URI&quot;)" name="URIParameterPanel">
+                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="URIParameterPanel.data.baseURI.binding" constraints="border(location=right;index=5;expandVertically=false;expandHorizontally=true)" name="baseURIValue" localize="true" manageDynamicModel="true">
+                  <Assignment variable="component.bindable" value="ParametersDetailsPanel.data" />
+                  <Assignment variable="component.bindingDefinition" value="ParametersDetailsPanel.data.baseURIBindingDefinition" />
+                </Custom>
+              </Panel>
+              <Label label="type" align="right" localize="true" constraints="twocols(location=left;index=8;expandVertically=false;expandHorizontally=true)" visible="(ParametersDetailsPanel.data.widget = &quot;INDIVIDUAL&quot;)" />
+              <Panel layout="border" data="ParametersDetailsPanel.data" dataClassName="org.openflexo.foundation.viewpoint.IndividualParameter" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=false)" visible="(ParametersDetailsPanel.data.widget = &quot;INDIVIDUAL&quot;)" name="IndividualParameterPanel">
+                <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="IndividualParameterPanel.data.concept" constraints="border(location=center;index=9;expandHorizontally=true;expandVertically=false)" localize="true" manageDynamicModel="true">
+                  <Assignment variable="component.ontologyLibrary" value="ParametersDetailsPanel.data.ontologyLibrary" />
+                  <Assignment variable="component.defaultHeight" value="200" />
+                </Custom>
+              </Panel>
+              <Label label="object_type" align="right" localize="true" constraints="twocols(location=left;index=10;expandVertically=false;expandHorizontally=true)" visible="(ParametersDetailsPanel.data.widget = &quot;FLEXO_OBJECT&quot;)" />
+              <Panel layout="border" data="ParametersDetailsPanel.data" dataClassName="org.openflexo.foundation.viewpoint.FlexoObjectParameter" constraints="twocols(location=right;index=11;expandHorizontally=true;expandVertically=false)" visible="(ParametersDetailsPanel.data.widget = &quot;FLEXO_OBJECT&quot;)" name="FlexoObjectParameterPanel">
+                <DropDown localize="true" name="dropdown" data="FlexoObjectParameterPanel.data.flexoObjectType" constraints="border(location=center;index=9;expandVertically=false;expandHorizontally=true)" iteratorClassName="org.openflexo.foundation.viewpoint.FlexoObjectParameter$FlexoObjectType" />
+              </Panel>
+              <Label label="default value" align="right" localize="true" constraints="twocols(location=left;index=12;expandVertically=false;expandHorizontally=true)" minWidth="80" minHeight="14">
+                <LocalizedDictionary />
+              </Label>
+              <Panel layout="gridbag" hGap="0" vGap="0" flowAlignment="LEADING" constraints="twocols(location=center;index=13;expandHorizontally=true;expandVertically=false)">
+                <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="ParametersDetailsPanel.data.defaultValue.binding" constraints="gridbag(location=right;index=0;anchor=east;weightY=0.0;y=0;insetsLeft=0;weightX=1.0;x=0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=both;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=true;expandVertically=false)" name="conditionalValue" localize="true" manageDynamicModel="true">
+                  <Assignment variable="component.bindable" value="ParametersDetailsPanel.data" />
+                  <Assignment variable="component.bindingDefinition" value="ParametersDetailsPanel.data.defaultValueBindingDefinition" />
+                </Custom>
                 <CheckBox selected="true" localize="true" name="checkbox" data="ParametersDetailsPanel.data.usePaletteLabelAsDefaultValue" constraints="gridbag(location=left;index=1;anchor=center;weightY=0.0;y=0;insetsLeft=0;weightX=0.0;x=0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=none;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=true;expandVertically=false)" />
                 <Label label="use_palette_label" localize="true" constraints="gridbag(location=right;index=2;anchor=center;weightY=0.0;y=0;insetsLeft=0;weightX=0.01;x=0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=horizontal;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=true;expandVertically=false)" />
               </Panel>
-              <TextArea columns="6" rows="2" text="TextArea" data="ParametersDetailsPanel.data.description" constraints="twocols(location=center;index=17;expandVertically=true;expandHorizontally=true)" localize="true" />
-              <Label label="description" align="right" localize="true" constraints="twocols(location=left;index=16;expandVertically=false;expandHorizontally=true)" />
+              <Label label="description" align="right" localize="true" constraints="twocols(location=left;index=14;expandVertically=false;expandHorizontally=true)" />
+              <TextArea columns="6" rows="2" text="TextArea" data="ParametersDetailsPanel.data.description" constraints="twocols(location=center;index=15;expandVertically=true;expandHorizontally=true)" localize="true" />
               <LocalizedDictionary />
             </Panel>
             <Panel layout="border" borderTitle="Panel" constraints="gridbag(location=west;index=1;anchor=center;weightY=1.0;y=0;insetsLeft=0;weightX=0.5;x=0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=both;insetsRight=0;gridY=1;gridX=0;gridWidth=1)">
-              <Table iteratorClassName="org.openflexo.foundation.viewpoint.EditionPatternParameter" visibleRowCount="10" rowHeight="18" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="EditionSchemePanel.data.parameters" constraints="border(location=center;index=0;anchor=center;weightY=1.0;y=0;insetsLeft=0;weightX=0.5;x=0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=both;insetsRight=0;gridY=1;gridX=0;gridWidth=1)" name="ParametersTable" localize="true" manageDynamicModel="true">
+              <Table iteratorClassName="org.openflexo.foundation.viewpoint.EditionSchemeParameter" visibleRowCount="10" rowHeight="18" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="EditionSchemePanel.data.parameters" constraints="border(location=center;index=0;anchor=center;weightY=1.0;y=0;insetsLeft=0;weightX=0.5;x=0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=both;insetsRight=0;gridY=1;gridX=0;gridWidth=1)" name="ParametersTable" localize="true" manageDynamicModel="true">
                 <IconColumn data="controller.iconForObject(iterator)" title="icon" columnWidth="20" resizable="false" displayTitle="false" name="icon" />
                 <TextFieldColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" />
                 <TextFieldColumn data="iterator.label" title="label" columnWidth="100" resizable="true" displayTitle="true" />
-                <DropDownColumn data="iterator.widget" title="dropdown" columnWidth="60" resizable="true" displayTitle="true" name="dropdown" />
-                <CheckBoxColumn data="iterator.uniqueURI" title="uri" columnWidth="25" resizable="false" displayTitle="true" name="checkbox" />
+                <DropDownColumn data="iterator.widget" title="widget" columnWidth="80" resizable="true" displayTitle="true" name="dropdown" />
                 <AddAction method="EditionSchemeTable.selected.createTextFieldParameter" name="add_textfield_parameter" />
                 <AddAction method="EditionSchemeTable.selected.createLocalizedTextFieldParameter" name="add_localized_textfield_parameter" />
                 <AddAction method="EditionSchemeTable.selected.createTextAreaParameter" name="add_textarea_parameter" />
                 <AddAction method="EditionSchemeTable.selected.createIntegerParameter" name="add_integer_parameter" />
                 <AddAction method="EditionSchemeTable.selected.createCheckBoxParameter" name="add_checkbox_parameter" />
                 <AddAction method="EditionSchemeTable.selected.createDropDownParameter" name="add_dropdown_parameter" />
-                <AddAction method="EditionSchemeTable.selected.createCustomParameter" name="add_custom_parameter" />
+                <AddAction method="EditionSchemeTable.selected.createIndividualParameter" name="add_individual_parameter" />
                 <RemoveAction method="EditionSchemeTable.selected.deleteParameter(selected)" name="delete" />
+                <AddAction method="EditionSchemeTable.selected.createFlexoObjectParameter" name="add_flexo_model_parameter" />
+                <AddAction method="EditionSchemeTable.selected.createURIParameter" name="add_uri_parameter" />
               </Table>
               <Panel layout="box" boxLayoutAxis="Y_AXIS" borderTitle="Panel" constraints="border(location=east)">
                 <Button buttonType="Trigger" label="top" constraints="box(location=west;index=0;alignmentY=0.5;alignmentX=0.5)" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &gt; 0))" clickAction="EditionSchemePanel.data.parameterFirst(ParametersTable.selected)">
@@ -300,14 +308,20 @@
                   <Label label="pattern_role" align="right" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=true;expandVertically=false)" />
                   <DropDown localize="true" data="AddIndividualPanel.data.patternRole" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" list="AddIndividualPanel.data.editionPattern.patternRoles" iteratorClassName="org.openflexo.foundation.viewpoint.PatternRole" />
                   <Label label="conditional" align="right" localize="true" constraints="twocols(location=left;index=4;expandVertically=false;expandHorizontally=true)" />
-                  <TextField columns="6" passwd="false" text="TextField" localize="true" data="AddIndividualPanel.data.conditional" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" />
+              <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddIndividualPanel.data.conditional.binding" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="AddIndividualPanel.data" />
+                <Assignment variable="component.bindingDefinition" value="AddIndividualPanel.data.conditionalBindingDefinition" />
+              </Custom>
                   <Label label="ontology_class" align="right" localize="true" constraints="twocols(location=left;index=6;expandVertically=false;expandHorizontally=true)" />
                   <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="AddIndividualPanel.data.ontologyClass" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=false)" localize="true" manageDynamicModel="true">
                     <Assignment variable="component.ontologyLibrary" value="AddIndividualPanel.data.ontologyLibrary" />
                     <Assignment variable="component.defaultHeight" value="200" />
                   </Custom>
                   <Label label="individual_name_(uri)" align="right" localize="true" constraints="twocols(location=left;index=8;expandVertically=false;expandHorizontally=true)" />
-                  <DropDown format="object.name" localize="true" data="AddIndividualPanel.data.individualNameParameter" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=false)" list="AddIndividualPanel.data.scheme.parameters" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPatternParameter" />
+              <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddIndividualPanel.data.individualName.binding" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=false)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="AddIndividualPanel.data" />
+                <Assignment variable="component.bindingDefinition" value="AddIndividualPanel.data.individualNameBindingDefinition" />
+              </Custom>
                   <Label label="description" localize="true" constraints="twocols(location=left;index=10;expandVertically=false;expandHorizontally=true)" />
                   <TextArea columns="6" rows="2" text="TextArea" data="AddIndividualPanel.data.description" constraints="twocols(location=right;index=11;expandHorizontally=true;expandVertically=true)" localize="true" />
                 </Tab>
@@ -344,96 +358,116 @@
                 <Label label="pattern_role" align="right" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=true;expandVertically=false)" />
                 <DropDown localize="true" data="AddClassPanel.data.patternRole" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" list="AddClassPanel.data.editionPattern.patternRoles" iteratorClassName="org.openflexo.foundation.viewpoint.PatternRole" />
                 <Label label="conditional" align="right" localize="true" constraints="twocols(location=left;index=4;expandHorizontally=true;expandVertically=false)" />
-                <TextField columns="6" passwd="false" text="TextField" localize="true" data="AddClassPanel.data.conditional" constraints="twocols(location=right;index=5;expandVertically=false;expandHorizontally=true)" />
-                <Label label="ontologic_class" align="right" localize="true" constraints="twocols(location=left;index=6;expandVertically=false;expandHorizontally=true)" />
+              <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddClassPanel.data.conditional.binding" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="AddClassPanel.data" />
+                <Assignment variable="component.bindingDefinition" value="AddClassPanel.data.conditionalBindingDefinition" />
+              </Custom>
+                 <Label label="ontologic_class" align="right" localize="true" constraints="twocols(location=left;index=6;expandVertically=false;expandHorizontally=true)" />
                 <Custom componentClassName="org.openflexo.components.widget.OntologyClassSelector" data="AddClassPanel.data.ontologyClass" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=false)" localize="true" manageDynamicModel="true">
                   <Assignment variable="component.ontologyLibrary" value="AddIndividualPanel.data.ontologyLibrary" />
                   <Assignment variable="component.defaultHeight" value="200" />
                 </Custom>
                 <Label label="new_class_name_(uri)" align="right" localize="true" constraints="twocols(location=left;index=8;expandHorizontally=true;expandVertically=false)" />
-                <DropDown format="object.name" localize="true" data="AddClassPanel.data.newClassNameParameter" constraints="twocols(location=right;index=9;expandVertically=false;expandHorizontally=true)" list="AddClassPanel.data.scheme.parameters" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPatternParameter" />
+              <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddClassPanel.data.className.binding" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=false)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="AddClassPanel.data" />
+                <Assignment variable="component.bindingDefinition" value="AddClassPanel.data.individualNameBindingDefinition" />
+              </Custom>
                 <Label label="description" align="right" localize="true" constraints="twocols(location=left;index=10;expandHorizontally=true;expandVertically=false)" />
                 <TextArea columns="6" rows="2" text="TextArea" data="AddClassPanel.data.description" constraints="twocols(location=right;index=11;expandVertically=true;expandHorizontally=true)" localize="true" />
               </Panel>
+
+              <!-- Add shape -->
               <Panel layout="twocols" borderTitle="Panel" borderLeft="10" data="EditionActionTable.selected" dataClassName="org.openflexo.foundation.viewpoint.AddShape" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=0;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=1;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=1.0;fill=both;weightX=1.0)" visible="(EditionActionTable.selected.editionActionType = &quot;AddShape&quot;)" name="AddShapePanel">
                 <Label label="action_type" align="right" localize="true" constraints="twocols(location=left;index=0;expandVertically=false;expandHorizontally=true)" />
                 <TextField columns="6" passwd="false" text="TextField" readOnly="true" localize="true" data="AddShapePanel.data.editionActionType.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
                 <Label label="pattern_role" align="right" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=true;expandVertically=false)" />
                 <DropDown localize="true" data="AddShapePanel.data.patternRole" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" list="AddShapePanel.data.editionPattern.patternRoles" iteratorClassName="org.openflexo.foundation.viewpoint.PatternRole" />
-                <Label label="bound_to" align="right" localize="true" constraints="twocols(location=left;index=4;expandHorizontally=true;expandVertically=false)" />
-                <DropDown localize="true" data="AddShapePanel.data.patternRole.boundPatternRole" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" list="AddShapePanel.data.editionPattern.patternRoles" iteratorClassName="org.openflexo.foundation.viewpoint.PatternRole" />
-                <Label label="label" align="right" localize="true" constraints="twocols(location=left;index=6;expandHorizontally=true;expandVertically=false)" />
-                <Panel layout="gridbag" hGap="5" vGap="5" flowAlignment="LEADING" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=false)">
-                  <DropDown localize="true" data="AddShapePanel.data.patternRole.retrieveLabelRepresentation.type" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;fill=horizontal;weightX=0.1)" iteratorClassName="org.openflexo.foundation.viewpoint.LabelRepresentation$LabelRepresentationType" />
-                  <TextField columns="6" passwd="false" text="TextField" localize="true" data="AddShapePanel.data.patternRole.retrieveLabelRepresentation.text" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=1;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=1.0;fill=horizontal)" visible="(AddShapePanel.data.patternRole.retrieveLabelRepresentation.type = &quot;StaticValue&quot;)" />
-                  <Custom componentClassName="org.openflexo.components.widget.OntologyPropertySelector" data="AddShapePanel.data.patternRole.retrieveLabelRepresentation.ontologyProperty" constraints="gridbag(location=right;index=2;anchor=center;weightY=0.0;insetsLeft=0;weightX=1.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=horizontal;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=true;expandVertically=false)" visible="(AddShapePanel.data.patternRole.retrieveLabelRepresentation.type = &quot;UseOntologicProperty&quot;)" localize="true" manageDynamicModel="true">
-                    <Assignment variable="component.ontologyLibrary" value="AddShapePanel.data.ontologyLibrary" />
-                    <Assignment variable="component.defaultHeight" value="200" />
-                    <Assignment variable="component.hierarchicalMode" value="false" />
-                  </Custom>
-                </Panel>
                 <Label label="conditional" align="right" localize="true" constraints="twocols(location=left;index=8;expandHorizontally=true;expandVertically=false)" />
-                <TextField columns="6" passwd="false" text="TextField" localize="true" data="AddShapePanel.data.conditional" constraints="twocols(location=right;index=9;expandVertically=false;expandHorizontally=true)" />
+              <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddShapePanel.data.conditional.binding" constraints="twocols(location=right;index=9;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="AddShapePanel.data" />
+                <Assignment variable="component.bindingDefinition" value="AddShapePanel.data.conditionalBindingDefinition" />
+              </Custom>
                 <Label label="container" align="right" localize="true" constraints="twocols(location=left;index=10;expandHorizontally=true;expandVertically=false)" />
-                <DropDown localize="true" data="AddShapePanel.data.container" constraints="twocols(location=right;index=11;expandHorizontally=true;expandVertically=false)" list="AddShapePanel.data.availableContainerValues" iteratorClassName="java.lang.String" />
+             <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddShapePanel.data.container.binding" constraints="twocols(location=right;index=11;expandHorizontally=true;expandVertically=false)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="AddShapePanel.data" />
+                <Assignment variable="component.bindingDefinition" value="AddShapePanel.data.containerBindingDefinition" />
+              </Custom>
                 <Label label="description" align="right" localize="true" constraints="twocols(location=left;index=12;expandHorizontally=true;expandVertically=false)" />
                 <TextArea columns="6" rows="2" text="TextArea" data="AddShapePanel.data.description" constraints="twocols(location=right;index=13;expandVertically=true;expandHorizontally=true)" localize="true" />
               </Panel>
+              
+              <!-- Add connector -->
               <Panel layout="twocols" borderTitle="Panel" borderLeft="10" data="EditionActionTable.selected" dataClassName="org.openflexo.foundation.viewpoint.AddConnector" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=0;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=2;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=1.0;fill=both;weightX=1.0)" visible="(EditionActionTable.selected.editionActionType = &quot;AddConnector&quot;)" name="AddConnectorPanel">
                 <Label label="action_type" align="right" localize="true" constraints="twocols(location=left;index=0;expandVertically=false;expandHorizontally=true)" />
                 <TextField columns="6" passwd="false" text="TextField" readOnly="true" localize="true" data="AddConnectorPanel.data.editionActionType.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
                 <Label label="pattern_role" align="right" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=true;expandVertically=false)" />
                 <DropDown localize="true" data="AddConnectorPanel.data.patternRole" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" list="AddConnectorPanel.data.editionPattern.patternRoles" iteratorClassName="org.openflexo.foundation.viewpoint.PatternRole" />
-                <Label label="bound_to" align="right" localize="true" constraints="twocols(location=left;index=4;expandHorizontally=true;expandVertically=false)" />
-                <DropDown localize="true" data="AddShapePanel.data.patternRole.boundPatternRole" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" list="AddConnectorPanel.data.editionPattern.patternRoles" iteratorClassName="org.openflexo.foundation.viewpoint.PatternRole" />
-                <Label label="label" align="right" localize="true" constraints="twocols(location=left;index=6;expandHorizontally=true;expandVertically=false)" />
-                <Panel layout="gridbag" hGap="5" vGap="5" flowAlignment="LEADING" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=false)">
-                  <DropDown localize="true" data="AddConnectorPanel.data.patternRole.retrieveLabelRepresentation.type" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;fill=horizontal;weightX=0.1)" iteratorClassName="org.openflexo.foundation.viewpoint.LabelRepresentation$LabelRepresentationType" />
-                  <TextField columns="6" passwd="false" text="TextField" localize="true" data="AddConnectorPanel.data.patternRole.retrieveLabelRepresentation.text" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=1;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=1.0;fill=horizontal)" visible="(AddConnectorPanel.data.patternRole.retrieveLabelRepresentation.type = &quot;StaticValue&quot;)" />
-                  <Custom componentClassName="org.openflexo.components.widget.OntologyPropertySelector" data="AddConnectorPanel.data.patternRole.retrieveLabelRepresentation.ontologyProperty" constraints="gridbag(location=right;index=2;anchor=center;weightY=0.0;insetsLeft=0;weightX=1.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=horizontal;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=true;expandVertically=false)" visible="(AddConnectorPanel.data.patternRole.retrieveLabelRepresentation.type = &quot;UseOntologicProperty&quot;)" localize="true" manageDynamicModel="true">
-                    <Assignment variable="component.ontologyLibrary" value="AddConnectorPanel.data.ontologyLibrary" />
-                    <Assignment variable="component.defaultHeight" value="200" />
-                    <Assignment variable="component.hierarchicalMode" value="false" />
-                  </Custom>
-                </Panel>
                 <Label label="conditional" align="right" localize="true" constraints="twocols(location=left;index=8;expandHorizontally=true;expandVertically=false)" />
-                <TextField columns="6" passwd="false" text="TextField" localize="true" data="AddConnectorPanel.data.conditional" constraints="twocols(location=right;index=9;expandVertically=false;expandHorizontally=true)" />
+              <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddConnectorPanel.data.conditional.binding" constraints="twocols(location=right;index=9;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="AddConnectorPanel.data" />
+                <Assignment variable="component.bindingDefinition" value="AddConnectorPanel.data.conditionalBindingDefinition" />
+              </Custom>
                 <Label label="from_shape" align="right" localize="true" constraints="twocols(location=left;index=10;expandHorizontally=true;expandVertically=false)" />
-                <DropDown localize="true" data="AddConnectorPanel.data.fromShape" constraints="twocols(location=right;index=11;expandVertically=false;expandHorizontally=true)" list="AddConnectorPanel.data.availableFromToShapeValues" iteratorClassName="java.lang.String" />
+            <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddConnectorPanel.data.fromShape.binding" constraints="twocols(location=right;index=11;expandHorizontally=true;expandVertically=false)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="AddConnectorPanel.data" />
+                <Assignment variable="component.bindingDefinition" value="AddConnectorPanel.data.fromShapeBindingDefinition" />
+              </Custom>
                 <Label label="to_shape" align="right" localize="true" constraints="twocols(location=left;index=12;expandHorizontally=true;expandVertically=false)" />
-                <DropDown localize="true" data="AddConnectorPanel.data.toShape" constraints="twocols(location=right;index=13;expandVertically=false;expandHorizontally=true)" list="AddConnectorPanel.data.availableFromToShapeValues" iteratorClassName="java.lang.String" />
+            <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddConnectorPanel.data.toShape.binding" constraints="twocols(location=right;index=13;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="AddConnectorPanel.data" />
+                <Assignment variable="component.bindingDefinition" value="AddConnectorPanel.data.toShapeBindingDefinition" />
+              </Custom>
                 <Label label="description" align="right" localize="true" constraints="twocols(location=left;index=14;expandHorizontally=true;expandVertically=false)" />
                 <TextArea columns="6" rows="2" text="TextArea" data="AddConnectorPanel.data.description" constraints="twocols(location=right;index=15;expandVertically=true;expandHorizontally=true)" localize="true" />
               </Panel>
+              
+              <!--  Add object property statement -->
               <Panel layout="twocols" borderTitle="Panel" borderLeft="10" data="EditionActionTable.selected" dataClassName="org.openflexo.foundation.viewpoint.AddObjectPropertyStatement" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=0;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=3;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=1.0;fill=both;weightX=1.0)" visible="(EditionActionTable.selected.editionActionType = &quot;AddObjectPropertyStatement&quot;)" name="AddObjectPropertyStatementPanel">
                 <Label label="action_type" align="right" localize="true" constraints="twocols(location=left;index=0;expandVertically=false;expandHorizontally=true)" />
                 <TextField columns="6" passwd="false" text="TextField" readOnly="true" localize="true" data="AddObjectPropertyStatementPanel.data.editionActionType.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
                 <Label label="pattern_role" align="right" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=true;expandVertically=false)" />
                 <DropDown localize="true" data="AddObjectPropertyStatementPanel.data.patternRole" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" list="AddObjectPropertyStatementPanel.data.editionPattern.patternRoles" iteratorClassName="org.openflexo.foundation.viewpoint.PatternRole" />
                 <Label label="conditional" align="right" localize="true" constraints="twocols(location=left;index=4;expandHorizontally=true;expandVertically=false)" />
-                <TextField columns="6" passwd="false" text="TextField" localize="true" data="AddObjectPropertyStatementPanel.data.conditional" constraints="twocols(location=right;index=5;expandVertically=false;expandHorizontally=true)" />
+              <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddObjectPropertyStatementPanel.data.conditional.binding" constraints="twocols(location=right;index=5;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="AddObjectPropertyStatementPanel.data" />
+                <Assignment variable="component.bindingDefinition" value="AddObjectPropertyStatementPanel.data.conditionalBindingDefinition" />
+              </Custom>
                 <Label label="subject" align="right" localize="true" constraints="twocols(location=left;index=6;expandHorizontally=true;expandVertically=false)" />
-                <DropDown localize="true" data="AddObjectPropertyStatementPanel.data.subject" constraints="twocols(location=right;index=7;expandVertically=false;expandHorizontally=true)" list="AddObjectPropertyStatementPanel.data.availableSubjectValues" iteratorClassName="java.lang.String" />
-                <Label label="property" align="right" localize="true" constraints="twocols(location=left;index=8;expandHorizontally=true;expandVertically=false)" />
+              <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddObjectPropertyStatementPanel.data.subject.binding" constraints="twocols(location=right;index=7;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="AddObjectPropertyStatementPanel.data" />
+                <Assignment variable="component.bindingDefinition" value="AddObjectPropertyStatementPanel.data.subjectBindingDefinition" />
+              </Custom>
+                 <Label label="property" align="right" localize="true" constraints="twocols(location=left;index=8;expandHorizontally=true;expandVertically=false)" />
                 <Custom componentClassName="org.openflexo.components.widget.OntologyPropertySelector" data="AddObjectPropertyStatementPanel.data.objectProperty" constraints="twocols(location=right;index=9;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true">
                   <Assignment variable="component.ontologyLibrary" value="AddObjectPropertyStatementPanel.data.ontologyLibrary" />
                   <Assignment variable="component.defaultHeight" value="200" />
                   <Assignment variable="component.hierarchicalMode" value="false" />
                 </Custom>
-                <Label label="value" align="right" localize="true" constraints="twocols(location=left;index=10;expandHorizontally=true;expandVertically=false)" />
-                <DropDown localize="true" data="AddObjectPropertyStatementPanel.data.object" constraints="twocols(location=right;index=11;expandVertically=false;expandHorizontally=true)" list="AddObjectPropertyStatementPanel.data.availableObjectValues" iteratorClassName="java.lang.String" />
+                <Label label="object" align="right" localize="true" constraints="twocols(location=left;index=10;expandHorizontally=true;expandVertically=false)" />
+             <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddObjectPropertyStatementPanel.data.object.binding" constraints="twocols(location=right;index=11;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="AddObjectPropertyStatementPanel.data" />
+                <Assignment variable="component.bindingDefinition" value="AddObjectPropertyStatementPanel.data.objectBindingDefinition" />
+              </Custom>
                 <Label label="description" align="right" localize="true" constraints="twocols(location=left;index=12;expandHorizontally=true;expandVertically=false)" />
                 <TextArea columns="6" rows="2" text="TextArea" data="AddObjectPropertyStatementPanel.data.description" constraints="twocols(location=right;index=13;expandVertically=true;expandHorizontally=true)" localize="true" />
               </Panel>
+              
+              <!-- Add data property statement -->
               <Panel layout="twocols" borderTitle="Panel" borderLeft="10" data="EditionActionTable.selected" dataClassName="org.openflexo.foundation.viewpoint.AddDataPropertyStatement" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=0;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=4;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=1.0;fill=both;weightX=1.0)" visible="(EditionActionTable.selected.editionActionType = &quot;AddDataPropertyStatement&quot;)" name="AddDataPropertyStatementPanel">
                 <Label label="action_type" align="right" localize="true" constraints="twocols(location=left;index=0;expandVertically=false;expandHorizontally=true)" />
                 <TextField columns="6" passwd="false" text="TextField" readOnly="true" localize="true" data="AddDataPropertyStatementPanel.data.editionActionType.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
                 <Label label="pattern_role" align="right" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=true;expandVertically=false)" />
                 <DropDown localize="true" data="AddDataPropertyStatementPanel.data.patternRole" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" list="AddDataPropertyStatementPanel.data.editionPattern.patternRoles" iteratorClassName="org.openflexo.foundation.viewpoint.PatternRole" />
                 <Label label="conditional" align="right" localize="true" constraints="twocols(location=left;index=4;expandHorizontally=true;expandVertically=false)" />
-                <TextField columns="6" passwd="false" text="TextField" localize="true" data="AddDataPropertyStatementPanel.data.conditional" constraints="twocols(location=right;index=5;expandVertically=false;expandHorizontally=true)" />
+              <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddDataPropertyStatementPanel.data.conditional.binding" constraints="twocols(location=right;index=5;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="AddDataPropertyStatementPanel.data" />
+                <Assignment variable="component.bindingDefinition" value="AddDataPropertyStatementPanel.data.conditionalBindingDefinition" />
+              </Custom>
                 <Label label="subject" align="right" localize="true" constraints="twocols(location=left;index=6;expandHorizontally=true;expandVertically=false)" />
-                <DropDown localize="true" data="AddDataPropertyStatementPanel.data.subject" constraints="twocols(location=right;index=7;expandVertically=false;expandHorizontally=true)" list="AddDataPropertyStatementPanel.data.availableSubjectValues" iteratorClassName="java.lang.String" />
+             <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddDataPropertyStatementPanel.data.subject.binding" constraints="twocols(location=right;index=7;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="AddDataPropertyStatementPanel.data" />
+                <Assignment variable="component.bindingDefinition" value="AddDataPropertyStatementPanel.data.subjectBindingDefinition" />
+              </Custom>
                 <Label label="property" align="right" localize="true" constraints="twocols(location=left;index=8;expandHorizontally=true;expandVertically=false)" />
                 <Custom componentClassName="org.openflexo.components.widget.OntologyPropertySelector" data="AddDataPropertyStatementPanel.data.dataProperty" constraints="twocols(location=right;index=9;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true">
                   <Assignment variable="component.ontologyLibrary" value="AddDataPropertyStatementPanel.data.ontologyLibrary" />
@@ -441,22 +475,35 @@
                   <Assignment variable="component.hierarchicalMode" value="false" />
                 </Custom>
                 <Label label="object" align="right" localize="true" constraints="twocols(location=left;index=10;expandHorizontally=true;expandVertically=false)" />
-                <DropDown localize="true" data="AddDataPropertyStatementPanel.data.object" constraints="twocols(location=right;index=11;expandVertically=false;expandHorizontally=true)" list="AddDataPropertyStatementPanel.data.availableObjectValues" iteratorClassName="java.lang.String" />
-                <Label label="description" align="right" localize="true" constraints="twocols(location=left;index=12;expandHorizontally=true;expandVertically=false)" />
+            <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddDataPropertyStatementPanel.data.value.binding" constraints="twocols(location=right;index=11;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="AddDataPropertyStatementPanel.data" />
+                <Assignment variable="component.bindingDefinition" value="AddDataPropertyStatementPanel.data.valueBindingDefinition" />
+              </Custom>
+                 <Label label="description" align="right" localize="true" constraints="twocols(location=left;index=12;expandHorizontally=true;expandVertically=false)" />
                 <TextArea columns="6" rows="2" text="TextArea" data="AddDataPropertyStatementPanel.data.description" constraints="twocols(location=right;index=13;expandVertically=true;expandHorizontally=true)" localize="true" />
               </Panel>
+              
+              <!-- Declare pattern role -->
               <Panel layout="twocols" borderTitle="Panel" borderLeft="10" data="EditionActionTable.selected" dataClassName="org.openflexo.foundation.viewpoint.DeclarePatternRole" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=0;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=5;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=1.0;fill=both;weightX=1.0)" visible="(EditionActionTable.selected.editionActionType = &quot;DeclarePatternRole&quot;)" name="DeclarePatternRolePanel">
                 <Label label="action_type" align="right" localize="true" constraints="twocols(location=left;index=0;expandVertically=false;expandHorizontally=true)" />
                 <TextField columns="6" passwd="false" text="TextField" readOnly="true" localize="true" data="DeclarePatternRolePanel.data.editionActionType.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
                 <Label label="pattern_role" align="right" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=true;expandVertically=false)" />
                 <DropDown localize="true" data="DeclarePatternRolePanel.data.patternRole" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" list="DeclarePatternRolePanel.data.editionPattern.patternRoles" iteratorClassName="org.openflexo.foundation.viewpoint.PatternRole" />
                 <Label label="conditional" align="right" localize="true" constraints="twocols(location=left;index=4;expandHorizontally=true;expandVertically=false)" />
-                <TextField columns="6" passwd="false" text="TextField" localize="true" data="DeclarePatternRolePanel.data.conditional" constraints="twocols(location=right;index=5;expandVertically=false;expandHorizontally=true)" />
+               <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="DeclarePatternRolePanel.data.conditional.binding" constraints="twocols(location=right;index=5;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="DeclarePatternRolePanel.data" />
+                <Assignment variable="component.bindingDefinition" value="DeclarePatternRolePanel.data.conditionalBindingDefinition" />
+              </Custom>
                 <Label label="object" align="right" localize="true" constraints="twocols(location=left;index=6;expandHorizontally=true;expandVertically=false)" />
-                <DropDown localize="true" data="DeclarePatternRolePanel.data.object" constraints="twocols(location=right;index=7;expandVertically=false;expandHorizontally=true)" list="DeclarePatternRolePanel.data.availableObjectValues" iteratorClassName="java.lang.String" />
+           <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="DeclarePatternRolePanel.data.object.binding" constraints="twocols(location=right;index=7;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="DeclarePatternRolePanel.data" />
+                <Assignment variable="component.bindingDefinition" value="AddConnectorPanel.data.objectBindingDefinition" />
+              </Custom>
                 <Label label="description" align="right" localize="true" constraints="twocols(location=left;index=8;expandHorizontally=true;expandVertically=false)" />
                 <TextArea columns="6" rows="2" text="TextArea" data="DeclarePatternRolePanel.data.description" constraints="twocols(location=right;index=9;expandVertically=true;expandHorizontally=true)" localize="true" />
               </Panel>
+              
+              <!--  Add shema -->
               <Panel layout="twocols" borderTitle="Panel" borderLeft="10" data="EditionActionTable.selected" dataClassName="org.openflexo.foundation.viewpoint.AddShema" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=0;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=6;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=1.0;fill=both;weightX=1.0)" visible="(EditionActionTable.selected.editionActionType = &quot;AddShema&quot;)" name="AddShemaPanel">
                 <Label label="action_type" align="right" localize="true" constraints="twocols(location=left;index=0;expandVertically=false;expandHorizontally=true)" />
                 <TextField columns="6" passwd="false" text="TextField" readOnly="true" localize="true" data="AddShemaPanel.data.editionActionType.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
@@ -473,6 +520,8 @@
                 <Label label="description" align="right" localize="true" constraints="twocols(location=left;index=10;expandHorizontally=true;expandVertically=false)" />
                 <TextArea columns="6" rows="2" text="TextArea" data="AddShemaPanel.data.description" constraints="twocols(location=right;index=11;expandVertically=true;expandHorizontally=true)" localize="true" />
               </Panel>
+              
+              <!-- Go to action -->
               <Panel layout="twocols" borderTitle="Panel" borderLeft="10" data="EditionActionTable.selected" dataClassName="org.openflexo.foundation.viewpoint.GoToAction" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=0;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=7;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=1.0;fill=both;weightX=1.0)" visible="(EditionActionTable.selected.editionActionType = &quot;GoToObject&quot;)" name="GoToActionPanel">
                 <Label label="action_type" align="right" localize="true" constraints="twocols(location=left;index=0;expandVertically=false;expandHorizontally=true)" />
                 <TextField columns="6" passwd="false" text="TextField" readOnly="true" localize="true" data="GoToActionPanel.data.editionActionType.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
@@ -483,17 +532,28 @@
                 <Label label="description" align="right" localize="true" constraints="twocols(location=left;index=6;expandHorizontally=true;expandVertically=false)" />
                 <TextArea columns="6" rows="2" text="TextArea" data="GoToActionPanel.data.description" constraints="twocols(location=right;index=7;expandVertically=true;expandHorizontally=true)" localize="true" />
               </Panel>
-              <Panel layout="twocols" borderTitle="Panel" borderLeft="5" data="EditionActionTable.selected" dataClassName="org.openflexo.foundation.viewpoint.AddRestrictionStatement" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=0;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=8;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=1.0;fill=both;weightX=1.0)" visible="(EditionActionTable.selected.editionActionType = &quot;AddRestriction&quot;)" name="AddRestrictionPanel">
+              
+              <!--  Add restriction -->
+              <Panel layout="twocols" borderTitle="Panel" borderLeft="5" data="EditionActionTable.selected" dataClassName="org.openflexo.foundation.viewpoint.AddRestrictionStatement" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=0;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=8;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=1.0;fill=both;weightX=1.0)" visible="(EditionActionTable.selected.editionActionType = &quot;AddRestrictionStatement&quot;)" name="AddRestrictionPanel">
                 <Label label="action_type" align="right" localize="true" constraints="twocols(location=left;index=0;expandVertically=false;expandHorizontally=true)" />
                 <TextField columns="6" passwd="false" text="TextField" readOnly="true" localize="true" data="AddRestrictionPanel.data.editionActionType.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
                 <Label label="pattern_role" align="right" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=true;expandVertically=false)" />
                 <DropDown localize="true" data="AddRestrictionPanel.data.patternRole" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" list="AddRestrictionPanel.data.editionPattern.patternRoles" iteratorClassName="org.openflexo.foundation.viewpoint.PatternRole" />
                 <Label label="conditional" align="right" localize="true" constraints="twocols(location=left;index=4;expandHorizontally=true;expandVertically=false)" />
-                <TextField columns="6" passwd="false" text="TextField" localize="true" data="AddRestrictionPanel.data.conditional" constraints="twocols(location=right;index=5;expandVertically=false;expandHorizontally=true)" />
+              <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddRestrictionPanel.data.conditional.binding" constraints="twocols(location=right;index=5;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="AddRestrictionPanel.data" />
+                <Assignment variable="component.bindingDefinition" value="AddRestrictionPanel.data.conditionalBindingDefinition" />
+              </Custom>
                 <Label label="subject" align="right" localize="true" constraints="twocols(location=left;index=6;expandHorizontally=true;expandVertically=false)" />
-                <DropDown localize="true" data="AddRestrictionPanel.data.subject" constraints="twocols(location=right;index=7;expandVertically=false;expandHorizontally=true)" list="AddRestrictionPanel.data.availableSubjectValues" iteratorClassName="java.lang.String" />
-                <Label label="object" align="right" localize="true" constraints="twocols(location=left;index=8;expandHorizontally=true;expandVertically=false)" />
-                <DropDown localize="true" data="AddRestrictionPanel.data.object" constraints="twocols(location=right;index=9;expandVertically=false;expandHorizontally=true)" list="AddRestrictionPanel.data.availableObjectValues" iteratorClassName="java.lang.String" />
+             <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddRestrictionPanel.data.subject.binding" constraints="twocols(location=right;index=7;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="AddRestrictionPanel.data" />
+                <Assignment variable="component.bindingDefinition" value="AddRestrictionPanel.data.subjectBindingDefinition" />
+              </Custom>
+                 <Label label="object" align="right" localize="true" constraints="twocols(location=left;index=8;expandHorizontally=true;expandVertically=false)" />
+             <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddRestrictionPanel.data.object.binding" constraints="twocols(location=right;index=9;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="AddRestrictionPanel.data" />
+                <Assignment variable="component.bindingDefinition" value="AddRestrictionPanel.data.objectBindingDefinition" />
+              </Custom>
                 <Label label="property" align="right" localize="true" constraints="twocols(location=left;index=10;expandHorizontally=true;expandVertically=false)" />
                 <Custom componentClassName="org.openflexo.components.widget.OntologyPropertySelector" data="AddRestrictionPanel.data.objectProperty" constraints="twocols(location=right;index=11;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true">
                   <Assignment variable="component.ontologyLibrary" value="AddRestrictionPanel.data.ontologyLibrary" />
@@ -501,27 +561,45 @@
                   <Assignment variable="component.hierarchicalMode" value="false" />
                 </Custom>
                 <Label label="restriction type" align="right" localize="true" constraints="twocols(location=left;index=12;expandHorizontally=true;expandVertically=false)" />
-                <DropDown format="object.name" localize="true" data="AddRestrictionPanel.data.restrictionTypeParameter" constraints="twocols(location=right;index=13;expandVertically=false;expandHorizontally=true)" list="AddRestrictionPanel.data.scheme.parameters" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPatternParameter" />
+            <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddRestrictionPanel.data.restrictionType.binding" constraints="twocols(location=right;index=13;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="AddRestrictionPanel.data" />
+                <Assignment variable="component.bindingDefinition" value="AddRestrictionPanel.data.restrictionTypeBindingDefinition" />
+              </Custom>
                 <Label label="cardinality" align="right" localize="true" constraints="twocols(location=left;index=14;expandHorizontally=true;expandVertically=false)" />
-                <DropDown format="object.name" localize="true" data="AddRestrictionPanel.data.cardinalityParameter" constraints="twocols(location=right;index=15;expandVertically=false;expandHorizontally=true)" list="AddRestrictionPanel.data.scheme.parameters" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPatternParameter" />
-                <Label label="description" align="right" localize="true" constraints="twocols(location=left;index=16;expandHorizontally=true;expandVertically=false)" />
+            <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddRestrictionPanel.data.cardinality.binding" constraints="twocols(location=right;index=15;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="AddRestrictionPanel.data" />
+                <Assignment variable="component.bindingDefinition" value="AddRestrictionPanel.data.cardinalityBindingDefinition" />
+              </Custom>
+                 <Label label="description" align="right" localize="true" constraints="twocols(location=left;index=16;expandHorizontally=true;expandVertically=false)" />
                 <TextArea columns="6" rows="2" text="TextArea" data="AddRestrictionPanel.data.description" constraints="twocols(location=right;index=17;expandVertically=true;expandHorizontally=true)" localize="true" />
               </Panel>
-              <Panel layout="twocols" borderTitle="Panel" data="EditionActionTable.selected" dataClassName="org.openflexo.foundation.viewpoint.AddIsAStatement" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=0;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=9;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=1.0;fill=both;weightX=1.0)" visible="(EditionActionTable.selected.editionActionType = &quot;AddIsAProperty&quot;)" name="AddIsAPropertyPanel">
+              
+              <!--  Add isA statement -->
+              <Panel layout="twocols" borderTitle="Panel" data="EditionActionTable.selected" dataClassName="org.openflexo.foundation.viewpoint.AddIsAStatement" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=0;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=9;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=1.0;fill=both;weightX=1.0)" visible="(EditionActionTable.selected.editionActionType = &quot;AddIsAStatement&quot;)" name="AddIsAPropertyPanel">
                 <Label label="action_type" align="right" localize="true" constraints="twocols(location=left;index=0;expandVertically=false;expandHorizontally=true)" />
                 <TextField columns="6" passwd="false" text="TextField" readOnly="true" localize="true" data="AddIsAPropertyPanel.data.editionActionType.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
                 <Label label="pattern_role" align="right" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=true;expandVertically=false)" />
                 <DropDown localize="true" data="AddIsAPropertyPanel.data.patternRole" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" list="AddIsAPropertyPanel.data.editionPattern.patternRoles" iteratorClassName="org.openflexo.foundation.viewpoint.PatternRole" />
                 <Label label="conditional" align="right" localize="true" constraints="twocols(location=left;index=4;expandHorizontally=true;expandVertically=false)" />
-                <TextField columns="6" passwd="false" text="TextField" localize="true" data="AddIsAPropertyPanel.data.conditional" constraints="twocols(location=right;index=5;expandVertically=false;expandHorizontally=true)" />
+              <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddIsAPropertyPanel.data.conditional.binding" constraints="twocols(location=right;index=5;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="AddIsAPropertyPanel.data" />
+                <Assignment variable="component.bindingDefinition" value="AddIsAPropertyPanel.data.conditionalBindingDefinition" />
+              </Custom>
                 <Label label="subject" align="right" localize="true" constraints="twocols(location=left;index=6;expandHorizontally=true;expandVertically=false)" />
-                <DropDown localize="true" data="AddIsAPropertyPanel.data.subject" constraints="twocols(location=right;index=7;expandVertically=false;expandHorizontally=true)" list="AddIsAPropertyPanel.data.availableSubjectValues" iteratorClassName="java.lang.String" />
+           <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddIsAPropertyPanel.data.subject.binding" constraints="twocols(location=right;index=7;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="AddIsAPropertyPanel.data" />
+                <Assignment variable="component.bindingDefinition" value="AddIsAPropertyPanel.data.subjectBindingDefinition" />
+              </Custom>
                 <Label label="father" align="right" localize="true" constraints="twocols(location=left;index=8;expandHorizontally=true;expandVertically=false)" />
-                <DropDown localize="true" data="AddIsAPropertyPanel.data.father" constraints="twocols(location=right;index=9;expandVertically=false;expandHorizontally=true)" list="AddIsAPropertyPanel.data.availableFatherValues" iteratorClassName="java.lang.String" />
+           <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="AddIsAPropertyPanel.data.father.binding" constraints="twocols(location=right;index=9;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true">
+                <Assignment variable="component.bindable" value="AddIsAPropertyPanel.data" />
+                <Assignment variable="component.bindingDefinition" value="AddIsAPropertyPanel.data.fatherBindingDefinition" />
+              </Custom>
                 <Label label="description" align="right" localize="true" constraints="twocols(location=left;index=10;expandHorizontally=true;expandVertically=false)" />
                 <TextArea columns="6" rows="2" text="TextArea" data="AddIsAPropertyPanel.data.description" constraints="twocols(location=right;index=11;expandVertically=true;expandHorizontally=true)" localize="true" />
               </Panel>
             </Panel>
+            
             <Panel layout="border" borderTitle="Panel" constraints="border(location=west;index=0)">
               <Table iteratorClassName="org.openflexo.foundation.viewpoint.EditionAction" visibleRowCount="5" rowHeight="18" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="EditionSchemePanel.data.actions" constraints="border(location=center;index=0)" name="EditionActionTable" localize="true" manageDynamicModel="true">
                 <IconColumn data="controller.iconForObject(iterator)" title="icon" columnWidth="20" resizable="false" displayTitle="false" name="icon" />
@@ -848,6 +926,12 @@
     <Localized key="add_connector_action" lang="French">add_connector_action</Localized>
     <Localized key="add_individual" lang="French">Ajouter un individuel ontologique</Localized>
     <Localized key="add_integer" lang="French">add_integer</Localized>
+    <Localized key="read_only_label" lang="French">Label en lecture seule</Localized>
+    <Localized key="read_only_label" lang="English">Read only label</Localized>
+    <Localized key="skip_confirmation_panel_when_possible" lang="French">Ne pas afficher la boite de dialogue de confirmation</Localized>
+    <Localized key="skip_confirmation_panel_when_possible" lang="English">Skip confirmation panel when possible</Localized>
+    <Localized key="object_type" lang="French">Type d'objet</Localized>
+    <Localized key="object_type" lang="English">Object type</Localized>
   </LocalizedDictionary>
 </Panel>
 

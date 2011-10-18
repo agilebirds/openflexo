@@ -19,9 +19,10 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyObject;
+import org.openflexo.foundation.viewpoint.inspector.EditionPatternPathElement;
+import org.openflexo.foundation.viewpoint.inspector.InspectorDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
 
@@ -56,17 +57,20 @@ public class DropScheme extends EditionScheme {
 		this.target = target;
 	}
 
-	public OntologyClass getTargetClass()
+	public EditionPattern getTargetEditionPattern()
 	{
 		if (StringUtils.isEmpty(_getTarget())) {
 			return null;
 		}
-		return getOntologyLibrary().getClass(_getTarget());
+		if (getViewPointLibrary() != null)
+			return getViewPointLibrary().getEditionPattern(_getTarget());
+		return null;
 	}
 	
-	public void setTargetClass(OntologyClass targetClass)
+	public void setTargetEditionPattern(EditionPattern targetEditionPattern)
 	{
-		_setTarget(targetClass != null ? targetClass.getURI() : null);
+		_setTarget(targetEditionPattern != null ? targetEditionPattern.getURI() : null);
+		updateBindingModels();
 	}
 
 	public boolean isTopTarget()
@@ -92,13 +96,41 @@ public class DropScheme extends EditionScheme {
 		}
 	}
 	
-	public boolean isValidTarget(OntologyObject aTarget)
+	public boolean isValidTarget(EditionPattern aTarget)
 	{
-		if (getTargetClass() == null) {
-			return false;
-		}
-		return getTargetClass().isSuperConceptOf(aTarget);
+		return getTargetEditionPattern() == aTarget;
+		
 	}
 	
+	
+	@Override
+	protected void appendContextualBindingVariables(BindingModel bindingModel)
+	{
+		bindingModelNeedToBeRecomputed = false;
+		if (getTargetEditionPattern() != null)
+			bindingModel.addToBindingVariables(new EditionPatternPathElement<DropScheme>("target",getTargetEditionPattern(),this));
+		else if (_getTarget() != null && !_getTarget().equals("top")) {
+			logger.warning("Cannot find edition pattern "+_getTarget()+" !!!!!!!!!!!!!!");
+			bindingModelNeedToBeRecomputed = true;
+		}
+	}
+	
+	private boolean bindingModelNeedToBeRecomputed = false;
+
+	@Override
+	public BindingModel getBindingModel() 
+	{
+		if (bindingModelNeedToBeRecomputed) updateBindingModels();
+		return super.getBindingModel();
+	}
+		
+	@Override
+	public AddShape createAddShapeAction()
+	{
+		AddShape newAction = super.createAddShapeAction();
+		if (isTopTarget()) newAction.setContainer(new InspectorDataBinding("topLevel"));
+		return newAction;
+	}
+
 
 }

@@ -7,12 +7,12 @@
  Related dropping scheme automatically perform creation and recording of a new individual of
  BOTCompany type, with a Shape connected to it.</description>
     <DropScheme id="3" target="top" name="DropBOTCompanyAtTopLevel" skipConfirmationPanel="false">
-      <Parameter id="4" name="companyName" label="company_name" widget="TEXT_FIELD" defaultValue="enter company name here" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      <TextFieldParameter id="4" name="companyName" label="company_name" widget="TEXT_FIELD" defaultValue="enter company name here" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Allow to enter company name while dropping concept</description>
-      </Parameter>
-      <Parameter id="5" name="companyURI" label="uri" widget="TEXT_FIELD" defaultValue="MyCompany" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="companyName">
+      </TextFieldParameter>
+      <URIParameter id="5" name="companyURI" label="uri" widget="TEXT_FIELD" defaultValue="MyCompany" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="companyName">
         <description>Allow to enter (unique) individual name used in Ontology</description>
-      </Parameter>
+      </URIParameter>
       <AddIndividual id="6" individualName="companyURI" patternRole="company" conceptURI="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTCompany">
         <DataPropertyAssertion id="7" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#companyName" value="companyName" />
       </AddIndividual>
@@ -39,12 +39,12 @@ Related dropping scheme automatically perform creation and recording of a new in
 BOTDepartment type, with a Shape connected to it.</description>
     <DropScheme id="21" target="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTCompany" name="DropBOTDepartmentInBOTCompany" skipConfirmationPanel="false">
       <description>Creates new BOTDepartment inside a BOTCompany</description>
-      <Parameter id="22" name="departmentName" label="department_name" widget="TEXT_FIELD" defaultValue="enter department name here" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      <TextFieldParameter id="22" name="departmentName" label="department_name" widget="TEXT_FIELD" defaultValue="enter department name here" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Allow to enter department name while dropping concept</description>
-      </Parameter>
-      <Parameter id="23" name="departmentURI" label="uri" widget="TEXT_FIELD" defaultValue="MyDepartment" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="departmentName">
+      </TextFieldParameter>
+      <URIParameter id="23" name="departmentURI" label="uri" widget="TEXT_FIELD" defaultValue="MyDepartment" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="departmentName">
         <description>Allow to enter (unique) individual name used in Ontology</description>
-      </Parameter>
+      </URIParameter>
       <AddIndividual id="24" individualName="departmentURI" patternRole="department" conceptURI="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTDepartment">
         <DataPropertyAssertion id="25" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#name" value="departmentName" />
         <ObjectPropertyAssertion id="26" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isContainedIn" object="container" />
@@ -85,12 +85,12 @@ A BOTSubDepartment is contained in a BOTDepartment
 Related dropping scheme automatically perform creation and recording of a new individual of
 BOTSubDepartment type, with a Shape connected to it.</description>
     <DropScheme id="45" target="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTDepartment" name="DropBOTSubDepartmentInBOTDepartment" skipConfirmationPanel="false">
-      <Parameter id="46" name="subDepartmentName" label="sub_department_name" widget="TEXT_FIELD" defaultValue="enter sub-department name here" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      <TextFieldParameter id="46" name="subDepartmentName" label="sub_department_name" widget="TEXT_FIELD" defaultValue="enter sub-department name here" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>Allow to enter sub-department name while dropping concept</description>
-      </Parameter>
-      <Parameter id="47" name="subDepartmentURI" label="uri" widget="TEXT_FIELD" defaultValue="MySubDepartment" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="subDepartmentName">
+      </TextFieldParameter>
+      <URIParameter id="47" name="subDepartmentURI" label="uri" widget="TEXT_FIELD" defaultValue="MySubDepartment" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="subDepartmentName">
         <description>Allow to enter (unique) individual name used in Ontology</description>
-      </Parameter>
+      </URIParameter>
       <AddIndividual id="48" individualName="subDepartmentURI" patternRole="subDepartment" conceptURI="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTSubDepartment">
         <DataPropertyAssertion id="49" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#name" value="subDepartmentName" />
         <ObjectPropertyAssertion id="50" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isContainedIn" object="container" />
@@ -114,30 +114,30 @@ BOTSubDepartment type, with a Shape connected to it.</description>
   <EditionPattern id="63" name="Employee">
     <description>Allows to define concept of employee in a context of basic organization tree</description>
     <DropScheme id="64" target="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#OrganizationCell" name="DropEmployeeInOrganization" skipConfirmationPanel="false">
-      <Parameter id="65" name="roleName" label="role_name" widget="TEXT_FIELD" defaultValue="enter role name here" usePaletteLabelAsDefaultValue="true" uniqueURI="false">
+      <TextFieldParameter id="65" name="roleName" label="role_name" widget="TEXT_FIELD" defaultValue="enter role name here" usePaletteLabelAsDefaultValue="true" uniqueURI="false">
         <description>Allow to enter role name while dropping concept</description>
-      </Parameter>
-      <Parameter id="66" name="employeeURI" label="employee_uri" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="roleName">
+      </TextFieldParameter>
+      <URIParameter id="66" name="employeeURI" label="employee_uri" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="roleName">
         <description>Allow to enter (unique) individual name used in Ontology</description>
-      </Parameter>
-      <Parameter id="67" name="isManager" label="is_manager" widget="CHECKBOX" defaultValue="false" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      </URIParameter>
+      <CheckBoxParameter id="67" name="isManager" label="is_manager" widget="CHECKBOX" defaultValue="false" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>When set to true, indicates that created employee concept will address a manager</description>
-      </Parameter>
-      <Parameter id="68" name="isHeadOfOrganization" label="is_head_of_organization" widget="CHECKBOX" defaultValue="false" usePaletteLabelAsDefaultValue="false" uniqueURI="false" conditional="isManager=true">
+      </CheckBoxParameter>
+      <CheckBoxParameter id="68" name="isHeadOfOrganization" label="is_head_of_organization" widget="CHECKBOX" defaultValue="false" usePaletteLabelAsDefaultValue="false" uniqueURI="false" conditional="isManager=true">
         <description>When set to true, indicates that created employee is at the head of current organization cell</description>
-      </Parameter>
-      <Parameter id="69" name="assignPerson" label="assign_employee" widget="CHECKBOX" defaultValue="false" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      </CheckBoxParameter>
+      <CheckBoxParameter id="69" name="assignPerson" label="assign_employee" widget="CHECKBOX" defaultValue="false" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>When set to true, indicates that created employee concept will be assigned to a given person</description>
-      </Parameter>
-      <Parameter id="70" name="employeeFirstName" label="employee_first_name" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false" conditional="assignPerson=true">
+      </CheckBoxParameter>
+      <TextFieldParameter id="70" name="employeeFirstName" label="employee_first_name" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false" conditional="assignPerson=true">
         <description>Employee first name</description>
-      </Parameter>
-      <Parameter id="71" name="employeeLastName" label="employee_last_name" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false" conditional="assignPerson=true">
+      </TextFieldParameter>
+      <TextFieldParameter id="71" name="employeeLastName" label="employee_last_name" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false" conditional="assignPerson=true">
         <description>Employee last name</description>
-      </Parameter>
-      <Parameter id="72" name="personURI" label="person_uri" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="employeeFirstName+employeeLastName" conditional="assignPerson=true">
+      </TextFieldParameter>
+      <URIParameter id="72" name="personURI" label="person_uri" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="employeeFirstName+employeeLastName" conditional="assignPerson=true">
         <description>Allow to enter (unique) individual name used in Ontology</description>
-      </Parameter>
+      </URIParameter>
       <AddIndividual id="73" individualName="employeeURI" patternRole="employeeAsManager" conditional="isManager=true" conceptURI="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl#BOTManager">
         <DataPropertyAssertion id="74" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#roleName" value="roleName" />
         <ObjectPropertyAssertion id="75" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#worksIn" object="container" />
@@ -188,9 +188,9 @@ BOTSubDepartment type, with a Shape connected to it.</description>
   <EditionPattern id="111" name="EmployeeHierarchicalRelationship">
     <description>Allows to define hierarchical relationship between two employees</description>
     <LinkScheme id="112" fromTarget="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#Manager" toTarget="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#OrganizationEmployee" name="LinkTwoEmployeesByHierarchicalRelationship" skipConfirmationPanel="false">
-      <Parameter id="113" name="makeInverseRelationship" label="make_inverse_relationship" widget="CHECKBOX" defaultValue="true" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
+      <CheckBoxParameter id="113" name="makeInverseRelationship" label="make_inverse_relationship" widget="CHECKBOX" defaultValue="true" usePaletteLabelAsDefaultValue="false" uniqueURI="false">
         <description>When set to true, indicates that inverse relationship must be defined</description>
-      </Parameter>
+      </CheckBoxParameter>
       <AddObjectPropertyStatement id="114" object="toTarget" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isResponsibleOf" patternRole="isResponsibleOf" subject="fromTarget" />
       <AddObjectPropertyStatement id="115" object="fromTarget" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isUnderResponsabilityOf" patternRole="isUnderResponsabilityOf" conditional="makeInverseRelationship=true" subject="toTarget" />
       <AddConnector id="116" patternRole="connector" />

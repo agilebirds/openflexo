@@ -23,9 +23,8 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
-import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.antar.binding.DefaultBindingFactory;
+import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
@@ -168,12 +167,6 @@ public class EditionPatternInspector extends ViewPointObject implements Bindable
 	}
 	
 	@Override
-	public BindingFactory getBindingFactory() 
-	{
-		return BINDING_FACTORY;
-	}
-	
-	@Override
 	public BindingModel getBindingModel() 
 	{
 			if (_bindingModel == null) createBindingModel();
@@ -191,10 +184,8 @@ public class EditionPatternInspector extends ViewPointObject implements Bindable
 	{
 		_bindingModel = new BindingModel();
 		for (PatternRole role : getEditionPattern().getPatternRoles()) {
-			_bindingModel.addToBindingVariables(PatternRolePathElement.makePatternRolePathElement(role));
+			_bindingModel.addToBindingVariables(PatternRolePathElement.makePatternRolePathElement(role,(EditionPatternInstance)null));
 		}	
 	}
-
-	private static DefaultBindingFactory BINDING_FACTORY = new EditionPatternInspectorBindingFactory();
 
  }

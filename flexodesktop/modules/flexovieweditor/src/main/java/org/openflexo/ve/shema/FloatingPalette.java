@@ -58,22 +58,15 @@ import org.openflexo.fge.notifications.ObjectResized;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEPaintManager;
 import org.openflexo.fge.view.ShapeView;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.view.ViewConnector;
 import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.AddConnector;
 import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.foundation.view.action.LinkSchemeAction;
-import org.openflexo.foundation.viewpoint.AddConcept;
 import org.openflexo.foundation.viewpoint.DropScheme;
-import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.LinkScheme;
-import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
-import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.ShapePatternRole;
 import org.openflexo.localization.FlexoLocalization;
 
 public class FloatingPalette extends ControlArea<FGERoundRectangle> implements Observer {
@@ -355,12 +348,12 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 			// Lets look if we match a CalcPaletteConnector
 			final ViewShape from = shapeGR.getDrawable();
 			if (from.getShema().getCalc() != null
-					&& from.getLinkedConcept() instanceof OntologyObject 
-					&& to.getLinkedConcept() instanceof OntologyObject ) {
+					&& from.getEditionPattern() != null 
+					&& to.getEditionPattern() != null ) {
 				availableConnectors = 
 					from.getShema().getCalc().getConnectorsMatching(
-							(OntologyObject)from.getLinkedConcept(),
-							(OntologyObject)to.getLinkedConcept());
+							from.getEditionPattern(),
+							to.getEditionPattern());
 
 			}
 
@@ -453,28 +446,8 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 	private Vector<DropScheme> findCompatibleDropSchemes(LinkScheme linkScheme)
 	{
 		Vector<DropScheme> dropSchemes = new Vector<DropScheme>();
-		OntologyClass targetClass = linkScheme.getToTargetClass();
-		
-		// Find a DropScheme that handle a shape bound to an ontologic object of right class
-		for (EditionPattern ep : linkScheme.getCalc().getEditionPatterns()) {
-			for (PatternRole role : ep.getPatternRoles()) {
-				if (role instanceof ShapePatternRole 
-						&& ((ShapePatternRole)role).getBoundPatternRole() != null
-						&& ((ShapePatternRole)role).getBoundPatternRole() instanceof OntologicObjectPatternRole) {
-					// This is a good candidate, but...
-					for (DropScheme ds : ep.getDropSchemes()) {
-						EditionAction action = ds.getAction(((ShapePatternRole)role).getBoundPatternRole());
-						if (action instanceof AddConcept 
-								&& targetClass.isSuperConceptOf(((AddConcept)action).getOntologyClass())) {
-							dropSchemes.add(ds);
-						}
-					}
-				}
-			}
-		}
-		return dropSchemes;
-		
-		//	Vector<DropScheme> dropSchemes 
+		EditionPattern targetEditionPattern = linkScheme.getToTargetEditionPattern();
+		return targetEditionPattern.getDropSchemes();
 	}
 	
 	private void resetVariables() {

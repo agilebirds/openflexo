@@ -8,15 +8,25 @@ import org.openflexo.antar.binding.DefaultBindingFactory;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
 
-public final class EditionPatternInspectorBindingFactory extends DefaultBindingFactory 
+public final class EditionPatternBindingFactory extends DefaultBindingFactory 
 {
 	private static List<BindingPathElement> EMPTY_LIST = new ArrayList<BindingPathElement>();
 
 	@Override
 	public BindingPathElement getBindingPathElement(BindingPathElement father, String propertyName) 
 	{
-		if (father instanceof EditionPatternPathElement) {
-			EditionPattern ep = ((EditionPatternPathElement) father).editionPattern;
+		if (father instanceof EditionPatternInstancePathElement) {
+			EditionPattern ep = ((EditionPatternInstancePathElement) father).getEditionPattern();
+			PatternRole pr = ep.getPatternRole(propertyName);
+			if (pr != null) {
+				return ((EditionPatternInstancePathElement) father).getPatternRolePathElement(pr);
+			}
+			else {
+				InspectorEntry.logger.warning("Not found pattern role: "+propertyName);
+			}
+		}
+		else if (father instanceof EditionPatternPathElement) {
+			EditionPattern ep = ((EditionPatternPathElement) father).getEditionPattern();
 			PatternRole pr = ep.getPatternRole(propertyName);
 			if (pr != null) {
 				return ((EditionPatternPathElement) father).getPatternRolePathElement(pr);
@@ -26,7 +36,7 @@ public final class EditionPatternInspectorBindingFactory extends DefaultBindingF
 			}
 		}
 		else if (father instanceof PatternRolePathElement) {
-			for (BindingPathElement prop : ((PatternRolePathElement<?>)father).getAllProperties()) {
+			for (BindingPathElement prop : ((PatternRolePathElement<?,?>)father).getAllProperties()) {
 				if (prop.getLabel().equals(propertyName)) return prop;
 			}
 			return null;
@@ -37,13 +47,28 @@ public final class EditionPatternInspectorBindingFactory extends DefaultBindingF
 			}
 			return null;
 		}
+		else if (father instanceof EditionSchemeParameterListPathElement) {
+			for (BindingPathElement prop : ((EditionSchemeParameterListPathElement)father).getAllProperties()) {
+				if (prop.getLabel().equals(propertyName)) return prop;
+			}
+			return null;
+		}
+		else if (father instanceof GraphicalElementPathElement) {
+			for (BindingPathElement prop : ((GraphicalElementPathElement<?>)father).getAllProperties()) {
+				if (prop.getLabel().equals(propertyName)) return prop;
+			}
+			return null;
+		}
 		return super.getBindingPathElement(father, propertyName);
 	}
 
 	@Override
 	public List<? extends BindingPathElement> getAccessibleBindingPathElements(BindingPathElement father) 
 	{
-		if (father instanceof EditionPatternPathElement) {
+		if (father instanceof EditionPatternInstancePathElement) {
+			return ((EditionPatternInstancePathElement) father).getAllPatternRoleElements();
+		}
+		else if (father instanceof EditionPatternPathElement) {
 			return ((EditionPatternPathElement) father).getAllPatternRoleElements();
 		}
 		else if (father instanceof PatternRolePathElement) {
@@ -52,19 +77,34 @@ public final class EditionPatternInspectorBindingFactory extends DefaultBindingF
 		else if (father instanceof StatementPathElement) {
 			return ((StatementPathElement) father).getAllProperties();
 		}
+		else if (father instanceof EditionSchemeParameterListPathElement) {
+			return ((EditionSchemeParameterListPathElement) father).getAllProperties();
+		}
+		else if (father instanceof GraphicalElementPathElement) {
+			return ((GraphicalElementPathElement) father).getAllProperties();
+		}
 		return super.getAccessibleBindingPathElements(father);
 	}
 	
 	@Override
 	public List<? extends BindingPathElement> getAccessibleCompoundBindingPathElements(BindingPathElement father) 
 	{
-		if (father instanceof EditionPatternPathElement) {
+		if (father instanceof EditionPatternInstancePathElement) {
+			return EMPTY_LIST;
+		}
+		else if (father instanceof EditionPatternPathElement) {
 			return EMPTY_LIST;
 		}
 		else if (father.getType() instanceof PatternRolePathElement) {
 			return EMPTY_LIST;
 		}
 		else if (father.getType() instanceof StatementPathElement) {
+			return EMPTY_LIST;
+		}
+		else if (father.getType() instanceof EditionSchemeParameterListPathElement) {
+			return EMPTY_LIST;
+		}
+		else if (father.getType() instanceof GraphicalElementPathElement) {
 			return EMPTY_LIST;
 		}
 		return super.getAccessibleCompoundBindingPathElements(father);

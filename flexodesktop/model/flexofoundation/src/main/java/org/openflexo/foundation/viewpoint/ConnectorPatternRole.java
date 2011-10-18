@@ -1,5 +1,6 @@
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.foundation.view.ViewConnector;
 import org.openflexo.localization.FlexoLocalization;
 
 public class ConnectorPatternRole extends GraphicalElementPatternRole {
@@ -82,8 +83,8 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole {
 					AddConnector addConnector = (AddConnector)action;
 					for (PatternRole r : getEditionPattern().getPatternRoles()) {
 						if ((r instanceof ShapePatternRole)
-								&& (addConnector._getFromShape() != null) 
-								&& addConnector._getFromShape().equals(r.getPatternRoleName())) {
+								&& (addConnector.getFromShape() != null) 
+								&& addConnector.getFromShape().toString().equals(r.getPatternRoleName())) {
 							return (ShapePatternRole)r;
 						}
 					}
@@ -102,8 +103,8 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole {
 					AddConnector addConnector = (AddConnector)action;
 					for (PatternRole r : getEditionPattern().getPatternRoles()) {
 						if ((r instanceof ShapePatternRole)
-								&& (addConnector._getToShape() != null) 
-								&& addConnector._getToShape().equals(r.getPatternRoleName())) {
+								&& (addConnector.getToShape() != null) 
+								&& addConnector.getToShape().toString().equals(r.getPatternRoleName())) {
 							return (ShapePatternRole)r;
 						}
 					}
@@ -114,9 +115,10 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole {
 		return null;
 	}
 	
+	@Override
 	public Class<?> getAccessedClass()
 	{
-		return Object.class;
+		return ViewConnector.class;
 	}
 	
 }
