@@ -30,17 +30,9 @@ import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 
 import org.openflexo.fge.geom.FGEDimension;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
-import org.openflexo.selection.FlexoClipboard;
-import org.openflexo.selection.PastingGraphicalContext;
-import org.openflexo.toolbox.FileUtils;
-import org.openflexo.view.controller.FlexoController;
-import org.openflexo.wkf.processeditor.ProcessEditorConstants;
-import org.openflexo.xmlcode.XMLSerializable;
-
-
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.RepresentableFlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -71,6 +63,12 @@ import org.openflexo.foundation.wkf.ws.NewPort;
 import org.openflexo.foundation.wkf.ws.OutPort;
 import org.openflexo.foundation.wkf.ws.PortRegistery;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.selection.FlexoClipboard;
+import org.openflexo.selection.PastingGraphicalContext;
+import org.openflexo.toolbox.FileUtils;
+import org.openflexo.view.controller.FlexoController;
+import org.openflexo.wkf.processeditor.ProcessEditorConstants;
+import org.openflexo.xmlcode.XMLSerializable;
 
 /**
  * WKFClipboard is intented to be the object working with the
@@ -127,14 +125,15 @@ public class WKFClipboard extends FlexoClipboard {
 			return super.performSelectionPaste();
 			// }
 		} else {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Sorry, PASTE disabled");
+			}
 			return false;
 		}
 	}
 
 	@Override
-	protected void performSelectionPaste(FlexoModelObject pastingContext, PastingGraphicalContext graphicalContext) 
+	protected void performSelectionPaste(FlexoModelObject pastingContext, PastingGraphicalContext graphicalContext)
 	{
 		logger.info("performSelectionPaste() with context "+pastingContext);
 
@@ -147,8 +146,9 @@ public class WKFClipboard extends FlexoClipboard {
 				location = graphicalContext.pastingLocation;
 			}
 		}
-		if (location==null)
+		if (location==null) {
 			location = new Point2D.Double();
+		}
 
 		if (pastingContext instanceof PetriGraphNode) {
 			pastingContext = ((PetriGraphNode) pastingContext).getParentPetriGraph();
@@ -156,16 +156,18 @@ public class WKFClipboard extends FlexoClipboard {
 			pastingContext = ((WKFArtefact) pastingContext).getParentPetriGraph();
 		}
 		if (isTargetValidForPasting(pastingContext)) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Paste is legal");
+			}
 			getSelectionManager().resetSelection();
 
 			XMLSerializable pasted = null;
 			try {
 				pasted = _clipboardData.cloneUsingXMLMapping();
 			} catch (Exception ex) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Unexpected exception raised during pasting: " + ex.getMessage());
+				}
 				ex.printStackTrace();
 				return;
 			}
@@ -174,7 +176,7 @@ public class WKFClipboard extends FlexoClipboard {
 				Vector<WKFObject> newSelection = pasteNodeCompound((WKFObject)pastingContext, (NodeCompound)pasted, location);
 				getWKFController().getSelectionManager().setSelectedObjects(newSelection);
 			}
-			
+
 			else if (pasted instanceof RoleCompound && pastingContext instanceof RoleList) {
 				Vector<Role> newSelection = pasteRoleCompound((RoleList)pastingContext, (RoleCompound)pasted, location);
 				getWKFController().getSelectionManager().setSelectedObjects(newSelection);
@@ -191,7 +193,7 @@ public class WKFClipboard extends FlexoClipboard {
 		}
 	}
 
-	protected Vector<WKFObject> pasteNodeCompound(WKFObject pastingContext, NodeCompound pastedCompound, Point2D location) 
+	protected Vector<WKFObject> pasteNodeCompound(WKFObject pastingContext, NodeCompound pastedCompound, Point2D location)
 	{
 
 		WKFObject container = pastingContext;
@@ -206,8 +208,9 @@ public class WKFClipboard extends FlexoClipboard {
 		FGERectangle bounds = new FGERectangle(new FGEPoint(location), new FGEDimension(0, 0), Filling.FILLED);
 		for (Enumeration<WKFObject> e = compound.getAllEmbeddedWKFObjects().elements(); e.hasMoreElements();) {
 			WKFObject node = e.nextElement();
-			if (node == compound)
+			if (node == compound) {
 				continue;
+			}
 			bounds.width = Math.max(bounds.width,node.getX(context)+node.getWidth(context)-bounds.x);
 			bounds.height = Math.max(bounds.height,node.getY(context)+node.getHeight(context)-bounds.y);
 		}
@@ -220,20 +223,21 @@ public class WKFClipboard extends FlexoClipboard {
 		process.setHeight(processBounds.height, context);
 		for (Enumeration<WKFObject> e = compound.getAllEmbeddedWKFObjects().elements(); e.hasMoreElements();) {
 			WKFObject node = e.nextElement();
-			if (node == compound)
+			if (node == compound) {
 				continue;
+			}
 			insertWKFObject(node, container);
 			newSelection.add(node);
 		}
-		
+
 		return newSelection;
 
 	}
 
-	protected Vector<Role> pasteRoleCompound(RoleList pastingContext, RoleCompound pastedCompound, Point2D location) 
+	protected Vector<Role> pasteRoleCompound(RoleList pastingContext, RoleCompound pastedCompound, Point2D location)
 	{
 		pastedCompound.setLocation(location, RepresentableFlexoModelObject.DEFAULT);
-		
+
 		Vector<Role> newSelection = new Vector<Role>();
 		FGERectangle bounds = new FGERectangle(new FGEPoint(location), new FGEDimension(0, 0), Filling.FILLED);
 		for (Enumeration<Role> e = pastedCompound.getRoles().elements(); e.hasMoreElements();) {
@@ -250,7 +254,7 @@ public class WKFClipboard extends FlexoClipboard {
 			insertRole(role, pastingContext);
 			newSelection.add(role);
 		}
-		
+
 		return newSelection;
 
 	}
@@ -276,8 +280,8 @@ public class WKFClipboard extends FlexoClipboard {
 			}
 		}
 	}
-	
-	public void insertWKFObject(WKFObject toInsert, WKFObject container) 
+
+	public void insertWKFObject(WKFObject toInsert, WKFObject container)
 	{
 		if (toInsert instanceof FlexoPort) {
 			FlexoPort port = (FlexoPort) toInsert;
@@ -298,34 +302,42 @@ public class WKFClipboard extends FlexoClipboard {
 				else if (port instanceof InOutPort) {
 					action = AddPort.createInOutPort.makeNewAction(container, null, getWKFController().getEditor());
 				}
-				action.setNewPortName((port).getDefaultName());
+				action.setNewPortName(port.getDefaultName());
 				action.setEditNodeLabel(false);
 				action.doAction();
 			}
 		} else {
 			FlexoPetriGraph pg = null;
-			if (container instanceof SelfExecutableNode)
+			if (container instanceof SelfExecutableNode) {
 				pg = ((SelfExecutableNode) container).getExecutionPetriGraph();
-			if (container instanceof FlexoProcess)
+			}
+			if (container instanceof FlexoProcess) {
 				pg = ((FlexoProcess) container).getActivityPetriGraph();
-			if (container instanceof AbstractActivityNode)
+			}
+			if (container instanceof AbstractActivityNode) {
 				pg = ((AbstractActivityNode) container).getOperationPetriGraph();
-			if (container instanceof OperationNode)
+			}
+			if (container instanceof OperationNode) {
 				pg = ((OperationNode) container).getActionPetriGraph();
-			if (container instanceof LOOPOperator)
+			}
+			if (container instanceof LOOPOperator) {
 				pg = ((LOOPOperator) container).getExecutionPetriGraph();
-			if (container instanceof FlexoPetriGraph)
+			}
+			if (container instanceof FlexoPetriGraph) {
 				pg = (FlexoPetriGraph) container;
-			if (container instanceof WKFGroup)
+			}
+			if (container instanceof WKFGroup) {
 				pg = ((WKFGroup) container).getParentPetriGraph();
+			}
 			if (pg!=null) {
 				DropWKFElement action = DropWKFElement.actionType.makeNewAction(pg, null, getWKFController().getEditor());
 				action.setObject(toInsert);
 				action.setResetNodeName(false);
 				action.setEditNodeLabel(false);
 				action.setLeaveSubProcessNodeUnchanged(true);
-				if (container instanceof WKFGroup)
+				if (container instanceof WKFGroup) {
 					action.setGroup((WKFGroup) container);
+				}
 				action.doAction();
 			}
 		}
@@ -333,7 +345,7 @@ public class WKFClipboard extends FlexoClipboard {
 
 	@Override
 	protected boolean isCurrentSelectionValidForCopy(Vector<FlexoModelObject> currentlySelectedObjects) {
-		return (getSelectionManager().getSelectionSize() > 0);
+		return getSelectionManager().getSelectionSize() > 0;
 	}
 
 	protected void resetClipboard() {
@@ -368,8 +380,9 @@ public class WKFClipboard extends FlexoClipboard {
 				FlexoProcess process = null;
 				for (Enumeration<FlexoModelObject> e = currentlySelectedObjects.elements(); e.hasMoreElements();) {
 					FlexoModelObject next = e.nextElement();
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Selected: " + next);
+					}
 					if (next instanceof PetriGraphNode ) {
 						PetriGraphNode node = (PetriGraphNode) next;
 						process = node.getProcess();
@@ -404,7 +417,8 @@ public class WKFClipboard extends FlexoClipboard {
 		}
 
 		if (_clipboardData != null) {
-			logger.fine("Storing in clipboard: " + _clipboardData.getXMLRepresentation());
+			// Call XMLRepresentation can be tricky because it trigger XML encoding and later some issues with FlexoID's
+			// logger.fine("Storing in clipboard: " + _clipboardData.getXMLRepresentation());
 		}
 		else {
 			logger.warning("null value in clipboard ! ");
@@ -412,24 +426,26 @@ public class WKFClipboard extends FlexoClipboard {
 		return true;
 	}
 
-	protected boolean isTargetValidForPasting(FlexoModelObject pastingContext) 
+	protected boolean isTargetValidForPasting(FlexoModelObject pastingContext)
 	{
-		if (pastingContext == null)
+		if (pastingContext == null) {
 			return false;
+		}
 		if (_clipboardData instanceof NodeCompound) {
 			if (pastingContext instanceof PortRegistery) {
 				return ((NodeCompound)_clipboardData).getLevel() == FlexoLevel.PORT;
 			} else {
 				FlexoPetriGraph targetPetriGraph = null;
-				if (pastingContext instanceof FlexoProcess)
+				if (pastingContext instanceof FlexoProcess) {
 					targetPetriGraph = ((FlexoProcess) pastingContext).getActivityPetriGraph();
-				else if (pastingContext instanceof FlexoPetriGraph)
+				} else if (pastingContext instanceof FlexoPetriGraph) {
 					targetPetriGraph = (FlexoPetriGraph) pastingContext;
-				else if (pastingContext instanceof WKFGroup)
+				} else if (pastingContext instanceof WKFGroup) {
 					targetPetriGraph = ((WKFGroup)pastingContext).getParentPetriGraph();
-				else {
-					if (logger.isLoggable(Level.INFO))
+				} else {
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Cannot paste into " + pastingContext.getClass().getName());
+					}
 				}
 				if (targetPetriGraph != null) {
 					return targetPetriGraph.acceptsObject((NodeCompound)_clipboardData);
@@ -437,8 +453,11 @@ public class WKFClipboard extends FlexoClipboard {
 			}
 		}
 		else if (_clipboardData instanceof RoleCompound) {
-			if (pastingContext instanceof RoleList) return true;
-			else if (pastingContext instanceof Role) return true;
+			if (pastingContext instanceof RoleList) {
+				return true;
+			} else if (pastingContext instanceof Role) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -453,13 +472,15 @@ public class WKFClipboard extends FlexoClipboard {
 					try {
 						FileUtils.saveToFile(newPaletteElementName, compound.getFirstNode().getXMLRepresentation(), paletteDirectory);
 					} catch (Exception e) {
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Error occurs while saving node in the palette\n" + e.getMessage());
+						}
 					}
 				}
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Sorry, but you can't export more than one top level node in the palette");
+				}
 			}
 		}
 	}
