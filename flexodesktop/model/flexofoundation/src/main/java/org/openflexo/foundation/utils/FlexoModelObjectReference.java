@@ -19,6 +19,8 @@
  */
 package org.openflexo.foundation.utils;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,17 +36,21 @@ import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
 public class FlexoModelObjectReference<O extends FlexoModelObject> extends FlexoObject implements
-StringConvertable, ResourceLoadingListener {
+StringConvertable,
+ResourceLoadingListener, PropertyChangeListener {
 
 	private static final Logger logger = FlexoLogger
-	.getLogger(FlexoModelObjectReference.class.getPackage().getName());
+			.getLogger(FlexoModelObjectReference.class.getPackage().getName());
 
 	public static interface ReferenceOwner {
 
-		public void notifyObjectLoaded(FlexoModelObjectReference reference);
-		public void objectCantBeFound(FlexoModelObjectReference reference);
-		public void objectDeleted(FlexoModelObjectReference reference);
-		public void objectSerializationIdChanged(FlexoModelObjectReference reference);
+		public void notifyObjectLoaded(FlexoModelObjectReference<?> reference);
+
+		public void objectCantBeFound(FlexoModelObjectReference<?> reference);
+
+		public void objectDeleted(FlexoModelObjectReference<?> reference);
+
+		public void objectSerializationIdChanged(FlexoModelObjectReference<?> reference);
 	}
 
 	public enum ReferenceStatus {
@@ -77,6 +83,8 @@ StringConvertable, ResourceLoadingListener {
 	private boolean serializeClassName = false;
 
 	private ReferenceStatus status =  ReferenceStatus.UNRESOLVED;
+
+	private FlexoXMLStorageResource resource;
 
 	public FlexoModelObjectReference(FlexoProject project, O object) {
 		this.project = project;
@@ -114,12 +122,11 @@ StringConvertable, ResourceLoadingListener {
 				this.className = s[2];
 				serializeClassName = true;
 			}
-			if (getResource()!=null) {
-				getResource().addResourceLoadingListener(this);
-			} else
+			if (getResource() == null) {
 				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Resource with id "+resourceIdentifier+" cannot be found! I doubt I will resolve the following object: "+modelObjectIdentifier);
 				}
+			}
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (RuntimeException e) {
@@ -130,6 +137,7 @@ StringConvertable, ResourceLoadingListener {
 	public void delete() {
 		if (getResource()!=null) {
 			getResource().removeResourceLoadingListener(this);
+			getResource().getPropertyChangeSupport().removePropertyChangeListener("name", this);
 		}
 		if (modelObject!=null) {
 			modelObject.removeFromReferencers(this);
@@ -175,7 +183,7 @@ StringConvertable, ResourceLoadingListener {
 				if (modelObject!=null) {
 					status = ReferenceStatus.RESOLVED;
 					owner.notifyObjectLoaded(this);
-				} else if (getResource()==null || (getResource().isLoaded() && !getResource().getIsLoading())) {
+				} else if (getResource()==null || getResource().isLoaded() && !getResource().getIsLoading()) {
 					if (getResource()==null) {
 						status = ReferenceStatus.RESOURCE_NOT_FOUND;
 					} else {
@@ -218,7 +226,14 @@ StringConvertable, ResourceLoadingListener {
 		if (resourceIdentifier==null || project==null) {
 			return null;
 		}
-		return (FlexoXMLStorageResource) project.resourceForKey(resourceIdentifier) ;
+		if (resource == null) {
+			resource = (FlexoXMLStorageResource) project.resourceForKey(resourceIdentifier);
+			if (resource != null) {
+				resource.addResourceLoadingListener(this);
+				resource.getPropertyChangeSupport().addPropertyChangeListener("name", this);
+			}
+		}
+		return resource ;
 	}
 
 	@Override
@@ -299,5 +314,15 @@ StringConvertable, ResourceLoadingListener {
 			status = ReferenceStatus.RESOURCE_NOT_FOUND;
 		}
 		return status;
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() == resource && "name".equals(evt.getPropertyName())) {
+			resourceIdentifier = resource.getResourceIdentifier();
+			if (getOwner() != null) {
+				getOwner().objectSerializationIdChanged(this);
+			}
+		}
 	}
 }

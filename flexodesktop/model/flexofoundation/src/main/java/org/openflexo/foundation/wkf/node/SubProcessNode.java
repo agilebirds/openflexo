@@ -30,6 +30,7 @@ import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.help.ApplicationHelpEntryPoint;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceOwner;
 import org.openflexo.foundation.validation.DeletionFixProposal;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
@@ -58,542 +59,610 @@ import org.openflexo.foundation.wkf.ws.ServiceInterface;
  * @author sguerin
  *
  */
-public abstract class SubProcessNode extends AbstractActivityNode implements ApplicationHelpEntryPoint
+public abstract class SubProcessNode extends AbstractActivityNode implements ApplicationHelpEntryPoint, ReferenceOwner
 {
 
 	protected static final boolean forceWSCallConsistency = false;
 
-    private static final Logger logger = Logger.getLogger(SubProcessNode.class.getPackage()
-            .getName());
+	private static final Logger logger = Logger.getLogger(SubProcessNode.class.getPackage()
+			.getName());
 
-    protected FlexoProcess _subProcess;
+	protected FlexoProcess _subProcess;
 
-    	//serialized. If null, then the serviceInterface to use is the DefaultServiceInterface
-    private ServiceInterface _serviceInterface;
+	//serialized. If null, then the serviceInterface to use is the DefaultServiceInterface
+	private ServiceInterface _serviceInterface;
 
-    private PortMapRegistery _portMapRegistery;
+	private PortMapRegistery _portMapRegistery;
 
-    private boolean displaySubProcessImage = false;
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	private boolean displaySubProcessImage = false;
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    /**
-     * Default constructor
-     */
-    public SubProcessNode(FlexoProcess process)
-    {
-        super(process);
-    }
+	/**
+	 * Default constructor
+	 */
+	public SubProcessNode(FlexoProcess process)
+	{
+		super(process);
+	}
 
-    @Override
+	@Override
 	public String getName()
 	{
 		return super.getName();
 	}
-    /**
-     * Dynamic constructor with ServiceInterface...
-     */
-    public SubProcessNode(FlexoProcess process, ServiceInterface _interface)
-    {
-        this(process);
-        setServiceInterface(_interface);
-    }
+	/**
+	 * Dynamic constructor with ServiceInterface...
+	 */
+	public SubProcessNode(FlexoProcess process, ServiceInterface _interface)
+	{
+		this(process);
+		setServiceInterface(_interface);
+	}
 
-    /**
-     * Overrides delete
-     *
-     * @see org.openflexo.foundation.wkf.node.AbstractActivityNode#delete()
-     */
-    @Override
-    public void delete()
-    {
-        super.delete();
-        if (getServiceInterface()!=null) {
-        	setServiceInterface(null);
-        }
-        if (getSubProcess()!=null)
-        	getSubProcess().removeFromSubProcessNodes(this);
-        if (_portMapRegistery != null)
-            _portMapRegistery.delete();
-    }
+	/**
+	 * Overrides delete
+	 *
+	 * @see org.openflexo.foundation.wkf.node.AbstractActivityNode#delete()
+	 */
+	@Override
+	public void delete()
+	{
+		super.delete();
+		if (getServiceInterface()!=null) {
+			setServiceInterface(null);
+		}
+		if (getSubProcess()!=null) {
+			getSubProcess().removeFromSubProcessNodes(this);
+		}
+		if (_portMapRegistery != null) {
+			_portMapRegistery.delete();
+		}
+	}
 
-   @Override
-   protected Vector<FlexoActionType> getSpecificActionListForThatClass()
-    {
-         Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-         returned.add(OpenEmbeddedProcess.actionType);
-         returned.add(ShowHidePortmapRegistery.actionType);
-         return returned;
-    }
+	@Override
+	protected Vector<FlexoActionType> getSpecificActionListForThatClass()
+	{
+		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
+		returned.add(OpenEmbeddedProcess.actionType);
+		returned.add(ShowHidePortmapRegistery.actionType);
+		return returned;
+	}
 
-   public boolean isAcceptableAsSubProcess(FlexoProcess aProcess)
-    {
-        if (aProcess == null)
-            return true; // Null value is allowed in the context of edition
-        return isAcceptableAsSubProcess(aProcess, aProcess.getParentProcess());
+	public boolean isAcceptableAsSubProcess(FlexoProcess aProcess)
+	{
+		if (aProcess == null)
+		{
+			return true; // Null value is allowed in the context of edition
+		}
+		return isAcceptableAsSubProcess(aProcess, aProcess.getParentProcess());
 
-    }
+	}
 
-    public boolean isAcceptableAsSubProcess(FlexoProcess aProcess, FlexoProcess parentProcess)
-    {
-    	if(parentProcess!=null && parentProcess.isImported()) return false;
-    	if(aProcess.isImported()) return aProcess.isTopLevelProcess();
+	public boolean isAcceptableAsSubProcess(FlexoProcess aProcess, FlexoProcess parentProcess)
+	{
+		if(parentProcess!=null && parentProcess.isImported()) {
+			return false;
+		}
+		if(aProcess.isImported()) {
+			return aProcess.isTopLevelProcess();
+		}
 
-        if (parentProcess == null) {
-            return /*!aProcess.isRootProcess()*/true;// Allowed to invoke the root process
-        } else {
-            return parentProcess.isAncestorOf(getProcess());
-        }
-    }
+		if (parentProcess == null) {
+			return /*!aProcess.isRootProcess()*/true;// Allowed to invoke the root process
+		} else {
+			return parentProcess.isAncestorOf(getProcess());
+		}
+	}
 
-    @Override
-    public boolean isAccessible() {
-    	boolean b = super.isAccessible();
-    	if (b)
-    		return true;
-    	else {
-    		if (getPortMapRegistery()!=null) {
-    			for(FlexoPortMap portMap:getPortMapRegistery().getPortMaps()) {
-    				if (portMap.getIncomingPostConditions().size()>0)
-    					return true;
-    			}
-    		}
-    	}
-    	return false;
-    }
+	@Override
+	public boolean isAccessible() {
+		boolean b = super.isAccessible();
+		if (b) {
+			return true;
+		} else {
+			if (getPortMapRegistery()!=null) {
+				for(FlexoPortMap portMap:getPortMapRegistery().getPortMaps()) {
+					if (portMap.getIncomingPostConditions().size()>0) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
 
-    // Used when serializing
-    public FlexoModelObjectReference<FlexoProcess> getSubProcessReference()
-    {
-    	if (getSubProcess()!=null)
-    		return new FlexoModelObjectReference<FlexoProcess>(getProject(), getSubProcess());
-    	else {
-    		return _deserializedReference;
-    	}
-    }
+	// Used when serializing
+	public FlexoModelObjectReference<FlexoProcess> getSubProcessReference()
+	{
+		if (getSubProcess()!=null) {
+			return new FlexoModelObjectReference<FlexoProcess>(getProject(), getSubProcess());
+		} else {
+			return _deserializedReference;
+		}
+	}
 
-    private FlexoModelObjectReference<FlexoProcess> _deserializedReference;
+	private FlexoModelObjectReference<FlexoProcess> _deserializedReference;
 
-    // Used when deserializing
-    public void setSubProcessReference(FlexoModelObjectReference<FlexoProcess> aSubProcessReference)
-    {
-    	FlexoProcess subProcess = aSubProcessReference.getObject(false); // False because we never know if a loop is possible...
-    	if (subProcess != null)
-    		setSubProcess(subProcess);
-    	else
-    		_deserializedReference = aSubProcessReference;
-    }
+	// Used when deserializing
+	public void setSubProcessReference(FlexoModelObjectReference<FlexoProcess> aSubProcessReference)
+	{
+		FlexoProcess subProcess = aSubProcessReference.getObject(false); // False because we never know if a loop is possible...
+		if (subProcess != null) {
+			setSubProcess(subProcess);
+		} else {
+			_deserializedReference = aSubProcessReference;
+			_deserializedReference.setOwner(this);
+		}
+	}
 
-    public boolean hasSubProcess() {
-    	return getSubProcess()!=null;
-    }
+	@Override
+	public void notifyObjectLoaded(FlexoModelObjectReference<?> reference) {
+		if (reference == _deserializedReference) {
+			getSubProcess();
+		}
+	}
 
-    public FlexoProcess getSubProcess()
-    {
-        if (_subProcess == null) {
-        	if (_deserializedReference != null && _deserializedReference.getObject(false) != null) {
-        		setSubProcess(_deserializedReference.getObject(false),false);
-        	}
-         }
-        return _subProcess;
-    }
+	@Override
+	public void objectCantBeFound(FlexoModelObjectReference<?> reference) {
+		if (reference == _deserializedReference) {
+			setSubProcess(null, false);
+		}
+	}
 
-    public void setSubProcess(FlexoProcess aSubProcess) {
-    	setSubProcess(aSubProcess, true);
-    }
+	@Override
+	public void objectSerializationIdChanged(FlexoModelObjectReference<?> reference) {
+		setChanged();
+	}
 
-    private boolean isPortMapRegisteryVisible() {
-    	boolean defaultValue = !(this instanceof SingleInstanceSubProcessNode && this instanceof LoopSubProcessNode);
-    	if (getPortMapRegistery()!=null)
-    		defaultValue = !getPortMapRegistery().getIsHidden();
-    	return _booleanGraphicalPropertyForKey("isPortMapRegisteryVisible", defaultValue);
-    }
+	@Override
+	public void objectDeleted(FlexoModelObjectReference<?> reference) {
+		if (reference == _deserializedReference) {
+			setSubProcess(null);
+		}
+	}
 
-    private void setIsPortMapRegisteryVisible(boolean b) {
-    	_setGraphicalPropertyForKey(b, "isPortMapRegisteryVisible");
-    }
+	public boolean hasSubProcess() {
+		return getSubProcess()!=null;
+	}
 
-    public void setSubProcess(FlexoProcess aSubProcess, boolean notify)
-    {
-        if (_subProcess != aSubProcess) {
-            if ((aSubProcess != null) && (!isAcceptableAsSubProcess(aSubProcess)) && !isDeserializing() && _deserializedReference==null) {
-                logger.warning("Sorry, this process is not acceptable as sub-process for this SubProcessNode");
-                return;
-            }
-            FlexoProcess oldSubProcess = _subProcess;
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("setSubProcess() with " + aSubProcess + " for " + this);
+	public FlexoProcess getSubProcess()
+	{
+		if (_subProcess == null) {
+			if (_deserializedReference != null) {
+				FlexoProcess object = _deserializedReference.getObject(false);
+				if (object != null) {
+					setSubProcess(object, false);
+				}
+			}
+		}
+		return _subProcess;
+	}
 
-            _subProcess = aSubProcess;
-            _deserializedReference = null;
-            if (_subProcess != null && getProcess()!=null) {
-            	if (getProcess()!=_subProcess)
-            		getProcess().getFlexoResource().addToDependantResources(aSubProcess.getFlexoResource());
-                aSubProcess.addToSubProcessNodes(this);
-            }
+	public void setSubProcess(FlexoProcess aSubProcess) {
+		setSubProcess(aSubProcess, true);
+	}
 
-            if ((oldSubProcess != null) && (oldSubProcess != aSubProcess)) {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("delete the old portmap registery");
-                if (_portMapRegistery != null) {
-                    _portMapRegistery.delete();
-                    setPortMapRegistery(null);
-                }
-                oldSubProcess.removeFromSubProcessNodes(this);
-            }
-            if (aSubProcess != null) {
-                if (!isDeserializing()) {
-                    if (logger.isLoggable(Level.FINE))
-                        logger.fine("update the portmap registery");
-                    updatePortMapRegistery();
-                }
-            }
-            if (oldSubProcess != aSubProcess && notify) {
-                notifyAttributeModification("subProcess", oldSubProcess, aSubProcess);
-            }
-        }
-    }
+	private boolean isPortMapRegisteryVisible() {
+		boolean defaultValue = !(this instanceof SingleInstanceSubProcessNode && this instanceof LoopSubProcessNode);
+		if (getPortMapRegistery()!=null) {
+			defaultValue = !getPortMapRegistery().getIsHidden();
+		}
+		return _booleanGraphicalPropertyForKey("isPortMapRegisteryVisible", defaultValue);
+	}
 
-    @Override
-    public void refreshStatistics() {
-    	super.refreshStatistics();
-    	if (hasSubProcess()) {
-    		getSubProcess().getStatistics().refresh();
-    		// Little hack for inspector
-    		notifyAttributeModification("subProcess.statistics.activityCount", null, null);
-    		notifyAttributeModification("subProcess.statistics.realActivityCount", null, null);
-    		notifyAttributeModification("subProcess.statistics.operationCount", null, null);
-    		notifyAttributeModification("subProcess.statistics.realOperationCount", null, null);
-    		notifyAttributeModification("subProcess.statistics.actionCount", null, null);
-    		notifyAttributeModification("subProcess.statistics.realActionCount", null, null);
-    	}
-    }
+	private void setIsPortMapRegisteryVisible(boolean b) {
+		_setGraphicalPropertyForKey(b, "isPortMapRegisteryVisible");
+	}
 
-    /**
-     * call this method to get the chosen ServiceInterface.
-     * @return
-     */
-    public ServiceInterface getActiveServiceInterface() {
-    	if (getSubProcess()==null)
-    		return null;
-    	if (getServiceInterface() != null) {
-			if (logger.isLoggable(Level.FINE))
+	public void setSubProcess(FlexoProcess aSubProcess, boolean notify)
+	{
+		if (_subProcess != aSubProcess) {
+			if (aSubProcess != null && !isAcceptableAsSubProcess(aSubProcess) && !isDeserializing() && _deserializedReference==null) {
+				logger.warning("Sorry, this process is not acceptable as sub-process for this SubProcessNode");
+				return;
+			}
+			FlexoProcess oldSubProcess = _subProcess;
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("setSubProcess() with " + aSubProcess + " for " + this);
+			}
+
+			_subProcess = aSubProcess;
+			_deserializedReference = null;
+			if (_subProcess != null && !isCreatedByCloning()) {
+				if (getProcess() != null && getProcess() != _subProcess) {
+					getProcess().getFlexoResource().addToDependantResources(aSubProcess.getFlexoResource());
+				}
+				aSubProcess.addToSubProcessNodes(this);
+			}
+
+			if (oldSubProcess != null && oldSubProcess != aSubProcess) {
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("delete the old portmap registery");
+				}
+				if (_portMapRegistery != null) {
+					_portMapRegistery.delete();
+					setPortMapRegistery(null);
+				}
+				oldSubProcess.removeFromSubProcessNodes(this);
+			}
+			if (aSubProcess != null) {
+				if (!isDeserializing()) {
+					if (logger.isLoggable(Level.FINE)) {
+						logger.fine("update the portmap registery");
+					}
+					updatePortMapRegistery();
+				}
+			}
+			if (oldSubProcess != aSubProcess && notify) {
+				notifyAttributeModification("subProcess", oldSubProcess, aSubProcess);
+			}
+		}
+	}
+
+	@Override
+	public void setProcess(FlexoProcess p) {
+		super.setProcess(p);
+		if (getSubProcess() != null) {
+			if (getProcess() != null && getProcess() != getSubProcess()) {
+				getProcess().getFlexoResource().addToDependantResources(getSubProcess().getFlexoResource());
+			}
+			getSubProcess().addToSubProcessNodes(this);
+		}
+	}
+
+	@Override
+	public void refreshStatistics() {
+		super.refreshStatistics();
+		if (hasSubProcess()) {
+			getSubProcess().getStatistics().refresh();
+			// Little hack for inspector
+			notifyAttributeModification("subProcess.statistics.activityCount", null, null);
+			notifyAttributeModification("subProcess.statistics.realActivityCount", null, null);
+			notifyAttributeModification("subProcess.statistics.operationCount", null, null);
+			notifyAttributeModification("subProcess.statistics.realOperationCount", null, null);
+			notifyAttributeModification("subProcess.statistics.actionCount", null, null);
+			notifyAttributeModification("subProcess.statistics.realActionCount", null, null);
+		}
+	}
+
+	/**
+	 * call this method to get the chosen ServiceInterface.
+	 * @return
+	 */
+	public ServiceInterface getActiveServiceInterface() {
+		if (getSubProcess()==null) {
+			return null;
+		}
+		if (getServiceInterface() != null) {
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Active service interface:" + getServiceInterface().getName());
+			}
 			return getServiceInterface();
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Active service interface is the default");
+		}
 		return getSubProcess().getPortRegisteryInterface();
-    }
+	}
 
-    /**
-	* do no use this method (for serialisation only), call getActiveServiceInterface()
-	*/
-    public ServiceInterface getServiceInterface() {
-    	if (logger.isLoggable(Level.FINE))
+	/**
+	 * do no use this method (for serialisation only), call getActiveServiceInterface()
+	 */
+	public ServiceInterface getServiceInterface() {
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getServiceInterface(): " + _serviceInterface);
-    	if (getSubProcess()!=null && serviceInterfaceName!=null && _serviceInterface==null) {
-    		_serviceInterface = getSubProcess().getServiceInterfaceNamed(serviceInterfaceName);
-    		if (_serviceInterface!=null) {
-    			serviceInterfaceName = null;
-    			_serviceInterface.addObserver(this);
-    		}
-    		else
-    			if (logger.isLoggable(Level.WARNING))
+		}
+		if (getSubProcess()!=null && serviceInterfaceName!=null && _serviceInterface==null) {
+			_serviceInterface = getSubProcess().getServiceInterfaceNamed(serviceInterfaceName);
+			if (_serviceInterface!=null) {
+				serviceInterfaceName = null;
+				_serviceInterface.addObserver(this);
+			}
+			else
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not find service interface '"+serviceInterfaceName+"' in process "+getSubProcess().getName());
-    	}
+				}
+		}
 		return _serviceInterface;
-    }
+	}
 
-    public void setServiceInterface(ServiceInterface anInterface){
-    	if (_serviceInterface!=null)
-    		_serviceInterface.deleteObserver(this);
+	public void setServiceInterface(ServiceInterface anInterface){
+		if (_serviceInterface!=null) {
+			_serviceInterface.deleteObserver(this);
+		}
 		_serviceInterface=anInterface;
-		if (_serviceInterface!=null)
+		if (_serviceInterface!=null) {
 			_serviceInterface.addObserver(this);
-    }
+		}
+	}
 
-    private String serviceInterfaceName;
+	private String serviceInterfaceName;
 
-    public String getServiceInterfaceName() {
-    	if (getServiceInterface()!=null && !(getServiceInterface() instanceof DefaultServiceInterface))
-    		return getServiceInterface().getName();
+	public String getServiceInterfaceName() {
+		if (getServiceInterface()!=null && !(getServiceInterface() instanceof DefaultServiceInterface)) {
+			return getServiceInterface().getName();
+		}
 		return null;
 	}
 
-    public void setServiceInterfaceName(String serviceInterfaceName) {
+	public void setServiceInterfaceName(String serviceInterfaceName) {
 		this.serviceInterfaceName = serviceInterfaceName;
 	}
 
-    @Override
-    public abstract String getInspectorName();
+	@Override
+	public abstract String getInspectorName();
 
-    @Deprecated
-    public String getSubProcessName()
-    {
-        if (getSubProcess() != null) {
-            return getSubProcess().getName();
-        } else {
-            return null;
-        }
-    }
+	@Deprecated
+	public String getSubProcessName()
+	{
+		if (getSubProcess() != null) {
+			return getSubProcess().getName();
+		} else {
+			return null;
+		}
+	}
 
-    @Deprecated
-    public void setSubProcessName(String subProcessName)
-    {
-    	// Not relevant anymore
-    	/*
+	@Deprecated
+	public void setSubProcessName(String subProcessName)
+	{
+		// Not relevant anymore
+		/*
         if (getSubProcess() != null) {
             _subProcess = null;
         }
         _subProcessName = subProcessName;
         _subProcess = getSubProcess();*/
-    }
+	}
 
-    public PortMapRegistery getPortMapRegistery()
-    {
-        if (_portMapRegistery == null && getSubProcess() != null && !getSubProcess().isImported()) {
-            updatePortMapRegistery();
-        }
-        return _portMapRegistery;
-    }
+	public PortMapRegistery getPortMapRegistery()
+	{
+		if (_portMapRegistery == null && getSubProcess() != null && !getSubProcess().isImported()) {
+			updatePortMapRegistery();
+		}
+		return _portMapRegistery;
+	}
 
-    public void setPortMapRegistery(PortMapRegistery portMapRegistery)
-    {
-        PortMapRegistery oldPortMapRegistery = _portMapRegistery;
-        _portMapRegistery = portMapRegistery;
-        if (_portMapRegistery != null) {
-            _portMapRegistery.setSubProcessNode(this);
-        }
-        if (oldPortMapRegistery != null) {
-            if (logger.isLoggable(Level.FINE))
-                logger.finer("Notify that PortMapRegistery has been removed");
-            setChanged();
-            notifyObservers(new PortMapRegisteryRemoved(oldPortMapRegistery));
-            oldPortMapRegistery.deleteObserver(this);
-        }
-        if (portMapRegistery != oldPortMapRegistery) {
-            if (portMapRegistery != null) {
-            	if (!isDeserializing())
-            		portMapRegistery.setIsVisible(isPortMapRegisteryVisible());
-                portMapRegistery.addObserver(this);
-                setChanged();
-                notifyObservers(new PortMapRegisteryInserted(portMapRegistery));
-            }
-        }
-    }
+	public void setPortMapRegistery(PortMapRegistery portMapRegistery)
+	{
+		PortMapRegistery oldPortMapRegistery = _portMapRegistery;
+		_portMapRegistery = portMapRegistery;
+		if (_portMapRegistery != null) {
+			_portMapRegistery.setSubProcessNode(this);
+		}
+		if (oldPortMapRegistery != null) {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.finer("Notify that PortMapRegistery has been removed");
+			}
+			setChanged();
+			notifyObservers(new PortMapRegisteryRemoved(oldPortMapRegistery));
+			oldPortMapRegistery.deleteObserver(this);
+		}
+		if (portMapRegistery != oldPortMapRegistery) {
+			if (portMapRegistery != null) {
+				if (!isDeserializing()) {
+					portMapRegistery.setIsVisible(isPortMapRegisteryVisible());
+				}
+				portMapRegistery.addObserver(this);
+				setChanged();
+				notifyObservers(new PortMapRegisteryInserted(portMapRegistery));
+			}
+		}
+	}
 
-    //here we must take into account that the portMap CAN map a ServiceInterface
-    private void updatePortMapRegistery()
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("updatePortMapRegistery()");
-        if (getSubProcess() != null && !getSubProcess().isImported()) {
-            if (_portMapRegistery == null) {
-            	//constuctor of PortMapRegistery must check the serviceInterface
-                setPortMapRegistery(new PortMapRegistery(this));
-            }
-            //update in portMapRegistery must check the ServiceInterface
-            _portMapRegistery.updateFromServiceInterface();
-        } else if (_portMapRegistery != null) {
-            _portMapRegistery.delete();
-            setPortMapRegistery(null);
-        }
-    }
+	//here we must take into account that the portMap CAN map a ServiceInterface
+	private void updatePortMapRegistery()
+	{
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("updatePortMapRegistery()");
+		}
+		if (getSubProcess() != null && !getSubProcess().isImported()) {
+			if (_portMapRegistery == null) {
+				//constuctor of PortMapRegistery must check the serviceInterface
+				setPortMapRegistery(new PortMapRegistery(this));
+			}
+			//update in portMapRegistery must check the ServiceInterface
+			_portMapRegistery.updateFromServiceInterface();
+		} else if (_portMapRegistery != null) {
+			_portMapRegistery.delete();
+			setPortMapRegistery(null);
+		}
+	}
 
-    public boolean getIsWebService()
-    {
-    	return this instanceof WSCallSubProcessNode;
-        //return ((getSubProcess() != null) && (getSubProcess().getIsWebService()));
-    }
+	public boolean getIsWebService()
+	{
+		return this instanceof WSCallSubProcessNode;
+		//return ((getSubProcess() != null) && (getSubProcess().getIsWebService()));
+	}
 
-    /**
-     * Return a Vector of all embedded WKFObjects
-     *
-     * @return a Vector of WKFObject instances
-     */
-    @Override
-    public Vector<WKFObject> getAllEmbeddedWKFObjects()
-    {
-        Vector<WKFObject> returned = super.getAllEmbeddedWKFObjects();
-        if (_portMapRegistery != null) {
-        	returned.add(_portMapRegistery);
-            returned.addAll(_portMapRegistery.getAllEmbeddedWKFObjects());
-        }
-        return returned;
-    }
+	/**
+	 * Return a Vector of all embedded WKFObjects
+	 *
+	 * @return a Vector of WKFObject instances
+	 */
+	@Override
+	public Vector<WKFObject> getAllEmbeddedWKFObjects()
+	{
+		Vector<WKFObject> returned = super.getAllEmbeddedWKFObjects();
+		if (_portMapRegistery != null) {
+			returned.add(_portMapRegistery);
+			returned.addAll(_portMapRegistery.getAllEmbeddedWKFObjects());
+		}
+		return returned;
+	}
 
-    @Override
-    public void update(FlexoObservable observable, DataModification dataModification)
-    {
-        super.update(observable, dataModification);
-        if (dataModification instanceof PortMapRegisteryOrientationChanged) {
-            forwardNotification(dataModification);
-        } else if (dataModification instanceof PortMapInserted) {
-            forwardNotification(dataModification);
-        } else if (dataModification instanceof PortMapRemoved) {
-            forwardNotification(dataModification);
-        } else if ((dataModification instanceof WKFAttributeDataModification)
-                && (((WKFAttributeDataModification) dataModification).getAttributeName()
-                        .equals("isWebService"))) {
-            forwardNotification(dataModification);
-        } else if (dataModification instanceof NameChanged) {
-            if (observable == getSubProcess() || observable == getServiceInterface())
-                forwardNotification(dataModification);
-        } else if (dataModification instanceof ObjectVisibilityChanged && observable==getPortMapRegistery()) {
-        	setIsPortMapRegisteryVisible(!getPortMapRegistery().getIsHidden());
-        }
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification)
+	{
+		super.update(observable, dataModification);
+		if (dataModification instanceof PortMapRegisteryOrientationChanged) {
+			forwardNotification(dataModification);
+		} else if (dataModification instanceof PortMapInserted) {
+			forwardNotification(dataModification);
+		} else if (dataModification instanceof PortMapRemoved) {
+			forwardNotification(dataModification);
+		} else if (dataModification instanceof WKFAttributeDataModification
+				&& ((WKFAttributeDataModification) dataModification).getAttributeName()
+				.equals("isWebService")) {
+			forwardNotification(dataModification);
+		} else if (dataModification instanceof NameChanged) {
+			if (observable == getSubProcess() || observable == getServiceInterface()) {
+				forwardNotification(dataModification);
+			}
+		} else if (dataModification instanceof ObjectVisibilityChanged && observable==getPortMapRegistery()) {
+			setIsPortMapRegisteryVisible(!getPortMapRegistery().getIsHidden());
+		}
 
-    }
+	}
 
-    // ==========================================================================
-    // ============================= Validation
-    // =================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Validation
+	// =================================
+	// ==========================================================================
 
-    public static class SubProcessNodeMustReferToAProcess extends ValidationRule<SubProcessNodeMustReferToAProcess,SubProcessNode>
-    {
-        public SubProcessNodeMustReferToAProcess()
-        {
-            super(SubProcessNode.class, "sub_process_node_must_refer_to_a_process");
-        }
+	public static class SubProcessNodeMustReferToAProcess extends ValidationRule<SubProcessNodeMustReferToAProcess,SubProcessNode>
+	{
+		public SubProcessNodeMustReferToAProcess()
+		{
+			super(SubProcessNode.class, "sub_process_node_must_refer_to_a_process");
+		}
 
-        @Override
-        public ValidationIssue<SubProcessNodeMustReferToAProcess,SubProcessNode> applyValidation(SubProcessNode subProcessNode)
-        {
-            if (subProcessNode.getSubProcess() == null) {
-                ValidationError<SubProcessNodeMustReferToAProcess,SubProcessNode> error = new ValidationError<SubProcessNodeMustReferToAProcess,SubProcessNode>(this, subProcessNode,
-                        "sub_process_node_($object.name)_is_not_link_to_any_sub_process");
-                for (FlexoProcess p:subProcessNode.getProject().getAllFlexoProcesses()) {
-                    if (subProcessNode.isAcceptableAsSubProcess(p)) {
-                        error.addToFixProposals(new SetSubProcessToExistingSubProcess(p));
-                    }
-                }
-                error.addToFixProposals(new DeletionFixProposal<SubProcessNodeMustReferToAProcess,SubProcessNode>("delete_this_sub_process_node"));
-                return error;
-            }
-            return null;
-        }
+		@Override
+		public ValidationIssue<SubProcessNodeMustReferToAProcess,SubProcessNode> applyValidation(SubProcessNode subProcessNode)
+		{
+			if (subProcessNode.getSubProcess() == null) {
+				ValidationError<SubProcessNodeMustReferToAProcess,SubProcessNode> error = new ValidationError<SubProcessNodeMustReferToAProcess,SubProcessNode>(this, subProcessNode,
+						"sub_process_node_($object.name)_is_not_link_to_any_sub_process");
+				for (FlexoProcess p:subProcessNode.getProject().getAllFlexoProcesses()) {
+					if (subProcessNode.isAcceptableAsSubProcess(p)) {
+						error.addToFixProposals(new SetSubProcessToExistingSubProcess(p));
+					}
+				}
+				error.addToFixProposals(new DeletionFixProposal<SubProcessNodeMustReferToAProcess,SubProcessNode>("delete_this_sub_process_node"));
+				return error;
+			}
+			return null;
+		}
 
-        public class SetSubProcessToExistingSubProcess extends FixProposal<SubProcessNodeMustReferToAProcess,SubProcessNode>
-        {
-            public FlexoProcess subProcess;
+		public class SetSubProcessToExistingSubProcess extends FixProposal<SubProcessNodeMustReferToAProcess,SubProcessNode>
+		{
+			public FlexoProcess subProcess;
 
-            public SetSubProcessToExistingSubProcess(FlexoProcess aSubProcess)
-            {
-                super("set_($object.name)_sub_process_to_($subProcess.name)");
-                subProcess = aSubProcess;
-            }
+			public SetSubProcessToExistingSubProcess(FlexoProcess aSubProcess)
+			{
+				super("set_($object.name)_sub_process_to_($subProcess.name)");
+				subProcess = aSubProcess;
+			}
 
-            @Override
-            protected void fixAction()
-            {
-                getObject().setSubProcess(subProcess);
-            }
-        }
+			@Override
+			protected void fixAction()
+			{
+				getObject().setSubProcess(subProcess);
+			}
+		}
 
-    }
+	}
 
-    public static class SubProcessReferenceMustBeValid extends ValidationRule<SubProcessReferenceMustBeValid,SubProcessNode>
-    {
-        public SubProcessReferenceMustBeValid()
-        {
-            super(SubProcessNode.class, "sub_process_node_must_refer_to_a_valid_process");
-        }
+	public static class SubProcessReferenceMustBeValid extends ValidationRule<SubProcessReferenceMustBeValid,SubProcessNode>
+	{
+		public SubProcessReferenceMustBeValid()
+		{
+			super(SubProcessNode.class, "sub_process_node_must_refer_to_a_valid_process");
+		}
 
-        @Override
-        public ValidationIssue<SubProcessReferenceMustBeValid,SubProcessNode> applyValidation(SubProcessNode subProcessNode)
-        {
-            if (subProcessNode.getSubProcess() != null) {
-                if (!subProcessNode.isAcceptableAsSubProcess(subProcessNode.getSubProcess())) {
-                    ValidationError<SubProcessReferenceMustBeValid,SubProcessNode> error = new ValidationError<SubProcessReferenceMustBeValid,SubProcessNode>(this, subProcessNode,
-                            "sub_process_node_($object.name)_is_linked_to_an_invalid_process");
-                    for (FlexoProcess p: subProcessNode.getProject().getWorkflow().getAllFlexoProcesses()) {
-                        if (subProcessNode.isAcceptableAsSubProcess(p)) {
-                            error.addToFixProposals(new SetSubProcessToExistingSubProcess(p));
-                        }
-                    }
-                    error.addToFixProposals(new SetSubProcessToNull());
-                    error.addToFixProposals(new DeletionFixProposal<SubProcessReferenceMustBeValid,SubProcessNode>(
-                                    "delete_this_sub_process_node"));
-                    return error;
-                }
-            }
-            return null;
-        }
+		@Override
+		public ValidationIssue<SubProcessReferenceMustBeValid,SubProcessNode> applyValidation(SubProcessNode subProcessNode)
+		{
+			if (subProcessNode.getSubProcess() != null) {
+				if (!subProcessNode.isAcceptableAsSubProcess(subProcessNode.getSubProcess())) {
+					ValidationError<SubProcessReferenceMustBeValid,SubProcessNode> error = new ValidationError<SubProcessReferenceMustBeValid,SubProcessNode>(this, subProcessNode,
+							"sub_process_node_($object.name)_is_linked_to_an_invalid_process");
+					for (FlexoProcess p: subProcessNode.getProject().getWorkflow().getAllFlexoProcesses()) {
+						if (subProcessNode.isAcceptableAsSubProcess(p)) {
+							error.addToFixProposals(new SetSubProcessToExistingSubProcess(p));
+						}
+					}
+					error.addToFixProposals(new SetSubProcessToNull());
+					error.addToFixProposals(new DeletionFixProposal<SubProcessReferenceMustBeValid,SubProcessNode>(
+							"delete_this_sub_process_node"));
+					return error;
+				}
+			}
+			return null;
+		}
 
-        public class SetSubProcessToExistingSubProcess extends FixProposal<SubProcessReferenceMustBeValid,SubProcessNode>
-        {
-            public FlexoProcess subProcess;
+		public class SetSubProcessToExistingSubProcess extends FixProposal<SubProcessReferenceMustBeValid,SubProcessNode>
+		{
+			public FlexoProcess subProcess;
 
-            public SetSubProcessToExistingSubProcess(FlexoProcess aSubProcess)
-            {
-                super("set_($object.name)_sub_process_to_($subProcess.name)");
-                subProcess = aSubProcess;
-            }
+			public SetSubProcessToExistingSubProcess(FlexoProcess aSubProcess)
+			{
+				super("set_($object.name)_sub_process_to_($subProcess.name)");
+				subProcess = aSubProcess;
+			}
 
-            @Override
-            protected void fixAction()
-            {
-                getObject().setSubProcess(subProcess);
-            }
-        }
+			@Override
+			protected void fixAction()
+			{
+				getObject().setSubProcess(subProcess);
+			}
+		}
 
-        public class SetSubProcessToNull extends FixProposal<SubProcessReferenceMustBeValid,SubProcessNode>
-        {
-            public SetSubProcessToNull()
-            {
-                super("reset_($object.name)_sub_process_reference");
-            }
+		public class SetSubProcessToNull extends FixProposal<SubProcessReferenceMustBeValid,SubProcessNode>
+		{
+			public SetSubProcessToNull()
+			{
+				super("reset_($object.name)_sub_process_reference");
+			}
 
-            @Override
-            protected void fixAction()
-            {
-                getObject().setSubProcess(null);
-            }
-        }
+			@Override
+			protected void fixAction()
+			{
+				getObject().setSubProcess(null);
+			}
+		}
 
-    }
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-    public String getClassNameKey()
-    {
-        return "sub_process_node";
-    }
+	/**
+	 * Overrides getClassNameKey
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey()
+	{
+		return "sub_process_node";
+	}
 
-    public boolean isLoop()
-    {
-    	return this instanceof MultipleInstanceSubProcessNode && ((MultipleInstanceSubProcessNode)this).getIsSequential();
-    }
+	public boolean isLoop()
+	{
+		return this instanceof MultipleInstanceSubProcessNode && ((MultipleInstanceSubProcessNode)this).getIsSequential();
+	}
 
-    public boolean isFork() {
-        return this instanceof MultipleInstanceSubProcessNode && !((MultipleInstanceSubProcessNode)this).getIsSequential();
-    }
+	public boolean isFork() {
+		return this instanceof MultipleInstanceSubProcessNode && !((MultipleInstanceSubProcessNode)this).getIsSequential();
+	}
 
-    public boolean isSingle() {
-        return this instanceof SingleInstanceSubProcessNode;
-    }
+	public boolean isSingle() {
+		return this instanceof SingleInstanceSubProcessNode;
+	}
 
-    public boolean isLoopSingle() {
-    	return this instanceof LoopSubProcessNode;
-    }
+	public boolean isLoopSingle() {
+		return this instanceof LoopSubProcessNode;
+	}
 
-    public boolean isWSCall() {
-    	return this instanceof WSCallSubProcessNode;
-    }
+	public boolean isWSCall() {
+		return this instanceof WSCallSubProcessNode;
+	}
 
-    @Override
+	@Override
 	public ApplicationHelpEntryPoint getParentHelpEntry(){
-    	return getProcess();
-    }
+		return getProcess();
+	}
 
-    @Override
+	@Override
 	public List<ApplicationHelpEntryPoint> getChildsHelpObjects() {
 		Vector<ApplicationHelpEntryPoint> reply = new Vector<ApplicationHelpEntryPoint>();
 		reply.addAll(getAllOperationNodes());
@@ -611,9 +680,11 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 	}
 
 	public void setDisplaySubProcessImage(boolean displaySubProcessImage) {
-		if(this.displaySubProcessImage==displaySubProcessImage)return;
+		if(this.displaySubProcessImage==displaySubProcessImage) {
+			return;
+		}
 		this.displaySubProcessImage = displaySubProcessImage;
-        notifyAttributeModification("displaySubProcessImage", !displaySubProcessImage, displaySubProcessImage);
+		notifyAttributeModification("displaySubProcessImage", !displaySubProcessImage, displaySubProcessImage);
 	}
 
 	public boolean getDisplaySubProcessImage() {
