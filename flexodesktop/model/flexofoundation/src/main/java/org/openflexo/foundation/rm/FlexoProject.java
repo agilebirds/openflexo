@@ -126,6 +126,7 @@ import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.sg.GeneratedSources;
 import org.openflexo.foundation.stats.ProjectStatistics;
 import org.openflexo.foundation.toc.TOCData;
+import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.foundation.utils.FlexoCSS;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.utils.FlexoObjectIDManager;
@@ -1785,6 +1786,8 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			FlexoWorkflow.createNewWorkflow(project);
 			FlexoNavigationMenu.createNewFlexoNavigationMenu(project);
 			DKVModel.createNewDKVModel(project);
+			TOCData tocData = project.getTOCData();
+			tocData.addToRepositories(new TOCRepository(tocData, project.getDocTypes().get(0), null));
 			GeneratedDoc.createNewGeneratedDoc(project);
 			project.initJavaFormatter();
 			importInitialImages(project, editor);
@@ -4207,7 +4210,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 				 e.printStackTrace();
 			 }
 		 }
-		if (!ok) {
+		 if (!ok) {
 			 return null;
 		 }
 		 return file;
@@ -4251,7 +4254,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		 }
 		 values.add(actorReference);
 	 }
-	 
+
 	 private Hashtable<String,Vector<ConceptActorReference>> pendingEditionPatternReferences = new Hashtable<String, Vector<ConceptActorReference>>();
 
 	 public void _retrievePendingEditionPatternReferences(OntologyObject object)
@@ -4271,5 +4274,5 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			 values.clear();
 		 }
 	 }
-	 
+
 }
