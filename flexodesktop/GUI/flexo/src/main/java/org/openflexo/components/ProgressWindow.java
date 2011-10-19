@@ -59,32 +59,32 @@ public class ProgressWindow extends JDialog implements FlexoProgress
 
 		public WhiteLabel() {
 			super();
-			setForeground(Color.WHITE);
+			setForeground(FlexoCst.WELCOME_FLEXO_COLOR);
 		}
 
 		public WhiteLabel(Icon image, int horizontalAlignment) {
 			super(image, horizontalAlignment);
-			setForeground(Color.WHITE);
+			setForeground(FlexoCst.WELCOME_FLEXO_COLOR);
 		}
 
 		public WhiteLabel(Icon image) {
 			super(image);
-			setForeground(Color.WHITE);
+			setForeground(FlexoCst.WELCOME_FLEXO_COLOR);
 		}
 
 		public WhiteLabel(String text, Icon icon, int horizontalAlignment) {
 			super(text, icon, horizontalAlignment);
-			setForeground(Color.WHITE);
+			setForeground(FlexoCst.WELCOME_FLEXO_COLOR);
 		}
 
 		public WhiteLabel(String text, int horizontalAlignment) {
 			super(text, horizontalAlignment);
-			setForeground(Color.WHITE);
+			setForeground(FlexoCst.WELCOME_FLEXO_COLOR);
 		}
 
 		public WhiteLabel(String text) {
 			super(text);
-			setForeground(Color.WHITE);
+			setForeground(FlexoCst.WELCOME_FLEXO_COLOR);
 		}
 
 	}
@@ -148,10 +148,10 @@ public class ProgressWindow extends JDialog implements FlexoProgress
 		label.setFont(FlexoCst.BIG_FONT);
 		mainProgressBarLabel = new WhiteLabel("", SwingConstants.LEFT);
 		mainProgressBarLabel.setFont(FlexoCst.NORMAL_FONT);
-		mainProgressBarLabel.setForeground(Color.LIGHT_GRAY);
+		mainProgressBarLabel.setForeground(Color.DARK_GRAY);
 		secondaryProgressBarLabel = new WhiteLabel("", SwingConstants.LEFT);
 		secondaryProgressBarLabel.setFont(FlexoCst.NORMAL_FONT);
-		secondaryProgressBarLabel.setForeground(Color.LIGHT_GRAY);
+		secondaryProgressBarLabel.setForeground(Color.DARK_GRAY);
 		icon = IconLibrary.PROGRESS_BACKGROUND;
 		mainPane = new JPanel()
 		{

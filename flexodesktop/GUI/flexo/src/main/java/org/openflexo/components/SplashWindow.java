@@ -54,21 +54,21 @@ public class SplashWindow extends JWindow {
 		//ajoute le label au panel
 		getContentPane().setLayout(null);
 
-		JLabel flexoLabel = new JLabel(userType.getBusinessName1(), SwingConstants.RIGHT);
-		flexoLabel.setForeground(Color.WHITE);
+		JLabel flexoLabel = new JLabel(IconLibrary.OPENFLEXO_TEXT_ICON, SwingConstants.RIGHT);
+		flexoLabel.setForeground(FlexoCst.WELCOME_FLEXO_COLOR);
 		flexoLabel.setBackground(Color.RED);
 		flexoLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
 		getContentPane().add(flexoLabel);
-		flexoLabel.setBounds(260,165,280,30);
+		flexoLabel.setBounds(319,142,231,59);
 
 		JLabel businessLabel = new JLabel(userType.getBusinessName2(), SwingConstants.RIGHT);
-		businessLabel.setForeground(Color.WHITE);
+		businessLabel.setForeground(FlexoCst.WELCOME_FLEXO_COLOR);
 		businessLabel.setFont(new Font("SansSerif", Font.ITALIC, 18));
 		getContentPane().add(businessLabel);
 		businessLabel.setBounds(260,195,280,15);
 
 		JLabel versionLabel = new JLabel("Version " + FlexoCst.BUSINESS_APPLICATION_VERSION+ " (build " + FlexoCst.BUILD_ID+")", SwingConstants.RIGHT);
-		versionLabel.setForeground(Color.WHITE);
+		versionLabel.setForeground(Color.DARK_GRAY);
 		versionLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
 		getContentPane().add(versionLabel);
 		versionLabel.setBounds(260,215,280,15);
@@ -113,7 +113,7 @@ public class SplashWindow extends JWindow {
 		urlLabel.setBounds(290,263,280,12);
 
 		JLabel copyrightLabel = new JLabel("(c) Copyright Agile Birds sprl, 2011, all rights reserved", SwingConstants.RIGHT);
-		copyrightLabel.setForeground(Color.LIGHT_GRAY);
+		copyrightLabel.setForeground(Color.DARK_GRAY);
 		copyrightLabel.setFont(new Font("SansSerif", Font.PLAIN, 9));
 		getContentPane().add(copyrightLabel);
 		copyrightLabel.setBounds(290,277,280,12);

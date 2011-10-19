@@ -19,6 +19,7 @@
  */
 package org.openflexo.components;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
@@ -29,7 +30,6 @@ import javax.swing.SwingConstants;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.icon.IconLibrary;
-import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
 
@@ -41,6 +41,7 @@ import org.openflexo.module.ModuleLoader;
 public abstract class WelcomePanel extends JPanel
 {
 
+    protected JLabel logoLabel;
     protected JLabel titleLabel;
 
     protected JLabel versionLabel;
@@ -58,12 +59,16 @@ public abstract class WelcomePanel extends JPanel
         super();
         setOpaque(false);
         setFont(FlexoCst.NORMAL_FONT);
-        titleLabel = new JLabel(FlexoLocalization.localizedForKey("welcome_to_flexo")+" "+ModuleLoader.getUserType().getBusinessName2(), SwingConstants.CENTER);
-        titleLabel.setFont(FlexoCst.TITLE_FONT);
+        
+        logoLabel = new JLabel(IconLibrary.OPENFLEXO_TEXT_SMALL_ICON, SwingConstants.RIGHT);
+        logoLabel.setBounds(315,37,150,38);
+		
+        titleLabel = new JLabel(ModuleLoader.getUserType().getBusinessName2(), SwingConstants.RIGHT);
+        titleLabel.setFont(FlexoCst.BIG_FONT);
         titleLabel.setForeground(FlexoCst.WELCOME_FLEXO_COLOR);
-        versionLabel = new JLabel("Version " + FlexoCst.BUSINESS_APPLICATION_VERSION+ " (build " + FlexoCst.BUILD_ID+")", SwingConstants.CENTER);
-        versionLabel.setFont(FlexoCst.BIG_FONT);
-        versionLabel.setForeground(FlexoCst.WELCOME_FLEXO_COLOR);
+        versionLabel = new JLabel("Version " + FlexoCst.BUSINESS_APPLICATION_VERSION+ " (build " + FlexoCst.BUILD_ID+")", SwingConstants.RIGHT);
+        versionLabel.setFont(FlexoCst.MEDIUM_FONT);
+        versionLabel.setForeground(Color.DARK_GRAY);
         /*comment1Label = new JLabel(FlexoLocalization.localizedForKey("you_can_submit_your_improvements_and_bug_reports"), SwingConstants.CENTER);
         comment1Label.setFont(FlexoCst.SMALL_FONT);
         comment2Label = new JLabel(FlexoLocalization.localizedForKey("by_editing_the_article_workfloweditor_improvement_request"), SwingConstants.CENTER);
@@ -75,11 +80,12 @@ public abstract class WelcomePanel extends JPanel
         //setBorder(BorderFactory.createRaisedBevelBorder());
 
         // adjust size and set layout
-        setPreferredSize(new Dimension(580, 560));
+        setPreferredSize(new Dimension(600, 560));
         setLayout(null);
 
         // add components
         //add(flexoLogo);
+        add(logoLabel);
         add(titleLabel);
         add(versionLabel);
         /*add(comment1Label);

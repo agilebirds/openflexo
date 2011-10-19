@@ -49,6 +49,8 @@ public class IconLibrary {
 	public static final ImageIcon FLEXO_ICON = new ImageIconResource("Icons/Flexo/FlexoIcon.png");
 	public static final ImageIcon FLEXO_ICON_SMALL = new ImageIconResource("Icons/Flexo/FlexoIcon_16.png");
 	public static final ImageIcon DEV_TEAM_ICON = new ImageIconResource("Icons/Flexo/Flexo_DT.gif");
+	public static final ImageIcon OPENFLEXO_TEXT_ICON = new ImageIconResource("Icons/Flexo/LogoText.gif");
+	public static final ImageIcon OPENFLEXO_TEXT_SMALL_ICON = new ImageIconResource("Icons/Flexo/LogoTextSmall.gif");
 	
 	// Common icons
 	public static final ImageIcon FOLDER_ICON = new ImageIconResource("Icons/Common/Folder.gif");

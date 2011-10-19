@@ -162,15 +162,15 @@ public class MultiModuleModeWelcomePanel extends WelcomePanel {
 		// set component bounds (only needed by Absolute Positioning)
 		// flexoLogo.setBounds(175, 20, 230, 80);
 		scrollPaneList.setBounds(120, 200, 340, scrollPaneHeight);
-		titleLabel.setBounds(95, 125, 400, 30);
-		versionLabel.setBounds(165, 150, 250, 30);
+		titleLabel.setBounds(60, 65, 400, 30);
+		versionLabel.setBounds(60, 82, 400, 30);
 		/*
 		 * comment1Label.setBounds(75, 340 + scrollPaneHeight, 400, 15); comment2Label.setBounds(75, 350 + scrollPaneHeight, 400, 15);
 		 * comment3Label.setBounds(75, 360 + scrollPaneHeight, 400, 15);
 		 */
 		// releaseTypeLabel.setBounds(170, 172, 85, 25);
 		// releaseType.setBounds(260, 170, 150, 22);
-		setPreferredSize(new Dimension(580, 400 + scrollPaneHeight));
+		setPreferredSize(new Dimension(600, 400 + scrollPaneHeight));
 	}
 
 	@Override

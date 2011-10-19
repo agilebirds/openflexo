@@ -43,7 +43,6 @@ import java.net.URL;
 import javax.swing.BorderFactory;
 import javax.swing.border.Border;
 
-import org.openflexo.ColorCst;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.ToolBox;
@@ -118,11 +117,11 @@ public class FlexoCst extends ColorCst
 
     public static Color WELCOME_BG_COLOR = Color.WHITE;
 
-    public static final Color DARK_BLUE_FLEXO_COLOR = new Color(2,67,123);
+    public static final Color DARK_BLUE_FLEXO_COLOR = new Color(245,255,246); //new Color(2,67,123);
 
-    public static final Color WELCOME_FLEXO_COLOR = Color.LIGHT_GRAY;
+    public static final Color WELCOME_FLEXO_COLOR = new Color(62,80,100);
 
-    public static final Color WELCOME_FLEXO_BG_LIST_COLOR = ToolBox.getPLATFORM()==ToolBox.WINDOWS?Color.WHITE:new Color(254,255,216);
+    public static final Color WELCOME_FLEXO_BG_LIST_COLOR = ToolBox.getPLATFORM()==ToolBox.WINDOWS?Color.WHITE:Color.WHITE;
 
 
     public static final int MINIMUM_BROWSER_VIEW_WIDTH = 200;

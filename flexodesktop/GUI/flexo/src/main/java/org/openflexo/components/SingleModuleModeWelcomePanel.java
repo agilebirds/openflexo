@@ -51,8 +51,8 @@ public class SingleModuleModeWelcomePanel extends WelcomePanel
         add(moduleTitleLabel);
 
         //flexoLogo.setBounds(175, 20, 230, 80);
-        titleLabel.setBounds(95, 125, 400, 30);
-        versionLabel.setBounds(190, 150, 200, 30);
+		titleLabel.setBounds(60, 65, 400, 30);
+		versionLabel.setBounds(60, 82, 400, 30);
         moduleTitleLabel.setBounds(125, 165, 300, 30);
 
         setPreferredSize(new Dimension(560, 460));
