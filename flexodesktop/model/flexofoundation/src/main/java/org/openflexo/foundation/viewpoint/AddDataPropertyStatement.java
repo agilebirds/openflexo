@@ -27,7 +27,7 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.inspector.InspectorDataBinding;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 
 
@@ -70,7 +70,7 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 	}
 
 	
-	private InspectorDataBinding value;
+	private ViewPointDataBinding value;
 	
 	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, BindingDefinitionType.GET, false) {
 		@Override
@@ -85,13 +85,13 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 		return VALUE;
 	}
 
-	public InspectorDataBinding getValue() 
+	public ViewPointDataBinding getValue() 
 	{
-		if (value == null) value = new InspectorDataBinding(this,EditionActionBindingAttribute.value,getValueBindingDefinition());
+		if (value == null) value = new ViewPointDataBinding(this,EditionActionBindingAttribute.value,getValueBindingDefinition());
 		return value;
 	}
 
-	public void setValue(InspectorDataBinding value) 
+	public void setValue(ViewPointDataBinding value) 
 	{
 		value.setOwner(this);
 		value.setBindingAttribute(EditionActionBindingAttribute.value);

@@ -25,7 +25,7 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.inspector.InspectorDataBinding;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 
 
@@ -60,7 +60,7 @@ public abstract class AddStatement<R extends OntologicObjectPatternRole> extends
 		super.setPatternRole(patternRole);
 	}
 	
-	private InspectorDataBinding subject;
+	private ViewPointDataBinding subject;
 	
 	private BindingDefinition SUBJECT = new BindingDefinition("subject", OntologyObject.class, BindingDefinitionType.GET, false);
 	
@@ -69,13 +69,13 @@ public abstract class AddStatement<R extends OntologicObjectPatternRole> extends
 		return SUBJECT;
 	}
 
-	public InspectorDataBinding getSubject() 
+	public ViewPointDataBinding getSubject() 
 	{
-		if (subject == null) subject = new InspectorDataBinding(this,EditionActionBindingAttribute.subject,getSubjectBindingDefinition());
+		if (subject == null) subject = new ViewPointDataBinding(this,EditionActionBindingAttribute.subject,getSubjectBindingDefinition());
 		return subject;
 	}
 
-	public void setSubject(InspectorDataBinding subject) 
+	public void setSubject(ViewPointDataBinding subject) 
 	{
 		subject.setOwner(this);
 		subject.setBindingAttribute(EditionActionBindingAttribute.subject);

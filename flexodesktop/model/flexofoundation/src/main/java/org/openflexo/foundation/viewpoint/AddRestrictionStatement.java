@@ -28,7 +28,7 @@ import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.ontology.RestrictionStatement.RestrictionType;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.inspector.InspectorDataBinding;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 
 
@@ -88,7 +88,7 @@ public class AddRestrictionStatement extends AddStatement<RestrictionStatementPa
 		}
 	}*/
 	
-	private InspectorDataBinding object;
+	private ViewPointDataBinding object;
 	
 	private BindingDefinition OBJECT = new BindingDefinition("object", OntologyObject.class, BindingDefinitionType.GET, false);
 	
@@ -97,13 +97,13 @@ public class AddRestrictionStatement extends AddStatement<RestrictionStatementPa
 		return OBJECT;
 	}
 
-	public InspectorDataBinding getObject() 
+	public ViewPointDataBinding getObject() 
 	{
-		if (object == null) object = new InspectorDataBinding(this,EditionActionBindingAttribute.object,getObjectBindingDefinition());
+		if (object == null) object = new ViewPointDataBinding(this,EditionActionBindingAttribute.object,getObjectBindingDefinition());
 		return object;
 	}
 
-	public void setObject(InspectorDataBinding object) 
+	public void setObject(ViewPointDataBinding object) 
 	{
 		object.setOwner(this);
 		object.setBindingAttribute(EditionActionBindingAttribute.object);
@@ -112,7 +112,7 @@ public class AddRestrictionStatement extends AddStatement<RestrictionStatementPa
 	}
 
 
-	private InspectorDataBinding restrictionType;
+	private ViewPointDataBinding restrictionType;
 	
 	private BindingDefinition RESTRICTION_TYPE = new BindingDefinition("restrictionType", RestrictionType.class, BindingDefinitionType.GET, false);
 	
@@ -121,13 +121,13 @@ public class AddRestrictionStatement extends AddStatement<RestrictionStatementPa
 		return RESTRICTION_TYPE;
 	}
 
-	public InspectorDataBinding getRestrictionType() 
+	public ViewPointDataBinding getRestrictionType() 
 	{
-		if (restrictionType == null) restrictionType = new InspectorDataBinding(this,EditionActionBindingAttribute.restrictionType,getRestrictionTypeBindingDefinition());
+		if (restrictionType == null) restrictionType = new ViewPointDataBinding(this,EditionActionBindingAttribute.restrictionType,getRestrictionTypeBindingDefinition());
 		return restrictionType;
 	}
 
-	public void setRestrictionType(InspectorDataBinding restrictionType) 
+	public void setRestrictionType(ViewPointDataBinding restrictionType) 
 	{
 		restrictionType.setOwner(this);
 		restrictionType.setBindingAttribute(EditionActionBindingAttribute.restrictionType);
@@ -143,7 +143,7 @@ public class AddRestrictionStatement extends AddStatement<RestrictionStatementPa
 	}
 
 
-	private InspectorDataBinding cardinality;
+	private ViewPointDataBinding cardinality;
 	
 	private BindingDefinition CARDINALITY = new BindingDefinition("cardinality", Integer.class, BindingDefinitionType.GET, false);
 	
@@ -152,13 +152,13 @@ public class AddRestrictionStatement extends AddStatement<RestrictionStatementPa
 		return CARDINALITY;
 	}
 
-	public InspectorDataBinding getCardinality() 
+	public ViewPointDataBinding getCardinality() 
 	{
-		if (cardinality == null) cardinality = new InspectorDataBinding(this,EditionActionBindingAttribute.cardinality,getCardinalityBindingDefinition());
+		if (cardinality == null) cardinality = new ViewPointDataBinding(this,EditionActionBindingAttribute.cardinality,getCardinalityBindingDefinition());
 		return cardinality;
 	}
 
-	public void setCardinality(InspectorDataBinding cardinality) 
+	public void setCardinality(ViewPointDataBinding cardinality) 
 	{
 		cardinality.setOwner(this);
 		cardinality.setBindingAttribute(EditionActionBindingAttribute.cardinality);

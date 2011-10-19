@@ -26,7 +26,7 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.inspector.InspectorDataBinding;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 
 public class AddShape extends AddShemaElementAction<ShapePatternRole> {
@@ -73,7 +73,7 @@ public class AddShape extends AddShemaElementAction<ShapePatternRole> {
 		super.setPatternRole(patternRole);
 	}
 	
-	private InspectorDataBinding container;
+	private ViewPointDataBinding container;
 	
 	private BindingDefinition CONTAINER = new BindingDefinition("container", ViewObject.class, BindingDefinitionType.GET, false);
 	
@@ -82,13 +82,13 @@ public class AddShape extends AddShemaElementAction<ShapePatternRole> {
 		return CONTAINER;
 	}
 
-	public InspectorDataBinding getContainer() 
+	public ViewPointDataBinding getContainer() 
 	{
-		if (container == null) container = new InspectorDataBinding(this,EditionActionBindingAttribute.container,getContainerBindingDefinition());
+		if (container == null) container = new ViewPointDataBinding(this,EditionActionBindingAttribute.container,getContainerBindingDefinition());
 		return container;
 	}
 
-	public void setContainer(InspectorDataBinding container) 
+	public void setContainer(ViewPointDataBinding container) 
 	{
 		container.setOwner(this);
 		container.setBindingAttribute(EditionActionBindingAttribute.container);

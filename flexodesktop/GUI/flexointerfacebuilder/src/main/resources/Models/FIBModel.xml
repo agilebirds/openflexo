@@ -124,6 +124,9 @@
     <property name="showReset" xmlTag="showReset" attribute="YES" ignoreDefaultValue="false"/> 
   </entity>
  
+  <entity name="org.openflexo.fib.model.FIBRadioButtonList" xmlTag="RadioButtonList"> 
+  </entity>
+ 
   <entity name="org.openflexo.fib.model.FIBList" xmlTag="List"> 
     <property name="visibleRowCount" xmlTag="visibleRowCount" attribute="YES"/> 
     <property name="rowHeight" xmlTag="rowHeight" attribute="YES"/> 

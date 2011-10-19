@@ -104,6 +104,11 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>flexopamela</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexoutils</artifactId>
 			<version>${project.version}</version>

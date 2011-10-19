@@ -22,8 +22,8 @@ package org.openflexo.foundation.viewpoint;
 import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingFactory;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
-import org.openflexo.foundation.viewpoint.inspector.InspectorDataBinding;
 
 
 public abstract class ViewPointObject extends ViewPointLibraryObject implements Bindable {
@@ -45,7 +45,7 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 		if (getCalc() != null) getCalc().setIsModified();
 	}
 		
-	public void notifyBindingChanged(InspectorDataBinding binding)
+	public void notifyBindingChanged(ViewPointDataBinding binding)
 	{
 	}
 	

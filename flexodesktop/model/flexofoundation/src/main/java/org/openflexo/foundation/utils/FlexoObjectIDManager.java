@@ -36,98 +36,113 @@ import org.openflexo.logging.FlexoLogger;
 public class FlexoObjectIDManager
 {
 
-    private FlexoProject currentProject;
+	private FlexoProject currentProject;
 
-    private static final Logger logger = FlexoLogger.getLogger(FlexoObjectIDManager.class.getPackage().toString());
+	private static final Logger logger = FlexoLogger.getLogger(FlexoObjectIDManager.class.getPackage().toString());
 
-    private static final FlexoObjectIDManager instance = new FlexoObjectIDManager();
+	private static final FlexoObjectIDManager instance = new FlexoObjectIDManager();
 
-    private Vector<FlexoModelObject> badObjects;
-    private Hashtable<Long,FlexoModelObject> used;
-    
-    /**
-     * 
-     */
-    private FlexoObjectIDManager()
-    {
-    }
+	private Vector<FlexoModelObject> badObjects;
+	private Hashtable<Long,FlexoModelObject> used;
 
-    public static FlexoObjectIDManager getInstance()
-    {
-        return instance;
-    }
+	/**
+	 * 
+	 */
+	private FlexoObjectIDManager()
+	{
+	}
 
-    public Vector<FlexoModelObject> checkProject(FlexoProject project, boolean fixProblems)
-    {
-        if (logger.isLoggable(Level.INFO))
-            logger.info("Start checking flexoID for project " + project.getProjectName());
+	public static FlexoObjectIDManager getInstance()
+	{
+		return instance;
+	}
 
-        currentProject = project;
+	public Vector<FlexoModelObject> checkProject(FlexoProject project, boolean fixProblems)
+	{
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Start checking flexoID for project " + project.getProjectName());
+		}
 
-        // First load all unloaded resources
-        for (FlexoResource resource : project.getResources().values()) {
-            if (resource instanceof FlexoStorageResource) {
-                ((FlexoStorageResource)resource).getResourceData(); // no need to mark as modified .setIsModified();
-            }
-        }
-        
-        // Iterate on all objects to validate
-        used = new Hashtable<Long,FlexoModelObject>();
-        badObjects = new Vector<FlexoModelObject>();
-        Vector<FlexoModelObject> objectsToUnregister = new Vector<FlexoModelObject>();
-        for (FlexoModelObject object : new Vector<FlexoModelObject>(project.getAllRegisteredObjects())) {
-            if (object.getProject() == project) {
-            	if (object.getXMLResourceData()==null) {
-            		continue;
-            	}
-            	if (object.getXMLResourceData().getFlexoResource()==null) {
-            		continue;
-            	}
-            	if (object.getXMLResourceData().getFlexoResource().getResourceData()==object.getXMLResourceData())
-            		testAndSetID(object,fixProblems);
-            	else {
-            		if (logger.isLoggable(Level.WARNING))
+		currentProject = project;
+
+		// First load all unloaded resources
+		for (FlexoResource resource : project.getResources().values()) {
+			if (resource instanceof FlexoStorageResource) {
+				((FlexoStorageResource)resource).getResourceData(); // no need to mark as modified .setIsModified();
+			}
+		}
+
+		// Iterate on all objects to validate
+		used = new Hashtable<Long,FlexoModelObject>();
+		badObjects = new Vector<FlexoModelObject>();
+		Vector<FlexoModelObject> objectsToUnregister = new Vector<FlexoModelObject>();
+		for (FlexoModelObject object : new Vector<FlexoModelObject>(project.getAllRegisteredObjects())) {
+			if (object.getProject() == project) {
+				if (object.getXMLResourceData()==null) {
+					continue;
+				}
+				if (object.getXMLResourceData().getFlexoResource()==null) {
+					continue;
+				}
+				if (object.getXMLResourceData().getFlexoResource().getResourceData()==object.getXMLResourceData()) {
+					testAndSetID(object,fixProblems);
+				} else {
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("This object "+object+" is registered but should not!");
-            		objectsToUnregister.add(object);
-            	}
-            }
-        }
+					}
+					objectsToUnregister.add(object);
+				}
+			}
+		}
 
-        for (FlexoModelObject obj : objectsToUnregister) {
+		for (FlexoModelObject obj : objectsToUnregister) {
 			project.unregister(obj);
 		}
-        
-        /*for (FlexoModelObject obj : badObjects) {
+
+		/*for (FlexoModelObject obj : badObjects) {
         	if (obj instanceof FlexoXMLSerializableObject) {
         		((FlexoXMLSerializableObject)obj).getXMLResourceData().setIsModified();
         	}
         }*/
-        
-        if (logger.isLoggable(Level.INFO))
-            logger.info("Found " + badObjects.size() + " objects that have an incorrect flexoID");
-        return badObjects;
-    }
-    
-     private void testAndSetID(FlexoModelObject o, boolean fixProblems)
-    {
-        if (o.isCreatedByCloning())
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("An object was found with status beingCloned " + o.getXMLRepresentation());
-        if (o.getFlexoID() < 0 || o.getFlexoID() > currentProject.getLastUniqueID()) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Found an object with an invalid ID: " + o.getXMLRepresentation());
-            if (fixProblems)
-                o.setFlexoID(o.getProject().getNewFlexoID());
-            badObjects.add(o);
-        }
-        FlexoModelObject old = used.put(new Long(o.getFlexoID()), o);
-        if (old != null && old != o) {
-            long newID = o.getProject().getNewFlexoID();
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Found two different objects with the same flexoID:" + o.getFlexoID()+ " Object1: "+old.getClass().getName()+"["+old.getSerializationIdentifier()+"]" + " and Object2:" + o.getClass().getName()+"["+o.getSerializationIdentifier()+"] Replace id with "+newID);
-            if (fixProblems)
-                o.setFlexoID(newID);
-            badObjects.add(o);
-        }
-    }
+
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Found " + badObjects.size() + " objects that have an incorrect flexoID");
+		}
+		return badObjects;
+	}
+
+	private void testAndSetID(FlexoModelObject o, boolean fixProblems)
+	{
+		if (o.isCreatedByCloning()) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("An object was found with status beingCloned " + o.getXMLRepresentation());
+			}
+		}
+		if (o.getFlexoID() < 0 || o.getFlexoID() > currentProject.getLastUniqueID()) {
+			// The next line is commented because if there are issues with flexoID, it is likely that the XML encoding of the object used to
+			// retrieve the XML representation will also fail, since it also works with the flexoID
+			// This is the kind of message we get: "org.openflexo.xmlcode.DuplicateSerializationIdentifierException: Found the same
+			// identifier 'GUI_-1' for different objects: class org.openflexo.foundation.wkf.ws.OutPort has the same serialization
+			// identifier than class org.openflexo.foundation.wkf.edge.InternalMessageOutEdge
+			// I was serializing 'IncomingInternalMessageOutEdge' on entity org.openflexo.foundation.wkf.edge.InternalMessageOutEdge (at
+			// org.openflexo.xmlcode.XMLCoder.buildNewElementFrom(XMLCoder.java:1397))"
+			/*if (logger.isLoggable(Level.WARNING))
+			    logger.warning("Found an object with an invalid ID: " + o.getXMLRepresentation());*/
+			if (fixProblems) {
+				o.setFlexoID(o.getProject().getNewFlexoID());
+			}
+			badObjects.add(o);
+		}
+		FlexoModelObject old = used.put(new Long(o.getFlexoID()), o);
+		if (old != null && old != o) {
+			long newID = o.getProject().getNewFlexoID();
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Found two different objects with the same flexoID:" + o.getFlexoID()+ " Object1: "+old.getClass().getName()+"["+old.getSerializationIdentifier()+"]" + " and Object2:" + o.getClass().getName()+"["+o.getSerializationIdentifier()+"] Replace id with "+newID);
+			}
+			if (fixProblems) {
+				o.setFlexoID(newID);
+			}
+			badObjects.add(o);
+		}
+	}
 }

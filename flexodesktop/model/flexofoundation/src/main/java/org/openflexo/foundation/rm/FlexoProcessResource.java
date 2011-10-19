@@ -32,6 +32,7 @@ import java.util.logging.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.filter.AbstractFilter;
+import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.gen.FlexoProcessImageBuilder;
 import org.openflexo.foundation.rm.FlexoProject.FlexoIDMustBeUnique.DuplicateObjectIDIssue;
 import org.openflexo.foundation.utils.FlexoProgress;
@@ -43,9 +44,9 @@ import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.node.ActionNode;
 import org.openflexo.foundation.wkf.node.EventNode;
+import org.openflexo.foundation.wkf.node.EventNode.TriggerType;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
-import org.openflexo.foundation.wkf.node.EventNode.TriggerType;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.foundation.xml.FlexoXMLMappings;
 import org.openflexo.foundation.xml.XMLUtils;
@@ -120,8 +121,10 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 	@Override
 	public void setName(String aName)
 	{
+		String old = name;
 		name = aName;
 		setChanged();
+		notifyObservers(new NameChanged(old, name));
 	}
 
 	@Override
@@ -132,22 +135,24 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 
 	@Override
 	public FlexoProcess performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler)
-	throws LoadXMLResourceException, ProjectLoadingCancelledException, MalformedXMLException
-	{
-		if (logger.isLoggable(Level.INFO))
-		logger.info("Loading process " + getName() + " file="+getFileName()+" ID="+getResourceIdentifier());
+			throws LoadXMLResourceException, ProjectLoadingCancelledException, MalformedXMLException
+			{
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Loading process " + getName() + " file="+getFileName()+" ID="+getResourceIdentifier());
+		}
 		FlexoProcess process;
 		try {
 			process = super.performLoadResourceData(progress, loadingHandler);
 		} catch (FlexoFileNotFoundException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("File " + getFile().getName() + " NOT found, removing resource !");
+			}
 			delete();
 			return null;
 		}
 
 		return process;
-	}
+			}
 
 	public FlexoProcess getFlexoProcess()
 	{
@@ -185,16 +190,17 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 		} catch (SaveResourcePermissionDeniedException e) {
 			throw e;
 		} finally {
-			if (s!=null)
+			if (s!=null) {
 				encoder._setDateFormat(s);
+			}
 		}
-		
+
 		try{
 			FlexoProcessImageBuilder.writeSnapshot(getFlexoProcess());
 		}catch(Exception e){
 			logger.warning("Save image snapshot for process "+getFlexoProcess().getName()+e.getMessage());
 		}
-		
+
 	}
 
 
@@ -249,8 +255,9 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 			for (Enumeration en = getFlexoProcess().getAllSubProcessNodes().elements(); en.hasMoreElements();) {
 				SubProcessNode node = (SubProcessNode) en.nextElement();
 				if (node.getSubProcess() != null && node.getSubProcess()!=getFlexoProcess()) {
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Found dependancy between " + this + " and "+ node.getSubProcess().getFlexoResource());
+					}
 					addToDependantResources(node.getSubProcess().getFlexoResource());
 				}
 			}
@@ -259,31 +266,34 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 				OperationNode node = (OperationNode) en.nextElement();
 				if (node.getComponentInstance() != null
 						&& node.getComponentInstance().getComponentDefinition() != null) {
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Found dependancy between "
 								+ this
 								+ " and "
 								+ node.getComponentInstance().getComponentDefinition()
 								.getComponentResource());
+					}
 					node.getComponentInstance().rebuildDependancies();
 					if (node.getTabOperationComponentInstance()!=null && node.getTabOperationComponentInstance().getComponentDefinition()!=null) {
-						if (logger.isLoggable(Level.INFO))
+						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Found dependancy between "
 									+ this
 									+ " and "
 									+ node.getTabOperationComponentInstance().getComponentDefinition()
 									.getComponentResource());
+						}
 						node.getTabOperationComponentInstance().rebuildDependancies();
 					}
 				}
 				for(ActionNode action: node.getAllActionNodes()) {
 					if (action.getTabActionComponentInstance()!=null && action.getTabActionComponentInstance().getComponentDefinition()!=null) {
-						if (logger.isLoggable(Level.INFO))
+						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Found dependancy between "
 									+ this
 									+ " and "
 									+ action.getTabActionComponentInstance().getComponentDefinition()
 									.getComponentResource());
+						}
 						action.getTabActionComponentInstance().rebuildDependancies();
 					}
 
@@ -311,15 +321,15 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 				if (!requestDate.before(getFlexoProcess().getProcessDMEntity().getLastUpdate())) {
 					if (logger.isLoggable(Level.FINE)) {
 						logger.info("OPTIMIST DEPENDANCY CHECKING for PROCESS "+getFlexoProcess().getName());
-						logger.info("entityLastUpdate["+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(getFlexoProcess().getProcessDMEntity().getLastUpdate())+"]"
-								+" < requestDate["+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(requestDate)+"]");
+						logger.info("entityLastUpdate["+new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(getFlexoProcess().getProcessDMEntity().getLastUpdate())+"]"
+								+" < requestDate["+new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(requestDate)+"]");
 					}
 					return false;
 				}
 				if (logger.isLoggable(Level.FINE)) {
 					logger.info("FAILED / OPTIMIST DEPENDANCY CHECKING for PROCESS "+getFlexoProcess().getName());
-					logger.info("entityLastUpdate["+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(getFlexoProcess().getProcessDMEntity().getLastUpdate())+"]"
-							+" > requestDate["+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(requestDate)+"]");
+					logger.info("entityLastUpdate["+new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(getFlexoProcess().getProcessDMEntity().getLastUpdate())+"]"
+							+" > requestDate["+new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(requestDate)+"]");
 				}
 			}
 		}
@@ -1653,7 +1663,7 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 			return returned;
 		}
 	}
-*/
+	 */
 	protected class ProcessConverter5
 	{
 
@@ -1674,9 +1684,10 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 				conversionWasSucessfull = save();
 			} catch (Exception e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName()
 							+ ". See console for details.");
+				}
 				e.printStackTrace();
 			}
 		}
@@ -1690,13 +1701,13 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 				@Override
 				public boolean matches(Object obj) {
 					if(obj instanceof Element)
-			        {
-			            Element el = (Element)obj;
-			            return el.getName().startsWith("Next");
-			        } else
-			        {
-			            return false;
-			        }
+					{
+						Element el = (Element)obj;
+						return el.getName().startsWith("Next");
+					} else
+					{
+						return false;
+					}
 				}
 			});
 			while (nextElementIterator.hasNext()) {
@@ -1704,8 +1715,9 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 				elem.setName("End"+elem.getName().substring("Next".length()));
 				count++;
 			}
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Converted "+count+" ending elements");
+			}
 
 			count = 0;
 			// 2. Convert all precondition attached to an EventNode and move all the incoming edges to the incoming edges of the event.
@@ -1746,8 +1758,9 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 				if (elem.getName().equals("FlexoPreCondition")) {
 					for (String string : eventXMLTags) {
 						if (elem.getParentElement()==null) {
-							if (logger.isLoggable(Level.SEVERE))
+							if (logger.isLoggable(Level.SEVERE)) {
 								logger.severe("Found pre condition "+elem+" "+key+" without parent");
+							}
 							break;
 						}
 						if (elem.getParentElement().getName().equals(string)) {
@@ -1758,8 +1771,9 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 					}
 				}
 			}
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Converted "+count+" pre-conditions attached to an event");
+			}
 
 			count = 0;
 			// 3. Convert all external edges
@@ -1767,16 +1781,16 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 				@Override
 				public boolean matches(Object obj) {
 					if(obj instanceof Element)
-			        {
-			            Element el = (Element)obj;
+					{
+						Element el = (Element)obj;
 
-			            return el.getName().endsWith("ExternalFlexoNodeMessageInEdge") || el.getName().endsWith("ExternalOperatorMessageInEdge")
-			            		||el.getName().endsWith("ExternalFlexoNodeMessageOutEdge") || el.getName().endsWith("ExternalOperatorMessageOutEdge");
+						return el.getName().endsWith("ExternalFlexoNodeMessageInEdge") || el.getName().endsWith("ExternalOperatorMessageInEdge")
+								||el.getName().endsWith("ExternalFlexoNodeMessageOutEdge") || el.getName().endsWith("ExternalOperatorMessageOutEdge");
 
-			        } else
-			        {
-			            return false;
-			        }
+					} else
+					{
+						return false;
+					}
 				}
 			});
 			while (externalEdgesIterator.hasNext()) {
@@ -1785,8 +1799,9 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 				edge.setName(edge.getName().substring(0,edge.getName().lastIndexOf("External"))+suffix);
 				count++;
 			}
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Converted "+count+" external message edges");
+			}
 
 			count = 0;
 			// 4. Convert all operator edges
@@ -1794,16 +1809,16 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 				@Override
 				public boolean matches(Object obj) {
 					if(obj instanceof Element)
-			        {
-			            Element el = (Element)obj;
+					{
+						Element el = (Element)obj;
 
-			            return el.getName().endsWith("OperatorInEdge") || el.getName().endsWith("OperatorOutEdge")
-			            		|| el.getName().endsWith("OperatorInterEdge");
+						return el.getName().endsWith("OperatorInEdge") || el.getName().endsWith("OperatorOutEdge")
+								|| el.getName().endsWith("OperatorInterEdge");
 
-			        } else
-			        {
-			            return false;
-			        }
+					} else
+					{
+						return false;
+					}
 				}
 			});
 			while (operatorEdgesIterator.hasNext()) {
@@ -1811,8 +1826,9 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 				edge.setName(edge.getName().substring(0,edge.getName().lastIndexOf("Operator"))+"TokenEdge");
 				count++;
 			}
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Converted "+count+" operator edges");
+			}
 
 			// 5. Convert all pre-conditions wrongly attached
 			count = 0;
@@ -1820,15 +1836,15 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 				@Override
 				public boolean matches(Object obj) {
 					if(obj instanceof Element)
-			        {
-			            Element el = (Element)obj;
+					{
+						Element el = (Element)obj;
 
-			            return el.getName().endsWith("FlexoPreCondition");
+						return el.getName().endsWith("FlexoPreCondition");
 
-			        } else
-			        {
-			            return false;
-			        }
+					} else
+					{
+						return false;
+					}
 				}
 			});
 			while (preConditionsIterator.hasNext()) {
@@ -1848,13 +1864,15 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 							count++;
 						}
 					} else {
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Pre condition is attached to a node that is not serialized somewhere else!");
+						}
 					}
 				}
 			}
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Converted "+count+" attached begin nodes");
+			}
 		}
 
 		private void swapUnalignedPreconditions(Hashtable<String, Element> elementsWithID,
@@ -1865,8 +1883,9 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 				Vector<Element> v = elementsWithIDRef.get(key);
 				for (Element element : v) {
 					if (element.getName().equals("FlexoPreCondition")) {
-						if (logger.isLoggable(Level.INFO))
+						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Found unaligned precondition with id "+idRefs);
+						}
 						// Unaligned precondition (all refs are supposed to start with Next...)
 						Element orig = elementsWithID.get(key);
 						Element origFather = orig.getParentElement();
@@ -1888,14 +1907,14 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 				@Override
 				public boolean matches(Object obj) {
 					if(obj instanceof Element)
-			        {
-			            Element el = (Element)obj;
+					{
+						Element el = (Element)obj;
 
-			            return el.getName().startsWith("Incoming");
-			        } else
-			        {
-			            return false;
-			        }
+						return el.getName().startsWith("Incoming");
+					} else
+					{
+						return false;
+					}
 				}
 			});
 			Vector<Element> incomingEdges = new Vector<Element>();
@@ -1910,8 +1929,9 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 				} else {
 					serializingEdgeElement = preAndEdgesWithID.get(edge.getAttributeValue("idref"));
 					if (serializingEdgeElement==null) {
-						if (logger.isLoggable(Level.SEVERE))
+						if (logger.isLoggable(Level.SEVERE)) {
 							logger.severe("Could not find serializing edge element with id "+edge.getAttributeValue("idref"));
+						}
 						continue;
 					}
 				}
@@ -1921,9 +1941,11 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 				Element refToPreCondition = serializingEdgeElement.getChild("EndFlexoPreCondition");
 				success = serializingEdgeElement.removeContent(refToPreCondition);
 
-				if(!success)
-					if (logger.isLoggable(Level.WARNING))
+				if(!success) {
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Could not remove "+refToPreCondition+" from its edge");
+					}
+				}
 				// 2. We move the edge to the event.
 				pre.removeContent(edge);
 				event.addContent(edge);
@@ -1955,9 +1977,11 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 	@Override
 	protected boolean repairDuplicateSerializationIdentifier() {
 		ValidationReport report = getProject().validate();
-		for (ValidationIssue issue: report.getValidationIssues())
-			if (issue instanceof DuplicateObjectIDIssue)
+		for (ValidationIssue issue: report.getValidationIssues()) {
+			if (issue instanceof DuplicateObjectIDIssue) {
 				return true;
+			}
+		}
 		return false;
 	}
 
@@ -1984,9 +2008,10 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 				conversionWasSucessfull = save();
 			} catch (Exception e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName()
 							+ ". See console for details.");
+				}
 				e.printStackTrace();
 			}
 		}
@@ -2109,10 +2134,10 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 			@Override
 			public boolean matches(Object obj) {
 				if(obj instanceof Element)			        {
-		            return ((Element)obj).getName().equals(elname);
-		        } else {
-		            return false;
-		        }
+					return ((Element)obj).getName().equals(elname);
+				} else {
+					return false;
+				}
 			}
 		}
 		private boolean save()

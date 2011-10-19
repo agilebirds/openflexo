@@ -26,7 +26,7 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.inspector.InspectorDataBinding;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 
 
@@ -54,7 +54,7 @@ public class AddIsAStatement extends AddStatement<IsAStatementPatternRole> {
 		return Inspectors.VPM.ADD_IS_A_PROPERTY_INSPECTOR;
 	}
 
-	private InspectorDataBinding father;
+	private ViewPointDataBinding father;
 	
 	private BindingDefinition FATHER = new BindingDefinition("father", OntologyObject.class, BindingDefinitionType.GET, false);
 	
@@ -63,13 +63,13 @@ public class AddIsAStatement extends AddStatement<IsAStatementPatternRole> {
 		return FATHER;
 	}
 
-	public InspectorDataBinding getFather() 
+	public ViewPointDataBinding getFather() 
 	{
-		if (father == null) father = new InspectorDataBinding(this,EditionActionBindingAttribute.father,getFatherBindingDefinition());
+		if (father == null) father = new ViewPointDataBinding(this,EditionActionBindingAttribute.father,getFatherBindingDefinition());
 		return father;
 	}
 
-	public void setFather(InspectorDataBinding father) 
+	public void setFather(ViewPointDataBinding father) 
 	{
 		father.setOwner(this);
 		father.setBindingAttribute(EditionActionBindingAttribute.father);

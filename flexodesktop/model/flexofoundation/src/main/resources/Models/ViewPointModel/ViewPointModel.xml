@@ -235,12 +235,12 @@
 	<entity name="org.openflexo.foundation.viewpoint.AddShema"
 		xmlTag="AddShema">
 		<property name="shemaName" xmlTag="shemaName" attribute="YES" />
-		<property name="shapePatternRole" xmlTag="shapePatternRole" attribute="YES" />
+		<property name="shapePatternRole" contains="org.openflexo.foundation.viewpoint.ShapePatternRole"/>
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.GoToAction"
 		xmlTag="GoToAction">
-		<property name="targetObject" xmlTag="targetObject" attribute="YES" />
+		<property name="target" xmlTag="targetObject" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.AddConcept"

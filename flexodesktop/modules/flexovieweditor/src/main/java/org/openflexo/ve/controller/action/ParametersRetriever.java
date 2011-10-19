@@ -248,7 +248,7 @@ public class ParametersRetriever {
 		if (skipDialogWhenPossible) {
 			boolean isValid = true;
 			for (URIParameter param : uriParametersList) {
-				if (param._parameter.evaluateCondition(action.getParameterValues())) {
+				if (param._parameter.evaluateCondition(action)) {
 					if (StringUtils.isEmpty(param.getValue())) {
 						// declared_uri_must_be_specified_please_enter_uri
 						isValid = false;
@@ -275,7 +275,7 @@ public class ParametersRetriever {
 					@Override
 					public boolean isValid(ParametersModel model) {
 						for (URIParameter param : uriParametersList) {
-							if (param._parameter.evaluateCondition(action.getParameterValues())) {
+							if (param._parameter.evaluateCondition(action)) {
 								if (StringUtils.isEmpty(param.getValue())) {
 									setErrorMessage(FlexoLocalization.localizedForKey("declared_uri_must_be_specified_please_enter_uri"));
 									return false;

@@ -49,6 +49,7 @@ import org.openflexo.fib.editor.view.widget.FIBEditableImageWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableLabelWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableListWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableNumberWidget;
+import org.openflexo.fib.editor.view.widget.FIBEditableRadioButtonListWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableTableWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableTextAreaWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableTextFieldWidget;
@@ -68,6 +69,7 @@ import org.openflexo.fib.model.FIBLabel;
 import org.openflexo.fib.model.FIBList;
 import org.openflexo.fib.model.FIBNumber;
 import org.openflexo.fib.model.FIBPanel;
+import org.openflexo.fib.model.FIBRadioButtonList;
 import org.openflexo.fib.model.FIBTab;
 import org.openflexo.fib.model.FIBTabPanel;
 import org.openflexo.fib.model.FIBTable;
@@ -94,11 +96,11 @@ public class FIBEditorController /*extends FIBController*/ extends Observable {
 	private FIBComponent focusedObject = null;
 
 	private ContextualMenu contextualMenu;
-	
-	public FIBEditorController(FIBComponent fibComponent, FIBGenericEditor editor) 
+
+	public FIBEditorController(FIBComponent fibComponent, FIBGenericEditor editor)
 	{
 		this(fibComponent,editor,null);
-		
+
 
 		//Class testClass = null;
 		if (fibComponent.getDataClass() != null) {
@@ -119,17 +121,17 @@ public class FIBEditorController /*extends FIBController*/ extends Observable {
 		}
 
 	}
-	
-	public FIBEditorController(FIBComponent fibComponent, FIBGenericEditor editor, Object dataObject) 
+
+	public FIBEditorController(FIBComponent fibComponent, FIBGenericEditor editor, Object dataObject)
 	{
 		this(fibComponent, editor, dataObject, FIBController.instanciateController(fibComponent));
 	}
-	
-	public FIBEditorController(FIBComponent fibComponent, FIBGenericEditor editor, Object dataObject, FIBController controller) 
+
+	public FIBEditorController(FIBComponent fibComponent, FIBGenericEditor editor, Object dataObject, FIBController controller)
 	{
 		this.controller = controller;
 		controller.setViewFactory(new EditorFIBViewFactory());
-		
+
 		this.editor = editor;
 
 		contextualMenu = new ContextualMenu(this);
@@ -154,7 +156,7 @@ public class FIBEditorController /*extends FIBController*/ extends Observable {
 		else {
 			fibPanel.getController().updateWithoutDataObject();
 		}
-		
+
 	}
 
 	public Object getDataObject()
@@ -167,7 +169,7 @@ public class FIBEditorController /*extends FIBController*/ extends Observable {
 		controller.setDataObject(anObject);
 	}
 
-	public FIBController getController() 
+	public FIBController getController()
 	{
 		return controller;
 	}
@@ -175,12 +177,12 @@ public class FIBEditorController /*extends FIBController*/ extends Observable {
 	public FIBGenericEditor getEditor() {
 		return editor;
 	}
-	
-	public JPanel getEditorPanel() 
+
+	public JPanel getEditorPanel()
 	{
 		return editorPanel;
 	}
-	
+
 	public ContextualMenu getContextualMenu() {
 		return contextualMenu;
 	}
@@ -190,22 +192,22 @@ public class FIBEditorController /*extends FIBController*/ extends Observable {
 		return editor.getPalette();
 	}
 
-	public FIBEditorBrowser getBrowser() 
+	public FIBEditorBrowser getBrowser()
 	{
 		return browser;
 	}
 
-	public FIBView getFibPanel() 
+	public FIBView getFibPanel()
 	{
 		return fibPanel;
 	}
 
-	public FIBComponent getFocusedObject() 
+	public FIBComponent getFocusedObject()
 	{
 		return focusedObject;
 	}
 
-	public void setFocusedObject(FIBComponent aComponent) 
+	public void setFocusedObject(FIBComponent aComponent)
 	{
 		if (aComponent != focusedObject) {
 			//System.out.println("setFocusedObject with "+aComponent);
@@ -216,12 +218,12 @@ public class FIBEditorController /*extends FIBController*/ extends Observable {
 		}
 	}
 
-	public FIBComponent getSelectedObject() 
+	public FIBComponent getSelectedObject()
 	{
 		return selectedObject;
 	}
 
-	public void setSelectedObject(FIBComponent aComponent) 
+	public void setSelectedObject(FIBComponent aComponent)
 	{
 		//logger.info("setSelectedObject "+aComponent);
 		if (aComponent != selectedObject) {
@@ -258,14 +260,14 @@ public class FIBEditorController /*extends FIBController*/ extends Observable {
 		setChanged();
 		notifyObservers(change2);
 	}
-	
+
 	public FIBView viewForComponent(FIBComponent component)
 	{
 		return controller.viewForComponent(component);
 	}
 
 
-	/*public void keyTyped(KeyEvent e) 
+	/*public void keyTyped(KeyEvent e)
 	{
 		logger.fine("keyTyped() "+e);
 		if (e.getKeyChar() == KeyEvent.VK_DELETE || e.getKeyChar() == KeyEvent.VK_BACK_SPACE) {
@@ -280,16 +282,17 @@ public class FIBEditorController /*extends FIBController*/ extends Observable {
 			}
 		}
 	}*/
-	
+
 	public void switchToLanguage(Language language)
 	{
 		controller.switchToLanguage(language);
 	}
 
 
-	
+
 	protected class EditorFIBViewFactory implements FIBViewFactory
 	{
+		@Override
 		public FIBView makeContainer(FIBContainer fibContainer)
 		{
 			if (fibContainer instanceof FIBTab) {
@@ -304,6 +307,7 @@ public class FIBEditorController /*extends FIBController*/ extends Observable {
 			return null;
 		}
 
+		@Override
 		public FIBWidgetView makeWidget(FIBWidget fibWidget)
 		{
 			if (fibWidget instanceof FIBTextField) {
@@ -332,6 +336,9 @@ public class FIBEditorController /*extends FIBController*/ extends Observable {
 			}
 			if (fibWidget instanceof FIBDropDown) {
 				return new FIBEditableDropDownWidget((FIBDropDown)fibWidget,FIBEditorController.this);
+			}
+			if (fibWidget instanceof FIBRadioButtonList) {
+				return new FIBEditableRadioButtonListWidget((FIBRadioButtonList) fibWidget, FIBEditorController.this);
 			}
 			if (fibWidget instanceof FIBList) {
 				return new FIBEditableListWidget((FIBList)fibWidget,FIBEditorController.this);
@@ -373,6 +380,6 @@ public class FIBEditorController /*extends FIBController*/ extends Observable {
 			return null;
 		}
 	}
-	
+
 
 }

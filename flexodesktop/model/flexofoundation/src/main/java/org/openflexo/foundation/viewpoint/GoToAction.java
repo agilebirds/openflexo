@@ -19,20 +19,20 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 
 // Note: no Pattern Role for this action !!!
 public class GoToAction extends EditionAction {
 
 	private static final Logger logger = Logger.getLogger(GoToAction.class.getPackage().getName());
-	
-	private String targetObject;
 	
 	public GoToAction() {
 	}
@@ -49,36 +49,9 @@ public class GoToAction extends EditionAction {
 		return Inspectors.VPM.GO_TO_OBJECT_INSPECTOR;
 	}
 
-	public String _getTargetObject()
-	{
-		return targetObject;
-	}
-	
-	public void _setTargetObject(String aTargetObject)
-	{
-		targetObject = aTargetObject;
-	}
-	
-	private Vector<String> availableTargetObjectValues = null;
-	
-	public Vector<String> getAvailableTargetObjectValues()
-	{
-		if (availableTargetObjectValues == null) {
-			availableTargetObjectValues = new Vector<String>();
-			for (PatternRole pr : getEditionPattern().getPatternRoles()) {
-				availableTargetObjectValues.add(pr.getPatternRoleName());
-			}
-			for (EditionSchemeParameter p : getScheme().getParameters()) {
-				availableTargetObjectValues.add(p.getName());
-			}
-		}
-		return availableTargetObjectValues;
-	}
-
-
 	public FlexoModelObject getTargetObject(EditionSchemeAction action)
 	{
-		return retrieveFlexoModelObject(_getTargetObject(), action);
+		return (FlexoModelObject)getTarget().getBindingValue(action);
 	}
 
 
@@ -88,5 +61,28 @@ public class GoToAction extends EditionAction {
 		// Not relevant
 	}*/
 
+	private ViewPointDataBinding target;
+	
+	private BindingDefinition TARGET = new BindingDefinition("target", FlexoModelObject.class, BindingDefinitionType.GET, false);
+	
+	public BindingDefinition getTargetBindingDefinition()
+	{
+		return TARGET;
+	}
+
+	public ViewPointDataBinding getTarget() 
+	{
+		if (target == null) target = new ViewPointDataBinding(this,EditionActionBindingAttribute.target,getTargetBindingDefinition());
+		return target;
+	}
+
+	public void setTarget(ViewPointDataBinding target) 
+	{
+		target.setOwner(this);
+		target.setBindingAttribute(EditionActionBindingAttribute.target);
+		target.setBindingDefinition(getTargetBindingDefinition());
+		this.target = target;
+	}
+	
 
 }

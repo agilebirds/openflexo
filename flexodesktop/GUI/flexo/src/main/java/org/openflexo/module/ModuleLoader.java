@@ -1734,7 +1734,7 @@ public final class ModuleLoader implements IModuleLoader {
 					.exists()) {
 				if (isDevelopperRelease() || isMaintainerRelease()) {
 					AskLocalResourceCenterDirectory data = new AskLocalResourceCenterDirectory();
-					data.setLocalResourceDirectory(new File(System.getProperty("user.home"), "Library/Flexo/FlexoResourceCenter"));
+					data.setLocalResourceDirectory(FlexoProject.getResourceCenterFile());
 					FIBDialog dialog = FIBDialog.instanciateComponent(AskLocalResourceCenterDirectory.FIB_FILE, data, null, true);
 					switch (dialog.getStatus()) {
 					case VALIDATED:
@@ -1760,7 +1760,7 @@ public final class ModuleLoader implements IModuleLoader {
 						break;
 					}
 				} else { // Otherwise, dont ask but create resource center in home directory if required
-					File resourceCenterDirectory = new File(System.getProperty("user.home"), "Library/Flexo/FlexoResourceCenter");
+					File resourceCenterDirectory = FlexoProject.getResourceCenterFile();
 					if (!resourceCenterDirectory.exists()) {
 						logger.info("Create directory " + resourceCenterDirectory);
 						resourceCenterDirectory.mkdirs();

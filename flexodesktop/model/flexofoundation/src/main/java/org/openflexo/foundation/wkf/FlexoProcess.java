@@ -201,9 +201,9 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author benoit, sylvain
  */
 public final class FlexoProcess extends WKFObject implements
-		FlexoImportableObject, ApplicationHelpEntryPoint,
-		XMLStorageResourceData, InspectableObject, Bindable,
-		ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
+FlexoImportableObject, ApplicationHelpEntryPoint,
+XMLStorageResourceData, InspectableObject, Bindable,
+ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	static final Logger logger = Logger.getLogger(FlexoProcess.class
 			.getPackage().getName());
@@ -324,26 +324,30 @@ public final class FlexoProcess extends WKFObject implements
 				return returned;
 			} catch (DuplicateResourceException e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: "
 							+ e.getClass().getName()
 							+ ". See console for details.");
+				}
 				e.printStackTrace();
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Cannot create root process !");
+				}
 				return null;
 			} catch (InvalidFileNameException e) {
 				e.printStackTrace();
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Cannot create root process because "
 							+ workflow.getWorkflowName()
 							+ " is not a valid file name");
+				}
 				return null;
 			}
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger
-						.warning("Cannot create root process: a root process is already declared");
+				.warning("Cannot create root process: a root process is already declared");
+			}
 			return null;
 		}
 	}
@@ -361,11 +365,13 @@ public final class FlexoProcess extends WKFObject implements
 	// TODO: Move that in a FlexoAction !!!!
 	public static FlexoProcess createNewProcess(FlexoWorkflow workflow,
 			FlexoProcess parentProcess, String processName, boolean isRoot)
-			throws DuplicateResourceException, InvalidFileNameException {
-		if(processWithSimilarNameExists(workflow,null,ToolBox.getJavaName(processName)))
+					throws DuplicateResourceException, InvalidFileNameException {
+		if(processWithSimilarNameExists(workflow,null,ToolBox.getJavaName(processName))) {
 			throw new InvalidFileNameException("A process with similar name exists");
-		if (logger.isLoggable(Level.FINE))
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("BEGIN createNewProcess()");
+		}
 		FlexoProject project = workflow.getProject();
 
 		if (workflow.getLocalFlexoProcessWithName(processName) != null) {
@@ -375,16 +381,18 @@ public final class FlexoProcess extends WKFObject implements
 		newProcess.setProject(project);
 		ProcessDMEntity e = project.getDataModel()
 				.getProcessInstanceRepository().getProcessDMEntity(newProcess);
-		if (e != null && logger.isLoggable(Level.SEVERE))
+		if (e != null && logger.isLoggable(Level.SEVERE)) {
 			logger.severe("Dm entity for process " + processName
 					+ "already exists.");
+		}
 		FlexoProcessResource processRes = createProcessResource(parentProcess,
 				processName, project, newProcess, false);
 
 		initProcessObjects(newProcess);
 		project.registerResource(processRes);
-		if (logger.isLoggable(Level.FINE))
-			logger.fine(("END createNewProcess()"));
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("END createNewProcess()");
+		}
 		return newProcess;
 	}
 
@@ -414,24 +422,24 @@ public final class FlexoProcess extends WKFObject implements
 		_processTerminated.setIndexValue(2);
 		process.getPortRegistery().addToOutPorts(_processTerminated);
 
-//		ActivityNode begin = (ActivityNode) process.getActivityPetriGraph()
-//				.getAllBeginNodes().firstElement();
-//		ActivityNode end = (ActivityNode) process.getActivityPetriGraph()
-//				.getAllEndNodes().firstElement();
-//		new OperationPetriGraph(begin);
-//		new OperationPetriGraph(end);
+		//		ActivityNode begin = (ActivityNode) process.getActivityPetriGraph()
+		//				.getAllBeginNodes().firstElement();
+		//		ActivityNode end = (ActivityNode) process.getActivityPetriGraph()
+		//				.getAllEndNodes().firstElement();
+		//		new OperationPetriGraph(begin);
+		//		new OperationPetriGraph(end);
 
 		EventNode begin = process.getActivityPetriGraph()
-		.getAllEventNodes().firstElement();
+				.getAllEventNodes().firstElement();
 		EventNode end = process.getActivityPetriGraph()
-		.getAllEventNodes().lastElement();
+				.getAllEventNodes().lastElement();
 
 
 
-//		FlexoPreCondition beginCondition = new FlexoPreCondition(begin, begin
-//				.getOperationPetriGraph().getAllBeginNodes().firstElement());
-//		FlexoPreCondition endCondition = new FlexoPreCondition(end, end
-//				.getOperationPetriGraph().getAllBeginNodes().firstElement());
+		//		FlexoPreCondition beginCondition = new FlexoPreCondition(begin, begin
+		//				.getOperationPetriGraph().getAllBeginNodes().firstElement());
+		//		FlexoPreCondition endCondition = new FlexoPreCondition(end, end
+		//				.getOperationPetriGraph().getAllBeginNodes().firstElement());
 		try {
 			FlexoPostCondition newBeginPostCondition = new InternalMessageInEdge(
 					_newPort, begin, process);
@@ -476,32 +484,36 @@ public final class FlexoProcess extends WKFObject implements
 	private static FlexoProcessResource createProcessResource(
 			FlexoProcess parentProcess, String processName,
 			FlexoProject project, FlexoProcess newProcess, boolean isImported)
-			throws InvalidFileNameException {
+					throws InvalidFileNameException {
 		FlexoWorkflow workflow = project.getWorkflow();
 		FlexoWorkflowResource workflowRes = workflow.getFlexoResource();
 		File processFile = ProjectRestructuration.getExpectedProcessFile(
 				project, processName);
 		FlexoProjectFile processResFile = new FlexoProjectFile(processFile,
 				project);
-		if (!processResFile.nameIsValid())
+		if (!processResFile.nameIsValid()) {
 			processResFile.fixName();
+		}
 
 		FlexoProcessNode newProcessNode = new FlexoProcessNode(processName,
 				processResFile.getRelativePath(), newProcess, project);
 		if (parentProcess == null) {
-			if (isImported)
+			if (isImported) {
 				workflow.addToImportedRootNodeProcesses(newProcessNode);
-			else
+			} else {
 				workflow.addToTopLevelNodeProcesses(newProcessNode);
+			}
 		} else {
 			if (isImported && !parentProcess.isImported()) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger
-							.severe("Trying to add an imported process to an non-imported process!");
+					.severe("Trying to add an imported process to an non-imported process!");
+				}
 			} else if (!isImported && parentProcess.isImported()) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger
-							.severe("Trying to add an non-imported process to an imported process!");
+					.severe("Trying to add an non-imported process to an imported process!");
+				}
 			}
 			parentProcess.addToSubProcesses(newProcess);
 			// parentProcess.getProcessNode().addToSubProcesses(newProcessNode);
@@ -530,21 +542,22 @@ public final class FlexoProcess extends WKFObject implements
 			if (!ok) {
 				processFile = ProjectRestructuration.getExpectedProcessFile(
 						project, FileUtils.getValidFileName(processName)
-								+ newProcess.getFlexoID());
+						+ newProcess.getFlexoID());
 				processResFile = new FlexoProjectFile(processFile, project);
 				processResFile.setProject(project);
 				processRes = new FlexoProcessResource(project, newProcess,
 						workflowRes, processResFile);
 			}
 		}
-		if (processRes == null)
+		if (processRes == null) {
 			throw new InvalidFileNameException(processResFile.getRelativePath());
+		}
 		return processRes;
 	}
 
 	public static FlexoProcess createImportedProcessFromProcess(
 			FlexoWorkflow workflow, PPMProcess process)
-			throws InvalidFileNameException, DuplicateResourceException {
+					throws InvalidFileNameException, DuplicateResourceException {
 		FlexoProject project = workflow.getProject();
 		FlexoProcess newFIP = workflow
 				.getRecursivelyImportedProcessWithURI(process.getUri());
@@ -553,15 +566,18 @@ public final class FlexoProcess extends WKFObject implements
 			parentProcess = workflow
 					.getRecursivelyImportedProcessWithURI(process
 							.getParentProcess().getUri());
-			if (parentProcess == null)
-				if (logger.isLoggable(Level.WARNING))
+			if (parentProcess == null) {
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not find parent process: "
 							+ process.getParentProcess().getName());
+				}
+			}
 		}
 		if (newFIP != null) {
-			if (parentProcess != null)
+			if (parentProcess != null) {
 				parentProcess.getProcessNode().addToSubProcesses(
 						newFIP.getProcessNode());
+			}
 			try {
 				newFIP.updateFromObject(process);
 			} catch (Exception e) {
@@ -576,9 +592,10 @@ public final class FlexoProcess extends WKFObject implements
 			fip.updateFromObject(process);
 		} catch (Exception e) {
 			// Should not happen for imported processes
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger
-						.severe("setName threw an exception for imported FlexoProcess!!!");
+				.severe("setName threw an exception for imported FlexoProcess!!!");
+			}
 			e.printStackTrace();
 		}
 		FlexoProcessResource resource = createProcessResource(parentProcess,
@@ -593,8 +610,9 @@ public final class FlexoProcess extends WKFObject implements
 			name = base + "_" + String.valueOf(attempt);
 			attempt++;
 		}
-		if (!resource.getName().equals(name))
+		if (!resource.getName().equals(name)) {
 			resource.setName(name);
+		}
 		project.registerResource(resource);
 		fip.setFlexoResource(resource);
 		if (process.getSubProcesses() != null) {
@@ -611,8 +629,9 @@ public final class FlexoProcess extends WKFObject implements
 
 	@Override
 	public boolean isImported() {
-		if (getProcessNode() != null)
+		if (getProcessNode() != null) {
 			return getProcessNode().isImported();
+		}
 		return isImported;
 	}
 
@@ -649,8 +668,9 @@ public final class FlexoProcess extends WKFObject implements
 	}
 
 	public boolean isEquivalentTo(PPMProcess p, boolean compareChildren) {
-		if (!super.isEquivalentTo(p))
+		if (!super.isEquivalentTo(p)) {
 			return false;
+		}
 		/*
 		 * if (getParentProcess()==null && p.getParentProcess()!=null) return
 		 * false; else if(getParentProcess()!=null &&
@@ -660,11 +680,11 @@ public final class FlexoProcess extends WKFObject implements
 		 * { return false; }
 		 */
 		if (compareChildren) {
-			boolean ok = (getSubProcesses().size() != 0
+			boolean ok = getSubProcesses().size() != 0
 					&& p.getSubProcesses() != null && p.getSubProcesses().length == getSubProcesses()
-					.size())
-					|| (getSubProcesses().size() == 0 && (p.getSubProcesses() == null || p
-							.getSubProcesses().length == 0));
+					.size()
+					|| getSubProcesses().size() == 0 && (p.getSubProcesses() == null || p
+					.getSubProcesses().length == 0);
 			for (int i = 0; ok && i < getSubProcesses().size(); i++) {
 				FlexoProcess fip = getSubProcesses().get(i);
 				if (p.getSubProcesses() == null
@@ -676,8 +696,9 @@ public final class FlexoProcess extends WKFObject implements
 				}
 				ok &= fip.getParentProcess() == this;
 			}
-			if (!ok)
+			if (!ok) {
 				return false;
+			}
 		}
 		return true;
 	}
@@ -685,8 +706,9 @@ public final class FlexoProcess extends WKFObject implements
 	@Override
 	public void setIsDeletedOnServer(boolean isDeletedOnServer) {
 		super.setIsDeletedOnServer(isDeletedOnServer);
-		for (FlexoProcess sub : getSubProcesses())
+		for (FlexoProcess sub : getSubProcesses()) {
 			sub.setIsDeletedOnServer(isDeletedOnServer);
+		}
 	}
 
 	// ==========================================================================
@@ -694,6 +716,7 @@ public final class FlexoProcess extends WKFObject implements
 	// ==================================
 	// ==========================================================================
 
+	@Override
 	public FlexoProcessResource getFlexoResource() {
 		return _resource;
 	}
@@ -709,10 +732,12 @@ public final class FlexoProcess extends WKFObject implements
 		return getProject().getXmlMappings().getWKFMapping();
 	}
 
+	@Override
 	public FlexoXMLStorageResource getFlexoXMLFileResource() {
 		return _resource;
 	}
 
+	@Override
 	public void setFlexoResource(FlexoResource resource) {
 		_resource = (FlexoProcessResource) resource;
 	}
@@ -722,6 +747,7 @@ public final class FlexoProcess extends WKFObject implements
 		return _project;
 	}
 
+	@Override
 	public void setProject(FlexoProject aProject) {
 		_project = aProject;
 	}
@@ -734,6 +760,7 @@ public final class FlexoProcess extends WKFObject implements
 	 * @see org.openflexo.foundation.rm.FlexoResourceData#save()
 	 * @see org.openflexo.foundation.rm.FlexoResourceData#save()
 	 */
+	@Override
 	public void save() throws SaveResourceException {
 		_resource.saveResourceData();
 	}
@@ -765,11 +792,12 @@ public final class FlexoProcess extends WKFObject implements
 				if (node.getComponentInstance() != null) {
 					OperationComponentInstance ci = node.getComponentInstance();
 					if (ci.getComponentName().equals(notification.oldValue())) {
-						if (logger.isLoggable(Level.INFO))
+						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Process " + getName()
 									+ " Updating component instance "
 									+ notification.component.getName()
 									+ " for " + node.getName());
+						}
 						ci.notifyComponentNameChanged(notification.component);
 					}
 				}
@@ -777,11 +805,12 @@ public final class FlexoProcess extends WKFObject implements
 					TabComponentInstance ci = node
 							.getTabOperationComponentInstance();
 					if (ci.getComponentName().equals(notification.oldValue())) {
-						if (logger.isLoggable(Level.INFO))
+						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Process " + getName()
 									+ " Updating tab component instance "
 									+ notification.component.getName()
 									+ " for " + node.getName());
+						}
 						ci.notifyComponentNameChanged(notification.component);
 					}
 				}
@@ -791,11 +820,12 @@ public final class FlexoProcess extends WKFObject implements
 					TabComponentInstance ci = action
 							.getTabActionComponentInstance();
 					if (ci.getComponentName().equals(notification.oldValue())) {
-						if (logger.isLoggable(Level.INFO))
+						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Process " + getName()
 									+ " Updating component instance "
 									+ notification.component.getName()
 									+ " for " + action.getName());
+						}
 						ci.notifyComponentNameChanged(notification.component);
 					}
 				}
@@ -810,10 +840,11 @@ public final class FlexoProcess extends WKFObject implements
 					OperationComponentInstance ci = node.getComponentInstance();
 					if (ci.getComponentName().equals(
 							notification.component.getComponentName())) {
-						if (logger.isLoggable(Level.INFO))
+						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Receive a deletion request for "
 									+ notification.component.getComponentName()
 									+ " in " + getName());
+						}
 						notification.addToWarnings(notification.component
 								.getComponentName()
 								+ " is used by operation : " + node.getName());
@@ -824,10 +855,11 @@ public final class FlexoProcess extends WKFObject implements
 							.getTabOperationComponentInstance();
 					if (ci.getComponentName().equals(
 							notification.component.getComponentName())) {
-						if (logger.isLoggable(Level.INFO))
+						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Receive a deletion request for "
 									+ notification.component.getComponentName()
 									+ " in " + getName());
+						}
 						notification.addToWarnings(notification.component
 								.getComponentName()
 								+ " is used by operation : " + node.getName());
@@ -846,11 +878,12 @@ public final class FlexoProcess extends WKFObject implements
 							.getTabOperationComponentInstance();
 					if (ci.getComponentName().equals(
 							notification.component.getComponentName())) {
-						if (logger.isLoggable(Level.INFO))
+						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Operation named " + node.getName()
 									+ " has received a deletion request for "
 									+ notification.component.getComponentName()
 									+ " in " + getName());
+						}
 						node.removeTabComponentInstance();
 					}
 				}
@@ -858,11 +891,12 @@ public final class FlexoProcess extends WKFObject implements
 					OperationComponentInstance ci = node.getComponentInstance();
 					if (ci.getComponentName().equals(
 							notification.component.getComponentName())) {
-						if (logger.isLoggable(Level.INFO))
+						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Operation named " + node.getName()
 									+ " has received a deletion request for "
 									+ notification.component.getComponentName()
 									+ " in " + getName());
+						}
 						node.removeComponentInstance();
 					}
 				}
@@ -872,11 +906,12 @@ public final class FlexoProcess extends WKFObject implements
 					TabComponentInstance ci = action
 							.getTabActionComponentInstance();
 					if (ci.getComponentName().equals(notification.oldValue())) {
-						if (logger.isLoggable(Level.INFO))
+						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Process " + getName()
 									+ " Updating component instance "
 									+ notification.component.getName()
 									+ " for " + action.getName());
+						}
 						action.removeTabComponentInstance();
 					}
 				}
@@ -915,8 +950,9 @@ public final class FlexoProcess extends WKFObject implements
 
 	public void setActivityPetriGraph(ActivityPetriGraph aPetriGraph) {
 		_petriGraph = aPetriGraph;
-		if (_petriGraph != null)
+		if (_petriGraph != null) {
 			_petriGraph.setContainer(this, ACTIVITY_CONTEXT);
+		}
 	}
 
 	/**
@@ -965,9 +1001,10 @@ public final class FlexoProcess extends WKFObject implements
 				getRoleList().addToRoles(role, true);
 			} catch (DuplicateRoleException e) {
 				logger.warning("DuplicateRoleException: " + e);
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.log(Level.FINE, "Duplicate role: " + role.getName(),
 							e);
+				}
 			}
 		}
 	}
@@ -977,7 +1014,7 @@ public final class FlexoProcess extends WKFObject implements
 	}
 
 	protected StatusList getStatusList(boolean createIfMissing) {
-		if ((_statusList == null) && (createIfMissing)) {
+		if (_statusList == null && createIfMissing) {
 			if (!isDeserializing()) {
 				_statusList = new StatusList(this, true);
 			} else {
@@ -1009,8 +1046,9 @@ public final class FlexoProcess extends WKFObject implements
 			} else {
 				return getParentProcess().getCalculatedCssSheet();
 			}
-		} else
+		} else {
 			return cssSheet;
+		}
 	}
 
 	/**
@@ -1041,10 +1079,12 @@ public final class FlexoProcess extends WKFObject implements
 	 * this.componentPrefix = componentPrefix; }
 	 */
 
+	@Override
 	public void updateMetricsValues() {
 		getWorkflow().updateMetricsForProcess(this);
 	}
 
+	@Override
 	public Vector<MetricsValue> getMetricsValues() {
 		return metricsValues;
 	}
@@ -1054,6 +1094,7 @@ public final class FlexoProcess extends WKFObject implements
 		setChanged();
 	}
 
+	@Override
 	public void addToMetricsValues(MetricsValue value) {
 		if (value.getMetricsDefinition() != null) {
 			metricsValues.add(value);
@@ -1063,6 +1104,7 @@ public final class FlexoProcess extends WKFObject implements
 		}
 	}
 
+	@Override
 	public void removeFromMetricsValues(MetricsValue value) {
 		metricsValues.remove(value);
 		value.setOwner(null);
@@ -1071,13 +1113,15 @@ public final class FlexoProcess extends WKFObject implements
 	}
 
 	public void addMetrics() {
-		if (addMetricsActionizer != null)
+		if (addMetricsActionizer != null) {
 			addMetricsActionizer.run(this, null);
+		}
 	}
 
 	public void deleteMetrics(MetricsValue value) {
-		if (deleteMetricsActionizer != null)
+		if (deleteMetricsActionizer != null) {
 			deleteMetricsActionizer.run(value, null);
+		}
 	}
 
 	@Override
@@ -1098,9 +1142,11 @@ public final class FlexoProcess extends WKFObject implements
 	// ==========================
 	// ==========================================================================
 
+	@Override
 	public String getInspectorName() {
-		if (isImported())
+		if (isImported()) {
 			return Inspectors.WKF.IMPORTED_PROCESS;
+		}
 		return Inspectors.WKF.FLEXO_PROCESS_INSPECTOR;
 	}
 
@@ -1155,8 +1201,9 @@ public final class FlexoProcess extends WKFObject implements
 			throws InvalidParentProcessException,
 			InvalidProcessReferencesException {
 		if (getParentProcess() != aNewParentProcess) {
-			if (aNewParentProcess != null && this.getIsWebService())
+			if (aNewParentProcess != null && this.getIsWebService()) {
 				throw new InvalidParentProcessException(this, aNewParentProcess);
+			}
 			boolean isImported = isImported();
 			if (!isImported && !isAcceptableAsParentProcess(aNewParentProcess)) {
 				throw new InvalidParentProcessException(this, aNewParentProcess);
@@ -1172,9 +1219,9 @@ public final class FlexoProcess extends WKFObject implements
 				}
 			}
 			FlexoProcessNode newParentProcessNode = aNewParentProcess != null ? aNewParentProcess.getProcessNode(): null;
-			if (newParentProcessNode != null)
+			if (newParentProcessNode != null) {
 				newParentProcessNode.addToSubProcesses(getProcessNode());
-			else {
+			} else {
 				if (isImported) {
 					getWorkflow().addToImportedRootNodeProcesses(getProcessNode());
 				} else {
@@ -1182,10 +1229,12 @@ public final class FlexoProcess extends WKFObject implements
 				}
 			}
 
-			if (getProcessDMEntity() != null)
+			if (getProcessDMEntity() != null) {
 				getProcessDMEntity().updateParentProcessPropertyIfRequired();
-			if (!isImported())
+			}
+			if (!isImported()) {
 				validateAfterMoving();
+			}
 		}
 	}
 
@@ -1198,7 +1247,7 @@ public final class FlexoProcess extends WKFObject implements
 		return !isImported()
 				&& !isAncestorOf(aNewParentProcess)
 				&& (aNewParentProcess == null || !aNewParentProcess
-						.isImported());
+				.isImported());
 	}
 
 	private void validateAfterMoving() throws InvalidProcessReferencesException {
@@ -1212,7 +1261,7 @@ public final class FlexoProcess extends WKFObject implements
 	private ProcessMovingValidationModel processMovingValidationModel;
 
 	public ProcessMovingValidationModel getProcessMovingValidationModel() {
-		if ((processMovingValidationModel == null) && (getProject() != null)) {
+		if (processMovingValidationModel == null && getProject() != null) {
 			processMovingValidationModel = new ProcessMovingValidationModel(
 					getProject());
 		}
@@ -1242,7 +1291,7 @@ public final class FlexoProcess extends WKFObject implements
 		 */
 		@Override
 		protected boolean shouldNotifyValidation(Validable next) {
-			return ((next instanceof FlexoWorkflow) || (next instanceof FlexoProcess));
+			return next instanceof FlexoWorkflow || next instanceof FlexoProcess;
 		}
 
 		/**
@@ -1258,18 +1307,19 @@ public final class FlexoProcess extends WKFObject implements
 	}
 
 	public boolean isTopLevelProcess() {
-		return (getParentProcess() == null);
+		return getParentProcess() == null;
 	}
 
 	public boolean isRootProcess() {
-		return ((isTopLevelProcess()) && (getWorkflow().getRootProcess() == this));
+		return isTopLevelProcess() && getWorkflow().getRootProcess() == this;
 	}
 
 	public boolean isAncestorOf(FlexoProcess anOtherProcess) {
 		FlexoProcess current = anOtherProcess;
 		while (current != null) {
-			if (current == this)
+			if (current == this) {
 				return true;
+			}
 			current = current.getParentProcess();
 		}
 		return false;
@@ -1281,22 +1331,24 @@ public final class FlexoProcess extends WKFObject implements
 	 * @return a Vector of FlexoProcess
 	 */
 	public Vector<FlexoProcess> getSubProcesses() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getSubProcesses() for " + getName());
+		}
 		_subProcesses = rebuildSubProcesses();
 		return _subProcesses;
 	}
-	
+
 	public boolean isSingleSubProcess()
 	{
 		boolean hasAtLeastOne = false;
 		for(SubProcessNode subProcessNode : getSubProcessNodes())
 		{
-			if(!subProcessNode.isSingle())
+			if(!subProcessNode.isSingle()) {
 				return false;
+			}
 			hasAtLeastOne = true;
 		}
-		
+
 		return hasAtLeastOne;
 	}
 
@@ -1311,19 +1363,22 @@ public final class FlexoProcess extends WKFObject implements
 	}
 
 	public void addToSubProcesses(FlexoProcess aProcess) {
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Adding process " + aProcess.getName()
 					+ " as subprocess of " + getName());
+		}
 		getProcessNode().addToSubProcesses(aProcess.getProcessNode());
 		rebuildSubProcesses();
-		if (aProcess.getProcessDMEntity() != null)
+		if (aProcess.getProcessDMEntity() != null) {
 			aProcess.getProcessDMEntity()
-					.createParentProcessPropertyIfRequired();
+			.createParentProcessPropertyIfRequired();
+		}
 		setChanged();
 		notifyObservers(new ProcessInserted(aProcess, this));
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("DONE. Adding process " + aProcess.getName()
 					+ " as subprocess of " + getName());
+		}
 	}
 
 	public void removeFromSubProcesses(FlexoProcess aProcess) {
@@ -1342,10 +1397,11 @@ public final class FlexoProcess extends WKFObject implements
 		if (_subProcesses != null) {
 			_subProcesses.clear();
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("rebuildSubProcesses() for " + getName());
-		if ((getProcessNode() == null)
-				|| (getProcessNode().getSubProcesses() == null)) {
+		}
+		if (getProcessNode() == null
+				|| getProcessNode().getSubProcesses() == null) {
 			return new Vector<FlexoProcess>();
 		}
 		_subProcesses = new Vector<FlexoProcess>();
@@ -1355,8 +1411,9 @@ public final class FlexoProcess extends WKFObject implements
 					.getProcess();
 			if (subProcess != null) {
 				_subProcesses.add(subProcess);
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Sub-process: " + subProcess.getName());
+				}
 			}
 		}
 		return _subProcesses;
@@ -1376,7 +1433,7 @@ public final class FlexoProcess extends WKFObject implements
 		return _doubleGraphicalPropertyForKey("scale_"+context, defaultValue);
 	}
 
-	public void setScale(String context, double value) 
+	public void setScale(String context, double value)
 	{
 		boolean wasNull = !hasGraphicalPropertyForKey("scale_"+context);
 		double oldValue = getScale(context, value);
@@ -1384,7 +1441,7 @@ public final class FlexoProcess extends WKFObject implements
 		if (wasNull || value != oldValue) {
 			_setGraphicalPropertyForKey(value, "scale_"+context);
 			setChanged();
-			
+
 		}
 	}
 
@@ -1395,8 +1452,9 @@ public final class FlexoProcess extends WKFObject implements
 	 */
 	public Vector<OperationNode> getAllEmbeddedOperationNodes() {
 		Vector<OperationNode> v = new Vector<OperationNode>();
-		if (isImported())
+		if (isImported()) {
 			return v;
+		}
 		if (_petriGraph != null) {
 			for (AbstractActivityNode activity : _petriGraph
 					.getAllEmbeddedAbstractActivityNodes()) {
@@ -1404,8 +1462,9 @@ public final class FlexoProcess extends WKFObject implements
 			}
 			return v;
 		}
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("_petriGraph is null for process:" + getName());
+		}
 		return v;
 	}
 
@@ -1421,8 +1480,9 @@ public final class FlexoProcess extends WKFObject implements
 		Enumeration<OperationNode> en = v.elements();
 		while (en.hasMoreElements()) {
 			OperationNode node = en.nextElement();
-			if (node.hasWOComponent())
+			if (node.hasWOComponent()) {
 				retval.add(node);
+			}
 		}
 		return retval;
 	}
@@ -1430,15 +1490,16 @@ public final class FlexoProcess extends WKFObject implements
 	public OperationNode getOperationNodeWithFlexoID(long flexoID) {
 		for (Enumeration e = getAllEmbeddedOperationNodes().elements(); e
 				.hasMoreElements();) {
-			OperationNode operation = ((OperationNode) e.nextElement());
+			OperationNode operation = (OperationNode) e.nextElement();
 			if (operation != null) {
 				if (operation.getFlexoID() == flexoID) {
 					return operation;
 				}
 			}
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Could not find operation with flexoID " + flexoID);
+		}
 		return null;
 	}
 
@@ -1532,10 +1593,12 @@ public final class FlexoProcess extends WKFObject implements
 	}
 
 	public static String beautifyName(String name) {
-		if (name == null)
+		if (name == null) {
 			return null;
-		if (name.matches(JavaUtils.JAVA_CLASS_NAME_REGEXP))
+		}
+		if (name.matches(JavaUtils.JAVA_CLASS_NAME_REGEXP)) {
 			return name;
+		}
 		Matcher m = JavaUtils.JAVA_VARIABLE_ACCEPTABLE_PATTERN.matcher(name);
 		StringBuffer sb = new StringBuffer();
 		int i = 0;
@@ -1547,8 +1610,9 @@ public final class FlexoProcess extends WKFObject implements
 			sb.append(ToolBox.capitalize(m.group(), true));
 			i = m.start() + m.end();
 		}
-		if (sb.length() == 0 || (sb.charAt(0) >= '0' && sb.charAt(0) <= '9'))
+		if (sb.length() == 0 || sb.charAt(0) >= '0' && sb.charAt(0) <= '9') {
 			sb.insert(0, '_');
+		}
 		return sb.toString();
 	}
 
@@ -1557,23 +1621,28 @@ public final class FlexoProcess extends WKFObject implements
 		for(FlexoProcess p:workflow.getAllFlexoProcesses()){
 			if(p!=thisProcess){
 				String processJavaName = ToolBox.getJavaName(p.getName());
-				if(processJavaName.equals(javaNameCandidate))return true;
+				if(processJavaName.equals(javaNameCandidate)) {
+					return true;
+				}
 			}
 		}
 		return false;
 	}
 	@Override
 	public void setName(String newName) throws DuplicateResourceException, InvalidNameException {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("FlexoProcess.setName() with " + newName + " was: "
 					+ _name);
-		if ((!newName.equals(_name)) || (_name == null)) {
-			if(processWithSimilarNameExists(getWorkflow(),this,ToolBox.getJavaName(newName)))
+		}
+		if (!newName.equals(_name) || _name == null) {
+			if(processWithSimilarNameExists(getWorkflow(),this,ToolBox.getJavaName(newName))) {
 				throw new InvalidNameException("A process with similar name exists");
-			if ((getProject() != null) && (getFlexoResource() != null)
+			}
+			if (getProject() != null && getFlexoResource() != null
 					&& !isDeserializing()) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("renameResource() with " + newName);
+				}
 				try {
 					getProject().renameResource(getFlexoResource(), newName);
 				} catch (DuplicateResourceException e) {
@@ -1582,19 +1651,23 @@ public final class FlexoProcess extends WKFObject implements
 						notifyObserversAsReentrantModification(new NameChanged(
 								_name, _name));
 						throw e;
-					} else if (logger.isLoggable(Level.WARNING))
+					} else if (logger.isLoggable(Level.WARNING)) {
 						logger
-								.warning("Duplicate resource thrown on imported process: "
-										+ newName);
+						.warning("Duplicate resource thrown on imported process: "
+								+ newName);
+					}
 				}
 				if (getProcessNode() != null)
+				{
 					getProcessNode().setChanged();// Workflow needs to be saved
-													// again
+					// again
+				}
 			}
 			if (!isDeserializing() && getProcessDMEntity() != null) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("rename process entity with "
 							+ getProcessInstanceEntityName(newName));
+				}
 				getProcessDMEntity().setName(
 						getProcessInstanceEntityName(newName));
 			}
@@ -1609,19 +1682,22 @@ public final class FlexoProcess extends WKFObject implements
 			setChanged();
 			notifyObservers(new NameChanged(oldName, newName));
 		} else {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("setName() ignored");
+			}
 		}
 	}
 
 	public void createsAutoGeneratedProcessBusinessDataDMEntityIfRequired() {
-		if (!isImported() && getBusinessDataType() == null)
+		if (!isImported() && getBusinessDataType() == null) {
 			getProject().getDataModel().getProcessBusinessDataRepository().getAutoGeneratedProcessBusinessDataDMEntity(this);
+		}
 	}
-	
+
 	public ProcessDMEntity createsProcessDMEntityIfRequired() {
-		if (!isImported())
+		if (!isImported()) {
 			return getProcessDMEntity();
+		}
 		return null;
 	}
 
@@ -1637,13 +1713,14 @@ public final class FlexoProcess extends WKFObject implements
 						.getProcessDMEntity(this);
 				// logger.info("************ getProcessNode()="+getProcessNode());
 				if (_processDMEntity == null) {
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Creates entry for process " + getName()
 								+ " in ProcessInstanceRepository");
+					}
 					_processDMEntity = new ProcessDMEntity(getProject()
 							.getDataModel(), this);
 					getProject().getDataModel().getProcessInstanceRepository()
-							.registerEntity(_processDMEntity);
+					.registerEntity(_processDMEntity);
 				}
 				_processDMEntity.setProcess(this);
 			}
@@ -1677,10 +1754,12 @@ public final class FlexoProcess extends WKFObject implements
 
 	public void setBusinessDataVariableName(String aName)
 			throws InvalidNameException, DuplicatePropertyNameException {
-		if (aName == null)
+		if (aName == null) {
 			return;
-		if (ReservedKeyword.contains(aName))
+		}
+		if (ReservedKeyword.contains(aName)) {
 			throw new InvalidNameException();
+		}
 		if (getBusinessDataProperty() != null) {
 			getBusinessDataProperty().setName(aName);
 		} else if (getProcessDMEntity() != null) {
@@ -1689,7 +1768,7 @@ public final class FlexoProcess extends WKFObject implements
 			}
 		}
 	}
-	
+
 	public DMEntity getBusinessDataType() {
 		if (getBusinessDataProperty() != null) {
 			return getBusinessDataProperty().getType().getBaseEntity();
@@ -1710,6 +1789,7 @@ public final class FlexoProcess extends WKFObject implements
 		notifyAttributeModification("businessDataType", null, aType);
 	}
 
+	@Override
 	public BindingModel getBindingModel() {
 		if (_bindingModel == null) {
 			_bindingModel = new ProcessBindingModel();
@@ -1752,7 +1832,7 @@ public final class FlexoProcess extends WKFObject implements
 						FlexoProcess.this,
 						FlexoProcess.this.getProject().getDataModel(),
 						FlexoLocalization
-								.localizedForKey("access_to_the_current_process_instance"));
+						.localizedForKey("access_to_the_current_process_instance"));
 				setVariableName("processInstance");
 			}
 
@@ -1953,8 +2033,11 @@ public final class FlexoProcess extends WKFObject implements
 		Vector<AbstractActivityNode> all = getAllAbstractActivityNodes();
 		Vector<AbstractActivityNode> reply = new Vector<AbstractActivityNode>();
 		for(AbstractActivityNode node:all){
-			if(!node.isBeginOrEndNode() && node.getName().trim().length()>0)
-				if(!node.getDontGenerate())reply.add(node);
+			if(!node.isBeginOrEndNode() && node.getName().trim().length()>0) {
+				if(!node.getDontGenerate()) {
+					reply.add(node);
+				}
+			}
 		}
 		return reply;
 	}
@@ -1963,8 +2046,11 @@ public final class FlexoProcess extends WKFObject implements
 		Vector<AbstractActivityNode> all = getAllAbstractActivityNodes();
 		Vector<SubProcessNode> reply = new Vector<SubProcessNode>();
 		for(AbstractActivityNode node:all){
-			if(!node.isBeginOrEndNode() && node.getName().trim().length()>0)
-				if(node instanceof SubProcessNode)reply.add((SubProcessNode)node);
+			if(!node.isBeginOrEndNode() && node.getName().trim().length()>0) {
+				if(node instanceof SubProcessNode) {
+					reply.add((SubProcessNode)node);
+				}
+			}
 		}
 		return reply;
 	}
@@ -2021,13 +2107,15 @@ public final class FlexoProcess extends WKFObject implements
 				.elements();
 		while (en.hasMoreElements()) {
 			AbstractActivityNode node = en.nextElement();
-			if (node.getName().equals(name))
+			if (node.getName().equals(name)) {
 				return node;
+			}
 		}
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("AbstractActivity named " + name
 					+ " could not be found in process "
 					+ getProcess().getName());
+		}
 		return null;
 	}
 
@@ -2035,13 +2123,15 @@ public final class FlexoProcess extends WKFObject implements
 		Enumeration<EventNode> en = getAllEventNodes().elements();
 		while (en.hasMoreElements()) {
 			EventNode node = en.nextElement();
-			if (node.getName().equals(name))
+			if (node.getName().equals(name)) {
 				return node;
+			}
 		}
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("AbstractActivity named " + name
 					+ " could not be found in process "
 					+ getProcess().getName());
+		}
 		return null;
 	}
 
@@ -2130,8 +2220,9 @@ public final class FlexoProcess extends WKFObject implements
 			public synchronized boolean addAll(
 					Collection<? extends FlexoPostCondition<?, ?>> c) {
 				for (FlexoPostCondition<?, ?> edge : c) {
-					if (!contains(edge))
+					if (!contains(edge)) {
 						add(edge);
+					}
 				}
 				return true;
 			}
@@ -2149,8 +2240,9 @@ public final class FlexoProcess extends WKFObject implements
 			public synchronized boolean addAll(
 					Collection<? extends WKFAssociation> c) {
 				for (WKFAssociation edge : c) {
-					if (!contains(edge))
+					if (!contains(edge)) {
 						add(edge);
+					}
 				}
 				return true;
 			}
@@ -2180,6 +2272,7 @@ public final class FlexoProcess extends WKFObject implements
 	 *
 	 * @see org.openflexo.foundation.wkf.LevelledObject#getLevel()
 	 */
+	@Override
 	public FlexoLevel getLevel() {
 		return FlexoLevel.PROCESS;
 	}
@@ -2191,22 +2284,26 @@ public final class FlexoProcess extends WKFObject implements
 	@Override
 	public final void delete() {
 		if (isImported())
+		{
 			isImported = true;// This is important, because it allows to do some
-								// tests on this deleted object
-		if (logger.isLoggable(Level.FINE))
+		}
+		// tests on this deleted object
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("delete: FlexoProcess " + getName());
+		}
 		for (FlexoProcess p : new Vector<FlexoProcess>(getSubProcesses())) {
 			p.delete();
 		}
 		Vector<SubProcessNode> allBoundSubProcessNodes = new Vector<SubProcessNode>(
 				getSubProcessNodes());
-		for (Enumeration e = allBoundSubProcessNodes.elements(); e
+		for (Enumeration<SubProcessNode> e = allBoundSubProcessNodes.elements(); e
 				.hasMoreElements();) {
-			SubProcessNode subProcessNode = (SubProcessNode) e.nextElement();
+			SubProcessNode subProcessNode = e.nextElement();
 			subProcessNode.setSubProcess(null);
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Set subprocess to null for "
 						+ subProcessNode.getName());
+			}
 		}
 		/*
 		 * FlexoProcessNode processNode = getProcessNode(); if (processNode !=
@@ -2225,13 +2322,15 @@ public final class FlexoProcess extends WKFObject implements
 		if (getProcessNode()!=null) {
 			getProcessNode().delete();
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Process "+getName()+" has no process node associated!");
+			}
 		}
 		FlexoProcessImageBuilder.deleteSnapshot(this);
 		super.delete();
-		if (nameForNodeMap != null)
+		if (nameForNodeMap != null) {
 			nameForNodeMap.clear();
+		}
 		nameForNodeMap = null;
 		setChanged();
 		notifyObservers(new ProcessRemoved(this, parentProcess));
@@ -2329,31 +2428,38 @@ public final class FlexoProcess extends WKFObject implements
 	public String findNextNonAmbigousNameForNode(String baseName,
 			AbstractNode aNode) {
 		if (aNode instanceof PetriGraphNode) {
-			if (aNode instanceof AbstractActivityNode)
+			if (aNode instanceof AbstractActivityNode) {
 				return findNextInitialName(baseName);
-			if (aNode instanceof OperationNode)
+			}
+			if (aNode instanceof OperationNode) {
 				return findNextInitialName(baseName, ((OperationNode) aNode)
 						.getAbstractActivityNode());
-			if (aNode instanceof ActionNode)
+			}
+			if (aNode instanceof ActionNode) {
 				return findNextInitialName(baseName, ((ActionNode) aNode)
 						.getOperationNode());
+			}
 		} else if (aNode instanceof OperatorNode) {
-			if (aNode.getLevel() == FlexoLevel.ACTIVITY)
+			if (aNode.getLevel() == FlexoLevel.ACTIVITY) {
 				return findNextInitialName(baseName);
-			if (aNode.getLevel() == FlexoLevel.OPERATION)
+			}
+			if (aNode.getLevel() == FlexoLevel.OPERATION) {
 				return findNextInitialName(baseName, ((OperatorNode) aNode)
 						.getAbstractActivityNode());
-			if (aNode.getLevel() == FlexoLevel.ACTION)
+			}
+			if (aNode.getLevel() == FlexoLevel.ACTION) {
 				return findNextInitialName(baseName, ((OperatorNode) aNode)
 						.getOperationNode());
+			}
 		} else if (aNode instanceof FlexoPort) {
 			return findNextInitialName(baseName);
 		} else if (aNode instanceof FlexoPortMap) {
 			return findNextInitialName(baseName, ((FlexoPortMap) aNode)
 					.getSubProcessNode());
 		}
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Unexpected type " + aNode.getClass().getName());
+		}
 		return null;
 	}
 
@@ -2376,8 +2482,9 @@ public final class FlexoProcess extends WKFObject implements
 	 */
 	public String findNextInitialName(String baseName,
 			AbstractActivityNode activityNode) {
-		if (activityNode == null)
+		if (activityNode == null) {
 			return baseName;
+		}
 		return nextInitialName(baseName, getFullyQualifiedName() + "."
 				+ activityNode.getName() + "." + baseName);
 	}
@@ -2389,8 +2496,9 @@ public final class FlexoProcess extends WKFObject implements
 	 */
 	public String findNextInitialName(String baseName,
 			OperationNode operationNode) {
-		if (operationNode == null)
+		if (operationNode == null) {
 			return baseName;
+		}
 		return nextInitialName(baseName, getFullyQualifiedName() + "."
 				+ operationNode.getAbstractActivityNode().getName() + "."
 				+ operationNode.getName() + "." + baseName);
@@ -2430,7 +2538,7 @@ public final class FlexoProcess extends WKFObject implements
 	}
 
 	public PortRegistery getPortRegistery() {
-		if ((_registery == null) && (!isImported())) {
+		if (_registery == null && !isImported()) {
 			_registery = new PortRegistery(this);
 			// TODO: following must be put in some finalizer
 			/*
@@ -2453,9 +2561,11 @@ public final class FlexoProcess extends WKFObject implements
 
 	public void setPortRegistery(PortRegistery registery) {
 		_registery = registery;
-		if (registery.getProcess() != this)
-			if (logger.isLoggable(Level.WARNING))
+		if (registery.getProcess() != this) {
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("there is a problem!");
+			}
+		}
 		_registery.setProcess(this);
 	}
 
@@ -2465,8 +2575,9 @@ public final class FlexoProcess extends WKFObject implements
 				_portRegistryInterface = new DefaultServiceInterface(this);
 				_portRegistryInterface.updateFromPortRegistery();
 			} catch (FlexoException f) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception should not arise");
+				}
 				f.printStackTrace();
 			}
 		}
@@ -2489,9 +2600,10 @@ public final class FlexoProcess extends WKFObject implements
 			ServiceInterface.checkInterfaceName(this, name, null);
 			newInterface = new ServiceInterface(this, name);
 		} catch (DuplicateWKFObjectException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("An interface with the same name (" + name
 						+ ") already exist");
+			}
 			throw e;
 		} catch (DuplicateWSObjectException e) {
 			throw e;
@@ -2523,8 +2635,9 @@ public final class FlexoProcess extends WKFObject implements
 		Enumeration<ServiceInterface> en = _serviceInterfaces.elements();
 		while (en.hasMoreElements()) {
 			ServiceInterface intf = en.nextElement();
-			if (intf.getName().equals(interfaceName))
+			if (intf.getName().equals(interfaceName)) {
 				return intf;
+			}
 		}
 		return null;
 	}
@@ -2549,19 +2662,21 @@ public final class FlexoProcess extends WKFObject implements
 	}
 
 	public void addToSubProcessNodes(SubProcessNode node) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine(getName() + ": addToSubProcessNodes() "
 					+ node.getName());
-		if (!node.getXMLResourceData().getFlexoXMLFileResource().isConverting()) {
+		}
+		if (!node.getXMLResourceData().getFlexoXMLFileResource().isConverting() && !_subProcessNodes.contains(node)) {
 			_subProcessNodes.add(node);
 			addObserver(node);
 		}
 	}
 
 	public void removeFromSubProcessNodes(SubProcessNode node) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine(getName() + ": removeFromSubProcessNodes() "
 					+ node.getName());
+		}
 		_subProcessNodes.remove(node);
 		deleteObserver(node);
 	}
@@ -2581,29 +2696,34 @@ public final class FlexoProcess extends WKFObject implements
 	 * are inter-procedural !
 	 */
 	public void finalizeProcessBindings() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("finalizeProcessBindings() " + getName());
+		}
 		for (Enumeration e = getAllSubProcessNodes().elements(); e
 				.hasMoreElements();) {
 			SubProcessNode node = (SubProcessNode) e.nextElement();
 			if (node.getSubProcess() != null) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.finer("Finalize linking " + getName() + " with "
 							+ node.getSubProcess().getName());
-				if (!node.getSubProcess().isImported())
+				}
+				if (!node.getSubProcess().isImported()) {
 					node.getPortMapRegistery().lookupServiceInterface();
+				}
 			} else if (node.getSubProcessName() != null) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Undefined sub-process "
 							+ node.getSubProcessName()
 							+ " referenced in process " + getName());
+				}
 				node.setSubProcessName(null);
 			}
-			if ((node.getSubProcess() == null)
-					&& (node.getPortMapRegistery() != null)) {
-				if (logger.isLoggable(Level.WARNING))
+			if (node.getSubProcess() == null
+					&& node.getPortMapRegistery() != null) {
+				if (logger.isLoggable(Level.WARNING)) {
 					logger
-							.warning("Inconsistent data : PortMapRegistery defined while no sub-process is defined: remove it");
+					.warning("Inconsistent data : PortMapRegistery defined while no sub-process is defined: remove it");
+				}
 				node.getPortMapRegistery().delete();
 				node.setSubProcessName(null);
 			}
@@ -2618,13 +2738,16 @@ public final class FlexoProcess extends WKFObject implements
 
 	@Override
 	public synchronized void setIsModified() {
-		if (ignoreNotifications())
+		if (ignoreNotifications()) {
 			return;
+		}
 		if (nameForNodeMap != null)
+		{
 			nameForNodeMap.clear();// Any modification is capable of modify the
-									// names of the objects.
+		}
+		// names of the objects.
 		lastUpdate = null; // Reset the last update date so that it will be
-							// recomputed according to the new lastMemoryUpdate!
+		// recomputed according to the new lastMemoryUpdate!
 		super.setIsModified();
 	}
 
@@ -2635,8 +2758,9 @@ public final class FlexoProcess extends WKFObject implements
 	 */
 	@Override
 	public Date getLastUpdate() {
-		if (lastUpdate == null)
+		if (lastUpdate == null) {
 			lastUpdate = lastMemoryUpdate();
+		}
 		if (lastUpdate == null) {
 			lastUpdate = super.getLastUpdate();
 		}
@@ -2663,13 +2787,15 @@ public final class FlexoProcess extends WKFObject implements
 			.EMPTY_VECTOR(WKFObject.class);
 
 	public void addStatus() {
-		if (addStatusActionizer != null)
+		if (addStatusActionizer != null) {
 			addStatusActionizer.run(this, EMPTY_VECTOR);
+		}
 	}
 
 	public void deleteStatus(Status object) {
-		if (deleteActionizer != null)
+		if (deleteActionizer != null) {
 			deleteActionizer.run(object, EMPTY_VECTOR);
+		}
 	}
 
 	/**
@@ -2682,8 +2808,9 @@ public final class FlexoProcess extends WKFObject implements
 	}
 
 	public Enumeration<Status> getSortedStatuses() {
-		if (getStatusList() == null)
+		if (getStatusList() == null) {
 			return ToolBox.getEnumeration(new Status[0]);
+		}
 		disableObserving();
 		Status[] o = FlexoIndexManager.sortArray(getStatusList().getStatus()
 				.toArray(new Status[0]));
@@ -2711,23 +2838,29 @@ public final class FlexoProcess extends WKFObject implements
 	}
 
 	public WorkflowControlGraph<FlexoProcess> getExecution() {
-		if (_executionComputingFactory != null)
+		if (_executionComputingFactory != null) {
 			return _executionComputingFactory.getControlGraph(this);
+		}
 		return null;
 	}
 
+	@Override
 	public void setProgrammingLanguageForControlGraphComputation(
 			ProgrammingLanguage language) {
-		if (getExecution() != null)
+		if (getExecution() != null) {
 			getExecution().setProgrammingLanguage(language);
+		}
 	}
 
+	@Override
 	public void setInterproceduralForControlGraphComputation(
 			boolean interprocedural) {
-		if (getExecution() != null)
+		if (getExecution() != null) {
 			getExecution().setInterprocedural(interprocedural);
+		}
 	}
 
+	@Override
 	public String getExecutableElementName() {
 		return FlexoLocalization.localizedForKeyWithParams("process_($0)",
 				getName());
@@ -2750,14 +2883,16 @@ public final class FlexoProcess extends WKFObject implements
 	}
 
 	public synchronized String getUniqueNameForNode(AbstractNode node) {
-		if (getNameForNodeMap().getKey(node) != null)
+		if (getNameForNodeMap().getKey(node) != null) {
 			return (String) getNameForNodeMap().getKey(node);
-		if (logger.isLoggable(Level.WARNING))
+		}
+		if (logger.isLoggable(Level.WARNING)) {
 			logger
-					.warning("Node "
-							+ node
-							+ " had no computed name meaning that it was probably not properly embedded in the FlexoProcess."
-							+ "I will compute its name now, but this can be source of instability in the names of the nodes. You should try to find why that node was not embedded.");
+			.warning("Node "
+					+ node
+					+ " had no computed name meaning that it was probably not properly embedded in the FlexoProcess."
+					+ "I will compute its name now, but this can be source of instability in the names of the nodes. You should try to find why that node was not embedded.");
+		}
 		return computeAndStoreNameForNode(node);
 	}
 
@@ -2767,8 +2902,9 @@ public final class FlexoProcess extends WKFObject implements
 		if (nameForNodeMap.get(attempt) != null
 				|| ReservedKeyword.contains(attempt)) {
 			String nodeType = node.getNodeTypeName();
-			if (base.toLowerCase().indexOf(nodeType.toLowerCase()) == -1)
+			if (base.toLowerCase().indexOf(nodeType.toLowerCase()) == -1) {
 				base = base + nodeType;
+			}
 			base = ToolBox.uncapitalize(base);
 			int i = 1;
 			attempt = base;
@@ -2788,18 +2924,21 @@ public final class FlexoProcess extends WKFObject implements
 		nodes.addAll(getPortRegistery().getAllPorts());
 		Collections.sort(nodes, new Comparator<FlexoModelObject>() {
 
+			@Override
 			public int compare(FlexoModelObject o1, FlexoModelObject o2) {
 				return o1.compareTo(o2);
 			}
 
 		});
-		for (FlexoProcess process : getWorkflow().getAllLocalFlexoProcesses())
+		for (FlexoProcess process : getWorkflow().getAllLocalFlexoProcesses()) {
 			nameForNodeMap.put(ToolBox.uncapitalize(ToolBox.getJavaName(process
 					.getName())), process);
+		}
 		for (FlexoProcess process : getWorkflow()
-				.getAllImportedFlexoProcesses())
+				.getAllImportedFlexoProcesses()) {
 			nameForNodeMap.put(ToolBox.uncapitalize(ToolBox.getJavaName(process
 					.getName())), process);
+		}
 		if (getProcessDMEntity() != null) {
 			for (DMObject obj : getProcessDMEntity().getOrderedChildren()) {
 				nameForNodeMap.put(ToolBox.uncapitalize(ToolBox.getJavaName(obj
@@ -2816,7 +2955,7 @@ public final class FlexoProcess extends WKFObject implements
 	// ============================================================
 
 	public static class NonRootProcessShouldBeUsed extends
-			ValidationRule<NonRootProcessShouldBeUsed, FlexoProcess> {
+	ValidationRule<NonRootProcessShouldBeUsed, FlexoProcess> {
 		public NonRootProcessShouldBeUsed() {
 			super(FlexoProcess.class, "non_root_process_should_be_used");
 		}
@@ -2835,7 +2974,7 @@ public final class FlexoProcess extends WKFObject implements
 	}
 
 	public static class FlexoProcessMustHaveADefaultStatus extends
-			ValidationRule<FlexoProcessMustHaveADefaultStatus, FlexoProcess> {
+	ValidationRule<FlexoProcessMustHaveADefaultStatus, FlexoProcess> {
 		public FlexoProcessMustHaveADefaultStatus() {
 			super(FlexoProcess.class, "process_must_have_a_default_status");
 		}
@@ -2861,7 +3000,7 @@ public final class FlexoProcess extends WKFObject implements
 		}
 
 		protected static class CreateAndSetDefaultStatus extends
-				FixProposal<FlexoProcessMustHaveADefaultStatus, FlexoProcess> {
+		FixProposal<FlexoProcessMustHaveADefaultStatus, FlexoProcess> {
 
 			public CreateAndSetDefaultStatus() {
 				super("create_and_set_default_status");
@@ -2878,7 +3017,7 @@ public final class FlexoProcess extends WKFObject implements
 		}
 
 		protected static class SetDefaultStatus extends
-				FixProposal<FlexoProcessMustHaveADefaultStatus, FlexoProcess> {
+		FixProposal<FlexoProcessMustHaveADefaultStatus, FlexoProcess> {
 
 			private Status status;
 
@@ -2902,7 +3041,7 @@ public final class FlexoProcess extends WKFObject implements
 	}
 
 	public static class ProcessHierarchyIsConsistent extends
-			ValidationRule<ProcessHierarchyIsConsistent, FlexoProcess> {
+	ValidationRule<ProcessHierarchyIsConsistent, FlexoProcess> {
 		public ProcessHierarchyIsConsistent() {
 			super(FlexoProcess.class, "process_hierarchy_must_be_consistent");
 		}
@@ -2912,16 +3051,17 @@ public final class FlexoProcess extends WKFObject implements
 				final FlexoProcess process) {
 			if (!process.isImported()
 					&& !process.isAcceptableAsParentProcess(process
-							.getParentProcess()))
+							.getParentProcess())) {
 				return new ValidationError<ProcessHierarchyIsConsistent, FlexoProcess>(
 						this, process,
 						"process_hierarchy_for_($object.name)_is_inconsistant");
+			}
 			return null;
 		}
 	}
 
 	public static class ImportedProcessShouldExistOnServer extends
-			ValidationRule<ImportedProcessShouldExistOnServer, FlexoProcess> {
+	ValidationRule<ImportedProcessShouldExistOnServer, FlexoProcess> {
 		public ImportedProcessShouldExistOnServer() {
 			super(FlexoProcess.class, "imported_process_should_exist_on_server");
 		}
@@ -2929,16 +3069,17 @@ public final class FlexoProcess extends WKFObject implements
 		@Override
 		public ValidationIssue<ImportedProcessShouldExistOnServer, FlexoProcess> applyValidation(
 				final FlexoProcess process) {
-			if (process.isImported() && process.isDeletedOnServer())
+			if (process.isImported() && process.isDeletedOnServer()) {
 				return new ValidationWarning<ImportedProcessShouldExistOnServer, FlexoProcess>(
 						this, process,
 						"process_($object.name)_no_longer_exists_on_server",
 						new DeleteProcess());
+			}
 			return null;
 		}
 
 		public static class DeleteProcess extends
-				FixProposal<ImportedProcessShouldExistOnServer, FlexoProcess> {
+		FixProposal<ImportedProcessShouldExistOnServer, FlexoProcess> {
 			public DeleteProcess() {
 				super("delete_process_($object.name)");
 			}
@@ -2951,7 +3092,7 @@ public final class FlexoProcess extends WKFObject implements
 	}
 
 	public static class ProcessMustDefineBusinessDataClass extends
-			ValidationRule<ProcessMustDefineBusinessDataClass, FlexoProcess> {
+	ValidationRule<ProcessMustDefineBusinessDataClass, FlexoProcess> {
 
 		/**
 		 * @param objectType
@@ -2970,18 +3111,20 @@ public final class FlexoProcess extends WKFObject implements
 		public ValidationIssue<ProcessMustDefineBusinessDataClass, FlexoProcess> applyValidation(
 				FlexoProcess process) {
 			if (process.getBusinessDataType() == null
-					&& !process.isRootProcess())
+					&& !process.isRootProcess()) {
 				return new ValidationError<ProcessMustDefineBusinessDataClass, FlexoProcess>(
 						this, process,
 						"process_must_define_a_business_data_type",
 						new SetTypeProposal());
+			}
 			if (!process.isRootProcess()
 					&& (process.getBusinessDataVariableName() == null || process
-							.getBusinessDataVariableName().trim().length() == 0))
+					.getBusinessDataVariableName().trim().length() == 0)) {
 				return new ValidationError<ProcessMustDefineBusinessDataClass, FlexoProcess>(
 						this, process,
 						"process_must_define_a_business_data_variable",
 						new SetVariableNameProposal());
+			}
 			return null;
 		}
 
@@ -2996,8 +3139,8 @@ public final class FlexoProcess extends WKFObject implements
 		}
 
 		public static class SetTypeProposal
-				extends
-				ParameteredFixProposal<ProcessMustDefineBusinessDataClass, FlexoProcess> {
+		extends
+		ParameteredFixProposal<ProcessMustDefineBusinessDataClass, FlexoProcess> {
 
 			private static final ParameterDefinition[] parameters = new ParameterDefinition[] { new DMEntityParameter(
 					"type", "type", null) };
@@ -3017,15 +3160,16 @@ public final class FlexoProcess extends WKFObject implements
 			@Override
 			protected void fixAction() {
 				DMEntity e = (DMEntity) getValueForParameter("type");
-				if (e != null)
+				if (e != null) {
 					getObject().setBusinessDataType(e);
+				}
 			}
 
 		}
 
 		public static class SetVariableNameProposal
-				extends
-				ParameteredFixProposal<ProcessMustDefineBusinessDataClass, FlexoProcess> {
+		extends
+		ParameteredFixProposal<ProcessMustDefineBusinessDataClass, FlexoProcess> {
 
 			private static final ParameterDefinition[] parameters = new ParameterDefinition[] { new TextFieldParameter(
 					"name", "name", null) };
@@ -3045,16 +3189,19 @@ public final class FlexoProcess extends WKFObject implements
 			@Override
 			protected void fixAction() {
 				String s = (String) getValueForParameter("name");
-				if (s != null && s.trim().length() == 0)
+				if (s != null && s.trim().length() == 0) {
 					try {
 						getObject().setBusinessDataVariableName(s);
 					} catch (InvalidNameException e) {
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning(e.getMessage());
+						}
 					} catch (DuplicatePropertyNameException e) {
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning(e.getMessage());
+						}
 					}
+				}
 			}
 
 		}
@@ -3062,8 +3209,8 @@ public final class FlexoProcess extends WKFObject implements
 	}
 
 	public static class BusinessDataClassMustHaveStatusProperty
-			extends
-			ValidationRule<BusinessDataClassMustHaveStatusProperty, FlexoProcess> {
+	extends
+	ValidationRule<BusinessDataClassMustHaveStatusProperty, FlexoProcess> {
 
 		/**
 		 * @param objectType
@@ -3085,7 +3232,7 @@ public final class FlexoProcess extends WKFObject implements
 
 			if (process.getBusinessDataType() != null) {
 				if (process.getBusinessDataType().getProperty("status") == null) {
-					if (process.getBusinessDataType() instanceof DMEOEntity)
+					if (process.getBusinessDataType() instanceof DMEOEntity) {
 						return new ValidationError<BusinessDataClassMustHaveStatusProperty, FlexoProcess>(
 								this,
 								process,
@@ -3093,11 +3240,12 @@ public final class FlexoProcess extends WKFObject implements
 								process.getBusinessDataType().getIsReadOnly() ? null
 										: new AddPropertyStatus(
 												(DMEOEntity) process
-														.getBusinessDataType()));
-					else
+												.getBusinessDataType()));
+					} else {
 						return new ValidationError<BusinessDataClassMustHaveStatusProperty, FlexoProcess>(
 								this, process,
 								"business_data_class_must_have_status_property");
+					}
 
 				}
 			}
@@ -3115,8 +3263,8 @@ public final class FlexoProcess extends WKFObject implements
 		}
 
 		public static class AddPropertyStatus
-				extends
-				FixProposal<BusinessDataClassMustHaveStatusProperty, FlexoProcess> {
+		extends
+		FixProposal<BusinessDataClassMustHaveStatusProperty, FlexoProcess> {
 
 			private DMEOEntity _businessDataClass;
 
@@ -3181,15 +3329,17 @@ public final class FlexoProcess extends WKFObject implements
 	 */
 	public boolean hasWOComponent() {
 		for (AbstractActivityNode act : getAllEmbeddedAbstractActivityNodes()) {
-			if (act.hasWOComponent())
+			if (act.hasWOComponent()) {
 				return true;
+			}
 		}
 		return false;
 	}
 
 	public int getIndex() {
-		if (getProcessNode() != null)
+		if (getProcessNode() != null) {
 			return getProcessNode().getIndex();
+		}
 
 		logger.warning("Process node is null for flexo process "
 				+ this.getName());
@@ -3207,14 +3357,16 @@ public final class FlexoProcess extends WKFObject implements
 				dm.setReentrant(true);
 				notifyObservers(dm);
 			}
-		} else
+		} else {
 			logger.warning("Process node is null for flexo process "
 					+ this.getName());
+		}
 	}
 
 	public int getVectorIndex() {
-		if (getProcessNode() != null)
+		if (getProcessNode() != null) {
 			return getProcessNode().getVectorIndex();
+		}
 
 		logger.warning("Process node is null for flexo process "
 				+ this.getName());
@@ -3232,9 +3384,10 @@ public final class FlexoProcess extends WKFObject implements
 				dm.setReentrant(true);
 				notifyObservers(dm);
 			}
-		} else
+		} else {
 			logger.warning("Process node is null for flexo process "
 					+ this.getName());
+		}
 	}
 
 	/**
@@ -3246,8 +3399,9 @@ public final class FlexoProcess extends WKFObject implements
 	 *         the petri graph.
 	 */
 	public Vector<AbstractActivityNode> getAllEmbeddedSortedAbstractActivityNodes() {
-		if (_petriGraph != null)
+		if (_petriGraph != null) {
 			return _petriGraph.getAllEmbeddedSortedAbstractActivityNodes();
+		}
 		return new Vector<AbstractActivityNode>();
 	}
 
@@ -3306,8 +3460,9 @@ public final class FlexoProcess extends WKFObject implements
 	}
 
 	public Vector<Status> getSortedStatusesVector() {
-		if (getStatusList() == null)
+		if (getStatusList() == null) {
 			return new Vector<Status>();
+		}
 		disableObserving();
 		Vector<Status> v = new Vector<Status>(getStatusList().getStatus());
 		Collections.sort(v, FlexoIndexManager.INDEX_COMPARATOR);
@@ -3316,44 +3471,53 @@ public final class FlexoProcess extends WKFObject implements
 	}
 
 	public boolean hasAtLeastOneStatusToDocument() {
-		if (getStatusList() == null)
+		if (getStatusList() == null) {
 			return false;
+		}
 		Enumeration<Status> en = getStatusList().elements();
-		while (en.hasMoreElements())
-			if (!en.nextElement().getDontGenerate())
+		while (en.hasMoreElements()) {
+			if (!en.nextElement().getDontGenerate()) {
 				return true;
+			}
+		}
 		return false;
 	}
 
 	public boolean hasAtLeastOneEventToDocument() {
 		Enumeration<EventNode> en = getAllEventNodes().elements();
 		while (en.hasMoreElements()) {
-			if (!en.nextElement().getDontGenerate())
+			if (!en.nextElement().getDontGenerate()) {
 				return true;
+			}
 		}
 		return false;
 	}
 
 	public ProcessStatistics getStatistics() {
-		if (statistics == null)
+		if (statistics == null) {
 			statistics = new ProcessStatistics(this);
+		}
 		return statistics;
 	}
 
+	@Override
 	public ApplicationHelpEntryPoint getParentHelpEntry() {
 		return getParentProcess();
 	}
 
+	@Override
 	public List<ApplicationHelpEntryPoint> getChildsHelpObjects() {
 		Vector<ApplicationHelpEntryPoint> reply = new Vector<ApplicationHelpEntryPoint>();
 		reply.addAll(getAllActivityNodes());
 		return reply;
 	}
 
+	@Override
 	public String getShortHelpLabel() {
 		return getName();
 	}
 
+	@Override
 	public String getTypedHelpLabel() {
 		return "Process : " + getName();
 	}
@@ -3366,28 +3530,33 @@ public final class FlexoProcess extends WKFObject implements
 	}
 
 	public boolean oneAncestorIsNotGenerated(){
-		if(getDontGenerate())return true;
-		if(getParentProcess()==null)return getDontGenerate();
+		if(getDontGenerate()) {
+			return true;
+		}
+		if(getParentProcess()==null) {
+			return getDontGenerate();
+		}
 		return getParentProcess().oneAncestorIsNotGenerated();
 	}
-	
+
 	public String getProcessDictionaryKey()
 	{
 		return ToolBox.cleanStringForProcessDictionaryKey(getName());
 	}
-	
+
 	public String getBusinessDataDictionaryKey()
 	{
-		if(getBusinessDataType() != null)
+		if(getBusinessDataType() != null) {
 			return ToolBox.cleanStringForProcessDictionaryKey(getBusinessDataType().getName());
+		}
 
 		return AutoGeneratedProcessBusinessDataDMEntity.getProcessBusinessDataEntityNameForProcess(this);
 	}
-	
+
 	public static final String PROCESSINSTANCE_STATUS_KEY = ToolBox.cleanStringForProcessDictionaryKey("status");
 	public static final String PROCESSINSTANCE_CREATIONDATE_KEY = ToolBox.cleanStringForProcessDictionaryKey("creationDate");
 	public static final String PROCESSINSTANCE_LASTUPDATEDATE_KEY = ToolBox.cleanStringForProcessDictionaryKey("lastUpdateDate");
-	
+
 	/**
 	 * Return a map containing the sample value list for each key used for this process (prototype).
 	 * 
@@ -3396,36 +3565,41 @@ public final class FlexoProcess extends WKFObject implements
 	public Map<String, List<Object>> getProcessInstanceDictionaryPrototypeSamples()
 	{
 		Map<String, List<Object>> keysTable = new HashMap<String, List<Object>>();
-		
+
 		for(IEWidget widget : getWidgetsForProcessInstanceDictionary())
 		{
 			String key = widget.getProcessInstanceDictionaryKey();
 			List<Object> sampleValues = new ArrayList<Object>();
-			if(widget instanceof IEWidgetWithValueList)
+			if(widget instanceof IEWidgetWithValueList) {
 				sampleValues = ((IEWidgetWithValueList)widget).getValueList(this);
-			
-			if(!keysTable.containsKey(key) || keysTable.get(key).size() < sampleValues.size())
+			}
+
+			if(!keysTable.containsKey(key) || keysTable.get(key).size() < sampleValues.size()) {
 				keysTable.put(widget.getProcessInstanceDictionaryKey(), sampleValues);
+			}
 		}
-		
-		if(getStatusList().size() >0 ) 
+
+		if(getStatusList().size() >0 )
 		{
 			//Always add status list if any
 			List<Object> statuses = new ArrayList<Object>();
 			keysTable.put(PROCESSINSTANCE_STATUS_KEY, statuses);
-			for(Status status : getStatusList().getStatus())
+			for(Status status : getStatusList().getStatus()) {
 				statuses.add(status.getName());
+			}
 		}
-		
-		if(keysTable.get(PROCESSINSTANCE_CREATIONDATE_KEY) == null)
+
+		if(keysTable.get(PROCESSINSTANCE_CREATIONDATE_KEY) == null) {
 			keysTable.put(PROCESSINSTANCE_CREATIONDATE_KEY, new ArrayList<Object>());
-		
-		if(keysTable.get(PROCESSINSTANCE_LASTUPDATEDATE_KEY) == null)
+		}
+
+		if(keysTable.get(PROCESSINSTANCE_LASTUPDATEDATE_KEY) == null) {
 			keysTable.put(PROCESSINSTANCE_LASTUPDATEDATE_KEY, new ArrayList<Object>());
-		
+		}
+
 		return keysTable;
 	}
-	
+
 	/**
 	 * Return a map with all keys found for this process with their type. Keys are created based on the screen components.
 	 * 
@@ -3440,66 +3614,72 @@ public final class FlexoProcess extends WKFObject implements
 			if(key != null)
 			{
 				Class<? extends Object> type = getProcessInstanceDictionaryType(widget);
-				
-				if(result.containsKey(key) && result.get(key) != type)
+
+				if(result.containsKey(key) && result.get(key) != type) {
 					type = Object.class;
-				
+				}
+
 				result.put(key, type);
 			}
 		}
-		
-		if(getStatusList().size() >0 ) 
+
+		if(getStatusList().size() >0 ) {
 			result.put(PROCESSINSTANCE_STATUS_KEY, String.class);
-		
+		}
+
 		result.put(PROCESSINSTANCE_CREATIONDATE_KEY, Date.class);
 		result.put(PROCESSINSTANCE_LASTUPDATEDATE_KEY, Date.class);
-		
+
 		return result;
 	}
-	
+
 	private List<IEWidget> getWidgetsForProcessInstanceDictionary()
 	{
 		Map<FlexoProcess, Set<IEWOComponent>> componentsByProcess = new HashMap<FlexoProcess, Set<IEWOComponent>>();
-		
+
 		for(OperationComponentInstance ci : getProject().getFlexoWorkflow().getAllComponentInstances())
 		{
 			OperationNode operationNode = ci.getOperationNode();
 			if(operationNode != null && operationNode.hasWOComponent())
 			{
-				if(componentsByProcess.get(operationNode.getProcess()) == null)
+				if(componentsByProcess.get(operationNode.getProcess()) == null) {
 					componentsByProcess.put(operationNode.getProcess(), new HashSet<IEWOComponent>());
+				}
 
 				componentsByProcess.get(operationNode.getProcess()).add(operationNode.getWOComponent());
 			}
 		}
-		
+
 		List<IEWidget> allWidgets = new ArrayList<IEWidget>();
 		for(Map.Entry<FlexoProcess, Set<IEWOComponent>> entry : componentsByProcess.entrySet())
 		{
-			for(IEWOComponent woComponent : entry.getValue())
+			for(IEWOComponent woComponent : entry.getValue()) {
 				allWidgets.addAll(getWidgetsForProcessInstanceFromComponent(woComponent, entry.getKey()));
+			}
 		}
-		
+
 		return allWidgets;
 	}
-	
+
 	private List<IEWidget> getWidgetsForProcessInstanceFromComponent(IEWOComponent component, FlexoProcess componentProcess)
 	{
 		List<IEWidget> allWidgets = new ArrayList<IEWidget>();
-		
+
 		for(IEWidget widget : component.getAllEmbeddedIEWidgets(IEWidget.class))
 		{
-			if(widget.getIsAcceptableForProcessInstanceDictionary(componentProcess, this))
+			if(widget.getIsAcceptableForProcessInstanceDictionary(componentProcess, this)) {
 				allWidgets.add(widget);
-			
-			if(widget instanceof IETabWidget)
+			}
+
+			if(widget instanceof IETabWidget) {
 				allWidgets.addAll(getWidgetsForProcessInstanceFromComponent(((IETabWidget)widget).getTabComponent(), componentProcess));
-			
+			}
+
 		}
-		
+
 		return allWidgets;
 	}
-	
+
 	/**
 	 * Return the type used in the process instance dictionary for the specified IEWidget.
 	 * 
@@ -3508,43 +3688,50 @@ public final class FlexoProcess extends WKFObject implements
 	 */
 	public Class<? extends Object> getProcessInstanceDictionaryType(IEWidget widget)
 	{
-		if(widget instanceof IECheckBoxWidget)
+		if(widget instanceof IECheckBoxWidget) {
 			return Boolean.class;
-		if(widget instanceof IEDropDownWidget)
+		}
+		if(widget instanceof IEDropDownWidget) {
 			return String.class;
-		if(widget instanceof IERadioButtonWidget)
+		}
+		if(widget instanceof IERadioButtonWidget) {
 			return Boolean.class;
-		if(widget instanceof IETextAreaWidget)
+		}
+		if(widget instanceof IETextAreaWidget) {
 			return String.class;
-		if(widget instanceof IEWysiwygWidget)
+		}
+		if(widget instanceof IEWysiwygWidget) {
 			return String.class;
-		
+		}
+
 		TextFieldType fieldType = null;
-		if(widget instanceof IEHyperlinkWidget)
+		if(widget instanceof IEHyperlinkWidget) {
 			fieldType = ((IEHyperlinkWidget)widget).getFieldType();
-		else if(widget instanceof IEStringWidget)
+		} else if(widget instanceof IEStringWidget) {
 			fieldType = ((IEStringWidget)widget).getFieldType();
-		else if(widget instanceof IETextFieldWidget)
+		} else if(widget instanceof IETextFieldWidget) {
 			fieldType = ((IETextFieldWidget)widget).getFieldType();
-		
-		if(fieldType == null)
+		}
+
+		if(fieldType == null) {
 			return String.class;
-		
+		}
+
 		switch(fieldType)
 		{
-			case DATE:
-				return Date.class;
-			case DOUBLE:
-				return Double.class;
-			case FLOAT:
-				return Float.class;
-			case INTEGER:
-				return Integer.class;
-			case KEYVALUE:
-			case STATUS_LIST:
-			case TEXT:
-			default:
-				return String.class;
+		case DATE:
+			return Date.class;
+		case DOUBLE:
+			return Double.class;
+		case FLOAT:
+			return Float.class;
+		case INTEGER:
+			return Integer.class;
+		case KEYVALUE:
+		case STATUS_LIST:
+		case TEXT:
+		default:
+			return String.class;
 		}
 	}
 }

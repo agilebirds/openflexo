@@ -20,74 +20,20 @@
 package org.openflexo.antar.binding;
 
 import java.lang.reflect.Type;
-import java.util.Observable;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 
 /**
- * Implemented by all path elements flagged as final (no children)
+ * Default implementation by all path elements flagged as final (no children)
  * 
  * @author sylvain
  *
  */
-public abstract class FinalBindingPathElementImpl<E,T> extends Observable implements FinalBindingPathElement<E,T> {
-
-	private String label;
-	private Type type;
-	private Class<E> declaringClass;
-	private boolean settable = false;
-	private String tooltipText;
+public abstract class FinalBindingPathElementImpl<E,T> extends SimpleBindingPathElementImpl<E, T> implements FinalBindingPathElement<E,T> {
 
 	public FinalBindingPathElementImpl(String label, Class<E> declaringClass, Type type, boolean isSettable, String tooltipText) 
 	{
-		super();
-		this.label = label;
-		this.type = type;
-		this.declaringClass = declaringClass;
-		this.settable = isSettable;
-		this.tooltipText = tooltipText;
-	}
-
-	@Override
-	public Class<E> getDeclaringClass() 
-	{
-		return declaringClass;
-	}
-
-	@Override
-	public Type getType() 
-	{
-		return type;
-	}
-
-	@Override
-	public String getSerializationRepresentation()
-	{
-		return label;
-	}
-
-	@Override
-	public boolean isBindingValid() 
-	{
-		return true;
-	}
-
-	@Override
-	public String getLabel() 
-	{
-		return label;
-	}
-
-	@Override
-	public String getTooltipText(Type resultingType) 
-	{
-		return tooltipText;
-	}
-
-	@Override
-	public boolean isSettable() 
-	{
-		return settable;
+		super(label, declaringClass, type, isSettable, tooltipText);
 	}
 
 	@Override

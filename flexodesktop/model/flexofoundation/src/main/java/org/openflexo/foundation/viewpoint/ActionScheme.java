@@ -24,8 +24,8 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.EditionPatternReference;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
-import org.openflexo.foundation.viewpoint.inspector.InspectorDataBinding;
 
 
 public class ActionScheme extends EditionScheme {
@@ -36,7 +36,7 @@ public class ActionScheme extends EditionScheme {
 	}
 
 
-	private InspectorDataBinding conditional;
+	private ViewPointDataBinding conditional;
 	
 	public ActionScheme() 
 	{
@@ -62,13 +62,13 @@ public class ActionScheme extends EditionScheme {
 		return CONDITIONAL;
 	}
 
-	public InspectorDataBinding getConditional() 
+	public ViewPointDataBinding getConditional() 
 	{
-		if (conditional == null) conditional = new InspectorDataBinding(this,ActionSchemeBindingAttribute.conditional,getConditionalBindingDefinition());
+		if (conditional == null) conditional = new ViewPointDataBinding(this,ActionSchemeBindingAttribute.conditional,getConditionalBindingDefinition());
 		return conditional;
 	}
 
-	public void setConditional(InspectorDataBinding conditional) 
+	public void setConditional(ViewPointDataBinding conditional) 
 	{
 		conditional.setOwner(this);
 		conditional.setBindingAttribute(ActionSchemeBindingAttribute.conditional);
@@ -79,7 +79,9 @@ public class ActionScheme extends EditionScheme {
 	
 	public boolean evaluateCondition(EditionPatternReference editionPatternReference)
 	{
-		return (Boolean)getConditional().getBindingValue(editionPatternReference);
+		if (getConditional().isValid())
+			return (Boolean)getConditional().getBindingValue(editionPatternReference);
+		return true;
 	}
 	
 	@Override

@@ -112,7 +112,7 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject> implements BindingEvalu
 		
 		// Perform actions
 		for (EditionAction action : getEditionScheme().getActions()) {
-			if (action.evaluateCondition(getEditionPatternInstance())) {
+			if (action.evaluateCondition(this)) {
 				if (action instanceof org.openflexo.foundation.viewpoint.AddShape) {
 					logger.info("Add shape with patternRole="+action.getPatternRole());
 					ViewShape newShape = performAddShape((org.openflexo.foundation.viewpoint.AddShape)action);
@@ -234,7 +234,7 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject> implements BindingEvalu
 		
 		// At this end, look after GoToAction
 		for (EditionAction action : getEditionScheme().getActions()) {
-			if (action.evaluateCondition(getEditionPatternInstance())) {
+			if (action.evaluateCondition(this)) {
 				if (action instanceof GoToAction) {
 					performGoToAction((GoToAction)action);
 				}
@@ -305,11 +305,11 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject> implements BindingEvalu
 	protected OntologyIndividual finalizePerformAddIndividual(AddIndividual action, OntologyIndividual newIndividual)
 	{
 		for (DataPropertyAssertion dataPropertyAssertion : action.getDataAssertions()) {
-			if (dataPropertyAssertion.evaluateCondition(parameterValues)) {
+			if (dataPropertyAssertion.evaluateCondition(this)) {
 				logger.info("DataPropertyAssertion="+dataPropertyAssertion);
 				OntologyProperty property = dataPropertyAssertion.getOntologyProperty();
 				logger.info("Property="+property);
-				Object value = getParameterValues().get(dataPropertyAssertion.getValueParameter().getName());
+				Object value = dataPropertyAssertion.getValue(this);
 				if (value instanceof String) {
 					newIndividual.getOntResource().addProperty(
 							property.getOntProperty(), 
@@ -350,7 +350,7 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject> implements BindingEvalu
 			}
 		}
 		for (ObjectPropertyAssertion objectPropertyAssertion : action.getObjectAssertions()) {
-			if (objectPropertyAssertion.evaluateCondition(parameterValues)) {
+			if (objectPropertyAssertion.evaluateCondition(this)) {
 				//logger.info("ObjectPropertyAssertion="+objectPropertyAssertion);
 				OntologyProperty property = objectPropertyAssertion.getOntologyProperty();
 				//logger.info("Property="+property);
@@ -538,7 +538,7 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject> implements BindingEvalu
 		addShemaAction.doAction();
 		if (addShemaAction.hasActionExecutionSucceeded()) {
 			View newShema = addShemaAction.getNewShema().getShema();
-			ShapePatternRole shapePatternRole = action.retrieveShapePatternRole();
+			ShapePatternRole shapePatternRole = action.getShapePatternRole();
 			if (shapePatternRole == null) {
 				logger.warning("Sorry, shape pattern role is undefined");
 				return newShema;

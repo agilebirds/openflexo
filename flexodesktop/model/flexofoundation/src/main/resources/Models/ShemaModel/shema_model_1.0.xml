@@ -81,8 +81,8 @@
 
   <entity name="org.openflexo.foundation.view.ViewElement" abstract="yes">
      <description>Shape or Connector</description>
-  	 <property name="editionPatternIdentifier" xmlTag="editionPatternIdentifier" attribute="YES"/>
-  	 <property name="editionPatternInstanceId" xmlTag="editionPatternInstanceId" attribute="YES"/>
+  	<!--  <property name="editionPatternIdentifier" xmlTag="editionPatternIdentifier" attribute="YES"/>
+  	 <property name="editionPatternInstanceId" xmlTag="editionPatternInstanceId" attribute="YES"/>-->
    </entity>
 
   <entity name="org.openflexo.foundation.view.ViewShape" xmlTag="VEShape" contexts="From,To">

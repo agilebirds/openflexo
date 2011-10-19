@@ -26,7 +26,7 @@ import org.openflexo.toolbox.FileResource;
 
 public class AskLocalResourceCenterDirectory {
 
-	public static FileResource FIB_FILE = new FileResource("Fib/AskLocalResourceCenterDirectory.fib");
+	public static final FileResource FIB_FILE = new FileResource("Fib/AskLocalResourceCenterDirectory.fib");
 
 	private File localResourceDirectory;
 

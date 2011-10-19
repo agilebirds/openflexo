@@ -23,12 +23,12 @@ import java.lang.reflect.Type;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.foundation.viewpoint.inspector.InspectorDataBinding;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class URIParameter extends EditionSchemeParameter {
 
 
-	private InspectorDataBinding baseURI;
+	private ViewPointDataBinding baseURI;
 
 	private BindingDefinition BASE_URI = new BindingDefinition("baseURI", String.class, BindingDefinitionType.GET, false);
 	
@@ -37,13 +37,13 @@ public class URIParameter extends EditionSchemeParameter {
 		return BASE_URI;
 	}
 	
-	public InspectorDataBinding getBaseURI() 
+	public ViewPointDataBinding getBaseURI() 
 	{
-		if (baseURI == null) baseURI = new InspectorDataBinding(this,ParameterBindingAttribute.baseURI,getBaseURIBindingDefinition());
+		if (baseURI == null) baseURI = new ViewPointDataBinding(this,ParameterBindingAttribute.baseURI,getBaseURIBindingDefinition());
 		return baseURI;
 	}
 
-	public void setBaseURI(InspectorDataBinding baseURI) 
+	public void setBaseURI(ViewPointDataBinding baseURI) 
 	{
 		baseURI.setOwner(this);
 		baseURI.setBindingAttribute(ParameterBindingAttribute.baseURI);

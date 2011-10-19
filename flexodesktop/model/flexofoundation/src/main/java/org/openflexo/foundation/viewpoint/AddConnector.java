@@ -27,7 +27,7 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.action.LinkSchemeAction;
-import org.openflexo.foundation.viewpoint.inspector.InspectorDataBinding;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 
 public class AddConnector extends AddShemaElementAction<ConnectorPatternRole> {
@@ -85,8 +85,8 @@ public class AddConnector extends AddShemaElementAction<ConnectorPatternRole> {
 		super.setPatternRole(patternRole);
 	}
 	
-	private InspectorDataBinding fromShape;
-	private InspectorDataBinding toShape;
+	private ViewPointDataBinding fromShape;
+	private ViewPointDataBinding toShape;
 	
 	private BindingDefinition FROM_SHAPE = new BindingDefinition("fromShape", ViewShape.class, BindingDefinitionType.GET, false);
 	
@@ -95,13 +95,13 @@ public class AddConnector extends AddShemaElementAction<ConnectorPatternRole> {
 		return FROM_SHAPE;
 	}
 
-	public InspectorDataBinding getFromShape() 
+	public ViewPointDataBinding getFromShape() 
 	{
-		if (fromShape == null) fromShape = new InspectorDataBinding(this,EditionActionBindingAttribute.fromShape,getFromShapeBindingDefinition());
+		if (fromShape == null) fromShape = new ViewPointDataBinding(this,EditionActionBindingAttribute.fromShape,getFromShapeBindingDefinition());
 		return fromShape;
 	}
 
-	public void setFromShape(InspectorDataBinding fromShape) 
+	public void setFromShape(ViewPointDataBinding fromShape) 
 	{
 		fromShape.setOwner(this);
 		fromShape.setBindingAttribute(EditionActionBindingAttribute.fromShape);
@@ -116,13 +116,13 @@ public class AddConnector extends AddShemaElementAction<ConnectorPatternRole> {
 		return TO_SHAPE;
 	}
 
-	public InspectorDataBinding getToShape() 
+	public ViewPointDataBinding getToShape() 
 	{
-		if (toShape == null) toShape = new InspectorDataBinding(this,EditionActionBindingAttribute.toShape,getToShapeBindingDefinition());
+		if (toShape == null) toShape = new ViewPointDataBinding(this,EditionActionBindingAttribute.toShape,getToShapeBindingDefinition());
 		return toShape;
 	}
 
-	public void setToShape(InspectorDataBinding toShape) 
+	public void setToShape(ViewPointDataBinding toShape) 
 	{
 		toShape.setOwner(this);
 		toShape.setBindingAttribute(EditionActionBindingAttribute.toShape);

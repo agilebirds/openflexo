@@ -25,15 +25,14 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.action.LinkSchemeAction;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
-import org.openflexo.foundation.viewpoint.inspector.InspectorDataBinding;
 
 
 public abstract class EditionAction<R extends PatternRole> extends ViewPointObject {
@@ -115,9 +114,11 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 		this.patternRole = patternRole;
 	}
 
-	public boolean evaluateCondition(EditionPatternInstance editionPatternInstance)
+	public boolean evaluateCondition(EditionSchemeAction action)
 	{
-		return (Boolean)getConditional().getBindingValue(editionPatternInstance);
+		if (getConditional().isValid())
+			return (Boolean)getConditional().getBindingValue(action);
+		return true;
 	}
 
 	public EditionPattern getEditionPattern()
@@ -530,11 +531,13 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 		father,
 		value,
 		restrictionType,
-		cardinality
+		cardinality,
+		target,
+		shemaName
 	}
 
 
-	private InspectorDataBinding conditional;
+	private ViewPointDataBinding conditional;
 	
 	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
 	
@@ -543,13 +546,13 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 		return CONDITIONAL;
 	}
 
-	public InspectorDataBinding getConditional() 
+	public ViewPointDataBinding getConditional() 
 	{
-		if (conditional == null) conditional = new InspectorDataBinding(this,EditionActionBindingAttribute.conditional,getConditionalBindingDefinition());
+		if (conditional == null) conditional = new ViewPointDataBinding(this,EditionActionBindingAttribute.conditional,getConditionalBindingDefinition());
 		return conditional;
 	}
 
-	public void setConditional(InspectorDataBinding conditional) 
+	public void setConditional(ViewPointDataBinding conditional) 
 	{
 		conditional.setOwner(this);
 		conditional.setBindingAttribute(EditionActionBindingAttribute.conditional);

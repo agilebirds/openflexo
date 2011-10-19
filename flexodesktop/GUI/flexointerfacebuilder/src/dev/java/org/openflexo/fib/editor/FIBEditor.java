@@ -43,6 +43,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -182,10 +183,10 @@ public class FIBEditor implements FIBGenericEditor {
 
 		public static void setLastFile(File file) {
 			List<File> files = getLastFiles();
-			if (files.contains(files)) {
+			if (files.contains(file)) {
 				files.remove(file);
-			} else if (files.size() == 10) {
-				files.remove(9);
+			} else if (files.size() == getLastFileCount()) {
+				files.remove(getLastFileCount() - 1);
 			}
 			files.add(0, file);
 			setLastFiles(files);
@@ -203,6 +204,7 @@ public class FIBEditor implements FIBGenericEditor {
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException,
 	UnsupportedLookAndFeelException
 	{
+		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		//UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		/*DefaultExpressionParser parser = new DefaultExpressionParser();
 			try {
@@ -429,6 +431,7 @@ public class FIBEditor implements FIBGenericEditor {
 			if (!file.getName().endsWith(".fib")) {
 				file = new File(file.getParentFile(),file.getName()+".fib");
 			}
+			FIBPreferences.setLastFile(file);
 			editedFIB.fibFile = file;
 			editedFIB.title = file.getName();
 			mainPanel.setTitleAt(mainPanel.getSelectedIndex(), editedFIB.title);

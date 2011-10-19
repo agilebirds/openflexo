@@ -19,13 +19,17 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.EditionAction.EditionActionBindingAttribute;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 
 public class ObjectPropertyAssertion extends AbstractAssertion {
@@ -33,7 +37,6 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 	private static final Logger logger = Logger.getLogger(ObjectPropertyAssertion.class.getPackage().getName());
 
 	private String objectPropertyURI;
-	private String object;
 
 	@Override
 	public String getInspectorName() 
@@ -61,76 +64,38 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 		_setObjectPropertyURI (p != null ? p.getURI() : null);
 	}
 	
-	public String _getObject()
+	@Override
+	public BindingModel getBindingModel() 
 	{
+		return getEditionScheme().getBindingModel();
+	}
+
+	private ViewPointDataBinding object;
+	
+	private BindingDefinition OBJECT = new BindingDefinition("object", OntologyObject.class, BindingDefinitionType.GET, false);
+	
+	public BindingDefinition getObjectBindingDefinition()
+	{
+		return OBJECT;
+	}
+
+	public ViewPointDataBinding getObject() 
+	{
+		if (object == null) object = new ViewPointDataBinding(this,EditionActionBindingAttribute.object,getObjectBindingDefinition());
 		return object;
 	}
-	
-	public void _setObject(String anObject)
-	{
-		object = anObject;
-	}
-	
-	private Vector<String> availableObjectValues = null;
-	
-	public Vector<String> getAvailableObjectValues()
-	{
-		if (availableObjectValues == null) {
-			availableObjectValues = new Vector<String>();
-			switch (getScheme().getEditionSchemeType()) {
-			case DropScheme:
-				availableObjectValues.add(EditionAction.CONTAINER);
-				availableObjectValues.add(EditionAction.CONTAINER_OF_CONTAINER);
-				break;
-			case LinkScheme:
-				availableObjectValues.add(EditionAction.FROM_TARGET);
-				availableObjectValues.add(EditionAction.TO_TARGET);
-				break;
-			default:
-				break;
-			}
-			for (PatternRole pr : getAction().getEditionPattern().getPatternRoles()) {
-				availableObjectValues.add(pr.getPatternRoleName());
-			}
-			for (EditionSchemeParameter p : getAction().getScheme().getParameters()) {
-				availableObjectValues.add(p.getName());
-			}
-		}
-		return availableObjectValues;
-	}
 
-
+	public void setObject(ViewPointDataBinding object) 
+	{
+		object.setOwner(this);
+		object.setBindingAttribute(EditionActionBindingAttribute.object);
+		object.setBindingDefinition(getObjectBindingDefinition());
+		this.object = object;
+	}
 
 	public OntologyObject getAssertionObject(EditionSchemeAction action)
 	{
-		return getAction().retrieveOntologyObject(_getObject(), action);
-		
-		/*if (action instanceof DropSchemeAction) {
-			DropSchemeAction dropSchemeAction = (DropSchemeAction)action;
-			if (_getObject() != null) {
-				Object value = action.getParameterValues().get(_getObject());
-				if (value instanceof OntologyObject) return (OntologyObject)value;
-			}
-
-			if (_getObject().equals(EditionAction.CONTAINER) && dropSchemeAction.getParent() instanceof OEShape) {
-				OEShape container = (OEShape)dropSchemeAction.getParent();
-				return (OntologyObject)container.getLinkedConcept();
-			}
-
-			if (_getObject().equals(EditionAction.CONTAINER_OF_CONTAINER) && dropSchemeAction.getParent().getParent() instanceof OEShape) {
-				OEShape container = (OEShape)dropSchemeAction.getParent().getParent();
-				return (OntologyObject)container.getLinkedConcept();
-			}
-
-			if (action.getEditionPatternInstance() != null) {
-				FlexoModelObject assertionObject
-				= action.getEditionPatternInstance().getPatternActor(_getObject());
-				if (assertionObject instanceof OntologyObject) return (OntologyObject)assertionObject;
-				else logger.warning("Unexpected "+assertionObject);
-			}
-		}
-		
-		return null;*/
+		return (OntologyObject)getObject().getBindingValue(action);
 	}
 	
 

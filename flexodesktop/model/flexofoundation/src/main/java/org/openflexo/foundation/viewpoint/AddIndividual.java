@@ -26,7 +26,7 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.viewpoint.inspector.InspectorDataBinding;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
 
 
@@ -153,7 +153,7 @@ public class AddIndividual extends AddConcept<IndividualPatternRole> {
 		}
 	}*/
 	
-	private InspectorDataBinding individualName;
+	private ViewPointDataBinding individualName;
 	
 	private BindingDefinition INDIVIDUAL_NAME = new BindingDefinition("individualName", String.class, BindingDefinitionType.GET, false);
 	
@@ -162,13 +162,13 @@ public class AddIndividual extends AddConcept<IndividualPatternRole> {
 		return INDIVIDUAL_NAME;
 	}
 
-	public InspectorDataBinding getIndividualName() 
+	public ViewPointDataBinding getIndividualName() 
 	{
-		if (individualName == null) individualName = new InspectorDataBinding(this,EditionActionBindingAttribute.individualName,getIndividualNameBindingDefinition());
+		if (individualName == null) individualName = new ViewPointDataBinding(this,EditionActionBindingAttribute.individualName,getIndividualNameBindingDefinition());
 		return individualName;
 	}
 
-	public void setIndividualName(InspectorDataBinding individualName) 
+	public void setIndividualName(ViewPointDataBinding individualName) 
 	{
 		individualName.setOwner(this);
 		individualName.setBindingAttribute(EditionActionBindingAttribute.individualName);

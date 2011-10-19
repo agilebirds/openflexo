@@ -28,6 +28,7 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 
 /**
@@ -68,8 +69,8 @@ public abstract class InspectorEntry extends ViewPointObject implements Bindable
 	private String label;
 	private boolean readOnly;
 	
-	private InspectorDataBinding data;
-	private InspectorDataBinding conditional;
+	private ViewPointDataBinding data;
+	private ViewPointDataBinding conditional;
 	
 	public InspectorEntry() 
 	{
@@ -142,13 +143,13 @@ public abstract class InspectorEntry extends ViewPointObject implements Bindable
 		this.readOnly = readOnly;
 	}
 	
-	public InspectorDataBinding getData() 
+	public ViewPointDataBinding getData() 
 	{
-		if (data == null) data = new InspectorDataBinding(this,InspectorEntryBindingAttribute.data,getDataBindingDefinition());
+		if (data == null) data = new ViewPointDataBinding(this,InspectorEntryBindingAttribute.data,getDataBindingDefinition());
 		return data;
 	}
 
-	public void setData(InspectorDataBinding data) 
+	public void setData(ViewPointDataBinding data) 
 	{
 		data.setOwner(this);
 		data.setBindingAttribute(InspectorEntryBindingAttribute.data);
@@ -156,13 +157,13 @@ public abstract class InspectorEntry extends ViewPointObject implements Bindable
 		this.data = data;
 	}
 	
-	public InspectorDataBinding getConditional() 
+	public ViewPointDataBinding getConditional() 
 	{
-		if (conditional == null) conditional = new InspectorDataBinding(this,InspectorEntryBindingAttribute.conditional,CONDITIONAL);
+		if (conditional == null) conditional = new ViewPointDataBinding(this,InspectorEntryBindingAttribute.conditional,CONDITIONAL);
 		return conditional;
 	}
 
-	public void setConditional(InspectorDataBinding conditional) 
+	public void setConditional(ViewPointDataBinding conditional) 
 	{
 		conditional.setOwner(this);
 		conditional.setBindingAttribute(InspectorEntryBindingAttribute.conditional);

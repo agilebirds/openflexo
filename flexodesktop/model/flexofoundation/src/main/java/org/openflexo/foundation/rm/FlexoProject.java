@@ -126,6 +126,7 @@ import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.sg.GeneratedSources;
 import org.openflexo.foundation.stats.ProjectStatistics;
 import org.openflexo.foundation.toc.TOCData;
+import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.foundation.utils.FlexoCSS;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.utils.FlexoObjectIDManager;
@@ -570,7 +571,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	 * @throws SaveResourceException
 	 */
 	public void saveAsZipFile(File zipFile, FlexoProgress progress, boolean lightenProject, boolean copyCVSFiles)
-	throws SaveResourceException {
+			throws SaveResourceException {
 		try {
 			FileUtils.createNewFile(zipFile);
 			File tmpDir = FileUtils.createTempDirectory(
@@ -600,7 +601,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 					if (!isKnown) {
 						continue;
 					}
-					if (jar.isFile() && (jar.length() > 4096)) {
+					if (jar.isFile() && jar.length() > 4096) {
 						ZipUtils.createEmptyZip(jar);
 					}
 				}
@@ -660,7 +661,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		for (File knownJar : knownJars) {
 			for (File jar : jars) {
 				if (jar.getName().equals(knownJar.getName())) {
-					if ((jar.length() < knownJar.length()) && (jar.length() < 4096)) {
+					if (jar.length() < knownJar.length() && jar.length() < 4096) {
 						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Restoring " + jar.getName());
 						}
@@ -747,7 +748,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			if (releaseVersion != null) {
 				getFlexoDMResource().revertToReleaseVersion(releaseVersion);
 				for (FlexoResource r : getResources().values()) {
-					if ((r instanceof FlexoXMLStorageResource) && (r != getFlexoDMResource()) && (r != getFlexoResource())) {
+					if (r instanceof FlexoXMLStorageResource && r != getFlexoDMResource() && r != getFlexoResource()) {
 						((FlexoXMLStorageResource) r).revertToReleaseVersion(releaseVersion);
 					}
 				}
@@ -796,7 +797,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	 * @throws SaveResourceException
 	 */
 	public synchronized void saveStorageResources(Vector<FlexoStorageResource> resourcesToSave, FlexoProgress progress)
-	throws SaveResourceException {
+			throws SaveResourceException {
 		for (FlexoStorageResource data : resourcesToSave) {
 			if (progress != null) {
 				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("saving_resource_") + data.getName());
@@ -982,10 +983,10 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		if (resourceManagerInstance != null) {
 			resourceManagerInstance.stopResourcePeriodicChecking();
 		}
-		if ((getGeneratedCodeResource(false) != null) && getGeneratedCodeResource(false).isLoaded()) {
+		if (getGeneratedCodeResource(false) != null && getGeneratedCodeResource(false).isLoaded()) {
 			getGeneratedCode().setFactory(null);
 		}
-		if ((getGeneratedDocResource(false) != null) && getGeneratedDocResource(false).isLoaded()) {
+		if (getGeneratedDocResource(false) != null && getGeneratedDocResource(false).isLoaded()) {
 			getGeneratedDoc().setFactory(null);
 		}
 		deleteObservers();
@@ -1104,7 +1105,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			throw new DuplicateResourceException(resource);
 		}
 		setResourceForKey(resource, resource.getResourceIdentifier());
-		if ((resource instanceof FlexoFileResource) && (getFlexoRMResource() != null)) {
+		if (resource instanceof FlexoFileResource && getFlexoRMResource() != null) {
 			resource.addToSynchronizedResources(getFlexoRMResource());
 		}
 	}
@@ -1118,8 +1119,8 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("resource is registered");
 			}
-			if (isRegistered(resource.getResourceIdentifierForNewName(newName)) && (resources.get(resource
-					.getResourceIdentifierForNewName(newName)) != resource)) {
+			if (isRegistered(resource.getResourceIdentifierForNewName(newName)) && resources.get(resource
+					.getResourceIdentifierForNewName(newName)) != resource) {
 				throw new DuplicateResourceException(resource.getResourceIdentifierForNewName(newName));
 			} else {
 				if (logger.isLoggable(Level.FINE)) {
@@ -1191,7 +1192,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			}
 			identifier = null;
 			Enumeration<String> i = resources.keys();
-			while (i.hasMoreElements() && (identifier == null)) {
+			while (i.hasMoreElements() && identifier == null) {
 				String s = i.nextElement();
 				FlexoResource r = resources.get(s);
 				if (r == resource) {
@@ -1262,7 +1263,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 
 	public FlexoOEShemaLibraryResource getFlexoShemaLibraryResource(boolean createIfNotExist) {
 		FlexoOEShemaLibraryResource returned = (FlexoOEShemaLibraryResource) resourceForKey(ResourceType.OE_SHEMA_LIBRARY, getProjectName());
-		if ((returned == null) && createIfNotExist) {
+		if (returned == null && createIfNotExist) {
 			ViewLibrary.createNewShemaLibrary(this);
 			return getFlexoShemaLibraryResource();
 		}
@@ -1280,7 +1281,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 
 	public FlexoDMResource getFlexoDMResource() {
 		FlexoDMResource returned = (FlexoDMResource) resourceForKey(ResourceType.DATA_MODEL, getProjectName());
-		if ((returned == null) && !dataModelIsBuilding) {
+		if (returned == null && !dataModelIsBuilding) {
 			DMModel.createNewDMModel(this);
 			return getFlexoDMResource();
 		}
@@ -1386,7 +1387,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			return null;
 		}
 		for (ProjectExternalRepository rep : _externalRepositories) {
-			if ((rep.getDirectory() != null) && rep.getDirectory().equals(directory)) {
+			if (rep.getDirectory() != null && rep.getDirectory().equals(directory)) {
 				return rep;
 			}
 		}
@@ -1399,7 +1400,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			returned = new ProjectExternalRepository(this, identifier);
 			addToExternalRepositories(returned);
 		}
-		if ((returned.getDirectory() == null) || !returned.getDirectory().equals(directory)) {
+		if (returned.getDirectory() == null || !returned.getDirectory().equals(directory)) {
 			returned.setDirectory(directory);
 			setChanged();
 			notifyObservers(new ExternalRepositorySet(returned));
@@ -1483,10 +1484,10 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	public ScreenshotResource getScreenshotResource(FlexoModelObject object, boolean createIfNotExist) {
 		ScreenshotResource resource = (ScreenshotResource) resourceForKey(ResourceType.SCREENSHOT,
 				ScreenshotGenerator.getScreenshotName(object));
-		if ((resource != null) && (resource.getModelObject() == null)) {
+		if (resource != null && resource.getModelObject() == null) {
 			resource = null;
 		}
-		if ((resource == null) && createIfNotExist) {
+		if (resource == null && createIfNotExist) {
 			resource = ScreenshotResource.createNewScreenshotForObject(object);
 		}
 		return resource;
@@ -1548,7 +1549,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 
 	public GeneratedCodeResource getGeneratedCodeResource(boolean createIfNotExists) {
 		GeneratedCodeResource returned = (GeneratedCodeResource) resourceForKey(ResourceType.GENERATED_CODE, getProjectName());
-		if ((returned == null) && createIfNotExists) {
+		if (returned == null && createIfNotExists) {
 			GeneratedCode.createNewGeneratedCode(this);
 			return getGeneratedCodeResource(false);
 		}
@@ -1571,7 +1572,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 
 	public GeneratedSourcesResource getGeneratedSourcesResource(boolean createIfNotExists) {
 		GeneratedSourcesResource returned = (GeneratedSourcesResource) resourceForKey(ResourceType.GENERATED_SOURCES, getProjectName());
-		if ((returned == null) && createIfNotExists) {
+		if (returned == null && createIfNotExists) {
 			GeneratedSources.createNewGeneratedSources(this);
 			return getGeneratedSourcesResource(false);
 		}
@@ -1594,7 +1595,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 
 	public GeneratedDocResource getGeneratedDocResource(boolean createIfNotExists) {
 		GeneratedDocResource returned = (GeneratedDocResource) resourceForKey(ResourceType.GENERATED_DOC, getProjectName());
-		if ((returned == null) && createIfNotExists) {
+		if (returned == null && createIfNotExists) {
 			GeneratedDoc.createNewGeneratedDoc(this);
 			return getGeneratedDocResource(false);
 		}
@@ -1785,6 +1786,8 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			FlexoWorkflow.createNewWorkflow(project);
 			FlexoNavigationMenu.createNewFlexoNavigationMenu(project);
 			DKVModel.createNewDKVModel(project);
+			TOCData tocData = project.getTOCData();
+			tocData.addToRepositories(new TOCRepository(tocData, project.getDocTypes().get(0), null));
 			GeneratedDoc.createNewGeneratedDoc(project);
 			project.initJavaFormatter();
 			importInitialImages(project, editor);
@@ -1907,7 +1910,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	 */
 	public void clearCachedFiles() {
 		for (FlexoResource<FlexoResourceData> r : getResources().values()) {
-			if ((r instanceof FlexoFileResource) && (((FlexoFileResource) r).getResourceFile() != null)) {
+			if (r instanceof FlexoFileResource && ((FlexoFileResource) r).getResourceFile() != null) {
 				((FlexoFileResource) r).getResourceFile().clearCachedFile();
 			}
 		}
@@ -2312,7 +2315,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			@Override
 			public boolean accept(File pathname) {
 				return pathname.isDirectory() && !pathname.getName().equals("CVS") && !pathname.getName().equals(".history") && !pathname
-				.getName().equals(".wo.LAST_ACCEPTED") && !pathname.getName().equals(".wo.LAST_GENERATED");
+						.getName().equals(".wo.LAST_ACCEPTED") && !pathname.getName().equals(".wo.LAST_GENERATED");
 			}
 		});
 
@@ -2531,7 +2534,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 				widget.getProject());
 
 		// DMEntity entityType = type==null?null:widget.getProject().getDataModel().getDMEntity(type,true);
-		if ((returned == null) || (returned.getType() == null) || !returned.getType().equals(type)) {
+		if (returned == null || returned.getType() == null || !returned.getType().equals(type)) {
 			returned = new WidgetBindingDefinition(name, type, widget, bindingType, mandatory);
 			bindingsForWidget.put(name, returned);
 		}
@@ -2546,7 +2549,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			wkfObjectBindingDefinitions.put(wkfObject, bindingsForObject);
 		}
 		WKFBindingDefinition returned = bindingsForObject.get(name);
-		if ((returned == null) || (returned.getType() == null) || returned.getType().equals(type)) {
+		if (returned == null || returned.getType() == null || returned.getType().equals(type)) {
 			returned = new WKFBindingDefinition(name, type, wkfObject, bindingType, mandatory);
 			bindingsForObject.put(name, returned);
 		}
@@ -2572,7 +2575,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	 * @return Returns the lastUniqueID.
 	 */
 	public long getLastID() {
-		if (lastUniqueIDHasBeenSet && (lastID < 0)) {
+		if (lastUniqueIDHasBeenSet && lastID < 0) {
 			lastID = 0;
 		}
 		return lastID;
@@ -2619,7 +2622,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		FlexoModelObject temp = null;
 		while (en.hasMoreElements()) {
 			temp = en.nextElement();
-			if ((temp.getFlexoID() == objectFlexoID) && temp.getUserIdentifier().equals(objectUID)) {
+			if (temp.getFlexoID() == objectFlexoID && temp.getUserIdentifier().equals(objectUID)) {
 				// logger.info("Try to find "+objectUID+"_"+objectFlexoID+" : SUCCEEDED");
 				return temp;
 			}
@@ -2637,7 +2640,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			if (o.getProject() == null) {
 				logger.severe("PROGRAMATION ISSUE : a FlexoModelObject of class " + o.getClass() + " don't have a project at notification time !");
 			}
-			if ((o.getProject() == null) || (o.getProject() == this)) {
+			if (o.getProject() == null || o.getProject() == this) {
 				if (!o.isDeleted()) {
 					notifyObjectCreated(o);
 				}
@@ -2883,7 +2886,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 					 break;
 				 }
 			 }
-			 if ((value != null) && value.startsWith("/ImportedImages/")) {
+			 if (value != null && value.startsWith("/ImportedImages/")) {
 				 return convertFromString(value.substring("/ImportedImages/".length()));
 			 }
 			 if (file == null) {
@@ -2948,7 +2951,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		 public File getImageFile() {
 			 File f = WRLocator.locate(getProjectDirectory(), imageName, getCssSheet() == null ? FlexoCSS.CONTENTO.getName() : getCssSheet()
 					 .getName());
-			 if ((f == null) || !f.exists()) {
+			 if (f == null || !f.exists()) {
 				 if (logger.isLoggable(Level.WARNING)) {
 					 logger.warning("Could not find '" + imageName + "' replacing with Denali logo");
 				 }
@@ -2959,7 +2962,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		 }
 
 		 public boolean exists() {
-			 return (getImageFile() != null) && getImageFile().exists();
+			 return getImageFile() != null && getImageFile().exists();
 		 }
 
 		 /**
@@ -2969,9 +2972,9 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		  */
 		 @Override
 		 public boolean equals(Object obj) {
-			 if ((imageName != null) && (obj instanceof ImageFile)) {
+			 if (imageName != null && obj instanceof ImageFile) {
 				 return ((ImageFile) obj).getImageName().equals(getImageName());
-			 } else if ((imageName != null) && (obj instanceof String)) {
+			 } else if (imageName != null && obj instanceof String) {
 				 return imageName.equals(obj);
 			 }
 			 return super.equals(obj);
@@ -3032,7 +3035,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	 }
 
 	 public String imageNameForFile(File f) {
-		 if ((f == null) || (f.getParentFile() == null)) {
+		 if (f == null || f.getParentFile() == null) {
 			 return null;
 		 }
 		 if (f.getName().startsWith("Contento_")) {
@@ -3131,7 +3134,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		  */
 		 @Override
 		 public Boolean isTraversable(File f) {
-			 if ((f == null) || !f.isDirectory()) {
+			 if (f == null || !f.isDirectory()) {
 				 return Boolean.FALSE;
 			 }
 			 if (f.getName().toLowerCase().endsWith(".prj")) {
@@ -3169,7 +3172,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		  */
 		 @Override
 		 public Boolean isTraversable(File f) {
-			 if ((f == null) || !f.isDirectory()) {
+			 if (f == null || !f.isDirectory()) {
 				 return Boolean.FALSE;
 			 }
 			 if (f.getName().toLowerCase().endsWith(".iepalette")) {
@@ -3182,7 +3185,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 					 return !file.isDirectory() && file.getName().toLowerCase().endsWith(".woxml");
 				 }
 			 });
-			 if ((files != null) && (files.length > 0)) {
+			 if (files != null && files.length > 0) {
 				 return Boolean.FALSE;
 			 }
 			 return super.isTraversable(f);
@@ -3205,7 +3208,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 						 return !file.isDirectory() && file.getName().toLowerCase().endsWith(".woxml");
 					 }
 				 });
-				 if ((files != null) && (files.length > 0)) {
+				 if (files != null && files.length > 0) {
 					 return FilesIconLibrary.SMALL_FOLDER_ICON;
 				 } else {
 					 return super.getIcon(f);
@@ -3276,7 +3279,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	 }
 
 	 public OperationNode getFirstOperation() {
-		 if ((firstOperation == null) && (firstOperationFlexoID > -1)) {
+		 if (firstOperation == null && firstOperationFlexoID > -1) {
 			 firstOperation = getRootFlexoProcess().getOperationNodeWithFlexoID(firstOperationFlexoID);
 		 }
 		 if (firstOperation == null) {
@@ -3399,7 +3402,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 
 	 public File[] listFrameworksToEmbed() {
 		 final File f = getFrameworksToEmbedDirectory();
-		 if ((f != null) && f.exists()) {
+		 if (f != null && f.exists()) {
 			 return f.listFiles(new FilenameFilter() {
 
 				 @Override
@@ -3423,7 +3426,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		 Vector<Validable> v = new Vector<Validable>();
 		 v.add(this);
 		 for (FlexoStorageResource r : getLoadedStorageResources()) {
-			 if ((r.getResourceData() instanceof Validable) && (r.getResourceData() != this)) {
+			 if (r.getResourceData() instanceof Validable && r.getResourceData() != this) {
 				 v.addAll(((Validable) r.getResourceData()).getAllEmbeddedValidableObjects());
 			 }
 		 }
@@ -3523,7 +3526,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 				 DuplicateObjectIDIssue issues = new DuplicateObjectIDIssue(object);
 				 for (FlexoModelObject obj : badObjects) {
 					 issues.addToContainedIssues(new InformationIssue<FlexoIDMustBeUnique, FlexoProject>(object,
-					 "identifier_of_($object.fullyQualifiedName)_was_duplicated_and_reset_to_($object.flexoID)"));
+							 "identifier_of_($object.fullyQualifiedName)_was_duplicated_and_reset_to_($object.flexoID)"));
 				 }
 				 return issues;
 			 } else {
@@ -3678,7 +3681,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 				 return issues;
 			 } else {
 				 return new InformationIssue<NameOfResourceMustBeKeyOfHashtableEntry, FlexoProject>(object,
-				 "no_inconsistant_resource_name_found");
+						 "no_inconsistant_resource_name_found");
 			 }
 		 }
 
@@ -3800,8 +3803,8 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		  */
 		 @Override
 		 public ValidationIssue<GeneratedResourcesMustHaveCGFile, FlexoProject> applyValidation(FlexoProject project) {
-			 if (((project.getGeneratedCodeResource(false) != null) && !project.getGeneratedCodeResource(false).isLoaded()) || ((project
-					 .getGeneratedDocResource(false) != null) && !project.getGeneratedDocResource(false).isLoaded())) {
+			 if (project.getGeneratedCodeResource(false) != null && !project.getGeneratedCodeResource(false).isLoaded() || project
+					 .getGeneratedDocResource(false) != null && !project.getGeneratedDocResource(false).isLoaded()) {
 				 return null;// If the generated code or the generated doc resource is not loaded, then CGFiles have not yet been associated
 				 // with their resource!
 			 }
@@ -3988,10 +3991,10 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 
 	 @Override
 	 public String getURI() {
-		 if ((projectURI == null) && !isDeserializing()) {
+		 if (projectURI == null && !isDeserializing()) {
 			 Date currentDate = new Date();
 			 projectURI = ONTOLOGY_URI + "/" + (1900 + currentDate.getYear()) + "/" + (currentDate.getMonth() + 1) + "/" + getProjectName() + "_" + System
-			 .currentTimeMillis();
+					 .currentTimeMillis();
 			 // projectURI= ONTOLOGY_URI+"/data/prj_"+getPrefix()+"_"+System.currentTimeMillis();
 		 }
 		 return projectURI;
@@ -4048,7 +4051,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	 public FlexoProjectOntologyResource getFlexoProjectOntologyResource(boolean createIfNotExist) {
 		 FlexoProjectOntologyResource returned = (FlexoProjectOntologyResource) resourceForKey(ResourceType.PROJECT_ONTOLOGY,
 				 getProjectName());
-		 if ((returned == null) && createIfNotExist) {
+		 if (returned == null && createIfNotExist) {
 			 ProjectOntology.createNewProjectOntology(this);
 			 return getFlexoProjectOntologyResource();
 		 }
@@ -4162,37 +4165,55 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 
 	 public FlexoResourceCenter getResourceCenter() {
 		 if (resourceCenter == null) {
-			String base = "FlexoResourceCenter";
-			String attempt = base;
-			int i = 0;
-			File file = new File(System.getProperty("user.home"));
-			boolean ok = false;
-			while (!ok && (i < 100)) {
-				file = new File(System.getProperty("user.home"), "Library/Flexo/" + attempt);
-				if (!file.exists()) {
-					file.mkdirs();
-				} else if (file.isDirectory() && file.canWrite()) {
-					ok = true;
-				}
-				i++;
-				attempt = base + "-" + i;
-			}
-			i = 0;
-			while (!ok && (i < 1000)) {
-				try {
-					file = File.createTempFile("FlexoResourceCenter", null);
-					file.delete();
-					file.mkdirs();
-					ok = file.exists() && file.canWrite();
-					i++;
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+			 File file = getResourceCenterFile();
 			 resourceCenter = new LocalResourceCenterImplementation(file);
-		}
-		//logger.info("return resourceCenter " + resourceCenter + " for project " + Integer.toHexString(hashCode()));
-		return resourceCenter;
+		 }
+		 //logger.info("return resourceCenter " + resourceCenter + " for project " + Integer.toHexString(hashCode()));
+		 return resourceCenter;
+	 }
+
+	 public static File getResourceCenterFile() {
+		 String base = "FlexoResourceCenter";
+		 String attempt = base;
+		 File root = new File(System.getProperty("user.home"), "Library/Flexo/");
+		 if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
+			 String appData = System.getenv("APPDATA");
+			 if (appData != null) {
+				 File f = new File(appData);
+				 if (f.isDirectory() && f.canWrite()) {
+					 root = new File(f, "OpenFlexo");
+				 }
+			 }
+		 }
+		 File file = null;
+		 boolean ok = false;
+		 int i = 0;
+		 while (!ok && i < 100) {
+			 file = new File(root, attempt);
+			 if (!file.exists()) {
+				 file.mkdirs();
+			 } else if (file.isDirectory() && file.canWrite()) {
+				 ok = true;
+			 }
+			 i++;
+			 attempt = base + "-" + i;
+		 }
+		 i = 0;
+		 while (!ok && i < 1000) {
+			 try {
+				 file = File.createTempFile("FlexoResourceCenter", null);
+				 file.delete();
+				 file.mkdirs();
+				 ok = file.exists() && file.canWrite();
+				 i++;
+			 } catch (IOException e) {
+				 e.printStackTrace();
+			 }
+		 }
+		 if (!ok) {
+			 return null;
+		 }
+		 return file;
 	 }
 
 	 public void setResourceCenter(FlexoResourceCenter resourceCenter) {
@@ -4233,7 +4254,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		 }
 		 values.add(actorReference);
 	 }
-	 
+
 	 private Hashtable<String,Vector<ConceptActorReference>> pendingEditionPatternReferences = new Hashtable<String, Vector<ConceptActorReference>>();
 
 	 public void _retrievePendingEditionPatternReferences(OntologyObject object)
@@ -4253,5 +4274,5 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			 values.clear();
 		 }
 	 }
-	 
+
 }

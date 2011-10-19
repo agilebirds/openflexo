@@ -54,6 +54,7 @@ import org.openflexo.fib.model.FIBList;
 import org.openflexo.fib.model.FIBLocalizedDictionary;
 import org.openflexo.fib.model.FIBNumber;
 import org.openflexo.fib.model.FIBPanel;
+import org.openflexo.fib.model.FIBRadioButtonList;
 import org.openflexo.fib.model.FIBTab;
 import org.openflexo.fib.model.FIBTabPanel;
 import org.openflexo.fib.model.FIBTable;
@@ -80,6 +81,7 @@ import org.openflexo.fib.view.widget.FIBImageWidget;
 import org.openflexo.fib.view.widget.FIBLabelWidget;
 import org.openflexo.fib.view.widget.FIBListWidget;
 import org.openflexo.fib.view.widget.FIBNumberWidget;
+import org.openflexo.fib.view.widget.FIBRadioButtonListWidget;
 import org.openflexo.fib.view.widget.FIBTableWidget;
 import org.openflexo.fib.view.widget.FIBTextAreaWidget;
 import org.openflexo.fib.view.widget.FIBTextFieldWidget;
@@ -96,11 +98,11 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 	private final Hashtable<FIBComponent,FIBView> views;
 	private FIBSelectable selectionLeader;
 	private FIBSelectable lastFocusedSelectable;
-	
+
 	private FIBWidgetView focusedWidget;
-	
+
 	private FIBViewFactory viewFactory;
-	
+
 	public enum Status
 	{
 		RUNNING,
@@ -113,13 +115,13 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		QUIT,
 		OTHER
 	}
-	
+
 	private Status status = Status.RUNNING;
 
 	private final Vector<FIBSelectionListener> selectionListeners;
 	private final Vector<FIBMouseClickListener> mouseClickListeners;
-	
-	
+
+
 	public FIBController(FIBComponent rootComponent)
 	{
 		this.rootComponent = rootComponent;
@@ -128,18 +130,18 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		mouseClickListeners = new Vector<FIBMouseClickListener>();
 		viewFactory = new DefaultFIBViewFactory();
 	}
-	
+
 	public FIBView<FIBComponent, ?> buildView()
 	{
 		return buildView(rootComponent);
 	}
 
-	public FIBViewFactory getViewFactory() 
+	public FIBViewFactory getViewFactory()
 	{
 		return viewFactory;
 	}
 
-	public void setViewFactory(FIBViewFactory viewFactory) 
+	public void setViewFactory(FIBViewFactory viewFactory)
 	{
 		this.viewFactory = viewFactory;
 	}
@@ -148,24 +150,24 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 	{
 		views.put(view.getComponent(),view);
 	}
-	
+
 	public void unregisterView(FIBView view)
 	{
 		views.remove(view.getComponent());
 	}
-	
+
 	public FIBView viewForComponent(FIBComponent component)
 	{
 		return views.get(component);
 	}
 
-	public Enumeration<FIBView> getViews() 
+	public Enumeration<FIBView> getViews()
 	{
 		return views.elements();
 	}
 
 	@Override
-	public Object getValue(BindingVariable variable) 
+	public Object getValue(BindingVariable variable)
 	{
 		if (variable.getVariableName() == null) {
 			return null;
@@ -181,15 +183,14 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		if (variable.getVariableName().equals("controller")) {
 			return this;
 		}
-		
 		return variable.getBindingValue(null,this);
 	}
-	
+
 	public FIBComponent getRootComponent()
 	{
 		return rootComponent;
 	}
-	
+
 	public FIBView getRootView()
 	{
 		return viewForComponent(getRootComponent());
@@ -204,15 +205,15 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 	{
 		setDataObject(anObject,false);
 	}
-	
+
 	public void updateWithoutDataObject()
 	{
 		setDataObject(null,true);
 	}
-	
+
 	public void setDataObject(T anObject, boolean forceUpdate)
 	{
-		if (forceUpdate || (anObject != dataObject)) {
+		if (forceUpdate || anObject != dataObject) {
 			if (dataObject instanceof Observable) {
 				((Observable)dataObject).deleteObserver(this);
 			}
@@ -220,10 +221,10 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 			getRootView().updateDataObject(anObject);
 			if (dataObject instanceof Observable) {
 				((Observable)dataObject).addObserver(this);
-			}	
+			}
 		}
 	}
-	
+
 	public static FIBController instanciateController(FIBComponent fibComponent)
 	{
 		FIBController returned = null;
@@ -251,7 +252,7 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		return returned;
 	}
 
-	
+
 	public static FIBView makeView(FIBComponent fibComponent)
 	{
 		return makeView(fibComponent,instanciateController(fibComponent));
@@ -296,11 +297,11 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 			public void mouseClicked(MouseEvent e)
 			{
 				fireMouseClicked(returned.getDynamicModel(),e.getClickCount());
-				if (fibWidget.hasClickAction() && (e.getClickCount() == 1)) {
+				if (fibWidget.hasClickAction() && e.getClickCount() == 1) {
 					// Detected click associated with action
 					fibWidget.getClickAction().execute(FIBController.this);
 				}
-				else if (fibWidget.hasDoubleClickAction() && (e.getClickCount() == 2)) {
+				else if (fibWidget.hasDoubleClickAction() && e.getClickCount() == 2) {
 					// Detected double-click associated with action
 					fibWidget.getDoubleClickAction().execute(FIBController.this);
 				}
@@ -324,7 +325,7 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		//System.out.println("Received "+arg);
 		getRootView().updateDataObject(dataObject);
 	}
-	
+
 	private Window retrieveWindow()
 	{
 		Component c = SwingUtilities.getRoot(getRootView().getJComponent());
@@ -333,7 +334,7 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		}
 		return null;
 	}
-	
+
 	public void validateAndDispose()
 	{
 		status = Status.VALIDATED;
@@ -406,12 +407,12 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 	{
 		this.status = status;
 	}
-	
+
 	public FIBLocalizedDictionary getLocalizer()
 	{
 		return getRootComponent().retrieveFIBLocalizedDictionary();
 	}
-	
+
 	public void switchToLanguage(Language language)
 	{
 		FlexoLocalization.setCurrentLanguage(language);
@@ -432,23 +433,23 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		setChanged();
 		notifyObservers();
 	}
-	
+
 	public void refreshLocalized()
 	{
 		setChanged();
 		notifyObservers();
 	}
-	
+
 	public FIBSelectable getSelectionLeader()
 	{
 		return selectionLeader;
 	}
-	
+
 	public FIBSelectable getLastFocusedSelectable()
 	{
 		return lastFocusedSelectable;
 	}
-	
+
 	public FIBWidgetView getFocusedWidget()
 	{
 		return focusedWidget;
@@ -479,9 +480,9 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 
 	public boolean isFocused(FIBWidgetView widget)
 	{
-		return (focusedWidget == widget);
+		return focusedWidget == widget;
 	}
-	
+
 	public void updateSelection(FIBSelectable widget, List<Object> oldSelection, List<Object> newSelection)
 	{
 		if (widget == selectionLeader) {
@@ -492,7 +493,7 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 				objectsToRemoveFromSelection.addAll(oldSelection);
 			}
 			for (Object o : newSelection) {
-				if ((oldSelection != null) && oldSelection.contains(o)) {
+				if (oldSelection != null && oldSelection.contains(o)) {
 					objectsToRemoveFromSelection.remove(o);
 				}
 				else {
@@ -502,8 +503,8 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 			Enumeration<FIBView> en = getViews();
 			while (en.hasMoreElements()) {
 				FIBView v = en.nextElement();
-				if (v.isSelectableComponent() 
-						&& (v.getSelectableComponent() != selectionLeader)
+				if (v.isSelectableComponent()
+						&& v.getSelectableComponent() != selectionLeader
 						&& v.getSelectableComponent().synchronizedWithSelection()) {
 					for (Object o : objectsToAddToSelection) {
 						if (v.getSelectableComponent().mayRepresent(o)) {
@@ -518,8 +519,8 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 				}
 			}
 		}
-	} 
-	
+	}
+
 	public void objectAddedToSelection(Object o)
 	{
 		logger.fine("FIBController: objectAddedToSelection(): "+o);
@@ -534,9 +535,9 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 				}
 			}
 		}
-		
+
 	}
-	
+
 	public void objectRemovedFromSelection(Object o)
 	{
 		logger.fine("FIBController: objectRemovedFromSelection(): "+o);
@@ -550,7 +551,7 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 			}
 		}
 	}
-	
+
 	public void selectionCleared()
 	{
 		logger.fine("FIBController: selectionCleared()");
@@ -562,7 +563,7 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 			}
 		}
 	}
-	
+
 	private void fireSelectionChanged(FIBSelectable leader)
 	{
 		// External synchronization
@@ -572,34 +573,34 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 			}
 		}
 	}
-	
+
 	public void fireMouseClicked(FIBComponentDynamicModel dm, int clickCount)
 	{
 		for (FIBMouseClickListener l : mouseClickListeners) {
 			l.mouseClicked(dm, clickCount);
 		}
 	}
-	
+
 	public void addSelectionListener(FIBSelectionListener l)
 	{
 		selectionListeners.add(l);
 	}
-	
+
 	public void removeSelectionListener(FIBSelectionListener l)
 	{
 		selectionListeners.remove(l);
 	}
-	
+
 	public void addMouseClickListener(FIBMouseClickListener l)
 	{
 		mouseClickListeners.add(l);
 	}
-	
+
 	public void removeMouseClickListener(FIBMouseClickListener l)
 	{
 		mouseClickListeners.remove(l);
 	}
-	
+
 	protected class DefaultFIBViewFactory implements FIBViewFactory
 	{
 		@Override
@@ -681,6 +682,9 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 			if (fibWidget instanceof FIBButton) {
 				return new FIBButtonWidget((FIBButton)fibWidget,FIBController.this);
 			}
+			if (fibWidget instanceof FIBRadioButtonList) {
+				return new FIBRadioButtonListWidget((FIBRadioButtonList) fibWidget, FIBController.this);
+			}
 			if (fibWidget instanceof FIBCustom) {
 				return new FIBCustomWidget((FIBCustom)fibWidget,FIBController.this);
 			}
@@ -688,5 +692,5 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		}
 
 	}
-	
+
 }

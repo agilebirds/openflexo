@@ -1,4 +1,4 @@
-<TextField text="TextField" columns="7">
+<TextField text="TextField" columns="7" validateOnReturn="true">
 	<Parameter name="x" value="50"/>
 	<Parameter name="y" value="75"/>
 </TextField>

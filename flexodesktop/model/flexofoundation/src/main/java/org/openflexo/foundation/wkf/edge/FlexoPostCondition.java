@@ -29,15 +29,14 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.openflexo.foundation.DeletableObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoActionizer;
 import org.openflexo.foundation.bindings.AbstractBinding;
+import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.bindings.BindingModel;
 import org.openflexo.foundation.bindings.WKFBindingDefinition;
-import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.validation.DeletionFixProposal;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
@@ -48,10 +47,10 @@ import org.openflexo.foundation.wkf.ExecutableWorkflowElement;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.LevelledObject;
 import org.openflexo.foundation.wkf.MetricsValue;
+import org.openflexo.foundation.wkf.MetricsValue.MetricsValueOwner;
 import org.openflexo.foundation.wkf.MetricsValueAdded;
 import org.openflexo.foundation.wkf.MetricsValueRemoved;
 import org.openflexo.foundation.wkf.WKFObject;
-import org.openflexo.foundation.wkf.MetricsValue.MetricsValueOwner;
 import org.openflexo.foundation.wkf.action.AddEdgeMetricsValue;
 import org.openflexo.foundation.wkf.action.DeleteMetricsValue;
 import org.openflexo.foundation.wkf.dm.PostRemoved;
@@ -161,13 +160,15 @@ public abstract class FlexoPostCondition<S extends AbstractNode, E extends Abstr
 	}
 
 	public void addMetrics() {
-		if (addMetricsActionizer!=null)
+		if (addMetricsActionizer!=null) {
 			addMetricsActionizer.run(this, null);
+		}
 	}
 
 	public void deleteMetrics(MetricsValue value) {
-		if (deleteMetricsActionizer!=null)
+		if (deleteMetricsActionizer!=null) {
 			deleteMetricsActionizer.run(value, null);
+		}
 	}
 
 	/**
@@ -189,7 +190,7 @@ public abstract class FlexoPostCondition<S extends AbstractNode, E extends Abstr
 		logger.info("delete() in FlexoPostCondition for "+this);
 		FlexoPreCondition pre = null;
 		if(getEndNode() instanceof FlexoPreCondition){
-			 pre = (FlexoPreCondition)getEndNode();
+			pre = (FlexoPreCondition)getEndNode();
 		}
 		super.delete();
 		if (pre!=null && pre.getIncomingPostConditions().size()==0) {
@@ -203,8 +204,9 @@ public abstract class FlexoPostCondition<S extends AbstractNode, E extends Abstr
 	@Override
 	public void addOutgoingEdgeToStartNode(S startNode) {
 		// ContextualEdgeStarting must take care of maintaining the start node of their outgoing edges
-		if (!(startNode instanceof ContextualEdgeStarting))
+		if (!(startNode instanceof ContextualEdgeStarting)) {
 			startNode.addToOutgoingPostConditions(this);
+		}
 	}
 
 	@Override
@@ -222,8 +224,9 @@ public abstract class FlexoPostCondition<S extends AbstractNode, E extends Abstr
 	}
 
 	public AbstractNode getNextNode() {
-		if (getEndNode()!=null)
+		if (getEndNode()!=null) {
 			return getEndNode().getNode();
+		}
 		return null;
 	}
 
@@ -285,21 +288,26 @@ public abstract class FlexoPostCondition<S extends AbstractNode, E extends Abstr
 
 	public WorkflowControlGraph<FlexoPostCondition<?,?>> getExecution()
 	{
-		if (_executionComputingFactory != null)
+		if (_executionComputingFactory != null) {
 			return _executionComputingFactory.getControlGraph(this);
+		}
 		return null;
 	}
 
 	@Override
 	public void setProgrammingLanguageForControlGraphComputation(ProgrammingLanguage language)
 	{
-		if (getExecution() != null) getExecution().setProgrammingLanguage(language);
+		if (getExecution() != null) {
+			getExecution().setProgrammingLanguage(language);
+		}
 	}
 
 	@Override
 	public void setInterproceduralForControlGraphComputation(boolean interprocedural)
 	{
-		if (getExecution() != null) getExecution().setInterprocedural(interprocedural);
+		if (getExecution() != null) {
+			getExecution().setInterprocedural(interprocedural);
+		}
 	}
 
 	@Override
@@ -323,53 +331,57 @@ public abstract class FlexoPostCondition<S extends AbstractNode, E extends Abstr
 		}
 	}
 
-    public boolean startOperatorIsIfNode() {
-    	return getStartNode() instanceof IFOperator;
-    }
+	public boolean startOperatorIsIfNode() {
+		return getStartNode() instanceof IFOperator;
+	}
 
-    public boolean isPositiveEvaluation() {
-    	if (getStartNode() instanceof OperatorNode) {
-	    	if (getStartNode() instanceof IFOperator) {
-	    		return ((IFOperator)getStartNode()).isPositiveEvaluationPostcondition(this);
-	    	}
-	    	if (logger.isLoggable(Level.WARNING))
+	public boolean isPositiveEvaluation() {
+		if (getStartNode() instanceof OperatorNode) {
+			if (getStartNode() instanceof IFOperator) {
+				return ((IFOperator)getStartNode()).isPositiveEvaluationPostcondition(this);
+			}
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("isPositiveEvaluation called on an edge that does not come out of an IF-operator");
-    	}
-    	return false;
-    }
+			}
+		}
+		return false;
+	}
 
-    public void setIsPositiveEvaluation(boolean positive) {
-    	if (getStartNode() instanceof OperatorNode) {
-	    	if (getStartNode() instanceof IFOperator) {
-	    		IFOperator operator = ((IFOperator)getStartNode());
+	public void setIsPositiveEvaluation(boolean positive) {
+		if (getStartNode() instanceof OperatorNode) {
+			if (getStartNode() instanceof IFOperator) {
+				IFOperator operator = (IFOperator)getStartNode();
 				if (isPositiveEvaluation() && !positive) {
-	    			operator.removeFromPositiveEvaluationPostConditions(this);
-	    			operator.addToNegativeEvaluationPostConditions(this);
-	    		} else if(!isPositiveEvaluation() && positive) {
-	    			operator.removeFromNegativeEvaluationPostConditions(this);
-	    			operator.addToPositiveEvaluationPostConditions(this);
-	    		}
-	    	} else
-	    		if (logger.isLoggable(Level.WARNING))
-	    			logger.warning("isPositiveEvaluation called on an edge that does not come out of an IF-operator");
-    	}
-    }
+					operator.removeFromPositiveEvaluationPostConditions(this);
+					operator.addToNegativeEvaluationPostConditions(this);
+				} else if(!isPositiveEvaluation() && positive) {
+					operator.removeFromNegativeEvaluationPostConditions(this);
+					operator.addToPositiveEvaluationPostConditions(this);
+				}
+			} else
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("isPositiveEvaluation called on an edge that does not come out of an IF-operator");
+				}
+		}
+	}
 
 	public String getDerivedNameFromStartingObject()
 	{
-		if (getName() != null)
+		if (getName() != null) {
 			return getName();
-		else if (getStartNode() != null)
+		} else if (getStartNode() != null) {
 			return getStartNode().getName();
+		}
 		return null;
 	}
 
 	public String getDerivedNameFromEndingObject()
 	{
-		if (getName() != null)
+		if (getName() != null) {
 			return getName();
-		else if (getNextNode() != null)
+		} else if (getNextNode() != null) {
 			return getNextNode().getName();
+		}
 		return null;
 	}
 
@@ -430,7 +442,7 @@ public abstract class FlexoPostCondition<S extends AbstractNode, E extends Abstr
 	ValidationRule<PostConditionMustHaveAnEndingObject,FlexoPostCondition<?,?>> {
 		public PostConditionMustHaveAnEndingObject() {
 			super(FlexoPostCondition.class,
-			"post_condition_must_have_an_ending_oject");
+					"post_condition_must_have_an_ending_oject");
 		}
 
 		@Override
@@ -449,7 +461,7 @@ public abstract class FlexoPostCondition<S extends AbstractNode, E extends Abstr
 	ValidationRule<PostConditionStartingPointShouldBeExplicitelyDefined,FlexoPostCondition<?,?>> {
 		public PostConditionStartingPointShouldBeExplicitelyDefined() {
 			super(FlexoPostCondition.class,
-			"post_condition_starting_point_should_be_explicitely_defined");
+					"post_condition_starting_point_should_be_explicitely_defined");
 		}
 
 		@Override
@@ -474,7 +486,7 @@ public abstract class FlexoPostCondition<S extends AbstractNode, E extends Abstr
 	ValidationRule<EdgesStartingFromEventBasedGatewayCannotBeConditionnal,FlexoPostCondition<?,?>> {
 		public EdgesStartingFromEventBasedGatewayCannotBeConditionnal() {
 			super(FlexoPostCondition.class,
-			"EdgesStartingFromEventBasedGatewayCannotBeConditionnal");
+					"EdgesStartingFromEventBasedGatewayCannotBeConditionnal");
 		}
 
 		@Override
@@ -504,7 +516,7 @@ public abstract class FlexoPostCondition<S extends AbstractNode, E extends Abstr
 	ValidationRule<EdgesStartingFromEventBasedGatewayCannotBeDefaultFlow,FlexoPostCondition<?,?>> {
 		public EdgesStartingFromEventBasedGatewayCannotBeDefaultFlow() {
 			super(FlexoPostCondition.class,
-			"EdgesStartingFromEventBasedGatewayCannotBeDefaultFlow");
+					"EdgesStartingFromEventBasedGatewayCannotBeDefaultFlow");
 		}
 
 		@Override
@@ -532,10 +544,10 @@ public abstract class FlexoPostCondition<S extends AbstractNode, E extends Abstr
 
 
 	public static class SinglePostConditionCannotBeConditionnal extends
-		ValidationRule<SinglePostConditionCannotBeConditionnal,FlexoPostCondition<?,?>> {
+	ValidationRule<SinglePostConditionCannotBeConditionnal,FlexoPostCondition<?,?>> {
 		public SinglePostConditionCannotBeConditionnal() {
 			super(FlexoPostCondition.class,
-			"SinglePostConditionCannotBeConditionnal");
+					"SinglePostConditionCannotBeConditionnal");
 		}
 
 		@Override
@@ -565,19 +577,19 @@ public abstract class FlexoPostCondition<S extends AbstractNode, E extends Abstr
 		}
 	}
 
-    public static class MarkAsGenericOutput extends FixProposal<PostConditionStartingPointShouldBeExplicitelyDefined,FlexoPostCondition<?,?>>
-    {
-        public MarkAsGenericOutput(FlexoPostCondition<?,?> post)
-        {
-            super("define_as_generic_output");
-         }
+	public static class MarkAsGenericOutput extends FixProposal<PostConditionStartingPointShouldBeExplicitelyDefined,FlexoPostCondition<?,?>>
+	{
+		public MarkAsGenericOutput(FlexoPostCondition<?,?> post)
+		{
+			super("define_as_generic_output");
+		}
 
-        @Override
+		@Override
 		protected void fixAction()
-        {
-           getObject().setIsGenericOutput(true);
-        }
-    }
+		{
+			getObject().setIsGenericOutput(true);
+		}
+	}
 
 	/**
 	 * Return a flag indicating if this edge was explicitely created as generic output:
@@ -602,46 +614,51 @@ public abstract class FlexoPostCondition<S extends AbstractNode, E extends Abstr
 	public WKFBindingDefinition getConditionPrimitiveBindingDefinition() {
 		if (getProject() != null) {
 			WKFBindingDefinition returned = WKFBindingDefinition.get(this, CONDITION_PRIMITIVE, Boolean.class,BindingDefinitionType.GET,false);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Returned WKFBindingDefinition : "+returned);
+			}
 			return returned;
 		}
 		return null;
 	}
 
 	public AbstractBinding getConditionPrimitive() {
-	    if (isBeingCloned())
-	        return null;
-	    return _conditionPrimitive;
+		if (isBeingCloned()) {
+			return null;
+		}
+		return _conditionPrimitive;
 	}
 
 	public void setConditionPrimitive(AbstractBinding conditionPrimitive) {
 		AbstractBinding oldBindingValue = _conditionPrimitive;
-	    _conditionPrimitive = conditionPrimitive;
-	    if (_conditionPrimitive != null) {
-	        _conditionPrimitive.setOwner(this);
-	        _conditionPrimitive.setBindingDefinition(getConditionPrimitiveBindingDefinition());
-	        isConditional = true;
-	    }
-	    setChanged();
-	    notifyObservers(new WKFAttributeDataModification(CONDITION_PRIMITIVE, oldBindingValue, conditionPrimitive));
+		_conditionPrimitive = conditionPrimitive;
+		if (_conditionPrimitive != null) {
+			_conditionPrimitive.setOwner(this);
+			_conditionPrimitive.setBindingDefinition(getConditionPrimitiveBindingDefinition());
+			isConditional = true;
+		}
+		setChanged();
+		notifyObservers(new WKFAttributeDataModification(CONDITION_PRIMITIVE, oldBindingValue, conditionPrimitive));
 	}
 
 	public BindingModel getBindingModel() {
-	    if (getProcess() != null)
-	        return getProcess().getBindingModel();
-	    return null;
+		if (getProcess() != null) {
+			return getProcess().getBindingModel();
+		}
+		return null;
 	}
 
 	public boolean getIsConditional() {
 		/*if (getStartNode() instanceof OperatorNode && ((OperatorNode) getStartNode()).isExclusiveGateway()) {
 			return !getIsDefaultFlow();
 		}*/
-		if (isStartingFromOr())
+		if (isStartingFromOr()) {
 			return !getIsDefaultFlow();
+		}
 		if (canBeConditional()) {
-			if(mustBeConditional())
+			if(mustBeConditional()) {
 				isConditional = true;
+			}
 		}
 		return isConditional;
 	}
@@ -650,11 +667,13 @@ public abstract class FlexoPostCondition<S extends AbstractNode, E extends Abstr
 		if (canBeConditional()) {
 			if(getStartNode() instanceof ActivityNode || getStartNode() instanceof OperationNode) {
 				FlexoNode start = (FlexoNode) getStartNode();
-				if (start.isEndNode() && getEndNodesAndOutgoingPortCountForParentNodeOfStartNode() > 1)
+				if (start.isEndNode() && getEndNodesAndOutgoingPortCountForParentNodeOfStartNode() > 1) {
 					return true;
+				}
 			} else if (getStartNode() instanceof FlexoPortMap && ((FlexoPortMap)getStartNode()).isOutputPort()) {
-				if (getEndNodesAndOutgoingPortCountForParentNodeOfStartNode()>1)
+				if (getEndNodesAndOutgoingPortCountForParentNodeOfStartNode()>1) {
 					return true;
+				}
 			}
 		}
 		return false;
@@ -666,34 +685,40 @@ public abstract class FlexoPostCondition<S extends AbstractNode, E extends Abstr
 			FlexoNode start = (FlexoNode)getStartNode();
 			if (start.getParentPetriGraph()!=null) {
 				count+=start.getParentPetriGraph().getAllEndNodes().size();
-				if (start.getParentPetriGraph().getContainer() instanceof SubProcessNode)
+				if (start.getParentPetriGraph().getContainer() instanceof SubProcessNode
+						&& ((SubProcessNode) start.getParentPetriGraph().getContainer()).getPortMapRegistery() != null) {
 					count+=((SubProcessNode)start.getParentPetriGraph().getContainer()).getPortMapRegistery().getAllOutPortmaps().size();
+				}
 			}
 		} else if (getStartNode() instanceof FlexoPortMap && ((FlexoPortMap)getStartNode()).isOutputPort()) {
 			SubProcessNode node = ((FlexoPortMap)getStartNode()).getSubProcessNode();
-			if (node!=null && node.getPortMapRegistery()!=null)
+			if (node!=null && node.getPortMapRegistery()!=null) {
 				count = node.getPortMapRegistery().getAllOutPortmaps().size()+(node.getOperationPetriGraph()!=null?node.getOperationPetriGraph().getAllEndNodes().size():0);
+			}
 		}
 		return count;
 	}
 
 	public boolean canBeConditional() {
 		//Incident 1007031
-		if(getStartNode() instanceof EventNode)
+		if(getStartNode() instanceof EventNode) {
 			return false;
+		}
 		boolean b = !getIsDefaultFlow() /* && getStartNode().getOutgoingPostConditions().size()>1*/;
 		if (b && getStartNode() instanceof OperatorNode) {
 			OperatorNode start = (OperatorNode) getStartNode();
-			b &= (start.isInclusiveGateway());
+			b &= start.isInclusiveGateway();
 		}
 		return b;
 	}
 
 	public boolean canBeDefaultFlow() {
-		if(getStartNode() instanceof EventNode)return false;
+		if(getStartNode() instanceof EventNode) {
+			return false;
+		}
 		if (getStartNode() instanceof OperatorNode) {
 			OperatorNode start = (OperatorNode) getStartNode();
-			return (start.isInclusiveGateway() && !getIsConditional()) || start instanceof OROperator;
+			return start.isInclusiveGateway() && !getIsConditional() || start instanceof OROperator;
 		}
 		return !getIsConditional();
 	}
@@ -710,8 +735,9 @@ public abstract class FlexoPostCondition<S extends AbstractNode, E extends Abstr
 	}
 
 	public void setIsConditional(boolean isConditional) {
-		if (isDefaultFlow && isConditional)
+		if (isDefaultFlow && isConditional) {
 			setIsDefaultFlow(false);
+		}
 		this.isConditional = isConditional;
 		setChanged();
 		notifyAttributeModification("isConditional", !isConditional, isConditional);
@@ -723,8 +749,9 @@ public abstract class FlexoPostCondition<S extends AbstractNode, E extends Abstr
 
 	public void setIsDefaultFlow(boolean isDefaultFlow) {
 		//a token edge cannot be conditional and the default flow at the same time.
-		if(isDefaultFlow && isConditional)
+		if(isDefaultFlow && isConditional) {
 			setIsConditional(false);
+		}
 		this.isDefaultFlow = isDefaultFlow;
 		setChanged();
 		notifyAttributeModification("isDefaultFlow", !isDefaultFlow, isDefaultFlow);

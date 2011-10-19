@@ -19,18 +19,21 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.foundation.viewpoint.dm.EditionSchemeInserted;
 import org.openflexo.foundation.viewpoint.dm.EditionSchemeRemoved;
 import org.openflexo.foundation.viewpoint.dm.PatternRoleInserted;
 import org.openflexo.foundation.viewpoint.dm.PatternRoleRemoved;
 import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
-import org.openflexo.foundation.viewpoint.inspector.PatternRolePathElement;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
@@ -150,19 +153,38 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		notifyObservers(new PatternRoleRemoved(aPatternRole, this));
 	}
 	
+	public <R> List<R> getPatternRoles(Class<R> type)
+	{
+		List<R> returned = new ArrayList<R>();
+		for (PatternRole r : patternRoles) {
+			if (TypeUtils.isTypeAssignableFrom(type, r.getClass())) {
+				returned.add((R)r);
+			}
+		}
+		return returned;
+	}
+	
+	public List<ShapePatternRole> getShapePatternRoles()
+	{
+		return getPatternRoles(ShapePatternRole.class);
+	}
+	
+	public List<ConnectorPatternRole> getConnectorPatternRoles()
+	{
+		return getPatternRoles(ConnectorPatternRole.class);
+	}
+	
 	public ShapePatternRole getDefaultShapePatternRole()
 	{
-		for (PatternRole r : patternRoles) {
-			if (r instanceof ShapePatternRole) return (ShapePatternRole)r;
-		}
+		List<ShapePatternRole> l = getShapePatternRoles();
+		if (l.size()>0) return l.get(0);
 		return null;
 	}
 	
 	public ConnectorPatternRole getDefaultConnectorPatternRole()
 	{
-		for (PatternRole r : patternRoles) {
-			if (r instanceof ConnectorPatternRole) return (ConnectorPatternRole)r;
-		}
+		List<ConnectorPatternRole> l = getConnectorPatternRoles();
+		if (l.size()>0) return l.get(0);
 		return null;
 	}
 	

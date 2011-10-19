@@ -21,8 +21,8 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.viewpoint.inspector.EditionPatternPathElement;
-import org.openflexo.foundation.viewpoint.inspector.InspectorDataBinding;
+import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
 
@@ -62,7 +62,8 @@ public class DropScheme extends EditionScheme {
 		if (StringUtils.isEmpty(_getTarget())) {
 			return null;
 		}
-		if (getViewPointLibrary() != null)
+		if (isTopTarget()) return null;
+ 		if (getViewPointLibrary() != null)
 			return getViewPointLibrary().getEditionPattern(_getTarget());
 		return null;
 	}
@@ -128,7 +129,7 @@ public class DropScheme extends EditionScheme {
 	public AddShape createAddShapeAction()
 	{
 		AddShape newAction = super.createAddShapeAction();
-		if (isTopTarget()) newAction.setContainer(new InspectorDataBinding("topLevel"));
+		if (isTopTarget()) newAction.setContainer(new ViewPointDataBinding("topLevel"));
 		return newAction;
 	}
 

@@ -5,14 +5,14 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
-import org.openflexo.foundation.viewpoint.inspector.InspectorDataBinding;
 
 
 public abstract class GraphicalElementPatternRole extends PatternRole implements Bindable {
 
 	private boolean readOnlyLabel;
-	private InspectorDataBinding label;
+	private ViewPointDataBinding label;
 
 	
  	public abstract Object getGraphicalRepresentation(); 
@@ -42,13 +42,13 @@ public abstract class GraphicalElementPatternRole extends PatternRole implements
 		return LABEL;
 	}
 
-	public InspectorDataBinding getLabel() 
+	public ViewPointDataBinding getLabel() 
 	{
-		if (label == null) label = new InspectorDataBinding(this,GraphicalElementBindingAttribute.label,getLabelBindingDefinition());
+		if (label == null) label = new ViewPointDataBinding(this,GraphicalElementBindingAttribute.label,getLabelBindingDefinition());
 		return label;
 	}
 
-	public void setLabel(InspectorDataBinding label) 
+	public void setLabel(ViewPointDataBinding label) 
 	{
 		label.setOwner(this);
 		label.setBindingAttribute(GraphicalElementBindingAttribute.label);

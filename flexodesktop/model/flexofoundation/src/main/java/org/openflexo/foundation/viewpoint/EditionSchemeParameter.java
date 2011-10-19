@@ -20,18 +20,21 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
-import java.util.Hashtable;
+import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyIndividual;
+import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
-import org.openflexo.foundation.viewpoint.inspector.InspectorDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
 public abstract class EditionSchemeParameter extends ViewPointObject {
+
+	private static final Logger logger = Logger.getLogger(EditionSchemeParameter.class.getPackage().getName());
 
 	public static enum WidgetType
 	{
@@ -179,19 +182,11 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 		this.usePaletteLabelAsDefaultValue = usePaletteLabelAsDefaultValue;
 	}
 
-	public boolean evaluateCondition(final Hashtable<String,Object> parameterValues)
+	public boolean evaluateCondition(final EditionSchemeAction<?> action)
 	{
-		/*if (condition == null) {
-			return true;
+		if (getConditional().isValid()) {
+			return (Boolean)getConditional().getBindingValue(action);
 		}
-		try {
-			return condition.evaluateCondition(parameterValues);
-		} catch (TypeMismatchException e) {
-			e.printStackTrace();
-		} catch (UnresolvedExpressionException e) {
-			e.printStackTrace();
-		}
-		return false;*/
 		return true;
 	}
 	
@@ -206,8 +201,8 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 		return getScheme().getParameters().indexOf(this);
 	}
 	
-	private InspectorDataBinding conditional;
-	private InspectorDataBinding defaultValue;
+	private ViewPointDataBinding conditional;
+	private ViewPointDataBinding defaultValue;
 
 	public static enum ParameterBindingAttribute implements InspectorBindingAttribute
 	{
@@ -234,13 +229,13 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 		return DEFAULT_VALUE;
 	}
 
-	public InspectorDataBinding getConditional() 
+	public ViewPointDataBinding getConditional() 
 	{
-		if (conditional == null) conditional = new InspectorDataBinding(this,ParameterBindingAttribute.conditional,getConditionalBindingDefinition());
+		if (conditional == null) conditional = new ViewPointDataBinding(this,ParameterBindingAttribute.conditional,getConditionalBindingDefinition());
 		return conditional;
 	}
 
-	public void setConditional(InspectorDataBinding conditional) 
+	public void setConditional(ViewPointDataBinding conditional) 
 	{
 		conditional.setOwner(this);
 		conditional.setBindingAttribute(ParameterBindingAttribute.conditional);
@@ -259,9 +254,9 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 		return getScheme().getParametersBindingModel();
 	}
 
-	public InspectorDataBinding getDefaultValue() 
+	public ViewPointDataBinding getDefaultValue() 
 	{
-		if (defaultValue == null) defaultValue = new InspectorDataBinding(this,ParameterBindingAttribute.defaultValue,getDefaultValueBindingDefinition());
+		if (defaultValue == null) defaultValue = new ViewPointDataBinding(this,ParameterBindingAttribute.defaultValue,getDefaultValueBindingDefinition());
 		return defaultValue;
 	}
 
@@ -278,7 +273,7 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 		return getDefaultValue().toString();
 	}
 
-	public void setDefaultValue(InspectorDataBinding defaultValue) 
+	public void setDefaultValue(ViewPointDataBinding defaultValue) 
 	{
 		defaultValue.setOwner(this);
 		defaultValue.setBindingAttribute(ParameterBindingAttribute.defaultValue);

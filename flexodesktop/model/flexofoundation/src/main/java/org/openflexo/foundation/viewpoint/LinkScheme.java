@@ -21,8 +21,8 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.viewpoint.inspector.EditionPatternPathElement;
-import org.openflexo.foundation.viewpoint.inspector.InspectorDataBinding;
+import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
 
@@ -137,12 +137,12 @@ public class LinkScheme extends EditionScheme {
 		EditionPattern fromEditionPattern = this.getFromTargetEditionPattern();
 		if (fromEditionPattern != null) {
 			ShapePatternRole fromShapePatternRole = fromEditionPattern.getDefaultShapePatternRole();
-			if (fromShapePatternRole != null) newAction.setFromShape(new InspectorDataBinding("fromTarget."+fromShapePatternRole.getName()));
+			if (fromShapePatternRole != null) newAction.setFromShape(new ViewPointDataBinding("fromTarget."+fromShapePatternRole.getName()));
 		}
 		EditionPattern toEditionPattern = this.getToTargetEditionPattern();
 		if (toEditionPattern != null) {
 			ShapePatternRole toShapePatternRole = toEditionPattern.getDefaultShapePatternRole();
-			if (toShapePatternRole != null) newAction.setToShape(new InspectorDataBinding("toTarget."+toShapePatternRole.getName()));
+			if (toShapePatternRole != null) newAction.setToShape(new ViewPointDataBinding("toTarget."+toShapePatternRole.getName()));
 		}
 		return newAction;
 	}
