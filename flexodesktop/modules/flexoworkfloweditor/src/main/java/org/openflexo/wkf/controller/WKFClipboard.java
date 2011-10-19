@@ -372,6 +372,7 @@ public class WKFClipboard extends FlexoClipboard {
 		if (currentlySelectedObjects.size() > 0) {
 
 			if (currentlySelectedObjects.firstElement() instanceof PetriGraphNode
+					|| currentlySelectedObjects.firstElement() instanceof WKFArtefact
 					|| currentlySelectedObjects.firstElement() instanceof WKFEdge<?,?>) {
 
 				Vector<PetriGraphNode> selectedNodes = new Vector<PetriGraphNode>();
