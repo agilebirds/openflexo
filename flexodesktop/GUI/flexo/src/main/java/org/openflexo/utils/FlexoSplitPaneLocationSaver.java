@@ -41,16 +41,24 @@ public class FlexoSplitPaneLocationSaver implements PropertyChangeListener {
 	public FlexoSplitPaneLocationSaver(JSplitPane pane, final String id, final Double defaultDividerLocation) {
 		this.splitPane = pane;
 		this.id = id;
+		layoutSplitPaneWhenShowing(id, defaultDividerLocation);
+	}
+
+	public void layoutSplitPaneWhenShowing(final String id, final Double defaultDividerLocation) {
 		SwingUtilities.invokeLater(new Runnable() {
 
 			@Override
 			public void run() {
-				initSplitPaneLayout(id, defaultDividerLocation);
+				if (splitPane.isShowing() && splitPane.getHeight() > 0) {
+					layoutSplitPane(id, defaultDividerLocation);
+				} else {
+					layoutSplitPaneWhenShowing(id, defaultDividerLocation);
+				}
 			}
 		});
 	}
 
-	private void initSplitPaneLayout(String id, Double defaultDividerLocation) {
+	private void layoutSplitPane(String id, Double defaultDividerLocation) {
 		if (GeneralPreferences.getDividerLocationForSplitPaneWithID(id)>=0) {
 			splitPane.setDividerLocation(GeneralPreferences.getDividerLocationForSplitPaneWithID(id));
 		} else if (defaultDividerLocation!=null){
@@ -66,51 +74,54 @@ public class FlexoSplitPaneLocationSaver implements PropertyChangeListener {
 		saveLocationInPreferenceWhenPossible();
 	}
 
-    private Thread locationSaver;
+	private Thread locationSaver;
 
-    protected synchronized void saveLocationInPreferenceWhenPossible()
-    {
-        if (!splitPane.isVisible())
-            return;
-        if (locationSaver!=null) {
-            locationSaver.interrupt();//Resets thread sleep
-            return;
-        }
+	protected synchronized void saveLocationInPreferenceWhenPossible()
+	{
+		if (!splitPane.isVisible()) {
+			return;
+		}
+		if (locationSaver!=null) {
+			locationSaver.interrupt();//Resets thread sleep
+			return;
+		}
 
-        locationSaver = new Thread(new Runnable() {
-            /**
-             * Overrides run
-             *
-             * @see java.lang.Runnable#run()
-             */
-            @Override
+		locationSaver = new Thread(new Runnable() {
+			/**
+			 * Overrides run
+			 *
+			 * @see java.lang.Runnable#run()
+			 */
+			@Override
 			public void run()
-            {
-                boolean go = true;
-                while (go)
-                    try {
-                        go = false;
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        go = true;// interruption is used to reset sleep.
-                    }
-                saveLocationInPreference();
-            }
-        },"Splitpane location saver for "+id);
-        locationSaver.start();
-    }
+			{
+				boolean go = true;
+				while (go) {
+					try {
+						go = false;
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						go = true;// interruption is used to reset sleep.
+					}
+				}
+				saveLocationInPreference();
+			}
+		},"Splitpane location saver for "+id);
+		locationSaver.start();
+	}
 
-    protected void saveLocationInPreference()
-    {
-    	int value = splitPane.getDividerLocation();
-    	if (value>splitPane.getMaximumDividerLocation())
-    		value = splitPane.getMaximumDividerLocation();
-    	else if (value<splitPane.getMinimumDividerLocation())
-    		value = splitPane.getMinimumDividerLocation();
-    	GeneralPreferences.setDividerLocationForSplitPaneWithID(value,id);
-        FlexoPreferences.savePreferences(true);
-        locationSaver = null;
-    }
+	protected void saveLocationInPreference()
+	{
+		int value = splitPane.getDividerLocation();
+		if (value>splitPane.getMaximumDividerLocation()) {
+			value = splitPane.getMaximumDividerLocation();
+		} else if (value<splitPane.getMinimumDividerLocation()) {
+			value = splitPane.getMinimumDividerLocation();
+		}
+		GeneralPreferences.setDividerLocationForSplitPaneWithID(value,id);
+		FlexoPreferences.savePreferences(true);
+		locationSaver = null;
+	}
 
 
 }
