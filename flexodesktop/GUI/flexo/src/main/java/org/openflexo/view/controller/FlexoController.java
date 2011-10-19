@@ -62,6 +62,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -1213,10 +1214,18 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 						//logger.warning("Switching to perspective "+perspective+" with an unexpected object: "+newEditedObject+". To avoid this, you should define a default object for perspective.");
 						newEditedObject = null;
 						if (perspective.doesPerspectiveControlLeftView()) {
-							getMainPane().setLeftView(perspective.getLeftView());
+							JComponent leftView = perspective.getLeftView();
+							if (leftView instanceof JSplitPane) {
+								((JSplitPane) leftView).setOneTouchExpandable(true);
+							}
+							getMainPane().setLeftView(leftView);
 						}
 						if (perspective.doesPerspectiveControlRightView()) {
-							getMainPane().setRightView(perspective.getRightView());
+							JComponent rightView = perspective.getRightView();
+							if (rightView instanceof JSplitPane) {
+								((JSplitPane) rightView).setOneTouchExpandable(true);
+							}
+							getMainPane().setRightView(rightView);
 						}
 					}
 				}
