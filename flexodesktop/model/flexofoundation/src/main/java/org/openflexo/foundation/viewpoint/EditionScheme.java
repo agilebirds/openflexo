@@ -452,12 +452,14 @@ public abstract class EditionScheme extends ViewPointObject {
 		createBindingModel();
 	}
 
+	public static final String TOP_LEVEL = "topLevel";
+	
 	private void createBindingModel()
 	{
 		_bindingModel = new BindingModel();
 		_bindingModel.addToBindingVariables(new EditionSchemeParameterListPathElement(this,null));
 		appendContextualBindingVariables(_bindingModel);
-		_bindingModel.addToBindingVariables(new GraphicalElementPathElement.ViewPathElement("topLevel",null));
+		_bindingModel.addToBindingVariables(new GraphicalElementPathElement.ViewPathElement(TOP_LEVEL,null));
 		if (getEditionPattern() != null) {
 			for (PatternRole pr : getEditionPattern().getPatternRoles()) {
 				PatternRolePathElement newPathElement = PatternRolePathElement.makePatternRolePathElement(pr,this);

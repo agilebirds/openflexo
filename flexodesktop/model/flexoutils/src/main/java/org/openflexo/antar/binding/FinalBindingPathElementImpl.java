@@ -29,17 +29,17 @@ import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
  * @author sylvain
  *
  */
-public abstract class FinalBindingPathElementImpl<E,T> extends SimpleBindingPathElementImpl<E, T> implements FinalBindingPathElement<E,T> {
+public abstract class FinalBindingPathElementImpl<T> extends SimpleBindingPathElementImpl<T> implements FinalBindingPathElement<T> {
 
-	public FinalBindingPathElementImpl(String label, Class<E> declaringClass, Type type, boolean isSettable, String tooltipText) 
+	public FinalBindingPathElementImpl(String label, Class<?> declaringClass, Type type, boolean isSettable, String tooltipText) 
 	{
 		super(label, declaringClass, type, isSettable, tooltipText);
 	}
 
 	@Override
-	public abstract T getBindingValue(E target, BindingEvaluationContext context);
+	public abstract T getBindingValue(Object target, BindingEvaluationContext context);
 	
     @Override
-    public abstract void setBindingValue(T value, E target, BindingEvaluationContext context);
+    public abstract void setBindingValue(T value, Object target, BindingEvaluationContext context);
 
  }

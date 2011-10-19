@@ -22,7 +22,7 @@ import org.openflexo.foundation.ontology.dm.URIChanged;
 import org.openflexo.foundation.ontology.dm.URINameChanged;
 import org.openflexo.localization.FlexoLocalization;
 
-public class OntologyObjectPathElement<T extends OntologyObject> implements SimplePathElement<Bindable,T>,BindingVariable<Bindable,T>
+public class OntologyObjectPathElement<T extends OntologyObject> implements SimplePathElement<T>,BindingVariable<T>
 {
 	private static final Logger logger = Logger.getLogger(OntologyObjectPathElement.class.getPackage().getName());
 
@@ -40,33 +40,38 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 		this.name = name;
 		parentElement = aParentElement;
 		allProperties = new Vector<BindingPathElement>();
-		uriNameProperty = new SimpleBindingPathElementImpl<T,String>(URINameChanged.URI_NAME_KEY,TypeUtils.getBaseClass(getType()),String.class,true,"uri_name_as_supplied_in_ontology") {
+		uriNameProperty = new SimpleBindingPathElementImpl<String>(URINameChanged.URI_NAME_KEY,TypeUtils.getBaseClass(getType()),String.class,true,"uri_name_as_supplied_in_ontology") {
 			@Override
-			public String getBindingValue(T target, BindingEvaluationContext context) 
+			public String getBindingValue(Object target, BindingEvaluationContext context) 
 			{
 				return ((OntologyObject)target).getName();
 			}
 		    @Override
-		    public void setBindingValue(String value, T target, BindingEvaluationContext context) 
+		    public void setBindingValue(String value, Object target, BindingEvaluationContext context) 
 		    {
-		    	try {
-		    		logger.info("Rename URI of object "+target+" with "+value);
-					target.setName(value);
-				} catch (Exception e) {
-					logger.warning("Unhandled exception: "+e);
-					e.printStackTrace();
-				}
+		    	if (target instanceof OntologyObject) {
+		    		try {
+		    			logger.info("Rename URI of object "+target+" with "+value);
+		    			((OntologyObject)target).setName(value);
+		    		} catch (Exception e) {
+		    			logger.warning("Unhandled exception: "+e);
+		    			e.printStackTrace();
+		    		}
+		    	}
+		    	else {
+		    		logger.warning("Unexpected "+target);
+		    	}
 		    }
 		};
 		allProperties.add(uriNameProperty);
-		uriProperty = new SimpleBindingPathElementImpl<T,String>(URIChanged.URI_KEY,TypeUtils.getBaseClass(getType()),String.class,false,"uri_as_supplied_in_ontology") {
+		uriProperty = new SimpleBindingPathElementImpl<String>(URIChanged.URI_KEY,TypeUtils.getBaseClass(getType()),String.class,false,"uri_as_supplied_in_ontology") {
 			@Override
-			public String getBindingValue(T target, BindingEvaluationContext context) 
+			public String getBindingValue(Object target, BindingEvaluationContext context) 
 			{
 				return ((OntologyObject)target).getURI();
 			}
 		    @Override
-		    public void setBindingValue(String value, T target, BindingEvaluationContext context) 
+		    public void setBindingValue(String value, Object target, BindingEvaluationContext context) 
 		    {
 		    	// not relevant because not settable
 		    }
@@ -119,14 +124,14 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 	}
 
 	@Override
-	public T getBindingValue(Bindable target,
+	public T getBindingValue(Object target,
 			BindingEvaluationContext context) {
 		logger.warning("Que dois-je renvoyer pour "+target);
 		return null;
 	}
 
 	@Override
-	public void setBindingValue(T value, Bindable target, BindingEvaluationContext context) {
+	public void setBindingValue(T value, Object target, BindingEvaluationContext context) {
 		// TODO Auto-generated method stub
 		
 	}

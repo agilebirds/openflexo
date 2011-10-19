@@ -30,9 +30,9 @@ import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
  * @author sylvain
  *
  */
-public interface BindingPathElement<E,T> extends Typed
+public interface BindingPathElement<T> extends Typed
 {
-    public Class<? extends E> getDeclaringClass();
+    public Class<?> getDeclaringClass();
 
     @Override
 	public Type getType();
@@ -64,7 +64,7 @@ public interface BindingPathElement<E,T> extends Typed
      * @param context: binding evaluation context
 	 * @return accessed value
 	 */
-    public T getBindingValue(E target, BindingEvaluationContext context);
+    public T getBindingValue(Object target, BindingEvaluationContext context);
     
     /**
      * Sets a new value for related path element, given a binding evaluation context
@@ -74,7 +74,7 @@ public interface BindingPathElement<E,T> extends Typed
      * @param target: adress object as target of parent path: the object on which setting will be performed
      * @param context: binding evaluation context
      */
-    public void setBindingValue(T value, E target, BindingEvaluationContext context);
+    public void setBindingValue(T value, Object target, BindingEvaluationContext context);
     
 	/*public BindingPathElement getBindingPathElement(String propertyName);
 

@@ -12,7 +12,7 @@ import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
 
-public class EditionPatternInstancePathElement<E extends Bindable> implements BindingVariable<E,EditionPatternInstance>
+public class EditionPatternInstancePathElement<E extends Bindable> implements BindingVariable<EditionPatternInstance>
 {
 	static final Logger logger = Logger.getLogger(EditionPatternInstancePathElement.class.getPackage().getName());
 
@@ -94,14 +94,14 @@ public class EditionPatternInstancePathElement<E extends Bindable> implements Bi
 	}
 			
 	@Override
-	public EditionPatternInstance getBindingValue(E target, BindingEvaluationContext context) 
+	public EditionPatternInstance getBindingValue(Object target, BindingEvaluationContext context) 
 	{
 		if (target != null) logger.info("TODO: evaluateBinding EditionPatternPathElement with target="+target+" context="+context);
 		return null;
 	}
 
     @Override
-    public void setBindingValue(EditionPatternInstance value, E target, BindingEvaluationContext context) 
+    public void setBindingValue(EditionPatternInstance value, Object target, BindingEvaluationContext context) 
     {
     	// Not settable
     }

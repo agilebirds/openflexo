@@ -30,15 +30,15 @@ import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
  * @author sylvain
  *
  */
-public abstract class SimpleBindingPathElementImpl<E,T> extends Observable implements SimplePathElement<E,T> {
+public abstract class SimpleBindingPathElementImpl<T> extends Observable implements SimplePathElement<T> {
 
 	private String label;
 	private Type type;
-	private Class<E> declaringClass;
+	private Class<?> declaringClass;
 	private boolean settable = false;
 	private String tooltipText;
 
-	public SimpleBindingPathElementImpl(String label, Class<E> declaringClass, Type type, boolean isSettable, String tooltipText) 
+	public SimpleBindingPathElementImpl(String label, Class<?> declaringClass, Type type, boolean isSettable, String tooltipText) 
 	{
 		super();
 		this.label = label;
@@ -49,7 +49,7 @@ public abstract class SimpleBindingPathElementImpl<E,T> extends Observable imple
 	}
 
 	@Override
-	public Class<E> getDeclaringClass() 
+	public Class<?> getDeclaringClass() 
 	{
 		return declaringClass;
 	}
@@ -91,9 +91,9 @@ public abstract class SimpleBindingPathElementImpl<E,T> extends Observable imple
 	}
 
 	@Override
-	public abstract T getBindingValue(E target, BindingEvaluationContext context);
+	public abstract T getBindingValue(Object target, BindingEvaluationContext context);
 	
     @Override
-    public abstract void setBindingValue(T value, E target, BindingEvaluationContext context);
+    public abstract void setBindingValue(T value, Object target, BindingEvaluationContext context);
 
  }

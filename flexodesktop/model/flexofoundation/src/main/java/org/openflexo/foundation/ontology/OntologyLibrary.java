@@ -456,6 +456,7 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 	 */
 	public boolean testValidURI(String ontologyURI, String conceptURI)
 	{
+		if (StringUtils.isEmpty(conceptURI)) return false;
 		if (StringUtils.isEmpty(conceptURI.trim())) return false;
 		return (conceptURI.equals(ToolBox.getJavaName(conceptURI,true,false)) && getOntologyObject(ontologyURI+"#"+conceptURI) == null);
 	}

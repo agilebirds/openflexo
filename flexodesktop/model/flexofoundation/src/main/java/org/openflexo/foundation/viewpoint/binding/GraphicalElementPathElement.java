@@ -17,7 +17,7 @@ import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.localization.FlexoLocalization;
 
-public class GraphicalElementPathElement<T extends ViewObject> implements SimplePathElement<Bindable,T>,BindingVariable<Bindable,T>
+public class GraphicalElementPathElement<T extends ViewObject> implements SimplePathElement<T>,BindingVariable<T>
 {
 	private static final Logger logger = Logger.getLogger(GraphicalElementPathElement.class.getPackage().getName());
 
@@ -25,7 +25,7 @@ public class GraphicalElementPathElement<T extends ViewObject> implements Simple
 	private BindingPathElement parentElement;
 	protected Vector<BindingPathElement> allProperties;
 	//private GraphicalElementPathElement<ViewObject> parent;
-	private FinalBindingPathElementImpl<T,String> text;
+	private FinalBindingPathElementImpl<String> text;
 	
 	public GraphicalElementPathElement(String name, BindingPathElement aParentElement) 
 	{
@@ -35,15 +35,15 @@ public class GraphicalElementPathElement<T extends ViewObject> implements Simple
 		allProperties = new Vector<BindingPathElement>();
 		//parent = new GraphicalElementPathElement<ViewObject>("parent",this);
 		//allProperties.add(parent);
-		text = new FinalBindingPathElementImpl<T,String>("text",TypeUtils.getBaseClass(getType()),String.class,true,"text") {
+		text = new FinalBindingPathElementImpl<String>("text",TypeUtils.getBaseClass(getType()),String.class,true,"text") {
 			@Override
-			public String getBindingValue(T target, BindingEvaluationContext context) 
+			public String getBindingValue(Object target, BindingEvaluationContext context) 
 			{
 				logger.warning("Please implement me");
 				return "???";
 			}
 		    @Override
-		    public void setBindingValue(String value, T target, BindingEvaluationContext context) 
+		    public void setBindingValue(String value, Object target, BindingEvaluationContext context) 
 		    {
 				logger.warning("Please implement me");
 		    }
@@ -96,14 +96,14 @@ public class GraphicalElementPathElement<T extends ViewObject> implements Simple
 	}
 
 	@Override
-	public T getBindingValue(Bindable target,
+	public T getBindingValue(Object target,
 			BindingEvaluationContext context) {
 		logger.warning("Que dois-je renvoyer pour "+target);
 		return null;
 	}
 
 	@Override
-	public void setBindingValue(T value, Bindable target, BindingEvaluationContext context) {
+	public void setBindingValue(T value, Object target, BindingEvaluationContext context) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -120,63 +120,63 @@ public class GraphicalElementPathElement<T extends ViewObject> implements Simple
 
 	public static class ShapePathElement extends GraphicalElementPathElement<ViewShape>
 	{
-		private FinalBindingPathElementImpl<View,Double> x;
-		private FinalBindingPathElementImpl<View,Double> y;
-		private FinalBindingPathElementImpl<View,Double> width;
-		private FinalBindingPathElementImpl<View,Double> height;
+		private FinalBindingPathElementImpl<Double> x;
+		private FinalBindingPathElementImpl<Double> y;
+		private FinalBindingPathElementImpl<Double> width;
+		private FinalBindingPathElementImpl<Double> height;
 		public ShapePathElement(String name, BindingPathElement aParent) {
 			super(name,aParent);
-			x = new FinalBindingPathElementImpl<View,Double>("x",TypeUtils.getBaseClass(getType()),Double.class,true,"x") {
+			x = new FinalBindingPathElementImpl<Double>("x",TypeUtils.getBaseClass(getType()),Double.class,true,"x") {
 				@Override
-				public Double getBindingValue(View target, BindingEvaluationContext context) 
+				public Double getBindingValue(Object target, BindingEvaluationContext context) 
 				{
 					logger.warning("Please implement me");
 					return 0.0;
 				}
 			    @Override
-			    public void setBindingValue(Double value, View target, BindingEvaluationContext context) 
+			    public void setBindingValue(Double value, Object target, BindingEvaluationContext context) 
 			    {
 					logger.warning("Please implement me");
 			    }
 			};
 			allProperties.add(x);
-			y = new FinalBindingPathElementImpl<View,Double>("y",TypeUtils.getBaseClass(getType()),Double.class,true,"y") {
+			y = new FinalBindingPathElementImpl<Double>("y",TypeUtils.getBaseClass(getType()),Double.class,true,"y") {
 				@Override
-				public Double getBindingValue(View target, BindingEvaluationContext context) 
+				public Double getBindingValue(Object target, BindingEvaluationContext context) 
 				{
 					logger.warning("Please implement me");
 					return 0.0;
 				}
 			    @Override
-			    public void setBindingValue(Double value, View target, BindingEvaluationContext context) 
+			    public void setBindingValue(Double value, Object target, BindingEvaluationContext context) 
 			    {
 					logger.warning("Please implement me");
 			    }
 			};
 			allProperties.add(y);
-			width = new FinalBindingPathElementImpl<View,Double>("width",TypeUtils.getBaseClass(getType()),Double.class,true,"width") {
+			width = new FinalBindingPathElementImpl<Double>("width",TypeUtils.getBaseClass(getType()),Double.class,true,"width") {
 				@Override
-				public Double getBindingValue(View target, BindingEvaluationContext context) 
+				public Double getBindingValue(Object target, BindingEvaluationContext context) 
 				{
 					logger.warning("Please implement me");
 					return 0.0;
 				}
 			    @Override
-			    public void setBindingValue(Double value, View target, BindingEvaluationContext context) 
+			    public void setBindingValue(Double value, Object target, BindingEvaluationContext context) 
 			    {
 					logger.warning("Please implement me");
 			    }
 			};
 			allProperties.add(width);
-			height = new FinalBindingPathElementImpl<View,Double>("height",TypeUtils.getBaseClass(getType()),Double.class,true,"height") {
+			height = new FinalBindingPathElementImpl<Double>("height",TypeUtils.getBaseClass(getType()),Double.class,true,"height") {
 				@Override
-				public Double getBindingValue(View target, BindingEvaluationContext context) 
+				public Double getBindingValue(Object target, BindingEvaluationContext context) 
 				{
 					logger.warning("Please implement me");
 					return 0.0;
 				}
 			    @Override
-			    public void setBindingValue(Double value, View target, BindingEvaluationContext context) 
+			    public void setBindingValue(Double value, Object target, BindingEvaluationContext context) 
 			    {
 					logger.warning("Please implement me");
 			    }
@@ -217,33 +217,33 @@ public class GraphicalElementPathElement<T extends ViewObject> implements Simple
 	
 	public static class ViewPathElement extends GraphicalElementPathElement<View>
 	{
-		private FinalBindingPathElementImpl<View,Double> width;
-		private FinalBindingPathElementImpl<View,Double> height;
+		private FinalBindingPathElementImpl<Double> width;
+		private FinalBindingPathElementImpl<Double> height;
 		public ViewPathElement(String name, BindingPathElement aParent) {
 			super(name,aParent);
-			width = new FinalBindingPathElementImpl<View,Double>("width",TypeUtils.getBaseClass(getType()),Double.class,true,"width") {
+			width = new FinalBindingPathElementImpl<Double>("width",TypeUtils.getBaseClass(getType()),Double.class,true,"width") {
 				@Override
-				public Double getBindingValue(View target, BindingEvaluationContext context) 
+				public Double getBindingValue(Object target, BindingEvaluationContext context) 
 				{
 					logger.warning("Please implement me");
 					return 0.0;
 				}
 			    @Override
-			    public void setBindingValue(Double value, View target, BindingEvaluationContext context) 
+			    public void setBindingValue(Double value, Object target, BindingEvaluationContext context) 
 			    {
 					logger.warning("Please implement me");
 			    }
 			};
 			allProperties.add(width);
-			height = new FinalBindingPathElementImpl<View,Double>("height",TypeUtils.getBaseClass(getType()),Double.class,true,"height") {
+			height = new FinalBindingPathElementImpl<Double>("height",TypeUtils.getBaseClass(getType()),Double.class,true,"height") {
 				@Override
-				public Double getBindingValue(View target, BindingEvaluationContext context) 
+				public Double getBindingValue(Object target, BindingEvaluationContext context) 
 				{
 					logger.warning("Please implement me");
 					return 0.0;
 				}
 			    @Override
-			    public void setBindingValue(Double value, View target, BindingEvaluationContext context) 
+			    public void setBindingValue(Double value, Object target, BindingEvaluationContext context) 
 			    {
 					logger.warning("Please implement me");
 			    }

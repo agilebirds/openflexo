@@ -60,6 +60,8 @@ import org.openflexo.foundation.viewpoint.GoToAction;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ShapePatternRole;
+import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
+import org.openflexo.foundation.viewpoint.binding.GraphicalElementPathElement.ViewPathElement;
 import org.openflexo.inspector.LocalizedString;
 import org.openflexo.toolbox.StringUtils;
 
@@ -384,6 +386,7 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject> implements BindingEvalu
 		String newClassName = (String)action.getClassName().getBindingValue(this);
 		OntologyClass newClass = null;
 		try {
+			logger.info("Adding class "+newClassName+" as "+father);
 			newClass = getProject().getProjectOntology().createOntologyClass(newClassName, father);
 			logger.info("Added class "+newClass.getName()+" as "+father);
 		} catch (DuplicateURIException e) {
@@ -584,8 +587,16 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject> implements BindingEvalu
 	}
 
 	@Override
-	public Object getValue(BindingVariable variable) {
-		logger.info("Je dois retourner un truc pour "+variable);
+	public Object getValue(BindingVariable variable) 
+	{
+		if (variable instanceof EditionSchemeParameterListPathElement) {
+			return parameterValues;
+		}
+		else if (variable instanceof ViewPathElement) {
+			if (variable.getVariableName().equals(EditionScheme.TOP_LEVEL)) return retrieveOEShema();
+			return parameterValues;
+		}
+		logger.warning("Unexpected variable requested in EditionSchemeAction "+variable);
 		return null;
 	}
 }

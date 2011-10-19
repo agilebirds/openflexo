@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingPathElement;
-import org.openflexo.antar.binding.FinalBindingPathElementImpl;
+import org.openflexo.antar.binding.SimpleBindingPathElementImpl;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.ontology.ObjectPropertyStatement;
 import org.openflexo.foundation.ontology.OntologyIndividual;
@@ -19,8 +19,8 @@ public class ObjectPropertyStatementPathElement extends StatementPathElement<Ont
 {
 	private static final Logger logger = Logger.getLogger(ObjectPropertyStatementPathElement.class.getPackage().getName());
 
-	private FinalBindingPathElementImpl<OntologyObject,String> uriNameProperty;
-	private FinalBindingPathElementImpl<OntologyObject,String> uriProperty;
+	private SimpleBindingPathElementImpl<String> uriNameProperty;
+	private SimpleBindingPathElementImpl<String> uriProperty;
 	
 	private OntologyObjectProperty ontologyProperty;
 	
@@ -28,32 +28,49 @@ public class ObjectPropertyStatementPathElement extends StatementPathElement<Ont
 	{
 		super(aParent);
 		ontologyProperty = anOntologyProperty;
-		uriNameProperty = new FinalBindingPathElementImpl<OntologyObject,String>(URINameChanged.URI_NAME_KEY,TypeUtils.getBaseClass(getType()),String.class,true,"uri_name_as_supplied_in_ontology") {
+		uriNameProperty = new SimpleBindingPathElementImpl<String>(URINameChanged.URI_NAME_KEY,TypeUtils.getBaseClass(getType()),String.class,true,"uri_name_as_supplied_in_ontology") {
 			@Override
-			public String getBindingValue(OntologyObject target, BindingEvaluationContext context) 
+			public String getBindingValue(Object target, BindingEvaluationContext context) 
 			{
-				return target.getName();
+				if (target instanceof OntologyObject) {
+					return ((OntologyObject) target).getName();
+				}
+				else {
+					logger.warning("Unexpected: "+target);
+					return null;
+				}
 			}
 			@Override
-			public void setBindingValue(String value, OntologyObject target, BindingEvaluationContext context) {
-				try {
-		    		logger.info("Rename URI of object "+target+" with "+value);
-					target.setName(value);
-				} catch (Exception e) {
-					logger.warning("Unhandled exception: "+e);
-					e.printStackTrace();
+			public void setBindingValue(String value, Object target, BindingEvaluationContext context) {
+				if (target instanceof OntologyObject) {
+					try {
+						logger.info("Rename URI of object "+target+" with "+value);
+						((OntologyObject)target).setName(value);
+					} catch (Exception e) {
+						logger.warning("Unhandled exception: "+e);
+						e.printStackTrace();
+					}
+				}
+				else {
+					logger.warning("Unexpected: "+target);
 				}
 			}
 		};
 		allProperties.add(uriNameProperty);
-		uriProperty = new FinalBindingPathElementImpl<OntologyObject,String>(URIChanged.URI_KEY,TypeUtils.getBaseClass(getType()),String.class,false,"uri_as_supplied_in_ontology") {
+		uriProperty = new SimpleBindingPathElementImpl<String>(URIChanged.URI_KEY,TypeUtils.getBaseClass(getType()),String.class,false,"uri_as_supplied_in_ontology") {
 			@Override
-			public String getBindingValue(OntologyObject target, BindingEvaluationContext context) 
+			public String getBindingValue(Object target, BindingEvaluationContext context) 
 			{
-				return target.getURI();
+				if (target instanceof OntologyObject) {
+				return ((OntologyObject) target).getURI();
+				}
+				else {
+					logger.warning("Unexpected: "+target);
+					return null;
+				}
 			}
 		    @Override
-		    public void setBindingValue(String value, OntologyObject target, BindingEvaluationContext context) 
+		    public void setBindingValue(String value, Object target, BindingEvaluationContext context) 
 		    {
 		    	// not relevant because not settable
 		    }
@@ -96,7 +113,7 @@ public class ObjectPropertyStatementPathElement extends StatementPathElement<Ont
 	}
 
 	@Override
-	public OntologyObject getBindingValue(OntologyObject target, BindingEvaluationContext context) 
+	public OntologyObject getBindingValue(Object target, BindingEvaluationContext context) 
 	{
 		if (target instanceof OntologyIndividual) {
 			OntologyIndividual individual = (OntologyIndividual)target;
@@ -118,7 +135,7 @@ public class ObjectPropertyStatementPathElement extends StatementPathElement<Ont
 	}
 	
 	@Override
-	public void setBindingValue(OntologyObject value, OntologyObject target, BindingEvaluationContext context) 
+	public void setBindingValue(OntologyObject value, Object target, BindingEvaluationContext context) 
 	{
 		logger.warning("Implement me");
 	}

@@ -39,7 +39,7 @@ public final class EditionPatternBindingFactory extends DefaultBindingFactory
 			}
 		}
 		else if (father instanceof PatternRolePathElement) {
-			for (BindingPathElement prop : ((PatternRolePathElement<?,?>)father).getAllProperties()) {
+			for (BindingPathElement prop : ((PatternRolePathElement<?>)father).getAllProperties()) {
 				if (prop.getLabel().equals(propertyName)) return prop;
 			}
 			return null;

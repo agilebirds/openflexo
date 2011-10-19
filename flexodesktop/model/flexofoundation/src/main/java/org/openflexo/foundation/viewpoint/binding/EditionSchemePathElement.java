@@ -12,7 +12,7 @@ import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.PatternRole;
 
-public class EditionSchemePathElement<E extends Bindable> implements BindingVariable<E,EditionScheme>
+public class EditionSchemePathElement<E extends Bindable> implements BindingVariable<EditionScheme>
 {
 	static final Logger logger = Logger.getLogger(EditionSchemePathElement.class.getPackage().getName());
 
@@ -96,13 +96,13 @@ public class EditionSchemePathElement<E extends Bindable> implements BindingVari
 	}
 			
 	@Override
-	public EditionScheme getBindingValue(E target, BindingEvaluationContext context) 
+	public EditionScheme getBindingValue(Object target, BindingEvaluationContext context) 
 	{
 		return editionScheme;
 	}
 
     @Override
-    public void setBindingValue(EditionScheme value, E target, BindingEvaluationContext context) 
+    public void setBindingValue(EditionScheme value, Object target, BindingEvaluationContext context) 
     {
     	// Not settable
     }
