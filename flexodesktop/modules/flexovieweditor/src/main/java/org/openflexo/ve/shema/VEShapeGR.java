@@ -33,9 +33,9 @@ import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.view.ConnectorInserted;
 import org.openflexo.foundation.view.ConnectorRemoved;
-import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.ShapeInserted;
 import org.openflexo.foundation.view.ShapeRemoved;
+import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.toolbox.ConcatenedList;
 import org.openflexo.toolbox.ToolBox;
@@ -156,4 +156,11 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 		return controlAreas;
 	}
 
+	/**
+	 * We dont want URI to be renamed all the time: we decide here to disable continuous text editing
+	 */
+	@Override
+	public boolean getContinuousTextEditing() {
+		return false;
+	}
 }
