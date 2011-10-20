@@ -127,8 +127,9 @@
 #end
 
 #metricsForNode($process)
-
+#set($currentTocEntry = ${generator.getNewHolder()})
 #getCurrentTocEntry($currentTocEntry)
+#set($currentTocEntry = ${currentTocEntry.get()})
 #if(${currentTocEntry.getIncludeStatusList()})
     #statusesForNode($process)
 #end

@@ -394,13 +394,17 @@
     </w:lvl>
   </w:abstractNum>
 
-	#getNumberingIds($numberingIds)
+	#set($numberingIds = $generator.getNewHolder())
+    #getNumberingIds($numberingIds)
+    #set($numberingIds = ${numberingIds.get()})
 	#foreach($bulletId in $numberingIds)
 		<w:num w:numId="$bulletId">
             <w:abstractNumId w:val="1"/>
 		</w:num>
 	#end
-	#getOrderedNumberingIds($orderedNumberingIds)
+	#set($orderedNumberingIds = $generator.getNewHolder())
+    #getOrderedNumberingIds($orderedNumberingIds)
+    #set($orderedNumberingIds = ${orderedNumberingIds.get()})
 	#foreach($bulletId in $orderedNumberingIds)
 		<w:num w:numId="$bulletId">
             <w:abstractNumId w:val="2"/>
