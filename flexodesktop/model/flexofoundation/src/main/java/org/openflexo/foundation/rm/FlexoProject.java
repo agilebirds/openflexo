@@ -4191,9 +4191,9 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		 while (!ok && i < 100) {
 			 file = new File(root, attempt);
 			 if (!file.exists()) {
-				 file.mkdirs();
-			 } else if (file.isDirectory() && file.canWrite()) {
-				 ok = true;
+				 ok = file.mkdirs();
+			 } else {
+				 ok = file.isDirectory() && file.canWrite();
 			 }
 			 i++;
 			 attempt = base + "-" + i;
