@@ -28,7 +28,6 @@ import java.awt.Toolkit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -42,7 +41,6 @@ import javax.swing.SwingUtilities;
 import org.openflexo.FlexoCst;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.icon.IconLibrary;
-import org.openflexo.module.FlexoModule;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.FlexoFrame;
 
@@ -55,36 +53,38 @@ import org.openflexo.view.FlexoFrame;
 public class ProgressWindow extends JDialog implements FlexoProgress
 {
 
-	private class WhiteLabel extends JLabel{
+	private static class ProgressBarLabel extends JLabel {
 
-		public WhiteLabel() {
+		private static final Color LABEL_COLOR = FlexoCst.OPEN_BLUE_COLOR;
+
+		public ProgressBarLabel() {
 			super();
-			setForeground(Color.WHITE);
+			setForeground(LABEL_COLOR);
 		}
 
-		public WhiteLabel(Icon image, int horizontalAlignment) {
+		public ProgressBarLabel(Icon image, int horizontalAlignment) {
 			super(image, horizontalAlignment);
-			setForeground(Color.WHITE);
+			setForeground(LABEL_COLOR);
 		}
 
-		public WhiteLabel(Icon image) {
+		public ProgressBarLabel(Icon image) {
 			super(image);
-			setForeground(Color.WHITE);
+			setForeground(LABEL_COLOR);
 		}
 
-		public WhiteLabel(String text, Icon icon, int horizontalAlignment) {
+		public ProgressBarLabel(String text, Icon icon, int horizontalAlignment) {
 			super(text, icon, horizontalAlignment);
-			setForeground(Color.WHITE);
+			setForeground(LABEL_COLOR);
 		}
 
-		public WhiteLabel(String text, int horizontalAlignment) {
+		public ProgressBarLabel(String text, int horizontalAlignment) {
 			super(text, horizontalAlignment);
-			setForeground(Color.WHITE);
+			setForeground(LABEL_COLOR);
 		}
 
-		public WhiteLabel(String text) {
+		public ProgressBarLabel(String text) {
 			super(text);
-			setForeground(Color.WHITE);
+			setForeground(LABEL_COLOR);
 		}
 
 	}
@@ -94,13 +94,13 @@ public class ProgressWindow extends JDialog implements FlexoProgress
 
 	//protected WhiteLabel flexoLogo;
 
-	protected WhiteLabel label;
+	protected ProgressBarLabel label;
 
-	protected WhiteLabel mainProgressBarLabel;
+	protected ProgressBarLabel mainProgressBarLabel;
+
+	protected ProgressBarLabel secondaryProgressBarLabel;
 
 	protected JProgressBar mainProgressBar;
-
-	protected WhiteLabel secondaryProgressBarLabel;
 
 	protected JProgressBar secondaryProgressBar;
 
@@ -129,7 +129,7 @@ public class ProgressWindow extends JDialog implements FlexoProgress
 
 	private ProgressWindow(Frame frameOwner, String title, int steps)
 	{
-		super(frameOwner=ToolBox.getFrame(frameOwner));
+		super(frameOwner = FlexoFrame.getOwner(frameOwner));
 		setUndecorated(true);
 		initOwner = frameOwner;
 		//logger.info("Build progress max="+steps);
@@ -144,14 +144,12 @@ public class ProgressWindow extends JDialog implements FlexoProgress
 		secondaryProgressBar.setIndeterminate(isSecondaryProgressIndeterminate);
 		secondaryProgressBar.setStringPainted(false);
 		//flexoLogo = new WhiteLabel(IconLibrary.LOGIN_IMAGE);
-		label = new WhiteLabel(title, SwingConstants.CENTER);
+		label = new ProgressBarLabel(title, SwingConstants.CENTER);
 		label.setFont(FlexoCst.BIG_FONT);
-		mainProgressBarLabel = new WhiteLabel("", SwingConstants.LEFT);
+		mainProgressBarLabel = new ProgressBarLabel("", SwingConstants.LEFT);
 		mainProgressBarLabel.setFont(FlexoCst.NORMAL_FONT);
-		mainProgressBarLabel.setForeground(Color.LIGHT_GRAY);
-		secondaryProgressBarLabel = new WhiteLabel("", SwingConstants.LEFT);
+		secondaryProgressBarLabel = new ProgressBarLabel("", SwingConstants.LEFT);
 		secondaryProgressBarLabel.setFont(FlexoCst.NORMAL_FONT);
-		secondaryProgressBarLabel.setForeground(Color.LIGHT_GRAY);
 		icon = IconLibrary.PROGRESS_BACKGROUND;
 		mainPane = new JPanel()
 		{
@@ -196,7 +194,6 @@ public class ProgressWindow extends JDialog implements FlexoProgress
 		} else {
 			centerOnFrame(getActiveModuleFrame());
 		}
-		getRootPane().setBorder(BorderFactory.createRaisedBevelBorder());
 		pack();
 		setVisible(true);
 		toFront();
@@ -208,11 +205,7 @@ public class ProgressWindow extends JDialog implements FlexoProgress
 
 	protected static FlexoFrame getActiveModuleFrame()
 	{
-		if (FlexoModule.getActiveModule() != null) {
-			return FlexoModule.getActiveModule().getFlexoFrame();
-		} else {
-			return null;
-		}
+		return FlexoFrame.getActiveFrame();
 	}
 
 	private void paintImmediately()

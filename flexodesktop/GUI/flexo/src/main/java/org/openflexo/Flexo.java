@@ -56,6 +56,7 @@ import org.openflexo.toolbox.ResourceLocator;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.CancelException;
 import org.openflexo.utils.TooManyFailedAttemptException;
+import org.openflexo.view.FlexoFrame;
 
 /**
  * Main class of the Flexo Application Suite
@@ -149,7 +150,7 @@ public class Flexo {
 			ToolBox.getFrame(null).setIconImage(userTypeNamed.getIconImage().getImage());
 		}
 		if (!noSplash) {
-			new SplashWindow(ToolBox.getFrame(null), userTypeNamed, 10000);
+			new SplashWindow(FlexoFrame.getActiveFrame(), userTypeNamed, 10000);
 		}
 		if (isDev) {
 			FlexoLoggingFormatter.logDate = false;

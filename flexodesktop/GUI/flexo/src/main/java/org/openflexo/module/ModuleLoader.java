@@ -93,6 +93,7 @@ import org.openflexo.rm.ResourceManagerWindow;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.utils.FlexoFileChooserUtils;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.ModuleBar;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
@@ -429,7 +430,7 @@ public final class ModuleLoader implements IModuleLoader {
 						ModuleLoader.quit();
 					}
 					if (projectDirectory != null) {
-				if (!FlexoFileChooserUtils.PROJECT_FILE_NAME_FILTER.accept(projectDirectory.getParentFile(), projectDirectory.getName())) {
+						if (!FlexoFileChooserUtils.PROJECT_FILE_NAME_FILTER.accept(projectDirectory.getParentFile(), projectDirectory.getName())) {
 							FlexoController.notify(FlexoLocalization.localizedForKey("chosen_file_is_not_a_flexo_project"));
 							projectDirectory = null;
 						}
@@ -914,9 +915,7 @@ public final class ModuleLoader implements IModuleLoader {
 					DirectoryParameter dirParam = new DirectoryParameter("directory", "directory", repository.getDirectory());
 					dirParam.setDepends("choice");
 					dirParam.setConditional("choice=" + '"' + CONNECT + '"');
-					AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(
-							getProject(),
-							null,
+					AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), FlexoFrame.getActiveFrame(),
 							FlexoLocalization.localizedForKey("connect_repository_to_local_file_system"),
 							repository.getName() + " : " + FlexoLocalization
 							.localizedForKey("repository_seems_to_be_not_valid_on_local_file_system"), choiceParam, dirParam);

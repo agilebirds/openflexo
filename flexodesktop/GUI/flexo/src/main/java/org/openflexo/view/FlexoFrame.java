@@ -24,6 +24,7 @@ import java.awt.Frame;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -57,6 +58,7 @@ import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.rm.ResourceStatusModification;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.prefs.FlexoPreferences;
@@ -149,16 +151,73 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 	private WindowListener windowListener;
 
 	public static FlexoFrame getActiveFrame() {
-		return FlexoModule.getActiveModule()!=null?FlexoModule.getActiveModule().getFlexoFrame():null;
+		return FlexoModule.getActiveModule() != null ? FlexoModule.getActiveModule().getFlexoFrame() : getDefaultFrame();
+	}
+
+	public static Frame getOwner(Frame owner) {
+		return owner != null ? owner : getActiveFrame();
+	}
+
+	private static FlexoFrame defaultFrame;
+
+	private static FlexoFrame getDefaultFrame() {
+		if (defaultFrame == null) {
+			defaultFrame = new FlexoFrame() {
+
+			};
+			defaultFrame.setUndecorated(true);
+			defaultFrame.pack();
+			defaultFrame.setBounds(Toolkit.getDefaultToolkit().getScreenSize().width / 2,
+					Toolkit.getDefaultToolkit().getScreenSize().height / 2, 0, 0);
+			defaultFrame.setVisible(true);
+		}
+		return defaultFrame;
+	}
+
+	private static void disposeDefaultFrameWhenPossible() {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				disposeDefaultFrame();
+			}
+		});
+	}
+
+	private static void disposeDefaultFrame() {
+		Frame f = defaultFrame;
+		if (f != null) {
+			boolean isDisposable = true;
+			for (Window w : f.getOwnedWindows()) {
+				isDisposable &= !w.isVisible();
+			}
+			if (isDisposable) {
+				f.dispose();
+				defaultFrame = null;
+			} else {
+				disposeDefaultFrameWhenPossible();
+			}
+		}
+	}
+
+	private FlexoFrame() {
+		super(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME);
+		setIconImage(IconLibrary.FLEXO_ICON.getImage());
 	}
 
 	public FlexoFrame(String title, FlexoController controller, FlexoKeyEventListener keyEventListener, FlexoMenuBar menuBar)
 	{
 		super(title);
+		if (defaultFrame != null) {
+			disposeDefaultFrameWhenPossible();
+		}
 		if (controller.getProject() != null) {
 			controller.getProject().addObserver(this);
 		}
-		setIconImage(controller.getModule().getModule().getBigActiveIcon().getImage());
+		if (ToolBox.getPLATFORM() != ToolBox.WINDOWS) {
+			setIconImage(controller.getModule().getModule().getBigActiveIcon().getImage());
+		} else {
+			setIconImage(IconLibrary.FLEXO_ICON.getImage());
+		}
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setBackground(ColorCst.GUI_BACK_COLOR);
 		_controller = controller;
@@ -417,6 +476,10 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 	@Override
 	public void setVisible(boolean mainFrameIsVisible)
 	{
+		if (this == defaultFrame) {
+			super.setVisible(mainFrameIsVisible);
+			return;
+		}
 		boolean old = isVisible();
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setVisible " + mainFrameIsVisible + " in " + this.getClass().getName());
@@ -445,7 +508,7 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 				addComponentListener(windowResizeListener);
 			}
 		}
-		if (((mainFrameIsVisible) && (getModule() != null && getModule().isActive())) || (!mainFrameIsVisible)) {
+		if (mainFrameIsVisible && getModule() != null && getModule().isActive() || !mainFrameIsVisible) {
 			setRelativeVisible(mainFrameIsVisible);
 			super.setVisible(mainFrameIsVisible);
 			if (mainFrameIsVisible) {
@@ -535,7 +598,7 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 
 	public void updateTitle()
 	{
-		String projectTitle = _controller.getProject()!=null?" - "+(_controller.getProject().getProjectName()+" - "+_controller.getProjectDirectory().getAbsolutePath()):"";
+		String projectTitle = _controller.getProject()!=null?" - "+_controller.getProject().getProjectName()+" - "+_controller.getProjectDirectory().getAbsolutePath():"";
 		if (getController().getCurrentModuleView() != null && getModule()!=null) {
 			setTitle(/*FlexoCst.BUSINESS_APPLICATION_VERSION_NAME + " - " +*/ getModule().getName() + " : " + getViewTitle()
 					+ projectTitle);
@@ -604,7 +667,7 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 	protected void saveBoundsInPreference()
 	{
 		int state = getExtendedState();
-		if (state == -1 || ((state& Frame.MAXIMIZED_BOTH) != Frame.MAXIMIZED_BOTH && (state& Frame.MAXIMIZED_HORIZ) != Frame.MAXIMIZED_HORIZ && (state& Frame.MAXIMIZED_VERT) != Frame.MAXIMIZED_VERT)) {
+		if (state == -1 || (state& Frame.MAXIMIZED_BOTH) != Frame.MAXIMIZED_BOTH && (state& Frame.MAXIMIZED_HORIZ) != Frame.MAXIMIZED_HORIZ && (state& Frame.MAXIMIZED_VERT) != Frame.MAXIMIZED_VERT) {
 			GeneralPreferences.setBoundForFrameWithID(getController().getModule().getShortName()+"Frame", getBounds());
 		}
 		GeneralPreferences.setFrameStateForFrameWithID(getController().getModule().getShortName()+"Frame", getExtendedState());

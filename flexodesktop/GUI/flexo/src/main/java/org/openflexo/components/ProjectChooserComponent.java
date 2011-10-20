@@ -39,6 +39,7 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.swing.FlexoFileChooser;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.FlexoFileChooserUtils;
+import org.openflexo.view.FlexoFrame;
 
 /**
  * Abstract component allowing to choose a Flexo Project
@@ -108,7 +109,7 @@ public abstract class ProjectChooserComponent
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Owner of the project chooser is not a Dialog nor a Frame");
 			}
-			_fileDialog = new FileDialog(Frame.getFrames()[0]);
+			_fileDialog = new FileDialog(FlexoFrame.getActiveFrame());
 		}
 		try {
 			_fileDialog.setDirectory(AdvancedPrefs.getLastVisitedDirectory().getCanonicalPath());
