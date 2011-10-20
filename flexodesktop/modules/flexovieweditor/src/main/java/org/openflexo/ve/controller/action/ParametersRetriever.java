@@ -23,6 +23,8 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.expr.Constant.StringConstant;
 import org.openflexo.antar.expr.DefaultExpressionParser;
 import org.openflexo.antar.expr.Expression;
@@ -62,7 +64,7 @@ import org.openflexo.localization.Language;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
-public class ParametersRetriever {
+public class ParametersRetriever implements BindingEvaluationContext {
 
 	private static final Logger logger = Logger.getLogger(ParametersRetriever.class.getPackage().getName());
 
@@ -95,13 +97,15 @@ public class ParametersRetriever {
 		
 		for (final EditionSchemeParameter parameter : editionScheme.getParameters()) {
 			ParameterDefinition param = null;
+			Object defaultValue =  parameter.getDefaultValue(paletteElement,this);
 			if (parameter instanceof org.openflexo.foundation.viewpoint.URIParameter) {
 				param = new URIParameter((org.openflexo.foundation.viewpoint.URIParameter)parameter, action);
 				uriParametersList.add((URIParameter)param);
-				action.getParameterValues().put(parameter.getName(), parameter.getDefaultValue(paletteElement));
+				if (defaultValue != null)
+					action.getParameterValues().put(parameter.getName(),defaultValue);
 			}
 			else if (parameter instanceof org.openflexo.foundation.viewpoint.TextFieldParameter) {
-				param = new TextFieldParameter(parameter.getName(), parameter.getLabel(), parameter.getDefaultValue(paletteElement), 40) {
+				param = new TextFieldParameter(parameter.getName(), parameter.getLabel(), (String)defaultValue, 40) {
 					@Override
 					public void setValue(String value)
 					{
@@ -114,10 +118,11 @@ public class ParametersRetriever {
 						}
 					}
 				};
-				action.getParameterValues().put(parameter.getName(), parameter.getDefaultValue(paletteElement));
+				if (defaultValue != null)
+					action.getParameterValues().put(parameter.getName(), defaultValue);
 			}
 			else if (parameter.getWidget() == WidgetType.LOCALIZED_TEXT_FIELD) {
-				LocalizedString ls = new LocalizedString(parameter.getDefaultValue(paletteElement),Language.ENGLISH);
+				LocalizedString ls = new LocalizedString((String)defaultValue,Language.ENGLISH);
 					param = new LocalizedTextFieldParameter(parameter.getName(), parameter.getLabel(), ls, 40) {
 				       	@Override
 			        	public void setValue(LocalizedString value)
@@ -129,7 +134,7 @@ public class ParametersRetriever {
 					action.getParameterValues().put(parameter.getName(), ls);
 			}
 			else if (parameter instanceof org.openflexo.foundation.viewpoint.TextAreaParameter) {
-				param = new TextAreaParameter(parameter.getName(), parameter.getLabel(), parameter.getDefaultValue(paletteElement), 40, 5) {
+				param = new TextAreaParameter(parameter.getName(), parameter.getLabel(), (String)defaultValue, 40, 5) {
 			       	@Override
 		        	public void setValue(String value)
 		        	{
@@ -137,17 +142,10 @@ public class ParametersRetriever {
 		        		action.getParameterValues().put(parameter.getName(), value);
 		        	}
 				};
-	       		action.getParameterValues().put(parameter.getName(), parameter.getDefaultValue(paletteElement));
+	       		action.getParameterValues().put(parameter.getName(), defaultValue);
 			}
 			else if (parameter instanceof org.openflexo.foundation.viewpoint.IntegerParameter) {
-				int defaultValue = 0;
-				try {
-					defaultValue = Integer.parseInt(parameter.getDefaultValue(paletteElement));
-				}
-				catch (NumberFormatException e) {
-					// Don't care
-				}
-				param = new IntegerParameter(parameter.getName(), parameter.getLabel(), defaultValue) {
+				param = new IntegerParameter(parameter.getName(), parameter.getLabel(), ((Number)defaultValue).intValue()) {
 			       	@Override
 		        	public void setValue(Integer value)
 		        	{
@@ -160,14 +158,14 @@ public class ParametersRetriever {
 						}
 		        	}
 				};
-	       		action.getParameterValues().put(parameter.getName(), Integer.parseInt(parameter.getDefaultValue(paletteElement)));
+				if (defaultValue != null)
+					action.getParameterValues().put(parameter.getName(), defaultValue);
 			}
 			else if (parameter instanceof org.openflexo.foundation.viewpoint.CheckboxParameter) {
 				param = new CheckboxParameter(
 						parameter.getName(), 
 						parameter.getLabel(), 
-						parameter.getDefaultValue(paletteElement).equalsIgnoreCase("true") 
-						|| parameter.getDefaultValue(paletteElement).equalsIgnoreCase("yes")) {
+						(Boolean)defaultValue) {
 			       	@Override
 		        	public void setValue(Boolean value)
 		        	{
@@ -175,10 +173,10 @@ public class ParametersRetriever {
 		        		action.getParameterValues().put(parameter.getName(), value);
 		        	}
 				};
-	       		action.getParameterValues().put(
-	       				parameter.getName(), 
-	       				parameter.getDefaultValue(paletteElement).equalsIgnoreCase("true") 
-	       				|| parameter.getDefaultValue(paletteElement).equalsIgnoreCase("yes"));
+				if (defaultValue != null)
+					action.getParameterValues().put(
+							parameter.getName(), 
+							defaultValue);
 			}
 			else if (parameter instanceof DropDownParameter) {
 				param = new StaticDropDownParameter<String>(parameter.getName(), parameter.getLabel(), ((DropDownParameter) parameter).getValueList(),parameter.getDefaultValue().toString()) {
@@ -189,7 +187,8 @@ public class ParametersRetriever {
 		        		action.getParameterValues().put(parameter.getName(), value);
 		        	}
 				};
-	       		action.getParameterValues().put(parameter.getName(), parameter.getDefaultValue(paletteElement));
+				if (defaultValue != null)
+						action.getParameterValues().put(parameter.getName(),defaultValue);
 			}
 			else if (parameter instanceof IndividualParameter) {
 				OntologyClass ontologyClass = ((IndividualParameter) parameter).getConcept();
@@ -381,7 +380,7 @@ public class ParametersRetriever {
 		public String getURIName() 
 		{
 			if (baseExpression == null) {
-				return _parameter.getDefaultValue(paletteElement);
+				return (String)_parameter.getDefaultValue(paletteElement,ParametersRetriever.this);
 			}
 			Hashtable<String,Object> paramValues = new Hashtable<String,Object>();
 			for (String s : _action.getParameterValues().keySet()) {
@@ -441,5 +440,11 @@ public class ParametersRetriever {
 		return returned;
 	}
 
+	@Override
+	public Object getValue(BindingVariable variable)
+	{
+		logger.warning("Zut, avec "+variable);
+		return null;
+	}
 
 }
