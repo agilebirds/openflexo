@@ -92,6 +92,7 @@ import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.rm.ResourceManagerWindow;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FlexoVersion;
+import org.openflexo.utils.FlexoFileChooserUtils;
 import org.openflexo.view.ModuleBar;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
@@ -428,7 +429,7 @@ public final class ModuleLoader implements IModuleLoader {
 						ModuleLoader.quit();
 					}
 					if (projectDirectory != null) {
-						if (!FlexoProject.getFilenameFilter().accept(projectDirectory.getParentFile(), projectDirectory.getName())) {
+				if (!FlexoFileChooserUtils.PROJECT_FILE_NAME_FILTER.accept(projectDirectory.getParentFile(), projectDirectory.getName())) {
 							FlexoController.notify(FlexoLocalization.localizedForKey("chosen_file_is_not_a_flexo_project"));
 							projectDirectory = null;
 						}
