@@ -22,15 +22,14 @@ package org.openflexo.foundation.viewpoint;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyIndividual;
-import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
-import org.openflexo.toolbox.StringUtils;
 
 public abstract class EditionSchemeParameter extends ViewPointObject {
 
@@ -182,10 +181,10 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 		this.usePaletteLabelAsDefaultValue = usePaletteLabelAsDefaultValue;
 	}
 
-	public boolean evaluateCondition(final EditionSchemeAction<?> action)
+	public boolean evaluateCondition(BindingEvaluationContext parameterRetriever)
 	{
 		if (getConditional().isValid()) {
-			return (Boolean)getConditional().getBindingValue(action);
+			return (Boolean)getConditional().getBindingValue(parameterRetriever);
 		}
 		return true;
 	}
@@ -260,25 +259,24 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 		return defaultValue;
 	}
 
-	public String getDefaultValue(ViewPointPaletteElement element) 
-	{
-		//System.out.println("Default value for "+element.getName()+" ???");
-		if (getUsePaletteLabelAsDefaultValue() && (element != null)) {
-			return element.getName();
-		}
-		if ((element != null) && (element.getParameter(getName()) != null) && !StringUtils.isEmpty(element.getParameter(getName()).getValue())) {
-			//System.out.println("Hop: "+element.getParameter(getName()).getValue());
-			return element.getParameter(getName()).getValue();
-		}
-		return getDefaultValue().toString();
-	}
-
 	public void setDefaultValue(ViewPointDataBinding defaultValue) 
 	{
 		defaultValue.setOwner(this);
 		defaultValue.setBindingAttribute(ParameterBindingAttribute.defaultValue);
 		defaultValue.setBindingDefinition(getDefaultValueBindingDefinition());
 		this.defaultValue = defaultValue;
+	}
+
+	public Object getDefaultValue(ViewPointPaletteElement element, BindingEvaluationContext parameterRetriever) 
+	{
+		//System.out.println("Default value for "+element.getName()+" ???");
+		if (getUsePaletteLabelAsDefaultValue() && (element != null)) {
+			return element.getName();
+		}
+		if (getDefaultValue().isValid()) {
+			return getDefaultValue().getBindingValue(parameterRetriever);
+		}
+		return null;
 	}
 
 

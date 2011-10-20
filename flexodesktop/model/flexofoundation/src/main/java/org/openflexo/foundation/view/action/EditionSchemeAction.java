@@ -62,6 +62,7 @@ import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
 import org.openflexo.foundation.viewpoint.binding.GraphicalElementPathElement.ViewPathElement;
+import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.inspector.LocalizedString;
 import org.openflexo.toolbox.StringUtils;
 
@@ -594,7 +595,9 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject> implements BindingEvalu
 		}
 		else if (variable instanceof ViewPathElement) {
 			if (variable.getVariableName().equals(EditionScheme.TOP_LEVEL)) return retrieveOEShema();
-			return parameterValues;
+		}
+		else if (variable instanceof PatternRolePathElement) {
+			return getEditionPatternInstance().getPatternActor(((PatternRolePathElement)variable).getPatternRole());
 		}
 		logger.warning("Unexpected variable requested in EditionSchemeAction "+variable);
 		return null;

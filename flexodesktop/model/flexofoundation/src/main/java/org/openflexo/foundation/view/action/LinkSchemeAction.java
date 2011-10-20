@@ -22,6 +22,7 @@ package org.openflexo.foundation.view.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -29,13 +30,14 @@ import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.view.ViewConnector;
-import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewConnector;
 import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.viewpoint.AddConnector;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.LinkScheme;
+import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 
 
 public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction> 
@@ -174,6 +176,20 @@ public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction>
 	{
 		_newConnector = super.performAddConnector(action);
 		return _newConnector;
+	}
+
+	@Override
+	public Object getValue(BindingVariable variable) 
+	{
+		if (variable instanceof EditionPatternPathElement) {
+			if (variable.getVariableName().equals(EditionScheme.FROM_TARGET)
+					&& getLinkScheme().getFromTargetEditionPattern() != null) 
+				return getFromShape().getEditionPatternInstance();
+			if (variable.getVariableName().equals(EditionScheme.TO_TARGET)
+					&& getLinkScheme().getToTargetEditionPattern() != null)
+				return getToShape().getEditionPatternInstance();
+		}
+		return super.getValue(variable);
 	}
 
 

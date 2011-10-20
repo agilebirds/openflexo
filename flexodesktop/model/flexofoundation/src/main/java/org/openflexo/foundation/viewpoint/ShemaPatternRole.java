@@ -23,4 +23,18 @@ public class ShemaPatternRole extends PatternRole {
 	{
 		return View.class;
 	}
+	
+	@Override
+	public boolean getIsPrimaryRole()
+	{
+		return false;
+	}
+	
+	@Override
+	public void setIsPrimaryRole(boolean isPrimary)
+	{
+		// Not relevant
+	}
+
+
 }

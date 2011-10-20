@@ -146,5 +146,10 @@ public abstract class PatternRole extends ViewPointObject {
 		return getEditionPattern().getBindingModel();
 	}
 
+	public abstract boolean getIsPrimaryRole();
+	
+	public abstract void setIsPrimaryRole(boolean isPrimary);
+
+
 
 }

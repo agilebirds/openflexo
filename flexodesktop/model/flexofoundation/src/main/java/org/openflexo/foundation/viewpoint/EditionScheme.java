@@ -35,6 +35,12 @@ public abstract class EditionScheme extends ViewPointObject {
 	//
 	protected static final Logger logger = FlexoLogger.getLogger(EditionScheme.class.getPackage().getName());
 
+	public static final String TOP_LEVEL = "topLevel";
+	public static final String TARGET = "target";	
+	public static final String FROM_TARGET = "fromTarget";	
+	public static final String TO_TARGET = "toTarget";
+	
+
 	public static enum EditionSchemeType
 	{
 		DropScheme,
@@ -452,8 +458,6 @@ public abstract class EditionScheme extends ViewPointObject {
 		createBindingModel();
 	}
 
-	public static final String TOP_LEVEL = "topLevel";
-	
 	private void createBindingModel()
 	{
 		_bindingModel = new BindingModel();

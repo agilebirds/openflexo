@@ -168,7 +168,7 @@ public class AddRestrictionStatement extends AddStatement<RestrictionStatementPa
 
 	public int getCardinality(EditionSchemeAction action)
 	{
-		return (Integer)getCardinality().getBindingValue(action);
+		return ((Number)getCardinality().getBindingValue(action)).intValue();
 	}
 
 

@@ -78,5 +78,34 @@ public abstract class GraphicalElementPatternRole extends PatternRole implements
 		return getEditionPattern().getInspector().getBindingModel();
 	}
 	
+	public boolean getIsPrimaryRepresentationRole()
+	{
+		if (getEditionPattern() == null) return false;
+		return (getEditionPattern().getPrimaryRepresentationRole() == this);
+	}
+	
+	public void setIsPrimaryRepresentationRole(boolean isPrimary)
+	{
+		if (getEditionPattern() == null) return;
+		if (isPrimary) {
+			getEditionPattern().setPrimaryRepresentationRole(this);
+		}
+		else {
+			getEditionPattern().setPrimaryRepresentationRole(null);
+		}
+	}
+
+	@Override
+	public boolean getIsPrimaryRole()
+	{
+		return getIsPrimaryRepresentationRole();
+	}
+	
+	@Override
+	public void setIsPrimaryRole(boolean isPrimary)
+	{
+		setIsPrimaryRepresentationRole(isPrimary);
+	}
+
 
 }

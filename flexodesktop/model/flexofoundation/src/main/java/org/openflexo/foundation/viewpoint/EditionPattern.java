@@ -51,6 +51,9 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 	private Vector<EditionScheme> editionSchemes;
 	private EditionPatternInspector inspector;
 	
+	private OntologicObjectPatternRole primaryConceptRole;
+	private GraphicalElementPatternRole primaryRepresentationRole;
+	
 	private ViewPoint _calc;
 
 	@Override
@@ -585,6 +588,37 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		for (PatternRole role : getPatternRoles()) {
 			_bindingModel.addToBindingVariables(PatternRolePathElement.makePatternRolePathElement(role,this));
 		}	
+	}
+
+	public OntologicObjectPatternRole getDefaultPrimaryConceptRole() {
+		List<OntologicObjectPatternRole> roles = getPatternRoles(OntologicObjectPatternRole.class);
+		if (roles.size()>0) return roles.get(0);
+		return null;
+	}
+
+	public GraphicalElementPatternRole getDefaultPrimaryRepresentationRole() {
+		List<GraphicalElementPatternRole> roles = getPatternRoles(GraphicalElementPatternRole.class);
+		if (roles.size()>0) return roles.get(0);
+		return null;
+	}
+
+	public OntologicObjectPatternRole getPrimaryConceptRole() {
+		if (primaryConceptRole == null) return getDefaultPrimaryConceptRole();
+		return primaryConceptRole;
+	}
+
+	public void setPrimaryConceptRole(OntologicObjectPatternRole primaryConceptRole) {
+		this.primaryConceptRole = primaryConceptRole;
+	}
+
+	public GraphicalElementPatternRole getPrimaryRepresentationRole() {
+		if (primaryRepresentationRole == null) return getDefaultPrimaryRepresentationRole();
+		return primaryRepresentationRole;
+	}
+
+	public void setPrimaryRepresentationRole(
+			GraphicalElementPatternRole primaryRepresentationRole) {
+		this.primaryRepresentationRole = primaryRepresentationRole;
 	}
 
 

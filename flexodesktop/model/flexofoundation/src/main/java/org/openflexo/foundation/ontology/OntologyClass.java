@@ -106,19 +106,38 @@ public class OntologyClass extends OntologyObject implements Comparable<Ontology
 				}
 			}
 		}
-		if ((superClasses.size() > 0) && (getOntologyLibrary().THING != null)) {
-			if (superClasses.contains(getOntologyLibrary().THING) && (superClasses.size() > 1)) {
-				superClasses.remove(getOntologyLibrary().THING);
-				getOntologyLibrary().THING.subClasses.remove(this);
+		
+		if (getFlexoOntology() != getOntologyLibrary().getRDFOntology()
+				&& getFlexoOntology() != getOntologyLibrary().getRDFSOntology()
+				&& getFlexoOntology() != getOntologyLibrary().getOWLOntology()) {
+			OntologyClass owlClass = getOntologyLibrary().getClass(OntologyLibrary.OWL_CLASS_URI);
+			if (owlClass != null) {
+				if (!superClasses.contains(owlClass)) {
+					superClasses.add(owlClass);
+				}
+				//System.out.println("Add "+fatherClass.getName()+" as a super class of "+getName());
+				if (!owlClass.subClasses.contains(this)) {
+					//System.out.println("Add "+getName()+" as a sub class of "+fatherClass.getName());
+					owlClass.subClasses.add(this);
+				}
 			}
-			/*if (superClasses.size() > 0 && getOntologyLibrary().THING != null) {
+		}
+
+		else {
+			if ((superClasses.size() > 0) && (getOntologyLibrary().THING != null)) {
+				if (superClasses.contains(getOntologyLibrary().THING) && (superClasses.size() > 1)) {
+					superClasses.remove(getOntologyLibrary().THING);
+					getOntologyLibrary().THING.subClasses.remove(this);
+				}
+				/*if (superClasses.size() > 0 && getOntologyLibrary().THING != null) {
 				getOntologyLibrary().THING.subClasses.remove(this);
 			}*/
-		}
-		if ((superClasses.size() == 0) && (getOntologyLibrary() != null) && (getOntologyLibrary().THING != null)) {
-			superClasses.add(getOntologyLibrary().THING);
-			if (!getOntologyLibrary().THING.subClasses.contains(this)) {
-				getOntologyLibrary().THING.subClasses.add(this);
+			}
+			if ((superClasses.size() == 0) && (getOntologyLibrary() != null) && (getOntologyLibrary().THING != null)) {
+				superClasses.add(getOntologyLibrary().THING);
+				if (!getOntologyLibrary().THING.subClasses.contains(this)) {
+					getOntologyLibrary().THING.subClasses.add(this);
+				}
 			}
 		}
 	}

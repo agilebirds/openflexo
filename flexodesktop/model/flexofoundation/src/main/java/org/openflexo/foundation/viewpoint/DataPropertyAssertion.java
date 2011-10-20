@@ -76,7 +76,7 @@ public class DataPropertyAssertion extends AbstractAssertion {
 	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, BindingDefinitionType.GET, false) {
 		@Override
 		public java.lang.reflect.Type getType() {
-			if (getOntologyProperty() != null) return ((OntologyDataProperty)getOntologyProperty()).getDataType().getAccessedType();
+			if (getOntologyProperty() instanceof OntologyDataProperty) return ((OntologyDataProperty)getOntologyProperty()).getDataType().getAccessedType();
 			return Object.class;
 		};
 	};

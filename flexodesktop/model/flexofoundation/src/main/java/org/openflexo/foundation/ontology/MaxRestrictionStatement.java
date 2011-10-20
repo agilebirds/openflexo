@@ -33,14 +33,14 @@ public class MaxRestrictionStatement extends ObjectRestrictionStatement {
 
 	private static final Logger logger = Logger.getLogger(MaxRestrictionStatement.class.getPackage().getName());
 
-	private OntologyProperty property;
-	private OntologyObject object;
+	private OntologyObjectProperty property;
+	private OntologyClass object;
 	private int maxCardinality = 0;
 	
 	public MaxRestrictionStatement(OntologyObject subject, Statement s, Restriction r)
 	{
 		super(subject,s,r);
-		property = getOntologyLibrary().getProperty(r.getOnProperty().getURI());
+		property = (OntologyObjectProperty)getOntologyLibrary().getProperty(r.getOnProperty().getURI());
 		
 		String OWL = getFlexoOntology().getOntModel().getNsPrefixURI("owl");
 		Property ON_CLASS = ResourceFactory.createProperty( OWL + "onClass" );
@@ -54,7 +54,7 @@ public class MaxRestrictionStatement extends ObjectRestrictionStatement {
 		RDFNode maxCardinalityStmtValue = maxCardinalityStmt.getObject();
 		
 		if (onClassStmtValue.isResource() && onClassStmtValue.canAs(OntClass.class)) {
-			object = getOntologyLibrary().getOntologyObject(((OntClass)onClassStmtValue.as(OntClass.class)).getURI());
+			object = (OntologyClass)getOntologyLibrary().getOntologyObject(((OntClass)onClassStmtValue.as(OntClass.class)).getURI());
 		}
 		
 		if (maxCardinalityStmtValue.isLiteral() && maxCardinalityStmtValue.canAs(Literal.class)) {
@@ -81,13 +81,13 @@ public class MaxRestrictionStatement extends ObjectRestrictionStatement {
 
 
 	@Override
-	public OntologyObject getObject() 
+	public OntologyClass getObject() 
 	{
 		return object;
 	}
 
 	@Override
-	public OntologyProperty getProperty() 
+	public OntologyObjectProperty getProperty() 
 	{
 		return property;
 	}
@@ -104,5 +104,14 @@ public class MaxRestrictionStatement extends ObjectRestrictionStatement {
 		return property.getName()+" max "+maxCardinality;
 	}
 
+	@Override
+	public int getCardinality() {
+		return maxCardinality;
+	}
+
+	@Override
+	public RestrictionType getRestrictionType() {
+		return RestrictionType.Max;
+	}
 
 }

@@ -162,4 +162,7 @@ public class PatternRolePathElement<T extends Object> implements SimplePathEleme
 		return EMPTY_LIST;
 	}
 
+	public PatternRole getPatternRole() {
+		return patternRole;
+	}
 }

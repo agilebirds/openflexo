@@ -73,6 +73,13 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 	public static final String OWL_ONTOLOGY_URI = "http://www.w3.org/2002/07/owl";
 	public static final String FLEXO_CONCEPT_ONTOLOGY_URI = "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl";
 
+	public static final String OWL_THING_URI =  OWL_ONTOLOGY_URI + "#Thing";
+	public static final String OWL_CLASS_URI = OWL_ONTOLOGY_URI+"#Class";
+	public static final String OWL_DATA_PROPERTY_URI = OWL_ONTOLOGY_URI+"#DatatypeProperty";
+	public static final String OWL_OBJECT_PROPERTY_URI = OWL_ONTOLOGY_URI+"#ObjectProperty";
+	
+	public static final String RDFS_LITERAL_URI =  RDFS_ONTOLOGY_URI + "#Literal";
+	
 	public OntologyClass THING;
 
 	//private FlexoProject _project;

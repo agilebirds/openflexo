@@ -109,7 +109,7 @@ public class DropScheme extends EditionScheme {
 	{
 		bindingModelNeedToBeRecomputed = false;
 		if (getTargetEditionPattern() != null)
-			bindingModel.addToBindingVariables(new EditionPatternPathElement<DropScheme>("target",getTargetEditionPattern(),this));
+			bindingModel.addToBindingVariables(new EditionPatternPathElement<DropScheme>(EditionScheme.TARGET,getTargetEditionPattern(),this));
 		else if (_getTarget() != null && !_getTarget().equals("top")) {
 			logger.warning("Cannot find edition pattern "+_getTarget()+" !!!!!!!!!!!!!!");
 			bindingModelNeedToBeRecomputed = true;
@@ -129,7 +129,7 @@ public class DropScheme extends EditionScheme {
 	public AddShape createAddShapeAction()
 	{
 		AddShape newAction = super.createAddShapeAction();
-		if (isTopTarget()) newAction.setContainer(new ViewPointDataBinding("topLevel"));
+		if (isTopTarget()) newAction.setContainer(new ViewPointDataBinding(EditionScheme.TOP_LEVEL));
 		return newAction;
 	}
 

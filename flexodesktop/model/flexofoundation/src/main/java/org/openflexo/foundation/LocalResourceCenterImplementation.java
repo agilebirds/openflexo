@@ -26,9 +26,9 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyFolder;
 import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointFolder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 
@@ -115,7 +115,7 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 			baseOntologyLibrary.getRDFSOntology().loadWhenUnloaded();
 			baseOntologyLibrary.getRDFOntology().loadWhenUnloaded();
 			baseOntologyLibrary.getOWLOntology().loadWhenUnloaded();
-			baseOntologyLibrary.THING = baseOntologyLibrary.getClass(OntologyLibrary.OWL_ONTOLOGY_URI + "#Thing");
+			baseOntologyLibrary.THING = baseOntologyLibrary.getClass(OntologyLibrary.OWL_THING_URI);
 			baseOntologyLibrary.getRDFSOntology().updateConceptsAndProperties();
 			baseOntologyLibrary.getRDFOntology().updateConceptsAndProperties();
 			baseOntologyLibrary.getFlexoConceptOntology().loadWhenUnloaded();

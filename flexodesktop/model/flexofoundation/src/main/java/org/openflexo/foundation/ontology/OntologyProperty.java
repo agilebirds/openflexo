@@ -243,7 +243,32 @@ public abstract class OntologyProperty extends OntologyObject {
 	
 	public OntologyObject getDomain() 
 	{
+/*		if (getURI().equals("http://www.w3.org/2000/01/rdf-schema#label")) {
+//			System.out.println("Pour "+getURI()+" le domain statement est "+getDomainStatement());
+//			return getOntologyLibrary().getOntologyObject("http://www.w3.org/2000/01/rdf-schema#Resource");
+			return getOntologyLibrary().THING;
+		}
+		if (getURI().equals("http://www.w3.org/2004/02/skos/core#prefLabel")) {
+			System.out.println("Pour "+getURI()+" le domain statement est "+getDomainStatement());
+			if (getDomainStatement() == null) {
+				for (OntologyProperty p : getSuperProperties()) {
+					System.out.println("Examining "+p);
+					OntologyObject o = p.getDomain();
+					if (o != null) {
+						System.out.println("Je retourne "+o);
+						return o;
+					}
+				}
+				return null;
+			}
+//			return getOntologyLibrary().getOntologyObject("http://www.w3.org/2000/01/rdf-schema#Resource");
+			return getOntologyLibrary().THING;
+		}*/
 		if (getDomainStatement() == null) {
+			for (OntologyProperty p : getSuperProperties()) {
+				OntologyObject o = p.getDomain();
+				if (o != null) return o;
+			}
 			return null;
 		}
 		return getDomainStatement().getDomain();
@@ -251,6 +276,9 @@ public abstract class OntologyProperty extends OntologyObject {
 
 	public OntologyObject getRange() 
 	{
+/*		if (getURI().equals("http://www.w3.org/2000/01/rdf-schema#label")) {
+			System.out.println("Pour "+getURI()+" le range statement est "+getRangeStatement());
+		}*/
 		if (getRangeStatement() == null) {
 			return null;
 		}

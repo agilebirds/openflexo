@@ -33,14 +33,14 @@ public class MinDataRestrictionStatement extends DataRestrictionStatement {
 
 	private static final Logger logger = Logger.getLogger(MinDataRestrictionStatement.class.getPackage().getName());
 
-	private OntologyProperty property;
+	private OntologyDataProperty property;
 	private int minCardinality = 0;
-	private DataType dataRange = DataType.Unknown;
+	private OntologicDataType dataRange;
 	
 	public MinDataRestrictionStatement(OntologyObject subject, Statement s, Restriction r)
 	{
 		super(subject,s,r);
-		property = getOntologyLibrary().getProperty(r.getOnProperty().getURI());
+		property = (OntologyDataProperty)getOntologyLibrary().getProperty(r.getOnProperty().getURI());
 		
 		String OWL = getFlexoOntology().getOntModel().getNsPrefixURI("owl");
 		Property ON_DATA_RANGE = ResourceFactory.createProperty( OWL + "onDataRange" );
@@ -53,7 +53,7 @@ public class MinDataRestrictionStatement extends DataRestrictionStatement {
 		RDFNode minCardinalityStmtValue = cardinalityStmt.getObject();
 		
 		if (onDataRangeStmtValue instanceof Resource) {
-			dataRange = getDataType(((Resource)onDataRangeStmtValue).getURI());
+			dataRange = OntologicDataType.fromURI(((Resource)onDataRangeStmtValue).getURI());
 		}
 	
 		if (minCardinalityStmtValue.isLiteral() && minCardinalityStmtValue.canAs(Literal.class)) {
@@ -67,7 +67,7 @@ public class MinDataRestrictionStatement extends DataRestrictionStatement {
 	}
 
 	@Override
-	public DataType getDataRange()
+	public OntologicDataType getDataRange()
 	{
 		return dataRange;
 	}
@@ -86,7 +86,7 @@ public class MinDataRestrictionStatement extends DataRestrictionStatement {
 
 
 	@Override
-	public OntologyProperty getProperty() 
+	public OntologyDataProperty getProperty() 
 	{
 		return property;
 	}
@@ -101,6 +101,16 @@ public class MinDataRestrictionStatement extends DataRestrictionStatement {
 	@Override
 	public String getName() {
 		return property.getName()+" min "+minCardinality;
+	}
+
+	@Override
+	public int getCardinality() {
+		return minCardinality;
+	}
+
+	@Override
+	public RestrictionType getRestrictionType() {
+		return RestrictionType.Min;
 	}
 
 }

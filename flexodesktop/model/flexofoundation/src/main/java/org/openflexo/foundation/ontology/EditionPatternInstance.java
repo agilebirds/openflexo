@@ -33,6 +33,7 @@ import org.openflexo.foundation.ontology.EditionPatternReference.ActorReference;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.logging.FlexoLogger;
 
 public class EditionPatternInstance extends FlexoObservable implements Bindable,BindingEvaluationContext {
@@ -176,7 +177,10 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 	@Override
 	public Object getValue(BindingVariable variable) 
 	{
-		logger.warning("Please, what should i return for "+variable+" ?");
+		if (variable instanceof PatternRolePathElement) {
+			return getPatternActor(((PatternRolePathElement) variable).getPatternRole());
+		}
+		logger.warning("Unexpected "+variable);
 		return null;
 	}
 

@@ -107,13 +107,13 @@ public class LinkScheme extends EditionScheme {
 	{
 		bindingModelNeedToBeRecomputed = false;
 		if (getFromTargetEditionPattern() != null) {
-			bindingModel.addToBindingVariables(new EditionPatternPathElement<LinkScheme>("fromTarget",getFromTargetEditionPattern(),this));
+			bindingModel.addToBindingVariables(new EditionPatternPathElement<LinkScheme>(EditionScheme.FROM_TARGET,getFromTargetEditionPattern(),this));
 		}
 		else if (_getFromTarget() != null && !StringUtils.isEmpty(_getFromTarget())) {
 			bindingModelNeedToBeRecomputed = true;
 		}
 		if (getToTargetEditionPattern() != null) {
-			bindingModel.addToBindingVariables(new EditionPatternPathElement<LinkScheme>("toTarget",getToTargetEditionPattern(),this));
+			bindingModel.addToBindingVariables(new EditionPatternPathElement<LinkScheme>(EditionScheme.TO_TARGET,getToTargetEditionPattern(),this));
 		}
 		else if (_getToTarget() != null && !StringUtils.isEmpty(_getToTarget())) {
 			bindingModelNeedToBeRecomputed = true;

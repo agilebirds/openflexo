@@ -13,6 +13,7 @@ import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewConnector;
+import org.openflexo.foundation.view.ViewElement;
 import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.localization.FlexoLocalization;
@@ -98,7 +99,12 @@ public class GraphicalElementPathElement<T extends ViewObject> implements Simple
 	@Override
 	public T getBindingValue(Object target,
 			BindingEvaluationContext context) {
-		logger.warning("Que dois-je renvoyer pour "+target);
+		if (target instanceof ViewElement) {
+			if (name != null && name.equals("parent")) {
+				return (T)((ViewElement)target).getParent();
+			}
+		}
+		logger.warning("Unexpected "+target+" name="+name);
 		return null;
 	}
 

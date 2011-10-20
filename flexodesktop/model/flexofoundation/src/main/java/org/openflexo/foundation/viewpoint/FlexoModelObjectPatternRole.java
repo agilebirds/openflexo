@@ -66,6 +66,7 @@ public class FlexoModelObjectPatternRole extends PatternRole {
 			}
 	}
 	
+	@Override
 	public Class<?> getAccessedClass()
 	{
 		if (flexoModelObjectType == null) {
@@ -90,5 +91,18 @@ public class FlexoModelObjectPatternRole extends PatternRole {
 			return null;
 		}
 	}
+
+	@Override
+	public boolean getIsPrimaryRole()
+	{
+		return false;
+	}
+	
+	@Override
+	public void setIsPrimaryRole(boolean isPrimary)
+	{
+		// Not relevant
+	}
+
 
 }

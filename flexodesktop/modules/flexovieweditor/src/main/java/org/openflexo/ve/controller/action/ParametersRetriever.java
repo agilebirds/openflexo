@@ -142,7 +142,8 @@ public class ParametersRetriever implements BindingEvaluationContext {
 		        		action.getParameterValues().put(parameter.getName(), value);
 		        	}
 				};
-	       		action.getParameterValues().put(parameter.getName(), defaultValue);
+				if (defaultValue != null)
+					action.getParameterValues().put(parameter.getName(), defaultValue);
 			}
 			else if (parameter instanceof org.openflexo.foundation.viewpoint.IntegerParameter) {
 				param = new IntegerParameter(parameter.getName(), parameter.getLabel(), ((Number)defaultValue).intValue()) {

@@ -167,6 +167,13 @@ public class EditionPatternInspector extends ViewPointObject implements Bindable
 		return newEntry;
 	}
 	
+	public InspectorEntry deleteEntry(InspectorEntry entry)
+	{
+		removeFromEntries(entry);
+		entry.delete();
+		return entry;
+	}
+	
 	@Override
 	public BindingModel getBindingModel() 
 	{

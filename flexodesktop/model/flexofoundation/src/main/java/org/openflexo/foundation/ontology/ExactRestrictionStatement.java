@@ -33,14 +33,14 @@ public class ExactRestrictionStatement extends ObjectRestrictionStatement {
 
 	private static final Logger logger = Logger.getLogger(ExactRestrictionStatement.class.getPackage().getName());
 
-	private OntologyProperty property;
-	private OntologyObject object;
+	private OntologyObjectProperty property;
+	private OntologyClass object;
 	private int cardinality = 0;
 	
 	public ExactRestrictionStatement(OntologyObject subject, Statement s, Restriction r)
 	{
 		super(subject,s,r);
-		property = getOntologyLibrary().getProperty(r.getOnProperty().getURI());
+		property = (OntologyObjectProperty)getOntologyLibrary().getProperty(r.getOnProperty().getURI());
 		
 		String OWL = getFlexoOntology().getOntModel().getNsPrefixURI("owl");
 		Property ON_CLASS = ResourceFactory.createProperty( OWL + "onClass" );
@@ -56,7 +56,7 @@ public class ExactRestrictionStatement extends ObjectRestrictionStatement {
 		//System.out.println("cardinalityStmtValue="+cardinalityStmtValue);
 
 		if (onClassStmtValue.isResource() && onClassStmtValue.canAs(OntClass.class)) {
-			object = getOntologyLibrary().getOntologyObject(((OntClass)onClassStmtValue.as(OntClass.class)).getURI());
+			object = (OntologyClass)getOntologyLibrary().getOntologyObject(((OntClass)onClassStmtValue.as(OntClass.class)).getURI());
 		}
 		
 		if (cardinalityStmtValue.isLiteral() && cardinalityStmtValue.canAs(Literal.class)) {
@@ -83,13 +83,13 @@ public class ExactRestrictionStatement extends ObjectRestrictionStatement {
 
 
 	@Override
-	public OntologyObject getObject() 
+	public OntologyClass getObject() 
 	{
 		return object;
 	}
 
 	@Override
-	public OntologyProperty getProperty() 
+	public OntologyObjectProperty getProperty() 
 	{
 		return property;
 	}
@@ -105,5 +105,14 @@ public class ExactRestrictionStatement extends ObjectRestrictionStatement {
 		return property.getName()+" exact "+cardinality;
 	}
 
+	@Override
+	public int getCardinality() {
+		return cardinality;
+	}
+
+	@Override
+	public RestrictionType getRestrictionType() {
+		return RestrictionType.Exact;
+	}
 
 }

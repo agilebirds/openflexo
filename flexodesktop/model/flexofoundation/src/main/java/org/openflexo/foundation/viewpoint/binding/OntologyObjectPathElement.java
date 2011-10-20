@@ -178,7 +178,7 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 				for (final OntologyProperty property : ontologyType.getPropertiesTakingMySelfAsDomain()) {
 					StatementPathElement propertyPathElement = null;
 					if (property instanceof OntologyObjectProperty) {
-						propertyPathElement = new ObjectPropertyStatementPathElement(this, (OntologyObjectProperty)property);
+						propertyPathElement = ObjectPropertyStatementPathElement.makeObjectPropertyStatementPathElement(this, (OntologyObjectProperty)property);
 					}
 					else if (property instanceof OntologyDataProperty) {
 						propertyPathElement = new DataPropertyStatementPathElement(this, (OntologyDataProperty)property);

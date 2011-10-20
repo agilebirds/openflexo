@@ -30,7 +30,9 @@
 		<property name="name" xmlTag="name" attribute="YES" />
 		<property name="description" xmlTag="description" />
 		<property name="editionSchemes" type="vector" contains="org.openflexo.foundation.viewpoint.EditionScheme" />
-		<property name="patternRoles" type="vector" contains="org.openflexo.foundation.viewpoint.PatternRole" />
+		<property name="patternRoles" type="vector" contains="org.openflexo.foundation.viewpoint.PatternRole" context="Contained"/>
+		<property name="primaryConceptRole" contains="org.openflexo.foundation.viewpoint.PatternRole" context="PrimaryConcept"/>
+		<property name="primaryRepresentationRole" contains="org.openflexo.foundation.viewpoint.PatternRole" context="PrimaryRepresentation"/>
 		<property name="inspector" xmlTag="Inspector" />
 	</entity>
 
@@ -60,7 +62,7 @@
 	<entity name="org.openflexo.foundation.viewpoint.inspector.CheckboxInspectorEntry" xmlTag="Checkbox">
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.PatternRole" abstract="yes">
+	<entity name="org.openflexo.foundation.viewpoint.PatternRole" abstract="yes" contexts="Contained,PrimaryConcept,PrimaryRepresentation">
 		<property name="patternRoleName" xmlTag="patternRole" attribute="YES" />
 		<property name="description" xmlTag="description" />
 	</entity>

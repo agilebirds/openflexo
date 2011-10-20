@@ -90,7 +90,9 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 
 	public void setBindingValue(Object value, BindingEvaluationContext context)
 	{
-		if (getBinding() != null && getBinding().isSettable()) getBinding().setBindingValue(value,context);
+ 		if (getBinding() != null && getBinding().isSettable()) {
+			getBinding().setBindingValue(value,context);
+		}
 	}
 
 	@Override

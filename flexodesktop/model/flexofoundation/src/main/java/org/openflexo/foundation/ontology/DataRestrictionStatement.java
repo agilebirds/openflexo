@@ -33,17 +33,9 @@ public abstract class DataRestrictionStatement extends RestrictionStatement {
 		super(subject,s,r);
 	}
 	
-	public abstract DataType getDataRange();
+	public abstract OntologicDataType getDataRange();
 	
-	public static enum DataType 
-	{
-		String,
-		Unknown
-	}
-	
-	public static DataType getDataType(String dataTypeAsString) 
-	{
-		if (dataTypeAsString.equals("http://www.w3.org/2001/XMLSchema#string")) return DataType.String;
-		return DataType.Unknown;
-	}
+	@Override
+	public abstract OntologyDataProperty getProperty(); 
+
 }
