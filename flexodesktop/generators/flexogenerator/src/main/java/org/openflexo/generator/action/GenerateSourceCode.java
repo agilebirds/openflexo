@@ -39,124 +39,128 @@ import org.openflexo.generator.AbstractProjectGenerator;
 import org.openflexo.generator.file.AbstractCGFile;
 import org.openflexo.localization.FlexoLocalization;
 
-public class GenerateSourceCode extends MultipleFileGCAction<GenerateSourceCode>
-{
+public class GenerateSourceCode extends MultipleFileGCAction<GenerateSourceCode> {
 
 	private static final Logger logger = Logger.getLogger(GenerateSourceCode.class.getPackage().getName());
 
-	public static final MultipleFileGCActionType<GenerateSourceCode> actionType 
-	= new MultipleFileGCActionType<GenerateSourceCode> ("generate_code_if_required",
-			GENERATE_MENU, GENERATION_GROUP,FlexoActionType.NORMAL_ACTION_TYPE) 
-	{
+	public static final MultipleFileGCActionType<GenerateSourceCode> actionType = new MultipleFileGCActionType<GenerateSourceCode>(
+			"generate_code_if_required", GENERATE_MENU, GENERATION_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 		/**
-         * Factory method
-         */
-        @Override
-		public GenerateSourceCode makeNewAction(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) 
-        {
-            return new GenerateSourceCode(focusedObject, globalSelection, editor);
-        }
-		
-        @Override
-		protected boolean accept (AbstractCGFile file)
-        {
-      		return (file.getResource() != null
-    				&& file.needsMemoryGeneration());
-        }
-
-	};
-	
-
-
-    static {
-        FlexoModelObject.addActionForClass (GenerateSourceCode.actionType, CGObject.class);
-    }
-    
-    GenerateSourceCode (CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
-
-/*    private class GenerateSourceCodeForFile extends GenerateSourceCode.CGFileRunnable {
-
-		public GenerateSourceCodeForFile(AbstractCGFile file) {
-			super(file);
-		}
-
-		public void run() {
-			logger.info(FlexoLocalization.localizedForKey("generate") +  " " + file.getFileName());
-    		file.getGenerator().refreshConcernedResources(getRepository());
-    		try {
-				file.getGenerator().generate(false);
-			} catch (GenerationException e) {
-				notifyActionFailed(e, e.getMessage());
-			}
+		 * Factory method
+		 */
+		@Override
+		public GenerateSourceCode makeNewAction(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new GenerateSourceCode(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public String getLocalizedName() {
-			return FlexoLocalization.localizedForKey("generating")+" "+file.getFileName();
+		protected boolean accept(AbstractCGFile file) {
+			return file.getResource() != null && file.needsMemoryGeneration();
 		}
-    	
-    }
-*/    
-    @Override
+
+	};
+
+	private boolean generationSucceeded;
+
+	static {
+		FlexoModelObject.addActionForClass(GenerateSourceCode.actionType, CGObject.class);
+	}
+
+	GenerateSourceCode(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	/*    private class GenerateSourceCodeForFile extends GenerateSourceCode.CGFileRunnable {
+
+	public GenerateSourceCodeForFile(AbstractCGFile file) {
+	super(file);
+	}
+
+	public void run() {
+	logger.info(FlexoLocalization.localizedForKey("generate") +  " " + file.getFileName());
+	file.getGenerator().refreshConcernedResources(getRepository());
+	try {
+		file.getGenerator().generate(false);
+	} catch (GenerationException e) {
+		notifyActionFailed(e, e.getMessage());
+	}
+	}
+
+	@Override
+	public String getLocalizedName() {
+	return FlexoLocalization.localizedForKey("generating")+" "+file.getFileName();
+	}
+
+	}
+	 */
+	@Override
 	protected void doAction(Object context) throws FlexoException {
 		logger.info("Generate source code for " + getFocusedObject());
 
-       	AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();
-    	pg.setAction(this);
- 
-    	GenerationRepository repository = getRepository();
+		AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();
+		pg.setAction(this);
+
+		GenerationRepository repository = getRepository();
 		if (getSaveBeforeGenerating()) {
 			repository.getProject().save();
 		}
 
-		// Rebuild and refresh resources, performed here to get also newly created resource on getSelectedCGFilesOnWhyCurrentActionShouldApply
+		// Rebuild and refresh resources, performed here to get also newly created resource on
+		// getSelectedCGFilesOnWhyCurrentActionShouldApply
 		pg.refreshConcernedResources(null);
 
 		Vector<AbstractCGFile> selectedFiles = getSelectedCGFilesOnWhyCurrentActionShouldApply();
 		long start, end;
 		boolean hasProgress = getFlexoProgress() != null;
-		makeFlexoProgress(FlexoLocalization.localizedForKey("generate") + " " + selectedFiles.size() + " "
-				+ FlexoLocalization.localizedForKey("files") + " " + FlexoLocalization.localizedForKey("into") + " "
-				+ getRepository().getDirectory().getAbsolutePath(), selectedFiles.size() + 1);
+		makeFlexoProgress(
+				FlexoLocalization.localizedForKey("generate") + " " + selectedFiles.size() + " "
+						+ FlexoLocalization.localizedForKey("files") + " " + FlexoLocalization.localizedForKey("into") + " "
+						+ getRepository().getDirectory().getAbsolutePath(), selectedFiles.size() + 1);
 		start = System.currentTimeMillis();
 		Vector<CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>> resources = new Vector<CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>>();
 		for (AbstractCGFile file : selectedFiles) {
 			resources.add(file.getResource());
 		}
-
+		generationSucceeded = true;
 		getProjectGenerator().sortResourcesForGeneration(resources);
 		HashSet<IFlexoResourceGenerator> generators = new HashSet<IFlexoResourceGenerator>();
 		for (CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> r : resources) {
 			AbstractCGFile file = (AbstractCGFile) r.getCGFile();
-			if (file==null) {
-				if (logger.isLoggable(Level.WARNING))
-					logger.warning("Found a file referencing a resource but the resource does not know the file!: "+r);
+			if (file == null) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Found a file referencing a resource but the resource does not know the file!: " + r);
+				}
 				continue;
 			}
-    		setProgress(FlexoLocalization.localizedForKey("generate") +  " " + file.getFileName());
+			setProgress(FlexoLocalization.localizedForKey("generate") + " " + file.getFileName());
 			if (file.needsMemoryGeneration()) {
 				if (file.getGenerator() != null && !generators.contains(file.getGenerator())) {
 					generators.add(file.getGenerator());
-					//addJob(new GenerateSourceCodeForFile(file));
+					// addJob(new GenerateSourceCodeForFile(file));
 					file.getGenerator().generate(false);
+					generationSucceeded &= file.getGenerator().getGenerationException() == null;
 				}
 			}
 		}
-		//waitForAllJobsToComplete();
+		// waitForAllJobsToComplete();
 		end = System.currentTimeMillis();
-		if (repository instanceof CGRepository)
-     		((CGRepository)repository).clearAllJavaParsingData();
-		if (!hasProgress)
+		if (repository instanceof CGRepository) {
+			((CGRepository) repository).clearAllJavaParsingData();
+		}
+		if (!hasProgress) {
 			hideFlexoProgress();
-		if (logger.isLoggable(Level.INFO))
+		}
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Generation took: " + (end - start) + " ms");
+		}
+	}
+
+	public boolean didGenerationSucceeded() {
+		return generationSucceeded;
 	}
 
 	public boolean requiresThreadPool() {
 		return true;
 	}
 
- }
+}
