@@ -23,7 +23,6 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
-import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorInserted;
@@ -204,16 +203,8 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 	}
 	
 	@Override
-	public BindingFactory getBindingFactory() 
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
 	public BindingModel getBindingModel() 
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return getCalc().getBindingModel();
 	}
 }

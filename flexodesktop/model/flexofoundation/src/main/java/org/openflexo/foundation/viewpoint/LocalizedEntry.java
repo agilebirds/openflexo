@@ -19,6 +19,8 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.antar.binding.BindingModel;
+
 
 
 
@@ -90,5 +92,10 @@ public class LocalizedEntry extends ViewPointObject {
 		return null;
 	}
 	
+	@Override
+	public BindingModel getBindingModel() 
+	{
+		return getCalc().getBindingModel();
+	}
 
 }

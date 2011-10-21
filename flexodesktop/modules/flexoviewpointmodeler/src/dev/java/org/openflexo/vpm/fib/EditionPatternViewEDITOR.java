@@ -43,7 +43,7 @@ public class EditionPatternViewEDITOR {
 				OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
 				ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
 
-				Object[] returned = new Object[12];
+				Object[] returned = new Object[13];
 				
 				ViewPoint calc1 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl");
 				calc1.loadWhenUnloaded();
@@ -54,6 +54,7 @@ public class EditionPatternViewEDITOR {
 				calc2.loadWhenUnloaded();
 				returned[2] = calc2.getEditionPattern("RootOrganizationUnit");
 				returned[3] = calc2.getEditionPattern("PositionMission");
+				returned[12] = calc2.getEditionPattern("OrganizationUnitObjective");
 
 				ViewPoint calc3 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
 				calc3.loadWhenUnloaded();

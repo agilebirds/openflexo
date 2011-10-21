@@ -384,7 +384,7 @@ public class FIBBrowserElement extends FIBModelObject {
 		private void createFormatterBindingModel()
 		{
 			iteratorBindingModel = new BindingModel(FIBBrowserElement.this.getBindingModel());
-			iteratorBindingModel.addToBindingVariables(new BindingVariableImpl<FIBBrowserElementIterator,Object>(this, "object", Object.class) {
+			iteratorBindingModel.addToBindingVariables(new BindingVariableImpl<Object>(this, "object", Object.class) {
 				@Override
 				public Type getType()
 				{

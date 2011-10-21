@@ -32,7 +32,7 @@ import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternConverter;
-import org.openflexo.foundation.viewpoint.inspector.InspectorDataBinding;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.xmlcode.InvalidModelException;
 import org.openflexo.xmlcode.StringEncoder;
@@ -74,7 +74,7 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 		
 		rootFolder = new ViewPointFolder("root", null,this);
 
-		StringEncoder.getDefaultInstance()._addConverter(InspectorDataBinding.CONVERTER);
+		StringEncoder.getDefaultInstance()._addConverter(ViewPointDataBinding.CONVERTER);
 		StringEncoder.getDefaultInstance()._addConverter(anOntologyLibrary.getOntologyObjectConverter());
 
 	}
@@ -249,6 +249,19 @@ public class ViewPointLibrary extends ViewPointLibraryObject {
 	public ViewPointFolder getRootFolder() 
 	{
 		return rootFolder;
+	}
+
+	public EditionPattern getEditionPattern(String editionPatternURI) 
+	{
+		if (editionPatternURI.indexOf("#") > -1) {
+			String viewPointURI = editionPatternURI.substring(0,editionPatternURI.indexOf("#"));
+			ViewPoint vp = getOntologyCalc(viewPointURI);
+			if (vp != null) {
+				return vp.getEditionPattern(editionPatternURI.substring(editionPatternURI.indexOf("#")+1));
+			}
+		} 
+		logger.warning("Cannot find edition pattern:"+editionPatternURI);
+		return null;
 	}
 	
 

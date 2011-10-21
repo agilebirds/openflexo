@@ -148,8 +148,11 @@ public class ProgressWindow extends JDialog implements FlexoProgress
 		label.setFont(FlexoCst.BIG_FONT);
 		mainProgressBarLabel = new ProgressBarLabel("", SwingConstants.LEFT);
 		mainProgressBarLabel.setFont(FlexoCst.NORMAL_FONT);
+		
 		secondaryProgressBarLabel = new ProgressBarLabel("", SwingConstants.LEFT);
 		secondaryProgressBarLabel.setFont(FlexoCst.NORMAL_FONT);
+		secondaryProgressBarLabel.setForeground(Color.DARK_GRAY);
+
 		icon = IconLibrary.PROGRESS_BACKGROUND;
 		mainPane = new JPanel()
 		{

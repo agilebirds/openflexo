@@ -149,7 +149,7 @@ public class ViewConnector extends ViewElement {
 	@Override
 	public String getDisplayableDescription()
 	{
-		return "Connector"+(getLinkedConcept() != null ? " representing "+getLinkedConcept().getDisplayableDescription() : "");
+		return "Connector"+(getEditionPattern() != null ? " representing "+getEditionPattern() : "");
 	}
 
 

@@ -22,6 +22,7 @@ package org.openflexo.foundation.viewpoint;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.xmlcode.XMLMapping;
 
@@ -170,7 +171,7 @@ public class ViewPointPaletteElement extends ViewPointObject {
 		unusedParameterInstances.addAll(parameters);
 		
 		for (EditionScheme es : editionPattern.getEditionSchemes()) {
-			for (EditionPatternParameter parameter : es.getParameters()) {
+			for (EditionSchemeParameter parameter : es.getParameters()) {
 				PaletteElementPatternParameter parameterInstance = getParameter(parameter.getName());
 				if (parameterInstance != null) {
 					unusedParameterInstances.remove(parameterInstance);
@@ -235,5 +236,10 @@ public class ViewPointPaletteElement extends ViewPointObject {
 		return getCalc().getAllEditionPatternWithDropScheme();
 	}
 	
+	@Override
+	public BindingModel getBindingModel() 
+	{
+		return getCalc().getBindingModel();
+	}
 
 }

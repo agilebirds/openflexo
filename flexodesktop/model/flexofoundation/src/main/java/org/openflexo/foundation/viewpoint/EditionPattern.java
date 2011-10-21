@@ -19,11 +19,16 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.foundation.viewpoint.dm.EditionSchemeInserted;
 import org.openflexo.foundation.viewpoint.dm.EditionSchemeRemoved;
 import org.openflexo.foundation.viewpoint.dm.PatternRoleInserted;
@@ -45,6 +50,9 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 	private Vector<PatternRole> patternRoles;
 	private Vector<EditionScheme> editionSchemes;
 	private EditionPatternInspector inspector;
+	
+	private OntologicObjectPatternRole primaryConceptRole;
+	private GraphicalElementPatternRole primaryRepresentationRole;
 	
 	private ViewPoint _calc;
 
@@ -70,6 +78,11 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		deleteObservers();
 	}
 	
+    @Override
+	public String getURI() {
+    	return getCalc().getURI()+"#"+getName();
+    }
+    
 	@Override
 	public String getName() 
 	{
@@ -141,6 +154,41 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		patternRoles.remove(aPatternRole);
 		setChanged();
 		notifyObservers(new PatternRoleRemoved(aPatternRole, this));
+	}
+	
+	public <R> List<R> getPatternRoles(Class<R> type)
+	{
+		List<R> returned = new ArrayList<R>();
+		for (PatternRole r : patternRoles) {
+			if (TypeUtils.isTypeAssignableFrom(type, r.getClass())) {
+				returned.add((R)r);
+			}
+		}
+		return returned;
+	}
+	
+	public List<ShapePatternRole> getShapePatternRoles()
+	{
+		return getPatternRoles(ShapePatternRole.class);
+	}
+	
+	public List<ConnectorPatternRole> getConnectorPatternRoles()
+	{
+		return getPatternRoles(ConnectorPatternRole.class);
+	}
+	
+	public ShapePatternRole getDefaultShapePatternRole()
+	{
+		List<ShapePatternRole> l = getShapePatternRoles();
+		if (l.size()>0) return l.get(0);
+		return null;
+	}
+	
+	public ConnectorPatternRole getDefaultConnectorPatternRole()
+	{
+		List<ConnectorPatternRole> l = getConnectorPatternRoles();
+		if (l.size()>0) return l.get(0);
+		return null;
 	}
 	
 	private Vector<String> availablePatternRoleNames = null;
@@ -518,4 +566,61 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 		getCalc().save();
 	}
 	
+	private BindingModel _bindingModel;
+	
+	@Override
+	public BindingModel getBindingModel() 
+	{
+		if (_bindingModel == null) createBindingModel();
+		return _bindingModel;
+	}
+
+	public void updateBindingModel()
+	{
+		logger.fine("updateBindingModel()");
+		_bindingModel = null;
+		createBindingModel();
+	}
+
+	private void createBindingModel()
+	{
+		_bindingModel = new BindingModel();
+		for (PatternRole role : getPatternRoles()) {
+			_bindingModel.addToBindingVariables(PatternRolePathElement.makePatternRolePathElement(role,this));
+		}	
+	}
+
+	public OntologicObjectPatternRole getDefaultPrimaryConceptRole() {
+		List<OntologicObjectPatternRole> roles = getPatternRoles(OntologicObjectPatternRole.class);
+		if (roles.size()>0) return roles.get(0);
+		return null;
+	}
+
+	public GraphicalElementPatternRole getDefaultPrimaryRepresentationRole() {
+		List<GraphicalElementPatternRole> roles = getPatternRoles(GraphicalElementPatternRole.class);
+		if (roles.size()>0) return roles.get(0);
+		return null;
+	}
+
+	public OntologicObjectPatternRole getPrimaryConceptRole() {
+		if (primaryConceptRole == null) return getDefaultPrimaryConceptRole();
+		return primaryConceptRole;
+	}
+
+	public void setPrimaryConceptRole(OntologicObjectPatternRole primaryConceptRole) {
+		this.primaryConceptRole = primaryConceptRole;
+	}
+
+	public GraphicalElementPatternRole getPrimaryRepresentationRole() {
+		if (primaryRepresentationRole == null) return getDefaultPrimaryRepresentationRole();
+		return primaryRepresentationRole;
+	}
+
+	public void setPrimaryRepresentationRole(
+			GraphicalElementPatternRole primaryRepresentationRole) {
+		this.primaryRepresentationRole = primaryRepresentationRole;
+	}
+
+
+
 }

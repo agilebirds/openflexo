@@ -1,4 +1,4 @@
-package org.openflexo.foundation.viewpoint.inspector;
+package org.openflexo.foundation.viewpoint.binding;
 
 import java.lang.reflect.Type;
 import java.util.Hashtable;
@@ -8,31 +8,38 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingVariable;
-import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
 
-public class EditionPatternPathElement<E extends Bindable,FlexoModelObject> implements BindingVariable<E,EditionPatternInstance>
+public class EditionPatternPathElement<E extends Bindable> implements BindingVariable<EditionPattern>
 {
 	static final Logger logger = Logger.getLogger(EditionPatternPathElement.class.getPackage().getName());
 
-	EditionPattern editionPattern;
-	private int index;
+	private E container;
+	private String name;
+	private EditionPattern editionPattern;
 	private Hashtable<PatternRole,PatternRolePathElement> patternRoleElements;
 	private Vector<PatternRolePathElement> allPatternRoleElements;
-	private Class<E> declaringClass;
 	
-	public EditionPatternPathElement(EditionPattern anEditionPattern, int index, Class<E> declaringClass)
+	public EditionPatternPathElement(EditionPattern anEditionPattern, E container)
 	{
+		this(null,anEditionPattern,container);
+	}
+	
+	public EditionPatternPathElement(String name, EditionPattern anEditionPattern, E container)
+	{
+		this.name = name;
 		this.editionPattern = anEditionPattern;
-		this.declaringClass = declaringClass;
-		this.index = index;
+		this.container = container;
 		patternRoleElements = new Hashtable<PatternRole, PatternRolePathElement>();
 		allPatternRoleElements = new Vector<PatternRolePathElement>();
-		for (PatternRole pr : editionPattern.getPatternRoles()) {
-			PatternRolePathElement newPathElement = null;
-			newPathElement = PatternRolePathElement.makePatternRolePathElement(pr);
-			patternRoleElements.put(pr,newPathElement);
+		if (editionPattern != null) {
+			for (PatternRole pr : editionPattern.getPatternRoles()) {
+				PatternRolePathElement newPathElement = null;
+				newPathElement = PatternRolePathElement.makePatternRolePathElement(pr,(EditionPattern)null);
+				patternRoleElements.put(pr,newPathElement);
+				allPatternRoleElements.add(newPathElement);
+			}
 		}
 	}
 	
@@ -49,17 +56,20 @@ public class EditionPatternPathElement<E extends Bindable,FlexoModelObject> impl
 	@Override
 	public Class<E> getDeclaringClass() 
 	{
-		return declaringClass;
+		if (container != null) return (Class<E>)container.getClass();
+		return null;
 	}
 
 	@Override
 	public Type getType() {
-		return EditionPatternInstance.class;
+		return EditionPattern.class;
 	}
 
 	@Override
-	public String getSerializationRepresentation() {
-		return editionPattern.getCalc().getName()+"_"+editionPattern.getName()+"_"+index;
+	public String getSerializationRepresentation() 
+	{
+		if (name != null) return name;
+		return editionPattern.getName();
 	}
 
 	@Override
@@ -84,8 +94,7 @@ public class EditionPatternPathElement<E extends Bindable,FlexoModelObject> impl
 
 	@Override
 	public E getContainer() {
-		//return patternRole.getEditionPattern();
-		return null;
+		return container;
 	}
 
 	@Override
@@ -94,14 +103,13 @@ public class EditionPatternPathElement<E extends Bindable,FlexoModelObject> impl
 	}
 			
 	@Override
-	public EditionPatternInstance getBindingValue(E target, BindingEvaluationContext context) 
+	public EditionPattern getBindingValue(Object target, BindingEvaluationContext context) 
 	{
-		if (target != null) logger.info("TODO: evaluateBinding EditionPatternPathElement with target="+target+" context="+context);
-		return null;
+		return editionPattern;
 	}
 
     @Override
-    public void setBindingValue(EditionPatternInstance value, E target, BindingEvaluationContext context) 
+    public void setBindingValue(EditionPattern value, Object target, BindingEvaluationContext context) 
     {
     	// Not settable
     }
@@ -110,7 +118,4 @@ public class EditionPatternPathElement<E extends Bindable,FlexoModelObject> impl
 		return editionPattern;
 	}
 
-	public int getIndex() {
-		return index;
-	}
 }

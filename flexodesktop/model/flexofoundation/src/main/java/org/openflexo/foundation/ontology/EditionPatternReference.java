@@ -22,6 +22,8 @@ package org.openflexo.foundation.ontology;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
@@ -36,7 +38,7 @@ import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.xmlcode.XMLMapping;
 
-public class EditionPatternReference extends FlexoModelObject implements DataFlexoObserver {
+public class EditionPatternReference extends FlexoModelObject implements DataFlexoObserver,BindingEvaluationContext {
 
 	private static final Logger logger = FlexoLogger.getLogger(EditionPatternReference.class.getPackage().toString());
 
@@ -645,6 +647,12 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 	public void removeActorWithKey(String key)
 	{
 		actors.remove(key);
+	}
+
+	@Override
+	public Object getValue(BindingVariable variable) 
+	{
+		return getEditionPatternInstance().getValue(variable);
 	}
 
 

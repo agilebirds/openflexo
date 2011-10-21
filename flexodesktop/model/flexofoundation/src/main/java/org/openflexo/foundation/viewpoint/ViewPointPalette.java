@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 
 import org.jdom.JDOMException;
+import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.gen.ScreenshotGenerator;
 import org.openflexo.foundation.gen.ScreenshotGenerator.ScreenshotImage;
@@ -445,4 +446,11 @@ public class ViewPointPalette extends ViewPointObject implements Comparable<View
 	}
 	
 	private boolean screenshotModified = false;
+	
+	@Override
+	public BindingModel getBindingModel() 
+	{
+		return getCalc().getBindingModel();
+	}
+
 }

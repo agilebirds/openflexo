@@ -31,7 +31,6 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.viewpoint.ShapePatternRole;
-import org.openflexo.foundation.viewpoint.LabelRepresentation.LabelRepresentationType;
 
 
 public class EditionPatternPreviewShapeGR extends ShapeGraphicalRepresentation<ShapePatternRole> implements GraphicalFlexoObserver, EditionPatternPreviewConstants {
@@ -135,14 +134,7 @@ public class EditionPatternPreviewShapeGR extends ShapeGraphicalRepresentation<S
 	public String getText()
 	{
 		if (getPatternRole() != null) {
-			if (getPatternRole().getLabelRepresentation() != null
-					&& getPatternRole().getLabelRepresentation().getType() != null
-					&& getPatternRole().getLabelRepresentation().getType() == LabelRepresentationType.StaticValue) {
-				return getPatternRole().getLabelRepresentation().getText();
-			}
-			else if (getPatternRole().getBoundPatternRole() != null) {
-				return getPatternRole().getBoundPatternRole().getPatternRoleName();
-			}
+			if (getPatternRole().getLabel() != null) return getPatternRole().getLabel().toString();
 			return getPatternRole().getPatternRoleName();
 		}
 		return null;

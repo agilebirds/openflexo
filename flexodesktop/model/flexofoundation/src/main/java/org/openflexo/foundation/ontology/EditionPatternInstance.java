@@ -22,18 +22,21 @@ package org.openflexo.foundation.ontology;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.ontology.EditionPatternReference.ActorReference;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.logging.FlexoLogger;
 
-public class EditionPatternInstance extends FlexoObservable implements Bindable {
+public class EditionPatternInstance extends FlexoObservable implements Bindable,BindingEvaluationContext {
 
 	private static final Logger logger = FlexoLogger.getLogger(EditionPatternReference.class.getPackage().toString());
 
@@ -171,5 +174,14 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable 
 		return getPattern().getInspector().getBindingModel();
 	}
 	
+	@Override
+	public Object getValue(BindingVariable variable) 
+	{
+		if (variable instanceof PatternRolePathElement) {
+			return getPatternActor(((PatternRolePathElement) variable).getPatternRole());
+		}
+		logger.warning("Unexpected "+variable);
+		return null;
+	}
 
 }

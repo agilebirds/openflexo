@@ -142,8 +142,8 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 
 	static final Logger logger = Logger.getLogger(FlexoController.class.getPackage().getName());
 
-	public static boolean USE_NEW_INSPECTOR_SCHEME = false;
-	public static boolean USE_OLD_INSPECTOR_SCHEME = true;
+	public static boolean USE_NEW_INSPECTOR_SCHEME = true;
+	public static boolean USE_OLD_INSPECTOR_SCHEME = false;
 
 	// ======================================================
 	// ================== Static variables ==================

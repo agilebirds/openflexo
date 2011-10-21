@@ -22,7 +22,11 @@ package org.openflexo.foundation.viewpoint;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.viewpoint.EditionPatternParameter.WidgetType;
+import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
+import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterPathElement;
+import org.openflexo.foundation.viewpoint.binding.GraphicalElementPathElement;
+import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.logging.FlexoLogger;
 
 
@@ -30,6 +34,12 @@ public abstract class EditionScheme extends ViewPointObject {
 
 	//
 	protected static final Logger logger = FlexoLogger.getLogger(EditionScheme.class.getPackage().getName());
+
+	public static final String TOP_LEVEL = "topLevel";
+	public static final String TARGET = "target";	
+	public static final String FROM_TARGET = "fromTarget";	
+	public static final String TO_TARGET = "toTarget";
+	
 
 	public static enum EditionSchemeType
 	{
@@ -42,7 +52,7 @@ public abstract class EditionScheme extends ViewPointObject {
 	private String label;
 	private String description;
 	private Vector<EditionAction> actions;
-	private Vector<EditionPatternParameter> parameters;
+	private Vector<EditionSchemeParameter> parameters;
 	private boolean skipConfirmationPanel = false;
 	
 	private EditionPattern _editionPattern;
@@ -50,7 +60,7 @@ public abstract class EditionScheme extends ViewPointObject {
 	public EditionScheme() 
 	{
 		actions = new Vector<EditionAction>();
-		parameters = new Vector<EditionPatternParameter>();
+		parameters = new Vector<EditionSchemeParameter>();
 	}
 
 	public abstract EditionSchemeType getEditionSchemeType();
@@ -163,29 +173,32 @@ public abstract class EditionScheme extends ViewPointObject {
 		notifyObservers();
 	}
 	
-	public Vector<EditionPatternParameter> getParameters() 
+	public Vector<EditionSchemeParameter> getParameters() 
 	{
 		return parameters;
 	}
 
-	public void setParameters(Vector<EditionPatternParameter> someParameters) 
+	public void setParameters(Vector<EditionSchemeParameter> someParameters) 
 	{
 		parameters = someParameters;
+		updateBindingModels();
 	}
 
-	public void addToParameters(EditionPatternParameter parameter) 
+	public void addToParameters(EditionSchemeParameter parameter) 
 	{
 		parameter.setScheme(this);
 		parameters.add(parameter);
+		updateBindingModels();
 	}
 
-	public void removeFromParameters(EditionPatternParameter parameter)
+	public void removeFromParameters(EditionSchemeParameter parameter)
 	{
 		parameter.setScheme(null);
 		parameters.remove(parameter);
+		updateBindingModels();
 	}
 
-	public void parameterFirst(EditionPatternParameter p)
+	public void parameterFirst(EditionSchemeParameter p)
 	{
 		parameters.remove(p);
 		parameters.insertElementAt(p, 0);
@@ -193,7 +206,7 @@ public abstract class EditionScheme extends ViewPointObject {
 		notifyObservers();
 	}
 	
-	public void parameterUp(EditionPatternParameter p)
+	public void parameterUp(EditionSchemeParameter p)
 	{
 		int index = parameters.indexOf(p);
 		parameters.remove(p);
@@ -202,7 +215,7 @@ public abstract class EditionScheme extends ViewPointObject {
 		notifyObservers();
 	}
 	
-	public void parameterDown(EditionPatternParameter p)
+	public void parameterDown(EditionSchemeParameter p)
 	{
 		int index = parameters.indexOf(p);
 		parameters.remove(p);
@@ -211,7 +224,7 @@ public abstract class EditionScheme extends ViewPointObject {
 		notifyObservers();
 	}
 	
-	public void parameterLast(EditionPatternParameter p)
+	public void parameterLast(EditionSchemeParameter p)
 	{
 		parameters.remove(p);
 		parameters.add(p);
@@ -220,10 +233,10 @@ public abstract class EditionScheme extends ViewPointObject {
 	}
 	
 
-	public EditionPatternParameter getParameter(String name)
+	public EditionSchemeParameter getParameter(String name)
 	{
 		if (name == null) return null;
-		for (EditionPatternParameter p : parameters) {
+		for (EditionSchemeParameter p : parameters) {
 			if (name.equals(p.getName())) return p;
 		}
 		return null;
@@ -232,13 +245,15 @@ public abstract class EditionScheme extends ViewPointObject {
 	@Override
 	public ViewPoint getCalc() 
 	{
-		return getEditionPattern().getCalc();
+		if (getEditionPattern() != null)
+			return getEditionPattern().getCalc();
+		return null;
 	}
 	
 	public AddShape createAddShapeAction()
 	{
 		AddShape newAction = new AddShape();
-		newAction.setContainer(EditionAction.CONTAINER);
+		newAction.setPatternRole(getEditionPattern().getDefaultShapePatternRole());
 		addToActions(newAction);
 		return newAction;
 	}
@@ -288,8 +303,7 @@ public abstract class EditionScheme extends ViewPointObject {
 	public AddConnector createAddConnectorAction()
 	{
 		AddConnector newAction = new AddConnector();
-		newAction._setFromShape(EditionAction.FROM_TARGET);
-		newAction._setToShape(EditionAction.TO_TARGET);
+		newAction.setPatternRole(getEditionPattern().getDefaultConnectorPatternRole());
 		addToActions(newAction);
 		return newAction;
 	}
@@ -322,77 +336,79 @@ public abstract class EditionScheme extends ViewPointObject {
 		return anAction;
 	}
 
-	public EditionPatternParameter createTextFieldParameter()
+	public EditionSchemeParameter createURIParameter()
 	{
-		EditionPatternParameter newParameter = new EditionPatternParameter();
-		newParameter.setName("newParameter");
-		newParameter.setLabel("label");
-		newParameter.setWidget(WidgetType.TEXT_FIELD);
+		EditionSchemeParameter newParameter = new URIParameter();
+		newParameter.setName("uri");
+		newParameter.setLabel("uri");
 		addToParameters(newParameter);
 		return newParameter;
 	}
 
-	public EditionPatternParameter createLocalizedTextFieldParameter()
+	public EditionSchemeParameter createTextFieldParameter()
 	{
-		EditionPatternParameter newParameter = new EditionPatternParameter();
+		EditionSchemeParameter newParameter = new TextFieldParameter();
 		newParameter.setName("newParameter");
 		newParameter.setLabel("label");
-		newParameter.setWidget(WidgetType.LOCALIZED_TEXT_FIELD);
 		addToParameters(newParameter);
 		return newParameter;
 	}
 
-	public EditionPatternParameter createTextAreaParameter()
+	public EditionSchemeParameter createTextAreaParameter()
 	{
-		EditionPatternParameter newParameter = new EditionPatternParameter();
+		EditionSchemeParameter newParameter = new TextAreaParameter();
 		newParameter.setName("newParameter");
 		newParameter.setLabel("label");
-		newParameter.setWidget(WidgetType.TEXT_AREA);
 		addToParameters(newParameter);
 		return newParameter;
 	}
 
-	public EditionPatternParameter createIntegerParameter()
+	public EditionSchemeParameter createIntegerParameter()
 	{
-		EditionPatternParameter newParameter = new EditionPatternParameter();
+		EditionSchemeParameter newParameter = new IntegerParameter();
 		newParameter.setName("newParameter");
 		newParameter.setLabel("label");
-		newParameter.setWidget(WidgetType.INTEGER);
 		addToParameters(newParameter);
 		return newParameter;
 	}
 
-	public EditionPatternParameter createCheckBoxParameter()
+	public EditionSchemeParameter createCheckBoxParameter()
 	{
-		EditionPatternParameter newParameter = new EditionPatternParameter();
+		EditionSchemeParameter newParameter = new CheckboxParameter();
 		newParameter.setName("newParameter");
 		newParameter.setLabel("label");
-		newParameter.setWidget(WidgetType.CHECKBOX);
 		addToParameters(newParameter);
 		return newParameter;
 	}
 
-	public EditionPatternParameter createDropDownParameter()
+	public EditionSchemeParameter createDropDownParameter()
 	{
-		EditionPatternParameter newParameter = new EditionPatternParameter();
+		EditionSchemeParameter newParameter = new DropDownParameter();
 		newParameter.setName("newParameter");
 		newParameter.setLabel("label");
-		newParameter.setWidget(WidgetType.DROPDOWN);
 		addToParameters(newParameter);
 		return newParameter;
 	}
 
-	public EditionPatternParameter createCustomParameter()
+	public EditionSchemeParameter createIndividualParameter()
 	{
-		EditionPatternParameter newParameter = new EditionPatternParameter();
+		EditionSchemeParameter newParameter = new IndividualParameter();
 		newParameter.setName("newParameter");
 		newParameter.setLabel("label");
-		newParameter.setWidget(WidgetType.CUSTOM);
 		addToParameters(newParameter);
 		return newParameter;
 	}
 
-	public EditionPatternParameter deleteParameter(EditionPatternParameter aParameter)
+	public EditionSchemeParameter createFlexoObjectParameter()
+	{
+		EditionSchemeParameter newParameter = new FlexoObjectParameter();
+		newParameter.setName("newParameter");
+		newParameter.setLabel("label");
+		addToParameters(newParameter);
+		return newParameter;
+	}
+
+	public EditionSchemeParameter deleteParameter(EditionSchemeParameter aParameter)
 	{
 		removeFromParameters(aParameter);
 		aParameter.delete();
@@ -406,6 +422,7 @@ public abstract class EditionScheme extends ViewPointObject {
 				a.updatePatternRoleType();
 			}
 		}
+		updateBindingModels();
 	}
 
 	public boolean getSkipConfirmationPanel()
@@ -416,6 +433,60 @@ public abstract class EditionScheme extends ViewPointObject {
 	public void setSkipConfirmationPanel(boolean skipConfirmationPanel)
 	{
 		this.skipConfirmationPanel = skipConfirmationPanel;
+	}
+
+	private BindingModel _bindingModel;
+	private BindingModel _parametersBindingModel;
+	
+	@Override
+	public BindingModel getBindingModel() 
+	{
+		if (_bindingModel == null) createBindingModel();
+		return _bindingModel;
+	}
+
+	public BindingModel getParametersBindingModel() 
+	{
+		if (_parametersBindingModel == null) createParametersBindingModel();
+		return _parametersBindingModel;
+	}
+
+	public void updateBindingModels()
+	{
+		logger.fine("updateBindingModels()");
+		_bindingModel = null;
+		createBindingModel();
+	}
+
+	private void createBindingModel()
+	{
+		_bindingModel = new BindingModel();
+		_bindingModel.addToBindingVariables(new EditionSchemeParameterListPathElement(this,null));
+		appendContextualBindingVariables(_bindingModel);
+		_bindingModel.addToBindingVariables(new GraphicalElementPathElement.ViewPathElement(TOP_LEVEL,null));
+		if (getEditionPattern() != null) {
+			for (PatternRole pr : getEditionPattern().getPatternRoles()) {
+				PatternRolePathElement newPathElement = PatternRolePathElement.makePatternRolePathElement(pr,this);
+				_bindingModel.addToBindingVariables(newPathElement);
+			}
+		}
+		/*for (PatternRole role : getPatternRoles()) {
+			_bindingModel.addToBindingVariables(PatternRolePathElement.makePatternRolePathElement(role,this));
+		}	*/
+	}
+	
+	protected abstract void appendContextualBindingVariables(BindingModel bindingModel);
+
+	private void createParametersBindingModel()
+	{
+		_parametersBindingModel = new BindingModel();
+		for (EditionSchemeParameter p : parameters) {
+			_parametersBindingModel.addToBindingVariables(new EditionSchemeParameterPathElement<EditionScheme>(null,p));
+		}
+		
+		/*for (PatternRole role : getPatternRoles()) {
+			_bindingModel.addToBindingVariables(PatternRolePathElement.makePatternRolePathElement(role,this));
+		}	*/
 	}
 
 

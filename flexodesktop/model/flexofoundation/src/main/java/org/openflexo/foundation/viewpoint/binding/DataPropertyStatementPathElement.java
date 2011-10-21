@@ -1,4 +1,4 @@
-package org.openflexo.foundation.viewpoint.inspector;
+package org.openflexo.foundation.viewpoint.binding;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -9,7 +9,6 @@ import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.foundation.ontology.DataPropertyStatement;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyIndividual;
-import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.PropertyStatement;
 
 public class DataPropertyStatementPathElement extends StatementPathElement<Object>
@@ -57,7 +56,7 @@ public class DataPropertyStatementPathElement extends StatementPathElement<Objec
 	}
 
 	@Override
-	public Object getBindingValue(OntologyObject target, BindingEvaluationContext context) 
+	public Object getBindingValue(Object target, BindingEvaluationContext context) 
 	{
 		if (target instanceof OntologyIndividual) {
 			OntologyIndividual individual = (OntologyIndividual)target;
@@ -79,7 +78,7 @@ public class DataPropertyStatementPathElement extends StatementPathElement<Objec
 	}
 	
 	@Override
-	public void setBindingValue(Object value, OntologyObject target, BindingEvaluationContext context) 
+	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) 
 	{
 		logger.warning("Attempt to process setBindingValue with "+value);
 		if (target instanceof OntologyIndividual) {

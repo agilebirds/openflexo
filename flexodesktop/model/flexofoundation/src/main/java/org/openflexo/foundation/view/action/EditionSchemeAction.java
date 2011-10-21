@@ -23,6 +23,8 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.NameChanged;
@@ -54,27 +56,27 @@ import org.openflexo.foundation.viewpoint.DeclarePatternRole;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
+import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.GoToAction;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ShapePatternRole;
-import org.openflexo.foundation.wkf.FlexoProcess;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
+import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
+import org.openflexo.foundation.viewpoint.binding.GraphicalElementPathElement.ViewPathElement;
+import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.inspector.LocalizedString;
 import org.openflexo.toolbox.StringUtils;
 
-import com.hp.hpl.jena.ontology.DatatypeProperty;
-import com.hp.hpl.jena.ontology.Individual;
-import com.hp.hpl.jena.ontology.ObjectProperty;
-import com.hp.hpl.jena.ontology.OntClass;
-import com.hp.hpl.jena.ontology.OntModel;
-
 public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> 
-extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
+extends FlexoAction<A,FlexoModelObject,FlexoModelObject> implements BindingEvaluationContext
 {
 
 	private static final Logger logger = Logger.getLogger(EditionSchemeAction.class.getPackage().getName());
 
 	protected Hashtable<String,Object> parameterValues;
+
+	public boolean escapeParameterRetrievingWhenValid = true;
 
 	public EditionSchemeAction(
 			FlexoActionType<A, FlexoModelObject, FlexoModelObject> actionType,
@@ -83,6 +85,30 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 	{
 		super(actionType, focusedObject, globalSelection, editor);
 		parameterValues = new Hashtable<String,Object>();
+	}
+
+	/** 
+	 * Compute and store default parameters, and return a flag indicating
+	 * if all parameters declared as "mandatory" could be successfully filled
+	 * 
+	 * @return
+	 */
+	public boolean retrieveDefaultParameters()
+	{
+		boolean returned = true;
+		ViewPointPaletteElement paletteElement = (this instanceof DropSchemeAction ? ((DropSchemeAction)this).getPaletteElement() : null);
+		EditionScheme editionScheme = getEditionScheme();
+		for (final EditionSchemeParameter parameter : editionScheme.getParameters()) {
+			Object defaultValue =  parameter.getDefaultValue(paletteElement,new BindingEvaluationContext() {
+				@Override
+				public Object getValue(BindingVariable variable) {
+					logger.info("Hop, retournons le bon parametre pour "+variable);
+					return null;
+				}
+			});
+			if (!parameter.isValid(this, defaultValue)) returned = false;
+		}
+		return returned;
 	}
 
 	public FlexoProject getProject()
@@ -117,7 +143,7 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 		
 		// Perform actions
 		for (EditionAction action : getEditionScheme().getActions()) {
-			if (action.evaluateCondition(parameterValues)) {
+			if (action.evaluateCondition(this)) {
 				if (action instanceof org.openflexo.foundation.viewpoint.AddShape) {
 					logger.info("Add shape with patternRole="+action.getPatternRole());
 					ViewShape newShape = performAddShape((org.openflexo.foundation.viewpoint.AddShape)action);
@@ -239,7 +265,7 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 		
 		// At this end, look after GoToAction
 		for (EditionAction action : getEditionScheme().getActions()) {
-			if (action.evaluateCondition(parameterValues)) {
+			if (action.evaluateCondition(this)) {
 				if (action instanceof GoToAction) {
 					performGoToAction((GoToAction)action);
 				}
@@ -287,7 +313,8 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 		OntologyClass father = action.getOntologyClass();
 		//OntologyObject father = action.getOntologyObject(getProject());
 		//System.out.println("Individual name param = "+action.getIndividualNameParameter());
-		String individualName = (String)getParameterValues().get(action.getIndividualNameParameter().getName());
+		//String individualName = (String)getParameterValues().get(action.getIndividualNameParameter().getName());
+		String individualName = (String)action.getIndividualName().getBindingValue(this);
 		//System.out.println("individualName="+individualName);
 		OntologyIndividual newIndividual;
 		try {
@@ -309,11 +336,11 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 	protected OntologyIndividual finalizePerformAddIndividual(AddIndividual action, OntologyIndividual newIndividual)
 	{
 		for (DataPropertyAssertion dataPropertyAssertion : action.getDataAssertions()) {
-			if (dataPropertyAssertion.evaluateCondition(parameterValues)) {
+			if (dataPropertyAssertion.evaluateCondition(this)) {
 				logger.info("DataPropertyAssertion="+dataPropertyAssertion);
 				OntologyProperty property = dataPropertyAssertion.getOntologyProperty();
 				logger.info("Property="+property);
-				Object value = getParameterValues().get(dataPropertyAssertion.getValueParameter().getName());
+				Object value = dataPropertyAssertion.getValue(this);
 				if (value instanceof String) {
 					newIndividual.getOntResource().addProperty(
 							property.getOntProperty(), 
@@ -354,7 +381,7 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 			}
 		}
 		for (ObjectPropertyAssertion objectPropertyAssertion : action.getObjectAssertions()) {
-			if (objectPropertyAssertion.evaluateCondition(parameterValues)) {
+			if (objectPropertyAssertion.evaluateCondition(this)) {
 				//logger.info("ObjectPropertyAssertion="+objectPropertyAssertion);
 				OntologyProperty property = objectPropertyAssertion.getOntologyProperty();
 				//logger.info("Property="+property);
@@ -385,9 +412,10 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 	protected OntologyClass performAddClass(AddClass action)
 	{
 		OntologyClass father = action.getOntologyClass();
-		String newClassName = (String)getParameterValues().get(action.getNewClassNameParameter().getName());
+		String newClassName = (String)action.getClassName().getBindingValue(this);
 		OntologyClass newClass = null;
 		try {
+			logger.info("Adding class "+newClassName+" as "+father);
 			newClass = getProject().getProjectOntology().createOntologyClass(newClassName, father);
 			logger.info("Added class "+newClass.getName()+" as "+father);
 		} catch (DuplicateURIException e) {
@@ -515,11 +543,8 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 		//System.out.println("cardinality="+getParameterValues().get(action.getCardinality()));
 
 		if (subject instanceof OntologyClass && object instanceof OntologyClass) {
-
-			RestrictionType restrictionType = RestrictionType.valueOf((String)getParameterValues().get(action.getRestrictionTypeParameter().getName()));
-			int cardinality = (Integer)getParameterValues().get(action.getCardinalityParameter().getName());
-			if (restrictionType == null) restrictionType = RestrictionType.Some;
-
+			RestrictionType restrictionType = action.getRestrictionType(this);
+			int cardinality = action.getCardinality(this);
 			RestrictionStatement restriction = getProject().getProjectOntology().createRestriction(
 					(OntologyClass)subject, property, restrictionType, cardinality, (OntologyClass)object);
 
@@ -545,7 +570,7 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 		addShemaAction.doAction();
 		if (addShemaAction.hasActionExecutionSucceeded()) {
 			View newShema = addShemaAction.getNewShema().getShema();
-			ShapePatternRole shapePatternRole = action.retrieveShapePatternRole();
+			ShapePatternRole shapePatternRole = action.getShapePatternRole();
 			if (shapePatternRole == null) {
 				logger.warning("Sorry, shape pattern role is undefined");
 				return newShema;
@@ -590,48 +615,19 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject>
 		getEditor().focusOn(target);
 	}
 
-
-	private void pourNePasOublier() 
+	@Override
+	public Object getValue(BindingVariable variable) 
 	{
-		String FLEXO_CONCEPTS_URI = "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl";
-		String FLEXO_MODEL_OBJECT = FLEXO_CONCEPTS_URI+"#FlexoModelObject";
-		String LINKED_TO_MODEL_PROPERTY = FLEXO_CONCEPTS_URI+"#linkedToModel";
-		String CLASS_NAME_PROPERTY = FLEXO_CONCEPTS_URI+"#className";
-		String FLEXO_ID_PROPERTY = FLEXO_CONCEPTS_URI+"#flexoID";
-		String RESOURCE_NAME_PROPERTY = FLEXO_CONCEPTS_URI+"#resourceName";
-
-		String BOT_URI = "http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl";
-		String COMPANY_NAME = BOT_URI+"#companyName";
-
-		String BOT_EDITOR_URI = "http://www.agilebirds.com/openflexo/ViewPoints/BasicOrganizationTreeEditor.owl";
-		String BOT_COMPANY = BOT_EDITOR_URI+"#BOTCompany";
-
-		OntModel ontModel = getProject().getProjectOntology().getOntModel();
-
-		OntClass fooClass = ontModel.createClass(getProject().getProjectOntology().getOntologyURI()+"#"+"foo");
-		OntClass foo2Class = ontModel.createClass(getProject().getProjectOntology().getOntologyURI()+"#"+"foo2");
-		foo2Class.addComment("Test de commentaire", "FR");
-		foo2Class.addComment("Comment test", "EN");
-		foo2Class.addSuperClass(fooClass);
-
-		FlexoProcess process = getProject().getWorkflow().getRootFlexoProcess();
-		OntClass flexoModelObject = ontModel.getOntClass(FLEXO_MODEL_OBJECT);
-		ObjectProperty linkedToModelProperty = ontModel.getObjectProperty(LINKED_TO_MODEL_PROPERTY);
-		DatatypeProperty classNameProperty = ontModel.getDatatypeProperty(CLASS_NAME_PROPERTY);
-		DatatypeProperty flexoIDProperty = ontModel.getDatatypeProperty(FLEXO_ID_PROPERTY);
-		DatatypeProperty resourceNameProperty = ontModel.getDatatypeProperty(RESOURCE_NAME_PROPERTY);
-
-		Individual myRootFlexoProcess = ontModel.createIndividual(getProject().getProjectOntology().getURI()+"#MyRootProcess", flexoModelObject);
-		myRootFlexoProcess.addProperty(classNameProperty,process.getClass().getName());
-		myRootFlexoProcess.addProperty(flexoIDProperty,process.getSerializationIdentifier());
-		myRootFlexoProcess.addProperty(resourceNameProperty,process.getFlexoResource().getFullyQualifiedName());
-
-		OntClass botCompany = ontModel.getOntClass(BOT_COMPANY);
-		DatatypeProperty companyNameProperty = ontModel.getDatatypeProperty(COMPANY_NAME);
-		Individual agileBirdsCompany = ontModel.createIndividual(getProject().getProjectOntology().getURI()+"#AgileBirds", botCompany);
-		agileBirdsCompany.addProperty(companyNameProperty,"Agile Birds S.A.");
-
-		agileBirdsCompany.addProperty(linkedToModelProperty, myRootFlexoProcess);
+		if (variable instanceof EditionSchemeParameterListPathElement) {
+			return parameterValues;
+		}
+		else if (variable instanceof ViewPathElement) {
+			if (variable.getVariableName().equals(EditionScheme.TOP_LEVEL)) return retrieveOEShema();
+		}
+		else if (variable instanceof PatternRolePathElement) {
+			return getEditionPatternInstance().getPatternActor(((PatternRolePathElement)variable).getPatternRole());
+		}
+		logger.warning("Unexpected variable requested in EditionSchemeAction "+variable);
+		return null;
 	}
-
 }

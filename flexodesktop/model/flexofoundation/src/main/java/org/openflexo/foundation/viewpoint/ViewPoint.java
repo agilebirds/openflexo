@@ -27,11 +27,14 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.jdom.JDOMException;
+import org.openflexo.antar.binding.BindingFactory;
+import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.ImportedOntology;
-import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.viewpoint.ViewPointPalette.RelativePathFileConverter;
+import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
+import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaRemoved;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteInserted;
@@ -67,6 +70,7 @@ public class ViewPoint extends ViewPointObject {
 	private File xmlFile;
 	private ViewPointLibrary _library;
 	private boolean isLoaded = false;
+	private boolean isLoading = false;
 	private RelativePathFileConverter relativePathFileConverter;
 
 	public static ViewPoint openViewPoint(File calcDir, ViewPointLibrary library, ViewPointFolder folder) 
@@ -275,7 +279,7 @@ public class ViewPoint extends ViewPointObject {
 	
 	public void loadWhenUnloaded()
 	{
-		if (!isLoaded) {
+		if (!isLoaded && !isLoading) {
 			load();
 		}
 	}
@@ -285,15 +289,18 @@ public class ViewPoint extends ViewPointObject {
 		//logger.info("------------------------------------------------- "+calcURI);
 		logger.info("Try to load ViewPoint "+viewPointURI);
 
+		isLoading = true;
+
 		//logger.info("calcOntology="+calcOntology.getURI());
 		//logger.info(calcOntology.getURI()+" isLoaded="+calcOntology.isLoaded()+" isLoading="+calcOntology.isLoading());
-		calcOntology.loadWhenUnloaded();
+		if (calcOntology != null) calcOntology.loadWhenUnloaded();
 		
 		if (getLocalizedDictionary() != null) {
 			FlexoLocalization.addToLocalizedDelegates(getLocalizedDictionary());
 		}
 		
-		isLoaded = true;
+		if (calcOntology != null)  isLoaded = true;
+		isLoading = false;
 		
 		/*logger.info("Loaded ViewPoint "+calcURI);
 		for (OntologyClass clazz : getOntologyLibrary().getAllClasses()) {
@@ -307,6 +314,12 @@ public class ViewPoint extends ViewPointObject {
 	{
 		return viewPointDirectory;
 	}
+	
+    @Override
+	public String getURI() {
+    	return getViewPointURI();
+    }
+
 
 	public String getViewPointURI() 
 	{
@@ -542,7 +555,7 @@ public class ViewPoint extends ViewPointObject {
 	}
 
 
-	public Vector<LinkScheme> getConnectorsMatching(OntologyObject fromConcept, OntologyObject toConcept) 
+	public Vector<LinkScheme> getConnectorsMatching(EditionPattern fromConcept, EditionPattern toConcept) 
 	{
 		Vector<LinkScheme> returned = new Vector<LinkScheme>();
 		for (EditionPattern ep : getCalc().getEditionPatterns()) {
@@ -572,5 +585,35 @@ public class ViewPoint extends ViewPointObject {
 		}
 	}
 
+	private BindingModel _bindingModel;
+	
+	@Override
+	public BindingModel getBindingModel() 
+	{
+		if (_bindingModel == null) createBindingModel();
+		return _bindingModel;
+	}
 
+	public void updateBindingModel()
+	{
+		logger.fine("updateBindingModel()");
+		_bindingModel = null;
+		createBindingModel();
+	}
+
+	private void createBindingModel()
+	{
+		_bindingModel = new BindingModel();
+		for (EditionPattern ep : getEditionPatterns()) {
+			_bindingModel.addToBindingVariables(new EditionPatternPathElement<ViewPoint>(ep,this));
+		}	
+	}
+
+	@Override
+	public BindingFactory getBindingFactory() {
+		return EDITION_PATTERN_BINDING_FACTORY;
+	}
+	
+	private static EditionPatternBindingFactory EDITION_PATTERN_BINDING_FACTORY = new EditionPatternBindingFactory();
+	
 }

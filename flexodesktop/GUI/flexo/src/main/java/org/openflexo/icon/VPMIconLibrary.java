@@ -31,7 +31,7 @@ import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.EditionPatternParameter;
+import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
@@ -112,7 +112,7 @@ public class VPMIconLibrary extends IconLibrary {
 		else if (object instanceof ExampleDrawingShema) return EXAMPLE_DIAGRAM_ICON;
 		else if (object instanceof EditionAction) return EDITION_PATTERN_ACTION_ICON;
 		else if (object instanceof EditionPattern) return EDITION_PATTERN_ICON;
-		else if (object instanceof EditionPatternParameter) return EDITION_PATTERN_PARAMETER_ICON;
+		else if (object instanceof EditionSchemeParameter) return EDITION_PATTERN_PARAMETER_ICON;
 		else if (object instanceof ActionScheme) return ACTION_SCHEME_ICON;
 		else if (object instanceof DropScheme) return DROP_SCHEME_ICON;
 		else if (object instanceof LinkScheme) return LINK_SCHEME_ICON;

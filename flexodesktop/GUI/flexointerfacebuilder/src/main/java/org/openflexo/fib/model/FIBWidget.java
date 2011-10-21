@@ -313,7 +313,7 @@ public abstract class FIBWidget extends FIBComponent {
 		private void createFormatterBindingModel()
 		{
 			formatterBindingModel = new BindingModel(FIBWidget.this.getBindingModel());
-			formatterBindingModel.addToBindingVariables(new BindingVariableImpl<FIBFormatter,Object>(this, "object", Object.class) {
+			formatterBindingModel.addToBindingVariables(new BindingVariableImpl<Object>(this, "object", Object.class) {
 				@Override
 				public Type getType()
 				{

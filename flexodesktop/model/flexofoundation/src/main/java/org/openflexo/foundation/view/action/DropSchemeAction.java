@@ -22,6 +22,7 @@ package org.openflexo.foundation.view.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -29,13 +30,14 @@ import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.viewpoint.AddShape;
-import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 import org.openflexo.foundation.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionScheme;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
+import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 
 
 public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> 
@@ -78,7 +80,6 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction>
 	private DropScheme _dropScheme;
 	private ViewShape _newShape;
 	
-	public boolean escapeParameterRetrievingWhenValid = false;
 
 	private Object _graphicalRepresentation;
 
@@ -183,4 +184,17 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction>
 		_newShape = super.performAddShape(action);
 		return _newShape;
 	}
+	
+	@Override
+	public Object getValue(BindingVariable variable) 
+	{
+		if (variable instanceof EditionPatternPathElement) {
+			if (variable.getVariableName().equals(EditionScheme.TARGET)
+					&& _dropScheme.getTargetEditionPattern() != null)
+				return ((ViewShape)getParent()).getEditionPatternInstance();
+			return parameterValues;
+		}
+		return super.getValue(variable);
+	}
+
 }

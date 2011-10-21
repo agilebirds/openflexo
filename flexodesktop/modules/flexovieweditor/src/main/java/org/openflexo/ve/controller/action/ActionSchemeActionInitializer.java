@@ -57,7 +57,7 @@ public class ActionSchemeActionInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, ActionSchemeAction action)
 			{
-				return ParametersRetriever.retrieveParameters(action,false);
+				return ParametersRetriever.retrieveParameters(action,action.escapeParameterRetrievingWhenValid);
 			}
 		};
 	}

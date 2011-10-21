@@ -254,7 +254,7 @@ public abstract class FIBTableColumn extends FIBModelObject {
 		private void createFormatterBindingModel()
 		{
 			formatterBindingModel = new BindingModel();
-			formatterBindingModel.addToBindingVariables(new BindingVariableImpl<FIBFormatter,Object>(this, "object", Object.class) {
+			formatterBindingModel.addToBindingVariables(new BindingVariableImpl<Object>(this, "object", Object.class) {
 				@Override
 				public Type getType()
 				{

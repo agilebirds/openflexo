@@ -19,13 +19,15 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 
 
@@ -33,8 +35,6 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 
 	private static final Logger logger = Logger.getLogger(AddObjectPropertyStatement.class.getPackage().getName());
 
-	private String object;
-	
 	public AddObjectPropertyStatement() {
 	}
 	
@@ -57,47 +57,9 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 			getPatternRole().setObjectProperty(p);
 	}
 	
-	public String _getObject()
-	{
-		return object;
-	}
-	
-	public void _setObject(String anObject)
-	{
-		object = anObject;
-	}
-	
-	private Vector<String> availableObjectValues = null;
-	
-	public Vector<String> getAvailableObjectValues()
-	{
-		if (availableObjectValues == null) {
-			availableObjectValues = new Vector<String>();
-			switch (getScheme().getEditionSchemeType()) {
-			case DropScheme:
-				availableObjectValues.add(EditionAction.CONTAINER);
-				availableObjectValues.add(EditionAction.CONTAINER_OF_CONTAINER);
-				break;
-			case LinkScheme:
-				availableObjectValues.add(EditionAction.FROM_TARGET);
-				availableObjectValues.add(EditionAction.TO_TARGET);
-				break;
-			default:
-				break;
-			}
-			for (PatternRole pr : getEditionPattern().getPatternRoles()) {
-				availableObjectValues.add(pr.getPatternRoleName());
-			}
-			for (EditionPatternParameter p : getScheme().getParameters()) {
-				availableObjectValues.add(p.getName());
-			}
-		}
-		return availableObjectValues;
-	}
-
 	public OntologyObject getPropertyObject(EditionSchemeAction action)
 	{
-		return retrieveOntologyObject(_getObject(), action);
+		return (OntologyObject)getObject().getBindingValue(action);
 	}
 
 
@@ -115,5 +77,29 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 			return;
 		}
 	}*/
+	
+	private ViewPointDataBinding object;
+	
+	private BindingDefinition OBJECT = new BindingDefinition("object", OntologyObject.class, BindingDefinitionType.GET, false);
+	
+	public BindingDefinition getObjectBindingDefinition()
+	{
+		return OBJECT;
+	}
+
+	public ViewPointDataBinding getObject() 
+	{
+		if (object == null) object = new ViewPointDataBinding(this,EditionActionBindingAttribute.object,getObjectBindingDefinition());
+		return object;
+	}
+
+	public void setObject(ViewPointDataBinding object) 
+	{
+		object.setOwner(this);
+		object.setBindingAttribute(EditionActionBindingAttribute.object);
+		object.setBindingDefinition(getObjectBindingDefinition());
+		this.object = object;
+	}
+
 
 }

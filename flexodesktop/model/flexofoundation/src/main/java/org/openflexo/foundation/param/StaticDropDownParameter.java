@@ -37,9 +37,11 @@ public class StaticDropDownParameter<T> extends ParameterDefinition<T> {
         super(name,label,defaultValue);
         String allChoices = "";
         boolean isFirst = true;
-        for (T next : allStaticValues) {
-            allChoices += (!isFirst?",":"")+next;
-            isFirst=false;
+        if (allStaticValues != null) {
+        	for (T next : allStaticValues) {
+        		allChoices += (!isFirst?",":"")+next;
+        		isFirst=false;
+        	}
         }
         addParameter("staticlist",allChoices);
     }

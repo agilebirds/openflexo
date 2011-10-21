@@ -26,6 +26,7 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
@@ -319,7 +320,7 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 			checkAndRegisterLocalized(ep.getName());
 			for (EditionScheme es : ep.getEditionSchemes()) {
 				checkAndRegisterLocalized(es.getName());
-				for (EditionPatternParameter p : es.getParameters()) {
+				for (EditionSchemeParameter p : es.getParameters()) {
 					checkAndRegisterLocalized(p.getLabel());
 				}
 				for (InspectorEntry entry : ep.getInspector().getEntries()) {
@@ -337,5 +338,11 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 		handleNewEntry = true;
 		localizedForKeyAndLanguage(key, FlexoLocalization.getCurrentLanguage());
 		handleNewEntry = false;
+	}
+	
+	@Override
+	public BindingModel getBindingModel() 
+	{
+		return getCalc().getBindingModel();
 	}
 }

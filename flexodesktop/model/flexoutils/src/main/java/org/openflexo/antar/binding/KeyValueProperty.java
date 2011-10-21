@@ -32,7 +32,7 @@ import org.openflexo.toolbox.ToolBox;
 import org.openflexo.xmlcode.KeyValueCoder;
 import org.openflexo.xmlcode.KeyValueDecoder;
 
-public class KeyValueProperty extends Observable implements SimplePathElement<Object,Object> 
+public class KeyValueProperty extends Observable implements SimplePathElement<Object> 
 {
 
 	static final Logger logger = Logger.getLogger(BindingValue.class.getPackage().getName());

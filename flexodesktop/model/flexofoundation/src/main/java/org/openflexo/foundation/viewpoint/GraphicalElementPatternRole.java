@@ -1,57 +1,111 @@
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.antar.binding.Bindable;
+import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.BindingFactory;
+import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
-public abstract class GraphicalElementPatternRole extends PatternRole {
 
-	private LabelRepresentation labelRepresentation;
-	private String boundPatternRoleName;
+public abstract class GraphicalElementPatternRole extends PatternRole implements Bindable {
 
+	private boolean readOnlyLabel;
+	private ViewPointDataBinding label;
+
+	
  	public abstract Object getGraphicalRepresentation(); 
 
 	public abstract void setGraphicalRepresentation(Object graphicalRepresentation); 
 	
 	public abstract void _setGraphicalRepresentationNoNotification(Object graphicalRepresentation); 
 
-	public String getBoundPatternRoleName()
+	public static enum GraphicalElementBindingAttribute implements InspectorBindingAttribute
 	{
-		return boundPatternRoleName;
+		label
 	}
 
-	public void setBoundPatternRoleName(String aPatternRoleName) 
-	{
-		boundPatternRoleName = aPatternRoleName;
-	}
-
-	public PatternRole getBoundPatternRole()
-	{
-		return getEditionPattern().getPatternRole(boundPatternRoleName);
-	}
-
-	public void setBoundPatternRole(PatternRole aPatternRole)
-	{
-		boundPatternRoleName = (aPatternRole != null ? aPatternRole.getPatternRoleName() : null);
-	}
-
-	public LabelRepresentation retrieveLabelRepresentation() 
-	{
-		if (getLabelRepresentation() == null) {
-			setLabelRepresentation(new LabelRepresentation());
-		}
-		return getLabelRepresentation();
-	}
-
-	public LabelRepresentation getLabelRepresentation() 
-	{
-		return labelRepresentation;
-	}
-
-	public void setLabelRepresentation(LabelRepresentation aLabelRepresentation) 
-	{
-		aLabelRepresentation.setPatternRole(this);
-		labelRepresentation = aLabelRepresentation;
-	}
-
+	private BindingDefinition LABEL;
 	
+	public BindingDefinition getLabelBindingDefinition()
+	{
+		if (LABEL == null) {
+			LABEL = new BindingDefinition("label", String.class, BindingDefinitionType.GET_SET, false) {
+				@Override
+				public BindingDefinitionType getBindingDefinitionType() {
+					if (getReadOnlyLabel()) return BindingDefinitionType.GET;
+					else return BindingDefinitionType.GET_SET;
+				}
+			};
+		}
+		return LABEL;
+	}
+
+	public ViewPointDataBinding getLabel() 
+	{
+		if (label == null) label = new ViewPointDataBinding(this,GraphicalElementBindingAttribute.label,getLabelBindingDefinition());
+		return label;
+	}
+
+	public void setLabel(ViewPointDataBinding label) 
+	{
+		label.setOwner(this);
+		label.setBindingAttribute(GraphicalElementBindingAttribute.label);
+		label.setBindingDefinition(getLabelBindingDefinition());
+		this.label = label;
+	}
+	
+	public boolean getReadOnlyLabel() 
+	{
+		return readOnlyLabel;
+	}
+
+	public void setReadOnlyLabel(boolean readOnlyLabel) 
+	{
+		this.readOnlyLabel = readOnlyLabel;
+	}
+
+	@Override
+	public BindingFactory getBindingFactory() 
+	{
+		return getEditionPattern().getInspector().getBindingFactory();
+	}
+	
+	@Override
+	public BindingModel getBindingModel() 
+	{
+		return getEditionPattern().getInspector().getBindingModel();
+	}
+	
+	public boolean getIsPrimaryRepresentationRole()
+	{
+		if (getEditionPattern() == null) return false;
+		return (getEditionPattern().getPrimaryRepresentationRole() == this);
+	}
+	
+	public void setIsPrimaryRepresentationRole(boolean isPrimary)
+	{
+		if (getEditionPattern() == null) return;
+		if (isPrimary) {
+			getEditionPattern().setPrimaryRepresentationRole(this);
+		}
+		else {
+			getEditionPattern().setPrimaryRepresentationRole(null);
+		}
+	}
+
+	@Override
+	public boolean getIsPrimaryRole()
+	{
+		return getIsPrimaryRepresentationRole();
+	}
+	
+	@Override
+	public void setIsPrimaryRole(boolean isPrimary)
+	{
+		setIsPrimaryRepresentationRole(isPrimary);
+	}
 
 
 }

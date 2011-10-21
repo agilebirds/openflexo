@@ -28,7 +28,6 @@ import java.util.logging.Logger;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
@@ -39,17 +38,15 @@ import org.openflexo.fge.controller.PaletteElement.PaletteElementGraphicalRepres
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEView;
-import org.openflexo.foundation.ontology.AbstractOntologyObject;
-import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.AddShape;
 import org.openflexo.foundation.view.action.DropSchemeAction;
-import org.openflexo.foundation.viewpoint.ViewPointPalette;
-import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 import org.openflexo.foundation.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
+import org.openflexo.foundation.viewpoint.ViewPointPalette;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 import org.openflexo.localization.FlexoLocalization;
 
 public class ContextualPalette extends DrawingPalette {
@@ -88,9 +85,8 @@ public class ContextualPalette extends DrawingPalette {
 				returned.add(dropScheme);
 			}
 			if (target.getDrawable() instanceof ViewShape) {
-				ViewShape targetShape = (ViewShape)target.getDrawable();
-				AbstractOntologyObject targetObject = targetShape.getLinkedConcept();
-				if (targetObject instanceof OntologyObject && dropScheme.isValidTarget((OntologyObject)targetObject)) {
+				ViewShape targetShape = (ViewShape)target.getDrawable();				
+				if (dropScheme.isValidTarget(targetShape.getEditionPattern())) {
 					returned.add(dropScheme);
 				}
 			}
@@ -106,9 +102,7 @@ public class ContextualPalette extends DrawingPalette {
 				if (dropScheme.isTopTarget() && target instanceof DrawingGraphicalRepresentation) return true;
 				if (target.getDrawable() instanceof ViewShape) {
 					ViewShape targetShape = (ViewShape)target.getDrawable();
-					AbstractOntologyObject targetObject = targetShape.getLinkedConcept();
-					if (targetObject instanceof OntologyObject 
-							&& dropScheme.isValidTarget((OntologyObject)targetObject)) return true;
+					if (dropScheme.isValidTarget(targetShape.getEditionPattern())) return true;
 				}
 			}
 		}

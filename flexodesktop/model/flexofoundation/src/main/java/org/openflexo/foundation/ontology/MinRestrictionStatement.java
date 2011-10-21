@@ -33,14 +33,14 @@ public class MinRestrictionStatement extends ObjectRestrictionStatement {
 
 	private static final Logger logger = Logger.getLogger(MinRestrictionStatement.class.getPackage().getName());
 
-	private OntologyProperty property;
-	private OntologyObject object;
+	private OntologyObjectProperty property;
+	private OntologyClass object;
 	private int minCardinality = 0;
 	
 	public MinRestrictionStatement(OntologyObject subject, Statement s, Restriction r)
 	{
 		super(subject,s,r);
-		property = getOntologyLibrary().getProperty(r.getOnProperty().getURI());
+		property = (OntologyObjectProperty)getOntologyLibrary().getProperty(r.getOnProperty().getURI());
 		
 		String OWL = getFlexoOntology().getOntModel().getNsPrefixURI("owl");
 		Property ON_CLASS = ResourceFactory.createProperty( OWL + "onClass" );
@@ -53,7 +53,7 @@ public class MinRestrictionStatement extends ObjectRestrictionStatement {
 		RDFNode minCardinalityStmtValue = minCardinalityStmt.getObject();
 		
 		if (onClassStmtValue.isResource() && onClassStmtValue.canAs(OntClass.class)) {
-			object = getOntologyLibrary().getOntologyObject(((OntClass)onClassStmtValue.as(OntClass.class)).getURI());
+			object = (OntologyClass)getOntologyLibrary().getOntologyObject(((OntClass)onClassStmtValue.as(OntClass.class)).getURI());
 		}
 		
 		if (minCardinalityStmtValue.isLiteral() && minCardinalityStmtValue.canAs(Literal.class)) {
@@ -80,13 +80,13 @@ public class MinRestrictionStatement extends ObjectRestrictionStatement {
 
 
 	@Override
-	public OntologyObject getObject() 
+	public OntologyClass getObject() 
 	{
 		return object;
 	}
 
 	@Override
-	public OntologyProperty getProperty() 
+	public OntologyObjectProperty getProperty() 
 	{
 		return property;
 	}
@@ -102,5 +102,16 @@ public class MinRestrictionStatement extends ObjectRestrictionStatement {
 	public String getName() {
 		return property.getName()+" min "+minCardinality;
 	}
+
+	@Override
+	public int getCardinality() {
+		return minCardinality;
+	}
+
+	@Override
+	public RestrictionType getRestrictionType() {
+		return RestrictionType.Min;
+	}
+
 
 }

@@ -26,15 +26,11 @@ import javax.naming.InvalidNameException;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.AbstractOntologyObject;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
-import org.openflexo.foundation.viewpoint.LabelRepresentation;
-import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.localization.FlexoLocalization;
 
@@ -43,8 +39,6 @@ public abstract class ViewElement extends ViewObject implements Bindable {
 
     private static final Logger logger = Logger.getLogger(ViewElement.class.getPackage().getName());
 
-    private EditionPatternInstance editionPatternInstance; 
-    
 	/**
      * Constructor invoked during deserialization
      * 
@@ -78,8 +72,8 @@ public abstract class ViewElement extends ViewObject implements Bindable {
     @Override
     public String getName() 
     {
-    	if (labelIsBoundToOntologicConcept()) {
-    		return getOntologicConceptLabelValue();
+    	if (isBoundInsideEditionPattern()) {
+    		return getLabelValue();
     	}
      	return super.getName();
     }
@@ -88,8 +82,8 @@ public abstract class ViewElement extends ViewObject implements Bindable {
 	public void setName(String name)
 	{
 		//logger.info("setName of OEShemaElement with "+name);
-    	if (labelIsBoundToOntologicConcept()) {
-    		setOntologicConceptLabelValue(name);
+    	if (isBoundInsideEditionPattern()) {
+    		setLabelValue(name);
     	}
     	else {
     		try {
@@ -106,69 +100,33 @@ public abstract class ViewElement extends ViewObject implements Bindable {
 
 	//public abstract AddShemaElementAction getEditionAction();
 
-    public boolean labelIsBoundToOntologicConcept()
+	/**
+	 * Return a flag indicating if current graphical element is bound inside
+	 * an edition pattern, ie if there is one edition pattern instance
+	 * where this element plays a role as primary representation
+	 * 
+	 * @return
+	 */
+    public boolean isBoundInsideEditionPattern()
     {
-    	return (getLinkedConcept() != null) && (getPatternRole() != null);
+    	return (getPatternRole() != null);
     }
     
-    protected String getOntologicConceptLabelValue()
+    protected String getLabelValue()
     {
-    	if (labelIsBoundToOntologicConcept()) {
-    		LabelRepresentation lr = getPatternRole().getLabelRepresentation();
-    		if (lr == null) {
-				return null;
-			}
-    		//if (lr.isStaticText()) return lr.getText();
-    		return lr.getDynamicValue(getLinkedConcept());
-    	}
-    	return null;
+    	if (getPatternRole() != null)
+    		return (String)getPatternRole().getLabel().getBindingValue(getEditionPatternInstance());
+     	return null;
     }
     
-    protected void setOntologicConceptLabelValue(String aValue)
+    protected void setLabelValue(String aValue)
     {
-    	if (labelIsBoundToOntologicConcept()) {
-    		LabelRepresentation lr = getPatternRole().getLabelRepresentation();
-       		if (lr == null) {
-				return;
-			}
-    		//if (lr.isStaticText()) return;
-    		lr.setDynamicValue(getLinkedConcept(),aValue);
-    	}
+    	if (getPatternRole() != null && !getPatternRole().getReadOnlyLabel())
+    		getPatternRole().getLabel().setBindingValue(aValue,getEditionPatternInstance());
      }
     
-	public AbstractOntologyObject getLinkedConcept()
-	{
-		if (getEditionPatternInstance() == null) {
-			return null;
-		}
-		if (getEditionPattern() == null) {
-			return null;
-		}
-		if (getPatternRole() == null) {
-			return null;
-		}
-		if (getPatternRole().getBoundPatternRole() == null) {
-			return null;
-		}
-		FlexoModelObject actor = getEditionPatternInstance().getPatternActor(getPatternRole().getBoundPatternRole());
-		if (actor instanceof AbstractOntologyObject) {
-			return (AbstractOntologyObject)actor;
-		} else {
-			return null;
-		}
-	}
-	
-	public String getLinkedConceptURI()
-	{
-		if (getLinkedConcept() != null) {
-			return getLinkedConcept().getURI();
-		}
-		return null;
-	}
-
 	public EditionPattern getEditionPattern() 
 	{
-		//System.out.println("pattern instance = "+getEditionPatternInstance());
 		if (getEditionPatternInstance() != null) {
 			return getEditionPatternInstance().getPattern();
 		}
@@ -187,64 +145,33 @@ public abstract class ViewElement extends ViewObject implements Bindable {
 	
 	public EditionPatternReference getEditionPatternReference() 
 	{
-		return getEditionPatternReference(_getEditionPatternIdentifier(),_getEditionPatternInstanceId());
+		// Default behaviour is to have only one EditionPattern where 
+		// this graphical element plays a representation primitive role 
+		// When many, big pbs may happen !!!!
+		
+		if (getEditionPatternReferences().size() > 0) {
+			EditionPatternReference returned = null;
+			for (EditionPatternReference r : getEditionPatternReferences()) {
+				if (r.getPatternRole() instanceof GraphicalElementPatternRole) {
+					if (((GraphicalElementPatternRole)r.getPatternRole()).getIsPrimaryRepresentationRole()) {
+						if (returned != null) {
+							logger.warning("More than one edition pattern reference where element plays a primary role !!!!");
+						}
+						returned = r;
+					}
+				}
+			}
+			if (returned != null) return returned;
+		}
+		return null;
 	}
 
 	public EditionPatternInstance getEditionPatternInstance() 
 	{
-		if (editionPatternInstance == null) {
-			//System.out.println("_editionPatternIdentifier="+_editionPatternIdentifier);
-    		if (_editionPatternIdentifier != null) {
-    			EditionPatternReference ref = getEditionPatternReference(_editionPatternIdentifier,_editionPatternInstanceId);
-    			//System.out.println("ref="+ref);
-    			if (ref != null) {
-					editionPatternInstance = ref.getEditionPatternInstance();
-				}
-    		}
-    	}
-		return editionPatternInstance;
+		if (getEditionPatternReference() != null) return getEditionPatternReference().getEditionPatternInstance();
+		return null;
 	}
 
-	private String _editionPatternIdentifier;
-	private long _editionPatternInstanceId;
-	
-	// Used while serializing/deserializing
-	public String _getEditionPatternIdentifier() 
-	{
-		if (getEditionPatternInstance() != null) {
-			return getEditionPatternInstance().getPattern().getName();
-		}
-		return _editionPatternIdentifier;
-	}
-
-	// Used while serializing/deserializing
-	public void _setEditionPatternIdentifier(String editionPatternIdentifier)
-	{
-		_editionPatternIdentifier = editionPatternIdentifier;
-	}
-
-	// Used while serializing/deserializing
-	public long _getEditionPatternInstanceId() 
-	{
-		if (getEditionPatternInstance() != null) {
-			return getEditionPatternInstance().getInstanceId();
-		}
-		return _editionPatternInstanceId;
-	}
-
-	// Used while serializing/deserializing
-	public void _setEditionPatternInstanceId(long id)
-	{
-		_editionPatternInstanceId = id;
-	}
-
-	@Override
-	public void registerEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole patternRole)
-	{
-		super.registerEditionPatternReference(editionPatternInstance,patternRole);
-		_editionPatternIdentifier = editionPatternInstance.getPattern().getName();
-		_editionPatternInstanceId = editionPatternInstance.getInstanceId();
-	}
 
     @Override
 	public String getInspectorTitle()
@@ -267,4 +194,5 @@ public abstract class ViewElement extends ViewObject implements Bindable {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 }

@@ -1,5 +1,6 @@
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.foundation.view.View;
 import org.openflexo.localization.FlexoLocalization;
 
 public class ShemaPatternRole extends PatternRole {
@@ -17,8 +18,23 @@ public class ShemaPatternRole extends PatternRole {
 		return FlexoLocalization.localizedForKey("shema");
 	}
 
+	@Override
 	public Class<?> getAccessedClass()
 	{
-		return Object.class;
+		return View.class;
 	}
+	
+	@Override
+	public boolean getIsPrimaryRole()
+	{
+		return false;
+	}
+	
+	@Override
+	public void setIsPrimaryRole(boolean isPrimary)
+	{
+		// Not relevant
+	}
+
+
 }

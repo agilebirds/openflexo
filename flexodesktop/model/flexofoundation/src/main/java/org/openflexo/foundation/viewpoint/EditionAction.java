@@ -19,36 +19,28 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.Hashtable;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.expr.DefaultExpressionParser;
-import org.openflexo.antar.expr.Expression;
-import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.antar.expr.UnresolvedExpressionException;
-import org.openflexo.antar.expr.parser.ParseException;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.view.ViewObject;
-import org.openflexo.foundation.view.ViewShape;
-import org.openflexo.foundation.view.action.DropSchemeAction;
+import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.view.action.LinkSchemeAction;
-import org.openflexo.toolbox.StringUtils;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
 
 public abstract class EditionAction<R extends PatternRole> extends ViewPointObject {
 
 	private static final Logger logger = Logger.getLogger(EditionAction.class.getPackage().getName());
 
-	public static final String CONTAINER = "container";
+	/*public static final String CONTAINER = "container";
 	public static final String CONTAINER_OF_CONTAINER = "container.container";
 	public static final String FROM_TARGET = "fromTarget";
 	public static final String TO_TARGET = "toTarget";
 	public static final String CONTAINER_CONCEPT = "container.concept";
 	public static final String CONTAINER_OF_CONTAINER_CONCEPT = "container.container.concept";
 	public static final String FROM_TARGET_CONCEPT = "fromTarget.concept";
-	public static final String TO_TARGET_CONCEPT = "toTarget.concept";
+	public static final String TO_TARGET_CONCEPT = "toTarget.concept";*/
 	
 
 	public static enum EditionActionType
@@ -68,9 +60,7 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 	
 	private EditionScheme _scheme;
 	private String description;
-	private String conditional;
 	private String patternRole;
-	private Expression condition;
 	
 	public EditionAction()
 	{
@@ -103,27 +93,11 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 	@Override
 	public ViewPoint getCalc() 
 	{
-		return getScheme().getCalc();
+		if (getScheme() != null)
+			return getScheme().getCalc();
+		return null;
 	}
-	
-	public String getConditional() 
-	{
-		return conditional;
-	}
-
-	public void setConditional(String conditional) 
-	{
-		this.conditional = conditional;
-		if (StringUtils.isNotEmpty(conditional)) {
-			DefaultExpressionParser parser = new DefaultExpressionParser();
-			try {
-				condition = parser.parse(conditional);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
+		
 	public String _getPatternRoleName() 
 	{
 		return patternRole;
@@ -134,19 +108,11 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 		this.patternRole = patternRole;
 	}
 
-	public boolean evaluateCondition(final Hashtable<String,Object> parameterValues)
+	public boolean evaluateCondition(EditionSchemeAction action)
 	{
-		if (condition == null) {
-			return true;
-		}
-		try {
-			return condition.evaluateCondition(parameterValues);
-		} catch (TypeMismatchException e) {
-			e.printStackTrace();
-		} catch (UnresolvedExpressionException e) {
-			e.printStackTrace();
-		}
-		return false;
+		if (getConditional().isValid())
+			return (Boolean)getConditional().getBindingValue(action);
+		return true;
 	}
 
 	public EditionPattern getEditionPattern()
@@ -175,7 +141,7 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 		return getScheme().getActions().indexOf(this);
 	}
 
-	protected OntologyObject retrieveOntologyObject(String identifier, EditionSchemeAction action)
+	/*protected OntologyObject retrieveOntologyObject(String identifier, EditionSchemeAction action)
 	{
 		if (identifier == null) {
 			return null;
@@ -205,6 +171,9 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 			ViewShape fromContext = linkSchemeAction.getFromShape();
 			ViewShape toContext = linkSchemeAction.getToShape();
 
+			logger.info("Please reimplement this !");
+			return null;
+			
 			if (identifier.equals(FROM_TARGET) && (fromContext.getLinkedConcept() instanceof OntologyObject)) {
 				return (OntologyObject)fromContext.getLinkedConcept();
 			}
@@ -218,11 +187,15 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 			if (identifier.equals(TO_TARGET_CONCEPT) && (toContext.getLinkedConcept() instanceof OntologyObject)) {
 				return (OntologyObject)linkSchemeAction.getToShape().getLinkedConcept();
 			}
+			
 		}
 		
 		else if (action instanceof DropSchemeAction) {
 			
 			DropSchemeAction dropSchemeAction = (DropSchemeAction)action;
+
+			logger.info("Please reimplement this !");
+			return null;
 
 			if (identifier.equals(CONTAINER) && (dropSchemeAction.getParent() instanceof ViewShape)) {
 				ViewShape container = (ViewShape)dropSchemeAction.getParent();
@@ -245,12 +218,12 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 					&& (((ViewShape)dropSchemeAction.getParent().getParent()).getLinkedConcept() instanceof OntologyObject)) {
 				return (OntologyObject)((ViewShape)dropSchemeAction.getParent().getParent()).getLinkedConcept();
 			}
-}
+		}
 		
 		return null;
-	}
+	}*/
 
-	protected FlexoModelObject retrieveFlexoModelObject(String identifier, EditionSchemeAction action)
+	/*protected FlexoModelObject retrieveFlexoModelObject(String identifier, EditionSchemeAction action)
 	{
 		if (identifier == null) {
 			return null;
@@ -298,9 +271,9 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 		}
 		
 		return null;
-	}
+	}*/
 
-	protected String generateStringForPatternRole (PatternRole patternRole, EditionSchemeAction action)
+	/*protected String generateStringForPatternRole (PatternRole patternRole, EditionSchemeAction action)
 	{
 		if (action.getEditionPatternInstance() != null) {
 			FlexoModelObject object
@@ -311,9 +284,9 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 		}
 		return "???";
 		
-	}
+	}*/
 
-	protected String generateStringFromIdentifier (String identifier, EditionSchemeAction action)
+	/*protected String generateStringFromIdentifier (String identifier, EditionSchemeAction action)
 	{
 		if (identifier == null) {
 			return null;
@@ -334,9 +307,9 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 		}
 		
 		return null;
-	}
+	}*/
 
-	protected Object retrieveObject(String identifier, EditionSchemeAction action)
+	/*protected Object retrieveObject(String identifier, EditionSchemeAction action)
 	{
 		if (identifier == null) {
 			return null;
@@ -367,12 +340,10 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 			if (identifier.equals(TO_TARGET)) {
 				return linkSchemeAction.getToShape();
 			}
-			if (identifier.equals(FROM_TARGET_CONCEPT) && (linkSchemeAction.getFromShape() != null)) {
-				return linkSchemeAction.getFromShape().getLinkedConcept();
-			}
-			if (identifier.equals(TO_TARGET_CONCEPT) && (linkSchemeAction.getToShape() != null)) {
-				return linkSchemeAction.getToShape().getLinkedConcept();
-			}
+			
+			logger.info("Please reimplement this !");
+			return null;
+
 
 		}
 		
@@ -390,21 +361,15 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 				return dropSchemeAction.getParent().getParent();
 			}
 
-			if (identifier.equals(CONTAINER_CONCEPT) 
-					&& (dropSchemeAction.getParent() instanceof ViewShape)) {
-				return ((ViewShape)dropSchemeAction.getParent()).getLinkedConcept();
-			}
+			logger.info("Please reimplement this !");
+			return null;
 
-			if (identifier.equals(CONTAINER_OF_CONTAINER_CONCEPT) 
-					&& (dropSchemeAction.getParent().getParent() instanceof ViewShape)) {
-				return ((ViewShape)dropSchemeAction.getParent().getParent()).getLinkedConcept();
-			}
 		}
 		
 		return null;
-	}
+	}*/
 
-	protected ViewShape retrieveOEShape(String identifier, EditionSchemeAction action)
+	/*protected ViewShape retrieveOEShape(String identifier, EditionSchemeAction action)
 	{
 		if (identifier == null) {
 			return null;
@@ -457,9 +422,9 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 		}
 		
 		return null;
-	}
+	}*/
 
-	protected ViewObject retrieveOEShemaObject(String identifier, EditionSchemeAction action)
+	/*protected ViewObject retrieveOEShemaObject(String identifier, EditionSchemeAction action)
 	{
 		if (identifier == null) {
 			return null;
@@ -510,14 +475,69 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 		}
 		
 		return null;
-	}
+	}*/
 
-	protected String retrieveString(String identifier, EditionSchemeAction action)
+	/*protected String retrieveString(String identifier, EditionSchemeAction action)
 	{
 		Object returned = retrieveObject(identifier, action);
 		if (returned instanceof String) {
 			return (String)returned;
 		}
 		return null;
+	}*/
+	
+	public EditionScheme getEditionScheme()
+	{
+		return _scheme;
 	}
+	
+	@Override
+	public BindingModel getBindingModel() 
+	{
+		return getEditionScheme().getBindingModel();
+	}
+
+	public static enum EditionActionBindingAttribute implements InspectorBindingAttribute
+	{
+		conditional,
+		individualName,
+		className,
+		container,
+		fromShape,
+		toShape,
+		object,
+		subject,
+		father,
+		value,
+		restrictionType,
+		cardinality,
+		target,
+		shemaName
+	}
+
+
+	private ViewPointDataBinding conditional;
+	
+	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
+	
+	public BindingDefinition getConditionalBindingDefinition()
+	{
+		return CONDITIONAL;
+	}
+
+	public ViewPointDataBinding getConditional() 
+	{
+		if (conditional == null) conditional = new ViewPointDataBinding(this,EditionActionBindingAttribute.conditional,getConditionalBindingDefinition());
+		return conditional;
+	}
+
+	public void setConditional(ViewPointDataBinding conditional) 
+	{
+		conditional.setOwner(this);
+		conditional.setBindingAttribute(EditionActionBindingAttribute.conditional);
+		conditional.setBindingDefinition(getConditionalBindingDefinition());
+		this.conditional = conditional;
+	}
+	
+
 }

@@ -39,7 +39,9 @@ public class IndividualPatternRole extends OntologicObjectPatternRole {
 	public OntologyClass getOntologicType()
 	{
 		getCalc().loadWhenUnloaded();
-		return getOntologyLibrary().getClass(_getConceptURI());
+		if (getOntologyLibrary() != null)
+			return getOntologyLibrary().getClass(_getConceptURI());
+		return null;
 	}
 	
 	public void setOntologicType(OntologyClass ontologyClass)

@@ -19,22 +19,24 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.Hashtable;
-
-import org.openflexo.antar.expr.DefaultExpressionParser;
-import org.openflexo.antar.expr.Expression;
-import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.antar.expr.UnresolvedExpressionException;
-import org.openflexo.antar.expr.parser.ParseException;
+import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.EditionPatternReference;
-import org.openflexo.toolbox.StringUtils;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
 
 public class ActionScheme extends EditionScheme {
 
-	private Expression condition;
-	private String conditional;
+	public static enum ActionSchemeBindingAttribute implements InspectorBindingAttribute
+	{
+		conditional
+	}
+
+
+	private ViewPointDataBinding conditional;
 	
 	public ActionScheme() 
 	{
@@ -53,43 +55,44 @@ public class ActionScheme extends EditionScheme {
 		return Inspectors.VPM.ACTION_SCHEME_INSPECTOR;
 	}
 
-	public String getConditional() 
+	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
+	
+	public BindingDefinition getConditionalBindingDefinition()
 	{
+		return CONDITIONAL;
+	}
+
+	public ViewPointDataBinding getConditional() 
+	{
+		if (conditional == null) conditional = new ViewPointDataBinding(this,ActionSchemeBindingAttribute.conditional,getConditionalBindingDefinition());
 		return conditional;
 	}
 
-	public void setConditional(String conditional) 
+	public void setConditional(ViewPointDataBinding conditional) 
 	{
+		conditional.setOwner(this);
+		conditional.setBindingAttribute(ActionSchemeBindingAttribute.conditional);
+		conditional.setBindingDefinition(getConditionalBindingDefinition());
 		this.conditional = conditional;
-		if (StringUtils.isNotEmpty(conditional)) {
-			DefaultExpressionParser parser = new DefaultExpressionParser();
-			try {
-				condition = parser.parse(conditional);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		}
 	}
+	
 	
 	public boolean evaluateCondition(EditionPatternReference editionPatternReference)
 	{
-		return evaluateCondition(editionPatternReference.getEditionPatternInstance().getActors());
+		if (getConditional().isValid())
+			return (Boolean)getConditional().getBindingValue(editionPatternReference);
+		return true;
 	}
-
-	public boolean evaluateCondition(final Hashtable<String,?> parameterValues)
+	
+	@Override
+	public BindingModel getBindingModel() 
 	{
-		if (condition == null) {
-			return true;
-		}
-		try {
-			return condition.evaluateCondition(parameterValues);
-		} catch (TypeMismatchException e) {
-			e.printStackTrace();
-		} catch (UnresolvedExpressionException e) {
-			e.printStackTrace();
-		}
-		return false;
+		return getEditionPattern().getInspector().getBindingModel();
 	}
 
+	@Override
+	protected void appendContextualBindingVariables(BindingModel bindingModel) 
+	{
+	}
 
 }

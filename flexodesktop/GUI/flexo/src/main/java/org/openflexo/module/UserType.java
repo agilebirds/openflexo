@@ -173,7 +173,7 @@ public abstract class UserType extends FlexoObject
 		@Override
 		public String getBusinessName1()
 		{
-			return PRODUCT_NAME + " TOOLSET PRO";
+			return PRODUCT_NAME;
 		}
 
 		@Override
@@ -227,7 +227,7 @@ public abstract class UserType extends FlexoObject
 		@Override
 		public String getBusinessName1()
 		{
-			return PRODUCT_NAME + " TOOLSET";
+			return PRODUCT_NAME;
 		}
 
 		@Override
@@ -279,7 +279,7 @@ public abstract class UserType extends FlexoObject
 		@Override
 		public String getBusinessName1()
 		{
-			return PRODUCT_NAME + " TOOLSET";
+			return PRODUCT_NAME;
 		}
 
 		@Override
@@ -334,7 +334,7 @@ public abstract class UserType extends FlexoObject
 		@Override
 		public String getBusinessName1()
 		{
-			return PRODUCT_NAME + " TOOLSET PRO";
+			return PRODUCT_NAME;
 		}
 
 		@Override

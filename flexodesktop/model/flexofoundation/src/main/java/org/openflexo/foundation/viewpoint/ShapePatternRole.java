@@ -1,5 +1,6 @@
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.localization.FlexoLocalization;
 
 public class ShapePatternRole extends GraphicalElementPatternRole {
@@ -56,9 +57,10 @@ public class ShapePatternRole extends GraphicalElementPatternRole {
 		}
 	}
 
+	@Override
 	public Class<?> getAccessedClass()
 	{
-		return Object.class;
+		return ViewShape.class;
 	}
 
 }

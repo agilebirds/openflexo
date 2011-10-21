@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.viewpoint.inspector;
+package org.openflexo.foundation.viewpoint.binding;
 
 import java.util.logging.Logger;
 
@@ -25,57 +25,58 @@ import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingFactory;
-import org.openflexo.foundation.viewpoint.inspector.InspectorEntry.InspectorBindingAttribute;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
+import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
 
-public class InspectorDataBinding implements StringConvertable<InspectorDataBinding>
+public class ViewPointDataBinding implements StringConvertable<ViewPointDataBinding>
 {
 
-	private static final Logger logger = Logger.getLogger(InspectorDataBinding.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ViewPointDataBinding.class.getPackage().getName());
 
-	public static InspectorDataBinding.DataBindingConverter CONVERTER = new DataBindingConverter();
+	public static ViewPointDataBinding.DataBindingConverter CONVERTER = new DataBindingConverter();
 
-	public static class DataBindingConverter extends Converter<InspectorDataBinding>
+	public static class DataBindingConverter extends Converter<ViewPointDataBinding>
 	{
 		public DataBindingConverter() 
 		{
-			super(InspectorDataBinding.class);
+			super(ViewPointDataBinding.class);
 		}
 
 		@Override
-		public InspectorDataBinding convertFromString(String value) 
+		public ViewPointDataBinding convertFromString(String value) 
 		{
-			return new InspectorDataBinding(value);
+			return new ViewPointDataBinding(value);
 		}
 
 		@Override
-		public String convertToString(InspectorDataBinding value) 
+		public String convertToString(ViewPointDataBinding value) 
 		{
 			return value.toString();
 		};
 	}
 
 	@Override
-	public Converter<? extends InspectorDataBinding> getConverter() {
+	public Converter<? extends ViewPointDataBinding> getConverter() {
 		return CONVERTER;
 	}
 
-	private InspectorEntry owner;
+	private ViewPointObject owner;
 	private InspectorBindingAttribute bindingAttribute;
 	private String unparsedBinding;
 	private BindingDefinition bindingDefinition;
 	private AbstractBinding binding;
 
-	public InspectorDataBinding(InspectorEntry owner, InspectorBindingAttribute attribute, BindingDefinition df) 
+	public ViewPointDataBinding(ViewPointObject owner, InspectorBindingAttribute attribute, BindingDefinition df) 
 	{
 		setOwner(owner);
 		setBindingAttribute(attribute);
 		setBindingDefinition(df);
 	}
 
-	public InspectorDataBinding(String unparsed) 
+	public ViewPointDataBinding(String unparsed) 
 	{
 		unparsedBinding = unparsed;
 	}
@@ -89,7 +90,9 @@ public class InspectorDataBinding implements StringConvertable<InspectorDataBind
 
 	public void setBindingValue(Object value, BindingEvaluationContext context)
 	{
-		if (getBinding() != null && getBinding().isSettable()) getBinding().setBindingValue(value,context);
+ 		if (getBinding() != null && getBinding().isSettable()) {
+			getBinding().setBindingValue(value,context);
+		}
 	}
 
 	@Override
@@ -176,11 +179,11 @@ public class InspectorDataBinding implements StringConvertable<InspectorDataBind
 		this.unparsedBinding = unparsedBinding;
 	}
 
-	public InspectorEntry getOwner() {
+	public ViewPointObject getOwner() {
 		return owner;
 	}
 
-	public void setOwner(InspectorEntry owner)
+	public void setOwner(ViewPointObject owner)
 	{
 		this.owner = owner;
 	}
@@ -309,7 +312,7 @@ public class InspectorDataBinding implements StringConvertable<InspectorDataBind
 	@Override
 	public boolean equals(Object obj)
 	{
-		if (obj instanceof InspectorDataBinding) {
+		if (obj instanceof ViewPointDataBinding) {
 			if (toString() == null) return false;
  			return toString().equals(obj.toString());
 		}

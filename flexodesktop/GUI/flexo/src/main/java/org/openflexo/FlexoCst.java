@@ -117,13 +117,13 @@ public class FlexoCst extends ColorCst
 
 	public static Color WELCOME_BG_COLOR = Color.WHITE;
 
-	public static final Color DARK_BLUE_FLEXO_COLOR = new Color(2,67,123);
+    public static final Color DARK_BLUE_FLEXO_COLOR = new Color(245,255,246); //new Color(2,67,123);
+
+    public static final Color WELCOME_FLEXO_COLOR = new Color(62,80,100);
+
+    public static final Color WELCOME_FLEXO_BG_LIST_COLOR = ToolBox.getPLATFORM()==ToolBox.WINDOWS?Color.WHITE:Color.WHITE;
 
 	public static final Color OPEN_BLUE_COLOR = new Color(65, 91, 116);
-
-	public static final Color WELCOME_FLEXO_COLOR = OPEN_BLUE_COLOR;
-
-	public static final Color WELCOME_FLEXO_BG_LIST_COLOR = ToolBox.getPLATFORM()==ToolBox.WINDOWS?Color.WHITE:new Color(254,255,216);
 
 
 	public static final int MINIMUM_BROWSER_VIEW_WIDTH = 200;

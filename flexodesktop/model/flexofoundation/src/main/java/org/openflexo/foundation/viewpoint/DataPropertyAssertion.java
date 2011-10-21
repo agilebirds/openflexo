@@ -19,14 +19,20 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.EditionAction.EditionActionBindingAttribute;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 
 public class DataPropertyAssertion extends AbstractAssertion {
 
 	private String dataPropertyURI;
-	private String value;
 
 	public String _getDataPropertyURI() 
 	{
@@ -54,27 +60,46 @@ public class DataPropertyAssertion extends AbstractAssertion {
 		_setDataPropertyURI(p != null ? p.getURI() : null);
 	}
 	
-	public String _getValue()
+	public Object getValue(EditionSchemeAction action)
 	{
-		return value;
-	}
-	
-	public void _setValue(String aValue)
-	{
-		value = aValue;
+		return getValue().getBindingValue(action);
 	}
 
-	public EditionPatternParameter getValueParameter()
+	@Override
+	public BindingModel getBindingModel() 
 	{
-		return getScheme().getParameter(value);
+		return getEditionScheme().getBindingModel();
 	}
+
+	private ViewPointDataBinding value;
 	
-	public void setValueParameter(EditionPatternParameter param)
+	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, BindingDefinitionType.GET, false) {
+		@Override
+		public java.lang.reflect.Type getType() {
+			if (getOntologyProperty() instanceof OntologyDataProperty) return ((OntologyDataProperty)getOntologyProperty()).getDataType().getAccessedType();
+			return Object.class;
+		};
+	};
+	
+	public BindingDefinition getValueBindingDefinition()
 	{
-		if (param != null) {
-			value = param.getName();
-		}
+		return VALUE;
 	}
+
+	public ViewPointDataBinding getValue() 
+	{
+		if (value == null) value = new ViewPointDataBinding(this,EditionActionBindingAttribute.value,getValueBindingDefinition());
+		return value;
+	}
+
+	public void setValue(ViewPointDataBinding value) 
+	{
+		value.setOwner(this);
+		value.setBindingAttribute(EditionActionBindingAttribute.value);
+		value.setBindingDefinition(getValueBindingDefinition());
+		this.value = value;
+	}
+
 	
 
 }

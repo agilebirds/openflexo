@@ -26,5 +26,5 @@
 				    // Must be like x.x.x or x.x or x.xalpha or x.xbeta or x.x.xRCxx or x.x.xalpha x.x.xbeta
 				    // This field must be non-final because it will be generated during the build procedure.
 				    // If you declare this field final, then the compiler will copy it's value directly and you will not see the value of the build
-				    public static String BUILD_ID = "Dev";
+				    public static String BUILD_ID = "dev";
 				}

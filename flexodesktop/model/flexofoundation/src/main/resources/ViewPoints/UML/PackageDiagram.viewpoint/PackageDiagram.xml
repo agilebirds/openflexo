@@ -9,18 +9,18 @@ A package can have one or more profile applications to indicate which profiles h
 Package specializes TemplateableElement and PackageableElement specializes ParameterableElement to specify that a package can be used as a template and a PackageableElement as a template parameter.</description>
     <DropScheme id="3" target="top" name="drop" skipConfirmationPanel="false">
       <description>Drop a package at top level</description>
-      <Parameter id="4" name="name" label="package_name" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="false" />
-      <Parameter id="5" name="uri" label="uri" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="name" />
-      <AddIndividual id="6" individualName="uri" patternRole="package" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package">
-        <DataPropertyAssertion id="7" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#name" value="name" />
+      <TextFieldParameter id="4" name="name" label="package_name" defaultValue="&quot;Package&quot;" usePaletteLabelAsDefaultValue="false" />
+      <URIParameter id="5" base="name" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" />
+      <AddIndividual id="6" individualName="parameters.uri" patternRole="package">
+        <DataPropertyAssertion id="7" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#name" value="parameters.name" />
         <description>Individual of type Package is added to ontology</description>
       </AddIndividual>
-      <AddShape id="8" container="container" patternRole="shape">
+      <AddShape id="8" container="topLevel" patternRole="shape">
         <description>Add the shape</description>
       </AddShape>
     </DropScheme>
-    <ShapePatternRole id="9" patternRole="shape" boundPatternRole="package">
-      <ShapeGraphicalRepresentation id="10" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="83.0" y="31.50491803278689" width="123.61395646606914" height="66.49508196721311" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="package" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+    <ContainedShapePatternRole id="9" patternRole="shape" label="package.name" readOnlyLabel="false">
+      <ShapeGraphicalRepresentation id="10" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="108.0" y="33.50491803278689" width="123.61395646606914" height="66.49508196721311" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="package.name" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
         <ForegroundStyle id="11" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
         <ImageBackgroundStyle id="12" imageFile="Package.gif" scaleX="0.3349971719947673" scaleY="0.2805699661063844" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
         <Border id="13" top="5" bottom="5" left="5" right="5" />
@@ -28,56 +28,64 @@ Package specializes TemplateableElement and PackageableElement specializes Param
         <RectangleShape id="15" isRounded="false" arcSize="30.0" />
         <TextStyle id="16" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ShapeGraphicalRepresentation>
-      <Label id="17" propertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#name" type="UseOntologicProperty" />
-    </ShapePatternRole>
-    <IndividualPatternRole id="18" ontologicType="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" patternRole="package" />
-    <Inspector id="19" />
+    </ContainedShapePatternRole>
+    <ContainedIndividualPatternRole id="17" ontologicType="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" patternRole="package" />
+    <PrimaryConceptIndividualPatternRole idref="17" />
+    <PrimaryRepresentationShapePatternRole idref="9" />
+    <Inspector id="18" inspectorTitle="Package">
+      <TextField id="19" label="uri" name="uri" readOnly="false" data="package.uriName" />
+      <TextField id="20" label="package" name="package" readOnly="false" data="package.name" />
+    </Inspector>
   </EditionPattern>
-  <EditionPattern id="20" name="ImportPackage">
+  <EditionPattern id="21" name="ImportPackage">
     <description>Allows to define dependancies between packages
 A package import is a relationship that allows the use of unqualified names to refer to package members from other namespaces.
 One package depends on another if changes in the other could possibly force changes in the first.</description>
-    <LinkScheme id="21" fromTarget="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" toTarget="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" name="ImportPackage" skipConfirmationPanel="false">
-      <Parameter id="22" name="uri" label="uri" widget="TEXT_FIELD" defaultValue="" usePaletteLabelAsDefaultValue="false" uniqueURI="true" base="&quot;PackageImport&quot;" conditional="" />
-      <DeclarePatternRole id="23" object="fromTarget.concept" patternRole="package" />
-      <DeclarePatternRole id="24" object="toTarget.concept" patternRole="importedPackage" />
-      <AddIndividual id="25" individualName="uri" patternRole="packageImport" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#PackageImport">
-        <ObjectPropertyAssertion id="26" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#importedPackage" object="importedPackage" />
+    <LinkScheme id="22" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/UML/PackageDiagram.owl#Package" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/UML/PackageDiagram.owl#Package" name="ImportPackage" skipConfirmationPanel="false">
+      <URIParameter id="23" base="&quot;PackageImport&quot;" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" />
+      <DeclarePatternRole id="24" object="fromTarget.package" patternRole="package" />
+      <DeclarePatternRole id="25" object="toTarget.package" patternRole="importedPackage" />
+      <AddIndividual id="26" individualName="parameters.uri" patternRole="packageImport">
+        <ObjectPropertyAssertion id="27" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#importedPackage" object="importedPackage" />
       </AddIndividual>
-      <AddObjectPropertyStatement id="27" object="packageImport" objectPropertyURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#packageImport" patternRole="import" subject="package" />
-      <AddConnector id="28" fromShape="fromTarget" toShape="toTarget" patternRole="connector" />
+      <AddObjectPropertyStatement id="28" object="packageImport" patternRole="import" subject="package" />
+      <AddConnector id="29" fromShape="fromTarget.shape" toShape="toTarget.shape" patternRole="connector" />
     </LinkScheme>
-    <IndividualPatternRole id="29" ontologicType="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" patternRole="package" />
-    <IndividualPatternRole id="30" ontologicType="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" patternRole="importedPackage" />
-    <IndividualPatternRole id="31" ontologicType="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#PackageImport" patternRole="packageImport" />
-    <ObjectPropertyStatementPatternRole id="32" objectProperty="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#packageImport" patternRole="import" />
-    <ConnectorPatternRole id="33" patternRole="connector" boundPatternRole="import">
-      <ConnectorGraphicalRepresentation id="34" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" text="" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
-        <ForegroundStyle id="35" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="BIG_DASHES" useTransparency="false" transparencyLevel="0.5" />
-        <StartShapeGraphicalRepresentation id="36" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="155.0" y="54.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
-          <ForegroundStyle id="37" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-          <ColorBackgroundStyle id="38" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-          <Border id="39" top="5" bottom="5" left="5" right="5" />
-          <ShadowStyle id="40" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-          <CircleShape id="41" />
-          <TextStyle id="42" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    <ContainedIndividualPatternRole id="30" ontologicType="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" patternRole="package" />
+    <ContainedIndividualPatternRole id="31" ontologicType="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" patternRole="importedPackage" />
+    <ContainedIndividualPatternRole id="32" ontologicType="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#PackageImport" patternRole="packageImport" />
+    <ContainedObjectPropertyStatementPatternRole id="33" objectProperty="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#packageImport" patternRole="import" />
+    <ContainedConnectorPatternRole id="34" patternRole="connector" label="&quot;import&quot;" readOnlyLabel="true">
+      <ConnectorGraphicalRepresentation id="35" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" text="&quot;import&quot;" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="-7.0" absoluteTextY="-11.0" textAlignment="CENTER">
+        <ForegroundStyle id="36" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="BIG_DASHES" useTransparency="false" transparencyLevel="0.5" />
+        <StartShapeGraphicalRepresentation id="37" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="155.0" y="54.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+          <ForegroundStyle id="38" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="39" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="40" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="41" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <CircleShape id="42" />
+          <TextStyle id="43" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
         </StartShapeGraphicalRepresentation>
-        <EndShapeGraphicalRepresentation id="43" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="376.0" y="54.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
-          <ForegroundStyle id="44" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-          <ColorBackgroundStyle id="45" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-          <Border id="46" top="5" bottom="5" left="5" right="5" />
-          <ShadowStyle id="47" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-          <CircleShape id="48" />
-          <TextStyle id="49" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        <EndShapeGraphicalRepresentation id="44" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="376.0" y="54.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+          <ForegroundStyle id="45" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="46" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="47" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="48" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <CircleShape id="49" />
+          <TextStyle id="50" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
         </EndShapeGraphicalRepresentation>
-        <LineConnector id="50" lineConnectorType="MINIMAL_LENGTH" cp1RelativeToStartObject="0.9965753021614381,0.5584206237836987" cp2RelativeToEndObject="0.0017271208775611058,0.5415227399268701" />
-        <TextStyle id="51" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        <LineConnector id="51" lineConnectorType="MINIMAL_LENGTH" cp1RelativeToStartObject="0.9965753021614381,0.5584206237836987" cp2RelativeToEndObject="0.0017271208775611058,0.5415227399268701" />
+        <TextStyle id="52" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ConnectorGraphicalRepresentation>
-      <ArtifactFromShapeGraphicalRepresentation idref="36" />
-      <ArtifactToShapeGraphicalRepresentation idref="43" />
-      <Label id="52" text="" type="StaticValue" />
-    </ConnectorPatternRole>
-    <Inspector id="53" />
+      <ArtifactFromShapeGraphicalRepresentation idref="37" />
+      <ArtifactToShapeGraphicalRepresentation idref="44" />
+    </ContainedConnectorPatternRole>
+    <PrimaryConceptIndividualPatternRole idref="30" />
+    <PrimaryRepresentationConnectorPatternRole idref="34" />
+    <Inspector id="53" inspectorTitle="Package import">
+      <TextField id="54" label="source_package" name="source" readOnly="true" data="package.name" />
+      <TextField id="55" label="imported_package" name="imported" readOnly="true" data="importedPackage.name" />
+    </Inspector>
   </EditionPattern>
 </ViewPoint>
 

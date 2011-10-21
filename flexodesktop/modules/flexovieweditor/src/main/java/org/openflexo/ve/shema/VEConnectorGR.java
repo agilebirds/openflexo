@@ -104,4 +104,13 @@ public class VEConnectorGR extends ConnectorGraphicalRepresentation<ViewConnecto
 		if (getOEConnector() != null)
 			getOEConnector().setName(text);
 	}
+	
+	/**
+	 * We dont want URI to be renamed all the time: we decide here to disable continuous text editing
+	 */
+	@Override
+	public boolean getContinuousTextEditing() {
+		return false;
+	}
+
 }

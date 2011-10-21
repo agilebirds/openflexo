@@ -28,14 +28,14 @@ public class OnlyRestrictionStatement extends ObjectRestrictionStatement {
 
 	private static final Logger logger = Logger.getLogger(OnlyRestrictionStatement.class.getPackage().getName());
 
-	private OntologyProperty property;
-	private OntologyObject object;
+	private OntologyObjectProperty property;
+	private OntologyClass object;
 	
 	public OnlyRestrictionStatement(OntologyObject subject, Statement s, AllValuesFromRestriction r)
 	{
 		super(subject,s,r);
-		property = getOntologyLibrary().getProperty(r.getOnProperty().getURI());
-		object = getOntologyLibrary().getOntologyObject(r.getAllValuesFrom().getURI());
+		property = (OntologyObjectProperty)getOntologyLibrary().getProperty(r.getOnProperty().getURI());
+		object = (OntologyClass)getOntologyLibrary().getOntologyObject(r.getAllValuesFrom().getURI());
 	}
 
 	@Override
@@ -52,13 +52,13 @@ public class OnlyRestrictionStatement extends ObjectRestrictionStatement {
 
 
 	@Override
-	public OntologyObject getObject() 
+	public OntologyClass getObject() 
 	{
 		return object;
 	}
 
 	@Override
-	public OntologyProperty getProperty() 
+	public OntologyObjectProperty getProperty() 
 	{
 		return property;
 	}
@@ -73,5 +73,16 @@ public class OnlyRestrictionStatement extends ObjectRestrictionStatement {
 	public String getName() {
 		return property.getName()+" only";
 	}
+
+	@Override
+	public int getCardinality() {
+		return -1;
+	}
+
+	@Override
+	public RestrictionType getRestrictionType() {
+		return RestrictionType.Only;
+	}
+
 
 }
