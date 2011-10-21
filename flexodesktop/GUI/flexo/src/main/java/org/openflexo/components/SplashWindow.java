@@ -28,8 +28,9 @@ import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.BorderFactory;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JWindow;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
@@ -39,21 +40,21 @@ import org.openflexo.module.UserType;
 import org.openflexo.toolbox.ToolBox;
 
 @SuppressWarnings("serial")
-public class SplashWindow extends JWindow {
+public class SplashWindow extends JDialog {
 
 	private JLabel splash;
 
 	public SplashWindow(Frame f, UserType userType, int waitTime) {
 		super(f);
-
+		setUndecorated(true);
 		Dimension imageDim = new Dimension(IconLibrary.SPLASH_IMAGE.getIconWidth(), IconLibrary.SPLASH_IMAGE.getIconHeight());
 
 		//cree un label avec notre image
 		splash = new JLabel(IconLibrary.SPLASH_IMAGE);
+		splash.setBorder(BorderFactory.createLineBorder(FlexoCst.UNDECORATED_DIALOG_BORDER_COLOR));
 
 		//ajoute le label au panel
 		getContentPane().setLayout(null);
-
 		JLabel flexoLabel = new JLabel(IconLibrary.OPENFLEXO_TEXT_ICON, SwingConstants.RIGHT);
 		flexoLabel.setForeground(FlexoCst.WELCOME_FLEXO_COLOR);
 		flexoLabel.setBackground(Color.RED);

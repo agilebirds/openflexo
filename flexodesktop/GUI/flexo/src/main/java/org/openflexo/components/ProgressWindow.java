@@ -28,6 +28,7 @@ import java.awt.Toolkit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -148,7 +149,7 @@ public class ProgressWindow extends JDialog implements FlexoProgress
 		label.setFont(FlexoCst.BIG_FONT);
 		mainProgressBarLabel = new ProgressBarLabel("", SwingConstants.LEFT);
 		mainProgressBarLabel.setFont(FlexoCst.NORMAL_FONT);
-		
+
 		secondaryProgressBarLabel = new ProgressBarLabel("", SwingConstants.LEFT);
 		secondaryProgressBarLabel.setFont(FlexoCst.NORMAL_FONT);
 		secondaryProgressBarLabel.setForeground(Color.DARK_GRAY);
@@ -176,6 +177,7 @@ public class ProgressWindow extends JDialog implements FlexoProgress
 		mainPane.setLayout(null);
 		mainPane.setOpaque(false);
 		//panel.add(flexoLogo);
+		mainPane.setBorder(BorderFactory.createLineBorder(FlexoCst.UNDECORATED_DIALOG_BORDER_COLOR));
 		mainPane.add(label);
 		mainPane.add(mainProgressBarLabel);
 		mainPane.add(mainProgressBar);
@@ -187,9 +189,9 @@ public class ProgressWindow extends JDialog implements FlexoProgress
 		mainProgressBar.setBounds(25, /*165*/220, 560, 15);
 		secondaryProgressBarLabel.setBounds(25, /*200*/245, 560, 15);
 		secondaryProgressBar.setBounds(25, /*215*/260, 560, 15);
-		mainPane.setPreferredSize(new Dimension(610, 292));
+		mainPane.setPreferredSize(new Dimension(600, 300));
 		getContentPane().add(mainPane);
-		setSize(610, 292);
+		setSize(600, 300);
 		Dimension dim = null;
 		if (getActiveModuleFrame()==null || !getActiveModuleFrame().isVisible()) {
 			dim = Toolkit.getDefaultToolkit().getScreenSize();

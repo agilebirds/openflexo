@@ -20,13 +20,14 @@
 package org.openflexo.components;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.components.MultiModuleModeWelcomePanel.ModuleSelectionListener;
@@ -51,11 +52,14 @@ public class AboutDialog extends FlexoDialog implements ModuleSelectionListener
 	{
 		super(FlexoFrame.getActiveFrame(), FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, true);
 		setUndecorated(true);
-		getContentPane().setBackground(Color.WHITE);
+		getContentPane().setBackground(FlexoCst.ABOUT_DIALOG_BACKGROUND_COLOR);
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(welcomePanel = ModuleLoader.getWelcomePanel(),BorderLayout.CENTER);
 		if (welcomePanel instanceof MultiModuleModeWelcomePanel) {
 			((MultiModuleModeWelcomePanel)welcomePanel).addToModuleSelectionListener(this);
+		}
+		if (getContentPane() instanceof JComponent) {
+			((JComponent) getContentPane()).setBorder(BorderFactory.createLineBorder(FlexoCst.UNDECORATED_DIALOG_BORDER_COLOR));
 		}
 		addButtons();
 		pack();
