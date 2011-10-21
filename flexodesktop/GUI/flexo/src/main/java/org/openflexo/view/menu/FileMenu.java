@@ -322,7 +322,7 @@ public class FileMenu extends FlexoMenu
 		public SaveAsProjectItem()
 		{
 			super(new SaveAsProjectAction(), "save_project_as", null, getController(), true);
-			setIcon(IconLibrary.SAVE_AS_ICON);
+			setIcon(IconLibrary.SAVE_ICON);
 		}
 
 	}

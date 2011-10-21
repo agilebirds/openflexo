@@ -68,24 +68,24 @@ public class IconLibrary {
 
 
 	// Actions icons
-	public static final ImageIcon UNDO_ICON = new ImageIconResource("Icons/Actions/Undo.gif");
-	public static final ImageIcon REDO_ICON = new ImageIconResource("Icons/Actions/Redo.gif");
-	public static final ImageIcon COPY_ICON = new ImageIconResource("Icons/Actions/Copy.gif");
-	public static final ImageIcon PASTE_ICON = new ImageIconResource("Icons/Actions/Paste.gif");
-	public static final ImageIcon CUT_ICON = new ImageIconResource("Icons/Actions/Cut.gif");
-	public static final ImageIcon DELETE_ICON = new ImageIconResource("Icons/Actions/Delete.gif");
-	public static final ImageIcon HELP_ICON = new ImageIconResource("Icons/Actions/Help.gif");
-	public static final ImageIcon IMPORT_ICON = new ImageIconResource("Icons/Actions/Import.gif");
-	public static final ImageIcon EXPORT_ICON = new ImageIconResource("Icons/Actions/Export.gif");
-	public static final ImageIcon PRINT_ICON = new ImageIconResource("Icons/Actions/Print.gif");
-	public static final ImageIcon SAVE_ICON = new ImageIconResource("Icons/Actions/Save.gif");
-	public static final ImageIcon SAVE_DISABLED_ICON = new ImageIconResource("Icons/Actions/Save-disabled.gif");
-	public static final ImageIcon SAVE_ALL_ICON = new ImageIconResource("Icons/Actions/SaveAll.gif");
-	public static final ImageIcon SAVE_AS_ICON = new ImageIconResource("Icons/Actions/SaveAs.gif");
-	public static final ImageIcon INFO_ICON = new ImageIconResource("Icons/Actions/Info.gif");
-	public static final ImageIcon INSPECT_ICON = new ImageIconResource("Icons/Actions/Inspect.gif");
-	public static final ImageIcon REFRESH_ICON = new ImageIconResource("Icons/Actions/Refresh.gif");
-	public static final ImageIcon REFRESH_DISABLED_ICON = new ImageIconResource("Icons/Actions/Refresh-disabled.gif");
+	public static final ImageIcon UNDO_ICON = new ImageIconResource("Icons/Actions/Undo.png");
+	public static final ImageIcon REDO_ICON = new ImageIconResource("Icons/Actions/Redo.png");
+	public static final ImageIcon COPY_ICON = new ImageIconResource("Icons/Actions/Copy.png");
+	public static final ImageIcon PASTE_ICON = new ImageIconResource("Icons/Actions/Paste.png");
+	public static final ImageIcon CUT_ICON = new ImageIconResource("Icons/Actions/Cut.png");
+	public static final ImageIcon DELETE_ICON = new ImageIconResource("Icons/Actions/Delete.png");
+	public static final ImageIcon HELP_ICON = new ImageIconResource("Icons/Actions/Help.png");
+	public static final ImageIcon IMPORT_ICON = new ImageIconResource("Icons/Actions/Import.png");
+	public static final ImageIcon EXPORT_ICON = new ImageIconResource("Icons/Actions/Export.png");
+	public static final ImageIcon PRINT_ICON = new ImageIconResource("Icons/Actions/Print.png");
+	public static final ImageIcon SAVE_ICON = new ImageIconResource("Icons/Actions/Save.png");
+	public static final ImageIcon SAVE_DISABLED_ICON = new ImageIconResource("Icons/Actions/Save-disabled.png");
+	//public static final ImageIcon SAVE_ALL_ICON = new ImageIconResource("Icons/Actions/SaveAll.gif");
+	//public static final ImageIcon SAVE_AS_ICON = new ImageIconResource("Icons/Actions/SaveAs.gif");
+	public static final ImageIcon INFO_ICON = new ImageIconResource("Icons/Actions/Info.png");
+	public static final ImageIcon INSPECT_ICON = new ImageIconResource("Icons/Actions/Inspect.png");
+	public static final ImageIcon REFRESH_ICON = new ImageIconResource("Icons/Actions/Refresh.png");
+	public static final ImageIcon REFRESH_DISABLED_ICON = new ImageIconResource("Icons/Actions/Refresh-disabled.png");
 	public static final ImageIcon TIME_TRAVEL_ICON = new ImageIconResource("Icons/Actions/AutoSaveRestore.gif");
 
 
@@ -110,14 +110,14 @@ public class IconLibrary {
 	public static final ImageIcon BROWSER_OPTIONS_DISABLED_ICON = new ImageIconResource("Icons/GUI/Browser/BrowserOptionsDisabled.gif");
 	public static final ImageIcon BROWSER_OPTIONS_SELECTED_ICON = new ImageIconResource("Icons/GUI/Browser/BrowserOptionsSelected.gif");
 
-	public static final Icon TOGGLE_ARROW_BOTTOM_ICON = new ImageIconResource("Icons/GUI/Controls/toggleArrowBottom.gif");
-	public static final Icon TOGGLE_ARROW_BOTTOM_SELECTED_ICON = new ImageIconResource("Icons/GUI/Controls/toggleArrowBottomSelected.gif");
-	public static final Icon TOGGLE_ARROW_TOP_ICON = new ImageIconResource("Icons/GUI/Controls/toggleArrowTop.gif");
-	public static final Icon TOGGLE_ARROW_TOP_SELECTED_ICON = new ImageIconResource("Icons/GUI/Controls/toggleArrowTopSelected.gif");
-	public static final Icon TOGGLE_ARROW_LEFT_ICON = new ImageIconResource("Icons/GUI/Controls/toggleArrowLeft.gif");
-	public static final Icon TOGGLE_ARROW_LEFT_SELECTED_ICON = new ImageIconResource("Icons/GUI/Controls/toggleArrowLeftSelected.gif");
-	public static final Icon TOGGLE_ARROW_RIGHT_ICON = new ImageIconResource("Icons/GUI/Controls/toggleArrowRight.gif");
-	public static final Icon TOGGLE_ARROW_RIGHT_SELECTED_ICON = new ImageIconResource("Icons/GUI/Controls/toggleArrowRightSelected.gif");
+	public static final Icon TOGGLE_ARROW_BOTTOM_ICON = new ImageIconResource("Icons/GUI/Controls/toggleArrowBottom.png");
+	public static final Icon TOGGLE_ARROW_BOTTOM_SELECTED_ICON = new ImageIconResource("Icons/GUI/Controls/toggleArrowBottomSelected.png");
+	public static final Icon TOGGLE_ARROW_TOP_ICON = new ImageIconResource("Icons/GUI/Controls/toggleArrowTop.png");
+	public static final Icon TOGGLE_ARROW_TOP_SELECTED_ICON = new ImageIconResource("Icons/GUI/Controls/toggleArrowTopSelected.png");
+	public static final Icon TOGGLE_ARROW_LEFT_ICON = new ImageIconResource("Icons/GUI/Controls/toggleArrowLeft.png");
+	public static final Icon TOGGLE_ARROW_LEFT_SELECTED_ICON = new ImageIconResource("Icons/GUI/Controls/toggleArrowLeftSelected.png");
+	public static final Icon TOGGLE_ARROW_RIGHT_ICON = new ImageIconResource("Icons/GUI/Controls/toggleArrowRight.png");
+	public static final Icon TOGGLE_ARROW_RIGHT_SELECTED_ICON = new ImageIconResource("Icons/GUI/Controls/toggleArrowRightSelected.png");
 
 	public static final Icon NAVIGATION_BACKWARD_ICON = new ImageIconResource("Icons/GUI/Navigation/MenuNAV_Fleche_01.gif");
 	public static final Icon NAVIGATION_FORWARD_ICON = new ImageIconResource("Icons/GUI/Navigation/MenuNAV_Fleche_03.gif");
