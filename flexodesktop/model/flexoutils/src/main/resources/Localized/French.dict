@@ -1,5 +1,5 @@
 #French
-#Mon Oct 17 12:27:41 CEST 2011
+#Fri Oct 21 16:31:30 CEST 2011
 =
 \ =\ 
 \ into\ =\ dans 
@@ -2613,7 +2613,7 @@ go_to_section=Voir la section
 go_to_wo=Voir l'\u00E9cran
 gradient_direction=Direction du gradient
 graph_type=Type de graphe
-graphical_connector_only=graphical_connector_only
+graphical_connector_only=Dessiner un connecteur graphique sans s\u00E9mantique
 greater_than_operator=Op\u00E9rateur 'plus grand que'
 greater_than_or_equals_operator=Op\u00E9rateur 'plus grand ou \u00E9gal'
 gridHeight=gridHeight

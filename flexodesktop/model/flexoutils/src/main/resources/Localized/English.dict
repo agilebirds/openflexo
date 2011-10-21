@@ -1,5 +1,5 @@
 #English
-#Mon Oct 17 12:27:41 CEST 2011
+#Fri Oct 21 16:31:30 CEST 2011
 =
 \ =\ 
 \ into\ =\ into 
@@ -2616,7 +2616,7 @@ go_to_section=Go to section
 go_to_wo=Go to Screen
 gradient_direction=Gradient direction
 graph_type=Graph type
-graphical_connector_only=graphical_connector_only
+graphical_connector_only=Draw a graphical connector without semantic
 greater_than_operator='greater than' operator
 greater_than_or_equals_operator='greater than or equals' operator
 gridHeight=gridHeight
