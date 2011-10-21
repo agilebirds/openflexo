@@ -82,6 +82,7 @@ public class IconLibrary {
 	public static final ImageIcon SAVE_DISABLED_ICON = new ImageIconResource("Icons/Actions/Save-disabled.png");
 	//public static final ImageIcon SAVE_ALL_ICON = new ImageIconResource("Icons/Actions/SaveAll.gif");
 	//public static final ImageIcon SAVE_AS_ICON = new ImageIconResource("Icons/Actions/SaveAs.gif");
+	public static final ImageIcon NETWORK_ICON = new ImageIconResource("Icons/Actions/Network.png");
 	public static final ImageIcon INFO_ICON = new ImageIconResource("Icons/Actions/Info.png");
 	public static final ImageIcon INSPECT_ICON = new ImageIconResource("Icons/Actions/Inspect.png");
 	public static final ImageIcon REFRESH_ICON = new ImageIconResource("Icons/Actions/Refresh.png");
