@@ -80,6 +80,8 @@ public class ParametersRetriever implements BindingEvaluationContext {
 		return retriever._retrieveParameters(action,skipDialogWhenPossible);
 	}
 
+	
+
 	private boolean _retrieveParameters(final EditionSchemeAction<?> action, boolean skipDialogWhenPossible)
 	{
 		paletteElement = (action instanceof DropSchemeAction ? ((DropSchemeAction)action).getPaletteElement() : null);

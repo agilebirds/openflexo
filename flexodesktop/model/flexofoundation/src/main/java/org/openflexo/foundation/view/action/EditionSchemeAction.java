@@ -56,10 +56,12 @@ import org.openflexo.foundation.viewpoint.DeclarePatternRole;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
+import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.GoToAction;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ShapePatternRole;
+import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
 import org.openflexo.foundation.viewpoint.binding.GraphicalElementPathElement.ViewPathElement;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
@@ -81,6 +83,30 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject> implements BindingEvalu
 	{
 		super(actionType, focusedObject, globalSelection, editor);
 		parameterValues = new Hashtable<String,Object>();
+	}
+
+	/** 
+	 * Compute and store default parameters, and return a flag indicating
+	 * if all parameters declared as "mandatory" could be successfully filled
+	 * 
+	 * @return
+	 */
+	public boolean retrieveDefaultParameters()
+	{
+		boolean returned = true;
+		ViewPointPaletteElement paletteElement = (this instanceof DropSchemeAction ? ((DropSchemeAction)this).getPaletteElement() : null);
+		EditionScheme editionScheme = getEditionScheme();
+		for (final EditionSchemeParameter parameter : editionScheme.getParameters()) {
+			Object defaultValue =  parameter.getDefaultValue(paletteElement,new BindingEvaluationContext() {
+				@Override
+				public Object getValue(BindingVariable variable) {
+					logger.info("Hop, retournons le bon parametre pour "+variable);
+					return null;
+				}
+			});
+			if (!parameter.isValid(this, defaultValue)) returned = false;
+		}
+		return returned;
 	}
 
 	public FlexoProject getProject()
