@@ -6,7 +6,7 @@ Use case diagrams are closely connected to scenarios. A scenario is an example o
 A use case is a summary of scenarios for a single task or goal. An actor is who or what initiates the events involved in that task. Actors are simply roles that people or objects play. The picture below is a Make Appointment use case for the medical clinic. The actor is a Patient. The connection between actor and use case is a communication association (or communication for short).</description>
   <EditionPattern id="2" name="Actor">
     <description>An actor specifies a role played by a user or any other system that interacts with the subject.</description>
-    <DropScheme id="3" target="top" name="DropNewActor" skipConfirmationPanel="false">
+    <DropScheme id="3" target="top" name="DropNewActor" skipConfirmationPanel="true">
       <TextFieldParameter id="4" name="name" label="name" defaultValue="&quot;Actor&quot;" usePaletteLabelAsDefaultValue="false" />
       <URIParameter id="5" base="name" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" />
       <IndividualParameter id="6" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" name="packageParameter" label="package" usePaletteLabelAsDefaultValue="false" />
@@ -21,9 +21,9 @@ A use case is a summary of scenarios for a single task or goal. An actor is who 
       </AddShape>
     </DropScheme>
     <ContainedShapePatternRole id="12" patternRole="shape" label="actor.name" readOnlyLabel="false">
-      <ShapeGraphicalRepresentation id="13" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="139.0" y="38.0" width="39.36708860759494" height="43.06896551724138" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="actor.name" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="27.0" absoluteTextY="-8.0" textAlignment="CENTER">
+      <ShapeGraphicalRepresentation id="13" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="139.0" y="38.0" width="68.0" height="43.06896551724138" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="actor.name" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="27.0" absoluteTextY="-8.0" textAlignment="CENTER">
         <ForegroundStyle id="14" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ImageBackgroundStyle id="15" imageFile="Actor.gif" scaleX="1.0935302390998594" scaleY="0.9163609684519443" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
+        <ImageBackgroundStyle id="15" imageFile="Actor.gif" scaleX="1.8888888888888888" scaleY="0.9163609684519443" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
         <Border id="16" top="5" bottom="5" left="5" right="5" />
         <ShadowStyle id="17" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
         <RectangleShape id="18" isRounded="false" arcSize="30.0" />
@@ -42,7 +42,7 @@ A use case is a summary of scenarios for a single task or goal. An actor is who 
   </EditionPattern>
   <EditionPattern id="26" name="UseCase">
     <description>A use case is the specification of a set of actions performed by a system, which yields an observable result that is, typically, of value for one or more actors or other stakeholders of the system.</description>
-    <DropScheme id="27" target="top" name="DropNewUseCase" skipConfirmationPanel="false">
+    <DropScheme id="27" target="top" name="DropNewUseCase" skipConfirmationPanel="true">
       <TextFieldParameter id="28" name="name" label="name" defaultValue="&quot;Use Case&quot;" usePaletteLabelAsDefaultValue="false" />
       <URIParameter id="29" base="name" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" />
       <IndividualParameter id="30" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" name="packageParameter" label="packageParameter" usePaletteLabelAsDefaultValue="false" />
@@ -74,7 +74,7 @@ A use case is a summary of scenarios for a single task or goal. An actor is who 
     </Inspector>
   </EditionPattern>
   <EditionPattern id="50" name="ActorUseCaseAssociation">
-    <LinkScheme id="51" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/UML/UseCaseDiagram.owl#Actor" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/UML/UseCaseDiagram.owl#UseCase" name="associateActorToUseCase" skipConfirmationPanel="false">
+    <LinkScheme id="51" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/UML/UseCaseDiagram.owl#Actor" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/UML/UseCaseDiagram.owl#UseCase" name="associateActorToUseCase" skipConfirmationPanel="true">
       <description>Associate actor to a use case</description>
       <IndividualParameter id="52" conceptURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#Package" name="packageParameter" label="package" usePaletteLabelAsDefaultValue="false" />
       <URIParameter id="53" base="&quot;association&quot;" name="associationURI" label="association_uri" usePaletteLabelAsDefaultValue="false" />

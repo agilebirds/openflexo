@@ -3,7 +3,7 @@
   <description>This calc is intented to deal with the organizational structure which is the first step of Flexo Methodology</description>
   <EditionPattern id="2" name="OrganizationUnit">
     <description>Allows to define concept of organization unit.</description>
-    <DropScheme id="3" target="top" name="DropOrganizationUnit" label="create_organization_unit" skipConfirmationPanel="false">
+    <DropScheme id="3" target="top" name="DropOrganizationUnit" label="create_organization_unit" skipConfirmationPanel="true">
       <description>Create an organization unit</description>
       <TextFieldParameter id="4" name="organizationUnitName" label="organization_unit_name" defaultValue="&quot;Organization Unit&quot;" usePaletteLabelAsDefaultValue="false">
         <description>Allow to enter organization unit name while dropping concept</description>
@@ -37,9 +37,9 @@
     </DropScheme>
     <ContainedIndividualPatternRole id="18" ontologicType="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#OrganizationalUnit" patternRole="organizationUnit" />
     <ContainedShapePatternRole id="19" patternRole="shape" label="organizationUnit.organizationUnitName" readOnlyLabel="false">
-      <ShapeGraphicalRepresentation id="20" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="123.0" y="26.0" width="152.32365145228215" height="62.48711943793913" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="organizationUnit.organizationUnitName" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+      <ShapeGraphicalRepresentation id="20" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="123.0" y="26.0" width="230.0" height="62.48711943793913" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="organizationUnit.organizationUnitName" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
         <ForegroundStyle id="21" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ImageBackgroundStyle id="22" imageFile="OrganizationUnit.gif" scaleX="1.1367436675543443" scaleY="0.7528568606980618" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
+        <ImageBackgroundStyle id="22" imageFile="OrganizationUnit.gif" scaleX="1.7164179104477613" scaleY="0.7528568606980618" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
         <Border id="23" top="5" bottom="5" left="5" right="5" />
         <ShadowStyle id="24" drawShadow="true" shadowDarkness="150" shadowDepth="1" shadowBlur="2" />
         <RectangleShape id="25" isRounded="true" arcSize="6.0" />
@@ -53,7 +53,7 @@
   </EditionPattern>
   <EditionPattern id="29" name="LinkOrganizationUnitToParentOrganizationUnit">
     <description>Allows to define a hierarchical link between an organization unit and a parent organization unit</description>
-    <LinkScheme id="30" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-B.owl#OrganizationUnit" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-B.owl#OrganizationUnit" name="LinkOrganizationUnitToParentOrganizationUnit" label="declare_as_parent_organizational_unit" skipConfirmationPanel="false">
+    <LinkScheme id="30" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-B.owl#OrganizationUnit" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-B.owl#OrganizationUnit" name="LinkOrganizationUnitToParentOrganizationUnit" label="declare_as_parent_organizational_unit" skipConfirmationPanel="true">
       <description>Allows to define a hierarchical link between an organization unit and a parent organization unit</description>
       <DeclarePatternRole id="31" object="fromTarget.organizationUnit" patternRole="childOrganizationUnit" />
       <DeclarePatternRole id="32" object="toTarget.organizationUnit" patternRole="parentOrganizationUnit" />
@@ -96,7 +96,7 @@
   </EditionPattern>
   <EditionPattern id="60" name="OrganizationUnitPosition">
     <description>Allows to add a position for an organization unit</description>
-    <DropScheme id="61" target="top" name="DropPosition" skipConfirmationPanel="false">
+    <DropScheme id="61" target="top" name="DropPosition" skipConfirmationPanel="true">
       <TextFieldParameter id="62" name="positionName" label="position" defaultValue="&quot;Position&quot;" usePaletteLabelAsDefaultValue="false">
         <description>Allow to enter short name for position</description>
       </TextFieldParameter>
@@ -133,15 +133,13 @@
   </EditionPattern>
   <EditionPattern id="82" name="LinkPositionToOrganizationUnit">
     <description>Allows to define a position inside an organization unit</description>
-    <LinkScheme id="83" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-B.owl#OrganizationUnitPosition" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-B.owl#OrganizationUnit" name="LinkPositionToOrganizationUnit" label="declare_inside_organizational_unit" skipConfirmationPanel="false">
+    <LinkScheme id="83" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-B.owl#OrganizationUnitPosition" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-B.owl#OrganizationUnit" name="LinkPositionToOrganizationUnit" label="declare_inside_organizational_unit" skipConfirmationPanel="true">
       <description>Allows to define a hierarchical link between an organization unit and a parent organization unit</description>
       <DeclarePatternRole id="84" object="fromTarget.position" patternRole="position" />
       <DeclarePatternRole id="85" object="toTarget.organizationUnit" patternRole="organizationUnit" />
       <AddObjectPropertyStatement id="86" object="toTarget.organizationUnit" patternRole="isInvolvedInOrganizationUnit" subject="fromTarget.position" />
       <AddObjectPropertyStatement id="87" object="fromTarget.position" patternRole="containsPosition" subject="toTarget.organizationUnit" />
-      <AddConnector id="88" fromShape="fromTarget.shape" toShape="toTarget.shape" patternRole="connector">
-        <description />
-      </AddConnector>
+      <AddConnector id="88" fromShape="fromTarget.shape" toShape="toTarget.shape" patternRole="connector" />
     </LinkScheme>
     <ContainedIndividualPatternRole id="89" ontologicType="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#OrganizationalUnit" patternRole="organizationUnit" />
     <ContainedIndividualPatternRole id="90" ontologicType="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#Position" patternRole="position" />

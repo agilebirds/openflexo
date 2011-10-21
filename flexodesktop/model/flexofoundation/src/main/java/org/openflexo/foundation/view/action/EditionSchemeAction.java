@@ -61,8 +61,8 @@ import org.openflexo.foundation.viewpoint.GoToAction;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ShapePatternRole;
-import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
+import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterPathElement;
 import org.openflexo.foundation.viewpoint.binding.GraphicalElementPathElement.ViewPathElement;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.inspector.LocalizedString;
@@ -96,17 +96,24 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject> implements BindingEvalu
 	public boolean retrieveDefaultParameters()
 	{
 		boolean returned = true;
-		ViewPointPaletteElement paletteElement = (this instanceof DropSchemeAction ? ((DropSchemeAction)this).getPaletteElement() : null);
 		EditionScheme editionScheme = getEditionScheme();
 		for (final EditionSchemeParameter parameter : editionScheme.getParameters()) {
-			Object defaultValue =  parameter.getDefaultValue(paletteElement,new BindingEvaluationContext() {
+			Object defaultValue =  parameter.getDefaultValue(this,new BindingEvaluationContext() {
 				@Override
 				public Object getValue(BindingVariable variable) {
-					logger.info("Hop, retournons le bon parametre pour "+variable);
+					if (variable instanceof EditionSchemeParameterPathElement) {
+						Object returned = parameterValues.get(((EditionSchemeParameterPathElement) variable).getParameter().getName());
+						return returned;
+					}
+					logger.warning("Unexpected "+variable);
 					return null;
 				}
 			});
-			if (!parameter.isValid(this, defaultValue)) returned = false;
+			if (defaultValue != null) parameterValues.put(parameter.getName(),defaultValue);
+			if (!parameter.isValid(this, defaultValue)) {
+				logger.info("Parameter "+parameter+" is not valid for value "+defaultValue);
+				returned = false;
+			}
 		}
 		return returned;
 	}

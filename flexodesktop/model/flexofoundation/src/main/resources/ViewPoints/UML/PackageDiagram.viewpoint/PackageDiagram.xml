@@ -7,7 +7,7 @@ A package is a collection of logically related UML elements.</description>
     <description>A package is used to group elements, and provides a namespace for the grouped elements.
 A package can have one or more profile applications to indicate which profiles have been applied. Because a profile is a package, it is possible to apply a profile not only to packages, but also to profiles.
 Package specializes TemplateableElement and PackageableElement specializes ParameterableElement to specify that a package can be used as a template and a PackageableElement as a template parameter.</description>
-    <DropScheme id="3" target="top" name="drop" skipConfirmationPanel="false">
+    <DropScheme id="3" target="top" name="drop" skipConfirmationPanel="true">
       <description>Drop a package at top level</description>
       <TextFieldParameter id="4" name="name" label="package_name" defaultValue="&quot;Package&quot;" usePaletteLabelAsDefaultValue="false" />
       <URIParameter id="5" base="name" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" />
@@ -56,7 +56,7 @@ One package depends on another if changes in the other could possibly force chan
     <ContainedIndividualPatternRole id="32" ontologicType="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#PackageImport" patternRole="packageImport" />
     <ContainedObjectPropertyStatementPatternRole id="33" objectProperty="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl#packageImport" patternRole="import" />
     <ContainedConnectorPatternRole id="34" patternRole="connector" label="&quot;import&quot;" readOnlyLabel="true">
-      <ConnectorGraphicalRepresentation id="35" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" text="&quot;import&quot;" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="-7.0" absoluteTextY="-11.0" textAlignment="CENTER">
+      <ConnectorGraphicalRepresentation id="35" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="-7.0" absoluteTextY="-11.0" textAlignment="CENTER">
         <ForegroundStyle id="36" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="BIG_DASHES" useTransparency="false" transparencyLevel="0.5" />
         <StartShapeGraphicalRepresentation id="37" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="155.0" y="54.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
           <ForegroundStyle id="38" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />

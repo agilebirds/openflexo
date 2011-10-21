@@ -21,10 +21,12 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
 public class URIParameter extends EditionSchemeParameter {
@@ -90,5 +92,25 @@ public class URIParameter extends EditionSchemeParameter {
 
 		return true;
 	}
+
+	@Override
+	public Object getDefaultValue(EditionSchemeAction<?> action, BindingEvaluationContext parameterRetriever) 
+	{
+		if (getBaseURI().isValid()) {
+			String baseProposal = (String)getBaseURI().getBindingValue(parameterRetriever);
+			if (baseProposal == null) return null;
+			baseProposal = JavaUtils.getClassName(baseProposal);
+			String proposal = baseProposal;
+			Integer i = null;
+			while (action.getProject().getProjectOntologyLibrary().isDuplicatedURI(
+					action.getProject().getProjectOntology().getURI(),proposal)) {
+				if (i == null) i= 1; else i++;
+				proposal = baseProposal+i;
+			}
+			return proposal;			
+		}
+		return null;
+	}
+
 
 }

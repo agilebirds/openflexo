@@ -4,7 +4,7 @@
   <EditionPattern id="2" name="RootOrganizationUnit">
     <description>Allows to define concept of top level organization unit.
  This is the root level in the scope of the project.</description>
-    <DropScheme id="3" target="top" name="DropRootOrganizationUnitAtTopLevel" label="create_root_organization_unit" skipConfirmationPanel="false">
+    <DropScheme id="3" target="top" name="DropRootOrganizationUnitAtTopLevel" label="create_root_organization_unit" skipConfirmationPanel="true">
       <description>Create a root organization unit</description>
       <TextFieldParameter id="4" name="organizationUnitName" label="organization_unit_name" defaultValue="&quot;organization unit&quot;" usePaletteLabelAsDefaultValue="false">
         <description>Allow to enter organization unit name while dropping concept</description>
@@ -50,7 +50,7 @@
   </EditionPattern>
   <EditionPattern id="28" name="OrganizationUnit">
     <description>Allows to define an organization unit inside an other organization unit.</description>
-    <DropScheme id="29" target="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl#OrganizationUnit" name="DropOrganizationUnitInOrganizationUnit" skipConfirmationPanel="false">
+    <DropScheme id="29" target="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl#OrganizationUnit" name="DropOrganizationUnitInOrganizationUnit" skipConfirmationPanel="true">
       <description>Create a new organization unit inside parent organization unit</description>
       <TextFieldParameter id="30" name="organizationUnitName" label="organization_unit_name" defaultValue="&quot;Organization unit&quot;" usePaletteLabelAsDefaultValue="false">
         <description>Allow to enter organization unit name while dropping concept</description>
@@ -85,7 +85,7 @@
     <ContainedIndividualPatternRole id="49" ontologicType="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#OrganizationalUnit" patternRole="organizationUnit" />
     <ContainedObjectPropertyStatementPatternRole id="50" objectProperty="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#hasSubOrgUnit" patternRole="hasSubOrgUnit" />
     <ContainedShapePatternRole id="51" patternRole="shape" label="organizationUnit.organizationUnitName" readOnlyLabel="false">
-      <ShapeGraphicalRepresentation id="52" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="122.0" y="29.950819672131146" width="278.0" height="65.73770491803278" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="75.01385648610986" absoluteTextY="18.16376306620209" textAlignment="CENTER">
+      <ShapeGraphicalRepresentation id="52" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="122.0" y="29.950819672131146" width="278.0" height="65.73770491803278" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="organizationUnit.organizationUnitName" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="75.01385648610986" absoluteTextY="18.16376306620209" textAlignment="CENTER">
         <ForegroundStyle id="53" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
         <ColorBackgroundStyle id="54" color="221,249,221" useTransparency="false" transparencyLevel="0.5" />
         <Border id="55" top="5" bottom="5" left="5" right="5" />
@@ -104,7 +104,7 @@
   </EditionPattern>
   <EditionPattern id="63" name="OrganizationUnitMission">
     <description>Allows to define a mission for an organization unit</description>
-    <DropScheme id="64" target="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl#OrganizationUnit" name="DropMissionInOrganizationUnit" skipConfirmationPanel="false">
+    <DropScheme id="64" target="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl#OrganizationUnit" name="DropMissionInOrganizationUnit" skipConfirmationPanel="true">
       <TextFieldParameter id="65" name="missionName" label="mission" defaultValue="&quot;Mission&quot;" usePaletteLabelAsDefaultValue="false">
         <description>Allow to enter short name for mission</description>
       </TextFieldParameter>
@@ -124,7 +124,7 @@
     <ContainedIndividualPatternRole id="73" ontologicType="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#OrganizationalUnitMission" patternRole="mission" />
     <ContainedObjectPropertyStatementPatternRole id="74" objectProperty="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#hasOrgUnitMission" patternRole="hasOrgUnitMission" />
     <ContainedShapePatternRole id="75" patternRole="shape" label="mission.missionDescription" readOnlyLabel="false">
-      <ShapeGraphicalRepresentation id="76" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="130.0" y="26.0" width="230.2869822485207" height="53.96615547329458" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" isMultilineAllowed="true" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+      <ShapeGraphicalRepresentation id="76" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="130.0" y="26.0" width="230.2869822485207" height="53.96615547329458" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="mission.missionDescription" isMultilineAllowed="true" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
         <ForegroundStyle id="77" noStroke="false" color="153,153,153" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
         <ColorBackgroundStyle id="78" color="255,255,255" useTransparency="false" transparencyLevel="0.5" />
         <Border id="79" top="5" bottom="5" left="5" right="5" />
@@ -143,7 +143,7 @@
   </EditionPattern>
   <EditionPattern id="87" name="OrganizationUnitObjective">
     <description>Allows to define an objective for an organization unit</description>
-    <DropScheme id="88" target="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl#OrganizationUnit" name="DropObjectiveInOrganizationUnit" skipConfirmationPanel="false">
+    <DropScheme id="88" target="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl#OrganizationUnit" name="DropObjectiveInOrganizationUnit" skipConfirmationPanel="true">
       <TextFieldParameter id="89" name="objectiveName" label="objective" defaultValue="&quot;Objective&quot;" usePaletteLabelAsDefaultValue="false">
         <description>Allow to enter short name for objective</description>
       </TextFieldParameter>
@@ -182,7 +182,7 @@
   </EditionPattern>
   <EditionPattern id="111" name="OrganizationUnitPosition">
     <description>Allows to add a position for an organization unit</description>
-    <DropScheme id="112" target="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl#OrganizationUnit" name="DropPositionInOrganizationUnit" skipConfirmationPanel="false">
+    <DropScheme id="112" target="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl#OrganizationUnit" name="DropPositionInOrganizationUnit" skipConfirmationPanel="true">
       <TextFieldParameter id="113" name="positionName" label="position" defaultValue="&quot;Position&quot;" usePaletteLabelAsDefaultValue="false">
         <description>Allow to enter short name for position</description>
       </TextFieldParameter>
@@ -222,7 +222,7 @@
   </EditionPattern>
   <EditionPattern id="136" name="PositionMission">
     <description>Allows to define a position mission</description>
-    <DropScheme id="137" target="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl#OrganizationUnitPosition" name="DropPositionMissionForPosition" skipConfirmationPanel="false">
+    <DropScheme id="137" target="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl#OrganizationUnitPosition" name="DropPositionMissionForPosition" skipConfirmationPanel="true">
       <TextFieldParameter id="138" name="missionName" label="mission" defaultValue="&quot;Mission&quot;" usePaletteLabelAsDefaultValue="false">
         <description>Allow to enter short name for mission</description>
       </TextFieldParameter>
@@ -280,7 +280,7 @@
   </EditionPattern>
   <EditionPattern id="174" name="PositionTask">
     <description>Allows to define a position task</description>
-    <DropScheme id="175" target="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl#OrganizationUnitPosition" name="DropTaskForPosition" skipConfirmationPanel="false">
+    <DropScheme id="175" target="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl#OrganizationUnitPosition" name="DropTaskForPosition" skipConfirmationPanel="true">
       <TextFieldParameter id="176" name="taskName" label="task" defaultValue="&quot;Task&quot;" usePaletteLabelAsDefaultValue="false">
         <description>Allow to enter short name for task</description>
       </TextFieldParameter>

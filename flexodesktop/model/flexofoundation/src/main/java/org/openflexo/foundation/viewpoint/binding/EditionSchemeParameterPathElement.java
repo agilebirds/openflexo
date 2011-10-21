@@ -91,5 +91,9 @@ public class EditionSchemeParameterPathElement<T> implements SimplePathElement<T
 	public String getVariableName() {
 		return parameter.getName();
 	}
+	
+	public EditionSchemeParameter getParameter() {
+		return parameter;
+	}
 
 }

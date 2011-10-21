@@ -57,6 +57,7 @@ import org.openflexo.foundation.viewpoint.FlexoObjectParameter;
 import org.openflexo.foundation.viewpoint.FlexoObjectParameter.FlexoObjectType;
 import org.openflexo.foundation.viewpoint.IndividualParameter;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
+import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterPathElement;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.inspector.LocalizedString;
 import org.openflexo.localization.FlexoLocalization;
@@ -76,10 +77,6 @@ public class ParametersRetriever implements BindingEvaluationContext {
 	{
 		boolean successfullyRetrievedDefaultParameters = action.retrieveDefaultParameters();
 		
-		System.out.println("successfullyRetrievedDefaultParameters="+successfullyRetrievedDefaultParameters);
-		System.out.println("action.getEditionScheme().getSkipConfirmationPanel()="+action.getEditionScheme().getSkipConfirmationPanel());
-		System.out.println("skipDialogWhenPossible="+skipDialogWhenPossible);
-		
 		if (successfullyRetrievedDefaultParameters
 				&& action.getEditionScheme().getSkipConfirmationPanel()
 				&& skipDialogWhenPossible) {
@@ -88,13 +85,13 @@ public class ParametersRetriever implements BindingEvaluationContext {
 
 		ParametersRetriever retriever = new ParametersRetriever();
 
-		return retriever._retrieveParameters(action,skipDialogWhenPossible);
+		return retriever._retrieveParameters(action);
 	}
 
 	private ParametersRetriever() {
 	}
 
-	private boolean _retrieveParameters(final EditionSchemeAction<?> action, boolean skipDialogWhenPossible)
+	private boolean _retrieveParameters(final EditionSchemeAction<?> action)
 	{
 		paletteElement = (action instanceof DropSchemeAction ? ((DropSchemeAction)action).getPaletteElement() : null);
 		EditionScheme editionScheme = action.getEditionScheme();
@@ -111,7 +108,7 @@ public class ParametersRetriever implements BindingEvaluationContext {
 		
 		for (final EditionSchemeParameter parameter : editionScheme.getParameters()) {
 			ParameterDefinition param = null;
-			Object defaultValue =  parameter.getDefaultValue(paletteElement,this);
+			Object defaultValue =  parameter.getDefaultValue(action,this);
 			if (parameter instanceof org.openflexo.foundation.viewpoint.URIParameter) {
 				param = new URIParameter((org.openflexo.foundation.viewpoint.URIParameter)parameter, action);
 				uriParametersList.add((URIParameter)param);
@@ -259,7 +256,7 @@ public class ParametersRetriever implements BindingEvaluationContext {
 			p.updateURIName();
 		}
 
-		if (skipDialogWhenPossible) {
+		/*if (skipDialogWhenPossible) {
 			boolean isValid = true;
 			for (URIParameter param : uriParametersList) {
 				if (param._parameter.evaluateCondition(action)) {
@@ -279,7 +276,7 @@ public class ParametersRetriever implements BindingEvaluationContext {
 			}
 			if (isValid) return true;
 			// We need to open dialog anyway
-		}
+		}*/
 		
 		AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(
 				action.getProject(), 
@@ -395,7 +392,7 @@ public class ParametersRetriever implements BindingEvaluationContext {
 		public String getURIName() 
 		{
 			if (baseExpression == null) {
-				return (String)_parameter.getDefaultValue(paletteElement,ParametersRetriever.this);
+				return (String)_parameter.getDefaultValue(_action,ParametersRetriever.this);
 			}
 			Hashtable<String,Object> paramValues = new Hashtable<String,Object>();
 			for (String s : _action.getParameterValues().keySet()) {
@@ -458,7 +455,10 @@ public class ParametersRetriever implements BindingEvaluationContext {
 	@Override
 	public Object getValue(BindingVariable variable)
 	{
-		logger.warning("Zut, avec "+variable);
+		if (variable instanceof EditionSchemeParameterPathElement) {
+			return paramHash.get(((EditionSchemeParameterPathElement) variable).getParameter()).getValue();
+		}
+		logger.warning("Unexpected "+variable);
 		return null;
 	}
 
