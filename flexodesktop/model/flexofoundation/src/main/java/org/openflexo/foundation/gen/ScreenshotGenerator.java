@@ -30,11 +30,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
+import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-
-import org.openflexo.swing.ImageUtils;
-import org.openflexo.toolbox.FileResource;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoXMLSerializableObject;
@@ -55,9 +53,9 @@ import org.openflexo.module.external.ExternalModule;
 import org.openflexo.module.external.ExternalModuleDelegater;
 import org.openflexo.module.external.ExternalOEModule;
 import org.openflexo.module.external.ExternalWKFModule;
+import org.openflexo.swing.ImageUtils;
+import org.openflexo.toolbox.FileResource;
 
-import com.sun.image.codec.jpeg.ImageFormatException;
-import com.sun.image.codec.jpeg.JPEGCodec;
 
 //TODO : rename it into ScreenshotBuilder
 public class ScreenshotGenerator
@@ -67,178 +65,181 @@ public class ScreenshotGenerator
 		public Rectangle trimInfo;
 	}
 
-    private static final Logger logger = FlexoLogger.getLogger(ScreenshotGenerator.class.getPackage().getName());
+	private static final Logger logger = FlexoLogger.getLogger(ScreenshotGenerator.class.getPackage().getName());
 
-    protected static final String BAD_FILE_NAME_CHARACTERS_REG_EXP = "[^-A-Za-z0-9]";
+	protected static final String BAD_FILE_NAME_CHARACTERS_REG_EXP = "[^-A-Za-z0-9]";
 
-    protected static final Pattern BAD_FILE_NAME_CHARACTERS_PATTERN= Pattern.compile(BAD_FILE_NAME_CHARACTERS_REG_EXP);
+	protected static final Pattern BAD_FILE_NAME_CHARACTERS_PATTERN= Pattern.compile(BAD_FILE_NAME_CHARACTERS_REG_EXP);
 
-    private static final String REPLACEMENT = "-";
+	private static final String REPLACEMENT = "-";
 
-    public static void main(String[] args)
-    {
-        String s = "ABSTRA\tCTACTIVITY\n-TestDM.BE\r\n\rGIN1062";
-        System.out.println(s+"="+formatImageName(s));
-    }
+	public static void main(String[] args)
+	{
+		String s = "ABSTRA\tCTACTIVITY\n-TestDM.BE\r\n\rGIN1062";
+		System.out.println(s+"="+formatImageName(s));
+	}
 
-    public static String getScreenshotName(Object o)
-    {
-        if (o instanceof FlexoProcess)
-            return getImageNameForProcess((FlexoProcess) o);
-        else if (o instanceof OperationNode)
-            return getImageNameForOperation((OperationNode) o);
-        else if (o instanceof AbstractActivityNode)
-            return getImageNameForActivity((AbstractActivityNode) o);
-        else if (o instanceof ComponentDefinition)
-            return getImageNameForComponent((ComponentDefinition) o);
-        else if (o instanceof IEWOComponent)
-            return getImageNameForComponent(((IEWOComponent) o).getComponentDefinition());
-        else if (o instanceof LOOPOperator)
-        	return getImageNameForLoopOperator((LOOPOperator)o);
-        else if (o instanceof ERDiagram)
-        	return getImageNameForERDiagram((ERDiagram)o);
-        else if (o instanceof RoleList)
-        	return getImageNameForRoleList((RoleList)o);
-        else if (o instanceof FlexoWorkflow)
-        	return getImageNameForWorkflow((FlexoWorkflow)o);
-        else if (o instanceof View) {
-        	return getImageNameForShema((View)o);
-        }
-        return null;
-    }
+	public static String getScreenshotName(Object o)
+	{
+		if (o instanceof FlexoProcess) {
+			return getImageNameForProcess((FlexoProcess) o);
+		} else if (o instanceof OperationNode) {
+			return getImageNameForOperation((OperationNode) o);
+		} else if (o instanceof AbstractActivityNode) {
+			return getImageNameForActivity((AbstractActivityNode) o);
+		} else if (o instanceof ComponentDefinition) {
+			return getImageNameForComponent((ComponentDefinition) o);
+		} else if (o instanceof IEWOComponent) {
+			return getImageNameForComponent(((IEWOComponent) o).getComponentDefinition());
+		} else if (o instanceof LOOPOperator) {
+			return getImageNameForLoopOperator((LOOPOperator)o);
+		} else if (o instanceof ERDiagram) {
+			return getImageNameForERDiagram((ERDiagram)o);
+		} else if (o instanceof RoleList) {
+			return getImageNameForRoleList((RoleList)o);
+		} else if (o instanceof FlexoWorkflow) {
+			return getImageNameForWorkflow((FlexoWorkflow)o);
+		} else if (o instanceof View) {
+			return getImageNameForShema((View)o);
+		}
+		return null;
+	}
 
-    private static String getImageNameForWorkflow(FlexoWorkflow o) {
+	private static String getImageNameForWorkflow(FlexoWorkflow o) {
 		return "Workflow";
 	}
 
 	private static String getImageNameForRoleList(RoleList o) {
-        return "RoleList";
+		return "RoleList";
 	}
 
 	/**
-     * @param definition
-     * @return
-     */
-    private static String getImageNameForComponent(ComponentDefinition definition)
-    {
-        return getImageNameForComponent(definition.getComponentName());
-    }
+	 * @param definition
+	 * @return
+	 */
+	private static String getImageNameForComponent(ComponentDefinition definition)
+	{
+		return getImageNameForComponent(definition.getComponentName());
+	}
 
-    /**
-     * @param definition
-     * @return
-     */
-    private static String getImageNameForComponent(String componentName)
-    {
-        return IEWOComponent.getTypeName() + "-" + formatImageName(componentName);
-    }
+	/**
+	 * @param definition
+	 * @return
+	 */
+	private static String getImageNameForComponent(String componentName)
+	{
+		return IEWOComponent.getTypeName() + "-" + formatImageName(componentName);
+	}
 
-    /**
-     * @param node
-     * @return
-     */
-    private static String getImageNameForActivity(AbstractActivityNode node)
-    {
-        return getImageNameForActivity(node, node.getName() + node.getFlexoID());
-    }
+	/**
+	 * @param node
+	 * @return
+	 */
+	private static String getImageNameForActivity(AbstractActivityNode node)
+	{
+		return getImageNameForActivity(node, node.getName() + node.getFlexoID());
+	}
 
-    /**
-     * @param node
-     * @return
-     */
-    private static String getImageNameForActivity(AbstractActivityNode node, String activityName)
-    {
-        String imageName = formatImageName(node.getProcess().getName() + "-" + activityName);
-        return AbstractActivityNode.getTypeName() + "-" + imageName;
-    }
+	/**
+	 * @param node
+	 * @return
+	 */
+	private static String getImageNameForActivity(AbstractActivityNode node, String activityName)
+	{
+		String imageName = formatImageName(node.getProcess().getName() + "-" + activityName);
+		return AbstractActivityNode.getTypeName() + "-" + imageName;
+	}
 
-    private static String getImageNameForLoopOperator(LOOPOperator node)
-    {
-    	String imageName = formatImageName(node.getProcess().getName() + "-" + node.getName() + node.getFlexoID());
-        return LOOPOperator.getTypeName() + "-" + imageName;
-    }
+	private static String getImageNameForLoopOperator(LOOPOperator node)
+	{
+		String imageName = formatImageName(node.getProcess().getName() + "-" + node.getName() + node.getFlexoID());
+		return LOOPOperator.getTypeName() + "-" + imageName;
+	}
 
-    private static String getImageNameForERDiagram(ERDiagram node)
-    {
-    	String imageName = formatImageName(node.getName() + "-"  + node.getFlexoID());
-        return "ERDiagram-" + imageName;
-    }
-    /**
-     * @param node
-     * @return
-     */
-    private static String getImageNameForOperation(OperationNode node)
-    {
-        return getImageNameForOperation(node.getProcess().getName() + "-" + node.getName() + node.getFlexoID());
-    }
+	private static String getImageNameForERDiagram(ERDiagram node)
+	{
+		String imageName = formatImageName(node.getName() + "-"  + node.getFlexoID());
+		return "ERDiagram-" + imageName;
+	}
+	/**
+	 * @param node
+	 * @return
+	 */
+	private static String getImageNameForOperation(OperationNode node)
+	{
+		return getImageNameForOperation(node.getProcess().getName() + "-" + node.getName() + node.getFlexoID());
+	}
 
-    /**
-     * @param node
-     * @return
-     */
-    private static String getImageNameForOperation(String operationName)
-    {
-        return OperationNode.getTypeName() + "-" + formatImageName(operationName);
-    }
+	/**
+	 * @param node
+	 * @return
+	 */
+	private static String getImageNameForOperation(String operationName)
+	{
+		return OperationNode.getTypeName() + "-" + formatImageName(operationName);
+	}
 
-    /**
-     * @param process
-     * @return
-     */
-    private static String getImageNameForProcess(FlexoProcess process)
-    {
-        return getImageNameForProcess(process.getName() + process.getFlexoID());
-    }
+	/**
+	 * @param process
+	 * @return
+	 */
+	private static String getImageNameForProcess(FlexoProcess process)
+	{
+		return getImageNameForProcess(process.getName() + process.getFlexoID());
+	}
 
-    /**
-     * @param process
-     * @return
-     */
-    private static String getImageNameForProcess(String processName)
-    {
-        return FlexoProcess.getTypeName() + "-" + formatImageName(processName);
-    }
+	/**
+	 * @param process
+	 * @return
+	 */
+	private static String getImageNameForProcess(String processName)
+	{
+		return FlexoProcess.getTypeName() + "-" + formatImageName(processName);
+	}
 
-    /**
-     * @param process
-     * @return
-     */
-    private static String getImageNameForShema(View shema)
-    {
-        return getImageNameForShema(shema.getName() + shema.getFlexoID());
-    }
+	/**
+	 * @param process
+	 * @return
+	 */
+	private static String getImageNameForShema(View shema)
+	{
+		return getImageNameForShema(shema.getName() + shema.getFlexoID());
+	}
 
-    /**
-     * @param process
-     * @return
-     */
-    private static String getImageNameForShema(String shemaName)
-    {
-        return View.getTypeName() + "-" + formatImageName(shemaName);
-    }
+	/**
+	 * @param process
+	 * @return
+	 */
+	private static String getImageNameForShema(String shemaName)
+	{
+		return View.getTypeName() + "-" + formatImageName(shemaName);
+	}
 
-    private static String formatImageName(String imageName)
-    {
-        if (imageName == null)
-            return null;
-        return BAD_FILE_NAME_CHARACTERS_PATTERN.matcher(imageName).replaceAll(REPLACEMENT);
-    }
+	private static String formatImageName(String imageName)
+	{
+		if (imageName == null) {
+			return null;
+		}
+		return BAD_FILE_NAME_CHARACTERS_PATTERN.matcher(imageName).replaceAll(REPLACEMENT);
+	}
 
-    public static ScreenshotImage getImage(FlexoModelObject object)
-    {
-        if (object==null) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Object is null: cannot generate screenshot");
-            return getEmptyScreenshot();
-        }
-        ScreenshotImage i = null;
+	public static ScreenshotImage getImage(FlexoModelObject object)
+	{
+		if (object==null) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Object is null: cannot generate screenshot");
+			}
+			return getEmptyScreenshot();
+		}
+		ScreenshotImage i = null;
 		JFrame frame = null;
 		ExternalWKFModule wkfModule = null;
 		ExternalIEModule ieModule = null;
 		ExternalDMModule dmModule = null;
 		ExternalOEModule oeModule = null;
-		if (object.getXMLResourceData() instanceof FlexoXMLSerializableObject)
+		if (object.getXMLResourceData() instanceof FlexoXMLSerializableObject) {
 			((FlexoXMLSerializableObject)object.getXMLResourceData()).setIgnoreNotifications();
+		}
 		try {
 			BufferedImage bi = null;
 			JComponent c = null;
@@ -249,7 +250,7 @@ public class ScreenshotGenerator
 						.getWKFModuleInstance() : null;
 			}
 			else if (object instanceof IEWOComponent
-					|| object instanceof ComponentDefinition 
+					|| object instanceof ComponentDefinition
 					|| object instanceof OperationNode) {
 				ieModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader()
 						.getIEModuleInstance() : null;
@@ -262,7 +263,7 @@ public class ScreenshotGenerator
 				oeModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader()
 						.getOEModuleInstance() : null;
 			}
-		if (wkfModule != null || ieModule != null || dmModule!=null || oeModule!=null) {
+			if (wkfModule != null || ieModule != null || dmModule!=null || oeModule!=null) {
 				ExternalModule module = ieModule != null ? ieModule : wkfModule!=null ? wkfModule : dmModule!=null ? dmModule : oeModule;
 				synchronized (module) {// We synchronize on the module because modules cannot handle multiple screenshot generation
 					if (object instanceof FlexoProcess) {
@@ -276,7 +277,7 @@ public class ScreenshotGenerator
 					} else if (object instanceof FlexoWorkflow) {
 						c = wkfModule.createScreenshotForObject(object);
 					} else if (object instanceof OperationNode) {
-						c = ieModule.createViewForOperation(((OperationNode) object));
+						c = ieModule.createViewForOperation((OperationNode) object);
 					} else if (object instanceof ComponentDefinition) {
 						c = ieModule
 								.getWOComponentView(ieModule.getIEExternalController(), ((ComponentDefinition) object).getWOComponent());
@@ -289,9 +290,10 @@ public class ScreenshotGenerator
 						c = oeModule.createScreenshotForShema((View)object);
 					}
 					if (c == null) {
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Could not retrieve printable component for " + object.getFullyQualifiedName());
-			            return getEmptyScreenshot();
+						}
+						return getEmptyScreenshot();
 					}
 					c.setOpaque(true);
 					c.setBackground(Color.WHITE);
@@ -306,134 +308,140 @@ public class ScreenshotGenerator
 					} else if (ieModule != null) {
 						i = new ScreenshotImage();
 						i.image = bi;
-				        i.trimInfo = new Rectangle(0,0,bi.getWidth(),bi.getHeight());
+						i.trimInfo = new Rectangle(0,0,bi.getWidth(),bi.getHeight());
 					} else if (dmModule != null) {
 						i = new ScreenshotImage();
 						i.image = bi;
-				        i.trimInfo = new Rectangle(0,0,bi.getWidth(),bi.getHeight());
+						i.trimInfo = new Rectangle(0,0,bi.getWidth(),bi.getHeight());
 					} else if (oeModule != null) {
 						i = new ScreenshotImage();
 						i.image = bi;
-				        i.trimInfo = new Rectangle(0,0,bi.getWidth(),bi.getHeight());
+						i.trimInfo = new Rectangle(0,0,bi.getWidth(),bi.getHeight());
 					}
 				}
 			}
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 		} catch (OutOfMemoryError mem) {
-            if (logger.isLoggable(Level.SEVERE))
-                logger.severe("I ran out of memory: I'm dead and cannot generate in memory screenshots!!!");
-        } finally {
-            if (frame!=null) {
-                if (frame.getContentPane()!=null)
-                    frame.getContentPane().removeAll();
-                frame.dispose();
-            }
-            if (wkfModule!=null)
-            	wkfModule.finalizeScreenshotGeneration();
-            if (ieModule!=null)
-            	ieModule.finalizeScreenshot();
-            if (oeModule!=null)
-            	oeModule.finalizeScreenshotGeneration();
-    		if (object.getXMLResourceData() instanceof FlexoXMLSerializableObject)
-    			((FlexoXMLSerializableObject)object.getXMLResourceData()).resetIgnoreNotifications();
-        }
-        if (i == null) {
-            return getEmptyScreenshot();
-        }
-        return i;
-    }
+			if (logger.isLoggable(Level.SEVERE)) {
+				logger.severe("I ran out of memory: I'm dead and cannot generate in memory screenshots!!!");
+			}
+		} finally {
+			if (frame!=null) {
+				if (frame.getContentPane()!=null) {
+					frame.getContentPane().removeAll();
+				}
+				frame.dispose();
+			}
+			if (wkfModule!=null) {
+				wkfModule.finalizeScreenshotGeneration();
+			}
+			if (ieModule!=null) {
+				ieModule.finalizeScreenshot();
+			}
+			if (oeModule!=null) {
+				oeModule.finalizeScreenshotGeneration();
+			}
+			if (object.getXMLResourceData() instanceof FlexoXMLSerializableObject) {
+				((FlexoXMLSerializableObject)object.getXMLResourceData()).resetIgnoreNotifications();
+			}
+		}
+		if (i == null) {
+			return getEmptyScreenshot();
+		}
+		return i;
+	}
 
-    public static ScreenshotImage makeImage(BufferedImage bi) 
-    {
-    	ScreenshotImage i = new ScreenshotImage();
+	public static ScreenshotImage makeImage(BufferedImage bi)
+	{
+		ScreenshotImage i = new ScreenshotImage();
 		i.image = bi;
-        i.trimInfo = new Rectangle(0,0,bi.getWidth(),bi.getHeight());
-        return i;
-    }
-    
-    public static ScreenshotImage trimImage(BufferedImage bi) 
-    {
-     // Trim operation to remove white borders.
-    	int border = 10;
-        int top = -1;
-        int bottom =-1;
-        int left = -1;
-        int right = -1;
-        for (int i=bi.getWidth()-1;i>0 && right==-1;i--) {
-            for (int j=0;j<bi.getHeight() && right==-1;j++) {
-                int color = bi.getRGB(i, j);
-                if (color!=-1) {
-                    right = i;
-                }
-            }
-        }
+		i.trimInfo = new Rectangle(0,0,bi.getWidth(),bi.getHeight());
+		return i;
+	}
 
-        for (int i=0;i<bi.getWidth() && left==-1;i++) {
-            for (int j=0;j<bi.getHeight() && left==-1;j++) {
-                int color = bi.getRGB(i, j);
-                if (color!=-1) {
-                    left = i;
-                }
-            }
-        }
-        for (int j=0;j<bi.getHeight() && top==-1;j++) {
-            for (int i=0;i<bi.getWidth() && top==-1;i++) {
+	public static ScreenshotImage trimImage(BufferedImage bi)
+	{
+		// Trim operation to remove white borders.
+		int border = 10;
+		int top = -1;
+		int bottom =-1;
+		int left = -1;
+		int right = -1;
+		for (int i=bi.getWidth()-1;i>0 && right==-1;i--) {
+			for (int j=0;j<bi.getHeight() && right==-1;j++) {
+				int color = bi.getRGB(i, j);
+				if (color!=-1) {
+					right = i;
+				}
+			}
+		}
 
-                int color = bi.getRGB(i, j);
-                if (color!=-1) {
-                    top = j;
-                }
-            }
-        }
+		for (int i=0;i<bi.getWidth() && left==-1;i++) {
+			for (int j=0;j<bi.getHeight() && left==-1;j++) {
+				int color = bi.getRGB(i, j);
+				if (color!=-1) {
+					left = i;
+				}
+			}
+		}
+		for (int j=0;j<bi.getHeight() && top==-1;j++) {
+			for (int i=0;i<bi.getWidth() && top==-1;i++) {
 
-        for (int j=bi.getHeight()-1;j>0 && bottom==-1;j--) {
-            for (int i=bi.getWidth()-1;i>0 && bottom==-1;i--) {
+				int color = bi.getRGB(i, j);
+				if (color!=-1) {
+					top = j;
+				}
+			}
+		}
 
-                int color = bi.getRGB(i, j);
-                if (color!=-1) {
-                    bottom = j;
-                }
-            }
-        }
-        left = Math.max(left-border,0);
-        top = Math.max(top-border,0);
-        right = Math.min(right-left+border,bi.getWidth()-1-left);
-        bottom = Math.min(bottom-top+border,bi.getHeight()-1-top);
-        ScreenshotImage i = new ScreenshotImage();
-        i.image = bi.getSubimage(left, top, right,bottom);
-        i.trimInfo = new Rectangle(left, top, right,bottom);
-        return i;
-    }
+		for (int j=bi.getHeight()-1;j>0 && bottom==-1;j--) {
+			for (int i=bi.getWidth()-1;i>0 && bottom==-1;i--) {
 
-    /**
-     * @return
-     */
-    private static ScreenshotImage getEmptyScreenshot()
-    {
-        File f = new FileResource("LatexExtras/EmptyScreenshot.jpg");
-        if (f.exists()) {
-            try {
-                FileInputStream fis = new FileInputStream(f);
-                BufferedImage bi = JPEGCodec.createJPEGDecoder(fis).decodeAsBufferedImage();
-                ScreenshotImage i = new ScreenshotImage();
-                i.image = bi;
-                i.trimInfo = new Rectangle(0,0,bi.getWidth(),bi.getHeight());
-                return i;
-            } catch (FileNotFoundException e) {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("File " + f.getAbsolutePath() + " does not exist.");
-            } catch (ImageFormatException e) {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Data contained inside file " + f.getAbsolutePath() + " is not valid.");
-            } catch (IOException e) {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Error trying to read file " + f.getAbsolutePath());
-            }
-        }
-        if (logger.isLoggable(Level.SEVERE))
+				int color = bi.getRGB(i, j);
+				if (color!=-1) {
+					bottom = j;
+				}
+			}
+		}
+		left = Math.max(left-border,0);
+		top = Math.max(top-border,0);
+		right = Math.min(right-left+border,bi.getWidth()-1-left);
+		bottom = Math.min(bottom-top+border,bi.getHeight()-1-top);
+		ScreenshotImage i = new ScreenshotImage();
+		i.image = bi.getSubimage(left, top, right,bottom);
+		i.trimInfo = new Rectangle(left, top, right,bottom);
+		return i;
+	}
+
+	/**
+	 * @return
+	 */
+	private static ScreenshotImage getEmptyScreenshot()
+	{
+		File f = new FileResource("LatexExtras/EmptyScreenshot.jpg");
+		if (f.exists()) {
+			try {
+				FileInputStream fis = new FileInputStream(f);
+				BufferedImage bi = ImageIO.read(fis);
+				ScreenshotImage i = new ScreenshotImage();
+				i.image = bi;
+				i.trimInfo = new Rectangle(0,0,bi.getWidth(),bi.getHeight());
+				return i;
+			} catch (FileNotFoundException e) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("File " + f.getAbsolutePath() + " does not exist.");
+				}
+			} catch (IOException e) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Error trying to read file " + f.getAbsolutePath());
+				}
+			}
+		}
+		if (logger.isLoggable(Level.SEVERE)) {
 			logger.severe("Cannot find "+f.getAbsolutePath()+" returning null");
-        return null;
-    }
+		}
+		return null;
+	}
 
 }
