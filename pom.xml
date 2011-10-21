@@ -84,6 +84,11 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
+				<groupId>org.codehaus.plexus</groupId>
+				<artifactId>plexus-compiler-eclipse</artifactId>
+				<version>1.8.2</version>
+			</dependency>
+			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
 				<version>3.8.2</version>
