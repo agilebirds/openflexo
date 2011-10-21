@@ -209,11 +209,12 @@
 			<arg value="a+x" />
 			<arg value="MacOS/make_dmg"/>
 		</exec>
-		<echo message="Launching make_dmg ${mac.app.dir.versioned} &quot;${project.build.directory}/${qualified_and_versioned_app_name}.dmg&quot; &quot;${qualified_and_versioned_app_name}&quot;"/>
+		<propertyregex property="vol_label" input="${qualified_and_versioned_app_name}" regexp=" " replace="" />
+		<echo message="Launching make_dmg ${mac.app.dir.versioned} &quot;${project.build.directory}/${qualified_and_versioned_app_name}.dmg&quot; &quot;${vol_label}&quot;"/>
 		<exec executable="MacOS/make_dmg">
 			<arg value="${mac.app.dir.versioned}" />
 			<arg value="${project.build.directory}/${qualified_and_versioned_app_name}.dmg" />
-			<arg value="${qualified_and_versioned_app_name}" />
+			<arg value="${vol_label}" />
 		</exec>
 	</target>
 
