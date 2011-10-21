@@ -95,7 +95,15 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 
 	public OntologyObject getAssertionObject(EditionSchemeAction action)
 	{
-		return (OntologyObject)getObject().getBindingValue(action);
+		Object value = getObject().getBindingValue(action);
+		if (value instanceof OntologyObject)
+			return (OntologyObject)value;
+		return null;
+	}
+	
+	public Object getValue(EditionSchemeAction action)
+	{
+		return getObject().getBindingValue(action);
 	}
 	
 
