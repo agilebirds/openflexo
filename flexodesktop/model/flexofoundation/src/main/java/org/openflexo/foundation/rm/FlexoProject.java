@@ -174,10 +174,6 @@ import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 import org.openflexo.xmlcode.XMLMapping;
 
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
-
-
 /**
  * This class represents a Flexo project. A FlexoProject is composed of FlexoResources which are generally located in a project directory. A
  * FlexoProject is the entry point to navigate through the whole data of the project.
@@ -2984,8 +2980,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 				 BufferedImage bi = ImageIO.read(file);
 				 BufferedImage image = new BufferedImage(bi.getWidth(null), bi.getHeight(null), BufferedImage.TYPE_INT_RGB);
 				 image.createGraphics().drawImage(i, 0, 0, bi.getWidth(null), bi.getHeight(null), null);
-				 JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-				 encoder.encode(image);
+				ImageIO.write(image, "jpg", out);
 				 return output;
 			 } catch (IOException e) {
 				 e.printStackTrace();
