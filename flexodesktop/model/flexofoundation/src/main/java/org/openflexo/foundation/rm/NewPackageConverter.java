@@ -46,7 +46,9 @@ public class NewPackageConverter {
 			org.openflexo.toolbox.FileUtils.saveToFile(new File(file.getParentFile(), file.getName() + ".~~"), content);
 			if (file.getName().endsWith(ProjectRestructuration.DM_EXTENSION)) {
 				content = convertDMContentToNewPackage(content);
-			} else {
+			} else if (file.getName().endsWith(ProjectRestructuration.SHEMA_EXTENSION)) {
+				content = content.replace("OESHEMA", "VESCHEMA").replace("OEShape", "VEShape").replace("OEConnector", "VEConnector");
+			}else {
 				content = convertContentToNewPackage(content);
 			}
 			org.openflexo.toolbox.FileUtils.saveToFile(file, content);
