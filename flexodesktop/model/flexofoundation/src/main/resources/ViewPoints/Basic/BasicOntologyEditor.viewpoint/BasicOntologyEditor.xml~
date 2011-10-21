@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewPoint id="1" uri="http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl" owlFile="BasicOntologyEditor.owl">
+  <description>This calc is intented to edit basic ontologies</description>
+  <EditionPattern id="2" name="Concept">
+    <description>Allows to define concept.</description>
+    <DropScheme id="3" target="top" name="DropConceptAtTopLevel" skipConfirmationPanel="false">
+      <TextFieldParameter id="4" name="conceptName" label="concept_name" defaultValue="&quot;concept&quot;" usePaletteLabelAsDefaultValue="false">
+        <description>Allow to enter concept name while dropping concept</description>
+      </TextFieldParameter>
+      <URIParameter id="5" base="conceptName" name="conceptURI" label="uri" usePaletteLabelAsDefaultValue="false">
+        <description>Allow to enter (unique) name used in Ontology</description>
+      </URIParameter>
+      <AddClass id="6" newClassName="parameters.conceptURI" patternRole="concept" />
+      <AddShape id="7" container="topLevel" patternRole="shape" />
+    </DropScheme>
+    <ContainedClassPatternRole id="8" ontologicType="http://www.agilebirds.com/openflexo/ViewPoints/BasicOntology.owl#Concept" patternRole="concept" />
+    <ContainedShapePatternRole id="9" patternRole="shape" label="concept.uriName" readOnlyLabel="false">
+      <ShapeGraphicalRepresentation id="10" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="158.0" y="34.0" width="99.0" height="36.22950819672131" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="concept.uriName" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+        <ForegroundStyle id="11" noStroke="false" color="0,51,255" lineWidth="1.6" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="12" color="204,255,255" useTransparency="true" transparencyLevel="0.5" />
+        <Border id="13" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="14" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="15" isRounded="true" arcSize="20.0" />
+        <TextStyle id="16" font="Lucida Sans,0,11" color="0,51,102" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShapePatternRole>
+    <PrimaryConceptClassPatternRole idref="8" />
+    <PrimaryRepresentationShapePatternRole idref="9" />
+    <Inspector id="17" inspectorTitle="Concept">
+      <TextField id="18" label="name" name="conceptName" readOnly="false" data="concept.uriName" />
+    </Inspector>
+  </EditionPattern>
+  <EditionPattern id="19" name="IsARelationship">
+    <description>Allows to define 'isA' link between two concepts</description>
+    <LinkScheme id="20" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl#Concept" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl#Concept" name="LinkTwoConceptByIsARelationShip" skipConfirmationPanel="false">
+      <AddIsAPropertyStatement id="21" father="toTarget.concept" patternRole="isA" subject="fromTarget.concept" />
+      <AddConnector id="22" fromShape="fromTarget.shape" toShape="toTarget.shape" patternRole="connector" />
+    </LinkScheme>
+    <ContainedIsAStatementPatternRole id="23" patternRole="isA" />
+    <ContainedConnectorPatternRole id="24" patternRole="connector" label="&quot;is a&quot;" readOnlyLabel="true">
+      <ConnectorGraphicalRepresentation id="25" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" text="&quot;is a&quot;" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="2.0" absoluteTextY="-13.0" textAlignment="CENTER">
+        <ForegroundStyle id="26" noStroke="false" color="0,102,0" lineWidth="1.2" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <StartShapeGraphicalRepresentation id="27" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="87.0" y="45.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+          <ForegroundStyle id="28" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="29" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="30" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="31" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <CircleShape id="32" />
+          <TextStyle id="33" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </StartShapeGraphicalRepresentation>
+        <EndShapeGraphicalRepresentation id="34" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="352.0" y="47.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+          <ForegroundStyle id="35" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="36" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="37" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="38" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <CircleShape id="39" />
+          <TextStyle id="40" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </EndShapeGraphicalRepresentation>
+        <LineConnector id="41" lineConnectorType="MINIMAL_LENGTH" />
+        <TextStyle id="42" font="Lucida Sans,0,10" color="0,153,51" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ConnectorGraphicalRepresentation>
+      <ArtifactFromShapeGraphicalRepresentation idref="27" />
+      <ArtifactToShapeGraphicalRepresentation idref="34" />
+    </ContainedConnectorPatternRole>
+    <PrimaryConceptIsAStatementPatternRole idref="23" />
+    <PrimaryRepresentationConnectorPatternRole idref="24" />
+    <Inspector id="43" inspectorTitle="&quot;Is A&quot; relationship">
+      <TextField id="44" label="child_concept" name="childConcept" readOnly="true" data="isA.subject.uriName" />
+      <TextField id="45" label="parent_concept" name="parentConcept" readOnly="true" data="isA.parent.uriName" />
+    </Inspector>
+  </EditionPattern>
+  <EditionPattern id="46" name="HasRelationship">
+    <description>Allows to define 'has' link between two concepts</description>
+    <LinkScheme id="47" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl#Concept" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl#Concept" name="LinkTwoConceptByHasRelationShip" skipConfirmationPanel="false">
+      <DropDownParameter id="48" values="Some,Only,Exact,Min,Max" name="restrictionType" label="restriction_type" defaultValue="&quot;Some&quot;" usePaletteLabelAsDefaultValue="false">
+        <description>Kind of restriction</description>
+      </DropDownParameter>
+      <IntegerParameter id="49" name="cardinality" label="cardinality" defaultValue="1" usePaletteLabelAsDefaultValue="false" conditional="(((restrictionType = &quot;Exact&quot;) | (restrictionType = &quot;Min&quot;)) | (restrictionType = &quot;Max&quot;))">
+        <description>Cardinality for restriction</description>
+      </IntegerParameter>
+      <AddRestrictionStatement id="50" object="toTarget.concept" propertyURI="http://www.agilebirds.com/openflexo/ViewPoints/BasicOntology.owl#has" cardinality="parameters.cardinality" patternRole="has" subject="fromTarget.concept" />
+      <AddConnector id="51" fromShape="fromTarget.shape" toShape="toTarget.shape" patternRole="connector" />
+    </LinkScheme>
+    <ContainedRestrictionStatementPatternRole id="52" patternRole="has" />
+    <ContainedConnectorPatternRole id="53" patternRole="connector" label="&quot;has&quot;" readOnlyLabel="true">
+      <ConnectorGraphicalRepresentation id="54" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="2.0" absoluteTextY="-11.0" textAlignment="CENTER">
+        <ForegroundStyle id="55" noStroke="false" color="204,102,0" lineWidth="1.2000000000000002" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <StartShapeGraphicalRepresentation id="56" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="86.0" y="45.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+          <ForegroundStyle id="57" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="58" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="59" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="60" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <CircleShape id="61" />
+          <TextStyle id="62" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </StartShapeGraphicalRepresentation>
+        <EndShapeGraphicalRepresentation id="63" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="356.0" y="45.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+          <ForegroundStyle id="64" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="65" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="66" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="67" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <CircleShape id="68" />
+          <TextStyle id="69" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </EndShapeGraphicalRepresentation>
+        <LineConnector id="70" lineConnectorType="MINIMAL_LENGTH" />
+        <TextStyle id="71" font="Lucida Sans,0,10" color="204,102,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ConnectorGraphicalRepresentation>
+      <ArtifactFromShapeGraphicalRepresentation idref="56" />
+      <ArtifactToShapeGraphicalRepresentation idref="63" />
+    </ContainedConnectorPatternRole>
+    <PrimaryConceptRestrictionStatementPatternRole idref="52" />
+    <PrimaryRepresentationConnectorPatternRole idref="53" />
+    <Inspector id="72" inspectorTitle="&quot;Has&quot; relationship">
+      <TextField id="73" label="statement" name="statement" readOnly="true" data="has.displayableRepresentation" />
+      <TextField id="74" label="owner" name="owner" readOnly="true" data="has.subject.uriName" />
+      <TextField id="75" label="object" name="object" readOnly="true" data="has.object.uriName" />
+      <TextField id="76" label="restriction_type" name="restrictionType" readOnly="true" data="has.restrictionType.name" />
+      <TextField id="77" label="cardinality" name="textfield" readOnly="true" data="has.cardinality.toString" />
+      <TextField id="78" label="property" name="textfield" readOnly="true" data="has.property.uri" />
+    </Inspector>
+  </EditionPattern>
+  <LocalizedDictionary id="79">
+    <Localized id="80" key="concept_name" lang="en">Concept name</Localized>
+    <Localized id="81" key="IsARelationship" lang="en">'Is a' relationship</Localized>
+    <Localized id="82" key="HasRelationship" lang="en">'Has' relationship</Localized>
+    <Localized id="83" key="LinkTwoConceptByIsARelationShip" lang="en">'Is a' relationship</Localized>
+    <Localized id="84" key="LinkTwoConceptByHasRelationShip" lang="en">'Has' relationship</Localized>
+    <Localized id="85" key="uri" lang="English">URI</Localized>
+    <Localized id="86" key="semantic_statements" lang="English">Semantic statements</Localized>
+    <Localized id="87" key="cardinality" lang="English">Cardinality</Localized>
+    <Localized id="88" key="annotations" lang="English">Annotations</Localized>
+    <Localized id="89" key="restriction_type" lang="English">Restriction type</Localized>
+    <Localized id="90" key="DropConceptAtTopLevel" lang="English">Drop concept at top level</Localized>
+    <Localized id="91" key="DropConceptAtTopLevel" lang="French">Créer un concept</Localized>
+    <Localized id="92" key="concept_name" lang="French">Nom du concept</Localized>
+    <Localized id="93" key="annotations" lang="French">Annotations</Localized>
+    <Localized id="94" key="restriction_type" lang="French">Type de restriction</Localized>
+    <Localized id="95" key="IsARelationship" lang="French">Relation 'est un/une'</Localized>
+    <Localized id="96" key="LinkTwoConceptByHasRelationShip" lang="French">Relation 'a'</Localized>
+    <Localized id="97" key="LinkTwoConceptByIsARelationShip" lang="French">Relation 'est un/une'</Localized>
+    <Localized id="98" key="name" lang="English">Name</Localized>
+    <Localized id="99" key="object" lang="English">Object</Localized>
+    <Localized id="100" key="property" lang="English">Property</Localized>
+    <Localized id="101" key="child_concept" lang="English">Child concept</Localized>
+    <Localized id="102" key="parent_concept" lang="English">Parent concept</Localized>
+    <Localized id="103" key="owner" lang="English">Owner</Localized>
+    <Localized id="104" key="statement" lang="English">Statement</Localized>
+    <Localized id="105" key="child_concept" lang="French">Concept enfant</Localized>
+    <Localized id="106" key="parent_concept" lang="French">Concept parent</Localized>
+    <Localized id="107" key="owner" lang="French">Propriétaire</Localized>
+    <Localized id="108" key="statement" lang="French">Fait ontologique</Localized>
+  </LocalizedDictionary>
+</ViewPoint>
+
