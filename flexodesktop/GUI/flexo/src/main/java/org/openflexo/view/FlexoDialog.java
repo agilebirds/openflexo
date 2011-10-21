@@ -31,7 +31,6 @@ import java.awt.event.KeyListener;
 import javax.swing.JDialog;
 
 import org.openflexo.swing.DialogFactory;
-import org.openflexo.toolbox.ToolBox;
 
 
 public class FlexoDialog extends JDialog
@@ -44,25 +43,25 @@ public class FlexoDialog extends JDialog
 
 	public FlexoDialog(Frame owner) throws HeadlessException
 	{
-		super(ToolBox.getFrame(owner));
+		super(FlexoFrame.getOwner(owner));
 		init();
 	}
 
 	public FlexoDialog(Frame owner, boolean modal) throws HeadlessException
 	{
-		super(ToolBox.getFrame(owner), modal);
+		super(FlexoFrame.getOwner(owner), modal);
 		init();
 	}
 
 	public FlexoDialog(Frame owner, String title) throws HeadlessException
 	{
-		super(ToolBox.getFrame(owner), title);
+		super(FlexoFrame.getOwner(owner), title);
 		init();
 	}
 
 	public FlexoDialog(Frame owner, String title, boolean modal) throws HeadlessException
 	{
-		super(ToolBox.getFrame(owner), title, modal);
+		super(FlexoFrame.getOwner(owner), title, modal);
 		init();
 	}
 

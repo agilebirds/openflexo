@@ -20,6 +20,7 @@
 package org.openflexo.components;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -29,7 +30,6 @@ import javax.swing.JButton;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.components.MultiModuleModeWelcomePanel.ModuleSelectionListener;
-
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
@@ -45,60 +45,60 @@ import org.openflexo.view.FlexoFrame;
 public class AboutDialog extends FlexoDialog implements ModuleSelectionListener
 {
 
-    protected WelcomePanel welcomePanel;
+	protected WelcomePanel welcomePanel;
 
-    public AboutDialog()
-    {
-        super(FlexoFrame.getActiveFrame(), FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, true);
-        setUndecorated(true);
-        getContentPane().setBackground(FlexoCst.DARK_BLUE_FLEXO_COLOR);
-        getContentPane().setLayout(new BorderLayout());
-        getContentPane().add(welcomePanel = ModuleLoader.getWelcomePanel(),BorderLayout.CENTER);
-        if (welcomePanel instanceof MultiModuleModeWelcomePanel) {
-        	((MultiModuleModeWelcomePanel)welcomePanel).addToModuleSelectionListener(this);
-        }
-        addButtons();
-        pack();
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
-    }
+	public AboutDialog()
+	{
+		super(FlexoFrame.getActiveFrame(), FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, true);
+		setUndecorated(true);
+		getContentPane().setBackground(Color.WHITE);
+		getContentPane().setLayout(new BorderLayout());
+		getContentPane().add(welcomePanel = ModuleLoader.getWelcomePanel(),BorderLayout.CENTER);
+		if (welcomePanel instanceof MultiModuleModeWelcomePanel) {
+			((MultiModuleModeWelcomePanel)welcomePanel).addToModuleSelectionListener(this);
+		}
+		addButtons();
+		pack();
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
+	}
 
-    protected void addButtons()
-    {
-        JButton closeButton;
-        closeButton = new JButton(FlexoLocalization.localizedForKey("close"));
-        closeButton.addActionListener(new ActionListener() {
-            @Override
+	protected void addButtons()
+	{
+		JButton closeButton;
+		closeButton = new JButton(FlexoLocalization.localizedForKey("close"));
+		closeButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e)
-            {
-                dispose();
-            }
-        });
-        welcomePanel.add(closeButton);
-        if (welcomePanel instanceof MultiModuleModeWelcomePanel) {
-            closeButton.setBounds(140, 360+((MultiModuleModeWelcomePanel)welcomePanel).getScrollPaneHeight(), 140, 30);
-        } else if (welcomePanel instanceof SingleModuleModeWelcomePanel) {
-            closeButton.setBounds(140, 440, 140, 30);
-        }
-        JButton licenceButton;
-        licenceButton = new JButton(FlexoLocalization.localizedForKey("licence"));
-        licenceButton.setToolTipText(FlexoLocalization.localizedForKey("open_licence_agreement"));
-        licenceButton.addActionListener(new ActionListener() {
-        	@Override
+			{
+				dispose();
+			}
+		});
+		welcomePanel.add(closeButton);
+		if (welcomePanel instanceof MultiModuleModeWelcomePanel) {
+			closeButton.setBounds(140, 360+((MultiModuleModeWelcomePanel)welcomePanel).getScrollPaneHeight(), 140, 30);
+		} else if (welcomePanel instanceof SingleModuleModeWelcomePanel) {
+			closeButton.setBounds(140, 440, 140, 30);
+		}
+		JButton licenceButton;
+		licenceButton = new JButton(FlexoLocalization.localizedForKey("licence"));
+		licenceButton.setToolTipText(FlexoLocalization.localizedForKey("open_licence_agreement"));
+		licenceButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e)
-        	{
-        		ToolBox.openFile(ModuleLoader.getUserType().getLicenceFile());
-        		dispose();
-        	}
-        });
-        welcomePanel.add(licenceButton);
-        if (welcomePanel instanceof MultiModuleModeWelcomePanel) {
-        	licenceButton.setBounds(300, 360+((MultiModuleModeWelcomePanel)welcomePanel).getScrollPaneHeight(), 140, 30);
-        } else if (welcomePanel instanceof SingleModuleModeWelcomePanel) {
-        	licenceButton.setBounds(300, 440, 140, 30);
-        }
-        getRootPane().setDefaultButton(closeButton);
-    }
+			{
+				ToolBox.openFile(ModuleLoader.getUserType().getLicenceFile());
+				dispose();
+			}
+		});
+		welcomePanel.add(licenceButton);
+		if (welcomePanel instanceof MultiModuleModeWelcomePanel) {
+			licenceButton.setBounds(300, 360+((MultiModuleModeWelcomePanel)welcomePanel).getScrollPaneHeight(), 140, 30);
+		} else if (welcomePanel instanceof SingleModuleModeWelcomePanel) {
+			licenceButton.setBounds(300, 440, 140, 30);
+		}
+		getRootPane().setDefaultButton(closeButton);
+	}
 
 	@Override
 	public void moduleSelected(Module selectedModule)

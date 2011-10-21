@@ -40,130 +40,129 @@ import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.openflexo.AdvancedPrefs;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.utils.FlexoFileChooserUtils;
 
 public class TestFileChoosing {
 
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) 
+	public static void main(String[] args)
 	{
 
 		final JFrame dialog = new JFrame();
-			
-			JButton closeButton = new JButton("Close");
-			closeButton.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					dialog.dispose();
-					System.exit(0);
+
+		JButton closeButton = new JButton("Close");
+		closeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
+				System.exit(0);
+			}
+		});
+
+		JButton openButton1 = new JButton("JFileChooser- open");
+		openButton1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new JFileChooser();
+				chooser.setCurrentDirectory(AdvancedPrefs.getLastVisitedDirectory());
+				chooser.setDialogTitle(FlexoLocalization.localizedForKey("select_a_prj_directory"));
+				chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				chooser.setFileFilter(FlexoFileChooserUtils.PROJECT_FILE_FILTER);
+				chooser.setFileView(FlexoFileChooserUtils.PROJECT_FILE_VIEW);
+				chooser.showOpenDialog(dialog);
+			}
+		});
+
+		JButton openButton2 = new JButton("FileDialog- open");
+		openButton2.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				FileDialog fileDialog = new FileDialog(dialog);
+				//fileDialog.setFilenameFilter(filter)
+				//fileDialog.set
+				try {
+					fileDialog.setDirectory(AdvancedPrefs.getLastVisitedDirectory().getCanonicalPath());
+				} catch (Throwable t) {
 				}
-			});
-			
-			JButton openButton1 = new JButton("JFileChooser- open");
-			openButton1.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					JFileChooser chooser = new JFileChooser();
-					chooser.setCurrentDirectory(AdvancedPrefs.getLastVisitedDirectory());
-					chooser.setDialogTitle(FlexoLocalization.localizedForKey("select_a_prj_directory"));
-					chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-					chooser.setFileFilter(FlexoProject.getFileFilter());
-					chooser.setFileView(FlexoProject.getFileView());
-					chooser.showOpenDialog(dialog);
-				}
-			});
-			
-			JButton openButton2 = new JButton("FileDialog- open");
-			openButton2.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					FileDialog fileDialog = new FileDialog(dialog);
-					//fileDialog.setFilenameFilter(filter)
-					//fileDialog.set
-					try {
-						fileDialog.setDirectory(AdvancedPrefs.getLastVisitedDirectory().getCanonicalPath());
-					} catch (Throwable t) {
-					}
-					fileDialog.setVisible(true);
-					
-				}
-			});
-			
-			
-			JPanel controlPanel = new JPanel(new FlowLayout());
-			controlPanel.add(closeButton);
-			controlPanel.add(openButton1);
-			controlPanel.add(openButton2);
-			
-			JPanel panel = new JPanel(new BorderLayout());
-			
-			panel.add(controlPanel,BorderLayout.CENTER);
-			
-			dialog.setPreferredSize(new Dimension(1000,800));
-			dialog.getContentPane().add(panel);
-			dialog.validate();
-			dialog.pack();
-			dialog.setVisible(true);
-			dialog.getRootPane().putClientProperty(WINDOW_MODIFIED, Boolean.TRUE);
-			dialog.setVisible(true);
-			//Editor.main(null);
-		}
+				fileDialog.setVisible(true);
+
+			}
+		});
+
+
+		JPanel controlPanel = new JPanel(new FlowLayout());
+		controlPanel.add(closeButton);
+		controlPanel.add(openButton1);
+		controlPanel.add(openButton2);
+
+		JPanel panel = new JPanel(new BorderLayout());
+
+		panel.add(controlPanel,BorderLayout.CENTER);
+
+		dialog.setPreferredSize(new Dimension(1000,800));
+		dialog.getContentPane().add(panel);
+		dialog.validate();
+		dialog.pack();
+		dialog.setVisible(true);
+		dialog.getRootPane().putClientProperty(WINDOW_MODIFIED, Boolean.TRUE);
+		dialog.setVisible(true);
+		//Editor.main(null);
+	}
 
 	final static String WINDOW_MODIFIED = "windowModified";
-	
+
 	public static class Editor extends JFrame
-	  implements DocumentListener, ActionListener {
+	implements DocumentListener, ActionListener {
 
-	    final static String WINDOW_MODIFIED = "windowModified";
+		final static String WINDOW_MODIFIED = "windowModified";
 
-	    JEditorPane jp;
-	    JMenuBar jmb;
-	    JMenu file;
-	    JMenuItem save;
+		JEditorPane jp;
+		JMenuBar jmb;
+		JMenu file;
+		JMenuItem save;
 
-	    public Editor(String title) {
-	        super(title);
-	        jp = new JEditorPane();
-	        jp.getDocument().addDocumentListener(this);
-	        getContentPane().add(jp);
-	        jmb = new JMenuBar();
-	        file = new JMenu("File");
-	        save = new JMenuItem("Save");
-	        save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
-	          java.awt.Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-	        save.addActionListener(this);
-	        file.add(save);
-	        jmb.add(file);
-	        setJMenuBar(jmb);
-	        setSize(400,600);
-	        setVisible(true);
-	    }
+		public Editor(String title) {
+			super(title);
+			jp = new JEditorPane();
+			jp.getDocument().addDocumentListener(this);
+			getContentPane().add(jp);
+			jmb = new JMenuBar();
+			file = new JMenu("File");
+			save = new JMenuItem("Save");
+			save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+					java.awt.Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+			save.addActionListener(this);
+			file.add(save);
+			jmb.add(file);
+			setJMenuBar(jmb);
+			setSize(400,600);
+			setVisible(true);
+		}
 
-	    // doChange() and actionPerformed() handle the "windowModified" state
-	    public void doChange() {
-	        getRootPane().putClientProperty(WINDOW_MODIFIED, Boolean.TRUE);
-	    }
+		// doChange() and actionPerformed() handle the "windowModified" state
+		public void doChange() {
+			getRootPane().putClientProperty(WINDOW_MODIFIED, Boolean.TRUE);
+		}
 
-	    @Override
+		@Override
 		public void actionPerformed(ActionEvent e) {
-	        // save functionality here...
-	        getRootPane().putClientProperty(WINDOW_MODIFIED, Boolean.FALSE);
-	    }
+			// save functionality here...
+			getRootPane().putClientProperty(WINDOW_MODIFIED, Boolean.FALSE);
+		}
 
-	    // DocumentListener implementations
-	    @Override
+		// DocumentListener implementations
+		@Override
 		public void changedUpdate(DocumentEvent e) { doChange(); }
-	    @Override
+		@Override
 		public void insertUpdate(DocumentEvent e)  { doChange(); }
-	    @Override
+		@Override
 		public void removeUpdate(DocumentEvent e)  { doChange(); }
 
-	    public static void main(String[] args) {
-	        new Editor("test");
-	    }
+		public static void main(String[] args) {
+			new Editor("test");
+		}
 	}
 }

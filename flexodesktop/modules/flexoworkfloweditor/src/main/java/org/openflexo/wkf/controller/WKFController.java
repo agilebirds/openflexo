@@ -189,7 +189,7 @@ PrintManagingController {
 		_processBrowserView = new ProcessBrowserView(_processBrowser, this);
 		_workflowProcessBrowserViews = new JSplitPane(JSplitPane.VERTICAL_SPLIT, _wkfBrowserView, _processBrowserView);
 		_workflowProcessBrowserViews.setBorder(BorderFactory.createEmptyBorder());
-		new FlexoSplitPaneLocationSaver(_workflowProcessBrowserViews, "WKFBrowsersLeftSplitPane", 1.0);
+		new FlexoSplitPaneLocationSaver(_workflowProcessBrowserViews, "WKFBrowsersSplitPane", 1.0);
 		_roleListBrowserView = new RoleListBrowserView(_roleListBrowser, this);
 
 		addToPerspectives(PROCESS_EDITOR_PERSPECTIVE = new ProcessPerspective(this));
@@ -382,8 +382,8 @@ PrintManagingController {
 	}
 
 	public void setCurrentFlexoProcess(FlexoProcess process) {
-		if ((getCurrentPerspective() == PROCESS_EDITOR_PERSPECTIVE) || (getCurrentPerspective() == SWIMMING_LANE_PERSPECTIVE)
-				|| (getCurrentPerspective() == DOCUMENTATION_PERSPECTIVE)) {
+		if (getCurrentPerspective() == PROCESS_EDITOR_PERSPECTIVE || getCurrentPerspective() == SWIMMING_LANE_PERSPECTIVE
+				|| getCurrentPerspective() == DOCUMENTATION_PERSPECTIVE) {
 			if (process.isImported()) {
 				setCurrentImportedProcess(process);
 			} else {
@@ -394,7 +394,7 @@ PrintManagingController {
 
 	@Override
 	public ModuleView setCurrentEditedObjectAsModuleView(FlexoModelObject object, FlexoPerspective perspective) {
-		if ((object instanceof FlexoProcess) && ((FlexoProcess) object).isImported()) {
+		if (object instanceof FlexoProcess && ((FlexoProcess) object).isImported()) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Trying to set an imported process as current module view: returning!");
 			}
@@ -469,7 +469,7 @@ PrintManagingController {
 
 	private void updateGraphicalRepresentationWithNewWKFPreferenceSettings() {
 		for (ModuleView<?> moduleView : getLoadedViews().values()) {
-			if ((moduleView instanceof DrawingView) && (((DrawingView<?>) moduleView).getDrawing() instanceof DefaultDrawing)) {
+			if (moduleView instanceof DrawingView && ((DrawingView<?>) moduleView).getDrawing() instanceof DefaultDrawing) {
 				DefaultDrawing<?> drawing = (DefaultDrawing<?>) ((DrawingView<?>) moduleView).getDrawing();
 				Enumeration<GraphicalRepresentation<?>> en = drawing.getAllGraphicalRepresentations();
 				while (en.hasMoreElements()) {
@@ -530,7 +530,7 @@ PrintManagingController {
 
 	@Override
 	public boolean handleException(InspectableObject inspectable, String propertyName, Object value, Throwable exception) {
-		if ((inspectable instanceof Role) && (exception instanceof DuplicateRoleException)) {
+		if (inspectable instanceof Role && exception instanceof DuplicateRoleException) {
 			boolean isOK = false;
 			while (!isOK) {
 				String newRoleName = FlexoController.askForString(FlexoLocalization
@@ -549,7 +549,7 @@ PrintManagingController {
 			return true;
 		}
 
-		if ((inspectable instanceof Status) && (exception instanceof DuplicateStatusException)) {
+		if (inspectable instanceof Status && exception instanceof DuplicateStatusException) {
 			boolean isOK = false;
 			while (!isOK) {
 				String newStatusName = FlexoController.askForString(FlexoLocalization
@@ -568,7 +568,7 @@ PrintManagingController {
 			return true;
 		}
 
-		if ((inspectable instanceof OperationNode) && (exception instanceof DuplicateResourceException)) {
+		if (inspectable instanceof OperationNode && exception instanceof DuplicateResourceException) {
 			if (propertyName.equals("WOComponentName")) {
 				boolean isOK = false;
 				while (!isOK) {

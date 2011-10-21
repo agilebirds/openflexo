@@ -47,10 +47,7 @@ import java.util.zip.Deflater;
 
 import javax.imageio.ImageIO;
 import javax.naming.InvalidNameException;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileView;
 
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.DataModification;
@@ -162,7 +159,6 @@ import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.ws.FlexoWSLibrary;
 import org.openflexo.foundation.xml.FlexoXMLMappings;
-import org.openflexo.icon.FilesIconLibrary;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.kvc.KVCObject;
 import org.openflexo.localization.FlexoLocalization;
@@ -266,16 +262,6 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	private Vector<DocType> docTypes;
 
 	private ProjectStatistics statistics = null;
-
-	private static final FileView PROJECT_FILE_VIEW = new FlexoProjectFileView();
-
-	private static final FileFilter PROJECT_FILE_FILTER = new FlexoProjectFileFilter();
-
-	private static final FilenameFilter PROJECT_FILE_NAME_FILTER = new FlexoProjectFilenameFilter();
-
-	private static final FileView PALETTE_FILE_VIEW = new FlexoPaletteFileView();
-
-	private static final FileFilter PALETTE_FILE_FILTER = new FlexoPaletteFileFilter();
 
 	/**
 	 * Hashtable where all the known resources are stored, with associated key which is a String identifying the resource
@@ -493,26 +479,6 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	@Override
 	public FlexoProject getProject() {
 		return this;
-	}
-
-	public static FileView getFileView() {
-		return PROJECT_FILE_VIEW;
-	}
-
-	public static FileFilter getFileFilter() {
-		return PROJECT_FILE_FILTER;
-	}
-
-	public static FilenameFilter getFilenameFilter() {
-		return PROJECT_FILE_NAME_FILTER;
-	}
-
-	public static FileView getPaletteFileView() {
-		return PALETTE_FILE_VIEW;
-	}
-
-	public static FileFilter getPaletteFileFilter() {
-		return PALETTE_FILE_FILTER;
 	}
 
 	/**
@@ -3072,153 +3038,6 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		 holdObjectRegistration = false;
 	 }
 
-	 public static class FlexoProjectFileFilter extends FileFilter {
-
-		 @Override
-		 public boolean accept(File f) {
-			 if (f.isDirectory()) {
-				 return true;
-			 }
-			 return false;
-		 }
-
-		 @Override
-		 public String getDescription() {
-			 return FlexoLocalization.localizedForKey("flexo_projects");
-		 }
-
-	 }
-
-	 public static class FlexoProjectFilenameFilter implements FilenameFilter {
-
-		 @Override
-		 public boolean accept(File dir, String name) {
-			 if (new File(dir, name).isDirectory() && name.toLowerCase().endsWith(".prj")) {
-				 return true;
-			 }
-			 return false;
-		 }
-	 }
-
-	 public static class FlexoPaletteFileFilter extends FileFilter {
-
-		 @Override
-		 public boolean accept(File f) {
-			 if (f.isDirectory()) {
-				 return true;
-			 }
-			 return false;
-		 }
-
-		 @Override
-		 public String getDescription() {
-			 return FlexoLocalization.localizedForKey("flexo_palettes");
-		 }
-
-	 }
-
-	 /**
-	  * @author gpolet
-	  * 
-	  */
-	 public static class FlexoProjectFileView extends FileView {
-
-		 protected FlexoProjectFileView() {
-
-		 }
-
-		 /**
-		  * Overrides isTraversable
-		  * 
-		  * @see javax.swing.filechooser.FileView#isTraversable(java.io.File)
-		  */
-		 @Override
-		 public Boolean isTraversable(File f) {
-			 if (f == null || !f.isDirectory()) {
-				 return Boolean.FALSE;
-			 }
-			 if (f.getName().toLowerCase().endsWith(".prj")) {
-				 return Boolean.FALSE;
-			 } else {
-				 return super.isTraversable(f);
-			 }
-		 }
-
-		 /**
-		  * Overrides getIcon
-		  * 
-		  * @see javax.swing.filechooser.FileView#getIcon(java.io.File)
-		  */
-		 @Override
-		 public Icon getIcon(File f) {
-			 if (f.getName().toLowerCase().endsWith(".prj")) {
-				 return FilesIconLibrary.SMALL_UNKNOWN_FILE_ICON;
-			 } else {
-				 return super.getIcon(f);
-			 }
-		 }
-	 }
-
-	 public static class FlexoPaletteFileView extends FileView {
-
-		 protected FlexoPaletteFileView() {
-
-		 }
-
-		 /**
-		  * Overrides isTraversable
-		  * 
-		  * @see javax.swing.filechooser.FileView#isTraversable(java.io.File)
-		  */
-		 @Override
-		 public Boolean isTraversable(File f) {
-			 if (f == null || !f.isDirectory()) {
-				 return Boolean.FALSE;
-			 }
-			 if (f.getName().toLowerCase().endsWith(".iepalette")) {
-				 return Boolean.FALSE;
-			 }
-			 File[] files = f.listFiles(new java.io.FileFilter() {
-
-				 @Override
-				 public boolean accept(File file) {
-					 return !file.isDirectory() && file.getName().toLowerCase().endsWith(".woxml");
-				 }
-			 });
-			 if (files != null && files.length > 0) {
-				 return Boolean.FALSE;
-			 }
-			 return super.isTraversable(f);
-		 }
-
-		 /**
-		  * Overrides getIcon
-		  * 
-		  * @see javax.swing.filechooser.FileView#getIcon(java.io.File)
-		  */
-		 @Override
-		 public Icon getIcon(File f) {
-			 if (f.getName().toLowerCase().endsWith(".iepalette")) {
-				 return FilesIconLibrary.SMALL_FOLDER_ICON;
-			 } else if (f.isDirectory()) {
-				 File[] files = f.listFiles(new java.io.FileFilter() {
-
-					 @Override
-					 public boolean accept(File file) {
-						 return !file.isDirectory() && file.getName().toLowerCase().endsWith(".woxml");
-					 }
-				 });
-				 if (files != null && files.length > 0) {
-					 return FilesIconLibrary.SMALL_FOLDER_ICON;
-				 } else {
-					 return super.getIcon(f);
-				 }
-			 } else {
-				 return super.getIcon(f);
-			 }
-		 }
-	 }
-
 	 private boolean _rebuildDependanciesIsRequired = false;
 
 	 public void setRebuildDependanciesIsRequired() {
@@ -4191,9 +4010,9 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		 while (!ok && i < 100) {
 			 file = new File(root, attempt);
 			 if (!file.exists()) {
-				 file.mkdirs();
-			 } else if (file.isDirectory() && file.canWrite()) {
-				 ok = true;
+				 ok = file.mkdirs();
+			 } else {
+				 ok = file.isDirectory() && file.canWrite();
 			 }
 			 i++;
 			 attempt = base + "-" + i;

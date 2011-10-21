@@ -36,8 +36,6 @@ import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 
 import org.openflexo.FlexoCst;
-
-
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
@@ -166,7 +164,7 @@ FlexoObserver, ExternalIEController, PrintManagingController
 
 	private ComponentLibraryBrowserView _componentLibraryBrowserView;
 	private ComponentBrowserView _componentBrowserView;
-    private JSplitPane splitPaneWithBrowsers;
+	private JSplitPane splitPaneWithBrowsers;
 
 	// ==========================================================
 	// =================== Perspectives =========================
@@ -202,7 +200,7 @@ FlexoObserver, ExternalIEController, PrintManagingController
 		_componentLibraryBrowserView = new ComponentLibraryBrowserView(this);// new
 		_componentBrowserView = new ComponentBrowserView(this);// new
 		splitPaneWithBrowsers = new JSplitPane(JSplitPane.VERTICAL_SPLIT,_componentLibraryBrowserView,_componentBrowserView);
-		new FlexoSplitPaneLocationSaver(splitPaneWithBrowsers,"IEBrowsersSplitPane");
+		new FlexoSplitPaneLocationSaver(splitPaneWithBrowsers, "IEBrowsersLeftSplitPane", 0.5d);
 		splitPaneWithBrowsers.setBorder(BorderFactory.createEmptyBorder());
 		splitPaneWithBrowsers.setName(FlexoLocalization.localizedForKey("Library",splitPaneWithBrowsers));
 
@@ -219,8 +217,9 @@ FlexoObserver, ExternalIEController, PrintManagingController
 	@Override
 	public void dispose() {
 		COMPONENT_EDITOR_PERSPECTIVE.getIEPalette().disposePalettes();
-		if (getIEPaletteWindow()!=null && getIEPaletteWindow().getPalette()!=null)
+		if (getIEPaletteWindow()!=null && getIEPaletteWindow().getPalette()!=null) {
 			getIEPaletteWindow().getPalette().disposePalettes();
+		}
 		super.dispose();
 	}
 
@@ -336,8 +335,9 @@ FlexoObserver, ExternalIEController, PrintManagingController
 
 	public IEFrame getInterfaceEditorWindow()
 	{
-		if (_ieFrame == null)
+		if (_ieFrame == null) {
 			recreateInterfaceEditorWindow();
+		}
 		return _ieFrame;
 	}
 
@@ -386,8 +386,9 @@ FlexoObserver, ExternalIEController, PrintManagingController
 	 */
 	public ComponentInstance getCurrentEditedComponent()
 	{
-		if (getCurrentModuleView() instanceof IEWOComponentView)
+		if (getCurrentModuleView() instanceof IEWOComponentView) {
 			return ((IEWOComponentView)getCurrentModuleView()).getComponentInstance();
+		}
 		return null;
 	}
 
@@ -427,23 +428,23 @@ FlexoObserver, ExternalIEController, PrintManagingController
 	 */
 	@Override
 	public void selectAndFocusObject(FlexoModelObject object)
-    {
-    	if(object instanceof IEOperator && ((IEOperator)object).getOperatedSequence()!=null){
-    		setSelectedComponent(((IEWidget) object).getWOComponent().getComponentDefinition().getDummyComponentInstance());
-            getSelectionManager().setSelectedObject(((IEOperator)object).getOperatedSequence());
-    	}else if (object instanceof IEWidget) {
-            setSelectedComponent(((IEWidget) object).getWOComponent().getComponentDefinition().getDummyComponentInstance());
-            getSelectionManager().setSelectedObject(object);
-        } else if (object instanceof IEWOComponent) {
-            setSelectedComponent(((IEWOComponent) object).getComponentDefinition().getDummyComponentInstance());
-            getSelectionManager().setSelectedObject(object);
-        }  else if (object instanceof ComponentInstance) {
-            setSelectedComponent((ComponentInstance) object);
-            getSelectionManager().setSelectedObject(object);
-        } else {
-            getSelectionManager().setSelectedObject(object);
-        }
-    }
+	{
+		if(object instanceof IEOperator && ((IEOperator)object).getOperatedSequence()!=null){
+			setSelectedComponent(((IEWidget) object).getWOComponent().getComponentDefinition().getDummyComponentInstance());
+			getSelectionManager().setSelectedObject(((IEOperator)object).getOperatedSequence());
+		}else if (object instanceof IEWidget) {
+			setSelectedComponent(((IEWidget) object).getWOComponent().getComponentDefinition().getDummyComponentInstance());
+			getSelectionManager().setSelectedObject(object);
+		} else if (object instanceof IEWOComponent) {
+			setSelectedComponent(((IEWOComponent) object).getComponentDefinition().getDummyComponentInstance());
+			getSelectionManager().setSelectedObject(object);
+		}  else if (object instanceof ComponentInstance) {
+			setSelectedComponent((ComponentInstance) object);
+			getSelectionManager().setSelectedObject(object);
+		} else {
+			getSelectionManager().setSelectedObject(object);
+		}
+	}
 
 	// ==========================================================================
 	// ===================== Model to view conversions =========================
@@ -471,7 +472,7 @@ FlexoObserver, ExternalIEController, PrintManagingController
 		if (getCurrentEditZone() instanceof IEWOComponentView) {
 			if (object instanceof IEWidget) {
 				returned = ((IEWOComponentView) getCurrentEditZone()).findViewForModel(object);
-			} else if ((getCurrentEditedComponent() != null) && (object == getCurrentEditedComponent().getWOComponent())) {
+			} else if (getCurrentEditedComponent() != null && object == getCurrentEditedComponent().getWOComponent()) {
 				returned = (IEWOComponentView) getCurrentEditZone();
 			}
 			if (returned==null && performDeepSearch) {
@@ -483,12 +484,14 @@ FlexoObserver, ExternalIEController, PrintManagingController
 
 	private IEPanel searchRecursivelyViewForObjectInComponent(JComponent component, IEObject object) {
 		for(Component c:component.getComponents()) {
-			if (c instanceof IEWidgetView && ((IEWidgetView)c).getModel()==object)
+			if (c instanceof IEWidgetView && ((IEWidgetView)c).getModel()==object) {
 				return (IEWidgetView)c;
+			}
 			if (c instanceof JComponent) {
 				IEPanel p = searchRecursivelyViewForObjectInComponent((JComponent) c, object);
-				if (p!=null)
+				if (p!=null) {
 					return p;
+				}
 			}
 		}
 		return null;
@@ -518,12 +521,14 @@ FlexoObserver, ExternalIEController, PrintManagingController
 					loadedComponentViews.remove(k);
 				}
 				setCurrentEditedObjectAsModuleView(null);
-				if (current != null)
+				if (current != null) {
 					setSelectedComponent(current);
+				}
 				setCurrentCSSStyle(getProject().getCssSheet().getName());
 			}
-		} else if (dataModification != null && dataModification.modificationType() == DataModification.COMPONENT_FOLDER_ADDED_TO_LIBRARY)
+		} else if (dataModification != null && dataModification.modificationType() == DataModification.COMPONENT_FOLDER_ADDED_TO_LIBRARY) {
 			((FlexoComponentFolder) dataModification.newValue()).addObserver(this);
+		}
 	}
 
 	public DKVEditorBrowser getDkvEditorBrowser()
@@ -584,12 +589,14 @@ FlexoObserver, ExternalIEController, PrintManagingController
 	public void setCurrentlyDroppingTarget(IEContainer droppingTarget)
 	{
 		if (droppingTarget == null) {
-			if (_currentlyDroppingTarget == null)
+			if (_currentlyDroppingTarget == null) {
 				return;
+			}
 			_currentDropTargetAsChanged = true;
 		} else {
-			if (droppingTarget.equals(_currentlyDroppingTarget))
+			if (droppingTarget.equals(_currentlyDroppingTarget)) {
 				return;
+			}
 			_currentDropTargetAsChanged = true;
 		}
 		_currentlyDroppingTarget = droppingTarget;
@@ -685,8 +692,9 @@ FlexoObserver, ExternalIEController, PrintManagingController
 	}
 
 	public IEPanel getComponentForWidgetInCurrentComponent(IEWidget widget) {
-		if (widget==null)
+		if (widget==null) {
 			return null;
+		}
 		return viewForObject(widget);
 	}
 
@@ -695,17 +703,20 @@ FlexoObserver, ExternalIEController, PrintManagingController
 	{
 		if (object instanceof ComponentInstance) {
 			ComponentInstance ci = (ComponentInstance)object;
-			if (ci.getComponentDefinition() == null) return "???";
-			if (ci instanceof OperationComponentInstance)
+			if (ci.getComponentDefinition() == null) {
+				return "???";
+			}
+			if (ci instanceof OperationComponentInstance) {
 				return ci.getComponentDefinition().getName()+" ("+FlexoLocalization.localizedForKey("operation")+" "+((OperationComponentInstance)ci).getOperationNode().getName()+")";
-			else
+			} else {
 				return ci.getComponentDefinition().getName();
+			}
 		}
 		else if (object instanceof FlexoItemMenu) {
 			return FlexoLocalization.localizedForKey("menu") + " " + ((FlexoItemMenu)object).getMenuLabel();
 		}
 		else if (object instanceof DKVModel) {
-		       return FlexoLocalization.localizedForKey("dkv_model");
+			return FlexoLocalization.localizedForKey("dkv_model");
 		}
 		return null;
 	}

@@ -81,6 +81,26 @@ import org.openflexo.velocity.PostVelocityParser;
 
 public abstract class Generator<T extends FlexoModelObject, R extends GenerationRepository> extends FlexoObservable implements DataFlexoObserver {
 
+	public static class Holder<T> {
+		private T value;
+
+		public T get() {
+			return value;
+		}
+
+		public T getValue() {
+			return get();
+		}
+
+		public void set(T value) {
+			this.value = value;
+		}
+
+		public void setValue(T value) {
+			set(value);
+		}
+	}
+
 	private static final Logger logger = FlexoLogger.getLogger(Generator.class.getPackage().getName());
 
 	private Vector<CGTemplate> _usedTemplates = new Vector<CGTemplate>();
@@ -165,6 +185,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		if (object!=null) {
 			context.put("object", object);
 		}
+		context.put("null", null);
 		context.put("project", getProject());
 		context.put("projectGenerator", getProjectGenerator());
 		context.put("repository", getRepository());
@@ -179,7 +200,15 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		context.put("falseValue", Boolean.FALSE);
 		context.put("toolbox", new ToolBox());
 		context.put("javaUtils", new JavaUtils());
-		context.put("globalVariableMap", new HashMap<String, Object>());
+		context.put("globalVariableMap", new HashMap<String, Object>() {
+			@Override
+			public Object put(String key, Object value) {
+				if (value == null) {
+					System.err.println("coucou");
+				}
+				return super.put(key, value);
+			}
+		});
 		context.put("today", new Date());
 		return context;
 	}
@@ -273,6 +302,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 				Map<String, Long> newMacroLibMap = new HashMap<String, Long>();
 				for (CGTemplate template : macroTemplates) {
 					newMacroLibMap.put(template.getRelativePath(), template.getLastUpdate().getTime());
+					notifyTemplateRequired(template);
 				}
 
 				if (!newMacroLibMap.equals(macroLibMap)) {
@@ -595,6 +625,10 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 
 	public void setUsedTemplates(Vector<CGTemplate> templates) {
 		this._usedTemplates = templates;
+	}
+
+	public Holder<Object> getNewHolder() {
+		return new Holder<Object>();
 	}
 
 	public Vector<Object> getNewVector() {
