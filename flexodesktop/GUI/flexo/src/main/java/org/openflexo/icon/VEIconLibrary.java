@@ -30,9 +30,6 @@ import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewFolder;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.view.ViewShape;
-import org.openflexo.foundation.viewpoint.ViewPointFolder;
-import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
 import org.openflexo.toolbox.ImageIconResource;
 
 /**
@@ -60,10 +57,10 @@ public class VEIconLibrary extends IconLibrary {
 	public static final ImageIcon VE_SP_SELECTED_ICON = new ImageIconResource("Icons/VE/ShemaPerspective_S.gif");
 	
 	// Model icons
-	public static final ImageIconResource VIEW_LIBRARY_ICON = new ImageIconResource("Icons/Model/VE/OEShemaLibrary.gif");
-	public static final ImageIconResource VIEW_ICON = new ImageIconResource("Icons/Model/VE/OEShema.gif");
-	public static final ImageIconResource SHAPE_ICON = new ImageIconResource("Icons/Model/VE/OEShape.gif");
-	public static final ImageIconResource CONNECTOR_ICON = new ImageIconResource("Icons/Model/VE/OEConnector.gif");
+	public static final ImageIconResource VIEW_LIBRARY_ICON = new ImageIconResource("Icons/Model/VE/ViewLibrary.png");
+	public static final ImageIconResource VIEW_ICON = new ImageIconResource("Icons/Model/VE/View.png");
+	public static final ImageIconResource SHAPE_ICON = new ImageIconResource("Icons/Model/VE/ViewShape.png");
+	public static final ImageIconResource CONNECTOR_ICON = new ImageIconResource("Icons/Model/VE/ViewConnector.gif");
 
 	public static final ImageIconResource UNKNOWN_ICON = new ImageIconResource("Icons/Model/VPM/UnknownIcon.gif");
 

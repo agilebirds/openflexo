@@ -322,7 +322,7 @@ public class FileMenu extends FlexoMenu
 		public SaveAsProjectItem()
 		{
 			super(new SaveAsProjectAction(), "save_project_as", null, getController(), true);
-			setIcon(IconLibrary.SAVE_AS_ICON);
+			setIcon(IconLibrary.SAVE_ICON);
 		}
 
 	}
@@ -348,7 +348,7 @@ public class FileMenu extends FlexoMenu
 		public SendProjectToFlexoServerItem()
 		{
 			super(new SendProjectToFlexoServerAction(), "send_project_to_flexo_server", null, getController(), true);
-			setIcon(IconLibrary.EXPORT_ICON);
+			setIcon(IconLibrary.NETWORK_ICON);
 		}
 
 	}
@@ -383,7 +383,7 @@ public class FileMenu extends FlexoMenu
 		public SaveProjectForServerItem()
 		{
 			super(new SaveProjectForServerAction(), "save_project_for_server", null, getController(), true);
-			setIcon(IconLibrary.EXPORT_ICON);
+			setIcon(IconLibrary.SAVE_ICON);
 		}
 
 	}

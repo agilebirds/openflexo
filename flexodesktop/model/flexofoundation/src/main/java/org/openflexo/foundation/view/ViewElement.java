@@ -149,19 +149,21 @@ public abstract class ViewElement extends ViewObject implements Bindable {
 		// this graphical element plays a representation primitive role 
 		// When many, big pbs may happen !!!!
 		
-		if (getEditionPatternReferences().size() > 0) {
-			EditionPatternReference returned = null;
-			for (EditionPatternReference r : getEditionPatternReferences()) {
-				if (r.getPatternRole() instanceof GraphicalElementPatternRole) {
-					if (((GraphicalElementPatternRole)r.getPatternRole()).getIsPrimaryRepresentationRole()) {
-						if (returned != null) {
-							logger.warning("More than one edition pattern reference where element plays a primary role !!!!");
+		if (getEditionPatternReferences() != null) {
+			if (getEditionPatternReferences().size() > 0) {
+				EditionPatternReference returned = null;
+				for (EditionPatternReference r : getEditionPatternReferences()) {
+					if (r.getPatternRole() instanceof GraphicalElementPatternRole) {
+						if (((GraphicalElementPatternRole)r.getPatternRole()).getIsPrimaryRepresentationRole()) {
+							if (returned != null) {
+								logger.warning("More than one edition pattern reference where element plays a primary role !!!!");
+							}
+							returned = r;
 						}
-						returned = r;
 					}
 				}
+				if (returned != null) return returned;
 			}
-			if (returned != null) return returned;
 		}
 		return null;
 	}

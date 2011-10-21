@@ -4,7 +4,7 @@
   <EditionPattern id="2" name="RootOrganizationUnit">
     <description>Allows to define concept of top level organization unit.
  This is the root level in the scope of the project.</description>
-    <DropScheme id="3" target="top" name="DropRootOrganizationUnitAtTopLevel" label="create_root_organization_unit" skipConfirmationPanel="false">
+    <DropScheme id="3" target="top" name="DropRootOrganizationUnitAtTopLevel" label="create_root_organization_unit" skipConfirmationPanel="true">
       <description>Create a root organization unit</description>
       <TextFieldParameter id="4" name="organizationUnitName" label="organization_unit_name" defaultValue="&quot;organization unit&quot;" usePaletteLabelAsDefaultValue="false">
         <description>Allow to enter organization unit name while dropping concept</description>
@@ -50,7 +50,7 @@
   </EditionPattern>
   <EditionPattern id="28" name="OrganizationUnit">
     <description>Allows to define an organization unit inside an other organization unit.</description>
-    <DropScheme id="29" target="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl#OrganizationUnit" name="DropOrganizationUnitInOrganizationUnit" skipConfirmationPanel="false">
+    <DropScheme id="29" target="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl#OrganizationUnit" name="DropOrganizationUnitInOrganizationUnit" skipConfirmationPanel="true">
       <description>Create a new organization unit inside parent organization unit</description>
       <TextFieldParameter id="30" name="organizationUnitName" label="organization_unit_name" defaultValue="&quot;Organization unit&quot;" usePaletteLabelAsDefaultValue="false">
         <description>Allow to enter organization unit name while dropping concept</description>
@@ -104,7 +104,7 @@
   </EditionPattern>
   <EditionPattern id="63" name="OrganizationUnitMission">
     <description>Allows to define a mission for an organization unit</description>
-    <DropScheme id="64" target="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl#OrganizationUnit" name="DropMissionInOrganizationUnit" skipConfirmationPanel="false">
+    <DropScheme id="64" target="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl#OrganizationUnit" name="DropMissionInOrganizationUnit" skipConfirmationPanel="true">
       <TextFieldParameter id="65" name="missionName" label="mission" defaultValue="&quot;Mission&quot;" usePaletteLabelAsDefaultValue="false">
         <description>Allow to enter short name for mission</description>
       </TextFieldParameter>
@@ -143,7 +143,7 @@
   </EditionPattern>
   <EditionPattern id="87" name="OrganizationUnitObjective">
     <description>Allows to define an objective for an organization unit</description>
-    <DropScheme id="88" target="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl#OrganizationUnit" name="DropObjectiveInOrganizationUnit" skipConfirmationPanel="false">
+    <DropScheme id="88" target="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl#OrganizationUnit" name="DropObjectiveInOrganizationUnit" skipConfirmationPanel="true">
       <TextFieldParameter id="89" name="objectiveName" label="objective" defaultValue="&quot;Objective&quot;" usePaletteLabelAsDefaultValue="false">
         <description>Allow to enter short name for objective</description>
       </TextFieldParameter>
@@ -163,7 +163,7 @@
     <ContainedIndividualPatternRole id="97" ontologicType="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#Objective" patternRole="objective" />
     <ContainedObjectPropertyStatementPatternRole id="98" objectProperty="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#hasObjective" patternRole="hasObjective" />
     <ContainedShapePatternRole id="99" patternRole="shape" label="objective.objectiveName" readOnlyLabel="false">
-      <ShapeGraphicalRepresentation id="100" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="135.0" y="35.0" width="183.4260355029586" height="40.3013698630137" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="objective.objectiveName" isMultilineAllowed="true" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+      <ShapeGraphicalRepresentation id="100" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="135.0" y="35.0" width="183.4260355029586" height="40.3013698630137" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" isMultilineAllowed="true" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
         <ForegroundStyle id="101" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
         <ColorBackgroundStyle id="102" color="204,0,51" useTransparency="false" transparencyLevel="0.5" />
         <Border id="103" top="5" bottom="5" left="5" right="5" />
@@ -222,7 +222,7 @@
   </EditionPattern>
   <EditionPattern id="136" name="PositionMission">
     <description>Allows to define a position mission</description>
-    <DropScheme id="137" target="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl#OrganizationUnitPosition" name="DropPositionMissionForPosition" skipConfirmationPanel="false">
+    <DropScheme id="137" target="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl#OrganizationUnitPosition" name="DropPositionMissionForPosition" skipConfirmationPanel="true">
       <TextFieldParameter id="138" name="missionName" label="mission" defaultValue="&quot;Mission&quot;" usePaletteLabelAsDefaultValue="false">
         <description>Allow to enter short name for mission</description>
       </TextFieldParameter>
@@ -243,7 +243,7 @@
     <ContainedIndividualPatternRole id="147" ontologicType="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#PositionMission" patternRole="mission" />
     <ContainedObjectPropertyStatementPatternRole id="148" objectProperty="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#hasPositionMission" patternRole="hasPositionMission" />
     <ContainedShapePatternRole id="149" patternRole="shape" label="mission.missionDescription" readOnlyLabel="false">
-      <ShapeGraphicalRepresentation id="150" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="195.60727272727274" y="30.0" width="156.39272727272726" height="42.13114754098361" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="mission.missionDescription" isMultilineAllowed="true" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+      <ShapeGraphicalRepresentation id="150" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="195.60727272727274" y="30.0" width="156.39272727272726" height="42.13114754098361" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" isMultilineAllowed="true" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
         <ForegroundStyle id="151" noStroke="false" color="102,102,102" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
         <ColorBackgroundStyle id="152" color="247,221,221" useTransparency="false" transparencyLevel="0.5" />
         <Border id="153" top="5" bottom="5" left="5" right="5" />
@@ -253,7 +253,7 @@
       </ShapeGraphicalRepresentation>
     </ContainedShapePatternRole>
     <ContainedConnectorPatternRole id="157" patternRole="hasPositionMissionConnector" label="&quot;has mission&quot;" readOnlyLabel="true">
-      <ConnectorGraphicalRepresentation id="158" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="NONE" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" text="&quot;has mission&quot;" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="-4.0" absoluteTextY="-13.0" textAlignment="CENTER">
+      <ConnectorGraphicalRepresentation id="158" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="NONE" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="-4.0" absoluteTextY="-13.0" textAlignment="CENTER">
         <ForegroundStyle id="159" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
         <StartShapeGraphicalRepresentation id="160" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="64.0" y="45.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
           <ForegroundStyle id="161" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -280,7 +280,7 @@
   </EditionPattern>
   <EditionPattern id="174" name="PositionTask">
     <description>Allows to define a position task</description>
-    <DropScheme id="175" target="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl#OrganizationUnitPosition" name="DropTaskForPosition" skipConfirmationPanel="false">
+    <DropScheme id="175" target="http://www.agilebirds.com/openflexo/ViewPoints/FlexoMethodology/FLXOrganizationalStructure-A.owl#OrganizationUnitPosition" name="DropTaskForPosition" skipConfirmationPanel="true">
       <TextFieldParameter id="176" name="taskName" label="task" defaultValue="&quot;Task&quot;" usePaletteLabelAsDefaultValue="false">
         <description>Allow to enter short name for task</description>
       </TextFieldParameter>
@@ -301,7 +301,7 @@
     <ContainedIndividualPatternRole id="185" ontologicType="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#Task" patternRole="task" />
     <ContainedObjectPropertyStatementPatternRole id="186" objectProperty="http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#hasTask" patternRole="hasTask" />
     <ContainedShapePatternRole id="187" patternRole="shape" label="task.taskDescription" readOnlyLabel="false">
-      <ShapeGraphicalRepresentation id="188" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="197.0" y="53.65573770491804" width="200.0" height="29.34426229508197" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" text="task.taskDescription" isMultilineAllowed="true" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+      <ShapeGraphicalRepresentation id="188" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="197.0" y="53.65573770491804" width="200.0" height="29.34426229508197" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" isMultilineAllowed="true" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
         <ForegroundStyle id="189" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
         <ColorBackgroundStyle id="190" color="102,102,102" useTransparency="false" transparencyLevel="0.5" />
         <Border id="191" top="5" bottom="5" left="5" right="5" />
@@ -311,7 +311,7 @@
       </ShapeGraphicalRepresentation>
     </ContainedShapePatternRole>
     <ContainedConnectorPatternRole id="195" patternRole="hasTaskConnector" label="&quot;has task&quot;" readOnlyLabel="true">
-      <ConnectorGraphicalRepresentation id="196" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="NONE" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" text="&quot;has task&quot;" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="5.0" absoluteTextY="-12.0" textAlignment="CENTER">
+      <ConnectorGraphicalRepresentation id="196" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" isVisible="true" layer="64" startSymbol="NONE" endSymbol="NONE" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="5.0" absoluteTextY="-12.0" textAlignment="CENTER">
         <ForegroundStyle id="197" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
         <StartShapeGraphicalRepresentation id="198" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="80.0" y="56.0" width="20.0" height="20.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" layer="1" isFloatingLabel="true" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
           <ForegroundStyle id="199" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />

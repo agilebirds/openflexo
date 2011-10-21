@@ -172,7 +172,9 @@
 
     <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#description -->
 
-    <owl:DatatypeProperty rdf:about="#description"/>
+    <owl:DatatypeProperty rdf:about="#description">
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
     
 
 
@@ -191,6 +193,7 @@
     <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#missionDescription -->
 
     <owl:DatatypeProperty rdf:about="#missionDescription">
+        <rdfs:domain rdf:resource="#Mission"/>
         <rdfs:subPropertyOf rdf:resource="#description"/>
     </owl:DatatypeProperty>
     
@@ -199,6 +202,7 @@
     <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#missionName -->
 
     <owl:DatatypeProperty rdf:about="#missionName">
+        <rdfs:domain rdf:resource="#Mission"/>
         <rdfs:subPropertyOf rdf:resource="#name"/>
     </owl:DatatypeProperty>
     
@@ -206,13 +210,16 @@
 
     <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#name -->
 
-    <owl:DatatypeProperty rdf:about="#name"/>
+    <owl:DatatypeProperty rdf:about="#name">
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
     
 
 
     <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#objectiveDescription -->
 
     <owl:DatatypeProperty rdf:about="#objectiveDescription">
+        <rdfs:domain rdf:resource="#Objective"/>
         <rdfs:subPropertyOf rdf:resource="#description"/>
     </owl:DatatypeProperty>
     
@@ -221,6 +228,7 @@
     <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#objectiveName -->
 
     <owl:DatatypeProperty rdf:about="#objectiveName">
+        <rdfs:domain rdf:resource="#Objective"/>
         <rdfs:subPropertyOf rdf:resource="#name"/>
     </owl:DatatypeProperty>
     
@@ -231,7 +239,6 @@
     <owl:DatatypeProperty rdf:about="#organizationUnitDescription">
         <rdfs:domain rdf:resource="#OrganizationalUnit"/>
         <rdfs:subPropertyOf rdf:resource="#description"/>
-        <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
 
@@ -241,7 +248,6 @@
     <owl:DatatypeProperty rdf:about="#organizationUnitName">
         <rdfs:domain rdf:resource="#OrganizationalUnit"/>
         <rdfs:subPropertyOf rdf:resource="#name"/>
-        <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
 
@@ -249,6 +255,7 @@
     <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#positionDescription -->
 
     <owl:DatatypeProperty rdf:about="#positionDescription">
+        <rdfs:domain rdf:resource="#Position"/>
         <rdfs:subPropertyOf rdf:resource="#description"/>
     </owl:DatatypeProperty>
     
@@ -257,6 +264,7 @@
     <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#positionName -->
 
     <owl:DatatypeProperty rdf:about="#positionName">
+        <rdfs:domain rdf:resource="#Position"/>
         <rdfs:subPropertyOf rdf:resource="#name"/>
     </owl:DatatypeProperty>
     
@@ -265,6 +273,7 @@
     <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#taskDescription -->
 
     <owl:DatatypeProperty rdf:about="#taskDescription">
+        <rdfs:domain rdf:resource="#Task"/>
         <rdfs:subPropertyOf rdf:resource="#description"/>
     </owl:DatatypeProperty>
     
@@ -273,6 +282,7 @@
     <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl#taskName -->
 
     <owl:DatatypeProperty rdf:about="#taskName">
+        <rdfs:domain rdf:resource="#Task"/>
         <rdfs:subPropertyOf rdf:resource="#name"/>
     </owl:DatatypeProperty>
     
@@ -303,6 +313,13 @@
         <rdfs:subClassOf rdf:resource="#OrganizationalConcept"/>
         <rdfs:subClassOf>
             <owl:Restriction>
+                <owl:onProperty rdf:resource="#lastName"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
                 <owl:onProperty rdf:resource="#hasPosition"/>
                 <owl:onClass rdf:resource="#Position"/>
                 <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
@@ -311,13 +328,6 @@
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="#firstName"/>
-                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
-                <owl:onDataRange rdf:resource="&xsd;string"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="#lastName"/>
                 <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
                 <owl:onDataRange rdf:resource="&xsd;string"/>
             </owl:Restriction>
@@ -358,14 +368,14 @@
         <rdfs:subClassOf rdf:resource="#OrganizationalConcept"/>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="#objectiveDescription"/>
+                <owl:onProperty rdf:resource="#objectiveName"/>
                 <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
                 <owl:onDataRange rdf:resource="&xsd;string"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="#objectiveName"/>
+                <owl:onProperty rdf:resource="#objectiveDescription"/>
                 <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
                 <owl:onDataRange rdf:resource="&xsd;string"/>
             </owl:Restriction>
@@ -395,8 +405,34 @@
         <rdfs:subClassOf rdf:resource="#OrganizationalConcept"/>
         <rdfs:subClassOf>
             <owl:Restriction>
+                <owl:onProperty rdf:resource="#organizationUnitName"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
                 <owl:onProperty rdf:resource="#hasSubOrgUnit"/>
                 <owl:allValuesFrom rdf:resource="#OrganizationalUnit"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasObjective"/>
+                <owl:someValuesFrom rdf:resource="#Objective"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#organizationUnitDescription"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#containsPosition"/>
+                <owl:allValuesFrom rdf:resource="#Position"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
@@ -411,32 +447,6 @@
                 <owl:onProperty rdf:resource="#hasParentOrgUnit"/>
                 <owl:onClass rdf:resource="#OrganizationalUnit"/>
                 <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="#containsPosition"/>
-                <owl:allValuesFrom rdf:resource="#Position"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="#organizationUnitName"/>
-                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
-                <owl:onDataRange rdf:resource="&xsd;string"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="#hasObjective"/>
-                <owl:someValuesFrom rdf:resource="#Objective"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="#organizationUnitDescription"/>
-                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
-                <owl:onDataRange rdf:resource="&xsd;string"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:comment xml:lang="en"
@@ -467,15 +477,9 @@
         <rdfs:subClassOf rdf:resource="#OrganizationalConcept"/>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="#positionDescription"/>
+                <owl:onProperty rdf:resource="#positionName"/>
                 <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
                 <owl:onDataRange rdf:resource="&xsd;string"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="#isInvolvedInOrganizationUnit"/>
-                <owl:someValuesFrom rdf:resource="#OrganizationalUnit"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
@@ -486,9 +490,8 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="#positionName"/>
-                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
-                <owl:onDataRange rdf:resource="&xsd;string"/>
+                <owl:onProperty rdf:resource="#isInvolvedInOrganizationUnit"/>
+                <owl:someValuesFrom rdf:resource="#OrganizationalUnit"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
@@ -496,6 +499,13 @@
                 <owl:onProperty rdf:resource="#hasPositionMission"/>
                 <owl:onClass rdf:resource="#PositionMission"/>
                 <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#positionDescription"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="&xsd;string"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:comment xml:lang="en"
@@ -534,14 +544,14 @@
         <rdfs:subClassOf rdf:resource="#OrganizationalConcept"/>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="#taskName"/>
+                <owl:onProperty rdf:resource="#taskDescription"/>
                 <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
                 <owl:onDataRange rdf:resource="&xsd;string"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="#taskDescription"/>
+                <owl:onProperty rdf:resource="#taskName"/>
                 <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
                 <owl:onDataRange rdf:resource="&xsd;string"/>
             </owl:Restriction>
