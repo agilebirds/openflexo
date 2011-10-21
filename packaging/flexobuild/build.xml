@@ -179,7 +179,7 @@
 	<target name="packageMacOSX">
 		<property name="java.stubfile" value="MacOS/JavaApplicationStub"/>
 		<chmod perm="a+x" file="${java.stubfile}"/>
-		<property name="relative_res_path" value="${qualified_and_versioned_app_name}.app/Contents/Icons" />
+		<property name="relative_res_path" value="${qualified_and_versioned_app_name}.app/Contents/Resources" />
 		<taskdef name="jarbundler" classpath="lib/jarbundler-1.9.jar:lib/xercesImpl.jar:lib/xml-apis.jar:lib/jdom-1.1.jar" classname="net.sourceforge.jarbundler.JarBundler" />
 		<mkdir dir="${mac.app.dir.versioned}" />
 		<tstamp>
@@ -198,6 +198,7 @@
 		<copy todir="${mac.app.dir.versioned}/${relative_res_path}">
 			<fileset dir="${dist.dir}">
 				<exclude name="lib/*" />
+				<exclude name="*.exe" />
 			</fileset>
 		</copy>
 		<antcall target="osx-packaging" />
