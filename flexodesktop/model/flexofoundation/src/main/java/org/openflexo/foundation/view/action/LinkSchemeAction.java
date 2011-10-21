@@ -83,7 +83,6 @@ public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction>
 	
 	private Object _graphicalRepresentation;
 
-	public boolean escapeParameterRetrievingWhenValid = false;
 
 	LinkSchemeAction (FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
 	{

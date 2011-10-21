@@ -80,7 +80,6 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction>
 	private DropScheme _dropScheme;
 	private ViewShape _newShape;
 	
-	public boolean escapeParameterRetrievingWhenValid = false;
 
 	private Object _graphicalRepresentation;
 

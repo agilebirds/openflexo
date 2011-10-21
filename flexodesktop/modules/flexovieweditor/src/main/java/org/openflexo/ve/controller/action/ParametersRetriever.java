@@ -74,10 +74,24 @@ public class ParametersRetriever implements BindingEvaluationContext {
 	
 	public static boolean retrieveParameters(final EditionSchemeAction<?> action, boolean skipDialogWhenPossible)
 	{
-		if (action.getEditionScheme().getParameters().size() == 0 
-				&& action.getEditionScheme().getSkipConfirmationPanel()) return true;
+		boolean successfullyRetrievedDefaultParameters = action.retrieveDefaultParameters();
+		
+		System.out.println("successfullyRetrievedDefaultParameters="+successfullyRetrievedDefaultParameters);
+		System.out.println("action.getEditionScheme().getSkipConfirmationPanel()="+action.getEditionScheme().getSkipConfirmationPanel());
+		System.out.println("skipDialogWhenPossible="+skipDialogWhenPossible);
+		
+		if (successfullyRetrievedDefaultParameters
+				&& action.getEditionScheme().getSkipConfirmationPanel()
+				&& skipDialogWhenPossible) {
+			return true;
+		}
+
 		ParametersRetriever retriever = new ParametersRetriever();
+
 		return retriever._retrieveParameters(action,skipDialogWhenPossible);
+	}
+
+	private ParametersRetriever() {
 	}
 
 	private boolean _retrieveParameters(final EditionSchemeAction<?> action, boolean skipDialogWhenPossible)

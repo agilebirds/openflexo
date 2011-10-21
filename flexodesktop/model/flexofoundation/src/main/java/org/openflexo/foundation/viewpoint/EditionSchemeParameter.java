@@ -28,6 +28,7 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyIndividual;
+import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
@@ -279,5 +280,13 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 		return null;
 	}
 
-
+	public boolean isMandatory()
+	{
+		return false;
+	}
+	
+	public boolean isValid(EditionSchemeAction action, Object value)
+	{
+		return !isMandatory() || value != null;
+	}
 }

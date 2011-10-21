@@ -23,7 +23,9 @@ import java.lang.reflect.Type;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+import org.openflexo.toolbox.StringUtils;
 
 public class URIParameter extends EditionSchemeParameter {
 
@@ -61,5 +63,32 @@ public class URIParameter extends EditionSchemeParameter {
 		return WidgetType.URI;
 	}
 
+	@Override
+	public boolean isMandatory()
+	{
+		return true;
+	}
+	
+	@Override
+	public boolean isValid(EditionSchemeAction action, Object value)
+	{
+		if (! (value instanceof String)) return false;
+		
+		String proposedURI = (String)value;
+		
+		if (StringUtils.isEmpty(proposedURI)) {
+			return false;
+		}
+		if (action.getProject().getProjectOntologyLibrary().isDuplicatedURI(action.getProject().getProjectOntology().getURI(),proposedURI)) {
+			// declared_uri_must_be_unique_please_choose_an_other_uri
+			return false;
+		}
+		else if (!action.getProject().getProjectOntologyLibrary().testValidURI(action.getProject().getProjectOntology().getURI(),proposedURI)) {
+			// declared_uri_is_not_well_formed_please_choose_an_other_uri
+			return false;
+		}
+
+		return true;
+	}
 
 }
