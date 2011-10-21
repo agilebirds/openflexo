@@ -54,12 +54,21 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
+					<version>2.3.2</version>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<configuration>
 						<source>${compiler.source}</source>
 						<target>${compiler.target}</target>
 						<encoding>${source.encoding}</encoding>
+						<compilerId>eclipse</compilerId>
 					</configuration>
+					<dependencies>
+						<dependency>
+							<groupId>org.codehaus.plexus</groupId>
+							<artifactId>plexus-compiler-eclipse</artifactId>
+							<version>1.6</version>
+						</dependency>
+					</dependencies>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
