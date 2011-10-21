@@ -28,6 +28,7 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyIndividual;
+import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
@@ -268,11 +269,13 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 		this.defaultValue = defaultValue;
 	}
 
-	public Object getDefaultValue(ViewPointPaletteElement element, BindingEvaluationContext parameterRetriever) 
+	public Object getDefaultValue(EditionSchemeAction<?> action, BindingEvaluationContext parameterRetriever) 
 	{
+		ViewPointPaletteElement paletteElement = (action instanceof DropSchemeAction ? ((DropSchemeAction)action).getPaletteElement() : null);
+
 		//System.out.println("Default value for "+element.getName()+" ???");
-		if (getUsePaletteLabelAsDefaultValue() && (element != null)) {
-			return element.getName();
+		if (getUsePaletteLabelAsDefaultValue() && (paletteElement != null)) {
+			return paletteElement.getName();
 		}
 		if (getDefaultValue().isValid()) {
 			return getDefaultValue().getBindingValue(parameterRetriever);
@@ -289,4 +292,5 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 	{
 		return !isMandatory() || value != null;
 	}
+		
 }

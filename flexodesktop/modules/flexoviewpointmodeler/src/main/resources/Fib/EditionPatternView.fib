@@ -295,10 +295,8 @@
               <Panel layout="border" data="ParametersDetailsPanel.data" dataClassName="org.openflexo.foundation.viewpoint.FlexoObjectParameter" constraints="twocols(location=right;index=11;expandVertically=false;expandHorizontally=true)" visible="(ParametersDetailsPanel.data.widget = &quot;FLEXO_OBJECT&quot;)" name="FlexoObjectParameterPanel">
                 <DropDown localize="true" name="dropdown" data="FlexoObjectParameterPanel.data.flexoObjectType" constraints="border(location=center;index=9;expandHorizontally=true;expandVertically=false)" iteratorClassName="org.openflexo.foundation.viewpoint.FlexoObjectParameter$FlexoObjectType" />
               </Panel>
-              <Label label="default value" align="right" localize="true" constraints="twocols(location=left;index=12;expandHorizontally=true;expandVertically=false)" minWidth="80" minHeight="14">
-                <LocalizedDictionary />
-              </Label>
-              <Panel layout="gridbag" hGap="0" vGap="0" flowAlignment="LEADING" constraints="twocols(location=center;index=13;expandVertically=false;expandHorizontally=true)">
+              <Label label="default value" align="right" localize="true" constraints="twocols(location=left;index=12;expandHorizontally=true;expandVertically=false)" minWidth="80" minHeight="14"  visible="(ParametersDetailsPanel.data.widget != &quot;URI&quot;)"/>
+               <Panel layout="gridbag" hGap="0" vGap="0" flowAlignment="LEADING" constraints="twocols(location=center;index=13;expandVertically=false;expandHorizontally=true)"   visible="(ParametersDetailsPanel.data.widget != &quot;URI&quot;)">
                 <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="ParametersDetailsPanel.data.defaultValue.binding" constraints="gridbag(location=right;index=0;anchor=east;weightY=0.0;y=0;insetsLeft=0;weightX=1.0;x=0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=both;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=true;expandVertically=false)" name="conditionalValue" localize="true" manageDynamicModel="true">
                   <Assignment variable="component.bindable" value="ParametersDetailsPanel.data" />
                   <Assignment variable="component.bindingDefinition" value="ParametersDetailsPanel.data.defaultValueBindingDefinition" />

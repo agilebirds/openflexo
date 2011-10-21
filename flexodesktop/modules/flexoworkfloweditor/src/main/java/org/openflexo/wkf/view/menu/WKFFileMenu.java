@@ -34,6 +34,7 @@ import javax.swing.AbstractAction;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.imported.action.ImportProcessesAction;
 import org.openflexo.foundation.imported.action.ImportRolesAction;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.menu.FileMenu;
 import org.openflexo.view.menu.FlexoMenuItem;
 import org.openflexo.wkf.controller.WKFController;
@@ -78,7 +79,7 @@ public class WKFFileMenu extends FileMenu
     @Override
 	public void addPrintItems()
     {
-        add(new FlexoMenuItem(PrintProcessAction.actionType, getController()) {
+        add(new FlexoMenuItem(PrintProcessAction.actionType, IconLibrary.PRINT_ICON, getController()) {
             @Override
 			public FlexoModelObject getFocusedObject() 
             {

@@ -61,12 +61,10 @@ import org.openflexo.foundation.viewpoint.GoToAction;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ShapePatternRole;
-import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterListPathElement;
+import org.openflexo.foundation.viewpoint.binding.EditionSchemeParameterPathElement;
 import org.openflexo.foundation.viewpoint.binding.GraphicalElementPathElement.ViewPathElement;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
-import org.openflexo.inspector.LocalizedString;
-import org.openflexo.toolbox.StringUtils;
 
 public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> 
 extends FlexoAction<A,FlexoModelObject,FlexoModelObject> implements BindingEvaluationContext
@@ -96,17 +94,24 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject> implements BindingEvalu
 	public boolean retrieveDefaultParameters()
 	{
 		boolean returned = true;
-		ViewPointPaletteElement paletteElement = (this instanceof DropSchemeAction ? ((DropSchemeAction)this).getPaletteElement() : null);
 		EditionScheme editionScheme = getEditionScheme();
 		for (final EditionSchemeParameter parameter : editionScheme.getParameters()) {
-			Object defaultValue =  parameter.getDefaultValue(paletteElement,new BindingEvaluationContext() {
+			Object defaultValue =  parameter.getDefaultValue(this,new BindingEvaluationContext() {
 				@Override
 				public Object getValue(BindingVariable variable) {
-					logger.info("Hop, retournons le bon parametre pour "+variable);
+					if (variable instanceof EditionSchemeParameterPathElement) {
+						Object returned = parameterValues.get(((EditionSchemeParameterPathElement) variable).getParameter().getName());
+						return returned;
+					}
+					logger.warning("Unexpected "+variable);
 					return null;
 				}
 			});
-			if (!parameter.isValid(this, defaultValue)) returned = false;
+			if (defaultValue != null) parameterValues.put(parameter.getName(),defaultValue);
+			if (!parameter.isValid(this, defaultValue)) {
+				logger.info("Parameter "+parameter+" is not valid for value "+defaultValue);
+				returned = false;
+			}
 		}
 		return returned;
 	}
@@ -332,7 +337,7 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject> implements BindingEvalu
 			return null;
 		}
 	}
-
+	
 	protected OntologyIndividual finalizePerformAddIndividual(AddIndividual action, OntologyIndividual newIndividual)
 	{
 		for (DataPropertyAssertion dataPropertyAssertion : action.getDataAssertions()) {
@@ -341,43 +346,7 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject> implements BindingEvalu
 				OntologyProperty property = dataPropertyAssertion.getOntologyProperty();
 				logger.info("Property="+property);
 				Object value = dataPropertyAssertion.getValue(this);
-				if (value instanceof String) {
-					newIndividual.getOntResource().addProperty(
-							property.getOntProperty(), 
-							(String)value);
-				}
-				else if (value instanceof LocalizedString) {
-					if (!StringUtils.isEmpty(((LocalizedString)value).string)) {
-						newIndividual.getOntResource().addProperty(
-								property.getOntProperty(), 
-								((LocalizedString)value).string,
-								((LocalizedString)value).language.getTag());
-					}
-				}
-				else if (value instanceof Double) {
-						newIndividual.getOntResource().addLiteral(property.getOntProperty(),((Double)value).doubleValue());
-				}
-				else if (value instanceof Float) {
-					newIndividual.getOntResource().addLiteral(property.getOntProperty(),((Float)value).floatValue());
-				}
-				else if (value instanceof Long) {
-					newIndividual.getOntResource().addLiteral(property.getOntProperty(),((Long)value).longValue());
-				}
-				else if (value instanceof Integer) {
-					newIndividual.getOntResource().addLiteral(property.getOntProperty(),((Integer)value).longValue());
-				}
-				else if (value instanceof Short) {
-					newIndividual.getOntResource().addLiteral(property.getOntProperty(),((Short)value).longValue());
-				}
-				else if (value instanceof Boolean) {
-					newIndividual.getOntResource().addLiteral(property.getOntProperty(),((Boolean)value).booleanValue());
-				}
-				else if (value != null) {
-					logger.warning("Unexpected "+value+" of "+value.getClass());
-				}
-				else {
-					// If value is null, just ignore
-				}
+				newIndividual.addLiteral(property, value);
 			}
 		}
 		for (ObjectPropertyAssertion objectPropertyAssertion : action.getObjectAssertions()) {
@@ -385,6 +354,18 @@ extends FlexoAction<A,FlexoModelObject,FlexoModelObject> implements BindingEvalu
 				//logger.info("ObjectPropertyAssertion="+objectPropertyAssertion);
 				OntologyProperty property = objectPropertyAssertion.getOntologyProperty();
 				//logger.info("Property="+property);
+				if (property instanceof OntologyObjectProperty) {
+					if (((OntologyObjectProperty) property).isLiteralRange()) {
+						Object value = objectPropertyAssertion.getValue(this);
+						newIndividual.addLiteral(property, value);
+					}
+					else {
+						OntologyObject assertionObject = objectPropertyAssertion.getAssertionObject(this);					
+						if (assertionObject != null) {
+							newIndividual.getOntResource().addProperty(property.getOntProperty(), assertionObject.getOntResource());
+						}						
+					}
+				}
 				OntologyObject assertionObject = objectPropertyAssertion.getAssertionObject(this);					
 				//logger.info("assertionObject="+assertionObject);
 				/*OntologyObject assertionObject = null;

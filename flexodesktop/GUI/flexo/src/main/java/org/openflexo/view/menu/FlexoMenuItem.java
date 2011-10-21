@@ -89,6 +89,12 @@ public class FlexoMenuItem extends JMenuItem implements FlexoActionSource
         setIcon(icon);
     }
 
+    public FlexoMenuItem(FlexoActionType actionType, Icon icon, FlexoController controller)
+    {
+    	this(actionType,controller);
+        setIcon(icon);
+    }
+
     public FlexoMenuItem(FlexoActionType actionType, FlexoController controller)
     {
         super(actionType);
