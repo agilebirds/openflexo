@@ -185,7 +185,7 @@
 		<tstamp>
 			<format property="current.year" pattern="yyyy" />
 		</tstamp>
-		<jarbundler stubfile="${java.stubfile}" dir="${mac.app.dir.versioned}" name="${qualified_and_versioned_app_name}" mainclass="${main.class}" bundleid="${project.groupId}" signature="FLXO" version="${flexo_version}" jvmversion="1.6+" shortname="${product.name}" icon="${dist.dir}/Resources/${icon_mac_name}" arguments="${program.args}" infostring="${product.name} ${flexo_version}, (c) ${organization.name} ${current.year}" vmoptions="${vm.args}">
+		<jarbundler stubfile="${java.stubfile}" dir="${mac.app.dir.versioned}" name="${qualified_and_versioned_app_name}" mainclass="${main.class}" bundleid="${project.groupId}" signature="FLXO" version="${flexo_version}" jvmversion="1.6+" shortname="${product.name}" icon="${dist.dir}/Resources/Icons/Flexo/${icon_mac_name}" arguments="${program.args}" infostring="${product.name} ${flexo_version}, (c) ${organization.name} ${current.year}" vmoptions="${vm.args}">
 			<javaproperty name="apple.awt.antialiasing" value="true" />
 			<javaproperty name="apple.awt.antialiasedtext" value="true" />
 			<javaproperty name="apple.laf.useScreenMenuBar" value="true" />

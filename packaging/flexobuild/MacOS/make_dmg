@@ -35,7 +35,7 @@ else
   echo "Using volume_label=Untitled" 
   echo
 fi
-du_output=`du -sk $dir_path 2>&1`
+du_output=`du -sbk $dir_path 2>&1`
 dir_size=`echo $du_output | cut -f1 -d" "`
 let dir_size=$dir_size*1024 
 let dir_size=$dir_size/1000 
