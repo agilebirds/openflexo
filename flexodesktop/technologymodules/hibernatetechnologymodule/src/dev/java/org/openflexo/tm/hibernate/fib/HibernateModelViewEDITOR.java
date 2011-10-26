@@ -31,7 +31,6 @@ import org.openflexo.tm.hibernate.impl.HibernateImplementation;
 import org.openflexo.tm.hibernate.impl.HibernateModel;
 import org.openflexo.toolbox.FileResource;
 
-
 public class HibernateModelViewEDITOR extends ProjectDialogEDITOR {
 
 	public static void main(String[] args) {
@@ -44,7 +43,7 @@ public class HibernateModelViewEDITOR extends ProjectDialogEDITOR {
 
 				try {
 					HibernateImplementation hibernateImplementation = new HibernateImplementation(im);
-					HibernateModel hibernateModel = HibernateModel.createNewHibernateModel("Model", hibernateImplementation);
+					HibernateModel hibernateModel = HibernateModel.createNewHibernateModel("Model", hibernateImplementation, null);
 					return makeArray(hibernateModel);
 				} catch (Exception e) {
 					throw new RuntimeException(e);

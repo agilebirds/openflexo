@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Generation timestamp="${projectGenerator.generateTimestamp()}">
-    <SymbolicPath name="webapp" kind="webapp" path="src/main/webapp"/>
+    <SymbolicPath name="webapp" path="src/main/webapp"/>
 	<File name="applicationContext.xml" type="text" symbolicPath="webapp" relativePath="WEB-INF">
     	<Template templateFile="applicationContext.xml.vm"/>
     </File>
 </Generation>
-#addMavenDependency("org.springframework" "spring-core" "3.0.5.RELEASE")
-#addMavenDependency("org.springframework" "spring-orm" "3.0.5.RELEASE")
-#addMavenDependency("org.springframework" "spring-webmvc" "3.0.5.RELEASE")
-#addMavenDependency("org.springframework" "spring-webmvc" "3.0.5.RELEASE")
+#addMavenDependency("org.springframework" "spring-core" "3.0.6.RELEASE")
+#addMavenDependency("org.springframework" "spring-orm" "3.0.6.RELEASE")
+#addMavenDependency("org.springframework" "spring-webmvc" "3.0.6.RELEASE")
+#addMavenDependency("org.springframework" "spring-webmvc" "3.0.6.RELEASE")
 #addMavenDependency("commons-logging" "commons-logging" "1.1.1")
 #addMavenDependency("log4j" "log4j" "1.2.14")
 #addMavenRepository("jboss" "Jboss Repository for Maven" "https://repository.jboss.org/nexus/content/groups/public")

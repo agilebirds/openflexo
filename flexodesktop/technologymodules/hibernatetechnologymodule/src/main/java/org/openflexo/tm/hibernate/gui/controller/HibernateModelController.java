@@ -12,7 +12,7 @@ import org.openflexo.tm.hibernate.impl.enums.HibernateAttributeType;
 import org.openflexo.view.controller.FlexoController;
 
 /**
- *
+ * 
  * @author Nicolas Daniels
  */
 public class HibernateModelController extends HibernateFibController<HibernateModel> {
@@ -30,18 +30,20 @@ public class HibernateModelController extends HibernateFibController<HibernateMo
 
 		try {
 			HibernateEntity entity = new HibernateEntity(getDataObject().getImplementationModel());
-			entity.setName("Entity" + (getDataObject().getEntities().size() > 0 ? getDataObject().getEntities().size() : ""));
+
+			int i = 0;
+			while (true) {
+				if (getDataObject().getEntity("Entity" + (i == 0 ? "" : i)) == null) {
+					entity.setName("Entity" + (i == 0 ? "" : i));
+					break;
+				}
+
+				i++;
+			}
 
 			getDataObject().addToEntities(entity);
 
-			// Create default primary key
-			HibernateAttribute attribute = new HibernateAttribute(entity.getImplementationModel());
-			attribute.setName("id");
-			attribute.setType(HibernateAttributeType.LONG);
-			attribute.setPrimaryKey(true);
-			attribute.setNotNull(true);
-			attribute.setUnique(true);
-			entity.addToAttributes(attribute);
+			entity.createDefaultPrimaryKey();
 
 			return entity;
 		} catch (Exception e) {
@@ -57,15 +59,25 @@ public class HibernateModelController extends HibernateFibController<HibernateMo
 	 */
 	public HibernateAttribute performCreateAttribute(HibernateEntity entity) {
 
-		HibernateAttribute attribute = new HibernateAttribute(entity.getImplementationModel());
 		try {
-			attribute.setName("attribute" + (entity.getAttributes().size() > 0 ? entity.getAttributes().size() : ""));
+			HibernateAttribute attribute = new HibernateAttribute(entity.getImplementationModel());
+
+			int i = 0;
+			while (true) {
+				if (entity.getAttribute("attribute" + (i == 0 ? "" : i)) == null) {
+					attribute.setName("attribute" + (i == 0 ? "" : i));
+					break;
+				}
+
+				i++;
+			}
+
+			attribute.setType(HibernateAttributeType.STRING);
+			entity.addToAttributes(attribute);
+			return attribute;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		attribute.setType(HibernateAttributeType.STRING);
-		entity.addToAttributes(attribute);
-		return attribute;
 	}
 
 	/**
@@ -75,8 +87,23 @@ public class HibernateModelController extends HibernateFibController<HibernateMo
 	 * @return the newly created relationship.
 	 */
 	public HibernateRelationship performCreateRelationship(HibernateEntity entity) {
-		HibernateRelationship relationship = new HibernateRelationship(entity.getImplementationModel());
-		entity.addToRelationships(relationship);
-		return relationship;
+		try {
+			HibernateRelationship relationship = new HibernateRelationship(entity.getImplementationModel());
+
+			int i = 0;
+			while (true) {
+				if (entity.getRelationship("relationship" + (i == 0 ? "" : i)) == null) {
+					relationship.setName("relationship" + (i == 0 ? "" : i));
+					break;
+				}
+
+				i++;
+			}
+
+			entity.addToRelationships(relationship);
+			return relationship;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

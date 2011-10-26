@@ -14,12 +14,13 @@
    	<!-- * Technically, the compatible module implementation and macro library will be added to the velocity context of   --> 
     <!-- * all generation performed by this module.                                                                       -->
     <!-- * I.E. <compatibleModule name="Spring" />                                                                        -->
+    <compatibleModule name="Maven" />
 	
 	<!-- * To be incompatible with another module means: If you use this module and the incompatible one, it will not -->
 	<!-- * work correctly. By default, a module is incompatible with all other module of the same layer EXCEPT if the -->
 	<!-- * layer is TRANSVERSAL.                                                                                      -->
 	<!-- * I.E. <incompatibleModule name="C#" />                                                                      -->
 	<description>
-		This module generates a Java project, for Eclipse environment, with maven dependencies management. 
+		This module generates a Java project.
 	</description>
 </technologyModule>	

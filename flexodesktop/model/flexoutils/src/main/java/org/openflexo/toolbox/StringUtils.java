@@ -43,24 +43,24 @@ public class StringUtils {
 	}
 
 	public static String reverse(String s) {
-		if (s==null)
+		if (s == null)
 			return s;
 		StringBuilder sb = new StringBuilder(s.length());
-		for (int i=s.length();i>0;i--)
-			sb.append(s.charAt(i-1));
+		for (int i = s.length(); i > 0; i--)
+			sb.append(s.charAt(i - 1));
 		return sb.toString();
 	}
 
 	public static String circularOffset(String s, int offset) {
-		if (offset==0)
+		if (offset == 0)
 			return s;
-		if (s.length()!=0)
-			offset = offset%s.length();
+		if (s.length() != 0)
+			offset = offset % s.length();
 		StringBuilder sb = new StringBuilder(s.length());
-		for (int i=0;i<s.length();i++) {
-			int location = (i+offset)%s.length();
-			if (location<0)
-				location+=s.length();
+		for (int i = 0; i < s.length(); i++) {
+			int location = (i + offset) % s.length();
+			if (location < 0)
+				location += s.length();
 			sb.append(s.charAt(location));
 		}
 		return sb.toString();
@@ -71,19 +71,38 @@ public class StringUtils {
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
 			switch (c) {
-				case 'Á': case 'À': case 'Â': case 'Ä': case 'Ã': case 'Å':
+				case 'Á':
+				case 'À':
+				case 'Â':
+				case 'Ä':
+				case 'Ã':
+				case 'Å':
 					sb.append('A');
 					break;
-				case 'É':case 'È':case 'Ê':case 'Ë':
+				case 'É':
+				case 'È':
+				case 'Ê':
+				case 'Ë':
 					sb.append('E');
 					break;
-				case 'Í':case 'Ì':case 'Î':case 'Ï':
+				case 'Í':
+				case 'Ì':
+				case 'Î':
+				case 'Ï':
 					sb.append('I');
 					break;
-				case 'Ó':case 'Ò':case 'Ô':case 'Ö': case'Õ': case 'Ø':
+				case 'Ó':
+				case 'Ò':
+				case 'Ô':
+				case 'Ö':
+				case 'Õ':
+				case 'Ø':
 					sb.append('O');
 					break;
-				case 'Ú':case 'Ù':case 'Û':case 'Ü':
+				case 'Ú':
+				case 'Ù':
+				case 'Û':
+				case 'Ü':
 					sb.append('U');
 					break;
 				case 'Ç':
@@ -92,22 +111,42 @@ public class StringUtils {
 				case 'Ñ':
 					sb.append('N');
 					break;
-				case 'á': case 'à': case 'â': case 'ä': case 'ã': case 'å':
+				case 'á':
+				case 'à':
+				case 'â':
+				case 'ä':
+				case 'ã':
+				case 'å':
 					sb.append('a');
 					break;
-				case 'é':case 'è':case 'ê':case 'ë':
+				case 'é':
+				case 'è':
+				case 'ê':
+				case 'ë':
 					sb.append('e');
 					break;
-				case 'í':case 'ì':case 'î':case 'ï':
+				case 'í':
+				case 'ì':
+				case 'î':
+				case 'ï':
 					sb.append('i');
 					break;
-				case 'ó':case 'ò':case 'ô':case 'ö': case'õ': case 'ø':
+				case 'ó':
+				case 'ò':
+				case 'ô':
+				case 'ö':
+				case 'õ':
+				case 'ø':
 					sb.append('o');
 					break;
-				case 'ú':case 'ù':case 'û':case 'ü':
+				case 'ú':
+				case 'ù':
+				case 'û':
+				case 'ü':
 					sb.append('u');
 					break;
-				case 'ý':case 'ÿ':
+				case 'ý':
+				case 'ÿ':
 					sb.append('y');
 					break;
 				case 'ç':
@@ -124,18 +163,18 @@ public class StringUtils {
 	}
 
 	public static Hashtable<String, String> getQueryFromURL(URL url) {
-		if (url == null || url.getQuery()==null)
+		if (url == null || url.getQuery() == null)
 			return new Hashtable<String, String>();
 		Hashtable<String, String> returned = new Hashtable<String, String>();
-		StringTokenizer st = new StringTokenizer(url.getQuery(),"&");
-		while(st.hasMoreTokens()) {
-			StringTokenizer subSt = new StringTokenizer(st.nextToken(),"=");
-			String key=null, value=null;
+		StringTokenizer st = new StringTokenizer(url.getQuery(), "&");
+		while (st.hasMoreTokens()) {
+			StringTokenizer subSt = new StringTokenizer(st.nextToken(), "=");
+			String key = null, value = null;
 			if (subSt.hasMoreTokens())
 				key = subSt.nextToken();
 			if (subSt.hasMoreTokens())
 				value = subSt.nextToken();
-			if (key!=null && value!=null)
+			if (key != null && value != null)
 				returned.put(key, value);
 		}
 		return returned;
@@ -154,9 +193,9 @@ public class StringUtils {
 		return count;
 	}
 
-	public static boolean isSame(String str1, String str2) 
-	{
-		if (str1 == null) return str2 == null;
+	public static boolean isSame(String str1, String str2) {
+		if (str1 == null)
+			return str2 == null;
 		else {
 			return str1.equals(str2);
 		}
@@ -169,11 +208,11 @@ public class StringUtils {
 	public static boolean isNotEmpty(String str) {
 		return (str != null && str.length() > 0);
 	}
+
 	/**
 	 * Compute number of lines of a string (use \n)
 	 */
-	public static int linesNb(String aString)
-	{
+	public static int linesNb(String aString) {
 		int returned = 0;
 		BufferedReader rdr = new BufferedReader(new StringReader(aString));
 		for (;;) {
@@ -183,25 +222,25 @@ public class StringUtils {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			if (line == null) break;
+			if (line == null)
+				break;
 			returned++;
 		}
 		return returned;
 	}
 
-	public static final String LINE_SEPARATOR = "\n";/*System.getProperty("line.separator");*/
+	public static final String LINE_SEPARATOR = "\n";/* System.getProperty("line.separator"); */
 
-	public static String extractStringFromLine (String aString, int lineNb)
-	{
+	public static String extractStringFromLine(String aString, int lineNb) {
 		StringBuilder sb = new StringBuilder();
 		int n = 0;
-		for (int i=0;i<aString.length();i++) {
+		for (int i = 0; i < aString.length(); i++) {
 			char c = aString.charAt(i);
-			if (n>=lineNb)
+			if (n >= lineNb)
 				sb.append(c);
-			if (c=='\n')
+			if (c == '\n')
 				n++;
-			if (c=='\r' && i+1<aString.length() && aString.charAt(i+1)!='\n')
+			if (c == '\r' && i + 1 < aString.length() && aString.charAt(i + 1) != '\n')
 				n++;
 		}
 		return sb.toString();
@@ -218,8 +257,10 @@ public class StringUtils {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			if (line == null) break;
-			if (n>=lineNb) returned.append((n>lineNb?LINE_SEPARATOR:"")+line);
+			if (line == null)
+				break;
+			if (n >= lineNb)
+				returned.append((n > lineNb ? LINE_SEPARATOR : "") + line);
 			n++;
 		}
 		return returned.toString();
@@ -229,15 +270,14 @@ public class StringUtils {
 		String s = "12345";
 		System.err.println(reverse(s));
 		System.err.println(circularOffset(s, 2));
-		System.err.println(circularOffset(circularOffset(s, -9),9));
+		System.err.println(circularOffset(circularOffset(s, -9), 9));
 		String s1 = "12";
-		System.err.println(circularOffset(circularOffset(s1, -2),2));
-		System.err.println(circularOffset(circularOffset("", -2),2));
-		System.err.println(circularOffset(circularOffset("1", -2),2));
+		System.err.println(circularOffset(circularOffset(s1, -2), 2));
+		System.err.println(circularOffset(circularOffset("", -2), 2));
+		System.err.println(circularOffset(circularOffset("1", -2), 2));
 	}
 
-	public static String extractStringAtLine (String aString, int lineNb)
-	{
+	public static String extractStringAtLine(String aString, int lineNb) {
 		int n = 0;
 		BufferedReader rdr = new BufferedReader(new StringReader(aString));
 		for (;;) {
@@ -247,35 +287,36 @@ public class StringUtils {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			if (line == null) break;
-			if (n==lineNb) return line;
+			if (line == null)
+				break;
+			if (n == lineNb)
+				return line;
 			n++;
 		}
 		return null;
 	}
 
-	public static String extractWhiteSpace(String aString)
-	{
-		if (aString == null) return null;
+	public static String extractWhiteSpace(String aString) {
+		if (aString == null)
+			return null;
 		int index = 0;
-		while (index<aString.length() && aString.charAt(index)<' ') index++;
-		return aString.substring(0,index);
+		while (index < aString.length() && aString.charAt(index) < ' ')
+			index++;
+		return aString.substring(0, index);
 	}
 
-	public static String buildString(char c, int length)
-	{
+	public static String buildString(char c, int length) {
 		StringBuffer sb = new StringBuffer();
-		for (int i=0; i<length; i++) sb.append(c);
+		for (int i = 0; i < length; i++)
+			sb.append(c);
 		return sb.toString();
 	}
 
-	public static String buildWhiteSpaceIndentation(int length)
-	{
+	public static String buildWhiteSpaceIndentation(int length) {
 		return buildString(' ', length);
 	}
 
-	public static int indexOfEscapingJava (char searchedChar, String someJavaCode)
-	{
+	public static int indexOfEscapingJava(char searchedChar, String someJavaCode) {
 		int parentLevel = 0; /* () */
 		int bracketLevel = 0; /* [] */
 		int curlyLevel = 0; /* {} */
@@ -284,12 +325,18 @@ public class StringUtils {
 
 		while (index < someJavaCode.length()) {
 			char current = someJavaCode.charAt(index);
-			if (current == '(') parentLevel++;
-			if (current == ')') parentLevel--;
-			if (current == '[') bracketLevel++;
-			if (current == ']') bracketLevel--;
-			if (current == '{') curlyLevel++;
-			if (current == '}') curlyLevel--;
+			if (current == '(')
+				parentLevel++;
+			if (current == ')')
+				parentLevel--;
+			if (current == '[')
+				bracketLevel++;
+			if (current == ']')
+				bracketLevel--;
+			if (current == '{')
+				curlyLevel++;
+			if (current == '}')
+				curlyLevel--;
 			if (parentLevel == 0 && bracketLevel == 0 && curlyLevel == 0 && current == searchedChar)
 				return index;
 			index++;
@@ -298,33 +345,32 @@ public class StringUtils {
 		return -1;
 	}
 
-	public static String replaceBreakLinesBy(String value, String replacement)
-	{
+	public static String replaceBreakLinesBy(String value, String replacement) {
 		return value.replaceAll("(\r\n|\r|\n|\n\r)", replacement);
 	}
 
 	/**
 	 * Returns the specified string into "camel case" : each word are appended without white-spaces, but with a capital letter.<br/>
-	 * Note that, except for the first word, if the whole word is uppurcase, it will be converted into lowercase.
+	 * Note that, except for the first word, if the whole word is upper case, it will be converted into lower case.
 	 * 
 	 * Example : "Todo list" => "TodoList"; "DAO controller" => "daoController".
 	 * 
-	 * @param firstUpper <code>true</code> if the first letter has to be uppercase.
+	 * @param firstUpper <code>true</code> if the first letter has to be upper case.
 	 * @param string the string to transform into camel case
 	 * @return the camel case string
 	 */
 	public static String camelCase(String string, boolean firstUpper) {
 		if (string == null)
 			return null;
-		String value = string.trim().replace('_', ' ');
+		String value = string.trim();
 		if (value.trim().length() == 0)
 			return value;
 		if (value.equals(value.toUpperCase()))
 			value = value.toLowerCase();
 		StringBuilder result = new StringBuilder(value.length());
 
-		String[] words = value.split(" ");
-
+		String[] words = value.split("[^a-zA-Z0-9]");
+		int index = 0;
 		// First word
 		if (words[0].equals(words[0].toUpperCase())) {
 			if (firstUpper)
@@ -337,13 +383,19 @@ public class StringUtils {
 			else
 				result.append(firstsLower(words[0]));
 		}
+		index += words[0].length();
 
 		// Other words
 		for (int i = 1; i < words.length; i++) {
+			if (value.charAt(index) != ' ' && value.charAt(index) != '\t')
+				result.append(value.charAt(index));
+
 			if (words[i].equals(words[i].toUpperCase())) {
 				result.append(words[i]);
 			} else
 				result.append(firstUpper(words[i]));
+
+			index += words[i].length() + 1;
 		}
 
 		return result.toString();

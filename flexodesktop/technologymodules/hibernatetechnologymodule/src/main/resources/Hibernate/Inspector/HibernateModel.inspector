@@ -3,11 +3,15 @@
 		<property name="name" label="name" widget="TEXT_FIELD" constraint="1">
 			<param name="columns" value="10"/>
 		</property>
-		<property name="watchedRepository" label="watched_repository" widget="DROPDOWN" constraint="2">
+		<property name="linkedFlexoModelObject.name" label="watched_repository" widget="LABEL" constraint="2">
+		</property>
+		<!--
+		<property name="linkedFlexoModelObject" label="watched_repository" widget="DROPDOWN" constraint="2">
 			<param name="dynamiclist" value="hibernateImplementation.watchableRepositories"/>
 			<param name="showReset" value="true"/>
 			<param name="format" value="name"/>
 		</property>
+		-->
 	</tab>
 	
 	<tab name="Doc" index="2" layout="DEFAULT">

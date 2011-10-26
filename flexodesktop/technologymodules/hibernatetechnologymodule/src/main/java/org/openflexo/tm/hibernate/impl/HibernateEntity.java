@@ -19,44 +19,59 @@
  */
 package org.openflexo.tm.hibernate.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
 
+import org.apache.commons.lang.StringUtils;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.NameChanged;
+import org.openflexo.foundation.dm.DMEntity;
+import org.openflexo.foundation.dm.DMProperty;
+import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
+import org.openflexo.foundation.dm.dm.DMEntityNameChanged;
+import org.openflexo.foundation.dm.dm.PropertyRegistered;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.sg.implmodel.ImplementationModel;
-import org.openflexo.foundation.sg.implmodel.TechnologyModelObject;
-import org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation;
+import org.openflexo.foundation.sg.implmodel.LinkableTechnologyModelObject;
 import org.openflexo.foundation.sg.implmodel.event.SGAttributeModification;
 import org.openflexo.foundation.sg.implmodel.event.SGObjectAddedToListModification;
 import org.openflexo.foundation.sg.implmodel.event.SGObjectDeletedModification;
 import org.openflexo.foundation.sg.implmodel.event.SGObjectRemovedFromListModification;
 import org.openflexo.foundation.xml.ImplementationModelBuilder;
+import org.openflexo.tm.hibernate.impl.comparator.HibernateLinkableObjectComparator;
+import org.openflexo.tm.hibernate.impl.enums.HibernateAttributeType;
+import org.openflexo.tm.hibernate.impl.utils.HibernateUtils;
 import org.openflexo.toolbox.JavaUtils;
-
 
 /**
  * This class defines an entity in the context of an Hibernate implementation.
  * 
  * @author Emmanuel Koch, Blue Pimento Services SPRL
  */
-public class HibernateEntity extends TechnologyModelObject implements FlexoObserver {
+public class HibernateEntity extends LinkableTechnologyModelObject<DMEntity> implements FlexoObserver {
+
+	protected static final Logger logger = Logger.getLogger(HibernateEntity.class.getPackage().getName());
 
 	public static final String CLASS_NAME_KEY = "hibernate_entity";
 
 	protected HibernateModel hibernateModel;
 
 	/**
-	 * Returns the name of the table that will be used to store this entity in the storage system. If <code>null</code>, the name define the
-	 * table name.
+	 * Returns the name of the table that will be used to store this entity in the storage system. If <code>null</code>, the name define the table name.
 	 */
 	protected String tableName;
+	protected boolean isTableNameSynchronized;
 
 	/** Indicates if an additional column "Version" must be added to implements optimistic locking. */
 	protected boolean optimisticLocking;
@@ -81,8 +96,7 @@ public class HibernateEntity extends TechnologyModelObject implements FlexoObser
 	 * Build a new Hibernate entity for the specified implementation model builder.<br/>
 	 * This constructor is namely invoked during unserialization.
 	 * 
-	 * @param builder
-	 *            the builder that will create this entity
+	 * @param builder the builder that will create this entity
 	 */
 	public HibernateEntity(ImplementationModelBuilder builder) {
 		this(builder.implementationModel);
@@ -92,11 +106,22 @@ public class HibernateEntity extends TechnologyModelObject implements FlexoObser
 	/**
 	 * Build a new Hibernate entity for the specified implementation model.
 	 * 
-	 * @param implementationModel
-	 *            the implementation model where to create this Hibernate entity
+	 * @param implementationModel the implementation model where to create this Hibernate entity
 	 */
 	public HibernateEntity(ImplementationModel implementationModel) {
 		super(implementationModel);
+		createDefaultPrimaryKey();
+	}
+
+	/**
+	 * @param implementationModel the implementation model where to create this Hibernate entity
+	 * @param linkedFlexoModelObject Can be null
+	 */
+	public HibernateEntity(ImplementationModel implementationModel, DMEntity linkedFlexoModelObject) {
+		super(implementationModel, linkedFlexoModelObject);
+		createDefaultPrimaryKey();
+		if (linkedFlexoModelObject != null)
+			isTableNameSynchronized = true;
 	}
 
 	// =========== //
@@ -127,6 +152,144 @@ public class HibernateEntity extends TechnologyModelObject implements FlexoObser
 		return getHibernateModel().getFullyQualifiedName() + "." + getName();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void synchronizeWithLinkedFlexoModelObject() {
+		if (getLinkedFlexoModelObject() != null) {
+			updateNameIfNecessary();
+			updateTableNameIfNecessary();
+
+			List<LinkableTechnologyModelObject<?>> deletedChildren = new ArrayList<LinkableTechnologyModelObject<?>>();
+
+			Map<DMProperty, LinkableTechnologyModelObject<?>> alreadyCreatedChildren = new HashMap<DMProperty, LinkableTechnologyModelObject<?>>();
+			for (HibernateAttribute hibernateAttribute : this.attributes) {
+				if (hibernateAttribute.getLinkedFlexoModelObject() != null)
+					alreadyCreatedChildren.put(hibernateAttribute.getLinkedFlexoModelObject(), hibernateAttribute);
+				else if (hibernateAttribute.getWasLinkedAtLastDeserialization())
+					deletedChildren.add(hibernateAttribute);
+			}
+
+			for (HibernateRelationship hibernateRelationship : this.relationships) {
+				if (hibernateRelationship.getLinkedFlexoModelObject() != null)
+					alreadyCreatedChildren.put(hibernateRelationship.getLinkedFlexoModelObject(), hibernateRelationship);
+				else if (hibernateRelationship.getWasLinkedAtLastDeserialization())
+					deletedChildren.add(hibernateRelationship);
+			}
+
+			// Create missing attributes & relationships and update existing ones
+			for (DMProperty property : getLinkedFlexoModelObject().getProperties().values()) {
+				if (!alreadyCreatedChildren.containsKey(property)) {
+					createHibernateObjectBasedOnDMProperty(property);
+				} else {
+					alreadyCreatedChildren.get(property).synchronizeWithLinkedFlexoModelObject();
+					alreadyCreatedChildren.remove(property);
+				}
+			}
+
+			// Remove deleted entities & enums
+			for (LinkableTechnologyModelObject<?> hibernateObj : deletedChildren)
+				hibernateObj.delete();
+		}
+	}
+
+	/**
+	 * Add a new Hibernate Attribute or Hibernate Relationshp to this entity. The newly created Hibernate object is based and linked to the specified DMProperty. <br>
+	 * If an Hibernate object was already existing for this DMProperty, nothing is performed.
+	 * 
+	 * @param dmProperty the DMProperty the newly created Hibernate object should be linked to.
+	 */
+	public void createHibernateObjectBasedOnDMProperty(DMProperty dmProperty) {
+		if (HibernateUtils.getIsHibernateAttributeRepresented(dmProperty)) {
+			if (getAttribute(dmProperty) == null) {
+				HibernateAttribute attribute = new HibernateAttribute(getImplementationModel(), dmProperty);
+				addToAttributes(attribute);
+				attribute.synchronizeWithLinkedFlexoModelObject();
+			}
+		} else {
+			if (getRelationship(dmProperty) == null) {
+				HibernateRelationship relationship = new HibernateRelationship(getImplementationModel(), dmProperty);
+				addToRelationships(relationship);
+				relationship.synchronizeWithLinkedFlexoModelObject();
+			}
+		}
+	}
+
+	/**
+	 * Create a new default primary key attribute on this entity. If the default primary key attribute was already existing, nothing is performed
+	 */
+	public void createDefaultPrimaryKey() {
+		if (getAttribute("id") == null) {
+			try {
+				// Create default primary key
+				HibernateAttribute attribute = new HibernateAttribute(getImplementationModel());
+				attribute.setName("id");
+				attribute.setType(HibernateAttributeType.LONG);
+				attribute.setPrimaryKey(true);
+				attribute.setNotNull(true);
+				attribute.setUnique(true);
+				addToAttributes(attribute);
+			} catch (Exception e) {
+				if (logger.isLoggable(Level.WARNING))
+					logger.log(Level.WARNING, "Cannot create default primary key on Hibernate entity " + getName(), e);
+			}
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected String escapeName(String name) {
+		return JavaUtils.getClassName(name);
+	}
+
+	/**
+	 * Retrieve the default table name to use for this entity based on the entity name.
+	 * 
+	 * @return the default table name to use for this entity.
+	 */
+	public String getDefaultTableName() {
+		return escapeTableName(getName());
+	}
+
+	private String escapeTableName(String tableName) {
+		return getTechnologyModuleImplementation().getDbObjectName(tableName);
+	}
+
+	public void updateIsTableNameSynchronized() {
+		if (!isDeserializing) {
+			String defaultTableName = getDefaultTableName();
+			setIsTableNameSynchronized(defaultTableName != null && (StringUtils.isEmpty(getTableName()) || StringUtils.equals(defaultTableName, getTableName())));
+		}
+	}
+
+	/**
+	 * Update the table name with this object name if necessary.
+	 */
+	public void updateTableNameIfNecessary() {
+		if (getIsTableNameSynchronized())
+			setTableName(getName());
+		else
+			updateIsTableNameSynchronized(); // Update this anyway in case the name is set to tableName. In this case synchronization is set back to true.
+	}
+
+	/**
+	 * Update the is enum with the linked Flexo Model Object one if necessary.
+	 */
+	public void updateIsEnumIfNecessary() {
+		if (getLinkedFlexoModelObject() != null) {
+			DMEntity dmEntity = getLinkedFlexoModelObject();
+			if (dmEntity.getIsEnumeration()) {
+				// Type is changed to an Enum one. Delete this entity and create a new Hibernate Enum
+				this.setLinkedFlexoModelObject(null);
+				getHibernateModel().createHibernateObjectBasedOnDMEntity(dmEntity);
+				this.delete();
+			}
+		}
+	}
+
 	/* ===================== */
 	/* ====== Actions ====== */
 	/* ===================== */
@@ -151,9 +314,9 @@ public class HibernateEntity extends TechnologyModelObject implements FlexoObser
 
 		if (getHibernateModel() != null)
 			getHibernateModel().removeFromEntities(this);
-		
+
 		setChanged();
-		notifyObservers(new SGObjectDeletedModification());
+		notifyObservers(new SGObjectDeletedModification<HibernateEntity>(this));
 		super.delete();
 		deleteObservers();
 	}
@@ -177,22 +340,30 @@ public class HibernateEntity extends TechnologyModelObject implements FlexoObser
 	 * Sort attributes stored in this entity by their name.
 	 */
 	public void sortAttributes() {
-		Collections.sort(this.attributes, new FlexoModelObject.FlexoNameComparator<FlexoModelObject>());
+		Collections.sort(this.attributes, new Comparator<HibernateAttribute>() {
+
+			private HibernateLinkableObjectComparator subComparator = new HibernateLinkableObjectComparator();
+
+			/**
+			 * {@inheritDoc}
+			 */
+			@Override
+			public int compare(HibernateAttribute o1, HibernateAttribute o2) {
+				if (o1.getPrimaryKey() && !o2.getPrimaryKey())
+					return -1;
+				if (!o1.getPrimaryKey() && o2.getPrimaryKey())
+					return 1;
+				return subComparator.compare(o1, o2);
+			}
+
+		});
 	}
 
 	/**
 	 * Sort relationships stored in this entity by their name.
 	 */
 	public void sortRelationships() {
-		Collections.sort(this.relationships, new FlexoModelObject.FlexoNameComparator<FlexoModelObject>());
-	}
-
-	/**
-	 * Update the table name based on the entity name
-	 */
-	public void updateTableName() {
-		if (!isDeserializing && getHibernateModel() != null)
-			setTableName(getHibernateModel().getHibernateImplementation().getDbObjectName(getName()));
+		Collections.sort(this.relationships, new HibernateLinkableObjectComparator());
 	}
 
 	/* ============== */
@@ -204,6 +375,16 @@ public class HibernateEntity extends TechnologyModelObject implements FlexoObser
 	 */
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
+		super.update(observable, dataModification);
+		if (observable == getLinkedFlexoModelObject()) {
+			if (dataModification instanceof DMEntityNameChanged)
+				updateNameIfNecessary();
+			else if (dataModification instanceof PropertyRegistered)
+				createHibernateObjectBasedOnDMProperty((DMProperty) dataModification.newValue());
+			else if (dataModification instanceof DMAttributeDataModification && "isEnumeration".equals(dataModification.propertyName()))
+				updateIsEnumIfNecessary();
+		}
+
 		if (dataModification instanceof NameChanged) {
 			if (observable instanceof HibernateAttribute)
 				sortAttributes();
@@ -220,11 +401,28 @@ public class HibernateEntity extends TechnologyModelObject implements FlexoObser
 	 * {@inheritDoc}
 	 */
 	@Override
+	public void setLinkedFlexoModelObject(DMEntity linkedFlexoModelObject) {
+		if (linkedFlexoModelObject == null || !linkedFlexoModelObject.getIsEnumeration()) {
+			super.setLinkedFlexoModelObject(linkedFlexoModelObject);
+		} else {
+			if (logger.isLoggable(Level.WARNING))
+				logger.log(Level.WARNING, "Cannot set linked object to Hibernate Entity with an enumeration DM Entity. DM Entity: " + linkedFlexoModelObject.getName());
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void setName(String name) throws DuplicateResourceException, InvalidNameException {
-		name = JavaUtils.getClassName(name);
+		name = escapeName(name);
+
+		if (StringUtils.isEmpty(name))
+			name = getDefaultName();
+
 		if (requireChange(getName(), name)) {
 			super.setName(name);
-			updateTableName();
+			updateTableNameIfNecessary();
 		}
 	}
 
@@ -233,11 +431,30 @@ public class HibernateEntity extends TechnologyModelObject implements FlexoObser
 	}
 
 	public void setTableName(String tableName) {
-		if (requireChange(this.tableName, tableName)) {
-			String oldValue = this.tableName;
+		tableName = escapeTableName(tableName);
+
+		if (StringUtils.isEmpty(tableName))
+			tableName = getDefaultTableName();
+
+		if (requireChange(getTableName(), tableName)) {
+			String oldValue = getTableName();
 			this.tableName = tableName;
+			updateIsTableNameSynchronized();
 			setChanged();
 			notifyObservers(new SGAttributeModification("tableName", oldValue, tableName));
+		}
+	}
+
+	public boolean getIsTableNameSynchronized() {
+		return isTableNameSynchronized;
+	}
+
+	public void setIsTableNameSynchronized(boolean isTableNameSynchronized) {
+		if (requireChange(this.isTableNameSynchronized, isTableNameSynchronized)) {
+			boolean oldValue = this.isTableNameSynchronized;
+			this.isTableNameSynchronized = isTableNameSynchronized;
+			setChanged();
+			notifyObservers(new SGAttributeModification("isTableNameSynchronized", oldValue, isTableNameSynchronized));
 		}
 	}
 
@@ -302,15 +519,45 @@ public class HibernateEntity extends TechnologyModelObject implements FlexoObser
 		sortAttributes();
 
 		setChanged();
-		notifyObservers(new SGObjectAddedToListModification("attributes", attribute));
+		notifyObservers(new SGObjectAddedToListModification<HibernateAttribute>("attributes", attribute));
 	}
 
 	public void removeFromAttributes(HibernateAttribute attribute) {
 		if (attributes.remove(attribute)) {
 			attribute.deleteObserver(this);
 			setChanged();
-			notifyObservers(new SGObjectRemovedFromListModification("attributes", attribute));
+			notifyObservers(new SGObjectRemovedFromListModification<HibernateAttribute>("attributes", attribute));
 		}
+	}
+
+	/**
+	 * Retrieve the Hibernate Attribute with the specified name.
+	 * 
+	 * @param attributeName
+	 * @return the retrieved Hibernate Attribute if any, null otherwise.
+	 */
+	public HibernateAttribute getAttribute(String attributeName) {
+		for (HibernateAttribute attribute : attributes) {
+			if (attribute.getName().equals(attributeName))
+				return attribute;
+		}
+
+		return null;
+	}
+
+	/**
+	 * Retrieve the Hibernate Attribute linked to the specified DMProperty.
+	 * 
+	 * @param dmProperty
+	 * @return the retrieved Hibernate Attribute if any, null otherwise.
+	 */
+	public HibernateAttribute getAttribute(DMProperty dmProperty) {
+		for (HibernateAttribute attribute : attributes) {
+			if (attribute.getLinkedFlexoModelObject() == dmProperty)
+				return attribute;
+		}
+
+		return null;
 	}
 
 	/**
@@ -348,15 +595,45 @@ public class HibernateEntity extends TechnologyModelObject implements FlexoObser
 		sortRelationships();
 
 		setChanged();
-		notifyObservers(new SGObjectAddedToListModification("relationships", relationship));
+		notifyObservers(new SGObjectAddedToListModification<HibernateRelationship>("relationships", relationship));
 	}
 
 	public void removeFromRelationships(HibernateRelationship relationship) {
 		if (relationships.remove(relationship)) {
 			relationship.deleteObserver(this);
 			setChanged();
-			notifyObservers(new SGObjectRemovedFromListModification("relationships", relationship));
+			notifyObservers(new SGObjectRemovedFromListModification<HibernateRelationship>("relationships", relationship));
 		}
+	}
+
+	/**
+	 * Retrieve the Hibernate Relationship with the specified name.
+	 * 
+	 * @param relationshipName
+	 * @return the retrieved Relationship Attribute if any, null otherwise.
+	 */
+	public HibernateRelationship getRelationship(String relationshipName) {
+		for (HibernateRelationship relationship : relationships) {
+			if (relationship.getName().equals(relationshipName))
+				return relationship;
+		}
+
+		return null;
+	}
+
+	/**
+	 * Retrieve the Hibernate Relationship linked to the specified DMProperty.
+	 * 
+	 * @param dmProperty
+	 * @return the retrieved Relationship Attribute if any, null otherwise.
+	 */
+	public HibernateRelationship getRelationship(DMProperty dmProperty) {
+		for (HibernateRelationship relationship : relationships) {
+			if (relationship.getLinkedFlexoModelObject() == dmProperty)
+				return relationship;
+		}
+
+		return null;
 	}
 
 	public Vector<HibernateEntity> getChildren() {
@@ -375,13 +652,13 @@ public class HibernateEntity extends TechnologyModelObject implements FlexoObser
 	public void addToChildren(HibernateEntity child) {
 		children.add(child);
 		setChanged();
-		notifyObservers(new SGObjectAddedToListModification("children", child));
+		notifyObservers(new SGObjectAddedToListModification<HibernateEntity>("children", child));
 	}
 
 	public void removeFromChildren(HibernateEntity child) {
 		if (children.remove(child)) {
 			setChanged();
-			notifyObservers(new SGObjectRemovedFromListModification("children", child));
+			notifyObservers(new SGObjectRemovedFromListModification<HibernateEntity>("children", child));
 		}
 	}
 
@@ -396,14 +673,13 @@ public class HibernateEntity extends TechnologyModelObject implements FlexoObser
 	 */
 	protected void setHibernateModel(HibernateModel hibernateModel) {
 		this.hibernateModel = hibernateModel;
-		updateTableName();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public TechnologyModuleImplementation getTechnologyModuleImplementation() {
-		return getHibernateModel().getTechnologyModuleImplementation();
+	public HibernateImplementation getTechnologyModuleImplementation() {
+		return HibernateImplementation.getHibernateImplementation(getImplementationModel());
 	}
 }

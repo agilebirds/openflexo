@@ -21,6 +21,7 @@ package org.openflexo.tm.hibernate.impl;
 
 import java.util.Arrays;
 import java.util.Vector;
+import java.util.logging.Level;
 
 import javax.naming.InvalidNameException;
 
@@ -28,25 +29,28 @@ import org.apache.commons.lang.StringUtils;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.dm.DMEntity;
+import org.openflexo.foundation.dm.DMProperty;
+import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
+import org.openflexo.foundation.dm.dm.DMPropertyNameChanged;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.sg.implmodel.ImplementationModel;
-import org.openflexo.foundation.sg.implmodel.TechnologyModelObject;
-import org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation;
+import org.openflexo.foundation.sg.implmodel.LinkableTechnologyModelObject;
 import org.openflexo.foundation.sg.implmodel.event.SGAttributeModification;
 import org.openflexo.foundation.sg.implmodel.event.SGObjectAddedToListModification;
 import org.openflexo.foundation.sg.implmodel.event.SGObjectDeletedModification;
 import org.openflexo.foundation.sg.implmodel.event.SGObjectRemovedFromListModification;
 import org.openflexo.foundation.xml.ImplementationModelBuilder;
 import org.openflexo.tm.hibernate.impl.enums.HibernateCascade;
+import org.openflexo.tm.hibernate.impl.utils.HibernateUtils;
 import org.openflexo.toolbox.JavaUtils;
-
 
 /**
  * This class defines relationships for the mapping relationships in a Hibernate implementation.
  * 
  * @author Emmanuel Koch, Blue Pimento Services SPRL
  */
-public class HibernateRelationship extends TechnologyModelObject implements FlexoObserver {
+public class HibernateRelationship extends LinkableTechnologyModelObject<DMProperty> implements FlexoObserver {
 
 	public static final String CLASS_NAME_KEY = "hibernate_entity";
 
@@ -106,6 +110,16 @@ public class HibernateRelationship extends TechnologyModelObject implements Flex
 		super(implementationModel);
 	}
 
+	/**
+	 * @param implementationModel
+	 *            the implementation model where to create this Hibernate relationship
+	 * @param linkedFlexoModelObject
+	 *            Can be null
+	 */
+	public HibernateRelationship(ImplementationModel implementationModel, DMProperty linkedFlexoModelObject) {
+		super(implementationModel, linkedFlexoModelObject);
+	}
+
 	// =========== //
 	// = Methods = //
 	// =========== //
@@ -134,6 +148,47 @@ public class HibernateRelationship extends TechnologyModelObject implements Flex
 		return getHibernateEntity().getFullyQualifiedName() + "." + getName();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void synchronizeWithLinkedFlexoModelObject() {
+		updateDestinationIfNecessary();
+		updateNameIfNecessary();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected String escapeName(String name) {
+		return JavaUtils.getVariableName(name);
+	}
+
+	/**
+	 * Update the destination with the linked Flexo Model Object one if necessary.
+	 */
+	public void updateDestinationIfNecessary() {
+		if (getLinkedFlexoModelObject() != null) {
+			DMProperty dmProperty = getLinkedFlexoModelObject();
+			if (!HibernateUtils.getIsHibernateAttributeRepresented(dmProperty)) {
+
+				DMEntity targetEntity = dmProperty.getType().getBaseEntity();
+
+				if (targetEntity == null) {
+					setDestination(null);
+				} else {
+					setDestination(getHibernateEntity().getHibernateModel().getEntity(targetEntity));
+				}
+			} else {
+				// Type is changed to an attribute one. Delete this attribute and create a new attribute.
+				this.setLinkedFlexoModelObject(null);
+				getHibernateEntity().createHibernateObjectBasedOnDMProperty(dmProperty);
+				this.delete();
+			}
+		}
+	}
+
 	/* ===================== */
 	/* ====== Actions ====== */
 	/* ===================== */
@@ -148,14 +203,15 @@ public class HibernateRelationship extends TechnologyModelObject implements Flex
 		}
 
 		if (getInverse() != null) {
-			if (getInverse().getIsInverse())
+			if (getInverse().getIsInverse()) {
 				getInverse().delete();
-			else
+			} else {
 				getInverse().setInverse(null);
+			}
 		}
 
 		setChanged();
-		notifyObservers(new SGObjectDeletedModification());
+		notifyObservers(new SGObjectDeletedModification<HibernateRelationship>(this));
 		super.delete();
 		deleteObservers();
 	}
@@ -175,7 +231,8 @@ public class HibernateRelationship extends TechnologyModelObject implements Flex
 
 	/**
 	 * Set if this relationship inverse must exists. <br>
-	 * If <code>hasInverse</code> is true and if the inverse relationship is currently null, a new relation ship will be created on the destination entity and will be set as inverse of this one. <br>
+	 * If <code>hasInverse</code> is true and if the inverse relationship is currently null, a new relation ship will be created on the
+	 * destination entity and will be set as inverse of this one. <br>
 	 * If <code>hasInverse</code> is true and if the inverse relationship is currently not null, the inverse relationship will be deleted
 	 * 
 	 * @param hasInverse
@@ -186,9 +243,9 @@ public class HibernateRelationship extends TechnologyModelObject implements Flex
 			HibernateRelationship relationship = new HibernateRelationship(getImplementationModel());
 			getDestination().addToRelationships(relationship);
 
-			relationship.setDestination(this.getHibernateEntity());
 			relationship.setIsInverse(true);
 			relationship.setToMany(!getToMany());
+			relationship.setDestination(this.getHibernateEntity());
 			setInverse(relationship);
 
 			setChanged();
@@ -202,34 +259,30 @@ public class HibernateRelationship extends TechnologyModelObject implements Flex
 	}
 
 	/**
-	 * Get the relationship name if any non empty one exists, otherwise build an automatic name for this relationship based on its destination and its cardinality.
+	 * Get the built automatic name for this relationship based on its destination and its cardinality.
 	 * 
-	 * @return the relationship name if exists, the built name otherwise.
+	 * @return the automatic name.
 	 */
-	public String getNameOrBuiltAutomaticOne() {
+	public String getAutomaticName() {
 
-		if (!StringUtils.isBlank(getName()))
-			return getName();
-
-		if (getDestination() == null)
+		if (getDestination() == null) {
 			return JavaUtils.getVariableName("relationship" + getHibernateEntity().getRelationships().size());
+		}
 
 		String builtName = getDestination().getName();
-		if (getToMany() && !builtName.endsWith("s") && !builtName.endsWith("x"))
+		if (getToMany() && !builtName.endsWith("s") && !builtName.endsWith("x")) {
 			builtName = builtName + "s";
+		}
 
 		builtName = JavaUtils.getVariableName(builtName);
 
 		if (getHasInverse() && getIsInverse()) { // Checks that the inverse has not the same name.
-			if (builtName.equals(getInverse().getName()))
+			if (builtName.equals(getInverse().getName())) {
 				builtName = builtName + "Inverse";
+			}
 		}
 
 		return builtName;
-	}
-
-	public void setNameOrBuiltAutomaticOne(String name) throws DuplicateResourceException, InvalidNameException {
-		setName(name);
 	}
 
 	/* ============== */
@@ -241,8 +294,17 @@ public class HibernateRelationship extends TechnologyModelObject implements Flex
 	 */
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (observable == getDestination() && dataModification instanceof SGObjectDeletedModification)
+		if (observable == getLinkedFlexoModelObject()) {
+			if (dataModification instanceof DMPropertyNameChanged) {
+				updateNameIfNecessary();
+			} else if (dataModification instanceof DMAttributeDataModification && "type".equals(dataModification.propertyName())) {
+				updateDestinationIfNecessary();
+			}
+		}
+		if (observable == getDestination() && dataModification instanceof SGObjectDeletedModification) {
 			setDestination(null);
+			updateDestinationIfNecessary();
+		}
 	}
 
 	/* ===================== */
@@ -253,8 +315,33 @@ public class HibernateRelationship extends TechnologyModelObject implements Flex
 	 * {@inheritDoc}
 	 */
 	@Override
+	public void setLinkedFlexoModelObject(DMProperty linkedFlexoModelObject) {
+		if (linkedFlexoModelObject == null || !HibernateUtils.getIsHibernateAttributeRepresented(linkedFlexoModelObject)) {
+			super.setLinkedFlexoModelObject(linkedFlexoModelObject);
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.log(Level.WARNING,
+						"Cannot set linked object to Hibernate Relationships with an DM Property with basic type. DM Property: "
+								+ linkedFlexoModelObject.getName());
+			}
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void setName(String name) throws DuplicateResourceException, InvalidNameException {
-		name = JavaUtils.getVariableName(name);
+		name = escapeName(name);
+
+		if (StringUtils.isEmpty(name)) {
+			name = getDefaultName();
+
+			if (StringUtils.isEmpty(name)) {
+				name = getAutomaticName();
+			}
+		}
+
 		super.setName(name);
 	}
 
@@ -274,13 +361,13 @@ public class HibernateRelationship extends TechnologyModelObject implements Flex
 	public void addToCascadeTypes(HibernateCascade cascadeType) {
 		cascadeTypes.add(cascadeType);
 		setChanged();
-		notifyObservers(new SGObjectAddedToListModification("cascadeTypes", cascadeType));
+		notifyObservers(new SGObjectAddedToListModification<HibernateCascade>("cascadeTypes", cascadeType));
 	}
 
 	public void removeFromCascadeTypes(HibernateCascade cascadeType) {
 		if (cascadeTypes.remove(cascadeType)) {
 			setChanged();
-			notifyObservers(new SGObjectRemovedFromListModification("cascadeTypes", cascadeType));
+			notifyObservers(new SGObjectRemovedFromListModification<HibernateCascade>("cascadeTypes", cascadeType));
 		}
 	}
 
@@ -322,8 +409,9 @@ public class HibernateRelationship extends TechnologyModelObject implements Flex
 			setChanged();
 			notifyObservers(new SGAttributeModification("isInverse", oldValue, isInverse));
 
-			if (getInverse() != null)
+			if (getInverse() != null) {
 				getInverse().setIsInverse(!isInverse);
+			}
 		}
 	}
 
@@ -333,10 +421,23 @@ public class HibernateRelationship extends TechnologyModelObject implements Flex
 
 	public void setToMany(boolean toMany) {
 		if (requireChange(this.toMany, toMany)) {
+
+			boolean wasAutomaticName = getLinkedFlexoModelObject() == null && getAutomaticName().equals(getName());
+
 			Object oldValue = this.toMany;
 			this.toMany = toMany;
 			setChanged();
 			notifyObservers(new SGAttributeModification("toMany", oldValue, toMany));
+
+			if (wasAutomaticName) {
+				try {
+					setName(getAutomaticName());
+				} catch (Exception e) {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.log(Level.WARNING, "Cannot update relationship name on to many property change.", e);
+					}
+				}
+			}
 		}
 	}
 
@@ -364,13 +465,26 @@ public class HibernateRelationship extends TechnologyModelObject implements Flex
 	public void setDestination(HibernateEntity destination) {
 		if (requireChange(this.destination, destination)) {
 			HibernateEntity oldValue = this.destination;
-			if (oldValue != null)
+			if (oldValue != null) {
 				oldValue.deleteObserver(this);
+			}
 			this.destination = destination;
-			if (this.destination != null)
+			if (this.destination != null) {
 				this.destination.addObserver(this);
+			}
+
 			setChanged();
 			notifyObservers(new SGAttributeModification("destination", oldValue, destination));
+
+			if (!isDeserializing) {
+				try {
+					setName(getAutomaticName());
+				} catch (Exception e) {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.log(Level.WARNING, "Cannot update relationship name based on its destination !", e);
+					}
+				}
+			}
 		}
 	}
 
@@ -386,10 +500,12 @@ public class HibernateRelationship extends TechnologyModelObject implements Flex
 			setChanged();
 			notifyObservers(new SGAttributeModification("inverse", oldValue, inverse));
 
-			if (this.inverse != null)
+			if (this.inverse != null) {
 				this.inverse.setInverse(this);
-			if (oldValue != null)
+			}
+			if (oldValue != null) {
 				oldValue.setInverse(null);
+			}
 		}
 	}
 
@@ -410,7 +526,7 @@ public class HibernateRelationship extends TechnologyModelObject implements Flex
 	 * {@inheritDoc}
 	 */
 	@Override
-	public TechnologyModuleImplementation getTechnologyModuleImplementation() {
-		return getHibernateEntity().getTechnologyModuleImplementation();
+	public HibernateImplementation getTechnologyModuleImplementation() {
+		return HibernateImplementation.getHibernateImplementation(getImplementationModel());
 	}
 }

@@ -3,5 +3,8 @@
 		<property name="projectName" label="project_name" widget="TEXT_FIELD" constraint="0"/>
 		<property name="rootPackage" label="root_package" widget="TEXT_FIELD" constraint="2"/>
 		<property name="archiveName" label="archive_name" widget="TEXT_FIELD" constraint="4"/>
+		<property name="selectedIde" label="IDE" widget="DROPDOWN" constraint="5">
+			<param name="showReset" value="true"/>
+		</property>
 	</tab>
 </inspector>

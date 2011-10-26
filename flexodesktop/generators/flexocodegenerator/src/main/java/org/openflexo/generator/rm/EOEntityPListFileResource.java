@@ -27,7 +27,7 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.cg.CGRepository;
 import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
-import org.openflexo.foundation.dm.dm.EntityDeleted;
+import org.openflexo.foundation.dm.dm.DMObjectDeleted;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.rm.FlexoDMResource;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -36,10 +36,8 @@ import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.cg.PListFileResource;
 import org.openflexo.generator.cg.CGPListFile;
 import org.openflexo.generator.dm.EOEntityPListGenerator;
-import org.openflexo.generator.rm.GenerationAvailableFileResource;
 
-
-public class EOEntityPListFileResource extends PListFileResource<EOEntityPListGenerator,CGPListFile> implements GenerationAvailableFileResource, FlexoObserver{
+public class EOEntityPListFileResource extends PListFileResource<EOEntityPListGenerator, CGPListFile> implements GenerationAvailableFileResource, FlexoObserver {
 
 	private boolean isObserverRegistered = false;
 
@@ -51,122 +49,108 @@ public class EOEntityPListFileResource extends PListFileResource<EOEntityPListGe
 		super(aProject);
 	}
 
-    @Override
-    protected EOEntityPListFile createGeneratedResourceData()
-    {
-        return new EOEntityPListFile(getFile(),this);
-    }
+	@Override
+	protected EOEntityPListFile createGeneratedResourceData() {
+		return new EOEntityPListFile(getFile(), this);
+	}
 
-    public DMEOEntity getEntity()
-    {
-        if (getGenerator() != null)
-            return getGenerator().getEntity();
-        return null;
-    }
+	public DMEOEntity getEntity() {
+		if (getGenerator() != null)
+			return getGenerator().getEntity();
+		return null;
+	}
 
-    public void registerObserverWhenRequired()
-    {
-        if (!isObserverRegistered && getEntity() != null) {
-            isObserverRegistered = true;
-            getEntity().addObserver(this);
-        }
-    }
+	public void registerObserverWhenRequired() {
+		if (!isObserverRegistered && getEntity() != null) {
+			isObserverRegistered = true;
+			getEntity().addObserver(this);
+		}
+	}
 
-    /**
-     * Overrides update
-     *
-     * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
-     *      org.openflexo.foundation.DataModification)
-     */
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-        if (observable == getEntity()) {
-            if (dataModification instanceof DMAttributeDataModification) {
-                if (((DMAttributeDataModification) dataModification).getAttributeName().equals(DMEOEntity.ENTITY_CLASS_NAME_KEY)) {
-                    logger.info("Building new resource after entity renaming");
-                    EOEntityPListGenerator generator = getGenerator();
-                    setGenerator(null);
-                    getCGFile().setMarkedForDeletion(true);
-                    generator.refreshConcernedResources();
-                    generator.getRepository().refresh();
-                    observable.deleteObserver(this);
-    				isObserverRegistered = false;
-                }
-            } else if (dataModification instanceof EntityDeleted) {
-                logger.info("Handle entity has been deleted");
-                setGenerator(null);
-                getCGFile().setMarkedForDeletion(true);
-                getCGFile().getRepository().refresh();
-                observable.deleteObserver(this);
+	/**
+	 * Overrides update
+	 * 
+	 * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable, org.openflexo.foundation.DataModification)
+	 */
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (observable == getEntity()) {
+			if (dataModification instanceof DMAttributeDataModification) {
+				if (((DMAttributeDataModification) dataModification).getAttributeName().equals(DMEOEntity.ENTITY_CLASS_NAME_KEY)) {
+					logger.info("Building new resource after entity renaming");
+					EOEntityPListGenerator generator = getGenerator();
+					setGenerator(null);
+					getCGFile().setMarkedForDeletion(true);
+					generator.refreshConcernedResources();
+					generator.getRepository().refresh();
+					observable.deleteObserver(this);
+					isObserverRegistered = false;
+				}
+			} else if (dataModification instanceof DMObjectDeleted) {
+				logger.info("Handle entity has been deleted");
+				setGenerator(null);
+				getCGFile().setMarkedForDeletion(true);
+				getCGFile().getRepository().refresh();
+				observable.deleteObserver(this);
 				isObserverRegistered = false;
-            }
-        }
-    }
+			}
+		}
+	}
 
-    /**
-     * @param repository
-     * @param entity
-     * @return
-     */
-    public static String nameForRepositoryAndEntity(CGRepository repository, DMEOEntity entity)
-    {
-        return repository.getName() + ".EOENTITY_PLIST" + entity.getFullyQualifiedName();
-    }
+	/**
+	 * @param repository
+	 * @param entity
+	 * @return
+	 */
+	public static String nameForRepositoryAndEntity(CGRepository repository, DMEOEntity entity) {
+		return repository.getName() + ".EOENTITY_PLIST" + entity.getFullyQualifiedName();
+	}
 
-    @Override
-    public EOEntityPListFile getGeneratedResourceData()
-    {
-    	return (EOEntityPListFile)super.getGeneratedResourceData();
-    }
+	@Override
+	public EOEntityPListFile getGeneratedResourceData() {
+		return (EOEntityPListFile) super.getGeneratedResourceData();
+	}
 
-    /**
-     * Return dependancy computing between this resource, and an other resource,
-     * asserting that this resource is contained in this resource's dependant
-     * resources
-     *
-     * @param resource
-     * @param dependancyScheme
-     * @return
-     */
-    @Override
-    public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate)
-    {
-        if (resource instanceof FlexoDMResource) {
-            FlexoDMResource dmRes = (FlexoDMResource) resource;
-            if (dmRes.isLoaded() && getEntity() != null) {
-                if (!requestDate.before(getEntity().getLastUpdate())) {
-                    if (logger.isLoggable(Level.FINER))
-                        logger.finer("OPTIMIST DEPENDANCY CHECKING for PLIST EOENTITY " + getEntity().getName());
-                    return false;
-                }
-            }
-        }
-        return super.optimisticallyDependsOf(resource, requestDate);
-    }
+	/**
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this resource's dependant resources
+	 * 
+	 * @param resource
+	 * @param dependancyScheme
+	 * @return
+	 */
+	@Override
+	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
+		if (resource instanceof FlexoDMResource) {
+			FlexoDMResource dmRes = (FlexoDMResource) resource;
+			if (dmRes.isLoaded() && getEntity() != null) {
+				if (!requestDate.before(getEntity().getLastUpdate())) {
+					if (logger.isLoggable(Level.FINER))
+						logger.finer("OPTIMIST DEPENDANCY CHECKING for PLIST EOENTITY " + getEntity().getName());
+					return false;
+				}
+			}
+		}
+		return super.optimisticallyDependsOf(resource, requestDate);
+	}
 
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-    public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
 
-        if (getEntity() != null) {
-            addToDependantResources(getProject().getFlexoDMResource());
-        }
-    }
+		if (getEntity() != null) {
+			addToDependantResources(getProject().getFlexoDMResource());
+		}
+	}
 
-
-    static String getDefaultFileName(DMEOEntity entity)
-    {
-        String fullQualifiedName = entity.getFullyQualifiedName();
-        String basicName = fullQualifiedName;
-        if (fullQualifiedName.lastIndexOf(".") > -1)
-            basicName = fullQualifiedName.substring(fullQualifiedName.lastIndexOf(".") + 1);
-        return basicName + ".plist";
-    }
-
+	static String getDefaultFileName(DMEOEntity entity) {
+		String fullQualifiedName = entity.getFullyQualifiedName();
+		String basicName = fullQualifiedName;
+		if (fullQualifiedName.lastIndexOf(".") > -1)
+			basicName = fullQualifiedName.substring(fullQualifiedName.lastIndexOf(".") + 1);
+		return basicName + ".plist";
+	}
 
 }

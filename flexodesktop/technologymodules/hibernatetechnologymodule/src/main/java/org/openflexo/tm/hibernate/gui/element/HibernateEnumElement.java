@@ -27,7 +27,6 @@ import org.openflexo.sgmodule.controller.browser.TechnologyModuleBrowserElement;
 import org.openflexo.tm.hibernate.gui.HibernateIconLibrary;
 import org.openflexo.tm.hibernate.impl.HibernateEnum;
 
-
 public class HibernateEnumElement extends TechnologyModuleBrowserElement<HibernateEnum> {
 
 	public HibernateEnumElement(HibernateEnum hibernateEnum, ProjectBrowser browser, BrowserElement parent) {
@@ -46,6 +45,6 @@ public class HibernateEnumElement extends TechnologyModuleBrowserElement<Hiberna
 	 */
 	@Override
 	public Icon getIcon() {
-		return HibernateIconLibrary.ENUM_ICON;
+		return HibernateIconLibrary.getIconForHibernateObject(getObject());
 	}
 }

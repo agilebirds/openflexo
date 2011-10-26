@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *
+ * 
  * @author Nicolas Daniels
  */
 public class JavaUtils {
@@ -25,15 +25,19 @@ public class JavaUtils {
 	public static final String JAVA_CLASS_NAME_REGEXP = "[_A-Za-z][_A-Za-z0-9]*";
 	public static final Pattern JAVA_CLASS_NAME_PATTERN = Pattern.compile(JAVA_CLASS_NAME_REGEXP);
 
-	public static final Set<String> JAVA_RESERVED_KEYWORDS = new HashSet<String>(Arrays.asList("abstract", "continue", "for", "new", "switch", "assert", "default", "goto", "package", "synchronized",
-			"boolean", "do", "if", "private", "this", "break", "double", "implements", "protected", "throw", "byte", "else", "import", "public", "throws", "catch", "extends", "int", "short", "try",
-			"char", "final", "interface", "static", "void", "class", "finally", "long", "strictfp", "volatile", "const", "float", "native", "super", "while"));
+	public static final Set<String> JAVA_RESERVED_KEYWORDS = new HashSet<String>(Arrays.asList("abstract", "continue", "for", "new",
+			"switch", "assert", "default", "goto", "package", "synchronized", "boolean", "do", "if", "private", "this", "break", "double",
+			"implements", "protected", "throw", "byte", "else", "import", "public", "throws", "catch", "extends", "int", "short", "try",
+			"char", "final", "interface", "static", "void", "class", "finally", "long", "strictfp", "volatile", "const", "float", "native",
+			"super", "while"));
 
 	/**
 	 * Transform the specified <code>value</code> to be used as a java variable name. <br>
-	 * Basically, it will remove all special/whiteSpace characters, ensure it starts with a lower case and ensure it doesn't start with a number.
+	 * Basically, it will remove all special/whiteSpace characters, ensure it starts with a lower case and ensure it doesn't start with a
+	 * number.
 	 * 
-	 * @param value the string to transform, can be null, in such case null is returned
+	 * @param value
+	 *            the string to transform, can be null, in such case null is returned
 	 * @return the transformed string
 	 */
 	public static String getVariableName(String value) {
@@ -44,7 +48,8 @@ public class JavaUtils {
 	 * Transform the specified <code>value</code> to be used as a java constant name. <br>
 	 * Basically, it will remove all special/whiteSpace characters, ensure it doesn't start with a number and transform it to upper case.
 	 * 
-	 * @param value the string to transform, can be null, in such case null is returned
+	 * @param value
+	 *            the string to transform, can be null, in such case null is returned
 	 * @return the transformed string
 	 */
 	public static String getConstantName(String name) {
@@ -53,9 +58,11 @@ public class JavaUtils {
 
 	/**
 	 * Transform the specified <code>value</code> to be used as a java class name. <br>
-	 * Basically, it will remove all special/whiteSpace characters, ensure it starts with a upper case and ensure it doesn't start with a number.
+	 * Basically, it will remove all special/whiteSpace characters, ensure it starts with a upper case and ensure it doesn't start with a
+	 * number.
 	 * 
-	 * @param value the string to transform, can be null, in such case null is returned
+	 * @param value
+	 *            the string to transform, can be null, in such case null is returned
 	 * @return the transformed string
 	 */
 	public static String getClassName(String value) {
@@ -64,9 +71,11 @@ public class JavaUtils {
 
 	/**
 	 * Transform the specified <code>value</code> to be used as a java package name. <br>
-	 * Basically, it will remove all special/whiteSpace characters (except .), ensure it contains only lower case and ensure each part doesn't start with a number.
+	 * Basically, it will replace all '/' or '\' by '.', remove all special/whiteSpace characters (except .), ensure it contains only lower
+	 * case and ensure each part doesn't start with a number.
 	 * 
-	 * @param value the string to transform, can be null, in such case null is returned
+	 * @param value
+	 *            the string to transform, can be null, in such case null is returned
 	 * @return the transformed string
 	 */
 	public static String getPackageName(String value) {
@@ -77,11 +86,14 @@ public class JavaUtils {
 			return value;
 		}
 
+		value = value.replaceAll("[/\\\\]", ".");
+
 		StringBuilder sb = new StringBuilder();
 		for (String s : value.split("\\.")) {
 			String part = getVariableName(s).toLowerCase();
-			if (sb.length() > 0 && part.length() > 0)
+			if (sb.length() > 0 && part.length() > 0) {
 				sb.append(".");
+			}
 			sb.append(part);
 		}
 
@@ -95,7 +107,8 @@ public class JavaUtils {
 	 * Transform the specified <code>value</code> to be used as a java string. <br>
 	 * Basically, it will replace all breaking line by \n and add a \ before all escapable characters (", \, ...).
 	 * 
-	 * @param value the string to transform, can be null, in such case null is returned
+	 * @param value
+	 *            the string to transform, can be null, in such case null is returned
 	 * @return the transformed string
 	 */
 	public static String getJavaString(String value) {

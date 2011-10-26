@@ -4,8 +4,15 @@
     	<Template templateFile="applicationContextHibernate.xml.vm"/>
     </File>
     #foreach($model in ${hibernateImplementation.getModels()})
+		#foreach($enum in ${model.getHibernateEnumContainer().getHibernateEnums()})
+        	<File name="${enum.getName()}.java" type="java" symbolicPath="sources" relativePath="#getJavaPackagePath("${model.getName()}.enums")">
+            	<Template templateFile="enum.java.vm">
+					<Context name="enum" value="${enum.makeReference()}"/>
+            	</Template>
+            </File>
+		#end
 		#foreach($entity in ${model.getEntities()})
-        	<File name="${entity.getName()}" type="java" symbolicPath="sources" relativePath="#getJavaPackagePath(${model.getName()})">
+        	<File name="${entity.getName()}.java" type="java" symbolicPath="sources" relativePath="#getJavaPackagePath(${model.getName()})">
             	<Template templateFile="pojo.java.vm">
 					<Context name="entity" value="${entity.makeReference()}"/>
             	</Template>

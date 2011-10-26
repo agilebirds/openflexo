@@ -52,14 +52,13 @@ public class GeneratedSources extends GeneratedOutput {
 	private SGTemplates _templates;
 
 	private Vector<ImplementationModelDefinition> _implementationModels;
-	
+
 	/**
 	 * Creates and returns a newly created GeneratedSources object
 	 * 
 	 * @return a newly created GeneratedSources
 	 */
-	public static GeneratedSources createNewGeneratedSources(FlexoProject project) 
-	{
+	public static GeneratedSources createNewGeneratedSources(FlexoProject project) {
 		GeneratedSources newGS = new GeneratedSources(project);
 		if (logger.isLoggable(Level.INFO))
 			logger.info("createNewGeneratedSources(), project=" + project + " " + newGS);
@@ -98,16 +97,14 @@ public class GeneratedSources extends GeneratedOutput {
 	}
 
 	@Override
-	public String getHelpText()
-	{
+	public String getHelpText() {
 		return FlexoLocalization.localizedForKey("generated_sources_help_text");
 	}
 
 	/**
 	 * @param project
 	 */
-	public GeneratedSources(FlexoProject project)
-	{
+	public GeneratedSources(FlexoProject project) {
 		super(project);
 		_implementationModels = new Vector<ImplementationModelDefinition>();
 	}
@@ -115,28 +112,24 @@ public class GeneratedSources extends GeneratedOutput {
 	/**
 	 * @param project
 	 */
-	public GeneratedSources(GeneratedSourcesBuilder builder) 
-	{
+	public GeneratedSources(GeneratedSourcesBuilder builder) {
 		this(builder.getProject());
 		builder.generatedSources = this;
 		_resource = builder.resource;
 		initializeDeserialization(builder);
 	}
-	
-	   @Override
-	    protected Vector<FlexoActionType> getSpecificActionListForThatClass()
-	    {
-	        Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-	        returned.add(CreateSourceRepository.actionType);
-	        return returned;
-	    }
 
-     @Override
-    public XMLMapping getXMLMapping()
-    {
-        return getProject().getXmlMappings().getGeneratedSourcesMapping();
-    }
+	@Override
+	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
+		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
+		returned.add(CreateSourceRepository.actionType);
+		return returned;
+	}
 
+	@Override
+	public XMLMapping getXMLMapping() {
+		return getProject().getXmlMappings().getGeneratedSourcesMapping();
+	}
 
 	@Override
 	public String getFullyQualifiedName() {
@@ -159,8 +152,7 @@ public class GeneratedSources extends GeneratedOutput {
 	}
 
 	@Override
-	public SGTemplates getTemplates() 
-	{
+	public SGTemplates getTemplates() {
 		if (_templates == null) {
 			_templates = new SGTemplates(getProject());
 		}
@@ -177,46 +169,41 @@ public class GeneratedSources extends GeneratedOutput {
 		return "default_sg_repository_name";
 	}
 
-    public ImplementationModelDefinition getImplementationModelDefinitionNamed(String value)
-    {
-        if (value == null)
-            return null;
-        for (ImplementationModelDefinition implModel : getImplementationModels()) {
-        	if (value.equals(implModel.getName())) return implModel;
-        }
-        return null;
-     }
+	public ImplementationModelDefinition getImplementationModelDefinitionNamed(String value) {
+		if (value == null)
+			return null;
+		for (ImplementationModelDefinition implModel : getImplementationModels()) {
+			if (value.equals(implModel.getName()))
+				return implModel;
+		}
+		return null;
+	}
 
-    public ImplementationModel getImplementationModelNamed(String value)
-    {
-    	ImplementationModelDefinition def = getImplementationModelDefinitionNamed(value);
-    	if (def != null) return def.getImplementationModel();
-    	return null;
-    }
+	public ImplementationModel getImplementationModelNamed(String value) {
+		ImplementationModelDefinition def = getImplementationModelDefinitionNamed(value);
+		if (def != null)
+			return def.getImplementationModel();
+		return null;
+	}
 
-    public Vector<ImplementationModelDefinition> getImplementationModels()
-	{
+	public Vector<ImplementationModelDefinition> getImplementationModels() {
 		return _implementationModels;
 	}
 
-	public void setImplementationModels(
-			Vector<ImplementationModelDefinition> implementationModels)
-	{
+	public void setImplementationModels(Vector<ImplementationModelDefinition> implementationModels) {
 		_implementationModels = implementationModels;
 	}
 
-	public void addToImplementationModels(ImplementationModelDefinition implementationModel)
-	{
+	public void addToImplementationModels(ImplementationModelDefinition implementationModel) {
 		_implementationModels.add(implementationModel);
 		setChanged();
-		notifyObservers(new SGObjectCreatedModification());
+		notifyObservers(new SGObjectCreatedModification<ImplementationModelDefinition>(implementationModel));
 	}
-	
-	public void removeFromImplementationModels(ImplementationModelDefinition implementationModel)
-	{
+
+	public void removeFromImplementationModels(ImplementationModelDefinition implementationModel) {
 		_implementationModels.remove(implementationModel);
 		setChanged();
-		notifyObservers(new SGObjectDeletedModification());
+		notifyObservers(new SGObjectDeletedModification<ImplementationModelDefinition>(implementationModel));
 	}
-	
+
 }

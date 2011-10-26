@@ -27,37 +27,33 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.xmlcode.XMLMapping;
 
-
 public abstract class TechnologyModelObject extends FlexoModelObject implements InspectableObject {
 
 	private ImplementationModel implementationModel;
-    
-     // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
 
-    /**
-     * Never use this constructor except for ComponentLibrary
-     */
-    public TechnologyModelObject(FlexoProject project)
-    {
-        super(project);
-    }
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    /**
-     * Default constructor
-     */
-	public TechnologyModelObject(ImplementationModel implementationModel)
-    {
+	/**
+	 * Never use this constructor except for ComponentLibrary
+	 */
+	public TechnologyModelObject(FlexoProject project) {
+		super(project);
+	}
+
+	/**
+	 * Default constructor
+	 */
+	public TechnologyModelObject(ImplementationModel implementationModel) {
 		this(implementationModel.getProject());
 		setImplementationModel(implementationModel);
-    }
+	}
 
-	public ImplementationModel getImplementationModel()
-    {
+	public ImplementationModel getImplementationModel() {
 		return implementationModel;
-    }
+	}
 
 	public void setImplementationModel(ImplementationModel implementationModel) {
 		this.implementationModel = implementationModel;
@@ -68,21 +64,18 @@ public abstract class TechnologyModelObject extends FlexoModelObject implements 
 	 * 
 	 * @return the component library
 	 */
-    @Override
-    public ImplementationModel getXMLResourceData()
-    {
-        return getImplementationModel();
-    }
-
-    @Override
-    public XMLMapping getXMLMapping()
-    {
-        return getImplementationModel().getXMLMapping();
-    }
+	@Override
+	public ImplementationModel getXMLResourceData() {
+		return getImplementationModel();
+	}
 
 	@Override
-	public void setName(String name) throws DuplicateResourceException, InvalidNameException
-	{
+	public XMLMapping getXMLMapping() {
+		return getImplementationModel().getXMLMapping();
+	}
+
+	@Override
+	public void setName(String name) throws DuplicateResourceException, InvalidNameException {
 		if (requireChange(getName(), name)) {
 			try {
 				super.setName(name);

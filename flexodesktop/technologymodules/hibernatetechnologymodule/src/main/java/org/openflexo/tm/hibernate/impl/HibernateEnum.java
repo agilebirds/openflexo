@@ -4,13 +4,20 @@
 package org.openflexo.tm.hibernate.impl;
 
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
 
+import org.apache.commons.lang.StringUtils;
+import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.dm.DMEntity;
+import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
+import org.openflexo.foundation.dm.dm.DMEntityNameChanged;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.sg.implmodel.ImplementationModel;
-import org.openflexo.foundation.sg.implmodel.TechnologyModelObject;
-import org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation;
+import org.openflexo.foundation.sg.implmodel.LinkableTechnologyModelObject;
 import org.openflexo.foundation.sg.implmodel.event.SGAttributeModification;
 import org.openflexo.foundation.sg.implmodel.event.SGObjectAddedToListModification;
 import org.openflexo.foundation.sg.implmodel.event.SGObjectDeletedModification;
@@ -19,10 +26,12 @@ import org.openflexo.foundation.xml.ImplementationModelBuilder;
 import org.openflexo.toolbox.JavaUtils;
 
 /**
- *
+ * 
  * @author Nicolas Daniels
  */
-public class HibernateEnum extends TechnologyModelObject {
+public class HibernateEnum extends LinkableTechnologyModelObject<DMEntity> {
+
+	protected static final Logger logger = Logger.getLogger(HibernateEnum.class.getPackage().getName());
 
 	public static final String CLASS_NAME_KEY = "hibernate_enum";
 
@@ -53,6 +62,14 @@ public class HibernateEnum extends TechnologyModelObject {
 		super(implementationModel);
 	}
 
+	/**
+	 * @param implementationModel the implementation model where to create this Hibernate enum
+	 * @param linkedFlexoModelObject Can be null
+	 */
+	public HibernateEnum(ImplementationModel implementationModel, DMEntity linkedFlexoModelObject) {
+		super(implementationModel, linkedFlexoModelObject);
+	}
+
 	// =========== //
 	// = Methods = //
 	// =========== //
@@ -81,6 +98,37 @@ public class HibernateEnum extends TechnologyModelObject {
 		return getHibernateEnumContainer().getFullyQualifiedName() + "." + getName();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void synchronizeWithLinkedFlexoModelObject() {
+		updateNameIfNecessary();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected String escapeName(String name) {
+		return JavaUtils.getClassName(name);
+	}
+
+	/**
+	 * Update the is enum with the linked Flexo Model Object one if necessary.
+	 */
+	public void updateIsEnumIfNecessary() {
+		if (getLinkedFlexoModelObject() != null) {
+			DMEntity dmEntity = getLinkedFlexoModelObject();
+			if (!dmEntity.getIsEnumeration()) {
+				// Type is changed to an not Enum one. Delete this entity and create a new Hibernate entity
+				this.setLinkedFlexoModelObject(null);
+				getHibernateEnumContainer().getHibernateModel().createHibernateObjectBasedOnDMEntity(dmEntity);
+				this.delete();
+			}
+		}
+	}
+
 	/* ===================== */
 	/* ====== Actions ====== */
 	/* ===================== */
@@ -95,9 +143,27 @@ public class HibernateEnum extends TechnologyModelObject {
 			getHibernateEnumContainer().removeFromHibernateEnums(this);
 
 		setChanged();
-		notifyObservers(new SGObjectDeletedModification());
+		notifyObservers(new SGObjectDeletedModification<HibernateEnum>(this));
 		super.delete();
 		deleteObservers();
+	}
+
+	/* ============== */
+	/* == Observer == */
+	/* ============== */
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		super.update(observable, dataModification);
+		if (observable == getLinkedFlexoModelObject()) {
+			if (dataModification instanceof DMEntityNameChanged)
+				updateNameIfNecessary();
+			else if (dataModification instanceof DMAttributeDataModification && "isEnumeration".equals(dataModification.propertyName()))
+				updateIsEnumIfNecessary();
+		}
 	}
 
 	/* ===================== */
@@ -108,8 +174,26 @@ public class HibernateEnum extends TechnologyModelObject {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public void setLinkedFlexoModelObject(DMEntity linkedFlexoModelObject) {
+		if (linkedFlexoModelObject == null || linkedFlexoModelObject.getIsEnumeration()) {
+			super.setLinkedFlexoModelObject(linkedFlexoModelObject);
+		} else {
+			if (logger.isLoggable(Level.WARNING))
+				logger.log(Level.WARNING, "Cannot set linked object to Hibernate Enum with a non enumeration DM Entity. DM Entity: " + linkedFlexoModelObject.getName());
+		}
+
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void setName(String name) throws DuplicateResourceException, InvalidNameException {
-		name = JavaUtils.getClassName(name);
+		name = escapeName(name);
+
+		if (StringUtils.isEmpty(name))
+			name = getDefaultName();
+
 		super.setName(name);
 	}
 
@@ -136,13 +220,13 @@ public class HibernateEnum extends TechnologyModelObject {
 		hibernateEnumValues.add(hibernateEnumValue);
 
 		setChanged();
-		notifyObservers(new SGObjectAddedToListModification("hibernateEnumValues", hibernateEnumValue));
+		notifyObservers(new SGObjectAddedToListModification<HibernateEnumValue>("hibernateEnumValues", hibernateEnumValue));
 	}
 
 	public void removeFromHibernateEnumValues(HibernateEnumValue hibernateEnumValue) {
 		if (hibernateEnumValues.remove(hibernateEnumValue)) {
 			setChanged();
-			notifyObservers(new SGObjectRemovedFromListModification("hibernateEnumValues", hibernateEnumValue));
+			notifyObservers(new SGObjectRemovedFromListModification<HibernateEnumValue>("hibernateEnumValues", hibernateEnumValue));
 		}
 	}
 
@@ -163,8 +247,8 @@ public class HibernateEnum extends TechnologyModelObject {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public TechnologyModuleImplementation getTechnologyModuleImplementation() {
-		return getHibernateEnumContainer().getTechnologyModuleImplementation();
+	public HibernateImplementation getTechnologyModuleImplementation() {
+		return HibernateImplementation.getHibernateImplementation(getImplementationModel());
 	}
 
 }

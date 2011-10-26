@@ -8,13 +8,12 @@ import javax.naming.InvalidNameException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.sg.implmodel.ImplementationModel;
 import org.openflexo.foundation.sg.implmodel.TechnologyModelObject;
-import org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation;
 import org.openflexo.foundation.sg.implmodel.event.SGObjectDeletedModification;
 import org.openflexo.foundation.xml.ImplementationModelBuilder;
 import org.openflexo.toolbox.JavaUtils;
 
 /**
- *
+ * 
  * @author Nicolas Daniels
  */
 public class HibernateEnumValue extends TechnologyModelObject {
@@ -89,7 +88,7 @@ public class HibernateEnumValue extends TechnologyModelObject {
 			getHibernateEnum().removeFromHibernateEnumValues(this);
 
 		setChanged();
-		notifyObservers(new SGObjectDeletedModification());
+		notifyObservers(new SGObjectDeletedModification<HibernateEnumValue>(this));
 		super.delete();
 		deleteObservers();
 	}
@@ -124,8 +123,8 @@ public class HibernateEnumValue extends TechnologyModelObject {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public TechnologyModuleImplementation getTechnologyModuleImplementation() {
-		return getHibernateEnum().getTechnologyModuleImplementation();
+	public HibernateImplementation getTechnologyModuleImplementation() {
+		return HibernateImplementation.getHibernateImplementation(getImplementationModel());
 	}
 
 }

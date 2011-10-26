@@ -27,7 +27,6 @@ import org.openflexo.sgmodule.controller.browser.TechnologyModuleBrowserElement;
 import org.openflexo.tm.hibernate.gui.HibernateIconLibrary;
 import org.openflexo.tm.hibernate.impl.HibernateEntity;
 
-
 public class HibernateEntityElement extends TechnologyModuleBrowserElement<HibernateEntity> {
 
 	public HibernateEntityElement(HibernateEntity entity, ProjectBrowser browser, BrowserElement parent) {
@@ -46,6 +45,6 @@ public class HibernateEntityElement extends TechnologyModuleBrowserElement<Hiber
 	 */
 	@Override
 	public Icon getIcon() {
-		return HibernateIconLibrary.ENTITY_ICON;
+		return HibernateIconLibrary.getIconForHibernateObject(getObject());
 	}
 }

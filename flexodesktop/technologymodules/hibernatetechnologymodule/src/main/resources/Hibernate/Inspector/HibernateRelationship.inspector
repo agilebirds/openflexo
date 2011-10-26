@@ -1,6 +1,6 @@
 <inspector title = "hibernate_relationship" >
 	<tab name="Basic" index="0">
-		<property name="nameOrBuiltAutomaticOne" label="propertyName" widget="TEXT_FIELD" constraint="1">
+		<property name="name" label="propertyName" widget="TEXT_FIELD" constraint="1">
 			<param name="columns" value="10"/>
 		</property>
 		

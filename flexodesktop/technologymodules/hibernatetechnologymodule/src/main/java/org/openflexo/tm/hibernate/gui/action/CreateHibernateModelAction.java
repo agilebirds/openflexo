@@ -36,7 +36,6 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.tm.hibernate.impl.HibernateImplementation;
 import org.openflexo.tm.hibernate.impl.HibernateModel;
 
-
 @SuppressWarnings("serial")
 public class CreateHibernateModelAction extends FlexoAction<CreateHibernateModelAction, HibernateImplementation, HibernateImplementation> {
 
@@ -85,10 +84,9 @@ public class CreateHibernateModelAction extends FlexoAction<CreateHibernateModel
 		}
 
 		try {
-			HibernateModel newModel = HibernateModel.createNewHibernateModel(newModelName, getFocusedObject());
-			newModel.setWatchedRepository(watchedRepository);
+			HibernateModel.createNewHibernateModel(newModelName, getFocusedObject(), watchedRepository);
 
-			logger.info("Created hibernate model " + newModelName + " for model " + getFocusedObject().getImplementationModel());
+			logger.info("Created hibernate model " + newModelName + " for implementation model " + getFocusedObject().getImplementationModel());
 		} catch (DuplicateResourceException e) {
 			throw new InvalidParametersException("duplicate_hibernate_model_name");
 		} catch (InvalidNameException e) {

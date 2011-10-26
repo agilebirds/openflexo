@@ -29,7 +29,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
-import org.openflexo.foundation.dm.dm.EntityDeleted;
+import org.openflexo.foundation.dm.dm.DMObjectDeleted;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.xml.FlexoDMBuilder;
 
@@ -67,8 +67,8 @@ public class ProcessDMEntity extends DMEntity {
 	 * Constructor used for dynamic creation
 	 */
 	public ProcessDMEntity(DMModel dmModel, FlexoProcess process) {
-		super(dmModel, process.getProcessInstanceEntityName(), process.getExecutionGroupName(), process.getProcessInstanceEntityName(),
-				DMType.makeResolvedDMType(dmModel.getExecutionModelRepository().getProcessInstanceEntity()));
+		super(dmModel, process.getProcessInstanceEntityName(), process.getExecutionGroupName(), process.getProcessInstanceEntityName(), DMType.makeResolvedDMType(dmModel.getExecutionModelRepository()
+				.getProcessInstanceEntity()));
 		setProcess(process);
 		createParentProcessPropertyIfRequired();
 	}
@@ -101,8 +101,7 @@ public class ProcessDMEntity extends DMEntity {
 	public DMProperty createBusinessDataProperty(String propertyName, DMEntity type) {
 		DMProperty property = getDMProperty(propertyName);
 		if (property == null) {
-			property = new DMProperty(getDMModel(), propertyName, DMType.makeResolvedDMType(type), DMCardinality.SINGLE, true, true,
-					DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
+			property = new DMProperty(getDMModel(), propertyName, DMType.makeResolvedDMType(type), DMCardinality.SINGLE, true, true, DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
 			registerProperty(property, false);
 			if (type != null) {
 				type.addObserver(this);
@@ -118,11 +117,10 @@ public class ProcessDMEntity extends DMEntity {
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (dataModification instanceof EntityDeleted) {
-			if (getBusinessDataProperty() != null && ((EntityDeleted) dataModification).getEntity().equals(
-					getBusinessDataProperty().getType().getBaseEntity())) {
+		if (dataModification instanceof DMObjectDeleted && dataModification.oldValue() instanceof DMEntity) {
+			if (getBusinessDataProperty() != null && dataModification.oldValue().equals(getBusinessDataProperty().getType().getBaseEntity())) {
 				getBusinessDataProperty().delete();
-				((EntityDeleted) dataModification).getEntity().deleteObserver(this);
+				((DMEntity) dataModification.oldValue()).deleteObserver(this);
 			}
 		}
 		super.update(observable, dataModification);
@@ -130,9 +128,8 @@ public class ProcessDMEntity extends DMEntity {
 
 	public DMProperty createParentProcessPropertyIfRequired() {
 		if (getParentProcessProperty() == null && _process.getParentProcess() != null) {
-			DMProperty newProperty = new DMProperty(getDMModel(), PARENT_PROCESS_PROPERTY_NAME, DMType.makeResolvedDMType(_process
-					.getParentProcess().getProcessDMEntity()), DMCardinality.SINGLE, true, true,
-					DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
+			DMProperty newProperty = new DMProperty(getDMModel(), PARENT_PROCESS_PROPERTY_NAME, DMType.makeResolvedDMType(_process.getParentProcess().getProcessDMEntity()), DMCardinality.SINGLE,
+					true, true, DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
 			registerProperty(newProperty, false);
 			logger.info("CREATES parent process property !");
 		}
@@ -152,8 +149,8 @@ public class ProcessDMEntity extends DMEntity {
 				return createParentProcessPropertyIfRequired();
 			}
 		}
-		if (getParentProcessProperty() != null && (getParentProcessProperty().getType() == null || getParentProcessProperty().getType()
-				.getBaseEntity() != _process.getParentProcess().getProcessDMEntity())) {
+		if (getParentProcessProperty() != null
+				&& (getParentProcessProperty().getType() == null || getParentProcessProperty().getType().getBaseEntity() != _process.getParentProcess().getProcessDMEntity())) {
 			logger.info("UPDATE parent process property !");
 			getParentProcessProperty().setType(DMType.makeResolvedDMType(_process.getParentProcess().getProcessDMEntity()));
 		}
@@ -164,8 +161,7 @@ public class ProcessDMEntity extends DMEntity {
 		Enumeration en = getProperties().elements();
 		while (en.hasMoreElements()) {
 			DMProperty next = (DMProperty) en.nextElement();
-			if (next.getType() != null && !getDMModel().getExecutionModelRepository().getProcessInstanceEntity()
-					.isAncestorOf(next.getType().getBaseEntity())) {
+			if (next.getType() != null && !getDMModel().getExecutionModelRepository().getProcessInstanceEntity().isAncestorOf(next.getType().getBaseEntity())) {
 				return next;
 			}
 		}
@@ -181,8 +177,7 @@ public class ProcessDMEntity extends DMEntity {
 		Enumeration en = getProperties().elements();
 		while (en.hasMoreElements()) {
 			DMProperty next = (DMProperty) en.nextElement();
-			if (next.getType() != null && getDMModel().getExecutionModelRepository().getProcessInstanceEntity()
-					.isAncestorOf(next.getType().getBaseEntity())) {
+			if (next.getType() != null && getDMModel().getExecutionModelRepository().getProcessInstanceEntity().isAncestorOf(next.getType().getBaseEntity())) {
 				return next;
 			}
 		}
@@ -228,8 +223,7 @@ public class ProcessDMEntity extends DMEntity {
 		} finally {
 			if (notify) {
 				setChanged();
-				notifyObserversAsReentrantModification(new DMAttributeDataModification("entityClassName", newEntityClassName,
-						getEntityClassName()));
+				notifyObserversAsReentrantModification(new DMAttributeDataModification("entityClassName", newEntityClassName, getEntityClassName()));
 			}
 		}
 	}

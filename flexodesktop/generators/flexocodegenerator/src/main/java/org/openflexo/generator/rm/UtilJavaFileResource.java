@@ -29,7 +29,7 @@ import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.cg.CGRepository;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.dm.DMEntityClassNameChanged;
-import org.openflexo.foundation.dm.dm.EntityDeleted;
+import org.openflexo.foundation.dm.dm.DMObjectDeleted;
 import org.openflexo.foundation.rm.FlexoDMResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
@@ -38,98 +38,89 @@ import org.openflexo.foundation.rm.cg.JavaFileResource;
 import org.openflexo.generator.FlexoResourceGenerator;
 import org.openflexo.generator.TemplateLocator;
 import org.openflexo.generator.cg.CGJavaFile;
-import org.openflexo.generator.rm.GenerationAvailableFileResource;
 import org.openflexo.generator.utils.JavaClassGenerator;
 import org.openflexo.logging.FlexoLogger;
-
 
 /**
  * @author sylvain
  * 
  */
-public class UtilJavaFileResource extends JavaFileResource<JavaClassGenerator, CGJavaFile> implements GenerationAvailableFileResource, FlexoObserver
-{
+public class UtilJavaFileResource extends JavaFileResource<JavaClassGenerator, CGJavaFile> implements GenerationAvailableFileResource, FlexoObserver {
 	static final Logger logger = FlexoLogger.getLogger(UtilJavaFileResource.class.getPackage().getName());
 
-    /**
-     * @param builder
-     */
-    public UtilJavaFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
-
-    /**
-     * @param aProject
-     */
-    public UtilJavaFileResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
-
-    public DMEntity getEntity() 
-    {
-    	if (getGenerator() != null) return getGenerator().getEntity();
-    	return null;
-    }
-    private boolean isObserverRegistered = false;
-    @Override
-	public void registerObserverWhenRequired()
-    {
-    	if ((!isObserverRegistered) && (getEntity() != null)) {
-    		isObserverRegistered = true;
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("*** addObserver "+getFileName()+" for "+getEntity());
-    		getEntity().addObserver(this);
-    	}
-    }
-    
-    @Override
-	protected UtilJavaFile createGeneratedResourceData()
-    {
-        return new UtilJavaFile(getFile(),this);
-    }
-    
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
-        
-        if (getEntity() != null) {
-        	addToDependantResources(getProject().getFlexoDMResource());
-        }
-        if(getGenerator()!=null)
-        	getGenerator().rebuildDependanciesForResource(this);
-   }
-    
-    @Override
-	public UtilJavaFile getGeneratedResourceData()
-    {
-    	return (UtilJavaFile)super.getGeneratedResourceData();
-    }
+	/**
+	 * @param builder
+	 */
+	public UtilJavaFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
 	/**
-     * Return dependancy computing between this resource, and an other resource,
-     * asserting that this resource is contained in this resource's dependant resources
-     * 
-     * @param resource
-	 * @param dependancyScheme
-     * @return
-     */
+	 * @param aProject
+	 */
+	public UtilJavaFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
+
+	public DMEntity getEntity() {
+		if (getGenerator() != null)
+			return getGenerator().getEntity();
+		return null;
+	}
+
+	private boolean isObserverRegistered = false;
+
 	@Override
-	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate)
-	{
-		if (resource instanceof TemplateLocator) {
-			return ((TemplateLocator)resource).needsUpdateForResource(this);
+	public void registerObserverWhenRequired() {
+		if ((!isObserverRegistered) && (getEntity() != null)) {
+			isObserverRegistered = true;
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("*** addObserver " + getFileName() + " for " + getEntity());
+			getEntity().addObserver(this);
 		}
-		else if (resource instanceof FlexoDMResource) {
-			FlexoDMResource dmRes = (FlexoDMResource)resource;
+	}
+
+	@Override
+	protected UtilJavaFile createGeneratedResourceData() {
+		return new UtilJavaFile(getFile(), this);
+	}
+
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+
+		if (getEntity() != null) {
+			addToDependantResources(getProject().getFlexoDMResource());
+		}
+		if (getGenerator() != null)
+			getGenerator().rebuildDependanciesForResource(this);
+	}
+
+	@Override
+	public UtilJavaFile getGeneratedResourceData() {
+		return (UtilJavaFile) super.getGeneratedResourceData();
+	}
+
+	/**
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this resource's dependant resources
+	 * 
+	 * @param resource
+	 * @param dependancyScheme
+	 * @return
+	 */
+	@Override
+	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
+		if (resource instanceof TemplateLocator) {
+			return ((TemplateLocator) resource).needsUpdateForResource(this);
+		} else if (resource instanceof FlexoDMResource) {
+			FlexoDMResource dmRes = (FlexoDMResource) resource;
 			if (dmRes.isLoaded() && getEntity() != null) {
 				if (!requestDate.before(getEntity().getLastUpdate())) {
-					if (logger.isLoggable(Level.FINER)) logger.finer("OPTIMIST DEPENDANCY CHECKING for UTIL JAVA FILE "+getEntity().getName());
+					if (logger.isLoggable(Level.FINER))
+						logger.finer("OPTIMIST DEPENDANCY CHECKING for UTIL JAVA FILE " + getEntity().getName());
 					return false;
 				}
 			}
@@ -138,8 +129,7 @@ public class UtilJavaFileResource extends JavaFileResource<JavaClassGenerator, C
 	}
 
 	@Override
-	public void update(FlexoObservable observable,
-			DataModification dataModification) {
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getEntity()) {
 			if (dataModification instanceof DMEntityClassNameChanged) {
 				logger.info("Building new resource after entity renaming");
@@ -148,21 +138,19 @@ public class UtilJavaFileResource extends JavaFileResource<JavaClassGenerator, C
 				getCGFile().setMarkedForDeletion(true);
 				generator.refreshConcernedResources();
 				generator.getRepository().refresh();
-			}
-			else if (dataModification instanceof EntityDeleted) {
+			} else if (dataModification instanceof DMObjectDeleted) {
 				logger.info("Handle entity has been deleted");
 				setGenerator(null);
 				getCGFile().setMarkedForDeletion(true);
 				getCGFile().getRepository().refresh();
 			}
 		}
-		
+
 	}
-	
+
 	@Override
-	public CGRepository getRepository()
-    {
-        return getGenerator().getProjectGenerator().getRepository();
-    }
+	public CGRepository getRepository() {
+		return getGenerator().getProjectGenerator().getRepository();
+	}
 
 }

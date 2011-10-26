@@ -25,8 +25,8 @@ import org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation;
 import org.openflexo.foundation.sg.implmodel.event.SGAttributeModification;
 import org.openflexo.foundation.sg.implmodel.exception.TechnologyModuleCompatibilityCheckException;
 import org.openflexo.foundation.xml.ImplementationModelBuilder;
+import org.openflexo.tm.java.impl.enums.JavaIDEEnum;
 import org.openflexo.toolbox.JavaUtils;
-
 
 /**
  * This class defines properties related to a Java implementation.
@@ -44,6 +44,8 @@ public class JavaImplementation extends TechnologyModuleImplementation {
 	private String rootPackage;
 	/** The archive name i.e. we generate a flexo.war */
 	private String archiveName = getProject().getName().replace(" ", "_").toLowerCase();
+	/** The selected IDE to use for this java project. */
+	private JavaIDEEnum selectedIde;
 
 	// ================ //
 	// = Constructors = //
@@ -53,7 +55,8 @@ public class JavaImplementation extends TechnologyModuleImplementation {
 	 * Build a new Java implementation for the specified implementation model builder.<br/>
 	 * This constructor is namely invoked during unserialization.
 	 * 
-	 * @param builder the builder that will create this implementation
+	 * @param builder
+	 *            the builder that will create this implementation
 	 */
 	public JavaImplementation(ImplementationModelBuilder builder) throws TechnologyModuleCompatibilityCheckException {
 		this(builder.implementationModel);
@@ -63,7 +66,8 @@ public class JavaImplementation extends TechnologyModuleImplementation {
 	/**
 	 * Build a new Java implementation for the specified implementation model.
 	 * 
-	 * @param implementationModel the implementation model where to create this Java implementation
+	 * @param implementationModel
+	 *            the implementation model where to create this Java implementation
 	 */
 	public JavaImplementation(ImplementationModel implementationModel) throws TechnologyModuleCompatibilityCheckException {
 		super(implementationModel);
@@ -123,7 +127,8 @@ public class JavaImplementation extends TechnologyModuleImplementation {
 
 	/**
 	 * The root package, without the archive project name.<br/>
-	 * i.e. use a root package with "org.openflexo" and an archive name with "flexo" if you want to generates your sources in "org.openflexo"
+	 * i.e. use a root package with "org.openflexo" and an archive name with "flexo" if you want to generates your sources in
+	 * "org.openflexo"
 	 * 
 	 * @return the rootPackage
 	 */
@@ -155,6 +160,19 @@ public class JavaImplementation extends TechnologyModuleImplementation {
 			this.archiveName = archiveName;
 			setChanged();
 			notifyObservers(new SGAttributeModification("archiveName", oldValue, archiveName));
+		}
+	}
+
+	public JavaIDEEnum getSelectedIde() {
+		return selectedIde;
+	}
+
+	public void setSelectedIde(JavaIDEEnum selectedIde) {
+		if (requireChange(this.selectedIde, selectedIde)) {
+			Object oldValue = this.selectedIde;
+			this.selectedIde = selectedIde;
+			setChanged();
+			notifyObservers(new SGAttributeModification("selectedIde", oldValue, selectedIde));
 		}
 	}
 

@@ -102,6 +102,16 @@ public class HibernateImplementation extends TechnologyModuleImplementation {
 		return getProject().getDataModel().getProjectRepositories();
 	}
 
+	/**
+	 * Retrieve the instance of HibernateImplementation from the implementation model.
+	 * 
+	 * @param implementationModel
+	 * @return the retrieved instance if any, null otherwise.
+	 */
+	public static HibernateImplementation getHibernateImplementation(ImplementationModel implementationModel) {
+		return (HibernateImplementation) implementationModel.getTechnologyModule(TECHNOLOGY_MODULE_NAME);
+	}
+
 	/* ===================== */
 	/* ====== Actions ====== */
 	/* ===================== */
@@ -116,7 +126,7 @@ public class HibernateImplementation extends TechnologyModuleImplementation {
 			hibernateModel.delete();
 
 		setChanged();
-		notifyObservers(new SGObjectDeletedModification());
+		notifyObservers(new SGObjectDeletedModification<HibernateImplementation>(this));
 		super.delete();
 		deleteObservers();
 	}
@@ -128,7 +138,7 @@ public class HibernateImplementation extends TechnologyModuleImplementation {
 	 * @return the transformed name.
 	 */
 	public String getDbObjectName(String name) {
-		if(database != null && database instanceof DatabaseTechnologyModuleImplementation)
+		if (database != null && database instanceof DatabaseTechnologyModuleImplementation)
 			return ((DatabaseTechnologyModuleImplementation) database).getDbObjectName(name);
 
 		// Default implementation is to set all lower case without spaces
@@ -171,13 +181,13 @@ public class HibernateImplementation extends TechnologyModuleImplementation {
 		models.add(model);
 		Collections.sort(this.models, new FlexoModelObject.FlexoNameComparator<FlexoModelObject>());
 		setChanged();
-		notifyObservers(new SGObjectAddedToListModification("models", model));
+		notifyObservers(new SGObjectAddedToListModification<HibernateModel>("models", model));
 	}
 
 	public void removeFromModels(HibernateModel model) {
 		if (models.remove(model)) {
 			setChanged();
-			notifyObservers(new SGObjectRemovedFromListModification("models", model));
+			notifyObservers(new SGObjectRemovedFromListModification<HibernateModel>("models", model));
 		}
 	}
 }

@@ -7,21 +7,21 @@ import java.util.Collections;
 import java.util.Vector;
 
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.NameChanged;
+import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.sg.implmodel.ImplementationModel;
 import org.openflexo.foundation.sg.implmodel.TechnologyModelObject;
-import org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation;
 import org.openflexo.foundation.sg.implmodel.event.SGAttributeModification;
 import org.openflexo.foundation.sg.implmodel.event.SGObjectAddedToListModification;
 import org.openflexo.foundation.sg.implmodel.event.SGObjectDeletedModification;
 import org.openflexo.foundation.sg.implmodel.event.SGObjectRemovedFromListModification;
 import org.openflexo.foundation.xml.ImplementationModelBuilder;
+import org.openflexo.tm.hibernate.impl.comparator.HibernateLinkableObjectComparator;
 
 /**
- *
+ * 
  * @author Nicolas Daniels
  */
 public class HibernateEnumContainer extends TechnologyModelObject implements FlexoObserver {
@@ -100,7 +100,7 @@ public class HibernateEnumContainer extends TechnologyModelObject implements Fle
 			getHibernateModel().setHibernateEnumContainer(null);
 
 		setChanged();
-		notifyObservers(new SGObjectDeletedModification());
+		notifyObservers(new SGObjectDeletedModification<HibernateEnumContainer>(this));
 		super.delete();
 		deleteObservers();
 	}
@@ -109,7 +109,7 @@ public class HibernateEnumContainer extends TechnologyModelObject implements Fle
 	 * Sort entities stored in this model by their name.
 	 */
 	public void sortHibernateEnums() {
-		Collections.sort(this.hibernateEnums, new FlexoModelObject.FlexoNameComparator<FlexoModelObject>());
+		Collections.sort(this.hibernateEnums, new HibernateLinkableObjectComparator());
 	}
 
 	/* ============== */
@@ -164,15 +164,43 @@ public class HibernateEnumContainer extends TechnologyModelObject implements Fle
 		sortHibernateEnums();
 
 		setChanged();
-		notifyObservers(new SGObjectAddedToListModification("hibernateEnums", hibernateEnum));
+		notifyObservers(new SGObjectAddedToListModification<HibernateEnum>("hibernateEnums", hibernateEnum));
 	}
 
 	public void removeFromHibernateEnums(HibernateEnum hibernateEnum) {
 		if (hibernateEnums.remove(hibernateEnum)) {
 			hibernateEnum.deleteObserver(this);
 			setChanged();
-			notifyObservers(new SGObjectRemovedFromListModification("hibernateEnums", hibernateEnum));
+			notifyObservers(new SGObjectRemovedFromListModification<HibernateEnum>("hibernateEnums", hibernateEnum));
 		}
+	}
+
+	/**
+	 * Retrieve the Hibernate Enum with the specified name.
+	 * 
+	 * @param entityName
+	 * @return the retrieved Hibernate Enum if any, null otherwise.
+	 */
+	public HibernateEnum getHibernateEnum(String name) {
+		for (HibernateEnum hibernateEnum : hibernateEnums) {
+			if (hibernateEnum.getName().equals(name))
+				return hibernateEnum;
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieve the Hibernate Enum linked to the specified DMEntity.
+	 * 
+	 * @param dmEntity
+	 * @return the retrieved Hibernate Enum if any, null otherwise.
+	 */
+	public HibernateEnum getHibernateEnum(DMEntity dmEntity) {
+		for (HibernateEnum hibernateEnum : hibernateEnums) {
+			if (hibernateEnum.getLinkedFlexoModelObject() == dmEntity)
+				return hibernateEnum;
+		}
+		return null;
 	}
 
 	public HibernateModel getHibernateModel() {
@@ -192,7 +220,7 @@ public class HibernateEnumContainer extends TechnologyModelObject implements Fle
 	 * {@inheritDoc}
 	 */
 	@Override
-	public TechnologyModuleImplementation getTechnologyModuleImplementation() {
-		return getHibernateModel().getTechnologyModuleImplementation();
+	public HibernateImplementation getTechnologyModuleImplementation() {
+		return HibernateImplementation.getHibernateImplementation(getImplementationModel());
 	}
 }

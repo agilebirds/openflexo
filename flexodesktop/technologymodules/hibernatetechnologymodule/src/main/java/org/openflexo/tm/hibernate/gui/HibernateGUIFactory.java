@@ -28,6 +28,7 @@ import org.openflexo.sgmodule.controller.SGController;
 import org.openflexo.sgmodule.controller.action.SGControllerActionInitializer;
 import org.openflexo.sgmodule.controller.browser.TechnologyModuleBrowserElement;
 import org.openflexo.tm.hibernate.gui.action.CreateHibernateModelActionInitializer;
+import org.openflexo.tm.hibernate.gui.action.DeleteHibernateModelActionInitializer;
 import org.openflexo.tm.hibernate.gui.element.HibernateEntityElement;
 import org.openflexo.tm.hibernate.gui.element.HibernateEnumContainerElement;
 import org.openflexo.tm.hibernate.gui.element.HibernateEnumElement;
@@ -46,10 +47,9 @@ import org.openflexo.tm.hibernate.impl.HibernateModel;
 import org.openflexo.tm.hibernate.impl.HibernateRelationship;
 import org.openflexo.view.ModuleView;
 
-
 /**
  * @author Nicolas Daniels
- *
+ * 
  */
 public class HibernateGUIFactory implements TechnologyModuleGUIFactory {
 
@@ -116,6 +116,7 @@ public class HibernateGUIFactory implements TechnologyModuleGUIFactory {
 	@Override
 	public void initializeActions(SGControllerActionInitializer actionInitializer) {
 		new CreateHibernateModelActionInitializer(actionInitializer).init();
+		new DeleteHibernateModelActionInitializer(actionInitializer).init();
 	}
 
 }

@@ -27,10 +27,9 @@ import org.openflexo.foundation.sg.implmodel.exception.TechnologyModuleInitializ
 import org.openflexo.sgmodule.SGModule;
 import org.openflexo.tm.hibernate.gui.HibernateGUIFactory;
 
-
 /**
  * @author nid
- *
+ * 
  */
 public class HibernateTechnologyDefinition extends TechnologyModuleDefinition {
 
@@ -40,13 +39,6 @@ public class HibernateTechnologyDefinition extends TechnologyModuleDefinition {
 	@Override
 	public TechnologyModuleImplementation createNewImplementation(ImplementationModel implementationModel) throws TechnologyModuleCompatibilityCheckException {
 		HibernateImplementation hibernateImplementation = new HibernateImplementation(implementationModel);
-
-		try {
-			HibernateModel.createNewHibernateModel("Model", hibernateImplementation);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-
 		return hibernateImplementation;
 	}
 

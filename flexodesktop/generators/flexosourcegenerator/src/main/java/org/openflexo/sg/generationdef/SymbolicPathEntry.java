@@ -23,6 +23,5 @@ import org.openflexo.xmlcode.XMLSerializable;
 
 public class SymbolicPathEntry implements XMLSerializable {
 	public String name;
-	public SymbolicPathKind kind;
 	public String path;
 }

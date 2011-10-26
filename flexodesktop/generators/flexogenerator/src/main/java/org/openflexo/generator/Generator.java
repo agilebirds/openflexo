@@ -79,7 +79,8 @@ import org.openflexo.toolbox.ToolBox;
 import org.openflexo.velocity.FlexoVelocity;
 import org.openflexo.velocity.PostVelocityParser;
 
-public abstract class Generator<T extends FlexoModelObject, R extends GenerationRepository> extends FlexoObservable implements DataFlexoObserver {
+public abstract class Generator<T extends FlexoModelObject, R extends GenerationRepository> extends FlexoObservable implements
+		DataFlexoObserver {
 
 	private static final Logger logger = FlexoLogger.getLogger(Generator.class.getPackage().getName());
 
@@ -109,7 +110,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 	public Generator(AbstractProjectGenerator<R> projectGenerator, T object) {
 		this.projectGenerator = projectGenerator;
 		this.object = object;
-		this.generatedResources = new Vector<CGRepositoryFileResource<?,?,? extends CGFile>>();
+		this.generatedResources = new Vector<CGRepositoryFileResource<?, ?, ? extends CGFile>>();
 		if (projectGenerator != null) {
 			projectGenerator.addToGenerators(this);
 		}
@@ -119,8 +120,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		return projectGenerator;
 	}
 
-	public R getRepository()
-	{
+	public R getRepository() {
 		if (projectGenerator != null) {
 			return projectGenerator.getRepository();
 		} else {
@@ -131,13 +131,11 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		}
 	}
 
-	public final T getObject()
-	{
+	public final T getObject() {
 		return object;
 	}
 
-	public FlexoProject getProject()
-	{
+	public FlexoProject getProject() {
 		return getProjectGenerator().getProject();
 	}
 
@@ -145,10 +143,9 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		return getProjectGenerator().getTarget();
 	}
 
-	public CGRepositoryFileResource resourceForKeyWithCGFile(ResourceType type, String resourceName)
-	{
+	public CGRepositoryFileResource resourceForKeyWithCGFile(ResourceType type, String resourceName) {
 		CGRepositoryFileResource ret = (CGRepositoryFileResource) getProject().resourceForKey(type, resourceName);
-		if (ret!=null && ret.getCGFile()==null) {
+		if (ret != null && ret.getCGFile() == null) {
 			ret.delete(false);
 			ret = null;
 		}
@@ -159,16 +156,15 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		return getProject().getPrefix();
 	}
 
-	protected VelocityContext defaultContext()
-	{
+	protected VelocityContext defaultContext() {
 		VelocityContext context = new VelocityContext();
-		if (object!=null) {
+		if (object != null) {
 			context.put("object", object);
 		}
 		context.put("project", getProject());
 		context.put("projectGenerator", getProjectGenerator());
 		context.put("repository", getRepository());
-		context.put("generator",this);
+		context.put("generator", this);
 		context.put("quote", "\"");
 		context.put("backslash", "\\");
 		context.put("sharp", "#");
@@ -178,6 +174,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		context.put("trueValue", Boolean.TRUE);
 		context.put("falseValue", Boolean.FALSE);
 		context.put("toolbox", new ToolBox());
+		context.put("stringUtils", new StringUtils());
 		context.put("javaUtils", new JavaUtils());
 		context.put("globalVariableMap", new HashMap<String, Object>());
 		context.put("today", new Date());
@@ -186,37 +183,35 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 
 	/**
 	 * Build or retrieve all resources (eventually just created) involved in this repository generation
-	 *
+	 * 
 	 * @param repository
 	 * @return the list of resources (eventually just created) involved in this repository generation
 	 */
-	private Vector<CGRepositoryFileResource> buildGeneratedResourceListForRepository(R repository)
-	{
+	private Vector<CGRepositoryFileResource> buildGeneratedResourceListForRepository(R repository) {
 		Vector<CGRepositoryFileResource> returned = new Vector<CGRepositoryFileResource>();
-		buildResourcesAndSetGenerators(repository,returned);
+		buildResourcesAndSetGenerators(repository, returned);
 		return returned;
 	}
 
-	//	public Vector<CGRepositoryFileResource> getConcernedResources(R repository)
-	//	{
-	//		if (concernedResources == null) {
-	//			concernedResources = refreshConcernedResources();
-	//		}
-	//		return concernedResources;
-	//	}
+	// public Vector<CGRepositoryFileResource> getConcernedResources(R repository)
+	// {
+	// if (concernedResources == null) {
+	// concernedResources = refreshConcernedResources();
+	// }
+	// return concernedResources;
+	// }
 
-	public Vector<CGRepositoryFileResource> refreshConcernedResources()
-	{
+	public Vector<CGRepositoryFileResource> refreshConcernedResources() {
 		return refreshConcernedResources(null);
 	}
 
-	public Vector<CGRepositoryFileResource> refreshConcernedResources(Vector<CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>> forResources)
-	{
+	public Vector<CGRepositoryFileResource> refreshConcernedResources(
+			Vector<CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>> forResources) {
 		Vector<CGRepositoryFileResource> oldConcernedResources = concernedResources;
 		concernedResources = buildGeneratedResourceListForRepository(getProjectGenerator().getRepository());
 		if (oldConcernedResources != null) {
 			for (CGRepositoryFileResource resource : oldConcernedResources) {
-				if (!concernedResources.contains(resource) && resource.getCGFile()!=null) {
+				if (!concernedResources.contains(resource) && resource.getCGFile() != null) {
 					resource.getCGFile().setMarkedForDeletion(true);
 				}
 			}
@@ -225,7 +220,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 			resource.rebuildDependancies();
 		}
 		for (CGRepositoryFileResource resource : concernedResources) {
-			if (resource.needsGeneration() && (forResources==null || forResources.contains(resource))) {
+			if (resource.needsGeneration() && (forResources == null || forResources.contains(resource))) {
 				resource.getDependantResourcesUpToDate();
 			}
 		}
@@ -235,33 +230,28 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 	public abstract void buildResourcesAndSetGenerators(R repository, Vector<CGRepositoryFileResource> resources);
 
 	/**
-	 * Generate code related to this generator.
-	 * If this generator may store result, setting forceGenerate flag to false will result
-	 * in giving the already generated code (cache scheme).
-	 *
+	 * Generate code related to this generator. If this generator may store result, setting forceGenerate flag to false will result in
+	 * giving the already generated code (cache scheme).
+	 * 
 	 * @param forceRegenerate
 	 * @throws GenerationException
 	 */
 	public abstract void generate(boolean forceRegenerate) throws GenerationException;
 
 	/**
-	 * Generate code related to this generator, using cache scheme if present
-	 * Equivalent for call generate(false)
-	 *
+	 * Generate code related to this generator, using cache scheme if present Equivalent for call generate(false)
+	 * 
 	 * @throws GenerationException
 	 */
-	public void generate() throws GenerationException
-	{
+	public void generate() throws GenerationException {
 		generate(false);
 	}
 
-	public String merge(String templateName) throws GenerationException
-	{
-		return merge(templateName,defaultContext());
+	public String merge(String templateName) throws GenerationException {
+		return merge(templateName, defaultContext());
 	}
 
-	private void updateVelocityMacroIfRequired() throws VelocityException, UnexpectedExceptionOccuredException
-	{
+	private void updateVelocityMacroIfRequired() throws VelocityException, UnexpectedExceptionOccuredException {
 		try {
 			// the next lines ensures that the macro library will be added as a template used by this generator
 
@@ -294,7 +284,8 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 
 	/**
 	 * Override this if you want to use one or more velocity macro library. <br>
-	 * All macro templates from the project generator and from the current generator will be added for generation. Use the project generator one to include macros for all merge. <br>
+	 * All macro templates from the project generator and from the current generator will be added for generation. Use the project generator
+	 * one to include macros for all merge. <br>
 	 * Order is important in case of multiple macro are defined with the same name. In such case, the last one will be taken into account.
 	 * 
 	 * @return list of template to use as Macro library.
@@ -303,8 +294,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		return new ArrayList<CGTemplate>();
 	}
 
-	public String merge(String templateRelativePath, VelocityContext velocityContext) throws GenerationException
-	{
+	public String merge(String templateRelativePath, VelocityContext velocityContext) throws GenerationException {
 		StringWriter sw = new StringWriter();
 		try {
 			updateVelocityMacroIfRequired();
@@ -318,62 +308,59 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 			throw e;
 		} catch (Exception e) {
 			if (e instanceof MethodInvocationException) {
-				if (((MethodInvocationException)e).getWrappedThrowable()!=null) {
-					((MethodInvocationException)e).getWrappedThrowable().printStackTrace();
+				if (((MethodInvocationException) e).getWrappedThrowable() != null) {
+					((MethodInvocationException) e).getWrappedThrowable().printStackTrace();
 				}
 			}
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Could not merge template: " + e);
 				e.printStackTrace();
 				Throwable t = e;
-				while(t.getCause()!=null){t=t.getCause();}
+				while (t.getCause() != null) {
+					t = t.getCause();
+				}
 				if (!e.equals(t)) {
 					logger.fine("Originally caused by: " + t.getMessage());
 					t.printStackTrace();
 				}
 			}
-			throw new VelocityException(e,getProjectGenerator());
+			throw new VelocityException(e, getProjectGenerator());
 		}
 		return PostVelocityParser.parseAndRenderCustomTag(sw.toString());
 	}
 
-	public AbstractGCAction getAction()
-	{
+	public AbstractGCAction getAction() {
 		return getProjectGenerator().getAction();
 	}
 
-	protected boolean hasProgressWindow()
-	{
+	protected boolean hasProgressWindow() {
 		return getAction() != null && getAction().getFlexoProgress() != null;
 	}
 
-	protected void refreshProgressWindow(String stepName, boolean localize)
-	{
+	protected void refreshProgressWindow(String stepName, boolean localize) {
 		if (hasProgressWindow()) {
 			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("************** refreshProgressWindow: "+stepName);
+				logger.fine("************** refreshProgressWindow: " + stepName);
 			}
-			getAction().getFlexoProgress().setProgress(localize?FlexoLocalization.localizedForKey(stepName):stepName);
+			getAction().getFlexoProgress().setProgress(localize ? FlexoLocalization.localizedForKey(stepName) : stepName);
 		}
 	}
 
-	protected void resetSecondaryProgressWindow(int stepNb)
-	{
+	protected void resetSecondaryProgressWindow(int stepNb) {
 		if (hasProgressWindow()) {
 			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("**** resetSecondaryProgressWindow: "+stepNb);
+				logger.fine("**** resetSecondaryProgressWindow: " + stepNb);
 			}
 			getAction().getFlexoProgress().resetSecondaryProgress(stepNb);
 		}
 	}
 
-	protected void refreshSecondaryProgressWindow(String stepName, boolean localize)
-	{
+	protected void refreshSecondaryProgressWindow(String stepName, boolean localize) {
 		if (hasProgressWindow()) {
 			if (logger.isLoggable(Level.FINE)) {
-				logger.fine(">>>>>>>>>>>>> refreshSecondaryProgressWindow: "+stepName);
+				logger.fine(">>>>>>>>>>>>> refreshSecondaryProgressWindow: " + stepName);
 			}
-			getAction().getFlexoProgress().setSecondaryProgress(localize?FlexoLocalization.localizedForKey(stepName):stepName);
+			getAction().getFlexoProgress().setSecondaryProgress(localize ? FlexoLocalization.localizedForKey(stepName) : stepName);
 		}
 	}
 
@@ -385,7 +372,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		}
 	}
 
-	public void removeFromGeneratedResourcesGeneratedByThisGenerator(CGRepositoryFileResource<?,?,? extends CGFile> resource) {
+	public void removeFromGeneratedResourcesGeneratedByThisGenerator(CGRepositoryFileResource<?, ?, ? extends CGFile> resource) {
 		generatedResources.remove(resource);
 		memoryLastGenerationDate = null;
 		generatedCode = null;
@@ -395,8 +382,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		return generatedResources;
 	}
 
-	public TemplateLocator getTemplateLocator()
-	{
+	public TemplateLocator getTemplateLocator() {
 		return getProjectGenerator().getTemplateLocator();
 	}
 
@@ -405,20 +391,17 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		return templateName;
 	}
 
-	public CGTemplate templateWithName(String templateRelativePath) throws TemplateNotFoundException
-	{
+	public CGTemplate templateWithName(String templateRelativePath) throws TemplateNotFoundException {
 		CGTemplate templateFile = getTemplateLocator().templateWithName(templateRelativePath);
 		notifyTemplateRequired(templateFile);
 		return templateFile;
 	}
 
-	public void clearTemplates()
-	{
+	public void clearTemplates() {
 		clearTemplates(false);
 	}
 
-	public void clearTemplates(boolean clearTemplateLocatorCache)
-	{
+	public void clearTemplates(boolean clearTemplateLocatorCache) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("clearTemplates() for " + this);
 		}
@@ -431,17 +414,15 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		}
 	}
 
-	public void notifyTemplateRequired(CGTemplate templateFile)
-	{
-		logger.info("notifyTemplateRequired "+templateFile.getRelativePath()+" for "+this);
+	public void notifyTemplateRequired(CGTemplate templateFile) {
+		logger.info("notifyTemplateRequired " + templateFile.getRelativePath() + " for " + this);
 		if (!_usedTemplates.contains(templateFile)) {
 			_usedTemplates.add(templateFile);
 			templateFile.addObserver(this);
 		}
 	}
 
-	public void silentlyGenerateCode()
-	{
+	public void silentlyGenerateCode() {
 		notifyObservers = false;
 		try {
 			generate(true);
@@ -451,8 +432,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		notifyObservers = true;
 	}
 
-	public void startGeneration()
-	{
+	public void startGeneration() {
 		isGenerating = true;
 		// getProjectGenerator().startGeneration(this);
 		if (needsRegenerationBecauseOfTemplateChange()) {
@@ -461,8 +441,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		generationException = null;
 	}
 
-	public void stopGeneration()
-	{
+	public void stopGeneration() {
 		// getProjectGenerator().stopGeneration(this);
 		memoryLastGenerationDate = new Date();
 		isGenerating = false;
@@ -472,8 +451,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		}
 	}
 
-	public Date getMemoryLastGenerationDate()
-	{
+	public Date getMemoryLastGenerationDate() {
 		if (memoryLastGenerationDate == null) {
 			if (generatedResources.size() == 0) {
 				memoryLastGenerationDate = new Date(1); // 1 because AFTER default template last update
@@ -489,10 +467,9 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		return memoryLastGenerationDate;
 	}
 
-	public boolean isCodeAlreadyGenerated()
-	{
+	public boolean isCodeAlreadyGenerated() {
 		if (this instanceof IFlexoResourceGenerator) {
-			return ((IFlexoResourceGenerator)this).getGeneratedCode() != null;
+			return ((IFlexoResourceGenerator) this).getGeneratedCode() != null;
 		}
 		// Not significant
 		return true;
@@ -501,20 +478,18 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 	/**
 	 * @return
 	 */
-	public GeneratedCodeResult getGeneratedCode()
-	{
+	public GeneratedCodeResult getGeneratedCode() {
 		return generatedCode;
 	}
 
-	public boolean needsGeneration()
-	{
+	public boolean needsGeneration() {
 		if (isGenerating) {
 			return false;
 		}
-		if (getGenerationException()!=null) {
+		if (getGenerationException() != null) {
 			return true;
 		}
-		if (generatedResources.size()==0) {
+		if (generatedResources.size() == 0) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("No resource generated by this generator!");
 			}
@@ -531,19 +506,17 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 	/**
 	 * @return
 	 */
-	private boolean needsRegenerationBecauseOfTemplateChange()
-	{
-		return getTemplateLocator()!=null && getTemplateLocator().needsRegenerationBecauseOfTemplateChange(this);
+	private boolean needsRegenerationBecauseOfTemplateChange() {
+		return getTemplateLocator() != null && getTemplateLocator().needsRegenerationBecauseOfTemplateChange(this);
 	}
 
-	public boolean needsRegenerationBecauseOfTemplateUpdated()
-	{
-		return getTemplateLocator()!=null && getTemplateLocator().needsUpdateForGenerator(getMemoryLastGenerationDate(), this);
+	public boolean needsRegenerationBecauseOfTemplateUpdated() {
+		return getTemplateLocator() != null && getTemplateLocator().needsUpdateForGenerator(getMemoryLastGenerationDate(), this);
 	}
 
-	public boolean needsRegenerationBecauseOfTemplateUpdated(Date diskLastGenerationDate)
-	{
-		return getTemplateLocator()!=null && getTemplateLocator().needsUpdateForGenerator(diskLastGenerationDate, this) || needsRegenerationBecauseOfTemplateChange();
+	public boolean needsRegenerationBecauseOfTemplateUpdated(Date diskLastGenerationDate) {
+		return getTemplateLocator() != null && getTemplateLocator().needsUpdateForGenerator(diskLastGenerationDate, this)
+				|| needsRegenerationBecauseOfTemplateChange();
 	}
 
 	public boolean hasFormattingException() {
@@ -554,15 +527,13 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		return false;
 	}
 
-	public GenerationException getGenerationException()
-	{
+	public GenerationException getGenerationException() {
 		return generationException;
 	}
 
-	public void setGenerationException(GenerationException generationException)
-	{
+	public void setGenerationException(GenerationException generationException) {
 		this.generationException = generationException;
-		if (projectGenerator!=null) {
+		if (projectGenerator != null) {
 			projectGenerator.notifyExceptionOccured(generationException);
 		}
 		stopGeneration();
@@ -573,11 +544,10 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (dataModification instanceof TemplateFileChanged || dataModification instanceof TemplateFileEditionCancelled
 				|| dataModification instanceof TemplateFileEdited || dataModification instanceof TemplateFileRedefined
-				|| dataModification instanceof TemplateFileSaved|| dataModification instanceof TemplateDeleted) {
+				|| dataModification instanceof TemplateFileSaved || dataModification instanceof TemplateDeleted) {
 			setChanged();
 			notifyObservers(dataModification);
 		}
@@ -585,11 +555,10 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 
 	/**
 	 * Overrides getUsedTemplates
-	 *
+	 * 
 	 * @see org.openflexo.foundation.cg.generator.IFlexoResourceGenerator#getUsedTemplates()
 	 */
-	public Vector<CGTemplate> getUsedTemplates()
-	{
+	public Vector<CGTemplate> getUsedTemplates() {
 		return _usedTemplates;
 	}
 
@@ -613,8 +582,8 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		return new Properties();
 	}
 
-	public TreeMap<FlexoModelObject,Object> getNewModelObjectTreeMap(){
-		return new TreeMap<FlexoModelObject,Object>(new FlexoModelObject.FlexoDefaultComparator<FlexoModelObject>());
+	public TreeMap<FlexoModelObject, Object> getNewModelObjectTreeMap() {
+		return new TreeMap<FlexoModelObject, Object>(new FlexoModelObject.FlexoDefaultComparator<FlexoModelObject>());
 	}
 
 	public BidiMap getNewBidiMap() {
@@ -657,13 +626,11 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		return ToolBox.escapeStringForCsv(s);
 	}
 
-	public String capitalize(String s)
-	{
+	public String capitalize(String s) {
 		return ToolBox.capitalize(s);
 	}
 
-	public static DateFormat getDateFormat(String pattern)
-	{
+	public static DateFormat getDateFormat(String pattern) {
 		return new SimpleDateFormat(pattern);
 	}
 
@@ -681,21 +648,19 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 
 	public static String escapeStringForXML(String string) {
 		String escapedString = StringEscapeUtils.escapeXml(string);
-		return escapedString!=null?StringUtils.replaceBreakLinesBy(escapedString," "):"";
+		return escapedString != null ? StringUtils.replaceBreakLinesBy(escapedString, " ") : "";
 	}
 
-
 	public static String removeAllWhiteCharacters(String text, String replacement) {
-		if (text==null) {
+		if (text == null) {
 			return null;
 		}
 		String replaced = text.replaceAll("(\\s)+", replacement);
 		return replaced;
 	}
 
-	public static Integer getNumberAsInteger(Number number)
-	{
-		if(number != null) {
+	public static Integer getNumberAsInteger(Number number) {
+		if (number != null) {
 			return new Long(Math.round(number.doubleValue())).intValue();
 		}
 		return null;

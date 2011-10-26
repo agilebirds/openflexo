@@ -19,25 +19,35 @@
  */
 package org.openflexo.tm.hibernate.impl;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.naming.InvalidNameException;
 
+import org.apache.commons.lang.StringUtils;
+import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.dm.DMProperty;
+import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
+import org.openflexo.foundation.dm.dm.DMPropertyNameChanged;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.sg.implmodel.ImplementationModel;
-import org.openflexo.foundation.sg.implmodel.TechnologyModelObject;
-import org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation;
+import org.openflexo.foundation.sg.implmodel.LinkableTechnologyModelObject;
 import org.openflexo.foundation.sg.implmodel.event.SGAttributeModification;
 import org.openflexo.foundation.sg.implmodel.event.SGObjectDeletedModification;
 import org.openflexo.foundation.xml.ImplementationModelBuilder;
 import org.openflexo.tm.hibernate.impl.enums.HibernateAttributeType;
+import org.openflexo.tm.hibernate.impl.utils.HibernateUtils;
 import org.openflexo.toolbox.JavaUtils;
-
 
 /**
  * This class defines property fields for the mapping attributes in an Hibernate implementation.
  * 
  * @author Emmanuel Koch, Blue Pimento Services SPRL
  */
-public class HibernateAttribute extends TechnologyModelObject {
+public class HibernateAttribute extends LinkableTechnologyModelObject<DMProperty> {
+
+	protected static final Logger logger = Logger.getLogger(HibernateAttribute.class.getPackage().getName());
 
 	public static final String CLASS_NAME_KEY = "hibernate_attribute";
 
@@ -46,6 +56,7 @@ public class HibernateAttribute extends TechnologyModelObject {
 
 	/** Name of the database column to bind with this attribute. */
 	protected String columnName;
+	protected boolean isColumnNameSynchronized;
 
 	/** Type of this attribute: string , integer, boolean... */
 	public HibernateAttributeType type;
@@ -76,8 +87,7 @@ public class HibernateAttribute extends TechnologyModelObject {
 	 * Build a new Hibernate attribute for the specified implementation model builder.<br/>
 	 * This constructor is namely invoked during deserialization.
 	 * 
-	 * @param builder
-	 *            the builder that will create this attribute
+	 * @param builder the builder that will create this attribute
 	 */
 	public HibernateAttribute(ImplementationModelBuilder builder) {
 		this(builder.implementationModel);
@@ -87,11 +97,20 @@ public class HibernateAttribute extends TechnologyModelObject {
 	/**
 	 * Build a new Hibernate attribute for the specified implementation model.
 	 * 
-	 * @param implementationModel
-	 *            the implementation model where to create this Hibernate attribute
+	 * @param implementationModel the implementation model where to create this Hibernate attribute
 	 */
 	public HibernateAttribute(ImplementationModel implementationModel) {
 		super(implementationModel);
+	}
+
+	/**
+	 * @param implementationModel the implementation model where to create this Hibernate attribute
+	 * @param linkedFlexoModelObject Can be null
+	 */
+	public HibernateAttribute(ImplementationModel implementationModel, DMProperty linkedFlexoModelObject) {
+		super(implementationModel, linkedFlexoModelObject);
+		if (linkedFlexoModelObject != null)
+			isColumnNameSynchronized = true;
 	}
 
 	// =========== //
@@ -122,6 +141,76 @@ public class HibernateAttribute extends TechnologyModelObject {
 		return getHibernateEntity().getFullyQualifiedName() + "." + getName();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void synchronizeWithLinkedFlexoModelObject() {
+		updateTypeIfNecessary();
+		updateNameIfNecessary();
+		updateColumnNameIfNecessary();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected String escapeName(String name) {
+		return JavaUtils.getVariableName(name);
+	}
+
+	/**
+	 * Retrieve the default column name to use for this attribute based on the entity name.
+	 * 
+	 * @return the default column name to use for this attribute.
+	 */
+	public String getDefaultColumnName() {
+		return escapeColumnName(getName());
+	}
+
+	private String escapeColumnName(String columnName) {
+		return getTechnologyModuleImplementation().getDbObjectName(columnName);
+	}
+
+	public void updateIsColumnNameSynchronized() {
+		if (!isDeserializing) {
+			String defaultColumnName = getDefaultColumnName();
+			setIsColumnNameSynchronized(defaultColumnName != null && (StringUtils.isEmpty(getColumnName()) || StringUtils.equals(defaultColumnName, getColumnName())));
+		}
+	}
+
+	/**
+	 * Update the column name with this object name if necessary.
+	 */
+	public void updateColumnNameIfNecessary() {
+		if (getIsColumnNameSynchronized())
+			setColumnName(getName());
+		else
+			updateIsColumnNameSynchronized(); // Update this anyway in case the name is set to columnName. In this case synchronization is set back to true.
+	}
+
+	/**
+	 * Update the type with the linked Flexo Model Object one if necessary.
+	 */
+	public void updateTypeIfNecessary() {
+		if (getLinkedFlexoModelObject() != null) {
+			DMProperty dmProperty = getLinkedFlexoModelObject();
+			if (HibernateUtils.getIsHibernateAttributeRepresented(dmProperty)) {
+				HibernateAttributeType type = HibernateUtils.getHibernateAttributeTypeFromDMType(dmProperty.getType());
+				if (type != null) {
+					setType(type);
+					if (type == HibernateAttributeType.ENUM)
+						setHibernateEnum(getHibernateEntity().getHibernateModel().getHibernateEnumContainer().getHibernateEnum(dmProperty.getType().getBaseEntity()));
+				}
+			} else {
+				// Type is changed to a relationship one. Delete this attribute and create a new relationship
+				this.setLinkedFlexoModelObject(null);
+				getHibernateEntity().createHibernateObjectBasedOnDMProperty(dmProperty);
+				this.delete();
+			}
+		}
+	}
+
 	/* ===================== */
 	/* ====== Actions ====== */
 	/* ===================== */
@@ -136,17 +225,33 @@ public class HibernateAttribute extends TechnologyModelObject {
 		}
 
 		setChanged();
-		notifyObservers(new SGObjectDeletedModification());
+		notifyObservers(new SGObjectDeletedModification<HibernateAttribute>(this));
 		super.delete();
 		deleteObservers();
 	}
 
+	/* ============== */
+	/* == Observer == */
+	/* ============== */
+
 	/**
-	 * Update the column name based on the attribute name
+	 * {@inheritDoc}
 	 */
-	public void updateColumnName() {
-		if (!isDeserializing && getHibernateEntity() != null)
-			setColumnName(getHibernateEntity().getHibernateModel().getHibernateImplementation().getDbObjectName(getName()));
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		super.update(observable, dataModification);
+		if (observable == getLinkedFlexoModelObject()) {
+			if (dataModification instanceof DMPropertyNameChanged) {
+				updateNameIfNecessary();
+			} else if (dataModification instanceof DMAttributeDataModification && "type".equals(dataModification.propertyName())) {
+				updateTypeIfNecessary();
+			}
+		}
+
+		if (observable == getHibernateEnum() && dataModification instanceof SGObjectDeletedModification) {
+			setHibernateEnum(null);
+			updateTypeIfNecessary();
+		}
 	}
 
 	/* ===================== */
@@ -157,11 +262,28 @@ public class HibernateAttribute extends TechnologyModelObject {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public void setLinkedFlexoModelObject(DMProperty linkedFlexoModelObject) {
+		if (linkedFlexoModelObject == null || HibernateUtils.getIsHibernateAttributeRepresented(linkedFlexoModelObject)) {
+			super.setLinkedFlexoModelObject(linkedFlexoModelObject);
+		} else {
+			if (logger.isLoggable(Level.WARNING))
+				logger.log(Level.WARNING, "Cannot set linked object to Hibernate Attribute with an DM Property with type not basic. DM Property: " + linkedFlexoModelObject.getName());
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void setName(String name) throws DuplicateResourceException, InvalidNameException {
-		name = JavaUtils.getVariableName(name);
+		name = escapeName(name);
+
+		if (StringUtils.isEmpty(name))
+			name = getDefaultName();
+
 		if (requireChange(getName(), name)) {
 			super.setName(name);
-			updateColumnName();
+			updateColumnNameIfNecessary();
 		}
 	}
 
@@ -170,11 +292,30 @@ public class HibernateAttribute extends TechnologyModelObject {
 	}
 
 	public void setColumnName(String columnName) {
-		if (requireChange(this.columnName, columnName)) {
-			String oldValue = this.columnName;
+		columnName = escapeColumnName(columnName);
+
+		if (StringUtils.isEmpty(columnName))
+			columnName = getDefaultColumnName();
+
+		if (requireChange(getColumnName(), columnName)) {
+			String oldValue = getColumnName();
 			this.columnName = columnName;
+			updateIsColumnNameSynchronized();
 			setChanged();
 			notifyObservers(new SGAttributeModification("columnName", oldValue, columnName));
+		}
+	}
+
+	public boolean getIsColumnNameSynchronized() {
+		return isColumnNameSynchronized;
+	}
+
+	public void setIsColumnNameSynchronized(boolean isColumnNameSynchronized) {
+		if (requireChange(this.isColumnNameSynchronized, isColumnNameSynchronized)) {
+			boolean oldValue = this.isColumnNameSynchronized;
+			this.isColumnNameSynchronized = isColumnNameSynchronized;
+			setChanged();
+			notifyObservers(new SGAttributeModification("isColumnNameSynchronized", oldValue, isColumnNameSynchronized));
 		}
 	}
 
@@ -255,15 +396,23 @@ public class HibernateAttribute extends TechnologyModelObject {
 			notifyObservers(new SGAttributeModification("type", oldValue, type));
 		}
 	}
-	
+
 	public HibernateEnum getHibernateEnum() {
 		return hibernateEnum;
 	}
 
 	public void setHibernateEnum(HibernateEnum hibernateEnum) {
 		if (requireChange(this.hibernateEnum, hibernateEnum)) {
-			Object oldValue = this.hibernateEnum;
+			HibernateEnum oldValue = this.hibernateEnum;
+
+			if (oldValue != null)
+				oldValue.deleteObserver(this);
+
 			this.hibernateEnum = hibernateEnum;
+
+			if (this.hibernateEnum != null)
+				this.hibernateEnum.addObserver(this);
+
 			setChanged();
 			notifyObservers(new SGAttributeModification("hibernateEnum", oldValue, hibernateEnum));
 		}
@@ -280,14 +429,13 @@ public class HibernateAttribute extends TechnologyModelObject {
 	 */
 	protected void setHibernateEntity(HibernateEntity entity) {
 		this.hibernateEntity = entity;
-		updateColumnName();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public TechnologyModuleImplementation getTechnologyModuleImplementation() {
-		return getHibernateEntity().getTechnologyModuleImplementation();
+	public HibernateImplementation getTechnologyModuleImplementation() {
+		return HibernateImplementation.getHibernateImplementation(getImplementationModel());
 	}
 }

@@ -55,7 +55,6 @@ import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.exception.PermissionDeniedException;
 import org.openflexo.generator.exception.TemplateNotFoundException;
 
-
 /**
  * 
  * @author sguerin
@@ -85,15 +84,18 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 	public ProjectGenerator(FlexoProject project, SourceRepository repository) throws GenerationException {
 		super(project, repository);
 		if (repository == null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("No target repository, this may happen during dynamic invocation of code generator within the context of the Data model edition");
+			}
 		}
 
 		if (getRootOutputDirectory() != null) {
-			if (!getResourceOutputDirectory().exists())
+			if (!getResourceOutputDirectory().exists()) {
 				getRootOutputDirectory().mkdirs();
-			if (!getRootOutputDirectory().canWrite())
+			}
+			if (!getRootOutputDirectory().canWrite()) {
 				throw new PermissionDeniedException(getRootOutputDirectory(), this);
+			}
 		}
 
 		buildListeners = new Vector<BuildListener>();
@@ -120,11 +122,15 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 	}
 
 	/**
-	 * This method is very important, because it is the way we must identify or build all resources involved in code generation. After this list has been built, we just let ResourceManager do the
-	 * work.
+	 * This method is very important, because it is the way we must identify or build all resources involved in code generation. After this
+	 * list has been built, we just let ResourceManager do the work. <br>
+	 * The order is important here because it defines the order the module main.xml will be loaded. So required modules must be loaded first
+	 * because it can defines symbolic directories needed in other module.
 	 * 
-	 * @param repository: repository where resources should be retrieved or built
-	 * @param resources: the list of resources we must retrieve or build
+	 * @param repository
+	 *            : repository where resources should be retrieved or built
+	 * @param resources
+	 *            : the list of resources we must retrieve or build
 	 */
 	@Override
 	public void buildResourcesAndSetGenerators(SourceRepository repository, Vector<CGRepositoryFileResource> resources) {
@@ -133,10 +139,12 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 		logger.info("We go for first pass on Project Generator");
 
 		Map<TechnologyModuleDefinition, ModuleGenerator> newGenerators = new LinkedHashMap<TechnologyModuleDefinition, ModuleGenerator>();
-		for (TechnologyModuleImplementation technologyModuleImplementation : repository.getImplementationModel().getTechnologyModules()) {
+		for (TechnologyModuleImplementation technologyModuleImplementation : repository.getImplementationModel()
+				.getTechnologyModulesDependencyOrdered()) {
 			ModuleGenerator moduleGenerator = generators.get(technologyModuleImplementation.getTechnologyModuleDefinition());
-			if (moduleGenerator == null)
+			if (moduleGenerator == null) {
 				moduleGenerator = new ModuleGenerator(this, technologyModuleImplementation);
+			}
 			newGenerators.put(technologyModuleImplementation.getTechnologyModuleDefinition(), moduleGenerator);
 		}
 
@@ -160,34 +168,40 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 	 * <li>Transversal layer modules</li>
 	 * <li>Main layer modules</li>
 	 * </ul>
-	 * In the same layer, modules which are compatible with or require another module will be before this other module (except loop exists, in such case order is unpredictable)
+	 * In the same layer, modules which are compatible with or require another module will be before this other module, in case module A
+	 * require module B and module B is compatible with A, A will be before B. (If loop exists, order is unpredictable)
 	 * 
-	 * @param filesToGenerate the list of file which will be regenerated
+	 * @param filesToGenerate
+	 *            the list of file which will be regenerated
 	 */
 	@Override
-	public void sortResourcesForGeneration(List<CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>> resources) {
+	public void sortResourcesForGeneration(
+			List<CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>> resources) {
 
 		List<CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>> notSGGeneratorResources = new ArrayList<CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>>();
 		Map<TechnologyLayer, Map<TechnologyModuleDefinition, List<CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>>>> map = new HashMap<TechnologyLayer, Map<TechnologyModuleDefinition, List<CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>>>>();
 
 		for (CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> resource : resources) {
 			if (resource.getGenerator() instanceof SGGenerator<?, ?>) {
-				TechnologyModuleDefinition moduleDefinition = ((SGGenerator<?, ?>) resource.getGenerator()).getModuleGenerator().getTechnologyModule().getTechnologyModuleDefinition();
-				Map<TechnologyModuleDefinition, List<CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>>> mapForLayer = map.get(moduleDefinition
-						.getTechnologyLayer());
+				TechnologyModuleDefinition moduleDefinition = ((SGGenerator<?, ?>) resource.getGenerator()).getModuleGenerator()
+						.getTechnologyModule().getTechnologyModuleDefinition();
+				Map<TechnologyModuleDefinition, List<CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>>> mapForLayer = map
+						.get(moduleDefinition.getTechnologyLayer());
 				if (mapForLayer == null) {
 					mapForLayer = new HashMap<TechnologyModuleDefinition, List<CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>>>();
 					map.put(moduleDefinition.getTechnologyLayer(), mapForLayer);
 				}
 
-				List<CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>> resourcesForModule = mapForLayer.get(moduleDefinition);
+				List<CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>> resourcesForModule = mapForLayer
+						.get(moduleDefinition);
 				if (resourcesForModule == null) {
 					resourcesForModule = new ArrayList<CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>>();
 					mapForLayer.put(moduleDefinition, resourcesForModule);
 				}
 				resourcesForModule.add(resource);
-			} else
+			} else {
 				notSGGeneratorResources.add(resource);
+			}
 		}
 
 		resources.clear();
@@ -196,10 +210,12 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 		Collections.reverse(allLayers);
 
 		for (TechnologyLayer layer : allLayers) {
-			Map<TechnologyModuleDefinition, List<CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>>> mapForLayer = map.get(layer);
+			Map<TechnologyModuleDefinition, List<CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>>> mapForLayer = map
+					.get(layer);
 
-			if (mapForLayer == null)
+			if (mapForLayer == null) {
 				continue;
+			}
 
 			/*
 			 * The idea is to build a map containing, for each module, all the modules which are compatible or which request it. Once this map is built, we iterates over each key to takes empty
@@ -208,37 +224,56 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 
 			// 1. Build the map with empty lists
 			Map<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>> requiringModuleMap = new HashMap<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>>();
-			for (TechnologyModuleDefinition moduleDefinition : mapForLayer.keySet())
+			Map<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>> compatibleModuleMap = new HashMap<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>>();
+			for (TechnologyModuleDefinition moduleDefinition : mapForLayer.keySet()) {
 				requiringModuleMap.put(moduleDefinition, new HashSet<TechnologyModuleDefinition>());
+				compatibleModuleMap.put(moduleDefinition, new HashSet<TechnologyModuleDefinition>());
+			}
 
 			// 2. Fill the map
 			for (TechnologyModuleDefinition definition : requiringModuleMap.keySet()) {
-				Set<TechnologyModuleDefinition> requiredModules = definition.getRequiredModules();
-				requiredModules.addAll(definition.getCompatibleModules());
-				for (TechnologyModuleDefinition requiredModule : requiredModules) {
-					if (requiringModuleMap.containsKey(requiredModule))
+				for (TechnologyModuleDefinition requiredModule : definition.getRequiredModules()) {
+					if (requiringModuleMap.containsKey(requiredModule)) {
 						requiringModuleMap.get(requiredModule).add(definition);
+					}
+				}
+				for (TechnologyModuleDefinition requiredModule : definition.getCompatibleModules()) {
+					if (compatibleModuleMap.containsKey(requiredModule)) {
+						compatibleModuleMap.get(requiredModule).add(definition);
+					}
 				}
 			}
 
 			// 3. Perform iteration
 			boolean hasRemovedKey;
+			boolean takeCompatibleIntoAccount = true;
 			do {
 				hasRemovedKey = false;
-				for (Map.Entry<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>> entry : new HashMap<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>>(requiringModuleMap)
-						.entrySet()) {
-					if (entry.getValue().isEmpty()) {
+				for (Map.Entry<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>> entry : new HashMap<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>>(
+						requiringModuleMap).entrySet()) {
+					if (entry.getValue().isEmpty() && (!takeCompatibleIntoAccount || compatibleModuleMap.get(entry.getKey()).isEmpty())) {
 						requiringModuleMap.remove(entry.getKey());
-						for (Set<TechnologyModuleDefinition> set : requiringModuleMap.values())
+						compatibleModuleMap.remove(entry.getKey());
+						for (Set<TechnologyModuleDefinition> set : requiringModuleMap.values()) {
 							set.remove(entry.getKey());
+						}
+						for (Set<TechnologyModuleDefinition> set : compatibleModuleMap.values()) {
+							set.remove(entry.getKey());
+						}
 						resources.addAll(mapForLayer.get(entry.getKey()));
 						hasRemovedKey = true;
 					}
 				}
-			} while (!requiringModuleMap.isEmpty() && hasRemovedKey);
 
-			for (TechnologyModuleDefinition notRemovedModule : requiringModuleMap.keySet())
+				if (!hasRemovedKey && takeCompatibleIntoAccount) {
+					takeCompatibleIntoAccount = false;
+					hasRemovedKey = true;
+				}
+			} while (!requiringModuleMap.isEmpty() && (hasRemovedKey || takeCompatibleIntoAccount));
+
+			for (TechnologyModuleDefinition notRemovedModule : requiringModuleMap.keySet()) {
 				resources.addAll(mapForLayer.get(notRemovedModule));
+			}
 		}
 
 		resources.addAll(notSGGeneratorResources);
@@ -257,8 +292,9 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 	 */
 	@Override
 	public File getRootOutputDirectory() {
-		if (getRepository() == null)
+		if (getRepository() == null) {
 			return null;
+		}
 		return getRepository().getDirectory();
 	}
 
@@ -283,7 +319,8 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 		try {
 			result.add(templateWithName(SG_MACRO_LIBRARY_NAME));
 		} catch (TemplateNotFoundException e) {
-			logger.warning("Should include velocity macro template for project generator but template is not found '" + SG_MACRO_LIBRARY_NAME + "'");
+			logger.warning("Should include velocity macro template for project generator but template is not found '"
+					+ SG_MACRO_LIBRARY_NAME + "'");
 			e.printStackTrace();
 		}
 		return result;
@@ -324,11 +361,13 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 	/**
 	 * Add a cross module data in the specified targeted module. <br>
 	 * Intended to be used in macro defined in the targeted module itself. <br>
-	 * For those macro to be available in the from module, the targeted module must be in the "requireModule" or in the "compatibleWithModule".
+	 * For those macro to be available in the from module, the targeted module must be in the "requireModule" or in the
+	 * "compatibleWithModule".
 	 * 
 	 * @see ModuleGenerator#addInModuleDataList(Generator, String, Object)
 	 */
-	public void addCrossModuleDataInList(TechnologyModuleDefinition targetedModule, Generator<?, ?> fromGenerator, String classifier, Object data) {
+	public void addCrossModuleDataInList(TechnologyModuleDefinition targetedModule, Generator<?, ?> fromGenerator, String classifier,
+			Object data) {
 		ModuleGenerator moduleGenerator = generators.get(targetedModule);
 
 		if (moduleGenerator == null) {
@@ -342,11 +381,13 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 	/**
 	 * Add a cross module data in the specified targeted module. <br>
 	 * Intended to be used in macro defined in the targeted module itself. <br>
-	 * For those macro to be available in the from module, the targeted module must be in the "requireModule" or in the "compatibleWithModule".
+	 * For those macro to be available in the from module, the targeted module must be in the "requireModule" or in the
+	 * "compatibleWithModule".
 	 * 
 	 * @see ModuleGenerator#addInModuleDataSet(Generator, String, Object)
 	 */
-	public void addCrossModuleDataInSet(TechnologyModuleDefinition targetedModule, Generator<?, ?> fromGenerator, String classifier, Object data) {
+	public void addCrossModuleDataInSet(TechnologyModuleDefinition targetedModule, Generator<?, ?> fromGenerator, String classifier,
+			Object data) {
 		ModuleGenerator moduleGenerator = generators.get(targetedModule);
 
 		if (moduleGenerator == null) {
@@ -360,11 +401,13 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 	/**
 	 * Add a cross module data in the specified targeted module. <br>
 	 * Intended to be used in macro defined in the targeted module itself. <br>
-	 * For those macro to be available in the from module, the targeted module must be in the "requireModule" or in the "compatibleWithModule".
+	 * For those macro to be available in the from module, the targeted module must be in the "requireModule" or in the
+	 * "compatibleWithModule".
 	 * 
 	 * @see ModuleGenerator#addInModuleDataMap(Generator, String, Object, Object)
 	 */
-	public void addCrossModuleDataInMap(TechnologyModuleDefinition targetedModule, Generator<?, ?> fromGenerator, String classifier, Object key, Object data) {
+	public void addCrossModuleDataInMap(TechnologyModuleDefinition targetedModule, Generator<?, ?> fromGenerator, String classifier,
+			Object key, Object data) {
 		ModuleGenerator moduleGenerator = generators.get(targetedModule);
 
 		if (moduleGenerator == null) {

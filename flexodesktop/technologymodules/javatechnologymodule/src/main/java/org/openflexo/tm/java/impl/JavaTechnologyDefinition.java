@@ -26,11 +26,11 @@ import org.openflexo.foundation.sg.implmodel.exception.TechnologyModuleCompatibi
 import org.openflexo.foundation.sg.implmodel.exception.TechnologyModuleInitializationException;
 import org.openflexo.sg.formatter.FormatterFactory;
 import org.openflexo.tm.java.formatter.JavaFormatter;
-
+import org.openflexo.tm.java.impl.enums.JavaIDEEnum;
 
 /**
  * @author nid
- *
+ * 
  */
 public class JavaTechnologyDefinition extends TechnologyModuleDefinition {
 
@@ -38,8 +38,10 @@ public class JavaTechnologyDefinition extends TechnologyModuleDefinition {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public TechnologyModuleImplementation createNewImplementation(ImplementationModel implementationModel) throws TechnologyModuleCompatibilityCheckException {
+	public TechnologyModuleImplementation createNewImplementation(ImplementationModel implementationModel)
+			throws TechnologyModuleCompatibilityCheckException {
 		JavaImplementation javaImplementation = new JavaImplementation(implementationModel);
+		javaImplementation.setSelectedIde(JavaIDEEnum.ECLIPSE);
 		return javaImplementation;
 	}
 
