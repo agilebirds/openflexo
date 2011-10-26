@@ -1,5 +1,5 @@
 #Dutch
-#Fri Oct 21 16:31:29 CEST 2011
+#Wed Oct 26 21:45:52 CEST 2011
 =
 \ =\ 
 \ into\ =\ into 
@@ -4541,7 +4541,7 @@ source_attribute=Source attribute
 source_code=Source code
 source_directory=Source directory
 source_entity=Source entity
-source_generator=source_generator
+source_generator=Source Code Generator
 source_generator_description=source_generator_description
 source_repository=Source repository
 south=South
