@@ -32,12 +32,10 @@ import org.openflexo.toolbox.ImageIconResource;
 public class DGIconLibrary extends GeneratorIconLibrary {
 
 	// Module icons
-	public static final ImageIcon DG_ACTIVE_ICON = new ImageIconResource("Icons/DG/DG_A_Small.gif");
-	public static final ImageIcon DG_UNACTIVE_ICON = new ImageIconResource("Icons/DG/DG_NA_Small.gif");
-	public static final ImageIcon DG_SELECTED_ICON = new ImageIconResource("Icons/DG/DG_S_Small.gif");
-	public static final ImageIcon DG_BIG_ACTIVE_ICON = new ImageIconResource("Icons/DG/DG_A.gif");
-	public static final ImageIcon DG_BIG_UNACTIVE_ICON = new ImageIconResource("Icons/DG/DG_NA.gif");
-	public static final ImageIcon DG_BIG_SELECTED_ICON = new ImageIconResource("Icons/DG/DG_S.gif");
+	public static final ImageIcon DG_SMALL_ICON = new ImageIconResource("Icons/DG/DG_A_Small.gif");
+	public static final ImageIcon DG_MEDIUM_ICON = new ImageIconResource("Icons/DG/module-dg.png");
+	public static final ImageIcon DG_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/DG/module-dg-hover.png");
+	public static final ImageIcon DG_BIG_ICON = new ImageIconResource("Icons/DG/module-dg-big.png");
 
 	// Perspective icons
 	public static final ImageIcon DG_VP_ACTIVE_ICON = new ImageIconResource("Icons/DG/VersionningPerspective_A.gif");

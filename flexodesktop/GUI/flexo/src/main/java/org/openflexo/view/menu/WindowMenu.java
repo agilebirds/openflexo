@@ -362,11 +362,7 @@ public class WindowMenu extends FlexoMenu {
 		public void actionPerformed(ActionEvent arg0) {
 			ModuleLoader.switchToModule(_module);
 			_menuItem.setState(ModuleLoader.instance().getActiveModule() == _module);
-			if (ModuleLoader.instance().getActiveModule() == _module && _module.getSelectedIcon() != null) {
-				_menuItem.setIcon(_module.getSelectedIcon());
-			} else if (ModuleLoader.instance().getActiveModule() != _module && _module.getActiveIcon() != null) {
-				_menuItem.setIcon(_module.getActiveIcon());
-			}
+			_menuItem.setIcon(_module.getSmallIcon());
 		}
 
 		public void setItem(JCheckBoxMenuItem menuItem) {
@@ -430,15 +426,12 @@ public class WindowMenu extends FlexoMenu {
 		for (Enumeration e = _availableWindowMenuItems.keys(); e.hasMoreElements();) {
 			Module next = (Module) e.nextElement();
 			JCheckBoxMenuItem menuItem = _availableWindowMenuItems.get(next);
+			if (next.getSmallIcon() != null)
+				menuItem.setIcon(next.getSmallIcon());
 			if (next != module) {
 				menuItem.setState(false);
-				if (next.getActiveIcon() != null)
-					menuItem.setIcon(next.getActiveIcon());
-
 			} else {
 				menuItem.setState(true);
-				if (next.getSelectedIcon() != null)
-					menuItem.setIcon(next.getSelectedIcon());
 			}
 		}
 	}
@@ -509,8 +502,8 @@ public class WindowMenu extends FlexoMenu {
 		JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem(action = new SwitchToModuleAction(module));
 		action.setItem(menuItem);
 		menuItem.setText(FlexoLocalization.localizedForKey(module.getName(), menuItem));
-		if (module.getActiveIcon() != null)
-			menuItem.setIcon(module.getActiveIcon());
+		if (module.getSmallIcon() != null)
+			menuItem.setIcon(module.getSmallIcon());
 		/*
 		 * if (init) { add(menuItem); } else { insert(menuItem, getItemCount() - 3); }
 		 */
@@ -524,8 +517,7 @@ public class WindowMenu extends FlexoMenu {
 			logger.fine("ADD to loadable Module : " + module.getName());
 		JMenuItem menuItem = new JMenuItem(new LoadModuleAction(module));
 		menuItem.setText(FlexoLocalization.localizedForKey(module.getName(), menuItem));
-		if (module.getUnactiveIcon() != null)
-			menuItem.setIcon(module.getUnactiveIcon());
+			menuItem.setIcon(module.getSmallIcon());
 		loadWindowMenu.add(menuItem);
 		_loadWindowMenuItems.put(module, menuItem);
 		return menuItem;

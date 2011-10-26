@@ -51,12 +51,10 @@ public class WKFIconLibrary extends IconLibrary {
 	private static final Logger logger = Logger.getLogger(WKFIconLibrary.class.getPackage().getName());
 
 	// Module icons
-	public static final ImageIconResource WKF_ACTIVE_ICON = new ImageIconResource("Icons/WKF/WKF_A_Small.gif");
-	public static final ImageIconResource WKF_UNACTIVE_ICON = new ImageIconResource("Icons/WKF/WKF_NA_Small.gif");
-	public static final ImageIconResource WKF_SELECTED_ICON = new ImageIconResource("Icons/WKF/WKF_S_Small.gif");
-	public static final ImageIconResource WKF_BIG_ACTIVE_ICON = new ImageIconResource("Icons/WKF/WKF_A.gif");
-	public static final ImageIconResource WKF_BIG_UNACTIVE_ICON = new ImageIconResource("Icons/WKF/WKF_NA.gif");
-	public static final ImageIconResource WKF_BIG_SELECTED_ICON = new ImageIconResource("Icons/WKF/WKF_S.gif");
+	public static final ImageIconResource WKF_SMALL_ICON = new ImageIconResource("Icons/WKF/WKF_A_Small.gif");
+	public static final ImageIconResource WKF_MEDIUM_ICON = new ImageIconResource("Icons/WKF/module-wkf.png");
+	public static final ImageIconResource WKF_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/WKF/module-wkf-hover.png");
+	public static final ImageIconResource WKF_BIG_ICON = new ImageIconResource("Icons/WKF/module-wkf-big.png");
 
 	// Perspective icons
 	public static final ImageIcon WKF_BPEP_ACTIVE_ICON = new ImageIconResource("Icons/WKF/WorkflowPerspective_A.gif");

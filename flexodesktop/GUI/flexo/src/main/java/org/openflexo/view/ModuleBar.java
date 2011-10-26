@@ -95,7 +95,7 @@ public class ModuleBar extends JPanel {
 	public ModuleBar() {
 		moduleButtons = new Hashtable<Module, ModuleButton>();
 		moduleBars.add(this);
-		setLayout(new FlowLayout(FlowLayout.LEFT, 2, 0));
+		setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		Enumeration en = ModuleLoader.availableModules().elements();
 		while (en.hasMoreElements()) {
 			Module m = (Module) en.nextElement();
@@ -167,16 +167,14 @@ public class ModuleBar extends JPanel {
 		}
 
 		protected void setAsActive() {
-			setIcon(module.getBigSelectedIcon());
+			setIcon(module.getMediumIconWithHover());
 		}
 
 		protected void refresh() {
 			if (module.isActive()) {
-				setIcon(module.getBigSelectedIcon());
-			} else if (module.isLoaded()) {
-				setIcon(module.getBigActiveIcon());
+				setIcon(module.getMediumIconWithHover());
 			} else {
-				setIcon(module.getBigUnactiveIcon());
+				setIcon(module.getMediumIcon());
 			}
 		}
 	}
