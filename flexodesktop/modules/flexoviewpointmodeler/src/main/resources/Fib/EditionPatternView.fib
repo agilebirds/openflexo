@@ -281,7 +281,7 @@
               <Panel layout="border" hGap="5" vGap="0" flowAlignment="LEADING" borderTitle="Panel" data="ParametersDetailsPanel.data" dataClassName="org.openflexo.foundation.viewpoint.URIParameter" constraints="twocols(location=right;index=7;expandVertically=false;expandHorizontally=true)" visible="(ParametersDetailsPanel.data.widget = &quot;URI&quot;)" name="URIParameterPanel">
                 <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="URIParameterPanel.data.baseURI.binding" constraints="border(location=right;index=5;expandHorizontally=true;expandVertically=false)" name="baseURIValue" localize="true" manageDynamicModel="true">
                   <Assignment variable="component.bindable" value="ParametersDetailsPanel.data" />
-                  <Assignment variable="component.bindingDefinition" value="ParametersDetailsPanel.data.baseURIBindingDefinition" />
+                  <Assignment variable="component.bindingDefinition" value="URIParameterPanel.data.baseURIBindingDefinition" />
                 </Custom>
               </Panel>
               <Label label="type" align="right" localize="true" constraints="twocols(location=left;index=8;expandHorizontally=true;expandVertically=false)" visible="(ParametersDetailsPanel.data.widget = &quot;INDIVIDUAL&quot;)" />
