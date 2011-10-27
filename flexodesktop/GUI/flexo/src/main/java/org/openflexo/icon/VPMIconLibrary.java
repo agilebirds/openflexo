@@ -71,10 +71,10 @@ public class VPMIconLibrary extends IconLibrary {
 	public static final ImageIcon VPM_BIG_ICON = new ImageIconResource("Icons/VPM/module-vpm-big.png");
 
 	// Perspective icons
-	public static final ImageIcon VPM_VPE_ACTIVE_ICON = new ImageIconResource("Icons/VPM/CalcPerspective_A.gif");
-	public static final ImageIcon VPM_VPE_SELECTED_ICON = new ImageIconResource("Icons/VPM/CalcPerspective_S.gif");
-	public static final ImageIcon VPM_OP_ACTIVE_ICON = new ImageIconResource("Icons/VPM/OntologyPerspective_A.gif");
-	public static final ImageIcon VPM_OP_SELECTED_ICON = new ImageIconResource("Icons/VPM/OntologyPerspective_S.gif");
+	public static final ImageIcon VPM_VPE_ACTIVE_ICON = new ImageIconResource("Icons/VPM/ViewPointPerspective.jpg");
+	public static final ImageIcon VPM_VPE_SELECTED_ICON = new ImageIconResource("Icons/VPM/ViewPointPerspective-hover.jpg");
+	public static final ImageIcon VPM_OP_ACTIVE_ICON = new ImageIconResource("Icons/VPM/OntologyPerspective.png");
+	public static final ImageIcon VPM_OP_SELECTED_ICON = new ImageIconResource("Icons/VPM/OntologyPerspective-hover.png");
 	
 	// Editor icons
 	public static final ImageIcon NO_HIERARCHY_MODE_ICON = new ImageIconResource("Icons/VPM/NoHierarchyViewMode.gif");

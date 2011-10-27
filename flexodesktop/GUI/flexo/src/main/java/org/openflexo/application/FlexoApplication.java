@@ -46,6 +46,7 @@ import org.openflexo.drm.DocResourceManager;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.inspector.InspectorCst;
 import org.openflexo.jedit.JEditTextArea;
 import org.openflexo.localization.FlexoLocalization;
@@ -54,7 +55,6 @@ import org.openflexo.localization.LocalizedEditor;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.logging.viewer.FlexoLoggingViewerWindow;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.CancelException;
 import org.openflexo.utils.TooManyFailedAttemptException;
@@ -110,7 +110,7 @@ public class FlexoApplication {
 				enableAboutMenu.invoke(application, new Object[] { new Boolean(true) });
 				// ((com.apple.eawt.Application)application).setDockIconImage(ModuleLoader.getUserType().getIconImage().getImage());
 				Method setDockIconImage = application.getClass().getMethod("setDockIconImage", new Class[] { Image.class });
-				setDockIconImage.invoke(application, new Object[] { ModuleLoader.getUserType().getIconImage().getImage() });
+				setDockIconImage.invoke(application, new Object[] { IconLibrary.OPENFLEXO_NOTEXT_128.getImage() });
 				applicationAdapter = new FlexoApplicationAdapter();
 
 				Method addApplicationListener = application.getClass().getMethod("addApplicationListener",

@@ -49,10 +49,10 @@ public class VEIconLibrary extends IconLibrary {
 	public static final ImageIcon VE_BIG_ICON = new ImageIconResource("Icons/VE/OE_A.gif");
 
 	// Perspective icons
-	public static final ImageIcon VE_OP_ACTIVE_ICON = new ImageIconResource("Icons/VE/OntologyPerspective_A.gif");
-	public static final ImageIcon VE_OP_SELECTED_ICON = new ImageIconResource("Icons/VE/OntologyPerspective_S.gif");
-	public static final ImageIcon VE_SP_ACTIVE_ICON = new ImageIconResource("Icons/VE/ShemaPerspective_A.gif");
-	public static final ImageIcon VE_SP_SELECTED_ICON = new ImageIconResource("Icons/VE/ShemaPerspective_S.gif");
+	public static final ImageIcon VE_OP_ACTIVE_ICON = new ImageIconResource("Icons/VE/OntologyPerspective.png");
+	public static final ImageIcon VE_OP_SELECTED_ICON = new ImageIconResource("Icons/VE/OntologyPerspective-hover.png");
+	public static final ImageIcon VE_SP_ACTIVE_ICON = new ImageIconResource("Icons/VE/ShemaPerspective.png");
+	public static final ImageIcon VE_SP_SELECTED_ICON = new ImageIconResource("Icons/VE/ShemaPerspective-hover.png");
 	
 	// Model icons
 	public static final ImageIconResource VIEW_LIBRARY_ICON = new ImageIconResource("Icons/Model/VE/ViewLibrary.png");

@@ -49,7 +49,7 @@ public abstract class FlexoRelativeWindow extends JFrame /*implements FocusListe
     {
         //super(frame);
         super();
-        setIconImage(IconLibrary.OPENFLEXO_NOTEXT_64.getImage());
+        setIconImage(IconLibrary.OPENFLEXO_NOTEXT_128.getImage());
         _parentFrame = frame;
         //setModal(false);
         setLocationRelativeTo(frame);
