@@ -44,6 +44,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.openflexo.application.FlexoApplication;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.SplashWindow;
+import org.openflexo.components.WelcomeDialog;
 import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLoggingFormatter;
@@ -185,7 +186,8 @@ public class Flexo {
 			 */
 			@Override
 			public void run() {
-				ModuleLoader.initializeModules(UserType.getUserTypeNamed(userTypeName2), true);
+				ModuleLoader.initializeModules(UserType.getUserTypeNamed(userTypeName2)/*, true*/);
+				WelcomeDialog welcomeDialog = new WelcomeDialog();
 			}
 		});
 	}

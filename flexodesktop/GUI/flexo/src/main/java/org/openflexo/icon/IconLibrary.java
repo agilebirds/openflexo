@@ -43,15 +43,18 @@ public class IconLibrary {
 	public static final ImageIcon SPLASH_IMAGE = new ImageIconResource("Icons/Panels/SplashPanel.jpg");
 
 	// Flexo icons
-	public static final ImageIcon SERVER_32_ICON = new ImageIconResource("Icons/Flexo/Server32.gif");
+	public static final ImageIcon BUSINESS_PLUS_32_ICON = new ImageIconResource("Icons/Flexo/BusinessPlus32.png");
 	public static final ImageIcon BUSINESS_32_ICON = new ImageIconResource("Icons/Flexo/Business32.png");
 	public static final ImageIcon ENTERPRISE_32_ICON = new ImageIconResource("Icons/Flexo/Entreprise32.png");
-	public static final ImageIcon FLEXO_ICON = new ImageIconResource("Icons/Flexo/FlexoIcon.png");
-	public static final ImageIcon FLEXO_ICON_SMALL = new ImageIconResource("Icons/Flexo/FlexoIcon_16.png");
+
+	public static final ImageIcon OPENFLEXO_NOTEXT_16 = new ImageIconResource("Icons/Flexo/OpenflexoNoText_16.png");
+	public static final ImageIcon OPENFLEXO_NOTEXT_32 = new ImageIconResource("Icons/Flexo/OpenflexoNoText_32.png");
+	public static final ImageIcon OPENFLEXO_NOTEXT_64 = new ImageIconResource("Icons/Flexo/OpenflexoNoText_64.png");
+	public static final ImageIcon OPENFLEXO_NOTEXT_128 = new ImageIconResource("Icons/Flexo/OpenflexoNoText_128.png");
 	public static final ImageIcon DEV_TEAM_ICON = new ImageIconResource("Icons/Flexo/Flexo_DT.jpg");
 
-	public static final ImageIcon OPENFLEXO_TEXT_ICON = new ImageIconResource("Icons/Flexo/LogoText.gif");
-	public static final ImageIcon OPENFLEXO_TEXT_SMALL_ICON = new ImageIconResource("Icons/Flexo/LogoTextSmall.gif");
+	public static final ImageIcon OPENFLEXO_TEXT_ICON = new ImageIconResource("Icons/Flexo/OpenflexoText_230x60.png");
+	public static final ImageIcon OPENFLEXO_TEXT_SMALL_ICON = new ImageIconResource("Icons/Flexo/OpenflexoText_150x40.png");
 
 	// Common icons
 	public static final ImageIcon FOLDER_ICON = new ImageIconResource("Icons/Common/Folder.gif");

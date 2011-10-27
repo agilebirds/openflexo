@@ -65,18 +65,16 @@ public class VPMIconLibrary extends IconLibrary {
 	private static final Logger logger = Logger.getLogger(VPMIconLibrary.class.getPackage().getName());
 
 	// Module icons
-	public static final ImageIcon VPM_ACTIVE_ICON = new ImageIconResource("Icons/VPM/CED_A_Small.gif");
-	public static final ImageIcon VPM_UNACTIVE_ICON = new ImageIconResource("Icons/VPM/CED_NA_Small.gif");
-	public static final ImageIcon VPM_SELECTED_ICON = new ImageIconResource("Icons/VPM/CED_S_Small.gif");
-	public static final ImageIcon VPM_BIG_ACTIVE_ICON = new ImageIconResource("Icons/VPM/CED_A.gif");
-	public static final ImageIcon VPM_BIG_UNACTIVE_ICON = new ImageIconResource("Icons/VPM/CED_NA.gif");
-	public static final ImageIcon VPM_BIG_SELECTED_ICON = new ImageIconResource("Icons/VPM/CED_S.gif");
+	public static final ImageIcon VPM_SMALL_ICON = new ImageIconResource("Icons/VPM/CED_A_Small.gif");
+	public static final ImageIcon VPM_MEDIUM_ICON = new ImageIconResource("Icons/VPM/module-vpm.png");
+	public static final ImageIcon VPM_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/VPM/module-vpm-hover.png");
+	public static final ImageIcon VPM_BIG_ICON = new ImageIconResource("Icons/VPM/module-vpm-big.png");
 
 	// Perspective icons
-	public static final ImageIcon VPM_VPE_ACTIVE_ICON = new ImageIconResource("Icons/VPM/CalcPerspective_A.gif");
-	public static final ImageIcon VPM_VPE_SELECTED_ICON = new ImageIconResource("Icons/VPM/CalcPerspective_S.gif");
-	public static final ImageIcon VPM_OP_ACTIVE_ICON = new ImageIconResource("Icons/VPM/OntologyPerspective_A.gif");
-	public static final ImageIcon VPM_OP_SELECTED_ICON = new ImageIconResource("Icons/VPM/OntologyPerspective_S.gif");
+	public static final ImageIcon VPM_VPE_ACTIVE_ICON = new ImageIconResource("Icons/VPM/ViewPointPerspective.jpg");
+	public static final ImageIcon VPM_VPE_SELECTED_ICON = new ImageIconResource("Icons/VPM/ViewPointPerspective-hover.jpg");
+	public static final ImageIcon VPM_OP_ACTIVE_ICON = new ImageIconResource("Icons/VPM/OntologyPerspective.png");
+	public static final ImageIcon VPM_OP_SELECTED_ICON = new ImageIconResource("Icons/VPM/OntologyPerspective-hover.png");
 	
 	// Editor icons
 	public static final ImageIcon NO_HIERARCHY_MODE_ICON = new ImageIconResource("Icons/VPM/NoHierarchyViewMode.gif");

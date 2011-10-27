@@ -33,8 +33,6 @@ import org.openflexo.ch.TrackComponentCHForHelpSubmission;
 import org.openflexo.ch.TrackComponentCHForHelpView;
 import org.openflexo.components.AboutDialog;
 import org.openflexo.drm.DocResourceManager;
-
-
 import org.openflexo.help.FlexoHelp;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.Module;
@@ -137,7 +135,6 @@ public class HelpMenu extends FlexoMenu implements Observer
 				public void actionPerformed(ActionEvent e)
                 {
                     AboutDialog about = new AboutDialog();
-                    about.setVisible(true);
                 }
                 
             });

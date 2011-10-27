@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="border" dataClassName="org.openflexo.ApplicationData" controllerClassName="org.openflexo.view.controller.WelcomePanelController" backgroundColor="245,255,246" width="520" height="570">
+  <Panel layout="gridbag" borderTitle="Panel" constraints="border(location=north;index=0)" backgroundColor="245,255,246">
+    <Image imageFile="../Icons/Flexo/FlexoIcon.png" sizeAdjustment="AdjustDimensions" align="left" imageWidth="100" imageHeight="100" localize="true" data="data.openflexoIcon.image" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=0;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
+    <Image imageFile="../Icons/Flexo/LogoTextSmall.png" sizeAdjustment="OriginalSize" align="left" imageWidth="32" imageHeight="32" localize="true" data="data.openflexoTextIcon.image" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=1;gridWidth=1;insetsTop=26;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
+    <Label label="label" localize="true" data="data.userType.businessName2" constraints="gridbag(insetsLeft=6;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=2;gridWidth=1;insetsTop=-6;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" font="LucidaGrande-Bold,0,14" foregroundColor="51,51,51">
+      <LocalizedDictionary />
+    </Label>
+    <Label label="label" localize="true" data="data.version" constraints="gridbag(insetsLeft=5;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=3;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" font="Dialog,2,11">
+      <LocalizedDictionary />
+    </Label>
+    <LocalizedDictionary />
+  </Panel>
+  <Panel layout="gridbag" borderTitle="Panel" constraints="border(location=center;index=0)" backgroundColor="245,255,246">
+    <List visibleRowCount="1" rowHeight="32" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="false" selectionMode="MultipleIntervalSelection" layoutOrientation="horizontal" format="object.name" icon="object.mediumIcon" localize="true" name="ModuleList" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=0;insetsTop=30;location=north;insetsBottom=13;weightY=0.0;weightX=0.0;fill=none)" list="data.availableModules" showIcon="true" showText="false" iteratorClassName="org.openflexo.module.Module" />
+    <Image imageFile="../../../../interfacebuilder/src/dev/resources/FIBEditorPalette/Image.gif" sizeAdjustment="OriginalSize" align="left" imageWidth="32" imageHeight="32" localize="true" data="ModuleList.selected.bigIcon.image" constraints="gridbag(insetsLeft=20;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=1;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;fill=none;weightX=0.0)" />
+    <Label label="label" localize="true" data="ModuleList.selected.name" constraints="gridbag(insetsLeft=3;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=south_west;gridY=-1;gridX=-1;index=2;gridWidth=0;insetsTop=0;insetsBottom=14;weightY=0.0;fill=none;weightX=0.0)" font="LucidaGrande-Bold,1,16">
+      <LocalizedDictionary />
+    </Label>
+    <Label label="label" localize="true" data="ModuleList.selected.hTMLDescription" constraints="gridbag(insetsLeft=20;insetsRight=20;gridHeight=1;padY=0;padX=0;anchor=north_west;gridY=-1;gridX=-1;index=3;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=1.0;fill=both;weightX=1.0)">
+      <LocalizedDictionary />
+    </Label>
+    <Table iteratorClassName="java.io.File" visibleRowCount="5" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="59,100,202" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" enable="ModuleList.selected.requireProject" manageDynamicModel="true" doubleClickAction="controller.openProject(RecentProjectTable.selected,ModuleList.selected)" name="RecentProjectTable" data="data.lastOpenedProjects" constraints="gridbag(insetsLeft=20;insetsRight=20;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=4;gridWidth=0;insetsTop=0;insetsBottom=20;weightY=1.0;fill=both;weightX=0.0)" font="LucidaGrande,0,11">
+      <IconColumn data="data.projectIcon" title="icon" columnWidth="20" resizable="false" displayTitle="false" name="icon" />
+      <LabelColumn data="iterator.name" title="project" columnWidth="100" resizable="true" displayTitle="true" name="label" />
+      <LabelColumn data="iterator.absolutePath" title="path" columnWidth="300" resizable="true" displayTitle="true" name="label" />
+      <LocalizedDictionary />
+    </Table>
+    <LocalizedDictionary />
+  </Panel>
+  <Panel layout="border" borderTitle="Panel" constraints="border(location=south;index=0)">
+    <Panel layout="flow" hGap="5" vGap="10" flowAlignment="CENTER" borderTitle="Panel" constraints="border(location=south)" backgroundColor="245,255,246">
+      <Button action="controller.openProject(RecentProjectTable.selected,ModuleList.selected)" buttonType="Trigger" label="open_project" constraints="flow(index=0)" visible="ModuleList.selected.requireProject" name="OpenProjectButton" localize="true">
+        <LocalizedDictionary />
+      </Button>
+      <Button action="controller.newProject(ModuleList.selected)" buttonType="Trigger" label="new_project" constraints="flow(index=1)" visible="ModuleList.selected.requireProject" name="NewProjectButton" localize="true">
+        <LocalizedDictionary />
+      </Button>
+      <Button action="controller.openModule(ModuleList.selected)" buttonType="Trigger" label="open_module" constraints="flow(index=2)" visible="(!(ModuleList.selected.requireProject))" name="OpenModuleButton" localize="true">
+        <LocalizedDictionary />
+      </Button>
+      <Button action="controller.exit()" buttonType="Trigger" label="Exit" constraints="flow(index=3)" name="ExitButton" localize="true">
+        <LocalizedDictionary />
+      </Button>
+      <LocalizedDictionary />
+    </Panel>
+    <LocalizedDictionary />
+  </Panel>
+  <LocalizedDictionary />
+</Panel>
+

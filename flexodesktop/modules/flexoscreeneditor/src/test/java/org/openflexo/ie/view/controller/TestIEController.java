@@ -250,7 +250,7 @@ public class TestIEController extends FlexoModuleTestCase {
 			GeneralPreferences.setFavoriteModuleName(Module.IE_MODULE.getName());
 		}
 		ModuleLoader.fileNameToOpen = projectDirectory.getAbsolutePath();
-		ModuleLoader.initializeModules(UserType.getUserTypeNamed("DEVELOPPER"), false);
+		ModuleLoader.initializeModules(UserType.getUserTypeNamed("DEVELOPPER")/*, false*/);
 		ModuleLoader.setProject(project);
 		if (ExternalModuleDelegater.getModuleLoader() == null) {
 			fail("Module loader is not there. Screenshots cannot be generated");

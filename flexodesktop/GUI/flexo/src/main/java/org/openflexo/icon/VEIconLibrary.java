@@ -43,18 +43,16 @@ public class VEIconLibrary extends IconLibrary {
 	private static final Logger logger = Logger.getLogger(VEIconLibrary.class.getPackage().getName());
 
 	// Module icons
-	public static final ImageIcon VE_ACTIVE_ICON = new ImageIconResource("Icons/VE/OE_A_Small.gif");
-	public static final ImageIcon VE_UNACTIVE_ICON = new ImageIconResource("Icons/VE/OE_NA_Small.gif");
-	public static final ImageIcon VE_SELECTED_ICON = new ImageIconResource("Icons/VE/OE_S_Small.gif");
-	public static final ImageIcon VE_BIG_ACTIVE_ICON = new ImageIconResource("Icons/VE/OE_A.gif");
-	public static final ImageIcon VE_BIG_UNACTIVE_ICON = new ImageIconResource("Icons/VE/OE_NA.gif");
-	public static final ImageIcon VE_BIG_SELECTED_ICON = new ImageIconResource("Icons/VE/OE_S.gif");
+	public static final ImageIcon VE_SMALL_ICON = new ImageIconResource("Icons/VE/OE_A_Small.gif");
+	public static final ImageIcon VE_MEDIUM_ICON = new ImageIconResource("Icons/VE/OE_A.gif");
+	public static final ImageIcon VE_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/VE/OE_S.gif");
+	public static final ImageIcon VE_BIG_ICON = new ImageIconResource("Icons/VE/OE_A.gif");
 
 	// Perspective icons
-	public static final ImageIcon VE_OP_ACTIVE_ICON = new ImageIconResource("Icons/VE/OntologyPerspective_A.gif");
-	public static final ImageIcon VE_OP_SELECTED_ICON = new ImageIconResource("Icons/VE/OntologyPerspective_S.gif");
-	public static final ImageIcon VE_SP_ACTIVE_ICON = new ImageIconResource("Icons/VE/ShemaPerspective_A.gif");
-	public static final ImageIcon VE_SP_SELECTED_ICON = new ImageIconResource("Icons/VE/ShemaPerspective_S.gif");
+	public static final ImageIcon VE_OP_ACTIVE_ICON = new ImageIconResource("Icons/VE/OntologyPerspective.png");
+	public static final ImageIcon VE_OP_SELECTED_ICON = new ImageIconResource("Icons/VE/OntologyPerspective-hover.png");
+	public static final ImageIcon VE_SP_ACTIVE_ICON = new ImageIconResource("Icons/VE/ShemaPerspective.png");
+	public static final ImageIcon VE_SP_SELECTED_ICON = new ImageIconResource("Icons/VE/ShemaPerspective-hover.png");
 	
 	// Model icons
 	public static final ImageIconResource VIEW_LIBRARY_ICON = new ImageIconResource("Icons/Model/VE/ViewLibrary.png");

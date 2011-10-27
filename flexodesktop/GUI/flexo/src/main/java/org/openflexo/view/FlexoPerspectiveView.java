@@ -75,13 +75,13 @@ public class FlexoPerspectiveView extends JLabel
 	public Icon getIcon()
     {
         if (controller.getCurrentPerspective() == perspective) {
-            setEnabled(false);
+            //setEnabled(false);
             if (perspective.getSelectedIcon() != null)
                 return perspective.getSelectedIcon();
             else
                 return IconLibrary.DEFAULT_PERSPECTIVE_SELECTED_ICON;
         } else {
-            setEnabled(true);
+            //setEnabled(true);
             if (perspective.getSelectedIcon() != null)
                 return perspective.getActiveIcon();
             else

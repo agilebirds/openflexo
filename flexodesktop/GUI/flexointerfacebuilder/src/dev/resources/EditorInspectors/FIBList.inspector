@@ -29,6 +29,8 @@
 			<CheckBox data="data.showFooter" constraints="twocols(location=left)"/>
 			<Label label="show_footer" constraints="twocols(location=right)"/>
 
+			<Label label="layout_orientation" constraints="twocols(location=left)" />
+			<DropDown data="data.layoutOrientation" constraints="twocols(location=right)" />
 		</Tab>
 
 		<Tab name="ControlsTab" title="Controls" index="2" layout="twocols" font="SansSerif,0,11" >

@@ -230,7 +230,7 @@ public class FlexoControlGraphController extends FlexoInspectorController {
     		protected ViewHeader()
     		{
     			super(new BorderLayout());
-    			icon = new JLabel(CGIconLibrary.CG_BIG_ACTIVE_ICON);
+    			icon = new JLabel(CGIconLibrary.CG_MEDIUM_ICON);
     			icon.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 20));
     			add(icon,BorderLayout.WEST);
     			title = new JLabel(getTitleText(),SwingConstants.LEFT);

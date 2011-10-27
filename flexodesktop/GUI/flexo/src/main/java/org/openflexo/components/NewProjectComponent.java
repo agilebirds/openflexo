@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 
 import org.openflexo.AdvancedPrefs;
-
+import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.view.FlexoFrame;
@@ -50,12 +50,12 @@ public class NewProjectComponent extends ProjectChooserComponent
         setApproveButtonText(FlexoLocalization.localizedForKey("create"));
     }
 
-    public static File getProjectDirectory()
+    public static File getProjectDirectory() throws ProjectLoadingCancelledException
     {
     	return getProjectDirectory(FlexoFrame.getActiveFrame());
     }
     
-    public static File getProjectDirectory(Frame owner)
+    public static File getProjectDirectory(Frame owner) throws ProjectLoadingCancelledException
     {
         NewProjectComponent chooser = new NewProjectComponent(owner);
         File newProjectDir = null;
@@ -88,6 +88,7 @@ public class NewProjectComponent extends ProjectChooserComponent
         } else {
             if (logger.isLoggable(Level.WARNING))
                 logger.warning("No project specified !");
+            throw new ProjectLoadingCancelledException();
         }
         return newProjectDir;
     }

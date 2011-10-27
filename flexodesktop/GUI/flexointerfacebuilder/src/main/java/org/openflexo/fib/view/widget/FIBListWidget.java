@@ -20,6 +20,7 @@
 package org.openflexo.fib.view.widget;
 
 import java.awt.Component;
+import java.awt.ComponentOrientation;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,6 +58,8 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList,JList,Object> 
 		//_list.setPrototypeCellValue("0123456789012345");
 		_list.setFixedCellHeight(model.getRowHeight());
 
+		_list.setLayoutOrientation(model.getLayoutOrientation().getSwingValue());
+		
 		_list.addFocusListener(this);
 
 		_list.setBorder(BorderFactory.createEtchedBorder());
@@ -147,6 +150,7 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList,JList,Object> 
 	private void setListModel(FIBListModel aListModel)
 	{
 		widgetUpdating = true;
+		_list.setLayoutOrientation(getWidget().getLayoutOrientation().getSwingValue());
 		_list.setSelectionMode(getWidget().getSelectionMode().getMode());
 		_list.setVisibleRowCount(getWidget().getVisibleRowCount());
 		_list.setFixedCellHeight(getWidget().getRowHeight());

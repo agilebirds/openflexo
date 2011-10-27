@@ -29,8 +29,12 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.GeneralPreferences;
 import org.openflexo.ch.FCH;
 import org.openflexo.components.OpenProjectComponent;
+import org.openflexo.drm.DocItem;
+import org.openflexo.drm.DocResourceManager;
+import org.openflexo.drm.Language;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.icon.CGIconLibrary;
 import org.openflexo.icon.DEIconLibrary;
@@ -88,7 +92,8 @@ public abstract class Module implements IModule {
 
 	public static final Module XXX_MODULE = new XXX();
 
-	private static final Module[] knownsModules = { WKF_MODULE, IE_MODULE, DE_MODULE, DM_MODULE, CG_MODULE, SG_MODULE, DG_MODULE, WSE_MODULE, VE_MODULE, DRE_MODULE, FPS_MODULE, VPM_MODULE /*
+	private static final Module[] knownsModules = { WKF_MODULE, IE_MODULE, DE_MODULE, DM_MODULE, CG_MODULE, SG_MODULE, DG_MODULE, WSE_MODULE, VE_MODULE, DRE_MODULE, FPS_MODULE, VPM_MODULE
+    /*
 	 * ,
 	 * XXX_MODULE
 	 */};
@@ -126,64 +131,24 @@ public abstract class Module implements IModule {
 			return true;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getActiveIcon()
-		 */
 		@Override
-		public ImageIcon getActiveIcon() {
-			return WKFIconLibrary.WKF_ACTIVE_ICON;
+		public ImageIcon getSmallIcon() {
+			return WKFIconLibrary.WKF_SMALL_ICON;
 		}
 
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getUnactiveIcon()
-		 */
 		@Override
-		public ImageIcon getUnactiveIcon() {
-			return WKFIconLibrary.WKF_UNACTIVE_ICON;
+		public ImageIcon getMediumIcon() {
+			return WKFIconLibrary.WKF_MEDIUM_ICON;
 		}
 
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getSelectedIcon()
-		 */
 		@Override
-		public ImageIcon getSelectedIcon() {
-			return WKFIconLibrary.WKF_SELECTED_ICON;
+		public ImageIcon getMediumIconWithHover() {
+			return WKFIconLibrary.WKF_MEDIUM_ICON_WITH_HOVER;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigActiveIcon()
-		 */
 		@Override
-		public ImageIcon getBigActiveIcon() {
-			return WKFIconLibrary.WKF_BIG_ACTIVE_ICON;
-		}
-
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigUnactiveIcon()
-		 */
-		@Override
-		public ImageIcon getBigUnactiveIcon() {
-			return WKFIconLibrary.WKF_BIG_UNACTIVE_ICON;
-		}
-
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigSelectedIcon()
-		 */
-		@Override
-		public ImageIcon getBigSelectedIcon() {
-			return WKFIconLibrary.WKF_BIG_SELECTED_ICON;
+		public ImageIcon getBigIcon() {
+			return WKFIconLibrary.WKF_BIG_ICON;
 		}
 
 		public static final String WKF_MODULE_SHORT_NAME = "WKF";
@@ -199,6 +164,7 @@ public abstract class Module implements IModule {
 		public String getShortName() {
 			return WKF_MODULE_SHORT_NAME;
 		}
+		
 	}
 
 	protected static class IE extends Module {
@@ -222,64 +188,24 @@ public abstract class Module implements IModule {
 			return true;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getActiveIcon()
-		 */
 		@Override
-		public ImageIcon getActiveIcon() {
-			return SEIconLibrary.IE_ACTIVE_ICON;
+		public ImageIcon getSmallIcon() {
+			return SEIconLibrary.SE_SMALL_ICON;
 		}
 
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getUnactiveIcon()
-		 */
 		@Override
-		public ImageIcon getUnactiveIcon() {
-			return SEIconLibrary.IE_UNACTIVE_ICON;
+		public ImageIcon getMediumIcon() {
+			return SEIconLibrary.SE_MEDIUM_ICON;
 		}
 
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getSelectedIcon()
-		 */
 		@Override
-		public ImageIcon getSelectedIcon() {
-			return SEIconLibrary.IE_SELECTED_ICON;
+		public ImageIcon getMediumIconWithHover() {
+			return SEIconLibrary.SE_MEDIUM_ICON_WITH_HOVER;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigActiveIcon()
-		 */
 		@Override
-		public ImageIcon getBigActiveIcon() {
-			return SEIconLibrary.IE_BIG_ACTIVE_ICON;
-		}
-
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigUnactiveIcon()
-		 */
-		@Override
-		public ImageIcon getBigUnactiveIcon() {
-			return SEIconLibrary.IE_BIG_UNACTIVE_ICON;
-		}
-
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigSelectedIcon()
-		 */
-		@Override
-		public ImageIcon getBigSelectedIcon() {
-			return SEIconLibrary.IE_BIG_SELECTED_ICON;
+		public ImageIcon getBigIcon() {
+			return SEIconLibrary.SE_BIG_ICON;
 		}
 
 		public static final String IE_MODULE_SHORT_NAME = "IE";
@@ -318,64 +244,24 @@ public abstract class Module implements IModule {
 			return true;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getActiveIcon()
-		 */
 		@Override
-		public ImageIcon getActiveIcon() {
-			return DMEIconLibrary.DM_ACTIVE_ICON;
+		public ImageIcon getSmallIcon() {
+			return DMEIconLibrary.DME_SMALL_ICON;
 		}
 
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getUnactiveIcon()
-		 */
 		@Override
-		public ImageIcon getUnactiveIcon() {
-			return DMEIconLibrary.DM_UNACTIVE_ICON;
+		public ImageIcon getMediumIcon() {
+			return DMEIconLibrary.DME_MEDIUM_ICON;
 		}
 
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getSelectedIcon()
-		 */
 		@Override
-		public ImageIcon getSelectedIcon() {
-			return DMEIconLibrary.DM_SELECTED_ICON;
+		public ImageIcon getMediumIconWithHover() {
+			return DMEIconLibrary.DME_MEDIUM_ICON_WITH_HOVER;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigActiveIcon()
-		 */
 		@Override
-		public ImageIcon getBigActiveIcon() {
-			return DMEIconLibrary.DM_BIG_ACTIVE_ICON;
-		}
-
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigUnactiveIcon()
-		 */
-		@Override
-		public ImageIcon getBigUnactiveIcon() {
-			return DMEIconLibrary.DM_BIG_UNACTIVE_ICON;
-		}
-
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigSelectedIcon()
-		 */
-		@Override
-		public ImageIcon getBigSelectedIcon() {
-			return DMEIconLibrary.DM_BIG_SELECTED_ICON;
+		public ImageIcon getBigIcon() {
+			return DMEIconLibrary.DME_BIG_ICON;
 		}
 
 		public static final String DM_MODULE_SHORT_NAME = "DM";
@@ -414,64 +300,24 @@ public abstract class Module implements IModule {
 			return true;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getActiveIcon()
-		 */
 		@Override
-		public ImageIcon getActiveIcon() {
-			return CGIconLibrary.CG_ACTIVE_ICON;
+		public ImageIcon getSmallIcon() {
+			return CGIconLibrary.CG_SMALL_ICON;
 		}
 
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getUnactiveIcon()
-		 */
 		@Override
-		public ImageIcon getUnactiveIcon() {
-			return CGIconLibrary.CG_UNACTIVE_ICON;
+		public ImageIcon getMediumIcon() {
+			return CGIconLibrary.CG_MEDIUM_ICON;
 		}
 
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getSelectedIcon()
-		 */
 		@Override
-		public ImageIcon getSelectedIcon() {
-			return CGIconLibrary.CG_SELECTED_ICON;
+		public ImageIcon getMediumIconWithHover() {
+			return CGIconLibrary.CG_MEDIUM_ICON_WITH_HOVER;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigActiveIcon()
-		 */
 		@Override
-		public ImageIcon getBigActiveIcon() {
-			return CGIconLibrary.CG_BIG_ACTIVE_ICON;
-		}
-
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigUnactiveIcon()
-		 */
-		@Override
-		public ImageIcon getBigUnactiveIcon() {
-			return CGIconLibrary.CG_BIG_UNACTIVE_ICON;
-		}
-
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigSelectedIcon()
-		 */
-		@Override
-		public ImageIcon getBigSelectedIcon() {
-			return CGIconLibrary.CG_BIG_SELECTED_ICON;
+		public ImageIcon getBigIcon() {
+			return CGIconLibrary.CG_BIG_ICON;
 		}
 
 		public static final String GENERATOR_MODULE_SHORT_NAME = "CG";
@@ -510,64 +356,24 @@ public abstract class Module implements IModule {
 			return true;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getActiveIcon()
-		 */
 		@Override
-		public ImageIcon getActiveIcon() {
-			return DGIconLibrary.DG_ACTIVE_ICON;
+		public ImageIcon getSmallIcon() {
+			return DGIconLibrary.DG_SMALL_ICON;
 		}
 
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getUnactiveIcon()
-		 */
 		@Override
-		public ImageIcon getUnactiveIcon() {
-			return DGIconLibrary.DG_UNACTIVE_ICON;
+		public ImageIcon getMediumIcon() {
+			return DGIconLibrary.DG_MEDIUM_ICON;
 		}
 
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getSelectedIcon()
-		 */
 		@Override
-		public ImageIcon getSelectedIcon() {
-			return DGIconLibrary.DG_SELECTED_ICON;
+		public ImageIcon getMediumIconWithHover() {
+			return DGIconLibrary.DG_MEDIUM_ICON_WITH_HOVER;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigActiveIcon()
-		 */
 		@Override
-		public ImageIcon getBigActiveIcon() {
-			return DGIconLibrary.DG_BIG_ACTIVE_ICON;
-		}
-
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigUnactiveIcon()
-		 */
-		@Override
-		public ImageIcon getBigUnactiveIcon() {
-			return DGIconLibrary.DG_BIG_UNACTIVE_ICON;
-		}
-
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigSelectedIcon()
-		 */
-		@Override
-		public ImageIcon getBigSelectedIcon() {
-			return DGIconLibrary.DG_BIG_SELECTED_ICON;
+		public ImageIcon getBigIcon() {
+			return DGIconLibrary.DG_BIG_ICON;
 		}
 
 		public static final String DG_MODULE_SHORT_NAME = "DG";
@@ -606,64 +412,24 @@ public abstract class Module implements IModule {
 			return true;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getActiveIcon()
-		 */
 		@Override
-		public ImageIcon getActiveIcon() {
-			return SGIconLibrary.SG_ACTIVE_ICON;
+		public ImageIcon getSmallIcon() {
+			return SGIconLibrary.SG_SMALL_ICON;
 		}
 
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getUnactiveIcon()
-		 */
 		@Override
-		public ImageIcon getUnactiveIcon() {
-			return SGIconLibrary.SG_UNACTIVE_ICON;
+		public ImageIcon getMediumIcon() {
+			return SGIconLibrary.SG_MEDIUM_ICON;
 		}
 
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getSelectedIcon()
-		 */
 		@Override
-		public ImageIcon getSelectedIcon() {
-			return SGIconLibrary.SG_SELECTED_ICON;
+		public ImageIcon getMediumIconWithHover() {
+			return SGIconLibrary.SG_MEDIUM_ICON_WITH_HOVER;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigActiveIcon()
-		 */
 		@Override
-		public ImageIcon getBigActiveIcon() {
-			return SGIconLibrary.SG_BIG_ACTIVE_ICON;
-		}
-
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigUnactiveIcon()
-		 */
-		@Override
-		public ImageIcon getBigUnactiveIcon() {
-			return SGIconLibrary.SG_BIG_UNACTIVE_ICON;
-		}
-
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigSelectedIcon()
-		 */
-		@Override
-		public ImageIcon getBigSelectedIcon() {
-			return SGIconLibrary.SG_BIG_SELECTED_ICON;
+		public ImageIcon getBigIcon() {
+			return SGIconLibrary.SG_BIG_ICON;
 		}
 
 		public static final String SOURCE_GENERATOR_MODULE_SHORT_NAME = "SG";
@@ -702,64 +468,24 @@ public abstract class Module implements IModule {
 			return true;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getActiveIcon()
-		 */
 		@Override
-		public ImageIcon getActiveIcon() {
-			return DEIconLibrary.DE_ACTIVE_ICON;
+		public ImageIcon getSmallIcon() {
+			return DEIconLibrary.DE_SMALL_ICON;
 		}
 
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getUnactiveIcon()
-		 */
 		@Override
-		public ImageIcon getUnactiveIcon() {
-			return DEIconLibrary.DE_UNACTIVE_ICON;
+		public ImageIcon getMediumIcon() {
+			return DEIconLibrary.DE_MEDIUM_ICON;
 		}
 
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getSelectedIcon()
-		 */
 		@Override
-		public ImageIcon getSelectedIcon() {
-			return DEIconLibrary.DE_SELECTED_ICON;
+		public ImageIcon getMediumIconWithHover() {
+			return DEIconLibrary.DE_MEDIUM_ICON_WITH_HOVER;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigActiveIcon()
-		 */
 		@Override
-		public ImageIcon getBigActiveIcon() {
-			return DEIconLibrary.DE_BIG_ACTIVE_ICON;
-		}
-
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigUnactiveIcon()
-		 */
-		@Override
-		public ImageIcon getBigUnactiveIcon() {
-			return DEIconLibrary.DE_BIG_UNACTIVE_ICON;
-		}
-
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigSelectedIcon()
-		 */
-		@Override
-		public ImageIcon getBigSelectedIcon() {
-			return DEIconLibrary.DE_BIG_SELECTED_ICON;
+		public ImageIcon getBigIcon() {
+			return DEIconLibrary.DE_BIG_ICON;
 		}
 
 		public static final String DE_MODULE_SHORT_NAME = "DE";
@@ -798,64 +524,24 @@ public abstract class Module implements IModule {
 			return true;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getActiveIcon()
-		 */
 		@Override
-		public ImageIcon getActiveIcon() {
-			return WSEIconLibrary.WS_ACTIVE_ICON;
+		public ImageIcon getSmallIcon() {
+			return WSEIconLibrary.WS_SMALL_ICON;
 		}
 
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getUnactiveIcon()
-		 */
 		@Override
-		public ImageIcon getUnactiveIcon() {
-			return WSEIconLibrary.WS_UNACTIVE_ICON;
+		public ImageIcon getMediumIcon() {
+			return WSEIconLibrary.WS_MEDIUM_ICON;
 		}
 
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getSelectedIcon()
-		 */
 		@Override
-		public ImageIcon getSelectedIcon() {
-			return WSEIconLibrary.WS_SELECTED_ICON;
+		public ImageIcon getMediumIconWithHover() {
+			return WSEIconLibrary.WS_MEDIUM_ICON_WITH_HOVER;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigActiveIcon()
-		 */
 		@Override
-		public ImageIcon getBigActiveIcon() {
-			return WSEIconLibrary.WS_BIG_ACTIVE_ICON;
-		}
-
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigUnactiveIcon()
-		 */
-		@Override
-		public ImageIcon getBigUnactiveIcon() {
-			return WSEIconLibrary.WS_BIG_UNACTIVE_ICON;
-		}
-
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigSelectedIcon()
-		 */
-		@Override
-		public ImageIcon getBigSelectedIcon() {
-			return WSEIconLibrary.WS_BIG_SELECTED_ICON;
+		public ImageIcon getBigIcon() {
+			return WSEIconLibrary.WS_BIG_ICON;
 		}
 
 		public static final String WSE_MODULE_SHORT_NAME = "WSE";
@@ -894,64 +580,24 @@ public abstract class Module implements IModule {
 			return true;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getActiveIcon()
-		 */
 		@Override
-		public ImageIcon getActiveIcon() {
-			return VEIconLibrary.VE_ACTIVE_ICON;
+		public ImageIcon getSmallIcon() {
+			return VEIconLibrary.VE_SMALL_ICON;
 		}
 
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getUnactiveIcon()
-		 */
 		@Override
-		public ImageIcon getUnactiveIcon() {
-			return VEIconLibrary.VE_UNACTIVE_ICON;
+		public ImageIcon getMediumIcon() {
+			return VEIconLibrary.VE_MEDIUM_ICON;
 		}
 
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getSelectedIcon()
-		 */
 		@Override
-		public ImageIcon getSelectedIcon() {
-			return VEIconLibrary.VE_SELECTED_ICON;
+		public ImageIcon getMediumIconWithHover() {
+			return VEIconLibrary.VE_MEDIUM_ICON_WITH_HOVER;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigActiveIcon()
-		 */
 		@Override
-		public ImageIcon getBigActiveIcon() {
-			return VEIconLibrary.VE_BIG_ACTIVE_ICON;
-		}
-
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigUnactiveIcon()
-		 */
-		@Override
-		public ImageIcon getBigUnactiveIcon() {
-			return VEIconLibrary.VE_BIG_UNACTIVE_ICON;
-		}
-
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigSelectedIcon()
-		 */
-		@Override
-		public ImageIcon getBigSelectedIcon() {
-			return VEIconLibrary.VE_BIG_SELECTED_ICON;
+		public ImageIcon getBigIcon() {
+			return VEIconLibrary.VE_BIG_ICON;
 		}
 
 		public static final String VE_MODULE_SHORT_NAME = "VE";
@@ -990,64 +636,24 @@ public abstract class Module implements IModule {
 			return false;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getActiveIcon()
-		 */
 		@Override
-		public ImageIcon getActiveIcon() {
-			return DREIconLibrary.DRE_ACTIVE_ICON;
+		public ImageIcon getSmallIcon() {
+			return DREIconLibrary.DRE_SMALL_ICON;
 		}
 
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getUnactiveIcon()
-		 */
 		@Override
-		public ImageIcon getUnactiveIcon() {
-			return DREIconLibrary.DRE_UNACTIVE_ICON;
+		public ImageIcon getMediumIcon() {
+			return DREIconLibrary.DRE_MEDIUM_ICON;
 		}
 
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getSelectedIcon()
-		 */
 		@Override
-		public ImageIcon getSelectedIcon() {
-			return DREIconLibrary.DRE_SELECTED_ICON;
+		public ImageIcon getMediumIconWithHover() {
+			return DREIconLibrary.DRE_MEDIUM_ICON_WITH_HOVER;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigActiveIcon()
-		 */
 		@Override
-		public ImageIcon getBigActiveIcon() {
-			return DREIconLibrary.DRE_BIG_ACTIVE_ICON;
-		}
-
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigUnactiveIcon()
-		 */
-		@Override
-		public ImageIcon getBigUnactiveIcon() {
-			return DREIconLibrary.DRE_BIG_UNACTIVE_ICON;
-		}
-
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigSelectedIcon()
-		 */
-		@Override
-		public ImageIcon getBigSelectedIcon() {
-			return DREIconLibrary.DRE_BIG_SELECTED_ICON;
+		public ImageIcon getBigIcon() {
+			return DREIconLibrary.DRE_BIG_ICON;
 		}
 
 		public static final String DRE_MODULE_SHORT_NAME = "DRE";
@@ -1089,61 +695,26 @@ public abstract class Module implements IModule {
 		/**
 		 * Overrides getActiveIcon
 		 * 
-		 * @see org.openflexo.module.Module#getActiveIcon()
+		 * @see org.openflexo.module.Module#getSmallIcon()
 		 */
 		@Override
-		public ImageIcon getActiveIcon() {
-			return FPSIconLibrary.FPS_ACTIVE_ICON;
+		public ImageIcon getSmallIcon() {
+			return FPSIconLibrary.FPS_SMALL_ICON;
 		}
 
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getUnactiveIcon()
-		 */
 		@Override
-		public ImageIcon getUnactiveIcon() {
-			return FPSIconLibrary.FPS_UNACTIVE_ICON;
+		public ImageIcon getMediumIcon() {
+			return FPSIconLibrary.FPS_MEDIUM_ICON;
 		}
 
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getSelectedIcon()
-		 */
 		@Override
-		public ImageIcon getSelectedIcon() {
-			return FPSIconLibrary.FPS_SELECTED_ICON;
+		public ImageIcon getMediumIconWithHover() {
+			return FPSIconLibrary.FPS_MEDIUM_ICON_WITH_HOVER;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigActiveIcon()
-		 */
 		@Override
-		public ImageIcon getBigActiveIcon() {
-			return FPSIconLibrary.FPS_BIG_ACTIVE_ICON;
-		}
-
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigUnactiveIcon()
-		 */
-		@Override
-		public ImageIcon getBigUnactiveIcon() {
-			return FPSIconLibrary.FPS_BIG_UNACTIVE_ICON;
-		}
-
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigSelectedIcon()
-		 */
-		@Override
-		public ImageIcon getBigSelectedIcon() {
-			return FPSIconLibrary.FPS_BIG_SELECTED_ICON;
+		public ImageIcon getBigIcon() {
+			return FPSIconLibrary.FPS_BIG_ICON;
 		}
 
 		public static final String FPS_MODULE_SHORT_NAME = "FPS";
@@ -1182,64 +753,24 @@ public abstract class Module implements IModule {
 			return false;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getActiveIcon()
-		 */
 		@Override
-		public ImageIcon getActiveIcon() {
-			return VPMIconLibrary.VPM_ACTIVE_ICON;
+		public ImageIcon getSmallIcon() {
+			return VPMIconLibrary.VPM_SMALL_ICON;
 		}
 
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getUnactiveIcon()
-		 */
 		@Override
-		public ImageIcon getUnactiveIcon() {
-			return VPMIconLibrary.VPM_UNACTIVE_ICON;
+		public ImageIcon getMediumIcon() {
+			return VPMIconLibrary.VPM_MEDIUM_ICON;
 		}
 
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getSelectedIcon()
-		 */
 		@Override
-		public ImageIcon getSelectedIcon() {
-			return VPMIconLibrary.VPM_SELECTED_ICON;
+		public ImageIcon getMediumIconWithHover() {
+			return VPMIconLibrary.VPM_MEDIUM_ICON_WITH_HOVER;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigActiveIcon()
-		 */
 		@Override
-		public ImageIcon getBigActiveIcon() {
-			return VPMIconLibrary.VPM_BIG_ACTIVE_ICON;
-		}
-
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigUnactiveIcon()
-		 */
-		@Override
-		public ImageIcon getBigUnactiveIcon() {
-			return VPMIconLibrary.VPM_BIG_UNACTIVE_ICON;
-		}
-
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigSelectedIcon()
-		 */
-		@Override
-		public ImageIcon getBigSelectedIcon() {
-			return VPMIconLibrary.VPM_BIG_SELECTED_ICON;
+		public ImageIcon getBigIcon() {
+			return VPMIconLibrary.VPM_BIG_ICON;
 		}
 
 		public static final String VPM_MODULE_SHORT_NAME = "VPM";
@@ -1279,64 +810,24 @@ public abstract class Module implements IModule {
 			return true;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getActiveIcon()
-		 */
 		@Override
-		public ImageIcon getActiveIcon() {
-			return WKFIconLibrary.WKF_ACTIVE_ICON;
+		public ImageIcon getSmallIcon() {
+			return WKFIconLibrary.WKF_SMALL_ICON;
 		}
 
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getUnactiveIcon()
-		 */
 		@Override
-		public ImageIcon getUnactiveIcon() {
-			return WKFIconLibrary.WKF_UNACTIVE_ICON;
+		public ImageIcon getMediumIcon() {
+			return WKFIconLibrary.WKF_MEDIUM_ICON;
 		}
 
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getSelectedIcon()
-		 */
 		@Override
-		public ImageIcon getSelectedIcon() {
-			return WKFIconLibrary.WKF_SELECTED_ICON;
+		public ImageIcon getMediumIconWithHover() {
+			return WKFIconLibrary.WKF_MEDIUM_ICON_WITH_HOVER;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigActiveIcon()
-		 */
 		@Override
-		public ImageIcon getBigActiveIcon() {
-			return WKFIconLibrary.WKF_BIG_ACTIVE_ICON;
-		}
-
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigUnactiveIcon()
-		 */
-		@Override
-		public ImageIcon getBigUnactiveIcon() {
-			return WKFIconLibrary.WKF_BIG_UNACTIVE_ICON;
-		}
-
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigSelectedIcon()
-		 */
-		@Override
-		public ImageIcon getBigSelectedIcon() {
-			return WKFIconLibrary.WKF_BIG_SELECTED_ICON;
+		public ImageIcon getBigIcon() {
+			return WKFIconLibrary.WKF_BIG_ICON;
 		}
 
 		@Override
@@ -1373,63 +864,23 @@ public abstract class Module implements IModule {
 			return false;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getActiveIcon()
-		 */
 		@Override
-		public ImageIcon getActiveIcon() {
+		public ImageIcon getSmallIcon() {
 			return null;
 		}
 
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getUnactiveIcon()
-		 */
 		@Override
-		public ImageIcon getUnactiveIcon() {
+		public ImageIcon getMediumIcon() {
 			return null;
 		}
 
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getSelectedIcon()
-		 */
 		@Override
-		public ImageIcon getSelectedIcon() {
+		public ImageIcon getMediumIconWithHover() {
 			return null;
 		}
 
-		/**
-		 * Overrides getActiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigActiveIcon()
-		 */
 		@Override
-		public ImageIcon getBigActiveIcon() {
-			return null;
-		}
-
-		/**
-		 * Overrides getUnactiveIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigUnactiveIcon()
-		 */
-		@Override
-		public ImageIcon getBigUnactiveIcon() {
-			return null;
-		}
-
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.module.Module#getBigSelectedIcon()
-		 */
-		@Override
-		public ImageIcon getBigSelectedIcon() {
+		public ImageIcon getBigIcon() {
 			return null;
 		}
 
@@ -1450,17 +901,29 @@ public abstract class Module implements IModule {
 
 	public abstract String getHelpTopic();
 
-	public abstract ImageIcon getActiveIcon();
+	/**
+	 * Return small icon for current module, as 20x20 pixels
+	 * @return
+	 */
+	public abstract ImageIcon getSmallIcon();
 
-	public abstract ImageIcon getUnactiveIcon();
+	/**
+	 * Return medium icon for current module, as 32x32 pixels
+	 * @return
+	 */
+	public abstract ImageIcon getMediumIcon();
 
-	public abstract ImageIcon getSelectedIcon();
+	/**
+	 * Return medium icon for current module, as 32x32 pixels and with hover effect
+	 * @return
+	 */
+	public abstract ImageIcon getMediumIconWithHover();
 
-	public abstract ImageIcon getBigActiveIcon();
-
-	public abstract ImageIcon getBigUnactiveIcon();
-
-	public abstract ImageIcon getBigSelectedIcon();
+	/**
+	 * Return big icon for current module, as 64x64 pixels
+	 * @return
+	 */
+	public abstract ImageIcon getBigIcon();
 
 	public abstract boolean requireProject();
 
@@ -1810,5 +1273,23 @@ public abstract class Module implements IModule {
 	@Override
 	public String toString() {
 		return getLocalizedName();
+	}
+	
+	public String getHTMLDescription()
+	{
+    	Language language = DocResourceManager.instance().getLanguage(GeneralPreferences.getLanguage());
+		DocItem docItem = DocResourceManager.getDocItem(getHelpTopic());
+	   	if (docItem != null) {
+    		if (docItem.getLastApprovedActionForLanguage(language) != null) {
+    			String returned = "<html>" 
+    			+ docItem.getLastApprovedActionForLanguage(language).getVersion().getFullHTMLDescription()
+    			+ "</html>";
+    			return returned;
+     		}
+    	}
+ 		
+		return "<html>No description available for <b>"+getLocalizedName()+"</b>"+"<br>"
+		+ "Please submit documentation in documentation resource center"+"<br>"
+		+"</html>";
 	}
 }
