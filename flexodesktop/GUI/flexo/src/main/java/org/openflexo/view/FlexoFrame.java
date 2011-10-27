@@ -201,7 +201,7 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 
 	private FlexoFrame() {
 		super(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME);
-		setIconImage(IconLibrary.FLEXO_ICON.getImage());
+		setIconImage(IconLibrary.OPENFLEXO_NOTEXT_64.getImage());
 	}
 
 	public FlexoFrame(String title, FlexoController controller, FlexoKeyEventListener keyEventListener, FlexoMenuBar menuBar)
@@ -216,7 +216,7 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 		if (ToolBox.getPLATFORM() != ToolBox.WINDOWS) {
 			setIconImage(controller.getModule().getModule().getMediumIcon().getImage());
 		} else {
-			setIconImage(IconLibrary.FLEXO_ICON.getImage());
+			setIconImage(IconLibrary.OPENFLEXO_NOTEXT_64.getImage());
 		}
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setBackground(ColorCst.GUI_BACK_COLOR);

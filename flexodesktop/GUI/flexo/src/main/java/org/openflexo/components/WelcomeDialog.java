@@ -106,7 +106,7 @@ public class WelcomeDialog extends AboutDialog {
 					JLabel l = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 					File f = (File) value;
 					l.setText(f.getName());
-					l.setIcon(IconLibrary.FLEXO_ICON_SMALL);
+					l.setIcon(IconLibrary.OPENFLEXO_NOTEXT_16);
 					l.setToolTipText(f.getAbsolutePath() + " - " + FlexoLocalization.localizedForKey("double_click_to_open"));
 					if (!isSelected) {
 						l.setBackground(FlexoCst.WELCOME_FLEXO_BG_LIST_COLOR);

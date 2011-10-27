@@ -243,7 +243,7 @@ public abstract class UserType extends FlexoObject
 
 		@Override
 		public ImageIcon getIconImage() {
-			return IconLibrary.SERVER_32_ICON;
+			return IconLibrary.BUSINESS_PLUS_32_ICON;
 		}
 
 	}

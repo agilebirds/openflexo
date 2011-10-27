@@ -104,7 +104,7 @@ public class ApplicationData {
 
 	public ImageIcon getProjectIcon()
 	{
-		return IconLibrary.FLEXO_ICON_SMALL;
+		return IconLibrary.OPENFLEXO_NOTEXT_16;
 	}
 
 	public Module moduleToOpen;
