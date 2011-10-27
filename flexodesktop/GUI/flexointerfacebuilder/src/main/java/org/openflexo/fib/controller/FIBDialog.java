@@ -33,7 +33,8 @@ import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.view.FIBView;
 
 
-public class FIBDialog extends JDialog {
+@SuppressWarnings("serial")
+public class FIBDialog<T> extends JDialog {
 
 	private static final Logger logger = Logger.getLogger(FIBController.class.getPackage().getName());
 
@@ -41,6 +42,25 @@ public class FIBDialog extends JDialog {
 	   
 	private FIBView view;
 	
+	public static <T> FIBDialog<T> instanciateComponent(File componentFile, T data, JFrame frame, boolean modal)
+	{
+		FIBComponent fibComponent = FIBLibrary.instance().retrieveFIBComponent(componentFile);
+		if (fibComponent == null) {
+			logger.warning("FileNotFoundException: "+componentFile.getAbsolutePath());
+			return null;
+		}
+		return instanciateComponent(fibComponent, data, frame, modal);
+	}
+
+	public static <T> FIBDialog<T> instanciateComponent(String fibResourcePath, T data, JFrame frame, boolean modal) {
+		FIBComponent fibComponent = FIBLibrary.instance().retrieveFIBComponent(fibResourcePath);
+		if (fibComponent == null) {
+			logger.warning("ResourceNotFoundException: " + fibResourcePath);
+			return null;
+		}
+		return instanciateComponent(fibComponent, data, frame, modal);
+	}
+
 	private FIBDialog(JFrame frame, boolean modal, FIBComponent fibComponent)
 	{
 		super(frame,fibComponent.getParameter("title"),modal);
@@ -50,9 +70,20 @@ public class FIBDialog extends JDialog {
 		pack();
 	}
 	
-	public FIBController getController()
+	protected FIBDialog(FIBComponent fibComponent, T data, JFrame frame, boolean modal)
+	{
+		this(frame,modal,fibComponent);
+		getController().setDataObject(data);
+	}
+	
+	public FIBController<T> getController()
 	{
 		return view.getController();
+	}
+	
+	public T getData()
+	{
+		return getController().getDataObject();
 	}
 	
 	public Status getStatus()
@@ -61,7 +92,7 @@ public class FIBDialog extends JDialog {
 	}
 
 
-    private void showDialog()
+    protected void showDialog()
     {
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
@@ -95,28 +126,8 @@ public class FIBDialog extends JDialog {
     	}
     }
 
-	public static FIBDialog instanciateComponent(File componentFile, Object data, JFrame frame, boolean modal)
-	{
-		FIBComponent fibComponent = FIBLibrary.instance().retrieveFIBComponent(componentFile);
-		if (fibComponent == null) {
-			logger.warning("FileNotFoundException: "+componentFile.getAbsolutePath());
-			return null;
-		}
-		return instanciateComponent(fibComponent, data, frame, modal);
-	}
-
-	public static FIBDialog instanciateComponent(String fibResourcePath, Object data, JFrame frame, boolean modal) {
-		FIBComponent fibComponent = FIBLibrary.instance().retrieveFIBComponent(fibResourcePath);
-		if (fibComponent == null) {
-			logger.warning("ResourceNotFoundException: " + fibResourcePath);
-			return null;
-		}
-		return instanciateComponent(fibComponent, data, frame, modal);
-	}
-
-	private static FIBDialog instanciateComponent(FIBComponent fibComponent, Object data, JFrame frame, boolean modal) {
-		FIBDialog dialog = new FIBDialog(frame, modal, fibComponent);
-		dialog.getController().setDataObject(data);
+	private static <T> FIBDialog<T> instanciateComponent(FIBComponent fibComponent, T data, JFrame frame, boolean modal) {
+		FIBDialog<T> dialog = new FIBDialog<T>(fibComponent,data,frame,modal);
 		dialog.showDialog();	
 		return dialog;
 	}

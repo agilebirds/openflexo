@@ -17,33 +17,12 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fib;
+package org.openflexo.foundation.utils;
 
-import java.io.File;
+import org.openflexo.foundation.FlexoException;
 
-import org.openflexo.ApplicationData;
-import org.openflexo.components.WelcomeDialog;
-import org.openflexo.fib.editor.FIBAbstractEditor;
+public class ProjectExitingCancelledException extends FlexoException {
 
-
-public class WelcomePanelEDITOR {
-
-
-	public static void main(String[] args)
-	{
-		//ModuleLoader.initializeModules(UserType.MAINTAINER, false);
-		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			@Override
-			public Object[] getData()
-			{
-				ApplicationData applicationData = new ApplicationData();
-				return FIBAbstractEditor.makeArray(applicationData);
-			}
-			@Override
-			public File getFIBFile() {
-				return WelcomeDialog.FIB_FILE;
-			}
-		};
-		editor.launch();
-	}
+	
+	
 }

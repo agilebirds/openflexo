@@ -19,93 +19,131 @@
  */
 package org.openflexo.components;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.components.MultiModuleModeWelcomePanel.ModuleSelectionListener;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.Module;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.toolbox.ToolBox;
-import org.openflexo.view.FlexoDialog;
 import org.openflexo.view.FlexoFrame;
 
-/**
- * 'About' window
- *
- * @author sguerin
- */
-public class AboutDialog extends FlexoDialog implements ModuleSelectionListener
-{
+@SuppressWarnings("serial")
+public class AboutDialog extends JDialog {
 
-	protected WelcomePanel welcomePanel;
+	private JLabel splash;
 
-	public AboutDialog()
-	{
-		super(FlexoFrame.getActiveFrame(), FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, true);
-		setUndecorated(true);
-		getContentPane().setBackground(FlexoCst.ABOUT_DIALOG_BACKGROUND_COLOR);
-		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(welcomePanel = ModuleLoader.getWelcomePanel(),BorderLayout.CENTER);
-		if (welcomePanel instanceof MultiModuleModeWelcomePanel) {
-			((MultiModuleModeWelcomePanel)welcomePanel).addToModuleSelectionListener(this);
-		}
-		if (getContentPane() instanceof JComponent) {
-			((JComponent) getContentPane()).setBorder(BorderFactory.createLineBorder(FlexoCst.UNDECORATED_DIALOG_BORDER_COLOR));
-		}
-		addButtons();
+	public AboutDialog() {
+		super(FlexoFrame.getActiveFrame());
+		//setUndecorated(true);
+		Dimension imageDim = new Dimension(IconLibrary.SPLASH_IMAGE.getIconWidth(), IconLibrary.SPLASH_IMAGE.getIconHeight());
+
+		//cree un label avec notre image
+		splash = new JLabel(IconLibrary.SPLASH_IMAGE);
+		splash.setBorder(BorderFactory.createLineBorder(FlexoCst.UNDECORATED_DIALOG_BORDER_COLOR));
+
+		//ajoute le label au panel
+		getContentPane().setLayout(null);
+		JLabel flexoLabel = new JLabel(IconLibrary.OPENFLEXO_TEXT_ICON, SwingConstants.RIGHT);
+		flexoLabel.setForeground(FlexoCst.WELCOME_FLEXO_COLOR);
+		flexoLabel.setBackground(Color.RED);
+		flexoLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
+		getContentPane().add(flexoLabel);
+		flexoLabel.setBounds(319,142,231,59);
+
+		JLabel businessLabel = new JLabel(ModuleLoader.getUserType().getBusinessName2(), SwingConstants.RIGHT);
+		businessLabel.setForeground(FlexoCst.WELCOME_FLEXO_COLOR);
+		businessLabel.setFont(new Font("SansSerif", Font.ITALIC, 18));
+		getContentPane().add(businessLabel);
+		businessLabel.setBounds(260,195,280,15);
+
+		JLabel versionLabel = new JLabel("Version " + FlexoCst.BUSINESS_APPLICATION_VERSION+ " (build " + FlexoCst.BUILD_ID+")", SwingConstants.RIGHT);
+		versionLabel.setForeground(Color.DARK_GRAY);
+		versionLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		getContentPane().add(versionLabel);
+		versionLabel.setBounds(260,215,280,15);
+
+		JLabel urlLabel = new JLabel("<html><u>www.openflexo.com</u></html>", SwingConstants.RIGHT);
+		urlLabel.addMouseListener(new MouseAdapter() {
+
+			/**
+			 * Overrides mouseEntered
+			 * @see java.awt.event.MouseAdapter#mouseEntered(java.awt.event.MouseEvent)
+			 */
+			@Override
+			public void mouseEntered(MouseEvent e)
+			{
+				setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			}
+
+			/**
+			 * Overrides mouseEntered
+			 * @see java.awt.event.MouseAdapter#mouseEntered(java.awt.event.MouseEvent)
+			 */
+			@Override
+			public void mouseExited(MouseEvent e)
+			{
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			}
+
+			/**
+			 * Overrides mouseClicked
+			 *
+			 * @see java.awt.event.MouseAdapter#mouseClicked(java.awt.event.MouseEvent)
+			 */
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				ToolBox.openURL("http://www.openflexo.com");
+			}
+		});
+		urlLabel.setForeground(new Color(180,150,200));
+		urlLabel.setFont(new Font("SansSerif", Font.PLAIN, 10));
+		getContentPane().add(urlLabel);
+		urlLabel.setBounds(290,263,280,12);
+
+		JLabel copyrightLabel = new JLabel("(c) Copyright Agile Birds sprl, 2011, all rights reserved", SwingConstants.RIGHT);
+		copyrightLabel.setForeground(Color.DARK_GRAY);
+		copyrightLabel.setFont(new Font("SansSerif", Font.PLAIN, 9));
+		getContentPane().add(copyrightLabel);
+		copyrightLabel.setBounds(290,277,280,12);
+
+		getContentPane().add(splash);
+		splash.setBounds(0,0,imageDim.width,imageDim.height);
+
+		getContentPane().setPreferredSize(imageDim);
+
+		setResizable(false);
+		setTitle("About Openflexo...");
+		
 		pack();
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
-	}
 
-	protected void addButtons()
-	{
-		JButton closeButton;
-		closeButton = new JButton(FlexoLocalization.localizedForKey("close"));
-		closeButton.addActionListener(new ActionListener() {
+		// center about dialog
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Dimension labelSize = splash.getPreferredSize();
+		setLocation(screenSize.width / 2 - labelSize.width / 2,
+				screenSize.height / 2 - labelSize.height / 2);
+
+		// make about dialog invisible when clicking on it
+		addMouseListener(new MouseAdapter() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void mousePressed(MouseEvent e) {
+				setVisible(false);
 				dispose();
 			}
 		});
-		welcomePanel.add(closeButton);
-		if (welcomePanel instanceof MultiModuleModeWelcomePanel) {
-			closeButton.setBounds(140, 360+((MultiModuleModeWelcomePanel)welcomePanel).getScrollPaneHeight(), 140, 30);
-		} else if (welcomePanel instanceof SingleModuleModeWelcomePanel) {
-			closeButton.setBounds(140, 440, 140, 30);
-		}
-		JButton licenceButton;
-		licenceButton = new JButton(FlexoLocalization.localizedForKey("licence"));
-		licenceButton.setToolTipText(FlexoLocalization.localizedForKey("open_licence_agreement"));
-		licenceButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				ToolBox.openFile(ModuleLoader.getUserType().getLicenceFile());
-				dispose();
-			}
-		});
-		welcomePanel.add(licenceButton);
-		if (welcomePanel instanceof MultiModuleModeWelcomePanel) {
-			licenceButton.setBounds(300, 360+((MultiModuleModeWelcomePanel)welcomePanel).getScrollPaneHeight(), 140, 30);
-		} else if (welcomePanel instanceof SingleModuleModeWelcomePanel) {
-			licenceButton.setBounds(300, 440, 140, 30);
-		}
-		getRootPane().setDefaultButton(closeButton);
-	}
 
-	@Override
-	public void moduleSelected(Module selectedModule)
-	{
+		//display about dialog
+		setVisible(true);
 	}
 }

@@ -48,14 +48,10 @@ import org.openflexo.GeneralPreferences;
 import org.openflexo.action.SubmitDocumentationAction;
 import org.openflexo.ch.FCH;
 import org.openflexo.components.AskParametersDialog;
-import org.openflexo.components.MultiModuleModeWelcomePanel;
 import org.openflexo.components.NewProjectComponent;
 import org.openflexo.components.OpenProjectComponent;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.components.SaveDialog;
-import org.openflexo.components.SingleModuleModeWelcomePanel;
-import org.openflexo.components.WelcomeDialog;
-import org.openflexo.components.WelcomePanel;
 import org.openflexo.drm.DocResourceManager;
 import org.openflexo.fib.AskLocalResourceCenterDirectory;
 import org.openflexo.fib.controller.FIBDialog;
@@ -72,6 +68,7 @@ import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.rm.ProjectExternalRepository;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
+import org.openflexo.foundation.utils.ProjectExitingCancelledException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.xml.FlexoXMLMappings;
@@ -92,7 +89,6 @@ import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.rm.ResourceManagerWindow;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FlexoVersion;
-import org.openflexo.utils.FlexoFileChooserUtils;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.ModuleBar;
 import org.openflexo.view.controller.FlexoController;
@@ -200,12 +196,12 @@ public final class ModuleLoader implements IModuleLoader {
 	 *
 	 * @param userType
 	 */
-	public static void initializeModules(UserType userType, boolean selectAndOpenProject) {
+	public static void initializeModules(UserType userType/*, boolean selectAndOpenProject*/) {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Initializing ModuleLoader...");
 		}
 		multiModuleMode = true;
-		initialize(Module.allKnownModules(), userType, selectAndOpenProject);
+		initialize(Module.allKnownModules(), userType/*, selectAndOpenProject*/);
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Initializing ModuleLoader DONE.");
 		}
@@ -225,7 +221,7 @@ public final class ModuleLoader implements IModuleLoader {
 		singleModuleModeModule = module;
 		Vector<Module> modules = new Vector<Module>();
 		modules.add(module);
-		initialize(modules, userType, true);
+		initialize(modules, userType/*, true*/);
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Initializing ModuleLoader DONE.");
 		}
@@ -249,7 +245,7 @@ public final class ModuleLoader implements IModuleLoader {
 	 * @param userType
 	 * @param selectAndOpenProject
 	 */
-	private static void initialize(Vector<Module> someModules, UserType userType, boolean selectAndOpenProject) {
+	private static void initialize(Vector<Module> someModules, UserType userType/*, boolean selectAndOpenProject*/) {
 		_instance = new ModuleLoader();
 		_userType = userType;
 		for (Enumeration<Module> e = someModules.elements(); e.hasMoreElements();) {
@@ -278,7 +274,7 @@ public final class ModuleLoader implements IModuleLoader {
 		}
 		FlexoHelp.configure(GeneralPreferences.getLanguage() != null ? GeneralPreferences.getLanguage().getIdentifier() : "ENGLISH",
 				userType.getIdentifier());
-		if (selectAndOpenProject) {
+		/*if (selectAndOpenProject) {
 			Module firstLaunchedModule = null;
 			while (firstLaunchedModule == null || firstLaunchedModule.requireProject() && currentProject == null) {
 				firstLaunchedModule = chooseProjectAndStartingModule();
@@ -299,7 +295,7 @@ public final class ModuleLoader implements IModuleLoader {
 					switchToModule(firstLaunchedModule);
 				}
 			}
-		}
+		}*/
 	}
 
 	private static Module getPreferredModule() {
@@ -339,7 +335,7 @@ public final class ModuleLoader implements IModuleLoader {
 		return _workspaceDirectory;
 	}
 
-	private static Module chooseProjectAndStartingModule() {
+	/*private static Module chooseProjectAndStartingModule() {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Initializing ModuleLoader... DONE.");
 		}
@@ -453,7 +449,7 @@ public final class ModuleLoader implements IModuleLoader {
 					}
 				}
 				return firstLaunchedModule;
-	}
+	}*/
 
 	public static boolean isMultiModuleMode() {
 		return multiModuleMode;
@@ -701,19 +697,12 @@ public final class ModuleLoader implements IModuleLoader {
 		return (ExternalOEModule) getModuleInstance(Module.VE_MODULE);
 	}
 
-	public static WelcomePanel getWelcomePanel() {
-		if (multiModuleMode) {
-			return new MultiModuleModeWelcomePanel();
-		} else {
-			return new SingleModuleModeWelcomePanel();
-		}
-	}
-
 	private synchronized static void setSwitchingTo(Module module) {
 		switchingToModule = module;
 	}
 
 	public static void switchToModule(Module module) {
+		logger.info("switchToModule: "+module);
 		if (switchingToModule != null) {
 			return;
 		}
@@ -751,8 +740,9 @@ public final class ModuleLoader implements IModuleLoader {
 
 	/**
 	 * Called for quitting with confirmation.
+	 * @throws ProjectExitingCancelledException 
 	 */
-	public static void quit() {
+	public static void quit() throws ProjectExitingCancelledException {
 		quit(true);
 	}
 
@@ -760,8 +750,9 @@ public final class ModuleLoader implements IModuleLoader {
 	 * Called for quitting. Ask if saving must be performed, and exit on request.
 	 *
 	 * @param askConfirmation
+	 * @throws ProjectExitingCancelledException 
 	 */
-	public static void quit(boolean askConfirmation) {
+	public static void quit(boolean askConfirmation) throws ProjectExitingCancelledException {
 		if (askConfirmation) {
 			proceedQuit();
 		} else {
@@ -769,7 +760,7 @@ public final class ModuleLoader implements IModuleLoader {
 		}
 	}
 
-	private static void proceedQuit() {
+	private static void proceedQuit() throws ProjectExitingCancelledException {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Exiting FLEXO Application Suite...");
 		}
@@ -801,6 +792,7 @@ public final class ModuleLoader implements IModuleLoader {
 				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Exiting FLEXO Application Suite... CANCELLED");
 				}
+				throw new ProjectExitingCancelledException();
 			}
 		} else {
 			if (FlexoController.confirm(FlexoLocalization.localizedForKey("really_quit"))) {
@@ -843,7 +835,7 @@ public final class ModuleLoader implements IModuleLoader {
 
 	private static InteractiveFlexoResourceUpdateHandler _flexoResourceUpdateHandler;
 
-	private static InteractiveFlexoEditor newProject(File projectDirectory, Module moduleToReload) {
+	public static InteractiveFlexoEditor newProject(File projectDirectory) {
 		if (!ProgressWindow.hasInstance()) {
 			ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("building_new_project"), 10);
 		} else {
@@ -860,26 +852,27 @@ public final class ModuleLoader implements IModuleLoader {
 		currentProject = returned.getProject();
 		conditionalStartOfAutoSaveThread(returned);
 		activeModule = null;
-		switchToModule(moduleToReload);
-		ProgressWindow.hideProgressWindow();
 		return returned;
 	}
 
-	public static InteractiveFlexoEditor newProject() {
-		Module moduleToReload = null;
+	public static InteractiveFlexoEditor newProject() throws ProjectLoadingCancelledException {
+
+		Module module = FlexoModule.getActiveModule().getModule();
 		if (currentProject != null) {
-			moduleToReload = FlexoModule.getActiveModule().getModule();
 			if (!saveProject()) {
 				return null;
 			}
 		}
-		File projectDirectory = NewProjectComponent.getProjectDirectory();
+		File projectDirectory;
+		projectDirectory = NewProjectComponent.getProjectDirectory();
 		if (projectDirectory != null) {
 			closeCurrentProject();
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Choosen " + projectDirectory.getAbsolutePath());
 			}
-			return newProject(projectDirectory, moduleToReload);
+			newProject(projectDirectory);
+			switchToModule(module);
+			ProgressWindow.hideProgressWindow();
 		}
 		return null;
 	}
@@ -1754,7 +1747,10 @@ public final class ModuleLoader implements IModuleLoader {
 					case CANCELED:
 						break;
 					case QUIT:
-						ModuleLoader.quit(true);
+						try {
+							ModuleLoader.quit(true);
+						} catch (ProjectExitingCancelledException e) {
+						}
 						break;
 					default:
 						break;

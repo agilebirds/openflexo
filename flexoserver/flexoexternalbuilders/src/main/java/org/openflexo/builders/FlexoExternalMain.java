@@ -103,7 +103,7 @@ public abstract class FlexoExternalMain {
 			logger.info("Launching "+getName()+"...");
 		}
 		GeneralPreferences.setFavoriteModuleName(Module.WKF_MODULE.getName());
-		ModuleLoader.initializeModules(UserType.getUserTypeNamed("DEVELOPPER"), false);
+		ModuleLoader.initializeModules(UserType.getUserTypeNamed("DEVELOPPER")/*, false*/);
 	}
 
 	protected abstract void run() throws FlexoRunException;

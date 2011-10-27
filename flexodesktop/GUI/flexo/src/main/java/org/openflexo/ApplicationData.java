@@ -20,47 +20,15 @@
 package org.openflexo;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.lang.management.ManagementFactory;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.Authenticator;
-import java.net.PasswordAuthentication;
-import java.net.Proxy;
-import java.net.ProxySelector;
-import java.net.SocketAddress;
-import java.net.URI;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
-import org.openflexo.application.FlexoApplication;
-import org.openflexo.components.AskParametersDialog;
-import org.openflexo.components.SplashWindow;
-import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.icon.IconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.logging.FlexoLoggingFormatter;
-import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.UserType;
-import org.openflexo.properties.FlexoProperties;
-import org.openflexo.ssl.DenaliSecurityProvider;
-import org.openflexo.toolbox.ResourceLocator;
-import org.openflexo.toolbox.ToolBox;
-import org.openflexo.utils.CancelException;
-import org.openflexo.utils.TooManyFailedAttemptException;
-import org.openflexo.view.FlexoFrame;
 
 /**
  * Class storing general data for application
@@ -74,7 +42,7 @@ public class ApplicationData {
 	public ApplicationData() {
 		if (ModuleLoader.instance() == null) {
 			logger.warning("ModuleLoader not initialized, initializing it with default values");
-			ModuleLoader.initializeModules(UserType.MAINTAINER, false);
+			ModuleLoader.initializeModules(UserType.MAINTAINER/*, false*/);
 		}
 	}
 	
@@ -107,7 +75,14 @@ public class ApplicationData {
 		return IconLibrary.OPENFLEXO_NOTEXT_16;
 	}
 
-	public Module moduleToOpen;
-	
-	public File projectFile;
+	public ImageIcon getOpenflexoIcon()
+	{
+		return IconLibrary.OPENFLEXO_NOTEXT_64;
+	}
+
+	public ImageIcon getOpenflexoTextIcon()
+	{
+		return IconLibrary.OPENFLEXO_TEXT_SMALL_ICON;
+	}
+
 }

@@ -42,6 +42,8 @@ import org.openflexo.foundation.imported.action.UploadPrjAction;
 import org.openflexo.foundation.param.CheckboxParameter;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.utils.ProjectExitingCancelledException;
+import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
@@ -185,7 +187,10 @@ public class FileMenu extends FlexoMenu
 
 	public void quit()
 	{
-		ModuleLoader.quit(true);
+		try {
+			ModuleLoader.quit(true);
+		} catch (ProjectExitingCancelledException e) {
+		}
 	}
 
 	// ==========================================================================
@@ -214,7 +219,10 @@ public class FileMenu extends FlexoMenu
 		@Override
 		public void actionPerformed(ActionEvent arg0)
 		{
-			ModuleLoader.newProject();
+			try {
+				ModuleLoader.newProject();
+			} catch (ProjectLoadingCancelledException e) {
+			}
 		}
 	}
 

@@ -34,7 +34,6 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.BasicInteractiveProjectLoadingHandler;
 import org.openflexo.view.controller.FullInteractiveProjectLoadingHandler;
 
@@ -49,9 +48,9 @@ public abstract class UserType extends FlexoObject
 
 	public static final String PRODUCT_NAME = "OPENFLEXO";
 
-	protected static final File CUSTOMER_LICENCE = new FileResource("License/Customer/License.pdf");
+	/*protected static final File CUSTOMER_LICENCE = new FileResource("License/Customer/License.pdf");
 	protected static final File ANALYST_LICENCE = new FileResource("License/Analyst/License.pdf");
-	protected static final File DEVELOPER_LICENCE = new FileResource("License/Developer/License.pdf");
+	protected static final File DEVELOPER_LICENCE = new FileResource("License/Developer/License.pdf");*/
 
 	private static final Logger logger = Logger.getLogger(Module.class.getPackage().getName());
 
@@ -182,10 +181,10 @@ public abstract class UserType extends FlexoObject
 			return "Enterprise edition";
 		}
 
-		@Override
+		/*@Override
 		public File getLicenceFile() {
 			return DEVELOPER_LICENCE;
-		}
+		}*/
 
 		@Override
 		public ImageIcon getIconImage() {
@@ -236,10 +235,10 @@ public abstract class UserType extends FlexoObject
 			return "Business+ edition";
 		}
 
-		@Override
+		/*@Override
 		public File getLicenceFile() {
 			return ANALYST_LICENCE;
-		}
+		}*/
 
 		@Override
 		public ImageIcon getIconImage() {
@@ -288,10 +287,10 @@ public abstract class UserType extends FlexoObject
 			return "Business edition";
 		}
 
-		@Override
+		/*@Override
 		public File getLicenceFile() {
 			return CUSTOMER_LICENCE;
-		}
+		}*/
 
 		@Override
 		public ImageIcon getIconImage() {
@@ -343,10 +342,10 @@ public abstract class UserType extends FlexoObject
 			return "Enterprise edition";
 		}
 
-		@Override
+		/*@Override
 		public File getLicenceFile() {
 			return DEVELOPER_LICENCE;
-		}
+		}*/
 
 		@Override
 		public ImageIcon getIconImage() {
@@ -365,7 +364,7 @@ public abstract class UserType extends FlexoObject
 
 	public abstract String getBusinessName2();
 
-	public abstract File getLicenceFile();
+	//public abstract File getLicenceFile();
 
 	public String getLocalizedName()
 	{

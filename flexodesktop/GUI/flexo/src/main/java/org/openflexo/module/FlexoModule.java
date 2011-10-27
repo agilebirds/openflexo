@@ -45,6 +45,7 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.SaveResourceExceptionList;
 import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
 import org.openflexo.foundation.utils.FlexoProgress;
+import org.openflexo.foundation.utils.ProjectExitingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.ModuleBar;
@@ -455,7 +456,10 @@ public abstract class FlexoModule implements DataFlexoObserver
         } else {
             _activeModule = null;
             if (quitIfNoModuleLeft) {
-                ModuleLoader.quit(false);
+                try {
+					ModuleLoader.quit(false);
+				} catch (ProjectExitingCancelledException e) {
+				}
             }
         }
 

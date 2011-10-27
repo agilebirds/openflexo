@@ -23,9 +23,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.components.AboutDialog;
+import org.openflexo.foundation.utils.ProjectExitingCancelledException;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.prefs.PreferencesController;
-
 
 import com.apple.eawt.ApplicationAdapter;
 import com.apple.eawt.ApplicationEvent;
@@ -45,7 +45,7 @@ public class FlexoApplicationAdapter extends ApplicationAdapter
         if (logger.isLoggable(Level.FINE))
             logger.fine("handleAbout");
         event.setHandled(true);
-        new AboutDialog().setVisible(true);
+        new AboutDialog();
     }
 
     public void handlePreferences(ApplicationEvent event)
@@ -59,7 +59,10 @@ public class FlexoApplicationAdapter extends ApplicationAdapter
     {
         if (logger.isLoggable(Level.FINE))
             logger.fine("handleQuit");
-        ModuleLoader.quit();
+        try {
+			ModuleLoader.quit();
+		} catch (ProjectExitingCancelledException e) {
+		}
     }
 
 	public void handleOpenFile(ApplicationEvent arg0) {
