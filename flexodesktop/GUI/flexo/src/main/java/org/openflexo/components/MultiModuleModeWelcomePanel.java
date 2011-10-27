@@ -78,7 +78,7 @@ public class MultiModuleModeWelcomePanel extends WelcomePanel {
 			Module module = (Module) value;
 			super.getListCellRendererComponent(list, value, index, isSelected, chf);
 			setText(module.getLocalizedName());
-			setIcon(module.getActiveIcon());
+			setIcon(module.getSmallIcon());
 			setBorder(BorderFactory.createEmptyBorder(1, 4, 1, 2));
 			if (isSelected) {
 				firstLaunchedModule = module;

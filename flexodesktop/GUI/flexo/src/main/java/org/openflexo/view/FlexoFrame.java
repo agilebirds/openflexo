@@ -214,7 +214,7 @@ public abstract class FlexoFrame extends JFrame implements GraphicalFlexoObserve
 			controller.getProject().addObserver(this);
 		}
 		if (ToolBox.getPLATFORM() != ToolBox.WINDOWS) {
-			setIconImage(controller.getModule().getModule().getBigActiveIcon().getImage());
+			setIconImage(controller.getModule().getModule().getMediumIcon().getImage());
 		} else {
 			setIconImage(IconLibrary.FLEXO_ICON.getImage());
 		}

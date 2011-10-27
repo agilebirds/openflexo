@@ -48,9 +48,34 @@ public class FIBList extends FIBMultipleValues {
 		textNonSelectionColor,
 		backgroundSelectionColor,
 		backgroundSecondarySelectionColor,
-		backgroundNonSelectionColor
+		backgroundNonSelectionColor,
+		layoutOrientation
 	}
 
+	public static enum LayoutOrientation
+	{
+		vertical {
+			@Override
+			public int getSwingValue() {
+				return 0;
+			}
+		},
+		horizontal {
+			@Override
+			public int getSwingValue() {
+				return 1;
+			}
+		},
+		jesaispas {
+			@Override
+			public int getSwingValue() {
+				return 2;
+			}
+		};
+		
+		public abstract int getSwingValue();
+	}
+	
 	private BindingDefinition SELECTED;
 	
 	public BindingDefinition getSelectedBindingDefinition()
@@ -77,6 +102,8 @@ public class FIBList extends FIBMultipleValues {
 	 private Color backgroundSecondarySelectionColor = SECONDARY_SELECTION_COLOR;
 	 private Color backgroundNonSelectionColor = UIManager.getColor("List.background");
 
+	 private LayoutOrientation layoutOrientation = LayoutOrientation.vertical;
+	 
 	public FIBList()
     {
 	}
@@ -275,6 +302,19 @@ public class FIBList extends FIBMultipleValues {
 				Parameters.backgroundNonSelectionColor, backgroundNonSelectionColor);
 		if (notification != null) {
 			this.backgroundNonSelectionColor = backgroundNonSelectionColor;
+			hasChanged(notification);
+		}
+	}
+
+	public LayoutOrientation getLayoutOrientation() {
+		return layoutOrientation;
+	}
+
+	public void setLayoutOrientation(LayoutOrientation layoutOrientation) {
+		FIBAttributeNotification<LayoutOrientation> notification = requireChange(
+				Parameters.layoutOrientation, layoutOrientation);
+		if (notification != null) {
+			this.layoutOrientation = layoutOrientation;
 			hasChanged(notification);
 		}
 	}

@@ -1,5 +1,5 @@
 #French
-#Fri Oct 21 16:31:30 CEST 2011
+#Wed Oct 26 21:45:52 CEST 2011
 =
 \ =\ 
 \ into\ =\ dans 
@@ -4541,7 +4541,7 @@ source_attribute=Attribut source
 source_code=Code source
 source_directory=R\u00E9pertoire du code source
 source_entity=Entit\u00E9 source
-source_generator=source_generator
+source_generator=G\u00E9n\u00E9rateur de code source
 source_generator_description=source_generator_description
 source_repository=Source Repository
 south=Sud

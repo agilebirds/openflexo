@@ -39,12 +39,10 @@ public class SEIconLibrary extends IconLibrary {
 	private static final Logger logger = Logger.getLogger(SEIconLibrary.class.getPackage().getName());
 	
 	// Module icons
-	public static final ImageIcon IE_ACTIVE_ICON = new ImageIconResource("Icons/SE/IE_A_Small.gif");
-	public static final ImageIcon IE_UNACTIVE_ICON = new ImageIconResource("Icons/SE/IE_NA_Small.gif");
-	public static final ImageIcon IE_SELECTED_ICON = new ImageIconResource("Icons/SE/IE_S_Small.gif");
-	public static final ImageIcon IE_BIG_ACTIVE_ICON = new ImageIconResource("Icons/SE/IE_A.gif");
-	public static final ImageIcon IE_BIG_UNACTIVE_ICON = new ImageIconResource("Icons/SE/IE_NA.gif");
-	public static final ImageIcon IE_BIG_SELECTED_ICON = new ImageIconResource("Icons/SE/IE_S.gif");
+	public static final ImageIcon SE_SMALL_ICON = new ImageIconResource("Icons/SE/IE_A_Small.gif");
+	public static final ImageIcon SE_MEDIUM_ICON = new ImageIconResource("Icons/SE/module-se.png");
+	public static final ImageIcon SE_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/SE/module-se-hover.png");
+	public static final ImageIcon SE_BIG_ICON = new ImageIconResource("Icons/SE/module-se-big.png");
 
 	// Perspective icons
 	public static final ImageIcon COMPONENT_PERSPECTIVE_ACTIVE_ICON = new ImageIconResource("Icons/SE/ComponentPerspective_A.gif");

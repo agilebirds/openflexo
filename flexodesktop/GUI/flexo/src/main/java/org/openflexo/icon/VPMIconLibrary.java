@@ -65,12 +65,10 @@ public class VPMIconLibrary extends IconLibrary {
 	private static final Logger logger = Logger.getLogger(VPMIconLibrary.class.getPackage().getName());
 
 	// Module icons
-	public static final ImageIcon VPM_ACTIVE_ICON = new ImageIconResource("Icons/VPM/CED_A_Small.gif");
-	public static final ImageIcon VPM_UNACTIVE_ICON = new ImageIconResource("Icons/VPM/CED_NA_Small.gif");
-	public static final ImageIcon VPM_SELECTED_ICON = new ImageIconResource("Icons/VPM/CED_S_Small.gif");
-	public static final ImageIcon VPM_BIG_ACTIVE_ICON = new ImageIconResource("Icons/VPM/CED_A.gif");
-	public static final ImageIcon VPM_BIG_UNACTIVE_ICON = new ImageIconResource("Icons/VPM/CED_NA.gif");
-	public static final ImageIcon VPM_BIG_SELECTED_ICON = new ImageIconResource("Icons/VPM/CED_S.gif");
+	public static final ImageIcon VPM_SMALL_ICON = new ImageIconResource("Icons/VPM/CED_A_Small.gif");
+	public static final ImageIcon VPM_MEDIUM_ICON = new ImageIconResource("Icons/VPM/module-vpm.png");
+	public static final ImageIcon VPM_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/VPM/module-vpm-hover.png");
+	public static final ImageIcon VPM_BIG_ICON = new ImageIconResource("Icons/VPM/module-vpm-big.png");
 
 	// Perspective icons
 	public static final ImageIcon VPM_VPE_ACTIVE_ICON = new ImageIconResource("Icons/VPM/CalcPerspective_A.gif");
