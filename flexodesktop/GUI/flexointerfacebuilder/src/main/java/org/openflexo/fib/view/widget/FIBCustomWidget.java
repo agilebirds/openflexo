@@ -186,7 +186,8 @@ implements ApplyCancelListener, BindingEvaluationContext
 		
 		//if (notEquals(getValue(), customComponent.getEditedObject())) {
 
-			//logger.info("updateWidgetFromModel() with "+getValue());
+		//logger.info("updateWidgetFromModel() with "+getValue()+" for "+customComponent);
+		
 			if (customComponent != null) {
 
 				try {

@@ -145,8 +145,8 @@ implements FIBCustomComponent<TextStyle,FIBTextStyleSelector>
 
         public void update()
         {
-           	controller.setDataObject(getEditedObject());
-                   }
+           	controller.setDataObject(getEditedObject(),true);
+        }
         
         @Override
 		public Dimension getDefaultSize()
