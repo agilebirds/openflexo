@@ -69,6 +69,18 @@ public class OEController extends FlexoController implements SelectionManagingCo
     public final ShemaPerspective SHEMA_PERSPECTIVE;
     public final OntologyPerspective ONTOLOGY_PERSPECTIVE;
 
+	@Override
+	public boolean useNewInspectorScheme()
+	{
+		return true;
+	}
+	
+	@Override
+	public boolean useOldInspectorScheme()
+	{
+		return false;
+	}
+		
 	// ================================================
 	// ================ Constructor ===================
 	// ================================================
@@ -132,7 +144,7 @@ public class OEController extends FlexoController implements SelectionManagingCo
 		if (getSharedInspectorController() != null) getOESelectionManager().addObserver(getSharedInspectorController());
 		if (getDocInspectorController() != null) getOESelectionManager().addObserver(getDocInspectorController());
 
-		if (USE_NEW_INSPECTOR_SCHEME) {
+		if (useNewInspectorScheme()) {
 			loadInspectorGroup("Ontology");
 		}
 

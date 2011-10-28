@@ -142,9 +142,19 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 
 	static final Logger logger = Logger.getLogger(FlexoController.class.getPackage().getName());
 
-	public static boolean USE_NEW_INSPECTOR_SCHEME = true;
+	public static boolean USE_NEW_INSPECTOR_SCHEME = false;
 	public static boolean USE_OLD_INSPECTOR_SCHEME = true;
 
+	public boolean useNewInspectorScheme()
+	{
+		return USE_NEW_INSPECTOR_SCHEME;
+	}
+	
+	public boolean useOldInspectorScheme()
+	{
+		return USE_OLD_INSPECTOR_SCHEME;
+	}
+	
 	// ======================================================
 	// ================== Static variables ==================
 	// ======================================================
@@ -290,7 +300,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	 */
 	public void initInspectors()
 	{
-		if (USE_OLD_INSPECTOR_SCHEME) {
+		if (useOldInspectorScheme()) {
 			if (inspectorController == null) {
 				inspectorController = new FlexoSharedInspectorController(this);
 			}
@@ -299,14 +309,14 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 			 */
 			getSharedInspectorController().addInspectorExceptionHandler(this);
 			loadAllModuleInspectors();
-			_docInspectorController = new FlexoDocInspectorController(this);
 		}
-		if (USE_NEW_INSPECTOR_SCHEME) {
+		if (useNewInspectorScheme()) {
 			loadInspectorGroup(getModule().getShortName().toUpperCase());
 			if (this instanceof SelectionManagingController) {
 				((SelectionManagingController) this).getSelectionManager().addObserver(getMainInspectorController());
 			}
 		}
+		_docInspectorController = new FlexoDocInspectorController(this);
 	}
 
 	protected MainInspectorController getMainInspectorController() {
@@ -545,7 +555,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 
 	public void showInspector()
 	{
-		if (USE_OLD_INSPECTOR_SCHEME) {
+		if (useOldInspectorScheme()) {
 			/*
 			 * if (!getInspectorWindow().isActive()) { int state = getInspectorWindow().getExtendedState(); state &= ~Frame.ICONIFIED;
 			 * getInspectorWindow().setExtendedState(state); }
@@ -554,7 +564,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 			getInspectorWindow().setVisible(true);
 		}
 
-		if (USE_NEW_INSPECTOR_SCHEME) {
+		if (useNewInspectorScheme()) {
 			getMainInspectorController().setVisible(true);
 		}
 
