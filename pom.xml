@@ -62,6 +62,25 @@
 						<fork>false</fork>
 						<maxmem>1024</maxmem>
 						<compilerId>jdt</compilerId>
+						<pluginExecution>
+							<pluginExecutionFilter>
+								<groupId>org.apache.maven.plugins</groupId>
+								<artifactId>maven-compiler-plugin</artifactId>
+								<versionRange>[2.0,)</versionRange>
+								<goals>
+									<goal>compile</goal>
+									<goal>testCompile</goal>
+								</goals>
+								<parameters>
+									<compilerId>jdt</compilerId>
+								</parameters>
+							</pluginExecutionFilter>
+							<action>
+								<configurator>
+									<id>org.eclipse.m2e.jdt.javaConfigurator</id>
+								</configurator>
+							</action>
+						</pluginExecution>
 					</configuration>
 					<dependencies>
 						<dependency>
