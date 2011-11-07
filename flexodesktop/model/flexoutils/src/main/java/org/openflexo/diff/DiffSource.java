@@ -23,7 +23,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.StringTokenizer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import org.openflexo.toolbox.FileUtils;
@@ -40,36 +41,39 @@ public class DiffSource {
 	private String text;
 
 	private int maxCols = 0;
-	
+
 	private DelimitingMethod _delimitingMethod = DelimitingMethod.LINES;
 
 	public class MergeToken
 	{
-		protected MergeToken(String token,int startIndex,int endIndex)
+		private final int beginDelimStartIndex;
+		private final int beginDelimEndIndex;
+		private final int endDelimStartIndex;
+		private final int endDelimEndIndex;
+
+		protected MergeToken(int beginDelimStartIndex, int beginDelimEndIndex, int endDelimStartIndex, int endDelimEndIndex)
 		{
-			if (token.equals("\n")) {
-				this.token = "";
-				beginDelims = "";
-				endDelims = token;
-			}
-			else {
-				this.token = token;
-				beginDelims = "";
-				endDelims = "";
-			}
-			this.startIndex = startIndex;
-			this.endIndex = endIndex;
+			this.beginDelimStartIndex = beginDelimStartIndex;
+			this.beginDelimEndIndex = beginDelimEndIndex;
+			this.endDelimStartIndex = endDelimStartIndex;
+			this.endDelimEndIndex = endDelimEndIndex;
 		}
-		
-		public String token;
-		public String beginDelims;
-		public String endDelims;
-		public int startIndex;
-		public int endIndex;
-		
+
+		public String getBeginDelim() {
+			return text.substring(beginDelimStartIndex, beginDelimEndIndex);
+		}
+
+		public String getEndDelim() {
+			return text.substring(endDelimStartIndex, endDelimEndIndex);
+		}
+
+		public String getToken() {
+			return text.substring(beginDelimEndIndex, endDelimStartIndex);
+		}
+
 		public String getFullString()
 		{
-			return beginDelims+token+endDelims;
+			return text.substring(beginDelimStartIndex, endDelimEndIndex);
 		}
 
 		@Override
@@ -77,8 +81,16 @@ public class DiffSource {
 		{
 			return getFullString();
 		}
-}
-	
+
+		public int getTokenStartIndex() {
+			return beginDelimEndIndex;
+		}
+
+		public int getTokenEndIndex() {
+			return endDelimStartIndex;
+		}
+	}
+
 	public enum MergeSourceType {
 		File,
 		String
@@ -106,10 +118,11 @@ public class DiffSource {
 		sourceFile = null;
 		this.ignoredCols = ignoredCols;
 		_delimitingMethod = method;
-		if (aString==null)
+		if (aString==null) {
 			textTokens = slurpString("", ignoredCols, method);
-		else
+		} else {
 			textTokens = slurpString(aString, ignoredCols, method);
+		}
 	}
 
 	public DiffSource(File aFile) throws IOException
@@ -176,10 +189,10 @@ public class DiffSource {
 		return textLines;
 	}*/
 
-	/** 
+	/**
 	 * Same as above, but ignore first ignoredCols cols
 	 */
-	/*private String[] slurpFile(File file, int ignoredCols) throws IOException 
+	/*private String[] slurpFile(File file, int ignoredCols) throws IOException
 	{
 		BufferedReader rdr = new BufferedReader(new FileReader(file));
 		Vector<String> s = new Vector<String>();
@@ -197,7 +210,7 @@ public class DiffSource {
 		return textLines;
 	}*/
 
-	/** 
+	/**
 	 * Convert a String to an array of String (use \n)
 	 */
 	/*private String[] slurpString(String aString)
@@ -242,7 +255,7 @@ public class DiffSource {
 		}
 	}*/
 
-	/** 
+	/**
 	 * Delete first columns
 	 */
 	private static String deleteFirstColumns(String aString, int ignoredCols)
@@ -257,7 +270,9 @@ public class DiffSource {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			if (line == null) break;
+			if (line == null) {
+				break;
+			}
 			s.addElement(line);
 			//System.out.println("String: add line "+line);
 			sb.append(line+StringUtils.LINE_SEPARATOR);
@@ -265,16 +280,20 @@ public class DiffSource {
 		return sb.toString();
 	}
 
-	/** 
+	/**
 	 * Internally tokenize a File given some ignored cols and a delimiting method
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	private MergeToken[] slurpFile(File aFile, int ignoredCols, DelimitingMethod delimitingMethod) throws IOException
 	{
 		return slurpString(FileUtils.fileContents(aFile), ignoredCols, delimitingMethod);
 	}
-	
-	/** 
+
+	private static enum TokenLocation {
+		BEGIN, TOKEN, END;
+	}
+
+	/**
 	 * Internally tokenize a String given some ignored cols and a delimiting method
 	 */
 	private MergeToken[] slurpString(String aString, int ignoredCols, DelimitingMethod delimitingMethod)
@@ -282,75 +301,69 @@ public class DiffSource {
 		if (ignoredCols > 0) {
 			aString = deleteFirstColumns(aString, ignoredCols);
 		}
-		
+		aString = aString.replace("\r", "");
+		text = aString;
+
 		_significativeTokens = null;
 		maxCols = 0;
-		
+
 		String delims = delimitingMethod.getDelimiters();
-		String nonSignifiantDelimiters = delimitingMethod.getNonSignifiantDelimiters();
-		
-		StringTokenizer st = new StringTokenizer(aString,delims,true);
-		Vector<MergeToken> tokens = new Vector<MergeToken>();
-		MergeToken previousToken = null;
-		String remainingDelims = "";
+
+		List<MergeToken> tokens = new ArrayList<MergeToken>();
 		int index = 0;
-		boolean previousTokenWasANewLine = false;
-		while (st.hasMoreTokens()) {
-			String nextStringToken = st.nextToken();
-            if (nextStringToken.equals("\r"))
-                continue;
-			//System.out.println("Token "+((int)nextStringToken.charAt(0))+"'"+nextStringToken+"'");
-			int nextIndex = index + nextStringToken.length();
-			if (nonSignifiantDelimiters.indexOf(nextStringToken) > -1
-					&& !previousTokenWasANewLine) {
-				// This token is not signicative. Add it to previous token end delimiters
-				if (previousToken == null) {
-					// First token was not registered yet
-					remainingDelims += nextStringToken;
+		int beginDelimStartIndex = 0;
+		int beginDelimEndIndex = 0;
+		int endDelimStartIndex = 0;
+		int endDelimEndIndex = 0;
+		TokenLocation location = TokenLocation.BEGIN;
+		while (index < aString.length()) {
+			char c = aString.charAt(index);
+			boolean isDelim = delims.indexOf(c) > -1;
+			boolean isNewLine = c == '\n';
+			if (isNewLine) {
+				if (location == TokenLocation.BEGIN) {
+					beginDelimEndIndex = index;
 				}
-				else {
-					previousToken.endDelims += nextStringToken;
+				if (location == TokenLocation.BEGIN || location == TokenLocation.TOKEN) {
+					endDelimStartIndex = index;
 				}
+				location = TokenLocation.END;
 			}
-			else {
-				// This token is significative. Add it to the token list
-				MergeToken newToken = new MergeToken(nextStringToken,index,nextIndex);
-				if (remainingDelims.length() > 0) {
-					newToken.beginDelims = remainingDelims;
-					remainingDelims = "";
+			switch (location) {
+			case BEGIN:
+				if (!isDelim) {
+					beginDelimEndIndex = index;
+					location = TokenLocation.TOKEN;
 				}
-				tokens.addElement(newToken);
-				previousToken = newToken;
+				break;
+			case END:
+				if (!isDelim || isNewLine) {
+					endDelimEndIndex = isNewLine ? index + 1 : index;
+					if (beginDelimStartIndex < endDelimEndIndex) {
+						tokens.add(new MergeToken(beginDelimStartIndex, beginDelimEndIndex, endDelimStartIndex, endDelimEndIndex));
+					}
+					beginDelimStartIndex = endDelimEndIndex;
+					if (isNewLine) {
+						location = TokenLocation.BEGIN;
+					} else {
+						location = TokenLocation.TOKEN;
+					}
+				}
+				break;
+			case TOKEN:
+				if (isDelim) {
+					endDelimStartIndex = index;
+					location = TokenLocation.END;
+				}
+				break;
 			}
-			previousTokenWasANewLine = (nextStringToken.equals("\n"));
-			index = nextIndex;
+			index++;
 		}
-		// In case of there is no significative chars in String to parse
-		if (remainingDelims.length() > 0) {
-			MergeToken newToken = new MergeToken("",index,index+remainingDelims.length());
-			newToken.beginDelims = remainingDelims;
-			remainingDelims = "";
-			tokens.addElement(newToken);
-			previousToken = newToken;
-		}
-		// Separate all \n
-		//for 
-		
-		StringBuffer sb = new StringBuffer();
-		for (MergeToken t : tokens) {
-			String fullString = t.getFullString();
-			sb.append(fullString);
-			if (fullString.length() > maxCols) maxCols = fullString.length();
-			//System.out.println("Found token: "+t.token);
-		}
-		text = sb.toString();
-		
-		textTokens = new MergeToken[tokens.size()];
-		tokens.copyInto(textTokens);
-		return textTokens;
+
+		return textTokens = tokens.toArray(new MergeToken[tokens.size()]);
 	}
 
-	/** 
+	/**
 	 * Same as above, but ignore first ignoredCols cols
 	 */
 	/*private String[] slurpString(String aString, int ignoredCols)
@@ -375,12 +388,12 @@ public class DiffSource {
 		return textLines;
 	}*/
 
-	public int getIgnoredCols() 
+	public int getIgnoredCols()
 	{
 		return ignoredCols;
 	}
 
-	public File getSourceFile() 
+	public File getSourceFile()
 	{
 		return sourceFile;
 	}
@@ -399,32 +412,31 @@ public class DiffSource {
 
 	public String[] getSignificativeTokens()
 	{
-		if (_significativeTokens == null)
+		if (_significativeTokens == null) {
 			_significativeTokens = new String[textTokens.length];
+		}
 		for (int i=0; i<textTokens.length; i++) {
-			_significativeTokens[i] = textTokens[i].token;
+			_significativeTokens[i] = textTokens[i].getToken();
 		}
 		return _significativeTokens;
 	}
 
 	public MergeToken tokenAt(int index)
 	{
-		if (index < textTokens.length)
+		if (index < textTokens.length) {
 			return textTokens[index];
-		else return null;
+		} else {
+			return null;
+		}
 	}
 
 	public String tokenValueAt(int index)
 	{
-		if (index < textTokens.length)
-			return textTokens[index].token;
-		else return "???";
-	}
-
-	public void setTokenValueAt(int index, String line)
-	{
-		if (index < textTokens.length)
-			textTokens[index].token = line;
+		if (index < textTokens.length) {
+			return textTokens[index].getToken();
+		} else {
+			return "???";
+		}
 	}
 
 	public int tokensCount()
@@ -446,13 +458,14 @@ public class DiffSource {
 	{
 		StringBuffer returned = new StringBuffer();
 		for (int i=beginIndex; i<=endIndex; i++) {
-			if (i>=0 && i<textTokens.length)
+			if (i>=0 && i<textTokens.length) {
 				returned.append(textTokens[i].getFullString());
+			}
 		}
 		return returned.toString();
 	}
 
-	public DelimitingMethod getDelimitingMethod() 
+	public DelimitingMethod getDelimitingMethod()
 	{
 		return _delimitingMethod;
 	}
@@ -462,5 +475,11 @@ public class DiffSource {
 		return maxCols;
 	}
 
+	public static void main(String[] args) throws IOException, InterruptedException {
+		DiffSource source = new DiffSource("    private static final String YOURTEXT456 = \"YOURTEXT456\";\n", DelimitingMethod.JAVA);
+		synchronized (source) {
+			source.wait();
+		}
+	}
 
 }
