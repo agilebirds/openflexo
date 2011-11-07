@@ -19,34 +19,34 @@ public class WebServiceURLDialog {
 		public static final String WS_PASSWORD = "wsPassword";
 		public static final String REMEMBER = "remember";
 
-		@Getter(id = WS_INSTANCE)
+		@Getter(value = WS_INSTANCE)
 		public FlexoServerInstance getWSInstance();
 
-		@Setter(id = WS_INSTANCE)
+		@Setter(value = WS_INSTANCE)
 		public void setWSInstance(FlexoServerInstance instance);
 
-		@Getter(id = WS_URL)
+		@Getter(value = WS_URL)
 		public String getWSURL();
 
-		@Setter(id = WS_URL)
+		@Setter(value = WS_URL)
 		public void setWSURL(String wsurl);
 
-		@Getter(id = WS_LOGIN)
+		@Getter(value = WS_LOGIN)
 		public String getWSLogin();
 
-		@Setter(id = WS_LOGIN)
+		@Setter(value = WS_LOGIN)
 		public void setWSLogin(String login);
 
-		@Getter(id = WS_PASSWORD)
+		@Getter(value = WS_PASSWORD)
 		public String getWSPassword();
 
-		@Setter(id = WS_PASSWORD)
+		@Setter(value = WS_PASSWORD)
 		public void setWSPassword(String password);
 
-		@Getter(id = REMEMBER)
+		@Getter(value = REMEMBER)
 		public Boolean getRemember();
 
-		@Setter(id = REMEMBER)
+		@Setter(value = REMEMBER)
 		public void setRemember(Boolean remember);
 
 	}

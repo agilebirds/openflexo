@@ -17,7 +17,7 @@ public @interface Getter {
 
 	public static final String UNDEFINED = "";
 
-	public String id();
+	public String value();
 
 	public Cardinality cardinality() default Cardinality.SINGLE;
 

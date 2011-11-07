@@ -17,11 +17,11 @@ public interface FlexoServerAddressBook {
 
 	public static final String INSTANCES = "instances";
 
-	@Getter(id = INSTANCES, cardinality = Cardinality.LIST)
+	@Getter(value = INSTANCES, cardinality = Cardinality.LIST)
 	@XMLElement
 	public List<FlexoServerInstance> getInstances();
 
-	@Setter(id = INSTANCES)
+	@Setter(value = INSTANCES)
 	public void setInstances(List<FlexoServerInstance> instances);
 
 	@Adder(id = INSTANCES)

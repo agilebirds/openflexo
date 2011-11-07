@@ -27,5 +27,5 @@ public @interface NotEmptyChecker {
 	 * 
 	 * @return
 	 */
-	public String id();
+	public String value();
 }
