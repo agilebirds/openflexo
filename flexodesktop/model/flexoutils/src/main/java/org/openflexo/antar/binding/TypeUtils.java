@@ -473,11 +473,11 @@ public class TypeUtils {
 			return ((Class)aType).getSimpleName();
 		} else if (aType instanceof ParameterizedType) {
 			ParameterizedType t = (ParameterizedType)aType;
-			StringBuffer sb = new StringBuffer();
-			sb.append(simpleRepresentation(t.getRawType())+"<");
+			StringBuilder sb = new StringBuilder();
+			sb.append(simpleRepresentation(t.getRawType())).append("<");
 			boolean isFirst = true;
 			for (Type st : t.getActualTypeArguments()) {
-				sb.append((isFirst?"":",")+simpleRepresentation(st));
+				sb.append(isFirst ? "" : ",").append(simpleRepresentation(st));
 				isFirst = false;
 			}
 			sb.append(">");
@@ -495,11 +495,11 @@ public class TypeUtils {
 			return ((Class)aType).getName();
 		} else if (aType instanceof ParameterizedType) {
 			ParameterizedType t = (ParameterizedType)aType;
-			StringBuffer sb = new StringBuffer();
-			sb.append(fullQualifiedRepresentation(t.getRawType())+"<");
+			StringBuilder sb = new StringBuilder();
+			sb.append(fullQualifiedRepresentation(t.getRawType())).append("<");
 			boolean isFirst = true;
 			for (Type st : t.getActualTypeArguments()) {
-				sb.append((isFirst?"":",")+fullQualifiedRepresentation(st));
+				sb.append(isFirst ? "" : ",").append(fullQualifiedRepresentation(st));
 				isFirst = false;
 			}
 			sb.append(">");
