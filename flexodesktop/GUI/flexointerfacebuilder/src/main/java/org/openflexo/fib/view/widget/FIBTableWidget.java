@@ -57,7 +57,7 @@ import org.openflexo.fib.view.widget.table.FIBTableModel;
  *
  * @author sguerin
  */
-public class FIBTableWidget extends FIBWidgetView<FIBTable,JTable,List> 
+public class FIBTableWidget extends FIBWidgetView<FIBTable,JTable,List>
 implements TableModelListener, FIBSelectable
 {
 
@@ -84,16 +84,18 @@ implements TableModelListener, FIBSelectable
 
 	public FIBTableModel getTableModel()
 	{
-		if (_tableModel == null)
+		if (_tableModel == null) {
 			_tableModel = new FIBTableModel(_fibTable,this,getController());
+		}
 		return _tableModel;
 	}
 
 	public void setVisibleRowCount(int rows)
 	{
 		int height = 0;
-		for (int row = 0; row < rows; row++)
+		for (int row = 0; row < rows; row++) {
 			height += _table.getRowHeight(row);
+		}
 		height+=_table.getTableHeader().getPreferredSize().height;
 		int width = 0;
 		for (int i = 0; i < getTableModel().getColumnCount(); i++) {
@@ -125,11 +127,11 @@ implements TableModelListener, FIBSelectable
 		Object wasSelected = getSelectedObject();
 
 		boolean returned = false;
-		
+
 		if (notEquals(getValue(), getTableModel().getValues())) {
 
 			returned = true;
-			
+
 			//boolean debug = false;
 			//if (getWidget().getName() != null && getWidget().getName().equals("PatternRoleTable")) debug=true;
 
@@ -137,19 +139,22 @@ implements TableModelListener, FIBSelectable
 			//if (debug) System.out.println("wasSelected: "+wasSelected);
 
 			if (_table.isEditing()) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine(getComponent().getName() + " - Table is currently editing at col:" + _table.getEditingColumn() + " row:"
 							+ _table.getEditingRow());
+				}
 				_table.getCellEditor().cancelCellEditing();
 			} else {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine(getComponent().getName() + " - Table is NOT currently edited ");
+				}
 			}
 
-			if (logger.isLoggable(Level.FINE))
-				logger.fine(getComponent().getName() 
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine(getComponent().getName()
 						+ " updateWidgetFromModel() with " + getValue()
 						+ " dataObject="+getDataObject());
+			}
 
 
 			if (getValue() == null) {
@@ -172,11 +177,12 @@ implements TableModelListener, FIBSelectable
 			setSelectedObject(wasSelected);
 		}
 		else {
-			if (getComponent().getSelected().isValid() 
+			if (getComponent().getSelected().isValid()
 					&& getComponent().getSelected().getBindingValue(getController()) != null) {
 				Object newSelectedObject = getComponent().getSelected().getBindingValue(getController());
-				if (returned = notEquals(newSelectedObject, getSelectedObject()))
+				if (returned = notEquals(newSelectedObject, getSelectedObject())) {
 					setSelectedObject(newSelectedObject);
+				}
 			}
 
 			else if (getComponent().getAutoSelectFirstRow()) {
@@ -187,7 +193,7 @@ implements TableModelListener, FIBSelectable
 				}
 			}
 		}
-	
+
 		return returned;
 	}
 
@@ -210,7 +216,9 @@ implements TableModelListener, FIBSelectable
 
 	public void setSelectedObject(Object object/*, boolean notify*/)
 	{
-		if (getValue() == null) return;
+		if (getValue() == null) {
+			return;
+		}
 		if (object == getSelectedObject()) {
 			logger.fine("FIBTableWidget: ignore setSelectedObject");
 			return;
@@ -233,15 +241,15 @@ implements TableModelListener, FIBSelectable
 	{
 		getListSelectionModel().clearSelection();
 	}
-	
-    @Override
+
+	@Override
 	public synchronized List<TargetObject> getDependingObjects()
-    {
-     	List<TargetObject> returned = super.getDependingObjects();
-     	appendToDependingObjects(getWidget().getSelected(),returned);
-       	return returned;
-    }
-    
+	{
+		List<TargetObject> returned = super.getDependingObjects();
+		appendToDependingObjects(getWidget().getSelected(),returned);
+		return returned;
+	}
+
 
 	@Override
 	public synchronized boolean updateModelFromWidget()
@@ -260,11 +268,13 @@ implements TableModelListener, FIBSelectable
 	{
 		if (e instanceof FIBTableModel.ModelObjectHasChanged) {
 			FIBTableModel.ModelObjectHasChanged event = (FIBTableModel.ModelObjectHasChanged) e;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Model has changed from " + event.getOldValues() + " to " + event.getNewValues());
+			}
 		} else if (e instanceof FIBTableModel.RowMoveForObjectEvent) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Reselect object, and then the edited cell");
+			}
 			FIBTableModel.RowMoveForObjectEvent event = (FIBTableModel.RowMoveForObjectEvent) e;
 			getListSelectionModel().removeListSelectionListener(getTableModel());
 			getListSelectionModel().addSelectionInterval(event.getNewRow(), event.getNewRow());
@@ -275,7 +285,7 @@ implements TableModelListener, FIBSelectable
 	}
 
 	@Override
-	public JPanel getJComponent() 
+	public JPanel getJComponent()
 	{
 		return _dynamicComponent;
 	}
@@ -293,7 +303,7 @@ implements TableModelListener, FIBSelectable
 	}
 
 	@Override
-	public FIBTableDynamicModel getDynamicModel() 
+	public FIBTableDynamicModel getDynamicModel()
 	{
 		return (FIBTableDynamicModel)super.getDynamicModel();
 	}
@@ -304,7 +314,9 @@ implements TableModelListener, FIBSelectable
 		super.updateLanguage();
 		updateTable();
 		for (FIBTableAction a : getWidget().getActions()) {
-			if (getWidget().getLocalize()) getLocalized(a.getName());
+			if (getWidget().getLocalize()) {
+				getLocalized(a.getName());
+			}
 		}
 	}
 
@@ -332,12 +344,20 @@ implements TableModelListener, FIBSelectable
 
 	private void deleteTable()
 	{
-		if (_table != null) _table.removeFocusListener(this);
-		if (getListSelectionModel() != null) getListSelectionModel().removeListSelectionListener(getTableModel());
-		if (scrollPane != null && _fibTable.getCreateNewRowOnClick()) {
-			for (MouseListener l : scrollPane.getMouseListeners()) scrollPane.removeMouseListener(l);
+		if (_table != null) {
+			_table.removeFocusListener(this);
 		}
-		for (MouseListener l : _table.getMouseListeners()) _table.removeMouseListener(l);
+		if (getListSelectionModel() != null) {
+			getListSelectionModel().removeListSelectionListener(getTableModel());
+		}
+		if (scrollPane != null && _fibTable.getCreateNewRowOnClick()) {
+			for (MouseListener l : scrollPane.getMouseListeners()) {
+				scrollPane.removeMouseListener(l);
+			}
+		}
+		for (MouseListener l : _table.getMouseListeners()) {
+			_table.removeMouseListener(l);
+		}
 	}
 
 	private void buildTable()
@@ -345,6 +365,8 @@ implements TableModelListener, FIBSelectable
 		getTableModel().addTableModelListener(this);
 
 		_table = new JTable(getTableModel());
+		_table.setShowHorizontalLines(false);
+		_table.setShowVerticalLines(false);
 		_table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		_table.addFocusListener(this);
 
@@ -374,7 +396,6 @@ implements TableModelListener, FIBSelectable
 			_table.setRowHeight(_fibTable.getRowHeight());
 		}
 
-		_table.setShowVerticalLines(true);
 		_table.setSelectionMode(_fibTable.getSelectionMode().getMode());
 		_table.getTableHeader().setReorderingAllowed(false);
 
@@ -420,10 +441,11 @@ implements TableModelListener, FIBSelectable
 
 		_dynamicComponent.removeAll();
 		_dynamicComponent.add(scrollPane, BorderLayout.CENTER);
-		
-		if (_fibTable.getShowFooter())
+
+		if (_fibTable.getShowFooter()) {
 			_dynamicComponent.add(getTableModel().getFooter(), BorderLayout.SOUTH);
-		
+		}
+
 		setVisibleRowCount(_fibTable.getVisibleRowCount());
 		_dynamicComponent.revalidate();
 		_dynamicComponent.repaint();
@@ -444,7 +466,9 @@ implements TableModelListener, FIBSelectable
 	public boolean mayRepresent(Object o)
 	{
 		try {
-			if (getValue() != null) return getValue().contains(o);
+			if (getValue() != null) {
+				return getValue().contains(o);
+			}
 		}
 		catch (ClassCastException e) {
 			logger.warning("ClassCastException in FIBTableWidget: "+e.getMessage());
@@ -492,8 +516,12 @@ implements TableModelListener, FIBSelectable
 
 	private static boolean areSameValuesOrderIndifferent(List l1, List l2)
 	{
-		if (l1 == null || l2 == null) return false;
-		if (l1.size() != l2.size()) return false;
+		if (l1 == null || l2 == null) {
+			return false;
+		}
+		if (l1.size() != l2.size()) {
+			return false;
+		}
 		Comparator comparator = new Comparator() {
 			@Override
 			public int compare(Object o1, Object o2) {
@@ -507,7 +535,9 @@ implements TableModelListener, FIBSelectable
 		sortedL2.addAll(l2);
 		Collections.sort(sortedL2,comparator);
 		for (int i=0; i<sortedL1.size(); i++) {
-			if (!sortedL1.get(i).equals(sortedL2.get(i))) return false;
+			if (!sortedL1.get(i).equals(sortedL2.get(i))) {
+				return false;
+			}
 		}
 		return true;
 	}
