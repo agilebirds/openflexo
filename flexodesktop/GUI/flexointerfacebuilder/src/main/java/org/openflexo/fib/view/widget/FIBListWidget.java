@@ -68,6 +68,8 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList,JList,Object> 
 		_list.revalidate();
 		_list.repaint();
 
+		updateListModelWhenRequired();
+		
 		updateFont();
 	}
 

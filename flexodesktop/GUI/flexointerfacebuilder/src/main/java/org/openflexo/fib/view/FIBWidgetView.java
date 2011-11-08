@@ -41,10 +41,10 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
-import org.openflexo.antar.binding.BindingVariable;
-import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.AbstractBinding.TargetObject;
+import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.DataBinding;
@@ -445,6 +445,11 @@ implements FocusListener, Observer, PropertyChangeListener
     			return getLocalized(returned);
     		}
     		else return returned;
+    	}
+    	if (value instanceof String) {
+    		if (getWidget().getLocalize()) {
+    			return getLocalized((String)value);
+    		}
     	}
     	return value.toString();
     }

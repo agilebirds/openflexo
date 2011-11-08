@@ -70,6 +70,7 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown,JCombo
 		_mySmallPanel.addFocusListener(this);
 
         updateFont();
+        
 	}
 
 	
@@ -216,5 +217,4 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown,JCombo
 		_jComboBox.setFont(getFont());
 	}
 	
-
 }

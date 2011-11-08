@@ -1,4 +1,4 @@
-<DropDown name="dropdown" showReset="false">
+<DropDown name="dropdown" showReset="false" staticList="Item-1  ,Item-2  , Item-3">
 	<Parameter name="x" value="30"/>
 	<Parameter name="y" value="105"/>
 	<Parameter name="isPaletteElement" value="true"/>

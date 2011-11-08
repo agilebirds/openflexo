@@ -1,4 +1,4 @@
-<RadioButtonList name="RadioButtonList" showReset="false">
+<RadioButtonList name="PaletteRadioButtonList" staticList="Item-1  ,Item-2  , Item-3">
 	<Parameter name="x" value="200"/>
 	<Parameter name="y" value="10"/>
 	<Parameter name="isPaletteElement" value="true"/>

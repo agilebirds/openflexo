@@ -2,7 +2,7 @@
 	   name="Inspector" 
 	   layout="border" 
 	   dataClassName="org.openflexo.fib.model.FIBRadioButtonList">
-	<Parameter name="title" value="DropDown"/>
+	<Parameter name="title" value="RadioButtons"/>
 
 		<TabPanel name="Tab" constraints="border(location=center)">
 

@@ -31,6 +31,7 @@ import org.openflexo.antar.binding.GenericArrayTypeImpl;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.binding.WilcardTypeImpl;
+import org.openflexo.toolbox.StringUtils;
 
 
 public abstract class FIBMultipleValues extends FIBWidget {
@@ -69,7 +70,7 @@ public abstract class FIBMultipleValues extends FIBWidget {
 		};
 	};
 
-	public String staticList;
+	private String staticList;
 
 	private DataBinding list;
 	private DataBinding array;
@@ -77,8 +78,8 @@ public abstract class FIBMultipleValues extends FIBWidget {
 	private Class iteratorClass;
 	private Class expectedIteratorClass;
 
-	public boolean showIcon = false;
-	public boolean showText = true;
+	private boolean showIcon = false;
+	private boolean showText = true;
 
 	public FIBMultipleValues()
 	{
@@ -148,8 +149,16 @@ public abstract class FIBMultipleValues extends FIBWidget {
 		}
 	}
 
+	public boolean isStaticList()
+	{
+		return (getList() == null || !getList().isSet())
+				&& (getArray() == null || !getArray().isSet())
+				&& StringUtils.isNotEmpty(getStaticList());
+	}
+	
 	public Class getIteratorClass()
 	{
+		if (isStaticList()) return String.class;
 		if (iteratorClass == null) {
 			if (expectedIteratorClass != null) {
 				return expectedIteratorClass;
@@ -176,6 +185,7 @@ public abstract class FIBMultipleValues extends FIBWidget {
 	@Override
 	public Type getDataType()
 	{
+		if (isStaticList()) return String.class;
 		if (iteratorClass != null) {
 			return iteratorClass;
 		}
@@ -185,6 +195,7 @@ public abstract class FIBMultipleValues extends FIBWidget {
 	@Override
 	public Type getFormattedObjectType()
 	{
+		if (isStaticList()) return String.class;
 		if (iteratorClass != null) {
 			return iteratorClass;
 		}
@@ -247,7 +258,56 @@ public abstract class FIBMultipleValues extends FIBWidget {
 
 			}
 		}
-
+		else if (binding == getFormat()) {
+			setChanged();
+			notifyChange(FIBWidget.Parameters.format);
+		}
 	}
 
+	public String getStaticList()
+	{
+		return staticList;
+	}
+
+	public final void setStaticList(String staticList)
+	{
+		FIBAttributeNotification<String> notification = requireChange(
+				Parameters.staticList, staticList);
+		if (notification != null) {
+			this.staticList = staticList;
+			logger.info("FIBMultiple: setStaticList with "+staticList);
+			hasChanged(notification);
+		}
+	}
+	
+	public Boolean getShowIcon()
+	{
+		return showIcon;
+	}
+
+	public void setShowIcon(Boolean showIcon)
+	{
+		FIBAttributeNotification<Boolean> notification = requireChange(
+				Parameters.showIcon, showIcon);
+		if (notification != null) {
+			this.showIcon = showIcon;
+			hasChanged(notification);
+		}
+	}
+	
+	public Boolean getShowText()
+	{
+		return showText;
+	}
+
+	public void setShowText(Boolean showText)
+	{
+		FIBAttributeNotification<Boolean> notification = requireChange(
+				Parameters.showText, showText);
+		if (notification != null) {
+			this.showText = showText;
+			hasChanged(notification);
+		}
+	}
+	
 }
