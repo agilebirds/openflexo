@@ -75,7 +75,8 @@ public class ModelEntity<I> extends ProxyFactory {
 				|| method.getAnnotation(Adder.class) != null
 				|| method.getAnnotation(Remover.class) != null;*/
 
-				return Modifier.isAbstract(method.getModifiers());
+				return Modifier.isAbstract(method.getModifiers()) || method.getName().equals("toString")
+						&& method.getParameterTypes().length == 0;
 			}
 		});
 		// methodHandler = new ProxyMethodHander(this);
