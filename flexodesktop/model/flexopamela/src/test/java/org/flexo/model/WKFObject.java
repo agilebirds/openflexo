@@ -16,14 +16,14 @@ public interface WKFObject extends FlexoModelObject {
 
 	public static final String PROCESS = "process";
 
-	@Getter(id = PROCESS)
+	@Getter(value = PROCESS)
 	@CloningStrategy(StrategyType.IGNORE)
 	public FlexoProcess getProcess();
 
-	@Setter(id=PROCESS)
+	@Setter(value=PROCESS)
 	public void setProcess(FlexoProcess aProcess);
 
 	@Override
-	@Setter(id=FlexoModelObject.FLEXO_ID)
+	@Setter(value=FlexoModelObject.FLEXO_ID)
 	public void setFlexoID(String flexoID);
 }

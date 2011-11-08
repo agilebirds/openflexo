@@ -23,20 +23,20 @@ public interface FlexoModelObject extends AccessibleProxyObject,ObservableObject
 
 	//@XMLProperty(id="flexoId",kind=Kind.GETTER,xml="flexoID",defaultValue="00000")
 
-	@Getter(id=FLEXO_ID,defaultValue="0000")
+	@Getter(value=FLEXO_ID,defaultValue="0000")
 	@XMLAttribute(xmlTag=FLEXO_ID)
 	public String getFlexoID();
 
 	//@XMLProperty(id="flexoId",kind=Kind.SETTER)
-	@Setter(id=FLEXO_ID)
+	@Setter(value=FLEXO_ID)
 	public void setFlexoID(String flexoID);
 
-	@Getter(id=NAME,defaultValue="???")
+	@Getter(value=NAME,defaultValue="???")
 	@XMLAttribute(xmlTag=NAME)
 	@CloningStrategy(value=StrategyType.FACTORY,factory="deriveName()")
 	public String getName();
 
-	@Setter(id=NAME)
+	@Setter(value=NAME)
 	public void setName(String name);
 
 	public String deriveName();
@@ -44,7 +44,7 @@ public interface FlexoModelObject extends AccessibleProxyObject,ObservableObject
 	@Deleter(deletedProperty = DELETED)
 	public void delete();
 
-	@Getter(id = DELETED, defaultValue = "false")
+	@Getter(value = DELETED, defaultValue = "false")
 	public boolean isDeleted();
 
 	/*@XMLProperty(xml="lastUpdateDate")

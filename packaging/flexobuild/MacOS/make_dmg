@@ -39,7 +39,8 @@ du_output=`du -sk $dir_path 2>&1`
 dir_size=`echo $du_output | cut -f1 -d" "`
 let dir_size=$dir_size*1024 
 let dir_size=$dir_size/1000 
-dir_size=`expr $dir_size + 1124` 
+dir_size=`expr $dir_size + 1124`
+echo "Creating dmg of $dir_size blocks of 1024 bytes"
 dd if=/dev/zero of="$dmg_name" bs=1024 count=$dir_size
 /sbin/mkfs.hfsplus -v "$volume_label" "$dmg_name"
 timestamp=`date +%Y%m%d.%H%M%S`

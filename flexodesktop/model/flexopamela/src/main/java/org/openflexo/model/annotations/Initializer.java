@@ -6,8 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(value = ElementType.METHOD)
-public @interface Constructor {
+@Target(ElementType.METHOD)
+public @interface Initializer {
 
-	public Parameter[] value();
 }

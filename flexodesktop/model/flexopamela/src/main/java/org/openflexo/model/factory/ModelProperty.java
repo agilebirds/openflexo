@@ -53,7 +53,7 @@ public class ModelProperty<I> {
 			Setter aSetter = m.getAnnotation(Setter.class);
 			Adder anAdder = m.getAnnotation(Adder.class);
 			Remover aRemover = m.getAnnotation(Remover.class);
-			if (aGetter != null && aGetter.id().equals(propertyIdentifier)) {
+			if (aGetter != null && aGetter.value().equals(propertyIdentifier)) {
 				if (getter != null) {
 					throw new ModelDefinitionException("Duplicate getter "+propertyIdentifier+" defined for interface "+modelEntity.getImplementedInterface());
 				}
@@ -83,7 +83,7 @@ public class ModelProperty<I> {
 
 				}
 			}
-			if (aSetter != null && aSetter.id().equals(propertyIdentifier)) {
+			if (aSetter != null && aSetter.value().equals(propertyIdentifier)) {
 				if (setter != null) {
 					throw new ModelDefinitionException("Duplicate setter "+propertyIdentifier+" defined for interface "+modelEntity.getImplementedInterface());
 				}
@@ -237,7 +237,7 @@ public class ModelProperty<I> {
 		if (xmlTag == null) {
 			xmlTag = xmlAttribute.xmlTag();
 			if (xmlTag.equals(XMLAttribute.DEFAULT_XML_TAG)) {
-				xmlTag = getGetter().id();
+				xmlTag = getGetter().value();
 			}
 		}
 		return xmlTag;

@@ -20,7 +20,6 @@
 package org.openflexo.fib.view.widget.table;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -44,14 +43,11 @@ import org.openflexo.fib.model.FIBTableAction;
 import org.openflexo.fib.utils.FIBIconLibrary;
 import org.openflexo.fib.view.widget.FIBTableWidget;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.ToolBox;
 
 public class FIBTableWidgetFooter extends JPanel
 {
 
     protected static final Logger logger = Logger.getLogger(FIBTableWidgetFooter.class.getPackage().getName());
-
-	public static final Color GUI_BACK_COLOR = ToolBox.getPLATFORM()==ToolBox.MACOS ? null : Color.WHITE;
 
     public static final int MINIMUM_BROWSER_VIEW_WIDTH = 200;
     
@@ -83,18 +79,15 @@ public class FIBTableWidgetFooter extends JPanel
         initializeActions(fibTable,tableModel);
                
         setBorder(BorderFactory.createEmptyBorder());
-        setBackground(GUI_BACK_COLOR);
         setLayout(new BorderLayout());
         // setPreferredSize(new
         // Dimension(FlexoCst.MINIMUM_BROWSER_VIEW_WIDTH,FlexoCst.MINIMUM_BROWSER_CONTROL_PANEL_HEIGHT));
         setPreferredSize(new Dimension(MINIMUM_BROWSER_VIEW_WIDTH, 20));
 
         JPanel plusMinusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        plusMinusPanel.setBackground(GUI_BACK_COLOR);
         plusMinusPanel.setBorder(BorderFactory.createEmptyBorder());
 
         plusButton = new JButton(FIBIconLibrary.BROWSER_PLUS_ICON);
-        plusButton.setBackground(GUI_BACK_COLOR);
         plusButton.addActionListener(new ActionListener() {
             @Override
 			public void actionPerformed(ActionEvent e)
@@ -135,7 +128,6 @@ public class FIBTableWidgetFooter extends JPanel
         });
 
         minusButton = new JButton(FIBIconLibrary.BROWSER_MINUS_ICON);
-        minusButton.setBackground(GUI_BACK_COLOR);
         minusButton.addActionListener(new ActionListener() {
             @Override
 			public void actionPerformed(ActionEvent e)

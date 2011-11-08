@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<name>Flexo Enterprise Packaging</name>
 	<parent>
@@ -6,15 +7,7 @@
 		<artifactId>exec</artifactId>
 		<version>1.4.4-SNAPSHOT</version>
 	</parent>
-	<artifactId>flexoenterprise</artifactId>
-	<build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
+	<artifactId>flexomaintainer</artifactId>
 	<dependencies>
 		<dependency>
 			<groupId>org.openflexo</groupId>
@@ -82,6 +75,13 @@
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexosourcegeneratormodule</artifactId>
+			<version>${project.version}</version>
+			<type>jar</type>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>flexodocresourceeditor</artifactId>
 			<version>${project.version}</version>
 			<type>jar</type>
 			<scope>runtime</scope>
@@ -195,6 +195,13 @@
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexosourcegeneratormodule</artifactId>
+			<version>${project.version}</version>
+			<classifier>resources</classifier>
+			<type>zip</type>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>flexodocresourceeditor</artifactId>
 			<version>${project.version}</version>
 			<classifier>resources</classifier>
 			<type>zip</type>

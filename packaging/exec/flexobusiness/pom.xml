@@ -4,7 +4,7 @@
 	<name>Flexo Business Packaging</name>
 	<parent>
 		<groupId>org.openflexo.packaging</groupId>
-		<artifactId>packaging</artifactId>
+		<artifactId>exec</artifactId>
 		<version>1.4.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>flexobusiness</artifactId>

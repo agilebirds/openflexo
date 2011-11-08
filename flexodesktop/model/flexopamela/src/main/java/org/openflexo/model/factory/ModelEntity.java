@@ -1,5 +1,6 @@
 package org.openflexo.model.factory;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -12,20 +13,17 @@ import java.util.List;
 import javassist.util.proxy.MethodFilter;
 import javassist.util.proxy.ProxyFactory;
 
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.model.annotations.Adder;
-import org.openflexo.model.annotations.Constructor;
-import org.openflexo.model.annotations.Constructors;
 import org.openflexo.model.annotations.Deleter;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
-import org.openflexo.model.annotations.Parameter;
 import org.openflexo.model.annotations.PastingPoint;
 import org.openflexo.model.annotations.PastingPoints;
 import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.StringConverter;
 import org.openflexo.model.annotations.XMLElement;
-import org.openflexo.model.utils.TypeUtils;
 import org.openflexo.model.xml.DefaultStringEncoder.Converter;
 
 public class ModelEntity<I> extends ProxyFactory {
@@ -58,19 +56,6 @@ public class ModelEntity<I> extends ProxyFactory {
 		entityAnnotation = implementedInterface.getAnnotation(org.openflexo.model.annotations.ModelEntity.class);
 		implementationClass = implementedInterface.getAnnotation(ImplementationClass.class);
 		xmlElement = implementedInterface.getAnnotation(XMLElement.class);
-		Constructors constructors = implementedInterface.getAnnotation(Constructors.class);
-		Constructor constructor = implementedInterface.getAnnotation(Constructor.class);
-		if (constructors != null && constructor != null) {
-			throw new ModelDefinitionException("Cannot annotate interface " + implementedInterface.getName() + " with both "
-					+ Constructors.class.getSimpleName() + " and " + Constructor.class.getSimpleName() + ".");
-		}
-		if (constructors != null) {
-			this.constructors = constructors.value();
-		} else if (constructor != null) {
-			this.constructors = new Constructor[]{constructor};
-		} else {
-			this.constructors = new Constructor[]{};
-		}
 		pastingPoints = implementedInterface.getAnnotation(PastingPoints.class);
 		this.isAbstract = entityAnnotation.isAbstract();
 		// We resolve here the model super interface
@@ -90,7 +75,8 @@ public class ModelEntity<I> extends ProxyFactory {
 				|| method.getAnnotation(Adder.class) != null
 				|| method.getAnnotation(Remover.class) != null;*/
 
-				return Modifier.isAbstract(method.getModifiers());
+				return Modifier.isAbstract(method.getModifiers()) || method.getName().equals("toString")
+						&& method.getParameterTypes().length == 0;
 			}
 		});
 		// methodHandler = new ProxyMethodHander(this);
@@ -103,10 +89,6 @@ public class ModelEntity<I> extends ProxyFactory {
 		setInterfaces(interfaces);
 		exploreEntity();
 		validateEntity();
-	}
-
-	private Constructor[] getConstructors() {
-		return constructors;
 	}
 
 	private void validateEntity() throws ModelDefinitionException {
@@ -182,11 +164,11 @@ public class ModelEntity<I> extends ProxyFactory {
 	protected boolean declaresModelProperty(String propertyIdentifier) {
 		for (Method m : getImplementedInterface().getDeclaredMethods()) {
 			Getter aGetter = m.getAnnotation(Getter.class);
-			if (aGetter != null && aGetter.id().equals(propertyIdentifier)) {
+			if (aGetter != null && aGetter.value().equals(propertyIdentifier)) {
 				return true;
 			}
 			Setter aSetter = m.getAnnotation(Setter.class);
-			if (aSetter != null && aSetter.id().equals(propertyIdentifier)) {
+			if (aSetter != null && aSetter.value().equals(propertyIdentifier)) {
 				return true;
 			}
 			Adder anAdder = m.getAnnotation(Adder.class);
@@ -233,52 +215,8 @@ public class ModelEntity<I> extends ProxyFactory {
 					types[i] = args[i].getClass();
 				}
 			}
-			Constructor constructor = retrieveConstructor(types);
-			if (constructor != null) {
-				// System.out.println("Found constructor: "+constructor);
-				int i = 0;
-				for (Parameter p : constructor.value()) {
-					ModelProperty<? super I> property = getModelProperty(p.name());
-					handler.invokeSetter(property, args[i++]);
-				}
-			} else {
-				StringBuilder sb = new StringBuilder();
-				boolean isFirst = true;
-				for (Class<?> c : types) {
-					sb.append(isFirst ? "" : ",").append(c.getSimpleName());
-					isFirst = false;
-				}
-				throw new ModelDefinitionException("Cannot find constructor for " + implementedInterface.getSimpleName() + " args=" + sb);
-			}
 		}
 		return returned;
-	}
-
-	private Constructor retrieveConstructor(Class... args) throws ModelDefinitionException {
-		if (constructors != null) {
-			for (Constructor c : constructors) {
-				if (c.value().length == args.length) {
-					int i = 0;
-					boolean validConstructor = true;
-					// System.out.println("Test constructor "+c);
-					for (Parameter p : c.value()) {
-						if (!TypeUtils.isTypeAssignableFrom(p.type(), args[i++])) {
-							validConstructor = false;
-							// System.out.println("Not valid: "+p.type()+" and "+args[i]);
-							break;
-						}
-					}
-					if (validConstructor) {
-						return c;
-					}
-				}
-			}
-		}
-		ModelEntity superModelEntity = getSuperEntity();
-		if (superModelEntity != null) {
-			return superModelEntity.retrieveConstructor(args);
-		}
-		return null;
 	}
 
 	protected PastingPoint retrievePastingPoint(Class type) throws ModelDefinitionException {
@@ -400,11 +338,11 @@ public class ModelEntity<I> extends ProxyFactory {
 			String propertyIdentifier = null;
 			Getter aGetter = m.getAnnotation(Getter.class);
 			if (aGetter != null) {
-				propertyIdentifier = aGetter.id();
+				propertyIdentifier = aGetter.value();
 			} else {
 				Setter aSetter = m.getAnnotation(Setter.class);
 				if (aSetter != null) {
-					propertyIdentifier = aSetter.id();
+					propertyIdentifier = aSetter.value();
 				} else {
 					Adder anAdder = m.getAnnotation(Adder.class);
 					if (anAdder != null) {

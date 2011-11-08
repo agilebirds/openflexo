@@ -1,8 +1,7 @@
 package org.flexo.model;
 
-import org.openflexo.model.annotations.Constructor;
-import org.openflexo.model.annotations.Constructors;
 import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.Initializer;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Parameter;
 import org.openflexo.model.annotations.Setter;
@@ -12,15 +11,20 @@ import org.openflexo.model.xml.DefaultStringEncoder.Converter;
 import org.openflexo.model.xml.InvalidDataException;
 
 @ModelEntity
-@Constructors({ @Constructor({}), @Constructor({ @Parameter(name = WKFAnnotation.TEXT, type = String.class) }) })
 public interface WKFAnnotation extends FlexoModelObject {
 
 	public static final String TEXT = "text";
 
-	@Getter(id = TEXT)
+	@Initializer
+	public void init();
+
+	@Initializer
+	public void init(@Parameter(TEXT) String text);
+
+	@Getter(value = TEXT)
 	public String getText();
 
-	@Setter(id = TEXT)
+	@Setter(value = TEXT)
 	public void setText(String s);
 
 	@StringConverter

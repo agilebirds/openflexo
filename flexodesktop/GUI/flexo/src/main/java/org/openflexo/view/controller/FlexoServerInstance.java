@@ -22,39 +22,39 @@ public interface FlexoServerInstance {
 	public static final String USER_TYPES = "userTypes";
 	public static final String OTHER_ID = "other";
 
-	@Getter(id = ID)
+	@Getter(value = ID)
 	@XMLAttribute
 	public String getID();
 
-	@Setter(id = ID)
+	@Setter(value = ID)
 	public void setID(String id);
 
-	@Getter(id = URL)
+	@Getter(value = URL)
 	@XMLAttribute
 	public String getURL();
 
-	@Setter(id = URL)
+	@Setter(value = URL)
 	public void setURL(String url);
 
-	@Getter(id = WS_URL)
+	@Getter(value = WS_URL)
 	@XMLAttribute
 	public String getWSURL();
 
-	@Setter(id = WS_URL)
+	@Setter(value = WS_URL)
 	public void setWSURL(String url);
 
-	@Getter(id = NAME)
+	@Getter(value = NAME)
 	@XMLAttribute
 	public String getName();
 
-	@Setter(id = NAME)
+	@Setter(value = NAME)
 	public void setName(String name);
 
-	@Getter(id = USER_TYPES, cardinality = Cardinality.LIST)
+	@Getter(value = USER_TYPES, cardinality = Cardinality.LIST)
 	@XMLElement(xmlTag = "usertype")
 	public List<String> getUserTypes();
 
-	@Setter(id = USER_TYPES)
+	@Setter(value = USER_TYPES)
 	public void setUserTypes(List<String> userTypes);
 
 	@Adder(id = USER_TYPES)

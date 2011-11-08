@@ -13,8 +13,8 @@
 
 	<target name="deploy">
 		<property name="deploy" value="true" />
-		<property name="deployment.root.folder" value="~/dist"/>
-		<property name="deployment.server.name" value="hudson@server.capexpe.org" />
+		<property name="deployment.root.folder" value="~/downloads/openflexo"/>
+		<property name="deployment.server.name" value="jenkins@downloads.openflexo.com" />
 		<property name="ssh.private.keyfile" value="${user.home}/.ssh/id_dsa" />
 		<property name="ssh.passphrase" value="" />
 		<tstamp>
@@ -107,7 +107,7 @@
 				<filtersfile file="${build.properties}" />
 			</filterset>
 		</copy>
-		<javac srcdir="${flexobuild.work.dir}/version/src" destdir="${flexobuild.work.dir}/version/bin" target="${compiler.target}" fork="true" />
+		<javac srcdir="${flexobuild.work.dir}/version/src" destdir="${flexobuild.work.dir}/version/bin" source="${compiler.source}" target="${compiler.target}" fork="true" />
 		<jar destfile="${dist.dir}/lib/flexo-${project.version}.jar" update="true">
 			<fileset dir="${flexobuild.work.dir}/version/bin">
 				<include name="**/*.class" />
@@ -185,7 +185,7 @@
 		<tstamp>
 			<format property="current.year" pattern="yyyy" />
 		</tstamp>
-		<jarbundler stubfile="${java.stubfile}" dir="${mac.app.dir.versioned}" name="${qualified_and_versioned_app_name}" mainclass="${main.class}" bundleid="${project.groupId}" signature="FLXO" version="${flexo_version}" jvmversion="1.6+" shortname="${product.name}" icon="${dist.dir}/Resources/${icon_mac_name}" arguments="${program.args}" infostring="${product.name} ${flexo_version}, (c) ${organization.name} ${current.year}" vmoptions="${vm.args}">
+		<jarbundler stubfile="${java.stubfile}" dir="${mac.app.dir.versioned}" name="${qualified_and_versioned_app_name}" mainclass="${main.class}" bundleid="${project.groupId}" signature="FLXO" version="${flexo_version}" jvmversion="1.6+" shortname="${product.name}" icon="${dist.dir}/Resources/Icons/Flexo/${icon_mac_name}" arguments="${program.args}" infostring="${product.name} ${flexo_version}, (c) ${organization.name} ${current.year}" vmoptions="${vm.args}">
 			<javaproperty name="apple.awt.antialiasing" value="true" />
 			<javaproperty name="apple.awt.antialiasedtext" value="true" />
 			<javaproperty name="apple.laf.useScreenMenuBar" value="true" />
