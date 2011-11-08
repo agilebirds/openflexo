@@ -11,7 +11,7 @@ public class FIBEditorIconLibrary {
 	public static final ImageIcon HELP_ICON = new ImageIconResource("Icons/Actions/Help.gif");
 	public static final ImageIcon REFRESH_ICON = new ImageIconResource("Icons/Actions/Refresh.gif");
 
-	public static final ImageIcon ROLE_ICON = new ImageIconResource("Resources/WKF/SmallRole.gif");
+	public static final ImageIcon ROLE_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/SmallRole.gif");
 	public static final ImageIcon ROOT_COMPONENT_ICON = new ImageIcon((new FileResource("Icons/RootComponentIcon.png")).getAbsolutePath());
 	public static final ImageIcon PANEL_ICON = new ImageIcon((new FileResource("Icons/PanelIcon.png")).getAbsolutePath());
 	public static final ImageIcon BUTTON_ICON = new ImageIcon((new FileResource("Icons/ButtonIcon.png")).getAbsolutePath());
