@@ -41,7 +41,7 @@ public class CreatePaletteDialogEDITOR {
 			{
 				FlexoResourceCenter resourceCenter = ModuleLoader.getFlexoResourceCenter(true);
 				ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
-				ViewPoint calc1 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/BasicOrganizationTreeEditor.owl");
+				ViewPoint calc1 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl");
 				calc1.loadWhenUnloaded();
 				CreateViewPointPalette action = CreateViewPointPalette.actionType.makeNewAction(calc1, null,null);
 				return makeArray(action);

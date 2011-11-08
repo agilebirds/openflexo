@@ -43,7 +43,7 @@ public class DeclareInEditionPatternDialogEDITOR {
 			{
 				FlexoResourceCenter resourceCenter = ModuleLoader.getFlexoResourceCenter(true);
 				ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
-				ViewPoint calc1 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/BasicOrganizationTreeEditor.owl");
+				ViewPoint calc1 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl");
 				calc1.loadWhenUnloaded();
 				ExampleDrawingShema shema = calc1.getShemas().firstElement();
 				ExampleDrawingShape shape = (ExampleDrawingShape)shema.getChilds().firstElement();
