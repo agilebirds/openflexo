@@ -218,7 +218,7 @@ implements ApplyCancelListener, BindingEvaluationContext
 	@Override
 	public void fireApplyPerformed() 
 	{
-		logger.info("fireApplyPerformed() in FIBCustomWidget, value="+customComponent.getEditedObject());
+		//logger.info("fireApplyPerformed() in FIBCustomWidget, value="+customComponent.getEditedObject());
 		updateModelFromWidget();
 	}
 
