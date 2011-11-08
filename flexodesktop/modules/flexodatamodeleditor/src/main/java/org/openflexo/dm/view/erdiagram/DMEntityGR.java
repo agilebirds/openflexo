@@ -85,9 +85,9 @@ public class DMEntityGR extends ShapeGraphicalRepresentation<DMEntity> implement
 			public void paintDecoration(org.openflexo.fge.graphics.FGEShapeDecorationGraphics g) {
 				double border = ENTITY_BORDER;
 				g.useBackgroundStyle(headerBackground);
-				g.fillRect(border,border,g.getWidth()-2*border-1,HEADER_HEIGHT);
+				g.fillRect(border,border,g.getWidth()/*-2*border*/-1,HEADER_HEIGHT);
 				g.useForegroundStyle(foreground);
-				g.drawRect(border,border,g.getWidth()-2*border-1,HEADER_HEIGHT);
+				g.drawRect(border,border,g.getWidth()/*-2*border*/-1,HEADER_HEIGHT);
 				g.drawImage(DMEIconLibrary.getIconFor(getEntity()).getImage(),new FGEPoint(ENTITY_BORDER*2,ENTITY_BORDER*1.6));
 			};
 			
