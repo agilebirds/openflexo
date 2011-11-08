@@ -15,8 +15,4 @@ public interface AccessibleProxyObject {
 
 	public Object performSuperFinder(Object value);
 
-	public void enableNotifications();
-
-	public void disableNotifications();
-
 }

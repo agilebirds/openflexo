@@ -11,7 +11,7 @@ import org.openflexo.model.annotations.XMLElement;
 @ImplementationClass(TokenEdgeImpl.class)
 public interface TokenEdge extends Edge {
 
-	@Getter(id=PROCESS)
+	@Getter(value=PROCESS)
 	public FlexoProcess getProcess();
 
 }

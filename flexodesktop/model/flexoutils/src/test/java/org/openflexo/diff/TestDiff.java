@@ -30,11 +30,21 @@ import org.openflexo.diff.ComputeDiff.DiffChange;
 import org.openflexo.diff.ComputeDiff.DiffReport;
 import org.openflexo.diff.ComputeDiff.ModificationChange;
 import org.openflexo.diff.ComputeDiff.RemovalChange;
+import org.openflexo.diff.DiffSource.MergeToken;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 
 
 public class TestDiff extends TestCase {
+
+	public void test() {
+		DiffSource source = new DiffSource("\t\t1\t\t\n\t\t\n\n4\n5\n", DelimitingMethod.DEFAULT);
+		assertEquals(5, source.getTextTokens().length);
+		for (MergeToken token : source.getTextTokens()) {
+			System.err.println("Begin: '" + token.getBeginDelim().replace("\n", "\\n") + "'" + " Token: '" + token.getToken() + "'"
+					+ " End: '" + token.getEndDelim().replace("\n", "\\n") + "'");
+		}
+	}
 
 	public void test0() throws IOException
 	{
@@ -102,7 +112,7 @@ public class TestDiff extends TestCase {
 		assertChange(report.getChanges().get(8),AdditionChange.class,70,69,144,148);
 	}
 
-	private void assertChange(DiffChange change, Class diffClass, int first0, int last0, int first1, int last1) 
+	private void assertChange(DiffChange change, Class diffClass, int first0, int last0, int first1, int last1)
 	{
 		assertTrue (diffClass.isAssignableFrom(change.getClass()));
 		assertEquals(first0,change.getFirst0());
@@ -113,7 +123,7 @@ public class TestDiff extends TestCase {
 
 
 	/*
-	public static void main(String[] args) 
+	public static void main(String[] args)
 	{
 		File file01 = new FileResource("TestDiff/TestJava0-v1.java");
 		File file02 = new FileResource("TestDiff/TestJava0-v2.java");
@@ -125,17 +135,17 @@ public class TestDiff extends TestCase {
 		File file32 = new FileResource("TestDiff/TestJava3-v2.java");
 		File file41 = new File("/Users/sylvain/temp/merge/branchNew.xml");
 		File file42 = new File("/Users/sylvain/temp/merge/branchOld.xml");
-		
+
 		try {
 			DiffReport report0 = ComputeDiff.diff(file01,file02);
 			DiffReport report1 = ComputeDiff.diff(file11,file12);
 			DiffReport report2 = ComputeDiff.diff(file21,file22);
 			DiffReport report3 = ComputeDiff.diff(file31,file32);
 			DiffReport report4 = ComputeDiff.diff(file41,file42);
-			
-			
+
+
 			final JDialog dialog = new JDialog((Frame)null,true);
-			
+
 			JButton closeButton = new JButton("Close");
 			closeButton.addActionListener(new ActionListener() {
 				@Override
@@ -144,16 +154,16 @@ public class TestDiff extends TestCase {
 					System.exit(0);
 				}
 			});
-			
+
 			JPanel panel = new JPanel(new BorderLayout());
-			
+
 			JTabbedPane tabbedPane = new JTabbedPane();
 			tabbedPane.add(new DiffPanel(report0,TokenMarkerStyle.Java),"Report-0");
 			tabbedPane.add(new DiffPanel(report1,TokenMarkerStyle.Java),"Report-1");
 			tabbedPane.add(new DiffPanel(report2,TokenMarkerStyle.Java),"Report-2");
 			tabbedPane.add(new DiffPanel(report3,TokenMarkerStyle.Java),"Report-3");
 			tabbedPane.add(new DiffPanel(report4,TokenMarkerStyle.Java),"Report-4");
-			
+
 			JEditTextArea editorPane = new JEditTextArea();
 			editorPane.setEditable(true);
 			editorPane.setTokenMarker(new JavaTokenMarker());
@@ -164,7 +174,7 @@ public class TestDiff extends TestCase {
 
 			panel.add(tabbedPane,BorderLayout.CENTER);
 			panel.add(closeButton,BorderLayout.SOUTH);
-			
+
 			dialog.setPreferredSize(new Dimension(1000,800));
 			dialog.getContentPane().add(panel);
 			dialog.validate();

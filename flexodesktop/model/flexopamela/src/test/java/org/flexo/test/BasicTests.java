@@ -141,7 +141,7 @@ public class BasicTests extends TestCase {
 
 		System.out.println("process="+process);
 
-		TokenEdge edge1 = factory.newInstance(TokenEdge.class,startNode,activityNode);
+		TokenEdge edge1 = (TokenEdge) factory.newInstance(TokenEdge.class).init(startNode, activityNode);
 		edge1.setName("edge1");
 		//startNode.addToOutgoingEdges(edge1);
 		//activityNode.addToIncomingEdges(edge1);

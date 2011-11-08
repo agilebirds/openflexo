@@ -61,77 +61,77 @@ import org.openflexo.view.controller.FlexoController;
 public class AskNewComponentDialog extends FlexoDialog implements ActionListener
 {
 
-    public static final FileResource REUSABLECOMPONENT_ICON_FILE = new FileResource("Resources/IE/ReusableComponent.gif");
+	public static final FileResource REUSABLECOMPONENT_ICON_FILE = new FileResource("Icons/Model/SE/ReusableComponent.gif");
 
-    public static final FileResource WOD_COMPONENT_ICON = new FileResource("Resources/IE/wocomponent_wiz.gif");
+	public static final FileResource WOD_COMPONENT_ICON = new FileResource("Icons/Model/SE/wocomponent_wiz.gif");
 
-    public static final FileResource COMPONENT_INSTANCE_ICON = new FileResource("Resources/IE/ReusableComponentInstance.gif");
+	public static final FileResource COMPONENT_INSTANCE_ICON = new FileResource("Icons/Model/SE/ReusableComponentInstance.gif");
 
-    public static final FileResource OPERATION_COMPONENT_ICON = new FileResource("Resources/IE/SmallOperationComponent.gif");
+	public static final FileResource OPERATION_COMPONENT_ICON = new FileResource("Icons/Model/SE/SmallOperationComponent.gif");
 
-    public static final FileResource POPUP_COMPONENT_ICON = new FileResource("Resources/IE/SmallPopupComponent.gif");
+	public static final FileResource POPUP_COMPONENT_ICON = new FileResource("Icons/Model/SE/SmallPopupComponent.gif");
 
-    public static final FileResource THUMBNAIL_COMPONENT_ICON = new FileResource("Resources/IE/SmallTabComponent.gif");
+	public static final FileResource THUMBNAIL_COMPONENT_ICON = new FileResource("Icons/Model/SE/SmallTabComponent.gif");
 
-    private static final String OPERATION_COMPONENT = "OPERATION_COMPONENT";
+	private static final String OPERATION_COMPONENT = "OPERATION_COMPONENT";
 
-    private static final String POPUP_COMPONENT = "POPUP_COMPONENT";
+	private static final String POPUP_COMPONENT = "POPUP_COMPONENT";
 
-    private static final String PARTIAL_COMPONENT = "PARTIAL_COMPONENT";
+	private static final String PARTIAL_COMPONENT = "PARTIAL_COMPONENT";
 
-    private static final String TAB_COMPONENT = "TAB_COMPONENT";
+	private static final String TAB_COMPONENT = "TAB_COMPONENT";
 
-    private static final String DATA_COMPONENT = "DATA_COMPONENT";
+	private static final String DATA_COMPONENT = "DATA_COMPONENT";
 
-    private static final String MONITORING_SCREEN = "MONITORING_SCREEN";
+	private static final String MONITORING_SCREEN = "MONITORING_SCREEN";
 
-    private static final String MONITORING_COMPONENT = "MONITORING_COMPONENT";
+	private static final String MONITORING_COMPONENT = "MONITORING_COMPONENT";
 
-    private final FlexoProject _project;
+	private final FlexoProject _project;
 
-    private String currentChoice;
+	private String currentChoice;
 
-    private final ProcessSelector monitoringScreenProcessSelector;
+	private final ProcessSelector monitoringScreenProcessSelector;
 
-    private final ProcessSelector monitoringComponentProcessSelector;
+	private final ProcessSelector monitoringComponentProcessSelector;
 
-    private final DMEntitySelector<DMEntity> dataComponentEntitySelector;
+	private final DMEntitySelector<DMEntity> dataComponentEntitySelector;
 
-    private final JTextField newComponentNameTF;
+	private final JTextField newComponentNameTF;
 
-    public AskNewComponentDialog(FlexoProject project, FlexoComponentFolder folder)
-    {
-        super();
+	public AskNewComponentDialog(FlexoProject project, FlexoComponentFolder folder)
+	{
+		super();
 
-        _project = project;
- 
-        setTitle(FlexoLocalization.localizedForKey("creates_new_component"));
-        getContentPane().setLayout(new BorderLayout());
+		_project = project;
 
-        // Create the radio buttons.
-        JRadioButton operationComponentButton = new JRadioButtonWithIcon(FlexoLocalization.localizedForKey("operation_component"),
-                OPERATION_COMPONENT_ICON, true);
-        operationComponentButton.addActionListener(this);
-        operationComponentButton.setActionCommand(OPERATION_COMPONENT);
-        currentChoice = OPERATION_COMPONENT;
+		setTitle(FlexoLocalization.localizedForKey("creates_new_component"));
+		getContentPane().setLayout(new BorderLayout());
 
-        JRadioButton popupComponentButton = new JRadioButtonWithIcon(FlexoLocalization.localizedForKey("popup_component"),
-                POPUP_COMPONENT_ICON);
-        popupComponentButton.addActionListener(this);
-        popupComponentButton.setActionCommand(POPUP_COMPONENT);
-        /*
-         * JRadioButton partialComponentButton = new
-         * JRadioButtonWithIcon(FlexoLocalization
-         * .localizedForKey("partial_component"), REUSABLECOMPONENT_ICON_FILE);
-         * partialComponentButton.addActionListener(this);
-         * partialComponentButton.setActionCommand(PARTIAL_COMPONENT);
-         */
-        JRadioButton tabComponentButton = new JRadioButtonWithIcon(FlexoLocalization.localizedForKey("tab_component"),
-                THUMBNAIL_COMPONENT_ICON);
-        tabComponentButton.addActionListener(this);
-        tabComponentButton.setActionCommand(TAB_COMPONENT);
+		// Create the radio buttons.
+		JRadioButton operationComponentButton = new JRadioButtonWithIcon(FlexoLocalization.localizedForKey("operation_component"),
+				OPERATION_COMPONENT_ICON, true);
+		operationComponentButton.addActionListener(this);
+		operationComponentButton.setActionCommand(OPERATION_COMPONENT);
+		currentChoice = OPERATION_COMPONENT;
 
-/* Disabled unused buttons        
+		JRadioButton popupComponentButton = new JRadioButtonWithIcon(FlexoLocalization.localizedForKey("popup_component"),
+				POPUP_COMPONENT_ICON);
+		popupComponentButton.addActionListener(this);
+		popupComponentButton.setActionCommand(POPUP_COMPONENT);
+		/*
+		 * JRadioButton partialComponentButton = new
+		 * JRadioButtonWithIcon(FlexoLocalization
+		 * .localizedForKey("partial_component"), REUSABLECOMPONENT_ICON_FILE);
+		 * partialComponentButton.addActionListener(this);
+		 * partialComponentButton.setActionCommand(PARTIAL_COMPONENT);
+		 */
+		JRadioButton tabComponentButton = new JRadioButtonWithIcon(FlexoLocalization.localizedForKey("tab_component"),
+				THUMBNAIL_COMPONENT_ICON);
+		tabComponentButton.addActionListener(this);
+		tabComponentButton.setActionCommand(TAB_COMPONENT);
+
+		/* Disabled unused buttons
         JRadioButton dataComponentButton = new JRadioButtonWithIcon(FlexoLocalization.localizedForKey("data_component"),
                 REUSABLECOMPONENT_ICON_FILE);
         dataComponentButton.addActionListener(this);
@@ -152,55 +152,55 @@ public class AskNewComponentDialog extends FlexoDialog implements ActionListener
         monitoringComponentButton.setActionCommand(MONITORING_COMPONENT);
         monitoringComponentButton.setEnabled(false);
         monitoringComponentButton.setToolTipText(FlexoLocalization.localizedForKey("not_yet_implemented"));
-*/
-        // Group the radio buttons.
-        ButtonGroup group = new ButtonGroup();
-        group.add(operationComponentButton);
-        group.add(popupComponentButton);
-        // group.add(partialComponentButton);
-        group.add(tabComponentButton);
-/* Disabled unused buttons
+		 */
+		// Group the radio buttons.
+		ButtonGroup group = new ButtonGroup();
+		group.add(operationComponentButton);
+		group.add(popupComponentButton);
+		// group.add(partialComponentButton);
+		group.add(tabComponentButton);
+		/* Disabled unused buttons
         group.add(dataComponentButton);
         group.add(monitoringScreenButton);
         group.add(monitoringComponentButton);
-*/
-        newComponentNameTF = IERegExp.getJavaClassNameValidationTextField(20);
-        newComponentNameTF.addActionListener(new ActionListener() {
+		 */
+		newComponentNameTF = IERegExp.getJavaClassNameValidationTextField(20);
+		newComponentNameTF.addActionListener(new ActionListener() {
 
-            @Override
+			@Override
 			public void actionPerformed(ActionEvent e)
-            {
-                performOK();
-            }
+			{
+				performOK();
+			}
 
-        });
-        JPanel componentNameChoice = new JPanel();
-        componentNameChoice.setLayout(new FlowLayout());
-        componentNameChoice.add(new JLabel(FlexoLocalization.localizedForKey("component_name")));
-        componentNameChoice.add(newComponentNameTF);
-        componentNameChoice.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		});
+		JPanel componentNameChoice = new JPanel();
+		componentNameChoice.setLayout(new FlowLayout());
+		componentNameChoice.add(new JLabel(FlexoLocalization.localizedForKey("component_name")));
+		componentNameChoice.add(newComponentNameTF);
+		componentNameChoice.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        monitoringScreenProcessSelector = new ProcessSelector(project, project.getFlexoWorkflow().getRootFlexoProcess());
-        monitoringComponentProcessSelector = new ProcessSelector(project, project.getFlexoWorkflow().getRootFlexoProcess());
-        dataComponentEntitySelector = new DMEntitySelector<DMEntity>(project, (DMEntity)null, DMEntity.class);
+		monitoringScreenProcessSelector = new ProcessSelector(project, project.getFlexoWorkflow().getRootFlexoProcess());
+		monitoringComponentProcessSelector = new ProcessSelector(project, project.getFlexoWorkflow().getRootFlexoProcess());
+		dataComponentEntitySelector = new DMEntitySelector<DMEntity>(project, (DMEntity)null, DMEntity.class);
 
-        JPanel choicePanel = new JPanel();
-        choicePanel.setLayout(new GridLayout(3, 2));
-/* Disabled unused buttons        
+		JPanel choicePanel = new JPanel();
+		choicePanel.setLayout(new GridLayout(3, 2));
+		/* Disabled unused buttons
         choicePanel.setLayout(new GridLayout(7, 2));
-*/
-        choicePanel.add(operationComponentButton);
-        operationComponentButton.setFocusable(false);
-        choicePanel.add(new JPanel());
-        choicePanel.add(popupComponentButton);
-        popupComponentButton.setFocusable(false);
-        choicePanel.add(new JPanel());
-        // choicePanel.add(partialComponentButton);
-        // choicePanel.add(new JPanel());
-        choicePanel.add(tabComponentButton);
-        tabComponentButton.setFocusable(false);
-        choicePanel.add(new JPanel());
-/* Disabled unused buttons        
+		 */
+		choicePanel.add(operationComponentButton);
+		operationComponentButton.setFocusable(false);
+		choicePanel.add(new JPanel());
+		choicePanel.add(popupComponentButton);
+		popupComponentButton.setFocusable(false);
+		choicePanel.add(new JPanel());
+		// choicePanel.add(partialComponentButton);
+		// choicePanel.add(new JPanel());
+		choicePanel.add(tabComponentButton);
+		tabComponentButton.setFocusable(false);
+		choicePanel.add(new JPanel());
+		/* Disabled unused buttons
         choicePanel.add(dataComponentButton);
         // TODO FIXME: When dataComponentScreen, monitoringScreen and
         // monitoringComponent will be implemented, the following lines need to
@@ -214,145 +214,145 @@ public class AskNewComponentDialog extends FlexoDialog implements ActionListener
         choicePanel.add(monitoringComponentButton);
         // choicePanel.add(monitoringComponentProcessSelector);
         choicePanel.add(new JPanel());
-*/
-        choicePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		 */
+		choicePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JPanel controlPanel = new JPanel();
-        controlPanel.setLayout(new FlowLayout());
+		JPanel controlPanel = new JPanel();
+		controlPanel.setLayout(new FlowLayout());
 
-        JButton confirmButton = new JButton(FlexoLocalization.localizedForKey("validate"));
-        JButton cancelButton = new JButton(FlexoLocalization.localizedForKey("cancel"));
+		JButton confirmButton = new JButton(FlexoLocalization.localizedForKey("validate"));
+		JButton cancelButton = new JButton(FlexoLocalization.localizedForKey("cancel"));
 
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
+		cancelButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e)
-            {
-                dispose();
-            }
-        });
-        confirmButton.addActionListener(new ActionListener() {
-            @Override
+			{
+				dispose();
+			}
+		});
+		confirmButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e)
-            {
-                performOK();
-            }
-        });
-        if (ToolBox.getPLATFORM()==ToolBox.MACOS) {
-	        controlPanel.add(cancelButton);
-	        controlPanel.add(confirmButton);
-        } else {
-            controlPanel.add(confirmButton);
-            controlPanel.add(cancelButton);
-        }
+			{
+				performOK();
+			}
+		});
+		if (ToolBox.getPLATFORM()==ToolBox.MACOS) {
+			controlPanel.add(cancelButton);
+			controlPanel.add(confirmButton);
+		} else {
+			controlPanel.add(confirmButton);
+			controlPanel.add(cancelButton);
+		}
 
-        JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new BorderLayout());
+		JPanel contentPanel = new JPanel();
+		contentPanel.setLayout(new BorderLayout());
 
-        contentPanel.add(componentNameChoice, BorderLayout.NORTH);
-        contentPanel.add(choicePanel, BorderLayout.CENTER);
-        contentPanel.add(controlPanel, BorderLayout.SOUTH);
+		contentPanel.add(componentNameChoice, BorderLayout.NORTH);
+		contentPanel.add(choicePanel, BorderLayout.CENTER);
+		contentPanel.add(controlPanel, BorderLayout.SOUTH);
 
-        getContentPane().add(contentPanel, BorderLayout.CENTER);
-        getRootPane().setDefaultButton(confirmButton);
-        setModal(true);
-        validate();
-        pack();
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
-        newComponentNameTF.grabFocus();
-        setVisible(true);
-    }
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		getRootPane().setDefaultButton(confirmButton);
+		setModal(true);
+		validate();
+		pack();
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
+		newComponentNameTF.grabFocus();
+		setVisible(true);
+	}
 
-    private boolean statusOK = false;
-    
-    protected void performOK()
-    {
-        if (checkComponentValidity()) {
-        	statusOK = true;
-            dispose();
-        }
-    }
+	private boolean statusOK = false;
 
-    /** Listens to the radio buttons. */
+	protected void performOK()
+	{
+		if (checkComponentValidity()) {
+			statusOK = true;
+			dispose();
+		}
+	}
 
-    @Override
+	/** Listens to the radio buttons. */
+
+	@Override
 	public void actionPerformed(ActionEvent e)
-    {
-        currentChoice = e.getActionCommand();
-    }
+	{
+		currentChoice = e.getActionCommand();
+	}
 
-    private String newComponentName;
-    
-    public boolean checkComponentValidity()
-    {
-        newComponentName = newComponentNameTF.getText();
-        if((newComponentName!=null) && newComponentName.equals(DEFAULT_ROCK_COMPONENT_NAME)){
-        	JFrame frame = new JFrame();
-        	frame.getContentPane().add(new JLabel(IconLibrary.DEV_TEAM_ICON));
-        	frame.pack();
-        	frame.setVisible(true);
-        	frame.toFront();
-        	return false;
-        }
-        if ((newComponentName == null) || !newComponentName.matches(IERegExp.JAVA_CLASS_NAME_REGEXP)) {
-            FlexoController.notify(FlexoLocalization.localizedForKey("must_start_with_a_letter_followed_by_any_letter_or_number"));
-            return false;
-        }
-        if (!_project.getFlexoComponentLibrary().isValidForANewComponentName(newComponentName)) {
-            FlexoController.notify(FlexoLocalization.localizedForKey("this_name_isalready_used_by_another_component"));
-            return false;
-        }
-        if (currentChoice == null) {
-        	return false;
-        }
+	private String newComponentName;
 
-        if (currentChoice.equals(OPERATION_COMPONENT)) {
-        	componentType = AddComponent.ComponentType.OPERATION_COMPONENT;
-        } else if (currentChoice.equals(POPUP_COMPONENT)) {
-        	componentType = AddComponent.ComponentType.POPUP_COMPONENT;
-        } else if (currentChoice.equals(PARTIAL_COMPONENT)) {
-        	componentType = AddComponent.ComponentType.PARTIAL_COMPONENT;
-        } else if (currentChoice.equals(TAB_COMPONENT)) {
-        	componentType = AddComponent.ComponentType.TAB_COMPONENT;
-        } else if (currentChoice.equals(DATA_COMPONENT)) {
-        	componentType = AddComponent.ComponentType.DATA_COMPONENT;
-        } else if (currentChoice.equals(MONITORING_SCREEN)) {
-        	componentType = AddComponent.ComponentType.MONITORING_SCREEN;
-        } else if (currentChoice.equals(MONITORING_COMPONENT)) {
-        	componentType = AddComponent.ComponentType.MONITORING_COMPONENT;
-        }
-        return (componentType != null);
-     }
+	public boolean checkComponentValidity()
+	{
+		newComponentName = newComponentNameTF.getText();
+		if(newComponentName!=null && newComponentName.equals(DEFAULT_ROCK_COMPONENT_NAME)){
+			JFrame frame = new JFrame();
+			frame.getContentPane().add(new JLabel(IconLibrary.DEV_TEAM_ICON));
+			frame.pack();
+			frame.setVisible(true);
+			frame.toFront();
+			return false;
+		}
+		if (newComponentName == null || !newComponentName.matches(IERegExp.JAVA_CLASS_NAME_REGEXP)) {
+			FlexoController.notify(FlexoLocalization.localizedForKey("must_start_with_a_letter_followed_by_any_letter_or_number"));
+			return false;
+		}
+		if (!_project.getFlexoComponentLibrary().isValidForANewComponentName(newComponentName)) {
+			FlexoController.notify(FlexoLocalization.localizedForKey("this_name_isalready_used_by_another_component"));
+			return false;
+		}
+		if (currentChoice == null) {
+			return false;
+		}
 
-    private AddComponent.ComponentType componentType = null;
-    
-    public AddComponent.ComponentType getComponentType()
-    {
-        return componentType;
-    }
+		if (currentChoice.equals(OPERATION_COMPONENT)) {
+			componentType = AddComponent.ComponentType.OPERATION_COMPONENT;
+		} else if (currentChoice.equals(POPUP_COMPONENT)) {
+			componentType = AddComponent.ComponentType.POPUP_COMPONENT;
+		} else if (currentChoice.equals(PARTIAL_COMPONENT)) {
+			componentType = AddComponent.ComponentType.PARTIAL_COMPONENT;
+		} else if (currentChoice.equals(TAB_COMPONENT)) {
+			componentType = AddComponent.ComponentType.TAB_COMPONENT;
+		} else if (currentChoice.equals(DATA_COMPONENT)) {
+			componentType = AddComponent.ComponentType.DATA_COMPONENT;
+		} else if (currentChoice.equals(MONITORING_SCREEN)) {
+			componentType = AddComponent.ComponentType.MONITORING_SCREEN;
+		} else if (currentChoice.equals(MONITORING_COMPONENT)) {
+			componentType = AddComponent.ComponentType.MONITORING_COMPONENT;
+		}
+		return componentType != null;
+	}
 
-    public boolean hasBeenValidated()
-    {
-    	return statusOK;
-    }
-    
-    private static final String DEFAULT_ROCK_COMPONENT_NAME = "Hard Rock Hallelujah";
+	private AddComponent.ComponentType componentType = null;
+
+	public AddComponent.ComponentType getComponentType()
+	{
+		return componentType;
+	}
+
+	public boolean hasBeenValidated()
+	{
+		return statusOK;
+	}
+
+	private static final String DEFAULT_ROCK_COMPONENT_NAME = "Hard Rock Hallelujah";
 
 	public String getNewComponentName() {
 		return newComponentName;
 	}
 
-	public DMEntity getDataComponentEntity() 
+	public DMEntity getDataComponentEntity()
 	{
 		return dataComponentEntitySelector.getEditedObject();
 	}
 
-	public FlexoProcess getMonitoringComponentProcess() 
+	public FlexoProcess getMonitoringComponentProcess()
 	{
 		return monitoringComponentProcessSelector.getEditedObject();
 	}
 
-	public FlexoProcess getMonitoringScreenProcess() 
+	public FlexoProcess getMonitoringScreenProcess()
 	{
 		return monitoringScreenProcessSelector.getEditedObject();
 	}

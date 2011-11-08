@@ -78,16 +78,16 @@ public class PerformanceTest extends TestCase {
 		public static final String CHILDREN = "children";
 		public static final String PARENT = "parent";
 
-		@Getter(id = PARENT, inverse = CHILDREN)
+		@Getter(value = PARENT, inverse = CHILDREN)
 		public ModelObject getParent();
 
-		@Setter(id = PARENT)
+		@Setter(value = PARENT)
 		public void setParent(ModelObject parent);
 
-		@Getter(id = CHILDREN, cardinality = Cardinality.LIST, inverse = PARENT)
+		@Getter(value = CHILDREN, cardinality = Cardinality.LIST, inverse = PARENT)
 		public List<ModelObject> getChildren();
 
-		@Setter(id = CHILDREN)
+		@Setter(value = CHILDREN)
 		public void setChildren(List<ModelObject> children);
 
 		@Adder(id = CHILDREN)

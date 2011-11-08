@@ -45,19 +45,19 @@ public interface FlexoProcess extends WKFObject {
 	public static final String FOO = "foo";
 	public static final String NODES = "nodes";
 
-	@Getter(id=FOO,defaultValue="4")
+	@Getter(value=FOO,defaultValue="4")
 	@XMLAttribute(xmlTag=FOO)
 	public int getFoo();
 
-	@Setter(id=FOO)
+	@Setter(value=FOO)
 	public void setFoo(int foo);
 
-	@Getter(id=NODES,cardinality=Cardinality.LIST,inverse=WKFObject.PROCESS)
+	@Getter(value=NODES,cardinality=Cardinality.LIST,inverse=WKFObject.PROCESS)
 	@XMLElement(primary=true)
 	@CloningStrategy(StrategyType.CLONE)
 	@Embedded
 	public List<AbstractNode> getNodes();
-	@Setter(id=NODES)
+	@Setter(value=NODES)
 	public void setNodes(List<AbstractNode> nodes);
 	@Adder(id=NODES)
 	public void addToNodes(AbstractNode node);
