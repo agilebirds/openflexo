@@ -216,6 +216,7 @@ public class TestCG extends CGTestCase {
 		action.setNewProcessName(TEST_SUB_PROCESS);
 		action.doAction();
 		logger.info("SubProcess "+action.getNewProcess().getName()+" successfully created");
+        defineStatusColumn(_rootProcessResource.getFlexoProcess());
 		_subProcessResource = _project.getFlexoProcessResource(TEST_SUB_PROCESS);
 		assertNotNull(_subProcessResource);
 		assertSynchonized(_subProcessResource,_rmResource);
@@ -258,6 +259,7 @@ public class TestCG extends CGTestCase {
 		assertTrue(action.hasActionExecutionSucceeded());
 		_subProcessNode = (SubProcessNode)action.getObject();
 		_subProcessNode.setName(TEST_SUB_PROCESS_NODE);
+        defineStatusColumn(_subProcessResource.getFlexoProcess());
 		logger.info("SubProcessNode "+_subProcessNode.getName()+" successfully created");
 		assertDepends(_rootProcessResource,_subProcessResource);
 		saveProject();
@@ -580,6 +582,7 @@ public class TestCG extends CGTestCase {
 		AddSubProcess process = AddSubProcess.actionType.makeNewAction(_project.getFlexoWorkflow(), null, _editor);
 		process.setNewProcessName("Process context free");
 		process.doAction();
+        defineStatusColumn(process.getNewProcess());
 		DropWKFElement addActivity = DropWKFElement.actionType.makeNewAction(process.getNewProcess().getActivityPetriGraph(), null, _editor);
         addActivity.setElementType(WKFElementType.NORMAL_ACTIVITY);
         addActivity.setLocation(100,100);

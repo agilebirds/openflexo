@@ -32,7 +32,7 @@ import org.openflexo.model.factory.ModelFactory;
  * @author Guillaume
  * 
  */
-public class PerformanceTest extends TestCase {
+public class PerformanceTest {
 
 	/**
 	 * The result of a TestRunnable.

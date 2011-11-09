@@ -3,7 +3,7 @@ target
 .classpath
 .settings
 *.helpset
-<<<<<<< HEAD
 *.hprof
-=======
->>>>>>> refs/heads/view_point_inspector
+*.iml
+*.ipr
+*.iws

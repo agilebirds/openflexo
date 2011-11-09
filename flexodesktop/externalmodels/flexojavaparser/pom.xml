@@ -9,6 +9,21 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>flexojavaparser</artifactId>
 	<name>FlexoJavaParser</name>
+    <build>
+        <plugins>
+            <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <!-- This test reference resources files that doesn't exists
+                          and I can't find any trace of those files even in VCS history-->
+                        <exclude>**/*/TestJavaParser.java</exclude>
+                    </excludes>
+                </configuration>
+			</plugin>
+        </plugins>
+    </build>
 	<dependencies>
 		<dependency>
 			<groupId>org.openflexo</groupId>

@@ -48,6 +48,8 @@ import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.action.AddGeneratedCodeRepository;
 import org.openflexo.foundation.cg.generator.GeneratorUtils;
 import org.openflexo.foundation.cg.templates.CGTemplate;
+import org.openflexo.foundation.dm.DMPropertyImplementationType;
+import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.FlexoExecutionModelRepository;
 import org.openflexo.foundation.dm.eo.EOPrototypeRepository;
 import org.openflexo.foundation.ie.IEOperationComponent;
@@ -75,8 +77,10 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.ScreenshotResource;
 import org.openflexo.foundation.rm.cg.CopyOfFlexoResource;
 import org.openflexo.foundation.rm.cg.GenerationStatus;
+import org.openflexo.foundation.rm.cg.JavaFileResource;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
+import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
@@ -229,7 +233,7 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 
 			if (!shouldBeModified) {
 				try {
-					assertEquals(file.getFileName(),GenerationStatus.UpToDate,file.getGenerationStatus());
+                    assertEquals(file.getFileName()+"["+file.getName()+"]",GenerationStatus.UpToDate,file.getGenerationStatus());
 				}
 				catch (AssertionFailedError e) {
 					logger.warning("RESOURCE status problem: "+file.getFileName()+" MUST be up-to-date; Status is currently "+file.getGenerationStatus()+" reason:\n"+file.getResource().getNeedsUpdateReason());
@@ -274,7 +278,7 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 
 			if (shouldDependsOnTemplate) {
 				try {
-					assertTrue(((GenerationAvailableFileResource)file.getResource()).getGenerator().getUsedTemplates().contains(templateFile));
+                    assertTrue("Was expecting that template "+templateFile+" being part of the used templates. Used templates : "+((GenerationAvailableFileResource)file.getResource()).getGenerator().getUsedTemplates(),((GenerationAvailableFileResource)file.getResource()).getGenerator().getUsedTemplates().contains(templateFile));
 				}
 				catch (AssertionFailedError e) {
 					logger.warning("File: " + file.getFileName() + " should depends on template " + templateFile.getTemplateName() + " which is not the case");
@@ -303,6 +307,8 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 	protected static OperationComponentJavaFileResource operationComponent3JavaResource;
 	protected static TabComponentJavaFileResource tabComponent1JavaResource;
 	protected static TabComponentJavaFileResource tabComponent2JavaResource;
+
+    protected static JavaFileResource workflowComponentInstanceResource;
 
 	protected static OperationComponentAPIFileResource operationComponent1APIResource;
 	protected static OperationComponentAPIFileResource operationComponent2APIResource;
@@ -387,6 +393,8 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 		//assertNotNull(tabComponent1JavaResource);
 		tabComponent2JavaResource = (TabComponentJavaFileResource)_project.resourceForKey(ResourceType.JAVA_FILE, codeRepository.getName()+"."+tab2Name);
 		assertNotNull(tabComponent2JavaResource);
+
+        workflowComponentInstanceResource = (JavaFileResource)_project.resourceForKey(ResourceType.JAVA_FILE, codeRepository.getName()+"."+"org.openflexo.workflowcontext.WorkflowComponentInstance");
 
 		operationComponent1APIResource = (OperationComponentAPIFileResource)_project.resourceForKey(ResourceType.API_FILE, codeRepository.getName()+"."+OPERATION_COMPONENT_1);
 		assertNotNull(operationComponent1APIResource);
@@ -831,6 +839,11 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 		saveProject();
 
 	}
+
+    protected void defineStatusColumn(FlexoProcess process){
+        process.getBusinessDataType().createDMProperty("status", DMType.makeResolvedDMType(String.class, _rootProcessResource.getProject()), DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
+
+    }
 
 	protected void associateTabWithOperations(){
 		//now we have to define tabs for operations
