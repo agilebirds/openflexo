@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBSelectable;
@@ -224,14 +225,20 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 		getResultingJComponent().setVisible(isVisible);
 	}
 	
-	public FIBComponentDynamicModel createDynamicModel()
+	public FIBComponentDynamicModel<?> createDynamicModel()
 	{
 		if (getComponent().getDataType() != null) {
 			logger.fine("Create dynamic model "+this+" for "+getComponent());
-			return new FIBComponentDynamicModel(getDefaultData());
+			return buildDynamicModel(TypeUtils.getBaseClass(getComponent().getDataType()));
 		}
 		return null;
 	}
+	
+	private <T> FIBComponentDynamicModel<T> buildDynamicModel(Class<T> type)
+	{
+		return new FIBComponentDynamicModel<T>((T)getDefaultData());
+	}
+	
 	
 	public Object getDefaultData()
 	{

@@ -294,7 +294,9 @@ implements Observer, MouseListener, FocusListener {
 						|| n.getAttribute() == FIBPanel.Parameters.borderTop
 						|| n.getAttribute() == FIBPanel.Parameters.borderLeft
 						|| n.getAttribute() == FIBPanel.Parameters.borderRight
-						|| n.getAttribute() == FIBPanel.Parameters.borderBottom) {
+						|| n.getAttribute() == FIBPanel.Parameters.borderBottom
+						|| n.getAttribute() == FIBPanel.Parameters.titleFont
+						|| n.getAttribute() == FIBPanel.Parameters.darkLevel) {
 					((FIBPanelView)view).updateBorder();
 				}
 				else if (n.getAttribute() == FIBPanel.Parameters.layout
@@ -363,8 +365,11 @@ implements Observer, MouseListener, FocusListener {
 					((FIBView)view).updateFont();
 				}
 				else if (n.getAttribute() == FIBComponent.Parameters.backgroundColor
-						|| n.getAttribute() == FIBComponent.Parameters.foregroundColor) {
+						|| n.getAttribute() == FIBComponent.Parameters.foregroundColor
+						|| n.getAttribute() == FIBComponent.Parameters.opaque) {
 					((FIBView)view).updateGraphicalProperties();
+					((FIBView)view).getJComponent().revalidate();
+					((FIBView)view).getJComponent().repaint();
 				}
 			}
 		}

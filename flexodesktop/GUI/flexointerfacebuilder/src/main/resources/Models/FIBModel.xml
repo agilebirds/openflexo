@@ -24,6 +24,7 @@
     <property name="constraints" xmlTag="constraints" attribute="YES"/> 
     <property name="visible" xmlTag="visible" attribute="YES"/> 
     <property name="font" xmlTag="font" attribute="YES"/> 
+    <property name="opaque" xmlTag="opaque" attribute="YES" ignoreDefaultValue="false"/> 
     <property name="backgroundColor" xmlTag="backgroundColor" attribute="YES"/> 
     <property name="foregroundColor" xmlTag="foregroundColor" attribute="YES"/> 
     <property name="width" xmlTag="width" attribute="YES"/> 
@@ -120,6 +121,7 @@
     <property name="showIcon" xmlTag="showIcon" attribute="YES" ignoreDefaultValue="false"/> 
     <property name="showText" xmlTag="showText" attribute="YES" ignoreDefaultValue="true"/> 
     <property name="iteratorClass" xmlTag="iteratorClassName" attribute="YES"/> 
+    <property name="autoSelectFirstRow" xmlTag="autoSelectFirstRow" attribute="YES"/> 
    </entity>
   
   <entity name="org.openflexo.fib.model.FIBDropDown" xmlTag="DropDown"> 
@@ -132,7 +134,6 @@
   <entity name="org.openflexo.fib.model.FIBList" xmlTag="List"> 
     <property name="visibleRowCount" xmlTag="visibleRowCount" attribute="YES"/> 
     <property name="rowHeight" xmlTag="rowHeight" attribute="YES"/> 
-    <property name="autoSelectFirstRow" xmlTag="autoSelectFirstRow" attribute="YES"/> 
     <property name="createNewRowOnClick" xmlTag="createNewRowOnClick" attribute="YES"/> 
     <property name="boundToSelectionManager" xmlTag="boundToSelectionManager" attribute="YES"/> 
     <property name="selectionMode" xmlTag="selectionMode" attribute="YES"/> 

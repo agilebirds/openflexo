@@ -258,6 +258,7 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList,JList,Object> 
 			}
 
 			getDynamicModel().selected = selectedObject;
+			getDynamicModel().selectedIndex = leadIndex;
 			getDynamicModel().selection = selection;
 			notifyDynamicModelChanged();
 

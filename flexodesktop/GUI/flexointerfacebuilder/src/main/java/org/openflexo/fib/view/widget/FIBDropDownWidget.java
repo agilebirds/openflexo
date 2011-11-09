@@ -66,7 +66,7 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown,JCombo
 		
 		_mySmallPanel.add(_jComboBox, BorderLayout.CENTER);
 		if (model.showReset) _mySmallPanel.add(_resetButton, BorderLayout.EAST);
-		_mySmallPanel.setOpaque(true);
+		_mySmallPanel.setOpaque(false);
 		_mySmallPanel.addFocusListener(this);
 
         updateFont();
@@ -119,6 +119,13 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown,JCombo
 		}
 		// Important: otherwise might be desynchronized
 		_jComboBox.revalidate();
+		
+		if ((getWidget().getData() == null || !getWidget().getData().isValid()) 
+				&& getWidget().getAutoSelectFirstRow()
+				&& getListModel().getSize() > 0) {
+			_jComboBox.setSelectedIndex(0);
+		}
+
 	}
 
 	@Override
@@ -131,7 +138,13 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown,JCombo
 			widgetUpdating = true;
 			initJComboBox();
 			_jComboBox.setSelectedItem(getValue());
+			
 			widgetUpdating = false;
+
+			if (getValue() == null && getWidget().getAutoSelectFirstRow() && getListModel().getSize() > 0) {
+				_jComboBox.setSelectedIndex(0);
+			}
+
 			return true;
 		}
 		return false;
@@ -188,6 +201,9 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown,JCombo
 		public void setSelectedItem(Object anItem)
 		{
 			selectedItem = anItem;
+			getDynamicModel().selected = anItem;
+			getDynamicModel().selectedIndex = indexOf(anItem);
+			notifyDynamicModelChanged();
 		}
 
 		@Override

@@ -26,8 +26,8 @@ import java.util.logging.Logger;
 import javax.swing.UIManager;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.fib.controller.FIBListDynamicModel;
 import org.openflexo.fib.model.FIBTable.SelectionMode;
 
@@ -40,7 +40,6 @@ public class FIBList extends FIBMultipleValues {
 		visibleRowCount,
 		rowHeight,
 		createNewRowOnClick,
-		autoSelectFirstRow,
 		boundToSelectionManager,
 		selectionMode,
 		selected,
@@ -91,7 +90,6 @@ public class FIBList extends FIBMultipleValues {
 	private int visibleRowCount = 5;
 	private int rowHeight = 20;
 	private boolean createNewRowOnClick = false;
-	private boolean autoSelectFirstRow = false;
 	private boolean boundToSelectionManager = false;
 
 	private SelectionMode selectionMode = SelectionMode.MultipleIntervalSelection;
@@ -185,21 +183,6 @@ public class FIBList extends FIBMultipleValues {
 		}
 	}
 
-	public boolean getAutoSelectFirstRow()
-	{
-		return autoSelectFirstRow;
-	}
-
-	public void setAutoSelectFirstRow(boolean autoSelectFirstRow)
-	{
-		FIBAttributeNotification<Boolean> notification = requireChange(
-				Parameters.autoSelectFirstRow, autoSelectFirstRow);
-		if (notification != null) {
-			this.autoSelectFirstRow = autoSelectFirstRow;
-			hasChanged(notification);
-		}
-	}
-	
 	public boolean getBoundToSelectionManager()
 	{
 		return boundToSelectionManager;

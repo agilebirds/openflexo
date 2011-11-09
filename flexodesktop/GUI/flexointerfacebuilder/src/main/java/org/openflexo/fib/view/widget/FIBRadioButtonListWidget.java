@@ -51,6 +51,10 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 		buttonGroup = new ButtonGroup();
 		panel = new JPanel(new GridLayout(0, model.getColumns()));
 		rebuildRadioButtons();
+		if (getWidget().getAutoSelectFirstRow() && getListModel().getSize() > 0) {
+			radioButtonArray[0].setSelected(true);
+			notifyDynamicModelChanged();
+		}
 	}
 
 	protected void rebuildRadioButtons()
@@ -61,7 +65,7 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 		for (int i = 0; i < getListModel().getSize(); i++) {
 			Object object = getListModel().getElementAt(i);
 			JRadioButton rb = new JRadioButton(getStringRepresentation(object), equals(object, selectedValue));
-			rb.addActionListener(new RadioButtonListener(rb, object));
+			rb.addActionListener(new RadioButtonListener(rb, object, i));
 			radioButtonArray[i] = rb;
 			panel.add(rb);
 			buttonGroup.add(rb);
@@ -82,6 +86,10 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 			selectedValue = value;
 			rebuildRadioButtons();
 			
+			if (getValue() == null && getWidget().getAutoSelectFirstRow() && getListModel().getSize() > 0) {
+				radioButtonArray[0].setSelected(true);
+			}
+
 			widgetUpdating = false;
 			return true;
 		}
@@ -92,10 +100,12 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 
 		private final Object value;
 		private final JRadioButton button;
+		private final int index;
 
-		public RadioButtonListener(JRadioButton button, Object value) {
+		public RadioButtonListener(JRadioButton button, Object value, int index) {
 			this.button = button;
 			this.value = value;
+			this.index = index;
 		}
 
 		@Override
@@ -103,6 +113,9 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 			if (e.getSource() == button && button.isSelected()) {
 				selectedValue = value;
 				updateModelFromWidget();
+				getDynamicModel().selected = value;
+				getDynamicModel().selectedIndex = index;
+				notifyDynamicModelChanged();
 			}
 		}
 

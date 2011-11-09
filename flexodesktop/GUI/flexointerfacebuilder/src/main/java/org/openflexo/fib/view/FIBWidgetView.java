@@ -178,7 +178,7 @@ implements FocusListener, Observer, PropertyChangeListener
     	if (getWidget().getData() == null || getWidget().getData().isUnset()) {
        		if (getDynamicModel() != null) {
        			logger.fine("Get dynamic model value: "+getDynamicModel().getData());
-      			return (T)getDynamicModel().getData();
+      			return getDynamicModel().getData();
        		}
        		else return null;
        	}
@@ -465,14 +465,21 @@ implements FocusListener, Observer, PropertyChangeListener
     }
 
 	@Override
-	public FIBComponentDynamicModel createDynamicModel()
+	public FIBComponentDynamicModel<T> createDynamicModel()
 	{
 		if (getWidget().getManageDynamicModel()) {
-			return super.createDynamicModel();
+			return (FIBComponentDynamicModel<T>)super.createDynamicModel();
 		}
 		return null;
 	}
 	
+	@Override
+	public FIBComponentDynamicModel<T> getDynamicModel()
+	{
+		return super.getDynamicModel();
+	}
+
+
 	@Override
 	public T getDefaultData()
 	{

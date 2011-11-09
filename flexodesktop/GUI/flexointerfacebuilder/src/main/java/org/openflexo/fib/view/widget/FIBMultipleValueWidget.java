@@ -33,6 +33,7 @@ import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 
 import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.controller.FIBMultipleValuesDynamicModel;
 import org.openflexo.fib.model.FIBMultipleValues;
 import org.openflexo.fib.view.FIBWidgetView;
 import org.openflexo.localization.FlexoLocalization;
@@ -307,6 +308,23 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 	{
 		updateListModel();
 		super.updateDataObject(value);
+	}
+
+	@Override
+	public FIBMultipleValuesDynamicModel<T,?> createDynamicModel()
+	{
+		return buildDynamicModel(getWidget().getIteratorClass());
+	}
+	
+	private <O> FIBMultipleValuesDynamicModel<T,O> buildDynamicModel(Class<O> aClass)
+	{
+		return new FIBMultipleValuesDynamicModel<T,O>(null);
+	}
+
+	@Override
+	public FIBMultipleValuesDynamicModel<T,Object> getDynamicModel()
+	{
+		return (FIBMultipleValuesDynamicModel<T,Object>)super.getDynamicModel();
 	}
 
 
