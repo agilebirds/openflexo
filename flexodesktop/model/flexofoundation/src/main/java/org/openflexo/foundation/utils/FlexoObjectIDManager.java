@@ -36,11 +36,9 @@ import org.openflexo.logging.FlexoLogger;
 public class FlexoObjectIDManager
 {
 
-	private FlexoProject currentProject;
+	private FlexoProject project;
 
 	private static final Logger logger = FlexoLogger.getLogger(FlexoObjectIDManager.class.getPackage().toString());
-
-	private static final FlexoObjectIDManager instance = new FlexoObjectIDManager();
 
 	private Vector<FlexoModelObject> badObjects;
 	private Hashtable<Long,FlexoModelObject> used;
@@ -48,23 +46,13 @@ public class FlexoObjectIDManager
 	/**
 	 * 
 	 */
-	private FlexoObjectIDManager()
+	public FlexoObjectIDManager(FlexoProject project)
 	{
+		this.project = project;
 	}
 
-	public static FlexoObjectIDManager getInstance()
+	public Vector<FlexoModelObject> checkProject(boolean fixProblems)
 	{
-		return instance;
-	}
-
-	public Vector<FlexoModelObject> checkProject(FlexoProject project, boolean fixProblems)
-	{
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Start checking flexoID for project " + project.getProjectName());
-		}
-
-		currentProject = project;
-
 		// First load all unloaded resources
 		for (FlexoResource resource : project.getResources().values()) {
 			if (resource instanceof FlexoStorageResource) {
@@ -118,7 +106,7 @@ public class FlexoObjectIDManager
 				logger.warning("An object was found with status beingCloned " + o.getXMLRepresentation());
 			}
 		}
-		if (o.getFlexoID() < 0 || o.getFlexoID() > currentProject.getLastUniqueID()) {
+		if (o.getFlexoID() < 0 || o.getFlexoID() > project.getLastUniqueID()) {
 			// The next line is commented because if there are issues with flexoID, it is likely that the XML encoding of the object used to
 			// retrieve the XML representation will also fail, since it also works with the flexoID
 			// This is the kind of message we get: "org.openflexo.xmlcode.DuplicateSerializationIdentifierException: Found the same

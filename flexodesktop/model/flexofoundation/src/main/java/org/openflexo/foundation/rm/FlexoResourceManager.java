@@ -28,8 +28,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
+import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.utils.DefaultProjectLoadingHandler;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectInitializerException;
@@ -152,6 +152,7 @@ public class FlexoResourceManager {
 				// simultaneously and might cause a popup
 				// because of some file modification when
 				// reloading the same project
+				_clockThread = null;
 			}
 		}
 	}
@@ -206,7 +207,7 @@ public class FlexoResourceManager {
 		File rmFile = getExpectedResourceManagerFile(aProjectDirectory);
 		if (!rmFile.exists()) {
 			throw new ProjectInitializerException(
-			"There is no rmxml file in project. Cannot load project without one. Use previous versions of Flexo first and then load with this new version.");
+					"There is no rmxml file in project. Cannot load project without one. Use previous versions of Flexo first and then load with this new version.");
 		} else {
 			try {
 				FlexoProject.restoreJarsIfNeeded(aProjectDirectory);

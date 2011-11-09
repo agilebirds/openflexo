@@ -28,7 +28,7 @@
 	<repositories>
 		<repository>
 			<id>openflexo</id>
-			<url>http://www.agilebirds.com/artifactory/openflexo-deps/</url>
+			<url>https://maven.openflexo.com/artifactory/openflexo-deps/</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
@@ -60,29 +60,7 @@
 						<target>${compiler.target}</target>
 						<encoding>${source.encoding}</encoding>
 						<fork>false</fork>
-						<maxmem>1024</maxmem>
 						<compilerId>jdt</compilerId>
-						<lifecycleMappingMetadata>
-							<pluginExecution>
-								<pluginExecutionFilter>
-									<groupId>org.apache.maven.plugins</groupId>
-									<artifactId>maven-compiler-plugin</artifactId>
-									<versionRange>[2.0,)</versionRange>
-									<goals>
-										<goal>compile</goal>
-										<goal>testCompile</goal>
-									</goals>
-									<parameters>
-										<compilerId>jdt</compilerId>
-									</parameters>
-								</pluginExecutionFilter>
-								<action>
-									<configurator>
-										<id>org.eclipse.m2e.jdt.javaConfigurator</id>
-									</configurator>
-								</action>
-							</pluginExecution>
-						</lifecycleMappingMetadata>
 					</configuration>
 					<dependencies>
 						<dependency>
@@ -91,6 +69,36 @@
 							<version>0.13.0</version>
 						</dependency>
 					</dependencies>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-compiler-plugin</artifactId>
+										<versionRange>[2.0,)</versionRange>
+										<goals>
+											<goal>compile</goal>
+											<goal>testCompile</goal>
+										</goals>
+										<parameters>
+											<compilerId>jdt</compilerId>
+										</parameters>
+									</pluginExecutionFilter>
+									<action>
+										<configurator>
+											<id>org.eclipse.m2e.jdt.javaConfigurator</id>
+										</configurator>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
