@@ -68,6 +68,8 @@
     <property name="borderBottom" xmlTag="borderBottom" attribute="YES"/> 
     <property name="borderLeft" xmlTag="borderLeft" attribute="YES"/> 
     <property name="borderRight" xmlTag="borderRight" attribute="YES"/> 
+    <property name="titleFont" xmlTag="titleFont" attribute="YES"/> 
+    <property name="darkLevel" xmlTag="darkLevel" attribute="YES"/> 
     <property name="protectContent" xmlTag="protectContent" attribute="YES" ignoreDefaultValue="false"/>     
   </entity>
   

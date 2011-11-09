@@ -43,6 +43,7 @@ import org.openflexo.fib.model.FIBPanel.Layout;
 import org.openflexo.fib.model.GridLayoutConstraints;
 import org.openflexo.fib.view.FIBContainerView;
 import org.openflexo.fib.view.FIBView;
+import org.openflexo.toolbox.StringUtils;
 
 
 public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C,JPanel> {
@@ -90,6 +91,17 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C,JPanel>
 			break;
 		case titled:
 			panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),getLocalized(getComponent().getBorderTitle()),TitledBorder.CENTER,TitledBorder.DEFAULT_POSITION,getComponent().retrieveValidFont(),getComponent().retrieveValidForegroundColor()));
+			break;
+		case rounded3d:
+			panel.setBorder(new RoundedBorder(
+					StringUtils.isNotEmpty(getComponent().getBorderTitle()) ? getLocalized(getComponent().getBorderTitle()) : null,
+							(getComponent().getBorderTop() != null ? getComponent().getBorderTop() : 0),
+							(getComponent().getBorderLeft() != null ? getComponent().getBorderLeft() : 0),
+							(getComponent().getBorderBottom() != null ? getComponent().getBorderBottom() : 0),
+							(getComponent().getBorderRight() != null ? getComponent().getBorderRight() : 0),
+							getComponent().getTitleFont(),
+							getComponent().retrieveValidForegroundColor(),
+							getComponent().getDarkLevel()));
 			break;
 		default:
 			break;
