@@ -208,6 +208,8 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 
 	private FlexoResourceCenter resourceCenter;
 
+	private FlexoObjectIDManager objectIDManager;
+
 	/**
 	 * These variable are here to replace old static references.
 	 */
@@ -2980,7 +2982,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 				 BufferedImage bi = ImageIO.read(file);
 				 BufferedImage image = new BufferedImage(bi.getWidth(null), bi.getHeight(null), BufferedImage.TYPE_INT_RGB);
 				 image.createGraphics().drawImage(i, 0, 0, bi.getWidth(null), bi.getHeight(null), null);
-				ImageIO.write(image, "jpg", out);
+				 ImageIO.write(image, "jpg", out);
 				 return output;
 			 } catch (IOException e) {
 				 e.printStackTrace();
@@ -3335,7 +3337,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		  */
 		 @Override
 		 public ValidationIssue<FlexoIDMustBeUnique, FlexoProject> applyValidation(FlexoProject object) {
-			 Vector<FlexoModelObject> badObjects = FlexoObjectIDManager.getInstance().checkProject(object, true);
+			Vector<FlexoModelObject> badObjects = object.getObjectIDManager().checkProject(true);
 			 if (badObjects.size() > 0) {
 				 DuplicateObjectIDIssue issues = new DuplicateObjectIDIssue(object);
 				 for (FlexoModelObject obj : badObjects) {
@@ -3975,6 +3977,13 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			 hash.put(reference.getInstanceId(), returned);
 		 }
 		 return returned;
+	 }
+
+	 public FlexoObjectIDManager getObjectIDManager() {
+		 if (objectIDManager == null) {
+			 objectIDManager = new FlexoObjectIDManager(this);
+		 }
+		 return objectIDManager;
 	 }
 
 	 public FlexoResourceCenter getResourceCenter() {

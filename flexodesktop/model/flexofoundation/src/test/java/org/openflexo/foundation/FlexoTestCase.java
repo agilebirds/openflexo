@@ -107,8 +107,6 @@ import org.openflexo.toolbox.ToolBox;
 public abstract class FlexoTestCase extends TestCase
 {
 
-
-
 	private static final Logger logger = FlexoLogger.getLogger(FlexoTestCase.class.getPackage().getName());
 
 	static {
