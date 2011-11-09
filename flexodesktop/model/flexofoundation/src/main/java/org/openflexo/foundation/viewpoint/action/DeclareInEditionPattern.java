@@ -26,11 +26,11 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
+import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
 import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
-import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
-import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ShapePatternRole;
 
@@ -74,7 +74,15 @@ public class DeclareInEditionPattern extends FlexoAction<DeclareInEditionPattern
 		FlexoModelObject.addActionForClass (DeclareInEditionPattern.actionType, ExampleDrawingConnector.class);
 	}
 
-
+	protected static String CREATES_EDITION_PATTERN = "CREATES_EDITION_PATTERN";
+	protected static String CHOOSE_ONE_EXISTING = "CHOOSE_ONE_EXISTING";
+	public static String[] choices = { CREATES_EDITION_PATTERN, CHOOSE_ONE_EXISTING };
+	
+	public static enum DeclareInEditionPatternChoices {
+		CREATES_EDITION_PATTERN,
+		CHOOSE_EXISTING_EDITION_PATTERN
+	}
+	
 	private EditionPattern editionPattern;
 	private PatternRole patternRole;
 
