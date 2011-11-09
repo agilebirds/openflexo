@@ -39,8 +39,8 @@ import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.ComponentConstraints;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBPanel;
-import org.openflexo.fib.model.GridLayoutConstraints;
 import org.openflexo.fib.model.FIBPanel.Layout;
+import org.openflexo.fib.model.GridLayoutConstraints;
 import org.openflexo.fib.view.FIBContainerView;
 import org.openflexo.fib.view.FIBView;
 
@@ -54,9 +54,18 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C,JPanel>
 	public FIBPanelView(C model, FIBController controller)
 	{
 		super(model,controller);
+		
 		updateBorder();
 	}
 
+	@Override
+	public void updateGraphicalProperties()
+	{
+		super.updateGraphicalProperties();
+		panel.setOpaque(getComponent().getOpaque());
+		panel.setBackground(getComponent().getBackgroundColor());
+	}
+	
 	public void updateBorder()
 	{
 		switch (getComponent().getBorder()) {
@@ -128,7 +137,8 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C,JPanel>
 	protected JPanel createJComponent() 
 	{
 		panel = new JPanel();
-
+		updateGraphicalProperties();
+		
 		_setPanelLayoutParameters();
 
 		return panel;
