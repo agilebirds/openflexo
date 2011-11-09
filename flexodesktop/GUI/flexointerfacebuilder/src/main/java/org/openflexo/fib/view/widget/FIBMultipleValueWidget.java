@@ -207,7 +207,6 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 					if (object2.array == null) return false;
 					else return array.equals(object2.array);
 				}
-				return false;
 			}
 			return super.equals(object);
 		}

@@ -148,9 +148,15 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList,JList,Object> 
 		return (FIBListModel)listModel;
 	}
 
+	private FIBListModel oldListModel = null;
+	
 	private void setListModel(FIBListModel aListModel)
 	{
 		widgetUpdating = true;
+		if (oldListModel != null) {
+			_list.getSelectionModel().removeListSelectionListener(oldListModel);
+		}
+		oldListModel = aListModel;
 		_list.setLayoutOrientation(getWidget().getLayoutOrientation().getSwingValue());
 		_list.setSelectionMode(getWidget().getSelectionMode().getMode());
 		_list.setVisibleRowCount(getWidget().getVisibleRowCount());
