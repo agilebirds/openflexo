@@ -145,11 +145,13 @@ public class TestCG2 extends CGTestCase  {
 			}
 		}
 
+        defineStatusColumn(_rootProcessResource.getFlexoProcess());
 		AddSubProcess action = AddSubProcess.actionType.makeNewAction(_rootProcessResource.getFlexoProcess(), null, _editor);
 		action.setParentProcess(_rootProcessResource.getFlexoProcess());
 		action.setNewProcessName(TEST_SUB_PROCESS);
 		action.doAction();
 		logger.info("SubProcess "+action.getNewProcess().getName()+" successfully created");
+        defineStatusColumn(action.getNewProcess());
 		_subProcessResource = _project.getFlexoProcessResource(TEST_SUB_PROCESS);
 		assertNotNull(_subProcessResource);
 		assertSynchonized(_subProcessResource,_rmResource);
@@ -626,7 +628,8 @@ public class TestCG2 extends CGTestCase  {
 				operationNode2ScreenshotCopyOfCopy.getCGFile(),
 				operationNode3ScreenshotCopyOfCopy.getCGFile(),
 				operationComponent1ScreenshotCopyOfCopy.getCGFile(),
-				operationComponent2ScreenshotCopyOfCopy.getCGFile());
+				operationComponent2ScreenshotCopyOfCopy.getCGFile(),
+                workflowComponentInstanceResource.getCGFile());
 
 		assertEquals(operationComponent1APIResource.getCGFile().getGenerationStatus(), GenerationStatus.GenerationModified);
 		assertEquals(operationComponent1WOResource.getCGFile().getGenerationStatus(), GenerationStatus.GenerationModified);
