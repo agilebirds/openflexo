@@ -149,28 +149,34 @@ public class LoadedClassesInfo implements HasPropertyChangeSupport {
 	
 	private ClassInfo registerClass(Class c)
 	{
-		PackageInfo p = registerPackage(c.getPackage());
-		
-			logger.fine("Register class "+c);
-		
-		if (!c.isMemberClass() && !c.isAnonymousClass() && !c.isLocalClass()) {		
-			ClassInfo returned = p.classes.get(c);
-			if (returned == null) {
-				p.classes.put(c, returned = new ClassInfo(c));
-				logger.fine("Store "+returned+" in package "+p.packageName);
-			}
-			return returned;
-		}
-		else if (c.isMemberClass()) {
-			//System.out.println("Member class: "+c+" of "+c.getDeclaringClass());
-			ClassInfo parentClass = registerClass(c.getEnclosingClass());
-			ClassInfo returned =  parentClass.declareMember(c);
-			return returned;
-		}
-		else {
-			//System.out.println("Ignored class: "+c);
+		if (c.getPackage() == null) {
+			logger.warning("No package for class "+c);
 			return null;
 		}
+
+		PackageInfo p = registerPackage(c.getPackage());
+
+			logger.fine("Register class "+c);
+
+			if (!c.isMemberClass() && !c.isAnonymousClass() && !c.isLocalClass()) {		
+				ClassInfo returned = p.classes.get(c);
+				if (returned == null) {
+					p.classes.put(c, returned = new ClassInfo(c));
+					logger.fine("Store "+returned+" in package "+p.packageName);
+				}
+				return returned;
+			}
+			else if (c.isMemberClass()) {
+				//System.out.println("Member class: "+c+" of "+c.getDeclaringClass());
+				ClassInfo parentClass = registerClass(c.getEnclosingClass());
+				ClassInfo returned =  parentClass.declareMember(c);
+				return returned;
+			}
+			else {
+				//System.out.println("Ignored class: "+c);
+				return null;
+			}
+		
 	}
 	
 	public class PackageInfo implements HasPropertyChangeSupport

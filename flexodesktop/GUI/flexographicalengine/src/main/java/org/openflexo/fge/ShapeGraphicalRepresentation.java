@@ -33,26 +33,27 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
-import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlActionType;
 import org.openflexo.fge.controller.MouseControl.MouseButton;
+import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.fge.controller.MouseDragControlAction.MouseDragControlActionType;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGESegment;
 import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEIntersectionArea;
 import org.openflexo.fge.graphics.BackgroundStyle;
+import org.openflexo.fge.graphics.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.graphics.DecorationPainter;
 import org.openflexo.fge.graphics.FGEShapeDecorationGraphics;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
@@ -60,7 +61,6 @@ import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShadowStyle;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.graphics.TextStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.ObjectHasMoved;
 import org.openflexo.fge.notifications.ObjectHasResized;
@@ -110,10 +110,6 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		shapeType,
 		shape,
 		shadowStyle,
-		/*drawShadow,
-		shadowDarkness,
-		shadowDeep,
-		shadowBlur,*/
 		isFloatingLabel,
 		decorationPainter,
 		shapePainter,
@@ -275,7 +271,6 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	public ShapeGraphicalRepresentation(ShapeType shapeType, O aDrawable, Drawing<?> aDrawing)
 	{
 		this(aDrawable,aDrawing);
-
 		setShapeType(shapeType);
 		layer = FGEConstants.DEFAULT_SHAPE_LAYER;
 		foreground = ForegroundStyle.makeDefault();

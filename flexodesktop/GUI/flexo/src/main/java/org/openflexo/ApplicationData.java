@@ -85,4 +85,13 @@ public class ApplicationData {
 		return IconLibrary.OPENFLEXO_TEXT_SMALL_ICON;
 	}
 
+	public Module getFavoriteModule()
+	{
+		return Module.getModule(GeneralPreferences.getFavoriteModuleName());
+	}
+
+	public void setFavoriteModule(Module aModule)
+	{
+		 GeneralPreferences.setFavoriteModuleName(aModule.getName());
+	}
 }

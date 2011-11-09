@@ -21,6 +21,7 @@ package org.openflexo.fib.model;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.util.logging.Logger;
 
 import javax.swing.BoxLayout;
@@ -49,6 +50,9 @@ public class FIBPanel extends FIBContainer {
 	private Integer borderLeft = null;
 	private Integer borderRight = null;
 	
+	private Font titleFont = null;
+	private int darkLevel = 0;
+	
 	private boolean protectContent = false;
 	
 	public static enum Parameters implements FIBModelAttribute
@@ -67,6 +71,8 @@ public class FIBPanel extends FIBContainer {
 		borderBottom,
 		borderLeft,
 		borderRight,
+		titleFont,
+		darkLevel,
 		protectContent
 	}
 
@@ -143,7 +149,8 @@ public class FIBPanel extends FIBContainer {
 		etched,
 		raised,
 		lowered,
-		titled
+		titled,
+		rounded3d
 	}
 		
 	public FIBPanel()
@@ -218,6 +225,12 @@ public class FIBPanel extends FIBContainer {
 				break;
 			case titled:
 				if (borderTitle == null) borderTitle = "Panel";
+				break;
+			case rounded3d:
+				if (borderTop == null) borderTop = 2;
+				if (borderBottom == null) borderBottom = 2;
+				if (borderLeft == null) borderRight = 2;
+				if (borderRight == null) borderRight = 2;
 				break;
 
 			default:
@@ -422,5 +435,37 @@ public class FIBPanel extends FIBContainer {
 			hasChanged(notification);
 		}
 	}
+
+	public Font getTitleFont()
+	{
+		if (titleFont == null) return retrieveValidFont();
+		return titleFont;
+	}
+
+	public void setTitleFont(Font titleFont)
+	{
+		FIBAttributeNotification<Font> notification = requireChange(
+				Parameters.titleFont, titleFont);
+		if (notification != null) {
+			this.titleFont = titleFont;
+			hasChanged(notification);
+		}
+	}
+	
+	public int getDarkLevel()
+	{
+		return darkLevel;
+	}
+
+	public void setDarkLevel(int darkLevel)
+	{
+		FIBAttributeNotification<Integer> notification = requireChange(
+				Parameters.darkLevel, darkLevel);
+		if (notification != null) {
+			this.darkLevel = darkLevel;
+			hasChanged(notification);
+		}
+	}
+
 
 }

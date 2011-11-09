@@ -27,6 +27,16 @@ public class FIBIconLibrary {
 	public static final ImageIcon BROWSER_FILTERS_DISABLED_ICON = new ImageIconResource("Icons/GUI/BrowserFiltersDisabled.gif");
 	public static final ImageIcon BROWSER_FILTERS_SELECTED_ICON = new ImageIconResource("Icons/GUI/BrowserFiltersSelected.gif");
 	
+	public static final ImageIcon ROUND_PANEL_BORDER = new ImageIconResource("Icons/GUI/RoundPanelBorder.png");
+	public static final ImageIcon ROUND_PANEL_BORDER_TOP_LEFT = new ImageIconResource("Icons/GUI/RoundPanelBorderTopLeft.png");
+	public static final ImageIcon ROUND_PANEL_BORDER_TOP_RIGHT = new ImageIconResource("Icons/GUI/RoundPanelBorderTopRight.png");
+	public static final ImageIcon ROUND_PANEL_BORDER_BOTTOM_LEFT = new ImageIconResource("Icons/GUI/RoundPanelBorderBottomLeft.png");
+	public static final ImageIcon ROUND_PANEL_BORDER_BOTTOM_RIGHT = new ImageIconResource("Icons/GUI/RoundPanelBorderBottomRight.png");
+	public static final ImageIcon ROUND_PANEL_BORDER_TOP = new ImageIconResource("Icons/GUI/RoundPanelBorderTop.png");
+	public static final ImageIcon ROUND_PANEL_BORDER_BOTTOM = new ImageIconResource("Icons/GUI/RoundPanelBorderBottom.png");
+	public static final ImageIcon ROUND_PANEL_BORDER_RIGHT = new ImageIconResource("Icons/GUI/RoundPanelBorderRight.png");
+	public static final ImageIcon ROUND_PANEL_BORDER_LEFT = new ImageIconResource("Icons/GUI/RoundPanelBorderLeft.png");
+
 	// Icons used in ClassSelector
 	public static final ImageIcon PACKAGE_ICON = new ImageIconResource("Icons/ClassSelector/Package.gif");
 	public static final ImageIcon CLASS_ICON = new ImageIconResource("Icons/ClassSelector/Class.gif");

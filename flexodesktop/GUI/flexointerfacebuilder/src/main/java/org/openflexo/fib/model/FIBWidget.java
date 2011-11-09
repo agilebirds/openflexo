@@ -336,6 +336,14 @@ public abstract class FIBWidget extends FIBComponent {
 			}
 			return "FIBFormatter["+FIBWidget.this+"]"+" dataType="+(FIBWidget.this).getDataType();
 		}
+		
+		@Override
+		public void notifyBindingChanged(DataBinding binding) {
+			if (binding == getFormat()) {
+				FIBWidget.this.notifyBindingChanged(binding);
+			}
+			super.notifyBindingChanged(binding);
+		}
 	}
 	
 	public DataBinding getValueChangedAction() 

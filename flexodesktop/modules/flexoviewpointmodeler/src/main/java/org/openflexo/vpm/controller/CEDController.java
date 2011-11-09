@@ -39,11 +39,11 @@ import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.validation.ValidationModel;
+import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
-import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.inspector.InspectableObject;
@@ -89,6 +89,19 @@ public class CEDController extends FlexoController implements SelectionManagingC
     public final ViewPointPerspective VIEW_POINT_PERSPECTIVE;
     public final OntologyPerspective ONTOLOGY_PERSPECTIVE;
     
+	@Override
+	public boolean useNewInspectorScheme()
+	{
+		return true;
+	}
+	
+	@Override
+	public boolean useOldInspectorScheme()
+	{
+		return false;
+	}
+	
+
 	// ================================================
 	// ================ Constructor ===================
 	// ================================================
@@ -159,7 +172,7 @@ public class CEDController extends FlexoController implements SelectionManagingC
 		if (getSharedInspectorController() != null) {
 			_selectionManager.addObserver(getSharedInspectorController());
 		}
-		if (USE_NEW_INSPECTOR_SCHEME) {
+		if (useNewInspectorScheme()) {
 			loadInspectorGroup("Ontology");
 		}
 

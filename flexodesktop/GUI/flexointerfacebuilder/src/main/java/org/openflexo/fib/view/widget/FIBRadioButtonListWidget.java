@@ -22,7 +22,6 @@ package org.openflexo.fib.view.widget;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,9 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import org.openflexo.fib.controller.FIBController;
-import org.openflexo.fib.model.FIBAddingNotification;
 import org.openflexo.fib.model.FIBRadioButtonList;
-import org.openflexo.fib.model.FIBRemovingNotification;
 
 public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioButtonList, JPanel, Object>
 {
@@ -53,10 +50,22 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 		super(model,controller);
 		buttonGroup = new ButtonGroup();
 		panel = new JPanel(new GridLayout(0, model.getColumns()));
-		radioButtonArray = new JRadioButton[3];
-		for (int i = 0; i < 3; i++) {
-			String object = "Item-" + (i + 1);
-			JRadioButton rb = new JRadioButton(object, false);
+		rebuildRadioButtons();
+		if (getWidget().getAutoSelectFirstRow() && getListModel().getSize() > 0) {
+			radioButtonArray[0].setSelected(true);
+			notifyDynamicModelChanged();
+		}
+	}
+
+	protected void rebuildRadioButtons()
+	{
+		panel.removeAll();
+		buttonGroup = new ButtonGroup();
+		radioButtonArray = new JRadioButton[getListModel().getSize()];
+		for (int i = 0; i < getListModel().getSize(); i++) {
+			Object object = getListModel().getElementAt(i);
+			JRadioButton rb = new JRadioButton(getStringRepresentation(object), equals(object, selectedValue));
+			rb.addActionListener(new RadioButtonListener(rb, object, i));
 			radioButtonArray[i] = rb;
 			panel.add(rb);
 			buttonGroup.add(rb);
@@ -72,19 +81,15 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("updateWidgetFromModel()");
 			}
-			panel.removeAll();
-			buttonGroup = new ButtonGroup();
+			
 			widgetUpdating = true;
-			radioButtonArray = new JRadioButton[getListModel().getSize()];
-			for (int i = 0; i < getListModel().getSize(); i++) {
-				Object object = getListModel().getElementAt(i);
-				JRadioButton rb = new JRadioButton(getStringRepresentation(object), equals(object, value));
-				rb.addActionListener(new RadioButtonListener(rb, object));
-				radioButtonArray[i] = rb;
-				panel.add(rb);
-				buttonGroup.add(rb);
+			selectedValue = value;
+			rebuildRadioButtons();
+			
+			if (getValue() == null && getWidget().getAutoSelectFirstRow() && getListModel().getSize() > 0) {
+				radioButtonArray[0].setSelected(true);
 			}
-			panel.validate();
+
 			widgetUpdating = false;
 			return true;
 		}
@@ -95,10 +100,12 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 
 		private final Object value;
 		private final JRadioButton button;
+		private final int index;
 
-		public RadioButtonListener(JRadioButton button, Object value) {
+		public RadioButtonListener(JRadioButton button, Object value, int index) {
 			this.button = button;
 			this.value = value;
+			this.index = index;
 		}
 
 		@Override
@@ -106,6 +113,9 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 			if (e.getSource() == button && button.isSelected()) {
 				selectedValue = value;
 				updateModelFromWidget();
+				getDynamicModel().selected = value;
+				getDynamicModel().selectedIndex = index;
+				notifyDynamicModelChanged();
 			}
 		}
 
@@ -150,14 +160,6 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 		for (JRadioButton rb : radioButtonArray) {
 			rb.setFont(getFont());
 		}
-	}
-
-	@Override
-	public void update(Observable o, Object dataModification) {
-		if (dataModification instanceof FIBAddingNotification || dataModification instanceof FIBRemovingNotification) {
-			updateListModelWhenRequired();
-		}
-		super.update(o, dataModification);
 	}
 
 

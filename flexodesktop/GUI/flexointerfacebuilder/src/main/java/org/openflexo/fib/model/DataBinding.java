@@ -164,7 +164,7 @@ public class DataBinding implements StringConvertable<DataBinding>
 			else {
 				this.binding = value;
 				unparsedBinding = (value != null ? value.getStringRepresentation() : null);
-				logger.info("Binding takes now value "+value);
+				//logger.info("Binding takes now value "+value);
 				updateDependancies();
 				if (bindingAttribute != null) owner.notify(new FIBAttributeNotification<AbstractBinding>(bindingAttribute,oldValue,value));
 				owner.notifyBindingChanged(this);

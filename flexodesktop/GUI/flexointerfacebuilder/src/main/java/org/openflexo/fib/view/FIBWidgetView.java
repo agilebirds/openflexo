@@ -41,10 +41,10 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
-import org.openflexo.antar.binding.BindingVariable;
-import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.AbstractBinding.TargetObject;
+import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.DataBinding;
@@ -178,7 +178,7 @@ implements FocusListener, Observer, PropertyChangeListener
     	if (getWidget().getData() == null || getWidget().getData().isUnset()) {
        		if (getDynamicModel() != null) {
        			logger.fine("Get dynamic model value: "+getDynamicModel().getData());
-      			return (T)getDynamicModel().getData();
+      			return getDynamicModel().getData();
        		}
        		else return null;
        	}
@@ -446,6 +446,11 @@ implements FocusListener, Observer, PropertyChangeListener
     		}
     		else return returned;
     	}
+    	if (value instanceof String) {
+    		if (getWidget().getLocalize()) {
+    			return getLocalized((String)value);
+    		}
+    	}
     	return value.toString();
     }
 
@@ -460,14 +465,21 @@ implements FocusListener, Observer, PropertyChangeListener
     }
 
 	@Override
-	public FIBComponentDynamicModel createDynamicModel()
+	public FIBComponentDynamicModel<T> createDynamicModel()
 	{
 		if (getWidget().getManageDynamicModel()) {
-			return super.createDynamicModel();
+			return (FIBComponentDynamicModel<T>)super.createDynamicModel();
 		}
 		return null;
 	}
 	
+	@Override
+	public FIBComponentDynamicModel<T> getDynamicModel()
+	{
+		return super.getDynamicModel();
+	}
+
+
 	@Override
 	public T getDefaultData()
 	{

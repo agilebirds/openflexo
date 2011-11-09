@@ -33,9 +33,11 @@ import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 
 import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.controller.FIBMultipleValuesDynamicModel;
 import org.openflexo.fib.model.FIBMultipleValues;
 import org.openflexo.fib.view.FIBWidgetView;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.StringUtils;
 
 public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C extends JComponent, T> extends FIBWidgetView<W,C,T>
 {
@@ -58,15 +60,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 
 			logger.fine("Build FIBListModel");
 						
-			if (getWidget().staticList !=null) {
-				list = new Vector();
-				StringTokenizer st = new StringTokenizer(getWidget().staticList,",");
-				while (st.hasMoreTokens()) {
-					list.add(st.nextToken());
-				}
-			}
-
-			else if (getWidget().getList() !=null
+			if (getWidget().getList() !=null
 					&& getWidget().getList().isSet()
 					&& getDataObject() != null) {
 				
@@ -111,15 +105,25 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 				}
 			}
 			
-		}
-
-		private boolean requireChange()
-		{
-			if (getWidget().staticList !=null) {
-				return false;
+			if (list == null && array == null && StringUtils.isNotEmpty(getWidget().getStaticList())) {
+				list = new Vector();
+				StringTokenizer st = new StringTokenizer(getWidget().getStaticList(),",");
+				while (st.hasMoreTokens()) {
+					list.add(st.nextToken());
+				}
 			}
 
-			else if (getWidget().getList() !=null
+		}
+
+		private boolean requireChange = true;
+		
+		private boolean requireChange()
+		{
+			// Always return true first time
+			if (requireChange) return true;
+			requireChange = false;
+			
+			 if (getWidget().getList() !=null
 					&& getWidget().getList().isSet()
 					&& getDataObject() != null) {
 				
@@ -146,6 +150,10 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 				}
 			}
 			
+			else if (StringUtils.isNotEmpty(getWidget().getStaticList())) {
+					return false;
+				}
+
 			return true;
 		}
 		
@@ -200,7 +208,6 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 					if (object2.array == null) return false;
 					else return array.equals(object2.array);
 				}
-				return false;
 			}
 			return super.equals(object);
 		}
@@ -208,7 +215,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 		@Override
 		public String toString() 
 		{
-			return getClass().getSimpleName()+"["+list.toString()+"]";
+			return getClass().getSimpleName()+"["+(list!=null?list.toString():"null")+"]";
 		}
 	}
 
@@ -225,7 +232,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 		{
 			FIBMultipleValueCellRenderer label = (FIBMultipleValueCellRenderer) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-			if (getWidget().showText) {
+			if (getWidget().getShowText()) {
 				if (value != null) {
 					String stringRepresentation = getStringRepresentation(value);
 					if (stringRepresentation == null || stringRepresentation.length()==0)
@@ -241,7 +248,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 			}
 			//label.setBorder(BorderFactory.createEmptyBorder(1, 2, 1, 2));
 			
-			if (getWidget().showIcon) {
+			if (getWidget().getShowIcon()) {
 				if (getWidget().getIcon() != null && getWidget().getIcon().isValid()) {
 					label.setIcon(getIconRepresentation(value));
 				}
@@ -279,6 +286,13 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 		return listModel;
 	}
 	
+	protected FIBMultipleValueModel updateListModel()
+	{
+		listModel = null;
+		updateListModelWhenRequired();
+		return listModel;
+	}
+	
 	/*protected final FIBListModel rebuildListModel()
 	{
 		return listModel = buildListModel();
@@ -292,9 +306,25 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 	@Override
 	public final void updateDataObject(Object value)
 	{
+		updateListModel();
 		super.updateDataObject(value);
-		listModel = null;
-		updateListModelWhenRequired();
+	}
+
+	@Override
+	public FIBMultipleValuesDynamicModel<T,?> createDynamicModel()
+	{
+		return buildDynamicModel(getWidget().getIteratorClass());
+	}
+	
+	private <O> FIBMultipleValuesDynamicModel<T,O> buildDynamicModel(Class<O> aClass)
+	{
+		return new FIBMultipleValuesDynamicModel<T,O>(null);
+	}
+
+	@Override
+	public FIBMultipleValuesDynamicModel<T,Object> getDynamicModel()
+	{
+		return (FIBMultipleValuesDynamicModel<T,Object>)super.getDynamicModel();
 	}
 
 

@@ -37,6 +37,8 @@ public class PPMWSParameterEDITOR {
 			public Object[] getData()
 			{
 				WebServiceURLDialog o = new WebServiceURLDialog();
+				System.out.println("WebServiceURLDialog="+o);
+				System.out.println("AddressBook="+o.getAddressBook().getInstances());
 				return FIBAbstractEditor.makeArray(o);
 			}
 			@Override

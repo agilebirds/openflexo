@@ -155,7 +155,7 @@ implements FIBCustomComponent<ForegroundStyle,FIBForegroundStyleSelector>
 
         public void update()
         {
-        	controller.setDataObject(getEditedObject());
+        	controller.setDataObject(getEditedObject(),true);
         }
         
         @Override

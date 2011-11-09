@@ -1565,8 +1565,8 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel
 			super();
 			_element = element;
 			_type = resultingType;
-			logger.info("Build NormalBindingColumnListModel for " + element
-					+ " base class=" + TypeUtils.getBaseClass(_type));
+			/*logger.info("Build NormalBindingColumnListModel for " + element
+					+ " base class=" + TypeUtils.getBaseClass(_type));*/
 			_accessibleProperties = new Vector<BindingPathElement>();
 			_accessibleMethods = new Vector<BindingPathElement>();
 			_elements = new Vector<BindingColumnElement>();

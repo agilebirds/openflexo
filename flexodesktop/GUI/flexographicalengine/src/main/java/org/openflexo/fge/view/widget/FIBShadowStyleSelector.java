@@ -142,7 +142,7 @@ implements FIBCustomComponent<ShadowStyle,FIBShadowStyleSelector>
 
         public void update()
         {
-           	controller.setDataObject(getEditedObject());
+           	controller.setDataObject(getEditedObject(),true);
         }
         
         @Override

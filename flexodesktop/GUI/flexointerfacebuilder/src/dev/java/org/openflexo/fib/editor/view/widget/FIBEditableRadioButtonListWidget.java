@@ -29,8 +29,10 @@ import org.openflexo.fib.editor.controller.FIBEditorController;
 import org.openflexo.fib.editor.view.FIBEditableView;
 import org.openflexo.fib.editor.view.FIBEditableViewDelegate;
 import org.openflexo.fib.editor.view.PlaceHolder;
+import org.openflexo.fib.model.FIBAttributeNotification;
 import org.openflexo.fib.model.FIBModelNotification;
 import org.openflexo.fib.model.FIBRadioButtonList;
+import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.fib.view.widget.FIBRadioButtonListWidget;
 import org.openflexo.logging.FlexoLogger;
 
@@ -81,6 +83,13 @@ public class FIBEditableRadioButtonListWidget extends FIBRadioButtonListWidget i
 	@Override
 	public void update(Observable o, Object dataModification)
 	{
+		 if (dataModification instanceof FIBAttributeNotification) {			 
+				FIBAttributeNotification n = (FIBAttributeNotification)dataModification;
+				if (n.getAttribute() == FIBWidget.Parameters.format
+						|| n.getAttribute() == FIBWidget.Parameters.localize) {
+					rebuildRadioButtons();
+				}
+		 }
 		if (dataModification instanceof FIBModelNotification) {
 			delegate.receivedModelNotifications(o, (FIBModelNotification)dataModification);
 		}

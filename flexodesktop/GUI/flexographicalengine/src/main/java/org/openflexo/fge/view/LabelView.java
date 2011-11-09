@@ -527,6 +527,7 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 		}
 		else {
 			textComponent = new JTextField(getGraphicalRepresentation().getText());
+			textComponent.setBorder(BorderFactory.createEmptyBorder());
 			((JTextField)textComponent).setHorizontalAlignment(SwingConstants.CENTER);
 			((JTextField)textComponent).addFocusListener(new FocusAdapter() {
 				@Override
