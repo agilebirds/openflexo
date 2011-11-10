@@ -27,17 +27,18 @@ import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.dm.action.ImportRationalRoseRepository;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.toolbox.FileUtils;
 
 
 
 public class TestRRImport extends FlexoTestCase {
-	
+
 	private static final Logger logger = FlexoLogger.getLogger(TestRRImport.class.getPackage().getName());
 
 	private static final File firstModel = new FileResource("aom_ed4.mdl");
 	private static final File secondModel = new FileResource("IAABOM Sample.mdl");
-	
-	
+
+
 	public TestRRImport(String name) {
 		super(name);
 	}
@@ -63,6 +64,7 @@ public class TestRRImport extends FlexoTestCase {
 			logger.info("Imported "+importRR.getNewRepository().getEntities().size()+" entities into "+importRR.getRationalRosePackageName());
 		}
 		editor.getProject().close();
+		FileUtils.deleteDir(editor.getProject().getProjectDirectory());
 	}
-	
+
 }

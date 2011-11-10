@@ -28,12 +28,11 @@ import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.LocalResourceCenterImplementation;
 import org.openflexo.foundation.dkv.TestPopulateDKV;
-import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.FlexoOntology.OntologyNotFoundException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.wkf.FlexoProcess;
-
+import org.openflexo.toolbox.FileUtils;
 
 import com.hp.hpl.jena.ontology.DatatypeProperty;
 import com.hp.hpl.jena.ontology.Individual;
@@ -50,7 +49,7 @@ public class TestOntologies extends FlexoTestCase{
 
 	private static File _resourceCenterDirectory;
 	private static FlexoResourceCenter _resourceCenter;
-	
+
 	public TestOntologies(String name)
 	{
 		super(name);
@@ -73,7 +72,7 @@ public class TestOntologies extends FlexoTestCase{
 		}
 
 		_resourceCenter = LocalResourceCenterImplementation.instanciateNewLocalResourceCenterImplementation(_resourceCenterDirectory);
-		
+
 	}
 
 	/**
@@ -95,34 +94,35 @@ public class TestOntologies extends FlexoTestCase{
 		log("test2CreateOntology()");
 
 		logger.info("Hop"+_project.getProjectOntology());
-		
+
 		saveProject(_project);
-		
+
 		logger.info("Reload project");
-		
+
 		_editor = reloadProject(_project.getProjectDirectory());
-		if (_project!=null)
+		if (_project!=null) {
 			_project.close();
+		}
 		_project = _editor.getProject();
 
 		logger.info("Hop"+_project.getProjectOntology());
-		
+
 		FlexoOntology flexoConceptsOntology = _project.getProjectOntologyLibrary().getFlexoConceptOntology();
 		flexoConceptsOntology.describe();
-	
+
 	}
 
-	
+
 	/**
 	 * Import ontologies
 	 */
 	public void test3ImportOntologies()
 	{
 		log("test3ImportOntologies()");
-				
+
 		FlexoOntology basicOrganizationTreeOntology = _project.getProjectOntologyLibrary().getOntology("http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl");
 		assertNotNull(basicOrganizationTreeOntology);
-		
+
 		try {
 			_project.getProjectOntology().importOntology(basicOrganizationTreeOntology);
 		} catch (OntologyNotFoundException e) {
@@ -131,7 +131,7 @@ public class TestOntologies extends FlexoTestCase{
 
 		saveProject(_project);
 	}
-	
+
 	/**
 	 * Load calcs, import calc
 	 */
@@ -149,7 +149,7 @@ public class TestOntologies extends FlexoTestCase{
 		ViewPoint thesaurusEditorCalc = _resourceCenter.retrieveViewPointLibrary().getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/ThesaurusEditor.owl");
 		logger.info("Le calc: "+thesaurusEditorCalc);
 		thesaurusEditorCalc.loadWhenUnloaded();
-		
+
 		try {
 			_project.getProjectOntology().importOntology(basicOrganizationTreeEditorCalc.getCalcOntology());
 		} catch (OntologyNotFoundException e) {
@@ -160,7 +160,7 @@ public class TestOntologies extends FlexoTestCase{
 
 	}
 
-	
+
 	/**
 	 * Edit ontology and reload project
 	 */
@@ -180,49 +180,55 @@ public class TestOntologies extends FlexoTestCase{
 
 		String BOT_EDITOR_URI = "http://www.agilebirds.com/openflexo/ViewPoints/BasicOrganizationTreeEditor.owl";
 		String BOT_COMPANY = BOT_EDITOR_URI+"#BOTCompany";
-		
+
 		OntModel ontModel = _project.getProjectOntology().getOntModel();
-		
+
 		OntClass fooClass = ontModel.createClass(_project.getProjectOntology().getOntologyURI()+"#"+"foo");
 		OntClass foo2Class = ontModel.createClass(_project.getProjectOntology().getOntologyURI()+"#"+"foo2");
 		foo2Class.addComment("Test de commentaire", "FR");
 		foo2Class.addComment("Comment test", "EN");
 		foo2Class.addSuperClass(fooClass);
-	
+
 		FlexoProcess process = _project.getWorkflow().getRootFlexoProcess();
 		OntClass flexoModelObject = ontModel.getOntClass(FLEXO_MODEL_OBJECT);
 		ObjectProperty linkedToModelProperty = ontModel.getObjectProperty(LINKED_TO_MODEL_PROPERTY);
 		DatatypeProperty classNameProperty = ontModel.getDatatypeProperty(CLASS_NAME_PROPERTY);
 		DatatypeProperty flexoIDProperty = ontModel.getDatatypeProperty(FLEXO_ID_PROPERTY);
 		DatatypeProperty resourceNameProperty = ontModel.getDatatypeProperty(RESOURCE_NAME_PROPERTY);
-		
+
 		Individual myRootFlexoProcess = ontModel.createIndividual(_project.getProjectOntology().getURI()+"#MyRootProcess", flexoModelObject);
 		myRootFlexoProcess.addProperty(classNameProperty,process.getClass().getName());
 		myRootFlexoProcess.addProperty(flexoIDProperty,process.getSerializationIdentifier());
 		myRootFlexoProcess.addProperty(resourceNameProperty,process.getFlexoResource().getFullyQualifiedName());
-		
+
 		OntClass botCompany = ontModel.getOntClass(BOT_COMPANY);
 		DatatypeProperty companyNameProperty = ontModel.getDatatypeProperty(COMPANY_NAME);
 		Individual agileBirdsCompany = ontModel.createIndividual(_project.getProjectOntology().getURI()+"#AgileBirds", botCompany);
 		agileBirdsCompany.addProperty(companyNameProperty,"Agile Birds S.A.");
-		
+
 		agileBirdsCompany.addProperty(linkedToModelProperty, myRootFlexoProcess);
-		
+
 		_project.getProjectOntology().setChanged();
 		saveProject(_project);
-		
+
 		_project.getProjectOntology().describe();
-		
+
 		logger.info("Reload project");
-		
+
 		_editor = reloadProject(_project.getProjectDirectory());
-		if (_project!=null)
+		if (_project!=null) {
 			_project.close();
+		}
 		_project = _editor.getProject();
 
 		_project.getProjectOntology().describe();
+		FileUtils.deleteDir(_project.getProjectDirectory());
+		_project = null;
+		_editor = null;
+		_resourceCenter = null;
+		_resourceCenterDirectory = null;
 	}
-	
+
 
 
 }

@@ -22,11 +22,11 @@ package org.openflexo.foundation.wkf;
 import java.util.Collection;
 import java.util.Vector;
 
+import junit.framework.AssertionFailedError;
+
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.wkf.FlexoProcess;
-import org.openflexo.foundation.wkf.WKFArtefact;
 import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
 import org.openflexo.foundation.wkf.node.AbstractNode;
 import org.openflexo.foundation.wkf.node.ActivityNode;
@@ -35,8 +35,6 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.wkf.node.PetriGraphNode;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.toolbox.FileUtils;
-
-import junit.framework.AssertionFailedError;
 
 public class TestDropWKFElement extends FlexoWKFTestCase {
 
@@ -65,7 +63,7 @@ public class TestDropWKFElement extends FlexoWKFTestCase {
 	//		ACTIVITYNODE:activity1InForkProcess
 	//		ACTIVITYNODE:activity2InForkProcess
 
-	public void testDrop()
+	public void test0Drop()
 	{
 		editor = createProject("TestDrop");
 		project = editor.getProject();
@@ -93,7 +91,7 @@ public class TestDropWKFElement extends FlexoWKFTestCase {
 		assertTrue(subProcessFork.getAllAbstractNodes().contains(activity2InForkProcess));
 	}
 
-	public void testNodeCompountConnexity() {
+	public void test1NodeCompountConnexity() {
 		FlexoProcess testCopyPaste = createSubProcess("testCopyPaste", project.getLocalFlexoProcess("subProcessFork"),editor);
 		ActivityNode actA = (ActivityNode)createActivityNode(testCopyPaste, 100, 100, "ActivityA",editor);
 		ActivityNode actB = (ActivityNode)createActivityNode(testCopyPaste, 250, 100, "ActivityB",editor);

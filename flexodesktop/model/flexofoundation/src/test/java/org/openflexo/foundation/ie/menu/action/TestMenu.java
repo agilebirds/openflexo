@@ -24,10 +24,6 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.ie.menu.FlexoItemMenu;
-import org.openflexo.foundation.ie.menu.action.AddMenu;
-import org.openflexo.foundation.ie.menu.action.MoveMenuDown;
-import org.openflexo.foundation.ie.menu.action.MoveMenuUp;
-import org.openflexo.foundation.ie.menu.action.MoveMenuUpperLevel;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.toolbox.FileUtils;
 
@@ -38,7 +34,7 @@ public class TestMenu extends FlexoTestCase {
 
 	private FlexoEditor _editor;
 	private FlexoProject _project;
-	
+
 	/**
 	 * Creates a new empty project in a temp directory
 	 */
@@ -56,6 +52,8 @@ public class TestMenu extends FlexoTestCase {
 		moveMenuUpperLevel(menu21,_editor);
 		_project.close();
 		FileUtils.deleteDir(_project.getProjectDirectory());
+		_project = null;
+		_editor = null;
 	}
 
 	protected void moveMenuUp(FlexoItemMenu itemMenu, FlexoEditor editor){
@@ -67,15 +65,15 @@ public class TestMenu extends FlexoTestCase {
 		}
 		boolean isFirstElement = itemMenu.getFather()!=null && itemMenu.getFather().getSubItems().indexOf(itemMenu)==0;
 		addmenu.doAction();
-		if(!isFirstElement)
+		if(!isFirstElement) {
 			assertTrue(addmenu.hasActionExecutionSucceeded());
-		else{
+		} else{
 			assertFalse(addmenu.hasActionExecutionSucceeded());
 			return;
 		}
 		assertEquals(oldIndex-1,itemMenu.getFather().getSubItems().indexOf(itemMenu));
 	}
-	
+
 	protected void moveMenuDown(FlexoItemMenu itemMenu, FlexoEditor editor){
 		MoveMenuDown addmenu = (MoveMenuDown)MoveMenuDown.actionType.makeNewAction(itemMenu, null, editor);
 		addmenu.setItemMenu(itemMenu);
@@ -86,37 +84,37 @@ public class TestMenu extends FlexoTestCase {
 		}
 		addmenu.doAction();
 		if(itemMenu.getFather()!=null &&
-				!isLastElement)
+				!isLastElement) {
 			assertTrue(addmenu.hasActionExecutionSucceeded());
-		else{
+		} else{
 			assertFalse(addmenu.hasActionExecutionSucceeded());
 			return;
 		}
 		assertEquals(oldIndex+1,itemMenu.getFather().getSubItems().indexOf(itemMenu));
 	}
-	
+
 	protected void moveMenuUpperLevel(FlexoItemMenu itemMenu, FlexoEditor editor){
 		MoveMenuUpperLevel addmenu = (MoveMenuUpperLevel)MoveMenuUpperLevel.actionType.makeNewAction(itemMenu, null, editor);
 		addmenu.setItemMenu(itemMenu);
 		FlexoItemMenu newFather = itemMenu.getFather()==null?null:itemMenu.getFather().getFather();
 		addmenu.doAction();
-		if(newFather!=null)
+		if(newFather!=null) {
 			assertTrue(addmenu.hasActionExecutionSucceeded());
-		else{
+		} else{
 			assertFalse(addmenu.hasActionExecutionSucceeded());
 			return;
 		}
 		assertEquals(newFather,itemMenu.getFather());
 	}
-	
+
 	protected FlexoItemMenu createMenu(String menuLabel,FlexoItemMenu parentMenu, FlexoEditor editor){
 		AddMenu addmenu = (AddMenu)AddMenu.actionType.makeNewAction(parentMenu, null, editor);
 		addmenu.setFather(parentMenu);
 		addmenu.setMenuLabel(menuLabel);
 		addmenu.doAction();
-		if(parentMenu!=null && menuLabel!=null)
+		if(parentMenu!=null && menuLabel!=null) {
 			assertTrue(addmenu.hasActionExecutionSucceeded());
-		else{
+		} else{
 			assertFalse(addmenu.hasActionExecutionSucceeded());
 			return null;
 		}
@@ -124,7 +122,7 @@ public class TestMenu extends FlexoTestCase {
 		assertEquals(addmenu.getNewMenu().getMenuLabel(), menuLabel);
 		return addmenu.getNewMenu();
 	}
-	
+
 	public TestMenu(String arg0) {
 		super(arg0);
 	}

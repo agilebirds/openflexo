@@ -29,8 +29,6 @@ import javax.activation.DataHandler;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoTestCase;
-import org.openflexo.foundation.imported.DeltaStatus;
-import org.openflexo.foundation.imported.FlexoImportedRoleLibraryDelta;
 import org.openflexo.foundation.imported.FlexoImportedRoleLibraryDelta.RoleDelta;
 import org.openflexo.foundation.imported.action.ConvertIntoLocalRole;
 import org.openflexo.foundation.imported.action.ImportRolesAction;
@@ -38,6 +36,7 @@ import org.openflexo.foundation.imported.action.RefreshImportedRoleAction;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.wkf.Role;
+import org.openflexo.toolbox.FileUtils;
 import org.openflexo.ws.client.PPMWebService.CLProjectDescriptor;
 import org.openflexo.ws.client.PPMWebService.PPMProcess;
 import org.openflexo.ws.client.PPMWebService.PPMRole;
@@ -54,7 +53,7 @@ public class TestImportedRoles extends FlexoTestCase {
 
 		@Override
 		public PPMProcess[] getProcesses(String login, String md5Password) throws RemoteException,
-				PPMWebServiceAuthentificationException {
+		PPMWebServiceAuthentificationException {
 			return null;
 		}
 
@@ -65,19 +64,19 @@ public class TestImportedRoles extends FlexoTestCase {
 
 		@Override
 		public byte[] getScreenshoot(String login, String md5Password, String processVersionURI) throws RemoteException,
-				PPMWebServiceAuthentificationException {
+		PPMWebServiceAuthentificationException {
 			return null;
 		}
 
 		@Override
 		public PPMProcess[] refreshProcesses(String login, String md5Password, String[] uris) throws RemoteException,
-				PPMWebServiceAuthentificationException {
+		PPMWebServiceAuthentificationException {
 			return null;
 		}
 
 		@Override
 		public PPMRole[] refreshRoles(String login, String md5Password, String[] uris) throws RemoteException,
-				PPMWebServiceAuthentificationException {
+		PPMWebServiceAuthentificationException {
 			return importedRoles.toArray(new PPMRole[importedRoles.size()]);
 		}
 
@@ -92,7 +91,7 @@ public class TestImportedRoles extends FlexoTestCase {
 		@Override
 		public String uploadPrj(CLProjectDescriptor targetProject,
 				DataHandler zip, String uploadComment, String login)
-				throws RemoteException, PPMWebServiceAuthentificationException {
+						throws RemoteException, PPMWebServiceAuthentificationException {
 			// TODO Auto-generated method stub
 			return null;
 		}
@@ -101,34 +100,35 @@ public class TestImportedRoles extends FlexoTestCase {
 	public interface DeltaChecker {
 		public void checkDelta(RoleDelta delta);
 	}
-	
+
 	private final class RefreshRoleDeltaVisitor implements FlexoImportedRoleLibraryDelta.DeltaVisitor {
-		
+
 		private DeltaChecker checker;
-		
+
 		public RefreshRoleDeltaVisitor(DeltaChecker checker) {
 			this.checker = checker;
 		}
-		
+
 		private int visitedRoleCount = 0;
-		
+
 		public int getVisitedRoleCount() {
 			return visitedRoleCount;
 		}
 
 		@Override
 		public void visit(RoleDelta delta) {
-			if (checker!=null)
+			if (checker!=null) {
 				checker.checkDelta(delta);
+			}
 			visitedRoleCount++;
 		}
-		
+
 	}
 
 	private static String generateRandomRoleURI(FlexoProject project) {
 		return project.getURI()+"fmo/RoleGPO_"+new Random().nextLong();
 	}
-	
+
 	private static Vector<PPMRole> createPPMRoles(FlexoProject project) {
 		Vector<PPMRole> rolesToImport = new Vector<PPMRole>();
 		PPMRole role = new PPMRole();
@@ -138,14 +138,14 @@ public class TestImportedRoles extends FlexoTestCase {
 		role.setGeneralDescription("The Administrator");
 		role.setUserManualDescription("Treat him with great care");
 		rolesToImport.add(role);
-		
+
 		role = new PPMRole();
 		role.setName("Manager");
 		role.setRgbColor(184, 245, 143);
 		role.setUri(generateRandomRoleURI(project));
 		role.setVersionUri(role.getUri()+generateRandomRoleURI(project));
 		rolesToImport.add(role);
-		
+
 		role = new PPMRole();
 		role.setName("Employee");
 		role.setRgbColor(0, 0, 0);
@@ -154,7 +154,7 @@ public class TestImportedRoles extends FlexoTestCase {
 		rolesToImport.add(role);
 		return rolesToImport;
 	}
-	
+
 	private static Vector<PPMRole> createPPMRoles2(FlexoProject project, String name, int count) {
 		Vector<PPMRole> rolesToImport = new Vector<PPMRole>();
 		for(int i=0;i<count;i++) {
@@ -166,7 +166,7 @@ public class TestImportedRoles extends FlexoTestCase {
 		}
 		return rolesToImport;
 	}
-	
+
 	private static File projectDirectoryFile;
 	private static FlexoEditor editor;
 	static Vector<PPMRole> importedRoles;
@@ -211,7 +211,7 @@ public class TestImportedRoles extends FlexoTestCase {
 
 	public void test2RefreshImportedRoles() throws SaveResourceException {
 		FlexoProject project = editor.getProject();
-		
+
 		// First we try without changing anything
 		RefreshImportedRoleAction refresh = RefreshImportedRoleAction.actionType.makeNewAction(project.getImportedRoleList(), null, editor);
 		refresh.setWebService(new PPMWebServiceMock());
@@ -225,7 +225,7 @@ public class TestImportedRoles extends FlexoTestCase {
 		});
 		refresh.getLibraryDelta().visit(visitor);
 		assertEquals(3,visitor.getVisitedRoleCount());
-		
+
 		// Then we change a single attribute and check that we have one update
 		final PPMRole updatedRole = importedRoles.firstElement();
 		updatedRole.setName(updatedRole.getName()+"coucou");
@@ -236,16 +236,17 @@ public class TestImportedRoles extends FlexoTestCase {
 		visitor = new RefreshRoleDeltaVisitor(new DeltaChecker(){
 			@Override
 			public void checkDelta(RoleDelta delta) {
-				if (delta.getPPMRole()==updatedRole)
+				if (delta.getPPMRole()==updatedRole) {
 					assertEquals(DeltaStatus.UPDATED, delta.getStatus());
-				else
+				} else {
 					assertEquals(DeltaStatus.UNCHANGED, delta.getStatus());
+				}
 			}
 		});
 		refresh.getLibraryDelta().visit(visitor);
 		assertEquals(3,visitor.getVisitedRoleCount());
 
-		// Then we create a new role and delete another one 
+		// Then we create a new role and delete another one
 		final PPMRole newRole = new PPMRole();
 		newRole.setName("Administrator");
 		newRole.setUri(generateRandomRoleURI(project));
@@ -269,8 +270,9 @@ public class TestImportedRoles extends FlexoTestCase {
 					assertEquals(DeltaStatus.DELETED, delta.getStatus());
 					assertTrue(delta.getFiRole().isDeletedOnServer());
 					assertNotNull(project2.getImportedRoleList().getImportedObjectWithURI(delta.getFiRole().getURI()));
-				} else
+				} else {
 					assertEquals(DeltaStatus.UNCHANGED, delta.getStatus());
+				}
 			}
 		});
 		refresh.getLibraryDelta().visit(visitor);
@@ -295,27 +297,28 @@ public class TestImportedRoles extends FlexoTestCase {
 				if (delta.getPPMRole()==deletedRole) {
 					assertEquals(DeltaStatus.UPDATED, delta.getStatus());
 					assertFalse(delta.getFiRole().isDeletedOnServer());
-				} else
+				} else {
 					assertEquals(DeltaStatus.UNCHANGED, delta.getStatus());
+				}
 			}
 		});
 		verifyImportedRoles(project, importedRoles);
 		project.save();
 		project.close();
 	}
-	
+
 	public void test3ConvertRolesIntoLocalRoles() {
 		editor = reloadProject(projectDirectoryFile);
 		FlexoProject project = editor.getProject();
 		verifyImportedRoles(project, importedRoles);
-		
+
 		Vector<PPMRole> importedRoles2 = createPPMRoles2(project, "Roles to convert", 5);
 		ImportRolesAction importRoles = ImportRolesAction.actionType.makeNewAction(project.getFlexoWorkflow().getImportedRoleList(), null, editor);
 		importRoles.setRolesToImport(importedRoles2);
 		importRoles.doAction();
 		assertTrue(importRoles.hasActionExecutionSucceeded());
 		assertEquals(5, importRoles.getImportReport().getProperlyImported().size());
-		
+
 		final Collection<Role> roles = importRoles.getImportReport().getProperlyImported().values();
 		RefreshImportedRoleAction refresh = RefreshImportedRoleAction.actionType.makeNewAction(project.getFlexoWorkflow().getImportedRoleList(), null, editor);
 		refresh.setWebService(new PPMWebServiceMock());
@@ -336,11 +339,16 @@ public class TestImportedRoles extends FlexoTestCase {
 		});
 		refresh.getLibraryDelta().visit(visitor);
 		assertEquals(5+4,visitor.getVisitedRoleCount());
-		
-		for(PPMRole r: importedRoles2)
+
+		for(PPMRole r: importedRoles2) {
 			convertRole(project, project.getWorkflow().getImportedRoleList().getImportedObjectWithURI(r.getUri()),r);
+		}
+		editor = null;
+		importedRoles = null;
+		FileUtils.deleteDir(projectDirectoryFile);
+		projectDirectoryFile = null;
 	}
-	
+
 	private void convertRole(FlexoProject project, Role roleToConvert, PPMRole sourcePPM) {
 		assertNotNull(roleToConvert);
 		assertTrue(roleToConvert.getURI().equals(sourcePPM.getUri()));
@@ -353,7 +361,7 @@ public class TestImportedRoles extends FlexoTestCase {
 		assertFalse(roleToConvert.getURI().equals(sourcePPM.getUri()));
 		assertFalse(roleToConvert.getVersionURI().equals(sourcePPM.getVersionUri()));
 	}
-	
+
 	/**
 	 * @param project
 	 * @param importedRoles
@@ -366,8 +374,9 @@ public class TestImportedRoles extends FlexoTestCase {
 		}
 		// Check equivalencies
 		for(Role r:project.getImportedRoleList().getRoles()) {
-			if (!r.isDeletedOnServer())// Deleted objects on server cannot be equal to their equivalent PPM objec
+			if (!r.isDeletedOnServer()) {
 				assertTrue(r.isEquivalentTo(r.getEquivalentPPMRole()));
+			}
 		}
 	}
 }

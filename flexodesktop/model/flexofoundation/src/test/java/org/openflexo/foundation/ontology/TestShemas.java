@@ -29,6 +29,7 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.view.ViewFolder;
 import org.openflexo.foundation.view.action.AddView;
 import org.openflexo.foundation.view.action.AddViewFolder;
+import org.openflexo.toolbox.FileUtils;
 
 
 public class TestShemas extends FlexoTestCase{
@@ -62,14 +63,15 @@ public class TestShemas extends FlexoTestCase{
 		log("test1CreateOntology()");
 
 		logger.info("Hop"+_project.getShemaLibrary());
-		
+
 		saveProject(_project);
-		
+
 		logger.info("Reload project");
-		
+
 		_editor = reloadProject(_project.getProjectDirectory());
-		if (_project!=null)
+		if (_project!=null) {
 			_project.close();
+		}
 		_project = _editor.getProject();
 
 	}
@@ -85,57 +87,61 @@ public class TestShemas extends FlexoTestCase{
 		AddViewFolder addFolder1 = AddViewFolder.actionType.makeNewAction(_project.getShemaLibrary(), null, _editor);
 		addFolder1.setNewFolderName("Folder1");
 		addFolder1.doAction();
-		
+
 		AddViewFolder addFolder2 = AddViewFolder.actionType.makeNewAction(_project.getShemaLibrary(), null, _editor);
 		addFolder2.setNewFolderName("Folder2");
 		addFolder2.doAction();
-		
+
 		AddViewFolder addFolder3 = AddViewFolder.actionType.makeNewAction(addFolder2.getNewFolder(), null, _editor);
 		addFolder3.setNewFolderName("Folder3");
 		addFolder3.doAction();
-		
+
 		saveProject(_project);
-		
+
 		logger.info("Reload project");
-		
+
 		_editor = reloadProject(_project.getProjectDirectory());
-		if (_project!=null)
+		if (_project!=null) {
 			_project.close();
+		}
 		_project = _editor.getProject();
-		
+
 	}
 
 	/**
-	 * Creates a shema 
+	 * Creates a shema
 	 */
 	public void test3CreateShema()
 	{
 		log("test3CreateShema()");
 
 		ViewFolder folder3 = _project.getShemaLibrary().getFolderWithName("Folder3");
-		
+
 		logger.info("Hop "+folder3);
-		
+
 		AddView addShema = AddView.actionType.makeNewAction(folder3, null, _editor);
 		addShema.newViewName = "TestShema";
 		addShema.doAction();
-		
+
 		try {
 			addShema.getNewShema().getShemaResource().saveResourceData();
 		} catch (SaveResourceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		saveProject(_project);
-		
-		logger.info("Reload project");
-		
-		_editor = reloadProject(_project.getProjectDirectory());
-		if (_project!=null)
-			_project.close();
-		_project = _editor.getProject();
 
+		saveProject(_project);
+
+		logger.info("Reload project");
+
+		_editor = reloadProject(_project.getProjectDirectory());
+		if (_project!=null) {
+			_project.close();
+		}
+		_project = _editor.getProject();
+		FileUtils.deleteDir(_project.getProjectDirectory());
+		_project = null;
+		_editor = null;
 	}
 
 

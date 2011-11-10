@@ -23,9 +23,6 @@ import java.util.Hashtable;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.dkv.Domain;
-import org.openflexo.foundation.dkv.Key;
-import org.openflexo.foundation.dkv.Language;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.toolbox.FileUtils;
 
@@ -69,8 +66,9 @@ public class TestPopulateDKV extends DKVTestCase {
 
 		saveProject(_project);
 		_editor = reloadProject(_project.getProjectDirectory());
-		if (_project!=null)
+		if (_project!=null) {
 			_project.close();
+		}
 		_project = _editor.getProject();
 		d1 = null;
 		l1 = null;
@@ -96,6 +94,8 @@ public class TestPopulateDKV extends DKVTestCase {
 		assertEquals(d1.getValue(k2, l2).getValue(), "K2_en_anglais");
 		_project.close();
 		FileUtils.deleteDir(_project.getProjectDirectory());
+		_editor = null;
+		_project = null;
 	}
 
 	public TestPopulateDKV(String arg0) {
