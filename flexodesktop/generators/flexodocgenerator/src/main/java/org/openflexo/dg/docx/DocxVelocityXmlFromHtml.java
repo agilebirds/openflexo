@@ -408,8 +408,8 @@ public class DocxVelocityXmlFromHtml {
 			sb.append(imageXml);
 			withinR = false;
 			String rel = "<Relationship Id=\"" + projectDocxGenerator.getRIdForString(imageSubPath)
-			+ "\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/image\" Target=\""
-			+ projectDocxGenerator.getMediaRelativePath(imageSubPath) + "\"/>";
+					+ "\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/image\" Target=\""
+					+ projectDocxGenerator.getMediaRelativePath(imageSubPath) + "\"/>";
 			getAdditionalRelationships().add(rel);
 
 		}
@@ -464,8 +464,8 @@ public class DocxVelocityXmlFromHtml {
 					sb.append(" r:id=\"" + rId + "\"");
 
 					String rel = "<Relationship Id=\"" + rId
-					+ "\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink\" Target=\"" + href
-					+ "\" TargetMode=\"External\"/>";
+							+ "\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink\" Target=\"" + href
+							+ "\" TargetMode=\"External\"/>";
 					getAdditionalRelationships().add(rel);
 				}
 				if (target != null && target.length() > 0) {
@@ -590,7 +590,7 @@ public class DocxVelocityXmlFromHtml {
 						}
 					} else if (attributeName == Attribute.CLASS) {
 						if (attributeValue != null && attributeValue.toString().trim().length() > 0 && !attributeValue.equals("no-style")) {
-							map.put((paragraphLevel ? PSTYLEKEY : RSTYLEKEY), "<w:" + (paragraphLevel ? "p" : "r") + "Style w:val=\""
+							map.put(paragraphLevel ? PSTYLEKEY : RSTYLEKEY, "<w:" + (paragraphLevel ? "p" : "r") + "Style w:val=\""
 									+ attributeValue.toString().trim() + "\"/>");
 						}
 					} else if (tag == HTML.Tag.FONT) {
@@ -655,7 +655,7 @@ public class DocxVelocityXmlFromHtml {
 
 				StringBuilder propertiesString = new StringBuilder();
 				for (String property : currentProperties.values()) {
-					propertiesString.append(StringUtils.LINE_SEPARATOR + property);
+					propertiesString.append(StringUtils.LINE_SEPARATOR).append(property);
 				}
 
 				return propertiesString.toString();
