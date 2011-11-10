@@ -26,7 +26,6 @@ import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.Hashtable;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JFrame;
@@ -56,17 +55,13 @@ public class FlexoSharedInspectorController extends FlexoInspectorController {
 
 	private final Logger logger = Logger.getLogger(FlexoSharedInspectorController.class.getPackage().getName());
 
-	private FlexoSharedInspectorController _sharedInstance;
-
 	protected InspectorWindow _inspectorWindow;
 
 	private boolean isBoundsSaverEnabled = true;
 
 	protected FlexoSharedInspectorController(FlexoController controller)
 	{
-		this(controller.new FlexoControllerInspectorDelegate(),
-				new DefaultInspectorHelpDelegate(DocResourceManager.instance()),
- controller
+		this(controller.new FlexoControllerInspectorDelegate(), new DefaultInspectorHelpDelegate(DocResourceManager.instance()), controller
 				.getFlexoFrame());
 		setInspectorNotFoundHandler(controller);
 		loadAllCustomInspectors(controller.getProject());
@@ -176,38 +171,6 @@ public class FlexoSharedInspectorController extends FlexoInspectorController {
 		} finally {
 			boundsSaver = null;
 		}
-	}
-
-
-	public FlexoSharedInspectorController createInstance(FlexoController controller)
-	{
-		_sharedInstance = new FlexoSharedInspectorController(controller);
-		// InspectorController.registerAsInstance(_sharedInstance);
-		return _sharedInstance;
-	}
-
-	public FlexoSharedInspectorController sharedInstance()
-	{
-		if (_sharedInstance == null) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Implementation error : there is no instance of FlexoInspectorController.");
-			}
-		}
-		return _sharedInstance;
-	}
-
-	public boolean hasSharedInstance()
-	{
-		return _sharedInstance != null;
-	}
-
-	public void resetInstance() {
-		if (_sharedInstance!=null) {
-			_sharedInstance._inspectorWindow.dispose();
-			_sharedInstance._inspectorWindow = null;
-		}
-		registerAsInstance(null);
-		_sharedInstance = null;
 	}
 
 	public InspectorWindow getInspectorWindow()

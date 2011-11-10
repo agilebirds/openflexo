@@ -149,12 +149,12 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 	{
 		return USE_NEW_INSPECTOR_SCHEME;
 	}
-	
+
 	public boolean useOldInspectorScheme()
 	{
 		return USE_OLD_INSPECTOR_SCHEME;
 	}
-	
+
 	// ======================================================
 	// ================== Static variables ==================
 	// ======================================================
@@ -1826,6 +1826,7 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 				}
 			}
 		}
+		getSharedInspectorController().getInspectorWindow().dispose();
 		_loadedViews.clear();
 		_perspectives.clear();
 		_keyStrokeActionTable.clear();
