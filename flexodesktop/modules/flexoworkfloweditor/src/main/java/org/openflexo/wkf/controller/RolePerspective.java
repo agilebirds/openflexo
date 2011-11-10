@@ -112,7 +112,7 @@ public class RolePerspective extends FlexoPerspective<RoleList>
 	@Override
 	public JComponent getLeftView() 
 	{
-		return _controller._roleListBrowserView;
+		return _controller.getRoleListBrowserView();
 	}
 
 	@Override

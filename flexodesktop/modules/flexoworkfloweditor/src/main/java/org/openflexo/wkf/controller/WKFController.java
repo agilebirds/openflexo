@@ -162,7 +162,7 @@ PrintManagingController {
 	private final JSplitPane _workflowProcessBrowserViews;
 	private final WorkflowBrowserView _wkfBrowserView;
 	private final ProcessBrowserView _processBrowserView;
-	RoleListBrowserView _roleListBrowserView;
+	private RoleListBrowserView roleListBrowserView;
 
 	// ==========================================================================
 	// ============================= Constructor ===============================
@@ -190,7 +190,7 @@ PrintManagingController {
 		_workflowProcessBrowserViews = new JSplitPane(JSplitPane.VERTICAL_SPLIT, _wkfBrowserView, _processBrowserView);
 		_workflowProcessBrowserViews.setBorder(BorderFactory.createEmptyBorder());
 		new FlexoSplitPaneLocationSaver(_workflowProcessBrowserViews, "WKFBrowsersSplitPane", 1.0);
-		_roleListBrowserView = new RoleListBrowserView(_roleListBrowser, this);
+		setRoleListBrowserView(new RoleListBrowserView(_roleListBrowser, this));
 
 		addToPerspectives(PROCESS_EDITOR_PERSPECTIVE = new ProcessPerspective(this));
 		addToPerspectives(SWIMMING_LANE_PERSPECTIVE = new SwimmingLanePerspective(this));
@@ -741,6 +741,14 @@ PrintManagingController {
 
 	public JSplitPane getWorkflowProcessBrowserViews() {
 		return _workflowProcessBrowserViews;
+	}
+
+	public RoleListBrowserView getRoleListBrowserView() {
+		return roleListBrowserView;
+	}
+
+	public void setRoleListBrowserView(RoleListBrowserView _roleListBrowserView) {
+		this.roleListBrowserView = _roleListBrowserView;
 	}
 
 }
