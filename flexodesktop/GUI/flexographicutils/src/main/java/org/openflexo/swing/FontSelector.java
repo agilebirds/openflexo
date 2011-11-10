@@ -33,7 +33,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -227,13 +226,13 @@ public class FontSelector extends CustomPopup<Font> implements ChangeListener
 		return (FontPreviewPanel)super.getFrontComponent();
 	}
 
-	@Override
+	/*@Override
 	protected Border getDownButtonBorder()
 	{
 		return BorderFactory.createCompoundBorder(
 				BorderFactory.createEmptyBorder(1,1,1,1),
 				BorderFactory.createRaisedBevelBorder());
-	}
+	}*/
 
 
 	protected class FontPreviewPanel extends JPanel

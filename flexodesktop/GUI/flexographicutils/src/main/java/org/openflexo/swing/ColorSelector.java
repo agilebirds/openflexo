@@ -33,7 +33,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 import javax.swing.colorchooser.ColorSelectionModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -223,13 +222,13 @@ public class ColorSelector extends CustomPopup<Color> implements ChangeListener
 		return (ColorPreviewPanel)super.getFrontComponent();
 	}
 
-	@Override
+	/*@Override
 	protected Border getDownButtonBorder()
 	{
 		return BorderFactory.createCompoundBorder(
 				BorderFactory.createEmptyBorder(1,1,1,1),
 				BorderFactory.createRaisedBevelBorder());
-	}
+	}*/
 
 
 	protected class ColorPreviewPanel extends JPanel

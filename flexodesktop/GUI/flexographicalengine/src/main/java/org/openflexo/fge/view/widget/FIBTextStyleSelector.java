@@ -29,7 +29,6 @@ import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
@@ -233,7 +232,7 @@ implements FIBCustomComponent<TextStyle,FIBTextStyleSelector>
 		return (TextStylePreviewPanel)super.getFrontComponent();
 	}
 	
-	@Override
+	/*@Override
 	protected Border getDownButtonBorder()
 	{
 		return BorderFactory.createCompoundBorder(
@@ -244,7 +243,7 @@ implements FIBCustomComponent<TextStyle,FIBTextStyleSelector>
 		//return BorderFactory.createEtchedBorder();
 		//return BorderFactory.createBevelBorder(BevelBorder.LOWERED);
 		//return BorderFactory.createBevelBorder(BevelBorder.LOWERED);
-	}
+	}*/
 	
 	
 	protected class TextStylePreviewPanel extends JPanel
