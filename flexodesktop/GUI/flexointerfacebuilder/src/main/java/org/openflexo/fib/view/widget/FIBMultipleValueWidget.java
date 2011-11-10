@@ -283,6 +283,12 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 		if (listModel == null) {
 			listModel = new FIBMultipleValueModel();
 		}
+		else {
+			FIBMultipleValueModel aNewListModel = new FIBMultipleValueModel();
+			if (!aNewListModel.equals(listModel)) {
+				listModel = aNewListModel;
+			}
+		}
 		return listModel;
 	}
 	
@@ -306,7 +312,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 	@Override
 	public final void updateDataObject(Object value)
 	{
-		updateListModel();
+		updateListModelWhenRequired();
 		super.updateDataObject(value);
 	}
 
