@@ -41,8 +41,8 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.OperationPetriGraph;
 import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
-import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.ActionNode;
+import org.openflexo.foundation.wkf.node.EventNode;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
 
@@ -112,8 +112,7 @@ public class TestReusableComponentGenerator extends FlexoTestCase{
 
 		FlexoProcess sub1 = FlexoTestCase.createSubProcess("sub1", _project.getRootFlexoProcess(), _editor);
 
-		AbstractActivityNode beginRootProcessNode = (AbstractActivityNode)_project.getRootFlexoProcess().getAllBeginNodes().get(0);
-		AbstractActivityNode endRootProcessNode = (AbstractActivityNode)_project.getRootFlexoProcess().getAllEndNodes().get(0);
+		EventNode beginRootProcessNode = _project.getRootFlexoProcess().getActivityPetriGraph().getAllStartNodes().get(0);
 
 		SubProcessNode sub1Node = FlexoTestCase.instanciateForkSubProcess(sub1, _project.getRootFlexoProcess(), 200, 200, _editor);
 		FlexoTestCase.openOperationLevel(sub1Node, _editor);
