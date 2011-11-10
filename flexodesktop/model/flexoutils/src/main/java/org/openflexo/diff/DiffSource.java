@@ -359,7 +359,17 @@ public class DiffSource {
 			}
 			index++;
 		}
-
+		switch (location) {
+		case BEGIN:
+			beginDelimEndIndex = index;
+		case TOKEN:
+			endDelimStartIndex = index;
+		case END:
+			endDelimEndIndex = index;
+		}
+		if (beginDelimStartIndex < endDelimEndIndex) {
+			tokens.add(new MergeToken(beginDelimStartIndex, beginDelimEndIndex, endDelimStartIndex, endDelimEndIndex));
+		}
 		return textTokens = tokens.toArray(new MergeToken[tokens.size()]);
 	}
 
@@ -476,10 +486,13 @@ public class DiffSource {
 	}
 
 	public static void main(String[] args) throws IOException, InterruptedException {
-		DiffSource source = new DiffSource("    private static final String YOURTEXT456 = \"YOURTEXT456\";\n", DelimitingMethod.JAVA);
-		synchronized (source) {
-			source.wait();
-		}
+		DiffSource left = new DiffSource(
+				"{\\n        \"WebObjects Release\" = \"WebObjects 5.0\";\\n        encoding = NSUTF8StringEncoding;\\n        variables = {};\\n");
+		DiffSource right = new DiffSource(
+				"{\\n        \"WebObjects Release\" = \"WebObjects 5.0\";\\n        encoding = NSUTF8StringEncoding;\\n        variables = {};\\n");
+		DiffSource orig = new DiffSource(
+				"{\\n        \"WebObjects Release\" = \"WebObjects 5.0\";\\n        encoding = NSUTF8StringEncoding;\\n        variables = {};\\n}\\n");
+
 	}
 
 }
