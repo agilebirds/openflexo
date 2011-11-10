@@ -26,7 +26,6 @@ import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.ie.IEOperationComponent;
 import org.openflexo.foundation.ie.IEPopupComponent;
 import org.openflexo.foundation.ie.IEReusableComponent;
-import org.openflexo.foundation.ie.TestReusableComponent;
 import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
 import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
 import org.openflexo.foundation.ie.cl.action.AddComponent;
@@ -50,7 +49,7 @@ import org.openflexo.foundation.wkf.node.SubProcessNode;
 
 public class TestReusableComponentGenerator extends FlexoTestCase{
 
-	protected static final Logger logger = Logger.getLogger(TestReusableComponent.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(TestReusableComponentGenerator.class.getPackage().getName());
 
 	private FlexoEditor _editor;
 	private FlexoProject _project;
@@ -64,14 +63,14 @@ public class TestReusableComponentGenerator extends FlexoTestCase{
 	private static final String TEST_COMPONENT_1 = "Component1";
 	private static final String TEST_COMPONENT_2 = "Component2";
 	private static final String POPUP_COMPONENT_NAME = "Popup1";
-	
+
 	private static final String PARTIAL_COMPONENT = "PartialTestComponent";
-    private static final String TEST_COMPONENT_FOLDER = "TestFolder";
-    
-    public TestReusableComponentGenerator(String arg0) {
+	private static final String TEST_COMPONENT_FOLDER = "TestFolder";
+
+	public TestReusableComponentGenerator(String arg0) {
 		super(arg0);
 	}
-    
+
 	/**
 	 * Creates a new empty project in a temp directory
 	 */
@@ -84,7 +83,7 @@ public class TestReusableComponentGenerator extends FlexoTestCase{
 		_oc1 = (IEOperationComponent)FlexoTestCase.createComponent(TEST_COMPONENT_1,_cf,AddComponent.ComponentType.OPERATION_COMPONENT, _editor);
 		_oc2 = (IEOperationComponent)FlexoTestCase.createComponent(TEST_COMPONENT_2,_cf,AddComponent.ComponentType.OPERATION_COMPONENT, _editor);
 		_popup1 = (IEPopupComponent)FlexoTestCase.createComponent(POPUP_COMPONENT_NAME, _cf, AddComponent.ComponentType.POPUP_COMPONENT, _editor);
-		
+
 		// Insert a new bloc at index 0, name it Bloc1
 		IEBlocWidget bloc1 = FlexoTestCase.dropBlocAtIndex("bloc1",_oc1,0,_editor);
 		IEBlocWidget bloc2 = FlexoTestCase.dropBlocAtIndex("bloc2",_oc1,1,_editor);
@@ -93,47 +92,47 @@ public class TestReusableComponentGenerator extends FlexoTestCase{
 		assertEquals(1,bloc1.getIndex());
 		assertEquals(2,bloc2.getIndex());
 		assertEquals(0,bloc3.getIndex());
-		
+
 		IEHTMLTableWidget table = FlexoTestCase.dropTableInBloc(bloc1,_editor);
-		
-		
+
+
 		// Drop a label in the table3, at cell (0,0) at position 0
 		IELabelWidget label = (IELabelWidget)FlexoTestCase.dropWidgetInTable(WidgetType.LABEL, table, 0, 0, 0,_editor);
 		IETextFieldWidget textField = (IETextFieldWidget)FlexoTestCase.dropWidgetInTable(WidgetType.TEXTFIELD, table, 0, 0, 1,_editor);
 		IETextAreaWidget textArea = (IETextAreaWidget)FlexoTestCase.dropWidgetInTable(WidgetType.TEXTAREA, table, 1, 1, 0,_editor);
 		// Save project
 		saveProject();
-		
+
 		//reuse table
 		IEReusableWidget reusableTable = FlexoTestCase.makePartial(PARTIAL_COMPONENT, _cf, table, _editor);
-		
+
 		IEReusableWidget dropTableInComponent2 = FlexoTestCase.dropPartialComponent((IEReusableComponent)reusableTable.getReusableComponentInstance().getComponentDefinition().getWOComponent(), _oc2, _editor);
 		// assertNotSame(dropPartial.getComponentInstance(), dropPartial2.getComponentInstance());
 		saveProject();
-		
+
 		FlexoProcess sub1 = FlexoTestCase.createSubProcess("sub1", _project.getRootFlexoProcess(), _editor);
-		
-		AbstractActivityNode beginRootProcessNode = (AbstractActivityNode)_project.getRootFlexoProcess().getAllBeginNodes().get(0); 
-		AbstractActivityNode endRootProcessNode = (AbstractActivityNode)_project.getRootFlexoProcess().getAllEndNodes().get(0); 
-		
+
+		AbstractActivityNode beginRootProcessNode = (AbstractActivityNode)_project.getRootFlexoProcess().getAllBeginNodes().get(0);
+		AbstractActivityNode endRootProcessNode = (AbstractActivityNode)_project.getRootFlexoProcess().getAllEndNodes().get(0);
+
 		SubProcessNode sub1Node = FlexoTestCase.instanciateForkSubProcess(sub1, _project.getRootFlexoProcess(), 200, 200, _editor);
 		FlexoTestCase.openOperationLevel(sub1Node, _editor);
 		OperationPetriGraph operationGraph = sub1Node.getOperationPetriGraph();
 		OperationNode beginOperation = (OperationNode)operationGraph.getAllBeginNodes().get(0);
-		
-		
+
+
 		FlexoPostCondition edge = FlexoTestCase.createEdge(beginRootProcessNode, beginOperation, _editor);
 		OperationNode monitoring = FlexoTestCase.createOperationNode("monitoring", sub1Node, 100, 50, _editor);
-		
+
 		FlexoTestCase.openActionLevel(monitoring, _editor);
 		ActionNode beginAction = (ActionNode)monitoring.getActionPetriGraph().getAllBeginNodes().get(0);
 		FlexoPostCondition edge2 = FlexoTestCase.createEdge(beginOperation, beginAction, _editor);
-		
+
 		saveProject();
-		
+
 	}
-	
-	
+
+
 
 	/**
 	 * Save the project
@@ -147,6 +146,6 @@ public class TestReusableComponentGenerator extends FlexoTestCase{
 			fail("Cannot save project");
 		}
 	}
-	
+
 
 }

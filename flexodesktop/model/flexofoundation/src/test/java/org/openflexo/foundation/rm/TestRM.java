@@ -26,8 +26,6 @@ import java.util.Iterator;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoTestCase;
@@ -43,24 +41,6 @@ import org.openflexo.foundation.ie.util.WidgetType;
 import org.openflexo.foundation.ie.widget.IEBlocWidget;
 import org.openflexo.foundation.ie.widget.IEHTMLTableWidget;
 import org.openflexo.foundation.ie.widget.TopComponentReusableWidget;
-import org.openflexo.foundation.rm.FlexoComponentLibraryResource;
-import org.openflexo.foundation.rm.FlexoDKVResource;
-import org.openflexo.foundation.rm.FlexoDMResource;
-import org.openflexo.foundation.rm.FlexoEOModelResource;
-import org.openflexo.foundation.rm.FlexoFileResource;
-import org.openflexo.foundation.rm.FlexoMemoryResource;
-import org.openflexo.foundation.rm.FlexoNavigationMenuResource;
-import org.openflexo.foundation.rm.FlexoOperationComponentResource;
-import org.openflexo.foundation.rm.FlexoProcessResource;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoRMResource;
-import org.openflexo.foundation.rm.FlexoResource;
-import org.openflexo.foundation.rm.FlexoResourceManager;
-import org.openflexo.foundation.rm.FlexoReusableComponentResource;
-import org.openflexo.foundation.rm.FlexoStorageResource;
-import org.openflexo.foundation.rm.FlexoWorkflowResource;
-import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
 import org.openflexo.foundation.rm.FlexoResourceManager.BackwardSynchronizationHook;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource.SaveXMLResourceException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
@@ -82,21 +62,21 @@ import org.openflexo.toolbox.ToolBox;
 
 public class TestRM extends FlexoTestCase {
 
-    public TestRM()
-    {
+	public TestRM()
+	{
 		super(TEST_RM);
 	}
 
-    public static final Logger logger = Logger.getLogger(TestRM.class.getPackage().getName());
+	public static final Logger logger = Logger.getLogger(TestRM.class.getPackage().getName());
 
-    private static final String TEST_RM = "TestRM";
+	private static final String TEST_RM = "TestRM";
 
-    private static final String TEST_SUB_PROCESS = "TestSubProcess";
-    private static final String TEST_OPERATION_NODE = "TestOperation";
-    private static final String TEST_OPERATION_COMPONENT = "TestOperation";
-    private static final String TEST_OPERATION_COMPONENT2 = "TestOperation2";
-    private static final String TEST_PARTIAL_COMPONENT = "TestPartialComponent";
-    private static final String TEST_STATUS = "TestANewStatus";
+	private static final String TEST_SUB_PROCESS = "TestSubProcess";
+	private static final String TEST_OPERATION_NODE = "TestOperation";
+	private static final String TEST_OPERATION_COMPONENT = "TestOperation";
+	private static final String TEST_OPERATION_COMPONENT2 = "TestOperation2";
+	private static final String TEST_PARTIAL_COMPONENT = "TestPartialComponent";
+	private static final String TEST_STATUS = "TestANewStatus";
 
 	private static FlexoEditor _editor;
 	private static FlexoProject _project;
@@ -123,15 +103,15 @@ public class TestRM extends FlexoTestCase {
 	private static IEBlocWidget _bloc2;
 	private static FlexoReusableComponentResource _partialComponentResource;
 
-    /**
-     * Overrides setUp
-     * @see junit.framework.TestCase#setUp()
-     */
-    @Override
-    protected void setUp() throws Exception
-    {
-        super.setUp();
-    }
+	/**
+	 * Overrides setUp
+	 * @see junit.framework.TestCase#setUp()
+	 */
+	@Override
+	protected void setUp() throws Exception
+	{
+		super.setUp();
+	}
 
 	/**
 	 * Creates a new empty project in a temp directory
@@ -139,8 +119,8 @@ public class TestRM extends FlexoTestCase {
 	public void test0CreateProject()
 	{
 		log("test0CreateProject");
-       ToolBox.setPlatform();
-       FlexoLoggingManager.forceInitialize();
+		ToolBox.setPlatform();
+		FlexoLoggingManager.forceInitialize();
 		try {
 			File tempFile = File.createTempFile(TEST_RM, "");
 			_projectDirectory = new File (tempFile.getParentFile(),tempFile.getName()+".prj");
@@ -175,7 +155,9 @@ public class TestRM extends FlexoTestCase {
 		assertNotNull(_eoPrototypesResource = _project.getEOModelResource(EOPrototypeRepository.EOPROTOTYPE_REPOSITORY_DIR.getName()));
 
 		for (FlexoResource resource : _project.getResources().values()) {
-			if (resource != _rmResource && !(resource instanceof FlexoMemoryResource)) assertSynchonized(resource, _rmResource);
+			if (resource != _rmResource && !(resource instanceof FlexoMemoryResource)) {
+				assertSynchonized(resource, _rmResource);
+			}
 		}
 		assertSynchonized (_dmResource,_executionModelResource);
 		assertSynchonized (_dmResource,_eoPrototypesResource);
@@ -410,7 +392,7 @@ public class TestRM extends FlexoTestCase {
 		reloadProject(true);
 		for (FlexoResource resource : _project.getResources().values()) {
 			if (resource instanceof FlexoStorageResource) {
-				logger.info("Resource"+resource+" lastModifiedOn: "+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(((FlexoStorageResource)resource).getDiskLastModifiedDate()));
+				logger.info("Resource"+resource+" lastModifiedOn: "+new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(((FlexoStorageResource)resource).getDiskLastModifiedDate()));
 			}
 		}
 		// Save RM for eventual back-synchro to be saved
@@ -423,7 +405,7 @@ public class TestRM extends FlexoTestCase {
 				assertNotModified((FlexoStorageResource)resource);
 			}
 		}
-		
+
 	}
 
 	/**
@@ -433,7 +415,7 @@ public class TestRM extends FlexoTestCase {
 	{
 		log("test10ReloadProjectAgain");
 		reloadProject(true);
-		 _bsHook.assertNoBackSynchronization();
+		_bsHook.assertNoBackSynchronization();
 	}
 
 	/**
@@ -565,7 +547,7 @@ public class TestRM extends FlexoTestCase {
 		ValidationReport wkfReport = _project.getFlexoWorkflow().validate();
 		assertEquals(1, wkfReport.getErrorNb());
 	}
-	
+
 	/**
 	 * Load project again
 	 * Check that repair action works and does not throws any exceptions
@@ -575,11 +557,12 @@ public class TestRM extends FlexoTestCase {
 		log("test15RepairProject");
 		reloadProject(true);
 		ValidationReport report = _project.validate();
-		if (report.getErrorNb()>0)
+		if (report.getErrorNb()>0) {
 			System.err.println(report.reportAsString());
+		}
 		assertEquals(0, report.getErrorNb());
 	}
-	
+
 	public void test16Serialization() {
 		AddStatus addStatus = AddStatus.actionType.makeNewAction(_rootProcessResource.getFlexoProcess(), null, _editor);
 		addStatus.setNewStatusName(TEST_STATUS);
@@ -595,8 +578,9 @@ public class TestRM extends FlexoTestCase {
 		Iterator<Status> i = _project.getGlobalStatus().values().iterator();
 		while (status==null && i.hasNext()) {
 			Status s = i.next();
-			if (TEST_STATUS.equals(s.getName()))
+			if (TEST_STATUS.equals(s.getName())) {
 				status = s;
+			}
 		}
 		assertNotNull(status);
 		assertEquals(status, _subProcessNode.getNewStatus());
@@ -606,37 +590,42 @@ public class TestRM extends FlexoTestCase {
 		// The last test must call this to stop the RM checking
 		_project.close();
 		FileUtils.deleteDir(_project.getProjectDirectory());
-		_project = null;
+		resetVariables();
+		_bsHook = null;
+		_editor = null;
+		_projectDirectory = null;
+		_projectIdentifier = null;
 	}
-	
-	private void resetVariables() 
+
+	private void resetVariables()
 	{
 		_project = null;
-		_rmResource = null;
-		_wkfResource = null;
-		_dmResource = null;
-		_dkvResource = null;
+		_bloc2 = null;
 		_clResource = null;
-		_menuResource = null;
-		_rootProcessResource = null;
-		_subProcessResource = null;
+		_dkvResource = null;
+		_dmResource = null;
 		_eoPrototypesResource = null;
 		_executionModelResource = null;
-		_subProcessNode = null;
+		_menuResource = null;
 		_operationNode = null;
+		_partialComponentResource = null;
+		_rmResource = null;
+		_rootProcessResource = null;
+		_subProcessNode = null;
+		_subProcessResource = null;
 		_testOperationComponentResource = null;
 		_testOperationComponent = null;
 		_testOperationComponentResource2 = null;
 		_testOperationComponent2 = null;
-		_bloc2 = null;
-		_partialComponentResource = null;
+		_wkfResource = null;
 	}
-	
+
 	private void reloadProject(boolean fullLoading)
 	{
 		_bsHook.clear();
-		if(_project!=null)
+		if(_project!=null) {
 			_project.close();
+		}
 		resetVariables();
 
 		try {
@@ -659,12 +648,20 @@ public class TestRM extends FlexoTestCase {
 		assertNotNull(_executionModelResource = _project.getEOModelResource(FlexoExecutionModelRepository.EXECUTION_MODEL_DIR.getName()));
 		assertNotNull(_eoPrototypesResource = _project.getEOModelResource(EOPrototypeRepository.EOPROTOTYPE_REPOSITORY_DIR.getName()));
 		assertNotNull(_subProcessResource = _project.getFlexoProcessResource(TEST_SUB_PROCESS));
-		if (fullLoading) assertNotNull(_subProcessNode = _rootProcessResource.getFlexoProcess().getActivityPetriGraph().getSubProcessNodeNamed(TEST_SUB_PROCESS));
-		if (fullLoading) assertNotNull(_operationNode = _rootProcessResource.getFlexoProcess().getActivityPetriGraph().getOperationNodeNamed(TEST_OPERATION_NODE));
+		if (fullLoading) {
+			assertNotNull(_subProcessNode = _rootProcessResource.getFlexoProcess().getActivityPetriGraph().getSubProcessNodeNamed(TEST_SUB_PROCESS));
+		}
+		if (fullLoading) {
+			assertNotNull(_operationNode = _rootProcessResource.getFlexoProcess().getActivityPetriGraph().getOperationNodeNamed(TEST_OPERATION_NODE));
+		}
 		assertNotNull(_testOperationComponentResource = _project.getFlexoOperationComponentResource(TEST_OPERATION_COMPONENT));
 		assertNotNull(_testOperationComponentResource2 = _project.getFlexoOperationComponentResource(TEST_OPERATION_COMPONENT2));
-		if (fullLoading) assertNotNull(_testOperationComponent = _testOperationComponentResource.getIEOperationComponent());
-		if (fullLoading) assertNotNull(_testOperationComponent2 = _testOperationComponentResource2.getIEOperationComponent());
+		if (fullLoading) {
+			assertNotNull(_testOperationComponent = _testOperationComponentResource.getIEOperationComponent());
+		}
+		if (fullLoading) {
+			assertNotNull(_testOperationComponent2 = _testOperationComponentResource2.getIEOperationComponent());
+		}
 		assertNotNull(_partialComponentResource = _project.getFlexoReusableComponentResource(TEST_PARTIAL_COMPONENT));
 
 		assertSynchonized (_dmResource,_executionModelResource);
@@ -730,7 +727,7 @@ public class TestRM extends FlexoTestCase {
 				resource2 = aResource2;
 			}
 			protected boolean backSynchroConcerns(FlexoResource aResource1, FlexoResource aResource2) {
-				return ((resource1 == aResource1) && (resource2 == aResource2));
+				return resource1 == aResource1 && resource2 == aResource2;
 			}
 		}
 
@@ -757,7 +754,9 @@ public class TestRM extends FlexoTestCase {
 		protected void assertBackSynchronizationHasBeenPerformed(FlexoResource aResource1, FlexoResource aResource2)
 		{
 			for (BackSynchroEntry entry : entries) {
-				if (entry.backSynchroConcerns(aResource1, aResource2)) return;
+				if (entry.backSynchroConcerns(aResource1, aResource2)) {
+					return;
+				}
 			}
 			fail("RESOURCE synchonization problem: "+aResource1+" MUST have been back-synchronized with "+aResource2);
 		}

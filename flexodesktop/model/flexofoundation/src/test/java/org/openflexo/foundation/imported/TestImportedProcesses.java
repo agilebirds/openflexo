@@ -35,6 +35,7 @@ import org.openflexo.foundation.imported.action.RefreshImportedProcessAction;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.wkf.FlexoProcess;
+import org.openflexo.toolbox.FileUtils;
 import org.openflexo.ws.client.PPMWebService.CLProjectDescriptor;
 import org.openflexo.ws.client.PPMWebService.PPMProcess;
 import org.openflexo.ws.client.PPMWebService.PPMRole;
@@ -407,7 +408,8 @@ public class TestImportedProcesses extends FlexoTestCase {
 
 		convertProcess(project, firstImportedProcess, firstProcess);
 		convertProcess(project, secondImportedProcess, secondProcess);
-
+		project.close();
+		FileUtils.deleteDir(project.getProjectDirectory());
 	}
 
 	public void test4TestProcessHierarchyChanges() {
@@ -500,6 +502,8 @@ public class TestImportedProcesses extends FlexoTestCase {
 		checkParenthood(processC, processD);
 		assertNull(project.getFlexoWorkflow().getImportedProcessWithURI(b.getUri()));
 		verifyImportedProcesses(project, processToImport);
+		project.close();
+		FileUtils.deleteDir(project.getProjectDirectory());
 	}
 
 	public void test5TestProcessHierarchyChanges() throws SaveResourceException {
@@ -567,6 +571,8 @@ public class TestImportedProcesses extends FlexoTestCase {
 		project.close();
 		project = reloadProject(project.getProjectDirectory()).getProject();
 		verifyImportedProcesses(project, processToImport);
+		project.close();
+		FileUtils.deleteDir(project.getProjectDirectory());
 	}
 
 	public void test6TestProcessHierarchyChanges() throws SaveResourceException {

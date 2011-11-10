@@ -19,7 +19,10 @@
  */
 package org.openflexo.fib.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
@@ -39,16 +42,16 @@ public abstract class ComponentConstraints extends Hashtable<String,String> impl
 	public static ComponentConstraintsConverter CONVERTER = new ComponentConstraintsConverter();
 
 	public boolean ignoreNotif = false;
-	
+
 	public static class ComponentConstraintsConverter extends Converter<ComponentConstraints>
 	{
-		public ComponentConstraintsConverter() 
+		public ComponentConstraintsConverter()
 		{
 			super(ComponentConstraints.class);
 		}
 
 		@Override
-		public ComponentConstraints convertFromString(String aValue) 
+		public ComponentConstraints convertFromString(String aValue)
 		{
 			try {
 				//System.out.println("aValue="+aValue);
@@ -85,27 +88,31 @@ public abstract class ComponentConstraints extends Hashtable<String,String> impl
 		}
 
 		@Override
-		public String convertToString(ComponentConstraints value) 
+		public String convertToString(ComponentConstraints value)
 		{
-			if (value == null) return null;
+			if (value == null) {
+				return null;
+			}
 			return value.getStringRepresentation();
 		};
 	}
 
 	public String getStringRepresentation()
 	{
-		StringBuffer returned = new StringBuffer();
-		returned.append(getType().name()+"(");
+		StringBuilder returned = new StringBuilder();
+		returned.append(getType().name()).append("(");
 		boolean isFirst = true;
-		for (String key : keySet()) {
+		List<String> keys = new ArrayList<String>(keySet());
+		Collections.sort(keys);
+		for (String key : keys) {
 			String v = get(key);
-			returned.append((isFirst?"":";")+key+"="+v);
+			returned.append(isFirst ? "" : ";").append(key).append("=").append(v);
 			isFirst = false;
 		}
 		returned.append(")");
 		return returned.toString();
 	}
-	
+
 	@Override
 	public ComponentConstraintsConverter getConverter() {
 		return CONVERTER;
@@ -113,12 +120,12 @@ public abstract class ComponentConstraints extends Hashtable<String,String> impl
 
 	private FIBComponent component;
 
-	public ComponentConstraints() 
+	public ComponentConstraints()
 	{
 		super();
 	}
 
-	protected ComponentConstraints(String someConstraints) 
+	protected ComponentConstraints(String someConstraints)
 	{
 		this();
 		StringTokenizer st = new StringTokenizer(someConstraints,";");
@@ -127,15 +134,19 @@ public abstract class ComponentConstraints extends Hashtable<String,String> impl
 			StringTokenizer st2 = new StringTokenizer(next,"=");
 			String key = null;
 			String value = null;
-			if (st2.hasMoreTokens()) key = st2.nextToken();
-			if (st2.hasMoreTokens()) value = st2.nextToken();
+			if (st2.hasMoreTokens()) {
+				key = st2.nextToken();
+			}
+			if (st2.hasMoreTokens()) {
+				value = st2.nextToken();
+			}
 			if (key != null && value != null) {
 				put(key,value);
 			}
 		}
 	}
 
-	ComponentConstraints(ComponentConstraints someConstraints) 
+	ComponentConstraints(ComponentConstraints someConstraints)
 	{
 		this();
 		ignoreNotif = true;
@@ -155,10 +166,10 @@ public abstract class ComponentConstraints extends Hashtable<String,String> impl
 			FIBAttributeNotification<ComponentConstraints> notification = new FIBAttributeNotification<ComponentConstraints>(FIBComponent.Parameters.constraints, this, this);
 			component.notify(notification);
 		}
-		
+
 		return returned;
 	}
-	
+
 	protected abstract Layout getType();
 
 	public <E extends Enum> E getEnumValue(String key, Class<E> enumType, E defaultValue)
@@ -171,7 +182,9 @@ public abstract class ComponentConstraints extends Hashtable<String,String> impl
 			return defaultValue;
 		}
 		for (E en : enumType.getEnumConstants()) {
-			if (en.name().equals(stringValue)) return en;
+			if (en.name().equals(stringValue)) {
+				return en;
+			}
 		}
 		logger.warning("Found inconsistent value '"+stringValue+"' as "+enumType);
 		return defaultValue;
@@ -259,20 +272,20 @@ public abstract class ComponentConstraints extends Hashtable<String,String> impl
 	{
 		this.component = component;
 	}
-	
+
 	public abstract void performConstrainedAddition(JComponent container, JComponent contained);
-	
-	public final int getIndex() 
+
+	public final int getIndex()
 	{
 		return getIntValue(INDEX,0);
 	}
 
-	public final void setIndex(int x) 
+	public final void setIndex(int x)
 	{
 		setIntValue(INDEX,x);
 	}
 
-	public final void setIndexNoNotification(int x) 
+	public final void setIndexNoNotification(int x)
 	{
 		ignoreNotif = true;
 		setIntValue(INDEX,x);

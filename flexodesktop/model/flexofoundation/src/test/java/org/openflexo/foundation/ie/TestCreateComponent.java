@@ -23,9 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.ie.IEOperationComponent;
 import org.openflexo.foundation.ie.action.DropIEElement;
 import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
 import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
@@ -43,14 +41,14 @@ import org.openflexo.toolbox.ToolBox;
 
 public class TestCreateComponent extends FlexoIETestCase {
 
-    public TestCreateComponent(String arg0) {
+	public TestCreateComponent(String arg0) {
 		super(arg0);
 	}
 
 	protected static final Logger logger = Logger.getLogger(TestCreateComponent.class.getPackage().getName());
 
-    private static final String TEST_COMPONENT = "TestComponent";
-    private static final String TEST_COMPONENT_FOLDER = "TestFolder";
+	private static final String TEST_COMPONENT = "TestComponent";
+	private static final String TEST_COMPONENT_FOLDER = "TestFolder";
 
 	private static FlexoEditor _editor;
 	private static FlexoProject _project;
@@ -65,8 +63,8 @@ public class TestCreateComponent extends FlexoIETestCase {
 	 */
 	public void test0CreateProject()
 	{
-        ToolBox.setPlatform();
-        FlexoLoggingManager.forceInitialize();
+		ToolBox.setPlatform();
+		FlexoLoggingManager.forceInitialize();
 		try {
 			File tempFile = File.createTempFile(TEST_COMPONENT, "");
 			_projectDirectory = new File (tempFile.getParentFile(),tempFile.getName()+".prj");
@@ -219,6 +217,13 @@ public class TestCreateComponent extends FlexoIETestCase {
 		// The last test must call this to stop the RM checking
 		_project.close();
 		FileUtils.deleteDir(_project.getProjectDirectory());
+		_cf = null;
+		_cl = null;
+		_editor = null;
+		_oc = null;
+		_project = null;
+		_projectDirectory = null;
+		_projectIdentifier = null;
 	}
 
 	/**

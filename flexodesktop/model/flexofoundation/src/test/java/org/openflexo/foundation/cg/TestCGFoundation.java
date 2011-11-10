@@ -23,8 +23,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.cg.action.AddGeneratedCodeRepository;
@@ -34,20 +32,21 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.logging.FlexoLoggingManager;
+import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ToolBox;
 
 public class TestCGFoundation extends FlexoTestCase {
 
-    public TestCGFoundation(String arg0) {
+	public TestCGFoundation(String arg0) {
 		super(arg0);
 	}
 
-    protected static final Logger logger = Logger.getLogger(TestCGFoundation.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(TestCGFoundation.class.getPackage().getName());
 
-    private static final String TEST_CG = "TestCG";
+	private static final String TEST_CG = "TestCG";
 
- 	private static FlexoEditor _editor;
- 	private static FlexoProject _project;
+	private static FlexoEditor _editor;
+	private static FlexoProject _project;
 	private static File _projectDirectory;
 	private static String _projectIdentifier;
 
@@ -57,8 +56,8 @@ public class TestCGFoundation extends FlexoTestCase {
 	public void test0CreateProject()
 	{
 		logger.info("test0CreateProject");
-       ToolBox.setPlatform();
-       FlexoLoggingManager.forceInitialize();
+		ToolBox.setPlatform();
+		FlexoLoggingManager.forceInitialize();
 		try {
 			File tempFile = File.createTempFile(TEST_CG, "");
 			_projectDirectory = new File (tempFile.getParentFile(),tempFile.getName()+".prj");
@@ -90,7 +89,7 @@ public class TestCGFoundation extends FlexoTestCase {
 		} catch (SaveResourceException e) {
 			fail("Cannot save project");
 		}
- 	}
+	}
 
 	/**
 	 * Creates a new empty project in a temp directory
@@ -99,8 +98,9 @@ public class TestCGFoundation extends FlexoTestCase {
 	{
 		logger.info("test2Reload");
 		try {
-		    if (_project!=null)
-		        _project.close();
+			if (_project!=null) {
+				_project.close();
+			}
 			assertNotNull(_editor = FlexoResourceManager.initializeExistingProject(_projectDirectory,EDITOR_FACTORY,null));
 			_project = _editor.getProject();
 		} catch (ProjectInitializerException e) {
@@ -112,5 +112,10 @@ public class TestCGFoundation extends FlexoTestCase {
 		}
 		logger.info("_project.getGeneratedCode()="+_project.getGeneratedCode());
 		_project.close();
- 	}
+		FileUtils.deleteDir(_projectDirectory);
+		_editor = null;
+		_project = null;
+		_projectDirectory = null;
+		_projectIdentifier = null;
+	}
 }

@@ -1,5 +1,5 @@
 #French
-#Wed Oct 26 21:45:52 CEST 2011
+#Wed Nov 09 13:55:36 CET 2011
 =
 \ =\ 
 \ into\ =\ dans 
@@ -151,6 +151,7 @@ Cancel=Annuler
 Cancel\ handler=Receveur d'annulation
 Cancel\ thrower=Emetteur d'annulation
 Cannot\ drop\ a\ null\ widget\ \!=Impossible de d\u00E9poser un \u00E9l\u00E9ment graphique 'null' \!
+Cannot\ drop\ on\ a\ null\ container\ \!=Cannot drop on a null container \!
 Cannot\ drop\ such\ a\ widget\ (be.denali.flexo.foundation.ie.cl.SingleWidgetComponentDefinition)\ on\ this\ container(be.denali.flexo.foundation.ie.widget.IESequenceWidget)\ \!=Impossible de d\u00E9poser un \u00E9l\u00E9ment graphique de ce type. (be.denali.flexo.foundation.ie.cl.SingleWidgetComponentDefinition) on this container(be.denali.flexo.foundation.ie.widget.IESequenceWidget) \!
 Cannot\ drop\ such\ a\ widget\ (org.openflexo.foundation.ie.cl.SingleWidgetComponentDefinition)\ on\ this\ container(org.openflexo.foundation.ie.widget.IESequenceWidget)\ \!=Cannot drop such a widget (org.openflexo.foundation.ie.cl.SingleWidgetComponentDefinition) on this container(org.openflexo.foundation.ie.widget.IESequenceWidget) \!
 Cannot\ drop\ such\ a\ widget\ on\ this\ container\ \!=Impossible de d\u00E9poser ce type d'\u00E9l\u00E9ment graphique dans ce conteneur

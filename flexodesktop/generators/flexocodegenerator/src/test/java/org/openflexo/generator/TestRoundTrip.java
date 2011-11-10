@@ -27,13 +27,12 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.diff.ComputeDiff;
-import org.openflexo.diff.DiffSource;
 import org.openflexo.diff.ComputeDiff.DiffReport;
+import org.openflexo.diff.DiffSource;
 import org.openflexo.diff.merge.Merge;
 import org.openflexo.diff.merge.MergeChange.MergeChangeAction;
 import org.openflexo.diff.merge.MergeChange.MergeChangeSource;
 import org.openflexo.diff.merge.MergeChange.MergeChangeType;
-
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoException;
@@ -96,20 +95,20 @@ import org.openflexo.toolbox.ToolBox;
 
 public class TestRoundTrip extends CGTestCase  {
 
-    private static final String BUILDPROPERTIES_VM = "build.properties.vm";
+	private static final String BUILDPROPERTIES_VM = "build.properties.vm";
 
 	public TestRoundTrip(String arg0) {
 		super(arg0);
 	}
 
-     protected static final Logger logger = Logger.getLogger(TestRoundTrip.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(TestRoundTrip.class.getPackage().getName());
 
-    private static final String TEST_RT = "TestRoundTrip";
+	private static final String TEST_RT = "TestRoundTrip";
 
-    static BuildPropertiesResource _buildPropertiesResource;
+	static BuildPropertiesResource _buildPropertiesResource;
 
 	@Override
-    protected void reloadGeneratedResources()
+	protected void reloadGeneratedResources()
 	{
 		super.reloadGeneratedResources();
 		_buildPropertiesResource = (BuildPropertiesResource)_project.resourceForKey(ResourceType.TEXT_FILE, codeRepository.getName() + ".BUILD_PROPERTIES");
@@ -117,19 +116,19 @@ public class TestRoundTrip extends CGTestCase  {
 
 
 	@Override
-    protected void reloadProject(boolean fullLoading)
+	protected void reloadProject(boolean fullLoading)
 	{
 		super.reloadProject(fullLoading);
 	}
 
- 	/**
+	/**
 	 * Creates a new empty project in a temp directory
 	 */
 	public void test0CreateProject()
 	{
 		log("test0CreateProject");
-       ToolBox.setPlatform();
-       FlexoLoggingManager.forceInitialize();
+		ToolBox.setPlatform();
+		FlexoLoggingManager.forceInitialize();
 		try {
 			File tempFile = File.createTempFile(TEST_RT, "");
 			_projectDirectory = new File (tempFile.getParentFile(),tempFile.getName()+".prj");
@@ -155,7 +154,9 @@ public class TestRoundTrip extends CGTestCase  {
 		assertNotNull(_eoPrototypesResource = _project.getEOModelResource(EOPrototypeRepository.EOPROTOTYPE_REPOSITORY_DIR.getName()));
 
 		for (FlexoResource resource : _project.getResources().values()) {
-			if (resource != _rmResource && !(resource instanceof FlexoMemoryResource)) assertSynchonized(resource, _rmResource);
+			if (resource != _rmResource && !(resource instanceof FlexoMemoryResource)) {
+				assertSynchonized(resource, _rmResource);
+			}
 		}
 		assertSynchonized (_dmResource,_executionModelResource);
 		assertSynchonized (_dmResource,_eoPrototypesResource);
@@ -443,7 +444,7 @@ public class TestRoundTrip extends CGTestCase  {
 
 		_editor.registerExceptionHandlerFor(ValidateProject.actionType,new FlexoExceptionHandler<ValidateProject>() {
 			@Override
-            public boolean handleException(FlexoException exception, ValidateProject action) {
+			public boolean handleException(FlexoException exception, ValidateProject action) {
 				if (action.getIeValidationReport() != null && action.getIeValidationReport().getErrorNb() > 0) {
 					logger.info("Errors reported from IE:\n"+action.getIeValidationReport().reportAsString());
 				}
@@ -470,44 +471,44 @@ public class TestRoundTrip extends CGTestCase  {
 		FlexoComponentFolder rootFolder = _project.getFlexoComponentLibrary().getRootFolder();
 		//rootFolder.setComponentPrefix("TST");
 		// To fix errors we need another process and operation on which we will bind the menu
-        AddSubProcess process = AddSubProcess.actionType.makeNewAction(_project.getFlexoWorkflow(), null, _editor);
-        process.setNewProcessName("Process context free");
-        process.doAction();
-        assertTrue(process.hasActionExecutionSucceeded());
-        DropWKFElement addActivity = DropWKFElement.actionType.makeNewAction(process.getNewProcess().getActivityPetriGraph(), null, _editor);
-        addActivity.setElementType(WKFElementType.NORMAL_ACTIVITY);
-        addActivity.setLocation(100,100);
-        addActivity.doAction();
-        assertTrue(addActivity.hasActionExecutionSucceeded());
-        ActivityNode activityNode = (ActivityNode)addActivity.getObject();
-        logger.info("ActivityNode "+activityNode.getName()+" successfully created");
+		AddSubProcess process = AddSubProcess.actionType.makeNewAction(_project.getFlexoWorkflow(), null, _editor);
+		process.setNewProcessName("Process context free");
+		process.doAction();
+		assertTrue(process.hasActionExecutionSucceeded());
+		DropWKFElement addActivity = DropWKFElement.actionType.makeNewAction(process.getNewProcess().getActivityPetriGraph(), null, _editor);
+		addActivity.setElementType(WKFElementType.NORMAL_ACTIVITY);
+		addActivity.setLocation(100,100);
+		addActivity.doAction();
+		assertTrue(addActivity.hasActionExecutionSucceeded());
+		ActivityNode activityNode = (ActivityNode)addActivity.getObject();
+		logger.info("ActivityNode "+activityNode.getName()+" successfully created");
 
-        OpenOperationLevel openOperationLevel = OpenOperationLevel.actionType.makeNewAction(activityNode, null, _editor);
-        openOperationLevel.doAction();
-        assertTrue(openOperationLevel.hasActionExecutionSucceeded());
-        DropWKFElement dropOperation2 = DropWKFElement.actionType.makeNewAction(activityNode.getOperationPetriGraph(), null, _editor);
-        dropOperation2.setElementType(WKFElementType.NORMAL_OPERATION);
-        dropOperation2.setLocation(10,50);
-        dropOperation2.doAction();
-        assertTrue(dropOperation2.hasActionExecutionSucceeded());
+		OpenOperationLevel openOperationLevel = OpenOperationLevel.actionType.makeNewAction(activityNode, null, _editor);
+		openOperationLevel.doAction();
+		assertTrue(openOperationLevel.hasActionExecutionSucceeded());
+		DropWKFElement dropOperation2 = DropWKFElement.actionType.makeNewAction(activityNode.getOperationPetriGraph(), null, _editor);
+		dropOperation2.setElementType(WKFElementType.NORMAL_OPERATION);
+		dropOperation2.setLocation(10,50);
+		dropOperation2.doAction();
+		assertTrue(dropOperation2.hasActionExecutionSucceeded());
 
-        OperationNode operationNodeForMenu = (OperationNode)dropOperation2.getObject();
-        operationNodeForMenu.setName("OperationNodeForMenu");
+		OperationNode operationNodeForMenu = (OperationNode)dropOperation2.getObject();
+		operationNodeForMenu.setName("OperationNodeForMenu");
 
-        // We also need to set a screen on the operation node
-        AddComponent addComponent = AddComponent.actionType.makeNewAction(_project.getFlexoComponentLibrary(), null, _editor);
-        addComponent.setComponentType(ComponentType.OPERATION_COMPONENT);
-        addComponent.setNewComponentName("DummyComponentForMenu");
-        addComponent.doAction();
-        assertTrue(addComponent.hasActionExecutionSucceeded());
+		// We also need to set a screen on the operation node
+		AddComponent addComponent = AddComponent.actionType.makeNewAction(_project.getFlexoComponentLibrary(), null, _editor);
+		addComponent.setComponentType(ComponentType.OPERATION_COMPONENT);
+		addComponent.setNewComponentName("DummyComponentForMenu");
+		addComponent.doAction();
+		assertTrue(addComponent.hasActionExecutionSucceeded());
 
-        try {
-            operationNodeForMenu.setOperationComponent((OperationComponentDefinition) addComponent.getNewComponent());
-        } catch (OperationAssociatedWithComponentSuccessfully e) {
-            // Normal
-        }
+		try {
+			operationNodeForMenu.setOperationComponent((OperationComponentDefinition) addComponent.getNewComponent());
+		} catch (OperationAssociatedWithComponentSuccessfully e) {
+			// Normal
+		}
 
-        logger.info("OperationNode "+operationNodeForMenu.getName()+" successfully created");
+		logger.info("OperationNode "+operationNodeForMenu.getName()+" successfully created");
 		_project.getFlexoNavigationMenu().getRootMenu().setProcess(operationNodeForMenu.getProcess());
 		_project.getFlexoNavigationMenu().getRootMenu().setOperation(operationNodeForMenu);
 		associateTabWithOperations();
@@ -711,7 +712,7 @@ public class TestRoundTrip extends CGTestCase  {
 
 		generateRequiredCode = GenerateSourceCode.actionType.makeNewAction(codeRepository,null, _editor);
 		assertTrue(generateRequiredCode.doAction().hasActionExecutionSucceeded());
-		
+
 		// Write generated files to disk
 		writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository,null, _editor);
 		writeToDisk.doAction();
@@ -722,10 +723,10 @@ public class TestRoundTrip extends CGTestCase  {
 		saveProject();
 
 		logger.info("Before modifying");
- 		logger.info("_tab2ComponentResource update="+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(_tab2ComponentResource.getLastUpdate()));
- 		logger.info("tabComponent2JavaResource update="+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(tabComponent2JavaResource.getLastUpdate()));
+		logger.info("_tab2ComponentResource update="+new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(_tab2ComponentResource.getLastUpdate()));
+		logger.info("tabComponent2JavaResource update="+new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(tabComponent2JavaResource.getLastUpdate()));
 
- 		// Now we change again bloc name
+		// Now we change again bloc name
 		bloc.setTitle("BlocInTab2");
 
 		// Naturally those resources are changed
@@ -748,8 +749,8 @@ public class TestRoundTrip extends CGTestCase  {
 				tabComponent2ScreenshotCopyOfCopy.getCGFile());
 
 		logger.info("After modifying");
- 		logger.info("_tab2ComponentResource update="+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(_tab2ComponentResource.getLastUpdate()));
- 		logger.info("tabComponent2JavaResource update="+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(tabComponent2JavaResource.getLastUpdate()));
+		logger.info("_tab2ComponentResource update="+new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(_tab2ComponentResource.getLastUpdate()));
+		logger.info("tabComponent2JavaResource update="+new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(tabComponent2JavaResource.getLastUpdate()));
 
 		log ("OK, trying to save and reload project");
 
@@ -767,8 +768,8 @@ public class TestRoundTrip extends CGTestCase  {
 		synchronizeCodeGeneration.doAction();
 
 		logger.info("After code synchro");
-		logger.info("_tab2ComponentResource update="+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(_tab2ComponentResource.getLastUpdate()));
- 		logger.info("tabComponent2JavaResource update="+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(tabComponent2JavaResource.getLastUpdate()));
+		logger.info("_tab2ComponentResource update="+new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(_tab2ComponentResource.getLastUpdate()));
+		logger.info("tabComponent2JavaResource update="+new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(tabComponent2JavaResource.getLastUpdate()));
 
 		// The same resources must be in the 'modified' state except for the ones that have been cleared because the backsynchronization
 		// mechanism has not caused an update in resource dependancy tree (The
@@ -897,9 +898,11 @@ public class TestRoundTrip extends CGTestCase  {
 		EditCustomTemplateFile editTemplate
 		= EditCustomTemplateFile.actionType.makeNewAction(newLabelHTMLTemplate, null, _editor);
 		editTemplate.setTemplateFileContentEditor(new TemplateFileContentEditor() {
+			@Override
 			public String getEditedContent() {
 				return newContent;
 			}
+			@Override
 			public void setEditedContent(String content) { }
 		});
 		editTemplate.doAction();
@@ -990,9 +993,11 @@ public class TestRoundTrip extends CGTestCase  {
 		EditCustomTemplateFile editTemplate
 		= EditCustomTemplateFile.actionType.makeNewAction(newBuildPropertiesTemplate, null, _editor);
 		editTemplate.setTemplateFileContentEditor(new TemplateFileContentEditor() {
+			@Override
 			public String getEditedContent() {
 				return ADDED_ON_FIRST_LINE + newBuildPropertiesTemplate.getContent();
 			}
+			@Override
 			public void setEditedContent(String content) { }
 		});
 		editTemplate.doAction();
@@ -1014,8 +1019,8 @@ public class TestRoundTrip extends CGTestCase  {
 		assertTrue(generateRequired.doAction().hasActionExecutionSucceeded());
 		logger.info("Generate required file DONE");
 
-//       And depending on template
-        checkDependingOnTemplate(newBuildPropertiesTemplate, _buildPropertiesResource.getCGFile());
+		//       And depending on template
+		checkDependingOnTemplate(newBuildPropertiesTemplate, _buildPropertiesResource.getCGFile());
 
 		// Check that file is to regenerate but generator has run and memory generation is up-to-date
 		assertTrue (_buildPropertiesResource.getCGFile().getGenerationStatus() == GenerationStatus.GenerationModified);
@@ -1063,10 +1068,12 @@ public class TestRoundTrip extends CGTestCase  {
 		EditGeneratedFile editFile
 		= EditGeneratedFile.actionType.makeNewAction(_buildPropertiesResource.getCGFile(), null, _editor);
 		editFile.setFileContentEditor(new CGFile.FileContentEditor() {
+			@Override
 			public String getEditedContentForKey(String contentKey)
 			{
 				return ADDED_ON_FIRST_LINE_BY_FLEXO+_buildPropertiesResource.getGeneratedResourceData().getContent(ContentSource.CONTENT_ON_DISK);
 			}
+			@Override
 			public void setEditedContent(CGFile file) { }
 		});
 		assertTrue (editFile.doAction().hasActionExecutionSucceeded());
@@ -1197,17 +1204,19 @@ public class TestRoundTrip extends CGTestCase  {
 		try {
 			final CGTemplate editedBuildPropertiesTemplate = projectGenerator.getTemplateLocator().templateWithName(BUILDPROPERTIES_VM);
 			EditCustomTemplateFile editTemplate
- = EditCustomTemplateFile.actionType.makeNewAction((CGTemplateFile) editedBuildPropertiesTemplate, null, _editor);
+			= EditCustomTemplateFile.actionType.makeNewAction((CGTemplateFile) editedBuildPropertiesTemplate, null, _editor);
 			editTemplate.setTemplateFileContentEditor(new TemplateFileContentEditor() {
+				@Override
 				public String getEditedContent() {
 					return tagStringWithLineNb(editedBuildPropertiesTemplate.getContent(), "*", 3, 5);
 				}
+				@Override
 				public void setEditedContent(String content) { }
 			});
 			editTemplate.doAction();
 			assertTrue(editTemplate.hasActionExecutionSucceeded());
 			SaveCustomTemplateFile saveTemplate
- = SaveCustomTemplateFile.actionType.makeNewAction((CGTemplateFile) editedBuildPropertiesTemplate, null, _editor);
+			= SaveCustomTemplateFile.actionType.makeNewAction((CGTemplateFile) editedBuildPropertiesTemplate, null, _editor);
 			saveTemplate.doAction();
 			assertTrue(saveTemplate.hasActionExecutionSucceeded());
 			newBuildPropertiesTemplate = editedBuildPropertiesTemplate;
@@ -1232,10 +1241,12 @@ public class TestRoundTrip extends CGTestCase  {
 		EditGeneratedFile editFile
 		= EditGeneratedFile.actionType.makeNewAction(_buildPropertiesResource.getCGFile(), null, _editor);
 		editFile.setFileContentEditor(new CGFile.FileContentEditor() {
+			@Override
 			public String getEditedContentForKey(String contentKey)
 			{
 				return tagStringWithLineNb(_buildPropertiesResource.getGeneratedResourceData().getContent(ContentSource.CONTENT_ON_DISK), "#", 8, 11);
 			}
+			@Override
 			public void setEditedContent(CGFile file) { }
 		});
 		assertTrue (editFile.doAction().hasActionExecutionSucceeded());
@@ -1254,7 +1265,7 @@ public class TestRoundTrip extends CGTestCase  {
 			e1.printStackTrace();
 		}
 		// Status of file must be ConflictingUnMerged
- catch (InterruptedException e) {
+		catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -1277,7 +1288,7 @@ public class TestRoundTrip extends CGTestCase  {
 
 		// Try to do it anyway
 		Vector<AbstractCGFile> writeThis = new Vector<AbstractCGFile>();
-		writeThis.add((AbstractCGFile) _buildPropertiesResource.getCGFile());
+		writeThis.add(_buildPropertiesResource.getCGFile());
 		writeToDisk.setFilesToWrite(writeThis);
 		assertFalse(writeToDisk.doAction().hasActionExecutionSucceeded());
 		// It's already been said: it's a conflict, it won't work
@@ -1353,16 +1364,18 @@ public class TestRoundTrip extends CGTestCase  {
 		try {
 			final CGTemplate editedBuildPropertiesTemplate = projectGenerator.getTemplateLocator().templateWithName(BUILDPROPERTIES_VM);
 			EditCustomTemplateFile editTemplate
- = EditCustomTemplateFile.actionType.makeNewAction((CGTemplateFile) editedBuildPropertiesTemplate, null, _editor);
+			= EditCustomTemplateFile.actionType.makeNewAction((CGTemplateFile) editedBuildPropertiesTemplate, null, _editor);
 			editTemplate.setTemplateFileContentEditor(new TemplateFileContentEditor() {
+				@Override
 				public String getEditedContent() {
 					return tagStringWithLineNb(editedBuildPropertiesTemplate.getContent(), "*", 8, 10);
 				}
+				@Override
 				public void setEditedContent(String content) { }
 			});
 			editTemplate.doAction();
 			SaveCustomTemplateFile saveTemplate
- = SaveCustomTemplateFile.actionType.makeNewAction((CGTemplateFile) editedBuildPropertiesTemplate, null, _editor);
+			= SaveCustomTemplateFile.actionType.makeNewAction((CGTemplateFile) editedBuildPropertiesTemplate, null, _editor);
 			saveTemplate.doAction();
 			newBuildPropertiesTemplate = editedBuildPropertiesTemplate;
 		} catch (TemplateNotFoundException e) {
@@ -1399,7 +1412,7 @@ public class TestRoundTrip extends CGTestCase  {
 
 		// Try to do it anyway
 		Vector<AbstractCGFile> writeThis = new Vector<AbstractCGFile>();
-		writeThis.add((AbstractCGFile) _buildPropertiesResource.getCGFile());
+		writeThis.add(_buildPropertiesResource.getCGFile());
 		writeToDisk.setFilesToWrite(writeThis);
 		assertFalse(writeToDisk.doAction().hasActionExecutionSucceeded());
 		// It's already been said: it's a conflict, it won't work
@@ -1481,16 +1494,18 @@ public class TestRoundTrip extends CGTestCase  {
 		try {
 			final CGTemplate editedBuildPropertiesTemplate = projectGenerator.getTemplateLocator().templateWithName(BUILDPROPERTIES_VM);
 			EditCustomTemplateFile editTemplate
- = EditCustomTemplateFile.actionType.makeNewAction((CGTemplateFile) editedBuildPropertiesTemplate, null, _editor);
+			= EditCustomTemplateFile.actionType.makeNewAction((CGTemplateFile) editedBuildPropertiesTemplate, null, _editor);
 			editTemplate.setTemplateFileContentEditor(new TemplateFileContentEditor() {
+				@Override
 				public String getEditedContent() {
 					return tagStringWithLineNb(editedBuildPropertiesTemplate.getContent(), "*", 5, 7);
 				}
+				@Override
 				public void setEditedContent(String content) { }
 			});
 			editTemplate.doAction();
 			SaveCustomTemplateFile saveTemplate
- = SaveCustomTemplateFile.actionType.makeNewAction((CGTemplateFile) editedBuildPropertiesTemplate, null, _editor);
+			= SaveCustomTemplateFile.actionType.makeNewAction((CGTemplateFile) editedBuildPropertiesTemplate, null, _editor);
 			saveTemplate.doAction();
 			assertTrue(saveTemplate.hasActionExecutionSucceeded());
 			newBuildPropertiesTemplate = editedBuildPropertiesTemplate;
@@ -1514,10 +1529,12 @@ public class TestRoundTrip extends CGTestCase  {
 		EditGeneratedFile editFile
 		= EditGeneratedFile.actionType.makeNewAction(_buildPropertiesResource.getCGFile(), null, _editor);
 		editFile.setFileContentEditor(new CGFile.FileContentEditor() {
+			@Override
 			public String getEditedContentForKey(String contentKey)
 			{
 				return tagStringWithLineNb(_buildPropertiesResource.getGeneratedResourceData().getContent(ContentSource.CONTENT_ON_DISK), "#", 6, 8);
 			}
+			@Override
 			public void setEditedContent(CGFile file) { }
 		});
 		assertTrue (editFile.doAction().hasActionExecutionSucceeded());
@@ -1550,7 +1567,7 @@ public class TestRoundTrip extends CGTestCase  {
 
 		// Try to do it anyway
 		Vector<AbstractCGFile> writeThis = new Vector<AbstractCGFile>();
-		writeThis.add((AbstractCGFile) _buildPropertiesResource.getCGFile());
+		writeThis.add(_buildPropertiesResource.getCGFile());
 		writeToDisk.setFilesToWrite(writeThis);
 		assertFalse(writeToDisk.doAction().hasActionExecutionSucceeded());
 		// It's already been said: it's a conflict, it won't work
@@ -1575,13 +1592,13 @@ public class TestRoundTrip extends CGTestCase  {
 		// Manually resolve conflict
 		resultFileMerge.getChanges().get(0).setMergeChangeAction(MergeChangeAction.ChooseLeft);
 		String leftString = resultFileMerge.getChanges().get(0).getMergeChangeResult().merge;
-		String[] leftVersion = (new DiffSource(leftString)).getSignificativeTokens();
+		String[] leftVersion = new DiffSource(leftString).getSignificativeTokens();
 		/*for (int i=0; i<leftVersion.length; i++) {
 			System.out.println("leftVersion["+i+"]="+leftVersion[i]);
 		}*/
 		resultFileMerge.getChanges().get(0).setMergeChangeAction(MergeChangeAction.ChooseRight);
 		String rightString = resultFileMerge.getChanges().get(0).getMergeChangeResult().merge;
-		String[] rightVersion = (new DiffSource(rightString)).getSignificativeTokens();
+		String[] rightVersion = new DiffSource(rightString).getSignificativeTokens();
 		/*for (int i=0; i<rightVersion.length; i++) {
 			System.out.println("rightVersion["+i+"]="+rightVersion[i]);
 		}*/
@@ -1626,6 +1643,7 @@ public class TestRoundTrip extends CGTestCase  {
 		_project.close();
 		FileUtils.deleteDir(_project.getProjectDirectory());
 		resetVariables();
+		buildPropertiesResource = null;
 	}
 
 

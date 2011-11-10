@@ -25,27 +25,27 @@ import org.openflexo.fib.model.FIBModelObject.FIBModelAttribute;
 public class FIBAttributeNotification<T extends Object> extends FIBModelNotification<T>
 {
 	private FIBModelAttribute attribute;
-	
+
 	public FIBAttributeNotification(FIBModelAttribute attribute, T oldValue, T newValue)
 	{
-		super(((Enum<?>)attribute).name(),oldValue,newValue);
+		super(attribute.name(), oldValue, newValue);
 		this.attribute = attribute;
 	}
-	
+
 	public FIBAttributeNotification(FIBModelAttribute attribute, T value)
 	{
 		this(attribute,value,value);
 	}
-	
-	public FIBModelAttribute getAttribute() 
+
+	public FIBModelAttribute getAttribute()
 	{
 		return attribute;
 	}
-	
+
 	@Override
 	public String toString()
 	{
 		return "FIBAttributeNotification of "+getClass().getSimpleName()+" "+getAttributeName()+" old: "+oldValue()+" new: "+newValue();
 	}
-	
+
 }

@@ -21,6 +21,7 @@ package org.openflexo.fib.model;
 
 import java.util.Iterator;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding;
@@ -164,7 +165,8 @@ public class DataBinding implements StringConvertable<DataBinding>
 			else {
 				this.binding = value;
 				unparsedBinding = (value != null ? value.getStringRepresentation() : null);
-				logger.info("Binding takes now value "+value);
+				if(logger.isLoggable(Level.FINE))
+					logger.fine("Binding takes now value "+value);
 				updateDependancies();
 				if (bindingAttribute != null) owner.notify(new FIBAttributeNotification<AbstractBinding>(bindingAttribute,oldValue,value));
 				owner.notifyBindingChanged(this);
