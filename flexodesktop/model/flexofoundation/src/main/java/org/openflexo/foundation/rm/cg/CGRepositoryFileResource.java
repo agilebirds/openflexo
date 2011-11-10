@@ -31,8 +31,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.cg.CGFile;
-import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.CGFile.FileContentEditor;
+import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.dm.CGContentRegenerated;
 import org.openflexo.foundation.cg.generator.IFlexoResourceGenerator;
 import org.openflexo.foundation.cg.generator.IGenerationException;
@@ -85,8 +85,9 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
     //final only to ensure that it wasn't overrided somewhere
     //but if there is a real need to override it : final modifier may be removed
 	final public void setGenerator(G generator) {
-		if (_generator==generator)
+		if (_generator==generator) {
 			return;
+		}
 		Vector<CGTemplate> templates = null;
 		if (_generator!=null) {
 			templates = _generator.getUsedTemplates();
@@ -97,8 +98,9 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
     		generator.addToGeneratedResourcesGeneratedByThisGenerator(this);
 			if (getCGFile() != null) {
 				generator.addObserver(getCGFile());
-				if (templates==null)
+				if (templates==null) {
 					templates = new Vector<CGTemplate>();
+				}
 				if (templates.size()==0) {
 					for (String templateRelativePath : getCGFile().getUsedTemplates()) {
 						CGTemplate file;
@@ -107,21 +109,24 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 						} else {
 							file = getCGFile().getGeneratedCode().getTemplates().getApplicationRepository().getTemplateWithRelativePath(templateRelativePath);
 						}
-						if (file!=null)
+						if (file!=null) {
 							templates.add(file);
+						}
 					}
 				}
 				generator.setUsedTemplates(templates);
-				if (generator.getTemplateLocator()!=null)
+				if (generator.getTemplateLocator()!=null) {
 					addToDependantResources(generator.getTemplateLocator());
+				}
 			}
     	}
 	}
 
 	@Override
 	public synchronized void delete(boolean deleteFile) {
-		if (getGenerator()!=null && getCGFile()!=null)
+		if (getGenerator()!=null && getCGFile()!=null) {
 			getGenerator().deleteObserver(getCGFile());
+		}
 		super.delete(deleteFile);
 	}
 
@@ -154,8 +159,9 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
     }
 
     public GenerationRepository getRepository() {
-        if (getCGFile()!=null)
-            return getCGFile().getRepository();
+        if (getCGFile()!=null) {
+			return getCGFile().getRepository();
+		}
         return null;
     }
 
@@ -166,7 +172,7 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 
 	public final void setCGFile(F cgFile)
 	{
-		if ((getCGFile() != cgFile) && (cgFile != null) && (getGenerator() != null)) {
+		if (getCGFile() != cgFile && cgFile != null && getGenerator() != null) {
 			getGenerator().addObserver(cgFile);
 		}
 		_cgFile = cgFile;
@@ -174,7 +180,9 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 
     public FlexoProjectFile makeFlexoProjectFile (String relativePath, String name)
     {
-    	if (relativePath == null) relativePath = "";
+    	if (relativePath == null) {
+			relativePath = "";
+		}
     	StringBuffer sb = new StringBuffer();
     	sb.append(getCGFile().getSymbolicDirectory().getDirectory().getRelativePath());
     	addPathFrom(sb,extractSignificantPathFrom(sb.toString(),relativePath));
@@ -205,12 +213,18 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
         aPath = aPath.replace('\\', '/');
 		Vector<String> path1 = new Vector<String>();
 		StringTokenizer st = new StringTokenizer(previousPath,"/");
-		while (st.hasMoreElements()) path1.add(st.nextToken());
+		while (st.hasMoreElements()) {
+			path1.add(st.nextToken());
+		}
 		Vector<String> path2 = new Vector<String>();
 		st = new StringTokenizer(aPath,"/");
-		while (st.hasMoreElements()) path2.add(st.nextToken());
+		while (st.hasMoreElements()) {
+			path2.add(st.nextToken());
+		}
 		int removeThat=0;
-		while (removeThat<path1.size() && removeThat<path2.size() && path1.get(removeThat).equals(path2.get(removeThat))) removeThat++;
+		while (removeThat<path1.size() && removeThat<path2.size() && path1.get(removeThat).equals(path2.get(removeThat))) {
+			removeThat++;
+		}
 		StringBuffer returned = new StringBuffer();
 		boolean isFirst = true;
 		for (int i=removeThat; i<path2.size(); i++) {
@@ -222,7 +236,7 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 
 	public Date getLastAcceptingDate()
 	{
-		if ((_lastAcceptingDate == null) || (getLastGenerationDate().getTime() > _lastAcceptingDate.getTime())) {
+		if (_lastAcceptingDate == null || getLastGenerationDate().getTime() > _lastAcceptingDate.getTime()) {
 			_lastAcceptingDate = getLastGenerationDate();
 		}
 		return _lastAcceptingDate;
@@ -235,7 +249,7 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 
 	public Date getLastGenerationCheckedDate()
 	{
-		if ((_lastGenerationCheckedDate == null) || (getLastGenerationDate().getTime() > _lastGenerationCheckedDate.getTime()) || (isConnected() && !getFile().exists())) {
+		if (_lastGenerationCheckedDate == null || getLastGenerationDate().getTime() > _lastGenerationCheckedDate.getTime() || isConnected() && !getFile().exists()) {
 			_lastGenerationCheckedDate = getLastGenerationDate();
 		}
 		return _lastGenerationCheckedDate;
@@ -249,7 +263,9 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 	public Date getMemoryLastGenerationDate()
 	{
        	IFlexoResourceGenerator generator = getGenerator();
-    	if (generator != null) return generator.getMemoryLastGenerationDate();
+    	if (generator != null) {
+			return generator.getMemoryLastGenerationDate();
+		}
     	return null;
 	}
 
@@ -268,42 +284,43 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 	@Override
     public final Date getLastUpdate()
 	{
-        if(_memoryUpdateComputation)
-            return getMemoryLastGenerationDate();
+        if(_memoryUpdateComputation) {
+			return getMemoryLastGenerationDate();
+		}
 		return getLastGenerationCheckedDate();
 	}
 
 	private GenerationStatus retrieveGenerationStatus()
 	{
-		boolean diskUpdate = (getDiskLastModifiedDate().getTime() > getLastAcceptingDate().getTime()+ACCEPTABLE_FS_DELAY);
+		boolean diskUpdate = getDiskLastModifiedDate().getTime() > getLastAcceptingDate().getTime()+ACCEPTABLE_FS_DELAY;
 		if (logger.isLoggable(Level.FINE) && diskUpdate) {
 			logger.fine("fileName="+getFileName());
-			logger.fine("getLastGenerationDate()["+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(getLastGenerationDate())+"]");
-			logger.fine("getLastAcceptingDate()["+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(getLastAcceptingDate())+"]"
-					+" < getDiskLastModifiedDate()["+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(getDiskLastModifiedDate())+"]");
+			logger.fine("getLastGenerationDate()["+new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(getLastGenerationDate())+"]");
+			logger.fine("getLastAcceptingDate()["+new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(getLastAcceptingDate())+"]"
+					+" < getDiskLastModifiedDate()["+new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(getDiskLastModifiedDate())+"]");
 		}
 
 		if (getGenerator() != null) {
-			if (hasGenerationError())
+			if (hasGenerationError()) {
 				return GenerationStatus.GenerationError;
-			else if (getGenerator().getGeneratedCode() == null) {
+			} else if (getGenerator().getGeneratedCode() == null) {
 				return GenerationStatus.NotGenerated;
 			}
 		}
-		if (!(this instanceof GenerationAvailableFileResourceInterface))
+		if (!(this instanceof GenerationAvailableFileResourceInterface)) {
 			return GenerationStatus.CodeGenerationNotAvailable;
-		else if ((getCGFile() == null) || (getFile() == null))
+		} else if (getCGFile() == null || getFile() == null) {
 			return GenerationStatus.Unknown;
-		else if (getCGFile().isMarkedForDeletion())
+		} else if (getCGFile().isMarkedForDeletion()) {
 			return GenerationStatus.GenerationRemoved;
-		else if (!isCodeGenerationAvailable())
+		} else if (!isCodeGenerationAvailable()) {
 			return GenerationStatus.CodeGenerationNotSynchronized;
-		else if (getCGFile().isOverrideScheduled()) {
+		} else if (getCGFile().isOverrideScheduled()) {
 			return GenerationStatus.OverrideScheduled;
 		}
 		else if (!getFile().exists() || needsGeneration()) {
 			if (diskUpdate && getProject()!=null && getProject().computeDiff) {
-				return (getCGFile().isMarkedAsMerged()?GenerationStatus.ConflictingMarkedAsMerged:GenerationStatus.ConflictingUnMerged);
+				return getCGFile().isMarkedAsMerged()?GenerationStatus.ConflictingMarkedAsMerged:GenerationStatus.ConflictingUnMerged;
 			}
 			else {
 				if (!getFile().exists()) {
@@ -311,7 +328,7 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 				}
 				else {
 					if (getProject()!=null && getProject().computeDiff && getCGFile().isGenerationConflicting()) {
-						return (getCGFile().isMarkedAsMerged()?GenerationStatus.ConflictingMarkedAsMerged:GenerationStatus.ConflictingUnMerged);
+						return getCGFile().isMarkedAsMerged()?GenerationStatus.ConflictingMarkedAsMerged:GenerationStatus.ConflictingUnMerged;
 					}
 					else {
 						return  GenerationStatus.GenerationModified;
@@ -337,14 +354,16 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 	{
 		GenerationStatus returnedStatus = retrieveGenerationStatus();
 		if (returnedStatus != previousGenerationStatus) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("File "+getFileName()+" changed status from "+previousGenerationStatus+" to "+returnedStatus);
+			}
             GenerationStatus old = previousGenerationStatus;
 			previousGenerationStatus = returnedStatus;
             if (getCGFile() != null) {
                 getCGFile().notifyGenerationStatusChange(old, returnedStatus);
-                if (getCGFile().getRepository() != null)
-                    getCGFile().getRepository().refresh();
+                if (getCGFile().getRepository() != null) {
+					getCGFile().getRepository().refresh();
+				}
             }
         }
         return returnedStatus;
@@ -365,8 +384,11 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 
 	public String _getResourceClassName()
 	{
-		if (_resourceClassName != null) return _resourceClassName;
-		else return this.getClass().getName();
+		if (_resourceClassName != null) {
+			return _resourceClassName;
+		} else {
+			return this.getClass().getName();
+		}
 	}
 
 	public void _setResourceClassName(String aClassName)
@@ -380,8 +402,9 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
     		_lastGeneratedFile = new File(
     				getCGFile().getRepository().getCodeGenerationWorkingDirectory(),
     				getResourceFile().getRelativePath()+".LAST_GENERATED");
-    		if (logger.isLoggable(Level.FINE))
-    			logger.fine("_lastGeneratedFile"+_lastGeneratedFile.getAbsolutePath());
+    		if (logger.isLoggable(Level.FINE)) {
+				logger.fine("_lastGeneratedFile"+_lastGeneratedFile.getAbsolutePath());
+			}
     	}
     	return _lastGeneratedFile;
     }
@@ -392,8 +415,9 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
     		_lastAcceptedFile = new File(
     				getCGFile().getRepository().getCodeGenerationWorkingDirectory(),
     				getResourceFile().getRelativePath()+".LAST_ACCEPTED");
-    		if (logger.isLoggable(Level.FINE))
-    			logger.fine("_lastAcceptedFile"+_lastAcceptedFile.getAbsolutePath());
+    		if (logger.isLoggable(Level.FINE)) {
+				logger.fine("_lastAcceptedFile"+_lastAcceptedFile.getAbsolutePath());
+			}
     	}
     	return _lastAcceptedFile;
     }
@@ -406,10 +430,10 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
        	//logger.info("File: "+getFileName()+" _forceRegenerate="+_forceRegenerate);
        	// Take care that because of template updating, memory generation can be up-to-date
     	// while disk writing is still required
-    	boolean returned = (generationChangedContent
+    	boolean returned = generationChangedContent
     			|| super.needsGeneration()
-    			|| (getGenerator() != null && getGenerator().needsRegenerationBecauseOfTemplateUpdated(getLastUpdate()))
-    			|| _forceRegenerate);
+    			|| getGenerator() != null && getGenerator().needsRegenerationBecauseOfTemplateUpdated(getLastUpdate())
+    			|| _forceRegenerate;
     	// We do this here, otherwise retrieveNeedsMemoryGenerationFlag may override this
     	//needsUpdateReason = super.getNeedsUpdateReason();
     	return returned;
@@ -427,13 +451,16 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
      */
     public boolean needsMemoryGeneration()
     {
-    	if (getGenerator() == null) return false;
+    	if (getGenerator() == null) {
+			return false;
+		}
 
 		boolean returnedFlag = getGenerator().needsGeneration();
 
 		if (returnedFlag != previousNeedsMemoryGeneration) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("File "+getFileName()+" changed needsMemoryGeneration status");
+			}
 			previousNeedsMemoryGeneration = returnedFlag;
 			if (getCGFile() != null) {
 				getCGFile().notifyGenerationStatusChange(null, null);
@@ -454,7 +481,9 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
     public boolean retrieveNeedsMemoryGenerationFlag()
     {
 
-    	if (getGenerator() == null) return false;
+    	if (getGenerator() == null) {
+			return false;
+		}
     	try {
         	IFlexoResourceGenerator generator = getGenerator();
         	/*if (generator.needsGeneration()) return true;*/
@@ -474,14 +503,16 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
         	boolean returned = needsUpdate();
         	_memoryUpdateComputation = false;
         	getDependantResources().update();// Clears the dependancy cache
-        	if (logger.isLoggable(Level.FINE))
-        		logger.fine("Resource "+getFileName()+" lastTimeItWasGenerated="
-        				+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(lastTimeItWasGenerated)
+        	if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Resource "+getFileName()+" lastTimeItWasGenerated="
+        				+new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(lastTimeItWasGenerated)
         				+" returns "+returned+ " reason "+getNeedsUpdateReason());
+			}
         	return returned;
         } catch (ResourceDependancyLoopException e) {
-            if (logger.isLoggable(Level.SEVERE))
-                logger.log(Level.SEVERE, "Loop found in dependant resources of "+this+"!", e);
+            if (logger.isLoggable(Level.SEVERE)) {
+				logger.log(Level.SEVERE, "Loop found in dependant resources of "+this+"!", e);
+			}
             return false;
         }
    }
@@ -490,7 +521,7 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 
 	public final boolean isCodeGenerationAvailable()
 	{
-		return (getGenerator() != null);
+		return getGenerator() != null;
 	}
 
     @Override
@@ -505,14 +536,15 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 
 	public final IGenerationException getGenerationException()
 	{
-		if (isCodeGenerationAvailable())
+		if (isCodeGenerationAvailable()) {
 			return getGenerator().getGenerationException();
+		}
 		return null;
 	}
 
 	public boolean hasGenerationError()
 	{
-		return (getGenerationException() != null);
+		return getGenerationException() != null;
 	}
 
 	public abstract void saveEditedVersion(FileContentEditor editor) throws SaveResourceException;
@@ -539,8 +571,9 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 			if (getGeneratedResourceData() != null && getGeneratedResourceData() instanceof AbstractGeneratedFile) {
 				((AbstractGeneratedFile)getGeneratedResourceData()).notifyVersionChangedOnDisk();
 			}
-			if(getCGFile()!=null)
+			if(getCGFile()!=null) {
 				getCGFile().notifyResourceChangedOnDisk();
+			}
 		}
 	}
 
@@ -576,7 +609,7 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 
 	public boolean doesGenerationKeepFileUnchanged()
 	{
-		if ((getGeneratedResourceData() != null && getGeneratedResourceData() instanceof AbstractGeneratedFile)
+		if (getGeneratedResourceData() != null && getGeneratedResourceData() instanceof AbstractGeneratedFile
 				&& (getGenerationStatus() == GenerationStatus.GenerationModified
 						|| getGenerationStatus() == GenerationStatus.OverrideScheduled)) {
 			return ((AbstractGeneratedFile)getGeneratedResourceData()).doesGenerationKeepFileUnchanged();
@@ -607,16 +640,18 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
     {
         String old = getFileName();
         boolean succeed = super.renameFileTo(name);
-        if (succeed && getCGFile()!=null)
-            getCGFile().notifyFileNameChanged(old, name);
+        if (succeed && getCGFile()!=null) {
+			getCGFile().notifyFileNameChanged(old, name);
+		}
         return succeed;
     }
 
     @Override
     protected void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependancyLoopException, FlexoException,
     		FileNotFoundException {
-    	if (getGenerator()!=null && (needsMemoryGeneration() || isForceRegenerate()))
-    		getGenerator().generate(isForceRegenerate());
+    	if (getGenerator()!=null && (needsMemoryGeneration() || isForceRegenerate())) {
+			getGenerator().generate(isForceRegenerate());
+		}
     	super.performUpdating(updatedResources);
     }
 
@@ -634,24 +669,29 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
                 }
             }
         } catch (LoadResourceException e) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.log(Level.WARNING, "Load resource exception.",e);
+            if (logger.isLoggable(Level.WARNING)) {
+				logger.log(Level.WARNING, "Load resource exception.",e);
+			}
             e.printStackTrace();
         } catch (FileNotFoundException e) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.log(Level.WARNING, "File not found exception.",e);
+            if (logger.isLoggable(Level.WARNING)) {
+				logger.log(Level.WARNING, "File not found exception.",e);
+			}
             e.printStackTrace();
         } catch (ProjectLoadingCancelledException e) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.log(Level.WARNING, "Project loading cancel exception.",e);
+            if (logger.isLoggable(Level.WARNING)) {
+				logger.log(Level.WARNING, "Project loading cancel exception.",e);
+			}
             e.printStackTrace();
         } catch (ResourceDependancyLoopException e) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.log(Level.WARNING, "Loop in dependancies exception.",e);
+            if (logger.isLoggable(Level.WARNING)) {
+				logger.log(Level.WARNING, "Loop in dependancies exception.",e);
+			}
             e.printStackTrace();
         } catch (FlexoException e) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.log(Level.WARNING, "Flexo exception.",e);
+            if (logger.isLoggable(Level.WARNING)) {
+				logger.log(Level.WARNING, "Flexo exception.",e);
+			}
             e.printStackTrace();
         }
     }
@@ -665,8 +705,9 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
     		isNotifiedDependantResourceChange = true;
 	    	super.notifyDependantResourceChange(origin);
 	    	if (isConnected()) {
-		    	if (getCGFile()!=null && getGenerator()!=null)
-		    		getGenerationStatus();
+		    	if (getCGFile()!=null && getGenerator()!=null) {
+					getGenerationStatus();
+				}
 	    	}
 	    	isNotifiedDependantResourceChange = false;
     	}
