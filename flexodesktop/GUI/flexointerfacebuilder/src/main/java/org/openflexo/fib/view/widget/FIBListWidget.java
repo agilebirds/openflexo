@@ -20,7 +20,6 @@
 package org.openflexo.fib.view.widget;
 
 import java.awt.Component;
-import java.awt.ComponentOrientation;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -69,6 +68,8 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList,JList,Object> 
 		_list.revalidate();
 		_list.repaint();
 
+		updateListModelWhenRequired();
+		
 		updateFont();
 	}
 
@@ -147,9 +148,15 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList,JList,Object> 
 		return (FIBListModel)listModel;
 	}
 
+	private FIBListModel oldListModel = null;
+	
 	private void setListModel(FIBListModel aListModel)
 	{
 		widgetUpdating = true;
+		if (oldListModel != null) {
+			_list.getSelectionModel().removeListSelectionListener(oldListModel);
+		}
+		oldListModel = aListModel;
 		_list.setLayoutOrientation(getWidget().getLayoutOrientation().getSwingValue());
 		_list.setSelectionMode(getWidget().getSelectionMode().getMode());
 		_list.setVisibleRowCount(getWidget().getVisibleRowCount());
@@ -159,14 +166,35 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList,JList,Object> 
 		_list.repaint();
 		_list.getSelectionModel().addListSelectionListener(aListModel);
 		widgetUpdating = false;
-		if (getWidget().getAutoSelectFirstRow() && _list.getModel().getSize() > 0) {
+		Object objectToSelect = null;
+		if (getComponent().getSelected().isValid()) {
+			objectToSelect = getComponent().getSelected().getBindingValue(getController());
+		}
+		if (objectToSelect == null && getWidget().getAutoSelectFirstRow() && _list.getModel().getSize() > 0) {
+			objectToSelect = _list.getModel().getElementAt(0);
+		}
+		if (objectToSelect != null) {
+			for ( int i=0; i<_list.getModel().getSize(); i++) {
+				if (_list.getModel().getElementAt(i) == objectToSelect) {
+					final int index = i;
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							_list.setSelectedIndex(index);
+						}
+					});
+				}
+			}
+		}
+		
+		/*if (getWidget().getAutoSelectFirstRow() && _list.getModel().getSize() > 0) {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
 					_list.setSelectedIndex(0);
 				}
 			});
-		}
+		}*/
 	}
 
 	protected class FIBListModel extends FIBMultipleValueModel implements ListSelectionListener
@@ -230,6 +258,7 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList,JList,Object> 
 			}
 
 			getDynamicModel().selected = selectedObject;
+			getDynamicModel().selectedIndex = leadIndex;
 			getDynamicModel().selection = selection;
 			notifyDynamicModelChanged();
 

@@ -44,8 +44,6 @@ import org.openflexo.toolbox.Localized;
  */
 public class TextAreaDefaults
 {
-	private static TextAreaDefaults DEFAULTS;
-
 	public InputHandler inputHandler;
 	public SyntaxDocument document;
 	public boolean editable;
@@ -70,71 +68,58 @@ public class TextAreaDefaults
 
 	public JPopupMenu popup;
 
-	/**
-	 * Returns a new TextAreaDefaults object with the default values filled
-	 * in.
-	 */
-	public static TextAreaDefaults getDefaults()
-	{
-		if(DEFAULTS == null)
-		{
-			DEFAULTS = new TextAreaDefaults();
-
-			DEFAULTS.inputHandler = new DefaultInputHandler();
-			DEFAULTS.inputHandler.addDefaultKeyBindings();
-			DEFAULTS.document = new SyntaxDocument();
-			DEFAULTS.editable = true;
-
-			DEFAULTS.caretVisible = true;
-			DEFAULTS.caretBlinks = true;
-			DEFAULTS.electricScroll = 0;
-
-			DEFAULTS.cols = 80;
-			DEFAULTS.rows = 25;
-			DEFAULTS.styles = SyntaxUtilities.getDefaultSyntaxStyles();
-			DEFAULTS.caretColor = Color.red;
-			DEFAULTS.selectionColor = new Color(0xccccff);
-			DEFAULTS.lineHighlightColor = new Color(0xe0e0e0);
-			DEFAULTS.lineHighlight = true;
-			DEFAULTS.bracketHighlightColor = Color.black;
-			DEFAULTS.bracketHighlight = true;
-			DEFAULTS.eolMarkerColor = new Color(0x009999);
-			DEFAULTS.eolMarkers = true;
-			DEFAULTS.paintInvalid = true;
-            DEFAULTS.popup = buildMenu();
-		}
-
-		return DEFAULTS;
+	// GPO Addition
+	public static JPopupMenu buildMenu() {
+		JPopupMenu popupMenu = new JPopupMenu();
+		popupMenu.add(makeMenu("cut",InputHandler.CUT));
+		popupMenu.add(makeMenu("copy",InputHandler.COPY));
+		popupMenu.add(makeMenu("paste",InputHandler.PASTE));
+		popupMenu.add(makeMenu("delete",InputHandler.DELETE));
+		popupMenu.addSeparator();
+		popupMenu.add(makeMenu("select_all", InputHandler.SELECT_ALL));
+		popupMenu.addSeparator();
+		popupMenu.add(makeMenu("disable_syntax_coloring", InputHandler.TOGGLE_SYNTAX_COLORING));
+		return popupMenu;
 	}
-     // GPO Addition
-    public static JPopupMenu buildMenu() {
-        JPopupMenu popupMenu = new JPopupMenu();
-        popupMenu.add(makeMenu("cut",InputHandler.CUT));
-        popupMenu.add(makeMenu("copy",InputHandler.COPY));
-        popupMenu.add(makeMenu("paste",InputHandler.PASTE));
-        popupMenu.add(makeMenu("delete",InputHandler.DELETE));
-        popupMenu.addSeparator();
-        popupMenu.add(makeMenu("select_all", InputHandler.SELECT_ALL));
-        popupMenu.addSeparator();
-        popupMenu.add(makeMenu("disable_syntax_coloring", InputHandler.TOGGLE_SYNTAX_COLORING));
-        return popupMenu;
-    }
-	
+
 	/**
-     * @param string
-     * @param cut
-     * @return
-     */
-    private static JMenuItem makeMenu(String string, ActionListener actionListener)
-    {
-        JMenuItem menu = new JMenuItem(Localized.localizedForKey(string));
-        menu.addActionListener(actionListener);
-        return menu;
-    }
-    // End of GPO Addition
-    
-    public static TextAreaDefaults getNewDefaults(){
-		DEFAULTS = null;
-		return getDefaults();
+	 * @param string
+	 * @param cut
+	 * @return
+	 */
+	private static JMenuItem makeMenu(String string, ActionListener actionListener)
+	{
+		JMenuItem menu = new JMenuItem(Localized.localizedForKey(string));
+		menu.addActionListener(actionListener);
+		return menu;
+	}
+	// End of GPO Addition
+
+	public static TextAreaDefaults getNewDefaults(){
+		TextAreaDefaults textAreaDefaults = new TextAreaDefaults();
+
+		textAreaDefaults.inputHandler = new DefaultInputHandler();
+		textAreaDefaults.inputHandler.addDefaultKeyBindings();
+		textAreaDefaults.document = new SyntaxDocument();
+		textAreaDefaults.editable = true;
+
+		textAreaDefaults.caretVisible = true;
+		textAreaDefaults.caretBlinks = true;
+		textAreaDefaults.electricScroll = 0;
+
+		textAreaDefaults.cols = 80;
+		textAreaDefaults.rows = 25;
+		textAreaDefaults.styles = SyntaxUtilities.getDefaultSyntaxStyles();
+		textAreaDefaults.caretColor = Color.red;
+		textAreaDefaults.selectionColor = new Color(0xccccff);
+		textAreaDefaults.lineHighlightColor = new Color(0xe0e0e0);
+		textAreaDefaults.lineHighlight = true;
+		textAreaDefaults.bracketHighlightColor = Color.black;
+		textAreaDefaults.bracketHighlight = true;
+		textAreaDefaults.eolMarkerColor = new Color(0x009999);
+		textAreaDefaults.eolMarkers = true;
+		textAreaDefaults.paintInvalid = true;
+		textAreaDefaults.popup = buildMenu();
+		return textAreaDefaults;
 	}
 }

@@ -177,19 +177,20 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 	// *                                   Utils                                     *
 	// *******************************************************************************
 
-	protected <T extends Object> void notifyChange(Enum<?> parameterKey, T oldValue, T newValue)
+	protected <T extends Object> void notifyChange(FIBModelAttribute parameterKey, T oldValue, T newValue)
 	{
 		// Never notify unchanged values
 		if (oldValue != null && newValue != null && oldValue.equals(newValue)) {
 			return;
 		}
 		setChanged();
-		notifyObservers(new FIBModelNotification<T>(parameterKey.name(),oldValue,newValue));
+		notifyObservers(new FIBAttributeNotification<T>(parameterKey,oldValue,newValue));
 	}
 
-	protected void notifyChange(Enum<?> parameterKey)
+	protected void notifyChange(FIBModelAttribute parameterKey)
 	{
-		notifyChange(parameterKey,null,null);
+		setChanged();
+		notifyObservers(new FIBAttributeNotification(parameterKey,null,null));
 	}
 
 	protected <T extends Object> void notifyChange(String parameterName, T oldValue, T newValue)
@@ -230,7 +231,7 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 		setChanged();
 		notifyObservers(notification);
 	}
-
+	
 	public void notifyBindingChanged(DataBinding binding)
 	{
 	}

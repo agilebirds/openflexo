@@ -160,8 +160,12 @@ public class WindowMenu extends FlexoMenu {
 	}
 
 	protected void updateWindowState() {
-		inspectorWindowItem.setState(getController().getInspectorWindow().isVisible());
-		preferencesWindowItem.setState(getController().getPreferencesWindow().isVisible());
+		if (getController().getInspectorWindow() != null) {
+			inspectorWindowItem.setState(getController().getInspectorWindow().isVisible());
+		}
+		if (getController().getPreferencesWindow() != null) {
+			preferencesWindowItem.setState(getController().getPreferencesWindow().isVisible());
+		}
 		if (checkConsistencyWindowItem != null) {
 			if (getController().getConsistencyCheckWindow() != null)
 				checkConsistencyWindowItem.setState(getController().getConsistencyCheckWindow().isVisible());

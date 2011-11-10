@@ -205,43 +205,51 @@ implements Observer, MouseListener, FocusListener {
 	
 	}
 	
+	@Override
 	public void mouseClicked(MouseEvent e) 
 	{
 		getEditorController().setSelectedObject(getFIBComponent());
 		view.getJComponent().requestFocus();
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 		if (e.isPopupTrigger() || e.getButton()==MouseEvent.BUTTON3) {
 			getEditorController().getContextualMenu().displayPopupMenu(getFIBComponent(), view.getJComponent(), e);
 		}
 	}
 	
+	@Override
 	public void focusLost(FocusEvent e) 
 	{
 		//getController().setSelectedObject(null);
 	}
 
+	@Override
 	public void focusGained(FocusEvent e) 
 	{
 		getEditorController().setSelectedObject(getFIBComponent());
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e) 
 	{
 		getEditorController().setFocusedObject(getFIBComponent());
 	}
 	
+	@Override
 	public void mouseExited(MouseEvent e) 
 	{
 		getEditorController().setFocusedObject(null);
 	}
 
+	@Override
 	public void update(Observable o, Object notification) 
 	{
 		if (notification instanceof FIBEditorNotification) {
@@ -286,7 +294,9 @@ implements Observer, MouseListener, FocusListener {
 						|| n.getAttribute() == FIBPanel.Parameters.borderTop
 						|| n.getAttribute() == FIBPanel.Parameters.borderLeft
 						|| n.getAttribute() == FIBPanel.Parameters.borderRight
-						|| n.getAttribute() == FIBPanel.Parameters.borderBottom) {
+						|| n.getAttribute() == FIBPanel.Parameters.borderBottom
+						|| n.getAttribute() == FIBPanel.Parameters.titleFont
+						|| n.getAttribute() == FIBPanel.Parameters.darkLevel) {
 					((FIBPanelView)view).updateBorder();
 				}
 				else if (n.getAttribute() == FIBPanel.Parameters.layout
@@ -355,8 +365,11 @@ implements Observer, MouseListener, FocusListener {
 					((FIBView)view).updateFont();
 				}
 				else if (n.getAttribute() == FIBComponent.Parameters.backgroundColor
-						|| n.getAttribute() == FIBComponent.Parameters.foregroundColor) {
+						|| n.getAttribute() == FIBComponent.Parameters.foregroundColor
+						|| n.getAttribute() == FIBComponent.Parameters.opaque) {
 					((FIBView)view).updateGraphicalProperties();
+					((FIBView)view).getJComponent().revalidate();
+					((FIBView)view).getJComponent().repaint();
 				}
 			}
 		}

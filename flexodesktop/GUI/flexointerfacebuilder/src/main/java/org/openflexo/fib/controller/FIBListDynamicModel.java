@@ -22,9 +22,8 @@ package org.openflexo.fib.controller;
 import java.util.List;
 
 
-public class FIBListDynamicModel<T,O> extends FIBComponentDynamicModel<T>
+public class FIBListDynamicModel<T,O> extends FIBMultipleValuesDynamicModel<T,O>
 {
-	public O selected;
 	public List<O> selection;
 	
 	public FIBListDynamicModel(T data)

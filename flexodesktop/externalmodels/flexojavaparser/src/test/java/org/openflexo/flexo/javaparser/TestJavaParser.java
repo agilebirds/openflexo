@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexoµ.flexo.javaparser;
+package org.openflexo.flexo.javaparser;
 
 import java.io.File;
 import java.io.FileNotFoundException;

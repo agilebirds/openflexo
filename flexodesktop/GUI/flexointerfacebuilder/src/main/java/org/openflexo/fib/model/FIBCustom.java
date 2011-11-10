@@ -32,10 +32,10 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 
 import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBCustomDynamicModel;
 import org.openflexo.swing.CustomPopup.ApplyCancelListener;
@@ -185,7 +185,7 @@ public class FIBCustom extends FIBWidget {
 	public FIBCustomAssignment getAssignent(String variableName)
 	{
 		for (FIBCustomAssignment a : assignments) {
-			if (variableName.equals(a.getVariable().toString())) return a;
+			if (variableName != null && variableName.equals(a.getVariable().toString())) return a;
 		}
 		return null;
 	}

@@ -173,11 +173,25 @@ public class FIBLocalizedDictionary extends FIBModelObject implements LocalizedD
 
 	public class DynamicEntry
 	{
-		public String key;
+		private String key;
 		
 		public DynamicEntry(String aKey)
 		{
 			key = aKey;
+		}
+		
+		public String getKey() {
+			return key;
+		}
+		
+		public void setKey(String aKey) {
+			String englishValue = getEnglish();
+			String frenchValue = getFrench();
+			String dutchValue = getDutch();
+			key = aKey;
+			setEnglish(englishValue);
+			setFrench(frenchValue);
+			setDutch(dutchValue);
 		}
 		
 		public String getEnglish()
@@ -263,7 +277,16 @@ public class FIBLocalizedDictionary extends FIBModelObject implements LocalizedD
 
 	public DynamicEntry addEntry()
 	{
-		logger.warning("Not implemented yet");
+		String key = "new_entry";
+		DynamicEntry newDynamicEntry = new DynamicEntry(key);
+		dynamicEntries.add(newDynamicEntry);
+		Collections.sort(dynamicEntries,new Comparator<DynamicEntry>() {
+			@Override
+			public int compare(DynamicEntry o1, DynamicEntry o2)
+			{
+				return Collator.getInstance().compare(o1.key,o2.key);
+			}
+		});
 		return null;
 	}
 	

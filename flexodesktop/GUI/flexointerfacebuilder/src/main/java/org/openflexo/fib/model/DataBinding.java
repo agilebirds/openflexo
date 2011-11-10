@@ -103,19 +103,25 @@ public class DataBinding implements StringConvertable<DataBinding>
 	public Object getBindingValue(BindingEvaluationContext context)
 	{
 		//logger.info("getBindingValue() "+this);
-		if (getBinding() != null) return getBinding().getBindingValue(context);
+		if (getBinding() != null) {
+			return getBinding().getBindingValue(context);
+		}
 		return null;
 	}
 
 	public void setBindingValue(Object value, BindingEvaluationContext context)
 	{
-		if (getBinding() != null && getBinding().isSettable()) getBinding().setBindingValue(value,context);
+		if (getBinding() != null && getBinding().isSettable()) {
+			getBinding().setBindingValue(value,context);
+		}
 	}
 
 	@Override
 	public String toString()
 	{
-		if (binding != null) return binding.getStringRepresentation();
+		if (binding != null) {
+			return binding.getStringRepresentation();
+		}
 		return unparsedBinding;
 	}
 
@@ -131,13 +137,17 @@ public class DataBinding implements StringConvertable<DataBinding>
 
 	public AbstractBinding getBinding() 
 	{
-		if (binding == null) finalizeDeserialization();
+		if (binding == null) {
+			finalizeDeserialization();
+		}
 		return binding;
 	}
 
 	public AbstractBinding getBinding(boolean silentMode) 
 	{
-		if (binding == null) finalizeDeserialization(silentMode);
+		if (binding == null) {
+			finalizeDeserialization(silentMode);
+		}
 		return binding;
 	}
 
@@ -150,25 +160,32 @@ public class DataBinding implements StringConvertable<DataBinding>
 	{
 		AbstractBinding oldValue = this.binding;
 		if (oldValue == null) {
-			if (value == null) return; // No change
-			else {
+			if (value == null) {
+				return; // No change
+			} else {
 				this.binding = value;
-				unparsedBinding = (value != null ? value.getStringRepresentation() : null);
+				unparsedBinding = value != null ? value.getStringRepresentation() : null;
 				updateDependancies();
-				if (bindingAttribute != null) owner.notify(new FIBAttributeNotification<AbstractBinding>(bindingAttribute,oldValue,value));
+				if (bindingAttribute != null) {
+					owner.notify(new FIBAttributeNotification<AbstractBinding>(bindingAttribute,oldValue,value));
+				}
 				owner.notifyBindingChanged(this);
 				return;
 			}
 		}
 		else {
-			if (oldValue.equals(value)) return; // No change
-			else {
+			if (oldValue.equals(value)) {
+				return; // No change
+			} else {
 				this.binding = value;
-				unparsedBinding = (value != null ? value.getStringRepresentation() : null);
-				if(logger.isLoggable(Level.FINE))
+				unparsedBinding = value != null ? value.getStringRepresentation() : null;
+				if(logger.isLoggable(Level.FINE)) {
 					logger.fine("Binding takes now value "+value);
+				}
 				updateDependancies();
-				if (bindingAttribute != null) owner.notify(new FIBAttributeNotification<AbstractBinding>(bindingAttribute,oldValue,value));
+				if (bindingAttribute != null) {
+					owner.notify(new FIBAttributeNotification<AbstractBinding>(bindingAttribute,oldValue,value));
+				}
 				owner.notifyBindingChanged(this);
 				return;
 			}
@@ -230,7 +247,9 @@ public class DataBinding implements StringConvertable<DataBinding>
 
 	protected void finalizeDeserialization(boolean silentMode)
 	{
-		if (getUnparsedBinding() == null) return;
+		if (getUnparsedBinding() == null) {
+			return;
+		}
 		
 		/*if (getUnparsedBinding().equals("data.isAcceptableAsSubProcess(SubProcess.component.candidateValue)")) {
 			System.out.println("finalizeDeserialization for "+getUnparsedBinding());
@@ -250,7 +269,7 @@ public class DataBinding implements StringConvertable<DataBinding>
 		
 		if (!binding.isBindingValid()) {
 			if (!silentMode) {
-				logger.warning("Binding not valid: "+binding+" for owner "+getOwner()+" context="+(getOwner()!=null?(getOwner()).getRootComponent():null));
+				logger.warning("Binding not valid: "+binding+" for owner "+getOwner()+" context="+(getOwner()!=null?getOwner().getRootComponent():null));
 				// Dev note: Uncomment following to get more informations
 				//logger.warning("Binding not valid: "+binding+" for owner "+getOwner()+" context="+(getOwner()!=null?(getOwner()).getRootComponent():null));			logger.info("BindingModel="+getOwner().getBindingModel());
 				//binding.debugIsBindingValid();
@@ -269,14 +288,18 @@ public class DataBinding implements StringConvertable<DataBinding>
 	protected void finalizeDeserialization()
 	{
 		finalizeDeserialization(false);
-		if (owner != null && hasBinding() && isValid()) owner.notifyBindingChanged(this);
+		if (owner != null && hasBinding() && isValid()) {
+			owner.notifyBindingChanged(this);
+		}
 	}
 
 	protected void updateDependancies()
 	{
 		if (getOwner() instanceof FIBComponent) {
 
-			if (binding == null) return;
+			if (binding == null) {
+				return;
+			}
 			
 			Vector<Expression> primitives;
 			try {
@@ -295,8 +318,12 @@ public class DataBinding implements StringConvertable<DataBinding>
 							if (data != null) {
 								for (Expression p : primitives) {
 									String primitiveValue = null;
-									if (p instanceof Variable) primitiveValue = ((Variable)p).getName();
-									if (p instanceof Function) primitiveValue = ((Function)p).getName();
+									if (p instanceof Variable) {
+										primitiveValue = ((Variable)p).getName();
+									}
+									if (p instanceof Function) {
+										primitiveValue = ((Function)p).getName();
+									}
 									if (primitiveValue != null && primitiveValue.startsWith(data)) {
 										try {
 											component.declareDependantOf(next);
@@ -317,8 +344,12 @@ public class DataBinding implements StringConvertable<DataBinding>
 						if (next.getName() != null) {
 							for (Expression p : primitives) {
 								String primitiveValue = null;
-								if (p instanceof Variable) primitiveValue = ((Variable)p).getName();
-								if (p instanceof Function) primitiveValue = ((Function)p).getName();
+								if (p instanceof Variable) {
+									primitiveValue = ((Variable)p).getName();
+								}
+								if (p instanceof Function) {
+									primitiveValue = ((Function)p).getName();
+								}
 								if (primitiveValue != null && StringUtils.isNotEmpty(next.getName()) && primitiveValue.startsWith(next.getName())) {
 									try {
 										component.declareDependantOf(next);

@@ -19,12 +19,16 @@
  */
 package org.openflexo.fib.model;
 
+import java.util.logging.Logger;
+
 
 public class FIBDropDown extends FIBMultipleValues {
  
 	public boolean showReset = false;
 	
-    public FIBDropDown()
+	private static final Logger logger = Logger.getLogger(FIBDropDown.class.getPackage().getName());
+
+	public FIBDropDown()
     {
 	}
     

@@ -20,9 +20,6 @@
 
 		<Tab name="AdvancedTab" title="Advanced" index="1" layout="twocols" font="SansSerif,0,11" >
 
-			<CheckBox data="data.autoSelectFirstRow" constraints="twocols(location=left)" />
-			<Label label="select_first_row" constraints="twocols(location=right)" />
-
 			<CheckBox data="data.createNewRowOnClick" constraints="twocols(location=left)" />
 			<Label label="create_new_row_on_click" constraints="twocols(location=right)" />
 

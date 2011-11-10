@@ -142,7 +142,7 @@ public class TestOntologies extends FlexoTestCase{
 		logger.info("CalcLibrary: "+_resourceCenter.retrieveViewPointLibrary());
 		logger.info("All calcs: "+_resourceCenter.retrieveViewPointLibrary().getViewPoints());
 
-		ViewPoint basicOrganizationTreeEditorCalc = _resourceCenter.retrieveViewPointLibrary().getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/BasicOrganizationTreeEditor.owl");
+		ViewPoint basicOrganizationTreeEditorCalc = _resourceCenter.retrieveViewPointLibrary().getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl");
 		logger.info("Le calc: "+basicOrganizationTreeEditorCalc);
 		basicOrganizationTreeEditorCalc.loadWhenUnloaded();
 
@@ -178,7 +178,7 @@ public class TestOntologies extends FlexoTestCase{
 		String BOT_URI = "http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl";
 		String COMPANY_NAME = BOT_URI+"#companyName";
 
-		String BOT_EDITOR_URI = "http://www.agilebirds.com/openflexo/ViewPoints/BasicOrganizationTreeEditor.owl";
+		String BOT_EDITOR_URI = "http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl";
 		String BOT_COMPANY = BOT_EDITOR_URI+"#BOTCompany";
 
 		OntModel ontModel = _project.getProjectOntology().getOntModel();

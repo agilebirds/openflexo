@@ -186,7 +186,8 @@ implements ApplyCancelListener, BindingEvaluationContext
 		
 		//if (notEquals(getValue(), customComponent.getEditedObject())) {
 
-			//logger.info("updateWidgetFromModel() with "+getValue());
+		//logger.info("updateWidgetFromModel() with "+getValue()+" for "+customComponent);
+		
 			if (customComponent != null) {
 
 				try {
@@ -217,7 +218,7 @@ implements ApplyCancelListener, BindingEvaluationContext
 	@Override
 	public void fireApplyPerformed() 
 	{
-		logger.info("fireApplyPerformed() in FIBCustomWidget, value="+customComponent.getEditedObject());
+		//logger.info("fireApplyPerformed() in FIBCustomWidget, value="+customComponent.getEditedObject());
 		updateModelFromWidget();
 	}
 

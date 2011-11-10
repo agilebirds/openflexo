@@ -20,7 +20,6 @@ public class WelcomePanelController extends FlexoFIBController {
 
 	public void exit()
 	{
-		System.out.println("called exit");
 		try {
 			ModuleLoader.quit(true);
 		} catch (ProjectExitingCancelledException e) {
@@ -29,15 +28,12 @@ public class WelcomePanelController extends FlexoFIBController {
 
 	public void openModule(Module module)
 	{
-		System.out.println("open module "+module);
 		validateAndDispose();
 		ModuleLoader.switchToModule(module);
 	}
 
 	public void openProject(File project, Module module)
 	{
-		System.out.println("open project "+project+" module "+module);
-		
 		if (project == null) {
 			try {
 				project = OpenProjectComponent.getProjectDirectory();
@@ -54,8 +50,6 @@ public class WelcomePanelController extends FlexoFIBController {
 
 	public void newProject(Module module)
 	{
-		System.out.println("new project module "+module);
-
 		File project;
 		try {
 			project = NewProjectComponent.getProjectDirectory();

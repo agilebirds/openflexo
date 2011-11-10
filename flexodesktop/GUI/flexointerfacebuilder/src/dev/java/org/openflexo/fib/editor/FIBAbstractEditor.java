@@ -20,19 +20,24 @@
 package org.openflexo.fib.editor;
 
 import java.awt.Dimension;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import org.openflexo.fib.FIBLibrary;
@@ -97,6 +102,19 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 	}
 
 
+	class LAFMenuItem extends JCheckBoxMenuItem
+	{
+		private LookAndFeelInfo laf;
+		public LAFMenuItem(LookAndFeelInfo laf) {
+			super(laf.getName(),UIManager.getLookAndFeel().getClass().getName().equals(laf.getClassName()));
+			this.laf = laf;
+		}
+		public void updateState()
+		{
+			setState(UIManager.getLookAndFeel().getClass().getName().equals(laf.getClassName()));
+		}
+	}
+	
 	public FIBAbstractEditor()
 	{
 		try {
@@ -194,6 +212,45 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 			languagesItem.add(languageItem);
 		}
 		fileMenu.add(languagesItem);
+		
+		final JMenu lafsItem = new JMenu(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,"look_and_feel"));
+		final Vector<LAFMenuItem> lafsItems = new Vector<LAFMenuItem>();
+		for (final LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()) {
+			LAFMenuItem lafItem = new LAFMenuItem(laf);
+			lafsItems.add(lafItem);
+			lafItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					try {
+						UIManager.setLookAndFeel(laf.getClassName());
+					} catch (ClassNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (InstantiationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (IllegalAccessException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (UnsupportedLookAndFeelException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					Window windows[] = frame.getOwnedWindows();
+					for (int j = 0; j < windows.length; j++) {
+						SwingUtilities.updateComponentTreeUI(windows[j]);
+					}
+					SwingUtilities.updateComponentTreeUI(frame);
+					for (LAFMenuItem me : lafsItems) {
+						me.updateState();
+					}
+				}
+			});
+			lafsItem.add(lafItem);
+		}
+
+		fileMenu.add(lafsItem);
+
 		fileMenu.addSeparator();
 
 		for (Object data : getData()) {

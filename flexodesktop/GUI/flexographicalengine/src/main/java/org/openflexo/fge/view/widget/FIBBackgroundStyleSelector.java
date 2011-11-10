@@ -22,6 +22,7 @@ package org.openflexo.fge.view.widget;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.util.List;
 import java.util.Vector;
@@ -54,6 +55,7 @@ import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.swing.CustomPopup;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 /**
  * Widget allowing to view and edit a BackgroundStyle
@@ -124,7 +126,6 @@ implements FIBCustomComponent<BackgroundStyle,FIBBackgroundStyleSelector>
     @Override
 	public void updateCustomPanel(BackgroundStyle editedObject)
     {
-    	//logger.info("updateCustomPanel with "+editedObject+" _selectorPanel="+_selectorPanel);
          if (_selectorPanel != null) {
             _selectorPanel.update();
         }
@@ -137,7 +138,7 @@ implements FIBCustomComponent<BackgroundStyle,FIBBackgroundStyleSelector>
      * @author sylvain
      *
      */
-    public static class BackgroundStyleFactory
+    public static class BackgroundStyleFactory implements HasPropertyChangeSupport
     {
     	private BackgroundStyle backgroundStyle;
  		private Color color1 = Color.RED;
@@ -145,18 +146,27 @@ implements FIBCustomComponent<BackgroundStyle,FIBBackgroundStyleSelector>
     	private ColorGradientDirection gradientDirection = ColorGradientDirection.NORTH_SOUTH;
        	private TextureType textureType = TextureType.TEXTURE1;
        	private File imageFile;
-           	
+		private PropertyChangeSupport pcSupport;
+          	
     	public BackgroundStyleFactory(BackgroundStyle backgroundStyle) 
     	{
+    		pcSupport = new PropertyChangeSupport(this);
 			this.backgroundStyle = backgroundStyle;
 		}
+    	
+    	@Override
+    	public PropertyChangeSupport getPropertyChangeSupport() {
+    		return pcSupport;
+    	}
     	
        	public BackgroundStyle getBackgroundStyle() {
 			return backgroundStyle;
 		}
 
 		public void setBackgroundStyle(BackgroundStyle backgroundStyle) {
+			BackgroundStyle oldBackgroundStyle = this.backgroundStyle;
 			this.backgroundStyle = backgroundStyle;
+			pcSupport.firePropertyChange("backgroundStyle", oldBackgroundStyle, backgroundStyle);
 		}
 
 		public BackgroundStyleType getBackgroundStyleType() 
@@ -166,6 +176,7 @@ implements FIBCustomComponent<BackgroundStyle,FIBBackgroundStyleSelector>
 
 		public void setBackgroundStyleType(BackgroundStyleType backgroundStyleType) 
 		{
+			BackgroundStyleType oldBackgroundStyleType = getBackgroundStyleType();
 			switch (getBackgroundStyleType()) {
 			case NONE:
 				break;
@@ -209,6 +220,7 @@ implements FIBCustomComponent<BackgroundStyle,FIBBackgroundStyleSelector>
 				break;
 			}
 
+			pcSupport.firePropertyChange("backgroundStyleType", oldBackgroundStyleType, getBackgroundStyleType());
 		}
     	
     }
@@ -238,8 +250,8 @@ implements FIBCustomComponent<BackgroundStyle,FIBBackgroundStyleSelector>
 
         public void update()
         {
-        	bsFactory.backgroundStyle = getEditedObject();
-        	controller.setDataObject(bsFactory);
+        	bsFactory.setBackgroundStyle(getEditedObject());
+        	controller.setDataObject(bsFactory,true);
         }
         
         @Override

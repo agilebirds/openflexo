@@ -3230,7 +3230,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		public ValidationIssue<BusinessDataClassMustHaveStatusProperty, FlexoProcess> applyValidation(
 				FlexoProcess process) {
 
-			if (process.getBusinessDataType() != null) {
+			if (process._processDMEntity!=null) {
 				if (process.getBusinessDataType().getProperty("status") == null) {
 					if (process.getBusinessDataType() instanceof DMEOEntity) {
 						return new ValidationError<BusinessDataClassMustHaveStatusProperty, FlexoProcess>(
