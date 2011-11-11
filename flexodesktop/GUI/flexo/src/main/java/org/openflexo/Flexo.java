@@ -68,6 +68,8 @@ import org.openflexo.view.FlexoFrame;
 public class Flexo {
 	private static final Logger logger = Logger.getLogger(Flexo.class.getPackage().getName());
 
+	public static boolean isDev = false;
+
 	private static String getResourcePath() {
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 
@@ -112,7 +114,6 @@ public class Flexo {
 	 */
 	public static void main(String[] args) {
 		String userTypeName = null;
-		boolean isDev = false;
 		boolean noSplash = false;
 		if (args.length > 0) {
 			// ATTENTION: Argument cannot start with "-D", nor start with "-X", nor start with "-agentlib" since they are reserved keywords

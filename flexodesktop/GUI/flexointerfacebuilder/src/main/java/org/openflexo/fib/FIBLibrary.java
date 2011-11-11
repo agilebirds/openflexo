@@ -39,10 +39,10 @@ import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.xmlcode.InvalidModelException;
 import org.openflexo.xmlcode.StringEncoder;
+import org.openflexo.xmlcode.StringEncoder.Converter;
 import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
-import org.openflexo.xmlcode.StringEncoder.Converter;
 
 
 public class FIBLibrary
@@ -183,6 +183,7 @@ public class FIBLibrary
 			try {
 				if (getFIBMapping() != null) {
 					FIBComponent fibComponent = (FIBComponent) XMLDecoder.decodeObjectWithMapping(inputStream, getFIBMapping(), this);
+					fibComponent.setDefinitionFile(fibIdentifier);
 					_fibDefinitions.put(fibIdentifier, fibComponent);
 				}
 			} catch (Exception e) {

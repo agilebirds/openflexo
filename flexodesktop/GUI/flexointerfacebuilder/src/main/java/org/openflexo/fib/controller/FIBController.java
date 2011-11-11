@@ -23,6 +23,7 @@ import java.awt.Component;
 import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Enumeration;
@@ -33,6 +34,7 @@ import java.util.Observer;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
@@ -63,6 +65,7 @@ import org.openflexo.fib.model.FIBTextField;
 import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.fib.model.listener.FIBMouseClickListener;
 import org.openflexo.fib.model.listener.FIBSelectionListener;
+import org.openflexo.fib.view.FIBContainerView;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.FIBWidgetView;
 import org.openflexo.fib.view.container.FIBPanelView;
@@ -252,7 +255,6 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		return returned;
 	}
 
-
 	public static FIBView makeView(FIBComponent fibComponent)
 	{
 		return makeView(fibComponent,instanciateController(fibComponent));
@@ -261,6 +263,17 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 	public static FIBView makeView(FIBComponent fibComponent, FIBController controller)
 	{
 		return controller.buildView(fibComponent);
+	}
+
+	protected static void recursivelyAddEditorLauncher(EditorLauncher editorLauncher, FIBContainerView<? extends FIBContainer, JComponent> container)
+	{
+		container.getJComponent().addMouseListener(editorLauncher);
+		for (FIBComponent c : container.getComponent().getSubComponents()) {
+			FIBView<FIBComponent, JComponent> subView = container.getController().viewForComponent(c);
+			if (subView instanceof FIBContainerView) {
+				recursivelyAddEditorLauncher(editorLauncher,(FIBContainerView)subView);
+			}
+		}
 	}
 
 	public final <M extends FIBComponent> FIBView<M,?> buildView(M fibComponent)
@@ -280,6 +293,13 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 	protected final FIBView buildContainer(FIBContainer fibContainer)
 	{
 		FIBView returned = makeContainer(fibContainer);
+		if (returned != null && fibContainer.isRootComponent()) {
+			if (returned instanceof FIBContainerView && allowsFIBEdition()) {
+				EditorLauncher editorLauncher = new EditorLauncher(this,fibContainer);
+				recursivelyAddEditorLauncher(editorLauncher,(FIBContainerView)returned);
+			}
+			return returned;
+		}
 		returned.updateGraphicalProperties();
 		return returned;
 	}
@@ -691,6 +711,60 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 			return null;
 		}
 
+	}
+
+	private static class EditorLauncher extends MouseAdapter
+	{
+		private FIBComponent component;
+		private FIBController controller;
+
+		public EditorLauncher(FIBController controller, FIBComponent component) {
+			logger.fine("make EditorLauncher for component: "+component.getDefinitionFile());
+			this.component = component;
+			this.controller = controller;
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			super.mouseClicked(e);
+			if (e.isAltDown()) {
+				controller.openFIBEditor(component,e);
+			}
+		}
+	}
+
+	protected void openFIBEditor(final FIBComponent component, MouseEvent event)
+	{
+		try {
+			File fibFile = new File(component.getDefinitionFile());
+			if (!fibFile.exists()) {
+				logger.warning("Cannot find FIB file definition for component, aborting FIB edition");
+				return;
+			}
+			Class embeddedEditor = Class.forName("org.openflexo.fib.editor.FIBEmbeddedEditor");
+			Constructor c = embeddedEditor.getConstructors()[0];
+			Object[] args = new Object[2];
+			args[0] = fibFile;
+			args[1] = getDataObject();
+			logger.info("Opening FIB editor for "+component.getDefinitionFile());
+			c.newInstance(args);
+		} catch (ClassNotFoundException e) {
+			logger.warning("Cannot open FIB Editor, please add org.openflexo.fib.editor.FIBEmbeddedEditor in the class path");
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	protected boolean allowsFIBEdition()
+	{
+		return true;
 	}
 
 }

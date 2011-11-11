@@ -20,6 +20,7 @@
 package org.openflexo.fib.editor;
 
 import java.awt.Rectangle;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -35,6 +36,7 @@ import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
 import java.util.prefs.Preferences;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -44,6 +46,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -500,6 +503,19 @@ public class FIBEditor implements FIBGenericEditor {
 		return frame;
 	}
 
+	class LAFMenuItem extends JCheckBoxMenuItem
+	{
+		private LookAndFeelInfo laf;
+		public LAFMenuItem(LookAndFeelInfo laf) {
+			super(laf.getName(),UIManager.getLookAndFeel().getClass().getName().equals(laf.getClassName()));
+			this.laf = laf;
+		}
+		public void updateState()
+		{
+			setState(UIManager.getLookAndFeel().getClass().getName().equals(laf.getClassName()));
+		}
+	}
+
 	public class MenuBar extends JMenuBar implements PreferenceChangeListener {
 		private JMenu fileMenu;
 
@@ -610,6 +626,43 @@ public class FIBEditor implements FIBGenericEditor {
 				}
 			});
 
+			final JMenu lafsItem = new JMenu(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,"look_and_feel"));
+			final Vector<LAFMenuItem> lafsItems = new Vector<LAFMenuItem>();
+			for (final LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()) {
+				LAFMenuItem lafItem = new LAFMenuItem(laf);
+				lafsItems.add(lafItem);
+				lafItem.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						try {
+							UIManager.setLookAndFeel(laf.getClassName());
+						} catch (ClassNotFoundException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (InstantiationException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (IllegalAccessException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (UnsupportedLookAndFeelException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						Window windows[] = frame.getOwnedWindows();
+						for (int j = 0; j < windows.length; j++) {
+							SwingUtilities.updateComponentTreeUI(windows[j]);
+						}
+						SwingUtilities.updateComponentTreeUI(frame);
+						for (LAFMenuItem me : lafsItems) {
+							me.updateState();
+						}
+					}
+				});
+				lafsItem.add(lafItem);
+			}
+
+
 			fileMenu.add(newItem);
 			fileMenu.add(loadItem);
 			fileMenu.add(openRecent);
@@ -619,6 +672,7 @@ public class FIBEditor implements FIBGenericEditor {
 			fileMenu.addSeparator();
 			fileMenu.add(testInterfaceItem);
 			fileMenu.add(componentLocalizationItem);
+			fileMenu.add(lafsItem);
 			languagesItem = new JMenu(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "switch_to_language"));
 			for (Language lang : Language.availableValues()) {
 				JMenuItem languageItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, lang.getName()));
