@@ -24,30 +24,25 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ie.cl.MonitoringScreenDefinition;
 
+public class MonitoringScreenDefinitionElement extends ComponentElement {
 
-public class MonitoringScreenDefinitionElement extends ComponentElement
-{
+	/**
+	 * @param widget
+	 * @param browser
+	 */
+	public MonitoringScreenDefinitionElement(MonitoringScreenDefinition compInst, ProjectBrowser browser, BrowserElement parent) {
+		super(compInst, BrowserElementType.SCREENCOMPONENTDEFINITION, browser, parent);
 
-    /**
-     * @param widget
-     * @param browser
-     */
-    public MonitoringScreenDefinitionElement(MonitoringScreenDefinition compInst, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(compInst, BrowserElementType.SCREENCOMPONENTDEFINITION, browser, parent);
+	}
 
-    }
+	@Override
+	public String getName() {
+		return getComponentDefinition().getComponentName();
+	}
 
-    @Override
-	public String getName()
-    {
-        return getComponentDefinition().getComponentName();
-    }
-
-    @Override
-	public MonitoringScreenDefinition getComponentDefinition()
-    {
-        return (MonitoringScreenDefinition) getObject();
-    }
+	@Override
+	public MonitoringScreenDefinition getComponentDefinition() {
+		return (MonitoringScreenDefinition) getObject();
+	}
 
 }

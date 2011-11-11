@@ -26,12 +26,10 @@ import org.openflexo.foundation.bindings.BindingDefinition;
  * 
  * @author sguerin
  */
-public class BindingAdded extends IEDataModification
-{
+public class BindingAdded extends IEDataModification {
 
-    public BindingAdded(BindingDefinition addedBindingDefinition)
-    {
-        super(null, addedBindingDefinition);
-    }
+	public BindingAdded(BindingDefinition addedBindingDefinition) {
+		super(null, addedBindingDefinition);
+	}
 
 }

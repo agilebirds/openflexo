@@ -442,7 +442,7 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 							}
 						} else if (e.getOppositeWindow() != parentWindow || FocusManager.getCurrentManager().getFocusOwner() != null
 								&& !_frontComponent.hasFocus()) {
-							//pointerLeavesPopup();
+							// pointerLeavesPopup();
 						}
 					}
 				}

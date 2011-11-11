@@ -31,55 +31,45 @@ import org.openflexo.foundation.action.SetPropertyAction;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 
+public class MakeFlexoProcessContextFree extends FlexoUndoableAction<MakeFlexoProcessContextFree, FlexoProcess, WKFObject> {
 
-public class MakeFlexoProcessContextFree extends FlexoUndoableAction<MakeFlexoProcessContextFree,FlexoProcess,WKFObject> 
-{
+	private static final Logger logger = Logger.getLogger(AddDeadline.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(AddDeadline.class.getPackage().getName());
-    
-    public static FlexoActionType<MakeFlexoProcessContextFree,FlexoProcess,WKFObject> actionType 
-    = new FlexoActionType<MakeFlexoProcessContextFree,FlexoProcess,WKFObject> (
-    		"make_context_free",
-    		FlexoActionType.defaultGroup,
-    		FlexoActionType.NORMAL_ACTION_TYPE) {
+	public static FlexoActionType<MakeFlexoProcessContextFree, FlexoProcess, WKFObject> actionType = new FlexoActionType<MakeFlexoProcessContextFree, FlexoProcess, WKFObject>(
+			"make_context_free", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public MakeFlexoProcessContextFree makeNewAction(FlexoProcess focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) 
-        {
-            return new MakeFlexoProcessContextFree(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public MakeFlexoProcessContextFree makeNewAction(FlexoProcess focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+			return new MakeFlexoProcessContextFree(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) 
-        {
-            return object!=null && !object.isImported();
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
+			return object != null && !object.isImported();
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) 
-        {
-            return object!=null && !object.isImported() && object.getParentProcess() != null;
-        }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (MakeFlexoProcessContextFree.actionType, FlexoProcess.class);
-    }
+		@Override
+		protected boolean isEnabledForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
+			return object != null && !object.isImported() && object.getParentProcess() != null;
+		}
 
-    private SetPropertyAction _setParentProcessAction;
+	};
 
-    MakeFlexoProcessContextFree (FlexoProcess focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
-    
+	static {
+		FlexoModelObject.addActionForClass(MakeFlexoProcessContextFree.actionType, FlexoProcess.class);
+	}
+
+	private SetPropertyAction _setParentProcessAction;
+
+	MakeFlexoProcessContextFree(FlexoProcess focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
 	@Override
-	protected void doAction(Object context) throws FlexoException 
-	{
+	protected void doAction(Object context) throws FlexoException {
 		if (getFocusedObject().isImported())
 			return;
 		_setParentProcessAction = SetPropertyAction.actionType.makeNewEmbeddedAction(getFocusedObject(), null, this);
@@ -89,14 +79,12 @@ public class MakeFlexoProcessContextFree extends FlexoUndoableAction<MakeFlexoPr
 	}
 
 	@Override
-	protected void undoAction(Object context) throws FlexoException 
-	{
+	protected void undoAction(Object context) throws FlexoException {
 		_setParentProcessAction.undoAction();
 	}
 
 	@Override
-	protected void redoAction(Object context) throws FlexoException 
-	{
+	protected void redoAction(Object context) throws FlexoException {
 		_setParentProcessAction.redoAction();
 	}
 

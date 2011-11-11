@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.CGTemplateJarResource;
 import org.openflexo.foundation.cg.templates.CGTemplateRepository;
@@ -34,35 +33,30 @@ import org.openflexo.toolbox.JavaResourceUtil;
 
 public class CommonSGApplicationTemplateSet extends CommonSGTemplateSet {
 
-	public CommonSGApplicationTemplateSet(File directory,CGTemplateRepository repository,boolean recursive)
-	{
-		super(directory,repository,recursive);
-	}
-	
-	@Override
-	public String getFullyQualifiedName() 
-	{
-		return getRepository().getFullyQualifiedName()+".COMMON";
+	public CommonSGApplicationTemplateSet(File directory, CGTemplateRepository repository, boolean recursive) {
+		super(directory, repository, recursive);
 	}
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getFullyQualifiedName() {
+		return getRepository().getFullyQualifiedName() + ".COMMON";
+	}
+
+	@Override
+	public String getInspectorName() {
 		return null; // Cannot be inspected
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return FlexoLocalization.localizedForKey("default_templates");
 	}
 
 	@Override
-	public String getRootFolderName()
-	{
+	public String getRootFolderName() {
 		return getRepository().getName();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -73,7 +67,8 @@ public class CommonSGApplicationTemplateSet extends CommonSGTemplateSet {
 		// Add all templates from technology modules implementations.
 		for (TechnologyModuleDefinition technologyModuleDefinition : TechnologyModuleDefinition.getAllTechnologyModuleDefinitions()) {
 			for (String templateResourcePath : JavaResourceUtil.getMatchingResources(technologyModuleDefinition.getClass(), ".vm")) {
-				result.add(new CGTemplateJarResource(this, technologyModuleDefinition.getTechnologyLayer().getFolderName(), templateResourcePath));
+				result.add(new CGTemplateJarResource(this, technologyModuleDefinition.getTechnologyLayer().getFolderName(),
+						templateResourcePath));
 			}
 		}
 

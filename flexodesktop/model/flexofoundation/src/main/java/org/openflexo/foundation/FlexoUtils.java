@@ -27,18 +27,14 @@ import org.openflexo.foundation.bindings.BindingValue;
 import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.toolbox.ToolBox;
 
-
 /**
  * @author sguerin
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ *         TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
  */
-public class FlexoUtils
-{
+public class FlexoUtils {
 
-	public static String exceptionStackTrace(Throwable tr)
-	{
+	public static String exceptionStackTrace(Throwable tr) {
 		StringWriter stw = new StringWriter();
 		PrintWriter pw = new PrintWriter(stw);
 		tr.printStackTrace(pw);
@@ -48,8 +44,7 @@ public class FlexoUtils
 		return st;
 	}
 
-	public static String getItemName(IEWidget _widget, BindingValue itemVariable)
-	{
+	public static String getItemName(IEWidget _widget, BindingValue itemVariable) {
 		String itemName = null;
 		if (itemVariable != null) {
 			itemName = itemVariable.getCodeStringRepresentation();

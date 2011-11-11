@@ -26,42 +26,34 @@ import org.openflexo.fge.geomedit.Segment;
 import org.openflexo.fge.geomedit.construction.SegmentWithTwoPointsConstruction;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
 
-
-
 public class CreateSegmentFromPoints extends Edition {
-	
+
 	public CreateSegmentFromPoints(GeomEditController controller) {
-		super("Create segment from points",controller);
-		inputs.add(new ObtainPoint("Select first point",controller));
-		inputs.add(new ObtainPoint("Select second point",controller));
+		super("Create segment from points", controller);
+		inputs.add(new ObtainPoint("Select first point", controller));
+		inputs.add(new ObtainPoint("Select second point", controller));
 	}
-	
+
 	@Override
-	public void performEdition()
-	{
-		ObtainPoint p1 = (ObtainPoint)inputs.get(0);
-		ObtainPoint p2 = (ObtainPoint)inputs.get(1);
-		
-		addObject (new Segment(
-				getController().getDrawing().getModel(),
-				new SegmentWithTwoPointsConstruction(p1.getConstruction(),p2.getConstruction())));
+	public void performEdition() {
+		ObtainPoint p1 = (ObtainPoint) inputs.get(0);
+		ObtainPoint p2 = (ObtainPoint) inputs.get(1);
+
+		addObject(new Segment(getController().getDrawing().getModel(), new SegmentWithTwoPointsConstruction(p1.getConstruction(),
+				p2.getConstruction())));
 
 	}
-	
+
 	@Override
-	public void paintEdition(FGEDrawingGraphics graphics,FGEPoint lastMouseLocation)
-	{
+	public void paintEdition(FGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		if (currentStep == 0) {
 			// Nothing to draw
-		}
-		else if (currentStep == 1) {
+		} else if (currentStep == 1) {
 			// Nothing to draw
-			FGEPoint p1 = ((ObtainPoint)inputs.get(0)).getInputData();
+			FGEPoint p1 = ((ObtainPoint) inputs.get(0)).getInputData();
 			graphics.setDefaultForeground(focusedForegroundStyle);
 			p1.paint(graphics);
-			(new FGESegment(p1,lastMouseLocation)).paint(graphics);
+			(new FGESegment(p1, lastMouseLocation)).paint(graphics);
 		}
 	}
 }
-
-

@@ -32,10 +32,7 @@ import org.openflexo.foundation.ie.widget.IETabWidget;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.ie.view.controller.dnd.IETreeDropTarget;
 
-
-
-public class ComponentBrowserView extends BrowserView
-{
+public class ComponentBrowserView extends BrowserView {
 
 	// ==========================================================================
 	// ============================= Variables
@@ -49,29 +46,28 @@ public class ComponentBrowserView extends BrowserView
 	// ================================
 	// ==========================================================================
 
-	public ComponentBrowserView(IEController controller)
-	{
+	public ComponentBrowserView(IEController controller) {
 		super(controller.getComponentBrowser(), controller.getKeyEventListener(), controller.getEditor());
 		_controller = controller;
-		FCH.setHelpItem(this,"component-browser");
+		FCH.setHelpItem(this, "component-browser");
 	}
 
 	@Override
 	protected TreeDropTarget createTreeDropTarget(FlexoJTree treeView2, ProjectBrowser _browser2) {
-		return new IETreeDropTarget(treeView2,_browser2);
+		return new IETreeDropTarget(treeView2, _browser2);
 	}
-	
+
 	@Override
-	public void treeSingleClick(FlexoModelObject object)
-	{
-		if(object instanceof IETabWidget){
-			if(_controller.getCurrentEditedComponent()!=null){
-				if((_controller.getCurrentEditedComponent()).getComponentDefinition().getWOComponent() instanceof IEPageComponent){
-					Enumeration en = ((IEPageComponent)(_controller.getCurrentEditedComponent()).getComponentDefinition().getWOComponent()).topComponents();
-					while(en.hasMoreElements()){
+	public void treeSingleClick(FlexoModelObject object) {
+		if (object instanceof IETabWidget) {
+			if (_controller.getCurrentEditedComponent() != null) {
+				if ((_controller.getCurrentEditedComponent()).getComponentDefinition().getWOComponent() instanceof IEPageComponent) {
+					Enumeration en = ((IEPageComponent) (_controller.getCurrentEditedComponent()).getComponentDefinition().getWOComponent())
+							.topComponents();
+					while (en.hasMoreElements()) {
 						Object obj = en.nextElement();
-						if(obj instanceof IESequenceTab){
-							((IESequenceTab)obj).setSelectedTab((IETabWidget)object);
+						if (obj instanceof IESequenceTab) {
+							((IESequenceTab) obj).setSelectedTab((IETabWidget) object);
 						}
 					}
 				}
@@ -80,8 +76,7 @@ public class ComponentBrowserView extends BrowserView
 	}
 
 	@Override
-	public void treeDoubleClick(FlexoModelObject object)
-	{
+	public void treeDoubleClick(FlexoModelObject object) {
 	}
 
 }

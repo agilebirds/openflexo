@@ -159,10 +159,10 @@ public class ProjectDocDocxGenerator extends ProjectDocGenerator {
 	public PackagedResourceToCopyGenerator<DGRepository> getFileResourceGenerator(FileResource r) {
 		PackagedResourceToCopyGenerator<DGRepository> returned = packagedResourceToCopyGenerator.get(r);
 		if (returned == null) {
-	   		//String extension = r.getName().substring(r.getName().lastIndexOf(".")+1);
-    		//FileFormat format = FileFormat.getFileFormatByExtension(extension);
-        	FileFormat format;
-        	if (r.getName().endsWith(".png")) {
+			// String extension = r.getName().substring(r.getName().lastIndexOf(".")+1);
+			// FileFormat format = FileFormat.getFileFormatByExtension(extension);
+			FileFormat format;
+			if (r.getName().endsWith(".png")) {
 				format = FileFormat.PNG;
 			} else if (r.getName().endsWith(".jpg")) {
 				format = FileFormat.JPG;
@@ -190,8 +190,8 @@ public class ProjectDocDocxGenerator extends ProjectDocGenerator {
 	@Override
 	public void copyAdditionalFiles() throws IOException {
 		super.copyAdditionalFiles();
-		FileUtils.copyContentDirToDir(getProject().getImportedImagesDir(), new File(getRootOutputDirectory(), "word/media/" + getProject()
-				.getImportedImagesDir().getName()), CopyStrategy.REPLACE_OLD_ONLY);
+		FileUtils.copyContentDirToDir(getProject().getImportedImagesDir(), new File(getRootOutputDirectory(), "word/media/"
+				+ getProject().getImportedImagesDir().getName()), CopyStrategy.REPLACE_OLD_ONLY);
 		FileUtils.copyContentDirToDir(getProject().getDocxToEmbedDirectory(), getRootOutputDirectory(), CopyStrategy.REPLACE_OLD_ONLY);
 	}
 
@@ -222,7 +222,8 @@ public class ProjectDocDocxGenerator extends ProjectDocGenerator {
 	public List<CGRepositoryFileResource> getAllMediaResources() {
 		List<CGRepositoryFileResource> mediaResources = new ArrayList<CGRepositoryFileResource>();
 		for (CGFile file : getRepository().getFiles()) {
-			if ((file.getResource() instanceof FlexoCopiedResource) || ((CGRepositoryFileResource) file.getResource() instanceof FlexoCopyOfFileResource)) {
+			if ((file.getResource() instanceof FlexoCopiedResource)
+					|| ((CGRepositoryFileResource) file.getResource() instanceof FlexoCopyOfFileResource)) {
 				mediaResources.add(file.getResource());
 			}
 		}
@@ -247,7 +248,8 @@ public class ProjectDocDocxGenerator extends ProjectDocGenerator {
 		try {
 			result.add(templateWithName(DOCX_MACRO_LIBRARY_NAME));
 		} catch (TemplateNotFoundException e) {
-			logger.warning("Should include velocity macro template for project generator but template is not found '" + DOCX_MACRO_LIBRARY_NAME + "'");
+			logger.warning("Should include velocity macro template for project generator but template is not found '"
+					+ DOCX_MACRO_LIBRARY_NAME + "'");
 			e.printStackTrace();
 		}
 		return result;
@@ -268,9 +270,8 @@ public class ProjectDocDocxGenerator extends ProjectDocGenerator {
 			String importedImageDirName = '/' + importedImageDir.getName() + '/';
 			int indexOfImportedImageDir = imagePath.indexOf(importedImageDirName);
 			if ((indexOfImportedImageDir != -1) && (imagePath.length() > indexOfImportedImageDir + importedImageDirName.length())) {
-				imageFile = new File(
-						importedImageDir.getAbsolutePath() + '/' + imagePath.substring(indexOfImportedImageDir + importedImageDirName
-								.length()));
+				imageFile = new File(importedImageDir.getAbsolutePath() + '/'
+						+ imagePath.substring(indexOfImportedImageDir + importedImageDirName.length()));
 			}
 		}
 

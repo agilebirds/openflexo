@@ -26,14 +26,13 @@ import org.openflexo.foundation.rm.cg.TextFile;
 import org.openflexo.generator.FlexoResourceGenerator;
 import org.openflexo.generator.rm.GenerationAvailableFile;
 
-
 public class BPELXSDFile extends TextFile implements GenerationAvailableFile {
 
 	public BPELXSDFile() {
 		super();
 	}
 
-	public BPELXSDFile(File f,BPELXSDFileResource resource) {
+	public BPELXSDFile(File f, BPELXSDFileResource resource) {
 		super(f);
 		try {
 			setFlexoResource(resource);
@@ -43,14 +42,12 @@ public class BPELXSDFile extends TextFile implements GenerationAvailableFile {
 	}
 
 	@Override
-	public BPELXSDFileResource getFlexoResource()
-    {
-        return (BPELXSDFileResource)super.getFlexoResource(); 
-    }
+	public BPELXSDFileResource getFlexoResource() {
+		return (BPELXSDFileResource) super.getFlexoResource();
+	}
 
 	@Override
-	public FlexoResourceGenerator getGenerator() 
-	{
+	public FlexoResourceGenerator getGenerator() {
 		return getFlexoResource().getGenerator();
 	}
 }

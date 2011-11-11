@@ -26,41 +26,37 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoGUIAction;
 
-
 public class ScenarioRecorder {
 
-    private static final Logger logger = Logger.getLogger(ScenarioRecorder.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ScenarioRecorder.class.getPackage().getName());
 
-    public static boolean ENABLE = false;
-    
-    private Vector<FlexoAction> _actionHistory;
-   
-    public ScenarioRecorder()
-    {
-        _actionHistory = new Vector<FlexoAction>();
-    }
+	public static boolean ENABLE = false;
 
-    public void registerDoneAction(FlexoAction action) 
-    {
-    	if (logger.isLoggable(Level.FINE))
-    		logger.info("registerDoneAction "+action);
-    	if (action instanceof FlexoGUIAction) {
-    		// Ignore
-    	}
-    	else {
-    		_actionHistory.add(action);
-    	}
-    	if (logger.isLoggable(Level.FINE)) debug();
-    }
+	private Vector<FlexoAction> _actionHistory;
 
-    private void debug()
-    {
-    	logger.info("ScenarioRecorder: ");
-        int i = 0;
-        for (FlexoAction a : _actionHistory) {
-            logger.info(""+i+" : "+a);
-            i++;
-        }   	
-    }
-    
+	public ScenarioRecorder() {
+		_actionHistory = new Vector<FlexoAction>();
+	}
+
+	public void registerDoneAction(FlexoAction action) {
+		if (logger.isLoggable(Level.FINE))
+			logger.info("registerDoneAction " + action);
+		if (action instanceof FlexoGUIAction) {
+			// Ignore
+		} else {
+			_actionHistory.add(action);
+		}
+		if (logger.isLoggable(Level.FINE))
+			debug();
+	}
+
+	private void debug() {
+		logger.info("ScenarioRecorder: ");
+		int i = 0;
+		for (FlexoAction a : _actionHistory) {
+			logger.info("" + i + " : " + a);
+			i++;
+		}
+	}
+
 }

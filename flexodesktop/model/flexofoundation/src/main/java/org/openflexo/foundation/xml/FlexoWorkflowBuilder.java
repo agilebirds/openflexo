@@ -27,7 +27,7 @@ public class FlexoWorkflowBuilder extends FlexoBuilder<FlexoWorkflowResource> {
 	public FlexoWorkflowBuilder(FlexoWorkflowResource resource) {
 		super(resource);
 	}
-	
+
 	public FlexoWorkflow workflow;
 
 }

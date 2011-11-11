@@ -21,5 +21,4 @@ public class AddToResponsibleRoleInitializer extends AddToXRoleInitializer<AddTo
 		return activity.getAvailableResponsibleRoles();
 	}
 
-
 }

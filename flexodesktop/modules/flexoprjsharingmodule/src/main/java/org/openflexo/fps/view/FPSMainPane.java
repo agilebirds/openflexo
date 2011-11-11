@@ -33,48 +33,39 @@ import org.openflexo.fps.controller.FPSController;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.ModuleView;
 
-
 /**
  * Represents the main pane for this module
  * 
  * @author yourname
  */
-public class FPSMainPane extends FlexoMainPane implements GraphicalFlexoObserver
-{
+public class FPSMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
 
-    public FPSMainPane(ModuleView moduleView, FPSFrame mainFrame, FPSController controller)
-    {
-        super(moduleView,mainFrame,controller,true,false);
+	public FPSMainPane(ModuleView moduleView, FPSFrame mainFrame, FPSController controller) {
+		super(moduleView, mainFrame, controller, true, false);
 
-        setLeftView(new JSplitPane(
-        		JSplitPane.VERTICAL_SPLIT,
-        		new CVSRepositoryBrowserView(controller),
-        		new SharedProjectBrowserView(controller)));
-        ((JSplitPane)getLeftView()).setResizeWeight(0.5);
-        setBottomView(controller.getConsoleView());
-    }
+		setLeftView(new JSplitPane(JSplitPane.VERTICAL_SPLIT, new CVSRepositoryBrowserView(controller), new SharedProjectBrowserView(
+				controller)));
+		((JSplitPane) getLeftView()).setResizeWeight(0.5);
+		setBottomView(controller.getConsoleView());
+	}
 
-    public void showBrowser()
-    {
-        showLeftView();
-    }
+	public void showBrowser() {
+		showLeftView();
+	}
 
-    public void hideBrowser()
-    {
-      hideLeftView();
-    }
-    
-    @Override
-	public void showRightView()
-    {
-    	super.showRightView();
-    }
+	public void hideBrowser() {
+		hideLeftView();
+	}
 
-    @Override
-	protected  FlexoModelObject getParentObject(FlexoModelObject object)
-    {
-        // Implements it if required
-        return null;
-    }
+	@Override
+	public void showRightView() {
+		super.showRightView();
+	}
+
+	@Override
+	protected FlexoModelObject getParentObject(FlexoModelObject object) {
+		// Implements it if required
+		return null;
+	}
 
 }

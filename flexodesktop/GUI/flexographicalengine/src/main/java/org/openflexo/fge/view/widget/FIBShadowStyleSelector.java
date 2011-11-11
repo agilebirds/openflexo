@@ -55,9 +55,7 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
-public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle>
-implements FIBCustomComponent<ShadowStyle,FIBShadowStyleSelector>
-{
+public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements FIBCustomComponent<ShadowStyle, FIBShadowStyleSelector> {
 
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBShadowStyleSelector.class.getPackage().getName());
@@ -66,169 +64,147 @@ implements FIBCustomComponent<ShadowStyle,FIBShadowStyleSelector>
 
 	private ShadowStyle _revertValue;
 
-    protected ShadowStyleDetailsPanel _selectorPanel;
+	protected ShadowStyleDetailsPanel _selectorPanel;
 
-    
-    public FIBShadowStyleSelector(ShadowStyle editedObject)
-    {
-        super(editedObject);
-        setRevertValue(editedObject!=null?editedObject.clone():null);
-        setFocusable(true);
-    }
-
-	@Override
-	public void init(FIBCustom component, FIBController controller) 
-	{
+	public FIBShadowStyleSelector(ShadowStyle editedObject) {
+		super(editedObject);
+		setRevertValue(editedObject != null ? editedObject.clone() : null);
+		setFocusable(true);
 	}
 
 	@Override
-	public void setRevertValue(ShadowStyle oldValue)
-    {
-    	// WARNING: we need here to clone to keep track back of previous data !!!
-        if (oldValue != null) _revertValue = oldValue.clone();
-        else _revertValue = null;
-        if (logger.isLoggable(Level.FINE))
-        	logger.fine("Sets revert value to "+_revertValue);
-    }
+	public void init(FIBCustom component, FIBController controller) {
+	}
 
-    @Override
-	public ShadowStyle getRevertValue()
-    {
-        return _revertValue;
-    }
+	@Override
+	public void setRevertValue(ShadowStyle oldValue) {
+		// WARNING: we need here to clone to keep track back of previous data !!!
+		if (oldValue != null)
+			_revertValue = oldValue.clone();
+		else
+			_revertValue = null;
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("Sets revert value to " + _revertValue);
+	}
 
-     @Override
-	protected ResizablePanel createCustomPanel(ShadowStyle editedObject)
-    {
-        _selectorPanel = makeCustomPanel(editedObject);
-         return _selectorPanel;
-    }
+	@Override
+	public ShadowStyle getRevertValue() {
+		return _revertValue;
+	}
 
-    protected ShadowStyleDetailsPanel makeCustomPanel(ShadowStyle editedObject)
-    {
-    	return new ShadowStyleDetailsPanel(editedObject);
-    }
-
-    @Override
-	public void updateCustomPanel(ShadowStyle editedObject)
-    {
-         if (_selectorPanel != null) {
-            _selectorPanel.update();
-        }
-         getFrontComponent().update();
-    }
-
-    public class ShadowStyleDetailsPanel extends ResizablePanel
-    {
-        private FIBComponent fibComponent;
-        private FIBView fibView;
-        private CustomFIBController controller;
-        
-        protected ShadowStyleDetailsPanel(ShadowStyle shadowStyle)
-        {
-        	super();
-
-           	fibComponent = FIBLibrary.instance().retrieveFIBComponent(FIB_FILE);
-        	controller = new CustomFIBController(fibComponent);
-    		fibView =  controller.buildView(fibComponent);
-
-        	controller.setDataObject(shadowStyle);
-        	
-        	setLayout(new BorderLayout());
-        	add(fibView.getResultingJComponent(),BorderLayout.CENTER);
-
-        }
-
-        public void update()
-        {
-           	controller.setDataObject(getEditedObject(),true);
-        }
-        
-        @Override
-		public Dimension getDefaultSize()
-        {
-        	return new Dimension(fibComponent.getWidth(),fibComponent.getHeight());
-        }
-
-        public void delete()
-        {
-        }
-
-		public class CustomFIBController extends FIBController<ShadowStyle>
-    	{
-    		public CustomFIBController(FIBComponent component)
-    		{
-    			super(component);
-    		}
-
-    		public void apply() 
-    		{
-    			FIBShadowStyleSelector.this.apply();
-    		}
-
-    		public void cancel() 
-    		{
-    			FIBShadowStyleSelector.this.cancel();
-    		}
-
-    		public void parameterChanged()
-    		{
-    			getFrontComponent().update();
-    		}
-    		
-     	}
-
- 
-     }
-
-    @Override
-	public void apply()
-    {
-    	setRevertValue(getEditedObject()!=null?getEditedObject().clone():null);
-    	closePopup();
-        super.apply();
-    }
-
-    @Override
-	public void cancel()
-    {
-    	if(logger.isLoggable(Level.FINE))
-   		 logger.fine("CANCEL: revert to "+getRevertValue());
-        setEditedObject(getRevertValue());
-        closePopup();
-        super.cancel();
-    }
-
-    @Override
-	protected void deletePopup()
-    {
-        if (_selectorPanel != null) _selectorPanel.delete();
-        _selectorPanel = null;
-        super.deletePopup();
-    }
-
-   /* protected void pointerLeavesPopup()
-    {
-        cancel();
-    }*/
-
-	public ShadowStyleDetailsPanel getSelectorPanel() 
-	{
+	@Override
+	protected ResizablePanel createCustomPanel(ShadowStyle editedObject) {
+		_selectorPanel = makeCustomPanel(editedObject);
 		return _selectorPanel;
 	}
-	
+
+	protected ShadowStyleDetailsPanel makeCustomPanel(ShadowStyle editedObject) {
+		return new ShadowStyleDetailsPanel(editedObject);
+	}
+
 	@Override
-	protected ShadowStylePreviewPanel buildFrontComponent()
-	{
+	public void updateCustomPanel(ShadowStyle editedObject) {
+		if (_selectorPanel != null) {
+			_selectorPanel.update();
+		}
+		getFrontComponent().update();
+	}
+
+	public class ShadowStyleDetailsPanel extends ResizablePanel {
+		private FIBComponent fibComponent;
+		private FIBView fibView;
+		private CustomFIBController controller;
+
+		protected ShadowStyleDetailsPanel(ShadowStyle shadowStyle) {
+			super();
+
+			fibComponent = FIBLibrary.instance().retrieveFIBComponent(FIB_FILE);
+			controller = new CustomFIBController(fibComponent);
+			fibView = controller.buildView(fibComponent);
+
+			controller.setDataObject(shadowStyle);
+
+			setLayout(new BorderLayout());
+			add(fibView.getResultingJComponent(), BorderLayout.CENTER);
+
+		}
+
+		public void update() {
+			controller.setDataObject(getEditedObject(), true);
+		}
+
+		@Override
+		public Dimension getDefaultSize() {
+			return new Dimension(fibComponent.getWidth(), fibComponent.getHeight());
+		}
+
+		public void delete() {
+		}
+
+		public class CustomFIBController extends FIBController<ShadowStyle> {
+			public CustomFIBController(FIBComponent component) {
+				super(component);
+			}
+
+			public void apply() {
+				FIBShadowStyleSelector.this.apply();
+			}
+
+			public void cancel() {
+				FIBShadowStyleSelector.this.cancel();
+			}
+
+			public void parameterChanged() {
+				getFrontComponent().update();
+			}
+
+		}
+
+	}
+
+	@Override
+	public void apply() {
+		setRevertValue(getEditedObject() != null ? getEditedObject().clone() : null);
+		closePopup();
+		super.apply();
+	}
+
+	@Override
+	public void cancel() {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("CANCEL: revert to " + getRevertValue());
+		setEditedObject(getRevertValue());
+		closePopup();
+		super.cancel();
+	}
+
+	@Override
+	protected void deletePopup() {
+		if (_selectorPanel != null)
+			_selectorPanel.delete();
+		_selectorPanel = null;
+		super.deletePopup();
+	}
+
+	/* protected void pointerLeavesPopup()
+	 {
+	     cancel();
+	 }*/
+
+	public ShadowStyleDetailsPanel getSelectorPanel() {
+		return _selectorPanel;
+	}
+
+	@Override
+	protected ShadowStylePreviewPanel buildFrontComponent() {
 		return new ShadowStylePreviewPanel();
 	}
-	
+
 	@Override
-	public ShadowStylePreviewPanel getFrontComponent()
-	{
-		return (ShadowStylePreviewPanel)super.getFrontComponent();
+	public ShadowStylePreviewPanel getFrontComponent() {
+		return (ShadowStylePreviewPanel) super.getFrontComponent();
 	}
-	
+
 	/*@Override
 	protected Border getDownButtonBorder()
 	{
@@ -241,35 +217,29 @@ implements FIBCustomComponent<ShadowStyle,FIBShadowStyleSelector>
 		//return BorderFactory.createBevelBorder(BevelBorder.LOWERED);
 		//return BorderFactory.createBevelBorder(BevelBorder.LOWERED);
 	}*/
-	
-	
-	protected class ShadowStylePreviewPanel extends JPanel
-	{
+
+	protected class ShadowStylePreviewPanel extends JPanel {
 		private Drawing drawing;
 		private DrawingGraphicalRepresentation drawingGR;
 		private DrawingController<?> controller;
-		private Object p1,p2,text;
+		private Object p1, p2, text;
 		private ShapeGraphicalRepresentation shapeGR;
-		
-		
-		
-		protected ShadowStylePreviewPanel()
-		{
+
+		protected ShadowStylePreviewPanel() {
 			super(new BorderLayout());
-			setBorder(BorderFactory.createEtchedBorder(Color.GRAY,Color.LIGHT_GRAY));
-			//setBorder(BorderFactory.createEtchedBorder());
-			setPreferredSize(new Dimension(40,19));
-			//setBackground(Color.WHITE);
-			
+			setBorder(BorderFactory.createEtchedBorder(Color.GRAY, Color.LIGHT_GRAY));
+			// setBorder(BorderFactory.createEtchedBorder());
+			setPreferredSize(new Dimension(40, 19));
+			// setBackground(Color.WHITE);
+
 			text = new Object();
-			
+
 			final Vector<Object> singleton = new Vector<Object>();
 			singleton.add(text);
-			
+
 			drawing = new Drawing<ShadowStylePreviewPanel>() {
 				@Override
-				public List<?> getContainedObjects(Object aDrawable)
-				{
+				public List<?> getContainedObjects(Object aDrawable) {
 					if (aDrawable == ShadowStylePreviewPanel.this) {
 						return singleton;
 					}
@@ -277,22 +247,21 @@ implements FIBCustomComponent<ShadowStyle,FIBShadowStyleSelector>
 				}
 
 				@Override
-				public Object getContainer(Object aDrawable)
-				{
-					if (aDrawable == text) return ShadowStylePreviewPanel.this;
+				public Object getContainer(Object aDrawable) {
+					if (aDrawable == text)
+						return ShadowStylePreviewPanel.this;
 					return null;
 				}
 
 				@Override
-				public DrawingGraphicalRepresentation<ShadowStylePreviewPanel> getDrawingGraphicalRepresentation()
-				{
+				public DrawingGraphicalRepresentation<ShadowStylePreviewPanel> getDrawingGraphicalRepresentation() {
 					return drawingGR;
 				}
 
 				@Override
-				public <O> GraphicalRepresentation<O> getGraphicalRepresentation(O aDrawable)
-				{
-					if (aDrawable == ShadowStylePreviewPanel.this) return drawingGR;
+				public <O> GraphicalRepresentation<O> getGraphicalRepresentation(O aDrawable) {
+					if (aDrawable == ShadowStylePreviewPanel.this)
+						return drawingGR;
 					else if (aDrawable == text) {
 						return shapeGR;
 					}
@@ -300,58 +269,53 @@ implements FIBCustomComponent<ShadowStyle,FIBShadowStyleSelector>
 				}
 
 				@Override
-				public ShadowStylePreviewPanel getModel()
-				{
+				public ShadowStylePreviewPanel getModel() {
 					return ShadowStylePreviewPanel.this;
 				}
-				
+
 			};
-			drawingGR = new DrawingGraphicalRepresentation(drawing,false);
+			drawingGR = new DrawingGraphicalRepresentation(drawing, false);
 			drawingGR.setBackgroundColor(new Color(255, 255, 255));
 			drawingGR.setWidth(35);
 			drawingGR.setHeight(19);
 			drawingGR.setDrawWorkingArea(false);
-			shapeGR = new ShapeGraphicalRepresentation(ShapeType.RECTANGLE,text,drawing);
+			shapeGR = new ShapeGraphicalRepresentation(ShapeType.RECTANGLE, text, drawing);
 			shapeGR.setWidth(130);
 			shapeGR.setHeight(130);
 			shapeGR.setAllowToLeaveBounds(true);
 			shapeGR.setX(-130);
 			shapeGR.setY(-143);
 			shapeGR.setForeground(ForegroundStyle.makeStyle(Color.BLACK));
-			shapeGR.setBackground(BackgroundStyle.makeColoredBackground(new Color(252,242,175)));
-			
+			shapeGR.setBackground(BackgroundStyle.makeColoredBackground(new Color(252, 242, 175)));
+
 			shapeGR.setIsSelectable(false);
 			shapeGR.setIsFocusable(false);
 			shapeGR.setIsReadOnly(true);
-			shapeGR.setBorder(new ShapeBorder(20,20,20,20));
-			
+			shapeGR.setBorder(new ShapeBorder(20, 20, 20, 20));
+
 			update();
 
 			controller = new DrawingController<Drawing<?>>(drawing);
 			add(controller.getDrawingView());
-			
+
 		}
-		
-		protected void update()
-		{
-			if (getEditedObject() == null) return;
+
+		protected void update() {
+			if (getEditedObject() == null)
+				return;
 			shapeGR.setShadowStyle(getEditedObject());
 		}
-		
-		
+
 	}
 
 	@Override
-	public FIBShadowStyleSelector getJComponent()
-	{
+	public FIBShadowStyleSelector getJComponent() {
 		return this;
 	}
 
 	@Override
-	public Class<ShadowStyle> getRepresentedType()
-	{
+	public Class<ShadowStyle> getRepresentedType() {
 		return ShadowStyle.class;
 	}
-
 
 }

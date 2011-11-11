@@ -30,22 +30,19 @@ import org.openflexo.logging.FlexoLogger;
  * @author gpolet
  * 
  */
-public class ConfigGenerator extends JavaClassGenerator
-{
-    private static final String TEMPLATE_NAME = "Config.java.vm";
+public class ConfigGenerator extends JavaClassGenerator {
+	private static final String TEMPLATE_NAME = "Config.java.vm";
 	private static final Logger logger = FlexoLogger.getLogger(ConfigGenerator.class.getPackage().getName());
 
-    public ConfigGenerator(ProjectGenerator projectGenerator)
-    {
-        super(projectGenerator,projectGenerator.getPrefix() + "Config","");
-    } 
+	public ConfigGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, projectGenerator.getPrefix() + "Config", "");
+	}
 
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
-	
+
 	@Override
 	protected VelocityContext defaultContext() {
 		VelocityContext vc = super.defaultContext();
@@ -55,15 +52,15 @@ public class ConfigGenerator extends JavaClassGenerator
 		return vc;
 	}
 
-    /**
-     * Overrides rebuildDependanciesForResource
-     * @see org.openflexo.generator.utils.JavaClassGenerator#rebuildDependanciesForResource(JavaFileResource)
-     */
-    @Override
-    public void rebuildDependanciesForResource(JavaFileResource resource)
-    {
-        
-    }
+	/**
+	 * Overrides rebuildDependanciesForResource
+	 * 
+	 * @see org.openflexo.generator.utils.JavaClassGenerator#rebuildDependanciesForResource(JavaFileResource)
+	 */
+	@Override
+	public void rebuildDependanciesForResource(JavaFileResource resource) {
+
+	}
 
 	@Override
 	public String getTemplateName() {

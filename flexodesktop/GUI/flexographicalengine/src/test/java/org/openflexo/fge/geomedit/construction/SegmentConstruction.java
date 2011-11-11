@@ -23,12 +23,11 @@ import org.openflexo.fge.geom.FGESegment;
 
 public abstract class SegmentConstruction extends GeometricConstruction<FGESegment> {
 
-	public final FGESegment getSegment()
-	{
+	public final FGESegment getSegment() {
 		return getData();
 	}
 
 	@Override
 	protected abstract FGESegment computeData();
-	
+
 }

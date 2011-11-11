@@ -34,36 +34,31 @@ public class RemoveTOCEntryInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RemoveTOCEntryInitializer(DEControllerActionInitializer actionInitializer)
-	{
-		super(RemoveTOCEntry.actionType,actionInitializer);
+	RemoveTOCEntryInitializer(DEControllerActionInitializer actionInitializer) {
+		super(RemoveTOCEntry.actionType, actionInitializer);
 	}
 
 	@Override
-	protected DEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DEControllerActionInitializer)super.getControllerActionInitializer();
+	protected DEControllerActionInitializer getControllerActionInitializer() {
+		return (DEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<RemoveTOCEntry> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<RemoveTOCEntry> getDefaultInitializer() {
 		return new FlexoActionInitializer<RemoveTOCEntry>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveTOCEntry action)
-			{
-				return FlexoController.confirm(FlexoLocalization.localizedForKey("are_you_sure_you_want_to_remove_this_toc_entry")+" "+action.getFocusedObject().getTitle());
+			public boolean run(ActionEvent e, RemoveTOCEntry action) {
+				return FlexoController.confirm(FlexoLocalization.localizedForKey("are_you_sure_you_want_to_remove_this_toc_entry") + " "
+						+ action.getFocusedObject().getTitle());
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<RemoveTOCEntry> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<RemoveTOCEntry> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RemoveTOCEntry>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveTOCEntry action)
-			{
+			public boolean run(ActionEvent e, RemoveTOCEntry action) {
 				return true;
 			}
 		};

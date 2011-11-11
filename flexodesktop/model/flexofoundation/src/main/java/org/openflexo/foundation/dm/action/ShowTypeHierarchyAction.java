@@ -29,42 +29,35 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.foundation.dm.DMEntity;
 
+public class ShowTypeHierarchyAction extends FlexoGUIAction {
 
-public class ShowTypeHierarchyAction extends FlexoGUIAction 
-{
-
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ShowTypeHierarchyAction.class.getPackage().getName());
 
-    public static FlexoActionType actionType = new FlexoActionType ("show_type_hierarchy",FlexoActionType.helpGroup) {
+	public static FlexoActionType actionType = new FlexoActionType("show_type_hierarchy", FlexoActionType.helpGroup) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) 
-        {
-            return new ShowTypeHierarchyAction(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new ShowTypeHierarchyAction(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return ((object != null) 
-                    && (object instanceof DMEntity));
-        }
-        
-    };
-    
-    ShowTypeHierarchyAction (FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return ((object != null) && (object instanceof DMEntity));
+		}
+
+	};
+
+	ShowTypeHierarchyAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
 }

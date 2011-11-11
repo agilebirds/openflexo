@@ -27,7 +27,7 @@ public class CheckboxParameter extends EditionSchemeParameter {
 	public Type getType() {
 		return Boolean.class;
 	};
-	
+
 	@Override
 	public WidgetType getWidget() {
 		return WidgetType.CHECKBOX;

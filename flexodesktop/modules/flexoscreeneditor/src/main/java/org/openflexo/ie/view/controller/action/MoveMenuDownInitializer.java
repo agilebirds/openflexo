@@ -32,29 +32,24 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
-public class MoveMenuDownInitializer extends ActionInitializer { 
+public class MoveMenuDownInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	MoveMenuDownInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(MoveMenuDown.actionType,actionInitializer);
+	MoveMenuDownInitializer(IEControllerActionInitializer actionInitializer) {
+		super(MoveMenuDown.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<MoveMenuDown> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<MoveMenuDown> getDefaultInitializer() {
 		return new FlexoActionInitializer<MoveMenuDown>() {
 			@Override
-			public boolean run(ActionEvent e, MoveMenuDown action)
-			{
+			public boolean run(ActionEvent e, MoveMenuDown action) {
 				boolean doable = false;
 				if (action.getFocusedObject() instanceof FlexoItemMenu) {
 					FlexoItemMenu item = (FlexoItemMenu) action.getFocusedObject();
@@ -71,23 +66,18 @@ public class MoveMenuDownInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<MoveMenuDown> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<MoveMenuDown> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MoveMenuDown>() {
 			@Override
-			public boolean run(ActionEvent e, MoveMenuDown action)
-			{
+			public boolean run(ActionEvent e, MoveMenuDown action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return IconLibrary.MOVE_DOWN_ICON;
 	}
-
-
 
 }

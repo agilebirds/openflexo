@@ -37,77 +37,74 @@ import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class CreateDMPropertyInitializer extends ActionInitializer {
 
 	static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateDMPropertyInitializer(DMControllerActionInitializer actionInitializer)
-	{
-		super(CreateDMProperty.actionType,actionInitializer);
+	CreateDMPropertyInitializer(DMControllerActionInitializer actionInitializer) {
+		super(CreateDMProperty.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected DMControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DMControllerActionInitializer)super.getControllerActionInitializer();
+	protected DMControllerActionInitializer getControllerActionInitializer() {
+		return (DMControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<CreateDMProperty> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<CreateDMProperty> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateDMProperty>() {
-            @Override
-			public boolean run(ActionEvent e, CreateDMProperty action)
-            {
-            	return true;
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, CreateDMProperty action) {
+				return true;
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<CreateDMProperty> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<CreateDMProperty> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateDMProperty>() {
-            @Override
-			public boolean run(ActionEvent e, CreateDMProperty action)
-            {
-                if (action.getEntity() instanceof DMEOEntity) {
-                    if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == ((DMEOEntity) action.getEntity()).getDMEOModel()) {
-                        if (logger.isLoggable(Level.FINE))
-                            logger.fine("Finalizer for CreateDMProperty in DMEOModelView");
-                        DMEOModelView dmEOModelView = (DMEOModelView) getControllerActionInitializer().getDMController().getCurrentEditedObjectView();
-                        dmEOModelView.getEoEntityTable().selectObject(action.getEntity());
-                        dmEOModelView.getPropertyTable().selectObject(action.getNewProperty());
-                    } else if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getEntity()) {
-                        if (logger.isLoggable(Level.FINE))
-                            logger.fine("Finalizer for CreateDMProperty in DMEOEntityView");
-                        DMEOEntityView eoEntityView = (DMEOEntityView) getControllerActionInitializer().getDMController().getCurrentEditedObjectView();
-                        eoEntityView.getPropertyTable().selectObject(action.getNewProperty());
-                    }
-                } else {
-                    if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getEntity().getPackage()) {
-                        if (logger.isLoggable(Level.FINE))
-                            logger.fine("Finalizer for CreateDMProperty in DMPackageView");
-                        DMPackageView packageView = (DMPackageView) getControllerActionInitializer().getDMController().getCurrentEditedObjectView();
-                        packageView.getEntityTable().selectObject(action.getEntity());
-                        packageView.getPropertyTable().selectObject(action.getNewProperty());
-                    } else if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getEntity()) {
-                        if (logger.isLoggable(Level.FINE))
-                            logger.fine("Finalizer for CreateDMProperty in DMEntityView");
-                        DMEntityView entityView = (DMEntityView) getControllerActionInitializer().getDMController().getCurrentEditedObjectView();
-                        entityView.getPropertyTable().selectObject(action.getNewProperty());
-                    }
-                }
-                return true;
-          }
-        };
+			@Override
+			public boolean run(ActionEvent e, CreateDMProperty action) {
+				if (action.getEntity() instanceof DMEOEntity) {
+					if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == ((DMEOEntity) action.getEntity())
+							.getDMEOModel()) {
+						if (logger.isLoggable(Level.FINE))
+							logger.fine("Finalizer for CreateDMProperty in DMEOModelView");
+						DMEOModelView dmEOModelView = (DMEOModelView) getControllerActionInitializer().getDMController()
+								.getCurrentEditedObjectView();
+						dmEOModelView.getEoEntityTable().selectObject(action.getEntity());
+						dmEOModelView.getPropertyTable().selectObject(action.getNewProperty());
+					} else if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getEntity()) {
+						if (logger.isLoggable(Level.FINE))
+							logger.fine("Finalizer for CreateDMProperty in DMEOEntityView");
+						DMEOEntityView eoEntityView = (DMEOEntityView) getControllerActionInitializer().getDMController()
+								.getCurrentEditedObjectView();
+						eoEntityView.getPropertyTable().selectObject(action.getNewProperty());
+					}
+				} else {
+					if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getEntity().getPackage()) {
+						if (logger.isLoggable(Level.FINE))
+							logger.fine("Finalizer for CreateDMProperty in DMPackageView");
+						DMPackageView packageView = (DMPackageView) getControllerActionInitializer().getDMController()
+								.getCurrentEditedObjectView();
+						packageView.getEntityTable().selectObject(action.getEntity());
+						packageView.getPropertyTable().selectObject(action.getNewProperty());
+					} else if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getEntity()) {
+						if (logger.isLoggable(Level.FINE))
+							logger.fine("Finalizer for CreateDMProperty in DMEntityView");
+						DMEntityView entityView = (DMEntityView) getControllerActionInitializer().getDMController()
+								.getCurrentEditedObjectView();
+						entityView.getPropertyTable().selectObject(action.getNewProperty());
+					}
+				}
+				return true;
+			}
+		};
 	}
 
- 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	@Override
+	protected Icon getEnabledIcon() {
 		return DMEIconLibrary.DM_PROPERTY_ICON;
 	}
- 
+
 }

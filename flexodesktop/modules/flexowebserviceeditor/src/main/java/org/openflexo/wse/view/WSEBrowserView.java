@@ -26,48 +26,42 @@ import org.openflexo.components.browser.view.BrowserView;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.wse.controller.WSEController;
 
-
 /**
  * Represents the view for the browser of this module
  * 
  * @author yourname
  * 
  */
-public class WSEBrowserView extends BrowserView
-{
+public class WSEBrowserView extends BrowserView {
 
-    private static final Logger logger = Logger.getLogger(WSEBrowserView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(WSEBrowserView.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Variables
-    // ==================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Variables
+	// ==================================
+	// ==========================================================================
 
-    protected WSEController _controller;
+	protected WSEController _controller;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public WSEBrowserView(WSEController controller)
-    {
-        super(controller.getWSEBrowser(), controller.getKeyEventListener(), controller.getEditor());
-        _controller = controller;
-        FCH.setHelpItem(this,"ws-browser");
-   }
+	public WSEBrowserView(WSEController controller) {
+		super(controller.getWSEBrowser(), controller.getKeyEventListener(), controller.getEditor());
+		_controller = controller;
+		FCH.setHelpItem(this, "ws-browser");
+	}
 
-    @Override
-	public void treeSingleClick(FlexoModelObject object)
-    {
-    }
+	@Override
+	public void treeSingleClick(FlexoModelObject object) {
+	}
 
-    @Override
-	public void treeDoubleClick(FlexoModelObject object)
-    {
-        // Try to display object in view
-        _controller.selectAndFocusObject(object);
-    }
-    
+	@Override
+	public void treeDoubleClick(FlexoModelObject object) {
+		// Try to display object in view
+		_controller.selectAndFocusObject(object);
+	}
 
 }

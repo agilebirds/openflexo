@@ -31,84 +31,68 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 
 @Deprecated
-public class AddDeadline extends FlexoAction<AddDeadline,WKFObject,WKFObject> 
-{
+public class AddDeadline extends FlexoAction<AddDeadline, WKFObject, WKFObject> {
 
-    private static final Logger logger = Logger.getLogger(AddDeadline.class.getPackage().getName());
-    
-    public static FlexoActionType<AddDeadline,WKFObject,WKFObject> actionType 
-    = new FlexoActionType<AddDeadline,WKFObject,WKFObject> (
-    		"add_new_deadline",
-    		FlexoActionType.newMenu,
-    		FlexoActionType.newMenuGroup1,
-    		FlexoActionType.ADD_ACTION_TYPE) {
+	private static final Logger logger = Logger.getLogger(AddDeadline.class.getPackage().getName());
 
-        /**
-         * Factory method
-         */
-        @Override
-		public AddDeadline makeNewAction(WKFObject focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) 
-        {
-            return new AddDeadline(focusedObject, globalSelection, editor);
-        }
+	public static FlexoActionType<AddDeadline, WKFObject, WKFObject> actionType = new FlexoActionType<AddDeadline, WKFObject, WKFObject>(
+			"add_new_deadline", FlexoActionType.newMenu, FlexoActionType.newMenuGroup1, FlexoActionType.ADD_ACTION_TYPE) {
 
-        @Override
-		protected boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) 
-        {
-            return object instanceof FlexoProcess && !((FlexoProcess)object).isImported();
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public AddDeadline makeNewAction(WKFObject focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+			return new AddDeadline(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) 
-        {
-            return ((object != null) && ((object instanceof FlexoProcess) || (object instanceof DeadLineList) || (object instanceof DeadLine)));
-        }
-                
-    };
-    
-    private String _newDeadlineName;
-    private DeadLine _newDeadline;
+		@Override
+		protected boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+			return object instanceof FlexoProcess && !((FlexoProcess) object).isImported();
+		}
 
-    AddDeadline (WKFObject focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+		@Override
+		protected boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+			return ((object != null) && ((object instanceof FlexoProcess) || (object instanceof DeadLineList) || (object instanceof DeadLine)));
+		}
 
-     public FlexoProcess getProcess() 
-    {
-         if (getFocusedObject() != null)  {
-             return getFocusedObject().getProcess();
-         }
-        return null;
-    }
-    
-    public String getNewDeadlineName() 
-    {
-        return _newDeadlineName;
-    }
+	};
 
-    public void setNewDeadlineName(String newDeadlineName) 
-    {
-        _newDeadlineName = newDeadlineName;
-    }
-    
-    @Override
-	protected void doAction(Object context) 
-    {
-        logger.info ("Add deadline");
-        if (getProcess() != null)  {
-            DeadLineList deadlineList = getProcess().getDeadLineList();
-            deadlineList.addToDeadLines(_newDeadline = new DeadLine(getProcess(), getNewDeadlineName()));
-        }
-        else {
-            logger.warning("Focused process is null !");
-        }
-    }
+	private String _newDeadlineName;
+	private DeadLine _newDeadline;
 
-    public DeadLine getNewDeadline() 
-    {
-        return _newDeadline;
-    }
+	AddDeadline(WKFObject focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
- 
+	public FlexoProcess getProcess() {
+		if (getFocusedObject() != null) {
+			return getFocusedObject().getProcess();
+		}
+		return null;
+	}
+
+	public String getNewDeadlineName() {
+		return _newDeadlineName;
+	}
+
+	public void setNewDeadlineName(String newDeadlineName) {
+		_newDeadlineName = newDeadlineName;
+	}
+
+	@Override
+	protected void doAction(Object context) {
+		logger.info("Add deadline");
+		if (getProcess() != null) {
+			DeadLineList deadlineList = getProcess().getDeadLineList();
+			deadlineList.addToDeadLines(_newDeadline = new DeadLine(getProcess(), getNewDeadlineName()));
+		} else {
+			logger.warning("Focused process is null !");
+		}
+	}
+
+	public DeadLine getNewDeadline() {
+		return _newDeadline;
+	}
+
 }

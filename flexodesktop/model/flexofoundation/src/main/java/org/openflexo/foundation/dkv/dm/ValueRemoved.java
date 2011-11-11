@@ -21,17 +21,14 @@ package org.openflexo.foundation.dkv.dm;
 
 import org.openflexo.foundation.dkv.Value;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class ValueRemoved extends DKVDataModification
-{
+public class ValueRemoved extends DKVDataModification {
 
-    public ValueRemoved(Value removedValue)
-    {
-        super(-1, "values", removedValue, null);
-    }
+	public ValueRemoved(Value removedValue) {
+		super(-1, "values", removedValue, null);
+	}
 
 }

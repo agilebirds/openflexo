@@ -24,5 +24,5 @@ import java.util.Vector;
 public interface WidgetsContainer {
 
 	public Vector getInnerWidgets();
-	
+
 }

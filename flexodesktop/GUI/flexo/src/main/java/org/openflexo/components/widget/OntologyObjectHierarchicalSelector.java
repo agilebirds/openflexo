@@ -27,105 +27,89 @@ import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 /**
  * Widget allowing to select an Ontology Object while browsing the ontology library
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class OntologyObjectHierarchicalSelector extends AbstractBrowserSelector<OntologyObject>
-{
+public class OntologyObjectHierarchicalSelector extends AbstractBrowserSelector<OntologyObject> {
 
-    protected static final String EMPTY_STRING = "";
-    protected String STRING_REPRESENTATION_WHEN_NULL = EMPTY_STRING;
+	protected static final String EMPTY_STRING = "";
+	protected String STRING_REPRESENTATION_WHEN_NULL = EMPTY_STRING;
 
-    private OntologyLibrary ontologyLibrary;
+	private OntologyLibrary ontologyLibrary;
 
-    public OntologyObjectHierarchicalSelector(OntologyObject object)
-    {
-        super(null, object, OntologyObject.class);
-    }
+	public OntologyObjectHierarchicalSelector(OntologyObject object) {
+		super(null, object, OntologyObject.class);
+	}
 
-    public OntologyObjectHierarchicalSelector(OntologyLibrary ontologyLibrary, OntologyObject object, int cols)
-    {
-        super(null, object, OntologyObject.class, cols);
-        setOntologyLibrary(ontologyLibrary);
-    }
+	public OntologyObjectHierarchicalSelector(OntologyLibrary ontologyLibrary, OntologyObject object, int cols) {
+		super(null, object, OntologyObject.class, cols);
+		setOntologyLibrary(ontologyLibrary);
+	}
 
-    public OntologyLibrary getOntologyLibrary()
-    {
-    	return ontologyLibrary;
-    }
+	public OntologyLibrary getOntologyLibrary() {
+		return ontologyLibrary;
+	}
 
-    public void setOntologyLibrary(OntologyLibrary ontologyLibrary)
-    {
-    	this.ontologyLibrary = ontologyLibrary;
-    }
+	public void setOntologyLibrary(OntologyLibrary ontologyLibrary) {
+		this.ontologyLibrary = ontologyLibrary;
+	}
 
-    @Override
-	protected OntologyObjectSelectorPanel makeCustomPanel(OntologyObject editedObject)
-    {
-        return new OntologyObjectSelectorPanel();
-    }
+	@Override
+	protected OntologyObjectSelectorPanel makeCustomPanel(OntologyObject editedObject) {
+		return new OntologyObjectSelectorPanel();
+	}
 
-    @Override
-	public String renderedString(OntologyObject editedObject)
-    {
-        if (editedObject != null) {
-            return editedObject.getName();
-        }
-        return STRING_REPRESENTATION_WHEN_NULL;
-    }
+	@Override
+	public String renderedString(OntologyObject editedObject) {
+		if (editedObject != null) {
+			return editedObject.getName();
+		}
+		return STRING_REPRESENTATION_WHEN_NULL;
+	}
 
-    protected class OntologyObjectSelectorPanel extends AbstractSelectorPanel<OntologyObject>
-    {
-        protected OntologyObjectSelectorPanel()
-        {
-            super(OntologyObjectHierarchicalSelector.this);
-        }
+	protected class OntologyObjectSelectorPanel extends AbstractSelectorPanel<OntologyObject> {
+		protected OntologyObjectSelectorPanel() {
+			super(OntologyObjectHierarchicalSelector.this);
+		}
 
-        @Override
-		protected ProjectBrowser createBrowser(FlexoProject project)
-        {
-            return new OntologyBrowser();
-        }
+		@Override
+		protected ProjectBrowser createBrowser(FlexoProject project) {
+			return new OntologyBrowser();
+		}
 
-    }
+	}
 
-    protected class OntologyBrowser extends ProjectBrowser
-    {
+	protected class OntologyBrowser extends ProjectBrowser {
 
-        protected OntologyBrowser()
-        {
-            super((getOntologyLibrary()!=null?getOntologyLibrary().getProject():null), false);
-            init();
-        }
+		protected OntologyBrowser() {
+			super((getOntologyLibrary() != null ? getOntologyLibrary().getProject() : null), false);
+			init();
+		}
 
-        @Override
-		public void configure()
-        {
-    		setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.SHOW);
-    		setFilterStatus(BrowserElementType.PROJECT_ONTOLOGY, BrowserFilterStatus.HIDE, true);
-    		setFilterStatus(BrowserElementType.IMPORTED_ONTOLOGY, BrowserFilterStatus.HIDE, true);
-    		setFilterStatus(BrowserElementType.ONTOLOGY_CLASS, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
-    		setFilterStatus(BrowserElementType.ONTOLOGY_INDIVIDUAL, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
-    		setFilterStatus(BrowserElementType.ONTOLOGY_DATA_PROPERTY, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
-    		setFilterStatus(BrowserElementType.ONTOLOGY_OBJECT_PROPERTY, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
-    		setFilterStatus(BrowserElementType.ONTOLOGY_STATEMENT, BrowserFilterStatus.HIDE);
-        	setOEViewMode(OEViewMode.FullHierarchy);
-        }
+		@Override
+		public void configure() {
+			setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.SHOW);
+			setFilterStatus(BrowserElementType.PROJECT_ONTOLOGY, BrowserFilterStatus.HIDE, true);
+			setFilterStatus(BrowserElementType.IMPORTED_ONTOLOGY, BrowserFilterStatus.HIDE, true);
+			setFilterStatus(BrowserElementType.ONTOLOGY_CLASS, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
+			setFilterStatus(BrowserElementType.ONTOLOGY_INDIVIDUAL, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
+			setFilterStatus(BrowserElementType.ONTOLOGY_DATA_PROPERTY, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
+			setFilterStatus(BrowserElementType.ONTOLOGY_OBJECT_PROPERTY, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
+			setFilterStatus(BrowserElementType.ONTOLOGY_STATEMENT, BrowserFilterStatus.HIDE);
+			setOEViewMode(OEViewMode.FullHierarchy);
+		}
 
-        @Override
-		public FlexoModelObject getDefaultRootObject()
-        {
-            return getOntologyLibrary();
-        }
-    }
+		@Override
+		public FlexoModelObject getDefaultRootObject() {
+			return getOntologyLibrary();
+		}
+	}
 
-    public void setNullStringRepresentation(String aString)
-    {
-        STRING_REPRESENTATION_WHEN_NULL = aString;
-    }
+	public void setNullStringRepresentation(String aString) {
+		STRING_REPRESENTATION_WHEN_NULL = aString;
+	}
 
 }

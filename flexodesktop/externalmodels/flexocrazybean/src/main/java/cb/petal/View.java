@@ -24,140 +24,143 @@ import java.util.Iterator;
 
 /**
  * Super class for all view objects used in the diagrams. They all contain a tag.
- *
+ * 
  * @version $Id: View.java,v 1.3 2011/09/12 11:46:49 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public abstract class View extends PetalObject implements Named, Tagged {
-  private int tag = -1;
+	private int tag = -1;
 
-  protected View(PetalNode parent, String name, Collection params, int tag) {
-    super(parent, name, params);
-    setTag(tag);
-  }
+	protected View(PetalNode parent, String name, Collection params, int tag) {
+		super(parent, name, params);
+		setTag(tag);
+	}
 
-  protected View(String name) {
-    super(name);
-  }
-  
-  @Override
-public void setTag(int t) { tag = t; }
+	protected View(String name) {
+		super(name);
+	}
 
-  @Override
-public int  getTag()      { return tag; }
+	@Override
+	public void setTag(int t) {
+		tag = t;
+	}
 
-  @Override
-public String toString() { 
-    StringBuffer buf = new StringBuffer("(object " + getName());
+	@Override
+	public int getTag() {
+		return tag;
+	}
 
-    for(Iterator i = params.iterator(); i.hasNext(); )
-      buf.append(" \"" + i.next() + "\"");
+	@Override
+	public String toString() {
+		StringBuffer buf = new StringBuffer("(object " + getName());
 
-    if(tag > 0)
-      buf.append( " @" + tag);
+		for (Iterator i = params.iterator(); i.hasNext();)
+			buf.append(" \"" + i.next() + "\"");
 
-    buf.append("\n");
+		if (tag > 0)
+			buf.append(" @" + tag);
 
-    for(Iterator i = getNames().iterator(), j = getPropertyList().iterator(); i.hasNext(); ) {
-      buf.append(i.next() + "\t" + j.next());
-      
-      if(i.hasNext())
-        buf.append("\n");
-    }
+		buf.append("\n");
 
-    buf.append(")\n");
-    
-    return buf.toString();
-  }
+		for (Iterator i = getNames().iterator(), j = getPropertyList().iterator(); i.hasNext();) {
+			buf.append(i.next() + "\t" + j.next());
 
-  @Override
-public void setNameParameter(String o) {
-    params.set(0, o);
-  }
+			if (i.hasNext())
+				buf.append("\n");
+		}
 
-  @Override
-public String getNameParameter() {
-    return (String)params.get(0);
-  }
+		buf.append(")\n");
 
-  public Tag getClient() {
-    return (Tag)getProperty("client");
-  }
+		return buf.toString();
+	}
 
-  public void setClient(Tag o) {
-    defineProperty("client", o);
-  }
+	@Override
+	public void setNameParameter(String o) {
+		params.set(0, o);
+	}
 
-  public Tag getSupplier() {
-    return (Tag)getProperty("supplier");
-  }
+	@Override
+	public String getNameParameter() {
+		return (String) params.get(0);
+	}
 
-  public void setSupplier(Tag o) {
-    defineProperty("supplier", o);
-  }
+	public Tag getClient() {
+		return (Tag) getProperty("client");
+	}
 
-  public int getLineColor() {
-    return getPropertyAsInteger("line_color");
-  }
+	public void setClient(Tag o) {
+		defineProperty("client", o);
+	}
 
-  public void setLineColor(int o) {
-    defineProperty("line_color", o);
-  }
+	public Tag getSupplier() {
+		return (Tag) getProperty("supplier");
+	}
 
-  public int getLineStyle() {
-    return getPropertyAsInteger("line_style");
-  }
+	public void setSupplier(Tag o) {
+		defineProperty("supplier", o);
+	}
 
-  public void setLineStyle(int o) {
-    defineProperty("line_style", o);
-  }
+	public int getLineColor() {
+		return getPropertyAsInteger("line_color");
+	}
 
-  public String getIcon() {
-    return getPropertyAsString("icon");
-  }
+	public void setLineColor(int o) {
+		defineProperty("line_color", o);
+	}
 
-  public void setIcon(String o) {
-    defineProperty("icon", o);
-  }
+	public int getLineStyle() {
+		return getPropertyAsInteger("line_style");
+	}
 
-  public String getIconStyle() {
-    return getPropertyAsString("icon_style");
-  }
+	public void setLineStyle(int o) {
+		defineProperty("line_style", o);
+	}
 
-  public void setIconStyle(String o) {
-    defineProperty("icon_style", o);
-  }
+	public String getIcon() {
+		return getPropertyAsString("icon");
+	}
 
-  public int getFillColor() {
-    return getPropertyAsInteger("fill_color");
-  }
+	public void setIcon(String o) {
+		defineProperty("icon", o);
+	}
 
-  public void setFillColor(int o) {
-    defineProperty("fill_color", o);
-  }
+	public String getIconStyle() {
+		return getPropertyAsString("icon_style");
+	}
 
-  public int getWidth() {
-    return getPropertyAsInteger("width");
-  }
+	public void setIconStyle(String o) {
+		defineProperty("icon_style", o);
+	}
 
-  public void setWidth(int o) {
-    defineProperty("width", o);
-  }
+	public int getFillColor() {
+		return getPropertyAsInteger("fill_color");
+	}
 
-  public int getHeight() {
-    return getPropertyAsInteger("height");
-  }
+	public void setFillColor(int o) {
+		defineProperty("fill_color", o);
+	}
 
-  public void setHeight(int o) {
-    defineProperty("height", o);
-  }
+	public int getWidth() {
+		return getPropertyAsInteger("width");
+	}
 
-  public Location getLocation() {
-    return (Location)getProperty("location");
-  }
+	public void setWidth(int o) {
+		defineProperty("width", o);
+	}
 
-  public void setLocation(Location o) {
-    defineProperty("location", o);
-  }
+	public int getHeight() {
+		return getPropertyAsInteger("height");
+	}
+
+	public void setHeight(int o) {
+		defineProperty("height", o);
+	}
+
+	public Location getLocation() {
+		return (Location) getProperty("location");
+	}
+
+	public void setLocation(Location o) {
+		defineProperty("location", o);
+	}
 }
-

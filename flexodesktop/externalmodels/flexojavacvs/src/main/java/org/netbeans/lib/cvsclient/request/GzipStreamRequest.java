@@ -25,74 +25,78 @@ import org.netbeans.lib.cvsclient.connection.Connection;
 import org.netbeans.lib.cvsclient.connection.GzipModifier;
 
 /**
- * This class implements the Gzip-Stream request that is used to indicate that
- * all further communication with the server is to be gzipped.
- * @author  Robert Greig
+ * This class implements the Gzip-Stream request that is used to indicate that all further communication with the server is to be gzipped.
+ * 
+ * @author Robert Greig
  */
 public class GzipStreamRequest extends Request {
 
-    /**
-     * The level of gzipping to specify
-     */
-    private int level = 6;
+	/**
+	 * The level of gzipping to specify
+	 */
+	private int level = 6;
 
-    /**
-     * Creates new GzipStreamRequest with gzip level 6
-     */
-    public GzipStreamRequest() {
-    }
+	/**
+	 * Creates new GzipStreamRequest with gzip level 6
+	 */
+	public GzipStreamRequest() {
+	}
 
-    /**
-     * Creates new GzipStreamRequest
-     * @param level the level of zipping to use (between 1 and 9)
-     */
-    public GzipStreamRequest(int level) {
-        this.level = level;
-    }
+	/**
+	 * Creates new GzipStreamRequest
+	 * 
+	 * @param level
+	 *            the level of zipping to use (between 1 and 9)
+	 */
+	public GzipStreamRequest(int level) {
+		this.level = level;
+	}
 
-    /**
-     * Get the request String that will be passed to the server
-     * @return the request String
-     * @throws UnconfiguredRequestException if the request has not been
-     * properly configured
-     */
-    @Override
+	/**
+	 * Get the request String that will be passed to the server
+	 * 
+	 * @return the request String
+	 * @throws UnconfiguredRequestException
+	 *             if the request has not been properly configured
+	 */
+	@Override
 	public String getRequestString() throws UnconfiguredRequestException {
-        return "Gzip-stream " + level + "\n"; //NOI18N
-    }
+		return "Gzip-stream " + level + "\n"; // NOI18N
+	}
 
-    /**
-     * Is a response expected from the server?
-     * @return true if a response is expected, false if no response if
-     * expected
-     */
-    @Override
+	/**
+	 * Is a response expected from the server?
+	 * 
+	 * @return true if a response is expected, false if no response if expected
+	 */
+	@Override
 	public boolean isResponseExpected() {
-        return false;
-    }
+		return false;
+	}
 
-    /**
-     * Modify streams on the connection if necessary
-     */
-    @Override
+	/**
+	 * Modify streams on the connection if necessary
+	 */
+	@Override
 	public void modifyOutputStream(Connection connection) throws IOException {
-        connection.modifyOutputStream(new GzipModifier());
-    }
+		connection.modifyOutputStream(new GzipModifier());
+	}
 
-    /**
-     * Modify streams on the connection if necessary
-     */
-    @Override
+	/**
+	 * Modify streams on the connection if necessary
+	 */
+	@Override
 	public void modifyInputStream(Connection connection) throws IOException {
-        connection.modifyInputStream(new GzipModifier());
-    }
+		connection.modifyInputStream(new GzipModifier());
+	}
 
-    /**
-     * Does this request modify the input stream?
-     * @return true if it does, false otherwise
-     */
-    @Override
+	/**
+	 * Does this request modify the input stream?
+	 * 
+	 * @return true if it does, false otherwise
+	 */
+	@Override
 	public boolean modifiesInputStream() {
-        return true;
-    }
+		return true;
+	}
 }

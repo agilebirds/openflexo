@@ -23,8 +23,6 @@ import java.util.Vector;
 
 import org.openflexo.foundation.rm.FlexoProject;
 
-
-
 public enum Format {
 	DOCX {
 		@Override
@@ -89,20 +87,23 @@ public enum Format {
 
 	private Format() {
 	}
+
 	public Vector<TargetType> getAvailableTargets(FlexoProject project) {
 		Vector<TargetType> v = new Vector<TargetType>();
-		for (DocType type: project.getDocTypes()){
-			if (type.getAvailableFormats().indexOf(this)>-1) {
+		for (DocType type : project.getDocTypes()) {
+			if (type.getAvailableFormats().indexOf(this) > -1) {
 				v.add(type);
 			}
 		}
-		for (CodeType type: CodeType.availableValues()){
-			if (type.getAvailableFormats().indexOf(this)>-1) {
+		for (CodeType type : CodeType.availableValues()) {
+			if (type.getAvailableFormats().indexOf(this) > -1) {
 				v.add(type);
 			}
 		}
 		return v;
 	}
+
 	public abstract String getPostBuildFileExtension();
+
 	public abstract String getPostBuildKey();
 }

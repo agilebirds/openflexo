@@ -20,21 +20,18 @@
 package org.openflexo.foundation.rm;
 
 /**
- * This exception is thrown whenever a generated resource required to be
- * regenerated before saving but failed to generate the data properly and so we
- * do not write an empty file.
+ * This exception is thrown whenever a generated resource required to be regenerated before saving but failed to generate the data properly
+ * and so we do not write an empty file.
  * 
  * @author gpolet
  */
-public class SaveGeneratedResourceException extends SaveResourceException
-{
+public class SaveGeneratedResourceException extends SaveResourceException {
 
-    /**
-     * @param fileResource
-     */
-    public SaveGeneratedResourceException(FlexoFileResource fileResource)
-    {
-        super(fileResource);
-    }
+	/**
+	 * @param fileResource
+	 */
+	public SaveGeneratedResourceException(FlexoFileResource fileResource) {
+		super(fileResource);
+	}
 
 }

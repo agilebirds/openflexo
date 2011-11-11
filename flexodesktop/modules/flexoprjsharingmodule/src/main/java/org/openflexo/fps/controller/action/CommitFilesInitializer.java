@@ -29,80 +29,66 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.param.TextAreaParameter;
 import org.openflexo.fps.action.CommitFiles;
 
-
 public class CommitFilesInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CommitFilesInitializer(FPSControllerActionInitializer actionInitializer)
-	{
-		super(CommitFiles.actionType,actionInitializer);
+	CommitFilesInitializer(FPSControllerActionInitializer actionInitializer) {
+		super(CommitFiles.actionType, actionInitializer);
 	}
-	
-	@Override
-	protected FPSControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (FPSControllerActionInitializer)super.getControllerActionInitializer();
-	}
-	
-	@Override
-	protected FlexoActionInitializer<CommitFiles> getDefaultInitializer() 
-	{
-		return new FlexoActionInitializer<CommitFiles>() {
-            @Override
-			public boolean run(ActionEvent e, CommitFiles action)
-            {
-            	if (action.getCommitMessage() == null) {
-            		TextAreaParameter commitMessage 
-            		= new TextAreaParameter("commitMessage", "commit_message",action.getCommitMessage(),40,15);
 
-            		AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(
-            				getProject(), 
-            				null, 
-            				action.getLocalizedName(), FlexoLocalization.localizedForKey("please_supply_commit_message"), commitMessage);
-            		if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-            			action.setCommitMessage(commitMessage.getValue());
-            			return true;
-            		}
-            		else {
-            			return false;
-            		}
-            	}
-            	else {
-            		return true;
-            	}
-            }
+	@Override
+	protected FPSControllerActionInitializer getControllerActionInitializer() {
+		return (FPSControllerActionInitializer) super.getControllerActionInitializer();
+	}
+
+	@Override
+	protected FlexoActionInitializer<CommitFiles> getDefaultInitializer() {
+		return new FlexoActionInitializer<CommitFiles>() {
+			@Override
+			public boolean run(ActionEvent e, CommitFiles action) {
+				if (action.getCommitMessage() == null) {
+					TextAreaParameter commitMessage = new TextAreaParameter("commitMessage", "commit_message", action.getCommitMessage(),
+							40, 15);
+
+					AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
+							action.getLocalizedName(), FlexoLocalization.localizedForKey("please_supply_commit_message"), commitMessage);
+					if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
+						action.setCommitMessage(commitMessage.getValue());
+						return true;
+					} else {
+						return false;
+					}
+				} else {
+					return true;
+				}
+			}
 		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<CommitFiles> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<CommitFiles> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CommitFiles>() {
-            @Override
-			public boolean run(ActionEvent e, CommitFiles action)
-            {
-      			return true;            	
-          }
-        };
+			@Override
+			public boolean run(ActionEvent e, CommitFiles action) {
+				return true;
+			}
+		};
 	}
 
- 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	@Override
+	protected Icon getEnabledIcon() {
 		return FPSIconLibrary.FPS_COMMIT_ICON;
 	}
- 
+
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return FPSIconLibrary.FPS_COMMIT_DISABLED_ICON;
 	}
 

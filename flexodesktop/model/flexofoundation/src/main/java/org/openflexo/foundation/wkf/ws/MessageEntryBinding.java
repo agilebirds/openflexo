@@ -34,7 +34,6 @@ import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.xmlcode.XMLMapping;
 
-
 /**
  * Please comment this class
  * 

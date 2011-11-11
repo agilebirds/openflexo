@@ -24,14 +24,12 @@ import java.lang.reflect.Type;
 public class FIBLabelColumn extends FIBTableColumn {
 
 	@Override
-	public Type getDefaultDataClass()
-	{
+	public Type getDefaultDataClass() {
 		return String.class;
 	}
 
 	@Override
-	public ColumnType getColumnType()
-	{
+	public ColumnType getColumnType() {
 		return ColumnType.Label;
 	}
 

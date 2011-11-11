@@ -52,345 +52,321 @@ import org.openflexo.foundation.ie.dm.table.WidgetRemovedFromTable;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 
+public class IEBlocWidget extends AbstractButtonedWidget implements IETopComponent, ExtensibleWidget {
 
-public class IEBlocWidget extends AbstractButtonedWidget implements IETopComponent, ExtensibleWidget
-{
-
-    /**
+	/**
      * 
      */
-    public static final String BLOC_WIDGET = "bloc_widget";
+	public static final String BLOC_WIDGET = "bloc_widget";
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(IEBlocWidget.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Variables
-    // ==================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Variables
+	// ==================================
+	// ==========================================================================
 
-    public static final String BLOC_TITLE_ATTRIBUTE_NAME = "title";
+	public static final String BLOC_TITLE_ATTRIBUTE_NAME = "title";
 
-    public static final String IE_BLOC_WIDGET_TAG_NAME = "IEBloc";
+	public static final String IE_BLOC_WIDGET_TAG_NAME = "IEBloc";
 
-    private String _title;
+	private String _title;
 
-    private int _colSpan = 1;
+	private int _colSpan = 1;
 
-    private int _rowSpan = 1;
+	private int _rowSpan = 1;
 
-    private String _value;
+	private String _value;
 
-    private boolean _hideTable = false;
+	private boolean _hideTable = false;
 
-    private InnerBlocWidgetInterface _innerBloc;
+	private InnerBlocWidgetInterface _innerBloc;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public IEBlocWidget(FlexoComponentBuilder builder)
-    {
-        this(builder.woComponent, null, builder.getProject());
-        initializeDeserialization(builder);
-    }
+	public IEBlocWidget(FlexoComponentBuilder builder) {
+		this(builder.woComponent, null, builder.getProject());
+		initializeDeserialization(builder);
+	}
 
-    public IEBlocWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj)
-    {
-        super(woComponent, parent, prj);
-        _colSpan = 1;
-        _rowSpan = 1;
-    }
+	public IEBlocWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj) {
+		super(woComponent, parent, prj);
+		_colSpan = 1;
+		_rowSpan = 1;
+	}
 
+	public void setColSpan(int colSpan) {
+		_colSpan = colSpan;
+		setChanged();
+		notifyObservers(new IEDataModification("description", null, new Integer(colSpan)));
+	}
 
-    public void setColSpan(int colSpan)
-    {
-        _colSpan = colSpan;
-        setChanged();
-        notifyObservers(new IEDataModification("description", null, new Integer(colSpan)));
-    }
+	public void setRowSpan(int rowSpan) {
+		_rowSpan = rowSpan;
+		setChanged();
+		notifyObservers(new IEDataModification("rowSpan", null, new Integer(rowSpan)));
+	}
 
-    public void setRowSpan(int rowSpan)
-    {
-        _rowSpan = rowSpan;
-        setChanged();
-        notifyObservers(new IEDataModification("rowSpan", null, new Integer(rowSpan)));
-    }
+	public int getColSpan() {
+		return _colSpan;
+	}
 
-    public int getColSpan()
-    {
-        return _colSpan;
-    }
+	public int getRowSpan() {
+		return _rowSpan;
+	}
 
-    public int getRowSpan()
-    {
-        return _rowSpan;
-    }
+	public boolean getHideTable() {
+		return _hideTable;
+	}
 
-    public boolean getHideTable()
-    {
-        return _hideTable;
-    }
+	public void setHideTable(boolean table) {
+		_hideTable = table;
+		setChanged();
+		notifyObservers(new IEDataModification("hideTable", null, new Boolean(table)));
+	}
 
-    public void setHideTable(boolean table)
-    {
-        _hideTable = table;
-        setChanged();
-        notifyObservers(new IEDataModification("hideTable", null, new Boolean(table)));
-    }
+	/**
+	 * @deprecated
+	 * @return
+	 */
+	@Deprecated
+	public String getValue() {
+		return _value;
+	}
 
-    /**
-     * @deprecated
-     * @return
-     */
-    @Deprecated
-	public String getValue()
-    {
-        return _value;
-    }
+	/**
+	 * @deprecated
+	 * @param _value
+	 */
+	@Deprecated
+	public void setValue(String _value) {
+		this._value = _value;
+		setChanged();
+		notifyObservers(new IEDataModification("value", null, _value));
+	}
 
-    /**
-     * @deprecated
-     * @param _value
-     */
-    @Deprecated
-	public void setValue(String _value)
-    {
-        this._value = _value;
-        setChanged();
-        notifyObservers(new IEDataModification("value", null, _value));
-    }
+	// ==========================================================================
+	// ============================= Instance Methods
+	// ===========================
+	// ==========================================================================
 
-    // ==========================================================================
-    // ============================= Instance Methods
-    // ===========================
-    // ==========================================================================
+	@Override
+	public void performOnDeleteOperations() {
+		if (_innerBloc != null) {
+			_innerBloc.delete();
+		}
+		super.performOnDeleteOperations();
+	}
 
-    @Override
-    public void performOnDeleteOperations() {
-    	if (_innerBloc != null) {
-            _innerBloc.delete();
-        }
-    	super.performOnDeleteOperations();
-    }
-    
-    public void removeContent(InnerBlocWidgetInterface table)
-    {
-        if (table != null && table.equals(_innerBloc)) {
-            DataModification dm = new InnerBlocRemoved(_innerBloc);
-            _innerBloc = null;
-            setChanged();
-            notifyObservers(dm);
-        }
-    }
+	public void removeContent(InnerBlocWidgetInterface table) {
+		if (table != null && table.equals(_innerBloc)) {
+			DataModification dm = new InnerBlocRemoved(_innerBloc);
+			_innerBloc = null;
+			setChanged();
+			notifyObservers(dm);
+		}
+	}
 
-    public void insertContent(InnerBlocWidgetInterface table)
-    {
-        if (table != null) {
-            setContent(table);
-            setChanged();
-            notifyObservers(new InnerBlocInserted(table));
-        }
-    }
+	public void insertContent(InnerBlocWidgetInterface table) {
+		if (table != null) {
+			setContent(table);
+			setChanged();
+			notifyObservers(new InnerBlocInserted(table));
+		}
+	}
 
-    public void replaceWidgetByReusable(IEWidget oldWidget, InnerBlocReusableWidget newWidget)
-    {
-        removeContent((InnerBlocWidgetInterface) oldWidget);
-        insertContent(newWidget);
-    }
+	public void replaceWidgetByReusable(IEWidget oldWidget, InnerBlocReusableWidget newWidget) {
+		removeContent((InnerBlocWidgetInterface) oldWidget);
+		insertContent(newWidget);
+	}
 
-    // ==========================================================================
-    // ============================= Accessors
-    // ==================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Accessors
+	// ==================================
+	// ==========================================================================
 
-    @Override
-    public boolean isTopComponent() {
-    	return true;
-    }
-    
-    public void setTitle(String title)
-    {
-        _title = title;
-        setChanged();
-        notifyObservers(new DataModification(DataModification.ATTRIBUTE, BLOC_TITLE_ATTRIBUTE_NAME, null, title));
-    }
+	@Override
+	public boolean isTopComponent() {
+		return true;
+	}
 
-    @Override
-	public String getTitle()
-    {
-        return _title;
-    }
+	public void setTitle(String title) {
+		_title = title;
+		setChanged();
+		notifyObservers(new DataModification(DataModification.ATTRIBUTE, BLOC_TITLE_ATTRIBUTE_NAME, null, title));
+	}
 
-    public InnerBlocWidgetInterface getContent()
-    {
-        return _innerBloc;
-    }
+	@Override
+	public String getTitle() {
+		return _title;
+	}
 
-    public void setContent(InnerBlocWidgetInterface content)
-    {
-        _innerBloc = content;
-        _innerBloc.setParent(this);
-        setChanged();
-    }
+	public InnerBlocWidgetInterface getContent() {
+		return _innerBloc;
+	}
 
-    @Override
-	public String getDefaultInspectorName()
-    {
-        return "Bloc.inspector";
-    }
+	public void setContent(InnerBlocWidgetInterface content) {
+		_innerBloc = content;
+		_innerBloc.setParent(this);
+		setChanged();
+	}
 
-    /**
-     * Return a Vector of embedded IEObjects at this level. NOTE that this is
-     * NOT a recursive method
-     * 
-     * @return a Vector of IEObject instances
-     */
-    @Override
-	public Vector<IObject> getEmbeddedIEObjects()
-    {
-        Vector answer = new Vector();
-        if (_innerBloc != null)
-            answer.add(_innerBloc);
-        answer.add(getButtonList());
-        return answer;
-    }
+	@Override
+	public String getDefaultInspectorName() {
+		return "Bloc.inspector";
+	}
 
-    public HTMLListDescriptor getContainedDescriptor() {
-    	if (getContent()!=null)
-    		return getContent().getHTMLListDescriptor();
-    	return null;
-    }
-    
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return "Bloc" + getTitle();
-    }
+	/**
+	 * Return a Vector of embedded IEObjects at this level. NOTE that this is NOT a recursive method
+	 * 
+	 * @return a Vector of IEObject instances
+	 */
+	@Override
+	public Vector<IObject> getEmbeddedIEObjects() {
+		Vector answer = new Vector();
+		if (_innerBloc != null)
+			answer.add(_innerBloc);
+		answer.add(getButtonList());
+		return answer;
+	}
 
-    public void notifyListActionButtonStateChange(IEDataModification modif)
-    {
-        setChanged();
-        notifyObservers(modif);
-    }
+	public HTMLListDescriptor getContainedDescriptor() {
+		if (getContent() != null)
+			return getContent().getHTMLListDescriptor();
+		return null;
+	}
 
-    /**
-     * Overrides getSpecificActionListForThatClass
-     * 
-     * @see org.openflexo.foundation.ie.widget.IEWidget#getSpecificActionListForThatClass()
-     */
-    @Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass()
-    {
-        Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
-        v.add(TopComponentUp.actionType);
-        v.add(TopComponentDown.actionType);
-        v.add(DropIEElement.actionType);
-        return v;
-    }
+	@Override
+	public String getFullyQualifiedName() {
+		return "Bloc" + getTitle();
+	}
 
-    public void handleContentResize()
-    {
-        setChanged();
-        notifyObservers(new ContentSizeChanged());
-    }
+	public void notifyListActionButtonStateChange(IEDataModification modif) {
+		setChanged();
+		notifyObservers(modif);
+	}
 
-    /**
-     * Overrides update
-     * 
-     * @see org.openflexo.foundation.ie.IEObject#update(org.openflexo.foundation.FlexoObservable,
-     *      org.openflexo.foundation.DataModification)
-     */
-    @Override
-	public void update(FlexoObservable observable, DataModification obj)
-    {
-        if (observable == _innerBloc
-                && (obj instanceof WidgetAddedToTable || obj instanceof WidgetRemovedFromTable || obj instanceof TableSizeChanged
-                        || obj instanceof AddEmptyRow || obj instanceof RemoveEmptyRow)) {
-            setChanged();
-            notifyObservers(new ContentSizeChanged());
-        } else
-            super.update(observable, obj);
-    }
+	/**
+	 * Overrides getSpecificActionListForThatClass
+	 * 
+	 * @see org.openflexo.foundation.ie.widget.IEWidget#getSpecificActionListForThatClass()
+	 */
+	@Override
+	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
+		Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
+		v.add(TopComponentUp.actionType);
+		v.add(TopComponentDown.actionType);
+		v.add(DropIEElement.actionType);
+		return v;
+	}
 
-    /**
-     * Overrides notifyDisplayNeedsRefresh
-     * @see org.openflexo.foundation.ie.widget.IEWidget#notifyDisplayNeedsRefresh()
-     */
-    @Override
-    public void notifyDisplayNeedsRefresh()
-    {
-        super.notifyDisplayNeedsRefresh();
-        if (_innerBloc !=null)
-            _innerBloc.notifyDisplayNeedsRefresh();
-    }
-    
-    /**
-     * Overrides getClassNameKey
-     * 
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return BLOC_WIDGET;
-    }
+	public void handleContentResize() {
+		setChanged();
+		notifyObservers(new ContentSizeChanged());
+	}
 
-    public Vector<IETextFieldWidget> getAllDateTextfields()
-    {
-        Vector<IETextFieldWidget> v = new Vector<IETextFieldWidget>();
-        if (_innerBloc != null)
-            v.addAll(_innerBloc.getAllDateTextfields());
-        return v;
-    }
-    
-    @Override
-	public Vector<IESequenceTab> getAllTabContainers(){
-    	Vector<IESequenceTab> reply = new Vector<IESequenceTab>();
-    	if(_innerBloc==null)return reply;
-    	if(_innerBloc instanceof IESequenceTab)reply.add((IESequenceTab)_innerBloc);
-    	if(_innerBloc instanceof IEHTMLTableWidget)reply.addAll(((IEHTMLTableWidget)_innerBloc).getAllTabContainers());
-    	return reply;
-    }
+	/**
+	 * Overrides update
+	 * 
+	 * @see org.openflexo.foundation.ie.IEObject#update(org.openflexo.foundation.FlexoObservable, org.openflexo.foundation.DataModification)
+	 */
+	@Override
+	public void update(FlexoObservable observable, DataModification obj) {
+		if (observable == _innerBloc
+				&& (obj instanceof WidgetAddedToTable || obj instanceof WidgetRemovedFromTable || obj instanceof TableSizeChanged
+						|| obj instanceof AddEmptyRow || obj instanceof RemoveEmptyRow)) {
+			setChanged();
+			notifyObservers(new ContentSizeChanged());
+		} else
+			super.update(observable, obj);
+	}
 
-    @Override
+	/**
+	 * Overrides notifyDisplayNeedsRefresh
+	 * 
+	 * @see org.openflexo.foundation.ie.widget.IEWidget#notifyDisplayNeedsRefresh()
+	 */
+	@Override
+	public void notifyDisplayNeedsRefresh() {
+		super.notifyDisplayNeedsRefresh();
+		if (_innerBloc != null)
+			_innerBloc.notifyDisplayNeedsRefresh();
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return BLOC_WIDGET;
+	}
+
+	public Vector<IETextFieldWidget> getAllDateTextfields() {
+		Vector<IETextFieldWidget> v = new Vector<IETextFieldWidget>();
+		if (_innerBloc != null)
+			v.addAll(_innerBloc.getAllDateTextfields());
+		return v;
+	}
+
+	@Override
+	public Vector<IESequenceTab> getAllTabContainers() {
+		Vector<IESequenceTab> reply = new Vector<IESequenceTab>();
+		if (_innerBloc == null)
+			return reply;
+		if (_innerBloc instanceof IESequenceTab)
+			reply.add((IESequenceTab) _innerBloc);
+		if (_innerBloc instanceof IEHTMLTableWidget)
+			reply.addAll(((IEHTMLTableWidget) _innerBloc).getAllTabContainers());
+		return reply;
+	}
+
+	@Override
 	public Vector<IEHyperlinkWidget> getAllButtonInterface() {
 		Vector<IEHyperlinkWidget> v = new Vector<IEHyperlinkWidget>();
-		if (_innerBloc!=null)
+		if (_innerBloc != null)
 			v.addAll(_innerBloc.getAllButtonInterface());
-		if(getButtonList()!=null)
+		if (getButtonList() != null)
 			v.addAll(getButtonList().getAllButtonInterface());
 		return v;
 	}
-    
-    @Override
-    public void setWOComponent(IEWOComponent woComponent) {
-    	if(noWOChange(woComponent))return;
-    	super.setWOComponent(woComponent);
-    	if (getContent()!=null)
-    		((IEWidget)getContent()).setWOComponent(woComponent);// This call is very important because it will update the WOComponent components cache
-    	if(getButtonList()!=null)getButtonList().setWOComponent(woComponent);
-    }
 
-    @Override
+	@Override
+	public void setWOComponent(IEWOComponent woComponent) {
+		if (noWOChange(woComponent))
+			return;
+		super.setWOComponent(woComponent);
+		if (getContent() != null)
+			((IEWidget) getContent()).setWOComponent(woComponent);// This call is very important because it will update the WOComponent
+																	// components cache
+		if (getButtonList() != null)
+			getButtonList().setWOComponent(woComponent);
+	}
+
+	@Override
 	public boolean areComponentInstancesValid() {
-    	if (getContent()!=null)
-			return ((IEWidget)getContent()).areComponentInstancesValid();
-    	else
-    		return true;
-}
+		if (getContent() != null)
+			return ((IEWidget) getContent()).areComponentInstancesValid();
+		else
+			return true;
+	}
 
 	@Override
 	public void removeInvalidComponentInstances() {
 		super.removeInvalidComponentInstances();
-		if (getContent()!=null)
-			((IEWidget)getContent()).removeInvalidComponentInstances();
+		if (getContent() != null)
+			((IEWidget) getContent()).removeInvalidComponentInstances();
 	}
-	
+
 	@Override
-	protected Hashtable<String,String> getLocalizableProperties(Hashtable<String,String> props){
-    	if(StringUtils.isNotEmpty(getTitle()))props.put("title",getTitle());
-    	return super.getLocalizableProperties(props);
-    }
+	protected Hashtable<String, String> getLocalizableProperties(Hashtable<String, String> props) {
+		if (StringUtils.isNotEmpty(getTitle()))
+			props.put("title", getTitle());
+		return super.getLocalizableProperties(props);
+	}
 }

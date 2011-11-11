@@ -27,7 +27,6 @@ import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.inspector.InspectableObject;
 
-
 /**
  * 
  * Used to store port's message definition

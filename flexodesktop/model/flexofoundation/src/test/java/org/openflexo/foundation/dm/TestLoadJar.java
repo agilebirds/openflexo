@@ -23,8 +23,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.dm.action.CreateDMRepository;
 import org.openflexo.foundation.dm.action.ImportJARFileRepository;
@@ -36,8 +34,7 @@ import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ToolBox;
 
-public class TestLoadJar extends FlexoDMTestCase
-{
+public class TestLoadJar extends FlexoDMTestCase {
 
 	protected static final Logger logger = Logger.getLogger(TestCreateComponent.class.getPackage().getName());
 	private static FlexoEditor _editor;
@@ -47,50 +44,47 @@ public class TestLoadJar extends FlexoDMTestCase
 	private static final String TEST_LOADJAR = "TestLoadJar";
 	private static final String TEST_JAR_REPOSITORY_NAME = "TestJarRepositoryName";
 
-	public TestLoadJar()
-	{
+	public TestLoadJar() {
 		super("TestLoadJar");
 	}
 
-    /**
-     * Overrides setUp
-     *
-     * @see junit.framework.TestCase#setUp()
-     */
-    @Override
-    protected void setUp() throws Exception
-    {
-        super.setUp();
-    }
+	/**
+	 * Overrides setUp
+	 * 
+	 * @see junit.framework.TestCase#setUp()
+	 */
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+	}
 
-    public void test0CreateProject()
-	{
-        ToolBox.setPlatform();
-        FlexoLoggingManager.forceInitialize();
+	public void test0CreateProject() {
+		ToolBox.setPlatform();
+		FlexoLoggingManager.forceInitialize();
 		try {
 			File tempFile = File.createTempFile(TEST_LOADJAR, "");
-			_projectDirectory = new File (tempFile.getParentFile(),tempFile.getName()+".prj");
+			_projectDirectory = new File(tempFile.getParentFile(), tempFile.getName() + ".prj");
 			tempFile.delete();
 		} catch (IOException e) {
 			fail();
 		}
-		logger.info("Project directory: "+_projectDirectory.getAbsolutePath());
-		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length()-4);
-		logger.info("Project identifier: "+_projectIdentifier);
-		_editor = FlexoResourceManager.initializeNewProject(_projectDirectory,EDITOR_FACTORY,null);
+		logger.info("Project directory: " + _projectDirectory.getAbsolutePath());
+		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length() - 4);
+		logger.info("Project identifier: " + _projectIdentifier);
+		_editor = FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY, null);
 		_project = _editor.getProject();
 		logger.info("Project has been SUCCESSFULLY created");
 		assertNotNull(_project.getDataModel().getEntityNamed("be.denali.core.woapp.WDLComponent"));
 	}
 
-    /**
+	/**
 	 * Creates a new component folder in the component library
 	 */
-	public void test1CreateJarRepository()
-	{
+	public void test1CreateJarRepository() {
 		File jarFile = getResource("dummy.jar");
 		assertNotNull(jarFile);
-		ImportJARFileRepository importJarFileRepository = ImportJARFileRepository.actionType.makeNewAction(_project.getDataModel(), null, _editor);
+		ImportJARFileRepository importJarFileRepository = ImportJARFileRepository.actionType.makeNewAction(_project.getDataModel(), null,
+				_editor);
 		importJarFileRepository.setNewRepositoryName(TEST_JAR_REPOSITORY_NAME);
 		importJarFileRepository.setJarFile(jarFile);
 		importJarFileRepository.setRepositoryType(CreateDMRepository.EXTERNAL_REPOSITORY);
@@ -106,10 +100,9 @@ public class TestLoadJar extends FlexoDMTestCase
 
 	/**
 	 * Save the project
-	 *
+	 * 
 	 */
-	private void saveProject()
-	{
+	private void saveProject() {
 		try {
 			_project.save();
 		} catch (SaveResourceException e) {

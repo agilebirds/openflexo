@@ -26,36 +26,33 @@ import org.openflexo.generator.ProjectGenerator;
 import org.openflexo.generator.utils.JavaClassGenerator;
 import org.openflexo.logging.FlexoLogger;
 
-public class BusinessDataStorageGenerator extends JavaClassGenerator
-{
+public class BusinessDataStorageGenerator extends JavaClassGenerator {
 
-    private static final String TEMPLATE_NAME = "BusinessDataStorage.java.vm";
+	private static final String TEMPLATE_NAME = "BusinessDataStorage.java.vm";
 
 	private static final Logger logger = FlexoLogger.getLogger(BusinessDataStorageGenerator.class.getPackage().getName());
-	
-    public BusinessDataStorageGenerator(ProjectGenerator projectGenerator, String packageName)
-    {
-        super(projectGenerator, "BusinessDataStorage", packageName);
-    }
 
-    @Override
-	public Logger getGeneratorLogger()
-	{
+	public BusinessDataStorageGenerator(ProjectGenerator projectGenerator, String packageName) {
+		super(projectGenerator, "BusinessDataStorage", packageName);
+	}
+
+	@Override
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
-    /**
-     * Overrides rebuildDependanciesForResource
-     * @see org.openflexo.generator.utils.JavaClassGenerator#rebuildDependanciesForResource(JavaFileResource)
-     */
-    @Override
-    public void rebuildDependanciesForResource(JavaFileResource resource)
-    {
-        
-    }
-    
-    @Override
-    public String getTemplateName() {
-    	return TEMPLATE_NAME;
-    }
+	/**
+	 * Overrides rebuildDependanciesForResource
+	 * 
+	 * @see org.openflexo.generator.utils.JavaClassGenerator#rebuildDependanciesForResource(JavaFileResource)
+	 */
+	@Override
+	public void rebuildDependanciesForResource(JavaFileResource resource) {
+
+	}
+
+	@Override
+	public String getTemplateName() {
+		return TEMPLATE_NAME;
+	}
 }

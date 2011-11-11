@@ -21,24 +21,20 @@ package org.openflexo.foundation.ws.dm;
 
 import org.openflexo.foundation.DataModification;
 
-public class WSDataModification extends DataModification
-{
+public class WSDataModification extends DataModification {
 
-    /**
-     * @param modificationType
-     * @param propertyName
-     * @param oldValue
-     * @param newValue
-     */
-    public WSDataModification(int modificationType, String propertyName, Object oldValue,
-            Object newValue)
-    {
-        super(modificationType, propertyName, oldValue, newValue);
-        // TODO Auto-generated constructor stub
-    }
-    
-    
-    public WSDataModification(Object oldValue, Object newValue){
-    		super(DataModification.WS_DM, oldValue, newValue);
-    }
+	/**
+	 * @param modificationType
+	 * @param propertyName
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public WSDataModification(int modificationType, String propertyName, Object oldValue, Object newValue) {
+		super(modificationType, propertyName, oldValue, newValue);
+		// TODO Auto-generated constructor stub
+	}
+
+	public WSDataModification(Object oldValue, Object newValue) {
+		super(DataModification.WS_DM, oldValue, newValue);
+	}
 }

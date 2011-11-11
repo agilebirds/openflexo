@@ -22,19 +22,18 @@ package org.openflexo.view.palette;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.SelectableView;
 
-
 public interface PaletteElement {
 
-    public FlexoModelObject getObject();
-    
-    public SelectableView getView();
-    
-    public boolean isEdited();
-    
-    public void edit();
-    
-    public void closeEdition();
-    
-    public void save();
-    
+	public FlexoModelObject getObject();
+
+	public SelectableView getView();
+
+	public boolean isEdited();
+
+	public void edit();
+
+	public void closeEdition();
+
+	public void save();
+
 }

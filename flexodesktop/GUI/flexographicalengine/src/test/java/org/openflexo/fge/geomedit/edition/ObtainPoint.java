@@ -40,15 +40,12 @@ import org.openflexo.fge.graphics.FGEDrawingGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.xmlcode.StringEncoder;
 
-
-public class ObtainPoint extends EditionInput<FGEPoint> 
-{
+public class ObtainPoint extends EditionInput<FGEPoint> {
 	public static int preferredMethodIndex = 0;
 
 	private boolean endOnRightClick = false;
-	
-	public ObtainPoint(String anInputLabel, GeomEditController controller) 
-	{
+
+	public ObtainPoint(String anInputLabel, GeomEditController controller) {
 		super(anInputLabel, controller);
 
 		availableMethods.add(new CursorSelection());
@@ -57,35 +54,32 @@ public class ObtainPoint extends EditionInput<FGEPoint>
 		availableMethods.add(new KeyboardSelection());
 	}
 
-	public ObtainPoint(String anInputLabel, GeomEditController controller, boolean appendEndSelection) 
-	{
-		this(anInputLabel,controller);
-		if (appendEndSelection) availableMethods.add(new EndEditionSelection());
+	public ObtainPoint(String anInputLabel, GeomEditController controller, boolean appendEndSelection) {
+		this(anInputLabel, controller);
+		if (appendEndSelection)
+			availableMethods.add(new EndEditionSelection());
 		endOnRightClick = appendEndSelection;
 	}
-	
+
 	@Override
-	protected int getPreferredMethodIndex()
-	{
+	protected int getPreferredMethodIndex() {
 		return preferredMethodIndex;
 	}
 
 	@Override
-	public void setActiveMethod(EditionInputMethod aMethod)
-	{
+	public void setActiveMethod(EditionInputMethod aMethod) {
 		super.setActiveMethod(aMethod);
 		preferredMethodIndex = availableMethods.indexOf(aMethod);
 	}
 
-	public class CursorSelection extends EditionInputMethod<FGEPoint,ObtainPoint> {
+	public class CursorSelection extends EditionInputMethod<FGEPoint, ObtainPoint> {
 
 		public CursorSelection() {
 			super("From cursor", ObtainPoint.this);
-		}		
+		}
 
 		@Override
-		public void mouseClicked(MouseEvent e)
-		{
+		public void mouseClicked(MouseEvent e) {
 			setConstruction(new ExplicitPointConstruction(getPointLocation(e)));
 			done();
 			if (endOnRightClick && e.getButton() == MouseEvent.BUTTON3) {
@@ -94,46 +88,41 @@ public class ObtainPoint extends EditionInput<FGEPoint>
 		}
 
 		@Override
-		public InputComponent getInputComponent()
-		{
+		public InputComponent getInputComponent() {
 			return new InputComponentButton(CursorSelection.this);
 		}
 
 	}
 
-	public class ControlPointSelection extends EditionInputMethod<FGEPoint,ObtainPoint> {
+	public class ControlPointSelection extends EditionInputMethod<FGEPoint, ObtainPoint> {
 
 		private ControlPoint focusedControlPoint;
 		private GeometricGraphicalRepresentation focusedObject;
 
 		public ControlPointSelection() {
 			super("As control point", ObtainPoint.this);
-		}		
+		}
 
 		@Override
-		public void mouseClicked(MouseEvent e)
-		{
+		public void mouseClicked(MouseEvent e) {
 			if (focusedControlPoint != null) {
-				if (focusedObject != null) focusedObject.setIsFocused(false);
+				if (focusedObject != null)
+					focusedObject.setIsFocused(false);
 				if (focusedControlPoint instanceof DraggableControlPoint) {
-					setConstruction(new PointReference(((DraggableControlPoint)focusedControlPoint).getExplicitPointConstruction()));
+					setConstruction(new PointReference(((DraggableControlPoint) focusedControlPoint).getExplicitPointConstruction()));
 					done();
-				}
-				else if (focusedControlPoint instanceof ComputedControlPoint){
-					setConstruction(new ControlPointReference(
-							((ComputedControlPoint)focusedControlPoint).getGraphicalRepresentation(),
-							((ComputedControlPoint)focusedControlPoint).getName()));
+				} else if (focusedControlPoint instanceof ComputedControlPoint) {
+					setConstruction(new ControlPointReference(((ComputedControlPoint) focusedControlPoint).getGraphicalRepresentation(),
+							((ComputedControlPoint) focusedControlPoint).getName()));
 					done();
-				}
-				else {
-					System.err.println("Don't know what to do with a "+focusedControlPoint);
+				} else {
+					System.err.println("Don't know what to do with a " + focusedControlPoint);
 				}
 			}
 		}
 
 		@Override
-		public void mouseMoved(MouseEvent e)
-		{
+		public void mouseMoved(MouseEvent e) {
 			GraphicalRepresentation focused = getFocusRetriever().getFocusedObject(e);
 
 			if (focusedObject != null && focusedObject != focused) {
@@ -141,106 +130,91 @@ public class ObtainPoint extends EditionInput<FGEPoint>
 			}
 
 			if (focused instanceof GeometricGraphicalRepresentation) {
-				focusedObject = (GeometricGraphicalRepresentation)focused;
+				focusedObject = (GeometricGraphicalRepresentation) focused;
 				focusedObject.setIsFocused(true);
 			}
 
 			ControlArea<?> controlArea = (focused != null ? getFocusRetriever().getFocusedControlAreaForDrawable(focused, e) : null);
 			if (controlArea instanceof ControlPoint)
-				focusedControlPoint = (ControlPoint)controlArea;
-			
-			if (!(focusedControlPoint instanceof DraggableControlPoint 
-					|| focusedControlPoint instanceof ComputedControlPoint))
+				focusedControlPoint = (ControlPoint) controlArea;
+
+			if (!(focusedControlPoint instanceof DraggableControlPoint || focusedControlPoint instanceof ComputedControlPoint))
 				focusedControlPoint = null;
 		}
 
 		@Override
-		public void paint(FGEDrawingGraphics graphics)
-		{
+		public void paint(FGEDrawingGraphics graphics) {
 			if (focusedControlPoint != null) {
 				graphics.useForegroundStyle(ForegroundStyle.makeStyle(Color.RED));
-				graphics.drawControlPoint(focusedControlPoint.getPoint(),FGEConstants.CONTROL_POINT_SIZE);
-				graphics.drawRoundArroundPoint(focusedControlPoint.getPoint(),8);
+				graphics.drawControlPoint(focusedControlPoint.getPoint(), FGEConstants.CONTROL_POINT_SIZE);
+				graphics.drawRoundArroundPoint(focusedControlPoint.getPoint(), 8);
 			}
 		}
 
 		@Override
-		public InputComponent getInputComponent()
-		{
+		public InputComponent getInputComponent() {
 			return new InputComponentButton(ControlPointSelection.this);
 		}
 
-
 	}
 
-	public class IntersectionSelection extends EditionInputMethod<FGEPoint,ObtainPoint> {
+	public class IntersectionSelection extends EditionInputMethod<FGEPoint, ObtainPoint> {
 
 		public IntersectionSelection() {
 			super("As intersection", ObtainPoint.this);
-			addChildInput(new ObtainLine("Select first line",ObtainPoint.this.getController()));
-			addChildInput(new ObtainLine("Select second line",ObtainPoint.this.getController()));
-		}		
+			addChildInput(new ObtainLine("Select first line", ObtainPoint.this.getController()));
+			addChildInput(new ObtainLine("Select second line", ObtainPoint.this.getController()));
+		}
 
 		@Override
-		public void mouseClicked(MouseEvent e)
-		{
+		public void mouseClicked(MouseEvent e) {
 			System.out.println("Mouse clicked for intersection selection");
 		}
 
 		@Override
-		public InputComponent getInputComponent()
-		{
+		public InputComponent getInputComponent() {
 			return new InputComponentButton(IntersectionSelection.this);
 		}
 
 		@Override
-		public PointConstruction retrieveInputDataFromChildInputs()
-		{
-			((ObtainLine)childInputs.get(0)).getReferencedLine().getGraphicalRepresentation().setIsSelected(false);
-			return new LineIntersectionPointConstruction(
-					((ObtainLine)childInputs.get(0)).getConstruction(),
-					((ObtainLine)childInputs.get(1)).getConstruction());
-		}
-		
-		@Override
-		public void paint(FGEDrawingGraphics graphics)
-		{
-			if (currentChildInputStep == 0) {
-				//Nothing to draw
-			}
-			else if (currentChildInputStep == 1 
-					&& ((ObtainLine)childInputs.get(0)).getReferencedLine() != null) {
-				((ObtainLine)childInputs.get(0)).getReferencedLine().getGraphicalRepresentation().setIsSelected(true);
-			}
+		public PointConstruction retrieveInputDataFromChildInputs() {
+			((ObtainLine) childInputs.get(0)).getReferencedLine().getGraphicalRepresentation().setIsSelected(false);
+			return new LineIntersectionPointConstruction(((ObtainLine) childInputs.get(0)).getConstruction(),
+					((ObtainLine) childInputs.get(1)).getConstruction());
 		}
 
+		@Override
+		public void paint(FGEDrawingGraphics graphics) {
+			if (currentChildInputStep == 0) {
+				// Nothing to draw
+			} else if (currentChildInputStep == 1 && ((ObtainLine) childInputs.get(0)).getReferencedLine() != null) {
+				((ObtainLine) childInputs.get(0)).getReferencedLine().getGraphicalRepresentation().setIsSelected(true);
+			}
+		}
 
 	}
 
-	public class KeyboardSelection extends EditionInputMethod<FGEPoint,ObtainPoint> {
+	public class KeyboardSelection extends EditionInputMethod<FGEPoint, ObtainPoint> {
 
 		private InputComponentTextField<FGEPoint> inputComponent;
 
 		public KeyboardSelection() {
 			super("As", ObtainPoint.this);
-		}		
+		}
 
 		@Override
-		public void mouseClicked(MouseEvent e)
-		{
+		public void mouseClicked(MouseEvent e) {
 			inputComponent.setData(getPointLocation(e));
 		}
 
 		@Override
-		public InputComponent getInputComponent()
-		{
+		public InputComponent getInputComponent() {
 			if (inputComponent == null) {
-				inputComponent = new InputComponentTextField<FGEPoint>(KeyboardSelection.this,new FGEPoint(0,0)) {
+				inputComponent = new InputComponentTextField<FGEPoint>(KeyboardSelection.this, new FGEPoint(0, 0)) {
 
-					private StringEncoder.Converter<FGEPoint> converter ;
+					private StringEncoder.Converter<FGEPoint> converter;
 
-					private StringEncoder.Converter<FGEPoint> getConverter()
-					{
+					private StringEncoder.Converter<FGEPoint> getConverter() {
 						if (converter == null) {
 							converter = StringEncoder.getDefaultInstance()._converterForClass(FGEPoint.class);
 						}
@@ -248,28 +222,26 @@ public class ObtainPoint extends EditionInput<FGEPoint>
 					}
 
 					@Override
-					public int getColumnSize()
-					{
+					public int getColumnSize() {
 						return 8;
 					}
 
 					@Override
-					public String convertDataToString(FGEPoint data)
-					{
-						if (data == null) return "";
+					public String convertDataToString(FGEPoint data) {
+						if (data == null)
+							return "";
 						return getConverter().convertToString(data);
 					}
 
 					@Override
-					public FGEPoint convertStringToData(String string)
-					{
-						if (string == null || string.trim().equals("")) return null;
+					public FGEPoint convertStringToData(String string) {
+						if (string == null || string.trim().equals(""))
+							return null;
 						return getConverter().convertFromString(string);
 					}
 
 					@Override
-					public void dataEntered(FGEPoint data)
-					{
+					public void dataEntered(FGEPoint data) {
 						setConstruction(new ExplicitPointConstruction(data));
 						done();
 					}
@@ -282,26 +254,21 @@ public class ObtainPoint extends EditionInput<FGEPoint>
 	}
 
 	@Override
-	public void paint(FGEDrawingGraphics graphics)
-	{
+	public void paint(FGEDrawingGraphics graphics) {
 		super.paint(graphics);
-		if ((getActiveMethod() instanceof ControlPointSelection) 
-				|| (getActiveMethod() instanceof IntersectionSelection)) {
+		if ((getActiveMethod() instanceof ControlPointSelection) || (getActiveMethod() instanceof IntersectionSelection)) {
 			getActiveMethod().paint(graphics);
 		}
 	}
-	
+
 	@Override
-	public PointConstruction getConstruction()
-	{
-		return (PointConstruction)super.getConstruction();
+	public PointConstruction getConstruction() {
+		return (PointConstruction) super.getConstruction();
 	}
 
 	@Override
-	public boolean endOnRightClick()
-	{
+	public boolean endOnRightClick() {
 		return endOnRightClick;
 	}
-	
 
 }

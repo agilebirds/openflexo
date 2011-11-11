@@ -37,36 +37,30 @@ public class RemoveTemplateFileInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RemoveTemplateFileInitializer(SGControllerActionInitializer actionInitializer)
-	{
-		super(RemoveTemplateFile.actionType,actionInitializer);
+	RemoveTemplateFileInitializer(SGControllerActionInitializer actionInitializer) {
+		super(RemoveTemplateFile.actionType, actionInitializer);
 	}
 
 	@Override
-	protected SGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (SGControllerActionInitializer)super.getControllerActionInitializer();
+	protected SGControllerActionInitializer getControllerActionInitializer() {
+		return (SGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<RemoveTemplateFile> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<RemoveTemplateFile> getDefaultInitializer() {
 		return new FlexoActionInitializer<RemoveTemplateFile>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveTemplateFile action)
-			{
-				return FlexoController.confirmWithWarning(FlexoLocalization.localizedForKey("are_you_sure_that_you_want_to_remove_definitely_this_template?"));
+			public boolean run(ActionEvent e, RemoveTemplateFile action) {
+				return FlexoController.confirmWithWarning(FlexoLocalization
+						.localizedForKey("are_you_sure_that_you_want_to_remove_definitely_this_template?"));
 
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return IconLibrary.DELETE_ICON;
 	}
-
-	
 
 }

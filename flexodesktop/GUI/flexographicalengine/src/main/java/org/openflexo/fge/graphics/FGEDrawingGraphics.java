@@ -25,34 +25,29 @@ import java.util.logging.Logger;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
 
-
 public class FGEDrawingGraphics extends FGEGraphics {
 
-    private static final Logger logger = Logger.getLogger(FGEDrawingGraphics.class.getPackage().getName());
-   
-	public FGEDrawingGraphics(DrawingGraphicalRepresentation aGraphicalRepresentation)
-	{
+	private static final Logger logger = Logger.getLogger(FGEDrawingGraphics.class.getPackage().getName());
+
+	public FGEDrawingGraphics(DrawingGraphicalRepresentation aGraphicalRepresentation) {
 		super(aGraphicalRepresentation);
 	}
-	
+
 	@Override
-	public DrawingGraphicalRepresentation getGraphicalRepresentation() 
-	{
-		return (DrawingGraphicalRepresentation)super.getGraphicalRepresentation();
-	}
-	
-	// Drawing graphics doesn't use normalized coordinates system
-	@Override
-	public Point convertNormalizedPointToViewCoordinates(double x, double y)
-	{
-		return new Point((int)(x*getScale()),(int)(y*getScale()));
+	public DrawingGraphicalRepresentation getGraphicalRepresentation() {
+		return (DrawingGraphicalRepresentation) super.getGraphicalRepresentation();
 	}
 
 	// Drawing graphics doesn't use normalized coordinates system
 	@Override
-	public FGEPoint convertViewCoordinatesToNormalizedPoint(int x, int y)
-	{
-		return new FGEPoint((x)/getScale(),(y)/getScale());
+	public Point convertNormalizedPointToViewCoordinates(double x, double y) {
+		return new Point((int) (x * getScale()), (int) (y * getScale()));
+	}
+
+	// Drawing graphics doesn't use normalized coordinates system
+	@Override
+	public FGEPoint convertViewCoordinatesToNormalizedPoint(int x, int y) {
+		return new FGEPoint((x) / getScale(), (y) / getScale());
 	}
 
 }

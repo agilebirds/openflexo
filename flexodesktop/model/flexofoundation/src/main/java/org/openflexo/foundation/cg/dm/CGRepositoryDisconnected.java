@@ -21,11 +21,8 @@ package org.openflexo.foundation.cg.dm;
 
 import org.openflexo.foundation.cg.GenerationRepository;
 
-
-public class CGRepositoryDisconnected extends CGDataModification
-{
-    public CGRepositoryDisconnected(GenerationRepository repository)
-    {
-        super(null,repository);
-    }
+public class CGRepositoryDisconnected extends CGDataModification {
+	public CGRepositoryDisconnected(GenerationRepository repository) {
+		super(null, repository);
+	}
 }

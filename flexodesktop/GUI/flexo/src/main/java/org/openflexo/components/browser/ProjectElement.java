@@ -29,18 +29,15 @@ import org.openflexo.foundation.rm.ResourceAdded;
 import org.openflexo.foundation.rm.ResourceRemoved;
 import org.openflexo.module.ModuleLoader;
 
-
 /**
  * Browser element representing the project
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class ProjectElement extends BrowserElement
-{
+public class ProjectElement extends BrowserElement {
 
-	public ProjectElement(FlexoProject project, ProjectBrowser browser, BrowserElement parent)
-	{
+	public ProjectElement(FlexoProject project, ProjectBrowser browser, BrowserElement parent) {
 		super(project, BrowserElementType.PROJECT, browser, parent);
 		project.getFlexoWorkflow().addObserver(this);
 	}
@@ -52,21 +49,20 @@ public class ProjectElement extends BrowserElement
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 		addToChilds(getProject().getFlexoWorkflow());
 		addToChilds(getProject().getDataModel());
 		addToChilds(getProject().getFlexoComponentLibrary());
 		addToChilds(getProject().getDKVModel());
 		addToChilds(getProject().getFlexoNavigationMenu().getRootMenu());
 		addToChilds(getProject().getFlexoWSLibrary());
-		if (getProject().getProjectOntology(false)!=null) {
+		if (getProject().getProjectOntology(false) != null) {
 			addToChilds(getProject().getProjectOntology(false));
 		}
-		if (getProject().getShemaLibrary(false)!=null) {
+		if (getProject().getShemaLibrary(false) != null) {
 			addToChilds(getProject().getShemaLibrary(false));
 		}
-		if (getProject().getImportedProcessLibrary()!=null) {
+		if (getProject().getImportedProcessLibrary() != null) {
 			addToChilds(getProject().getImportedProcessLibrary());
 		}
 
@@ -76,20 +72,17 @@ public class ProjectElement extends BrowserElement
 		}
 
 		/*if (getProject().getOntologyLibrary(false)!=null)
-        	addToChilds(getProject().getOntologyLibrary(false));
-        if (getProject().getCalcLibrary(false)!=null)
-        	addToChilds(getProject().getCalcLibrary(false));*/
+			addToChilds(getProject().getOntologyLibrary(false));
+		if (getProject().getCalcLibrary(false)!=null)
+			addToChilds(getProject().getCalcLibrary(false));*/
 
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
-		//logger.info("Project element received "+dataModification);
-		if (dataModification instanceof ImportedRoleLibraryCreated
-				|| dataModification instanceof ImportedProcessLibraryCreated
-				|| dataModification instanceof ImportedObjectLibraryDeleted
-				|| dataModification instanceof ResourceAdded
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		// logger.info("Project element received "+dataModification);
+		if (dataModification instanceof ImportedRoleLibraryCreated || dataModification instanceof ImportedProcessLibraryCreated
+				|| dataModification instanceof ImportedObjectLibraryDeleted || dataModification instanceof ResourceAdded
 				|| dataModification instanceof ResourceRemoved) {
 			refreshWhenPossible();
 		} else {
@@ -98,14 +91,12 @@ public class ProjectElement extends BrowserElement
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return getProject().getProjectName();
 	}
 
 	@Override
-	protected FlexoProject getProject()
-	{
+	protected FlexoProject getProject() {
 		return (FlexoProject) getObject();
 	}
 

@@ -22,17 +22,10 @@ package org.openflexo.fib.model;
 import java.lang.reflect.Type;
 
 public class FIBNumber extends FIBWidget {
- 
-	public static enum Parameters implements FIBModelAttribute
-	{
-		numberType,
-		validateOnReturn,
-		minValue,
-		maxValue,
-		increment,
-		columns
-	}
 
+	public static enum Parameters implements FIBModelAttribute {
+		numberType, validateOnReturn, minValue, maxValue, increment, columns
+	}
 
 	private boolean validateOnReturn = false;
 	private Number minValue;
@@ -41,23 +34,14 @@ public class FIBNumber extends FIBWidget {
 	private NumberType numberType = NumberType.IntegerType;
 	private Integer columns;
 
-    
-    public FIBNumber()
-    {
-	}
-    
-	public static enum NumberType
-	{
-		ByteType,
-		ShortType,
-		IntegerType,
-		LongType,
-		FloatType,
-		DoubleType;
+	public FIBNumber() {
 	}
 
-	public Number retrieveMinValue() 
-	{
+	public static enum NumberType {
+		ByteType, ShortType, IntegerType, LongType, FloatType, DoubleType;
+	}
+
+	public Number retrieveMinValue() {
 		if (minValue == null) {
 			switch (numberType) {
 			case ByteType:
@@ -85,18 +69,15 @@ public class FIBNumber extends FIBWidget {
 		return minValue;
 	}
 
-	public Number getMinValue() 
-	{
+	public Number getMinValue() {
 		return minValue;
 	}
 
-	public void setMinValue(Number minValue) 
-	{
+	public void setMinValue(Number minValue) {
 		this.minValue = minValue;
 	}
 
-	public Number retrieveMaxValue() 
-	{
+	public Number retrieveMaxValue() {
 		if (maxValue == null) {
 			switch (numberType) {
 			case ByteType:
@@ -124,25 +105,22 @@ public class FIBNumber extends FIBWidget {
 		return maxValue;
 	}
 
-	public Number getMaxValue() 
-	{
+	public Number getMaxValue() {
 		return maxValue;
 	}
 
-	public void setMaxValue(Number maxValue) 
-	{
+	public void setMaxValue(Number maxValue) {
 		this.maxValue = maxValue;
 	}
 
-	public Number retrieveIncrement() 
-	{
+	public Number retrieveIncrement() {
 		if (increment == null) {
 			switch (numberType) {
 			case ByteType:
-				increment = new Byte((byte)1);
+				increment = new Byte((byte) 1);
 				break;
 			case ShortType:
-				increment = new Short((short)1);
+				increment = new Short((short) 1);
 				break;
 			case IntegerType:
 				increment = new Integer(1);
@@ -163,18 +141,16 @@ public class FIBNumber extends FIBWidget {
 		return increment;
 	}
 
-	public Number getIncrement() 
-	{
+	public Number getIncrement() {
 		return increment;
 	}
-	public void setIncrement(Number increment) 
-	{
+
+	public void setIncrement(Number increment) {
 		this.increment = increment;
 	}
 
 	@Override
-	public Type getDefaultDataClass() 
-	{
+	public Type getDefaultDataClass() {
 		switch (numberType) {
 		case ByteType:
 			return Byte.class;
@@ -193,45 +169,36 @@ public class FIBNumber extends FIBWidget {
 		}
 	}
 
-	public NumberType getNumberType()
-	{
+	public NumberType getNumberType() {
 		return numberType;
 	}
 
-	public void setNumberType(NumberType numberType)
-	{
-		FIBAttributeNotification<NumberType> notification = requireChange(
-				Parameters.numberType, numberType);
+	public void setNumberType(NumberType numberType) {
+		FIBAttributeNotification<NumberType> notification = requireChange(Parameters.numberType, numberType);
 		if (notification != null) {
 			this.numberType = numberType;
 			hasChanged(notification);
 		}
 	}
 
-	public boolean getValidateOnReturn()
-	{
+	public boolean getValidateOnReturn() {
 		return validateOnReturn;
 	}
 
-	public void setValidateOnReturn(boolean validateOnReturn)
-	{
-		FIBAttributeNotification<Boolean> notification = requireChange(
-				Parameters.validateOnReturn, validateOnReturn);
+	public void setValidateOnReturn(boolean validateOnReturn) {
+		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.validateOnReturn, validateOnReturn);
 		if (notification != null) {
 			this.validateOnReturn = validateOnReturn;
 			hasChanged(notification);
 		}
 	}
 
-	public Integer getColumns()
-	{
+	public Integer getColumns() {
 		return columns;
 	}
 
-	public void setColumns(Integer columns)
-	{
-		FIBAttributeNotification<Integer> notification = requireChange(
-				Parameters.columns, columns);
+	public void setColumns(Integer columns) {
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.columns, columns);
 		if (notification != null) {
 			this.columns = columns;
 			hasChanged(notification);
@@ -261,6 +228,5 @@ public class FIBNumber extends FIBWidget {
 	public void setMaxValueAsInteger(int maxValueAsInteger) {
 		setMaxValue(maxValueAsInteger);
 	}
-	
-	
+
 }

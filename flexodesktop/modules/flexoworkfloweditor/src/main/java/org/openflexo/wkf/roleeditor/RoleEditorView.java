@@ -28,46 +28,38 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.wkf.roleeditor.DrawRoleSpecializationControl.DrawRoleSpecializationAction;
 
-
 public class RoleEditorView extends DrawingView<RoleListRepresentation> implements ModuleView<RoleList> {
 
-	public RoleEditorView(RoleListRepresentation aDrawing,RoleEditorController controller)
-	{
-		super(aDrawing,controller);
+	public RoleEditorView(RoleListRepresentation aDrawing, RoleEditorController controller) {
+		super(aDrawing, controller);
 	}
 
 	@Override
-	public RoleEditorController getController()
-	{
-		return (RoleEditorController)super.getController();
+	public RoleEditorController getController() {
+		return (RoleEditorController) super.getController();
 	}
 
 	@Override
-	public void deleteModuleView()
-	{
+	public void deleteModuleView() {
 		getController().delete();
 	}
 
 	@Override
-	public FlexoPerspective<RoleList> getPerspective()
-	{
+	public FlexoPerspective<RoleList> getPerspective() {
 		return getController().getWKFController().ROLE_EDITOR_PERSPECTIVE;
 	}
 
-	public FlexoProject getProject()
-	{
+	public FlexoProject getProject() {
 		return getRepresentedObject().getProject();
 	}
 
 	@Override
-	public RoleList getRepresentedObject()
-	{
+	public RoleList getRepresentedObject() {
 		return getModel().getRoleList();
 	}
 
 	@Override
-	public boolean isAutoscrolled()
-	{
+	public boolean isAutoscrolled() {
 		return false;
 	}
 
@@ -82,42 +74,35 @@ public class RoleEditorView extends DrawingView<RoleListRepresentation> implemen
 
 	private DrawRoleSpecializationAction _drawRoleSpecializationAction;
 
-	public void  setDrawEdgeAction(DrawRoleSpecializationAction action)
-	{
+	public void setDrawEdgeAction(DrawRoleSpecializationAction action) {
 		_drawRoleSpecializationAction = action;
 	}
 
-	public void resetDrawEdgeAction()
-	{
+	public void resetDrawEdgeAction() {
 		_drawRoleSpecializationAction = null;
 		repaint();
 	}
 
 	private FloatingPalette floatingPalette;
 
-	public void  setFloatingPalette(FloatingPalette palette)
-	{
+	public void setFloatingPalette(FloatingPalette palette) {
 		floatingPalette = palette;
 	}
 
-	public void resetFloatingPalette()
-	{
+	public void resetFloatingPalette() {
 		floatingPalette = null;
 		repaint();
 	}
 
-
-
 	@Override
-	public void paint(Graphics g)
-	{
+	public void paint(Graphics g) {
 		boolean isBuffering = isBuffering();
 		super.paint(g);
 		if (_drawRoleSpecializationAction != null && !isBuffering) {
-			_drawRoleSpecializationAction.paint(g,getController());
+			_drawRoleSpecializationAction.paint(g, getController());
 		}
 		if (floatingPalette != null && !isBuffering) {
-			floatingPalette.paint(g,getController());
+			floatingPalette.paint(g, getController());
 		}
 	}
 

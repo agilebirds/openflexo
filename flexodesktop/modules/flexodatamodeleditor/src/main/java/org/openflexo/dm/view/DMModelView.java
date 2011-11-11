@@ -36,124 +36,111 @@ import org.openflexo.foundation.dm.action.CreateDMRepository;
 import org.openflexo.foundation.dm.action.DMDelete;
 import org.openflexo.foundation.dm.action.UpdateDMRepository;
 
-
 /**
  * View allowing to represent/edit a DMModel object
  * 
  * @author sguerin
  * 
  */
-public class DMModelView extends DMView<DMModel>
-{
+public class DMModelView extends DMView<DMModel> {
 
-    private DMTabularView repositoryFolderTable;
-    private DMRepositoryFolderTableModel repositoryFolderTableModel;
+	private DMTabularView repositoryFolderTable;
+	private DMRepositoryFolderTableModel repositoryFolderTableModel;
 
-    private DMTabularView repositoriesTable;
-    private DMRepositoryTableModel repositoriesTableModel;
+	private DMTabularView repositoriesTable;
+	private DMRepositoryTableModel repositoriesTableModel;
 
-    public DMModelView(DMModel model, DMController controller)
-    {
-        super(model, controller, "data_model");
+	public DMModelView(DMModel model, DMController controller) {
+		super(model, controller, "data_model");
 
-        addAction(new TabularViewAction(CreateDMRepository.actionType,"add_repository",controller.getEditor()) {
-            @Override
-			protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+		addAction(new TabularViewAction(CreateDMRepository.actionType, "add_repository", controller.getEditor()) {
+			@Override
+			protected Vector getGlobalSelection() {
+				return getViewSelection();
+			}
 
-            @Override
-			protected FlexoModelObject getFocusedObject() 
-            {
-                return getDMModel();
-            }           
-        });
-        addAction(new TabularViewAction(UpdateDMRepository.actionType,controller.getEditor()) {
-            @Override
-			protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+			@Override
+			protected FlexoModelObject getFocusedObject() {
+				return getDMModel();
+			}
+		});
+		addAction(new TabularViewAction(UpdateDMRepository.actionType, controller.getEditor()) {
+			@Override
+			protected Vector getGlobalSelection() {
+				return getViewSelection();
+			}
 
-            @Override
-			protected FlexoModelObject getFocusedObject() 
-            {
-                return getSelectedDMRepository();
-            }           
-        });
-       addAction(new TabularViewAction(DMDelete.actionType,"delete_repository",controller.getEditor()) {
-            @Override
-			protected Vector getGlobalSelection()
-            {
-                 return getViewSelection();
-            }
+			@Override
+			protected FlexoModelObject getFocusedObject() {
+				return getSelectedDMRepository();
+			}
+		});
+		addAction(new TabularViewAction(DMDelete.actionType, "delete_repository", controller.getEditor()) {
+			@Override
+			protected Vector getGlobalSelection() {
+				return getViewSelection();
+			}
 
-            @Override
-			protected FlexoModelObject getFocusedObject() 
-            {
-                return null;
-            }           
-        });
-        finalizeBuilding();
-    }
+			@Override
+			protected FlexoModelObject getFocusedObject() {
+				return null;
+			}
+		});
+		finalizeBuilding();
+	}
 
-    @Override
-	protected JComponent buildContentPane()
-    {
-        DMModel model = getDMObject();
-        repositoryFolderTableModel = new DMRepositoryFolderTableModel(model, getDMController().getProject());
-        addToMasterTabularView(repositoryFolderTable = new DMTabularView(getDMController(), repositoryFolderTableModel,5));
-       repositoriesTableModel = new DMRepositoryTableModel(null, getDMController().getProject());
-        addToSlaveTabularView(repositoriesTable = new DMTabularView(getDMController(), repositoriesTableModel,10),repositoryFolderTable);
+	@Override
+	protected JComponent buildContentPane() {
+		DMModel model = getDMObject();
+		repositoryFolderTableModel = new DMRepositoryFolderTableModel(model, getDMController().getProject());
+		addToMasterTabularView(repositoryFolderTable = new DMTabularView(getDMController(), repositoryFolderTableModel, 5));
+		repositoriesTableModel = new DMRepositoryTableModel(null, getDMController().getProject());
+		addToSlaveTabularView(repositoriesTable = new DMTabularView(getDMController(), repositoriesTableModel, 10), repositoryFolderTable);
 
-        return new JSplitPane(JSplitPane.VERTICAL_SPLIT, repositoryFolderTable, repositoriesTable);
-    }
+		return new JSplitPane(JSplitPane.VERTICAL_SPLIT, repositoryFolderTable, repositoriesTable);
+	}
 
-    public DMModel getDMModel()
-    {
-        return getDMObject();
-    }
+	public DMModel getDMModel() {
+		return getDMObject();
+	}
 
-    public DMRepository getSelectedDMRepository()
-    {
-        DMSelectionManager sm = getDMController().getDMSelectionManager();
-        Vector selection = sm.getSelection();
-        if ((selection.size() == 1) && (selection.firstElement() instanceof DMRepository)) {
-            return (DMRepository) selection.firstElement();
-        }
-        return null;
-    }
+	public DMRepository getSelectedDMRepository() {
+		DMSelectionManager sm = getDMController().getDMSelectionManager();
+		Vector selection = sm.getSelection();
+		if ((selection.size() == 1) && (selection.firstElement() instanceof DMRepository)) {
+			return (DMRepository) selection.firstElement();
+		}
+		return null;
+	}
 
-    public DMTabularView getRepositoriesTable() {
-        return repositoriesTable;
-    }
+	public DMTabularView getRepositoriesTable() {
+		return repositoriesTable;
+	}
 
-    public DMTabularView getRepositoryFolderTable() {
-        return repositoryFolderTable;
-    }
+	public DMTabularView getRepositoryFolderTable() {
+		return repositoryFolderTable;
+	}
 
-    /**
-     * Overrides willShow
-     * @see org.openflexo.view.ModuleView#willShow()
-     */
-    @Override
-	public void willShow()
-    {
-        // TODO Auto-generated method stub
-        
-    }
+	/**
+	 * Overrides willShow
+	 * 
+	 * @see org.openflexo.view.ModuleView#willShow()
+	 */
+	@Override
+	public void willShow() {
+		// TODO Auto-generated method stub
 
-    /**
-     * Overrides willHide
-     * @see org.openflexo.view.ModuleView#willHide()
-     */
-    @Override
-	public void willHide()
-    {
-        // TODO Auto-generated method stub
-        
-    }
+	}
 
+	/**
+	 * Overrides willHide
+	 * 
+	 * @see org.openflexo.view.ModuleView#willHide()
+	 */
+	@Override
+	public void willHide() {
+		// TODO Auto-generated method stub
+
+	}
 
 }

@@ -28,7 +28,6 @@ import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.generator.ProjectGenerator;
 import org.openflexo.generator.rm.GeneratedFileResourceFactory;
 
-
 /**
  * @author gpolet
  * 

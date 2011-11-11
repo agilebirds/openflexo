@@ -31,95 +31,83 @@ import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.inspector.widget.CustomWidget;
 import org.openflexo.inspector.widget.WidgetFocusListener;
 
-
 @Deprecated
-public class ShadowStyleInspectorWidget extends CustomWidget<ShadowStyle>
-{
+public class ShadowStyleInspectorWidget extends CustomWidget<ShadowStyle> {
 
-    static final Logger logger = Logger.getLogger(ShadowStyleInspectorWidget.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(ShadowStyleInspectorWidget.class.getPackage().getName());
 
-    FIBShadowStyleSelector _selector;
+	FIBShadowStyleSelector _selector;
 
-    public ShadowStyleInspectorWidget(PropertyModel model, AbstractController controller)
-    {
-        super(model,controller);
-        _selector = new FIBShadowStyleSelector(null) {
-            @Override
-			public void setEditedObject(ShadowStyle aShadowStyle)
-            {
-                super.setEditedObject(aShadowStyle);
-                updateModelFromWidget();
-            }
-        };
-        getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
-            @Override
-			public void focusGained(FocusEvent arg0)
-            {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Focus gained in " + getClass().getName());
-                super.focusGained(arg0);
-           }
+	public ShadowStyleInspectorWidget(PropertyModel model, AbstractController controller) {
+		super(model, controller);
+		_selector = new FIBShadowStyleSelector(null) {
+			@Override
+			public void setEditedObject(ShadowStyle aShadowStyle) {
+				super.setEditedObject(aShadowStyle);
+				updateModelFromWidget();
+			}
+		};
+		getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				if (logger.isLoggable(Level.FINE))
+					logger.fine("Focus gained in " + getClass().getName());
+				super.focusGained(arg0);
+			}
 
-            @Override
-			public void focusLost(FocusEvent arg0)
-            {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Focus lost in " + getClass().getName());
-                super.focusLost(arg0);
-            }
-        });
-    }
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if (logger.isLoggable(Level.FINE))
+					logger.fine("Focus lost in " + getClass().getName());
+				super.focusLost(arg0);
+			}
+		});
+	}
 
-    @Override
-	public synchronized void updateWidgetFromModel()
-    {
-    	widgetUpdating = true;
-    	//logger.info("getObjectValue()="+getObjectValue());
-        _selector.setEditedObject(getObjectValue());
-        _selector.setRevertValue(getObjectValue());
-    	widgetUpdating = false;
-   }
+	@Override
+	public synchronized void updateWidgetFromModel() {
+		widgetUpdating = true;
+		// logger.info("getObjectValue()="+getObjectValue());
+		_selector.setEditedObject(getObjectValue());
+		_selector.setRevertValue(getObjectValue());
+		widgetUpdating = false;
+	}
 
-    /**
-     * Update the model given the actual state of the widget
-     */
-    @Override
-	public synchronized void updateModelFromWidget()
-    {
-    	modelUpdating = true;
-        setObjectValue(_selector.getEditedObject());
-    	modelUpdating = false;
-  }
+	/**
+	 * Update the model given the actual state of the widget
+	 */
+	@Override
+	public synchronized void updateModelFromWidget() {
+		modelUpdating = true;
+		setObjectValue(_selector.getEditedObject());
+		modelUpdating = false;
+	}
 
-    @Override
-	public JComponent getDynamicComponent()
-    {
-        return _selector;
-    }
+	@Override
+	public JComponent getDynamicComponent() {
+		return _selector;
+	}
 
-    @Override
-	public Class getDefaultType()
-    {
-        return ShadowStyle.class;
-    }
+	@Override
+	public Class getDefaultType() {
+		return ShadowStyle.class;
+	}
 
-    @Override
-    public void fireEditingCanceled() 
-    {
-    	if (_selector != null) _selector.closePopup();
-    }
-    
-    @Override
-    public void fireEditingStopped()     
-    {
-    	if (_selector != null) _selector.closePopup();
-    }
+	@Override
+	public void fireEditingCanceled() {
+		if (_selector != null)
+			_selector.closePopup();
+	}
 
-    @Override
-	public boolean defaultShouldExpandHorizontally()
-    {
-    	return false;
-    }
- 
+	@Override
+	public void fireEditingStopped() {
+		if (_selector != null)
+			_selector.closePopup();
+	}
+
+	@Override
+	public boolean defaultShouldExpandHorizontally() {
+		return false;
+	}
 
 }

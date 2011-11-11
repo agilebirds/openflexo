@@ -28,17 +28,13 @@ import org.openflexo.foundation.cg.CGSymbolicDirectory;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.dm.CGStructureRefreshed;
 
-
-public class GeneratedCodeRepositoryElement extends GCBrowserElement
-{
-	public GeneratedCodeRepositoryElement(GenerationRepository repository, ProjectBrowser browser, BrowserElement parent)
-	{
-		super(repository, BrowserElementType.GENERATED_CODE_REPOSITORY, browser,parent);
+public class GeneratedCodeRepositoryElement extends GCBrowserElement {
+	public GeneratedCodeRepositoryElement(GenerationRepository repository, ProjectBrowser browser, BrowserElement parent) {
+		super(repository, BrowserElementType.GENERATED_CODE_REPOSITORY, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 		if (getRepository().isEnabled()) {
 			getRepository().ensureStructureIsUpToDate();
 			for (CGSymbolicDirectory dir : getRepository().getSymbolicDirectories().values()) {
@@ -48,27 +44,26 @@ public class GeneratedCodeRepositoryElement extends GCBrowserElement
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return getRepository().getDisplayName();
 	}
 
-	public GenerationRepository getRepository()
-	{
-		return (GenerationRepository)getObject();
+	public GenerationRepository getRepository() {
+		return (GenerationRepository) getObject();
 	}
-    
-    /**
-     * Overrides update
-     * @see org.openflexo.cgmodule.controller.browser.GCBrowserElement#update(org.openflexo.foundation.FlexoObservable, org.openflexo.foundation.DataModification)
-     */
-    @Override
-    public void update(FlexoObservable observable, DataModification dataModification)
-    {
-        if (dataModification instanceof CGStructureRefreshed) {
-            refreshWhenPossible();
-            return;
-        }
-        super.update(observable, dataModification);
-    }
+
+	/**
+	 * Overrides update
+	 * 
+	 * @see org.openflexo.cgmodule.controller.browser.GCBrowserElement#update(org.openflexo.foundation.FlexoObservable,
+	 *      org.openflexo.foundation.DataModification)
+	 */
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (dataModification instanceof CGStructureRefreshed) {
+			refreshWhenPossible();
+			return;
+		}
+		super.update(observable, dataModification);
+	}
 }

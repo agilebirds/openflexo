@@ -27,18 +27,15 @@ import java.awt.geom.Dimension2D;
  * @author sguerin
  * 
  */
-public class ObjectSizeChanged extends WKFDataModification
-{
+public class ObjectSizeChanged extends WKFDataModification {
 	private String context = null;
 
-    public ObjectSizeChanged(Dimension2D oldSize, Dimension2D newSize, String context)
-    {
-        super(oldSize, newSize);
-        this.context = context;
-    }
+	public ObjectSizeChanged(Dimension2D oldSize, Dimension2D newSize, String context) {
+		super(oldSize, newSize);
+		this.context = context;
+	}
 
-	public String getContext() 
-	{
+	public String getContext() {
 		return context;
 	}
 

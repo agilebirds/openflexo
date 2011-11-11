@@ -29,21 +29,17 @@ import org.openflexo.foundation.FlexoException;
  * 
  */
 @Deprecated
-public class DuplicatePortNameException extends FlexoException
-{
+public class DuplicatePortNameException extends FlexoException {
 
-    private String name;
+	private String name;
 
+	public DuplicatePortNameException(FlexoPort aPort, String aName, String localizationKey) {
+		super(null, localizationKey);
+		name = aName;
+	}
 
-    public DuplicatePortNameException(FlexoPort aPort, String aName, String localizationKey)
-    {
-        super(null,localizationKey);
-        name = aName;
-    }
-
-    @Override
-	public String getMessage()
-    {
-        return "DuplicatePortNameException: port " + name + " already registered.";
-    }
+	@Override
+	public String getMessage() {
+		return "DuplicatePortNameException: port " + name + " already registered.";
+	}
 }

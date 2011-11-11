@@ -29,59 +29,52 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.DuplicateCodeRepositoryNameException;
 import org.openflexo.foundation.cg.templates.CGTemplateObject;
 
+public class RefreshTemplates extends FlexoAction<RefreshTemplates, CGTemplateObject, CGTemplateObject> {
 
-public class RefreshTemplates extends FlexoAction<RefreshTemplates,CGTemplateObject,CGTemplateObject>
-{
+	private static final Logger logger = Logger.getLogger(RefreshTemplates.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(RefreshTemplates.class.getPackage().getName());
+	public static FlexoActionType<RefreshTemplates, CGTemplateObject, CGTemplateObject> actionType = new FlexoActionType<RefreshTemplates, CGTemplateObject, CGTemplateObject>(
+			"refresh", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType<RefreshTemplates,CGTemplateObject,CGTemplateObject> actionType = new FlexoActionType<RefreshTemplates,CGTemplateObject,CGTemplateObject> ("refresh",FlexoActionType.defaultGroup,FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public RefreshTemplates makeNewAction(CGTemplateObject focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor) {
+			return new RefreshTemplates(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public RefreshTemplates makeNewAction(CGTemplateObject focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor) 
-        {
-            return new RefreshTemplates(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(CGTemplateObject object, Vector<CGTemplateObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(CGTemplateObject object, Vector<CGTemplateObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(CGTemplateObject object, Vector<CGTemplateObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(CGTemplateObject object, Vector<CGTemplateObject> globalSelection) 
-        {
-            return true;
-        }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (RefreshTemplates.actionType, CGTemplateObject.class);
-    }
-    
+	};
 
-    RefreshTemplates (CGTemplateObject focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	static {
+		FlexoModelObject.addActionForClass(RefreshTemplates.actionType, CGTemplateObject.class);
+	}
 
-    @Override
-	protected void doAction(Object context) throws DuplicateCodeRepositoryNameException
-    {
-    	logger.info ("Refresh "+getFocusedObject());
-    	if (getFocusedObject() != null) {
-    		getFocusedObject().refresh();
-     	}
-    	if ((getGlobalSelection() != null) && (getGlobalSelection().size() > 0)) {
-    		for (CGTemplateObject o : getGlobalSelection()) {
-        		o.refresh();
-    		}
-    	}
-     }
+	RefreshTemplates(CGTemplateObject focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws DuplicateCodeRepositoryNameException {
+		logger.info("Refresh " + getFocusedObject());
+		if (getFocusedObject() != null) {
+			getFocusedObject().refresh();
+		}
+		if ((getGlobalSelection() != null) && (getGlobalSelection().size() > 0)) {
+			for (CGTemplateObject o : getGlobalSelection()) {
+				o.refresh();
+			}
+		}
+	}
 
 }

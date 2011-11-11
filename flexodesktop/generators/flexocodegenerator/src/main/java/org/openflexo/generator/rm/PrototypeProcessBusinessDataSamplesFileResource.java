@@ -33,8 +33,9 @@ import org.openflexo.generator.cg.CGTextFile;
 import org.openflexo.generator.utils.PrototypeProcessBusinessDataSamplesGenerator;
 import org.openflexo.toolbox.FileFormat;
 
-
-public class PrototypeProcessBusinessDataSamplesFileResource extends TextFileResource<PrototypeProcessBusinessDataSamplesGenerator, CGTextFile> implements GenerationAvailableFileResource, FlexoObserver{
+public class PrototypeProcessBusinessDataSamplesFileResource extends
+		TextFileResource<PrototypeProcessBusinessDataSamplesGenerator, CGTextFile> implements GenerationAvailableFileResource,
+		FlexoObserver {
 
 	public PrototypeProcessBusinessDataSamplesFileResource(FlexoProjectBuilder builder) {
 		super(builder);
@@ -46,49 +47,43 @@ public class PrototypeProcessBusinessDataSamplesFileResource extends TextFileRes
 		setResourceFormat(FileFormat.TEXT);
 	}
 
-    public void registerObserverWhenRequired()
-    {
-    }
+	public void registerObserverWhenRequired() {
+	}
 
-    /**
-     * Overrides update
-     * 
-     * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
-     *      org.openflexo.foundation.DataModification)
-     */
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-        
-    }
-    
-    @Override
-    protected PrototypeProcessBusinessDataSamplesFile createGeneratedResourceData()
-    {
-        return new PrototypeProcessBusinessDataSamplesFile(getFile(),this);
-    }
-    
-    @Override
-    public PrototypeProcessBusinessDataSamplesFile getGeneratedResourceData()
-    {
-    	return (PrototypeProcessBusinessDataSamplesFile) super.getGeneratedResourceData();
-    }
-    
-    /**
-     * Return dependancy computing between this resource, and an other resource,
-     * asserting that this resource is contained in this resource's dependant
-     * resources
-     * 
-     * @param resource
-     * @param dependancyScheme
-     * @return
-     */
-    @Override
-	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate)
-    {
-    	if (resource instanceof TemplateLocator) {
-			return ((TemplateLocator)resource).needsUpdateForResource(this);
+	/**
+	 * Overrides update
+	 * 
+	 * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
+	 *      org.openflexo.foundation.DataModification)
+	 */
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+
+	}
+
+	@Override
+	protected PrototypeProcessBusinessDataSamplesFile createGeneratedResourceData() {
+		return new PrototypeProcessBusinessDataSamplesFile(getFile(), this);
+	}
+
+	@Override
+	public PrototypeProcessBusinessDataSamplesFile getGeneratedResourceData() {
+		return (PrototypeProcessBusinessDataSamplesFile) super.getGeneratedResourceData();
+	}
+
+	/**
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this
+	 * resource's dependant resources
+	 * 
+	 * @param resource
+	 * @param dependancyScheme
+	 * @return
+	 */
+	@Override
+	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
+		if (resource instanceof TemplateLocator) {
+			return ((TemplateLocator) resource).needsUpdateForResource(this);
 		}
-        return super.optimisticallyDependsOf(resource, requestDate);
-    }
+		return super.optimisticallyDependsOf(resource, requestDate);
+	}
 }

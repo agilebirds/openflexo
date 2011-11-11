@@ -35,84 +35,74 @@ import org.openflexo.wkf.processeditor.ProcessEditorController;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 import org.openflexo.wkf.processeditor.ProcessView;
 
-
 public class PrintableProcessView extends ProcessView implements FlexoPrintableComponent {
 
-    protected static final Logger logger = Logger.getLogger(PrintableProcessView.class.getPackage().getName());
-    
-    private FlexoPrintableDelegate _printableDelegate;
+	protected static final Logger logger = Logger.getLogger(PrintableProcessView.class.getPackage().getName());
 
-    public PrintableProcessView(ProcessRepresentation processRepresentation, ProcessEditorController printController, WKFController controller)
-    {
-        super(processRepresentation,printController);
-        _printableDelegate = new FlexoPrintableDelegate(this,controller);
-     }
-    
-    @Override
-	public FlexoPrintableDelegate getPrintableDelegate()
-    {
-        return _printableDelegate;
-    }
-    
-    public FlexoProcess getFlexoProcess()
-    {
-    	return getModel().getProcess();
-    }
-    
-    @Override
-	public FlexoModelObject getFlexoModelObject(){
-    	return getFlexoProcess();
-    }
-    
-    @Override
-	public String getDefaultPrintableName()
-    {
-        return getFlexoProcess().getName();
-    }
+	private FlexoPrintableDelegate _printableDelegate;
 
-    @Override
-	public void paint(Graphics graphics)
-    {
-    	//logger.info("graphics="+graphics);
-        FlexoPrintableDelegate.PaintParameters params = _printableDelegate.paintPrelude((Graphics2D)graphics);
-        super.paint(graphics);
-        _printableDelegate.paintPostlude((Graphics2D)graphics, params);
-    }
-    
-    @Override
-	public void print(Graphics graphics)
-    {
-         super.print(graphics);
-    }
-    
-    @Override
-	public Rectangle getOptimalBounds()
-    {
-        return getOptimalBounds(getFlexoProcess());
-    }
+	public PrintableProcessView(ProcessRepresentation processRepresentation, ProcessEditorController printController,
+			WKFController controller) {
+		super(processRepresentation, printController);
+		_printableDelegate = new FlexoPrintableDelegate(this, controller);
+	}
 
-    @Override
-	public void resizeComponent(Dimension aSize)
-    {
-        setSize(aSize);
-        setPreferredSize(aSize);
-    }
-    
-    @Override
-	public void refreshComponent()
-    {
-        revalidate();
-        repaint();
-    }
+	@Override
+	public FlexoPrintableDelegate getPrintableDelegate() {
+		return _printableDelegate;
+	}
+
+	public FlexoProcess getFlexoProcess() {
+		return getModel().getProcess();
+	}
+
+	@Override
+	public FlexoModelObject getFlexoModelObject() {
+		return getFlexoProcess();
+	}
+
+	@Override
+	public String getDefaultPrintableName() {
+		return getFlexoProcess().getName();
+	}
+
+	@Override
+	public void paint(Graphics graphics) {
+		// logger.info("graphics="+graphics);
+		FlexoPrintableDelegate.PaintParameters params = _printableDelegate.paintPrelude((Graphics2D) graphics);
+		super.paint(graphics);
+		_printableDelegate.paintPostlude((Graphics2D) graphics, params);
+	}
+
+	@Override
+	public void print(Graphics graphics) {
+		super.print(graphics);
+	}
+
+	@Override
+	public Rectangle getOptimalBounds() {
+		return getOptimalBounds(getFlexoProcess());
+	}
+
+	@Override
+	public void resizeComponent(Dimension aSize) {
+		setSize(aSize);
+		setPreferredSize(aSize);
+	}
+
+	@Override
+	public void refreshComponent() {
+		revalidate();
+		repaint();
+	}
 
 	/**
 	 * Return optimal size, regarding contained nodes
-  	 */
-	public static Rectangle getOptimalBounds(FlexoProcess process)
-	{
+	 */
+	public static Rectangle getOptimalBounds(FlexoProcess process) {
 		// Please reimplement this
-		return new Rectangle(0,0,(int)process.getWidth(ProcessEditorConstants.BASIC_PROCESS_EDITOR),(int)process.getHeight(ProcessEditorConstants.BASIC_PROCESS_EDITOR));
+		return new Rectangle(0, 0, (int) process.getWidth(ProcessEditorConstants.BASIC_PROCESS_EDITOR),
+				(int) process.getHeight(ProcessEditorConstants.BASIC_PROCESS_EDITOR));
 	}
 
-    
 }

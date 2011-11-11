@@ -24,10 +24,9 @@ import java.util.Map;
 
 import org.openflexo.toolbox.FileFormat;
 
-
 /**
  * @author Nicolas Daniels
- *
+ * 
  */
 public class FormatterFactory {
 

@@ -23,7 +23,6 @@ import java.util.Vector;
 
 import org.openflexo.xmlcode.XMLSerializable;
 
-
 public class TemplateEntry implements XMLSerializable {
 	public String templateFile;
 	public Vector<ContextEntry> contexts;

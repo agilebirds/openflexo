@@ -24,7 +24,7 @@ import java.util.Vector;
 
 import org.jdom.Element;
 
-public abstract class UnresolvedConflict extends Observable{
+public abstract class UnresolvedConflict extends Observable {
 
 	private MergeAction _solveAction;
 	private boolean _isManualChoice = false;
@@ -33,56 +33,63 @@ public abstract class UnresolvedConflict extends Observable{
 	private MergeAction _keepYourChangeAction;
 	private MergeAction _discardYourChange;
 	private XMLDiff3 _merge;
-	
-	protected UnresolvedConflict(XMLDiff3 merge,int conflictIndex){
+
+	protected UnresolvedConflict(XMLDiff3 merge, int conflictIndex) {
 		super();
 		_merge = merge;
 		_conflictIndex = conflictIndex;
 		_potentialActions = new Vector<MergeAction>();
 	}
-	
-	public int getConflictIndex(){
+
+	public int getConflictIndex() {
 		return _conflictIndex;
 	}
-	public boolean isSolved(){
-		return _solveAction!=null;
+
+	public boolean isSolved() {
+		return _solveAction != null;
 	}
-	
-	public void setSolveAction(MergeAction action, boolean isManualChoice){
-		if(isManualChoice){
-			if(_solveAction!=null)_solveAction.undo();
+
+	public void setSolveAction(MergeAction action, boolean isManualChoice) {
+		if (isManualChoice) {
+			if (_solveAction != null)
+				_solveAction.undo();
 		}
 		_solveAction = action;
-		if(isManualChoice)_solveAction.execute();
+		if (isManualChoice)
+			_solveAction.execute();
 		_isManualChoice = isManualChoice;
 		_merge.propagateChange();
 	}
-	
-	public MergeAction getSolveAction(){
+
+	public MergeAction getSolveAction() {
 		return _solveAction;
 	}
 
-	public boolean getIsManualChoice(){
+	public boolean getIsManualChoice() {
 		return _isManualChoice;
 	}
-	
-	public MergeAction getKeepYourChangeAction(){
-		if(_keepYourChangeAction==null)_keepYourChangeAction = buildKeepYourChangeAction();
+
+	public MergeAction getKeepYourChangeAction() {
+		if (_keepYourChangeAction == null)
+			_keepYourChangeAction = buildKeepYourChangeAction();
 		return _keepYourChangeAction;
 	}
-	public MergeAction getDiscardYourChangeAction(){
-		if(_discardYourChange==null)_discardYourChange = buildDiscardYourChangeAction();
+
+	public MergeAction getDiscardYourChangeAction() {
+		if (_discardYourChange == null)
+			_discardYourChange = buildDiscardYourChangeAction();
 		return _discardYourChange;
 	}
-	
+
 	protected abstract MergeAction buildKeepYourChangeAction();
+
 	protected abstract MergeAction buildDiscardYourChangeAction();
-	
-	public void addToPotentialMergeAction(MergeAction action){
+
+	public void addToPotentialMergeAction(MergeAction action) {
 		_potentialActions.add(action);
 	}
 
-	public String getXMLStringRepresentation(Element e){
+	public String getXMLStringRepresentation(Element e) {
 		return XMLDiff3.getXMLText(e);
 	}
 }

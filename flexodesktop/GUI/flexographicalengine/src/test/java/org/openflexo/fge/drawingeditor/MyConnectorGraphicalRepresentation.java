@@ -26,57 +26,43 @@ import org.openflexo.fge.drawingeditor.MyDrawing.DrawingBuilder;
 import org.openflexo.fge.view.ConnectorView;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
-public class MyConnectorGraphicalRepresentation extends ConnectorGraphicalRepresentation<MyConnector> implements XMLSerializable 
-{
+public class MyConnectorGraphicalRepresentation extends ConnectorGraphicalRepresentation<MyConnector> implements XMLSerializable {
 
 	// Called for LOAD
-	public MyConnectorGraphicalRepresentation(DrawingBuilder builder)
-	{
-		this(ConnectorType.LINE,null,null,null,builder.drawing);
+	public MyConnectorGraphicalRepresentation(DrawingBuilder builder) {
+		this(ConnectorType.LINE, null, null, null, builder.drawing);
 		initializeDeserialization();
 	}
-	
-	public MyConnectorGraphicalRepresentation(ConnectorType aConnectorType, 
-			MyShapeGraphicalRepresentation aStartObject, 
-			MyShapeGraphicalRepresentation anEndObject,
-			MyConnector aDrawable, 
-			EditedDrawing aDrawing)
-	{
+
+	public MyConnectorGraphicalRepresentation(ConnectorType aConnectorType, MyShapeGraphicalRepresentation aStartObject,
+			MyShapeGraphicalRepresentation anEndObject, MyConnector aDrawable, EditedDrawing aDrawing) {
 		super(aConnectorType, aStartObject, anEndObject, aDrawable, aDrawing);
 		addToMouseClickControls(new ShowContextualMenuControl());
 	}
-	
+
 	@Override
-	public MyShapeGraphicalRepresentation getStartObject()
-	{
-		return (MyShapeGraphicalRepresentation)super.getStartObject();
+	public MyShapeGraphicalRepresentation getStartObject() {
+		return (MyShapeGraphicalRepresentation) super.getStartObject();
 	}
 
 	@Override
-	public MyShapeGraphicalRepresentation getEndObject()
-	{
-		return (MyShapeGraphicalRepresentation)super.getEndObject();
+	public MyShapeGraphicalRepresentation getEndObject() {
+		return (MyShapeGraphicalRepresentation) super.getEndObject();
 	}
 
-	
 	@Override
-	public MyConnectorView makeConnectorView(DrawingController<?> controller)
-	{
-		return new MyConnectorView(this,controller);
+	public MyConnectorView makeConnectorView(DrawingController<?> controller) {
+		return new MyConnectorView(this, controller);
 	}
-	
-	public class MyConnectorView extends ConnectorView<MyConnector>
-	{
-		public MyConnectorView(MyConnectorGraphicalRepresentation aGraphicalRepresentation,DrawingController<?> controller)
-		{
-			super(aGraphicalRepresentation,controller);
+
+	public class MyConnectorView extends ConnectorView<MyConnector> {
+		public MyConnectorView(MyConnectorGraphicalRepresentation aGraphicalRepresentation, DrawingController<?> controller) {
+			super(aGraphicalRepresentation, controller);
 		}
-		
+
 		@Override
-		public MyDrawingView getDrawingView()
-		{
-			return (MyDrawingView)super.getDrawingView();
+		public MyDrawingView getDrawingView() {
+			return (MyDrawingView) super.getDrawingView();
 		}
 
 	}

@@ -31,69 +31,60 @@ import org.openflexo.foundation.dm.DMRepository;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.DMEIconLibrary;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class WSEDMPackageTableModel extends AbstractModel<DMRepository,DMPackage>
-{
+public class WSEDMPackageTableModel extends AbstractModel<DMRepository, DMPackage> {
 
-    protected static final Logger logger = Logger.getLogger(WSEDMPackageTableModel.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(WSEDMPackageTableModel.class.getPackage().getName());
 
-    public WSEDMPackageTableModel(DMRepository repository, FlexoProject project)
-    {
-        super(repository, project);
-        addToColumns(new IconColumn<DMPackage>("package_icon", 30) {
-            @Override
-			public Icon getIcon(DMPackage object)
-            {
-                return DMEIconLibrary.DM_PACKAGE_ICON;
-            }
-        });
-        addToColumns(new StringColumn<DMPackage>("name", 745) {
-            @Override
-			public String getValue(DMPackage aPackage)
-            {
-                return aPackage.getLocalizedName();
-            }
+	public WSEDMPackageTableModel(DMRepository repository, FlexoProject project) {
+		super(repository, project);
+		addToColumns(new IconColumn<DMPackage>("package_icon", 30) {
+			@Override
+			public Icon getIcon(DMPackage object) {
+				return DMEIconLibrary.DM_PACKAGE_ICON;
+			}
+		});
+		addToColumns(new StringColumn<DMPackage>("name", 745) {
+			@Override
+			public String getValue(DMPackage aPackage) {
+				return aPackage.getLocalizedName();
+			}
 
-          /*  public void setValue(FlexoModelObject object, String aValue)
-            {
-                ((DMPackage) object).setName(aValue);
-            }*/
-        });
-    }
+			/*  public void setValue(FlexoModelObject object, String aValue)
+			  {
+			      ((DMPackage) object).setName(aValue);
+			  }*/
+		});
+	}
 
-    public DMRepository getDMRepository()
-    {
-        return getModel();
-    }
+	public DMRepository getDMRepository() {
+		return getModel();
+	}
 
-    @Override
-	public DMPackage elementAt(int row)
-    {
-        if ((row >= 0) && (row < getRowCount())) {
-            return (DMPackage) getDMRepository().getOrderedChildren().elementAt(row);
-        } else {
-            return null;
-        }
-    }
+	@Override
+	public DMPackage elementAt(int row) {
+		if ((row >= 0) && (row < getRowCount())) {
+			return (DMPackage) getDMRepository().getOrderedChildren().elementAt(row);
+		} else {
+			return null;
+		}
+	}
 
-    public DMPackage packageAt(int row)
-    {
-        return elementAt(row);
-    }
+	public DMPackage packageAt(int row) {
+		return elementAt(row);
+	}
 
-    @Override
-	public int getRowCount()
-    {
-        if (getDMRepository() != null) {
-            return getDMRepository().getOrderedChildren().size();
-        }
-        return 0;
-    }
+	@Override
+	public int getRowCount() {
+		if (getDMRepository() != null) {
+			return getDMRepository().getOrderedChildren().size();
+		}
+		return 0;
+	}
 
 }

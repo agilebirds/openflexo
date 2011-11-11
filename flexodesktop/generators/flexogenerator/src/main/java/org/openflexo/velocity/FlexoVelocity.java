@@ -38,54 +38,54 @@ import org.openflexo.toolbox.FileResource;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class FlexoVelocity
-{
-    protected static final Logger logger = FlexoLogger.getLogger(FlexoVelocity.class.getPackage().getName());
-    private static boolean isInitialized = false;
+public class FlexoVelocity {
+	protected static final Logger logger = FlexoLogger.getLogger(FlexoVelocity.class.getPackage().getName());
+	private static boolean isInitialized = false;
 
-    private static FlexoVelocityResourceCache resourceCache;
+	private static FlexoVelocityResourceCache resourceCache;
 
-    static {
-        try {
+	static {
+		try {
 			init();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (logger.isLoggable(Level.WARNING))
 				logger.warning("Error while initializing Velocity");
 		}
-    }
+	}
 
-    public static Logger getLogger() {
-    	return logger;
-    }
+	public static Logger getLogger() {
+		return logger;
+	}
 
-	public synchronized static void addToVelocimacro(TemplateLocator templateLocator, CGTemplate[] templates) throws ResourceNotFoundException, ParseErrorException, Exception
-    {
-    	if (logger.isLoggable(Level.INFO))
+	public synchronized static void addToVelocimacro(TemplateLocator templateLocator, CGTemplate[] templates)
+			throws ResourceNotFoundException, ParseErrorException, Exception {
+		if (logger.isLoggable(Level.INFO))
 			logger.info("Adding macros: " + templates);
-    	if (resourceCache!=null)
-    		resourceCache.clearCache();
+		if (resourceCache != null)
+			resourceCache.clearCache();
 		Velocity.setApplicationAttribute("templateLocator", templateLocator);
 		for (CGTemplate template : templates) {
 			if (template != null)
 				Velocity.getTemplate(template.getRelativePath());
 		}
 		Velocity.setApplicationAttribute("templateLocator", null);
-    }
+	}
 
-    /**
-     * @throws Exception
-     *
-     */
-    public synchronized static void init() throws Exception
-    {
-    	if (!isInitialized) {
-    		// 1. We load properties with the Java object because it loads property files correctly unlike ExtendedProperties (which does not handle properly "\ " as value " ")
+	/**
+	 * @throws Exception
+	 * 
+	 */
+	public synchronized static void init() throws Exception {
+		if (!isInitialized) {
+			// 1. We load properties with the Java object because it loads property files correctly unlike ExtendedProperties (which does
+			// not handle properly "\ " as value " ")
 			Properties p = new Properties();
 			p.load(new FileInputStream(new FileResource("Config/velocity.properties")));
-			// 2. We convert properties to extended properties (this conversion only handles values of type String (i.e., a VelocityLogger cannot be set directly in the Properties, see 3.)
+			// 2. We convert properties to extended properties (this conversion only handles values of type String (i.e., a VelocityLogger
+			// cannot be set directly in the Properties, see 3.)
 			ExtendedProperties ep = ExtendedProperties.convertProperties(p);
 			VelocityLogger vl = new VelocityLogger();
 			// 3. We set our logger so that it does not try to use its own
@@ -98,7 +98,7 @@ public class FlexoVelocity
 			if (logger.isLoggable(Level.FINE))
 				logger.fine("Velocity Engine started");
 		}
-    }
+	}
 
 	public static void setResourceCache(FlexoVelocityResourceCache resourceCache) {
 		if (logger.isLoggable(Level.INFO))

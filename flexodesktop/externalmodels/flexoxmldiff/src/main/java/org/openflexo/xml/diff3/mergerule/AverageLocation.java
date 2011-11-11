@@ -25,14 +25,12 @@ import org.openflexo.xml.diff3.MergeActionType;
 import org.openflexo.xml.diff3.MergeAttributeAction;
 import org.openflexo.xml.diff3.UnresolvedAttributesConflict;
 
-
 public class AverageLocation extends MergeAttributeRule {
 
-	public AverageLocation(UnresolvedAttributesConflict conflict){
+	public AverageLocation(UnresolvedAttributesConflict conflict) {
 		super(conflict);
 	}
-	
-	
+
 	@Override
 	public boolean canBeApplyed() {
 		return "deducedLocation".equals(_conflict.attributeName()) || "inducedDeducedLocation".equals(_conflict.attributeName());
@@ -40,11 +38,12 @@ public class AverageLocation extends MergeAttributeRule {
 
 	@Override
 	public MergeAttributeAction getAction() {
-		if(_action==null){
+		if (_action == null) {
 			Point p1 = MergeUtils.pointFromString(_conflict.value1());
 			Point p2 = MergeUtils.pointFromString(_conflict.value2());
-			Point average = new Point((p1.x+p2.x)/2,(p1.y+p2.y)/2);
-			_action = new MergeAttributeAction(_conflict.getConflictIndex(),MergeActionType.UPDATE,_conflict.attributeName(),MergeUtils.pointToString(average),_conflict.getMergedElement());
+			Point average = new Point((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
+			_action = new MergeAttributeAction(_conflict.getConflictIndex(), MergeActionType.UPDATE, _conflict.attributeName(),
+					MergeUtils.pointToString(average), _conflict.getMergedElement());
 		}
 		return _action;
 	}

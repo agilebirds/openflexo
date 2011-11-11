@@ -18,53 +18,54 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents RoleView object
- *
+ * 
  * @version $Id: RoleView.java,v 1.3 2011/09/12 11:46:48 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class RoleView extends QuiduView implements SegLabeled {
-  static final long serialVersionUID = -903647066739783608L;
+	static final long serialVersionUID = -903647066739783608L;
 
-  public RoleView(PetalNode parent, Collection params, int tag) {
-    super(parent, "RoleView", params, tag);
-  }
+	public RoleView(PetalNode parent, Collection params, int tag) {
+		super(parent, "RoleView", params, tag);
+	}
 
-  public RoleView() {
-    super("RoleView");
-  }
+	public RoleView() {
+		super("RoleView");
+	}
 
-  public Tag getParentView() {
-    return (Tag)getProperty("Parent_View");
-  }
+	public Tag getParentView() {
+		return (Tag) getProperty("Parent_View");
+	}
 
-  public void setParentView(Tag o) {
-    defineProperty("Parent_View", o);
-  }
+	public void setParentView(Tag o) {
+		defineProperty("Parent_View", o);
+	}
 
-  @Override
-public SegLabel getLabel() {
-    return (SegLabel)getProperty("label");
-  }
+	@Override
+	public SegLabel getLabel() {
+		return (SegLabel) getProperty("label");
+	}
 
-  @Override
-public void setLabel(SegLabel o) {
-    defineProperty("label", o);
-  }
+	@Override
+	public void setLabel(SegLabel o) {
+		defineProperty("label", o);
+	}
 
-  public List getVertices() {
-    return (List)getProperty("vertices");
-  }
+	public List getVertices() {
+		return (List) getProperty("vertices");
+	}
 
-  public void setVertices(List o) {
-    defineProperty("vertices", o);
-  }
+	public void setVertices(List o) {
+		defineProperty("vertices", o);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

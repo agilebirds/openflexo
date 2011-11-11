@@ -35,60 +35,53 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class EditUserHelpInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	EditUserHelpInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(EditUserHelpAction.actionType,actionInitializer);
+	EditUserHelpInitializer(IEControllerActionInitializer actionInitializer) {
+		super(EditUserHelpAction.actionType, actionInitializer);
 	}
 
 	@Override
-    protected IEControllerActionInitializer getControllerActionInitializer()
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<EditUserHelpAction> getDefaultInitializer()
-	{
+	protected FlexoActionInitializer<EditUserHelpAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<EditUserHelpAction>() {
 			@Override
-            public boolean run(ActionEvent e, EditUserHelpAction action)
-			{
-		           return (action.getFocusedObject() instanceof InspectableObject);
+			public boolean run(ActionEvent e, EditUserHelpAction action) {
+				return (action.getFocusedObject() instanceof InspectableObject);
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<EditUserHelpAction> getDefaultFinalizer()
-	{
+	protected FlexoActionFinalizer<EditUserHelpAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<EditUserHelpAction>() {
 			@Override
-            public boolean run(ActionEvent e, EditUserHelpAction action)
-			{
-	            if (action.getFocusedObject() instanceof IEOperationComponent) {
-	                CommentZone commentZone = new CommentZone(getController().getFlexoFrame(),(IEOperationComponent)action.getFocusedObject());
-	                commentZone.setVisible(true);
-	                return true;
-	            }else if (action.getFocusedObject() instanceof OperationComponentDefinition) {
-	                CommentZone commentZone = new CommentZone(getController().getFlexoFrame(),(OperationComponentDefinition)action.getFocusedObject());
-	                commentZone.setVisible(true);
-	                return true;
-	            }
-	            return false;
+			public boolean run(ActionEvent e, EditUserHelpAction action) {
+				if (action.getFocusedObject() instanceof IEOperationComponent) {
+					CommentZone commentZone = new CommentZone(getController().getFlexoFrame(),
+							(IEOperationComponent) action.getFocusedObject());
+					commentZone.setVisible(true);
+					return true;
+				} else if (action.getFocusedObject() instanceof OperationComponentDefinition) {
+					CommentZone commentZone = new CommentZone(getController().getFlexoFrame(),
+							(OperationComponentDefinition) action.getFocusedObject());
+					commentZone.setVisible(true);
+					return true;
+				}
+				return false;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon()
-	{
+	protected Icon getEnabledIcon() {
 		return IconLibrary.HELP_ICON;
 	}
-
 
 }

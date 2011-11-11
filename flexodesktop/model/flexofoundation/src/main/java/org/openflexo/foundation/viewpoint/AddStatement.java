@@ -27,18 +27,15 @@ import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-
-
 public abstract class AddStatement<R extends OntologicObjectPatternRole> extends EditionAction<R> {
 
 	private static final Logger logger = Logger.getLogger(AddStatement.class.getPackage().getName());
 
 	public AddStatement() {
 	}
-	
-	public OntologyObject getPropertySubject(EditionSchemeAction action)
-	{
-		return (OntologyObject)getSubject().getBindingValue(action);
+
+	public OntologyObject getPropertySubject(EditionSchemeAction action) {
+		return (OntologyObject) getSubject().getBindingValue(action);
 	}
 
 	@Override
@@ -51,37 +48,33 @@ public abstract class AddStatement<R extends OntologicObjectPatternRole> extends
 			return null;
 		}
 	}
-	
+
 	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
 	// Need to be fixed in KeyValueProperty.java
 	@Override
-	public void setPatternRole(R patternRole) 
-	{
+	public void setPatternRole(R patternRole) {
 		super.setPatternRole(patternRole);
 	}
-	
+
 	private ViewPointDataBinding subject;
-	
+
 	private BindingDefinition SUBJECT = new BindingDefinition("subject", OntologyObject.class, BindingDefinitionType.GET, false);
-	
-	public BindingDefinition getSubjectBindingDefinition()
-	{
+
+	public BindingDefinition getSubjectBindingDefinition() {
 		return SUBJECT;
 	}
 
-	public ViewPointDataBinding getSubject() 
-	{
-		if (subject == null) subject = new ViewPointDataBinding(this,EditionActionBindingAttribute.subject,getSubjectBindingDefinition());
+	public ViewPointDataBinding getSubject() {
+		if (subject == null)
+			subject = new ViewPointDataBinding(this, EditionActionBindingAttribute.subject, getSubjectBindingDefinition());
 		return subject;
 	}
 
-	public void setSubject(ViewPointDataBinding subject) 
-	{
+	public void setSubject(ViewPointDataBinding subject) {
 		subject.setOwner(this);
 		subject.setBindingAttribute(EditionActionBindingAttribute.subject);
 		subject.setBindingDefinition(getSubjectBindingDefinition());
 		this.subject = subject;
 	}
-
 
 }

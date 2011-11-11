@@ -24,34 +24,28 @@ import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.Point;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
 
-
-
 public class CreatePoint extends Edition {
-	
+
 	public CreatePoint(GeomEditController controller) {
-		super("Create point",controller);
-		inputs.add(new ObtainPoint("Select position",controller));
+		super("Create point", controller);
+		inputs.add(new ObtainPoint("Select position", controller));
 	}
-	
+
 	@Override
-	public void performEdition()
-	{
-		ObtainPoint p = (ObtainPoint)inputs.get(0);
-		
-		addObject (new Point(getController().getDrawing().getModel(),p.getConstruction()));
+	public void performEdition() {
+		ObtainPoint p = (ObtainPoint) inputs.get(0);
+
+		addObject(new Point(getController().getDrawing().getModel(), p.getConstruction()));
 
 	}
-	
+
 	/*public void addObject(GeometricObject object)
 	{
 		getController().getDrawing().getModel().addToChilds(object);
 	}*/
-	
+
 	@Override
-	public void paintEdition(FGEDrawingGraphics graphics,FGEPoint lastMouseLocation)
-	{
+	public void paintEdition(FGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		// Nothing to draw
 	}
 }
-
-

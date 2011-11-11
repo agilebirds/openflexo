@@ -26,59 +26,53 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.fps.view.menu.FPSMenuBar;
 import org.openflexo.selection.SelectionManager;
 
-
 /**
  * Selection manager dedicated to this module
  * 
  * @author yourname
  */
-public class FPSSelectionManager extends SelectionManager
-{
+public class FPSSelectionManager extends SelectionManager {
 
-    protected static final Logger logger = Logger.getLogger(FPSSelectionManager.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(FPSSelectionManager.class.getPackage().getName());
 
-    public FPSSelectionManager(FPSController controller)
-    {
-        super(controller);
-        FPSMenuBar menuBar = controller.getEditorMenuBar();
-        _clipboard = new FPSClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem, menuBar.getEditMenu(controller).cutItem);
-        _contextualMenuManager = new FPSContextualMenuManager(this,controller.getEditor(),controller);
-   }
+	public FPSSelectionManager(FPSController controller) {
+		super(controller);
+		FPSMenuBar menuBar = controller.getEditorMenuBar();
+		_clipboard = new FPSClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem,
+				menuBar.getEditMenu(controller).cutItem);
+		_contextualMenuManager = new FPSContextualMenuManager(this, controller.getEditor(), controller);
+	}
 
-    public FPSController getFPSController()
-    {
-        return (FPSController) getController();
-    }
+	public FPSController getFPSController() {
+		return (FPSController) getController();
+	}
 
-    @Override
-	public boolean performSelectionSelectAll()
-    {
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("'Select All' not implemented yet in this module");
-        return false;
-    }
+	@Override
+	public boolean performSelectionSelectAll() {
+		if (logger.isLoggable(Level.WARNING))
+			logger.warning("'Select All' not implemented yet in this module");
+		return false;
+	}
 
-    // ==========================================================================
-    // ============================= Deletion
-    // ===================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Deletion
+	// ===================================
+	// ==========================================================================
 
-    /**
-     * Returns the root object that can be currently edited
-     * 
-     * @return FlexoModelObject
-     */
-    @Override
-	public FlexoModelObject getRootFocusedObject()
-    {
-        return getFPSController().getCurrentDisplayedObjectAsModuleView();
-    }
+	/**
+	 * Returns the root object that can be currently edited
+	 * 
+	 * @return FlexoModelObject
+	 */
+	@Override
+	public FlexoModelObject getRootFocusedObject() {
+		return getFPSController().getCurrentDisplayedObjectAsModuleView();
+	}
 
-    @Override
-	public FlexoModelObject getPasteContext()
-    {
-        // TODO please implement this
-        return null;
-    }
+	@Override
+	public FlexoModelObject getPasteContext() {
+		// TODO please implement this
+		return null;
+	}
 
 }

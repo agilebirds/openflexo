@@ -50,7 +50,6 @@ import org.openflexo.module.Module;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.selection.SelectionManager;
 
-
 public class FlexoSharedInspectorController extends FlexoInspectorController {
 
 	private final Logger logger = Logger.getLogger(FlexoSharedInspectorController.class.getPackage().getName());
@@ -59,16 +58,14 @@ public class FlexoSharedInspectorController extends FlexoInspectorController {
 
 	private boolean isBoundsSaverEnabled = true;
 
-	protected FlexoSharedInspectorController(FlexoController controller)
-	{
+	protected FlexoSharedInspectorController(FlexoController controller) {
 		this(controller.new FlexoControllerInspectorDelegate(), new DefaultInspectorHelpDelegate(DocResourceManager.instance()), controller
 				.getFlexoFrame());
 		setInspectorNotFoundHandler(controller);
 		loadAllCustomInspectors(controller.getProject());
 	}
 
-	private FlexoSharedInspectorController(InspectorDelegate inspectorDelegate, HelpDelegate helpDelegate, JFrame frame)
-	{
+	private FlexoSharedInspectorController(InspectorDelegate inspectorDelegate, HelpDelegate helpDelegate, JFrame frame) {
 		super(inspectorDelegate, helpDelegate);
 		_inspectorWindow = createInspectorWindow(frame);
 		Rectangle bounds = GeneralPreferences.getBoundForFrameWithID("Inspector");
@@ -91,8 +88,7 @@ public class FlexoSharedInspectorController extends FlexoInspectorController {
 			 * @see java.awt.event.ComponentAdapter#componentResized(java.awt.event.ComponentEvent)
 			 */
 			@Override
-			public void componentResized(ComponentEvent e)
-			{
+			public void componentResized(ComponentEvent e) {
 				if (isBoundsSaverEnabled()) {
 					saveBoundsInPreferenceWhenPossible();
 				}
@@ -104,8 +100,7 @@ public class FlexoSharedInspectorController extends FlexoInspectorController {
 			 * @see java.awt.event.ComponentAdapter#componentMoved(java.awt.event.ComponentEvent)
 			 */
 			@Override
-			public void componentMoved(ComponentEvent e)
-			{
+			public void componentMoved(ComponentEvent e) {
 				if (isBoundsSaverEnabled()) {
 					saveBoundsInPreferenceWhenPossible();
 				}
@@ -123,13 +118,12 @@ public class FlexoSharedInspectorController extends FlexoInspectorController {
 
 	private Thread boundsSaver;
 
-	protected synchronized void saveBoundsInPreferenceWhenPossible()
-	{
+	protected synchronized void saveBoundsInPreferenceWhenPossible() {
 		if (!_inspectorWindow.isVisible()) {
 			return;
 		}
-		if (boundsSaver!=null) {
-			boundsSaver.interrupt();//Resets thread sleep
+		if (boundsSaver != null) {
+			boundsSaver.interrupt();// Resets thread sleep
 			return;
 		}
 
@@ -140,8 +134,7 @@ public class FlexoSharedInspectorController extends FlexoInspectorController {
 			 * @see java.lang.Runnable#run()
 			 */
 			@Override
-			public void run()
-			{
+			public void run() {
 				boolean go = true;
 				while (go) {
 					try {
@@ -157,10 +150,9 @@ public class FlexoSharedInspectorController extends FlexoInspectorController {
 		boundsSaver.start();
 	}
 
-	protected void saveBoundsInPreference()
-	{
+	protected void saveBoundsInPreference() {
 		try {
-			if (_inspectorWindow.getBounds().x +_inspectorWindow.getBounds().width < 0) {
+			if (_inspectorWindow.getBounds().x + _inspectorWindow.getBounds().width < 0) {
 				return;
 			}
 			if (_inspectorWindow.getBounds().y + _inspectorWindow.getHeight() < 0) {
@@ -173,40 +165,30 @@ public class FlexoSharedInspectorController extends FlexoInspectorController {
 		}
 	}
 
-	public InspectorWindow getInspectorWindow()
-	{
+	public InspectorWindow getInspectorWindow() {
 		return _inspectorWindow;
 	}
 
 	// We override here default behaviour by using other inspectors in the context of
 	// WebServiceEditor
 	@Override
-	public String getInspectorName(InspectableObject object, Hashtable<String,Object> inspectionContext)
-	{
-		if (inspectionContext.get(SelectionManager.MODULE_KEY).equals(Module.WSE_MODULE.getClassName()))
-		{
-			if (object instanceof FlexoProcess){
+	public String getInspectorName(InspectableObject object, Hashtable<String, Object> inspectionContext) {
+		if (inspectionContext.get(SelectionManager.MODULE_KEY).equals(Module.WSE_MODULE.getClassName())) {
+			if (object instanceof FlexoProcess) {
 				return Inspectors.WSE.WSFLEXOPROCESS_INSPECTOR;
-			}
-			else if (object instanceof InPort){
+			} else if (object instanceof InPort) {
 				return Inspectors.WSE.WSINPORT_INSPECTOR;
-			}
-			else if (object instanceof OutPort){
+			} else if (object instanceof OutPort) {
 				return Inspectors.WSE.WSOUTPORT_INSPECTOR;
-			}
-			else if(object instanceof InOutPort){
+			} else if (object instanceof InOutPort) {
 				return Inspectors.WSE.WSINOUTPORT_INSPECTOR;
-			}
-			else if (object instanceof AbstractInPort){
+			} else if (object instanceof AbstractInPort) {
 				return Inspectors.WSE.WSABSTRACTINPORT_INSPECTOR;
-			}
-			else if (object instanceof FlexoPort){
+			} else if (object instanceof FlexoPort) {
 				return Inspectors.WSE.WSPORT_INSPECTOR;
-			}
-			else if (object instanceof MessageDefinition){
+			} else if (object instanceof MessageDefinition) {
 				return Inspectors.WSE.WSMESSAGEDEFINITION_INSPECTOR;
-			}
-			else if (object instanceof ServiceMessageDefinition){
+			} else if (object instanceof ServiceMessageDefinition) {
 				return Inspectors.WSE.WSMESSAGEDEFINITION_INSPECTOR;
 			}
 			return null;

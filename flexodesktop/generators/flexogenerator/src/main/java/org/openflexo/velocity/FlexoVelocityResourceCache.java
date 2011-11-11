@@ -34,9 +34,9 @@ public class FlexoVelocityResourceCache extends ResourceCacheImpl {
 	public FlexoVelocityResourceCache() {
 		FlexoVelocity.setResourceCache(this);
 	}
-	
+
 	public void clearCache() {
 		cache.clear();
 	}
-	
+
 }

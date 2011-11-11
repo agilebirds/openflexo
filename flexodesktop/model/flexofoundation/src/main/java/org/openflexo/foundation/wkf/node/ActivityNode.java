@@ -28,85 +28,78 @@ import org.openflexo.foundation.help.ApplicationHelpEntryPoint;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 
-
 /**
  * This represents a FlexoNode at the level 'Activity'
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class ActivityNode extends AbstractActivityNode  implements ApplicationHelpEntryPoint
-{
+public class ActivityNode extends AbstractActivityNode implements ApplicationHelpEntryPoint {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ActivityNode.class.getPackage().getName());
 
-    private TaskType taskType;
- 
+	private TaskType taskType;
+
 	/**
-     * Constructor used during deserialization
-     */
-    public ActivityNode(FlexoProcessBuilder builder)
-    {
-        this(builder.process);
-        initializeDeserialization(builder);
-    }
+	 * Constructor used during deserialization
+	 */
+	public ActivityNode(FlexoProcessBuilder builder) {
+		this(builder.process);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor
-     */
-    public ActivityNode(FlexoProcess process)
-    {
-        super(process);
-    }
+	/**
+	 * Default constructor
+	 */
+	public ActivityNode(FlexoProcess process) {
+		super(process);
+	}
 
-    /**
-     * Overrides delete
-     * @see org.openflexo.foundation.wkf.node.AbstractActivityNode#delete()
-     */
-    @Override
-    public final void delete()
-    {
-        super.delete();
-        deleteObservers();
-    }
+	/**
+	 * Overrides delete
+	 * 
+	 * @see org.openflexo.foundation.wkf.node.AbstractActivityNode#delete()
+	 */
+	@Override
+	public final void delete() {
+		super.delete();
+		deleteObservers();
+	}
 
-    @Override
-    public String getInspectorName()
-    {
-        if (getNodeType() == NodeType.NORMAL) {
-            return Inspectors.WKF.ACTIVITY_NODE_INSPECTOR;
-        } else if (getNodeType() == NodeType.BEGIN) {
-            return Inspectors.WKF.BEGIN_ACTIVITY_NODE_INSPECTOR;
-        } else if (getNodeType() == NodeType.END) {
-            return Inspectors.WKF.END_ACTIVITY_NODE_INSPECTOR;
-        } else {
-            return super.getInspectorName();
-        }
-    }
+	@Override
+	public String getInspectorName() {
+		if (getNodeType() == NodeType.NORMAL) {
+			return Inspectors.WKF.ACTIVITY_NODE_INSPECTOR;
+		} else if (getNodeType() == NodeType.BEGIN) {
+			return Inspectors.WKF.BEGIN_ACTIVITY_NODE_INSPECTOR;
+		} else if (getNodeType() == NodeType.END) {
+			return Inspectors.WKF.END_ACTIVITY_NODE_INSPECTOR;
+		} else {
+			return super.getInspectorName();
+		}
+	}
 
-    // Used for old models, deprecated now !
-    @Override
-    public void finalizeRoleLinking()
-    {
-        super.finalizeRoleLinking();
-    }
+	// Used for old models, deprecated now !
+	@Override
+	public void finalizeRoleLinking() {
+		super.finalizeRoleLinking();
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-    public String getClassNameKey()
-    {
-        return "activity_node";
-    }
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "activity_node";
+	}
 
 	@Override
 	public ApplicationHelpEntryPoint getParentHelpEntry() {
 		return getProcess();
 	}
-
 
 	@Override
 	public List<ApplicationHelpEntryPoint> getChildsHelpObjects() {
@@ -122,24 +115,23 @@ public class ActivityNode extends AbstractActivityNode  implements ApplicationHe
 
 	@Override
 	public String getTypedHelpLabel() {
-		return "Activity : "+getName();
+		return "Activity : " + getName();
 	}
 
 	@Override
-	public boolean mightHaveOperationPetriGraph() 
-	{
+	public boolean mightHaveOperationPetriGraph() {
 		// Implement here some limitations if you want !
 		return true;
 	}
-	
-   public TaskType getTaskType() {
-			return taskType;
+
+	public TaskType getTaskType() {
+		return taskType;
 	}
 
 	public void setTaskType(TaskType taskType) {
-			this.taskType = taskType;
-			setChanged();
-    		notifyAttributeModification("taskType", null, taskType);
+		this.taskType = taskType;
+		setChanged();
+		notifyAttributeModification("taskType", null, taskType);
 	}
 
 }

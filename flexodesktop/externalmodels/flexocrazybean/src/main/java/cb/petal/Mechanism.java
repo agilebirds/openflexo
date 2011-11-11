@@ -18,42 +18,47 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents Mechanism object
- *
+ * 
  * @version $Id: Mechanism.java,v 1.3 2011/09/12 11:46:48 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class Mechanism extends PetalObject implements Tagged {
-  public Mechanism(PetalNode parent, Collection params) {
-    super(parent, "Mechanism", params);
-    setTag(tag);
-  }
+	public Mechanism(PetalNode parent, Collection params) {
+		super(parent, "Mechanism", params);
+		setTag(tag);
+	}
 
-  public Mechanism() {
-    super("Mechanism");
-  }
+	public Mechanism() {
+		super("Mechanism");
+	}
 
-  private int tag = -1;
+	private int tag = -1;
 
-  @Override
-public void setTag(int t) { tag = t; }
+	@Override
+	public void setTag(int t) {
+		tag = t;
+	}
 
-  @Override
-public int  getTag()      { return tag; }
+	@Override
+	public int getTag() {
+		return tag;
+	}
 
-  public List getLogicalModels() {
-    return (List)getProperty("logical_models");
-  }
+	public List getLogicalModels() {
+		return (List) getProperty("logical_models");
+	}
 
-  public void setLogicalModels(List o) {
-    defineProperty("logical_models", o);
-  }
+	public void setLogicalModels(List o) {
+		defineProperty("logical_models", o);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

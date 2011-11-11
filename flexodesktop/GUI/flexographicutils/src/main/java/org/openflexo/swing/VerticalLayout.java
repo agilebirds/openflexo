@@ -30,140 +30,130 @@ import java.awt.Insets;
 import java.awt.LayoutManager;
 
 /**
- * A simple layout that arranges its components vertically all the components
- * are given the same width and keep their own height.
+ * A simple layout that arranges its components vertically all the components are given the same width and keep their own height.
  * 
  */
 
-public class VerticalLayout implements LayoutManager
-{
+public class VerticalLayout implements LayoutManager {
 
-    final static private int VGAP = 0;
+	final static private int VGAP = 0;
 
-    final static private int HMARGIN = 0;
+	final static private int HMARGIN = 0;
 
-    final static private int VMARGIN = 0;
+	final static private int VMARGIN = 0;
 
-    protected int vgap;
+	protected int vgap;
 
-    protected int hmargin;
+	protected int hmargin;
 
-    protected int vmargin;
+	protected int vmargin;
 
-    /**
-     * Constructs a new VerticalLayout.
-     */
-    public VerticalLayout()
-    {
-        this(VGAP, HMARGIN, VMARGIN);
-    }
+	/**
+	 * Constructs a new VerticalLayout.
+	 */
+	public VerticalLayout() {
+		this(VGAP, HMARGIN, VMARGIN);
+	}
 
-    /**
-     * Constructs a new VerticalLayout with specific gap and margin.
-     * 
-     * @param gap
-     * @param h
-     * @param v
-     */
-    public VerticalLayout(int gap, int h, int v)
-    {
-        vgap = gap;
-        hmargin = h;
-        vmargin = v;
-    }
+	/**
+	 * Constructs a new VerticalLayout with specific gap and margin.
+	 * 
+	 * @param gap
+	 * @param h
+	 * @param v
+	 */
+	public VerticalLayout(int gap, int h, int v) {
+		vgap = gap;
+		hmargin = h;
+		vmargin = v;
+	}
 
-    /**
-     * Adds the specified named component to the layout.
-     * 
-     * @param name
-     *            the String name
-     * @param comp
-     *            the component to be added
-     */
-    @Override
-	public void addLayoutComponent(String name, Component comp)
-    {
-        // interface method
-    }
+	/**
+	 * Adds the specified named component to the layout.
+	 * 
+	 * @param name
+	 *            the String name
+	 * @param comp
+	 *            the component to be added
+	 */
+	@Override
+	public void addLayoutComponent(String name, Component comp) {
+		// interface method
+	}
 
-    /**
-     * Removes the specified component from the layout.
-     * 
-     * @param comp
-     *            the component to be removed
-     */
-    @Override
-	public void removeLayoutComponent(Component comp)
-    {
-        // interface method
-    }
+	/**
+	 * Removes the specified component from the layout.
+	 * 
+	 * @param comp
+	 *            the component to be removed
+	 */
+	@Override
+	public void removeLayoutComponent(Component comp) {
+		// interface method
+	}
 
-    @Override
-	public Dimension minimumLayoutSize(Container target)
-    {
-        return preferredLayoutSize(target);
-    }
+	@Override
+	public Dimension minimumLayoutSize(Container target) {
+		return preferredLayoutSize(target);
+	}
 
-    @Override
-	public Dimension preferredLayoutSize(Container target)
-    {
-        Dimension dim = new Dimension(0, 0);
-        int width = 0;
-        int height = 0;
-        Component children[] = target.getComponents();
-        int length=0;
-        for (int i = 0; i < children.length; i++) {
-            if (!children[i].isVisible())
-                continue;
-            Dimension d = children[i].getPreferredSize();
-            width = Math.max(width, d.width);
-            height += d.height;
-            length++;
-        }
-        height += vgap * (length + 1) + vmargin * 2 * length;
-        Insets insets = target.getInsets();
-        dim.width = width + insets.left + insets.right + hmargin * 2;
-        dim.height = height + insets.top + insets.bottom;
-        return dim;
-    }
+	@Override
+	public Dimension preferredLayoutSize(Container target) {
+		Dimension dim = new Dimension(0, 0);
+		int width = 0;
+		int height = 0;
+		Component children[] = target.getComponents();
+		int length = 0;
+		for (int i = 0; i < children.length; i++) {
+			if (!children[i].isVisible())
+				continue;
+			Dimension d = children[i].getPreferredSize();
+			width = Math.max(width, d.width);
+			height += d.height;
+			length++;
+		}
+		height += vgap * (length + 1) + vmargin * 2 * length;
+		Insets insets = target.getInsets();
+		dim.width = width + insets.left + insets.right + hmargin * 2;
+		dim.height = height + insets.top + insets.bottom;
+		return dim;
+	}
 
-    /**
-     * Lays out the specified container.
-     * 
-     * @param target
-     *            the component being laid out
-     * @see Container
-     */
-    @Override
-	public void layoutContainer(Container target)
-    {
-        Insets insets = target.getInsets();
-        int top = insets.top, left = insets.left + hmargin;
-        int width = target.getSize().width - left - insets.right - hmargin;
-        Component children[] = target.getComponents();
-        // available vertical space
-        int vroom = target.getSize().height - top - insets.bottom - vmargin * 2;
+	/**
+	 * Lays out the specified container.
+	 * 
+	 * @param target
+	 *            the component being laid out
+	 * @see Container
+	 */
+	@Override
+	public void layoutContainer(Container target) {
+		Insets insets = target.getInsets();
+		int top = insets.top, left = insets.left + hmargin;
+		int width = target.getSize().width - left - insets.right - hmargin;
+		Component children[] = target.getComponents();
+		// available vertical space
+		int vroom = target.getSize().height - top - insets.bottom - vmargin * 2;
 
-        top += vgap;
-        for (int i = 0; i < children.length; i++) {
-            if (!children[i].isVisible())
-                continue;
-            int h = children[i].getPreferredSize().height + vmargin * 2;
-            children[i].setBounds(left, top, width, h);
-            top += h + vgap;
-            vroom -= (h + vgap);
-        }
-    }
+		top += vgap;
+		for (int i = 0; i < children.length; i++) {
+			if (!children[i].isVisible())
+				continue;
+			int h = children[i].getPreferredSize().height + vmargin * 2;
+			children[i].setBounds(left, top, width, h);
+			top += h + vgap;
+			vroom -= (h + vgap);
+		}
+	}
 
-    /**
-     * Returns the String representation of this BorderLayout's values.
-     * 
-     * @return
-     */
-    @Override
-	public String toString()
-    {
-        return getClass().getName() + ",vgap=" + vgap + "]";
-    }
+	/**
+	 * Returns the String representation of this BorderLayout's values.
+	 * 
+	 * @return
+	 */
+	@Override
+	public String toString() {
+		return getClass().getName() + ",vgap=" + vgap + "]";
+	}
 
 }

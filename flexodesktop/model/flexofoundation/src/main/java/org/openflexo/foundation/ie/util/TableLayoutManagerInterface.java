@@ -24,13 +24,11 @@ import java.awt.LayoutManager;
 /**
  * @author sguerin
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ *         TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
  */
-public interface TableLayoutManagerInterface extends LayoutManager
-{
+public interface TableLayoutManagerInterface extends LayoutManager {
 
-    public int getTotalWidth();
+	public int getTotalWidth();
 
-    public int getTotalHeight();
+	public int getTotalHeight();
 }

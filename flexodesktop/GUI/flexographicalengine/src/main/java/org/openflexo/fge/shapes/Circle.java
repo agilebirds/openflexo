@@ -23,25 +23,21 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 
 public class Circle extends Oval {
 
-	public Circle() 
-	{
+	public Circle() {
 		this(null);
 	}
-	
-	public Circle(ShapeGraphicalRepresentation aGraphicalRepresentation) 
-	{
+
+	public Circle(ShapeGraphicalRepresentation aGraphicalRepresentation) {
 		super(aGraphicalRepresentation);
 	}
-	
+
 	@Override
-	public ShapeType getShapeType()
-	{
+	public ShapeType getShapeType() {
 		return ShapeType.CIRCLE;
 	}
 
 	@Override
-	public boolean areDimensionConstrained()
-	{
+	public boolean areDimensionConstrained() {
 		return true;
 	}
 

@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.dgmodule.DGPreferences;
 
-
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -41,95 +40,90 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class GenerateZipInitializer extends ActionInitializer<GenerateZip, GenerationRepository, CGObject>
-{
+public class GenerateZipInitializer extends ActionInitializer<GenerateZip, GenerationRepository, CGObject> {
 
-    private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-    GenerateZipInitializer(DGControllerActionInitializer actionInitializer)
-    {
-        super(GenerateZip.actionType, actionInitializer);
-    }
+	GenerateZipInitializer(DGControllerActionInitializer actionInitializer) {
+		super(GenerateZip.actionType, actionInitializer);
+	}
 
-    @Override
-	protected DGControllerActionInitializer getControllerActionInitializer()
-    {
-        return (DGControllerActionInitializer) super.getControllerActionInitializer();
-    }
+	@Override
+	protected DGControllerActionInitializer getControllerActionInitializer() {
+		return (DGControllerActionInitializer) super.getControllerActionInitializer();
+	}
 
-    @Override
-    protected FlexoActionInitializer<GenerateZip> getDefaultInitializer()
-    {
-        return new FlexoActionInitializer<GenerateZip>() {
-            @Override
-			public boolean run(ActionEvent e, GenerateZip action)
-            {
-            	DGRepository repository = (DGRepository) action.getFocusedObject();
-                if (action.getRepository().getDirectory() == null) {
-                    FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
-                    return false;
-                }
-                if (repository.getPostBuildDirectory() == null) {
-                    FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
-                    return false;
-                }
-                if (!repository.getPostBuildRepository().getDirectory().exists()) {
-                    if (FlexoController.confirm(FlexoLocalization.localizedForKey("directory")+" "+repository.getPostBuildRepository().getDirectory().getAbsolutePath()+" "+FlexoLocalization.localizedForKey("does_not_exist")+"\n"+FlexoLocalization.localizedForKey("would_you_like_to_create_it_and_continue?"))) {
-                    	repository.getPostBuildRepository().getDirectory().mkdirs();
-                    } else {
-                        return false;
-                    }
-                }
-                action.setSaveBeforeGenerating(DGPreferences.getSaveBeforeGenerating());
-                if (repository.getPostBuildDirectory().exists() && !repository.getPostBuildDirectory().canWrite()) {
-                    FlexoController.notify(FlexoLocalization.localizedForKey("permission_denied_for ")
-                            + repository.getPostBuildDirectory().getAbsolutePath());
-                    return false;
-                }
-                return true;
-            }
-        };
-    }
+	@Override
+	protected FlexoActionInitializer<GenerateZip> getDefaultInitializer() {
+		return new FlexoActionInitializer<GenerateZip>() {
+			@Override
+			public boolean run(ActionEvent e, GenerateZip action) {
+				DGRepository repository = (DGRepository) action.getFocusedObject();
+				if (action.getRepository().getDirectory() == null) {
+					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
+					return false;
+				}
+				if (repository.getPostBuildDirectory() == null) {
+					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
+					return false;
+				}
+				if (!repository.getPostBuildRepository().getDirectory().exists()) {
+					if (FlexoController.confirm(FlexoLocalization.localizedForKey("directory") + " "
+							+ repository.getPostBuildRepository().getDirectory().getAbsolutePath() + " "
+							+ FlexoLocalization.localizedForKey("does_not_exist") + "\n"
+							+ FlexoLocalization.localizedForKey("would_you_like_to_create_it_and_continue?"))) {
+						repository.getPostBuildRepository().getDirectory().mkdirs();
+					} else {
+						return false;
+					}
+				}
+				action.setSaveBeforeGenerating(DGPreferences.getSaveBeforeGenerating());
+				if (repository.getPostBuildDirectory().exists() && !repository.getPostBuildDirectory().canWrite()) {
+					FlexoController.notify(FlexoLocalization.localizedForKey("permission_denied_for ")
+							+ repository.getPostBuildDirectory().getAbsolutePath());
+					return false;
+				}
+				return true;
+			}
+		};
+	}
 
-    @Override
-    protected FlexoActionFinalizer<GenerateZip> getDefaultFinalizer()
-    {
-        return new FlexoActionFinalizer<GenerateZip>() {
-            @Override
-			public boolean run(ActionEvent e, GenerateZip action)
-            {
-                if (action.getGeneratedZipFile() != null && DGPreferences.getShowZIP()) {
-                	if (action.getGeneratedZipFile()!=null && action.getGeneratedZipFile().exists()) {
-            			try {
-            				ToolBox.showFileInExplorer(action.getGeneratedZipFile());
-            			} catch (IOException e1) {
-            				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_file")+" "+action.getGeneratedZipFile().getAbsolutePath());
-            				return false;
-            			}
-            		}
-                }
-                return true;
-            }
-        };
-    }
+	@Override
+	protected FlexoActionFinalizer<GenerateZip> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<GenerateZip>() {
+			@Override
+			public boolean run(ActionEvent e, GenerateZip action) {
+				if (action.getGeneratedZipFile() != null && DGPreferences.getShowZIP()) {
+					if (action.getGeneratedZipFile() != null && action.getGeneratedZipFile().exists()) {
+						try {
+							ToolBox.showFileInExplorer(action.getGeneratedZipFile());
+						} catch (IOException e1) {
+							FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_file") + " "
+									+ action.getGeneratedZipFile().getAbsolutePath());
+							return false;
+						}
+					}
+				}
+				return true;
+			}
+		};
+	}
 
-    @Override
-    protected FlexoExceptionHandler<GenerateZip> getDefaultExceptionHandler()
-    {
-        return new FlexoExceptionHandler<GenerateZip>() {
-            @Override
-			public boolean handleException(FlexoException exception, GenerateZip action)
-            {
-                getControllerActionInitializer().getDGController().disposeProgressWindow();
-                if (exception instanceof GenerationException) {
-                    FlexoController.notify(FlexoLocalization.localizedForKey("generation_failed") + ":\n"
-                            + ((GenerationException) exception).getLocalizedMessage());
-                    return true;
-                }
-                exception.printStackTrace();
-                return false;
-            }
-        };
-    }
+	@Override
+	protected FlexoExceptionHandler<GenerateZip> getDefaultExceptionHandler() {
+		return new FlexoExceptionHandler<GenerateZip>() {
+			@Override
+			public boolean handleException(FlexoException exception, GenerateZip action) {
+				getControllerActionInitializer().getDGController().disposeProgressWindow();
+				if (exception instanceof GenerationException) {
+					FlexoController.notify(FlexoLocalization.localizedForKey("generation_failed") + ":\n"
+							+ ((GenerationException) exception).getLocalizedMessage());
+					return true;
+				}
+				exception.printStackTrace();
+				return false;
+			}
+		};
+	}
 
 }

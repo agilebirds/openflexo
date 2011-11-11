@@ -27,16 +27,14 @@ import org.openflexo.foundation.rm.FlexoProject;
 public class SGTemplates extends CGTemplates {
 
 	public SGTemplates(FlexoProject project) {
-		super(project,null);
-        _applicationRepository = new ApplicationSGTemplateRepository(this);
+		super(project, null);
+		_applicationRepository = new ApplicationSGTemplateRepository(this);
 		update();
 	}
 
 	@Override
-	public CustomCGTemplateRepository createNewCustomTemplatesRepository(CustomTemplatesResource resource)
-	{
-		return new CustomSGTemplateRepository(this,resource);
+	public CustomCGTemplateRepository createNewCustomTemplatesRepository(CustomTemplatesResource resource) {
+		return new CustomSGTemplateRepository(this, resource);
 	}
-	
 
 }

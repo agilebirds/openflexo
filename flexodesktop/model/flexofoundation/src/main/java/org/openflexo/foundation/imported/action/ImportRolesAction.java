@@ -38,39 +38,39 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.ws.client.PPMWebService.PPMRole;
 
-
 public class ImportRolesAction extends FlexoAction<ImportRolesAction, WorkflowModelObject, WorkflowModelObject> {
-	
+
 	private static final Logger logger = FlexoLogger.getLogger(ImportRolesAction.class.getPackage().getName());
 
-	public static final FlexoActionType<ImportRolesAction, WorkflowModelObject, WorkflowModelObject> actionType = 
-		new FlexoActionType<ImportRolesAction, WorkflowModelObject, WorkflowModelObject>("import_roles",FlexoActionType.defaultGroup,FlexoActionType.importMenu,FlexoActionType.ADD_ACTION_TYPE) {
-		
-			@Override
-			public ImportRolesAction makeNewAction(WorkflowModelObject focusedObject, Vector<WorkflowModelObject> globalSelection, FlexoEditor editor) {
-				return new ImportRolesAction(focusedObject,globalSelection,editor);
-			}
-		
-			@Override
-			protected boolean isVisibleForSelection(WorkflowModelObject object, Vector<WorkflowModelObject> globalSelection) {
-				return true;
-			}
-		
-			@Override
-			protected boolean isEnabledForSelection(WorkflowModelObject object, Vector<WorkflowModelObject> globalSelection) {
-				return true;
-			}
-		};
-	
+	public static final FlexoActionType<ImportRolesAction, WorkflowModelObject, WorkflowModelObject> actionType = new FlexoActionType<ImportRolesAction, WorkflowModelObject, WorkflowModelObject>(
+			"import_roles", FlexoActionType.defaultGroup, FlexoActionType.importMenu, FlexoActionType.ADD_ACTION_TYPE) {
+
+		@Override
+		public ImportRolesAction makeNewAction(WorkflowModelObject focusedObject, Vector<WorkflowModelObject> globalSelection,
+				FlexoEditor editor) {
+			return new ImportRolesAction(focusedObject, globalSelection, editor);
+		}
+
+		@Override
+		protected boolean isVisibleForSelection(WorkflowModelObject object, Vector<WorkflowModelObject> globalSelection) {
+			return true;
+		}
+
+		@Override
+		protected boolean isEnabledForSelection(WorkflowModelObject object, Vector<WorkflowModelObject> globalSelection) {
+			return true;
+		}
+	};
+
 	static {
 		FlexoModelObject.addActionForClass(actionType, RoleList.class);
 		FlexoModelObject.addActionForClass(actionType, Role.class);
 	}
 
 	private RoleImportReport importReport;
-	
+
 	private Vector<PPMRole> rolesToImport;
-	
+
 	public Vector<PPMRole> getRolesToImport() {
 		return rolesToImport;
 	}
@@ -83,8 +83,7 @@ public class ImportRolesAction extends FlexoAction<ImportRolesAction, WorkflowMo
 		return importReport;
 	}
 
-	protected ImportRolesAction(WorkflowModelObject focusedObject,
-			Vector<WorkflowModelObject> globalSelection, FlexoEditor editor) {
+	protected ImportRolesAction(WorkflowModelObject focusedObject, Vector<WorkflowModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -102,22 +101,22 @@ public class ImportRolesAction extends FlexoAction<ImportRolesAction, WorkflowMo
 				} catch (RoleAlreadyImportedException e) {
 					importReport.addToAlreadyImportedRoles(p);
 					if (logger.isLoggable(Level.FINE))
-						logger.log(Level.FINE,"Role "+p.getName()+" was already imported",e);
+						logger.log(Level.FINE, "Role " + p.getName() + " was already imported", e);
 				}
 			}
 		}
 
 	}
-	
+
 	private boolean isValid(PPMRole role) {
-    	return role.getUri()!=null && role.getVersionUri()!=null;
-    }
-	
+		return role.getUri() != null && role.getVersionUri() != null;
+	}
+
 	public static class RoleImportReport {
-		private LinkedHashMap<PPMRole,Role> properlyImported;
+		private LinkedHashMap<PPMRole, Role> properlyImported;
 		private Vector<PPMRole> invalidRoles;
 		private Vector<PPMRole> alreadyImportedRoles;
-		
+
 		public RoleImportReport() {
 			properlyImported = new LinkedHashMap<PPMRole, Role>();
 			invalidRoles = new Vector<PPMRole>();
@@ -135,7 +134,7 @@ public class ImportRolesAction extends FlexoAction<ImportRolesAction, WorkflowMo
 		public void addToProperlyImportedRoles(PPMRole processToImport, Role matchingImportedRole) {
 			properlyImported.put(processToImport, matchingImportedRole);
 		}
-		
+
 		public Vector<PPMRole> getInvalidRoles() {
 			return invalidRoles;
 		}
@@ -143,7 +142,7 @@ public class ImportRolesAction extends FlexoAction<ImportRolesAction, WorkflowMo
 		public void setInvalidRoles(Vector<PPMRole> invalidRole) {
 			this.invalidRoles = invalidRole;
 		}
-		
+
 		public void addToInvalidRoles(PPMRole process) {
 			invalidRoles.add(process);
 		}
@@ -151,36 +150,36 @@ public class ImportRolesAction extends FlexoAction<ImportRolesAction, WorkflowMo
 		public Vector<PPMRole> getAlreadyImportedRoles() {
 			return alreadyImportedRoles;
 		}
-		
+
 		public void setAlreadyImportedRoles(Vector<PPMRole> invalidRole) {
 			this.alreadyImportedRoles = invalidRole;
 		}
-		
+
 		public void addToAlreadyImportedRoles(PPMRole process) {
 			alreadyImportedRoles.add(process);
 		}
-		
+
 		@Override
 		public String toString() {
 			StringBuilder sb = new StringBuilder();
 			// 1. Properly imported
 			Iterator<PPMRole> i = getProperlyImported().keySet().iterator();
-			append(sb,i,FlexoLocalization.localizedForKey("the_following_roles_have_been_properly_imported"));
+			append(sb, i, FlexoLocalization.localizedForKey("the_following_roles_have_been_properly_imported"));
 			// 2. Invalid roles
 			i = getInvalidRoles().iterator();
-			append(sb,i,FlexoLocalization.localizedForKey("the_following_roles_were_not_valid"));
+			append(sb, i, FlexoLocalization.localizedForKey("the_following_roles_were_not_valid"));
 			// 3. Already imported
 			i = getAlreadyImportedRoles().iterator();
-			append(sb,i,FlexoLocalization.localizedForKey("the_following_roles_were_already_imported"));
-			if (sb.length()==0)
+			append(sb, i, FlexoLocalization.localizedForKey("the_following_roles_were_already_imported"));
+			if (sb.length() == 0)
 				return FlexoLocalization.localizedForKey("nothing_has_been_imported");
-			else 
+			else
 				sb.append("</html>");
 			return sb.toString();
 		}
-		
-		private void append(StringBuilder sb,Iterator<PPMRole> i,String title) {
-			if (sb.length()==0)
+
+		private void append(StringBuilder sb, Iterator<PPMRole> i, String title) {
+			if (sb.length() == 0)
 				sb.append("<html>");
 			boolean needsClosingUl = false;
 			if (i.hasNext()) {
@@ -198,6 +197,5 @@ public class ImportRolesAction extends FlexoAction<ImportRolesAction, WorkflowMo
 		}
 
 	}
-	
 
 }

@@ -21,14 +21,13 @@ public class RemoveFromAccountableRole extends RemoveFromXRole<RemoveFromAccount
 	private static final Logger logger = Logger.getLogger(RemoveFromAccountableRole.class.getPackage().getName());
 
 	public static FlexoActionType<RemoveFromAccountableRole, Role, AbstractActivityNode> actionType = new FlexoActionType<RemoveFromAccountableRole, Role, AbstractActivityNode>(
-	"remove_from_accountable_role") {
+			"remove_from_accountable_role") {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public RemoveFromAccountableRole makeNewAction(Role focusedObject, Vector<AbstractActivityNode> globalSelection,
-				FlexoEditor editor) {
+		public RemoveFromAccountableRole makeNewAction(Role focusedObject, Vector<AbstractActivityNode> globalSelection, FlexoEditor editor) {
 			return new RemoveFromAccountableRole(focusedObject, globalSelection, editor);
 		}
 

@@ -33,40 +33,38 @@ import javax.swing.text.StyledEditorKit;
 import javax.swing.text.html.HTMLDocument;
 
 /**
- *
+ * 
  * @author Rudolf Visagie
  */
 public class UnlinkAction extends StyledEditorKit.StyledTextAction {
-    private MetaphaseEditorPanel editorPanel;
+	private MetaphaseEditorPanel editorPanel;
 
-    public UnlinkAction(MetaphaseEditorPanel editorPanel, String actionName) {
-            super(actionName);
-            this.editorPanel = editorPanel;
-    }
+	public UnlinkAction(MetaphaseEditorPanel editorPanel, String actionName) {
+		super(actionName);
+		this.editorPanel = editorPanel;
+	}
 
-    public void actionPerformed(ActionEvent ae) {
-        JTextPane textPane = editorPanel.getHtmlTextPane();
-        HTMLDocument htmlDocument = (HTMLDocument) textPane.getDocument();
+	public void actionPerformed(ActionEvent ae) {
+		JTextPane textPane = editorPanel.getHtmlTextPane();
+		HTMLDocument htmlDocument = (HTMLDocument) textPane.getDocument();
 
-        int start = textPane.getSelectionStart();
+		int start = textPane.getSelectionStart();
 
-        Element element = null;
-        for (
-                element = htmlDocument.getCharacterElement(start);
-                element != null && !element.getName().equals("a") && !element.getName().equals("content");
-                ) {
-            element = element.getParentElement();
-        }
-        if (element != null) {
-            try {
-                String text = htmlDocument.getText(element.getStartOffset(), element.getEndOffset() - element.getStartOffset());
-                htmlDocument.setOuterHTML(element, text);
-                editorPanel.refreshAfterAction();
-            } catch (IOException ex) {
-                throw new MetaphaseEditorException(ex.getMessage(), ex);
-            } catch (BadLocationException ex) {
-                throw new MetaphaseEditorException(ex.getMessage(), ex);
-            }
-        }
-    }
+		Element element = null;
+		for (element = htmlDocument.getCharacterElement(start); element != null && !element.getName().equals("a")
+				&& !element.getName().equals("content");) {
+			element = element.getParentElement();
+		}
+		if (element != null) {
+			try {
+				String text = htmlDocument.getText(element.getStartOffset(), element.getEndOffset() - element.getStartOffset());
+				htmlDocument.setOuterHTML(element, text);
+				editorPanel.refreshAfterAction();
+			} catch (IOException ex) {
+				throw new MetaphaseEditorException(ex.getMessage(), ex);
+			} catch (BadLocationException ex) {
+				throw new MetaphaseEditorException(ex.getMessage(), ex);
+			}
+		}
+	}
 }

@@ -61,7 +61,6 @@ import org.openflexo.sg.generationdef.SymbolicPathEntry;
 import org.openflexo.toolbox.FileFormat;
 import org.openflexo.toolbox.ToolBox;
 
-
 /**
  * @author sylvain
  * 
@@ -74,8 +73,10 @@ public class ModuleGenerator extends MetaGenerator<FlexoModelObject, SourceRepos
 	 * This map allows data transfer between modules. <br>
 	 * Key is a custom String allowing to classify the content. <br>
 	 * Value is a sorted map with the 'from generator' and an object representing the data list. <br>
-	 * This object can be either a List<Object>, a Map<Object, Object> or a Set<Object> depending on method used to perform the data insertion. <br>
-	 * The 'from generator' is stored to allow clean of the transfered value from this generator only (as not all files are regenerated at each time, we must keep previous not regenerated content).
+	 * This object can be either a List<Object>, a Map<Object, Object> or a Set<Object> depending on method used to perform the data
+	 * insertion. <br>
+	 * The 'from generator' is stored to allow clean of the transfered value from this generator only (as not all files are regenerated at
+	 * each time, we must keep previous not regenerated content).
 	 */
 	private final Map<String, LinkedHashMap<Generator<?, ?>, Object>> crossModuleDataMap = new HashMap<String, LinkedHashMap<Generator<?, ?>, Object>>();
 
@@ -146,9 +147,11 @@ public class ModuleGenerator extends MetaGenerator<FlexoModelObject, SourceRepos
 
 	/**
 	 * Retrieve all data inserted by other modules for the specified classifier. <br>
-	 * The returned Object can be either a List<Object>, a Map<Object, Object> or a Set<Object> depending on method used to perform the data insertion.
+	 * The returned Object can be either a List<Object>, a Map<Object, Object> or a Set<Object> depending on method used to perform the data
+	 * insertion.
 	 * 
-	 * @param classifier : the data classifier.
+	 * @param classifier
+	 *            : the data classifier.
 	 * @return all data inserted by other modules for the specified classifier.
 	 */
 	@SuppressWarnings({ "unchecked" })
@@ -188,11 +191,14 @@ public class ModuleGenerator extends MetaGenerator<FlexoModelObject, SourceRepos
 	/**
 	 * Add a data object in this module cross data for the specified classifier. <br>
 	 * The data container used for the specified classifier will be a List<Object>. <br>
-	 * If this module already contains data for this classifier, it MUST have been inserted using the same method to ensure List<Object> is used everywhere. <br>
+	 * If this module already contains data for this classifier, it MUST have been inserted using the same method to ensure List<Object> is
+	 * used everywhere. <br>
 	 * If this module already contains data for this classifier which is not a List<Object>, a RuntimeException is thrown.
 	 * 
-	 * @param fromGenerator the generator which adds this data
-	 * @param classifier the data classifier, used to allow different type of data for the same module.
+	 * @param fromGenerator
+	 *            the generator which adds this data
+	 * @param classifier
+	 *            the data classifier, used to allow different type of data for the same module.
 	 * @param data
 	 */
 	@SuppressWarnings("unchecked")
@@ -208,8 +214,9 @@ public class ModuleGenerator extends MetaGenerator<FlexoModelObject, SourceRepos
 		// Checks all data are in List<Object> for each generator
 		for (Entry<Generator<?, ?>, Object> entry : classifiedMap.entrySet()) {
 			if ((entry.getValue() != null) && !(entry.getValue() instanceof List)) {
-				throw new RuntimeException("Cannot add cross module data in module '" + this.getTechnologyModule().getName() + "' for classifier '" + classifier
-						+ "' because it already contains a non List value (" + entry.getValue().getClass() + ") added by generator '" + entry.getKey() + "'");
+				throw new RuntimeException("Cannot add cross module data in module '" + this.getTechnologyModule().getName()
+						+ "' for classifier '" + classifier + "' because it already contains a non List value ("
+						+ entry.getValue().getClass() + ") added by generator '" + entry.getKey() + "'");
 			}
 		}
 
@@ -226,11 +233,14 @@ public class ModuleGenerator extends MetaGenerator<FlexoModelObject, SourceRepos
 	/**
 	 * Add a data object in this module cross data for the specified classifier. <br>
 	 * The data container used for the specified classifier will be a Set<Object>. <br>
-	 * If this module already contains data for this classifier, it MUST have been inserted using the same method to ensure Set<Object> is used everywhere. <br>
+	 * If this module already contains data for this classifier, it MUST have been inserted using the same method to ensure Set<Object> is
+	 * used everywhere. <br>
 	 * If this module already contains data for this classifier which is not a Set<Object>, a RuntimeException is thrown.
 	 * 
-	 * @param fromGenerator the generator which adds this data
-	 * @param classifier the data classifier, used to allow different type of data for the same module.
+	 * @param fromGenerator
+	 *            the generator which adds this data
+	 * @param classifier
+	 *            the data classifier, used to allow different type of data for the same module.
 	 * @param data
 	 */
 	@SuppressWarnings("unchecked")
@@ -246,8 +256,9 @@ public class ModuleGenerator extends MetaGenerator<FlexoModelObject, SourceRepos
 		// Checks all data are in List<Object> for each generator
 		for (Entry<Generator<?, ?>, Object> entry : classifiedMap.entrySet()) {
 			if ((entry.getValue() != null) && !(entry.getValue() instanceof Set)) {
-				throw new RuntimeException("Cannot add cross module data in module '" + this.getTechnologyModule().getName() + "' for classifier '" + classifier
-						+ "' because it already contains a non Set value (" + entry.getValue().getClass() + ") added by generator '" + entry.getKey() + "'");
+				throw new RuntimeException("Cannot add cross module data in module '" + this.getTechnologyModule().getName()
+						+ "' for classifier '" + classifier + "' because it already contains a non Set value ("
+						+ entry.getValue().getClass() + ") added by generator '" + entry.getKey() + "'");
 			}
 		}
 
@@ -264,12 +275,16 @@ public class ModuleGenerator extends MetaGenerator<FlexoModelObject, SourceRepos
 	/**
 	 * Add a data object in this module cross data for the specified classifier. <br>
 	 * The data container used for the specified classifier will be a Map<Object, Object>. <br>
-	 * If this module already contains data for this classifier, it MUST have been inserted using the same method to ensure Map<Object, Object> is used everywhere. <br>
+	 * If this module already contains data for this classifier, it MUST have been inserted using the same method to ensure Map<Object,
+	 * Object> is used everywhere. <br>
 	 * If this module already contains data for this classifier which is not a Map<Object, Object>, a RuntimeException is thrown.
 	 * 
-	 * @param fromGenerator the generator which adds this data
-	 * @param classifier the data classifier, used to allow different type of data for the same module.
-	 * @param key the key to use to insert the data into the map
+	 * @param fromGenerator
+	 *            the generator which adds this data
+	 * @param classifier
+	 *            the data classifier, used to allow different type of data for the same module.
+	 * @param key
+	 *            the key to use to insert the data into the map
 	 * @param data
 	 */
 	@SuppressWarnings("unchecked")
@@ -285,9 +300,9 @@ public class ModuleGenerator extends MetaGenerator<FlexoModelObject, SourceRepos
 		// Checks all data are in List<Object> for each generator
 		for (Entry<Generator<?, ?>, Object> entry : classifiedMap.entrySet()) {
 			if ((entry.getValue() != null) && !(entry.getValue() instanceof Map)) {
-				throw new RuntimeException("Cannot add cross module data in module '" + this.getTechnologyModule().getName() + "' for classifier '" + classifier
-						+ "' because it already contains a non Map value (" + entry.getValue().getClass() + ") added by generator '" + entry.getKey()
-						+ "'");
+				throw new RuntimeException("Cannot add cross module data in module '" + this.getTechnologyModule().getName()
+						+ "' for classifier '" + classifier + "' because it already contains a non Map value ("
+						+ entry.getValue().getClass() + ") added by generator '" + entry.getKey() + "'");
 			}
 		}
 
@@ -314,7 +329,8 @@ public class ModuleGenerator extends MetaGenerator<FlexoModelObject, SourceRepos
 		try {
 			templateWithName(getTemplateName());
 		} catch (TemplateNotFoundException e1) {
-			logger.warning("Could not generate TechnologyModule " + getTechnologyModule().getTechnologyModuleDefinition().getName() + " no main.xml.vm found");
+			logger.warning("Could not generate TechnologyModule " + getTechnologyModule().getTechnologyModuleDefinition().getName()
+					+ " no main.xml.vm found");
 			return;
 		}
 
@@ -337,8 +353,10 @@ public class ModuleGenerator extends MetaGenerator<FlexoModelObject, SourceRepos
 			for (SymbolicPathEntry symbolicPath : generation.symbolicPaths) {
 				// Ensure declaration or creation of used symbolic dir
 				if (getSourceRepository().getSymbolicDirectoryNamed(symbolicPath.name, false) == null) {
-					FlexoProjectFile resourcesSymbDir = new FlexoProjectFile(getProject(), getSourceRepository().getSourceCodeRepository(), symbolicPath.path);
-					getSourceRepository().setSymbolicDirectoryForKey(new CGSymbolicDirectory(getSourceRepository(), symbolicPath.name, resourcesSymbDir), symbolicPath.name);
+					FlexoProjectFile resourcesSymbDir = new FlexoProjectFile(getProject(), getSourceRepository().getSourceCodeRepository(),
+							symbolicPath.path);
+					getSourceRepository().setSymbolicDirectoryForKey(
+							new CGSymbolicDirectory(getSourceRepository(), symbolicPath.name, resourcesSymbDir), symbolicPath.name);
 					resourcesSymbDir.getFile().mkdirs();
 				}
 			}
@@ -348,7 +366,8 @@ public class ModuleGenerator extends MetaGenerator<FlexoModelObject, SourceRepos
 				String identifier = SGFile.makeIdentifier(file.name, file.symbolicPath, file.relativePath);
 				CGSymbolicDirectory symbDir = getSourceRepository().getSymbolicDirectoryNamed(file.symbolicPath, true);
 				if (file.getFormat().equals(FileFormat.JAVA)) {
-					SGJavaFileResource javaResource = (SGJavaFileResource) resourceForKeyWithCGFile(ResourceType.JAVA_FILE, GeneratorUtils.nameForRepositoryAndIdentifier(repository, identifier));
+					SGJavaFileResource javaResource = (SGJavaFileResource) resourceForKeyWithCGFile(ResourceType.JAVA_FILE,
+							GeneratorUtils.nameForRepositoryAndIdentifier(repository, identifier));
 					if (javaResource == null) {
 						SGJavaClassGenerator generator = new SGJavaClassGenerator(this, file);
 						javaResource = new SGJavaFileResource(getProject());
@@ -368,7 +387,8 @@ public class ModuleGenerator extends MetaGenerator<FlexoModelObject, SourceRepos
 					resources.add(javaResource);
 					generators.put(javaResource, javaResource.getGenerator());
 				} else {
-					SGTextFileResource textResource = (SGTextFileResource) resourceForKeyWithCGFile(ResourceType.TEXT_FILE, GeneratorUtils.nameForRepositoryAndIdentifier(repository, identifier));
+					SGTextFileResource textResource = (SGTextFileResource) resourceForKeyWithCGFile(ResourceType.TEXT_FILE,
+							GeneratorUtils.nameForRepositoryAndIdentifier(repository, identifier));
 					if (textResource == null) {
 						SGTextFileGenerator generator = new SGTextFileGenerator(this, file);
 						textResource = new SGTextFileResource(getProject());

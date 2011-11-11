@@ -31,119 +31,100 @@ import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
-
 /**
  * Represents type of an hyperlink
  * 
  * @author sguerin
  * 
  */
-public abstract class ClientSideEventType extends FlexoObject implements StringConvertable, ChoiceList, Serializable
-{
+public abstract class ClientSideEventType extends FlexoObject implements StringConvertable, ChoiceList, Serializable {
 
-    private static final Logger logger = Logger.getLogger(ClientSideEventType.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ClientSideEventType.class.getPackage().getName());
 
-    public static final ClientSideEventType ONCLICK = new OnClickClientSideEventType();
-    public static final ClientSideEventType MOUSEOUT = new MouseOutClientSideEventType();
-    public static final ClientSideEventType MOUSEOVER = new MouseOverClientSideEventType();
+	public static final ClientSideEventType ONCLICK = new OnClickClientSideEventType();
+	public static final ClientSideEventType MOUSEOUT = new MouseOutClientSideEventType();
+	public static final ClientSideEventType MOUSEOVER = new MouseOverClientSideEventType();
 
-    public static final StringEncoder.Converter<ClientSideEventType> ClientSideEventTypeConverter = new Converter<ClientSideEventType>(ClientSideEventType.class) {
+	public static final StringEncoder.Converter<ClientSideEventType> ClientSideEventTypeConverter = new Converter<ClientSideEventType>(
+			ClientSideEventType.class) {
 
-        @Override
-		public ClientSideEventType convertFromString(String value)
-        {
-            return get(value);
-        }
+		@Override
+		public ClientSideEventType convertFromString(String value) {
+			return get(value);
+		}
 
-        @Override
-		public String convertToString(ClientSideEventType value)
-        {
-            return value.getName();
-        }
+		@Override
+		public String convertToString(ClientSideEventType value) {
+			return value.getName();
+		}
 
-    };
+	};
 
-    public static class OnClickClientSideEventType extends ClientSideEventType
-    {
-        OnClickClientSideEventType()
-        {
-        }
+	public static class OnClickClientSideEventType extends ClientSideEventType {
+		OnClickClientSideEventType() {
+		}
 
-        @Override
-		public String getName()
-        {
-            return "onclick";
-        }
-    }
+		@Override
+		public String getName() {
+			return "onclick";
+		}
+	}
 
+	public static class MouseOutClientSideEventType extends ClientSideEventType {
+		MouseOutClientSideEventType() {
+		}
 
-    public static class MouseOutClientSideEventType extends ClientSideEventType
-    {
-        MouseOutClientSideEventType()
-        {
-        }
+		@Override
+		public String getName() {
+			return "onmouseout";
+		}
+	}
 
-        @Override
-		public String getName()
-        {
-            return "onmouseout";
-        }
-    }
-    
-    
-    public static class MouseOverClientSideEventType extends ClientSideEventType
-    {
-    	MouseOverClientSideEventType()
-        {
-        }
+	public static class MouseOverClientSideEventType extends ClientSideEventType {
+		MouseOverClientSideEventType() {
+		}
 
-        @Override
-		public String getName()
-        {
-            return "onmouseover";
-        }
-    }
+		@Override
+		public String getName() {
+			return "onmouseover";
+		}
+	}
 
+	public abstract String getName();
 
-    public abstract String getName();
+	public static ClientSideEventType get(String typeName) {
+		for (Enumeration e = availableValues().elements(); e.hasMoreElements();) {
+			ClientSideEventType temp = (ClientSideEventType) e.nextElement();
+			if (temp.getName().equals(typeName)) {
+				return temp;
+			}
+		}
 
-    public static ClientSideEventType get(String typeName)
-    {
-        for (Enumeration e = availableValues().elements(); e.hasMoreElements();) {
-            ClientSideEventType temp = (ClientSideEventType) e.nextElement();
-            if (temp.getName().equals(typeName)) {
-                return temp;
-            }
-        }
+		if (logger.isLoggable(Level.WARNING))
+			logger.warning("Could not find ClientSideEventType named " + typeName);
+		return null;
+	}
 
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("Could not find ClientSideEventType named " + typeName);
-        return null;
-    }
+	private Vector<ClientSideEventType> _availableValues = null;
 
-    private Vector<ClientSideEventType> _availableValues = null;
+	@Override
+	public Vector getAvailableValues() {
+		if (_availableValues == null) {
+			_availableValues = new Vector<ClientSideEventType>();
+			_availableValues.add(ONCLICK);
+			_availableValues.add(MOUSEOUT);
+			_availableValues.add(MOUSEOVER);
+		}
+		return _availableValues;
+	}
 
-    @Override
-	public Vector getAvailableValues()
-    {
-        if (_availableValues == null) {
-            _availableValues = new Vector<ClientSideEventType>();
-            _availableValues.add(ONCLICK);
-            _availableValues.add(MOUSEOUT);
-            _availableValues.add(MOUSEOVER);
-        }
-        return _availableValues;
-    }
+	@Override
+	public StringEncoder.Converter getConverter() {
+		return ClientSideEventTypeConverter;
+	}
 
-    @Override
-	public StringEncoder.Converter getConverter()
-    {
-        return ClientSideEventTypeConverter;
-    }
-
-    public static Vector availableValues()
-    {
-        return ONCLICK.getAvailableValues();
-    }
+	public static Vector availableValues() {
+		return ONCLICK.getAvailableValues();
+	}
 
 }

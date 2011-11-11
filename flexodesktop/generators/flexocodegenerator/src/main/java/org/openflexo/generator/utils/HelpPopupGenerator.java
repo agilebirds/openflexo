@@ -38,73 +38,70 @@ import org.openflexo.generator.rm.UtilComponentWOFileResource;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 
+public class HelpPopupGenerator extends MetaWOGenerator {
+	private static final Logger logger = FlexoLogger.getLogger(HelpPopupGenerator.class.getPackage().getName());
 
-public class HelpPopupGenerator extends MetaWOGenerator
-{
-    private static final Logger logger = FlexoLogger.getLogger(HelpPopupGenerator.class.getPackage().getName());
-
-    public HelpPopupGenerator(ProjectGenerator projectGenerator)
-    {
-        super(projectGenerator,null,projectGenerator.getPrefix() + "HelpPopup","");
-    }
+	public HelpPopupGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, null, projectGenerator.getPrefix() + "HelpPopup", "");
+	}
 
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
-   @Override
-public synchronized void generate(boolean forceRegenerate)
-    {
-	   	if (!forceRegenerate && !needsGeneration()) return;
-    	try {
-    		refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating")+ " "+getIdentifier(),false);
-    		startGeneration();
-    		VelocityContext velocityContext = defaultContext();
-    		String javaCode = merge("HelpPopup.java.vm", velocityContext);
-    		try {
-    			javaAppendingException = null;
-				javaCode = JavaCodeMerger.mergeJavaCode(javaCode,getEntity(),javaResource);
-    		} catch (JavaParseException e) {
-    			javaAppendingException = new JavaAppendingException(this, getEntity().getFullQualifiedName(), e);
-    			logger.warning("Could not parse generated code. Escape java merge.");
-    		}
-    		_javaFormattingException = null;
-    		try {
-    			javaCode = GeneratorFormatter.formatJavaCode(javaCode,"",getIdentifier(),this,getProject());
-    		} catch (JavaFormattingException javaFormattingException) {
-    			_javaFormattingException = javaFormattingException;
-    		}
-    		String apiCode = merge("HelpPopup.api.vm", velocityContext);
-    		String htmlCode = merge("HelpPopup.html.vm", velocityContext);
-    		String wodCode = merge("HelpPopup.wod.vm", velocityContext);
-    		generatedCode = new GeneratedComponent(getComponentClassName(), javaCode, apiCode, htmlCode, wodCode, GeneratorUtils.defaultWOO());
-    	} catch (GenerationException e) {
-    		setGenerationException(e);
+	@Override
+	public synchronized void generate(boolean forceRegenerate) {
+		if (!forceRegenerate && !needsGeneration())
+			return;
+		try {
+			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + getIdentifier(), false);
+			startGeneration();
+			VelocityContext velocityContext = defaultContext();
+			String javaCode = merge("HelpPopup.java.vm", velocityContext);
+			try {
+				javaAppendingException = null;
+				javaCode = JavaCodeMerger.mergeJavaCode(javaCode, getEntity(), javaResource);
+			} catch (JavaParseException e) {
+				javaAppendingException = new JavaAppendingException(this, getEntity().getFullQualifiedName(), e);
+				logger.warning("Could not parse generated code. Escape java merge.");
+			}
+			_javaFormattingException = null;
+			try {
+				javaCode = GeneratorFormatter.formatJavaCode(javaCode, "", getIdentifier(), this, getProject());
+			} catch (JavaFormattingException javaFormattingException) {
+				_javaFormattingException = javaFormattingException;
+			}
+			String apiCode = merge("HelpPopup.api.vm", velocityContext);
+			String htmlCode = merge("HelpPopup.html.vm", velocityContext);
+			String wodCode = merge("HelpPopup.wod.vm", velocityContext);
+			generatedCode = new GeneratedComponent(getComponentClassName(), javaCode, apiCode, htmlCode, wodCode,
+					GeneratorUtils.defaultWOO());
+		} catch (GenerationException e) {
+			setGenerationException(e);
 		} catch (Exception e) {
-			setGenerationException(new UnexpectedExceptionOccuredException(e,getProjectGenerator()));
-    	} finally {
-    		stopGeneration();
-    	}
-    }
+			setGenerationException(new UnexpectedExceptionOccuredException(e, getProjectGenerator()));
+		} finally {
+			stopGeneration();
+		}
+	}
 
 	@Override
 	public void rebuildDependanciesForResource(UtilComponentJavaFileResource java) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void rebuildDependanciesForResource(UtilComponentWOFileResource wo) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void rebuildDependanciesForResource(UtilComponentAPIFileResource api) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

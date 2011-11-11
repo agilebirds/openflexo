@@ -26,7 +26,6 @@ import org.openflexo.foundation.rm.cg.TextFile;
 import org.openflexo.generator.FlexoResourceGenerator;
 import org.openflexo.generator.rm.GenerationAvailableFile;
 
-
 public class ApplicationConfProdFile extends TextFile implements GenerationAvailableFile {
 
 	public ApplicationConfProdFile() {
@@ -43,14 +42,12 @@ public class ApplicationConfProdFile extends TextFile implements GenerationAvail
 	}
 
 	@Override
-	public ApplicationConfProdResource getFlexoResource()
-    {
-        return (ApplicationConfProdResource)super.getFlexoResource();
-    }
+	public ApplicationConfProdResource getFlexoResource() {
+		return (ApplicationConfProdResource) super.getFlexoResource();
+	}
 
 	@Override
-	public FlexoResourceGenerator getGenerator() 
-	{
+	public FlexoResourceGenerator getGenerator() {
 		return getFlexoResource().getGenerator();
 	}
 }

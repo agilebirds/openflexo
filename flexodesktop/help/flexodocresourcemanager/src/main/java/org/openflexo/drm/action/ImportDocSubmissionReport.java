@@ -32,87 +32,74 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 
+public class ImportDocSubmissionReport extends FlexoAction {
 
-public class ImportDocSubmissionReport extends FlexoAction 
-{
+	private static final Logger logger = Logger.getLogger(ImportDocSubmissionReport.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(ImportDocSubmissionReport.class.getPackage().getName());
+	public static FlexoActionType actionType = new FlexoActionType("import_doc_submission_report", FlexoActionType.defaultGroup,
+			FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType actionType = new FlexoActionType ("import_doc_submission_report",FlexoActionType.defaultGroup,FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new ImportDocSubmissionReport(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) 
-        {
-            return new ImportDocSubmissionReport(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return isEnabledForSelection(object, globalSelection);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return isEnabledForSelection(object,globalSelection);
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return ((object != null) && (object instanceof DocItemFolder) && (((DocItemFolder) object).isRootFolder()));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return ((object != null) 
-                    && (object instanceof DocItemFolder)
-                    && (((DocItemFolder)object).isRootFolder()));
-        }
-               
-    };
-    
-    ImportDocSubmissionReport (FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
-    
-    private File _docSubmissionReportFile;
-    private Vector _actionsToImport; // null if all actions must be imported
-    
-    @Override
-	protected void doAction(Object context) 
-    {
-        logger.info ("ImportDocSubmissionReport");
-        if (getDocSubmissionReport() != null) {
-            DocResourceManager.instance().importDocSubmissionReport(getDocSubmissionReport(),getActionsToImport());
-        }
-     }
-    
-    public File getDocSubmissionReportFile()
-    {
-        return _docSubmissionReportFile;
-    }
+	};
 
-    public void setDocSubmissionReportFile(File docSubmissionReportFile)
-    {
-        _docSubmissionReportFile = docSubmissionReportFile;
-    }
+	ImportDocSubmissionReport(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    private DocSubmissionReport _docSubmissionReport;
-    
-    public DocSubmissionReport getDocSubmissionReport()
-    {
-        if (_docSubmissionReport == null) {
-            if (getDocSubmissionReportFile() != null) {
-                DocResourceCenter drc = DocResourceManager.instance().getDocResourceCenter();
-                _docSubmissionReport = DocSubmissionReport.load(drc,getDocSubmissionReportFile());
-            }
-        }
-        return _docSubmissionReport;
-    }
+	private File _docSubmissionReportFile;
+	private Vector _actionsToImport; // null if all actions must be imported
 
-    public Vector getActionsToImport()
-    {
-        return _actionsToImport;
-    }
+	@Override
+	protected void doAction(Object context) {
+		logger.info("ImportDocSubmissionReport");
+		if (getDocSubmissionReport() != null) {
+			DocResourceManager.instance().importDocSubmissionReport(getDocSubmissionReport(), getActionsToImport());
+		}
+	}
 
-    public void setActionsToImport(Vector actionsToImport) 
-    {
-        _actionsToImport = actionsToImport;
-    }
+	public File getDocSubmissionReportFile() {
+		return _docSubmissionReportFile;
+	}
+
+	public void setDocSubmissionReportFile(File docSubmissionReportFile) {
+		_docSubmissionReportFile = docSubmissionReportFile;
+	}
+
+	private DocSubmissionReport _docSubmissionReport;
+
+	public DocSubmissionReport getDocSubmissionReport() {
+		if (_docSubmissionReport == null) {
+			if (getDocSubmissionReportFile() != null) {
+				DocResourceCenter drc = DocResourceManager.instance().getDocResourceCenter();
+				_docSubmissionReport = DocSubmissionReport.load(drc, getDocSubmissionReportFile());
+			}
+		}
+		return _docSubmissionReport;
+	}
+
+	public Vector getActionsToImport() {
+		return _actionsToImport;
+	}
+
+	public void setActionsToImport(Vector actionsToImport) {
+		_actionsToImport = actionsToImport;
+	}
 
 }

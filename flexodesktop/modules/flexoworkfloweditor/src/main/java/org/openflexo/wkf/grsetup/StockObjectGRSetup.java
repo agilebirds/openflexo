@@ -26,7 +26,6 @@ import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.foundation.wkf.WKFStockObject;
 
-
 public class StockObjectGRSetup {
 
 	public static void setupGR(ShapeGraphicalRepresentation<WKFStockObject> gr) {
@@ -40,14 +39,14 @@ public class StockObjectGRSetup {
 	}
 
 	public static double getRelativeTextY(ShapeGraphicalRepresentation<WKFStockObject> gr) {
-		return 2.0/3.0*gr.getShape().getShape().getEmbeddingBounds().getHeight();
+		return 2.0 / 3.0 * gr.getShape().getShape().getEmbeddingBounds().getHeight();
 	}
 
 	public static double getRequiredSize(ShapeGraphicalRepresentation<WKFStockObject> gr, double labelWidth) {
-		Dimension d= gr.getNormalizedLabelSize();
-		double minWidth = 3.0/2.0*(d.width+d.height/2.0);
-		minWidth/=(1-gr.getShape().getShape().getEmbeddingBounds().x);
-		double minHeight = 3.0/2.0*(d.height)/gr.getShape().getShape().getEmbeddingBounds().getHeight();
-		return Math.max(minWidth,minHeight);
+		Dimension d = gr.getNormalizedLabelSize();
+		double minWidth = 3.0 / 2.0 * (d.width + d.height / 2.0);
+		minWidth /= (1 - gr.getShape().getShape().getEmbeddingBounds().x);
+		double minHeight = 3.0 / 2.0 * (d.height) / gr.getShape().getShape().getEmbeddingBounds().getHeight();
+		return Math.max(minWidth, minHeight);
 	}
 }

@@ -54,7 +54,6 @@ import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.sgmodule.SGModule;
 import org.openflexo.sgmodule.TechnologyModuleGUIFactory;
 
-
 class SGBrowserConfiguration implements BrowserConfiguration {
 
 	private final GeneratedOutput _generatedCode;
@@ -235,11 +234,12 @@ class SGBrowserConfiguration implements BrowserConfiguration {
 			} else if (object instanceof ImplementationModel) {
 				return new ImplementationModelElement((ImplementationModel) object, browser, parent);
 			} else if (object instanceof TechnologyModelObject) {
-				
-				TechnologyModuleGUIFactory technologyModuleGUIFactory = SGModule.getTechnologyModuleGUIFactory((((TechnologyModelObject) object).getTechnologyModuleImplementation()).getClass());
-				if (technologyModuleGUIFactory != null)
-				{
-					TechnologyModuleBrowserElement<?> element = technologyModuleGUIFactory.createBrowserElement((TechnologyModelObject) object, browser, parent);
+
+				TechnologyModuleGUIFactory technologyModuleGUIFactory = SGModule
+						.getTechnologyModuleGUIFactory((((TechnologyModelObject) object).getTechnologyModuleImplementation()).getClass());
+				if (technologyModuleGUIFactory != null) {
+					TechnologyModuleBrowserElement<?> element = technologyModuleGUIFactory.createBrowserElement(
+							(TechnologyModelObject) object, browser, parent);
 					if (element != null) {
 						return element;
 					}

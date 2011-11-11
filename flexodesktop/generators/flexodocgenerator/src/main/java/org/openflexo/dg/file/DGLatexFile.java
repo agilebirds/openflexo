@@ -25,29 +25,24 @@ import org.openflexo.foundation.cg.GeneratedOutput;
 import org.openflexo.foundation.xml.GeneratedCodeBuilder;
 import org.openflexo.generator.file.AbstractCGFile;
 
-
 public class DGLatexFile extends AbstractCGFile {
 
-   public DGLatexFile(GeneratedCodeBuilder builder)
-    {
-        this(builder.generatedCode);
-        initializeDeserialization(builder);
-     }
-    
-    public DGLatexFile(GeneratedOutput generatedCode)
-    {
-        super(generatedCode);  
-    }
+	public DGLatexFile(GeneratedCodeBuilder builder) {
+		this(builder.generatedCode);
+		initializeDeserialization(builder);
+	}
 
-    public DGLatexFile(DGRepository repository, LatexFileResource resource)
-    {
-        super(repository,resource);
-    }
+	public DGLatexFile(GeneratedOutput generatedCode) {
+		super(generatedCode);
+	}
+
+	public DGLatexFile(DGRepository repository, LatexFileResource resource) {
+		super(repository, resource);
+	}
 
 	@Override
-	public LatexFileResource getResource() 
-	{
-		return (LatexFileResource)super.getResource();
+	public LatexFileResource getResource() {
+		return (LatexFileResource) super.getResource();
 	}
 
 }

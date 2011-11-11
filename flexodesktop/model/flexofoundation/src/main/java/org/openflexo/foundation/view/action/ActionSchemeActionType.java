@@ -27,56 +27,42 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.ActionScheme;
 
-
-public class ActionSchemeActionType extends FlexoActionType<ActionSchemeAction,FlexoModelObject,FlexoModelObject> {
+public class ActionSchemeActionType extends FlexoActionType<ActionSchemeAction, FlexoModelObject, FlexoModelObject> {
 
 	private ActionScheme actionScheme;
 	private EditionPatternReference editionPatternReference;
-	
-	public ActionSchemeActionType(ActionScheme actionScheme, EditionPatternReference editionPatternReference)
-	{
-		super(actionScheme.getName(),
-			FlexoActionType.defaultGroup,
-			FlexoActionType.NORMAL_ACTION_TYPE);
+
+	public ActionSchemeActionType(ActionScheme actionScheme, EditionPatternReference editionPatternReference) {
+		super(actionScheme.getName(), FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE);
 		this.actionScheme = actionScheme;
 		this.editionPatternReference = editionPatternReference;
 	}
-	
+
 	@Override
-	public boolean isEnabled(FlexoModelObject object,
-			Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-	{
-	   	return isEnabledForSelection(object, globalSelection);
-  	}
-	
+	public boolean isEnabled(FlexoModelObject object, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		return isEnabledForSelection(object, globalSelection);
+	}
+
 	@Override
-	protected boolean isEnabledForSelection(FlexoModelObject object,
-			Vector globalSelection)
-	{
+	protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
 		return actionScheme.evaluateCondition(editionPatternReference);
 	}
 
 	@Override
-	protected boolean isVisibleForSelection(FlexoModelObject object,
-			Vector globalSelection)
-	{
+	protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
 		return true;
 	}
 
 	@Override
-	public ActionSchemeAction makeNewAction(FlexoModelObject focusedObject,
-			Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-	{
+	public ActionSchemeAction makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		return new ActionSchemeAction(this, focusedObject, globalSelection, editor);
 	}
 
-	public ActionScheme getActionScheme()
-	{
+	public ActionScheme getActionScheme() {
 		return actionScheme;
 	}
 
-	public EditionPatternReference getEditionPatternReference()
-	{
+	public EditionPatternReference getEditionPatternReference() {
 		return editionPatternReference;
 	}
 

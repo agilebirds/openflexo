@@ -29,77 +29,66 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.EditionAction.EditionActionBindingAttribute;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-
 public class DataPropertyAssertion extends AbstractAssertion {
 
 	private String dataPropertyURI;
 
-	public String _getDataPropertyURI() 
-	{
+	public String _getDataPropertyURI() {
 		return dataPropertyURI;
 	}
 
-	public void _setDataPropertyURI(String dataPropertyURI) 
-	{
+	public void _setDataPropertyURI(String dataPropertyURI) {
 		this.dataPropertyURI = dataPropertyURI;
 	}
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.VPM.DATA_PROPERTY_ASSERTION_INSPECTOR;
 	}
 
-	public OntologyProperty getOntologyProperty()
-	{
+	public OntologyProperty getOntologyProperty() {
 		return getOntologyLibrary().getProperty(_getDataPropertyURI());
 	}
 
-	public void setOntologyProperty(OntologyProperty p)
-	{
+	public void setOntologyProperty(OntologyProperty p) {
 		_setDataPropertyURI(p != null ? p.getURI() : null);
 	}
-	
-	public Object getValue(EditionSchemeAction action)
-	{
+
+	public Object getValue(EditionSchemeAction action) {
 		return getValue().getBindingValue(action);
 	}
 
 	@Override
-	public BindingModel getBindingModel() 
-	{
+	public BindingModel getBindingModel() {
 		return getEditionScheme().getBindingModel();
 	}
 
 	private ViewPointDataBinding value;
-	
+
 	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, BindingDefinitionType.GET, false) {
 		@Override
 		public java.lang.reflect.Type getType() {
-			if (getOntologyProperty() instanceof OntologyDataProperty) return ((OntologyDataProperty)getOntologyProperty()).getDataType().getAccessedType();
+			if (getOntologyProperty() instanceof OntologyDataProperty)
+				return ((OntologyDataProperty) getOntologyProperty()).getDataType().getAccessedType();
 			return Object.class;
 		};
 	};
-	
-	public BindingDefinition getValueBindingDefinition()
-	{
+
+	public BindingDefinition getValueBindingDefinition() {
 		return VALUE;
 	}
 
-	public ViewPointDataBinding getValue() 
-	{
-		if (value == null) value = new ViewPointDataBinding(this,EditionActionBindingAttribute.value,getValueBindingDefinition());
+	public ViewPointDataBinding getValue() {
+		if (value == null)
+			value = new ViewPointDataBinding(this, EditionActionBindingAttribute.value, getValueBindingDefinition());
 		return value;
 	}
 
-	public void setValue(ViewPointDataBinding value) 
-	{
+	public void setValue(ViewPointDataBinding value) {
 		value.setOwner(this);
 		value.setBindingAttribute(EditionActionBindingAttribute.value);
 		value.setBindingDefinition(getValueBindingDefinition());
 		this.value = value;
 	}
-
-	
 
 }

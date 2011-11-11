@@ -18,33 +18,34 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents State_Machine object
- *
+ * 
  * @version $Id: StateMachine.java,v 1.3 2011/09/12 11:46:47 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class StateMachine extends QuidObject {
-  public StateMachine(PetalNode parent, Collection params) {
-    super(parent, "State_Machine", params);
-  }
+	public StateMachine(PetalNode parent, Collection params) {
+		super(parent, "State_Machine", params);
+	}
 
-  public StateMachine() {
-    super("State_Machine");
-  }
+	public StateMachine() {
+		super("State_Machine");
+	}
 
-  public List getStates() {
-    return (List)getProperty("states");
-  }
+	public List getStates() {
+		return (List) getProperty("states");
+	}
 
-  public void setStates(List o) {
-    defineProperty("states", o);
-  }
+	public void setStates(List o) {
+		defineProperty("states", o);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

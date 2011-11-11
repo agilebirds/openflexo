@@ -12,41 +12,35 @@ import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 
-public class EditionSchemeParameterPathElement<T> implements SimplePathElement<T>,BindingVariable<T>
-{
+public class EditionSchemeParameterPathElement<T> implements SimplePathElement<T>, BindingVariable<T> {
 	private static final Logger logger = Logger.getLogger(EditionSchemeParameterPathElement.class.getPackage().getName());
 
 	private BindingPathElement parent;
 	private EditionSchemeParameter parameter;
-	
-	public EditionSchemeParameterPathElement(BindingPathElement aParent, EditionSchemeParameter parameter) 
-	{
+
+	public EditionSchemeParameterPathElement(BindingPathElement aParent, EditionSchemeParameter parameter) {
 		super();
 		parent = aParent;
 		this.parameter = parameter;
 	}
 
 	@Override
-	public Class getDeclaringClass() 
-	{
+	public Class getDeclaringClass() {
 		return TypeUtils.getBaseClass(parent.getType());
 	}
 
 	@Override
-	public String getSerializationRepresentation() 
-	{
+	public String getSerializationRepresentation() {
 		return getLabel();
 	}
 
 	@Override
-	public boolean isBindingValid() 
-	{
+	public boolean isBindingValid() {
 		return true;
 	}
 
 	@Override
-	public Type getType() 
-	{
+	public Type getType() {
 		return parameter.getWidget().getType();
 	}
 
@@ -66,13 +60,11 @@ public class EditionSchemeParameterPathElement<T> implements SimplePathElement<T
 	}
 
 	@Override
-	public T getBindingValue(Object target, BindingEvaluationContext context) 
-	{
+	public T getBindingValue(Object target, BindingEvaluationContext context) {
 		if (target instanceof Hashtable) {
-			return (T)((Hashtable)target).get(parameter.getName());
-		}
-		else {
-			logger.warning("Unexpected: "+target);
+			return (T) ((Hashtable) target).get(parameter.getName());
+		} else {
+			logger.warning("Unexpected: " + target);
 			return null;
 		}
 	}
@@ -91,7 +83,7 @@ public class EditionSchemeParameterPathElement<T> implements SimplePathElement<T
 	public String getVariableName() {
 		return parameter.getName();
 	}
-	
+
 	public EditionSchemeParameter getParameter() {
 		return parameter;
 	}

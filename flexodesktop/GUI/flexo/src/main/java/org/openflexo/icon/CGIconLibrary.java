@@ -27,7 +27,7 @@ import org.openflexo.toolbox.ImageIconResource;
  * Utility class containing all icons used in context of CGModule
  * 
  * @author sylvain
- *
+ * 
  */
 public class CGIconLibrary extends GeneratorIconLibrary {
 
@@ -44,7 +44,7 @@ public class CGIconLibrary extends GeneratorIconLibrary {
 	public static final ImageIcon CG_CGP_SELECTED_ICON = new ImageIconResource("Icons/CG/CGPerspective_S.gif");
 	public static final ImageIcon CG_VP_ACTIVE_ICON = new ImageIconResource("Icons/CG/VersionningPerspective_A.gif");
 	public static final ImageIcon CG_VP_SELECTED_ICON = new ImageIconResource("Icons/CG/VersionningPerspective_S.gif");
-	
+
 	// Model icons
 	public static final ImageIcon GENERATED_CODE_ICON = new ImageIconResource("Icons/CG/GeneratedCode.gif");
 	public static final ImageIcon GENERATED_CODE_REPOSITORY_ICON = new ImageIconResource("Icons/CG/GeneratedCodeRepository.gif");

@@ -19,10 +19,9 @@
  */
 package org.openflexo.foundation.sg.implmodel.exception;
 
-
 /**
  * @author Nicolas Daniels
- *
+ * 
  */
 public class TechnologyModuleInitializationException extends RuntimeException {
 

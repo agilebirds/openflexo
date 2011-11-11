@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 import org.openflexo.dgmodule.controller.DGController;
 import org.openflexo.diff.ComputeDiff;
 
-
 import org.openflexo.foundation.rm.cg.ASCIIFile;
 import org.openflexo.foundation.rm.cg.ASCIIFileResource;
 import org.openflexo.foundation.rm.cg.ContentSource;
@@ -39,79 +38,66 @@ public class CustomDiffDocDisplayer extends DiffCodeDisplayer {
 	private static final Logger logger = Logger.getLogger(CustomDiffDocDisplayer.class.getPackage().getName());
 
 	protected ContentSource _left;
-    protected ContentSource _right;
-	
-	
-	public CustomDiffDocDisplayer(
-			GenerationAvailableFileResource resource,
-			ContentSource left,
-			ContentSource right,
-			DGController controller)
-	{
-		super(resource,controller);
+	protected ContentSource _right;
+
+	public CustomDiffDocDisplayer(GenerationAvailableFileResource resource, ContentSource left, ContentSource right, DGController controller) {
+		super(resource, controller);
 		_left = left;
 		_right = right;
 		update();
 	}
-	
+
 	@Override
-	protected DiffCodeDisplayerComponent buildComponent()
-	{
+	protected DiffCodeDisplayerComponent buildComponent() {
 		_component = null;
-		
+
 		if (getResource() instanceof ASCIIFileResource) {
 			_component = new CustomASCIIFileDiffCodeDisplayer();
 		}
-		
+
 		if (_component == null) {
 			_component = new ErrorPanel();
 		}
-		
-		return (DiffCodeDisplayerComponent)_component;
+
+		return (DiffCodeDisplayerComponent) _component;
 	}
-	
-	protected class CustomASCIIFileDiffCodeDisplayer extends ASCIIFileDiffCodeDisplayer
-	{
+
+	protected class CustomASCIIFileDiffCodeDisplayer extends ASCIIFileDiffCodeDisplayer {
 		@Override
-		public void update()
-		{
+		public void update() {
 			removeAll();
-			if ((getLeft() == null) || (getRight() == null)) return;
-			_diffReport = ComputeDiff.diff(getLeft(),getRight());
-			String leftLabel = (_left!=null?_left.getStringRepresentation():"null");
-			String rightLabel = (_right!=null?_right.getStringRepresentation():"null");
+			if ((getLeft() == null) || (getRight() == null))
+				return;
+			_diffReport = ComputeDiff.diff(getLeft(), getRight());
+			String leftLabel = (_left != null ? _left.getStringRepresentation() : "null");
+			String rightLabel = (_right != null ? _right.getStringRepresentation() : "null");
 			boolean isLeftOriented = false;
-			_diffPanel = new DiffPanel(
-					_diffReport,
-					getTokenMarkerStyle(),
-					leftLabel,
-					rightLabel,
-					FlexoLocalization.localizedForKey("no_structural_changes"),
-					isLeftOriented);
-			add(_diffPanel,BorderLayout.CENTER);
+			_diffPanel = new DiffPanel(_diffReport, getTokenMarkerStyle(), leftLabel, rightLabel,
+					FlexoLocalization.localizedForKey("no_structural_changes"), isLeftOriented);
+			add(_diffPanel, BorderLayout.CENTER);
 			validate();
 		}
-		
-		public String getLeft() 
-		{
-			if (_left == null) return "";
+
+		public String getLeft() {
+			if (_left == null)
+				return "";
 			if (getResource() instanceof ASCIIFileResource) {
 				if (_left.getType() == ContentSourceType.PureGeneration) {
-					return ((ASCIIFileResource)getResource()).getCurrentGeneration();
+					return ((ASCIIFileResource) getResource()).getCurrentGeneration();
 				}
-				return ((ASCIIFile)getResourceData()).getContent(_left);
+				return ((ASCIIFile) getResourceData()).getContent(_left);
 			}
 			return "Inconsistent data";
 		}
 
-		public String getRight() 
-		{
-			if (_right == null) return "";
+		public String getRight() {
+			if (_right == null)
+				return "";
 			if (getResource() instanceof ASCIIFileResource) {
 				if (_right.getType() == ContentSourceType.PureGeneration) {
-					return ((ASCIIFileResource)getResource()).getCurrentGeneration();
+					return ((ASCIIFileResource) getResource()).getCurrentGeneration();
 				}
-				return ((ASCIIFile)getResourceData()).getContent(_right);
+				return ((ASCIIFile) getResourceData()).getContent(_right);
 			}
 			return "Inconsistent data";
 		}

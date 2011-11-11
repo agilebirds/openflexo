@@ -23,22 +23,19 @@ import java.util.Vector;
 
 import org.openflexo.foundation.dm.DMType;
 
-
-public interface ParsedJavaMethod extends ParsedJavaElement
-{
+public interface ParsedJavaMethod extends ParsedJavaElement {
 
 	public String getCallSignature();
-	
+
 	public String getName();
-	
-	public Vector<? extends ParsedJavaMethodParameter> getMethodParameters(); 
+
+	public Vector<? extends ParsedJavaMethodParameter> getMethodParameters();
 
 	public String getCoreCode();
 
-	public static interface ParsedJavaMethodParameter
-	{
+	public static interface ParsedJavaMethodParameter {
 		public String getName();
-		
+
 		public DMType getType();
 
 	}

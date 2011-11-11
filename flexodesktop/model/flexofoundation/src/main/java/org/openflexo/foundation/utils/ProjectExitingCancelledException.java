@@ -23,6 +23,4 @@ import org.openflexo.foundation.FlexoException;
 
 public class ProjectExitingCancelledException extends FlexoException {
 
-	
-	
 }

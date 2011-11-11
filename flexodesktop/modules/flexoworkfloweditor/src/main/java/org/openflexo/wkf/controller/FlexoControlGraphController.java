@@ -66,81 +66,71 @@ import org.openflexo.view.FlexoDialog;
 import org.openflexo.view.controller.FlexoInspectorController;
 import org.openflexo.view.listener.FlexoActionButton;
 
-
 public class FlexoControlGraphController extends FlexoInspectorController {
 
-    private static final Logger logger = Logger.getLogger(FlexoControlGraphController.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(FlexoControlGraphController.class.getPackage().getName());
 
-    public static final Font HEADER_FONT = new Font("Verdana", Font.BOLD, 14);
-    public static final Font SUB_TITLE_FONT = new Font("Verdana", Font.ITALIC, 10);
+	public static final Font HEADER_FONT = new Font("Verdana", Font.BOLD, 14);
+	public static final Font SUB_TITLE_FONT = new Font("Verdana", Font.ITALIC, 10);
 
-     protected InspectorTabbedPanel _inspectorPanel;
-     protected WKFController _controller;
-     protected ExecutableWorkflowElement _currentlyInspectedObject;
-     protected boolean isMultipleSelection = false;
+	protected InspectorTabbedPanel _inspectorPanel;
+	protected WKFController _controller;
+	protected ExecutableWorkflowElement _currentlyInspectedObject;
+	protected boolean isMultipleSelection = false;
 
-     private ControlFlowGraphViewer _viewer;
-     
-     private ProgrammingLanguage selectedLanguage = ControlGraphFactory.DEFAULT_LANGUAGE;
+	private ControlFlowGraphViewer _viewer;
 
-     private boolean selectedInterprocedural = ControlGraphFactory.DEFAULT_INTERPROCEDURAL;
-     
-    protected FlexoControlGraphController(WKFController controller)
-    {
-    	super(controller.new FlexoControllerInspectorDelegate(),
-    			new DefaultInspectorHelpDelegate(DocResourceManager.instance()));
-     	//if (getDocTabModel() != null)
-    	_controller = controller;
-    	_inspectorPanel = createInspectorTabbedPanel();
-    	loadInspectors(Inspectors.WKF_CG);
-    	updateSelection(_controller.getWKFSelectionManager());
-     }
-    
-    private void updateSelection(SelectionManager sm)
-    {
-        if (sm.getSelectionSize() == 0) {
-        	update(sm,new EmptySelection());
-        } else if ((sm.getSelectionSize() == 1) 
-        		&& (sm.getSelection().firstElement() instanceof InspectableObject)
-        		&& (sm.getSelection().firstElement() instanceof ExecutableWorkflowElement)) {
-        	ExecutableWorkflowElement objectToInspect = (ExecutableWorkflowElement)sm.getSelection().firstElement();
-        	objectToInspect.setInterproceduralForControlGraphComputation(selectedInterprocedural);
-        	objectToInspect.setProgrammingLanguageForControlGraphComputation(selectedLanguage);
-        	update(sm,new UniqueSelection((InspectableObject)objectToInspect,sm.getInspectionContext()));
-           } else if (sm.getSelectionSize() > 1) {
-        	update(sm,new MultipleSelection());
-        }
-     }
+	private ProgrammingLanguage selectedLanguage = ControlGraphFactory.DEFAULT_LANGUAGE;
 
-    @Override
-	public void update(Observable observable, Object selection)
-    {
-    	isMultipleSelection = false;
-    	if (selection instanceof InspectorSelection) {
-    		if (selection instanceof EmptySelection) {
-    			_currentlyInspectedObject = null;
-    		}
-    		else if (selection instanceof MultipleSelection) {
-    			_currentlyInspectedObject = null;
-    			isMultipleSelection = true;
-    		}
-       		else if (selection instanceof UniqueSelection) {
-    			if (((UniqueSelection)selection).getInspectedObject() instanceof ExecutableWorkflowElement) {
-    				_currentlyInspectedObject = (ExecutableWorkflowElement)((UniqueSelection)selection).getInspectedObject();
-        			_currentlyInspectedObject.setInterproceduralForControlGraphComputation(selectedInterprocedural);
-        			_currentlyInspectedObject.setProgrammingLanguageForControlGraphComputation(selectedLanguage);
-    			}
-    			else {
-    				_currentlyInspectedObject = null;
-    			}
-       		}
-    	}
-    	getViewer().getHeader().update();
-    	super.update(observable, selection);
-    }
+	private boolean selectedInterprocedural = ControlGraphFactory.DEFAULT_INTERPROCEDURAL;
 
-	public InspectorTabbedPanel getDocInspectorPanel() 
-	{
+	protected FlexoControlGraphController(WKFController controller) {
+		super(controller.new FlexoControllerInspectorDelegate(), new DefaultInspectorHelpDelegate(DocResourceManager.instance()));
+		// if (getDocTabModel() != null)
+		_controller = controller;
+		_inspectorPanel = createInspectorTabbedPanel();
+		loadInspectors(Inspectors.WKF_CG);
+		updateSelection(_controller.getWKFSelectionManager());
+	}
+
+	private void updateSelection(SelectionManager sm) {
+		if (sm.getSelectionSize() == 0) {
+			update(sm, new EmptySelection());
+		} else if ((sm.getSelectionSize() == 1) && (sm.getSelection().firstElement() instanceof InspectableObject)
+				&& (sm.getSelection().firstElement() instanceof ExecutableWorkflowElement)) {
+			ExecutableWorkflowElement objectToInspect = (ExecutableWorkflowElement) sm.getSelection().firstElement();
+			objectToInspect.setInterproceduralForControlGraphComputation(selectedInterprocedural);
+			objectToInspect.setProgrammingLanguageForControlGraphComputation(selectedLanguage);
+			update(sm, new UniqueSelection((InspectableObject) objectToInspect, sm.getInspectionContext()));
+		} else if (sm.getSelectionSize() > 1) {
+			update(sm, new MultipleSelection());
+		}
+	}
+
+	@Override
+	public void update(Observable observable, Object selection) {
+		isMultipleSelection = false;
+		if (selection instanceof InspectorSelection) {
+			if (selection instanceof EmptySelection) {
+				_currentlyInspectedObject = null;
+			} else if (selection instanceof MultipleSelection) {
+				_currentlyInspectedObject = null;
+				isMultipleSelection = true;
+			} else if (selection instanceof UniqueSelection) {
+				if (((UniqueSelection) selection).getInspectedObject() instanceof ExecutableWorkflowElement) {
+					_currentlyInspectedObject = (ExecutableWorkflowElement) ((UniqueSelection) selection).getInspectedObject();
+					_currentlyInspectedObject.setInterproceduralForControlGraphComputation(selectedInterprocedural);
+					_currentlyInspectedObject.setProgrammingLanguageForControlGraphComputation(selectedLanguage);
+				} else {
+					_currentlyInspectedObject = null;
+				}
+			}
+		}
+		getViewer().getHeader().update();
+		super.update(observable, selection);
+	}
+
+	public InspectorTabbedPanel getDocInspectorPanel() {
 		return _inspectorPanel;
 	}
 
@@ -159,164 +149,143 @@ public class FlexoControlGraphController extends FlexoInspectorController {
 		}
 		return _docTabModel;
 	}*/
-	
-	// We override here default behaviour by using other inspectors in the context of 
+
+	// We override here default behaviour by using other inspectors in the context of
 	// Control Graph visualization
-    @Override
-	public String getInspectorName(InspectableObject object, Hashtable<String, Object> inspectionContext)
-    {
-    	if (object instanceof FlexoProcess){
-    		return Inspectors.WKF_CG.FLEXO_PROCESS_CONTROL_FLOW_GRAPH_INSPECTOR;
-    	}
-    	else if (object instanceof PetriGraphNode){
-    		return Inspectors.WKF_CG.FLEXO_NODE_CONTROL_FLOW_GRAPH_INSPECTOR;
-    	}
-    	else if (object instanceof OperatorNode){
-    		return Inspectors.WKF_CG.OPERATOR_NODE_CONTROL_FLOW_GRAPH_INSPECTOR;
-    	}
-       	else if (object instanceof FlexoPreCondition){
-    		return Inspectors.WKF_CG.PRE_CONDITION_CONTROL_FLOW_GRAPH_INSPECTOR;
-    	}
-       	else if (object instanceof FlexoPostCondition){
-    		return Inspectors.WKF_CG.EDGE_CONTROL_FLOW_GRAPH_INSPECTOR;
-    	} else {
+	@Override
+	public String getInspectorName(InspectableObject object, Hashtable<String, Object> inspectionContext) {
+		if (object instanceof FlexoProcess) {
+			return Inspectors.WKF_CG.FLEXO_PROCESS_CONTROL_FLOW_GRAPH_INSPECTOR;
+		} else if (object instanceof PetriGraphNode) {
+			return Inspectors.WKF_CG.FLEXO_NODE_CONTROL_FLOW_GRAPH_INSPECTOR;
+		} else if (object instanceof OperatorNode) {
+			return Inspectors.WKF_CG.OPERATOR_NODE_CONTROL_FLOW_GRAPH_INSPECTOR;
+		} else if (object instanceof FlexoPreCondition) {
+			return Inspectors.WKF_CG.PRE_CONDITION_CONTROL_FLOW_GRAPH_INSPECTOR;
+		} else if (object instanceof FlexoPostCondition) {
+			return Inspectors.WKF_CG.EDGE_CONTROL_FLOW_GRAPH_INSPECTOR;
+		} else {
 			return null;
 		}
-    }
+	}
 
-    public ControlFlowGraphViewer getViewer() 
-    {
-    	if (_viewer == null) {
-    		_viewer = new ControlFlowGraphViewer();
-    	}
-    	return _viewer;
-    }
+	public ControlFlowGraphViewer getViewer() {
+		if (_viewer == null) {
+			_viewer = new ControlFlowGraphViewer();
+		}
+		return _viewer;
+	}
 
+	public class ControlFlowGraphViewer extends FlexoDialog {
+		protected Logger logger = FlexoLogger.getLogger(ControlFlowGraphViewer.class.getPackage().getName());
 
+		public ControlFlowGraphViewer() {
+			super(_controller.getFlexoFrame(), FlexoLocalization.localizedForKey("flexo_model_execution"), false);
 
-    public class ControlFlowGraphViewer extends FlexoDialog
-    {
-    	protected Logger logger = FlexoLogger.getLogger(ControlFlowGraphViewer.class.getPackage().getName());
+			_header = new ViewHeader();
 
+			getContentPane().setLayout(new BorderLayout());
+			getContentPane().add(_header, BorderLayout.NORTH);
+			getContentPane().add(getDocInspectorPanel(), BorderLayout.CENTER);
+			setPreferredSize(new Dimension(700, 600));
+			validate();
+			pack();
+		}
 
-    	public ControlFlowGraphViewer ()
-    	{
-    		super(_controller.getFlexoFrame(),FlexoLocalization.localizedForKey("flexo_model_execution"),false);
-     		
-    		_header = new ViewHeader();
-    		
-     		
-    		getContentPane().setLayout(new BorderLayout());
-    	   	getContentPane().add(_header,BorderLayout.NORTH);
-    	   	getContentPane().add(getDocInspectorPanel(),BorderLayout.CENTER);
-        	setPreferredSize(new Dimension(700,600));
-        	validate();
-        	pack();
-     	}
-    	
-    	private final ViewHeader _header;
+		private final ViewHeader _header;
 
-    	protected class ViewHeader extends JPanel
-    	{
-    		JLabel icon;
-    		JLabel title;
-    		JLabel subTitle;
-    		JPanel controlPanel;
-    		Vector<FlexoActionButton> actionButtons = new Vector<FlexoActionButton>();
-    		
-    		private final JComboBox languageSelector;
-    		private final JCheckBox interproceduralSelector;
-    		
-    		protected ViewHeader()
-    		{
-    			super(new BorderLayout());
-    			icon = new JLabel(CGIconLibrary.CG_MEDIUM_ICON);
-    			icon.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 20));
-    			add(icon,BorderLayout.WEST);
-    			title = new JLabel(getTitleText(),SwingConstants.LEFT);
-    			//title.setVerticalAlignment(JLabel.BOTTOM);
-    			title.setFont(HEADER_FONT);
-    			title.setForeground(Color.BLACK);
-    			title.setBorder(BorderFactory.createEmptyBorder(5, 10, 0, 10));
-    			subTitle = new JLabel(getSubTitleText(),SwingConstants.LEFT);
-    			subTitle.setFont(SUB_TITLE_FONT);
-    			subTitle.setForeground(Color.GRAY);
-    			subTitle.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
-    			subTitle.setVerticalAlignment(SwingConstants.BOTTOM);
+		protected class ViewHeader extends JPanel {
+			JLabel icon;
+			JLabel title;
+			JLabel subTitle;
+			JPanel controlPanel;
+			Vector<FlexoActionButton> actionButtons = new Vector<FlexoActionButton>();
 
-    			JPanel labelsPanel = new JPanel(new VerticalLayout());
-    			labelsPanel.add(title);
-    			labelsPanel.add(subTitle);
-    			add(labelsPanel,BorderLayout.CENTER);			
-    			
-    			languageSelector = new JComboBox(ProgrammingLanguage.values());
-    			languageSelector.setSelectedItem(selectedLanguage);
-    			languageSelector.addActionListener(new ActionListener() {
+			private final JComboBox languageSelector;
+			private final JCheckBox interproceduralSelector;
+
+			protected ViewHeader() {
+				super(new BorderLayout());
+				icon = new JLabel(CGIconLibrary.CG_MEDIUM_ICON);
+				icon.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 20));
+				add(icon, BorderLayout.WEST);
+				title = new JLabel(getTitleText(), SwingConstants.LEFT);
+				// title.setVerticalAlignment(JLabel.BOTTOM);
+				title.setFont(HEADER_FONT);
+				title.setForeground(Color.BLACK);
+				title.setBorder(BorderFactory.createEmptyBorder(5, 10, 0, 10));
+				subTitle = new JLabel(getSubTitleText(), SwingConstants.LEFT);
+				subTitle.setFont(SUB_TITLE_FONT);
+				subTitle.setForeground(Color.GRAY);
+				subTitle.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
+				subTitle.setVerticalAlignment(SwingConstants.BOTTOM);
+
+				JPanel labelsPanel = new JPanel(new VerticalLayout());
+				labelsPanel.add(title);
+				labelsPanel.add(subTitle);
+				add(labelsPanel, BorderLayout.CENTER);
+
+				languageSelector = new JComboBox(ProgrammingLanguage.values());
+				languageSelector.setSelectedItem(selectedLanguage);
+				languageSelector.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						selectorChanged();
-					}   				
-    			});
-    			languageSelector.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));
-    			
-    			interproceduralSelector = new JCheckBox(FlexoLocalization.localizedForKey("interprocedural"),true);
-    			interproceduralSelector.addActionListener(new ActionListener() {
+					}
+				});
+				languageSelector.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));
+
+				interproceduralSelector = new JCheckBox(FlexoLocalization.localizedForKey("interprocedural"), true);
+				interproceduralSelector.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						selectorChanged();
-					}   				
-    			});
-    			interproceduralSelector.setBorder(BorderFactory.createEmptyBorder(0, 5, 5, 5));
-  			
-       			JPanel selectorsPanel = new JPanel(new VerticalLayout());
-       			selectorsPanel.add(languageSelector);
-       			selectorsPanel.add(interproceduralSelector);
-    			add(selectorsPanel,BorderLayout.EAST);			
-    				
-    			update();
-    		}
-    		
-    		private void selectorChanged()
-    		{
-    			selectedInterprocedural = interproceduralSelector.isSelected();
-    			selectedLanguage = (ProgrammingLanguage)languageSelector.getSelectedItem();
-    		   	updateSelection(_controller.getWKFSelectionManager());
-    		   	_inspectorPanel.currentTabPanel.updateFromModel();
-   		}
-    		
-       		private String getTitleText()
-    		{
-     			if (_currentlyInspectedObject == null) {
-     				if (isMultipleSelection) {
+					}
+				});
+				interproceduralSelector.setBorder(BorderFactory.createEmptyBorder(0, 5, 5, 5));
+
+				JPanel selectorsPanel = new JPanel(new VerticalLayout());
+				selectorsPanel.add(languageSelector);
+				selectorsPanel.add(interproceduralSelector);
+				add(selectorsPanel, BorderLayout.EAST);
+
+				update();
+			}
+
+			private void selectorChanged() {
+				selectedInterprocedural = interproceduralSelector.isSelected();
+				selectedLanguage = (ProgrammingLanguage) languageSelector.getSelectedItem();
+				updateSelection(_controller.getWKFSelectionManager());
+				_inspectorPanel.currentTabPanel.updateFromModel();
+			}
+
+			private String getTitleText() {
+				if (_currentlyInspectedObject == null) {
+					if (isMultipleSelection) {
 						return FlexoLocalization.localizedForKey("multiple_selection");
 					} else {
 						return FlexoLocalization.localizedForKey("no_selected_object");
 					}
-     			}
-     			return _currentlyInspectedObject.getExecutableElementName();
-     		}
-    		
-       		private String getSubTitleText()
-       		{
-       			if (_currentlyInspectedObject == null) {
-       				return FlexoLocalization.localizedForKey("please_select_one_executable_workflow_element");
-       			}
-       			return FlexoLocalization.localizedForKey("please_press_refresh_button_to_get_up_to_date_control_flow_graph");
-       		}
+				}
+				return _currentlyInspectedObject.getExecutableElementName();
+			}
 
-     		protected void update()
-    		{
-   			title.setText(getTitleText());
-    			subTitle.setText(getSubTitleText());
-     			for (FlexoActionButton button : actionButtons) {
-    				button.update();
-    			}
-    		}
+			private String getSubTitleText() {
+				if (_currentlyInspectedObject == null) {
+					return FlexoLocalization.localizedForKey("please_select_one_executable_workflow_element");
+				}
+				return FlexoLocalization.localizedForKey("please_press_refresh_button_to_get_up_to_date_control_flow_graph");
+			}
 
+			protected void update() {
+				title.setText(getTitleText());
+				subTitle.setText(getSubTitleText());
+				for (FlexoActionButton button : actionButtons) {
+					button.update();
+				}
+			}
 
-    	}
-    	
-    	
+		}
 
 		protected ViewHeader getHeader() {
 			return _header;
@@ -325,38 +294,38 @@ public class FlexoControlGraphController extends FlexoInspectorController {
 		private FlexoModelObject getFocusedObject() {
 			return _controller.getSelectionManager().getFocusedObject();
 		}
-		
+
 		private void refresh() {
 			if (getFocusedObject() instanceof FlexoNode) {
-				if (((FlexoNode)getFocusedObject()).getActivation()!=null) {
-					((FlexoNode)getFocusedObject()).getActivation().refresh();
+				if (((FlexoNode) getFocusedObject()).getActivation() != null) {
+					((FlexoNode) getFocusedObject()).getActivation().refresh();
 				}
-				if (((FlexoNode)getFocusedObject()).getDesactivation()!=null) {
-					((FlexoNode)getFocusedObject()).getDesactivation().refresh();
+				if (((FlexoNode) getFocusedObject()).getDesactivation() != null) {
+					((FlexoNode) getFocusedObject()).getDesactivation().refresh();
 				}
 			} else if (getFocusedObject() instanceof FlexoPostCondition) {
-				if (((FlexoPostCondition)getFocusedObject()).getExecution()!=null) {
-					((FlexoPostCondition)getFocusedObject()).getExecution().refresh();
+				if (((FlexoPostCondition) getFocusedObject()).getExecution() != null) {
+					((FlexoPostCondition) getFocusedObject()).getExecution().refresh();
 				}
 			} else if (getFocusedObject() instanceof FlexoPreCondition) {
-				if (((FlexoPreCondition)getFocusedObject()).getExecution()!=null) {
-					((FlexoPreCondition)getFocusedObject()).getExecution().refresh();
+				if (((FlexoPreCondition) getFocusedObject()).getExecution() != null) {
+					((FlexoPreCondition) getFocusedObject()).getExecution().refresh();
 				}
 			} else if (getFocusedObject() instanceof FlexoProcess) {
-				if (((FlexoProcess)getFocusedObject()).getExecution()!=null) {
-					((FlexoProcess)getFocusedObject()).getExecution().refresh();
+				if (((FlexoProcess) getFocusedObject()).getExecution() != null) {
+					((FlexoProcess) getFocusedObject()).getExecution().refresh();
 				}
 			} else if (getFocusedObject() instanceof OperatorNode) {
-				if (((OperatorNode)getFocusedObject()).getExecution()!=null) {
-					((OperatorNode)getFocusedObject()).getExecution().refresh();
+				if (((OperatorNode) getFocusedObject()).getExecution() != null) {
+					((OperatorNode) getFocusedObject()).getExecution().refresh();
 				}
 			} else if (getFocusedObject() instanceof EventNode) {
-				if (((EventNode)getFocusedObject()).getExecution()!=null) {
-					((EventNode)getFocusedObject()).getExecution().refresh();
+				if (((EventNode) getFocusedObject()).getExecution() != null) {
+					((EventNode) getFocusedObject()).getExecution().refresh();
 				}
 			}
 		}
-		
+
 		@Override
 		public void setVisible(boolean b) {
 			if (b) {
@@ -365,8 +334,6 @@ public class FlexoControlGraphController extends FlexoInspectorController {
 			super.setVisible(b);
 		}
 
-    }
-
-
+	}
 
 }

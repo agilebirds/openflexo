@@ -58,7 +58,6 @@ import org.openflexo.wkf.processeditor.gr.EdgeGR.EdgeRepresentation;
 import org.openflexo.wkf.swleditor.SwimmingLaneEditorController;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-
 public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> {
 
 	private static final Logger logger = Logger.getLogger(EdgeGR.class.getPackage().getName());

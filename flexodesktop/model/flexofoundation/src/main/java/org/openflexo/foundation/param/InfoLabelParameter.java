@@ -24,28 +24,24 @@ import org.openflexo.inspector.widget.InfoLabelWidget;
 
 public class InfoLabelParameter extends ParameterDefinition<String> {
 
-    public InfoLabelParameter(String name, String label, String defaultValue)
-    {
-        super(name,label,defaultValue);
-    }
-    
-    public InfoLabelParameter(String name, String label, String defaultValue, boolean displayLabel)
-    {
-        this(name,label,defaultValue);
-        addParameter(DenaliWidget.DISPLAY_LABEL,""+displayLabel);
-    }
+	public InfoLabelParameter(String name, String label, String defaultValue) {
+		super(name, label, defaultValue);
+	}
 
-    public InfoLabelParameter(String name, String label, String defaultValue, boolean displayLabel, int rows, int cols)
-    {
-        this(name,label,defaultValue,displayLabel);
-        addParameter(InfoLabelWidget.ROWS,""+rows);
-        addParameter(InfoLabelWidget.COLUMNS,""+cols);
-    }
+	public InfoLabelParameter(String name, String label, String defaultValue, boolean displayLabel) {
+		this(name, label, defaultValue);
+		addParameter(DenaliWidget.DISPLAY_LABEL, "" + displayLabel);
+	}
 
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.INFOLABEL;
-   }
-   
+	public InfoLabelParameter(String name, String label, String defaultValue, boolean displayLabel, int rows, int cols) {
+		this(name, label, defaultValue, displayLabel);
+		addParameter(InfoLabelWidget.ROWS, "" + rows);
+		addParameter(InfoLabelWidget.COLUMNS, "" + cols);
+	}
+
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.INFOLABEL;
+	}
+
 }

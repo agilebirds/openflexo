@@ -24,40 +24,34 @@ import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
 public class OntologyIndividualParameter extends ParameterDefinition<OntologyIndividual> {
 
-    public OntologyIndividualParameter(String name, String label, OntologyIndividual defaultValue)
-    {
-        super(name,label,defaultValue);
-        addParameter("className","org.openflexo.components.widget.OntologyIndividualInspectorWidget");
-    }
-    
-    public OntologyIndividualParameter(String name, String label, OntologyClass ontologyClass, OntologyIndividual defaultValue)
-    {
-        this(name,label,defaultValue);
-        if (ontologyClass != null) setOntologyClass(ontologyClass);
-    }
-    
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.CUSTOM;
-    }
+	public OntologyIndividualParameter(String name, String label, OntologyIndividual defaultValue) {
+		super(name, label, defaultValue);
+		addParameter("className", "org.openflexo.components.widget.OntologyIndividualInspectorWidget");
+	}
 
-   private OntologyClass _ontologyClass;
+	public OntologyIndividualParameter(String name, String label, OntologyClass ontologyClass, OntologyIndividual defaultValue) {
+		this(name, label, defaultValue);
+		if (ontologyClass != null)
+			setOntologyClass(ontologyClass);
+	}
 
-   public void setOntologyClass(OntologyClass ontologyClass)
-   {
-	   System.out.println("Class "+ontologyClass.getURI());
-	   _ontologyClass = ontologyClass;
-	   addParameter("ontologyClass", "params."+getName()+".ontologyClass");
-   }
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.CUSTOM;
+	}
 
-   public FlexoModelObject getOntologyClass() 
-   {
-	   return _ontologyClass;
-   }
+	private OntologyClass _ontologyClass;
 
+	public void setOntologyClass(OntologyClass ontologyClass) {
+		System.out.println("Class " + ontologyClass.getURI());
+		_ontologyClass = ontologyClass;
+		addParameter("ontologyClass", "params." + getName() + ".ontologyClass");
+	}
+
+	public FlexoModelObject getOntologyClass() {
+		return _ontologyClass;
+	}
 
 }

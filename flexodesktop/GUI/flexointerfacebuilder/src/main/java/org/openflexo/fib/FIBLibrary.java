@@ -44,9 +44,7 @@ import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
 
-
-public class FIBLibrary
-{
+public class FIBLibrary {
 
 	static final Logger logger = Logger.getLogger(FIBLibrary.class.getPackage().getName());
 
@@ -56,15 +54,13 @@ public class FIBLibrary
 	private Hashtable<String, FIBComponent> _fibDefinitions;
 
 	private DefaultBindingFactory bindingFactory = new DefaultBindingFactory();
-	
-	private FIBLibrary()
-	{
+
+	private FIBLibrary() {
 		super();
 		_fibDefinitions = new Hashtable<String, FIBComponent>();
 	}
 
-	protected static FIBLibrary createInstance()
-	{
+	protected static FIBLibrary createInstance() {
 		_current = new FIBLibrary();
 
 		StringEncoder.getDefaultInstance()._addConverter(_current.bindingFactory);
@@ -78,26 +74,22 @@ public class FIBLibrary
 		return _current;
 	}
 
-	public static FIBLibrary instance()
-	{
+	public static FIBLibrary instance() {
 		if (_current == null) {
 			createInstance();
 		}
 		return _current;
 	}
 
-	public static boolean hasInstance()
-	{
+	public static boolean hasInstance() {
 		return (_current != null);
 	}
 
-	public BindingFactory getBindingFactory() 
-	{
+	public BindingFactory getBindingFactory() {
 		return bindingFactory;
 	}
-	
-	public static XMLMapping getFIBMapping()
-	{
+
+	public static XMLMapping getFIBMapping() {
 		if (_fibMapping == null) {
 			// File mappingFile = new File
 			// ("../FlexoInspector/Models/InspectorModel.xml");
@@ -111,63 +103,57 @@ public class FIBLibrary
 			} catch (InvalidModelException e) {
 				// Warns about the exception
 				if (logger.isLoggable(Level.SEVERE))
-					logger.severe("Exception raised: " + e + " for file "+mappingFile.getAbsolutePath()+". See console for details.");
+					logger.severe("Exception raised: " + e + " for file " + mappingFile.getAbsolutePath() + ". See console for details.");
 				e.printStackTrace();
 			} catch (Exception e) {
 				// Warns about the exception
 				if (logger.isLoggable(Level.SEVERE))
-					logger.severe("Exception raised: " + e.getClass().getName() + " for file "+mappingFile.getAbsolutePath()+". See console for details.");
+					logger.severe("Exception raised: " + e.getClass().getName() + " for file " + mappingFile.getAbsolutePath()
+							+ ". See console for details.");
 				e.printStackTrace();
 			}
 		}
 		return _fibMapping;
 	}
 
-	public boolean componentIsLoaded(File fibFile)
-	{
+	public boolean componentIsLoaded(File fibFile) {
 		return _fibDefinitions.get(fibFile.getAbsolutePath()) != null;
 	}
-	
-	public boolean componentIsLoaded(String fibResourcePath)
-	{
+
+	public boolean componentIsLoaded(String fibResourcePath) {
 		return _fibDefinitions.get(fibResourcePath) != null;
 	}
-	
-	public FIBComponent retrieveFIBComponent(File fibFile)
-	{
-		return retrieveFIBComponent(fibFile,true); 
+
+	public FIBComponent retrieveFIBComponent(File fibFile) {
+		return retrieveFIBComponent(fibFile, true);
 	}
-	
-	public FIBComponent retrieveFIBComponent(File fibFile, boolean useCache)
-	{
+
+	public FIBComponent retrieveFIBComponent(File fibFile, boolean useCache) {
 		if (!useCache || _fibDefinitions.get(fibFile.getAbsolutePath()) == null) {
 
 			RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(fibFile.getParentFile());
 			Converter<File> previousConverter = StringEncoder.getDefaultInstance()._converterForClass(File.class);
 			StringEncoder.getDefaultInstance()._addConverter(relativePathFileConverter);
-			
+
 			FileInputStream inputStream = null;
 			try {
 				inputStream = new FileInputStream(fibFile);
 				return retrieveFIBComponent(fibFile.getAbsolutePath(), inputStream, useCache);
 			} catch (FileNotFoundException e) {
 				return null;
-			} finally
-			{
+			} finally {
 				IOUtils.closeQuietly(inputStream);
 				StringEncoder.getDefaultInstance()._addConverter(previousConverter);
 			}
 		}
 		return _fibDefinitions.get(fibFile.getAbsolutePath());
 	}
-	
-	public FIBComponent retrieveFIBComponent(String fibResourcePath) 
-	{
-		return retrieveFIBComponent(fibResourcePath,true);
+
+	public FIBComponent retrieveFIBComponent(String fibResourcePath) {
+		return retrieveFIBComponent(fibResourcePath, true);
 	}
-	
-	public FIBComponent retrieveFIBComponent(String fibResourcePath, boolean useCache) 
-	{
+
+	public FIBComponent retrieveFIBComponent(String fibResourcePath, boolean useCache) {
 		InputStream inputStream = getClass().getResourceAsStream(fibResourcePath);
 		try {
 			return retrieveFIBComponent(fibResourcePath, inputStream, useCache);
@@ -176,8 +162,7 @@ public class FIBLibrary
 		}
 	}
 
-	private FIBComponent retrieveFIBComponent(String fibIdentifier, InputStream inputStream, boolean useCache)
-	{
+	private FIBComponent retrieveFIBComponent(String fibIdentifier, InputStream inputStream, boolean useCache) {
 		if (!useCache || _fibDefinitions.get(fibIdentifier) == null) {
 
 			try {
@@ -195,57 +180,50 @@ public class FIBLibrary
 		return _fibDefinitions.get(fibIdentifier);
 	}
 
-	public static void save(FIBComponent component, File file) 
-	{
-		logger.info("Save to file "+file.getAbsolutePath());
-		
+	public static void save(FIBComponent component, File file) {
+		logger.info("Save to file " + file.getAbsolutePath());
+
 		RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(file.getParentFile());
 		Converter<File> previousConverter = StringEncoder.getDefaultInstance()._converterForClass(File.class);
 		StringEncoder.getDefaultInstance()._addConverter(relativePathFileConverter);
 
 		XMLCoder coder = new XMLCoder(getFIBMapping());
-		
+
 		try {
-			coder.encodeObject(component,new FileOutputStream(file));
-			logger.info("Succeeded to save: "+file);
-			//System.out.println("> "+coder.encodeObject(component));
+			coder.encodeObject(component, new FileOutputStream(file));
+			logger.info("Succeeded to save: " + file);
+			// System.out.println("> "+coder.encodeObject(component));
 		} catch (Exception e) {
-			logger.warning("Failed to save: "+file+" unexpected exception: "+e.getMessage());
+			logger.warning("Failed to save: " + file + " unexpected exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 
 		StringEncoder.getDefaultInstance()._addConverter(previousConverter);
 	}
 
-	public static class RelativePathFileConverter extends Converter<File>
-	{
+	public static class RelativePathFileConverter extends Converter<File> {
 		private File relativePath;
 
-		public RelativePathFileConverter(File aRelativePath) 
-		{
+		public RelativePathFileConverter(File aRelativePath) {
 			super(File.class);
 			relativePath = aRelativePath;
 		}
 
 		@Override
-		public File convertFromString(String value) 
-		{
-			return new File(relativePath,value);
+		public File convertFromString(String value) {
+			return new File(relativePath, value);
 		}
 
 		@Override
-		public String convertToString(File value) 
-		{
+		public String convertToString(File value) {
 			try {
 				return FileUtils.makeFilePathRelativeToDir(value, relativePath);
 			} catch (IOException e) {
-				logger.warning("IOException while computing relative path for "+value+" relative to "+relativePath);
+				logger.warning("IOException while computing relative path for " + value + " relative to " + relativePath);
 				return value.getAbsolutePath();
 			}
 		}
-		
+
 	}
-
-
 
 }

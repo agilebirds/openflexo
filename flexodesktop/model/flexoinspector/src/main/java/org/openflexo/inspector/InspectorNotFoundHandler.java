@@ -25,8 +25,7 @@ package org.openflexo.inspector;
  * @author sguerin
  * 
  */
-public interface InspectorNotFoundHandler
-{
+public interface InspectorNotFoundHandler {
 
-    public void inspectorNotFound(String inspectorName);
+	public void inspectorNotFound(String inspectorName);
 }

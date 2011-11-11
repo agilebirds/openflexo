@@ -30,7 +30,6 @@ import org.openflexo.foundation.dm.dm.EntityAddedToDiagram;
 import org.openflexo.foundation.dm.dm.EntityRemovedFromDiagram;
 import org.openflexo.foundation.xml.FlexoDMBuilder;
 
-
 public class ERDiagram extends DMObject {
 
 	protected static final Logger logger = Logger.getLogger(ERDiagram.class.getPackage().getName());
@@ -41,64 +40,57 @@ public class ERDiagram extends DMObject {
 
 	/**
 	 * Constructor used during deserialization
-     */
-    public ERDiagram(FlexoDMBuilder builder)
-    {
-        this(builder.dmModel);
-        initializeDeserialization(builder);
-    }
+	 */
+	public ERDiagram(FlexoDMBuilder builder) {
+		this(builder.dmModel);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor
-     */
-    public ERDiagram(DMModel dmModel)
-    {
-        super(dmModel);
-        entities = new Vector<DMEntity>();
-    }
-
-    @Override
-    public final void delete() {
-    	DMModel model = getDMModel();
-    	super.delete();
-    	// This removes the only ref
-    	model.removeFromDiagrams(this);
-
-    	// this method is final because of this call
-    	deleteObservers();
-    }
+	/**
+	 * Default constructor
+	 */
+	public ERDiagram(DMModel dmModel) {
+		super(dmModel);
+		entities = new Vector<DMEntity>();
+	}
 
 	@Override
-	public String getName()
-	{
+	public final void delete() {
+		DMModel model = getDMModel();
+		super.delete();
+		// This removes the only ref
+		model.removeFromDiagrams(this);
+
+		// this method is final because of this call
+		deleteObservers();
+	}
+
+	@Override
+	public String getName() {
 		return name;
 	}
 
 	@Override
-	public void setName(String aName)
-	{
+	public void setName(String aName) {
 		if (name == null || !name.equals(aName)) {
 			String oldName = name;
 			name = aName;
 			setChanged();
-			notifyObservers(new DMAttributeDataModification("name",oldName,aName));
+			notifyObservers(new DMAttributeDataModification("name", oldName, aName));
 		}
 	}
 
-	public Vector<DMEntity> getEntities()
-	{
+	public Vector<DMEntity> getEntities() {
 		return entities;
 	}
 
-	public void setEntities(Vector<DMEntity> someEntities)
-	{
+	public void setEntities(Vector<DMEntity> someEntities) {
 		Vector<DMEntity> entitiesToRemove = new Vector<DMEntity>();
 		entitiesToRemove.addAll(entities);
 		for (DMEntity entity : someEntities) {
 			if (entities.contains(entity)) {
 				entitiesToRemove.remove(entity);
-			}
-			else {
+			} else {
 				addToEntities(entity);
 			}
 		}
@@ -107,22 +99,19 @@ public class ERDiagram extends DMObject {
 		}
 	}
 
-	public void addToEntities(DMEntity entity)
-	{
-		//logger.info("**** addToEntities() "+entity);
+	public void addToEntities(DMEntity entity) {
+		// logger.info("**** addToEntities() "+entity);
 		entities.add(entity);
 		setChanged();
 		notifyObservers(new EntityAddedToDiagram(entity));
 	}
 
-	public void removeFromEntities(DMEntity entity)
-	{
-		//logger.info("**** removeFromEntities() "+entity);
+	public void removeFromEntities(DMEntity entity) {
+		// logger.info("**** removeFromEntities() "+entity);
 		entities.remove(entity);
 		setChanged();
 		notifyObservers(new EntityRemovedFromDiagram(entity));
 	}
-
 
 	@Override
 	public boolean getAllowsChildren() {
@@ -131,56 +120,46 @@ public class ERDiagram extends DMObject {
 	}
 
 	@Override
-	public Vector<? extends DMObject> getEmbeddedDMObjects()
-	{
+	public Vector<? extends DMObject> getEmbeddedDMObjects() {
 		return entities;
 	}
 
 	@Override
-	public Vector<? extends DMObject> getOrderedChildren()
-	{
+	public Vector<? extends DMObject> getOrderedChildren() {
 		return entities;
 	}
 
 	@Override
-	public TreeNode getParent()
-	{
+	public TreeNode getParent() {
 		return getDMModel();
 	}
 
 	@Override
-	public boolean isDeletable()
-	{
+	public boolean isDeletable() {
 		return true;
 	}
 
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "er_diagram";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return getDMModel().getFullyQualifiedName()+"."+getName();
+	public String getFullyQualifiedName() {
+		return getDMModel().getFullyQualifiedName() + "." + getName();
 	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return Inspectors.DM.ER_DIAGRAM_INSPECTOR;
 	}
 
-	public DMRepository getRepository()
-	{
+	public DMRepository getRepository() {
 		return repository;
 	}
 
-	public void setRepository(DMRepository aRepository)
-	{
+	public void setRepository(DMRepository aRepository) {
 		repository = aRepository;
 	}
-
 
 }

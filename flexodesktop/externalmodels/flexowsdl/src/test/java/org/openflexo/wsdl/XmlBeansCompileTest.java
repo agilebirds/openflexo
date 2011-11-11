@@ -28,40 +28,36 @@ import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.ws.action.CreateNewWebService;
 import org.openflexo.toolbox.FileResource;
 
-
 public class XmlBeansCompileTest extends FlexoTestCase {
 
-	
-	
 	public XmlBeansCompileTest(String name) {
 		super(name);
 	}
 
-	public void testCompile(){
-		try{
-		FlexoEditor editor = FlexoResourceManager.initializeNewProject(new File("/tmp/FlexoTest/xmlBeansTest/XmlBeansTest.prj"),EDITOR_FACTORY,null);
-		FlexoProject project = editor.getProject();
-		
-		CreateNewWebService action =(CreateNewWebService) CreateNewWebService.actionType.makeNewAction(project.getFlexoWSLibrary(), null, editor);
-		action.setWebServiceType(CreateNewWebService.EXTERNAL_WS);
-	
-        
-       	String externalName ="externalWSGroupName";
-       	File wsdlFile = new FileResource("getJoke.asmx.xml");
-       	action.setNewWebServiceName(externalName);
-       	action.setWsdlFile(wsdlFile);
-     
-		
-		action.setNewWebServiceName("myNewWebService");
-		action.setPortRegistry(project.getLocalFlexoProcess("MyWebService").getPortRegistery());
-		action.setProject(project);
-		action.doAction();
-		//try{
-		//	project.save();
-		}
-		catch(Exception e){
+	public void testCompile() {
+		try {
+			FlexoEditor editor = FlexoResourceManager.initializeNewProject(new File("/tmp/FlexoTest/xmlBeansTest/XmlBeansTest.prj"),
+					EDITOR_FACTORY, null);
+			FlexoProject project = editor.getProject();
+
+			CreateNewWebService action = (CreateNewWebService) CreateNewWebService.actionType.makeNewAction(project.getFlexoWSLibrary(),
+					null, editor);
+			action.setWebServiceType(CreateNewWebService.EXTERNAL_WS);
+
+			String externalName = "externalWSGroupName";
+			File wsdlFile = new FileResource("getJoke.asmx.xml");
+			action.setNewWebServiceName(externalName);
+			action.setWsdlFile(wsdlFile);
+
+			action.setNewWebServiceName("myNewWebService");
+			action.setPortRegistry(project.getLocalFlexoProcess("MyWebService").getPortRegistery());
+			action.setProject(project);
+			action.doAction();
+			// try{
+			// project.save();
+		} catch (Exception e) {
 			fail(e.getMessage());
 		}
 	}
-	
+
 }

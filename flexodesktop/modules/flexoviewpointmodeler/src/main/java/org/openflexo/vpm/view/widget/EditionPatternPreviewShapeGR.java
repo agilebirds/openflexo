@@ -32,35 +32,31 @@ import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.viewpoint.ShapePatternRole;
 
-
-public class EditionPatternPreviewShapeGR extends ShapeGraphicalRepresentation<ShapePatternRole> implements GraphicalFlexoObserver, EditionPatternPreviewConstants {
+public class EditionPatternPreviewShapeGR extends ShapeGraphicalRepresentation<ShapePatternRole> implements GraphicalFlexoObserver,
+		EditionPatternPreviewConstants {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(EditionPatternPreviewShapeGR.class.getPackage().getName());
 
 	/**
-	 * Constructor invoked during deserialization
-	 * DO NOT use it
+	 * Constructor invoked during deserialization DO NOT use it
 	 */
-	public EditionPatternPreviewShapeGR()
-	{
-		super(ShapeType.RECTANGLE,null,null);		
+	public EditionPatternPreviewShapeGR() {
+		super(ShapeType.RECTANGLE, null, null);
 		initWithDefaultValues();
 	}
 
-	public EditionPatternPreviewShapeGR(ShapePatternRole aPatternRole, EditionPatternPreviewRepresentation aDrawing) 
-	{
+	public EditionPatternPreviewShapeGR(ShapePatternRole aPatternRole, EditionPatternPreviewRepresentation aDrawing) {
 		super(ShapeType.RECTANGLE, aPatternRole, aDrawing);
 		initWithDefaultValues();
-		init(aPatternRole,aDrawing);
+		init(aPatternRole, aDrawing);
 
 	}
-	
-	private void initWithDefaultValues()
-	{
+
+	private void initWithDefaultValues() {
 		setTextStyle(TextStyle.makeTextStyle(DEFAULT_SHAPE_TEXT_COLOR, DEFAULT_FONT));
-		setX((WIDTH-DEFAULT_SHAPE_WIDTH)/2);
-		setY((HEIGHT-DEFAULT_SHAPE_HEIGHT)/2);
+		setX((WIDTH - DEFAULT_SHAPE_WIDTH) / 2);
+		setY((HEIGHT - DEFAULT_SHAPE_HEIGHT) / 2);
 		setWidth(DEFAULT_SHAPE_WIDTH);
 		setHeight(DEFAULT_SHAPE_HEIGHT);
 		setBackground(BackgroundStyle.makeColoredBackground(DEFAULT_SHAPE_BACKGROUND_COLOR));
@@ -68,47 +64,41 @@ public class EditionPatternPreviewShapeGR extends ShapeGraphicalRepresentation<S
 	}
 
 	private boolean isInitialized = false;
-	
-	public boolean isInitialized()
-	{
+
+	public boolean isInitialized() {
 		return isInitialized;
 	}
-	
-	public void init(ShapePatternRole aPatternRole, EditionPatternPreviewRepresentation aDrawing)
-	{
+
+	public void init(ShapePatternRole aPatternRole, EditionPatternPreviewRepresentation aDrawing) {
 		setDrawable(aPatternRole);
 		setDrawing(aDrawing);
-		
-		if (aPatternRole != null) aPatternRole.addObserver(this);
+
+		if (aPatternRole != null)
+			aPatternRole.addObserver(this);
 		isInitialized = true;
 	}
-	
+
 	@Override
-	public void delete()
-	{
-		logger.info("Delete GR "+this);
-		if (getDrawable() != null) getDrawable().deleteObserver(this);
+	public void delete() {
+		logger.info("Delete GR " + this);
+		if (getDrawable() != null)
+			getDrawable().deleteObserver(this);
 		super.delete();
 	}
 
-
 	@Override
-	public EditionPatternPreviewRepresentation getDrawing() 
-	{
-		return (EditionPatternPreviewRepresentation)super.getDrawing();
+	public EditionPatternPreviewRepresentation getDrawing() {
+		return (EditionPatternPreviewRepresentation) super.getDrawing();
 	}
-	
-	public ShapePatternRole getPatternRole()
-	{
+
+	public ShapePatternRole getPatternRole() {
 		return getDrawable();
 	}
 
-
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getPatternRole()) {
-			logger.info("Notified "+dataModification);
+			logger.info("Notified " + dataModification);
 			/*if ((dataModification instanceof CalcDrawingShapeInserted)
 					|| (dataModification instanceof CalcDrawingShapeRemoved)
 					|| (dataModification instanceof CalcDrawingConnectorInserted)
@@ -117,7 +107,7 @@ public class EditionPatternPreviewShapeGR extends ShapeGraphicalRepresentation<S
 			}
 			else*/
 			if (dataModification instanceof NameChanged) {
-				//logger.info("received NameChanged notification");
+				// logger.info("received NameChanged notification");
 				setText(getText());
 				notifyChange(org.openflexo.fge.GraphicalRepresentation.Parameters.text);
 			}
@@ -125,37 +115,31 @@ public class EditionPatternPreviewShapeGR extends ShapeGraphicalRepresentation<S
 	}
 
 	@Override
-	public boolean getAllowToLeaveBounds()
-	{
+	public boolean getAllowToLeaveBounds() {
 		return false;
 	}
-	
+
 	@Override
-	public String getText()
-	{
+	public String getText() {
 		if (getPatternRole() != null) {
-			if (getPatternRole().getLabel() != null) return getPatternRole().getLabel().toString();
+			if (getPatternRole().getLabel() != null)
+				return getPatternRole().getLabel().toString();
 			return getPatternRole().getPatternRoleName();
 		}
 		return null;
 	}
 
 	@Override
-	public void setTextNoNotification(String text) 
-	{
+	public void setTextNoNotification(String text) {
 		// not allowed
 	}
 
 	@Override
-	public void notifyObservers(Object arg)
-	{
+	public void notifyObservers(Object arg) {
 		super.notifyObservers(arg);
-		if (arg instanceof FGENotification
-				&& ((FGENotification)arg).isModelNotification()
-				&& getDrawing() != null 
-				&& !getDrawing().ignoreNotifications()
-				&& getPatternRole() != null)
+		if (arg instanceof FGENotification && ((FGENotification) arg).isModelNotification() && getDrawing() != null
+				&& !getDrawing().ignoreNotifications() && getPatternRole() != null)
 			getPatternRole().setChanged();
 	}
-	
+
 }

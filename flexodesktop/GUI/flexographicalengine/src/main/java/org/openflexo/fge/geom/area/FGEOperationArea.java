@@ -23,54 +23,57 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 
 public abstract class FGEOperationArea implements FGEArea {
-	
+
 	@Override
 	public abstract boolean containsPoint(FGEPoint p);
 
 	@Override
-	public FGEArea exclusiveOr(FGEArea area)
-	{
-		return new FGEExclusiveOrArea(this,area);
+	public FGEArea exclusiveOr(FGEArea area) {
+		return new FGEExclusiveOrArea(this, area);
 	}
 
 	@Override
-	public FGEArea intersect(FGEArea area)
-	{
-		if (area.containsArea(this)) return this.clone();
-		if (containsArea(area)) return area.clone();
+	public FGEArea intersect(FGEArea area) {
+		if (area.containsArea(this))
+			return this.clone();
+		if (containsArea(area))
+			return area.clone();
 
-		FGEIntersectionArea returned = new FGEIntersectionArea(this,area);
-		if (returned.isDevelopable()) return returned.makeDevelopped();
-		else return returned;
+		FGEIntersectionArea returned = new FGEIntersectionArea(this, area);
+		if (returned.isDevelopable())
+			return returned.makeDevelopped();
+		else
+			return returned;
 	}
 
 	@Override
-	public FGEArea substract(FGEArea area, boolean isStrict)
-	{
-		return new FGESubstractionArea(this,area,isStrict);
+	public FGEArea substract(FGEArea area, boolean isStrict) {
+		return new FGESubstractionArea(this, area, isStrict);
 	}
 
 	@Override
-	public FGEArea union(FGEArea area)
-	{
-		if (containsArea(area)) return clone();
-		if (area.containsArea(this)) return area.clone();
-		
-		return new FGEUnionArea(this,area);
+	public FGEArea union(FGEArea area) {
+		if (containsArea(area))
+			return clone();
+		if (area.containsArea(this))
+			return area.clone();
+
+		return new FGEUnionArea(this, area);
 	}
-	
+
 	/**
-	 * Creates a new object of the same class and with the same
-	 * contents as this object.
-	 * @return     a clone of this instance.
-	 * @exception  OutOfMemoryError            if there is not enough memory.
-	 * @see        java.lang.Cloneable
-	 * @since      1.2
+	 * Creates a new object of the same class and with the same contents as this object.
+	 * 
+	 * @return a clone of this instance.
+	 * @exception OutOfMemoryError
+	 *                if there is not enough memory.
+	 * @see java.lang.Cloneable
+	 * @since 1.2
 	 */
 	@Override
 	public FGEOperationArea clone() {
 		try {
-			return (FGEOperationArea)super.clone();
+			return (FGEOperationArea) super.clone();
 		} catch (CloneNotSupportedException e) {
 			// cannot happen
 			e.printStackTrace();
@@ -79,16 +82,13 @@ public abstract class FGEOperationArea implements FGEArea {
 	}
 
 	@Override
-	public FGEArea getOrthogonalPerspectiveArea(SimplifiedCardinalDirection orientation)
-	{
+	public FGEArea getOrthogonalPerspectiveArea(SimplifiedCardinalDirection orientation) {
 		return this;
 	}
 
 	@Override
-	public FGEArea getAnchorAreaFrom(SimplifiedCardinalDirection direction)
-	{
+	public FGEArea getAnchorAreaFrom(SimplifiedCardinalDirection direction) {
 		return this;
 	}
-
 
 }

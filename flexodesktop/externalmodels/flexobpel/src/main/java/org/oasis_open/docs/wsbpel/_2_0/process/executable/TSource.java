@@ -23,7 +23,6 @@
 // Generated on: 2008.02.08 at 10:43:57 AM CET 
 //
 
-
 package org.oasis_open.docs.wsbpel._2_0.process.executable;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -34,11 +33,12 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-
 /**
- * <p>Java class for tSource complex type.
+ * <p>
+ * Java class for tSource complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tSource">
@@ -56,65 +56,55 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tSource", propOrder = {
-    "transitionCondition"
-})
-public class TSource
-    extends TExtensibleElements
-{
+@XmlType(name = "tSource", propOrder = { "transitionCondition" })
+public class TSource extends TExtensibleElements {
 
-    protected TCondition transitionCondition;
-    @XmlAttribute(required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "NCName")
-    protected String linkName;
+	protected TCondition transitionCondition;
+	@XmlAttribute(required = true)
+	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+	@XmlSchemaType(name = "NCName")
+	protected String linkName;
 
-    /**
-     * Gets the value of the transitionCondition property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TCondition }
-     *     
-     */
-    public TCondition getTransitionCondition() {
-        return transitionCondition;
-    }
+	/**
+	 * Gets the value of the transitionCondition property.
+	 * 
+	 * @return possible object is {@link TCondition }
+	 * 
+	 */
+	public TCondition getTransitionCondition() {
+		return transitionCondition;
+	}
 
-    /**
-     * Sets the value of the transitionCondition property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TCondition }
-     *     
-     */
-    public void setTransitionCondition(TCondition value) {
-        this.transitionCondition = value;
-    }
+	/**
+	 * Sets the value of the transitionCondition property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link TCondition }
+	 * 
+	 */
+	public void setTransitionCondition(TCondition value) {
+		this.transitionCondition = value;
+	}
 
-    /**
-     * Gets the value of the linkName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getLinkName() {
-        return linkName;
-    }
+	/**
+	 * Gets the value of the linkName property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getLinkName() {
+		return linkName;
+	}
 
-    /**
-     * Sets the value of the linkName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setLinkName(String value) {
-        this.linkName = value;
-    }
+	/**
+	 * Sets the value of the linkName property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setLinkName(String value) {
+		this.linkName = value;
+	}
 
 }

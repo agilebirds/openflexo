@@ -26,11 +26,10 @@ import org.openflexo.foundation.rm.FlexoProject;
  * 
  * @author sguerin
  */
-public interface ExternalDGModule extends ExternalModule
-{
+public interface ExternalDGModule extends ExternalModule {
 
-    public void generateXML(FlexoProject project);
+	public void generateXML(FlexoProject project);
 
-    public void generateOO3(FlexoProject project);
+	public void generateOO3(FlexoProject project);
 
 }

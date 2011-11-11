@@ -26,9 +26,9 @@ public class UnresolvedElementConflict extends UnresolvedConflict {
 
 	private Content _insertedElement;
 	private Element _deletedElement;
-	
-	public UnresolvedElementConflict(XMLDiff3 merge,int index,Content inserted, Element deleted) {
-		super(merge,index);
+
+	public UnresolvedElementConflict(XMLDiff3 merge, int index, Content inserted, Element deleted) {
+		super(merge, index);
 		_insertedElement = inserted;
 		_deletedElement = deleted;
 	}

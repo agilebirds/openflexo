@@ -36,74 +36,64 @@ import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.file.AbstractCGFile;
 import org.openflexo.localization.FlexoLocalization;
 
-public class DismissUnchangedGeneratedFiles extends MultipleFileGCAction<DismissUnchangedGeneratedFiles>
-{
+public class DismissUnchangedGeneratedFiles extends MultipleFileGCAction<DismissUnchangedGeneratedFiles> {
 
 	private static final Logger logger = Logger.getLogger(DismissUnchangedGeneratedFiles.class.getPackage().getName());
 
-	public static final MultipleFileGCActionType<DismissUnchangedGeneratedFiles> actionType 
-	= new MultipleFileGCActionType<DismissUnchangedGeneratedFiles> ("dismiss_unchanged_files",
-			GENERATE_MENU, WRITE_GROUP,FlexoActionType.NORMAL_ACTION_TYPE) 
-	{
+	public static final MultipleFileGCActionType<DismissUnchangedGeneratedFiles> actionType = new MultipleFileGCActionType<DismissUnchangedGeneratedFiles>(
+			"dismiss_unchanged_files", GENERATE_MENU, WRITE_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 		/**
-         * Factory method
-         */
-        @Override
-		public DismissUnchangedGeneratedFiles makeNewAction(CGObject repository, Vector<CGObject> globalSelection, FlexoEditor editor) 
-        {
-            return new DismissUnchangedGeneratedFiles(repository, globalSelection, editor);
-        }
-		
-        @Override
-		protected boolean accept (AbstractCGFile file)
-        {
-        	return (file.getResource() != null
-        			&& (file.getGenerationStatus() == GenerationStatus.GenerationModified
-        					|| file.getGenerationStatus() == GenerationStatus.OverrideScheduled)) && file.getResource().doesGenerationKeepFileUnchanged();
-        }
+		 * Factory method
+		 */
+		@Override
+		public DismissUnchangedGeneratedFiles makeNewAction(CGObject repository, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new DismissUnchangedGeneratedFiles(repository, globalSelection, editor);
+		}
+
+		@Override
+		protected boolean accept(AbstractCGFile file) {
+			return (file.getResource() != null && (file.getGenerationStatus() == GenerationStatus.GenerationModified || file
+					.getGenerationStatus() == GenerationStatus.OverrideScheduled)) && file.getResource().doesGenerationKeepFileUnchanged();
+		}
 
 	};
-	
-    static {
-        FlexoModelObject.addActionForClass (DismissUnchangedGeneratedFiles.actionType, CGObject.class);
-    }
-    
-    DismissUnchangedGeneratedFiles (CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
 
-    @Override
-	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException
-    {
-    	logger.info ("Dismiss unchanged files");
-       	
-       	AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();
-    	pg.setAction(this);
- 
-    	GenerationRepository repository = getRepository();
-    	
-       	Vector<AbstractCGFile> dimissibleFiles = getSelectedCGFilesOnWhyCurrentActionShouldApply();
-       	if (dimissibleFiles.size()>0) {
-	     	makeFlexoProgress(FlexoLocalization.localizedForKey("dismiss_unchanged_files") +  " "
-	       			+ dimissibleFiles.size() + " "
-	       			+ FlexoLocalization.localizedForKey("files") +" "
-	      			+ FlexoLocalization.localizedForKey("into")  +" "
-	      			+ repository.getDirectory().getAbsolutePath(), dimissibleFiles.size()+2);
-	     	
-	     	for (AbstractCGFile file : dimissibleFiles) {
-	     		setProgress(FlexoLocalization.localizedForKey("check") +  " " + file.getFileName());
-	     		logger.info (FlexoLocalization.localizedForKey("check") +  " " + file.getFileName());
-	     		file.dismissWhenUnchanged();
-	     	}
-       	}
+	static {
+		FlexoModelObject.addActionForClass(DismissUnchangedGeneratedFiles.actionType, CGObject.class);
+	}
+
+	DismissUnchangedGeneratedFiles(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException {
+		logger.info("Dismiss unchanged files");
+
+		AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();
+		pg.setAction(this);
+
+		GenerationRepository repository = getRepository();
+
+		Vector<AbstractCGFile> dimissibleFiles = getSelectedCGFilesOnWhyCurrentActionShouldApply();
+		if (dimissibleFiles.size() > 0) {
+			makeFlexoProgress(FlexoLocalization.localizedForKey("dismiss_unchanged_files") + " " + dimissibleFiles.size() + " "
+					+ FlexoLocalization.localizedForKey("files") + " " + FlexoLocalization.localizedForKey("into") + " "
+					+ repository.getDirectory().getAbsolutePath(), dimissibleFiles.size() + 2);
+
+			for (AbstractCGFile file : dimissibleFiles) {
+				setProgress(FlexoLocalization.localizedForKey("check") + " " + file.getFileName());
+				logger.info(FlexoLocalization.localizedForKey("check") + " " + file.getFileName());
+				file.dismissWhenUnchanged();
+			}
+		}
 		setProgress(FlexoLocalization.localizedForKey("save_rm"));
 		repository.getProject().getFlexoRMResource().saveResourceData();
-		     	 
-     	hideFlexoProgress();
-     	if (repository instanceof CGRepository)
-     		((CGRepository)repository).clearAllJavaParsingData();
-    }
+
+		hideFlexoProgress();
+		if (repository instanceof CGRepository)
+			((CGRepository) repository).clearAllJavaParsingData();
+	}
 
 	public boolean requiresThreadPool() {
 		return false;

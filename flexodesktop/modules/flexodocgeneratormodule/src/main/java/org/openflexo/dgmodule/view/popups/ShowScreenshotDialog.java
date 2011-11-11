@@ -46,77 +46,71 @@ import org.openflexo.view.FlexoDialog;
  * @author sguerin
  * 
  */
-public class ShowScreenshotDialog extends FlexoDialog
-{
+public class ShowScreenshotDialog extends FlexoDialog {
 
-    private ScreenshotResource _screenshotResource;
-     protected ScreenshotPanel screenshotPanel;
-    
-    public ShowScreenshotDialog(String labelString, ScreenshotResource screenshotResource, Frame owner)
-    {
-        super(owner);
+	private ScreenshotResource _screenshotResource;
+	protected ScreenshotPanel screenshotPanel;
 
-        _screenshotResource = screenshotResource;
-        
-        String title = FlexoLocalization.localizedForKey("screenshot")+":"+screenshotResource.getFile().getName();
-        setTitle(title);
-        getContentPane().setLayout(new BorderLayout());
+	public ShowScreenshotDialog(String labelString, ScreenshotResource screenshotResource, Frame owner) {
+		super(owner);
 
-        JLabel label = new JLabel(labelString,SwingConstants.CENTER);
-        label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		_screenshotResource = screenshotResource;
 
-        screenshotPanel = new ScreenshotPanel();
-        screenshotPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		String title = FlexoLocalization.localizedForKey("screenshot") + ":" + screenshotResource.getFile().getName();
+		setTitle(title);
+		getContentPane().setLayout(new BorderLayout());
 
-        JPanel controlPanel = new JPanel();
-        controlPanel.setLayout(new FlowLayout());
+		JLabel label = new JLabel(labelString, SwingConstants.CENTER);
+		label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        JButton closeButton = new JButton(FlexoLocalization.localizedForKey("close"));
- 
-        closeButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                 dispose();
-            }
-        });
-         controlPanel.add(closeButton);
-         closeButton.setSelected(true);
+		screenshotPanel = new ScreenshotPanel();
+		screenshotPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new BorderLayout());
+		JPanel controlPanel = new JPanel();
+		controlPanel.setLayout(new FlowLayout());
 
-        contentPanel.add(label, BorderLayout.NORTH);
-        contentPanel.add(new JScrollPane(screenshotPanel), BorderLayout.CENTER);
-        contentPanel.add(controlPanel, BorderLayout.SOUTH);
+		JButton closeButton = new JButton(FlexoLocalization.localizedForKey("close"));
 
-        getContentPane().add(contentPanel, BorderLayout.CENTER);
-        getRootPane().setDefaultButton(closeButton);
-        setModal(true);
-        validate();
-        pack();
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2 - 100);
-        setVisible(true);
-    }
+		closeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		controlPanel.add(closeButton);
+		closeButton.setSelected(true);
 
-    private class ScreenshotPanel extends JPanel
-    {
-        private BufferedImage _image;
-        
-        private ScreenshotPanel()
-        {
-            super();
-            _image = _screenshotResource.getScreenshotData().getImage();
-            setPreferredSize(new Dimension(_image.getWidth(),_image.getHeight()));
-        }
-        
-        @Override
-		public void paintComponent(Graphics g) 
-        {
-            super.paintComponent(g);
-            g.drawImage(_image,0,0,null);
-        }
-    }
-    
+		JPanel contentPanel = new JPanel();
+		contentPanel.setLayout(new BorderLayout());
+
+		contentPanel.add(label, BorderLayout.NORTH);
+		contentPanel.add(new JScrollPane(screenshotPanel), BorderLayout.CENTER);
+		contentPanel.add(controlPanel, BorderLayout.SOUTH);
+
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		getRootPane().setDefaultButton(closeButton);
+		setModal(true);
+		validate();
+		pack();
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2 - 100);
+		setVisible(true);
+	}
+
+	private class ScreenshotPanel extends JPanel {
+		private BufferedImage _image;
+
+		private ScreenshotPanel() {
+			super();
+			_image = _screenshotResource.getScreenshotData().getImage();
+			setPreferredSize(new Dimension(_image.getWidth(), _image.getHeight()));
+		}
+
+		@Override
+		public void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			g.drawImage(_image, 0, 0, null);
+		}
+	}
+
 }

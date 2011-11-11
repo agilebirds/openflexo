@@ -38,108 +38,105 @@ import org.openflexo.generator.ProjectGenerator;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.logging.FlexoLogger;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class CopiedResourceGenerator extends FlexoResourceGenerator<FlexoModelObject, GeneratedCopiedFile>
-{
-    private static final Logger logger = FlexoLogger.getLogger(CopiedResourceGenerator.class.getPackage().getName());
-    
-    private FlexoCopiedResource copiedResource;
-    
-    private Date lastMemoryGeneration = new Date(1);
-    
-    private GeneratedCopiedFile generatedCode;
-    
-    /**
+public class CopiedResourceGenerator extends FlexoResourceGenerator<FlexoModelObject, GeneratedCopiedFile> {
+	private static final Logger logger = FlexoLogger.getLogger(CopiedResourceGenerator.class.getPackage().getName());
+
+	private FlexoCopiedResource copiedResource;
+
+	private Date lastMemoryGeneration = new Date(1);
+
+	private GeneratedCopiedFile generatedCode;
+
+	/**
      * 
      */
-    public CopiedResourceGenerator(ProjectGenerator pg, FlexoCopiedResource copiedResource)
-    {
-    	super(pg);
-        this.copiedResource = copiedResource;
-    }
-    
-    /**
-     * Overrides generate
-     * @see org.openflexo.foundation.cg.generator.IFlexoResourceGenerator#generate(boolean)
-     */
-    @Override
-	public void generate(boolean forceRegenerate)
-    {
-        if (forceRegenerate) {
-            if (logger.isLoggable(Level.INFO))
-                logger.info("Called force generate on copied resource");
-            if (copiedResource.getResourceToCopy() instanceof FlexoGeneratedResource)
-                try {
-                    ((FlexoGeneratedResource)copiedResource.getResourceToCopy()).generate();
-                } catch (SaveResourceException e) {
-                    e.printStackTrace();
-                } catch (FlexoException e) {
-                    e.printStackTrace();
-                }
-        }
-        generatedCode = new GeneratedCopiedFile(copiedResource.getResourceToCopy().getFile());
-        lastMemoryGeneration = new Date();
-    }
+	public CopiedResourceGenerator(ProjectGenerator pg, FlexoCopiedResource copiedResource) {
+		super(pg);
+		this.copiedResource = copiedResource;
+	}
 
-    /**
-     * Overrides getGeneratedCode
-     * @see org.openflexo.foundation.cg.generator.IFlexoResourceGenerator#getGeneratedCode()
-     */
-    @Override
-	public GeneratedCopiedFile getGeneratedCode()
-    {
-        return generatedCode;
-    }
-
-    @Override
-    public Logger getGeneratorLogger() {
-    	return logger;
-    }
-    
-    /**
-     * Overrides getGenerationException
-     * @see org.openflexo.foundation.cg.generator.IFlexoResourceGenerator#getGenerationException()
-     */
-    @Override
-	public GenerationException getGenerationException()
-    {
-        return null;
-    }
-
-    /**
-     * Overrides getIdentifier
-     * @see org.openflexo.foundation.cg.generator.IFlexoResourceGenerator#getIdentifier()
-     */
-    @Override
-	public String getIdentifier()
-    {
-        return "SCREENSHOT-"+copiedResource.getResourceIdentifier();
-    }
-
-    /**
-     * Overrides getMemoryLastGenerationDate
-     * @see org.openflexo.foundation.cg.generator.IFlexoResourceGenerator#getMemoryLastGenerationDate()
-     */
-    @Override
-	public Date getMemoryLastGenerationDate()
-    {
-        //return copiedResource.getResourceToCopy().getDiskLastModifiedDate();
-        return lastMemoryGeneration;
-    }
-
-    /**
-     * Overrides getUsedTemplates
-     * @see org.openflexo.foundation.cg.generator.IFlexoResourceGenerator#getUsedTemplates()
-     */
+	/**
+	 * Overrides generate
+	 * 
+	 * @see org.openflexo.foundation.cg.generator.IFlexoResourceGenerator#generate(boolean)
+	 */
 	@Override
-	public Vector<CGTemplate> getUsedTemplates()
-    {
+	public void generate(boolean forceRegenerate) {
+		if (forceRegenerate) {
+			if (logger.isLoggable(Level.INFO))
+				logger.info("Called force generate on copied resource");
+			if (copiedResource.getResourceToCopy() instanceof FlexoGeneratedResource)
+				try {
+					((FlexoGeneratedResource) copiedResource.getResourceToCopy()).generate();
+				} catch (SaveResourceException e) {
+					e.printStackTrace();
+				} catch (FlexoException e) {
+					e.printStackTrace();
+				}
+		}
+		generatedCode = new GeneratedCopiedFile(copiedResource.getResourceToCopy().getFile());
+		lastMemoryGeneration = new Date();
+	}
+
+	/**
+	 * Overrides getGeneratedCode
+	 * 
+	 * @see org.openflexo.foundation.cg.generator.IFlexoResourceGenerator#getGeneratedCode()
+	 */
+	@Override
+	public GeneratedCopiedFile getGeneratedCode() {
+		return generatedCode;
+	}
+
+	@Override
+	public Logger getGeneratorLogger() {
+		return logger;
+	}
+
+	/**
+	 * Overrides getGenerationException
+	 * 
+	 * @see org.openflexo.foundation.cg.generator.IFlexoResourceGenerator#getGenerationException()
+	 */
+	@Override
+	public GenerationException getGenerationException() {
+		return null;
+	}
+
+	/**
+	 * Overrides getIdentifier
+	 * 
+	 * @see org.openflexo.foundation.cg.generator.IFlexoResourceGenerator#getIdentifier()
+	 */
+	@Override
+	public String getIdentifier() {
+		return "SCREENSHOT-" + copiedResource.getResourceIdentifier();
+	}
+
+	/**
+	 * Overrides getMemoryLastGenerationDate
+	 * 
+	 * @see org.openflexo.foundation.cg.generator.IFlexoResourceGenerator#getMemoryLastGenerationDate()
+	 */
+	@Override
+	public Date getMemoryLastGenerationDate() {
+		// return copiedResource.getResourceToCopy().getDiskLastModifiedDate();
+		return lastMemoryGeneration;
+	}
+
+	/**
+	 * Overrides getUsedTemplates
+	 * 
+	 * @see org.openflexo.foundation.cg.generator.IFlexoResourceGenerator#getUsedTemplates()
+	 */
+	@Override
+	public Vector<CGTemplate> getUsedTemplates() {
 		return new Vector<CGTemplate>();
-    }
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -149,29 +146,29 @@ public class CopiedResourceGenerator extends FlexoResourceGenerator<FlexoModelOb
 		return false;
 	}
 
-    /**
-     * Overrides needsRegenerationBecauseOfTemplateUpdated
-     * @see org.openflexo.foundation.cg.generator.IFlexoResourceGenerator#needsRegenerationBecauseOfTemplateUpdated()
-     */
-    @Override
-	public boolean needsRegenerationBecauseOfTemplateUpdated()
-    {
-        return false;
-    }
+	/**
+	 * Overrides needsRegenerationBecauseOfTemplateUpdated
+	 * 
+	 * @see org.openflexo.foundation.cg.generator.IFlexoResourceGenerator#needsRegenerationBecauseOfTemplateUpdated()
+	 */
+	@Override
+	public boolean needsRegenerationBecauseOfTemplateUpdated() {
+		return false;
+	}
 
-    /**
-     * Overrides needsRegenerationBecauseOfTemplateUpdated
-     * @see org.openflexo.foundation.cg.generator.IFlexoResourceGenerator#needsRegenerationBecauseOfTemplateUpdated(java.util.Date)
-     */
-    @Override
-	public boolean needsRegenerationBecauseOfTemplateUpdated(Date diskLastGenerationDate)
-    {
-        return false;
-    }
+	/**
+	 * Overrides needsRegenerationBecauseOfTemplateUpdated
+	 * 
+	 * @see org.openflexo.foundation.cg.generator.IFlexoResourceGenerator#needsRegenerationBecauseOfTemplateUpdated(java.util.Date)
+	 */
+	@Override
+	public boolean needsRegenerationBecauseOfTemplateUpdated(Date diskLastGenerationDate) {
+		return false;
+	}
 
 	@Override
 	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
-		
+
 	}
 
 }

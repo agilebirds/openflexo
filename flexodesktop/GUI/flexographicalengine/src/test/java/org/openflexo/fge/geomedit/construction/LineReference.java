@@ -24,37 +24,30 @@ import org.openflexo.fge.geom.FGELine;
 public class LineReference extends LineConstruction {
 
 	public LineConstruction reference;
-	
-	public LineReference() 
-	{
+
+	public LineReference() {
 		super();
 	}
 
-	public LineReference(LineConstruction aReference) 
-	{
+	public LineReference(LineConstruction aReference) {
 		this();
 		this.reference = aReference;
 	}
 
-	
 	@Override
-	protected FGELine computeData()
-	{
+	protected FGELine computeData() {
 		return reference.getData();
-	}
-	
-	@Override
-	public String toString()
-	{
-		return "LineReference["+reference.toString()+"]";
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public String toString() {
+		return "LineReference[" + reference.toString() + "]";
+	}
+
+	@Override
+	public GeometricConstruction[] getDepends() {
 		GeometricConstruction[] returned = { reference };
 		return returned;
 	}
-
 
 }

@@ -21,16 +21,14 @@ package org.openflexo.foundation.ie.dm;
 
 import org.openflexo.foundation.ie.widget.IESequence;
 
-public class SubsequenceInserted extends IEDataModification
-{
+public class SubsequenceInserted extends IEDataModification {
 
-    public SubsequenceInserted(IESequence sequence)
-    {
-        super(null, sequence);
-    }
+	public SubsequenceInserted(IESequence sequence) {
+		super(null, sequence);
+	}
 
-    public IESequence getSequence(){
-    	return (IESequence)newValue();
-    }
+	public IESequence getSequence() {
+		return (IESequence) newValue();
+	}
 
 }

@@ -34,34 +34,30 @@ public class MethodDefinition extends Observable implements ComplexPathElement<O
 
 	private Type declaringType;
 	private Method method;
-	private static Hashtable<Method,MethodDefinition> cache = new Hashtable<Method, MethodDefinition>();
+	private static Hashtable<Method, MethodDefinition> cache = new Hashtable<Method, MethodDefinition>();
 
-	public static MethodDefinition getMethodDefinition(Type aDeclaringType, Method method)
-	{
+	public static MethodDefinition getMethodDefinition(Type aDeclaringType, Method method) {
 		MethodDefinition returned = cache.get(method);
 		if (returned == null) {
-			returned = new MethodDefinition(aDeclaringType,method);
-			cache.put(method,returned);
+			returned = new MethodDefinition(aDeclaringType, method);
+			cache.put(method, returned);
 		}
 		return returned;
 	}
 
-	private MethodDefinition(Type aDeclaringType, Method method)
-	{
+	private MethodDefinition(Type aDeclaringType, Method method) {
 		super();
 		this.method = method;
 		this.declaringType = aDeclaringType;
 	}
 
-	public Method getMethod() 
-	{
+	public Method getMethod() {
 		return method;
 	}
 
 	@Override
-	public Type getType() 
-	{
-		return TypeUtils.makeInstantiatedType(getMethod().getGenericReturnType(),declaringType);
+	public Type getType() {
+		return TypeUtils.makeInstantiatedType(getMethod().getGenericReturnType(), declaringType);
 	}
 
 	private String _signatureNFQ;
@@ -69,8 +65,7 @@ public class MethodDefinition extends Observable implements ComplexPathElement<O
 	private String _parameterListAsStringFQ;
 	private String _parameterListAsString;
 
-	public String getSimplifiedSignature()
-	{
+	public String getSimplifiedSignature() {
 		if (_signatureNFQ == null) {
 			StringBuffer signature = new StringBuffer();
 			signature.append(method.getName());
@@ -82,16 +77,15 @@ public class MethodDefinition extends Observable implements ComplexPathElement<O
 		return _signatureNFQ;
 	}
 
-	public String getSignature()
-	{
+	public String getSignature() {
 		if (_signatureFQ == null) {
-			//try {
-				StringBuffer signature = new StringBuffer();
-				signature.append(method.getName());
-				signature.append("(");
-				signature.append(getParameterListAsString(true));
-				signature.append(")");
-				_signatureFQ = signature.toString();
+			// try {
+			StringBuffer signature = new StringBuffer();
+			signature.append(method.getName());
+			signature.append("(");
+			signature.append(getParameterListAsString(true));
+			signature.append(")");
+			_signatureFQ = signature.toString();
 			/*}
 			catch (InvalidKeyValuePropertyException e) {
 				logger.warning("While computing getSignature() for "+method+" and "+declaringType+" message:"+e.getMessage());
@@ -123,27 +117,25 @@ public class MethodDefinition extends Observable implements ComplexPathElement<O
 		return signature.toString();
 	}*/
 
-
-	private String getParameterListAsString(boolean fullyQualified)
-	{
-		String _searched = (fullyQualified?_parameterListAsStringFQ:_parameterListAsString);
+	private String getParameterListAsString(boolean fullyQualified) {
+		String _searched = (fullyQualified ? _parameterListAsStringFQ : _parameterListAsString);
 		if (_searched == null) {
 			StringBuffer returned = new StringBuffer();
 			boolean isFirst = true;
 			for (Type p : method.getGenericParameterTypes()) {
-				Type contextualParamType = TypeUtils.makeInstantiatedType(p,declaringType);
-				returned.append((isFirst?"":",")
-						+(fullyQualified?TypeUtils.fullQualifiedRepresentation(contextualParamType):TypeUtils.simpleRepresentation(contextualParamType)));
-				isFirst = false;          	
+				Type contextualParamType = TypeUtils.makeInstantiatedType(p, declaringType);
+				returned.append((isFirst ? "" : ",")
+						+ (fullyQualified ? TypeUtils.fullQualifiedRepresentation(contextualParamType) : TypeUtils
+								.simpleRepresentation(contextualParamType)));
+				isFirst = false;
 			}
 			if (fullyQualified) {
-				_parameterListAsStringFQ =returned.toString();
-			}
-			else {
-				_parameterListAsString =returned.toString();
+				_parameterListAsStringFQ = returned.toString();
+			} else {
+				_parameterListAsString = returned.toString();
 			}
 		}
-		return (fullyQualified?_parameterListAsStringFQ:_parameterListAsString);
+		return (fullyQualified ? _parameterListAsStringFQ : _parameterListAsString);
 	}
 
 	// Warning: no cache for this method
@@ -160,87 +152,76 @@ public class MethodDefinition extends Observable implements ComplexPathElement<O
 	}*/
 
 	@Override
-	public boolean equals(Object obj)
-	{
+	public boolean equals(Object obj) {
 		if (obj instanceof MethodDefinition) {
-			//System.out.println("Compare "+getMethod()+" and "+((MethodDefinition)obj).getMethod());
-			return getMethod().equals(((MethodDefinition)obj).getMethod());
+			// System.out.println("Compare "+getMethod()+" and "+((MethodDefinition)obj).getMethod());
+			return getMethod().equals(((MethodDefinition) obj).getMethod());
 		}
 		return super.equals(obj);
 	}
-	
+
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		return getMethod().hashCode();
-	}
-	
-	@Override
-	public String toString()
-	{
-		return "MethodDefinition["+getSimplifiedSignature()+"]";
 	}
 
 	@Override
-	public Class getDeclaringClass()
-	{
+	public String toString() {
+		return "MethodDefinition[" + getSimplifiedSignature() + "]";
+	}
+
+	@Override
+	public Class getDeclaringClass() {
 		return TypeUtils.getBaseClass(declaringType);
 	}
 
 	@Override
-	public String getSerializationRepresentation() 
-	{
+	public String getSerializationRepresentation() {
 		return toString();
 	}
 
 	@Override
-	public boolean isBindingValid() 
-	{
-			return true;
+	public boolean isBindingValid() {
+		return true;
 	}
 
-    @Override
-	public String getLabel()
-    {
-    	return getSimplifiedSignature();
-    }
-    
 	@Override
-	public String getTooltipText(Type resultingType)
-	{
+	public String getLabel() {
+		return getSimplifiedSignature();
+	}
+
+	@Override
+	public String getTooltipText(Type resultingType) {
 		String returned = "<html>";
 		String resultingTypeAsString;
-		if (resultingType!=null) {
+		if (resultingType != null) {
 			resultingTypeAsString = TypeUtils.simpleRepresentation(resultingType);
 			resultingTypeAsString = ToolBox.replaceStringByStringInString("<", "&LT;", resultingTypeAsString);
 			resultingTypeAsString = ToolBox.replaceStringByStringInString(">", "&GT;", resultingTypeAsString);
-		}
-		else {
+		} else {
 			resultingTypeAsString = "???";
 		}
-		returned += "<p><b>"+resultingTypeAsString+" "+getSimplifiedSignature()+"</b></p>";
-		//returned += "<p><i>"+(method.getDescription()!=null?method.getDescription():FlexoLocalization.localizedForKey("no_description"))+"</i></p>";
+		returned += "<p><b>" + resultingTypeAsString + " " + getSimplifiedSignature() + "</b></p>";
+		// returned +=
+		// "<p><i>"+(method.getDescription()!=null?method.getDescription():FlexoLocalization.localizedForKey("no_description"))+"</i></p>";
 		returned += "</html>";
 		return returned;
 	}
 
-    @Override
-    public boolean isSettable()
-    {
-    	return false;
-    }
- 
-    @Override
-    public Object getBindingValue(Object target, BindingEvaluationContext context)
-    {
-    	// Not relevant
-     	return null;
-    }
-    
-    @Override
-    public void setBindingValue(Object value, Object target, BindingEvaluationContext context) 
-    {
-    	// Not relevant
-    }
+	@Override
+	public boolean isSettable() {
+		return false;
+	}
+
+	@Override
+	public Object getBindingValue(Object target, BindingEvaluationContext context) {
+		// Not relevant
+		return null;
+	}
+
+	@Override
+	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) {
+		// Not relevant
+	}
 
 }

@@ -23,37 +23,41 @@ import org.netbeans.lib.cvsclient.util.BugLog;
 
 /**
  * Tells the server about the eviroment variables to set for CVSROOT/*info executions.
- * @author  Milos Kleint
+ * 
+ * @author Milos Kleint
  */
 public class SetRequest extends Request {
 
-    private String keyValue;
-    /**
-     * Creates a new SetResponse with the key-value pair for one enviroment variable.
-     */
-    public SetRequest(String keyValue) {
-        BugLog.getInstance().assertTrue(keyValue.indexOf('=') > 0, "Wrong SetRequest=" + keyValue);
-        this.keyValue = keyValue;
-    }
-    /**
-     * Get the request String that will be passed to the server
-     * @return the request String
-     * @throws UnconfiguredRequestException if the request has not been
-     * properly configured
-     */
-    @Override
-	public String getRequestString() throws UnconfiguredRequestException {
-        String toReturn = "Set " + keyValue + "\n"; //NOI18N
-        return toReturn; //NOI18N
-    }
+	private String keyValue;
 
-    /**
-     * Is a response expected from the server?
-     * @return true if a response is expected, false if no response if
-     * expected
-     */
-    @Override
+	/**
+	 * Creates a new SetResponse with the key-value pair for one enviroment variable.
+	 */
+	public SetRequest(String keyValue) {
+		BugLog.getInstance().assertTrue(keyValue.indexOf('=') > 0, "Wrong SetRequest=" + keyValue);
+		this.keyValue = keyValue;
+	}
+
+	/**
+	 * Get the request String that will be passed to the server
+	 * 
+	 * @return the request String
+	 * @throws UnconfiguredRequestException
+	 *             if the request has not been properly configured
+	 */
+	@Override
+	public String getRequestString() throws UnconfiguredRequestException {
+		String toReturn = "Set " + keyValue + "\n"; // NOI18N
+		return toReturn; // NOI18N
+	}
+
+	/**
+	 * Is a response expected from the server?
+	 * 
+	 * @return true if a response is expected, false if no response if expected
+	 */
+	@Override
 	public boolean isResponseExpected() {
-        return false;
-    }
+		return false;
+	}
 }

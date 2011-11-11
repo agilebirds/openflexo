@@ -32,98 +32,97 @@ import javax.swing.JPopupMenu;
 import javax.swing.text.AttributeSet;
 
 /**
- *
+ * 
  * @author Rudolf Visagie
  */
 public class MetaphaseEditor extends JComponent {
 
-    public static final String PROP_DOCUMENT = "document";
+	public static final String PROP_DOCUMENT = "document";
 
-    private PropertyChangeSupport propertySupport;
+	private PropertyChangeSupport propertySupport;
 
-    private MetaphaseEditorPanel editorPanel;
+	private MetaphaseEditorPanel editorPanel;
 
-    public MetaphaseEditor(MetaphaseEditorConfiguration configuration) 
-    {
-    	editorPanel = new MetaphaseEditorPanel(configuration);
-        setLayout(new BorderLayout());
-        add(editorPanel,BorderLayout.CENTER);
-        propertySupport = new PropertyChangeSupport(this);
-    }
+	public MetaphaseEditor(MetaphaseEditorConfiguration configuration) {
+		editorPanel = new MetaphaseEditorPanel(configuration);
+		setLayout(new BorderLayout());
+		add(editorPanel, BorderLayout.CENTER);
+		propertySupport = new PropertyChangeSupport(this);
+	}
 
-    public String getDocument() {
-        return editorPanel.getDocument();
-    }
+	public String getDocument() {
+		return editorPanel.getDocument();
+	}
 
-    public void setDocument(String value) {
-        String oldValue = editorPanel.getDocument();
-        editorPanel.setDocument(value);
-        propertySupport.firePropertyChange(PROP_DOCUMENT, oldValue, value);
-    }
+	public void setDocument(String value) {
+		String oldValue = editorPanel.getDocument();
+		editorPanel.setDocument(value);
+		propertySupport.firePropertyChange(PROP_DOCUMENT, oldValue, value);
+	}
 
-    public JPopupMenu getContextMenu() {
-        return editorPanel.getContextMenu();
-    }
+	public JPopupMenu getContextMenu() {
+		return editorPanel.getContextMenu();
+	}
 
-    public AttributeSet getSelectedParagraphAttributes() {
-        return editorPanel.getSelectedParagraphAttributes();
-    }
+	public AttributeSet getSelectedParagraphAttributes() {
+		return editorPanel.getSelectedParagraphAttributes();
+	}
 
-    public void addAttributesToSelectedParagraph(Map<String, String> attributes) {
-        editorPanel.addAttributesToSelectedParagraph(attributes);
-    }
+	public void addAttributesToSelectedParagraph(Map<String, String> attributes) {
+		editorPanel.addAttributesToSelectedParagraph(attributes);
+	}
 
-    public void removeAttributesFromSelectedParagraph(String[] attributeNames) {
-        editorPanel.removeAttributesFromSelectedParagraph(attributeNames);
-    }
+	public void removeAttributesFromSelectedParagraph(String[] attributeNames) {
+		editorPanel.removeAttributesFromSelectedParagraph(attributeNames);
+	}
 
-    public void addContextMenuListener(ContextMenuListener contextMenuListener) {
-        editorPanel.addContextMenuListener(contextMenuListener);
-    }
+	public void addContextMenuListener(ContextMenuListener contextMenuListener) {
+		editorPanel.addContextMenuListener(contextMenuListener);
+	}
 
-    public void removeContextMenuListener(ContextMenuListener contextMenuListener) {
-        editorPanel.removeContextMenuListener(contextMenuListener);
-    }
+	public void removeContextMenuListener(ContextMenuListener contextMenuListener) {
+		editorPanel.removeContextMenuListener(contextMenuListener);
+	}
 
-    public void setEditorToolTipText(String string) {
-        editorPanel.setEditorToolTipText(string);
-    }
+	public void setEditorToolTipText(String string) {
+		editorPanel.setEditorToolTipText(string);
+	}
 
-    public void addStyleSheetRule(String rule) {
-        editorPanel.addStyleSheetRule(rule);
-    }
+	public void addStyleSheetRule(String rule) {
+		editorPanel.addStyleSheetRule(rule);
+	}
 
-    public void addEditorMouseMotionListener(EditorMouseMotionListener mouseMotionListener) {
-        editorPanel.addEditorMouseMotionListener(mouseMotionListener);
-    }
+	public void addEditorMouseMotionListener(EditorMouseMotionListener mouseMotionListener) {
+		editorPanel.addEditorMouseMotionListener(mouseMotionListener);
+	}
 
-    public void removeEditorMouseMotionListener(EditorMouseMotionListener mouseMotionListener) {
-        editorPanel.removeEditorMouseMotionListener(mouseMotionListener);
-    }
+	public void removeEditorMouseMotionListener(EditorMouseMotionListener mouseMotionListener) {
+		editorPanel.removeEditorMouseMotionListener(mouseMotionListener);
+	}
 
-    @Override
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        propertySupport.addPropertyChangeListener(listener);
-    }
+	@Override
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		propertySupport.addPropertyChangeListener(listener);
+	}
 
-    @Override
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        propertySupport.removePropertyChangeListener(listener);
-    }
+	@Override
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		propertySupport.removePropertyChangeListener(listener);
+	}
 
-    public void setCustomDictionaryFilename(String customDictionaryFilename) {
-        editorPanel.setCustomDictionaryFilename(customDictionaryFilename);
-    }
+	public void setCustomDictionaryFilename(String customDictionaryFilename) {
+		editorPanel.setCustomDictionaryFilename(customDictionaryFilename);
+	}
 
-    public String getCustomDictionaryFilename() {
-        return editorPanel.getCustomDictionaryFilename();
-    }
+	public String getCustomDictionaryFilename() {
+		return editorPanel.getCustomDictionaryFilename();
+	}
 
-    public void setDictionaryVersion(SpellCheckDictionaryVersion spellCheckDictionaryVersion) {
-        editorPanel.setDictionaryVersion(spellCheckDictionaryVersion);
-    }
+	public void setDictionaryVersion(SpellCheckDictionaryVersion spellCheckDictionaryVersion) {
+		editorPanel.setDictionaryVersion(spellCheckDictionaryVersion);
+	}
 
-    public SpellCheckDictionaryVersion getDictionaryVersion() {
-        return editorPanel.getDictionaryVersion();
-    }
+	public SpellCheckDictionaryVersion getDictionaryVersion() {
+		return editorPanel.getDictionaryVersion();
+	}
 }

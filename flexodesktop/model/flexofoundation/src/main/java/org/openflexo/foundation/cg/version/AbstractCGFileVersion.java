@@ -33,7 +33,6 @@ import org.openflexo.foundation.rm.cg.GenerationStatus;
 import org.openflexo.foundation.rm.cg.WOFile;
 import org.openflexo.toolbox.FileUtils;
 
-
 public abstract class AbstractCGFileVersion extends CGObject {
 
 	private static final Logger logger = Logger.getLogger(AbstractCGFileVersion.class.getPackage().getName());
@@ -41,80 +40,67 @@ public abstract class AbstractCGFileVersion extends CGObject {
 	private CGFile _cgFile;
 	private CGVersionIdentifier _versionId;
 	private File _file;
-	
-	
+
 	/**
-     * Default constructor
-     */
-    public AbstractCGFileVersion(CGFile cgFile, CGVersionIdentifier versionId, File file)
-    {
-        super(cgFile.getGeneratedCode());
-        _cgFile = cgFile;
-        _file = file;
-        _versionId = versionId;
-    }
-	
+	 * Default constructor
+	 */
+	public AbstractCGFileVersion(CGFile cgFile, CGVersionIdentifier versionId, File file) {
+		super(cgFile.getGeneratedCode());
+		_cgFile = cgFile;
+		_file = file;
+		_versionId = versionId;
+	}
+
 	@Override
-	public GenerationStatus getGenerationStatus()
-	{
+	public GenerationStatus getGenerationStatus() {
 		return GenerationStatus.UpToDate;
 	}
 
 	@Override
-	public boolean hasGenerationErrors() 
-	{
+	public boolean hasGenerationErrors() {
 		return false;
 	}
 
 	@Override
-	public boolean needsModelReinjection()
-	{
+	public boolean needsModelReinjection() {
 		return false;
 	}
 
 	@Override
-	public boolean isContainedIn(CGObject obj)
-	{
-		if (obj == getCGFile()) return true;
+	public boolean isContainedIn(CGObject obj) {
+		if (obj == getCGFile())
+			return true;
 		return getCGFile().isContainedIn(obj);
 	}
 
 	@Override
-	public boolean isEnabled()
-	{
+	public boolean isEnabled() {
 		return true;
 	}
 
 	@Override
-	public boolean needsRegeneration()
-	{
+	public boolean needsRegeneration() {
 		return false;
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return getCGFile().getFullyQualifiedName()+"."+getVersionId();
+	public String getFullyQualifiedName() {
+		return getCGFile().getFullyQualifiedName() + "." + getVersionId();
 	}
 
-	public CGFile getCGFile()
-	{
+	public CGFile getCGFile() {
 		return _cgFile;
 	}
 
-
-	public CGVersionIdentifier getVersionId()
-	{
+	public CGVersionIdentifier getVersionId() {
 		return _versionId;
 	}
 
-	public File getFile() 
-	{
+	public File getFile() {
 		return _file;
 	}
 
-	public void setFile(File file) 
-	{
+	public void setFile(File file) {
 		_file = file;
 	}
 
@@ -128,20 +114,18 @@ public abstract class AbstractCGFileVersion extends CGObject {
 
 	public abstract String getUserId();
 
-	public String getDateAsString()
-	{
+	public String getDateAsString() {
 		if (getDate() != null) {
 			return (new SimpleDateFormat("dd/MM HH:mm:ss")).format(getDate());
 		}
 		return "";
 	}
-	
+
 	public abstract String getStringRepresentation();
 
 	private String _content;
-	
-	public String getContent() throws IOFlexoException
-	{
+
+	public String getContent() throws IOFlexoException {
 		if (_cgFile.getResource().getGeneratedResourceData() instanceof ASCIIFile) {
 			if (_content == null) {
 				if ((_file != null) && (_file.exists())) {
@@ -150,10 +134,9 @@ public abstract class AbstractCGFileVersion extends CGObject {
 					} catch (IOException e) {
 						throw new IOFlexoException(e);
 					}
-				}
-				else {
-					logger.warning("Unable to access file "+_file);
-					return "Unable to access file "+_file;
+				} else {
+					logger.warning("Unable to access file " + _file);
+					return "Unable to access file " + _file;
 				}
 			}
 			return _content;
@@ -161,28 +144,26 @@ public abstract class AbstractCGFileVersion extends CGObject {
 		return "???";
 	}
 
-	public String getHTMLContent() throws IOFlexoException
-	{
+	public String getHTMLContent() throws IOFlexoException {
 		File htmlFile = null;
 		if (_cgFile.getResource().getGeneratedResourceData() instanceof WOFile) {
 			if (_content == null) {
 				if ((_file != null) && (_file.exists())) {
 					String name = getFile().getName().substring(0, getFile().getName().indexOf(".wo"));
-					try {	
-						 htmlFile = new File(getFile(),name+".html"+"."+_versionId.toString());
+					try {
+						htmlFile = new File(getFile(), name + ".html" + "." + _versionId.toString());
 						_content = FileUtils.fileContents(htmlFile);
 					} catch (IOException e) {
-						try {	
-							 htmlFile = new File(getFile(),name+".html");
+						try {
+							htmlFile = new File(getFile(), name + ".html");
 							_content = FileUtils.fileContents(htmlFile);
 						} catch (IOException e2) {
 							throw new IOFlexoException(e);
 						}
 					}
-				}
-				else {
-					logger.warning("Unable to access file "+htmlFile+" for "+_file);
-					return "Unable to access file "+htmlFile+" for "+_file;
+				} else {
+					logger.warning("Unable to access file " + htmlFile + " for " + _file);
+					return "Unable to access file " + htmlFile + " for " + _file;
 				}
 			}
 			return _content;
@@ -190,28 +171,26 @@ public abstract class AbstractCGFileVersion extends CGObject {
 		return "???";
 	}
 
-	public String getWODContent() throws IOFlexoException
-	{
+	public String getWODContent() throws IOFlexoException {
 		File wodFile = null;
 		if (_cgFile.getResource().getGeneratedResourceData() instanceof WOFile) {
 			if (_content == null) {
 				if ((_file != null) && (_file.exists())) {
 					String name = getFile().getName().substring(0, getFile().getName().indexOf(".wo"));
-					try {	
-						wodFile = new File(getFile(),name+".wod"+"."+_versionId.toString());
+					try {
+						wodFile = new File(getFile(), name + ".wod" + "." + _versionId.toString());
 						_content = FileUtils.fileContents(wodFile);
 					} catch (IOException e) {
-						try {	
-							wodFile = new File(getFile(),name+".wod");
+						try {
+							wodFile = new File(getFile(), name + ".wod");
 							_content = FileUtils.fileContents(wodFile);
 						} catch (IOException e2) {
 							throw new IOFlexoException(e);
 						}
 					}
-				}
-				else {
-					logger.warning("Unable to access file "+wodFile+" for "+_file);
-					return "Unable to access file "+wodFile+" for "+_file;
+				} else {
+					logger.warning("Unable to access file " + wodFile + " for " + _file);
+					return "Unable to access file " + wodFile + " for " + _file;
 				}
 			}
 			return _content;
@@ -219,28 +198,26 @@ public abstract class AbstractCGFileVersion extends CGObject {
 		return "???";
 	}
 
-	public String getWOOContent() throws IOFlexoException
-	{
+	public String getWOOContent() throws IOFlexoException {
 		File wooFile = null;
 		if (_cgFile.getResource().getGeneratedResourceData() instanceof WOFile) {
 			if (_content == null) {
 				if ((_file != null) && (_file.exists())) {
 					String name = getFile().getName().substring(0, getFile().getName().indexOf(".wo"));
-					try {	
-						wooFile = new File(getFile(),name+".woo"+"."+_versionId.toString());
+					try {
+						wooFile = new File(getFile(), name + ".woo" + "." + _versionId.toString());
 						_content = FileUtils.fileContents(wooFile);
 					} catch (IOException e) {
-						try {	
-							wooFile = new File(getFile(),name+".woo");
+						try {
+							wooFile = new File(getFile(), name + ".woo");
 							_content = FileUtils.fileContents(wooFile);
 						} catch (IOException e2) {
 							throw new IOFlexoException(e);
 						}
 					}
-				}
-				else {
-					logger.warning("Unable to access file "+wooFile+" for "+_file);
-					return "Unable to access file "+wooFile+" for "+_file;
+				} else {
+					logger.warning("Unable to access file " + wooFile + " for " + _file);
+					return "Unable to access file " + wooFile + " for " + _file;
 				}
 			}
 			return _content;
@@ -249,8 +226,7 @@ public abstract class AbstractCGFileVersion extends CGObject {
 	}
 
 	@Override
-	public void delete()
-	{
+	public void delete() {
 		super.delete();
 		deleteObservers();
 	}

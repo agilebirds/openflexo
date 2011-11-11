@@ -32,57 +32,50 @@ import java.io.IOException;
 
 import org.openflexo.ie.view.palette.IEDSWidget;
 
-
 /**
  * TODO : Description for this file
  * 
  * @author benoit
  */
-public class WidgetTransferable implements Transferable
-{
+public class WidgetTransferable implements Transferable {
 
-    public WidgetTransferable(IEDSWidget widget)
-    {
-        _transferedWidget = new TransferedWidget(widget);
-    }
+	public WidgetTransferable(IEDSWidget widget) {
+		_transferedWidget = new TransferedWidget(widget);
+	}
 
-    /*
-     * @see java.awt.datatransfer.Transferable#getTransferDataFlavors()
-     */
-    @Override
-	public DataFlavor[] getTransferDataFlavors()
-    {
-        return new DataFlavor[] { widgetFlavor() };
-    }
+	/*
+	 * @see java.awt.datatransfer.Transferable#getTransferDataFlavors()
+	 */
+	@Override
+	public DataFlavor[] getTransferDataFlavors() {
+		return new DataFlavor[] { widgetFlavor() };
+	}
 
-    /*
-     * @see java.awt.datatransfer.Transferable#isDataFlavorSupported(java.awt.datatransfer.DataFlavor)
-     */
-    @Override
-	public boolean isDataFlavorSupported(DataFlavor arg0)
-    {
-        return true;
-    }
+	/*
+	 * @see java.awt.datatransfer.Transferable#isDataFlavorSupported(java.awt.datatransfer.DataFlavor)
+	 */
+	@Override
+	public boolean isDataFlavorSupported(DataFlavor arg0) {
+		return true;
+	}
 
-    /*
-     * @see java.awt.datatransfer.Transferable#getTransferData(java.awt.datatransfer.DataFlavor)
-     */
-    @Override
-	public Object getTransferData(DataFlavor arg0) throws UnsupportedFlavorException, IOException
-    {
-        return _transferedWidget;
-    }
+	/*
+	 * @see java.awt.datatransfer.Transferable#getTransferData(java.awt.datatransfer.DataFlavor)
+	 */
+	@Override
+	public Object getTransferData(DataFlavor arg0) throws UnsupportedFlavorException, IOException {
+		return _transferedWidget;
+	}
 
-    public static DataFlavor widgetFlavor()
-    {
-        if (_currentWidgetFlavor == null) {
-            _currentWidgetFlavor = new DataFlavor(WidgetTransferable.class, "Widget");
-        }
-        return _currentWidgetFlavor;
-    }
+	public static DataFlavor widgetFlavor() {
+		if (_currentWidgetFlavor == null) {
+			_currentWidgetFlavor = new DataFlavor(WidgetTransferable.class, "Widget");
+		}
+		return _currentWidgetFlavor;
+	}
 
-    private static DataFlavor _currentWidgetFlavor;
+	private static DataFlavor _currentWidgetFlavor;
 
-    private TransferedWidget _transferedWidget;
+	private TransferedWidget _transferedWidget;
 
 }

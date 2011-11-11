@@ -27,7 +27,6 @@ import org.openflexo.foundation.wkf.action.AddDeadline;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.inspector.InspectableObject;
 
-
 /**
  * Represents a deadline in a process
  * 
@@ -36,158 +35,141 @@ import org.openflexo.inspector.InspectableObject;
  * 
  */
 @Deprecated
-public final class DeadLine extends WKFObject implements DeletableObject, InspectableObject, LevelledObject
-{
+public final class DeadLine extends WKFObject implements DeletableObject, InspectableObject, LevelledObject {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DeadLine.class.getPackage().getName());
 
-    private String deadLineName;
+	private String deadLineName;
 
-    private String deadLineDescription;
+	private String deadLineDescription;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    /**
-     * Constructor used during deserialization
-     */
-    public DeadLine(FlexoProcessBuilder builder)
-    {
-        this(builder.process);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor used during deserialization
+	 */
+	public DeadLine(FlexoProcessBuilder builder) {
+		this(builder.process);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor
-     */
-    public DeadLine(FlexoProcess process)
-    {
-        super(process);
-    }
+	/**
+	 * Default constructor
+	 */
+	public DeadLine(FlexoProcess process) {
+		super(process);
+	}
 
-    /**
-     * Default constructor
-     */
-    public DeadLine(FlexoProcess process, String deadLineName)
-    {
-        this(process);
-        setName(deadLineName);
-    }
+	/**
+	 * Default constructor
+	 */
+	public DeadLine(FlexoProcess process, String deadLineName) {
+		this(process);
+		setName(deadLineName);
+	}
 
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return getProcess().getFullyQualifiedName() + ".DEADLINE." + getName();
-    }
+	@Override
+	public String getFullyQualifiedName() {
+		return getProcess().getFullyQualifiedName() + ".DEADLINE." + getName();
+	}
 
-    /**
-     * Default inspector name
-     */
-    @Override
-	public String getInspectorName()
-    {
-        return "DeadLine.inspector";
-    }
+	/**
+	 * Default inspector name
+	 */
+	@Override
+	public String getInspectorName() {
+		return "DeadLine.inspector";
+	}
 
-    @Override
-	protected Vector getSpecificActionListForThatClass()
-    {
-         Vector returned = super.getSpecificActionListForThatClass();
-         returned.add(AddDeadline.actionType);
-         return returned;
-    }
+	@Override
+	protected Vector getSpecificActionListForThatClass() {
+		Vector returned = super.getSpecificActionListForThatClass();
+		returned.add(AddDeadline.actionType);
+		return returned;
+	}
 
-   @Override
-public String getName()
-    {
-        return deadLineName;
-    }
+	@Override
+	public String getName() {
+		return deadLineName;
+	}
 
-    @Override
-	public void setName(String aName)
-    {
-        deadLineName = aName;
-    }
+	@Override
+	public void setName(String aName) {
+		deadLineName = aName;
+	}
 
-    @Override
-	public String getDescription()
-    {
-        return deadLineDescription;
-    }
+	@Override
+	public String getDescription() {
+		return deadLineDescription;
+	}
 
-    @Override
-	public void setDescription(String aDescription)
-    {
-        deadLineDescription = aDescription;
-    }
+	@Override
+	public void setDescription(String aDescription) {
+		deadLineDescription = aDescription;
+	}
 
-    public DeadLineList getDeadLineList()
-    {
-        if (getProcess() != null) {
-            return getProcess().getDeadLineList();
-        }
-        return null;
-    }
+	public DeadLineList getDeadLineList() {
+		if (getProcess() != null) {
+			return getProcess().getDeadLineList();
+		}
+		return null;
+	}
 
-    /**
-     * Return a Vector of all embedded WKFObjects
-     * 
-     * @return a Vector of WKFObject instances
-     */
-    @Override
-	public Vector getAllEmbeddedWKFObjects()
-    {
-        Vector returned = new Vector();
-        returned.add(this);
-        return returned;
-    }
+	/**
+	 * Return a Vector of all embedded WKFObjects
+	 * 
+	 * @return a Vector of WKFObject instances
+	 */
+	@Override
+	public Vector getAllEmbeddedWKFObjects() {
+		Vector returned = new Vector();
+		returned.add(this);
+		return returned;
+	}
 
-    /**
-     * Returns the level of a Deadline (which is {@link FlexoLevel.PROCESS}).
-     * 
-     * @see org.openflexo.foundation.wkf.LevelledObject#getLevel()
-     */
-    @Override
-	public FlexoLevel getLevel()
-    {
-        return FlexoLevel.PROCESS;
-    }
+	/**
+	 * Returns the level of a Deadline (which is {@link FlexoLevel.PROCESS}).
+	 * 
+	 * @see org.openflexo.foundation.wkf.LevelledObject#getLevel()
+	 */
+	@Override
+	public FlexoLevel getLevel() {
+		return FlexoLevel.PROCESS;
+	}
 
-    // ==========================================================================
-    // ================================= Delete ===============================
-    // ==========================================================================
+	// ==========================================================================
+	// ================================= Delete ===============================
+	// ==========================================================================
 
-    @Override
-	public final void delete()
-    {
-        super.delete();
-        deleteObservers();
-    }
+	@Override
+	public final void delete() {
+		super.delete();
+		deleteObservers();
+	}
 
-    /**
-     * Build and return a vector of all the objects that will be deleted during
-     * process deletion
-     * 
-     * @param aVector
-     *            of DeletableObject
-     */
-    @Override
-	public Vector<WKFObject> getAllEmbeddedDeleted()
-    {
-        return getAllEmbeddedWKFObjects();
-    }
+	/**
+	 * Build and return a vector of all the objects that will be deleted during process deletion
+	 * 
+	 * @param aVector
+	 *            of DeletableObject
+	 */
+	@Override
+	public Vector<WKFObject> getAllEmbeddedDeleted() {
+		return getAllEmbeddedWKFObjects();
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "deadline";
-    }
-    
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "deadline";
+	}
+
 }

@@ -18,26 +18,26 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
- * Represents AttachView object which means the line drawn between a note (view) and some
- * entity.
- *
+ * Represents AttachView object which means the line drawn between a note (view) and some entity.
+ * 
  * @version $Id: AttachView.java,v 1.3 2011/09/12 11:46:48 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class AttachView extends View {
-  public AttachView(PetalNode parent, Collection params, int tag) {
-    super(parent, "AttachView", params, tag);
-  }
+	public AttachView(PetalNode parent, Collection params, int tag) {
+		super(parent, "AttachView", params, tag);
+	}
 
-  public AttachView() {
-    super("AttachView");
-  }
+	public AttachView() {
+		super("AttachView");
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

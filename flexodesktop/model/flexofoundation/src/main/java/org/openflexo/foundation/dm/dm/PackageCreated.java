@@ -26,11 +26,9 @@ import org.openflexo.foundation.dm.DMPackage;
  * 
  * @author sguerin
  */
-public class PackageCreated extends DMDataModification
-{
+public class PackageCreated extends DMDataModification {
 
-    public PackageCreated(DMPackage aPackage)
-    {
-        super(null, aPackage);
-    }
+	public PackageCreated(DMPackage aPackage) {
+		super(null, aPackage);
+	}
 }

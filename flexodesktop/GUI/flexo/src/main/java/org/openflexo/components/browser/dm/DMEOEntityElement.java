@@ -26,36 +26,30 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class DMEOEntityElement extends DMEntityElement
-{
+public class DMEOEntityElement extends DMEntityElement {
 
-    public DMEOEntityElement(DMEOEntity entity, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(entity, BrowserElementType.DM_EOENTITY, browser,parent);
-    }
+	public DMEOEntityElement(DMEOEntity entity, ProjectBrowser browser, BrowserElement parent) {
+		super(entity, BrowserElementType.DM_EOENTITY, browser, parent);
+	}
 
-    protected DMEOEntity getDMEOEntity()
-    {
-        return (DMEOEntity) getObject();
-    }
+	protected DMEOEntity getDMEOEntity() {
+		return (DMEOEntity) getObject();
+	}
 
-    @Override
-	public boolean mustBeItalic()
-    {
-        return getDMEOEntity().getClassProperties().size()==0;
-    }
+	@Override
+	public boolean mustBeItalic() {
+		return getDMEOEntity().getClassProperties().size() == 0;
+	}
 
-    @Override
-	public Icon getIcon()
-    {
-        return decorateIcon(getElementType().getIcon());
-    }
+	@Override
+	public Icon getIcon() {
+		return decorateIcon(getElementType().getIcon());
+	}
 
 }

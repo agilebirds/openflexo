@@ -30,69 +30,62 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class DMValidationModel extends ValidationModel
-{
+public class DMValidationModel extends ValidationModel {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DMValidationModel.class.getPackage().getName());
 
-    public DMValidationModel(FlexoProject project)
-    {
-        this(project,project.getTargetType());
-    }
-    
-    public DMValidationModel(FlexoProject project, TargetType targetType)
-    {
-        super(project,targetType);
-        registerRule(new DMObject.DataModelObjectNameMustBeValid());
-        registerRule(new DMEntity.EntityInPackageCannotUseEntityOfTheDefaultPackage());
-        registerRule(new DMProperty.PropertyMustDefineType());
-        registerRule(new DMProperty.PropertyNameMustStartWithALetterAndFollowedByDigitsOrLetters());
-        registerRule(new DMEOAttribute.DMEOAttributeMustReferToAValidEORelationship() );
-        registerRule(new DMEOAttribute.DMEOAttributeMustHaveAJavaClass() );
-        registerRule(new DMEORelationship.DMEORelationshipMustReferToAValidEORelationship() );
-        registerRule(new DMEORelationship.DMEORelationshipToManyIsRarellyMandatory() );
-        registerRule(new DMEORelationship.ForeignKeyTypeMustMatchPrimaryKey());
-        registerRule(new DMEOEntity.DMEOEntityMustReferToAValidEOEntity() );
-        registerRule(new DMEOEntity.DMEOEntityMustAtLeastOnePrimaryKey() );
-        registerRule(new DMModel.DMModelMustDefineASuitableConnectionString() );
-        registerRule(new DMEOJoin.JoinMustBeValid());
-        registerRule(new WORepository.ADefaultComponentEntityMustBeDeclared());
-               
-        
-        // Notify that the validation model is complete and that inheritance
-        // computation could be performed
-        update();
-    }
+	public DMValidationModel(FlexoProject project) {
+		this(project, project.getTargetType());
+	}
 
-    /**
-     * Return a boolean indicating if validation of supplied object must be
-     * notified
-     * 
-     * @param next
-     * @return a boolean
-     */
-    @Override
-	protected boolean shouldNotifyValidation(Validable next)
-    {
-        return true;
-    }
+	public DMValidationModel(FlexoProject project, TargetType targetType) {
+		super(project, targetType);
+		registerRule(new DMObject.DataModelObjectNameMustBeValid());
+		registerRule(new DMEntity.EntityInPackageCannotUseEntityOfTheDefaultPackage());
+		registerRule(new DMProperty.PropertyMustDefineType());
+		registerRule(new DMProperty.PropertyNameMustStartWithALetterAndFollowedByDigitsOrLetters());
+		registerRule(new DMEOAttribute.DMEOAttributeMustReferToAValidEORelationship());
+		registerRule(new DMEOAttribute.DMEOAttributeMustHaveAJavaClass());
+		registerRule(new DMEORelationship.DMEORelationshipMustReferToAValidEORelationship());
+		registerRule(new DMEORelationship.DMEORelationshipToManyIsRarellyMandatory());
+		registerRule(new DMEORelationship.ForeignKeyTypeMustMatchPrimaryKey());
+		registerRule(new DMEOEntity.DMEOEntityMustReferToAValidEOEntity());
+		registerRule(new DMEOEntity.DMEOEntityMustAtLeastOnePrimaryKey());
+		registerRule(new DMModel.DMModelMustDefineASuitableConnectionString());
+		registerRule(new DMEOJoin.JoinMustBeValid());
+		registerRule(new WORepository.ADefaultComponentEntityMustBeDeclared());
 
-    /**
-     * Overrides fixAutomaticallyIfOneFixProposal
-     * @see org.openflexo.foundation.validation.ValidationModel#fixAutomaticallyIfOneFixProposal()
-     */
-    @Override
-    public boolean fixAutomaticallyIfOneFixProposal()
-    {
-        return false;
-    }
+		// Notify that the validation model is complete and that inheritance
+		// computation could be performed
+		update();
+	}
+
+	/**
+	 * Return a boolean indicating if validation of supplied object must be notified
+	 * 
+	 * @param next
+	 * @return a boolean
+	 */
+	@Override
+	protected boolean shouldNotifyValidation(Validable next) {
+		return true;
+	}
+
+	/**
+	 * Overrides fixAutomaticallyIfOneFixProposal
+	 * 
+	 * @see org.openflexo.foundation.validation.ValidationModel#fixAutomaticallyIfOneFixProposal()
+	 */
+	@Override
+	public boolean fixAutomaticallyIfOneFixProposal() {
+		return false;
+	}
 
 }

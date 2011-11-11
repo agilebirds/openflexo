@@ -32,7 +32,7 @@ import org.openflexo.toolbox.JavaResourceUtil;
 
 /**
  * @author Nicolas Daniels
- *
+ * 
  */
 public class CGTemplateJarResource extends CGTemplate {
 

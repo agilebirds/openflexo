@@ -32,20 +32,19 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.utils.FlexoCSS;
 import org.openflexo.toolbox.FileResource;
 
-
 public class FlexoIEBasicPalette extends FlexoIEPalette<FlexoIEBasicPalette.FlexoIEBasicWidget> {
 
-	public static final FileResource PALETTE_DIRECTORY =new FileResource("Config/IEPalette/Basic");
-	
+	public static final FileResource PALETTE_DIRECTORY = new FileResource("Config/IEPalette/Basic");
+
 	public FlexoIEBasicPalette(FlexoProject project) {
 		super(project);
 	}
-	
+
 	@Override
 	public boolean resizeScreenshots() {
 		return false;
 	}
-	
+
 	@Override
 	protected void loadWidgets() {
 		File[] files = PALETTE_DIRECTORY.listFiles(new FilenameFilter() {
@@ -59,7 +58,8 @@ public class FlexoIEBasicPalette extends FlexoIEPalette<FlexoIEBasicPalette.Flex
 			Properties props = new Properties();
 			try {
 				props.load(new FileInputStream(file));
-				getWidgets().add(new FlexoIEBasicWidget(file.getName().substring(0,file.getName().length()-".properties".length()),props));
+				getWidgets().add(
+						new FlexoIEBasicWidget(file.getName().substring(0, file.getName().length() - ".properties".length()), props));
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 				continue;
@@ -74,28 +74,28 @@ public class FlexoIEBasicPalette extends FlexoIEPalette<FlexoIEBasicPalette.Flex
 		Collections.sort(getWidgets(), new Comparator<FlexoIEBasicWidget>() {
 			@Override
 			public int compare(FlexoIEBasicWidget o1, FlexoIEBasicWidget o2) {
-				return o1.getIndex()-o2.getIndex();
+				return o1.getIndex() - o2.getIndex();
 			}
 		});
 	}
-	
+
 	public class FlexoIEBasicWidget extends FlexoIEPalette<FlexoIEBasicWidget>.FlexoIEPaletteWidget {
 
 		private int index;
-		
+
 		public FlexoIEBasicWidget(String name, Properties props) {
 			super(name, props);
 			index = Integer.parseInt(props.getProperty("index"));
 		}
-		
+
 		public int getIndex() {
 			return index;
 		}
 
 		@Override
 		public File getScreenshotFile(FlexoCSS css) {
-			return new File(PALETTE_DIRECTORY,css.getName()+"/"+getName()+".gif");
+			return new File(PALETTE_DIRECTORY, css.getName() + "/" + getName() + ".gif");
 		}
-		
+
 	}
 }

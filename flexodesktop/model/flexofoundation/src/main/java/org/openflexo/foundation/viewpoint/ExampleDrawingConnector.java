@@ -23,40 +23,35 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
 
-
-
 public class ExampleDrawingConnector extends ExampleDrawingObject {
 
-    private static final Logger logger = Logger.getLogger(ExampleDrawingConnector.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ExampleDrawingConnector.class.getPackage().getName());
 
 	private ExampleDrawingShape startShape;
 	private ExampleDrawingShape endShape;
-	
-    /**
-     * Constructor invoked during deserialization
-     * 
-     * @param componentDefinition
-     */
-    public ExampleDrawingConnector()
-    {
-        super();
-   }
 
-    /**
-     * Common constructor for OEShema
-     * 
-     * @param shemaDefinition
-     */
-    public ExampleDrawingConnector(ExampleDrawingShape aStartShape, ExampleDrawingShape anEndShape)
-    {
-        super();
-        setStartShape(aStartShape);
-        setEndShape(anEndShape);
-   }
-    
+	/**
+	 * Constructor invoked during deserialization
+	 * 
+	 * @param componentDefinition
+	 */
+	public ExampleDrawingConnector() {
+		super();
+	}
+
+	/**
+	 * Common constructor for OEShema
+	 * 
+	 * @param shemaDefinition
+	 */
+	public ExampleDrawingConnector(ExampleDrawingShape aStartShape, ExampleDrawingShape anEndShape) {
+		super();
+		setStartShape(aStartShape);
+		setEndShape(anEndShape);
+	}
+
 	@Override
-	public void delete()
-	{
+	public void delete() {
 		if (getParent() != null) {
 			getParent().removeFromChilds(this);
 		}
@@ -65,48 +60,40 @@ public class ExampleDrawingConnector extends ExampleDrawingObject {
 	}
 
 	@Override
-	public String getClassNameKey() 
-	{
+	public String getClassNameKey() {
 		return "calc_drawing_connector";
 	}
 
 	@Override
-	public String getFullyQualifiedName() 
-	{
-		return getShema().getFullyQualifiedName()+"."+getName();
+	public String getFullyQualifiedName() {
+		return getShema().getFullyQualifiedName() + "." + getName();
 	}
 
-    @Override
-	public String getInspectorName() 
-    {
-    	return Inspectors.VPM.CALC_DRAWING_CONNECTOR_INSPECTOR;
-    }
+	@Override
+	public String getInspectorName() {
+		return Inspectors.VPM.CALC_DRAWING_CONNECTOR_INSPECTOR;
+	}
 
-	public ExampleDrawingShape getEndShape() 
-	{
+	public ExampleDrawingShape getEndShape() {
 		return endShape;
 	}
 
-	public void setEndShape(ExampleDrawingShape endShape) 
-	{
+	public void setEndShape(ExampleDrawingShape endShape) {
 		this.endShape = endShape;
 		endShape.addToIncomingConnectors(this);
 	}
 
-	public ExampleDrawingShape getStartShape() 
-	{
+	public ExampleDrawingShape getStartShape() {
 		return startShape;
 	}
 
-	public void setStartShape(ExampleDrawingShape startShape) 
-	{
+	public void setStartShape(ExampleDrawingShape startShape) {
 		this.startShape = startShape;
 		startShape.addToOutgoingConnectors(this);
 	}
 
 	@Override
-	public boolean isContainedIn(ExampleDrawingObject o)
-	{
+	public boolean isContainedIn(ExampleDrawingObject o) {
 		if (o == this) {
 			return true;
 		}
@@ -118,6 +105,5 @@ public class ExampleDrawingConnector extends ExampleDrawingObject {
 		}
 		return false;
 	}
-	
 
 }

@@ -27,12 +27,10 @@ import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
  * @author sguerin
  * 
  */
-public class PostInserted extends WKFDataModification
-{
+public class PostInserted extends WKFDataModification {
 
-    public PostInserted(FlexoPostCondition<?, ?> insertedPostCondition)
-    {
-        super(null, insertedPostCondition);
-    }
+	public PostInserted(FlexoPostCondition<?, ?> insertedPostCondition) {
+		super(null, insertedPostCondition);
+	}
 
 }

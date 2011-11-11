@@ -37,30 +37,24 @@ import org.openflexo.foundation.wkf.edge.WKFAssociation;
 import org.openflexo.foundation.wkf.edge.WKFAssociation.Arrow;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-
 public class AssociationGR extends EdgeGR<WKFAssociation> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(AssociationGR.class.getPackage().getName());
 
-	public AssociationGR(WKFAssociation edge,SwimmingLaneRepresentation aDrawing) 
-	{
-		super(edge,
-				aDrawing.getFirstVisibleObject(edge.getStartNode()),
-				aDrawing.getFirstVisibleObject(edge.getEndNode()),
-				aDrawing);
+	public AssociationGR(WKFAssociation edge, SwimmingLaneRepresentation aDrawing) {
+		super(edge, aDrawing.getFirstVisibleObject(edge.getStartNode()), aDrawing.getFirstVisibleObject(edge.getEndNode()), aDrawing);
 		setForeground(ForegroundStyle.makeStyle(Color.darkGray, 1.0f, DashStyle.MEDIUM_SPACED_DASHES));
 		setApplyForegroundToSymbols(false);
 	}
-	
-	public WKFAssociation getAssociation()
-	{
+
+	public WKFAssociation getAssociation() {
 		return getDrawable();
 	}
-	
+
 	@Override
 	public StartSymbolType getStartSymbol() {
-		if (getAssociation().getArrow()==Arrow.END_TO_START || getAssociation().getArrow()==Arrow.BOTH)
+		if (getAssociation().getArrow() == Arrow.END_TO_START || getAssociation().getArrow() == Arrow.BOTH)
 			return StartSymbolType.ARROW;
 		return StartSymbolType.NONE;
 	}
@@ -69,49 +63,48 @@ public class AssociationGR extends EdgeGR<WKFAssociation> {
 	public double getStartSymbolSize() {
 		return 8;
 	}
-	
+
 	@Override
 	public EndSymbolType getEndSymbol() {
-		if (getAssociation().getArrow()==Arrow.START_TO_END || getAssociation().getArrow()==Arrow.BOTH)
+		if (getAssociation().getArrow() == Arrow.START_TO_END || getAssociation().getArrow() == Arrow.BOTH)
 			return EndSymbolType.ARROW;
 		return EndSymbolType.NONE;
 	}
-	
+
 	@Override
 	public double getEndSymbolSize() {
 		return 8;
 	}
-	
+
 	@Override
 	public MiddleSymbolType getMiddleSymbol() {
 		return MiddleSymbolType.NONE;
 	}
-	
+
 	@Override
-	public String toString() 
-	{
-		return "AssociationGR of "+getAssociation();
+	public String toString() {
+		return "AssociationGR of " + getAssociation();
 	}
 
 	@Override
-	public void refreshConnector() 
-	{
+	public void refreshConnector() {
 		if (!isConnectorConsistent()) {
-			// Dont' go further for connector that are inconsistent (this may happen 
+			// Dont' go further for connector that are inconsistent (this may happen
 			// during big model restructurations (for example during a multiple delete)
 			return;
 		}
 		if (getConnector() instanceof RectPolylinConnector) {
 			startOrientationFixed = false;
 			endOrientationFixed = false;
-			//((RectPolylinConnector)getConnector()).setRectPolylinConstraints(RectPolylinConstraints.NONE);	
+			// ((RectPolylinConnector)getConnector()).setRectPolylinConstraints(RectPolylinConstraints.NONE);
 		}
 		super.refreshConnector();
 	}
-	
+
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (dataModification instanceof WKFAttributeDataModification && "arrow".equals(((WKFDataModification)dataModification).propertyName())) {
+		if (dataModification instanceof WKFAttributeDataModification
+				&& "arrow".equals(((WKFDataModification) dataModification).propertyName())) {
 			refreshConnector(true);
 		} else if (dataModification instanceof AssociationRemoved) {
 			getDrawing().updateGraphicalObjectsHierarchy();

@@ -23,25 +23,22 @@ import java.awt.event.ActionEvent;
 
 import org.openflexo.kvc.KeyValueCoding;
 
-
-
 /**
  * Interface used by widgets to delegate the task of setting a new value for a certain property.
  * 
  * @author gpolet
- *
+ * 
  */
-public interface InspectorDelegate
-{
-    public boolean setObjectValue(Object value);
-    
-    public void setTarget(KeyValueCoding target);
-    
-    public void setKey(String path);
-    
-    public void setLocalizedPropertyName(String name);
-    
-    public boolean handlesObjectOfClass(Class c);
-    
-    public void performAction(ActionEvent e, String actionName, Object object);
+public interface InspectorDelegate {
+	public boolean setObjectValue(Object value);
+
+	public void setTarget(KeyValueCoding target);
+
+	public void setKey(String path);
+
+	public void setLocalizedPropertyName(String name);
+
+	public boolean handlesObjectOfClass(Class c);
+
+	public void performAction(ActionEvent e, String actionName, Object object);
 }

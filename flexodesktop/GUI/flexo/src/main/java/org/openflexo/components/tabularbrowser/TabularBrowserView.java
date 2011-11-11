@@ -52,543 +52,476 @@ import org.openflexo.selection.SelectionSynchronizedComponent;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.SelectionManagingController;
 
-
 /**
  * Tabular and browsable view representing an TabularBrowserModel
  * 
  * @author sguerin
  * 
  */
-public class TabularBrowserView extends JPanel 
-implements TableModelListener, ListSelectionListener, GraphicalFlexoObserver, SelectionSynchronizedComponent
-{
+public class TabularBrowserView extends JPanel implements TableModelListener, ListSelectionListener, GraphicalFlexoObserver,
+		SelectionSynchronizedComponent {
 
-    protected static final Logger logger = Logger.getLogger(TabularBrowserView.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(TabularBrowserView.class.getPackage().getName());
 
-    protected FlexoController _controller;
-    protected SelectionManager _selectionManager;
+	protected FlexoController _controller;
+	protected SelectionManager _selectionManager;
 
-    protected JTreeTable _treeTable;
+	protected JTreeTable _treeTable;
 
-    protected TabularBrowserModel _model;
+	protected TabularBrowserModel _model;
 
-    private JScrollPane scrollPane;
-    
-    private TabularBrowserFooter _footer;
-    
-    private FlexoEditor _editor;
-    
-    private boolean _synchronizeWithSelectionManager = false;
-    
-     public TabularBrowserView(FlexoController controller, TabularBrowserModel model, int visibleRowCount, FlexoEditor editor)
-    {
-        this(controller, model,editor);
-        setVisibleRowCount(visibleRowCount);
-    }
+	private JScrollPane scrollPane;
 
-    public TabularBrowserView(FlexoController controller, TabularBrowserModel model, FlexoEditor editor)
-    {
-        super();
-        _model = model;
-        _editor = editor;
-        _controller = controller;
-        if (_controller instanceof SelectionManagingController) {
-            _selectionManager = ((SelectionManagingController)_controller).getSelectionManager();
-        }
- 
-        _treeTable = new JTreeTable(model);
-        //_treeTable.setPreferredSize(new Dimension(model.getTotalPreferredWidth(),100));
+	private TabularBrowserFooter _footer;
 
-        if (model.getRowHeight() > 0) {
-            _treeTable.setRowHeight(model.getRowHeight());
-        }
+	private FlexoEditor _editor;
 
-        _treeTable.setShowVerticalLines(true);
+	private boolean _synchronizeWithSelectionManager = false;
 
-        _treeTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-         getSelectionModel().addListSelectionListener(this);
+	public TabularBrowserView(FlexoController controller, TabularBrowserModel model, int visibleRowCount, FlexoEditor editor) {
+		this(controller, model, editor);
+		setVisibleRowCount(visibleRowCount);
+	}
 
-        scrollPane = new JScrollPane(_treeTable);
-        setLayout(new BorderLayout());
-        //_treeTable.getTableHeader().setPreferredSize(new Dimension(model.getTotalPreferredWidth(),100));
-        add(_treeTable.getTableHeader(), BorderLayout.NORTH);
-        add(scrollPane, BorderLayout.CENTER);
-        
-        //add(new JPanel(),BorderLayout.SOUTH);
-        
-        if (getBrowser().handlesControlPanel()) {
-            _footer = new TabularBrowserFooter(this);
-            add(_footer, BorderLayout.SOUTH);
-        }
+	public TabularBrowserView(FlexoController controller, TabularBrowserModel model, FlexoEditor editor) {
+		super();
+		_model = model;
+		_editor = editor;
+		_controller = controller;
+		if (_controller instanceof SelectionManagingController) {
+			_selectionManager = ((SelectionManagingController) _controller).getSelectionManager();
+		}
 
-        _treeTable.addMouseListener(new MouseAdapter() {
-            @Override
-			public void mousePressed(MouseEvent e)
-            {
-                if (getContextualMenuManager() != null)
-                    getContextualMenuManager().processMousePressed(e);
-            }
-            @Override
-			public void mouseReleased(MouseEvent e)
-            {
-                if (getContextualMenuManager() != null)
-                    getContextualMenuManager().processMouseReleased(e);
-            }
-        });
-        _treeTable.addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
-			public void mouseMoved(MouseEvent e)
-            {
-                if (getContextualMenuManager() != null)
-                    getContextualMenuManager().processMouseMoved(e);
-            }
-         });
-    
+		_treeTable = new JTreeTable(model);
+		// _treeTable.setPreferredSize(new Dimension(model.getTotalPreferredWidth(),100));
 
-        validate();
+		if (model.getRowHeight() > 0) {
+			_treeTable.setRowHeight(model.getRowHeight());
+		}
 
-    }
-    
-    /**
-     * !!!!!!!!!! IMPORTANT !!!!!!!!
-     * 
-     * This hack is a workaround to prevent arrival on a NPE while
-     * such a component is added to the container hierarchy in a 
-     * context i still don't understand, but certainly due to adding
-     * of JTextArea when using TextColumn. Seems that this is not
-     * so important, but....
-     * 
-     * Overrides @see java.awt.Component#addNotify()
-     * @see java.awt.Component#addNotify()
-     */
-    @Override
-	public void addNotify() 
-    {
-        logger.fine("BEGIN addNotify() NPE catcher");
-        try {
-            super.addNotify();
-        }
-        catch (NullPointerException e) {
-            logger.fine("NPE caught!");
-            for (int i = 0 ; i < getComponentCount() ; i++) {
-                logger.fine("addNotify() for "+getComponent(i));
-                getComponent(i).addNotify();
-            }
-        }
-        logger.fine("END addNotify() NPE catcher");
-    }
-    
-    public ProjectBrowser getBrowser()
-    {
-        return getTreeTable().getProjectBrowser();
-    }
+		_treeTable.setShowVerticalLines(true);
 
-    public BrowserElement getSelectedElement()
-    {
-        return (BrowserElement) getTreeTable().getTree().getLastSelectedPathComponent();
-    }
+		_treeTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		getSelectionModel().addListSelectionListener(this);
 
-   public FlexoModelObject getSelectedObject()
-    {
-        if (getSelectedElement() != null) {
-            return getSelectedElement().getObject();
-        }
-        return null;
-    }
+		scrollPane = new JScrollPane(_treeTable);
+		setLayout(new BorderLayout());
+		// _treeTable.getTableHeader().setPreferredSize(new Dimension(model.getTotalPreferredWidth(),100));
+		add(_treeTable.getTableHeader(), BorderLayout.NORTH);
+		add(scrollPane, BorderLayout.CENTER);
 
-    public JTreeTable getTreeTable() 
-    {
-        return _treeTable;
-    }
+		// add(new JPanel(),BorderLayout.SOUTH);
 
-    private DefaultContextualMenuManager defaultContextualMenuManager;
+		if (getBrowser().handlesControlPanel()) {
+			_footer = new TabularBrowserFooter(this);
+			add(_footer, BorderLayout.SOUTH);
+		}
 
-    protected ContextualMenuManager getContextualMenuManager()
-    {
-        if ((_selectionManager != null) && (_synchronizeWithSelectionManager)) {
-            return _selectionManager.getContextualMenuManager();
-        }
-        if (defaultContextualMenuManager == null) {
-            defaultContextualMenuManager = new DefaultContextualMenuManager();
-        }
-        return defaultContextualMenuManager;
-    }
-    
+		_treeTable.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if (getContextualMenuManager() != null)
+					getContextualMenuManager().processMousePressed(e);
+			}
 
-    public ListSelectionModel getSelectionModel() 
-    {
-        return _treeTable.getTreeTableSelectionModel();
-    }
-    
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				if (getContextualMenuManager() != null)
+					getContextualMenuManager().processMouseReleased(e);
+			}
+		});
+		_treeTable.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				if (getContextualMenuManager() != null)
+					getContextualMenuManager().processMouseMoved(e);
+			}
+		});
 
-    public TabularBrowserModel getModel()
-    {
-        return _model;
-    }
+		validate();
 
-    public void focusOn (FlexoModelObject object)
-    {
-        setSelectedObject(object);
-    }
-    
-    public void setVisibleRowCount(int rows)
-    {
-        int height = 0;
-        for (int row = 0; row < rows; row++)
-            height += _treeTable.getRowHeight(row);
-        _treeTable.setPreferredScrollableViewportSize(new Dimension(_treeTable.getPreferredScrollableViewportSize().width, height));
-    }
+	}
 
-    public boolean isSelected(FlexoModelObject object)
-    {
-        return _treeTable.isSelected(object);
-    }
+	/**
+	 * !!!!!!!!!! IMPORTANT !!!!!!!!
+	 * 
+	 * This hack is a workaround to prevent arrival on a NPE while such a component is added to the container hierarchy in a context i still
+	 * don't understand, but certainly due to adding of JTextArea when using TextColumn. Seems that this is not so important, but....
+	 * 
+	 * Overrides @see java.awt.Component#addNotify()
+	 * 
+	 * @see java.awt.Component#addNotify()
+	 */
+	@Override
+	public void addNotify() {
+		logger.fine("BEGIN addNotify() NPE catcher");
+		try {
+			super.addNotify();
+		} catch (NullPointerException e) {
+			logger.fine("NPE caught!");
+			for (int i = 0; i < getComponentCount(); i++) {
+				logger.fine("addNotify() for " + getComponent(i));
+				getComponent(i).addNotify();
+			}
+		}
+		logger.fine("END addNotify() NPE catcher");
+	}
 
+	public ProjectBrowser getBrowser() {
+		return getTreeTable().getProjectBrowser();
+	}
 
-    public Vector getObjects()
-    {
-        return getSelectedObjects();
-    }
+	public BrowserElement getSelectedElement() {
+		return (BrowserElement) getTreeTable().getTree().getLastSelectedPathComponent();
+	}
 
-    public Vector getSelectedObjects()
-    {
-        return _treeTable.getSelectedObjects();
-    }
+	public FlexoModelObject getSelectedObject() {
+		if (getSelectedElement() != null) {
+			return getSelectedElement().getObject();
+		}
+		return null;
+	}
 
-    private boolean _isSelected = false;
+	public JTreeTable getTreeTable() {
+		return _treeTable;
+	}
 
-    public boolean isSelected()
-    {
-        return _isSelected;
-    }
+	private DefaultContextualMenuManager defaultContextualMenuManager;
 
-    public void setIsSelected(boolean b)
-    {
-        _isSelected = b;
-    }
+	protected ContextualMenuManager getContextualMenuManager() {
+		if ((_selectionManager != null) && (_synchronizeWithSelectionManager)) {
+			return _selectionManager.getContextualMenuManager();
+		}
+		if (defaultContextualMenuManager == null) {
+			defaultContextualMenuManager = new DefaultContextualMenuManager();
+		}
+		return defaultContextualMenuManager;
+	}
 
-    public FlexoModelObject getRootObject()
-    {
-        return _model.getRootObject();
-    }
+	public ListSelectionModel getSelectionModel() {
+		return _treeTable.getTreeTableSelectionModel();
+	}
 
-    /**
-     * Implements
-     * 
-     * @see org.openflexo.view.InspectableObjectView#getInspectedObject()
-     * @see org.openflexo.view.InspectableObjectView#getInspectedObject()
-     */
-    public InspectableObject getInspectedObject()
-    {
-        if (getRootObject() instanceof InspectableObject)
-            return (InspectableObject)getRootObject();
-        return null;
-    }
+	public TabularBrowserModel getModel() {
+		return _model;
+	}
 
-    /**
-     * Implements
-     * 
-     * @see org.openflexo.view.MultipleInspectableObjectView#getInspectedObjects()
-     * @see org.openflexo.view.MultipleInspectableObjectView#getInspectedObjects()
-     */
-    public Vector getInspectedObjects()
-    {
-        return getObjects();
-    }
+	public void focusOn(FlexoModelObject object) {
+		setSelectedObject(object);
+	}
 
-    /**
-     * Overrides
-     * 
-     * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
-     *      org.openflexo.foundation.DataModification)
-     * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
-     *      org.openflexo.foundation.DataModification)
-     */
-    @Override
-	public void update(FlexoObservable o, DataModification dataModification)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("update received in TabularBrowserView for " + o+" dataModification="+dataModification);
-    }
+	public void setVisibleRowCount(int rows) {
+		int height = 0;
+		for (int row = 0; row < rows; row++)
+			height += _treeTable.getRowHeight(row);
+		_treeTable.setPreferredScrollableViewportSize(new Dimension(_treeTable.getPreferredScrollableViewportSize().width, height));
+	}
 
-    /**
-     * Overrides
-     * 
-     * @see javax.swing.event.TableModelListener#tableChanged(javax.swing.event.TableModelEvent)
-     * @see javax.swing.event.TableModelListener#tableChanged(javax.swing.event.TableModelEvent)
-     */
-    @Override
-	public void tableChanged(TableModelEvent e)
-    {
-    }
+	public boolean isSelected(FlexoModelObject object) {
+		return _treeTable.isSelected(object);
+	}
 
-    public FlexoModelObject getObject() 
-    {
-        return getRootObject();
-    }
+	public Vector getObjects() {
+		return getSelectedObjects();
+	}
 
-   public boolean isSelected(Vector objectList)
-    {
-        return getSelectedObjects().containsAll(objectList);
-    }
+	public Vector getSelectedObjects() {
+		return _treeTable.getSelectedObjects();
+	}
 
-    public boolean isSynchronizedWithSelectionManager()
-    {
-        return _synchronizeWithSelectionManager;
-    }
+	private boolean _isSelected = false;
 
-    public void setSynchronizeWithSelectionManager(boolean synchronizeWithSelectionManager) 
-    {
-        _synchronizeWithSelectionManager = synchronizeWithSelectionManager;
-        if (synchronizeWithSelectionManager) {
-        	if (_selectionManager != null) {
-        		_treeTable.getTreeTableModel().setSelectionManager(_selectionManager);
-                _selectionManager.addToSelectionListeners(this);
-       	}
-            updateSelection();
-        }
-    }
-    
-    @Override
-	public SelectionManager getSelectionManager() 
-    {
-        return _selectionManager;
-    }
+	public boolean isSelected() {
+		return _isSelected;
+	}
 
-    @Override
-	public Vector<FlexoModelObject> getSelection()
-    {
-        if (getSelectionManager() != null)
-            return getSelectionManager().getSelection();
-        return null;
-    }
+	public void setIsSelected(boolean b) {
+		_isSelected = b;
+	}
 
-    @Override
-	public void resetSelection() 
-    {
-        if (getSelectionManager() != null) {
-            getSelectionManager().resetSelection();
-        }
-        else {
-            fireResetSelection();
-        }
-    }
+	public FlexoModelObject getRootObject() {
+		return _model.getRootObject();
+	}
 
-   @Override
-public void addToSelected(FlexoModelObject object)
-    {
-       if (mayRepresents(object)) {
-           if (getSelectionManager() != null) {
-               getSelectionManager().addToSelected(object);
-           }
-           else {
-               fireObjectSelected(object);
-           }    
-       }
-   }
+	/**
+	 * Implements
+	 * 
+	 * @see org.openflexo.view.InspectableObjectView#getInspectedObject()
+	 * @see org.openflexo.view.InspectableObjectView#getInspectedObject()
+	 */
+	public InspectableObject getInspectedObject() {
+		if (getRootObject() instanceof InspectableObject)
+			return (InspectableObject) getRootObject();
+		return null;
+	}
 
-   @Override
-public void removeFromSelected(FlexoModelObject object) 
-   {
-       if (mayRepresents(object)) {
-           if (getSelectionManager() != null) {
-               getSelectionManager().removeFromSelected(object);
-           }
-           else {
-               fireObjectDeselected(object);
-           }
-       }
-   }
+	/**
+	 * Implements
+	 * 
+	 * @see org.openflexo.view.MultipleInspectableObjectView#getInspectedObjects()
+	 * @see org.openflexo.view.MultipleInspectableObjectView#getInspectedObjects()
+	 */
+	public Vector getInspectedObjects() {
+		return getObjects();
+	}
 
-    @Override
-	public void addToSelected(Vector<? extends FlexoModelObject> objects) 
-    {
-        if (getSelectionManager() != null) {
-            getSelectionManager().addToSelected(objects);
-        }
-        else {
-            fireBeginMultipleSelection();
-            for (Enumeration en=objects.elements(); en.hasMoreElements();) {
-                FlexoModelObject next = (FlexoModelObject)en.nextElement();
-                fireObjectSelected(next);
-            }
-            fireEndMultipleSelection();
-       }
-    }
+	/**
+	 * Overrides
+	 * 
+	 * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
+	 *      org.openflexo.foundation.DataModification)
+	 * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
+	 *      org.openflexo.foundation.DataModification)
+	 */
+	@Override
+	public void update(FlexoObservable o, DataModification dataModification) {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("update received in TabularBrowserView for " + o + " dataModification=" + dataModification);
+	}
 
-    @Override
-	public void removeFromSelected(Vector<? extends FlexoModelObject> objects) 
-    {
-        if (getSelectionManager() != null) {
-            getSelectionManager().removeFromSelected(objects);
-        }
-        else {
-            fireBeginMultipleSelection();
-            for (Enumeration en=objects.elements(); en.hasMoreElements();) {
-                FlexoModelObject next = (FlexoModelObject)en.nextElement();
-                fireObjectDeselected(next);
-            }
-            fireEndMultipleSelection();           
-        }
-    }
+	/**
+	 * Overrides
+	 * 
+	 * @see javax.swing.event.TableModelListener#tableChanged(javax.swing.event.TableModelEvent)
+	 * @see javax.swing.event.TableModelListener#tableChanged(javax.swing.event.TableModelEvent)
+	 */
+	@Override
+	public void tableChanged(TableModelEvent e) {
+	}
 
-    @Override
-	public void setSelectedObjects(Vector<? extends FlexoModelObject> objects)
-    {
-        if (getSelectionManager() != null) {
-            getSelectionManager().setSelectedObjects(objects);
-        }
-        else {
-            resetSelection();
-            addToSelected(objects);
-        }
-    }
+	public FlexoModelObject getObject() {
+		return getRootObject();
+	}
 
-    public void setSelectedObject(FlexoModelObject object)
-    {
-        if (getSelectionManager() != null) {
-            getSelectionManager().setSelectedObject(object);
-        }
-        else {
-            resetSelection();
-            addToSelected(object);
-        }
-    }
+	public boolean isSelected(Vector objectList) {
+		return getSelectedObjects().containsAll(objectList);
+	}
 
-    @Override
-	public boolean mayRepresents (FlexoModelObject anObject)
-    {
-        return _treeTable.mayRepresents(anObject);
-    }
-    
+	public boolean isSynchronizedWithSelectionManager() {
+		return _synchronizeWithSelectionManager;
+	}
 
-    @Override
-	public FlexoModelObject getFocusedObject() 
-    {
-        if (getSelectionManager() != null)
-            return getSelectionManager().getFocusedObject();
-        return null;
-    }
+	public void setSynchronizeWithSelectionManager(boolean synchronizeWithSelectionManager) {
+		_synchronizeWithSelectionManager = synchronizeWithSelectionManager;
+		if (synchronizeWithSelectionManager) {
+			if (_selectionManager != null) {
+				_treeTable.getTreeTableModel().setSelectionManager(_selectionManager);
+				_selectionManager.addToSelectionListeners(this);
+			}
+			updateSelection();
+		}
+	}
 
-    @Override
-	public void fireObjectSelected(FlexoModelObject object)
-    {
-    	if (mayRepresents(object)) {
-    		getSelectionModel().removeListSelectionListener(this);
-    		_treeTable.fireObjectSelected(object);
-    		getSelectionModel().addListSelectionListener(this);
-    	}
-    	else {
-    		fireResetSelection();
-    	}
-        if (getBrowser().handlesControlPanel()) {
-            _footer.handleSelectionChanged();
-        }
+	@Override
+	public SelectionManager getSelectionManager() {
+		return _selectionManager;
+	}
 
-    }
-    
-    @Override
-	public void fireObjectDeselected(FlexoModelObject object)
-    {
-    	if (mayRepresents(object)) {
-    		getSelectionModel().removeListSelectionListener(this);
-    		_treeTable.fireObjectDeselected(object);
-    		getSelectionModel().addListSelectionListener(this);
-    	}
-    	if (getBrowser().handlesControlPanel()) {
-            _footer.handleSelectionChanged();
-        }
-    }
-    
-    @Override
-	public void fireResetSelection()
-    {
-        getSelectionModel().removeListSelectionListener(this);
-        _treeTable.fireResetSelection();
-        getSelectionModel().addListSelectionListener(this);
-        if (getBrowser().handlesControlPanel()) {
-            _footer.handleSelectionCleared();
-        }
-    }
-      
-    @Override
-	public void fireBeginMultipleSelection()
-    {
-        _treeTable.fireBeginMultipleSelection();
-    }
-    
-    @Override
-	public void fireEndMultipleSelection() 
-    {
-        _treeTable.fireEndMultipleSelection();
-    }
-    
-    /**
-     * Update selection
-     */
-    public void updateSelection()
-    {
-        if (getSelectionManager() != null) {
-            getSelectionManager().fireUpdateSelection(this);
-        }
-        if (getBrowser().handlesControlPanel()) {
-            _footer.handleSelectionChanged();
-        }
-    }
-   
-    @Override
-	public void valueChanged(ListSelectionEvent e)
-    {
-        // Ignore extra messages.
-        if (e.getValueIsAdjusting())
-            return;
+	@Override
+	public Vector<FlexoModelObject> getSelection() {
+		if (getSelectionManager() != null)
+			return getSelectionManager().getSelection();
+		return null;
+	}
 
-        if ((_selectionManager != null) && (_synchronizeWithSelectionManager)) {
-            
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("valueChanged() ListSelectionEvent=" + e + " ListSelectionModel=" + getSelectionModel().toString());
-            
-            /* At least one of this item has change */
-            int beginIndex = e.getFirstIndex();
-            int endIndex = e.getLastIndex();
-            
-            Vector toBeRemovedFromSelection = new Vector();
-            Vector toBeAddedToSelection = new Vector();
-                        
-            for (int i = beginIndex; i <= endIndex; i++) {
-                FlexoModelObject object = _treeTable.getObjectAt(i);
-                if (getSelectionModel().isSelectedIndex(i) 
-                        != _selectionManager.selectionContains(object)) {
-                    //logger.info("Selection status for object "+object+" at index "+i+" has changed");
-                    if (getSelectionModel().isSelectedIndex(i)) {
-                        // Change for addition
-                        toBeAddedToSelection.add(object);
-                    }
-                    else {
-                        // Change for removing
-                        toBeRemovedFromSelection.add(object);
-                    }
-                }
-            }
-            
-            for (Enumeration en=toBeAddedToSelection.elements(); en.hasMoreElements();) {
-                FlexoModelObject next = (FlexoModelObject)en.nextElement();
-                getSelectionManager().addToSelected(next);
-            }
-            
-            for (Enumeration en=toBeRemovedFromSelection.elements(); en.hasMoreElements();) {
-                FlexoModelObject next = (FlexoModelObject)en.nextElement();
-                getSelectionManager().removeFromSelected(next);
-            }
-                 
-            
-        }
-        
-        if (getBrowser().handlesControlPanel()) {
-            _footer.handleSelectionChanged();
-        }
+	@Override
+	public void resetSelection() {
+		if (getSelectionManager() != null) {
+			getSelectionManager().resetSelection();
+		} else {
+			fireResetSelection();
+		}
+	}
 
-    }
+	@Override
+	public void addToSelected(FlexoModelObject object) {
+		if (mayRepresents(object)) {
+			if (getSelectionManager() != null) {
+				getSelectionManager().addToSelected(object);
+			} else {
+				fireObjectSelected(object);
+			}
+		}
+	}
+
+	@Override
+	public void removeFromSelected(FlexoModelObject object) {
+		if (mayRepresents(object)) {
+			if (getSelectionManager() != null) {
+				getSelectionManager().removeFromSelected(object);
+			} else {
+				fireObjectDeselected(object);
+			}
+		}
+	}
+
+	@Override
+	public void addToSelected(Vector<? extends FlexoModelObject> objects) {
+		if (getSelectionManager() != null) {
+			getSelectionManager().addToSelected(objects);
+		} else {
+			fireBeginMultipleSelection();
+			for (Enumeration en = objects.elements(); en.hasMoreElements();) {
+				FlexoModelObject next = (FlexoModelObject) en.nextElement();
+				fireObjectSelected(next);
+			}
+			fireEndMultipleSelection();
+		}
+	}
+
+	@Override
+	public void removeFromSelected(Vector<? extends FlexoModelObject> objects) {
+		if (getSelectionManager() != null) {
+			getSelectionManager().removeFromSelected(objects);
+		} else {
+			fireBeginMultipleSelection();
+			for (Enumeration en = objects.elements(); en.hasMoreElements();) {
+				FlexoModelObject next = (FlexoModelObject) en.nextElement();
+				fireObjectDeselected(next);
+			}
+			fireEndMultipleSelection();
+		}
+	}
+
+	@Override
+	public void setSelectedObjects(Vector<? extends FlexoModelObject> objects) {
+		if (getSelectionManager() != null) {
+			getSelectionManager().setSelectedObjects(objects);
+		} else {
+			resetSelection();
+			addToSelected(objects);
+		}
+	}
+
+	public void setSelectedObject(FlexoModelObject object) {
+		if (getSelectionManager() != null) {
+			getSelectionManager().setSelectedObject(object);
+		} else {
+			resetSelection();
+			addToSelected(object);
+		}
+	}
+
+	@Override
+	public boolean mayRepresents(FlexoModelObject anObject) {
+		return _treeTable.mayRepresents(anObject);
+	}
+
+	@Override
+	public FlexoModelObject getFocusedObject() {
+		if (getSelectionManager() != null)
+			return getSelectionManager().getFocusedObject();
+		return null;
+	}
+
+	@Override
+	public void fireObjectSelected(FlexoModelObject object) {
+		if (mayRepresents(object)) {
+			getSelectionModel().removeListSelectionListener(this);
+			_treeTable.fireObjectSelected(object);
+			getSelectionModel().addListSelectionListener(this);
+		} else {
+			fireResetSelection();
+		}
+		if (getBrowser().handlesControlPanel()) {
+			_footer.handleSelectionChanged();
+		}
+
+	}
+
+	@Override
+	public void fireObjectDeselected(FlexoModelObject object) {
+		if (mayRepresents(object)) {
+			getSelectionModel().removeListSelectionListener(this);
+			_treeTable.fireObjectDeselected(object);
+			getSelectionModel().addListSelectionListener(this);
+		}
+		if (getBrowser().handlesControlPanel()) {
+			_footer.handleSelectionChanged();
+		}
+	}
+
+	@Override
+	public void fireResetSelection() {
+		getSelectionModel().removeListSelectionListener(this);
+		_treeTable.fireResetSelection();
+		getSelectionModel().addListSelectionListener(this);
+		if (getBrowser().handlesControlPanel()) {
+			_footer.handleSelectionCleared();
+		}
+	}
+
+	@Override
+	public void fireBeginMultipleSelection() {
+		_treeTable.fireBeginMultipleSelection();
+	}
+
+	@Override
+	public void fireEndMultipleSelection() {
+		_treeTable.fireEndMultipleSelection();
+	}
+
+	/**
+	 * Update selection
+	 */
+	public void updateSelection() {
+		if (getSelectionManager() != null) {
+			getSelectionManager().fireUpdateSelection(this);
+		}
+		if (getBrowser().handlesControlPanel()) {
+			_footer.handleSelectionChanged();
+		}
+	}
+
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		// Ignore extra messages.
+		if (e.getValueIsAdjusting())
+			return;
+
+		if ((_selectionManager != null) && (_synchronizeWithSelectionManager)) {
+
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("valueChanged() ListSelectionEvent=" + e + " ListSelectionModel=" + getSelectionModel().toString());
+
+			/* At least one of this item has change */
+			int beginIndex = e.getFirstIndex();
+			int endIndex = e.getLastIndex();
+
+			Vector toBeRemovedFromSelection = new Vector();
+			Vector toBeAddedToSelection = new Vector();
+
+			for (int i = beginIndex; i <= endIndex; i++) {
+				FlexoModelObject object = _treeTable.getObjectAt(i);
+				if (getSelectionModel().isSelectedIndex(i) != _selectionManager.selectionContains(object)) {
+					// logger.info("Selection status for object "+object+" at index "+i+" has changed");
+					if (getSelectionModel().isSelectedIndex(i)) {
+						// Change for addition
+						toBeAddedToSelection.add(object);
+					} else {
+						// Change for removing
+						toBeRemovedFromSelection.add(object);
+					}
+				}
+			}
+
+			for (Enumeration en = toBeAddedToSelection.elements(); en.hasMoreElements();) {
+				FlexoModelObject next = (FlexoModelObject) en.nextElement();
+				getSelectionManager().addToSelected(next);
+			}
+
+			for (Enumeration en = toBeRemovedFromSelection.elements(); en.hasMoreElements();) {
+				FlexoModelObject next = (FlexoModelObject) en.nextElement();
+				getSelectionManager().removeFromSelected(next);
+			}
+
+		}
+
+		if (getBrowser().handlesControlPanel()) {
+			_footer.handleSelectionChanged();
+		}
+
+	}
 
 	public FlexoEditor getEditor() {
 		return _editor;

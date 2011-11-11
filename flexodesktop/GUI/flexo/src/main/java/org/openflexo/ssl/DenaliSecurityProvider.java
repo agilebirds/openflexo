@@ -33,33 +33,33 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactorySpi;
 import javax.net.ssl.X509TrustManager;
 
- public final class DenaliSecurityProvider extends Provider {
-	 
- 	private final static String PROVIDER_ID = "DenaliSecurityProvider"; 
+public final class DenaliSecurityProvider extends Provider {
 
- 	public DenaliSecurityProvider() { 
- 		super(PROVIDER_ID, 1.0, "Denali security provider"); 
+	private final static String PROVIDER_ID = "DenaliSecurityProvider";
 
- 		AccessController.doPrivileged(new SecurityPrivilegedAction()); 
- 	} 
+	public DenaliSecurityProvider() {
+		super(PROVIDER_ID, 1.0, "Denali security provider");
 
- 	public static void insertSecurityProvider() throws Exception { 
- 		if(Security.getProvider(PROVIDER_ID) == null) { 
- 			Security.addProvider(new DenaliSecurityProvider()); 
- 			Security.setProperty("ssl.TrustManagerFactory.algorithm", "DenaliX509"); 
- 		} 
- 	} 
-
- 	protected final class SecurityPrivilegedAction implements PrivilegedAction<Object> {
-		@Override
-		public Object run() { 
-		     put("TrustManagerFactory.DenaliX509", TrustManagerFactoryImpl.class.getName()); 
-		     return null; 
-		 }
+		AccessController.doPrivileged(new SecurityPrivilegedAction());
 	}
 
-	public final static class TrustManagerFactoryImpl extends TrustManagerFactorySpi { 
- 		protected final class DenaliX509TrustManager implements X509TrustManager {
+	public static void insertSecurityProvider() throws Exception {
+		if (Security.getProvider(PROVIDER_ID) == null) {
+			Security.addProvider(new DenaliSecurityProvider());
+			Security.setProperty("ssl.TrustManagerFactory.algorithm", "DenaliX509");
+		}
+	}
+
+	protected final class SecurityPrivilegedAction implements PrivilegedAction<Object> {
+		@Override
+		public Object run() {
+			put("TrustManagerFactory.DenaliX509", TrustManagerFactoryImpl.class.getName());
+			return null;
+		}
+	}
+
+	public final static class TrustManagerFactoryImpl extends TrustManagerFactorySpi {
+		protected final class DenaliX509TrustManager implements X509TrustManager {
 			@Override
 			public X509Certificate[] getAcceptedIssuers() {
 				return null;
@@ -67,28 +67,28 @@ import javax.net.ssl.X509TrustManager;
 
 			@Override
 			public void checkClientTrusted(X509Certificate[] chain, String authType) {
-				
+
 			}
 
 			@Override
 			public void checkServerTrusted(X509Certificate[] chain, String authType) {
-				//TODO: check in some way the certificates here.
+				// TODO: check in some way the certificates here.
 			}
 		}
 
 		@Override
 		protected void engineInit(KeyStore keystore) throws KeyStoreException {
-			
+
 		}
 
 		@Override
 		protected void engineInit(ManagerFactoryParameters mgrparams) throws InvalidAlgorithmParameterException {
-			
+
 		}
 
 		@Override
 		protected TrustManager[] engineGetTrustManagers() {
 			return new TrustManager[] { new DenaliX509TrustManager() };
-		} 
- 	} 
- } 
+		}
+	}
+}

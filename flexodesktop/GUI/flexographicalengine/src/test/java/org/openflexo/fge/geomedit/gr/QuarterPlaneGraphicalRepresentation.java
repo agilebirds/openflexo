@@ -25,19 +25,16 @@ import org.openflexo.fge.geomedit.QuarterPlane;
 import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
-public class QuarterPlaneGraphicalRepresentation extends GeometricObjectGraphicalRepresentation<FGEQuarterPlane,QuarterPlane> implements XMLSerializable 
-{
+public class QuarterPlaneGraphicalRepresentation extends GeometricObjectGraphicalRepresentation<FGEQuarterPlane, QuarterPlane> implements
+		XMLSerializable {
 	// Called for LOAD
-	public QuarterPlaneGraphicalRepresentation(GeomEditBuilder builder)
-	{
-		this(null,builder.drawing);
+	public QuarterPlaneGraphicalRepresentation(GeomEditBuilder builder) {
+		this(null, builder.drawing);
 		initializeDeserialization();
 	}
-	
-	public QuarterPlaneGraphicalRepresentation(QuarterPlane quarterPlane, GeometricDrawing aDrawing)
-	{
+
+	public QuarterPlaneGraphicalRepresentation(QuarterPlane quarterPlane, GeometricDrawing aDrawing) {
 		super(quarterPlane, aDrawing);
 	}
-	
+
 }

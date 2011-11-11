@@ -42,77 +42,70 @@ import org.openflexo.foundation.cg.templates.action.RedefineCustomTemplateFile;
 import org.openflexo.generator.action.GCAction;
 import org.openflexo.generator.exception.GenerationException;
 
+public class DGControllerActionInitializer extends DEControllerActionInitializer {
 
-public class DGControllerActionInitializer extends DEControllerActionInitializer
-{
-
-	protected static final Logger logger = Logger.getLogger(DGControllerActionInitializer.class.getPackage().getName()); 
+	protected static final Logger logger = Logger.getLogger(DGControllerActionInitializer.class.getPackage().getName());
 
 	static {
-        FlexoModelObject.addActionForClass (OpenFileInExplorer.actionType, CGFile.class);
-    }
-	
-	public DGControllerActionInitializer(DGController controller)
-	{
+		FlexoModelObject.addActionForClass(OpenFileInExplorer.actionType, CGFile.class);
+	}
+
+	public DGControllerActionInitializer(DGController controller) {
 		super(controller);
 		deController = controller;
 	}
 
-	protected DGController getDGController()
-	{
+	protected DGController getDGController() {
 		return (DGController) deController;
 	}
 
 	@Override
-	protected DGSelectionManager getDGSelectionManager()
-	{
+	protected DGSelectionManager getDGSelectionManager() {
 		return getDGController().getSelectionManager();
 	}
 
 	@Override
-	public void initializeActions()
-	{
+	public void initializeActions() {
 		super.initializeActions();
 
 		new AddGeneratedCodeRepositoryInitializer(this).init();
 		new RemoveGeneratedCodeRepositoryInitializer(this).init();
-		
-        (new DGSetPropertyInitializer(this)).init();
-        (new OpenFileInExplorerInitializer(this)).init();
-        new CompareTemplatesInNewWindowInitializer(this).init();
-        (new GenerateProcessScreenshotInitializer(this)).init();
+
+		(new DGSetPropertyInitializer(this)).init();
+		(new OpenFileInExplorerInitializer(this)).init();
+		new CompareTemplatesInNewWindowInitializer(this).init();
+		(new GenerateProcessScreenshotInitializer(this)).init();
 		(new GenerateActivityScreenshotInitializer(this)).init();
 		(new GenerateComponentScreenshotInitializer(this)).init();
 		(new GenerateOperationScreenshotInitializer(this)).init();
-        
+
 		// Doc generation
-        getProject().getGeneratedDoc().setFactory(new GCAction.ProjectGeneratorFactory() {
+		getProject().getGeneratedDoc().setFactory(new GCAction.ProjectGeneratorFactory() {
 			/**
 			 * Overrides generatorForRepository
-			 * @throws GenerationException 
+			 * 
+			 * @throws GenerationException
 			 * @see org.openflexo.dg.action.DGAction.ProjectDocGeneratorFactory#generatorForRepository(org.openflexo.foundation.cg.DGRepository)
 			 */
 			@Override
-			public ProjectDocGenerator generatorForRepository(GenerationRepository repository)
-			{
+			public ProjectDocGenerator generatorForRepository(GenerationRepository repository) {
 				if (repository instanceof DGRepository) {
 					return getDGController().getProjectGenerator((DGRepository) repository);
-				}
-				else {
+				} else {
 					if (logger.isLoggable(Level.SEVERE))
-						logger.severe("Cannot create project generator for "+repository);
+						logger.severe("Cannot create project generator for " + repository);
 				}
 				return null;
 			}
 		});
 		(new SynchronizeRepositoryCodeGenerationInitializer(this)).init();
 		(new GenerateSourceCodeInitializer(this)).init();
-        (new GenerateAndWriteCodeInitializer(this)).init();
+		(new GenerateAndWriteCodeInitializer(this)).init();
 		(new ForceRegenerateSourceCodeInitializer(this)).init();
 		(new RegenerateAndOverrideInitializer(this)).init();
-        (new IncludeFromGenerationInitializer(this)).init();
-        (new ExcludeFromGenerationInitializer(this)).init();
-        (new ExportTOCAsTemplateInitializer(this)).init();
+		(new IncludeFromGenerationInitializer(this)).init();
+		(new ExcludeFromGenerationInitializer(this)).init();
+		(new ExportTOCAsTemplateInitializer(this)).init();
 		(new WriteModifiedGeneratedFilesInitializer(this)).init();
 		(new DismissUnchangedGeneratedFilesInitializer(this)).init();
 
@@ -148,14 +141,14 @@ public class DGControllerActionInitializer extends DEControllerActionInitializer
 
 		// PDF management
 		(new GeneratePDFInitializer(this)).init();
-		
+
 		// DOCX management
 		(new GenerateDocxInitializer(this)).init();
 		(new ReinjectDocxInitializer(this)).init();
-		
+
 		// ZIP management
 		(new GenerateZipInitializer(this)).init();
-		
+
 		// Repository management
 		(new ConnectCGRepositoryInitializer(this)).init();
 		(new DisconnectCGRepositoryInitializer(this)).init();
@@ -175,15 +168,16 @@ public class DGControllerActionInitializer extends DEControllerActionInitializer
 		(new CancelEditionOfCustomTemplateFileInitializer(this)).init();
 		(new RemoveTemplateFileInitializer(this)).init();
 		// Initialize actions available using inspector (template tab)
-		
-		CGFile.showTemplateActionizer = new FlexoActionizer<OpenTemplateFileInNewWindow, CGTemplate, CGTemplateObject>(OpenTemplateFileInNewWindow.actionType, getDGController().getEditor());
 
-		CGFile.editCustomTemplateActionizer = new FlexoActionizer<EditCustomTemplateFile, CGTemplateFile, CGTemplateObject>(EditCustomTemplateFile.actionType, getDGController().getEditor());
+		CGFile.showTemplateActionizer = new FlexoActionizer<OpenTemplateFileInNewWindow, CGTemplate, CGTemplateObject>(
+				OpenTemplateFileInNewWindow.actionType, getDGController().getEditor());
 
-		CGFile.redefineTemplateActionizer = new FlexoActionizer<RedefineCustomTemplateFile, CGTemplate, CGTemplateObject>(RedefineCustomTemplateFile.actionType, getDGController().getEditor());
+		CGFile.editCustomTemplateActionizer = new FlexoActionizer<EditCustomTemplateFile, CGTemplateFile, CGTemplateObject>(
+				EditCustomTemplateFile.actionType, getDGController().getEditor());
+
+		CGFile.redefineTemplateActionizer = new FlexoActionizer<RedefineCustomTemplateFile, CGTemplate, CGTemplateObject>(
+				RedefineCustomTemplateFile.actionType, getDGController().getEditor());
 
 	}
-
-
 
 }

@@ -24,17 +24,13 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.javaparser.FJPJavaClass;
 import org.openflexo.javaparser.FJPJavaSource;
 
-
-public class JavaSourceElement extends JavaBrowserElement
-{
-	public JavaSourceElement(FJPJavaSource source, JavaParserBrowser browser, BrowserElement parent)
-	{
-		super(source, BrowserElementType.SOURCE_FILE, browser,parent);
+public class JavaSourceElement extends JavaBrowserElement {
+	public JavaSourceElement(FJPJavaSource source, JavaParserBrowser browser, BrowserElement parent) {
+		super(source, BrowserElementType.SOURCE_FILE, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 		addToChilds(getSource().getPackageDeclaration());
 		addToChilds(getSource().getImportDeclarations());
 		for (FJPJavaClass c : getSource().getClasses()) {
@@ -43,13 +39,11 @@ public class JavaSourceElement extends JavaBrowserElement
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return getSource().getFileName();
 	}
 
-	public FJPJavaSource getSource()
-	{
-		return (FJPJavaSource)getObject();
+	public FJPJavaSource getSource() {
+		return (FJPJavaSource) getObject();
 	}
 }

@@ -31,56 +31,47 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class RefreshDGStructureInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RefreshDGStructureInitializer(DGControllerActionInitializer actionInitializer)
-	{
-		super(RefreshCGStructure.actionType,actionInitializer);
-	}
-	
-	@Override
-	protected DGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DGControllerActionInitializer)super.getControllerActionInitializer();
-	}
-	
-	@Override
-	protected FlexoActionInitializer<RefreshCGStructure> getDefaultInitializer() 
-	{
-		return new FlexoActionInitializer<RefreshCGStructure>() {
-            @Override
-			public boolean run(ActionEvent e, RefreshCGStructure action)
-            {
-            	return true;
-            }
-        };
+	RefreshDGStructureInitializer(DGControllerActionInitializer actionInitializer) {
+		super(RefreshCGStructure.actionType, actionInitializer);
 	}
 
-     @Override
-	protected FlexoActionFinalizer<RefreshCGStructure> getDefaultFinalizer() 
-	{
-		return new FlexoActionFinalizer<RefreshCGStructure>() {
-            @Override
-			public boolean run(ActionEvent e, RefreshCGStructure action)
-            {
-            	return true;
-            }
-        };
-	}
- 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected DGControllerActionInitializer getControllerActionInitializer() {
+		return (DGControllerActionInitializer) super.getControllerActionInitializer();
+	}
+
+	@Override
+	protected FlexoActionInitializer<RefreshCGStructure> getDefaultInitializer() {
+		return new FlexoActionInitializer<RefreshCGStructure>() {
+			@Override
+			public boolean run(ActionEvent e, RefreshCGStructure action) {
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoActionFinalizer<RefreshCGStructure> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<RefreshCGStructure>() {
+			@Override
+			public boolean run(ActionEvent e, RefreshCGStructure action) {
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return IconLibrary.REFRESH_ICON;
 	}
- 
+
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return IconLibrary.REFRESH_DISABLED_ICON;
 	}
- 
+
 }

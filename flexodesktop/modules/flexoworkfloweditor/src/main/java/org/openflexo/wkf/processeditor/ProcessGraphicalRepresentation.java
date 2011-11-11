@@ -41,11 +41,10 @@ import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.processeditor.gr.WKFConnectorGR;
 import org.openflexo.wkf.processeditor.gr.WKFObjectGR;
 
-
 public class ProcessGraphicalRepresentation extends DrawingGraphicalRepresentation<FlexoProcess> implements ProcessEditorConstants {
 	private FlexoProcess process;
 
-	protected static final Color GRID_COLOR = new Color(220,220,220);
+	protected static final Color GRID_COLOR = new Color(220, 220, 220);
 
 	protected FGEFiniteGrid constraints;
 	private FGESteppedDimensionConstraint dimensionConstraints;
@@ -66,18 +65,19 @@ public class ProcessGraphicalRepresentation extends DrawingGraphicalRepresentati
 					double h = g.getHeight();
 					double scaledHStep = constraints.getHorizontalStep();
 					double scaledVStep = constraints.getVerticalStep();
-					int m = (int) Math.floor(w/scaledHStep);
-					int n = (int) Math.floor(h/scaledVStep);
-					int borderSize = getGraphics().getDefaultForeground()!=null?(int)Math.ceil(getGraphics().getDefaultForeground().getLineWidth()):0;
+					int m = (int) Math.floor(w / scaledHStep);
+					int n = (int) Math.floor(h / scaledVStep);
+					int borderSize = getGraphics().getDefaultForeground() != null ? (int) Math.ceil(getGraphics().getDefaultForeground()
+							.getLineWidth()) : 0;
 					// Vertical lines
-					for (int i=1;i<m+1;i++) {
-						double x1 = i*scaledHStep;
-						g.drawLine(x1,borderSize,x1,h-borderSize);
+					for (int i = 1; i < m + 1; i++) {
+						double x1 = i * scaledHStep;
+						g.drawLine(x1, borderSize, x1, h - borderSize);
 					}
 					// Horizontal lines
-					for (int i=1;i<n+1;i++) {
-						double y1 = i*scaledHStep;
-						g.drawLine(borderSize,y1,w-borderSize,y1);
+					for (int i = 1; i < n + 1; i++) {
+						double y1 = i * scaledHStep;
+						g.drawLine(borderSize, y1, w - borderSize, y1);
 					}
 				}
 			}
@@ -94,26 +94,26 @@ public class ProcessGraphicalRepresentation extends DrawingGraphicalRepresentati
 	 *
 	 */
 	private void updateConstraints() {
-		constraints = new FGEFiniteGrid(new FGEPoint(0,0),getGridSize(),getGridSize(),getProcessBounds());
-		//constraints = new FGEGrid(new FGEPoint(0,0),getGridSize(),getGridSize());
-		dimensionConstraints = new FGESteppedDimensionConstraint(getGridSize(),getGridSize());
+		constraints = new FGEFiniteGrid(new FGEPoint(0, 0), getGridSize(), getGridSize(), getProcessBounds());
+		// constraints = new FGEGrid(new FGEPoint(0,0),getGridSize(),getGridSize());
+		dimensionConstraints = new FGESteppedDimensionConstraint(getGridSize(), getGridSize());
 	}
 
 	private FGERectangle getProcessBounds() {
-		return new FGERectangle(0, 0, process.getWidth(BASIC_PROCESS_EDITOR), process.getHeight(BASIC_PROCESS_EDITOR),Filling.FILLED);
+		return new FGERectangle(0, 0, process.getWidth(BASIC_PROCESS_EDITOR), process.getHeight(BASIC_PROCESS_EDITOR), Filling.FILLED);
 	}
 
 	public void updateAlignOnGridOrGridSize() {
 		updateConstraints();
-		for(GraphicalRepresentation<?>gr:getContainedGraphicalRepresentations()){
-			if (gr instanceof WKFObjectGR && ((WKFObjectGR<?>)gr).getDimensionConstraints() != DimensionConstraints.CONTAINER) {
+		for (GraphicalRepresentation<?> gr : getContainedGraphicalRepresentations()) {
+			if (gr instanceof WKFObjectGR && ((WKFObjectGR<?>) gr).getDimensionConstraints() != DimensionConstraints.CONTAINER) {
 				updateConstraintsForObject((WKFObjectGR<?>) gr);
 			}
 		}
 	}
 
 	public void updateConstraintsForObject(WKFObjectGR<?> gr) {
-		if (gr.getContainerGraphicalRepresentation()==this) {
+		if (gr.getContainerGraphicalRepresentation() == this) {
 			if (isAlignedOnGrid()) {
 				if (gr.supportAlignOnGrid()) {
 					gr.setLocationConstraints(LocationConstraints.AREA_CONSTRAINED);
@@ -138,24 +138,24 @@ public class ProcessGraphicalRepresentation extends DrawingGraphicalRepresentati
 	}
 
 	public FGEArea getLocationConstraintsForObject(WKFObjectGR<?> gr) {
-		if (gr.getContainerGraphicalRepresentation()==this) {
+		if (gr.getContainerGraphicalRepresentation() == this) {
 			if (isAlignedOnGrid()) {
 				if (gr.supportAlignOnGrid()) {
 					FGEFiniteGrid grid = constraints.clone();
-					grid.bounds.width-=gr.getWidth();
-					grid.bounds.height-=gr.getHeight();
-					if (gr.getDimensionConstraints()==DimensionConstraints.UNRESIZABLE) {
-						grid.origin.x-=gr.getWidth()/2;
-						grid.origin.y-=gr.getHeight()/2;
+					grid.bounds.width -= gr.getWidth();
+					grid.bounds.height -= gr.getHeight();
+					if (gr.getDimensionConstraints() == DimensionConstraints.UNRESIZABLE) {
+						grid.origin.x -= gr.getWidth() / 2;
+						grid.origin.y -= gr.getHeight() / 2;
 					}
-					if (gr.getBorder()!=null) {
-						grid.origin.x-=gr.getBorder().left;
-						grid.origin.y-=gr.getBorder().top;
+					if (gr.getBorder() != null) {
+						grid.origin.x -= gr.getBorder().left;
+						grid.origin.y -= gr.getBorder().top;
 					}
-					if (gr.getShape().getShape().getEmbeddingBounds().x>0)
-						grid.origin.x-=gr.getShape().getShape().getEmbeddingBounds().x*gr.getWidth();
-					if (gr.getShape().getShape().getEmbeddingBounds().y>0)
-						grid.origin.y-=gr.getShape().getShape().getEmbeddingBounds().y*gr.getHeight();
+					if (gr.getShape().getShape().getEmbeddingBounds().x > 0)
+						grid.origin.x -= gr.getShape().getShape().getEmbeddingBounds().x * gr.getWidth();
+					if (gr.getShape().getShape().getEmbeddingBounds().y > 0)
+						grid.origin.y -= gr.getShape().getShape().getEmbeddingBounds().y * gr.getHeight();
 					/*if (gr.getShadowStyle()!=null) {
 						grid.origin.x-=gr.getShadowStyle().getShadowDeep();
 						grid.origin.y-=gr.getShadowStyle().getShadowDeep();
@@ -163,8 +163,9 @@ public class ProcessGraphicalRepresentation extends DrawingGraphicalRepresentati
 					return grid;
 				}
 			} else {
-				if (gr.getDimensionConstraints()!=DimensionConstraints.CONTAINER)
-					return new FGERectangle(0,0,getDrawingGraphicalRepresentation().getWidth()-gr.getWidth(),getDrawingGraphicalRepresentation().getHeight()-gr.getHeight(),Filling.FILLED);
+				if (gr.getDimensionConstraints() != DimensionConstraints.CONTAINER)
+					return new FGERectangle(0, 0, getDrawingGraphicalRepresentation().getWidth() - gr.getWidth(),
+							getDrawingGraphicalRepresentation().getHeight() - gr.getHeight(), Filling.FILLED);
 			}
 		}
 		return null;
@@ -185,15 +186,15 @@ public class ProcessGraphicalRepresentation extends DrawingGraphicalRepresentati
 	 *
 	 */
 	private void checkAndSetGrid() {
-		if(!process._booleanGraphicalPropertyForKey(BASIC_PROCESS_EDITOR+"-"+GRID_SIZE_IS_SET, false)) {
-			process.setGridSize(WKFPreferences.getGridSize(),BASIC_PROCESS_EDITOR);
+		if (!process._booleanGraphicalPropertyForKey(BASIC_PROCESS_EDITOR + "-" + GRID_SIZE_IS_SET, false)) {
+			process.setGridSize(WKFPreferences.getGridSize(), BASIC_PROCESS_EDITOR);
 			process.setIsAlignedOnGrid(WKFPreferences.getAlignOnGrid(), BASIC_PROCESS_EDITOR);
-			process._setGraphicalPropertyForKey(true,BASIC_PROCESS_EDITOR+"-"+GRID_SIZE_IS_SET);
+			process._setGraphicalPropertyForKey(true, BASIC_PROCESS_EDITOR + "-" + GRID_SIZE_IS_SET);
 		}
 	}
 
 	public FGESteppedDimensionConstraint getDimensionConstraintsForObject(WKFObjectGR<?> gr) {
-		if (gr.getContainerGraphicalRepresentation()==this) {
+		if (gr.getContainerGraphicalRepresentation() == this) {
 			if (isAlignedOnGrid()) {
 				if (gr.supportAlignOnGrid()) {
 					if (gr.supportResizeToGrid()) {
@@ -207,27 +208,27 @@ public class ProcessGraphicalRepresentation extends DrawingGraphicalRepresentati
 
 	@Override
 	public double getWidth() {
-		return process.getWidth(BASIC_PROCESS_EDITOR,PROCESS_DEFAULT_WIDTH);
+		return process.getWidth(BASIC_PROCESS_EDITOR, PROCESS_DEFAULT_WIDTH);
 	}
 
 	@Override
 	public double getHeight() {
-		return process.getHeight(BASIC_PROCESS_EDITOR,PROCESS_DEFAULT_HEIGHT);
+		return process.getHeight(BASIC_PROCESS_EDITOR, PROCESS_DEFAULT_HEIGHT);
 	}
 
 	@Override
 	public void setWidth(double value) {
-		process.setWidth(value,BASIC_PROCESS_EDITOR);
+		process.setWidth(value, BASIC_PROCESS_EDITOR);
 	}
 
 	@Override
 	public void setHeight(double value) {
-		process.setHeight(value,BASIC_PROCESS_EDITOR);
+		process.setHeight(value, BASIC_PROCESS_EDITOR);
 	}
 
 	@Override
 	public String toString() {
-		return "Graphical representation of "+process;
+		return "Graphical representation of " + process;
 	}
 
 	public boolean getShowGrid() {
@@ -238,13 +239,12 @@ public class ProcessGraphicalRepresentation extends DrawingGraphicalRepresentati
 		this.showGrid = showGrid;
 		notifyDrawingNeedsToBeRedrawn();
 	}
-	
-	public void updateAllEdgeLayers()
-	{
+
+	public void updateAllEdgeLayers() {
 		for (GraphicalRepresentation<?> processChild : getContainedGraphicalRepresentations()) {
-			if (processChild instanceof WKFConnectorGR<?>) ((WKFConnectorGR<?>)processChild).updateLayer();
+			if (processChild instanceof WKFConnectorGR<?>)
+				((WKFConnectorGR<?>) processChild).updateLayer();
 		}
-		
+
 	}
 }
-

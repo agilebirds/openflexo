@@ -26,14 +26,14 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoProperty;
 
-
 public class AddFlexoProperty extends FlexoAction<AddFlexoProperty, FlexoModelObject, FlexoModelObject> {
 
-	public static final FlexoActionType<AddFlexoProperty, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<AddFlexoProperty, FlexoModelObject, FlexoModelObject>("add_flexo_property") {
+	public static final FlexoActionType<AddFlexoProperty, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<AddFlexoProperty, FlexoModelObject, FlexoModelObject>(
+			"add_flexo_property") {
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return object!=null;
+			return object != null;
 		}
 
 		@Override
@@ -43,37 +43,37 @@ public class AddFlexoProperty extends FlexoAction<AddFlexoProperty, FlexoModelOb
 
 		@Override
 		public AddFlexoProperty makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
-			return new AddFlexoProperty(focusedObject, globalSelection,editor);
+			return new AddFlexoProperty(focusedObject, globalSelection, editor);
 		}
-		
+
 	};
-	
+
 	static {
 		FlexoModelObject.addActionForClass(actionType, FlexoModelObject.class);
 	}
-	
+
 	private String name;
 	private String value;
-	
+
 	private boolean insertSorted = false;
-	
+
 	private FlexoProperty createdProperty;
-	
+
 	public AddFlexoProperty(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
-		super(actionType,focusedObject,globalSelection,editor);
+		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
 	protected void doAction(Object context) throws FlexoException {
-		if (getFocusedObject()!=null) {
-			createdProperty = new FlexoProperty(getFocusedObject().getProject(),getFocusedObject());
-			if (getName()!=null)
+		if (getFocusedObject() != null) {
+			createdProperty = new FlexoProperty(getFocusedObject().getProject(), getFocusedObject());
+			if (getName() != null)
 				createdProperty.setName(getName());
 			else
 				createdProperty.setName(getFocusedObject().getNextPropertyName());
-			if (getValue()!=null)
+			if (getValue() != null)
 				createdProperty.setValue(getValue());
-			getFocusedObject().addToCustomProperties(createdProperty,isInsertSorted());
+			getFocusedObject().addToCustomProperties(createdProperty, isInsertSorted());
 		}
 	}
 

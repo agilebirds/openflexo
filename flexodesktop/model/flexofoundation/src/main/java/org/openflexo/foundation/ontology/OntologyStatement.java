@@ -30,79 +30,70 @@ import com.hp.hpl.jena.rdf.model.Statement;
 public abstract class OntologyStatement extends AbstractOntologyObject implements InspectableObject {
 
 	private static final Logger logger = Logger.getLogger(OntologyStatement.class.getPackage().getName());
-	
+
 	private final OntologyObject _subject;
-	
+
 	private final Statement _statement;
-	
-	public OntologyStatement(OntologyObject subject, Statement s)
-	{
+
+	public OntologyStatement(OntologyObject subject, Statement s) {
 		super();
 		_subject = subject;
 		_statement = s;
-		
-		 if (!s.getSubject().equals(_subject.getOntResource())) {
-			 logger.warning("Inconsistant data: subject is not "+this);
-		 }
+
+		if (!s.getSubject().equals(_subject.getOntResource())) {
+			logger.warning("Inconsistant data: subject is not " + this);
+		}
 	}
-	
+
 	@Override
-	public void delete()
-	{
+	public void delete() {
 		if ((getSubject() != null) && (getStatement() != null)) {
 			getSubject().getFlexoOntology().getOntModel().remove(getStatement());
 			getSubject().update();
 		}
 		super.delete();
 	}
-	
+
 	@Override
-	public FlexoOntology getFlexoOntology() 
-	{
+	public FlexoOntology getFlexoOntology() {
 		if (_subject != null) {
 			return _subject.getFlexoOntology();
 		}
 		return null;
 	}
-	
+
 	@Override
-	public FlexoProject getProject()
-	{
+	public FlexoProject getProject() {
 		if (_subject != null) {
 			return _subject.getProject();
 		}
 		return null;
 	}
 
-	public OntologyObject getSubject() 
-	{
+	public OntologyObject getSubject() {
 		return _subject;
 	}
 
-	public Statement getStatement() 
-	{
+	public Statement getStatement() {
 		return _statement;
 	}
-	
+
 	/*public OntologyLibrary getOntologyLibrary()
 	{
 		return getProject().getOntologyLibrary();
 	}*/
 
 	@Override
-	public final String getInspectorName()
-	{
+	public final String getInspectorName() {
 		return Inspectors.VE.ONTOLOGY_STATEMENT_INSPECTOR;
 	}
 
 	@Override
-	public String getDisplayableDescription()
-	{
+	public String getDisplayableDescription() {
 		return toString();
 	}
 
-	public OntologyProperty getPredicate()
-	{
+	public OntologyProperty getPredicate() {
 		return getOntologyLibrary().getProperty(_statement.getPredicate().getURI());
 	}
 }

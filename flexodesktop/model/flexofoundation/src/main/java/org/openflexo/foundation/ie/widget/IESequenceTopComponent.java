@@ -38,148 +38,151 @@ import org.openflexo.foundation.ie.dm.TopComponentRemoved;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 import org.openflexo.logging.FlexoLogger;
-@Deprecated
-public class IESequenceTopComponent extends IESequence<IETopComponent> implements IETopComponent{
 
-   @SuppressWarnings("unused")
-private static final Logger logger = FlexoLogger.getLogger(IESequenceTopComponent.class.getPackage().getName()); 
-    @Deprecated
+@Deprecated
+public class IESequenceTopComponent extends IESequence<IETopComponent> implements IETopComponent {
+
+	@SuppressWarnings("unused")
+	private static final Logger logger = FlexoLogger.getLogger(IESequenceTopComponent.class.getPackage().getName());
+
+	@Deprecated
 	public IESequenceTopComponent(FlexoComponentBuilder builder) {
 		this(builder.woComponent, null, builder.getProject());
-        initializeDeserialization(builder);
+		initializeDeserialization(builder);
 	}
 
 	public IESequenceTopComponent(IEWOComponent woComponent, IEObject parent, FlexoProject prj) {
 		super(woComponent, parent, prj);
 	}
 
-    /**
-     * Overrides getSpecificActionListForThatClass
-     * 
-     * @see org.openflexo.foundation.ie.widget.IEWidget#getSpecificActionListForThatClass()
-     */
-    @Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass()
-    {
-        Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
-        v.add(TopComponentUp.actionType);
-        v.add(TopComponentDown.actionType);
-        return v;
-    }
-    
+	/**
+	 * Overrides getSpecificActionListForThatClass
+	 * 
+	 * @see org.openflexo.foundation.ie.widget.IEWidget#getSpecificActionListForThatClass()
+	 */
 	@Override
-	public void addToInnerWidgets(IETopComponent w){
-		super.addToInnerWidgets(w);
-		
+	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
+		Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
+		v.add(TopComponentUp.actionType);
+		v.add(TopComponentDown.actionType);
+		return v;
 	}
-	
+
+	@Override
+	public void addToInnerWidgets(IETopComponent w) {
+		super.addToInnerWidgets(w);
+
+	}
+
 	/**
 	 * Overrides removeFromInnerWidgets
+	 * 
 	 * @see org.openflexo.foundation.ie.widget.IESequence#removeFromInnerWidgets(org.openflexo.foundation.ie.widget.IWidget, boolean)
 	 */
 	@Override
-	public void removeFromInnerWidgets(IETopComponent w, boolean deleteIfEmpty)
-	{
-	    super.removeFromInnerWidgets(w, deleteIfEmpty);
-        TopComponentRemoved tcr = new TopComponentRemoved(w);
-        setChanged();
-        notifyObservers(tcr);
-        if (getParent() instanceof TopComponentContainer) {
-            ((TopComponentContainer)getParent()).notifyTopComponentRemoved(tcr);
-        }
-        //getWOComponent().getAbstractComponentDefinition().notifyStructureChanged();
+	public void removeFromInnerWidgets(IETopComponent w, boolean deleteIfEmpty) {
+		super.removeFromInnerWidgets(w, deleteIfEmpty);
+		TopComponentRemoved tcr = new TopComponentRemoved(w);
+		setChanged();
+		notifyObservers(tcr);
+		if (getParent() instanceof TopComponentContainer) {
+			((TopComponentContainer) getParent()).notifyTopComponentRemoved(tcr);
+		}
+		// getWOComponent().getAbstractComponentDefinition().notifyStructureChanged();
 	}
-	
+
 	@Override
-	public void insertElementAt(IETopComponent o, int i){
+	public void insertElementAt(IETopComponent o, int i) {
 		super.insertElementAt(o, i);
-        TopComponentInserted tci = new TopComponentInserted(o);
-        setChanged();
-        notifyObservers(tci);
-        if (getParent() instanceof TopComponentContainer) {
-            ((TopComponentContainer)getParent()).notifyTopComponentInserted(tci);
-        }
+		TopComponentInserted tci = new TopComponentInserted(o);
+		setChanged();
+		notifyObservers(tci);
+		if (getParent() instanceof TopComponentContainer) {
+			((TopComponentContainer) getParent()).notifyTopComponentInserted(tci);
+		}
 	}
-	
+
 	@Override
-	public boolean isSubsequence(){
-    	return getParent() instanceof IESequenceTopComponent;
-    }
-	
-	public HTMLListDescriptorCollection getAllHTMLTableList(){
-    	HTMLListDescriptorCollection v = new HTMLListDescriptorCollection();
-        Enumeration en = elements();
-        while (en.hasMoreElements()) {
-            IETopComponent tcc = (IETopComponent) en.nextElement();
-            if (tcc instanceof IEBlocWidget) {
-         	   IEBlocWidget w = (IEBlocWidget) tcc;
-         	   HTMLListDescriptor d = HTMLListDescriptor.createInstanceForBloc(w);
-         	   if (d != null) v.add(d);
-            } else if(tcc instanceof IESequenceTopComponent){
-            	v.addAll(((IESequenceTopComponent)tcc).getAllHTMLTableList());
-            }
-        }
-        return v;
-    }
-    
-    /**
-     * Overrides getAllNonSequenceWidget
-     * @see org.openflexo.foundation.ie.widget.IESequence#getAllNonSequenceWidget()
-     */
-    @Override
-    public Vector<IWidget> getAllNonSequenceWidget()
-    {
-        Vector<IWidget> v = new Vector<IWidget>();
-        Enumeration<IETopComponent> en = elements();
-        while (en.hasMoreElements()) {
-            IETopComponent element = en.nextElement();
-            if (element instanceof IESequenceTab)
-                v.add(element);
-            else
-                v.addAll(element.getAllNonSequenceWidget());
-        }
-        return v;
-    }
-	
-    @Override
-	public Vector<IESequenceTab> getAllTabContainers(){
-    	Vector<IESequenceTab> reply = new Vector<IESequenceTab>();
-    	Enumeration en = elements();
-    	while(en.hasMoreElements()){
-    		IETopComponent top = (IETopComponent)en.nextElement();
-    		if(top instanceof IESequenceTab)reply.add((IESequenceTab)top);
-    		reply.addAll(top.getAllTabContainers());
-    	}
-    	return reply;
-    	
-    }
+	public boolean isSubsequence() {
+		return getParent() instanceof IESequenceTopComponent;
+	}
+
+	public HTMLListDescriptorCollection getAllHTMLTableList() {
+		HTMLListDescriptorCollection v = new HTMLListDescriptorCollection();
+		Enumeration en = elements();
+		while (en.hasMoreElements()) {
+			IETopComponent tcc = (IETopComponent) en.nextElement();
+			if (tcc instanceof IEBlocWidget) {
+				IEBlocWidget w = (IEBlocWidget) tcc;
+				HTMLListDescriptor d = HTMLListDescriptor.createInstanceForBloc(w);
+				if (d != null)
+					v.add(d);
+			} else if (tcc instanceof IESequenceTopComponent) {
+				v.addAll(((IESequenceTopComponent) tcc).getAllHTMLTableList());
+			}
+		}
+		return v;
+	}
+
+	/**
+	 * Overrides getAllNonSequenceWidget
+	 * 
+	 * @see org.openflexo.foundation.ie.widget.IESequence#getAllNonSequenceWidget()
+	 */
+	@Override
+	public Vector<IWidget> getAllNonSequenceWidget() {
+		Vector<IWidget> v = new Vector<IWidget>();
+		Enumeration<IETopComponent> en = elements();
+		while (en.hasMoreElements()) {
+			IETopComponent element = en.nextElement();
+			if (element instanceof IESequenceTab)
+				v.add(element);
+			else
+				v.addAll(element.getAllNonSequenceWidget());
+		}
+		return v;
+	}
+
+	@Override
+	public Vector<IESequenceTab> getAllTabContainers() {
+		Vector<IESequenceTab> reply = new Vector<IESequenceTab>();
+		Enumeration en = elements();
+		while (en.hasMoreElements()) {
+			IETopComponent top = (IETopComponent) en.nextElement();
+			if (top instanceof IESequenceTab)
+				reply.add((IESequenceTab) top);
+			reply.addAll(top.getAllTabContainers());
+		}
+		return reply;
+
+	}
 
 	public Vector<TabComponentDefinition> getAvailableTabs() {
 		Vector<TabComponentDefinition> reply = new Vector();
 		Enumeration<IETopComponent> en = elements();
-		while(en.hasMoreElements()){
+		while (en.hasMoreElements()) {
 			IETopComponent top = en.nextElement();
-			if(top instanceof IESequenceTab){
+			if (top instanceof IESequenceTab) {
 				IESequenceTab w = (IESequenceTab) top;
-                Enumeration en1 = w.getAllTabs().elements();
-                while (en1.hasMoreElements()) {
-                    IETabWidget tab = (IETabWidget) en1.nextElement();
-                    reply.add(tab.getTabComponentDefinition());
-                }
-			}else if(top instanceof IESequenceTopComponent){
-				reply.addAll(((IESequenceTopComponent)top).getAvailableTabs());
+				Enumeration en1 = w.getAllTabs().elements();
+				while (en1.hasMoreElements()) {
+					IETabWidget tab = (IETabWidget) en1.nextElement();
+					reply.add(tab.getTabComponentDefinition());
+				}
+			} else if (top instanceof IESequenceTopComponent) {
+				reply.addAll(((IESequenceTopComponent) top).getAvailableTabs());
 			}
 		}
 		return reply;
 	}
 
-    /**
-     * Overrides getTitle
-     * @see org.openflexo.foundation.ie.IETopComponent#getTitle()
-     */
-    @Override
-	public String getTitle()
-    {
-        return getLabel();
-    }
+	/**
+	 * Overrides getTitle
+	 * 
+	 * @see org.openflexo.foundation.ie.IETopComponent#getTitle()
+	 */
+	@Override
+	public String getTitle() {
+		return getLabel();
+	}
 }

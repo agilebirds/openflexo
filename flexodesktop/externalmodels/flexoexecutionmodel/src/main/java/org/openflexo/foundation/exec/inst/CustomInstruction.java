@@ -26,6 +26,5 @@ public abstract class CustomInstruction extends Instruction implements JavaPrett
 
 	@Override
 	public abstract String toString();
-	
 
 }

@@ -22,19 +22,15 @@ package org.openflexo.cgmodule.view.listener;
 import org.openflexo.cgmodule.controller.GeneratorController;
 import org.openflexo.view.listener.FlexoKeyEventListener;
 
-
 /**
  * @author sguerin
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ *         TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
  */
-public class GeneratorKeyEventListener extends FlexoKeyEventListener
-{
+public class GeneratorKeyEventListener extends FlexoKeyEventListener {
 
-    public GeneratorKeyEventListener(GeneratorController controller)
-    {
-        super(controller);
-    }
+	public GeneratorKeyEventListener(GeneratorController controller) {
+		super(controller);
+	}
 
 }

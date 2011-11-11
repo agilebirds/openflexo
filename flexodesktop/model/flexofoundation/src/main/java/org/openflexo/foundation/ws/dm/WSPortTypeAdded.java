@@ -19,20 +19,16 @@
  */
 package org.openflexo.foundation.ws.dm;
 
+public class WSPortTypeAdded extends WSDataModification {
 
-
-public class WSPortTypeAdded extends WSDataModification
-{
-
-    /**
-     * @param modificationType
-     * @param propertyName
-     * @param oldValue
-     * @param newValue
-     */
-    public WSPortTypeAdded(Object newValue)
-    {
-        super( null, newValue);
-    }
+	/**
+	 * @param modificationType
+	 * @param propertyName
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public WSPortTypeAdded(Object newValue) {
+		super(null, newValue);
+	}
 
 }

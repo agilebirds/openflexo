@@ -21,43 +21,37 @@ package org.openflexo.letparser;
 
 public class CharValue extends Value {
 
-    private char _value;
-    
-    public static CharValue createCharValue(char value)
-    {
-        return new CharValue(value);
-    }
- 
-    public CharValue (char value)
-    {
-        super();
-        _value = value;
-    }
-    
-    @Override
-	public String getStringValue() 
-    {
-        return ""+_value;
-    }
-    
-    @Override
-	public String toString()
-    {
-        return getPrefix()+"Char["+_value+"]";
-    }
-    
-    @Override
-	public String getSerializationValue()
-    {
-        return "$'"+_value+"'";
-    }
+	private char _value;
 
-    @Override
-	public boolean equals (Object obj)
-    {
-        if (obj instanceof CharValue) {
-            return getStringValue().equals(((CharValue)obj).getStringValue());
-        }
-        return super.equals(obj);
-    }
+	public static CharValue createCharValue(char value) {
+		return new CharValue(value);
+	}
+
+	public CharValue(char value) {
+		super();
+		_value = value;
+	}
+
+	@Override
+	public String getStringValue() {
+		return "" + _value;
+	}
+
+	@Override
+	public String toString() {
+		return getPrefix() + "Char[" + _value + "]";
+	}
+
+	@Override
+	public String getSerializationValue() {
+		return "$'" + _value + "'";
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof CharValue) {
+			return getStringValue().equals(((CharValue) obj).getStringValue());
+		}
+		return super.equals(obj);
+	}
 }

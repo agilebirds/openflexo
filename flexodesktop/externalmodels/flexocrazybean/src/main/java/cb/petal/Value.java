@@ -21,45 +21,59 @@ package cb.petal;
 
 /**
  * Values like in (value Text "foo")
- *
+ * 
  * @version $Id: Value.java,v 1.3 2011/09/12 11:46:47 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class Value extends Literal {
-  static final long serialVersionUID=-1364810248783653817L;
+	static final long serialVersionUID = -1364810248783653817L;
 
-  private String        name;
-  private StringLiteral value;
+	private String name;
+	private StringLiteral value;
 
-  public Value(String name, StringLiteral value) {
-    super("value");
-    setValueName(name);
-    setValue(value);
-  }
+	public Value(String name, StringLiteral value) {
+		super("value");
+		setValueName(name);
+		setValue(value);
+	}
 
-  public void   setValueName(String n) { name = n.intern(); }
-  public String getValueName()         { return name; }
-  public void          setValue(StringLiteral v) { value = v; }
-  public StringLiteral getValue()                { return value; }
+	public void setValueName(String n) {
+		name = n.intern();
+	}
 
-  public String getStringValue() { return value.getValue(); }
+	public String getValueName() {
+		return name;
+	}
 
-  @Override
-public String toString() { return "(value " + name + " " + value + ")"; }
-  
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	public void setValue(StringLiteral v) {
+		value = v;
+	}
 
-  @Override
-public java.lang.Object getLiteralValue() {
-    return name + " \"" + value.getLiteralValue() + '"';
-  }
+	public StringLiteral getValue() {
+		return value;
+	}
 
-  @Override
-public boolean equals(java.lang.Object o) {
-    return (o instanceof Value) && (((Value)o).value.equals(this.value)) &&
-      (((Value)o).name.equals(this.name));
-  }
+	public String getStringValue() {
+		return value.getValue();
+	}
+
+	@Override
+	public String toString() {
+		return "(value " + name + " " + value + ")";
+	}
+
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
+
+	@Override
+	public java.lang.Object getLiteralValue() {
+		return name + " \"" + value.getLiteralValue() + '"';
+	}
+
+	@Override
+	public boolean equals(java.lang.Object o) {
+		return (o instanceof Value) && (((Value) o).value.equals(this.value)) && (((Value) o).name.equals(this.name));
+	}
 }

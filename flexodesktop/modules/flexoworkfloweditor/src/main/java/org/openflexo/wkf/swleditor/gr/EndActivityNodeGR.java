@@ -31,7 +31,6 @@ import org.openflexo.foundation.wkf.node.ActivityNode;
 import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-
 public class EndActivityNodeGR extends AbstractActivityNodeGR<ActivityNode> {
 
 	private ForegroundStyle foreground;
@@ -40,9 +39,8 @@ public class EndActivityNodeGR extends AbstractActivityNodeGR<ActivityNode> {
 	private ForegroundStyle painterForeground;
 	private BackgroundStyle painterBackground;
 
-	public EndActivityNodeGR(ActivityNode activityNode, SwimmingLaneRepresentation aDrawing,boolean isInPalet)
-	{
-		super(activityNode, ShapeType.RECTANGLE, aDrawing,isInPalet);
+	public EndActivityNodeGR(ActivityNode activityNode, SwimmingLaneRepresentation aDrawing, boolean isInPalet) {
+		super(activityNode, ShapeType.RECTANGLE, aDrawing, isInPalet);
 
 		// Important: width is different from height here to avoid connector blinking when editing layout
 		// This little difference allows a kind of hysteresis favourizing horizontal layout
@@ -68,8 +66,7 @@ public class EndActivityNodeGR extends AbstractActivityNodeGR<ActivityNode> {
 
 		setShapePainter(new ShapePainter() {
 			@Override
-			public void paintShape(FGEShapeGraphics g)
-			{
+			public void paintShape(FGEShapeGraphics g) {
 				g.useBackgroundStyle(painterBackground);
 				g.fillCircle(0.2, 0.2, 0.6, 0.6);
 			}
@@ -77,23 +74,20 @@ public class EndActivityNodeGR extends AbstractActivityNodeGR<ActivityNode> {
 
 	}
 
-	public ActivityNode getActivityNode()
-	{
+	public ActivityNode getActivityNode() {
 		return getDrawable();
 	}
 
 	@Override
-	public Rectangle getShape()
-	{
-		return (Rectangle)super.getShape();
+	public Rectangle getShape() {
+		return (Rectangle) super.getShape();
 	}
 
 	/**
 	 * Overriden to implement defaut automatic layout
 	 */
 	@Override
-	public double _getDefaultX()
-	{
+	public double _getDefaultX() {
 		return 300;
 	}
 
@@ -101,26 +95,22 @@ public class EndActivityNodeGR extends AbstractActivityNodeGR<ActivityNode> {
 	 * Overriden to implement defaut automatic layout
 	 */
 	@Override
-	public double _getDefaultY()
-	{
+	public double _getDefaultY() {
 		return (getActivityNode().getParentPetriGraph().getIndexForEndNode(getActivityNode()) * 80);
 	}
 
 	@Override
-	public double getDefaultLabelX() 
-	{
+	public double getDefaultLabelX() {
 		if (getModel().hasLabelLocationForContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR))
 			return getModel().getLabelLocation(ProcessEditorConstants.BASIC_PROCESS_EDITOR).getX();
-		return getLeftBorder()+15;
+		return getLeftBorder() + 15;
 	}
 
 	@Override
-	public double getDefaultLabelY() 
-	{
+	public double getDefaultLabelY() {
 		if (getModel().hasLabelLocationForContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR))
 			return getModel().getLabelLocation(ProcessEditorConstants.BASIC_PROCESS_EDITOR).getY();
-		return getTopBorder()+40;
+		return getTopBorder() + 40;
 	}
-
 
 }

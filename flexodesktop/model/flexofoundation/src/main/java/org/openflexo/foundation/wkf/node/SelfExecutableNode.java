@@ -26,21 +26,19 @@ import org.openflexo.foundation.bindings.BindingValue;
 import org.openflexo.foundation.bindings.WKFBindingDefinition;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public interface SelfExecutableNode
-{
+public interface SelfExecutableNode {
 
-     public WKFBindingDefinition getExecutionPrimitiveBindingDefinition();
+	public WKFBindingDefinition getExecutionPrimitiveBindingDefinition();
 
-    public BindingValue getExecutionPrimitive();
+	public BindingValue getExecutionPrimitive();
 
-    public void setExecutionPrimitive(BindingValue executionPrimitive);
+	public void setExecutionPrimitive(BindingValue executionPrimitive);
 
 	public Vector<BindingAssignment> getAssignments();
 
@@ -51,6 +49,6 @@ public interface SelfExecutableNode
 	public void removeFromAssignments(BindingAssignment assignment);
 
 	public FlexoPetriGraph getExecutionPetriGraph();
-	
+
 	public boolean hasExecutionPetriGraph();
 }

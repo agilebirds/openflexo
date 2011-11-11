@@ -27,33 +27,29 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ws.WSPortType;
 import org.openflexo.foundation.ws.WSPortTypeFolder;
 
+public class WSPortTypeFolderElement extends BrowserElement {
 
-public class WSPortTypeFolderElement extends BrowserElement
-{
+	/**
+	 * @param object
+	 * @param elementType
+	 * @param browser
+	 */
+	public WSPortTypeFolderElement(WSPortTypeFolder object, ProjectBrowser browser, BrowserElement parent) {
+		super(object, BrowserElementType.WS_PORTTYPE_FOLDER, browser, parent);
+	}
 
-    /**
-     * @param object
-     * @param elementType
-     * @param browser
-     */
-    public WSPortTypeFolderElement(WSPortTypeFolder object, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(object, BrowserElementType.WS_PORTTYPE_FOLDER, browser, parent);
-    }
+	/**
+	 * Overrides buildChildrenVector
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
+	 */
+	@Override
+	protected void buildChildrenVector() {
+		WSPortTypeFolder list = (WSPortTypeFolder) getObject();
+		Enumeration en = list.getWSPortTypes().elements();
+		while (en.hasMoreElements()) {
 
-    /**
-     * Overrides buildChildrenVector
-     *
-     * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
-     */
-    @Override
-	protected void buildChildrenVector()
-    {
-        WSPortTypeFolder list = (WSPortTypeFolder) getObject();
-        Enumeration en = list.getWSPortTypes().elements();
-        while (en.hasMoreElements()) {
-
-            addToChilds(((WSPortType) en.nextElement()).getServiceInterface());
-        }
-    }
+			addToChilds(((WSPortType) en.nextElement()).getServiceInterface());
+		}
+	}
 }

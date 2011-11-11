@@ -19,17 +19,14 @@
  */
 package org.openflexo.fge.notifications;
 
-
 public class ShapeNeedsToBeRedrawn extends FGENotification {
 
-	public ShapeNeedsToBeRedrawn()
-	{
-		super("repaint",null,null);
+	public ShapeNeedsToBeRedrawn() {
+		super("repaint", null, null);
 	}
-	
+
 	@Override
-	public boolean isModelNotification()
-	{
+	public boolean isModelNotification() {
 		return false;
 	}
 

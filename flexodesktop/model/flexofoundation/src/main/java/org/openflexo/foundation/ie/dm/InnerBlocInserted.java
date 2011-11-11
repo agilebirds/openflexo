@@ -21,11 +21,9 @@ package org.openflexo.foundation.ie.dm;
 
 import org.openflexo.foundation.ie.widget.InnerBlocWidgetInterface;
 
-public class InnerBlocInserted extends IEDataModification
-{
+public class InnerBlocInserted extends IEDataModification {
 
-    public InnerBlocInserted(InnerBlocWidgetInterface insertedHTMLTable)
-    {
-        super(null, insertedHTMLTable);
-    }
+	public InnerBlocInserted(InnerBlocWidgetInterface insertedHTMLTable) {
+		super(null, insertedHTMLTable);
+	}
 }

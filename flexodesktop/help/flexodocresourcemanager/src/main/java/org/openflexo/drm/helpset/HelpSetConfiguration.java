@@ -24,43 +24,35 @@ import java.util.Vector;
 import org.openflexo.drm.DocItemFolder;
 import org.openflexo.drm.Language;
 
-
 public class HelpSetConfiguration {
-    
-    private Language language;
-    private Vector<DocItemFolder> docItemFolders;
-    private String title;
-    private String distributionName;
-    
-     public HelpSetConfiguration(String aTitle, Language aLanguage, String aDistributionName, Vector<DocItemFolder> someDocItemFolders)
-    {
-        super();
-        title = aTitle;
-        language = aLanguage;
-        distributionName = aDistributionName;
-        docItemFolders = someDocItemFolders;
-    }
 
-    public Vector<DocItemFolder> getDocItemFolders() 
-    {
-        return docItemFolders;
-    }
+	private Language language;
+	private Vector<DocItemFolder> docItemFolders;
+	private String title;
+	private String distributionName;
 
-    public Language getLanguage() 
-    {
-        return language;
-    }
+	public HelpSetConfiguration(String aTitle, Language aLanguage, String aDistributionName, Vector<DocItemFolder> someDocItemFolders) {
+		super();
+		title = aTitle;
+		language = aLanguage;
+		distributionName = aDistributionName;
+		docItemFolders = someDocItemFolders;
+	}
 
-    public String getTitle() 
-    {
-        return title;
-    }
+	public Vector<DocItemFolder> getDocItemFolders() {
+		return docItemFolders;
+	}
 
-    public String getDistributionName()
-    {
-        return distributionName;
-    }
+	public Language getLanguage() {
+		return language;
+	}
 
+	public String getTitle() {
+		return title;
+	}
+
+	public String getDistributionName() {
+		return distributionName;
+	}
 
 }
-

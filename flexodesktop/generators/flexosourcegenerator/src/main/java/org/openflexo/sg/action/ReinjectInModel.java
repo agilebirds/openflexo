@@ -22,7 +22,6 @@ package org.openflexo.sg.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
@@ -40,13 +39,12 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.sg.file.SGJavaFile;
 import org.openflexo.sg.generator.ProjectGenerator;
 
-
 public class ReinjectInModel extends MultipleFileGCAction<ReinjectInModel> {
 
 	private static final Logger logger = Logger.getLogger(ReinjectInModel.class.getPackage().getName());
 
-	public static final MultipleFileGCActionType<ReinjectInModel> actionType = new MultipleFileGCActionType<ReinjectInModel>("reinject_in_model", MODEL_MENU, MODEL_GROUP1,
-			FlexoActionType.NORMAL_ACTION_TYPE) {
+	public static final MultipleFileGCActionType<ReinjectInModel> actionType = new MultipleFileGCActionType<ReinjectInModel>(
+			"reinject_in_model", MODEL_MENU, MODEL_GROUP1, FlexoActionType.NORMAL_ACTION_TYPE) {
 		/**
 		 * Factory method
 		 */
@@ -57,7 +55,8 @@ public class ReinjectInModel extends MultipleFileGCAction<ReinjectInModel> {
 
 		@Override
 		protected boolean accept(AbstractCGFile file) {
-			return (file.getResource() != null && file instanceof ModelReinjectableFile && ((ModelReinjectableFile) file).needsModelReinjection());
+			return (file.getResource() != null && file instanceof ModelReinjectableFile && ((ModelReinjectableFile) file)
+					.needsModelReinjection());
 		}
 
 	};
@@ -83,8 +82,9 @@ public class ReinjectInModel extends MultipleFileGCAction<ReinjectInModel> {
 			repository.getProject().save();
 		}
 
-		makeFlexoProgress(FlexoLocalization.localizedForKey("reinjecting_in_model") + " " + getFilesToReinjectInModel().size() + " " + FlexoLocalization.localizedForKey("files") + " "
-				+ FlexoLocalization.localizedForKey("from") + repository.getDirectory().getAbsolutePath(), getFilesToReinjectInModel().size() + 2);
+		makeFlexoProgress(FlexoLocalization.localizedForKey("reinjecting_in_model") + " " + getFilesToReinjectInModel().size() + " "
+				+ FlexoLocalization.localizedForKey("files") + " " + FlexoLocalization.localizedForKey("from")
+				+ repository.getDirectory().getAbsolutePath(), getFilesToReinjectInModel().size() + 2);
 
 		for (AbstractCGFile file : getFilesToReinjectInModel()) {
 			setProgress(FlexoLocalization.localizedForKey("reinjecting_in_model") + " " + file.getFileName());

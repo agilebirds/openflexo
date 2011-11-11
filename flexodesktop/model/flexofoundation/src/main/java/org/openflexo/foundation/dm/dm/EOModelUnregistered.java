@@ -26,11 +26,9 @@ import org.openflexo.foundation.dm.eo.DMEOModel;
  * 
  * @author sguerin
  */
-public class EOModelUnregistered extends DMDataModification
-{
+public class EOModelUnregistered extends DMDataModification {
 
-    public EOModelUnregistered(DMEOModel eoModel)
-    {
-        super(eoModel, null);
-    }
+	public EOModelUnregistered(DMEOModel eoModel) {
+		super(eoModel, null);
+	}
 }

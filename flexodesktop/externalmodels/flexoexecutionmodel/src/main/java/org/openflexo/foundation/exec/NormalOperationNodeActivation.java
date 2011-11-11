@@ -24,22 +24,18 @@ import org.openflexo.antar.Nop;
 import org.openflexo.foundation.wkf.node.FlexoPreCondition;
 import org.openflexo.foundation.wkf.node.OperationNode;
 
-
 public class NormalOperationNodeActivation extends NodeActivation<OperationNode> {
 
-	public NormalOperationNodeActivation(OperationNode node, FlexoPreCondition pre)
-	{
-		super(node,pre);
+	public NormalOperationNodeActivation(OperationNode node, FlexoPreCondition pre) {
+		super(node, pre);
 	}
-	
-	public NormalOperationNodeActivation(OperationNode node)
-	{
+
+	public NormalOperationNodeActivation(OperationNode node) {
 		super(node);
 	}
-	
+
 	@Override
-	public ControlGraph makeSpecificControlGraph(boolean interprocedural) 
-	{
+	public ControlGraph makeSpecificControlGraph(boolean interprocedural) {
 		return new Nop();
 	}
 

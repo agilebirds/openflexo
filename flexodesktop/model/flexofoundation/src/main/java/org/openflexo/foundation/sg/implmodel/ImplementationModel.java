@@ -52,7 +52,10 @@ public class ImplementationModel extends ImplModelObject implements XMLStorageRe
 	private FlexoProject _project;
 	private ImplementationModelResource _resource;
 	private ImplementationModelDefinition _implModelDefinition;
-	private LinkedHashMap<String, TechnologyModuleImplementation> technologyModules = new LinkedHashMap<String, TechnologyModuleImplementation>(); // <Module definition name, implementation>
+	private LinkedHashMap<String, TechnologyModuleImplementation> technologyModules = new LinkedHashMap<String, TechnologyModuleImplementation>(); // <Module
+																																					// definition
+																																					// name,
+																																					// implementation>
 
 	private boolean isAddingModule = false;
 
@@ -194,23 +197,27 @@ public class ImplementationModel extends ImplModelObject implements XMLStorageRe
 	 * @throws TechnologyModuleCompatibilityCheckException
 	 */
 	@SuppressWarnings("unchecked")
-	public void addToTechnologyModules(TechnologyModuleImplementation technologyModuleImplementation) throws TechnologyModuleCompatibilityCheckException {
+	public void addToTechnologyModules(TechnologyModuleImplementation technologyModuleImplementation)
+			throws TechnologyModuleCompatibilityCheckException {
 
 		if (containsTechnologyModule(technologyModuleImplementation.getTechnologyModuleDefinition()))
 			return;
 
 		// Clone the map to restore it in case of compatibility issue
-		LinkedHashMap<String, TechnologyModuleImplementation> clone = (LinkedHashMap<String, TechnologyModuleImplementation>) technologyModules.clone();
+		LinkedHashMap<String, TechnologyModuleImplementation> clone = (LinkedHashMap<String, TechnologyModuleImplementation>) technologyModules
+				.clone();
 
 		boolean currentIsAddingModule = isAddingModule;
 		isAddingModule = true;
 		try {
 			// Add the required modules (addToTechnologyModules will be called at implementation creation)
-			for (TechnologyModuleDefinition requiredModule : technologyModuleImplementation.getTechnologyModuleDefinition().getRequiredModules()) {
+			for (TechnologyModuleDefinition requiredModule : technologyModuleImplementation.getTechnologyModuleDefinition()
+					.getRequiredModules()) {
 				try {
 					requiredModule.createNewImplementation(this);
 				} catch (TechnologyModuleCompatibilityCheckException e) {
-					e.prependMessage("Module '" + requiredModule.getName() + "' is required by module '" + technologyModuleImplementation.getTechnologyModuleDefinition().getName() + "'");
+					e.prependMessage("Module '" + requiredModule.getName() + "' is required by module '"
+							+ technologyModuleImplementation.getTechnologyModuleDefinition().getName() + "'");
 					throw e;
 				}
 			}
@@ -237,8 +244,10 @@ public class ImplementationModel extends ImplModelObject implements XMLStorageRe
 		if (technologyModules.remove(technologyModuleImplementation.getTechnologyModuleDefinition().getName()) != null) {
 
 			// Remove also all dependent modules
-			for (TechnologyModuleImplementation moduleImplementation : new ArrayList<TechnologyModuleImplementation>(technologyModules.values())) {
-				if (moduleImplementation.getTechnologyModuleDefinition().getAllRequiredModules().contains(technologyModuleImplementation.getTechnologyModuleDefinition()))
+			for (TechnologyModuleImplementation moduleImplementation : new ArrayList<TechnologyModuleImplementation>(
+					technologyModules.values())) {
+				if (moduleImplementation.getTechnologyModuleDefinition().getAllRequiredModules()
+						.contains(technologyModuleImplementation.getTechnologyModuleDefinition()))
 					removeFromTechnologyModules(moduleImplementation);
 			}
 
@@ -250,7 +259,8 @@ public class ImplementationModel extends ImplModelObject implements XMLStorageRe
 	/**
 	 * Perform all necessary checks to ensure compatibility between available modules.
 	 * 
-	 * @throws TechnologyModuleCompatibilityCheckException if the check fails
+	 * @throws TechnologyModuleCompatibilityCheckException
+	 *             if the check fails
 	 */
 	public void checkTechnologyModuleCompatibility() throws TechnologyModuleCompatibilityCheckException {
 
@@ -260,7 +270,8 @@ public class ImplementationModel extends ImplModelObject implements XMLStorageRe
 		// 1. Build a map of TechnologyModuleDefinition by layers.
 		Map<TechnologyLayer, Set<TechnologyModuleDefinition>> layerModuleMap = new HashMap<TechnologyLayer, Set<TechnologyModuleDefinition>>();
 		for (TechnologyModuleImplementation technologyModuleImplementation : getTechnologyModules()) {
-			Set<TechnologyModuleDefinition> set = layerModuleMap.get(technologyModuleImplementation.getTechnologyModuleDefinition().getTechnologyLayer());
+			Set<TechnologyModuleDefinition> set = layerModuleMap.get(technologyModuleImplementation.getTechnologyModuleDefinition()
+					.getTechnologyLayer());
 			if (set == null) {
 				set = new HashSet<TechnologyModuleDefinition>();
 				layerModuleMap.put(technologyModuleImplementation.getTechnologyModuleDefinition().getTechnologyLayer(), set);
@@ -274,12 +285,14 @@ public class ImplementationModel extends ImplModelObject implements XMLStorageRe
 			TechnologyModuleDefinition moduleDefinition = implementation.getTechnologyModuleDefinition();
 			Set<TechnologyModuleDefinition> possibleIncompatibleModules = moduleDefinition.getIncompatibleModules();
 
-			if (moduleDefinition.getTechnologyLayer() != TechnologyLayer.MAIN && moduleDefinition.getTechnologyLayer() != TechnologyLayer.TRANSVERSAL)
+			if (moduleDefinition.getTechnologyLayer() != TechnologyLayer.MAIN
+					&& moduleDefinition.getTechnologyLayer() != TechnologyLayer.TRANSVERSAL)
 				possibleIncompatibleModules.addAll(layerModuleMap.get(moduleDefinition.getTechnologyLayer()));
 
 			for (TechnologyModuleDefinition incompatibleModule : possibleIncompatibleModules) {
 				if (incompatibleModule != moduleDefinition && !incompatibleModule.getCompatibleModules().contains(moduleDefinition)
-						&& !incompatibleModule.getRequiredModules().contains(moduleDefinition) && !moduleDefinition.getCompatibleModules().contains(incompatibleModule)
+						&& !incompatibleModule.getRequiredModules().contains(moduleDefinition)
+						&& !moduleDefinition.getCompatibleModules().contains(incompatibleModule)
 						&& !moduleDefinition.getRequiredModules().contains(incompatibleModule))
 					throw new TechnologyModuleCompatibilityCheckException(moduleDefinition, incompatibleModule);
 			}

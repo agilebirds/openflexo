@@ -33,24 +33,24 @@ import javax.swing.text.html.HTMLDocument;
 
 public class InsertTextAction extends StyledEditorKit.StyledTextAction {
 
-    private MetaphaseEditorPanel editorPanel;
-    private String text;
+	private MetaphaseEditorPanel editorPanel;
+	private String text;
 
-    public InsertTextAction(MetaphaseEditorPanel editorPanel, String actionName, String text) {
-        super(actionName);
-        this.editorPanel = editorPanel;
-        this.text = text;
-    }
+	public InsertTextAction(MetaphaseEditorPanel editorPanel, String actionName, String text) {
+		super(actionName);
+		this.editorPanel = editorPanel;
+		this.text = text;
+	}
 
-    public void actionPerformed(ActionEvent ae) {
-        try {
-            JTextPane textPane = editorPanel.getHtmlTextPane();
-            HTMLDocument doc = (HTMLDocument) textPane.getDocument();
-            int pos = textPane.getCaretPosition();
-            doc.insertString(pos, text, null);
-            editorPanel.refreshAfterAction();
-        } catch (BadLocationException e) {
-            throw new MetaphaseEditorException(e.getMessage(), e);
-        }
-    }
+	public void actionPerformed(ActionEvent ae) {
+		try {
+			JTextPane textPane = editorPanel.getHtmlTextPane();
+			HTMLDocument doc = (HTMLDocument) textPane.getDocument();
+			int pos = textPane.getCaretPosition();
+			doc.insertString(pos, text, null);
+			editorPanel.refreshAfterAction();
+		} catch (BadLocationException e) {
+			throw new MetaphaseEditorException(e.getMessage(), e);
+		}
+	}
 }

@@ -33,95 +33,79 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.ProcessFolder;
 
+public class AddSubProcess extends FlexoAction<AddSubProcess, FlexoModelObject, FlexoModelObject> {
 
-public class AddSubProcess extends FlexoAction<AddSubProcess,FlexoModelObject,FlexoModelObject>
-{
+	private static final Logger logger = Logger.getLogger(AddSubProcess.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(AddSubProcess.class.getPackage().getName());
+	public static FlexoActionType<AddSubProcess, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<AddSubProcess, FlexoModelObject, FlexoModelObject>(
+			"add_new_sub_process", FlexoActionType.newMenu, FlexoActionType.newMenuGroup1, FlexoActionType.ADD_ACTION_TYPE) {
 
-    public static FlexoActionType<AddSubProcess,FlexoModelObject,FlexoModelObject> actionType
-    = new FlexoActionType<AddSubProcess,FlexoModelObject,FlexoModelObject> (
-    		"add_new_sub_process",
-    		FlexoActionType.newMenu,
-    		FlexoActionType.newMenuGroup1,
-    		FlexoActionType.ADD_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public AddSubProcess makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+			return new AddSubProcess(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public AddSubProcess makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-        {
-            return new AddSubProcess(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return (object instanceof FlexoProcess && !((FlexoProcess) object).isImported())
+					|| (object instanceof ProcessFolder && !((ProcessFolder) object).getProcessNode().isImported())
+					|| object instanceof FlexoWorkflow;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection)
-        {
-            return (object instanceof FlexoProcess && !((FlexoProcess)object).isImported())|| (object instanceof ProcessFolder && !((ProcessFolder)object).getProcessNode().isImported())|| object instanceof FlexoWorkflow;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return isVisibleForSelection(object, globalSelection);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection)
-        {
-            return isVisibleForSelection(object, globalSelection);
-        }
+	};
 
-    };
+	private String _newProcessName;
+	private FlexoProcess _parentProcess;
+	private FlexoProcess _newProcess;
+	private FlexoProject _project;
 
-    private String _newProcessName;
-    private FlexoProcess _parentProcess;
-    private FlexoProcess _newProcess;
-    private FlexoProject _project;
+	static {
+		FlexoModelObject.addActionForClass(AddSubProcess.actionType, ProcessFolder.class);
+	}
 
-    static {
-    	FlexoModelObject.addActionForClass(AddSubProcess.actionType, ProcessFolder.class);
-    }
+	AddSubProcess(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    AddSubProcess (FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	public void setParentProcess(FlexoProcess parentProcess) {
+		_parentProcess = parentProcess;
+	}
 
-    public void setParentProcess(FlexoProcess parentProcess)
-    {
-        _parentProcess = parentProcess;
-    }
+	public FlexoProcess getParentProcess() {
+		return _parentProcess;
+	}
 
-    public FlexoProcess getParentProcess()
-    {
-        return _parentProcess;
-    }
+	public String getNewProcessName() {
+		return _newProcessName;
+	}
 
-    public String getNewProcessName()
-    {
-        return _newProcessName;
-    }
+	public void setNewProcessName(String newProcessName) {
+		_newProcessName = newProcessName;
+	}
 
-    public void setNewProcessName(String newProcessName)
-    {
-        _newProcessName = newProcessName;
-    }
+	@Override
+	protected void doAction(Object context) throws DuplicateResourceException, InvalidFileNameException {
+		logger.info("Add sub-process");
+		if (getNewProcessName() == null || getNewProcessName().trim().length() == 0)
+			throw new InvalidFileNameException("");
+		if (getFocusedObject() != null) {
+			_project = getFocusedObject().getProject();
+			_newProcess = FlexoProcess.createNewProcess(_project.getFlexoWorkflow(), getParentProcess(), getNewProcessName(), false);
+		} else {
+			logger.warning("Focused object is null !");
+		}
+	}
 
-    @Override
-	protected void doAction(Object context) throws DuplicateResourceException, InvalidFileNameException
-    {
-        logger.info ("Add sub-process");
-        if (getNewProcessName()==null || getNewProcessName().trim().length()==0)
-        	throw new InvalidFileNameException("");
-        if (getFocusedObject() != null) {
-            _project = getFocusedObject().getProject();
-                _newProcess = FlexoProcess.createNewProcess(_project.getFlexoWorkflow(), getParentProcess(), getNewProcessName(), false);
-        }
-        else {
-            logger.warning("Focused object is null !");
-        }
-    }
-
-    public FlexoProcess getNewProcess()
-    {
-        return _newProcess;
-    }
-
+	public FlexoProcess getNewProcess() {
+		return _newProcess;
+	}
 
 }

@@ -30,54 +30,45 @@ import org.openflexo.fps.CVSRepository;
 import org.openflexo.fps.FPSObject;
 import org.openflexo.fps.FlexoAuthentificationException;
 
+public class RemoveCVSRepository extends CVSAction<RemoveCVSRepository, CVSRepository> {
 
-public class RemoveCVSRepository extends CVSAction<RemoveCVSRepository,CVSRepository> 
-{
+	private static final Logger logger = Logger.getLogger(RemoveCVSRepository.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(RemoveCVSRepository.class.getPackage().getName());
+	public static FlexoActionType<RemoveCVSRepository, CVSRepository, FPSObject> actionType = new FlexoActionType<RemoveCVSRepository, CVSRepository, FPSObject>(
+			"remove_CVS_repository", FlexoActionType.defaultGroup, FlexoActionType.DELETE_ACTION_TYPE) {
 
-    public static FlexoActionType<RemoveCVSRepository,CVSRepository,FPSObject> actionType 
-    = new FlexoActionType<RemoveCVSRepository,CVSRepository,FPSObject> 
-    ("remove_CVS_repository",FlexoActionType.defaultGroup,FlexoActionType.DELETE_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public RemoveCVSRepository makeNewAction(CVSRepository focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {
+			return new RemoveCVSRepository(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public RemoveCVSRepository makeNewAction(CVSRepository focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) 
-        {
-            return new RemoveCVSRepository(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(CVSRepository object, Vector<FPSObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(CVSRepository object, Vector<FPSObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(CVSRepository object, Vector<FPSObject> globalSelection) {
+			return (object != null);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(CVSRepository object, Vector<FPSObject> globalSelection) 
-        {
-            return (object != null);
-        }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (actionType, CVSRepository.class);
-    }
- 
-    RemoveCVSRepository (CVSRepository focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor)
-    {
-    	super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-    @Override
-	protected void doAction(Object context) throws IOFlexoException, FlexoAuthentificationException
-    {
-    	logger.info ("RemoveCVSRepository");
-    	getFocusedObject().delete();
-    }
+	static {
+		FlexoModelObject.addActionForClass(actionType, CVSRepository.class);
+	}
 
+	RemoveCVSRepository(CVSRepository focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws IOFlexoException, FlexoAuthentificationException {
+		logger.info("RemoveCVSRepository");
+		getFocusedObject().delete();
+	}
 
 }

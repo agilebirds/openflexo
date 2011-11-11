@@ -31,31 +31,26 @@ import org.openflexo.logging.FlexoLogger;
  * @author sylvain
  * 
  */
-public class ReusableComponentJavaFileResource extends ComponentJavaFileResource<ComponentGenerator>
-{
-    protected static final Logger logger = FlexoLogger.getLogger(ReusableComponentJavaFileResource.class.getPackage().getName());
+public class ReusableComponentJavaFileResource extends ComponentJavaFileResource<ComponentGenerator> {
+	protected static final Logger logger = FlexoLogger.getLogger(ReusableComponentJavaFileResource.class.getPackage().getName());
 
-      /**
-     * @param builder
-     */
-    public ReusableComponentJavaFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
+	/**
+	 * @param builder
+	 */
+	public ReusableComponentJavaFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * @param aProject
-     */
-    public ReusableComponentJavaFileResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
+	/**
+	 * @param aProject
+	 */
+	public ReusableComponentJavaFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-	public SingleWidgetComponentInstance getComponentInstance() 
-	{
+	public SingleWidgetComponentInstance getComponentInstance() {
 		// TODO implements this
 		return null;
 	}
-	
 
 }

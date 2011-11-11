@@ -23,7 +23,6 @@
 // Generated on: 2007.11.06 at 03:26:51 PM CET 
 //
 
-
 package org.xmlsoap.schemas.ws._2004._03.business_process;
 
 import java.util.ArrayList;
@@ -34,11 +33,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for tCorrelationSet complex type.
+ * <p>
+ * Java class for tCorrelationSet complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tCorrelationSet">
@@ -55,66 +55,59 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tCorrelationSet")
-public class TCorrelationSet
-    extends TExtensibleElements
-{
+public class TCorrelationSet extends TExtensibleElements {
 
-    @XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
-    protected List<String> properties;
-    @XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
-    protected String name;
+	@XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
+	protected List<String> properties;
+	@XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
+	protected String name;
 
-    /**
-     * Gets the value of the properties property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the properties property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getProperties().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link String }
-     * 
-     * 
-     */
-    public List<String> getProperties() {
-        if (properties == null) {
-            properties = new ArrayList<String>();
-        }
-        return this.properties;
-    }
+	/**
+	 * Gets the value of the properties property.
+	 * 
+	 * <p>
+	 * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make to the returned list
+	 * will be present inside the JAXB object. This is why there is not a <CODE>set</CODE> method for the properties property.
+	 * 
+	 * <p>
+	 * For example, to add a new item, do as follows:
+	 * 
+	 * <pre>
+	 * getProperties().add(newItem);
+	 * </pre>
+	 * 
+	 * 
+	 * <p>
+	 * Objects of the following type(s) are allowed in the list {@link String }
+	 * 
+	 * 
+	 */
+	public List<String> getProperties() {
+		if (properties == null) {
+			properties = new ArrayList<String>();
+		}
+		return this.properties;
+	}
 
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
+	/**
+	 * Gets the value of the name property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
+	/**
+	 * Sets the value of the name property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setName(String value) {
+		this.name = value;
+	}
 
 }

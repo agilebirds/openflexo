@@ -4,7 +4,7 @@ import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
-@XMLElement(xmlTag="EndNode")
+@XMLElement(xmlTag = "EndNode")
 public interface EndNode extends EventNode {
 
 }

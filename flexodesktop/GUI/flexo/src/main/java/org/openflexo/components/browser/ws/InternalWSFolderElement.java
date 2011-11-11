@@ -27,33 +27,29 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ws.InternalWSFolder;
 import org.openflexo.foundation.ws.WSService;
 
+public class InternalWSFolderElement extends BrowserElement {
 
-public class InternalWSFolderElement extends BrowserElement
-{
+	/**
+	 * @param object
+	 * @param elementType
+	 * @param browser
+	 */
+	public InternalWSFolderElement(InternalWSFolder object, ProjectBrowser browser, BrowserElement parent) {
+		super(object, BrowserElementType.INTERNAL_WS_FOLDER, browser, parent);
+	}
 
-    /**
-     * @param object
-     * @param elementType
-     * @param browser
-     */
-    public InternalWSFolderElement(InternalWSFolder object, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(object, BrowserElementType.INTERNAL_WS_FOLDER, browser, parent);
-    }
+	/**
+	 * Overrides buildChildrenVector
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
+	 */
+	@Override
+	protected void buildChildrenVector() {
+		InternalWSFolder list = (InternalWSFolder) getObject();
+		Enumeration en = list.getInternalWSServices().elements();
+		while (en.hasMoreElements()) {
+			addToChilds((WSService) en.nextElement());
+		}
 
-    /**
-     * Overrides buildChildrenVector
-     *
-     * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
-     */
-    @Override
-	protected void buildChildrenVector()
-    {
-    	InternalWSFolder list = (InternalWSFolder) getObject();
-        Enumeration en = list.getInternalWSServices().elements();
-        while (en.hasMoreElements()) {
-            addToChilds((WSService) en.nextElement());
-        }
-
-    }
+	}
 }

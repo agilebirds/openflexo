@@ -31,30 +31,26 @@ import org.openflexo.logging.FlexoLogger;
  * @deprecated
  */
 @Deprecated
-public class TabLatexFileResource extends ComponentLatexFileResource<TabComponentDefinition>
-{
-    protected static final Logger logger = FlexoLogger.getLogger(TabLatexFileResource.class.getPackage().getName());
+public class TabLatexFileResource extends ComponentLatexFileResource<TabComponentDefinition> {
+	protected static final Logger logger = FlexoLogger.getLogger(TabLatexFileResource.class.getPackage().getName());
 
-    /**
-     * @param builder
-     */
-    public TabLatexFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
+	/**
+	 * @param builder
+	 */
+	public TabLatexFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * @param aProject
-     */
-    public TabLatexFileResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
+	/**
+	 * @param aProject
+	 */
+	public TabLatexFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    @Override
-	protected LatexFile createGeneratedResourceData()
-    {
-        return new LatexFile(getFile(), this);
-    }
+	@Override
+	protected LatexFile createGeneratedResourceData() {
+		return new LatexFile(getFile(), this);
+	}
 
 }

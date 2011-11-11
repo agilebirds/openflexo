@@ -18,6 +18,7 @@
  *
  */
 package org.openflexo.jedit;
+
 /*
  * TextAreaDefaults.java - Encapsulates default values for various settings
  * Copyright (C) 1999 Slava Pestov
@@ -35,15 +36,11 @@ import javax.swing.JPopupMenu;
 
 import org.openflexo.toolbox.Localized;
 
-
 /**
- * Encapsulates default settings for a text area. This can be passed
- * to the constructor once the necessary fields have been filled out.
- * The advantage of doing this over calling lots of set() methods after
- * creating the text area is that this method is faster.
+ * Encapsulates default settings for a text area. This can be passed to the constructor once the necessary fields have been filled out. The
+ * advantage of doing this over calling lots of set() methods after creating the text area is that this method is faster.
  */
-public class TextAreaDefaults
-{
+public class TextAreaDefaults {
 	public InputHandler inputHandler;
 	public SyntaxDocument document;
 	public boolean editable;
@@ -71,10 +68,10 @@ public class TextAreaDefaults
 	// GPO Addition
 	public static JPopupMenu buildMenu() {
 		JPopupMenu popupMenu = new JPopupMenu();
-		popupMenu.add(makeMenu("cut",InputHandler.CUT));
-		popupMenu.add(makeMenu("copy",InputHandler.COPY));
-		popupMenu.add(makeMenu("paste",InputHandler.PASTE));
-		popupMenu.add(makeMenu("delete",InputHandler.DELETE));
+		popupMenu.add(makeMenu("cut", InputHandler.CUT));
+		popupMenu.add(makeMenu("copy", InputHandler.COPY));
+		popupMenu.add(makeMenu("paste", InputHandler.PASTE));
+		popupMenu.add(makeMenu("delete", InputHandler.DELETE));
 		popupMenu.addSeparator();
 		popupMenu.add(makeMenu("select_all", InputHandler.SELECT_ALL));
 		popupMenu.addSeparator();
@@ -87,15 +84,15 @@ public class TextAreaDefaults
 	 * @param cut
 	 * @return
 	 */
-	private static JMenuItem makeMenu(String string, ActionListener actionListener)
-	{
+	private static JMenuItem makeMenu(String string, ActionListener actionListener) {
 		JMenuItem menu = new JMenuItem(Localized.localizedForKey(string));
 		menu.addActionListener(actionListener);
 		return menu;
 	}
+
 	// End of GPO Addition
 
-	public static TextAreaDefaults getNewDefaults(){
+	public static TextAreaDefaults getNewDefaults() {
 		TextAreaDefaults textAreaDefaults = new TextAreaDefaults();
 
 		textAreaDefaults.inputHandler = new DefaultInputHandler();

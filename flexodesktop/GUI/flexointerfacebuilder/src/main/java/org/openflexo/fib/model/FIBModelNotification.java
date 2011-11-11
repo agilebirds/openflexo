@@ -19,39 +19,33 @@
  */
 package org.openflexo.fib.model;
 
-
-public class FIBModelNotification<T extends Object>
-{
+public class FIBModelNotification<T extends Object> {
 	private String attributeName;
 	private T oldValue;
 	private T newValue;
-	
+
 	public FIBModelNotification(String attributeName, T oldValue, T newValue) {
 		super();
 		this.attributeName = attributeName;
 		this.oldValue = oldValue;
 		this.newValue = newValue;
 	}
-	
+
 	@Override
-	public String toString()
-	{
-		return "FIBModelNotification of "+getClass().getSimpleName()+" "+attributeName+" old: "+oldValue+" new: "+newValue;
+	public String toString() {
+		return "FIBModelNotification of " + getClass().getSimpleName() + " " + attributeName + " old: " + oldValue + " new: " + newValue;
 	}
-	
-    public String getAttributeName()
-    {
-    	return attributeName;
-    }
 
-    public T newValue()
-    {
-    	return newValue;
-    }
+	public String getAttributeName() {
+		return attributeName;
+	}
 
-    public T oldValue()
-    {
-    	return oldValue;
-    }
+	public T newValue() {
+		return newValue;
+	}
+
+	public T oldValue() {
+		return oldValue;
+	}
 
 }

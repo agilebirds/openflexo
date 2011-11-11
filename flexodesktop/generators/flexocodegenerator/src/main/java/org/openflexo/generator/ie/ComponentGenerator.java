@@ -46,78 +46,70 @@ import org.openflexo.generator.rm.UtilComponentWOFileResource;
 import org.openflexo.generator.utils.MetaWOGenerator;
 import org.openflexo.logging.FlexoLogger;
 
-
 /**
  * @author gpolet
  * 
  */
-public class ComponentGenerator extends MetaWOGenerator 
-{
+public class ComponentGenerator extends MetaWOGenerator {
 
-    Logger logger = FlexoLogger.getLogger(ComponentGenerator.class.getPackage().getName());
+	Logger logger = FlexoLogger.getLogger(ComponentGenerator.class.getPackage().getName());
 
-    /**
-     * @param aProject
-     */
-    public ComponentGenerator(ProjectGenerator projectGenerator, ComponentDefinition componentDefinition, String componentGeneratedName)
-    {
-        super(projectGenerator,componentDefinition,componentGeneratedName,null);
-    }
+	/**
+	 * @param aProject
+	 */
+	public ComponentGenerator(ProjectGenerator projectGenerator, ComponentDefinition componentDefinition, String componentGeneratedName) {
+		super(projectGenerator, componentDefinition, componentGeneratedName, null);
+	}
 
-    public String getGeneratedComponentName()
-    {
-        if (getComponentDefinition() != null)
-            return getComponentDefinition().getName();
-        return generatedComponentName;
-    }
+	public String getGeneratedComponentName() {
+		if (getComponentDefinition() != null)
+			return getComponentDefinition().getName();
+		return generatedComponentName;
+	}
 
-    public void setGeneratedComponentName(String generatedComponentName)
-    {
-        this.generatedComponentName = generatedComponentName;
-    }
- 
-    /**
-     * Overrides defaultContext
-     * @see org.openflexo.generator.CGGenerator#defaultContext()
-     */
-    @Override
-    protected VelocityContext defaultContext()
-    {
-        VelocityContext vc =  super.defaultContext();
-        if(getComponentDefinition() != null)
-        {
-	        vc.put("component", getComponentDefinition().getWOComponent());
-	        vc.put("componentDefinition", getComponentDefinition());
-	        vc.put("entity", getEntity());
-        }
-        return vc;
-    }
-    
-    /***************************************************************************
-     * Generation *
-     **************************************************************************/
+	public void setGeneratedComponentName(String generatedComponentName) {
+		this.generatedComponentName = generatedComponentName;
+	}
 
-    public boolean isItemOfRepetition(DMProperty prop)
-    {
-    	Enumeration<RepetitionOperator> en = getComponentDefinition().getWOComponent().getAllRepetitionOperator().elements();
-        RepetitionOperator op = null;
-        while (en.hasMoreElements()) {
-        	op = en.nextElement();
-            if (!op.getFetchObjects() && op.getBindingItem()!=null && op.getBindingItem().isProperty(prop))
-                return true;
-        }
-        return false;
-    }
+	/**
+	 * Overrides defaultContext
+	 * 
+	 * @see org.openflexo.generator.CGGenerator#defaultContext()
+	 */
+	@Override
+	protected VelocityContext defaultContext() {
+		VelocityContext vc = super.defaultContext();
+		if (getComponentDefinition() != null) {
+			vc.put("component", getComponentDefinition().getWOComponent());
+			vc.put("componentDefinition", getComponentDefinition());
+			vc.put("entity", getEntity());
+		}
+		return vc;
+	}
 
-    @Override
-	public synchronized void generate(boolean forceRegenerate)
-    {
-    	if (!forceRegenerate && !needsGeneration())
-    		return;
-    	startGeneration();
-        try {
-            VelocityContext vc = defaultContext();
-            String woComponentName = getGeneratedComponentName();
+	/***************************************************************************
+	 * Generation *
+	 **************************************************************************/
+
+	public boolean isItemOfRepetition(DMProperty prop) {
+		Enumeration<RepetitionOperator> en = getComponentDefinition().getWOComponent().getAllRepetitionOperator().elements();
+		RepetitionOperator op = null;
+		while (en.hasMoreElements()) {
+			op = en.nextElement();
+			if (!op.getFetchObjects() && op.getBindingItem() != null && op.getBindingItem().isProperty(prop))
+				return true;
+		}
+		return false;
+	}
+
+	@Override
+	public synchronized void generate(boolean forceRegenerate) {
+		if (!forceRegenerate && !needsGeneration())
+			return;
+		startGeneration();
+		try {
+			VelocityContext vc = defaultContext();
+			String woComponentName = getGeneratedComponentName();
 			long start, end;
 			start = System.currentTimeMillis();
 			String javaCode = merge(getJavaTemplate(), vc);
@@ -129,18 +121,18 @@ public class ComponentGenerator extends MetaWOGenerator
 				logger.info("Generating code for " + woComponentName + " took " + (end - start) + "ms");
 			javaAppendingException = null;
 			try {
-				javaCode = JavaCodeMerger.mergeJavaCode(javaCode,getEntity(),javaResource);
+				javaCode = JavaCodeMerger.mergeJavaCode(javaCode, getEntity(), javaResource);
 			} catch (JavaParseException e) {
 				javaAppendingException = new JavaAppendingException(this, woComponentName, e);
 				logger.warning("Could not parse generated code. Escape java merge.");
 				if (logger.isLoggable(Level.FINE))
-					logger.fine("Obtaining: "+javaCode);
-			} 
-            _javaFormattingException = null;
-            try {
-                javaCode = GeneratorFormatter.formatJavaCode(javaCode, "", getGeneratedComponentName(), this, getProject());
-            } catch (JavaFormattingException javaFormattingException) {
-                _javaFormattingException = javaFormattingException;
+					logger.fine("Obtaining: " + javaCode);
+			}
+			_javaFormattingException = null;
+			try {
+				javaCode = GeneratorFormatter.formatJavaCode(javaCode, "", getGeneratedComponentName(), this, getProject());
+			} catch (JavaFormattingException javaFormattingException) {
+				_javaFormattingException = javaFormattingException;
 			}
 			wodCode = GeneratorFormatter.formatWodCode(wodCode);
 			htmlCode = GeneratorFormatter.formatHTMLCode(htmlCode);
@@ -157,50 +149,48 @@ public class ComponentGenerator extends MetaWOGenerator
 		}
 	}
 
-    public String getJavaTemplate() {
-    	return "Component.java.vm";
-    }
-    
-    public String getWodTemplate() {
-    	return "Component.wod.vm";
-    }
-    
-    public String getHtmlTemplate() {
-    	return "Component.html.vm";
-    }
-    
-    public String getApiTemplate() {
-    	return "Component.api.vm";
-    }
-    
-    protected IEWOComponent getIEWOComponent()
-    {
-        return component.getWOComponent();
-    }
+	public String getJavaTemplate() {
+		return "Component.java.vm";
+	}
 
-    public ComponentDMEntity getComponentEntity() {
-    	return getComponentDefinition().getComponentDMEntity();
-    }
+	public String getWodTemplate() {
+		return "Component.wod.vm";
+	}
 
-    @Override
-	public Logger getGeneratorLogger()
-	{
+	public String getHtmlTemplate() {
+		return "Component.html.vm";
+	}
+
+	public String getApiTemplate() {
+		return "Component.api.vm";
+	}
+
+	protected IEWOComponent getIEWOComponent() {
+		return component.getWOComponent();
+	}
+
+	public ComponentDMEntity getComponentEntity() {
+		return getComponentDefinition().getComponentDMEntity();
+	}
+
+	@Override
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
 	@Override
 	public void rebuildDependanciesForResource(UtilComponentJavaFileResource java) {
-		
+
 	}
 
 	@Override
 	public void rebuildDependanciesForResource(UtilComponentWOFileResource wo) {
-		
+
 	}
 
 	@Override
 	public void rebuildDependanciesForResource(UtilComponentAPIFileResource api) {
-		
+
 	}
-	
+
 }

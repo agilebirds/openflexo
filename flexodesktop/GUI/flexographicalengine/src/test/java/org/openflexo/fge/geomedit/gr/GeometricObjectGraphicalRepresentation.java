@@ -31,48 +31,42 @@ import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.BackgroundStyle.Texture.TextureType;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
-public class GeometricObjectGraphicalRepresentation<A extends FGEArea,G extends GeometricObject<A>> 
-extends GeometricGraphicalRepresentation<G> implements XMLSerializable 
-{
+public class GeometricObjectGraphicalRepresentation<A extends FGEArea, G extends GeometricObject<A>> extends
+		GeometricGraphicalRepresentation<G> implements XMLSerializable {
 	// Called for LOAD
-	public GeometricObjectGraphicalRepresentation(GeomEditBuilder builder)
-	{
-		this(null,builder.drawing);
+	public GeometricObjectGraphicalRepresentation(GeomEditBuilder builder) {
+		this(null, builder.drawing);
 		initializeDeserialization();
 	}
-	
-	public GeometricObjectGraphicalRepresentation(G object, GeometricDrawing aDrawing)
-	{
+
+	public GeometricObjectGraphicalRepresentation(G object, GeometricDrawing aDrawing) {
 		super(/*object.getGeometricObject()*/null, object, aDrawing);
 		setBackground(BackgroundStyle.makeTexturedBackground(TextureType.TEXTURE1, Color.RED, Color.WHITE));
 		addToMouseClickControls(new ShowContextualMenuControl());
 	}
-	
+
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return getDrawable().getInspectorName();
 	}
-	
+
 	/*@Override
 	public G getDrawable() {
 		// TODO Auto-generated method stub
 		return super.getDrawable();
 	}*/
-	
+
 	@Override
-	public A getGeometricObject()
-	{
+	public A getGeometricObject() {
 		if (getDrawable() != null)
 			return getDrawable().getGeometricObject();
 		return null;
 	}
 
 	@Override
-	public String getText()
-	{
-		if (!getDisplayLabel()) return null;
+	public String getText() {
+		if (!getDisplayLabel())
+			return null;
 		if (getDrawable() != null)
 			return getDrawable().name;
 		return super.getText();
@@ -80,14 +74,12 @@ extends GeometricGraphicalRepresentation<G> implements XMLSerializable
 
 	private boolean displayLabel;
 
-	public boolean getDisplayLabel()
-	{
+	public boolean getDisplayLabel() {
 		return displayLabel;
 	}
 
-	public void setDisplayLabel(boolean aFlag)
-	{
+	public void setDisplayLabel(boolean aFlag) {
 		displayLabel = aFlag;
 	}
-	
+
 }

@@ -21,28 +21,25 @@
 package org.openflexo.xmlcode.examples.example2;
 
 /**
- * Class <code>ReggaeAlbum</code> is intented to represent a reggae album (to
- * show an inheritance example).
+ * Class <code>ReggaeAlbum</code> is intented to represent a reggae album (to show an inheritance example).
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  */
-public class ReggaeAlbum extends Album
-{
+public class ReggaeAlbum extends Album {
 
-    @Override
-	public String toString()
-    {
+	@Override
+	public String toString() {
 
-        String returnedString = "ReggaeAlbum (id=" + articleId + ", price=" + price + ", title=" + title + ", author=" + author + ", description="
-                + description + ", date=";
-        if (dateReleased != null) {
-            returnedString += dateReleased.toString();
-        } else {
-            returnedString += "null";
-        }
+		String returnedString = "ReggaeAlbum (id=" + articleId + ", price=" + price + ", title=" + title + ", author=" + author
+				+ ", description=" + description + ", date=";
+		if (dateReleased != null) {
+			returnedString += dateReleased.toString();
+		} else {
+			returnedString += "null";
+		}
 
-        returnedString += ")";
-        return returnedString;
-    }
+		returnedString += ")";
+		return returnedString;
+	}
 
 }

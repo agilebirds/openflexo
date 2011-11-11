@@ -30,9 +30,8 @@ import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
-
-public abstract class WKFConnectorGR<O> extends ConnectorGraphicalRepresentation<O>
-implements GraphicalFlexoObserver, ProcessEditorConstants {
+public abstract class WKFConnectorGR<O> extends ConnectorGraphicalRepresentation<O> implements GraphicalFlexoObserver,
+		ProcessEditorConstants {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(WKFConnectorGR.class.getPackage().getName());
@@ -42,65 +41,49 @@ implements GraphicalFlexoObserver, ProcessEditorConstants {
 	private WKFObjectGR<? extends WKFObject> startObjectGR;
 	private WKFObjectGR<? extends WKFObject> endObjectGR;
 
-	public WKFConnectorGR(
-			ConnectorType aConnectorType,
-			WKFObject startObject,
-			WKFObject endObject,
-			O aDrawable,
-			ProcessRepresentation aDrawing)
-	{
-		super(aConnectorType,
-				getGraphicalRepresentation(startObject,aDrawing),
-				getGraphicalRepresentation(endObject,aDrawing),
-				aDrawable,
-				aDrawing);
+	public WKFConnectorGR(ConnectorType aConnectorType, WKFObject startObject, WKFObject endObject, O aDrawable,
+			ProcessRepresentation aDrawing) {
+		super(aConnectorType, getGraphicalRepresentation(startObject, aDrawing), getGraphicalRepresentation(endObject, aDrawing),
+				aDrawable, aDrawing);
 		this.startObject = startObject;
 		this.endObject = endObject;
 		updatePropertiesFromWKFPreferences();
 	}
 
-	public O getModel()
-	{
+	public O getModel() {
 		return getDrawable();
 	}
 
 	@Override
-	public ProcessRepresentation getDrawing()
-	{
-		return (ProcessRepresentation)super.getDrawing();
+	public ProcessRepresentation getDrawing() {
+		return (ProcessRepresentation) super.getDrawing();
 	}
 
 	public abstract void updatePropertiesFromWKFPreferences();
 
-	protected static <O extends WKFObject> WKFObjectGR<? extends O> getGraphicalRepresentation(O obj, ProcessRepresentation drawing)
-	{
-		return (WKFObjectGR<? extends O>)drawing.getGraphicalRepresentation(obj);
+	protected static <O extends WKFObject> WKFObjectGR<? extends O> getGraphicalRepresentation(O obj, ProcessRepresentation drawing) {
+		return (WKFObjectGR<? extends O>) drawing.getGraphicalRepresentation(obj);
 	}
 
 	/**
 	 * Bug 1007430
 	 * 
-	 * We have here to implement a very subtle scheme.
-	 * It may happen that an edge relies two nodes, with one node beeing
-	 * hidden by the container of other node. This is functionnaly correct
-	 * but may lead to some graphical misunderstanding.
+	 * We have here to implement a very subtle scheme. It may happen that an edge relies two nodes, with one node beeing hidden by the
+	 * container of other node. This is functionnaly correct but may lead to some graphical misunderstanding.
 	 * 
-	 * We try here to detect this kind of case, and if we detect that a 
-	 * container shape cover one of the both nodes, we set the layer to
-	 * the minimal of two layers, in order to have the edge BELOW container
+	 * We try here to detect this kind of case, and if we detect that a container shape cover one of the both nodes, we set the layer to the
+	 * minimal of two layers, in order to have the edge BELOW container
 	 * 
 	 * @param startObjGR
 	 * @param endObjGR
 	 * @return
 	 */
-	private int computeBestLayer(ShapeGraphicalRepresentation<?> startObjGR, ShapeGraphicalRepresentation<?> endObjGR)
-	{
+	private int computeBestLayer(ShapeGraphicalRepresentation<?> startObjGR, ShapeGraphicalRepresentation<?> endObjGR) {
 		if (isConnectorFullyVisible(startObjGR, endObjGR)) {
-			return Math.max(startObjGR.getLayer(),endObjGR.getLayer())+1;
-		}
-		else {
+			return Math.max(startObjGR.getLayer(), endObjGR.getLayer()) + 1;
+		} else {
 			return minimalLayerHiding(startObjGR, endObjGR);
-			//return Math.min(startObjGR.getLayer(),endObjGR.getLayer());
+			// return Math.min(startObjGR.getLayer(),endObjGR.getLayer());
 		}
 	}
 
@@ -109,9 +92,8 @@ implements GraphicalFlexoObserver, ProcessEditorConstants {
 	 * 
 	 * @return
 	 */
-	protected boolean isConnectorFullyVisible()
-	{
-		return isConnectorFullyVisible(getStartObject(),getEndObject());
+	protected boolean isConnectorFullyVisible() {
+		return isConnectorFullyVisible(getStartObject(), getEndObject());
 	}
 
 	/**
@@ -121,17 +103,18 @@ implements GraphicalFlexoObserver, ProcessEditorConstants {
 	 * @param endObjGR
 	 * @return
 	 */
-	protected boolean isConnectorFullyVisible(ShapeGraphicalRepresentation<?> startObjGR, ShapeGraphicalRepresentation<?> endObjGR)
-	{
+	protected boolean isConnectorFullyVisible(ShapeGraphicalRepresentation<?> startObjGR, ShapeGraphicalRepresentation<?> endObjGR) {
 		FGEPoint startLocation = getConnector().getStartLocation();
 		FGEPoint endLocation = getConnector().getEndLocation();
-		
-		if (startLocation == null) return true;
-		if (endLocation == null) return true;
 
-		//boolean debug = false;
-		//if (getText() != null && getText().equals("debug")) debug = true;
-		
+		if (startLocation == null)
+			return true;
+		if (endLocation == null)
+			return true;
+
+		// boolean debug = false;
+		// if (getText() != null && getText().equals("debug")) debug = true;
+
 		if (!startObjGR.isPointVisible(startLocation)) {
 			/*if (debug) {
 				logger.info("DEBUG: start location is not visible");
@@ -158,106 +141,98 @@ implements GraphicalFlexoObserver, ProcessEditorConstants {
 			}*/
 			return false;
 		}
-		
+
 		return true;
 	}
 
 	/**
 	 * Bug 1007430, see above
 	 * 
-	 * This method return top-most layer of shape hidding either start 
-	 * location or end location of connector
+	 * This method return top-most layer of shape hidding either start location or end location of connector
 	 * 
 	 * @param startObjGR
 	 * @param endObjGR
 	 * @return
 	 */
-	protected int minimalLayerHiding(ShapeGraphicalRepresentation<?> startObjGR, ShapeGraphicalRepresentation<?> endObjGR)
-	{
+	protected int minimalLayerHiding(ShapeGraphicalRepresentation<?> startObjGR, ShapeGraphicalRepresentation<?> endObjGR) {
 		FGEPoint startLocation = getConnector().getStartLocation();
 		FGEPoint endLocation = getConnector().getEndLocation();
-		
-		if (startLocation == null) return -1;
-		if (endLocation == null) return -1;
+
+		if (startLocation == null)
+			return -1;
+		if (endLocation == null)
+			return -1;
 
 		ShapeGraphicalRepresentation<?> firstHiddingShape = startObjGR.shapeHiding(startLocation);
 		ShapeGraphicalRepresentation<?> secondHiddingShape = endObjGR.shapeHiding(endLocation);
-		
+
 		if (firstHiddingShape == null) {
 			if (secondHiddingShape == null) {
 				return -1;
-			}
-			else {
+			} else {
 				return secondHiddingShape.getLayer();
 			}
-		}
-		else {
+		} else {
 			if (secondHiddingShape == null) {
 				return firstHiddingShape.getLayer();
-			}
-			else {
-				return Math.min(firstHiddingShape.getLayer(),secondHiddingShape.getLayer());
+			} else {
+				return Math.min(firstHiddingShape.getLayer(), secondHiddingShape.getLayer());
 			}
 		}
-		
-	}
 
+	}
 
 	/**
 	 * 
 	 * @param startObjGR
 	 * @param endObjGR
 	 */
-	private void updateLayer(ShapeGraphicalRepresentation<?> startObjGR, ShapeGraphicalRepresentation<?> endObjGR)
-	{
+	private void updateLayer(ShapeGraphicalRepresentation<?> startObjGR, ShapeGraphicalRepresentation<?> endObjGR) {
 		if (startObjGR != null && endObjGR != null && !switchedToSelectionLayer) {
-			setLayer(computeBestLayer(startObjGR,endObjGR));	
+			setLayer(computeBestLayer(startObjGR, endObjGR));
 		}
 	}
 
 	@Override
-	protected void refreshConnector(boolean forceRefresh) 
-	{
+	protected void refreshConnector(boolean forceRefresh) {
 		super.refreshConnector(forceRefresh);
-		updateLayer(getStartObject(),getEndObject());
+		updateLayer(getStartObject(), getEndObject());
 	}
-	
+
 	@Override
-	public WKFObjectGR<? extends WKFObject> getStartObject()
-	{
-		if (startObject == null) return null;
+	public WKFObjectGR<? extends WKFObject> getStartObject() {
+		if (startObject == null)
+			return null;
 		if (startObjectGR == null) {
-			startObjectGR = getGraphicalRepresentation(startObject,getDrawing());
+			startObjectGR = getGraphicalRepresentation(startObject, getDrawing());
 			enableStartObjectObserving(startObjectGR);
-			updateLayer(startObjectGR,endObjectGR);
+			updateLayer(startObjectGR, endObjectGR);
 		}
 		return startObjectGR;
 	}
 
 	@Override
-	public WKFObjectGR<? extends WKFObject> getEndObject()
-	{
-		if (endObject == null) return null;
+	public WKFObjectGR<? extends WKFObject> getEndObject() {
+		if (endObject == null)
+			return null;
 		if (endObjectGR == null) {
-			endObjectGR = getGraphicalRepresentation(endObject,getDrawing());
+			endObjectGR = getGraphicalRepresentation(endObject, getDrawing());
 			enableEndObjectObserving(endObjectGR);
-			updateLayer(startObjectGR,endObjectGR);
+			updateLayer(startObjectGR, endObjectGR);
 		}
 		return endObjectGR;
 	}
 
 	@Override
-	public void notifyObjectHierarchyHasBeenUpdated()
-	{
+	public void notifyObjectHierarchyHasBeenUpdated() {
 		super.notifyObjectHierarchyHasBeenUpdated();
 		if (isConnectorConsistent()) {
-			updateLayer(getStartObject(),getEndObject());
+			updateLayer(getStartObject(), getEndObject());
 			notifyConnectorChanged();
 		}
 	}
 
-	protected void dismissGraphicalRepresentation()
-	{
+	protected void dismissGraphicalRepresentation() {
 		disableStartObjectObserving();
 		disableEndObjectObserving();
 		startObjectGR = null;
@@ -265,30 +240,25 @@ implements GraphicalFlexoObserver, ProcessEditorConstants {
 		getDrawing().invalidateGraphicalObjectsHierarchy(getModel());
 	}
 
-	//private int regularLayer;
+	// private int regularLayer;
 	private boolean switchedToSelectionLayer = false;
 
-	protected void switchToSelectionLayer()
-	{
-		//regularLayer = getLayer();
+	protected void switchToSelectionLayer() {
+		// regularLayer = getLayer();
 		switchedToSelectionLayer = true;
-		setLayer(SELECTION_LAYER+1);
+		setLayer(SELECTION_LAYER + 1);
 	}
 
-	protected void restoreNormalLayer()
-	{
+	protected void restoreNormalLayer() {
 		if (switchedToSelectionLayer) {
 			switchedToSelectionLayer = false;
-			//setLayer(regularLayer);
+			// setLayer(regularLayer);
 		}
 		updateLayer();
 	}
 
-	public void updateLayer()
-	{
-		setLayer(computeBestLayer(getStartObject(),getEndObject()));
+	public void updateLayer() {
+		setLayer(computeBestLayer(getStartObject(), getEndObject()));
 	}
-
-
 
 }

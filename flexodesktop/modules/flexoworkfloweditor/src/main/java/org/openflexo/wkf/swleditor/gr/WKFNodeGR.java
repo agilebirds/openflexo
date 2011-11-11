@@ -32,9 +32,7 @@ import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.swleditor.SWLDrawEdgeControl;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-
-public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O>
-implements GraphicalFlexoObserver {
+public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implements GraphicalFlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(WKFNodeGR.class.getPackage().getName());
 	protected boolean isUpdatingPosition = false;
@@ -47,7 +45,7 @@ implements GraphicalFlexoObserver {
 		if (!getNode().hasLocationForContext(SWIMMING_LANE_EDITOR)) {
 			if (!isRegistered())
 				return 0;
-			return getNode().getX(SWIMMING_LANE_EDITOR,getDefaultX());
+			return getNode().getX(SWIMMING_LANE_EDITOR, getDefaultX());
 		}
 		return getNode().getX(SWIMMING_LANE_EDITOR);
 	}
@@ -55,7 +53,7 @@ implements GraphicalFlexoObserver {
 	@Override
 	public final void setXNoNotification(double posX) {
 		isUpdatingPosition = true;
-		getNode().setX(posX,SWIMMING_LANE_EDITOR);
+		getNode().setX(posX, SWIMMING_LANE_EDITOR);
 		isUpdatingPosition = false;
 	}
 
@@ -64,7 +62,7 @@ implements GraphicalFlexoObserver {
 		if (!getNode().hasLocationForContext(SWIMMING_LANE_EDITOR)) {
 			if (!isRegistered())
 				return 0;
-			return getNode().getY(SWIMMING_LANE_EDITOR,getDefaultY());
+			return getNode().getY(SWIMMING_LANE_EDITOR, getDefaultY());
 		}
 		return getNode().getY(SWIMMING_LANE_EDITOR);
 	}
@@ -72,54 +70,52 @@ implements GraphicalFlexoObserver {
 	@Override
 	public void setYNoNotification(double posY) {
 		isUpdatingPosition = true;
-		getNode().setY(posY,SWIMMING_LANE_EDITOR);
+		getNode().setY(posY, SWIMMING_LANE_EDITOR);
 		isUpdatingPosition = false;
 	}
 
 	@Override
 	public double getAbsoluteTextX() {
 		if (!getNode().hasLabelLocationForContext(SWIMMING_LANE_EDITOR)) {
-			getNode().getLabelX(SWIMMING_LANE_EDITOR,getDefaultLabelX());
+			getNode().getLabelX(SWIMMING_LANE_EDITOR, getDefaultLabelX());
 		}
 		return getNode().getLabelX(SWIMMING_LANE_EDITOR);
 	}
 
 	@Override
 	public void setAbsoluteTextXNoNotification(double posX) {
-		getNode().setLabelX(posX,SWIMMING_LANE_EDITOR);
+		getNode().setLabelX(posX, SWIMMING_LANE_EDITOR);
 	}
 
 	@Override
 	public double getAbsoluteTextY() {
 		if (!getNode().hasLabelLocationForContext(SWIMMING_LANE_EDITOR)) {
-			getNode().getLabelY(SWIMMING_LANE_EDITOR,getDefaultLabelY());
+			getNode().getLabelY(SWIMMING_LANE_EDITOR, getDefaultLabelY());
 		}
 		return getNode().getLabelY(SWIMMING_LANE_EDITOR);
 	}
 
 	@Override
 	public void setAbsoluteTextYNoNotification(double posY) {
-		getNode().setLabelY(posY,SWIMMING_LANE_EDITOR);
+		getNode().setLabelY(posY, SWIMMING_LANE_EDITOR);
 	}
 
 	private boolean isAlreadyDoingLayout = true;
 
-	public WKFNodeGR(O object, ShapeType shapeType, SwimmingLaneRepresentation aDrawing)
-	{
+	public WKFNodeGR(O object, ShapeType shapeType, SwimmingLaneRepresentation aDrawing) {
 		super(object, shapeType, aDrawing);
 		addToMouseDragControls(new SWLDrawEdgeControl());
 	}
 
-	public O getNode()
-	{
+	public O getNode() {
 		return getDrawable();
 	}
 
 	public double getDefaultX() {
 		if (!getDrawing().hasProcessBeenLaidOut())
 			return 0;
-		if (defaultX<0) {
-			doDefaultLayout(_getDefaultX(),_getDefaultY());
+		if (defaultX < 0) {
+			doDefaultLayout(_getDefaultX(), _getDefaultY());
 		}
 		return defaultX;
 	}
@@ -127,8 +123,8 @@ implements GraphicalFlexoObserver {
 	public double getDefaultY() {
 		if (!getDrawing().hasProcessBeenLaidOut())
 			return 0;
-		if (defaultY<0) {
-			doDefaultLayout(_getDefaultX(),_getDefaultY());
+		if (defaultY < 0) {
+			doDefaultLayout(_getDefaultX(), _getDefaultY());
 		}
 		return defaultY;
 	}
@@ -154,11 +150,11 @@ implements GraphicalFlexoObserver {
 		try {
 			if (getContainerGraphicalRepresentation() != null) {
 				doLayoutMethod1();
-				if (defaultX<0 || defaultY<0)
+				if (defaultX < 0 || defaultY < 0)
 					doLayoutMethod2();
-				if (defaultX<0 || defaultY<0)
+				if (defaultX < 0 || defaultY < 0)
 					doLayoutMethod3(x, y);
-				if (defaultX>=0 && defaultY>=0)
+				if (defaultX >= 0 && defaultY >= 0)
 					notifyObjectMoved();
 			}
 		} finally {
@@ -174,8 +170,8 @@ implements GraphicalFlexoObserver {
 	 * Looks for relative position in BPE view on related objects
 	 */
 	protected void doLayoutMethod2() {
-		for(WKFNodeGR<?> nodeGR:getFromInterestingNodeGR()) {
-			double x,y;
+		for (WKFNodeGR<?> nodeGR : getFromInterestingNodeGR()) {
+			double x, y;
 			if (!nodeGR.getModel().hasLocationForContext(SWIMMING_LANE_EDITOR)) {
 				nodeGR.doDefaultLayout(-1, -1);
 				x = nodeGR.defaultX;
@@ -184,14 +180,14 @@ implements GraphicalFlexoObserver {
 				x = nodeGR.getModel().getLocation(SWIMMING_LANE_EDITOR).getX();
 				y = nodeGR.getModel().getLocation(SWIMMING_LANE_EDITOR).getY();
 			}
-			if(x>=0 && y>=0) {
+			if (x >= 0 && y >= 0) {
 				defaultX = x + nodeGR.getWidth() + 30;
 				defaultY = y;
 			}
 		}
 
-		for(WKFNodeGR<?> nodeGR:getToInterestingNodeGR()) {
-			double x,y;
+		for (WKFNodeGR<?> nodeGR : getToInterestingNodeGR()) {
+			double x, y;
 			if (!nodeGR.getModel().hasLocationForContext(SWIMMING_LANE_EDITOR)) {
 				nodeGR.doDefaultLayout(-1, -1);
 				x = nodeGR.defaultX;
@@ -200,7 +196,7 @@ implements GraphicalFlexoObserver {
 				x = nodeGR.getModel().getLocation(SWIMMING_LANE_EDITOR).getX();
 				y = nodeGR.getModel().getLocation(SWIMMING_LANE_EDITOR).getY();
 			}
-			if(x>=0 && y>=0) {
+			if (x >= 0 && y >= 0) {
 				defaultX = x - getWidth() - 30;
 				defaultY = y;
 			}
@@ -224,7 +220,8 @@ implements GraphicalFlexoObserver {
 					if (rgr != this) {
 						if (rgr.hasLocation()) {
 							java.awt.Rectangle viewBounds = gr.getViewBounds(1.0);
-							if (viewBounds.intersects(new java.awt.Rectangle((int)attemptX,(int) attemptY, (int) getWidth(), (int) getHeight()))) {
+							if (viewBounds.intersects(new java.awt.Rectangle((int) attemptX, (int) attemptY, (int) getWidth(),
+									(int) getHeight()))) {
 								// The attempt location intersects with another one, let's move forward
 								found = false;
 								if (viewBounds.x + viewBounds.width + getWidth() > getDrawingGraphicalRepresentation().getWidth()) {
@@ -259,7 +256,7 @@ implements GraphicalFlexoObserver {
 
 	protected Vector<WKFNodeGR<?>> getFromInterestingNodeGR() {
 		Vector<WKFNodeGR<?>> v = new Vector<WKFNodeGR<?>>();
-		for(WKFNode node:getModel().getAllRelatedFromNodes()) {
+		for (WKFNode node : getModel().getAllRelatedFromNodes()) {
 			findSiblingGRFromNodeAndAddToVector(node, v);
 		}
 		return v;
@@ -267,7 +264,7 @@ implements GraphicalFlexoObserver {
 
 	protected Vector<WKFNodeGR<?>> getToInterestingNodeGR() {
 		Vector<WKFNodeGR<?>> v = new Vector<WKFNodeGR<?>>();
-		for(WKFNode node:getModel().getAllRelatedToNodes()) {
+		for (WKFNode node : getModel().getAllRelatedToNodes()) {
 			findSiblingGRFromNodeAndAddToVector(node, v);
 		}
 		return v;
@@ -275,10 +272,10 @@ implements GraphicalFlexoObserver {
 
 	private void findSiblingGRFromNodeAndAddToVector(WKFNode node, Vector<WKFNodeGR<?>> vector) {
 		GraphicalRepresentation<?> gr = getGraphicalRepresentation(node);
-		while (gr!=null && gr.getParentGraphicalRepresentation()!=getParentGraphicalRepresentation()) {
+		while (gr != null && gr.getParentGraphicalRepresentation() != getParentGraphicalRepresentation()) {
 			gr = gr.getParentGraphicalRepresentation();
 		}
-		if(gr!=null && gr instanceof WKFNodeGR<?> && !vector.contains(gr))
+		if (gr != null && gr instanceof WKFNodeGR<?> && !vector.contains(gr))
 			vector.add((WKFNodeGR<?>) gr);
 	}
 

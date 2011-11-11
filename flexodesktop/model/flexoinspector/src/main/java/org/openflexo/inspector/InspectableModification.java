@@ -22,24 +22,21 @@ package org.openflexo.inspector;
 /**
  * @author bmangez
  * 
- * To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
+ *         To change the template for this generated type comment go to Window - Preferences - Java - Code Generation - Code and Comments
  */
-public interface InspectableModification
-{
+public interface InspectableModification {
 
-    public String propertyName();
+	public String propertyName();
 
-    public Object newValue();
+	public Object newValue();
 
-    /**
-     * Returns a flag indicating if this notification should be propagated to the widget
-     * forcing widget to be updating from the model, even if the source of modification
-     * is the inspected widget itself. Typically this value is false, except when a change
-     * will modify the same property itself that should be refreshed.
-     * 
-     * @return
-     */
-    public boolean isReentrant();
-    
+	/**
+	 * Returns a flag indicating if this notification should be propagated to the widget forcing widget to be updating from the model, even
+	 * if the source of modification is the inspected widget itself. Typically this value is false, except when a change will modify the
+	 * same property itself that should be refreshed.
+	 * 
+	 * @return
+	 */
+	public boolean isReentrant();
+
 }

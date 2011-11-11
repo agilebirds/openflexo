@@ -26,20 +26,17 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.cg.templates.CGTemplateObject;
 
-
 public abstract class DGTemplateBrowserElement extends BrowserElement {
 
-    protected static final Logger logger = Logger.getLogger(DGTemplateBrowserElement.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(DGTemplateBrowserElement.class.getPackage().getName());
 
-	public DGTemplateBrowserElement(CGTemplateObject object, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent)
-	{
+	public DGTemplateBrowserElement(CGTemplateObject object, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent) {
 		super(object, elementType, browser, parent);
 	}
-	
+
 	@Override
-	public CGTemplateObject getObject()
-	{
-		return (CGTemplateObject)super.getObject();
+	public CGTemplateObject getObject() {
+		return (CGTemplateObject) super.getObject();
 	}
-	
+
 }

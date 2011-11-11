@@ -23,19 +23,17 @@ import java.lang.reflect.Type;
 
 public class FIBTextArea extends FIBWidget {
 
-	//TODO: handle font
-    public boolean validateOnReturn = false;
-    public Integer columns = null;
-    public Integer rows = null;
-    public String text = null;
- 
-    public FIBTextArea() 
-    {
+	// TODO: handle font
+	public boolean validateOnReturn = false;
+	public Integer columns = null;
+	public Integer rows = null;
+	public String text = null;
+
+	public FIBTextArea() {
 	}
-    
+
 	@Override
-	public Type getDefaultDataClass() 
-	{
+	public Type getDefaultDataClass() {
 		return String.class;
 	}
 

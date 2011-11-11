@@ -27,22 +27,19 @@ import org.openflexo.foundation.dm.DMEntity;
  * @author sguerin
  * 
  */
-public class DMEntityClassNameChanged extends DMAttributeDataModification
-{
+public class DMEntityClassNameChanged extends DMAttributeDataModification {
 
-    public static final String ENTITY_CLASS_NAME_KEY = "entityClassName";
+	public static final String ENTITY_CLASS_NAME_KEY = "entityClassName";
 
-    private DMEntity _dmEntity;
+	private DMEntity _dmEntity;
 
-    public DMEntityClassNameChanged(DMEntity dmEntity, String oldName, String newName)
-    {
-        super(ENTITY_CLASS_NAME_KEY, oldName, newName);
-        _dmEntity = dmEntity;
-    }
+	public DMEntityClassNameChanged(DMEntity dmEntity, String oldName, String newName) {
+		super(ENTITY_CLASS_NAME_KEY, oldName, newName);
+		_dmEntity = dmEntity;
+	}
 
-    public DMEntity getDMEntity()
-    {
-        return _dmEntity;
-    }
+	public DMEntity getDMEntity() {
+		return _dmEntity;
+	}
 
 }

@@ -36,13 +36,12 @@ import org.openflexo.generator.file.AbstractCGFile;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.sg.generator.ProjectGenerator;
 
-
 public class AcceptDiskUpdateAndReinjectInModel extends MultipleFileGCAction<AcceptDiskUpdateAndReinjectInModel> {
 
 	private static final Logger logger = Logger.getLogger(AcceptDiskUpdateAndReinjectInModel.class.getPackage().getName());
 
-	public static final MultipleFileGCActionType<AcceptDiskUpdateAndReinjectInModel> actionType = new MultipleFileGCActionType<AcceptDiskUpdateAndReinjectInModel>("accept_and_reinject",
-			ROUND_TRIP_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
+	public static final MultipleFileGCActionType<AcceptDiskUpdateAndReinjectInModel> actionType = new MultipleFileGCActionType<AcceptDiskUpdateAndReinjectInModel>(
+			"accept_and_reinject", ROUND_TRIP_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 		/**
 		 * Factory method
 		 */
@@ -53,7 +52,8 @@ public class AcceptDiskUpdateAndReinjectInModel extends MultipleFileGCAction<Acc
 
 		@Override
 		protected boolean accept(AbstractCGFile file) {
-			return (file.getResource() != null && file.getGenerationStatus().isDiskModified() && file instanceof ModelReinjectableFile && ((ModelReinjectableFile) file).needsModelReinjection());
+			return (file.getResource() != null && file.getGenerationStatus().isDiskModified() && file instanceof ModelReinjectableFile && ((ModelReinjectableFile) file)
+					.needsModelReinjection());
 		}
 
 	};
@@ -79,8 +79,9 @@ public class AcceptDiskUpdateAndReinjectInModel extends MultipleFileGCAction<Acc
 			repository.getProject().save();
 		}
 
-		makeFlexoProgress(FlexoLocalization.localizedForKey("accepting_and_reinjecting") + " " + getFilesToAccept().size() + " " + FlexoLocalization.localizedForKey("files") + " "
-				+ FlexoLocalization.localizedForKey("from") + repository.getDirectory().getAbsolutePath(), getFilesToAccept().size() + 2);
+		makeFlexoProgress(FlexoLocalization.localizedForKey("accepting_and_reinjecting") + " " + getFilesToAccept().size() + " "
+				+ FlexoLocalization.localizedForKey("files") + " " + FlexoLocalization.localizedForKey("from")
+				+ repository.getDirectory().getAbsolutePath(), getFilesToAccept().size() + 2);
 
 		for (AbstractCGFile file : getFilesToAccept()) {
 			setProgress(FlexoLocalization.localizedForKey("accepting_and_reinjecting") + " " + file.getFileName());
@@ -96,7 +97,8 @@ public class AcceptDiskUpdateAndReinjectInModel extends MultipleFileGCAction<Acc
 		repository.refresh();
 
 		// And now launch reinjection procedure
-		ReinjectInModel reinjectInModelAction = ReinjectInModel.actionType.makeNewEmbeddedAction(getFocusedObject(), getGlobalSelection(), this);
+		ReinjectInModel reinjectInModelAction = ReinjectInModel.actionType.makeNewEmbeddedAction(getFocusedObject(), getGlobalSelection(),
+				this);
 		reinjectInModelAction.setContext(this);
 		reinjectInModelAction.setAskReinjectionContext(getAskReinjectionContext());
 		reinjectInModelAction.setFilesToReinjectInModel(getFilesToAccept());

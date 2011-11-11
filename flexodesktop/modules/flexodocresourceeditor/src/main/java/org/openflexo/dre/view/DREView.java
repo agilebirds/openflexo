@@ -33,63 +33,54 @@ import org.openflexo.selection.SelectionListener;
 import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.SelectionSynchronizedModuleView;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public abstract class DREView<O extends DRMObject> extends CompoundTabularView<O> implements SelectionSynchronizedModuleView<O>, GraphicalFlexoObserver
-{
+public abstract class DREView<O extends DRMObject> extends CompoundTabularView<O> implements SelectionSynchronizedModuleView<O>,
+		GraphicalFlexoObserver {
 
-     public DREView(O object, DREController controller, String title)
-    {
-        super(object,controller,title);
-        object.addObserver(this);
-     }
+	public DREView(O object, DREController controller, String title) {
+		super(object, controller, title);
+		object.addObserver(this);
+	}
 
-    public DREController getDREController()
-    {
-        return (DREController)getController();
-    }
+	public DREController getDREController() {
+		return (DREController) getController();
+	}
 
-    public O getDRMObject()
-    {
-        return getModelObject();
-   }
+	public O getDRMObject() {
+		return getModelObject();
+	}
 
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (dataModification instanceof ObjectDeleted) {
+			if (dataModification.oldValue() == getDRMObject()) {
+				deleteModuleView();
+			}
+		}
+	}
 
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-        if (dataModification instanceof ObjectDeleted) {
-            if (dataModification.oldValue() == getDRMObject()) {
-                deleteModuleView();
-             }
-        }
-    }
-    
-    @Override
-	public O getRepresentedObject()
-    {
-        return getDRMObject();
-    }
-    
-    @Override
-	public void deleteModuleView()
-    {
-        getDREController().removeModuleView(this);   
-    }
+	@Override
+	public O getRepresentedObject() {
+		return getDRMObject();
+	}
 
-    @Override
-	public FlexoPerspective<DRMObject> getPerspective()
-    {
-        return getDREController().DRE_PERSPECTIVE;
-    }
-    
-    @Override
-	public List<SelectionListener> getSelectionListeners(){
+	@Override
+	public void deleteModuleView() {
+		getDREController().removeModuleView(this);
+	}
+
+	@Override
+	public FlexoPerspective<DRMObject> getPerspective() {
+		return getDREController().DRE_PERSPECTIVE;
+	}
+
+	@Override
+	public List<SelectionListener> getSelectionListeners() {
 		Vector<SelectionListener> reply = new Vector<SelectionListener>();
 		reply.add(this);
 		return reply;

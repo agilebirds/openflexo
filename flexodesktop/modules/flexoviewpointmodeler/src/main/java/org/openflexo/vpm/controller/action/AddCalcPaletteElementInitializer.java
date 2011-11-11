@@ -32,7 +32,6 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.vpm.controller.CEDController;
 import org.openflexo.vpm.palette.PaletteElementGR;
 
-
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -43,24 +42,20 @@ public class AddCalcPaletteElementInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddCalcPaletteElementInitializer(CEDControllerActionInitializer actionInitializer)
-	{
-		super(AddPaletteElement.actionType,actionInitializer);
+	AddCalcPaletteElementInitializer(CEDControllerActionInitializer actionInitializer) {
+		super(AddPaletteElement.actionType, actionInitializer);
 	}
 
 	@Override
-	protected CEDControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (CEDControllerActionInitializer)super.getControllerActionInitializer();
+	protected CEDControllerActionInitializer getControllerActionInitializer() {
+		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<AddPaletteElement> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<AddPaletteElement> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddPaletteElement>() {
 			@Override
-			public boolean run(ActionEvent e, AddPaletteElement action)
-			{
+			public boolean run(ActionEvent e, AddPaletteElement action) {
 				/*if (action.getNewElementName() != null && (action.getFocusedObject() != null))
 					return true;*/
 
@@ -71,11 +66,9 @@ public class AddCalcPaletteElementInitializer extends ActionInitializer {
 			}
 		};
 	}
-	
-	protected PaletteElementGR makePaletteElementGraphicalRepresentation(ShapeType st)
-	{
-		final PaletteElementGR gr 
-		= new PaletteElementGR(null,null);
+
+	protected PaletteElementGR makePaletteElementGraphicalRepresentation(ShapeType st) {
+		final PaletteElementGR gr = new PaletteElementGR(null, null);
 		gr.setShapeType(st);
 		gr.setX(100);
 		gr.setY(100);
@@ -90,27 +83,21 @@ public class AddCalcPaletteElementInitializer extends ActionInitializer {
 		gr.setLayer(1);
 		return gr;
 	}
-	
-
 
 	@Override
-	protected FlexoActionFinalizer<AddPaletteElement> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<AddPaletteElement> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddPaletteElement>() {
 			@Override
-			public boolean run(ActionEvent e, AddPaletteElement action)
-			{
-				((CEDController)getController()).getSelectionManager().setSelectedObject(action.getNewElement());
+			public boolean run(ActionEvent e, AddPaletteElement action) {
+				((CEDController) getController()).getSelectionManager().setSelectedObject(action.getNewElement());
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return VEIconLibrary.SHAPE_ICON;
 	}
-
 
 }

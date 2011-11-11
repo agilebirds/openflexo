@@ -24,17 +24,14 @@ import org.openflexo.foundation.validation.ValidationReport;
 public class ModelValidationException extends GenerationException {
 
 	private ValidationReport _validationReport;
-	
-	public ModelValidationException(String message, String localizationKey, ValidationReport validationReport)
-	{
-		super(message,localizationKey);
+
+	public ModelValidationException(String message, String localizationKey, ValidationReport validationReport) {
+		super(message, localizationKey);
 		_validationReport = validationReport;
 	}
 
-	public ValidationReport getValidationReport() 
-	{
+	public ValidationReport getValidationReport() {
 		return _validationReport;
 	}
-	
 
 }

@@ -18,25 +18,26 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents Instantiation_Relationship object
- *
+ * 
  * @version $Id: InstantiationRelationship.java,v 1.3 2011/09/12 11:46:48 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class InstantiationRelationship extends Relationship {
-  public InstantiationRelationship(PetalNode parent, Collection params) {
-    super(parent, "Instantiation_Relationship", params);
-  }
+	public InstantiationRelationship(PetalNode parent, Collection params) {
+		super(parent, "Instantiation_Relationship", params);
+	}
 
-  public InstantiationRelationship() {
-    super("Instantiation_Relationship");
-  }
+	public InstantiationRelationship() {
+		super("Instantiation_Relationship");
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

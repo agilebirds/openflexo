@@ -25,73 +25,65 @@ import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.RMNotification;
 
-
 /**
  * Notify that a ComponentDefinition has been renamed
  * 
  * @author sguerin
  * 
  */
-public class ComponentDeleteRequest extends IEDataModification implements RMNotification
-{
+public class ComponentDeleteRequest extends IEDataModification implements RMNotification {
 
-    public ComponentDefinition component;
-    private Vector<String> warnings;
-    
-    public ComponentDeleteRequest(ComponentDefinition component)
-    {
-        super(component, null);
-        warnings = new Vector<String>();
-        this.component = component;
-    }
+	public ComponentDefinition component;
+	private Vector<String> warnings;
 
-    public boolean hasWarnings(){
-        return warnings.size()>0;
-    }
-    
-    public Vector warnings(){
-        return warnings;
-    }
-    
-    public void addToWarnings(String w){
-        warnings.add(w);
-    }
-    
-    @Override
-	public boolean forceUpdateWhenUnload()
-    {
-        return true;
-    }
+	public ComponentDeleteRequest(ComponentDefinition component) {
+		super(component, null);
+		warnings = new Vector<String>();
+		this.component = component;
+	}
 
-    @Override
-	public boolean isDeepNotification()
-    {
-        return true;
-    }
+	public boolean hasWarnings() {
+		return warnings.size() > 0;
+	}
 
-    @Override
-	public boolean propagateToSynchronizedResource(FlexoResource originResource, FlexoResource targetResource)
-    {
-        if ((originResource == component.getComponentLibrary().getFlexoResource()) /*&& targetResource == component.getComponentResource()*/) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+	public Vector warnings() {
+		return warnings;
+	}
 
-    @Override
-	public boolean propagateToAlteredResource(FlexoResource originResource, FlexoResource targetResource)
-    {
-        if (originResource == component.getComponentResource()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+	public void addToWarnings(String w) {
+		warnings.add(w);
+	}
 
-    @Override
-	public String toString()
-    {
-        return "ComponentDeleteRequest " + component.getComponentName();
-    }
+	@Override
+	public boolean forceUpdateWhenUnload() {
+		return true;
+	}
+
+	@Override
+	public boolean isDeepNotification() {
+		return true;
+	}
+
+	@Override
+	public boolean propagateToSynchronizedResource(FlexoResource originResource, FlexoResource targetResource) {
+		if ((originResource == component.getComponentLibrary().getFlexoResource()) /*&& targetResource == component.getComponentResource()*/) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean propagateToAlteredResource(FlexoResource originResource, FlexoResource targetResource) {
+		if (originResource == component.getComponentResource()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "ComponentDeleteRequest " + component.getComponentName();
+	}
 }

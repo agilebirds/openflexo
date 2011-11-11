@@ -28,45 +28,38 @@ import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class RemoveInheritanceChildItemInitializer extends ActionInitializer {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RemoveInheritanceChildItemInitializer(DREControllerActionInitializer actionInitializer)
-	{
-		super(RemoveInheritanceChildItem.actionType,actionInitializer);
-	}
-	
-	@Override
-	protected DREControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DREControllerActionInitializer)super.getControllerActionInitializer();
-	}
-	
-	@Override
-	protected FlexoActionInitializer<RemoveInheritanceChildItem> getDefaultInitializer() 
-	{
-		return new FlexoActionInitializer<RemoveInheritanceChildItem>() {
-            @Override
-			public boolean run(ActionEvent e, RemoveInheritanceChildItem action)
-            {
-               	return true;
-            }
-        };
+	RemoveInheritanceChildItemInitializer(DREControllerActionInitializer actionInitializer) {
+		super(RemoveInheritanceChildItem.actionType, actionInitializer);
 	}
 
-     @Override
-	protected FlexoActionFinalizer<RemoveInheritanceChildItem> getDefaultFinalizer() 
-	{
+	@Override
+	protected DREControllerActionInitializer getControllerActionInitializer() {
+		return (DREControllerActionInitializer) super.getControllerActionInitializer();
+	}
+
+	@Override
+	protected FlexoActionInitializer<RemoveInheritanceChildItem> getDefaultInitializer() {
+		return new FlexoActionInitializer<RemoveInheritanceChildItem>() {
+			@Override
+			public boolean run(ActionEvent e, RemoveInheritanceChildItem action) {
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoActionFinalizer<RemoveInheritanceChildItem> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RemoveInheritanceChildItem>() {
-            @Override
-			public boolean run(ActionEvent e, RemoveInheritanceChildItem action)
-            {
-               	return true;
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, RemoveInheritanceChildItem action) {
+				return true;
+			}
+		};
 	}
 
 }

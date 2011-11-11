@@ -88,7 +88,8 @@ public class ProjectDocHTMLGenerator extends ProjectDocGenerator {
 		processGenerators = new Hashtable<FlexoProcess, DGJSGenerator<FlexoProcess>>();
 		processFolderGenerators = new Hashtable<ProcessFolder, DGJSGenerator<ProcessFolder>>();
 		rootGenerator = new DGHTMLGenerator<FlexoProject>(this, project, PROJECT_TEMPLATE_NAME);
-		propertiesGenerator = new DGTextGenerator<FlexoWorkflow>(this, project.getWorkflow(), PROPERTIES_TEMPLATE_NAME, HTMLDOC_PROPERTIES_FILE_NAME);
+		propertiesGenerator = new DGTextGenerator<FlexoWorkflow>(this, project.getWorkflow(), PROPERTIES_TEMPLATE_NAME,
+				HTMLDOC_PROPERTIES_FILE_NAME);
 	}
 
 	@Override
@@ -130,7 +131,8 @@ public class ProjectDocHTMLGenerator extends ProjectDocGenerator {
 		resources.add(projectRes);
 
 		// The properties file
-		WorkflowTextFileResource propertiesRes = GeneratedFileResourceFactory.createNewWorkflowTextFileResource(repository, propertiesGenerator);
+		WorkflowTextFileResource propertiesRes = GeneratedFileResourceFactory.createNewWorkflowTextFileResource(repository,
+				propertiesGenerator);
 		resources.add(propertiesRes);
 
 		// A JS file per process
@@ -223,7 +225,8 @@ public class ProjectDocHTMLGenerator extends ProjectDocGenerator {
 	}
 
 	public ProjectHTMLFileResource getProjectDocResource() {
-		return ((ProjectHTMLFileResource) getProject().resourceForKey(ResourceType.HTML_FILE, ProjectHTMLFileResource.nameForRepositoryAndProject(this.getRepository(), getProject())));
+		return ((ProjectHTMLFileResource) getProject().resourceForKey(ResourceType.HTML_FILE,
+				ProjectHTMLFileResource.nameForRepositoryAndProject(this.getRepository(), getProject())));
 	}
 
 	protected long lastLogUpdate;
@@ -299,7 +302,8 @@ public class ProjectDocHTMLGenerator extends ProjectDocGenerator {
 				format = FileFormat.UNKNOWN_BINARY_FILE;
 			}
 
-			returned = new PackagedResourceToCopyGenerator<DGRepository>(this, format, ResourceType.COPIED_FILE, r, getRepository().getResourcesSymbolicDirectory(), relativePath);
+			returned = new PackagedResourceToCopyGenerator<DGRepository>(this, format, ResourceType.COPIED_FILE, r, getRepository()
+					.getResourcesSymbolicDirectory(), relativePath);
 			packagedResourceToCopyGenerator.put(r, returned);
 		}
 		return returned;
@@ -314,7 +318,8 @@ public class ProjectDocHTMLGenerator extends ProjectDocGenerator {
 		try {
 			result.add(templateWithName(HTML_MACRO_LIBRARY_NAME));
 		} catch (TemplateNotFoundException e) {
-			logger.warning("Should include velocity macro template for project generator but template is not found '" + HTML_MACRO_LIBRARY_NAME + "'");
+			logger.warning("Should include velocity macro template for project generator but template is not found '"
+					+ HTML_MACRO_LIBRARY_NAME + "'");
 			e.printStackTrace();
 		}
 		return result;

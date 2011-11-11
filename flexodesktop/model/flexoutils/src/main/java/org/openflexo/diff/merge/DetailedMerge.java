@@ -25,38 +25,35 @@ import org.openflexo.diff.DiffSource;
 public class DetailedMerge extends Merge {
 
 	private MergeChange _change;
-	
-	public DetailedMerge(MergeChange change)
-	{
-		super(new DiffSource(change.getOriginalText(),change.getMerge().getDocumentType().getDelimitingMethod()),	
-				new DiffSource(change.getTokenizedLeftText(),change.getMerge().getDocumentType().getDelimitingMethod()),	
-				new DiffSource(change.getTokenizedRightText(),change.getMerge().getDocumentType().getDelimitingMethod()),
-				change.getMerge().getDocumentType());	
+
+	public DetailedMerge(MergeChange change) {
+		super(new DiffSource(change.getOriginalText(), change.getMerge().getDocumentType().getDelimitingMethod()), new DiffSource(
+				change.getTokenizedLeftText(), change.getMerge().getDocumentType().getDelimitingMethod()), new DiffSource(
+				change.getTokenizedRightText(), change.getMerge().getDocumentType().getDelimitingMethod()), change.getMerge()
+				.getDocumentType());
 		_change = change;
-		//computeChanges();
+		// computeChanges();
 	}
-	
+
 	@Override
-	public DelimitingMethod getDelimitingMethod() 
-	{
+	public DelimitingMethod getDelimitingMethod() {
 		return getDocumentType().getDelimitingMethod();
 	}
 
-	public Merge getParentMerge() 
-	{
-		if (_change != null) return _change.getMerge();
+	public Merge getParentMerge() {
+		if (_change != null)
+			return _change.getMerge();
 		return null;
 	}
 
-	public MergeChange getChange() 
-	{
+	public MergeChange getChange() {
 		return _change;
 	}
 
 	@Override
-	public MergedDocumentType getDocumentType() 
-	{
-		if (getParentMerge() != null)  return getParentMerge().getDocumentType();
+	public MergedDocumentType getDocumentType() {
+		if (getParentMerge() != null)
+			return getParentMerge().getDocumentType();
 		return super.getDocumentType();
 	}
 

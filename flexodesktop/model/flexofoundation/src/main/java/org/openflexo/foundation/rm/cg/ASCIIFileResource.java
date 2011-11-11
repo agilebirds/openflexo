@@ -31,94 +31,82 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.toolbox.FileUtils;
 
-
 /**
  * @author sylvain
  * 
  */
-public abstract class ASCIIFileResource<G extends IFlexoResourceGenerator, F extends CGFile>
-extends CGRepositoryFileResource<ASCIIFile,G,F>
-{
-	
-    private static final Logger logger = Logger.getLogger(ASCIIFileResource.class.getPackage().getName());
+public abstract class ASCIIFileResource<G extends IFlexoResourceGenerator, F extends CGFile> extends
+		CGRepositoryFileResource<ASCIIFile, G, F> {
 
+	private static final Logger logger = Logger.getLogger(ASCIIFileResource.class.getPackage().getName());
 
-	public ASCIIFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
-
-	public ASCIIFileResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
-	
-    @Override
-	protected abstract ASCIIFile createGeneratedResourceData();
-    
-    @Override
-	public boolean isGeneratedResourceDataReadable()
-    {
-        return getFile().exists();
-    }
-
-    @Override
-	public ASCIIFile readGeneratedResourceData() throws LoadGeneratedResourceIOException
-    {
-    	ASCIIFile returned = createGeneratedResourceData();
-    	returned.load();
-     	return returned;
-    }
-
-    public ASCIIFile getASCIIFile()
-    {
-        return getGeneratedResourceData();
-    }
-    
-    public String getCurrentGeneration()
-    {
-    	if ((getGenerator() != null) && (!hasGenerationError())) {
-            if (getGenerator().getGeneratedCode()==null) {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Generator is not null and there are no generation errors but the generated code is null");
-                return null;
-            }
-            
-    		return getGenerator().getGeneratedCode().get(getGenerationResultKey());
-    	}
-    	return null;
-    }
-
-    public abstract String getGenerationResultKey();
-    
-    @Override
-	public void saveEditedVersion(FileContentEditor editor) throws SaveGeneratedResourceIOException
-	{
-		File path = getFile().getParentFile();
-    	
-    	// Creates directory when non existant
-    	if (!path.exists())
-    		path.mkdirs();
-    	
-    	// Save content stored in supplied editor
-    	FileWritingLock lock = null;
-    	try {   		    		
-    		lock = willWriteOnDisk();
-    		FileUtils.saveToFile(getFile(), getEditedVersion(editor)); 		
-    		hasWrittenOnDisk(lock);
-    	} 
-    	
-    	catch (IOException e) 
-    	{
-     		hasWrittenOnDisk(lock);
-			throw new SaveGeneratedResourceIOException(this,e);
-		}
-
- 		getGeneratedResourceData().notifyVersionChangedOnDisk(getEditedVersion(editor));
+	public ASCIIFileResource(FlexoProjectBuilder builder) {
+		super(builder);
 	}
 
-	public String getEditedVersion(FileContentEditor editor)
-	{
+	public ASCIIFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
+
+	@Override
+	protected abstract ASCIIFile createGeneratedResourceData();
+
+	@Override
+	public boolean isGeneratedResourceDataReadable() {
+		return getFile().exists();
+	}
+
+	@Override
+	public ASCIIFile readGeneratedResourceData() throws LoadGeneratedResourceIOException {
+		ASCIIFile returned = createGeneratedResourceData();
+		returned.load();
+		return returned;
+	}
+
+	public ASCIIFile getASCIIFile() {
+		return getGeneratedResourceData();
+	}
+
+	public String getCurrentGeneration() {
+		if ((getGenerator() != null) && (!hasGenerationError())) {
+			if (getGenerator().getGeneratedCode() == null) {
+				if (logger.isLoggable(Level.WARNING))
+					logger.warning("Generator is not null and there are no generation errors but the generated code is null");
+				return null;
+			}
+
+			return getGenerator().getGeneratedCode().get(getGenerationResultKey());
+		}
+		return null;
+	}
+
+	public abstract String getGenerationResultKey();
+
+	@Override
+	public void saveEditedVersion(FileContentEditor editor) throws SaveGeneratedResourceIOException {
+		File path = getFile().getParentFile();
+
+		// Creates directory when non existant
+		if (!path.exists())
+			path.mkdirs();
+
+		// Save content stored in supplied editor
+		FileWritingLock lock = null;
+		try {
+			lock = willWriteOnDisk();
+			FileUtils.saveToFile(getFile(), getEditedVersion(editor));
+			hasWrittenOnDisk(lock);
+		}
+
+		catch (IOException e) {
+			hasWrittenOnDisk(lock);
+			throw new SaveGeneratedResourceIOException(this, e);
+		}
+
+		getGeneratedResourceData().notifyVersionChangedOnDisk(getEditedVersion(editor));
+	}
+
+	public String getEditedVersion(FileContentEditor editor) {
 		return editor.getEditedContentForKey(getGenerationResultKey());
 	}
 

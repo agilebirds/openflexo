@@ -29,32 +29,25 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.wkf.controller.WKFController;
 
-
-public class ConvertIntoLocalRoleInitializer extends ActionInitializer
-{
+public class ConvertIntoLocalRoleInitializer extends ActionInitializer {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	public ConvertIntoLocalRoleInitializer(WKFControllerActionInitializer actionInitializer)
-	{
+	public ConvertIntoLocalRoleInitializer(WKFControllerActionInitializer actionInitializer) {
 		super(ConvertIntoLocalRole.actionType, actionInitializer);
 	}
 
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer()
-	{
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
 		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<ConvertIntoLocalRole> getDefaultInitializer()
-	{
-		return new FlexoActionInitializer<ConvertIntoLocalRole>()
-		{
+	protected FlexoActionInitializer<ConvertIntoLocalRole> getDefaultInitializer() {
+		return new FlexoActionInitializer<ConvertIntoLocalRole>() {
 			@Override
-			public boolean run(ActionEvent e, ConvertIntoLocalRole action)
-			{
+			public boolean run(ActionEvent e, ConvertIntoLocalRole action) {
 				return true;
 			}
 		};
@@ -64,15 +57,12 @@ public class ConvertIntoLocalRoleInitializer extends ActionInitializer
 	public WKFController getController() {
 		return (WKFController) super.getController();
 	}
-	
+
 	@Override
-	protected FlexoActionFinalizer<ConvertIntoLocalRole> getDefaultFinalizer()
-	{
-		return new FlexoActionFinalizer<ConvertIntoLocalRole>()
-		{
+	protected FlexoActionFinalizer<ConvertIntoLocalRole> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<ConvertIntoLocalRole>() {
 			@Override
-			public boolean run(ActionEvent e, ConvertIntoLocalRole action)
-			{
+			public boolean run(ActionEvent e, ConvertIntoLocalRole action) {
 				return true;
 			}
 		};

@@ -23,17 +23,16 @@ import org.openflexo.jedit.JEditTextArea;
 import org.openflexo.jedit.TeXTokenMarker;
 import org.openflexo.toolbox.FontCst;
 
-public class TeXCodeDisplayer extends JEditTextArea{
+public class TeXCodeDisplayer extends JEditTextArea {
 
-	public TeXCodeDisplayer(String text)
-	{
+	public TeXCodeDisplayer(String text) {
 		super();
 		setTokenMarker(new TeXTokenMarker());
 		painter.setEOLMarkersPainted(false);
 		painter.setInvalidLinesPainted(false);
 		setFont(FontCst.CODE_FONT);
 		setEditable(false);
-		//setElectricScroll(1000);
+		// setElectricScroll(1000);
 		setFirstLine(0);
 		setText(text);
 	}

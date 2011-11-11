@@ -31,92 +31,87 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationWarning;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 
-
 /**
- * Represents a 'popup' WOComponent related to a ComponentDefinition.Popup
- * attached to an Operation Node
+ * Represents a 'popup' WOComponent related to a ComponentDefinition.Popup attached to an Operation Node
  * 
  * @author sguerin
  * 
  */
-public final class IEPopupComponent extends IEPageComponent
-{
+public final class IEPopupComponent extends IEPageComponent {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(IEPopupComponent.class.getPackage().getName());
 
-    /**
-     * Constructor invoked during deserialization for IEPopupComponent
-     * 
-     * @param componentDefinition
-     */
-    public IEPopupComponent(FlexoComponentBuilder builder)
-    {
-        super(builder);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor invoked during deserialization for IEPopupComponent
+	 * 
+	 * @param componentDefinition
+	 */
+	public IEPopupComponent(FlexoComponentBuilder builder) {
+		super(builder);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor for IEPopupComponent
-     * 
-     * @param componentDefinition
-     */
-    public IEPopupComponent(PopupComponentDefinition componentDefinition, FlexoProject prj)
-    {
-        super(componentDefinition, prj);
-    }
+	/**
+	 * Default constructor for IEPopupComponent
+	 * 
+	 * @param componentDefinition
+	 */
+	public IEPopupComponent(PopupComponentDefinition componentDefinition, FlexoProject prj) {
+		super(componentDefinition, prj);
+	}
 
-    @Override
-	public PopupComponentDefinition getComponentDefinition()
-    {
-        return (PopupComponentDefinition) super.getComponentDefinition();
-    }
+	@Override
+	public PopupComponentDefinition getComponentDefinition() {
+		return (PopupComponentDefinition) super.getComponentDefinition();
+	}
 
-    @Override
-	public String getInspectorName()
-    {
-        return "PopupComponent.inspector";
-    }
+	@Override
+	public String getInspectorName() {
+		return "PopupComponent.inspector";
+	}
 
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return "Popup:" + getName();
-    }
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "popup_component";
-    }
-    
-    public static class PopupRequiresAConfirmOrCancelButtonRule extends ValidationRule
-    {
-        public PopupRequiresAConfirmOrCancelButtonRule()
-        {
-            super(IEPopupComponent.class, "usually_popups_require_confirm_or_cancel_button");
-        }
+	@Override
+	public String getFullyQualifiedName() {
+		return "Popup:" + getName();
+	}
 
-        @Override
-		public ValidationIssue applyValidation(final Validable object)
-        {
-            final IEPopupComponent popup = (IEPopupComponent) object;
-            if (popup.getName().equals("WDLDateAssistant")) {return null;}
-            boolean found=false;
-            for(IEHyperlinkWidget o:popup.getAllButtonInterface()) {
-            	if (o.getHyperlinkType()==HyperlinkType.CONFIRM) {found=true;}
-            	if (o.getHyperlinkType()==HyperlinkType.CANCEL) {found=true;}
-            }
-            if (!found) {
-                return new ValidationWarning(this, object, "usually_popups_require_confirm_or_cancel_button");
-            }
-            return null;
-        }
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "popup_component";
+	}
 
-    }
+	public static class PopupRequiresAConfirmOrCancelButtonRule extends ValidationRule {
+		public PopupRequiresAConfirmOrCancelButtonRule() {
+			super(IEPopupComponent.class, "usually_popups_require_confirm_or_cancel_button");
+		}
 
-    
+		@Override
+		public ValidationIssue applyValidation(final Validable object) {
+			final IEPopupComponent popup = (IEPopupComponent) object;
+			if (popup.getName().equals("WDLDateAssistant")) {
+				return null;
+			}
+			boolean found = false;
+			for (IEHyperlinkWidget o : popup.getAllButtonInterface()) {
+				if (o.getHyperlinkType() == HyperlinkType.CONFIRM) {
+					found = true;
+				}
+				if (o.getHyperlinkType() == HyperlinkType.CANCEL) {
+					found = true;
+				}
+			}
+			if (!found) {
+				return new ValidationWarning(this, object, "usually_popups_require_confirm_or_cancel_button");
+			}
+			return null;
+		}
+
+	}
+
 }

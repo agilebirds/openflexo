@@ -31,107 +31,86 @@ import org.openflexo.foundation.view.ViewLibraryObject;
 import org.openflexo.foundation.view.ViewFolder;
 import org.openflexo.foundation.view.ViewLibrary;
 
+public class AddViewFolder extends FlexoAction<AddViewFolder, ViewLibraryObject, ViewLibraryObject> {
 
-public class AddViewFolder extends FlexoAction<AddViewFolder,ViewLibraryObject,ViewLibraryObject>
-{
+	private static final Logger logger = Logger.getLogger(AddViewFolder.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(AddViewFolder.class.getPackage().getName());
+	public static FlexoActionType<AddViewFolder, ViewLibraryObject, ViewLibraryObject> actionType = new FlexoActionType<AddViewFolder, ViewLibraryObject, ViewLibraryObject>(
+			"create_view_folder", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
-    public static FlexoActionType<AddViewFolder,ViewLibraryObject,ViewLibraryObject> actionType 
-    = new FlexoActionType<AddViewFolder,ViewLibraryObject,ViewLibraryObject> (
-    		"create_view_folder",
-    		FlexoActionType.newMenu,FlexoActionType.defaultGroup,FlexoActionType.ADD_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public AddViewFolder makeNewAction(ViewLibraryObject focusedObject, Vector<ViewLibraryObject> globalSelection, FlexoEditor editor) {
+			return new AddViewFolder(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public AddViewFolder makeNewAction(ViewLibraryObject focusedObject, Vector<ViewLibraryObject> globalSelection, FlexoEditor editor) 
-        {
-            return new AddViewFolder(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(ViewLibraryObject object, Vector<ViewLibraryObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(ViewLibraryObject object, Vector<ViewLibraryObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(ViewLibraryObject object, Vector<ViewLibraryObject> globalSelection) {
+			return ((object != null) && ((object instanceof ViewFolder) || (object instanceof ViewLibrary)));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(ViewLibraryObject object, Vector<ViewLibraryObject> globalSelection) 
-        {
-            return ((object != null) 
-                    && ((object instanceof ViewFolder)
-                            || (object instanceof ViewLibrary)));
-        }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (AddViewFolder.actionType, ViewLibrary.class);
-        FlexoModelObject.addActionForClass (AddViewFolder.actionType, ViewFolder.class);
-    }
-    
+	};
 
-    private ViewFolder _newFolder;
-    private ViewFolder _parentFolder;
-    private String _newFolderName;
-    
-    AddViewFolder (ViewLibraryObject focusedObject, Vector<ViewLibraryObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	static {
+		FlexoModelObject.addActionForClass(AddViewFolder.actionType, ViewLibrary.class);
+		FlexoModelObject.addActionForClass(AddViewFolder.actionType, ViewFolder.class);
+	}
 
-    @Override
-	protected void doAction(Object context) throws InvalidParametersException
-    {
-        logger.info ("Add shema folder");
-        if (getFocusedObject() != null) {
-            if (getParentFolder() != null) {
-                _newFolder = ViewFolder.createNewFolder(getParentFolder().getShemaLibrary(), getParentFolder(), getNewFolderName());
-            }
-            else {
-            	if (!getFocusedObject().getProject().getFlexoComponentLibrary().hasRootFolder()) {
-            		_parentFolder = ViewFolder.createNewRootFolder(getFocusedObject().getProject().getShemaLibrary());
-            	}
-            	if (getFocusedObject() instanceof ViewFolder) {
-            		_parentFolder = (ViewFolder)getFocusedObject();
-            	}
-            	else {
-            		_parentFolder = getFocusedObject().getProject().getShemaLibrary().getRootFolder();
-            	}
-                 _newFolder = ViewFolder.createNewFolder(getParentFolder().getShemaLibrary(), getParentFolder(), getNewFolderName());
-            }
-        }
-        else {
-        	throw new InvalidParametersException("unable to create shema folder: no focused object supplied");
-        }
-    }
+	private ViewFolder _newFolder;
+	private ViewFolder _parentFolder;
+	private String _newFolderName;
 
-    public String getNewFolderName() 
-    {
-        return _newFolderName;
-    }
+	AddViewFolder(ViewLibraryObject focusedObject, Vector<ViewLibraryObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    public void setNewFolderName(String newFolderName) 
-    {
-        _newFolderName = newFolderName;
-    }
+	@Override
+	protected void doAction(Object context) throws InvalidParametersException {
+		logger.info("Add shema folder");
+		if (getFocusedObject() != null) {
+			if (getParentFolder() != null) {
+				_newFolder = ViewFolder.createNewFolder(getParentFolder().getShemaLibrary(), getParentFolder(), getNewFolderName());
+			} else {
+				if (!getFocusedObject().getProject().getFlexoComponentLibrary().hasRootFolder()) {
+					_parentFolder = ViewFolder.createNewRootFolder(getFocusedObject().getProject().getShemaLibrary());
+				}
+				if (getFocusedObject() instanceof ViewFolder) {
+					_parentFolder = (ViewFolder) getFocusedObject();
+				} else {
+					_parentFolder = getFocusedObject().getProject().getShemaLibrary().getRootFolder();
+				}
+				_newFolder = ViewFolder.createNewFolder(getParentFolder().getShemaLibrary(), getParentFolder(), getNewFolderName());
+			}
+		} else {
+			throw new InvalidParametersException("unable to create shema folder: no focused object supplied");
+		}
+	}
 
-    public ViewFolder getParentFolder()
-    {
-        return _parentFolder;
-    }
+	public String getNewFolderName() {
+		return _newFolderName;
+	}
 
-    public void setParentFolder(ViewFolder parentFolder) 
-    {
-        _parentFolder = parentFolder;
-    }
+	public void setNewFolderName(String newFolderName) {
+		_newFolderName = newFolderName;
+	}
 
-    public ViewFolder getNewFolder() 
-    {
-        return _newFolder;
-    }
+	public ViewFolder getParentFolder() {
+		return _parentFolder;
+	}
 
-    
+	public void setParentFolder(ViewFolder parentFolder) {
+		_parentFolder = parentFolder;
+	}
+
+	public ViewFolder getNewFolder() {
+		return _newFolder;
+	}
+
 }

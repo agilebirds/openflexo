@@ -27,77 +27,59 @@ import org.openflexo.icon.JavaIconLibrary;
 import org.openflexo.javaparser.FJPJavaClass;
 import org.openflexo.javaparser.FJPJavaEntity;
 
-
-public class JavaClassElement extends JavaBrowserElementWithModifiers
-{
-	public JavaClassElement(FJPJavaClass aClass, JavaParserBrowser browser, BrowserElement parent)
-	{
-		super(aClass, BrowserElementType.CLASS, browser,parent);
+public class JavaClassElement extends JavaBrowserElementWithModifiers {
+	public JavaClassElement(FJPJavaClass aClass, JavaParserBrowser browser, BrowserElement parent) {
+		super(aClass, BrowserElementType.CLASS, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 		for (FJPJavaEntity e : getJavaClass().getOrderedChildren()) {
 			addToChilds(e);
 		}
 	}
 
-	public FJPJavaClass getJavaClass()
-	{
-		return (FJPJavaClass)getObject();
+	public FJPJavaClass getJavaClass() {
+		return (FJPJavaClass) getObject();
 	}
 
 	@Override
-	public ImageIcon getBaseIcon()
-	{
+	public ImageIcon getBaseIcon() {
 		if (getJavaClass().isEnum()) {
 			if (getJavaClass().isPublic()) {
 				return JavaIconLibrary.FJP_ENUM_PUBLIC_ICON;
-			}
-			else if (getJavaClass().isProtected()) {
+			} else if (getJavaClass().isProtected()) {
 				return JavaIconLibrary.FJP_ENUM_PROTECTED_ICON;
-			}
-			else if (getJavaClass().isPrivate()) {
+			} else if (getJavaClass().isPrivate()) {
 				return JavaIconLibrary.FJP_ENUM_PRIVATE_ICON;
-			}
-			else {
+			} else {
 				return JavaIconLibrary.FJP_ENUM_DEFAULT_ICON;
 			}
-		}
-		else if (getJavaClass().isInterface()) {
+		} else if (getJavaClass().isInterface()) {
 			if (getJavaClass().isPublic()) {
 				return JavaIconLibrary.FJP_INTERFACE_PUBLIC_ICON;
-			}
-			else if (getJavaClass().isProtected()) {
+			} else if (getJavaClass().isProtected()) {
 				return JavaIconLibrary.FJP_INTERFACE_PROTECTED_ICON;
-			}
-			else if (getJavaClass().isPrivate()) {
+			} else if (getJavaClass().isPrivate()) {
 				return JavaIconLibrary.FJP_INTERFACE_PRIVATE_ICON;
-			}
-			else {
+			} else {
 				return JavaIconLibrary.FJP_INTERFACE_DEFAULT_ICON;
 			}
-		}
-		else {
+		} else {
 			if (getJavaClass().isPublic()) {
 				return JavaIconLibrary.FJP_CLASS_PUBLIC_ICON;
-			}
-			else if (getJavaClass().isProtected()) {
+			} else if (getJavaClass().isProtected()) {
 				return JavaIconLibrary.FJP_CLASS_PROTECTED_ICON;
-			}
-			else if (getJavaClass().isPrivate()) {
+			} else if (getJavaClass().isPrivate()) {
 				return JavaIconLibrary.FJP_CLASS_PRIVATE_ICON;
-			}
-			else {
+			} else {
 				return JavaIconLibrary.FJP_CLASS_DEFAULT_ICON;
 			}
 		}
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return getJavaClass().getName();
 	}
 }

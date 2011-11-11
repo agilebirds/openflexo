@@ -37,137 +37,142 @@ import org.apache.xmlbeans.XmlOptions;
 import org.apache.xmlbeans.impl.schema.MySchemaTypeSystemCompiler;
 import org.openflexo.toolbox.FileResource;
 
-
 public class SchemaTypeExtractor {
-	
+
 	File wsdlFile;
 	String wsdlUrl;
-	//XMLObjects of schemas
+	// XMLObjects of schemas
 	List schemaList;
 	SchemaTypeSystem sts;
 	SchemaTypeLoader stl;
-	
+
 	/**
 	 * used by xml beans for writing generated files..
+	 * 
 	 * @author dvanvyve
-	 *
+	 * 
 	 */
-	public class MyFiler implements Filer{
-		   /**
-	     * Creates a new schema binary file (.xsb) and returns a stream for writing to it.
-	     *
-	     * @param typename fully qualified type name
-	     * @return a stream to write the type to
-	     * @throws IOException
-	     */
-	    @Override
-		public OutputStream createBinaryFile(String typename) throws IOException{
-	    		return new EmptyFileOutputStream();
-	    }
-
-	    /**
-	     * Creates a new binding source file (.java) and returns a writer for it.
-	     *
-	     * @param typename fully qualified type name
-	     * @return a stream to write the type to
-	     * @throws IOException
-	     */
-	    @Override
-		public Writer createSourceFile(String typename) throws IOException{
-	    		return new OutputStreamWriter(new EmptyFileOutputStream());
-	    }
-	}
-	
-	private class EmptyFileOutputStream extends OutputStream
-	{
-		EmptyFileOutputStream(){	
+	public class MyFiler implements Filer {
+		/**
+		 * Creates a new schema binary file (.xsb) and returns a stream for writing to it.
+		 * 
+		 * @param typename
+		 *            fully qualified type name
+		 * @return a stream to write the type to
+		 * @throws IOException
+		 */
+		@Override
+		public OutputStream createBinaryFile(String typename) throws IOException {
+			return new EmptyFileOutputStream();
 		}
+
+		/**
+		 * Creates a new binding source file (.java) and returns a writer for it.
+		 * 
+		 * @param typename
+		 *            fully qualified type name
+		 * @return a stream to write the type to
+		 * @throws IOException
+		 */
+		@Override
+		public Writer createSourceFile(String typename) throws IOException {
+			return new OutputStreamWriter(new EmptyFileOutputStream());
+		}
+	}
+
+	private class EmptyFileOutputStream extends OutputStream {
+		EmptyFileOutputStream() {
+		}
+
 		@Override
 		public void close() throws IOException {
 		}
+
 		@Override
 		public void write(int arg0) throws IOException {
 		}
+
 		@Override
 		public void flush() throws IOException {
 		}
+
 		@Override
 		public void write(byte[] arg0) throws IOException {
 		}
+
 		@Override
 		public void write(byte[] arg0, int arg1, int arg2) throws IOException {
 		}
 	}
-	
-	public SchemaTypeExtractor(String fileName){
-		
+
+	public SchemaTypeExtractor(String fileName) {
+
 		System.out.println("**** TEST testImport");
-		try{
-			
+		try {
+
 			wsdlFile = new File(fileName);
 			wsdlUrl = fileName;
-			
-		    SchemaTypeLoader schemaTypeLoader = null;
-		    XmlObject[] schemaArray =  new XmlObject[]{ XmlObject.Factory.parse(new FileResource("Resources/soapEncoding.xml")) };
-		    XmlOptions opts = new XmlOptions();
-		    opts.setCompileDownloadUrls();
-	        opts.setCompileNoValidation(); // already validated here
-	        WSDL2Java.MyResolver entityResolver = new WSDL2Java.MyResolver();
-		    opts.setEntityResolver(entityResolver);
-		    
-		    //TODO : use my new loadScheam method in WSDL2Java,(working but returns null if an error occurs
-		    // cannot manage to get the error displayed...
-		    /** this is another CORRECT but from modified source way to do it WITH java-ized types**/
-			//test with xmlBeans normal COMPILE
-		    SchemaTypeSystem soapsts = MySchemaTypeSystemCompiler.compile2("SoapTypeSystem",null,schemaArray ,new BindingConfig(),XmlBeans.getBuiltinTypeSystem(),new MyFiler(),opts);
-			
-		    //SchemaTypeSystem soapsts = MySchemaTypeSystemCompiler.compile("SoapTypeSystem",null,schemaArray ,null,XmlBeans.getBuiltinTypeSystem(),null,opts);
-			System.out.println("soap System:"+ soapsts);
-			    		
 
-			stl = XmlBeans.typeLoaderUnion(new SchemaTypeLoader[]{ soapsts, XmlBeans.getBuiltinTypeSystem() });
+			SchemaTypeLoader schemaTypeLoader = null;
+			XmlObject[] schemaArray = new XmlObject[] { XmlObject.Factory.parse(new FileResource("Resources/soapEncoding.xml")) };
+			XmlOptions opts = new XmlOptions();
+			opts.setCompileDownloadUrls();
+			opts.setCompileNoValidation(); // already validated here
+			WSDL2Java.MyResolver entityResolver = new WSDL2Java.MyResolver();
+			opts.setEntityResolver(entityResolver);
 
-		
-			/// SOLUTION 1: WSDL2Java to get the wsdl schema list.
+			// TODO : use my new loadScheam method in WSDL2Java,(working but returns null if an error occurs
+			// cannot manage to get the error displayed...
+			/** this is another CORRECT but from modified source way to do it WITH java-ized types **/
+			// test with xmlBeans normal COMPILE
+			SchemaTypeSystem soapsts = MySchemaTypeSystemCompiler.compile2("SoapTypeSystem", null, schemaArray, new BindingConfig(),
+					XmlBeans.getBuiltinTypeSystem(), new MyFiler(), opts);
+
+			// SchemaTypeSystem soapsts = MySchemaTypeSystemCompiler.compile("SoapTypeSystem",null,schemaArray
+			// ,null,XmlBeans.getBuiltinTypeSystem(),null,opts);
+			System.out.println("soap System:" + soapsts);
+
+			stl = XmlBeans.typeLoaderUnion(new SchemaTypeLoader[] { soapsts, XmlBeans.getBuiltinTypeSystem() });
+
+			// / SOLUTION 1: WSDL2Java to get the wsdl schema list.
 			WSDL2Java wsdl2Java = new WSDL2Java();
 			// get the wsdl schema in a list of XmlObject
-			List schemas = wsdl2Java.generate(null,null,null,wsdlUrl);
-			schemaList=schemas;
-			System.out.println("Schemas:"+schemas);
+			List schemas = wsdl2Java.generate(null, null, null, wsdlUrl);
+			schemaList = schemas;
+			System.out.println("Schemas:" + schemas);
 			Iterator it = schemas.iterator();
 			schemaArray = new XmlObject[schemas.size()];
-			int l =0;
+			int l = 0;
 			while (it.hasNext()) {
-				XmlObject schema = (XmlObject)it.next();
-				schemaArray[l]= schema;
+				XmlObject schema = (XmlObject) it.next();
+				schemaArray[l] = schema;
 				l++;
 			}
 			// SOLUTION 2: (NOT WORKING) Try directly with xmlbeans
-			//schemaArray =  new XmlObject[]{ XmlObject.Factory.parse(getWsdlFile()) };
-			
-			
-			opts = new XmlOptions();	
+			// schemaArray = new XmlObject[]{ XmlObject.Factory.parse(getWsdlFile()) };
+
+			opts = new XmlOptions();
 			opts.setCompileDownloadUrls();
 			opts.setCompileNoValidation(); // already validated here
 			opts.setEntityResolver(entityResolver);
-			/** this is another CORRECT but from modified source way to do it WITH java-ized types**/
-			//sts = MySchemaTypeSystemCompiler.compile("WSDLTypeSystem",null,schemaArray ,null,stl,null,opts);
-			
-			sts = MySchemaTypeSystemCompiler.compile2("WSDLTypeSystem",null,schemaArray ,new BindingConfig(),stl,new MyFiler(),opts);
-			
-			stl = XmlBeans.typeLoaderUnion(new SchemaTypeLoader[]{ sts, stl });
-		}
-		catch(Exception e){
+			/** this is another CORRECT but from modified source way to do it WITH java-ized types **/
+			// sts = MySchemaTypeSystemCompiler.compile("WSDLTypeSystem",null,schemaArray ,null,stl,null,opts);
+
+			sts = MySchemaTypeSystemCompiler.compile2("WSDLTypeSystem", null, schemaArray, new BindingConfig(), stl, new MyFiler(), opts);
+
+			stl = XmlBeans.typeLoaderUnion(new SchemaTypeLoader[] { sts, stl });
+		} catch (Exception e) {
 			e.printStackTrace();
-			sts=null;
-			stl=null;
+			sts = null;
+			stl = null;
 		}
 	}
-	
-	public SchemaTypeSystem schemaTypeSystem(){
+
+	public SchemaTypeSystem schemaTypeSystem() {
 		return sts;
 	}
-	public SchemaTypeLoader schemaTypeLoader(){
+
+	public SchemaTypeLoader schemaTypeLoader() {
 		return stl;
 	}
 
@@ -175,14 +180,12 @@ public class SchemaTypeExtractor {
 		return schemaList;
 	}
 
-	
-
 	public File getWsdlFile() {
 		return wsdlFile;
 	}
-	public String getWsdlUrl(){
+
+	public String getWsdlUrl() {
 		return wsdlUrl;
 	}
-
 
 }

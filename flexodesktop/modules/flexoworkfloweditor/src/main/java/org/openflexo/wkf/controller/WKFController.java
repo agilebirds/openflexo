@@ -90,14 +90,13 @@ import org.openflexo.wkf.view.doc.WKFDocumentationView;
 import org.openflexo.wkf.view.listener.WKFKeyEventListener;
 import org.openflexo.wkf.view.menu.WKFMenuBar;
 
-
 /**
  * The main controller for the WKF module
  * 
  * @author benoit, sylvain
  */
 public class WKFController extends FlexoController implements SelectionManagingController, ConsistencyCheckingController,
-PrintManagingController {
+		PrintManagingController {
 
 	private static final Logger logger = Logger.getLogger(WKFController.class.getPackage().getName());
 
@@ -710,8 +709,7 @@ PrintManagingController {
 	public void notifyUseSimpleEventPaletteHasChanged() {
 		JOptionPane.showMessageDialog(getPreferencesWindow(),
 				FlexoLocalization.localizedForKey("You must restart OpenFlexo to enable this change."),
-				FlexoLocalization.localizedForKey("Restart required"),
-				JOptionPane.INFORMATION_MESSAGE);
+				FlexoLocalization.localizedForKey("Restart required"), JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	public void notifyEdgeRepresentationChanged() {

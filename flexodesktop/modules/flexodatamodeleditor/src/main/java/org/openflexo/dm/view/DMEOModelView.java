@@ -27,7 +27,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-
 import org.openflexo.components.tabular.TabularViewAction;
 import org.openflexo.dm.model.DMEOAttributeTableModel;
 import org.openflexo.dm.model.DMEOEntityTableModel;
@@ -61,282 +60,262 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sguerin
  * 
  */
-public class DMEOModelView extends DMView<DMEOModel>
-{
+public class DMEOModelView extends DMView<DMEOModel> {
 
-    private DMEOEntityTableModel eoEntityTableModel;
-    protected DMTabularView eoEntityTable;
+	private DMEOEntityTableModel eoEntityTableModel;
+	protected DMTabularView eoEntityTable;
 
-    private DMPropertyTableModel propertyTableModel;
-    protected DMTabularView propertyTable;
+	private DMPropertyTableModel propertyTableModel;
+	protected DMTabularView propertyTable;
 
-    private DMEOAttributeTableModel eoAttributeTableModel;
-    protected DMTabularView eoAttributeTable;
+	private DMEOAttributeTableModel eoAttributeTableModel;
+	protected DMTabularView eoAttributeTable;
 
-    private DMEORelationshipTableModel eoRelationshipTableModel;
-    protected DMTabularView eoRelationshipTable;
+	private DMEORelationshipTableModel eoRelationshipTableModel;
+	protected DMTabularView eoRelationshipTable;
 
-    private DMMethodTableModel methodTableModel;
-    protected DMTabularView methodTable;
+	private DMMethodTableModel methodTableModel;
+	protected DMTabularView methodTable;
 
-    protected JTabbedPane tabbedPane;
+	protected JTabbedPane tabbedPane;
 
-    public DMEOModelView(DMEOModel anEOModel, DMController controller)
-    {
-        super(anEOModel, controller, "eomodel_($name)");
+	public DMEOModelView(DMEOModel anEOModel, DMController controller) {
+		super(anEOModel, controller, "eomodel_($name)");
 
-        addAction(new TabularViewAction(CreateDMEOEntity.actionType,controller.getEditor()) {
-            @Override
-			protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+		addAction(new TabularViewAction(CreateDMEOEntity.actionType, controller.getEditor()) {
+			@Override
+			protected Vector getGlobalSelection() {
+				return getViewSelection();
+			}
 
-            @Override
-			protected FlexoModelObject getFocusedObject() 
-            {
-                return getDMEOModel();
-            }           
-        });
+			@Override
+			protected FlexoModelObject getFocusedObject() {
+				return getDMEOModel();
+			}
+		});
 
-         addAction(new TabularViewAction(CreateDMProperty.actionType,controller.getEditor()) {
-            @Override
-			protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+		addAction(new TabularViewAction(CreateDMProperty.actionType, controller.getEditor()) {
+			@Override
+			protected Vector getGlobalSelection() {
+				return getViewSelection();
+			}
 
-            @Override
-			protected FlexoModelObject getFocusedObject() 
-            {
-                if (tabbedPane.getSelectedIndex() == 1) return getSelectedDMEOEntity();
-                return null;
-            }           
-        });
-         
-        addAction(new TabularViewAction(CreateDMMethod.actionType,controller.getEditor()) {
-            @Override
-			protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+			@Override
+			protected FlexoModelObject getFocusedObject() {
+				if (tabbedPane.getSelectedIndex() == 1)
+					return getSelectedDMEOEntity();
+				return null;
+			}
+		});
 
-            @Override
-			protected FlexoModelObject getFocusedObject() 
-            {
-                if (tabbedPane.getSelectedIndex() == 1) return getSelectedDMEOEntity();
-                return null;
-            }           
-        });
+		addAction(new TabularViewAction(CreateDMMethod.actionType, controller.getEditor()) {
+			@Override
+			protected Vector getGlobalSelection() {
+				return getViewSelection();
+			}
 
-        addAction(new TabularViewAction(CreateDMEOAttribute.actionType,controller.getEditor()) {
-            @Override
-			protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+			@Override
+			protected FlexoModelObject getFocusedObject() {
+				if (tabbedPane.getSelectedIndex() == 1)
+					return getSelectedDMEOEntity();
+				return null;
+			}
+		});
 
-            @Override
-			protected FlexoModelObject getFocusedObject() 
-            {
-                if (tabbedPane.getSelectedIndex() == 0) return getSelectedDMEOEntity();
-                return null;
-            }           
-        });
+		addAction(new TabularViewAction(CreateDMEOAttribute.actionType, controller.getEditor()) {
+			@Override
+			protected Vector getGlobalSelection() {
+				return getViewSelection();
+			}
 
-        addAction(new TabularViewAction(CreateDMEORelationship.actionType,controller.getEditor()) {
-            @Override
-			protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+			@Override
+			protected FlexoModelObject getFocusedObject() {
+				if (tabbedPane.getSelectedIndex() == 0)
+					return getSelectedDMEOEntity();
+				return null;
+			}
+		});
 
-            @Override
-			protected FlexoModelObject getFocusedObject() 
-            {
-                if (tabbedPane.getSelectedIndex() == 0) return getSelectedDMEOEntity();
-                return null;
-            }           
-        });
+		addAction(new TabularViewAction(CreateDMEORelationship.actionType, controller.getEditor()) {
+			@Override
+			protected Vector getGlobalSelection() {
+				return getViewSelection();
+			}
 
-        addAction(new TabularViewAction(DMDelete.actionType,controller.getEditor()) {
-            @Override
-			protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
-            
-            @Override
-			protected FlexoModelObject getFocusedObject() 
-            {
-                return null;
-            }           
-        });
+			@Override
+			protected FlexoModelObject getFocusedObject() {
+				if (tabbedPane.getSelectedIndex() == 0)
+					return getSelectedDMEOEntity();
+				return null;
+			}
+		});
 
-        finalizeBuilding();
-    }
+		addAction(new TabularViewAction(DMDelete.actionType, controller.getEditor()) {
+			@Override
+			protected Vector getGlobalSelection() {
+				return getViewSelection();
+			}
 
-     @Override
-	protected JComponent buildContentPane()
-    {
-        tabbedPane = new JTabbedPane();
-        
-        if (getDMEOModel().getRepository().isReadOnly())
-            eoEntityTableModel = new DMReadOnlyEOEntityTableModel(getDMEOModel(), getDMController().getProject());
-        else
-            eoEntityTableModel = new DMEOEntityTableModel(getDMEOModel(), getDMController().getProject());
-        
-        addToMasterTabularView(eoEntityTable = new DMTabularView(getDMController(), eoEntityTableModel, 10));
-        eoEntityTable.setName("EOEntityTable");
-        if (getDMEOModel().getRepository().isReadOnly())
-            eoAttributeTableModel = new DMReadOnlyEOAttributeTableModel(null, getDMController());
-        else
-            eoAttributeTableModel = new DMEOAttributeTableModel(null, getDMController());
-        addToSlaveTabularView(eoAttributeTable = new DMTabularView(getDMController(), eoAttributeTableModel, 7), eoEntityTable);
-        eoAttributeTable.setName("EOAttributeTable");
-        eoRelationshipTableModel = new DMEORelationshipTableModel(null, getDMController());
-        addToSlaveTabularView(eoRelationshipTable = new DMTabularView(getDMController(), eoRelationshipTableModel, 7), eoEntityTable);
-        eoRelationshipTable.setName("EORelationshipTable");
-        tabbedPane.add(FlexoLocalization.localizedForKey("database_design"),new JSplitPane(JSplitPane.VERTICAL_SPLIT, eoAttributeTable, eoRelationshipTable)); 
-        if (getDMEOModel().getRepository().isReadOnly())
-        	propertyTableModel = new DMReadOnlyPropertyTableModel(null, getDMController().getProject());
-        else
-        	propertyTableModel = new DMPropertyTableModel(null, getDMController().getProject());
-        addToSlaveTabularView(propertyTable = new DMTabularView(getDMController(), propertyTableModel, 7), eoEntityTable);
-        if (getDMEOModel().getRepository().isReadOnly())
-            methodTableModel = new DMReadOnlyMethodTableModel(null, getDMController().getProject());
-        else
-            methodTableModel = new DMMethodTableModel(null, getDMController().getProject());
-        addToSlaveTabularView(methodTable = new DMTabularView(getDMController(), methodTableModel, 7), eoEntityTable);
- 
-        tabbedPane.add(FlexoLocalization.localizedForKey("common_design"),new JSplitPane(JSplitPane.VERTICAL_SPLIT, propertyTable, methodTable)); 
-        
-        tabbedPane.addChangeListener(new ChangeListener() {
-            @Override
+			@Override
+			protected FlexoModelObject getFocusedObject() {
+				return null;
+			}
+		});
+
+		finalizeBuilding();
+	}
+
+	@Override
+	protected JComponent buildContentPane() {
+		tabbedPane = new JTabbedPane();
+
+		if (getDMEOModel().getRepository().isReadOnly())
+			eoEntityTableModel = new DMReadOnlyEOEntityTableModel(getDMEOModel(), getDMController().getProject());
+		else
+			eoEntityTableModel = new DMEOEntityTableModel(getDMEOModel(), getDMController().getProject());
+
+		addToMasterTabularView(eoEntityTable = new DMTabularView(getDMController(), eoEntityTableModel, 10));
+		eoEntityTable.setName("EOEntityTable");
+		if (getDMEOModel().getRepository().isReadOnly())
+			eoAttributeTableModel = new DMReadOnlyEOAttributeTableModel(null, getDMController());
+		else
+			eoAttributeTableModel = new DMEOAttributeTableModel(null, getDMController());
+		addToSlaveTabularView(eoAttributeTable = new DMTabularView(getDMController(), eoAttributeTableModel, 7), eoEntityTable);
+		eoAttributeTable.setName("EOAttributeTable");
+		eoRelationshipTableModel = new DMEORelationshipTableModel(null, getDMController());
+		addToSlaveTabularView(eoRelationshipTable = new DMTabularView(getDMController(), eoRelationshipTableModel, 7), eoEntityTable);
+		eoRelationshipTable.setName("EORelationshipTable");
+		tabbedPane.add(FlexoLocalization.localizedForKey("database_design"), new JSplitPane(JSplitPane.VERTICAL_SPLIT, eoAttributeTable,
+				eoRelationshipTable));
+		if (getDMEOModel().getRepository().isReadOnly())
+			propertyTableModel = new DMReadOnlyPropertyTableModel(null, getDMController().getProject());
+		else
+			propertyTableModel = new DMPropertyTableModel(null, getDMController().getProject());
+		addToSlaveTabularView(propertyTable = new DMTabularView(getDMController(), propertyTableModel, 7), eoEntityTable);
+		if (getDMEOModel().getRepository().isReadOnly())
+			methodTableModel = new DMReadOnlyMethodTableModel(null, getDMController().getProject());
+		else
+			methodTableModel = new DMMethodTableModel(null, getDMController().getProject());
+		addToSlaveTabularView(methodTable = new DMTabularView(getDMController(), methodTableModel, 7), eoEntityTable);
+
+		tabbedPane.add(FlexoLocalization.localizedForKey("common_design"), new JSplitPane(JSplitPane.VERTICAL_SPLIT, propertyTable,
+				methodTable));
+
+		tabbedPane.addChangeListener(new ChangeListener() {
+			@Override
 			public void stateChanged(ChangeEvent e) {
-                updateControls();
-             }
-        });
-        
-        return new JSplitPane(JSplitPane.VERTICAL_SPLIT, eoEntityTable, tabbedPane);
-    }
+				updateControls();
+			}
+		});
 
-    public DMEOModel getDMEOModel()
-    {
-        return getDMObject();
-    }
+		return new JSplitPane(JSplitPane.VERTICAL_SPLIT, eoEntityTable, tabbedPane);
+	}
 
-    public DMEOEntity getSelectedDMEOEntity()
-    {
-        DMSelectionManager sm = getDMController().getDMSelectionManager();
-        Vector selection = sm.getSelection();
-        if ((selection.size() == 1) && (selection.firstElement() instanceof DMEOEntity)) {
-            return (DMEOEntity) selection.firstElement();
-        }
-        if (getSelectedDMProperty() != null) {
-            if (getSelectedDMProperty().getEntity() instanceof DMEOEntity)
-                return (DMEOEntity) getSelectedDMProperty().getEntity();
-            return null;
-        }
-        if (getSelectedDMMethod() != null) {
-            if (getSelectedDMMethod().getEntity() instanceof DMEOEntity)
-                return (DMEOEntity) getSelectedDMMethod().getEntity();
-            return null;
-        }
-        if (getSelectedDMEOAttribute() != null) {
-            return getSelectedDMEOAttribute().getDMEOEntity();
-        }
-        if (getSelectedDMEORelationship() != null) {
-            return getSelectedDMEORelationship().getDMEOEntity();
-        }
-        return null;
-    }
+	public DMEOModel getDMEOModel() {
+		return getDMObject();
+	}
 
-    public DMProperty getSelectedDMProperty()
-    {
-        DMSelectionManager sm = getDMController().getDMSelectionManager();
-        Vector selection = sm.getSelection();
-        if ((selection.size() == 1) && (selection.firstElement() instanceof DMProperty)) {
-            return (DMProperty) selection.firstElement();
-        }
-        return null;
-    }
+	public DMEOEntity getSelectedDMEOEntity() {
+		DMSelectionManager sm = getDMController().getDMSelectionManager();
+		Vector selection = sm.getSelection();
+		if ((selection.size() == 1) && (selection.firstElement() instanceof DMEOEntity)) {
+			return (DMEOEntity) selection.firstElement();
+		}
+		if (getSelectedDMProperty() != null) {
+			if (getSelectedDMProperty().getEntity() instanceof DMEOEntity)
+				return (DMEOEntity) getSelectedDMProperty().getEntity();
+			return null;
+		}
+		if (getSelectedDMMethod() != null) {
+			if (getSelectedDMMethod().getEntity() instanceof DMEOEntity)
+				return (DMEOEntity) getSelectedDMMethod().getEntity();
+			return null;
+		}
+		if (getSelectedDMEOAttribute() != null) {
+			return getSelectedDMEOAttribute().getDMEOEntity();
+		}
+		if (getSelectedDMEORelationship() != null) {
+			return getSelectedDMEORelationship().getDMEOEntity();
+		}
+		return null;
+	}
 
-    public DMMethod getSelectedDMMethod()
-    {
-        DMSelectionManager sm = getDMController().getDMSelectionManager();
-        Vector selection = sm.getSelection();
-        if ((selection.size() == 1) && (selection.firstElement() instanceof DMMethod)) {
-            return (DMMethod) selection.firstElement();
-        }
-        return null;
-    }
+	public DMProperty getSelectedDMProperty() {
+		DMSelectionManager sm = getDMController().getDMSelectionManager();
+		Vector selection = sm.getSelection();
+		if ((selection.size() == 1) && (selection.firstElement() instanceof DMProperty)) {
+			return (DMProperty) selection.firstElement();
+		}
+		return null;
+	}
 
-    public DMEOAttribute getSelectedDMEOAttribute()
-    {
-        DMSelectionManager sm = getDMController().getDMSelectionManager();
-        Vector selection = sm.getSelection();
-        if ((selection.size() == 1) && (selection.firstElement() instanceof DMEOAttribute)) {
-            return (DMEOAttribute) selection.firstElement();
-        }
-        return null;
-    }
+	public DMMethod getSelectedDMMethod() {
+		DMSelectionManager sm = getDMController().getDMSelectionManager();
+		Vector selection = sm.getSelection();
+		if ((selection.size() == 1) && (selection.firstElement() instanceof DMMethod)) {
+			return (DMMethod) selection.firstElement();
+		}
+		return null;
+	}
 
-    public DMEORelationship getSelectedDMEORelationship()
-    {
-        DMSelectionManager sm = getDMController().getDMSelectionManager();
-        Vector selection = sm.getSelection();
-        if ((selection.size() == 1) && (selection.firstElement() instanceof DMEORelationship)) {
-            return (DMEORelationship) selection.firstElement();
-        }
-        return null;
-    }
+	public DMEOAttribute getSelectedDMEOAttribute() {
+		DMSelectionManager sm = getDMController().getDMSelectionManager();
+		Vector selection = sm.getSelection();
+		if ((selection.size() == 1) && (selection.firstElement() instanceof DMEOAttribute)) {
+			return (DMEOAttribute) selection.firstElement();
+		}
+		return null;
+	}
 
-    public DMTabularView getEoEntityTable()
-    {
-        return eoEntityTable;
-    }
+	public DMEORelationship getSelectedDMEORelationship() {
+		DMSelectionManager sm = getDMController().getDMSelectionManager();
+		Vector selection = sm.getSelection();
+		if ((selection.size() == 1) && (selection.firstElement() instanceof DMEORelationship)) {
+			return (DMEORelationship) selection.firstElement();
+		}
+		return null;
+	}
 
-    public DMTabularView getEoAttributeTable() 
-    {
-        return eoAttributeTable;
-    }
+	public DMTabularView getEoEntityTable() {
+		return eoEntityTable;
+	}
 
-    public DMTabularView getEoRelationshipTable()
-    {
-        return eoRelationshipTable;
-    }
+	public DMTabularView getEoAttributeTable() {
+		return eoAttributeTable;
+	}
 
-    public DMTabularView getMethodTable()
-    {
-        return methodTable;
-    }
+	public DMTabularView getEoRelationshipTable() {
+		return eoRelationshipTable;
+	}
 
-    public DMTabularView getPropertyTable() 
-    {
-        return propertyTable;
-    }
+	public DMTabularView getMethodTable() {
+		return methodTable;
+	}
 
-    /**
-     * Overrides willShow
-     * @see org.openflexo.view.ModuleView#willShow()
-     */
-    @Override
-	public void willShow()
-    {
-        // TODO Auto-generated method stub
-        
-    }
+	public DMTabularView getPropertyTable() {
+		return propertyTable;
+	}
 
-    /**
-     * Overrides willHide
-     * @see org.openflexo.view.ModuleView#willHide()
-     */
-    @Override
-	public void willHide()
-    {
-        // TODO Auto-generated method stub
-        
-    }
+	/**
+	 * Overrides willShow
+	 * 
+	 * @see org.openflexo.view.ModuleView#willShow()
+	 */
+	@Override
+	public void willShow() {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Overrides willHide
+	 * 
+	 * @see org.openflexo.view.ModuleView#willHide()
+	 */
+	@Override
+	public void willHide() {
+		// TODO Auto-generated method stub
+
+	}
 
 }

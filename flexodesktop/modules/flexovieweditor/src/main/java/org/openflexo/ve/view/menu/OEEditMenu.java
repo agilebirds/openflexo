@@ -30,40 +30,37 @@ import java.util.logging.Logger;
 import org.openflexo.ve.controller.OEController;
 import org.openflexo.view.menu.EditMenu;
 
-
 /**
  * 'Edit' menu for this module
  * 
  * @author yourname
  */
-public class OEEditMenu extends EditMenu
-{
+public class OEEditMenu extends EditMenu {
 
-    private static final Logger logger = Logger.getLogger(OEEditMenu.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(OEEditMenu.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
-     protected OEController _xxxController;
+	protected OEController _xxxController;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public OEEditMenu(OEController controller)
-    {
-        super(controller);
-        _xxxController = controller;
-        addSeparator();
-        // Add actions here
-        //add(deleteItem = new FlexoMenuItem(XXXDelete.actionType, getController()));
-        //add(cutItem = new FlexoMenuItem(XXXCut.actionType, getController()));
-        //add(copyItem = new FlexoMenuItem(XXXCopy.actionType, getController()));
-        //add(pasteItem = new FlexoMenuItem(XXXPaste.actionType, getController()));
-        //add(selectAllItem = new FlexoMenuItem(XXXSelectAll.actionType, getController()));
-    }
+	public OEEditMenu(OEController controller) {
+		super(controller);
+		_xxxController = controller;
+		addSeparator();
+		// Add actions here
+		// add(deleteItem = new FlexoMenuItem(XXXDelete.actionType, getController()));
+		// add(cutItem = new FlexoMenuItem(XXXCut.actionType, getController()));
+		// add(copyItem = new FlexoMenuItem(XXXCopy.actionType, getController()));
+		// add(pasteItem = new FlexoMenuItem(XXXPaste.actionType, getController()));
+		// add(selectAllItem = new FlexoMenuItem(XXXSelectAll.actionType, getController()));
+	}
 
 }

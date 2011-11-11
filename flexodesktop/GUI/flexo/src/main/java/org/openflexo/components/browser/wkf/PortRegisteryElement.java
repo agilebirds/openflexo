@@ -35,95 +35,83 @@ import org.openflexo.foundation.wkf.dm.ObjectVisibilityChanged;
 import org.openflexo.foundation.wkf.ws.FlexoPort;
 import org.openflexo.foundation.wkf.ws.PortRegistery;
 
-
 /**
- * Browser element representing a process not used in the parent process petri
- * graph
- *
+ * Browser element representing a process not used in the parent process petri graph
+ * 
  * @author sguerin
- *
+ * 
  */
-public class PortRegisteryElement extends BrowserElement implements ExpansionSynchronizedElement
-{
+public class PortRegisteryElement extends BrowserElement implements ExpansionSynchronizedElement {
 	static final Logger logger = Logger.getLogger(PortRegisteryElement.class.getPackage().getName());
 
-    public PortRegisteryElement(PortRegistery portRegistery, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(portRegistery, BrowserElementType.PORT_REGISTERY, browser, parent);
-    }
+	public PortRegisteryElement(PortRegistery portRegistery, ProjectBrowser browser, BrowserElement parent) {
+		super(portRegistery, BrowserElementType.PORT_REGISTERY, browser, parent);
+	}
 
 	@Override
 	public TreePath getTreePath() {
 		return super.getTreePath();
 	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        // Adding ports
-        for (Enumeration e = getPortRegistery().getSortedPorts(); e.hasMoreElements();) {
-            addToChilds((FlexoPort) e.nextElement());
-        }
-    }
+	@Override
+	protected void buildChildrenVector() {
+		// Adding ports
+		for (Enumeration e = getPortRegistery().getSortedPorts(); e.hasMoreElements();) {
+			addToChilds((FlexoPort) e.nextElement());
+		}
+	}
 
-    protected PortRegistery getPortRegistery()
-    {
-        return (PortRegistery) getObject();
-    }
-
-    @Override
-	public boolean isExpansionSynchronizedWithData()
-    {
-        if (_browser.getSelectionManager() != null) {
-        	//logger.info("root focused object is "+_browser.getSelectionManager().getRootFocusedObject());
-            return (getPortRegistery().getProcess() == _browser.getSelectionManager().getRootFocusedObject());
-        }
-        return false;
-    }
-
-    @Override
-	public boolean isExpanded()
-    {
-        return getPortRegistery().getIsVisible();
-    }
+	protected PortRegistery getPortRegistery() {
+		return (PortRegistery) getObject();
+	}
 
 	@Override
-	public void expand()
-	{
+	public boolean isExpansionSynchronizedWithData() {
+		if (_browser.getSelectionManager() != null) {
+			// logger.info("root focused object is "+_browser.getSelectionManager().getRootFocusedObject());
+			return (getPortRegistery().getProcess() == _browser.getSelectionManager().getRootFocusedObject());
+		}
+		return false;
+	}
+
+	@Override
+	public boolean isExpanded() {
+		return getPortRegistery().getIsVisible();
+	}
+
+	@Override
+	public void expand() {
 		if (!getPortRegistery().getIsVisible())
-			OpenPortRegistery.actionType.makeNewAction(getPortRegistery().getProcess(),null,getProjectBrowser().getEditor()).doAction();
-	    // getPortRegistery().setIsVisible(true);
+			OpenPortRegistery.actionType.makeNewAction(getPortRegistery().getProcess(), null, getProjectBrowser().getEditor()).doAction();
+		// getPortRegistery().setIsVisible(true);
 	}
 
 	@Override
-	public void collapse()
-	{
+	public void collapse() {
 		if (getPortRegistery().getIsVisible())
-			OpenPortRegistery.actionType.makeNewAction(getPortRegistery().getProcess(),null,getProjectBrowser().getEditor()).doAction();
-	    // getPortRegistery().setIsVisible(false);
+			OpenPortRegistery.actionType.makeNewAction(getPortRegistery().getProcess(), null, getProjectBrowser().getEditor()).doAction();
+		// getPortRegistery().setIsVisible(false);
 	}
 
-     @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-        if (_browser != null) {
-            if (dataModification instanceof ObjectVisibilityChanged) {
-                _browser.notifyExpansionChanged(this);
-            } else {
-                super.update(observable, dataModification);
-            }
-        }
-    }
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (_browser != null) {
+			if (dataModification instanceof ObjectVisibilityChanged) {
+				_browser.notifyExpansionChanged(this);
+			} else {
+				super.update(observable, dataModification);
+			}
+		}
+	}
 
-    @Override
-	public boolean requiresExpansionFor(BrowserElement next)
-    {
-        return true;
-    }
+	@Override
+	public boolean requiresExpansionFor(BrowserElement next) {
+		return true;
+	}
 
-    @Override
-	public String getName(){
-    	return getPortRegistery().getName();
-    }
+	@Override
+	public String getName() {
+		return getPortRegistery().getName();
+	}
 
 }

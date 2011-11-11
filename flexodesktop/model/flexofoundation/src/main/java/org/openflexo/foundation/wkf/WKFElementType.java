@@ -38,10 +38,8 @@ import org.openflexo.foundation.wkf.node.SelfExecutableOperationNode;
 import org.openflexo.foundation.wkf.node.SingleInstanceSubProcessNode;
 import org.openflexo.foundation.wkf.node.WSCallSubProcessNode;
 
+public enum WKFElementType {
 
-public enum WKFElementType
-{
-	
 	NORMAL_ACTIVITY,
 	BEGIN_ACTIVITY,
 	END_ACTIVITY,
@@ -76,139 +74,115 @@ public enum WKFElementType
 	REVERT,
 	ANNOTATION,
 	BOUNDING_BOX;
-	
+
 	private static final Logger logger = Logger.getLogger(WKFElementType.class.getPackage().getName());
-	
-	public WKFObject instanciateNewObject()
-	{
+
+	public WKFObject instanciateNewObject() {
 		WKFObject returned = null;
 		if (this == NORMAL_ACTIVITY) {
-			ActivityNode activity = new ActivityNode((FlexoProcess)null); 
+			ActivityNode activity = new ActivityNode((FlexoProcess) null);
 			activity.setName(activity.getDefaultName());
 			returned = activity;
-		}
-		else if (this == BEGIN_ACTIVITY) {
-			ActivityNode activity = new ActivityNode((FlexoProcess)null); 
+		} else if (this == BEGIN_ACTIVITY) {
+			ActivityNode activity = new ActivityNode((FlexoProcess) null);
 			activity.setNodeType(NodeType.BEGIN);
 			activity.setName(activity.getDefaultName());
 			returned = activity;
-		}
-		else if (this == END_ACTIVITY) {
-			ActivityNode activity = new ActivityNode((FlexoProcess)null); 
+		} else if (this == END_ACTIVITY) {
+			ActivityNode activity = new ActivityNode((FlexoProcess) null);
 			activity.setNodeType(NodeType.END);
 			activity.setName(activity.getDefaultName());
 			returned = activity;
-		}
-		else if (this == SELF_EXECUTABLE_ACTIVITY) {
-			SelfExecutableActivityNode activity = new SelfExecutableActivityNode((FlexoProcess)null); 
+		} else if (this == SELF_EXECUTABLE_ACTIVITY) {
+			SelfExecutableActivityNode activity = new SelfExecutableActivityNode((FlexoProcess) null);
 			activity.setName(activity.getDefaultName());
 			returned = activity;
-		}
-		else if (this == MULTIPLE_INSTANCE_PARALLEL_SUB_PROCESS_NODE) {
-			MultipleInstanceSubProcessNode activity = new MultipleInstanceSubProcessNode((FlexoProcess)null); 
+		} else if (this == MULTIPLE_INSTANCE_PARALLEL_SUB_PROCESS_NODE) {
+			MultipleInstanceSubProcessNode activity = new MultipleInstanceSubProcessNode((FlexoProcess) null);
 			activity.setIsSequential(false);
 			activity.setName(activity.getDefaultName());
 			returned = activity;
-		}
-		else if (this == MULTIPLE_INSTANCE_SEQUENTIAL_SUB_PROCESS_NODE) {
-			MultipleInstanceSubProcessNode activity = new MultipleInstanceSubProcessNode((FlexoProcess)null); 
+		} else if (this == MULTIPLE_INSTANCE_SEQUENTIAL_SUB_PROCESS_NODE) {
+			MultipleInstanceSubProcessNode activity = new MultipleInstanceSubProcessNode((FlexoProcess) null);
 			activity.setIsSequential(true);
 			activity.setName(activity.getDefaultName());
 			returned = activity;
-		}
-		else if (this == SINGLE_INSTANCE_SUB_PROCESS_NODE) {
-			SingleInstanceSubProcessNode activity = new SingleInstanceSubProcessNode((FlexoProcess)null); 
+		} else if (this == SINGLE_INSTANCE_SUB_PROCESS_NODE) {
+			SingleInstanceSubProcessNode activity = new SingleInstanceSubProcessNode((FlexoProcess) null);
 			activity.setName(activity.getDefaultName());
 			returned = activity;
-		}
-		else if (this == LOOP_SUB_PROCESS_NODE) {
-			LoopSubProcessNode activity = new LoopSubProcessNode((FlexoProcess)null); 
+		} else if (this == LOOP_SUB_PROCESS_NODE) {
+			LoopSubProcessNode activity = new LoopSubProcessNode((FlexoProcess) null);
 			activity.setName(activity.getDefaultName());
 			returned = activity;
-		}
-		else if (this == WS_CALL_SUB_PROCESS_NODE) {
-			WSCallSubProcessNode activity = new WSCallSubProcessNode((FlexoProcess)null); 
+		} else if (this == WS_CALL_SUB_PROCESS_NODE) {
+			WSCallSubProcessNode activity = new WSCallSubProcessNode((FlexoProcess) null);
 			activity.setName(activity.getDefaultName());
 			returned = activity;
-		}
-		else if (this == NORMAL_OPERATION) {
-			OperationNode operation = new OperationNode((FlexoProcess)null); 
+		} else if (this == NORMAL_OPERATION) {
+			OperationNode operation = new OperationNode((FlexoProcess) null);
 			operation.setNodeType(NodeType.NORMAL);
 			operation.setName(operation.getDefaultName());
 			returned = operation;
-		}
-		else if (this == BEGIN_OPERATION) {
-			OperationNode operation = new OperationNode((FlexoProcess)null); 
+		} else if (this == BEGIN_OPERATION) {
+			OperationNode operation = new OperationNode((FlexoProcess) null);
 			operation.setNodeType(NodeType.BEGIN);
 			operation.setName(operation.getDefaultName());
 			returned = operation;
-		}
-		else if (this == END_OPERATION) {
-			OperationNode operation = new OperationNode((FlexoProcess)null); 
+		} else if (this == END_OPERATION) {
+			OperationNode operation = new OperationNode((FlexoProcess) null);
 			operation.setNodeType(NodeType.END);
 			operation.setName(operation.getDefaultName());
 			returned = operation;
-		}
-		else if (this == SELF_EXECUTABLE_OPERATION) {
-			SelfExecutableOperationNode operation = new SelfExecutableOperationNode((FlexoProcess)null); 
+		} else if (this == SELF_EXECUTABLE_OPERATION) {
+			SelfExecutableOperationNode operation = new SelfExecutableOperationNode((FlexoProcess) null);
 			operation.setName(operation.getDefaultName());
 			returned = operation;
-		}
-		else if (this == FLEXO_ACTION) {
-			ActionNode action = new ActionNode((FlexoProcess)null); 
+		} else if (this == FLEXO_ACTION) {
+			ActionNode action = new ActionNode((FlexoProcess) null);
 			action.setNodeType(NodeType.NORMAL);
 			action.setActionType(ActionType.FLEXO_ACTION);
 			action.setName(action.getDefaultName());
 			returned = action;
-		}
-		else if (this == DISPLAY_ACTION) {
-			ActionNode action = new ActionNode((FlexoProcess)null); 
+		} else if (this == DISPLAY_ACTION) {
+			ActionNode action = new ActionNode((FlexoProcess) null);
 			action.setNodeType(NodeType.NORMAL);
 			action.setActionType(ActionType.DISPLAY_ACTION);
 			action.setName(action.getDefaultName());
 			returned = action;
-		}
-		else if (this == BEGIN_ACTION) {
-			ActionNode action = new ActionNode((FlexoProcess)null); 
+		} else if (this == BEGIN_ACTION) {
+			ActionNode action = new ActionNode((FlexoProcess) null);
 			action.setNodeType(NodeType.BEGIN);
 			action.setName(action.getDefaultName());
 			returned = action;
-		}
-		else if (this == END_ACTION) {
-			ActionNode action = new ActionNode((FlexoProcess)null); 
+		} else if (this == END_ACTION) {
+			ActionNode action = new ActionNode((FlexoProcess) null);
 			action.setNodeType(NodeType.END);
 			action.setName(action.getDefaultName());
 			returned = action;
-		}
-		else if (this == SELF_EXECUTABLE_ACTION) {
-			SelfExecutableActionNode action = new SelfExecutableActionNode((FlexoProcess)null); 
+		} else if (this == SELF_EXECUTABLE_ACTION) {
+			SelfExecutableActionNode action = new SelfExecutableActionNode((FlexoProcess) null);
 			action.setName(action.getDefaultName());
 			returned = action;
-		}
-		else if (this == AND_OPERATOR) {
-			ANDOperator operator = new ANDOperator((FlexoProcess)null); 
+		} else if (this == AND_OPERATOR) {
+			ANDOperator operator = new ANDOperator((FlexoProcess) null);
 			operator.setName(operator.getDefaultName());
 			returned = operator;
-		}
-		else if (this == OR_OPERATOR) {
-			OROperator operator = new OROperator((FlexoProcess)null); 
+		} else if (this == OR_OPERATOR) {
+			OROperator operator = new OROperator((FlexoProcess) null);
 			operator.setName(operator.getDefaultName());
 			returned = operator;
-		}
-		else if (this == IF_OPERATOR) {
-			IFOperator operator = new IFOperator((FlexoProcess)null); 
+		} else if (this == IF_OPERATOR) {
+			IFOperator operator = new IFOperator((FlexoProcess) null);
 			operator.setName(operator.getDefaultName());
 			returned = operator;
-		}
-		else if (this == LOOP_OPERATOR) {
-			LOOPOperator operator = new LOOPOperator((FlexoProcess)null); 
+		} else if (this == LOOP_OPERATOR) {
+			LOOPOperator operator = new LOOPOperator((FlexoProcess) null);
 			operator.setName(operator.getDefaultName());
 			returned = operator;
-		}
-		else {
+		} else {
 			logger.warning("Not implemented...");
 		}
 		return returned;
 	}
 }
-

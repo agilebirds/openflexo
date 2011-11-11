@@ -41,62 +41,55 @@ public class AddDeadlineInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddDeadlineInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(AddDeadline.actionType,actionInitializer);
+	AddDeadlineInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(AddDeadline.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<AddDeadline> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<AddDeadline> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddDeadline>() {
-            @Override
-			public boolean run(ActionEvent e, AddDeadline action)
-            {
-                String newDeadlineName = FlexoController.askForString(FlexoLocalization.localizedForKey("enter_name_for_the_new_deadline"));
-                if (newDeadlineName == null) {
+			@Override
+			public boolean run(ActionEvent e, AddDeadline action) {
+				String newDeadlineName = FlexoController.askForString(FlexoLocalization.localizedForKey("enter_name_for_the_new_deadline"));
+				if (newDeadlineName == null) {
 					return false;
 				}
-                action.setNewDeadlineName(newDeadlineName);
-                return true;
-            }
-        };
-	}
-
-     @Override
-	protected FlexoActionFinalizer<AddDeadline> getDefaultFinalizer() 
-	{
-		return new FlexoActionFinalizer<AddDeadline>() {
-            @Override
-			public boolean run(ActionEvent e, AddDeadline action)
-            {
-                DeadLine newDeadLine = action.getNewDeadline();
-                if (e.getSource() instanceof BrowserActionSource) {
-                    ProjectBrowser browser = ((BrowserActionSource) e.getSource()).getBrowser();
-                    if (!browser.activateBrowsingFor(newDeadLine)) {
-                        if (FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_desactivate_deadline_filtering"))) {
-                            browser.getFilterForObject(newDeadLine).setStatus(BrowserFilterStatus.SHOW);
-                            browser.update();
-                        }
-                    }
-                }
-                getControllerActionInitializer().getWKFController().getWorkflowBrowser().focusOn(newDeadLine);
-                return true;
-           }
-        };
+				action.setNewDeadlineName(newDeadlineName);
+				return true;
+			}
+		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
-		return null;
-		//return WKFIconLibrary.DEADLINE_ICON;
+	protected FlexoActionFinalizer<AddDeadline> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<AddDeadline>() {
+			@Override
+			public boolean run(ActionEvent e, AddDeadline action) {
+				DeadLine newDeadLine = action.getNewDeadline();
+				if (e.getSource() instanceof BrowserActionSource) {
+					ProjectBrowser browser = ((BrowserActionSource) e.getSource()).getBrowser();
+					if (!browser.activateBrowsingFor(newDeadLine)) {
+						if (FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_desactivate_deadline_filtering"))) {
+							browser.getFilterForObject(newDeadLine).setStatus(BrowserFilterStatus.SHOW);
+							browser.update();
+						}
+					}
+				}
+				getControllerActionInitializer().getWKFController().getWorkflowBrowser().focusOn(newDeadLine);
+				return true;
+			}
+		};
 	}
- 
+
+	@Override
+	protected Icon getEnabledIcon() {
+		return null;
+		// return WKFIconLibrary.DEADLINE_ICON;
+	}
+
 }

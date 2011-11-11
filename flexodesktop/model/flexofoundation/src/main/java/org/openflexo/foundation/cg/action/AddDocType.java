@@ -29,78 +29,70 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.GeneratedDoc;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class AddDocType extends FlexoAction<AddDocType, FlexoModelObject, FlexoModelObject>
-{
+public class AddDocType extends FlexoAction<AddDocType, FlexoModelObject, FlexoModelObject> {
 
-    public static final FlexoActionType<AddDocType, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<AddDocType, FlexoModelObject, FlexoModelObject>("add_doc_type",FlexoActionType.ADD_ACTION_TYPE) {
+	public static final FlexoActionType<AddDocType, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<AddDocType, FlexoModelObject, FlexoModelObject>(
+			"add_doc_type", FlexoActionType.ADD_ACTION_TYPE) {
 
-        @Override
-        protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection)
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-        protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection)
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-        public AddDocType makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-        {
-            return new AddDocType(focusedObject,globalSelection,editor);
-        }
+		@Override
+		public AddDocType makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+			return new AddDocType(focusedObject, globalSelection, editor);
+		}
 
-    };
+	};
 
-    static {
-        FlexoModelObject.addActionForClass (AddDocType.actionType, GeneratedDoc.class);
-    }
+	static {
+		FlexoModelObject.addActionForClass(AddDocType.actionType, GeneratedDoc.class);
+	}
 
-    private String newName;
+	private String newName;
 	private DocType newDocType;
 
-    public DocType getNewDocType() {
+	public DocType getNewDocType() {
 		return newDocType;
 	}
 
 	/**
-     * @param actionType
-     * @param focusedObject
-     * @param globalSelection
-     */
-    protected AddDocType(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	 * @param actionType
+	 * @param focusedObject
+	 * @param globalSelection
+	 */
+	protected AddDocType(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    /**
-     * Overrides doAction
-     *
-     * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
-     */
-    @Override
-    protected void doAction(Object context) throws FlexoException
-    {
-    	FlexoModelObject mo = getFocusedObject();
-        newDocType = new DocType(getNewName(),mo.getProject());
-        mo.getProject().addToDocTypes(newDocType);
-    }
+	/**
+	 * Overrides doAction
+	 * 
+	 * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
+	 */
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		FlexoModelObject mo = getFocusedObject();
+		newDocType = new DocType(getNewName(), mo.getProject());
+		mo.getProject().addToDocTypes(newDocType);
+	}
 
-    public String getNewName()
-    {
-        return newName;
-    }
+	public String getNewName() {
+		return newName;
+	}
 
-    public void setNewName(String newName)
-    {
-        this.newName = newName;
-    }
+	public void setNewName(String newName) {
+		this.newName = newName;
+	}
 
 }

@@ -44,26 +44,25 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 					args[i] = args[i].substring(1);
 				}
 				if (args[i].endsWith("\"")) {
-					args[i] = args[i].substring(0,args[i].length()-1);
+					args[i] = args[i].substring(0, args[i].length() - 1);
 				}
 				projectDirectory = new File(args[i]);
 				if (!projectDirectory.exists()) {
 					projectDirectory = null;
 				} else if (!projectDirectory.getName().toLowerCase().endsWith(".prj")) {
 					projectDirectory = searchProjectDirectory(projectDirectory);
-				}
-				else {
+				} else {
 					break;// Project found!
 				}
 			}
 		}
-		if (projectDirectory==null) {
+		if (projectDirectory == null) {
 			throw new MissingArgumentException("Project directory");
 		}
 		try {
 			editor = loadProject(projectDirectory);
 		} catch (ProjectLoadingCancelledException e) {
-			//Should not happend in external builder
+			// Should not happend in external builder
 			e.printStackTrace();
 			System.exit(PROJECT_CANCELED_FAILURE);
 		} catch (ProjectInitializerException e) {
@@ -120,7 +119,6 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 			writeToConsole(FlexoBuilderListener.SUB_STEP_COUNT_END_TAG);
 		}
 
-
 		public FlexoBuilderProgress(String title, int steps) {
 			reportMainStepMessage(title);
 			reportMainStepCount(steps);
@@ -145,7 +143,7 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 	}
 
 	public FlexoBuilderEditor loadProject(File projectDirectory) throws ProjectLoadingCancelledException, ProjectInitializerException {
-		return (FlexoBuilderEditor)FlexoResourceManager.initializeExistingProject(projectDirectory, new FlexoEditorFactory() {
+		return (FlexoBuilderEditor) FlexoResourceManager.initializeExistingProject(projectDirectory, new FlexoEditorFactory() {
 
 			public FlexoEditor makeFlexoEditor(FlexoProject project) {
 
@@ -158,7 +156,7 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 				return builderEditor;
 			}
 
-		},null);
+		}, null);
 	}
 
 }

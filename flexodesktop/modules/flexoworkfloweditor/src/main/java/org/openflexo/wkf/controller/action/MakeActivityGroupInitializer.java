@@ -22,7 +22,6 @@ package org.openflexo.wkf.controller.action;
 import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -36,36 +35,28 @@ public class MakeActivityGroupInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	MakeActivityGroupInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(MakeActivityGroup.actionType,actionInitializer);
+	MakeActivityGroupInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(MakeActivityGroup.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<MakeActivityGroup> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<MakeActivityGroup> getDefaultInitializer() {
 		return new FlexoActionInitializer<MakeActivityGroup>() {
 			@Override
-			public boolean run(ActionEvent e, MakeActivityGroup action)
-			{
+			public boolean run(ActionEvent e, MakeActivityGroup action) {
 				action.setNewGroupName(FlexoLocalization.localizedForKey("activity_group"));
-           		TextFieldParameter newGroupNameParam = new TextFieldParameter(
-						"newGroupNameParam", "group_name", action.getNewGroupName());
-				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(
-						getProject(), 
-						null,
-						action.getLocalizedName(), FlexoLocalization.localizedForKey("please_enter_name_for_newly_created_activity_group"), newGroupNameParam);
-				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {   
+				TextFieldParameter newGroupNameParam = new TextFieldParameter("newGroupNameParam", "group_name", action.getNewGroupName());
+				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null, action.getLocalizedName(),
+						FlexoLocalization.localizedForKey("please_enter_name_for_newly_created_activity_group"), newGroupNameParam);
+				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 					action.setNewGroupName(newGroupNameParam.getValue());
 					return true;
-				}
-				else {
+				} else {
 					return false;
 				}
 			}
@@ -73,17 +64,16 @@ public class MakeActivityGroupInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<MakeActivityGroup> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<MakeActivityGroup> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MakeActivityGroup>() {
 			@Override
-			public boolean run(ActionEvent e, MakeActivityGroup action)
-			{
-				if (getControllerActionInitializer().getWKFController().getSelectionManager() !=null)
-					getControllerActionInitializer().getWKFController().getSelectionManager().setSelectedObject(action.getNewActivityGroup());
-                return true;
-          }
-        };
+			public boolean run(ActionEvent e, MakeActivityGroup action) {
+				if (getControllerActionInitializer().getWKFController().getSelectionManager() != null)
+					getControllerActionInitializer().getWKFController().getSelectionManager()
+							.setSelectedObject(action.getNewActivityGroup());
+				return true;
+			}
+		};
 	}
 
 }

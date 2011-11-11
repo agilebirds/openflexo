@@ -21,19 +21,18 @@ package org.openflexo.ie.view;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public interface Layoutable
-{
+public interface Layoutable {
 
-    public void doLayout();
-    
-    public void propagateResize();
-    
-    public boolean getHoldsNextComputedPreferredSize();
+	public void doLayout();
 
-    public void setHoldsNextComputedPreferredSize();
+	public void propagateResize();
 
-    public void resetPreferredSize();
-    
+	public boolean getHoldsNextComputedPreferredSize();
+
+	public void setHoldsNextComputedPreferredSize();
+
+	public void resetPreferredSize();
+
 }

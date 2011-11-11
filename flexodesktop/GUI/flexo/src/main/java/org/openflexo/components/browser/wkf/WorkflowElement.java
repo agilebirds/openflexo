@@ -32,61 +32,55 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoProcessNode;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 
-
 /**
  * Browser element representing the workflow
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class WorkflowElement extends BrowserElement
-{
+public class WorkflowElement extends BrowserElement {
 
-    public WorkflowElement(FlexoWorkflow workflow, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(workflow, BrowserElementType.WORKFLOW, browser, parent);
-    }
+	public WorkflowElement(FlexoWorkflow workflow, ProjectBrowser browser, BrowserElement parent) {
+		super(workflow, BrowserElementType.WORKFLOW, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-    	// We add the roles
-    	addToChilds(getFlexoWorkflow().getRoleList());
-    	if (getFlexoWorkflow().getImportedRoleList()!=null)
-    		addToChilds(getFlexoWorkflow().getImportedRoleList());
-    	// We add top-level processes
-    	for (Enumeration<FlexoProcessNode> en = getFlexoWorkflow().getSortedTopLevelProcesses(); en.hasMoreElements();) {
-    		FlexoProcess next = en.nextElement().getProcess();
-    		addToChilds(next);
-    	}
-    }
+	@Override
+	protected void buildChildrenVector() {
+		// We add the roles
+		addToChilds(getFlexoWorkflow().getRoleList());
+		if (getFlexoWorkflow().getImportedRoleList() != null)
+			addToChilds(getFlexoWorkflow().getImportedRoleList());
+		// We add top-level processes
+		for (Enumeration<FlexoProcessNode> en = getFlexoWorkflow().getSortedTopLevelProcesses(); en.hasMoreElements();) {
+			FlexoProcess next = en.nextElement().getProcess();
+			addToChilds(next);
+		}
+	}
 
-    @Override
-    public boolean isNameEditable() {
-    	return true;
-    }
+	@Override
+	public boolean isNameEditable() {
+		return true;
+	}
 
-    @Override
-	public String getName()
-    {
-        return getFlexoWorkflow().getWorkflowName();
-    }
+	@Override
+	public String getName() {
+		return getFlexoWorkflow().getWorkflowName();
+	}
 
-    @Override
-    public void setName(String aName) throws FlexoException {
-    	getFlexoWorkflow().setWorkflowName(aName);
-    }
+	@Override
+	public void setName(String aName) throws FlexoException {
+		getFlexoWorkflow().setWorkflowName(aName);
+	}
 
-    public FlexoWorkflow getFlexoWorkflow()
-    {
-        return (FlexoWorkflow) getObject();
-    }
+	public FlexoWorkflow getFlexoWorkflow() {
+		return (FlexoWorkflow) getObject();
+	}
 
-    @Override
-    public void update(FlexoObservable observable, DataModification dataModification) {
-    	if (dataModification instanceof ImportedRoleLibraryCreated)
-    		refreshWhenPossible();
-    	super.update(observable, dataModification);
-    }
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (dataModification instanceof ImportedRoleLibraryCreated)
+			refreshWhenPossible();
+		super.update(observable, dataModification);
+	}
 
 }

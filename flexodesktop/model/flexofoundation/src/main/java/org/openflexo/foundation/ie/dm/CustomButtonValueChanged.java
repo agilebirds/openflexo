@@ -19,17 +19,13 @@
  */
 package org.openflexo.foundation.ie.dm;
 
+public class CustomButtonValueChanged extends IEDataModification {
 
-public class CustomButtonValueChanged extends IEDataModification
-{
+	public CustomButtonValueChanged(String newValue) {
+		super("customButtonValue", null, newValue);
+	}
 
-    public CustomButtonValueChanged(String newValue)
-    {
-        super("customButtonValue",null, newValue);
-    }
-
-    public String getNewButtonLabel()
-    {
-        return (String) newValue();
-    }
+	public String getNewButtonLabel() {
+		return (String) newValue();
+	}
 }

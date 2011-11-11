@@ -54,17 +54,17 @@ public abstract class ProjectDocGenerator extends AbstractProjectGenerator<DGRep
 
 	private static final Logger logger = FlexoLogger.getLogger(ProjectDocGenerator.class.getPackage().getName());
 
-    protected ScreenshotsGenerator screenshotsGenerator;
-    protected Hashtable<FileResource, PackagedResourceToCopyGenerator<DGRepository>> packagedResourceToCopyGenerator;
-    private Hashtable<FlexoCopiedResource, CopiedResourceGenerator> copiedResourceGenerators = new Hashtable<FlexoCopiedResource, CopiedResourceGenerator>();
-    private final Hashtable<TOCEntry, TextFileResource> entryResAssociation;
+	protected ScreenshotsGenerator screenshotsGenerator;
+	protected Hashtable<FileResource, PackagedResourceToCopyGenerator<DGRepository>> packagedResourceToCopyGenerator;
+	private Hashtable<FlexoCopiedResource, CopiedResourceGenerator> copiedResourceGenerators = new Hashtable<FlexoCopiedResource, CopiedResourceGenerator>();
+	private final Hashtable<TOCEntry, TextFileResource> entryResAssociation;
 
 	public ProjectDocGenerator(FlexoProject project, DGRepository repository) throws GenerationException {
 		super(project, repository);
 		entryResAssociation = new Hashtable<TOCEntry, TextFileResource>();
-        screenshotsGenerator = new ScreenshotsGenerator(this, project);
-        copiedResourceGenerators = new Hashtable<FlexoCopiedResource, CopiedResourceGenerator>();
-        packagedResourceToCopyGenerator = new Hashtable<FileResource, PackagedResourceToCopyGenerator<DGRepository>>();
+		screenshotsGenerator = new ScreenshotsGenerator(this, project);
+		copiedResourceGenerators = new Hashtable<FlexoCopiedResource, CopiedResourceGenerator>();
+		packagedResourceToCopyGenerator = new Hashtable<FileResource, PackagedResourceToCopyGenerator<DGRepository>>();
 	}
 
 	/**
@@ -72,13 +72,16 @@ public abstract class ProjectDocGenerator extends AbstractProjectGenerator<DGRep
 	 */
 	protected void buildResourcesAndSetGeneratorsForCopiedResources(Vector<CGRepositoryFileResource> resources) {
 		Vector<FlexoWebServerFileResource> webResources = getProject().getResourcesOfClass(FlexoWebServerFileResource.class);
-        for (FlexoWebServerFileResource res : webResources) {
-			if ((res.getResourceFormat() == FileFormat.PNG) || (res.getResourceFormat() == FileFormat.JPG)|| (res.getResourceFormat() == FileFormat.GIF)) {
-				FlexoCopiedResource copy = (FlexoCopiedResource) getProject().resourceForKey(ResourceType.COPIED_FILE,FlexoCopiedResource.nameForCopiedResource(projectGenerator.getRepository(), res));
-				if (copy==null) {
+		for (FlexoWebServerFileResource res : webResources) {
+			if ((res.getResourceFormat() == FileFormat.PNG) || (res.getResourceFormat() == FileFormat.JPG)
+					|| (res.getResourceFormat() == FileFormat.GIF)) {
+				FlexoCopiedResource copy = (FlexoCopiedResource) getProject().resourceForKey(ResourceType.COPIED_FILE,
+						FlexoCopiedResource.nameForCopiedResource(projectGenerator.getRepository(), res));
+				if (copy == null) {
 					DGImageFile file = new DGImageFile(projectGenerator.getRepository().getGeneratedDoc());
-					copy = GeneratedFileResourceFactory.createNewCopiedFileResource(projectGenerator.getRepository(), file, projectGenerator
-                        .getRepository().getResourcesSymbolicDirectory(), res, getCopiedResourcesRelativePath(res.getResourceFile()));
+					copy = GeneratedFileResourceFactory.createNewCopiedFileResource(projectGenerator.getRepository(), file,
+							projectGenerator.getRepository().getResourcesSymbolicDirectory(), res,
+							getCopiedResourcesRelativePath(res.getResourceFile()));
 				}
 				copy.setGenerator(new CopiedResourceGenerator<DGRepository>(copy, this, this));
 				copiedResourceGenerators.put(copy, (CopiedResourceGenerator) copy.getGenerator());
@@ -87,22 +90,20 @@ public abstract class ProjectDocGenerator extends AbstractProjectGenerator<DGRep
 		}
 	}
 
-    /**
-     * @param o
-     */
-    public FlexoCopiedResource getScreenshot(FlexoModelObject o)
-    {
-        return screenshotsGenerator.getScreenshot(o);
-    }
+	/**
+	 * @param o
+	 */
+	public FlexoCopiedResource getScreenshot(FlexoModelObject o) {
+		return screenshotsGenerator.getScreenshot(o);
+	}
 
-    public PackagedResourceToCopyGenerator<DGRepository> getFileResourceGenerator(FileResource r)
-    {
-    	PackagedResourceToCopyGenerator<DGRepository> returned = packagedResourceToCopyGenerator.get(r);
-        if (returned==null) {
-    		//String extension = r.getName().substring(r.getName().lastIndexOf(".")+1);
-    		//FileFormat format = FileFormat.getFileFormatByExtension(extension);
-        	FileFormat format;
-        	if (r.getName().endsWith(".png")) {
+	public PackagedResourceToCopyGenerator<DGRepository> getFileResourceGenerator(FileResource r) {
+		PackagedResourceToCopyGenerator<DGRepository> returned = packagedResourceToCopyGenerator.get(r);
+		if (returned == null) {
+			// String extension = r.getName().substring(r.getName().lastIndexOf(".")+1);
+			// FileFormat format = FileFormat.getFileFormatByExtension(extension);
+			FileFormat format;
+			if (r.getName().endsWith(".png")) {
 				format = FileFormat.PNG;
 			} else if (r.getName().endsWith(".jpg")) {
 				format = FileFormat.JPG;
@@ -115,38 +116,42 @@ public abstract class ProjectDocGenerator extends AbstractProjectGenerator<DGRep
 			} else {
 				format = FileFormat.UNKNOWN_BINARY_FILE;
 			}
-        	if (format == FileFormat.LATEX) {
-				packagedResourceToCopyGenerator.put(r,returned = new PackagedResourceToCopyGenerator<DGRepository>(this,format,ResourceType.COPIED_FILE,r,getRepository().getLatexSymbolicDirectory(),""));
+			if (format == FileFormat.LATEX) {
+				packagedResourceToCopyGenerator.put(r, returned = new PackagedResourceToCopyGenerator<DGRepository>(this, format,
+						ResourceType.COPIED_FILE, r, getRepository().getLatexSymbolicDirectory(), ""));
 			} else {
-				packagedResourceToCopyGenerator.put(r,returned = new PackagedResourceToCopyGenerator<DGRepository>(this,format,ResourceType.COPIED_FILE,r,getRepository().getResourcesSymbolicDirectory(),""));
+				packagedResourceToCopyGenerator.put(r, returned = new PackagedResourceToCopyGenerator<DGRepository>(this, format,
+						ResourceType.COPIED_FILE, r, getRepository().getResourcesSymbolicDirectory(), ""));
 			}
-        }
-        return returned;
-    }
+		}
+		return returned;
+	}
 
-	public CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> getResourceForObject(FlexoModelObject object) {
-		for (CGFile file:getRepository().getFiles()) {
-			if ((file.getResource()!=null) && (file.getResource() instanceof LatexFileResource)) {
-				if ((file.getResource().getGenerator()!=null) && (((Generator<? extends FlexoModelObject, DGRepository>)file.getResource().getGenerator()).getObject() == object)) {
+	public CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> getResourceForObject(
+			FlexoModelObject object) {
+		for (CGFile file : getRepository().getFiles()) {
+			if ((file.getResource() != null) && (file.getResource() instanceof LatexFileResource)) {
+				if ((file.getResource().getGenerator() != null)
+						&& (((Generator<? extends FlexoModelObject, DGRepository>) file.getResource().getGenerator()).getObject() == object)) {
 					return file.getResource();
 				}
 			}
 		}
 		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning("Resource not found for object "+object.getFullyQualifiedName());
+			logger.warning("Resource not found for object " + object.getFullyQualifiedName());
 		}
 		return null;
 	}
 
 	public void associateEntryWithResource(TOCEntry entry, TextFileResource res) {
-		if(res==null) {
+		if (res == null) {
 			entryResAssociation.remove(entry);
 		} else {
 			entryResAssociation.put(entry, res);
 		}
 	}
 
-	public String getLatexFileResourceNameForEntry(TOCEntry entry){
+	public String getLatexFileResourceNameForEntry(TOCEntry entry) {
 		if (entry == null) {
 			return null;
 		}
@@ -163,13 +168,13 @@ public abstract class ProjectDocGenerator extends AbstractProjectGenerator<DGRep
 
 	/**
 	 * Returns the default file extension with the dot included
+	 * 
 	 * @return the default file extension with the dot included
 	 */
 	public abstract String getFileExtension();
 
-    protected String getCopiedResourcesRelativePath(FlexoProjectFile flexoFile)
-    {
-    	return "";
-    }
+	protected String getCopiedResourcesRelativePath(FlexoProjectFile flexoFile) {
+		return "";
+	}
 
 }

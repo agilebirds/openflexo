@@ -71,7 +71,7 @@ public class XMLDeserializer {
 	}
 
 	private Object buildObjectFromNodeAndModelEntity(Element node, ModelEntity modelEntity) throws InvalidXMLDataException,
-	ModelDefinitionException {
+			ModelDefinitionException {
 		Object currentDeserializedReference = null;
 
 		Attribute idAttribute = node.getAttribute(ID);

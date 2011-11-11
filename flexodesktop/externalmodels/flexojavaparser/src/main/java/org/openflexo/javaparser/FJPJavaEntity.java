@@ -23,32 +23,29 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.dm.javaparser.ParsedJavaElement;
 
-
 import com.thoughtworks.qdox.model.AbstractJavaEntity;
 import com.thoughtworks.qdox.model.JavaClassParent;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.Type;
 
-
 public abstract class FJPJavaEntity extends FJPJavaElement implements ParsedJavaElement {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FJPJavaEntity.class.getPackage().getName());
-	
+
 	private AbstractJavaEntity _qdJavaEntity;
 	private JavadocItem _javadocItem;
-	
-	public FJPJavaEntity(AbstractJavaEntity qdJavaEntity, FJPJavaSource aJavaSource)
-	{
+
+	public FJPJavaEntity(AbstractJavaEntity qdJavaEntity, FJPJavaSource aJavaSource) {
 		super(aJavaSource);
 		_qdJavaEntity = qdJavaEntity;
 	}
-	
+
 	@Override
-	public JavadocItem getJavadoc()
-	{
-		if ((_javadocItem == null) && ((_qdJavaEntity.getComment() != null) || (_qdJavaEntity.getTags() != null && _qdJavaEntity.getTags().length > 0))) {
-			_javadocItem = new JavadocItem(_qdJavaEntity.getComment(),_qdJavaEntity.getTags());
+	public JavadocItem getJavadoc() {
+		if ((_javadocItem == null)
+				&& ((_qdJavaEntity.getComment() != null) || (_qdJavaEntity.getTags() != null && _qdJavaEntity.getTags().length > 0))) {
+			_javadocItem = new JavadocItem(_qdJavaEntity.getComment(), _qdJavaEntity.getTags());
 		}
 		return _javadocItem;
 	}
@@ -121,11 +118,10 @@ public abstract class FJPJavaEntity extends FJPJavaElement implements ParsedJava
 		return _qdJavaEntity.isVolatile();
 	}
 
-	protected static String getNonQualifiedName(Type aType)
-	{
+	protected static String getNonQualifiedName(Type aType) {
 		String fullQualified = aType.toString();
 		if (fullQualified.lastIndexOf(".") >= 0)
-			return fullQualified.substring(fullQualified.lastIndexOf(".")+1);
+			return fullQualified.substring(fullQualified.lastIndexOf(".") + 1);
 		return fullQualified;
 	}
 }

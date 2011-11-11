@@ -47,7 +47,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-
 import org.openflexo.FlexoCst;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.foundation.DataModification;
@@ -61,377 +60,353 @@ import org.openflexo.module.ModuleLoader;
 
 /**
  * Defines the panel allowing to show and edit a ValidationModel
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class ValidationModelViewer extends JPanel implements GraphicalFlexoObserver
-{
+public class ValidationModelViewer extends JPanel implements GraphicalFlexoObserver {
 
-    private static final Logger logger = Logger.getLogger(ValidationModelViewer.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ValidationModelViewer.class.getPackage().getName());
 
-    ValidationModel _validationModel;
+	ValidationModel _validationModel;
 
-    ValidationRuleSet _currentRuleSet;
+	ValidationRuleSet _currentRuleSet;
 
-    ValidationRule _currentRule;
+	ValidationRule _currentRule;
 
-    JList _validationModelList;
+	JList _validationModelList;
 
-    JList _ruleSetList;
+	JList _ruleSetList;
 
-    private JLabel _title;
+	private JLabel _title;
 
-    JButton closeButton;
+	JButton closeButton;
 
-    JButton disableButton;
+	JButton disableButton;
 
-    JButton editButton;
+	JButton editButton;
 
-    JButton saveButton;
+	JButton saveButton;
 
-    JTextField _ruleName;
+	JTextField _ruleName;
 
-    private JTextField _ruleType;
+	private JTextField _ruleType;
 
-    JTextArea _ruleDescription;
+	JTextArea _ruleDescription;
 
-    DocumentListener _ruleNameDocumentListener;
+	DocumentListener _ruleNameDocumentListener;
 
-    DocumentListener _ruleDescriptionDocumentListener;
+	DocumentListener _ruleDescriptionDocumentListener;
 
-    ConsistencyCheckDialogInterface _consistencyCheckDialog;
+	ConsistencyCheckDialogInterface _consistencyCheckDialog;
 
-    public ValidationModelViewer(ConsistencyCheckDialogInterface consistencyCheckDialog, ValidationModel validationModel)
-    {
-        super();
-        setLayout(new BorderLayout());
-        _consistencyCheckDialog = consistencyCheckDialog;
-        _validationModel = validationModel;
-        _currentRuleSet = new ValidationRuleSet(null, new Vector());
+	public ValidationModelViewer(ConsistencyCheckDialogInterface consistencyCheckDialog, ValidationModel validationModel) {
+		super();
+		setLayout(new BorderLayout());
+		_consistencyCheckDialog = consistencyCheckDialog;
+		_validationModel = validationModel;
+		_currentRuleSet = new ValidationRuleSet(null, new Vector());
 
-        _title = new JLabel(FlexoLocalization.localizedForKey("validation_model"), SwingConstants.CENTER);
-        _title.setFont(FlexoCst.BIG_FONT);
-        _title.setForeground(Color.BLACK);
-        _title.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		_title = new JLabel(FlexoLocalization.localizedForKey("validation_model"), SwingConstants.CENTER);
+		_title.setFont(FlexoCst.BIG_FONT);
+		_title.setForeground(Color.BLACK);
+		_title.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        _validationModelList = new JList(_validationModel);
-        _validationModelList.setCellRenderer(new ValidationModelCellRenderer());
-        _validationModelList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        _validationModelList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-			public void valueChanged(ListSelectionEvent e)
-            {
-                // Ignore extra messages.
-                if (e.getValueIsAdjusting()) {
-                    return;
-                }
-                int selectedRow = _validationModelList.getSelectedIndex();
-                if ((selectedRow >= 0) && (_validationModel != null) && (selectedRow < _validationModel.getSize())) {
-                    ValidationRuleSet ruleSet = (ValidationRuleSet) _validationModel.getElementAt(selectedRow);
-                    setCurrentRuleSet(ruleSet);
-                } else {
-                    setCurrentRuleSet(null);
-                }
-            }
-        });
-        JScrollPane leftPanel = new JScrollPane(_validationModelList);
+		_validationModelList = new JList(_validationModel);
+		_validationModelList.setCellRenderer(new ValidationModelCellRenderer());
+		_validationModelList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		_validationModelList.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				// Ignore extra messages.
+				if (e.getValueIsAdjusting()) {
+					return;
+				}
+				int selectedRow = _validationModelList.getSelectedIndex();
+				if ((selectedRow >= 0) && (_validationModel != null) && (selectedRow < _validationModel.getSize())) {
+					ValidationRuleSet ruleSet = (ValidationRuleSet) _validationModel.getElementAt(selectedRow);
+					setCurrentRuleSet(ruleSet);
+				} else {
+					setCurrentRuleSet(null);
+				}
+			}
+		});
+		JScrollPane leftPanel = new JScrollPane(_validationModelList);
 
-        _ruleSetList = new JList();
-        _ruleSetList.setCellRenderer(new RuleSetCellRenderer());
-        _ruleSetList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        _ruleSetList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-			public void valueChanged(ListSelectionEvent e)
-            {
-                // Ignore extra messages.
-                if (e.getValueIsAdjusting()) {
-                    return;
-                }
-                int selectedRow = _ruleSetList.getSelectedIndex();
-                if ((selectedRow >= 0) && (_currentRuleSet != null) && (selectedRow < _currentRuleSet.getSize())) {
-                    ValidationRule rule = _currentRuleSet.getElementAt(selectedRow);
-                    setCurrentRule(rule);
-                } else {
-                    setCurrentRule(null);
-                }
-            }
-        });
-        JScrollPane rightPanel = new JScrollPane(_ruleSetList);
+		_ruleSetList = new JList();
+		_ruleSetList.setCellRenderer(new RuleSetCellRenderer());
+		_ruleSetList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		_ruleSetList.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				// Ignore extra messages.
+				if (e.getValueIsAdjusting()) {
+					return;
+				}
+				int selectedRow = _ruleSetList.getSelectedIndex();
+				if ((selectedRow >= 0) && (_currentRuleSet != null) && (selectedRow < _currentRuleSet.getSize())) {
+					ValidationRule rule = _currentRuleSet.getElementAt(selectedRow);
+					setCurrentRule(rule);
+				} else {
+					setCurrentRule(null);
+				}
+			}
+		});
+		JScrollPane rightPanel = new JScrollPane(_ruleSetList);
 
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
 
+		JPanel rulePanel = new JPanel(new BorderLayout());
+		JPanel namePanel = new JPanel(new BorderLayout());
+		JPanel typePanel = new JPanel(new BorderLayout());
+		JLabel ruleNameLabel = new JLabel();
+		ruleNameLabel.setText(FlexoLocalization.localizedForKey("validation_rule_name", ruleNameLabel));
+		_ruleName = new JTextField();
+		_ruleName.setEditable(false);
+		JLabel ruleTypeLabel = new JLabel();
+		ruleTypeLabel.setText(FlexoLocalization.localizedForKey("defined_in", ruleTypeLabel));
+		_ruleType = new JTextField();
+		_ruleType.setEditable(false);
+		_ruleDescription = new JTextArea(3, 20);
+		_ruleDescription.setLineWrap(true);
+		_ruleDescription.setWrapStyleWord(true);
+		_ruleDescription.setEditable(false);
+		_ruleDescription.setBorder(BorderFactory.createEmptyBorder(0, 10, 5, 10));
 
-        JPanel rulePanel = new JPanel(new BorderLayout());
-        JPanel namePanel = new JPanel(new BorderLayout());
-        JPanel typePanel = new JPanel(new BorderLayout());
-        JLabel ruleNameLabel = new JLabel();
-        ruleNameLabel.setText(FlexoLocalization.localizedForKey("validation_rule_name", ruleNameLabel));
-        _ruleName = new JTextField();
-        _ruleName.setEditable(false);
-        JLabel ruleTypeLabel = new JLabel();
-        ruleTypeLabel.setText(FlexoLocalization.localizedForKey("defined_in", ruleTypeLabel));
-        _ruleType = new JTextField();
-        _ruleType.setEditable(false);
-        _ruleDescription = new JTextArea(3, 20);
-        _ruleDescription.setLineWrap(true);
-        _ruleDescription.setWrapStyleWord(true);
-        _ruleDescription.setEditable(false);
-        _ruleDescription.setBorder(BorderFactory.createEmptyBorder(0, 10, 5, 10));
+		_ruleNameDocumentListener = new DocumentListener() {
+			@Override
+			public void changedUpdate(DocumentEvent event) {
+				updateValue();
+			}
 
-        _ruleNameDocumentListener = new DocumentListener() {
-            @Override
-			public void changedUpdate(DocumentEvent event)
-            {
-                updateValue();
-            }
+			@Override
+			public void insertUpdate(DocumentEvent event) {
+				updateValue();
+			}
 
-            @Override
-			public void insertUpdate(DocumentEvent event)
-            {
-                updateValue();
-            }
+			@Override
+			public void removeUpdate(DocumentEvent event) {
+				updateValue();
+			}
 
-            @Override
-			public void removeUpdate(DocumentEvent event)
-            {
-                updateValue();
-            }
+			private void updateValue() {
+				if (_currentRule != null) {
+					FlexoLocalization.setLocalizedForKey(_currentRule.getNameKey(), _ruleName.getText());
+				}
+			}
+		};
+		_ruleDescriptionDocumentListener = new DocumentListener() {
+			@Override
+			public void changedUpdate(DocumentEvent event) {
+				updateValue();
+			}
 
-            private void updateValue()
-            {
-                if (_currentRule != null) {
-                    FlexoLocalization.setLocalizedForKey(_currentRule.getNameKey(), _ruleName.getText());
-                }
-            }
-        };
-        _ruleDescriptionDocumentListener = new DocumentListener() {
-            @Override
-			public void changedUpdate(DocumentEvent event)
-            {
-                updateValue();
-            }
+			@Override
+			public void insertUpdate(DocumentEvent event) {
+				updateValue();
+			}
 
-            @Override
-			public void insertUpdate(DocumentEvent event)
-            {
-                updateValue();
-            }
+			@Override
+			public void removeUpdate(DocumentEvent event) {
+				updateValue();
+			}
 
-            @Override
-			public void removeUpdate(DocumentEvent event)
-            {
-                updateValue();
-            }
+			private void updateValue() {
+				if (_currentRule != null) {
+					FlexoLocalization.setLocalizedForKey(_currentRule.getDescriptionKey(), _ruleDescription.getText());
+				}
+			}
+		};
 
-            private void updateValue()
-            {
-                if (_currentRule != null) {
-                    FlexoLocalization.setLocalizedForKey(_currentRule.getDescriptionKey(), _ruleDescription.getText());
-                }
-            }
-        };
+		namePanel.add(ruleNameLabel, BorderLayout.WEST);
+		namePanel.add(_ruleName, BorderLayout.CENTER);
+		disableButton = new JButton();
+		namePanel.add(disableButton, BorderLayout.EAST);
+		namePanel.setBorder(BorderFactory.createEmptyBorder(3, 0, 5, 0));
 
-        namePanel.add(ruleNameLabel, BorderLayout.WEST);
-        namePanel.add(_ruleName, BorderLayout.CENTER);
-        disableButton = new JButton();
-        namePanel.add(disableButton,BorderLayout.EAST);
-        namePanel.setBorder(BorderFactory.createEmptyBorder(3, 0, 5, 0));
+		typePanel.add(ruleTypeLabel, BorderLayout.WEST);
+		typePanel.add(_ruleType, BorderLayout.CENTER);
+		typePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 3, 0));
 
-        typePanel.add(ruleTypeLabel, BorderLayout.WEST);
-        typePanel.add(_ruleType, BorderLayout.CENTER);
-        typePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 3, 0));
+		JPanel topRuleInfoPanel = new JPanel(new BorderLayout());
+		topRuleInfoPanel.add(namePanel, BorderLayout.NORTH);
+		topRuleInfoPanel.add(typePanel, BorderLayout.SOUTH);
+		topRuleInfoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        JPanel topRuleInfoPanel = new JPanel(new BorderLayout());
-        topRuleInfoPanel.add(namePanel, BorderLayout.NORTH);
-        topRuleInfoPanel.add(typePanel, BorderLayout.SOUTH);
-        topRuleInfoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		rulePanel.add(topRuleInfoPanel, BorderLayout.NORTH);
+		rulePanel.add(_ruleDescription, BorderLayout.CENTER);
 
-        rulePanel.add(topRuleInfoPanel, BorderLayout.NORTH);
-        rulePanel.add(_ruleDescription, BorderLayout.CENTER);
+		JSplitPane splitPane2 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, splitPane, rulePanel);
 
-        JSplitPane splitPane2 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, splitPane, rulePanel);
+		JPanel controlPanel = new JPanel();
+		controlPanel.setLayout(new FlowLayout());
 
-        JPanel controlPanel = new JPanel();
-        controlPanel.setLayout(new FlowLayout());
+		closeButton = new JButton();
+		closeButton.setText(FlexoLocalization.localizedForKey("close", closeButton));
+		editButton = new JButton();
+		editButton.setText(FlexoLocalization.localizedForKey("edit", editButton));
+		editButton.setEnabled(true);
+		saveButton = new JButton();
+		saveButton.setText(FlexoLocalization.localizedForKey("save", saveButton));
+		saveButton.setEnabled(false);
 
-        closeButton = new JButton();
-        closeButton.setText(FlexoLocalization.localizedForKey("close", closeButton));
-        editButton = new JButton();
-        editButton.setText(FlexoLocalization.localizedForKey("edit", editButton));
-        editButton.setEnabled(true);
-        saveButton = new JButton();
-        saveButton.setText(FlexoLocalization.localizedForKey("save", saveButton));
-        saveButton.setEnabled(false);
+		disableButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (_currentRule != null) {
+					_currentRule.setIsEnabled(!_currentRule.getIsEnabled());
+					GeneralPreferences.setValidationRuleEnabled(_currentRule, _currentRule.getIsEnabled());
+					GeneralPreferences.save();
+					disableButton.setText(_currentRule.getIsEnabled() ? FlexoLocalization.localizedForKey("disableRule", disableButton)
+							: FlexoLocalization.localizedForKey("enableRule", disableButton));
+					_ruleSetList.validate();
+					_ruleSetList.repaint();
+				}
+			}
+		});
+		closeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				_consistencyCheckDialog.hide();
+			}
+		});
+		editButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				editButton.setEnabled(false);
+				saveButton.setEnabled(true);
+				_ruleName.setEditable(true);
+				_ruleDescription.setEditable(true);
+				_ruleName.getDocument().addDocumentListener(_ruleNameDocumentListener);
+				_ruleDescription.getDocument().addDocumentListener(_ruleDescriptionDocumentListener);
+			}
+		});
+		saveButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				editButton.setEnabled(true);
+				saveButton.setEnabled(false);
+				_ruleName.setEditable(false);
+				_ruleDescription.setEditable(false);
+				_ruleName.getDocument().removeDocumentListener(_ruleNameDocumentListener);
+				_ruleDescription.getDocument().removeDocumentListener(_ruleDescriptionDocumentListener);
+				FlexoLocalization.saveAllDictionaries();
+			}
+		});
+		controlPanel.add(closeButton);
+		if (ModuleLoader.isDevelopperRelease() || ModuleLoader.isMaintainerRelease()) {
+			controlPanel.add(editButton);
+			controlPanel.add(saveButton);
+		}
 
-        disableButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-            	if(_currentRule!=null){
-            		_currentRule.setIsEnabled(!_currentRule.getIsEnabled());
-            		GeneralPreferences.setValidationRuleEnabled(_currentRule, _currentRule.getIsEnabled());
-            		GeneralPreferences.save();
-            		disableButton.setText(_currentRule.getIsEnabled()?FlexoLocalization.localizedForKey("disableRule", disableButton):FlexoLocalization.localizedForKey("enableRule", disableButton));
-            		_ruleSetList.validate();
-            		_ruleSetList.repaint();
-            	}
-            }
-        });
-        closeButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                _consistencyCheckDialog.hide();
-            }
-        });
-        editButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                editButton.setEnabled(false);
-                saveButton.setEnabled(true);
-                _ruleName.setEditable(true);
-                _ruleDescription.setEditable(true);
-                _ruleName.getDocument().addDocumentListener(_ruleNameDocumentListener);
-                _ruleDescription.getDocument().addDocumentListener(_ruleDescriptionDocumentListener);
-            }
-        });
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                editButton.setEnabled(true);
-                saveButton.setEnabled(false);
-                _ruleName.setEditable(false);
-                _ruleDescription.setEditable(false);
-                _ruleName.getDocument().removeDocumentListener(_ruleNameDocumentListener);
-                _ruleDescription.getDocument().removeDocumentListener(_ruleDescriptionDocumentListener);
-                FlexoLocalization.saveAllDictionaries();
-            }
-        });
-        controlPanel.add(closeButton);
-        if (ModuleLoader.isDevelopperRelease() || ModuleLoader.isMaintainerRelease()) {
-	        controlPanel.add(editButton);
-	        controlPanel.add(saveButton);
-        }
+		add(_title, BorderLayout.NORTH);
+		add(splitPane2, BorderLayout.CENTER);
+		add(controlPanel, BorderLayout.SOUTH);
 
-        add(_title, BorderLayout.NORTH);
-        add(splitPane2, BorderLayout.CENTER);
-        add(controlPanel, BorderLayout.SOUTH);
+		validate();
+		splitPane.setResizeWeight(0.4);
+		splitPane.setDividerLocation(0.3);
+		if (_validationModel.getSize() > 0) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					if (_validationModel.getSize() > 0) {
+						_validationModelList.setSelectedIndex(0);
+						if (((ValidationRuleSet) _validationModel.getElementAt(0)).getRules().size() > 0)
+							disableButton.setText(((ValidationRuleSet) _validationModel.getElementAt(0)).getRules().firstElement()
+									.getIsEnabled() ? FlexoLocalization.localizedForKey("disableRule", disableButton) : FlexoLocalization
+									.localizedForKey("enableRule", disableButton));
+					}
+					_consistencyCheckDialog.toFront();
+				}
+			});
+		}
+	}
 
-        validate();
-        splitPane.setResizeWeight(0.4);
-        splitPane.setDividerLocation(0.3);
-        if (_validationModel.getSize() > 0) {
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-				public void run()
-                {
-                	if (_validationModel.getSize() > 0) {
-	                    _validationModelList.setSelectedIndex(0);
-	                    if (((ValidationRuleSet)_validationModel.getElementAt(0)).getRules().size()>0)
-	                    	disableButton.setText(((ValidationRuleSet)_validationModel.getElementAt(0)).getRules().firstElement().getIsEnabled()?FlexoLocalization.localizedForKey("disableRule", disableButton):FlexoLocalization.localizedForKey("enableRule", disableButton));
-                	}
-                    _consistencyCheckDialog.toFront();
-                }
-            });
-        }
-    }
+	void setCurrentRuleSet(ValidationRuleSet ruleSet) {
+		_currentRuleSet = ruleSet;
+		if (_currentRuleSet != null) {
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("Sets RuleSet to " + ruleSet.getTypeName());
+			_ruleSetList.setModel(_currentRuleSet);
+			if (_currentRuleSet.getSize() > 0) {
+				_ruleSetList.setSelectedIndex(0);
+			}
+		}
+	}
 
-    void setCurrentRuleSet(ValidationRuleSet ruleSet)
-    {
-        _currentRuleSet = ruleSet;
-        if (_currentRuleSet != null) {
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("Sets RuleSet to " + ruleSet.getTypeName());
-            _ruleSetList.setModel(_currentRuleSet);
-            if (_currentRuleSet.getSize() > 0) {
-                _ruleSetList.setSelectedIndex(0);
-            }
-        }
-    }
+	void setCurrentRule(ValidationRule rule) {
+		_currentRule = rule;
+		if (rule != null) {
+			_ruleName.setText(rule.getLocalizedName());
+			_ruleDescription.setText(rule.getLocalizedDescription());
+			_ruleType.setText(rule.getTypeName());
+			if (rule.getIsEnabled())
+				disableButton.setText(FlexoLocalization.localizedForKey("disableRule", disableButton));
+			else
+				disableButton.setText(FlexoLocalization.localizedForKey("enableRule", disableButton));
+			disableButton.setEnabled(true);
+		} else {
+			_ruleName.setText("");
+			_ruleDescription.setText("");
+			_ruleType.setText("");
+			disableButton.setEnabled(false);
+		}
+	}
 
-    void setCurrentRule(ValidationRule rule)
-    {
-        _currentRule = rule;
-        if (rule != null) {
-            _ruleName.setText(rule.getLocalizedName());
-            _ruleDescription.setText(rule.getLocalizedDescription());
-            _ruleType.setText(rule.getTypeName());
-            if(rule.getIsEnabled())
-            	disableButton.setText(FlexoLocalization.localizedForKey("disableRule", disableButton));
-            else
-            	disableButton.setText(FlexoLocalization.localizedForKey("enableRule", disableButton));
-            disableButton.setEnabled(true);
-        } else {
-            _ruleName.setText("");
-            _ruleDescription.setText("");
-            _ruleType.setText("");
-            disableButton.setEnabled(false);
-        }
-    }
+	public void setValidationModel(ValidationModel validationModel) {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("setValidationModel() with " + validationModel.getSize());
 
-    public void setValidationModel(ValidationModel validationModel)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("setValidationModel() with " + validationModel.getSize());
+		_validationModel = validationModel;
+		_validationModelList.setModel(validationModel);
+		if (_validationModel.getSize() > 0) {
+			_validationModelList.setSelectedIndex(0);
+		}
+		_validationModelList.revalidate();
+		_validationModelList.repaint();
+	}
 
-        _validationModel = validationModel;
-        _validationModelList.setModel(validationModel);
-        if (_validationModel.getSize() > 0) {
-            _validationModelList.setSelectedIndex(0);
-        }
-        _validationModelList.revalidate();
-        _validationModelList.repaint();
-    }
+	public ValidationModel getValidationModel() {
+		return _validationModel;
+	}
 
-    public ValidationModel getValidationModel()
-    {
-        return _validationModel;
-    }
+	/**
+	 * Implements
+	 * 
+	 * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
+	 *      org.openflexo.foundation.DataModification)
+	 * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
+	 *      org.openflexo.foundation.DataModification)
+	 */
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+	}
 
-    /**
-     * Implements
-     *
-     * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
-     *      org.openflexo.foundation.DataModification)
-     * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
-     *      org.openflexo.foundation.DataModification)
-     */
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-    }
+	protected class ValidationModelCellRenderer extends DefaultListCellRenderer {
+		@Override
+		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+			Component returned = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+			if (returned instanceof JLabel) {
+				JLabel label = (JLabel) returned;
+				label.setText(((ValidationRuleSet) value).getTypeName());
+			}
+			return returned;
+		}
+	}
 
-    protected class ValidationModelCellRenderer extends DefaultListCellRenderer
-    {
-        @Override
-		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
-        {
-            Component returned = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            if (returned instanceof JLabel) {
-                JLabel label = (JLabel) returned;
-                label.setText(((ValidationRuleSet) value).getTypeName());
-            }
-            return returned;
-        }
-    }
-
-    protected class RuleSetCellRenderer extends DefaultListCellRenderer
-    {
-        @Override
-		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
-        {
-            Component returned = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            if (returned instanceof JLabel) {
-                JLabel label = (JLabel) returned;
-                label.setText(((ValidationRule) value).getLocalizedName());
-                if(!((ValidationRule) value).getIsEnabled())
-                	returned.setForeground(Color.GRAY);
-            }
-            return returned;
-        }
-    }
+	protected class RuleSetCellRenderer extends DefaultListCellRenderer {
+		@Override
+		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+			Component returned = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+			if (returned instanceof JLabel) {
+				JLabel label = (JLabel) returned;
+				label.setText(((ValidationRule) value).getLocalizedName());
+				if (!((ValidationRule) value).getIsEnabled())
+					returned.setForeground(Color.GRAY);
+			}
+			return returned;
+		}
+	}
 
 }

@@ -29,7 +29,6 @@ import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
 
-
 import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -87,32 +86,27 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ReservedKeyword;
 
 /**
- * Abstract class representing a component, but only the definition, not the
- * component itself (no need to load the component to handle a
+ * Abstract class representing a component, but only the definition, not the component itself (no need to load the component to handle a
  * ComponentDefinition)
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public abstract class ComponentDefinition extends IECLObject implements InspectableObject, Serializable, FlexoObserver, Bindable, Sortable
-{
+public abstract class ComponentDefinition extends IECLObject implements InspectableObject, Serializable, FlexoObserver, Bindable, Sortable {
 
 	public static final ComponentComparator COMPARATOR = new ComponentComparator();
 
-	public static class ComponentComparator implements Comparator<ComponentDefinition>
-	{
-		protected ComponentComparator()
-		{
+	public static class ComponentComparator implements Comparator<ComponentDefinition> {
+		protected ComponentComparator() {
 		}
 
 		/**
 		 * Overrides compare
-		 *
+		 * 
 		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 		 */
 		@Override
-		public int compare(ComponentDefinition o1, ComponentDefinition o2)
-		{
+		public int compare(ComponentDefinition o1, ComponentDefinition o2) {
 			return o1.getName().compareTo(o2.getName());
 		}
 
@@ -134,18 +128,16 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 
 	private String _behavior;
 
-	private boolean hasTabContainer=false;
+	private boolean hasTabContainer = false;
 
-	private int index  = -1;
+	private int index = -1;
 
-	protected ComponentDefinition(FlexoComponentLibrary componentLibrary)
-	{
+	protected ComponentDefinition(FlexoComponentLibrary componentLibrary) {
 		super(componentLibrary);
 	}
 
 	protected ComponentDefinition(String aComponentName, FlexoComponentLibrary componentLibrary, FlexoComponentFolder aFolder,
-			FlexoProject prj) throws DuplicateResourceException
-			{
+			FlexoProject prj) throws DuplicateResourceException {
 		this(componentLibrary);
 		_componentName = aComponentName;
 		createsComponentDMEntityIfRequired();
@@ -153,24 +145,22 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 			aFolder.addToComponents(this);
 		}
 		componentLibrary.handleNewComponentCreated(this);
-			}
+	}
 
-	public ComponentDefinition(FlexoComponentLibraryBuilder builder)
-	{
+	public ComponentDefinition(FlexoComponentLibraryBuilder builder) {
 		this(builder.componentLibrary);
 	}
 
 	@SuppressWarnings("unchecked")
 	public DummyComponentInstance getDummyComponentInstance() {
-		if (_dummyComponentInstance==null) {
+		if (_dummyComponentInstance == null) {
 			return _dummyComponentInstance = new DummyComponentInstance(this);
 		}
 		return _dummyComponentInstance;
 	}
 
 	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass()
-	{
+	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
 		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
 		returned.add(AddComponent.actionType);
 		returned.add(AddComponentFolder.actionType);
@@ -182,20 +172,17 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
+	public String getFullyQualifiedName() {
 		return "COMPONENT." + getName();
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return _componentName;
 	}
 
 	@Override
-	public void setName(String aName) throws DuplicateResourceException, DuplicateClassNameException, InvalidNameException
-	{
+	public void setName(String aName) throws DuplicateResourceException, DuplicateClassNameException, InvalidNameException {
 		setComponentName(aName);
 	}
 
@@ -204,13 +191,11 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 		return getFolder();
 	}
 
-	public FlexoComponentFolder getFolder()
-	{
+	public FlexoComponentFolder getFolder() {
 		return _folder;
 	}
 
-	public void setFolder(FlexoComponentFolder aFolder)
-	{
+	public void setFolder(FlexoComponentFolder aFolder) {
 		_folder = aFolder;
 		if (!isDeserializing()) {
 			if (_folder == null) {
@@ -221,43 +206,38 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 		}
 	}
 
-	public String getComponentPrefix()
-	{
+	public String getComponentPrefix() {
 		return _folder.getComponentPrefix();
 	}
 
-	public IEWOComponent getWOComponent()
-	{
+	public IEWOComponent getWOComponent() {
 		return getWOComponent(null);
 	}
 
-	public IEWOComponent getWOComponent(FlexoProgress progress)
-	{
+	public IEWOComponent getWOComponent(FlexoProgress progress) {
 		return getComponentResource().getResourceData(progress);
 	}
 
-	public String getComponentName()
-	{
+	public String getComponentName() {
 		return _componentName;
 	}
 
-	public void setComponentName(String name) throws DuplicateResourceException, DuplicateClassNameException, InvalidNameException
-	{
+	public void setComponentName(String name) throws DuplicateResourceException, DuplicateClassNameException, InvalidNameException {
 		if (_componentName != null && !_componentName.equals(name) && name != null && !isDeserializing()) {
 			if (!name.matches(IERegExp.JAVA_CLASS_NAME_REGEXP)) {
 				throw new InvalidNameException();
 			}
 
-			if(ReservedKeyword.contains(name)) {
+			if (ReservedKeyword.contains(name)) {
 				throw new InvalidNameException();
 			}
 			if (getProject() != null) {
 				ComponentDefinition cd = getComponentLibrary().getComponentNamed(name);
-				if (cd != null && cd!=this) {
+				if (cd != null && cd != this) {
 					throw new DuplicateResourceException(getComponentResource());
 				}
-				DMEntity e  = getProject().getDataModel().getEntityNamed(name);
-				if (e != null && e!=getComponentDMEntity()) {
+				DMEntity e = getProject().getDataModel().getEntityNamed(name);
+				if (e != null && e != getComponentDMEntity()) {
 					throw new DuplicateClassNameException(name);
 				}
 				FlexoComponentResource resource = getComponentResource();
@@ -290,13 +270,11 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 		}
 	}
 
-	protected ComponentDMEntity createsComponentDMEntityIfRequired()
-	{
+	protected ComponentDMEntity createsComponentDMEntityIfRequired() {
 		return getComponentDMEntity();
 	}
 
-	public ComponentDMEntity getComponentDMEntity()
-	{
+	public ComponentDMEntity getComponentDMEntity() {
 		if (_componentDMEntity == null || _componentDMEntity.isDeleted()) {
 			if (getProject() != null) {
 				DMModel dmModel = getProject().getDataModel();
@@ -317,8 +295,7 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 		return _componentDMEntity;
 	}
 
-	public String requestDeletion()
-	{
+	public String requestDeletion() {
 		setChanged();
 		ComponentDeleteRequest request = new ComponentDeleteRequest(this);
 		setChanged();
@@ -330,8 +307,8 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 			while (en.hasMoreElements()) {
 				buffer.append((String) en.nextElement()).append("\n");
 				count++;
-				if(count>9 && en.hasMoreElements()){
-					buffer.append("and "+(request.warnings().size()-10)+" more...\n");
+				if (count > 9 && en.hasMoreElements()) {
+					buffer.append("and " + (request.warnings().size() - 10) + " more...\n");
 					break;
 				}
 			}
@@ -342,15 +319,14 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 	}
 
 	@Override
-	public void delete()
-	{
+	public void delete() {
 		setChanged();
 		notifyObservers(new ComponentDeleted(this));
 		getProject().getFlexoComponentLibrary().delete(this);
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Removing component !");
 		}
-		if (hasComponentResource() && getWOComponent()!=null) {
+		if (hasComponentResource() && getWOComponent() != null) {
 			getWOComponent().delete(false);
 		}
 		if (_componentDMEntity != null) {
@@ -363,11 +339,13 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 	public abstract IEWOComponent createNewComponent();
 
 	public boolean hasComponentResource() {
-		return getComponentResource(false)!=null;
+		return getComponentResource(false) != null;
 	}
 
 	/**
-	 * This method is final because if you want to override the default behaviour, you should instead override the method {@link #getComponentResource(boolean)}
+	 * This method is final because if you want to override the default behaviour, you should instead override the method
+	 * {@link #getComponentResource(boolean)}
+	 * 
 	 * @return
 	 */
 	public final FlexoComponentResource getComponentResource() {
@@ -376,8 +354,7 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 
 	public abstract FlexoComponentResource getComponentResource(boolean createIfNotExists);
 
-	public void notifyWOComponentHasBeenLoaded()
-	{
+	public void notifyWOComponentHasBeenLoaded() {
 		setChanged(false);
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Notify observers that WO has been loaded");
@@ -385,20 +362,17 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 		notifyObservers(new ComponentLoaded(this));
 	}
 
-	public boolean isLoaded()
-	{
+	public boolean isLoaded() {
 		return hasComponentResource() && getComponentResource().isLoaded();
 	}
 
 	/**
-	 * Return a Vector of embedded IEObjects at this level. NOTE that this is
-	 * NOT a recursive method
-	 *
+	 * Return a Vector of embedded IEObjects at this level. NOTE that this is NOT a recursive method
+	 * 
 	 * @return a Vector of IEObject instances
 	 */
 	@Override
-	public Vector<IObject> getEmbeddedIEObjects()
-	{
+	public Vector<IObject> getEmbeddedIEObjects() {
 		Vector<IObject> answer = new Vector<IObject>();
 		answer.add(this);
 		return answer;
@@ -412,8 +386,7 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 	}
 
 	@Override
-	public ValidationModel getDefaultValidationModel()
-	{
+	public ValidationModel getDefaultValidationModel() {
 		if (getProject() != null) {
 			return getProject().getIEValidationModel();
 		} else {
@@ -425,92 +398,78 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 	}
 
 	/**
-	 * Returns a flag indicating if this object is valid according to default
-	 * validation model
-	 *
+	 * Returns a flag indicating if this object is valid according to default validation model
+	 * 
 	 * @return boolean
 	 */
 	@Override
-	public boolean isValid()
-	{
+	public boolean isValid() {
 		return isValid(getDefaultValidationModel());
 	}
 
 	/**
-	 * Returns a flag indicating if this object is valid according to specified
-	 * validation model
-	 *
+	 * Returns a flag indicating if this object is valid according to specified validation model
+	 * 
 	 * @return boolean
 	 */
 	@Override
-	public boolean isValid(ValidationModel validationModel)
-	{
+	public boolean isValid(ValidationModel validationModel) {
 		return validationModel.isValid(this);
 	}
 
 	/**
-	 * Validates this object by building new ValidationReport object Default
-	 * validation model is used to perform this validation.
+	 * Validates this object by building new ValidationReport object Default validation model is used to perform this validation.
 	 */
 	@Override
-	public ValidationReport validate()
-	{
+	public ValidationReport validate() {
 		return validate(getDefaultValidationModel());
 	}
 
 	/**
-	 * Validates this object by building new ValidationReport object Supplied
-	 * validation model is used to perform this validation.
+	 * Validates this object by building new ValidationReport object Supplied validation model is used to perform this validation.
 	 */
 	@Override
-	public ValidationReport validate(ValidationModel validationModel)
-	{
+	public ValidationReport validate(ValidationModel validationModel) {
 		return validationModel.validate(this);
 	}
 
 	/**
-	 * Validates this object by appending eventual issues to supplied
-	 * ValidationReport. Default validation model is used to perform this
+	 * Validates this object by appending eventual issues to supplied ValidationReport. Default validation model is used to perform this
 	 * validation.
-	 *
-	 * @param report,
-	 *            a ValidationReport object on which found issues are appened
+	 * 
+	 * @param report
+	 *            , a ValidationReport object on which found issues are appened
 	 */
 	@Override
-	public void validate(ValidationReport report)
-	{
+	public void validate(ValidationReport report) {
 		validate(report, getDefaultValidationModel());
 	}
 
 	/**
-	 * Validates this object by appending eventual issues to supplied
-	 * ValidationReport. Supplied validation model is used to perform this
+	 * Validates this object by appending eventual issues to supplied ValidationReport. Supplied validation model is used to perform this
 	 * validation.
-	 *
-	 * @param report,
-	 *            a ValidationReport object on which found issues are appened
+	 * 
+	 * @param report
+	 *            , a ValidationReport object on which found issues are appened
 	 */
 	@Override
-	public void validate(ValidationReport report, ValidationModel validationModel)
-	{
+	public void validate(ValidationReport report, ValidationModel validationModel) {
 		validationModel.validate(this, report);
 	}
 
 	/**
 	 * Returns all the binding definitions for this component
-	 *
+	 * 
 	 * @return a vector of ComponentBindingDefinition
 	 */
-	public Vector<ComponentBindingDefinition> getBindingDefinitions()
-	{
+	public Vector<ComponentBindingDefinition> getBindingDefinitions() {
 		if (getComponentDMEntity() != null) {
 			return getComponentDMEntity().getBindingDefinitions();
 		}
 		return null;
 	}
 
-	private Vector<ComponentBindingDefinition> getMandatoryBindingDefinitions()
-	{
+	private Vector<ComponentBindingDefinition> getMandatoryBindingDefinitions() {
 		Enumeration<ComponentBindingDefinition> en = getBindingDefinitions().elements();
 		Vector<ComponentBindingDefinition> answer = new Vector<ComponentBindingDefinition>();
 		while (en.hasMoreElements()) {
@@ -528,8 +487,7 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 		}
 	}
 
-	public boolean isAssignableFromDA()
-	{
+	public boolean isAssignableFromDA() {
 		Vector mandatoryBD = getMandatoryBindingDefinitions();
 		if (mandatoryBD.size() == 0) {
 			return true;
@@ -537,7 +495,7 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 		Enumeration en = mandatoryBD.elements();
 		while (en.hasMoreElements()) {
 			ComponentBindingDefinition cbd = (ComponentBindingDefinition) en.nextElement();
-			if (cbd.getType() == null || !cbd.getType().isEOEntity() || !daEntitiesContainsType(getProject(),cbd.getType())) {
+			if (cbd.getType() == null || !cbd.getType().isEOEntity() || !daEntitiesContainsType(getProject(), cbd.getType())) {
 				return false;
 			}
 		}
@@ -560,13 +518,12 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 		return true;
 	}
 
-	private static boolean daEntitiesContainsType(FlexoProject project, DMType type)
-	{
-		return type.getBaseEntity() == project.getDataModel().getEntityNamed(String.class.getName()) || type.getBaseEntity() == project.getDataModel().getEntityNamed(Integer.class.getName());
+	private static boolean daEntitiesContainsType(FlexoProject project, DMType type) {
+		return type.getBaseEntity() == project.getDataModel().getEntityNamed(String.class.getName())
+				|| type.getBaseEntity() == project.getDataModel().getEntityNamed(Integer.class.getName());
 	}
 
-	public ComponentBindingDefinition bindingDefinitionNamed(String aName)
-	{
+	public ComponentBindingDefinition bindingDefinitionNamed(String aName) {
 		if (getComponentDMEntity() != null) {
 			return getComponentDMEntity().bindingDefinitionNamed(aName);
 		}
@@ -575,23 +532,22 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 
 	/*
 	 * Commented because bindings are no more stored on the ComponentDefinition
-    public void notifyBindingDefinitionAdded(BindingDefinition bindingDefinition)
-    {
-        setChanged();
-        notifyObservers(new BindingAdded(bindingDefinition));
-    }
+	public void notifyBindingDefinitionAdded(BindingDefinition bindingDefinition)
+	{
+	    setChanged();
+	    notifyObservers(new BindingAdded(bindingDefinition));
+	}
 
-    public void notifyBindingDefinitionRemoved(BindingDefinition bindingDefinition)
-    {
-        setChanged();
-        notifyObservers(new BindingRemoved(bindingDefinition));
-    }
+	public void notifyBindingDefinitionRemoved(BindingDefinition bindingDefinition)
+	{
+	    setChanged();
+	    notifyObservers(new BindingRemoved(bindingDefinition));
+	}
 	 */
 	private BindingModel _bindingModel = null;
 
 	@Override
-	public BindingModel getBindingModel()
-	{
+	public BindingModel getBindingModel() {
 		if (_bindingModel == null) {
 			if (getComponentDMEntity() != null) {
 				_bindingModel = new ComponentDefinitionBindingModel();
@@ -601,48 +557,42 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 	}
 
 	/**
-	 *
+	 * 
 	 * Binding model for a component definition
-	 *
+	 * 
 	 * @author sguerin
 	 */
-	public class ComponentDefinitionBindingModel extends BindingModel
-	{
+	public class ComponentDefinitionBindingModel extends BindingModel {
 		public static final String COMPONENT_BINDING_VARIABLE_NAME = "component";
 
 		private BindingVariable _componentVariable;
 
-		public ComponentDefinitionBindingModel()
-		{
+		public ComponentDefinitionBindingModel() {
 			super();
-			_componentVariable = new BindingVariable(ComponentDefinition.this, getProject().getDataModel(), FlexoLocalization
-					.localizedForKey("access_to_the_current_component"));
+			_componentVariable = new BindingVariable(ComponentDefinition.this, getProject().getDataModel(),
+					FlexoLocalization.localizedForKey("access_to_the_current_component"));
 			_componentVariable.setVariableName(COMPONENT_BINDING_VARIABLE_NAME);
 			_componentVariable.setType(DMType.makeResolvedDMType(getComponentDMEntity()));
 
 		}
 
 		@Override
-		public int getBindingVariablesCount()
-		{
+		public int getBindingVariablesCount() {
 			return 1;
 		}
 
 		@Override
-		public BindingVariable getBindingVariableAt(int index)
-		{
+		public BindingVariable getBindingVariableAt(int index) {
 			return getComponentBindingVariable();
 
 		}
 
-		public BindingVariable getComponentBindingVariable()
-		{
+		public BindingVariable getComponentBindingVariable() {
 			return _componentVariable;
 		}
 
 		@Override
-		public boolean allowsNewBindingVariableCreation()
-		{
+		public boolean allowsNewBindingVariableCreation() {
 			return false;
 		}
 
@@ -651,15 +601,14 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 	/**
 	 *
 	 */
-	public ComponentBindingDefinition createNewBinding()
-	{
+	public ComponentBindingDefinition createNewBinding() {
 		if (getComponentDMEntity() != null) {
 			String newPropertyName = getProject().getDataModel().getNextDefautPropertyName(getComponentDMEntity());
 			DMProperty newProperty = new DMProperty(getProject().getDataModel(), /* getComponentDMEntity(), */newPropertyName, null,
 					DMCardinality.SINGLE, false, true, DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
-			boolean success = getComponentDMEntity().registerProperty(newProperty,true);
+			boolean success = getComponentDMEntity().registerProperty(newProperty, true);
 			ComponentBindingDefinition reply = getComponentDMEntity().bindingDefinitionForProperty(newProperty);
-			if(success && reply!=null) {
+			if (success && reply != null) {
 				getComponentDMEntity().addToMandatoryBindingProperties(newProperty);
 			}
 			return reply;
@@ -671,66 +620,54 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 		}
 	}
 
-	public void deleteBinding(ComponentBindingDefinition bd)
-	{
-		if(bd!=null && bd.getProperty()!=null) {
+	public void deleteBinding(ComponentBindingDefinition bd) {
+		if (bd != null && bd.getProperty() != null) {
 			bd.getProperty().delete();
 		}
 	}
 
-	public boolean isBindingDefinitionDeletable(ComponentBindingDefinition bd)
-	{
+	public boolean isBindingDefinitionDeletable(ComponentBindingDefinition bd) {
 		return true;
 	}
 
-	public String getBehavior()
-	{
+	public String getBehavior() {
 		return _behavior;
 	}
 
-	public void setBehavior(String behavior)
-	{
+	public void setBehavior(String behavior) {
 		_behavior = behavior;
 	}
 
-	public String getInput()
-	{
+	public String getInput() {
 		return _input;
 	}
 
-	public void setInput(String input)
-	{
+	public void setInput(String input) {
 		_input = input;
 	}
 
-	public String getNameRegexp()
-	{
+	public String getNameRegexp() {
 		return IERegExp.JAVA_CLASS_NAME_REGEXP;
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return getComponentName();
 	}
 
-	public boolean getHasTabContainer()
-	{
+	public boolean getHasTabContainer() {
 		return hasTabContainer;
 	}
 
-	public void setHasTabContainer(boolean hasTabContainer)
-	{
+	public void setHasTabContainer(boolean hasTabContainer) {
 		this.hasTabContainer = hasTabContainer;
 	}
 
-	public ComponentBindingDefinition getBindingDefinitionTyped(DMEntity type)
-	{
+	public ComponentBindingDefinition getBindingDefinitionTyped(DMEntity type) {
 		return getBindingDefinitionTyped(DMType.makeResolvedDMType(type));
 	}
 
-	public ComponentBindingDefinition getBindingDefinitionTyped(DMType type)
-	{
+	public ComponentBindingDefinition getBindingDefinitionTyped(DMType type) {
 		Enumeration<ComponentBindingDefinition> en = getBindingDefinitions().elements();
 		while (en.hasMoreElements()) {
 			ComponentBindingDefinition bd = en.nextElement();
@@ -742,16 +679,15 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 	}
 
 	public boolean isIndexed() {
-		return this.index>-1;
+		return this.index > -1;
 	}
 
 	@Override
-	public int getIndex()
-	{
+	public int getIndex() {
 		if (isBeingCloned()) {
 			return -1;
 		}
-		if (index==-1 && getCollection()!=null) {
+		if (index == -1 && getCollection() != null) {
 			index = getCollection().length;
 			FlexoIndexManager.reIndexObjectOfArray(getCollection());
 		}
@@ -759,37 +695,35 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 	}
 
 	@Override
-	public void setIndex(int index)
-	{
+	public void setIndex(int index) {
 		if (isDeserializing() || isCreatedByCloning()) {
 			setIndexValue(index);
 			return;
 		}
-		FlexoIndexManager.switchIndexForKey(this.index,index,this);
-		if (getIndex()!=index) {
+		FlexoIndexManager.switchIndexForKey(this.index, index, this);
+		if (getIndex() != index) {
 			setChanged();
-			AttributeDataModification dm = new AttributeDataModification("index",null,getIndex());
+			AttributeDataModification dm = new AttributeDataModification("index", null, getIndex());
 			dm.setReentrant(true);
 			notifyObservers(dm);
 		}
 	}
 
 	@Override
-	public int getIndexValue()
-	{
+	public int getIndexValue() {
 		return getIndex();
 	}
 
 	@Override
 	public void setIndexValue(int index) {
-		if (this.index==index) {
+		if (this.index == index) {
 			return;
 		}
 		int old = this.index;
 		this.index = index;
 		setChanged();
 		notifyModification("index", old, index);
-		if (!isDeserializing() && !isCreatedByCloning() && getFolder()!=null) {
+		if (!isDeserializing() && !isCreatedByCloning() && getFolder() != null) {
 			getFolder().setChanged();
 			getFolder().notifyObservers(new ChildrenOrderChanged());
 		}
@@ -797,12 +731,12 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 
 	/**
 	 * Overrides getCollection
+	 * 
 	 * @see org.openflexo.foundation.utils.Sortable#getCollection()
 	 */
 	@Override
-	public ComponentDefinition[] getCollection()
-	{
-		if (getFolder()==null) {
+	public ComponentDefinition[] getCollection() {
+		if (getFolder() == null) {
 			return null;
 		}
 		return getFolder().getComponents().toArray(new ComponentDefinition[0]);
@@ -813,18 +747,18 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 	}
 
 	public void addToComponentInstances(ComponentInstance instance) {
-		addToComponentInstances(instance,true);
+		addToComponentInstances(instance, true);
 	}
 
-    public void addToComponentInstances(ComponentInstance instance, boolean notify) {
+	public void addToComponentInstances(ComponentInstance instance, boolean notify) {
 		if (!componentInstances.contains(instance) && !(instance instanceof DummyComponentInstance)) {
 			if (!instance.getXMLResourceData().getFlexoXMLFileResource().isConverting()) {
 				componentInstances.add(instance);
-				if(notify)setChanged();
-			} else
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Found resource converting, ignoring component instance");
-				}
+				if (notify)
+					setChanged();
+			} else if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Found resource converting, ignoring component instance");
+			}
 		}
 	}
 
@@ -840,38 +774,42 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 	// ======================== Validation =========================
 	// =============================================================
 
-	public static class BindingsMustDefineType<CD extends ComponentDefinition ,CI extends ComponentInstance> extends ValidationRule<BindingsMustDefineType<CD,CI>,CD>
-	{
+	public static class BindingsMustDefineType<CD extends ComponentDefinition, CI extends ComponentInstance> extends
+			ValidationRule<BindingsMustDefineType<CD, CI>, CD> {
 
 		/**
 		 * @param objectType
 		 * @param ruleName
 		 */
-		public BindingsMustDefineType()
-		{
-			super(ComponentDefinition.class,"binding_must_define_a_type");
+		public BindingsMustDefineType() {
+			super(ComponentDefinition.class, "binding_must_define_a_type");
 		}
 
 		/**
 		 * Overrides applyValidation
+		 * 
 		 * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
 		 */
 		@Override
-		public ValidationIssue<BindingsMustDefineType<CD,CI>,CD> applyValidation(CD cd)
-		{
-			CompoundIssue<BindingsMustDefineType<CD,CI>,CD> issues = null;
+		public ValidationIssue<BindingsMustDefineType<CD, CI>, CD> applyValidation(CD cd) {
+			CompoundIssue<BindingsMustDefineType<CD, CI>, CD> issues = null;
 			for (ComponentBindingDefinition cbd : cd.getBindingDefinitions()) {
 				DMProperty p = cbd.getProperty();
-				if (p.getType()==null || p.getType().getKindOfType()==KindOfType.UNRESOLVED && (p.getType().getName()==null || p.getType().getName().equals("null"))) {
-					Vector<FixProposal<BindingsMustDefineType<CD,CI>,CD>> fixes = new Vector<FixProposal<BindingsMustDefineType<CD,CI>,CD>>();
-					fixes.add(new SetType<BindingsMustDefineType<CD,CI>, CD, CI>(cbd, DMType.makeResolvedDMType(p.getDMModel().getDMEntity(String.class))));
-					fixes.add(new SetType<BindingsMustDefineType<CD,CI>, CD, CI>(cbd, DMType.makeResolvedDMType(p.getDMModel().getDMEntity(Boolean.class))));
-					fixes.add(new SetType<BindingsMustDefineType<CD,CI>, CD, CI>(cbd, DMType.makeResolvedDMType(p.getDMModel().getDMEntity(Object.class))));
-					fixes.add(new DeleteBinding<BindingsMustDefineType<CD,CI>, CD, CI>(cbd));
-					if (issues==null) {
-						issues = new CompoundIssue<BindingsMustDefineType<CD,CI>,CD>(cd);
+				if (p.getType() == null || p.getType().getKindOfType() == KindOfType.UNRESOLVED
+						&& (p.getType().getName() == null || p.getType().getName().equals("null"))) {
+					Vector<FixProposal<BindingsMustDefineType<CD, CI>, CD>> fixes = new Vector<FixProposal<BindingsMustDefineType<CD, CI>, CD>>();
+					fixes.add(new SetType<BindingsMustDefineType<CD, CI>, CD, CI>(cbd, DMType.makeResolvedDMType(p.getDMModel()
+							.getDMEntity(String.class))));
+					fixes.add(new SetType<BindingsMustDefineType<CD, CI>, CD, CI>(cbd, DMType.makeResolvedDMType(p.getDMModel()
+							.getDMEntity(Boolean.class))));
+					fixes.add(new SetType<BindingsMustDefineType<CD, CI>, CD, CI>(cbd, DMType.makeResolvedDMType(p.getDMModel()
+							.getDMEntity(Object.class))));
+					fixes.add(new DeleteBinding<BindingsMustDefineType<CD, CI>, CD, CI>(cbd));
+					if (issues == null) {
+						issues = new CompoundIssue<BindingsMustDefineType<CD, CI>, CD>(cd);
 					}
-					issues.addToContainedIssues(new ValidationError<BindingsMustDefineType<CD,CI>,CD>(this,cd,"binding_must_define_a_type",fixes));
+					issues.addToContainedIssues(new ValidationError<BindingsMustDefineType<CD, CI>, CD>(this, cd,
+							"binding_must_define_a_type", fixes));
 				}
 			}
 			return issues;
@@ -879,8 +817,8 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 
 	}
 
-	public static class DeleteBinding<V extends ValidationRule<V, CD>, CD extends ComponentDefinition, CI extends ComponentInstance> extends FixProposal<V,CD>
-	{
+	public static class DeleteBinding<V extends ValidationRule<V, CD>, CD extends ComponentDefinition, CI extends ComponentInstance>
+			extends FixProposal<V, CD> {
 		private ComponentBindingDefinition binding;
 
 		public DeleteBinding(ComponentBindingDefinition def) {
@@ -890,7 +828,7 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 
 		@Override
 		protected void fixAction() {
-			((ComponentDefinition)getObject()).deleteBinding(binding);
+			((ComponentDefinition) getObject()).deleteBinding(binding);
 		}
 
 		public BindingDefinition getBinding() {
@@ -900,10 +838,10 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 
 	/**
 	 * @author gpolet
-	 *
+	 * 
 	 */
-	public static class SetType<V extends ValidationRule<V, CD>, CD extends ComponentDefinition, CI extends ComponentInstance> extends FixProposal<V,CD>
-	{
+	public static class SetType<V extends ValidationRule<V, CD>, CD extends ComponentDefinition, CI extends ComponentInstance> extends
+			FixProposal<V, CD> {
 
 		private DMType type;
 
@@ -912,8 +850,7 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 		/**
 		 * @param aMessage
 		 */
-		public SetType(ComponentBindingDefinition cbd, DMType type)
-		{
+		public SetType(ComponentBindingDefinition cbd, DMType type) {
 			super("set_type_to_($type)");
 			this.type = type;
 			this.binding = cbd;
@@ -921,16 +858,15 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 
 		/**
 		 * Overrides fixAction
+		 * 
 		 * @see org.openflexo.foundation.validation.FixProposal#fixAction()
 		 */
 		@Override
-		protected void fixAction()
-		{
+		protected void fixAction() {
 			binding.getProperty().setType(type);
 		}
 
-		public DMType getType()
-		{
+		public DMType getType() {
 			return type;
 		}
 

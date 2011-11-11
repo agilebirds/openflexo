@@ -26,21 +26,18 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.ContextualMenuManager;
 
-
 public class WKFContextualMenuManager extends ContextualMenuManager {
 
-    private WKFController _controller;
-    
-    public WKFContextualMenuManager(WKFSelectionManager selectionManager, FlexoEditor editor, WKFController controller)
-    {
-        super(selectionManager,editor);
-        _controller = controller;
-    }
-    
-     @Override
-	public FlexoModelObject getFocusedObject(Component focusedComponent, MouseEvent e)
-    {
-          return super.getFocusedObject(focusedComponent,e);
-    }
+	private WKFController _controller;
+
+	public WKFContextualMenuManager(WKFSelectionManager selectionManager, FlexoEditor editor, WKFController controller) {
+		super(selectionManager, editor);
+		_controller = controller;
+	}
+
+	@Override
+	public FlexoModelObject getFocusedObject(Component focusedComponent, MouseEvent e) {
+		return super.getFocusedObject(focusedComponent, e);
+	}
 
 }

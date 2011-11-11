@@ -44,195 +44,179 @@ import org.openflexo.foundation.validation.ValidationWarning;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 
-
 /**
  * Represents a checkbox widget
  * 
  * @author bmangez
  */
-public class IECheckBoxWidget extends IEControlWidget implements Serializable, IEWidgetWithValueList, IEWidgetWithMainBinding
-{
-    /**
+public class IECheckBoxWidget extends IEControlWidget implements Serializable, IEWidgetWithValueList, IEWidgetWithMainBinding {
+	/**
      * 
      */
-    public static final String CHECKBOX_WIDGET = "checkbox_widget";
+	public static final String CHECKBOX_WIDGET = "checkbox_widget";
 
-    public static final String BINDING_ISCHECKED_NAME = "isChecked";
+	public static final String BINDING_ISCHECKED_NAME = "isChecked";
 
-    public static final String ATTRIB_DESCRIPTION_NAME = "description";
+	public static final String ATTRIB_DESCRIPTION_NAME = "description";
 
-    public static final String ATTRIB_DEFAULTVALUE_NAME = "value";
+	public static final String ATTRIB_DEFAULTVALUE_NAME = "value";
 
-    protected boolean _value = false;
+	protected boolean _value = false;
 
-    protected BindingValue _bindingChecked; // Could be considered as a BindingValue because defined as GET_SET
+	protected BindingValue _bindingChecked; // Could be considered as a BindingValue because defined as GET_SET
 
-    private boolean _submitForm = false;
-    
-    private String _behavior;
+	private boolean _submitForm = false;
 
-    private String _funcName;
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	private String _behavior;
 
-    public IECheckBoxWidget(FlexoComponentBuilder builder)
-    {
-        this(builder.woComponent, null, builder.getProject());
-        initializeDeserialization(builder);
-    }
+	private String _funcName;
 
-    public IECheckBoxWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj)
-    {
-        super(woComponent, parent, prj);
-    }
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    @Override
-	public String getDefaultInspectorName()
-    {
-        return "CheckBox.inspector";
-    }
+	public IECheckBoxWidget(FlexoComponentBuilder builder) {
+		this(builder.woComponent, null, builder.getProject());
+		initializeDeserialization(builder);
+	}
 
-    // ==========================================================================
-    // ============================= XMLSerialize
-    // ===============================
-    // ==========================================================================
+	public IECheckBoxWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj) {
+		super(woComponent, parent, prj);
+	}
 
-    // ==========================================================================
-    // ============================= Variables
-    // ==================================
-    // ==========================================================================
+	@Override
+	public String getDefaultInspectorName() {
+		return "CheckBox.inspector";
+	}
 
-    public WidgetBindingDefinition getBindingCheckedDefinition()
-    {
-        return WidgetBindingDefinition.get(this, "bindingChecked", Boolean.TYPE, BindingDefinitionType.GET_SET, true);
-    }
+	// ==========================================================================
+	// ============================= XMLSerialize
+	// ===============================
+	// ==========================================================================
 
-    public BindingValue getBindingChecked()
-    {
-        if (isBeingCloned())
-            return null;
-        return _bindingChecked;
-    }
+	// ==========================================================================
+	// ============================= Variables
+	// ==================================
+	// ==========================================================================
 
-    public void setBindingChecked(BindingValue bindingChecked)
-    {
-        _bindingChecked = bindingChecked;
-        setChanged();
-        if (_bindingChecked != null) {
-            _bindingChecked.setOwner(this);
-            _bindingChecked.setBindingDefinition(getBindingCheckedDefinition());
-        }
-        setChanged();
-        notifyObservers(new IEDataModification("bindingChecked",null,_bindingChecked));
-    }
+	public WidgetBindingDefinition getBindingCheckedDefinition() {
+		return WidgetBindingDefinition.get(this, "bindingChecked", Boolean.TYPE, BindingDefinitionType.GET_SET, true);
+	}
 
-    public boolean getValue()
-    {
-        return _value;
-    }
+	public BindingValue getBindingChecked() {
+		if (isBeingCloned())
+			return null;
+		return _bindingChecked;
+	}
 
-    public void setValue(boolean value)
-    {
-        this._value = value;
-        setChanged();
-        notifyObservers(new DataModification(DataModification.ATTRIBUTE, ATTRIB_DEFAULTVALUE_NAME, null, null));
-    }
+	public void setBindingChecked(BindingValue bindingChecked) {
+		_bindingChecked = bindingChecked;
+		setChanged();
+		if (_bindingChecked != null) {
+			_bindingChecked.setOwner(this);
+			_bindingChecked.setBindingDefinition(getBindingCheckedDefinition());
+		}
+		setChanged();
+		notifyObservers(new IEDataModification("bindingChecked", null, _bindingChecked));
+	}
 
-    public boolean getSubmitForm()
-    {
-        return _submitForm;
-    }
+	public boolean getValue() {
+		return _value;
+	}
 
-    public void setSubmitForm(boolean aBoolean)
-    {
-        _submitForm = aBoolean;
-        setChanged();
-        notifyObservers(new IEDataModification("submitForm",null,new Boolean(_submitForm)));
-    }
+	public void setValue(boolean value) {
+		this._value = value;
+		setChanged();
+		notifyObservers(new DataModification(DataModification.ATTRIBUTE, ATTRIB_DEFAULTVALUE_NAME, null, null));
+	}
 
-    /**
-     * Return a Vector of embedded IEObjects at this level. NOTE that this is
-     * NOT a recursive method
-     * 
-     * @return a Vector of IEObject instances
-     */
-    @Override
-	public Vector<IObject> getEmbeddedIEObjects()
-    {
-        return EMPTY_IOBJECT_VECTOR;
-    }
+	public boolean getSubmitForm() {
+		return _submitForm;
+	}
 
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return "CheckBox";
-    }
+	public void setSubmitForm(boolean aBoolean) {
+		_submitForm = aBoolean;
+		setChanged();
+		notifyObservers(new IEDataModification("submitForm", null, new Boolean(_submitForm)));
+	}
 
-    public String getBehavior()
-    {
-        return _behavior;
-    }
+	/**
+	 * Return a Vector of embedded IEObjects at this level. NOTE that this is NOT a recursive method
+	 * 
+	 * @return a Vector of IEObject instances
+	 */
+	@Override
+	public Vector<IObject> getEmbeddedIEObjects() {
+		return EMPTY_IOBJECT_VECTOR;
+	}
 
-    public void setBehavior(String behavior)
-    {
-        _behavior = behavior;
-        setChanged();
-        notifyObservers(new IEDataModification("behavior",null,_behavior));
-    }
+	@Override
+	public String getFullyQualifiedName() {
+		return "CheckBox";
+	}
 
-    public String getFuncName()
-    {
-        return _funcName;
-    }
+	public String getBehavior() {
+		return _behavior;
+	}
 
-    public void setFuncName(String funcName)
-    {
-        _funcName = funcName;
-        setChanged();
-        notifyObservers(new IEDataModification("funcName",null,_funcName));
-    }
+	public void setBehavior(String behavior) {
+		_behavior = behavior;
+		setChanged();
+		notifyObservers(new IEDataModification("behavior", null, _behavior));
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return CHECKBOX_WIDGET;
-    }
-    
-    public String getOperatorCodeStringRepresentation(){
-        //TODO... but is it needed ?
-    	return null;
-    }
-    
-    /**
-     * Overrides getRawRowKeyPath
-     * @see org.openflexo.foundation.ie.widget.IEWidget#getRawRowKeyPath()
-     */
-    @Override
-    public String getRawRowKeyPath()
-    {
-        HTMLListDescriptor desc = getHTMLListDescriptor();
-        if (desc==null)
-            return null;
-        String item = desc.getItemName();
-        if (item==null)
-            return null;
-        if (getBindingChecked()==null)
-            return null;
-        if (getBindingChecked().getCodeStringRepresentation().indexOf(item)>-1){
-            String reply = getBindingChecked().getCodeStringRepresentation().substring(getBindingChecked().getCodeStringRepresentation().indexOf(item)+item.length()+1);
-            if(reply.endsWith("Boolean"))return reply.substring(0,reply.length()-7);
-            return reply;
-        }else
-            return null;
-    }
-    
-    public static class RadioButtonReloadOnChange extends ValidationRule<RadioButtonReloadOnChange, IECheckBoxWidget> {
+	public String getFuncName() {
+		return _funcName;
+	}
+
+	public void setFuncName(String funcName) {
+		_funcName = funcName;
+		setChanged();
+		notifyObservers(new IEDataModification("funcName", null, _funcName));
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return CHECKBOX_WIDGET;
+	}
+
+	public String getOperatorCodeStringRepresentation() {
+		// TODO... but is it needed ?
+		return null;
+	}
+
+	/**
+	 * Overrides getRawRowKeyPath
+	 * 
+	 * @see org.openflexo.foundation.ie.widget.IEWidget#getRawRowKeyPath()
+	 */
+	@Override
+	public String getRawRowKeyPath() {
+		HTMLListDescriptor desc = getHTMLListDescriptor();
+		if (desc == null)
+			return null;
+		String item = desc.getItemName();
+		if (item == null)
+			return null;
+		if (getBindingChecked() == null)
+			return null;
+		if (getBindingChecked().getCodeStringRepresentation().indexOf(item) > -1) {
+			String reply = getBindingChecked().getCodeStringRepresentation().substring(
+					getBindingChecked().getCodeStringRepresentation().indexOf(item) + item.length() + 1);
+			if (reply.endsWith("Boolean"))
+				return reply.substring(0, reply.length() - 7);
+			return reply;
+		} else
+			return null;
+	}
+
+	public static class RadioButtonReloadOnChange extends ValidationRule<RadioButtonReloadOnChange, IECheckBoxWidget> {
 
 		public RadioButtonReloadOnChange() {
 			super(IECheckBoxWidget.class, "checkbox_reload_on_change");
@@ -241,18 +225,19 @@ public class IECheckBoxWidget extends IEControlWidget implements Serializable, I
 		@Override
 		public ValidationIssue<RadioButtonReloadOnChange, IECheckBoxWidget> applyValidation(IECheckBoxWidget radio) {
 			if (!radio.getSubmitForm())
-				return new ValidationWarning<RadioButtonReloadOnChange, IECheckBoxWidget>(this,radio,"checkbox_reload_on_change",new SetReloadOnChange());
+				return new ValidationWarning<RadioButtonReloadOnChange, IECheckBoxWidget>(this, radio, "checkbox_reload_on_change",
+						new SetReloadOnChange());
 			return null;
 		}
 
 		@Override
 		public boolean isValidForTarget(TargetType targetType) {
-			return targetType==CodeType.PROTOTYPE;
+			return targetType == CodeType.PROTOTYPE;
 		}
-    	
-    }
-    
-    public static class SetReloadOnChange extends FixProposal<RadioButtonReloadOnChange, IECheckBoxWidget> {
+
+	}
+
+	public static class SetReloadOnChange extends FixProposal<RadioButtonReloadOnChange, IECheckBoxWidget> {
 
 		public SetReloadOnChange() {
 			super("set_checkbox_to_reload_on_value_change");
@@ -262,15 +247,14 @@ public class IECheckBoxWidget extends IEControlWidget implements Serializable, I
 		protected void fixAction() {
 			getObject().setSubmitForm(true);
 		}
-    	
-    }
+
+	}
 
 	/**
 	 * @see org.openflexo.foundation.ie.widget.IEWidgetWithValueList#getValueList()
 	 */
 	@Override
-	public List<Object> getValueList()
-	{
+	public List<Object> getValueList() {
 		return getValueList(null);
 	}
 
@@ -278,8 +262,7 @@ public class IECheckBoxWidget extends IEControlWidget implements Serializable, I
 	 * @see org.openflexo.foundation.ie.widget.IEWidgetWithValueList#getValueList(org.openflexo.foundation.wkf.FlexoProcess)
 	 */
 	@Override
-	public List<Object> getValueList(FlexoProcess process)
-	{
+	public List<Object> getValueList(FlexoProcess process) {
 		List<Object> result = new ArrayList<Object>();
 		result.add(getValue());
 		return result;
@@ -289,8 +272,7 @@ public class IECheckBoxWidget extends IEControlWidget implements Serializable, I
 	 * @see org.openflexo.foundation.ie.widget.IEWidgetWithMainBinding#getMainBinding()
 	 */
 	@Override
-	public AbstractBinding getMainBinding()
-	{
+	public AbstractBinding getMainBinding() {
 		return getBindingChecked();
 	}
 }

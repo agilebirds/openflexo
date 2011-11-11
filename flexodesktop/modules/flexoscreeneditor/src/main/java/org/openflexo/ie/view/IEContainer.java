@@ -28,14 +28,13 @@ import org.openflexo.foundation.ie.widget.IEWidget;
  * @author sguerin
  * 
  */
-public interface IEContainer
-{
+public interface IEContainer {
 
-    public IEWidget getContainerModel();
+	public IEWidget getContainerModel();
 
-    public void repaint();
+	public void repaint();
 
-    public void validate();
+	public void validate();
 
-    public IEWOComponent getWOComponent();
+	public IEWOComponent getWOComponent();
 }

@@ -27,13 +27,10 @@ import org.openflexo.foundation.ontology.dm.OEDataModification;
  * @author sguerin
  * 
  */
-public class OntologyCalcCreated extends OEDataModification
-{
+public class OntologyCalcCreated extends OEDataModification {
 
-     public OntologyCalcCreated(ViewPoint newCalc)
-    {
-        super(null, newCalc);
-    }
+	public OntologyCalcCreated(ViewPoint newCalc) {
+		super(null, newCalc);
+	}
 
- 
 }

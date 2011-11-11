@@ -26,72 +26,62 @@ import java.util.Map;
  * @author gpolet
  * 
  */
-public abstract class EOObject
-{
-    protected static final String NAME_KEY = "name";
+public abstract class EOObject {
+	protected static final String NAME_KEY = "name";
 
-    private String name;
+	private String name;
 
-    private Map<Object, Object> originalMap;
+	private Map<Object, Object> originalMap;
 
-    /**
-     * Resolve all links between entities, attributes and relationships.
-     * Therefore, this will resolve:
-     * <ul>
-     * <li> All the destination entities
-     * <li> All the source attributes of each relationship
-     * <li> All the destination attributes of each relationship
-     * <li> All the parent entity for EOEntity
-     * </ul>
-     * 
-     */
-    protected abstract void resolveObjects();
+	/**
+	 * Resolve all links between entities, attributes and relationships. Therefore, this will resolve:
+	 * <ul>
+	 * <li>All the destination entities
+	 * <li>All the source attributes of each relationship
+	 * <li>All the destination attributes of each relationship
+	 * <li>All the parent entity for EOEntity
+	 * </ul>
+	 * 
+	 */
+	protected abstract void resolveObjects();
 
-    /**
-     * Remove all links between entities, attributes and relationships.
-     * Therefore, this will remove:
-     * <ul>
-     * <li> All the destination entities
-     * <li> All the source attributes of each relationship
-     * <li> All the destination attributes of each relationship
-     * <li> All the parent entity for EOEntity
-     * </ul>
-     */
-    protected abstract void clearObjects();
+	/**
+	 * Remove all links between entities, attributes and relationships. Therefore, this will remove:
+	 * <ul>
+	 * <li>All the destination entities
+	 * <li>All the source attributes of each relationship
+	 * <li>All the destination attributes of each relationship
+	 * <li>All the parent entity for EOEntity
+	 * </ul>
+	 */
+	protected abstract void clearObjects();
 
-    public abstract void delete();
+	public abstract void delete();
 
-    public String getName()
-    {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name)
-    {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    protected void createHashMap()
-    {
-        originalMap = new HashMap<Object, Object>();
-    }
-    
-    /**
-     * Returns the original map used for deserializing this object. If the
-     * object is new, the map will be automatically created. The original map is
-     * created by the deserialization process and is used as well for
-     * serialization.
-     * 
-     * @return the original map for this object.
-     */
-    public Map<Object, Object> getOriginalMap()
-    {
-        return originalMap;
-    }
+	protected void createHashMap() {
+		originalMap = new HashMap<Object, Object>();
+	}
 
-    public void setOriginalMap(Map<Object, Object> originalMap)
-    {
-        this.originalMap = originalMap;
-    }
+	/**
+	 * Returns the original map used for deserializing this object. If the object is new, the map will be automatically created. The
+	 * original map is created by the deserialization process and is used as well for serialization.
+	 * 
+	 * @return the original map for this object.
+	 */
+	public Map<Object, Object> getOriginalMap() {
+		return originalMap;
+	}
+
+	public void setOriginalMap(Map<Object, Object> originalMap) {
+		this.originalMap = originalMap;
+	}
 
 }

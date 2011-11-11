@@ -21,21 +21,19 @@ package org.openflexo.fge.notifications;
 
 import org.openflexo.fge.Drawing;
 
-public class GraphicalObjectsHierarchyRebuildEnded extends
-		FGENotification {
+public class GraphicalObjectsHierarchyRebuildEnded extends FGENotification {
 
 	public GraphicalObjectsHierarchyRebuildEnded(Drawing<?> drawing) {
 		super("graphicalObjectsHierarchy", null, drawing);
-		
+
 	}
-	
+
 	public Drawing<?> getDrawing() {
 		return (Drawing<?>) newValue();
 	}
 
 	@Override
-	public boolean isModelNotification()
-	{
+	public boolean isModelNotification() {
 		return false;
 	}
 

@@ -25,42 +25,35 @@ import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.drawingeditor.DrawEdgeControl.DrawEdgeAction;
 import org.openflexo.fge.view.DrawingView;
 
+public class MyDrawingView extends DrawingView<EditedDrawing> {
 
-public class MyDrawingView extends DrawingView<EditedDrawing>
-{
-	
-	public MyDrawingView(EditedDrawing drawing,DrawingController<EditedDrawing> controller)
-	{
-		super(drawing,controller);
+	public MyDrawingView(EditedDrawing drawing, DrawingController<EditedDrawing> controller) {
+		super(drawing, controller);
 	}
-	
+
 	private DrawEdgeAction _drawEdgeAction;
 
-	public void  setDrawEdgeAction(DrawEdgeAction action) 
-	{
+	public void setDrawEdgeAction(DrawEdgeAction action) {
 		_drawEdgeAction = action;
 	}
 
-	public void resetDrawEdgeAction() 
-	{
+	public void resetDrawEdgeAction() {
 		_drawEdgeAction = null;
 		getPaintManager().repaint(this);
 	}
 
 	@Override
-	public void paint(Graphics g)
-	{
+	public void paint(Graphics g) {
 		boolean isBuffering = isBuffering();
 		super.paint(g);
 		if (_drawEdgeAction != null && !isBuffering) {
-			_drawEdgeAction.paint(g,getController());
+			_drawEdgeAction.paint(g, getController());
 		}
 	}
-	
+
 	@Override
-	public MyDrawingController getController()
-	{
-		return (MyDrawingController)super.getController();
+	public MyDrawingController getController() {
+		return (MyDrawingController) super.getController();
 	}
-	
+
 }

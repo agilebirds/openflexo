@@ -25,9 +25,10 @@ import java.io.InputStream;
 
 /**
  * Preprocesses the text file after getting from server.
- * @author  Thomas Singer
+ * 
+ * @author Thomas Singer
  */
 public interface WriteTextFilePreprocessor {
 
-    void copyTextFileToLocation(InputStream processedInputStream, File fileToWrite, OutputStreamProvider customOutput) throws IOException;
+	void copyTextFileToLocation(InputStream processedInputStream, File fileToWrite, OutputStreamProvider customOutput) throws IOException;
 }

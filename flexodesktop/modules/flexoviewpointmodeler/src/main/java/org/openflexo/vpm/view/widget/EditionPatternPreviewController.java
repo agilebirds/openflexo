@@ -26,38 +26,32 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.selection.SelectionManagingDrawingController;
 
-
 public class EditionPatternPreviewController extends SelectionManagingDrawingController<EditionPatternPreviewRepresentation> {
 
 	private static final Logger logger = Logger.getLogger(EditionPatternPreviewController.class.getPackage().getName());
 
-	public EditionPatternPreviewController(EditionPattern editionPattern, SelectionManager sm)
-	{
-		super(new EditionPatternPreviewRepresentation(editionPattern),sm);
+	public EditionPatternPreviewController(EditionPattern editionPattern, SelectionManager sm) {
+		super(new EditionPatternPreviewRepresentation(editionPattern), sm);
 	}
 
 	@Override
-	public void delete() 
-	{
+	public void delete() {
 		getDrawing().delete();
 		super.delete();
 	}
-	
+
 	@Override
-	public DrawingView<EditionPatternPreviewRepresentation> makeDrawingView(EditionPatternPreviewRepresentation drawing) 
-	{
-		return new EditionPatterPreviewDrawingView(drawing,this);
+	public DrawingView<EditionPatternPreviewRepresentation> makeDrawingView(EditionPatternPreviewRepresentation drawing) {
+		return new EditionPatterPreviewDrawingView(drawing, this);
 	}
 
 	@Override
-	public EditionPatterPreviewDrawingView getDrawingView() 
-	{
-		return (EditionPatterPreviewDrawingView)super.getDrawingView();
+	public EditionPatterPreviewDrawingView getDrawingView() {
+		return (EditionPatterPreviewDrawingView) super.getDrawingView();
 	}
-	
-	public EditionPattern getEditionPattern()
-	{
+
+	public EditionPattern getEditionPattern() {
 		return getDrawing().getEditionPattern();
 	}
-	
+
 }

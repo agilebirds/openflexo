@@ -30,47 +30,43 @@ import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
 
+public class IECopy extends FlexoAction {
 
-public class IECopy extends FlexoAction 
-{
+	private static final Logger logger = Logger.getLogger(IECopy.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(IECopy.class.getPackage().getName());
+	public static FlexoActionType actionType = new FlexoActionType("copy", FlexoActionType.editGroup) {
 
-    public static FlexoActionType actionType = new FlexoActionType ("copy",FlexoActionType.editGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new IECopy(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) 
-        {
-            return new IECopy(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return (globalSelection != null) && globalSelection.size() == 1
+					&& !(globalSelection.firstElement() instanceof ComponentDefinition)
+					&& !(globalSelection.firstElement() instanceof IEWOComponent)
+					&& !(globalSelection.firstElement() instanceof FlexoComponentFolder);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return (globalSelection != null) && globalSelection.size()==1 && !(globalSelection.firstElement() instanceof ComponentDefinition) && !(globalSelection.firstElement() instanceof IEWOComponent) && !(globalSelection.firstElement() instanceof FlexoComponentFolder);
-        }
-                
-    };
-    
-    IECopy (FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-    @Override
-	protected void doAction(Object context) 
-    {
-        // Implemented in IE module
-        logger.info ("COPY on IE");
-    }
-    
+	IECopy(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) {
+		// Implemented in IE module
+		logger.info("COPY on IE");
+	}
+
 }

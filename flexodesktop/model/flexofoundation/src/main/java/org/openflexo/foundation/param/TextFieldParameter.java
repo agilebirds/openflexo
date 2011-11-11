@@ -24,36 +24,30 @@ import org.openflexo.inspector.widget.TextFieldWidget;
 
 public class TextFieldParameter extends ParameterDefinition<String> {
 
-    public TextFieldParameter(String name, String label, String defaultValue)
-    {
-        super(name,label,defaultValue);
-    }
-    
-    public TextFieldParameter(String name, String label, String defaultValue, int cols)
-    {
-        this(name,label,defaultValue);
-        setColumns(cols);
-    }
-    
-    public void setValidateOnReturn(boolean validateOnReturn)
-    {
-    	addParameter(TextFieldWidget.VALIDATE_ON_RETURN,""+validateOnReturn);
-    }
-    
-    public void setIsPassword(boolean isPassword)
-    {
-    	addParameter(TextFieldWidget.PASSWORD_PARAM,""+isPassword);
-    }
-    
-    public void setColumns(int cols)
-    {
-    	addParameter(TextFieldWidget.COLUMNS_PARAM,""+cols);
-    }
+	public TextFieldParameter(String name, String label, String defaultValue) {
+		super(name, label, defaultValue);
+	}
 
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.TEXT_FIELD;
-    }
+	public TextFieldParameter(String name, String label, String defaultValue, int cols) {
+		this(name, label, defaultValue);
+		setColumns(cols);
+	}
+
+	public void setValidateOnReturn(boolean validateOnReturn) {
+		addParameter(TextFieldWidget.VALIDATE_ON_RETURN, "" + validateOnReturn);
+	}
+
+	public void setIsPassword(boolean isPassword) {
+		addParameter(TextFieldWidget.PASSWORD_PARAM, "" + isPassword);
+	}
+
+	public void setColumns(int cols) {
+		addParameter(TextFieldWidget.COLUMNS_PARAM, "" + cols);
+	}
+
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.TEXT_FIELD;
+	}
 
 }

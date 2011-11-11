@@ -18,41 +18,42 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Refer to external documentation, i.e. a file or URL
- *
+ * 
  * @version $Id: ExternalDoc.java,v 1.3 2011/09/12 11:46:48 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class ExternalDoc extends PetalObject {
-  public ExternalDoc(PetalNode parent, Collection params) {
-    super(parent, "external_doc", params);
-  }
+	public ExternalDoc(PetalNode parent, Collection params) {
+		super(parent, "external_doc", params);
+	}
 
-  public ExternalDoc() {
-    super("external_doc");
-  }
+	public ExternalDoc() {
+		super("external_doc");
+	}
 
-  public String getExternalDocUrl() {
-    return getPropertyAsString("external_doc_url");
-  }
+	public String getExternalDocUrl() {
+		return getPropertyAsString("external_doc_url");
+	}
 
-  public void setExternalDocUrl(String o) {
-    defineProperty("external_doc_url", o);
-  }
+	public void setExternalDocUrl(String o) {
+		defineProperty("external_doc_url", o);
+	}
 
-  public String getExternalDocPath() {
-    return getPropertyAsString("external_doc_path");
-  }
+	public String getExternalDocPath() {
+		return getPropertyAsString("external_doc_path");
+	}
 
-  public void setExternalDocPath(String o) {
-    defineProperty("external_doc_path", o);
-  }
+	public void setExternalDocPath(String o) {
+		defineProperty("external_doc_path", o);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

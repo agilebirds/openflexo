@@ -22,41 +22,38 @@ package org.netbeans.lib.cvsclient.command;
 import java.util.List;
 
 /**
- * @author  Thomas Singer
+ * @author Thomas Singer
  */
 public class CommandUtils {
-    /**
-     * Returns the directory relative to local path from the specified message.
-     * This method returns null, if the specified message isn't a EXAM_DIR-
-     * message.
-     */
-    public static String getExaminedDirectory(String message, String examDirPattern) {
-        final int index = message.indexOf(examDirPattern);
-        final int startIndex = index + examDirPattern.length() + 1;
-        if (index < 0 || message.length() < startIndex + 1) {
-            return null;
-        }
+	/**
+	 * Returns the directory relative to local path from the specified message. This method returns null, if the specified message isn't a
+	 * EXAM_DIR- message.
+	 */
+	public static String getExaminedDirectory(String message, String examDirPattern) {
+		final int index = message.indexOf(examDirPattern);
+		final int startIndex = index + examDirPattern.length() + 1;
+		if (index < 0 || message.length() < startIndex + 1) {
+			return null;
+		}
 
-        return message.substring(startIndex);
-    }
-    
-    /**
-     * for a list of string will return the string that equals the name parameter.
-     * To be used everywhere you need to have only one string occupying teh memory space,
-     * eg. in Builders to have the revision number strings not repeatedly in memory.
-     */
-    public static String findUniqueString(String name, List list) {
-        if (name == null) {
-            return null;
-        }
-        int index = list.indexOf(name);
-        if (index >= 0) {
-            return (String)list.get(index);
-        }
-        else {
-            String newName = new String(name);
-            list.add(newName);
-            return newName;
-        }
-    }    
+		return message.substring(startIndex);
+	}
+
+	/**
+	 * for a list of string will return the string that equals the name parameter. To be used everywhere you need to have only one string
+	 * occupying teh memory space, eg. in Builders to have the revision number strings not repeatedly in memory.
+	 */
+	public static String findUniqueString(String name, List list) {
+		if (name == null) {
+			return null;
+		}
+		int index = list.indexOf(name);
+		if (index >= 0) {
+			return (String) list.get(index);
+		} else {
+			String newName = new String(name);
+			list.add(newName);
+			return newName;
+		}
+	}
 }

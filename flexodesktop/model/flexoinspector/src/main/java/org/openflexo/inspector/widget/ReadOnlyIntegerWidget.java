@@ -24,33 +24,28 @@ import java.util.logging.Logger;
 import org.openflexo.inspector.AbstractController;
 import org.openflexo.inspector.model.PropertyModel;
 
-
 /**
  * Represents a widget able to edit an int or an Integer object in read only mode
- *
+ * 
  * @author sguerin
  */
-public class ReadOnlyIntegerWidget extends IntegerWidget
-{
+public class ReadOnlyIntegerWidget extends IntegerWidget {
 
-    static final Logger logger = Logger.getLogger(ReadOnlyIntegerWidget.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(ReadOnlyIntegerWidget.class.getPackage().getName());
 
-    /**
-     * @param model
-     */
-    public ReadOnlyIntegerWidget(PropertyModel model, AbstractController controller)
-    {
-        super(model,controller);
-        valueChooser.setEnabled(false);
-    }
+	/**
+	 * @param model
+	 */
+	public ReadOnlyIntegerWidget(PropertyModel model, AbstractController controller) {
+		super(model, controller);
+		valueChooser.setEnabled(false);
+	}
 
-    /**
-     * Update the model given the actual state of the widget
-     */
-    @Override
-    public synchronized void updateModelFromWidget()
-    {
-    }
-
+	/**
+	 * Update the model given the actual state of the widget
+	 */
+	@Override
+	public synchronized void updateModelFromWidget() {
+	}
 
 }

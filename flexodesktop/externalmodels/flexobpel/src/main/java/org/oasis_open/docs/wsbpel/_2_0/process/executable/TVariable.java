@@ -23,7 +23,6 @@
 // Generated on: 2008.02.08 at 10:43:57 AM CET 
 //
 
-
 package org.oasis_open.docs.wsbpel._2_0.process.executable;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -34,11 +33,12 @@ import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.namespace.QName;
 
-
 /**
- * <p>Java class for tVariable complex type.
+ * <p>
+ * Java class for tVariable complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tVariable">
@@ -59,142 +59,123 @@ import javax.xml.namespace.QName;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tVariable", propOrder = {
-    "from"
-})
-public class TVariable
-    extends TExtensibleElements
-{
+@XmlType(name = "tVariable", propOrder = { "from" })
+public class TVariable extends TExtensibleElements {
 
-    protected TFrom from;
-    @XmlAttribute(required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String name;
-    @XmlAttribute
-    protected QName messageType;
-    @XmlAttribute
-    protected QName type;
-    @XmlAttribute
-    protected QName element;
+	protected TFrom from;
+	@XmlAttribute(required = true)
+	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+	protected String name;
+	@XmlAttribute
+	protected QName messageType;
+	@XmlAttribute
+	protected QName type;
+	@XmlAttribute
+	protected QName element;
 
-    /**
-     * Gets the value of the from property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TFrom }
-     *     
-     */
-    public TFrom getFrom() {
-        return from;
-    }
+	/**
+	 * Gets the value of the from property.
+	 * 
+	 * @return possible object is {@link TFrom }
+	 * 
+	 */
+	public TFrom getFrom() {
+		return from;
+	}
 
-    /**
-     * Sets the value of the from property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TFrom }
-     *     
-     */
-    public void setFrom(TFrom value) {
-        this.from = value;
-    }
+	/**
+	 * Sets the value of the from property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link TFrom }
+	 * 
+	 */
+	public void setFrom(TFrom value) {
+		this.from = value;
+	}
 
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
+	/**
+	 * Gets the value of the name property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
+	/**
+	 * Sets the value of the name property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setName(String value) {
+		this.name = value;
+	}
 
-    /**
-     * Gets the value of the messageType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QName }
-     *     
-     */
-    public QName getMessageType() {
-        return messageType;
-    }
+	/**
+	 * Gets the value of the messageType property.
+	 * 
+	 * @return possible object is {@link QName }
+	 * 
+	 */
+	public QName getMessageType() {
+		return messageType;
+	}
 
-    /**
-     * Sets the value of the messageType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QName }
-     *     
-     */
-    public void setMessageType(QName value) {
-        this.messageType = value;
-    }
+	/**
+	 * Sets the value of the messageType property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link QName }
+	 * 
+	 */
+	public void setMessageType(QName value) {
+		this.messageType = value;
+	}
 
-    /**
-     * Gets the value of the type property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QName }
-     *     
-     */
-    public QName getType() {
-        return type;
-    }
+	/**
+	 * Gets the value of the type property.
+	 * 
+	 * @return possible object is {@link QName }
+	 * 
+	 */
+	public QName getType() {
+		return type;
+	}
 
-    /**
-     * Sets the value of the type property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QName }
-     *     
-     */
-    public void setType(QName value) {
-        this.type = value;
-    }
+	/**
+	 * Sets the value of the type property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link QName }
+	 * 
+	 */
+	public void setType(QName value) {
+		this.type = value;
+	}
 
-    /**
-     * Gets the value of the element property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QName }
-     *     
-     */
-    public QName getElement() {
-        return element;
-    }
+	/**
+	 * Gets the value of the element property.
+	 * 
+	 * @return possible object is {@link QName }
+	 * 
+	 */
+	public QName getElement() {
+		return element;
+	}
 
-    /**
-     * Sets the value of the element property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QName }
-     *     
-     */
-    public void setElement(QName value) {
-        this.element = value;
-    }
+	/**
+	 * Sets the value of the element property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link QName }
+	 * 
+	 */
+	public void setElement(QName value) {
+		this.element = value;
+	}
 
 }

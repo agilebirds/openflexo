@@ -36,7 +36,7 @@ import org.openflexo.toolbox.ImageIconResource;
  * Utility class containing all icons used in context of VEModule
  * 
  * @author sylvain
- *
+ * 
  */
 public class VEIconLibrary extends IconLibrary {
 
@@ -53,7 +53,7 @@ public class VEIconLibrary extends IconLibrary {
 	public static final ImageIcon VE_OP_SELECTED_ICON = new ImageIconResource("Icons/VE/OntologyPerspective-hover.png");
 	public static final ImageIcon VE_SP_ACTIVE_ICON = new ImageIconResource("Icons/VE/ShemaPerspective.png");
 	public static final ImageIcon VE_SP_SELECTED_ICON = new ImageIconResource("Icons/VE/ShemaPerspective-hover.png");
-	
+
 	// Model icons
 	public static final ImageIconResource VIEW_LIBRARY_ICON = new ImageIconResource("Icons/Model/VE/ViewLibrary.png");
 	public static final ImageIconResource VIEW_ICON = new ImageIconResource("Icons/Model/VE/View.png");
@@ -62,16 +62,21 @@ public class VEIconLibrary extends IconLibrary {
 
 	public static final ImageIconResource UNKNOWN_ICON = new ImageIconResource("Icons/Model/VPM/UnknownIcon.gif");
 
-	public static ImageIcon iconForObject(AbstractViewObject object)
-	{
-		if (object instanceof View) return VIEW_ICON;
-		else if (object instanceof ViewConnector) return CONNECTOR_ICON;
-		else if (object instanceof ViewShape) return SHAPE_ICON;
-		else if (object instanceof ViewLibrary) return VIEW_LIBRARY_ICON;
-		else if (object instanceof ViewDefinition) return VIEW_ICON;
-		else if (object instanceof ViewFolder) return FOLDER_ICON;
-		logger.warning("No icon for "+object.getClass());
+	public static ImageIcon iconForObject(AbstractViewObject object) {
+		if (object instanceof View)
+			return VIEW_ICON;
+		else if (object instanceof ViewConnector)
+			return CONNECTOR_ICON;
+		else if (object instanceof ViewShape)
+			return SHAPE_ICON;
+		else if (object instanceof ViewLibrary)
+			return VIEW_LIBRARY_ICON;
+		else if (object instanceof ViewDefinition)
+			return VIEW_ICON;
+		else if (object instanceof ViewFolder)
+			return FOLDER_ICON;
+		logger.warning("No icon for " + object.getClass());
 		return UNKNOWN_ICON;
 	}
-	
+
 }

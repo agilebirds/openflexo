@@ -37,112 +37,115 @@ public class ContentSource {
 	public static final ContentSource CONTENT_ON_DISK = new ContentSource(ContentSourceType.ContentOnDisk);
 	public static final ContentSource LAST_GENERATED = new ContentSource(ContentSourceType.LastGenerated);
 	public static final ContentSource LAST_ACCEPTED = new ContentSource(ContentSourceType.LastAccepted);
-	
-	public static ContentSource getContentSource (ContentSourceType type)
-	{
-		if (type == ContentSourceType.PureGeneration) return PURE_GENERATION;
-		if (type == ContentSourceType.GeneratedMerge) return GENERATED_MERGE;
-		if (type == ContentSourceType.ResultFileMerge) return RESULT_FILE_MERGE;
-		if (type == ContentSourceType.ContentOnDisk) return CONTENT_ON_DISK;
-		if (type == ContentSourceType.LastGenerated) return LAST_GENERATED;
-		if (type == ContentSourceType.LastAccepted) return LAST_ACCEPTED;
+
+	public static ContentSource getContentSource(ContentSourceType type) {
+		if (type == ContentSourceType.PureGeneration)
+			return PURE_GENERATION;
+		if (type == ContentSourceType.GeneratedMerge)
+			return GENERATED_MERGE;
+		if (type == ContentSourceType.ResultFileMerge)
+			return RESULT_FILE_MERGE;
+		if (type == ContentSourceType.ContentOnDisk)
+			return CONTENT_ON_DISK;
+		if (type == ContentSourceType.LastGenerated)
+			return LAST_GENERATED;
+		if (type == ContentSourceType.LastAccepted)
+			return LAST_ACCEPTED;
 		return new ContentSource(type);
 	}
-	
-	public static ContentSource getContentSource (ContentSourceType type, CGVersionIdentifier version)
-	{
-		if (type == ContentSourceType.PureGeneration) return PURE_GENERATION;
-		if (type == ContentSourceType.GeneratedMerge) return GENERATED_MERGE;
-		if (type == ContentSourceType.ResultFileMerge) return RESULT_FILE_MERGE;
-		if (type == ContentSourceType.ContentOnDisk) return CONTENT_ON_DISK;
-		if (type == ContentSourceType.LastGenerated) return LAST_GENERATED;
-		if (type == ContentSourceType.LastAccepted) return LAST_ACCEPTED;
-		return new ContentSource(type,version);
+
+	public static ContentSource getContentSource(ContentSourceType type, CGVersionIdentifier version) {
+		if (type == ContentSourceType.PureGeneration)
+			return PURE_GENERATION;
+		if (type == ContentSourceType.GeneratedMerge)
+			return GENERATED_MERGE;
+		if (type == ContentSourceType.ResultFileMerge)
+			return RESULT_FILE_MERGE;
+		if (type == ContentSourceType.ContentOnDisk)
+			return CONTENT_ON_DISK;
+		if (type == ContentSourceType.LastGenerated)
+			return LAST_GENERATED;
+		if (type == ContentSourceType.LastAccepted)
+			return LAST_ACCEPTED;
+		return new ContentSource(type, version);
 	}
-	
-	private ContentSource (ContentSourceType type)
-	{
+
+	private ContentSource(ContentSourceType type) {
 		super();
 		this.type = type;
 	}
-	
-	private ContentSource (ContentSourceType type, CGVersionIdentifier version)
-	{
+
+	private ContentSource(ContentSourceType type, CGVersionIdentifier version) {
 		super();
 		this.type = type;
 		this.version = version;
 	}
-	
+
 	@Override
-	public boolean equals(Object obj)
-	{
+	public boolean equals(Object obj) {
 		if (obj instanceof ContentSource) {
-			ContentSource cs = (ContentSource)obj;
+			ContentSource cs = (ContentSource) obj;
 			return ((type == cs.type) && ((version == cs.version) || (version.equals(cs.version))));
 		}
 		return super.equals(obj);
 	}
-	
+
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return getStringRepresentation();
 	}
-	
-	public String getStringRepresentation()
-	{
+
+	public String getStringRepresentation() {
 		if (type == ContentSourceType.HistoryVersion) {
-			return FlexoLocalization.localizedForKey(type.getUnlocalizedStringRepresentation()) + " "+(version!=null?version.versionAsString():"???");
+			return FlexoLocalization.localizedForKey(type.getUnlocalizedStringRepresentation()) + " "
+					+ (version != null ? version.versionAsString() : "???");
 		}
 		return FlexoLocalization.localizedForKey(type.getUnlocalizedStringRepresentation());
 	}
 
-	public enum ContentSourceType implements StringConvertable
-	{
-		PureGeneration,
-		GeneratedMerge,
-		ResultFileMerge,
-		ContentOnDisk,
-		LastGenerated,
-		LastAccepted,
-		HistoryVersion;
+	public enum ContentSourceType implements StringConvertable {
+		PureGeneration, GeneratedMerge, ResultFileMerge, ContentOnDisk, LastGenerated, LastAccepted, HistoryVersion;
 
-		public String getUnlocalizedStringRepresentation() 
-		{
-			if (this == PureGeneration) return "pure_generation";
-			else if (this == GeneratedMerge) return "generated_merge";
-			else if (this == ResultFileMerge) return "result_file_merge";
-			else if (this == ContentOnDisk) return "content_on_disk";
-			else if (this == LastGenerated) return "last_generated_version";
-			else if (this == LastAccepted) return "last_accepted_version";
-			else if (this == HistoryVersion) return "history_version";
+		public String getUnlocalizedStringRepresentation() {
+			if (this == PureGeneration)
+				return "pure_generation";
+			else if (this == GeneratedMerge)
+				return "generated_merge";
+			else if (this == ResultFileMerge)
+				return "result_file_merge";
+			else if (this == ContentOnDisk)
+				return "content_on_disk";
+			else if (this == LastGenerated)
+				return "last_generated_version";
+			else if (this == LastAccepted)
+				return "last_accepted_version";
+			else if (this == HistoryVersion)
+				return "history_version";
 			return "???";
 		}
-		
-		public String getStringRepresentation()
-		{
+
+		public String getStringRepresentation() {
 			return FlexoLocalization.localizedForKey(getUnlocalizedStringRepresentation());
 		}
 
 		@Override
-		public StringEncoder.Converter getConverter()
-		{
+		public StringEncoder.Converter getConverter() {
 			return contentSourceConverter;
 		}
+
 		public static final StringEncoder.Converter contentSourceConverter = new Converter<ContentSourceType>(ContentSourceType.class) {
 
 			@Override
-			public ContentSourceType convertFromString(String value)
-			{
+			public ContentSourceType convertFromString(String value) {
 				for (ContentSourceType cs : values()) {
-					if (cs.getStringRepresentation().equals(value)) return cs;
+					if (cs.getStringRepresentation().equals(value))
+						return cs;
 				}
 				return null;
 			}
 
 			@Override
-			public String convertToString(ContentSourceType value)
-			{
+			public String convertToString(ContentSourceType value) {
 				return value.getStringRepresentation();
 			}
 
@@ -150,19 +153,16 @@ public class ContentSource {
 
 	}
 
-	public ContentSourceType getType() 
-	{
+	public ContentSourceType getType() {
 		return type;
 	}
 
-	public CGVersionIdentifier getVersion()
-	{
+	public CGVersionIdentifier getVersion() {
 		return version;
 	}
 
 	public void setVersion(CGVersionIdentifier version) {
 		this.version = version;
 	}
-	
 
 }

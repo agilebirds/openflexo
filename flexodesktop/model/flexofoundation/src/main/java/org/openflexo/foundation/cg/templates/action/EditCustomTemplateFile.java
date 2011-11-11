@@ -30,67 +30,57 @@ import org.openflexo.foundation.cg.templates.CGTemplateFile;
 import org.openflexo.foundation.cg.templates.CGTemplateObject;
 import org.openflexo.foundation.cg.templates.CGTemplateFile.TemplateFileContentEditor;
 
+public class EditCustomTemplateFile extends FlexoAction<EditCustomTemplateFile, CGTemplateFile, CGTemplateObject> {
 
-public class EditCustomTemplateFile extends FlexoAction<EditCustomTemplateFile, CGTemplateFile, CGTemplateObject>
-{
-
-    private static final Logger logger = Logger.getLogger(EditCustomTemplateFile.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(EditCustomTemplateFile.class.getPackage().getName());
 
 	public static FlexoActionType<EditCustomTemplateFile, CGTemplateFile, CGTemplateObject> actionType = new FlexoActionType<EditCustomTemplateFile, CGTemplateFile, CGTemplateObject>(
 			"edit_template", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
+		/**
+		 * Factory method
+		 */
 		@Override
-		public EditCustomTemplateFile makeNewAction(CGTemplateFile focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor)
-        {
-            return new EditCustomTemplateFile(focusedObject, globalSelection,editor);
-        }
+		public EditCustomTemplateFile makeNewAction(CGTemplateFile focusedObject, Vector<CGTemplateObject> globalSelection,
+				FlexoEditor editor) {
+			return new EditCustomTemplateFile(focusedObject, globalSelection, editor);
+		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGTemplateFile object, Vector<CGTemplateObject> globalSelection)
-        {
-            return ((object != null) && (object.isCustomTemplate()));
-       }
+		protected boolean isVisibleForSelection(CGTemplateFile object, Vector<CGTemplateObject> globalSelection) {
+			return ((object != null) && (object.isCustomTemplate()));
+		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGTemplateFile object, Vector<CGTemplateObject> globalSelection)
-        {
-            return ((object != null) && (object.isCustomTemplate()) && (!object.isEdited()));
-       }
-                
-    };
-    
-    static {
+		protected boolean isEnabledForSelection(CGTemplateFile object, Vector<CGTemplateObject> globalSelection) {
+			return ((object != null) && (object.isCustomTemplate()) && (!object.isEdited()));
+		}
+
+	};
+
+	static {
 		FlexoModelObject.addActionForClass(EditCustomTemplateFile.actionType, CGTemplateFile.class);
-    }
-    
+	}
 
-    private TemplateFileContentEditor templateFileContentEditor;
-    
-	EditCustomTemplateFile(CGTemplateFile focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	private TemplateFileContentEditor templateFileContentEditor;
 
-    @Override
-	protected void doAction(Object context)
-    {
-    	logger.info ("Edit CustomTemplateFile "+getFocusedObject());
-    	if ((getFocusedObject() != null) && (templateFileContentEditor != null)) {
-    		getFocusedObject().edit(templateFileContentEditor);
-     	}
-     }
+	EditCustomTemplateFile(CGTemplateFile focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-	public TemplateFileContentEditor getTemplateFileContentEditor() 
-	{
+	@Override
+	protected void doAction(Object context) {
+		logger.info("Edit CustomTemplateFile " + getFocusedObject());
+		if ((getFocusedObject() != null) && (templateFileContentEditor != null)) {
+			getFocusedObject().edit(templateFileContentEditor);
+		}
+	}
+
+	public TemplateFileContentEditor getTemplateFileContentEditor() {
 		return templateFileContentEditor;
 	}
 
-	public void setTemplateFileContentEditor(
-			TemplateFileContentEditor templateFileContentEditor) 
-	{
+	public void setTemplateFileContentEditor(TemplateFileContentEditor templateFileContentEditor) {
 		this.templateFileContentEditor = templateFileContentEditor;
 	}
 

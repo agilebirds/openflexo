@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.cg.templates;
 
-
 import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -34,49 +33,45 @@ import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.logging.FlexoLogger;
 
 public class CustomCGTemplateRepository extends CGTemplateRepository {
-	
+
 	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(CustomCGTemplateRepository.class.getPackage().getName());
 
 	private CustomTemplatesResource _resource;
-	
+
 	private TemplateRepositoryType repositoryType;
-	
-	public CustomCGTemplateRepository (CGTemplates templates, CustomTemplatesResource resource, Vector<TargetType> availableTargets)
-	{
-		super(resource.getDirectory(),templates, availableTargets);
+
+	public CustomCGTemplateRepository(CGTemplates templates, CustomTemplatesResource resource, Vector<TargetType> availableTargets) {
+		super(resource.getDirectory(), templates, availableTargets);
 		_resource = resource;
 	}
-	
+
 	@Override
-	public String getFullyQualifiedName() 
-	{
-		return getTemplates().getFullyQualifiedName()+"."+_resource.getName();
+	public String getFullyQualifiedName() {
+		return getTemplates().getFullyQualifiedName() + "." + _resource.getName();
 	}
 
-	public CustomTemplatesResource getResource() 
-	{
+	public CustomTemplatesResource getResource() {
 		return _resource;
 	}
-	
+
 	@Override
 	public void delete() {
-		if (_resource!=null)
+		if (_resource != null)
 			_resource.delete();
 		super.delete();
 		getTemplates().update();
 	}
 
 	@Override
-	public String getName()
-	{
-		if (getResource() != null) return getResource().getName();
+	public String getName() {
+		if (getResource() != null)
+			return getResource().getName();
 		return null;
 	}
-	
+
 	@Override
-	public void setName(String aName)
-	{
+	public void setName(String aName) {
 		if (getResource() != null) {
 			try {
 				getResource().getProject().renameResource(getResource(), aName);
@@ -85,24 +80,21 @@ public class CustomCGTemplateRepository extends CGTemplateRepository {
 			}
 		}
 	}
-	
+
 	@Override
-	public boolean readOnly()
-	{
+	public boolean readOnly() {
 		return false;
 	}
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.GENERATORS.CG_CUSTOM_TEMPLATE_REPOSITORY;
 	}
 
-	public TemplateRepositoryType getRepositoryType() 
-	{
-		if (repositoryType==null) {
-			Enumeration<TargetSpecificCGTemplateSet> en = getTargetSpecificTemplates(); 
-			while (repositoryType==null && en.hasMoreElements()) {
+	public TemplateRepositoryType getRepositoryType() {
+		if (repositoryType == null) {
+			Enumeration<TargetSpecificCGTemplateSet> en = getTargetSpecificTemplates();
+			while (repositoryType == null && en.hasMoreElements()) {
 				TargetSpecificCGTemplateSet set = en.nextElement();
 				if (set.getTargetType() instanceof CodeType)
 					repositoryType = TemplateRepositoryType.Code;
@@ -111,24 +103,28 @@ public class CustomCGTemplateRepository extends CGTemplateRepository {
 			}
 			if (repositoryType == null) {
 				Enumeration<CGTemplate> en1 = getAllTemplateFiles().elements();
-				while(en1.hasMoreElements() && repositoryType==null) {
+				while (en1.hasMoreElements() && repositoryType == null) {
 					CGTemplate file = en1.nextElement();
-					CGTemplate codeTemplate = getProject().getGeneratedCode().getTemplates().getApplicationRepository().getTemplateWithRelativePath(file.getRelativePath());
-					if (codeTemplate==null)
-						codeTemplate = getProject().getGeneratedCode().getTemplates().getApplicationRepository().getTemplateWithRelativePath(file.getTemplateName());
-					CGTemplate docTemplate = getProject().getGeneratedDoc().getTemplates().getApplicationRepository().getTemplateWithRelativePath(file.getRelativePath());
-					if (docTemplate==null)
-						docTemplate = getProject().getGeneratedDoc().getTemplates().getApplicationRepository().getTemplateWithRelativePath(file.getTemplateName());
-					if (codeTemplate==null && docTemplate!=null)
+					CGTemplate codeTemplate = getProject().getGeneratedCode().getTemplates().getApplicationRepository()
+							.getTemplateWithRelativePath(file.getRelativePath());
+					if (codeTemplate == null)
+						codeTemplate = getProject().getGeneratedCode().getTemplates().getApplicationRepository()
+								.getTemplateWithRelativePath(file.getTemplateName());
+					CGTemplate docTemplate = getProject().getGeneratedDoc().getTemplates().getApplicationRepository()
+							.getTemplateWithRelativePath(file.getRelativePath());
+					if (docTemplate == null)
+						docTemplate = getProject().getGeneratedDoc().getTemplates().getApplicationRepository()
+								.getTemplateWithRelativePath(file.getTemplateName());
+					if (codeTemplate == null && docTemplate != null)
 						repositoryType = TemplateRepositoryType.Documentation;
-					else if (codeTemplate!=null && docTemplate==null)
+					else if (codeTemplate != null && docTemplate == null)
 						repositoryType = TemplateRepositoryType.Code;
 				}
 			}
 		}
 		return repositoryType;
 	}
-	
+
 	public void setRepositoryType(TemplateRepositoryType repositoryType) {
 		this.repositoryType = repositoryType;
 		getTemplates().refresh();

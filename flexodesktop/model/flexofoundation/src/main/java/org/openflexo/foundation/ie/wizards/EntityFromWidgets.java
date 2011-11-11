@@ -48,22 +48,21 @@ import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ProjectRestructuration;
 
-
 public class EntityFromWidgets {
 
 	private Map<IEWidget, PropertyProposal> relevantWidgets;
 	private FlexoProject _project;
-	
+
 	private DMEOEntity _dmeoEntity;
 	private DMEOModel _dmeoModel;
 	private ProjectDatabaseRepository _projectDatabaseRepository;
-	
-	//the factory will create PropertyProposal for any relevant widget.
+
+	// the factory will create PropertyProposal for any relevant widget.
 	private PropertyProposalFactory _factory;
 	private boolean _useDMEOEntity;
 	private IEWOComponent _component;
-	
-	public EntityFromWidgets(FlexoProject project,List<FlexoModelObject> widgets, boolean useDMEOEntity){
+
+	public EntityFromWidgets(FlexoProject project, List<FlexoModelObject> widgets, boolean useDMEOEntity) {
 		super();
 		_project = project;
 		_useDMEOEntity = useDMEOEntity;
@@ -71,32 +70,34 @@ public class EntityFromWidgets {
 		relevantWidgets = extractRelevantWidgets(widgets, useDMEOEntity);
 	}
 
-	public void justDoIt(String projectDataBaseRepositoryName,String eomodelName,String eoentityName,List<PropertyProposal> selectedProps,FlexoEditor editor) throws InvalidNameException{
-		if(_useDMEOEntity){
+	public void justDoIt(String projectDataBaseRepositoryName, String eomodelName, String eoentityName,
+			List<PropertyProposal> selectedProps, FlexoEditor editor) throws InvalidNameException {
+		if (_useDMEOEntity) {
 			createProjectPersistantRepository(projectDataBaseRepositoryName, editor);
 			createEOModel(eomodelName, editor);
 			createEOEntity(eoentityName, editor);
 			createAttributes(selectedProps, editor);
-			makeBindings(eoentityName,_component,selectedProps);
+			makeBindings(eoentityName, _component, selectedProps);
 		}
 	}
-	
-	private void makeBindings(String componentPropertyName, IEWOComponent component, List<PropertyProposal> selectedProposals){
-		//first we have to create a component binding for the created entity
-		DMProperty entityBindingPathElement = component.getComponentDMEntity().createDMProperty(componentPropertyName, DMType.makeResolvedDMType(_dmeoEntity), DMPropertyImplementationType.PUBLIC_FIELD); // TODO
+
+	private void makeBindings(String componentPropertyName, IEWOComponent component, List<PropertyProposal> selectedProposals) {
+		// first we have to create a component binding for the created entity
+		DMProperty entityBindingPathElement = component.getComponentDMEntity().createDMProperty(componentPropertyName,
+				DMType.makeResolvedDMType(_dmeoEntity), DMPropertyImplementationType.PUBLIC_FIELD); // TODO
 		entityBindingPathElement.setIsBindable(true);
 		component.getComponentDMEntity().setMandatory(entityBindingPathElement, true);
-		//now we have to build a binding value for each widget
-		BindingVariable bv = ((ComponentDefinitionBindingModel)component.getBindingModel()).getBindingVariableAt(0);
+		// now we have to build a binding value for each widget
+		BindingVariable bv = ((ComponentDefinitionBindingModel) component.getBindingModel()).getBindingVariableAt(0);
 		PropertyProposal itemProposal = null;
 		IEWidget owner = null;
 		BindingDefinition bindingDef = null;
-		for(int i=0;i<selectedProposals.size();i++){
+		for (int i = 0; i < selectedProposals.size(); i++) {
 			itemProposal = selectedProposals.get(i);
 			owner = itemProposal.getWidget();
-			//a widget have a lot of bindings : we have to get the binding related to this wizard.
+			// a widget have a lot of bindings : we have to get the binding related to this wizard.
 			bindingDef = _factory.retreiveRelevantBindingDefinition(owner);
-			BindingValue bindingValue = new BindingValue(bindingDef,owner);
+			BindingValue bindingValue = new BindingValue(bindingDef, owner);
 			bindingValue.setBindingVariable(bv);
 			bindingValue.setBindingPathElementAtIndex(entityBindingPathElement, 0);
 			bindingValue.setBindingPathElementAtIndex(itemProposal.getImplementedProperty(), 0);
@@ -106,9 +107,9 @@ public class EntityFromWidgets {
 	private void createAttributes(List<PropertyProposal> selectedProps, FlexoEditor editor) {
 		Iterator<PropertyProposal> it = selectedProps.iterator();
 		PropertyProposal proposal;
-		while(it.hasNext()){
+		while (it.hasNext()) {
 			proposal = it.next();
-			CreateDMEOAttribute createAttributeAction = CreateDMEOAttribute.actionType.makeNewAction(_dmeoEntity, null,editor);
+			CreateDMEOAttribute createAttributeAction = CreateDMEOAttribute.actionType.makeNewAction(_dmeoEntity, null, editor);
 			createAttributeAction.doAction();
 			try {
 				createAttributeAction.getNewEOAttribute().setName(proposal.getName());
@@ -117,53 +118,54 @@ public class EntityFromWidgets {
 			} catch (InvalidNameException e) {
 				e.printStackTrace();
 			}
-			createAttributeAction.getNewEOAttribute().setPrototype(((EOAttributeProposal)proposal).getPrototype());
-			createAttributeAction.getNewEOAttribute().setColumnName(((EOAttributeProposal)proposal).getColumnName());
+			createAttributeAction.getNewEOAttribute().setPrototype(((EOAttributeProposal) proposal).getPrototype());
+			createAttributeAction.getNewEOAttribute().setColumnName(((EOAttributeProposal) proposal).getColumnName());
 			proposal.setImplementedProperty(createAttributeAction.getNewEOAttribute());
 		}
-		
+
 	}
 
-	private void createProjectPersistantRepository(String projectDataBaseRepositoryName, FlexoEditor editor){
+	private void createProjectPersistantRepository(String projectDataBaseRepositoryName, FlexoEditor editor) {
 		_projectDatabaseRepository = _project.getDataModel().getProjectDatabaseRepositoryName(projectDataBaseRepositoryName);
-		if(_projectDatabaseRepository==null){
-			CreateProjectDatabaseRepository createProjectDBRepositoryAction = CreateProjectDatabaseRepository.actionType.makeNewAction(_projectDatabaseRepository, null,editor);
+		if (_projectDatabaseRepository == null) {
+			CreateProjectDatabaseRepository createProjectDBRepositoryAction = CreateProjectDatabaseRepository.actionType.makeNewAction(
+					_projectDatabaseRepository, null, editor);
 			createProjectDBRepositoryAction.setNewRepositoryName(projectDataBaseRepositoryName);
 			createProjectDBRepositoryAction.doAction();
 		}
 	}
-	private void createEOModel(String eomodelName, FlexoEditor editor){
+
+	private void createEOModel(String eomodelName, FlexoEditor editor) {
 		_dmeoModel = _project.getDataModel().getDMEOModelNamed(eomodelName);
-		if(_dmeoModel == null){
-			//we need to create a new EOModel
-			File eoModelFile = new File(ProjectRestructuration.getExpectedDataModelDirectory(_project.getProjectDirectory()),eomodelName);
-			CreateDMEOModel createEOModelAction = CreateDMEOModel.actionType.makeNewAction(_projectDatabaseRepository, null,editor);
+		if (_dmeoModel == null) {
+			// we need to create a new EOModel
+			File eoModelFile = new File(ProjectRestructuration.getExpectedDataModelDirectory(_project.getProjectDirectory()), eomodelName);
+			CreateDMEOModel createEOModelAction = CreateDMEOModel.actionType.makeNewAction(_projectDatabaseRepository, null, editor);
 			createEOModelAction.setEOModelFile(eoModelFile);
 			createEOModelAction.setFocusedObject(_projectDatabaseRepository);
 			createEOModelAction.doAction();
 		}
 	}
-	
-	private void createEOEntity(String eoentityName, FlexoEditor editor) throws InvalidNameException{
+
+	private void createEOEntity(String eoentityName, FlexoEditor editor) throws InvalidNameException {
 		_dmeoEntity = _dmeoModel.getDMEOEntityNamed(eoentityName);
-		if(_dmeoEntity == null){
-			//we need to create a new EOModel
-			CreateDMEOEntity createEOEntity = CreateDMEOEntity.actionType.makeNewAction(_dmeoModel, null,editor);
+		if (_dmeoEntity == null) {
+			// we need to create a new EOModel
+			CreateDMEOEntity createEOEntity = CreateDMEOEntity.actionType.makeNewAction(_dmeoModel, null, editor);
 			createEOEntity.setFocusedObject(_dmeoModel);
 			createEOEntity.doAction();
 			createEOEntity.getNewEntity().setName(eoentityName);
 		}
 	}
-	
-	
+
 	private Map<IEWidget, PropertyProposal> extractRelevantWidgets(List<FlexoModelObject> widgets, boolean useDMEOEntity) {
 		Map<IEWidget, PropertyProposal> reply = new Hashtable<IEWidget, PropertyProposal>();
 		Iterator<FlexoModelObject> it = widgets.iterator();
 		FlexoModelObject modelObject = null;
 		while (it.hasNext()) {
 			modelObject = it.next();
-			if(modelObject instanceof IEWidget){
-				IEWidget widget = (IEWidget)modelObject;
+			if (modelObject instanceof IEWidget) {
+				IEWidget widget = (IEWidget) modelObject;
 				if (_factory.isRelevant(widget)) {
 					if (_component == null)
 						_component = widget.getWOComponent();
@@ -180,11 +182,12 @@ public class EntityFromWidgets {
 		}
 		return reply;
 	}
-	
-	public boolean isPropertyNameUsed(String propertyName){
+
+	public boolean isPropertyNameUsed(String propertyName) {
 		Iterator<PropertyProposal> it = relevantWidgets.values().iterator();
-		while(it.hasNext()){
-			if(it.next().getName().equals(propertyName))return true;
+		while (it.hasNext()) {
+			if (it.next().getName().equals(propertyName))
+				return true;
 		}
 		return false;
 	}

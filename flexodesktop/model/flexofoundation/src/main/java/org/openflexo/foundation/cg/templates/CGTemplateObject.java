@@ -24,7 +24,6 @@ import org.openflexo.foundation.cg.dm.CGStructureRefreshed;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.inspector.InspectableObject;
 
-
 public abstract class CGTemplateObject extends TemporaryFlexoModelObject implements InspectableObject {
 
 	@Override
@@ -35,13 +34,12 @@ public abstract class CGTemplateObject extends TemporaryFlexoModelObject impleme
 
 	@Override
 	public abstract FlexoProject getProject();
-	   
+
 	public abstract CGTemplates getTemplates();
 
 	public abstract void update();
-	
-	public void refresh()
-	{
+
+	public void refresh() {
 		update();
 		setChanged();
 		notifyObservers(new CGStructureRefreshed());

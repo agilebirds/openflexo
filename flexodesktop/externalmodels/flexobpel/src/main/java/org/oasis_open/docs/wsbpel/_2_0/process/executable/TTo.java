@@ -23,7 +23,6 @@
 // Generated on: 2008.02.08 at 10:43:57 AM CET 
 //
 
-
 package org.oasis_open.docs.wsbpel._2_0.process.executable;
 
 import java.util.ArrayList;
@@ -48,11 +47,12 @@ import javax.xml.namespace.QName;
 
 import org.w3c.dom.Element;
 
-
 /**
- * <p>Java class for tTo complex type.
+ * <p>
+ * Java class for tTo complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tTo">
@@ -76,206 +76,184 @@ import org.w3c.dom.Element;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tTo", propOrder = {
-    "content"
-})
+@XmlType(name = "tTo", propOrder = { "content" })
 public class TTo {
 
-    @XmlElementRefs({
-        @XmlElementRef(name = "documentation", namespace = "http://docs.oasis-open.org/wsbpel/2.0/process/executable", type = JAXBElement.class),
-        @XmlElementRef(name = "query", namespace = "http://docs.oasis-open.org/wsbpel/2.0/process/executable", type = JAXBElement.class)
-    })
-    @XmlMixed
-    @XmlAnyElement(lax = true)
-    protected List<Object> content;
-    @XmlAttribute
-    @XmlSchemaType(name = "anyURI")
-    protected String expressionLanguage;
-    @XmlAttribute
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String variable;
-    @XmlAttribute
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "NCName")
-    protected String part;
-    @XmlAttribute
-    protected QName property;
-    @XmlAttribute
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "NCName")
-    protected String partnerLink;
-    @XmlAnyAttribute
-    private Map<QName, String> otherAttributes = new HashMap<QName, String>();
+	@XmlElementRefs({
+			@XmlElementRef(
+					name = "documentation",
+					namespace = "http://docs.oasis-open.org/wsbpel/2.0/process/executable",
+					type = JAXBElement.class),
+			@XmlElementRef(name = "query", namespace = "http://docs.oasis-open.org/wsbpel/2.0/process/executable", type = JAXBElement.class) })
+	@XmlMixed
+	@XmlAnyElement(lax = true)
+	protected List<Object> content;
+	@XmlAttribute
+	@XmlSchemaType(name = "anyURI")
+	protected String expressionLanguage;
+	@XmlAttribute
+	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+	protected String variable;
+	@XmlAttribute
+	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+	@XmlSchemaType(name = "NCName")
+	protected String part;
+	@XmlAttribute
+	protected QName property;
+	@XmlAttribute
+	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+	@XmlSchemaType(name = "NCName")
+	protected String partnerLink;
+	@XmlAnyAttribute
+	private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
-    /**
-     * Gets the value of the content property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the content property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getContent().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Element }
-     * {@link JAXBElement }{@code <}{@link TQuery }{@code >}
-     * {@link Object }
-     * {@link String }
-     * {@link JAXBElement }{@code <}{@link TDocumentation }{@code >}
-     * 
-     * 
-     */
-    public List<Object> getContent() {
-        if (content == null) {
-            content = new ArrayList<Object>();
-        }
-        return this.content;
-    }
+	/**
+	 * Gets the value of the content property.
+	 * 
+	 * <p>
+	 * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make to the returned list
+	 * will be present inside the JAXB object. This is why there is not a <CODE>set</CODE> method for the content property.
+	 * 
+	 * <p>
+	 * For example, to add a new item, do as follows:
+	 * 
+	 * <pre>
+	 * getContent().add(newItem);
+	 * </pre>
+	 * 
+	 * 
+	 * <p>
+	 * Objects of the following type(s) are allowed in the list {@link Element } {@link JAXBElement }{@code <}{@link TQuery }{@code >}
+	 * {@link Object } {@link String } {@link JAXBElement }{@code <}{@link TDocumentation }{@code >}
+	 * 
+	 * 
+	 */
+	public List<Object> getContent() {
+		if (content == null) {
+			content = new ArrayList<Object>();
+		}
+		return this.content;
+	}
 
-    /**
-     * Gets the value of the expressionLanguage property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getExpressionLanguage() {
-        return expressionLanguage;
-    }
+	/**
+	 * Gets the value of the expressionLanguage property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getExpressionLanguage() {
+		return expressionLanguage;
+	}
 
-    /**
-     * Sets the value of the expressionLanguage property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setExpressionLanguage(String value) {
-        this.expressionLanguage = value;
-    }
+	/**
+	 * Sets the value of the expressionLanguage property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setExpressionLanguage(String value) {
+		this.expressionLanguage = value;
+	}
 
-    /**
-     * Gets the value of the variable property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getVariable() {
-        return variable;
-    }
+	/**
+	 * Gets the value of the variable property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getVariable() {
+		return variable;
+	}
 
-    /**
-     * Sets the value of the variable property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setVariable(String value) {
-        this.variable = value;
-    }
+	/**
+	 * Sets the value of the variable property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setVariable(String value) {
+		this.variable = value;
+	}
 
-    /**
-     * Gets the value of the part property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getPart() {
-        return part;
-    }
+	/**
+	 * Gets the value of the part property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getPart() {
+		return part;
+	}
 
-    /**
-     * Sets the value of the part property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPart(String value) {
-        this.part = value;
-    }
+	/**
+	 * Sets the value of the part property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setPart(String value) {
+		this.part = value;
+	}
 
-    /**
-     * Gets the value of the property property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QName }
-     *     
-     */
-    public QName getProperty() {
-        return property;
-    }
+	/**
+	 * Gets the value of the property property.
+	 * 
+	 * @return possible object is {@link QName }
+	 * 
+	 */
+	public QName getProperty() {
+		return property;
+	}
 
-    /**
-     * Sets the value of the property property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QName }
-     *     
-     */
-    public void setProperty(QName value) {
-        this.property = value;
-    }
+	/**
+	 * Sets the value of the property property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link QName }
+	 * 
+	 */
+	public void setProperty(QName value) {
+		this.property = value;
+	}
 
-    /**
-     * Gets the value of the partnerLink property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getPartnerLink() {
-        return partnerLink;
-    }
+	/**
+	 * Gets the value of the partnerLink property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getPartnerLink() {
+		return partnerLink;
+	}
 
-    /**
-     * Sets the value of the partnerLink property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPartnerLink(String value) {
-        this.partnerLink = value;
-    }
+	/**
+	 * Sets the value of the partnerLink property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setPartnerLink(String value) {
+		this.partnerLink = value;
+	}
 
-    /**
-     * Gets a map that contains attributes that aren't bound to any typed property on this class.
-     * 
-     * <p>
-     * the map is keyed by the name of the attribute and 
-     * the value is the string value of the attribute.
-     * 
-     * the map returned by this method is live, and you can add new attribute
-     * by updating the map directly. Because of this design, there's no setter.
-     * 
-     * 
-     * @return
-     *     always non-null
-     */
-    public Map<QName, String> getOtherAttributes() {
-        return otherAttributes;
-    }
+	/**
+	 * Gets a map that contains attributes that aren't bound to any typed property on this class.
+	 * 
+	 * <p>
+	 * the map is keyed by the name of the attribute and the value is the string value of the attribute.
+	 * 
+	 * the map returned by this method is live, and you can add new attribute by updating the map directly. Because of this design, there's
+	 * no setter.
+	 * 
+	 * 
+	 * @return always non-null
+	 */
+	public Map<QName, String> getOtherAttributes() {
+		return otherAttributes;
+	}
 
 }

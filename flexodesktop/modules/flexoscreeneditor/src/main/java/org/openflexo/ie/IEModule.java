@@ -48,27 +48,23 @@ import org.openflexo.module.external.ExternalIEModule;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
-
 /**
  * Interface Editor module
- *
+ * 
  * @author sguerin
  */
-public class IEModule extends FlexoModule implements ExternalIEModule
-{
+public class IEModule extends FlexoModule implements ExternalIEModule {
 
 	private static final Logger logger = Logger.getLogger(IEModule.class.getPackage().getName());
-	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[]{Inspectors.IE};
+	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.IE };
 	private IEWOComponentView componentView;
 
 	/**
-	 * The 'main' method of module allow to launch this module as a
-	 * single-module application.
-	 *
+	 * The 'main' method of module allow to launch this module as a single-module application.
+	 * 
 	 * @param args
 	 */
-	public static void main(String[] args) throws Exception
-	{
+	public static void main(String[] args) throws Exception {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Start Interface Editor stand-alone.");
 		}
@@ -77,8 +73,7 @@ public class IEModule extends FlexoModule implements ExternalIEModule
 		ModuleLoader.initializeSingleModule(Module.IE_MODULE);
 	}
 
-	public IEModule(InteractiveFlexoEditor projectEditor) throws Exception
-	{
+	public IEModule(InteractiveFlexoEditor projectEditor) throws Exception {
 		super(projectEditor);
 		setFlexoController(new IEController(projectEditor, this));
 		IEPreferences.init(getIEController());
@@ -101,23 +96,19 @@ public class IEModule extends FlexoModule implements ExternalIEModule
 	}
 
 	@Override
-	public InspectorGroup[] getInspectorGroups()
-	{
+	public InspectorGroup[] getInspectorGroups() {
 		return inspectorGroups;
 	}
 
-	public File getSmallButtonsDirectory()
-	{
+	public File getSmallButtonsDirectory() {
 		return new FileResource(IECst.SMALL_BUTTONS_DIR);
 	}
 
-	public File getBigButtonsDirectory()
-	{
+	public File getBigButtonsDirectory() {
 		return new FileResource(IECst.BIG_BUTTONS_DIR);
 	}
 
-	public IEController getIEController()
-	{
+	public IEController getIEController() {
 		return (IEController) getFlexoController();
 	}
 
@@ -127,20 +118,17 @@ public class IEModule extends FlexoModule implements ExternalIEModule
 	// ==========================================================================
 
 	@Override
-	public void showScreenInterface(ComponentInstance component)
-	{
+	public void showScreenInterface(ComponentInstance component) {
 		getIEController().setSelectedComponent(component);
 	}
 
 	@Override
-	public void saveAll(boolean showConfirm)
-	{
+	public void saveAll(boolean showConfirm) {
 		save(showConfirm, true);
 	}
 
 	@Override
-	public JComponent createViewForOperation(OperationNode operation)
-	{
+	public JComponent createViewForOperation(OperationNode operation) {
 		if (!operation.hasWOComponent()) {
 			return null;
 		}
@@ -154,7 +142,7 @@ public class IEModule extends FlexoModule implements ExternalIEModule
 		pane.setLayout(new BorderLayout());
 		pane.setSize(1024, 768);
 		IEWOComponentView answer = new IEWOComponentView(getIEController(), operation.getComponentInstance());
-		if (operation.getTabComponent()!=null) {
+		if (operation.getTabComponent() != null) {
 			answer.setSelectedTab(operation.getTabComponent());
 		}
 		pane.add(answer.dropZone, BorderLayout.CENTER);
@@ -170,10 +158,9 @@ public class IEModule extends FlexoModule implements ExternalIEModule
 	 *
 	 */
 	@Override
-	public void finalizeScreenshot()
-	{
-		if (componentView!=null) {
-			if (componentView.getParent()!=null) {
+	public void finalizeScreenshot() {
+		if (componentView != null) {
+			if (componentView.getParent() != null) {
 				componentView.getParent().remove(componentView);
 			}
 			componentView.deleteModuleView();
@@ -183,24 +170,22 @@ public class IEModule extends FlexoModule implements ExternalIEModule
 
 	/**
 	 * Overrides getIEExternalController
-	 *
+	 * 
 	 * @see org.openflexo.module.external.ExternalIEModule#getIEExternalController()
 	 */
 	@Override
-	public ExternalIEController getIEExternalController()
-	{
+	public ExternalIEController getIEExternalController() {
 		return getIEController();
 	}
 
 	/**
 	 * Overrides getWOComponentView
-	 *
+	 * 
 	 * @see org.openflexo.module.external.ExternalIEModule#getWOComponentView(org.openflexo.module.external.ExternalIEController,
 	 *      org.openflexo.foundation.ie.IEWOComponent)
 	 */
 	@Override
-	public JComponent getWOComponentView(ExternalIEController controller, IEWOComponent component)
-	{
+	public JComponent getWOComponentView(ExternalIEController controller, IEWOComponent component) {
 		if (componentView != null) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Previous component view was not properly disposed, please invoke finalizeScreenshot() before requesting a new component.");
@@ -211,11 +196,12 @@ public class IEModule extends FlexoModule implements ExternalIEModule
 		pane.setLayout(new BorderLayout());
 		pane.setSize(1024, 768);
 		IEWOComponentView compView = null;
-		if(component instanceof IEReusableComponent){
-			compView = new IEReusableWidgetComponentView((IEController) controller,((IEReusableComponent)component).getComponentDefinition().getDummyComponentInstance());
-		}else {
+		if (component instanceof IEReusableComponent) {
+			compView = new IEReusableWidgetComponentView((IEController) controller, ((IEReusableComponent) component)
+					.getComponentDefinition().getDummyComponentInstance());
+		} else {
 			compView = new IEWOComponentView((IEController) controller, component.getComponentDefinition().getDummyComponentInstance());
-			compView.setPreferredSize(new Dimension(compView.getMaxWidth(),(compView).dropZone.getPreferredSize().height));
+			compView.setPreferredSize(new Dimension(compView.getMaxWidth(), (compView).dropZone.getPreferredSize().height));
 		}
 		pane.add((compView).dropZone, BorderLayout.CENTER);
 		pane.validate();
@@ -226,21 +212,21 @@ public class IEModule extends FlexoModule implements ExternalIEModule
 
 	/**
 	 * Overrides getDefaultObjectToSelect
+	 * 
 	 * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect()
 	 */
 	@Override
-	public FlexoModelObject getDefaultObjectToSelect()
-	{
-		return null;//getProject().getFlexoComponentLibrary();
+	public FlexoModelObject getDefaultObjectToSelect() {
+		return null;// getProject().getFlexoComponentLibrary();
 	}
 
 	/**
 	 * Overrides moduleWillClose
+	 * 
 	 * @see org.openflexo.module.FlexoModule#moduleWillClose()
 	 */
 	@Override
-	public void moduleWillClose()
-	{
+	public void moduleWillClose() {
 		super.moduleWillClose();
 		IEPreferences.reset();
 	}

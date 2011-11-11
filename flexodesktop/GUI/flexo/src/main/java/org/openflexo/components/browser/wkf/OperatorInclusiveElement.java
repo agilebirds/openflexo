@@ -24,12 +24,9 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.wkf.node.InclusiveOperator;
 
+public class OperatorInclusiveElement extends OperatorNodeElement {
 
-public class OperatorInclusiveElement extends OperatorNodeElement
-{
-
-    public OperatorInclusiveElement(InclusiveOperator node, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(node, BrowserElementType.OPERATOR_INCLUSIVE_NODE, browser,parent);
-    }
+	public OperatorInclusiveElement(InclusiveOperator node, ProjectBrowser browser, BrowserElement parent) {
+		super(node, BrowserElementType.OPERATOR_INCLUSIVE_NODE, browser, parent);
+	}
 }

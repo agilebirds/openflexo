@@ -23,34 +23,32 @@ import org.openflexo.antar.ControlGraph;
 import org.openflexo.antar.Instruction;
 import org.openflexo.foundation.wkf.ws.FlexoPort;
 
-
 public class BPELWSAPI extends Instruction {
-	
+
 	public FlexoPort associatedPort;
 	public ControlGraph graph;
-	
-	
+
 	public BPELWSAPI(FlexoPort p) {
-		associatedPort=p;
-		graph=null;
+		associatedPort = p;
+		graph = null;
 	}
-	
+
 	public void setControlGraph(ControlGraph cg) {
-		graph=cg;
+		graph = cg;
 	}
-	
+
 	public ControlGraph getControlGraph() {
 		return graph;
 	}
-	
+
 	@Override
 	public String toString() {
-		String toReturn=new String();
-		toReturn+= "BPEL API : \n";
-		toReturn+= graph.toString();
+		String toReturn = new String();
+		toReturn += "BPEL API : \n";
+		toReturn += graph.toString();
 		return toReturn;
 	}
-	
+
 	@Override
 	public Instruction clone() {
 		return null;

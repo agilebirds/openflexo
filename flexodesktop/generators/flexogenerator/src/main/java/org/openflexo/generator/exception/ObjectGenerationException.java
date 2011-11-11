@@ -23,19 +23,16 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.generator.AbstractProjectGenerator;
 
+public class ObjectGenerationException extends GenerationException {
+	private FlexoModelObject failedObjectGeneration;
 
-public class ObjectGenerationException extends GenerationException
-{
-    private FlexoModelObject failedObjectGeneration;
+	public ObjectGenerationException(FlexoModelObject failedObjectGeneration, String message, String localizationKey,
+			AbstractProjectGenerator<? extends GenerationRepository> projectGenerator) {
+		super(message, localizationKey);
+		this.failedObjectGeneration = failedObjectGeneration;
+	}
 
-    public ObjectGenerationException(FlexoModelObject failedObjectGeneration, String message, String localizationKey,  AbstractProjectGenerator<? extends GenerationRepository> projectGenerator)
-    {
-	  super(message,localizationKey);
-	  this.failedObjectGeneration = failedObjectGeneration;
-    }
-
-    public FlexoModelObject getFailedObjectGeneration()
-    {
-        return failedObjectGeneration;
-    }
+	public FlexoModelObject getFailedObjectGeneration() {
+		return failedObjectGeneration;
+	}
 }

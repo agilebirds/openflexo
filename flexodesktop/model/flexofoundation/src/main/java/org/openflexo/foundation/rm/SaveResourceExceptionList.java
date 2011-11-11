@@ -23,41 +23,35 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 /**
- * Thrown when one or more SaveResourceException were raised during resource
- * saving
+ * Thrown when one or more SaveResourceException were raised during resource saving
  * 
  * @author sguerin
  * 
  */
-public class SaveResourceExceptionList extends Exception
-{
+public class SaveResourceExceptionList extends Exception {
 
-    protected Vector _saveExceptions;
+	protected Vector _saveExceptions;
 
-    public SaveResourceExceptionList(SaveResourceException exception)
-    {
-        super();
-        _saveExceptions = new Vector();
-        registerNewException(exception);
-    }
+	public SaveResourceExceptionList(SaveResourceException exception) {
+		super();
+		_saveExceptions = new Vector();
+		registerNewException(exception);
+	}
 
-    public void registerNewException(SaveResourceException exception)
-    {
-        _saveExceptions.add(exception);
-    }
+	public void registerNewException(SaveResourceException exception) {
+		_saveExceptions.add(exception);
+	}
 
-    public Vector getSaveExceptions()
-    {
-        return _saveExceptions;
-    }
+	public Vector getSaveExceptions() {
+		return _saveExceptions;
+	}
 
-    public String errorFilesList()
-    {
-        String errorFiles = "";
-        for (Enumeration en = getSaveExceptions().elements(); en.hasMoreElements();) {
-            SaveResourceException excep = (SaveResourceException) en.nextElement();
-            errorFiles += errorFiles + excep.getFileResource().getFile().getName() + "\n";
-        }
-        return errorFiles;
-    }
+	public String errorFilesList() {
+		String errorFiles = "";
+		for (Enumeration en = getSaveExceptions().elements(); en.hasMoreElements();) {
+			SaveResourceException excep = (SaveResourceException) en.nextElement();
+			errorFiles += errorFiles + excep.getFileResource().getFile().getName() + "\n";
+		}
+		return errorFiles;
+	}
 }

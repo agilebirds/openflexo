@@ -92,13 +92,17 @@ public class ModelEntity<I> extends ProxyFactory {
 	}
 
 	private void validateEntity() throws ModelDefinitionException {
-		if (getDeclaredDeleter()!=null && !getDeclaredDeleter().getDeleter().deletedProperty().equals(Deleter.UNDEFINED)) {
+		if (getDeclaredDeleter() != null && !getDeclaredDeleter().getDeleter().deletedProperty().equals(Deleter.UNDEFINED)) {
 			ModelProperty<? super I> deletedProperty = getModelProperty(getDeclaredDeleter().getDeleter().deletedProperty());
-			if (deletedProperty==null) {
-				throw new ModelDefinitionException("Interface "+getImplementedInterface().getName()+" declares a deleter but the associated deletedProperty ("+getDeclaredDeleter().getDeleter().deletedProperty()+") is not declared in hierarchy");
+			if (deletedProperty == null) {
+				throw new ModelDefinitionException("Interface " + getImplementedInterface().getName()
+						+ " declares a deleter but the associated deletedProperty (" + getDeclaredDeleter().getDeleter().deletedProperty()
+						+ ") is not declared in hierarchy");
 			}
 			if (!TypeUtils.isBoolean(deletedProperty.getType())) {
-				throw new ModelDefinitionException("Interface "+getImplementedInterface().getName()+" declares a deleter but the associated deletedProperty ("+getDeclaredDeleter().getDeleter().deletedProperty()+") is not of type boolean/Boolean");
+				throw new ModelDefinitionException("Interface " + getImplementedInterface().getName()
+						+ " declares a deleter but the associated deletedProperty (" + getDeclaredDeleter().getDeleter().deletedProperty()
+						+ ") is not of type boolean/Boolean");
 			}
 		}
 	}
@@ -196,7 +200,7 @@ public class ModelEntity<I> extends ProxyFactory {
 	}
 
 	public I newInstance(Object... args) throws IllegalArgumentException, NoSuchMethodException, InstantiationException,
-	IllegalAccessException, InvocationTargetException, ModelDefinitionException {
+			IllegalAccessException, InvocationTargetException, ModelDefinitionException {
 		if (isAbstract()) {
 			throw new InstantiationException("Interface " + implementedInterface.getName()
 					+ " is declared as an abstract entity, cannot instantiate it");

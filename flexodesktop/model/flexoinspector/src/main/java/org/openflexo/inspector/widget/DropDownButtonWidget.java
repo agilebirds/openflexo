@@ -24,41 +24,35 @@ import javax.swing.ImageIcon;
 import org.openflexo.inspector.AbstractController;
 import org.openflexo.inspector.model.PropertyModel;
 
-
 /**
  * @author bmangez
  * 
- * To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
+ *         To change the template for this generated type comment go to Window - Preferences - Java - Code Generation - Code and Comments
  */
-public class DropDownButtonWidget extends DropDownWidget
-{
+public class DropDownButtonWidget extends DropDownWidget {
 
-    public DropDownButtonWidget(PropertyModel model, AbstractController controller)
-    {
-        super(model,controller);
-    }
+	public DropDownButtonWidget(PropertyModel model, AbstractController controller) {
+		super(model, controller);
+	}
 
-    @Override
-	public synchronized void updateWidgetFromModel()
-    {
+	@Override
+	public synchronized void updateWidgetFromModel() {
 		widgetUpdating = true;
-       initJComboBox();
-        ImageIcon sel = findLabelWithName((String) getObjectValue());
-        if (sel != null)
-            _jComboBox.setSelectedItem(sel);
+		initJComboBox();
+		ImageIcon sel = findLabelWithName((String) getObjectValue());
+		if (sel != null)
+			_jComboBox.setSelectedItem(sel);
 		widgetUpdating = false;
-   }
+	}
 
-    private ImageIcon findLabelWithName(String name)
-    {
-        for (int i = 0; i < _jComboBox.getModel().getSize(); i++) {
-            if (((ImageIcon) _jComboBox.getModel().getElementAt(i)).getDescription().equals(name)) {
-                return (ImageIcon) _jComboBox.getModel().getElementAt(i);
-            }
+	private ImageIcon findLabelWithName(String name) {
+		for (int i = 0; i < _jComboBox.getModel().getSize(); i++) {
+			if (((ImageIcon) _jComboBox.getModel().getElementAt(i)).getDescription().equals(name)) {
+				return (ImageIcon) _jComboBox.getModel().getElementAt(i);
+			}
 
-        }
-        return null;
-    }
+		}
+		return null;
+	}
 
 }

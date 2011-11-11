@@ -29,75 +29,65 @@ import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.ws.FlexoPortMap;
 import org.openflexo.localization.FlexoLocalization;
 
-public class ShowHidePortmap extends FlexoUndoableAction<ShowHidePortmap,FlexoPortMap,WKFObject>
-{
+public class ShowHidePortmap extends FlexoUndoableAction<ShowHidePortmap, FlexoPortMap, WKFObject> {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ShowHidePortmap.class.getPackage().getName());
 
-    public static FlexoActionType<ShowHidePortmap,FlexoPortMap,WKFObject> actionType
-    = new FlexoActionType<ShowHidePortmap,FlexoPortMap,WKFObject>
-    ("show_portmap",FlexoActionType.defaultGroup) {
+	public static FlexoActionType<ShowHidePortmap, FlexoPortMap, WKFObject> actionType = new FlexoActionType<ShowHidePortmap, FlexoPortMap, WKFObject>(
+			"show_portmap", FlexoActionType.defaultGroup) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public ShowHidePortmap makeNewAction(FlexoPortMap focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-        {
-            return new ShowHidePortmap(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public ShowHidePortmap makeNewAction(FlexoPortMap focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+			return new ShowHidePortmap(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoPortMap object, Vector<WKFObject> globalSelection)
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoPortMap object, Vector<WKFObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoPortMap object, Vector<WKFObject> globalSelection)
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoPortMap object, Vector<WKFObject> globalSelection) {
+			return true;
+		}
 
-    };
+	};
 
-    ShowHidePortmap (FlexoPortMap focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	ShowHidePortmap(FlexoPortMap focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    @Override
-	protected void doAction(Object context)
-    {
-    	if (getFocusedObject() != null)
-    		getFocusedObject().setIsVisible(!getFocusedObject().getIsVisible());
-     }
+	@Override
+	protected void doAction(Object context) {
+		if (getFocusedObject() != null)
+			getFocusedObject().setIsVisible(!getFocusedObject().getIsVisible());
+	}
 
-    @Override
-	public String getLocalizedName ()
-    {
-        if (getFocusedObject() != null) {
-            if (getFocusedObject().getIsVisible()) {
+	@Override
+	public String getLocalizedName() {
+		if (getFocusedObject() != null) {
+			if (getFocusedObject().getIsVisible()) {
 				return FlexoLocalization.localizedForKey("hide_portmap");
 			} else {
 				return FlexoLocalization.localizedForKey("show_portmap");
 			}
-        }
-        return super.getLocalizedName();
+		}
+		return super.getLocalizedName();
 
-    }
+	}
 
-    @Override
-	protected void undoAction(Object context)
-    {
-        doAction(context);
-    }
+	@Override
+	protected void undoAction(Object context) {
+		doAction(context);
+	}
 
-    @Override
-	protected void redoAction(Object context)
-    {
-        doAction(context);
-   }
+	@Override
+	protected void redoAction(Object context) {
+		doAction(context);
+	}
 
 }

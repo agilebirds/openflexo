@@ -53,29 +53,24 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.swleditor.SWLEditorConstants;
 
-
 public class DropWKFElementInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DropWKFElementInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(DropWKFElement.actionType,actionInitializer);
+	DropWKFElementInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(DropWKFElement.actionType, actionInitializer);
 	}
 
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer()
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<DropWKFElement> getDefaultInitializer()
-	{
+	protected FlexoActionInitializer<DropWKFElement> getDefaultInitializer() {
 		return new FlexoActionInitializer<DropWKFElement>() {
 			@Override
-			public boolean run(ActionEvent e, DropWKFElement action)
-			{
+			public boolean run(ActionEvent e, DropWKFElement action) {
 				if (action.getPetriGraph() == null) {
 					return false;
 				}
@@ -97,55 +92,52 @@ public class DropWKFElementInitializer extends ActionInitializer {
 					int deltaX = 0;
 					int deltaY = 0;
 					if (action.getGraphicalContext().equals(ProcessEditorConstants.BASIC_PROCESS_EDITOR)) {
-						deltaX = 0; //ProcessEditorConstants.REQUIRED_SPACE_ON_LEFT;
-						deltaY = 0; //ProcessEditorConstants.REQUIRED_SPACE_ON_TOP;
-						if (action.getPetriGraph() instanceof OperationPetriGraph
-								|| action.getPetriGraph() instanceof ActionPetriGraph) {
-							deltaY = ProcessEditorConstants.REQUIRED_SPACE_ON_TOP_FOR_CLOSING_BOX-ProcessEditorConstants.REQUIRED_SPACE_ON_TOP;
+						deltaX = 0; // ProcessEditorConstants.REQUIRED_SPACE_ON_LEFT;
+						deltaY = 0; // ProcessEditorConstants.REQUIRED_SPACE_ON_TOP;
+						if (action.getPetriGraph() instanceof OperationPetriGraph || action.getPetriGraph() instanceof ActionPetriGraph) {
+							deltaY = ProcessEditorConstants.REQUIRED_SPACE_ON_TOP_FOR_CLOSING_BOX
+									- ProcessEditorConstants.REQUIRED_SPACE_ON_TOP;
 						}
 						if (action.getObject() instanceof SubProcessNode) {
-							deltaX = ProcessEditorConstants.PORTMAP_REGISTERY_WIDTH-ProcessEditorConstants.REQUIRED_SPACE_ON_LEFT;
-							deltaY = ProcessEditorConstants.PORTMAP_REGISTERY_WIDTH-ProcessEditorConstants.REQUIRED_SPACE_ON_TOP;
+							deltaX = ProcessEditorConstants.PORTMAP_REGISTERY_WIDTH - ProcessEditorConstants.REQUIRED_SPACE_ON_LEFT;
+							deltaY = ProcessEditorConstants.PORTMAP_REGISTERY_WIDTH - ProcessEditorConstants.REQUIRED_SPACE_ON_TOP;
 						}
-					}
-					else if (action.getGraphicalContext().equals(SWLEditorConstants.SWIMMING_LANE_EDITOR)) {
-						deltaX = 0; //ProcessEditorConstants.REQUIRED_SPACE_ON_LEFT;
-						deltaY = 0; //ProcessEditorConstants.REQUIRED_SPACE_ON_TOP;
-						if (action.getPetriGraph() instanceof OperationPetriGraph
-								|| action.getPetriGraph() instanceof ActionPetriGraph) {
-							deltaY = SWLEditorConstants.REQUIRED_SPACE_ON_TOP_FOR_CLOSING_BOX-ProcessEditorConstants.REQUIRED_SPACE_ON_TOP;
+					} else if (action.getGraphicalContext().equals(SWLEditorConstants.SWIMMING_LANE_EDITOR)) {
+						deltaX = 0; // ProcessEditorConstants.REQUIRED_SPACE_ON_LEFT;
+						deltaY = 0; // ProcessEditorConstants.REQUIRED_SPACE_ON_TOP;
+						if (action.getPetriGraph() instanceof OperationPetriGraph || action.getPetriGraph() instanceof ActionPetriGraph) {
+							deltaY = SWLEditorConstants.REQUIRED_SPACE_ON_TOP_FOR_CLOSING_BOX
+									- ProcessEditorConstants.REQUIRED_SPACE_ON_TOP;
 						}
 						if (action.getObject() instanceof SubProcessNode) {
-							deltaX = SWLEditorConstants.PORTMAP_REGISTERY_WIDTH-SWLEditorConstants.REQUIRED_SPACE_ON_LEFT;
-							deltaY = SWLEditorConstants.PORTMAP_REGISTERY_WIDTH-SWLEditorConstants.REQUIRED_SPACE_ON_TOP;
+							deltaX = SWLEditorConstants.PORTMAP_REGISTERY_WIDTH - SWLEditorConstants.REQUIRED_SPACE_ON_LEFT;
+							deltaY = SWLEditorConstants.PORTMAP_REGISTERY_WIDTH - SWLEditorConstants.REQUIRED_SPACE_ON_TOP;
 						}
 					}
-					action.setPosX(action.getPosX()-deltaX);
-					action.setPosY(action.getPosY()-deltaY);
+					action.setPosX(action.getPosX() - deltaX);
+					action.setPosY(action.getPosY() - deltaY);
 				}
 
 				return true;
 			}
 
-
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<DropWKFElement> getDefaultFinalizer()
-	{
+	protected FlexoActionFinalizer<DropWKFElement> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DropWKFElement>() {
 			@Override
-			public boolean run(ActionEvent e, DropWKFElement action)
-			{
+			public boolean run(ActionEvent e, DropWKFElement action) {
 				getControllerActionInitializer().getWKFController().getSelectionManager().setSelectedObject(action.getObject());
 
 				if (action.getObject() instanceof SubProcessNode && !action.leaveSubProcessNodeUnchanged()) {
 					// We just dropped a SubProcessNode
 					// Default status of DELETE ports is hidden
-					SubProcessNode spNode = (SubProcessNode)action.getObject();
+					SubProcessNode spNode = (SubProcessNode) action.getObject();
 					if (spNode.getPortMapRegistery() != null) {
-						if (spNode instanceof SingleInstanceSubProcessNode || spNode instanceof LoopSubProcessNode || spNode instanceof WSCallSubProcessNode) {
+						if (spNode instanceof SingleInstanceSubProcessNode || spNode instanceof LoopSubProcessNode
+								|| spNode instanceof WSCallSubProcessNode) {
 							for (FlexoPortMap pm : spNode.getPortMapRegistery().getAllDeletePortmaps()) {
 								ShowHidePortmap.actionType.makeNewAction(pm, null, action.getEditor()).doAction();
 							}
@@ -164,16 +156,21 @@ public class DropWKFElementInitializer extends ActionInitializer {
 						spNode.getPortMapRegistery().resetLocation(SWLEditorConstants.SWIMMING_LANE_EDITOR);
 						if (spNode instanceof SingleInstanceSubProcessNode || spNode instanceof LoopSubProcessNode
 								|| spNode instanceof MultipleInstanceSubProcessNode) {
-							ShowHidePortmapRegistery.actionType.makeNewAction(spNode.getPortMapRegistery(), null, action.getEditor()).doAction();
+							ShowHidePortmapRegistery.actionType.makeNewAction(spNode.getPortMapRegistery(), null, action.getEditor())
+									.doAction();
 						}
 					}
 				}
 
 				SelectionManagingDrawingController<? extends DefaultDrawing<?>> controller = null;
-				if (getControllerActionInitializer().getWKFController().getCurrentPerspective()==getControllerActionInitializer().getWKFController().PROCESS_EDITOR_PERSPECTIVE) {
-					controller =  getControllerActionInitializer().getWKFController().PROCESS_EDITOR_PERSPECTIVE.getControllerForProcess(action.getProcess());
-				} else if (getControllerActionInitializer().getWKFController().getCurrentPerspective()==getControllerActionInitializer().getWKFController().SWIMMING_LANE_PERSPECTIVE) {
-					controller =  getControllerActionInitializer().getWKFController().SWIMMING_LANE_PERSPECTIVE.getControllerForProcess(action.getProcess());
+				if (getControllerActionInitializer().getWKFController().getCurrentPerspective() == getControllerActionInitializer()
+						.getWKFController().PROCESS_EDITOR_PERSPECTIVE) {
+					controller = getControllerActionInitializer().getWKFController().PROCESS_EDITOR_PERSPECTIVE
+							.getControllerForProcess(action.getProcess());
+				} else if (getControllerActionInitializer().getWKFController().getCurrentPerspective() == getControllerActionInitializer()
+						.getWKFController().SWIMMING_LANE_PERSPECTIVE) {
+					controller = getControllerActionInitializer().getWKFController().SWIMMING_LANE_PERSPECTIVE
+							.getControllerForProcess(action.getProcess());
 				} else {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Drop in WKF but current perspective is neither BPE or SWL");
@@ -181,10 +178,11 @@ public class DropWKFElementInitializer extends ActionInitializer {
 					return true;
 				}
 				DefaultDrawing<?> drawing = controller.getDrawing();
-				ShapeGraphicalRepresentation<?> newNodeGR = (ShapeGraphicalRepresentation<?>)drawing.getGraphicalRepresentation(action.getObject());
-				if (newNodeGR==null) {
+				ShapeGraphicalRepresentation<?> newNodeGR = (ShapeGraphicalRepresentation<?>) drawing.getGraphicalRepresentation(action
+						.getObject());
+				if (newNodeGR == null) {
 					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Could not find GR for newly created node: "+action.getObject());
+						logger.warning("Could not find GR for newly created node: " + action.getObject());
 					}
 					return true;
 				}
@@ -196,7 +194,7 @@ public class DropWKFElementInitializer extends ActionInitializer {
 					return false;
 				} else {
 					if (action.getEditNodeLabel()) {
-						SwingUtilities.invokeLater(new Runnable(){
+						SwingUtilities.invokeLater(new Runnable() {
 							@Override
 							public void run() {
 								if (view != null && view.getLabelView() != null) {
@@ -213,8 +211,7 @@ public class DropWKFElementInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoExceptionHandler<DropWKFElement> getDefaultExceptionHandler()
-	{
+	protected FlexoExceptionHandler<DropWKFElement> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<DropWKFElement>() {
 			@Override
 			public boolean handleException(FlexoException exception, DropWKFElement action) {
@@ -227,7 +224,5 @@ public class DropWKFElementInitializer extends ActionInitializer {
 			}
 		};
 	}
-
-
 
 }

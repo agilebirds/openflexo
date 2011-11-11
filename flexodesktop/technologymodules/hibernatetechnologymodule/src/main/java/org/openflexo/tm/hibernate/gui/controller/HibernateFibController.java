@@ -12,7 +12,7 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.FlexoFIBController;
 
 /**
- *
+ * 
  * @author Nicolas Daniels
  */
 public class HibernateFibController<O extends TechnologyModelObject> extends FlexoFIBController<O> {

@@ -20,37 +20,35 @@
 package org.openflexo.foundation.rm;
 
 /**
- * This interface is implemented by all classes which represents data related to
- * a given resource
+ * This interface is implemented by all classes which represents data related to a given resource
  * 
  * @author sguerin
  * 
  */
-public interface FlexoResourceData
-{
+public interface FlexoResourceData {
 
-    /**
-     * Return the resource related to this object
-     * 
-     * @return a FlexoResource instance
-     */
-    public FlexoResource getFlexoResource();
+	/**
+	 * Return the resource related to this object
+	 * 
+	 * @return a FlexoResource instance
+	 */
+	public FlexoResource getFlexoResource();
 
-    /**
-     * Sets the resource related to this object
-     */
-    public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException;
+	/**
+	 * Sets the resource related to this object
+	 */
+	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException;
 
-    /**
-     * Return the project related to this object
-     * 
-     * @return a FlexoProject instance
-     */
-    public FlexoProject getProject();
+	/**
+	 * Return the project related to this object
+	 * 
+	 * @return a FlexoProject instance
+	 */
+	public FlexoProject getProject();
 
-    /**
-     * Sets the project related to this object
-     */
-    public void setProject(FlexoProject aProject);
+	/**
+	 * Sets the project related to this object
+	 */
+	public void setProject(FlexoProject aProject);
 
 }

@@ -30,96 +30,88 @@ import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-
 public class NormalAbstractActivityNodeGR<O extends AbstractActivityNode> extends AbstractActivityNodeGR<O> {
 
 	private static final Logger logger = Logger.getLogger(NormalAbstractActivityNodeGR.class.getPackage().getName());
-	
+
 	private ForegroundStyle foreground;
-	
-	public NormalAbstractActivityNodeGR(O activity, ShapeType shapeType, SwimmingLaneRepresentation drawing,boolean isInPalet)
-	{
-		super(activity, shapeType, drawing,isInPalet);
+
+	public NormalAbstractActivityNodeGR(O activity, ShapeType shapeType, SwimmingLaneRepresentation drawing, boolean isInPalet) {
+		super(activity, shapeType, drawing, isInPalet);
 		setIsFloatingLabel(false);
 		setRelativeTextX(0.5); // Center label horizontally
 		setRelativeTextY(0.5); // No need to display role here !
-		
+
 		setMinimalWidth(NODE_MINIMAL_WIDTH);
 		setMinimalHeight(NODE_MINIMAL_HEIGHT);
-		//if (getText() != null && getText().equals("Activity-10")) logger.info("setLocationConstraints() with "+getLocationConstrainedArea());
+		// if (getText() != null && getText().equals("Activity-10"))
+		// logger.info("setLocationConstraints() with "+getLocationConstrainedArea());
 		setLocationConstraints(LocationConstraints.AREA_CONSTRAINED);
-		
+
 		getShape().setIsRounded(true);
-		
+
 		foreground = ForegroundStyle.makeStyle(Color.BLACK);
 		foreground.setLineWidth(0.2);
 		setForeground(foreground);
-		
-		BackgroundStyle background = BackgroundStyle.makeColorGradientBackground(getMainBgColor(), getOppositeBgColor(), ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
+
+		BackgroundStyle background = BackgroundStyle.makeColorGradientBackground(getMainBgColor(), getOppositeBgColor(),
+				ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
 		setBackground(background);
-		//setDecorationPainter(new NodeDecorationPainter());
-	}
-	
-	@Override
-	public Rectangle getShape()
-	{
-		return (Rectangle)super.getShape();
+		// setDecorationPainter(new NodeDecorationPainter());
 	}
 
 	@Override
-	public double getWidth() 
-	{
+	public Rectangle getShape() {
+		return (Rectangle) super.getShape();
+	}
+
+	@Override
+	public double getWidth() {
 		if (!getNode().hasDimensionForContext(SWIMMING_LANE_EDITOR)) {
-			getNode().getWidth(SWIMMING_LANE_EDITOR,getDefaultWidth());
+			getNode().getWidth(SWIMMING_LANE_EDITOR, getDefaultWidth());
 		}
 		return getNode().getWidth(SWIMMING_LANE_EDITOR);
 	}
 
 	@Override
-	public void setWidthNoNotification(double width) 
-	{
-		getNode().setWidth(width,SWIMMING_LANE_EDITOR);
+	public void setWidthNoNotification(double width) {
+		getNode().setWidth(width, SWIMMING_LANE_EDITOR);
 		resetLocationConstrainedArea();
 	}
-	
-	public double getDefaultWidth()
-	{
+
+	public double getDefaultWidth() {
 		return DEFAULT_ACTIVITY_WIDTH;
 	}
 
 	@Override
-	public double getHeight() 
-	{
+	public double getHeight() {
 		if (!getNode().hasDimensionForContext(SWIMMING_LANE_EDITOR)) {
-			getNode().getHeight(SWIMMING_LANE_EDITOR,getDefaultHeight());
+			getNode().getHeight(SWIMMING_LANE_EDITOR, getDefaultHeight());
 		}
 		return getNode().getHeight(SWIMMING_LANE_EDITOR);
 	}
 
 	@Override
-	public void setHeightNoNotification(double height)
-	{
-		getNode().setHeight(height,SWIMMING_LANE_EDITOR);
+	public void setHeightNoNotification(double height) {
+		getNode().setHeight(height, SWIMMING_LANE_EDITOR);
 		resetLocationConstrainedArea();
 	}
 
-	public double getDefaultHeight()
-	{
+	public double getDefaultHeight() {
 		return DEFAULT_ACTIVITY_HEIGHT;
 	}
 
 	@Override
-	public void notifyObjectHasResized()
-	{
+	public void notifyObjectHasResized() {
 		super.notifyObjectHasResized();
 		checkAndUpdateLocationIfRequired();
 	}
-	
+
 	/*@Override
 	public void setBorder(ShapeBorder border) 
 	{
 		super.setBorder(border);
 		resetLocationConstrainedArea();
 	}*/
-	
+
 }

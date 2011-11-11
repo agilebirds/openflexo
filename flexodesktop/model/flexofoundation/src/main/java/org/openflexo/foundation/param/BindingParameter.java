@@ -22,19 +22,16 @@ package org.openflexo.foundation.param;
 import org.openflexo.foundation.bindings.AbstractBinding;
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
 public class BindingParameter extends ParameterDefinition<AbstractBinding> {
 
-    public BindingParameter(String name, String label, AbstractBinding defaultValue)
-    {
-        super(name,label,defaultValue);
-        addParameter("className","org.openflexo.components.widget.BindingSelectorInspectorWidget");
-    }
-    
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.CUSTOM;
-    }
+	public BindingParameter(String name, String label, AbstractBinding defaultValue) {
+		super(name, label, defaultValue);
+		addParameter("className", "org.openflexo.components.widget.BindingSelectorInspectorWidget");
+	}
+
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.CUSTOM;
+	}
 
 }

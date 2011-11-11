@@ -51,23 +51,23 @@ public class FlexoProcessImageBuilder {
 		}
 		ExternalWKFModule wkfModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader()
 				.getWKFModuleInstance() : null;
-				if (wkfModule == null) {
-					return null;
-				}
-				try {
-					JComponent c = wkfModule.createScreenshotForProcess(process);
-					c.setOpaque(true);
-					c.setBackground(Color.WHITE);
-					JFrame frame = new JFrame();
-					frame.setBackground(Color.WHITE);
-					frame.setUndecorated(true);
-					frame.getContentPane().add(c);
-					frame.pack();
-					BufferedImage bi = ImageUtils.createImageFromComponent(c);
-					return bi;
-				} finally {
-					wkfModule.finalizeScreenshotGeneration();
-				}
+		if (wkfModule == null) {
+			return null;
+		}
+		try {
+			JComponent c = wkfModule.createScreenshotForProcess(process);
+			c.setOpaque(true);
+			c.setBackground(Color.WHITE);
+			JFrame frame = new JFrame();
+			frame.setBackground(Color.WHITE);
+			frame.setUndecorated(true);
+			frame.getContentPane().add(c);
+			frame.pack();
+			BufferedImage bi = ImageUtils.createImageFromComponent(c);
+			return bi;
+		} finally {
+			wkfModule.finalizeScreenshotGeneration();
+		}
 	}
 
 	private static void saveImageOfProcess(FlexoProcess process, File dest) {

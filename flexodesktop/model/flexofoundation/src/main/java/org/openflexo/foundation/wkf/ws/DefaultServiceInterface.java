@@ -40,10 +40,8 @@ import org.openflexo.foundation.wkf.dm.ServiceOperationRemoved;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.toolbox.EmptyVector;
 
-
 /**
- * A ServiceInteface is attached to a FlexoProcess and contains all the service operations used
- * in the context of WebServices.
+ * A ServiceInteface is attached to a FlexoProcess and contains all the service operations used in the context of WebServices.
  * 
  * The Default Service Interface is the ServiceInterface of the port registery.
  * 
@@ -51,247 +49,230 @@ import org.openflexo.toolbox.EmptyVector;
  * @author Denis VANVYVE
  * 
  */
-public final class DefaultServiceInterface extends ServiceInterface implements InspectableObject, LevelledObject, DeletableObject, FlexoObserver
-{
+public final class DefaultServiceInterface extends ServiceInterface implements InspectableObject, LevelledObject, DeletableObject,
+		FlexoObserver {
 
-    private static final Logger logger = Logger.getLogger(DefaultServiceInterface.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DefaultServiceInterface.class.getPackage().getName());
 
-    
-    private Hashtable operationTable;
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	private Hashtable operationTable;
 
-   
-    /**
-     * Default constructor
-     */
-    public DefaultServiceInterface(FlexoProcess process)throws FlexoException
-    {
-        super(process, process.getPortRegistery().getName());
-        operationTable = new Hashtable();
-        //add observer
-        getPortRegistery();
-        updateFromPortRegistery();
-    }
-    
-    // ==========================================================================
-    // ============================= Methods
-    // ================================
-    // ==========================================================================
-    public PortRegistery getPortRegistery(){
-        if (getProcess() != null) {
-            if (getProcess().getPortRegistery() != null) {
-                getProcess().getPortRegistery().addObserver(this);
-            } else {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("No related PortRegistery !");
-            }
-            return getProcess().getPortRegistery();
-        }
-        return null;
-    }
-    
-    @Override
-	public String getName()
-    {
-        return getPortRegistery().getName();
-    }
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    @Override
-	public void setName(String aName)
-    {
-    		// not possible on port registry
-    }
-    
-    
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return getProcess().getFullyQualifiedName()+"."+getName()+".DEFAULT_SERVICE_INTERFACE";
-    }
+	/**
+	 * Default constructor
+	 */
+	public DefaultServiceInterface(FlexoProcess process) throws FlexoException {
+		super(process, process.getPortRegistery().getName());
+		operationTable = new Hashtable();
+		// add observer
+		getPortRegistery();
+		updateFromPortRegistery();
+	}
 
- 
-    public ServiceOperation addServiceOperation(FlexoPort relatedPort) throws DuplicateWKFObjectException{
-    		return addServiceOperation(relatedPort.getName(), relatedPort);
-    }
-    
-    @Override
-	public ServiceOperation addServiceOperation(String name, FlexoPort relatedPort)throws DuplicateWKFObjectException{
-    	//will throw an exception
-    	try{
-    	ServiceOperation.checkOperationName(this,name,null);
-    	}
-    	catch(DuplicateWKFObjectException e){
-    		if (logger.isLoggable(Level.WARNING)) logger.warning("An operation with the same name ("+name+") already exist");
-    		throw e;
-    	}
-    	ServiceOperation newOp = new DefaultServiceOperation(this,relatedPort);
-    	addToOperations(newOp);
-    	return newOp;
-    }
-    
-    @Override
-	public Vector getOperations()
-    {
-    		//updateFromPortRegistery();
-    		if (logger.isLoggable(Level.FINE)) logger.fine("getOperations in DefaultServiceInterface:"+operationTable);
-        return new Vector(operationTable.values());
-    }
+	// ==========================================================================
+	// ============================= Methods
+	// ================================
+	// ==========================================================================
+	public PortRegistery getPortRegistery() {
+		if (getProcess() != null) {
+			if (getProcess().getPortRegistery() != null) {
+				getProcess().getPortRegistery().addObserver(this);
+			} else {
+				if (logger.isLoggable(Level.WARNING))
+					logger.warning("No related PortRegistery !");
+			}
+			return getProcess().getPortRegistery();
+		}
+		return null;
+	}
 
-    @Override
-	public void setOperations(Vector operations)
-    {
-        //not applicable.
-    }
+	@Override
+	public String getName() {
+		return getPortRegistery().getName();
+	}
 
-    
-    public void updateFromPortRegistery()
-    {
-       if (logger.isLoggable(Level.FINE))
-            logger.fine("updateFromPortRegistery() in DefaultServiceInterface of process:"+getProcess().getName());
-       //Check if some ports have been deleted.
-        Vector operationsToDelete = new Vector(operationTable.values());
-        if (getPortRegistery() != null) {
-            Vector ports = getPortRegistery().getAllPorts();
-            //logger.info("updateFromPortRegistery()");
-            //for (FlexoPort p : getPortRegistery().getAllPorts()) logger.info("port: "+p);
-            if (logger.isLoggable(Level.FINE)) logger.fine("Ports of portRegistry for "+getProcess().getName()+":"+ports);
-            for (Enumeration e = ports.elements(); e.hasMoreElements();) {
-                FlexoPort port = (FlexoPort) e.nextElement();
-                if (operationForPort(port) == null) {
-                    // port not already in operationTable
-                		// add port as a DefaultServiceOperation
-                	try{
-                    DefaultServiceOperation newOperation = new DefaultServiceOperation(this, port);
-                    addToOperations(newOperation);
-                    //logger.info("Add operation for "+port);
-                	}
-                	catch(FlexoException f){
-                		if (logger.isLoggable(Level.WARNING)) logger.warning("Exception should not arise here");
-                		f.printStackTrace();
-                	}
-                   
-               } else {
-            	   		//port already registered in the hashtable
-            	   		// do not delete it.
-            	   		operationsToDelete.remove(operationForPort(port));
-              }
-            }
-        } else {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("No related PortRegistery !");
-        }
-        for (Enumeration e = operationsToDelete.elements(); e.hasMoreElements();) {
-            ServiceOperation op = (ServiceOperation) e.nextElement();
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("Remove ServiceOperation " + op.getName());
-            op.delete();//will thereby be removed from operations.
-            
-        }
-    }
-    
-    private ServiceOperation operationForPort(FlexoPort port){
-    		return (ServiceOperation) operationTable.get(port);
-    }
-    
-    
-    @Override
-	public void addToOperations(ServiceOperation anOp)
-    {
-    	//logger.info("addToOperations "+anOp);
-        if (!operationTable.contains(anOp)) {
-        	operationTable.put(anOp.getPort(),anOp);
-        	anOp.setServiceInterface(this);
-        	if(!isDeserializing()){
-        		setChanged();
-        		notifyObservers(new ServiceOperationInserted(anOp)); 
-        	}
-        }	
-    }
+	@Override
+	public void setName(String aName) {
+		// not possible on port registry
+	}
 
-    @Override
-	public void removeFromOperations(ServiceOperation anOp)
-    {
-    	//logger.info("removeFromOperations "+anOp);
-       if (operationTable.contains(anOp)) {
-        		operationTable.remove(anOp.getPort());
-            setChanged();
-            notifyObservers(new ServiceOperationRemoved(anOp));
-            anOp.setServiceInterface(null);
-        }
-    }
+	@Override
+	public String getFullyQualifiedName() {
+		return getProcess().getFullyQualifiedName() + "." + getName() + ".DEFAULT_SERVICE_INTERFACE";
+	}
 
-    @Override
-	public String getDescription(){
-    		return null;
-    }
-    
-    @Override
-	public void setDescription(String a){
-    		// not applicable
-    }
+	public ServiceOperation addServiceOperation(FlexoPort relatedPort) throws DuplicateWKFObjectException {
+		return addServiceOperation(relatedPort.getName(), relatedPort);
+	}
 
-    @Override
-	public ServiceOperation operationWithName(String name)
-    {
-      
-        for (Enumeration e = operationTable.elements(); e.hasMoreElements();) {
-        	ServiceOperation op = (ServiceOperation) e.nextElement();
-            if (op.getName().equals(name)) {
-                return op;
-            }
-        }
-     
-        return null;
-    }
+	@Override
+	public ServiceOperation addServiceOperation(String name, FlexoPort relatedPort) throws DuplicateWKFObjectException {
+		// will throw an exception
+		try {
+			ServiceOperation.checkOperationName(this, name, null);
+		} catch (DuplicateWKFObjectException e) {
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("An operation with the same name (" + name + ") already exist");
+			throw e;
+		}
+		ServiceOperation newOp = new DefaultServiceOperation(this, relatedPort);
+		addToOperations(newOp);
+		return newOp;
+	}
 
-    @Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass()
-    {
-    	return EmptyVector.EMPTY_VECTOR(FlexoActionType.class);
-    }
+	@Override
+	public Vector getOperations() {
+		// updateFromPortRegistery();
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("getOperations in DefaultServiceInterface:" + operationTable);
+		return new Vector(operationTable.values());
+	}
 
+	@Override
+	public void setOperations(Vector operations) {
+		// not applicable.
+	}
 
-    @Override
-	public Vector<WKFObject> getAllEmbeddedDeleted()
-    {
-        return getAllEmbeddedWKFObjects();
-    }
+	public void updateFromPortRegistery() {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("updateFromPortRegistery() in DefaultServiceInterface of process:" + getProcess().getName());
+		// Check if some ports have been deleted.
+		Vector operationsToDelete = new Vector(operationTable.values());
+		if (getPortRegistery() != null) {
+			Vector ports = getPortRegistery().getAllPorts();
+			// logger.info("updateFromPortRegistery()");
+			// for (FlexoPort p : getPortRegistery().getAllPorts()) logger.info("port: "+p);
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("Ports of portRegistry for " + getProcess().getName() + ":" + ports);
+			for (Enumeration e = ports.elements(); e.hasMoreElements();) {
+				FlexoPort port = (FlexoPort) e.nextElement();
+				if (operationForPort(port) == null) {
+					// port not already in operationTable
+					// add port as a DefaultServiceOperation
+					try {
+						DefaultServiceOperation newOperation = new DefaultServiceOperation(this, port);
+						addToOperations(newOperation);
+						// logger.info("Add operation for "+port);
+					} catch (FlexoException f) {
+						if (logger.isLoggable(Level.WARNING))
+							logger.warning("Exception should not arise here");
+						f.printStackTrace();
+					}
 
+				} else {
+					// port already registered in the hashtable
+					// do not delete it.
+					operationsToDelete.remove(operationForPort(port));
+				}
+			}
+		} else {
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("No related PortRegistery !");
+		}
+		for (Enumeration e = operationsToDelete.elements(); e.hasMoreElements();) {
+			ServiceOperation op = (ServiceOperation) e.nextElement();
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("Remove ServiceOperation " + op.getName());
+			op.delete();// will thereby be removed from operations.
 
-    /*
-     * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
-     */
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-    		if (logger.isLoggable(Level.FINE)) logger.fine("update in DefaultServiceInterface of "+getProcess().getName()+": "+observable+" - "+dataModification);
-    	 	if (!isSerializing()) {
-	             if (observable == getPortRegistery()) {
-	                  updateFromPortRegistery();
-	             } else {
-	            	 if (logger.isLoggable(Level.WARNING))
-						logger.warning("Received a notification from "+observable);
-	             }
-    	 	}
-    }
-    
-    
-    @Override
-	public void delete(){
-    		if (logger.isLoggable(Level.INFO)) logger.info("Delete in DefaultServiceInterface... ????");
-    		super.delete();
-    }
+		}
+	}
 
-    public static ServiceInterface copyPortsFromRegistry(ServiceInterface toInterface, PortRegistery fromReg){
-    		// NOT APPLICABLE
-    		return null;
-    	}
-    
-    @Override
+	private ServiceOperation operationForPort(FlexoPort port) {
+		return (ServiceOperation) operationTable.get(port);
+	}
+
+	@Override
+	public void addToOperations(ServiceOperation anOp) {
+		// logger.info("addToOperations "+anOp);
+		if (!operationTable.contains(anOp)) {
+			operationTable.put(anOp.getPort(), anOp);
+			anOp.setServiceInterface(this);
+			if (!isDeserializing()) {
+				setChanged();
+				notifyObservers(new ServiceOperationInserted(anOp));
+			}
+		}
+	}
+
+	@Override
+	public void removeFromOperations(ServiceOperation anOp) {
+		// logger.info("removeFromOperations "+anOp);
+		if (operationTable.contains(anOp)) {
+			operationTable.remove(anOp.getPort());
+			setChanged();
+			notifyObservers(new ServiceOperationRemoved(anOp));
+			anOp.setServiceInterface(null);
+		}
+	}
+
+	@Override
+	public String getDescription() {
+		return null;
+	}
+
+	@Override
+	public void setDescription(String a) {
+		// not applicable
+	}
+
+	@Override
+	public ServiceOperation operationWithName(String name) {
+
+		for (Enumeration e = operationTable.elements(); e.hasMoreElements();) {
+			ServiceOperation op = (ServiceOperation) e.nextElement();
+			if (op.getName().equals(name)) {
+				return op;
+			}
+		}
+
+		return null;
+	}
+
+	@Override
+	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
+		return EmptyVector.EMPTY_VECTOR(FlexoActionType.class);
+	}
+
+	@Override
+	public Vector<WKFObject> getAllEmbeddedDeleted() {
+		return getAllEmbeddedWKFObjects();
+	}
+
+	/*
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("update in DefaultServiceInterface of " + getProcess().getName() + ": " + observable + " - " + dataModification);
+		if (!isSerializing()) {
+			if (observable == getPortRegistery()) {
+				updateFromPortRegistery();
+			} else {
+				if (logger.isLoggable(Level.WARNING))
+					logger.warning("Received a notification from " + observable);
+			}
+		}
+	}
+
+	@Override
+	public void delete() {
+		if (logger.isLoggable(Level.INFO))
+			logger.info("Delete in DefaultServiceInterface... ????");
+		super.delete();
+	}
+
+	public static ServiceInterface copyPortsFromRegistry(ServiceInterface toInterface, PortRegistery fromReg) {
+		// NOT APPLICABLE
+		return null;
+	}
+
+	@Override
 	public String getClassNameKey() {
-    		return "default_service_interface";
-    }
+		return "default_service_interface";
+	}
 }

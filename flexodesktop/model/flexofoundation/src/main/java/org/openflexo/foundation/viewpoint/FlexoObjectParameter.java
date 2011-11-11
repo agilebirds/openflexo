@@ -26,7 +26,7 @@ import org.openflexo.foundation.FlexoModelObject;
 public class FlexoObjectParameter extends EditionSchemeParameter {
 
 	private FlexoObjectType flexoObjectType;
-	
+
 	@Override
 	public Type getType() {
 		return FlexoModelObject.class;
@@ -36,17 +36,11 @@ public class FlexoObjectParameter extends EditionSchemeParameter {
 	public WidgetType getWidget() {
 		return WidgetType.FLEXO_OBJECT;
 	}
-	
-	public static enum FlexoObjectType
-	{
-		Process,
-		ProcessFolder,
-		Role,
-		Activity,
-		Operation,
-		Action
+
+	public static enum FlexoObjectType {
+		Process, ProcessFolder, Role, Activity, Operation, Action
 	}
-	
+
 	public FlexoObjectType getFlexoObjectType() {
 		return flexoObjectType;
 	}

@@ -101,7 +101,7 @@ public class XMLSerializer {
 	}
 
 	private <I> Element serializeElement(Object object, XMLElement context) throws IllegalArgumentException, IllegalAccessException,
-	InvocationTargetException, ModelDefinitionException {
+			InvocationTargetException, ModelDefinitionException {
 		Element returned;
 		if (object instanceof ProxyObject) {
 			ProxyMethodHandler<I> handler = (ProxyMethodHandler<I>) ((ProxyObject) object).getHandler();

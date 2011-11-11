@@ -40,7 +40,6 @@ import org.openflexo.foundation.xml.ImplementationModelBuilder;
 import org.openflexo.tm.hibernate.impl.enums.HibernateCascade;
 import org.openflexo.toolbox.JavaUtils;
 
-
 /**
  * This class defines relationships for the mapping relationships in a Hibernate implementation.
  * 
@@ -175,7 +174,8 @@ public class HibernateRelationship extends TechnologyModelObject implements Flex
 
 	/**
 	 * Set if this relationship inverse must exists. <br>
-	 * If <code>hasInverse</code> is true and if the inverse relationship is currently null, a new relation ship will be created on the destination entity and will be set as inverse of this one. <br>
+	 * If <code>hasInverse</code> is true and if the inverse relationship is currently null, a new relation ship will be created on the
+	 * destination entity and will be set as inverse of this one. <br>
 	 * If <code>hasInverse</code> is true and if the inverse relationship is currently not null, the inverse relationship will be deleted
 	 * 
 	 * @param hasInverse
@@ -202,7 +202,8 @@ public class HibernateRelationship extends TechnologyModelObject implements Flex
 	}
 
 	/**
-	 * Get the relationship name if any non empty one exists, otherwise build an automatic name for this relationship based on its destination and its cardinality.
+	 * Get the relationship name if any non empty one exists, otherwise build an automatic name for this relationship based on its
+	 * destination and its cardinality.
 	 * 
 	 * @return the relationship name if exists, the built name otherwise.
 	 */

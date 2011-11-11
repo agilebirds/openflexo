@@ -33,38 +33,35 @@ import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 import org.openflexo.wkf.swleditor.SWLEditorConstants;
 
-
 public abstract class OperatorGR<O extends OperatorNode> extends PetriGraphNodeGR<O> {
 
 	private ForegroundStyle foreground;
 	protected BackgroundStyle background;
 
-	public OperatorGR(O operatorNode, ProcessRepresentation aDrawing, boolean isInPalet)
-	{
+	public OperatorGR(O operatorNode, ProcessRepresentation aDrawing, boolean isInPalet) {
 		super(operatorNode, ShapeType.LOSANGE, aDrawing, isInPalet);
-		//setX(getOperatorNode().getPosX());
-		//setY(getOperatorNode().getPosY());
+		// setX(getOperatorNode().getPosX());
+		// setY(getOperatorNode().getPosY());
 		setWidth(35);
 		setHeight(35);
 
-		//setText(getOperatorNode().getName());
-		//setAbsoluteTextX(getOperatorNode().getNodeLabelPosX());
-		//setAbsoluteTextY(getOperatorNode().getNodeLabelPosY());
+		// setText(getOperatorNode().getName());
+		// setAbsoluteTextX(getOperatorNode().getNodeLabelPosX());
+		// setAbsoluteTextY(getOperatorNode().getNodeLabelPosY());
 		setIsFloatingLabel(true);
 
 		foreground = ForegroundStyle.makeStyle(Color.BLACK);
 		foreground.setLineWidth(0.6);
 
-		if(getImageIcon()!=null){
+		if (getImageIcon() != null) {
 			background = BackgroundStyle.makeImageBackground(getImageIcon());
-			((BackgroundStyle.BackgroundImage)background).setScaleX(1);
-			((BackgroundStyle.BackgroundImage)background).setScaleY(1);
-			((BackgroundStyle.BackgroundImage)background).setDeltaX(-2);
-			((BackgroundStyle.BackgroundImage)background).setDeltaY(-3);
+			((BackgroundStyle.BackgroundImage) background).setScaleX(1);
+			((BackgroundStyle.BackgroundImage) background).setScaleY(1);
+			((BackgroundStyle.BackgroundImage) background).setDeltaX(-2);
+			((BackgroundStyle.BackgroundImage) background).setDeltaY(-3);
 		} else {
 			background = BackgroundStyle.makeEmptyBackground();
 		}
-
 
 		setForeground(foreground);
 		setBackground(background);
@@ -73,11 +70,9 @@ public abstract class OperatorGR<O extends OperatorNode> extends PetriGraphNodeG
 
 		if (getOperatorNode().getLevel() == FlexoLevel.ACTIVITY) {
 			setLayer(ACTIVITY_LAYER);
-		}
-		else if (getOperatorNode().getLevel() == FlexoLevel.OPERATION) {
+		} else if (getOperatorNode().getLevel() == FlexoLevel.OPERATION) {
 			setLayer(OPERATION_LAYER);
-		}
-		else if (getOperatorNode().getLevel() == FlexoLevel.ACTION) {
+		} else if (getOperatorNode().getLevel() == FlexoLevel.ACTION) {
 			setLayer(ACTION_LAYER);
 		}
 
@@ -86,19 +81,17 @@ public abstract class OperatorGR<O extends OperatorNode> extends PetriGraphNodeG
 	}
 
 	@Override
-	public void updatePropertiesFromWKFPreferences()
-	{
+	public void updatePropertiesFromWKFPreferences() {
 		super.updatePropertiesFromWKFPreferences();
-		setTextStyle(TextStyle.makeTextStyle(Color.BLACK, getWorkflow()!=null?getWorkflow().getEventFont(WKFPreferences.getEventNodeFont()).getFont():WKFPreferences.getEventNodeFont().getFont()));
+		setTextStyle(TextStyle.makeTextStyle(Color.BLACK,
+				getWorkflow() != null ? getWorkflow().getEventFont(WKFPreferences.getEventNodeFont()).getFont() : WKFPreferences
+						.getEventNodeFont().getFont()));
 		setIsMultilineAllowed(true);
 		getShadowStyle().setShadowDepth(1);
 		getShadowStyle().setShadowBlur(3);
 	}
 
-
-
-	public O getOperatorNode()
-	{
+	public O getOperatorNode() {
 		return getDrawable();
 	}
 
@@ -110,22 +103,19 @@ public abstract class OperatorGR<O extends OperatorNode> extends PetriGraphNodeG
 	public abstract ImageIcon getImageIcon();
 
 	@Override
-	public double getDefaultLabelX()
-	{
+	public double getDefaultLabelX() {
 		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR)) {
 			return getModel().getLabelLocation(SWLEditorConstants.SWIMMING_LANE_EDITOR).getX();
 		}
-		return getLeftBorder()+15;
+		return getLeftBorder() + 15;
 	}
 
 	@Override
-	public double getDefaultLabelY()
-	{
+	public double getDefaultLabelY() {
 		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR)) {
 			return getModel().getLabelLocation(SWLEditorConstants.SWIMMING_LANE_EDITOR).getY();
 		}
 		return getTopBorder() + getHeight() + getTextStyle().getFont().getSize() + 5;
 	}
-
 
 }

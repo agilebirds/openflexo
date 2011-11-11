@@ -23,12 +23,10 @@ package org.openflexo.xmlcode.examples.example2;
 import java.util.Vector;
 
 /**
- * Class <code>ArticlesList</code> is intented to represent a list of
- * multimedia articles.
+ * Class <code>ArticlesList</code> is intented to represent a list of multimedia articles.
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  */
-public class ArticlesList extends Vector
-{
+public class ArticlesList extends Vector {
 
 }

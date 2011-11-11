@@ -43,15 +43,13 @@ import org.openflexo.generator.rm.GenerationAvailableFileResource;
 import org.openflexo.logging.FlexoLogger;
 
 /**
- * This class is intended to be used by generators. As template status are
- * involved in dependancies computation, this class is declared as a
+ * This class is intended to be used by generators. As template status are involved in dependancies computation, this class is declared as a
  * MemoryResource.
- *
+ * 
  * @author Guillaume Polet, Sylvain Guerin
- *
+ * 
  */
-public class TemplateLocator extends FlexoMemoryResource
-{
+public class TemplateLocator extends FlexoMemoryResource {
 
 	private static final Logger logger = FlexoLogger.getLogger(TemplateLocator.class.getPackage().getName());
 
@@ -68,18 +66,15 @@ public class TemplateLocator extends FlexoMemoryResource
 	private AbstractProjectGenerator _projectGenerator;
 
 	/**
-	 * Constructor used for XML Serialization: never try to instanciate resource
-	 * from this constructor
-	 *
+	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
+	 * 
 	 * @param builder
 	 */
-	public TemplateLocator(FlexoProjectBuilder builder)
-	{
+	public TemplateLocator(FlexoProjectBuilder builder) {
 		super(builder.project);
 	}
 
-	public TemplateLocator(CGTemplates templates, AbstractProjectGenerator projectGenerator)
-	{
+	public TemplateLocator(CGTemplates templates, AbstractProjectGenerator projectGenerator) {
 		super(templates.getProject());
 		_templateDirectories = null;
 		_templateTable = new Hashtable<String, CGTemplate>();
@@ -88,16 +83,14 @@ public class TemplateLocator extends FlexoMemoryResource
 		rebuildDependancies();
 	}
 
-	public void notifyTemplateModified()
-	{
-		logger.info("********* Clear TemplateLocator cache !!!!!!!!!!! for "+getFullyQualifiedName());
+	public void notifyTemplateModified() {
+		logger.info("********* Clear TemplateLocator cache !!!!!!!!!!! for " + getFullyQualifiedName());
 		_templateTable.clear();
 		_templateDirectories = null;
 		lastUpdate = new Date();
 	}
 
-	public CGTemplate templateWithName(String templateRelativePath) throws TemplateNotFoundException
-	{
+	public CGTemplate templateWithName(String templateRelativePath) throws TemplateNotFoundException {
 		if (templateRelativePath.startsWith("/")) {
 			templateRelativePath = templateRelativePath.substring(1);
 		}
@@ -114,13 +107,12 @@ public class TemplateLocator extends FlexoMemoryResource
 	}
 
 	@SuppressWarnings("unchecked")
-	private CGTemplate searchForTemplate(String templateRelativePath) throws TemplateNotFoundException
-	{
+	private CGTemplate searchForTemplate(String templateRelativePath) throws TemplateNotFoundException {
 		Enumeration<CGTemplateSet> en = templateDirectories().elements();
 		CGTemplateSet set = null;
 		while (en.hasMoreElements()) {
 			set = en.nextElement();
-			//logger.info("search in "+set.getDirectory().getAbsolutePath());
+			// logger.info("search in "+set.getDirectory().getAbsolutePath());
 			CGTemplate answer = set.getTemplate(templateRelativePath);
 			if (answer != null) {
 				return answer;
@@ -135,17 +127,16 @@ public class TemplateLocator extends FlexoMemoryResource
 	}
 
 	/**
-	 * search order is : - prj/Templates/GENERATION_TARGET - prj/Templates -
-	 * Flexo/Config/Generator/Templates/GENERATION_TARGET -
+	 * search order is : - prj/Templates/GENERATION_TARGET - prj/Templates - Flexo/Config/Generator/Templates/GENERATION_TARGET -
 	 * Flexo/Config/Generator/Templates/
 	 */
-	private Vector<CGTemplateSet> templateDirectories()
-	{
+	private Vector<CGTemplateSet> templateDirectories() {
 		if (_templateDirectories == null || this.project != _projectGenerator.getProject() || this.target != _projectGenerator.getTarget()) {
 			this.project = _projectGenerator.getProject();
 			this.target = _projectGenerator.getTarget();
 			_templateDirectories = new Vector<CGTemplateSet>();
-			CustomCGTemplateRepository customRepository = _projectGenerator.getRepository() != null ? _projectGenerator.getRepository().getPreferredTemplateRepository() : null;
+			CustomCGTemplateRepository customRepository = _projectGenerator.getRepository() != null ? _projectGenerator.getRepository()
+					.getPreferredTemplateRepository() : null;
 			if (customRepository != null) {
 				if (target != null && customRepository.getTemplateSetForTarget(target) != null) {
 					_templateDirectories.add(customRepository.getTemplateSetForTarget(target));
@@ -165,34 +156,31 @@ public class TemplateLocator extends FlexoMemoryResource
 	private Date lastUpdate = new Date();
 
 	@Override
-	public Date getLastUpdate()
-	{
+	public Date getLastUpdate() {
 		return lastUpdate;
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		if (_projectGenerator == null || _projectGenerator.getRepository() == null) {
 			return null;
 		}
 		if (_projectGenerator.getTarget() != null) {
-			return _projectGenerator.getTarget().getName()+"."+_projectGenerator.getRepository().getName();
+			return _projectGenerator.getTarget().getName() + "." + _projectGenerator.getRepository().getName();
 		}
 		return _projectGenerator.getRepository().getName();
 	}
 
 	@Override
-	public ResourceType getResourceType()
-	{
+	public ResourceType getResourceType() {
 		return ResourceType.CG_TEMPLATES;
 	}
 
 	@SuppressWarnings("unchecked")
-	public boolean needsUpdateForResource(GenerationAvailableFileResource resource)
-	{
+	public boolean needsUpdateForResource(GenerationAvailableFileResource resource) {
 		Date requestDate = resource.getLastUpdate();
-		return needsUpdateForGenerator(requestDate, (Generator<? extends FlexoModelObject, ? extends GenerationRepository>) resource.getGenerator());
+		return needsUpdateForGenerator(requestDate,
+				(Generator<? extends FlexoModelObject, ? extends GenerationRepository>) resource.getGenerator());
 	}
 
 	/**
@@ -200,8 +188,7 @@ public class TemplateLocator extends FlexoMemoryResource
 	 * @param generator
 	 * @return
 	 */
-	public boolean needsUpdateForGenerator(Date requestDate, Generator<? extends FlexoModelObject, ? extends GenerationRepository> generator)
-	{
+	public boolean needsUpdateForGenerator(Date requestDate, Generator<? extends FlexoModelObject, ? extends GenerationRepository> generator) {
 		if (generator == null) {
 			return false;
 		}
@@ -216,15 +203,14 @@ public class TemplateLocator extends FlexoMemoryResource
 		return false;
 	}
 
-	public boolean needsRegenerationBecauseOfTemplateChange(Generator<? extends FlexoModelObject, ? extends GenerationRepository> generator)
-	{
+	public boolean needsRegenerationBecauseOfTemplateChange(Generator<? extends FlexoModelObject, ? extends GenerationRepository> generator) {
 		if (generator == null) {
 			return false;
 		}
 		for (CGTemplate template : generator.getUsedTemplates()) {
 			try {
 				CGTemplate file = searchForTemplate(template.getRelativePathWithoutSetPrefix());
-				if (file!=template) {
+				if (file != template) {
 					return true;
 				}
 			} catch (TemplateNotFoundException e) {

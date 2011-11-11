@@ -28,7 +28,6 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-
 import org.openflexo.cgmodule.view.CGTemplateFileModuleView;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -42,61 +41,54 @@ public class OpenTemplateFileInNewWindowInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	OpenTemplateFileInNewWindowInitializer(GeneratorControllerActionInitializer actionInitializer)
-	{
-		super(OpenTemplateFileInNewWindow.actionType,actionInitializer);
-	}
-	
-	@Override
-	protected GeneratorControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (GeneratorControllerActionInitializer)super.getControllerActionInitializer();
-	}
-	
-	@Override
-	protected FlexoActionInitializer<OpenTemplateFileInNewWindow> getDefaultInitializer() 
-	{
-		return new FlexoActionInitializer<OpenTemplateFileInNewWindow>() {
-            @Override
-			public boolean run(ActionEvent e, OpenTemplateFileInNewWindow action)
-            {
-            	return true;
-           }
-        };
+	OpenTemplateFileInNewWindowInitializer(GeneratorControllerActionInitializer actionInitializer) {
+		super(OpenTemplateFileInNewWindow.actionType, actionInitializer);
 	}
 
-     @Override
-	protected FlexoActionFinalizer<OpenTemplateFileInNewWindow> getDefaultFinalizer() 
-	{
+	@Override
+	protected GeneratorControllerActionInitializer getControllerActionInitializer() {
+		return (GeneratorControllerActionInitializer) super.getControllerActionInitializer();
+	}
+
+	@Override
+	protected FlexoActionInitializer<OpenTemplateFileInNewWindow> getDefaultInitializer() {
+		return new FlexoActionInitializer<OpenTemplateFileInNewWindow>() {
+			@Override
+			public boolean run(ActionEvent e, OpenTemplateFileInNewWindow action) {
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoActionFinalizer<OpenTemplateFileInNewWindow> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<OpenTemplateFileInNewWindow>() {
-            @Override
-			public boolean run(ActionEvent e, OpenTemplateFileInNewWindow action)
-            {
-              	CGTemplateFileModuleView view 
-            	= (CGTemplateFileModuleView)getControllerActionInitializer().getGeneratorController().
-            	createModuleViewForObjectAndPerspective(action.getFocusedObject(), null);
-            	view.setOpenedInSeparateWindow(true);
-				final FlexoDialog dialog = new FlexoDialog(getControllerActionInitializer().getGeneratorController().getFlexoFrame(), action.getFocusedObject().getTemplateName(), false);
-            	dialog.getContentPane().setLayout(new BorderLayout());
-            	dialog.getContentPane().add(view,BorderLayout.CENTER);
-            	JPanel controlPanel = new JPanel(new FlowLayout());
-            	JButton button = new JButton();
-            	button.setText(FlexoLocalization.localizedForKey("close",button));
-            	button.addActionListener(new ActionListener() {
+			@Override
+			public boolean run(ActionEvent e, OpenTemplateFileInNewWindow action) {
+				CGTemplateFileModuleView view = (CGTemplateFileModuleView) getControllerActionInitializer().getGeneratorController()
+						.createModuleViewForObjectAndPerspective(action.getFocusedObject(), null);
+				view.setOpenedInSeparateWindow(true);
+				final FlexoDialog dialog = new FlexoDialog(getControllerActionInitializer().getGeneratorController().getFlexoFrame(),
+						action.getFocusedObject().getTemplateName(), false);
+				dialog.getContentPane().setLayout(new BorderLayout());
+				dialog.getContentPane().add(view, BorderLayout.CENTER);
+				JPanel controlPanel = new JPanel(new FlowLayout());
+				JButton button = new JButton();
+				button.setText(FlexoLocalization.localizedForKey("close", button));
+				button.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						dialog.dispose();
-					}            		
-            	});
-            	controlPanel.add(button);
-            	dialog.getContentPane().add(controlPanel,BorderLayout.SOUTH);
-            	dialog.validate();
-            	dialog.pack();
-            	dialog.setVisible(true);
-            	return true;
-           }
-        };
+					}
+				});
+				controlPanel.add(button);
+				dialog.getContentPane().add(controlPanel, BorderLayout.SOUTH);
+				dialog.validate();
+				dialog.pack();
+				dialog.setVisible(true);
+				return true;
+			}
+		};
 	}
-
 
 }

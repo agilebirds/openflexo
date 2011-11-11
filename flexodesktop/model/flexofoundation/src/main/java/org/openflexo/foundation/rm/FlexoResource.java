@@ -44,24 +44,21 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileFormat;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
 /**
- * This class represents a Flexo resource. A FlexoResource represent an object
- * handled by Flexo Application Suite (all concerned modules), which could be
- * stored in a File, generally located in related {@link FlexoProject} project
- * directory (see {@link FlexoFileResource}) or simply stored in memory (see
- * {@link FlexoMemoryResource}).
+ * This class represents a Flexo resource. A FlexoResource represent an object handled by Flexo Application Suite (all concerned modules),
+ * which could be stored in a File, generally located in related {@link FlexoProject} project directory (see {@link FlexoFileResource}) or
+ * simply stored in memory (see {@link FlexoMemoryResource}).
  * 
  * @author sguerin
  */
-public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoObservable implements XMLSerializable, Validable
-{
+public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoObservable implements XMLSerializable, Validable {
 
 	private static final FlexoDependantResourceComparator dependancyComparator = new FlexoDependantResourceComparator();
 
 	private static class FlexoDependantResourceComparator implements Comparator<FlexoResource> {
 
-		protected FlexoDependantResourceComparator(){}
+		protected FlexoDependantResourceComparator() {
+		}
 
 		@Override
 		public int compare(FlexoResource resource1, FlexoResource resource2) {
@@ -70,12 +67,12 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	}
 
 	public static void sortResourcesWithDependancies(List<? extends FlexoResource<? extends FlexoResourceData>> resources) {
-		//1. Reset the sort
+		// 1. Reset the sort
 		for (FlexoResource<? extends FlexoResourceData> r : resources) {
 			r.resourceHasBeenSeen = false;
 			r.resourceOrder = 0;
 		}
-		//2. Resolve order
+		// 2. Resolve order
 		for (FlexoResource<? extends FlexoResourceData> r : resources) {
 			try {
 				r.resolveOrder();
@@ -85,14 +82,13 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 				}
 			}
 		}
-		//3. Do the sort
+		// 3. Do the sort
 		Collections.sort(resources, dependancyComparator);
 	}
 
 	protected int resourceOrder;
 
-	public int getResourceOrder()
-	{
+	public int getResourceOrder() {
 		return resourceOrder;
 	}
 
@@ -141,19 +137,16 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	protected SynchronizedResources _synchronizedResources;
 
 	/**
-	 * Hashtable coding the date 'this' resource was lastly backward
-	 * synchronized with the resource matching related key
+	 * Hashtable coding the date 'this' resource was lastly backward synchronized with the resource matching related key
 	 */
-	private Hashtable<FlexoResource<?>,LastSynchronizedWithResourceEntry> _lastSynchronizedForResources;
+	private Hashtable<FlexoResource<?>, LastSynchronizedWithResourceEntry> _lastSynchronizedForResources;
 
 	/**
-	 * Constructor used for XML Serialization: never try to instanciate resource
-	 * from this constructor
+	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
 	 * 
 	 * @param builder
 	 */
-	public FlexoResource(FlexoProjectBuilder builder)
-	{
+	public FlexoResource(FlexoProjectBuilder builder) {
 		this(builder.project);
 		builder.notifyResourceLoading(this);
 	}
@@ -163,30 +156,26 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * 
 	 * @param aProject
 	 */
-	public FlexoResource(FlexoProject aProject)
-	{
+	public FlexoResource(FlexoProject aProject) {
 		super();
-		_lastSynchronizedForResources = new Hashtable<FlexoResource<?>,LastSynchronizedWithResourceEntry>();
+		_lastSynchronizedForResources = new Hashtable<FlexoResource<?>, LastSynchronizedWithResourceEntry>();
 		project = aProject;
 	}
 
-	public ProjectLoadingHandler getLoadingHandler()
-	{
+	public ProjectLoadingHandler getLoadingHandler() {
 		if (getProject() != null) {
 			return getProject().getLoadingHandler();
 		}
 		return null;
 	}
 
-	public void notifyResourceStatusChanged()
-	{
+	public void notifyResourceStatusChanged() {
 		if (getProject() != null) {
 			getProject().notifyResourceStatusChanged(this);
 		}
 	}
 
-	protected void notifyResourceChanged()
-	{
+	protected void notifyResourceChanged() {
 		if (getProject() != null) {
 			getProject().notifyResourceChanged(this);
 		}
@@ -202,45 +191,38 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * 
 	 * @return
 	 */
-	public FlexoProject getProject()
-	{
+	public FlexoProject getProject() {
 		return project;
 	}
 
 	/**
-	 * This date is VERY IMPORTANT and CRITICAL since this is the date used by ResourceManager
-	 * to compute dependancies between resources. This method returns the date that must be considered
-	 * as last known update for this resource
+	 * This date is VERY IMPORTANT and CRITICAL since this is the date used by ResourceManager to compute dependancies between resources.
+	 * This method returns the date that must be considered as last known update for this resource
 	 * 
 	 * @return a Date object
 	 */
 	public abstract Date getLastUpdate();
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return getResourceIdentifier();
 	}
 
-	public void setResourceIdentifier(String anIdentifier)
-	{
+	public void setResourceIdentifier(String anIdentifier) {
 		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Setting resource identifier is not allowed !");
 		}
 	}
 
-	public final String getResourceIdentifier()
-	{
+	public final String getResourceIdentifier() {
 		return getResourceTypeIdentifier() + "." + getName();
 	}
 
-	public String getResourceIdentifierForNewName(String newName)
-	{
+	public String getResourceIdentifierForNewName(String newName) {
 		return getResourceTypeIdentifier() + "." + newName;
 	}
 
-	public final String getResourceTypeIdentifier()
-	{
+	public final String getResourceTypeIdentifier() {
 		if (getResourceType() != null) {
 			return getResourceType().getName();
 		}
@@ -260,28 +242,24 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * 
 	 * @param aName
 	 */
-	public void setName(String aName)
-	{
+	public void setName(String aName) {
 		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Could NOT rename this kind of resource: operation not allowed !");
 		}
 	}
 
 	/**
-	 * Rebuild resource dependancies for this resource This method must be
-	 * overriden, since only RM resource is declared to be in sync with current
-	 * resource
+	 * Rebuild resource dependancies for this resource This method must be overriden, since only RM resource is declared to be in sync with
+	 * current resource
 	 */
-	public void rebuildDependancies()
-	{
+	public void rebuildDependancies() {
 		addToSynchronizedResources(getProject().getFlexoRMResource());
 	}
 
 	/**
 	 * Clear resource dependancies for this resource
 	 */
-	public void clearDependancies()
-	{
+	public void clearDependancies() {
 		getDependantResources().clear();
 		getAlteredResources().clear();
 		getSynchronizedResources().clear();
@@ -297,8 +275,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * 
 	 * @return Returns the dependantResources.
 	 */
-	public DependantResources getDependantResources()
-	{
+	public DependantResources getDependantResources() {
 		if (_dependantResources == null) {
 			_dependantResources = new DependantResources(this);
 		}
@@ -311,8 +288,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @param dependantResources
 	 *            The dependantResources to set.
 	 */
-	public void setDependantResources(DependantResources resources)
-	{
+	public void setDependantResources(DependantResources resources) {
 		_dependantResources = resources;
 		resources.setRelatedResource(this);
 	}
@@ -323,8 +299,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @param dependantResources
 	 *            The dependantResources to add.
 	 */
-	public void addToDependantResources(FlexoResource aDependantResource)
-	{
+	public void addToDependantResources(FlexoResource aDependantResource) {
 		getDependantResources().addToResources(aDependantResource);
 	}
 
@@ -334,8 +309,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @param dependantResources
 	 *            The dependantResources to remove.
 	 */
-	public void removeFromDependantResources(FlexoResource aDependantResource)
-	{
+	public void removeFromDependantResources(FlexoResource aDependantResource) {
 		getDependantResources().removeFromResources(aDependantResource);
 	}
 
@@ -349,8 +323,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * 
 	 * @return Returns the AlteredResources.
 	 */
-	public AlteredResources getAlteredResources()
-	{
+	public AlteredResources getAlteredResources() {
 		if (_alteredResources == null) {
 			_alteredResources = new AlteredResources(this);
 		}
@@ -363,8 +336,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @param resources
 	 *            The AlteredResources to set.
 	 */
-	public void setAlteredResources(AlteredResources resources)
-	{
+	public void setAlteredResources(AlteredResources resources) {
 		_alteredResources = resources;
 		resources.setRelatedResource((FlexoResource<FlexoResourceData>) this);
 	}
@@ -375,8 +347,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @param aDependingResource
 	 *            The FlexoResource to add.
 	 */
-	public void addToAlteredResources(FlexoResource<FlexoResourceData> aDependingResource)
-	{
+	public void addToAlteredResources(FlexoResource<FlexoResourceData> aDependingResource) {
 		getAlteredResources().addToResources(aDependingResource);
 	}
 
@@ -386,8 +357,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @param aDependingResource
 	 *            The FlexoResource to remove.
 	 */
-	public void removeFromAlteredResources(FlexoResource<FlexoResourceData> aDependingResource)
-	{
+	public void removeFromAlteredResources(FlexoResource<FlexoResourceData> aDependingResource) {
 		getAlteredResources().removeFromResources(aDependingResource);
 	}
 
@@ -401,8 +371,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * 
 	 * @return Returns the SynchronizedResources.
 	 */
-	public SynchronizedResources getSynchronizedResources()
-	{
+	public SynchronizedResources getSynchronizedResources() {
 		if (_synchronizedResources == null) {
 			_synchronizedResources = new SynchronizedResources(this);
 		}
@@ -415,8 +384,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @param resources
 	 *            The SynchronizedResources to set.
 	 */
-	public void setSynchronizedResources(SynchronizedResources resources)
-	{
+	public void setSynchronizedResources(SynchronizedResources resources) {
 		_synchronizedResources = resources;
 		resources.setRelatedResource(this);
 	}
@@ -427,8 +395,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @param aSynchronizedResource
 	 *            The FlexoResource to add.
 	 */
-	public void addToSynchronizedResources(FlexoResource aSynchronizedResource)
-	{
+	public void addToSynchronizedResources(FlexoResource aSynchronizedResource) {
 		getSynchronizedResources().addToResources(aSynchronizedResource);
 	}
 
@@ -438,14 +405,12 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @param aSynchronizedResource
 	 *            The FlexoResource to remove.
 	 */
-	public void removeFromSynchronizedResources(FlexoResource aSynchronizedResource)
-	{
+	public void removeFromSynchronizedResources(FlexoResource aSynchronizedResource) {
 		getSynchronizedResources().removeFromResources(aSynchronizedResource);
 	}
 
 	@Override
-	public void setChanged()
-	{
+	public void setChanged() {
 		getProject().notifyResourceChanged(this);
 	}
 
@@ -457,17 +422,15 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	private boolean isDeleted = false;
 
 	/**
-	 * Delete this resource. Note that this method does nothing, except removing
-	 * resource from projet, so this must be overriden in sub-classes
+	 * Delete this resource. Note that this method does nothing, except removing resource from projet, so this must be overriden in
+	 * sub-classes
 	 */
-	public void delete()
-	{
+	public void delete() {
 		isDeleted = true;
 		getProject().removeResource(this);
 	}
 
-	public boolean isDeleted()
-	{
+	public boolean isDeleted() {
 		return isDeleted;
 	}
 
@@ -478,14 +441,13 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 
 	/**
 	 * 
-	 * Receive a notification that should be handled by the ResourceManager
-	 * scheme. The ResourceManager will handle and propagate this notification
+	 * Receive a notification that should be handled by the ResourceManager scheme. The ResourceManager will handle and propagate this
+	 * notification
 	 * 
 	 * @see org.openflexo.foundation.rm.FlexoResourceData#notifyRM(org.openflexo.foundation.rm.RMNotification)
 	 * @see org.openflexo.foundation.rm.FlexoResource#receiveRMNotification(org.openflexo.foundation.rm.RMNotification)
 	 */
-	public void notifyRM(RMNotification notification) throws FlexoException
-	{
+	public void notifyRM(RMNotification notification) throws FlexoException {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Resource " + getResourceIdentifier() + " is notified of " + notification);
 		}
@@ -504,8 +466,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 		}
 	}
 
-	private Vector<FlexoResource> getSimplePropagationTargets(RMNotification notification)
-	{
+	private Vector<FlexoResource> getSimplePropagationTargets(RMNotification notification) {
 		Vector<FlexoResource> returned = new Vector<FlexoResource>();
 		Enumeration en = getSynchronizedResources().elements();
 		while (en.hasMoreElements()) {
@@ -524,15 +485,13 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 		return returned;
 	}
 
-	private Vector<FlexoResource> getDeepPropagationTargets(RMNotification notification)
-	{
+	private Vector<FlexoResource> getDeepPropagationTargets(RMNotification notification) {
 		Vector<FlexoResource> returned = new Vector<FlexoResource>();
 		addDeepPropagationTargets(returned, notification);
 		return returned;
 	}
 
-	private void addDeepPropagationTargets(Vector<FlexoResource> targetList, RMNotification notification)
-	{
+	private void addDeepPropagationTargets(Vector<FlexoResource> targetList, RMNotification notification) {
 		Enumeration<FlexoResource<FlexoResourceData>> en = getSynchronizedResources().elements();
 		while (en.hasMoreElements()) {
 			FlexoResource<FlexoResourceData> res = en.nextElement();
@@ -553,42 +512,36 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 
 	/**
 	 * 
-	 * Receive a notification that has been propagated by the ResourceManager
-	 * scheme and coming from a modification on an other resource
+	 * Receive a notification that has been propagated by the ResourceManager scheme and coming from a modification on an other resource
 	 * 
 	 * @see org.openflexo.foundation.rm.FlexoResource#notifyRM(org.openflexo.foundation.rm.RMNotification)
 	 */
-	public void receiveRMNotification(RMNotification notification) throws FlexoException
-	{
-		if(logger.isLoggable(Level.FINE)) {
-			logger.fine ("Receive RMNotification in FlexoResource IGNORED\n\treceiver:"+this+"\n\tnotification:"+notification);
+	public void receiveRMNotification(RMNotification notification) throws FlexoException {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Receive RMNotification in FlexoResource IGNORED\n\treceiver:" + this + "\n\tnotification:" + notification);
 		}
 	}
 
 	/**
-	 * Returns true if and only if this resource is up-to-date and therefore
-	 * doesn't require to be updated.
-	 * (No assertion is done on the fact whether resource is loaded or not)
+	 * Returns true if and only if this resource is up-to-date and therefore doesn't require to be updated. (No assertion is done on the
+	 * fact whether resource is loaded or not)
 	 * 
-	 * Note: Calling this method assert that NO MODIFICATION will be performed on
-	 * the entire model
+	 * Note: Calling this method assert that NO MODIFICATION will be performed on the entire model
 	 * 
 	 * @return
 	 * @throws ResourceDependancyLoopException
 	 */
-	public final boolean needsUpdate() throws ResourceDependancyLoopException
-	{
+	public final boolean needsUpdate() throws ResourceDependancyLoopException {
 		return _needsUpdate(makeSingleton());
 	}
 
 	/**
 	 * Update this resource.
 	 * 
-	 * If this resource was up-to-date, ensure that resource will be correctely
-	 * loaded (performUpdating is called during this method execution)
+	 * If this resource was up-to-date, ensure that resource will be correctely loaded (performUpdating is called during this method
+	 * execution)
 	 * 
-	 * If this resource wasn't up-to-date, update whole required model using
-	 * dependancies, and perform updating on resource
+	 * If this resource wasn't up-to-date, update whole required model using dependancies, and perform updating on resource
 	 * 
 	 * When returning, we are sure that the method is up-to-date.
 	 * 
@@ -599,79 +552,78 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @throws FileNotFoundException
 	 * @throws LoadResourceException
 	 */
-	public final FlexoResourceTree update() throws ResourceDependancyLoopException, LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException, FlexoException
-	{
+	public final FlexoResourceTree update() throws ResourceDependancyLoopException, LoadResourceException, FileNotFoundException,
+			ProjectLoadingCancelledException, FlexoException {
 		return _update(makeSingleton());
 	}
 
 	/**
-	 * Abstract method representing things to do (processing) for a method to build itself
-	 * (semantic differs from different kind of resources: load/backward_sync/generate/etc...)
+	 * Abstract method representing things to do (processing) for a method to build itself (semantic differs from different kind of
+	 * resources: load/backward_sync/generate/etc...)
 	 * 
-	 * @param updatedResources: supply a tree representing all resources that were updated below
+	 * @param updatedResources
+	 *            : supply a tree representing all resources that were updated below
 	 * @throws ResourceDependancyLoopException
 	 * @throws ProjectLoadingCancelledException
 	 * @throws FileNotFoundException
 	 * @throws LoadResourceException
 	 */
-	protected abstract void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependancyLoopException, LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException, FlexoException;
+	protected abstract void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependancyLoopException,
+			LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException, FlexoException;
 
 	/**
-	 * Important method "telling" if a resource from which this resource depend is a state
-	 * requiring this resource to be updated/processed (load/backward_sync/generate/etc...)
+	 * Important method "telling" if a resource from which this resource depend is a state requiring this resource to be updated/processed
+	 * (load/backward_sync/generate/etc...)
 	 * 
-	 * Note: here is the default implementation, which is overriden in FlexoStorageResource with
-	 * LastSynchonizedWith scheme
+	 * Note: here is the default implementation, which is overriden in FlexoStorageResource with LastSynchonizedWith scheme
 	 * 
 	 * Note2: this was your isToBeBacksynchronizedWith() method
 	 * 
 	 * @return flag indicating if resource is in a state requiring this resource to be updated/processed
 	 */
-	protected boolean requireUpdateBecauseOf(FlexoResource resource)
-	{
-		return resource.getLastUpdate() != null
-				&& getLastUpdate() != null
-				&& resource.getLastUpdate().after(getLastUpdate());
+	protected boolean requireUpdateBecauseOf(FlexoResource resource) {
+		return resource.getLastUpdate() != null && getLastUpdate() != null && resource.getLastUpdate().after(getLastUpdate());
 	}
 
 	/**
-	 * Internal scheme computing the dependancies tree
-	 * This tree contains all resources requiring to be updated (except the root one, naturally)
+	 * Internal scheme computing the dependancies tree This tree contains all resources requiring to be updated (except the root one,
+	 * naturally)
 	 * 
-	 * Note: Calling this method assert that NO MODIFICATION will be performed on
-	 * the entire model
+	 * Note: Calling this method assert that NO MODIFICATION will be performed on the entire model
 	 * 
 	 * Note2: we assert here that only current resource is requesting this data
 	 * 
 	 * @return a FlexoResourceTree representing all resources requiring to be updated
-	 * @throws ResourceDependancyLoopException if a loop was detected (loop in dependancies definition)
+	 * @throws ResourceDependancyLoopException
+	 *             if a loop was detected (loop in dependancies definition)
 	 */
-	private final FlexoResourceTree buildDependanciesTree() throws ResourceDependancyLoopException
-	{
+	private final FlexoResourceTree buildDependanciesTree() throws ResourceDependancyLoopException {
 		return buildDependanciesTree(makeSingleton());
 	}
 
 	/**
-	 * Internal scheme computing the dependancies tree, given a set of resources involved
-	 * in this request (used to prevent infinite loop when loop in definition)
-	 * This tree contains all resources requiring to be updated (except the root one, naturally)
+	 * Internal scheme computing the dependancies tree, given a set of resources involved in this request (used to prevent infinite loop
+	 * when loop in definition) This tree contains all resources requiring to be updated (except the root one, naturally)
 	 * 
-	 * Note: Calling this method assert that NO MODIFICATION will be performed on
-	 * the entire model
+	 * Note: Calling this method assert that NO MODIFICATION will be performed on the entire model
 	 * 
-	 * @param processedResources: a set of resources involved in this request
+	 * @param processedResources
+	 *            : a set of resources involved in this request
 	 * @return a FlexoResourceTree representing all resources requiring to be updated
-	 * @throws ResourceDependancyLoopException if a loop was detected (loop in dependancies definition)
+	 * @throws ResourceDependancyLoopException
+	 *             if a loop was detected (loop in dependancies definition)
 	 */
-	private final FlexoResourceTree buildDependanciesTree(Vector<FlexoResource<FlexoResourceData>> processedResources) throws ResourceDependancyLoopException
-	{
+	private final FlexoResourceTree buildDependanciesTree(Vector<FlexoResource<FlexoResourceData>> processedResources)
+			throws ResourceDependancyLoopException {
 		FlexoResourceTreeImplementation returned = new FlexoResourceTreeImplementation(this);
-		for (Enumeration<FlexoResource<FlexoResourceData>> e = getDependantResources().elements(false, getProject().getDependancyScheme());e.hasMoreElements();) {
+		for (Enumeration<FlexoResource<FlexoResourceData>> e = getDependantResources().elements(false, getProject().getDependancyScheme()); e
+				.hasMoreElements();) {
 			FlexoResource<FlexoResourceData> resource = e.nextElement();
 			if (processedResources.contains(resource)) {
 				throw new ResourceDependancyLoopException(resource);
 			}
-			Vector<FlexoResource<FlexoResourceData>> newProcessesResources = (Vector<FlexoResource<FlexoResourceData>>)processedResources.clone();
+			Vector<FlexoResource<FlexoResourceData>> newProcessesResources = (Vector<FlexoResource<FlexoResourceData>>) processedResources
+					.clone();
 			newProcessesResources.add(resource);
 			if (resource._needsUpdate(newProcessesResources) || requireUpdateBecauseOf(resource)) {
 				// Add this resource to dependancies tree
@@ -682,26 +634,31 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	}
 
 	/**
-	 * Internal method used to update the whole model above which we depend, given a set of resources involved
-	 * in this request (used to prevent infinite loop when loop in definition)
+	 * Internal method used to update the whole model above which we depend, given a set of resources involved in this request (used to
+	 * prevent infinite loop when loop in definition)
 	 * 
-	 * @param processedResources: a set of resources involved in this request
+	 * @param processedResources
+	 *            : a set of resources involved in this request
 	 * @return a FlexoResourceTree representing all resources that were updated
-	 * @throws ResourceDependancyLoopException if a loop was detected (loop in dependancies definition)
+	 * @throws ResourceDependancyLoopException
+	 *             if a loop was detected (loop in dependancies definition)
 	 * @throws FlexoException
 	 * @throws ProjectLoadingCancelledException
 	 * @throws FileNotFoundException
 	 * @throws LoadResourceException
 	 */
-	protected final FlexoResourceTree performUpdateDependanciesModel(Vector<FlexoResource<FlexoResourceData>> processedResources) throws ResourceDependancyLoopException, LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException, FlexoException
-	{
+	protected final FlexoResourceTree performUpdateDependanciesModel(Vector<FlexoResource<FlexoResourceData>> processedResources)
+			throws ResourceDependancyLoopException, LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException,
+			FlexoException {
 		FlexoResourceTreeImplementation returned = new FlexoResourceTreeImplementation(this);
-		for (Enumeration<FlexoResource<FlexoResourceData>> e = getDependantResources().elements(false, getProject().getDependancyScheme());e.hasMoreElements();) {
+		for (Enumeration<FlexoResource<FlexoResourceData>> e = getDependantResources().elements(false, getProject().getDependancyScheme()); e
+				.hasMoreElements();) {
 			FlexoResource<FlexoResourceData> resource = e.nextElement();
 			if (processedResources.contains(resource)) {
 				throw new ResourceDependancyLoopException(resource);
 			}
-			Vector<FlexoResource<FlexoResourceData>> newProcessesResources = (Vector<FlexoResource<FlexoResourceData>>)processedResources.clone();
+			Vector<FlexoResource<FlexoResourceData>> newProcessesResources = (Vector<FlexoResource<FlexoResourceData>>) processedResources
+					.clone();
 			newProcessesResources.add(resource);
 			try {
 				if (resource._needsUpdate(newProcessesResources)) {
@@ -725,29 +682,26 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * 
 	 * @return
 	 */
-	private Vector<FlexoResource<FlexoResourceData>> makeSingleton()
-	{
+	private Vector<FlexoResource<FlexoResourceData>> makeSingleton() {
 		Vector<FlexoResource<FlexoResourceData>> returned = new Vector<FlexoResource<FlexoResourceData>>();
 		returned.add((FlexoResource<FlexoResourceData>) this);
 		return returned;
 	}
 
 	/**
-	 * Internal method computing needsUpdate() given a vector of calling resources
-	 * allowing to prevent from infinite loop
+	 * Internal method computing needsUpdate() given a vector of calling resources allowing to prevent from infinite loop
 	 * 
 	 * @return a flag indicating if this resource needs to be updated
 	 * @throws ResourceDependancyLoopException
 	 */
-	private final boolean _needsUpdate(Vector<FlexoResource<FlexoResourceData>> callingResources) throws ResourceDependancyLoopException
-	{
+	private final boolean _needsUpdate(Vector<FlexoResource<FlexoResourceData>> callingResources) throws ResourceDependancyLoopException {
 		FlexoResourceTree tree = buildDependanciesTree(callingResources);
 		if (!tree.isEmpty()) {
 			/*StringBuilder sb = new StringBuilder(this+" ").append('(').append(new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(getLastUpdate())).append(") needs update because of ");
-            for (FlexoResourceTree node : tree.getChildNodes()) {
-               sb.append((node.getRootNode().getNeedsUpdateReason().equals(FlexoLocalization.localizedForKey("up_to_date")))
-                       ? node.getRootNode() +new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(node.getRootNode().getLastUpdate()): node.getRootNode().getNeedsUpdateReason()).append(",");
-            }*/
+			for (FlexoResourceTree node : tree.getChildNodes()) {
+			   sb.append((node.getRootNode().getNeedsUpdateReason().equals(FlexoLocalization.localizedForKey("up_to_date")))
+			           ? node.getRootNode() +new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(node.getRootNode().getLastUpdate()): node.getRootNode().getNeedsUpdateReason()).append(",");
+			}*/
 			_needsUpdateReason = tree.toString();
 		} else {
 			_needsUpdateReason = FlexoLocalization.localizedForKey("up_to_date");
@@ -756,8 +710,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	}
 
 	/**
-	 * Internal method computing update() given a vector of calling resources
-	 * allowing to prevent from infinite loop
+	 * Internal method computing update() given a vector of calling resources allowing to prevent from infinite loop
 	 * 
 	 * @return a tree representing all resources that were updated
 	 * @throws ResourceDependancyLoopException
@@ -766,8 +719,9 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @throws FileNotFoundException
 	 * @throws LoadResourceException
 	 */
-	private final FlexoResourceTree _update(Vector<FlexoResource<FlexoResourceData>> callingResources) throws ResourceDependancyLoopException, LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException, FlexoException
-	{
+	private final FlexoResourceTree _update(Vector<FlexoResource<FlexoResourceData>> callingResources)
+			throws ResourceDependancyLoopException, LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException,
+			FlexoException {
 		// First update all dependancies model
 		FlexoResourceTree updatedResources = performUpdateDependanciesModel(callingResources);
 
@@ -777,18 +731,14 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 		return updatedResources;
 	}
 
-
-
 	/**
-	 * Called by the resource manager on a resource to tell that an other
-	 * resource
+	 * Called by the resource manager on a resource to tell that an other resource
 	 * 
 	 * <pre>
 	 * aResource
 	 * </pre>
 	 * 
-	 * from which this resource depends, has been more recently modified and
-	 * thus provides a way to synchonize this resource from
+	 * from which this resource depends, has been more recently modified and thus provides a way to synchonize this resource from
 	 * 
 	 * <pre>
 	 * aResource
@@ -799,209 +749,183 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @throws FlexoException
 	 */
 	/*public void backwardSynchronizeWith(FlexoResource aResource) throws FlexoException
-    {
-        // Does nothing here: must be overriden in subclasses !
-        if (logger.isLoggable(Level.FINEST))
-            logger.finest("Resource " + getResourceIdentifier() + " : ignore backward synchronization for " + aResource.getResourceIdentifier()
-                    + " : override me in subclasses if required.");
-    }*/
+	{
+	    // Does nothing here: must be overriden in subclasses !
+	    if (logger.isLoggable(Level.FINEST))
+	        logger.finest("Resource " + getResourceIdentifier() + " : ignore backward synchronization for " + aResource.getResourceIdentifier()
+	                + " : override me in subclasses if required.");
+	}*/
 
 	private String _needsUpdateReason = null;
 
 	/**
 	 * debug
+	 * 
 	 * @return
 	 */
-	public String getNeedsUpdateReason()
-	{
+	public String getNeedsUpdateReason() {
 		return _needsUpdateReason;
 	}
 
-	public Date getLastSynchronizedWithResource(FlexoResource aResource)
-	{
+	public Date getLastSynchronizedWithResource(FlexoResource aResource) {
 		LastSynchronizedWithResourceEntry entry = _lastSynchronizedForResources.get(aResource);
 		if (entry != null) {
 			return entry.date;
 		}
-		//return null;
+		// return null;
 		return new Date(0);
 	}
 
-	public void setLastSynchronizedWithResource(FlexoResource aResource, Date aDate)
-	{
+	public void setLastSynchronizedWithResource(FlexoResource aResource, Date aDate) {
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("setLastSynchronizedWithResource "+aResource+" with "+aDate);
+			logger.fine("setLastSynchronizedWithResource " + aResource + " with " + aDate);
 		}
-		_lastSynchronizedForResources.put(aResource, new LastSynchronizedWithResourceEntry(this,aResource,aDate));
-		for (Enumeration en=getAlteredResources().elements(); en.hasMoreElements();) {
-			FlexoResource alteredResource = (FlexoResource)en.nextElement();
+		_lastSynchronizedForResources.put(aResource, new LastSynchronizedWithResourceEntry(this, aResource, aDate));
+		for (Enumeration en = getAlteredResources().elements(); en.hasMoreElements();) {
+			FlexoResource alteredResource = (FlexoResource) en.nextElement();
 			alteredResource.resetLastSynchronizedWithResource(this);
 		}
 		notifyResourceChanged();
 	}
 
-	public void resetLastSynchronizedWithResource(FlexoResource aResource)
-	{
+	public void resetLastSynchronizedWithResource(FlexoResource aResource) {
 		if (logger.isLoggable(Level.FINEST)) {
-			logger.finest("resetLastSynchronizedWithResource "+aResource);
+			logger.finest("resetLastSynchronizedWithResource " + aResource);
 		}
 		/*_lastSynchronizedForResources.remove(aResource);
-        // And propagate it again
-        for (Enumeration en=getAlteredResources().elements(); en.hasMoreElements();) {
-            FlexoResource alteredResource = (FlexoResource)en.nextElement();
-            alteredResource.resetLastSynchronizedWithResource(this);
-        }
-        notifyResourceChanged();*/
-		resetLastSynchronizedWithResource(aResource,new Vector<FlexoResource>());
+		// And propagate it again
+		for (Enumeration en=getAlteredResources().elements(); en.hasMoreElements();) {
+		    FlexoResource alteredResource = (FlexoResource)en.nextElement();
+		    alteredResource.resetLastSynchronizedWithResource(this);
+		}
+		notifyResourceChanged();*/
+		resetLastSynchronizedWithResource(aResource, new Vector<FlexoResource>());
 	}
 
-	private void resetLastSynchronizedWithResource(FlexoResource aResource, Vector<FlexoResource> alreadyDone)
-	{
+	private void resetLastSynchronizedWithResource(FlexoResource aResource, Vector<FlexoResource> alreadyDone) {
 		if (!alreadyDone.contains(this)) {
 			_lastSynchronizedForResources.remove(aResource);
 			alreadyDone.add(this);
 			// And propagate it again
-			for (Enumeration en=getAlteredResources().elements(); en.hasMoreElements();) {
-				FlexoResource alteredResource = (FlexoResource)en.nextElement();
-				alteredResource.resetLastSynchronizedWithResource(this,alreadyDone);
+			for (Enumeration en = getAlteredResources().elements(); en.hasMoreElements();) {
+				FlexoResource alteredResource = (FlexoResource) en.nextElement();
+				alteredResource.resetLastSynchronizedWithResource(this, alreadyDone);
 			}
 		}
 		notifyResourceChanged();
 	}
 
-	public Hashtable<FlexoResource<?>,LastSynchronizedWithResourceEntry> getLastSynchronizedForResources()
-	{
+	public Hashtable<FlexoResource<?>, LastSynchronizedWithResourceEntry> getLastSynchronizedForResources() {
 		return _lastSynchronizedForResources;
 	}
 
-	public void setLastSynchronizedForResources(Hashtable<FlexoResource<?>,LastSynchronizedWithResourceEntry> lastSynchronizedForResources)
-	{
+	public void setLastSynchronizedForResources(Hashtable<FlexoResource<?>, LastSynchronizedWithResourceEntry> lastSynchronizedForResources) {
 		this._lastSynchronizedForResources = lastSynchronizedForResources;
 	}
 
-	public void setLastSynchronizedForResourcesForKey(LastSynchronizedWithResourceEntry entry, FlexoResource key)
-	{
+	public void setLastSynchronizedForResourcesForKey(LastSynchronizedWithResourceEntry entry, FlexoResource key) {
 		entry.originResource = this;
-		_lastSynchronizedForResources.put(key,entry);
+		_lastSynchronizedForResources.put(key, entry);
 	}
 
-	public void removeLastSynchronizedForResourcesWithKey(FlexoResource key)
-	{
+	public void removeLastSynchronizedForResourcesWithKey(FlexoResource key) {
 		_lastSynchronizedForResources.remove(key);
 	}
 
-
-	public static class LastSynchronizedWithResourceEntry implements XMLSerializable
-	{
+	public static class LastSynchronizedWithResourceEntry implements XMLSerializable {
 		protected FlexoResource originResource;
 		private FlexoResource resource;
 		Date date;
 
-		public LastSynchronizedWithResourceEntry()
-		{
+		public LastSynchronizedWithResourceEntry() {
 			super();
 		}
-		public LastSynchronizedWithResourceEntry(FlexoResource anOriginResource, FlexoResource aResource, Date aDate)
-		{
+
+		public LastSynchronizedWithResourceEntry(FlexoResource anOriginResource, FlexoResource aResource, Date aDate) {
 			this();
 			date = aDate;
 			resource = aResource;
 			originResource = anOriginResource;
 		}
 
-		public Date getDate()
-		{
+		public Date getDate() {
 			return date;
 		}
 
-		public void setDate(Date date)
-		{
+		public void setDate(Date date) {
 			this.date = date;
 		}
 
-		public FlexoResource getResource()
-		{
+		public FlexoResource getResource() {
 			return resource;
 		}
 
-		public FlexoResource getOriginResource()
-		{
+		public FlexoResource getOriginResource() {
 			return originResource;
 		}
 
-		public void setResource(FlexoResource resource)
-		{
+		public void setResource(FlexoResource resource) {
 			this.resource = resource;
 		}
 
-		public String getSerializationIdentifier()
-		{
-			return originResource.getSerializationIdentifier()+"_"+getResource().getSerializationIdentifier();
+		public String getSerializationIdentifier() {
+			return originResource.getSerializationIdentifier() + "_" + getResource().getSerializationIdentifier();
 		}
 	}
 
-	public String getSerializationIdentifier()
-	{
-		return getUserIdentifier()+"_"+getResourceIdentifier();
+	public String getSerializationIdentifier() {
+		return getUserIdentifier() + "_" + getResourceIdentifier();
 	}
 
 	private String userIdentifier;
 
-	public String getUserIdentifier()
-	{
+	public String getUserIdentifier() {
 		if (userIdentifier == null) {
 			return FlexoModelObject.getCurrentUserIdentifier();
 		}
 		return userIdentifier;
 	}
 
-	public void setUserIdentifier(String aUserIdentifier)
-	{
+	public void setUserIdentifier(String aUserIdentifier) {
 		userIdentifier = aUserIdentifier;
 	}
 
 	private boolean isActive = true;
 
-	public void activate()
-	{
+	public void activate() {
 		isActive = true;
 		notifyResourceStatusChanged();
 	}
 
-	public void desactivate()
-	{
+	public void desactivate() {
 		isActive = false;
 		notifyResourceStatusChanged();
 	}
 
-	public boolean isActive()
-	{
+	public boolean isActive() {
 		return isActive;
 	}
 
-	public final boolean isInactive()
-	{
+	public final boolean isInactive() {
 		return !isActive();
 	}
 
 	public enum DependancyAlgorithmScheme {
-		Pessimistic,
-		Optimistic
+		Pessimistic, Optimistic
 	}
 
 	// CPU-expensive
-	public boolean deeplyDependsOf(FlexoResource resource)
-	{
+	public boolean deeplyDependsOf(FlexoResource resource) {
 		return deeplyDependsOf(resource, new HashSet<FlexoResource>());
 	}
+
 	// CPU-expensive
-	public boolean deeplyDependsOf(FlexoResource resource, HashSet<FlexoResource> calling)
-	{
+	public boolean deeplyDependsOf(FlexoResource resource, HashSet<FlexoResource> calling) {
 		if (!calling.contains(this)) {
 			calling.add(this);
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Loop detected "+calling+"\n"+this);
+				logger.warning("Loop detected " + calling + "\n" + this);
 			}
 			return true;
 		}
@@ -1009,13 +933,13 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 			return true;
 		}
 		for (FlexoResource r : getDependantResources()) {
-			if (r==this) {
+			if (r == this) {
 				if (logger.isLoggable(Level.WARNING)) {
-					logger.info("Loop dependancy found for resource "+r+" "+r.getFullyQualifiedName());
+					logger.info("Loop dependancy found for resource " + r + " " + r.getFullyQualifiedName());
 				}
 				continue;
 			}
-			if ( r.deeplyDependsOf(resource, calling)) {
+			if (r.deeplyDependsOf(resource, calling)) {
 				return true;
 			}
 		}
@@ -1024,18 +948,17 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	}
 
 	/**
-	 * Return dependancy computing between this resource, and an other resource,
-	 * asserting that this resource is contained in this resource's dependant resources
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this
+	 * resource's dependant resources
+	 * 
 	 * @param resource
 	 * @param dependancyScheme
 	 * @return
 	 */
-	protected final boolean dependsOf(FlexoResource resource, DependancyAlgorithmScheme dependancyScheme)
-	{
+	protected final boolean dependsOf(FlexoResource resource, DependancyAlgorithmScheme dependancyScheme) {
 		if (dependancyScheme == DependancyAlgorithmScheme.Pessimistic) {
 			return true;
-		}
-		else if (dependancyScheme == DependancyAlgorithmScheme.Optimistic) {
+		} else if (dependancyScheme == DependancyAlgorithmScheme.Optimistic) {
 			Date requestDate = getRequestDateToBeUsedForOptimisticDependancyChecking(resource);
 			return optimisticallyDependsOf(resource, requestDate);
 		}
@@ -1043,18 +966,18 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	}
 
 	/**
-	 * Return dependancy computing between this resource, and an other resource,
-	 * asserting that this resource is contained in this resource's dependant resources
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this
+	 * resource's dependant resources
 	 * 
 	 * Please override this method when required
 	 * 
 	 * @param resource
-	 * @param requestDate TODO
+	 * @param requestDate
+	 *            TODO
 	 * @param dependancyScheme
 	 * @return
 	 */
-	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate)
-	{
+	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
 		return true;
 	}
 
@@ -1064,13 +987,12 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @param resource
 	 * @return
 	 */
-	protected Date getRequestDateToBeUsedForOptimisticDependancyChecking(FlexoResource resource)
-	{
+	protected Date getRequestDateToBeUsedForOptimisticDependancyChecking(FlexoResource resource) {
 		return new Date();
 	}
 
 	public boolean isRegistered() {
-		return getProject()!=null && getProject().resourceForKey(getFullyQualifiedName())==this;
+		return getProject() != null && getProject().resourceForKey(getFullyQualifiedName()) == this;
 	}
 
 	// =============================================================
@@ -1083,8 +1005,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @return
 	 */
 	@Override
-	public String getFullyQualifiedName()
-	{
+	public String getFullyQualifiedName() {
 		return getResourceIdentifier();
 	}
 
@@ -1094,8 +1015,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @see org.openflexo.foundation.validation.Validable#getAllEmbeddedValidableObjects()
 	 */
 	@Override
-	public Vector<Validable> getAllEmbeddedValidableObjects()
-	{
+	public Vector<Validable> getAllEmbeddedValidableObjects() {
 		Vector<Validable> v = new Vector<Validable>();
 		v.add(this);
 		return v;
@@ -1107,8 +1027,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @see org.openflexo.foundation.validation.Validable#getDefaultValidationModel()
 	 */
 	@Override
-	public ValidationModel getDefaultValidationModel()
-	{
+	public ValidationModel getDefaultValidationModel() {
 		return getProject().getDefaultValidationModel();
 	}
 
@@ -1118,8 +1037,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @see org.openflexo.foundation.validation.Validable#isValid()
 	 */
 	@Override
-	public boolean isValid()
-	{
+	public boolean isValid() {
 		return isValid(getDefaultValidationModel());
 	}
 
@@ -1129,8 +1047,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @see org.openflexo.foundation.validation.Validable#isValid(org.openflexo.foundation.validation.ValidationModel)
 	 */
 	@Override
-	public boolean isValid(ValidationModel validationModel)
-	{
+	public boolean isValid(ValidationModel validationModel) {
 		return validationModel.isValid(this);
 	}
 
@@ -1140,8 +1057,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @see org.openflexo.foundation.validation.Validable#validate()
 	 */
 	@Override
-	public ValidationReport validate()
-	{
+	public ValidationReport validate() {
 		return validate(getDefaultValidationModel());
 	}
 
@@ -1151,8 +1067,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @see org.openflexo.foundation.validation.Validable#validate(org.openflexo.foundation.validation.ValidationModel)
 	 */
 	@Override
-	public ValidationReport validate(ValidationModel validationModel)
-	{
+	public ValidationReport validate(ValidationModel validationModel) {
 		return validationModel.validate(this);
 	}
 
@@ -1162,8 +1077,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @see org.openflexo.foundation.validation.Validable#validate(org.openflexo.foundation.validation.ValidationReport)
 	 */
 	@Override
-	public void validate(ValidationReport report)
-	{
+	public void validate(ValidationReport report) {
 		validate(report, getDefaultValidationModel());
 	}
 
@@ -1174,16 +1088,14 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 *      org.openflexo.foundation.validation.ValidationModel)
 	 */
 	@Override
-	public void validate(ValidationReport report, ValidationModel validationModel)
-	{
+	public void validate(ValidationReport report, ValidationModel validationModel) {
 		validationModel.validate(this, report);
 	}
 
 	/**
 	 * @return
 	 */
-	public boolean deeplyDependsOfItSelf()
-	{
+	public boolean deeplyDependsOfItSelf() {
 		for (FlexoResource r : getDependantResources()) {
 			if (r.deeplyDependsOf(this)) {
 				return true;
@@ -1192,7 +1104,8 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 		return false;
 	}
 
-	public final void performUpdating(){}
+	public final void performUpdating() {
+	}
 
 	public void notifyDependantResourceChange(FlexoResource origin) {
 		getDependantResources().update();

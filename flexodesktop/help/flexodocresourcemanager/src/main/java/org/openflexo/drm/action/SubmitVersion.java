@@ -32,123 +32,105 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 
+public class SubmitVersion extends FlexoAction {
 
-public class SubmitVersion extends FlexoAction 
-{
+	private static final Logger logger = Logger.getLogger(SubmitVersion.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(SubmitVersion.class.getPackage().getName());
+	public static FlexoActionType actionType = new FlexoActionType("submit_version", FlexoActionType.defaultGroup,
+			FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType actionType = new FlexoActionType ("submit_version",FlexoActionType.defaultGroup,FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new SubmitVersion(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) 
-        {
-            return new SubmitVersion(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return ((object != null) && (object instanceof DocItem));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return ((object != null) 
-                    && (object instanceof DocItem));
-        }
-                
-    };
-    
-    private DocItem _docItem;
-    private DocItemVersion _version;
-    private Author _author;
-    private DocItemAction _newAction;
-    private String _note;
-     
-    SubmitVersion (FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-     @Override
-	protected void doAction(Object context) 
-     {
-         if (getVersion() != null) {
-             
-             DocItemAction lastAction = getDocItem().getLastActionForLanguage(getVersion().getLanguage()); 
-             if (lastAction == null) {
-                 logger.info ("SubmitVersion");
-                 _newAction = DocItemAction.createSubmitAction(getVersion(),getAuthor(),getDocItem().getDocResourceCenter());
-                 _newAction.setNote(getNote());
-                 getDocItem().addToActions(_newAction);
-                 getDocItem().addToVersions(getVersion());
-                 DocResourceManager.instance().getSessionSubmissions().addToSubmissionActions(_newAction);
-           }
-             else {
-                 logger.info ("ReviewVersion");
-                 _newAction = DocItemAction.createReviewAction(getVersion(),getAuthor(),getDocItem().getDocResourceCenter());
-                 _newAction.setNote(getNote());
-                 getDocItem().addToActions(_newAction);
-                 getDocItem().addToVersions(getVersion());
-                 DocResourceManager.instance().getSessionSubmissions().addToSubmissionActions(_newAction);
-             }
-        }
-     }
+	private DocItem _docItem;
+	private DocItemVersion _version;
+	private Author _author;
+	private DocItemAction _newAction;
+	private String _note;
 
-   public DocItem getDocItem()
-   {
-       if (_docItem == null) {
-           if ((getFocusedObject() != null) && (getFocusedObject() instanceof DocItem)) {
-               _docItem = (DocItem)getFocusedObject();
-            }           
-       }
-       return _docItem;
-   }
-   
-   public void setDocItem(DocItem docItem)
-   {
-       _docItem = docItem;
-   }
+	SubmitVersion(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-   public Author getAuthor() 
-   {
-       return _author;
-   }
+	@Override
+	protected void doAction(Object context) {
+		if (getVersion() != null) {
 
-   public void setAuthor(Author author) 
-   {
-       _author = author;
-   }
+			DocItemAction lastAction = getDocItem().getLastActionForLanguage(getVersion().getLanguage());
+			if (lastAction == null) {
+				logger.info("SubmitVersion");
+				_newAction = DocItemAction.createSubmitAction(getVersion(), getAuthor(), getDocItem().getDocResourceCenter());
+				_newAction.setNote(getNote());
+				getDocItem().addToActions(_newAction);
+				getDocItem().addToVersions(getVersion());
+				DocResourceManager.instance().getSessionSubmissions().addToSubmissionActions(_newAction);
+			} else {
+				logger.info("ReviewVersion");
+				_newAction = DocItemAction.createReviewAction(getVersion(), getAuthor(), getDocItem().getDocResourceCenter());
+				_newAction.setNote(getNote());
+				getDocItem().addToActions(_newAction);
+				getDocItem().addToVersions(getVersion());
+				DocResourceManager.instance().getSessionSubmissions().addToSubmissionActions(_newAction);
+			}
+		}
+	}
 
-   public DocItemAction getNewAction()
-   {
-       return _newAction;
-   }
+	public DocItem getDocItem() {
+		if (_docItem == null) {
+			if ((getFocusedObject() != null) && (getFocusedObject() instanceof DocItem)) {
+				_docItem = (DocItem) getFocusedObject();
+			}
+		}
+		return _docItem;
+	}
 
-   public DocItemVersion getVersion() 
-   {
-       return _version;
-   }
+	public void setDocItem(DocItem docItem) {
+		_docItem = docItem;
+	}
 
-   public void setVersion(DocItemVersion version)
-   {
-       _version = version;
-   }
+	public Author getAuthor() {
+		return _author;
+	}
 
-   public String getNote() 
-   {
-       return _note;
-   }
+	public void setAuthor(Author author) {
+		_author = author;
+	}
 
-   public void setNote(String note) 
-   {
-       _note = note;
-   }
+	public DocItemAction getNewAction() {
+		return _newAction;
+	}
 
+	public DocItemVersion getVersion() {
+		return _version;
+	}
+
+	public void setVersion(DocItemVersion version) {
+		_version = version;
+	}
+
+	public String getNote() {
+		return _note;
+	}
+
+	public void setNote(String note) {
+		_note = note;
+	}
 
 }

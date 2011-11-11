@@ -25,20 +25,16 @@ package org.openflexo.inspector;
  * @author sguerin
  * 
  */
-public interface InspectorObserver
-{
+public interface InspectorObserver {
 
-    /**
-     * This method is called whenever the observed object is changed. An
-     * application calls an <tt>InspectableObject</tt> object's
-     * <code>notifyObservers</code> method to have all the object's observers
-     * notified of the change.
-     * 
-     * @param o
-     *            the inspectable object.
-     * @param arg
-     *            an argument passed to the <code>notifyObservers</code>
-     *            method.
-     */
-    public void update(InspectableObject inspectable, InspectableModification modification);
+	/**
+	 * This method is called whenever the observed object is changed. An application calls an <tt>InspectableObject</tt> object's
+	 * <code>notifyObservers</code> method to have all the object's observers notified of the change.
+	 * 
+	 * @param o
+	 *            the inspectable object.
+	 * @param arg
+	 *            an argument passed to the <code>notifyObservers</code> method.
+	 */
+	public void update(InspectableObject inspectable, InspectableModification modification);
 }

@@ -124,8 +124,8 @@ public class ServiceInputMessageBindings extends ServiceMessageBindings implemen
 		 */
 		@Override
 		protected BindingVariable addBindingVariableForEntry(MessageEntry entry) {
-			BindingVariable var = new BindingVariable(ServiceInputMessageBindings.this, getProject().getDataModel(), FlexoLocalization
-					.localizedForKey("access_to_message_value"));
+			BindingVariable var = new BindingVariable(ServiceInputMessageBindings.this, getProject().getDataModel(),
+					FlexoLocalization.localizedForKey("access_to_message_value"));
 			var.setVariableName(entry.getVariableName());
 			var.setType(entry.getType());
 			variablesTable.put(entry, var);

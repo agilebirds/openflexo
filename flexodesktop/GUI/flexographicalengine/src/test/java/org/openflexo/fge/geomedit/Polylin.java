@@ -24,50 +24,41 @@ import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
 import org.openflexo.fge.geomedit.construction.PolylinConstruction;
 import org.openflexo.fge.geomedit.gr.PolylinGraphicalRepresentation;
 
-
 public class Polylin extends GeometricObject<FGEPolylin> {
 
 	private PolylinGraphicalRepresentation graphicalRepresentation;
-	
+
 	// Called for LOAD
-	public Polylin(GeomEditBuilder builder)
-	{
+	public Polylin(GeomEditBuilder builder) {
 		super(builder);
 	}
-	
-	public Polylin(GeometricSet set, PolylinConstruction construction) 
-	{
+
+	public Polylin(GeometricSet set, PolylinConstruction construction) {
 		super(set, construction);
-		graphicalRepresentation = new PolylinGraphicalRepresentation(this,set.getEditedDrawing());
+		graphicalRepresentation = new PolylinGraphicalRepresentation(this, set.getEditedDrawing());
 	}
 
 	@Override
-	public PolylinGraphicalRepresentation getGraphicalRepresentation()
-	{
+	public PolylinGraphicalRepresentation getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
-	public void setGraphicalRepresentation(PolylinGraphicalRepresentation aGR)
-	{
+	public void setGraphicalRepresentation(PolylinGraphicalRepresentation aGR) {
 		aGR.setDrawable(this);
 		graphicalRepresentation = aGR;
 	}
 
 	@Override
-	public PolylinConstruction getConstruction()
-	{
-		return (PolylinConstruction)super.getConstruction();
+	public PolylinConstruction getConstruction() {
+		return (PolylinConstruction) super.getConstruction();
 	}
 
-	public void setConstruction(PolylinConstruction polylinConstruction)
-	{
+	public void setConstruction(PolylinConstruction polylinConstruction) {
 		_setConstruction(polylinConstruction);
 	}
 
-
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return "Polylin.inspector";
 	}
 

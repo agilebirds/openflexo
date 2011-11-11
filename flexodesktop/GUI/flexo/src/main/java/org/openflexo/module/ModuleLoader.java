@@ -99,7 +99,7 @@ import org.openflexo.view.menu.WindowMenu;
 /**
  * This class handles computation of available modules and modules loading. Only one instance of this class is instancied, and available all
  * over Flexo Application Suite. This is the ONLY ONE WAY to access external modules from a given module.
- *
+ * 
  * @author sguerin
  */
 public final class ModuleLoader implements IModuleLoader {
@@ -132,28 +132,28 @@ public final class ModuleLoader implements IModuleLoader {
 
 	/**
 	 * Hashtable where are stored Module instances (instance of
-	 *
+	 * 
 	 * <pre>
 	 * FlexoModule
 	 * </pre>
-	 *
+	 * 
 	 * associated to a
-	 *
+	 * 
 	 * <pre>
 	 * Module
 	 * </pre>
-	 *
+	 * 
 	 * instance key.
 	 */
 	private static Hashtable<Module, FlexoModule> _modules = new Hashtable<Module, FlexoModule>();
 
 	/**
 	 * Vector of
-	 *
+	 * 
 	 * <pre>
 	 * Module
 	 * </pre>
-	 *
+	 * 
 	 * instance representing all available modules
 	 */
 	private static Vector<Module> _availableModules = new Vector<Module>();
@@ -193,7 +193,7 @@ public final class ModuleLoader implements IModuleLoader {
 
 	/**
 	 * Called for a 'Multi-modules' initialization. Choosen module is opened.
-	 *
+	 * 
 	 * @param userType
 	 */
 	public static void initializeModules(UserType userType/*, boolean selectAndOpenProject*/) {
@@ -210,7 +210,7 @@ public final class ModuleLoader implements IModuleLoader {
 
 	/**
 	 * Called for a 'Single-module' initialization
-	 *
+	 * 
 	 * @param module
 	 */
 	public static void initializeSingleModule(Module module, UserType userType) {
@@ -230,17 +230,16 @@ public final class ModuleLoader implements IModuleLoader {
 
 	/**
 	 * Called for a 'Single-module' initialization
-	 *
+	 * 
 	 * @param module
 	 */
-	public static void initializeSingleModule(Module module)
-	{
-		initializeSingleModule(module,UserType.ANALYST);
+	public static void initializeSingleModule(Module module) {
+		initializeSingleModule(module, UserType.ANALYST);
 	}
 
 	/**
 	 * Given a list of modules, check if user type has right to use them and register them consequently
-	 *
+	 * 
 	 * @param someModules
 	 * @param userType
 	 * @param selectAndOpenProject
@@ -319,18 +318,17 @@ public final class ModuleLoader implements IModuleLoader {
 	}
 
 	/**
-	 * Return active openflexo/flexodesktop directory
-	 * (dev-mode only)
+	 * Return active openflexo/flexodesktop directory (dev-mode only)
+	 * 
 	 * @return
 	 */
-	public static File getWorkspaceDirectory()
-	{
+	public static File getWorkspaceDirectory() {
 		if (_workspaceDirectory == null) {
 			File returned = new File(System.getProperty("user.dir"));
 			while (returned != null && !returned.getName().equals("openflexo")) {
 				returned = returned.getParentFile();
 			}
-			_workspaceDirectory = new File(returned,"flexodesktop");
+			_workspaceDirectory = new File(returned, "flexodesktop");
 		}
 		return _workspaceDirectory;
 	}
@@ -493,11 +491,11 @@ public final class ModuleLoader implements IModuleLoader {
 
 	/**
 	 * Internally used to register module with class name
-	 *
+	 * 
 	 * <pre>
 	 * moduleClass
 	 * </pre>
-	 *
+	 * 
 	 * @param moduleClass
 	 */
 	private static void registerModule(Module module) {
@@ -508,19 +506,19 @@ public final class ModuleLoader implements IModuleLoader {
 
 	/**
 	 * Return all loaded modules as an
-	 *
+	 * 
 	 * <pre>
 	 * Enumeration
 	 * </pre>
-	 *
+	 * 
 	 * of
-	 *
+	 * 
 	 * <pre>
 	 * FlexoModule
 	 * </pre>
-	 *
+	 * 
 	 * instances
-	 *
+	 * 
 	 * @return Enumeration
 	 */
 	public static Enumeration<FlexoModule> loadedModules() {
@@ -533,19 +531,19 @@ public final class ModuleLoader implements IModuleLoader {
 
 	/**
 	 * Return all unloaded modules but available modules as a
-	 *
+	 * 
 	 * <pre>
 	 * Vector
 	 * </pre>
-	 *
+	 * 
 	 * of
-	 *
+	 * 
 	 * <pre>
 	 * Module
 	 * </pre>
-	 *
+	 * 
 	 * instances
-	 *
+	 * 
 	 * @return Vector
 	 */
 	public static Vector<Module> unloadedButAvailableModules() {
@@ -559,19 +557,19 @@ public final class ModuleLoader implements IModuleLoader {
 
 	/**
 	 * Return all loaded modules as a
-	 *
+	 * 
 	 * <pre>
 	 * Vector
 	 * </pre>
-	 *
+	 * 
 	 * of
-	 *
+	 * 
 	 * <pre>
 	 * Module
 	 * </pre>
-	 *
+	 * 
 	 * instances
-	 *
+	 * 
 	 * @return Vector
 	 */
 	public static Vector<Module> availableModules() {
@@ -580,19 +578,19 @@ public final class ModuleLoader implements IModuleLoader {
 
 	/**
 	 * Return all known modules as an
-	 *
+	 * 
 	 * <pre>
 	 * Vector
 	 * </pre>
-	 *
+	 * 
 	 * of
-	 *
+	 * 
 	 * <pre>
 	 * Module
 	 * </pre>
-	 *
+	 * 
 	 * instances
-	 *
+	 * 
 	 * @return Vector
 	 */
 	public static Vector<Module> allKnownModules() {
@@ -702,7 +700,7 @@ public final class ModuleLoader implements IModuleLoader {
 	}
 
 	public static void switchToModule(Module module) {
-		logger.info("switchToModule: "+module);
+		logger.info("switchToModule: " + module);
 		if (switchingToModule != null) {
 			return;
 		}
@@ -740,7 +738,8 @@ public final class ModuleLoader implements IModuleLoader {
 
 	/**
 	 * Called for quitting with confirmation.
-	 * @throws ProjectExitingCancelledException 
+	 * 
+	 * @throws ProjectExitingCancelledException
 	 */
 	public static void quit() throws ProjectExitingCancelledException {
 		quit(true);
@@ -748,9 +747,9 @@ public final class ModuleLoader implements IModuleLoader {
 
 	/**
 	 * Called for quitting. Ask if saving must be performed, and exit on request.
-	 *
+	 * 
 	 * @param askConfirmation
-	 * @throws ProjectExitingCancelledException 
+	 * @throws ProjectExitingCancelledException
 	 */
 	public static void quit(boolean askConfirmation) throws ProjectExitingCancelledException {
 		if (askConfirmation) {
@@ -774,15 +773,15 @@ public final class ModuleLoader implements IModuleLoader {
 					proceedQuitWithoutConfirmation();
 				} catch (SaveResourcePermissionDeniedException e) {
 					ProgressWindow.hideProgressWindow();
-					if (FlexoController.confirm(FlexoLocalization.localizedForKey("error_during_saving") + "\n" + FlexoLocalization
-							.localizedForKey("would_you_like_to_exit_anyway"))) {
+					if (FlexoController.confirm(FlexoLocalization.localizedForKey("error_during_saving") + "\n"
+							+ FlexoLocalization.localizedForKey("would_you_like_to_exit_anyway"))) {
 						proceedQuitWithoutConfirmation();
 					}
 				} catch (SaveResourceException e) {
 					e.printStackTrace();
 					ProgressWindow.hideProgressWindow();
-					if (FlexoController.confirm(FlexoLocalization.localizedForKey("error_during_saving") + "\n" + FlexoLocalization
-							.localizedForKey("would_you_like_to_exit_anyway"))) {
+					if (FlexoController.confirm(FlexoLocalization.localizedForKey("error_during_saving") + "\n"
+							+ FlexoLocalization.localizedForKey("would_you_like_to_exit_anyway"))) {
 						proceedQuitWithoutConfirmation();
 					}
 				}
@@ -810,19 +809,17 @@ public final class ModuleLoader implements IModuleLoader {
 		for (Enumeration<FlexoModule> en = ModuleLoader.loadedModules(); en.hasMoreElements();) {
 			en.nextElement().moduleWillClose();
 		}
-		if (ModuleLoader.allowsDocSubmission() && !ModuleLoader.isAvailable(Module.DRE_MODULE) && DocResourceManager.instance()
-				.getSessionSubmissions().size() > 0) {
-			if (FlexoController
-					.confirm(FlexoLocalization.localizedForKey("you_have_submitted_documentation_without_having_saved_report") + "\n" + FlexoLocalization
-							.localizedForKey("would_you_like_to_save_your_submissions"))) {
+		if (ModuleLoader.allowsDocSubmission() && !ModuleLoader.isAvailable(Module.DRE_MODULE)
+				&& DocResourceManager.instance().getSessionSubmissions().size() > 0) {
+			if (FlexoController.confirm(FlexoLocalization.localizedForKey("you_have_submitted_documentation_without_having_saved_report")
+					+ "\n" + FlexoLocalization.localizedForKey("would_you_like_to_save_your_submissions"))) {
 				new ToolsMenu.SaveDocSubmissionAction().actionPerformed(null);
 			}
 		}
 		if (ModuleLoader.isAvailable(Module.DRE_MODULE)) {
 			if (DocResourceManager.instance().needSaving()) {
-				if (FlexoController
-						.confirm(FlexoLocalization.localizedForKey("documentation_resource_center_not_saved") + "\n" + FlexoLocalization
-								.localizedForKey("would_you_like_to_save_documenation_resource_center"))) {
+				if (FlexoController.confirm(FlexoLocalization.localizedForKey("documentation_resource_center_not_saved") + "\n"
+						+ FlexoLocalization.localizedForKey("would_you_like_to_save_documenation_resource_center"))) {
 					DocResourceManager.instance().save();
 				}
 			}
@@ -841,8 +838,7 @@ public final class ModuleLoader implements IModuleLoader {
 		} else {
 			ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("building_new_project"));
 		}
-		if (currentFlexoVersionIsSmallerThanLastVersion(projectDirectory))
-		{
+		if (currentFlexoVersionIsSmallerThanLastVersion(projectDirectory)) {
 			;// This will just create the .version in the project
 		}
 		preInitialization(projectDirectory);
@@ -880,7 +876,7 @@ public final class ModuleLoader implements IModuleLoader {
 	/**
 	 * Check if there is an external repository with some active resources connected In this case, explicitely ask what to do, connect or
 	 * let disconnected
-	 *
+	 * 
 	 * @param project
 	 */
 	private static void checkExternalRepositories(FlexoProject project) {
@@ -909,18 +905,18 @@ public final class ModuleLoader implements IModuleLoader {
 					dirParam.setDepends("choice");
 					dirParam.setConditional("choice=" + '"' + CONNECT + '"');
 					AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), FlexoFrame.getActiveFrame(),
-							FlexoLocalization.localizedForKey("connect_repository_to_local_file_system"),
-							repository.getName() + " : " + FlexoLocalization
-							.localizedForKey("repository_seems_to_be_not_valid_on_local_file_system"), choiceParam, dirParam);
+							FlexoLocalization.localizedForKey("connect_repository_to_local_file_system"), repository.getName() + " : "
+									+ FlexoLocalization.localizedForKey("repository_seems_to_be_not_valid_on_local_file_system"),
+							choiceParam, dirParam);
 					System.setProperty("apple.awt.fileDialogForDirectories", "false");
 					if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 						if (choiceParam.getValue().equals(CONNECT)) {
 							if (dirParam.getValue() != null) {
 								if (!dirParam.getValue().exists()) {
-									if (FlexoController
-											.confirm(FlexoLocalization.localizedForKey("directory") + " " + dirParam.getValue()
-													.getAbsolutePath() + " " + FlexoLocalization.localizedForKey("does_not_exist") + "\n" + FlexoLocalization
-													.localizedForKey("would_you_like_to_create_it_and_continue?"))) {
+									if (FlexoController.confirm(FlexoLocalization.localizedForKey("directory") + " "
+											+ dirParam.getValue().getAbsolutePath() + " "
+											+ FlexoLocalization.localizedForKey("does_not_exist") + "\n"
+											+ FlexoLocalization.localizedForKey("would_you_like_to_create_it_and_continue?"))) {
 										dirParam.getValue().mkdirs();
 									}
 									repository.setDirectory(dirParam.getValue());
@@ -940,7 +936,7 @@ public final class ModuleLoader implements IModuleLoader {
 	/**
 	 * Loads the project located within <code>projectDirectory</code> and then switches automatically to the given module
 	 * <code> moduleToReload </code>.
-	 *
+	 * 
 	 * @param projectDirectory
 	 * @param moduleToReload
 	 * @return the editor of the loaded project.
@@ -964,7 +960,7 @@ public final class ModuleLoader implements IModuleLoader {
 	 * Loads the project located withing <code> projectDirectory </code>. The following method is the default methode to call when opening a
 	 * project from a GUI (Interactive mode) so that resource update handling is properly initialized. Additional small stuffs can be
 	 * performed in that call so that projects are always opened the same way.
-	 *
+	 * 
 	 * @param projectDirectory
 	 * @return the {@link InteractiveFlexoEditor} editor if the opening succeeded else <code>null</code>
 	 */
@@ -1017,8 +1013,8 @@ public final class ModuleLoader implements IModuleLoader {
 			}
 		} catch (ProjectInitializerException e) {
 			e.printStackTrace();
-			FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at") + projectDirectory
-					.getAbsolutePath());
+			FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
+					+ projectDirectory.getAbsolutePath());
 			ProgressWindow.hideProgressWindow();
 			return null;
 		} catch (ProjectLoadingCancelledException e) {
@@ -1343,15 +1339,15 @@ public final class ModuleLoader implements IModuleLoader {
 		AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
 				FlexoLocalization.localizedForKey("save_project_as"), FlexoLocalization.localizedForKey("select_a_zip_file_for_project"),
 				new AskParametersDialog.ValidationCondition() {
-			@Override
-			public boolean isValid(ParametersModel model) {
-				if (targetZippedProject.getValue() == null) {
-					errorMessage = FlexoLocalization.localizedForKey("please_submit_a_zip");
-					return false;
-				}
-				return true;
-			}
-		}, targetZippedProject, removeScreenshotsAndLibraries);
+					@Override
+					public boolean isValid(ParametersModel model) {
+						if (targetZippedProject.getValue() == null) {
+							errorMessage = FlexoLocalization.localizedForKey("please_submit_a_zip");
+							return false;
+						}
+						return true;
+					}
+				}, targetZippedProject, removeScreenshotsAndLibraries);
 
 		System.setProperty("apple.awt.fileDialogForDirectories", "false");
 		if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
@@ -1377,8 +1373,8 @@ public final class ModuleLoader implements IModuleLoader {
 				return;
 			}
 			try {
-				ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"),
-						removeScreenshotsAndLibraries.getValue() ? 5 : 2);
+				ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"), removeScreenshotsAndLibraries.getValue() ? 5
+						: 2);
 				getProject().saveAsZipFile(zipFile, ProgressWindow.instance(), removeScreenshotsAndLibraries.getValue(), true);
 				ProgressWindow.hideProgressWindow();
 			} catch (SaveResourceException e) {
@@ -1414,23 +1410,23 @@ public final class ModuleLoader implements IModuleLoader {
 		AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
 				FlexoLocalization.localizedForKey("save_project_as"),
 				FlexoLocalization.localizedForKey("enter_parameters_for_project_saving"), new AskParametersDialog.ValidationCondition() {
-			@Override
-			public boolean isValid(ParametersModel model) {
-				if (versionParam.getValue() == null) {
-					errorMessage = FlexoLocalization.localizedForKey("please_submit_a_version");
-					return false;
-				}
-				if (targetPrjDirectory.getValue() == null) {
-					errorMessage = FlexoLocalization.localizedForKey("please_submit_a_prj_directory");
-					return false;
-				}
-				if (!(targetPrjDirectory.getValue().getName().endsWith(".prj") && !targetPrjDirectory.getValue().exists())) {
-					errorMessage = FlexoLocalization.localizedForKey("please_submit_a_valid_prj_directory");
-					return false;
-				}
-				return true;
-			}
-		}, targetPrjDirectory, versionParam);
+					@Override
+					public boolean isValid(ParametersModel model) {
+						if (versionParam.getValue() == null) {
+							errorMessage = FlexoLocalization.localizedForKey("please_submit_a_version");
+							return false;
+						}
+						if (targetPrjDirectory.getValue() == null) {
+							errorMessage = FlexoLocalization.localizedForKey("please_submit_a_prj_directory");
+							return false;
+						}
+						if (!(targetPrjDirectory.getValue().getName().endsWith(".prj") && !targetPrjDirectory.getValue().exists())) {
+							errorMessage = FlexoLocalization.localizedForKey("please_submit_a_valid_prj_directory");
+							return false;
+						}
+						return true;
+					}
+				}, targetPrjDirectory, versionParam);
 
 		System.setProperty("apple.awt.fileDialogForDirectories", "false");
 		if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
@@ -1451,8 +1447,7 @@ public final class ModuleLoader implements IModuleLoader {
 			try {
 				ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"), 1);
 				getProject().saveAs(projectDirectory, ProgressWindow.instance(),
-						FlexoCst.BUSINESS_APPLICATION_VERSION.equals(versionParam.getValue()) ? null : versionParam.getValue(), true,
-								true);
+						FlexoCst.BUSINESS_APPLICATION_VERSION.equals(versionParam.getValue()) ? null : versionParam.getValue(), true, true);
 				GeneralPreferences.addToLastOpenedProjects(projectDirectory);
 				ProgressWindow.hideProgressWindow();
 			} catch (SaveResourceException e) {
@@ -1483,18 +1478,13 @@ public final class ModuleLoader implements IModuleLoader {
 						ProgressWindow.hideProgressWindow();
 						if (e instanceof SaveResourcePermissionDeniedException) {
 							if (e.getFileResource().getFile().isDirectory()) {
-								FlexoController
-								.showError(
-										FlexoLocalization.localizedForKey("permission_denied"),
-										FlexoLocalization
-										.localizedForKey("project_was_not_properly_saved_permission_denied_directory") + "\n" + e
-										.getFileResource().getFile().getAbsolutePath());
+								FlexoController.showError(FlexoLocalization.localizedForKey("permission_denied"),
+										FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_directory")
+												+ "\n" + e.getFileResource().getFile().getAbsolutePath());
 							} else {
-								FlexoController
-								.showError(
-										FlexoLocalization.localizedForKey("permission_denied"),
-										FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_file") + "\n" + e
-										.getFileResource().getFile().getAbsolutePath());
+								FlexoController.showError(FlexoLocalization.localizedForKey("permission_denied"),
+										FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_file") + "\n"
+												+ e.getFileResource().getFile().getAbsolutePath());
 							}
 						} else {
 							FlexoController.showError(FlexoLocalization.localizedForKey("error_during_saving"));
@@ -1530,19 +1520,19 @@ public final class ModuleLoader implements IModuleLoader {
 				ProgressWindow.hideProgressWindow();
 				if (e.getFileResource().getFile().isDirectory()) {
 					FlexoController.showError(FlexoLocalization.localizedForKey("permission_denied"),
-							FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_directory") + "\n" + e
-							.getFileResource().getFile().getAbsolutePath());
+							FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_directory") + "\n"
+									+ e.getFileResource().getFile().getAbsolutePath());
 				} else {
 					FlexoController.showError(FlexoLocalization.localizedForKey("permission_denied"),
-							FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_file") + "\n" + e
-							.getFileResource().getFile().getAbsolutePath());
+							FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_file") + "\n"
+									+ e.getFileResource().getFile().getAbsolutePath());
 				}
 				return false;
 			} catch (SaveResourceException e) {
 				e.printStackTrace();
 				ProgressWindow.hideProgressWindow();
-				return FlexoController.confirm(FlexoLocalization.localizedForKey("error_during_saving") + "\n" + FlexoLocalization
-						.localizedForKey("would_you_like_to_exit_anyway"));
+				return FlexoController.confirm(FlexoLocalization.localizedForKey("error_during_saving") + "\n"
+						+ FlexoLocalization.localizedForKey("would_you_like_to_exit_anyway"));
 			}
 		} else if (reviewer.getRetval() == SaveDialog.NO_OPTION) {
 			if (logger.isLoggable(Level.INFO)) {
@@ -1570,7 +1560,7 @@ public final class ModuleLoader implements IModuleLoader {
 
 	/**
 	 * Overrides getIEModuleInstance
-	 *
+	 * 
 	 * @see org.openflexo.module.external.IModuleLoader#getIEModuleInstance()
 	 */
 	@Override
@@ -1580,7 +1570,7 @@ public final class ModuleLoader implements IModuleLoader {
 
 	/**
 	 * Overrides getDMModuleInstance
-	 *
+	 * 
 	 * @see org.openflexo.module.external.IModuleLoader#getDMModuleInstance()
 	 */
 	@Override
@@ -1590,7 +1580,7 @@ public final class ModuleLoader implements IModuleLoader {
 
 	/**
 	 * Overrides getWKFModuleInstance
-	 *
+	 * 
 	 * @see org.openflexo.module.external.IModuleLoader#getWKFModuleInstance()
 	 */
 	@Override
@@ -1620,7 +1610,7 @@ public final class ModuleLoader implements IModuleLoader {
 	 * @throws InstantiationException
 	 */
 	public static void setLookAndFeel(String value) throws ClassNotFoundException, InstantiationException, IllegalAccessException,
-	UnsupportedLookAndFeelException {
+			UnsupportedLookAndFeelException {
 		if (UIManager.getLookAndFeel().getClass().getName().equals(value)) {
 			return;
 		}
@@ -1723,8 +1713,8 @@ public final class ModuleLoader implements IModuleLoader {
 
 	public static FlexoResourceCenter getFlexoResourceCenter(boolean createIfNotExist) {
 		if (flexoResourceCenter == null && createIfNotExist) {
-			if (GeneralPreferences.getLocalResourceCenterDirectory() == null || !GeneralPreferences.getLocalResourceCenterDirectory()
-					.exists()) {
+			if (GeneralPreferences.getLocalResourceCenterDirectory() == null
+					|| !GeneralPreferences.getLocalResourceCenterDirectory().exists()) {
 				if (isDevelopperRelease() || isMaintainerRelease()) {
 					AskLocalResourceCenterDirectory data = new AskLocalResourceCenterDirectory();
 					data.setLocalResourceDirectory(FlexoProject.getResourceCenterFile());

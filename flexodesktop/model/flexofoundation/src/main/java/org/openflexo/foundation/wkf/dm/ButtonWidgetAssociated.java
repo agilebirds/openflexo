@@ -21,17 +21,14 @@ package org.openflexo.foundation.wkf.dm;
 
 import org.openflexo.foundation.ie.widget.IEHyperlinkWidget;
 
-public class ButtonWidgetAssociated extends WKFDataModification
-{
+public class ButtonWidgetAssociated extends WKFDataModification {
 
-    public ButtonWidgetAssociated(IEHyperlinkWidget oldValue, IEHyperlinkWidget newValue)
-    {
-        super("associatedButtonWidget",oldValue, newValue);
-    }
+	public ButtonWidgetAssociated(IEHyperlinkWidget oldValue, IEHyperlinkWidget newValue) {
+		super("associatedButtonWidget", oldValue, newValue);
+	}
 
-    public ButtonWidgetAssociated(String propertyName, IEHyperlinkWidget oldValue, IEHyperlinkWidget newValue)
-    {
-        super(propertyName, oldValue, newValue);
-    }
+	public ButtonWidgetAssociated(String propertyName, IEHyperlinkWidget oldValue, IEHyperlinkWidget newValue) {
+		super(propertyName, oldValue, newValue);
+	}
 
 }

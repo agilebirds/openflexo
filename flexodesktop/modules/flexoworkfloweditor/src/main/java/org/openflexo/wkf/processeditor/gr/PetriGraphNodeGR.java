@@ -35,7 +35,6 @@ import org.openflexo.wkf.processeditor.ProcessRepresentation;
 import org.openflexo.wkf.swleditor.SWLEditorConstants;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-
 public abstract class PetriGraphNodeGR<O extends PetriGraphNode> extends AbstractNodeGR<O> {
 
 	@SuppressWarnings("unused")
@@ -44,17 +43,15 @@ public abstract class PetriGraphNodeGR<O extends PetriGraphNode> extends Abstrac
 	private ConcatenedList<ControlArea> concatenedList;
 	protected boolean isInPalette = false;
 
-	public PetriGraphNodeGR(O node, ShapeType shapeType, ProcessRepresentation aDrawing,boolean isInPalet)
-	{
+	public PetriGraphNodeGR(O node, ShapeType shapeType, ProcessRepresentation aDrawing, boolean isInPalet) {
 		super(node, shapeType, aDrawing);
 		this.isInPalette = isInPalet;
 	}
 
 	@Override
-	public void updatePropertiesFromWKFPreferences()
-	{
+	public void updatePropertiesFromWKFPreferences() {
 		super.updatePropertiesFromWKFPreferences();
-		setBorder(new ShapeBorder(getTopBorder(),getBottomBorder(),getLeftBorder(),getRightBorder()));
+		setBorder(new ShapeBorder(getTopBorder(), getBottomBorder(), getLeftBorder(), getRightBorder()));
 	}
 
 	/**
@@ -77,46 +74,42 @@ public abstract class PetriGraphNodeGR<O extends PetriGraphNode> extends Abstrac
 		v.addAll(getModel().getAllRelatedToNodes());
 		for (WKFNode node : v) {
 			if (node instanceof FlexoPreCondition) {
-				node = ((FlexoPreCondition)node).getAttachedNode();
+				node = ((FlexoPreCondition) node).getAttachedNode();
 			}
-			if (node instanceof PetriGraphNode && ((PetriGraphNode)node).getParentPetriGraph()==parentPetrigraph) {
+			if (node instanceof PetriGraphNode && ((PetriGraphNode) node).getParentPetriGraph() == parentPetrigraph) {
 				if (isInRootPetriGraph) {
 					// We need the node to be in the same role, otherwise there is no useful information
-					if (SwimmingLaneRepresentation.getRepresentationRole((PetriGraphNode)node)!=SwimmingLaneRepresentation.getRepresentationRole(getModel()))
+					if (SwimmingLaneRepresentation.getRepresentationRole((PetriGraphNode) node) != SwimmingLaneRepresentation
+							.getRepresentationRole(getModel()))
 						continue;
 				}
 				if (node.hasLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR) && node.hasLocationForContext(BASIC_PROCESS_EDITOR)) {
 					Point2D p1 = node.getLocation(SWLEditorConstants.SWIMMING_LANE_EDITOR);
 					Point2D p2 = node.getLocation(BASIC_PROCESS_EDITOR);
-					defaultX = (int) (p2.getX() + (swlPosition.getX()-p1.getX()));
-					defaultY = (int) (p2.getY() + (swlPosition.getY()-p1.getY()));
+					defaultX = (int) (p2.getX() + (swlPosition.getX() - p1.getX()));
+					defaultY = (int) (p2.getY() + (swlPosition.getY() - p1.getY()));
 				}
 			}
 		}
 	}
 
-	public int getTopBorder() 
-	{
+	public int getTopBorder() {
 		return REQUIRED_SPACE_ON_TOP;
 	}
-	
-	public int getBottomBorder() 
-	{
+
+	public int getBottomBorder() {
 		return REQUIRED_SPACE_ON_BOTTOM;
 	}
 
-	public int getLeftBorder() 
-	{
+	public int getLeftBorder() {
 		return REQUIRED_SPACE_ON_LEFT;
 	}
-	
-	public int getRightBorder() 
-	{
+
+	public int getRightBorder() {
 		return (hasNodePalette() ? REQUIRED_SPACE_ON_RIGHT_FOR_PALETTE : REQUIRED_SPACE_ON_RIGHT);
 	}
-	
-	public boolean hasNodePalette() 
-	{
+
+	public boolean hasNodePalette() {
 		return true;
 	}
 
@@ -136,21 +129,18 @@ public abstract class PetriGraphNodeGR<O extends PetriGraphNode> extends Abstrac
 	}*/
 
 	@Override
-	public List<? extends ControlArea> getControlAreas() 
-	{
+	public List<? extends ControlArea> getControlAreas() {
 		if (hasNodePalette()) {
-			if (concatenedList==null) {
+			if (concatenedList == null) {
 				concatenedList = new ConcatenedList<ControlArea>();
 				concatenedList.addElementList(super.getControlAreas());
 				concatenedList.addElement(new NodePalette(this, getDrawable().getParentPetriGraph()));
 			}
 			return concatenedList;
-		}
-		else {
+		} else {
 			concatenedList = null;
 			return super.getControlAreas();
 		}
 	}
-
 
 }

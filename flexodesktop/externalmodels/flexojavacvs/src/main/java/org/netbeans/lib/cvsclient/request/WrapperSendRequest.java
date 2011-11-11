@@ -21,32 +21,35 @@
 package org.netbeans.lib.cvsclient.request;
 
 /**
- * This class encapsulates the wrapper-sendme-rcsOptions request in the
- * CVS client-server protocol. This request is used by the client to get
- * the wrapper settings on the server.
- * @author  Sriram Seshan
+ * This class encapsulates the wrapper-sendme-rcsOptions request in the CVS client-server protocol. This request is used by the client to
+ * get the wrapper settings on the server.
+ * 
+ * @author Sriram Seshan
  */
 public class WrapperSendRequest extends Request {
 
-    /** Get the request String that will be passed to the server
-     * @return the request String
-     * @throws UnconfiguredRequestException if the request has not been
-     * properly configured
-     *
-     */
-    @Override
+	/**
+	 * Get the request String that will be passed to the server
+	 * 
+	 * @return the request String
+	 * @throws UnconfiguredRequestException
+	 *             if the request has not been properly configured
+	 * 
+	 */
+	@Override
 	public String getRequestString() throws UnconfiguredRequestException {
-        return "wrapper-sendme-rcsOptions \n";
-    }
-    
-    /** Is a response expected from the server?
-     * @return true if a response is expected, false if no response if
-     * expected
-     *
-     */
-    @Override
+		return "wrapper-sendme-rcsOptions \n";
+	}
+
+	/**
+	 * Is a response expected from the server?
+	 * 
+	 * @return true if a response is expected, false if no response if expected
+	 * 
+	 */
+	@Override
 	public boolean isResponseExpected() {
-        return true;
-    }
-    
+		return true;
+	}
+
 }

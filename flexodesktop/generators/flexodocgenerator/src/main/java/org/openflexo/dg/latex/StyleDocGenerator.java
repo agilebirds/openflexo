@@ -30,93 +30,90 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 
+public abstract class StyleDocGenerator extends DGLatexGenerator<FlexoProject> {
 
-public abstract class StyleDocGenerator extends DGLatexGenerator<FlexoProject>
-{
-   
-    private String styleName;
-    
-    public StyleDocGenerator(ProjectDocLatexGenerator projectGenerator, FlexoProject source, String styleName)
-    {
-        super(projectGenerator, source);
-        this.styleName=styleName;
-    }
+	private String styleName;
 
-    /**
-     * Overrides buildResourcesAndSetGenerators
-     * @see org.openflexo.dg.DGGenerator#buildResourcesAndSetGenerators(DGRepository, java.util.Vector)
-     */
-    @Override
-    public void buildResourcesAndSetGenerators(DGRepository repository, Vector<CGRepositoryFileResource> resources)
-    {
-        // The style itself
-        StyleLatexFileResource res = (StyleLatexFileResource) getProject().resourceForKey(ResourceType.LATEX_FILE,LatexFileResource.nameForRepositoryAndIdentifier(repository, getIdentifier()));
-        if (res!=null && res.getCGFile()==null) {
-            res.delete(false);
-            res = null;
-        }
-        if (res == null) {
-            res = GeneratedFileResourceFactory.createNewStyleLatexFileResource(repository, this, getFileName().endsWith(getFileExtension())?getFileName():getFileName()+getFileExtension());
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("Created Style LATEX resource " + res.getName());
-        } else {
-            res.setGenerator(this);
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("Successfully retrieved Style LATEX resource " + res.getName());
-        }
-        res.registerObserverWhenRequired();
-        resources.add(res);
-    }
-    
-    /**
-     * Overrides generate
-     * @see org.openflexo.dg.DGGenerator#generate(boolean)
-     */
-    @Override
-    public void generate(boolean forceRegenerate)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("Called StyleDocGenerator.generate(forceRegenerate)");
-        super.generate(forceRegenerate);
-    }
-    
-    /**
-     * Overrides getFileName
-     * @see org.openflexo.dg.DGGenerator#getFileName()
-     */
-    @Override
-    public String getFileName()
-    {
-        return styleName;
-    }
+	public StyleDocGenerator(ProjectDocLatexGenerator projectGenerator, FlexoProject source, String styleName) {
+		super(projectGenerator, source);
+		this.styleName = styleName;
+	}
 
-    /**
-     * Overrides getIdentifier
-     * @see org.openflexo.foundation.cg.generator.IFlexoResourceGenerator#getIdentifier()
-     */
-    @Override
-	public String getIdentifier()
-    {
-        return "Style-Latex-"+getStyleName();
-    }
+	/**
+	 * Overrides buildResourcesAndSetGenerators
+	 * 
+	 * @see org.openflexo.dg.DGGenerator#buildResourcesAndSetGenerators(DGRepository, java.util.Vector)
+	 */
+	@Override
+	public void buildResourcesAndSetGenerators(DGRepository repository, Vector<CGRepositoryFileResource> resources) {
+		// The style itself
+		StyleLatexFileResource res = (StyleLatexFileResource) getProject().resourceForKey(ResourceType.LATEX_FILE,
+				LatexFileResource.nameForRepositoryAndIdentifier(repository, getIdentifier()));
+		if (res != null && res.getCGFile() == null) {
+			res.delete(false);
+			res = null;
+		}
+		if (res == null) {
+			res = GeneratedFileResourceFactory.createNewStyleLatexFileResource(repository, this,
+					getFileName().endsWith(getFileExtension()) ? getFileName() : getFileName() + getFileExtension());
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("Created Style LATEX resource " + res.getName());
+		} else {
+			res.setGenerator(this);
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("Successfully retrieved Style LATEX resource " + res.getName());
+		}
+		res.registerObserverWhenRequired();
+		resources.add(res);
+	}
 
-    public String getStyleName()
-    {
-        return styleName;
-    }
+	/**
+	 * Overrides generate
+	 * 
+	 * @see org.openflexo.dg.DGGenerator#generate(boolean)
+	 */
+	@Override
+	public void generate(boolean forceRegenerate) {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("Called StyleDocGenerator.generate(forceRegenerate)");
+		super.generate(forceRegenerate);
+	}
 
-    public void setStyleName(String styleName)
-    {
-        this.styleName = styleName;
-    }
-    
-    /**
-     * Overrides getFileExtension
-     * @see org.openflexo.dg.latex.DGLatexGenerator#getFileExtension()
-     */
-    @Override
-    public String getFileExtension()
-    {
-        return ".sty";
-    }
+	/**
+	 * Overrides getFileName
+	 * 
+	 * @see org.openflexo.dg.DGGenerator#getFileName()
+	 */
+	@Override
+	public String getFileName() {
+		return styleName;
+	}
+
+	/**
+	 * Overrides getIdentifier
+	 * 
+	 * @see org.openflexo.foundation.cg.generator.IFlexoResourceGenerator#getIdentifier()
+	 */
+	@Override
+	public String getIdentifier() {
+		return "Style-Latex-" + getStyleName();
+	}
+
+	public String getStyleName() {
+		return styleName;
+	}
+
+	public void setStyleName(String styleName) {
+		this.styleName = styleName;
+	}
+
+	/**
+	 * Overrides getFileExtension
+	 * 
+	 * @see org.openflexo.dg.latex.DGLatexGenerator#getFileExtension()
+	 */
+	@Override
+	public String getFileExtension() {
+		return ".sty";
+	}
 }

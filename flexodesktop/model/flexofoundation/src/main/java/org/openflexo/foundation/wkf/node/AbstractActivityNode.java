@@ -81,15 +81,13 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ToolBox;
 
 /**
- * An abstract activity represents an activity that can be a node of the
- * activity petri graph. This is either an ActivityFlexoNode or a
+ * An abstract activity represents an activity that can be a node of the activity petri graph. This is either an ActivityFlexoNode or a
  * SubProcessNode.
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public abstract class AbstractActivityNode extends FatherNode implements MetricsValueOwner, FlexoObserver
-{
+public abstract class AbstractActivityNode extends FatherNode implements MetricsValueOwner, FlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(AbstractActivityNode.class.getPackage().getName());
 
@@ -119,7 +117,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	private transient AbstractActivityStatistics statistics;
 
 	public static FlexoActionizer<AddActivityMetricsValue, AbstractActivityNode, WKFObject> addMetricsActionizer;
-	public static FlexoActionizer<DeleteMetricsValue,MetricsValue,MetricsValue> deleteMetricsActionizer;
+	public static FlexoActionizer<DeleteMetricsValue, MetricsValue, MetricsValue> deleteMetricsActionizer;
 
 	public static FlexoActionizer<AddToResponsibleRole, AbstractActivityNode, AbstractActivityNode> addResponsibleRoleActionizer;
 	public static FlexoActionizer<RemoveFromResponsibleRole, Role, AbstractActivityNode> removeFromResponsibleRoleActionizer;
@@ -136,8 +134,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	/**
 	 * Default constructor
 	 */
-	public AbstractActivityNode(FlexoProcess process)
-	{
+	public AbstractActivityNode(FlexoProcess process) {
 		super(process);
 		metricsValues = new Vector<MetricsValue>();
 		this.responsibleRoles = new Vector<Role>();
@@ -156,19 +153,16 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	 * Default inspector name: implemented in sub-classes !
 	 */
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return Inspectors.WKF.ABSTRACT_ACTIVITY_NODE_INSPECTOR;
 	}
 
-	public static String DEFAULT_ACTIVITY_NODE_NAME()
-	{
+	public static String DEFAULT_ACTIVITY_NODE_NAME() {
 		return FlexoLocalization.localizedForKey("activity_default_name");
 	}
 
 	@Override
-	public String getDefaultName()
-	{
+	public String getDefaultName() {
 		if (isBeginNode() || isEndNode()) {
 			return super.getDefaultName();
 		} else {
@@ -177,8 +171,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	}
 
 	// Used for old models, deprecated now !
-	public void finalizeRoleLinking()
-	{
+	public void finalizeRoleLinking() {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("finalizeRoleLinking() called");
 		}
@@ -197,14 +190,12 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	}
 
 	@Override
-	public ActivityPetriGraph getParentPetriGraph()
-	{
-		return (ActivityPetriGraph)super.getParentPetriGraph();
+	public ActivityPetriGraph getParentPetriGraph() {
+		return (ActivityPetriGraph) super.getParentPetriGraph();
 	}
 
 	@Override
-	public FlexoLevel getLevel()
-	{
+	public FlexoLevel getLevel() {
 		return FlexoLevel.ACTIVITY;
 	}
 
@@ -215,21 +206,18 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		return v;
 	}
 
-	public boolean isSubProcessNode()
-	{
+	public boolean isSubProcessNode() {
 		return this instanceof SubProcessNode;
 	}
 
 	public abstract boolean mightHaveOperationPetriGraph();
 
 	@Override
-	public boolean hasContainedPetriGraph()
-	{
+	public boolean hasContainedPetriGraph() {
 		return mightHaveOperationPetriGraph() && super.hasContainedPetriGraph();
 	}
 
-	public OperationPetriGraph getOperationPetriGraph()
-	{
+	public OperationPetriGraph getOperationPetriGraph() {
 		if (mightHaveOperationPetriGraph()) {
 			return (OperationPetriGraph) getContainedPetriGraph();
 		} else {
@@ -237,13 +225,11 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		}
 	}
 
-	public void setOperationPetriGraph(OperationPetriGraph aPetriGraph)
-	{
+	public void setOperationPetriGraph(OperationPetriGraph aPetriGraph) {
 		setContainedPetriGraph(aPetriGraph);
 	}
 
-	public Role getRole()
-	{
+	public Role getRole() {
 		if (_role == null && !isDeserializing()) {
 			if (inheritedRoleName != null) {
 				_role = getProject().getWorkflow().getRoleList().roleWithName(inheritedRoleName);
@@ -265,38 +251,36 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 
 	/**
 	 * Kept for backward compatibility only
+	 * 
 	 * @return
 	 * @deprecated
 	 */
 	@Deprecated
-	public String getInheritedRoleName()
-	{
+	public String getInheritedRoleName() {
 		return null;
 	}
 
 	/**
 	 * Kept for backward compatibility only
+	 * 
 	 * @deprecated
 	 */
 	@Deprecated
-	public void setInheritedRoleName(String aRoleName)
-	{
+	public void setInheritedRoleName(String aRoleName) {
 		this.inheritedRoleName = aRoleName;
 	}
 
 	// Used when serializing
-	public FlexoModelObjectReference<Role> getRoleReference()
-	{
-		if (getRole()!=null) {
-			return new FlexoModelObjectReference<Role>(getProject(),getRole());
+	public FlexoModelObjectReference<Role> getRoleReference() {
+		if (getRole() != null) {
+			return new FlexoModelObjectReference<Role>(getProject(), getRole());
 		} else {
 			return null;
 		}
 	}
 
 	// Used when deserializing
-	public void setRoleReference(FlexoModelObjectReference<Role> aRoleReference)
-	{
+	public void setRoleReference(FlexoModelObjectReference<Role> aRoleReference) {
 		setRole(aRoleReference.getObject(true));
 	}
 
@@ -327,16 +311,14 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 
 	// Used when deserializing
 	public void setLinkedProcessReference(FlexoModelObjectReference<FlexoProcess> aProcessReference) {
-		if(aProcessReference.getResource().equals(getProcess().getFlexoResource())){
+		if (aProcessReference.getResource().equals(getProcess().getFlexoResource())) {
 			setLinkedProcess(getProcess());
 		} else {
 			setLinkedProcess(aProcessReference.getObject(true));
 		}
 	}
 
-
-	public void setRole(Role aRole)
-	{
+	public void setRole(Role aRole) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setRole() with " + aRole);
 		}
@@ -354,8 +336,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		}
 	}
 
-	public String getRoleName()
-	{
+	public String getRoleName() {
 		if (getRole() != null) {
 			return getRole().getName();
 		} else {
@@ -364,14 +345,12 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	}
 
 	/**
-	 * Deprecated: kept for backward compatibility during deserialization
-	 * process from version 1.0
-	 *
+	 * Deprecated: kept for backward compatibility during deserialization process from version 1.0
+	 * 
 	 * @deprecated
 	 */
 	@Deprecated
-	public void setRoleName(String aRoleName)
-	{
+	public void setRoleName(String aRoleName) {
 		_roleName = aRoleName;
 	}
 
@@ -381,8 +360,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		return roleA;
 	}
 
-	public void setRoleA(Role aRole)
-	{
+	public void setRoleA(Role aRole) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setRoleA() with " + aRole);
 		}
@@ -400,18 +378,16 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	}
 
 	// Used when serializing
-	public FlexoModelObjectReference<Role> getRoleAReference()
-	{
-		if (getRoleA()!=null) {
-			return new FlexoModelObjectReference<Role>(getProject(),getRoleA());
+	public FlexoModelObjectReference<Role> getRoleAReference() {
+		if (getRoleA() != null) {
+			return new FlexoModelObjectReference<Role>(getProject(), getRoleA());
 		} else {
 			return null;
 		}
 	}
 
 	// Used when deserializing
-	public void setRoleAReference(FlexoModelObjectReference<Role> aRoleReference)
-	{
+	public void setRoleAReference(FlexoModelObjectReference<Role> aRoleReference) {
 		setRoleA(aRoleReference.getObject(true));
 	}
 
@@ -419,8 +395,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		return roleC;
 	}
 
-	public void setRoleC(Role aRole)
-	{
+	public void setRoleC(Role aRole) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setRoleC() with " + aRole);
 		}
@@ -438,18 +413,16 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	}
 
 	// Used when serializing
-	public FlexoModelObjectReference<Role> getRoleCReference()
-	{
-		if (getRoleC()!=null) {
-			return new FlexoModelObjectReference<Role>(getProject(),getRoleC());
+	public FlexoModelObjectReference<Role> getRoleCReference() {
+		if (getRoleC() != null) {
+			return new FlexoModelObjectReference<Role>(getProject(), getRoleC());
 		} else {
 			return null;
 		}
 	}
 
 	// Used when deserializing
-	public void setRoleCReference(FlexoModelObjectReference<Role> aRoleReference)
-	{
+	public void setRoleCReference(FlexoModelObjectReference<Role> aRoleReference) {
 		setRoleC(aRoleReference.getObject(true));
 	}
 
@@ -457,8 +430,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		return roleI;
 	}
 
-	public void setRoleI(Role aRole)
-	{
+	public void setRoleI(Role aRole) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setRoleI() with " + aRole);
 		}
@@ -477,18 +449,16 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	}
 
 	// Used when serializing
-	public FlexoModelObjectReference<Role> getRoleIReference()
-	{
-		if (getRoleI()!=null) {
-			return new FlexoModelObjectReference<Role>(getProject(),getRoleI());
+	public FlexoModelObjectReference<Role> getRoleIReference() {
+		if (getRoleI() != null) {
+			return new FlexoModelObjectReference<Role>(getProject(), getRoleI());
 		} else {
 			return null;
 		}
 	}
 
 	// Used when deserializing
-	public void setRoleIReference(FlexoModelObjectReference<Role> aRoleReference)
-	{
+	public void setRoleIReference(FlexoModelObjectReference<Role> aRoleReference) {
 		setRoleI(aRoleReference.getObject(true));
 	}
 
@@ -780,11 +750,11 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 
 	@Override
 	public void addToMetricsValues(MetricsValue value) {
-		if (value.getMetricsDefinition()!=null) {
+		if (value.getMetricsDefinition() != null) {
 			metricsValues.add(value);
 			value.setOwner(this);
 			setChanged();
-			notifyObservers(new MetricsValueAdded(value,"metricsValues"));
+			notifyObservers(new MetricsValueAdded(value, "metricsValues"));
 		}
 	}
 
@@ -793,7 +763,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		metricsValues.remove(value);
 		value.setOwner(null);
 		setChanged();
-		notifyObservers(new MetricsValueRemoved(value,"metricsValues"));
+		notifyObservers(new MetricsValueRemoved(value, "metricsValues"));
 	}
 
 	@Override
@@ -802,13 +772,13 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	}
 
 	public void addMetrics() {
-		if (addMetricsActionizer!=null) {
+		if (addMetricsActionizer != null) {
 			addMetricsActionizer.run(this, null);
 		}
 	}
 
 	public void deleteMetrics(MetricsValue value) {
-		if (deleteMetricsActionizer!=null) {
+		if (deleteMetricsActionizer != null) {
 			deleteMetricsActionizer.run(value, null);
 		}
 	}
@@ -821,11 +791,12 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	}
 
 	/**
-	 * Returns all the operation nodes embedded in this activity. This returns also operation nodes embedded in LOOPOperator and SelfExecutableNode.
+	 * Returns all the operation nodes embedded in this activity. This returns also operation nodes embedded in LOOPOperator and
+	 * SelfExecutableNode.
+	 * 
 	 * @return all the operation nodes embedded in this activity.
 	 */
-	public Vector<OperationNode> getAllEmbeddedOperationNodes()
-	{
+	public Vector<OperationNode> getAllEmbeddedOperationNodes() {
 		// TODO: optimize me later !!!
 		if (getOperationPetriGraph() != null) {
 			return getOperationPetriGraph().getAllEmbeddedOperationNodes();
@@ -834,23 +805,25 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	}
 
 	/**
-	 * Returns all the Operation nodes that are in the underlying operation petrigraph and the ones embedded by LOOPOperator and SelfExecutableNode.
-	 * This is done recursively on all nodes.
+	 * Returns all the Operation nodes that are in the underlying operation petrigraph and the ones embedded by LOOPOperator and
+	 * SelfExecutableNode. This is done recursively on all nodes.
+	 * 
 	 * @return all the operation nodes embedded in the underlying operation petri graph.
 	 */
 	public Vector<OperationNode> getAllEmbeddedSortedOperationNodes() {
-		if (getOperationPetriGraph()!=null) {
+		if (getOperationPetriGraph() != null) {
 			return getOperationPetriGraph().getAllEmbeddedSortedOperationNodes();
 		}
 		return new Vector<OperationNode>();
 	}
 
 	/**
-	 * Returns all the action nodes embedded in this activity. This returns also action nodes embedded in LOOPOperator and SelfExecutableNode.
+	 * Returns all the action nodes embedded in this activity. This returns also action nodes embedded in LOOPOperator and
+	 * SelfExecutableNode.
+	 * 
 	 * @return all the action nodes embedded in this activity.
 	 */
-	public Vector<ActionNode> getAllEmbeddedActionNodes()
-	{
+	public Vector<ActionNode> getAllEmbeddedActionNodes() {
 		if (getOperationPetriGraph() != null) {
 			Vector<ActionNode> v = new Vector<ActionNode>();
 			for (OperationNode o : getOperationPetriGraph().getAllEmbeddedOperationNodes()) {
@@ -860,8 +833,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		return new Vector<ActionNode>();
 	}
 
-	public OperationNode getOperationNodeNamed(String name)
-	{
+	public OperationNode getOperationNodeNamed(String name) {
 		for (OperationNode node : getAllEmbeddedOperationNodes()) {
 			if (node.getName().equals(name)) {
 				return node;
@@ -870,16 +842,14 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		return null;
 	}
 
-	public Enumeration getSortedOperationNodes()
-	{
+	public Enumeration getSortedOperationNodes() {
 		disableObserving();
 		Object[] o = FlexoIndexManager.sortArray(getAllOperationNodes().toArray(new OperationNode[0]));
 		enableObserving();
 		return ToolBox.getEnumeration(o);
 	}
 
-	public Vector<EventNode> getAllEventNodes()
-	{
+	public Vector<EventNode> getAllEventNodes() {
 		// TODO: optimize me later !!!
 		Vector<EventNode> returned = new Vector<EventNode>();
 		if (getOperationPetriGraph() != null) {
@@ -888,8 +858,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		return returned;
 	}
 
-	public Vector<OperatorNode> getAllOperatorNodes()
-	{
+	public Vector<OperatorNode> getAllOperatorNodes() {
 		// TODO: optimize me later !!!
 		Vector<OperatorNode> returned = new Vector<OperatorNode>();
 		if (getOperationPetriGraph() != null) {
@@ -903,12 +872,11 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	// ==========================================================================
 
 	public boolean isEmbedded() {
-		return getParentPetriGraph()!=null && getParentPetriGraph().getContainer() != getProcess();
+		return getParentPetriGraph() != null && getParentPetriGraph().getContainer() != getProcess();
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
+	public String getFullyQualifiedName() {
 		if (getProcess() == null) {
 			return "Process:NULL." + formattedString(getNodeName());
 		}
@@ -916,8 +884,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if ((dataModification instanceof RoleInserted) || (dataModification instanceof RoleRemoved)
 				|| (dataModification instanceof RoleNameChange) || (dataModification instanceof RoleColorChange)
 				|| "color".equals(dataModification.propertyName())) {
@@ -937,25 +904,22 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	// =================================
 	// ==========================================================================
 
-	public static class ActivityMustHaveARole extends ValidationRule<ActivityMustHaveARole,AbstractActivityNode>
-	{
-		public ActivityMustHaveARole()
-		{
+	public static class ActivityMustHaveARole extends ValidationRule<ActivityMustHaveARole, AbstractActivityNode> {
+		public ActivityMustHaveARole() {
 			super(AbstractActivityNode.class, "activity_must_have_a_role");
 		}
 
 		@Override
-		public ValidationIssue<ActivityMustHaveARole,AbstractActivityNode> applyValidation(final AbstractActivityNode activity)
-		{
+		public ValidationIssue<ActivityMustHaveARole, AbstractActivityNode> applyValidation(final AbstractActivityNode activity) {
 			if ((activity.getNodeType() == NodeType.NORMAL) && !(activity instanceof SelfExecutableActivityNode)
 					&& (activity.getRole() == null)) {
-				ValidationError<ActivityMustHaveARole,AbstractActivityNode> error
-				= new ValidationError<ActivityMustHaveARole,AbstractActivityNode>(this, activity, "activity_($object.name)_has_no_role");
+				ValidationError<ActivityMustHaveARole, AbstractActivityNode> error = new ValidationError<ActivityMustHaveARole, AbstractActivityNode>(
+						this, activity, "activity_($object.name)_has_no_role");
 				for (Role role : activity.getProcess().getWorkflow().getRoleList().getRoles()) {
 					error.addToFixProposals(new SetRoleToExistingRole(role));
 				}
 				error.addToFixProposals(new CreateAndAssignNewRole());
-				error.addToFixProposals(new DeletionFixProposal<ActivityMustHaveARole,AbstractActivityNode>("delete_this_activity"));
+				error.addToFixProposals(new DeletionFixProposal<ActivityMustHaveARole, AbstractActivityNode>("delete_this_activity"));
 				return error;
 			}
 			return null;
@@ -963,43 +927,36 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 
 		/**
 		 * Overrides isValidForTarget
-		 *
+		 * 
 		 * @see org.openflexo.foundation.validation.ValidationRule#isValidForTarget(TargetType)
 		 */
 		@Override
-		public boolean isValidForTarget(TargetType targetType)
-		{
+		public boolean isValidForTarget(TargetType targetType) {
 			return targetType != CodeType.PROTOTYPE;
 		}
 
-		public static class SetRoleToExistingRole extends FixProposal<ActivityMustHaveARole,AbstractActivityNode>
-		{
+		public static class SetRoleToExistingRole extends FixProposal<ActivityMustHaveARole, AbstractActivityNode> {
 			public Role role;
 
-			public SetRoleToExistingRole(Role aRole)
-			{
+			public SetRoleToExistingRole(Role aRole) {
 				super("set_($object.name)_role_to_($role.name)");
 				role = aRole;
 			}
 
 			@Override
-			protected void fixAction()
-			{
+			protected void fixAction() {
 				getObject().setRole(role);
 			}
 		}
 
-		public static class CreateAndAssignNewRole extends ParameteredFixProposal<ActivityMustHaveARole,AbstractActivityNode>
-		{
-			public CreateAndAssignNewRole()
-			{
+		public static class CreateAndAssignNewRole extends ParameteredFixProposal<ActivityMustHaveARole, AbstractActivityNode> {
+			public CreateAndAssignNewRole() {
 				super("create_and_assign_new_role_to_activity_($object.name)", "newRoleName", "enter_a_name_for_the_new_role",
 						FlexoLocalization.localizedForKey("new_role"));
 			}
 
 			@Override
-			protected void fixAction()
-			{
+			protected void fixAction() {
 				Role newRole;
 				String newRoleName = (String) getValueForParameter("newRoleName");
 				RoleList roleList = getObject().getProcess().getWorkflow().getRoleList();
@@ -1008,7 +965,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 					roleList.addToRoles(newRole);
 				} catch (DuplicateRoleException e) {
 					try {
-						newRole.setName(newRole.getIsSystemRole()?roleList.getNextNewSystemRoleName():roleList.getNextNewUserRoleName());
+						newRole.setName(newRole.getIsSystemRole() ? roleList.getNextNewSystemRoleName() : roleList.getNextNewUserRoleName());
 						roleList.addToRoles(newRole);
 					} catch (DuplicateRoleException e1) {
 						// should never happen
@@ -1019,39 +976,35 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 			}
 		}
 
-
 	}
 
-	public static class ActivityCouldNotDefineOperationPetriGraphWhenNotAllowed extends ValidationRule<ActivityCouldNotDefineOperationPetriGraphWhenNotAllowed,AbstractActivityNode>
-	{
-		public ActivityCouldNotDefineOperationPetriGraphWhenNotAllowed()
-		{
+	public static class ActivityCouldNotDefineOperationPetriGraphWhenNotAllowed extends
+			ValidationRule<ActivityCouldNotDefineOperationPetriGraphWhenNotAllowed, AbstractActivityNode> {
+		public ActivityCouldNotDefineOperationPetriGraphWhenNotAllowed() {
 			super(AbstractActivityNode.class, "activity_could_not_define_operation_petri_graph_when_not_allowed");
 		}
 
 		@Override
-		public ValidationIssue<ActivityCouldNotDefineOperationPetriGraphWhenNotAllowed,AbstractActivityNode> applyValidation(final AbstractActivityNode activity)
-		{
+		public ValidationIssue<ActivityCouldNotDefineOperationPetriGraphWhenNotAllowed, AbstractActivityNode> applyValidation(
+				final AbstractActivityNode activity) {
 			if (activity.getContainedPetriGraph() != null && !activity.mightHaveOperationPetriGraph()) {
-				ValidationError<ActivityCouldNotDefineOperationPetriGraphWhenNotAllowed,AbstractActivityNode> error
-				= new ValidationError<ActivityCouldNotDefineOperationPetriGraphWhenNotAllowed,AbstractActivityNode>
-				(this, activity, "activity_($object.name)_define_an_operation_petri_graph_while_this_is_forbidden_for_this_kind_of_activity");
+				ValidationError<ActivityCouldNotDefineOperationPetriGraphWhenNotAllowed, AbstractActivityNode> error = new ValidationError<ActivityCouldNotDefineOperationPetriGraphWhenNotAllowed, AbstractActivityNode>(
+						this, activity,
+						"activity_($object.name)_define_an_operation_petri_graph_while_this_is_forbidden_for_this_kind_of_activity");
 				error.addToFixProposals(new DeleteInconsistentPetriGraph());
 				return error;
 			}
 			return null;
 		}
 
-		public static class DeleteInconsistentPetriGraph extends FixProposal<ActivityCouldNotDefineOperationPetriGraphWhenNotAllowed,AbstractActivityNode>
-		{
-			public DeleteInconsistentPetriGraph()
-			{
+		public static class DeleteInconsistentPetriGraph extends
+				FixProposal<ActivityCouldNotDefineOperationPetriGraphWhenNotAllowed, AbstractActivityNode> {
+			public DeleteInconsistentPetriGraph() {
 				super("delete_inconsistent_petri_graph");
 			}
 
 			@Override
-			protected void fixAction()
-			{
+			protected void fixAction() {
 				if (getObject() != null) {
 					if (getObject().getContainedPetriGraph() != null) {
 						getObject().getContainedPetriGraph().delete();
@@ -1062,35 +1015,28 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		}
 	}
 
-
-
-	public String getAcronym()
-	{
+	public String getAcronym() {
 		return _acronym;
 	}
 
-	public void setAcronym(String acronym)
-	{
+	public void setAcronym(String acronym) {
 		String old = _acronym;
 		_acronym = acronym;
 		setChanged();
 		notifyObservers(new WKFAttributeDataModification("acronym", old, _acronym));
 	}
 
-	public static final String getTypeName()
-	{
+	public static final String getTypeName() {
 		return "ABSTRACTACTIVITY";
 	}
 
 	protected FlexoColor roleTextColor = FlexoColor.GRAY_COLOR;
 
-	public FlexoColor getRoleTextColor()
-	{
+	public FlexoColor getRoleTextColor() {
 		return roleTextColor;
 	}
 
-	public void setRoleTextColor(FlexoColor roleTextColor)
-	{
+	public void setRoleTextColor(FlexoColor roleTextColor) {
 		FlexoColor old = roleTextColor;
 		this.roleTextColor = roleTextColor;
 		setChanged();
@@ -1102,8 +1048,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	 * @deprecated
 	 */
 	@Deprecated
-	public FlexoCSS getCalculatedCssSheet()
-	{
+	public FlexoCSS getCalculatedCssSheet() {
 		if (cssSheet == null) {
 			if (getProcess() != null) {
 				return getProcess().getCalculatedCssSheet();
@@ -1120,8 +1065,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	 * @deprecated
 	 */
 	@Deprecated
-	public FlexoCSS getCssSheet()
-	{
+	public FlexoCSS getCssSheet() {
 		return cssSheet;
 	}
 
@@ -1129,8 +1073,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	 * @deprecated
 	 */
 	@Deprecated
-	public void setCssSheet(FlexoCSS cssSheet)
-	{
+	public void setCssSheet(FlexoCSS cssSheet) {
 		FlexoCSS old = this.cssSheet;
 		this.cssSheet = cssSheet;
 		setChanged();
@@ -1139,10 +1082,10 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 
 	/**
 	 * Wheter there is within all the operations of this activity at least one operation associated to a component
+	 * 
 	 * @return
 	 */
-	public boolean hasWOComponent()
-	{
+	public boolean hasWOComponent() {
 		for (OperationNode op : getAllEmbeddedOperationNodes()) {
 			if (op.hasWOComponent()) {
 				return true;
@@ -1151,9 +1094,8 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		return false;
 	}
 
-	public AbstractActivityStatistics getStatistics()
-	{
-		if (statistics==null) {
+	public AbstractActivityStatistics getStatistics() {
+		if (statistics == null) {
 			statistics = new AbstractActivityStatistics(this);
 		}
 		return statistics;
@@ -1165,8 +1107,8 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 
 	private Role representationRole = null;
 
-	public String getRACICodeForRole(Role aRole){
-		if(aRole==null) {
+	public String getRACICodeForRole(Role aRole) {
+		if (aRole == null) {
 			return "";
 		}
 		if (aRole.equals(_role) || getResponsibleRoles().contains(aRole)) {
@@ -1187,8 +1129,8 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 
 	public List<EventNode> getAllBoundaryEvents() {
 		ArrayList<EventNode> reply = new ArrayList<EventNode>();
-		for(EventNode n:getProcess().getAllEventNodes()){
-			if(this.equals(n.getBoundaryOf())) {
+		for (EventNode n : getProcess().getAllEventNodes()) {
+			if (this.equals(n.getBoundaryOf())) {
 				reply.add(n);
 			}
 		}
@@ -1197,7 +1139,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 
 	@Override
 	public void delete() {
-		for(EventNode boundaryEvent:getAllBoundaryEvents()) {
+		for (EventNode boundaryEvent : getAllBoundaryEvents()) {
 			boundaryEvent.delete();
 		}
 		super.delete();

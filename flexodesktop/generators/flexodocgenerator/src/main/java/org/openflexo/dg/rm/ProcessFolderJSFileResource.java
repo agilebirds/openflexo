@@ -32,7 +32,6 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.foundation.wkf.ProcessFolder;
 
-
 /**
  * @author gpolet
  * 
@@ -93,7 +92,8 @@ public class ProcessFolderJSFileResource extends JSFileResource<DGJSGenerator<Pr
 		if (observable == getProcessFolder()) {
 			if (dataModification instanceof AttributeDataModification) {
 				if (((AttributeDataModification) dataModification).getAttributeName().equals("name")
-						&& !getCGFile().getFileName().equals(DGJSGenerator.nameForProcessFolder(getProcessFolder(), getGenerator().getRepository()))) {
+						&& !getCGFile().getFileName().equals(
+								DGJSGenerator.nameForProcessFolder(getProcessFolder(), getGenerator().getRepository()))) {
 					logger.info("Building new resource after process folder renaming");
 					DGJSGenerator<ProcessFolder> generator = getGenerator();
 					setGenerator(null);

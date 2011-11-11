@@ -25,22 +25,19 @@ import org.openflexo.foundation.ie.widget.IEWidget;
 /**
  * @author sguerin
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ *         TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
  */
-public class WidgetRemovedFromTable extends IEDataModification
-{
+public class WidgetRemovedFromTable extends IEDataModification {
 
-    public WidgetRemovedFromTable(IEWidget removedWidget)
-    {
-        super(removedWidget, null);
-        /*
-         * _row=removedWidget.getRow(); _col=removedWidget.getCol();
-         */
-    }
-    /*
-     * public int getRow() { return _row; }
-     * 
-     * public int getCol() { return _col; } private int _row; private int _col;
-     */
+	public WidgetRemovedFromTable(IEWidget removedWidget) {
+		super(removedWidget, null);
+		/*
+		 * _row=removedWidget.getRow(); _col=removedWidget.getCol();
+		 */
+	}
+	/*
+	 * public int getRow() { return _row; }
+	 * 
+	 * public int getCol() { return _col; } private int _row; private int _col;
+	 */
 }

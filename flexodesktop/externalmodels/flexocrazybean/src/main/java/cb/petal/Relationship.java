@@ -18,62 +18,61 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Super class for all relationships between classes.
- *
+ * 
  * @version $Id: Relationship.java,v 1.3 2011/09/12 11:46:48 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
-public abstract class Relationship extends QuiduObject
-  implements HasSupplier, StereoTyped, Labeled, Documented
-{
-  public Relationship(PetalNode parent, String name, Collection params) {
-    super(parent, name, params);
-  }
+public abstract class Relationship extends QuiduObject implements HasSupplier, StereoTyped, Labeled, Documented {
+	public Relationship(PetalNode parent, String name, Collection params) {
+		super(parent, name, params);
+	}
 
-  public Relationship(String name) {
-    super(name);
-  }
+	public Relationship(String name) {
+		super(name);
+	}
 
-  @Override
-public String getSupplier() {
-    return getPropertyAsString("supplier");
-  }
+	@Override
+	public String getSupplier() {
+		return getPropertyAsString("supplier");
+	}
 
-  @Override
-public void setSupplier(String o) {
-    defineProperty("supplier", o);
-  }
+	@Override
+	public void setSupplier(String o) {
+		defineProperty("supplier", o);
+	}
 
-  @Override
-public String getStereotype() {
-    return getPropertyAsString("stereotype");
-  }
+	@Override
+	public String getStereotype() {
+		return getPropertyAsString("stereotype");
+	}
 
-  @Override
-public void setStereotype(String c) {
-    defineProperty("stereotype", c);
-  }
+	@Override
+	public void setStereotype(String c) {
+		defineProperty("stereotype", c);
+	}
 
-  @Override
-public void setLabel(String o) {
-    defineProperty("label", o);
-  }
+	@Override
+	public void setLabel(String o) {
+		defineProperty("label", o);
+	}
 
-  @Override
-public String getLabel() {
-    return getPropertyAsString("label");
-  }
+	@Override
+	public String getLabel() {
+		return getPropertyAsString("label");
+	}
 
-  @Override
-public void setDocumentation(String o) {
-    defineProperty("documentation", o);
-  }
+	@Override
+	public void setDocumentation(String o) {
+		defineProperty("documentation", o);
+	}
 
-  @Override
-public String getDocumentation() {
-    return getPropertyAsString("documentation");
-  }
+	@Override
+	public String getDocumentation() {
+		return getPropertyAsString("documentation");
+	}
 }

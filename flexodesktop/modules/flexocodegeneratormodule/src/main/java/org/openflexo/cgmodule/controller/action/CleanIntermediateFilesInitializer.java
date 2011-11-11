@@ -23,7 +23,6 @@ import java.awt.event.ActionEvent;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -40,43 +39,39 @@ public class CleanIntermediateFilesInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CleanIntermediateFilesInitializer(GeneratorControllerActionInitializer actionInitializer)
-	{
-		super(CleanIntermediateFiles.actionType,actionInitializer);
+	CleanIntermediateFilesInitializer(GeneratorControllerActionInitializer actionInitializer) {
+		super(CleanIntermediateFiles.actionType, actionInitializer);
 	}
 
 	@Override
-	protected GeneratorControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (GeneratorControllerActionInitializer)super.getControllerActionInitializer();
+	protected GeneratorControllerActionInitializer getControllerActionInitializer() {
+		return (GeneratorControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<CleanIntermediateFiles> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<CleanIntermediateFiles> getDefaultInitializer() {
 		return new FlexoActionInitializer<CleanIntermediateFiles>() {
 			@Override
-			public boolean run(ActionEvent e, CleanIntermediateFiles action)
-			{
-				ParameterDefinition[] params = new ParameterDefinition[action.getRepository().getReleases().size()+2];
-				params[0] = new InfoLabelParameter("info","info",action.getLocalizedDescription(),false,6,30);
-				params[1] = new CheckboxParameter("beforeFirstRelease","clean_all_intermediate_versions_before_first_release",true);
+			public boolean run(ActionEvent e, CleanIntermediateFiles action) {
+				ParameterDefinition[] params = new ParameterDefinition[action.getRepository().getReleases().size() + 2];
+				params[0] = new InfoLabelParameter("info", "info", action.getLocalizedDescription(), false, 6, 30);
+				params[1] = new CheckboxParameter("beforeFirstRelease", "clean_all_intermediate_versions_before_first_release", true);
 				action.getRepository().ensureReleasesAreSorted();
-				for (int i=0; i<action.getRepository().getReleases().size(); i++) {
+				for (int i = 0; i < action.getRepository().getReleases().size(); i++) {
 					CGRelease release = action.getRepository().getReleases().elementAt(i);
-					params[i+2] = new CheckboxParameter("after"+i,null,true);
-					params[i+2].setLocalizedLabel(FlexoLocalization.localizedForKey("clean_all_intermediate_versions_after_release")+" "+release.getVersionIdentifier().versionAsString());
+					params[i + 2] = new CheckboxParameter("after" + i, null, true);
+					params[i + 2].setLocalizedLabel(FlexoLocalization.localizedForKey("clean_all_intermediate_versions_after_release")
+							+ " " + release.getVersionIdentifier().versionAsString());
 				}
 
-				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(
-						getProject(), 
-						null,
-						action.getLocalizedName(), FlexoLocalization.localizedForKey("please_choose_releases_to_clean"), params);
+				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null, action.getLocalizedName(),
+						FlexoLocalization.localizedForKey("please_choose_releases_to_clean"), params);
 				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-					action.setCleanBeforeFirstRelease(((CheckboxParameter)params[1]).getValue());
+					action.setCleanBeforeFirstRelease(((CheckboxParameter) params[1]).getValue());
 					Vector<CGRelease> releasesToClean = new Vector<CGRelease>();
-					for (int i=0; i<action.getRepository().getReleases().size(); i++) {
-						if (((CheckboxParameter)params[i+2]).getValue()) releasesToClean.add(action.getRepository().getReleases().elementAt(i));
+					for (int i = 0; i < action.getRepository().getReleases().size(); i++) {
+						if (((CheckboxParameter) params[i + 2]).getValue())
+							releasesToClean.add(action.getRepository().getReleases().elementAt(i));
 					}
 					action.setReleasesToClean(releasesToClean);
 					return true;
@@ -87,12 +82,10 @@ public class CleanIntermediateFilesInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<CleanIntermediateFiles> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<CleanIntermediateFiles> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CleanIntermediateFiles>() {
 			@Override
-			public boolean run(ActionEvent e, CleanIntermediateFiles action)
-			{
+			public boolean run(ActionEvent e, CleanIntermediateFiles action) {
 				return true;
 			}
 		};

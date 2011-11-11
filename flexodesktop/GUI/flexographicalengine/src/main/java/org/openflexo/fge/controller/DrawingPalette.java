@@ -56,7 +56,6 @@ import org.openflexo.fge.view.listener.FocusRetriever;
 import org.openflexo.fib.utils.FIBIconLibrary;
 import org.openflexo.toolbox.ToolBox;
 
-
 public class DrawingPalette {
 
 	private static final Logger logger = Logger.getLogger(DrawingPalette.class.getPackage().getName());
@@ -64,9 +63,11 @@ public class DrawingPalette {
 	private static Image DROP_OK_IMAGE = FIBIconLibrary.DROP_OK_CURSOR.getImage();
 	private static Image DROP_KO_IMAGE = FIBIconLibrary.DROP_KO_CURSOR.getImage();
 
-	public static final Cursor dropOK = ToolBox.getPLATFORM()==ToolBox.MACOS?Toolkit.getDefaultToolkit().createCustomCursor(DROP_OK_IMAGE, new Point(16, 16), "Drop OK"):DragSource.DefaultMoveDrop;
+	public static final Cursor dropOK = ToolBox.getPLATFORM() == ToolBox.MACOS ? Toolkit.getDefaultToolkit().createCustomCursor(
+			DROP_OK_IMAGE, new Point(16, 16), "Drop OK") : DragSource.DefaultMoveDrop;
 
-	public static final Cursor dropKO = ToolBox.getPLATFORM()==ToolBox.MACOS?Toolkit.getDefaultToolkit().createCustomCursor(DROP_KO_IMAGE, new Point(16, 16), "Drop KO"):DragSource.DefaultMoveNoDrop;
+	public static final Cursor dropKO = ToolBox.getPLATFORM() == ToolBox.MACOS ? Toolkit.getDefaultToolkit().createCustomCursor(
+			DROP_KO_IMAGE, new Point(16, 16), "Drop KO") : DragSource.DefaultMoveNoDrop;
 
 	private DrawingController _controller;
 
@@ -82,23 +83,20 @@ public class DrawingPalette {
 	private final int height;
 	private final String title;
 
-	public DrawingPalette(int width, int height, String title)
-	{
+	public DrawingPalette(int width, int height, String title) {
 		this.width = width;
 		this.height = height;
 		this.title = title;
 		elements = new Vector<PaletteElement>();
 		_paletteDrawing = new PaletteDrawing();
-		logger.info("Build palette "+title+" "+Integer.toHexString(hashCode())+" of "+getClass().getName());
+		logger.info("Build palette " + title + " " + Integer.toHexString(hashCode()) + " of " + getClass().getName());
 	}
 
-	public String getTitle() 
-	{
+	public String getTitle() {
 		return title;
 	}
 
-	public void addElement(PaletteElement element)
-	{
+	public void addElement(PaletteElement element) {
 		elements.add(element);
 		// Try to perform some checks and initialization of
 		// expecting behaviour for a PaletteElement
@@ -106,16 +104,14 @@ public class DrawingPalette {
 		element.getGraphicalRepresentation().setIsSelectable(false);
 		element.getGraphicalRepresentation().setIsReadOnly(true);
 		element.getGraphicalRepresentation().setLocationConstraints(LocationConstraints.UNMOVABLE);
-		//element.getGraphicalRepresentation().addToMouseDragControls(mouseDragControl)
+		// element.getGraphicalRepresentation().addToMouseDragControls(mouseDragControl)
 	}
 
-	public void removeElement(PaletteElement element)
-	{
+	public void removeElement(PaletteElement element) {
 		elements.remove(element);
 	}
 
-	public DrawingView<PaletteDrawing> getPaletteView()
-	{
+	public DrawingView<PaletteDrawing> getPaletteView() {
 		if (_paletteController == null) {
 			makePalettePanel();
 		}
@@ -125,41 +121,37 @@ public class DrawingPalette {
 	private JScrollPane scrollPane;
 
 	public JScrollPane getPaletteViewInScrollPane() {
-		if (scrollPane==null) {
-			scrollPane = new JScrollPane(getPaletteView(), ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		if (scrollPane == null) {
+			scrollPane = new JScrollPane(getPaletteView(), ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+					ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		}
 		return scrollPane;
 	}
 
-	public PaletteDrawing getPaletteDrawing()
-	{
+	public PaletteDrawing getPaletteDrawing() {
 		return _paletteDrawing;
 	}
 
-	protected void makePalettePanel()
-	{
+	protected void makePalettePanel() {
 		_paletteController = new DrawingController<PaletteDrawing>(_paletteDrawing);
 		for (PaletteElement e : elements) {
 			e.getGraphicalRepresentation().notifyObjectHierarchyHasBeenUpdated();
 		}
 	}
 
-	protected class PaletteDrawing implements Drawing<DrawingPalette>
-	{
+	protected class PaletteDrawing implements Drawing<DrawingPalette> {
 
 		private final DrawingGraphicalRepresentation<DrawingPalette> gr;
 
-		private PaletteDrawing()
-		{
-			gr = new DrawingGraphicalRepresentation<DrawingPalette>(this,false);
+		private PaletteDrawing() {
+			gr = new DrawingGraphicalRepresentation<DrawingPalette>(this, false);
 			gr.setWidth(width);
 			gr.setHeight(height);
 			gr.setDrawWorkingArea(false);
 		}
 
 		@Override
-		public List<?> getContainedObjects(Object aDrawable)
-		{
+		public List<?> getContainedObjects(Object aDrawable) {
 			if (aDrawable == getModel()) {
 				return elements;
 			} else {
@@ -168,8 +160,7 @@ public class DrawingPalette {
 		}
 
 		@Override
-		public Object getContainer(Object aDrawable)
-		{
+		public Object getContainer(Object aDrawable) {
 			if (aDrawable instanceof PaletteElement) {
 				return getModel();
 			} else {
@@ -178,27 +169,24 @@ public class DrawingPalette {
 		}
 
 		@Override
-		public DrawingGraphicalRepresentation<DrawingPalette> getDrawingGraphicalRepresentation()
-		{
+		public DrawingGraphicalRepresentation<DrawingPalette> getDrawingGraphicalRepresentation() {
 			return gr;
 		}
 
 		@Override
 		@SuppressWarnings("unchecked")
-		public GraphicalRepresentation<?> getGraphicalRepresentation(Object aDrawable)
-		{
+		public GraphicalRepresentation<?> getGraphicalRepresentation(Object aDrawable) {
 			if (aDrawable == getModel()) {
 				return getDrawingGraphicalRepresentation();
 			}
 			if (aDrawable instanceof PaletteElement) {
-				return ((PaletteElement)aDrawable).getGraphicalRepresentation();
+				return ((PaletteElement) aDrawable).getGraphicalRepresentation();
 			}
 			return null;
 		}
 
 		@Override
-		public DrawingPalette getModel()
-		{
+		public DrawingPalette getModel() {
 			return DrawingPalette.this;
 		}
 
@@ -207,35 +195,31 @@ public class DrawingPalette {
 	// Bout de code a rajouter dans les vues
 
 	/*
-    this.setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY, new WKFDTListener(this, controller), true){
-    	@Override
-    	public synchronized void dragOver(DropTargetDragEvent dtde) {
-    		super.dragOver(dtde);
-    		FlexoProcessView.this.getController().paintDraggedNode(FlexoProcessView.this, dtde);
-    	}
-    });*/
+	this.setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY, new WKFDTListener(this, controller), true){
+		@Override
+		public synchronized void dragOver(DropTargetDragEvent dtde) {
+			super.dragOver(dtde);
+			FlexoProcessView.this.getController().paintDraggedNode(FlexoProcessView.this, dtde);
+		}
+	});*/
 
-	public PaletteDropListener buildPaletteDropListener(JComponent dropContainer, DrawingController controller)
-	{
-		return new PaletteDropListener(dropContainer,controller);
+	public PaletteDropListener buildPaletteDropListener(JComponent dropContainer, DrawingController controller) {
+		return new PaletteDropListener(dropContainer, controller);
 	}
 
 	/**
 	 * DTListener a listener that tracks the state of the operation
-	 *
+	 * 
 	 * @see java.awt.dnd.DropTargetListener
 	 * @see java.awt.dnd.DropTarget
 	 */
-	public class PaletteDropListener implements DropTargetListener
-	{
+	public class PaletteDropListener implements DropTargetListener {
 
 		private final int acceptableActions = DnDConstants.ACTION_COPY;
 		private final JComponent _dropContainer;
 		private final DrawingController _controller;
 
-
-		public PaletteDropListener(JComponent dropContainer, DrawingController controller)
-		{
+		public PaletteDropListener(JComponent dropContainer, DrawingController controller) {
 			super();
 			_dropContainer = dropContainer;
 			_controller = controller;
@@ -243,13 +227,12 @@ public class DrawingPalette {
 
 		/**
 		 * Called by isDragOk Checks to see if the flavor drag flavor is acceptable
-		 *
+		 * 
 		 * @param e
 		 *            the DropTargetDragEvent object
 		 * @return whether the flavor is acceptable
 		 */
-		private boolean isDragFlavorSupported(DropTargetDragEvent e)
-		{
+		private boolean isDragFlavorSupported(DropTargetDragEvent e) {
 			boolean ok = false;
 			if (e.isDataFlavorSupported(PaletteElementTransferable.defaultFlavor())) {
 				ok = true;
@@ -259,13 +242,12 @@ public class DrawingPalette {
 
 		/**
 		 * Called by drop Checks the flavors and operations
-		 *
+		 * 
 		 * @param e
 		 *            the DropTargetDropEvent object
 		 * @return the chosen DataFlavor or null if none match
 		 */
-		private DataFlavor chooseDropFlavor(DropTargetDropEvent e)
-		{
+		private DataFlavor chooseDropFlavor(DropTargetDropEvent e) {
 			if ((e.isLocalTransfer() == true) && e.isDataFlavorSupported(PaletteElementTransferable.defaultFlavor())) {
 				return PaletteElementTransferable.defaultFlavor();
 			}
@@ -274,13 +256,12 @@ public class DrawingPalette {
 
 		/**
 		 * Called by dragEnter and dragOver Checks the flavors and operations
-		 *
+		 * 
 		 * @param e
 		 *            the event object
 		 * @return whether the flavor and operation is ok
 		 */
-		private boolean isDragOk(DropTargetDragEvent e)
-		{
+		private boolean isDragOk(DropTargetDragEvent e) {
 			if (isDragFlavorSupported(e) == false) {
 				return false;
 			}
@@ -292,7 +273,8 @@ public class DrawingPalette {
 			}
 
 			try {
-				PaletteElement element = ((TransferedPaletteElement)e.getTransferable().getTransferData(PaletteElementTransferable.defaultFlavor())).getPaletteElement();
+				PaletteElement element = ((TransferedPaletteElement) e.getTransferable().getTransferData(
+						PaletteElementTransferable.defaultFlavor())).getPaletteElement();
 				if (element == null) {
 					return false;
 				}
@@ -303,29 +285,27 @@ public class DrawingPalette {
 				return element.acceptDragging(focused);
 
 			} catch (UnsupportedFlavorException e1) {
-				logger.warning("Unexpected: "+e1);
+				logger.warning("Unexpected: " + e1);
 				e1.printStackTrace();
 				return false;
 			} catch (IOException e1) {
-				logger.warning("Unexpected: "+e1);
+				logger.warning("Unexpected: " + e1);
 				e1.printStackTrace();
 				return false;
 			} catch (Exception e1) {
-				logger.warning("Unexpected: "+e1);
+				logger.warning("Unexpected: " + e1);
 				e1.printStackTrace();
 				return false;
 			}
 		}
 
 		/**
-		 * start "drag under" feedback on component invoke acceptDrag or rejectDrag
-		 * based on isDragOk
-		 *
+		 * start "drag under" feedback on component invoke acceptDrag or rejectDrag based on isDragOk
+		 * 
 		 * @param e
 		 */
 		@Override
-		public void dragEnter(DropTargetDragEvent e)
-		{
+		public void dragEnter(DropTargetDragEvent e) {
 			if (!isDragOk(e)) {
 				// DropLabel.this.borderColor=Color.red;
 				// showBorder(true);
@@ -336,20 +316,19 @@ public class DrawingPalette {
 		}
 
 		/**
-		 * continue "drag under" feedback on component invoke acceptDrag or
-		 * rejectDrag based on isDragOk
-		 *
+		 * continue "drag under" feedback on component invoke acceptDrag or rejectDrag based on isDragOk
+		 * 
 		 * @param e
 		 */
 		@Override
-		public void dragOver(DropTargetDragEvent e)
-		{
+		public void dragOver(DropTargetDragEvent e) {
 			if (isDragFlavorSupported(e)) {
-				getController().getDrawingView().paintDraggedNode(e,_controller.getDrawingView().getActivePalette().getPaletteView());
+				getController().getDrawingView().paintDraggedNode(e, _controller.getDrawingView().getActivePalette().getPaletteView());
 			}
 			if (!isDragOk(e)) {
 				if (dragSourceContext == null) {
-					logger.warning("dragSourceContext should NOT be null for "+DrawingPalette.this.getTitle()+Integer.toHexString(DrawingPalette.this.hashCode())+" of "+DrawingPalette.this.getClass().getName());
+					logger.warning("dragSourceContext should NOT be null for " + DrawingPalette.this.getTitle()
+							+ Integer.toHexString(DrawingPalette.this.hashCode()) + " of " + DrawingPalette.this.getClass().getName());
 				} else {
 					dragSourceContext.setCursor(dropKO);
 				}
@@ -364,10 +343,8 @@ public class DrawingPalette {
 			e.acceptDrag(e.getDropAction());
 		}
 
-
 		@Override
-		public void dropActionChanged(DropTargetDragEvent e)
-		{
+		public void dropActionChanged(DropTargetDragEvent e) {
 			if (!isDragOk(e)) {
 				e.rejectDrag();
 				return;
@@ -376,24 +353,20 @@ public class DrawingPalette {
 		}
 
 		@Override
-		public void dragExit(DropTargetEvent e)
-		{
+		public void dragExit(DropTargetEvent e) {
 			// interface method
 			getController().getDrawingView().resetCapturedNode();
 		}
 
 		/**
-		 * perform action from getSourceActions on the transferrable invoke
-		 * acceptDrop or rejectDrop invoke dropComplete if its a local (same JVM)
-		 * transfer, use StringTransferable.localStringFlavor find a match for the
-		 * flavor check the operation get the transferable according to the chosen
-		 * flavor do the transfer
-		 *
+		 * perform action from getSourceActions on the transferrable invoke acceptDrop or rejectDrop invoke dropComplete if its a local
+		 * (same JVM) transfer, use StringTransferable.localStringFlavor find a match for the flavor check the operation get the
+		 * transferable according to the chosen flavor do the transfer
+		 * 
 		 * @param e
 		 */
 		@Override
-		public void drop(DropTargetDropEvent e)
-		{
+		public void drop(DropTargetDropEvent e) {
 			try {
 				DataFlavor chosen = chooseDropFlavor(e);
 				if (chosen == null) {
@@ -438,13 +411,13 @@ public class DrawingPalette {
 				if (data instanceof TransferedPaletteElement) {
 
 					try {
-						PaletteElement element = ((TransferedPaletteElement)data).getPaletteElement();
+						PaletteElement element = ((TransferedPaletteElement) data).getPaletteElement();
 						if (element == null) {
 							e.rejectDrop();
 							return;
 						}
 						GraphicalRepresentation<?> focused = getFocusedObject(e);
-						if (focused == null)  {
+						if (focused == null) {
 							e.rejectDrop();
 							return;
 						}
@@ -454,22 +427,22 @@ public class DrawingPalette {
 							Point pt = e.getLocation();
 							FGEPoint modelLocation = new FGEPoint();
 							if (targetComponent instanceof FGEView) {
-								pt = GraphicalRepresentation.convertPoint(((FGEView<?>)targetComponent).getGraphicalRepresentation(), pt, focused, ((FGEView<?>)targetComponent).getScale());
-								modelLocation.x = pt.x/((FGEView<?>)targetComponent).getScale();
-								modelLocation.y = pt.y/((FGEView<?>)targetComponent).getScale();
-								modelLocation.x-=((TransferedPaletteElement)data).getOffset().x;
-								modelLocation.y-=((TransferedPaletteElement)data).getOffset().y;
+								pt = GraphicalRepresentation.convertPoint(((FGEView<?>) targetComponent).getGraphicalRepresentation(), pt,
+										focused, ((FGEView<?>) targetComponent).getScale());
+								modelLocation.x = pt.x / ((FGEView<?>) targetComponent).getScale();
+								modelLocation.y = pt.y / ((FGEView<?>) targetComponent).getScale();
+								modelLocation.x -= ((TransferedPaletteElement) data).getOffset().x;
+								modelLocation.y -= ((TransferedPaletteElement) data).getOffset().y;
 							} else {
-								modelLocation.x-=(((TransferedPaletteElement)data).getOffset().x);
-								modelLocation.y-=(((TransferedPaletteElement)data).getOffset().y);
+								modelLocation.x -= (((TransferedPaletteElement) data).getOffset().x);
+								modelLocation.y -= (((TransferedPaletteElement) data).getOffset().y);
 							}
-							if (element.elementDragged(focused,modelLocation)) {
+							if (element.elementDragged(focused, modelLocation)) {
 								e.acceptDrop(acceptableActions);
 								e.dropComplete(true);
-								//logger.info("OK, valid drop, proceed");
+								// logger.info("OK, valid drop, proceed");
 								return;
-							}
-							else {
+							} else {
 								e.rejectDrop();
 								e.dropComplete(false);
 								return;
@@ -477,7 +450,7 @@ public class DrawingPalette {
 						}
 
 					} catch (Exception e1) {
-						logger.warning("Unexpected: "+e1);
+						logger.warning("Unexpected: " + e1);
 						e1.printStackTrace();
 						e.rejectDrop();
 						e.dropComplete(false);
@@ -496,24 +469,21 @@ public class DrawingPalette {
 			}
 		}
 
-		private FocusRetriever getFocusRetriever()
-		{
+		private FocusRetriever getFocusRetriever() {
 			if (_dropContainer instanceof FGEView) {
-				return ((FGEView)_dropContainer).getDrawingView().getFocusRetriever();
+				return ((FGEView) _dropContainer).getDrawingView().getFocusRetriever();
 			}
 			return null;
 		}
 
-		private FGEView getFGEView()
-		{
+		private FGEView getFGEView() {
 			if (_dropContainer instanceof FGEView) {
-				return ((FGEView)_dropContainer);
+				return ((FGEView) _dropContainer);
 			}
 			return null;
 		}
 
-		public GraphicalRepresentation getFocusedObject(DropTargetDragEvent event)
-		{
+		public GraphicalRepresentation getFocusedObject(DropTargetDragEvent event) {
 			if (getFocusRetriever() != null) {
 				GraphicalRepresentation returned = getFocusRetriever().getFocusedObject(event);
 				if (returned == null) {
@@ -526,8 +496,7 @@ public class DrawingPalette {
 			return null;
 		}
 
-		public GraphicalRepresentation getFocusedObject(DropTargetDropEvent event)
-		{
+		public GraphicalRepresentation getFocusedObject(DropTargetDropEvent event) {
 			if (getFocusRetriever() != null) {
 				GraphicalRepresentation returned = getFocusRetriever().getFocusedObject(event);
 				if (returned == null) {
@@ -539,23 +508,18 @@ public class DrawingPalette {
 			// No focus retriever: we are not in a FGEView....
 			return null;
 		}
-
-
 
 	}
 
-	public DrawingController<?> getController()
-	{
+	public DrawingController<?> getController() {
 		return _controller;
 	}
 
-	protected void registerController(DrawingController controller)
-	{
+	protected void registerController(DrawingController controller) {
 		_controller = controller;
 	}
-	
-	public void updatePalette()
-	{
+
+	public void updatePalette() {
 		_paletteController.rebuildDrawingView();
 	}
 }

@@ -42,29 +42,24 @@ import org.openflexo.foundation.ie.widget.IESpanTDWidget;
 import org.openflexo.foundation.ie.widget.IETDWidget;
 import org.openflexo.foundation.ie.widget.ITableRow;
 
-
 public class SuroundWithRepetitionInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	SuroundWithRepetitionInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(SuroundWithRepetition.actionType,actionInitializer);
+	SuroundWithRepetitionInitializer(IEControllerActionInitializer actionInitializer) {
+		super(SuroundWithRepetition.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<SuroundWithRepetition> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<SuroundWithRepetition> getDefaultInitializer() {
 		return new FlexoActionInitializer<SuroundWithRepetition>() {
 			@Override
-			public boolean run(ActionEvent e, SuroundWithRepetition action)
-			{
+			public boolean run(ActionEvent e, SuroundWithRepetition action) {
 				if (action.getFocusedObject() instanceof ITableRow) {
 					Vector<FlexoModelObject> v = (Vector<FlexoModelObject>) action.getGlobalSelection().clone();
 					if (!v.contains(action.getFocusedObject()))
@@ -125,24 +120,19 @@ public class SuroundWithRepetitionInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<SuroundWithRepetition> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<SuroundWithRepetition> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<SuroundWithRepetition>() {
 			@Override
-			public boolean run(ActionEvent e, SuroundWithRepetition action)
-			{
-				((IEController)getController()).getSelectionManager().setSelectedObject(action.getNewRepetition().getOperatedSequence());
+			public boolean run(ActionEvent e, SuroundWithRepetition action) {
+				((IEController) getController()).getSelectionManager().setSelectedObject(action.getNewRepetition().getOperatedSequence());
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return SEIconLibrary.REPETITION_ICON;
 	}
-
-
 
 }

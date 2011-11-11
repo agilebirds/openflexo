@@ -24,62 +24,58 @@ import java.util.Vector;
 
 import org.openflexo.foundation.ie.IEObject;
 
+public interface ITableData extends IWidget {
+	public int getColSpan();
 
-public interface ITableData extends IWidget
-{
-    public int getColSpan();
+	public IEHTMLTableConstraints getConstraints();
 
-    public IEHTMLTableConstraints getConstraints();
+	/**
+	 * Search and return the parent TRWidget
+	 * 
+	 * @return the unique parent IETRWidget
+	 */
+	public IETRWidget tr();
 
-    /**
-     * Search and return the parent TRWidget
-     * 
-     * @return the unique parent IETRWidget
-     */
-    public IETRWidget tr();
+	public void deleteCol();
 
-    public void deleteCol();
-    
-    public void deleteRow();
+	public void deleteRow();
 
-    public Enumeration<ITableData> elements();
+	public Enumeration<ITableData> elements();
 
-    public double getPourcentage();
+	public double getPourcentage();
 
-    @Override
+	@Override
 	public int getIndex();
-    
+
 	public Vector<IETextFieldWidget> getAllDateTextfields();
 
-    public Vector<IETDWidget> getAllTD();
-    
-    /**
-     * This method parses a sequenceTD recursively so that all the contained
-     * IETDWidget insert SpannedTD in the model for each of their
-     * colspan/rowspan. This means that at the end of this operation, all cells
-     * of the table are present but some of them are SpannedTD which means that
-     * they are part of another cell
-     * 
-     */
-    public void insertSpannedTD();
+	public Vector<IETDWidget> getAllTD();
 
-    @Override
+	/**
+	 * This method parses a sequenceTD recursively so that all the contained IETDWidget insert SpannedTD in the model for each of their
+	 * colspan/rowspan. This means that at the end of this operation, all cells of the table are present but some of them are SpannedTD
+	 * which means that they are part of another cell
+	 * 
+	 */
+	public void insertSpannedTD();
+
+	@Override
 	public IEObject getParent();
 
-    @Override
+	@Override
 	public void setParent(IEObject parent);
 
-    /**
-     * @param b
-     */
-    public void makeRealDelete(boolean b);
+	/**
+	 * @param b
+	 */
+	public void makeRealDelete(boolean b);
 
-    /**
-     * @param incrementer
-     */
-    public void setXLocation(Incrementer incrementer);
-    
-    public IETDWidget getFirstTD();
+	/**
+	 * @param incrementer
+	 */
+	public void setXLocation(Incrementer incrementer);
+
+	public IETDWidget getFirstTD();
 
 	public Vector<IESequenceTab> getAllTabContainers();
 

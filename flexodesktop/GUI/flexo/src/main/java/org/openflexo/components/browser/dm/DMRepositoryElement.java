@@ -39,77 +39,69 @@ import org.openflexo.foundation.dm.eo.DMEORepository;
 import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.icon.WSEIconLibrary;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class DMRepositoryElement extends DMElement
-{
+public class DMRepositoryElement extends DMElement {
 
-    public DMRepositoryElement(DMRepository repository, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(repository, BrowserElementType.DM_REPOSITORY, browser,parent);
-    }
+	public DMRepositoryElement(DMRepository repository, ProjectBrowser browser, BrowserElement parent) {
+		super(repository, BrowserElementType.DM_REPOSITORY, browser, parent);
+	}
 
-    public DMRepositoryElement(DMRepository repository, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(repository, elementType, browser,parent);
-    }
+	public DMRepositoryElement(DMRepository repository, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent) {
+		super(repository, elementType, browser, parent);
+	}
 
-    protected DMRepository getDMRepository()
-    {
-        return (DMRepository) getObject();
-    }
+	protected DMRepository getDMRepository() {
+		return (DMRepository) getObject();
+	}
 
-    @Override
-    public boolean isNameEditable()
-    {
-        return (!(getDMRepository() instanceof JDKRepository) && !(getDMRepository() instanceof WORepository)
-                && !(getDMRepository() instanceof ComponentRepository) && !(getDMRepository().isReadOnly()));
-    }
+	@Override
+	public boolean isNameEditable() {
+		return (!(getDMRepository() instanceof JDKRepository) && !(getDMRepository() instanceof WORepository)
+				&& !(getDMRepository() instanceof ComponentRepository) && !(getDMRepository().isReadOnly()));
+	}
 
-    @Override
-    public Icon getIcon()
-    {
-        if (getDMRepository() instanceof JDKRepository) {
-            return DMEIconLibrary.JDK_REPOSITORY_ICON;
-        } else if (getDMRepository() instanceof WORepository) {
-            return DMEIconLibrary.WO_REPOSITORY_ICON;
-        } else if (getDMRepository() instanceof ComponentRepository) {
-            return DMEIconLibrary.COMPONENT_REPOSITORY_ICON;
-        } else if (getDMRepository() instanceof ProcessInstanceRepository) {
-        	return DMEIconLibrary.PROCESS_INSTANCE_REPOSITORY_ICON;
-        } else if (getDMRepository() instanceof ProcessBusinessDataRepository) {
-        	return DMEIconLibrary.PROCESS_BUSINESS_DATA_REPOSITORY_ICON;
-        } else if (getDMRepository() instanceof ExternalRepository) {
-            return DMEIconLibrary.EXTERNAL_REPOSITORY_ICON;
-        } else if (getDMRepository() instanceof WSDLRepository){
-        		return WSEIconLibrary.WS_REPOSITORY_ICON;
-        } else {
-            return super.getIcon();
-        }
-    }
+	@Override
+	public Icon getIcon() {
+		if (getDMRepository() instanceof JDKRepository) {
+			return DMEIconLibrary.JDK_REPOSITORY_ICON;
+		} else if (getDMRepository() instanceof WORepository) {
+			return DMEIconLibrary.WO_REPOSITORY_ICON;
+		} else if (getDMRepository() instanceof ComponentRepository) {
+			return DMEIconLibrary.COMPONENT_REPOSITORY_ICON;
+		} else if (getDMRepository() instanceof ProcessInstanceRepository) {
+			return DMEIconLibrary.PROCESS_INSTANCE_REPOSITORY_ICON;
+		} else if (getDMRepository() instanceof ProcessBusinessDataRepository) {
+			return DMEIconLibrary.PROCESS_BUSINESS_DATA_REPOSITORY_ICON;
+		} else if (getDMRepository() instanceof ExternalRepository) {
+			return DMEIconLibrary.EXTERNAL_REPOSITORY_ICON;
+		} else if (getDMRepository() instanceof WSDLRepository) {
+			return WSEIconLibrary.WS_REPOSITORY_ICON;
+		} else {
+			return super.getIcon();
+		}
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
+	@Override
+	protected void buildChildrenVector() {
 
-    	if (getProjectBrowser().getDMViewMode() == DMViewMode.Diagrams ) {
-    		for (ERDiagram diagram : getDMRepository().getDMModel().getDiagrams()) {
-    			if (diagram.getRepository() == getDMRepository()) addToChilds(diagram);
-    		}
-    		if (getDMRepository() instanceof DMEORepository) {
-    			for (DMEOModel eoModel : ((DMEORepository)getDMRepository()).getDMEOModels().values()) {
-    				addToChilds(eoModel);
-    			}
-    		}
-    	}
-    	else {
-    		super.buildChildrenVector();
-    	}
-   }
+		if (getProjectBrowser().getDMViewMode() == DMViewMode.Diagrams) {
+			for (ERDiagram diagram : getDMRepository().getDMModel().getDiagrams()) {
+				if (diagram.getRepository() == getDMRepository())
+					addToChilds(diagram);
+			}
+			if (getDMRepository() instanceof DMEORepository) {
+				for (DMEOModel eoModel : ((DMEORepository) getDMRepository()).getDMEOModels().values()) {
+					addToChilds(eoModel);
+				}
+			}
+		} else {
+			super.buildChildrenVector();
+		}
+	}
 
 }

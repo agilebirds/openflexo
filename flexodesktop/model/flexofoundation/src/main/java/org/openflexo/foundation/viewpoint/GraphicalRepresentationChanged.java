@@ -21,19 +21,16 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.ontology.dm.OEDataModification;
 
-public class GraphicalRepresentationChanged extends OEDataModification
-{
+public class GraphicalRepresentationChanged extends OEDataModification {
 	private PatternRole patternRole;
 
-     public GraphicalRepresentationChanged(PatternRole patternRole, Object graphicalRepresentation)
-    {
-        super(null, graphicalRepresentation);
-        this.patternRole = patternRole;
-    }
+	public GraphicalRepresentationChanged(PatternRole patternRole, Object graphicalRepresentation) {
+		super(null, graphicalRepresentation);
+		this.patternRole = patternRole;
+	}
 
-     public PatternRole getPatternRole() 
-     {
+	public PatternRole getPatternRole() {
 		return patternRole;
 	}
- 
+
 }

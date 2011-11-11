@@ -24,26 +24,22 @@ import java.util.Vector;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 
-
 /**
  * 
- * Abstract representation of an action which implies no modification
- * of the Flexo model. This kind of action is generally used by graphical
+ * Abstract representation of an action which implies no modification of the Flexo model. This kind of action is generally used by graphical
  * interfaces.
  * 
  * @author sguerin
  */
-public abstract class FlexoGUIAction<A extends FlexoAction<?,T1,T2>, T1 extends FlexoModelObject,T2 extends FlexoModelObject> extends FlexoAction<A,T1,T2> {
+public abstract class FlexoGUIAction<A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> extends
+		FlexoAction<A, T1, T2> {
 
-   
-   protected FlexoGUIAction (FlexoActionType<A,T1,T2> actionType, T1 focusedObject, Vector<T2> globalSelection, FlexoEditor editor)
-    {
-        super(actionType,focusedObject,globalSelection, editor);
-    }
+	protected FlexoGUIAction(FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-   @Override
-protected final void doAction (Object context) 
-   {
-   }
+	@Override
+	protected final void doAction(Object context) {
+	}
 
 }

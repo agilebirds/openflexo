@@ -32,79 +32,69 @@ import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.ontology.OntologyStatement;
 import org.openflexo.icon.IconFactory;
 
-
 /**
  * Browser element representing the calc library
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class OntologyDataPropertyElement extends BrowserElement
-{
+public class OntologyDataPropertyElement extends BrowserElement {
 
-    protected OntologyDataPropertyElement(OntologyDataProperty property, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(property, BrowserElementType.ONTOLOGY_DATA_PROPERTY, browser, parent);
-    }
-
-    @Override
-	protected void buildChildrenVector()
-    {
-    	if (getProjectBrowser().getOEViewMode() == OEViewMode.FullHierarchy) {
-			for (OntologyProperty subProperty : getProperty().getSubProperties()) {
-          		if (!getProjectBrowser().showOnlyAnnotationProperties() || subProperty.isAnnotationProperty())
-          			addToChilds(subProperty);
-			}
-    	}
-
-    	if (getProjectBrowser().getOEViewMode() == OEViewMode.PartialHierarchy)
-    	{
-    		BrowserElement ontologyElement = findNearestAncestor(BrowserElementType.PROJECT_ONTOLOGY,BrowserElementType.IMPORTED_ONTOLOGY);
-    		if (ontologyElement instanceof FlexoOntologyElement) {
-    			FlexoOntology ontology = ((FlexoOntologyElement)ontologyElement).getOntology();
-    			for (OntologyProperty subProperty : getProperty().getSubProperties(ontology)) {
-    				addToChilds(subProperty);
-    			}
-    		}
-    	}
-
-    	for (OntologyStatement s : getProperty().getStatements()) {
-    		addToChilds(s);
-    	}
-    }
-
-    @Override
-	public String getName()
-    {
-        return getProperty().getName();
-    }
-
-    protected OntologyDataProperty getProperty()
-    {
-        return (OntologyDataProperty) getObject();
-    }
+	protected OntologyDataPropertyElement(OntologyDataProperty property, ProjectBrowser browser, BrowserElement parent) {
+		super(property, BrowserElementType.ONTOLOGY_DATA_PROPERTY, browser, parent);
+	}
 
 	@Override
-    public Icon getIcon()
-	{
+	protected void buildChildrenVector() {
+		if (getProjectBrowser().getOEViewMode() == OEViewMode.FullHierarchy) {
+			for (OntologyProperty subProperty : getProperty().getSubProperties()) {
+				if (!getProjectBrowser().showOnlyAnnotationProperties() || subProperty.isAnnotationProperty())
+					addToChilds(subProperty);
+			}
+		}
+
+		if (getProjectBrowser().getOEViewMode() == OEViewMode.PartialHierarchy) {
+			BrowserElement ontologyElement = findNearestAncestor(BrowserElementType.PROJECT_ONTOLOGY, BrowserElementType.IMPORTED_ONTOLOGY);
+			if (ontologyElement instanceof FlexoOntologyElement) {
+				FlexoOntology ontology = ((FlexoOntologyElement) ontologyElement).getOntology();
+				for (OntologyProperty subProperty : getProperty().getSubProperties(ontology)) {
+					addToChilds(subProperty);
+				}
+			}
+		}
+
+		for (OntologyStatement s : getProperty().getStatements()) {
+			addToChilds(s);
+		}
+	}
+
+	@Override
+	public String getName() {
+		return getProperty().getName();
+	}
+
+	protected OntologyDataProperty getProperty() {
+		return (OntologyDataProperty) getObject();
+	}
+
+	@Override
+	public Icon getIcon() {
 		Icon returned = super.getIcon();
 
 		if (returned instanceof ImageIcon && !isEnabled()) {
-			returned = IconFactory.getDisabledIcon((ImageIcon)returned);
+			returned = IconFactory.getDisabledIcon((ImageIcon) returned);
 		}
 		return returned;
 	}
 
-	public boolean isEnabled()
-	{
-	   	if (getProjectBrowser().getOEViewMode() == OEViewMode.PartialHierarchy)
-    	{
-    		BrowserElement ontologyElement = findNearestAncestor(BrowserElementType.PROJECT_ONTOLOGY,BrowserElementType.IMPORTED_ONTOLOGY);
-    		if (ontologyElement instanceof FlexoOntologyElement) {
-    			return getProperty().getFlexoOntology() == ((FlexoOntologyElement)ontologyElement).getOntology();
-    		}
-    	}
-	   	return true;
+	public boolean isEnabled() {
+		if (getProjectBrowser().getOEViewMode() == OEViewMode.PartialHierarchy) {
+			BrowserElement ontologyElement = findNearestAncestor(BrowserElementType.PROJECT_ONTOLOGY, BrowserElementType.IMPORTED_ONTOLOGY);
+			if (ontologyElement instanceof FlexoOntologyElement) {
+				return getProperty().getFlexoOntology() == ((FlexoOntologyElement) ontologyElement).getOntology();
+			}
+		}
+		return true;
 
 	}
 

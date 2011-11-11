@@ -51,35 +51,31 @@ import org.openflexo.module.external.ExternalDMModule;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
-
 /**
  * Data Model Editor module
- *
+ * 
  * @author sguerin
  */
-public class DMModule extends FlexoModule implements ExternalDMModule
-{
+public class DMModule extends FlexoModule implements ExternalDMModule {
 
 	private static final Logger logger = Logger.getLogger(DMModule.class.getPackage().getName());
-	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[]{Inspectors.DM};
+	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.DM };
+
 	/**
-	 * The 'main' method of module allow to launch this module as a
-	 * single-module application
-	 *
+	 * The 'main' method of module allow to launch this module as a single-module application
+	 * 
 	 * @param args
 	 */
-	public static void main(String[] args) throws Exception
-	{
+	public static void main(String[] args) throws Exception {
 		ToolBox.setPlatform();
 		FlexoLoggingManager.initialize();
 		FlexoApplication.initialize();
 		ModuleLoader.initializeSingleModule(Module.DM_MODULE);
 	}
 
-	public DMModule(InteractiveFlexoEditor projectEditor) throws Exception
-	{
+	public DMModule(InteractiveFlexoEditor projectEditor) throws Exception {
 		super(projectEditor);
-		setFlexoController(new DMController(projectEditor,this));
+		setFlexoController(new DMController(projectEditor, this));
 		getDMController().loadRelativeWindows();
 		DMPreferences.init();
 		retain(getProject().getDataModel());
@@ -93,25 +89,21 @@ public class DMModule extends FlexoModule implements ExternalDMModule
 	}
 
 	@Override
-	public InspectorGroup[] getInspectorGroups()
-	{
+	public InspectorGroup[] getInspectorGroups() {
 		return inspectorGroups;
 	}
 
-	public File getInspectorDirectory()
-	{
+	public File getInspectorDirectory() {
 		// No inspectors to load !!!
 		return null;
 	}
 
-	public DMController getDMController()
-	{
+	public DMController getDMController() {
 		return (DMController) getFlexoController();
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (dataModification instanceof ResourceAdded) {
 			if (((ResourceAdded) dataModification).getAddedResource().getResourceType() == ResourceType.EOMODEL) {
 				if (logger.isLoggable(Level.INFO)) {
@@ -129,37 +121,35 @@ public class DMModule extends FlexoModule implements ExternalDMModule
 	// ==========================================================================
 
 	@Override
-	public void save()
-	{
+	public void save() {
 		super.save();
 		getDMController().saveAll();
 	}
 
 	/**
 	 * Overrides getDefaultObjectToSelect
+	 * 
 	 * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect()
 	 */
 	@Override
-	public FlexoModelObject getDefaultObjectToSelect()
-	{
+	public FlexoModelObject getDefaultObjectToSelect() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void showDMEntity(DMEntity entity)
-	{
+	public void showDMEntity(DMEntity entity) {
 		getDMController().setCurrentEditedObjectAsModuleView(entity);
 		getDMController().selectAndFocusObject(entity);
 	}
 
 	/**
 	 * Overrides moduleWillClose
+	 * 
 	 * @see org.openflexo.module.FlexoModule#moduleWillClose()
 	 */
 	@Override
-	public void moduleWillClose()
-	{
+	public void moduleWillClose() {
 		super.moduleWillClose();
 		DMPreferences.reset();
 	}
@@ -168,22 +158,21 @@ public class DMModule extends FlexoModule implements ExternalDMModule
 	private DrawingView<? extends Drawing<ERDiagram>> screenshot = null;
 
 	@Override
-	public JComponent createScreenshotForObject(ERDiagram target)
-	{
-		if (target==null) {
+	public JComponent createScreenshotForObject(ERDiagram target) {
+		if (target == null) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Cannot create screenshot for null target!");
 			}
 			return null;
 		}
-		screenshotController = new ERDiagramController(getDMController(),target);
+		screenshotController = new ERDiagramController(getDMController(), target);
 		screenshot = screenshotController.getDrawingView();
 		screenshot.getDrawingGraphicalRepresentation().setDrawWorkingArea(false);
 		screenshot.getPaintManager().disablePaintingCache();
 		screenshot.validate();
 		Dimension d = screenshot.getComputedMinimumSize();
 		d.height += 20;
-		d.width +=20;
+		d.width += 20;
 		screenshot.setSize(d);
 		screenshot.setPreferredSize(d);
 		return screenshot;

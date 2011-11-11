@@ -22,37 +22,33 @@ package org.openflexo.foundation.sg.implmodel;
 import org.openflexo.foundation.sg.implmodel.exception.TechnologyModuleCompatibilityCheckException;
 import org.openflexo.foundation.xml.ImplementationModelBuilder;
 
-
 public abstract class TechnologyModuleImplementation extends TechnologyModelObject {
 
 	public static final String CLASS_NAME_KEY = "technology_module_implementation";
 
-   /**
-     * Constructor invoked during deserialization
-     * 
-     * @param componentDefinition
-     */
-	public TechnologyModuleImplementation(ImplementationModelBuilder builder) throws TechnologyModuleCompatibilityCheckException
-    {
-    	this(builder.implementationModel);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor invoked during deserialization
+	 * 
+	 * @param componentDefinition
+	 */
+	public TechnologyModuleImplementation(ImplementationModelBuilder builder) throws TechnologyModuleCompatibilityCheckException {
+		this(builder.implementationModel);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor for OEShema
-     * 
-     * @param shemaDefinition
-     */
-	public TechnologyModuleImplementation(ImplementationModel implementationModel) throws TechnologyModuleCompatibilityCheckException
-    {
-        super(implementationModel);
+	/**
+	 * Default constructor for OEShema
+	 * 
+	 * @param shemaDefinition
+	 */
+	public TechnologyModuleImplementation(ImplementationModel implementationModel) throws TechnologyModuleCompatibilityCheckException {
+		super(implementationModel);
 		this.getImplementationModel().addToTechnologyModules(this);
-    }
-    
+	}
+
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return getImplementationModel().getFullyQualifiedName()+"."+getClass().getSimpleName();
+	public String getFullyQualifiedName() {
+		return getImplementationModel().getFullyQualifiedName() + "." + getClass().getSimpleName();
 	}
 
 	/**

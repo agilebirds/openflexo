@@ -26,32 +26,31 @@ import javax.swing.JPanel;
 
 import org.openflexo.xml.diff3.UnresolvedMoveConflict;
 
-
 public class UnresolvedMoveConflictView extends UnresolvedConflictView {
-	
+
 	private JPanel _choicePanel;
 	private JPanel _descriptionPanel;
-	
+
 	public UnresolvedMoveConflictView(UnresolvedMoveConflict model) {
 		super(model);
 	}
 
 	@Override
-	public UnresolvedMoveConflict getModel(){
-		return (UnresolvedMoveConflict)super.getModel();
+	public UnresolvedMoveConflict getModel() {
+		return (UnresolvedMoveConflict) super.getModel();
 	}
-	
+
 	@Override
 	public JPanel getChoicePane() {
 		refreshChoicePanel();
 		return _choicePanel;
 	}
-	
+
 	@Override
-	public void refreshChoicePanel(){
-		if(_choicePanel==null){
+	public void refreshChoicePanel() {
+		if (_choicePanel == null) {
 			_choicePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		}else{
+		} else {
 			_choicePanel.removeAll();
 			_choicePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		}
@@ -61,29 +60,29 @@ public class UnresolvedMoveConflictView extends UnresolvedConflictView {
 			_choicePanel.setBackground(findBackgroundColor());
 			_choicePanel.add(new JLabel("You choose :"));
 			if (getModel().getSolveAction().equals(getModel().getKeepYourChangeAction()))
-				_choicePanel.add(new JLabel("Move to "+getModel().getParent1Name()));
+				_choicePanel.add(new JLabel("Move to " + getModel().getParent1Name()));
 			else
-				_choicePanel.add(new JLabel("Move to "+getModel().getParent2Name()));
+				_choicePanel.add(new JLabel("Move to " + getModel().getParent2Name()));
 		}
 		_choicePanel.validate();
 	}
-	
+
 	@Override
 	public JPanel getDescriptionPane() {
-		if(_descriptionPanel==null){
+		if (_descriptionPanel == null) {
 			_descriptionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-			_descriptionPanel.add(new JLabel(getModel().getMovedContentName()+" has moved in 2 differents way."));
+			_descriptionPanel.add(new JLabel(getModel().getMovedContentName() + " has moved in 2 differents way."));
 		}
 		return _descriptionPanel;
 	}
 
 	@Override
 	public String getThirdPartyChangeText() {
-		return "Move to "+getModel().getParent1Name();
+		return "Move to " + getModel().getParent1Name();
 	}
 
 	@Override
 	public String getYourChangeText() {
-		return "Move to "+getModel().getParent2Name();
+		return "Move to " + getModel().getParent2Name();
 	}
 }

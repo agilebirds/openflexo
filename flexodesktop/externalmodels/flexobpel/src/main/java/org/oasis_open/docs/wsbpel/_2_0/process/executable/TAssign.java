@@ -23,7 +23,6 @@
 // Generated on: 2008.02.08 at 10:43:57 AM CET 
 //
 
-
 package org.oasis_open.docs.wsbpel._2_0.process.executable;
 
 import java.util.ArrayList;
@@ -36,11 +35,12 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for tAssign complex type.
+ * <p>
+ * Java class for tAssign complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tAssign">
@@ -61,77 +61,66 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tAssign", propOrder = {
-    "copyOrExtensionAssignOperation"
-})
-public class TAssign
-    extends TActivity
-{
+@XmlType(name = "tAssign", propOrder = { "copyOrExtensionAssignOperation" })
+public class TAssign extends TActivity {
 
-    @XmlElements({
-        @XmlElement(name = "copy", type = TCopy.class),
-        @XmlElement(name = "extensionAssignOperation", type = TExtensionAssignOperation.class)
-    })
-    protected List<TExtensibleElements> copyOrExtensionAssignOperation;
-    @XmlAttribute
-    protected TBoolean validate;
+	@XmlElements({ @XmlElement(name = "copy", type = TCopy.class),
+			@XmlElement(name = "extensionAssignOperation", type = TExtensionAssignOperation.class) })
+	protected List<TExtensibleElements> copyOrExtensionAssignOperation;
+	@XmlAttribute
+	protected TBoolean validate;
 
-    /**
-     * Gets the value of the copyOrExtensionAssignOperation property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the copyOrExtensionAssignOperation property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getCopyOrExtensionAssignOperation().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link TCopy }
-     * {@link TExtensionAssignOperation }
-     * 
-     * 
-     */
-    public List<TExtensibleElements> getCopyOrExtensionAssignOperation() {
-        if (copyOrExtensionAssignOperation == null) {
-            copyOrExtensionAssignOperation = new ArrayList<TExtensibleElements>();
-        }
-        return this.copyOrExtensionAssignOperation;
-    }
+	/**
+	 * Gets the value of the copyOrExtensionAssignOperation property.
+	 * 
+	 * <p>
+	 * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make to the returned list
+	 * will be present inside the JAXB object. This is why there is not a <CODE>set</CODE> method for the copyOrExtensionAssignOperation
+	 * property.
+	 * 
+	 * <p>
+	 * For example, to add a new item, do as follows:
+	 * 
+	 * <pre>
+	 * getCopyOrExtensionAssignOperation().add(newItem);
+	 * </pre>
+	 * 
+	 * 
+	 * <p>
+	 * Objects of the following type(s) are allowed in the list {@link TCopy } {@link TExtensionAssignOperation }
+	 * 
+	 * 
+	 */
+	public List<TExtensibleElements> getCopyOrExtensionAssignOperation() {
+		if (copyOrExtensionAssignOperation == null) {
+			copyOrExtensionAssignOperation = new ArrayList<TExtensibleElements>();
+		}
+		return this.copyOrExtensionAssignOperation;
+	}
 
-    /**
-     * Gets the value of the validate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TBoolean }
-     *     
-     */
-    public TBoolean getValidate() {
-        if (validate == null) {
-            return TBoolean.NO;
-        } else {
-            return validate;
-        }
-    }
+	/**
+	 * Gets the value of the validate property.
+	 * 
+	 * @return possible object is {@link TBoolean }
+	 * 
+	 */
+	public TBoolean getValidate() {
+		if (validate == null) {
+			return TBoolean.NO;
+		} else {
+			return validate;
+		}
+	}
 
-    /**
-     * Sets the value of the validate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TBoolean }
-     *     
-     */
-    public void setValidate(TBoolean value) {
-        this.validate = value;
-    }
+	/**
+	 * Sets the value of the validate property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link TBoolean }
+	 * 
+	 */
+	public void setValidate(TBoolean value) {
+		this.validate = value;
+	}
 
 }

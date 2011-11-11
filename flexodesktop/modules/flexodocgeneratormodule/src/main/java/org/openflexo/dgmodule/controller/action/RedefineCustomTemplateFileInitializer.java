@@ -33,7 +33,6 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.dgmodule.view.DGTemplateFileModuleView;
 import org.openflexo.foundation.DocType;
@@ -58,68 +57,68 @@ public class RedefineCustomTemplateFileInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RedefineCustomTemplateFileInitializer(DGControllerActionInitializer actionInitializer)
-	{
-		super(RedefineCustomTemplateFile.actionType,actionInitializer);
+	RedefineCustomTemplateFileInitializer(DGControllerActionInitializer actionInitializer) {
+		super(RedefineCustomTemplateFile.actionType, actionInitializer);
 	}
 
 	@Override
-	protected DGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DGControllerActionInitializer)super.getControllerActionInitializer();
+	protected DGControllerActionInitializer getControllerActionInitializer() {
+		return (DGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<RedefineCustomTemplateFile> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<RedefineCustomTemplateFile> getDefaultInitializer() {
 		return new FlexoActionInitializer<RedefineCustomTemplateFile>() {
 			@Override
-			public boolean run(ActionEvent e, RedefineCustomTemplateFile action)
-			{
+			public boolean run(ActionEvent e, RedefineCustomTemplateFile action) {
 				CGTemplates templates = action.getFocusedObject().getTemplates();
 
 				String CREATE_NEW_REPOSITORY = FlexoLocalization.localizedForKey("create_new_repository");
 				String CHOOSE_EXISTING_REPOSITORY = FlexoLocalization.localizedForKey("choose_existing_repository");
 				String[] locationChoices = { CREATE_NEW_REPOSITORY, CHOOSE_EXISTING_REPOSITORY };
-				RadioButtonListParameter<String> repositoryChoiceParam = new RadioButtonListParameter<String>("location","location",
-						(templates.getCustomDocRepositoriesVector().size()>0?CHOOSE_EXISTING_REPOSITORY:CREATE_NEW_REPOSITORY),locationChoices);
-				TextFieldParameter newRepositoryNameParam = new TextFieldParameter("name", "custom_template_repository_name", templates.getNextGeneratedCodeRepositoryName());
+				RadioButtonListParameter<String> repositoryChoiceParam = new RadioButtonListParameter<String>("location", "location",
+						(templates.getCustomDocRepositoriesVector().size() > 0 ? CHOOSE_EXISTING_REPOSITORY : CREATE_NEW_REPOSITORY),
+						locationChoices);
+				TextFieldParameter newRepositoryNameParam = new TextFieldParameter("name", "custom_template_repository_name",
+						templates.getNextGeneratedCodeRepositoryName());
 				newRepositoryNameParam.setDepends("location");
-				newRepositoryNameParam.setConditional("location="+'"'+CREATE_NEW_REPOSITORY+'"');
-				DynamicDropDownParameter<CustomCGTemplateRepository> customRepositoryParam 
-				= new DynamicDropDownParameter<CustomCGTemplateRepository>("customRepository","custom_templates_repository",
+				newRepositoryNameParam.setConditional("location=" + '"' + CREATE_NEW_REPOSITORY + '"');
+				DynamicDropDownParameter<CustomCGTemplateRepository> customRepositoryParam = new DynamicDropDownParameter<CustomCGTemplateRepository>(
+						"customRepository",
+						"custom_templates_repository",
 						templates.getCustomDocRepositoriesVector(),
-						(getControllerActionInitializer().getDGController().getLastEditedCGRepository()!=null?getControllerActionInitializer().getDGController().getLastEditedCGRepository().getPreferredTemplateRepository():null));
+						(getControllerActionInitializer().getDGController().getLastEditedCGRepository() != null ? getControllerActionInitializer()
+								.getDGController().getLastEditedCGRepository().getPreferredTemplateRepository()
+								: null));
 				customRepositoryParam.setFormatter("name");
 				customRepositoryParam.setDepends("location");
-				customRepositoryParam.setConditional("location="+'"'+CHOOSE_EXISTING_REPOSITORY+'"');
+				customRepositoryParam.setConditional("location=" + '"' + CHOOSE_EXISTING_REPOSITORY + '"');
 				String COMMON = FlexoLocalization.localizedForKey("redefine_in_common_context");
 				String SPECIFIC_TARGET = FlexoLocalization.localizedForKey("redefine_for_a_specific_target");
 				String[] contextChoices = { COMMON, SPECIFIC_TARGET };
-				RadioButtonListParameter<String> contextChoiceParam = new RadioButtonListParameter<String>("context","context",COMMON,contextChoices);
-				ChoiceListParameter<DocType> targetTypeParam = new ChoiceListParameter<DocType>("target", "target", getProject().getDocTypes().firstElement());
+				RadioButtonListParameter<String> contextChoiceParam = new RadioButtonListParameter<String>("context", "context", COMMON,
+						contextChoices);
+				ChoiceListParameter<DocType> targetTypeParam = new ChoiceListParameter<DocType>("target", "target", getProject()
+						.getDocTypes().firstElement());
 				targetTypeParam.setDepends("context");
-				targetTypeParam.setConditional("context="+'"'+SPECIFIC_TARGET+'"');
+				targetTypeParam.setConditional("context=" + '"' + SPECIFIC_TARGET + '"');
 
-				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null, 
-						FlexoLocalization
-						        		.localizedForKey("redefine_template_file"),
-						FlexoLocalization
-						.localizedForKey("enter_parameters_for_template_file_redefinition"),
-						repositoryChoiceParam,
-						newRepositoryNameParam,
-						customRepositoryParam, contextChoiceParam, targetTypeParam);
+				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
+						FlexoLocalization.localizedForKey("redefine_template_file"),
+						FlexoLocalization.localizedForKey("enter_parameters_for_template_file_redefinition"), repositoryChoiceParam,
+						newRepositoryNameParam, customRepositoryParam, contextChoiceParam, targetTypeParam);
 				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-					//CustomCGTemplateRepository repository = null;
+					// CustomCGTemplateRepository repository = null;
 					if (repositoryChoiceParam.getValue().equals(CREATE_NEW_REPOSITORY)) {
-						AddCustomTemplateRepository addDirectory = AddCustomTemplateRepository.actionType.makeNewAction(templates,null, action.getEditor());                	
+						AddCustomTemplateRepository addDirectory = AddCustomTemplateRepository.actionType.makeNewAction(templates, null,
+								action.getEditor());
 						addDirectory.setNewCustomTemplatesRepositoryName(newRepositoryNameParam.getValue());
-						addDirectory.setNewCustomTemplatesRepositoryDirectory(new FlexoProjectFile(action.getFocusedObject().getProject(),newRepositoryNameParam.getValue()));
+						addDirectory.setNewCustomTemplatesRepositoryDirectory(new FlexoProjectFile(action.getFocusedObject().getProject(),
+								newRepositoryNameParam.getValue()));
 						addDirectory.setRepositoryType(TemplateRepositoryType.Documentation);
 						addDirectory.doAction();
 						action.setRepository(addDirectory.getNewCustomTemplatesRepository());
-					}
-					else  if (repositoryChoiceParam.getValue().equals(CHOOSE_EXISTING_REPOSITORY)) {
+					} else if (repositoryChoiceParam.getValue().equals(CHOOSE_EXISTING_REPOSITORY)) {
 						action.setRepository(customRepositoryParam.getValue());
 					}
 					if (contextChoiceParam.getValue().equals(SPECIFIC_TARGET)) {
@@ -129,9 +128,10 @@ public class RedefineCustomTemplateFileInitializer extends ActionInitializer {
 					// If context is CGFile, check if custom template repository is
 					// to associate to current repository
 					if (action.getContext() instanceof CGFile) {
-						GenerationRepository enclosingRepository = ((CGFile)action.getContext()).getRepository();
+						GenerationRepository enclosingRepository = ((CGFile) action.getContext()).getRepository();
 						if (enclosingRepository.getPreferredTemplateRepository() != action.getRepository()) {
-							if (FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_associate_custom_template_repository_to_current_code_repository"))) {
+							if (FlexoController.confirm(FlexoLocalization
+									.localizedForKey("would_you_like_to_associate_custom_template_repository_to_current_code_repository"))) {
 								enclosingRepository.setPreferredTemplateRepository(action.getRepository());
 							}
 						}
@@ -151,19 +151,21 @@ public class RedefineCustomTemplateFileInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, RedefineCustomTemplateFile action) {
 				if (action.getNewTemplateFile() != null) {
-					if ((action.getInvoker() != null) && (action.getInvoker() instanceof DGTemplateFileModuleView) && (((DGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow())) {
+					if ((action.getInvoker() != null) && (action.getInvoker() instanceof DGTemplateFileModuleView)
+							&& (((DGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow())) {
 						DGTemplateFileModuleView invoker = (DGTemplateFileModuleView) action.getInvoker();
 						FlexoDialog dialog = (FlexoDialog) SwingUtilities.getAncestorOfClass(FlexoDialog.class, invoker);
 						dialog.getContentPane().remove(invoker);
-						DGTemplateFileModuleView newView = (DGTemplateFileModuleView) getControllerActionInitializer().getDGController().createModuleViewForObjectAndPerspective(
-								(CGTemplate) action.getNewTemplateFile(), null);
+						DGTemplateFileModuleView newView = (DGTemplateFileModuleView) getControllerActionInitializer().getDGController()
+								.createModuleViewForObjectAndPerspective((CGTemplate) action.getNewTemplateFile(), null);
 						newView.setOpenedInSeparateWindow(true);
 						dialog.getContentPane().add(newView, BorderLayout.CENTER);
 						dialog.validate();
 					} else {
 						getControllerActionInitializer().getDGController().setCurrentEditedObjectAsModuleView(action.getNewTemplateFile());
 					}
-					EditCustomTemplateFile editFile = EditCustomTemplateFile.actionType.makeNewAction(action.getNewTemplateFile(), null, action.getEditor());
+					EditCustomTemplateFile editFile = EditCustomTemplateFile.actionType.makeNewAction(action.getNewTemplateFile(), null,
+							action.getEditor());
 					editFile.setInvoker(action.getInvoker());
 					editFile.doAction();
 					return true;
@@ -175,14 +177,12 @@ public class RedefineCustomTemplateFileInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return GeneratorIconLibrary.EDIT_ICON;
 	}
 
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return GeneratorIconLibrary.EDIT_DISABLED_ICON;
 	}
 

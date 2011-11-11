@@ -31,50 +31,45 @@ import org.openflexo.wkf.swleditor.SWLEditorConstants;
 import org.openflexo.wkf.swleditor.SwimmingLaneEditorController;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
+public abstract class SWLObjectGR<O extends FlexoModelObject> extends ShapeGraphicalRepresentation<O> implements GraphicalFlexoObserver,
+		SWLEditorConstants {
 
-public abstract class SWLObjectGR<O extends FlexoModelObject> extends ShapeGraphicalRepresentation<O>
-implements GraphicalFlexoObserver, SWLEditorConstants {
-
-	public SWLObjectGR(O object, ShapeType shapeType, SwimmingLaneRepresentation aDrawing)
-	{
+	public SWLObjectGR(O object, ShapeType shapeType, SwimmingLaneRepresentation aDrawing) {
 		super(shapeType, object, aDrawing);
 		object.addObserver(this);
 		addToMouseClickControls(new SwimmingLaneEditorController.ShowContextualMenuControl(false));
-		if (ToolBox.getPLATFORM()!=ToolBox.MACOS) {
+		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
 			addToMouseClickControls(new SwimmingLaneEditorController.ShowContextualMenuControl(true));
 		}
 		updatePropertiesFromWKFPreferences();
 	}
 
-	public O getModel()
-	{
+	public O getModel() {
 		return getDrawable();
 	}
 
 	public FlexoWorkflow getWorkflow() {
-		if (getModel().getProject()!=null)
+		if (getModel().getProject() != null)
 			return getModel().getProject().getFlexoWorkflow();
 		return null;
 	}
 
 	@Override
-	public void delete()
-	{
+	public void delete() {
 		O model = getModel();
 		super.delete();
 		model.deleteObserver(this);
 	}
 
 	@Override
-	public SwimmingLaneRepresentation getDrawing()
-	{
-		return (SwimmingLaneRepresentation)super.getDrawing();
+	public SwimmingLaneRepresentation getDrawing() {
+		return (SwimmingLaneRepresentation) super.getDrawing();
 	}
 
-	public void updatePropertiesFromWKFPreferences()
-	{
-		if (supportShadow() && ((getWorkflow()!=null && getWorkflow().getShowShadows(WKFPreferences.getShowShadows()))
-				|| (getWorkflow()==null && WKFPreferences.getShowShadows()))) {
+	public void updatePropertiesFromWKFPreferences() {
+		if (supportShadow()
+				&& ((getWorkflow() != null && getWorkflow().getShowShadows(WKFPreferences.getShowShadows())) || (getWorkflow() == null && WKFPreferences
+						.getShowShadows()))) {
 			setShadowStyle(ShadowStyle.makeDefault());
 		} else {
 			setShadowStyle(ShadowStyle.makeNone());

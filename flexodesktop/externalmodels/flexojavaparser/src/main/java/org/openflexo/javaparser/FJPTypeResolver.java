@@ -31,43 +31,34 @@ import org.openflexo.foundation.dm.LoadableDMEntity;
 import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference;
 import org.openflexo.javaparser.FJPJavaSource.FJPImportDeclarations.FJPImportDeclaration;
 
-
 import com.thoughtworks.qdox.model.Type;
 
 /**
- * Utility class used to resolve types in the context of Flexo Data Model
- * (mapping between Type and DMEntity)
+ * Utility class used to resolve types in the context of Flexo Data Model (mapping between Type and DMEntity)
  * 
  * @author sylvain
- *
+ * 
  */
 public class FJPTypeResolver {
 
 	private static final Logger logger = Logger.getLogger(FJPTypeResolver.class.getPackage().getName());
 
-	private static DMEntity entityForType (Type type, DMModel dataModel)
-	{
+	private static DMEntity entityForType(Type type, DMModel dataModel) {
 		DMEntity returned = dataModel.getCachedEntitiesForTypes().get(type.getValue());
 		return returned;
 	}
-	
-	private static void storeEntityForType (DMEntity entity, Type type, DMModel dataModel)
-	{
-		dataModel.getCachedEntitiesForTypes().put(type.getValue(),entity);
+
+	private static void storeEntityForType(DMEntity entity, Type type, DMModel dataModel) {
+		dataModel.getCachedEntitiesForTypes().put(type.getValue(), entity);
 	}
-	
-	private static enum ClassResolvingMethod
-	{
-		Cache,
-		DataModel,
-		ImportDeclarations,
-		Context,
-		ClassPath
+
+	private static enum ClassResolvingMethod {
+		Cache, DataModel, ImportDeclarations, Context, ClassPath
 	}
-	
+
 	/*public static long timeSpendResolvingTypes = 0;
 	public static Vector<Type> searchedTypes;*/
-	
+
 	/*public static void startDebug()
 	{
 		timeSpendResolvingTypes = 0;
@@ -99,45 +90,42 @@ public class FJPTypeResolver {
 			//logger.info("Type "+t.hashCode()+" library "+t.getJavaClassParent().getClassLibrary());
 		}
 	}*/
-	
+
 	protected static class TypeLookupInfo {
 		DMEntity foundEntity = null;
 		boolean resolvedButEntityNotAvailableYet = false;
 	}
-	
-	private static TypeLookupInfo lookupEntity (Type type, DMModel dataModel, FJPDMSet context, FJPJavaSource source, boolean resolveNow) throws CrossReferencedEntitiesException
-	{
-		//Date date1 = new Date();
+
+	private static TypeLookupInfo lookupEntity(Type type, DMModel dataModel, FJPDMSet context, FJPJavaSource source, boolean resolveNow)
+			throws CrossReferencedEntitiesException {
+		// Date date1 = new Date();
 
 		TypeLookupInfo returned = new TypeLookupInfo();
 		returned.foundEntity = null;
 		returned.resolvedButEntityNotAvailableYet = false;
-		
+
 		ClassResolvingMethod m = ClassResolvingMethod.Cache;
-		
-		
+
 		while (returned.foundEntity == null && m != null && !returned.resolvedButEntityNotAvailableYet) {
 			if (m == ClassResolvingMethod.Cache) {
-				returned.foundEntity = entityForType(type,dataModel);
-			}
-			else if (m == ClassResolvingMethod.DataModel) {
+				returned.foundEntity = entityForType(type, dataModel);
+			} else if (m == ClassResolvingMethod.DataModel) {
 				returned.foundEntity = dataModel.getDMEntity(type.getValue());
 				if (returned.foundEntity == null && source.getPackage() == null) {
-					returned.foundEntity = dataModel.getDMEntity(DMPackage.DEFAULT_PACKAGE_NAME,type.getValue());
+					returned.foundEntity = dataModel.getDMEntity(DMPackage.DEFAULT_PACKAGE_NAME, type.getValue());
 				}
-			}
-			else if (m == ClassResolvingMethod.ImportDeclarations) {
+			} else if (m == ClassResolvingMethod.ImportDeclarations) {
 				if (source != null) {
 					for (FJPImportDeclaration importDeclaration : source.getImportDeclarations().getImportDeclarations()) {
 						if (importDeclaration.getImportDeclaration().endsWith(".*")) {
-							String importPrefix = importDeclaration.getImportDeclaration().substring(0,importDeclaration.getImportDeclaration().lastIndexOf(".*"));
-							returned.foundEntity = dataModel.getDMEntity(importPrefix+"."+type.getValue());
+							String importPrefix = importDeclaration.getImportDeclaration().substring(0,
+									importDeclaration.getImportDeclaration().lastIndexOf(".*"));
+							returned.foundEntity = dataModel.getDMEntity(importPrefix + "." + type.getValue());
 							if (returned.foundEntity != null) {
-								source.getQDSource().getClassLibrary().add(importPrefix+"."+type.getValue());
+								source.getQDSource().getClassLibrary().add(importPrefix + "." + type.getValue());
 								break;
 							}
-						}
-						else if (importDeclaration.getImportDeclaration().endsWith(type.getValue())) {
+						} else if (importDeclaration.getImportDeclaration().endsWith(type.getValue())) {
 							returned.foundEntity = dataModel.getDMEntity(importDeclaration.getImportDeclaration());
 							if (returned.foundEntity != null) {
 								source.getQDSource().getClassLibrary().add(importDeclaration.getImportDeclaration());
@@ -146,9 +134,8 @@ public class FJPTypeResolver {
 						}
 					}
 				}
-			}
-			else if (m == ClassResolvingMethod.Context) {
-				if (context != null) {      	
+			} else if (m == ClassResolvingMethod.Context) {
+				if (context != null) {
 					ClassReference classRef = context.getClassReference(type.getValue());
 					if (classRef != null) {
 						if (resolveNow) {
@@ -156,108 +143,100 @@ public class FJPTypeResolver {
 							if (returned.foundEntity == null) {
 								throw new CrossReferencedEntitiesException();
 							}
-						}
-						else {
+						} else {
 							returned.resolvedButEntityNotAvailableYet = true;
 						}
 					}
-			}
-			}
-			else if (m == ClassResolvingMethod.ClassPath) {
+				}
+			} else if (m == ClassResolvingMethod.ClassPath) {
 				try {
 					Class searchedClass = Class.forName(type.getValue());
-					if (resolveNow) {      		       
+					if (resolveNow) {
 						returned.foundEntity = LoadableDMEntity.createLoadableDMEntity(searchedClass, dataModel, false, false);
-					}
-					else {
+					} else {
 						returned.resolvedButEntityNotAvailableYet = true;
 					}
-				}
-				catch (ClassNotFoundException e) {
+				} catch (ClassNotFoundException e) {
 				}
 			}
 			if (returned.foundEntity == null) {
-				if (m.ordinal()+1 < ClassResolvingMethod.values().length) {
-					m = ClassResolvingMethod.values()[m.ordinal()+1];
-				}
-				else {
+				if (m.ordinal() + 1 < ClassResolvingMethod.values().length) {
+					m = ClassResolvingMethod.values()[m.ordinal() + 1];
+				} else {
 					m = null;
 				}
 			}
 		}
-	
+
 		if (returned.foundEntity != null) {
 			storeEntityForType(returned.foundEntity, type, dataModel);
 		}
-		
+
 		/*Date date2 = new Date();
 		long timeToResolveThisType = (date2.getTime()-date1.getTime());
 		timeSpendResolvingTypes += timeToResolveThisType;
 		logger.info("Spent "+timeToResolveThisType+" ms to resolve "+type.getValue()+" with method "+m);*/
-		
+
 		return returned;
-		
+
 	}
 
-	public static class CrossReferencedEntitiesException extends Exception {}
+	public static class CrossReferencedEntitiesException extends Exception {
+	}
 
-	public static class UnresolvedTypeException extends FlexoException 
-	{
+	public static class UnresolvedTypeException extends FlexoException {
 		private Type _unresolvedType;
-		
-		public UnresolvedTypeException(Type unresolvedType)
-		{
-			super("Cannot resolve "+unresolvedType);
+
+		public UnresolvedTypeException(Type unresolvedType) {
+			super("Cannot resolve " + unresolvedType);
 			_unresolvedType = unresolvedType;
 		}
 
-		public Type getUnresolvedType() 
-		{
+		public Type getUnresolvedType() {
 			return _unresolvedType;
 		}
 	}
 
-	public static boolean isResolvable(Type type, DMModel dataModel, FJPDMSet context, FJPJavaSource source)
-	{
+	public static boolean isResolvable(Type type, DMModel dataModel, FJPDMSet context, FJPJavaSource source) {
 		if (type == null) {
 			logger.warning("isResolvable() called for null type");
 			return false;
 		}
-		
-		if (!type.isResolved()) return false;
-		
+
+		if (!type.isResolved())
+			return false;
+
 		TypeLookupInfo lookupInfo;
 		try {
-			 lookupInfo = lookupEntity(type, dataModel, context, source, false);
+			lookupInfo = lookupEntity(type, dataModel, context, source, false);
 		} catch (CrossReferencedEntitiesException e1) {
 			lookupInfo = new TypeLookupInfo();
 		}
-		
+
 		if (lookupInfo.foundEntity != null) {
 			return true;
-		}
-		else if (lookupInfo.resolvedButEntityNotAvailableYet) {
+		} else if (lookupInfo.resolvedButEntityNotAvailableYet) {
 			return true;
-		}
-		else {
-			logger.warning("Type: "+type+" is not resolvable");
+		} else {
+			logger.warning("Type: " + type + " is not resolvable");
 			return false;
 		}
 	}
-	public static DMEntity resolveEntity (Type type, DMModel dataModel, FJPDMSet context, FJPJavaSource source, boolean importReferencedEntities) throws CrossReferencedEntitiesException
-	{
-		if (!type.isResolved()) return null;
-		
+
+	public static DMEntity resolveEntity(Type type, DMModel dataModel, FJPDMSet context, FJPJavaSource source,
+			boolean importReferencedEntities) throws CrossReferencedEntitiesException {
+		if (!type.isResolved())
+			return null;
+
 		TypeLookupInfo lookupInfo = lookupEntity(type, dataModel, context, source, true);
 
 		// Warn if not found
-		if (lookupInfo.foundEntity == null) {      		       
+		if (lookupInfo.foundEntity == null) {
 			if (logger.isLoggable(Level.WARNING))
 				logger.warning("Could not resolve " + type.getValue());
-		}
-		else {
+		} else {
 			if (type instanceof DMType) {
-				((DMType)type).resolveAs(lookupInfo.foundEntity);
+				((DMType) type).resolveAs(lookupInfo.foundEntity);
 			}
 		}
 

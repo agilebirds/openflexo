@@ -31,24 +31,21 @@ import org.openflexo.toolbox.StringUtils;
 
 public class URIParameter extends EditionSchemeParameter {
 
-
 	private ViewPointDataBinding baseURI;
 
 	private BindingDefinition BASE_URI = new BindingDefinition("baseURI", String.class, BindingDefinitionType.GET, false);
-	
-	public BindingDefinition getBaseURIBindingDefinition()
-	{
+
+	public BindingDefinition getBaseURIBindingDefinition() {
 		return BASE_URI;
 	}
-	
-	public ViewPointDataBinding getBaseURI() 
-	{
-		if (baseURI == null) baseURI = new ViewPointDataBinding(this,ParameterBindingAttribute.baseURI,getBaseURIBindingDefinition());
+
+	public ViewPointDataBinding getBaseURI() {
+		if (baseURI == null)
+			baseURI = new ViewPointDataBinding(this, ParameterBindingAttribute.baseURI, getBaseURIBindingDefinition());
 		return baseURI;
 	}
 
-	public void setBaseURI(ViewPointDataBinding baseURI) 
-	{
+	public void setBaseURI(ViewPointDataBinding baseURI) {
 		baseURI.setOwner(this);
 		baseURI.setBindingAttribute(ParameterBindingAttribute.baseURI);
 		baseURI.setBindingDefinition(getBaseURIBindingDefinition());
@@ -59,33 +56,32 @@ public class URIParameter extends EditionSchemeParameter {
 	public Type getType() {
 		return String.class;
 	}
-	
+
 	@Override
 	public WidgetType getWidget() {
 		return WidgetType.URI;
 	}
 
 	@Override
-	public boolean isMandatory()
-	{
+	public boolean isMandatory() {
 		return true;
 	}
-	
+
 	@Override
-	public boolean isValid(EditionSchemeAction action, Object value)
-	{
-		if (! (value instanceof String)) return false;
-		
-		String proposedURI = (String)value;
-		
+	public boolean isValid(EditionSchemeAction action, Object value) {
+		if (!(value instanceof String))
+			return false;
+
+		String proposedURI = (String) value;
+
 		if (StringUtils.isEmpty(proposedURI)) {
 			return false;
 		}
-		if (action.getProject().getProjectOntologyLibrary().isDuplicatedURI(action.getProject().getProjectOntology().getURI(),proposedURI)) {
+		if (action.getProject().getProjectOntologyLibrary().isDuplicatedURI(action.getProject().getProjectOntology().getURI(), proposedURI)) {
 			// declared_uri_must_be_unique_please_choose_an_other_uri
 			return false;
-		}
-		else if (!action.getProject().getProjectOntologyLibrary().testValidURI(action.getProject().getProjectOntology().getURI(),proposedURI)) {
+		} else if (!action.getProject().getProjectOntologyLibrary()
+				.testValidURI(action.getProject().getProjectOntology().getURI(), proposedURI)) {
 			// declared_uri_is_not_well_formed_please_choose_an_other_uri
 			return false;
 		}
@@ -94,23 +90,25 @@ public class URIParameter extends EditionSchemeParameter {
 	}
 
 	@Override
-	public Object getDefaultValue(EditionSchemeAction<?> action, BindingEvaluationContext parameterRetriever) 
-	{
+	public Object getDefaultValue(EditionSchemeAction<?> action, BindingEvaluationContext parameterRetriever) {
 		if (getBaseURI().isValid()) {
-			String baseProposal = (String)getBaseURI().getBindingValue(parameterRetriever);
-			if (baseProposal == null) return null;
+			String baseProposal = (String) getBaseURI().getBindingValue(parameterRetriever);
+			if (baseProposal == null)
+				return null;
 			baseProposal = JavaUtils.getClassName(baseProposal);
 			String proposal = baseProposal;
 			Integer i = null;
-			while (action.getProject().getProjectOntologyLibrary().isDuplicatedURI(
-					action.getProject().getProjectOntology().getURI(),proposal)) {
-				if (i == null) i= 1; else i++;
-				proposal = baseProposal+i;
+			while (action.getProject().getProjectOntologyLibrary()
+					.isDuplicatedURI(action.getProject().getProjectOntology().getURI(), proposal)) {
+				if (i == null)
+					i = 1;
+				else
+					i++;
+				proposal = baseProposal + i;
 			}
-			return proposal;			
+			return proposal;
 		}
 		return null;
 	}
-
 
 }

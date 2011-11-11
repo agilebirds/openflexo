@@ -23,23 +23,18 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.fib.utils.FIBIconLibrary;
 
-
-
 public class FIBLocalizedEntry extends FIBModelObject {
 
 	private FIBLocalizedDictionary _dictionary;
-	
+
 	private String key;
 	private String language;
 	private String value;
-	
-	public FIBLocalizedEntry()
-	{
+
+	public FIBLocalizedEntry() {
 	}
-	
-	public FIBLocalizedEntry(FIBLocalizedDictionary dictionary, String key,
-			String language, String value)
-	{
+
+	public FIBLocalizedEntry(FIBLocalizedDictionary dictionary, String key, String language, String value) {
 		super();
 		_dictionary = dictionary;
 		this.key = key;
@@ -47,16 +42,14 @@ public class FIBLocalizedEntry extends FIBModelObject {
 		this.value = value;
 	}
 
-	public void setLocalizedDictionary(FIBLocalizedDictionary dict) 
-	{
+	public void setLocalizedDictionary(FIBLocalizedDictionary dict) {
 		_dictionary = dict;
 	}
 
-	public FIBLocalizedDictionary getLocalizedDictionary() 
-	{
+	public FIBLocalizedDictionary getLocalizedDictionary() {
 		return _dictionary;
 	}
-	
+
 	public String getKey() {
 		return key;
 	}
@@ -85,15 +78,13 @@ public class FIBLocalizedEntry extends FIBModelObject {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	public ImageIcon getIcon()
-	{
+
+	public ImageIcon getIcon() {
 		return FIBIconLibrary.LOCALIZATION_ICON;
 	}
 
 	@Override
-	public FIBComponent getRootComponent()
-	{
+	public FIBComponent getRootComponent() {
 		return getLocalizedDictionary().getRootComponent();
 	}
 

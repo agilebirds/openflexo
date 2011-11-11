@@ -6,22 +6,18 @@ import org.openflexo.localization.FlexoLocalization;
 public class RestrictionStatementPatternRole extends StatementPatternRole {
 
 	@Override
-	public PatternRoleType getType()
-	{
+	public PatternRoleType getType() {
 		return PatternRoleType.RestrictionStatement;
 	}
 
 	@Override
-	public  String getPreciseType()
-	{
+	public String getPreciseType() {
 		return FlexoLocalization.localizedForKey("restriction_statement");
 	}
-	
+
 	@Override
-	public Class<RestrictionStatement> getAccessedClass()
-	{
+	public Class<RestrictionStatement> getAccessedClass() {
 		return RestrictionStatement.class;
 	}
-
 
 }

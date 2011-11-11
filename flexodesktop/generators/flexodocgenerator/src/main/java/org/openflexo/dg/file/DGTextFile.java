@@ -25,7 +25,6 @@ import org.openflexo.foundation.rm.cg.TextFileResource;
 import org.openflexo.foundation.xml.GeneratedCodeBuilder;
 import org.openflexo.generator.file.AbstractCGFile;
 
-
 public class DGTextFile extends AbstractCGFile {
 
 	public DGTextFile(GeneratedCodeBuilder builder) {

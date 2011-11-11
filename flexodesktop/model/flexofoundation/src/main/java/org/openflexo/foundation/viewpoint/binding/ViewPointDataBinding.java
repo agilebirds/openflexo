@@ -30,30 +30,24 @@ import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
-
-public class ViewPointDataBinding implements StringConvertable<ViewPointDataBinding>
-{
+public class ViewPointDataBinding implements StringConvertable<ViewPointDataBinding> {
 
 	private static final Logger logger = Logger.getLogger(ViewPointDataBinding.class.getPackage().getName());
 
 	public static ViewPointDataBinding.DataBindingConverter CONVERTER = new DataBindingConverter();
 
-	public static class DataBindingConverter extends Converter<ViewPointDataBinding>
-	{
-		public DataBindingConverter() 
-		{
+	public static class DataBindingConverter extends Converter<ViewPointDataBinding> {
+		public DataBindingConverter() {
 			super(ViewPointDataBinding.class);
 		}
 
 		@Override
-		public ViewPointDataBinding convertFromString(String value) 
-		{
+		public ViewPointDataBinding convertFromString(String value) {
 			return new ViewPointDataBinding(value);
 		}
 
 		@Override
-		public String convertToString(ViewPointDataBinding value) 
-		{
+		public String convertToString(ViewPointDataBinding value) {
 			return value.toString();
 		};
 	}
@@ -69,52 +63,47 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 	private BindingDefinition bindingDefinition;
 	private AbstractBinding binding;
 
-	public ViewPointDataBinding(ViewPointObject owner, InspectorBindingAttribute attribute, BindingDefinition df) 
-	{
+	public ViewPointDataBinding(ViewPointObject owner, InspectorBindingAttribute attribute, BindingDefinition df) {
 		setOwner(owner);
 		setBindingAttribute(attribute);
 		setBindingDefinition(df);
 	}
 
-	public ViewPointDataBinding(String unparsed) 
-	{
+	public ViewPointDataBinding(String unparsed) {
 		unparsedBinding = unparsed;
 	}
 
-	public Object getBindingValue(BindingEvaluationContext context)
-	{
-		//logger.info("getBindingValue() "+this);
-		if (getBinding() != null) return getBinding().getBindingValue(context);
+	public Object getBindingValue(BindingEvaluationContext context) {
+		// logger.info("getBindingValue() "+this);
+		if (getBinding() != null)
+			return getBinding().getBindingValue(context);
 		return null;
 	}
 
-	public void setBindingValue(Object value, BindingEvaluationContext context)
-	{
- 		if (getBinding() != null && getBinding().isSettable()) {
-			getBinding().setBindingValue(value,context);
+	public void setBindingValue(Object value, BindingEvaluationContext context) {
+		if (getBinding() != null && getBinding().isSettable()) {
+			getBinding().setBindingValue(value, context);
 		}
 	}
 
 	@Override
-	public String toString()
-	{
-		if (binding != null) return binding.getStringRepresentation();
+	public String toString() {
+		if (binding != null)
+			return binding.getStringRepresentation();
 		return unparsedBinding;
 	}
 
-	public BindingDefinition getBindingDefinition() 
-	{
+	public BindingDefinition getBindingDefinition() {
 		return bindingDefinition;
 	}
 
-	public void setBindingDefinition(BindingDefinition bindingDefinition) 
-	{
+	public void setBindingDefinition(BindingDefinition bindingDefinition) {
 		this.bindingDefinition = bindingDefinition;
 	}
 
-	public AbstractBinding getBinding() 
-	{
-		if (binding == null) finalizeDeserialization();
+	public AbstractBinding getBinding() {
+		if (binding == null)
+			finalizeDeserialization();
 		return binding;
 	}
 
@@ -123,54 +112,52 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 		this.binding = binding;
 	}*/
 
-	public void setBinding(AbstractBinding value)
-	{
+	public void setBinding(AbstractBinding value) {
 		AbstractBinding oldValue = this.binding;
 		if (oldValue == null) {
-			if (value == null) return; // No change
+			if (value == null)
+				return; // No change
 			else {
 				this.binding = value;
 				unparsedBinding = (value != null ? value.getStringRepresentation() : null);
 				updateDependancies();
-				if (bindingAttribute != null) owner.notifyChange(bindingAttribute,oldValue,value);
+				if (bindingAttribute != null)
+					owner.notifyChange(bindingAttribute, oldValue, value);
 				owner.notifyBindingChanged(this);
 				return;
 			}
-		}
-		else {
-			if (oldValue.equals(value)) return; // No change
+		} else {
+			if (oldValue.equals(value))
+				return; // No change
 			else {
 				this.binding = value;
 				unparsedBinding = (value != null ? value.getStringRepresentation() : null);
-				logger.info("Binding takes now value "+value);
+				logger.info("Binding takes now value " + value);
 				updateDependancies();
-				if (bindingAttribute != null)  owner.notifyChange(bindingAttribute,oldValue,value);
+				if (bindingAttribute != null)
+					owner.notifyChange(bindingAttribute, oldValue, value);
 				owner.notifyBindingChanged(this);
 				return;
 			}
 		}
 	}
-	
-	public boolean hasBinding()
-	{
+
+	public boolean hasBinding() {
 		return binding != null;
 	}
-	
-	public boolean isValid()
-	{
+
+	public boolean isValid() {
 		return getBinding() != null && getBinding().isBindingValid();
 	}
-	
-	public boolean isSet()
-	{
+
+	public boolean isSet() {
 		return unparsedBinding != null || binding != null;
 	}
-	
-	public boolean isUnset()
-	{
+
+	public boolean isUnset() {
 		return unparsedBinding == null && binding == null;
 	}
-	
+
 	public String getUnparsedBinding() {
 		return unparsedBinding;
 	}
@@ -183,43 +170,41 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 		return owner;
 	}
 
-	public void setOwner(ViewPointObject owner)
-	{
+	public void setOwner(ViewPointObject owner) {
 		this.owner = owner;
 	}
 
-	protected void finalizeDeserialization()
-	{
-		if (getUnparsedBinding() == null) return;
-		
-		//System.out.println("BindingModel: "+getOwner().getBindingModel());
+	protected void finalizeDeserialization() {
+		if (getUnparsedBinding() == null)
+			return;
+
+		// System.out.println("BindingModel: "+getOwner().getBindingModel());
 		if (getOwner() != null) {
 			BindingFactory factory = getOwner().getBindingFactory();
 			factory.setBindable(getOwner());
 			binding = factory.convertFromString(getUnparsedBinding());
 			binding.setBindingDefinition(getBindingDefinition());
-			//System.out.println(">>>>>>>>>>>>>> Binding: "+binding.getStringRepresentation()+" owner="+binding.getOwner());
-			//System.out.println("binding.isBindingValid()="+binding.isBindingValid());
+			// System.out.println(">>>>>>>>>>>>>> Binding: "+binding.getStringRepresentation()+" owner="+binding.getOwner());
+			// System.out.println("binding.isBindingValid()="+binding.isBindingValid());
 		}
-		
 
 		if (!binding.isBindingValid()) {
-			logger.warning("Binding not valid: "+binding+" for owner "+getOwner()+" context="+getOwner());
+			logger.warning("Binding not valid: " + binding + " for owner " + getOwner() + " context=" + getOwner());
 			/*logger.info("BindingModel="+getOwner().getBindingModel());
 			BindingExpression.logger.setLevel(Level.FINE);
 			binding = factory.convertFromString(getUnparsedBinding());
 			binding.setBindingDefinition(getBindingDefinition());
 			binding.isBindingValid();*/
 		}
-		
+
 		updateDependancies();
 	}
 
-	protected void updateDependancies()
-	{
-		if (binding == null) return;
+	protected void updateDependancies() {
+		if (binding == null)
+			return;
 
-		//logger.info("Searching dependancies for "+this);
+		// logger.info("Searching dependancies for "+this);
 
 		/*InspectorEntry component = getOwner();
 		List<TargetObject> targetList = binding.getTargetObjects(owner);
@@ -243,8 +228,8 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 			}
 		}*/
 
-		//Vector<Expression> primitives;
-		//try {
+		// Vector<Expression> primitives;
+		// try {
 
 		/*primitives = Expression.extractPrimitives(binding.getStringRepresentation());
 
@@ -296,27 +281,24 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-*/
+		*/
 	}
 
-	public InspectorBindingAttribute getBindingAttribute()
-	{
+	public InspectorBindingAttribute getBindingAttribute() {
 		return bindingAttribute;
 	}
-	
-	public void setBindingAttribute(InspectorBindingAttribute bindingAttribute)
-	{
+
+	public void setBindingAttribute(InspectorBindingAttribute bindingAttribute) {
 		this.bindingAttribute = bindingAttribute;
 	}
 
 	@Override
-	public boolean equals(Object obj)
-	{
+	public boolean equals(Object obj) {
 		if (obj instanceof ViewPointDataBinding) {
-			if (toString() == null) return false;
- 			return toString().equals(obj.toString());
-		}
-		else {
+			if (toString() == null)
+				return false;
+			return toString().equals(obj.toString());
+		} else {
 			return super.equals(obj);
 		}
 	}

@@ -22,7 +22,6 @@ package org.openflexo.sg.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
@@ -41,12 +40,12 @@ import org.openflexo.javaparser.FJPTypeResolver;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.sg.file.SGJavaFile;
 
-
 public class UpdateModel extends MultipleFileGCAction<UpdateModel> {
 
 	private static final Logger logger = Logger.getLogger(UpdateModel.class.getPackage().getName());
 
-	public static final MultipleFileGCActionType<UpdateModel> actionType = new MultipleFileGCActionType<UpdateModel>("update_model", MODEL_MENU, MODEL_GROUP3, FlexoActionType.NORMAL_ACTION_TYPE) {
+	public static final MultipleFileGCActionType<UpdateModel> actionType = new MultipleFileGCActionType<UpdateModel>("update_model",
+			MODEL_MENU, MODEL_GROUP3, FlexoActionType.NORMAL_ACTION_TYPE) {
 		/**
 		 * Factory method
 		 */
@@ -83,8 +82,9 @@ public class UpdateModel extends MultipleFileGCAction<UpdateModel> {
 			repository.getProject().save();
 		}
 
-		makeFlexoProgress(FlexoLocalization.localizedForKey("updating_model_for") + " " + getFilesToUpdate().size() + " " + FlexoLocalization.localizedForKey("files") + " "
-				+ FlexoLocalization.localizedForKey("from") + repository.getDirectory().getAbsolutePath(), getFilesToUpdate().size() + 2);
+		makeFlexoProgress(FlexoLocalization.localizedForKey("updating_model_for") + " " + getFilesToUpdate().size() + " "
+				+ FlexoLocalization.localizedForKey("files") + " " + FlexoLocalization.localizedForKey("from")
+				+ repository.getDirectory().getAbsolutePath(), getFilesToUpdate().size() + 2);
 
 		for (ModelReinjectableFile file : getFilesToUpdate()) {
 			setProgress(FlexoLocalization.localizedForKey("updating_model_for") + " " + ((AbstractCGFile) file).getFileName());

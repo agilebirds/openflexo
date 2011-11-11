@@ -29,40 +29,34 @@ public class RelationshipRepresentation {
 	private DMEntity sourceEntity;
 	private DMEntity destinationEntity;
 	private DMProperty inverseProperty;
-	
-	public RelationshipRepresentation(DMProperty aProperty)
-	{
+
+	public RelationshipRepresentation(DMProperty aProperty) {
 		super();
 		property = aProperty;
 		sourceEntity = property.getEntity();
 		destinationEntity = property.getType().getBaseEntity();
 		if (property instanceof DMEORelationship) {
-			inverseProperty = ((DMEORelationship)property).getInverse();
+			inverseProperty = ((DMEORelationship) property).getInverse();
 		}
 	}
 
-	public DMProperty getProperty()
-	{
+	public DMProperty getProperty() {
 		return property;
 	}
 
-	public DMEntity getDestinationEntity() 
-	{
+	public DMEntity getDestinationEntity() {
 		return destinationEntity;
 	}
 
-	public DMProperty getInverseProperty() 
-	{
+	public DMProperty getInverseProperty() {
 		return inverseProperty;
 	}
 
-	public DMEntity getSourceEntity() 
-	{
+	public DMEntity getSourceEntity() {
 		return sourceEntity;
 	}
-	
-	public boolean isInverseDeclaration (DMProperty aProperty)
-	{
+
+	public boolean isInverseDeclaration(DMProperty aProperty) {
 		return inverseProperty == aProperty;
 	}
 }

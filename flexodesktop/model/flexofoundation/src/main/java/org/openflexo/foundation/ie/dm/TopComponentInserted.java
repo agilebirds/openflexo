@@ -20,13 +20,12 @@
 package org.openflexo.foundation.ie.dm;
 
 import org.openflexo.foundation.ie.IETopComponent;
+
 @Deprecated
-public class TopComponentInserted extends IEDataModification
-{
+public class TopComponentInserted extends IEDataModification {
 	@Deprecated
-    public TopComponentInserted(IETopComponent insertedBloc)
-    {
-        super(null, insertedBloc);
-    }
+	public TopComponentInserted(IETopComponent insertedBloc) {
+		super(null, insertedBloc);
+	}
 
 }

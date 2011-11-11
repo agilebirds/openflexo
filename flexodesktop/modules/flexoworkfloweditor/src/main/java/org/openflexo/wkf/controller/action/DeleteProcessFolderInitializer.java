@@ -40,56 +40,47 @@ public class DeleteProcessFolderInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeleteProcessFolderInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(DeleteProcessFolder.actionType,actionInitializer);
+	DeleteProcessFolderInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(DeleteProcessFolder.actionType, actionInitializer);
 	}
 
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer()
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<DeleteProcessFolder> getDefaultInitializer()
-	{
+	protected FlexoActionInitializer<DeleteProcessFolder> getDefaultInitializer() {
 		return new FlexoActionInitializer<DeleteProcessFolder>() {
-            @Override
-			public boolean run(ActionEvent e, DeleteProcessFolder action)
-            {
-                return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_delete_those_objects"));
-            }
-        };
-	}
-
-     @Override
-	protected FlexoActionFinalizer<DeleteProcessFolder> getDefaultFinalizer()
-	{
-		return new FlexoActionFinalizer<DeleteProcessFolder>() {
-            @Override
-			public boolean run(ActionEvent e, DeleteProcessFolder action)
-            {
-				return true;
-          }
-        };
-	}
-
-     @Override
- 	protected FlexoExceptionHandler<DeleteProcessFolder> getDefaultExceptionHandler()
- 	{
- 		return new FlexoExceptionHandler<DeleteProcessFolder>() {
- 			@Override
-			public boolean handleException(FlexoException exception, DeleteProcessFolder action) {
-                return false;
+			@Override
+			public boolean run(ActionEvent e, DeleteProcessFolder action) {
+				return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_delete_those_objects"));
 			}
-        };
- 	}
-
+		};
+	}
 
 	@Override
-	protected Icon getEnabledIcon()
-	{
+	protected FlexoActionFinalizer<DeleteProcessFolder> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<DeleteProcessFolder>() {
+			@Override
+			public boolean run(ActionEvent e, DeleteProcessFolder action) {
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoExceptionHandler<DeleteProcessFolder> getDefaultExceptionHandler() {
+		return new FlexoExceptionHandler<DeleteProcessFolder>() {
+			@Override
+			public boolean handleException(FlexoException exception, DeleteProcessFolder action) {
+				return false;
+			}
+		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return IconLibrary.DELETE_ICON;
 	}
 

@@ -57,42 +57,41 @@ import org.openflexo.vpm.view.CalcView;
 import org.openflexo.vpm.view.EditionPatternView;
 import org.openflexo.vpm.view.OntologyView;
 
-public class ViewPointPerspective extends FlexoPerspective<FlexoModelObject>
-{
+public class ViewPointPerspective extends FlexoPerspective<FlexoModelObject> {
 
 	protected static final Logger logger = Logger.getLogger(ViewPointPerspective.class.getPackage().getName());
 
 	private final CEDController _controller;
-	
+
 	private final CalcLibraryBrowser _browser;
 	private final CalcBrowser calcBrowser;
 	private final CalcPaletteBrowser calcPaletteBrowser;
 	private final OntologyBrowser ontologyBrowser;
 	private final CalcDrawingShemaBrowser calcDrawingShemaBrowser;
-	
+
 	private final CEDBrowserView _browserView;
 	private final CEDBrowserView calcBrowserView;
 	private final CEDBrowserView calcPaletteBrowserView;
 	private final CEDBrowserView ontologyBrowserView;
 	private final CEDBrowserView calcDrawingShemaBrowserView;
-	
+
 	private final JSplitPane splitPane;
 	private final JSplitPane splitPane2;
-	
-	private final Hashtable<ViewPointPalette,CalcPaletteController> _paletteControllers;
-	private final Hashtable<ExampleDrawingShema,CalcDrawingShemaController> _shemaControllers;
-	private final Hashtable<SelectionManagingDrawingController,JSplitPane> _splitPaneForProcess;
-	
+
+	private final Hashtable<ViewPointPalette, CalcPaletteController> _paletteControllers;
+	private final Hashtable<ExampleDrawingShema, CalcDrawingShemaController> _shemaControllers;
+	private final Hashtable<SelectionManagingDrawingController, JSplitPane> _splitPaneForProcess;
+
 	private final JLabel infoLabel;
-	
+
 	private static final JPanel EMPTY_RIGHT_VIEW = new JPanel();
 
 	/**
-	 * @param controller TODO
+	 * @param controller
+	 *            TODO
 	 * @param name
 	 */
-	public ViewPointPerspective(CEDController controller)
-	{
+	public ViewPointPerspective(CEDController controller) {
 		super("calc_perspective");
 		_controller = controller;
 		_paletteControllers = new Hashtable<ViewPointPalette, CalcPaletteController>();
@@ -104,8 +103,8 @@ public class ViewPointPerspective extends FlexoPerspective<FlexoModelObject>
 			public void treeDoubleClick(FlexoModelObject object) {
 				super.treeDoubleClick(object);
 				if (object instanceof ViewPoint) {
-					focusOnCalc((ViewPoint)object);
-					//System.out.println(((OntologyCalc)object).getXMLRepresentation());
+					focusOnCalc((ViewPoint) object);
+					// System.out.println(((OntologyCalc)object).getXMLRepresentation());
 				}
 			}
 		};
@@ -115,114 +114,102 @@ public class ViewPointPerspective extends FlexoPerspective<FlexoModelObject>
 			public void treeDoubleClick(FlexoModelObject object) {
 				super.treeDoubleClick(object);
 				if (object instanceof ViewPointPalette) {
-					focusOnPalette((ViewPointPalette)object);
-				}
-				else if (object instanceof ImportedOntology) {
-					focusOnOntology((ImportedOntology)object);
-				}
-				else if (object instanceof EditionPattern) {
+					focusOnPalette((ViewPointPalette) object);
+				} else if (object instanceof ImportedOntology) {
+					focusOnOntology((ImportedOntology) object);
+				} else if (object instanceof EditionPattern) {
 					hideBottomBrowser();
 				}
-			}			
-			
+			}
+
 			@Override
-			public void treeSingleClick(FlexoModelObject object)
-			{
+			public void treeSingleClick(FlexoModelObject object) {
 				super.treeSingleClick(object);
-				if (! (object instanceof ViewPointPalette) && !(object instanceof ImportedOntology)) {
+				if (!(object instanceof ViewPointPalette) && !(object instanceof ImportedOntology)) {
 					hideBottomBrowser();
 				}
 			}
 		};
-		
+
 		calcPaletteBrowser = new CalcPaletteBrowser(controller);
 		calcPaletteBrowserView = new CEDBrowserView(calcPaletteBrowser, controller, SelectionPolicy.ForceSelection);
-		
+
 		calcDrawingShemaBrowser = new CalcDrawingShemaBrowser(controller);
 		calcDrawingShemaBrowserView = new CEDBrowserView(calcDrawingShemaBrowser, controller, SelectionPolicy.ForceSelection);
-		
+
 		ontologyBrowser = new OntologyBrowser(controller);
 		ontologyBrowserView = new CEDBrowserView(ontologyBrowser, controller, SelectionPolicy.ForceSelection);
-		
-		
-		splitPane2 = new JSplitPane(JSplitPane.VERTICAL_SPLIT,calcBrowserView,calcPaletteBrowserView);
+
+		splitPane2 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, calcBrowserView, calcPaletteBrowserView);
 		splitPane2.setDividerLocation(0.5);
 		splitPane2.setResizeWeight(0.5);
 		splitPane2.remove(calcPaletteBrowserView);
-		
-		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,_browserView,splitPane2);
+
+		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, _browserView, splitPane2);
 		splitPane.setDividerLocation(0.5);
 		splitPane.setResizeWeight(0.5);
 		infoLabel = new JLabel("Calc perspective");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
 	}
 
-	public void focusOnCalc(ViewPoint calc)
-	{
+	public void focusOnCalc(ViewPoint calc) {
 		splitPane2.setBottomComponent(null);
-		calcBrowser.deleteBrowserListener(_browserView); 		            
+		calcBrowser.deleteBrowserListener(_browserView);
 		calcBrowser.setRepresentedObject(calc);
 		calcBrowser.update();
-		calcBrowser.addBrowserListener(_browserView); 		            
+		calcBrowser.addBrowserListener(_browserView);
 	}
-	
-	public void focusOnPalette(ViewPointPalette palette)
-	{
+
+	public void focusOnPalette(ViewPointPalette palette) {
 		splitPane2.setBottomComponent(calcPaletteBrowserView);
-		calcPaletteBrowser.deleteBrowserListener(_browserView); 		            
+		calcPaletteBrowser.deleteBrowserListener(_browserView);
 		calcPaletteBrowser.setRepresentedPalette(palette);
 		calcPaletteBrowser.update();
-		calcPaletteBrowser.addBrowserListener(_browserView); 		            
+		calcPaletteBrowser.addBrowserListener(_browserView);
 	}
-	
-	public void focusOnShema(ExampleDrawingShema shema)
-	{
+
+	public void focusOnShema(ExampleDrawingShema shema) {
 		splitPane2.setBottomComponent(calcDrawingShemaBrowserView);
-		calcDrawingShemaBrowser.deleteBrowserListener(_browserView); 		            
+		calcDrawingShemaBrowser.deleteBrowserListener(_browserView);
 		calcDrawingShemaBrowser.setRepresentedShema(shema);
 		calcDrawingShemaBrowser.update();
-		calcDrawingShemaBrowser.addBrowserListener(_browserView); 		            
+		calcDrawingShemaBrowser.addBrowserListener(_browserView);
 	}
-	
-	public void focusOnOntology(ImportedOntology ontology)
-	{
+
+	public void focusOnOntology(ImportedOntology ontology) {
 		splitPane2.setBottomComponent(ontologyBrowserView);
-		ontologyBrowser.deleteBrowserListener(_browserView); 		            
+		ontologyBrowser.deleteBrowserListener(_browserView);
 		ontologyBrowser.setRepresentedOntology(ontology);
 		ontologyBrowser.update();
-		ontologyBrowser.addBrowserListener(_browserView); 		            
+		ontologyBrowser.addBrowserListener(_browserView);
 	}
-	
-	public void hideBottomBrowser()
-	{
+
+	public void hideBottomBrowser() {
 		splitPane2.setBottomComponent(null);
 	}
-	
+
 	/**
 	 * Overrides getIcon
-	 *
+	 * 
 	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
-	public ImageIcon getActiveIcon()
-	{
+	public ImageIcon getActiveIcon() {
 		return VPMIconLibrary.VPM_VPE_ACTIVE_ICON;
 	}
 
 	/**
 	 * Overrides getSelectedIcon
-	 *
+	 * 
 	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
 	 */
 	@Override
-	public ImageIcon getSelectedIcon()
-	{
+	public ImageIcon getSelectedIcon() {
 		return VPMIconLibrary.VPM_VPE_SELECTED_ICON;
 	}
 
 	@Override
-	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) 
-	{
+	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
 		if (hasModuleViewForObject(proposedObject)) {
 			return proposedObject;
 		}
@@ -230,191 +217,162 @@ public class ViewPointPerspective extends FlexoPerspective<FlexoModelObject>
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object)
-	{
-		return (object instanceof ViewPointLibrary) 
-		|| (object instanceof ImportedOntology)
-		|| (object instanceof ViewPointPalette)
-		|| (object instanceof ExampleDrawingShema)
-		|| (object instanceof ViewPoint)
-		|| (object instanceof EditionPattern);
+	public boolean hasModuleViewForObject(FlexoModelObject object) {
+		return (object instanceof ViewPointLibrary) || (object instanceof ImportedOntology) || (object instanceof ViewPointPalette)
+				|| (object instanceof ExampleDrawingShema) || (object instanceof ViewPoint) || (object instanceof EditionPattern);
 	}
-
 
 	@Override
-	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoModelObject object, FlexoController controller)
-	{
+	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
 		if (object instanceof ViewPointLibrary) {
-			return new CalcLibraryView((ViewPointLibrary)object,(CEDController)controller);
+			return new CalcLibraryView((ViewPointLibrary) object, (CEDController) controller);
 		}
 		if (object instanceof ImportedOntology) {
-			((ImportedOntology)object).loadWhenUnloaded();
-			return new OntologyView((ImportedOntology)object,(CEDController)controller,this);
+			((ImportedOntology) object).loadWhenUnloaded();
+			return new OntologyView((ImportedOntology) object, (CEDController) controller, this);
 		}
 		if (object instanceof ViewPoint) {
-			((ViewPoint)object).loadWhenUnloaded();
-			return new CalcView((ViewPoint)object,(CEDController)controller);
+			((ViewPoint) object).loadWhenUnloaded();
+			return new CalcView((ViewPoint) object, (CEDController) controller);
 		}
 		if (object instanceof EditionPattern) {
-			((EditionPattern)object).getCalc().loadWhenUnloaded();
-			return new EditionPatternView((EditionPattern)object,(CEDController)controller);
+			((EditionPattern) object).getCalc().loadWhenUnloaded();
+			return new EditionPatternView((EditionPattern) object, (CEDController) controller);
 		}
 		if (object instanceof ViewPointPalette) {
-			return getControllerForPalette((ViewPointPalette)object).getModuleView();
+			return getControllerForPalette((ViewPointPalette) object).getModuleView();
 		}
 		if (object instanceof ExampleDrawingShema) {
-			return getControllerForShema((ExampleDrawingShema)object).getModuleView();
+			return getControllerForShema((ExampleDrawingShema) object).getModuleView();
 		}
-		return new EmptyPanel<FlexoModelObject>(controller,this,object);
+		return new EmptyPanel<FlexoModelObject>(controller, this, object);
 	}
 
-	public ModuleView getCurrentModuleView()
-	{
+	public ModuleView getCurrentModuleView() {
 		if (_controller != null) {
 			return _controller.getCurrentModuleView();
 		}
 		return null;
 	}
 
-
 	@Override
-	public boolean doesPerspectiveControlLeftView() 
-	{
+	public boolean doesPerspectiveControlLeftView() {
 		return true;
 	}
-	
+
 	@Override
-	public JComponent getLeftView() 
-	{
+	public JComponent getLeftView() {
 		return splitPane;
 	}
 
 	@Override
-	public JComponent getFooter() 
-	{
+	public JComponent getFooter() {
 		return infoLabel;
 	}
 
-
-	   @Override
-	    public boolean doesPerspectiveControlRightView()
-	    {
-	    	return true;
-	    }
-
-		@Override
-		public JComponent getRightView()
-		{
-			if (getCurrentModuleView() == null) {
-				return EMPTY_RIGHT_VIEW;
-			}
-			return getSplitPaneWithPalettesAndDocInspectorPanel();
-		}
-
-		/**
-		 * Return Split pane with Role palette and doc inspector panel
-		 * Disconnect doc inspector panel from its actual parent
-		 * @return
-		 */
-		protected JComponent getSplitPaneWithPalettesAndDocInspectorPanel()
-		{
-			SelectionManagingDrawingController controller = null;
-			JTabbedPane paletteView = null;
-			if (getCurrentModuleView() instanceof CalcPaletteModuleView) {
-				controller =  ((CalcPaletteModuleView)getCurrentModuleView()).getController();
-				paletteView = (((CalcPaletteModuleView)getCurrentModuleView()).getController()).getPaletteView();
-			}
-			if (getCurrentModuleView() instanceof CalcDrawingShemaModuleView) {
-				controller =  ((CalcDrawingShemaModuleView)getCurrentModuleView()).getController();
-				paletteView = (((CalcDrawingShemaModuleView)getCurrentModuleView()).getController()).getPaletteView();
-			}
-
-			
-			if ((controller != null) && (paletteView != null)) {
-				JSplitPane splitPaneWithPalettesAndDocInspectorPanel = _splitPaneForProcess.get(controller);
-				if (splitPaneWithPalettesAndDocInspectorPanel == null) {
-					splitPaneWithPalettesAndDocInspectorPanel = new JSplitPane(
-							JSplitPane.VERTICAL_SPLIT,
-							paletteView,
-							_controller.getDisconnectedDocInspectorPanel());
-					splitPaneWithPalettesAndDocInspectorPanel.setResizeWeight(0);
-					splitPaneWithPalettesAndDocInspectorPanel.setDividerLocation(CEDCst.PALETTE_DOC_SPLIT_LOCATION);
-					_splitPaneForProcess.put(controller,splitPaneWithPalettesAndDocInspectorPanel);
-				}
-				if (splitPaneWithPalettesAndDocInspectorPanel.getBottomComponent() == null) {
-					splitPaneWithPalettesAndDocInspectorPanel.setBottomComponent(_controller.getDisconnectedDocInspectorPanel());
-				}
-				new FlexoSplitPaneLocationSaver(splitPaneWithPalettesAndDocInspectorPanel,"CEDPaletteAndDocInspectorPanel");
-				return splitPaneWithPalettesAndDocInspectorPanel;
-			}
-		
-			//logger.warning("Unexpected view: "+getCurrentModuleView());
-			return EMPTY_RIGHT_VIEW;
-		}
-
-	
 	@Override
-	public boolean isAlwaysVisible() 
-	{
+	public boolean doesPerspectiveControlRightView() {
 		return true;
 	}
-	
-	public String getWindowTitleforObject(FlexoModelObject object) 
-	{
+
+	@Override
+	public JComponent getRightView() {
+		if (getCurrentModuleView() == null) {
+			return EMPTY_RIGHT_VIEW;
+		}
+		return getSplitPaneWithPalettesAndDocInspectorPanel();
+	}
+
+	/**
+	 * Return Split pane with Role palette and doc inspector panel Disconnect doc inspector panel from its actual parent
+	 * 
+	 * @return
+	 */
+	protected JComponent getSplitPaneWithPalettesAndDocInspectorPanel() {
+		SelectionManagingDrawingController controller = null;
+		JTabbedPane paletteView = null;
+		if (getCurrentModuleView() instanceof CalcPaletteModuleView) {
+			controller = ((CalcPaletteModuleView) getCurrentModuleView()).getController();
+			paletteView = (((CalcPaletteModuleView) getCurrentModuleView()).getController()).getPaletteView();
+		}
+		if (getCurrentModuleView() instanceof CalcDrawingShemaModuleView) {
+			controller = ((CalcDrawingShemaModuleView) getCurrentModuleView()).getController();
+			paletteView = (((CalcDrawingShemaModuleView) getCurrentModuleView()).getController()).getPaletteView();
+		}
+
+		if ((controller != null) && (paletteView != null)) {
+			JSplitPane splitPaneWithPalettesAndDocInspectorPanel = _splitPaneForProcess.get(controller);
+			if (splitPaneWithPalettesAndDocInspectorPanel == null) {
+				splitPaneWithPalettesAndDocInspectorPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, paletteView,
+						_controller.getDisconnectedDocInspectorPanel());
+				splitPaneWithPalettesAndDocInspectorPanel.setResizeWeight(0);
+				splitPaneWithPalettesAndDocInspectorPanel.setDividerLocation(CEDCst.PALETTE_DOC_SPLIT_LOCATION);
+				_splitPaneForProcess.put(controller, splitPaneWithPalettesAndDocInspectorPanel);
+			}
+			if (splitPaneWithPalettesAndDocInspectorPanel.getBottomComponent() == null) {
+				splitPaneWithPalettesAndDocInspectorPanel.setBottomComponent(_controller.getDisconnectedDocInspectorPanel());
+			}
+			new FlexoSplitPaneLocationSaver(splitPaneWithPalettesAndDocInspectorPanel, "CEDPaletteAndDocInspectorPanel");
+			return splitPaneWithPalettesAndDocInspectorPanel;
+		}
+
+		// logger.warning("Unexpected view: "+getCurrentModuleView());
+		return EMPTY_RIGHT_VIEW;
+	}
+
+	@Override
+	public boolean isAlwaysVisible() {
+		return true;
+	}
+
+	public String getWindowTitleforObject(FlexoModelObject object) {
 		if (object instanceof ViewPointLibrary) {
 			return FlexoLocalization.localizedForKey("view_point_library");
 		}
 		if (object instanceof ViewPoint) {
-			return ((ViewPoint)object).getName();
+			return ((ViewPoint) object).getName();
 		}
 		if (object instanceof ViewPointPalette) {
-			return ((ViewPointPalette)object).getName()+" ("+FlexoLocalization.localizedForKey("palette")+")";
+			return ((ViewPointPalette) object).getName() + " (" + FlexoLocalization.localizedForKey("palette") + ")";
 		}
 		if (object instanceof ExampleDrawingShema) {
-			return ((ExampleDrawingShema)object).getName()+" ("+FlexoLocalization.localizedForKey("example_drawing")+")";
+			return ((ExampleDrawingShema) object).getName() + " (" + FlexoLocalization.localizedForKey("example_drawing") + ")";
 		}
 		if (object instanceof ViewPoint) {
-			return ((ViewPoint)object).getName();
+			return ((ViewPoint) object).getName();
 		}
 		if (object instanceof EditionPattern) {
-			return ((EditionPattern)object).getName();
+			return ((EditionPattern) object).getName();
 		}
 		return object.getFullyQualifiedName();
 	}
-	
-	public CalcPaletteController getControllerForPalette(ViewPointPalette object)
-	{
+
+	public CalcPaletteController getControllerForPalette(ViewPointPalette object) {
 		CalcPaletteController returned = _paletteControllers.get(object);
 		if (returned == null) {
-				returned = new CalcPaletteController(_controller,object,false);
-				_paletteControllers.put(object, returned);
+			returned = new CalcPaletteController(_controller, object, false);
+			_paletteControllers.put(object, returned);
 		}
 		return returned;
 	}
 
-
-	public void removeFromControllers(CalcPaletteController controller)
-	{
+	public void removeFromControllers(CalcPaletteController controller) {
 		_paletteControllers.remove(controller.getDrawing().getModel());
 		_splitPaneForProcess.remove(controller);
 	}
 
-	public CalcDrawingShemaController getControllerForShema(ExampleDrawingShema object)
-	{
+	public CalcDrawingShemaController getControllerForShema(ExampleDrawingShema object) {
 		CalcDrawingShemaController returned = _shemaControllers.get(object);
 		if (returned == null) {
-				returned = new CalcDrawingShemaController(_controller,object,false);
-				_shemaControllers.put(object, returned);
+			returned = new CalcDrawingShemaController(_controller, object, false);
+			_shemaControllers.put(object, returned);
 		}
 		return returned;
 	}
 
-
-	public void removeFromControllers(CalcDrawingShemaController controller)
-	{
+	public void removeFromControllers(CalcDrawingShemaController controller) {
 		_shemaControllers.remove(controller.getDrawing().getModel());
 		_splitPaneForProcess.remove(controller);
 	}
-
 
 }

@@ -25,54 +25,47 @@ import org.openflexo.foundation.ie.cl.TabComponentDefinition;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 
-
 /**
  * @author gpolet
  * @deprecated
  */
 @Deprecated
-public class TabOperationComponentInstance extends TabComponentInstance
-{
+public class TabOperationComponentInstance extends TabComponentInstance {
 
-    /**
-     * @param component
-     */
-    public TabOperationComponentInstance(TabComponentDefinition component, OperationNode node)
-    {
-        super(component, node);
-        setOperationNode(node);
-    }
+	/**
+	 * @param component
+	 */
+	public TabOperationComponentInstance(TabComponentDefinition component, OperationNode node) {
+		super(component, node);
+		setOperationNode(node);
+	}
 
-    public TabOperationComponentInstance(FlexoProcessBuilder builder)
-    {
-        super(builder);
-    }
+	public TabOperationComponentInstance(FlexoProcessBuilder builder) {
+		super(builder);
+	}
 
-    public TabComponentDefinition getTabComponentDefinition()
-    {
-        return getComponentDefinition();
-    }
+	public TabComponentDefinition getTabComponentDefinition() {
+		return getComponentDefinition();
+	}
 
-    @Override
-    public String getFullyQualifiedName()
-    {
-        return "TAB_OPERATION_COMPONENT_INSTANCE." + getComponentDefinition().getName();
-    }
+	@Override
+	public String getFullyQualifiedName() {
+		return "TAB_OPERATION_COMPONENT_INSTANCE." + getComponentDefinition().getName();
+	}
 
-    /**
-     * Overrides getClassNameKey
-     *
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-    public String getClassNameKey()
-    {
-        return "tab_operation_component_instance";
-    }
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "tab_operation_component_instance";
+	}
 
 	@Override
 	public String getContextIdentifier() {
-		return "operation: "+getOperationNode().getName();
+		return "operation: " + getOperationNode().getName();
 	}
 
 	@Override

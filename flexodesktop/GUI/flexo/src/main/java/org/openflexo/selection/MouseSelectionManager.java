@@ -32,184 +32,162 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.FlexoController;
 
-
 /**
- * A MouseSelectionManager extends the concept of SelectionManager by providing
- * a basic implementation of a MouseListener (and a MouseMotionListener) allowing
- * to basically handle custom view selection manageent.
+ * A MouseSelectionManager extends the concept of SelectionManager by providing a basic implementation of a MouseListener (and a
+ * MouseMotionListener) allowing to basically handle custom view selection manageent.
  * 
  * @author sguerin
  */
-public abstract class MouseSelectionManager extends SelectionManager implements MouseListener
-{
+public abstract class MouseSelectionManager extends SelectionManager implements MouseListener {
 
-    private static final Logger logger = Logger.getLogger(MouseSelectionManager.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(MouseSelectionManager.class.getPackage().getName());
 
-    protected FocusableView _focusedPanel;
-        
-    private PastingGraphicalContext _pastingGraphicalContext;
-    
-    // ==========================================================================
-    // ============================= Constructor ================================
-    // ==========================================================================
+	protected FocusableView _focusedPanel;
 
-    public MouseSelectionManager(FlexoController controller)
-    {
-        super(controller);
-        _pastingGraphicalContext = new PastingGraphicalContext();
-     }
+	private PastingGraphicalContext _pastingGraphicalContext;
 
-    // ==========================================================================
-    // ============================= MouseListenerInterface =====================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor ================================
+	// ==========================================================================
 
-    public abstract void processMouseClicked(JComponent clickedContainer, Point clickedPoint, int clickCount, boolean isShiftDown);
+	public MouseSelectionManager(FlexoController controller) {
+		super(controller);
+		_pastingGraphicalContext = new PastingGraphicalContext();
+	}
 
-    public abstract void processMouseEntered(MouseEvent e);
+	// ==========================================================================
+	// ============================= MouseListenerInterface =====================
+	// ==========================================================================
 
-    public abstract void processMouseExited(MouseEvent e);
+	public abstract void processMouseClicked(JComponent clickedContainer, Point clickedPoint, int clickCount, boolean isShiftDown);
 
-    public abstract void processMousePressed(MouseEvent e);
+	public abstract void processMouseEntered(MouseEvent e);
 
-    public abstract void processMouseReleased(MouseEvent e);
+	public abstract void processMouseExited(MouseEvent e);
 
-    @Override
-	public void mouseClicked(MouseEvent e)
-    {
-        JComponent clickedContainer = (JComponent) e.getSource();
-        Point clickedPoint = e.getPoint();
-        
-        setLastClickedContainer(clickedContainer);
-        setLastClickedPoint(clickedPoint);
-        if (ToolBox.getPLATFORM()!=ToolBox.MACOS || e.getButton()!=MouseEvent.BUTTON3)
-        	processMouseClicked(clickedContainer, clickedPoint, e.getClickCount(), e.getModifiersEx() == FlexoCst.MULTI_SELECTION_MASK);
-    }
+	public abstract void processMousePressed(MouseEvent e);
 
-    @Override
-	public void mouseEntered(MouseEvent e)
-    {
-        processMouseEntered(e);
-    }
+	public abstract void processMouseReleased(MouseEvent e);
 
-    @Override
-	public void mouseExited(MouseEvent e)
-    {
-        processMouseExited(e);
-    }
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		JComponent clickedContainer = (JComponent) e.getSource();
+		Point clickedPoint = e.getPoint();
 
-    @Override
-	public void mousePressed(MouseEvent e)
-    {
-       processMousePressed(e);
-       if ((!e.isConsumed()) && (_contextualMenuManager != null)) {
-           _contextualMenuManager.processMousePressed(e);
-       }
-    }
+		setLastClickedContainer(clickedContainer);
+		setLastClickedPoint(clickedPoint);
+		if (ToolBox.getPLATFORM() != ToolBox.MACOS || e.getButton() != MouseEvent.BUTTON3)
+			processMouseClicked(clickedContainer, clickedPoint, e.getClickCount(), e.getModifiersEx() == FlexoCst.MULTI_SELECTION_MASK);
+	}
 
-    @Override
-	public void mouseReleased(MouseEvent e)
-    {
-        processMouseReleased(e);
-        if ((!e.isConsumed()) && (_contextualMenuManager != null)) {
-            _contextualMenuManager.processMouseReleased(e);
-        }
-    }
-    
-    public void processMouseMoved(MouseEvent e)
-    {
-        if (_contextualMenuManager != null) {
-            _contextualMenuManager.processMouseMoved(e);
-       }
-    }
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		processMouseEntered(e);
+	}
 
-     // ==========================================================================
-    // ============================= Focus Management ===========================
-    // ==========================================================================
+	@Override
+	public void mouseExited(MouseEvent e) {
+		processMouseExited(e);
+	}
 
-    /**
-     * Return currently focused view, if any
-     * 
-     * @return a FocusableView instance
-     */
-    public FocusableView getFocusedView()
-    {
-        return _focusedPanel;
-    }
+	@Override
+	public void mousePressed(MouseEvent e) {
+		processMousePressed(e);
+		if ((!e.isConsumed()) && (_contextualMenuManager != null)) {
+			_contextualMenuManager.processMousePressed(e);
+		}
+	}
 
-    /**
-     * Remove focus on supplied view
-     */
-    public void removeFocus(FocusableView p)
-    {
-        if (logger.isLoggable(Level.FINEST))
-            logger.finest("Remove focus on " + p);
-        _focusedPanel = null;
-        p.setIsFocused(false);
-    }
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		processMouseReleased(e);
+		if ((!e.isConsumed()) && (_contextualMenuManager != null)) {
+			_contextualMenuManager.processMouseReleased(e);
+		}
+	}
 
-    /**
-     * Add focus on supplied view
-     */
-    protected void setIsFocused(FocusableView p)
-    {
-        if (logger.isLoggable(Level.FINEST))
-            logger.finest("Set focus on " + p);
-        _focusedPanel = p;
-        p.setIsFocused(true);
-        setFocusedObject(p.getObject());
-    }
+	public void processMouseMoved(MouseEvent e) {
+		if (_contextualMenuManager != null) {
+			_contextualMenuManager.processMouseMoved(e);
+		}
+	}
 
-    /**
-     * Return boolean indicating if supplied view if the currently focused view
-     */
-     protected boolean isCurrentlyFocused(FocusableView p)
-    {
-        return _focusedPanel == p;
-    }
+	// ==========================================================================
+	// ============================= Focus Management ===========================
+	// ==========================================================================
 
+	/**
+	 * Return currently focused view, if any
+	 * 
+	 * @return a FocusableView instance
+	 */
+	public FocusableView getFocusedView() {
+		return _focusedPanel;
+	}
 
-    // ==========================================================================
-    // ============================= Cut&Paste Management =======================
-    // ==========================================================================
+	/**
+	 * Remove focus on supplied view
+	 */
+	public void removeFocus(FocusableView p) {
+		if (logger.isLoggable(Level.FINEST))
+			logger.finest("Remove focus on " + p);
+		_focusedPanel = null;
+		p.setIsFocused(false);
+	}
 
-    @Override
-	public FlexoModelObject getPasteContext()
-    {
-        return pasteContextForComponent(getLastClickedContainer());
-    }
-    
-    public abstract FlexoModelObject pasteContextForComponent(JComponent aComponent);
+	/**
+	 * Add focus on supplied view
+	 */
+	protected void setIsFocused(FocusableView p) {
+		if (logger.isLoggable(Level.FINEST))
+			logger.finest("Set focus on " + p);
+		_focusedPanel = p;
+		p.setIsFocused(true);
+		setFocusedObject(p.getObject());
+	}
 
-    @Override
-	public PastingGraphicalContext getPastingGraphicalContext()
-    {
-        return _pastingGraphicalContext;
-    }
-    
+	/**
+	 * Return boolean indicating if supplied view if the currently focused view
+	 */
+	protected boolean isCurrentlyFocused(FocusableView p) {
+		return _focusedPanel == p;
+	}
 
-    // ===============================================================
-    // ================= Graphical utilities =========================
-    // ===============================================================
+	// ==========================================================================
+	// ============================= Cut&Paste Management =======================
+	// ==========================================================================
 
-    public Point getLastClickedPoint()
-    {
-        return _pastingGraphicalContext.pastingLocation;
-    }
+	@Override
+	public FlexoModelObject getPasteContext() {
+		return pasteContextForComponent(getLastClickedContainer());
+	}
 
-    public JComponent getLastClickedContainer()
-    {
-        return _pastingGraphicalContext.targetContainer;
-    }
+	public abstract FlexoModelObject pasteContextForComponent(JComponent aComponent);
 
-    public void setLastClickedPoint(Point aPoint)
-    {
-    	//logger.info("setLastClickedPoint="+aPoint);
-        _pastingGraphicalContext.pastingLocation = aPoint;
-    }
+	@Override
+	public PastingGraphicalContext getPastingGraphicalContext() {
+		return _pastingGraphicalContext;
+	}
 
-    public void setLastClickedContainer(JComponent aContainer)
-    {
-        _pastingGraphicalContext.targetContainer = aContainer;
-    }
+	// ===============================================================
+	// ================= Graphical utilities =========================
+	// ===============================================================
+
+	public Point getLastClickedPoint() {
+		return _pastingGraphicalContext.pastingLocation;
+	}
+
+	public JComponent getLastClickedContainer() {
+		return _pastingGraphicalContext.targetContainer;
+	}
+
+	public void setLastClickedPoint(Point aPoint) {
+		// logger.info("setLastClickedPoint="+aPoint);
+		_pastingGraphicalContext.pastingLocation = aPoint;
+	}
+
+	public void setLastClickedContainer(JComponent aContainer) {
+		_pastingGraphicalContext.targetContainer = aContainer;
+	}
 
 }

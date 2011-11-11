@@ -26,46 +26,40 @@ import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
 @ImplementationClass(FlexoProcessImpl.class)
-@XMLElement(xmlTag="FlexoProcess")
-@PastingPoints({
-	@PastingPoint(type=AbstractNode.class,id=FlexoProcess.NODES)
-})
-@IntegrityConstraints({
-	@IntegrityConstraint("foo > 0"),
-	@IntegrityConstraint("name != null")
-})
-@Imports({
-	@Import(ActivityNode.class),
-	@Import(StartNode.class),
-	@Import(EndNode.class),
-	@Import(TokenEdge.class)
-})
+@XMLElement(xmlTag = "FlexoProcess")
+@PastingPoints({ @PastingPoint(type = AbstractNode.class, id = FlexoProcess.NODES) })
+@IntegrityConstraints({ @IntegrityConstraint("foo > 0"), @IntegrityConstraint("name != null") })
+@Imports({ @Import(ActivityNode.class), @Import(StartNode.class), @Import(EndNode.class), @Import(TokenEdge.class) })
 public interface FlexoProcess extends WKFObject {
 
 	public static final String FOO = "foo";
 	public static final String NODES = "nodes";
 
-	@Getter(value=FOO,defaultValue="4")
-	@XMLAttribute(xmlTag=FOO)
+	@Getter(value = FOO, defaultValue = "4")
+	@XMLAttribute(xmlTag = FOO)
 	public int getFoo();
 
-	@Setter(value=FOO)
+	@Setter(value = FOO)
 	public void setFoo(int foo);
 
-	@Getter(value=NODES,cardinality=Cardinality.LIST,inverse=WKFObject.PROCESS)
-	@XMLElement(primary=true)
+	@Getter(value = NODES, cardinality = Cardinality.LIST, inverse = WKFObject.PROCESS)
+	@XMLElement(primary = true)
 	@CloningStrategy(StrategyType.CLONE)
 	@Embedded
 	public List<AbstractNode> getNodes();
-	@Setter(value=NODES)
+
+	@Setter(value = NODES)
 	public void setNodes(List<AbstractNode> nodes);
-	@Adder(id=NODES)
+
+	@Adder(id = NODES)
 	public void addToNodes(AbstractNode node);
-	@Remover(id=NODES)
+
+	@Remover(id = NODES)
 	public void removeFromNodes(AbstractNode node);
 
 	@Finder(attribute = AbstractNode.NAME, collection = NODES)
 	public AbstractNode getNodeNamed(String name);
+
 	public Edge getEdgeNamed(String name);
 
 	@Deleter

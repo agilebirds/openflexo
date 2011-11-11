@@ -24,25 +24,24 @@ import org.openflexo.localization.FlexoLocalization;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class MissingReaderRepositoryException extends FlexoException
-{
+public class MissingReaderRepositoryException extends FlexoException {
 
-    /**
-     * @param folder
-     * @param name
-     */
-    public MissingReaderRepositoryException()
-    {
-    }
-    /**
-     * Overrides getLocalizedMessage
-     * @see org.openflexo.foundation.FlexoException#getLocalizedMessage()
-     */
-    @Override
-    public String getLocalizedMessage()
-    {
-        return FlexoLocalization.localizedForKey("missing_reader_repository");
-    }
+	/**
+	 * @param folder
+	 * @param name
+	 */
+	public MissingReaderRepositoryException() {
+	}
+
+	/**
+	 * Overrides getLocalizedMessage
+	 * 
+	 * @see org.openflexo.foundation.FlexoException#getLocalizedMessage()
+	 */
+	@Override
+	public String getLocalizedMessage() {
+		return FlexoLocalization.localizedForKey("missing_reader_repository");
+	}
 }

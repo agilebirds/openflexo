@@ -21,38 +21,45 @@ package cb.petal;
 
 /**
  * Reference to object.
- *
+ * 
  * @version $Id: Tag.java,v 1.3 2011/09/12 11:46:47 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class Tag extends Literal {
-  static final long serialVersionUID=-5297792541671900279L;
+	static final long serialVersionUID = -5297792541671900279L;
 
-  private int value;
+	private int value;
 
-  public Tag(int v) {
-    super("<tag>");
-    value = v;
-  }
+	public Tag(int v) {
+		super("<tag>");
+		value = v;
+	}
 
-  public void setValue(int v) { value = v; }
-  public int  getValue()      { return value; }
+	public void setValue(int v) {
+		value = v;
+	}
 
-  @Override
-public String toString() { return "@" + value; }
-  
-  @Override
-public java.lang.Object getLiteralValue() {
-    return toString();
-  }
+	public int getValue() {
+		return value;
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public String toString() {
+		return "@" + value;
+	}
 
-  @Override
-public boolean equals(java.lang.Object o) {
-    return (o instanceof Tag) && (((Tag)o).value == this.value);
-  }
+	@Override
+	public java.lang.Object getLiteralValue() {
+		return toString();
+	}
+
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
+
+	@Override
+	public boolean equals(java.lang.Object o) {
+		return (o instanceof Tag) && (((Tag) o).value == this.value);
+	}
 }

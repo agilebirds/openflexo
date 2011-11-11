@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-
 import org.openflexo.drm.action.CreateDocItem;
 import org.openflexo.drm.action.CreateDocItemFolder;
 import org.openflexo.drm.action.GenerateHelpSet;
@@ -51,534 +50,482 @@ import org.openflexo.localization.FlexoLocalization;
 
 public class DocItemFolder extends DRMObject implements InspectableObject {
 
-    private static final Logger logger = Logger.getLogger(DocItemFolder.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DocItemFolder.class.getPackage().getName());
 
-    // String identifier for this folder: name will be used as folder name in FS
-    private String identifier;
-    
-    // Description for this folder
-    private String description;
+	// String identifier for this folder: name will be used as folder name in FS
+	private String identifier;
 
-    // Parent DocItemFolder
-    private DocItemFolder parentFolder;
-    
-    // Vector of DocItemFolder: childs
-    private Vector<DocItemFolder> childFolders;
-    
-    // Vector of DocItem: childs
-    private Vector<DocItem> items;
-    
-    private HashMap<String,DocItem> itemCache; 
-    
-    private DocItem _primaryDocItem;
-    
-    public DocItemFolder (DRMBuilder builder)
-    {
-        this(builder.docResourceCenter);
-        initializeDeserialization(builder);
-    }
+	// Description for this folder
+	private String description;
 
-   public DocItemFolder(DocResourceCenter docResourceCenter)
-    {
-        super(docResourceCenter);
-        identifier = null;
-        description = null;
-        parentFolder = null;
-        childFolders = new Vector<DocItemFolder>();
-        items = new Vector<DocItem>();
-        itemCache = new HashMap<String, DocItem>();
-    }
-    
-    public static DocItemFolder createDocItemFolder(String anIdentifier, String aDescription, DocItemFolder parent, DocResourceCenter docResourceCenter)
-    {
-        logger.info("Create DocItemFolder "+anIdentifier+" in "+parent);
-        DocItemFolder returned = new DocItemFolder(docResourceCenter);
-        returned.identifier = anIdentifier;
-        returned.description = aDescription;
-        if (parent != null) {
-            parent.addToChildFolders(returned);
-        }
-        returned.createDefaultPrimaryDocItem();
-        return returned;
-    }
+	// Parent DocItemFolder
+	private DocItemFolder parentFolder;
 
-    @Override
-	public String getInspectorName()
-    {
-        return Inspectors.DRE.DOC_ITEM_FOLDER_INSPECTOR;
-    }
+	// Vector of DocItemFolder: childs
+	private Vector<DocItemFolder> childFolders;
 
-    @Override
-	public String toString()
-    {
-        return "folder:"+getIdentifier();
-    }
+	// Vector of DocItem: childs
+	private Vector<DocItem> items;
 
-    /**
-     * Overrides delete
-     * @see org.openflexo.foundation.FlexoModelObject#delete()
-     */
-    @Override
-	public void delete()
-    {
-        Enumeration en = ((Vector)childFolders.clone()).elements();
-        while (en.hasMoreElements()) {
-            DocItemFolder f = (DocItemFolder) en.nextElement();
-            f.delete();
-        }
-        en = ((Vector)items.clone()).elements();
-        while (en.hasMoreElements()) {
-            DocItem it = (DocItem) en.nextElement();
-            it.delete();
-        }
-        if (parentFolder!=null)
-            parentFolder.removeFromChildFolders(this);
-        itemCache = null;
-        super.delete();
-    }
-    
-   private File directory;
-    
-    public File getDirectory()
-    {
-        if (directory == null) {
-            File parent;
-            if (getParentFolder() != null) {
-                parent = getParentFolder().getDirectory();
-            }
-            else {
-                parent = DocResourceManager.getDocResourceCenterDirectory();
-            }
-            directory = new File(parent,identifier);
-        }
-        return directory;
-    }
-    
+	private HashMap<String, DocItem> itemCache;
 
-    @Override
-	public String getDescription()
-    {
-        return description;
-    }
+	private DocItem _primaryDocItem;
 
-    @Override
-	public void setDescription(String description) 
-    {
-        this.description = description;
-        setChanged();
-   }
+	public DocItemFolder(DRMBuilder builder) {
+		this(builder.docResourceCenter);
+		initializeDeserialization(builder);
+	}
 
-    @Override
-	public String getIdentifier() 
-    {
-        return identifier;
-    }
+	public DocItemFolder(DocResourceCenter docResourceCenter) {
+		super(docResourceCenter);
+		identifier = null;
+		description = null;
+		parentFolder = null;
+		childFolders = new Vector<DocItemFolder>();
+		items = new Vector<DocItem>();
+		itemCache = new HashMap<String, DocItem>();
+	}
 
-    public void setIdentifier(String identifier) 
-    {
-        this.identifier = identifier;
-        setChanged();
-   }
+	public static DocItemFolder createDocItemFolder(String anIdentifier, String aDescription, DocItemFolder parent,
+			DocResourceCenter docResourceCenter) {
+		logger.info("Create DocItemFolder " + anIdentifier + " in " + parent);
+		DocItemFolder returned = new DocItemFolder(docResourceCenter);
+		returned.identifier = anIdentifier;
+		returned.description = aDescription;
+		if (parent != null) {
+			parent.addToChildFolders(returned);
+		}
+		returned.createDefaultPrimaryDocItem();
+		return returned;
+	}
 
-    public DocItem getPrimaryDocItem() 
-    {
-        if (_primaryDocItem == null) {
-            // Try to lookup
-            if (primaryDocItemId != null) {
-                setPrimaryDocItemId(primaryDocItemId);
-            }
-        }
-        return _primaryDocItem;
-    }
+	@Override
+	public String getInspectorName() {
+		return Inspectors.DRE.DOC_ITEM_FOLDER_INSPECTOR;
+	}
 
-    public void setPrimaryDocItem(DocItem primaryDocItem) 
-    {
-        if (primaryDocItem.getFolder() == this) {
-            _primaryDocItem = primaryDocItem;
-            if (primaryDocItem != null) primaryDocItemId = primaryDocItem.getIdentifier();
-            setChanged();
-        }
-    }
-    
-    public boolean isPublished() {
-    	return getPrimaryDocItem()!=null && getPrimaryDocItem().isPublished();
-    }
-    
-    /**
-     * Overrides getSerializationIdentifier
-     * @see org.openflexo.drm.DRMObject#getSerializationIdentifier()
-     */
-    @Override
-    public String getSerializationIdentifier()
-    {
+	@Override
+	public String toString() {
+		return "folder:" + getIdentifier();
+	}
+
+	/**
+	 * Overrides delete
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#delete()
+	 */
+	@Override
+	public void delete() {
+		Enumeration en = ((Vector) childFolders.clone()).elements();
+		while (en.hasMoreElements()) {
+			DocItemFolder f = (DocItemFolder) en.nextElement();
+			f.delete();
+		}
+		en = ((Vector) items.clone()).elements();
+		while (en.hasMoreElements()) {
+			DocItem it = (DocItem) en.nextElement();
+			it.delete();
+		}
+		if (parentFolder != null)
+			parentFolder.removeFromChildFolders(this);
+		itemCache = null;
+		super.delete();
+	}
+
+	private File directory;
+
+	public File getDirectory() {
+		if (directory == null) {
+			File parent;
+			if (getParentFolder() != null) {
+				parent = getParentFolder().getDirectory();
+			} else {
+				parent = DocResourceManager.getDocResourceCenterDirectory();
+			}
+			directory = new File(parent, identifier);
+		}
+		return directory;
+	}
+
+	@Override
+	public String getDescription() {
+		return description;
+	}
+
+	@Override
+	public void setDescription(String description) {
+		this.description = description;
+		setChanged();
+	}
+
+	@Override
+	public String getIdentifier() {
+		return identifier;
+	}
+
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+		setChanged();
+	}
+
+	public DocItem getPrimaryDocItem() {
+		if (_primaryDocItem == null) {
+			// Try to lookup
+			if (primaryDocItemId != null) {
+				setPrimaryDocItemId(primaryDocItemId);
+			}
+		}
+		return _primaryDocItem;
+	}
+
+	public void setPrimaryDocItem(DocItem primaryDocItem) {
+		if (primaryDocItem.getFolder() == this) {
+			_primaryDocItem = primaryDocItem;
+			if (primaryDocItem != null)
+				primaryDocItemId = primaryDocItem.getIdentifier();
+			setChanged();
+		}
+	}
+
+	public boolean isPublished() {
+		return getPrimaryDocItem() != null && getPrimaryDocItem().isPublished();
+	}
+
+	/**
+	 * Overrides getSerializationIdentifier
+	 * 
+	 * @see org.openflexo.drm.DRMObject#getSerializationIdentifier()
+	 */
+	@Override
+	public String getSerializationIdentifier() {
 		return (getParentFolder() != null ? getParentFolder().getSerializationIdentifier() : "Folder: ") + getIdentifier();
-    }
+	}
 
-    public String getPrimaryDocItemId() 
-    {
-        if (getPrimaryDocItem() != null)
-            return getPrimaryDocItem().getIdentifier();
-        return primaryDocItemId;
-    }
+	public String getPrimaryDocItemId() {
+		if (getPrimaryDocItem() != null)
+			return getPrimaryDocItem().getIdentifier();
+		return primaryDocItemId;
+	}
 
-    private String primaryDocItemId;
-    
-    public void setPrimaryDocItemId(String primaryDocItemId) 
-    {
-        this.primaryDocItemId = primaryDocItemId; 
-       DocItem item = getItemNamed(primaryDocItemId);
-        if (item == null) {
-            this.primaryDocItemId = primaryDocItemId; 
-        }
-        else if (item.getFolder() == this) {
-            _primaryDocItem = item;
-        }
-     }
+	private String primaryDocItemId;
 
-    public void createDefaultPrimaryDocItem()
-    {
-        _primaryDocItem = DocItem.createDocItem(getIdentifier(),FlexoLocalization.localizedForKey("no_description"),this,getDocResourceCenter(),false);
-    }
-    
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return getIdentifier();
-    }
+	public void setPrimaryDocItemId(String primaryDocItemId) {
+		this.primaryDocItemId = primaryDocItemId;
+		DocItem item = getItemNamed(primaryDocItemId);
+		if (item == null) {
+			this.primaryDocItemId = primaryDocItemId;
+		} else if (item.getFolder() == this) {
+			_primaryDocItem = item;
+		}
+	}
 
-    public DocItemFolder getParentFolder() 
-    {
-        return parentFolder;
-    }
+	public void createDefaultPrimaryDocItem() {
+		_primaryDocItem = DocItem.createDocItem(getIdentifier(), FlexoLocalization.localizedForKey("no_description"), this,
+				getDocResourceCenter(), false);
+	}
 
-    public void setParentFolder(DocItemFolder parentFolder) 
-    {
-        this.parentFolder = parentFolder;
-        setChanged();
-   }
+	@Override
+	public String getFullyQualifiedName() {
+		return getIdentifier();
+	}
 
-    private boolean itemsNeedsReordering = true;
-    private Vector<DocItem> orderedItems;
-    
-    public Vector getOrderedItems() 
-    {
-        if (itemsNeedsReordering) {
-            orderedItems = new Vector<DocItem>();
-            orderedItems.addAll(items);
-            Collections.sort(orderedItems,DocItem.COMPARATOR);
-            itemsNeedsReordering = false;
-        }
-        return orderedItems;
-    }
+	public DocItemFolder getParentFolder() {
+		return parentFolder;
+	}
 
-    public Vector<DocItem> getItems() 
-    {
-        if (isSerializing())
-            return getOrderedItems();
-        return items;
-    }
+	public void setParentFolder(DocItemFolder parentFolder) {
+		this.parentFolder = parentFolder;
+		setChanged();
+	}
 
-    public void setItems(Vector<DocItem> items)
-    {
-        this.items = items;
-        setChanged();
-        itemsNeedsReordering = true;
-  }
+	private boolean itemsNeedsReordering = true;
+	private Vector<DocItem> orderedItems;
 
-    public void addToItems(DocItem item)
-    {
-        items.add(item);
-        itemCache.put(item.getIdentifier(), item);
-        item.setFolder(this);
-        itemsNeedsReordering = true;
-        setChanged();
-        notifyObservers(new DocItemAdded(item));
-    }
-    
-    public void removeFromItems(DocItem item)
-    {
-        items.remove(item);
-        itemCache.remove(item.getIdentifier());
-        itemsNeedsReordering = true;
-       setChanged();
-   }
-    
-    protected void reorderItems()
-    {
-        itemsNeedsReordering = true;
-        setChanged();
-        notifyObservers(new StructureModified());
-    }
-    
-    public static DocItemFolderComparator COMPARATOR = new DocItemFolderComparator();
-    
-    public static class DocItemFolderComparator implements Comparator<DocItemFolder>
-    {
-        @Override
-		public int compare(DocItemFolder o1, DocItemFolder o2) 
-        {   
-            return o1.getIdentifier().compareTo(o2.getIdentifier());
-        }
-        
-    }
-    
-    private boolean childFolderNeedsReordering = true;
-    private Vector<DocItemFolder> orderedChildFolders;
-    
-    public Vector<DocItemFolder> getOrderedChildFolders() 
-    {
-        if (childFolderNeedsReordering) {
-            orderedChildFolders = new Vector<DocItemFolder>();
-            orderedChildFolders.addAll(childFolders);
-            Collections.sort(orderedChildFolders,COMPARATOR);
-            childFolderNeedsReordering = false;
-        }
-        return orderedChildFolders;
-    }
+	public Vector getOrderedItems() {
+		if (itemsNeedsReordering) {
+			orderedItems = new Vector<DocItem>();
+			orderedItems.addAll(items);
+			Collections.sort(orderedItems, DocItem.COMPARATOR);
+			itemsNeedsReordering = false;
+		}
+		return orderedItems;
+	}
 
-    public Vector<DocItemFolder> getChildFolders() 
-    {
-        if (isSerializing())
-            return getOrderedChildFolders();
-        return childFolders;
-    }
+	public Vector<DocItem> getItems() {
+		if (isSerializing())
+			return getOrderedItems();
+		return items;
+	}
 
-    public void setChildFolders(Vector<DocItemFolder> childFolders) 
-    {
-        this.childFolders = childFolders;
-        setChanged();
-        childFolderNeedsReordering = true;
-  }
+	public void setItems(Vector<DocItem> items) {
+		this.items = items;
+		setChanged();
+		itemsNeedsReordering = true;
+	}
 
-    public void addToChildFolders(DocItemFolder itemFolder)
-    {
-        childFolders.add(itemFolder);
-        itemFolder.setParentFolder(this);
-        childFolderNeedsReordering = true;
-        setChanged();
-        notifyObservers(new DocItemFolderAdded(itemFolder));
-   }
-    
-    public void removeFromChildFolders(DocItemFolder item)
-    {
-        childFolders.remove(item);
-        childFolderNeedsReordering = true;
-       setChanged();
-    }
-    
-    public void notifyStructureChanged()
-    {
-        setChanged();
-        notifyObservers(new StructureModified());
-    }
+	public void addToItems(DocItem item) {
+		items.add(item);
+		itemCache.put(item.getIdentifier(), item);
+		item.setFolder(this);
+		itemsNeedsReordering = true;
+		setChanged();
+		notifyObservers(new DocItemAdded(item));
+	}
 
+	public void removeFromItems(DocItem item) {
+		items.remove(item);
+		itemCache.remove(item.getIdentifier());
+		itemsNeedsReordering = true;
+		setChanged();
+	}
 
-    public boolean isRootFolder() 
-    {
-        return (getDocResourceCenter().getRootFolder() == this);
-    }
-    
-    @Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass()
-    {
-         Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-         returned.add(CreateDocItem.actionType);
-         returned.add(CreateDocItemFolder.actionType);
-         // returned.add(DeleteDocItemFolder.actionType);
-         // following are applied only on the root folder
-         returned.add(GenerateHelpSet.actionType);
-         returned.add(ImportDocSubmissionReport.actionType);
-         return returned;
-    }
-    
-    public String getNextDefautItemName()
-    {
-        String baseName = "item";
-        String testMe = baseName;
-        int test = 0;
-        while (getItemNamed(testMe) != null) {
-            test++;
-            testMe = baseName + test;
-        }
-        return testMe;
-    }
+	protected void reorderItems() {
+		itemsNeedsReordering = true;
+		setChanged();
+		notifyObservers(new StructureModified());
+	}
 
-     public String getNextDefautItemFolderName()
-     {
-         String baseName = "Folder";
-         String testMe = baseName;
-         int test = 0;
-         while (getItemFolderNamed(testMe) != null) {
-             test++;
-             testMe = baseName + test;
-         }
-         return testMe;
-     }
+	public static DocItemFolderComparator COMPARATOR = new DocItemFolderComparator();
 
-     public DocItem getItemNamed (String itemIdentifier)
-     {
-         DocItem returned = itemCache.get(itemIdentifier);
-         if (returned!=null)
-             return returned;
-         for (Enumeration en=getChildFolders().elements(); en.hasMoreElements();) {
-             DocItemFolder nextFolder = (DocItemFolder)en.nextElement();
-             returned = nextFolder.getItemNamed(itemIdentifier);
-             if (returned != null) return returned;
-         }
-         return null;
-     }
-     
-     public DocItemFolder getItemFolderNamed (String itemFolderIdentifier)
-     {
-         for (Enumeration en=getChildFolders().elements(); en.hasMoreElements();) {
-             DocItemFolder next = (DocItemFolder)en.nextElement();
-             if (next.getIdentifier().equals(itemFolderIdentifier)) return next;
-         }
-         return null;
-     }
-     
-     /**
-      * Return a vector of all embedded objects at this level
-      * does NOT include itself
-      * 
-      * @return a Vector of Validable objects
-      */
-     @Override
-	public Vector<Validable> getEmbeddedValidableObjects()
-     {
-         Vector<Validable> returned = new Vector<Validable>();
-         returned.addAll(getChildFolders());
-         returned.addAll(getItems());
-         return returned;
-     }
+	public static class DocItemFolderComparator implements Comparator<DocItemFolder> {
+		@Override
+		public int compare(DocItemFolder o1, DocItemFolder o2) {
+			return o1.getIdentifier().compareTo(o2.getIdentifier());
+		}
 
-     public String getRelativePath()
-     {
-         return (getParentFolder()!=null?getParentFolder().getRelativePath()+"/":"")+getIdentifier();
-     }
+	}
 
-     public boolean isAncestorOf (DocItem anItem)
-     {
-         if (anItem.getFolder() == this) return true;
-         for (Enumeration en=getChildFolders().elements(); en.hasMoreElements();) {
-            DocItemFolder next = (DocItemFolder)en.nextElement();
-            if (next.isAncestorOf(anItem)) return true;
-        }
-         return false;
-     }
-     
-     @Override
-	public String getClassNameKey() 
-     {
-         return "doc_item_folder";
-     }
+	private boolean childFolderNeedsReordering = true;
+	private Vector<DocItemFolder> orderedChildFolders;
 
+	public Vector<DocItemFolder> getOrderedChildFolders() {
+		if (childFolderNeedsReordering) {
+			orderedChildFolders = new Vector<DocItemFolder>();
+			orderedChildFolders.addAll(childFolders);
+			Collections.sort(orderedChildFolders, COMPARATOR);
+			childFolderNeedsReordering = false;
+		}
+		return orderedChildFolders;
+	}
 
-     // ==========================================================================
-     // ============================= Validation =================================
-     // ==========================================================================
+	public Vector<DocItemFolder> getChildFolders() {
+		if (isSerializing())
+			return getOrderedChildFolders();
+		return childFolders;
+	}
 
-     public static class DocItemFolderMustHavePrimaryItem extends ValidationRule
-     {
-          public DocItemFolderMustHavePrimaryItem()
-         {
-             super(DocItemFolder.class, "documentation_folder_must_have_primary_doc_item");
-          }
+	public void setChildFolders(Vector<DocItemFolder> childFolders) {
+		this.childFolders = childFolders;
+		setChanged();
+		childFolderNeedsReordering = true;
+	}
 
-         @Override
-		public ValidationIssue applyValidation(final Validable object)
-         {
-             final DocItemFolder folder = (DocItemFolder) object;
-             ProblemIssue issue = null;
-             if (folder.getPrimaryDocItem() == null) {
-                 issue = new ValidationError(this, object, "doc_item_folder_($object.identifier)_has_no_primary_doc_item");
-                 issue.addToFixProposals(new CreateDefaultPrimaryDocItem(folder));
-                 issue.addToFixProposals(new SetPrimaryDocItem(folder));
-             }
-             return issue;
-         }
+	public void addToChildFolders(DocItemFolder itemFolder) {
+		childFolders.add(itemFolder);
+		itemFolder.setParentFolder(this);
+		childFolderNeedsReordering = true;
+		setChanged();
+		notifyObservers(new DocItemFolderAdded(itemFolder));
+	}
 
-         public static class CreateDefaultPrimaryDocItem extends FixProposal
-         {
-             public DocItemFolder folder;
+	public void removeFromChildFolders(DocItemFolder item) {
+		childFolders.remove(item);
+		childFolderNeedsReordering = true;
+		setChanged();
+	}
 
-             public CreateDefaultPrimaryDocItem(DocItemFolder aFolder)
-             {
-                 super("create_default_primary_doc_item");
-                 folder = aFolder;
-             }
+	public void notifyStructureChanged() {
+		setChanged();
+		notifyObservers(new StructureModified());
+	}
 
-             @Override
-			protected void fixAction()
-             {
-                 folder.createDefaultPrimaryDocItem();
-             }
-         }
+	public boolean isRootFolder() {
+		return (getDocResourceCenter().getRootFolder() == this);
+	}
 
-         public static class SetPrimaryDocItem extends ParameteredFixProposal
-         {
-             public DocItemFolder folder;
-           
-             public SetPrimaryDocItem(DocItemFolder aFolder)
-             {
-                 super("set_primary_doc_item",buildParameters(aFolder));
-                 folder = aFolder;
-             }
+	@Override
+	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
+		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
+		returned.add(CreateDocItem.actionType);
+		returned.add(CreateDocItemFolder.actionType);
+		// returned.add(DeleteDocItemFolder.actionType);
+		// following are applied only on the root folder
+		returned.add(GenerateHelpSet.actionType);
+		returned.add(ImportDocSubmissionReport.actionType);
+		return returned;
+	}
 
-             private static ParameterDefinition[] buildParameters(DocItemFolder aFolder)
-             {
-                 ParameterDefinition[] returned = new ParameterDefinition[1];
-                 returned[0] = new DocItemParameter("docItem","doc_item_to_choose",null);
-                  return returned;
-             }
-             
-             @Override
-			protected void fixAction()
-             {
-                 DocItem newPrimaryDocItem = (DocItem) getValueForParameter("docItem");
-                 folder.setPrimaryDocItem(newPrimaryDocItem);
-             }
-             
+	public String getNextDefautItemName() {
+		String baseName = "item";
+		String testMe = baseName;
+		int test = 0;
+		while (getItemNamed(testMe) != null) {
+			test++;
+			testMe = baseName + test;
+		}
+		return testMe;
+	}
 
-         }
+	public String getNextDefautItemFolderName() {
+		String baseName = "Folder";
+		String testMe = baseName;
+		int test = 0;
+		while (getItemFolderNamed(testMe) != null) {
+			test++;
+			testMe = baseName + test;
+		}
+		return testMe;
+	}
 
+	public DocItem getItemNamed(String itemIdentifier) {
+		DocItem returned = itemCache.get(itemIdentifier);
+		if (returned != null)
+			return returned;
+		for (Enumeration en = getChildFolders().elements(); en.hasMoreElements();) {
+			DocItemFolder nextFolder = (DocItemFolder) en.nextElement();
+			returned = nextFolder.getItemNamed(itemIdentifier);
+			if (returned != null)
+				return returned;
+		}
+		return null;
+	}
 
-     }
+	public DocItemFolder getItemFolderNamed(String itemFolderIdentifier) {
+		for (Enumeration en = getChildFolders().elements(); en.hasMoreElements();) {
+			DocItemFolder next = (DocItemFolder) en.nextElement();
+			if (next.getIdentifier().equals(itemFolderIdentifier))
+				return next;
+		}
+		return null;
+	}
 
-     public boolean isIncluded (HelpSetConfiguration configuration)
-     {
-         if (isDirectelyIncluded(configuration)) return true;
-         if (isPartiallyIncluded(configuration)) return true;
-         return false;
-     }
+	/**
+	 * Return a vector of all embedded objects at this level does NOT include itself
+	 * 
+	 * @return a Vector of Validable objects
+	 */
+	@Override
+	public Vector<Validable> getEmbeddedValidableObjects() {
+		Vector<Validable> returned = new Vector<Validable>();
+		returned.addAll(getChildFolders());
+		returned.addAll(getItems());
+		return returned;
+	}
 
-     protected boolean isDirectelyIncluded (HelpSetConfiguration configuration)
-     {
-         if (configuration.getDocItemFolders().contains(this)) return true;
-         if (getParentFolder() != null) return getParentFolder().isDirectelyIncluded(configuration);
-         return false;
-     }
+	public String getRelativePath() {
+		return (getParentFolder() != null ? getParentFolder().getRelativePath() + "/" : "") + getIdentifier();
+	}
 
-     protected boolean isPartiallyIncluded (HelpSetConfiguration configuration)
-     {
-         for (DocItemFolder folder : getChildFolders()) {
-             if (folder.isDirectelyIncluded(configuration)) return true;
-             if (folder.isPartiallyIncluded(configuration)) return true;
-         }
-         return false;
-     }
+	public boolean isAncestorOf(DocItem anItem) {
+		if (anItem.getFolder() == this)
+			return true;
+		for (Enumeration en = getChildFolders().elements(); en.hasMoreElements();) {
+			DocItemFolder next = (DocItemFolder) en.nextElement();
+			if (next.isAncestorOf(anItem))
+				return true;
+		}
+		return false;
+	}
 
-    /**
-     * @param docItem
-     * @param old
-     * @param identifier2
-     */
-    public void notifyItemHasBeenRenamedTo(DocItem docItem, String old, String identifier2)
-    {
-        if (old!=null)
-            itemCache.remove(old);
-        itemCache.put(identifier2,docItem);
-    }
+	@Override
+	public String getClassNameKey() {
+		return "doc_item_folder";
+	}
 
+	// ==========================================================================
+	// ============================= Validation =================================
+	// ==========================================================================
 
- }
+	public static class DocItemFolderMustHavePrimaryItem extends ValidationRule {
+		public DocItemFolderMustHavePrimaryItem() {
+			super(DocItemFolder.class, "documentation_folder_must_have_primary_doc_item");
+		}
+
+		@Override
+		public ValidationIssue applyValidation(final Validable object) {
+			final DocItemFolder folder = (DocItemFolder) object;
+			ProblemIssue issue = null;
+			if (folder.getPrimaryDocItem() == null) {
+				issue = new ValidationError(this, object, "doc_item_folder_($object.identifier)_has_no_primary_doc_item");
+				issue.addToFixProposals(new CreateDefaultPrimaryDocItem(folder));
+				issue.addToFixProposals(new SetPrimaryDocItem(folder));
+			}
+			return issue;
+		}
+
+		public static class CreateDefaultPrimaryDocItem extends FixProposal {
+			public DocItemFolder folder;
+
+			public CreateDefaultPrimaryDocItem(DocItemFolder aFolder) {
+				super("create_default_primary_doc_item");
+				folder = aFolder;
+			}
+
+			@Override
+			protected void fixAction() {
+				folder.createDefaultPrimaryDocItem();
+			}
+		}
+
+		public static class SetPrimaryDocItem extends ParameteredFixProposal {
+			public DocItemFolder folder;
+
+			public SetPrimaryDocItem(DocItemFolder aFolder) {
+				super("set_primary_doc_item", buildParameters(aFolder));
+				folder = aFolder;
+			}
+
+			private static ParameterDefinition[] buildParameters(DocItemFolder aFolder) {
+				ParameterDefinition[] returned = new ParameterDefinition[1];
+				returned[0] = new DocItemParameter("docItem", "doc_item_to_choose", null);
+				return returned;
+			}
+
+			@Override
+			protected void fixAction() {
+				DocItem newPrimaryDocItem = (DocItem) getValueForParameter("docItem");
+				folder.setPrimaryDocItem(newPrimaryDocItem);
+			}
+
+		}
+
+	}
+
+	public boolean isIncluded(HelpSetConfiguration configuration) {
+		if (isDirectelyIncluded(configuration))
+			return true;
+		if (isPartiallyIncluded(configuration))
+			return true;
+		return false;
+	}
+
+	protected boolean isDirectelyIncluded(HelpSetConfiguration configuration) {
+		if (configuration.getDocItemFolders().contains(this))
+			return true;
+		if (getParentFolder() != null)
+			return getParentFolder().isDirectelyIncluded(configuration);
+		return false;
+	}
+
+	protected boolean isPartiallyIncluded(HelpSetConfiguration configuration) {
+		for (DocItemFolder folder : getChildFolders()) {
+			if (folder.isDirectelyIncluded(configuration))
+				return true;
+			if (folder.isPartiallyIncluded(configuration))
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * @param docItem
+	 * @param old
+	 * @param identifier2
+	 */
+	public void notifyItemHasBeenRenamedTo(DocItem docItem, String old, String identifier2) {
+		if (old != null)
+			itemCache.remove(old);
+		itemCache.put(identifier2, docItem);
+	}
+
+}

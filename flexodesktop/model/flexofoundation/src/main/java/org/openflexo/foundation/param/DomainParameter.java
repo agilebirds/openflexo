@@ -22,19 +22,16 @@ package org.openflexo.foundation.param;
 import org.openflexo.foundation.dkv.Domain;
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
 public class DomainParameter extends ParameterDefinition<Domain> {
 
-    public DomainParameter(String name, String label, Domain defaultValue)
-    {
-        super(name,label,defaultValue);
-        addParameter("className","org.openflexo.components.widget.DomainInspectorWidget");
-    }
-    
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.CUSTOM;
-    }
+	public DomainParameter(String name, String label, Domain defaultValue) {
+		super(name, label, defaultValue);
+		addParameter("className", "org.openflexo.components.widget.DomainInspectorWidget");
+	}
+
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.CUSTOM;
+	}
 
 }

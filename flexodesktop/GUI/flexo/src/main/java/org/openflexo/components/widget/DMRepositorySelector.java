@@ -27,99 +27,84 @@ import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMRepository;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 /**
  * Widget allowing to select a DMRepository while browsing the data model
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class DMRepositorySelector extends AbstractBrowserSelector<DMRepository>
-{
+public class DMRepositorySelector extends AbstractBrowserSelector<DMRepository> {
 
-    protected static final String EMPTY_STRING = "";
-    protected String STRING_REPRESENTATION_WHEN_NULL = EMPTY_STRING;
+	protected static final String EMPTY_STRING = "";
+	protected String STRING_REPRESENTATION_WHEN_NULL = EMPTY_STRING;
 
-    public DMRepositorySelector(FlexoProject project, DMRepository repository)
-    {
-        super(project, repository, DMRepository.class);
-    }
+	public DMRepositorySelector(FlexoProject project, DMRepository repository) {
+		super(project, repository, DMRepository.class);
+	}
 
-    public DMRepositorySelector(FlexoProject project, DMRepository repository, int cols)
-    {
-        super(project, repository, DMRepository.class, cols);
-    }
+	public DMRepositorySelector(FlexoProject project, DMRepository repository, int cols) {
+		super(project, repository, DMRepository.class, cols);
+	}
 
-    DMModel getDataModel()
-    {
-        if (getProject() != null) {
-            return getProject().getDataModel();
-        }
-        return null;
-    }
+	DMModel getDataModel() {
+		if (getProject() != null) {
+			return getProject().getDataModel();
+		}
+		return null;
+	}
 
-    @Override
-	protected DMRepositorySelectorPanel makeCustomPanel(DMRepository editedObject)
-    {
-        return new DMRepositorySelectorPanel();
-    }
+	@Override
+	protected DMRepositorySelectorPanel makeCustomPanel(DMRepository editedObject) {
+		return new DMRepositorySelectorPanel();
+	}
 
-    @Override
-	public String renderedString(DMRepository editedObject)
-    {
-        if (editedObject != null) {
-            return editedObject.getLocalizedName();
-        }
-        return STRING_REPRESENTATION_WHEN_NULL;
-    }
+	@Override
+	public String renderedString(DMRepository editedObject) {
+		if (editedObject != null) {
+			return editedObject.getLocalizedName();
+		}
+		return STRING_REPRESENTATION_WHEN_NULL;
+	}
 
-    protected class DMRepositorySelectorPanel extends AbstractSelectorPanel<DMRepository>
-    {
-        protected DMRepositorySelectorPanel()
-        {
-            super(DMRepositorySelector.this);
-        }
+	protected class DMRepositorySelectorPanel extends AbstractSelectorPanel<DMRepository> {
+		protected DMRepositorySelectorPanel() {
+			super(DMRepositorySelector.this);
+		}
 
-        @Override
-		protected ProjectBrowser createBrowser(FlexoProject project)
-        {
-            return new DataModelBrowser(/* project.getDataModel() */);
-        }
+		@Override
+		protected ProjectBrowser createBrowser(FlexoProject project) {
+			return new DataModelBrowser(/* project.getDataModel() */);
+		}
 
-    }
+	}
 
-    protected class DataModelBrowser extends ProjectBrowser
-    {
+	protected class DataModelBrowser extends ProjectBrowser {
 
-        // private DMModel _dmModel;
+		// private DMModel _dmModel;
 
-        protected DataModelBrowser(/* DMModel dataModel */)
-        {
-            super((getDataModel()!=null?getDataModel().getProject():null), false);
-            init();
-        }
+		protected DataModelBrowser(/* DMModel dataModel */) {
+			super((getDataModel() != null ? getDataModel().getProject() : null), false);
+			init();
+		}
 
-        @Override
-		public void configure()
-        {
-            setFilterStatus(BrowserElementType.DM_PACKAGE, BrowserFilterStatus.HIDE);
-            setFilterStatus(BrowserElementType.DM_EOMODEL, BrowserFilterStatus.HIDE);
-            setFilterStatus(BrowserElementType.DM_ENTITY, BrowserFilterStatus.HIDE);
-            setFilterStatus(BrowserElementType.DM_PROPERTY, BrowserFilterStatus.HIDE);
-            setFilterStatus(BrowserElementType.DM_EOATTRIBUTE, BrowserFilterStatus.HIDE);
-            setFilterStatus(BrowserElementType.DM_EORELATIONSHIP, BrowserFilterStatus.HIDE);
-        }
+		@Override
+		public void configure() {
+			setFilterStatus(BrowserElementType.DM_PACKAGE, BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.DM_EOMODEL, BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.DM_ENTITY, BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.DM_PROPERTY, BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.DM_EOATTRIBUTE, BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.DM_EORELATIONSHIP, BrowserFilterStatus.HIDE);
+		}
 
-        @Override
-		public FlexoModelObject getDefaultRootObject()
-        {
-            return getDataModel();
-        }
-    }
+		@Override
+		public FlexoModelObject getDefaultRootObject() {
+			return getDataModel();
+		}
+	}
 
-    public void setNullStringRepresentation(String aString)
-    {
-        STRING_REPRESENTATION_WHEN_NULL = aString;
-    }
+	public void setNullStringRepresentation(String aString) {
+		STRING_REPRESENTATION_WHEN_NULL = aString;
+	}
 
 }

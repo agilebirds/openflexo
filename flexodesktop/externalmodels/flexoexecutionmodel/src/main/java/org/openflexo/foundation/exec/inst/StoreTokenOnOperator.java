@@ -26,31 +26,29 @@ public class StoreTokenOnOperator extends CustomInstruction {
 
 	private OperatorNode operatorNode;
 	private FlexoPostCondition<?, ?> entry;
-	
-	public StoreTokenOnOperator (OperatorNode operatorNode,FlexoPostCondition<?, ?> entry)
-	{
+
+	public StoreTokenOnOperator(OperatorNode operatorNode, FlexoPostCondition<?, ?> entry) {
 		super();
 		this.operatorNode = operatorNode;
 		this.entry = entry;
-		setInlineComment("Store a new token on operator"+operatorNode.getName()+" and entry "+((FlexoPostCondition)entry).getDerivedNameFromStartingObject());
+		setInlineComment("Store a new token on operator" + operatorNode.getName() + " and entry "
+				+ ((FlexoPostCondition) entry).getDerivedNameFromStartingObject());
 	}
 
 	@Override
-	public String toString()
-	{
-		return "[StoreTokenOnOperator:"+operatorNode.getName()+","+((FlexoPostCondition)entry).getDerivedNameFromStartingObject()+"]";
+	public String toString() {
+		return "[StoreTokenOnOperator:" + operatorNode.getName() + "," + ((FlexoPostCondition) entry).getDerivedNameFromStartingObject()
+				+ "]";
 	}
 
 	@Override
-	public String getJavaStringRepresentation() 
-	{
-		return "storeTokenOnOperator("+getOperatorNode().getFlexoID()+","+((FlexoPostCondition)entry).getFlexoID()+");";
+	public String getJavaStringRepresentation() {
+		return "storeTokenOnOperator(" + getOperatorNode().getFlexoID() + "," + ((FlexoPostCondition) entry).getFlexoID() + ");";
 	}
-	
+
 	@Override
-	public StoreTokenOnOperator clone()
-	{
-		StoreTokenOnOperator returned = new StoreTokenOnOperator(operatorNode,entry);
+	public StoreTokenOnOperator clone() {
+		StoreTokenOnOperator returned = new StoreTokenOnOperator(operatorNode, entry);
 		returned.setHeaderComment(getHeaderComment());
 		returned.setInlineComment(getInlineComment());
 		return returned;

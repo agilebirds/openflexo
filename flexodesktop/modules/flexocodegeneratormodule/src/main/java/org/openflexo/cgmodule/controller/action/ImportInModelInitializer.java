@@ -36,76 +36,65 @@ import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.generator.action.ImportInModel;
 
-
 public class ImportInModelInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	ImportInModelInitializer(GeneratorControllerActionInitializer actionInitializer)
-	{
-		super(ImportInModel.actionType,actionInitializer);
+	ImportInModelInitializer(GeneratorControllerActionInitializer actionInitializer) {
+		super(ImportInModel.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected GeneratorControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (GeneratorControllerActionInitializer)super.getControllerActionInitializer();
+	protected GeneratorControllerActionInitializer getControllerActionInitializer() {
+		return (GeneratorControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<ImportInModel> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<ImportInModel> getDefaultInitializer() {
 		return new FlexoActionInitializer<ImportInModel>() {
-            @Override
-			public boolean run(ActionEvent e, ImportInModel action)
-            {
-    			FlexoController.showError(FlexoLocalization.localizedForKey("sorry_not_implemented_yet"));
-    			action.getProjectGenerator().startHandleLogs();
-    			return true;
-          }
-        };
-	}
-
-     @Override
-	protected FlexoActionFinalizer<ImportInModel> getDefaultFinalizer() 
-	{
-		return new FlexoActionFinalizer<ImportInModel>() {
-            @Override
-			public boolean run(ActionEvent e, ImportInModel action)
-            {
-                action.getProjectGenerator().stopHandleLogs();
-                action.getProjectGenerator().flushLogs();
-                return true;
-           }
-        };
-	}
-
-     @Override
- 	protected FlexoExceptionHandler<ImportInModel> getDefaultExceptionHandler() 
- 	{
- 		return new FlexoExceptionHandler<ImportInModel>() {
- 			@Override
-			public boolean handleException(FlexoException exception, ImportInModel action) {
-                getControllerActionInitializer().getGeneratorController().disposeProgressWindow();
-                exception.printStackTrace();
-                FlexoController.showError(FlexoLocalization.localizedForKey("file_importing_failed") + ":\n"
-                        + exception.getLocalizedMessage());
-                return true;
+			@Override
+			public boolean run(ActionEvent e, ImportInModel action) {
+				FlexoController.showError(FlexoLocalization.localizedForKey("sorry_not_implemented_yet"));
+				action.getProjectGenerator().startHandleLogs();
+				return true;
 			}
-        };
- 	}
-
+		};
+	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected FlexoActionFinalizer<ImportInModel> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<ImportInModel>() {
+			@Override
+			public boolean run(ActionEvent e, ImportInModel action) {
+				action.getProjectGenerator().stopHandleLogs();
+				action.getProjectGenerator().flushLogs();
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoExceptionHandler<ImportInModel> getDefaultExceptionHandler() {
+		return new FlexoExceptionHandler<ImportInModel>() {
+			@Override
+			public boolean handleException(FlexoException exception, ImportInModel action) {
+				getControllerActionInitializer().getGeneratorController().disposeProgressWindow();
+				exception.printStackTrace();
+				FlexoController.showError(FlexoLocalization.localizedForKey("file_importing_failed") + ":\n"
+						+ exception.getLocalizedMessage());
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return GeneratorIconLibrary.IMPORT_IN_MODEL_ICON;
 	}
- 
+
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return GeneratorIconLibrary.IMPORT_IN_MODEL_DISABLED_ICON;
 	}
- 
+
 }

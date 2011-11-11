@@ -19,7 +19,6 @@
  */
 package org.openflexo.sgmodule.controller.browser;
 
-
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
@@ -30,16 +29,13 @@ import org.openflexo.foundation.sg.GeneratedSources;
 import org.openflexo.foundation.sg.implmodel.ImplementationModelDefinition;
 import org.openflexo.localization.FlexoLocalization;
 
-public class GeneratedSourcesElement extends SGBrowserElement
-{
-	public GeneratedSourcesElement(GeneratedSources generatedSources, ProjectBrowser browser, BrowserElement parent)
-	{
-		super(generatedSources, BrowserElementType.GENERATED_SOURCES, browser,parent);
+public class GeneratedSourcesElement extends SGBrowserElement {
+	public GeneratedSourcesElement(GeneratedSources generatedSources, ProjectBrowser browser, BrowserElement parent) {
+		super(generatedSources, BrowserElementType.GENERATED_SOURCES, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 		for (ImplementationModelDefinition implementationModel : getGeneratedSources().getImplementationModels()) {
 			addToChilds(implementationModel.getImplementationModel());
 		}
@@ -48,22 +44,19 @@ public class GeneratedSourcesElement extends SGBrowserElement
 		}
 		addToChilds(getGeneratedSources().getTemplates());
 	}
-@Override
-public void update(FlexoObservable observable,
-		DataModification dataModification)
-{
-	// TODO Auto-generated method stub
-	super.update(observable, dataModification);
-}
-	
-	public GeneratedSources getGeneratedSources()
-	{
-		return (GeneratedSources)getObject();
-	}
-	
+
 	@Override
-	public String getName()
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		// TODO Auto-generated method stub
+		super.update(observable, dataModification);
+	}
+
+	public GeneratedSources getGeneratedSources() {
+		return (GeneratedSources) getObject();
+	}
+
+	@Override
+	public String getName() {
 		return FlexoLocalization.localizedForKey("generated_sources");
 	}
 }

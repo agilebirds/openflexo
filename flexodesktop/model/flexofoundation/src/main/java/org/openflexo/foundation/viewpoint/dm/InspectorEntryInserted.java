@@ -25,20 +25,17 @@ import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 
-public class InspectorEntryInserted extends OEDataModification
-{
+public class InspectorEntryInserted extends OEDataModification {
 
-    private EditionPatternInspector _inspector;
+	private EditionPatternInspector _inspector;
 
-    public InspectorEntryInserted(InspectorEntry entry, EditionPatternInspector inspector)
-    {
-        super(null, entry);
-        _inspector = inspector;
-    }
+	public InspectorEntryInserted(InspectorEntry entry, EditionPatternInspector inspector) {
+		super(null, entry);
+		_inspector = inspector;
+	}
 
-    public EditionPatternInspector getInspector()
-    {
-        return _inspector;
-    }
+	public EditionPatternInspector getInspector() {
+		return _inspector;
+	}
 
 }

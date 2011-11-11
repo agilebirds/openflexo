@@ -27,20 +27,17 @@ import org.openflexo.foundation.dm.DMProperty;
  * @author sguerin
  * 
  */
-public class DMPropertyNameChanged extends DMAttributeDataModification
-{
+public class DMPropertyNameChanged extends DMAttributeDataModification {
 
-    private DMProperty _dmProperty;
+	private DMProperty _dmProperty;
 
-    public DMPropertyNameChanged(DMProperty dmProperty, String oldName, String newName)
-    {
-        super("name", oldName, newName);
-        _dmProperty = dmProperty;
-    }
+	public DMPropertyNameChanged(DMProperty dmProperty, String oldName, String newName) {
+		super("name", oldName, newName);
+		_dmProperty = dmProperty;
+	}
 
-    public DMProperty getDMProperty()
-    {
-        return _dmProperty;
-    }
+	public DMProperty getDMProperty() {
+		return _dmProperty;
+	}
 
 }

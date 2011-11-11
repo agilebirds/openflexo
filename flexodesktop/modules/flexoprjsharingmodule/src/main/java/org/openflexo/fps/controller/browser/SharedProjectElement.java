@@ -26,17 +26,13 @@ import org.openflexo.fps.CVSDirectory;
 import org.openflexo.fps.CVSFile;
 import org.openflexo.fps.SharedProject;
 
-
-public class SharedProjectElement extends FPSBrowserElement
-{
-	public SharedProjectElement(SharedProject project, ProjectBrowser browser, BrowserElement parent)
-	{
-		super(project, BrowserElementType.SHARED_PROJECT, browser,parent);
+public class SharedProjectElement extends FPSBrowserElement {
+	public SharedProjectElement(SharedProject project, ProjectBrowser browser, BrowserElement parent) {
+		super(project, BrowserElementType.SHARED_PROJECT, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 		for (CVSDirectory dir : getSharedProject().getDirectories()) {
 			addToChilds(dir);
 		}
@@ -46,15 +42,12 @@ public class SharedProjectElement extends FPSBrowserElement
 	}
 
 	@Override
-	public String getName()
-	{
-		return getSharedProject().getLocalName()
-		+" - "+getSharedProject().getLocalDirectory().getAbsolutePath();
+	public String getName() {
+		return getSharedProject().getLocalName() + " - " + getSharedProject().getLocalDirectory().getAbsolutePath();
 	}
 
-	public SharedProject getSharedProject()
-	{
-		return (SharedProject)getObject();
+	public SharedProject getSharedProject() {
+		return (SharedProject) getObject();
 	}
 
 }

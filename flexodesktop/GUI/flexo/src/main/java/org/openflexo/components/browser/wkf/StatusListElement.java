@@ -27,40 +27,34 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.wkf.Status;
 import org.openflexo.foundation.wkf.StatusList;
 
-
 /**
  * Browser element representing all the status of a process
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class StatusListElement extends BrowserElement
-{
+public class StatusListElement extends BrowserElement {
 
-    public StatusListElement(StatusList statusList, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(statusList, BrowserElementType.STATUS_LIST, browser, parent);
-    }
+	public StatusListElement(StatusList statusList, ProjectBrowser browser, BrowserElement parent) {
+		super(statusList, BrowserElementType.STATUS_LIST, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        // We add the status
-        StatusList statusList = getStatusList();
-        for (Enumeration e = statusList.getProcess().getSortedStatuses(); e.hasMoreElements();) {
-            addToChilds((Status) e.nextElement());
-        }
-    }
+	@Override
+	protected void buildChildrenVector() {
+		// We add the status
+		StatusList statusList = getStatusList();
+		for (Enumeration e = statusList.getProcess().getSortedStatuses(); e.hasMoreElements();) {
+			addToChilds((Status) e.nextElement());
+		}
+	}
 
-    protected StatusList getStatusList()
-    {
-        return (StatusList) getObject();
-    }
+	protected StatusList getStatusList() {
+		return (StatusList) getObject();
+	}
 
-    @Override
-	protected BrowserElementType getFilteredElementType()
-    {
-        return BrowserElementType.STATUS;
-    }
+	@Override
+	protected BrowserElementType getFilteredElementType() {
+		return BrowserElementType.STATUS;
+	}
 
 }

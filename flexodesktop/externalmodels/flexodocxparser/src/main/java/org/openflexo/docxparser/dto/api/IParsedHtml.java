@@ -21,9 +21,8 @@ package org.openflexo.docxparser.dto.api;
 
 import java.util.List;
 
-
-public interface IParsedHtml
-{
+public interface IParsedHtml {
 	public String getHtml();
+
 	public List<IParsedHtmlResource> getNeededResources();
 }

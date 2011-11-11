@@ -30,81 +30,71 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.ScreenshotResource;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 
+public class GenerateActivityScreenshot extends FlexoAction<GenerateActivityScreenshot, AbstractActivityNode, AbstractActivityNode> {
 
-public class GenerateActivityScreenshot extends FlexoAction<GenerateActivityScreenshot,AbstractActivityNode,AbstractActivityNode>  
-{
+	private static final Logger logger = Logger.getLogger(GenerateActivityScreenshot.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(GenerateActivityScreenshot.class.getPackage().getName());
-    
-    public static FlexoActionType<GenerateActivityScreenshot,AbstractActivityNode,AbstractActivityNode> actionType = new FlexoActionType<GenerateActivityScreenshot,AbstractActivityNode,AbstractActivityNode> ("generate_screenshot",FlexoActionType.docGroup,FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<GenerateActivityScreenshot, AbstractActivityNode, AbstractActivityNode> actionType = new FlexoActionType<GenerateActivityScreenshot, AbstractActivityNode, AbstractActivityNode>(
+			"generate_screenshot", FlexoActionType.docGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public GenerateActivityScreenshot makeNewAction(AbstractActivityNode focusedObject, Vector<AbstractActivityNode> globalSelection, FlexoEditor editor) 
-        {
-            return new GenerateActivityScreenshot(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public GenerateActivityScreenshot makeNewAction(AbstractActivityNode focusedObject, Vector<AbstractActivityNode> globalSelection,
+				FlexoEditor editor) {
+			return new GenerateActivityScreenshot(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(AbstractActivityNode object, Vector<AbstractActivityNode> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(AbstractActivityNode object, Vector<AbstractActivityNode> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(AbstractActivityNode object, Vector<AbstractActivityNode> globalSelection) 
-        {
-            return object != null;
-        }
-                
-    };
-    
-    private boolean _hasBeenRegenerated;
+		@Override
+		protected boolean isEnabledForSelection(AbstractActivityNode object, Vector<AbstractActivityNode> globalSelection) {
+			return object != null;
+		}
 
-    GenerateActivityScreenshot (AbstractActivityNode focusedObject, Vector<AbstractActivityNode> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-    public AbstractActivityNode getActivity() 
-    {
-        if (getFocusedObject() != null) {
-            return getFocusedObject();
-        }
-        return null;
-    }
-    
-    public ScreenshotResource getScreenshotResource()
-    {
-        return getActivity().getProject().getScreenshotResource(getActivity());
-    }
-    
-    @Override
-	protected void doAction(Object context) throws FlexoException
-    {
-        if (getActivity() != null) {
-            ScreenshotResource screenshotResource = getScreenshotResource();
-            if (screenshotResource == null) {
-                logger.info("Create resource for screenshot of activity "+getActivity().getName());
-                screenshotResource = ScreenshotResource.createNewScreenshotForObject(getActivity());
-            }
-            else {
-                logger.info("Resource for screenshot has been found");
-            }
-            _hasBeenRegenerated = screenshotResource.ensureGenerationIsUpToDate();
-            if (logger.isLoggable(Level.INFO))
-                logger.info("Screenshot generated");
-        }
-        else {
-            logger.warning("Focused object is null !");
-        }
-    }
+	private boolean _hasBeenRegenerated;
 
-    public boolean hasBeenRegenerated() 
-    {
-        return _hasBeenRegenerated;
-    }
+	GenerateActivityScreenshot(AbstractActivityNode focusedObject, Vector<AbstractActivityNode> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	public AbstractActivityNode getActivity() {
+		if (getFocusedObject() != null) {
+			return getFocusedObject();
+		}
+		return null;
+	}
+
+	public ScreenshotResource getScreenshotResource() {
+		return getActivity().getProject().getScreenshotResource(getActivity());
+	}
+
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		if (getActivity() != null) {
+			ScreenshotResource screenshotResource = getScreenshotResource();
+			if (screenshotResource == null) {
+				logger.info("Create resource for screenshot of activity " + getActivity().getName());
+				screenshotResource = ScreenshotResource.createNewScreenshotForObject(getActivity());
+			} else {
+				logger.info("Resource for screenshot has been found");
+			}
+			_hasBeenRegenerated = screenshotResource.ensureGenerationIsUpToDate();
+			if (logger.isLoggable(Level.INFO))
+				logger.info("Screenshot generated");
+		} else {
+			logger.warning("Focused object is null !");
+		}
+	}
+
+	public boolean hasBeenRegenerated() {
+		return _hasBeenRegenerated;
+	}
 
 }

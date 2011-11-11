@@ -24,34 +24,31 @@ import org.openflexo.localization.FlexoLocalization;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class DuplicateDKVObjectException extends FlexoException
-{
+public class DuplicateDKVObjectException extends FlexoException {
 
-    private DKVObject object;
+	private DKVObject object;
 
-    /**
+	/**
      * 
      */
-    public DuplicateDKVObjectException(DKVObject object)
-    {
-        super();
-        this.object = object;
-    }
+	public DuplicateDKVObjectException(DKVObject object) {
+		super();
+		this.object = object;
+	}
 
-    public DKVObject getObject()
-    {
-        return object;
-    }
-    
-    /**
-     * Overrides getLocalizedMessage
-     * @see org.openflexo.foundation.FlexoException#getLocalizedMessage()
-     */
-    @Override
-    public String getLocalizedMessage()
-    {
-        return FlexoLocalization.localizedForKey("duplicate_object");
-    }
+	public DKVObject getObject() {
+		return object;
+	}
+
+	/**
+	 * Overrides getLocalizedMessage
+	 * 
+	 * @see org.openflexo.foundation.FlexoException#getLocalizedMessage()
+	 */
+	@Override
+	public String getLocalizedMessage() {
+		return FlexoLocalization.localizedForKey("duplicate_object");
+	}
 }

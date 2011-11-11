@@ -30,62 +30,53 @@ import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCRepository;
 
-
-class DEBrowserConfiguration implements BrowserConfiguration
-{
+class DEBrowserConfiguration implements BrowserConfiguration {
 	private TOCData tocData;
 	private GeneratorBrowserConfigurationElementFactory _factory;
 
-	protected DEBrowserConfiguration(TOCData generatedDoc)
-	{
+	protected DEBrowserConfiguration(TOCData generatedDoc) {
 		super();
 		tocData = generatedDoc;
 		_factory = new GeneratorBrowserConfigurationElementFactory();
 	}
 
 	@Override
-	public FlexoProject getProject() 
-	{
+	public FlexoProject getProject() {
 		if (tocData != null)
 			return tocData.getProject();
 		return null;
 	}
-	
-    @Override
-	public void configure(ProjectBrowser aBrowser) 
-	{
+
+	@Override
+	public void configure(ProjectBrowser aBrowser) {
 	}
 
 	@Override
-	public FlexoModelObject getDefaultRootObject()
-	{
+	public FlexoModelObject getDefaultRootObject() {
 		return tocData;
 	}
 
 	@Override
-	public BrowserElementFactory getBrowserElementFactory()
-	{
-		return _factory; 
+	public BrowserElementFactory getBrowserElementFactory() {
+		return _factory;
 	}
 
-	class GeneratorBrowserConfigurationElementFactory implements BrowserElementFactory
-	{
+	class GeneratorBrowserConfigurationElementFactory implements BrowserElementFactory {
 
 		GeneratorBrowserConfigurationElementFactory() {
 			super();
 		}
 
 		@Override
-		public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent)
-		{
+		public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
 			if (object instanceof TOCRepository) {
-				return new TOCRepositoryElement((TOCRepository)object,browser,parent);
+				return new TOCRepositoryElement((TOCRepository) object, browser, parent);
 			} else if (object instanceof TOCEntry) {
-				return new TOCEntryElement((TOCEntry)object,browser,parent);
+				return new TOCEntryElement((TOCEntry) object, browser, parent);
 			} else if (object instanceof DocType) {
-                return new DocTypeElement(object,browser,parent);
-            } else if (object instanceof TOCData) {
-				return new TOCDataElement((TOCData)object,browser,parent);
+				return new DocTypeElement(object, browser, parent);
+			} else if (object instanceof TOCData) {
+				return new TOCDataElement((TOCData) object, browser, parent);
 			}
 			return null;
 		}

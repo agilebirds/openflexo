@@ -21,45 +21,38 @@ package org.openflexo.letparser;
 
 public class IntValue extends Value {
 
-    private int _value;
-    
-    public IntValue (int value)
-    {
-        super();
-        _value = value;
-    }
-    
-    public int getIntValue() 
-    {
-        return _value;
-    }
-    
-    @Override
-	public String getStringValue() 
-    {
-        return ""+_value;
-    }
-    
-   @Override
-public String toString()
-    {
-        return getPrefix()+"Int["+_value+"]";
-    }
+	private int _value;
 
-   @Override
-public String getSerializationValue()
-   {
-       return "$"+getStringValue();
-   }
+	public IntValue(int value) {
+		super();
+		_value = value;
+	}
 
-    @Override
-	public boolean equals (Object obj)
-    {
-        if (obj instanceof IntValue) {
-            return (getIntValue() == ((IntValue)obj).getIntValue());
-        }
-        return super.equals(obj);
-    }
+	public int getIntValue() {
+		return _value;
+	}
 
+	@Override
+	public String getStringValue() {
+		return "" + _value;
+	}
+
+	@Override
+	public String toString() {
+		return getPrefix() + "Int[" + _value + "]";
+	}
+
+	@Override
+	public String getSerializationValue() {
+		return "$" + getStringValue();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof IntValue) {
+			return (getIntValue() == ((IntValue) obj).getIntValue());
+		}
+		return super.equals(obj);
+	}
 
 }

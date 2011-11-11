@@ -27,22 +27,20 @@ import org.openflexo.logging.FlexoLogger;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class FlexoDKVModelBuilder extends FlexoBuilder<FlexoDKVResource>
-{
-    
-    @SuppressWarnings("unused")
+public class FlexoDKVModelBuilder extends FlexoBuilder<FlexoDKVResource> {
+
+	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(FlexoDKVModelBuilder.class.getPackage().getName());
 
-    public DKVModel dkvModel;
-    
-    /**
+	public DKVModel dkvModel;
+
+	/**
      * 
      */
-    public FlexoDKVModelBuilder(FlexoDKVResource resource)
-    {
-        super(resource);
-    }
-    
+	public FlexoDKVModelBuilder(FlexoDKVResource resource) {
+		super(resource);
+	}
+
 }

@@ -49,8 +49,8 @@ import org.openflexo.sg.generationdef.ContextEntry;
 import org.openflexo.sg.generationdef.FileEntry;
 import org.openflexo.toolbox.FileFormat;
 
-
-public abstract class SGGenerator<T extends FlexoModelObject, CR extends GeneratedCodeResult> extends Generator<T, SourceRepository> implements DataFlexoObserver, IFlexoResourceGenerator {
+public abstract class SGGenerator<T extends FlexoModelObject, CR extends GeneratedCodeResult> extends Generator<T, SourceRepository>
+		implements DataFlexoObserver, IFlexoResourceGenerator {
 
 	private static final Logger logger = FlexoLogger.getLogger(SGGenerator.class.getPackage().getName());
 
@@ -90,13 +90,15 @@ public abstract class SGGenerator<T extends FlexoModelObject, CR extends Generat
 		returned.put("implementationModel", getRepository().getImplementationModel());
 
 		// Add the technology module and all its required modules in context
-		for (TechnologyModuleDefinition moduleDefinition : moduleGenerator.getTechnologyModule().getTechnologyModuleDefinition().getAllRequiredModules()) {
+		for (TechnologyModuleDefinition moduleDefinition : moduleGenerator.getTechnologyModule().getTechnologyModuleDefinition()
+				.getAllRequiredModules()) {
 			TechnologyModuleImplementation implementation = getRepository().getImplementationModel().getTechnologyModule(moduleDefinition);
 			if (implementation != null)
 				returned.put(ModuleGenerator.getTechnologyImplementationVelocityName(implementation), implementation);
 		}
 		// Add the compatible technology modules in context
-		for (TechnologyModuleDefinition moduleDefinition : moduleGenerator.getTechnologyModule().getTechnologyModuleDefinition().getCompatibleModules()) {
+		for (TechnologyModuleDefinition moduleDefinition : moduleGenerator.getTechnologyModule().getTechnologyModuleDefinition()
+				.getCompatibleModules()) {
 			TechnologyModuleImplementation implementation = getRepository().getImplementationModel().getTechnologyModule(moduleDefinition);
 			if (implementation != null)
 				returned.put(ModuleGenerator.getTechnologyImplementationVelocityName(implementation), implementation);
@@ -119,8 +121,7 @@ public abstract class SGGenerator<T extends FlexoModelObject, CR extends Generat
 	 * @return true if a generation must proceed, false otherwise.
 	 */
 	public boolean needGeneration(boolean forceRegenerate) {
-		if (isResourceMarkedAsDeleted())
-		{
+		if (isResourceMarkedAsDeleted()) {
 			formattingException = null;
 			cleanCrossModuleDate();
 			return false;
@@ -203,11 +204,12 @@ public abstract class SGGenerator<T extends FlexoModelObject, CR extends Generat
 	 */
 	public static List<CGTemplate> getVelocityMacroTemplates(Generator<?, ?> currentGenerator, ModuleGenerator moduleGenerator) {
 		List<CGTemplate> macros = new ArrayList<CGTemplate>();
-		
+
 		TechnologyModuleDefinition currentModuleDefinition = moduleGenerator.getTechnologyModule().getTechnologyModuleDefinition();
 
 		// Add required modules
-		Map<Integer, LinkedHashSet<TechnologyModuleDefinition>> requiredModuleByLevel = currentModuleDefinition.getAllRequiredModulesByLevel();
+		Map<Integer, LinkedHashSet<TechnologyModuleDefinition>> requiredModuleByLevel = currentModuleDefinition
+				.getAllRequiredModulesByLevel();
 		List<Integer> orderedLevels = new ArrayList<Integer>(requiredModuleByLevel.keySet());
 		Collections.sort(orderedLevels);
 		Collections.reverse(orderedLevels);
@@ -218,10 +220,12 @@ public abstract class SGGenerator<T extends FlexoModelObject, CR extends Generat
 					ModuleGenerator definitionModuleGenerator = moduleGenerator.getProjectGenerator().getModuleGenerator(definition);
 					if (definitionModuleGenerator != null) {
 						try {
-							macros.add(currentGenerator.templateWithName(definitionModuleGenerator.getTemplatesFolder() + "VM_global_library.vm"));
+							macros.add(currentGenerator.templateWithName(definitionModuleGenerator.getTemplatesFolder()
+									+ "VM_global_library.vm"));
 						} catch (TemplateNotFoundException e) {
 							if (logger.isLoggable(Level.FINE)) {
-								logger.fine("Specific velocity macro library '" + definitionModuleGenerator.getTemplatesFolder() + "VM_global_library.vm" + "' not found in module.");
+								logger.fine("Specific velocity macro library '" + definitionModuleGenerator.getTemplatesFolder()
+										+ "VM_global_library.vm" + "' not found in module.");
 								e.printStackTrace();
 							}
 						}
@@ -238,7 +242,8 @@ public abstract class SGGenerator<T extends FlexoModelObject, CR extends Generat
 					macros.add(currentGenerator.templateWithName(definitionModuleGenerator.getTemplatesFolder() + "VM_global_library.vm"));
 				} catch (TemplateNotFoundException e) {
 					if (logger.isLoggable(Level.FINE)) {
-						logger.fine("Specific velocity macro library '" + definitionModuleGenerator.getTemplatesFolder() + "VM_global_library.vm" + "' not found in module.");
+						logger.fine("Specific velocity macro library '" + definitionModuleGenerator.getTemplatesFolder()
+								+ "VM_global_library.vm" + "' not found in module.");
 						e.printStackTrace();
 					}
 				}
@@ -250,7 +255,8 @@ public abstract class SGGenerator<T extends FlexoModelObject, CR extends Generat
 			macros.add(currentGenerator.templateWithName(moduleGenerator.getTemplatesFolder() + "VM_global_library.vm"));
 		} catch (TemplateNotFoundException e) {
 			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Specific velocity macro library '" + moduleGenerator.getTemplatesFolder() + "VM_global_library.vm" + "' not found in module.");
+				logger.fine("Specific velocity macro library '" + moduleGenerator.getTemplatesFolder() + "VM_global_library.vm"
+						+ "' not found in module.");
 				e.printStackTrace();
 			}
 		}

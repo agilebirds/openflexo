@@ -27,7 +27,6 @@ import org.openflexo.antar.expr.Variable;
 import org.openflexo.foundation.exec.inst.CreateProcessInstance;
 import org.openflexo.foundation.wkf.ws.NewPort;
 
-
 public class NewPortActivation extends PortActivation<NewPort> {
 
 	protected NewPortActivation(NewPort port) {
@@ -36,24 +35,20 @@ public class NewPortActivation extends PortActivation<NewPort> {
 
 	@Override
 	protected String getProcedureName() {
-		return "newProcessInstance"+getPort().getFlexoID();
+		return "newProcessInstance" + getPort().getFlexoID();
 	}
 
 	@Override
 	protected ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException, NotSupportedException {
-		return makeSequentialControlGraph(new CreateProcessInstance(getPort().getProcess()),
-				new ProcedureCall(PortDesactivation.getDesactivationPortBuilder(getPort()).makeProcedure()));
+		return makeSequentialControlGraph(new CreateProcessInstance(getPort().getProcess()), new ProcedureCall(PortDesactivation
+				.getDesactivationPortBuilder(getPort()).makeProcedure()));
 	}
 
 	@Override
 	protected Procedure makeProcedure() throws InvalidModelException, NotSupportedException {
-		Procedure returned = new Procedure(
-				getProcedureName(),
-				makeControlGraph(true),
-				getProcedureComment(),
-				new Procedure.ProcedureParameter(new Variable("ec"),new Type("com.webobjects.eocontrol.EOEditingContext")));
+		Procedure returned = new Procedure(getProcedureName(), makeControlGraph(true), getProcedureComment(),
+				new Procedure.ProcedureParameter(new Variable("ec"), new Type("com.webobjects.eocontrol.EOEditingContext")));
 		return returned;
 	}
-	
-	
+
 }

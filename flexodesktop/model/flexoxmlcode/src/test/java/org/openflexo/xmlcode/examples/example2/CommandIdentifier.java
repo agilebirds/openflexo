@@ -23,30 +23,25 @@ package org.openflexo.xmlcode.examples.example2;
 import org.openflexo.xmlcode.XMLSerializable;
 
 /**
- * Class <code>CommandIdentifier</code> is intented to represent a command
- * identifier (a very basic object which is just here to demonstrate how to use
- * hashtables).
+ * Class <code>CommandIdentifier</code> is intented to represent a command identifier (a very basic object which is just here to demonstrate
+ * how to use hashtables).
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  */
-public class CommandIdentifier implements XMLSerializable
-{
+public class CommandIdentifier implements XMLSerializable {
 
-    protected String identifier;
+	protected String identifier;
 
-    public String getIdentifier()
-    {
-        return identifier;
-    }
+	public String getIdentifier() {
+		return identifier;
+	}
 
-    public void setIdentifier(String v)
-    {
-        this.identifier = v;
-    }
+	public void setIdentifier(String v) {
+		this.identifier = v;
+	}
 
-    @Override
-	public String toString()
-    {
-        return "CommandIdentifier=" + identifier;
-    }
+	@Override
+	public String toString() {
+		return "CommandIdentifier=" + identifier;
+	}
 }

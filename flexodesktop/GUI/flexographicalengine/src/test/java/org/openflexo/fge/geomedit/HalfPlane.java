@@ -24,52 +24,42 @@ import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
 import org.openflexo.fge.geomedit.construction.HalfPlaneConstruction;
 import org.openflexo.fge.geomedit.gr.HalfPlaneGraphicalRepresentation;
 
-
 public class HalfPlane extends GeometricObject<FGEHalfPlane> {
 
 	private HalfPlaneGraphicalRepresentation graphicalRepresentation;
-	
+
 	// Called for LOAD
-	public HalfPlane(GeomEditBuilder builder)
-	{
+	public HalfPlane(GeomEditBuilder builder) {
 		super(builder);
 	}
-	
-	public HalfPlane(GeometricSet set, HalfPlaneConstruction construction) 
-	{
+
+	public HalfPlane(GeometricSet set, HalfPlaneConstruction construction) {
 		super(set, construction);
-		graphicalRepresentation = new HalfPlaneGraphicalRepresentation(this,set.getEditedDrawing());
+		graphicalRepresentation = new HalfPlaneGraphicalRepresentation(this, set.getEditedDrawing());
 	}
-	
+
 	@Override
-	public HalfPlaneGraphicalRepresentation getGraphicalRepresentation()
-	{
+	public HalfPlaneGraphicalRepresentation getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
-	public void setGraphicalRepresentation(HalfPlaneGraphicalRepresentation aGR)
-	{
+	public void setGraphicalRepresentation(HalfPlaneGraphicalRepresentation aGR) {
 		aGR.setDrawable(this);
 		graphicalRepresentation = aGR;
 	}
-	
+
 	@Override
-	public HalfPlaneConstruction getConstruction()
-	{
-		return (HalfPlaneConstruction)super.getConstruction();
+	public HalfPlaneConstruction getConstruction() {
+		return (HalfPlaneConstruction) super.getConstruction();
 	}
 
-	public void setConstruction(HalfPlaneConstruction lineConstruction)
-	{
+	public void setConstruction(HalfPlaneConstruction lineConstruction) {
 		_setConstruction(lineConstruction);
 	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return "HalfPlane.inspector";
 	}
-
-
 
 }

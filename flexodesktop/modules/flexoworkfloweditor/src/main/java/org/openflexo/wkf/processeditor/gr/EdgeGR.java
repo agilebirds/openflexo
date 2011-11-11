@@ -63,7 +63,6 @@ import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.processeditor.ProcessEditorController;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
-
 public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> implements ProcessEditorConstants {
 
 	protected static final Logger logger = Logger.getLogger(EdgeGR.class.getPackage().getName());
@@ -688,8 +687,8 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 		return (getPostCondition() != null)
 				&& (getPostCondition().getStartNode() instanceof ActionNode)
 				&& (getPostCondition().getNextNode() instanceof ActionNode)
-				&& (((ActionNode) getPostCondition().getStartNode()).getParentPetriGraph() == ((ActionNode) getPostCondition().getNextNode())
-						.getParentPetriGraph());
+				&& (((ActionNode) getPostCondition().getStartNode()).getParentPetriGraph() == ((ActionNode) getPostCondition()
+						.getNextNode()).getParentPetriGraph());
 	}
 
 	@Override
@@ -726,9 +725,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 	}
 
 	public static enum EdgeRepresentation implements HasIcon {
-		RECT_POLYLIN,
-		CURVE,
-		LINE;
+		RECT_POLYLIN, CURVE, LINE;
 
 		@Override
 		public ImageIcon getIcon() {

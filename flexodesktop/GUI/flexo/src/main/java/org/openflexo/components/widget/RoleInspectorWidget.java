@@ -33,130 +33,115 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.inspector.widget.WidgetFocusListener;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class RoleInspectorWidget extends CustomInspectorWidget<Role>
-{
+public class RoleInspectorWidget extends CustomInspectorWidget<Role> {
 
-    protected static final Logger logger = Logger.getLogger(RoleInspectorWidget.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(RoleInspectorWidget.class.getPackage().getName());
 
-    protected RoleSelector _selector;
+	protected RoleSelector _selector;
 
-    public RoleInspectorWidget(PropertyModel model, AbstractController controller)
-    {
-        super(model,controller);
-        _selector = new RoleSelector(null, null) {
-            @Override
-			public void apply()
-            {
-                super.apply();
-                updateModelFromWidget();
-            }
+	public RoleInspectorWidget(PropertyModel model, AbstractController controller) {
+		super(model, controller);
+		_selector = new RoleSelector(null, null) {
+			@Override
+			public void apply() {
+				super.apply();
+				updateModelFromWidget();
+			}
 
-            @Override
-			public void cancel()
-            {
-                super.cancel();
-                updateModelFromWidget();
-            }
-            
-            @Override
-			public boolean isSelectable (FlexoModelObject object)
-            {
-                boolean returned = super.isSelectable(object);
-                if (returned) {
-                    if (hasValueForParameter("isSelectable")) {
-                        return getBooleanParameteredValue(getValueForParameter("isSelectable"),object);
-                    }
-                }
-                return returned;
-            }
-        };
-        getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
-            @Override
-			public void focusGained(FocusEvent arg0)
-            {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Focus gained in " + getClass().getName());
-                super.focusGained(arg0);
-                _selector.getTextField().requestFocus();
-                _selector.getTextField().selectAll();
-            }
+			@Override
+			public void cancel() {
+				super.cancel();
+				updateModelFromWidget();
+			}
 
-            @Override
-			public void focusLost(FocusEvent arg0)
-            {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Focus lost in " + getClass().getName());
-                super.focusLost(arg0);
-            }
-        });
-    }
+			@Override
+			public boolean isSelectable(FlexoModelObject object) {
+				boolean returned = super.isSelectable(object);
+				if (returned) {
+					if (hasValueForParameter("isSelectable")) {
+						return getBooleanParameteredValue(getValueForParameter("isSelectable"), object);
+					}
+				}
+				return returned;
+			}
+		};
+		getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				if (logger.isLoggable(Level.FINE))
+					logger.fine("Focus gained in " + getClass().getName());
+				super.focusGained(arg0);
+				_selector.getTextField().requestFocus();
+				_selector.getTextField().selectAll();
+			}
 
-    @Override
-	public Class getDefaultType()
-    {
-        return Role.class;
-    }
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if (logger.isLoggable(Level.FINE))
+					logger.fine("Focus lost in " + getClass().getName());
+				super.focusLost(arg0);
+			}
+		});
+	}
 
-    @Override
-	public synchronized void updateWidgetFromModel()
-    {
-        _selector.setEditedObject(getObjectValue());
-        _selector.setRevertValue(getObjectValue());
-    }
+	@Override
+	public Class getDefaultType() {
+		return Role.class;
+	}
 
-    /**
-     * Update the model given the actual state of the widget
-     */
-    @Override
-	public synchronized void updateModelFromWidget()
-    {
-        setObjectValue(_selector.getEditedObject());
-    	super.updateModelFromWidget();
-   }
+	@Override
+	public synchronized void updateWidgetFromModel() {
+		_selector.setEditedObject(getObjectValue());
+		_selector.setRevertValue(getObjectValue());
+	}
 
-    @Override
-	public JComponent getDynamicComponent()
-    {
-        return _selector;
-    }
+	/**
+	 * Update the model given the actual state of the widget
+	 */
+	@Override
+	public synchronized void updateModelFromWidget() {
+		setObjectValue(_selector.getEditedObject());
+		super.updateModelFromWidget();
+	}
 
-    @Override
-	public void setProject(FlexoProject aProject)
-    {
-        super.setProject(aProject);
-        _selector.setProject(aProject);
-    }
+	@Override
+	public JComponent getDynamicComponent() {
+		return _selector;
+	}
 
-    /*protected void setRepository(DMRepository repository)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("Setting repository to " + repository);
-        _selector.setRootObject(repository);
-    }*/
+	@Override
+	public void setProject(FlexoProject aProject) {
+		super.setProject(aProject);
+		_selector.setProject(aProject);
+	}
 
-    @Override
-	protected void performModelUpdating(InspectableObject value)
-    {
-     }
+	/*protected void setRepository(DMRepository repository)
+	{
+	    if (logger.isLoggable(Level.FINE))
+	        logger.fine("Setting repository to " + repository);
+	    _selector.setRootObject(repository);
+	}*/
 
-    @Override
-    public void fireEditingCanceled() 
-    {
-    	if (_selector != null) _selector.closePopup();
-    }
-    
-    @Override
-    public void fireEditingStopped()     
-    {
-    	if (_selector != null) _selector.closePopup();
-    }
+	@Override
+	protected void performModelUpdating(InspectableObject value) {
+	}
 
+	@Override
+	public void fireEditingCanceled() {
+		if (_selector != null)
+			_selector.closePopup();
+	}
 
- }
+	@Override
+	public void fireEditingStopped() {
+		if (_selector != null)
+			_selector.closePopup();
+	}
+
+}

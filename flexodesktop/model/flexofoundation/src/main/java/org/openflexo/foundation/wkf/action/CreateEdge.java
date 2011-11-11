@@ -59,133 +59,123 @@ import org.openflexo.foundation.wkf.ws.InOutPort;
 import org.openflexo.foundation.wkf.ws.MessageEntry;
 import org.openflexo.foundation.wkf.ws.MessageEntryBinding;
 
+public class CreateEdge extends FlexoUndoableAction<CreateEdge, AbstractNode, AbstractNode> {
 
-public class CreateEdge extends FlexoUndoableAction<CreateEdge,AbstractNode,AbstractNode>
-{
+	private static final Logger logger = Logger.getLogger(CreateEdge.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(CreateEdge.class.getPackage().getName());
+	public static FlexoActionType<CreateEdge, AbstractNode, AbstractNode> actionType = new FlexoActionType<CreateEdge, AbstractNode, AbstractNode>(
+			"create_edge", FlexoActionType.defaultGroup) {
 
-    public static FlexoActionType<CreateEdge,AbstractNode,AbstractNode> actionType
-    = new FlexoActionType<CreateEdge,AbstractNode,AbstractNode> ("create_edge",FlexoActionType.defaultGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public CreateEdge makeNewAction(AbstractNode focusedObject, Vector<AbstractNode> globalSelection, FlexoEditor editor) {
+			return new CreateEdge(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public CreateEdge makeNewAction(AbstractNode focusedObject, Vector<AbstractNode> globalSelection, FlexoEditor editor)
-        {
-            return new CreateEdge(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(AbstractNode object, Vector<AbstractNode> globalSelection) {
+			return false;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(AbstractNode object, Vector<AbstractNode> globalSelection)
-        {
-            return false;
-        }
+		@Override
+		protected boolean isEnabledForSelection(AbstractNode object, Vector<AbstractNode> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(AbstractNode object, Vector<AbstractNode> globalSelection)
-        {
-            return true;
-        }
+		private String[] persistentProperties = { "startingNode", "endNode", "endNodePreCondition" };
 
-        private String[] persistentProperties = { "startingNode", "endNode", "endNodePreCondition" };
+		@Override
+		protected String[] getPersistentProperties() {
+			return persistentProperties;
+		}
 
-        @Override
-		protected String[] getPersistentProperties()
-        {
-        	return persistentProperties;
-        }
+	};
 
-    };
+	CreateEdge(AbstractNode focusedObject, Vector<AbstractNode> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    CreateEdge (AbstractNode focusedObject, Vector<AbstractNode> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	static {
+		FlexoModelObject.addActionForClass(actionType, AbstractNode.class);
+	}
 
-    static {
-    	FlexoModelObject.addActionForClass(actionType, AbstractNode.class);
-    }
+	AbstractNode startingNode;
+	AbstractNode endNode;
+	private FlexoPreCondition endNodePreCondition;
+	private FlexoPostCondition newPostCondition = null;
 
-    AbstractNode startingNode;
-    AbstractNode endNode;
-    private FlexoPreCondition endNodePreCondition;
-    private FlexoPostCondition newPostCondition = null;
+	private boolean isGenericOutput = false;
 
-    private boolean isGenericOutput = false;
+	private Object outputContext;
+	private String newEdgeName;
 
-    private Object outputContext;
-    private String newEdgeName;
+	private CreatePreCondition createPreConditionForInducedEdgeConstruction = null;
+	private CreatePreCondition createPreCondition = null;
 
-    private CreatePreCondition createPreConditionForInducedEdgeConstruction = null;
-    private CreatePreCondition createPreCondition = null;
+	@Override
+	protected void doAction(Object context) throws InvalidEdgeDefinition, DisplayActionCannotBeBound {
+		// 1. Check validity
+		// Cannot have null start node or end node
+		if (startingNode == null || endNode == null)
+			throw new InvalidEdgeDefinition();
 
-    @Override
-	protected void doAction(Object context) throws InvalidEdgeDefinition, DisplayActionCannotBeBound
-    {
-    	// 1. Check validity
-    	// Cannot have null start node or end node
-    	if (startingNode == null || endNode == null)
-    		throw new InvalidEdgeDefinition();
+		// Display action cannot have outgoing edges
+		if (startingNode instanceof ActionNode && ((ActionNode) startingNode).getActionType() == ActionType.DISPLAY_ACTION)
+			throw new DisplayActionCannotBeBound();
 
-    	// Display action cannot have outgoing edges
-    	if (startingNode instanceof ActionNode
-    			&&  ((ActionNode)startingNode).getActionType()==ActionType.DISPLAY_ACTION)
-    		throw new DisplayActionCannotBeBound();
+		// End activity node of the top level cannot have outgoing edges
+		if (startingNode instanceof AbstractActivityNode && ((AbstractActivityNode) startingNode).isEndNode()
+				&& ((AbstractActivityNode) startingNode).getActivityPetriGraph().getContainer() instanceof FlexoProcess) {
+			throw new InvalidEdgeDefinition();
+		}
 
-    	// End activity node of the top level cannot have outgoing edges
-    	if(startingNode instanceof AbstractActivityNode &&
-    			((AbstractActivityNode)startingNode).isEndNode() && ((AbstractActivityNode)startingNode).getActivityPetriGraph().getContainer() instanceof FlexoProcess){
-    		throw new InvalidEdgeDefinition();
-    	}
+		// 2. Let's find the end node (mainly ensure that edges that go to a FlexoNode go onto a precondition
+		AbstractNode realEndNode = findEndNode();
+		// Start node check
+		if (!startingNode.mayHaveOutgoingPostConditions())
+			throw new InvalidEdgeDefinition();
 
+		// End node check
+		if (!realEndNode.mayHaveIncomingPostConditions())
+			throw new InvalidEdgeDefinition();
 
-    	// 2. Let's find the end node (mainly ensure that edges that go to a FlexoNode go onto a precondition
-    	AbstractNode realEndNode = findEndNode();
-    	// Start node check
-    	if (!startingNode.mayHaveOutgoingPostConditions())
-    		throw new InvalidEdgeDefinition();
+		// 3. Create the edge
 
-    	// End node check
-    	if (!realEndNode.mayHaveIncomingPostConditions())
-    		throw new InvalidEdgeDefinition();
-
-    	// 3. Create the edge
-
-    	try {
+		try {
 			if (startingNode instanceof AbstractInPort) {
-				AbstractInPort start = (AbstractInPort)startingNode;
-				if (realEndNode instanceof FlexoPortMap && ((FlexoPortMap)realEndNode).isInputPort()) {
-					newPostCondition = new ForwardWSEdge(start,(FlexoPortMap) realEndNode);
+				AbstractInPort start = (AbstractInPort) startingNode;
+				if (realEndNode instanceof FlexoPortMap && ((FlexoPortMap) realEndNode).isInputPort()) {
+					newPostCondition = new ForwardWSEdge(start, (FlexoPortMap) realEndNode);
 				} else if (realEndNode instanceof Node) {
-					newPostCondition = new InternalMessageInEdge(start,(Node) realEndNode);
+					newPostCondition = new InternalMessageInEdge(start, (Node) realEndNode);
 				}
-			} else if (startingNode instanceof FlexoPortMap && ((FlexoPortMap)startingNode).isOutputPort()) {
-				FlexoPortMap start = (FlexoPortMap)startingNode;
-				if (realEndNode instanceof FlexoPort && ((FlexoPort)realEndNode).isOutPort()) {
-					newPostCondition = new BackwardWSEdge(start,(FlexoPort) realEndNode);
-				} else if (realEndNode instanceof FlexoPortMap && ((FlexoPortMap)realEndNode).isInputPort()) {
-					newPostCondition = new TransferWSEdge(start,(FlexoPortMap) realEndNode);
+			} else if (startingNode instanceof FlexoPortMap && ((FlexoPortMap) startingNode).isOutputPort()) {
+				FlexoPortMap start = (FlexoPortMap) startingNode;
+				if (realEndNode instanceof FlexoPort && ((FlexoPort) realEndNode).isOutPort()) {
+					newPostCondition = new BackwardWSEdge(start, (FlexoPort) realEndNode);
+				} else if (realEndNode instanceof FlexoPortMap && ((FlexoPortMap) realEndNode).isInputPort()) {
+					newPostCondition = new TransferWSEdge(start, (FlexoPortMap) realEndNode);
 				} else if (realEndNode instanceof Node) {
-					newPostCondition = new ExternalMessageOutEdge(start,(Node) realEndNode);
+					newPostCondition = new ExternalMessageOutEdge(start, (Node) realEndNode);
 				}
-			} else if (realEndNode instanceof FlexoPort && ((FlexoPort)realEndNode).isOutPort()) {
+			} else if (realEndNode instanceof FlexoPort && ((FlexoPort) realEndNode).isOutPort()) {
 				FlexoPort end = (FlexoPort) realEndNode;
-				if (startingNode instanceof FlexoPortMap && ((FlexoPortMap)startingNode).isOutputPort()) {
-					newPostCondition = new BackwardWSEdge((FlexoPortMap) startingNode,end);
+				if (startingNode instanceof FlexoPortMap && ((FlexoPortMap) startingNode).isOutputPort()) {
+					newPostCondition = new BackwardWSEdge((FlexoPortMap) startingNode, end);
 				} else if (startingNode instanceof PetriGraphNode) {
-					newPostCondition = new InternalMessageOutEdge((PetriGraphNode) startingNode,end);
+					newPostCondition = new InternalMessageOutEdge((PetriGraphNode) startingNode, end);
 				}
-			} else if (realEndNode instanceof FlexoPortMap && ((FlexoPortMap)realEndNode).isInputPort()) {
+			} else if (realEndNode instanceof FlexoPortMap && ((FlexoPortMap) realEndNode).isInputPort()) {
 				FlexoPortMap end = (FlexoPortMap) realEndNode;
 				if (startingNode instanceof AbstractInPort) {
-					newPostCondition = new ForwardWSEdge((AbstractInPort) startingNode,end);
+					newPostCondition = new ForwardWSEdge((AbstractInPort) startingNode, end);
 				} else if (startingNode instanceof PetriGraphNode) {
-					newPostCondition = new ExternalMessageInEdge((PetriGraphNode) startingNode,end);
+					newPostCondition = new ExternalMessageInEdge((PetriGraphNode) startingNode, end);
 				}
 			} else if (startingNode instanceof PetriGraphNode && realEndNode instanceof Node) {
-				newPostCondition = new TokenEdge((PetriGraphNode)startingNode, (Node) realEndNode);
+				newPostCondition = new TokenEdge((PetriGraphNode) startingNode, (Node) realEndNode);
 			}
 		} catch (InvalidEdgeException e) {
 			e.printStackTrace();
@@ -196,35 +186,34 @@ public class CreateEdge extends FlexoUndoableAction<CreateEdge,AbstractNode,Abst
 			addMessageVariableToProcessInstance((MessageEdge) newPostCondition);
 		}
 
-        if (newPostCondition != null) {
-        	// Set name when defined
-        	if (getNewEdgeName() != null){
-        		newPostCondition.setName(getNewEdgeName());
-        	}
-        	newPostCondition.setIsGenericOutput(getIsGenericOutput());
-        	newPostCondition.updateMetricsValues();
-        	if (getStartingNode() instanceof ContextualEdgeStarting && getOutputContext() != null) {
-        		((ContextualEdgeStarting)getStartingNode()).addToOutgoingPostConditions(newPostCondition,getOutputContext());
-        	} else {
-        		getStartingNode().addToOutgoingPostConditions(newPostCondition);
-        	}
-        } else {
-           	throw new InvalidEdgeDefinition();
-        }
+		if (newPostCondition != null) {
+			// Set name when defined
+			if (getNewEdgeName() != null) {
+				newPostCondition.setName(getNewEdgeName());
+			}
+			newPostCondition.setIsGenericOutput(getIsGenericOutput());
+			newPostCondition.updateMetricsValues();
+			if (getStartingNode() instanceof ContextualEdgeStarting && getOutputContext() != null) {
+				((ContextualEdgeStarting) getStartingNode()).addToOutgoingPostConditions(newPostCondition, getOutputContext());
+			} else {
+				getStartingNode().addToOutgoingPostConditions(newPostCondition);
+			}
+		} else {
+			throw new InvalidEdgeDefinition();
+		}
 
-        if (createPreCondition != null && createPreCondition.getNewPreCondition() != null) {
-         	createPreCondition.getNewPreCondition().resetLocation();
-        }
-        if (createPreConditionForInducedEdgeConstruction != null
-        		&& createPreConditionForInducedEdgeConstruction.getNewPreCondition() != null)
-        	createPreConditionForInducedEdgeConstruction.getNewPreCondition().resetLocation();
+		if (createPreCondition != null && createPreCondition.getNewPreCondition() != null) {
+			createPreCondition.getNewPreCondition().resetLocation();
+		}
+		if (createPreConditionForInducedEdgeConstruction != null
+				&& createPreConditionForInducedEdgeConstruction.getNewPreCondition() != null)
+			createPreConditionForInducedEdgeConstruction.getNewPreCondition().resetLocation();
 
-        objectCreated("NEW_POST_CONDITION",newPostCondition);
-    }
+		objectCreated("NEW_POST_CONDITION", newPostCondition);
+	}
 
 	@Override
-	protected void undoAction(Object context) throws FlexoException
-	{
+	protected void undoAction(Object context) throws FlexoException {
 		logger.info("CreateEdge: UNDO");
 		getNewPostCondition().delete();
 		if (createPreConditionForInducedEdgeConstruction != null) {
@@ -236,16 +225,15 @@ public class CreateEdge extends FlexoUndoableAction<CreateEdge,AbstractNode,Abst
 	}
 
 	@Override
-	protected void redoAction(Object context) throws FlexoException
-	{
+	protected void redoAction(Object context) throws FlexoException {
 		logger.info("CreateEdge: REDO");
 		if (createPreConditionForInducedEdgeConstruction != null) {
 			createPreConditionForInducedEdgeConstruction.redoAction();
-            endNodePreCondition = createPreConditionForInducedEdgeConstruction.getNewPreCondition();
+			endNodePreCondition = createPreConditionForInducedEdgeConstruction.getNewPreCondition();
 		}
 		if (createPreCondition != null) {
 			createPreCondition.redoAction();
-            endNodePreCondition = createPreCondition.getNewPreCondition();
+			endNodePreCondition = createPreCondition.getNewPreCondition();
 		}
 		doAction(context);
 	}
@@ -254,89 +242,75 @@ public class CreateEdge extends FlexoUndoableAction<CreateEdge,AbstractNode,Abst
 		if (endNode instanceof ActionNode)
 			return endNode;
 		if (endNode instanceof FlexoNode) {
-    		FlexoNode endFlexoNode = (FlexoNode)endNode;
-            if ((endFlexoNode.isBeginNode()) && (!(startingNode instanceof AbstractInPort))) {
-                // This is a induced edge construction
-                if (endFlexoNode.getAttachedPreCondition() != null) {
-                    endNodePreCondition = endFlexoNode.getAttachedPreCondition();
-                } else if (endFlexoNode instanceof ChildNode) {
-                	createPreConditionForInducedEdgeConstruction
-            		= CreatePreCondition.actionType.makeNewEmbeddedAction(
-            				((ChildNode)endFlexoNode).getFather(), null, this);
-            		createPreConditionForInducedEdgeConstruction.setAttachedBeginNode(endFlexoNode);
-            		createPreConditionForInducedEdgeConstruction.doAction();
-                    endNodePreCondition = createPreConditionForInducedEdgeConstruction.getNewPreCondition();
-                } else {
-                	throw new InvalidEdgeDefinition();
-                }
-            }
+			FlexoNode endFlexoNode = (FlexoNode) endNode;
+			if ((endFlexoNode.isBeginNode()) && (!(startingNode instanceof AbstractInPort))) {
+				// This is a induced edge construction
+				if (endFlexoNode.getAttachedPreCondition() != null) {
+					endNodePreCondition = endFlexoNode.getAttachedPreCondition();
+				} else if (endFlexoNode instanceof ChildNode) {
+					createPreConditionForInducedEdgeConstruction = CreatePreCondition.actionType.makeNewEmbeddedAction(
+							((ChildNode) endFlexoNode).getFather(), null, this);
+					createPreConditionForInducedEdgeConstruction.setAttachedBeginNode(endFlexoNode);
+					createPreConditionForInducedEdgeConstruction.doAction();
+					endNodePreCondition = createPreConditionForInducedEdgeConstruction.getNewPreCondition();
+				} else {
+					throw new InvalidEdgeDefinition();
+				}
+			}
 
-        	// We have to check that precondition is defined
-        	// Otherwise create it (but this is normally handled by initializer)
-        	if (endNodePreCondition == null) {
-        		createPreCondition
-        		= CreatePreCondition.actionType.makeNewEmbeddedAction(
-        				(FlexoNode)endNode, null, this);
-        		createPreCondition.setAllowsToSelectPreconditionOnly(true);
-        		createPreCondition.doAction();
-                endNodePreCondition = createPreCondition.getNewPreCondition();
-        	}
-        	return endNodePreCondition;
+			// We have to check that precondition is defined
+			// Otherwise create it (but this is normally handled by initializer)
+			if (endNodePreCondition == null) {
+				createPreCondition = CreatePreCondition.actionType.makeNewEmbeddedAction((FlexoNode) endNode, null, this);
+				createPreCondition.setAllowsToSelectPreconditionOnly(true);
+				createPreCondition.doAction();
+				endNodePreCondition = createPreCondition.getNewPreCondition();
+			}
+			return endNodePreCondition;
 		}
 		return endNode;
 	}
 
-	public AbstractNode getStartingNode()
-	{
+	public AbstractNode getStartingNode() {
 		if (startingNode == null) {
 			return getFocusedObject();
 		}
 		return startingNode;
 	}
 
-	public void setStartingNode(AbstractNode startingNode)
-	{
+	public void setStartingNode(AbstractNode startingNode) {
 		this.startingNode = startingNode;
 	}
 
-	public AbstractNode getEndNode()
-	{
+	public AbstractNode getEndNode() {
 		return endNode;
 	}
 
-	public void setEndNode(AbstractNode endNode)
-	{
+	public void setEndNode(AbstractNode endNode) {
 		this.endNode = endNode;
 	}
 
-	public class InvalidEdgeDefinition extends FlexoException
-	{
-		protected InvalidEdgeDefinition()
-		{
-			super("InvalidEdgeDefinition startingNode="+startingNode+" endNode="+endNode,"invalid_edge_definition");
+	public class InvalidEdgeDefinition extends FlexoException {
+		protected InvalidEdgeDefinition() {
+			super("InvalidEdgeDefinition startingNode=" + startingNode + " endNode=" + endNode, "invalid_edge_definition");
 		}
 	}
 
-	public class DisplayActionCannotBeBound extends FlexoException
-	{
-		protected DisplayActionCannotBeBound()
-		{
-			super("DisplayActionCannotBeBound","display_action_can_not_be_bound");
+	public class DisplayActionCannotBeBound extends FlexoException {
+		protected DisplayActionCannotBeBound() {
+			super("DisplayActionCannotBeBound", "display_action_can_not_be_bound");
 		}
 	}
 
-	public FlexoPreCondition getEndNodePreCondition()
-	{
+	public FlexoPreCondition getEndNodePreCondition() {
 		return endNodePreCondition;
 	}
 
-	public void setEndNodePreCondition(FlexoPreCondition endNodePreCondition)
-	{
+	public void setEndNodePreCondition(FlexoPreCondition endNodePreCondition) {
 		this.endNodePreCondition = endNodePreCondition;
 	}
 
-	public FlexoPostCondition getNewPostCondition()
-	{
+	public FlexoPostCondition getNewPostCondition() {
 		return newPostCondition;
 	}
 
@@ -358,105 +332,104 @@ public class CreateEdge extends FlexoUndoableAction<CreateEdge,AbstractNode,Abst
 
 	private void addMessageVariableToProcessInstance(MessageEdge pme) {
 
-    	// here, should insert the code to create automatically the bindings with the messages.
-    	DMEntity processInstance=pme.getProcess().getProcessDMEntity();
-
+		// here, should insert the code to create automatically the bindings with the messages.
+		DMEntity processInstance = pme.getProcess().getProcessDMEntity();
 
 		// TODO : wrong convention used with ports.
-		//edge leaving a API Port
-		if (pme.getStartNode() instanceof  InOutPort) {
-			Vector<MessageEntryBinding> inputBindings=pme.getInputMessage().getBindings();
+		// edge leaving a API Port
+		if (pme.getStartNode() instanceof InOutPort) {
+			Vector<MessageEntryBinding> inputBindings = pme.getInputMessage().getBindings();
 
-    		for (MessageEntryBinding b:inputBindings) {
-    			// for every entry in the message def
+			for (MessageEntryBinding b : inputBindings) {
+				// for every entry in the message def
 
-    			// add an property to the process instance
-    			MessageEntry m=b.getBindingDefinition();
+				// add an property to the process instance
+				MessageEntry m = b.getBindingDefinition();
 
-    			String propertyName="Service_"+m.getVariableName()+"_IN";
+				String propertyName = "Service_" + m.getVariableName() + "_IN";
 
-    			//String propertyName=pme.getOutputMessage().getName()+"_"+m.getVariableName()+"_IN";
-    			DMProperty p=processInstance.createDMProperty(propertyName, m.getType(),DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
+				// String propertyName=pme.getOutputMessage().getName()+"_"+m.getVariableName()+"_IN";
+				DMProperty p = processInstance.createDMProperty(propertyName, m.getType(),
+						DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
 
-    			// bind the created property to the message.
-    			pme.getProject().getBindingValueConverter().setBindable(pme);
-    			b.setBindingValue(pme.getProject().getBindingValueConverter().convertFromString("processInstance."+propertyName));
-    		}
+				// bind the created property to the message.
+				pme.getProject().getBindingValueConverter().setBindable(pme);
+				b.setBindingValue(pme.getProject().getBindingValueConverter().convertFromString("processInstance." + propertyName));
+			}
 		}
 
-		if (pme.getEndNode() instanceof  InOutPort) {
-			Vector<MessageEntryBinding> inputBindings=pme.getOutputMessage().getBindings();
+		if (pme.getEndNode() instanceof InOutPort) {
+			Vector<MessageEntryBinding> inputBindings = pme.getOutputMessage().getBindings();
 
-    		for (MessageEntryBinding b:inputBindings) {
-    			// for every entry in the message def
+			for (MessageEntryBinding b : inputBindings) {
+				// for every entry in the message def
 
-    			// add an property to the process instance
-    			MessageEntry m=b.getBindingDefinition();
+				// add an property to the process instance
+				MessageEntry m = b.getBindingDefinition();
 
-    			String propertyName="Service_"+m.getVariableName()+"_OUT";
+				String propertyName = "Service_" + m.getVariableName() + "_OUT";
 
-    			//String propertyName=pme.getOutputMessage().getName()+"_"+m.getVariableName()+"_IN";
-    			DMProperty p=processInstance.createDMProperty(propertyName, m.getType(),DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
+				// String propertyName=pme.getOutputMessage().getName()+"_"+m.getVariableName()+"_IN";
+				DMProperty p = processInstance.createDMProperty(propertyName, m.getType(),
+						DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
 
-    			// bind the created property to the message.
-    			pme.getProject().getBindingValueConverter().setBindable(pme);
-    			b.setBindingValue(pme.getProject().getBindingValueConverter().convertFromString("processInstance."+propertyName));
-    		}
+				// bind the created property to the message.
+				pme.getProject().getBindingValueConverter().setBindable(pme);
+				b.setBindingValue(pme.getProject().getBindingValueConverter().convertFromString("processInstance." + propertyName));
+			}
 		}
 
+		// edge ending in a WS port -> create a message for input
+		if (pme.getEndNode() instanceof FlexoPortMap && pme.getInputMessage() != null) {
+			Vector<MessageEntryBinding> inputBindings = pme.getInputMessage().getBindings();
 
-    	// edge ending in a WS port -> create a message for input
-    	if (pme.getEndNode() instanceof FlexoPortMap && pme.getInputMessage()!=null) {
-    		Vector<MessageEntryBinding> inputBindings=pme.getInputMessage().getBindings();
+			for (MessageEntryBinding b : inputBindings) {
+				// for every entry in the message def
 
-    		for (MessageEntryBinding b:inputBindings) {
-    			// for every entry in the message def
+				// add an property to the process instance
+				MessageEntry m = b.getBindingDefinition();
 
-    			// add an property to the process instance
-    			MessageEntry m=b.getBindingDefinition();
+				String propertyName = ((FlexoPortMap) pme.getEndNode()).getSubProcessNode().getName() + "_" + m.getVariableName() + "_IN";
 
-    			String propertyName=((FlexoPortMap)pme.getEndNode()).getSubProcessNode().getName()+"_"+m.getVariableName()+"_IN";
+				// String propertyName=pme.getOutputMessage().getName()+"_"+m.getVariableName()+"_IN";
+				DMProperty p = processInstance.createDMProperty(propertyName, m.getType(),
+						DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
 
-    			//String propertyName=pme.getOutputMessage().getName()+"_"+m.getVariableName()+"_IN";
-    			DMProperty p=processInstance.createDMProperty(propertyName, m.getType(),DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
+				// bind the created property to the message.
+				pme.getProject().getBindingValueConverter().setBindable(pme);
+				b.setBindingValue(pme.getProject().getBindingValueConverter().convertFromString("processInstance." + propertyName));
+			}
+		}
 
-    			// bind the created property to the message.
-    			pme.getProject().getBindingValueConverter().setBindable(pme);
-    			b.setBindingValue(pme.getProject().getBindingValueConverter().convertFromString("processInstance."+propertyName));
-    		}
-    	}
+		// edge starting is a WSPort -> create a message for output
+		if (pme.getStartNode() instanceof FlexoPortMap && pme.getOutputMessage() != null) {
+			Vector<MessageEntryBinding> outputBindings = pme.getOutputMessage().getBindings();
 
+			for (MessageEntryBinding b : outputBindings) {
+				// for every entry in the message def
 
-    	// edge starting is a WSPort -> create a message for output
-    	if (pme.getStartNode() instanceof FlexoPortMap && pme.getOutputMessage() != null) {
-    		Vector<MessageEntryBinding> outputBindings=pme.getOutputMessage().getBindings();
+				// add an property to the process instance
+				MessageEntry m = b.getBindingDefinition();
 
-        	for (MessageEntryBinding b:outputBindings) {
-        		// for every entry in the message def
+				String propertyName = ((FlexoPortMap) pme.getStartNode()).getSubProcessNode().getName() + "_" + m.getVariableName()
+						+ "_OUT";
 
-        		// add an property to the process instance
-        		MessageEntry m=b.getBindingDefinition();
+				DMProperty p = processInstance.createDMProperty(propertyName, m.getType(),
+						DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
 
-        		String propertyName=((FlexoPortMap)pme.getStartNode()).getSubProcessNode().getName()+"_"+m.getVariableName()+"_OUT";
-
-        		DMProperty p=processInstance.createDMProperty(propertyName, m.getType(),DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
-
-        		// bind the created property to the message.
-        		pme.getProject().getBindingValueConverter().setBindable(pme);
-        		b.setBindingValue(pme.getProject().getBindingValueConverter().convertFromString("processInstance."+propertyName));
-        	}
-    	}
+				// bind the created property to the message.
+				pme.getProject().getBindingValueConverter().setBindable(pme);
+				b.setBindingValue(pme.getProject().getBindingValueConverter().convertFromString("processInstance." + propertyName));
+			}
+		}
 	}
 
-	public boolean getIsGenericOutput()
-	{
+	public boolean getIsGenericOutput() {
 		return isGenericOutput;
 	}
 
-	public void setIsGenericOutput(boolean isGenericOutput)
-	{
+	public void setIsGenericOutput(boolean isGenericOutput) {
 		this.isGenericOutput = isGenericOutput;
 	}
-
 
 }

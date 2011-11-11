@@ -39,95 +39,87 @@ import org.openflexo.wkf.processeditor.ProcessRepresentation;
 import org.openflexo.wkf.swleditor.SwimmingLaneEditorController;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
+public class PrintProcessAction extends FlexoGUIAction<PrintProcessAction, FlexoProcess, WKFObject> {
 
-public class PrintProcessAction extends FlexoGUIAction<PrintProcessAction,FlexoProcess,WKFObject>
-{
+	protected static final Logger logger = Logger.getLogger(PrintProcessAction.class.getPackage().getName());
 
-    protected static final Logger logger = Logger.getLogger(PrintProcessAction.class.getPackage().getName());
+	public static FlexoActionType<PrintProcessAction, FlexoProcess, WKFObject> actionType = new FlexoActionType<PrintProcessAction, FlexoProcess, WKFObject>(
+			"print_process", FlexoActionType.printGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType<PrintProcessAction,FlexoProcess,WKFObject> actionType = new FlexoActionType<PrintProcessAction,FlexoProcess,WKFObject> ("print_process",FlexoActionType.printGroup,FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public PrintProcessAction makeNewAction(FlexoProcess focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+			return new PrintProcessAction(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public PrintProcessAction makeNewAction(FlexoProcess focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-        {
-            return new PrintProcessAction(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
+			return (object != null) && !object.isImported();
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoProcess object, Vector<WKFObject> globalSelection)
-        {
-            return (object!=null) && !object.isImported();
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
+			return (object != null);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoProcess object, Vector<WKFObject> globalSelection)
-        {
-            return (object != null);
-        }
+	};
 
-    };
+	static {
+		FlexoModelObject.addActionForClass(PrintProcessAction.actionType, FlexoProcess.class);
+	}
 
-    static {
-        FlexoModelObject.addActionForClass (PrintProcessAction.actionType, FlexoProcess.class);
-    }
+	protected FlexoProcess processToPrint;
 
-    protected FlexoProcess processToPrint;
+	PrintProcessAction(FlexoProcess focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    PrintProcessAction (FlexoProcess focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	public static void initWithController(final WKFController controller) {
+		controller.getEditor().registerInitializerFor(actionType, new FlexoActionInitializer<PrintProcessAction>() {
+			@Override
+			public boolean run(ActionEvent e, PrintProcessAction anAction) {
+				if (anAction.getFocusedObject() == null) {
+					anAction.setFocusedObject(controller.getCurrentFlexoProcess());
+				}
+				return (anAction.getFocusedObject() != null);
+			}
+		}, controller.getModule());
 
-    public static void initWithController (final WKFController controller)
-    {
-    	controller.getEditor().registerInitializerFor(actionType, new FlexoActionInitializer<PrintProcessAction>() {
-            @Override
-			public boolean run(ActionEvent e, PrintProcessAction anAction)
-            {
-                if (anAction.getFocusedObject() == null) {
-                    anAction.setFocusedObject(controller.getCurrentFlexoProcess());
-                }
-                return (anAction.getFocusedObject() != null);
-            }
-        }, controller.getModule());
+		controller.getEditor().registerFinalizerFor(actionType, new FlexoActionFinalizer<PrintProcessAction>() {
+			@Override
+			public boolean run(ActionEvent e, final PrintProcessAction anAction) {
+				anAction.processToPrint = anAction.getFocusedObject();
 
-    	controller.getEditor().registerFinalizerFor(actionType, new FlexoActionFinalizer<PrintProcessAction>() {
-            @Override
-			public boolean run(ActionEvent e, final PrintProcessAction anAction)
-            {
-                anAction.processToPrint = anAction.getFocusedObject();
+				FlexoPrintableComponent printableView = null;
+				if (controller.getCurrentPerspective() == controller.SWIMMING_LANE_PERSPECTIVE) {
+					SwimmingLaneEditorController printController = new SwimmingLaneEditorController(controller, anAction.processToPrint) {
+						@Override
+						public DrawingView<SwimmingLaneRepresentation> makeDrawingView(SwimmingLaneRepresentation drawing) {
+							return new PrintableSwimimingLaneView(drawing, this, getWKFController());
+						}
+					};
+					printController.getDrawingView().getPaintManager().disablePaintingCache();
+					printController.getDrawingGraphicalRepresentation().setDrawWorkingArea(false);
+					printableView = (FlexoPrintableComponent) printController.getDrawingView();
+				} else {
+					ProcessEditorController printController = new ProcessEditorController(anAction.processToPrint, anAction.getEditor(),
+							null) {
+						@Override
+						public DrawingView<ProcessRepresentation> makeDrawingView(ProcessRepresentation drawing) {
+							return new PrintableProcessView(drawing, this, getWKFController());
+						}
+					};
+					printController.getDrawingView().getPaintManager().disablePaintingCache();
+					printController.getDrawingGraphicalRepresentation().setDrawWorkingArea(false);
+					printableView = (FlexoPrintableComponent) printController.getDrawingView();
+				}
+				PrintProcessPreviewDialog dialog = new PrintProcessPreviewDialog(controller, printableView);
+				return (dialog.getStatus() == PrintProcessPreviewDialog.ReturnedStatus.CONTINUE_PRINTING);
+			}
+		}, controller.getModule());
 
-                FlexoPrintableComponent printableView = null;
-                if (controller.getCurrentPerspective()==controller.SWIMMING_LANE_PERSPECTIVE) {
-	                SwimmingLaneEditorController printController = new SwimmingLaneEditorController(controller,anAction.processToPrint) {
-	                	@Override
-	                	public DrawingView<SwimmingLaneRepresentation> makeDrawingView(SwimmingLaneRepresentation drawing) {
-	                		return new PrintableSwimimingLaneView(drawing,this,getWKFController());
-	                	}
-	                };
-                	printController.getDrawingView().getPaintManager().disablePaintingCache();
-                	printController.getDrawingGraphicalRepresentation().setDrawWorkingArea(false);
-                	printableView = (FlexoPrintableComponent)printController.getDrawingView();
-                } else {
-	                ProcessEditorController printController = new ProcessEditorController(anAction.processToPrint,anAction.getEditor(),null) {
-	                	@Override
-	                	public DrawingView<ProcessRepresentation> makeDrawingView(ProcessRepresentation drawing) {
-	                		return new PrintableProcessView(drawing,this,getWKFController());
-	                	}
-	                };
-                	printController.getDrawingView().getPaintManager().disablePaintingCache();
-                	printController.getDrawingGraphicalRepresentation().setDrawWorkingArea(false);
-                	printableView = (FlexoPrintableComponent)printController.getDrawingView();
-                }
-				PrintProcessPreviewDialog dialog = new PrintProcessPreviewDialog(controller,printableView);
-                return (dialog.getStatus() == PrintProcessPreviewDialog.ReturnedStatus.CONTINUE_PRINTING);
-            }
-        }, controller.getModule());
-
-    }
-
+	}
 
 }

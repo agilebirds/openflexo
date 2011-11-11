@@ -24,7 +24,7 @@ import org.openflexo.foundation.wkf.dm.WKFDataModification;
 public class RoleNoMoreSpecializing extends WKFDataModification {
 
 	public RoleNoMoreSpecializing(Role specializingRole) {
-		super(specializingRole,null);
+		super(specializingRole, null);
 	}
 
 }

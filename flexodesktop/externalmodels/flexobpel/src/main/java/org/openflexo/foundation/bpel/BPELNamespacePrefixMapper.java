@@ -24,13 +24,14 @@ import java.util.Hashtable;
 
 import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 
-public class BPELNamespacePrefixMapper extends NamespacePrefixMapper{
-	private Hashtable<String,String> ht;
-	private int currentPrefixIndex=0;
+public class BPELNamespacePrefixMapper extends NamespacePrefixMapper {
+	private Hashtable<String, String> ht;
+	private int currentPrefixIndex = 0;
 
 	public BPELNamespacePrefixMapper() {
-		ht=new Hashtable<String, String>();
+		ht = new Hashtable<String, String>();
 	}
+
 	@Override
 	public String getPreferredPrefix(String arg0, String arg1, boolean arg2) {
 		if (ht.containsKey(arg0)) {
@@ -41,11 +42,11 @@ public class BPELNamespacePrefixMapper extends NamespacePrefixMapper{
 
 	@Override
 	public String[] getPreDeclaredNamespaceUris() {
-		int i=0;
-		String[] toReturn=new String[ht.size()];
-		Enumeration<String> en=ht.keys();
+		int i = 0;
+		String[] toReturn = new String[ht.size()];
+		Enumeration<String> en = ht.keys();
 		while (en.hasMoreElements()) {
-			toReturn[i++]=en.nextElement();
+			toReturn[i++] = en.nextElement();
 		}
 		return toReturn;
 	}
@@ -58,7 +59,7 @@ public class BPELNamespacePrefixMapper extends NamespacePrefixMapper{
 		if (prefix != null) {
 			ht.put(namespace, prefix);
 		} else {
-			ht.put(namespace,"ns"+currentPrefixIndex++);
+			ht.put(namespace, "ns" + currentPrefixIndex++);
 		}
 	}
 

@@ -24,41 +24,34 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ie.widget.IEHyperlinkWidget;
 
-
 /**
- * @author bmangez
- * <B>Class Description</B>
+ * @author bmangez <B>Class Description</B>
  */
-public class IEHyperlinkElement extends IEElement
-{
+public class IEHyperlinkElement extends IEElement {
 
-    /**
-     * @param widget
-     * @param browser
-     */
-    public IEHyperlinkElement(IEHyperlinkWidget widget, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(widget, BrowserElementType.HYPERLINK, browser,parent);
-    }
+	/**
+	 * @param widget
+	 * @param browser
+	 */
+	public IEHyperlinkElement(IEHyperlinkWidget widget, ProjectBrowser browser, BrowserElement parent) {
+		super(widget, BrowserElementType.HYPERLINK, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        //no childs
-    }
+	@Override
+	protected void buildChildrenVector() {
+		// no childs
+	}
 
-    @Override
-	public String getName()
-    {
-        if (getHyperlink().getName() == null) {
-            return "Hyperlink";
-        }
-        return getHyperlink().getName();
-    }
+	@Override
+	public String getName() {
+		if (getHyperlink().getName() == null) {
+			return "Hyperlink";
+		}
+		return getHyperlink().getName();
+	}
 
-    protected IEHyperlinkWidget getHyperlink()
-    {
-        return (IEHyperlinkWidget) getObject();
-    }
+	protected IEHyperlinkWidget getHyperlink() {
+		return (IEHyperlinkWidget) getObject();
+	}
 
 }

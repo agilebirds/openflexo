@@ -20,7 +20,6 @@
 
 package org.openflexo.xmlcode;
 
-
 /**
  * <p>
  * A Constant KeyValue property represents an access to a constant of given type
@@ -31,74 +30,64 @@ package org.openflexo.xmlcode;
  * @see KeyValueDecoder
  * 
  */
-public class ConstantKeyValueProperty<E extends Object> extends KeyValueProperty
-{
+public class ConstantKeyValueProperty<E extends Object> extends KeyValueProperty {
 
 	private E constant;
-	
-    /**
-     * Creates a new <code>ConstantKeyValueProperty</code> instance
-     */
-    public ConstantKeyValueProperty(Class anObjectClass, E value) throws InvalidKeyValuePropertyException
-    {
 
-        super(anObjectClass, "CONSTANT");
-        constant = value;
-    }
-    
-	public E getConstant() 
-	{
+	/**
+	 * Creates a new <code>ConstantKeyValueProperty</code> instance
+	 */
+	public ConstantKeyValueProperty(Class anObjectClass, E value) throws InvalidKeyValuePropertyException {
+
+		super(anObjectClass, "CONSTANT");
+		constant = value;
+	}
+
+	public E getConstant() {
 		return constant;
 	}
-    
-    @Override
-    public synchronized E getObjectValue(Object object)
-    {
-    	return getConstant();
-    }
 
-    @Override
-    public synchronized void setObjectValue(Object aValue, Object object)
-    {
-    	// Not applicable
-    }
-    
-     /**
-     * Return a string representation of this object (debug purposes)
-     */
-    @Override
-	public String toString()
-    {
-        return getClass().getSimpleName() + ":" + constant;
+	@Override
+	public synchronized E getObjectValue(Object object) {
+		return getConstant();
+	}
 
-    }
+	@Override
+	public synchronized void setObjectValue(Object aValue, Object object) {
+		// Not applicable
+	}
 
-    public static class StringConstantKeyValueProperty extends ConstantKeyValueProperty<String>
-    {
+	/**
+	 * Return a string representation of this object (debug purposes)
+	 */
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + ":" + constant;
+
+	}
+
+	public static class StringConstantKeyValueProperty extends ConstantKeyValueProperty<String> {
 		public StringConstantKeyValueProperty(Class anObjectClass, String value) throws InvalidKeyValuePropertyException {
 			super(anObjectClass, value);
 		}
-    }
+	}
 
-    public static class BooleanConstantKeyValueProperty extends ConstantKeyValueProperty<Boolean>
-    {
+	public static class BooleanConstantKeyValueProperty extends ConstantKeyValueProperty<Boolean> {
 		public BooleanConstantKeyValueProperty(Class anObjectClass, Boolean value) throws InvalidKeyValuePropertyException {
 			super(anObjectClass, value);
 		}
-    }
+	}
 
-    public static class LongConstantKeyValueProperty extends ConstantKeyValueProperty<Long>
-    {
+	public static class LongConstantKeyValueProperty extends ConstantKeyValueProperty<Long> {
 		public LongConstantKeyValueProperty(Class anObjectClass, Long value) throws InvalidKeyValuePropertyException {
 			super(anObjectClass, value);
 		}
-    }
+	}
 
-    public static class DoubleConstantKeyValueProperty extends ConstantKeyValueProperty<Double>
-    {
+	public static class DoubleConstantKeyValueProperty extends ConstantKeyValueProperty<Double> {
 		public DoubleConstantKeyValueProperty(Class anObjectClass, Double value) throws InvalidKeyValuePropertyException {
 			super(anObjectClass, value);
 		}
-    }
+	}
 
 }

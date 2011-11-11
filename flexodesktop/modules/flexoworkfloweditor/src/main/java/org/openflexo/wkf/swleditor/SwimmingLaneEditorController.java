@@ -38,7 +38,6 @@ import org.openflexo.wkf.controller.WKFController;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation.SwimmingLaneRepresentationObjectVisibilityDelegate;
 import org.openflexo.wkf.swleditor.gr.WKFObjectGR;
 
-
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.MoveInfo;
@@ -56,7 +55,6 @@ import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.ActionNode;
 import org.openflexo.foundation.wkf.node.OperationNode;
 
-
 public class SwimmingLaneEditorController extends SelectionManagingDrawingController<SwimmingLaneRepresentation> {
 
 	private static final Logger logger = FlexoLogger.getLogger(SwimmingLaneEditorController.class.getPackage().getName());
@@ -68,15 +66,14 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 	private EventPalette _eventPalette;
 	private ArtefactPalette artefactPalette;
 
-	public SwimmingLaneEditorController(WKFController controller,FlexoProcess process)
-	{
-		this(process,controller.getEditor(),controller.getSelectionManager(),null);
+	public SwimmingLaneEditorController(WKFController controller, FlexoProcess process) {
+		this(process, controller.getEditor(), controller.getSelectionManager(), null);
 		_controller = controller;
 	}
 
-	public SwimmingLaneEditorController(FlexoProcess process, FlexoEditor editor, SelectionManager sm,SwimmingLaneRepresentationObjectVisibilityDelegate delegate)
-	{
-		super(new SwimmingLaneRepresentation(process,editor,delegate),sm);
+	public SwimmingLaneEditorController(FlexoProcess process, FlexoEditor editor, SelectionManager sm,
+			SwimmingLaneRepresentationObjectVisibilityDelegate delegate) {
+		super(new SwimmingLaneRepresentation(process, editor, delegate), sm);
 		_activityPalette = new ActivityPalette();
 		_operationPalette = new OperationPalette();
 		_actionPalette = new ActionPalette();
@@ -99,8 +96,8 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 
 	@Override
 	public void delete() {
-		if (_controller!=null) {
-			if (getDrawingView()!=null)
+		if (_controller != null) {
+			if (getDrawingView() != null)
 				_controller.removeModuleView(getDrawingView());
 			_controller.SWIMMING_LANE_PERSPECTIVE.removeProcessController(this);
 		}
@@ -108,9 +105,8 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 	}
 
 	@Override
-	public DrawingView<SwimmingLaneRepresentation> makeDrawingView(SwimmingLaneRepresentation drawing)
-	{
-		return new SwimmingLaneView(drawing,this);
+	public DrawingView<SwimmingLaneRepresentation> makeDrawingView(SwimmingLaneRepresentation drawing) {
+		return new SwimmingLaneView(drawing, this);
 	}
 
 	public WKFController getWKFController() {
@@ -118,33 +114,27 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 	}
 
 	@Override
-	public SwimmingLaneView getDrawingView()
-	{
-		return (SwimmingLaneView)super.getDrawingView();
+	public SwimmingLaneView getDrawingView() {
+		return (SwimmingLaneView) super.getDrawingView();
 	}
 
-	public FlexoEditor getEditor()
-	{
+	public FlexoEditor getEditor() {
 		return getDrawing().getEditor();
 	}
 
-	public ActivityPalette getActivityPalette()
-	{
+	public ActivityPalette getActivityPalette() {
 		return _activityPalette;
 	}
 
-	public OperationPalette getOperationPalette()
-	{
+	public OperationPalette getOperationPalette() {
 		return _operationPalette;
 	}
 
-	public ActionPalette getActionPalette()
-	{
+	public ActionPalette getActionPalette() {
 		return _actionPalette;
 	}
 
-	public EventPalette getEventPalette()
-	{
+	public EventPalette getEventPalette() {
 		return _eventPalette;
 	}
 
@@ -154,8 +144,7 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 
 	private JTabbedPane paletteView;
 
-	public JTabbedPane getPaletteView()
-	{
+	public JTabbedPane getPaletteView() {
 		if (paletteView == null) {
 			paletteView = new JTabbedPane() {
 				@Override
@@ -175,13 +164,19 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 					return "";
 				};
 			};
-			paletteView.addTab(null, WKFIconLibrary.ACTIVITY_NODE_ICON, getActivityPalette().getPaletteViewInScrollPane(),FlexoLocalization.localizedForKey("Activity"));
-			paletteView.addTab(null, WKFIconLibrary.OPERATION_NODE_ICON, getOperationPalette().getPaletteViewInScrollPane(),FlexoLocalization.localizedForKey("Operation"));
-			paletteView.addTab(null, WKFIconLibrary.ACTION_NODE_ICON, getActionPalette().getPaletteViewInScrollPane(),FlexoLocalization.localizedForKey("Action"));
-			paletteView.addTab(null, WKFIconLibrary.EVENT_ICON, getEventPalette().getPaletteViewInScrollPane(),FlexoLocalization.localizedForKey("Event"));
-			paletteView.addTab(null, WKFIconLibrary.ARTEFACT_ICON, getArtefactPalette().getPaletteViewInScrollPane(),FlexoLocalization.localizedForKey("Artefact"));
+			paletteView.addTab(null, WKFIconLibrary.ACTIVITY_NODE_ICON, getActivityPalette().getPaletteViewInScrollPane(),
+					FlexoLocalization.localizedForKey("Activity"));
+			paletteView.addTab(null, WKFIconLibrary.OPERATION_NODE_ICON, getOperationPalette().getPaletteViewInScrollPane(),
+					FlexoLocalization.localizedForKey("Operation"));
+			paletteView.addTab(null, WKFIconLibrary.ACTION_NODE_ICON, getActionPalette().getPaletteViewInScrollPane(),
+					FlexoLocalization.localizedForKey("Action"));
+			paletteView.addTab(null, WKFIconLibrary.EVENT_ICON, getEventPalette().getPaletteViewInScrollPane(),
+					FlexoLocalization.localizedForKey("Event"));
+			paletteView.addTab(null, WKFIconLibrary.ARTEFACT_ICON, getArtefactPalette().getPaletteViewInScrollPane(),
+					FlexoLocalization.localizedForKey("Artefact"));
 			getEventPalette().getPaletteView().getDrawingGraphicalRepresentation().setDrawWorkingArea(true);
-			getEventPalette().getPaletteView().getDrawingGraphicalRepresentation().setDecorationPainter(getEventPalette().getEventPaletteDecorationPainter());
+			getEventPalette().getPaletteView().getDrawingGraphicalRepresentation()
+					.setDecorationPainter(getEventPalette().getEventPaletteDecorationPainter());
 
 			/*
 			paletteView.add(FlexoLocalization.localizedForKey("Activity",getActivityPalette().getPaletteView()),getActivityPalette().getPaletteView());
@@ -194,17 +189,13 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 				public void stateChanged(ChangeEvent e) {
 					if (paletteView.getSelectedIndex() == 0) {
 						activatePalette(getActivityPalette());
-					}
-					else if (paletteView.getSelectedIndex() == 1) {
+					} else if (paletteView.getSelectedIndex() == 1) {
 						activatePalette(getOperationPalette());
-					}
-					else if (paletteView.getSelectedIndex() == 2) {
+					} else if (paletteView.getSelectedIndex() == 2) {
 						activatePalette(getActionPalette());
-					}
-					else if (paletteView.getSelectedIndex() == 3) {
+					} else if (paletteView.getSelectedIndex() == 3) {
 						activatePalette(getEventPalette());
-					}
-					else if (paletteView.getSelectedIndex() == 4) {
+					} else if (paletteView.getSelectedIndex() == 4) {
 						activatePalette(getArtefactPalette());
 					}
 				}
@@ -229,7 +220,7 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 	protected FlexoModelObject objectForPaletteSwitch;
 
 	public void setObjectForPaletteSwitch(FlexoModelObject objectForPaletteSwitch) {
-		if (this.objectForPaletteSwitch!=null && this.objectForPaletteSwitch!=objectForPaletteSwitch) {
+		if (this.objectForPaletteSwitch != null && this.objectForPaletteSwitch != objectForPaletteSwitch) {
 			if (logger.isLoggable(Level.WARNING))
 				logger.warning("Received palette switch for different objects. Cannot fulfill everyone's needs, latest wins.");
 		}
@@ -255,12 +246,13 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 	 *
 	 */
 	protected synchronized void performPaletteSwitch() {
-		if (getSelectionManager()==null)
+		if (getSelectionManager() == null)
 			return;
-		if (objectForPaletteSwitch==null)
+		if (objectForPaletteSwitch == null)
 			objectForPaletteSwitch = getSelectionManager().getLastSelectedObject();
-		if (objectForPaletteSwitch!=null) {
-			if (objectForPaletteSwitch instanceof AbstractActivityNode || objectForPaletteSwitch instanceof ActivityPetriGraph || objectForPaletteSwitch instanceof FlexoProcess)
+		if (objectForPaletteSwitch != null) {
+			if (objectForPaletteSwitch instanceof AbstractActivityNode || objectForPaletteSwitch instanceof ActivityPetriGraph
+					|| objectForPaletteSwitch instanceof FlexoProcess)
 				selectActivityPalette();
 			else if (objectForPaletteSwitch instanceof OperationNode || objectForPaletteSwitch instanceof OperationPetriGraph)
 				selectOperationPalette();
@@ -292,52 +284,49 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 		getPaletteView().setSelectedComponent(getActivityPalette().getPaletteViewInScrollPane());
 	}
 
-	public void performAutoLayout()
-	{
+	public void performAutoLayout() {
 		getDrawing().performAutoLayout();
 	}
 
 	private WKFMove currentMoveAction = null;
-	
+
 	@Override
-	public void notifyWillMove(MoveInfo currentMove)
-	{
+	public void notifyWillMove(MoveInfo currentMove) {
 		currentMoveAction = null;
-		
+
 		WKFObject movedObject = null;
 		Vector<WKFObject> movedObjects = new Vector<WKFObject>();
-		
-		if (currentMove.getMovedObject() instanceof WKFObjectGR<?>) 
-			movedObject = ((WKFObjectGR<?>)currentMove.getMovedObject()).getModel();
-		
+
+		if (currentMove.getMovedObject() instanceof WKFObjectGR<?>)
+			movedObject = ((WKFObjectGR<?>) currentMove.getMovedObject()).getModel();
+
 		for (ShapeGraphicalRepresentation<?> gr : currentMove.getMovedObjects()) {
-			if (gr instanceof WKFObjectGR<?>) 
-				movedObjects.add(((WKFObjectGR<?>)gr).getModel());
+			if (gr instanceof WKFObjectGR<?>)
+				movedObjects.add(((WKFObjectGR<?>) gr).getModel());
 		}
-		
+
 		if (movedObject != null) {
-			currentMoveAction = WKFMove.actionType.makeNewAction(movedObject,movedObjects,getWKFController().getEditor());
+			currentMoveAction = WKFMove.actionType.makeNewAction(movedObject, movedObjects, getWKFController().getEditor());
 			currentMoveAction.setGraphicalContext(SWLEditorConstants.SWIMMING_LANE_EDITOR);
 			for (ShapeGraphicalRepresentation<?> gr : currentMove.getMovedObjects()) {
 				if (gr instanceof WKFObjectGR<?>) {
-					WKFObject o = ((WKFObjectGR<?>)gr).getModel();
+					WKFObject o = ((WKFObjectGR<?>) gr).getModel();
 					FGEPoint initialLocation = currentMove.getInitialLocations().get(gr);
-					currentMoveAction.getInitialLocations().put(o,new Point2D.Double(initialLocation.x,initialLocation.y));
+					currentMoveAction.getInitialLocations().put(o, new Point2D.Double(initialLocation.x, initialLocation.y));
 				}
 			}
-			
+
 		}
-		
+
 	}
-	
+
 	@Override
-	public void notifyHasMoved(MoveInfo currentMove)
-	{
+	public void notifyHasMoved(MoveInfo currentMove) {
 		if (currentMoveAction != null) {
 			for (ShapeGraphicalRepresentation<?> gr : currentMove.getMovedObjects()) {
 				if (gr instanceof WKFObjectGR<?>) {
-					WKFObject o = ((WKFObjectGR<?>)gr).getModel();
-					currentMoveAction.getNewLocations().put(o,new Point2D.Double(gr.getX(),gr.getY()));
+					WKFObject o = ((WKFObjectGR<?>) gr).getModel();
+					currentMoveAction.getNewLocations().put(o, new Point2D.Double(gr.getX(), gr.getY()));
 				}
 			}
 			// This is already done, but keep it for record and undo/redo
@@ -346,6 +335,5 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 
 		}
 	}
-	
 
 }

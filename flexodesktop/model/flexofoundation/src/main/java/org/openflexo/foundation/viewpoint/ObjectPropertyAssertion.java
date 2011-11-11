@@ -31,7 +31,6 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.EditionAction.EditionActionBindingAttribute;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-
 public class ObjectPropertyAssertion extends AbstractAssertion {
 
 	private static final Logger logger = Logger.getLogger(ObjectPropertyAssertion.class.getPackage().getName());
@@ -39,72 +38,61 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 	private String objectPropertyURI;
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.VPM.OBJECT_PROPERTY_ASSERTION_INSPECTOR;
 	}
 
-	public void _setObjectPropertyURI(String objectPropertyURI)
-	{
+	public void _setObjectPropertyURI(String objectPropertyURI) {
 		this.objectPropertyURI = objectPropertyURI;
 	}
 
-	public String _getObjectPropertyURI() 
-	{
+	public String _getObjectPropertyURI() {
 		return objectPropertyURI;
 	}
 
-	public OntologyProperty getOntologyProperty()
-	{
+	public OntologyProperty getOntologyProperty() {
 		return getOntologyLibrary().getObjectProperty(_getObjectPropertyURI());
 	}
 
-	public void setOntologyProperty(OntologyProperty p)
-	{
-		_setObjectPropertyURI (p != null ? p.getURI() : null);
+	public void setOntologyProperty(OntologyProperty p) {
+		_setObjectPropertyURI(p != null ? p.getURI() : null);
 	}
-	
+
 	@Override
-	public BindingModel getBindingModel() 
-	{
+	public BindingModel getBindingModel() {
 		return getEditionScheme().getBindingModel();
 	}
 
 	private ViewPointDataBinding object;
-	
+
 	private BindingDefinition OBJECT = new BindingDefinition("object", OntologyObject.class, BindingDefinitionType.GET, false);
-	
-	public BindingDefinition getObjectBindingDefinition()
-	{
+
+	public BindingDefinition getObjectBindingDefinition() {
 		return OBJECT;
 	}
 
-	public ViewPointDataBinding getObject() 
-	{
-		if (object == null) object = new ViewPointDataBinding(this,EditionActionBindingAttribute.object,getObjectBindingDefinition());
+	public ViewPointDataBinding getObject() {
+		if (object == null)
+			object = new ViewPointDataBinding(this, EditionActionBindingAttribute.object, getObjectBindingDefinition());
 		return object;
 	}
 
-	public void setObject(ViewPointDataBinding object) 
-	{
+	public void setObject(ViewPointDataBinding object) {
 		object.setOwner(this);
 		object.setBindingAttribute(EditionActionBindingAttribute.object);
 		object.setBindingDefinition(getObjectBindingDefinition());
 		this.object = object;
 	}
 
-	public OntologyObject getAssertionObject(EditionSchemeAction action)
-	{
+	public OntologyObject getAssertionObject(EditionSchemeAction action) {
 		Object value = getObject().getBindingValue(action);
 		if (value instanceof OntologyObject)
-			return (OntologyObject)value;
+			return (OntologyObject) value;
 		return null;
 	}
-	
-	public Object getValue(EditionSchemeAction action)
-	{
+
+	public Object getValue(EditionSchemeAction action) {
 		return getObject().getBindingValue(action);
 	}
-	
 
 }

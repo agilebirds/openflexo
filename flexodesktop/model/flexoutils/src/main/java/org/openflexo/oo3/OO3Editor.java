@@ -27,21 +27,18 @@ import org.openflexo.xmlcode.XMLSerializable;
  * @author sguerin
  * 
  */
-public class OO3Editor implements XMLSerializable
-{
+public class OO3Editor implements XMLSerializable {
 
-    public Drawer drawer;
+	public Drawer drawer;
 
-    public OO3Editor()
-    {
-        super();
-        drawer = new Drawer();
-    }
+	public OO3Editor() {
+		super();
+		drawer = new Drawer();
+	}
 
-    public static class Drawer implements XMLSerializable
-    {
-        public String display = "sections";
+	public static class Drawer implements XMLSerializable {
+		public String display = "sections";
 
-        public int paletteHeight = 167;
-    }
+		public int paletteHeight = 167;
+	}
 }

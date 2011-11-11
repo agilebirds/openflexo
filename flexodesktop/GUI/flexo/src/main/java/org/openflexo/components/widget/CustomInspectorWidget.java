@@ -26,71 +26,62 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.inspector.widget.CustomWidget;
 
-
 /**
  * Abstract FLEXO custom inspector widget
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public abstract class CustomInspectorWidget<T> extends CustomWidget<T>
-{
+public abstract class CustomInspectorWidget<T> extends CustomWidget<T> {
 
-    public CustomInspectorWidget(PropertyModel model, AbstractController controller)
-    {
-        super(model,controller);
-    }
+	public CustomInspectorWidget(PropertyModel model, AbstractController controller) {
+		super(model, controller);
+	}
 
-    public FlexoModelObject getInspectedObject()
-    {
-        if (getModel() instanceof FlexoModelObject) {
-            return (FlexoModelObject) getModel();
-        }
-        return null;
-    }
+	public FlexoModelObject getInspectedObject() {
+		if (getModel() instanceof FlexoModelObject) {
+			return (FlexoModelObject) getModel();
+		}
+		return null;
+	}
 
-    @Override
-	public void setModel(InspectableObject value)
-    {
-        if (value instanceof FlexoModelObject) {
-            setProject(((FlexoModelObject) value).getProject());
-        }
-        super.setModel(value);
-    }
+	@Override
+	public void setModel(InspectableObject value) {
+		if (value instanceof FlexoModelObject) {
+			setProject(((FlexoModelObject) value).getProject());
+		}
+		super.setModel(value);
+	}
 
-    public void setProject(FlexoProject aProject)
-    {
-        // does nothing: should be overriden in subclasses if needed
-    }
+	public void setProject(FlexoProject aProject) {
+		// does nothing: should be overriden in subclasses if needed
+	}
 
-    /**
-     * Update the model given the actual state of the widget
-     */
-    @Override
-	public synchronized void updateModelFromWidget()
-    {
-        notifyApply();
-    }
+	/**
+	 * Update the model given the actual state of the widget
+	 */
+	@Override
+	public synchronized void updateModelFromWidget() {
+		notifyApply();
+	}
 
-    /**
-     * Override when required (generally close popup)
-     */
-    @Override
-    public void fireEditingCanceled()
-    {
-    }
+	/**
+	 * Override when required (generally close popup)
+	 */
+	@Override
+	public void fireEditingCanceled() {
+	}
 
-    /**
-     * Override when required (generally close popup)
-     */
-    @Override
-    public void fireEditingStopped()
-    {
-    }
+	/**
+	 * Override when required (generally close popup)
+	 */
+	@Override
+	public void fireEditingStopped() {
+	}
 
-    @Override
-    public boolean disableTerminateEditOnFocusLost() {
-    	return true;
-    }
+	@Override
+	public boolean disableTerminateEditOnFocusLost() {
+		return true;
+	}
 
 }

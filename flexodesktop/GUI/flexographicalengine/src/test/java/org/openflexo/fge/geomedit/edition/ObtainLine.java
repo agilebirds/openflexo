@@ -29,97 +29,83 @@ import org.openflexo.fge.geomedit.Line;
 import org.openflexo.fge.geomedit.construction.LineConstruction;
 import org.openflexo.fge.geomedit.construction.LineReference;
 
-
-public class ObtainLine extends EditionInput<FGELine> 
-{
+public class ObtainLine extends EditionInput<FGELine> {
 	public static int preferredMethodIndex = 0;
 
-	public ObtainLine(String anInputLabel, GeomEditController controller) 
-	{
+	public ObtainLine(String anInputLabel, GeomEditController controller) {
 		super(anInputLabel, controller);
 
 		availableMethods.add(new LineSelection());
 	}
 
 	@Override
-	protected int getPreferredMethodIndex()
-	{
+	protected int getPreferredMethodIndex() {
 		return preferredMethodIndex;
 	}
 
 	@Override
-	public void setActiveMethod(EditionInputMethod aMethod)
-	{
+	public void setActiveMethod(EditionInputMethod aMethod) {
 		super.setActiveMethod(aMethod);
 		preferredMethodIndex = availableMethods.indexOf(aMethod);
 	}
 
-	public class LineSelection extends EditionInputMethod<FGELine,ObtainLine> {
+	public class LineSelection extends EditionInputMethod<FGELine, ObtainLine> {
 
 		private GeometricGraphicalRepresentation focusedObject;
 
 		public LineSelection() {
 			super("With mouse", ObtainLine.this);
-		}		
+		}
 
 		@Override
-		public void mouseClicked(MouseEvent e)
-		{
+		public void mouseClicked(MouseEvent e) {
 			if (focusedObject != null) {
 				focusedObject.setIsFocused(false);
-				referencedLine = (Line)focusedObject.getDrawable();
+				referencedLine = (Line) focusedObject.getDrawable();
 				setConstruction(new LineReference(referencedLine.getConstruction()));
 				done();
 			}
 		}
 
 		@Override
-		public void mouseMoved(MouseEvent e)
-		{
+		public void mouseMoved(MouseEvent e) {
 			GraphicalRepresentation focused = getFocusRetriever().getFocusedObject(e);
 
 			if (focusedObject != null && focusedObject != focused) {
 				focusedObject.setIsFocused(false);
 			}
 
-			if (focused instanceof GeometricGraphicalRepresentation 
-					&& ((GeometricGraphicalRepresentation)focused).getGeometricObject() instanceof FGELine) {
-				focusedObject = (GeometricGraphicalRepresentation)focused;
+			if (focused instanceof GeometricGraphicalRepresentation
+					&& ((GeometricGraphicalRepresentation) focused).getGeometricObject() instanceof FGELine) {
+				focusedObject = (GeometricGraphicalRepresentation) focused;
 				focusedObject.setIsFocused(true);
-			}
-			else {
+			} else {
 				focusedObject = null;
 			}
 
 		}
 
 		@Override
-		public InputComponent getInputComponent()
-		{
+		public InputComponent getInputComponent() {
 			return new InputComponentButton(LineSelection.this);
 		}
 
-
 	}
 
 	@Override
-	public LineConstruction getConstruction()
-	{
-		return (LineConstruction)super.getConstruction();
+	public LineConstruction getConstruction() {
+		return (LineConstruction) super.getConstruction();
 	}
-	
+
 	@Override
-	public boolean endOnRightClick()
-	{
+	public boolean endOnRightClick() {
 		return false;
 	}
-	
+
 	private Line referencedLine;
-	
-	public Line getReferencedLine()
-	{
+
+	public Line getReferencedLine() {
 		return referencedLine;
 	}
-
 
 }

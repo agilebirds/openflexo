@@ -27,27 +27,26 @@ import java.awt.Color;
  * @author gpolet
  * 
  */
-public class DGCst
-{
+public class DGCst {
 
-    public static final String IMAGE_EXTENSION = ".jpg";
+	public static final String IMAGE_EXTENSION = ".jpg";
 
-    public static final String DG_MODULE_VERSION = "2.5";// Hopefully, version
+	public static final String DG_MODULE_VERSION = "2.5";// Hopefully, version
 
-    public static final String DG_MODULE_SHORT_NAME = "DG";
+	public static final String DG_MODULE_SHORT_NAME = "DG";
 
-    public static final String DG_MODULE_NAME = "documentation_generator";
+	public static final String DG_MODULE_NAME = "documentation_generator";
 
-    public static final String DG_MODULE_DESCRIPTION = "documentation_generator_description";
+	public static final String DG_MODULE_DESCRIPTION = "documentation_generator_description";
 
-    public static final String GENERATE_THIS_SCREENSHOT_IMAGE_NAME = "GenerateScreenshot";
-    
-    public static final String DEFAULT_OUTPUT_DIRECTORY = "Documentation";
+	public static final String GENERATE_THIS_SCREENSHOT_IMAGE_NAME = "GenerateScreenshot";
 
-    public static final int DEFAULT_DG_WIDTH = 1024;
+	public static final String DEFAULT_OUTPUT_DIRECTORY = "Documentation";
 
-    public static final int DEFAULT_DG_HEIGHT = 700;
+	public static final int DEFAULT_DG_WIDTH = 1024;
 
-    public static final Color DEFAULT_DG_COLOR = Color.WHITE;
+	public static final int DEFAULT_DG_HEIGHT = 700;
+
+	public static final Color DEFAULT_DG_COLOR = Color.WHITE;
 
 }

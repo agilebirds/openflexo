@@ -25,41 +25,35 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyFolder;
 
-
 /**
  * Browser element representing an ontology folder
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class OntologyFolderElement extends BrowserElement
-{
+public class OntologyFolderElement extends BrowserElement {
 
-    protected OntologyFolderElement(OntologyFolder folder, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(folder, BrowserElementType.ONTOLOGY_FOLDER, browser, parent);
-    }
+	protected OntologyFolderElement(OntologyFolder folder, ProjectBrowser browser, BrowserElement parent) {
+		super(folder, BrowserElementType.ONTOLOGY_FOLDER, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-       	for (OntologyFolder subFolder : getFolder().getChildren()) {
-       		addToChilds(subFolder);
-       	}
-       	for (FlexoOntology ontology : getFolder().getOntologies()) {
-       		addToChilds(ontology);
-       	}
-     }
+	@Override
+	protected void buildChildrenVector() {
+		for (OntologyFolder subFolder : getFolder().getChildren()) {
+			addToChilds(subFolder);
+		}
+		for (FlexoOntology ontology : getFolder().getOntologies()) {
+			addToChilds(ontology);
+		}
+	}
 
-    @Override
-	public String getName()
-    {
-        return getFolder().getName();
-    }
+	@Override
+	public String getName() {
+		return getFolder().getName();
+	}
 
-    protected OntologyFolder getFolder()
-    {
-        return (OntologyFolder) getObject();
-    }
+	protected OntologyFolder getFolder() {
+		return (OntologyFolder) getObject();
+	}
 
 }

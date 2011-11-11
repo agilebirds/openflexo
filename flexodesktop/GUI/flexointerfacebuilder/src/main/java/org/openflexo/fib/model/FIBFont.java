@@ -25,14 +25,12 @@ import java.lang.reflect.Type;
 public class FIBFont extends FIBWidget {
 
 	public String sampleText = "Sample for this font";
-	
-	public FIBFont() 
-	{
+
+	public FIBFont() {
 	}
-	
+
 	@Override
-	public Type getDefaultDataClass() 
-	{
+	public Type getDefaultDataClass() {
 		return Font.class;
 	}
 }

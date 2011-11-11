@@ -23,31 +23,29 @@ import org.openflexo.foundation.rm.FlexoProject;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class GeneralStyleDocGenerator extends StyleDocGenerator
-{
-    
-    private static final String TEMPLATE_NAME = "flexolist.sty.vm";
+public class GeneralStyleDocGenerator extends StyleDocGenerator {
 
-    /**
-     * @param projectGenerator
-     * @param source
-     * @param styleName
-     */
-    public GeneralStyleDocGenerator(ProjectDocLatexGenerator projectGenerator, FlexoProject source)
-    {
-        super(projectGenerator, source, "flexolist.sty");
-    }
+	private static final String TEMPLATE_NAME = "flexolist.sty.vm";
 
-    /**
-     * Overrides getTemplateName
-     * @see org.openflexo.dg.DGGenerator#getTemplateName()
-     */
-    @Override
-    public String getTemplateName()
-    {
-        return TEMPLATE_NAME;
-    }
+	/**
+	 * @param projectGenerator
+	 * @param source
+	 * @param styleName
+	 */
+	public GeneralStyleDocGenerator(ProjectDocLatexGenerator projectGenerator, FlexoProject source) {
+		super(projectGenerator, source, "flexolist.sty");
+	}
+
+	/**
+	 * Overrides getTemplateName
+	 * 
+	 * @see org.openflexo.dg.DGGenerator#getTemplateName()
+	 */
+	@Override
+	public String getTemplateName() {
+		return TEMPLATE_NAME;
+	}
 
 }

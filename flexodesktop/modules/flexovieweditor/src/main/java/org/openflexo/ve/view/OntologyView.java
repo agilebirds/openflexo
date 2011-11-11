@@ -25,33 +25,28 @@ import org.openflexo.ve.controller.OEController;
 import org.openflexo.view.FIBModuleView;
 import org.openflexo.view.FlexoPerspective;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class OntologyView extends FIBModuleView<FlexoOntology>
-{
+public class OntologyView extends FIBModuleView<FlexoOntology> {
 
 	private FlexoPerspective<? super FlexoOntology> declaredPerspective;
-	
-    public OntologyView(FlexoOntology ontology, OEController controller, FlexoPerspective<? super FlexoOntology> perspective)
-    {
-        super(ontology,controller,VECst.ONTOLOGY_VIEW_FIB);
-        declaredPerspective = perspective;
-    }
 
-    @Override
-    public OEController getFlexoController()
-    {
-    	return (OEController)super.getFlexoController();
-    }
-    
-     @Override
-	public FlexoPerspective<? super FlexoOntology> getPerspective() 
-    {
-    	return declaredPerspective;
-    }
+	public OntologyView(FlexoOntology ontology, OEController controller, FlexoPerspective<? super FlexoOntology> perspective) {
+		super(ontology, controller, VECst.ONTOLOGY_VIEW_FIB);
+		declaredPerspective = perspective;
+	}
+
+	@Override
+	public OEController getFlexoController() {
+		return (OEController) super.getFlexoController();
+	}
+
+	@Override
+	public FlexoPerspective<? super FlexoOntology> getPerspective() {
+		return declaredPerspective;
+	}
 }

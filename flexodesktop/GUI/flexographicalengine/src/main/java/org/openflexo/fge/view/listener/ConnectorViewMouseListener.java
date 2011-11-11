@@ -24,14 +24,12 @@ import java.util.logging.Logger;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.view.ConnectorView;
 
-
 public class ConnectorViewMouseListener extends FGEViewMouseListener {
 
 	private static final Logger logger = Logger.getLogger(ConnectorViewMouseListener.class.getPackage().getName());
 
-	public ConnectorViewMouseListener(ConnectorGraphicalRepresentation anObject, ConnectorView aView)
-	{
-		super(anObject,aView);
+	public ConnectorViewMouseListener(ConnectorGraphicalRepresentation anObject, ConnectorView aView) {
+		super(anObject, aView);
 	}
-	
+
 }

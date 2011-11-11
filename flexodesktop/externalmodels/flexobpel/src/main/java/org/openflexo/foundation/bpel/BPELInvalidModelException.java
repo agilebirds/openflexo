@@ -22,8 +22,7 @@ package org.openflexo.foundation.bpel;
 import org.openflexo.foundation.exec.InvalidModelException;
 
 public class BPELInvalidModelException extends InvalidModelException {
-	public BPELInvalidModelException(String message)
-	{
+	public BPELInvalidModelException(String message) {
 		super(message);
 	}
 }

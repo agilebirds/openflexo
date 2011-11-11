@@ -38,52 +38,52 @@ import javax.swing.text.html.HTMLDocument;
 
 public class FormatAction extends StyledEditorKit.StyledTextAction {
 
-    private HTML.Tag htmlTag;
-    private Map<String, String> attributes;
-    private MetaphaseEditorPanel editorPanel;
+	private HTML.Tag htmlTag;
+	private Map<String, String> attributes;
+	private MetaphaseEditorPanel editorPanel;
 
-    public FormatAction(MetaphaseEditorPanel editorPanel, String actionName, HTML.Tag htmlTag) {
-            super(actionName);
-            this.editorPanel = editorPanel;
-            this.htmlTag = htmlTag;
-            attributes = null;
-    }
+	public FormatAction(MetaphaseEditorPanel editorPanel, String actionName, HTML.Tag htmlTag) {
+		super(actionName);
+		this.editorPanel = editorPanel;
+		this.htmlTag = htmlTag;
+		attributes = null;
+	}
 
-    public FormatAction(MetaphaseEditorPanel editorPanel, String actionName, HTML.Tag htmlTag, Map<String, String> attributes) {
-            super(actionName);
-            this.editorPanel = editorPanel;
-            this.htmlTag = htmlTag;
-            this.attributes = attributes;
-    }
+	public FormatAction(MetaphaseEditorPanel editorPanel, String actionName, HTML.Tag htmlTag, Map<String, String> attributes) {
+		super(actionName);
+		this.editorPanel = editorPanel;
+		this.htmlTag = htmlTag;
+		this.attributes = attributes;
+	}
 
-    public FormatAction(MetaphaseEditorPanel editorPanel, String actionName, Map<String, String> attributes) {
-            super(actionName);
-            this.editorPanel = editorPanel;
-            htmlTag = null;
-            this.attributes = attributes;
-    }
+	public FormatAction(MetaphaseEditorPanel editorPanel, String actionName, Map<String, String> attributes) {
+		super(actionName);
+		this.editorPanel = editorPanel;
+		htmlTag = null;
+		this.attributes = attributes;
+	}
 
-    public void actionPerformed(ActionEvent ae) {
-        JTextPane textPane = editorPanel.getHtmlTextPane();
-        HTMLDocument htmlDocument = (HTMLDocument) textPane.getDocument();
+	public void actionPerformed(ActionEvent ae) {
+		JTextPane textPane = editorPanel.getHtmlTextPane();
+		HTMLDocument htmlDocument = (HTMLDocument) textPane.getDocument();
 
-        int start = textPane.getSelectionStart();
-        int end = textPane.getSelectionEnd();
+		int start = textPane.getSelectionStart();
+		int end = textPane.getSelectionEnd();
 
-        Element element = htmlDocument.getParagraphElement(start);
-        MutableAttributeSet newAttrs = new SimpleAttributeSet(element.getAttributes());
-        if (htmlTag != null) {
-            newAttrs.addAttribute(StyleConstants.NameAttribute, htmlTag);
-        }
-        if (attributes != null) {
-            Iterator iterator = attributes.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry entry = (Map.Entry)iterator.next();
-                newAttrs.addAttribute(entry.getKey(), entry.getValue());
-            }
-        }
+		Element element = htmlDocument.getParagraphElement(start);
+		MutableAttributeSet newAttrs = new SimpleAttributeSet(element.getAttributes());
+		if (htmlTag != null) {
+			newAttrs.addAttribute(StyleConstants.NameAttribute, htmlTag);
+		}
+		if (attributes != null) {
+			Iterator iterator = attributes.entrySet().iterator();
+			while (iterator.hasNext()) {
+				Map.Entry entry = (Map.Entry) iterator.next();
+				newAttrs.addAttribute(entry.getKey(), entry.getValue());
+			}
+		}
 
-        htmlDocument.setParagraphAttributes(start, end - start, newAttrs, true);
-        editorPanel.refreshAfterAction();
-    }
+		htmlDocument.setParagraphAttributes(start, end - start, newAttrs, true);
+		editorPanel.refreshAfterAction();
+	}
 }

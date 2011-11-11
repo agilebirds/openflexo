@@ -28,21 +28,18 @@ import org.apache.cayenne.access.trans.SelectTranslator;
  */
 class H2SelectTranslator extends SelectTranslator {
 
-    static final String SELECT_PREFIX = "SELECT";
+	static final String SELECT_PREFIX = "SELECT";
 
-    @Override
+	@Override
 	public String createSqlString() throws Exception {
-        String sql = super.createSqlString();
+		String sql = super.createSqlString();
 
-        // limit results
-        int limit = getQuery().getMetaData(getEntityResolver()).getFetchLimit();
-        if (limit > 0 && sql.startsWith(SELECT_PREFIX)) {
-            return SELECT_PREFIX
-                    + " TOP "
-                    + limit
-                    + sql.substring(SELECT_PREFIX.length());
-        }
+		// limit results
+		int limit = getQuery().getMetaData(getEntityResolver()).getFetchLimit();
+		if (limit > 0 && sql.startsWith(SELECT_PREFIX)) {
+			return SELECT_PREFIX + " TOP " + limit + sql.substring(SELECT_PREFIX.length());
+		}
 
-        return sql;
-    }
+		return sql;
+	}
 }

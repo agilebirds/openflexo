@@ -33,134 +33,115 @@ import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.RoleList;
 import org.openflexo.foundation.wkf.WorkflowModelObject;
 
+public class AddRole extends FlexoAction<AddRole, WorkflowModelObject, WorkflowModelObject> {
 
-public class AddRole extends FlexoAction<AddRole,WorkflowModelObject,WorkflowModelObject> 
-{
+	private static final Logger logger = Logger.getLogger(AddRole.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(AddRole.class.getPackage().getName());
-    
-    public static FlexoActionType<AddRole,WorkflowModelObject,WorkflowModelObject>  actionType 
-    = new FlexoActionType<AddRole,WorkflowModelObject,WorkflowModelObject> (
-    		"add_new_role",
-    		FlexoActionType.newMenu,
-    		FlexoActionType.newMenuGroup1,
-    		FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<AddRole, WorkflowModelObject, WorkflowModelObject> actionType = new FlexoActionType<AddRole, WorkflowModelObject, WorkflowModelObject>(
+			"add_new_role", FlexoActionType.newMenu, FlexoActionType.newMenuGroup1, FlexoActionType.ADD_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-    	@Override
-        public AddRole makeNewAction(WorkflowModelObject focusedObject, Vector<WorkflowModelObject> globalSelection, FlexoEditor editor) 
-        {
-            return new AddRole(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public AddRole makeNewAction(WorkflowModelObject focusedObject, Vector<WorkflowModelObject> globalSelection, FlexoEditor editor) {
+			return new AddRole(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(WorkflowModelObject object, Vector<WorkflowModelObject> globalSelection) 
-        {
-            return object!=null && (object instanceof RoleList && !((RoleList)object).isImportedRoleList()) || (object instanceof Role && !((Role)object).isImported());
-        }
+		@Override
+		protected boolean isVisibleForSelection(WorkflowModelObject object, Vector<WorkflowModelObject> globalSelection) {
+			return object != null && (object instanceof RoleList && !((RoleList) object).isImportedRoleList())
+					|| (object instanceof Role && !((Role) object).isImported());
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(WorkflowModelObject object, Vector<WorkflowModelObject> globalSelection) 
-        {
-            return isVisibleForSelection(object, globalSelection);
-        }
-                
-    };
-    
-    private String _newRoleName;
-    private FlexoColor _newColor;
-    private String _newDescription;
-    private boolean _isSystemRole = false;
-    
-    private double x=-1;
-    private double y=-1;
-    
-    private boolean automaticallyCreateRole = false;
-    
-    private Role _newRole;
+		@Override
+		protected boolean isEnabledForSelection(WorkflowModelObject object, Vector<WorkflowModelObject> globalSelection) {
+			return isVisibleForSelection(object, globalSelection);
+		}
 
-    AddRole (WorkflowModelObject focusedObject, Vector<WorkflowModelObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-     public FlexoWorkflow getWorkflow() 
-    {
-         if (getFocusedObject() != null)  {
-             return (getFocusedObject()).getWorkflow();
-         }
-        return null;
-    }
-    
-    public String getNewRoleName() 
-    {
-        return _newRoleName;
-    }
+	private String _newRoleName;
+	private FlexoColor _newColor;
+	private String _newDescription;
+	private boolean _isSystemRole = false;
 
-    public void setNewRoleName(String newRoleName) 
-    {
-        _newRoleName = newRoleName;
-    }
-    
-    @Override
-	protected void doAction(Object context) throws DuplicateRoleException 
-    {
-        logger.info ("Add role");
-        if (getWorkflow() != null)  {
-            RoleList roleList = getWorkflow().getRoleList();
-            roleList.addToRoles(_newRole = new Role(getWorkflow(), getNewRoleName()));
-            if (x!=-1 && y!=-1) {
-            	_newRole.setX(x,RepresentableFlexoModelObject.DEFAULT);
-               	_newRole.setY(y,RepresentableFlexoModelObject.DEFAULT);
-            }
-            if (getNewColor() != null) _newRole.setColor(getNewColor());
-            if (getNewDescription() != null) _newRole.setDescription(getNewDescription());
-            _newRole.setIsSystemRole(isSystemRole());
-       }
-        else {
-            logger.warning("Cannot access workflow !");
-        }
-    }
+	private double x = -1;
+	private double y = -1;
 
-    public Role getNewRole() 
-    {
-        return _newRole;
-    }
+	private boolean automaticallyCreateRole = false;
 
-    public FlexoColor getNewColor()
-    {
-        return _newColor;
-    }
+	private Role _newRole;
 
-    public void setNewColor(FlexoColor newColor) 
-    {
-        _newColor = newColor;
-    }
+	AddRole(WorkflowModelObject focusedObject, Vector<WorkflowModelObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    public String getNewDescription() 
-    {
-        return _newDescription;
-    }
+	public FlexoWorkflow getWorkflow() {
+		if (getFocusedObject() != null) {
+			return (getFocusedObject()).getWorkflow();
+		}
+		return null;
+	}
 
-    public void setNewDescription(String newDescription) 
-    {
-        _newDescription = newDescription;
-    }
+	public String getNewRoleName() {
+		return _newRoleName;
+	}
+
+	public void setNewRoleName(String newRoleName) {
+		_newRoleName = newRoleName;
+	}
+
+	@Override
+	protected void doAction(Object context) throws DuplicateRoleException {
+		logger.info("Add role");
+		if (getWorkflow() != null) {
+			RoleList roleList = getWorkflow().getRoleList();
+			roleList.addToRoles(_newRole = new Role(getWorkflow(), getNewRoleName()));
+			if (x != -1 && y != -1) {
+				_newRole.setX(x, RepresentableFlexoModelObject.DEFAULT);
+				_newRole.setY(y, RepresentableFlexoModelObject.DEFAULT);
+			}
+			if (getNewColor() != null)
+				_newRole.setColor(getNewColor());
+			if (getNewDescription() != null)
+				_newRole.setDescription(getNewDescription());
+			_newRole.setIsSystemRole(isSystemRole());
+		} else {
+			logger.warning("Cannot access workflow !");
+		}
+	}
+
+	public Role getNewRole() {
+		return _newRole;
+	}
+
+	public FlexoColor getNewColor() {
+		return _newColor;
+	}
+
+	public void setNewColor(FlexoColor newColor) {
+		_newColor = newColor;
+	}
+
+	public String getNewDescription() {
+		return _newDescription;
+	}
+
+	public void setNewDescription(String newDescription) {
+		_newDescription = newDescription;
+	}
 
 	public void setLocation(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}
 
-	public boolean getRoleAutomaticallyCreated() 
-	{
+	public boolean getRoleAutomaticallyCreated() {
 		return automaticallyCreateRole;
 	}
 
-	public void setRoleAutomaticallyCreated(boolean automaticallyCreateRole)
-	{
+	public void setRoleAutomaticallyCreated(boolean automaticallyCreateRole) {
 		this.automaticallyCreateRole = automaticallyCreateRole;
 	}
 
@@ -172,5 +153,4 @@ public class AddRole extends FlexoAction<AddRole,WorkflowModelObject,WorkflowMod
 		_isSystemRole = isSystemRole;
 	}
 
- 
 }

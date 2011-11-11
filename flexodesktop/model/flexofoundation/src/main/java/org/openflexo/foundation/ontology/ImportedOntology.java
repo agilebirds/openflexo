@@ -30,39 +30,33 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 public class ImportedOntology extends FlexoOntology {
 
-	public ImportedOntology(String anURI, File owlFile, OntologyLibrary library) 
-	{
+	public ImportedOntology(String anURI, File owlFile, OntologyLibrary library) {
 		super(anURI, owlFile, library);
 	}
 
 	@Override
-	public String getClassNameKey() 
-	{
+	public String getClassNameKey() {
 		return "imported_ontology";
 	}
 
 	@Override
-	public String getDescription() 
-	{
+	public String getDescription() {
 		return FlexoLocalization.localizedForKey("no_description_available");
 	}
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.VE.IMPORTED_ONTOLOGY_INSPECTOR;
 	}
-	
+
 	@Override
-	public String getDisplayableDescription()
-	{
-		return "Ontology "+getName();
+	public String getDisplayableDescription() {
+		return "Ontology " + getName();
 	}
 
-    public static ImportedOntology createNewImportedOntology(String anURI, File owlFile, OntologyLibrary library)
-    {
-    	ImportedOntology returned = new ImportedOntology(anURI, owlFile, library);
-    	
+	public static ImportedOntology createNewImportedOntology(String anURI, File owlFile, OntologyLibrary library) {
+		ImportedOntology returned = new ImportedOntology(anURI, owlFile, library);
+
 		Model base = ModelFactory.createDefaultModel();
 		returned.ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, library, base);
 		returned.ontModel.createOntology(anURI);
@@ -70,7 +64,6 @@ public class ImportedOntology extends FlexoOntology {
 		returned.isLoaded = true;
 		return returned;
 
-    }
-
+	}
 
 }

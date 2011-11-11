@@ -24,39 +24,30 @@ import org.openflexo.foundation.wkf.node.EventNode;
 public class SendMail extends CustomInstruction {
 
 	private EventNode mailOut;
-	
-	public SendMail (EventNode mailOut)
-	{
+
+	public SendMail(EventNode mailOut) {
 		super();
 		this.mailOut = mailOut;
 	}
 
 	@Override
-	public String toString()
-	{
-		return "[Send email '"+mailOut.getMailSubject()+"' to:"+mailOut.getToAddress()+"]";
+	public String toString() {
+		return "[Send email '" + mailOut.getMailSubject() + "' to:" + mailOut.getToAddress() + "]";
 	}
 
 	@Override
-	public String getJavaStringRepresentation() 
-	{
-		return "/*\n" +
-				"//TODO put correct sendMailCode\n" +
-				"Mail from : "+mailOut.getFromAddress()+"\n" +
-				"To : "+mailOut.getToAddress()+"\n" +
-				"Subject : "+mailOut.getMailSubject()+"\n" +
-								"Body :\n"+mailOut.getMailBody()+"\n" +
-										"*/";
+	public String getJavaStringRepresentation() {
+		return "/*\n" + "//TODO put correct sendMailCode\n" + "Mail from : " + mailOut.getFromAddress() + "\n" + "To : "
+				+ mailOut.getToAddress() + "\n" + "Subject : " + mailOut.getMailSubject() + "\n" + "Body :\n" + mailOut.getMailBody()
+				+ "\n" + "*/";
 	}
-	
+
 	@Override
-	public SendMail clone()
-	{
+	public SendMail clone() {
 		SendMail returned = new SendMail(mailOut);
 		returned.setHeaderComment(getHeaderComment());
 		returned.setInlineComment(getInlineComment());
 		return returned;
 	}
-
 
 }

@@ -30,48 +30,43 @@ public class SomeRestrictionStatement extends ObjectRestrictionStatement {
 
 	private OntologyObjectProperty property;
 	private OntologyClass object;
-	
-	public SomeRestrictionStatement(OntologyObject subject, Statement s, SomeValuesFromRestriction r)
-	{
-		super(subject,s,r);
-		property = (OntologyObjectProperty)getOntologyLibrary().getProperty(r.getOnProperty().getURI());
-		object = (OntologyClass)getOntologyLibrary().getOntologyObject(r.getSomeValuesFrom().getURI());
+
+	public SomeRestrictionStatement(OntologyObject subject, Statement s, SomeValuesFromRestriction r) {
+		super(subject, s, r);
+		property = (OntologyObjectProperty) getOntologyLibrary().getProperty(r.getOnProperty().getURI());
+		object = (OntologyClass) getOntologyLibrary().getOntologyObject(r.getSomeValuesFrom().getURI());
 	}
 
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "some_restriction_statement";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return "SomeRestrictionStatement: "+getStatement();
+	public String getFullyQualifiedName() {
+		return "SomeRestrictionStatement: " + getStatement();
 	}
 
-
 	@Override
-	public OntologyClass getObject() 
-	{
+	public OntologyClass getObject() {
 		return object;
 	}
 
 	@Override
-	public OntologyObjectProperty getProperty() 
-	{
+	public OntologyObjectProperty getProperty() {
 		return property;
 	}
 
 	@Override
-	public String toString() 
-	{
-		return getSubject().getName()+" "+(property==null?"<NOT FOUND:"+restriction.getOnProperty().getURI()+">":property.getName())+" some "+(getObject() != null ? getObject().getName() : "<NOT_FOUND:"+getStatement().getObject()+">");
+	public String toString() {
+		return getSubject().getName() + " "
+				+ (property == null ? "<NOT FOUND:" + restriction.getOnProperty().getURI() + ">" : property.getName()) + " some "
+				+ (getObject() != null ? getObject().getName() : "<NOT_FOUND:" + getStatement().getObject() + ">");
 	}
 
 	@Override
 	public String getName() {
-		return property.getName()+" some";
+		return property.getName() + " some";
 	}
 
 	@Override

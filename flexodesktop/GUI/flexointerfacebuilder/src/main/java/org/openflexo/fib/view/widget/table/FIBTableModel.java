@@ -52,15 +52,13 @@ import org.openflexo.fib.model.FIBTextFieldColumn;
 import org.openflexo.fib.view.widget.FIBTableWidget;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class FIBTableModel extends DefaultTableModel implements ListSelectionListener
-{
+public class FIBTableModel extends DefaultTableModel implements ListSelectionListener {
 
 	private static final Logger logger = Logger.getLogger(FIBTableModel.class.getPackage().getName());
 
@@ -72,53 +70,47 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 	private Object selectedObject;
 	private Vector<Object> selection;
 
-	private final Hashtable<Object,RowObjectModificationTracker> _rowObjectModificationTrackers;
-	
+	private final Hashtable<Object, RowObjectModificationTracker> _rowObjectModificationTrackers;
 
 	/**
-	 * Stores controls: key is the JButton and value the
-	 * PropertyListActionListener
+	 * Stores controls: key is the JButton and value the PropertyListActionListener
 	 */
-	//private Hashtable<JButton,PropertyListActionListener> _controls;
+	// private Hashtable<JButton,PropertyListActionListener> _controls;
 
-	public FIBTableModel(FIBTable fibTable, FIBTableWidget widget, FIBController controller)
-	{
+	public FIBTableModel(FIBTable fibTable, FIBTableWidget widget, FIBController controller) {
 		super();
 		_fibTable = fibTable;
 		_widget = widget;
 		_values = null;
 		_columns = new Vector<AbstractColumn>();
 		for (FIBTableColumn column : fibTable.getColumns()) {
-			addToColumns(buildTableColumn(column,controller));
+			addToColumns(buildTableColumn(column, controller));
 		}
 
 		_rowObjectModificationTrackers = new Hashtable<Object, RowObjectModificationTracker>();
-		
+
 		_footer = new FIBTableWidgetFooter(fibTable, this, widget);
 
 	}
 
-	public FIBTable getTable() 
-	{
+	public FIBTable getTable() {
 		return _fibTable;
 	}
-	
-	public void delete()
-	{
+
+	public void delete() {
 		if (_values != null) {
 			for (Object o : _values) {
-				//logger.info("REMOVE "+o);
+				// logger.info("REMOVE "+o);
 				if (o instanceof HasPropertyChangeSupport) {
-					PropertyChangeSupport pcSupport = ((HasPropertyChangeSupport)o).getPropertyChangeSupport();
-					//logger.info("Widget "+getWidget()+" remove property change listener: "+o);
+					PropertyChangeSupport pcSupport = ((HasPropertyChangeSupport) o).getPropertyChangeSupport();
+					// logger.info("Widget "+getWidget()+" remove property change listener: "+o);
 					pcSupport.removePropertyChangeListener(getTracker(o));
 					deleteTracker(o);
-				}
-				else if (o instanceof Observable) {
-					//logger.info("Widget "+getWidget()+" remove observable: "+o);
-					((Observable)o).deleteObserver(getTracker(o));
+				} else if (o instanceof Observable) {
+					// logger.info("Widget "+getWidget()+" remove observable: "+o);
+					((Observable) o).deleteObserver(getTracker(o));
 					deleteTracker(o);
-				}  		
+				}
 			}
 		}
 
@@ -129,7 +121,8 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 		_footer.delete();
 
 		_columns.clear();
-		if (_values != null) _values.clear();
+		if (_values != null)
+			_values.clear();
 
 		_columns = null;
 		_values = null;
@@ -137,174 +130,155 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 		_fibTable = null;
 	}
 
-	public FIBTableWidget getWidget()
-	{
+	public FIBTableWidget getWidget() {
 		return _widget;
 	}
 
-	public List getValues()
-	{
+	public List getValues() {
 		return _values;
 	}
 
 	private static final Vector EMPTY_VECTOR = new Vector();
 
-	public void setValues(List values)
-	{
-		//logger.info("setValues with "+values);
+	public void setValues(List values) {
+		// logger.info("setValues with "+values);
 		if (logger.isLoggable(Level.FINE))
-			logger.fine("setValues() with "+values);
+			logger.fine("setValues() with " + values);
 		List newValues = values;
-		if (values == null) newValues = EMPTY_VECTOR;
+		if (values == null)
+			newValues = EMPTY_VECTOR;
 
 		List oldValues = _values;
 		_values = new ArrayList();
 		ArrayList removedValues = new ArrayList();
 		ArrayList addedValues = new ArrayList();
-		if (oldValues != null) removedValues.addAll(oldValues);
-		
+		if (oldValues != null)
+			removedValues.addAll(oldValues);
+
 		for (Object v : newValues) {
 			if (oldValues != null && oldValues.contains(v)) {
 				removedValues.remove(v);
-			}
-			else {
+			} else {
 				addedValues.add(v);
 			}
 			_values.add(v);
 		}
 
 		for (Object o : addedValues) {
-			logger.fine("ADD "+o);
-      		if (o instanceof HasPropertyChangeSupport) {
-				PropertyChangeSupport pcSupport = ((HasPropertyChangeSupport)o).getPropertyChangeSupport();
-      			logger.fine("Widget "+getWidget()+" remove property change listener: "+o);
+			logger.fine("ADD " + o);
+			if (o instanceof HasPropertyChangeSupport) {
+				PropertyChangeSupport pcSupport = ((HasPropertyChangeSupport) o).getPropertyChangeSupport();
+				logger.fine("Widget " + getWidget() + " remove property change listener: " + o);
 				pcSupport.addPropertyChangeListener(getTracker(o));
-      		}
-       		else if (o instanceof Observable) {
-       			logger.fine("Widget "+getWidget()+" remove observable: "+o);
-       			((Observable)o).addObserver(getTracker(o));
-       		}
+			} else if (o instanceof Observable) {
+				logger.fine("Widget " + getWidget() + " remove observable: " + o);
+				((Observable) o).addObserver(getTracker(o));
+			}
 		}
-		
+
 		for (Object o : removedValues) {
-			logger.fine("REMOVE "+o);
-      		if (o instanceof HasPropertyChangeSupport) {
-				PropertyChangeSupport pcSupport = ((HasPropertyChangeSupport)o).getPropertyChangeSupport();
-      			logger.fine("Widget "+getWidget()+" remove property change listener: "+o);
+			logger.fine("REMOVE " + o);
+			if (o instanceof HasPropertyChangeSupport) {
+				PropertyChangeSupport pcSupport = ((HasPropertyChangeSupport) o).getPropertyChangeSupport();
+				logger.fine("Widget " + getWidget() + " remove property change listener: " + o);
 				pcSupport.removePropertyChangeListener(getTracker(o));
 				deleteTracker(o);
-      		}
-       		else if (o instanceof Observable) {
-       			logger.fine("Widget "+getWidget()+" remove observable: "+o);
-       			((Observable)o).deleteObserver(getTracker(o));
+			} else if (o instanceof Observable) {
+				logger.fine("Widget " + getWidget() + " remove observable: " + o);
+				((Observable) o).deleteObserver(getTracker(o));
 				deleteTracker(o);
-      		}
-      		
+			}
+
 		}
-		
+
 		fireModelObjectHasChanged(oldValues, newValues);
 		fireTableDataChanged();
 	}
 
-	private void deleteTracker(Object o)
-	{
+	private void deleteTracker(Object o) {
 		_rowObjectModificationTrackers.remove(o);
 	}
-	
-	private RowObjectModificationTracker getTracker(Object o)
-	{
+
+	private RowObjectModificationTracker getTracker(Object o) {
 		RowObjectModificationTracker returned = _rowObjectModificationTrackers.get(o);
 		if (returned == null) {
 			returned = new RowObjectModificationTracker(o);
-			_rowObjectModificationTrackers.put(o,returned);
+			_rowObjectModificationTrackers.put(o, returned);
 		}
 		return returned;
 	}
-	
-	protected class RowObjectModificationTracker implements Observer, PropertyChangeListener
-	{
+
+	protected class RowObjectModificationTracker implements Observer, PropertyChangeListener {
 		private final Object rowObject;
-		
-		public RowObjectModificationTracker(Object rowObject) 
-		{
+
+		public RowObjectModificationTracker(Object rowObject) {
 			this.rowObject = rowObject;
 		}
-		
+
 		@Override
-		public void propertyChange(PropertyChangeEvent evt) 
-		{
-	    	//System.out.println("Row object "+evt.getSource()+" : propertyChange "+evt);
+		public void propertyChange(PropertyChangeEvent evt) {
+			// System.out.println("Row object "+evt.getSource()+" : propertyChange "+evt);
 			updateRow();
 		}
-		
+
 		@Override
-		public void update(Observable o, Object arg)
-		{
+		public void update(Observable o, Object arg) {
 			updateRow();
 		}
-		
-		private void updateRow()
-		{
-	    	fireTableRowsUpdated(indexOf(rowObject),indexOf(rowObject));
-	    	getTableWidget().notifyDynamicModelChanged();
+
+		private void updateRow() {
+			fireTableRowsUpdated(indexOf(rowObject), indexOf(rowObject));
+			getTableWidget().notifyDynamicModelChanged();
 		}
 	}
-	
+
 	/**
 	 * Notifies all listeners that represented model has changed
-	 *
+	 * 
 	 * @see TableModelEvent
 	 * @see EventListenerList
 	 * @see javax.swing.JTable#tableChanged(TableModelEvent)
 	 */
-	public void fireModelObjectHasChanged(List oldValues, List newValues)
-	{
+	public void fireModelObjectHasChanged(List oldValues, List newValues) {
 		fireTableChanged(new ModelObjectHasChanged(this, oldValues, newValues));
 	}
 
-	public class ModelObjectHasChanged extends TableModelEvent
-	{
+	public class ModelObjectHasChanged extends TableModelEvent {
 		private final List _oldValues;
 
 		private final List _newValues;
 
-		public ModelObjectHasChanged(TableModel source, List oldValues, List newValues)
-		{
+		public ModelObjectHasChanged(TableModel source, List oldValues, List newValues) {
 			super(source);
 			_oldValues = oldValues;
 			_newValues = newValues;
 		}
 
-		public List getNewValues()
-		{
+		public List getNewValues() {
 			return _newValues;
 		}
 
-		public List getOldValues()
-		{
+		public List getOldValues() {
 			return _oldValues;
 		}
 	}
 
 	@Override
-	public int getRowCount()
-	{
+	public int getRowCount() {
 		if (getValues() != null) {
 			return getValues().size();
 		}
 		return 0;
 	}
 
-	public Object elementAt(int row)
-	{
+	public Object elementAt(int row) {
 		if ((getValues() != null) && (row >= 0) && (row < getValues().size())) {
 			return getValues().get(row);
 		}
 		return null;
 	}
 
-	public int indexOf(Object object)
-	{
+	public int indexOf(Object object) {
 		for (int i = 0; i < getRowCount(); i++) {
 			if (elementAt(i) == object) {
 				return i;
@@ -313,34 +287,28 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 		return -1;
 	}
 
-
-	public void addToColumns(AbstractColumn aColumn)
-	{
+	public void addToColumns(AbstractColumn aColumn) {
 		_columns.add(aColumn);
 		aColumn.setTableModel(this);
 	}
 
-	public void removeFromColumns(AbstractColumn aColumn)
-	{
+	public void removeFromColumns(AbstractColumn aColumn) {
 		_columns.remove(aColumn);
 		aColumn.setTableModel(null);
 	}
 
-	public AbstractColumn columnAt(int index)
-	{
+	public AbstractColumn columnAt(int index) {
 		AbstractColumn returned = _columns.elementAt(index);
 		return returned;
 	}
 
 	@Override
-	public int getColumnCount()
-	{
+	public int getColumnCount() {
 		return _columns.size();
 	}
 
 	@Override
-	public String getColumnName(int col)
-	{
+	public String getColumnName(int col) {
 		AbstractColumn column = columnAt(col);
 		if (column != null) {
 			return column.getLocalizedTitle();
@@ -348,8 +316,7 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 		return "???";
 	}
 
-	public int getDefaultColumnSize(int col)
-	{
+	public int getDefaultColumnSize(int col) {
 		AbstractColumn column = columnAt(col);
 		if (column != null) {
 			return column.getDefaultWidth();
@@ -357,8 +324,7 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 		return 75;
 	}
 
-	public boolean getColumnResizable(int col)
-	{
+	public boolean getColumnResizable(int col) {
 		AbstractColumn column = columnAt(col);
 		if (column != null) {
 			return column.getResizable();
@@ -367,8 +333,7 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 	}
 
 	@Override
-	public Class<?> getColumnClass(int col)
-	{
+	public Class<?> getColumnClass(int col) {
 		AbstractColumn column = columnAt(col);
 		if (column != null) {
 			return column.getValueClass();
@@ -377,8 +342,7 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 	}
 
 	@Override
-	public boolean isCellEditable(int row, int col)
-	{
+	public boolean isCellEditable(int row, int col) {
 		AbstractColumn column = columnAt(col);
 		if (column != null) {
 			Object object = elementAt(row);
@@ -388,8 +352,7 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 	}
 
 	@Override
-	public Object getValueAt(int row, int col)
-	{
+	public Object getValueAt(int row, int col) {
 		AbstractColumn column = columnAt(col);
 		if (column != null) {
 			Object object = elementAt(row);
@@ -400,24 +363,22 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 	}
 
 	@Override
-	public void setValueAt(Object value, int row, int col)
-	{
+	public void setValueAt(Object value, int row, int col) {
 		AbstractColumn column = columnAt(col);
 		if ((column != null) && (column instanceof EditableColumn)) {
 			Object object = elementAt(row);
 			((EditableColumn) column).setValueFor(object, value);
-			fireCellUpdated(object,row,col);
+			fireCellUpdated(object, row, col);
 		}
 	}
 
-	public void fireCellUpdated(Object editedObject,int row, int column)
-	{
-		//fireTableChanged(new TableModelEvent(this, row, row, column));
+	public void fireCellUpdated(Object editedObject, int row, int column) {
+		// fireTableChanged(new TableModelEvent(this, row, row, column));
 		int newRow = indexOf(editedObject);
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("editedObject="+editedObject);
-			logger.fine("row was "+row);
-			logger.fine("new row is "+newRow);
+			logger.fine("editedObject=" + editedObject);
+			logger.fine("row was " + row);
+			logger.fine("new row is " + newRow);
 		}
 		if (row != newRow) {
 			if (logger.isLoggable(Level.FINE))
@@ -426,155 +387,133 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 		}
 	}
 
-	public class RowMoveForObjectEvent extends TableModelEvent
-	{
+	public class RowMoveForObjectEvent extends TableModelEvent {
 		private final Object _editedObject;
 		private final int _newRow;
 		private final int _column;
 
-		public RowMoveForObjectEvent(TableModel source, Object editedObject, int newRow, int column)
-		{
+		public RowMoveForObjectEvent(TableModel source, Object editedObject, int newRow, int column) {
 			super(source);
 			_editedObject = editedObject;
 			_column = column;
 			_newRow = newRow;
 		}
 
-		public Object getEditedObject()
-		{
+		public Object getEditedObject() {
 			return _editedObject;
 		}
 
 		@Override
-		public int getColumn()
-		{
+		public int getColumn() {
 			return _column;
 		}
 
-		public int getNewRow()
-		{
+		public int getNewRow() {
 			return _newRow;
 		}
 	}
 
 	/*   protected class PropertyListCellRenderer extends DefaultTableCellRenderer
-    {
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
-        {
-            Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            AbstractColumn col = get
-            if (returned instanceof JComponent)
-            	((JComponent)returned).setToolTipText(getLocalizedTooltip(getModel().elementAt(row)));
-            return returned;
-        }
-    }
+	{
+	    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+	    {
+	        Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+	        AbstractColumn col = get
+	        if (returned instanceof JComponent)
+	        	((JComponent)returned).setToolTipText(getLocalizedTooltip(getModel().elementAt(row)));
+	        return returned;
+	    }
+	}
 	 */
 	/* protected void addToActions(PropertyListAction plAction)
-    {
-        PropertyListActionListener plActionListener = new PropertyListActionListener(plAction, this);
-        JButton newButton = new JButton();
-        newButton.setText(FlexoLocalization.localizedForKey(plAction.name, newButton));
-        if (plAction.help!=null)
-        	newButton.setToolTipText(FlexoLocalization.localizedForKey(plAction.help, newButton));
-        newButton.addActionListener(plActionListener);
-        getControlPanel().add(newButton);
-        _controls.put(newButton, plActionListener);
-        updateControls(null);
-    }
-
-    public Enumeration<PropertyListActionListener> getActionListeners() {
-    	return _controls.elements();
-    }*/
-
-	public FIBTableWidgetFooter getFooter()
 	{
+	    PropertyListActionListener plActionListener = new PropertyListActionListener(plAction, this);
+	    JButton newButton = new JButton();
+	    newButton.setText(FlexoLocalization.localizedForKey(plAction.name, newButton));
+	    if (plAction.help!=null)
+	    	newButton.setToolTipText(FlexoLocalization.localizedForKey(plAction.help, newButton));
+	    newButton.addActionListener(plActionListener);
+	    getControlPanel().add(newButton);
+	    _controls.put(newButton, plActionListener);
+	    updateControls(null);
+	}
+
+	public Enumeration<PropertyListActionListener> getActionListeners() {
+		return _controls.elements();
+	}*/
+
+	public FIBTableWidgetFooter getFooter() {
 		return _footer;
 
 		/*  if (controlPanel == null) {
-            controlPanel = new JPanel() {
-                 @Override
-                public void remove(int index)
-                {
-                    super.remove(index);
-                }
-            };
-            controlPanel.setLayout(new FlowLayout());
-            controlPanel.setOpaque(false);
-        }
-        return controlPanel;*/
+		    controlPanel = new JPanel() {
+		         @Override
+		        public void remove(int index)
+		        {
+		            super.remove(index);
+		        }
+		    };
+		    controlPanel.setLayout(new FlowLayout());
+		    controlPanel.setOpaque(false);
+		}
+		return controlPanel;*/
 	}
 
-	public void setModel(Object model)
-	{
+	public void setModel(Object model) {
 		_footer.setModel(model);
 
 		/* for (Enumeration en = _controls.elements(); en.hasMoreElements();) {
-            PropertyListActionListener actionListener = (PropertyListActionListener) en.nextElement();
-        	actionListener.setModel(model);
-        }
-        updateControls(null);*/
+		    PropertyListActionListener actionListener = (PropertyListActionListener) en.nextElement();
+			actionListener.setModel(model);
+		}
+		updateControls(null);*/
 	}
 
-	public FIBTableColumn getPropertyListColumnWithTitle(String title)
-	{
+	public FIBTableColumn getPropertyListColumnWithTitle(String title) {
 		return _fibTable.getColumnWithTitle(title);
 	}
 
 	@Override
-	public void fireTableRowsUpdated(int firstRow, int lastRow)
-	{
+	public void fireTableRowsUpdated(int firstRow, int lastRow) {
 		if (logger.isLoggable(Level.FINE))
-			logger.fine("fireTableRowsUpdated firstRow="+firstRow+" lastRow="+lastRow);
+			logger.fine("fireTableRowsUpdated firstRow=" + firstRow + " lastRow=" + lastRow);
 		if (firstRow > -1 && lastRow > -1)
 			super.fireTableRowsUpdated(firstRow, lastRow);
 	}
 
-	protected FIBTableWidget getTableWidget() 
-	{
+	protected FIBTableWidget getTableWidget() {
 		return _widget;
 	}
 
-
-
-	private AbstractColumn buildTableColumn(FIBTableColumn column, FIBController controller)
-	{
+	private AbstractColumn buildTableColumn(FIBTableColumn column, FIBController controller) {
 		if (column instanceof FIBLabelColumn) {
-			return new LabelColumn((FIBLabelColumn)column,this,controller);
-		} 
-		else if (column instanceof FIBTextFieldColumn) {
-			return new TextFieldColumn((FIBTextFieldColumn)column,this,controller);
-		} 
-		else if (column instanceof FIBCheckBoxColumn) {
-			return new CheckBoxColumn((FIBCheckBoxColumn)column,this,controller);
-		} 
-		else if (column instanceof FIBDropDownColumn) {
-			return new DropDownColumn((FIBDropDownColumn)column,this,controller);
-		} 
-		else if (column instanceof FIBIconColumn) {
-			return new IconColumn((FIBIconColumn)column,this,controller);
-		} 
-		else if (column instanceof FIBNumberColumn) {
-			return new NumberColumn((FIBNumberColumn)column,this,controller);
-		} 
-		else if (column instanceof FIBCustomColumn) {
-			return new CustomColumn((FIBCustomColumn)column,this,controller);
-		} 
+			return new LabelColumn((FIBLabelColumn) column, this, controller);
+		} else if (column instanceof FIBTextFieldColumn) {
+			return new TextFieldColumn((FIBTextFieldColumn) column, this, controller);
+		} else if (column instanceof FIBCheckBoxColumn) {
+			return new CheckBoxColumn((FIBCheckBoxColumn) column, this, controller);
+		} else if (column instanceof FIBDropDownColumn) {
+			return new DropDownColumn((FIBDropDownColumn) column, this, controller);
+		} else if (column instanceof FIBIconColumn) {
+			return new IconColumn((FIBIconColumn) column, this, controller);
+		} else if (column instanceof FIBNumberColumn) {
+			return new NumberColumn((FIBNumberColumn) column, this, controller);
+		} else if (column instanceof FIBCustomColumn) {
+			return new CustomColumn((FIBCustomColumn) column, this, controller);
+		}
 		return null;
 
 	}
 
-	public Object getSelectedObject()
-	{
+	public Object getSelectedObject() {
 		return selectedObject;
 	}
 
-	public Vector<Object> getSelection()
-	{
+	public Vector<Object> getSelection() {
 		return selection;
 	}
 
-	public ListSelectionModel getListSelectionModel()
-	{
+	public ListSelectionModel getListSelectionModel() {
 		return _widget.getListSelectionModel();
 	}
 
@@ -584,9 +523,8 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 	}*/
 
 	@Override
-	public void valueChanged(ListSelectionEvent e)
-	{
-		
+	public void valueChanged(ListSelectionEvent e) {
+
 		// Ignore extra messages.
 		if (e.getValueIsAdjusting())
 			return;
@@ -596,8 +534,9 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 
 		int i = getListSelectionModel().getMinSelectionIndex();
 		int leadIndex = getListSelectionModel().getLeadSelectionIndex();
-		if (!getListSelectionModel().isSelectedIndex(leadIndex)) leadIndex = getListSelectionModel().getAnchorSelectionIndex();
-		while (!getListSelectionModel().isSelectedIndex(leadIndex) && i<=getListSelectionModel().getMaxSelectionIndex()) {
+		if (!getListSelectionModel().isSelectedIndex(leadIndex))
+			leadIndex = getListSelectionModel().getAnchorSelectionIndex();
+		while (!getListSelectionModel().isSelectedIndex(leadIndex) && i <= getListSelectionModel().getMaxSelectionIndex()) {
 			leadIndex = i;
 			i++;
 		}
@@ -606,28 +545,28 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 
 		Vector<Object> oldSelection = selection;
 		selection = new Vector<Object>();
-		for (i=getListSelectionModel().getMinSelectionIndex(); i<=getListSelectionModel().getMaxSelectionIndex(); i++) {
+		for (i = getListSelectionModel().getMinSelectionIndex(); i <= getListSelectionModel().getMaxSelectionIndex(); i++) {
 			if (getListSelectionModel().isSelectedIndex(i))
 				selection.add(elementAt(i));
 		}
-		
+
 		_widget.getDynamicModel().selected = selectedObject;
 		_widget.getDynamicModel().selection = selection;
-		_widget.notifyDynamicModelChanged();       
+		_widget.notifyDynamicModelChanged();
 
-       	if (_widget.getComponent().getSelected().isValid()) {
-       		logger.fine("Sets SELECTED binding with "+selectedObject);
-       		_widget.getComponent().getSelected().setBindingValue(selectedObject,_widget.getController());
-    	}
-		
+		if (_widget.getComponent().getSelected().isValid()) {
+			logger.fine("Sets SELECTED binding with " + selectedObject);
+			_widget.getComponent().getSelected().setBindingValue(selectedObject, _widget.getController());
+		}
+
 		_widget.updateFont();
 
 		if (!ignoreNotifications) {
-			_widget.getController().updateSelection(_widget,oldSelection,selection);
+			_widget.getController().updateSelection(_widget, oldSelection, selection);
 		}
-		
+
 		_footer.handleSelectionChanged();
-		
+
 		/*SwingUtilities.invokeLater(new Runnable() {
 			
 			public void run()
@@ -636,48 +575,42 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 				System.out.println((isFocused() ? "LEADER" : "SECONDARY")+" La selection est "+selection);
 			}
 		});*/
-		
+
 	}
 
 	private boolean ignoreNotifications = false;
-	
-	public void addToSelectionNoNotification(Object o)
-	{
+
+	public void addToSelectionNoNotification(Object o) {
 		int index = getWidget().getValue().indexOf(o);
 		ignoreNotifications = true;
-		getListSelectionModel().addSelectionInterval(index,index);
+		getListSelectionModel().addSelectionInterval(index, index);
 		ignoreNotifications = false;
 	}
 
-	public void removeFromSelectionNoNotification(Object o)
-	{
+	public void removeFromSelectionNoNotification(Object o) {
 		int index = getWidget().getValue().indexOf(o);
 		ignoreNotifications = true;
-		getListSelectionModel().removeSelectionInterval(index,index);
+		getListSelectionModel().removeSelectionInterval(index, index);
 		ignoreNotifications = false;
 	}
 
-	public void resetSelectionNoNotification()
-	{
+	public void resetSelectionNoNotification() {
 		ignoreNotifications = true;
 		getListSelectionModel().clearSelection();
 		ignoreNotifications = false;
 	}
 
-	public void addToSelection(Object o)
-	{
+	public void addToSelection(Object o) {
 		int index = getWidget().getValue().indexOf(o);
-		getListSelectionModel().addSelectionInterval(index,index);
+		getListSelectionModel().addSelectionInterval(index, index);
 	}
 
-	public void removeFromSelection(Object o)
-	{
+	public void removeFromSelection(Object o) {
 		int index = getWidget().getValue().indexOf(o);
-		getListSelectionModel().removeSelectionInterval(index,index);
+		getListSelectionModel().removeSelectionInterval(index, index);
 	}
-	
-	public void resetSelection()
-	{
+
+	public void resetSelection() {
 		getListSelectionModel().clearSelection();
 	}
 

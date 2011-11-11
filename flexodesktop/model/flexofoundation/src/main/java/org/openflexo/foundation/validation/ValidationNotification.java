@@ -27,18 +27,15 @@ import org.openflexo.foundation.DataModification;
  * @author sguerin
  * 
  */
-public abstract class ValidationNotification extends DataModification
-{
-    private Validable _rootObject;
+public abstract class ValidationNotification extends DataModification {
+	private Validable _rootObject;
 
-    public ValidationNotification(Validable rootObject)
-    {
-        super(DataModification.UNDEFINED, null, null);
-        _rootObject = rootObject;
-    }
+	public ValidationNotification(Validable rootObject) {
+		super(DataModification.UNDEFINED, null, null);
+		_rootObject = rootObject;
+	}
 
-    public Validable getRootObject()
-    {
-        return _rootObject;
-    }
+	public Validable getRootObject() {
+		return _rootObject;
+	}
 }

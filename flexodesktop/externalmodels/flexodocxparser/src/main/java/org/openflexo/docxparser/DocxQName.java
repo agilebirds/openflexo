@@ -21,10 +21,8 @@ package org.openflexo.docxparser;
 
 import org.dom4j.QName;
 
-public class DocxQName
-{
-	public static QName getQName(OpenXmlTag openXmlTag)
-	{
+public class DocxQName {
+	public static QName getQName(OpenXmlTag openXmlTag) {
 		return new QName(openXmlTag.getTagName(), DocxXmlUtil.getNamespace(openXmlTag));
 	}
 }

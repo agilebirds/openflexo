@@ -21,18 +21,17 @@ package org.openflexo.dre;
 
 /**
  * Constants used by the DRE module.
- *
+ * 
  * @author yourname
  */
-public class DRECst
-{
+public class DRECst {
 
-    public static final int DEFAULT_DRE_BROWSER_WINDOW_WIDTH = 300;
+	public static final int DEFAULT_DRE_BROWSER_WINDOW_WIDTH = 300;
 
-    public static final int DEFAULT_DRE_BROWSER_WINDOW_HEIGHT = 250;
+	public static final int DEFAULT_DRE_BROWSER_WINDOW_HEIGHT = 250;
 
-    public static final int DEFAULT_MAINFRAME_WIDTH = 1200;
+	public static final int DEFAULT_MAINFRAME_WIDTH = 1200;
 
-    public static final int DEFAULT_MAINFRAME_HEIGHT = 870;
+	public static final int DEFAULT_MAINFRAME_HEIGHT = 870;
 
 }

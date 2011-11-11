@@ -23,26 +23,22 @@ package org.openflexo.xmlcode.examples.example2;
 import org.openflexo.xmlcode.XMLSerializable;
 
 /**
- * Class <code>MultimediaArticle</code> is intented to represent a command
- * object in XML coding/decoding example.
+ * Class <code>MultimediaArticle</code> is intented to represent a command object in XML coding/decoding example.
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  */
-public abstract class MultimediaArticle implements XMLSerializable
-{
+public abstract class MultimediaArticle implements XMLSerializable {
 
-    public int articleId;
+	public int articleId;
 
-    protected float price;
+	protected float price;
 
-    public float getPrice()
-    {
-        return price;
-    }
+	public float getPrice() {
+		return price;
+	}
 
-    public void setPrice(float v)
-    {
-        this.price = v;
-    }
+	public void setPrice(float v) {
+		this.price = v;
+	}
 
 }

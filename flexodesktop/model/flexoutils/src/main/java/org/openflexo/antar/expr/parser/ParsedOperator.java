@@ -18,6 +18,7 @@
  *
  */
 package org.openflexo.antar.expr.parser;
+
 import org.openflexo.antar.expr.Operator;
 import org.openflexo.antar.expr.OperatorNotSupportedException;
 
@@ -34,9 +35,8 @@ public class ParsedOperator implements AbstractToken {
 	private Operator _alternativeOperator; // When ambigous
 	private String _serializationValue;
 	private ExpressionParser _parser;
-	
-	public ParsedOperator(Operator operator, ExpressionParser parser)
-	{
+
+	public ParsedOperator(Operator operator, ExpressionParser parser) {
 		super();
 		_parser = parser;
 		_operator = operator;
@@ -46,21 +46,18 @@ public class ParsedOperator implements AbstractToken {
 			_serializationValue = "<unsupported>";
 		}
 	}
-	
-	public ParsedOperator(Operator operator, Operator alternativeOperator, ExpressionParser parser)
-	{
-		this(operator,parser);
+
+	public ParsedOperator(Operator operator, Operator alternativeOperator, ExpressionParser parser) {
+		this(operator, parser);
 		_alternativeOperator = alternativeOperator;
 	}
-	
-	public int getPriority()
-	{
+
+	public int getPriority() {
 		return _operator.getPriority();
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return /*(_operator instanceof UnaryOperator ? "Unary:" : "Binary:")+*/_serializationValue;
 	}
 
@@ -68,18 +65,15 @@ public class ParsedOperator implements AbstractToken {
 		return _operator;
 	}
 
-	public Operator getAlternativeOperator() 
-	{
+	public Operator getAlternativeOperator() {
 		return _alternativeOperator;
 	}
-	
-	public boolean isAmbigous()
-	{
+
+	public boolean isAmbigous() {
 		return _alternativeOperator != null;
 	}
 
-	public ExpressionParser getExpressionParser() 
-	{
+	public ExpressionParser getExpressionParser() {
 		return _parser;
 	}
 

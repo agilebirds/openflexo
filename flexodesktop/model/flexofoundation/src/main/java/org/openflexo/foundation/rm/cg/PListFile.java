@@ -21,29 +21,24 @@ package org.openflexo.foundation.rm.cg;
 
 import java.io.File;
 
-public class PListFile extends TextFile
-{
+public class PListFile extends TextFile {
 
-	public PListFile(File f)
-	{
+	public PListFile(File f) {
 		super(f);
-    }
+	}
 
-	public PListFile()
-	{
+	public PListFile() {
 		super();
-    }
+	}
 
-    @Override
-	public PListFileResource getFlexoResource()
-    {
-    	return (PListFileResource)super.getFlexoResource();
-    }
+	@Override
+	public PListFileResource getFlexoResource() {
+		return (PListFileResource) super.getFlexoResource();
+	}
 
-    @Override
-	public String getCurrentGeneration()
-    {
-    	return getFlexoResource().getCurrentGeneration();
-    }
+	@Override
+	public String getCurrentGeneration() {
+		return getFlexoResource().getCurrentGeneration();
+	}
 
 }

@@ -41,101 +41,87 @@ import de.hunsicker.jalopy.swing.SettingsDialog;
  * @author gpolet
  * 
  */
-public class GeneratorToolsMenu extends ToolsMenu
-{
+public class GeneratorToolsMenu extends ToolsMenu {
 
-    private JMenuItem javaFormat;
+	private JMenuItem javaFormat;
 
-    /**
-     * @param controller
-     */
-    public GeneratorToolsMenu(FlexoController controller)
-    {
-        super(controller);
-        add(javaFormat = new JavaFormatItem());
-    }
+	/**
+	 * @param controller
+	 */
+	public GeneratorToolsMenu(FlexoController controller) {
+		super(controller);
+		add(javaFormat = new JavaFormatItem());
+	}
 
-    public class JavaFormatAction extends AbstractAction
-    {
+	public class JavaFormatAction extends AbstractAction {
 
-        /**
-         * Overrides actionPerformed
-         * 
-         * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-         */
-        @Override
-		public void actionPerformed(ActionEvent e)
-        {
-            try {
-                Convention.importSettings(getController().getProject().getJavaFormatterSettings().getFile());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-            SettingsDialog settings = SettingsDialog.create(getController().getFlexoFrame(), FlexoLocalization
-                    .localizedForKey("java_format_settings"));
-            settings.setSize(700, 550);
-            Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-            settings.setLocation((dim.width-settings.getWidth())/2, (int) ((dim.getHeight()-settings.getHeight())/2));
-            settings.addWindowListener(new WindowListener(){
+		/**
+		 * Overrides actionPerformed
+		 * 
+		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+		 */
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			try {
+				Convention.importSettings(getController().getProject().getJavaFormatterSettings().getFile());
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			SettingsDialog settings = SettingsDialog.create(getController().getFlexoFrame(),
+					FlexoLocalization.localizedForKey("java_format_settings"));
+			settings.setSize(700, 550);
+			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+			settings.setLocation((dim.width - settings.getWidth()) / 2, (int) ((dim.getHeight() - settings.getHeight()) / 2));
+			settings.addWindowListener(new WindowListener() {
 
-                @Override
-				public void windowActivated(WindowEvent e)
-                {
-                }
+				@Override
+				public void windowActivated(WindowEvent e) {
+				}
 
-                @Override
-				public void windowClosed(WindowEvent e)
-                {
-                    try {
-                        Convention.getInstance().exportSettings(getController().getProject().getJavaFormatterSettings().getFile());
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }                    
-                }
+				@Override
+				public void windowClosed(WindowEvent e) {
+					try {
+						Convention.getInstance().exportSettings(getController().getProject().getJavaFormatterSettings().getFile());
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
 
-                @Override
-				public void windowClosing(WindowEvent e)
-                {
-                }
+				@Override
+				public void windowClosing(WindowEvent e) {
+				}
 
-                @Override
-				public void windowDeactivated(WindowEvent e)
-                {
-                }
+				@Override
+				public void windowDeactivated(WindowEvent e) {
+				}
 
-                @Override
-				public void windowDeiconified(WindowEvent e)
-                {
-                }
+				@Override
+				public void windowDeiconified(WindowEvent e) {
+				}
 
-                @Override
-				public void windowIconified(WindowEvent e)
-                {
-                }
+				@Override
+				public void windowIconified(WindowEvent e) {
+				}
 
-                @Override
-				public void windowOpened(WindowEvent e)
-                {
-                }
-                
-            });
-            settings.show();
-        }
+				@Override
+				public void windowOpened(WindowEvent e) {
+				}
 
-    }
+			});
+			settings.show();
+		}
 
-    public class JavaFormatItem extends FlexoMenuItem
-    {
+	}
 
-        /**
-         * @param actionType
-         * @param controller
-         */
-        public JavaFormatItem()
-        {
-            super(new JavaFormatAction(), "java_format", null, null, getController());
-        }
+	public class JavaFormatItem extends FlexoMenuItem {
 
-    }
+		/**
+		 * @param actionType
+		 * @param controller
+		 */
+		public JavaFormatItem() {
+			super(new JavaFormatAction(), "java_format", null, null, getController());
+		}
+
+	}
 }
-

@@ -27,7 +27,6 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 
-
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ReservedKeyword;
@@ -35,52 +34,47 @@ import org.openflexo.view.controller.FlexoController;
 
 /**
  * Abstract browser element representing a DMObject
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public abstract class DMElement extends BrowserElement
-{
+public abstract class DMElement extends BrowserElement {
 
-    public DMElement(DMObject object, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(object, elementType, browser, parent);
-    }
+	public DMElement(DMObject object, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent) {
+		super(object, elementType, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-    	if (getDMObject() != null && getDMObject().getOrderedChildren() != null) {
-    		for (Enumeration e = getDMObject().getOrderedChildren().elements(); e.hasMoreElements();) {
-    			DMObject next = (DMObject) e.nextElement();
-    			addToChilds(next);
-    		}
-    	}
-    }
+	@Override
+	protected void buildChildrenVector() {
+		if (getDMObject() != null && getDMObject().getOrderedChildren() != null) {
+			for (Enumeration e = getDMObject().getOrderedChildren().elements(); e.hasMoreElements();) {
+				DMObject next = (DMObject) e.nextElement();
+				addToChilds(next);
+			}
+		}
+	}
 
-    @Override
-	public String getName()
-    {
-        return getDMObject().getLocalizedName();
-    }
+	@Override
+	public String getName() {
+		return getDMObject().getLocalizedName();
+	}
 
-    protected DMObject getDMObject()
-    {
-        return (DMObject) getObject();
-    }
+	protected DMObject getDMObject() {
+		return (DMObject) getObject();
+	}
 
-    @Override
+	@Override
 	public abstract boolean isNameEditable();
 
-    @Override
-	public void setName(String aName)
-    {
-        try {
-        	if(ReservedKeyword.contains(aName))throw new InvalidNameException();
-            getDMObject().setName(aName);
-        } catch (Exception e) {
-            FlexoController.notify(FlexoLocalization.localizedForKey("invalid_name"));
-        }
-    }
+	@Override
+	public void setName(String aName) {
+		try {
+			if (ReservedKeyword.contains(aName))
+				throw new InvalidNameException();
+			getDMObject().setName(aName);
+		} catch (Exception e) {
+			FlexoController.notify(FlexoLocalization.localizedForKey("invalid_name"));
+		}
+	}
 
 }

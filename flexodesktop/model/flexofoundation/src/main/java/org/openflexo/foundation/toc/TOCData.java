@@ -39,7 +39,6 @@ import org.openflexo.foundation.toc.action.AddTOCRepository;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.xml.FlexoTOCBuilder;
 
-
 public class TOCData extends TOCObject implements XMLStorageResourceData {
 
 	private FlexoTOCResource resource;
@@ -55,7 +54,7 @@ public class TOCData extends TOCObject implements XMLStorageResourceData {
 		resource = builder.resource;
 	}
 
-	public TOCData(FlexoProject project){
+	public TOCData(FlexoProject project) {
 		super(project);
 		this.project = project;
 		repositories = new Vector<TOCRepository>();
@@ -63,11 +62,11 @@ public class TOCData extends TOCObject implements XMLStorageResourceData {
 
 	@Override
 	public void finalizeDeserialization(Object builder) {
-		for(TOCRepository rep:getRepositories()) {
+		for (TOCRepository rep : getRepositories()) {
 			String attempt = rep.getTitle();
 			int i = 1;
-			while (getRepositoryWithTitle(attempt)!=null && getRepositoryWithTitle(attempt)!=rep)
-				attempt=rep.getTitle()+"-"+i++;
+			while (getRepositoryWithTitle(attempt) != null && getRepositoryWithTitle(attempt) != rep)
+				attempt = rep.getTitle() + "-" + i++;
 			rep.setTitle(attempt);
 		}
 		super.finalizeDeserialization(builder);
@@ -139,11 +138,11 @@ public class TOCData extends TOCObject implements XMLStorageResourceData {
 		if (!repositories.contains(repository)) {
 			repositories.add(repository);
 			setChanged();
-			notifyObservers(new TOCModification("repositories",null,repository));
+			notifyObservers(new TOCModification("repositories", null, repository));
 		}
 	}
 
-	public void removeFromRepositories(TOCRepository repository){
+	public void removeFromRepositories(TOCRepository repository) {
 		repositories.remove(repository);
 		setChanged();
 		notifyObservers(new TOCModification("repositories", repository, null));
@@ -151,46 +150,46 @@ public class TOCData extends TOCObject implements XMLStorageResourceData {
 
 	public static TOCData createNewTOCData(FlexoProject project) {
 		TOCData newCG = new TOCData(project);
-        if (logger.isLoggable(Level.INFO))
-            logger.info("createNewTOCData(), project=" + project + " " + newCG);
+		if (logger.isLoggable(Level.INFO))
+			logger.info("createNewTOCData(), project=" + project + " " + newCG);
 
-        File cgFile = ProjectRestructuration.getExpectedTOCFile(project);
-        FlexoProjectFile generatedCodeFile = new FlexoProjectFile(cgFile, project);
-        FlexoTOCResource cgRes;
-        try {
-            cgRes = new FlexoTOCResource(project, newCG);
-            cgRes.setResourceFile(generatedCodeFile);
-        } catch (InvalidFileNameException e2) {
-            e2.printStackTrace();
-            generatedCodeFile = new FlexoProjectFile("TOC");
-            generatedCodeFile.setProject(project);
-            try {
-            	cgRes = new FlexoTOCResource(project, newCG);
-                cgRes.setResourceFile(generatedCodeFile);
-            } catch (InvalidFileNameException e) {
-                if (logger.isLoggable(Level.SEVERE))
-                    logger.severe("Could not create TOC.");
-                e.printStackTrace();
-                return null;
-            }
-        }
+		File cgFile = ProjectRestructuration.getExpectedTOCFile(project);
+		FlexoProjectFile generatedCodeFile = new FlexoProjectFile(cgFile, project);
+		FlexoTOCResource cgRes;
+		try {
+			cgRes = new FlexoTOCResource(project, newCG);
+			cgRes.setResourceFile(generatedCodeFile);
+		} catch (InvalidFileNameException e2) {
+			e2.printStackTrace();
+			generatedCodeFile = new FlexoProjectFile("TOC");
+			generatedCodeFile.setProject(project);
+			try {
+				cgRes = new FlexoTOCResource(project, newCG);
+				cgRes.setResourceFile(generatedCodeFile);
+			} catch (InvalidFileNameException e) {
+				if (logger.isLoggable(Level.SEVERE))
+					logger.severe("Could not create TOC.");
+				e.printStackTrace();
+				return null;
+			}
+		}
 
-        try {
-            cgRes.saveResourceData();
-            project.registerResource(cgRes);
-        } catch (Exception e1) {
-            // Warns about the exception
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
-            e1.printStackTrace();
-            System.exit(-1);
-        }
+		try {
+			cgRes.saveResourceData();
+			project.registerResource(cgRes);
+		} catch (Exception e1) {
+			// Warns about the exception
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+			e1.printStackTrace();
+			System.exit(-1);
+		}
 
-        return newCG;
+		return newCG;
 	}
 
 	public TOCRepository getRepositoryWithTitle(String title) {
-		if (title==null)
+		if (title == null)
 			return null;
 		for (TOCRepository rep : getRepositories()) {
 			if (title.equals(rep.getTitle()))
@@ -199,13 +198,13 @@ public class TOCData extends TOCObject implements XMLStorageResourceData {
 		return null;
 	}
 
-	public TOCRepository getRepositoryWithIdentifier(String uid,long flexoID){
-		if(uid==null)
+	public TOCRepository getRepositoryWithIdentifier(String uid, long flexoID) {
+		if (uid == null)
 			return null;
 		Enumeration<TOCRepository> en = getRepositories().elements();
-		while(en.hasMoreElements()){
+		while (en.hasMoreElements()) {
 			TOCRepository rep = en.nextElement();
-			if(uid.equals(rep.getUserIdentifier()) && flexoID==rep.getFlexoID())
+			if (uid.equals(rep.getUserIdentifier()) && flexoID == rep.getFlexoID())
 				return rep;
 		}
 		return null;

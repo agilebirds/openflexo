@@ -27,75 +27,64 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 
+public class AddToRelatedToItem extends FlexoAction {
 
-public class AddToRelatedToItem extends FlexoAction 
-{
+	public static FlexoActionType actionType = new FlexoActionType("add_related_to_item", FlexoActionType.newMenu,
+			FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
-    public static FlexoActionType actionType = new FlexoActionType ("add_related_to_item",FlexoActionType.newMenu,FlexoActionType.defaultGroup,FlexoActionType.ADD_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new AddToRelatedToItem(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) 
-        {
-            return new AddToRelatedToItem(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return ((object != null) && (object instanceof DocItem));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return ((object != null) 
-                    && (object instanceof DocItem));
-        }
-                
-    };
-    
-    private DocItem _parentDocItem;
-    private DocItem _childDocItem;
-    
-    AddToRelatedToItem (FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-   @Override
-protected void doAction(Object context) 
-    {
-      if ((getParentDocItem() != null) && (getChildDocItem() != null)) {
-          getParentDocItem().addToRelatedToItems(getChildDocItem());
-      }
-    }
+	private DocItem _parentDocItem;
+	private DocItem _childDocItem;
 
-   public DocItem getChildDocItem() 
-   {
-       return _childDocItem;
-   }
+	AddToRelatedToItem(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-   public void setChildDocItem(DocItem childDocItem) 
-   {
-       _childDocItem = childDocItem;
-   }
+	@Override
+	protected void doAction(Object context) {
+		if ((getParentDocItem() != null) && (getChildDocItem() != null)) {
+			getParentDocItem().addToRelatedToItems(getChildDocItem());
+		}
+	}
 
-   public void setParentDocItem(DocItem parentDocItem) 
-   {
-       _parentDocItem = parentDocItem;
-   }
+	public DocItem getChildDocItem() {
+		return _childDocItem;
+	}
 
-   public DocItem getParentDocItem()
-   {
-       if (_parentDocItem == null) {
-           if ((getFocusedObject() != null) && (getFocusedObject() instanceof DocItem)) {
-               _parentDocItem = (DocItem)getFocusedObject();
-            }           
-       }
-       return _parentDocItem;
-   }
+	public void setChildDocItem(DocItem childDocItem) {
+		_childDocItem = childDocItem;
+	}
 
-  }
+	public void setParentDocItem(DocItem parentDocItem) {
+		_parentDocItem = parentDocItem;
+	}
+
+	public DocItem getParentDocItem() {
+		if (_parentDocItem == null) {
+			if ((getFocusedObject() != null) && (getFocusedObject() instanceof DocItem)) {
+				_parentDocItem = (DocItem) getFocusedObject();
+			}
+		}
+		return _parentDocItem;
+	}
+
+}

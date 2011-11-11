@@ -46,1237 +46,1122 @@ import org.openflexo.selection.SelectionManager;
 import org.openflexo.selection.SelectionSynchronizedComponent;
 
 /**
- * Object that will act as a model for a JTree to represent a browsing
- * perspective of a project
- *
+ * Object that will act as a model for a JTree to represent a browsing perspective of a project
+ * 
  * @author sguerin
- *
+ * 
  */
-public abstract class ProjectBrowser extends DefaultTreeModel implements SelectionSynchronizedComponent
-{
+public abstract class ProjectBrowser extends DefaultTreeModel implements SelectionSynchronizedComponent {
 
-    static final Logger logger = Logger.getLogger(ProjectBrowser.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(ProjectBrowser.class.getPackage().getName());
 
 	private static final int DEFAULT_ROW_HEIGHT = 18;
 
-    protected FlexoProject _project;
-    protected FlexoEditor _editor;
+	protected FlexoProject _project;
+	protected FlexoEditor _editor;
 
-    private BrowserElement _rootElement;
+	private BrowserElement _rootElement;
 
-    private FlexoModelObject _rootObject = null;
+	private FlexoModelObject _rootObject = null;
 
-    protected Hashtable<BrowserElementType, BrowserFilterStatus> _filterStatus;
+	protected Hashtable<BrowserElementType, BrowserFilterStatus> _filterStatus;
 
-    protected Hashtable<BrowserElementType, Boolean> _filterDeepBrowsing;
+	protected Hashtable<BrowserElementType, Boolean> _filterDeepBrowsing;
 
-    protected Hashtable<BrowserElementType, ElementTypeBrowserFilter> _filters;
+	protected Hashtable<BrowserElementType, ElementTypeBrowserFilter> _filters;
 
-   // private Vector<ElementTypeBrowserFilter> _elementTypeFilters;
+	// private Vector<ElementTypeBrowserFilter> _elementTypeFilters;
 
-    private Vector<CustomBrowserFilter> _customFilters;
+	private Vector<CustomBrowserFilter> _customFilters;
 
-    // hashtable where keys are FlexoModelObject objects while values are either
-    // BrowserElement
-    // or a Vector of BrowserElement
-    private Hashtable<FlexoModelObject, Object> _elements = null;
+	// hashtable where keys are FlexoModelObject objects while values are either
+	// BrowserElement
+	// or a Vector of BrowserElement
+	private Hashtable<FlexoModelObject, Object> _elements = null;
 
-    private final Vector<ProjectBrowserListener> _browserListeners;
+	private final Vector<ProjectBrowserListener> _browserListeners;
 
-    private SelectionManager _selectionManager;
+	private SelectionManager _selectionManager;
 
-    private SelectionController _selectionController;
+	private SelectionController _selectionController;
 
-    private boolean _handlesControlPanel = true;
+	private boolean _handlesControlPanel = true;
 
-    private boolean isRebuildingStructure = false;
+	private boolean isRebuildingStructure = false;
 
-    private boolean holdStructure = false;
+	private boolean holdStructure = false;
 
 	int rowHeight = DEFAULT_ROW_HEIGHT;
 
-    public ProjectBrowser(FlexoProject project)
-    {
-        this(project, true);
-    }
+	public ProjectBrowser(FlexoProject project) {
+		this(project, true);
+	}
 
-    public ProjectBrowser(FlexoProject project, boolean initNow)
-    {
-        this(project, null, initNow);
-    }
+	public ProjectBrowser(FlexoProject project, boolean initNow) {
+		this(project, null, initNow);
+	}
 
-    public ProjectBrowser(FlexoEditor editor, SelectionManager selectionManager)
-    {
-        this(editor.getProject(), selectionManager, true);
-        _editor = editor;
-    }
+	public ProjectBrowser(FlexoEditor editor, SelectionManager selectionManager) {
+		this(editor.getProject(), selectionManager, true);
+		_editor = editor;
+	}
 
-    public ProjectBrowser(FlexoEditor editor, SelectionManager selectionManager, boolean initNow)
-    {
-    	this(editor.getProject(),selectionManager,initNow);
-        _editor = editor;
-    }
+	public ProjectBrowser(FlexoEditor editor, SelectionManager selectionManager, boolean initNow) {
+		this(editor.getProject(), selectionManager, initNow);
+		_editor = editor;
+	}
 
-    public ProjectBrowser(FlexoProject project, SelectionManager selectionManager)
-    {
-        this(project, selectionManager, true);
-    }
+	public ProjectBrowser(FlexoProject project, SelectionManager selectionManager) {
+		this(project, selectionManager, true);
+	}
 
-    public ProjectBrowser(FlexoProject project, SelectionManager selectionManager, boolean initNow)
-    {
-        super(null);
-        _project = project;
-        _filterStatus = new Hashtable<BrowserElementType, BrowserFilterStatus>();
-        _filterDeepBrowsing = new Hashtable<BrowserElementType, Boolean>();
-        _filters = new Hashtable<BrowserElementType, ElementTypeBrowserFilter>();
-        //_elementTypeFilters = new Vector<ElementTypeBrowserFilter>();
-        _browserListeners = new Vector<ProjectBrowserListener>();
-         _customFilters = new Vector<CustomBrowserFilter>();
-        configure();
-        if (selectionManager != null) {
-            _selectionManager = selectionManager;
-            _selectionManager.addToSelectionListeners(this);
-        }
-        _selectionController = new SelectionController.DefaultSelectionController();
-        if (initNow) {
-            init();
-        }
-    }
+	public ProjectBrowser(FlexoProject project, SelectionManager selectionManager, boolean initNow) {
+		super(null);
+		_project = project;
+		_filterStatus = new Hashtable<BrowserElementType, BrowserFilterStatus>();
+		_filterDeepBrowsing = new Hashtable<BrowserElementType, Boolean>();
+		_filters = new Hashtable<BrowserElementType, ElementTypeBrowserFilter>();
+		// _elementTypeFilters = new Vector<ElementTypeBrowserFilter>();
+		_browserListeners = new Vector<ProjectBrowserListener>();
+		_customFilters = new Vector<CustomBrowserFilter>();
+		configure();
+		if (selectionManager != null) {
+			_selectionManager = selectionManager;
+			_selectionManager.addToSelectionListeners(this);
+		}
+		_selectionController = new SelectionController.DefaultSelectionController();
+		if (initNow) {
+			init();
+		}
+	}
 
-    protected ProjectBrowser(BrowserConfiguration configuration, SelectionManager selectionManager, boolean initNow)
-    {
-        super(null);
-        _project = configuration.getProject();
-        _browserElementFactory = configuration.getBrowserElementFactory();
-        _filterStatus = new Hashtable<BrowserElementType, BrowserFilterStatus>();
-        _filterDeepBrowsing = new Hashtable<BrowserElementType, Boolean>();
-        _filters = new Hashtable<BrowserElementType, ElementTypeBrowserFilter>();
-       // _elementTypeFilters = new Vector<ElementTypeBrowserFilter>();
-        _browserListeners = new Vector<ProjectBrowserListener>();
-        _customFilters = new Vector<CustomBrowserFilter>();
-        configuration.configure(this);
-        if (selectionManager != null) {
-            _selectionManager = selectionManager;
-            _selectionManager.addToSelectionListeners(this);
-        }
-        _selectionController = new SelectionController.DefaultSelectionController();
-    }
+	protected ProjectBrowser(BrowserConfiguration configuration, SelectionManager selectionManager, boolean initNow) {
+		super(null);
+		_project = configuration.getProject();
+		_browserElementFactory = configuration.getBrowserElementFactory();
+		_filterStatus = new Hashtable<BrowserElementType, BrowserFilterStatus>();
+		_filterDeepBrowsing = new Hashtable<BrowserElementType, Boolean>();
+		_filters = new Hashtable<BrowserElementType, ElementTypeBrowserFilter>();
+		// _elementTypeFilters = new Vector<ElementTypeBrowserFilter>();
+		_browserListeners = new Vector<ProjectBrowserListener>();
+		_customFilters = new Vector<CustomBrowserFilter>();
+		configuration.configure(this);
+		if (selectionManager != null) {
+			_selectionManager = selectionManager;
+			_selectionManager.addToSelectionListeners(this);
+		}
+		_selectionController = new SelectionController.DefaultSelectionController();
+	}
 
-    public boolean showRootNode() {
-    	return true;
-    }
+	public boolean showRootNode() {
+		return true;
+	}
 
-    public void setSelectionManager(SelectionManager aSelectionManager)
-    {
-        _selectionManager = aSelectionManager;
-        _selectionManager.addToSelectionListeners(this);
-     }
+	public void setSelectionManager(SelectionManager aSelectionManager) {
+		_selectionManager = aSelectionManager;
+		_selectionManager.addToSelectionListeners(this);
+	}
 
-    public void init()
-    {
-        if (getRootElement() != null) {
-            setRoot(getRootElement());
-        }
-    }
+	public void init() {
+		if (getRootElement() != null) {
+			setRoot(getRootElement());
+		}
+	}
 
-    private BrowserElementFactory _browserElementFactory = null;
+	private BrowserElementFactory _browserElementFactory = null;
 
-    public BrowserElementFactory getBrowserElementFactory()
-    {
-        if (_browserElementFactory == null) {
+	public BrowserElementFactory getBrowserElementFactory() {
+		if (_browserElementFactory == null) {
 			return DefaultBrowserElementFactory.DEFAULT_FACTORY;
 		} else {
 			return _browserElementFactory;
 		}
-    }
+	}
 
-    protected void setBrowserElementFactory(BrowserElementFactory browserElementFactory)
-    {
-        _browserElementFactory = browserElementFactory;
-    }
+	protected void setBrowserElementFactory(BrowserElementFactory browserElementFactory) {
+		_browserElementFactory = browserElementFactory;
+	}
 
-    public BrowserElement makeNewElement(FlexoModelObject object, BrowserElement parent)
-    {
-        return getBrowserElementFactory().makeNewElement(object, this, parent);
-    }
+	public BrowserElement makeNewElement(FlexoModelObject object, BrowserElement parent) {
+		return getBrowserElementFactory().makeNewElement(object, this, parent);
+	}
 
-	public void changeFilterStatus(BrowserElementType elementType, BrowserFilterStatus initialFilterStatus)
-	{
+	public void changeFilterStatus(BrowserElementType elementType, BrowserFilterStatus initialFilterStatus) {
 		if (getFilterForElementType(elementType) != null) {
 			getFilterForElementType(elementType).setInitialFilterStatus(initialFilterStatus);
 			notifyListeners(new OptionalFilterAddedEvent(getFilterForElementType(elementType)));
 		}
 	}
 
-    public void setFilterStatus(BrowserElementType elementType, BrowserFilterStatus status)
-    {
-        if (logger.isLoggable(Level.FINE)) {
+	public void setFilterStatus(BrowserElementType elementType, BrowserFilterStatus status) {
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine(getClass().getName() + ": Setting filter status for " + elementType.getName() + " status=" + status);
 		}
-        _filterStatus.put(elementType, status);
-    }
+		_filterStatus.put(elementType, status);
+	}
 
-    public void setFilterStatus(BrowserElementType elementType, BrowserFilterStatus status, boolean isDeepBrowsing)
-    {
-        setFilterStatus(elementType, status);
-        _filterDeepBrowsing.put(elementType, new Boolean(isDeepBrowsing));
-    }
+	public void setFilterStatus(BrowserElementType elementType, BrowserFilterStatus status, boolean isDeepBrowsing) {
+		setFilterStatus(elementType, status);
+		_filterDeepBrowsing.put(elementType, new Boolean(isDeepBrowsing));
+	}
 
-    protected boolean activateBrowsingFor(BrowserElement newElement)
-    {
-        boolean returned = newElement.getBrowserFilter().getStatus() == BrowserFilterStatus.SHOW;
-        if (logger.isLoggable(Level.FINE)) {
+	protected boolean activateBrowsingFor(BrowserElement newElement) {
+		boolean returned = newElement.getBrowserFilter().getStatus() == BrowserFilterStatus.SHOW;
+		if (logger.isLoggable(Level.FINE)) {
 			logger.finer("activateBrowsingFor() " + newElement + " return " + returned);
 		}
-        return returned;
-    }
+		return returned;
+	}
 
-    public boolean activateBrowsingFor(FlexoModelObject object)
-    {
-        BrowserElement browserElement = makeNewElement(object,null);
-        boolean returned = activateBrowsingFor(browserElement);
-        browserElement.delete();
-        return returned;
-    }
+	public boolean activateBrowsingFor(FlexoModelObject object) {
+		BrowserElement browserElement = makeNewElement(object, null);
+		boolean returned = activateBrowsingFor(browserElement);
+		browserElement.delete();
+		return returned;
+	}
 
-    public ElementTypeBrowserFilter getFilterForObject(FlexoModelObject object)
-    {
-        BrowserElement browserElement = makeNewElement(object,null);
-        ElementTypeBrowserFilter returned = getFilterForElement(browserElement);
-        browserElement.delete();
-        return returned;
-    }
+	public ElementTypeBrowserFilter getFilterForObject(FlexoModelObject object) {
+		BrowserElement browserElement = makeNewElement(object, null);
+		ElementTypeBrowserFilter returned = getFilterForElement(browserElement);
+		browserElement.delete();
+		return returned;
+	}
 
-    protected boolean requiresDeepBrowsing(BrowserElement newElement)
-    {
-        return newElement.getBrowserFilter().isDeepBrowsing();
-    }
+	protected boolean requiresDeepBrowsing(BrowserElement newElement) {
+		return newElement.getBrowserFilter().isDeepBrowsing();
+	}
 
-    public ElementTypeBrowserFilter getFilterForElementType(BrowserElementType elementType)
-    {
-    	return _filters.get(elementType);
-    }
+	public ElementTypeBrowserFilter getFilterForElementType(BrowserElementType elementType) {
+		return _filters.get(elementType);
+	}
 
-    public ElementTypeBrowserFilter getFilterForElement(BrowserElement element)
-    {
-        BrowserElementType elementType = element.getFilteredElementType();
-        if (_filters.get(elementType) == null) {
-            // first time we see this element type
-            ElementTypeBrowserFilter newBrowserFilter = element.newBrowserFilter(_filterStatus.get(elementType));
-          /*  if (_filterStatus.get(elementType) != null) {
-                newBrowserFilter.setStatus((_filterStatus.get(elementType)));
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine(getClass().getName() + ": Setting filter " + newBrowserFilter.getName() + " status to "
-                            + (_filterStatus.get(elementType)));
-                if ((newBrowserFilter.getStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN)
-                        || (newBrowserFilter.getStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN)) {
-                    if (logger.isLoggable(Level.FINE))
-                        logger.fine(getClass().getName() + ": Adding optional filter " + newBrowserFilter.getName());
-                    //_elementTypeFilters.add(newBrowserFilter);
-                    if ((newBrowserFilter.getStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN)) {
-                        newBrowserFilter.setStatus(BrowserFilterStatus.HIDE);
-                    } else if ((newBrowserFilter.getStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN)) {
-                        newBrowserFilter.setStatus(BrowserFilterStatus.SHOW);
-                    }
-                  //  notifyListeners(new OptionalFilterAddedEvent(newBrowserFilter));
-                }
-            }*/
-            if (_filterDeepBrowsing.get(elementType) != null) {
-                newBrowserFilter.setDeepBrowsing((_filterDeepBrowsing.get(elementType)).booleanValue());
-            }
-            _filters.put(elementType, newBrowserFilter);
-            notifyListeners(new OptionalFilterAddedEvent(newBrowserFilter));
-           if (logger.isLoggable(Level.FINE)) {
-			logger.fine(getClass().getName() + ": Registering filter " + newBrowserFilter.getName());
+	public ElementTypeBrowserFilter getFilterForElement(BrowserElement element) {
+		BrowserElementType elementType = element.getFilteredElementType();
+		if (_filters.get(elementType) == null) {
+			// first time we see this element type
+			ElementTypeBrowserFilter newBrowserFilter = element.newBrowserFilter(_filterStatus.get(elementType));
+			/*  if (_filterStatus.get(elementType) != null) {
+			      newBrowserFilter.setStatus((_filterStatus.get(elementType)));
+			      if (logger.isLoggable(Level.FINE))
+			          logger.fine(getClass().getName() + ": Setting filter " + newBrowserFilter.getName() + " status to "
+			                  + (_filterStatus.get(elementType)));
+			      if ((newBrowserFilter.getStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN)
+			              || (newBrowserFilter.getStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN)) {
+			          if (logger.isLoggable(Level.FINE))
+			              logger.fine(getClass().getName() + ": Adding optional filter " + newBrowserFilter.getName());
+			          //_elementTypeFilters.add(newBrowserFilter);
+			          if ((newBrowserFilter.getStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN)) {
+			              newBrowserFilter.setStatus(BrowserFilterStatus.HIDE);
+			          } else if ((newBrowserFilter.getStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN)) {
+			              newBrowserFilter.setStatus(BrowserFilterStatus.SHOW);
+			          }
+			        //  notifyListeners(new OptionalFilterAddedEvent(newBrowserFilter));
+			      }
+			  }*/
+			if (_filterDeepBrowsing.get(elementType) != null) {
+				newBrowserFilter.setDeepBrowsing((_filterDeepBrowsing.get(elementType)).booleanValue());
+			}
+			_filters.put(elementType, newBrowserFilter);
+			notifyListeners(new OptionalFilterAddedEvent(newBrowserFilter));
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine(getClass().getName() + ": Registering filter " + newBrowserFilter.getName());
+			}
 		}
-        }
-        return _filters.get(elementType);
-    }
+		return _filters.get(elementType);
+	}
 
-    public FlexoProject getProject()
-    {
-        return _project;
-    }
+	public FlexoProject getProject() {
+		return _project;
+	}
 
-    /*
-     * Pour le moment parce que j'ai pas trop le temps, on reconstruit a chaque
-     * fois tout l'arbre. On pourrait faire un truc beaucoup plus chiade avec
-     * des MutableNodeTree qui recoivent plein de DataModification toutes plus
-     * chiadees les unes que les autres, faire des insert nodes, en notifier le
-     * modele, tout ca....
-     */
-    /**
-     * Brutal update of the whole browser. You rarely need to invoke it, except
-     * when you have done big structural changes which are not notified (for
-     * example filter status modification)
-     */
-    public void update()
-    {
-        Vector<FlexoModelObject> selectionBeforeUpdate = null;
-        if (getSelectedObjects() != null) {
-            selectionBeforeUpdate = new Vector<FlexoModelObject>(getSelectedObjects());
-            if (logger.isLoggable(Level.FINE)) {
+	/*
+	 * Pour le moment parce que j'ai pas trop le temps, on reconstruit a chaque
+	 * fois tout l'arbre. On pourrait faire un truc beaucoup plus chiade avec
+	 * des MutableNodeTree qui recoivent plein de DataModification toutes plus
+	 * chiadees les unes que les autres, faire des insert nodes, en notifier le
+	 * modele, tout ca....
+	 */
+	/**
+	 * Brutal update of the whole browser. You rarely need to invoke it, except when you have done big structural changes which are not
+	 * notified (for example filter status modification)
+	 */
+	public void update() {
+		Vector<FlexoModelObject> selectionBeforeUpdate = null;
+		if (getSelectedObjects() != null) {
+			selectionBeforeUpdate = new Vector<FlexoModelObject>(getSelectedObjects());
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Before update, selected objects are " + selectionBeforeUpdate);
 			}
-        }
-        Vector<FlexoModelObject> expandedObjects = null;
-        if (leadingView != null) {
-            expandedObjects = new Vector<FlexoModelObject>();
-            Vector<BrowserElement> expandedElements = leadingView.getExpandedElements();
-            for (Enumeration<BrowserElement> en = expandedElements.elements(); en.hasMoreElements();) {
-                BrowserElement next =  en.nextElement();
-                expandedObjects.add(next.getObject());
-            }
-            if (logger.isLoggable(Level.FINE)) {
+		}
+		Vector<FlexoModelObject> expandedObjects = null;
+		if (leadingView != null) {
+			expandedObjects = new Vector<FlexoModelObject>();
+			Vector<BrowserElement> expandedElements = leadingView.getExpandedElements();
+			for (Enumeration<BrowserElement> en = expandedElements.elements(); en.hasMoreElements();) {
+				BrowserElement next = en.nextElement();
+				expandedObjects.add(next.getObject());
+			}
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Before update, expanded objects are " + expandedObjects);
 			}
-        }
-        rebuildTree();
-        update(getRootElement());
-        if (logger.isLoggable(Level.FINE)) {
+		}
+		rebuildTree();
+		update(getRootElement());
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Notifying expansions");
 		}
-        notifyListeners(new ExpansionNotificationEvent());
-        if (selectionBeforeUpdate != null) {
-            for (Enumeration<FlexoModelObject> en = selectionBeforeUpdate.elements(); en.hasMoreElements();) {
-                FlexoModelObject next = en.nextElement();
-                if (logger.isLoggable(Level.FINE)) {
+		notifyListeners(new ExpansionNotificationEvent());
+		if (selectionBeforeUpdate != null) {
+			for (Enumeration<FlexoModelObject> en = selectionBeforeUpdate.elements(); en.hasMoreElements();) {
+				FlexoModelObject next = en.nextElement();
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Select " + next);
 				}
-                fireObjectSelected(next);
-            }
-        }
-        if (expandedObjects != null) {
-            for (Enumeration<FlexoModelObject> en = expandedObjects.elements(); en.hasMoreElements();) {
-                FlexoModelObject next = en.nextElement();
-                if (logger.isLoggable(Level.FINE)) {
+				fireObjectSelected(next);
+			}
+		}
+		if (expandedObjects != null) {
+			for (Enumeration<FlexoModelObject> en = expandedObjects.elements(); en.hasMoreElements();) {
+				FlexoModelObject next = en.nextElement();
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Expand " + next);
 				}
-                expand(next,false);
-                // expandAll(next);
-            }
-        }
-    }
+				expand(next, false);
+				// expandAll(next);
+			}
+		}
+	}
 
-    /*
-     * private void expandAll(FlexoModelObject object) { BrowserElement[]
-     * elements = elementForObject(object); for (int i=0; i<elements.length;
-     * i++) { BrowserElement el = elements[i]; for (int j=0; j<el.getChildCount();
-     * j++) { BrowserElement el2 = (BrowserElement)el.getChildAt(j);
-     * expand(el2.getObject()); } } }
-     */
+	/*
+	 * private void expandAll(FlexoModelObject object) { BrowserElement[]
+	 * elements = elementForObject(object); for (int i=0; i<elements.length;
+	 * i++) { BrowserElement el = elements[i]; for (int j=0; j<el.getChildCount();
+	 * j++) { BrowserElement el2 = (BrowserElement)el.getChildAt(j);
+	 * expand(el2.getObject()); } } }
+	 */
 
-    private BrowserView leadingView;
+	private BrowserView leadingView;
 
-    protected BrowserView getLeadingView()
-    {
-        return leadingView;
-    }
+	protected BrowserView getLeadingView() {
+		return leadingView;
+	}
 
-    public void setLeadingView(BrowserView leadingView)
-    {
-        this.leadingView = leadingView;
-    }
+	public void setLeadingView(BrowserView leadingView) {
+		this.leadingView = leadingView;
+	}
 
-    protected Vector<BrowserElement> getSelectedElements()
-    {
-        if (leadingView != null) {
+	protected Vector<BrowserElement> getSelectedElements() {
+		if (leadingView != null) {
 			return leadingView.getSelectedElements();
 		}
-        return null;
-    }
+		return null;
+	}
 
-    protected Vector<FlexoModelObject> getSelectedObjects()
-    {
-        if (leadingView != null) {
+	protected Vector<FlexoModelObject> getSelectedObjects() {
+		if (leadingView != null) {
 			return leadingView.getSelectedObjects();
 		}
-        return null;
-    }
+		return null;
+	}
 
-    protected Vector<FlexoModelObject> getExpandedObjects()
-    {
-        Vector<FlexoModelObject> expandedObjects = new Vector<FlexoModelObject>();
-        if (leadingView != null) {
-            Vector<BrowserElement> expandedElements = leadingView.getExpandedElements();
-            for (Enumeration<BrowserElement> en = expandedElements.elements(); en.hasMoreElements();) {
-                BrowserElement next = en.nextElement();
-                expandedObjects.add(next.getObject());
-            }
-            if (logger.isLoggable(Level.FINE)) {
+	protected Vector<FlexoModelObject> getExpandedObjects() {
+		Vector<FlexoModelObject> expandedObjects = new Vector<FlexoModelObject>();
+		if (leadingView != null) {
+			Vector<BrowserElement> expandedElements = leadingView.getExpandedElements();
+			for (Enumeration<BrowserElement> en = expandedElements.elements(); en.hasMoreElements();) {
+				BrowserElement next = en.nextElement();
+				expandedObjects.add(next.getObject());
+			}
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Before update, expanded objects are " + expandedObjects);
 			}
-        }
-        return expandedObjects;
-    }
+		}
+		return expandedObjects;
+	}
 
-    /**
-     * Update the TreeModel juste below element
-     *
-     * @param element
-     */
-    protected void update(BrowserElement element)
-    {
-        if (logger.isLoggable(Level.FINE)) {
+	/**
+	 * Update the TreeModel juste below element
+	 * 
+	 * @param element
+	 */
+	protected void update(BrowserElement element) {
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Update tree from " + element + " in ProjectBrowser");
 		}
-        reload(element);
-    }
+		reload(element);
+	}
 
-    public BrowserElement getRootElement()
-    {
-        if (_rootElement == null) {
-            rebuildTree();
-        }
-        return _rootElement;
-    }
+	public BrowserElement getRootElement() {
+		if (_rootElement == null) {
+			rebuildTree();
+		}
+		return _rootElement;
+	}
 
-    /**
-     * This has no modifier because sub-classes should call this directly.
-     */
-    void rebuildTree()
-    {
-        if (!SwingUtilities.isEventDispatchThread()) {
-            try {
-                SwingUtilities.invokeAndWait(new Runnable() {
-                    @Override
-					public void run()
-                    {
-                        if (logger.isLoggable(Level.FINE)) {
+	/**
+	 * This has no modifier because sub-classes should call this directly.
+	 */
+	void rebuildTree() {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			try {
+				SwingUtilities.invokeAndWait(new Runnable() {
+					@Override
+					public void run() {
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("refreshWhenPossible() DO IT NOW");
 						}
-                        rebuildTree();
-                    }
-                });
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            }
-            return;
-        }
-        if (logger.isLoggable(Level.FINE)) {
+						rebuildTree();
+					}
+				});
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			return;
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Rebuild whole tree in ProjectBrowser");
 		}
-        if (getRootObject() != null) {
-            if (_elements != null) {
-                clearTree();
-            }
-            _elements = new Hashtable<FlexoModelObject, Object>();
-            _rootElement = makeNewElement(getRootObject(),null);
-        }
-    }
+		if (getRootObject() != null) {
+			if (_elements != null) {
+				clearTree();
+			}
+			_elements = new Hashtable<FlexoModelObject, Object>();
+			_rootElement = makeNewElement(getRootObject(), null);
+		}
+	}
 
-    public void setRootObject(FlexoModelObject aRootObject)
-    {
-        if (logger.isLoggable(Level.FINE)) {
+	public void setRootObject(FlexoModelObject aRootObject) {
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Setting root object to be " + aRootObject);
 		}
-        _rootObject = aRootObject;
-        update();
-    }
+		_rootObject = aRootObject;
+		update();
+	}
 
-    public FlexoModelObject getRootObject()
-    {
-        if (_rootObject != null) {
-            return _rootObject;
-        } else {
-            return getDefaultRootObject();
-        }
-    }
+	public FlexoModelObject getRootObject() {
+		if (_rootObject != null) {
+			return _rootObject;
+		} else {
+			return getDefaultRootObject();
+		}
+	}
 
-    public void delete()
-    {
-        if (logger.isLoggable(Level.FINE)) {
+	public void delete() {
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Delete browser " + getClass().getName());
 		}
 
-        clearTree();
-        _project = null;
-        _rootElement = null;
-        _filterStatus.clear();
-        _filterDeepBrowsing.clear();
-        _filters.clear();
-       // _elementTypeFilters.clear();
-        _browserListeners.clear();
-        _selectionManager = null;
-    }
+		clearTree();
+		_project = null;
+		_rootElement = null;
+		_filterStatus.clear();
+		_filterDeepBrowsing.clear();
+		_filters.clear();
+		// _elementTypeFilters.clear();
+		_browserListeners.clear();
+		_selectionManager = null;
+	}
 
-    private void clearTree()
-    {
-        //synchronized (getBrowserLock()) {
-            if (_rootElement != null) {
+	private void clearTree() {
+		// synchronized (getBrowserLock()) {
+		if (_rootElement != null) {
 
-                //_rootElement.recursiveDeleteChilds();
+			// _rootElement.recursiveDeleteChilds();
 
-                _rootElement.delete();
-            }
-            for (Enumeration<Object> e = _elements.elements(); e.hasMoreElements();) {
-                Object obj = e.nextElement();
-                if (obj instanceof BrowserElement) {
-                    ((BrowserElement) obj).delete();
-                } else if (obj instanceof Vector) {
-                    Vector<BrowserElement> elementList = (Vector<BrowserElement>) obj;
-                    for (Enumeration<BrowserElement> e2 = elementList.elements(); e2.hasMoreElements();) {
-                        BrowserElement element = e2.nextElement();
-                        element.delete();
-                    }
-                }
-            }
-            _elements.clear();
-            _expansionSynchronizedElements.removeAllElements();
-            _expansionSynchronizedElements = new Vector<ExpansionSynchronizedElement>();
-            _elements = null;
-        //}
-    }
+			_rootElement.delete();
+		}
+		for (Enumeration<Object> e = _elements.elements(); e.hasMoreElements();) {
+			Object obj = e.nextElement();
+			if (obj instanceof BrowserElement) {
+				((BrowserElement) obj).delete();
+			} else if (obj instanceof Vector) {
+				Vector<BrowserElement> elementList = (Vector<BrowserElement>) obj;
+				for (Enumeration<BrowserElement> e2 = elementList.elements(); e2.hasMoreElements();) {
+					BrowserElement element = e2.nextElement();
+					element.delete();
+				}
+			}
+		}
+		_elements.clear();
+		_expansionSynchronizedElements.removeAllElements();
+		_expansionSynchronizedElements = new Vector<ExpansionSynchronizedElement>();
+		_elements = null;
+		// }
+	}
 
-    Vector<ExpansionSynchronizedElement> _expansionSynchronizedElements = new Vector<ExpansionSynchronizedElement>();
+	Vector<ExpansionSynchronizedElement> _expansionSynchronizedElements = new Vector<ExpansionSynchronizedElement>();
 
-    protected void registerElementForObject(BrowserElement element, FlexoModelObject modelObject)
-    {
-        if (element == null) {
-            if (logger.isLoggable(Level.WARNING)) {
+	protected void registerElementForObject(BrowserElement element, FlexoModelObject modelObject) {
+		if (element == null) {
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Try to register a null element for " + modelObject + " in ProjectBrowser !");
 			}
-            return;
-        }
-        if (_elements == null) {
-            if (logger.isLoggable(Level.WARNING)) {
+			return;
+		}
+		if (_elements == null) {
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("_elements is null in browser " + getClass().getName());
 			}
-            return;
-        }
-        Object existingValue = _elements.get(modelObject);
-        if (existingValue != null) {
-            if (existingValue instanceof BrowserElement) {
-                Vector<BrowserElement> newVector = new Vector<BrowserElement>();
-                newVector.add((BrowserElement) existingValue);
-                newVector.add(element);
-                _elements.put(modelObject, newVector);
-            } else if (existingValue instanceof Vector) {
-                Vector<BrowserElement> newVector = (Vector<BrowserElement>) _elements.get(modelObject);
-                newVector.add(element);
-            } else {
-                if (logger.isLoggable(Level.WARNING)) {
+			return;
+		}
+		Object existingValue = _elements.get(modelObject);
+		if (existingValue != null) {
+			if (existingValue instanceof BrowserElement) {
+				Vector<BrowserElement> newVector = new Vector<BrowserElement>();
+				newVector.add((BrowserElement) existingValue);
+				newVector.add(element);
+				_elements.put(modelObject, newVector);
+			} else if (existingValue instanceof Vector) {
+				Vector<BrowserElement> newVector = (Vector<BrowserElement>) _elements.get(modelObject);
+				newVector.add(element);
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Found unexpected " + existingValue.getClass().getName() + " in ProjectBrowser !");
 				}
-            }
-        } else {
-            _elements.put(modelObject, element);
-        }
-        if (element instanceof ExpansionSynchronizedElement) {
-        	//logger.info("What about "+element+" isExpansionSynchronizedWithData()="+((ExpansionSynchronizedElement) element).isExpansionSynchronizedWithData());
-            if (((ExpansionSynchronizedElement) element).isExpansionSynchronizedWithData()) {
-                _expansionSynchronizedElements.add((ExpansionSynchronizedElement) element);
-            }
-        }
-        if (element.getSelectableObject() != modelObject) {
-            registerElementForObject(element, element.getSelectableObject());
-        }
-    }
+			}
+		} else {
+			_elements.put(modelObject, element);
+		}
+		if (element instanceof ExpansionSynchronizedElement) {
+			// logger.info("What about "+element+" isExpansionSynchronizedWithData()="+((ExpansionSynchronizedElement)
+			// element).isExpansionSynchronizedWithData());
+			if (((ExpansionSynchronizedElement) element).isExpansionSynchronizedWithData()) {
+				_expansionSynchronizedElements.add((ExpansionSynchronizedElement) element);
+			}
+		}
+		if (element.getSelectableObject() != modelObject) {
+			registerElementForObject(element, element.getSelectableObject());
+		}
+	}
 
-    protected void unregisterElementForObject(BrowserElement element, FlexoModelObject modelObject)
-    {
-        if (element.getSelectableObject() != modelObject) {
-            unregisterElementForObject(element, element.getSelectableObject());
-        }
-        Object existingValue = _elements.get(modelObject);
-        if (existingValue != null) {
-            if (existingValue instanceof BrowserElement) {
-                _elements.remove(modelObject);
-            } else if (existingValue instanceof Vector) {
-                Vector newVector = (Vector) _elements.get(modelObject);
-                newVector.remove(element);
-            } else {
-                if (logger.isLoggable(Level.WARNING)) {
+	protected void unregisterElementForObject(BrowserElement element, FlexoModelObject modelObject) {
+		if (element.getSelectableObject() != modelObject) {
+			unregisterElementForObject(element, element.getSelectableObject());
+		}
+		Object existingValue = _elements.get(modelObject);
+		if (existingValue != null) {
+			if (existingValue instanceof BrowserElement) {
+				_elements.remove(modelObject);
+			} else if (existingValue instanceof Vector) {
+				Vector newVector = (Vector) _elements.get(modelObject);
+				newVector.remove(element);
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Found unexpected " + existingValue.getClass().getName() + " in ProjectBrowser !");
 				}
-            }
-        }
-        if (element instanceof ExpansionSynchronizedElement) {
-            _expansionSynchronizedElements.remove(element);
-        }
-    }
+			}
+		}
+		if (element instanceof ExpansionSynchronizedElement) {
+			_expansionSynchronizedElements.remove(element);
+		}
+	}
 
-    public boolean isExpansionSynchronizedElement(BrowserElement element)
-    {
-        return ((element instanceof ExpansionSynchronizedElement) && (_expansionSynchronizedElements.contains(element)));
-    }
+	public boolean isExpansionSynchronizedElement(BrowserElement element) {
+		return ((element instanceof ExpansionSynchronizedElement) && (_expansionSynchronizedElements.contains(element)));
+	}
 
-    /**
-     * Return an array of TreePath of all paths where this observable is defined
-     *
-     * @param object
-     * @return
-     */
-    public TreePath[] treePathForObject(FlexoModelObject object)
-    {
-        Vector<TreePath> builtVector = new Vector<TreePath>();
-        if (object == null) {
+	/**
+	 * Return an array of TreePath of all paths where this observable is defined
+	 * 
+	 * @param object
+	 * @return
+	 */
+	public TreePath[] treePathForObject(FlexoModelObject object) {
+		Vector<TreePath> builtVector = new Vector<TreePath>();
+		if (object == null) {
 			return null;
 		}
-        if (_elements == null) {
+		if (_elements == null) {
 			return null;
 		}
-        Object found = _elements.get(object);
-        if (found instanceof BrowserElement) {
-            BrowserElement element = (BrowserElement) found;
-            builtVector.add(element.getTreePath());
-        } else if (found instanceof Vector) {
-            Vector elementList = (Vector) found;
-            for (Enumeration e = elementList.elements(); e.hasMoreElements();) {
-                BrowserElement element = (BrowserElement) e.nextElement();
-                builtVector.add(element.getTreePath());
-            }
-        } else if (found != null) {
-            if (logger.isLoggable(Level.WARNING)) {
+		Object found = _elements.get(object);
+		if (found instanceof BrowserElement) {
+			BrowserElement element = (BrowserElement) found;
+			builtVector.add(element.getTreePath());
+		} else if (found instanceof Vector) {
+			Vector elementList = (Vector) found;
+			for (Enumeration e = elementList.elements(); e.hasMoreElements();) {
+				BrowserElement element = (BrowserElement) e.nextElement();
+				builtVector.add(element.getTreePath());
+			}
+		} else if (found != null) {
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Found unexpected " + found.getClass().getName() + " in ProjectBrowser !");
 			}
-            return null;
-        } else {
-            if (logger.isLoggable(Level.FINE)) {
+			return null;
+		} else {
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Found null in ProjectBrowser for object " + object);
 			}
-            return null;
-        }
-        TreePath[] returned = new TreePath[builtVector.size()];
-        for (int i = 0; i < builtVector.size(); i++) {
-            returned[i] = builtVector.get(i);
-        }
-        return returned;
-    }
+			return null;
+		}
+		TreePath[] returned = new TreePath[builtVector.size()];
+		for (int i = 0; i < builtVector.size(); i++) {
+			returned[i] = builtVector.get(i);
+		}
+		return returned;
+	}
 
-    /**
-     * Return an array of TreePath of all paths where this observable is defined
-     *
-     * @param object
-     * @return
-     */
-    protected BrowserElement[] elementForObject(FlexoModelObject object)
-    {
-        Vector<BrowserElement> builtVector = new Vector<BrowserElement>();
-        Object found = (object!=null?_elements.get(object):null);
-        if (found instanceof BrowserElement) {
-            BrowserElement element = (BrowserElement) found;
-            builtVector.add(element);
-        } else if (found instanceof Vector) {
-            Vector elementList = (Vector) found;
-            for (Enumeration e = elementList.elements(); e.hasMoreElements();) {
-                BrowserElement element = (BrowserElement) e.nextElement();
-                builtVector.add(element);
-            }
-        } else if (found != null) {
-            if (logger.isLoggable(Level.WARNING)) {
+	/**
+	 * Return an array of TreePath of all paths where this observable is defined
+	 * 
+	 * @param object
+	 * @return
+	 */
+	protected BrowserElement[] elementForObject(FlexoModelObject object) {
+		Vector<BrowserElement> builtVector = new Vector<BrowserElement>();
+		Object found = (object != null ? _elements.get(object) : null);
+		if (found instanceof BrowserElement) {
+			BrowserElement element = (BrowserElement) found;
+			builtVector.add(element);
+		} else if (found instanceof Vector) {
+			Vector elementList = (Vector) found;
+			for (Enumeration e = elementList.elements(); e.hasMoreElements();) {
+				BrowserElement element = (BrowserElement) e.nextElement();
+				builtVector.add(element);
+			}
+		} else if (found != null) {
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Found unexpected " + found.getClass().getName() + " in ProjectBrowser !");
 			}
-            return null;
-        } else {
-            if (logger.isLoggable(Level.FINE)) {
+			return null;
+		} else {
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Found null in ProjectBrowser for object " + object);
 			}
-            return null;
-        }
-        BrowserElement[] returned = new BrowserElement[builtVector.size()];
-        for (int i = 0; i < builtVector.size(); i++) {
-            returned[i] = builtVector.get(i);
-        }
-        return returned;
-    }
+			return null;
+		}
+		BrowserElement[] returned = new BrowserElement[builtVector.size()];
+		for (int i = 0; i < builtVector.size(); i++) {
+			returned[i] = builtVector.get(i);
+		}
+		return returned;
+	}
 
-    public abstract FlexoModelObject getDefaultRootObject();
+	public abstract FlexoModelObject getDefaultRootObject();
 
-    public abstract void configure();
+	public abstract void configure();
 
+	@Override
+	public Object getRoot() {
+		return getRootElement();
+	}
 
-    @Override
-	public Object getRoot()
-    {
-        return getRootElement();
-    }
+	@Override
+	public Object getChild(Object parent, int index) {
+		return ((BrowserElement) parent).getChildAt(index);
+	}
 
-    @Override
-	public Object getChild(Object parent, int index)
-    {
-        return ((BrowserElement) parent).getChildAt(index);
-    }
+	@Override
+	public int getChildCount(Object parent) {
+		return ((BrowserElement) parent).getChildCount();
+	}
 
-    @Override
-	public int getChildCount(Object parent)
-    {
-        return ((BrowserElement) parent).getChildCount();
-    }
+	@Override
+	public boolean isLeaf(Object node) {
+		return ((BrowserElement) node).isLeaf();
+	}
 
-    @Override
-	public boolean isLeaf(Object node)
-    {
-        return ((BrowserElement) node).isLeaf();
-    }
+	@Override
+	public int getIndexOfChild(Object parent, Object child) {
+		return ((BrowserElement) parent).getIndex((TreeNode) child);
+	}
 
-    @Override
-	public int getIndexOfChild(Object parent, Object child)
-    {
-        return ((BrowserElement) parent).getIndex((TreeNode) child);
-    }
+	public synchronized void addBrowserListener(ProjectBrowserListener l) {
+		_browserListeners.add(l);
+	}
 
-    public synchronized void addBrowserListener(ProjectBrowserListener l)
-    {
-        _browserListeners.add(l);
-    }
+	public synchronized void deleteBrowserListener(ProjectBrowserListener l) {
+		_browserListeners.remove(l);
+	}
 
-    public synchronized void deleteBrowserListener(ProjectBrowserListener l)
-    {
-        _browserListeners.remove(l);
-    }
-
-    public void notifyExpansionChanged(final ExpansionSynchronizedElement element)
-    {
-    	if (element instanceof BrowserElement) {
-    		if (((BrowserElement)element).refreshHasBeenRequested()) {
-    			SwingUtilities.invokeLater(new Runnable(){
-    				@Override
+	public void notifyExpansionChanged(final ExpansionSynchronizedElement element) {
+		if (element instanceof BrowserElement) {
+			if (((BrowserElement) element).refreshHasBeenRequested()) {
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
 					public void run() {
-    					if (!((BrowserElement)element).isDeleted()) {
+						if (!((BrowserElement) element).isDeleted()) {
 							notifyListeners(new ExpansionNotificationEvent(element));
 						}
-    				}
-    			});
-    			return;
-    		}
-    	}
-        notifyListeners(new ExpansionNotificationEvent(element));
-    }
+					}
+				});
+				return;
+			}
+		}
+		notifyListeners(new ExpansionNotificationEvent(element));
+	}
 
-    public synchronized void notifyListeners(BrowserEvent event)
-    {
-        for (Enumeration<ProjectBrowserListener> e = _browserListeners.elements(); e.hasMoreElements();) {
-            ProjectBrowserListener l = e.nextElement();
-            if (event instanceof OptionalFilterAddedEvent) {
-                l.optionalFilterAdded((OptionalFilterAddedEvent) event);
-            } else if (event instanceof ObjectAddedToSelectionEvent) {
-                l.objectAddedToSelection((ObjectAddedToSelectionEvent) event);
-            } else if (event instanceof ObjectRemovedFromSelectionEvent) {
-                l.objectRemovedFromSelection((ObjectRemovedFromSelectionEvent) event);
-            } else if (event instanceof SelectionClearedEvent) {
-                l.selectionCleared((SelectionClearedEvent) event);
-            }
-            /*
-             * else if (event instanceof SaveSelectionEvent) {
-             * l.selectionSaved((SaveSelectionEvent)event); } else if (event
-             * instanceof RestoreSelectionEvent) {
-             * l.selectionRestored((RestoreSelectionEvent)event); }
-             */
-            else if (event instanceof ExpansionNotificationEvent) {
-                l.notifyExpansions((ExpansionNotificationEvent) event);
-            } else if (event instanceof EnableExpandingSynchronizationEvent) {
-                l.enableExpandingSynchronization((EnableExpandingSynchronizationEvent) event);
-            } else if (event instanceof DisableExpandingSynchronizationEvent) {
-                l.disableExpandingSynchronization((DisableExpandingSynchronizationEvent) event);
-            }
-        }
-    }
+	public synchronized void notifyListeners(BrowserEvent event) {
+		for (Enumeration<ProjectBrowserListener> e = _browserListeners.elements(); e.hasMoreElements();) {
+			ProjectBrowserListener l = e.nextElement();
+			if (event instanceof OptionalFilterAddedEvent) {
+				l.optionalFilterAdded((OptionalFilterAddedEvent) event);
+			} else if (event instanceof ObjectAddedToSelectionEvent) {
+				l.objectAddedToSelection((ObjectAddedToSelectionEvent) event);
+			} else if (event instanceof ObjectRemovedFromSelectionEvent) {
+				l.objectRemovedFromSelection((ObjectRemovedFromSelectionEvent) event);
+			} else if (event instanceof SelectionClearedEvent) {
+				l.selectionCleared((SelectionClearedEvent) event);
+			}
+			/*
+			 * else if (event instanceof SaveSelectionEvent) {
+			 * l.selectionSaved((SaveSelectionEvent)event); } else if (event
+			 * instanceof RestoreSelectionEvent) {
+			 * l.selectionRestored((RestoreSelectionEvent)event); }
+			 */
+			else if (event instanceof ExpansionNotificationEvent) {
+				l.notifyExpansions((ExpansionNotificationEvent) event);
+			} else if (event instanceof EnableExpandingSynchronizationEvent) {
+				l.enableExpandingSynchronization((EnableExpandingSynchronizationEvent) event);
+			} else if (event instanceof DisableExpandingSynchronizationEvent) {
+				l.disableExpandingSynchronization((DisableExpandingSynchronizationEvent) event);
+			}
+		}
+	}
 
-    public class BrowserEvent
-    {
-    }
+	public class BrowserEvent {
+	}
 
-    public class OptionalFilterAddedEvent extends BrowserEvent
-    {
+	public class OptionalFilterAddedEvent extends BrowserEvent {
 
-        private final ElementTypeBrowserFilter _browserFilter;
+		private final ElementTypeBrowserFilter _browserFilter;
 
-        protected OptionalFilterAddedEvent(ElementTypeBrowserFilter browserFilter)
-        {
-            super();
-            _browserFilter = browserFilter;
-        }
+		protected OptionalFilterAddedEvent(ElementTypeBrowserFilter browserFilter) {
+			super();
+			_browserFilter = browserFilter;
+		}
 
-        public ElementTypeBrowserFilter getFilter()
-        {
-        	return _browserFilter;
-        }
-    }
+		public ElementTypeBrowserFilter getFilter() {
+			return _browserFilter;
+		}
+	}
 
-    public class ObjectAddedToSelectionEvent extends BrowserEvent
-    {
+	public class ObjectAddedToSelectionEvent extends BrowserEvent {
 
-        private final FlexoModelObject _object;
+		private final FlexoModelObject _object;
 
-        protected ObjectAddedToSelectionEvent(FlexoModelObject object)
-        {
-            super();
-            if (logger.isLoggable(Level.FINE)) {
+		protected ObjectAddedToSelectionEvent(FlexoModelObject object) {
+			super();
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("ObjectAddedToSelectionEvent");
 			}
-            _object = object;
-        }
+			_object = object;
+		}
 
-        public FlexoModelObject getAddedObject()
-        {
-            return _object;
-        }
-    }
+		public FlexoModelObject getAddedObject() {
+			return _object;
+		}
+	}
 
-    public class ObjectRemovedFromSelectionEvent extends BrowserEvent
-    {
+	public class ObjectRemovedFromSelectionEvent extends BrowserEvent {
 
-        private final FlexoModelObject _object;
+		private final FlexoModelObject _object;
 
-        protected ObjectRemovedFromSelectionEvent(FlexoModelObject object)
-        {
-            super();
-            if (logger.isLoggable(Level.FINE)) {
+		protected ObjectRemovedFromSelectionEvent(FlexoModelObject object) {
+			super();
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("ObjectRemovedFromSelectionEvent");
 			}
-            _object = object;
-        }
+			_object = object;
+		}
 
-        public FlexoModelObject getRemovedObject()
-        {
-            return _object;
-        }
-    }
+		public FlexoModelObject getRemovedObject() {
+			return _object;
+		}
+	}
 
-    public class SelectionClearedEvent extends BrowserEvent
-    {
+	public class SelectionClearedEvent extends BrowserEvent {
 
-        protected SelectionClearedEvent()
-        {
-            super();
-            if (logger.isLoggable(Level.FINE)) {
+		protected SelectionClearedEvent() {
+			super();
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("SelectionClearedEvent");
 			}
-        }
-    }
+		}
+	}
 
-    /*
-     * protected class SaveSelectionEvent extends BrowserEvent {
-     *
-     * protected SaveSelectionEvent() { super(); } }
-     *
-     * protected class RestoreSelectionEvent extends BrowserEvent {
-     *
-     * protected RestoreSelectionEvent() { super(); } }
-     */
+	/*
+	 * protected class SaveSelectionEvent extends BrowserEvent {
+	 *
+	 * protected SaveSelectionEvent() { super(); } }
+	 *
+	 * protected class RestoreSelectionEvent extends BrowserEvent {
+	 *
+	 * protected RestoreSelectionEvent() { super(); } }
+	 */
 
-    public class EnableExpandingSynchronizationEvent extends BrowserEvent
-    {
+	public class EnableExpandingSynchronizationEvent extends BrowserEvent {
 
-        protected EnableExpandingSynchronizationEvent()
-        {
-            super();
-        }
-    }
+		protected EnableExpandingSynchronizationEvent() {
+			super();
+		}
+	}
 
-    public class DisableExpandingSynchronizationEvent extends BrowserEvent
-    {
+	public class DisableExpandingSynchronizationEvent extends BrowserEvent {
 
-        protected DisableExpandingSynchronizationEvent()
-        {
-            super();
-        }
-    }
+		protected DisableExpandingSynchronizationEvent() {
+			super();
+		}
+	}
 
-    public class ExpansionNotificationEvent extends BrowserEvent
-    {
+	public class ExpansionNotificationEvent extends BrowserEvent {
 
-        protected Vector<TreePath> _pathsToExpand;
+		protected Vector<TreePath> _pathsToExpand;
 
-        protected Vector<TreePath> _pathsToCollapse;
+		protected Vector<TreePath> _pathsToCollapse;
 
-        public ExpansionNotificationEvent()
-        {
-            super();
-            _pathsToExpand = new Vector<TreePath>();
-            _pathsToCollapse = new Vector<TreePath>();
-            for (Enumeration<ExpansionSynchronizedElement> e = _expansionSynchronizedElements.elements(); e.hasMoreElements();) {
-            	ExpansionSynchronizedElement element = e.nextElement();
-                TreePath path = element.getTreePath();
-                if ((element).isExpanded()) {
-                    _pathsToExpand.add(path);
-                } else {
-                    _pathsToCollapse.add(path);
-                }
-            }
-        }
+		public ExpansionNotificationEvent() {
+			super();
+			_pathsToExpand = new Vector<TreePath>();
+			_pathsToCollapse = new Vector<TreePath>();
+			for (Enumeration<ExpansionSynchronizedElement> e = _expansionSynchronizedElements.elements(); e.hasMoreElements();) {
+				ExpansionSynchronizedElement element = e.nextElement();
+				TreePath path = element.getTreePath();
+				if ((element).isExpanded()) {
+					_pathsToExpand.add(path);
+				} else {
+					_pathsToCollapse.add(path);
+				}
+			}
+		}
 
-        public ExpansionNotificationEvent(ExpansionSynchronizedElement element)
-        {
-            super();
-            _pathsToExpand = new Vector<TreePath>();
-            _pathsToCollapse = new Vector<TreePath>();
-            TreePath path = ((BrowserElement) element).getTreePath();
-            if (element.isExpanded()) {
-                _pathsToExpand.add(path);
-            } else {
-                _pathsToCollapse.add(path);
-            }
-        }
+		public ExpansionNotificationEvent(ExpansionSynchronizedElement element) {
+			super();
+			_pathsToExpand = new Vector<TreePath>();
+			_pathsToCollapse = new Vector<TreePath>();
+			TreePath path = ((BrowserElement) element).getTreePath();
+			if (element.isExpanded()) {
+				_pathsToExpand.add(path);
+			} else {
+				_pathsToCollapse.add(path);
+			}
+		}
 
-        public ExpansionNotificationEvent(BrowserElement[] elements, boolean expand)
-        {
-            super();
-            _pathsToExpand = new Vector<TreePath>();
-            _pathsToCollapse = new Vector<TreePath>();
-            for (int i = 0; i < elements.length; i++) {
-                BrowserElement element = elements[i];
-                TreePath path = element.getTreePath();
-                if (expand) {
-                    _pathsToExpand.add(path);
-                } else {
-                    _pathsToCollapse.add(path);
-                }
-            }
-        }
+		public ExpansionNotificationEvent(BrowserElement[] elements, boolean expand) {
+			super();
+			_pathsToExpand = new Vector<TreePath>();
+			_pathsToCollapse = new Vector<TreePath>();
+			for (int i = 0; i < elements.length; i++) {
+				BrowserElement element = elements[i];
+				TreePath path = element.getTreePath();
+				if (expand) {
+					_pathsToExpand.add(path);
+				} else {
+					_pathsToCollapse.add(path);
+				}
+			}
+		}
 
-        public Vector<TreePath> pathsToExpand()
-        {
-            return _pathsToExpand;
-        }
+		public Vector<TreePath> pathsToExpand() {
+			return _pathsToExpand;
+		}
 
-        public Vector<TreePath> pathsToCollabse()
-        {
-            return _pathsToCollapse;
-        }
-    }
+		public Vector<TreePath> pathsToCollabse() {
+			return _pathsToCollapse;
+		}
+	}
 
-    /**
-     * Adds specified object to selection
-     *
-     * @param object
-     */
-    @Override
-	public void fireObjectSelected(FlexoModelObject object)
-    {
-        if (object instanceof IEWOComponent) {
-            fireObjectSelected(((IEWOComponent) object).getComponentDefinition());
-            return;
-        }
-        if (logger.isLoggable(Level.FINE)) {
+	/**
+	 * Adds specified object to selection
+	 * 
+	 * @param object
+	 */
+	@Override
+	public void fireObjectSelected(FlexoModelObject object) {
+		if (object instanceof IEWOComponent) {
+			fireObjectSelected(((IEWOComponent) object).getComponentDefinition());
+			return;
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("ProjectBrowser.addToSelection() " + object);
 		}
-        notifyListeners(new ObjectAddedToSelectionEvent(object));
-    }
+		notifyListeners(new ObjectAddedToSelectionEvent(object));
+	}
 
-    /**
-     * Removes specified object from selection
-     *
-     * @param object
-     */
-    @Override
-	public void fireObjectDeselected(FlexoModelObject object)
-    {
-        if (object instanceof IEWOComponent) {
-            fireObjectDeselected(((IEWOComponent) object).getComponentDefinition());
-            return;
-        }
-        if (logger.isLoggable(Level.FINE)) {
+	/**
+	 * Removes specified object from selection
+	 * 
+	 * @param object
+	 */
+	@Override
+	public void fireObjectDeselected(FlexoModelObject object) {
+		if (object instanceof IEWOComponent) {
+			fireObjectDeselected(((IEWOComponent) object).getComponentDefinition());
+			return;
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("ProjectBrowser.removeFromSelection() " + object);
 		}
-        notifyListeners(new ObjectRemovedFromSelectionEvent(object));
-    }
+		notifyListeners(new ObjectRemovedFromSelectionEvent(object));
+	}
 
-    /**
-     * Clear selection
-     */
-    @Override
-	public void fireResetSelection()
-    {
-        notifyListeners(new SelectionClearedEvent());
-    }
+	/**
+	 * Clear selection
+	 */
+	@Override
+	public void fireResetSelection() {
+		notifyListeners(new SelectionClearedEvent());
+	}
 
-    /**
-     * Update selection
-     */
-    public void updateSelection()
-    {
-        if (_selectionManager != null) {
-            _selectionManager.fireUpdateSelection(this);
-        }
-    }
+	/**
+	 * Update selection
+	 */
+	public void updateSelection() {
+		if (_selectionManager != null) {
+			_selectionManager.fireUpdateSelection(this);
+		}
+	}
 
-    /**
-     * Notify that the selection manager is performing a multiple selection
-     */
-    @Override
-	public void fireBeginMultipleSelection()
-    {
-        notifyListeners(new DisableExpandingSynchronizationEvent());
-    }
+	/**
+	 * Notify that the selection manager is performing a multiple selection
+	 */
+	@Override
+	public void fireBeginMultipleSelection() {
+		notifyListeners(new DisableExpandingSynchronizationEvent());
+	}
 
-    /**
-     * Notify that the selection manager has finished to perform a multiple
-     * selection
-     */
-    @Override
-	public void fireEndMultipleSelection()
-    {
-        notifyListeners(new EnableExpandingSynchronizationEvent());
-    }
+	/**
+	 * Notify that the selection manager has finished to perform a multiple selection
+	 */
+	@Override
+	public void fireEndMultipleSelection() {
+		notifyListeners(new EnableExpandingSynchronizationEvent());
+	}
 
-    /**
-     * Notify that selection must be saved to be restored later (modification of
-     * the structure)
-     */
-    /*
-     * public void saveSelection() { notifyListeners(new SaveSelectionEvent()); }
-     */
+	/**
+	 * Notify that selection must be saved to be restored later (modification of the structure)
+	 */
+	/*
+	 * public void saveSelection() { notifyListeners(new SaveSelectionEvent()); }
+	 */
 
-    /**
-     * Notify that selection must be saved to be restored later (modification of
-     * the structure)
-     */
-    /*
-     * public void restoreSelection() { notifyListeners(new
-     * RestoreSelectionEvent()); }
-     */
+	/**
+	 * Notify that selection must be saved to be restored later (modification of the structure)
+	 */
+	/*
+	 * public void restoreSelection() { notifyListeners(new
+	 * RestoreSelectionEvent()); }
+	 */
 
-    @Override
-	public SelectionManager getSelectionManager()
-    {
-        return _selectionManager;
-    }
+	@Override
+	public SelectionManager getSelectionManager() {
+		return _selectionManager;
+	}
 
-    public void focusOn(FlexoModelObject object)
-    {
-        // logger.info("Focus on "+object);
-        // fireResetSelection();
-        // fireObjectSelected(object);
-        resetSelection();
-        addToSelected(object);
-    }
+	public void focusOn(FlexoModelObject object) {
+		// logger.info("Focus on "+object);
+		// fireResetSelection();
+		// fireObjectSelected(object);
+		resetSelection();
+		addToSelected(object);
+	}
 
-    public void focusOff(FlexoModelObject object)
-    {
-        collapse(object);
-    }
+	public void focusOff(FlexoModelObject object) {
+		collapse(object);
+	}
 
-    public void expand(FlexoModelObject object, boolean synchronizeExpansion)
-    {
-        BrowserElement[] elements = elementForObject(object);
-        if (elements == null) {
-            // logger.info("Elements representing object "+object+" could not be
-            // found");
-        } else {
-        	if (!synchronizeExpansion) {
+	public void expand(FlexoModelObject object, boolean synchronizeExpansion) {
+		BrowserElement[] elements = elementForObject(object);
+		if (elements == null) {
+			// logger.info("Elements representing object "+object+" could not be
+			// found");
+		} else {
+			if (!synchronizeExpansion) {
 				for (BrowserElement e : elements) {
 					e.enableSynchronizeExpansion();
 				}
 			}
-            notifyListeners(new ExpansionNotificationEvent(elements, true));
-        	if (!synchronizeExpansion) {
+			notifyListeners(new ExpansionNotificationEvent(elements, true));
+			if (!synchronizeExpansion) {
 				for (BrowserElement e : elements) {
 					e.disableSynchronizeExpansion();
 				}
 			}
-        }
-    }
+		}
+	}
 
-    public void collapse(FlexoModelObject object)
-    {
-        BrowserElement[] elements = elementForObject(object);
-        if (elements != null) {
+	public void collapse(FlexoModelObject object) {
+		BrowserElement[] elements = elementForObject(object);
+		if (elements != null) {
 			notifyListeners(new ExpansionNotificationEvent(elements, false));
 		}
-    }
+	}
 
-    @Override
-	public void valueForPathChanged(TreePath path, Object newValue)
-    {
-        BrowserElement element = (BrowserElement) path.getLastPathComponent();
-        if (element.isNameEditable()) {
-            try {
-                element.setName((String) newValue);
-            } catch (FlexoException e) {
-                // TODO handle those error properly
-                // Instead of doing setName() on the model, use a FlexoAction
-                // This is the FlexoAction exception handler that will catch
-                // those errors !!!
-                e.printStackTrace();
-            }
-        }
-    }
+	@Override
+	public void valueForPathChanged(TreePath path, Object newValue) {
+		BrowserElement element = (BrowserElement) path.getLastPathComponent();
+		if (element.isNameEditable()) {
+			try {
+				element.setName((String) newValue);
+			} catch (FlexoException e) {
+				// TODO handle those error properly
+				// Instead of doing setName() on the model, use a FlexoAction
+				// This is the FlexoAction exception handler that will catch
+				// those errors !!!
+				e.printStackTrace();
+			}
+		}
+	}
 
-    public Enumeration<FlexoModelObject> getAllObjects()
-    {
-        return _elements.keys();
-    }
+	public Enumeration<FlexoModelObject> getAllObjects() {
+		return _elements.keys();
+	}
 
-    public SelectionController getSelectionController()
-    {
-        return _selectionController;
-    }
+	public SelectionController getSelectionController() {
+		return _selectionController;
+	}
 
-    public void setSelectionController(SelectionController selectionController)
-    {
-        _selectionController = selectionController;
-    }
+	public void setSelectionController(SelectionController selectionController) {
+		_selectionController = selectionController;
+	}
 
-    public boolean handlesControlPanel()
-    {
-        return _handlesControlPanel;
-    }
+	public boolean handlesControlPanel() {
+		return _handlesControlPanel;
+	}
 
-    public void setHandlesControlPanel(boolean handlesControlPanel)
-    {
-        _handlesControlPanel = handlesControlPanel;
-    }
+	public void setHandlesControlPanel(boolean handlesControlPanel) {
+		_handlesControlPanel = handlesControlPanel;
+	}
 
-    public Vector<ElementTypeBrowserFilter> getConfigurableElementTypeFilters()
-    {
-    	Vector<ElementTypeBrowserFilter> returned = new Vector<ElementTypeBrowserFilter>();
-    	for (BrowserElementType t : _filters.keySet()) {
-    		ElementTypeBrowserFilter f = _filters.get(t);
-    		if ((f.getInitialFilterStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN)
-    				|| (f.getInitialFilterStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN)) {
-    			returned.add(f);
-    		}
-    	}
-        return returned;
-    }
+	public Vector<ElementTypeBrowserFilter> getConfigurableElementTypeFilters() {
+		Vector<ElementTypeBrowserFilter> returned = new Vector<ElementTypeBrowserFilter>();
+		for (BrowserElementType t : _filters.keySet()) {
+			ElementTypeBrowserFilter f = _filters.get(t);
+			if ((f.getInitialFilterStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN)
+					|| (f.getInitialFilterStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN)) {
+				returned.add(f);
+			}
+		}
+		return returned;
+	}
 
-    @Override
-	public Vector<FlexoModelObject> getSelection()
-    {
-        if (getSelectionManager() != null) {
+	@Override
+	public Vector<FlexoModelObject> getSelection() {
+		if (getSelectionManager() != null) {
 			return getSelectionManager().getSelection();
 		}
-        return null;
-    }
+		return null;
+	}
 
-    @Override
-	public void resetSelection()
-    {
-        if (getSelectionManager() != null) {
-            getSelectionManager().resetSelection();
-        } else {
-            fireResetSelection();
-        }
-    }
+	@Override
+	public void resetSelection() {
+		if (getSelectionManager() != null) {
+			getSelectionManager().resetSelection();
+		} else {
+			fireResetSelection();
+		}
+	}
 
-    @Override
-	public void addToSelected(FlexoModelObject object)
-    {
-        if (mayRepresents(object)) {
-            if (getSelectionManager() != null) {
-                getSelectionManager().addToSelected(object);
-            } else {
-                fireObjectSelected(object);
-            }
-        }
-    }
+	@Override
+	public void addToSelected(FlexoModelObject object) {
+		if (mayRepresents(object)) {
+			if (getSelectionManager() != null) {
+				getSelectionManager().addToSelected(object);
+			} else {
+				fireObjectSelected(object);
+			}
+		}
+	}
 
-    @Override
-	public void removeFromSelected(FlexoModelObject object)
-    {
-        if (mayRepresents(object)) {
-            if (getSelectionManager() != null) {
-                getSelectionManager().removeFromSelected(object);
-            } else {
-                fireObjectDeselected(object);
-            }
-        }
-    }
+	@Override
+	public void removeFromSelected(FlexoModelObject object) {
+		if (mayRepresents(object)) {
+			if (getSelectionManager() != null) {
+				getSelectionManager().removeFromSelected(object);
+			} else {
+				fireObjectDeselected(object);
+			}
+		}
+	}
 
-    @Override
-	public void addToSelected(Vector<? extends FlexoModelObject> objects)
-    {
-        if (getSelectionManager() != null) {
-            getSelectionManager().addToSelected(objects);
-        } else {
-            fireBeginMultipleSelection();
-            for (Enumeration<? extends FlexoModelObject> en = objects.elements(); en.hasMoreElements();) {
-                FlexoModelObject next = en.nextElement();
-                fireObjectSelected(next);
-            }
-            fireEndMultipleSelection();
-        }
-    }
+	@Override
+	public void addToSelected(Vector<? extends FlexoModelObject> objects) {
+		if (getSelectionManager() != null) {
+			getSelectionManager().addToSelected(objects);
+		} else {
+			fireBeginMultipleSelection();
+			for (Enumeration<? extends FlexoModelObject> en = objects.elements(); en.hasMoreElements();) {
+				FlexoModelObject next = en.nextElement();
+				fireObjectSelected(next);
+			}
+			fireEndMultipleSelection();
+		}
+	}
 
-    @Override
-	public void removeFromSelected(Vector<? extends FlexoModelObject> objects)
-    {
-        if (getSelectionManager() != null) {
-            getSelectionManager().removeFromSelected(objects);
-        } else {
-            fireBeginMultipleSelection();
-            for (Enumeration<? extends FlexoModelObject> en = objects.elements(); en.hasMoreElements();) {
-                FlexoModelObject next = en.nextElement();
-                fireObjectDeselected(next);
-            }
-            fireEndMultipleSelection();
-        }
-    }
+	@Override
+	public void removeFromSelected(Vector<? extends FlexoModelObject> objects) {
+		if (getSelectionManager() != null) {
+			getSelectionManager().removeFromSelected(objects);
+		} else {
+			fireBeginMultipleSelection();
+			for (Enumeration<? extends FlexoModelObject> en = objects.elements(); en.hasMoreElements();) {
+				FlexoModelObject next = en.nextElement();
+				fireObjectDeselected(next);
+			}
+			fireEndMultipleSelection();
+		}
+	}
 
-    @Override
-	public void setSelectedObjects(Vector<? extends FlexoModelObject> objects)
-    {
-        if (getSelectionManager() != null) {
-            getSelectionManager().setSelectedObjects(objects);
-        } else {
-            resetSelection();
-            addToSelected(objects);
-        }
-    }
+	@Override
+	public void setSelectedObjects(Vector<? extends FlexoModelObject> objects) {
+		if (getSelectionManager() != null) {
+			getSelectionManager().setSelectedObjects(objects);
+		} else {
+			resetSelection();
+			addToSelected(objects);
+		}
+	}
 
-    @Override
-	public FlexoModelObject getFocusedObject()
-    {
-        if (getSelectionManager() != null) {
+	@Override
+	public FlexoModelObject getFocusedObject() {
+		if (getSelectionManager() != null) {
 			return getSelectionManager().getFocusedObject();
 		}
-        return null;
-    }
+		return null;
+	}
 
-    @Override
-	public boolean mayRepresents(FlexoModelObject anObject)
-    {
-        if (anObject instanceof IEWOComponent) {
-            return (_elements.get(anObject) != null) || mayRepresents(((IEWOComponent) anObject).getComponentDefinition());
-        }
-        return ((_elements != null) && (anObject != null) && (_elements.get(anObject) != null));
-    }
+	@Override
+	public boolean mayRepresents(FlexoModelObject anObject) {
+		if (anObject instanceof IEWOComponent) {
+			return (_elements.get(anObject) != null) || mayRepresents(((IEWOComponent) anObject).getComponentDefinition());
+		}
+		return ((_elements != null) && (anObject != null) && (_elements.get(anObject) != null));
+	}
 
-	public Vector<CustomBrowserFilter> getCustomFilters()
-	{
+	public Vector<CustomBrowserFilter> getCustomFilters() {
 		return _customFilters;
 	}
 
-	public void setCustomFilters(Vector<CustomBrowserFilter> customFilters)
-	{
+	public void setCustomFilters(Vector<CustomBrowserFilter> customFilters) {
 		_customFilters = customFilters;
 	}
 
-	public void addToCustomFilters(CustomBrowserFilter aCustomFilter)
-	{
+	public void addToCustomFilters(CustomBrowserFilter aCustomFilter) {
 		_customFilters.add(aCustomFilter);
 	}
 
-	public void removeFromCustomFilters(CustomBrowserFilter aCustomFilter)
-	{
+	public void removeFromCustomFilters(CustomBrowserFilter aCustomFilter) {
 		_customFilters.remove(aCustomFilter);
 	}
 
 	// TODO: should NOT be handled at this level
-	public static enum DMViewMode
-	{
-		Repositories,
-		Packages,
-		Hierarchy,
-		Diagrams
+	public static enum DMViewMode {
+		Repositories, Packages, Hierarchy, Diagrams
 	}
 
 	// TODO: should NOT be handled at this level
 	private DMViewMode _viewMode = DMViewMode.Repositories;
 
 	// TODO: should NOT be handled at this level
-	public DMViewMode getDMViewMode()
-	{
+	public DMViewMode getDMViewMode() {
 		return _viewMode;
 	}
 
 	// TODO: should NOT be handled at this level
-	public void setDMViewMode(DMViewMode viewMode)
-	{
+	public void setDMViewMode(DMViewMode viewMode) {
 		if (_viewMode != viewMode) {
 			_viewMode = viewMode;
 			update();
@@ -1284,25 +1169,20 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	}
 
 	// TODO: should NOT be handled at this level
-	public static enum OEViewMode
-	{
-		NoHierarchy,
-		PartialHierarchy,
-		FullHierarchy
+	public static enum OEViewMode {
+		NoHierarchy, PartialHierarchy, FullHierarchy
 	}
 
 	// TODO: should NOT be handled at this level
 	private OEViewMode _oeViewMode = OEViewMode.NoHierarchy;
 
 	// TODO: should NOT be handled at this level
-	public OEViewMode getOEViewMode()
-	{
+	public OEViewMode getOEViewMode() {
 		return _oeViewMode;
 	}
 
 	// TODO: should NOT be handled at this level
-	public void setOEViewMode(OEViewMode viewMode)
-	{
+	public void setOEViewMode(OEViewMode viewMode) {
 		if (_oeViewMode != viewMode) {
 			_oeViewMode = viewMode;
 			update();
@@ -1313,14 +1193,12 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	private boolean _showOnlyAnnotationProperties = false;
 
 	// TODO: should NOT be handled at this level
-    public boolean showOnlyAnnotationProperties()
-    {
+	public boolean showOnlyAnnotationProperties() {
 		return _showOnlyAnnotationProperties;
 	}
 
 	// TODO: should NOT be handled at this level
-	public void setShowOnlyAnnotationProperties(boolean showOnlyAnnotationProperties)
-	{
+	public void setShowOnlyAnnotationProperties(boolean showOnlyAnnotationProperties) {
 		_showOnlyAnnotationProperties = showOnlyAnnotationProperties;
 	}
 
@@ -1329,29 +1207,30 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 
 	// TODO: should NOT be handled at this level
 	public enum RoleViewMode {
-    	TOP_DOWN {
-    		@Override
-    		public ImageIcon getIcon() {
-    			return UtilsIconLibrary.ARROW_DOWN;
-    		}
-    	},
-    	BOTTOM_UP {
-    		@Override
-    		public ImageIcon getIcon() {
-    			return UtilsIconLibrary.ARROW_UP;
-    		}
-    	},
-    	FLAT {
-    		@Override
-    		public ImageIcon getIcon() {
-    			return WKFIconLibrary.FLAT_ICON;
-    		}
-    	};
-    	public abstract ImageIcon getIcon();
-    	public String getLocalizedName() {
-    		return FlexoLocalization.localizedForKey(name().toLowerCase());
-    	}
-    }
+		TOP_DOWN {
+			@Override
+			public ImageIcon getIcon() {
+				return UtilsIconLibrary.ARROW_DOWN;
+			}
+		},
+		BOTTOM_UP {
+			@Override
+			public ImageIcon getIcon() {
+				return UtilsIconLibrary.ARROW_UP;
+			}
+		},
+		FLAT {
+			@Override
+			public ImageIcon getIcon() {
+				return WKFIconLibrary.FLAT_ICON;
+			}
+		};
+		public abstract ImageIcon getIcon();
+
+		public String getLocalizedName() {
+			return FlexoLocalization.localizedForKey(name().toLowerCase());
+		}
+	}
 
 	// TODO: should NOT be handled at this level
 	public RoleViewMode getRoleViewMode() {
@@ -1364,53 +1243,44 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		update();
 	}
 
-    public boolean isRebuildingStructure()
-    {
-        return isRebuildingStructure;
-    }
+	public boolean isRebuildingStructure() {
+		return isRebuildingStructure;
+	}
 
-    public void setIsRebuildingStructure()
-    {
-        isRebuildingStructure = true;
-    }
+	public void setIsRebuildingStructure() {
+		isRebuildingStructure = true;
+	}
 
-    public void resetIsRebuildingStructure()
-    {
-    	isRebuildingStructure = false;
-    }
+	public void resetIsRebuildingStructure() {
+		isRebuildingStructure = false;
+	}
 
-    public boolean isHoldingStructure()
-    {
-        return holdStructure;
-    }
+	public boolean isHoldingStructure() {
+		return holdStructure;
+	}
 
-    public void setHoldStructure()
-    {
-        holdStructure = true;
-    }
+	public void setHoldStructure() {
+		holdStructure = true;
+	}
 
-    public void resetHoldStructure()
-    {
-        holdStructure = false;
-    }
+	public void resetHoldStructure() {
+		holdStructure = false;
+	}
 
-    /**
-     * Return editor when available
-     * False otherwise
-     * @return
-     */
-	public FlexoEditor getEditor()
-	{
+	/**
+	 * Return editor when available False otherwise
+	 * 
+	 * @return
+	 */
+	public FlexoEditor getEditor() {
 		return _editor;
 	}
 
-	public int getRowHeight()
-	{
+	public int getRowHeight() {
 		return rowHeight;
 	}
 
-	public void setRowHeight(int rowHeight)
-	{
+	public void setRowHeight(int rowHeight) {
 		this.rowHeight = rowHeight;
 	}
 }

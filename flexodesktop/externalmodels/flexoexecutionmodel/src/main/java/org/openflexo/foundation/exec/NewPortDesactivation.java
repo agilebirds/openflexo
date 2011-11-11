@@ -23,7 +23,6 @@ import org.openflexo.antar.ControlGraph;
 import org.openflexo.antar.Nop;
 import org.openflexo.foundation.wkf.ws.NewPort;
 
-
 public class NewPortDesactivation extends PortDesactivation<NewPort> {
 
 	protected NewPortDesactivation(NewPort port) {
@@ -32,7 +31,7 @@ public class NewPortDesactivation extends PortDesactivation<NewPort> {
 
 	@Override
 	protected String getProcedureName() {
-		return "newPortDeactivation"+getPort().getFlexoID();
+		return "newPortDeactivation" + getPort().getFlexoID();
 	}
 
 	@Override
@@ -40,6 +39,4 @@ public class NewPortDesactivation extends PortDesactivation<NewPort> {
 		return new Nop();
 	}
 
-	
-	
 }

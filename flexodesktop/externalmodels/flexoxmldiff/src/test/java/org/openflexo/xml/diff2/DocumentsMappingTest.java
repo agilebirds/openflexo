@@ -30,27 +30,25 @@ import org.openflexo.xml.XMLDiffTest;
 import org.openflexo.xml.diff2.DocumentsMapping;
 import org.xml.sax.SAXException;
 
+public class DocumentsMappingTest extends XMLDiffTest {
 
-public class DocumentsMappingTest extends XMLDiffTest{
+	private static final Logger logger = Logger.getLogger(DocumentsMappingTest.class.getPackage().getName());
 
-	private static final Logger logger = Logger.getLogger(DocumentsMappingTest.class.getPackage()
-            .getName());
-	
-	
-	public void testTableMoved(){
+	public void testTableMoved() {
 		logger.info("Start Table moved test");
-		buildMapping("TableMoved/Screen1A.woxml","TableMoved/Screen1B.woxml");
+		buildMapping("TableMoved/Screen1A.woxml", "TableMoved/Screen1B.woxml");
 	}
-	public void testOneAddOneRemoved(){
+
+	public void testOneAddOneRemoved() {
 		logger.info("Start Operation add and remove test");
-		buildMapping("OneOpAddOneOpRemoved/MergeA.xml","OneOpAddOneOpRemoved/MergeB.xml");
+		buildMapping("OneOpAddOneOpRemoved/MergeA.xml", "OneOpAddOneOpRemoved/MergeB.xml");
 	}
-	
-	private static DocumentsMapping buildMapping(String fileNameSource, String fileNameTarget){
+
+	private static DocumentsMapping buildMapping(String fileNameSource, String fileNameTarget) {
 		try {
-			Document src = docFromFile(new FileResource(fileNameSource)); 
+			Document src = docFromFile(new FileResource(fileNameSource));
 			Document target = docFromFile(new FileResource(fileNameTarget));
-			return new DocumentsMapping(src,target);
+			return new DocumentsMapping(src, target);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (SAXException e) {
@@ -60,6 +58,5 @@ public class DocumentsMappingTest extends XMLDiffTest{
 		}
 		return null;
 	}
-	
 
 }

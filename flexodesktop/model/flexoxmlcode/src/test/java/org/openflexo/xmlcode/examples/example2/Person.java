@@ -27,13 +27,12 @@ import org.openflexo.xmlcode.XMLSerializable;
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  */
-public class Person implements XMLSerializable
-{
+public class Person implements XMLSerializable {
 
-    public String name;
+	public String name;
 
-    public String firstName;
+	public String firstName;
 
-    public String address;
+	public String address;
 
 }

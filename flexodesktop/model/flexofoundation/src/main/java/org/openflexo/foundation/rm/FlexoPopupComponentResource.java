@@ -29,95 +29,85 @@ import org.openflexo.foundation.ie.cl.PopupComponentDefinition;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class FlexoPopupComponentResource extends FlexoComponentResource implements Serializable
-{
-	
+public class FlexoPopupComponentResource extends FlexoComponentResource implements Serializable {
 
 	private static final Logger logger = Logger.getLogger(FlexoPopupComponentResource.class.getPackage().getName());
 
-    private PopupComponentDefinition _componentDefinition;
+	private PopupComponentDefinition _componentDefinition;
 
-    /**
-     * Constructor used for XML Serialization: never try to instanciate resource
-     * from this constructor
-     * 
-     * @param builder
-     */
-    public FlexoPopupComponentResource(FlexoProjectBuilder builder)
-    {
-        this(builder.project);
-        builder.notifyResourceLoading(this);
-   }
+	/**
+	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
+	 * 
+	 * @param builder
+	 */
+	public FlexoPopupComponentResource(FlexoProjectBuilder builder) {
+		this(builder.project);
+		builder.notifyResourceLoading(this);
+	}
 
-    public FlexoPopupComponentResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
+	public FlexoPopupComponentResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    public FlexoPopupComponentResource(FlexoProject aProject, String aName, FlexoComponentLibraryResource clResource, FlexoProjectFile componentFile) throws InvalidFileNameException
-    {
-        super(aProject, aName, clResource, componentFile);
-    }
+	public FlexoPopupComponentResource(FlexoProject aProject, String aName, FlexoComponentLibraryResource clResource,
+			FlexoProjectFile componentFile) throws InvalidFileNameException {
+		super(aProject, aName, clResource, componentFile);
+	}
 
-    @Override
-	public ResourceType getResourceType()
-    {
-        return ResourceType.POPUP_COMPONENT;
-    }
+	@Override
+	public ResourceType getResourceType() {
+		return ResourceType.POPUP_COMPONENT;
+	}
 
-    public IEPopupComponent getIEPopupComponent()
-    {
-        return (IEPopupComponent) getResourceData();
-    }
+	public IEPopupComponent getIEPopupComponent() {
+		return (IEPopupComponent) getResourceData();
+	}
 
-    /*
-     * public FlexoResourceData loadResourceData() throws
-     * LoadXMLResourceException, FlexoFileNotFoundException { if
-     * (logger.isLoggable(Level.INFO)) logger.info("Loading component
-     * "+getName()); IEPopupComponent popupComponent =
-     * (IEPopupComponent)super.loadResourceData();
-     * popupComponent.setProject(getProject()); return popupComponent; }
-     */
+	/*
+	 * public FlexoResourceData loadResourceData() throws
+	 * LoadXMLResourceException, FlexoFileNotFoundException { if
+	 * (logger.isLoggable(Level.INFO)) logger.info("Loading component
+	 * "+getName()); IEPopupComponent popupComponent =
+	 * (IEPopupComponent)super.loadResourceData();
+	 * popupComponent.setProject(getProject()); return popupComponent; }
+	 */
 
-    @Override
-	public PopupComponentDefinition getComponentDefinition()
-    {
-        if (_componentDefinition == null) {
+	@Override
+	public PopupComponentDefinition getComponentDefinition() {
+		if (_componentDefinition == null) {
 
-            _componentDefinition = (PopupComponentDefinition) getProject().getFlexoComponentLibrary().getComponentNamed(getName());
-            if (_componentDefinition == null) {
-                if (logger.isLoggable(Level.SEVERE))
-                    logger.severe("cant find an PopupComponentDefinition for popup: " + getName() + " in library");
-                if (logger.isLoggable(Level.INFO))
-                    logger.info("Trying to repair...");
-                FlexoComponentFolder rootFolder = getProject().getFlexoComponentLibrary().getRootFolder();
-                try {
-                    _componentDefinition = new PopupComponentDefinition(getName(), getProject().getFlexoComponentLibrary(), rootFolder, getProject(), false);
-                } catch (DuplicateResourceException e) {
-                }
-            }
-        }
-        return _componentDefinition;
-    }
+			_componentDefinition = (PopupComponentDefinition) getProject().getFlexoComponentLibrary().getComponentNamed(getName());
+			if (_componentDefinition == null) {
+				if (logger.isLoggable(Level.SEVERE))
+					logger.severe("cant find an PopupComponentDefinition for popup: " + getName() + " in library");
+				if (logger.isLoggable(Level.INFO))
+					logger.info("Trying to repair...");
+				FlexoComponentFolder rootFolder = getProject().getFlexoComponentLibrary().getRootFolder();
+				try {
+					_componentDefinition = new PopupComponentDefinition(getName(), getProject().getFlexoComponentLibrary(), rootFolder,
+							getProject(), false);
+				} catch (DuplicateResourceException e) {
+				}
+			}
+		}
+		return _componentDefinition;
+	}
 
-    public static String resourceIdentifierForName(String aComponentName)
-    {
-        return ResourceType.POPUP_COMPONENT.getName() + "." + aComponentName;
-    }
+	public static String resourceIdentifierForName(String aComponentName) {
+		return ResourceType.POPUP_COMPONENT.getName() + "." + aComponentName;
+	}
 
-    @Override
-	public Object instanciateNewBuilder()
-    {
-        Object returned = super.instanciateNewBuilder();
-        ((FlexoComponentBuilder) returned).componentDefinition = getComponentDefinition();
-        return returned;
-    }
+	@Override
+	public Object instanciateNewBuilder() {
+		Object returned = super.instanciateNewBuilder();
+		((FlexoComponentBuilder) returned).componentDefinition = getComponentDefinition();
+		return returned;
+	}
 
 }

@@ -23,57 +23,51 @@ import java.io.Serializable;
 
 import org.openflexo.foundation.utils.FlexoColor;
 
-
 /**
  * Represents a color
  * 
  * @author sguerin
  */
-public abstract class FlexoConceptualColor implements Serializable
-{
+public abstract class FlexoConceptualColor implements Serializable {
 
-    public static final MainColor MAIN_COLOR = new MainColor();
+	public static final MainColor MAIN_COLOR = new MainColor();
 
-    public static final TextColor TEXT_COLOR = new TextColor();
+	public static final TextColor TEXT_COLOR = new TextColor();
 
-    public static final OddLineColor ODD_LINE_COLOR = new OddLineColor();
+	public static final OddLineColor ODD_LINE_COLOR = new OddLineColor();
 
-    public static final OtherLineColor OTHER_LINE_COLOR = new OtherLineColor();
+	public static final OtherLineColor OTHER_LINE_COLOR = new OtherLineColor();
 
-    public static class MainColor extends FlexoConceptualColor
-    {
-        MainColor(){}
-    }
+	public static class MainColor extends FlexoConceptualColor {
+		MainColor() {
+		}
+	}
 
-    public static class TextColor extends FlexoConceptualColor
-    {
-        TextColor(){}
-    }
+	public static class TextColor extends FlexoConceptualColor {
+		TextColor() {
+		}
+	}
 
-    public static class OddLineColor extends FlexoConceptualColor
-    {
-        OddLineColor(){}
-    }
+	public static class OddLineColor extends FlexoConceptualColor {
+		OddLineColor() {
+		}
+	}
 
-    public static class OtherLineColor extends FlexoConceptualColor
-    {
-    }
+	public static class OtherLineColor extends FlexoConceptualColor {
+	}
 
-    public static class CustomColor extends FlexoConceptualColor
-    {
+	public static class CustomColor extends FlexoConceptualColor {
 
-        protected FlexoColor _color;
+		protected FlexoColor _color;
 
-        public CustomColor(FlexoColor aColor)
-        {
-            super();
-            _color = aColor;
-        }
+		public CustomColor(FlexoColor aColor) {
+			super();
+			_color = aColor;
+		}
 
-        public FlexoColor getColor()
-        {
-            return _color;
-        }
-    }
+		public FlexoColor getColor() {
+			return _color;
+		}
+	}
 
 }

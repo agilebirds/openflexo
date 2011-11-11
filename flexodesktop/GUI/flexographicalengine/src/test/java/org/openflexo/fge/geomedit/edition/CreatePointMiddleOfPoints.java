@@ -25,38 +25,31 @@ import org.openflexo.fge.geomedit.Point;
 import org.openflexo.fge.geomedit.construction.PointMiddleOfTwoPointsConstruction;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
 
-
-
 public class CreatePointMiddleOfPoints extends Edition {
-	
+
 	public CreatePointMiddleOfPoints(GeomEditController controller) {
-		super("Create point as middle of points",controller);
-		inputs.add(new ObtainPoint("Select first point",controller));
-		inputs.add(new ObtainPoint("Select second point",controller));
+		super("Create point as middle of points", controller);
+		inputs.add(new ObtainPoint("Select first point", controller));
+		inputs.add(new ObtainPoint("Select second point", controller));
 	}
-	
+
 	@Override
-	public void performEdition()
-	{
-		ObtainPoint p1 = (ObtainPoint)inputs.get(0);
-		ObtainPoint p2 = (ObtainPoint)inputs.get(1);
-		
-		addObject (new Point(
-				getController().getDrawing().getModel(),
-				new PointMiddleOfTwoPointsConstruction(p1.getConstruction(),p2.getConstruction())));
+	public void performEdition() {
+		ObtainPoint p1 = (ObtainPoint) inputs.get(0);
+		ObtainPoint p2 = (ObtainPoint) inputs.get(1);
+
+		addObject(new Point(getController().getDrawing().getModel(), new PointMiddleOfTwoPointsConstruction(p1.getConstruction(),
+				p2.getConstruction())));
 
 	}
-	
+
 	/*public void addObject(GeometricObject object)
 	{
 		getController().getDrawing().getModel().addToChilds(object);
 	}*/
-	
+
 	@Override
-	public void paintEdition(FGEDrawingGraphics graphics,FGEPoint lastMouseLocation)
-	{
+	public void paintEdition(FGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		// Nothing to draw
 	}
 }
-
-

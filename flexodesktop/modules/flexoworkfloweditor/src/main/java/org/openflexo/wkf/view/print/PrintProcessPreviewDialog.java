@@ -26,17 +26,16 @@ import org.openflexo.print.PrintPreviewDialog;
 import org.openflexo.view.ModuleView;
 import org.openflexo.wkf.controller.WKFController;
 
-
 public class PrintProcessPreviewDialog extends PrintPreviewDialog {
 
-    protected static final Logger logger = Logger.getLogger(PrintProcessPreviewDialog.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(PrintProcessPreviewDialog.class.getPackage().getName());
 
 	private boolean isPrintDialogDisposed;
 
 	public PrintProcessPreviewDialog(WKFController controller, FlexoPrintableComponent printableProcessView) {
-        super(controller,printableProcessView);
-        setIsPrintDialogDispose(false);
-    }
+		super(controller, printableProcessView);
+		setIsPrintDialogDispose(false);
+	}
 
 	/**
 	 *
@@ -48,12 +47,12 @@ public class PrintProcessPreviewDialog extends PrintPreviewDialog {
 	@Override
 	public void dispose() {
 		isPrintDialogDisposed |= !isVisible();
-        super.dispose();
+		super.dispose();
 		if (!isPrintDialogDisposed) {
 			setIsPrintDialogDispose(true);
 			if (getPrintableComponent() instanceof ModuleView)
-				((ModuleView)getPrintableComponent()).deleteModuleView();
+				((ModuleView) getPrintableComponent()).deleteModuleView();
 		}
-    }
+	}
 
- }
+}

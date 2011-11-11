@@ -40,7 +40,6 @@ import org.openflexo.foundation.sg.implmodel.event.SGObjectRemovedFromListModifi
 import org.openflexo.foundation.xml.ImplementationModelBuilder;
 import org.openflexo.toolbox.JavaUtils;
 
-
 /**
  * This class defines an entity in the context of an Hibernate implementation.
  * 
@@ -151,7 +150,7 @@ public class HibernateEntity extends TechnologyModelObject implements FlexoObser
 
 		if (getHibernateModel() != null)
 			getHibernateModel().removeFromEntities(this);
-		
+
 		setChanged();
 		notifyObservers(new SGObjectDeletedModification());
 		super.delete();

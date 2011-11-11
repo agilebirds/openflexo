@@ -18,25 +18,26 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents LinkView object
- *
+ * 
  * @version $Id: LinkView.java,v 1.3 2011/09/12 11:46:47 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class LinkView extends QuiduView {
-  public LinkView(PetalNode parent, Collection params, int tag) {
-    super(parent, "LinkView", params, tag);
-  }
+	public LinkView(PetalNode parent, Collection params, int tag) {
+		super(parent, "LinkView", params, tag);
+	}
 
-  public LinkView() {
-    super("LinkView");
-  }
+	public LinkView() {
+		super("LinkView");
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

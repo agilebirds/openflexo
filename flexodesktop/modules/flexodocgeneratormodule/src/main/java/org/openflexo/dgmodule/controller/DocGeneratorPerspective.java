@@ -33,71 +33,67 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-public class DocGeneratorPerspective extends FlexoPerspective<FlexoModelObject>
- {
+public class DocGeneratorPerspective extends FlexoPerspective<FlexoModelObject> {
 
-	 /**
+	/**
 	 * 
 	 */
 	private final DGController dgController;
 
 	/**
-	  * @param dgController TODO
+	 * @param dgController
+	 *            TODO
 	 * @param name
-	  */
-	  public DocGeneratorPerspective(DGController dgController)
-	 {
-		  super("doc_generation");
+	 */
+	public DocGeneratorPerspective(DGController dgController) {
+		super("doc_generation");
 		this.dgController = dgController;
-	 }
+	}
 
-	  /**
-	   * Overrides getIcon
-	   * 
-	   * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
-	   */
-	  @Override
-	public ImageIcon getActiveIcon()
-	  {
-		  return DGIconLibrary.DG_DGP_ACTIVE_ICON;
-	  }
+	/**
+	 * Overrides getIcon
+	 * 
+	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 */
+	@Override
+	public ImageIcon getActiveIcon() {
+		return DGIconLibrary.DG_DGP_ACTIVE_ICON;
+	}
 
-	  /**
-	   * Overrides getSelectedIcon
-	   * 
-	   * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
-	   */
-	  @Override
-	public ImageIcon getSelectedIcon()
-	  {
-		  return DGIconLibrary.DG_DGP_SELECTED_ICON;
-	  }
+	/**
+	 * Overrides getSelectedIcon
+	 * 
+	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
+	 */
+	@Override
+	public ImageIcon getSelectedIcon() {
+		return DGIconLibrary.DG_DGP_SELECTED_ICON;
+	}
 
-	  @Override
-	  public boolean isAlwaysVisible() {
-		  return true;
-	  }
+	@Override
+	public boolean isAlwaysVisible() {
+		return true;
+	}
 
-		@Override
-		public JPanel getFooter()
-		{
-			return this.dgController._footer;
+	@Override
+	public JPanel getFooter() {
+		return this.dgController._footer;
+	}
+
+	@Override
+	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
+		if (proposedObject instanceof TOCEntry) {
+			return ((TOCEntry) proposedObject).getRepository();
+		} else {
+			return this.dgController.getProject().getGeneratedDoc();
 		}
-
-		@Override
-		public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject)
-		{
-			if (proposedObject instanceof TOCEntry) {
-				return ((TOCEntry)proposedObject).getRepository();
-			} else {
-			  return this.dgController.getProject().getGeneratedDoc();
-		  }
-	  }
+	}
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return ((object instanceof GeneratedDoc) || (object instanceof DGRepository) || (object instanceof DGLatexFile) || (object instanceof DGScreenshotFile) || (object instanceof CGTemplate)
-				|| (object instanceof TOCEntry) || (object instanceof TOCRepository) || (object instanceof TOCData));
+		return ((object instanceof GeneratedDoc) || (object instanceof DGRepository) || (object instanceof DGLatexFile)
+				|| (object instanceof DGScreenshotFile) || (object instanceof CGTemplate) || (object instanceof TOCEntry)
+				|| (object instanceof TOCRepository) || (object instanceof TOCData));
 	}
 
 	@Override
@@ -123,16 +119,15 @@ public class DocGeneratorPerspective extends FlexoPerspective<FlexoModelObject>
 		return null;
 	}
 
-	  @Override
-	  public void notifyModuleViewDisplayed(ModuleView<?> moduleView)
-	  {
-		  if (moduleView.getRepresentedObject() instanceof CGObject) {
-			  this.dgController._lastEditedCGRepository = AbstractGCAction.repositoryForObject((CGObject) moduleView.getRepresentedObject());
-		  }
-		  this.dgController.refreshFooter();
-		  if (moduleView instanceof DGFileModuleView) {
-			  ((DGFileModuleView) moduleView).refresh();
-		  }
-	  }
+	@Override
+	public void notifyModuleViewDisplayed(ModuleView<?> moduleView) {
+		if (moduleView.getRepresentedObject() instanceof CGObject) {
+			this.dgController._lastEditedCGRepository = AbstractGCAction.repositoryForObject((CGObject) moduleView.getRepresentedObject());
+		}
+		this.dgController.refreshFooter();
+		if (moduleView instanceof DGFileModuleView) {
+			((DGFileModuleView) moduleView).refresh();
+		}
+	}
 
- }
+}

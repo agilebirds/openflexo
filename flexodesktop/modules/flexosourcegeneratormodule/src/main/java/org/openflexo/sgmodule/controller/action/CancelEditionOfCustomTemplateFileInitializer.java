@@ -31,55 +31,46 @@ import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class CancelEditionOfCustomTemplateFileInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CancelEditionOfCustomTemplateFileInitializer(SGControllerActionInitializer actionInitializer)
-	{
-		super(CancelEditionOfCustomTemplateFile.actionType,actionInitializer);
+	CancelEditionOfCustomTemplateFileInitializer(SGControllerActionInitializer actionInitializer) {
+		super(CancelEditionOfCustomTemplateFile.actionType, actionInitializer);
 	}
 
 	@Override
-	protected SGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (SGControllerActionInitializer)super.getControllerActionInitializer();
+	protected SGControllerActionInitializer getControllerActionInitializer() {
+		return (SGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<CancelEditionOfCustomTemplateFile> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<CancelEditionOfCustomTemplateFile> getDefaultInitializer() {
 		return new FlexoActionInitializer<CancelEditionOfCustomTemplateFile>() {
 			@Override
-			public boolean run(ActionEvent e, CancelEditionOfCustomTemplateFile action)
-			{
+			public boolean run(ActionEvent e, CancelEditionOfCustomTemplateFile action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<CancelEditionOfCustomTemplateFile> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<CancelEditionOfCustomTemplateFile> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CancelEditionOfCustomTemplateFile>() {
 			@Override
-			public boolean run(ActionEvent e, CancelEditionOfCustomTemplateFile action)
-			{
+			public boolean run(ActionEvent e, CancelEditionOfCustomTemplateFile action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return GeneratorIconLibrary.CANCEL_ICON;
 	}
 
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return GeneratorIconLibrary.CANCEL_DISABLED_ICON;
 	}
 

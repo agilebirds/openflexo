@@ -23,20 +23,18 @@ import org.openflexo.foundation.DataModification;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class SubsequenceRemoved extends DataModification
-{
+public class SubsequenceRemoved extends DataModification {
 
-    /**
-     * @param modificationType
-     * @param oldValue
-     * @param newValue
-     */
-    public SubsequenceRemoved(IESequence seq)
-    {
-        super(-1, seq, null);
-        // TODO Auto-generated constructor stub
-    }
+	/**
+	 * @param modificationType
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public SubsequenceRemoved(IESequence seq) {
+		super(-1, seq, null);
+		// TODO Auto-generated constructor stub
+	}
 
 }

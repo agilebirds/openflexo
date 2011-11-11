@@ -28,84 +28,71 @@ import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.toolbox.FlexoProperties;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class ProjectExternalRepository extends FlexoObject implements XMLSerializable
-{
+public class ProjectExternalRepository extends FlexoObject implements XMLSerializable {
 	private FlexoProject _project;
 	private String _identifier;
 	private File _directory;
 	private FlexoProperties directoriesForUser = new FlexoProperties();
-	
-	
+
 	private static final String getUserName() {
 		return System.getProperty("user.name");
 	}
-	
-    /**
-     * Constructor used for XML Serialization: never try to instanciate resource
-     * from this constructor
-     * 
-     * @param builder
-     */
-    public ProjectExternalRepository(FlexoProjectBuilder builder)
-    {
-        this(builder.project);
-   }
 
-    public ProjectExternalRepository(FlexoProject aProject,String identifier)
-    {
-        this(aProject);
-        setIdentifier(identifier);
-    }
+	/**
+	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
+	 * 
+	 * @param builder
+	 */
+	public ProjectExternalRepository(FlexoProjectBuilder builder) {
+		this(builder.project);
+	}
 
-    public ProjectExternalRepository(FlexoProject aProject,String identifier, File directory)
-    {
-        this(aProject,identifier);
-        setDirectory(directory);
-    }
+	public ProjectExternalRepository(FlexoProject aProject, String identifier) {
+		this(aProject);
+		setIdentifier(identifier);
+	}
 
-    public ProjectExternalRepository(FlexoProject aProject)
-    {
-    	super();
-    	_project = aProject;
-     }
+	public ProjectExternalRepository(FlexoProject aProject, String identifier, File directory) {
+		this(aProject, identifier);
+		setDirectory(directory);
+	}
 
-    public String getName()
-    {
-        return getIdentifier();
-    }
-    
- 	public String getIdentifier() 
-	{
+	public ProjectExternalRepository(FlexoProject aProject) {
+		super();
+		_project = aProject;
+	}
+
+	public String getName() {
+		return getIdentifier();
+	}
+
+	public String getIdentifier() {
 		return _identifier;
 	}
 
-	public void setIdentifier(String identifier) 
-	{
+	public void setIdentifier(String identifier) {
 		_identifier = identifier;
 	}
 
-	public File getDirectory() 
-	{
-		if (_directory==null) {
+	public File getDirectory() {
+		if (_directory == null) {
 			String s = (String) directoriesForUser.get(getUserName());
-			if (s!=null)
+			if (s != null)
 				_directory = new File(s);
 			_isConnected = ((_directory != null) && (_directory.exists()));
 		}
 		return _directory;
 	}
 
-	public void setDirectory(File directory) 
-	{
+	public void setDirectory(File directory) {
 		_directory = directory;
-		if (_directory!=null) {
+		if (_directory != null) {
 			directoriesForUser.put(getUserName(), _directory.getAbsolutePath());
 		} else
 			directoriesForUser.remove(getUserName());
@@ -114,73 +101,64 @@ public class ProjectExternalRepository extends FlexoObject implements XMLSeriali
 		getProject().notifyResourceChanged(null);
 	}
 
-	public FlexoProject getProject() 
-	{
+	public FlexoProject getProject() {
 		return _project;
 	}
- 
-    public String getSerializationIdentifier() 
-    {
-       return getProject().getUserIdentifier()+"_"+getIdentifier();
-    }
 
-    @Override
-	public String toString()
-    {
-    	return "ProjectExternalRepository:"+getName()+"["+(getDirectory()!=null?getDirectory().getAbsolutePath():"null")+"]";
-    }
-    
-    private boolean _isConnected = false;
-    private boolean _isNormallyConnected = false;
-    
-    public boolean isConnected()
-    {
-    	return _isConnected;
-    }
-    
-    public boolean shouldBeConnected()
-    {
-    	return _isNormallyConnected;
-    }
-    
-	public boolean _getIsConnected()
-	{
+	public String getSerializationIdentifier() {
+		return getProject().getUserIdentifier() + "_" + getIdentifier();
+	}
+
+	@Override
+	public String toString() {
+		return "ProjectExternalRepository:" + getName() + "[" + (getDirectory() != null ? getDirectory().getAbsolutePath() : "null") + "]";
+	}
+
+	private boolean _isConnected = false;
+	private boolean _isNormallyConnected = false;
+
+	public boolean isConnected() {
+		return _isConnected;
+	}
+
+	public boolean shouldBeConnected() {
+		return _isNormallyConnected;
+	}
+
+	public boolean _getIsConnected() {
 		return isConnected();
 	}
-	
-	public void _setIsConnected(boolean aBoolean)
-	{
+
+	public void _setIsConnected(boolean aBoolean) {
 		_isNormallyConnected = aBoolean;
 	}
-	
-    public Vector<FlexoFileResource> getRelatedResources()
-    {
-    	Vector<FlexoFileResource> returned = new Vector<FlexoFileResource>();
+
+	public Vector<FlexoFileResource> getRelatedResources() {
+		Vector<FlexoFileResource> returned = new Vector<FlexoFileResource>();
 		for (FlexoResource resource : getProject().getResources().values()) {
 			if (resource instanceof FlexoFileResource) {
-				FlexoProjectFile pFile = ((FlexoFileResource)resource).getResourceFile();
+				FlexoProjectFile pFile = ((FlexoFileResource) resource).getResourceFile();
 				if (pFile.getExternalRepository() == this) {
-					returned.add((FlexoFileResource)resource);
+					returned.add((FlexoFileResource) resource);
 				}
 			}
 		}
 		return returned;
-    }
+	}
 
-    public Vector<FlexoFileResource> getRelatedActiveResources()
-    {
-    	Vector<FlexoFileResource> returned = new Vector<FlexoFileResource>();
+	public Vector<FlexoFileResource> getRelatedActiveResources() {
+		Vector<FlexoFileResource> returned = new Vector<FlexoFileResource>();
 		for (FlexoResource resource : getProject().getResources().values()) {
 			if (resource instanceof FlexoFileResource) {
-				FlexoProjectFile pFile = ((FlexoFileResource)resource).getResourceFile();
+				FlexoProjectFile pFile = ((FlexoFileResource) resource).getResourceFile();
 				if (pFile.getExternalRepository() == this) {
 					if (resource.isActive())
-						returned.add((FlexoFileResource)resource);
+						returned.add((FlexoFileResource) resource);
 				}
 			}
 		}
 		return returned;
-    }
+	}
 
 	public Properties getDirectoriesForUser() {
 		return directoriesForUser;
@@ -189,11 +167,11 @@ public class ProjectExternalRepository extends FlexoObject implements XMLSeriali
 	public void setDirectoriesForUser(Properties directoriesForUser) {
 		this.directoriesForUser = new FlexoProperties(directoriesForUser);
 	}
-	
+
 	public void setDirectoriesForUserForKey(String directory, String user) {
-		directoriesForUser.put(user,directory);
+		directoriesForUser.put(user, directory);
 	}
-	
+
 	public void removeDirectoriesForUserWithKey(String key) {
 		this.directoriesForUser.remove(key);
 	}

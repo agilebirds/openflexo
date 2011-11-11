@@ -33,81 +33,67 @@ import org.openflexo.foundation.wkf.node.FlexoPreCondition;
 import org.openflexo.foundation.wkf.node.PetriGraphNode;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
-
 public class PreAndBeginNodeAssociationGR extends WKFConnectorGR<PreAndBeginNodeAssociationGR.PreAndBeginNodeAssociation> {
 
 	private static final Logger logger = Logger.getLogger(Connector.class.getPackage().getName());
 
-	public static class PreAndBeginNodeAssociation 
-	{
+	public static class PreAndBeginNodeAssociation {
 		private FlexoPreCondition precondition;
-		
-		public PreAndBeginNodeAssociation(FlexoPreCondition aPrecondition)
-		{
+
+		public PreAndBeginNodeAssociation(FlexoPreCondition aPrecondition) {
 			precondition = aPrecondition;
 		}
-		public FlexoPreCondition getPreCondition()
-		{
+
+		public FlexoPreCondition getPreCondition() {
 			return precondition;
 		}
-		public PetriGraphNode getBeginNode()
-		{
+
+		public PetriGraphNode getBeginNode() {
 			return precondition.getAttachedBeginNode();
 		}
 	}
 
 	private ForegroundStyle foreground;
 
-	public PreAndBeginNodeAssociationGR(PreAndBeginNodeAssociation association, ProcessRepresentation aDrawing) 
-	{
-		super(ConnectorType.LINE,
-				association.getPreCondition(),
-				association.getBeginNode(),
-				association,
-				aDrawing);
-		setForeground(ForegroundStyle.makeStyle(Color.RED,0.4f,DashStyle.BIG_DASHES));
+	public PreAndBeginNodeAssociationGR(PreAndBeginNodeAssociation association, ProcessRepresentation aDrawing) {
+		super(ConnectorType.LINE, association.getPreCondition(), association.getBeginNode(), association, aDrawing);
+		setForeground(ForegroundStyle.makeStyle(Color.RED, 0.4f, DashStyle.BIG_DASHES));
 		setEndSymbol(EndSymbolType.PLAIN_ARROW);
 		setEndSymbolSize(8);
-		
+
 		setIsFocusable(false);
 		setIsSelectable(false);
 
 	}
 
-	public PreAndBeginNodeAssociation getAssociation()
-	{
+	public PreAndBeginNodeAssociation getAssociation() {
 		return getDrawable();
 	}
 
-	public FlexoPreCondition getPreCondition()
-	{
+	public FlexoPreCondition getPreCondition() {
 		return getAssociation().getPreCondition();
 	}
-	public PetriGraphNode getBeginNode()
-	{
+
+	public PetriGraphNode getBeginNode() {
 		return getAssociation().getBeginNode();
 	}
 
 	@Override
-	public boolean getIsVisible()
-	{
+	public boolean getIsVisible() {
 		return true;
-		//return getBeginNode() != null && getBeginNode().getParentPetriGraph().getIsVisible();
+		// return getBeginNode() != null && getBeginNode().getParentPetriGraph().getIsVisible();
 	}
 
 	@Override
-	public String toString() 
-	{
-		return "PreAndBeginNodeAssociation of "+getPreCondition();
+	public String toString() {
+		return "PreAndBeginNodeAssociation of " + getPreCondition();
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 	}
-	
+
 	@Override
-	public void updatePropertiesFromWKFPreferences() 
-	{
+	public void updatePropertiesFromWKFPreferences() {
 	}
 }

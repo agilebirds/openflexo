@@ -128,7 +128,7 @@ public class FlexoServerInstanceManager {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			if (fileContent!=null) {
+			if (fileContent != null) {
 				try {
 					addressBook = (FlexoServerAddressBook) new XMLDeserializer(factory).deserializeDocument(fileContent);
 				} catch (IOException e) {

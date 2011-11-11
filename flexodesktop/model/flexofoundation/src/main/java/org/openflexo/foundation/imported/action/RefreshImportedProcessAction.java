@@ -45,25 +45,28 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.ws.client.PPMWebService.PPMProcess;
 
-public class RefreshImportedProcessAction extends RefreshImportedObjectAction<RefreshImportedProcessAction,FlexoModelObject,FlexoModelObject> {
+public class RefreshImportedProcessAction extends
+		RefreshImportedObjectAction<RefreshImportedProcessAction, FlexoModelObject, FlexoModelObject> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(RefreshImportedProcessAction.class.getPackage().getName());
 
-	public static final FlexoActionType<RefreshImportedProcessAction, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<RefreshImportedProcessAction, FlexoModelObject, FlexoModelObject>("refresh_imported_processes"){
+	public static final FlexoActionType<RefreshImportedProcessAction, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<RefreshImportedProcessAction, FlexoModelObject, FlexoModelObject>(
+			"refresh_imported_processes") {
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return object!=null;
+			return object != null;
 		}
 
 		@Override
 		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return object!=null && object.getProject().getWorkflow().getImportedProcessLibrary()!=null;
+			return object != null && object.getProject().getWorkflow().getImportedProcessLibrary() != null;
 		}
 
 		@Override
-		public RefreshImportedProcessAction makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
-			return new RefreshImportedProcessAction(focusedObject,globalSelection,editor);
+		public RefreshImportedProcessAction makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection,
+				FlexoEditor editor) {
+			return new RefreshImportedProcessAction(focusedObject, globalSelection, editor);
 		}
 
 	};
@@ -98,21 +101,21 @@ public class RefreshImportedProcessAction extends RefreshImportedObjectAction<Re
 			updatedProcesses = getWebService().refreshProcesses(getLogin(), getMd5Password(), uris);
 		} catch (RemoteException e) {
 			if (logger.isLoggable(Level.WARNING))
-				logger.log(Level.WARNING,"Remote exception: "+e.getMessage(),e);
-			throw new FlexoRemoteException(null,e);
+				logger.log(Level.WARNING, "Remote exception: " + e.getMessage(), e);
+			throw new FlexoRemoteException(null, e);
 		}
-		if (updatedProcesses!=null) {
-			libraryDelta = new FlexoImportedProcessLibraryDelta(lib,updatedProcesses);
+		if (updatedProcesses != null) {
+			libraryDelta = new FlexoImportedProcessLibraryDelta(lib, updatedProcesses);
 			visitor = new RefreshProcessDeltaVisitor(lib);
-			libraryDelta.visit(visitor,true);
-			
-			FlexoProcessImageBuilder.startBackgroundDownloadOfSnapshots(visitor.getProcessToKeep(), getWebService(), getLogin(), getMd5Password());
-			
-			
-			for(FlexoProcess process:visitor.getProcessToDelete()) {
+			libraryDelta.visit(visitor, true);
+
+			FlexoProcessImageBuilder.startBackgroundDownloadOfSnapshots(visitor.getProcessToKeep(), getWebService(), getLogin(),
+					getMd5Password());
+
+			for (FlexoProcess process : visitor.getProcessToDelete()) {
 				if (visitor.getProcessToKeep().contains(process)) {
 					if (logger.isLoggable(Level.WARNING))
-						logger.warning("Visitor reported process "+process.getName()+" to be kept and deleted! Keeping it.");
+						logger.warning("Visitor reported process " + process.getName() + " to be kept and deleted! Keeping it.");
 					continue;
 				}
 				if (process.isTopLevelProcess()) {
@@ -133,7 +136,7 @@ public class RefreshImportedProcessAction extends RefreshImportedObjectAction<Re
 	}
 
 	public String getReport() {
-		if (visitor!=null)
+		if (visitor != null)
 			return visitor.getReport();
 		return FlexoLocalization.localizedForKey("refresh_has_not_been_performed");
 	}
@@ -163,9 +166,10 @@ public class RefreshImportedProcessAction extends RefreshImportedObjectAction<Re
 			case DELETED:
 				if (delta.getFiProcess().isTopLevelProcess()) {
 					if (!delta.getFiProcess().isDeletedOnServer()) {
-						if (report.length()>0)
+						if (report.length() > 0)
 							report.append("\n");
-						report.append(FlexoLocalization.localizedForKey("the_process")).append(" ").append(delta.getFiProcess().getName()).append(" ").append(FlexoLocalization.localizedForKey("has_been_removed_from_server"));
+						report.append(FlexoLocalization.localizedForKey("the_process")).append(" ").append(delta.getFiProcess().getName())
+								.append(" ").append(FlexoLocalization.localizedForKey("has_been_removed_from_server"));
 					}
 				}
 				addToProcessToDelete(delta.getFiProcess());
@@ -173,10 +177,12 @@ public class RefreshImportedProcessAction extends RefreshImportedObjectAction<Re
 			case UPDATED:
 				FlexoProcess fip = lib.getRecursivelyImportedProcessWithURI(process.getUri());
 				if (fip.isTopLevelProcess()) {
-					if (report.length()>0)
+					if (report.length() > 0)
 						report.append("\n");
-					report.append(FlexoLocalization.localizedForKey("the_process")).append(" ").append(fip.getName()).append(" ").append(FlexoLocalization.localizedForKey("has_been_updated"));
-					FlexoProcessImageBuilder.startBackgroundDownloadOfSnapshots(delta.getFiProcess(), getWebService(), getLogin(), getMd5Password());
+					report.append(FlexoLocalization.localizedForKey("the_process")).append(" ").append(fip.getName()).append(" ")
+							.append(FlexoLocalization.localizedForKey("has_been_updated"));
+					FlexoProcessImageBuilder.startBackgroundDownloadOfSnapshots(delta.getFiProcess(), getWebService(), getLogin(),
+							getMd5Password());
 				}
 				try {
 					fip.updateFromObject(process);
@@ -185,15 +191,16 @@ public class RefreshImportedProcessAction extends RefreshImportedObjectAction<Re
 				}// This does not take children into account (automatically handled with NEW/DELETED)
 				break;
 			case NEW:
-				if (delta.getParent()==null) {
+				if (delta.getParent() == null) {
 					// We have received a new root process-->we import it
 					// Import process action will automatically verify that the process is not already somewhere in the workflow
-					ImportProcessesAction importProcesses = ImportProcessesAction.actionType.makeNewEmbeddedAction(lib, null, RefreshImportedProcessAction.this);
+					ImportProcessesAction importProcesses = ImportProcessesAction.actionType.makeNewEmbeddedAction(lib, null,
+							RefreshImportedProcessAction.this);
 					Vector<PPMProcess> v = new Vector<PPMProcess>();
 					v.add(delta.getPPMProcess());
 					importProcesses.setProcessesToImport(v);
 					importProcesses.doAction();
-					if (importProcesses.getImportReport().getProperlyImported().size()==1)
+					if (importProcesses.getImportReport().getProperlyImported().size() == 1)
 						addToProcessToKeep(importProcesses.getImportReport().getProperlyImported().get(delta.getPPMProcess()));
 				} else {
 					// We create the new sub-process
@@ -201,11 +208,12 @@ public class RefreshImportedProcessAction extends RefreshImportedObjectAction<Re
 						addToProcessToKeep(FlexoProcess.createImportedProcessFromProcess(lib, delta.getPPMProcess()));
 					} catch (InvalidFileNameException e) {
 						if (logger.isLoggable(Level.SEVERE))
-							logger.severe("Invalid file name thrown for process "+delta.getPPMProcess().getName()+": "+e.getMessage());
+							logger.severe("Invalid file name thrown for process " + delta.getPPMProcess().getName() + ": " + e.getMessage());
 						e.printStackTrace();
 					} catch (DuplicateResourceException e) {
 						if (logger.isLoggable(Level.SEVERE))
-							logger.severe("DuplicateResourceException file name thrown for process "+delta.getPPMProcess().getName()+": "+e.getMessage());
+							logger.severe("DuplicateResourceException file name thrown for process " + delta.getPPMProcess().getName()
+									+ ": " + e.getMessage());
 						e.printStackTrace();
 					}
 				}
@@ -242,7 +250,7 @@ public class RefreshImportedProcessAction extends RefreshImportedObjectAction<Re
 		}
 
 		public String getReport() {
-			if (report.length()==0) {
+			if (report.length() == 0) {
 				return FlexoLocalization.localizedForKey("there_are_no_changes");
 			}
 			return report.toString();

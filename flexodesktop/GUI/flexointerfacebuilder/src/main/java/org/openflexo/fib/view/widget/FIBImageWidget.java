@@ -32,71 +32,63 @@ import org.openflexo.fib.model.FIBImage;
 import org.openflexo.fib.view.FIBWidgetView;
 import org.openflexo.swing.ImageUtils;
 
+public class FIBImageWidget extends FIBWidgetView<FIBImage, JLabel, Image> implements ImageObserver {
 
-public class FIBImageWidget extends FIBWidgetView<FIBImage,JLabel,Image> implements ImageObserver
-{
+	private static final Logger logger = Logger.getLogger(FIBImageWidget.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(FIBImageWidget.class.getPackage().getName());
+	private JLabel labelWidget;
 
-    private JLabel labelWidget;
+	public FIBImageWidget(FIBImage model, FIBController controller) {
+		super(model, controller);
+		if (model.getData().isValid())
+			labelWidget = new JLabel(" ");
+		else
+			labelWidget = new JLabel();
+		updateFont();
+		updateAlign();
+		updateImage();
+		// updatePreferredSize();
 
-     public FIBImageWidget(FIBImage model, FIBController controller)
-    {
-        super(model,controller);
-        if (model.getData().isValid()) labelWidget = new JLabel(" ");
-        else labelWidget = new JLabel();
-        updateFont();
-        updateAlign();
-        updateImage();
-        //updatePreferredSize();
-        
-    }
-
-     @Override
-	public synchronized boolean updateWidgetFromModel()
-    {
-        if (modelUpdating)
-            return false;
-        widgetUpdating = true;
-        updateImage();
-        widgetUpdating = false;
-    	return false;
-     }
-
-    /**
-     * Update the model given the actual state of the widget
-     */
-    @Override
-	public synchronized boolean updateModelFromWidget()
-    {
-    	// Read only component
-    	return false;
-    }
+	}
 
 	@Override
-	public JLabel getJComponent() 
-	{
+	public synchronized boolean updateWidgetFromModel() {
+		if (modelUpdating)
+			return false;
+		widgetUpdating = true;
+		updateImage();
+		widgetUpdating = false;
+		return false;
+	}
+
+	/**
+	 * Update the model given the actual state of the widget
+	 */
+	@Override
+	public synchronized boolean updateModelFromWidget() {
+		// Read only component
+		return false;
+	}
+
+	@Override
+	public JLabel getJComponent() {
 		return labelWidget;
 	}
 
 	@Override
-	public JLabel getDynamicJComponent()
-	{
+	public JLabel getDynamicJComponent() {
 		return labelWidget;
 	}
 
-	protected void updateAlign()
-	{
+	protected void updateAlign() {
 		labelWidget.setHorizontalAlignment(getWidget().getAlign().getAlign());
 	}
-	
-	protected void updateImage()
-	{
+
+	protected void updateImage() {
 		if (getWidget().getData().isValid()) {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
-				public void run()
-				{
+				public void run() {
 					if (!isDeleted()) {
 						Image image = getValue();
 						updateImageDefaultSize(image);
@@ -104,8 +96,7 @@ public class FIBImageWidget extends FIBWidgetView<FIBImage,JLabel,Image> impleme
 					}
 				}
 			});
-		}
-		else if (getWidget().getImageFile() != null) {
+		} else if (getWidget().getImageFile() != null) {
 			if (getWidget().getImageFile().exists()) {
 				Image image = ImageUtils.loadImageFromFile(getWidget().getImageFile());
 				updateImageDefaultSize(image);
@@ -113,17 +104,17 @@ public class FIBImageWidget extends FIBWidgetView<FIBImage,JLabel,Image> impleme
 			}
 		}
 	}
-	
-	private ImageIcon makeImageIcon(Image image)
-	{
-		if (image == null) return null;
-		if (getWidget() == null) return null;
+
+	private ImageIcon makeImageIcon(Image image) {
+		if (image == null)
+			return null;
+		if (getWidget() == null)
+			return null;
 		switch (getWidget().getSizeAdjustment()) {
 		case OriginalSize:
 			return new ImageIcon(image);
 		case FitToAvailableSize:
-			return new ImageIcon(image.getScaledInstance(getJComponent().getWidth(),
-					getJComponent().getHeight(), Image.SCALE_SMOOTH));
+			return new ImageIcon(image.getScaledInstance(getJComponent().getWidth(), getJComponent().getHeight(), Image.SCALE_SMOOTH));
 		case FitToAvailableSizeRespectRatio:
 			int imageWidth = image.getWidth(this);
 			int imageHeight = image.getHeight(this);
@@ -137,49 +128,43 @@ public class FIBImageWidget extends FIBWidgetView<FIBImage,JLabel,Image> impleme
 			if (getJComponent().getWidth() == 0 || getJComponent().getHeight() == 0) {
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
-					public void run()
-					{
+					public void run() {
 						updateImage();
 					}
 				});
 				return new ImageIcon(image);
 			}
-			double widthRatio = ((double)getJComponent().getWidth())/(imageWidth);
-			double heightRatio = ((double)getJComponent().getHeight())/(imageHeight);
-			double ratio = (widthRatio<heightRatio ? widthRatio : heightRatio);
-			int newWidth = (int)(imageWidth*ratio);
-			int newHeight = (int)(imageHeight*ratio);
-			return new ImageIcon(image.getScaledInstance(newWidth,newHeight, Image.SCALE_SMOOTH));
+			double widthRatio = ((double) getJComponent().getWidth()) / (imageWidth);
+			double heightRatio = ((double) getJComponent().getHeight()) / (imageHeight);
+			double ratio = (widthRatio < heightRatio ? widthRatio : heightRatio);
+			int newWidth = (int) (imageWidth * ratio);
+			int newHeight = (int) (imageHeight * ratio);
+			return new ImageIcon(image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH));
 		case AdjustDimensions:
-			return new ImageIcon(image.getScaledInstance(getWidget().getImageWidth(),
-					getWidget().getImageHeight(), Image.SCALE_SMOOTH));
+			return new ImageIcon(image.getScaledInstance(getWidget().getImageWidth(), getWidget().getImageHeight(), Image.SCALE_SMOOTH));
 		case AdjustWidth:
-			return new ImageIcon(image.getScaledInstance(getWidget().getImageWidth(),
-					-1, Image.SCALE_SMOOTH));
+			return new ImageIcon(image.getScaledInstance(getWidget().getImageWidth(), -1, Image.SCALE_SMOOTH));
 		case AdjustHeight:
-			return new ImageIcon(image.getScaledInstance(-1,
-					getWidget().getImageHeight(), Image.SCALE_SMOOTH));
+			return new ImageIcon(image.getScaledInstance(-1, getWidget().getImageHeight(), Image.SCALE_SMOOTH));
 		default:
 			return null;
 		}
 	}
-	
+
 	private boolean computeImageLater = false;
-	
-	private void updateImageDefaultSize(Image image)
-	{
-		if (getWidget() == null || image == null) return;
-		if (getWidget().getImageWidth() == null) 
+
+	private void updateImageDefaultSize(Image image) {
+		if (getWidget() == null || image == null)
+			return;
+		if (getWidget().getImageWidth() == null)
 			getWidget().setImageWidth(image.getWidth(this));
-		if (getWidget().getImageHeight() == null) 
+		if (getWidget().getImageHeight() == null)
 			getWidget().setImageHeight(image.getHeight(this));
 
 	}
-	
+
 	@Override
-	public synchronized boolean imageUpdate(Image img, int infoflags, int x, int y,
-			int width, int height)
-	{
+	public synchronized boolean imageUpdate(Image img, int infoflags, int x, int y, int width, int height) {
 		updateImageDefaultSize(img);
 		if (computeImageLater) {
 			logger.fine("Image can now be displayed");

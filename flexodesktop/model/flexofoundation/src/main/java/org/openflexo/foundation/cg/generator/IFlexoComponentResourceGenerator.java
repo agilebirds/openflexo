@@ -21,12 +21,11 @@ package org.openflexo.foundation.cg.generator;
 
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 
-
 public interface IFlexoComponentResourceGenerator extends IFlexoResourceGenerator {
 
-    @Override
+	@Override
 	public GeneratedComponent getGeneratedCode();
 
-    public ComponentDefinition getComponentDefinition();
-    
+	public ComponentDefinition getComponentDefinition();
+
 }

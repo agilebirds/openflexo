@@ -25,8 +25,7 @@ package org.openflexo.foundation.dm.eo;
  * @author sguerin
  * 
  */
-public interface DMEOObject
-{
+public interface DMEOObject {
 
-    public DMEOModel getDMEOModel();
+	public DMEOModel getDMEOModel();
 }

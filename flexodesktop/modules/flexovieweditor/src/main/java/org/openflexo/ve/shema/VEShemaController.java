@@ -27,7 +27,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.view.View;
@@ -36,30 +35,28 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManagingDrawingController;
 import org.openflexo.ve.controller.OEController;
 
-
 public class VEShemaController extends SelectionManagingDrawingController<VEShemaRepresentation> {
 
 	private OEController _controller;
 	private CommonPalette _commonPalette;
 	private EditorToolbox _toolbox;
 	private VEShemaModuleView _moduleView;
-	private Hashtable<ViewPointPalette,ContextualPalette> _contextualPalettes;
-	
-	public VEShemaController(OEController controller, View shema)
-	{
-		super(new VEShemaRepresentation(shema),controller.getSelectionManager());
-		
+	private Hashtable<ViewPointPalette, ContextualPalette> _contextualPalettes;
+
+	public VEShemaController(OEController controller, View shema) {
+		super(new VEShemaRepresentation(shema), controller.getSelectionManager());
+
 		_controller = controller;
-		
+
 		_commonPalette = new CommonPalette();
 		registerPalette(_commonPalette);
 		activatePalette(_commonPalette);
-		
-		_contextualPalettes = new Hashtable<ViewPointPalette,ContextualPalette>();
+
+		_contextualPalettes = new Hashtable<ViewPointPalette, ContextualPalette>();
 		if (shema.getCalc() != null) {
 			for (ViewPointPalette palette : shema.getCalc().getPalettes()) {
 				ContextualPalette contextualPalette = new ContextualPalette(palette);
-				_contextualPalettes.put(palette,contextualPalette);
+				_contextualPalettes.put(palette, contextualPalette);
 				registerPalette(contextualPalette);
 				activatePalette(contextualPalette);
 			}
@@ -70,65 +67,59 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 
 	@Override
 	public void delete() {
-		if (_controller!=null) {
-			if (getDrawingView()!=null)
+		if (_controller != null) {
+			if (getDrawingView() != null)
 				_controller.removeModuleView(getModuleView());
 			_controller.SHEMA_PERSPECTIVE.removeFromControllers(this);
 		}
 		super.delete();
 	}
-	
+
 	@Override
-	public DrawingView<VEShemaRepresentation> makeDrawingView(VEShemaRepresentation drawing) 
-	{
-		return new VEShemaView(drawing,this);
+	public DrawingView<VEShemaRepresentation> makeDrawingView(VEShemaRepresentation drawing) {
+		return new VEShemaView(drawing, this);
 	}
 
-	public OEController getOEController() 
-	{
+	public OEController getOEController() {
 		return _controller;
 	}
-	
+
 	@Override
-	public VEShemaView getDrawingView() 
-	{
-		return (VEShemaView)super.getDrawingView();
+	public VEShemaView getDrawingView() {
+		return (VEShemaView) super.getDrawingView();
 	}
-	
-	public VEShemaModuleView getModuleView()
-	{
+
+	public VEShemaModuleView getModuleView() {
 		if (_moduleView == null) {
 			_moduleView = new VEShemaModuleView(this);
 		}
 		return _moduleView;
 	}
-	
-	public CommonPalette getCommonPalette()
-	{
+
+	public CommonPalette getCommonPalette() {
 		return _commonPalette;
 	}
-	
+
 	private JTabbedPane paletteView;
-	
+
 	private Vector<ViewPointPalette> orderedPalettes;
-	
-	public JTabbedPane getPaletteView()
-	{
+
+	public JTabbedPane getPaletteView() {
 		if (paletteView == null) {
 			paletteView = new JTabbedPane();
 			orderedPalettes = new Vector<ViewPointPalette>(_contextualPalettes.keySet());
 			Collections.sort(orderedPalettes);
 			for (ViewPointPalette palette : orderedPalettes) {
-				paletteView.add(palette.getName(),(_contextualPalettes.get(palette)).getPaletteView());
+				paletteView.add(palette.getName(), (_contextualPalettes.get(palette)).getPaletteView());
 			}
-			paletteView.add(FlexoLocalization.localizedForKey("Common",getCommonPalette().getPaletteView()),getCommonPalette().getPaletteView());
+			paletteView.add(FlexoLocalization.localizedForKey("Common", getCommonPalette().getPaletteView()), getCommonPalette()
+					.getPaletteView());
 			paletteView.addChangeListener(new ChangeListener() {
 				@Override
 				public void stateChanged(ChangeEvent e) {
 					if (paletteView.getSelectedIndex() < orderedPalettes.size()) {
 						activatePalette(_contextualPalettes.get(orderedPalettes.elementAt(paletteView.getSelectedIndex())));
-					}
-					else if (paletteView.getSelectedIndex() == orderedPalettes.size()) {
+					} else if (paletteView.getSelectedIndex() == orderedPalettes.size()) {
 						activatePalette(getCommonPalette());
 					}
 				}
@@ -136,29 +127,23 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 			paletteView.setSelectedIndex(0);
 			if (orderedPalettes.size() > 0) {
 				activatePalette(_contextualPalettes.get(orderedPalettes.firstElement()));
-			}
-			else {
+			} else {
 				activatePalette(getCommonPalette());
 			}
 		}
 		return paletteView;
 	}
 
-	public EditorToolbox getToolbox()
-	{
+	public EditorToolbox getToolbox() {
 		return _toolbox;
 	}
-	
-	public View getShema()
-	{
+
+	public View getShema() {
 		return getDrawing().getShema();
 	}
-	
-	public FlexoEditor getEditor()
-	{
+
+	public FlexoEditor getEditor() {
 		return _controller.getEditor();
 	}
-
-
 
 }

@@ -28,60 +28,50 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 
+public class DMCut extends FlexoUndoableAction {
 
-public class DMCut extends FlexoUndoableAction 
-{
+	private static final Logger logger = Logger.getLogger(DMCut.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(DMCut.class.getPackage().getName());
+	public static FlexoActionType actionType = new FlexoActionType("cut", FlexoActionType.editGroup) {
 
-    public static FlexoActionType actionType = new FlexoActionType ("cut",FlexoActionType.editGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new DMCut(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) 
-        {
-            return new DMCut(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return false;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return false;
-        }
-                
-    };
-    
-    DMCut (FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	};
 
-    @Override
-	protected void doAction(Object context) 
-    {
-        // Not yet implemented 
-        logger.info ("CUT on DM");
-    }
-    
-    @Override
-	protected void undoAction(Object context) 
-    {
-        logger.warning ("UNDO CUT on DM not implemented yet !");
-    }
+	DMCut(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    @Override
-	protected void redoAction(Object context)
-    {
-        logger.warning ("REDO CUT on DM not implemented yet !");
-    }
-    
+	@Override
+	protected void doAction(Object context) {
+		// Not yet implemented
+		logger.info("CUT on DM");
+	}
+
+	@Override
+	protected void undoAction(Object context) {
+		logger.warning("UNDO CUT on DM not implemented yet !");
+	}
+
+	@Override
+	protected void redoAction(Object context) {
+		logger.warning("REDO CUT on DM not implemented yet !");
+	}
 
 }

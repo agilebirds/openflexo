@@ -34,7 +34,6 @@ import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.graphics.FGEGraphics;
 
-
 public abstract class ControlArea<A extends FGEArea> implements FGEConstants {
 
 	private static final Logger logger = Logger.getLogger(ControlArea.class.getPackage().getName());
@@ -43,8 +42,7 @@ public abstract class ControlArea<A extends FGEArea> implements FGEConstants {
 
 	private A _area;
 
-	public ControlArea(GraphicalRepresentation<?> aGraphicalRepresentation, A area)
-	{
+	public ControlArea(GraphicalRepresentation<?> aGraphicalRepresentation, A area) {
 		graphicalRepresentation = aGraphicalRepresentation;
 		_area = area;
 		if (graphicalRepresentation == null) {
@@ -53,99 +51,87 @@ public abstract class ControlArea<A extends FGEArea> implements FGEConstants {
 
 	}
 
-	public GraphicalRepresentation<?> getGraphicalRepresentation()
-	{
+	public GraphicalRepresentation<?> getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
-	public A getArea()
-	{
+	public A getArea() {
 		return _area;
 	}
 
-	public void setArea(A point)
-	{
+	public void setArea(A point) {
 		_area = point;
 	}
 
 	// Please override when required
-	public boolean isClickable()
-	{
+	public boolean isClickable() {
 		return false;
 	}
 
 	public abstract boolean isDraggable();
 
 	// Please override when required
-	public Cursor getDraggingCursor()
-	{
+	public Cursor getDraggingCursor() {
 		return Cursor.getDefaultCursor();
 	}
 
 	private FGEArea _draggingAuthorizedArea = new FGEEmptyArea();
 
-	public FGEArea getDraggingAuthorizedArea()
-	{
+	public FGEArea getDraggingAuthorizedArea() {
 		return _draggingAuthorizedArea;
 	}
 
-	public final void setDraggingAuthorizedArea(FGEArea area)
-	{
+	public final void setDraggingAuthorizedArea(FGEArea area) {
 		_draggingAuthorizedArea = area;
 	}
 
-	protected FGEPoint getNearestPointOnAuthorizedArea(FGEPoint point)
-	{
+	protected FGEPoint getNearestPointOnAuthorizedArea(FGEPoint point) {
 		return getDraggingAuthorizedArea().getNearestPoint(point);
 	}
 
 	// Override when required
-	public void startDragging(DrawingController<?> controller, FGEPoint startPoint)
-	{
+	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
 	}
 
 	// Override when required
 	/**
-	 * Drag control area to supplied location
-	 * Return a flag indicating if dragging should continue
-	 * Override this method when required
-	 * @param event TODO
+	 * Drag control area to supplied location Return a flag indicating if dragging should continue Override this method when required
+	 * 
+	 * @param event
+	 *            TODO
 	 */
-	public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-	{
+	public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+			FGEPoint initialPoint, MouseEvent event) {
 		return true;
 	}
 
 	// Override when required
-	public void stopDragging(DrawingController<?> controller)
-	{
+	public void stopDragging(DrawingController<?> controller) {
 	}
 
 	// Override when required
 	/**
-	 * Clicked on control area to supplied location
-	 * Return a flag indicating if click has been handled
+	 * Clicked on control area to supplied location Return a flag indicating if click has been handled
 	 */
-	public boolean clickOnPoint(FGEPoint clickedPoint, int clickCount)
-	{
+	public boolean clickOnPoint(FGEPoint clickedPoint, int clickCount) {
 		return true;
 	}
 
 	public abstract Rectangle paint(FGEGraphics graphics);
 
 	/**
-	 * Return distance between a point (normalized) and represented area,
-	 * asserting that we are working on a view (not normalized), and at a given scale
-	 *
-	 * @param aPoint normalized point relative to current GraphicalRepresentation
+	 * Return distance between a point (normalized) and represented area, asserting that we are working on a view (not normalized), and at a
+	 * given scale
+	 * 
+	 * @param aPoint
+	 *            normalized point relative to current GraphicalRepresentation
 	 * @param scale
 	 * @return
 	 */
-	public double getDistanceToArea(FGEPoint aPoint, double scale)
-	{
+	public double getDistanceToArea(FGEPoint aPoint, double scale) {
 		FGEPoint nearestPoint = getArea().getNearestPoint(aPoint);
 		if (nearestPoint == null) {
-			logger.warning("Could not find nearest point for "+aPoint+" on "+getArea());
+			logger.warning("Could not find nearest point for " + aPoint + " on " + getArea());
 			return Double.POSITIVE_INFINITY;
 		}
 		if (getGraphicalRepresentation() == null) {
@@ -154,28 +140,27 @@ public abstract class ControlArea<A extends FGEArea> implements FGEConstants {
 		}
 		Point pt1 = getGraphicalRepresentation().convertNormalizedPointToViewCoordinates(nearestPoint, scale);
 		Point pt2 = getGraphicalRepresentation().convertNormalizedPointToViewCoordinates(aPoint, scale);
-		return Point2D.distance(pt1.x,pt1.y,pt2.x,pt2.y);
+		return Point2D.distance(pt1.x, pt1.y, pt2.x, pt2.y);
 	}
 
 	/**
-	 * Return distance between a point (normalized) and represented area,
-	 * asserting that we are working on a view (not normalized), and at a given scale
-	 *
-	 * @param aPoint view point relative to current GraphicalRepresentation, at correct scale
+	 * Return distance between a point (normalized) and represented area, asserting that we are working on a view (not normalized), and at a
+	 * given scale
+	 * 
+	 * @param aPoint
+	 *            view point relative to current GraphicalRepresentation, at correct scale
 	 * @param scale
 	 * @return
 	 */
-	public double getDistanceToArea(Point aPoint, double scale)
-	{
+	public double getDistanceToArea(Point aPoint, double scale) {
 		FGEPoint normalizedPoint = graphicalRepresentation.convertViewCoordinatesToNormalizedPoint(aPoint, scale);
 		FGEPoint nearestPoint = getArea().getNearestPoint(normalizedPoint);
 		Point pt1 = graphicalRepresentation.convertNormalizedPointToViewCoordinates(nearestPoint, scale);
-		return Point2D.distance(pt1.x,pt1.y,aPoint.x,aPoint.y);
+		return Point2D.distance(pt1.x, pt1.y, aPoint.x, aPoint.y);
 	}
 
 	@Override
-	public String toString()
-	{
-		return "["+getClass().getSimpleName()+","+Integer.toHexString(hashCode())+"]";
+	public String toString() {
+		return "[" + getClass().getSimpleName() + "," + Integer.toHexString(hashCode()) + "]";
 	}
 }

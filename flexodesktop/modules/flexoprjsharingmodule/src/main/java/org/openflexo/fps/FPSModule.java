@@ -37,33 +37,29 @@ import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
-
 /**
  * FPS module
- *
+ * 
  * @author Sylvain
  */
-public class FPSModule extends FlexoModule implements ExternalFPSModule
-{
+public class FPSModule extends FlexoModule implements ExternalFPSModule {
 
 	private static final Logger logger = Logger.getLogger(CVSRepository.class.getPackage().getName());
-	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[]{Inspectors.FPS};
+	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.FPS };
+
 	/**
-	 * The 'main' method of module allow to launch this module as a
-	 * single-module application
-	 *
+	 * The 'main' method of module allow to launch this module as a single-module application
+	 * 
 	 * @param args
 	 */
-	public static void main(String[] args) throws Exception
-	{
+	public static void main(String[] args) throws Exception {
 		ToolBox.setPlatform();
 		FlexoLoggingManager.initialize();
 		FlexoApplication.initialize();
 		ModuleLoader.initializeSingleModule(Module.FPS_MODULE);
 	}
 
-	public FPSModule() throws Exception
-	{
+	public FPSModule() throws Exception {
 		super(InteractiveFlexoEditor.makeInteractiveEditorWithoutProject());
 		setFlexoController(new FPSController(this));
 		getFPSController().loadRelativeWindows();
@@ -73,35 +69,29 @@ public class FPSModule extends FlexoModule implements ExternalFPSModule
 		// Put here a code to display default view
 		getFPSController().setCurrentEditedObjectAsModuleView(getFPSController().getRepositories());
 
-
 		// Retain here all necessary resources
-		//retain(<the_required_resource_data>);
+		// retain(<the_required_resource_data>);
 	}
 
 	@Override
-	public InspectorGroup[] getInspectorGroups()
-	{
+	public InspectorGroup[] getInspectorGroups() {
 		return inspectorGroups;
 	}
 
-	public FPSController getFPSController()
-	{
+	public FPSController getFPSController() {
 		return (FPSController) getFlexoController();
 	}
 
 	@Override
-	public FlexoModelObject getDefaultObjectToSelect()
-	{
+	public FlexoModelObject getDefaultObjectToSelect() {
 		return getFPSController().getSharedProject();
 	}
 
 	@Override
-	public void moduleWillClose()
-	{
+	public void moduleWillClose() {
 		for (CVSRepository repository : getFPSController().getRepositories().getCVSRepositories()) {
-			if (repository.getRepositoryExploringDirectory() != null
-					&& repository.getRepositoryExploringDirectory().exists()) {
-				logger.info("Deleting "+repository.getRepositoryExploringDirectory());
+			if (repository.getRepositoryExploringDirectory() != null && repository.getRepositoryExploringDirectory().exists()) {
+				logger.info("Deleting " + repository.getRepositoryExploringDirectory());
 				FileUtils.recursiveDeleteFile(repository.getRepositoryExploringDirectory());
 			}
 		}

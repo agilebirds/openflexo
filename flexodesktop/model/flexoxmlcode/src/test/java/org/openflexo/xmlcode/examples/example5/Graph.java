@@ -24,32 +24,27 @@ import java.util.Vector;
 
 import org.openflexo.xmlcode.XMLSerializable;
 
-
 /**
- * Class <code>Graph</code> is intented to represent a graph object in XML
- * coding/decoding example.
+ * Class <code>Graph</code> is intented to represent a graph object in XML coding/decoding example.
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  */
-public class Graph implements XMLSerializable
-{
+public class Graph implements XMLSerializable {
 
-    public Vector nodes;
+	public Vector nodes;
 
-    public Graph()
-    {
-        super();
-        nodes = new Vector();
-    }
+	public Graph() {
+		super();
+		nodes = new Vector();
+	}
 
-    @Override
-	public String toString()
-    {
-        String returned = "Graph ==============================================================================\n";
-        for (Enumeration e = nodes.elements(); e.hasMoreElements();) {
-            returned += e.nextElement().toString();
-        }
-        returned += "======================================================================================";
-        return returned;
-    }
+	@Override
+	public String toString() {
+		String returned = "Graph ==============================================================================\n";
+		for (Enumeration e = nodes.elements(); e.hasMoreElements();) {
+			returned += e.nextElement().toString();
+		}
+		returned += "======================================================================================";
+		return returned;
+	}
 }

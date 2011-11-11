@@ -21,10 +21,8 @@ package org.openflexo.fps.dm;
 
 import org.openflexo.fps.CVSModule;
 
-public class CVSModuleForgotten extends FPSDataModification
-{
-    public CVSModuleForgotten(CVSModule module)
-    {
-        super(null,module);
-    }
+public class CVSModuleForgotten extends FPSDataModification {
+	public CVSModuleForgotten(CVSModule module) {
+		super(null, module);
+	}
 }

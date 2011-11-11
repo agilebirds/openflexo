@@ -31,29 +31,24 @@ import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class DismissUnchangedGeneratedFilesInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DismissUnchangedGeneratedFilesInitializer(GeneratorControllerActionInitializer actionInitializer)
-	{
-		super(DismissUnchangedGeneratedFiles.actionType,actionInitializer);
+	DismissUnchangedGeneratedFilesInitializer(GeneratorControllerActionInitializer actionInitializer) {
+		super(DismissUnchangedGeneratedFiles.actionType, actionInitializer);
 	}
 
 	@Override
-	protected GeneratorControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (GeneratorControllerActionInitializer)super.getControllerActionInitializer();
+	protected GeneratorControllerActionInitializer getControllerActionInitializer() {
+		return (GeneratorControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<DismissUnchangedGeneratedFiles> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<DismissUnchangedGeneratedFiles> getDefaultInitializer() {
 		return new FlexoActionInitializer<DismissUnchangedGeneratedFiles>() {
 			@Override
-			public boolean run(ActionEvent e, DismissUnchangedGeneratedFiles action)
-			{
+			public boolean run(ActionEvent e, DismissUnchangedGeneratedFiles action) {
 				action.getProjectGenerator().startHandleLogs();
 				return true;
 			}
@@ -61,12 +56,10 @@ public class DismissUnchangedGeneratedFilesInitializer extends ActionInitializer
 	}
 
 	@Override
-	protected FlexoActionFinalizer<DismissUnchangedGeneratedFiles> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<DismissUnchangedGeneratedFiles> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DismissUnchangedGeneratedFiles>() {
 			@Override
-			public boolean run(ActionEvent e, DismissUnchangedGeneratedFiles action)
-			{
+			public boolean run(ActionEvent e, DismissUnchangedGeneratedFiles action) {
 				action.getProjectGenerator().stopHandleLogs();
 				action.getProjectGenerator().flushLogs();
 				return true;
@@ -75,14 +68,12 @@ public class DismissUnchangedGeneratedFilesInitializer extends ActionInitializer
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return GeneratorIconLibrary.DISMISS_UNCHANGED_ICON;
 	}
 
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return GeneratorIconLibrary.DISMISS_UNCHANGED_DISABLED_ICON;
 	}
 

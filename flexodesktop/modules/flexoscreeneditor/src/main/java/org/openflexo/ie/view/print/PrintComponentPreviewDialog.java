@@ -24,13 +24,12 @@ import java.util.logging.Logger;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.print.PrintPreviewDialog;
 
-
 public class PrintComponentPreviewDialog extends PrintPreviewDialog {
 
 	protected static final Logger logger = Logger.getLogger(PrintComponentPreviewDialog.class.getPackage().getName());
 
 	private boolean isDisposed = false;
-	
+
 	public PrintComponentPreviewDialog(IEController controller, PrintableIEWOComponentView printableProcessView) {
 		super(controller, printableProcessView);
 	}

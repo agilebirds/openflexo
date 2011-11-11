@@ -25,16 +25,13 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.cl.PopupComponentDefinition;
 
-
 /**
- * Utility class containing static methods used to restructure old Flexo
- * Projects
- *
+ * Utility class containing static methods used to restructure old Flexo Projects
+ * 
  * @author sguerin
- *
+ * 
  */
 public class ProjectRestructuration {
-
 
 	public static final String OELIB_EXTENSION = ".oelib";
 
@@ -71,9 +68,8 @@ public class ProjectRestructuration {
 	public static final String SHEMA_EXTENSION = ".shema";
 
 	public static final String[] DOT_FILE_EXTENSIONS = { WKF_EXTENSION, WOLIB_EXTENSION, CG_EXTENSION, DG_EXTENSION, SG_EXTENSION,
-		TOC_EXTENSION, MENU_EXTENSION, LINKS_EXTENSION, XML_EXTENSION, DM_EXTENSION, DKV_EXTENSION, WS_EXTENSION, OWL_EXTENSION,
-		OELIB_EXTENSION,
-		RM_EXTENSION, TS_EXTENSION };
+			TOC_EXTENSION, MENU_EXTENSION, LINKS_EXTENSION, XML_EXTENSION, DM_EXTENSION, DKV_EXTENSION, WS_EXTENSION, OWL_EXTENSION,
+			OELIB_EXTENSION, RM_EXTENSION, TS_EXTENSION };
 
 	public static final String[] FILE_EXTENSIONS;
 
@@ -199,8 +195,6 @@ public class ProjectRestructuration {
 		}
 		return returned;
 	}
-
-
 
 	public static File getExpectedGeneratedDocDirectory(File projectDirectory) {
 		File returned = new File(projectDirectory, ProjectRestructuration.GENERATED_DOC_DIR);

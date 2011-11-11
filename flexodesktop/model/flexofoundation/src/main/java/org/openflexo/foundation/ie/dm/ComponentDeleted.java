@@ -23,53 +23,45 @@ import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.RMNotification;
 
-public class ComponentDeleted extends IEDataModification implements RMNotification
-{
+public class ComponentDeleted extends IEDataModification implements RMNotification {
 
-    public ComponentDefinition component;
-    
-    
-    public ComponentDeleted(ComponentDefinition component)
-    {
-        super(component, null);
-        this.component = component;
-    }
+	public ComponentDefinition component;
 
-    @Override
-	public boolean forceUpdateWhenUnload()
-    {
-        return true;
-    }
+	public ComponentDeleted(ComponentDefinition component) {
+		super(component, null);
+		this.component = component;
+	}
 
-    @Override
-	public boolean isDeepNotification()
-    {
-        return true;
-    }
+	@Override
+	public boolean forceUpdateWhenUnload() {
+		return true;
+	}
 
-    @Override
-	public boolean propagateToSynchronizedResource(FlexoResource originResource, FlexoResource targetResource)
-    {
-    	if ((originResource == component.getComponentLibrary().getFlexoResource()) /*&& targetResource == component.getComponentResource()*/) {
-               return true;
-        } else {
-            return false;
-        }
-    }
+	@Override
+	public boolean isDeepNotification() {
+		return true;
+	}
 
-    @Override
-	public boolean propagateToAlteredResource(FlexoResource originResource, FlexoResource targetResource)
-    {
-        if (originResource == component.getComponentResource()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+	@Override
+	public boolean propagateToSynchronizedResource(FlexoResource originResource, FlexoResource targetResource) {
+		if ((originResource == component.getComponentLibrary().getFlexoResource()) /*&& targetResource == component.getComponentResource()*/) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-    @Override
-	public String toString()
-    {
-        return "ComponentDeleteRequest " + component.getComponentName();
-    }
+	@Override
+	public boolean propagateToAlteredResource(FlexoResource originResource, FlexoResource targetResource) {
+		if (originResource == component.getComponentResource()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "ComponentDeleteRequest " + component.getComponentName();
+	}
 }

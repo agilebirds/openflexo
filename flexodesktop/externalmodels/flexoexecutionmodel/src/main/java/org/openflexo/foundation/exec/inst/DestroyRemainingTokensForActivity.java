@@ -24,34 +24,29 @@ import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 public class DestroyRemainingTokensForActivity extends CustomInstruction {
 
 	private AbstractActivityNode activity;
-	
-	public DestroyRemainingTokensForActivity (AbstractActivityNode activity)
-	{
+
+	public DestroyRemainingTokensForActivity(AbstractActivityNode activity) {
 		super();
 		this.activity = activity;
-		setInlineComment("Destroy remaining tokens in current ActivityTask for node "+getAbstractActivityNode().getName());
+		setInlineComment("Destroy remaining tokens in current ActivityTask for node " + getAbstractActivityNode().getName());
 	}
 
-	public AbstractActivityNode getAbstractActivityNode()
-	{
+	public AbstractActivityNode getAbstractActivityNode() {
 		return activity;
 	}
 
 	@Override
-	public String toString()
-	{
-		return "[DestroyRemainingTokens:"+activity+"]";
+	public String toString() {
+		return "[DestroyRemainingTokens:" + activity + "]";
 	}
 
 	@Override
-	public String getJavaStringRepresentation() 
-	{
-		return "destroyRemainingTokensForActivity(getActivityTask("+activity.getFlexoID()+"));";
+	public String getJavaStringRepresentation() {
+		return "destroyRemainingTokensForActivity(getActivityTask(" + activity.getFlexoID() + "));";
 	}
-	
+
 	@Override
-	public DestroyRemainingTokensForActivity clone()
-	{
+	public DestroyRemainingTokensForActivity clone() {
 		DestroyRemainingTokensForActivity returned = new DestroyRemainingTokensForActivity(activity);
 		returned.setHeaderComment(getHeaderComment());
 		returned.setInlineComment(getInlineComment());

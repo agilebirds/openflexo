@@ -18,20 +18,21 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents Class Utility object, i.e., helper class
- *
+ * 
  * @version $Id: ClassUtility.java,v 1.2 2011/09/12 11:46:47 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class ClassUtility extends Class {
-  public ClassUtility(PetalNode parent, Collection params) {
-    super(parent, "Class_Utility", params);
-  }
+	public ClassUtility(PetalNode parent, Collection params) {
+		super(parent, "Class_Utility", params);
+	}
 
-  public ClassUtility() {
-    setName("Class_Utility");
-  }
+	public ClassUtility() {
+		setName("Class_Utility");
+	}
 }

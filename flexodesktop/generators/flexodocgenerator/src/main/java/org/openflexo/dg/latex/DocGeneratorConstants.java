@@ -22,13 +22,11 @@ package org.openflexo.dg.latex;
 /**
  * @author gpolet
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ *         TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
  */
-public class DocGeneratorConstants
-{
+public class DocGeneratorConstants {
 
-    public static final String TEMPLATE_PATH = "Config/Templates/Latex";
+	public static final String TEMPLATE_PATH = "Config/Templates/Latex";
 
-    public static final String DG_LABEL_PREFIX = "DG-REF-";
+	public static final String DG_LABEL_PREFIX = "DG-REF-";
 }

@@ -30,164 +30,146 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.xmlcode.XMLMapping;
 
-
 public abstract class ViewObject extends AbstractViewObject {
 
 	private static final Logger logger = Logger.getLogger(ViewObject.class.getPackage().getName());
 
-    private View _shema;
-    private String _name;
-    private ViewObject parent = null;
-   private Vector<ViewObject> childs;
-    
-    // We dont want to import graphical engine in foundation
-    // But you can assert graphical representation is a org.openflexo.fge.GraphicalRepresentation.
-    // For a OEShema, graphicalRepresentation is a DrawingGraphicalRepresentation
-    // For a OEShape, graphicalRepresentation is a ShapeGraphicalRepresentation
-    // For a OEConnector, graphicalRepresentation is a ConnectorGraphicalRepresentation
-    private Object _graphicalRepresentation;
-    
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	private View _shema;
+	private String _name;
+	private ViewObject parent = null;
+	private Vector<ViewObject> childs;
 
-    /**
-     * Never use this constructor except for ComponentLibrary
-     */
-    public ViewObject(FlexoProject project)
-    {
-        super(project);
-        childs = new Vector<ViewObject>();
-    }
+	// We dont want to import graphical engine in foundation
+	// But you can assert graphical representation is a org.openflexo.fge.GraphicalRepresentation.
+	// For a OEShema, graphicalRepresentation is a DrawingGraphicalRepresentation
+	// For a OEShape, graphicalRepresentation is a ShapeGraphicalRepresentation
+	// For a OEConnector, graphicalRepresentation is a ConnectorGraphicalRepresentation
+	private Object _graphicalRepresentation;
 
-    /**
-     * Default constructor
-     */
-    public ViewObject(View shema)
-    {
-        this(shema.getProject());
-        setShema(shema);
-    }
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-	public View getShema()
-    {
-        return _shema;
-    }
+	/**
+	 * Never use this constructor except for ComponentLibrary
+	 */
+	public ViewObject(FlexoProject project) {
+		super(project);
+		childs = new Vector<ViewObject>();
+	}
 
-    public void setShema(View shema)
-    {
-        _shema = shema;
-    }
+	/**
+	 * Default constructor
+	 */
+	public ViewObject(View shema) {
+		this(shema.getProject());
+		setShema(shema);
+	}
 
-    /**
-     * Returns reference to the main object in which this XML-serializable
-     * object is contained relating to storing scheme: here it's the component
-     * library
-     *
-     * @return the component library
-     */
-    @Override
-    public XMLStorageResourceData getXMLResourceData()
-    {
-        return getShema();
-    }
+	public View getShema() {
+		return _shema;
+	}
 
-    @Override
-    public XMLMapping getXMLMapping()
-    {
-        return getShema().getXMLMapping();
-    }
+	public void setShema(View shema) {
+		_shema = shema;
+	}
+
+	/**
+	 * Returns reference to the main object in which this XML-serializable object is contained relating to storing scheme: here it's the
+	 * component library
+	 * 
+	 * @return the component library
+	 */
+	@Override
+	public XMLStorageResourceData getXMLResourceData() {
+		return getShema();
+	}
 
 	@Override
-	public String getName() 
-	{
+	public XMLMapping getXMLMapping() {
+		return getShema().getXMLMapping();
+	}
+
+	@Override
+	public String getName() {
 		return _name;
 	}
 
 	@Override
-	public void setName(String name) throws DuplicateResourceException, InvalidNameException
-	{
+	public void setName(String name) throws DuplicateResourceException, InvalidNameException {
 		if (requireChange(_name, name)) {
 			String oldName = _name;
 			_name = name;
 			setChanged();
-			notifyObservers(new NameChanged(oldName,name));
+			notifyObservers(new NameChanged(oldName, name));
 		}
 	}
 
-	public Vector<ViewObject> getChilds()
-	{
+	public Vector<ViewObject> getChilds() {
 		return childs;
 	}
 
-	public void setChilds(Vector<ViewObject> someChilds)
-	{
+	public void setChilds(Vector<ViewObject> someChilds) {
 		childs.addAll(someChilds);
 	}
 
-	public void addToChilds(ViewObject aChild)
-	{
-		//logger.info("****** addToChild() put "+aChild+" under "+this);
+	public void addToChilds(ViewObject aChild) {
+		// logger.info("****** addToChild() put "+aChild+" under "+this);
 		childs.add(aChild);
 		aChild.parent = this;
 		setChanged();
 		if (aChild instanceof ViewShape) {
-			notifyObservers(new ShapeInserted((ViewShape)aChild,this));
+			notifyObservers(new ShapeInserted((ViewShape) aChild, this));
 		}
 		if (aChild instanceof ViewConnector) {
-			notifyObservers(new ConnectorInserted((ViewConnector)aChild));
+			notifyObservers(new ConnectorInserted((ViewConnector) aChild));
 		}
 	}
 
-	public void removeFromChilds(ViewObject aChild)
-	{
+	public void removeFromChilds(ViewObject aChild) {
 		childs.remove(aChild);
 		setChanged();
 		if (aChild instanceof ViewShape) {
-			notifyObservers(new ShapeRemoved((ViewShape)aChild,this));
+			notifyObservers(new ShapeRemoved((ViewShape) aChild, this));
 		}
 		if (aChild instanceof ViewConnector) {
-			notifyObservers(new ConnectorRemoved((ViewConnector)aChild));
+			notifyObservers(new ConnectorRemoved((ViewConnector) aChild));
 		}
 	}
 
-	public ViewShape getShapeNamed(String name)
-	{
+	public ViewShape getShapeNamed(String name) {
 		for (ViewObject o : childs) {
-			if (o instanceof ViewShape && o.getName() != null && o.getName().equals(name)) return (ViewShape)o;
+			if (o instanceof ViewShape && o.getName() != null && o.getName().equals(name))
+				return (ViewShape) o;
 		}
 		return null;
 	}
-	
-	public ViewConnector getConnectorNamed(String name)
-	{
+
+	public ViewConnector getConnectorNamed(String name) {
 		for (ViewObject o : childs) {
-			if (o instanceof ViewConnector && o.getName() != null && o.getName().equals(name)) return (ViewConnector)o;
+			if (o instanceof ViewConnector && o.getName() != null && o.getName().equals(name))
+				return (ViewConnector) o;
 		}
 		return null;
 	}
-	
-	public Object getGraphicalRepresentation() 
-	{
+
+	public Object getGraphicalRepresentation() {
 		return _graphicalRepresentation;
 	}
 
-	public void setGraphicalRepresentation(Object graphicalRepresentation) 
-	{
+	public void setGraphicalRepresentation(Object graphicalRepresentation) {
 		_graphicalRepresentation = graphicalRepresentation;
 		setChanged();
 	}
-	
+
 	private Vector<ViewObject> ancestors;
-	
-	public ViewObject getParent() 
-	{
+
+	public ViewObject getParent() {
 		return parent;
 	}
-	
-	public Vector<ViewObject> getAncestors()
-	{
+
+	public Vector<ViewObject> getAncestors() {
 		if (ancestors == null) {
 			ancestors = new Vector<ViewObject>();
 			ViewObject current = getParent();
@@ -199,25 +181,23 @@ public abstract class ViewObject extends AbstractViewObject {
 		return ancestors;
 	}
 
-	public static ViewObject getFirstCommonAncestor(ViewObject child1, ViewObject child2)
-	{
+	public static ViewObject getFirstCommonAncestor(ViewObject child1, ViewObject child2) {
 		Vector<ViewObject> ancestors1 = child1.getAncestors();
 		Vector<ViewObject> ancestors2 = child2.getAncestors();
-		for (int i=0; i<ancestors1.size(); i++) {
+		for (int i = 0; i < ancestors1.size(); i++) {
 			ViewObject o1 = ancestors1.elementAt(i);
-			if (ancestors2.contains(o1)) return o1;
+			if (ancestors2.contains(o1))
+				return o1;
 		}
 		return null;
 	}
 
 	public abstract boolean isContainedIn(ViewObject o);
 
-	public final boolean contains(ViewObject o)
-	{
+	public final boolean contains(ViewObject o) {
 		return o.isContainedIn(this);
 	}
 
 	public abstract String getDisplayableDescription();
-
 
 }

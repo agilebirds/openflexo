@@ -25,39 +25,32 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 
-
 /**
  * Browser element representing the calc palette
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class CalcDrawingShemaBrowserElement extends BrowserElement
-{
+public class CalcDrawingShemaBrowserElement extends BrowserElement {
 
-    protected CalcDrawingShemaBrowserElement(ExampleDrawingShema shema, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(shema, BrowserElementType.ONTOLOGY_CALC_DRAWING_SHEMA, browser, parent);
-    }
+	protected CalcDrawingShemaBrowserElement(ExampleDrawingShema shema, ProjectBrowser browser, BrowserElement parent) {
+		super(shema, BrowserElementType.ONTOLOGY_CALC_DRAWING_SHEMA, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-    	for (ExampleDrawingObject element : getShema().getChilds()) {
-    		addToChilds(element);
-    	}
-    }
+	@Override
+	protected void buildChildrenVector() {
+		for (ExampleDrawingObject element : getShema().getChilds()) {
+			addToChilds(element);
+		}
+	}
 
-    @Override
-	public String getName()
-    {
-        return getShema().getName()+".shema";
-    }
+	@Override
+	public String getName() {
+		return getShema().getName() + ".shema";
+	}
 
-
-    protected ExampleDrawingShema getShema()
-    {
-        return (ExampleDrawingShema) getObject();
-    }
+	protected ExampleDrawingShema getShema() {
+		return (ExampleDrawingShema) getObject();
+	}
 
 }

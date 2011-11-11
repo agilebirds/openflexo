@@ -36,20 +36,17 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.wkf.controller.WKFController;
 
-
 public class CreateAssociationInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateAssociationInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(CreateAssociation.actionType,actionInitializer);
+	CreateAssociationInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(CreateAssociation.actionType, actionInitializer);
 	}
 
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer()
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
@@ -59,27 +56,22 @@ public class CreateAssociationInitializer extends ActionInitializer {
 
 	boolean nameWasEdited = false;
 
-
 	@Override
-	protected FlexoActionInitializer<CreateAssociation> getDefaultInitializer()
-	{
+	protected FlexoActionInitializer<CreateAssociation> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateAssociation>() {
 			@Override
-			public boolean run(ActionEvent e, CreateAssociation action)
-			{
+			public boolean run(ActionEvent e, CreateAssociation action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<CreateAssociation> getDefaultFinalizer()
-	{
+	protected FlexoActionFinalizer<CreateAssociation> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateAssociation>() {
 			@Override
-			public boolean run(ActionEvent e, CreateAssociation action)
-			{
-				
+			public boolean run(ActionEvent e, CreateAssociation action) {
+
 				getController().getSelectionManager().setSelectedObject(action.getNewAssociation());
 
 				return true;
@@ -88,8 +80,7 @@ public class CreateAssociationInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoExceptionHandler<CreateEdge> getDefaultExceptionHandler()
-	{
+	protected FlexoExceptionHandler<CreateEdge> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<CreateEdge>() {
 			@Override
 			public boolean handleException(FlexoException exception, CreateEdge action) {
@@ -103,8 +94,7 @@ public class CreateAssociationInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected Icon getEnabledIcon()
-	{
+	protected Icon getEnabledIcon() {
 		return WKFIconLibrary.POSTCONDITION_ICON;
 	}
 

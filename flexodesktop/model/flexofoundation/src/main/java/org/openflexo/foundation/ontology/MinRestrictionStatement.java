@@ -36,71 +36,64 @@ public class MinRestrictionStatement extends ObjectRestrictionStatement {
 	private OntologyObjectProperty property;
 	private OntologyClass object;
 	private int minCardinality = 0;
-	
-	public MinRestrictionStatement(OntologyObject subject, Statement s, Restriction r)
-	{
-		super(subject,s,r);
-		property = (OntologyObjectProperty)getOntologyLibrary().getProperty(r.getOnProperty().getURI());
-		
+
+	public MinRestrictionStatement(OntologyObject subject, Statement s, Restriction r) {
+		super(subject, s, r);
+		property = (OntologyObjectProperty) getOntologyLibrary().getProperty(r.getOnProperty().getURI());
+
 		String OWL = getFlexoOntology().getOntModel().getNsPrefixURI("owl");
-		Property ON_CLASS = ResourceFactory.createProperty( OWL + "onClass" );
-		Property MIN_QUALIFIED_CARDINALITY = ResourceFactory.createProperty( OWL + "minQualifiedCardinality" );
+		Property ON_CLASS = ResourceFactory.createProperty(OWL + "onClass");
+		Property MIN_QUALIFIED_CARDINALITY = ResourceFactory.createProperty(OWL + "minQualifiedCardinality");
 
 		Statement onClassStmt = r.getProperty(ON_CLASS);
 		Statement minCardinalityStmt = r.getProperty(MIN_QUALIFIED_CARDINALITY);
-		
+
 		RDFNode onClassStmtValue = onClassStmt.getObject();
 		RDFNode minCardinalityStmtValue = minCardinalityStmt.getObject();
-		
+
 		if (onClassStmtValue.isResource() && onClassStmtValue.canAs(OntClass.class)) {
-			object = (OntologyClass)getOntologyLibrary().getOntologyObject(((OntClass)onClassStmtValue.as(OntClass.class)).getURI());
+			object = (OntologyClass) getOntologyLibrary().getOntologyObject(((OntClass) onClassStmtValue.as(OntClass.class)).getURI());
 		}
-		
+
 		if (minCardinalityStmtValue.isLiteral() && minCardinalityStmtValue.canAs(Literal.class)) {
-			Literal literal = (Literal)minCardinalityStmtValue.as(Literal.class);
+			Literal literal = (Literal) minCardinalityStmtValue.as(Literal.class);
 			minCardinality = literal.getInt();
 		}
-		
-		
-		//object = getOntologyLibrary().getOntologyObject(r.get().getURI());
-		//cardinality = r.getCardinality();
+
+		// object = getOntologyLibrary().getOntologyObject(r.get().getURI());
+		// cardinality = r.getCardinality();
 	}
 
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "min_restriction_statement";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return "MinRestrictionStatement: "+getStatement();
+	public String getFullyQualifiedName() {
+		return "MinRestrictionStatement: " + getStatement();
 	}
 
-
 	@Override
-	public OntologyClass getObject() 
-	{
+	public OntologyClass getObject() {
 		return object;
 	}
 
 	@Override
-	public OntologyObjectProperty getProperty() 
-	{
+	public OntologyObjectProperty getProperty() {
 		return property;
 	}
 
-
 	@Override
-	public String toString() 
-	{
-		return getSubject().getName()+" "+(property==null?"<NOT FOUND:"+restriction.getOnProperty().getURI()+">":property.getName())+" min "+minCardinality+" "+(getObject() != null ? getObject().getName() : "<NOT_FOUND:"+getStatement().getObject()+">");
+	public String toString() {
+		return getSubject().getName() + " "
+				+ (property == null ? "<NOT FOUND:" + restriction.getOnProperty().getURI() + ">" : property.getName()) + " min "
+				+ minCardinality + " " + (getObject() != null ? getObject().getName() : "<NOT_FOUND:" + getStatement().getObject() + ">");
 	}
 
 	@Override
 	public String getName() {
-		return property.getName()+" min "+minCardinality;
+		return property.getName() + " min " + minCardinality;
 	}
 
 	@Override
@@ -112,6 +105,5 @@ public class MinRestrictionStatement extends ObjectRestrictionStatement {
 	public RestrictionType getRestrictionType() {
 		return RestrictionType.Min;
 	}
-
 
 }

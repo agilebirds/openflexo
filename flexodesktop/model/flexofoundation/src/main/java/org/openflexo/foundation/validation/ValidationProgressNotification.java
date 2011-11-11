@@ -25,19 +25,16 @@ package org.openflexo.foundation.validation;
  * @author sguerin
  * 
  */
-public class ValidationProgressNotification extends ValidationNotification
-{
-    private Validable _validatedObject;
+public class ValidationProgressNotification extends ValidationNotification {
+	private Validable _validatedObject;
 
-    public ValidationProgressNotification(Validable rootObject, Validable validatedObject)
-    {
-        super(rootObject);
-        _validatedObject = validatedObject;
-    }
+	public ValidationProgressNotification(Validable rootObject, Validable validatedObject) {
+		super(rootObject);
+		_validatedObject = validatedObject;
+	}
 
-    public Validable getValidatedObject()
-    {
-        return _validatedObject;
-    }
+	public Validable getValidatedObject() {
+		return _validatedObject;
+	}
 
 }

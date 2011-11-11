@@ -27,56 +27,52 @@ import org.openflexo.foundation.rm.cg.JavaFileResource;
 import org.openflexo.generator.ProjectGenerator;
 import org.openflexo.logging.FlexoLogger;
 
-public class CustomComponentGenerator extends JavaClassGenerator
-{
+public class CustomComponentGenerator extends JavaClassGenerator {
 
-    private static final String TEMPLATE_NAME = "CustomComponent.java.vm";
+	private static final String TEMPLATE_NAME = "CustomComponent.java.vm";
 	private static final Logger logger = FlexoLogger.getLogger(CustomComponentGenerator.class.getPackage().getName());
 
-    public CustomComponentGenerator(ProjectGenerator projectGenerator)
-    {
-        super(projectGenerator,projectGenerator.getProject().getDataModel().getWORepository().getCustomComponentEntity());
-    }
+	public CustomComponentGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, projectGenerator.getProject().getDataModel().getWORepository().getCustomComponentEntity());
+	}
 
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
 	@Override
 	protected VelocityContext defaultContext() {
-   		VelocityContext velocityContext = super.defaultContext();
-   		velocityContext.put("WOCOMPONENTNAME", getIdentifier());
-   		velocityContext.put("ENTITY", getEntity());
-   		velocityContext.put("entity", getEntity());
-/*   		if(getGenerationTarget().equals(CodeType.PROTOTYPE)){
-   			velocityContext.put("eo_props", getEntity().getPropertiesEOTypesOnly());
-   			velocityContext.put("eopropReplacement", merge("DMEOEntityReplacementProperties.java.vm",velocityContext));
-		}
-		*/
-   		return velocityContext;
+		VelocityContext velocityContext = super.defaultContext();
+		velocityContext.put("WOCOMPONENTNAME", getIdentifier());
+		velocityContext.put("ENTITY", getEntity());
+		velocityContext.put("entity", getEntity());
+		/*   		if(getGenerationTarget().equals(CodeType.PROTOTYPE)){
+		   			velocityContext.put("eo_props", getEntity().getPropertiesEOTypesOnly());
+		   			velocityContext.put("eopropReplacement", merge("DMEOEntityReplacementProperties.java.vm",velocityContext));
+				}
+				*/
+		return velocityContext;
 	}
-	
-    /**
-     * Overrides rebuildDependanciesForResource
-     * @see org.openflexo.generator.utils.JavaClassGenerator#rebuildDependanciesForResource(JavaFileResource)
-     */
-    @Override
-    public void rebuildDependanciesForResource(JavaFileResource resource)
-    {
-    	if (resource!=null) {
-    		resource.addToDependantResources(getProject().getFlexoDKVResource());
-    	}
-    }
 
-    @Override
-    public String getTemplateName() {
-    	return TEMPLATE_NAME;
-    }
-    
-    public String getCustomComponentCurrentProcessBusinessDataGetterName()
-    {
-    	return ProcessBusinessDataRepository.getCustomComponentCurrentProcessBusinessDataGetterName();
-    }
+	/**
+	 * Overrides rebuildDependanciesForResource
+	 * 
+	 * @see org.openflexo.generator.utils.JavaClassGenerator#rebuildDependanciesForResource(JavaFileResource)
+	 */
+	@Override
+	public void rebuildDependanciesForResource(JavaFileResource resource) {
+		if (resource != null) {
+			resource.addToDependantResources(getProject().getFlexoDKVResource());
+		}
+	}
+
+	@Override
+	public String getTemplateName() {
+		return TEMPLATE_NAME;
+	}
+
+	public String getCustomComponentCurrentProcessBusinessDataGetterName() {
+		return ProcessBusinessDataRepository.getCustomComponentCurrentProcessBusinessDataGetterName();
+	}
 }

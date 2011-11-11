@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 public @interface Getter {
 
 	public static enum Cardinality {
-		SINGLE,LIST,MAP;
+		SINGLE, LIST, MAP;
 	}
 
 	public static final String UNDEFINED = "";

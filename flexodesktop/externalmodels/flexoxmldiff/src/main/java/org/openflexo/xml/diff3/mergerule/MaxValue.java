@@ -25,26 +25,24 @@ import org.openflexo.xml.diff3.UnresolvedAttributesConflict;
 
 public class MaxValue extends MergeAttributeRule {
 
-	public MaxValue(UnresolvedAttributesConflict conflict){
+	public MaxValue(UnresolvedAttributesConflict conflict) {
 		super(conflict);
 	}
-	
-	
+
 	@Override
 	public boolean canBeApplyed() {
-		return "height".equals(_conflict.attributeName()) 
-		|| "width".equals(_conflict.attributeName())
-		|| "lastUniqueID".equals(_conflict.attributeName())
-		|| "resourcesCount".equals(_conflict.attributeName());
+		return "height".equals(_conflict.attributeName()) || "width".equals(_conflict.attributeName())
+				|| "lastUniqueID".equals(_conflict.attributeName()) || "resourcesCount".equals(_conflict.attributeName());
 	}
 
 	@Override
 	public MergeAttributeAction getAction() {
-		if(_action==null){
+		if (_action == null) {
 			int v1 = Integer.valueOf(_conflict.value1());
 			int v2 = Integer.valueOf(_conflict.value2());
 			Integer max = new Integer(Math.max(v1, v2));
-			_action = new MergeAttributeAction(_conflict.getConflictIndex(),MergeActionType.UPDATE,_conflict.attributeName(),max.toString(),_conflict.getMergedElement());
+			_action = new MergeAttributeAction(_conflict.getConflictIndex(), MergeActionType.UPDATE, _conflict.attributeName(),
+					max.toString(), _conflict.getMergedElement());
 		}
 		return _action;
 	}

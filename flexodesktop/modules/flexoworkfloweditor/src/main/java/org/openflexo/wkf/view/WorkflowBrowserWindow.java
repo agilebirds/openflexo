@@ -33,48 +33,44 @@ import org.openflexo.view.FlexoRelativeWindow;
 import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.controller.WKFController;
 
-
 /**
  * The WKF Browser window
  * 
  * @author sguerin
  */
-public class WorkflowBrowserWindow extends FlexoRelativeWindow
-{
+public class WorkflowBrowserWindow extends FlexoRelativeWindow {
 
-    private WorkflowBrowserView _wkfBrowserView;
+	private WorkflowBrowserView _wkfBrowserView;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public WorkflowBrowserWindow(WKFFrame mainFrame)
-    {
-        super(mainFrame);
-        getContentPane().setLayout(new BorderLayout());
+	public WorkflowBrowserWindow(WKFFrame mainFrame) {
+		super(mainFrame);
+		getContentPane().setLayout(new BorderLayout());
 
-        _wkfBrowserView = new WorkflowBrowserView((WKFController) getController());
-        getContentPane().add(_wkfBrowserView, BorderLayout.CENTER);
+		_wkfBrowserView = new WorkflowBrowserView((WKFController) getController());
+		getContentPane().add(_wkfBrowserView, BorderLayout.CENTER);
 
-        setTitle(FlexoLocalization.localizedForKey(getName()));
-        setSize(WKFCst.DEFAULT_WORKFLOW_BROWSER_WINDOW_WIDTH, WKFCst.DEFAULT_WORKFLOW_BROWSER_WINDOW_HEIGHT);
-        setLocation(WKFCst.DEFAULT_MAINFRAME_WIDTH + 2, WKFCst.DEFAULT_PALETTE_HEIGHT + 25);
+		setTitle(FlexoLocalization.localizedForKey(getName()));
+		setSize(WKFCst.DEFAULT_WORKFLOW_BROWSER_WINDOW_WIDTH, WKFCst.DEFAULT_WORKFLOW_BROWSER_WINDOW_HEIGHT);
+		setLocation(WKFCst.DEFAULT_MAINFRAME_WIDTH + 2, WKFCst.DEFAULT_PALETTE_HEIGHT + 25);
 
-        validate();
-        pack();
-    }
+		validate();
+		pack();
+	}
 
-    @Override
-    public void dispose() {
-    	_wkfBrowserView = null;
-    	super.dispose();
-    }
-    
-    @Override
-	public String getName()
-    {
-        return WKFCst.DEFAULT_WORKFLOW_BROWSER_WINDOW_TITLE;
-    }
+	@Override
+	public void dispose() {
+		_wkfBrowserView = null;
+		super.dispose();
+	}
+
+	@Override
+	public String getName() {
+		return WKFCst.DEFAULT_WORKFLOW_BROWSER_WINDOW_TITLE;
+	}
 
 }

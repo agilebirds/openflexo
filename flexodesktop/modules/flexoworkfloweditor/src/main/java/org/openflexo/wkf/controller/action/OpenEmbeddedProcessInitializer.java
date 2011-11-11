@@ -35,33 +35,27 @@ public class OpenEmbeddedProcessInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	OpenEmbeddedProcessInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(OpenEmbeddedProcess.actionType,actionInitializer);
+	OpenEmbeddedProcessInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(OpenEmbeddedProcess.actionType, actionInitializer);
 	}
 
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer()
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<OpenEmbeddedProcess> getDefaultInitializer()
-	{
+	protected FlexoActionInitializer<OpenEmbeddedProcess> getDefaultInitializer() {
 		return new FlexoActionInitializer<OpenEmbeddedProcess>() {
 			@Override
-			public boolean run(ActionEvent e, OpenEmbeddedProcess action)
-			{
-				if (action.getProcessToOpen()!=null && action.getProcessToOpen().isImported()) {
+			public boolean run(ActionEvent e, OpenEmbeddedProcess action) {
+				if (action.getProcessToOpen() != null && action.getProcessToOpen().isImported()) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("you_cannot_edit/inspect_an_imported_process"));
 					return false;
 				}
 				if (action.getProcessToOpen() == null) {
 					return new SubProcessSelectorDialog(action.getFocusedObject().getProject(), getControllerActionInitializer())
-							.askAndSetSubProcess(
-							action.getFocusedObject(),
-							action.getFocusedObject().getProcess());
+							.askAndSetSubProcess(action.getFocusedObject(), action.getFocusedObject().getProcess());
 				}
 				return true;
 			}
@@ -69,20 +63,16 @@ public class OpenEmbeddedProcessInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<OpenEmbeddedProcess> getDefaultFinalizer()
-	{
+	protected FlexoActionFinalizer<OpenEmbeddedProcess> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<OpenEmbeddedProcess>() {
 			@Override
-			public boolean run(ActionEvent e, OpenEmbeddedProcess action)
-			{
-				if (action.getFocusedObject() instanceof SubProcessNode
-						&& action.getFocusedObject().getSubProcess()!=null) {
+			public boolean run(ActionEvent e, OpenEmbeddedProcess action) {
+				if (action.getFocusedObject() instanceof SubProcessNode && action.getFocusedObject().getSubProcess() != null) {
 					getControllerActionInitializer().getWKFController().setCurrentFlexoProcess(action.getFocusedObject().getSubProcess());
 				}
 				return true;
 			}
 		};
 	}
-
 
 }

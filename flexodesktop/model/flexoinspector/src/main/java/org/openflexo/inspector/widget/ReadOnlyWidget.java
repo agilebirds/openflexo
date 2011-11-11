@@ -30,99 +30,90 @@ import org.openflexo.inspector.AbstractController;
 import org.openflexo.inspector.InspectorCst;
 import org.openflexo.inspector.model.PropertyModel;
 
-
 /**
  * @author gpolet Created on 5 oct. 2005
  */
-public class ReadOnlyWidget extends DenaliWidget<String>
-{
+public class ReadOnlyWidget extends DenaliWidget<String> {
 
-    JTextField textfield;
+	JTextField textfield;
 
-    public static final String COLUMNS_PARAM = "columns";
-    private static final int DEFAULT_COLUMNS = 5;
+	public static final String COLUMNS_PARAM = "columns";
+	private static final int DEFAULT_COLUMNS = 5;
 
-   /**
-     * @param model
-     */
-    public ReadOnlyWidget(PropertyModel model, AbstractController controller)
-    {
-        super(model,controller);
-        textfield = new JTextField();
-        textfield.setEditable(false);
-        textfield.setEnabled(true);
-        textfield.setSelectionColor(InspectorCst.SELECTED_TEXT_COLOR);
-        textfield.setSelectedTextColor(Color.WHITE);
-        textfield.addFocusListener(new FocusListener() {
+	/**
+	 * @param model
+	 */
+	public ReadOnlyWidget(PropertyModel model, AbstractController controller) {
+		super(model, controller);
+		textfield = new JTextField();
+		textfield.setEditable(false);
+		textfield.setEnabled(true);
+		textfield.setSelectionColor(InspectorCst.SELECTED_TEXT_COLOR);
+		textfield.setSelectedTextColor(Color.WHITE);
+		textfield.addFocusListener(new FocusListener() {
 
-            @Override
-			public void focusGained(FocusEvent e)
-            {
-                textfield.selectAll();
-            }
+			@Override
+			public void focusGained(FocusEvent e) {
+				textfield.selectAll();
+			}
 
-            @Override
-			public void focusLost(FocusEvent e)
-            {
+			@Override
+			public void focusLost(FocusEvent e) {
 
-            }
+			}
 
-        });
-        
-        if (model.hasValueForParameter(COLUMNS_PARAM)) {
-            int colNb = model.getIntValueForParameter(COLUMNS_PARAM);
-            textfield.setColumns(colNb > 0 ? colNb : DEFAULT_COLUMNS);
-        } else {
-        	textfield.setColumns(DEFAULT_COLUMNS);
-        }
-        textfield.setMinimumSize(MINIMUM_SIZE);
-    }
+		});
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.openflexo.inspector.widget.DenaliWidget#updateWidgetFromModel()
-     */
-    @Override
-	public void updateWidgetFromModel()
-    {
-        widgetUpdating = true;
-        textfield.setText(getStringValue());
-        widgetUpdating = false;
-    }
+		if (model.hasValueForParameter(COLUMNS_PARAM)) {
+			int colNb = model.getIntValueForParameter(COLUMNS_PARAM);
+			textfield.setColumns(colNb > 0 ? colNb : DEFAULT_COLUMNS);
+		} else {
+			textfield.setColumns(DEFAULT_COLUMNS);
+		}
+		textfield.setMinimumSize(MINIMUM_SIZE);
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.openflexo.inspector.widget.DenaliWidget#updateModelFromWidget()
-     */
-    @Override
-	public void updateModelFromWidget()
-    {
-        // Empty block on purpose since this is read-only <-- Look at this
-        // Master comment!
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.openflexo.inspector.widget.DenaliWidget#updateWidgetFromModel()
+	 */
+	@Override
+	public void updateWidgetFromModel() {
+		widgetUpdating = true;
+		textfield.setText(getStringValue());
+		widgetUpdating = false;
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.openflexo.inspector.widget.DenaliWidget#getDynamicComponent()
-     */
-    @Override
-	public JComponent getDynamicComponent()
-    {
-        return textfield;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.openflexo.inspector.widget.DenaliWidget#updateModelFromWidget()
+	 */
+	@Override
+	public void updateModelFromWidget() {
+		// Empty block on purpose since this is read-only <-- Look at this
+		// Master comment!
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.openflexo.inspector.widget.DenaliWidget#getDefaultType()
-     */
-    @Override
-	public Class getDefaultType()
-    {
-        return String.class;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.openflexo.inspector.widget.DenaliWidget#getDynamicComponent()
+	 */
+	@Override
+	public JComponent getDynamicComponent() {
+		return textfield;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.openflexo.inspector.widget.DenaliWidget#getDefaultType()
+	 */
+	@Override
+	public Class getDefaultType() {
+		return String.class;
+	}
 
 }

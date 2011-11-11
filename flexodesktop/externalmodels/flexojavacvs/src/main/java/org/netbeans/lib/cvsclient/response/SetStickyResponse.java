@@ -30,65 +30,62 @@ import org.netbeans.lib.cvsclient.util.LoggedDataInputStream;
 
 /**
  * Handles the Set-sticky response.
- * @author  Milos Kleint
+ * 
+ * @author Milos Kleint
  */
 
 class SetStickyResponse implements Response {
 
-    /**
-     * Process the data for the response.
-     * @param dis the data inputstream allowing the client to read the server's
-     * response. Note that the actual response name has already been read
-     * and the input stream is positioned just before the first argument, if
-     * any.
-     */
-    @Override
-	public void process(LoggedDataInputStream dis, ResponseServices services)
-            throws ResponseException {
-        PrintWriter w = null;
-        try {
-            String localPath = dis.readLine();
+	/**
+	 * Process the data for the response.
+	 * 
+	 * @param dis
+	 *            the data inputstream allowing the client to read the server's response. Note that the actual response name has already
+	 *            been read and the input stream is positioned just before the first argument, if any.
+	 */
+	@Override
+	public void process(LoggedDataInputStream dis, ResponseServices services) throws ResponseException {
+		PrintWriter w = null;
+		try {
+			String localPath = dis.readLine();
 
-            String repositoryPath = dis.readLine();
-            String tag = dis.readLine();
-            //System.err.println("Repository path is: " + repositoryPath);
-//            services.updateAdminData(localPath, repositoryPath, null);
-            String absPath = services.convertPathname(localPath, repositoryPath);
-            
-            if (services.getGlobalOptions().isExcluded(new File(absPath))) {
-                return;
-            }
-            
-            absPath = absPath + "/CVS"; //NOI18N
-            File absFile = new File(absPath);
-            if (absFile.exists()) {
-                File tagFile = new File(absPath, "Tag"); //NOI18N
-                if ("THEAD".equals(tag) | "NHEAD".equals(tag) ) { //NOI18N
-                    tagFile.delete();
-                } else {
-                    w = new PrintWriter(
-                            new BufferedWriter(new FileWriter(tagFile)));
-                    // we write out the sticky tag/date
-                    w.println(tag);
-                }
-            }
-        }
-        catch (IOException e) {
-            throw new ResponseException(e);
-        } finally {
-            if (w != null) {
-                w.close();
-            }
-        }
-    }
+			String repositoryPath = dis.readLine();
+			String tag = dis.readLine();
+			// System.err.println("Repository path is: " + repositoryPath);
+			// services.updateAdminData(localPath, repositoryPath, null);
+			String absPath = services.convertPathname(localPath, repositoryPath);
 
-    /**
-     * Is this a terminal response, i.e. should reading of responses stop
-     * after this response. This is true for responses such as OK or
-     * an error response
-     */
-    @Override
+			if (services.getGlobalOptions().isExcluded(new File(absPath))) {
+				return;
+			}
+
+			absPath = absPath + "/CVS"; // NOI18N
+			File absFile = new File(absPath);
+			if (absFile.exists()) {
+				File tagFile = new File(absPath, "Tag"); // NOI18N
+				if ("THEAD".equals(tag) | "NHEAD".equals(tag)) { // NOI18N
+					tagFile.delete();
+				} else {
+					w = new PrintWriter(new BufferedWriter(new FileWriter(tagFile)));
+					// we write out the sticky tag/date
+					w.println(tag);
+				}
+			}
+		} catch (IOException e) {
+			throw new ResponseException(e);
+		} finally {
+			if (w != null) {
+				w.close();
+			}
+		}
+	}
+
+	/**
+	 * Is this a terminal response, i.e. should reading of responses stop after this response. This is true for responses such as OK or an
+	 * error response
+	 */
+	@Override
 	public boolean isTerminalResponse() {
-        return false;
-    }
+		return false;
+	}
 }

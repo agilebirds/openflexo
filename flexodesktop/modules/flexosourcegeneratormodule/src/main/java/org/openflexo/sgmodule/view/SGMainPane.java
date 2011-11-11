@@ -25,35 +25,29 @@ import org.openflexo.sgmodule.controller.SGController;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.ModuleView;
 
-
 /**
  * Represents the main pane for this module
  * 
  * @author sylvain
  */
-public class SGMainPane extends FlexoMainPane implements GraphicalFlexoObserver
-{
+public class SGMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
 
-    public SGMainPane(ModuleView moduleView, SGFrame mainFrame, SGController controller)
-    {
-        super(moduleView,mainFrame,controller);
-    }
+	public SGMainPane(ModuleView moduleView, SGFrame mainFrame, SGController controller) {
+		super(moduleView, mainFrame, controller);
+	}
 
-    public void showBrowser()
-    {
-        showLeftView();
-    }
+	public void showBrowser() {
+		showLeftView();
+	}
 
-    public void hideBrowser()
-    {
-      hideLeftView();
-    }
+	public void hideBrowser() {
+		hideLeftView();
+	}
 
-    @Override
-	protected  FlexoModelObject getParentObject(FlexoModelObject object)
-    {
-        // Implements it if required
-        return null;
-    }
+	@Override
+	protected FlexoModelObject getParentObject(FlexoModelObject object) {
+		// Implements it if required
+		return null;
+	}
 
 }

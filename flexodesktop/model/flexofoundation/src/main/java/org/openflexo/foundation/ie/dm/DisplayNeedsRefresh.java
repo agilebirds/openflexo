@@ -23,18 +23,16 @@ import org.openflexo.foundation.ie.widget.IEWidget;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class DisplayNeedsRefresh extends IEDataModification
-{
+public class DisplayNeedsRefresh extends IEDataModification {
 
-    /**
-     * @param oldValue
-     * @param newValue
-     */
-    public DisplayNeedsRefresh(IEWidget widget)
-    {
-        super(null, widget);
-    }
+	/**
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public DisplayNeedsRefresh(IEWidget widget) {
+		super(null, widget);
+	}
 
 }

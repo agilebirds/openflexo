@@ -27,7 +27,6 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.toc.TOCEntry;
 
-
 public class MoveTOCEntry extends FlexoAction<MoveTOCEntry, TOCEntry, TOCEntry> {
 
 	public static final FlexoActionType<MoveTOCEntry, TOCEntry, TOCEntry> actionType = new FlexoActionType<MoveTOCEntry, TOCEntry, TOCEntry>(
@@ -35,7 +34,7 @@ public class MoveTOCEntry extends FlexoAction<MoveTOCEntry, TOCEntry, TOCEntry> 
 
 		@Override
 		protected boolean isEnabledForSelection(TOCEntry object, Vector<TOCEntry> globalSelection) {
-			if (object==null)
+			if (object == null)
 				return false;
 			for (TOCEntry entry : globalSelection) {
 				if (!object.acceptsEntryAsChild(entry))
@@ -51,11 +50,11 @@ public class MoveTOCEntry extends FlexoAction<MoveTOCEntry, TOCEntry, TOCEntry> 
 
 		@Override
 		public MoveTOCEntry makeNewAction(TOCEntry focusedObject, Vector<TOCEntry> globalSelection, FlexoEditor editor) {
-			return new MoveTOCEntry(focusedObject,globalSelection,editor);
+			return new MoveTOCEntry(focusedObject, globalSelection, editor);
 		}
 
 	};
-	
+
 	protected MoveTOCEntry(TOCEntry focusedObject, Vector<TOCEntry> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}

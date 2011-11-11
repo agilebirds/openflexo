@@ -24,18 +24,25 @@ import java.util.List;
 
 import org.openflexo.foundation.rm.FlexoProject;
 
-
-
 public interface ApplicationHelpEntryPoint {
 
 	public long getFlexoID();
+
 	public ApplicationHelpEntryPoint getParentHelpEntry();
+
 	public boolean hasDescription();
+
 	public String getDescription();
+
 	public boolean hasSpecificHelp(String key);
+
 	public Hashtable<String, String> getSpecificDescriptions();
+
 	public FlexoProject getProject();
+
 	public String getShortHelpLabel();
+
 	public String getTypedHelpLabel();
+
 	public List<ApplicationHelpEntryPoint> getChildsHelpObjects();
 }

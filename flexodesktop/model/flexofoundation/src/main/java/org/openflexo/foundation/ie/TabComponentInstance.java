@@ -31,131 +31,122 @@ import org.openflexo.foundation.xml.FlexoComponentBuilder;
 import org.openflexo.foundation.xml.FlexoNavigationMenuBuilder;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 
-
 /**
  * @author bmangez
  * 
- * <B>Class Description</B>
+ *         <B>Class Description</B>
  */
-public class TabComponentInstance extends PartialComponentInstance implements Serializable
-{
+public class TabComponentInstance extends PartialComponentInstance implements Serializable {
 
-    private IETabWidget _widget;
+	private IETabWidget _widget;
 
-    private OperationNode operationNode;
-    
-    private ActionNode actionNode;
+	private OperationNode operationNode;
 
-    private FlexoItemMenu itemMenu;
+	private ActionNode actionNode;
 
-    public TabComponentInstance(TabComponentDefinition component, IETabWidget widget, IEWOComponent container)
-    {
-        super(component, container);
-        setReusableWidget(widget);
-    }
+	private FlexoItemMenu itemMenu;
 
-    /**
-     * @param component
-     */
-    public TabComponentInstance(TabComponentDefinition component, IETabWidget widget)
-    {
-        super(component, widget.getWOComponent());
-        setReusableWidget(widget);
-    }
-    /**
-     * @param component
-     */
-    public TabComponentInstance(TabComponentDefinition component, FlexoItemMenu menu)
-    {
-    	super(component, menu.getNavigationMenu());
-    	setItemMenu(menu);
-    }
-    /**
-     * @param component
-     */
-    public TabComponentInstance(TabComponentDefinition component, OperationNode operation)
-    {
-    	super(component, operation.getProcess());
-    	setOperationNode(operation);
-    }
-
-    /**
-     * @param component
-     */
-    public TabComponentInstance(TabComponentDefinition component, ActionNode action)
-    {
-    	super(component, action.getProcess());
-    	setActionNode(action);
-    }
-    
-    public TabComponentInstance(FlexoComponentBuilder builder)
-    {
-        super(builder);
-    }
-
-    public TabComponentInstance(FlexoProcessBuilder builder)
-    {
-        super(builder);
-    }
-    
-    @Deprecated
-    public TabComponentInstance(FlexoNavigationMenuBuilder builder) {
-    	super(builder);
+	public TabComponentInstance(TabComponentDefinition component, IETabWidget widget, IEWOComponent container) {
+		super(component, container);
+		setReusableWidget(widget);
 	}
 
-    @Override
-    public TabComponentDefinition getComponentDefinition() {
-    	return (TabComponentDefinition)super.getComponentDefinition();
-    }
-    
-    public OperationNode getOperationNode()
-    {
-        return operationNode;
-    }
+	/**
+	 * @param component
+	 */
+	public TabComponentInstance(TabComponentDefinition component, IETabWidget widget) {
+		super(component, widget.getWOComponent());
+		setReusableWidget(widget);
+	}
 
-    public void setOperationNode(OperationNode operationNode) {
+	/**
+	 * @param component
+	 */
+	public TabComponentInstance(TabComponentDefinition component, FlexoItemMenu menu) {
+		super(component, menu.getNavigationMenu());
+		setItemMenu(menu);
+	}
+
+	/**
+	 * @param component
+	 */
+	public TabComponentInstance(TabComponentDefinition component, OperationNode operation) {
+		super(component, operation.getProcess());
+		setOperationNode(operation);
+	}
+
+	/**
+	 * @param component
+	 */
+	public TabComponentInstance(TabComponentDefinition component, ActionNode action) {
+		super(component, action.getProcess());
+		setActionNode(action);
+	}
+
+	public TabComponentInstance(FlexoComponentBuilder builder) {
+		super(builder);
+	}
+
+	public TabComponentInstance(FlexoProcessBuilder builder) {
+		super(builder);
+	}
+
+	@Deprecated
+	public TabComponentInstance(FlexoNavigationMenuBuilder builder) {
+		super(builder);
+	}
+
+	@Override
+	public TabComponentDefinition getComponentDefinition() {
+		return (TabComponentDefinition) super.getComponentDefinition();
+	}
+
+	public OperationNode getOperationNode() {
+		return operationNode;
+	}
+
+	public void setOperationNode(OperationNode operationNode) {
 		this.operationNode = operationNode;
 		setOwner(operationNode);
 	}
-    
-    public ActionNode getActionNode() {
+
+	public ActionNode getActionNode() {
 		return actionNode;
 	}
-    
-    public void setActionNode(ActionNode actionNode) {
+
+	public void setActionNode(ActionNode actionNode) {
 		this.actionNode = actionNode;
 		setOwner(actionNode);
 	}
-    
-    public FlexoItemMenu getItemMenu() {
+
+	public FlexoItemMenu getItemMenu() {
 		return itemMenu;
 	}
-    
-    public void setItemMenu(FlexoItemMenu itemMenu) {
+
+	public void setItemMenu(FlexoItemMenu itemMenu) {
 		this.itemMenu = itemMenu;
 		setOwner(itemMenu);
 	}
-    
-    @Override
-    public String getFullyQualifiedName()
-    {
-        return "TAB_COMPONENT_INSTANCE." + getComponentDefinition().getName();
-    }
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-    public String getClassNameKey()
-    {
-        return "tab_component_instance";
-    }
-
-    public String getContextIdentifier() {
-		return getOwner().getFullyQualifiedName()+"_"+getOwner().getFlexoID();
+	@Override
+	public String getFullyQualifiedName() {
+		return "TAB_COMPONENT_INSTANCE." + getComponentDefinition().getName();
 	}
-    
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "tab_component_instance";
+	}
+
+	public String getContextIdentifier() {
+		return getOwner().getFullyQualifiedName() + "_" + getOwner().getFlexoID();
+	}
+
 	@Override
 	public Vector<IObject> getWOComponentEmbeddedIEObjects() {
 		return getComponentDefinition().getAllEmbeddedIEObjects();

@@ -18,6 +18,7 @@
  *
  */
 package org.openflexo.letparser;
+
 import java.util.Vector;
 
 /*
@@ -29,61 +30,54 @@ import java.util.Vector;
 
 public class Operator implements AbstractToken {
 
-    public static final Operator AND = new Operator("AND","&&",2);
-    public static final Operator OR = new Operator("OR","||",3);
-    public static final Operator EQU = new Operator("=","==",1);
-    public static final Operator NEQ = new Operator("!=",1);
-   
-    public static Vector<Operator> _knownOperators = null;
-    
-    public static Vector<Operator> getKnownOperators()
-    {
-        if (_knownOperators == null) {
-            _knownOperators = new Vector<Operator>();
-            _knownOperators.add(AND);
-            _knownOperators.add(OR);
-            _knownOperators.add(EQU);
-            _knownOperators.add(NEQ);
-        }
-        return _knownOperators;
-    }
-    
-    private String _symbol;
-    private String _alternativeSymbol;
-    private int _priority;
-       
-    public Operator (String symbol, String alternativeSymbol, int priority) 
-    {
-        this(symbol,priority);
-        _alternativeSymbol = alternativeSymbol;
-    }
+	public static final Operator AND = new Operator("AND", "&&", 2);
+	public static final Operator OR = new Operator("OR", "||", 3);
+	public static final Operator EQU = new Operator("=", "==", 1);
+	public static final Operator NEQ = new Operator("!=", 1);
 
-    public Operator (String symbol, int priority) 
-    {
-        _priority = priority;
-        _symbol = symbol;
-        _alternativeSymbol = null;
-    }
+	public static Vector<Operator> _knownOperators = null;
 
-    public String getSymbol()
-    {
-        return _symbol;
-    }
+	public static Vector<Operator> getKnownOperators() {
+		if (_knownOperators == null) {
+			_knownOperators = new Vector<Operator>();
+			_knownOperators.add(AND);
+			_knownOperators.add(OR);
+			_knownOperators.add(EQU);
+			_knownOperators.add(NEQ);
+		}
+		return _knownOperators;
+	}
 
-    public String getAlternativeSymbol()
-    {
-        return _alternativeSymbol;
-    }
+	private String _symbol;
+	private String _alternativeSymbol;
+	private int _priority;
 
-    @Override
-	public String toString()
-    {
-        return _symbol;
-    }
+	public Operator(String symbol, String alternativeSymbol, int priority) {
+		this(symbol, priority);
+		_alternativeSymbol = alternativeSymbol;
+	}
 
-    public int getPriority() 
-    {
-        return _priority;
-    }
+	public Operator(String symbol, int priority) {
+		_priority = priority;
+		_symbol = symbol;
+		_alternativeSymbol = null;
+	}
+
+	public String getSymbol() {
+		return _symbol;
+	}
+
+	public String getAlternativeSymbol() {
+		return _alternativeSymbol;
+	}
+
+	@Override
+	public String toString() {
+		return _symbol;
+	}
+
+	public int getPriority() {
+		return _priority;
+	}
 
 }

@@ -23,29 +23,27 @@ import org.openflexo.xmlcode.XMLMapping;
 import org.openflexo.xmlcode.XMLSerializable;
 
 /**
- * This interface is implemented by all classes which represents data related to
- * a given XML resource
- *
+ * This interface is implemented by all classes which represents data related to a given XML resource
+ * 
  * @author sguerin
- *
+ * 
  */
-public interface XMLStorageResourceData extends StorageResourceData, XMLSerializable
-{
+public interface XMLStorageResourceData extends StorageResourceData, XMLSerializable {
 
-    public FlexoXMLStorageResource getFlexoXMLFileResource();
+	public FlexoXMLStorageResource getFlexoXMLFileResource();
 
-    public boolean isSerializing();
+	public boolean isSerializing();
 
-    public boolean isDeserializing();
+	public boolean isDeserializing();
 
-    @Override
+	@Override
 	public FlexoProject getProject();
 
-    public XMLMapping getXMLMapping();
-    
-    public void initializeCloning();
-    
-    public void finalizeCloning();
-    
-    public boolean isBeingCloned();
+	public XMLMapping getXMLMapping();
+
+	public void initializeCloning();
+
+	public void finalizeCloning();
+
+	public boolean isBeingCloned();
 }

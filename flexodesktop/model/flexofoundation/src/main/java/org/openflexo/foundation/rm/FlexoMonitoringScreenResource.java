@@ -31,70 +31,60 @@ import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 
-
-public class FlexoMonitoringScreenResource extends FlexoComponentResource implements Serializable
-{
-
+public class FlexoMonitoringScreenResource extends FlexoComponentResource implements Serializable {
 
 	private static final Logger logger = Logger.getLogger(FlexoMonitoringScreenResource.class.getPackage().getName());
-    
+
 	private MonitoringScreenDefinition _componentDefinition;
 
-    /**
-     * Constructor used for XML Serialization: never try to instanciate resource
-     * from this constructor
-     * 
-     * @param builder
-     */
-    public FlexoMonitoringScreenResource(FlexoProjectBuilder builder)
-    {
-        this(builder.project);
-        builder.notifyResourceLoading(this);
-    }
+	/**
+	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
+	 * 
+	 * @param builder
+	 */
+	public FlexoMonitoringScreenResource(FlexoProjectBuilder builder) {
+		this(builder.project);
+		builder.notifyResourceLoading(this);
+	}
 
-    public FlexoMonitoringScreenResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
+	public FlexoMonitoringScreenResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    public FlexoMonitoringScreenResource(FlexoProject aProject, String aName, FlexoComponentLibraryResource processResource, FlexoProjectFile componentFile) throws InvalidFileNameException
-    {
-        super(aProject, aName, processResource, componentFile);
-    }
+	public FlexoMonitoringScreenResource(FlexoProject aProject, String aName, FlexoComponentLibraryResource processResource,
+			FlexoProjectFile componentFile) throws InvalidFileNameException {
+		super(aProject, aName, processResource, componentFile);
+	}
 
-    @Override
-	public ResourceType getResourceType()
-    {
-        return ResourceType.MONITORING_SCREEN;
-    }
+	@Override
+	public ResourceType getResourceType() {
+		return ResourceType.MONITORING_SCREEN;
+	}
 
-    public IEMonitoringScreen getIEScreenComponent()
-    {
-        return (IEMonitoringScreen) getResourceData();
-    }
+	public IEMonitoringScreen getIEScreenComponent() {
+		return (IEMonitoringScreen) getResourceData();
+	}
 
-    @Override
-	public IEWOComponent performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadXMLResourceException, FlexoFileNotFoundException, ProjectLoadingCancelledException, MalformedXMLException
-    {
-        if (logger.isLoggable(Level.INFO))
-            logger.info("Loading component " + getName());
-        IEMonitoringScreen monitoringScreen = (IEMonitoringScreen) super.performLoadResourceData(progress, loadingHandler);
-        monitoringScreen.setProject(getProject());
-        return monitoringScreen;
-    }
+	@Override
+	public IEWOComponent performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler)
+			throws LoadXMLResourceException, FlexoFileNotFoundException, ProjectLoadingCancelledException, MalformedXMLException {
+		if (logger.isLoggable(Level.INFO))
+			logger.info("Loading component " + getName());
+		IEMonitoringScreen monitoringScreen = (IEMonitoringScreen) super.performLoadResourceData(progress, loadingHandler);
+		monitoringScreen.setProject(getProject());
+		return monitoringScreen;
+	}
 
-    @Override
-	public MonitoringScreenDefinition getComponentDefinition()
-    {
-        if (_componentDefinition == null) {
-            _componentDefinition = (MonitoringScreenDefinition) getProject().getFlexoComponentLibrary().getComponentNamed(getName());
-        }
-        return _componentDefinition;
-    }
+	@Override
+	public MonitoringScreenDefinition getComponentDefinition() {
+		if (_componentDefinition == null) {
+			_componentDefinition = (MonitoringScreenDefinition) getProject().getFlexoComponentLibrary().getComponentNamed(getName());
+		}
+		return _componentDefinition;
+	}
 
-    public static String resourceIdentifierForName(String aComponentName)
-    {
-        return ResourceType.MONITORING_SCREEN.getName() + "." + aComponentName;
-    }
+	public static String resourceIdentifierForName(String aComponentName) {
+		return ResourceType.MONITORING_SCREEN.getName() + "." + aComponentName;
+	}
 
 }

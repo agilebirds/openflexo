@@ -24,10 +24,9 @@ import java.util.Vector;
 import org.openflexo.foundation.sg.implmodel.enums.TechnologyLayer;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
 /**
  * @author nid
- *
+ * 
  */
 public class TechnologyModuleDefinitionDTO implements XMLSerializable {
 

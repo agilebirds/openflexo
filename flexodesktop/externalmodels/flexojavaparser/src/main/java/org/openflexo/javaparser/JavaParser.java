@@ -31,7 +31,6 @@ import org.openflexo.foundation.dm.javaparser.ClassSourceCode;
 import org.openflexo.foundation.dm.javaparser.FieldSourceCode;
 import org.openflexo.foundation.dm.javaparser.MethodSourceCode;
 
-
 import com.thoughtworks.qdox.model.ClassLibrary;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaSource;
@@ -43,54 +42,48 @@ public class JavaParser {
 	private static final Logger logger = Logger.getLogger(JavaParser.class.getPackage().getName());
 
 	private FJPJavaDocBuilder _builder;
-	private Hashtable<String,Type> _types; 
+	private Hashtable<String, Type> _types;
 	private Vector<FJPJavaSource> _sources;
 	private Vector<ClassLibrary> _classLibraries;
-	
+
 	public static void init() {
 		DefaultJavaParser javaParser = new DefaultJavaParser();
 		MethodSourceCode.setJavaMethodParser(javaParser);
 		FieldSourceCode.setJavaFieldParser(javaParser);
 		ClassSourceCode.setJavaClassParser(javaParser);
 	}
-	
-	public JavaParser(ClassLibrary classLibrary)
-	{
+
+	public JavaParser(ClassLibrary classLibrary) {
 		_builder = new FJPJavaDocBuilder(classLibrary);
-		_types = new Hashtable<String,Type>();
+		_types = new Hashtable<String, Type>();
 		_sources = new Vector<FJPJavaSource>();
 		_classLibraries = null;
 	}
-		
-	protected JavaSource parseFileForSource(File sourceFile, FJPJavaSource source) throws FileNotFoundException, IOException
-	{
+
+	protected JavaSource parseFileForSource(File sourceFile, FJPJavaSource source) throws FileNotFoundException, IOException {
 		JavaSource returned = _builder.addSource(sourceFile);
 		addSource(source);
 		return returned;
 	}
-	
-	protected JavaSource parseStringForSource(String sourceString, FJPJavaSource source)
-	{
+
+	protected JavaSource parseStringForSource(String sourceString, FJPJavaSource source) {
 		JavaSource returned = _builder.addSource(new StringReader(sourceString));
 		addSource(source);
 		return returned;
 	}
-	
-	protected JavaSource parseStringForSource(String sourceString, FJPJavaSource source, String sourceInfo)
-	{
+
+	protected JavaSource parseStringForSource(String sourceString, FJPJavaSource source, String sourceInfo) {
 		JavaSource returned = _builder.addSource(new StringReader(sourceString), sourceInfo);
 		addSource(source);
 		return returned;
 	}
-	
-	private void addSource(FJPJavaSource source)
-	{
+
+	private void addSource(FJPJavaSource source) {
 		_sources.add(source);
 		_classLibraries = null;
 	}
-	
-	public Vector<ClassLibrary> getClassLibraries()
-	{
+
+	public Vector<ClassLibrary> getClassLibraries() {
 		if (_classLibraries == null) {
 			_classLibraries = new Vector<ClassLibrary>();
 			for (FJPJavaSource source : _sources) {
@@ -102,8 +95,7 @@ public class JavaParser {
 		return _classLibraries;
 	}
 
-	public Type getType(String fullQualifiedName)
-	{
+	public Type getType(String fullQualifiedName) {
 		Type returned = _types.get(fullQualifiedName);
 		if (returned == null) {
 			returned = retrieveType(fullQualifiedName);
@@ -111,9 +103,8 @@ public class JavaParser {
 		}
 		return returned;
 	}
-	
-	private Type retrieveType(String fullQualifiedName)
-	{
+
+	private Type retrieveType(String fullQualifiedName) {
 		for (ClassLibrary cl : getClassLibraries()) {
 			if (cl.contains(fullQualifiedName)) {
 				return cl.getClassByName(fullQualifiedName).asType();
@@ -121,21 +112,20 @@ public class JavaParser {
 		}
 		return new Type(fullQualifiedName);
 	}
-	
-	public Type getType(Class aClass)
-	{
+
+	public Type getType(Class aClass) {
 		return getType(aClass.getName());
 	}
-	
-	public FJPJavaClass getClassByName(String fullQualifiedName)
-	{
+
+	public FJPJavaClass getClassByName(String fullQualifiedName) {
 		JavaClass foundClass = _builder.getClassByName(fullQualifiedName);
-		if (foundClass == null) return null;
+		if (foundClass == null)
+			return null;
 		for (FJPJavaSource source : _sources) {
-			if (source.getClass(foundClass) != null) return source.getClass(foundClass);
+			if (source.getClass(foundClass) != null)
+				return source.getClass(foundClass);
 		}
 		return null;
 	}
-
 
 }

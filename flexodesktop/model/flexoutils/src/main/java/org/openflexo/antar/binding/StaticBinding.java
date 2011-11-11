@@ -27,245 +27,227 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.expr.EvaluationType;
 
-
 public abstract class StaticBinding<T> extends AbstractBinding {
 
-    @SuppressWarnings("hiding")
+	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(StaticBinding.class.getPackage().getName());
 
-	public StaticBinding()
-	{
+	public StaticBinding() {
 		super();
 	}
-	
-    public StaticBinding(BindingDefinition bindingDefinition, Bindable owner)
-    {
-    	super(bindingDefinition,owner);
-    }
 
- 	public String getSerializationRepresentation() 
-	{
-		return "$"+getStringRepresentation();
+	public StaticBinding(BindingDefinition bindingDefinition, Bindable owner) {
+		super(bindingDefinition, owner);
 	}
-	
-    // ==========================================================
-    // ================= Serialization stuff ====================
-    // ==========================================================
 
-    public static StaticBinding makeStaticBinding(String value, Bindable owner)
-    {
-       	if (owner != null) {
-    		StaticBindingFactory factory = owner.getBindingFactory().getStaticBindingFactory();
-    		factory.setBindable(owner);
-     		StaticBinding returned = factory.convertFromString(value);
-    		returned.setOwner(owner);
-    		return returned;
-    	}
-    	return null;
-    }
+	public String getSerializationRepresentation() {
+		return "$" + getStringRepresentation();
+	}
 
-    public StaticBinding getStaticBindingFromString(String aValue)
-    {
-    	return getConverter().convertFromString(aValue);
-    }
+	// ==========================================================
+	// ================= Serialization stuff ====================
+	// ==========================================================
 
-    @Override
-	public StaticBindingFactory getConverter()
-    {
-		if (getOwner() != null) return getOwner().getBindingFactory().getStaticBindingFactory();
+	public static StaticBinding makeStaticBinding(String value, Bindable owner) {
+		if (owner != null) {
+			StaticBindingFactory factory = owner.getBindingFactory().getStaticBindingFactory();
+			factory.setBindable(owner);
+			StaticBinding returned = factory.convertFromString(value);
+			returned.setOwner(owner);
+			return returned;
+		}
 		return null;
-		// return staticBindingConverter;
-    }
+	}
 
- 	public abstract EvaluationType getEvaluationType();
-
-	public abstract T getValue() ;
-
-	public abstract void setValue(T aValue) ;
-
-    @Override
-	public void setsWith(AbstractBinding aValue)
-    {
-    	super.setsWith(aValue);
-    	if (aValue != null) {
-    		if (aValue instanceof StaticBinding) {
-    			Object value = ((StaticBinding)aValue).getValue();
-    			try {
-    				setValue((T)value);
-    			}
-    			catch (ClassCastException e) {
-    				logger.warning("setsWith() with mismatched types !!!");
-    			}
-    		}
-    		else {
-    			logger.warning("setsWith called with mismatched type "+aValue.getClass().getSimpleName()+", expected StaticBinding");
-    		}
-
-    	}
-    }
-    
-    @Override
-	public boolean equals(Object object)
-    {
-        if (object == null)
-            return false;
-        if (object instanceof StaticBinding) {
-        	StaticBinding sb = (StaticBinding) object;
-            if (getBindingDefinition() == null) {
-                if (sb.getBindingDefinition() != null)
-                    return false;
-            } else {
-                if (!getBindingDefinition().equals(sb.getBindingDefinition()))
-                    return false;
-            }
-            return ((_owner == sb._owner) && sb.getValue() != null && getValue().equals(sb.getValue()));
-        } else {
-            return super.equals(object);
-        }
-    }
-
-    protected Type accessedType = null;
-    
-    @Override
-	public Type getAccessedType()
-    {
-    	if (accessedType == null) accessedType = getStaticBindingClass();
-    	return accessedType;
-    }
-
-    public abstract Class<T> getStaticBindingClass();
-
-    @Override
-	public boolean isBindingValid()
-    {
-       	if (logger.isLoggable(Level.FINE))
-    		logger.fine("Is StaticBinding "+this+" valid ?");
-
-       	if (getAccessedType() == null) {
-    		if (logger.isLoggable(Level.FINE))
-    			logger.fine("Invalid binding because accessed type is null");
-    		return false;
-    	}
-
-    	if (getBindingDefinition() == null) {
-    		if (logger.isLoggable(Level.FINE))
-    			logger.fine("Invalid binding because binding definition is null");
-    		return false;
-    	}
-    	else if (getBindingDefinition().getIsSettable()) {
-       		if (logger.isLoggable(Level.FINE))
-    			logger.fine("Invalid binding because binding definition is declared as settable");
-    		return false;
-    	}
-       	else if (getBindingDefinition().getBindingDefinitionType() == BindingDefinitionType.EXECUTE) {
-       		if (logger.isLoggable(Level.FINE))
-    			logger.fine("Invalid binding because binding definition is declared as executable");
-    		return false;
-    	}
-    	
-    	if (getAccessedType().equals(Object.class)) return true;
-
-    	if (_areTypesMatching()) {
-    		if (logger.isLoggable(Level.FINE))
-    			logger.fine("Valid binding");
-       		return true;
-    	}
-
-    	if (logger.isLoggable(Level.FINE))
-			logger.fine("Invalid binding because types doesn't match: "+getAccessedType()+" cannot be assigned to "+getBindingDefinition().getType());
-    	return false;
-
-      }
-
-    @Override
-	public boolean debugIsBindingValid()
-    {
-       	logger.info("Is StaticBinding "+this+" valid ?");
-
-       	if (getAccessedType() == null) {
-       		logger.info("Invalid binding because accessed type is null");
-    		return false;
-    	}
-
-    	if (getBindingDefinition() == null) {
-    		logger.info("Invalid binding because binding definition is null");
-    		return false;
-    	}
-    	else if (getBindingDefinition().getIsSettable()) {
-    		logger.info("Invalid binding because binding definition is declared as settable");
-    		return false;
-    	}
-       	else if (getBindingDefinition().getBindingDefinitionType() == BindingDefinitionType.EXECUTE) {
-       		logger.info("Invalid binding because binding definition is declared as executable");
-    		return false;
-    	}
-    	
-    	if (getAccessedType().equals(Object.class)) {
-       		logger.info("Valid binding since accessed type is Object");
-       		return true;
-    	}
-
-    	if (_areTypesMatching()) {
-    		logger.info("Valid binding");
-       		return true;
-    	}
-
-    	logger.info("Invalid binding because types doesn't match: "+getAccessedType()+" cannot be assigned to "+getBindingDefinition().getType());
-    	return false;
-
-      }
-
-    protected boolean _areTypesMatching()
-    {
-    	return TypeUtils.isTypeAssignableFrom(getBindingDefinition().getType(), getAccessedType(),true);
-    }
-    
-     @Override
-	public boolean isStaticValue()
-    {
-    	return true;
-    }
-
-    @Override
-	public abstract StaticBinding<T> clone();
-
-    @Override
-	public T getBindingValue(BindingEvaluationContext context)
-    {
-    	return getValue();
-    }
-    
-    @Override
-	public void setBindingValue(Object value, BindingEvaluationContext context)
-    {
-    	logger.warning("Binding "+getStringRepresentation()+" is not settable");
-    }
+	public StaticBinding getStaticBindingFromString(String aValue) {
+		return getConverter().convertFromString(aValue);
+	}
 
 	@Override
-	public boolean isSettable()
-	{
+	public StaticBindingFactory getConverter() {
+		if (getOwner() != null)
+			return getOwner().getBindingFactory().getStaticBindingFactory();
+		return null;
+		// return staticBindingConverter;
+	}
+
+	public abstract EvaluationType getEvaluationType();
+
+	public abstract T getValue();
+
+	public abstract void setValue(T aValue);
+
+	@Override
+	public void setsWith(AbstractBinding aValue) {
+		super.setsWith(aValue);
+		if (aValue != null) {
+			if (aValue instanceof StaticBinding) {
+				Object value = ((StaticBinding) aValue).getValue();
+				try {
+					setValue((T) value);
+				} catch (ClassCastException e) {
+					logger.warning("setsWith() with mismatched types !!!");
+				}
+			} else {
+				logger.warning("setsWith called with mismatched type " + aValue.getClass().getSimpleName() + ", expected StaticBinding");
+			}
+
+		}
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		if (object == null)
+			return false;
+		if (object instanceof StaticBinding) {
+			StaticBinding sb = (StaticBinding) object;
+			if (getBindingDefinition() == null) {
+				if (sb.getBindingDefinition() != null)
+					return false;
+			} else {
+				if (!getBindingDefinition().equals(sb.getBindingDefinition()))
+					return false;
+			}
+			return ((_owner == sb._owner) && sb.getValue() != null && getValue().equals(sb.getValue()));
+		} else {
+			return super.equals(object);
+		}
+	}
+
+	protected Type accessedType = null;
+
+	@Override
+	public Type getAccessedType() {
+		if (accessedType == null)
+			accessedType = getStaticBindingClass();
+		return accessedType;
+	}
+
+	public abstract Class<T> getStaticBindingClass();
+
+	@Override
+	public boolean isBindingValid() {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("Is StaticBinding " + this + " valid ?");
+
+		if (getAccessedType() == null) {
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("Invalid binding because accessed type is null");
+			return false;
+		}
+
+		if (getBindingDefinition() == null) {
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("Invalid binding because binding definition is null");
+			return false;
+		} else if (getBindingDefinition().getIsSettable()) {
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("Invalid binding because binding definition is declared as settable");
+			return false;
+		} else if (getBindingDefinition().getBindingDefinitionType() == BindingDefinitionType.EXECUTE) {
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("Invalid binding because binding definition is declared as executable");
+			return false;
+		}
+
+		if (getAccessedType().equals(Object.class))
+			return true;
+
+		if (_areTypesMatching()) {
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("Valid binding");
+			return true;
+		}
+
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("Invalid binding because types doesn't match: " + getAccessedType() + " cannot be assigned to "
+					+ getBindingDefinition().getType());
+		return false;
+
+	}
+
+	@Override
+	public boolean debugIsBindingValid() {
+		logger.info("Is StaticBinding " + this + " valid ?");
+
+		if (getAccessedType() == null) {
+			logger.info("Invalid binding because accessed type is null");
+			return false;
+		}
+
+		if (getBindingDefinition() == null) {
+			logger.info("Invalid binding because binding definition is null");
+			return false;
+		} else if (getBindingDefinition().getIsSettable()) {
+			logger.info("Invalid binding because binding definition is declared as settable");
+			return false;
+		} else if (getBindingDefinition().getBindingDefinitionType() == BindingDefinitionType.EXECUTE) {
+			logger.info("Invalid binding because binding definition is declared as executable");
+			return false;
+		}
+
+		if (getAccessedType().equals(Object.class)) {
+			logger.info("Valid binding since accessed type is Object");
+			return true;
+		}
+
+		if (_areTypesMatching()) {
+			logger.info("Valid binding");
+			return true;
+		}
+
+		logger.info("Invalid binding because types doesn't match: " + getAccessedType() + " cannot be assigned to "
+				+ getBindingDefinition().getType());
+		return false;
+
+	}
+
+	protected boolean _areTypesMatching() {
+		return TypeUtils.isTypeAssignableFrom(getBindingDefinition().getType(), getAccessedType(), true);
+	}
+
+	@Override
+	public boolean isStaticValue() {
+		return true;
+	}
+
+	@Override
+	public abstract StaticBinding<T> clone();
+
+	@Override
+	public T getBindingValue(BindingEvaluationContext context) {
+		return getValue();
+	}
+
+	@Override
+	public void setBindingValue(Object value, BindingEvaluationContext context) {
+		logger.warning("Binding " + getStringRepresentation() + " is not settable");
+	}
+
+	@Override
+	public boolean isSettable() {
 		return false;
 	}
 
 	/**
 	 * Build and return a list of objects (the current object path computed from supplied context)
+	 * 
 	 * @param context
 	 * @return
 	 */
 	@Override
-	public List<Object> getConcernedObjects(BindingEvaluationContext context)
-	{
+	public List<Object> getConcernedObjects(BindingEvaluationContext context) {
 		return null;
 	}
 
 	/**
 	 * Build and return a list of target objects (the current object path computed from supplied context)
+	 * 
 	 * @param context
 	 * @return
 	 */
 	@Override
-	public List<TargetObject> getTargetObjects(BindingEvaluationContext context)
-	{
+	public List<TargetObject> getTargetObjects(BindingEvaluationContext context) {
 		return null;
 	}
 }

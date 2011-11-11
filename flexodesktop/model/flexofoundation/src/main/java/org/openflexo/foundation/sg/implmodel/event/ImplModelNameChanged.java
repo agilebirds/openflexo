@@ -30,60 +30,51 @@ import org.openflexo.foundation.sg.implmodel.ImplementationModelDefinition;
  * @author sguerin
  * 
  */
-public class ImplModelNameChanged extends SGDataModification implements RMNotification
-{
+public class ImplModelNameChanged extends SGDataModification implements RMNotification {
 
-    public ImplementationModelDefinition implModel;
+	public ImplementationModelDefinition implModel;
 
-    public ImplModelNameChanged(ImplementationModelDefinition implModel, String oldName, String newName)
-    {
-        super(oldName, newName);
-        this.implModel = implModel;
-    }
+	public ImplModelNameChanged(ImplementationModelDefinition implModel, String oldName, String newName) {
+		super(oldName, newName);
+		this.implModel = implModel;
+	}
 
-    public ImplModelNameChanged(String propertyName, ImplementationModelDefinition implModel, String oldName, String newName)
-    {
-        super("name", oldName, newName);
-        this.implModel = implModel;
-    }
+	public ImplModelNameChanged(String propertyName, ImplementationModelDefinition implModel, String oldName, String newName) {
+		super("name", oldName, newName);
+		this.implModel = implModel;
+	}
 
-    @Override
-	public boolean forceUpdateWhenUnload()
-    {
-        return true;
-    }
+	@Override
+	public boolean forceUpdateWhenUnload() {
+		return true;
+	}
 
-    @Override
-	public boolean isDeepNotification()
-    {
-        return true;
-    }
+	@Override
+	public boolean isDeepNotification() {
+		return true;
+	}
 
-    @Override
-	public boolean propagateToSynchronizedResource(FlexoResource originResource, FlexoResource targetResource)
-    {
-    	// return true;
-        if (originResource == implModel.getGeneratedSources().getFlexoResource()
-        			&& (targetResource instanceof ImplementationModelResource)) {
-          return true;
-        } else {
-           return false;
-        }
-    }
+	@Override
+	public boolean propagateToSynchronizedResource(FlexoResource originResource, FlexoResource targetResource) {
+		// return true;
+		if (originResource == implModel.getGeneratedSources().getFlexoResource() && (targetResource instanceof ImplementationModelResource)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-    @Override
-	public boolean propagateToAlteredResource(FlexoResource originResource, FlexoResource targetResource)
-    {
-        if (originResource == implModel.getImplementationModelResource()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+	@Override
+	public boolean propagateToAlteredResource(FlexoResource originResource, FlexoResource targetResource) {
+		if (originResource == implModel.getImplementationModelResource()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-    @Override
-	public String toString()
-    {
-        return "ImplModelNameChanged " + oldValue() + "/" + newValue();
-    }
+	@Override
+	public String toString() {
+		return "ImplModelNameChanged " + oldValue() + "/" + newValue();
+	}
 }

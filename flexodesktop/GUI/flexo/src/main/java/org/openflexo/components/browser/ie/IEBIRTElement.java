@@ -24,34 +24,27 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ie.widget.IEBIRTWidget;
 
-
 /**
- * @author bmangez
- * <B>Class Description</B>
+ * @author bmangez <B>Class Description</B>
  */
-public class IEBIRTElement extends IEElement
-{
+public class IEBIRTElement extends IEElement {
 
-    public IEBIRTElement(IEBIRTWidget widget, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(widget, BrowserElementType.BIRT, browser,parent);
-    }
+	public IEBIRTElement(IEBIRTWidget widget, ProjectBrowser browser, BrowserElement parent) {
+		super(widget, BrowserElementType.BIRT, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        //no childs
-    }
+	@Override
+	protected void buildChildrenVector() {
+		// no childs
+	}
 
-    @Override
-	public String getName()
-    {
-        return getButton().getName();
-    }
+	@Override
+	public String getName() {
+		return getButton().getName();
+	}
 
-    protected IEBIRTWidget getButton()
-    {
-        return (IEBIRTWidget) getObject();
-    }
+	protected IEBIRTWidget getButton() {
+		return (IEBIRTWidget) getObject();
+	}
 
 }

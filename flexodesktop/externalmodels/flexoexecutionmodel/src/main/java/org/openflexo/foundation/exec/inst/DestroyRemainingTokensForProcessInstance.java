@@ -19,30 +19,25 @@
  */
 package org.openflexo.foundation.exec.inst;
 
-
 public class DestroyRemainingTokensForProcessInstance extends CustomInstruction {
 
-	public DestroyRemainingTokensForProcessInstance ()
-	{
+	public DestroyRemainingTokensForProcessInstance() {
 		super();
 		setInlineComment("Destroy remaining tokens in current ProcessInstance");
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "[DestroyRemainingTokensInProcessInstance]";
 	}
 
 	@Override
-	public String getJavaStringRepresentation() 
-	{
+	public String getJavaStringRepresentation() {
 		return "destroyRemainingTokensForProcessInstance();";
 	}
-	
+
 	@Override
-	public DestroyRemainingTokensForProcessInstance clone()
-	{
+	public DestroyRemainingTokensForProcessInstance clone() {
 		DestroyRemainingTokensForProcessInstance returned = new DestroyRemainingTokensForProcessInstance();
 		returned.setHeaderComment(getHeaderComment());
 		returned.setInlineComment(getInlineComment());

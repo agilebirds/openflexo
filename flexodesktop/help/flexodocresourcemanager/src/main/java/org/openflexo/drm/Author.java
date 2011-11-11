@@ -21,60 +21,55 @@ package org.openflexo.drm;
 
 public class Author extends DRMObject {
 
-    private String identifier;
-    private String fullName;
-    private String email;
+	private String identifier;
+	private String fullName;
+	private String email;
 
-     public Author (DRMBuilder builder)
-    {
-        this(builder.docResourceCenter);
-        initializeDeserialization(builder);
-    }
+	public Author(DRMBuilder builder) {
+		this(builder.docResourceCenter);
+		initializeDeserialization(builder);
+	}
 
-    public Author (DocResourceCenter docResourceCenter)
-    {
-        super(docResourceCenter);
-    }
+	public Author(DocResourceCenter docResourceCenter) {
+		super(docResourceCenter);
+	}
 
-    protected static Author createAuthor(String anIdentifier, String aFullName, String anEmail, DocResourceCenter docResourceCenter)
-    {
-        Author returned = new Author(docResourceCenter);
-        returned.identifier = anIdentifier;
-        returned.fullName = aFullName;
-        returned.email = anEmail;
-        return returned;
-    }
-    
-    public String getEmail() {
-        return email;
-    }
+	protected static Author createAuthor(String anIdentifier, String aFullName, String anEmail, DocResourceCenter docResourceCenter) {
+		Author returned = new Author(docResourceCenter);
+		returned.identifier = anIdentifier;
+		returned.fullName = aFullName;
+		returned.email = anEmail;
+		return returned;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public String getFullName() {
-        return fullName;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
+	public String getFullName() {
+		return fullName;
+	}
 
-    @Override
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+	@Override
 	public String getIdentifier() {
-        return identifier;
-    }
+		return identifier;
+	}
 
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
 
-    @Override
-	public String getClassNameKey() 
-    {
-        return "author";
-    }
-
+	@Override
+	public String getClassNameKey() {
+		return "author";
+	}
 
 }

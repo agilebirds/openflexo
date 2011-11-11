@@ -25,37 +25,32 @@ import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
-
 public abstract class ViewPointObject extends ViewPointLibraryObject implements Bindable {
 
 	public abstract ViewPoint getCalc();
-	
+
 	@Override
-	public ViewPointLibrary getViewPointLibrary() 
-	{
+	public ViewPointLibrary getViewPointLibrary() {
 		if (getCalc() != null)
 			return getCalc().getViewPointLibrary();
 		return null;
 	}
-	
+
 	@Override
-	public void setChanged()
-	{
+	public void setChanged() {
 		super.setChanged();
-		if (getCalc() != null) getCalc().setIsModified();
+		if (getCalc() != null)
+			getCalc().setIsModified();
 	}
-		
-	public void notifyBindingChanged(ViewPointDataBinding binding)
-	{
+
+	public void notifyBindingChanged(ViewPointDataBinding binding) {
 	}
-	
-	public void notifyChange(InspectorBindingAttribute bindingAttribute, AbstractBinding oldValue, AbstractBinding value) 
-	{
+
+	public void notifyChange(InspectorBindingAttribute bindingAttribute, AbstractBinding oldValue, AbstractBinding value) {
 	}
 
 	@Override
-	public BindingFactory getBindingFactory() 
-	{
+	public BindingFactory getBindingFactory() {
 		return getCalc().getBindingFactory();
 	}
 

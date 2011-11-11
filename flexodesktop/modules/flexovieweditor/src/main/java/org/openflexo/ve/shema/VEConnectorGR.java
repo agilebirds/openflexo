@@ -33,78 +33,70 @@ import org.openflexo.foundation.view.ViewConnector;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.toolbox.ToolBox;
 
-
-public class VEConnectorGR extends ConnectorGraphicalRepresentation<ViewConnector> implements GraphicalFlexoObserver,VEShemaConstants {
+public class VEConnectorGR extends ConnectorGraphicalRepresentation<ViewConnector> implements GraphicalFlexoObserver, VEShemaConstants {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(VEConnectorGR.class.getPackage().getName());
 
 	/**
-	 * Constructor invoked during deserialization
-	 * DO NOT use it
+	 * Constructor invoked during deserialization DO NOT use it
 	 */
-	public VEConnectorGR(VEShemaBuilder builder)
-	{
-		this(null,null);
+	public VEConnectorGR(VEShemaBuilder builder) {
+		this(null, null);
 	}
 
-	public VEConnectorGR(ViewConnector aConnector, Drawing<?> aDrawing) 
-	{
-		super(ConnectorType.LINE,
-				aDrawing != null ? (ShapeGraphicalRepresentation<?>)aDrawing.getGraphicalRepresentation(aConnector.getStartShape()) : null,
-				aDrawing != null ? (ShapeGraphicalRepresentation<?>)aDrawing.getGraphicalRepresentation(aConnector.getEndShape()) : null,
-				aConnector, aDrawing);
-		//setText(getRole().getName());
+	public VEConnectorGR(ViewConnector aConnector, Drawing<?> aDrawing) {
+		super(ConnectorType.LINE, aDrawing != null ? (ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(aConnector
+				.getStartShape()) : null, aDrawing != null ? (ShapeGraphicalRepresentation<?>) aDrawing
+				.getGraphicalRepresentation(aConnector.getEndShape()) : null, aConnector, aDrawing);
+		// setText(getRole().getName());
 
 		addToMouseClickControls(new VEShemaController.ShowContextualMenuControl());
-		if (ToolBox.getPLATFORM()!=ToolBox.MACOS) {
+		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
 			addToMouseClickControls(new VEShemaController.ShowContextualMenuControl(true));
 		}
-		//addToMouseDragControls(new DrawRoleSpecializationControl());
+		// addToMouseDragControls(new DrawRoleSpecializationControl());
 
-		if (aConnector != null) aConnector.addObserver(this);
+		if (aConnector != null)
+			aConnector.addObserver(this);
 
 	}
-	
+
 	@Override
-	public void delete()
-	{
-		if (getDrawable() != null) getDrawable().deleteObserver(this);
+	public void delete() {
+		if (getDrawable() != null)
+			getDrawable().deleteObserver(this);
 		super.delete();
 	}
 
-	public ViewConnector getOEConnector()
-	{
+	public ViewConnector getOEConnector() {
 		return getDrawable();
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getOEConnector()) {
 			if (dataModification instanceof NameChanged) {
-				//logger.info("received NameChanged notification");
+				// logger.info("received NameChanged notification");
 				notifyChange(org.openflexo.fge.GraphicalRepresentation.Parameters.text);
-				//setText(getText());
+				// setText(getText());
 			}
 		}
 	}
 
 	@Override
-	public String getText()
-	{
+	public String getText() {
 		if (getOEConnector() != null)
 			return getOEConnector().getName();
 		return null;
 	}
 
 	@Override
-	public void setTextNoNotification(String text) 
-	{
+	public void setTextNoNotification(String text) {
 		if (getOEConnector() != null)
 			getOEConnector().setName(text);
 	}
-	
+
 	/**
 	 * We dont want URI to be renamed all the time: we decide here to disable continuous text editing
 	 */

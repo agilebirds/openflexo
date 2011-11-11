@@ -19,15 +19,11 @@
  */
 package org.openflexo.fib.controller;
 
-
-
-public class FIBMultipleValuesDynamicModel<T,O> extends FIBComponentDynamicModel<T>
-{
+public class FIBMultipleValuesDynamicModel<T, O> extends FIBComponentDynamicModel<T> {
 	public O selected;
 	public int selectedIndex;
-	
-	public FIBMultipleValuesDynamicModel(T data)
-	{
+
+	public FIBMultipleValuesDynamicModel(T data) {
 		super(data);
 	}
 }

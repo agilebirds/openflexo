@@ -23,20 +23,16 @@ import java.awt.event.MouseEvent;
 
 import org.openflexo.fge.GraphicalRepresentation;
 
+public class ContinuousSelectionAction extends MouseClickControlAction {
+	@Override
+	public MouseClickControlActionType getActionType() {
+		return MouseClickControlActionType.CONTINUOUS_SELECTION;
+	}
 
-public class ContinuousSelectionAction extends MouseClickControlAction
-	{
-		@Override
-		public MouseClickControlActionType getActionType()
-		{
-			return MouseClickControlActionType.CONTINUOUS_SELECTION;
-		}
+	@Override
+	public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
+		MouseClickControlAction.logger.info("Continuous select " + graphicalRepresentation);
 
-		@Override
-		public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event)
-		{
-			MouseClickControlAction.logger.info("Continuous select "+graphicalRepresentation);
-			
-			return true;
-		}
+		return true;
+	}
 }

@@ -28,46 +28,37 @@ import org.openflexo.foundation.ie.action.InsertColBefore;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class InsertColBeforeInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	InsertColBeforeInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(InsertColBefore.actionType,actionInitializer);
+	InsertColBeforeInitializer(IEControllerActionInitializer actionInitializer) {
+		super(InsertColBefore.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<InsertColBefore> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<InsertColBefore> getDefaultInitializer() {
 		return new FlexoActionInitializer<InsertColBefore>() {
 			@Override
-			public boolean run(ActionEvent e, InsertColBefore action)
-			{
+			public boolean run(ActionEvent e, InsertColBefore action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<InsertColBefore> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<InsertColBefore> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<InsertColBefore>() {
 			@Override
-			public boolean run(ActionEvent e, InsertColBefore action)
-			{
+			public boolean run(ActionEvent e, InsertColBefore action) {
 				return true;
 			}
 		};
 	}
-
-
 
 }

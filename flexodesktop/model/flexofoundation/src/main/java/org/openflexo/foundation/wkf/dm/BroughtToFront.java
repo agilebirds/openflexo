@@ -25,12 +25,10 @@ package org.openflexo.foundation.wkf.dm;
  * @author sguerin
  * 
  */
-public class BroughtToFront extends WKFDataModification
-{
+public class BroughtToFront extends WKFDataModification {
 
-    public BroughtToFront()
-    {
-        super(null, null);
-    }
+	public BroughtToFront() {
+		super(null, null);
+	}
 
 }

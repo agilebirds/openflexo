@@ -27,30 +27,25 @@ import java.io.File;
 import org.openflexo.toolbox.FileResource;
 
 /**
- *
+ * 
  * @author Rudolf Visagie
  */
 public enum SpellCheckDictionaryVersion {
-    STRICT_UK("Spellcheck/dictionary/eng_uk_strict.zip"),
-    LIBERAL_UK("Spellcheck/dictionary/eng_uk_liberal.zip"),
-    STRICT_US("Spellcheck/dictionary/eng_us_strict.zip"),
-    LIBERAL_US("Spellcheck/dictionary/eng_us_liberal.zip"),
-    CUSTOM(null);
+	STRICT_UK("Spellcheck/dictionary/eng_uk_strict.zip"), LIBERAL_UK("Spellcheck/dictionary/eng_uk_liberal.zip"), STRICT_US(
+			"Spellcheck/dictionary/eng_us_strict.zip"), LIBERAL_US("Spellcheck/dictionary/eng_us_liberal.zip"), CUSTOM(null);
 
-    private String filename;
+	private String filename;
 
-    SpellCheckDictionaryVersion(String filename) {
-        this.filename = filename;
-    }
+	SpellCheckDictionaryVersion(String filename) {
+		this.filename = filename;
+	}
 
-    public File getFile()
-    {
-        return new FileResource(filename);
-    }
+	public File getFile() {
+		return new FileResource(filename);
+	}
 
-    @Override
-    public String toString() 
-    {
-        return filename;
-    }
+	@Override
+	public String toString() {
+		return filename;
+	}
 }

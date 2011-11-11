@@ -25,14 +25,12 @@ package org.openflexo.foundation.ontology.dm;
  * @author sguerin
  * 
  */
-public class URINameChanged extends OEDataModification
-{
+public class URINameChanged extends OEDataModification {
 
 	public static final String URI_NAME_KEY = "uriName";
-	
-    public URINameChanged(Object oldValue, Object newValue)
-    {
-        super(URI_NAME_KEY, oldValue, newValue);
-    }
+
+	public URINameChanged(Object oldValue, Object newValue) {
+		super(URI_NAME_KEY, oldValue, newValue);
+	}
 
 }

@@ -32,33 +32,26 @@ import org.openflexo.docxparser.dto.api.IParsedFlexoName;
 import org.openflexo.docxparser.dto.api.IParsedFlexoObject;
 import org.openflexo.docxparser.dto.api.IParsedFlexoTitle;
 
-
-public class ParsedDocx implements IParsedDocx
-{
+public class ParsedDocx implements IParsedDocx {
 	private Map<String, IParsedFlexoObject> parsedFlexoObjectsByFlexoIdAndUserId;
 
-	public ParsedDocx()
-	{
+	public ParsedDocx() {
 		this.parsedFlexoObjectsByFlexoIdAndUserId = new HashMap<String, IParsedFlexoObject>();
 	}
 
 	@Override
-	public IParsedFlexoObject getParsedFlexoObject(String flexoId, String userId)
-	{
+	public IParsedFlexoObject getParsedFlexoObject(String flexoId, String userId) {
 		return parsedFlexoObjectsByFlexoIdAndUserId.get(flexoId + "_" + userId);
 	}
 
 	@Override
-	public Collection<IParsedFlexoObject> getAllParsedFlexoObjects()
-	{
+	public Collection<IParsedFlexoObject> getAllParsedFlexoObjects() {
 		return parsedFlexoObjectsByFlexoIdAndUserId.values();
 	}
 
-	public IParsedFlexoObject getOrCreateParsedFlexoObject(String flexoId, String userId)
-	{
+	public IParsedFlexoObject getOrCreateParsedFlexoObject(String flexoId, String userId) {
 		IParsedFlexoObject parsedObject = getParsedFlexoObject(flexoId, userId);
-		if(parsedObject == null)
-		{
+		if (parsedObject == null) {
 			parsedObject = new ParsedFlexoObject(flexoId, userId);
 			parsedFlexoObjectsByFlexoIdAndUserId.put(flexoId + "_" + userId, parsedObject);
 		}
@@ -67,133 +60,116 @@ public class ParsedDocx implements IParsedDocx
 	}
 
 	@Override
-	public IParsedFlexoDescription getParsedDescription(String flexoId, String userId)
-	{
+	public IParsedFlexoDescription getParsedDescription(String flexoId, String userId) {
 		IParsedFlexoObject flexoObject = getParsedFlexoObject(flexoId, userId);
-		return flexoObject != null?flexoObject.getParsedFlexoDescription():null;
+		return flexoObject != null ? flexoObject.getParsedFlexoDescription() : null;
 	}
 
 	/**
 	 * @return the ParsedFlexoDescription associated to the flexoId if any, otherwise it will create a new one and return it.
 	 */
-	public IParsedFlexoDescription getOrCreateParsedDescription(String flexoId, String userId)
-	{
+	public IParsedFlexoDescription getOrCreateParsedDescription(String flexoId, String userId) {
 		IParsedFlexoObject flexoObject = getOrCreateParsedFlexoObject(flexoId, userId);
 
 		IParsedFlexoDescription parsedDescription = flexoObject.getParsedFlexoDescription();
-		if(parsedDescription == null)
+		if (parsedDescription == null)
 			parsedDescription = new ParsedFlexoDescription(flexoObject);
 
 		return parsedDescription;
 	}
 
 	@Override
-	public Collection<IParsedFlexoDescription> getAllParsedFlexoDescriptions()
-	{
+	public Collection<IParsedFlexoDescription> getAllParsedFlexoDescriptions() {
 		List<IParsedFlexoDescription> list = new ArrayList<IParsedFlexoDescription>();
-		for(IParsedFlexoObject flexoObject : getAllParsedFlexoObjects())
-		{
-			if(flexoObject.getParsedFlexoDescription() != null)
+		for (IParsedFlexoObject flexoObject : getAllParsedFlexoObjects()) {
+			if (flexoObject.getParsedFlexoDescription() != null)
 				list.add(flexoObject.getParsedFlexoDescription());
 		}
 		return list;
 	}
 
-
 	/**
 	 * @return the ParsedFlexoName associated to the flexoId if any, otherwise it will create a new one and return it.
 	 */
-	public IParsedFlexoName getOrCreateParsedName(String flexoId, String userId)
-	{
+	public IParsedFlexoName getOrCreateParsedName(String flexoId, String userId) {
 		IParsedFlexoObject flexoObject = getOrCreateParsedFlexoObject(flexoId, userId);
 
 		IParsedFlexoName parsedName = flexoObject.getParsedFlexoName();
-		if(parsedName == null)
+		if (parsedName == null)
 			parsedName = new ParsedFlexoName(flexoObject);
 
 		return parsedName;
 	}
 
 	@Override
-	public IParsedFlexoName getParsedName(String flexoId, String userId)
-	{
+	public IParsedFlexoName getParsedName(String flexoId, String userId) {
 		IParsedFlexoObject flexoObject = getParsedFlexoObject(flexoId, userId);
-		return flexoObject != null?flexoObject.getParsedFlexoName():null;
+		return flexoObject != null ? flexoObject.getParsedFlexoName() : null;
 	}
 
 	@Override
-	public Collection<IParsedFlexoName> getAllParsedFlexoNames()
-	{
+	public Collection<IParsedFlexoName> getAllParsedFlexoNames() {
 		List<IParsedFlexoName> list = new ArrayList<IParsedFlexoName>();
-		for(IParsedFlexoObject flexoObject : getAllParsedFlexoObjects())
-		{
-			if(flexoObject.getParsedFlexoName() != null)
+		for (IParsedFlexoObject flexoObject : getAllParsedFlexoObjects()) {
+			if (flexoObject.getParsedFlexoName() != null)
 				list.add(flexoObject.getParsedFlexoName());
 		}
 		return list;
 	}
-	
+
 	/**
 	 * @return the ParsedFlexoTitle associated to the flexoId if any, otherwise it will create a new one and return it.
 	 */
-	public IParsedFlexoTitle getOrCreateParsedTitle(String flexoId, String userId)
-	{
+	public IParsedFlexoTitle getOrCreateParsedTitle(String flexoId, String userId) {
 		IParsedFlexoObject flexoObject = getOrCreateParsedFlexoObject(flexoId, userId);
 
 		IParsedFlexoTitle parsedTitle = flexoObject.getParsedFlexoTitle();
-		if(parsedTitle == null)
+		if (parsedTitle == null)
 			parsedTitle = new ParsedFlexoTitle(flexoObject);
 
 		return parsedTitle;
 	}
 
 	@Override
-	public IParsedFlexoTitle getParsedTitle(String flexoId, String userId)
-	{
+	public IParsedFlexoTitle getParsedTitle(String flexoId, String userId) {
 		IParsedFlexoObject flexoObject = getParsedFlexoObject(flexoId, userId);
-		return flexoObject != null?flexoObject.getParsedFlexoTitle():null;
+		return flexoObject != null ? flexoObject.getParsedFlexoTitle() : null;
 	}
 
 	@Override
-	public Collection<IParsedFlexoTitle> getAllParsedFlexoTitles()
-	{
+	public Collection<IParsedFlexoTitle> getAllParsedFlexoTitles() {
 		List<IParsedFlexoTitle> list = new ArrayList<IParsedFlexoTitle>();
-		for(IParsedFlexoObject flexoObject : getAllParsedFlexoObjects())
-		{
-			if(flexoObject.getParsedFlexoTitle() != null)
+		for (IParsedFlexoObject flexoObject : getAllParsedFlexoObjects()) {
+			if (flexoObject.getParsedFlexoTitle() != null)
 				list.add(flexoObject.getParsedFlexoTitle());
 		}
 		return list;
 	}
-	
+
 	/**
 	 * @return the ParsedFlexoContent associated to the flexoId if any, otherwise it will create a new one and return it.
 	 */
-	public IParsedFlexoContent getOrCreateParsedContent(String flexoId, String userId)
-	{
+	public IParsedFlexoContent getOrCreateParsedContent(String flexoId, String userId) {
 		IParsedFlexoObject flexoObject = getOrCreateParsedFlexoObject(flexoId, userId);
 
 		IParsedFlexoContent parsedContent = flexoObject.getParsedFlexoContent();
-		if(parsedContent == null)
+		if (parsedContent == null)
 			parsedContent = new ParsedFlexoContent(flexoObject);
 
 		return parsedContent;
 	}
 
 	@Override
-	public IParsedFlexoContent getParsedContent(String flexoId, String userId)
-	{
+	public IParsedFlexoContent getParsedContent(String flexoId, String userId) {
 		IParsedFlexoObject flexoObject = getParsedFlexoObject(flexoId, userId);
-		return flexoObject != null?flexoObject.getParsedFlexoContent():null;
+		return flexoObject != null ? flexoObject.getParsedFlexoContent() : null;
 	}
 
 	@Override
-	public Collection<IParsedFlexoContent> getAllParsedFlexoContents()
-	{
+	public Collection<IParsedFlexoContent> getAllParsedFlexoContents() {
 		List<IParsedFlexoContent> list = new ArrayList<IParsedFlexoContent>();
-		for(IParsedFlexoObject flexoObject : getAllParsedFlexoObjects())
-		{
-			if(flexoObject.getParsedFlexoContent() != null)
+		for (IParsedFlexoObject flexoObject : getAllParsedFlexoObjects()) {
+			if (flexoObject.getParsedFlexoContent() != null)
 				list.add(flexoObject.getParsedFlexoContent());
 		}
 		return list;

@@ -23,7 +23,7 @@ import org.openflexo.foundation.FlexoException;
 
 public class AbortedActionException extends FlexoException {
 
-	public AbortedActionException(String message, String localizationKey){
+	public AbortedActionException(String message, String localizationKey) {
 		super(message, localizationKey);
 	}
 }

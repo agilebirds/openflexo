@@ -33,50 +33,47 @@ import org.openflexo.logging.FlexoLogger;
 /**
  * @author gpolet Created on 3 oct. 2005
  */
-public class FlexoObjectIDManager
-{
+public class FlexoObjectIDManager {
 
 	private FlexoProject project;
 
 	private static final Logger logger = FlexoLogger.getLogger(FlexoObjectIDManager.class.getPackage().toString());
 
 	private Vector<FlexoModelObject> badObjects;
-	private Hashtable<Long,FlexoModelObject> used;
+	private Hashtable<Long, FlexoModelObject> used;
 
 	/**
 	 * 
 	 */
-	public FlexoObjectIDManager(FlexoProject project)
-	{
+	public FlexoObjectIDManager(FlexoProject project) {
 		this.project = project;
 	}
 
-	public Vector<FlexoModelObject> checkProject(boolean fixProblems)
-	{
+	public Vector<FlexoModelObject> checkProject(boolean fixProblems) {
 		// First load all unloaded resources
 		for (FlexoResource resource : project.getResources().values()) {
 			if (resource instanceof FlexoStorageResource) {
-				((FlexoStorageResource)resource).getResourceData(); // no need to mark as modified .setIsModified();
+				((FlexoStorageResource) resource).getResourceData(); // no need to mark as modified .setIsModified();
 			}
 		}
 
 		// Iterate on all objects to validate
-		used = new Hashtable<Long,FlexoModelObject>();
+		used = new Hashtable<Long, FlexoModelObject>();
 		badObjects = new Vector<FlexoModelObject>();
 		Vector<FlexoModelObject> objectsToUnregister = new Vector<FlexoModelObject>();
 		for (FlexoModelObject object : new Vector<FlexoModelObject>(project.getAllRegisteredObjects())) {
 			if (object.getProject() == project) {
-				if (object.getXMLResourceData()==null) {
+				if (object.getXMLResourceData() == null) {
 					continue;
 				}
-				if (object.getXMLResourceData().getFlexoResource()==null) {
+				if (object.getXMLResourceData().getFlexoResource() == null) {
 					continue;
 				}
-				if (object.getXMLResourceData().getFlexoResource().getResourceData()==object.getXMLResourceData()) {
-					testAndSetID(object,fixProblems);
+				if (object.getXMLResourceData().getFlexoResource().getResourceData() == object.getXMLResourceData()) {
+					testAndSetID(object, fixProblems);
 				} else {
 					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("This object "+object+" is registered but should not!");
+						logger.warning("This object " + object + " is registered but should not!");
 					}
 					objectsToUnregister.add(object);
 				}
@@ -88,10 +85,10 @@ public class FlexoObjectIDManager
 		}
 
 		/*for (FlexoModelObject obj : badObjects) {
-        	if (obj instanceof FlexoXMLSerializableObject) {
-        		((FlexoXMLSerializableObject)obj).getXMLResourceData().setIsModified();
-        	}
-        }*/
+			if (obj instanceof FlexoXMLSerializableObject) {
+				((FlexoXMLSerializableObject)obj).getXMLResourceData().setIsModified();
+			}
+		}*/
 
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Found " + badObjects.size() + " objects that have an incorrect flexoID");
@@ -99,8 +96,7 @@ public class FlexoObjectIDManager
 		return badObjects;
 	}
 
-	private void testAndSetID(FlexoModelObject o, boolean fixProblems)
-	{
+	private void testAndSetID(FlexoModelObject o, boolean fixProblems) {
 		if (o.isCreatedByCloning()) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("An object was found with status beingCloned " + o.getXMLRepresentation());
@@ -125,7 +121,9 @@ public class FlexoObjectIDManager
 		if (old != null && old != o) {
 			long newID = o.getProject().getNewFlexoID();
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Found two different objects with the same flexoID:" + o.getFlexoID()+ " Object1: "+old.getClass().getName()+"["+old.getSerializationIdentifier()+"]" + " and Object2:" + o.getClass().getName()+"["+o.getSerializationIdentifier()+"] Replace id with "+newID);
+				logger.warning("Found two different objects with the same flexoID:" + o.getFlexoID() + " Object1: "
+						+ old.getClass().getName() + "[" + old.getSerializationIdentifier() + "]" + " and Object2:"
+						+ o.getClass().getName() + "[" + o.getSerializationIdentifier() + "] Replace id with " + newID);
 			}
 			if (fixProblems) {
 				o.setFlexoID(newID);

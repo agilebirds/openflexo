@@ -15,13 +15,12 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.wkf.DuplicateRoleException;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 
-
 public class AddToConsultedRole extends AddToXRole<AddToConsultedRole> {
 
 	private static final Logger logger = Logger.getLogger(AddToConsultedRole.class.getPackage().getName());
 
 	public static FlexoActionType<AddToConsultedRole, AbstractActivityNode, AbstractActivityNode> actionType = new FlexoActionType<AddToConsultedRole, AbstractActivityNode, AbstractActivityNode>(
-	"add_to_consulted_role") {
+			"add_to_consulted_role") {
 
 		/**
 		 * Factory method

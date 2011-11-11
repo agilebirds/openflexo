@@ -23,7 +23,6 @@
 // Generated on: 2008.02.08 at 10:43:57 AM CET 
 //
 
-
 package org.oasis_open.docs.wsbpel._2_0.process.executable;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -34,11 +33,12 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-
 /**
- * <p>Java class for tCompensateScope complex type.
+ * <p>
+ * Java class for tCompensateScope complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tCompensateScope">
@@ -54,37 +54,32 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tCompensateScope")
-public class TCompensateScope
-    extends TActivity
-{
+public class TCompensateScope extends TActivity {
 
-    @XmlAttribute(required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "NCName")
-    protected String target;
+	@XmlAttribute(required = true)
+	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+	@XmlSchemaType(name = "NCName")
+	protected String target;
 
-    /**
-     * Gets the value of the target property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getTarget() {
-        return target;
-    }
+	/**
+	 * Gets the value of the target property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getTarget() {
+		return target;
+	}
 
-    /**
-     * Sets the value of the target property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setTarget(String value) {
-        this.target = value;
-    }
+	/**
+	 * Sets the value of the target property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setTarget(String value) {
+		this.target = value;
+	}
 
 }

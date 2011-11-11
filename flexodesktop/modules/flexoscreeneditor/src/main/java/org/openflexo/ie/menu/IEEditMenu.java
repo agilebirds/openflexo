@@ -33,51 +33,47 @@ import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.view.menu.EditMenu;
 import org.openflexo.view.menu.FlexoMenuItem;
 
-
 /**
  * TODO : Description for this file
  * 
  * @author benoit
  */
-public class IEEditMenu extends EditMenu
-{
+public class IEEditMenu extends EditMenu {
 
-    protected static final Logger logger = Logger.getLogger(IEEditMenu.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(IEEditMenu.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
-     protected IEController _controller;
+	protected IEController _controller;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public IEEditMenu(IEController controller)
-    {
-        super(controller);
-        _controller = controller;
-         addSeparator();
-        add(cutItem = new FlexoMenuItem(IECut.actionType, getController()));
-        add(copyItem = new FlexoMenuItem(IECopy.actionType, getController()));
-        add(pasteItem = new FlexoMenuItem(IEPaste.actionType, getController()));
-        add(deleteItem = new FlexoMenuItem(IEDelete.actionType, getController()));
-        deleteItem.getInputMap().put(KeyStroke.getKeyStroke((char)FlexoCst.DELETE_KEY_CODE),"doClick");
-        add(selectAllItem = new FlexoMenuItem(IESelectAll.actionType, getController()));
-        selectAllItem.setEnabled(false);
-    }
+	public IEEditMenu(IEController controller) {
+		super(controller);
+		_controller = controller;
+		addSeparator();
+		add(cutItem = new FlexoMenuItem(IECut.actionType, getController()));
+		add(copyItem = new FlexoMenuItem(IECopy.actionType, getController()));
+		add(pasteItem = new FlexoMenuItem(IEPaste.actionType, getController()));
+		add(deleteItem = new FlexoMenuItem(IEDelete.actionType, getController()));
+		deleteItem.getInputMap().put(KeyStroke.getKeyStroke((char) FlexoCst.DELETE_KEY_CODE), "doClick");
+		add(selectAllItem = new FlexoMenuItem(IESelectAll.actionType, getController()));
+		selectAllItem.setEnabled(false);
+	}
 
-    // ==========================================================================
-    // ============================= Accessors
-    // ==================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Accessors
+	// ==================================
+	// ==========================================================================
 
-    public IEController getIEController()
-    {
-        return _controller;
-    }
+	public IEController getIEController() {
+		return _controller;
+	}
 
 }

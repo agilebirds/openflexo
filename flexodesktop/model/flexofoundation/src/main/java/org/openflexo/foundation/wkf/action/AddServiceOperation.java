@@ -33,19 +33,19 @@ import org.openflexo.foundation.wkf.ws.FlexoPort;
 import org.openflexo.foundation.wkf.ws.ServiceInterface;
 import org.openflexo.foundation.wkf.ws.ServiceOperation;
 
-
-public class AddServiceOperation extends FlexoAction<AddServiceOperation,FlexoModelObject,FlexoModelObject> {
+public class AddServiceOperation extends FlexoAction<AddServiceOperation, FlexoModelObject, FlexoModelObject> {
 
 	private static final Logger logger = Logger.getLogger(AddServiceOperation.class.getPackage().getName());
 
-	public static FlexoActionType<AddServiceOperation,FlexoModelObject,FlexoModelObject> actionType = new FlexoActionType<AddServiceOperation,FlexoModelObject,FlexoModelObject>("add_new_service_operation", FlexoActionType.newMenu,
-			FlexoActionType.newMenuGroup1, FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<AddServiceOperation, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<AddServiceOperation, FlexoModelObject, FlexoModelObject>(
+			"add_new_service_operation", FlexoActionType.newMenu, FlexoActionType.newMenuGroup1, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public AddServiceOperation makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		public AddServiceOperation makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection,
+				FlexoEditor editor) {
 			return new AddServiceOperation(focusedObject, globalSelection, editor);
 		}
 

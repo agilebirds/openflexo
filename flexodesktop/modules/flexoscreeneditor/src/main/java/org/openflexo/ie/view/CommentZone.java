@@ -31,56 +31,51 @@ import org.openflexo.view.FlexoDialog;
 import org.openflexo.wysiwyg.FlexoWysiwyg;
 import org.openflexo.wysiwyg.FlexoWysiwygLight;
 
+public class CommentZone extends FlexoDialog {
 
-public class CommentZone extends FlexoDialog
-{
+	protected IEWOComponent _model;
 
-    protected IEWOComponent _model;
+	private JLabel helpLabel;
 
-    private JLabel helpLabel;
+	FlexoWysiwyg editor;
 
-    FlexoWysiwyg editor;
+	public CommentZone(Frame owner, ComponentDefinition model) {
+		super(owner);
+		setTitle(model.getWOComponent().getName());
+		_model = model.getWOComponent();
+		setDefaultCloseOperation(HIDE_ON_CLOSE);
+		getContentPane().setLayout(new BorderLayout());
+		helpLabel = new JLabel("Help (for end-user):");
+		helpLabel.setFont(IEWOComponentView.LABEL_BOLD_FONT);
+		helpLabel.setBackground(IEWOComponentView.DEFAULT_BG_COLOR);
+		editor = new FlexoWysiwygLight(_model.getHelpText(), true) {
+			@Override
+			public void notifyTextChanged() {
+				_model.setHelpText(editor.getBodyContent());
+			}
+		};
+		getContentPane().add(helpLabel, BorderLayout.NORTH);
+		getContentPane().add(editor, BorderLayout.CENTER);
+		setSize(new Dimension(400, 250));
+	}
 
-    public CommentZone(Frame owner, ComponentDefinition model)
-    {
-        super(owner);
-        setTitle(model.getWOComponent().getName());
-        _model = model.getWOComponent();
-        setDefaultCloseOperation(HIDE_ON_CLOSE);
-        getContentPane().setLayout(new BorderLayout());
-        helpLabel = new JLabel("Help (for end-user):");
-        helpLabel.setFont(IEWOComponentView.LABEL_BOLD_FONT);
-        helpLabel.setBackground(IEWOComponentView.DEFAULT_BG_COLOR);
-        editor = new FlexoWysiwygLight(_model.getHelpText(), true) {
-        	@Override
-        	public void notifyTextChanged() {
-        		_model.setHelpText(editor.getBodyContent());
-        	}
-        };
-        getContentPane().add(helpLabel,BorderLayout.NORTH);
-        getContentPane().add(editor, BorderLayout.CENTER);
-        setSize(new Dimension(400, 250));
-    }
-
-    public CommentZone(Frame owner, IEWOComponent model)
-    {
-        super();
-        setTitle(model.getName());
-        _model = model;
-        getContentPane().setLayout(new BorderLayout());
-        helpLabel = new JLabel("Help (for end-user):");
-        helpLabel.setFont(IEWOComponentView.LABEL_BOLD_FONT);
-        helpLabel.setBackground(IEWOComponentView.DEFAULT_BG_COLOR);
-        editor = new FlexoWysiwygLight(_model.getHelpText(), true) {
-        	@Override
-        	public void notifyTextChanged() {
-        		_model.setHelpText(editor.getBodyContent());
-        	}
-        };
-        getContentPane().add(helpLabel,BorderLayout.NORTH);
-        getContentPane().add(editor, BorderLayout.CENTER);
-        setSize(new Dimension(400, 250));
-    }
-
+	public CommentZone(Frame owner, IEWOComponent model) {
+		super();
+		setTitle(model.getName());
+		_model = model;
+		getContentPane().setLayout(new BorderLayout());
+		helpLabel = new JLabel("Help (for end-user):");
+		helpLabel.setFont(IEWOComponentView.LABEL_BOLD_FONT);
+		helpLabel.setBackground(IEWOComponentView.DEFAULT_BG_COLOR);
+		editor = new FlexoWysiwygLight(_model.getHelpText(), true) {
+			@Override
+			public void notifyTextChanged() {
+				_model.setHelpText(editor.getBodyContent());
+			}
+		};
+		getContentPane().add(helpLabel, BorderLayout.NORTH);
+		getContentPane().add(editor, BorderLayout.CENTER);
+		setSize(new Dimension(400, 250));
+	}
 
 }

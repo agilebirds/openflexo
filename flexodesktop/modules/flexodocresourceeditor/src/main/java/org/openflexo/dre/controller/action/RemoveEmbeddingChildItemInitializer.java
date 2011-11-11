@@ -28,45 +28,38 @@ import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class RemoveEmbeddingChildItemInitializer extends ActionInitializer {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RemoveEmbeddingChildItemInitializer(DREControllerActionInitializer actionInitializer)
-	{
-		super(RemoveEmbeddingChildItem.actionType,actionInitializer);
-	}
-	
-	@Override
-	protected DREControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DREControllerActionInitializer)super.getControllerActionInitializer();
-	}
-	
-	@Override
-	protected FlexoActionInitializer<RemoveEmbeddingChildItem> getDefaultInitializer() 
-	{
-		return new FlexoActionInitializer<RemoveEmbeddingChildItem>() {
-            @Override
-			public boolean run(ActionEvent e, RemoveEmbeddingChildItem action)
-            {
-            	return true;
-            }
-        };
+	RemoveEmbeddingChildItemInitializer(DREControllerActionInitializer actionInitializer) {
+		super(RemoveEmbeddingChildItem.actionType, actionInitializer);
 	}
 
-     @Override
-	protected FlexoActionFinalizer<RemoveEmbeddingChildItem> getDefaultFinalizer() 
-	{
+	@Override
+	protected DREControllerActionInitializer getControllerActionInitializer() {
+		return (DREControllerActionInitializer) super.getControllerActionInitializer();
+	}
+
+	@Override
+	protected FlexoActionInitializer<RemoveEmbeddingChildItem> getDefaultInitializer() {
+		return new FlexoActionInitializer<RemoveEmbeddingChildItem>() {
+			@Override
+			public boolean run(ActionEvent e, RemoveEmbeddingChildItem action) {
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoActionFinalizer<RemoveEmbeddingChildItem> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RemoveEmbeddingChildItem>() {
-            @Override
-			public boolean run(ActionEvent e, RemoveEmbeddingChildItem action)
-            {
-            	return true;
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, RemoveEmbeddingChildItem action) {
+				return true;
+			}
+		};
 	}
 
 }

@@ -33,41 +33,37 @@ import org.openflexo.logging.FlexoLogger;
  * @author sylvain
  * 
  */
-public class UtilComponentAPIFileResource extends ComponentAPIFileResource<FlexoComponentResourceGenerator>
-{
-    protected static final Logger logger = FlexoLogger.getLogger(UtilComponentAPIFileResource.class.getPackage().getName());
+public class UtilComponentAPIFileResource extends ComponentAPIFileResource<FlexoComponentResourceGenerator> {
+	protected static final Logger logger = FlexoLogger.getLogger(UtilComponentAPIFileResource.class.getPackage().getName());
 
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
-        if (getGenerator() instanceof MetaWOGenerator)
-            ((MetaWOGenerator)getGenerator()).rebuildDependanciesForResource(this);
-    }
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+		if (getGenerator() instanceof MetaWOGenerator)
+			((MetaWOGenerator) getGenerator()).rebuildDependanciesForResource(this);
+	}
 
-    /**
-     * @param builder
-     */
-    public UtilComponentAPIFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
+	/**
+	 * @param builder
+	 */
+	public UtilComponentAPIFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * @param aProject
-     */
-    public UtilComponentAPIFileResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
+	/**
+	 * @param aProject
+	 */
+	public UtilComponentAPIFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

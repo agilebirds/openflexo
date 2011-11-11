@@ -23,16 +23,20 @@ import java.util.List;
 
 /**
  * Represents a Method containing code.
- *
+ * 
  * @version $Id: Method.java,v 1.2 2011/09/12 11:47:23 gpolet Exp $
  * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public interface Method extends Node {
-  public void setParameters(List p);
-  public List getParameters();
+	public void setParameters(List p);
 
-  public void   setCode(List c);
-  public List   getCode();
-  public void   setReturnType(String p);
-  public String getReturnType();
+	public List getParameters();
+
+	public void setCode(List c);
+
+	public List getCode();
+
+	public void setReturnType(String p);
+
+	public String getReturnType();
 }

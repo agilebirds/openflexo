@@ -37,7 +37,6 @@ import org.netbeans.lib.cvsclient.connection.PServerConnection;
 import org.netbeans.lib.cvsclient.connection.SSHConnection;
 import org.openflexo.fps.CVSRepository.ConnectionType;
 
-
 public class CVSConnection {
 
 	private static final Logger logger = Logger.getLogger(SharedProject.class.getPackage().getName());
@@ -45,15 +44,13 @@ public class CVSConnection {
 	private SharedProject _project;
 	private AbstractConnection _connection;
 	private Client _client;
-	
-	private CVSConnection(SharedProject project)
-	{
+
+	private CVSConnection(SharedProject project) {
 		super();
 		_project = project;
 	}
-	
-	public static AbstractConnection initConnection(CVSRepository repository) 
-	{
+
+	public static AbstractConnection initConnection(CVSRepository repository) {
 		// Les traces indiques :
 
 		// WARNING TO DEVELOPERS:
@@ -68,13 +65,9 @@ public class CVSConnection {
 
 		if (repository.getConnectionType() == ConnectionType.SSH) {
 
-			//Ext-SSH Connection 
-			SSHConnection newConnection = new SSHConnection(
-					SocketFactory.getDefault(),
-					repository.getHostName(),
-					repository.getPort(),
-					repository.getUserName(),
-					repository.getPassword());
+			// Ext-SSH Connection
+			SSHConnection newConnection = new SSHConnection(SocketFactory.getDefault(), repository.getHostName(), repository.getPort(),
+					repository.getUserName(), repository.getPassword());
 			newConnection.setRepository(repository.getRepository());
 			return newConnection;
 		}
@@ -92,49 +85,46 @@ public class CVSConnection {
 
 		return null;
 	}
-	
-	public static CVSConnection initCVSConnection(SharedProject project) throws IOException 
-	{
-		
+
+	public static CVSConnection initCVSConnection(SharedProject project) throws IOException {
+
 		CVSConnection connection = new CVSConnection(project);
 
 		connection._connection = initConnection(project.getCVSRepository());
 
-		//project.getGlobalOptions().setCVSRoot(connection.getRepository());
+		// project.getGlobalOptions().setCVSRoot(connection.getRepository());
 		connection._client = new Client(connection._connection, project.getAdminHandler());
 		connection._client.setLocalPath(project.getLocalDirectory().getCanonicalPath());
-		
+
 		connection._client.getEventManager().addCVSListener(project.getConsoleHandler());
 		connection._client.getEventManager().addCVSListener(project.getCVSHandler());
 
 		return connection;
 	}
 
-	public void executeCommand(Command command) throws CommandAbortedException, CommandException, AuthenticationException
-	{
-		executeCommand(command,new GlobalOptions());
+	public void executeCommand(Command command) throws CommandAbortedException, CommandException, AuthenticationException {
+		executeCommand(command, new GlobalOptions());
 	}
-	
+
 	public String getCVSRoot() {
 		return getCVSRepository().getCVSRoot();
 	}
-	
-	public void executeCommand(Command command, GlobalOptions options) throws CommandAbortedException, CommandException, AuthenticationException
-	{
+
+	public void executeCommand(Command command, GlobalOptions options) throws CommandAbortedException, CommandException,
+			AuthenticationException {
 		options.setCVSRoot(getCVSRoot());
 		try {
 			if (logger.isLoggable(Level.FINE))
-				logger.fine("["+Thread.currentThread().getName()+"] [CVS] BEGIN "+"cvs "+command.getCVSCommand()
-					+ " "+options.getCVSCommand()
-					+ " on directory "+getClient().getLocalPath());
-			getProject().getConsoleHandler().commandLog("cvs "+command.getCVSCommand()
-					+ " "+options.getCVSCommand()
-					+ " on directory "+getClient().getLocalPath()+"\n");
+				logger.fine("[" + Thread.currentThread().getName() + "] [CVS] BEGIN " + "cvs " + command.getCVSCommand() + " "
+						+ options.getCVSCommand() + " on directory " + getClient().getLocalPath());
+			getProject().getConsoleHandler()
+					.commandLog(
+							"cvs " + command.getCVSCommand() + " " + options.getCVSCommand() + " on directory "
+									+ getClient().getLocalPath() + "\n");
 			getClient().executeCommand(command, options);
 			if (logger.isLoggable(Level.FINE))
-				logger.fine("["+Thread.currentThread().getName()+"] [CVS] END "+"cvs "+command.getCVSCommand()
-					+ " "+options.getCVSCommand()
-					+ " on directory "+getClient().getLocalPath());
+				logger.fine("[" + Thread.currentThread().getName() + "] [CVS] END " + "cvs " + command.getCVSCommand() + " "
+						+ options.getCVSCommand() + " on directory " + getClient().getLocalPath());
 		} catch (CommandAbortedException e) {
 			throw e;
 		} catch (CommandException e) {
@@ -142,23 +132,22 @@ public class CVSConnection {
 		} catch (AuthenticationException e) {
 			throw e;
 		} catch (Exception e) {
-		    e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-        
-        finally {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+
+		finally {
 			try {
-                if (getClient().getConnection().isOpen())
-                    getClient().getConnection().close();
- 			} catch (IOException e) {
-				logger.warning("Cannot close connection "+e.getMessage());
+				if (getClient().getConnection().isOpen())
+					getClient().getConnection().close();
+			} catch (IOException e) {
+				logger.warning("Cannot close connection " + e.getMessage());
 			}
 		}
 
 	}
 
-	public CVSRepository getCVSRepository()
-	{
+	public CVSRepository getCVSRepository() {
 		return _project.getCVSRepository();
 	}
 
@@ -167,54 +156,41 @@ public class CVSConnection {
 		return _project.getGlobalOptions();
 	}*/
 
-	public File getLocalDirectory() 
-	{
+	public File getLocalDirectory() {
 		return _project.getLocalDirectory();
 	}
 
-	public CVSModule getModule() 
-	{
+	public CVSModule getModule() {
 		return _project.getCVSModule();
 	}
 
-	public ConnectionType getConnectionType() 
-	{
+	public ConnectionType getConnectionType() {
 		return getCVSRepository().getConnectionType();
 	}
 
-	public String getEncodedPasswd() 
-	{
+	public String getEncodedPasswd() {
 		return getCVSRepository().getEncodedPasswd();
 	}
 
-	public String getHostName() 
-	{
+	public String getHostName() {
 		return getCVSRepository().getHostName();
 	}
 
-	public String getRepository() 
-	{
+	public String getRepository() {
 		return getCVSRepository().getRepository();
 	}
 
-	public String getUserName() 
-	{
+	public String getUserName() {
 		return getCVSRepository().getUserName();
 	}
-
-
 
 	public Client getClient() {
 		return _client;
 	}
 
-
-
 	public AbstractConnection getConnection() {
 		return _connection;
 	}
-
-
 
 	public SharedProject getProject() {
 		return _project;

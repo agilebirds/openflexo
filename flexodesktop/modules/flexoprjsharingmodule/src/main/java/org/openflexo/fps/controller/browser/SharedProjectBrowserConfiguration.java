@@ -37,46 +37,38 @@ import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.UtilsIconLibrary;
 
-
-class SharedProjectBrowserConfiguration implements BrowserConfiguration
-{
+class SharedProjectBrowserConfiguration implements BrowserConfiguration {
 	private final SharedProject _project;
 	private final SharedProjectBrowserConfigurationElementFactory _factory;
 
-	protected SharedProjectBrowserConfiguration(SharedProject project)
-	{
+	protected SharedProjectBrowserConfiguration(SharedProject project) {
 		super();
 		_project = project;
 		_factory = new SharedProjectBrowserConfigurationElementFactory();
 	}
 
 	@Override
-	public FlexoProject getProject() 
-	{
+	public FlexoProject getProject() {
 		return null;
 	}
-	
-	protected abstract class FPSFileFilter extends CustomBrowserFilter
-	{
-	    public FPSFileFilter(String name, Icon icon)
-	    {
-	        super(name,icon);
-	    }
+
+	protected abstract class FPSFileFilter extends CustomBrowserFilter {
+		public FPSFileFilter(String name, Icon icon) {
+			super(name, icon);
+		}
 
 		@Override
-		public boolean accept(FlexoModelObject object)
-		{
+		public boolean accept(FlexoModelObject object) {
 			if (object instanceof CVSFile) {
-				return acceptFile((CVSFile)object);
+				return acceptFile((CVSFile) object);
 			}
 			if (object instanceof CVSContainer) {
-				return acceptCVSContainer((CVSContainer)object);
+				return acceptCVSContainer((CVSContainer) object);
 			}
 			return true;
 		}
-		
-		public boolean acceptCVSContainer(CVSContainer container)
-		{
+
+		public boolean acceptCVSContainer(CVSContainer container) {
 			for (CVSFile file : container.getFiles()) {
 				if (acceptFile(file)) {
 					return true;
@@ -89,27 +81,25 @@ class SharedProjectBrowserConfiguration implements BrowserConfiguration
 			}
 			return false;
 		}
-		
+
 		public abstract boolean acceptFile(CVSFile file);
-		
+
 	}
 
-    @Override
-	public void configure(ProjectBrowser aBrowser) 
-	{
-    	SharedProjectBrowser browser = (SharedProjectBrowser)aBrowser;
-    	
+	@Override
+	public void configure(ProjectBrowser aBrowser) {
+		SharedProjectBrowser browser = (SharedProjectBrowser) aBrowser;
+
 		// Custom filters
-		browser.setAllFilesAndDirectoryFilter(new FPSFileFilter("all_files_and_directories",null) {
+		browser.setAllFilesAndDirectoryFilter(new FPSFileFilter("all_files_and_directories", null) {
 			@Override
-			public boolean acceptFile(CVSFile file)
-			{
+			public boolean acceptFile(CVSFile file) {
 				return !file.getStatus().isIgnored();
 			}
 		});
 		browser.addToCustomFilters(browser.getAllFilesAndDirectoryFilter());
 
-		browser.setUpToDateFilesFilter(new FPSFileFilter("up_to_date_files",FilesIconLibrary.SMALL_MISC_FILE_ICON) {
+		browser.setUpToDateFilesFilter(new FPSFileFilter("up_to_date_files", FilesIconLibrary.SMALL_MISC_FILE_ICON) {
 			@Override
 			public boolean acceptFile(CVSFile file) {
 				return file.getStatus().isUpToDate();
@@ -117,7 +107,7 @@ class SharedProjectBrowserConfiguration implements BrowserConfiguration
 		});
 		browser.addToCustomFilters(browser.getUpToDateFilesFilter());
 
-		browser.setLocallyModifiedFilter(new FPSFileFilter("locally_modified_files",UtilsIconLibrary.LEFT_MODIFICATION_ICON) {
+		browser.setLocallyModifiedFilter(new FPSFileFilter("locally_modified_files", UtilsIconLibrary.LEFT_MODIFICATION_ICON) {
 			@Override
 			public boolean acceptFile(CVSFile file) {
 				return (file.getStatus().isLocallyModified());
@@ -125,7 +115,7 @@ class SharedProjectBrowserConfiguration implements BrowserConfiguration
 		});
 		browser.addToCustomFilters(browser.getLocallyModifiedFilter());
 
-		browser.setRemotelyModifiedFilter(new FPSFileFilter("remotely_modified_files",UtilsIconLibrary.RIGHT_MODIFICATION_ICON) {
+		browser.setRemotelyModifiedFilter(new FPSFileFilter("remotely_modified_files", UtilsIconLibrary.RIGHT_MODIFICATION_ICON) {
 			@Override
 			public boolean acceptFile(CVSFile file) {
 				return (file.getStatus().isRemotelyModified());
@@ -133,7 +123,7 @@ class SharedProjectBrowserConfiguration implements BrowserConfiguration
 		});
 		browser.addToCustomFilters(browser.getRemotelyModifiedFilter());
 
-		browser.setConflictingFileFilter(new FPSFileFilter("unresolved_conflicting_files",UtilsIconLibrary.CONFLICT_ICON) {
+		browser.setConflictingFileFilter(new FPSFileFilter("unresolved_conflicting_files", UtilsIconLibrary.CONFLICT_ICON) {
 			@Override
 			public boolean acceptFile(CVSFile file) {
 				return file.getStatus().isConflicting();
@@ -142,7 +132,8 @@ class SharedProjectBrowserConfiguration implements BrowserConfiguration
 		browser.addToCustomFilters(browser.getConflictingFileFilter());
 
 		;
-		browser.setIgnoredFileFilter(new FPSFileFilter("ignored_files",IconFactory.getImageIcon(FilesIconLibrary.SMALL_MISC_FILE_ICON, IconLibrary.QUESTION)) {
+		browser.setIgnoredFileFilter(new FPSFileFilter("ignored_files", IconFactory.getImageIcon(FilesIconLibrary.SMALL_MISC_FILE_ICON,
+				IconLibrary.QUESTION)) {
 			@Override
 			public boolean acceptFile(CVSFile file) {
 				return file.getStatus().isIgnored();
@@ -153,38 +144,32 @@ class SharedProjectBrowserConfiguration implements BrowserConfiguration
 	}
 
 	@Override
-	public FlexoModelObject getDefaultRootObject()
-	{
+	public FlexoModelObject getDefaultRootObject() {
 		return _project;
 	}
 
 	@Override
-	public BrowserElementFactory getBrowserElementFactory()
-	{
-		return _factory; 
+	public BrowserElementFactory getBrowserElementFactory() {
+		return _factory;
 	}
 
-	class SharedProjectBrowserConfigurationElementFactory implements BrowserElementFactory
-	{
+	class SharedProjectBrowserConfigurationElementFactory implements BrowserElementFactory {
 
 		SharedProjectBrowserConfigurationElementFactory() {
 			super();
 		}
 
 		@Override
-		public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent)
-		{
+		public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
 			if (object instanceof SharedProject) {
-				return new SharedProjectElement((SharedProject)object,browser,parent);
-			}
-			else if (object instanceof CVSDirectory) {
-				return new CVSDirectoryElement((CVSDirectory)object,browser,parent);
-			}
-			else if (object instanceof CVSFile) {
-				return new CVSFileElement((CVSFile)object,browser,parent);
+				return new SharedProjectElement((SharedProject) object, browser, parent);
+			} else if (object instanceof CVSDirectory) {
+				return new CVSDirectoryElement((CVSDirectory) object, browser, parent);
+			} else if (object instanceof CVSFile) {
+				return new CVSFileElement((CVSFile) object, browser, parent);
 			}
 			return null;
 		}
-		
+
 	}
 }

@@ -24,24 +24,21 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.rm.FlexoDMResource;
 
-
 /**
  * Used only during XML serialization to build data model
  * 
  * @author sguerin
  * 
  */
-public class FlexoDMBuilder extends FlexoBuilder<FlexoDMResource>
-{
+public class FlexoDMBuilder extends FlexoBuilder<FlexoDMResource> {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FlexoDMBuilder.class.getPackage().getName());
 
-    public DMModel dmModel = null;
- 
-    public FlexoDMBuilder(FlexoDMResource project)
-    {
-        super(project);
-    }
-    
+	public DMModel dmModel = null;
+
+	public FlexoDMBuilder(FlexoDMResource project) {
+		super(project);
+	}
+
 }

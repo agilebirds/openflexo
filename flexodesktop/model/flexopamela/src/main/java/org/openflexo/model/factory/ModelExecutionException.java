@@ -4,13 +4,11 @@ import java.lang.reflect.InvocationTargetException;
 
 public class ModelExecutionException extends RuntimeException {
 
-	public ModelExecutionException(String message)
-	{
+	public ModelExecutionException(String message) {
 		super(message);
 	}
 
-	public ModelExecutionException(InvocationTargetException e)
-	{
+	public ModelExecutionException(InvocationTargetException e) {
 		this(e.getTargetException());
 	}
 
@@ -19,9 +17,8 @@ public class ModelExecutionException extends RuntimeException {
 		e.printStackTrace();
 	}
 
-	public ModelExecutionException(Throwable e)
-	{
-		super("ModelExecutionException raised because of exception "+e.getClass().getSimpleName()+" message: "+e.getMessage());
+	public ModelExecutionException(Throwable e) {
+		super("ModelExecutionException raised because of exception " + e.getClass().getSimpleName() + " message: " + e.getMessage());
 		e.printStackTrace();
 	}
 }

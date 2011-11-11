@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 
-
 /**
  * Please comment this class
  * 

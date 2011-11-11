@@ -22,18 +22,16 @@ package org.openflexo.jedit.cd;
 import org.openflexo.jedit.JEditTextArea;
 import org.openflexo.toolbox.FontCst;
 
-public class TextCodeDisplayer extends JEditTextArea
-{
+public class TextCodeDisplayer extends JEditTextArea {
 
-    public TextCodeDisplayer(String text)
-    {
-        super();
-        painter.setEOLMarkersPainted(false);
-        painter.setInvalidLinesPainted(false);
-        setFont(FontCst.TEXT_FONT);
-        setEditable(false);
-        //setElectricScroll(1000);
-        setFirstLine(0);
-        setText(text);
-    }
+	public TextCodeDisplayer(String text) {
+		super();
+		painter.setEOLMarkersPainted(false);
+		painter.setInvalidLinesPainted(false);
+		setFont(FontCst.TEXT_FONT);
+		setEditable(false);
+		// setElectricScroll(1000);
+		setFirstLine(0);
+		setText(text);
+	}
 }

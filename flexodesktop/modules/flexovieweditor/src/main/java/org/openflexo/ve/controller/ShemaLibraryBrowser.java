@@ -23,22 +23,18 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.foundation.FlexoModelObject;
 
-
-class ShemaLibraryBrowser extends OEBrowser
-{
-	protected ShemaLibraryBrowser(OEController controller)
-	{
+class ShemaLibraryBrowser extends OEBrowser {
+	protected ShemaLibraryBrowser(OEController controller) {
 		super(controller);
 	}
 
 	@Override
-	public void configure()
-	{
+	public void configure() {
 		super.configure();
 		setFilterStatus(BrowserElementType.OE_SHEMA_LIBRARY, BrowserFilterStatus.SHOW);
 		setFilterStatus(BrowserElementType.OE_SHEMA_FOLDER, BrowserFilterStatus.SHOW);
 		setFilterStatus(BrowserElementType.OE_SHEMA_DEFINITION, BrowserFilterStatus.SHOW);
-		setFilterStatus(BrowserElementType.OE_SHEMA,BrowserFilterStatus.HIDE);
+		setFilterStatus(BrowserElementType.OE_SHEMA, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.PROJECT_ONTOLOGY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.IMPORTED_ONTOLOGY, BrowserFilterStatus.HIDE);
@@ -49,12 +45,10 @@ class ShemaLibraryBrowser extends OEBrowser
 		setFilterStatus(BrowserElementType.CALC_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.ONTOLOGY_CALC, BrowserFilterStatus.HIDE);
 	}
-	
-    @Override
-	public FlexoModelObject getDefaultRootObject()
-    {
-        return getProject().getShemaLibrary();
-    }
 
+	@Override
+	public FlexoModelObject getDefaultRootObject() {
+		return getProject().getShemaLibrary();
+	}
 
 }

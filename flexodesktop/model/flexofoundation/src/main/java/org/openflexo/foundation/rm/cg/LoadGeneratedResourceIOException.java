@@ -24,57 +24,49 @@ import java.io.IOException;
 import org.openflexo.foundation.rm.FlexoGeneratedResource;
 import org.openflexo.foundation.rm.LoadResourceException;
 
-
 /**
  * 
  */
-public class LoadGeneratedResourceIOException extends LoadResourceException
-{
+public class LoadGeneratedResourceIOException extends LoadResourceException {
 
 	private IOException ioException;
 	private String _message = null;
-	
-    /**
-     * @param fileResource
-     */
-    public LoadGeneratedResourceIOException(FlexoGeneratedResource fileResource, IOException exception)
-    {
-        super(fileResource, null);
+
+	/**
+	 * @param fileResource
+	 */
+	public LoadGeneratedResourceIOException(FlexoGeneratedResource fileResource, IOException exception) {
+		super(fileResource, null);
 		ioException = exception;
-   }
+	}
 
-    /**
-     * @param fileResource
-     */
-    public LoadGeneratedResourceIOException(FlexoGeneratedResource fileResource, String message)
-    {
-        super(fileResource, null);
-        _message = message;
-   }
+	/**
+	 * @param fileResource
+	 */
+	public LoadGeneratedResourceIOException(FlexoGeneratedResource fileResource, String message) {
+		super(fileResource, null);
+		_message = message;
+	}
 
-	public IOException getIOException()
-	{
+	public IOException getIOException() {
 		return ioException;
 	}
-	
-    @Override
-	public String getMessage()
-    {
-    	if (_message != null) {
-    		return _message;
-    	}
-    	else {
-    		return super.getMessage();
-    	}
-    }
 
-    @Override
-	public void printStackTrace()
-    {
-    	super.printStackTrace();
-    	if (ioException != null) {
-    		System.err.println("Caused by:");
-    		ioException.printStackTrace();
-    	}
-    }
+	@Override
+	public String getMessage() {
+		if (_message != null) {
+			return _message;
+		} else {
+			return super.getMessage();
+		}
+	}
+
+	@Override
+	public void printStackTrace() {
+		super.printStackTrace();
+		if (ioException != null) {
+			System.err.println("Caused by:");
+			ioException.printStackTrace();
+		}
+	}
 }

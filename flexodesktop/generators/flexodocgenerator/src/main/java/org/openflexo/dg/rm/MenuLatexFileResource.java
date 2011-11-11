@@ -22,7 +22,6 @@ package org.openflexo.dg.rm;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.openflexo.dg.latex.DGLatexGenerator;
 import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.DataModification;
@@ -36,85 +35,75 @@ import org.openflexo.logging.FlexoLogger;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class MenuLatexFileResource extends LatexFileResource<DGLatexGenerator<FlexoNavigationMenu>> implements FlexoObserver
-{
-    protected static final Logger logger = FlexoLogger.getLogger(MenuLatexFileResource.class.getPackage().getName());
+public class MenuLatexFileResource extends LatexFileResource<DGLatexGenerator<FlexoNavigationMenu>> implements FlexoObserver {
+	protected static final Logger logger = FlexoLogger.getLogger(MenuLatexFileResource.class.getPackage().getName());
 
-    /**
-     * @param builder
-     */
-    public MenuLatexFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
+	/**
+	 * @param builder
+	 */
+	public MenuLatexFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * @param aProject
-     */
-    public MenuLatexFileResource(FlexoProject aProject)
-    {
-    	super(aProject);
-    }
+	/**
+	 * @param aProject
+	 */
+	public MenuLatexFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    private boolean isObserverRegistered = false;
+	private boolean isObserverRegistered = false;
 
-    @Override
-	public String getName()
-    {
-    	if (getCGFile()==null || getCGFile().getRepository()==null || getMenu()==null)
-            return super.getName();
-    	registerObserverWhenRequired();
-    	if (super.getName()==null)
-    		setName(nameForRepositoryAndMenu(getCGFile().getRepository(), getMenu()));
-    	return nameForRepositoryAndMenu(getCGFile().getRepository(), getMenu());
-    }
+	@Override
+	public String getName() {
+		if (getCGFile() == null || getCGFile().getRepository() == null || getMenu() == null)
+			return super.getName();
+		registerObserverWhenRequired();
+		if (super.getName() == null)
+			setName(nameForRepositoryAndMenu(getCGFile().getRepository(), getMenu()));
+		return nameForRepositoryAndMenu(getCGFile().getRepository(), getMenu());
+	}
 
-    public void registerObserverWhenRequired()
-    {
-    	if ((!isObserverRegistered) && (getMenu() != null)) {
-    		isObserverRegistered = true;
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("*** addObserver "+getFileName()+" for "+getProject());
-            getMenu().addObserver(this);
-    	}
-    }
+	public void registerObserverWhenRequired() {
+		if ((!isObserverRegistered) && (getMenu() != null)) {
+			isObserverRegistered = true;
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("*** addObserver " + getFileName() + " for " + getProject());
+			getMenu().addObserver(this);
+		}
+	}
 
-    public static String nameForRepositoryAndMenu(GenerationRepository repository, FlexoNavigationMenu menu)
-    {
-    	return repository.getName()+".MENU_LATEX."+menu.getName();
-    }
+	public static String nameForRepositoryAndMenu(GenerationRepository repository, FlexoNavigationMenu menu) {
+		return repository.getName() + ".MENU_LATEX." + menu.getName();
+	}
 
-    public FlexoNavigationMenu getMenu()
-    {
-    	if (getGenerator() != null)
-            return getGenerator().getObject();
-    	return null;
-    }
+	public FlexoNavigationMenu getMenu() {
+		if (getGenerator() != null)
+			return getGenerator().getObject();
+		return null;
+	}
 
-    @Override
-	protected LatexFile createGeneratedResourceData()
-    {
-        return new LatexFile(getFile(),this);
-    }
+	@Override
+	protected LatexFile createGeneratedResourceData() {
+		return new LatexFile(getFile(), this);
+	}
 
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
-        addToDependantResources(getProject().getFlexoNavigationMenuResource());
-   }
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+		addToDependantResources(getProject().getFlexoNavigationMenuResource());
+	}
 
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getMenu()) {
 			if (dataModification instanceof AttributeDataModification) {
-				if (((AttributeDataModification)dataModification).getAttributeName().equals("name")) {
+				if (((AttributeDataModification) dataModification).getAttributeName().equals("name")) {
 					logger.info("Building new resource after process renaming");
 					DGLatexGenerator<FlexoNavigationMenu> generator = getGenerator();
 					setGenerator(null);

@@ -22,12 +22,12 @@ package org.openflexo.foundation.ie.wizards;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.ie.widget.IEWidget;
 
-class DMPropertyProposal extends PropertyProposal{
+class DMPropertyProposal extends PropertyProposal {
 
 	private DMType type;
-	
-	public DMPropertyProposal(IEWidget widget,String name, DMType type) {
-		super(widget,name);
+
+	public DMPropertyProposal(IEWidget widget, String name, DMType type) {
+		super(widget, name);
 		this.type = type;
 	}
 
@@ -38,6 +38,5 @@ class DMPropertyProposal extends PropertyProposal{
 	public void setType(DMType type) {
 		this.type = type;
 	}
-	
-	
+
 }

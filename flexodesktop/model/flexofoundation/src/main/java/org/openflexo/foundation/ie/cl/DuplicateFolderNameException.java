@@ -24,41 +24,37 @@ import org.openflexo.localization.FlexoLocalization;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class DuplicateFolderNameException extends FlexoException
-{
+public class DuplicateFolderNameException extends FlexoException {
 
-    private FlexoComponentFolder folder;
-    private String name;
-    
-    /**
-     * @param folder
-     * @param name
-     */
-    public DuplicateFolderNameException(FlexoComponentFolder folder, String name)
-    {
-        this.folder =folder;
-        this.name = name;
-    }
+	private FlexoComponentFolder folder;
+	private String name;
 
-    public FlexoComponentFolder getFolder()
-    {
-        return folder;
-    }
+	/**
+	 * @param folder
+	 * @param name
+	 */
+	public DuplicateFolderNameException(FlexoComponentFolder folder, String name) {
+		this.folder = folder;
+		this.name = name;
+	}
 
-    public String getName()
-    {
-        return name;
-    }
+	public FlexoComponentFolder getFolder() {
+		return folder;
+	}
 
-    /**
-     * Overrides getLocalizedMessage
-     * @see org.openflexo.foundation.FlexoException#getLocalizedMessage()
-     */
-    @Override
-    public String getLocalizedMessage()
-    {
-        return FlexoLocalization.localizedForKey("duplicate_folder_name");
-    }
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Overrides getLocalizedMessage
+	 * 
+	 * @see org.openflexo.foundation.FlexoException#getLocalizedMessage()
+	 */
+	@Override
+	public String getLocalizedMessage() {
+		return FlexoLocalization.localizedForKey("duplicate_folder_name");
+	}
 }

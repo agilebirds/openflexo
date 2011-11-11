@@ -24,11 +24,10 @@ import org.openflexo.foundation.action.SortFlexoProperties;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class SortFlexoPropertiesActionizer extends ActionInitializer<SortFlexoProperties, FlexoModelObject, FlexoModelObject> {
 
 	public SortFlexoPropertiesActionizer(ControllerActionInitializer actionInitializer) {
 		super(SortFlexoProperties.actionType, actionInitializer);
 	}
-	
+
 }

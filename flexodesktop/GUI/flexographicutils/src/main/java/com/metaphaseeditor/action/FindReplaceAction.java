@@ -28,20 +28,20 @@ import javax.swing.AbstractAction;
 import javax.swing.JTextPane;
 
 /**
- *
+ * 
  * @author Rudolf Visagie
  */
 public class FindReplaceAction extends AbstractAction {
-    private JTextPane htmlTextPane;
-    
-    public FindReplaceAction(String actionName, JTextPane htmlTextPane) {
-        super(actionName);
-        this.htmlTextPane = htmlTextPane;
-    }
+	private JTextPane htmlTextPane;
 
-    public void actionPerformed(ActionEvent ae) {
-        FindReplaceDialog findReplaceDialog = new FindReplaceDialog(null, true, htmlTextPane);
-        findReplaceDialog.setVisible(true);
-    }
+	public FindReplaceAction(String actionName, JTextPane htmlTextPane) {
+		super(actionName);
+		this.htmlTextPane = htmlTextPane;
+	}
+
+	public void actionPerformed(ActionEvent ae) {
+		FindReplaceDialog findReplaceDialog = new FindReplaceDialog(null, true, htmlTextPane);
+		findReplaceDialog.setVisible(true);
+	}
 
 }

@@ -22,14 +22,13 @@ package org.openflexo.foundation.ie.wizards;
 import org.openflexo.foundation.dm.eo.DMEOPrototype;
 import org.openflexo.foundation.ie.widget.IEWidget;
 
-class EOAttributeProposal extends PropertyProposal{
+class EOAttributeProposal extends PropertyProposal {
 
 	private DMEOPrototype prototype;
 	private String columnName;
-	
 
-	public EOAttributeProposal(IEWidget widget,String name, DMEOPrototype prototype) {
-		super(widget,name);
+	public EOAttributeProposal(IEWidget widget, String name, DMEOPrototype prototype) {
+		super(widget, name);
 		this.prototype = prototype;
 		setColumnName(name.toUpperCase());
 	}
@@ -49,5 +48,5 @@ class EOAttributeProposal extends PropertyProposal{
 	public void setColumnName(String columnName) {
 		this.columnName = columnName;
 	}
-	
+
 }

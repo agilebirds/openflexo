@@ -40,27 +40,23 @@ public class DeleteMetricsInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeleteMetricsInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(DeleteMetricsValue.actionType,actionInitializer);
+	DeleteMetricsInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(DeleteMetricsValue.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<DeleteMetricsValue> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<DeleteMetricsValue> getDefaultInitializer() {
 		return new FlexoActionInitializer<DeleteMetricsValue>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteMetricsValue action)
-			{
+			public boolean run(ActionEvent e, DeleteMetricsValue action) {
 				boolean doIt;
 				Vector<MetricsValue> metricsValueToDelete = action.getMetricsValueToDelete();
-				if (metricsValueToDelete.size()==0) 
+				if (metricsValueToDelete.size() == 0)
 					return false;
 				if (metricsValueToDelete.size() == 1)
 					doIt = FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_delete_this_metrics"));
@@ -72,25 +68,21 @@ public class DeleteMetricsInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<DeleteMetricsValue> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<DeleteMetricsValue> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DeleteMetricsValue>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteMetricsValue action)
-			{
-				if (getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject()!=null && getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject().isDeleted())
+			public boolean run(ActionEvent e, DeleteMetricsValue action) {
+				if (getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject() != null
+						&& getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject().isDeleted())
 					getControllerActionInitializer().getWKFController().getSelectionManager().resetSelection();
-                return true;
-          }
-        };
+				return true;
+			}
+		};
 	}
-     
- 	@Override
-	protected Icon getEnabledIcon() 
-	{
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return IconLibrary.DELETE_ICON;
 	}
-
-
 
 }

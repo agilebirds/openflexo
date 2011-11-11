@@ -21,9 +21,8 @@ package org.openflexo.foundation.ie.widget;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public interface IEEditableFieldWidget extends IWidget
-{
+public interface IEEditableFieldWidget extends IWidget {
 
 }

@@ -26,9 +26,6 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-
-
-
 public class DeclarePatternRole extends EditionAction<PatternRole> {
 
 	private static final Logger logger = Logger.getLogger(DeclarePatternRole.class.getPackage().getName());
@@ -37,44 +34,39 @@ public class DeclarePatternRole extends EditionAction<PatternRole> {
 	}
 
 	@Override
-	public EditionActionType getEditionActionType()
-	{
+	public EditionActionType getEditionActionType() {
 		return EditionActionType.DeclarePatternRole;
 	}
-	
+
 	@Override
 	public String getInspectorName() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	public Object getDeclaredObject(EditionSchemeAction action)
-	{
+
+	public Object getDeclaredObject(EditionSchemeAction action) {
 		return getObject().getBindingValue(action);
 	}
 
 	private ViewPointDataBinding object;
-	
+
 	private BindingDefinition OBJECT = new BindingDefinition("object", Object.class, BindingDefinitionType.GET, false);
-	
-	public BindingDefinition getObjectBindingDefinition()
-	{
+
+	public BindingDefinition getObjectBindingDefinition() {
 		return OBJECT;
 	}
 
-	public ViewPointDataBinding getObject() 
-	{
-		if (object == null) object = new ViewPointDataBinding(this,EditionActionBindingAttribute.object,getObjectBindingDefinition());
+	public ViewPointDataBinding getObject() {
+		if (object == null)
+			object = new ViewPointDataBinding(this, EditionActionBindingAttribute.object, getObjectBindingDefinition());
 		return object;
 	}
 
-	public void setObject(ViewPointDataBinding object) 
-	{
+	public void setObject(ViewPointDataBinding object) {
 		object.setOwner(this);
 		object.setBindingAttribute(EditionActionBindingAttribute.object);
 		object.setBindingDefinition(getObjectBindingDefinition());
 		this.object = object;
 	}
-
 
 }

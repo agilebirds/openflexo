@@ -28,7 +28,6 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
-
 public abstract class EditionAction<R extends PatternRole> extends ViewPointObject {
 
 	private static final Logger logger = Logger.getLogger(EditionAction.class.getPackage().getName());
@@ -41,10 +40,8 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 	public static final String CONTAINER_OF_CONTAINER_CONCEPT = "container.container.concept";
 	public static final String FROM_TARGET_CONCEPT = "fromTarget.concept";
 	public static final String TO_TARGET_CONCEPT = "toTarget.concept";*/
-	
 
-	public static enum EditionActionType
-	{
+	public static enum EditionActionType {
 		AddClass,
 		AddIndividual,
 		AddObjectPropertyStatement,
@@ -57,87 +54,77 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 		DeclarePatternRole,
 		GoToObject
 	}
-	
+
 	private EditionScheme _scheme;
 	private String description;
 	private String patternRole;
-	
-	public EditionAction()
-	{
+
+	public EditionAction() {
 	}
-	
+
 	public abstract EditionActionType getEditionActionType();
-	
-	public void setScheme(EditionScheme scheme) 
-	{
+
+	public void setScheme(EditionScheme scheme) {
 		_scheme = scheme;
 	}
 
-	public EditionScheme getScheme() 
-	{
+	public EditionScheme getScheme() {
 		return _scheme;
 	}
-	
+
 	@Override
-	public String getDescription() 
-	{
+	public String getDescription() {
 		return description;
 	}
 
 	@Override
-	public void setDescription(String description) 
-	{
+	public void setDescription(String description) {
 		this.description = description;
 	}
 
 	@Override
-	public ViewPoint getCalc() 
-	{
+	public ViewPoint getCalc() {
 		if (getScheme() != null)
 			return getScheme().getCalc();
 		return null;
 	}
-		
-	public String _getPatternRoleName() 
-	{
+
+	public String _getPatternRoleName() {
 		return patternRole;
 	}
 
-	public void _setPatternRoleName(String patternRole) 
-	{
+	public void _setPatternRoleName(String patternRole) {
 		this.patternRole = patternRole;
 	}
 
-	public boolean evaluateCondition(EditionSchemeAction action)
-	{
+	public boolean evaluateCondition(EditionSchemeAction action) {
 		if (getConditional().isValid())
-			return (Boolean)getConditional().getBindingValue(action);
+			return (Boolean) getConditional().getBindingValue(action);
 		return true;
 	}
 
-	public EditionPattern getEditionPattern()
-	{
-		if (getScheme() == null) return null;
+	public EditionPattern getEditionPattern() {
+		if (getScheme() == null)
+			return null;
 		return getScheme().getEditionPattern();
 	}
-	
-	public R getPatternRole()
-	{
-		if (getEditionPattern() == null) return null;
-		return (R)getEditionPattern().getPatternRole(_getPatternRoleName());
+
+	public R getPatternRole() {
+		if (getEditionPattern() == null)
+			return null;
+		return (R) getEditionPattern().getPatternRole(_getPatternRoleName());
 	}
 
-	public void setPatternRole(R patternRole) 
-	{
+	public void setPatternRole(R patternRole) {
 		_setPatternRoleName((patternRole != null) && (patternRole.getPatternRoleName() != null) ? patternRole.getPatternRoleName() : null);
-		//updatePatternRoleType();
+		// updatePatternRoleType();
 	}
 
 	@Deprecated
-	protected final void updatePatternRoleType() {}
+	protected final void updatePatternRoleType() {
+	}
 
-	public int getIndex()
-	{
+	public int getIndex() {
 		return getScheme().getActions().indexOf(this);
 	}
 
@@ -485,20 +472,17 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 		}
 		return null;
 	}*/
-	
-	public EditionScheme getEditionScheme()
-	{
+
+	public EditionScheme getEditionScheme() {
 		return _scheme;
 	}
-	
+
 	@Override
-	public BindingModel getBindingModel() 
-	{
+	public BindingModel getBindingModel() {
 		return getEditionScheme().getBindingModel();
 	}
 
-	public static enum EditionActionBindingAttribute implements InspectorBindingAttribute
-	{
+	public static enum EditionActionBindingAttribute implements InspectorBindingAttribute {
 		conditional,
 		individualName,
 		className,
@@ -515,29 +499,25 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 		shemaName
 	}
 
-
 	private ViewPointDataBinding conditional;
-	
+
 	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
-	
-	public BindingDefinition getConditionalBindingDefinition()
-	{
+
+	public BindingDefinition getConditionalBindingDefinition() {
 		return CONDITIONAL;
 	}
 
-	public ViewPointDataBinding getConditional() 
-	{
-		if (conditional == null) conditional = new ViewPointDataBinding(this,EditionActionBindingAttribute.conditional,getConditionalBindingDefinition());
+	public ViewPointDataBinding getConditional() {
+		if (conditional == null)
+			conditional = new ViewPointDataBinding(this, EditionActionBindingAttribute.conditional, getConditionalBindingDefinition());
 		return conditional;
 	}
 
-	public void setConditional(ViewPointDataBinding conditional) 
-	{
+	public void setConditional(ViewPointDataBinding conditional) {
 		conditional.setOwner(this);
 		conditional.setBindingAttribute(EditionActionBindingAttribute.conditional);
 		conditional.setBindingDefinition(getConditionalBindingDefinition());
 		this.conditional = conditional;
 	}
-	
 
 }

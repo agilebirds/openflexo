@@ -26,33 +26,28 @@ import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.inspector.InspectableObject;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class WidgetBindingDefinition extends BindingDefinition implements InspectableObject
-{
+public class WidgetBindingDefinition extends BindingDefinition implements InspectableObject {
 
-    @SuppressWarnings("hiding")
+	@SuppressWarnings("hiding")
 	private static final Logger logger = Logger.getLogger(WidgetBindingDefinition.class.getPackage().getName());
 
-    public WidgetBindingDefinition(String variableName, DMType type, IEWidget widget, BindingDefinitionType bindingType, boolean mandatory)
-    {
-        super(variableName, type, widget, bindingType, mandatory);
-    }
-
-	public static WidgetBindingDefinition get(IEWidget  widget, String name, Class type,
-			BindingDefinitionType bindingType, boolean mandatory) 
-	{
-		if (widget.getProject()==null) {
-    		if (logger.isLoggable(Level.SEVERE))
-				logger.severe("Widget "+widget.getFullyQualifiedName()+" has no project!!!");
-    		return null;
-    	}
-        return widget.getProject().getWidgetBindingDefinition(widget,name,type,bindingType,mandatory);
+	public WidgetBindingDefinition(String variableName, DMType type, IEWidget widget, BindingDefinitionType bindingType, boolean mandatory) {
+		super(variableName, type, widget, bindingType, mandatory);
 	}
-    
+
+	public static WidgetBindingDefinition get(IEWidget widget, String name, Class type, BindingDefinitionType bindingType, boolean mandatory) {
+		if (widget.getProject() == null) {
+			if (logger.isLoggable(Level.SEVERE))
+				logger.severe("Widget " + widget.getFullyQualifiedName() + " has no project!!!");
+			return null;
+		}
+		return widget.getProject().getWidgetBindingDefinition(widget, name, type, bindingType, mandatory);
+	}
+
 }

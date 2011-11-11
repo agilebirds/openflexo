@@ -59,7 +59,6 @@ import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 import org.openflexo.toolbox.ConcatenedList;
 
-
 /**
  * A RectPolylinConnector is a connector joining 2 shapes with a path of orthogonal segments (this connector is encoded as a
  * {@link FGERectPolylin} instance).
@@ -366,7 +365,16 @@ public class RectPolylinConnector extends Connector {
 	}
 
 	public static enum RectPolylinConstraints {
-		NONE, ORTHOGONAL_LAYOUT, ORTHOGONAL_LAYOUT_HORIZONTAL_FIRST, ORTHOGONAL_LAYOUT_VERTICAL_FIRST, HORIZONTAL_OR_VERTICAL_LAYOUT, HORIZONTAL_LAYOUT, VERTICAL_LAYOUT, ORIENTATIONS_FIXED, START_ORIENTATION_FIXED, END_ORIENTATION_FIXED
+		NONE,
+		ORTHOGONAL_LAYOUT,
+		ORTHOGONAL_LAYOUT_HORIZONTAL_FIRST,
+		ORTHOGONAL_LAYOUT_VERTICAL_FIRST,
+		HORIZONTAL_OR_VERTICAL_LAYOUT,
+		HORIZONTAL_LAYOUT,
+		VERTICAL_LAYOUT,
+		ORIENTATIONS_FIXED,
+		START_ORIENTATION_FIXED,
+		END_ORIENTATION_FIXED
 	}
 
 	private RectPolylinConstraints rectPolylinConstraints = RectPolylinConstraints.NONE;
@@ -1179,10 +1187,10 @@ public class RectPolylinConnector extends Connector {
 			/*
 			 * if (startArea instanceof FGEShape) { return ((FGEShape<?>)startArea).nearestOutlinePoint(fixedPoint); } else
 			 */FGEPoint returned = startArea.getNearestPoint(fixedPoint);
-			 if (!startArea.containsPoint(returned)) {
-				 logger.warning("Inconsistent data: point " + returned + " not located on area: " + startArea + " [was: " + fixedPoint + "]");
-			 }
-			 return returned;
+			if (!startArea.containsPoint(returned)) {
+				logger.warning("Inconsistent data: point " + returned + " not located on area: " + startArea + " [was: " + fixedPoint + "]");
+			}
+			return returned;
 
 		}
 
@@ -1600,10 +1608,10 @@ public class RectPolylinConnector extends Connector {
 							getOverlapYResultingFromPixelOverlap());
 					potentialPolylin.add(newPolylin);
 					if (newPolylin.getPointsNb() > 0 && newPolylin.getLength() < minimalLength + FGEGeometricObject.EPSILON /*
-					 * Hysteresis to
-					 * avoid
-					 * blinking
-					 */) {
+																															* Hysteresis to
+																															* avoid
+																															* blinking
+																															*/) {
 						polylin = newPolylin;
 						minimalLength = newPolylin.getLength();
 						choosenStartOrientation = potentialStartOrientations.get(i);
@@ -1623,11 +1631,11 @@ public class RectPolylinConnector extends Connector {
 								getOverlapYResultingFromPixelOverlap());
 						potentialPolylin.add(newPolylin);
 						if (newPolylin.doesRespectAllConstraints() && newPolylin.getLength() < minimalLength + FGEGeometricObject.EPSILON /*
-						 * Hysteresis
-						 * to
-						 * avoid
-						 * blinking
-						 */) {
+																																			* Hysteresis
+																																			* to
+																																			* avoid
+																																			* blinking
+																																			*/) {
 							polylin = newPolylin;
 							minimalLength = newPolylin.getLength();
 							choosenStartOrientation = potentialStartOrientations.get(i);
@@ -1777,7 +1785,7 @@ public class RectPolylinConnector extends Connector {
 					if (i == 0) {
 						// This is the start object, when not, put it on starting object shape outline
 						pointRelativeToStartObject = getStartObject().getShape().getOutline()
-						.nearestOutlinePoint(pointRelativeToStartObject);
+								.nearestOutlinePoint(pointRelativeToStartObject);
 						polylin.updatePointAt(i, GraphicalRepresentation.convertNormalizedPoint(getStartObject(),
 								pointRelativeToStartObject, getGraphicalRepresentation()));
 					} else if (i == 1 && polylin.getPointsNb() >= 6) {
@@ -1810,7 +1818,7 @@ public class RectPolylinConnector extends Connector {
 						FGEPoint previousPoint = polylin.getPointAt(polylin.getPointsNb() - 3);
 						if (polylinRelativeToEndObject.getSegmentAt(polylinRelativeToEndObject.getSegmentNb() - 2) != null
 								&& polylinRelativeToEndObject.getSegmentAt(polylinRelativeToEndObject.getSegmentNb() - 2)
-								.getApproximatedOrientation().isHorizontal()) {
+										.getApproximatedOrientation().isHorizontal()) {
 							previousPoint.y = previousPoint.y;
 						} else {
 							previousPoint.x = previousPoint.x;

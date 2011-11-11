@@ -24,11 +24,10 @@ import org.openflexo.foundation.action.DeleteFlexoProperty;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class DeleteFlexoPropertyActionizer extends ActionInitializer<DeleteFlexoProperty, FlexoProperty, FlexoProperty> {
 
 	public DeleteFlexoPropertyActionizer(ControllerActionInitializer actionInitializer) {
 		super(DeleteFlexoProperty.actionType, actionInitializer);
 	}
-		
+
 }

@@ -14,7 +14,7 @@ import org.openflexo.foundation.xml.ImplementationModelBuilder;
 import org.openflexo.toolbox.JavaUtils;
 
 /**
- *
+ * 
  * @author Nicolas Daniels
  */
 public class HibernateEnumValue extends TechnologyModelObject {
@@ -31,7 +31,8 @@ public class HibernateEnumValue extends TechnologyModelObject {
 	 * Build a new Hibernate enum value for the specified implementation model builder.<br/>
 	 * This constructor is namely invoked during deserialization.
 	 * 
-	 * @param builder the builder that will create this enum value
+	 * @param builder
+	 *            the builder that will create this enum value
 	 */
 	public HibernateEnumValue(ImplementationModelBuilder builder) {
 		this(builder.implementationModel);
@@ -41,7 +42,8 @@ public class HibernateEnumValue extends TechnologyModelObject {
 	/**
 	 * Build a new Hibernate enum value for the specified implementation model.
 	 * 
-	 * @param implementationModel the implementation model where to create this Hibernate enum value
+	 * @param implementationModel
+	 *            the implementation model where to create this Hibernate enum value
 	 */
 	public HibernateEnumValue(ImplementationModel implementationModel) {
 		super(implementationModel);

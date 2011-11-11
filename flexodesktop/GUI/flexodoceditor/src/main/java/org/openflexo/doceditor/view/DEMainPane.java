@@ -27,49 +27,44 @@ import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.ModuleView;
 
-
 /**
  * @author gpolet
  * 
  */
-public class DEMainPane extends FlexoMainPane
-{
-	
+public class DEMainPane extends FlexoMainPane {
+
 	// This variable can be null!
-    protected DEBrowserView deBrowserView;
+	protected DEBrowserView deBrowserView;
 
-    /**
-     * @param moduleView
-     * @param mainFrame
-     * @param controller
-     */
-    public DEMainPane(DEController controller, ModuleView moduleView, FlexoFrame mainFrame)
-    {
-        super(moduleView, mainFrame, controller);
-        deBrowserView = new DEBrowserView(controller, new DEBrowser(controller));
-        _controller = controller;
-        setLeftView(deBrowserView);
-    }
+	/**
+	 * @param moduleView
+	 * @param mainFrame
+	 * @param controller
+	 */
+	public DEMainPane(DEController controller, ModuleView moduleView, FlexoFrame mainFrame) {
+		super(moduleView, mainFrame, controller);
+		deBrowserView = new DEBrowserView(controller, new DEBrowser(controller));
+		_controller = controller;
+		setLeftView(deBrowserView);
+	}
 
-    /**
-     * Overrides getParentObject
-     * 
-     * @see org.openflexo.view.FlexoMainPane#getParentObject(org.openflexo.foundation.FlexoModelObject)
-     */
-    @Override
-	protected FlexoModelObject getParentObject(FlexoModelObject object)
-    {
-    	if (object instanceof TOCEntry)
-        	if (((TOCEntry) object).getParent()!=null)
-        		return ((TOCEntry) object).getParent();
-        	else
-        		((TOCEntry) object).getRepository();
-    	return null;
-    }
+	/**
+	 * Overrides getParentObject
+	 * 
+	 * @see org.openflexo.view.FlexoMainPane#getParentObject(org.openflexo.foundation.FlexoModelObject)
+	 */
+	@Override
+	protected FlexoModelObject getParentObject(FlexoModelObject object) {
+		if (object instanceof TOCEntry)
+			if (((TOCEntry) object).getParent() != null)
+				return ((TOCEntry) object).getParent();
+			else
+				((TOCEntry) object).getRepository();
+		return null;
+	}
 
 	@Override
-	public DEController getController() 
-	{
+	public DEController getController() {
 		return (DEController) _controller;
 	}
 

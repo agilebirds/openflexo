@@ -22,14 +22,12 @@ package org.openflexo.foundation.wkf.edge;
 import org.openflexo.foundation.wkf.ws.FlexoPortMap;
 
 /**
- * Classes implementing this interface represent an edge which is connected from
- * something to an FlexoPortMap
+ * Classes implementing this interface represent an edge which is connected from something to an FlexoPortMap
  * 
  * @author sguerin
  * 
  */
-public interface PortMapEntry
-{
-    public FlexoPortMap getEndNode();
+public interface PortMapEntry {
+	public FlexoPortMap getEndNode();
 
 }

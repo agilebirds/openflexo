@@ -27,49 +27,43 @@ import java.security.InvalidParameterException;
 import org.apache.poi.openxml4j.opc.PackageRelationshipTypes;
 import org.dom4j.Namespace;
 
-public class DocxXmlUtil
-{
+public class DocxXmlUtil {
 	private static final String NAMESPACEURL_WORDPROCESSINGML = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
 	private static final String NAMESPACEURL_RELATIONSHIP = "http://schemas.openxmlformats.org/officeDocument/2006/relationships";
 	private static final String NAMESPACEURL_DRAWINGMAIN = "http://schemas.openxmlformats.org/drawingml/2006/main";
 	public static final Namespace NAMESPACE_WORDPROCESSINGML = new Namespace("w", NAMESPACEURL_WORDPROCESSINGML);
 	public static final Namespace NAMESPACE_RELATIONSHIP = new Namespace("r", NAMESPACEURL_RELATIONSHIP);
 	public static final Namespace NAMESPACE_DRAWINGMAIN = new Namespace("a", NAMESPACEURL_DRAWINGMAIN);
-	
+
 	public static final String RELATIONSHIPTYPE_COREDOCUMENT = PackageRelationshipTypes.CORE_DOCUMENT;
 	public static final String RELATIONSHIPTYPE_IMAGEPART = PackageRelationshipTypes.IMAGE_PART;
 	public static final String RELATIONSHIPTYPE_NUMBERINGPART = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering";
 	public static final String RELATIONSHIPTYPE_HYPERLINK = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink";
-	
-	
-	public static Namespace getNamespace(String prefix)
-	{
-		if(NAMESPACE_WORDPROCESSINGML.getPrefix().equals(prefix))
+
+	public static Namespace getNamespace(String prefix) {
+		if (NAMESPACE_WORDPROCESSINGML.getPrefix().equals(prefix))
 			return NAMESPACE_WORDPROCESSINGML;
-		else if(NAMESPACE_RELATIONSHIP.getPrefix().equals(prefix))
+		else if (NAMESPACE_RELATIONSHIP.getPrefix().equals(prefix))
 			return NAMESPACE_RELATIONSHIP;
-		else if(NAMESPACE_DRAWINGMAIN.getPrefix().equals(prefix))
+		else if (NAMESPACE_DRAWINGMAIN.getPrefix().equals(prefix))
 			return NAMESPACE_DRAWINGMAIN;
-		
-		throw new InvalidParameterException("Invalid prefix '" +prefix+ "' for getNamespace");
+
+		throw new InvalidParameterException("Invalid prefix '" + prefix + "' for getNamespace");
 	}
-	
-	public static Namespace getNamespace(OpenXmlTag openXmlTag)
-	{
+
+	public static Namespace getNamespace(OpenXmlTag openXmlTag) {
 		return getNamespace(openXmlTag.getPrefix());
 	}
-	
-	public static byte[] getByteArrayFromInputStream(InputStream in) throws IOException
-	{
+
+	public static byte[] getByteArrayFromInputStream(InputStream in) throws IOException {
 		ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
 		byte[] buffer = new byte[1024];
 		int length;
-		
-		while((length = in.read(buffer)) != -1)
-		{
+
+		while ((length = in.read(buffer)) != -1) {
 			byteArray.write(buffer, 0, length);
 		}
-		
+
 		return byteArray.toByteArray();
 	}
 }

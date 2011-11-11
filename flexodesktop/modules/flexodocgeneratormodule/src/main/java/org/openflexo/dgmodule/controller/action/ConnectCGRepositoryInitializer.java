@@ -23,7 +23,6 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.logging.Logger;
 
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.Format;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -43,24 +42,20 @@ public class ConnectCGRepositoryInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	ConnectCGRepositoryInitializer(DGControllerActionInitializer actionInitializer)
-	{
-		super(ConnectCGRepository.actionType,actionInitializer);
+	ConnectCGRepositoryInitializer(DGControllerActionInitializer actionInitializer) {
+		super(ConnectCGRepository.actionType, actionInitializer);
 	}
 
 	@Override
-	protected DGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DGControllerActionInitializer)super.getControllerActionInitializer();
+	protected DGControllerActionInitializer getControllerActionInitializer() {
+		return (DGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<ConnectCGRepository> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<ConnectCGRepository> getDefaultInitializer() {
 		return new FlexoActionInitializer<ConnectCGRepository>() {
 			@Override
-			public boolean run(ActionEvent e, ConnectCGRepository action)
-			{
+			public boolean run(ActionEvent e, ConnectCGRepository action) {
 				if (!(action.getFocusedObject() instanceof DGRepository))
 					return false;
 				DGRepository repository = (DGRepository) action.getFocusedObject();
@@ -76,33 +71,34 @@ public class ConnectCGRepositoryInitializer extends ActionInitializer {
 				DirectoryParameter paramDir = new DirectoryParameter("directory", "source_directory", repository.getSourceCodeRepository()
 						.getDirectory());
 				TextFieldParameter paramWarName = new TextFieldParameter("pdfName", "pdf_name", repository.getPostProductName());
-				DirectoryParameter paramWarDir = new DirectoryParameter("pdfDirectory", "pdf_directory", repository.getPostBuildRepository()
-						.getDirectory());
-				DynamicDropDownParameter<TOCRepository> repositoryParam = new DynamicDropDownParameter<TOCRepository>("repository","table_of_content",repository.getTocRepository());
+				DirectoryParameter paramWarDir = new DirectoryParameter("pdfDirectory", "pdf_directory", repository
+						.getPostBuildRepository().getDirectory());
+				DynamicDropDownParameter<TOCRepository> repositoryParam = new DynamicDropDownParameter<TOCRepository>("repository",
+						"table_of_content", repository.getTocRepository());
 				repositoryParam.setAvailableValues(getProject().getTOCData().getRepositories());
 				repositoryParam.setFormatter("title");
-				AskParametersDialog dialog =AskParametersDialog.createAskParametersDialog(getProject(), null, FlexoLocalization
-								        		.localizedForKey("connect_repository_to_local_file_system"), FlexoLocalization
-.localizedForKey("enter_parameters_for_connecting_repository_to_the_local_file_system"),
-						paramName, paramDir, paramWarName, paramWarDir,repositoryParam);
+				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
+						FlexoLocalization.localizedForKey("connect_repository_to_local_file_system"),
+						FlexoLocalization.localizedForKey("enter_parameters_for_connecting_repository_to_the_local_file_system"),
+						paramName, paramDir, paramWarName, paramWarDir, repositoryParam);
 				System.setProperty("apple.awt.fileDialogForDirectories", "false");
-                if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-                	repository.setTocRepository(repositoryParam.getValue());
-					//try {
-						repository.setDisplayName(paramName.getValue());
-						repository.setDirectory(paramDir.getValue());
-						repository.setPostProductName(paramWarName.getValue());
-						repository.setPostBuildDirectory(paramWarDir.getValue());
-//					} catch (DuplicateCodeRepositoryNameException e2) {
-//						e2.printStackTrace();
-//						FlexoController.notify(FlexoLocalization.localizedForKey("wrong_name"));
-//						return false;
-//					}
+				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
+					repository.setTocRepository(repositoryParam.getValue());
+					// try {
+					repository.setDisplayName(paramName.getValue());
+					repository.setDirectory(paramDir.getValue());
+					repository.setPostProductName(paramWarName.getValue());
+					repository.setPostBuildDirectory(paramWarDir.getValue());
+					// } catch (DuplicateCodeRepositoryNameException e2) {
+					// e2.printStackTrace();
+					// FlexoController.notify(FlexoLocalization.localizedForKey("wrong_name"));
+					// return false;
+					// }
 					if (!repository.getSourceCodeRepository().isConnected()) {
 						FlexoController.notify(FlexoLocalization.localizedForKey("sorry_invalid_directory"));
 						return false;
 					}
-					if (repository.getFormat()!=Format.HTML && repository.getTocRepository()==null) {
+					if (repository.getFormat() != Format.HTML && repository.getTocRepository() == null) {
 						FlexoController.notify(FlexoLocalization.localizedForKey("you_must_choose_a_toc"));
 						return false;
 					}
@@ -115,16 +111,13 @@ public class ConnectCGRepositoryInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<ConnectCGRepository> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<ConnectCGRepository> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ConnectCGRepository>() {
 			@Override
-			public boolean run(ActionEvent e, ConnectCGRepository action)
-			{
+			public boolean run(ActionEvent e, ConnectCGRepository action) {
 				return true;
 			}
 		};
 	}
-
 
 }

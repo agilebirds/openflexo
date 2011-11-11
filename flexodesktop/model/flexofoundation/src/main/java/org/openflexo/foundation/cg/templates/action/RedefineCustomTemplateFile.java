@@ -37,9 +37,7 @@ import org.openflexo.foundation.cg.templates.CGTemplateObject;
 import org.openflexo.foundation.cg.templates.CustomCGTemplateRepository;
 import org.openflexo.toolbox.FileUtils;
 
-
-public class RedefineCustomTemplateFile extends FlexoAction<RedefineCustomTemplateFile, CGTemplate, CGTemplateObject>
-{
+public class RedefineCustomTemplateFile extends FlexoAction<RedefineCustomTemplateFile, CGTemplate, CGTemplateObject> {
 
 	private static final Logger logger = Logger.getLogger(RedefineCustomTemplateFile.class.getPackage().getName());
 
@@ -50,20 +48,18 @@ public class RedefineCustomTemplateFile extends FlexoAction<RedefineCustomTempla
 		 * Factory method
 		 */
 		@Override
-		public RedefineCustomTemplateFile makeNewAction(CGTemplate focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor)
-		{
-			return new RedefineCustomTemplateFile(focusedObject, globalSelection,editor);
+		public RedefineCustomTemplateFile makeNewAction(CGTemplate focusedObject, Vector<CGTemplateObject> globalSelection,
+				FlexoEditor editor) {
+			return new RedefineCustomTemplateFile(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGTemplate object, Vector<CGTemplateObject> globalSelection)
-		{
+		protected boolean isVisibleForSelection(CGTemplate object, Vector<CGTemplateObject> globalSelection) {
 			return object != null && object.isApplicationTemplate();
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGTemplate object, Vector<CGTemplateObject> globalSelection)
-		{
+		protected boolean isEnabledForSelection(CGTemplate object, Vector<CGTemplateObject> globalSelection) {
 			return object != null && object.isApplicationTemplate();
 		}
 
@@ -73,20 +69,17 @@ public class RedefineCustomTemplateFile extends FlexoAction<RedefineCustomTempla
 		FlexoModelObject.addActionForClass(RedefineCustomTemplateFile.actionType, CGTemplate.class);
 	}
 
-
 	private CustomCGTemplateRepository _repository;
 	private TargetType _target;
 	private CGTemplateFile _newTemplateFile;
 
-	RedefineCustomTemplateFile(CGTemplate focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor)
-	{
+	RedefineCustomTemplateFile(CGTemplate focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
-	protected void doAction(Object context) throws IOFlexoException
-	{
-		logger.info ("Redefine CustomTemplateFile "+getFocusedObject());
+	protected void doAction(Object context) throws IOFlexoException {
+		logger.info("Redefine CustomTemplateFile " + getFocusedObject());
 		if (getFocusedObject() != null && _repository != null) {
 			File createdFile;
 			CGDirectoryTemplateSet set;
@@ -110,30 +103,24 @@ public class RedefineCustomTemplateFile extends FlexoAction<RedefineCustomTempla
 		}
 	}
 
-	public CustomCGTemplateRepository getRepository()
-	{
+	public CustomCGTemplateRepository getRepository() {
 		return _repository;
 	}
 
-	public void setRepository(CustomCGTemplateRepository repository)
-	{
+	public void setRepository(CustomCGTemplateRepository repository) {
 		_repository = repository;
 	}
 
-	public TargetType getTarget()
-	{
+	public TargetType getTarget() {
 		return _target;
 	}
 
-	public void setTarget(TargetType target)
-	{
+	public void setTarget(TargetType target) {
 		_target = target;
 	}
 
-	public CGTemplateFile getNewTemplateFile()
-	{
+	public CGTemplateFile getNewTemplateFile() {
 		return _newTemplateFile;
 	}
-
 
 }

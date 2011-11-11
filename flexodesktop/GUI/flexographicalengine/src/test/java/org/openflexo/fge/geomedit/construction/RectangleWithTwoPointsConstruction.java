@@ -28,21 +28,18 @@ public class RectangleWithTwoPointsConstruction extends RectangleConstruction {
 	public PointConstruction pointConstruction1;
 	public PointConstruction pointConstruction2;
 
-	public RectangleWithTwoPointsConstruction()
-	{
+	public RectangleWithTwoPointsConstruction() {
 		super();
 	}
 
-	public RectangleWithTwoPointsConstruction(PointConstruction pointConstruction1, PointConstruction pointConstruction2)
-	{
+	public RectangleWithTwoPointsConstruction(PointConstruction pointConstruction1, PointConstruction pointConstruction2) {
 		super();
 		this.pointConstruction1 = pointConstruction1;
 		this.pointConstruction2 = pointConstruction2;
 	}
 
 	@Override
-	protected FGERectangle computeData()
-	{
+	protected FGERectangle computeData() {
 		FGEPoint p1 = pointConstruction1.getPoint();
 		FGEPoint p2 = pointConstruction2.getPoint();
 
@@ -50,24 +47,22 @@ public class RectangleWithTwoPointsConstruction extends RectangleConstruction {
 		p.x = Math.min(p1.x, p2.x);
 		p.y = Math.min(p1.y, p2.y);
 
-		double width = Math.abs(p1.x-p2.x);
-		double height = Math.abs(p1.y-p2.y);
+		double width = Math.abs(p1.x - p2.x);
+		double height = Math.abs(p1.y - p2.y);
 
-		return new FGERectangle(p.x,p.y,width,height,(getIsFilled()?Filling.FILLED:Filling.NOT_FILLED));
+		return new FGERectangle(p.x, p.y, width, height, (getIsFilled() ? Filling.FILLED : Filling.NOT_FILLED));
 	}
 
 	@Override
-	public String toString()
-	{
-		return "RectangleWithTwoPointsConstruction[\n"+"> "+pointConstruction1.toString()+"\n> "+pointConstruction2.toString()+"\n]";
+	public String toString() {
+		return "RectangleWithTwoPointsConstruction[\n" + "> " + pointConstruction1.toString() + "\n> " + pointConstruction2.toString()
+				+ "\n]";
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public GeometricConstruction[] getDepends() {
 		GeometricConstruction[] returned = { pointConstruction1, pointConstruction2 };
 		return returned;
 	}
-
 
 }

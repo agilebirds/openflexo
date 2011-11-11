@@ -44,7 +44,7 @@ import org.openflexo.view.controller.FlexoFIBController;
  * Utility class containing all icons used in context of WKFModule
  * 
  * @author sylvain
- *
+ * 
  */
 public class WKFIconLibrary extends IconLibrary {
 
@@ -63,11 +63,11 @@ public class WKFIconLibrary extends IconLibrary {
 	public static final ImageIcon WKF_SWLP_SELECTED_ICON = new ImageIconResource("Icons/WKF/SwimmingLanesPerspective_S.gif");
 	public static final ImageIcon WKF_RP_ACTIVE_ICON = new ImageIconResource("Icons/WKF/RolePerspective_A.gif");
 	public static final ImageIcon WKF_RP_SELECTED_ICON = new ImageIconResource("Icons/WKF/RolePerspective_S.gif");
-	
+
 	// Editor icons
 	public static final ImageIcon FLAT_ICON = new ImageIconResource("Icons/WKF/Flat.gif");
 	public static final ImageIcon EXPANDABLE_ICON = new ImageIconResource("Icons/WKF/Expandable.gif");
-	
+
 	public static final IconMarker WS_MARKER = new IconMarker(new ImageIconResource("Icons/WKF/MarkerWS.gif"), 12, 9);
 
 	public static final ImageIcon MULTIPLE_INSTANCE_SUBPROCESS_ICON = new ImageIconResource("Icons/WKF/MultipleInstanceProcess.gif");
@@ -85,7 +85,8 @@ public class WKFIconLibrary extends IconLibrary {
 	// Small model icons
 	public static final ImageIcon WORKFLOW_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Library_WKF.gif");
 	public static final ImageIcon ROLE_LIBRARY_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Library_Role.gif");
-	public static final ImageIcon IMPORTED_PROCESS_LIBRARY_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/ImportedLibrary_WKF.gif");
+	public static final ImageIcon IMPORTED_PROCESS_LIBRARY_ICON = new ImageIconResource(
+			"Icons/Model/WKF/SmallIcons/ImportedLibrary_WKF.gif");
 	public static final ImageIcon IMPORTED_ROLE_LIBRARY_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/ImportedLibrary_Role.gif");
 	public static final ImageIconResource PROCESS_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/SmallProcess.gif");
 	public static final ImageIcon PROCESS_FOLDER_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/ProcessFolder.gif");
@@ -111,7 +112,7 @@ public class WKFIconLibrary extends IconLibrary {
 	public static final ImageIcon IMPORTED_ROLE_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/SmallImportedRole.gif");
 	public static final ImageIcon SYSTEM_ROLE_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/SmallSystemRole.gif");
 	public static final ImageIcon STATUS_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/SmallStatus.gif");
-	//public static final ImageIcon DEADLINE_ICON = new ImageIconResource("Icons/Model/WKF/SmallDeadLine.gif");
+	// public static final ImageIcon DEADLINE_ICON = new ImageIconResource("Icons/Model/WKF/SmallDeadLine.gif");
 	public static final ImageIcon POSTCONDITION_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/SmallPostCondition.gif");
 	public static final ImageIcon PRECONDITION_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/SmallPrecondition.gif");
 	public static final ImageIcon PORT_REGISTERY_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/SmallPortRegistery.gif");
@@ -135,7 +136,8 @@ public class WKFIconLibrary extends IconLibrary {
 	public static final ImageIcon SMALL_IN_OUT_PORT_LEFT_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/SmallPortInOutLeft.gif");
 	public static final ImageIcon SMALL_IN_OUT_PORT_RIGHT_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/SmallPortInOutRight.gif");
 	public static final ImageIcon SMALL_IN_OUT_PORT_TOP_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/SmallPortInOutTop.gif");
-	public static final ImageIcon SMALL_IN_OUT_PORT_BOTTOM_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/SmallPortInOutBottom.gif");
+	public static final ImageIcon SMALL_IN_OUT_PORT_BOTTOM_ICON = new ImageIconResource(
+			"Icons/Model/WKF/SmallIcons/SmallPortInOutBottom.gif");
 	public static final ImageIcon SMALL_IN_PORT_LEFT_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/SmallPortInLeft.gif");
 	public static final ImageIcon SMALL_IN_PORT_RIGHT_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/SmallPortInRight.gif");
 	public static final ImageIcon SMALL_IN_PORT_TOP_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/SmallPortInTop.gif");
@@ -150,12 +152,16 @@ public class WKFIconLibrary extends IconLibrary {
 	public static final ImageIcon SELF_EXECUTABLE_IMAGE = new ImageIconResource("Icons/Model/WKF/BigIcons/SelfExecutable.gif");
 	public static final ImageIcon AND_OPERATOR_ICON = new ImageIconResource("Icons/Model/WKF/BigIcons/AndOperator.gif");
 	public static final ImageIcon AND_OPERATOR_DISABLED_ICON = new ImageIconResource("Icons/Model/WKF/BigIcons/AndOperatorDisabled.gif");
-	public static final ImageIcon EXCLUSIVE_EVENT_BASED_OPERATOR_ICON = new ImageIconResource("Icons/Model/WKF/BigIcons/ExclusiveEventBasedOperator.gif");
-	public static final ImageIcon EXCLUSIVE_EVENT_BASED_OPERATOR_DISABLED_ICON = new ImageIconResource("Icons/Model/WKF/BigIcons/ExclusiveEventBasedOperatorDisabled.gif");
+	public static final ImageIcon EXCLUSIVE_EVENT_BASED_OPERATOR_ICON = new ImageIconResource(
+			"Icons/Model/WKF/BigIcons/ExclusiveEventBasedOperator.gif");
+	public static final ImageIcon EXCLUSIVE_EVENT_BASED_OPERATOR_DISABLED_ICON = new ImageIconResource(
+			"Icons/Model/WKF/BigIcons/ExclusiveEventBasedOperatorDisabled.gif");
 	public static final ImageIcon COMPLEX_OPERATOR_ICON = new ImageIconResource("Icons/Model/WKF/BigIcons/ComplexOperator.gif");
-	public static final ImageIcon COMPLEX_OPERATOR_DISABLED_ICON = new ImageIconResource("Icons/Model/WKF/BigIcons/ComplexOperatorDisabled.gif");
+	public static final ImageIcon COMPLEX_OPERATOR_DISABLED_ICON = new ImageIconResource(
+			"Icons/Model/WKF/BigIcons/ComplexOperatorDisabled.gif");
 	public static final ImageIcon INCLUSIVE_OPERATOR_ICON = new ImageIconResource("Icons/Model/WKF/BigIcons/InclusiveOperator.gif");
-	public static final ImageIcon INCLUSIVE_OPERATOR_DISABLED_ICON = new ImageIconResource("Icons/Model/WKF/BigIcons/InclusiveOperatorDisabled.gif");
+	public static final ImageIcon INCLUSIVE_OPERATOR_DISABLED_ICON = new ImageIconResource(
+			"Icons/Model/WKF/BigIcons/InclusiveOperatorDisabled.gif");
 	public static final ImageIcon OR_OPERATOR_ICON = new ImageIconResource("Icons/Model/WKF/BigIcons/OrOperator.gif");
 	public static final ImageIcon OR_OPERATOR_DISABLED_ICON = new ImageIconResource("Icons/Model/WKF/BigIcons/OrOperatorDisabled.gif");
 	public static final ImageIcon IF_OPERATOR_ICON = new ImageIconResource("Icons/Model/WKF/BigIcons/IfOperator.gif");
@@ -163,7 +169,8 @@ public class WKFIconLibrary extends IconLibrary {
 	public static final ImageIcon LOOP_OPERATOR_ICON = new ImageIconResource("Icons/Model/WKF/BigIcons/LoopOperator.gif");
 	public static final ImageIcon LOOP_OPERATOR_DISABLED_ICON = new ImageIconResource("Icons/Model/WKF/BigIcons/LoopOperatorDisabled.gif");
 	public static final ImageIcon SWITCH_OPERATOR_ICON = new ImageIconResource("Icons/Model/WKF/BigIcons/SwitchOperator.gif");
-	public static final ImageIcon SWITCH_OPERATOR_DISABLED_ICON = new ImageIconResource("Icons/Model/WKF/BigIcons/SwitchOperatorDisabled.gif");
+	public static final ImageIcon SWITCH_OPERATOR_DISABLED_ICON = new ImageIconResource(
+			"Icons/Model/WKF/BigIcons/SwitchOperatorDisabled.gif");
 
 	public static final ImageIcon BIG_DELETE_PORT_ICON = new ImageIconResource("Icons/Model/WKF/BigIcons/BigPortDel.gif");
 	public static final ImageIcon BIG_IN_OUT_PORT_LEFT_ICON = new ImageIconResource("Icons/Model/WKF/BigIcons/BigPortInOutLeft.gif");
@@ -180,234 +187,255 @@ public class WKFIconLibrary extends IconLibrary {
 	public static final ImageIcon BIG_OUT_PORT_RIGHT_ICON = new ImageIconResource("Icons/Model/WKF/BigIcons/BigPortOutRight.gif");
 	public static final ImageIcon BIG_OUT_PORT_BOTTOM_ICON = new ImageIconResource("Icons/Model/WKF/BigIcons/BigPortOutBottom.gif");
 
-
 	// Events icons
 	public static final ImageIcon CANCEL_END_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/CancelEnd.gif");
 	public static final ImageIcon CANCEL_INTER_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/CancelIntermediate.gif");
-	public static final ImageIcon COMPENSATION_DROP_END_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/CompensationDropEnd.gif");
-	public static final ImageIcon COMPENSATION_DROP_INTER_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/CompensationDropIntermediate.gif");
-	public static final ImageIcon COMPENSATION_INTER_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/CompensationIntermediate.gif");
+	public static final ImageIcon COMPENSATION_DROP_END_ICON = new ImageIconResource(
+			"Icons/Model/WKF/SmallIcons/Events/CompensationDropEnd.gif");
+	public static final ImageIcon COMPENSATION_DROP_INTER_ICON = new ImageIconResource(
+			"Icons/Model/WKF/SmallIcons/Events/CompensationDropIntermediate.gif");
+	public static final ImageIcon COMPENSATION_INTER_ICON = new ImageIconResource(
+			"Icons/Model/WKF/SmallIcons/Events/CompensationIntermediate.gif");
 	public static final ImageIcon COMPENSATION_START_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/CompensationStart.gif");
 	public static final ImageIcon CONDITION_BOUNDARY_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/ConditionBoundary.gif");
-	public static final ImageIcon CONDITION_INTER_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/ConditionIntermediate.gif");
+	public static final ImageIcon CONDITION_INTER_ICON = new ImageIconResource(
+			"Icons/Model/WKF/SmallIcons/Events/ConditionIntermediate.gif");
 	public static final ImageIcon CONDITION_START_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/ConditionStart.gif");
-	public static final ImageIcon CONDITION_START_NON_INTERRUPT_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/ConditionStartNonInterupt.gif");
+	public static final ImageIcon CONDITION_START_NON_INTERRUPT_ICON = new ImageIconResource(
+			"Icons/Model/WKF/SmallIcons/Events/ConditionStartNonInterupt.gif");
 	public static final ImageIcon DEFAULT_END_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/DefaultEnd.gif");
 	public static final ImageIcon DEFAULT_INTER_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/DefautIntermediate.gif");
 	public static final ImageIcon ERROR_INTER_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/ErrorIntermediate.gif");
 	public static final ImageIcon ERROR_START_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/ErrorStart.gif");
 	public static final ImageIcon ERROR_END_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/ErrorTerminate.gif");
-	public static final ImageIcon ESCALATION_BOUNDARY_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/EscalationBoundary.gif");
-	public static final ImageIcon ESCALATION_DROP_INTER_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/EscalationDropIntermediate.gif");
-	public static final ImageIcon ESCALATION_DROP_END_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/EscalationDropTerminate.gif");
-	public static final ImageIcon ESCALATION_INTER_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/EscalationIntermediate.gif");
+	public static final ImageIcon ESCALATION_BOUNDARY_ICON = new ImageIconResource(
+			"Icons/Model/WKF/SmallIcons/Events/EscalationBoundary.gif");
+	public static final ImageIcon ESCALATION_DROP_INTER_ICON = new ImageIconResource(
+			"Icons/Model/WKF/SmallIcons/Events/EscalationDropIntermediate.gif");
+	public static final ImageIcon ESCALATION_DROP_END_ICON = new ImageIconResource(
+			"Icons/Model/WKF/SmallIcons/Events/EscalationDropTerminate.gif");
+	public static final ImageIcon ESCALATION_INTER_ICON = new ImageIconResource(
+			"Icons/Model/WKF/SmallIcons/Events/EscalationIntermediate.gif");
 	public static final ImageIcon ESCALATION_START_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/EscalationStart.gif");
-	public static final ImageIcon ESCALATION_START_NON_INTERRUPT_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/EscalationStartNonInterrupt.gif");
-	public static final ImageIcon MAIL_IN_START_NON_INTERRUPT_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/StartNonInteruptReceiveMessage.gif");
+	public static final ImageIcon ESCALATION_START_NON_INTERRUPT_ICON = new ImageIconResource(
+			"Icons/Model/WKF/SmallIcons/Events/EscalationStartNonInterrupt.gif");
+	public static final ImageIcon MAIL_IN_START_NON_INTERRUPT_ICON = new ImageIconResource(
+			"Icons/Model/WKF/SmallIcons/Events/StartNonInteruptReceiveMessage.gif");
 	public static final ImageIcon MAIL_IN_START_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/StartReceiveMessage.gif");
-	public static final ImageIcon MAIL_IN_INTER_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/IntermediateReceiveMessage.gif");
-	public static final ImageIcon MAIL_IN_BOUNDARY_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/BoundaryReceiveMessage.gif");
-	public static final ImageIcon MAIL_OUT_INTER_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/IntermediateSendMessage.gif");
+	public static final ImageIcon MAIL_IN_INTER_ICON = new ImageIconResource(
+			"Icons/Model/WKF/SmallIcons/Events/IntermediateReceiveMessage.gif");
+	public static final ImageIcon MAIL_IN_BOUNDARY_ICON = new ImageIconResource(
+			"Icons/Model/WKF/SmallIcons/Events/BoundaryReceiveMessage.gif");
+	public static final ImageIcon MAIL_OUT_INTER_ICON = new ImageIconResource(
+			"Icons/Model/WKF/SmallIcons/Events/IntermediateSendMessage.gif");
 	public static final ImageIcon MAIL_OUT_END_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/TerminateSendMessage.gif");
 	public static final ImageIcon TIMER_INTER_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/IntermediateTimer.gif");
 	public static final ImageIcon TIMER_BOUNDARY_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/BoundaryTimer.gif");
-	public static final ImageIcon TIMER_START_NON_INTERRUPT_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/TimerNonInterruptStart.gif");
+	public static final ImageIcon TIMER_START_NON_INTERRUPT_ICON = new ImageIconResource(
+			"Icons/Model/WKF/SmallIcons/Events/TimerNonInterruptStart.gif");
 	public static final ImageIcon TIMER_START_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/TimerStart.gif");
 	public static final ImageIcon LINK_DROP_INTER_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/LinkDropIntermediate.gif");
 	public static final ImageIcon LINK_INTER_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/LinkIntermediate.gif");
 	public static final ImageIcon MULTIPLE_BOUNDARY_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/MultipleBoundary.gif");
 	public static final ImageIcon MULTIPLE_DROP_END_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/MultipleDropEnd.gif");
-	public static final ImageIcon MULTIPLE_DROP_INTER_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/MultipleDropIntermediate.gif");
+	public static final ImageIcon MULTIPLE_DROP_INTER_ICON = new ImageIconResource(
+			"Icons/Model/WKF/SmallIcons/Events/MultipleDropIntermediate.gif");
 	public static final ImageIcon MULTIPLE_INTER_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/MultipleIntermediate.gif");
-	public static final ImageIcon MULTIPLE_PARA_BOUNDARY_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/MultipleParaBoundary.gif");
-	public static final ImageIcon MULTIPLE_PARA_INTER_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/MultipleParaIntermediate.gif");
-	public static final ImageIcon MULTIPLE_PARA_START_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/MultipleParaStart.gif");
-	public static final ImageIcon MULTIPLE_PARA_START_NON_INTERRUPT_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/MultipleParaStartNonInterrupt.gif");
+	public static final ImageIcon MULTIPLE_PARA_BOUNDARY_ICON = new ImageIconResource(
+			"Icons/Model/WKF/SmallIcons/Events/MultipleParaBoundary.gif");
+	public static final ImageIcon MULTIPLE_PARA_INTER_ICON = new ImageIconResource(
+			"Icons/Model/WKF/SmallIcons/Events/MultipleParaIntermediate.gif");
+	public static final ImageIcon MULTIPLE_PARA_START_ICON = new ImageIconResource(
+			"Icons/Model/WKF/SmallIcons/Events/MultipleParaStart.gif");
+	public static final ImageIcon MULTIPLE_PARA_START_NON_INTERRUPT_ICON = new ImageIconResource(
+			"Icons/Model/WKF/SmallIcons/Events/MultipleParaStartNonInterrupt.gif");
 	public static final ImageIcon MULTIPLE_START_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/MultipleStart.gif");
-	public static final ImageIcon MULTIPLE_START_NON_INTERRUPT_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/MultipleStartNonInterrupt.gif");
+	public static final ImageIcon MULTIPLE_START_NON_INTERRUPT_ICON = new ImageIconResource(
+			"Icons/Model/WKF/SmallIcons/Events/MultipleStartNonInterrupt.gif");
 	public static final ImageIcon SIGNAL_BOUNDARY_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/SignalBoundary.gif");
-	public static final ImageIcon SIGNAL_DROP_INTER_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/SignalDropIntermediate.gif");
-	public static final ImageIcon SIGNAL_DROP_TERMINATE_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/SignalDropTerminate.gif");
+	public static final ImageIcon SIGNAL_DROP_INTER_ICON = new ImageIconResource(
+			"Icons/Model/WKF/SmallIcons/Events/SignalDropIntermediate.gif");
+	public static final ImageIcon SIGNAL_DROP_TERMINATE_ICON = new ImageIconResource(
+			"Icons/Model/WKF/SmallIcons/Events/SignalDropTerminate.gif");
 	public static final ImageIcon SIGNAL_INTER_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/SignalIntermediate.gif");
 	public static final ImageIcon SIGNAL_START_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/SignalStart.gif");
-	public static final ImageIcon SIGNAL_START_NON_INTERRUPT_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/SignalStartNonInterrupt.gif");
+	public static final ImageIcon SIGNAL_START_NON_INTERRUPT_ICON = new ImageIconResource(
+			"Icons/Model/WKF/SmallIcons/Events/SignalStartNonInterrupt.gif");
 	public static final ImageIcon DEFAULT_START_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/StartDefault.gif");
 	public static final ImageIcon TERMINATE_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Events/Terminate.gif");
-	
-	public static Icon getIconForEventNode(EventNode event)
-	{
+
+	public static Icon getIconForEventNode(EventNode event) {
 		if (event.isTriggerNone()) {
-			if(event.getEventType()==EVENT_TYPE.Start) {
+			if (event.getEventType() == EVENT_TYPE.Start) {
 				return WKFIconLibrary.DEFAULT_START_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.Intermediate) {
+			if (event.getEventType() == EVENT_TYPE.Intermediate) {
 				return WKFIconLibrary.DEFAULT_INTER_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.End) {
+			if (event.getEventType() == EVENT_TYPE.End) {
 				return WKFIconLibrary.DEFAULT_END_ICON;
 			}
 		} else if (event.isTriggerMessage()) {
-			if(event.getEventType()==EVENT_TYPE.Start) {
+			if (event.getEventType() == EVENT_TYPE.Start) {
 				return WKFIconLibrary.MAIL_IN_START_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.NonInteruptive) {
+			if (event.getEventType() == EVENT_TYPE.NonInteruptive) {
 				return WKFIconLibrary.MAIL_IN_START_NON_INTERRUPT_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.Intermediate) {
+			if (event.getEventType() == EVENT_TYPE.Intermediate) {
 				return WKFIconLibrary.MAIL_IN_INTER_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.NonInteruptiveBoundary) {
+			if (event.getEventType() == EVENT_TYPE.NonInteruptiveBoundary) {
 				return WKFIconLibrary.MAIL_IN_BOUNDARY_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.IntermediateDrop) {
+			if (event.getEventType() == EVENT_TYPE.IntermediateDrop) {
 				return WKFIconLibrary.MAIL_OUT_INTER_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.End) {
+			if (event.getEventType() == EVENT_TYPE.End) {
 				return WKFIconLibrary.MAIL_OUT_END_ICON;
 			}
 		} else if (event.isTriggerTimer()) {
-			if(event.getEventType()==EVENT_TYPE.Start) {
+			if (event.getEventType() == EVENT_TYPE.Start) {
 				return WKFIconLibrary.TIMER_START_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.NonInteruptive) {
+			if (event.getEventType() == EVENT_TYPE.NonInteruptive) {
 				return WKFIconLibrary.TIMER_START_NON_INTERRUPT_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.Intermediate) {
+			if (event.getEventType() == EVENT_TYPE.Intermediate) {
 				return WKFIconLibrary.TIMER_INTER_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.NonInteruptiveBoundary) {
+			if (event.getEventType() == EVENT_TYPE.NonInteruptiveBoundary) {
 				return WKFIconLibrary.TIMER_BOUNDARY_ICON;
 			}
 		} else if (event.isTriggerError()) {
-			if(event.getEventType()==EVENT_TYPE.Start) {
+			if (event.getEventType() == EVENT_TYPE.Start) {
 				return WKFIconLibrary.ERROR_START_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.Intermediate) {
+			if (event.getEventType() == EVENT_TYPE.Intermediate) {
 				return WKFIconLibrary.ERROR_INTER_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.End) {
+			if (event.getEventType() == EVENT_TYPE.End) {
 				return WKFIconLibrary.ERROR_END_ICON;
 			}
 		} else if (event.isTriggerEscalation()) {
-			if(event.getEventType()==EVENT_TYPE.Start) {
+			if (event.getEventType() == EVENT_TYPE.Start) {
 				return WKFIconLibrary.ESCALATION_START_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.NonInteruptive) {
+			if (event.getEventType() == EVENT_TYPE.NonInteruptive) {
 				return WKFIconLibrary.ESCALATION_START_NON_INTERRUPT_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.Intermediate) {
+			if (event.getEventType() == EVENT_TYPE.Intermediate) {
 				return WKFIconLibrary.ESCALATION_INTER_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.NonInteruptiveBoundary) {
+			if (event.getEventType() == EVENT_TYPE.NonInteruptiveBoundary) {
 				return WKFIconLibrary.ESCALATION_BOUNDARY_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.IntermediateDrop) {
+			if (event.getEventType() == EVENT_TYPE.IntermediateDrop) {
 				return WKFIconLibrary.ESCALATION_DROP_INTER_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.End) {
+			if (event.getEventType() == EVENT_TYPE.End) {
 				return WKFIconLibrary.ESCALATION_DROP_END_ICON;
 			}
-		}else if (event.isTriggerCancel()) {
-			if(event.getEventType()==EVENT_TYPE.Intermediate) {
+		} else if (event.isTriggerCancel()) {
+			if (event.getEventType() == EVENT_TYPE.Intermediate) {
 				return WKFIconLibrary.CANCEL_INTER_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.End) {
+			if (event.getEventType() == EVENT_TYPE.End) {
 				return WKFIconLibrary.CANCEL_END_ICON;
 			}
 		} else if (event.isTriggerCompensation()) {
-			if(event.getEventType()==EVENT_TYPE.Start) {
+			if (event.getEventType() == EVENT_TYPE.Start) {
 				return WKFIconLibrary.COMPENSATION_START_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.Intermediate) {
+			if (event.getEventType() == EVENT_TYPE.Intermediate) {
 				return WKFIconLibrary.COMPENSATION_INTER_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.IntermediateDrop) {
+			if (event.getEventType() == EVENT_TYPE.IntermediateDrop) {
 				return WKFIconLibrary.COMPENSATION_DROP_INTER_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.End) {
+			if (event.getEventType() == EVENT_TYPE.End) {
 				return WKFIconLibrary.COMPENSATION_DROP_END_ICON;
 			}
 		} else if (event.isTriggerConditional()) {
-			if(event.getEventType()==EVENT_TYPE.Start) {
+			if (event.getEventType() == EVENT_TYPE.Start) {
 				return WKFIconLibrary.CONDITION_START_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.NonInteruptive) {
+			if (event.getEventType() == EVENT_TYPE.NonInteruptive) {
 				return WKFIconLibrary.CONDITION_START_NON_INTERRUPT_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.Intermediate) {
+			if (event.getEventType() == EVENT_TYPE.Intermediate) {
 				return WKFIconLibrary.CONDITION_INTER_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.NonInteruptiveBoundary) {
+			if (event.getEventType() == EVENT_TYPE.NonInteruptiveBoundary) {
 				return WKFIconLibrary.CONDITION_BOUNDARY_ICON;
 			}
 		} else if (event.isTriggerLink()) {
-			if(event.getEventType()==EVENT_TYPE.Intermediate) {
+			if (event.getEventType() == EVENT_TYPE.Intermediate) {
 				return WKFIconLibrary.LINK_INTER_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.IntermediateDrop) {
+			if (event.getEventType() == EVENT_TYPE.IntermediateDrop) {
 				return WKFIconLibrary.LINK_DROP_INTER_ICON;
 			}
 		} else if (event.isTriggerSignal()) {
-			if(event.getEventType()==EVENT_TYPE.Start) {
+			if (event.getEventType() == EVENT_TYPE.Start) {
 				return WKFIconLibrary.SIGNAL_START_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.NonInteruptive) {
+			if (event.getEventType() == EVENT_TYPE.NonInteruptive) {
 				return WKFIconLibrary.SIGNAL_START_NON_INTERRUPT_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.Intermediate) {
+			if (event.getEventType() == EVENT_TYPE.Intermediate) {
 				return WKFIconLibrary.SIGNAL_INTER_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.NonInteruptiveBoundary) {
+			if (event.getEventType() == EVENT_TYPE.NonInteruptiveBoundary) {
 				return WKFIconLibrary.SIGNAL_BOUNDARY_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.IntermediateDrop) {
+			if (event.getEventType() == EVENT_TYPE.IntermediateDrop) {
 				return WKFIconLibrary.SIGNAL_DROP_INTER_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.End) {
+			if (event.getEventType() == EVENT_TYPE.End) {
 				return WKFIconLibrary.SIGNAL_DROP_TERMINATE_ICON;
 			}
 		} else if (event.isTriggerTerminate()) {
-			if(event.getEventType()==EVENT_TYPE.End) {
+			if (event.getEventType() == EVENT_TYPE.End) {
 				return WKFIconLibrary.TERMINATE_ICON;
 			}
 		} else if (event.isTriggerMultiple()) {
-			if(event.getEventType()==EVENT_TYPE.Start) {
+			if (event.getEventType() == EVENT_TYPE.Start) {
 				return WKFIconLibrary.MULTIPLE_START_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.NonInteruptive) {
+			if (event.getEventType() == EVENT_TYPE.NonInteruptive) {
 				return WKFIconLibrary.MULTIPLE_START_NON_INTERRUPT_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.Intermediate) {
+			if (event.getEventType() == EVENT_TYPE.Intermediate) {
 				return WKFIconLibrary.MULTIPLE_INTER_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.NonInteruptiveBoundary) {
+			if (event.getEventType() == EVENT_TYPE.NonInteruptiveBoundary) {
 				return WKFIconLibrary.MULTIPLE_BOUNDARY_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.IntermediateDrop) {
+			if (event.getEventType() == EVENT_TYPE.IntermediateDrop) {
 				return WKFIconLibrary.MULTIPLE_DROP_INTER_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.End) {
+			if (event.getEventType() == EVENT_TYPE.End) {
 				return WKFIconLibrary.MULTIPLE_DROP_END_ICON;
 			}
 		} else if (event.isTriggerMultiplePara()) {
-			if(event.getEventType()==EVENT_TYPE.Start) {
+			if (event.getEventType() == EVENT_TYPE.Start) {
 				return WKFIconLibrary.MULTIPLE_PARA_START_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.NonInteruptive) {
+			if (event.getEventType() == EVENT_TYPE.NonInteruptive) {
 				return WKFIconLibrary.MULTIPLE_PARA_START_NON_INTERRUPT_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.Intermediate) {
+			if (event.getEventType() == EVENT_TYPE.Intermediate) {
 				return WKFIconLibrary.MULTIPLE_PARA_INTER_ICON;
 			}
-			if(event.getEventType()==EVENT_TYPE.NonInteruptiveBoundary) {
+			if (event.getEventType() == EVENT_TYPE.NonInteruptiveBoundary) {
 				return WKFIconLibrary.MULTIPLE_PARA_BOUNDARY_ICON;
 			}
 		}
 		return null;
 	}
 
-	public static ImageIcon getImageIconForFlexoPort(FlexoPort port)
-	{
+	public static ImageIcon getImageIconForFlexoPort(FlexoPort port) {
 		if (port instanceof OutPort) {
 			return WKFIconLibrary.BIG_OUT_PORT_LEFT_ICON;
 		}
@@ -426,13 +454,11 @@ public class WKFIconLibrary extends IconLibrary {
 		return null;
 	}
 
-	public static ImageIcon getSmallImageIconForFlexoPort(FlexoPort port)
-	{
-		return getSmallImageIconForFlexoPort(port,PortMapRegistery.WEST);
+	public static ImageIcon getSmallImageIconForFlexoPort(FlexoPort port) {
+		return getSmallImageIconForFlexoPort(port, PortMapRegistery.WEST);
 	}
 
-	public static ImageIcon getSmallImageIconForFlexoPort(FlexoPort port, int orientation)
-	{
+	public static ImageIcon getSmallImageIconForFlexoPort(FlexoPort port, int orientation) {
 		if (port instanceof NewPort) {
 			return WKFIconLibrary.SMALL_NEW_PORT_ICON;
 		}
@@ -492,13 +518,12 @@ public class WKFIconLibrary extends IconLibrary {
 		return null;
 	}
 
-	public static ImageIcon getImageIconForPortmap(FlexoPortMap portmap,int orientation) {
+	public static ImageIcon getImageIconForPortmap(FlexoPortMap portmap, int orientation) {
 		if ((portmap.getOperation() != null) && (portmap.getOperation().getPort() != null)) {
-			return getSmallImageIconForFlexoPort(portmap.getOperation().getPort(),orientation);
+			return getSmallImageIconForFlexoPort(portmap.getOperation().getPort(), orientation);
 		}
 		return null;
 	}
-
 
 	public static ImageIcon getSmallImageIconForServiceOperation(ServiceOperation so) {
 		if (so.isInOperation()) {
@@ -512,8 +537,7 @@ public class WKFIconLibrary extends IconLibrary {
 		}
 	}
 
-	public static ImageIcon iconForObject(WKFObject object)
-	{
+	public static ImageIcon iconForObject(WKFObject object) {
 		logger.warning("iconForObject(WKFObject) not implemented yet");
 		return null;
 	}

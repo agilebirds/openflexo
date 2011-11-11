@@ -24,32 +24,26 @@ import java.util.Vector;
 import org.openflexo.foundation.wkf.WKFGroup;
 import org.openflexo.foundation.wkf.node.PetriGraphNode;
 
-
-public class GroupRemoved extends WKFDataModification
-{
+public class GroupRemoved extends WKFDataModification {
 
 	private Vector<PetriGraphNode> nodesThatWereInGroup;
 
-	public GroupRemoved(WKFGroup removedGroup)
-	{
-		super(removedGroup,null);
+	public GroupRemoved(WKFGroup removedGroup) {
+		super(removedGroup, null);
 	}
 
-	public GroupRemoved(WKFGroup removedGroup, Vector<PetriGraphNode> nodesThatWereInGroup)
-	{
-		super(removedGroup,null);
+	public GroupRemoved(WKFGroup removedGroup, Vector<PetriGraphNode> nodesThatWereInGroup) {
+		super(removedGroup, null);
 		this.nodesThatWereInGroup = nodesThatWereInGroup;
 	}
 
-	public Vector<PetriGraphNode> getNodesThatWereInGroup()
-	{
+	public Vector<PetriGraphNode> getNodesThatWereInGroup() {
 		return nodesThatWereInGroup;
 	}
-	
-    @Override
-    public WKFGroup oldValue()
-     {
-    	return (WKFGroup)super.oldValue();
-    }
+
+	@Override
+	public WKFGroup oldValue() {
+		return (WKFGroup) super.oldValue();
+	}
 
 }

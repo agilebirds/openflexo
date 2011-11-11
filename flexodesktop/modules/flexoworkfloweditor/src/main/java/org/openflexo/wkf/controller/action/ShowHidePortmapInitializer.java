@@ -27,29 +27,24 @@ import org.openflexo.foundation.wkf.action.ShowHidePortmap;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
-public class ShowHidePortmapInitializer extends ActionInitializer { 
+public class ShowHidePortmapInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	ShowHidePortmapInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(ShowHidePortmap.actionType,actionInitializer);
+	ShowHidePortmapInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(ShowHidePortmap.actionType, actionInitializer);
 	}
 
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionFinalizer<ShowHidePortmap> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<ShowHidePortmap> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ShowHidePortmap>() {
 			@Override
-			public boolean run(ActionEvent e, ShowHidePortmap action)
-			{
+			public boolean run(ActionEvent e, ShowHidePortmap action) {
 				return true;
 			}
 		};

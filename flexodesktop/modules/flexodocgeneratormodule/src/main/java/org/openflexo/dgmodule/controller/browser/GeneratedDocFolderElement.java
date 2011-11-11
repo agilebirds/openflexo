@@ -25,18 +25,14 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGFolder;
 
-
-public class GeneratedDocFolderElement extends DGBrowserElement
-{
-	public GeneratedDocFolderElement(CGFolder folder, ProjectBrowser browser, BrowserElement parent)
-	{
-		super(folder, BrowserElementType.GENERATED_CODE_FOLDER, browser,parent);
+public class GeneratedDocFolderElement extends DGBrowserElement {
+	public GeneratedDocFolderElement(CGFolder folder, ProjectBrowser browser, BrowserElement parent) {
+		super(folder, BrowserElementType.GENERATED_CODE_FOLDER, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
-		for (CGFolder folder : getFolder().getSortedSubFolders()){
+	protected void buildChildrenVector() {
+		for (CGFolder folder : getFolder().getSortedSubFolders()) {
 			addToChilds(folder);
 		}
 		for (CGFile file : getFolder().getSortedFiles()) {
@@ -45,13 +41,11 @@ public class GeneratedDocFolderElement extends DGBrowserElement
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return getFolder().getName();
 	}
 
-	public CGFolder getFolder()
-	{
-		return (CGFolder)getObject();
+	public CGFolder getFolder() {
+		return (CGFolder) getObject();
 	}
 }

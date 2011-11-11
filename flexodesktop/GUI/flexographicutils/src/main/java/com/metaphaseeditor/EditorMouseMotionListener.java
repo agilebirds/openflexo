@@ -23,11 +23,11 @@
 package com.metaphaseeditor;
 
 /**
- *
+ * 
  * @author Rudolf Visagie
  */
 public interface EditorMouseMotionListener {
-    public void mouseMoved(EditorMouseEvent editorMouseEvent);
+	public void mouseMoved(EditorMouseEvent editorMouseEvent);
 
-    public void mouseDragged(EditorMouseEvent editorMouseEvent);
+	public void mouseDragged(EditorMouseEvent editorMouseEvent);
 }

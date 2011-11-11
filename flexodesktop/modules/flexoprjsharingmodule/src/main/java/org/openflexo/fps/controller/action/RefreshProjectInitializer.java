@@ -31,55 +31,46 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class RefreshProjectInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RefreshProjectInitializer(FPSControllerActionInitializer actionInitializer)
-	{
-		super(RefreshProject.actionType,actionInitializer);
+	RefreshProjectInitializer(FPSControllerActionInitializer actionInitializer) {
+		super(RefreshProject.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected FPSControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (FPSControllerActionInitializer)super.getControllerActionInitializer();
+	protected FPSControllerActionInitializer getControllerActionInitializer() {
+		return (FPSControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<RefreshProject> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<RefreshProject> getDefaultInitializer() {
 		return new FlexoActionInitializer<RefreshProject>() {
-            @Override
-			public boolean run(ActionEvent e, RefreshProject action)
-            {
-                return true;
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, RefreshProject action) {
+				return true;
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<RefreshProject> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<RefreshProject> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RefreshProject>() {
-            @Override
-			public boolean run(ActionEvent e, RefreshProject action)
-            {
-                return true;
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, RefreshProject action) {
+				return true;
+			}
+		};
 	}
 
-   	@Override
-	protected Icon getEnabledIcon() 
-	{
+	@Override
+	protected Icon getEnabledIcon() {
 		return IconLibrary.REFRESH_ICON;
 	}
- 
+
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return IconLibrary.REFRESH_DISABLED_ICON;
 	}
 

@@ -24,15 +24,13 @@ import org.openflexo.foundation.ie.dm.IEDataModification;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class CLComponentDeleted extends IEDataModification
-{
-    /**
+public class CLComponentDeleted extends IEDataModification {
+	/**
      * 
      */
-    public CLComponentDeleted(ComponentDefinition def)
-    {
-        super("componentDeleted", def, def);
-    }
+	public CLComponentDeleted(ComponentDefinition def) {
+		super("componentDeleted", def, def);
+	}
 }

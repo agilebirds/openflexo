@@ -22,19 +22,16 @@ package org.openflexo.drm;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
 public class DocItemParameter extends ParameterDefinition<DocItem> {
 
-    public DocItemParameter(String name, String label, DocItem defaultValue)
-    {
-        super(name,label,defaultValue);
-        addParameter("className","org.openflexo.dre.view.DocItemInspectorWidget");
-    }
-    
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.CUSTOM;
-    }
+	public DocItemParameter(String name, String label, DocItem defaultValue) {
+		super(name, label, defaultValue);
+		addParameter("className", "org.openflexo.dre.view.DocItemInspectorWidget");
+	}
+
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.CUSTOM;
+	}
 
 }

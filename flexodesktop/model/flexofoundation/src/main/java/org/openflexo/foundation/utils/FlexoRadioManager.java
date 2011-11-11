@@ -27,69 +27,63 @@ import java.util.Iterator;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.widget.IERadioButtonWidget;
 
-
 /**
  * @author gpolet Created on 12 sept. 2005
  */
-public class FlexoRadioManager
-{
+public class FlexoRadioManager {
 
-    private Hashtable<String,HashSet<IERadioButtonWidget>> table;
+	private Hashtable<String, HashSet<IERadioButtonWidget>> table;
 
-    /**
-     * @param component
-     *
-     */
-    public FlexoRadioManager(IEWOComponent component)
-    {
-        table = new Hashtable<String, HashSet<IERadioButtonWidget>>();
-    }
+	/**
+	 * @param component
+	 * 
+	 */
+	public FlexoRadioManager(IEWOComponent component) {
+		table = new Hashtable<String, HashSet<IERadioButtonWidget>>();
+	}
 
-    public HashSet<IERadioButtonWidget> registerButton(IERadioButtonWidget w, String groupName)
-    {
-        if (table.get(groupName) == null)
-            table.put(groupName, new HashSet<IERadioButtonWidget>());
-        HashSet<IERadioButtonWidget> v = table.get(groupName);
-        Enumeration<String> keys = table.keys();
-        while (keys.hasMoreElements()) {
-            String key = keys.nextElement();
-            HashSet<IERadioButtonWidget> radios = table.get(key);
-            if (radios!=v && radios.contains(w))
-                radios.remove(w);
-        }
-        if (w.getValue()) {
-            Iterator<IERadioButtonWidget> i = v.iterator();
-            while (i.hasNext()) {
-                if (i.next().getValue()) {
-                    w.setValue(false);
-                    break;
-                }
-            }
-        }
-        if (!v.contains(w))
-            v.add(w);
-        return v;
-    }
-
-    public void unRegisterButton(IERadioButtonWidget w, String groupName)
-    {
-        if (table.get(groupName) != null) {
-            ((HashSet) table.get(groupName)).remove(w);
-        }
-    }
-
-    public HashSet<IERadioButtonWidget> getButtons(String groupName)
-    {
-        return  table.get(groupName);
-    }
-
-    public String getUnusedGroupName(String base) {
-    	String attempt = base;
-    	int i=0;
-    	while (table.get(attempt)!=null) {
-    		i++;
-			attempt=base+"-"+i;
+	public HashSet<IERadioButtonWidget> registerButton(IERadioButtonWidget w, String groupName) {
+		if (table.get(groupName) == null)
+			table.put(groupName, new HashSet<IERadioButtonWidget>());
+		HashSet<IERadioButtonWidget> v = table.get(groupName);
+		Enumeration<String> keys = table.keys();
+		while (keys.hasMoreElements()) {
+			String key = keys.nextElement();
+			HashSet<IERadioButtonWidget> radios = table.get(key);
+			if (radios != v && radios.contains(w))
+				radios.remove(w);
 		}
-    	return attempt;
-    }
+		if (w.getValue()) {
+			Iterator<IERadioButtonWidget> i = v.iterator();
+			while (i.hasNext()) {
+				if (i.next().getValue()) {
+					w.setValue(false);
+					break;
+				}
+			}
+		}
+		if (!v.contains(w))
+			v.add(w);
+		return v;
+	}
+
+	public void unRegisterButton(IERadioButtonWidget w, String groupName) {
+		if (table.get(groupName) != null) {
+			((HashSet) table.get(groupName)).remove(w);
+		}
+	}
+
+	public HashSet<IERadioButtonWidget> getButtons(String groupName) {
+		return table.get(groupName);
+	}
+
+	public String getUnusedGroupName(String base) {
+		String attempt = base;
+		int i = 0;
+		while (table.get(attempt) != null) {
+			i++;
+			attempt = base + "-" + i;
+		}
+		return attempt;
+	}
 }

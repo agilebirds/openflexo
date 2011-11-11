@@ -40,73 +40,70 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.FlexoFIBController;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class FlexoFIBView<O extends FlexoModelObject> extends JPanel
-implements GraphicalFlexoObserver
-{
-    static final Logger logger = Logger.getLogger(FlexoFIBView.class.getPackage().getName());
+public class FlexoFIBView<O extends FlexoModelObject> extends JPanel implements GraphicalFlexoObserver {
+	static final Logger logger = Logger.getLogger(FlexoFIBView.class.getPackage().getName());
 
-    private O representedObject;
+	private O representedObject;
 	private FlexoController controller;
 	private FIBView fibView;
 
-    public FlexoFIBView(O representedObject, FlexoController controller, File fibFile, FlexoProgress progress)
-    {
-    	this(representedObject, controller, fibFile, false, progress);
-    }
+	public FlexoFIBView(O representedObject, FlexoController controller, File fibFile, FlexoProgress progress) {
+		this(representedObject, controller, fibFile, false, progress);
+	}
 
-    public FlexoFIBView(O representedObject, FlexoController controller, File fibFile, boolean addScrollBar, FlexoProgress progress)
-    {
-    	this(representedObject, controller, FIBLibrary.instance().retrieveFIBComponent(fibFile), addScrollBar, progress);
-    }
+	public FlexoFIBView(O representedObject, FlexoController controller, File fibFile, boolean addScrollBar, FlexoProgress progress) {
+		this(representedObject, controller, FIBLibrary.instance().retrieveFIBComponent(fibFile), addScrollBar, progress);
+	}
 
-    public FlexoFIBView(O representedObject, FlexoController controller, String fibResourcePath, FlexoProgress progress)
-    {
-    	this(representedObject, controller, fibResourcePath, false, progress);
-    }
+	public FlexoFIBView(O representedObject, FlexoController controller, String fibResourcePath, FlexoProgress progress) {
+		this(representedObject, controller, fibResourcePath, false, progress);
+	}
 
-    public FlexoFIBView(O representedObject, FlexoController controller, String fibResourcePath, boolean addScrollBar, FlexoProgress progress)
-    {
-    	this(representedObject, controller, FIBLibrary.instance().retrieveFIBComponent(fibResourcePath), addScrollBar, progress);
-    }
+	public FlexoFIBView(O representedObject, FlexoController controller, String fibResourcePath, boolean addScrollBar,
+			FlexoProgress progress) {
+		this(representedObject, controller, FIBLibrary.instance().retrieveFIBComponent(fibResourcePath), addScrollBar, progress);
+	}
 
-    protected FlexoFIBView(O representedObject, FlexoController controller, FIBComponent fibComponent, boolean addScrollBar, FlexoProgress progress)
-    {
-        super(new BorderLayout());
-        this.representedObject = representedObject;
-        this.controller = controller;
-        representedObject.addObserver(this);
+	protected FlexoFIBView(O representedObject, FlexoController controller, FIBComponent fibComponent, boolean addScrollBar,
+			FlexoProgress progress) {
+		super(new BorderLayout());
+		this.representedObject = representedObject;
+		this.controller = controller;
+		representedObject.addObserver(this);
 
 		FlexoFIBController<O> fibController = createFibController(fibComponent, controller);
-		
-		if (progress != null) progress.setProgress(FlexoLocalization.localizedForKey("build_view"));
-		
+
+		if (progress != null)
+			progress.setProgress(FlexoLocalization.localizedForKey("build_view"));
+
 		fibView = fibController.buildView(fibComponent);
 
-		if (progress != null) progress.setProgress(FlexoLocalization.localizedForKey("init_view"));
+		if (progress != null)
+			progress.setProgress(FlexoLocalization.localizedForKey("init_view"));
 
 		fibController.setDataObject(representedObject);
 
 		if (this instanceof FIBMouseClickListener) {
-			fibView.getController().addMouseClickListener((FIBMouseClickListener)this);
+			fibView.getController().addMouseClickListener((FIBMouseClickListener) this);
 		}
 
 		if (addScrollBar)
-			add(new JScrollPane(fibView.getJComponent()),BorderLayout.CENTER);
+			add(new JScrollPane(fibView.getJComponent()), BorderLayout.CENTER);
 		else
-			add(fibView.getJComponent(),BorderLayout.CENTER);
+			add(fibView.getJComponent(), BorderLayout.CENTER);
 
 		validate();
 		revalidate();
-		
-		if (progress != null) progress.hideWindow();
-    }
+
+		if (progress != null)
+			progress.hideWindow();
+	}
 
 	/**
 	 * Create the Fib Controller to be used for this view. Can be overrided to add functionalities to this Fib View.
@@ -115,64 +112,56 @@ implements GraphicalFlexoObserver
 	 * @param controller
 	 * @return the newly created FlexoFIBController
 	 */
-	protected FlexoFIBController<O> createFibController(FIBComponent fibComponent, FlexoController controller) 
-	{
+	protected FlexoFIBController<O> createFibController(FIBComponent fibComponent, FlexoController controller) {
 		FIBController returned = FIBController.instanciateController(fibComponent);
 		if (returned instanceof FlexoFIBController) {
-			((FlexoFIBController)returned).setFlexoController(controller);
-			return (FlexoFIBController)returned;
-		}
-		else if (fibComponent.getControllerClass() != null) {
-			logger.warning("Controller for component "+fibComponent+" is not an instanceof FlexoFIBController");
+			((FlexoFIBController) returned).setFlexoController(controller);
+			return (FlexoFIBController) returned;
+		} else if (fibComponent.getControllerClass() != null) {
+			logger.warning("Controller for component " + fibComponent + " is not an instanceof FlexoFIBController");
 		}
 		return new FlexoFIBController<O>(fibComponent, controller);
 	}
 
-    public FlexoController getFlexoController()
-    {
-        return controller;
-    }
+	public FlexoController getFlexoController() {
+		return controller;
+	}
 
-     public void update(FlexoObservable observable, DataModification dataModification)
-    {
-       /* if (dataModification instanceof ObjectDeleted) {
-            if (dataModification.oldValue() == getOntologyObject()) {
-                deleteModuleView();
-             }
-        } else if (dataModification.propertyName()!=null && dataModification.propertyName().equals("name")) {
-            getOEController().getFlexoFrame().updateTitle();
-            updateTitlePanel();
-        }*/
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		/* if (dataModification instanceof ObjectDeleted) {
+		     if (dataModification.oldValue() == getOntologyObject()) {
+		         deleteModuleView();
+		      }
+		 } else if (dataModification.propertyName()!=null && dataModification.propertyName().equals("name")) {
+		     getOEController().getFlexoFrame().updateTitle();
+		     updateTitlePanel();
+		 }*/
 
-    }
+	}
 
-    public O getRepresentedObject()
-    {
-        representedObject.deleteObserver(this);
-        return representedObject;
-    }
+	public O getRepresentedObject() {
+		representedObject.deleteObserver(this);
+		return representedObject;
+	}
 
-    public FIBView getFIBView() 
-    {
+	public FIBView getFIBView() {
 		return fibView;
 	}
-    
-    public void deleteView()
-    {
+
+	public void deleteView() {
 		if (this instanceof FIBMouseClickListener) {
-			fibView.getController().removeMouseClickListener((FIBMouseClickListener)this);
+			fibView.getController().removeMouseClickListener((FIBMouseClickListener) this);
 		}
-        representedObject.deleteObserver(this);
-     }
+		representedObject.deleteObserver(this);
+	}
 
 	/**
-	 * Returns flag indicating if this view is itself responsible for scroll management
-	 * When not, Flexo will manage it's own scrollbar for you
-	 *
+	 * Returns flag indicating if this view is itself responsible for scroll management When not, Flexo will manage it's own scrollbar for
+	 * you
+	 * 
 	 * @return
 	 */
-	public boolean isAutoscrolled()
-	{
+	public boolean isAutoscrolled() {
 		return false;
 	}
 

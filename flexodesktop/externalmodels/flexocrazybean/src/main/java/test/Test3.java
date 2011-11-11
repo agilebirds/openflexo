@@ -30,43 +30,43 @@ import cb.util.PetalTree;
 
 /**
  * Display petal file visually. Property names are displayed as tool tips.
- *
+ * 
  * @version $Id: Test3.java,v 1.3 2011/09/12 11:47:32 gpolet Exp $
  * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class Test3 {
-  public static void main(String[] args) throws Exception {
-    PetalParser parser;
+	public static void main(String[] args) throws Exception {
+		PetalParser parser;
 
-    if(args.length == 0)
-      parser = PetalParser.createParser(System.in);
-    else
-      parser = PetalParser.createParser(args[0]);
+		if (args.length == 0)
+			parser = PetalParser.createParser(System.in);
+		else
+			parser = PetalParser.createParser(args[0]);
 
-    PetalFile tree = parser.parse();
-    
-    JTree        jtree = new PetalTree(tree);
-    final JFrame frame = new JFrame();
-    JPanel panel = new JPanel();
-    panel.setLayout(new java.awt.BorderLayout());
-    frame.setContentPane(panel);
-    
-    JScrollPane scroll = new JScrollPane();
-    scroll.setPreferredSize(new java.awt.Dimension(400, 500));
-    scroll.setViewportView(jtree);
-    
-    panel.add(scroll, java.awt.BorderLayout.CENTER);
-      
-    frame.addWindowListener(new java.awt.event.WindowAdapter() {
-      @Override
-	public void windowClosing(java.awt.event.WindowEvent event){
-	frame.setVisible(false);
-	frame.dispose();
-	System.exit(0);
-      }
-    });
+		PetalFile tree = parser.parse();
 
-    frame.pack();
-    frame.setVisible(true);
-  }
+		JTree jtree = new PetalTree(tree);
+		final JFrame frame = new JFrame();
+		JPanel panel = new JPanel();
+		panel.setLayout(new java.awt.BorderLayout());
+		frame.setContentPane(panel);
+
+		JScrollPane scroll = new JScrollPane();
+		scroll.setPreferredSize(new java.awt.Dimension(400, 500));
+		scroll.setViewportView(jtree);
+
+		panel.add(scroll, java.awt.BorderLayout.CENTER);
+
+		frame.addWindowListener(new java.awt.event.WindowAdapter() {
+			@Override
+			public void windowClosing(java.awt.event.WindowEvent event) {
+				frame.setVisible(false);
+				frame.dispose();
+				System.exit(0);
+			}
+		});
+
+		frame.pack();
+		frame.setVisible(true);
+	}
 }

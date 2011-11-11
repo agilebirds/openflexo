@@ -29,39 +29,35 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.view.FlexoFrame;
 
-
 /**
  * Main frame for DM Module
  * 
  * @author sguerin
  */
-public class DMFrame extends FlexoFrame
-{
+public class DMFrame extends FlexoFrame {
 
-    protected DMController _dmController;
+	protected DMController _dmController;
 
-    protected DMMenuBar _dmMenuBar;
+	protected DMMenuBar _dmMenuBar;
 
-    protected DMKeyEventListener _dmKeyEventListener;
+	protected DMKeyEventListener _dmKeyEventListener;
 
-    /**
-     * Constructor for DMFrame
-     */
-    public DMFrame(String title, DMController controller, DMKeyEventListener dmKeyEventListener, DMMenuBar menuBar)
-    {
-        super(title, controller, dmKeyEventListener, menuBar);
-        _dmController = controller;
-        _dmMenuBar = menuBar;
-        _dmKeyEventListener = dmKeyEventListener;
-        setSize(DMCst.DEFAULT_DMEDITOR_WIDTH + FlexoCst.MINIMUM_BROWSER_VIEW_WIDTH + 10, DMCst.DEFAULT_DMEDITOR_HEIGHT);
-        getContentPane().setLayout(new BorderLayout());
-        setTitle("DataBase Layout");
-    }
+	/**
+	 * Constructor for DMFrame
+	 */
+	public DMFrame(String title, DMController controller, DMKeyEventListener dmKeyEventListener, DMMenuBar menuBar) {
+		super(title, controller, dmKeyEventListener, menuBar);
+		_dmController = controller;
+		_dmMenuBar = menuBar;
+		_dmKeyEventListener = dmKeyEventListener;
+		setSize(DMCst.DEFAULT_DMEDITOR_WIDTH + FlexoCst.MINIMUM_BROWSER_VIEW_WIDTH + 10, DMCst.DEFAULT_DMEDITOR_HEIGHT);
+		getContentPane().setLayout(new BorderLayout());
+		setTitle("DataBase Layout");
+	}
 
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-       super.update(observable,dataModification);
-    }
-    
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		super.update(observable, dataModification);
+	}
+
 }

@@ -23,21 +23,17 @@ import org.openflexo.foundation.ie.widget.IETDWidget;
 
 /**
  * @author bmangez
- * @version $Id: TDInserted.java,v 1.2 2011/09/12 11:47:11 gpolet Exp $ $Log:
- *          TDInserted.java,v $ Revision 1.2 2005/04/18 15:19:07 sguerin Commit
- *          on 18/04/2005, Sylvain GUERIN, version 7.0.6 See committing
- *          documentation
+ * @version $Id: TDInserted.java,v 1.2 2011/09/12 11:47:11 gpolet Exp $ $Log: TDInserted.java,v $ Revision 1.2 2005/04/18 15:19:07 sguerin
+ *          Commit on 18/04/2005, Sylvain GUERIN, version 7.0.6 See committing documentation
  * 
- * Revision 1.1 2005/03/29 08:10:50 benoit *** empty log message ***
+ *          Revision 1.1 2005/03/29 08:10:50 benoit *** empty log message ***
  * 
  * 
- * <B>Class Description</B>
+ *          <B>Class Description</B>
  */
-public class TDInserted extends IEDataModification
-{
+public class TDInserted extends IEDataModification {
 
-    public TDInserted(IETDWidget insertedTD)
-    {
-        super(null, insertedTD);
-    }
+	public TDInserted(IETDWidget insertedTD) {
+		super(null, insertedTD);
+	}
 }

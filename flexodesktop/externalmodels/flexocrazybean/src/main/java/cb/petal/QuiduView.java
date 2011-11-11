@@ -23,47 +23,46 @@ import java.util.Collection;
 
 /**
  * Super class for all view objects with a "quidu" property defined.
- *
+ * 
  * @version $Id: QuiduView.java,v 1.3 2011/09/12 11:46:48 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
-public abstract class QuiduView extends View implements HasQuidu
-{
-  static final long serialVersionUID = -7371455691558399461L;
+public abstract class QuiduView extends View implements HasQuidu {
+	static final long serialVersionUID = -7371455691558399461L;
 
-  protected QuiduView(PetalNode parent, String name, Collection params, int tag) {
-    super(parent, name, params, tag);
-  }
+	protected QuiduView(PetalNode parent, String name, Collection params, int tag) {
+		super(parent, name, params, tag);
+	}
 
-  protected QuiduView(String name) {
-    super(name);
-  }
+	protected QuiduView(String name) {
+		super(name);
+	}
 
-  @Override
-public void setQuidu(String quid) {
-    defineProperty("quidu", quid);
-  }
+	@Override
+	public void setQuidu(String quid) {
+		defineProperty("quidu", quid);
+	}
 
-  @Override
-public String getQuidu() {
-    return QuiduObject.getQuidu(this);
-  }
+	@Override
+	public String getQuidu() {
+		return QuiduObject.getQuidu(this);
+	}
 
-  @Override
-public long getQuiduAsLong() {
-    return Long.parseLong(getQuidu(), 16);
-  }
+	@Override
+	public long getQuiduAsLong() {
+		return Long.parseLong(getQuidu(), 16);
+	}
 
-  @Override
-public void setQuiduAsLong(long quid) {
-    defineProperty("quidu", Long.toHexString(quid).toUpperCase());
-  }
+	@Override
+	public void setQuiduAsLong(long quid) {
+		defineProperty("quidu", Long.toHexString(quid).toUpperCase());
+	}
 
-  /** @return object referenced via "quidu"
-   */
-  @Override
-public QuidObject getReferencedObject() {
-    return getRoot().getReferencedObject(this);
-  }
+	/**
+	 * @return object referenced via "quidu"
+	 */
+	@Override
+	public QuidObject getReferencedObject() {
+		return getRoot().getReferencedObject(this);
+	}
 }
-

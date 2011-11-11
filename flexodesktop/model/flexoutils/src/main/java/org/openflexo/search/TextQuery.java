@@ -21,31 +21,38 @@ package org.openflexo.search;
 
 public class TextQuery {
 	private String searchedText;
-	private boolean caseSensitive=false;
+	private boolean caseSensitive = false;
 	private boolean wholeWord = false;
 	private boolean regularExpression = false;
-	
+
 	public String getSearchedText() {
 		return searchedText;
 	}
+
 	public void setSearchedText(String searchedText) {
 		this.searchedText = searchedText;
 	}
+
 	public boolean isCaseSensitive() {
 		return caseSensitive;
 	}
+
 	public void setCaseSensitive(boolean caseSensitive) {
 		this.caseSensitive = caseSensitive;
 	}
+
 	public boolean isWholeWord() {
 		return wholeWord;
 	}
+
 	public void setWholeWord(boolean wholeWord) {
 		this.wholeWord = wholeWord;
 	}
+
 	public boolean isRegularExpression() {
 		return regularExpression;
 	}
+
 	public void setRegularExpression(boolean regularExpression) {
 		this.regularExpression = regularExpression;
 	}

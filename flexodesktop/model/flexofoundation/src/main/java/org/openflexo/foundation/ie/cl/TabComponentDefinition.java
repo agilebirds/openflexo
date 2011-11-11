@@ -44,179 +44,170 @@ import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.xml.FlexoComponentLibraryBuilder;
 import org.openflexo.toolbox.FileUtils;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public final class TabComponentDefinition extends PartialComponentDefinition implements Serializable
-{
-    private static final Logger logger = Logger.getLogger(TabComponentDefinition.class.getPackage().getName());
+public final class TabComponentDefinition extends PartialComponentDefinition implements Serializable {
+	private static final Logger logger = Logger.getLogger(TabComponentDefinition.class.getPackage().getName());
 
-    /**
-     * Constructor used during deserialization
-     * 
-     * @throws DuplicateResourceException
-     */
-    public TabComponentDefinition(FlexoComponentLibraryBuilder builder) throws DuplicateResourceException
-    {
-        this(null, builder.componentLibrary, null, builder.getProject());
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor used during deserialization
+	 * 
+	 * @throws DuplicateResourceException
+	 */
+	public TabComponentDefinition(FlexoComponentLibraryBuilder builder) throws DuplicateResourceException {
+		this(null, builder.componentLibrary, null, builder.getProject());
+		initializeDeserialization(builder);
+	}
 
-    public TabComponentDefinition(FlexoComponentLibrary componentLibrary)
-    {
-        super(componentLibrary);
-    }
+	public TabComponentDefinition(FlexoComponentLibrary componentLibrary) {
+		super(componentLibrary);
+	}
 
-    public static boolean isAValidNewTabName(String aComponentName, FlexoProject project)
-    {
-        return project.getFlexoComponentLibrary().isValidForANewComponentName(aComponentName);
-    }
+	public static boolean isAValidNewTabName(String aComponentName, FlexoProject project) {
+		return project.getFlexoComponentLibrary().isValidForANewComponentName(aComponentName);
+	}
 
-    public TabComponentDefinition(String aComponentName, FlexoComponentLibrary componentLibrary, FlexoComponentFolder aFolder,
-            FlexoProject prj, boolean checkUnicity) throws DuplicateResourceException
-    {
-        super(aComponentName, componentLibrary, aFolder, prj);
-        if (checkUnicity) {
-            String resourceIdentifier = FlexoTabComponentResource.resourceIdentifierForName(aComponentName);
-            if ((aFolder != null) && (aFolder.getProject() != null) && (aFolder.getProject().isRegistered(resourceIdentifier))) {
-                aFolder.removeFromComponents(this);
-                throw new DuplicateResourceException(resourceIdentifier);
-            }
-        }
-    }
+	public TabComponentDefinition(String aComponentName, FlexoComponentLibrary componentLibrary, FlexoComponentFolder aFolder,
+			FlexoProject prj, boolean checkUnicity) throws DuplicateResourceException {
+		super(aComponentName, componentLibrary, aFolder, prj);
+		if (checkUnicity) {
+			String resourceIdentifier = FlexoTabComponentResource.resourceIdentifierForName(aComponentName);
+			if ((aFolder != null) && (aFolder.getProject() != null) && (aFolder.getProject().isRegistered(resourceIdentifier))) {
+				aFolder.removeFromComponents(this);
+				throw new DuplicateResourceException(resourceIdentifier);
+			}
+		}
+	}
 
-    public TabComponentDefinition(String aComponentName, FlexoComponentLibrary componentLibrary, FlexoComponentFolder aFolder,
-            FlexoProject prj) throws DuplicateResourceException
-    {
-        this(aComponentName, componentLibrary, aFolder, prj, true);
-    }
-    
-    @Override
-	public IETabComponent getWOComponent()
-    {
-        return (IETabComponent)super.getWOComponent();
-    }
+	public TabComponentDefinition(String aComponentName, FlexoComponentLibrary componentLibrary, FlexoComponentFolder aFolder,
+			FlexoProject prj) throws DuplicateResourceException {
+		this(aComponentName, componentLibrary, aFolder, prj, true);
+	}
 
-    public Vector<OperationComponentInstance> getAllOperationComponentInstances() {
-    	Vector<OperationComponentInstance> v = new Vector<OperationComponentInstance>();
-    	for(ComponentInstance ci : getComponentInstances()) {
-    		TabComponentInstance tci = (TabComponentInstance)ci;
-    		if (tci.getReusableWidget()!=null && tci.getReusableWidget().getComponentDefinition().isOperation()) {
-    			for (ComponentInstance oci:((OperationComponentDefinition)tci.getReusableWidget().getComponentDefinition()).getComponentInstances()) {
-    				if (!v.contains(oci))
-    					v.add((OperationComponentInstance)oci);
-    			}
-    		}
-    	}
-    	return v;
-    }
+	@Override
+	public IETabComponent getWOComponent() {
+		return (IETabComponent) super.getWOComponent();
+	}
 
-    @Override
-    public IEWOComponent createNewComponent() {
-    	return new IETabComponent(this,getProject());
-    }
-    
-    @Override
-	public FlexoComponentResource getComponentResource(boolean createIfNotExists)
-    {
-        if (getProject() != null) {
-            FlexoComponentResource returned = getProject().getFlexoTabComponentResource(getName());
-            if (returned == null && createIfNotExists) {
-                if (logger.isLoggable(Level.INFO))
-                    logger.info("Creating new tab component resource !");
-                // FlexoProcessResource processRes =
-                // getProject().getFlexoProcessResource(getProcess().getName());
-                File componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(getProject().getProjectDirectory(),
-                        this), _componentName + ".woxml");
-                FlexoProjectFile resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
-                FlexoTabComponentResource compRes=null;
-                try {
-                    compRes = new FlexoTabComponentResource(getProject(), _componentName, getProject()
-                            .getFlexoComponentLibraryResource(), resourceComponentFile);
-                } catch (InvalidFileNameException e1) {
-                    boolean ok = false;
-                    for (int i = 0; i < 100 && !ok; i++) {
-                        try {
-                            componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(getProject().getProjectDirectory(),
-                                    this), FileUtils.getValidFileName(_componentName)+i + ".woxml");
-                            resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
-                            resourceComponentFile.setProject(getProject());
-                            compRes = new FlexoTabComponentResource(getProject(), _componentName, getProject()
-                                    .getFlexoComponentLibraryResource(), resourceComponentFile);
-                            ok = true;
-                        } catch (InvalidFileNameException e) {
-                            
-                        }
-                    }
-                    if (!ok) {
-                        componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(getProject().getProjectDirectory(),
-                                this), FileUtils.getValidFileName(_componentName)+getFlexoID() + ".woxml");
-                        try {
-                            compRes = new FlexoTabComponentResource(getProject(), _componentName, getProject()
-                                    .getFlexoComponentLibraryResource(), resourceComponentFile);
-                        } catch (InvalidFileNameException e) {
-                            if (logger.isLoggable(Level.SEVERE))
-                                logger.severe("This should really not happen.");
-                            return null;
-                        }
-                    }
-                }
-                if (compRes==null)
-                    return null;
-                compRes.setResourceData(new IETabComponent(this, getProject()));
-                try {
-                    compRes.getResourceData().setFlexoResource(compRes);
-                    getProject().registerResource(compRes);
-                    compRes.saveResourceData();
-                } catch (DuplicateResourceException e) {
-                    // Warns about the exception
-                    if (logger.isLoggable(Level.WARNING))
-                        logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-                    e.printStackTrace();
-                } catch (SaveXMLResourceException e) {
-                    // Warns about the exception
-                    if (logger.isLoggable(Level.WARNING))
-                        logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-                    e.printStackTrace();
+	public Vector<OperationComponentInstance> getAllOperationComponentInstances() {
+		Vector<OperationComponentInstance> v = new Vector<OperationComponentInstance>();
+		for (ComponentInstance ci : getComponentInstances()) {
+			TabComponentInstance tci = (TabComponentInstance) ci;
+			if (tci.getReusableWidget() != null && tci.getReusableWidget().getComponentDefinition().isOperation()) {
+				for (ComponentInstance oci : ((OperationComponentDefinition) tci.getReusableWidget().getComponentDefinition())
+						.getComponentInstances()) {
+					if (!v.contains(oci))
+						v.add((OperationComponentInstance) oci);
+				}
+			}
+		}
+		return v;
+	}
+
+	@Override
+	public IEWOComponent createNewComponent() {
+		return new IETabComponent(this, getProject());
+	}
+
+	@Override
+	public FlexoComponentResource getComponentResource(boolean createIfNotExists) {
+		if (getProject() != null) {
+			FlexoComponentResource returned = getProject().getFlexoTabComponentResource(getName());
+			if (returned == null && createIfNotExists) {
+				if (logger.isLoggable(Level.INFO))
+					logger.info("Creating new tab component resource !");
+				// FlexoProcessResource processRes =
+				// getProject().getFlexoProcessResource(getProcess().getName());
+				File componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(getProject().getProjectDirectory(),
+						this), _componentName + ".woxml");
+				FlexoProjectFile resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
+				FlexoTabComponentResource compRes = null;
+				try {
+					compRes = new FlexoTabComponentResource(getProject(), _componentName, getProject().getFlexoComponentLibraryResource(),
+							resourceComponentFile);
+				} catch (InvalidFileNameException e1) {
+					boolean ok = false;
+					for (int i = 0; i < 100 && !ok; i++) {
+						try {
+							componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(getProject()
+									.getProjectDirectory(), this), FileUtils.getValidFileName(_componentName) + i + ".woxml");
+							resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
+							resourceComponentFile.setProject(getProject());
+							compRes = new FlexoTabComponentResource(getProject(), _componentName, getProject()
+									.getFlexoComponentLibraryResource(), resourceComponentFile);
+							ok = true;
+						} catch (InvalidFileNameException e) {
+
+						}
+					}
+					if (!ok) {
+						componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(
+								getProject().getProjectDirectory(), this), FileUtils.getValidFileName(_componentName) + getFlexoID()
+								+ ".woxml");
+						try {
+							compRes = new FlexoTabComponentResource(getProject(), _componentName, getProject()
+									.getFlexoComponentLibraryResource(), resourceComponentFile);
+						} catch (InvalidFileNameException e) {
+							if (logger.isLoggable(Level.SEVERE))
+								logger.severe("This should really not happen.");
+							return null;
+						}
+					}
+				}
+				if (compRes == null)
+					return null;
+				compRes.setResourceData(new IETabComponent(this, getProject()));
+				try {
+					compRes.getResourceData().setFlexoResource(compRes);
+					getProject().registerResource(compRes);
+					compRes.saveResourceData();
+				} catch (DuplicateResourceException e) {
+					// Warns about the exception
+					if (logger.isLoggable(Level.WARNING))
+						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					e.printStackTrace();
+				} catch (SaveXMLResourceException e) {
+					// Warns about the exception
+					if (logger.isLoggable(Level.WARNING))
+						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					e.printStackTrace();
 				} catch (SaveResourcePermissionDeniedException e) {
-	                   // Warns about the exception
-                    if (logger.isLoggable(Level.WARNING))
-                        logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-                    e.printStackTrace();
+					// Warns about the exception
+					if (logger.isLoggable(Level.WARNING))
+						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					e.printStackTrace();
 				} catch (SaveResourceException e) {
-                    e.printStackTrace();
-                }
-                if (logger.isLoggable(Level.INFO))
-                    logger.info("Registered component " + _componentName + " file: " + componentFile);
-                returned = compRes;
-            }
-            return returned;
-        } else {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("project is null");
-        }
-        return null;
-    }
+					e.printStackTrace();
+				}
+				if (logger.isLoggable(Level.INFO))
+					logger.info("Registered component " + _componentName + " file: " + componentFile);
+				returned = compRes;
+			}
+			return returned;
+		} else {
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("project is null");
+		}
+		return null;
+	}
 
-    @Override
-	public String getInspectorName()
-    {
-        return Inspectors.IE.TAB_COMPONENT_DEFINITION_INSPECTOR;
-    }
+	@Override
+	public String getInspectorName() {
+		return Inspectors.IE.TAB_COMPONENT_DEFINITION_INSPECTOR;
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * 
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "tab_component_definition";
-    }
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "tab_component_definition";
+	}
 
 }

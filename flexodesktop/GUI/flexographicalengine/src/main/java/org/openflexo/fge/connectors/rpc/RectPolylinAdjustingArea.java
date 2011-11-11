@@ -36,155 +36,139 @@ import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEPlane;
 import org.openflexo.fge.graphics.FGEGraphics;
 
+public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 
-public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin>
-{
+	private static final Hashtable<Integer, Image> PIN_CACHE = new Hashtable<Integer, Image>();
+	protected FGERectPolylin initialPolylin;
+	private RectPolylinConnector connector;
+	private FGERectPolylin newPolylin;
 
-	    private static final Hashtable<Integer, Image> PIN_CACHE = new Hashtable<Integer, Image>();
-		protected FGERectPolylin initialPolylin;
-		private RectPolylinConnector connector;
-		private FGERectPolylin newPolylin;
+	public RectPolylinAdjustingArea(RectPolylinConnector connector) {
+		super(connector.getGraphicalRepresentation(), connector.getCurrentPolylin());
+		this.connector = connector;
+	}
 
-		public RectPolylinAdjustingArea(RectPolylinConnector connector)
-		{
-			super(connector.getGraphicalRepresentation(),connector.getCurrentPolylin());
-			this.connector = connector;
+	@Override
+	public FGEArea getDraggingAuthorizedArea() {
+		return new FGEPlane();
+	}
+
+	@Override
+	public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+			FGEPoint initialPoint, MouseEvent event) {
+		/*AffineTransform at1 = GraphicalRepresentation.convertNormalizedCoordinatesAT(
+				getConnector().getStartObject(), getGraphicalRepresentation());
+		AffineTransform at2 = GraphicalRepresentation.convertNormalizedCoordinatesAT(
+				getConnector().getEndObject(), getGraphicalRepresentation());
+		FGEArea startArea = getConnector().getStartObject().getShape().getShape().transform(at1);
+		FGEArea endArea = getConnector().getEndObject().getShape().getShape().transform(at2);
+
+		newPolylin = FGERectPolylin.makeRectPolylinCrossingPoint(
+				startArea, endArea, newRelativePoint,
+				getConnector().getStartOrientation(),
+				getConnector().getEndOrientation(),
+				true, getConnector().getOverlapXResultingFromPixelOverlap(), getConnector().getOverlapYResultingFromPixelOverlap());
+		getConnector().getBasicallyAdjustableControlPoint().setPoint(newRelativePoint);
+		getConnector().updateWithNewPolylin(newPolylin);*/
+
+		getConnector().setCrossedControlPoint(newRelativePoint);
+
+		// getConnector().updateLayout();
+
+		// getConnector()._updateAsBasicallyAdjustable();
+
+		getConnector()._connectorChanged(true);
+		getGraphicalRepresentation().notifyConnectorChanged();
+		return true;
+	}
+
+	protected void notifyConnectorChanged() {
+		getGraphicalRepresentation().notifyConnectorChanged();
+	}
+
+	@Override
+	public void startDragging(DrawingController controller, FGEPoint startPoint) {
+		super.startDragging(controller, startPoint);
+		if (controller.getPaintManager().isPaintingCacheEnabled()) {
+			controller.getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
+			controller.getPaintManager().invalidate(getGraphicalRepresentation());
 		}
+		initialPolylin = getPolylin().clone();
+		// getConnector().setWasManuallyAdjusted(true);
 
-		@Override
-		public FGEArea getDraggingAuthorizedArea()
-		{
-			return new FGEPlane();
+	}
+
+	@Override
+	public void stopDragging(DrawingController controller) {
+		super.stopDragging(controller);
+		if (controller.getPaintManager().isPaintingCacheEnabled()) {
+			controller.getPaintManager().resetTemporaryObjects();
+			controller.getPaintManager().invalidate(getGraphicalRepresentation());
+			controller.getPaintManager().repaint(controller.getDrawingView());
 		}
+		// getConnector().setWasManuallyAdjusted(true);
+	}
 
-		@Override
-		public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-		{
-			/*AffineTransform at1 = GraphicalRepresentation.convertNormalizedCoordinatesAT(
-					getConnector().getStartObject(), getGraphicalRepresentation());
-			AffineTransform at2 = GraphicalRepresentation.convertNormalizedCoordinatesAT(
-					getConnector().getEndObject(), getGraphicalRepresentation());
-			FGEArea startArea = getConnector().getStartObject().getShape().getShape().transform(at1);
-			FGEArea endArea = getConnector().getEndObject().getShape().getShape().transform(at2);
+	@Override
+	public Cursor getDraggingCursor() {
+		return Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
+	}
 
-			newPolylin = FGERectPolylin.makeRectPolylinCrossingPoint(
-					startArea, endArea, newRelativePoint,
-					getConnector().getStartOrientation(),
-					getConnector().getEndOrientation(),
-					true, getConnector().getOverlapXResultingFromPixelOverlap(), getConnector().getOverlapYResultingFromPixelOverlap());
-			getConnector().getBasicallyAdjustableControlPoint().setPoint(newRelativePoint);
-			getConnector().updateWithNewPolylin(newPolylin);*/
+	@Override
+	public boolean isDraggable() {
+		return true;
+	}
 
-
-			getConnector().setCrossedControlPoint(newRelativePoint);
-
-			//getConnector().updateLayout();
-
-			//getConnector()._updateAsBasicallyAdjustable();
-
-
-
-			getConnector()._connectorChanged(true);
-			getGraphicalRepresentation().notifyConnectorChanged();
-			return true;
+	@Override
+	public Rectangle paint(FGEGraphics graphics) {
+		/*System.out.println("prout");*/
+		FGEPoint crossedControlPoint = getConnector().getCrossedControlPointOnRoundedArc();
+		if (crossedControlPoint != null) {
+			int pinSize = graphics.getScale() <= 1 ? 16 : (int) (16.0 / 2 * (1.0 + graphics.getScale()));
+			Image PIN = getPinForPinSize(pinSize);
+			// int d = (int) (PIN_SIZE * graphics.getScale());
+			// g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 0.4f));
+			Point p = getGraphicalRepresentation().convertLocalNormalizedPointToRemoteViewCoordinates(crossedControlPoint,
+					graphics.getGraphicalRepresentation(), 1.0);
+			p.x -= (int) (54.0d / 196.0d * pinSize);
+			p.y -= (int) (150.0d / 196.0d * pinSize);
+			graphics.drawImage(PIN, new FGEPoint(p.x, p.y));
+			// g.drawImage(FGEConstants.PIN_ICON.getImage(), ), , d, d, null);
 		}
+		return null;
+	}
 
-		protected void notifyConnectorChanged()
-		{
-			getGraphicalRepresentation().notifyConnectorChanged();
+	public Image getPinForPinSize(int pinSize) {
+		Image returned = PIN_CACHE.get(pinSize);
+		if (returned == null) {
+			PIN_CACHE.put(pinSize, returned = FGEIconLibrary.PIN_ICON.getImage().getScaledInstance(pinSize, pinSize, Image.SCALE_SMOOTH));
 		}
+		return returned;
+	}
 
-		@Override
-		public void startDragging(DrawingController controller, FGEPoint startPoint)
-		{
-			super.startDragging(controller, startPoint);
-			if (controller.getPaintManager().isPaintingCacheEnabled()) {
-				controller.getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
-				controller.getPaintManager().invalidate(getGraphicalRepresentation());
-			}
-			initialPolylin = getPolylin().clone();
-			//getConnector().setWasManuallyAdjusted(true);
-
+	/*private Rectangle paintPolylin(Graphics2D g, DrawingView<?> drawingView, Color mainColor, Color backColor, FGERectPolylin polylin)
+	{
+		Rectangle r = new Rectangle();
+		Point lastLocation = drawingView.getGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(polylin.getFirstPoint(), getGraphicalRepresentation(), drawingView.getScale());
+		for (int i=1; i<polylin.getPointsNb(); i++) {
+			FGEPoint p = polylin.getPointAt(i);
+			Point currentLocation = drawingView.getGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(p, getGraphicalRepresentation(), drawingView.getScale());
+			g.drawLine(lastLocation.x,lastLocation.y,currentLocation.x,currentLocation.y);
+			lastLocation = currentLocation;
 		}
+		return r;
+	}*/
 
-		@Override
-		public void stopDragging(DrawingController controller)
-		{
-			super.stopDragging(controller);
-			if (controller.getPaintManager().isPaintingCacheEnabled()) {
-				controller.getPaintManager().resetTemporaryObjects();
-				controller.getPaintManager().invalidate(getGraphicalRepresentation());
-				controller.getPaintManager().repaint(controller.getDrawingView());
-			}
-			//getConnector().setWasManuallyAdjusted(true);
-		}
+	public RectPolylinConnector getConnector() {
+		return connector;
+	}
 
+	@Override
+	public ConnectorGraphicalRepresentation<?> getGraphicalRepresentation() {
+		return connector.getGraphicalRepresentation();
+	}
 
-		@Override
-		public Cursor getDraggingCursor()
-		{
-			return Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
-		}
-
-		@Override
-		public boolean isDraggable()
-		{
-			return true;
-		}
-
-		@Override
-		public Rectangle paint(FGEGraphics graphics)
-		{
-			/*System.out.println("prout");*/
-			FGEPoint crossedControlPoint = getConnector().getCrossedControlPointOnRoundedArc();
-			if (crossedControlPoint!=null) {
-				int pinSize = graphics.getScale()<=1?16:(int)(16.0/2 * (1.0+graphics.getScale()));
-				Image PIN = getPinForPinSize(pinSize);
-				//int d = (int) (PIN_SIZE * graphics.getScale());
-				//g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 0.4f));
-				Point p = getGraphicalRepresentation().convertLocalNormalizedPointToRemoteViewCoordinates(crossedControlPoint, graphics.getGraphicalRepresentation(), 1.0);
-				p.x-=(int)(54.0d/196.0d*pinSize);
-				p.y-=(int)(150.0d/196.0d*pinSize);
-				graphics.drawImage(PIN, new FGEPoint(p.x,p.y));
-				//g.drawImage(FGEConstants.PIN_ICON.getImage(), ), , d, d, null);
-			}
-			return null;
-		}
-
-		public Image getPinForPinSize(int pinSize) {
-			Image returned = PIN_CACHE.get(pinSize);
-			if (returned == null) {
-				PIN_CACHE.put(pinSize,returned = FGEIconLibrary.PIN_ICON.getImage().getScaledInstance(pinSize, pinSize, Image.SCALE_SMOOTH));
-			}
-			return returned;
-		}
-
-		/*private Rectangle paintPolylin(Graphics2D g, DrawingView<?> drawingView, Color mainColor, Color backColor, FGERectPolylin polylin)
-		{
-			Rectangle r = new Rectangle();
-			Point lastLocation = drawingView.getGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(polylin.getFirstPoint(), getGraphicalRepresentation(), drawingView.getScale());
-			for (int i=1; i<polylin.getPointsNb(); i++) {
-				FGEPoint p = polylin.getPointAt(i);
-				Point currentLocation = drawingView.getGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(p, getGraphicalRepresentation(), drawingView.getScale());
-				g.drawLine(lastLocation.x,lastLocation.y,currentLocation.x,currentLocation.y);
-				lastLocation = currentLocation;
-			}
-			return r;
-		}*/
-
-		public RectPolylinConnector getConnector()
-		{
-			return connector;
-		}
-
-		@Override
-		public ConnectorGraphicalRepresentation<?> getGraphicalRepresentation()
-		{
-			return connector.getGraphicalRepresentation();
-		}
-
-		public FGERectPolylin getPolylin()
-		{
-			return getConnector().getCurrentPolylin();
-		}
+	public FGERectPolylin getPolylin() {
+		return getConnector().getCurrentPolylin();
+	}
 }

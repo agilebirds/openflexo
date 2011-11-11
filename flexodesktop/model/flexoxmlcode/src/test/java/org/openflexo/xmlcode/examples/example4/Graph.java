@@ -22,23 +22,19 @@ package org.openflexo.xmlcode.examples.example4;
 import org.openflexo.xmlcode.XMLSerializable;
 
 /**
- * Class <code>Graph</code> is intented to represent a graph object in XML
- * coding/decoding example.
+ * Class <code>Graph</code> is intented to represent a graph object in XML coding/decoding example.
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  */
-public class Graph implements XMLSerializable
-{
+public class Graph implements XMLSerializable {
 
-    public Graph(GraphBuilder gb)
-    {
-        super();
-    }
+	public Graph(GraphBuilder gb) {
+		super();
+	}
 
-    public Node startNode;
+	public Node startNode;
 
-    public void finalizeGraphSerialization(GraphBuilder gb)
-    {
-        System.out.println("finalizeGraphSerialization");
-    }
+	public void finalizeGraphSerialization(GraphBuilder gb) {
+		System.out.println("finalizeGraphSerialization");
+	}
 }

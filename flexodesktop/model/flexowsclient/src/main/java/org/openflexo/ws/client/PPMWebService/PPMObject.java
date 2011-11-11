@@ -28,7 +28,6 @@ public class PPMObject {
 	protected java.lang.String businessDescription;
 	protected java.lang.String technicalDescription;
 	protected java.lang.String userManualDescription;;
-	
 
 	/**
 	 * Gets the businessDescription value for this PPMProcess.
@@ -36,7 +35,7 @@ public class PPMObject {
 	 * @return businessDescription
 	 */
 	public java.lang.String getBusinessDescription() {
-	    return businessDescription;
+		return businessDescription;
 	}
 
 	/**
@@ -45,7 +44,7 @@ public class PPMObject {
 	 * @param businessDescription
 	 */
 	public void setBusinessDescription(java.lang.String businessDescription) {
-	    this.businessDescription = businessDescription;
+		this.businessDescription = businessDescription;
 	}
 
 	/**
@@ -54,7 +53,7 @@ public class PPMObject {
 	 * @return generalDescription
 	 */
 	public java.lang.String getGeneralDescription() {
-	    return generalDescription;
+		return generalDescription;
 	}
 
 	/**
@@ -63,7 +62,7 @@ public class PPMObject {
 	 * @param generalDescription
 	 */
 	public void setGeneralDescription(java.lang.String generalDescription) {
-	    this.generalDescription = generalDescription;
+		this.generalDescription = generalDescription;
 	}
 
 	/**
@@ -72,7 +71,7 @@ public class PPMObject {
 	 * @return name
 	 */
 	public java.lang.String getName() {
-	    return name;
+		return name;
 	}
 
 	/**
@@ -81,7 +80,7 @@ public class PPMObject {
 	 * @param name
 	 */
 	public void setName(java.lang.String name) {
-	    this.name = name;
+		this.name = name;
 	}
 
 	/**
@@ -90,7 +89,7 @@ public class PPMObject {
 	 * @return technicalDescription
 	 */
 	public java.lang.String getTechnicalDescription() {
-	    return technicalDescription;
+		return technicalDescription;
 	}
 
 	/**
@@ -99,7 +98,7 @@ public class PPMObject {
 	 * @param technicalDescription
 	 */
 	public void setTechnicalDescription(java.lang.String technicalDescription) {
-	    this.technicalDescription = technicalDescription;
+		this.technicalDescription = technicalDescription;
 	}
 
 	/**
@@ -108,7 +107,7 @@ public class PPMObject {
 	 * @return uri
 	 */
 	public java.lang.String getUri() {
-	    return uri;
+		return uri;
 	}
 
 	/**
@@ -117,7 +116,7 @@ public class PPMObject {
 	 * @param uri
 	 */
 	public void setUri(java.lang.String uri) {
-	    this.uri = uri;
+		this.uri = uri;
 	}
 
 	/**
@@ -126,7 +125,7 @@ public class PPMObject {
 	 * @return userManualDescription
 	 */
 	public java.lang.String getUserManualDescription() {
-	    return userManualDescription;
+		return userManualDescription;
 	}
 
 	/**
@@ -135,7 +134,7 @@ public class PPMObject {
 	 * @param userManualDescription
 	 */
 	public void setUserManualDescription(java.lang.String userManualDescription) {
-	    this.userManualDescription = userManualDescription;
+		this.userManualDescription = userManualDescription;
 	}
 
 	/**
@@ -144,7 +143,7 @@ public class PPMObject {
 	 * @return versionUri
 	 */
 	public java.lang.String getVersionUri() {
-	    return versionUri;
+		return versionUri;
 	}
 
 	/**
@@ -153,7 +152,7 @@ public class PPMObject {
 	 * @param versionUri
 	 */
 	public void setVersionUri(java.lang.String versionUri) {
-	    this.versionUri = versionUri;
+		this.versionUri = versionUri;
 	}
 
 }

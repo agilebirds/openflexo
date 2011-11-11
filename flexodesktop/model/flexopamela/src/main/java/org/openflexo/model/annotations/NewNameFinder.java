@@ -7,5 +7,6 @@ import java.lang.annotation.Target;
 public @interface NewNameFinder {
 
 	public String collection();
+
 	public String attribute();
 }

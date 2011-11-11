@@ -27,7 +27,6 @@ import org.openflexo.foundation.ie.menu.FlexoItemMenu;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.toolbox.FileUtils;
 
-
 public class TestMenu extends FlexoTestCase {
 
 	protected static final Logger logger = Logger.getLogger(TestMenu.class.getPackage().getName());
@@ -38,8 +37,7 @@ public class TestMenu extends FlexoTestCase {
 	/**
 	 * Creates a new empty project in a temp directory
 	 */
-	public void test0CreateProject()
-	{
+	public void test0CreateProject() {
 		_editor = createProject("MenuTest");
 		_project = _editor.getProject();
 		FlexoItemMenu rootMenu = _project.getFlexoNavigationMenu().getRootMenu();
@@ -49,72 +47,71 @@ public class TestMenu extends FlexoTestCase {
 		moveMenuDown(menu1, _editor);
 		moveMenuUp(menu1, _editor);
 		FlexoItemMenu menu21 = createMenu("menu21", menu2, _editor);
-		moveMenuUpperLevel(menu21,_editor);
+		moveMenuUpperLevel(menu21, _editor);
 		_project.close();
 		FileUtils.deleteDir(_project.getProjectDirectory());
 		_project = null;
 		_editor = null;
 	}
 
-	protected void moveMenuUp(FlexoItemMenu itemMenu, FlexoEditor editor){
-		MoveMenuUp addmenu = (MoveMenuUp)MoveMenuUp.actionType.makeNewAction(itemMenu, null, editor);
+	protected void moveMenuUp(FlexoItemMenu itemMenu, FlexoEditor editor) {
+		MoveMenuUp addmenu = (MoveMenuUp) MoveMenuUp.actionType.makeNewAction(itemMenu, null, editor);
 		addmenu.setItemMenu(itemMenu);
 		int oldIndex = -1;
-		if(itemMenu.getFather()!=null){
+		if (itemMenu.getFather() != null) {
 			oldIndex = itemMenu.getFather().getSubItems().indexOf(itemMenu);
 		}
-		boolean isFirstElement = itemMenu.getFather()!=null && itemMenu.getFather().getSubItems().indexOf(itemMenu)==0;
+		boolean isFirstElement = itemMenu.getFather() != null && itemMenu.getFather().getSubItems().indexOf(itemMenu) == 0;
 		addmenu.doAction();
-		if(!isFirstElement) {
+		if (!isFirstElement) {
 			assertTrue(addmenu.hasActionExecutionSucceeded());
-		} else{
+		} else {
 			assertFalse(addmenu.hasActionExecutionSucceeded());
 			return;
 		}
-		assertEquals(oldIndex-1,itemMenu.getFather().getSubItems().indexOf(itemMenu));
+		assertEquals(oldIndex - 1, itemMenu.getFather().getSubItems().indexOf(itemMenu));
 	}
 
-	protected void moveMenuDown(FlexoItemMenu itemMenu, FlexoEditor editor){
-		MoveMenuDown addmenu = (MoveMenuDown)MoveMenuDown.actionType.makeNewAction(itemMenu, null, editor);
+	protected void moveMenuDown(FlexoItemMenu itemMenu, FlexoEditor editor) {
+		MoveMenuDown addmenu = (MoveMenuDown) MoveMenuDown.actionType.makeNewAction(itemMenu, null, editor);
 		addmenu.setItemMenu(itemMenu);
 		int oldIndex = -1;
-		boolean isLastElement = itemMenu.getFather()!=null && itemMenu.getFather().getSubItems().lastElement().equals(itemMenu);
-		if(itemMenu.getFather()!=null){
+		boolean isLastElement = itemMenu.getFather() != null && itemMenu.getFather().getSubItems().lastElement().equals(itemMenu);
+		if (itemMenu.getFather() != null) {
 			oldIndex = itemMenu.getFather().getSubItems().indexOf(itemMenu);
 		}
 		addmenu.doAction();
-		if(itemMenu.getFather()!=null &&
-				!isLastElement) {
+		if (itemMenu.getFather() != null && !isLastElement) {
 			assertTrue(addmenu.hasActionExecutionSucceeded());
-		} else{
+		} else {
 			assertFalse(addmenu.hasActionExecutionSucceeded());
 			return;
 		}
-		assertEquals(oldIndex+1,itemMenu.getFather().getSubItems().indexOf(itemMenu));
+		assertEquals(oldIndex + 1, itemMenu.getFather().getSubItems().indexOf(itemMenu));
 	}
 
-	protected void moveMenuUpperLevel(FlexoItemMenu itemMenu, FlexoEditor editor){
-		MoveMenuUpperLevel addmenu = (MoveMenuUpperLevel)MoveMenuUpperLevel.actionType.makeNewAction(itemMenu, null, editor);
+	protected void moveMenuUpperLevel(FlexoItemMenu itemMenu, FlexoEditor editor) {
+		MoveMenuUpperLevel addmenu = (MoveMenuUpperLevel) MoveMenuUpperLevel.actionType.makeNewAction(itemMenu, null, editor);
 		addmenu.setItemMenu(itemMenu);
-		FlexoItemMenu newFather = itemMenu.getFather()==null?null:itemMenu.getFather().getFather();
+		FlexoItemMenu newFather = itemMenu.getFather() == null ? null : itemMenu.getFather().getFather();
 		addmenu.doAction();
-		if(newFather!=null) {
+		if (newFather != null) {
 			assertTrue(addmenu.hasActionExecutionSucceeded());
-		} else{
+		} else {
 			assertFalse(addmenu.hasActionExecutionSucceeded());
 			return;
 		}
-		assertEquals(newFather,itemMenu.getFather());
+		assertEquals(newFather, itemMenu.getFather());
 	}
 
-	protected FlexoItemMenu createMenu(String menuLabel,FlexoItemMenu parentMenu, FlexoEditor editor){
-		AddMenu addmenu = (AddMenu)AddMenu.actionType.makeNewAction(parentMenu, null, editor);
+	protected FlexoItemMenu createMenu(String menuLabel, FlexoItemMenu parentMenu, FlexoEditor editor) {
+		AddMenu addmenu = (AddMenu) AddMenu.actionType.makeNewAction(parentMenu, null, editor);
 		addmenu.setFather(parentMenu);
 		addmenu.setMenuLabel(menuLabel);
 		addmenu.doAction();
-		if(parentMenu!=null && menuLabel!=null) {
+		if (parentMenu != null && menuLabel != null) {
 			assertTrue(addmenu.hasActionExecutionSucceeded());
-		} else{
+		} else {
 			assertFalse(addmenu.hasActionExecutionSucceeded());
 			return null;
 		}

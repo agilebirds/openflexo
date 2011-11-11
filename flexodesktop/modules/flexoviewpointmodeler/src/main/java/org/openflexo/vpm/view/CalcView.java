@@ -32,46 +32,35 @@ import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.CEDController;
 import org.openflexo.vpm.controller.ViewPointPerspective;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class CalcView extends FIBModuleView<ViewPoint> implements FIBMouseClickListener
-{
+public class CalcView extends FIBModuleView<ViewPoint> implements FIBMouseClickListener {
 
-   public CalcView(ViewPoint viewPoint, CEDController controller)
-    {
-        super(viewPoint,controller,CEDCst.CALC_VIEW_FIB);
-        
+	public CalcView(ViewPoint viewPoint, CEDController controller) {
+		super(viewPoint, controller, CEDCst.CALC_VIEW_FIB);
+
 		controller.manageResource(viewPoint);
-   }
+	}
 
-    @Override
-    public CEDController getFlexoController()
-    {
-    	return (CEDController)super.getFlexoController();
-    }
-    
-     @Override
-	public ViewPointPerspective getPerspective() 
-    {
-    	return getFlexoController().VIEW_POINT_PERSPECTIVE;
-    }
-     
- 	@Override
-	public void mouseClicked(FIBComponentDynamicModel data, int clickCount)
-	{
-		if (data instanceof FIBTableDynamicModel
-				&& ((FIBTableDynamicModel)data).selected instanceof FlexoModelObject
-				&& clickCount == 2) {
-			FlexoModelObject o = (FlexoModelObject)((FIBTableDynamicModel)data).selected;
-			if (o instanceof ViewPoint 
-					|| o instanceof EditionPattern
-					|| o instanceof ExampleDrawingShema
-					|| o instanceof ViewPointPalette) {
+	@Override
+	public CEDController getFlexoController() {
+		return (CEDController) super.getFlexoController();
+	}
+
+	@Override
+	public ViewPointPerspective getPerspective() {
+		return getFlexoController().VIEW_POINT_PERSPECTIVE;
+	}
+
+	@Override
+	public void mouseClicked(FIBComponentDynamicModel data, int clickCount) {
+		if (data instanceof FIBTableDynamicModel && ((FIBTableDynamicModel) data).selected instanceof FlexoModelObject && clickCount == 2) {
+			FlexoModelObject o = (FlexoModelObject) ((FIBTableDynamicModel) data).selected;
+			if (o instanceof ViewPoint || o instanceof EditionPattern || o instanceof ExampleDrawingShema || o instanceof ViewPointPalette) {
 				getFlexoController().selectAndFocusObject(o);
 			}
 		}

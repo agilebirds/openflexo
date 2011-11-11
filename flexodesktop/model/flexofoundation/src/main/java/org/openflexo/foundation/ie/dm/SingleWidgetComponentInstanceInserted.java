@@ -23,28 +23,24 @@ import org.openflexo.foundation.ie.widget.IEReusableWidget;
 
 /**
  * @author bmangez
- * @version $Id: SingleWidgetComponentInstanceInserted.java,v 1.1.2.4 2005/10/03
- *          07:31:30 benoit Exp $ $Log:
- *          SingleWidgetComponentInstanceInserted.java,v $ Revision 1.1.2.4
- *          2005/10/03 07:31:30 benoit *** empty log message ***
+ * @version $Id: SingleWidgetComponentInstanceInserted.java,v 1.1.2.4 2005/10/03 07:31:30 benoit Exp $ $Log:
+ *          SingleWidgetComponentInstanceInserted.java,v $ Revision 1.1.2.4 2005/10/03 07:31:30 benoit *** empty log message ***
  * 
- * Revision 1.1.2.3 2005/08/19 16:45:38 sguerin Commit on 19/08/2005, Sylvain
- * GUERIN, version 7.1.10.alpha See committing documentation
+ *          Revision 1.1.2.3 2005/08/19 16:45:38 sguerin Commit on 19/08/2005, Sylvain GUERIN, version 7.1.10.alpha See committing
+ *          documentation
  * 
- * Revision 1.1.2.2 2005/08/04 16:20:19 sguerin Commit on 04/08/2005, Sylvain
- * GUERIN, version 7.1.6.alpha Temporary commit, see next commit
+ *          Revision 1.1.2.2 2005/08/04 16:20:19 sguerin Commit on 04/08/2005, Sylvain GUERIN, version 7.1.6.alpha Temporary commit, see
+ *          next commit
  * 
- * Revision 1.1.2.1 2005/06/28 12:53:52 benoit ReusableComponents
+ *          Revision 1.1.2.1 2005/06/28 12:53:52 benoit ReusableComponents
  * 
  * 
- * <B>Class Description</B>
+ *          <B>Class Description</B>
  */
-public class SingleWidgetComponentInstanceInserted extends IEDataModification
-{
+public class SingleWidgetComponentInstanceInserted extends IEDataModification {
 
-    public SingleWidgetComponentInstanceInserted(IEReusableWidget insertedBloc)
-    {
-        super(null, insertedBloc);
-    }
+	public SingleWidgetComponentInstanceInserted(IEReusableWidget insertedBloc) {
+		super(null, insertedBloc);
+	}
 
 }

@@ -25,24 +25,21 @@ import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.generator.AbstractProjectGenerator;
 import org.openflexo.localization.FlexoLocalization;
 
+public class PermissionDeniedException extends GenerationException {
+	public String path;
 
-public class PermissionDeniedException extends GenerationException
-{
-    public String path;
-    
- 	public PermissionDeniedException(File file, AbstractProjectGenerator<? extends GenerationRepository> projectGenerator)
-	{
-		super("Permission denied for "+file!=null?file.getAbsolutePath():"null","permission_denied",file.getAbsolutePath(),null);
+	public PermissionDeniedException(File file, AbstractProjectGenerator<? extends GenerationRepository> projectGenerator) {
+		super("Permission denied for " + file != null ? file.getAbsolutePath() : "null", "permission_denied", file.getAbsolutePath(), null);
 		path = file.getAbsolutePath();
 	}
- 	
- 	/**
-     * Overrides getLocalizedMessage
-     * @see org.openflexo.foundation.FlexoException#getLocalizedMessage()
-     */
-    @Override
-    public String getLocalizedMessage()
-    {
-        return FlexoLocalization.localizedForKey("permission_denied")+"\n"+path;
-    }
+
+	/**
+	 * Overrides getLocalizedMessage
+	 * 
+	 * @see org.openflexo.foundation.FlexoException#getLocalizedMessage()
+	 */
+	@Override
+	public String getLocalizedMessage() {
+		return FlexoLocalization.localizedForKey("permission_denied") + "\n" + path;
+	}
 }

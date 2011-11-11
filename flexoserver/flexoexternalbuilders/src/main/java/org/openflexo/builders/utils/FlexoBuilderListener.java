@@ -24,18 +24,18 @@ public class FlexoBuilderListener implements Runnable {
 	private static final Logger logger = FlexoLogger.getLogger(FlexoBuilderListener.class.getPackage().getName());
 
 	public static final String MAIN_STEP_START_TAG = "<MAIN_STEP>";
-	public static final String MAIN_STEP_END_TAG="</MAIN_STEP>";
+	public static final String MAIN_STEP_END_TAG = "</MAIN_STEP>";
 	public static final String SUB_STEP_START_TAG = "<SUB_STEP>";
-	public static final String SUB_STEP_END_TAG="</SUB_STEP>";
+	public static final String SUB_STEP_END_TAG = "</SUB_STEP>";
 	public static final String MAIN_STEP_COUNT_START_TAG = "<MAIN_STEP_COUNT>";
-	public static final String MAIN_STEP_COUNT_END_TAG="</MAIN_STEP_COUNT>";
+	public static final String MAIN_STEP_COUNT_END_TAG = "</MAIN_STEP_COUNT>";
 	public static final String SUB_STEP_COUNT_START_TAG = "<SUB_STEP_COUNT>";
-	public static final String SUB_STEP_COUNT_END_TAG="</SUB_STEP_COUNT>";
+	public static final String SUB_STEP_COUNT_END_TAG = "</SUB_STEP_COUNT>";
 
 	public static final String REPORT_START_TAG = "<FLEXO_REPORT>";
-	public static final String REPORT_END_TAG="</FLEXO_REPORT>";
+	public static final String REPORT_END_TAG = "</FLEXO_REPORT>";
 	public static final String TOCS_START_TAG = "<TOCS>";
-	public static final String TOCS_END_TAG="</TOCS>";
+	public static final String TOCS_END_TAG = "</TOCS>";
 	public static final String CONFLICTING_RESSOURCES_START_TAG = "<CONFLICTING_RESOURCES>";
 	public static final String CONFLICTING_RESSOURCES_END_TAG = "</CONFLICTING_RESOURCES>";
 
@@ -45,7 +45,7 @@ public class FlexoBuilderListener implements Runnable {
 
 	private StringBuilder stacktraces;
 
-	//private StringBuilder logs;
+	// private StringBuilder logs;
 
 	private boolean logAsException = false;
 
@@ -68,17 +68,17 @@ public class FlexoBuilderListener implements Runnable {
 		this.messages = new Vector<String>();
 		stacktraces = new StringBuilder();
 		try {
-			logFile = File.createTempFile(prefix+"LogFile", ".log");
+			logFile = File.createTempFile(prefix + "LogFile", ".log");
 		} catch (IOException e) {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Cannot create temporary file for logs! "+e.getMessage());
+				logger.warning("Cannot create temporary file for logs! " + e.getMessage());
 			}
 		}
 	}
 
 	public void run() {
-		boolean isReportingMessage=false;
-		boolean isReportingTOCRepositories=false;
+		boolean isReportingMessage = false;
+		boolean isReportingTOCRepositories = false;
 		boolean isReportingConflictingResources = false;
 		StringBuilder tmpMessage = null;
 		StringBuilder xmlTocRepositories = null;
@@ -92,16 +92,16 @@ public class FlexoBuilderListener implements Runnable {
 		}
 		BufferedReader reader = new BufferedReader(is);
 		writer = null;
-		if (logFile!=null) {
+		if (logFile != null) {
 			try {
-				writer = new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(logFile,true)),"UTF-8");
+				writer = new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(logFile, true)), "UTF-8");
 			} catch (FileNotFoundException e) {
 				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("FileNotFound: Cannot open build log file "+logFile.getAbsolutePath()+": "+e.getMessage());
+					logger.warning("FileNotFound: Cannot open build log file " + logFile.getAbsolutePath() + ": " + e.getMessage());
 				}
 			} catch (IOException e) {
 				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("IOException: Cannot open build log file "+logFile.getAbsolutePath()+": "+e.getMessage());
+					logger.warning("IOException: Cannot open build log file " + logFile.getAbsolutePath() + ": " + e.getMessage());
 				}
 			}
 		}
@@ -121,7 +121,7 @@ public class FlexoBuilderListener implements Runnable {
 					isReportingTOCRepositories = false;
 					xmlTOCRepositoriesDescription = xmlTocRepositories.toString();
 				} else if (line.equals(CONFLICTING_RESSOURCES_START_TAG)) {
-					isReportingConflictingResources= true;
+					isReportingConflictingResources = true;
 				} else if (line.equals(CONFLICTING_RESSOURCES_END_TAG)) {
 					isReportingConflictingResources = false;
 				} else {
@@ -131,12 +131,12 @@ public class FlexoBuilderListener implements Runnable {
 						xmlTocRepositories.append(line).append("\n");
 					} else if (isReportingConflictingResources) {
 						conflictingResources.add(line);
-					} else if (line.indexOf("Exception:")>-1) {
+					} else if (line.indexOf("Exception:") > -1) {
 						logAsException = true;
 						stacktraces.append(line).append("\n");
 					} else if (logAsException && line.matches(STACKTRACE_LINE_REG_EXP)) {
 						stacktraces.append(line).append("\n");
-					} else if (line.trim().length()==0) {
+					} else if (line.trim().length() == 0) {
 						;
 					} else {
 						if (logAsException) {
@@ -153,12 +153,12 @@ public class FlexoBuilderListener implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			if (writer!=null) {
+			if (writer != null) {
 				try {
 					writer.close();
 				} catch (IOException e) {
 					if (logger.isLoggable(Level.SEVERE)) {
-						logger.severe("Could not close writer! "+e.getMessage());
+						logger.severe("Could not close writer! " + e.getMessage());
 					}
 				}
 			}
@@ -173,7 +173,7 @@ public class FlexoBuilderListener implements Runnable {
 	}
 
 	public boolean hasStacktraces() {
-		return stacktraces.length()>0;
+		return stacktraces.length() > 0;
 	}
 
 	public String getStacktraces() {
@@ -181,7 +181,7 @@ public class FlexoBuilderListener implements Runnable {
 			stacktraces.append("--------------- END OF STACKTRACE ---------------\n");
 		}
 		logAsException = false;
-		return hasStacktraces()?stacktraces.toString():null;
+		return hasStacktraces() ? stacktraces.toString() : null;
 	}
 
 	/*public String getLogs() {
@@ -201,8 +201,8 @@ public class FlexoBuilderListener implements Runnable {
 		return xmlTOCRepositoriesDescription;
 	}
 
-	public boolean hasTOCRepositoriesDescription(){
-		return xmlTOCRepositoriesDescription!=null && xmlTOCRepositoriesDescription.length()>0;
+	public boolean hasTOCRepositoriesDescription() {
+		return xmlTOCRepositoriesDescription != null && xmlTOCRepositoriesDescription.length() > 0;
 	}
 
 	public Vector<String> getConflictingResources() {

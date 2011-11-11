@@ -29,52 +29,44 @@ import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.construction.CircleWithCenterAndPointConstruction;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
 
-
-
 public class CreateCircleWithCenterAndPoint extends Edition {
-	
+
 	public CreateCircleWithCenterAndPoint(GeomEditController controller) {
-		super("Create circle from center and point",controller);
-		inputs.add(new ObtainPoint("Select center",controller));
-		inputs.add(new ObtainPoint("Select a point",controller));
+		super("Create circle from center and point", controller);
+		inputs.add(new ObtainPoint("Select center", controller));
+		inputs.add(new ObtainPoint("Select a point", controller));
 	}
-	
+
 	@Override
-	public void performEdition()
-	{
-		ObtainPoint p1 = (ObtainPoint)inputs.get(0);
-		ObtainPoint p2 = (ObtainPoint)inputs.get(1);
-		
-		addObject (new Circle(
-				getController().getDrawing().getModel(),
-				new CircleWithCenterAndPointConstruction(p1.getConstruction(),p2.getConstruction())));
+	public void performEdition() {
+		ObtainPoint p1 = (ObtainPoint) inputs.get(0);
+		ObtainPoint p2 = (ObtainPoint) inputs.get(1);
+
+		addObject(new Circle(getController().getDrawing().getModel(), new CircleWithCenterAndPointConstruction(p1.getConstruction(),
+				p2.getConstruction())));
 
 	}
-	
+
 	/*public void addObject(GeometricObject object)
 	{
 		getController().getDrawing().getModel().addToChilds(object);
 	}*/
-	
+
 	@Override
-	public void paintEdition(FGEDrawingGraphics graphics,FGEPoint lastMouseLocation)
-	{
+	public void paintEdition(FGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		if (currentStep == 0) {
 			// Nothing to draw
-		}
-		else if (currentStep == 1) {
+		} else if (currentStep == 1) {
 			// Nothing to draw
-			
-			FGEPoint center = ((ObtainPoint)inputs.get(0)).getInputData();
+
+			FGEPoint center = ((ObtainPoint) inputs.get(0)).getInputData();
 			FGEPoint p = lastMouseLocation;
 
-			double diameter = FGESegment.getLength(center,p)*2;
+			double diameter = FGESegment.getLength(center, p) * 2;
 
 			graphics.setDefaultForeground(focusedForegroundStyle);
 			center.paint(graphics);
-			(new FGEEllips(center,new FGEDimension(diameter,diameter),Filling.NOT_FILLED)).paint(graphics);
+			(new FGEEllips(center, new FGEDimension(diameter, diameter), Filling.NOT_FILLED)).paint(graphics);
 		}
 	}
 }
-
-

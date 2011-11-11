@@ -23,60 +23,44 @@ import org.openflexo.foundation.ie.widget.IESequenceTab;
 
 /**
  * @author bmangez
- * @version $Id: TabReordered.java,v 1.2 2011/09/12 11:47:11 gpolet Exp $
- *          $Log: TabReordered.java,v $
- *          Revision 1.2  2011/09/12 11:47:11  gpolet
- *          Converted v2 to v3
- *
- *          Revision 1.1  2011/05/24 01:12:36  gpolet
- *          LOW: First import of OpenFlexo
- *
- *          Revision 1.1.2.2  2011/05/20 14:23:30  gpolet
- *          LOW: Added GPL v2 file header
- *
- *          Revision 1.1.2.1  2011/05/20 08:26:28  gpolet
- *          Package refactor of flexofoundation
- *
- *          Revision 1.1.2.1  2011/05/19 09:39:48  gpolet
- *          refactored package names
- *
- *          Revision 1.3  2007/09/17 14:38:54  gpolet
- *          IMPORTANT: First merge of branch b_1_1_0 from Root_b_1_1_0 until t_first_merge (after t_1_1_0RC10)
- *
- *          Revision 1.2.10.1  2007/05/31 11:57:21  bmangez
- *          LOW/organize import
- *
- *          Revision 1.2  2006/09/06 12:21:29  gpolet
- *          LOW: Changed model to replace TabContainer by IESequenceTab to allow to have conditional for different tabs.
- *
- *          Revision 1.1  2006/08/31 16:14:22  gpolet
- *          LOW: new DataModification
- *
- *          Revision 1.4  2006/03/01 13:53:08  bmangez
- *          IMPORTANT/MEGA IMPORTANT/Merge with b_RC_0_8
- *
- *          Revision 1.3.2.1  2006/02/24 12:49:25  bmangez
- *          IMPORTANT/refactoring : Thumbnail renamed into Tab IN CODE
- *
- *          Revision 1.3  2006/02/02 15:28:53  bmangez
- *          merge from bdev
- *
- *          Revision 1.2.2.1  2005/10/03 11:50:43  benoit
- *          organize importformat codelogger test
- * Revision 1.2 2005/04/18 15:19:07
- *          sguerin Commit on 18/04/2005, Sylvain GUERIN, version 7.0.6 See
- *          committing documentation
+ * @version $Id: TabReordered.java,v 1.2 2011/09/12 11:47:11 gpolet Exp $ $Log: TabReordered.java,v $ Revision 1.2 2011/09/12 11:47:11
+ *          gpolet Converted v2 to v3
  * 
- * Revision 1.1 2005/03/30 07:47:43 benoit Thumbnails ordering
+ *          Revision 1.1 2011/05/24 01:12:36 gpolet LOW: First import of OpenFlexo
+ * 
+ *          Revision 1.1.2.2 2011/05/20 14:23:30 gpolet LOW: Added GPL v2 file header
+ * 
+ *          Revision 1.1.2.1 2011/05/20 08:26:28 gpolet Package refactor of flexofoundation
+ * 
+ *          Revision 1.1.2.1 2011/05/19 09:39:48 gpolet refactored package names
+ * 
+ *          Revision 1.3 2007/09/17 14:38:54 gpolet IMPORTANT: First merge of branch b_1_1_0 from Root_b_1_1_0 until t_first_merge (after
+ *          t_1_1_0RC10)
+ * 
+ *          Revision 1.2.10.1 2007/05/31 11:57:21 bmangez LOW/organize import
+ * 
+ *          Revision 1.2 2006/09/06 12:21:29 gpolet LOW: Changed model to replace TabContainer by IESequenceTab to allow to have conditional
+ *          for different tabs.
+ * 
+ *          Revision 1.1 2006/08/31 16:14:22 gpolet LOW: new DataModification
+ * 
+ *          Revision 1.4 2006/03/01 13:53:08 bmangez IMPORTANT/MEGA IMPORTANT/Merge with b_RC_0_8
+ * 
+ *          Revision 1.3.2.1 2006/02/24 12:49:25 bmangez IMPORTANT/refactoring : Thumbnail renamed into Tab IN CODE
+ * 
+ *          Revision 1.3 2006/02/02 15:28:53 bmangez merge from bdev
+ * 
+ *          Revision 1.2.2.1 2005/10/03 11:50:43 benoit organize import format code logger test Revision 1.2 2005/04/18 15:19:07 sguerin
+ *          Commit on 18/04/2005, Sylvain GUERIN, version 7.0.6 See committing documentation
+ * 
+ *          Revision 1.1 2005/03/30 07:47:43 benoit Thumbnails ordering
  * 
  * 
- * <B>Class Description</B>
+ *          <B>Class Description</B>
  */
-public class TabReordered extends IEDataModification
-{
+public class TabReordered extends IEDataModification {
 
-    public TabReordered(IESequenceTab tabContainer)
-    {
-        super(tabContainer, tabContainer);
-    }
+	public TabReordered(IESequenceTab tabContainer) {
+		super(tabContainer, tabContainer);
+	}
 }

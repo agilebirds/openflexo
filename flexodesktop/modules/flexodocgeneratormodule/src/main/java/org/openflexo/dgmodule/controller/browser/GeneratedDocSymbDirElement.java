@@ -26,17 +26,13 @@ import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGFolder;
 import org.openflexo.foundation.cg.CGSymbolicDirectory;
 
-
-public class GeneratedDocSymbDirElement extends DGBrowserElement
-{
-	public GeneratedDocSymbDirElement(CGSymbolicDirectory dir, ProjectBrowser browser, BrowserElement parent)
-	{
-		super(dir, BrowserElementType.GENERATED_CODE_SYMB_DIR, browser,parent);
+public class GeneratedDocSymbDirElement extends DGBrowserElement {
+	public GeneratedDocSymbDirElement(CGSymbolicDirectory dir, ProjectBrowser browser, BrowserElement parent) {
+		super(dir, BrowserElementType.GENERATED_CODE_SYMB_DIR, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 		for (CGFolder folder : getSymbDir().getSortedSubFolders()) {
 			addToChilds(folder);
 		}
@@ -46,13 +42,11 @@ public class GeneratedDocSymbDirElement extends DGBrowserElement
 	}
 
 	@Override
-	public String getName()
-	{
-		return getSymbDir().getName()+" - ["+getSymbDir().getDirectory().getRelativePath()+"]";
+	public String getName() {
+		return getSymbDir().getName() + " - [" + getSymbDir().getDirectory().getRelativePath() + "]";
 	}
 
-	public CGSymbolicDirectory getSymbDir()
-	{
-		return (CGSymbolicDirectory)getObject();
+	public CGSymbolicDirectory getSymbDir() {
+		return (CGSymbolicDirectory) getObject();
 	}
 }

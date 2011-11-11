@@ -44,54 +44,51 @@ import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 
-
 /**
- *
+ * 
  * @author gpolet
  */
-public class DERepositoryModuleView extends JPanel implements ModuleView<TOCRepository>, FlexoObserver
-{
+public class DERepositoryModuleView extends JPanel implements ModuleView<TOCRepository>, FlexoObserver {
 
-    protected static final Logger logger = Logger.getLogger(DERepositoryModuleView.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(DERepositoryModuleView.class.getPackage().getName());
 
 	private static final File STYLESHEET_FILE = new FileResource("Resources/FlexoDocumentationMasterStyle.css");
 
-    protected DEController controller;
+	protected DEController controller;
 
-    private TOCRepository codeRepository;
-    
-    private JEditorPane htmlComponent;
-    
-    private JScrollPane scrollPane;
-    
-    private boolean isShown = false;
+	private TOCRepository codeRepository;
 
-    private FlexoPerspective perspective;
-    
-    /**
-     * @param _process
-     *
-     */
-    public DERepositoryModuleView(TOCRepository repository, DEController ctrl, FlexoPerspective perspective)
-    {
-        super(new BorderLayout());
-        codeRepository = repository;
-        repository.addObserver(this);
-        this.controller = ctrl;
-        this.perspective = perspective;
-        htmlComponent = new JEditorPane("text/html","");
-        htmlComponent.setEditable(false);
-        StyleSheet styleSheet = new StyleSheet();
-        try {
+	private JEditorPane htmlComponent;
+
+	private JScrollPane scrollPane;
+
+	private boolean isShown = false;
+
+	private FlexoPerspective perspective;
+
+	/**
+	 * @param _process
+	 * 
+	 */
+	public DERepositoryModuleView(TOCRepository repository, DEController ctrl, FlexoPerspective perspective) {
+		super(new BorderLayout());
+		codeRepository = repository;
+		repository.addObserver(this);
+		this.controller = ctrl;
+		this.perspective = perspective;
+		htmlComponent = new JEditorPane("text/html", "");
+		htmlComponent.setEditable(false);
+		StyleSheet styleSheet = new StyleSheet();
+		try {
 			styleSheet.setBase(STYLESHEET_FILE.toURL());
 		} catch (MalformedURLException e1) {
 			e1.printStackTrace();
 			if (logger.isLoggable(Level.WARNING))
 				logger.warning("Documentation Editor Stylesheet not found");
 		}
-        ((HTMLEditorKit)htmlComponent.getEditorKit()).setStyleSheet(styleSheet);
-        try {
-			((HTMLDocument)htmlComponent.getDocument()).setBase(ctrl.getProject().getImportedImagesDir().getParentFile().toURI().toURL()); /* set the base to the parent of the imported images dir */
+		((HTMLEditorKit) htmlComponent.getEditorKit()).setStyleSheet(styleSheet);
+		try {
+			((HTMLDocument) htmlComponent.getDocument()).setBase(ctrl.getProject().getImportedImagesDir().getParentFile().toURI().toURL()); /* set the base to the parent of the imported images dir */
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 			if (logger.isLoggable(Level.WARNING))
@@ -104,92 +101,84 @@ public class DERepositoryModuleView extends JPanel implements ModuleView<TOCRepo
 		 * by extending HTMLViewFactory and override the public View
 		 * create(Element elem) method
 		 */
-        //GPO: Don't call refresh() now because it is expensive, the willShow() method will!
+		// GPO: Don't call refresh() now because it is expensive, the willShow() method will!
 		scrollPane = new JScrollPane(htmlComponent);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        add(scrollPane);
-        validate();
-    }
+		add(scrollPane);
+		validate();
+	}
 
-    
-    /**
-     * Overrides getPerspective
-     *
-     * @see org.openflexo.view.ModuleView#getPerspective()
-     */
-    @Override
-	public FlexoPerspective getPerspective()
-    {
-        return perspective;
-    }
+	/**
+	 * Overrides getPerspective
+	 * 
+	 * @see org.openflexo.view.ModuleView#getPerspective()
+	 */
+	@Override
+	public FlexoPerspective getPerspective() {
+		return perspective;
+	}
 
-     @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-        if (observable instanceof TOCEntry && ((TOCEntry)observable).getRepository()==codeRepository)
-        	requestRefresh();
-        else if (observable == codeRepository)
-        	requestRefresh();
-    }
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (observable instanceof TOCEntry && ((TOCEntry) observable).getRepository() == codeRepository)
+			requestRefresh();
+		else if (observable == codeRepository)
+			requestRefresh();
+	}
 
-    // CPU-expensive
-    protected void refresh() {
-    	if (isShown)
-    		htmlComponent.setText(codeRepository.buildDocument(controller.getProject().getDocumentationCssResource().getFile()));
-    }
-    
-    protected boolean refreshRequested = false;
-    
-    private synchronized void requestRefresh(){
-    	if (refreshRequested)
-    		return;
-    	SwingUtilities.invokeLater(new Runnable() {
-    		@Override
+	// CPU-expensive
+	protected void refresh() {
+		if (isShown)
+			htmlComponent.setText(codeRepository.buildDocument(controller.getProject().getDocumentationCssResource().getFile()));
+	}
+
+	protected boolean refreshRequested = false;
+
+	private synchronized void requestRefresh() {
+		if (refreshRequested)
+			return;
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
-    			refresh();
-    			refreshRequested = false;
-    		}
-    	});
-    }
-    
-    /**
-     * Overrides getRepresentedObject
-     *
-     * @see org.openflexo.view.ModuleView#getRepresentedObject()
-     */
-    @Override
-	public TOCRepository getRepresentedObject()
-    {
-        return codeRepository;
-    }
+				refresh();
+				refreshRequested = false;
+			}
+		});
+	}
 
-    /**
-     * Overrides delete
-     *
-     * @see org.openflexo.view.ModuleView#deleteModuleView()
-     */
-    @Override
-	public void deleteModuleView()
-    {
-    	controller.removeModuleView(this);
-    	codeRepository.deleteObserver(this);
-    	perspective = null;
-    	codeRepository = null;
-    }
+	/**
+	 * Overrides getRepresentedObject
+	 * 
+	 * @see org.openflexo.view.ModuleView#getRepresentedObject()
+	 */
+	@Override
+	public TOCRepository getRepresentedObject() {
+		return codeRepository;
+	}
 
+	/**
+	 * Overrides delete
+	 * 
+	 * @see org.openflexo.view.ModuleView#deleteModuleView()
+	 */
+	@Override
+	public void deleteModuleView() {
+		controller.removeModuleView(this);
+		codeRepository.deleteObserver(this);
+		perspective = null;
+		codeRepository = null;
+	}
 
 	@Override
 	public boolean isAutoscrolled() {
 		return true;
 	}
 
-
 	@Override
 	public void willHide() {
 		isShown = false;
 	}
-
 
 	@Override
 	public void willShow() {

@@ -34,132 +34,122 @@ import org.openflexo.foundation.wkf.node.FlexoNode;
 import org.openflexo.foundation.wkf.node.FlexoPreCondition;
 import org.openflexo.localization.FlexoLocalization;
 
-public class CreatePreCondition extends FlexoUndoableAction<CreatePreCondition,FlexoNode,WKFObject>
-{
+public class CreatePreCondition extends FlexoUndoableAction<CreatePreCondition, FlexoNode, WKFObject> {
 
-    private static final Logger logger = Logger.getLogger(CreatePreCondition.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(CreatePreCondition.class.getPackage().getName());
 
-    public static FlexoActionType<CreatePreCondition,FlexoNode,WKFObject> actionType
-    = new FlexoActionType<CreatePreCondition,FlexoNode,WKFObject> (
-    		"create_pre_condition",
-    		FlexoActionType.newMenu,
-    		FlexoActionType.newMenuGroup3,
-    		FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<CreatePreCondition, FlexoNode, WKFObject> actionType = new FlexoActionType<CreatePreCondition, FlexoNode, WKFObject>(
+			"create_pre_condition", FlexoActionType.newMenu, FlexoActionType.newMenuGroup3, FlexoActionType.ADD_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public CreatePreCondition makeNewAction(FlexoNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-        {
-            return new CreatePreCondition(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public CreatePreCondition makeNewAction(FlexoNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+			return new CreatePreCondition(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoNode object, Vector<WKFObject> globalSelection)
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoNode object, Vector<WKFObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoNode object, Vector<WKFObject> globalSelection)
-        {
-            return object != null;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoNode object, Vector<WKFObject> globalSelection) {
+			return object != null;
+		}
 
-        private String[] persistentProperties = { "attachedBeginNode" };
+		private String[] persistentProperties = { "attachedBeginNode" };
 
-        @Override
-		protected String[] getPersistentProperties()
-        {
-        	return persistentProperties;
-        }
+		@Override
+		protected String[] getPersistentProperties() {
+			return persistentProperties;
+		}
 
-   };
+	};
 
-    static {
-        FlexoModelObject.addActionForClass (CreatePreCondition.actionType, FlexoNode.class);
-    }
+	static {
+		FlexoModelObject.addActionForClass(CreatePreCondition.actionType, FlexoNode.class);
+	}
 
-    CreatePreCondition (FlexoNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	CreatePreCondition(FlexoNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    private FlexoPreCondition newPreCondition = null;
+	private FlexoPreCondition newPreCondition = null;
 
-    // Optional arguments
-    private FlexoNode attachedBeginNode;
-
-    @Override
-	protected void doAction(Object context) throws InvalidArgumentException
-    {
-    	if (selectedPreCondition != null) return;
-
-    	if (getFocusedObject() == null) throw new InvalidArgumentException("Trying to create pre-condition on null FlexoNode");
-
-    	if (getAttachedBeginNode() != null) {
-    		if (!getAttachedBeginNode().isBeginNode()) throw new InvalidArgumentException("Supplied attached begin node is not a begin node");
-    		if (getAttachedBeginNode().getParentPetriGraph()==null ||  getAttachedBeginNode().getParentPetriGraph().getContainer()!= getFocusedObject()) throw new InvalidArgumentException("Supplied attached begin node is not a child node of focused node");
-    	}
-
-    	if (logger.isLoggable(Level.FINE))
-			logger.fine("Create pre-condition for "+getFocusedObject()+" with attached begin node="+getAttachedBeginNode());
-    	newPreCondition = new FlexoPreCondition(getFocusedObject(), getAttachedBeginNode());
-
-         objectCreated("NEW_PRE_CONDITION",newPreCondition);
-
-     }
+	// Optional arguments
+	private FlexoNode attachedBeginNode;
 
 	@Override
-	protected void undoAction(Object context) throws FlexoException
-	{
+	protected void doAction(Object context) throws InvalidArgumentException {
+		if (selectedPreCondition != null)
+			return;
+
+		if (getFocusedObject() == null)
+			throw new InvalidArgumentException("Trying to create pre-condition on null FlexoNode");
+
+		if (getAttachedBeginNode() != null) {
+			if (!getAttachedBeginNode().isBeginNode())
+				throw new InvalidArgumentException("Supplied attached begin node is not a begin node");
+			if (getAttachedBeginNode().getParentPetriGraph() == null
+					|| getAttachedBeginNode().getParentPetriGraph().getContainer() != getFocusedObject())
+				throw new InvalidArgumentException("Supplied attached begin node is not a child node of focused node");
+		}
+
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("Create pre-condition for " + getFocusedObject() + " with attached begin node=" + getAttachedBeginNode());
+		newPreCondition = new FlexoPreCondition(getFocusedObject(), getAttachedBeginNode());
+
+		objectCreated("NEW_PRE_CONDITION", newPreCondition);
+
+	}
+
+	@Override
+	protected void undoAction(Object context) throws FlexoException {
 		logger.info("CreatePreCondition: UNDO");
-    	if (selectedPreCondition != null) return;
+		if (selectedPreCondition != null)
+			return;
 		newPreCondition.delete();
 	}
 
 	@Override
-	protected void redoAction(Object context) throws FlexoException
-	{
+	protected void redoAction(Object context) throws FlexoException {
 		logger.info("CreatePreCondition: REDO");
 		doAction(context);
 	}
 
-	public FlexoNode getAttachedBeginNode()
-	{
+	public FlexoNode getAttachedBeginNode() {
 		return attachedBeginNode;
 	}
 
-	public void setAttachedBeginNode(FlexoNode attachedBeginNode)
-	{
+	public void setAttachedBeginNode(FlexoNode attachedBeginNode) {
 		this.attachedBeginNode = attachedBeginNode;
 	}
 
-	public FlexoPreCondition getNewPreCondition()
-	{
-    	if (selectedPreCondition != null) return selectedPreCondition;
+	public FlexoPreCondition getNewPreCondition() {
+		if (selectedPreCondition != null)
+			return selectedPreCondition;
 		return newPreCondition;
 	}
-
 
 	private boolean allowsToSelectPreconditionOnly = false;
 
 	private FlexoPreCondition selectedPreCondition;
 
 	@Override
-	public String getLocalizedName()
-	{
-		if (allowsToSelectPreconditionOnly) return FlexoLocalization.localizedForKey("create_or_select_pre_condition");
-		else return super.getLocalizedName();
+	public String getLocalizedName() {
+		if (allowsToSelectPreconditionOnly)
+			return FlexoLocalization.localizedForKey("create_or_select_pre_condition");
+		else
+			return super.getLocalizedName();
 	}
 
 	public boolean allowsToSelectPreconditionOnly() {
 		return allowsToSelectPreconditionOnly;
 	}
 
-	public void setAllowsToSelectPreconditionOnly(
-			boolean allowsToSelectPreconditionOnly) {
+	public void setAllowsToSelectPreconditionOnly(boolean allowsToSelectPreconditionOnly) {
 		this.allowsToSelectPreconditionOnly = allowsToSelectPreconditionOnly;
 	}
 

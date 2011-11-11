@@ -38,10 +38,9 @@ public class WelcomeDialog extends FIBDialog<ApplicationData> {
 	private static final Logger logger = FlexoLogger.getLogger(WelcomeDialog.class.getPackage().getName());
 
 	public static final FileResource FIB_FILE = new FileResource("Fib/WelcomePanel.fib");
-	
-	public WelcomeDialog() 
-	{
-		super(FIBLibrary.instance().retrieveFIBComponent(FIB_FILE),new ApplicationData(),FlexoFrame.getActiveFrame(),true);
+
+	public WelcomeDialog() {
+		super(FIBLibrary.instance().retrieveFIBComponent(FIB_FILE), new ApplicationData(), FlexoFrame.getActiveFrame(), true);
 		setResizable(false);
 		showDialog();
 	}

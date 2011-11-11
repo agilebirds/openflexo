@@ -27,53 +27,47 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.widget.IETDWidget;
 
-
 /**
  * @author bmangez <B>Class Description</B>
  */
-public class IETDElement extends IEElement
-{
+public class IETDElement extends IEElement {
 
-    /**
-     * @param widget
-     * @param browser
-     */
-    public IETDElement(IETDWidget widget, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(widget, BrowserElementType.TD, browser,parent);
-        widget.getSequenceWidget().addObserver(this);
-    }
+	/**
+	 * @param widget
+	 * @param browser
+	 */
+	public IETDElement(IETDWidget widget, ProjectBrowser browser, BrowserElement parent) {
+		super(widget, BrowserElementType.TD, browser, parent);
+		widget.getSequenceWidget().addObserver(this);
+	}
 
-    /**
-     * Overrides delete
-     * @see org.openflexo.components.browser.BrowserElement#delete()
-     */
-    @Override
-    public void delete()
-    {
-        ((IETDWidget)getObject()).getSequenceWidget().deleteObserver(this);
-        super.delete();
-    }
+	/**
+	 * Overrides delete
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#delete()
+	 */
+	@Override
+	public void delete() {
+		((IETDWidget) getObject()).getSequenceWidget().deleteObserver(this);
+		super.delete();
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        FlexoModelObject child = null;
-        for (Enumeration e = getTD().getSequenceWidget().elements(); e.hasMoreElements();) {
-            child = (FlexoModelObject) e.nextElement();
-            addToChilds(child);
-        }
-    }
+	@Override
+	protected void buildChildrenVector() {
+		FlexoModelObject child = null;
+		for (Enumeration e = getTD().getSequenceWidget().elements(); e.hasMoreElements();) {
+			child = (FlexoModelObject) e.nextElement();
+			addToChilds(child);
+		}
+	}
 
-    @Override
-	public String getName()
-    {
-        return "Cell(" + (getTD().getYLocation()+1) + "," + (getTD().getXLocation()+1) + ")";
-    }
+	@Override
+	public String getName() {
+		return "Cell(" + (getTD().getYLocation() + 1) + "," + (getTD().getXLocation() + 1) + ")";
+	}
 
-    protected IETDWidget getTD()
-    {
-        return (IETDWidget) getObject();
-    }
+	protected IETDWidget getTD() {
+		return (IETDWidget) getObject();
+	}
 
 }

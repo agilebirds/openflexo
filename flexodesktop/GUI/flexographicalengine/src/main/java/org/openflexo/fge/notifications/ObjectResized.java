@@ -23,8 +23,7 @@ import org.openflexo.fge.geom.FGEDimension;
 
 public class ObjectResized extends FGENotification {
 
-	public ObjectResized(FGEDimension oldSize, FGEDimension newSize)
-	{
-		super("size",oldSize,newSize);
+	public ObjectResized(FGEDimension oldSize, FGEDimension newSize) {
+		super("size", oldSize, newSize);
 	}
 }

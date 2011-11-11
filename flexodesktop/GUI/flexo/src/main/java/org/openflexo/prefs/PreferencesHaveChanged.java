@@ -27,17 +27,14 @@ import org.openflexo.foundation.DataModification;
  * @author sguerin
  * 
  */
-public class PreferencesHaveChanged extends DataModification
-{
+public class PreferencesHaveChanged extends DataModification {
 
-    public PreferencesHaveChanged(String key, String oldValue, String newValue)
-    {
-        super(DataModification.ATTRIBUTE, key, oldValue, newValue);
-    }
-    
-    @Override
-	public String toString () 
-    {
-        return ("PreferencesHaveChanged "+propertyName()+" old: "+oldValue()+" new: "+newValue());
-    }
+	public PreferencesHaveChanged(String key, String oldValue, String newValue) {
+		super(DataModification.ATTRIBUTE, key, oldValue, newValue);
+	}
+
+	@Override
+	public String toString() {
+		return ("PreferencesHaveChanged " + propertyName() + " old: " + oldValue() + " new: " + newValue());
+	}
 }

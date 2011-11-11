@@ -30,5 +30,5 @@ public class TOCModification extends DataModification {
 	public TOCModification(String propertyName, Object oldValue, Object newValue) {
 		super(DataModification.TOC_DM, propertyName, oldValue, newValue);
 	}
-	
+
 }

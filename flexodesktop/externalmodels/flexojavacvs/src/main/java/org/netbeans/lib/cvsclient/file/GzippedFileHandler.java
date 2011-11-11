@@ -31,36 +31,33 @@ import org.netbeans.lib.cvsclient.request.GzipStreamRequest;
 import org.netbeans.lib.cvsclient.request.Request;
 
 /**
- * Handles the reading and writing of Compressed files to and from the
- * server.
- * @author  Milos Kleint
+ * Handles the reading and writing of Compressed files to and from the server.
+ * 
+ * @author Milos Kleint
  */
 public class GzippedFileHandler extends DefaultFileHandler {
-    /**
-     * Indicates whether the file is actually compressed
-     */
-    private boolean isCompressed;
+	/**
+	 * Indicates whether the file is actually compressed
+	 */
+	private boolean isCompressed;
 
-    /**
-     * Get any requests that must be sent before commands are sent, to init
-     * this file handler.
-     * @return an array of Requests that must be sent
-     */
-    @Override
+	/**
+	 * Get any requests that must be sent before commands are sent, to init this file handler.
+	 * 
+	 * @return an array of Requests that must be sent
+	 */
+	@Override
 	public Request[] getInitialisationRequests() {
-        return new Request[]{
-            new GzipStreamRequest()
-        };
-    }
+		return new Request[] { new GzipStreamRequest() };
+	}
 
-    @Override
+	@Override
 	protected Reader getProcessedReader(File f) throws IOException {
-        return new InputStreamReader(new GZIPInputStream(new
-                FileInputStream(f)));
-    }
+		return new InputStreamReader(new GZIPInputStream(new FileInputStream(f)));
+	}
 
-    @Override
+	@Override
 	protected InputStream getProcessedInputStream(File f) throws IOException {
-        return new GZIPInputStream(new FileInputStream(f));
-    }
+		return new GZIPInputStream(new FileInputStream(f));
+	}
 }

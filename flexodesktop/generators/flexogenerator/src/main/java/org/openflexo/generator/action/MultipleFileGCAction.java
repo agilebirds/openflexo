@@ -39,119 +39,112 @@ import org.openflexo.logging.FlexoLogger;
  * Abstract class for actions applying on a set of CGFile
  * 
  * @author sylvain
- *
+ * 
  */
-public abstract class MultipleFileGCAction<A extends MultipleFileGCAction<A>> extends GCAction<A,CGObject> 
-{
+public abstract class MultipleFileGCAction<A extends MultipleFileGCAction<A>> extends GCAction<A, CGObject> {
 	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(MultipleFileGCAction.class.getPackage().getName());
 
-	public static abstract class MultipleFileGCActionType<A extends MultipleFileGCAction<?>> extends FlexoActionType<A,CGObject,CGObject>
-	{
-	    protected MultipleFileGCActionType (String actionName, ActionMenu actionMenu, ActionGroup actionGroup, int actionCategory)
-	    {
-	        super(actionName,actionMenu,actionGroup,actionCategory);
-	    }
-	    
-	    protected MultipleFileGCActionType (String actionName, ActionGroup actionGroup, int actionCategory)
-	    {
-	    	super(actionName,actionGroup,actionCategory);
-	    }
-	    
-        @Override
-		protected boolean isVisibleForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) 
-        {
-        	if (focusedObject instanceof AbstractCGFileVersion) {
+	public static abstract class MultipleFileGCActionType<A extends MultipleFileGCAction<?>> extends FlexoActionType<A, CGObject, CGObject> {
+		protected MultipleFileGCActionType(String actionName, ActionMenu actionMenu, ActionGroup actionGroup, int actionCategory) {
+			super(actionName, actionMenu, actionGroup, actionCategory);
+		}
+
+		protected MultipleFileGCActionType(String actionName, ActionGroup actionGroup, int actionCategory) {
+			super(actionName, actionGroup, actionCategory);
+		}
+
+		@Override
+		protected boolean isVisibleForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) {
+			if (focusedObject instanceof AbstractCGFileVersion) {
 				return false;
 			}
-            Vector<CGObject> topLevelObjects = getSelectedTopLevelObjects(focusedObject, globalSelection);
-            for (CGObject obj : topLevelObjects) {
-            	if (obj instanceof GeneratedOutput) {
+			Vector<CGObject> topLevelObjects = getSelectedTopLevelObjects(focusedObject, globalSelection);
+			for (CGObject obj : topLevelObjects) {
+				if (obj instanceof GeneratedOutput) {
 					return false;
 				}
-             }
-            return true;
-        }
+			}
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) 
-        {
-        	GenerationRepository repository = getRepository(focusedObject, globalSelection);
-        	if (repository == null) {
+		@Override
+		protected boolean isEnabledForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) {
+			GenerationRepository repository = getRepository(focusedObject, globalSelection);
+			if (repository == null) {
 				return false;
 			}
-           	AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator(repository);
-           	if ((pg == null) || (!pg.hasBeenInitialized())) {
+			AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator(repository);
+			if ((pg == null) || (!pg.hasBeenInitialized())) {
 				return false;
 			}
-           	Vector<AbstractCGFile> selectedFiles = 
-           		getSelectedCGFilesOnWhyCurrentActionShouldApply(focusedObject,globalSelection);
-         	return selectedFiles.size()>0;
-        }
-        
-        protected Vector<AbstractCGFile> getSelectedCGFilesOnWhyCurrentActionShouldApply(CGObject focusedObject, Vector<CGObject> globalSelection)
-        {
-          	Vector<AbstractCGFile> selectedFiles = getSelectedCGFiles(focusedObject, globalSelection);
-          	Vector<AbstractCGFile> returned = new Vector<AbstractCGFile>();
-          	for (AbstractCGFile file : selectedFiles) {
-          		if (!file.getMarkedAsDoNotGenerate() && accept(file)) {
+			Vector<AbstractCGFile> selectedFiles = getSelectedCGFilesOnWhyCurrentActionShouldApply(focusedObject, globalSelection);
+			return selectedFiles.size() > 0;
+		}
+
+		protected Vector<AbstractCGFile> getSelectedCGFilesOnWhyCurrentActionShouldApply(CGObject focusedObject,
+				Vector<CGObject> globalSelection) {
+			Vector<AbstractCGFile> selectedFiles = getSelectedCGFiles(focusedObject, globalSelection);
+			Vector<AbstractCGFile> returned = new Vector<AbstractCGFile>();
+			for (AbstractCGFile file : selectedFiles) {
+				if (!file.getMarkedAsDoNotGenerate() && accept(file)) {
 					returned.add(file);
 				}
-           	}
-          	
-          	return returned;
-        }
+			}
 
-        protected abstract boolean accept (AbstractCGFile aFile);
+			return returned;
+		}
+
+		protected abstract boolean accept(AbstractCGFile aFile);
 	}
-	
-/*	public void actionStarted(CGFileRunnable runnable) {
-		if (getFlexoProgress()!=null)
-			getFlexoProgress().setProgress(runnable.getLocalizedName());
-	}
-	
-	public void actionEnded(CGFileRunnable runnable) {
-		
-	}
-	
-	public void actionFailed(CGFileRunnable runnable, Exception e, String message) {
-		
-	}
-	
-	public abstract class CGFileRunnable implements Runnable {
-		protected AbstractCGFile file;
-		
-		public CGFileRunnable(AbstractCGFile file) {
-			this.file = file;
+
+	/*	public void actionStarted(CGFileRunnable runnable) {
+			if (getFlexoProgress()!=null)
+				getFlexoProgress().setProgress(runnable.getLocalizedName());
 		}
 		
-		public void notifyActionStarted() {
-			actionStarted(this);
+		public void actionEnded(CGFileRunnable runnable) {
+			
 		}
 		
-		public void notifyActionEnded() {
-			actionEnded(this);
+		public void actionFailed(CGFileRunnable runnable, Exception e, String message) {
+			
 		}
 		
-		public void notifyActionFailed(Exception e, String message) {
-			actionFailed(this, e, message);
+		public abstract class CGFileRunnable implements Runnable {
+			protected AbstractCGFile file;
+			
+			public CGFileRunnable(AbstractCGFile file) {
+				this.file = file;
+			}
+			
+			public void notifyActionStarted() {
+				actionStarted(this);
+			}
+			
+			public void notifyActionEnded() {
+				actionEnded(this);
+			}
+			
+			public void notifyActionFailed(Exception e, String message) {
+				actionFailed(this, e, message);
+			}
+			
+			public abstract String getLocalizedName();
 		}
 		
-		public abstract String getLocalizedName();
-	}
-	
-	private ThreadPoolExecutor threadPool;
-	
-	public abstract boolean requiresThreadPool();
-	
-	public boolean allJobsAreDone() {
-		return threadPool.isTerminated();
-	}
-	*/
-    protected MultipleFileGCAction (final MultipleFileGCActionType<A> actionType, CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-        /*if (requiresThreadPool())
+		private ThreadPoolExecutor threadPool;
+		
+		public abstract boolean requiresThreadPool();
+		
+		public boolean allJobsAreDone() {
+			return threadPool.isTerminated();
+		}
+		*/
+	protected MultipleFileGCAction(final MultipleFileGCActionType<A> actionType, CGObject focusedObject, Vector<CGObject> globalSelection,
+			FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+		/*if (requiresThreadPool())
 			threadPool = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(),
 					new ThreadFactory() {
 						public Thread newThread(Runnable r) {
@@ -175,51 +168,49 @@ public abstract class MultipleFileGCAction<A extends MultipleFileGCAction<A>> ex
 				}
 
 			};*/
-    }
-    
-    private Vector<AbstractCGFile> files;
-    
-    @Override
-	public MultipleFileGCActionType<A> getActionType() 
-    {
-        return (MultipleFileGCActionType<A>)super.getActionType();
-    }
+	}
 
-    protected Vector<AbstractCGFile> getSelectedCGFilesOnWhyCurrentActionShouldApply()
-    {
-    	if (files==null) {
+	private Vector<AbstractCGFile> files;
+
+	@Override
+	public MultipleFileGCActionType<A> getActionType() {
+		return (MultipleFileGCActionType<A>) super.getActionType();
+	}
+
+	protected Vector<AbstractCGFile> getSelectedCGFilesOnWhyCurrentActionShouldApply() {
+		if (files == null) {
 			files = getActionType().getSelectedCGFilesOnWhyCurrentActionShouldApply(getFocusedObject(), getGlobalSelection());
 		}
-    	return files;
-    }
+		return files;
+	}
 
-    @Override
-    protected void doAction(Object context) throws FlexoException {
-    	//TODO : explain why there is nothing here
-    }
-    
-    //public abstract void performActionOnFile(AbstractCGFile file);
-    
-/*    public void addJob(MultipleFileGCAction<?>.CGFileRunnable job) {
-    	threadPool.execute(job);
-    }
-    
-    public void waitForAllJobsToComplete() {
-    	/*
-		 * The next line does not stop everything. It simply prevents new job from being added to the pool and allows the method
-		 * isTerminated() to return true once all jobs are completed
-		 */
-/*		threadPool.shutdown();
-		while (!threadPool.isTerminated()) {
-			synchronized (this) {
-				try {
-					wait(300);
-					getEditor().performPendingActions();
-				} catch (InterruptedException e) {
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		// TODO : explain why there is nothing here
+	}
+
+	// public abstract void performActionOnFile(AbstractCGFile file);
+
+	/*    public void addJob(MultipleFileGCAction<?>.CGFileRunnable job) {
+	    	threadPool.execute(job);
+	    }
+	    
+	    public void waitForAllJobsToComplete() {
+	    	/*
+			 * The next line does not stop everything. It simply prevents new job from being added to the pool and allows the method
+			 * isTerminated() to return true once all jobs are completed
+			 */
+	/*		threadPool.shutdown();
+			while (!threadPool.isTerminated()) {
+				synchronized (this) {
+					try {
+						wait(300);
+						getEditor().performPendingActions();
+					} catch (InterruptedException e) {
+					}
 				}
 			}
-		}
 
-    }
-*/
+	    }
+	*/
 }

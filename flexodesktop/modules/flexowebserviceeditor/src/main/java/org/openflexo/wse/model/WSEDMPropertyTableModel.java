@@ -31,126 +31,117 @@ import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.DMEIconLibrary;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class WSEDMPropertyTableModel extends AbstractModel<DMEntity,DMProperty>
-{
+public class WSEDMPropertyTableModel extends AbstractModel<DMEntity, DMProperty> {
 
-    protected static final Logger logger = Logger.getLogger(WSEDMPropertyTableModel.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(WSEDMPropertyTableModel.class.getPackage().getName());
 
-    public WSEDMPropertyTableModel(DMEntity entity, FlexoProject project)
-    {
-        super(entity, project);
-        addToColumns(new IconColumn<DMProperty>("property_icon", 30) {
-            @Override
-			public Icon getIcon(DMProperty object)
-            {
-                return DMEIconLibrary.DM_PROPERTY_ICON;
-            }
-        });
-        addToColumns(new StringColumn<DMProperty>("name", 150) {
-            @Override
-			public String getValue(DMProperty object)
-            {
-                return (object).getName();
-            }
+	public WSEDMPropertyTableModel(DMEntity entity, FlexoProject project) {
+		super(entity, project);
+		addToColumns(new IconColumn<DMProperty>("property_icon", 30) {
+			@Override
+			public Icon getIcon(DMProperty object) {
+				return DMEIconLibrary.DM_PROPERTY_ICON;
+			}
+		});
+		addToColumns(new StringColumn<DMProperty>("name", 150) {
+			@Override
+			public String getValue(DMProperty object) {
+				return (object).getName();
+			}
 
-          /*  public void setValue(FlexoModelObject object, String aValue)
-            {
-                ((DMProperty) object).setName(aValue);
-            }*/
-        });
-        addToColumns(new StringColumn<DMProperty>("cardinality", 150){
-        		@Override
-				public String getValue(DMProperty object){
-        			if((object).getCardinality()!=null)
-        			return (object).getCardinality().getName();
-        			return "";
-        		}
-        });
-    /*    addToColumns(new ChoiceListColumn("cardinality", 150) {
-            public ChoiceList getValue(FlexoModelObject object)
-            {
-                return ((DMProperty) object).getCardinality();
-            }
+			/*  public void setValue(FlexoModelObject object, String aValue)
+			  {
+			      ((DMProperty) object).setName(aValue);
+			  }*/
+		});
+		addToColumns(new StringColumn<DMProperty>("cardinality", 150) {
+			@Override
+			public String getValue(DMProperty object) {
+				if ((object).getCardinality() != null)
+					return (object).getCardinality().getName();
+				return "";
+			}
+		});
+		/*    addToColumns(new ChoiceListColumn("cardinality", 150) {
+		        public ChoiceList getValue(FlexoModelObject object)
+		        {
+		            return ((DMProperty) object).getCardinality();
+		        }
 
-            public void setValue(FlexoModelObject object, ChoiceList aValue)
-            {
-                ((DMProperty) object).setCardinality((DMCardinality) aValue);
-            }
+		        public void setValue(FlexoModelObject object, ChoiceList aValue)
+		        {
+		            ((DMProperty) object).setCardinality((DMCardinality) aValue);
+		        }
 
-            protected String renderChoiceListValue(ChoiceList value)
-            {
-                return ((DMCardinality) value).getName();
-            }
-        });
-        */
-        addToColumns(new StringColumn<DMProperty>("type", 150){
-        		@Override
-				public String getValue(DMProperty object){
-        			if((object).getType()!=null)
-        			return (object).getType().getName();
-        			return "";
-        		}
-        });
-/*        addToColumns(new EntitySelectorColumn("type", 150, project) {
-            public FlexoModelObject getValue(FlexoModelObject object)
-            {
-                return ((DMProperty) object).getType();
-            }
+		        protected String renderChoiceListValue(ChoiceList value)
+		        {
+		            return ((DMCardinality) value).getName();
+		        }
+		    });
+		    */
+		addToColumns(new StringColumn<DMProperty>("type", 150) {
+			@Override
+			public String getValue(DMProperty object) {
+				if ((object).getType() != null)
+					return (object).getType().getName();
+				return "";
+			}
+		});
+		/*        addToColumns(new EntitySelectorColumn("type", 150, project) {
+		            public FlexoModelObject getValue(FlexoModelObject object)
+		            {
+		                return ((DMProperty) object).getType();
+		            }
 
-            public void setValue(FlexoModelObject object, FlexoModelObject aValue)
-            {
-                ((DMProperty) object).setType((DMEntity) aValue);
-            }
-        });
-        */
-/*        addToColumns(new StringColumn("description", 250) {
-            public String getValue(FlexoModelObject object)
-            {
-                return ((DMProperty) object).getDescription();
-            }
+		            public void setValue(FlexoModelObject object, FlexoModelObject aValue)
+		            {
+		                ((DMProperty) object).setType((DMEntity) aValue);
+		            }
+		        });
+		        */
+		/*        addToColumns(new StringColumn("description", 250) {
+		            public String getValue(FlexoModelObject object)
+		            {
+		                return ((DMProperty) object).getDescription();
+		            }
 
-            public void setValue(FlexoModelObject object, String aValue)
-            {
-                ((DMProperty) object).setDescription(aValue);
-            }
-        });*/
+		            public void setValue(FlexoModelObject object, String aValue)
+		            {
+		                ((DMProperty) object).setDescription(aValue);
+		            }
+		        });*/
 
-    }
+	}
 
-    public DMEntity getDMEntity()
-    {
-        return getModel();
-    }
+	public DMEntity getDMEntity() {
+		return getModel();
+	}
 
-    @Override
-	public DMProperty elementAt(int row)
-    {
-        if ((row >= 0) && (row < getRowCount())) {
-            return getDMEntity().getOrderedSingleProperties().elementAt(row);
-        } else {
-            return null;
-        }
-    }
+	@Override
+	public DMProperty elementAt(int row) {
+		if ((row >= 0) && (row < getRowCount())) {
+			return getDMEntity().getOrderedSingleProperties().elementAt(row);
+		} else {
+			return null;
+		}
+	}
 
-    public DMProperty entityAt(int row)
-    {
-        return elementAt(row);
-    }
+	public DMProperty entityAt(int row) {
+		return elementAt(row);
+	}
 
-    @Override
-	public int getRowCount()
-    {
-        if (getDMEntity() != null) {
-            return getDMEntity().getOrderedSingleProperties().size();
-        }
-        return 0;
-    }
+	@Override
+	public int getRowCount() {
+		if (getDMEntity() != null) {
+			return getDMEntity().getOrderedSingleProperties().size();
+		}
+		return 0;
+	}
 
 }

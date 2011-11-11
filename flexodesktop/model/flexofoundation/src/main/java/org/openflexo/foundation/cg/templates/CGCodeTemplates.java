@@ -24,12 +24,11 @@ import java.util.Vector;
 import org.openflexo.foundation.TargetType;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 public class CGCodeTemplates extends CGTemplates {
 
 	public CGCodeTemplates(FlexoProject project, Vector<TargetType> availableTargets) {
 		super(project, availableTargets);
-        _applicationRepository = new ApplicationCGTemplateRepository(this, availableTargets);
+		_applicationRepository = new ApplicationCGTemplateRepository(this, availableTargets);
 		update();
 	}
 

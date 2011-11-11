@@ -28,61 +28,53 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 
+public class CompareTemplatesInNewWindow extends FlexoGUIAction<CompareTemplatesInNewWindow, CGTemplate, CGTemplate> {
 
-public class CompareTemplatesInNewWindow extends FlexoGUIAction<CompareTemplatesInNewWindow, CGTemplate, CGTemplate>
-{
-
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(CompareTemplatesInNewWindow.class.getPackage().getName());
 
-	public static Vector<CGTemplate> getTemplates(CGTemplate object, Vector<CGTemplate> globalSelection)
-    {
+	public static Vector<CGTemplate> getTemplates(CGTemplate object, Vector<CGTemplate> globalSelection) {
 		Vector<CGTemplate> v = globalSelection == null ? new Vector<CGTemplate>(1) : new Vector<CGTemplate>(globalSelection.size() + 1);
-    	if (globalSelection!=null)
-    		v.addAll(globalSelection);
-    	if (object!=null && !v.contains(object))
-    		v.add(object);
-    	return v;
-    }
-    
-	public static FlexoActionType<CompareTemplatesInNewWindow, CGTemplate, CGTemplate> actionType = new FlexoActionType<CompareTemplatesInNewWindow, CGTemplate, CGTemplate>("compare_each_other",
-			FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
+		if (globalSelection != null)
+			v.addAll(globalSelection);
+		if (object != null && !v.contains(object))
+			v.add(object);
+		return v;
+	}
 
-        /**
-         * Factory method
-         */
-		@Override
-		public CompareTemplatesInNewWindow makeNewAction(CGTemplate focusedObject, Vector<CGTemplate> globalSelection, FlexoEditor editor)
-        {
-            return new CompareTemplatesInNewWindow(focusedObject, globalSelection,editor);
-        }
+	public static FlexoActionType<CompareTemplatesInNewWindow, CGTemplate, CGTemplate> actionType = new FlexoActionType<CompareTemplatesInNewWindow, CGTemplate, CGTemplate>(
+			"compare_each_other", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
+		/**
+		 * Factory method
+		 */
 		@Override
-		protected boolean isVisibleForSelection(CGTemplate object, Vector<CGTemplate> globalSelection)
-        {
-            return isEnabledForSelection(object, globalSelection);
-       }
+		public CompareTemplatesInNewWindow makeNewAction(CGTemplate focusedObject, Vector<CGTemplate> globalSelection, FlexoEditor editor) {
+			return new CompareTemplatesInNewWindow(focusedObject, globalSelection, editor);
+		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGTemplate object, Vector<CGTemplate> globalSelection)
-        {
-            return getTemplates(object, globalSelection).size()==2;
-        }
-                
-    };
-    
-    static {
+		protected boolean isVisibleForSelection(CGTemplate object, Vector<CGTemplate> globalSelection) {
+			return isEnabledForSelection(object, globalSelection);
+		}
+
+		@Override
+		protected boolean isEnabledForSelection(CGTemplate object, Vector<CGTemplate> globalSelection) {
+			return getTemplates(object, globalSelection).size() == 2;
+		}
+
+	};
+
+	static {
 		FlexoModelObject.addActionForClass(CompareTemplatesInNewWindow.actionType, CGTemplate.class);
-    }
-    
+	}
 
-	CompareTemplatesInNewWindow(CGTemplate focusedObject, Vector<CGTemplate> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
-    
+	CompareTemplatesInNewWindow(CGTemplate focusedObject, Vector<CGTemplate> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
 	public Vector<CGTemplate> getTemplates() {
-    	return getTemplates(getFocusedObject(),getGlobalSelection());
-    }
+		return getTemplates(getFocusedObject(), getGlobalSelection());
+	}
 
 }

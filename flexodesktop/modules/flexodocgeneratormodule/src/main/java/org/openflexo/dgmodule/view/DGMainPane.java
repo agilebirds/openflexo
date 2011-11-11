@@ -27,48 +27,43 @@ import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.ModuleView;
 
-
 /**
  * @author gpolet
  * 
  */
-public class DGMainPane extends DEMainPane
-{
+public class DGMainPane extends DEMainPane {
 
-    private DGBrowserView dgBrowserView;
+	private DGBrowserView dgBrowserView;
 
-    /**
-     * @param moduleView
-     * @param mainFrame
-     * @param controller
-     */
-    public DGMainPane(DGController controller, ModuleView moduleView, FlexoFrame mainFrame)
-    {
-        super(controller, moduleView, mainFrame);
-        dgBrowserView = new DGBrowserView(controller, new DGBrowser(controller));
-        setLeftView(dgBrowserView);
-        if (deBrowserView.getParent()!=null)
-        	deBrowserView.getParent().remove(deBrowserView);
-        deBrowserView.getBrowser().delete();
-        deBrowserView = null;
-    }
+	/**
+	 * @param moduleView
+	 * @param mainFrame
+	 * @param controller
+	 */
+	public DGMainPane(DGController controller, ModuleView moduleView, FlexoFrame mainFrame) {
+		super(controller, moduleView, mainFrame);
+		dgBrowserView = new DGBrowserView(controller, new DGBrowser(controller));
+		setLeftView(dgBrowserView);
+		if (deBrowserView.getParent() != null)
+			deBrowserView.getParent().remove(deBrowserView);
+		deBrowserView.getBrowser().delete();
+		deBrowserView = null;
+	}
 
-    /**
-     * Overrides getParentObject
-     * 
-     * @see org.openflexo.view.FlexoMainPane#getParentObject(org.openflexo.foundation.FlexoModelObject)
-     */
-    @Override
-	protected FlexoModelObject getParentObject(FlexoModelObject object)
-    {
-        if (object instanceof CGFile)
-        	return ((CGFile)object).getRepository();
-        return super.getParentObject(object);
-    }
+	/**
+	 * Overrides getParentObject
+	 * 
+	 * @see org.openflexo.view.FlexoMainPane#getParentObject(org.openflexo.foundation.FlexoModelObject)
+	 */
+	@Override
+	protected FlexoModelObject getParentObject(FlexoModelObject object) {
+		if (object instanceof CGFile)
+			return ((CGFile) object).getRepository();
+		return super.getParentObject(object);
+	}
 
 	@Override
-	public DGController getController() 
-	{
+	public DGController getController() {
 		return (DGController) _controller;
 	}
 

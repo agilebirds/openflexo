@@ -33,7 +33,7 @@ import org.openflexo.toolbox.ImageIconResource;
  * Utility class containing all icons used in whole application
  * 
  * @author sylvain
- *
+ * 
  */
 public class IconLibrary {
 
@@ -68,8 +68,6 @@ public class IconLibrary {
 	public static final ImageIconResource FIXABLE_WARNING_ICON = new ImageIconResource("Icons/Common/Validation/FixableWarning.gif");
 	public static final ImageIconResource UNFIXABLE_WARNING_ICON = new ImageIconResource("Icons/Common/Validation/UnfixableWarning.gif");
 
-
-
 	// Actions icons
 	public static final ImageIcon UNDO_ICON = new ImageIconResource("Icons/Actions/Undo.png");
 	public static final ImageIcon REDO_ICON = new ImageIconResource("Icons/Actions/Redo.png");
@@ -83,15 +81,14 @@ public class IconLibrary {
 	public static final ImageIcon PRINT_ICON = new ImageIconResource("Icons/Actions/Print.png");
 	public static final ImageIcon SAVE_ICON = new ImageIconResource("Icons/Actions/Save.png");
 	public static final ImageIcon SAVE_DISABLED_ICON = new ImageIconResource("Icons/Actions/Save-disabled.png");
-	//public static final ImageIcon SAVE_ALL_ICON = new ImageIconResource("Icons/Actions/SaveAll.gif");
-	//public static final ImageIcon SAVE_AS_ICON = new ImageIconResource("Icons/Actions/SaveAs.gif");
+	// public static final ImageIcon SAVE_ALL_ICON = new ImageIconResource("Icons/Actions/SaveAll.gif");
+	// public static final ImageIcon SAVE_AS_ICON = new ImageIconResource("Icons/Actions/SaveAs.gif");
 	public static final ImageIcon NETWORK_ICON = new ImageIconResource("Icons/Actions/Network.png");
 	public static final ImageIcon INFO_ICON = new ImageIconResource("Icons/Actions/Info.png");
 	public static final ImageIcon INSPECT_ICON = new ImageIconResource("Icons/Actions/Inspect.png");
 	public static final ImageIcon REFRESH_ICON = new ImageIconResource("Icons/Actions/Refresh.png");
 	public static final ImageIcon REFRESH_DISABLED_ICON = new ImageIconResource("Icons/Actions/Refresh-disabled.png");
 	public static final ImageIcon TIME_TRAVEL_ICON = new ImageIconResource("Icons/Actions/AutoSaveRestore.gif");
-
 
 	// GUI icons
 
@@ -180,68 +177,49 @@ public class IconLibrary {
 	// Model icons
 	public static final ImageIcon PROJECT_ICON = new ImageIconResource("Icons/Model/Project.gif");
 
-	public static ImageIcon getIconForValidationIssue(ValidationIssue issue)
-	{
+	public static ImageIcon getIconForValidationIssue(ValidationIssue issue) {
 		if (issue instanceof ValidationWarning) {
-			return ((ValidationWarning)issue).isFixable() ? IconLibrary.FIXABLE_WARNING_ICON : IconLibrary.UNFIXABLE_WARNING_ICON;
-		}
-		else if (issue instanceof ValidationError) {
-			return ((ValidationError)issue).isFixable() ? IconLibrary.FIXABLE_ERROR_ICON : IconLibrary.UNFIXABLE_ERROR_ICON;
-		}
-		else if (issue instanceof InformationIssue) {
+			return ((ValidationWarning) issue).isFixable() ? IconLibrary.FIXABLE_WARNING_ICON : IconLibrary.UNFIXABLE_WARNING_ICON;
+		} else if (issue instanceof ValidationError) {
+			return ((ValidationError) issue).isFixable() ? IconLibrary.FIXABLE_ERROR_ICON : IconLibrary.UNFIXABLE_ERROR_ICON;
+		} else if (issue instanceof InformationIssue) {
 			return IconLibrary.INFO_ISSUE_ICON;
 		}
 		return null;
 	}
 
-	public static ImageIcon getIconForResourceType(ResourceType resourceType)
-	{
+	public static ImageIcon getIconForResourceType(ResourceType resourceType) {
 		if (resourceType == ResourceType.COMPONENT_LIBRARY) {
 			return SEIconLibrary.COMPONENT_LIBRARY_ICON;
-		}
-		else if (resourceType == ResourceType.DKV_MODEL) {
+		} else if (resourceType == ResourceType.DKV_MODEL) {
 			return SEIconLibrary.DOMAIN_ICON;
-		}
-		else if (resourceType == ResourceType.DATA_MODEL) {
+		} else if (resourceType == ResourceType.DATA_MODEL) {
 			return DMEIconLibrary.DM_MODEL_ICON;
-		}
-		else if (resourceType == ResourceType.GENERATED_CODE) {
+		} else if (resourceType == ResourceType.GENERATED_CODE) {
 			return CGIconLibrary.GENERATED_CODE_ICON;
-		}
-		else if (resourceType == ResourceType.GENERATED_DOC) {
+		} else if (resourceType == ResourceType.GENERATED_DOC) {
 			return DGIconLibrary.GENERATED_DOC_ICON;
-		}
-		else if (resourceType == ResourceType.GENERATED_SOURCES) {
+		} else if (resourceType == ResourceType.GENERATED_SOURCES) {
 			return CGIconLibrary.GENERATED_CODE_ICON;
-		}
-		else if (resourceType == ResourceType.IMPLEMENTATION_MODEL) {
+		} else if (resourceType == ResourceType.IMPLEMENTATION_MODEL) {
 			return CGIconLibrary.GENERATED_CODE_ICON;
-		}
-		else if (resourceType == ResourceType.MONITORING_COMPONENT) {
+		} else if (resourceType == ResourceType.MONITORING_COMPONENT) {
 			return SEIconLibrary.SCREEN_COMPONENT_ICON;
-		}
-		else if (resourceType == ResourceType.MONITORING_SCREEN) {
+		} else if (resourceType == ResourceType.MONITORING_SCREEN) {
 			return SEIconLibrary.SCREEN_COMPONENT_ICON;
-		}
-		else if (resourceType == ResourceType.OPERATION_COMPONENT) {
+		} else if (resourceType == ResourceType.OPERATION_COMPONENT) {
 			return SEIconLibrary.SCREEN_COMPONENT_ICON;
-		}
-		else if (resourceType == ResourceType.TAB_COMPONENT) {
+		} else if (resourceType == ResourceType.TAB_COMPONENT) {
 			return SEIconLibrary.SCREEN_COMPONENT_ICON;
-		}
-		else if (resourceType == ResourceType.POPUP_COMPONENT) {
+		} else if (resourceType == ResourceType.POPUP_COMPONENT) {
 			return SEIconLibrary.SCREEN_COMPONENT_ICON;
-		}
-		else if (resourceType == ResourceType.PROCESS) {
+		} else if (resourceType == ResourceType.PROCESS) {
 			return WKFIconLibrary.PROCESS_ICON;
-		}
-		else if (resourceType == ResourceType.RM) {
+		} else if (resourceType == ResourceType.RM) {
 			return IconLibrary.PROJECT_ICON;
-		}
-		else if (resourceType == ResourceType.SCREENSHOT) {
+		} else if (resourceType == ResourceType.SCREENSHOT) {
 			return FilesIconLibrary.SMALL_IMAGE_ICON;
-		}
-		else if (resourceType == ResourceType.WORKFLOW) {
+		} else if (resourceType == ResourceType.WORKFLOW) {
 			return WKFIconLibrary.WORKFLOW_ICON;
 		}
 

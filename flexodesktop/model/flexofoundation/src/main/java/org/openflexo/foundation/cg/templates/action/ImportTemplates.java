@@ -34,70 +34,63 @@ import org.openflexo.foundation.cg.templates.CGTemplateRepository;
 import org.openflexo.foundation.cg.templates.CustomCGTemplateRepository;
 import org.openflexo.toolbox.FileUtils;
 
+public class ImportTemplates extends FlexoAction<ImportTemplates, CGTemplateRepository, CGTemplateObject> {
 
-public class ImportTemplates extends FlexoAction<ImportTemplates,CGTemplateRepository,CGTemplateObject>
-{
+	private static final Logger logger = Logger.getLogger(ImportTemplates.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(ImportTemplates.class.getPackage().getName());
-    
-    private CustomCGTemplateRepository _repository;
-    private File externalTemplateDirectory;
-    
-    public static FlexoActionType<ImportTemplates,CGTemplateRepository,CGTemplateObject> actionType = new FlexoActionType<ImportTemplates,CGTemplateRepository,CGTemplateObject> ("import_templates",FlexoActionType.defaultGroup,FlexoActionType.NORMAL_ACTION_TYPE) {
+	private CustomCGTemplateRepository _repository;
+	private File externalTemplateDirectory;
 
-        /**
-         * Factory method
-         */
-        @Override
-		public ImportTemplates makeNewAction(CGTemplateRepository focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor) 
-        {
-            return new ImportTemplates(focusedObject, globalSelection,editor);
-        }
+	public static FlexoActionType<ImportTemplates, CGTemplateRepository, CGTemplateObject> actionType = new FlexoActionType<ImportTemplates, CGTemplateRepository, CGTemplateObject>(
+			"import_templates", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-        @Override
-		protected boolean isVisibleForSelection(CGTemplateRepository object, Vector<CGTemplateObject> globalSelection) 
-        {
-            return object != null && !(object instanceof CustomCGTemplateRepository);
-       }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public ImportTemplates makeNewAction(CGTemplateRepository focusedObject, Vector<CGTemplateObject> globalSelection,
+				FlexoEditor editor) {
+			return new ImportTemplates(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(CGTemplateRepository object, Vector<CGTemplateObject> globalSelection) 
-        {
-            return object != null && !(object instanceof CustomCGTemplateRepository);
-       }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (ImportTemplates.actionType, CGTemplateRepository.class);
-    }
-    
-	ImportTemplates (CGTemplateRepository focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+		@Override
+		protected boolean isVisibleForSelection(CGTemplateRepository object, Vector<CGTemplateObject> globalSelection) {
+			return object != null && !(object instanceof CustomCGTemplateRepository);
+		}
 
-    @Override
-	protected void doAction(Object context) throws IOFlexoException
-    {
-    	logger.info ("ImportTemplates from "+getFocusedObject().getName()+" to "+getRepository().getName());
-    	File source = getExternalTemplateDirectory();
-    	CustomCGTemplateRepository dest = getRepository();
-   		try{
-   			FileUtils.copyContentDirToDir(source, dest.getDirectory());
-   		}catch(IOException e){
-   			throw new IOFlexoException(e);
-   		}
-    	dest.refresh();
-     }
+		@Override
+		protected boolean isEnabledForSelection(CGTemplateRepository object, Vector<CGTemplateObject> globalSelection) {
+			return object != null && !(object instanceof CustomCGTemplateRepository);
+		}
 
-	public CustomCGTemplateRepository getRepository() 
-	{
+	};
+
+	static {
+		FlexoModelObject.addActionForClass(ImportTemplates.actionType, CGTemplateRepository.class);
+	}
+
+	ImportTemplates(CGTemplateRepository focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws IOFlexoException {
+		logger.info("ImportTemplates from " + getFocusedObject().getName() + " to " + getRepository().getName());
+		File source = getExternalTemplateDirectory();
+		CustomCGTemplateRepository dest = getRepository();
+		try {
+			FileUtils.copyContentDirToDir(source, dest.getDirectory());
+		} catch (IOException e) {
+			throw new IOFlexoException(e);
+		}
+		dest.refresh();
+	}
+
+	public CustomCGTemplateRepository getRepository() {
 		return _repository;
 	}
 
-	public void setRepository(CustomCGTemplateRepository repository)
-	{
+	public void setRepository(CustomCGTemplateRepository repository) {
 		_repository = repository;
 	}
 

@@ -33,29 +33,25 @@ import org.openflexo.view.controller.FlexoFIBController;
  * 
  * @author Nicolas Daniels
  */
-public class HibernateModelView extends FIBModuleView<HibernateModel>
-{
+public class HibernateModelView extends FIBModuleView<HibernateModel> {
 	public static String HIBERNATE_MODEL_VIEW_FIB_RESOURCE_PATH = "/Hibernate/Fib/ModelView.fib";
 
 	private FlexoPerspective<? super HibernateModel> declaredPerspective;
-	
-	public HibernateModelView(HibernateModel hibernateModel, SGController controller, FlexoPerspective<? super HibernateModel> perspective)
-    {
-		super(hibernateModel, controller, HIBERNATE_MODEL_VIEW_FIB_RESOURCE_PATH);
-        declaredPerspective = perspective;
-    }
 
-    @Override
-    public SGController getFlexoController()
-    {
-    	return (SGController)super.getFlexoController();
-    }
-    
+	public HibernateModelView(HibernateModel hibernateModel, SGController controller, FlexoPerspective<? super HibernateModel> perspective) {
+		super(hibernateModel, controller, HIBERNATE_MODEL_VIEW_FIB_RESOURCE_PATH);
+		declaredPerspective = perspective;
+	}
+
 	@Override
-	public FlexoPerspective<? super HibernateModel> getPerspective()
-    {
-    	return declaredPerspective;
-    }
+	public SGController getFlexoController() {
+		return (SGController) super.getFlexoController();
+	}
+
+	@Override
+	public FlexoPerspective<? super HibernateModel> getPerspective() {
+		return declaredPerspective;
+	}
 
 	/**
 	 * {@inheritDoc}

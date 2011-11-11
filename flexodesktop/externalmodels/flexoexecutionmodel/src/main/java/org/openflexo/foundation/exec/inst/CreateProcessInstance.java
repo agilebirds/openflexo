@@ -24,12 +24,11 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 public class CreateProcessInstance extends CustomInstruction {
 
 	private FlexoProcess process;
-	
-	public CreateProcessInstance (FlexoProcess process)
-	{
+
+	public CreateProcessInstance(FlexoProcess process) {
 		super();
 		this.process = process;
-		setInlineComment("Create new ProcessInstance for process "+getProcess().getName());
+		setInlineComment("Create new ProcessInstance for process " + getProcess().getName());
 	}
 
 	public FlexoProcess getProcess() {
@@ -37,20 +36,17 @@ public class CreateProcessInstance extends CustomInstruction {
 	}
 
 	@Override
-	public String toString()
-	{
-		return "[CreateProcessInstance:"+process.getName()+"]";
+	public String toString() {
+		return "[CreateProcessInstance:" + process.getName() + "]";
 	}
 
 	@Override
-	public String getJavaStringRepresentation() 
-	{
-		return "createProcessInstance("+getProcess().getFlexoID()+");";
+	public String getJavaStringRepresentation() {
+		return "createProcessInstance(" + getProcess().getFlexoID() + ");";
 	}
-	
+
 	@Override
-	public CreateProcessInstance clone()
-	{
+	public CreateProcessInstance clone() {
 		CreateProcessInstance returned = new CreateProcessInstance(process);
 		returned.setHeaderComment(getHeaderComment());
 		returned.setInlineComment(getInlineComment());

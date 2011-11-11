@@ -23,7 +23,6 @@ import java.util.Vector;
 
 import org.openflexo.foundation.dm.DMEntity.DMTypeVariable;
 
-
 /**
  * Interface implemented by all classes having generic declaration
  * 
@@ -31,6 +30,6 @@ import org.openflexo.foundation.dm.DMEntity.DMTypeVariable;
  */
 public interface DMGenericDeclaration {
 
-	public Vector<DMTypeVariable> getTypeVariables(); 
+	public Vector<DMTypeVariable> getTypeVariables();
 
 }

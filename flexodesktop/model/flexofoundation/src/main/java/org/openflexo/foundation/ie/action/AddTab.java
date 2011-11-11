@@ -33,104 +33,87 @@ import org.openflexo.foundation.ie.widget.IETabWidget;
 import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 
+public class AddTab extends FlexoAction<AddTab, IEWidget, IEWidget> {
+	private String tabName;
 
-public class AddTab extends FlexoAction<AddTab,IEWidget,IEWidget>
-{
-    private String tabName;
+	private FlexoComponentFolder aFolder;
 
-    private FlexoComponentFolder aFolder;
+	private TabComponentDefinition tabDef;
 
-    private TabComponentDefinition tabDef;
+	private IESequenceTab tabContainer;
 
-    private IESequenceTab tabContainer;
+	private String tabTitle;
 
-    private String tabTitle;
-    
-    private int tabIndex=-1;
+	private int tabIndex = -1;
 
-    
-    public static FlexoActionType<AddTab,IEWidget,IEWidget> actionType
-    = new FlexoActionType<AddTab,IEWidget,IEWidget>(
-    		"add_tab", 
-    		FlexoActionType.defaultGroup, 
-    		FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<AddTab, IEWidget, IEWidget> actionType = new FlexoActionType<AddTab, IEWidget, IEWidget>("add_tab",
+			FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public AddTab makeNewAction(IEWidget focusedObject, Vector<IEWidget> globalSelection, FlexoEditor editor)
-        {
-            return new AddTab(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public AddTab makeNewAction(IEWidget focusedObject, Vector<IEWidget> globalSelection, FlexoEditor editor) {
+			return new AddTab(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(IEWidget object, Vector<IEWidget> globalSelection)
-        {
-            return globalSelection != null && globalSelection.size() == 1;
-        }
+		@Override
+		protected boolean isVisibleForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
+			return globalSelection != null && globalSelection.size() == 1;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(IEWidget object, Vector<IEWidget> globalSelection)
-        {
-            return ((object != null) && ((object instanceof IESequenceTab)||(object instanceof IETabWidget)));
-        }
+		@Override
+		protected boolean isEnabledForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
+			return ((object != null) && ((object instanceof IESequenceTab) || (object instanceof IETabWidget)));
+		}
 
-    };
+	};
 
-    AddTab(IEWidget focusedObject, Vector<IEWidget> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	AddTab(IEWidget focusedObject, Vector<IEWidget> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    @Override
-	protected void doAction(Object context) throws FlexoException
-    {
-        if (tabDef == null) {
-                try {
-					tabDef = new TabComponentDefinition(tabName, aFolder.getComponentLibrary(), aFolder.getComponentLibrary()
-					        .getRootFolder().getFolderTyped(FolderType.TAB_FOLDER), aFolder.getProject());
-				} catch (DuplicateResourceException e) {
-					throw new FlexoException("A tab named :"+tabName+" has already been created in this project. Please choose another name",e);
-				}
-        }
-        tabContainer.addNewTab(tabDef, tabTitle,tabIndex);
-    }
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		if (tabDef == null) {
+			try {
+				tabDef = new TabComponentDefinition(tabName, aFolder.getComponentLibrary(), aFolder.getComponentLibrary().getRootFolder()
+						.getFolderTyped(FolderType.TAB_FOLDER), aFolder.getProject());
+			} catch (DuplicateResourceException e) {
+				throw new FlexoException("A tab named :" + tabName
+						+ " has already been created in this project. Please choose another name", e);
+			}
+		}
+		tabContainer.addNewTab(tabDef, tabTitle, tabIndex);
+	}
 
-    public void setFolder(FlexoComponentFolder folder)
-    {
-        aFolder = folder;
-    }
+	public void setFolder(FlexoComponentFolder folder) {
+		aFolder = folder;
+	}
 
-    public void setTabContainer(IESequenceTab tab_container)
-    {
-        this.tabContainer = tab_container;
-    }
+	public void setTabContainer(IESequenceTab tab_container) {
+		this.tabContainer = tab_container;
+	}
 
-    public void setTabName(String tab_name)
-    {
-        this.tabName = tab_name;
-    }
+	public void setTabName(String tab_name) {
+		this.tabName = tab_name;
+	}
 
-    public void setTabDef(TabComponentDefinition tabdef)
-    {
-        this.tabDef = tabdef;
-    }
+	public void setTabDef(TabComponentDefinition tabdef) {
+		this.tabDef = tabdef;
+	}
 
-    public TabComponentDefinition getTabDef()
-    {
-        return tabDef;
-    }
+	public TabComponentDefinition getTabDef() {
+		return tabDef;
+	}
 
-    public String getTabTitle()
-    {
-        return tabTitle;
-    }
+	public String getTabTitle() {
+		return tabTitle;
+	}
 
-    public void setTabTitle(String tab_title)
-    {
-        this.tabTitle = tab_title;
-    }
+	public void setTabTitle(String tab_title) {
+		this.tabTitle = tab_title;
+	}
 
 	public void setTabIndex(int i) {
 		this.tabIndex = i;

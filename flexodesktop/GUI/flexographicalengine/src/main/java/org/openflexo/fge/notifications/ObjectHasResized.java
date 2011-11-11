@@ -19,11 +19,9 @@
  */
 package org.openflexo.fge.notifications;
 
-
 public class ObjectHasResized extends FGENotification {
 
-	public ObjectHasResized()
-	{
-		super("location",null,null);
+	public ObjectHasResized() {
+		super("location", null, null);
 	}
 }

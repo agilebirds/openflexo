@@ -20,18 +20,15 @@
 package org.openflexo.logging.viewer;
 
 /**
- * Utility class allowing to launch a small application used to visualize logs
- * of a session of Flexo
+ * Utility class allowing to launch a small application used to visualize logs of a session of Flexo
  * 
  * @author sguerin
  */
-public class FlexoLoggingViewer
-{
+public class FlexoLoggingViewer {
 
-    public static void main(String[] args)
-    {
-        System.out.println("Starting FlexoLoggingViewer");
-        FlexoLoggingViewerWindow w = new FlexoLoggingViewerWindow();
-        w.setVisible(true);
-    }
+	public static void main(String[] args) {
+		System.out.println("Starting FlexoLoggingViewer");
+		FlexoLoggingViewerWindow w = new FlexoLoggingViewerWindow();
+		w.setVisible(true);
+	}
 }

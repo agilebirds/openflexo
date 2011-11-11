@@ -26,48 +26,43 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.vpm.controller.CEDBrowser;
 import org.openflexo.vpm.controller.CEDController;
 
-
 /**
  * Represents the view for the browser of this module
  * 
  * @author yourname
  * 
  */
-public class CEDBrowserView extends BrowserView
-{
+public class CEDBrowserView extends BrowserView {
 
-    private static final Logger logger = Logger.getLogger(CEDBrowserView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(CEDBrowserView.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Variables
-    // ==================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Variables
+	// ==================================
+	// ==========================================================================
 
-    protected CEDController _controller;
+	protected CEDController _controller;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public CEDBrowserView(CEDBrowser browser, CEDController controller, SelectionPolicy selectionPolicy)
-    {
-        super(browser, controller.getKeyEventListener(), controller.getEditor(), selectionPolicy);
-        _controller = controller;
-    }
+	public CEDBrowserView(CEDBrowser browser, CEDController controller, SelectionPolicy selectionPolicy) {
+		super(browser, controller.getKeyEventListener(), controller.getEditor(), selectionPolicy);
+		_controller = controller;
+	}
 
-    @Override
-	public void treeSingleClick(FlexoModelObject object)
-    {
-    }
+	@Override
+	public void treeSingleClick(FlexoModelObject object) {
+	}
 
-    @Override
-	public void treeDoubleClick(FlexoModelObject object)
-    {
-    	if (_controller.getCurrentPerspective().hasModuleViewForObject(object)) {
-    		// Try to display object in view
-    		_controller.selectAndFocusObject(object);
-    	}
-    }
+	@Override
+	public void treeDoubleClick(FlexoModelObject object) {
+		if (_controller.getCurrentPerspective().hasModuleViewForObject(object)) {
+			// Try to display object in view
+			_controller.selectAndFocusObject(object);
+		}
+	}
 
 }

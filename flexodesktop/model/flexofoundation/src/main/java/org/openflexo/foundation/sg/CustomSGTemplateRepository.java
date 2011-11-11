@@ -25,31 +25,26 @@ import org.openflexo.foundation.cg.templates.CustomCGTemplateRepository;
 import org.openflexo.foundation.cg.utils.TemplateRepositoryType;
 import org.openflexo.foundation.rm.CustomTemplatesResource;
 
-
 public class CustomSGTemplateRepository extends CustomCGTemplateRepository {
 
 	private static final Logger logger = Logger.getLogger(CustomSGTemplateRepository.class.getPackage().getName());
 
-	public CustomSGTemplateRepository(SGTemplates templates,CustomTemplatesResource resource)
-	{
+	public CustomSGTemplateRepository(SGTemplates templates, CustomTemplatesResource resource) {
 		super(templates, resource, null);
 	}
 
 	@Override
-	public CommonSGTemplateSet makeCommonTemplateSet()
-	{
-		return new CommonSGTemplateSet(getDirectory(),this,true) {
+	public CommonSGTemplateSet makeCommonTemplateSet() {
+		return new CommonSGTemplateSet(getDirectory(), this, true) {
 			@Override
-			public String getName()
-			{
+			public String getName() {
 				return CustomSGTemplateRepository.this.getName();
 			}
 		};
 	}
-	
+
 	@Override
-	public TemplateRepositoryType getRepositoryType() 
-	{
+	public TemplateRepositoryType getRepositoryType() {
 		return TemplateRepositoryType.Code;
 	}
 }

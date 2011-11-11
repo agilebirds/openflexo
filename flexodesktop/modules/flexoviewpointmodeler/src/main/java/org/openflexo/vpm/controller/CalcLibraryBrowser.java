@@ -24,17 +24,13 @@ import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.module.ModuleLoader;
 
-
-class CalcLibraryBrowser extends CEDBrowser
-{
-	protected CalcLibraryBrowser(CEDController controller)
-	{
+class CalcLibraryBrowser extends CEDBrowser {
+	protected CalcLibraryBrowser(CEDController controller) {
 		super(controller);
 	}
 
 	@Override
-	public void configure()
-	{
+	public void configure() {
 		super.configure();
 		setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.PROJECT_ONTOLOGY, BrowserFilterStatus.HIDE);
@@ -50,12 +46,10 @@ class CalcLibraryBrowser extends CEDBrowser
 		setFilterStatus(BrowserElementType.ONTOLOGY_CALC_PALETTE, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.ONTOLOGY_CALC_DRAWING_SHEMA, BrowserFilterStatus.HIDE);
 	}
-	
-    @Override
-	public FlexoModelObject getDefaultRootObject()
-    {
-        return ModuleLoader.getFlexoResourceCenter().retrieveViewPointLibrary();
-    }
 
+	@Override
+	public FlexoModelObject getDefaultRootObject() {
+		return ModuleLoader.getFlexoResourceCenter().retrieveViewPointLibrary();
+	}
 
 }

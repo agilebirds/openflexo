@@ -21,17 +21,14 @@ package org.openflexo.foundation.dkv.dm;
 
 import org.openflexo.foundation.dkv.Value;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class ValueAdded extends DKVDataModification
-{
+public class ValueAdded extends DKVDataModification {
 
-    public ValueAdded(Value newValue)
-    {
-        super(-1, "values", null, newValue);
-    }
+	public ValueAdded(Value newValue) {
+		super(-1, "values", null, newValue);
+	}
 
 }

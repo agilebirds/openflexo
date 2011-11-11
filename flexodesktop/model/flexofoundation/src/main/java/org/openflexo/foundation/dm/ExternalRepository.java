@@ -45,9 +45,7 @@ import org.openflexo.toolbox.FileUtils;
  * @author sguerin
  * 
  */
-public class ExternalRepository extends DMRepository
-{
-
+public class ExternalRepository extends DMRepository {
 
 	private static final Logger logger = Logger.getLogger(ExternalRepository.class.getPackage().getName());
 
@@ -65,29 +63,25 @@ public class ExternalRepository extends DMRepository
 	/**
 	 * Constructor used during deserialization
 	 */
-	public ExternalRepository(FlexoDMBuilder builder)
-	{
+	public ExternalRepository(FlexoDMBuilder builder) {
 		this(builder.dmModel);
 		initializeDeserialization(builder);
 	}
 
 	@Override
-	protected FlexoDMBuilder getBuilder()
-	{
-		return (FlexoDMBuilder)super.getBuilder();
+	protected FlexoDMBuilder getBuilder() {
+		return (FlexoDMBuilder) super.getBuilder();
 	}
 
 	/**
 	 * Default constructor
 	 */
-	private ExternalRepository(DMModel dmModel)
-	{
+	private ExternalRepository(DMModel dmModel) {
 		super(dmModel);
 	}
 
 	@Override
-	public DMRepositoryFolder getRepositoryFolder()
-	{
+	public DMRepositoryFolder getRepositoryFolder() {
 		return getDMModel().getLibraryRepositoryFolder();
 	}
 
@@ -95,16 +89,15 @@ public class ExternalRepository extends DMRepository
 	 * @param dmModel
 	 * @return
 	 */
-	public static ExternalRepository createNewExternalRepository(DMModel dmModel, File aJarFile, DMSet importedClassSet) throws DuplicateResourceException
-	{
+	public static ExternalRepository createNewExternalRepository(DMModel dmModel, File aJarFile, DMSet importedClassSet)
+			throws DuplicateResourceException {
 		return createNewExternalRepository(dmModel, aJarFile, importedClassSet, null);
 	}
 
 	public static Enumeration<Class<?>> getContainedClasses(File aJarFile, ExternalRepository jarRepository, FlexoProject project,
-			FlexoProgress progress)
-	{
+			FlexoProgress progress) {
 		// Parse the JAR file
-		JarLoader jarLoader = new JarLoader(aJarFile,jarRepository,project,progress);
+		JarLoader jarLoader = new JarLoader(aJarFile, jarRepository, project, progress);
 		return jarLoader.getContainedClasses().elements();
 	}
 
@@ -113,15 +106,16 @@ public class ExternalRepository extends DMRepository
 	 * @return
 	 * @throws DuplicateResourceException
 	 */
-	public static ExternalRepository createNewExternalRepository(DMModel dmModel, File aJarFile, DMSet importedClassSet, FlexoProgress progress) throws DuplicateResourceException
-	{
+	public static ExternalRepository createNewExternalRepository(DMModel dmModel, File aJarFile, DMSet importedClassSet,
+			FlexoProgress progress) throws DuplicateResourceException {
 		Date jarCreationDate = new Date();
 
 		// Creates the repository
 		ExternalRepository newExternalRepository = new ExternalRepository(dmModel);
 
 		// Copy JAR file
-		File copiedFile = new File(ProjectRestructuration.getExpectedDataModelDirectory(dmModel.getProject().getProjectDirectory()), aJarFile.getName());
+		File copiedFile = new File(ProjectRestructuration.getExpectedDataModelDirectory(dmModel.getProject().getProjectDirectory()),
+				aJarFile.getName());
 		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("copying") + " " + aJarFile.getName());
 		}
@@ -139,7 +133,7 @@ public class ExternalRepository extends DMRepository
 		// Perform some settings
 		FlexoProjectFile jarFile = new FlexoProjectFile(copiedFile, dmModel.getProject());
 		newExternalRepository.setName(copiedFile.getName());
-		newExternalRepository.setJarFile(jarFile,dmModel);
+		newExternalRepository.setJarFile(jarFile, dmModel);
 		newExternalRepository.getJarResource()._setLastWrittenOnDisk(jarCreationDate);
 
 		// Add to the data model
@@ -147,7 +141,7 @@ public class ExternalRepository extends DMRepository
 
 		// Parse the JAR file
 		// JarLoader jarLoader = new JarLoader(copiedFile);
-		//newExternalRepository.setJarLoader(jarLoader);
+		// newExternalRepository.setJarLoader(jarLoader);
 
 		JarLoader jarLoader = newExternalRepository.getJarLoader();
 
@@ -157,27 +151,25 @@ public class ExternalRepository extends DMRepository
 		}
 		for (Enumeration e = jarLoader.getContainedClasses().elements(); e.hasMoreElements();) {
 			Class next = (Class) e.nextElement();
-			if (next==null) {
+			if (next == null) {
 				logger.warning("Entity: null IGNORED");
-			}
-			else {
+			} else {
 				if (importedClassSet == null || importedClassSet.containsSelectedClass(next)) {
 					if (progress != null) {
 						progress.setSecondaryProgress(FlexoLocalization.localizedForKey("importing_class") + " " + next.getName());
 					}
-					logger.info("Import "+next);
+					logger.info("Import " + next);
 					if (importedClassSet == null) {
-						LoadableDMEntity.createLoadableDMEntity(dmModel,next);
+						LoadableDMEntity.createLoadableDMEntity(dmModel, next);
+					} else {
+						LoadableDMEntity.createLoadableDMEntity(next, dmModel, importedClassSet.getImportGetOnlyProperties(),
+								importedClassSet.getImportMethods());
 					}
-					else {
-						LoadableDMEntity.createLoadableDMEntity(next, dmModel, importedClassSet.getImportGetOnlyProperties(), importedClassSet.getImportMethods());
-					}
-				}
-				else {
+				} else {
 					if (progress != null) {
 						progress.setSecondaryProgress(FlexoLocalization.localizedForKey("ignoring_class") + " " + next.getName());
 					}
-					logger.fine("Ignore "+next);
+					logger.fine("Ignore " + next);
 				}
 			}
 		}
@@ -187,37 +179,31 @@ public class ExternalRepository extends DMRepository
 	}
 
 	@Override
-	public int getOrder()
-	{
+	public int getOrder() {
 		return 8;
 	}
 
 	@Override
-	public boolean isReadOnly()
-	{
+	public boolean isReadOnly() {
 		return true;
 	}
 
 	@Override
-	public boolean isDeletable()
-	{
+	public boolean isDeletable() {
 		return true;
 	}
 
 	@Override
-	public boolean isUpdatable()
-	{
+	public boolean isUpdatable() {
 		return true;
 	}
 
 	@Override
-	public final void delete()
-	{
+	public final void delete() {
 		delete(false);
 	}
 
-	public final void delete(boolean deleteJarFile)
-	{
+	public final void delete(boolean deleteJarFile) {
 		if (getJarResource() != null) {
 			getJarResource().delete(deleteJarFile);
 		}
@@ -226,46 +212,40 @@ public class ExternalRepository extends DMRepository
 		deleteObservers();
 	}
 
-
-
-
 	/*public FlexoProjectFile getJarFile()
-    {
-        return jarFile;
-    }
+	{
+	    return jarFile;
+	}
 
-    public void setJarFile(FlexoProjectFile jarFile)
-    {
-        this.jarFile = jarFile;
-    }
+	public void setJarFile(FlexoProjectFile jarFile)
+	{
+	    this.jarFile = jarFile;
+	}
 
-    protected JarLoader getJarLoader()
-    {
-        if (jarLoader == null) {
-            jarLoader = new JarLoader(jarFile.getFile());
-        }
-        return jarLoader;
-    }
+	protected JarLoader getJarLoader()
+	{
+	    if (jarLoader == null) {
+	        jarLoader = new JarLoader(jarFile.getFile());
+	    }
+	    return jarLoader;
+	}
 
-    private void setJarLoader(JarLoader jarLoader)
-    {
-        this.jarLoader = jarLoader;
-    }
+	private void setJarLoader(JarLoader jarLoader)
+	{
+	    this.jarLoader = jarLoader;
+	}
 
 	 */
 
-	public FlexoJarResource getJarResource()
-	{
+	public FlexoJarResource getJarResource() {
 		return _jarResource;
 	}
 
-	public void setJarResource(FlexoJarResource jarResource)
-	{
+	public void setJarResource(FlexoJarResource jarResource) {
 		_jarResource = jarResource;
 	}
 
-	public JarLoader getJarLoader()
-	{
+	public JarLoader getJarLoader() {
 		if (getJarResource() != null) {
 			if (getJarResource().isLoaded()) {
 				try {
@@ -298,36 +278,32 @@ public class ExternalRepository extends DMRepository
 
 	private boolean jarIsLoading = false;
 
-	public FlexoProjectFile getJarFile()
-	{
+	public FlexoProjectFile getJarFile() {
 		if (getJarResource() != null) {
 			return getJarResource().getResourceFile();
 		}
 		return null;
 	}
 
-	public void setJarFile(FlexoProjectFile jarFile) throws DuplicateResourceException
-	{
+	public void setJarFile(FlexoProjectFile jarFile) throws DuplicateResourceException {
 		if (isDeserializing()) {
-			setJarFile (jarFile,getBuilder().dmModel);
-		}
-		else {
-			setJarFile (jarFile,getProject().getDataModel());
+			setJarFile(jarFile, getBuilder().dmModel);
+		} else {
+			setJarFile(jarFile, getProject().getDataModel());
 		}
 	}
 
-	public void setJarFile(FlexoProjectFile jarFile, DMModel dmModel) throws DuplicateResourceException
-	{
+	public void setJarFile(FlexoProjectFile jarFile, DMModel dmModel) throws DuplicateResourceException {
 		jarFile.setProject(getProject());
 		if (_jarResource == null) {
 			_jarResource = getProject().getJarResource(jarFile);
 			if (_jarResource == null) {
 				if (logger.isLoggable(Level.INFO)) {
-					logger.info("Could not find nor create resource for JAR " + jarFile.getFile().getName()+", create entry");
+					logger.info("Could not find nor create resource for JAR " + jarFile.getFile().getName() + ", create entry");
 				}
 				_jarResource = new FlexoJarResource(getProject(), this, dmModel.getFlexoResource(), jarFile);
-							_jarResource.setLastImportDate(new Date(0));
-							getProject().registerResource(_jarResource);
+				_jarResource.setLastImportDate(new Date(0));
+				getProject().registerResource(_jarResource);
 
 			}
 			_jarResource.setDMModel(getDMModel());
@@ -337,11 +313,11 @@ public class ExternalRepository extends DMRepository
 
 	/**
 	 * Overrides getClassNameKey
+	 * 
 	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
 	 */
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "external_repository";
 	}
 

@@ -23,7 +23,6 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.openflexo.dg.latex.DGLatexGenerator;
 import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.DataModification;
@@ -40,89 +39,80 @@ import org.openflexo.logging.FlexoLogger;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class ProcessLatexFileResource extends LatexFileResource<DGLatexGenerator<FlexoProcess>> implements FlexoObserver
-{
-    protected static final Logger logger = FlexoLogger.getLogger(ProcessLatexFileResource.class.getPackage().getName());
+public class ProcessLatexFileResource extends LatexFileResource<DGLatexGenerator<FlexoProcess>> implements FlexoObserver {
+	protected static final Logger logger = FlexoLogger.getLogger(ProcessLatexFileResource.class.getPackage().getName());
 
-    /**
-     * @param builder
-     */
-    public ProcessLatexFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
+	/**
+	 * @param builder
+	 */
+	public ProcessLatexFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * @param aProject
-     */
-    public ProcessLatexFileResource(FlexoProject aProject)
-    {
-    	super(aProject);
-    }
+	/**
+	 * @param aProject
+	 */
+	public ProcessLatexFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    private boolean isObserverRegistered = false;
+	private boolean isObserverRegistered = false;
 
-    @Override
-	public String getName()
-    {
-    	if (getCGFile()==null || getCGFile().getRepository()==null || getProcess()==null)
-            return super.getName();
-    	registerObserverWhenRequired();
-    	if (super.getName()==null)
-    		setName(nameForRepositoryAndProcess(getCGFile().getRepository(), getProcess()));
-    	return nameForRepositoryAndProcess(getCGFile().getRepository(), getProcess());
-    }
+	@Override
+	public String getName() {
+		if (getCGFile() == null || getCGFile().getRepository() == null || getProcess() == null)
+			return super.getName();
+		registerObserverWhenRequired();
+		if (super.getName() == null)
+			setName(nameForRepositoryAndProcess(getCGFile().getRepository(), getProcess()));
+		return nameForRepositoryAndProcess(getCGFile().getRepository(), getProcess());
+	}
 
-    public void registerObserverWhenRequired()
-    {
-    	if ((!isObserverRegistered) && (getProcess() != null)) {
-    		isObserverRegistered = true;
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("*** addObserver "+getFileName()+" for "+getProject());
-            getProcess().addObserver(this);
-    	}
-    }
+	public void registerObserverWhenRequired() {
+		if ((!isObserverRegistered) && (getProcess() != null)) {
+			isObserverRegistered = true;
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("*** addObserver " + getFileName() + " for " + getProject());
+			getProcess().addObserver(this);
+		}
+	}
 
-    public static String nameForRepositoryAndProcess(GenerationRepository repository, FlexoProcess process)
-    {
-    	return repository.getName()+".PROCESS_LATEX."+process.getName();
-    }
+	public static String nameForRepositoryAndProcess(GenerationRepository repository, FlexoProcess process) {
+		return repository.getName() + ".PROCESS_LATEX." + process.getName();
+	}
 
-    public FlexoProcess getProcess()
-    {
-    	if (getGenerator() != null)
-    		return getGenerator().getObject();
-    	return null;
-    }
+	public FlexoProcess getProcess() {
+		if (getGenerator() != null)
+			return getGenerator().getObject();
+		return null;
+	}
 
-    @Override
-	protected LatexFile createGeneratedResourceData()
-    {
-        return new LatexFile(getFile(),this);
-    }
+	@Override
+	protected LatexFile createGeneratedResourceData() {
+		return new LatexFile(getFile(), this);
+	}
 
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
-        addToDependantResources(getProject().getTOCResource());
-        if (getProcess()!=null)
-        	addToDependantResources(getProcess().getFlexoResource());
-   }
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+		addToDependantResources(getProject().getTOCResource());
+		if (getProcess() != null)
+			addToDependantResources(getProcess().getFlexoResource());
+	}
 
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getProcess()) {
 			if (dataModification instanceof AttributeDataModification) {
-				if (((AttributeDataModification)dataModification).getAttributeName().equals("name") && !getCGFile().getFileName().equals(DGLatexGenerator.nameForProcess(getProcess(), getGenerator().getRepository()))) {
+				if (((AttributeDataModification) dataModification).getAttributeName().equals("name")
+						&& !getCGFile().getFileName().equals(DGLatexGenerator.nameForProcess(getProcess(), getGenerator().getRepository()))) {
 					logger.info("Building new resource after process renaming");
-                    DGLatexGenerator<FlexoProcess> generator = getGenerator();
+					DGLatexGenerator<FlexoProcess> generator = getGenerator();
 					setGenerator(null);
 					getCGFile().setMarkedForDeletion(true);
 					generator.refreshConcernedResources();
@@ -131,7 +121,7 @@ public class ProcessLatexFileResource extends LatexFileResource<DGLatexGenerator
 					isObserverRegistered = false;
 				}
 			}
-			if (dataModification instanceof ProcessRemoved && ((ProcessRemoved)dataModification).getRemovedProcess()==getProcess()) {
+			if (dataModification instanceof ProcessRemoved && ((ProcessRemoved) dataModification).getRemovedProcess() == getProcess()) {
 				logger.info("Handle process has been deleted");
 				setGenerator(null);
 				getCGFile().setMarkedForDeletion(true);
@@ -142,17 +132,16 @@ public class ProcessLatexFileResource extends LatexFileResource<DGLatexGenerator
 		}
 	}
 
-    /**
-     * Return dependancy computing between this resource, and an other resource,
-     * asserting that this resource is contained in this resource's dependant resources
-     *
-     * @param resource
-     * @param dependancyScheme
-     * @return
-     */
+	/**
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this
+	 * resource's dependant resources
+	 * 
+	 * @param resource
+	 * @param dependancyScheme
+	 * @return
+	 */
 	@Override
-	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate)
-	{
+	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
 		if (resource instanceof FlexoTOCResource) {
 			if (getGenerator() != null && getGenerator().getRepository().getTocRepository() != null) {
 				if (!requestDate.before(getGenerator().getRepository().getTocRepository().getLastUpdateDate())) {

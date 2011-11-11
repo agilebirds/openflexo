@@ -24,22 +24,19 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
 import org.openflexo.foundation.rm.FlexoComponentLibraryResource;
 
-
 /**
  * Used only during XML serialization to build component library
  * 
  * @author bmangez
  */
-public class FlexoComponentLibraryBuilder extends FlexoBuilder<FlexoComponentLibraryResource>
-{
-    @SuppressWarnings("unused")
+public class FlexoComponentLibraryBuilder extends FlexoBuilder<FlexoComponentLibraryResource> {
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FlexoComponentLibraryBuilder.class.getPackage().getName());
 
-    public FlexoComponentLibrary componentLibrary;
+	public FlexoComponentLibrary componentLibrary;
 
-    public FlexoComponentLibraryBuilder(FlexoComponentLibraryResource library)
-    {
-        super(library);
-    }
+	public FlexoComponentLibraryBuilder(FlexoComponentLibraryResource library) {
+		super(library);
+	}
 
 }

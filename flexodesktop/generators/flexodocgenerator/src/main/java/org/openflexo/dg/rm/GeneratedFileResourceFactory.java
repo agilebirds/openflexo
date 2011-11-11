@@ -35,7 +35,6 @@ import org.openflexo.dg.html.DGTextGenerator;
 import org.openflexo.dg.latex.DGLatexGenerator;
 import org.openflexo.dg.latex.StyleDocGenerator;
 
-
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGSymbolicDirectory;
 import org.openflexo.foundation.cg.DGRepository;
@@ -66,9 +65,10 @@ public class GeneratedFileResourceFactory {
 
 	static final Logger logger = FlexoLogger.getLogger(GeneratedFileResourceFactory.class.getPackage().getName());
 
-	public static <CD extends ComponentDefinition> ComponentLatexFileResource<CD> createNewComponentLatexFileResource(DGRepository repository, DGLatexGenerator<CD> generator) {
-		ComponentLatexFileResource<CD> returned = (ComponentLatexFileResource<CD>) generator.getProject().resourceForKey(ResourceType.LATEX_FILE,
-				ComponentLatexFileResource.nameForRepositoryAndComponent(repository, generator.getObject()));
+	public static <CD extends ComponentDefinition> ComponentLatexFileResource<CD> createNewComponentLatexFileResource(
+			DGRepository repository, DGLatexGenerator<CD> generator) {
+		ComponentLatexFileResource<CD> returned = (ComponentLatexFileResource<CD>) generator.getProject().resourceForKey(
+				ResourceType.LATEX_FILE, ComponentLatexFileResource.nameForRepositoryAndComponent(repository, generator.getObject()));
 		if (returned != null && returned.getCGFile() == null) {
 			returned.delete(false);
 			returned = null;
@@ -92,10 +92,11 @@ public class GeneratedFileResourceFactory {
 		return returned;
 	}
 
-	public static ComponentLibraryLatexFileResource createNewComponentLibraryLatexFileResource(DGRepository repository, DGLatexGenerator<FlexoComponentLibrary> generator) {
+	public static ComponentLibraryLatexFileResource createNewComponentLibraryLatexFileResource(DGRepository repository,
+			DGLatexGenerator<FlexoComponentLibrary> generator) {
 		FlexoProject project = generator.getProject();
-		ComponentLibraryLatexFileResource res = (ComponentLibraryLatexFileResource) project.resourceForKey(ResourceType.LATEX_FILE, ComponentLibraryLatexFileResource.nameForRepositoryAndModel(
-				repository, generator.getObject()));
+		ComponentLibraryLatexFileResource res = (ComponentLibraryLatexFileResource) project.resourceForKey(ResourceType.LATEX_FILE,
+				ComponentLibraryLatexFileResource.nameForRepositoryAndModel(repository, generator.getObject()));
 		if (res != null && res.getCGFile() == null) {
 			res.delete(false);
 			res = null;
@@ -118,10 +119,11 @@ public class GeneratedFileResourceFactory {
 		return res;
 	}
 
-	public static DefinitionsLatexFileResource createNewDefinitionsLatexFileResource(DGRepository repository, DGLatexGenerator<FlexoProject> definitionsGenerator) {
+	public static DefinitionsLatexFileResource createNewDefinitionsLatexFileResource(DGRepository repository,
+			DGLatexGenerator<FlexoProject> definitionsGenerator) {
 		FlexoProject project = definitionsGenerator.getProject();
-		DefinitionsLatexFileResource res = (DefinitionsLatexFileResource) project.resourceForKey(ResourceType.LATEX_FILE, LatexFileResource.nameForRepositoryAndIdentifier(repository,
-				definitionsGenerator.getIdentifier()));
+		DefinitionsLatexFileResource res = (DefinitionsLatexFileResource) project.resourceForKey(ResourceType.LATEX_FILE,
+				LatexFileResource.nameForRepositoryAndIdentifier(repository, definitionsGenerator.getIdentifier()));
 		if (res != null && res.getCGFile() == null) {
 			res.delete(false);
 			res = null;
@@ -146,8 +148,8 @@ public class GeneratedFileResourceFactory {
 
 	public static DKVModelLatexFileResource createNewDKVLatexFileResource(DGRepository repository, DGLatexGenerator<DKVModel> generator) {
 		FlexoProject project = generator.getProject();
-		DKVModelLatexFileResource res = (DKVModelLatexFileResource) project.resourceForKey(ResourceType.LATEX_FILE, DKVModelLatexFileResource
-				.nameForRepositoryAndDKV(repository, generator.getObject()));
+		DKVModelLatexFileResource res = (DKVModelLatexFileResource) project.resourceForKey(ResourceType.LATEX_FILE,
+				DKVModelLatexFileResource.nameForRepositoryAndDKV(repository, generator.getObject()));
 		if (res != null && res.getCGFile() == null) {
 			res.delete(false);
 			res = null;
@@ -171,7 +173,8 @@ public class GeneratedFileResourceFactory {
 		return res;
 	}
 
-	public static DMEOEntityLatexFileResource createNewEOEntityLatexFileResource(DGRepository repository, DGLatexGenerator<DMEOEntity> generator) {
+	public static DMEOEntityLatexFileResource createNewEOEntityLatexFileResource(DGRepository repository,
+			DGLatexGenerator<DMEOEntity> generator) {
 		DMEOEntityLatexFileResource res = (DMEOEntityLatexFileResource) generator.getProject().resourceForKey(ResourceType.LATEX_FILE,
 				DMEOEntityLatexFileResource.nameForRepositoryAndEntity(repository, generator.getObject()));
 		if (res != null && res.getCGFile() == null) {
@@ -201,8 +204,8 @@ public class GeneratedFileResourceFactory {
 
 	public static DMModelLatexFileResource createNewDMModelLatexFileResource(DGRepository repository, DGLatexGenerator<DMModel> generator) {
 		FlexoProject project = generator.getProject();
-		DMModelLatexFileResource res = (DMModelLatexFileResource) project
-				.resourceForKey(ResourceType.LATEX_FILE, DMModelLatexFileResource.nameForRepositoryAndModel(repository, generator.getObject()));
+		DMModelLatexFileResource res = (DMModelLatexFileResource) project.resourceForKey(ResourceType.LATEX_FILE,
+				DMModelLatexFileResource.nameForRepositoryAndModel(repository, generator.getObject()));
 		if (res != null && res.getCGFile() == null) {
 			res.delete(false);
 			res = null;
@@ -226,9 +229,11 @@ public class GeneratedFileResourceFactory {
 		return res;
 	}
 
-	public static MenuLatexFileResource createNewMenuLatexFileResource(DGRepository repository, DGLatexGenerator<FlexoNavigationMenu> generator) {
+	public static MenuLatexFileResource createNewMenuLatexFileResource(DGRepository repository,
+			DGLatexGenerator<FlexoNavigationMenu> generator) {
 		FlexoProject project = generator.getProject();
-		MenuLatexFileResource res = (MenuLatexFileResource) project.resourceForKey(ResourceType.LATEX_FILE, MenuLatexFileResource.nameForRepositoryAndMenu(repository, generator.getObject()));
+		MenuLatexFileResource res = (MenuLatexFileResource) project.resourceForKey(ResourceType.LATEX_FILE,
+				MenuLatexFileResource.nameForRepositoryAndMenu(repository, generator.getObject()));
 		if (res != null && res.getCGFile() == null) {
 			res.delete(false);
 			res = null;
@@ -254,10 +259,11 @@ public class GeneratedFileResourceFactory {
 		return res;
 	}
 
-	public static OperationLatexFileResource createNewOperationLatexFileResource(DGRepository repository, DGLatexGenerator<OperationNode> generator) {
+	public static OperationLatexFileResource createNewOperationLatexFileResource(DGRepository repository,
+			DGLatexGenerator<OperationNode> generator) {
 		FlexoProject project = generator.getProject();
-		OperationLatexFileResource res = (OperationLatexFileResource) project.resourceForKey(ResourceType.LATEX_FILE, OperationLatexFileResource.nameForRepositoryAndOperation(repository, generator
-				.getObject()));
+		OperationLatexFileResource res = (OperationLatexFileResource) project.resourceForKey(ResourceType.LATEX_FILE,
+				OperationLatexFileResource.nameForRepositoryAndOperation(repository, generator.getObject()));
 		if (res != null && res.getCGFile() == null) {
 			res.delete(false);
 			res = null;
@@ -281,10 +287,11 @@ public class GeneratedFileResourceFactory {
 		return res;
 	}
 
-	public static ProcessLatexFileResource createNewProcessLatexFileResource(DGRepository repository, DGLatexGenerator<FlexoProcess> generator) {
+	public static ProcessLatexFileResource createNewProcessLatexFileResource(DGRepository repository,
+			DGLatexGenerator<FlexoProcess> generator) {
 		FlexoProject project = generator.getProject();
-		ProcessLatexFileResource res = (ProcessLatexFileResource) project.resourceForKey(ResourceType.LATEX_FILE, ProcessLatexFileResource.nameForRepositoryAndProcess(repository, generator
-				.getObject()));
+		ProcessLatexFileResource res = (ProcessLatexFileResource) project.resourceForKey(ResourceType.LATEX_FILE,
+				ProcessLatexFileResource.nameForRepositoryAndProcess(repository, generator.getObject()));
 		if (res != null && res.getCGFile() == null) {
 			res.delete(false);
 			res = null;
@@ -308,9 +315,11 @@ public class GeneratedFileResourceFactory {
 		return res;
 	}
 
-	public static ProjectLatexFileResource createNewProjectLatexFileResource(DGRepository repository, DGLatexGenerator<FlexoProject> generator) {
+	public static ProjectLatexFileResource createNewProjectLatexFileResource(DGRepository repository,
+			DGLatexGenerator<FlexoProject> generator) {
 		FlexoProject project = generator.getProject();
-		ProjectLatexFileResource res = (ProjectLatexFileResource) project.resourceForKey(ResourceType.LATEX_FILE, ProjectLatexFileResource.nameForRepositoryAndProject(repository, project));
+		ProjectLatexFileResource res = (ProjectLatexFileResource) project.resourceForKey(ResourceType.LATEX_FILE,
+				ProjectLatexFileResource.nameForRepositoryAndProject(repository, project));
 		if (res != null && res.getCGFile() == null) {
 			res.delete(false);
 			res = null;
@@ -334,10 +343,11 @@ public class GeneratedFileResourceFactory {
 		return res;
 	}
 
-	public static ReadersGuideLatexFileResource createNewReadersGuideLatexFileResource(DGRepository repository, DGLatexGenerator<FlexoProject> readersGuideGenerator) {
+	public static ReadersGuideLatexFileResource createNewReadersGuideLatexFileResource(DGRepository repository,
+			DGLatexGenerator<FlexoProject> readersGuideGenerator) {
 		FlexoProject project = readersGuideGenerator.getProject();
-		ReadersGuideLatexFileResource res = (ReadersGuideLatexFileResource) project.resourceForKey(ResourceType.LATEX_FILE, LatexFileResource.nameForRepositoryAndIdentifier(repository,
-				readersGuideGenerator.getIdentifier()));
+		ReadersGuideLatexFileResource res = (ReadersGuideLatexFileResource) project.resourceForKey(ResourceType.LATEX_FILE,
+				LatexFileResource.nameForRepositoryAndIdentifier(repository, readersGuideGenerator.getIdentifier()));
 		if (res != null && res.getCGFile() == null) {
 			res.delete(false);
 			res = null;
@@ -360,7 +370,8 @@ public class GeneratedFileResourceFactory {
 		return res;
 	}
 
-	public static StyleLatexFileResource createNewStyleLatexFileResource(DGRepository repository, StyleDocGenerator generator, String styleName) {
+	public static StyleLatexFileResource createNewStyleLatexFileResource(DGRepository repository, StyleDocGenerator generator,
+			String styleName) {
 		FlexoProject project = generator.getProject();
 		StyleLatexFileResource returned = new StyleLatexFileResource(project);
 		returned.setGenerator(generator);
@@ -372,10 +383,11 @@ public class GeneratedFileResourceFactory {
 		return registerUniqueDGFile(returned, styleName);
 	}
 
-	public static WorkflowLatexFileResource createNewWorkflowLatexFileResource(DGRepository repository, DGLatexGenerator<FlexoWorkflow> generator) {
+	public static WorkflowLatexFileResource createNewWorkflowLatexFileResource(DGRepository repository,
+			DGLatexGenerator<FlexoWorkflow> generator) {
 		FlexoProject project = generator.getProject();
-		WorkflowLatexFileResource res = (WorkflowLatexFileResource) project.resourceForKey(ResourceType.LATEX_FILE, WorkflowLatexFileResource.nameForRepositoryAndModel(repository, generator
-				.getObject()));
+		WorkflowLatexFileResource res = (WorkflowLatexFileResource) project.resourceForKey(ResourceType.LATEX_FILE,
+				WorkflowLatexFileResource.nameForRepositoryAndModel(repository, generator.getObject()));
 		if (res != null && res.getCGFile() == null) {
 			res.delete(false);
 			res = null;
@@ -400,7 +412,8 @@ public class GeneratedFileResourceFactory {
 
 	public static ProjectHTMLFileResource createNewProjectHTMLFileResource(DGRepository repository, DGHTMLGenerator<FlexoProject> generator) {
 		FlexoProject project = generator.getProject();
-		ProjectHTMLFileResource res = (ProjectHTMLFileResource) project.resourceForKey(ResourceType.HTML_FILE, ProjectHTMLFileResource.nameForRepositoryAndProject(repository, project));
+		ProjectHTMLFileResource res = (ProjectHTMLFileResource) project.resourceForKey(ResourceType.HTML_FILE,
+				ProjectHTMLFileResource.nameForRepositoryAndProject(repository, project));
 		if (res != null && res.getCGFile() == null) {
 			res.delete(false);
 			res = null;
@@ -425,7 +438,8 @@ public class GeneratedFileResourceFactory {
 
 	public static ProjectTextFileResource createNewProjectTextFileResource(DGRepository repository, DGTextGenerator<FlexoProject> generator) {
 		FlexoProject project = generator.getProject();
-		ProjectTextFileResource res = (ProjectTextFileResource) project.resourceForKey(ResourceType.TEXT_FILE, ProjectTextFileResource.nameForRepositoryAndProject(repository, project));
+		ProjectTextFileResource res = (ProjectTextFileResource) project.resourceForKey(ResourceType.TEXT_FILE,
+				ProjectTextFileResource.nameForRepositoryAndProject(repository, project));
 
 		if (res != null && res.getCGFile() == null) {
 			res.delete(false);
@@ -449,10 +463,11 @@ public class GeneratedFileResourceFactory {
 		return res;
 	}
 
-	public static WorkflowTextFileResource createNewWorkflowTextFileResource(DGRepository repository, DGTextGenerator<FlexoWorkflow> generator) {
+	public static WorkflowTextFileResource createNewWorkflowTextFileResource(DGRepository repository,
+			DGTextGenerator<FlexoWorkflow> generator) {
 		FlexoProject project = generator.getProject();
-		WorkflowTextFileResource res = (WorkflowTextFileResource) project.resourceForKey(ResourceType.TEXT_FILE, WorkflowTextFileResource.nameForRepositoryAndWorkflow(repository, generator
-				.getObject()));
+		WorkflowTextFileResource res = (WorkflowTextFileResource) project.resourceForKey(ResourceType.TEXT_FILE,
+				WorkflowTextFileResource.nameForRepositoryAndWorkflow(repository, generator.getObject()));
 
 		if (res != null && res.getCGFile() == null) {
 			res.delete(false);
@@ -478,7 +493,8 @@ public class GeneratedFileResourceFactory {
 
 	public static ProcessJSFileResource createNewProcessJSFileResource(DGRepository repository, DGJSGenerator<FlexoProcess> generator) {
 		FlexoProject project = generator.getProject();
-		ProcessJSFileResource res = (ProcessJSFileResource) project.resourceForKey(ResourceType.JS_FILE, ProcessJSFileResource.nameForRepositoryAndProcess(repository, generator.getObject()));
+		ProcessJSFileResource res = (ProcessJSFileResource) project.resourceForKey(ResourceType.JS_FILE,
+				ProcessJSFileResource.nameForRepositoryAndProcess(repository, generator.getObject()));
 
 		if (res != null && res.getCGFile() == null) {
 			res.delete(false);
@@ -507,10 +523,11 @@ public class GeneratedFileResourceFactory {
 		return res;
 	}
 
-	public static ProcessFolderJSFileResource createNewProcessFolderJSFileResource(DGRepository repository, DGJSGenerator<ProcessFolder> generator) {
+	public static ProcessFolderJSFileResource createNewProcessFolderJSFileResource(DGRepository repository,
+			DGJSGenerator<ProcessFolder> generator) {
 		FlexoProject project = generator.getProject();
-		ProcessFolderJSFileResource res = (ProcessFolderJSFileResource) project.resourceForKey(ResourceType.JS_FILE, ProcessFolderJSFileResource.nameForRepositoryAndProcessFolder(repository,
-				generator.getObject()));
+		ProcessFolderJSFileResource res = (ProcessFolderJSFileResource) project.resourceForKey(ResourceType.JS_FILE,
+				ProcessFolderJSFileResource.nameForRepositoryAndProcessFolder(repository, generator.getObject()));
 
 		if (res != null && res.getCGFile() == null) {
 			res.delete(false);
@@ -539,10 +556,11 @@ public class GeneratedFileResourceFactory {
 		return res;
 	}
 
-	public static ProjectDocxXmlFileResource createNewProjectDocxXmlFileResource(DGRepository repository, DGDocxXMLGenerator<FlexoProject> generator, DocxTemplatesEnum docxTemplate) {
+	public static ProjectDocxXmlFileResource createNewProjectDocxXmlFileResource(DGRepository repository,
+			DGDocxXMLGenerator<FlexoProject> generator, DocxTemplatesEnum docxTemplate) {
 		FlexoProject project = generator.getProject();
-		ProjectDocxXmlFileResource res = (ProjectDocxXmlFileResource) project.resourceForKey(ResourceType.DOCXXML_FILE, ProjectDocxXmlFileResource.nameForRepositoryAndDocxTemplate(repository,
-				docxTemplate));
+		ProjectDocxXmlFileResource res = (ProjectDocxXmlFileResource) project.resourceForKey(ResourceType.DOCXXML_FILE,
+				ProjectDocxXmlFileResource.nameForRepositoryAndDocxTemplate(repository, docxTemplate));
 
 		if (res != null && res.getCGFile() == null) {
 			res.delete(false);
@@ -576,12 +594,13 @@ public class GeneratedFileResourceFactory {
 		returned.setCGFile(cgFile);
 	}
 
-	public static FlexoCopiedResource createNewCopiedFileResource(GenerationRepository repository, CGFile cgFile, CGSymbolicDirectory symbolicDirectory, FlexoFileResource resourceToCopy) {
+	public static FlexoCopiedResource createNewCopiedFileResource(GenerationRepository repository, CGFile cgFile,
+			CGSymbolicDirectory symbolicDirectory, FlexoFileResource resourceToCopy) {
 		return createNewCopiedFileResource(repository, cgFile, symbolicDirectory, resourceToCopy, null);
 	}
 
-	public static FlexoCopiedResource createNewCopiedFileResource(GenerationRepository repository, CGFile cgFile, CGSymbolicDirectory symbolicDirectory, FlexoFileResource resourceToCopy,
-			String folderPath) {
+	public static FlexoCopiedResource createNewCopiedFileResource(GenerationRepository repository, CGFile cgFile,
+			CGSymbolicDirectory symbolicDirectory, FlexoFileResource resourceToCopy, String folderPath) {
 		FlexoProject project = resourceToCopy.getProject();
 		FlexoCopiedResource returned = new FlexoCopiedResource(project, resourceToCopy);
 

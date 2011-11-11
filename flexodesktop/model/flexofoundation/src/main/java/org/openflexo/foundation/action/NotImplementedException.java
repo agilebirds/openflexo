@@ -23,13 +23,11 @@ import org.openflexo.foundation.FlexoException;
 
 public class NotImplementedException extends FlexoException {
 
-    /**
-     * @param string
-     */
-    public NotImplementedException(String string)
-    {
-        super(string,string);
-    }
-
+	/**
+	 * @param string
+	 */
+	public NotImplementedException(String string) {
+		super(string, string);
+	}
 
 }

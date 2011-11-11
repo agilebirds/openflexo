@@ -18,109 +18,110 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents ObjectDiagram object
- *
+ * 
  * @version $Id: ObjectDiagram.java,v 1.3 2011/09/12 11:46:48 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class ObjectDiagram extends Diagram {
-  public ObjectDiagram(PetalNode parent, Collection params) {
-    super(parent, "ObjectDiagram", params);
-  }
+	public ObjectDiagram(PetalNode parent, Collection params) {
+		super(parent, "ObjectDiagram", params);
+	}
 
-  public ObjectDiagram() {
-    super("ObjectDiagram");
-  }
+	public ObjectDiagram() {
+		super("ObjectDiagram");
+	}
 
-  // TODO
-  @Override
-protected View searchView(String qual_name) {
-    throw new RuntimeException("TODO: Not implemented yet");
-  }
+	// TODO
+	@Override
+	protected View searchView(String qual_name) {
+		throw new RuntimeException("TODO: Not implemented yet");
+	}
 
-  public Tag getMechanismRef() {
-    return (Tag)getProperty("mechanism_ref");
-  }
+	public Tag getMechanismRef() {
+		return (Tag) getProperty("mechanism_ref");
+	}
 
-  public void setMechanismRef(Tag o) {
-    defineProperty("mechanism_ref", o);
-  }
+	public void setMechanismRef(Tag o) {
+		defineProperty("mechanism_ref", o);
+	}
 
-  @Override
-public String getTitle() {
-    return getPropertyAsString("title");
-  }
+	@Override
+	public String getTitle() {
+		return getPropertyAsString("title");
+	}
 
-  @Override
-public void setTitle(String o) {
-    defineProperty("title", o);
-  }
+	@Override
+	public void setTitle(String o) {
+		defineProperty("title", o);
+	}
 
-  @Override
-public int getZoom() {
-    return getPropertyAsInteger("zoom");
-  }
+	@Override
+	public int getZoom() {
+		return getPropertyAsInteger("zoom");
+	}
 
-  @Override
-public void setZoom(int o) {
-    defineProperty("zoom", o);
-  }
+	@Override
+	public void setZoom(int o) {
+		defineProperty("zoom", o);
+	}
 
-  @Override
-public int getMaxHeight() {
-    return getPropertyAsInteger("max_height");
-  }
+	@Override
+	public int getMaxHeight() {
+		return getPropertyAsInteger("max_height");
+	}
 
-  @Override
-public void setMaxHeight(int o) {
-    defineProperty("max_height", o);
-  }
+	@Override
+	public void setMaxHeight(int o) {
+		defineProperty("max_height", o);
+	}
 
-  @Override
-public int getMaxWidth() {
-    return getPropertyAsInteger("max_width");
-  }
+	@Override
+	public int getMaxWidth() {
+		return getPropertyAsInteger("max_width");
+	}
 
-  @Override
-public void setMaxWidth(int o) {
-    defineProperty("max_width", o);
-  }
+	@Override
+	public void setMaxWidth(int o) {
+		defineProperty("max_width", o);
+	}
 
-  @Override
-public int getOriginX() {
-    return getPropertyAsInteger("origin_x");
-  }
+	@Override
+	public int getOriginX() {
+		return getPropertyAsInteger("origin_x");
+	}
 
-  @Override
-public void setOriginX(int o) {
-    defineProperty("origin_x", o);
-  }
+	@Override
+	public void setOriginX(int o) {
+		defineProperty("origin_x", o);
+	}
 
-  @Override
-public int getOriginY() {
-    return getPropertyAsInteger("origin_y");
-  }
+	@Override
+	public int getOriginY() {
+		return getPropertyAsInteger("origin_y");
+	}
 
-  @Override
-public void setOriginY(int o) {
-    defineProperty("origin_y", o);
-  }
+	@Override
+	public void setOriginY(int o) {
+		defineProperty("origin_y", o);
+	}
 
-  @Override
-public List getItems() {
-    return (List)getProperty("items");
-  }
+	@Override
+	public List getItems() {
+		return (List) getProperty("items");
+	}
 
-  @Override
-public void setItems(List o) {
-    defineProperty("items", o);
-  }
+	@Override
+	public void setItems(List o) {
+		defineProperty("items", o);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

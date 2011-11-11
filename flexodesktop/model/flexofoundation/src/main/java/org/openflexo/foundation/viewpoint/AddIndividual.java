@@ -29,119 +29,99 @@ import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
 
-
 public class AddIndividual extends AddConcept<IndividualPatternRole> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(AddIndividual.class.getPackage().getName());
-	
+
 	private Vector<DataPropertyAssertion> dataAssertions;
 	private Vector<ObjectPropertyAssertion> objectAssertions;
 
-	public AddIndividual() 
-	{	
+	public AddIndividual() {
 		super();
 		dataAssertions = new Vector<DataPropertyAssertion>();
 		objectAssertions = new Vector<ObjectPropertyAssertion>();
 	}
-	
+
 	@Override
-	public EditionActionType getEditionActionType()
-	{
+	public EditionActionType getEditionActionType() {
 		return EditionActionType.AddIndividual;
 	}
-	
+
 	@Override
-	public OntologyClass getOntologyClass()
-	{
-		if (getPatternRole() != null) 
+	public OntologyClass getOntologyClass() {
+		if (getPatternRole() != null)
 			return getPatternRole().getOntologicType();
 		return null;
 	}
-	
+
 	@Override
-	public void setOntologyClass(OntologyClass ontologyClass)
-	{
-		if (getPatternRole() != null) 
+	public void setOntologyClass(OntologyClass ontologyClass) {
+		if (getPatternRole() != null)
 			getPatternRole().setOntologicType(ontologyClass);
 	}
-	
-	public Vector<DataPropertyAssertion> getDataAssertions() 
-	{
+
+	public Vector<DataPropertyAssertion> getDataAssertions() {
 		return dataAssertions;
 	}
 
-	public void setDataAssertions(Vector<DataPropertyAssertion> assertions) 
-	{
+	public void setDataAssertions(Vector<DataPropertyAssertion> assertions) {
 		this.dataAssertions = assertions;
 	}
 
-	public void addToDataAssertions(DataPropertyAssertion assertion) 
-	{
+	public void addToDataAssertions(DataPropertyAssertion assertion) {
 		assertion.setAction(this);
 		dataAssertions.add(assertion);
 	}
 
-	public void removeFromDataAssertions(DataPropertyAssertion assertion)
-	{
+	public void removeFromDataAssertions(DataPropertyAssertion assertion) {
 		assertion.setAction(null);
 		dataAssertions.remove(assertion);
 	}
-	
-	public DataPropertyAssertion createDataPropertyAssertion()
-	{
+
+	public DataPropertyAssertion createDataPropertyAssertion() {
 		DataPropertyAssertion newDataPropertyAssertion = new DataPropertyAssertion();
 		addToDataAssertions(newDataPropertyAssertion);
 		return newDataPropertyAssertion;
 	}
-	
-	public DataPropertyAssertion deleteDataPropertyAssertion(DataPropertyAssertion assertion)
-	{
+
+	public DataPropertyAssertion deleteDataPropertyAssertion(DataPropertyAssertion assertion) {
 		removeFromDataAssertions(assertion);
 		assertion.delete();
 		return assertion;
 	}
-	
-	
-	public Vector<ObjectPropertyAssertion> getObjectAssertions() 
-	{
+
+	public Vector<ObjectPropertyAssertion> getObjectAssertions() {
 		return objectAssertions;
 	}
 
-	public void setObjectAssertions(Vector<ObjectPropertyAssertion> assertions) 
-	{
+	public void setObjectAssertions(Vector<ObjectPropertyAssertion> assertions) {
 		this.objectAssertions = assertions;
 	}
 
-	public void addToObjectAssertions(ObjectPropertyAssertion assertion) 
-	{
+	public void addToObjectAssertions(ObjectPropertyAssertion assertion) {
 		assertion.setAction(this);
 		objectAssertions.add(assertion);
 	}
 
-	public void removeFromObjectAssertions(ObjectPropertyAssertion assertion)
-	{
+	public void removeFromObjectAssertions(ObjectPropertyAssertion assertion) {
 		assertion.setAction(null);
 		objectAssertions.remove(assertion);
 	}
-	
-	public ObjectPropertyAssertion createObjectPropertyAssertion()
-	{
+
+	public ObjectPropertyAssertion createObjectPropertyAssertion() {
 		ObjectPropertyAssertion newObjectPropertyAssertion = new ObjectPropertyAssertion();
 		addToObjectAssertions(newObjectPropertyAssertion);
 		return newObjectPropertyAssertion;
 	}
-	
-	public ObjectPropertyAssertion deleteObjectPropertyAssertion(ObjectPropertyAssertion assertion)
-	{
+
+	public ObjectPropertyAssertion deleteObjectPropertyAssertion(ObjectPropertyAssertion assertion) {
 		removeFromObjectAssertions(assertion);
 		assertion.delete();
 		return assertion;
 	}
-	
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.VPM.ADD_INDIVIDUAL_INSPECTOR;
 	}
 
@@ -152,29 +132,27 @@ public class AddIndividual extends AddConcept<IndividualPatternRole> {
 			return;
 		}
 	}*/
-	
+
 	private ViewPointDataBinding individualName;
-	
+
 	private BindingDefinition INDIVIDUAL_NAME = new BindingDefinition("individualName", String.class, BindingDefinitionType.GET, false);
-	
-	public BindingDefinition getIndividualNameBindingDefinition()
-	{
+
+	public BindingDefinition getIndividualNameBindingDefinition() {
 		return INDIVIDUAL_NAME;
 	}
 
-	public ViewPointDataBinding getIndividualName() 
-	{
-		if (individualName == null) individualName = new ViewPointDataBinding(this,EditionActionBindingAttribute.individualName,getIndividualNameBindingDefinition());
+	public ViewPointDataBinding getIndividualName() {
+		if (individualName == null)
+			individualName = new ViewPointDataBinding(this, EditionActionBindingAttribute.individualName,
+					getIndividualNameBindingDefinition());
 		return individualName;
 	}
 
-	public void setIndividualName(ViewPointDataBinding individualName) 
-	{
+	public void setIndividualName(ViewPointDataBinding individualName) {
 		individualName.setOwner(this);
 		individualName.setBindingAttribute(EditionActionBindingAttribute.individualName);
 		individualName.setBindingDefinition(getIndividualNameBindingDefinition());
 		this.individualName = individualName;
 	}
-
 
 }

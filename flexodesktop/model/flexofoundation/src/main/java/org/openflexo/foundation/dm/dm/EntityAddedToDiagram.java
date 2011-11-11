@@ -21,17 +21,14 @@ package org.openflexo.foundation.dm.dm;
 
 import org.openflexo.foundation.dm.DMEntity;
 
-public class EntityAddedToDiagram extends DMDataModification
-{
+public class EntityAddedToDiagram extends DMDataModification {
 
-     public EntityAddedToDiagram(DMEntity insertedEntity)
-    {
-        super(null, insertedEntity);
-     }
+	public EntityAddedToDiagram(DMEntity insertedEntity) {
+		super(null, insertedEntity);
+	}
 
-     @Override
-    public DMEntity newValue()
-     {
-    	return (DMEntity)super.newValue();
-    }
+	@Override
+	public DMEntity newValue() {
+		return (DMEntity) super.newValue();
+	}
 }

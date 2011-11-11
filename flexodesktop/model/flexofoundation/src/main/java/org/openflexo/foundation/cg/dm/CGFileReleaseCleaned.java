@@ -21,11 +21,8 @@ package org.openflexo.foundation.cg.dm;
 
 import org.openflexo.foundation.cg.version.CGFileReleaseVersion;
 
-
-public class CGFileReleaseCleaned extends CGDataModification
-{
-    public CGFileReleaseCleaned(CGFileReleaseVersion releaseVersion)
-    {
-        super(null,releaseVersion);
-    }
+public class CGFileReleaseCleaned extends CGDataModification {
+	public CGFileReleaseCleaned(CGFileReleaseVersion releaseVersion) {
+		super(null, releaseVersion);
+	}
 }

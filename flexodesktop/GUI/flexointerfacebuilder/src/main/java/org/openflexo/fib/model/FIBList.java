@@ -32,11 +32,10 @@ import org.openflexo.fib.controller.FIBListDynamicModel;
 import org.openflexo.fib.model.FIBTable.SelectionMode;
 
 public class FIBList extends FIBMultipleValues {
- 
+
 	private static final Logger logger = Logger.getLogger(FIBList.class.getPackage().getName());
 
-	public static enum Parameters implements FIBModelAttribute
-	{
+	public static enum Parameters implements FIBModelAttribute {
 		visibleRowCount,
 		rowHeight,
 		createNewRowOnClick,
@@ -51,8 +50,7 @@ public class FIBList extends FIBMultipleValues {
 		layoutOrientation
 	}
 
-	public static enum LayoutOrientation
-	{
+	public static enum LayoutOrientation {
 		vertical {
 			@Override
 			public int getSwingValue() {
@@ -71,20 +69,19 @@ public class FIBList extends FIBMultipleValues {
 				return 2;
 			}
 		};
-		
+
 		public abstract int getSwingValue();
 	}
-	
+
 	private BindingDefinition SELECTED;
-	
-	public BindingDefinition getSelectedBindingDefinition()
-	{
+
+	public BindingDefinition getSelectedBindingDefinition() {
 		if (SELECTED == null) {
 			SELECTED = new BindingDefinition("selected", getIteratorClass(), BindingDefinitionType.GET_SET, false);
 		}
 		return SELECTED;
 	}
-	
+
 	private DataBinding selected;
 
 	private int visibleRowCount = 5;
@@ -93,196 +90,161 @@ public class FIBList extends FIBMultipleValues {
 	private boolean boundToSelectionManager = false;
 
 	private SelectionMode selectionMode = SelectionMode.MultipleIntervalSelection;
-	
-	 private Color textSelectionColor = UIManager.getColor("List.selectionForeground");
-	 private Color textNonSelectionColor = UIManager.getColor("List.foreground");
-	 private Color backgroundSelectionColor = UIManager.getColor("List.selectionBackground");
-	 private Color backgroundSecondarySelectionColor = SECONDARY_SELECTION_COLOR;
-	 private Color backgroundNonSelectionColor = UIManager.getColor("List.background");
 
-	 private LayoutOrientation layoutOrientation = LayoutOrientation.vertical;
-	 
-	public FIBList()
-    {
+	private Color textSelectionColor = UIManager.getColor("List.selectionForeground");
+	private Color textNonSelectionColor = UIManager.getColor("List.foreground");
+	private Color backgroundSelectionColor = UIManager.getColor("List.selectionBackground");
+	private Color backgroundSecondarySelectionColor = SECONDARY_SELECTION_COLOR;
+	private Color backgroundNonSelectionColor = UIManager.getColor("List.background");
+
+	private LayoutOrientation layoutOrientation = LayoutOrientation.vertical;
+
+	public FIBList() {
 	}
-    
+
 	@Override
-	public Type getDynamicAccessType()
-	{
+	public Type getDynamicAccessType() {
 		Type[] args = new Type[2];
 		args[0] = getDataType();
 		args[1] = getIteratorClass();
 		return new ParameterizedTypeImpl(FIBListDynamicModel.class, args);
 	}
-	
 
-	public DataBinding getSelected() 
-	{
-		if (selected == null) selected = new DataBinding(this,Parameters.selected,getSelectedBindingDefinition());
+	public DataBinding getSelected() {
+		if (selected == null)
+			selected = new DataBinding(this, Parameters.selected, getSelectedBindingDefinition());
 		return selected;
 	}
 
-	public void setSelected(DataBinding selected) 
-	{
+	public void setSelected(DataBinding selected) {
 		selected.setOwner(this);
 		selected.setBindingAttribute(Parameters.selected);
 		selected.setBindingDefinition(getSelectedBindingDefinition());
 		this.selected = selected;
 	}
-	
-	@Override
-	public void finalizeDeserialization() 
-	{
-		super.finalizeDeserialization();
-		if (selected != null) selected.finalizeDeserialization();
-	}
-	
 
-	public int getVisibleRowCount()
-	{
+	@Override
+	public void finalizeDeserialization() {
+		super.finalizeDeserialization();
+		if (selected != null)
+			selected.finalizeDeserialization();
+	}
+
+	public int getVisibleRowCount() {
 		return visibleRowCount;
 	}
 
-	public void setVisibleRowCount(int visibleRowCount)
-	{
-		FIBAttributeNotification<Integer> notification = requireChange(
-				Parameters.visibleRowCount, visibleRowCount);
+	public void setVisibleRowCount(int visibleRowCount) {
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.visibleRowCount, visibleRowCount);
 		if (notification != null) {
 			this.visibleRowCount = visibleRowCount;
 			hasChanged(notification);
 		}
 	}
 
-	public int getRowHeight()
-	{
+	public int getRowHeight() {
 		return rowHeight;
 	}
 
-	public void setRowHeight(int rowHeight)
-	{
-		FIBAttributeNotification<Integer> notification = requireChange(
-				Parameters.rowHeight, rowHeight);
+	public void setRowHeight(int rowHeight) {
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.rowHeight, rowHeight);
 		if (notification != null) {
 			this.rowHeight = rowHeight;
 			hasChanged(notification);
 		}
 	}
 
-	public boolean getCreateNewRowOnClick()
-	{
+	public boolean getCreateNewRowOnClick() {
 		return createNewRowOnClick;
 	}
 
-	public void setCreateNewRowOnClick(boolean createNewRowOnClick)
-	{
-		FIBAttributeNotification<Boolean> notification = requireChange(
-				Parameters.createNewRowOnClick, createNewRowOnClick);
+	public void setCreateNewRowOnClick(boolean createNewRowOnClick) {
+		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.createNewRowOnClick, createNewRowOnClick);
 		if (notification != null) {
 			this.createNewRowOnClick = createNewRowOnClick;
 			hasChanged(notification);
 		}
 	}
 
-	public boolean getBoundToSelectionManager()
-	{
+	public boolean getBoundToSelectionManager() {
 		return boundToSelectionManager;
 	}
 
-	public void setBoundToSelectionManager(boolean boundToSelectionManager)
-	{
-		FIBAttributeNotification<Boolean> notification = requireChange(
-				Parameters.boundToSelectionManager, boundToSelectionManager);
+	public void setBoundToSelectionManager(boolean boundToSelectionManager) {
+		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.boundToSelectionManager, boundToSelectionManager);
 		if (notification != null) {
 			this.boundToSelectionManager = boundToSelectionManager;
 			hasChanged(notification);
 		}
 	}
 
-	public SelectionMode getSelectionMode()
-	{
+	public SelectionMode getSelectionMode() {
 		return selectionMode;
 	}
 
-	public void setSelectionMode(SelectionMode selectionMode)
-	{
-		FIBAttributeNotification<SelectionMode> notification = requireChange(
-				Parameters.selectionMode, selectionMode);
+	public void setSelectionMode(SelectionMode selectionMode) {
+		FIBAttributeNotification<SelectionMode> notification = requireChange(Parameters.selectionMode, selectionMode);
 		if (notification != null) {
 			this.selectionMode = selectionMode;
 			hasChanged(notification);
 		}
 	}
 
-	public Color getTextSelectionColor() 
-	{
+	public Color getTextSelectionColor() {
 		return textSelectionColor;
 	}
 
-	public void setTextSelectionColor(Color textSelectionColor)
-	{
-		FIBAttributeNotification<Color> notification = requireChange(
-				Parameters.textSelectionColor, textSelectionColor);
+	public void setTextSelectionColor(Color textSelectionColor) {
+		FIBAttributeNotification<Color> notification = requireChange(Parameters.textSelectionColor, textSelectionColor);
 		if (notification != null) {
 			this.textSelectionColor = textSelectionColor;
 			hasChanged(notification);
 		}
 	}
 
-	public Color getTextNonSelectionColor() 
-	{
+	public Color getTextNonSelectionColor() {
 		return textNonSelectionColor;
 	}
 
-	public void setTextNonSelectionColor(Color textNonSelectionColor) 
-	{
-		FIBAttributeNotification<Color> notification = requireChange(
-				Parameters.textNonSelectionColor, textNonSelectionColor);
+	public void setTextNonSelectionColor(Color textNonSelectionColor) {
+		FIBAttributeNotification<Color> notification = requireChange(Parameters.textNonSelectionColor, textNonSelectionColor);
 		if (notification != null) {
 			this.textNonSelectionColor = textNonSelectionColor;
 			hasChanged(notification);
 		}
 	}
 
-	public Color getBackgroundSelectionColor()
-	{
+	public Color getBackgroundSelectionColor() {
 		return backgroundSelectionColor;
 	}
 
-	public void setBackgroundSelectionColor(Color backgroundSelectionColor) 
-	{
-		FIBAttributeNotification<Color> notification = requireChange(
-				Parameters.backgroundSelectionColor, backgroundSelectionColor);
+	public void setBackgroundSelectionColor(Color backgroundSelectionColor) {
+		FIBAttributeNotification<Color> notification = requireChange(Parameters.backgroundSelectionColor, backgroundSelectionColor);
 		if (notification != null) {
 			this.backgroundSelectionColor = backgroundSelectionColor;
 			hasChanged(notification);
 		}
 	}
 
-	public Color getBackgroundSecondarySelectionColor()
-	{
+	public Color getBackgroundSecondarySelectionColor() {
 		return backgroundSecondarySelectionColor;
 	}
 
-	public void setBackgroundSecondarySelectionColor(
-			Color backgroundSecondarySelectionColor)
-	{
-		FIBAttributeNotification<Color> notification = requireChange(
-				Parameters.backgroundSecondarySelectionColor, backgroundSecondarySelectionColor);
+	public void setBackgroundSecondarySelectionColor(Color backgroundSecondarySelectionColor) {
+		FIBAttributeNotification<Color> notification = requireChange(Parameters.backgroundSecondarySelectionColor,
+				backgroundSecondarySelectionColor);
 		if (notification != null) {
 			this.backgroundSecondarySelectionColor = backgroundSecondarySelectionColor;
 			hasChanged(notification);
 		}
 	}
 
-	public Color getBackgroundNonSelectionColor() 
-	{
+	public Color getBackgroundNonSelectionColor() {
 		return backgroundNonSelectionColor;
 	}
 
-	public void setBackgroundNonSelectionColor(Color backgroundNonSelectionColor)
-	{
-		FIBAttributeNotification<Color> notification = requireChange(
-				Parameters.backgroundNonSelectionColor, backgroundNonSelectionColor);
+	public void setBackgroundNonSelectionColor(Color backgroundNonSelectionColor) {
+		FIBAttributeNotification<Color> notification = requireChange(Parameters.backgroundNonSelectionColor, backgroundNonSelectionColor);
 		if (notification != null) {
 			this.backgroundNonSelectionColor = backgroundNonSelectionColor;
 			hasChanged(notification);
@@ -294,13 +256,11 @@ public class FIBList extends FIBMultipleValues {
 	}
 
 	public void setLayoutOrientation(LayoutOrientation layoutOrientation) {
-		FIBAttributeNotification<LayoutOrientation> notification = requireChange(
-				Parameters.layoutOrientation, layoutOrientation);
+		FIBAttributeNotification<LayoutOrientation> notification = requireChange(Parameters.layoutOrientation, layoutOrientation);
 		if (notification != null) {
 			this.layoutOrientation = layoutOrientation;
 			hasChanged(notification);
 		}
 	}
-
 
 }

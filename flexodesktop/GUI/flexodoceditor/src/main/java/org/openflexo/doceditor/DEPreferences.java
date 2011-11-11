@@ -27,46 +27,40 @@ import org.openflexo.module.Module;
 import org.openflexo.prefs.ModulePreferences;
 import org.openflexo.toolbox.FileResource;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author gpolet
- *
+ * 
  */
-public class DEPreferences extends ModulePreferences
-{
+public class DEPreferences extends ModulePreferences {
 
-    private static final Logger logger = Logger.getLogger(DEPreferences.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DEPreferences.class.getPackage().getName());
 
-    private static final Class DE_PREFERENCES = DEPreferences.class;
+	private static final Class DE_PREFERENCES = DEPreferences.class;
 
-    private static DEController _controller;
+	private static DEController _controller;
 
-    public static void init(DEController c)
-    {
-        _controller = c;
-        preferences(DE_PREFERENCES);
-    }
+	public static void init(DEController c) {
+		_controller = c;
+		preferences(DE_PREFERENCES);
+	}
 
-    public static void reset() {
-        _controller = null;
-    }
+	public static void reset() {
+		_controller = null;
+	}
 
-    public DEPreferences()
-    {
-        super(Module.DE_MODULE);
-    }
+	public DEPreferences() {
+		super(Module.DE_MODULE);
+	}
 
-    protected DEPreferences(Module module)
-    {
-        super(module);
-    }
-    
-    @Override
-    public File getInspectorFile()
-    {
-        return new FileResource("Config/Preferences/DEPrefs.inspector");
-    }
+	protected DEPreferences(Module module) {
+		super(module);
+	}
+
+	@Override
+	public File getInspectorFile() {
+		return new FileResource("Config/Preferences/DEPrefs.inspector");
+	}
 
 }

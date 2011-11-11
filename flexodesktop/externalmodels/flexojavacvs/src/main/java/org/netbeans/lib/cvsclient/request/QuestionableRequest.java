@@ -21,44 +21,47 @@ package org.netbeans.lib.cvsclient.request;
 
 /**
  * The questionable request. Tell the server which directory to use.
- * @author  Milos Kleint
+ * 
+ * @author Milos Kleint
  */
 public final class QuestionableRequest extends Request {
 
-    /**
-     * name of file that is questionable
-     */
-    private String questionFile;
+	/**
+	 * name of file that is questionable
+	 */
+	private String questionFile;
 
-    /**
-     * Create a new QuestionableRequest
-     * @param fileName name of the file that is questionable.
-     */
-    public QuestionableRequest(String questionFile) {
-        this.questionFile = questionFile;
-    }
+	/**
+	 * Create a new QuestionableRequest
+	 * 
+	 * @param fileName
+	 *            name of the file that is questionable.
+	 */
+	public QuestionableRequest(String questionFile) {
+		this.questionFile = questionFile;
+	}
 
-    /**
-     * Get the request String that will be passed to the server
-     * @return the request String
-     */
-    @Override
+	/**
+	 * Get the request String that will be passed to the server
+	 * 
+	 * @return the request String
+	 */
+	@Override
 	public String getRequestString() throws UnconfiguredRequestException {
-        if (questionFile == null) {
-            throw new UnconfiguredRequestException(
-                    "Questionable request has not been configured");
-        }
+		if (questionFile == null) {
+			throw new UnconfiguredRequestException("Questionable request has not been configured");
+		}
 
-        return "Questionable " + questionFile + "\n"; //NOI18N
-    }
+		return "Questionable " + questionFile + "\n"; // NOI18N
+	}
 
-    /**
-     * Is a response expected from the server?
-     * @return true if a response is expected, false if no response if
-     * expected
-     */
-    @Override
+	/**
+	 * Is a response expected from the server?
+	 * 
+	 * @return true if a response is expected, false if no response if expected
+	 */
+	@Override
 	public boolean isResponseExpected() {
-        return false;
-    }
+		return false;
+	}
 }

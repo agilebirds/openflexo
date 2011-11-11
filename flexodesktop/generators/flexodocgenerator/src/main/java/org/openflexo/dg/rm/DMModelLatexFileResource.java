@@ -22,7 +22,6 @@ package org.openflexo.dg.rm;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.openflexo.dg.latex.DGLatexGenerator;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -36,83 +35,73 @@ import org.openflexo.logging.FlexoLogger;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class DMModelLatexFileResource extends LatexFileResource<DGLatexGenerator<DMModel>> implements FlexoObserver
-{
-    protected static final Logger logger = FlexoLogger.getLogger(DMModelLatexFileResource.class.getPackage().getName());
+public class DMModelLatexFileResource extends LatexFileResource<DGLatexGenerator<DMModel>> implements FlexoObserver {
+	protected static final Logger logger = FlexoLogger.getLogger(DMModelLatexFileResource.class.getPackage().getName());
 
-    /**
-     * @param builder
-     */
-    public DMModelLatexFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
+	/**
+	 * @param builder
+	 */
+	public DMModelLatexFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * @param aProject
-     */
-    public DMModelLatexFileResource(FlexoProject aProject)
-    {
-    	super(aProject);
-    }
+	/**
+	 * @param aProject
+	 */
+	public DMModelLatexFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    private boolean isObserverRegistered = false;
+	private boolean isObserverRegistered = false;
 
-    @Override
-	public String getName()
-    {
-    	if (getCGFile()==null || getCGFile().getRepository()==null || getModel()==null)
-            return super.getName();
-    	registerObserverWhenRequired();
-    	if (super.getName()==null)
-    		setName(nameForRepositoryAndModel(getCGFile().getRepository(), getModel()));
-    	return nameForRepositoryAndModel(getCGFile().getRepository(), getModel());
-    }
+	@Override
+	public String getName() {
+		if (getCGFile() == null || getCGFile().getRepository() == null || getModel() == null)
+			return super.getName();
+		registerObserverWhenRequired();
+		if (super.getName() == null)
+			setName(nameForRepositoryAndModel(getCGFile().getRepository(), getModel()));
+		return nameForRepositoryAndModel(getCGFile().getRepository(), getModel());
+	}
 
-    public void registerObserverWhenRequired()
-    {
-    	if ((!isObserverRegistered) && (getModel() != null)) {
-    		isObserverRegistered = true;
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("*** addObserver "+getFileName()+" for "+getModel());
-            getModel().addObserver(this);
-    	}
-    }
+	public void registerObserverWhenRequired() {
+		if ((!isObserverRegistered) && (getModel() != null)) {
+			isObserverRegistered = true;
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("*** addObserver " + getFileName() + " for " + getModel());
+			getModel().addObserver(this);
+		}
+	}
 
-    public static String nameForRepositoryAndModel(GenerationRepository repository, DMModel model)
-    {
-    	return repository.getName()+".DMMODEL_LATEX."+model.getName();
-    }
+	public static String nameForRepositoryAndModel(GenerationRepository repository, DMModel model) {
+		return repository.getName() + ".DMMODEL_LATEX." + model.getName();
+	}
 
-    public DMModel getModel()
-    {
-    	if (getGenerator() != null)
-            return getGenerator().getObject();
-    	return null;
-    }
+	public DMModel getModel() {
+		if (getGenerator() != null)
+			return getGenerator().getObject();
+		return null;
+	}
 
-    @Override
-	protected LatexFile createGeneratedResourceData()
-    {
-        return new LatexFile(getFile(),this);
-    }
+	@Override
+	protected LatexFile createGeneratedResourceData() {
+		return new LatexFile(getFile(), this);
+	}
 
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
-        addToDependantResources(getProject().getTOCResource());
-        addToDependantResources(getProject().getFlexoDMResource());
-   }
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+		addToDependantResources(getProject().getTOCResource());
+		addToDependantResources(getProject().getFlexoDMResource());
+	}
 
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getModel()) {
 			if (dataModification instanceof DMEntityClassNameChanged) {
 				logger.info("Building new resource after entity renaming");

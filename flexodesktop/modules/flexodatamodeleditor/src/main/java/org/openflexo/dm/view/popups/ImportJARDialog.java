@@ -28,39 +28,33 @@ import org.openflexo.foundation.dm.action.ImportJARFileRepository;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.view.FlexoFrame;
 
-
 /**
  * Popup allowing to choose and import a JAR file
  * 
  * @author sguerin
  * 
  */
-public class ImportJARDialog extends AskNewRepositoryDialog
-{
+public class ImportJARDialog extends AskNewRepositoryDialog {
 
-    public ImportJARDialog(ImportJARFileRepository flexoAction, FlexoFrame owner)
-    {
-        super(flexoAction,owner);
-        setModal(true);
-    }
-    
-    public static int displayDialog(ImportJARFileRepository flexoAction, FlexoProject project,
-    		FlexoFrame owner)
-    {
-        flexoAction.setProject(project);
-        ImportJARDialog dialog = new ImportJARDialog(flexoAction, owner);
-        return dialog.getStatus();
-    }
+	public ImportJARDialog(ImportJARFileRepository flexoAction, FlexoFrame owner) {
+		super(flexoAction, owner);
+		setModal(true);
+	}
 
-    @Override
-	protected void init()
-    {
-        choicePanel = new JPanel();
-        choicePanel.setLayout(new GridLayout(1, 2));
-        choicePanel.add(externalRepositoryButton);
-        choicePanel.add(externalRepositorySelector);
-        externalRepositoryButton.setSelected(true);
-       selectRepositoryType(CreateDMRepository.EXTERNAL_REPOSITORY);
-   }
+	public static int displayDialog(ImportJARFileRepository flexoAction, FlexoProject project, FlexoFrame owner) {
+		flexoAction.setProject(project);
+		ImportJARDialog dialog = new ImportJARDialog(flexoAction, owner);
+		return dialog.getStatus();
+	}
+
+	@Override
+	protected void init() {
+		choicePanel = new JPanel();
+		choicePanel.setLayout(new GridLayout(1, 2));
+		choicePanel.add(externalRepositoryButton);
+		choicePanel.add(externalRepositorySelector);
+		externalRepositoryButton.setSelected(true);
+		selectRepositoryType(CreateDMRepository.EXTERNAL_REPOSITORY);
+	}
 
 }

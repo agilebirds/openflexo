@@ -25,8 +25,7 @@ import org.openflexo.docxparser.dto.api.IParsedFlexoName;
 import org.openflexo.docxparser.dto.api.IParsedFlexoObject;
 import org.openflexo.docxparser.dto.api.IParsedFlexoTitle;
 
-public class ParsedFlexoObject implements IParsedFlexoObject
-{
+public class ParsedFlexoObject implements IParsedFlexoObject {
 	private String flexoId;
 	private String userId;
 	private IParsedFlexoDescription flexoDescription;
@@ -34,69 +33,58 @@ public class ParsedFlexoObject implements IParsedFlexoObject
 	private IParsedFlexoTitle flexoTitle;
 	private IParsedFlexoContent flexoContent;
 
-	public ParsedFlexoObject(String flexoId, String userId)
-	{
+	public ParsedFlexoObject(String flexoId, String userId) {
 		this.flexoId = flexoId;
 		this.userId = userId;
 	}
 
 	@Override
-	public IParsedFlexoDescription getParsedFlexoDescription()
-	{
+	public IParsedFlexoDescription getParsedFlexoDescription() {
 		return flexoDescription;
 	}
 
 	@Override
-	public IParsedFlexoName getParsedFlexoName()
-	{
+	public IParsedFlexoName getParsedFlexoName() {
 		return flexoName;
 	}
 
 	@Override
-	public void setParsedFlexoDescription(IParsedFlexoDescription flexoDescription)
-	{
+	public void setParsedFlexoDescription(IParsedFlexoDescription flexoDescription) {
 		this.flexoDescription = flexoDescription;
 	}
 
 	@Override
-	public void setParsedFlexoName(IParsedFlexoName flexoName)
-	{
+	public void setParsedFlexoName(IParsedFlexoName flexoName) {
 		this.flexoName = flexoName;
 	}
 
 	@Override
-	public IParsedFlexoContent getParsedFlexoContent()
-	{
+	public IParsedFlexoContent getParsedFlexoContent() {
 		return flexoContent;
 	}
 
 	@Override
-	public IParsedFlexoTitle getParsedFlexoTitle()
-	{
+	public IParsedFlexoTitle getParsedFlexoTitle() {
 		return flexoTitle;
 	}
 
 	@Override
-	public void setParsedFlexoContent(IParsedFlexoContent flexoContent)
-	{
+	public void setParsedFlexoContent(IParsedFlexoContent flexoContent) {
 		this.flexoContent = flexoContent;
 	}
 
 	@Override
-	public void setParsedFlexoTitle(IParsedFlexoTitle flexoTitle)
-	{
+	public void setParsedFlexoTitle(IParsedFlexoTitle flexoTitle) {
 		this.flexoTitle = flexoTitle;
 	}
 
 	@Override
-	public String getFlexoId()
-	{
+	public String getFlexoId() {
 		return flexoId;
 	}
 
 	@Override
-	public String getUserId()
-	{
+	public String getUserId() {
 		return userId;
 	}
 

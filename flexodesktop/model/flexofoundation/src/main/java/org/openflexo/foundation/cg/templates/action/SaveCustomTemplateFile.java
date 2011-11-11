@@ -34,58 +34,50 @@ import org.openflexo.foundation.cg.templates.CGTemplateObject;
 import org.openflexo.foundation.rm.FlexoFileResource;
 import org.openflexo.toolbox.ToolBox;
 
+public class SaveCustomTemplateFile extends FlexoAction<SaveCustomTemplateFile, CGTemplateFile, CGTemplateObject> {
 
-public class SaveCustomTemplateFile extends FlexoAction<SaveCustomTemplateFile,CGTemplateFile,CGTemplateObject>
-{
-
-    private static final Logger logger = Logger.getLogger(SaveCustomTemplateFile.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(SaveCustomTemplateFile.class.getPackage().getName());
 
 	public static FlexoActionType<SaveCustomTemplateFile, CGTemplateFile, CGTemplateObject> actionType = new FlexoActionType<SaveCustomTemplateFile, CGTemplateFile, CGTemplateObject>(
 			"save_template", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
+		/**
+		 * Factory method
+		 */
 		@Override
-		public SaveCustomTemplateFile makeNewAction(CGTemplateFile focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor)
-        {
-            return new SaveCustomTemplateFile(focusedObject, globalSelection,editor);
-        }
+		public SaveCustomTemplateFile makeNewAction(CGTemplateFile focusedObject, Vector<CGTemplateObject> globalSelection,
+				FlexoEditor editor) {
+			return new SaveCustomTemplateFile(focusedObject, globalSelection, editor);
+		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGTemplateFile object, Vector<CGTemplateObject> globalSelection)
-        {
-            return ((object != null) && (object.isCustomTemplate()));
-       }
+		protected boolean isVisibleForSelection(CGTemplateFile object, Vector<CGTemplateObject> globalSelection) {
+			return ((object != null) && (object.isCustomTemplate()));
+		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGTemplateFile object, Vector<CGTemplateObject> globalSelection)
-        {
-            return ((object != null) && (object.isCustomTemplate()) && (object.isEdited()));
-       }
-                
-    };
-    
-    static {
+		protected boolean isEnabledForSelection(CGTemplateFile object, Vector<CGTemplateObject> globalSelection) {
+			return ((object != null) && (object.isCustomTemplate()) && (object.isEdited()));
+		}
+
+	};
+
+	static {
 		FlexoModelObject.addActionForClass(SaveCustomTemplateFile.actionType, CGTemplateFile.class);
-    }
-    
+	}
 
-    
-	SaveCustomTemplateFile(CGTemplateFile focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	SaveCustomTemplateFile(CGTemplateFile focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    @Override
-	protected void doAction(Object context) throws DuplicateCodeRepositoryNameException
-    {
-    	logger.info ("Save CustomTemplateFile "+getFocusedObject());
-    	if (getFocusedObject() != null) {
-    		File file = getFocusedObject().getTemplateFile();
-    		long previousLastModified = file.lastModified();
-    		getFocusedObject().save();
-    		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+	@Override
+	protected void doAction(Object context) throws DuplicateCodeRepositoryNameException {
+		logger.info("Save CustomTemplateFile " + getFocusedObject());
+		if (getFocusedObject() != null) {
+			File file = getFocusedObject().getTemplateFile();
+			long previousLastModified = file.lastModified();
+			getFocusedObject().save();
+			if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 				long startChecking = System.currentTimeMillis();
 				logger.info("Checking that file " + file.getAbsolutePath() + " has been successfully written");
 				boolean fileHasBeenWritten = false;
@@ -102,15 +94,15 @@ public class SaveCustomTemplateFile extends FlexoAction<SaveCustomTemplateFile,C
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
-					} else
-						if (logger.isLoggable(Level.INFO))
-							logger.info("Writing of template: "+getFocusedObject().getName()+" took "+(file.lastModified()-previousLastModified)+"ms");
+					} else if (logger.isLoggable(Level.INFO))
+						logger.info("Writing of template: " + getFocusedObject().getName() + " took "
+								+ (file.lastModified() - previousLastModified) + "ms");
 				}
 				if (!fileHasBeenWritten)
 					if (logger.isLoggable(Level.WARNING))
-						logger.warning("Waited for "+FlexoFileResource.ACCEPTABLE_FS_DELAY+"ms but file was still not written on disk!");
+						logger.warning("Waited for " + FlexoFileResource.ACCEPTABLE_FS_DELAY + "ms but file was still not written on disk!");
 			}
-     	}
-     }
+		}
+	}
 
 }

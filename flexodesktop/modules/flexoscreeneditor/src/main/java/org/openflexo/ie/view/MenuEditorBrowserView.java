@@ -19,7 +19,6 @@
  */
 package org.openflexo.ie.view;
 
-
 import org.openflexo.ch.FCH;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.dnd.TreeDropTarget;
@@ -29,55 +28,49 @@ import org.openflexo.foundation.ie.menu.FlexoItemMenu;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.ie.view.controller.dnd.MenuTreeDropTarget;
 
+public class MenuEditorBrowserView extends BrowserView {
 
-public class MenuEditorBrowserView extends BrowserView
-{
+	// ==========================================================================
+	// ============================= Variables
+	// ==================================
+	// ==========================================================================
 
-    // ==========================================================================
-    // ============================= Variables
-    // ==================================
-    // ==========================================================================
+	protected IEController _controller;
 
-    protected IEController _controller;
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	public MenuEditorBrowserView(IEController controller) {
+		super(controller.getMenuEditorBrowser(), controller.getKeyEventListener(), controller.getEditor());
+		_controller = controller;
+		FCH.setHelpItem(this, "menu-browser");
+	}
 
-    public MenuEditorBrowserView(IEController controller)
-    {
-        super(controller.getMenuEditorBrowser(), controller.getKeyEventListener(), controller.getEditor());
-        _controller = controller;
-        FCH.setHelpItem(this,"menu-browser");
-   }
+	@Override
+	protected TreeDropTarget createTreeDropTarget(FlexoJTree treeView2, ProjectBrowser _browser2) {
+		return new MenuTreeDropTarget(treeView2, _browser2);
+	}
 
-    @Override
-    protected TreeDropTarget createTreeDropTarget(FlexoJTree treeView2,
-    		ProjectBrowser _browser2) {
-    	return new MenuTreeDropTarget(treeView2, _browser2);
-    }
-    
-    @Override
-	public void treeSingleClick(FlexoModelObject object)
-    {
+	@Override
+	public void treeSingleClick(FlexoModelObject object) {
 
-        if (object instanceof FlexoItemMenu) {
-            _controller.setSelectedMenu((FlexoItemMenu) object);
-        }
-        // If this object is inspectable, inspect it.
-        /*if (object instanceof InspectableObject) {
-            _controller.setCurrentInspectedObject((InspectableObject) object);
-        }*/
+		if (object instanceof FlexoItemMenu) {
+			_controller.setSelectedMenu((FlexoItemMenu) object);
+		}
+		// If this object is inspectable, inspect it.
+		/*if (object instanceof InspectableObject) {
+		    _controller.setCurrentInspectedObject((InspectableObject) object);
+		}*/
 
-    }
+	}
 
-    @Override
-	public void treeDoubleClick(FlexoModelObject object)
-    {
-        if (object instanceof FlexoItemMenu) {
-            _controller.setSelectedMenu((FlexoItemMenu) object);
-        }
-    }
+	@Override
+	public void treeDoubleClick(FlexoModelObject object) {
+		if (object instanceof FlexoItemMenu) {
+			_controller.setSelectedMenu((FlexoItemMenu) object);
+		}
+	}
 
 }

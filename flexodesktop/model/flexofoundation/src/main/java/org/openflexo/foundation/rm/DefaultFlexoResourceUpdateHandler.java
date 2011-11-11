@@ -26,7 +26,6 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.cg.templates.CustomCGTemplateRepository;
 
-
 public class DefaultFlexoResourceUpdateHandler extends FlexoResourceUpdateHandler {
 
 	/**

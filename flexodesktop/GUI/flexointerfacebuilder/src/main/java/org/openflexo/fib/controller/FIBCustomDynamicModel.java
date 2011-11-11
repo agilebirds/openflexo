@@ -21,14 +21,10 @@ package org.openflexo.fib.controller;
 
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
 
-
-
-public class FIBCustomDynamicModel<T,C extends FIBCustomComponent<T,?>> extends FIBComponentDynamicModel<T>
-{
+public class FIBCustomDynamicModel<T, C extends FIBCustomComponent<T, ?>> extends FIBComponentDynamicModel<T> {
 	public C customComponent;
-	
-	public FIBCustomDynamicModel(T data)
-	{
+
+	public FIBCustomDynamicModel(T data) {
 		super(data);
 	}
 }

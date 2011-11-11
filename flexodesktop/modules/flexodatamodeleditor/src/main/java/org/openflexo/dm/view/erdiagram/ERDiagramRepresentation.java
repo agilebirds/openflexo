@@ -36,124 +36,107 @@ import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.dm.dm.EntityAddedToDiagram;
 import org.openflexo.foundation.dm.dm.EntityRemovedFromDiagram;
 
-
 public class ERDiagramRepresentation extends DefaultDrawing<ERDiagram> implements GraphicalFlexoObserver, ERDiagramConstants {
 
 	private static final Logger logger = Logger.getLogger(ERDiagramRepresentation.class.getPackage().getName());
-	
+
 	private DrawingGraphicalRepresentation<ERDiagram> graphicalRepresentation;
-	
-	public ERDiagramRepresentation(ERDiagram aDiagram)
-	{
+
+	public ERDiagramRepresentation(ERDiagram aDiagram) {
 		super(aDiagram);
 		graphicalRepresentation = new DrawingGraphicalRepresentation<ERDiagram>(this);
-		graphicalRepresentation.setBackgroundColor(new Color(255,255,204));
+		graphicalRepresentation.setBackgroundColor(new Color(255, 255, 204));
 		graphicalRepresentation.addToMouseClickControls(new ERDiagramController.ShowContextualMenuControl());
-		
+
 		aDiagram.addObserver(this);
-		
+
 		updateGraphicalObjectsHierarchy();
 
 	}
-	
+
 	@Override
-	protected void buildGraphicalObjectsHierarchy()
-	{
+	protected void buildGraphicalObjectsHierarchy() {
 		for (DMEntity entity : getDiagram().getEntities()) {
 			addDrawable(entity, getDiagram());
 			for (DMProperty property : entity.getOrderedProperties()) {
-				addDrawable(property,entity);
+				addDrawable(property, entity);
 			}
 		}
 		for (DMEntity entity : getDiagram().getEntities()) {
 			for (DMProperty property : entity.getOrderedProperties()) {
 				if (isRelationship(property) && !relationshipForProperty(property).isInverseDeclaration(property)) {
-					addDrawable(relationshipForProperty(property),getDiagram());
+					addDrawable(relationshipForProperty(property), getDiagram());
 				}
 			}
 			if (isSpecializationRepresentable(entity, entity.getParentType())) {
-				addDrawable(specializationForEntity(entity, entity.getParentType()),getDiagram());
+				addDrawable(specializationForEntity(entity, entity.getParentType()), getDiagram());
 			}
 			for (DMType t : entity.getImplementedTypes()) {
-				if (isSpecializationRepresentable(entity,t)) {
-					addDrawable(specializationForEntity(entity,t),getDiagram());
+				if (isSpecializationRepresentable(entity, t)) {
+					addDrawable(specializationForEntity(entity, t), getDiagram());
 				}
 			}
 		}
 	}
-	
-	public ERDiagram getDiagram()
-	{
+
+	public ERDiagram getDiagram() {
 		return getModel();
 	}
 
 	@Override
-	public DrawingGraphicalRepresentation<ERDiagram> getDrawingGraphicalRepresentation()
-	{
+	public DrawingGraphicalRepresentation<ERDiagram> getDrawingGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable)
-	{
-		return (GraphicalRepresentation<O>)buildGraphicalRepresentation(aDrawable);
+	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable) {
+		return (GraphicalRepresentation<O>) buildGraphicalRepresentation(aDrawable);
 	}
-	
-	private boolean isRelationship(DMProperty property)
-	{
-		if (property.getType() != null
-				&& property.getType().getBaseEntity() != null
+
+	private boolean isRelationship(DMProperty property) {
+		if (property.getType() != null && property.getType().getBaseEntity() != null
 				&& getDiagram().getEntities().contains(property.getType().getBaseEntity())) {
 			// This is a relation !
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
-	
-	private boolean isSpecializationRepresentable(DMEntity entity, DMType type)
-	{
+
+	private boolean isSpecializationRepresentable(DMEntity entity, DMType type) {
 		return entity != null && type != null && type.getBaseEntity() != null && getDiagram().getEntities().contains(type.getBaseEntity());
 	}
 
-	private GraphicalRepresentation<?> buildGraphicalRepresentation(Object aDrawable)
-	{
+	private GraphicalRepresentation<?> buildGraphicalRepresentation(Object aDrawable) {
 		if (aDrawable instanceof DMEntity) {
-			return new DMEntityGR((DMEntity)aDrawable,this);
+			return new DMEntityGR((DMEntity) aDrawable, this);
+		} else if (aDrawable instanceof DMProperty) {
+			return new DMPropertyGR((DMProperty) aDrawable, this);
+		} else if (aDrawable instanceof RelationshipRepresentation) {
+			return new DMRelationshipGR((RelationshipRepresentation) aDrawable, this);
+		} else if (aDrawable instanceof EntitySpecialization) {
+			return new EntitySpecializationGR((EntitySpecialization) aDrawable, this);
 		}
-		else if (aDrawable instanceof DMProperty) {
-			return new DMPropertyGR((DMProperty)aDrawable,this);
-		}
-		else if (aDrawable instanceof RelationshipRepresentation) {
-			return new DMRelationshipGR((RelationshipRepresentation)aDrawable,this);
-		}
-		else if (aDrawable instanceof EntitySpecialization) {
-			return new EntitySpecializationGR((EntitySpecialization)aDrawable,this);
-		}
-		logger.warning("Cannot build GraphicalRepresentation for "+aDrawable);
+		logger.warning("Cannot build GraphicalRepresentation for " + aDrawable);
 		return null;
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) 
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getDiagram()) {
-			//logger.info("Notified "+dataModification);
+			// logger.info("Notified "+dataModification);
 			if (dataModification instanceof EntityAddedToDiagram) {
 				updateGraphicalObjectsHierarchy();
-			}
-			else if (dataModification instanceof EntityRemovedFromDiagram) {
+			} else if (dataModification instanceof EntityRemovedFromDiagram) {
 				updateGraphicalObjectsHierarchy();
 			}
 		}
 	}
-	
-	private Hashtable<DMProperty,RelationshipRepresentation> relationships = new Hashtable<DMProperty,RelationshipRepresentation>();
 
-	protected RelationshipRepresentation relationshipForProperty(DMProperty property)
-	{
+	private Hashtable<DMProperty, RelationshipRepresentation> relationships = new Hashtable<DMProperty, RelationshipRepresentation>();
+
+	protected RelationshipRepresentation relationshipForProperty(DMProperty property) {
 		RelationshipRepresentation returned = relationships.get(property);
 		if (returned == null) {
 			returned = new RelationshipRepresentation(property);
@@ -166,25 +149,21 @@ public class ERDiagramRepresentation extends DefaultDrawing<ERDiagram> implement
 		return returned;
 	}
 
-	private Hashtable<DMEntity,Hashtable<DMType,EntitySpecialization>> specializations 
-	= new Hashtable<DMEntity,Hashtable<DMType,EntitySpecialization>>();
+	private Hashtable<DMEntity, Hashtable<DMType, EntitySpecialization>> specializations = new Hashtable<DMEntity, Hashtable<DMType, EntitySpecialization>>();
 
-	protected EntitySpecialization specializationForEntity(DMEntity entity, DMType type)
-	{
-		Hashtable<DMType,EntitySpecialization> specializationsForEntity = specializations.get(entity);
+	protected EntitySpecialization specializationForEntity(DMEntity entity, DMType type) {
+		Hashtable<DMType, EntitySpecialization> specializationsForEntity = specializations.get(entity);
 		if (specializationsForEntity == null) {
-			specializationsForEntity = new Hashtable<DMType,EntitySpecialization>();
+			specializationsForEntity = new Hashtable<DMType, EntitySpecialization>();
 			specializations.put(entity, specializationsForEntity);
 		}
-		
+
 		EntitySpecialization returned = specializationsForEntity.get(type);
 		if (returned == null) {
-			returned = new EntitySpecialization(entity,type);
+			returned = new EntitySpecialization(entity, type);
 			specializationsForEntity.put(type, returned);
 		}
 		return returned;
 	}
 
-
-	
 }

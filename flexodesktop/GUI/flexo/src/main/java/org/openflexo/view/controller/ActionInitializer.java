@@ -37,90 +37,51 @@ import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.module.FlexoModule;
 
-
-public abstract class ActionInitializer<A extends FlexoAction<?,T1,T2>, T1 extends FlexoModelObject,T2 extends FlexoModelObject>
-{
+public abstract class ActionInitializer<A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> {
 	private final ControllerActionInitializer _controllerActionInitializer;
 	private final FlexoActionType _actionType;
 
-	public ActionInitializer(FlexoActionType actionType, ControllerActionInitializer controllerActionInitializer)
-	{
+	public ActionInitializer(FlexoActionType actionType, ControllerActionInitializer controllerActionInitializer) {
 		super();
 		_controllerActionInitializer = controllerActionInitializer;
 		_actionType = actionType;
 	}
 
-	protected ControllerActionInitializer getControllerActionInitializer()
-	{
+	protected ControllerActionInitializer getControllerActionInitializer() {
 		return _controllerActionInitializer;
 	}
 
-	public InteractiveFlexoEditor getEditor()
-	{
+	public InteractiveFlexoEditor getEditor() {
 		return getController().getEditor();
 	}
 
-	public FlexoController getController()
-    {
-        return _controllerActionInitializer.getController();
-    }
-
-	public FlexoModule getModule()
-    {
-        return getController().getModule();
-    }
-
-	public FlexoProject getProject()
-    {
-        return getController().getProject();
-    }
-
-
-	public void init()
-	{
-		initActionType(_actionType,
-				getDefaultInitializer(),
-				getDefaultFinalizer(),
-				getDefaultUndoInitializer(),
-				getDefaultUndoFinalizer(),
-				getDefaultRedoInitializer(),
-				getDefaultRedoFinalizer(),
-				getDefaultExceptionHandler(),
-				getEnableCondition(),
-				getVisibleCondition(),
-				getShortcut(),
-				getEnabledIcon(),
-				getDisabledIcon());
+	public FlexoController getController() {
+		return _controllerActionInitializer.getController();
 	}
 
-	public void initForClass(Class<? extends FlexoActionType<?,?,?>> aClass)
-	{
-		initActionTypeForClass(aClass,
-				getDefaultInitializer(),
-				getDefaultFinalizer(),
-				getDefaultUndoInitializer(),
-				getDefaultUndoFinalizer(),
-				getDefaultRedoInitializer(),
-				getDefaultRedoFinalizer(),
-				getDefaultExceptionHandler(),
-				getEnableCondition(),
-				getVisibleCondition(),
-				getShortcut(),
-				getEnabledIcon(),
-				getDisabledIcon());
+	public FlexoModule getModule() {
+		return getController().getModule();
 	}
 
-	protected  void initActionType (
-			FlexoActionType actionType,
-			FlexoActionInitializer initializer,
-			FlexoActionFinalizer finalizer,
-			FlexoExceptionHandler exceptionHandler,
-			FlexoActionEnableCondition enableCondition,
-			FlexoActionVisibleCondition visibleCondition,
-			KeyStroke shortcut,
-			Icon enabledIcon,
-			Icon disabledIcon)
-	{
+	public FlexoProject getProject() {
+		return getController().getProject();
+	}
+
+	public void init() {
+		initActionType(_actionType, getDefaultInitializer(), getDefaultFinalizer(), getDefaultUndoInitializer(), getDefaultUndoFinalizer(),
+				getDefaultRedoInitializer(), getDefaultRedoFinalizer(), getDefaultExceptionHandler(), getEnableCondition(),
+				getVisibleCondition(), getShortcut(), getEnabledIcon(), getDisabledIcon());
+	}
+
+	public void initForClass(Class<? extends FlexoActionType<?, ?, ?>> aClass) {
+		initActionTypeForClass(aClass, getDefaultInitializer(), getDefaultFinalizer(), getDefaultUndoInitializer(),
+				getDefaultUndoFinalizer(), getDefaultRedoInitializer(), getDefaultRedoFinalizer(), getDefaultExceptionHandler(),
+				getEnableCondition(), getVisibleCondition(), getShortcut(), getEnabledIcon(), getDisabledIcon());
+	}
+
+	protected void initActionType(FlexoActionType actionType, FlexoActionInitializer initializer, FlexoActionFinalizer finalizer,
+			FlexoExceptionHandler exceptionHandler, FlexoActionEnableCondition enableCondition,
+			FlexoActionVisibleCondition visibleCondition, KeyStroke shortcut, Icon enabledIcon, Icon disabledIcon) {
 		if (initializer != null) {
 			getEditor().registerInitializerFor(actionType, initializer, getModule());
 		}
@@ -138,29 +99,19 @@ public abstract class ActionInitializer<A extends FlexoAction<?,T1,T2>, T1 exten
 		}
 
 		getEditor().registerIcons(actionType, enabledIcon, disabledIcon);
-		
-		//if (enabledIcon != null) actionType.setSmallIcon(enabledIcon);
-		//if (disabledIcon != null) actionType.setSmallDisabledIcon(disabledIcon);
-		_controllerActionInitializer.registerAction(actionType,shortcut);
+
+		// if (enabledIcon != null) actionType.setSmallIcon(enabledIcon);
+		// if (disabledIcon != null) actionType.setSmallDisabledIcon(disabledIcon);
+		_controllerActionInitializer.registerAction(actionType, shortcut);
 
 	}
 
-	protected void initActionType (
-			FlexoActionType actionType,
-			FlexoActionInitializer initializer,
-			FlexoActionFinalizer finalizer,
-			FlexoActionUndoInitializer undoInitializer,
-			FlexoActionUndoFinalizer undoFinalizer,
-			FlexoActionRedoInitializer redoInitializer,
-			FlexoActionRedoFinalizer redoFinalizer,
-			FlexoExceptionHandler exceptionHandler,
-			FlexoActionEnableCondition enableCondition,
-			FlexoActionVisibleCondition visibleCondition,
-			KeyStroke shortcut,
-			Icon enabledIcon,
-			Icon disabledIcon)
-	{
-		initActionType(actionType, initializer, finalizer, exceptionHandler, enableCondition, visibleCondition, shortcut, enabledIcon, disabledIcon);
+	protected void initActionType(FlexoActionType actionType, FlexoActionInitializer initializer, FlexoActionFinalizer finalizer,
+			FlexoActionUndoInitializer undoInitializer, FlexoActionUndoFinalizer undoFinalizer, FlexoActionRedoInitializer redoInitializer,
+			FlexoActionRedoFinalizer redoFinalizer, FlexoExceptionHandler exceptionHandler, FlexoActionEnableCondition enableCondition,
+			FlexoActionVisibleCondition visibleCondition, KeyStroke shortcut, Icon enabledIcon, Icon disabledIcon) {
+		initActionType(actionType, initializer, finalizer, exceptionHandler, enableCondition, visibleCondition, shortcut, enabledIcon,
+				disabledIcon);
 
 		if (undoInitializer != null) {
 			getEditor().registerUndoInitializerFor(actionType, undoInitializer, getModule());
@@ -177,17 +128,9 @@ public abstract class ActionInitializer<A extends FlexoAction<?,T1,T2>, T1 exten
 
 	}
 
-	protected  void initActionTypeForClass (
-			Class<? extends FlexoActionType<?,?,?>> aClass,
-			FlexoActionInitializer initializer,
-			FlexoActionFinalizer finalizer,
-			FlexoExceptionHandler exceptionHandler,
-			FlexoActionEnableCondition enableCondition,
-			FlexoActionVisibleCondition visibleCondition,
-			KeyStroke shortcut,
-			Icon enabledIcon,
-			Icon disabledIcon)
-	{
+	protected void initActionTypeForClass(Class<? extends FlexoActionType<?, ?, ?>> aClass, FlexoActionInitializer initializer,
+			FlexoActionFinalizer finalizer, FlexoExceptionHandler exceptionHandler, FlexoActionEnableCondition enableCondition,
+			FlexoActionVisibleCondition visibleCondition, KeyStroke shortcut, Icon enabledIcon, Icon disabledIcon) {
 		if (initializer != null) {
 			getEditor().registerInitializerFor(aClass, initializer, getModule());
 		}
@@ -204,28 +147,19 @@ public abstract class ActionInitializer<A extends FlexoAction<?,T1,T2>, T1 exten
 			getEditor().registerVisibleConditionFor(aClass, visibleCondition, getModule());
 		}
 
-		//if (enabledIcon != null) actionType.setSmallIcon(enabledIcon);
-		//if (disabledIcon != null) actionType.setSmallDisabledIcon(disabledIcon);
-		//_controllerActionInitializer.registerAction(actionType,shortcut);
+		// if (enabledIcon != null) actionType.setSmallIcon(enabledIcon);
+		// if (disabledIcon != null) actionType.setSmallDisabledIcon(disabledIcon);
+		// _controllerActionInitializer.registerAction(actionType,shortcut);
 
 	}
 
-	protected void initActionTypeForClass (
-			Class<? extends FlexoActionType<?,?,?>> aClass,
-			FlexoActionInitializer initializer,
-			FlexoActionFinalizer finalizer,
-			FlexoActionUndoInitializer undoInitializer,
-			FlexoActionUndoFinalizer undoFinalizer,
-			FlexoActionRedoInitializer redoInitializer,
-			FlexoActionRedoFinalizer redoFinalizer,
-			FlexoExceptionHandler exceptionHandler,
-			FlexoActionEnableCondition enableCondition,
-			FlexoActionVisibleCondition visibleCondition,
-			KeyStroke shortcut,
-			Icon enabledIcon,
-			Icon disabledIcon)
-	{
-		initActionTypeForClass(aClass, initializer, finalizer, exceptionHandler, enableCondition, visibleCondition, shortcut, enabledIcon, disabledIcon);
+	protected void initActionTypeForClass(Class<? extends FlexoActionType<?, ?, ?>> aClass, FlexoActionInitializer initializer,
+			FlexoActionFinalizer finalizer, FlexoActionUndoInitializer undoInitializer, FlexoActionUndoFinalizer undoFinalizer,
+			FlexoActionRedoInitializer redoInitializer, FlexoActionRedoFinalizer redoFinalizer, FlexoExceptionHandler exceptionHandler,
+			FlexoActionEnableCondition enableCondition, FlexoActionVisibleCondition visibleCondition, KeyStroke shortcut, Icon enabledIcon,
+			Icon disabledIcon) {
+		initActionTypeForClass(aClass, initializer, finalizer, exceptionHandler, enableCondition, visibleCondition, shortcut, enabledIcon,
+				disabledIcon);
 
 		if (undoInitializer != null) {
 			getEditor().registerUndoInitializerFor(aClass, undoInitializer, getModule());
@@ -243,137 +177,111 @@ public abstract class ActionInitializer<A extends FlexoAction<?,T1,T2>, T1 exten
 	}
 
 	/**
-	 * Please override if required
-	 * Default implementation return null
-	 *
+	 * Please override if required Default implementation return null
+	 * 
 	 * @return null
 	 */
-	protected FlexoActionInitializer<? super A> getDefaultInitializer()
-	{
+	protected FlexoActionInitializer<? super A> getDefaultInitializer() {
 		return null;
 	}
 
 	/**
-	 * Please override if required
-	 * Default implementation return null
-	 *
+	 * Please override if required Default implementation return null
+	 * 
 	 * @return null
 	 */
-	protected FlexoActionFinalizer<? super A> getDefaultFinalizer()
-	{
+	protected FlexoActionFinalizer<? super A> getDefaultFinalizer() {
 		return null;
 	}
 
 	/**
-	 * Please override if required
-	 * Default implementation return null
-	 *
+	 * Please override if required Default implementation return null
+	 * 
 	 * @return null
 	 */
-	protected FlexoExceptionHandler<? super A> getDefaultExceptionHandler()
-	{
+	protected FlexoExceptionHandler<? super A> getDefaultExceptionHandler() {
 		return null;
 	}
 
 	/**
-	 * Please override if required
-	 * Default implementation return null
-	 *
+	 * Please override if required Default implementation return null
+	 * 
 	 * @return null
 	 */
-	protected FlexoActionEnableCondition getEnableCondition()
-	{
+	protected FlexoActionEnableCondition getEnableCondition() {
 		return null;
 	}
 
 	/**
-	 * Please override if required
-	 * Default implementation return null
-	 *
+	 * Please override if required Default implementation return null
+	 * 
 	 * @return null
 	 */
-	protected FlexoActionVisibleCondition getVisibleCondition()
-	{
+	protected FlexoActionVisibleCondition getVisibleCondition() {
 		return null;
 	}
 
 	/**
-	 * Please override if required
-	 * Default implementation return null
-	 *
+	 * Please override if required Default implementation return null
+	 * 
 	 * @return null
 	 */
-	protected KeyStroke getShortcut()
-	{
+	protected KeyStroke getShortcut() {
 		return null;
 	}
 
 	/**
-	 * Please override if required
-	 * Default implementation return null
-	 *
+	 * Please override if required Default implementation return null
+	 * 
 	 * @return null
 	 */
-	protected Icon getEnabledIcon()
-	{
+	protected Icon getEnabledIcon() {
 		return null;
 	}
 
 	/**
-	 * Please override if required
-	 * Default implementation return null
-	 *
+	 * Please override if required Default implementation return null
+	 * 
 	 * @return null
 	 */
-	protected Icon getDisabledIcon()
-	{
+	protected Icon getDisabledIcon() {
 		return null;
 	}
 
 	/**
-	 * Please override if required
-	 * Default implementation return null
-	 *
+	 * Please override if required Default implementation return null
+	 * 
 	 * @return null
 	 */
-	protected FlexoActionUndoInitializer<? super A> getDefaultUndoInitializer()
-	{
+	protected FlexoActionUndoInitializer<? super A> getDefaultUndoInitializer() {
 		return null;
 	}
 
 	/**
-	 * Please override if required
-	 * Default implementation return null
-	 *
+	 * Please override if required Default implementation return null
+	 * 
 	 * @return null
 	 */
-	protected FlexoActionUndoFinalizer<? super A> getDefaultUndoFinalizer()
-	{
+	protected FlexoActionUndoFinalizer<? super A> getDefaultUndoFinalizer() {
 		return null;
 	}
 
 	/**
-	 * Please override if required
-	 * Default implementation return null
-	 *
+	 * Please override if required Default implementation return null
+	 * 
 	 * @return null
 	 */
-	protected FlexoActionRedoInitializer<? super A> getDefaultRedoInitializer()
-	{
+	protected FlexoActionRedoInitializer<? super A> getDefaultRedoInitializer() {
 		return null;
 	}
 
 	/**
-	 * Please override if required
-	 * Default implementation return null
-	 *
+	 * Please override if required Default implementation return null
+	 * 
 	 * @return null
 	 */
-	protected FlexoActionRedoFinalizer<? super A> getDefaultRedoFinalizer()
-	{
+	protected FlexoActionRedoFinalizer<? super A> getDefaultRedoFinalizer() {
 		return null;
 	}
-
-
 
 }

@@ -23,7 +23,6 @@ import java.awt.Color;
 import java.awt.Point;
 import java.util.logging.Logger;
 
-
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEDimension;
@@ -56,46 +55,37 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 
 	private static final Logger logger = Logger.getLogger(AbstractNodeGR.class.getPackage().getName());
 
-	//private boolean isUpdatingPosition = false;
+	// private boolean isUpdatingPosition = false;
 
-	public AbstractNodeGR(O node, ShapeType shapeType, SwimmingLaneRepresentation aDrawing)
-	{
+	public AbstractNodeGR(O node, ShapeType shapeType, SwimmingLaneRepresentation aDrawing) {
 		super(node, shapeType, aDrawing);
 	}
 
 	@Override
-	public String getText()
-	{
+	public String getText() {
 		return getNode().getName();
 	}
 
 	@Override
-	public void setTextNoNotification(String text)
-	{
+	public void setTextNoNotification(String text) {
 		getNode().setName(text);
 	}
 
 	@Override
-	public void update (FlexoObservable observable, DataModification dataModification)
-	{
-		//logger.info(">>>>>>>>>>>  Notified "+dataModification+" for "+observable);
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		// logger.info(">>>>>>>>>>>  Notified "+dataModification+" for "+observable);
 		if (observable == getNode()) {
 			if (dataModification instanceof NodeRemoved) {
 				getDrawing().updateGraphicalObjectsHierarchy();
-			}
-			else if (dataModification instanceof PreInserted) {
+			} else if (dataModification instanceof PreInserted) {
 				getDrawing().updateGraphicalObjectsHierarchy();
-			}
-			else if (dataModification instanceof PetriGraphHasBeenOpened) {
+			} else if (dataModification instanceof PetriGraphHasBeenOpened) {
 				getDrawing().updateGraphicalObjectsHierarchy();
-			}
-			else if (dataModification instanceof PetriGraphHasBeenClosed) {
+			} else if (dataModification instanceof PetriGraphHasBeenClosed) {
 				getDrawing().updateGraphicalObjectsHierarchy();
-			}
-			else if (dataModification instanceof PostRemoved) {
+			} else if (dataModification instanceof PostRemoved) {
 				getDrawing().updateGraphicalObjectsHierarchy();
-			}
-			else if (dataModification instanceof WKFAttributeDataModification) {
+			} else if (dataModification instanceof WKFAttributeDataModification) {
 				/*if ((((WKFAttributeDataModification)dataModification).getAttributeName().equals("posX"))
 						|| (((WKFAttributeDataModification)dataModification).getAttributeName().equals("posY"))) {
 					if (!isUpdatingPosition) {
@@ -103,123 +93,112 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 					}
 				}
 				else {*/
-					notifyShapeNeedsToBeRedrawn();
-				//}
-			}
-			else if (dataModification instanceof NameChanged) {
+				notifyShapeNeedsToBeRedrawn();
+				// }
+			} else if (dataModification instanceof NameChanged) {
 				notifyAttributeChange(org.openflexo.fge.GraphicalRepresentation.Parameters.text);
 				checkAndUpdateDimensionIfRequired();
-			}
-			else if (dataModification instanceof ObjectLocationChanged) {
+			} else if (dataModification instanceof ObjectLocationChanged) {
 				if (!isUpdatingPosition) {
 					handlePositionChanged();
 				}
-			}
-			else if (dataModification instanceof LabelLocationChanged) {
+			} else if (dataModification instanceof LabelLocationChanged) {
 				notifyAttributeChange(org.openflexo.fge.GraphicalRepresentation.Parameters.absoluteTextX);
 				notifyAttributeChange(org.openflexo.fge.GraphicalRepresentation.Parameters.absoluteTextX);
 			}
 		}
 	}
 
-	private void handlePositionChanged()
-	{
+	private void handlePositionChanged() {
 		checkAndUpdateLocationIfRequired();
 		notifyObjectMoved();
 		notifyShapeNeedsToBeRedrawn();
 	}
 
 	@Override
-	public String getToolTipText()
-	{
+	public String getToolTipText() {
 		if (getNode().getDescription() == null || getNode().getDescription().trim().equals(""))
-			return "<html><b>"+getNode().getName()+"</b><br><i>"+FlexoLocalization.localizedForKey("no_description")+"</i></html>";
-		return "<html><b>"+getNode().getName()+"</b><br><i>"+getNode().getDescription()+"</i></html>";
+			return "<html><b>" + getNode().getName() + "</b><br><i>" + FlexoLocalization.localizedForKey("no_description") + "</i></html>";
+		return "<html><b>" + getNode().getName() + "</b><br><i>" + getNode().getDescription() + "</i></html>";
 	}
 
 	@Override
-	protected boolean supportShadow()
-	{
+	protected boolean supportShadow() {
 		return true;
 	}
 
-	public Color getTextColor()
-	{
+	public Color getTextColor() {
 		return Color.BLACK;
 	}
 
-	public Color getMainBgColor()
-	{
+	public Color getMainBgColor() {
 		return Color.WHITE;
 	}
 
-	public Color getOppositeBgColor()
-	{
+	public Color getOppositeBgColor() {
 		return Color.WHITE;
 	}
 
 	private FGEArea locationConstrainedArea;
 
 	@Override
-	public FGEArea getLocationConstrainedArea()
-	{
+	public FGEArea getLocationConstrainedArea() {
 		GraphicalRepresentation<?> parentContainer = getContainerGraphicalRepresentation();
 		if (parentContainer instanceof SWLContainerGR) {
 			if (locationConstrainedArea == null) {
-				SWLContainerGR parentSWLContainer = (SWLContainerGR)getContainerGraphicalRepresentation();
+				SWLContainerGR parentSWLContainer = (SWLContainerGR) getContainerGraphicalRepresentation();
 				getDrawing();
-				if (parentContainer instanceof RoleContainerGR && parentContainer.getDrawable()==SwimmingLaneRepresentation.getRepresentationRole(getNode()))
+				if (parentContainer instanceof RoleContainerGR
+						&& parentContainer.getDrawable() == SwimmingLaneRepresentation.getRepresentationRole(getNode()))
 					locationConstrainedArea = parentSWLContainer.getLocationConstrainedAreaForChild(this);
 			}
 			return locationConstrainedArea;
-		}
-		else return super.getLocationConstrainedArea();
+		} else
+			return super.getLocationConstrainedArea();
 	}
 
-	protected final void resetLocationConstrainedArea()
-	{
+	protected final void resetLocationConstrainedArea() {
 		locationConstrainedArea = null;
 	}
 
 	@Override
-	public boolean isAllowedToBeDraggedOutsideParentContainer()
-	{
-		return getContainerGraphicalRepresentation() instanceof RoleContainerGR
-			&& getNode().getLevel() == FlexoLevel.ACTIVITY;
+	public boolean isAllowedToBeDraggedOutsideParentContainer() {
+		return getContainerGraphicalRepresentation() instanceof RoleContainerGR && getNode().getLevel() == FlexoLevel.ACTIVITY;
 	}
 
 	@Override
-	public boolean isAllowedToBeDraggedOutsideParentContainerInsideContainer(
-			ShapeGraphicalRepresentation container)
-	{
+	public boolean isAllowedToBeDraggedOutsideParentContainerInsideContainer(ShapeGraphicalRepresentation container) {
 		return container instanceof RoleContainerGR;
 	}
 
 	@Override
-	public boolean dragOutsideParentContainerInsideContainer(ShapeGraphicalRepresentation container, FGEPoint location)
-	{
+	public boolean dragOutsideParentContainerInsideContainer(ShapeGraphicalRepresentation container, FGEPoint location) {
 		if (container instanceof RoleContainerGR) {
 			resetLocationConstrainedArea();
-			getDrawing().setRepresentationRole(((RoleContainerGR)container).getRole(), getNode());
+			getDrawing().setRepresentationRole(((RoleContainerGR) container).getRole(), getNode());
 			getNode().setX(location.x, SWIMMING_LANE_EDITOR);
 			getNode().setY(location.y, SWIMMING_LANE_EDITOR);
 			return true;
-		}
-		else return false;
+		} else
+			return false;
 	}
 
 	public boolean showNoChildrenSign() {
-		if (getDrawing()==null || getDrawing().getModel()==null)
+		if (getDrawing() == null || getDrawing().getModel() == null)
 			return false;
 		if (getNode() instanceof FlexoNode)
-			if (((FlexoNode)getNode()).isBeginOrEndNode())
+			if (((FlexoNode) getNode()).isBeginOrEndNode())
 				return false;
 		/*if (getNode() instanceof SelfExecutableNode) {
 			return !((SelfExecutableNode)getNode()).hasExecutionPetriGraph() || !((SelfExecutableNode)getNode()).getExecutionPetriGraph().hasOtherNodesThanBeginEndNodes();
-		} else*/ if (getNode() instanceof AbstractActivityNode) {
-			return ((AbstractActivityNode)getNode()).mightHaveOperationPetriGraph() && (!((AbstractActivityNode)getNode()).hasContainedPetriGraph() || !((AbstractActivityNode)getNode()).getContainedPetriGraph().hasOtherNodesThanBeginEndNodes());
-		}  else if (getNode() instanceof OperationNode) {
-			return ((OperationNode)getNode()).mightHaveActionPetriGraph() && (!((OperationNode)getNode()).hasContainedPetriGraph() || !((OperationNode)getNode()).getContainedPetriGraph().hasOtherNodesThanBeginEndNodes());
+		} else*/if (getNode() instanceof AbstractActivityNode) {
+			return ((AbstractActivityNode) getNode()).mightHaveOperationPetriGraph()
+					&& (!((AbstractActivityNode) getNode()).hasContainedPetriGraph() || !((AbstractActivityNode) getNode())
+							.getContainedPetriGraph().hasOtherNodesThanBeginEndNodes());
+		} else if (getNode() instanceof OperationNode) {
+			return ((OperationNode) getNode()).mightHaveActionPetriGraph()
+					&& (!((OperationNode) getNode()).hasContainedPetriGraph() || !((OperationNode) getNode()).getContainedPetriGraph()
+							.hasOtherNodesThanBeginEndNodes());
 		}
 		return false;
 	}
@@ -227,8 +206,9 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 	protected class NodeDecorationPainter implements DecorationPainter {
 
 		private static final int size = 8;
-		private FGEPoint bottomLeft = new FGEPoint(0,1);
-		private FGEDimension dimension = new FGEDimension(size,size);
+		private FGEPoint bottomLeft = new FGEPoint(0, 1);
+		private FGEDimension dimension = new FGEDimension(size, size);
+
 		public NodeDecorationPainter() {
 		}
 
@@ -245,9 +225,9 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 			g.useForegroundStyle(ForegroundStyle.makeStyle(Color.gray));
 
 			// Finds the bottomLeft in the view coordinates (we don't pass the scale here because it will be done by the graphics)
-			Point southWest = convertNormalizedPointToViewCoordinates(getShape().nearestOutlinePoint(bottomLeft),1);
-			southWest.y-=1.5*size;
-			southWest.x+=size/2;
+			Point southWest = convertNormalizedPointToViewCoordinates(getShape().nearestOutlinePoint(bottomLeft), 1);
+			southWest.y -= 1.5 * size;
+			southWest.x += size / 2;
 			g.drawCircle(new FGEPoint(southWest), dimension);
 		}
 	}

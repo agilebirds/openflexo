@@ -21,11 +21,5 @@ package org.openflexo.xml.diff3;
 
 public enum MergeActionType {
 
-	INSERT,
-	DELETE,
-	UPDATE,
-	CHOOSE1,
-	CHOOSE2,
-	SWAP,
-	DONOTHING
+	INSERT, DELETE, UPDATE, CHOOSE1, CHOOSE2, SWAP, DONOTHING
 }

@@ -31,61 +31,53 @@ import org.openflexo.fge.geomedit.construction.ExplicitPointConstruction;
 import org.openflexo.fge.geomedit.gr.GeometricObjectGraphicalRepresentation;
 import org.openflexo.fge.graphics.FGEGraphics;
 
-
 public abstract class DraggableControlPoint<O extends FGEArea> extends GeometryAdjustingControlPoint<O> {
 
 	private ExplicitPointConstruction explicitPointConstruction;
-	
-	public DraggableControlPoint(GeometricObjectGraphicalRepresentation<O,?> gr, String aName, FGEPoint pt, ExplicitPointConstruction pc)
-	{
-		super(gr,aName,pt);
+
+	public DraggableControlPoint(GeometricObjectGraphicalRepresentation<O, ?> gr, String aName, FGEPoint pt, ExplicitPointConstruction pc) {
+		super(gr, aName, pt);
 		explicitPointConstruction = pc;
 		setDraggingAuthorizedArea(new FGEPlane());
 	}
 
 	@Override
-	public GeometricObjectGraphicalRepresentation<O,?> getGraphicalRepresentation()
-	{
-		return (GeometricObjectGraphicalRepresentation<O,?>)super.getGraphicalRepresentation();
+	public GeometricObjectGraphicalRepresentation<O, ?> getGraphicalRepresentation() {
+		return (GeometricObjectGraphicalRepresentation<O, ?>) super.getGraphicalRepresentation();
 	}
 
 	@Override
-	public boolean isDraggable()
-	{
+	public boolean isDraggable() {
 		return true;
 	}
 
 	@Override
-	public void startDragging(DrawingController controller, FGEPoint startPoint)
-	{
+	public void startDragging(DrawingController controller, FGEPoint startPoint) {
 	}
 
 	@Override
-	public abstract boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event);
+	public abstract boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+			FGEPoint initialPoint, MouseEvent event);
 
 	@Override
-	public void stopDragging(DrawingController controller)
-	{
+	public void stopDragging(DrawingController controller) {
 	}
-	
+
 	@Override
 	public abstract void update(O geometricObject);
 
 	@Override
-	public void setPoint(FGEPoint point)
-	{
+	public void setPoint(FGEPoint point) {
 		super.setPoint(point);
 		explicitPointConstruction.setPoint(point);
 	}
 
-	public ExplicitPointConstruction getExplicitPointConstruction()
-	{
+	public ExplicitPointConstruction getExplicitPointConstruction() {
 		return explicitPointConstruction;
 	}
-	
-	public void paint(FGEGraphics graphics,boolean focused)
-	{
-		graphics.drawControlPoint(getPoint(),FGEConstants.CONTROL_POINT_SIZE);
+
+	public void paint(FGEGraphics graphics, boolean focused) {
+		graphics.drawControlPoint(getPoint(), FGEConstants.CONTROL_POINT_SIZE);
 		if (focused) {
 			graphics.drawRoundArroundPoint(getPoint(), 8);
 		}

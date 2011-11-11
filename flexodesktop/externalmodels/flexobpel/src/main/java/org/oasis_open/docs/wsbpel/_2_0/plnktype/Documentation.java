@@ -38,12 +38,13 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.w3c.dom.Element;
 
-
 /**
- * <p>Java class for anonymous complex type.
- *
- * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * <p>
+ * Java class for anonymous complex type.
+ * 
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -57,101 +58,89 @@ import org.w3c.dom.Element;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder =  {
-    "content"}
-)
+@XmlType(name = "", propOrder = { "content" })
 @XmlRootElement(name = "documentation")
 public class Documentation {
-    @XmlMixed
-    @XmlAnyElement(lax = true)
-    protected List<Object> content;
-    @XmlAttribute
-    @XmlSchemaType(name = "anyURI")
-    protected String source;
-    @XmlAttribute(namespace = "http://www.w3.org/XML/1998/namespace")
-    protected String lang;
+	@XmlMixed
+	@XmlAnyElement(lax = true)
+	protected List<Object> content;
+	@XmlAttribute
+	@XmlSchemaType(name = "anyURI")
+	protected String source;
+	@XmlAttribute(namespace = "http://www.w3.org/XML/1998/namespace")
+	protected String lang;
 
-    /**
-     * Gets the value of the content property.
-     *
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the content property.
-     *
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getContent().add(newItem);
-     * </pre>
-     *
-     *
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link String }
-     * {@link Element }
-     * {@link Object }
-     *
-     *
-     */
-    public List<Object> getContent() {
-        if (content == null) {
-            content = new ArrayList<Object>();
-        }
+	/**
+	 * Gets the value of the content property.
+	 * 
+	 * <p>
+	 * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make to the returned list
+	 * will be present inside the JAXB object. This is why there is not a <CODE>set</CODE> method for the content property.
+	 * 
+	 * <p>
+	 * For example, to add a new item, do as follows:
+	 * 
+	 * <pre>
+	 * getContent().add(newItem);
+	 * </pre>
+	 * 
+	 * 
+	 * <p>
+	 * Objects of the following type(s) are allowed in the list {@link String } {@link Element } {@link Object }
+	 * 
+	 * 
+	 */
+	public List<Object> getContent() {
+		if (content == null) {
+			content = new ArrayList<Object>();
+		}
 
-        return this.content;
-    }
+		return this.content;
+	}
 
-    /**
-     * Gets the value of the source property.
-     *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *
-     */
-    public String getSource() {
-        return source;
-    }
+	/**
+	 * Gets the value of the source property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getSource() {
+		return source;
+	}
 
-    /**
-     * Sets the value of the source property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *
-     */
-    public void setSource(String value) {
-        this.source = value;
-    }
+	/**
+	 * Sets the value of the source property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setSource(String value) {
+		this.source = value;
+	}
 
-    /**
-     * Gets the value of the lang property.
-     *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *
-     */
-    public String getLang() {
-        return lang;
-    }
+	/**
+	 * Gets the value of the lang property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getLang() {
+		return lang;
+	}
 
-    /**
-     * Sets the value of the lang property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *
-     */
-    public void setLang(String value) {
-        this.lang = value;
-    }
+	/**
+	 * Sets the value of the lang property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setLang(String value) {
+		this.lang = value;
+	}
 }

@@ -28,57 +28,50 @@ import org.openflexo.foundation.wkf.node.ActionNode;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
-
 public abstract class AbstractActionNodeGR extends FlexoNodeGR<ActionNode> {
 
-	public AbstractActionNodeGR(ActionNode object, ProcessRepresentation aDrawing, boolean isInPalet)
-	{
+	public AbstractActionNodeGR(ActionNode object, ProcessRepresentation aDrawing, boolean isInPalet) {
 		super(object, ShapeType.CIRCLE, aDrawing, isInPalet);
 		setLayer(ACTION_LAYER);
 		updatePropertiesFromWKFPreferences();
 	}
 
 	@Override
-	public int getTopBorder() 
-	{
+	public int getTopBorder() {
 		return (isInPalette ? super.getTopBorder() : REQUIRED_SPACE_ON_TOP_FOR_CLOSING_BOX);
 	}
-	
+
 	@Override
-	public int getBottomBorder() 
-	{
+	public int getBottomBorder() {
 		return super.getBottomBorder();
 	}
 
 	@Override
-	public int getLeftBorder() 
-	{
+	public int getLeftBorder() {
 		return super.getLeftBorder();
 	}
-	
+
 	@Override
-	public int getRightBorder() 
-	{
+	public int getRightBorder() {
 		return super.getRightBorder();
 	}
-	
+
 	@Override
-	public void updatePropertiesFromWKFPreferences()
-	{
+	public void updatePropertiesFromWKFPreferences() {
 		super.updatePropertiesFromWKFPreferences();
-		setTextStyle(TextStyle.makeTextStyle(Color.BLACK, getWorkflow()!=null?getWorkflow().getActionFont(WKFPreferences.getActionNodeFont()).getFont():WKFPreferences.getActionNodeFont().getFont()));
+		setTextStyle(TextStyle.makeTextStyle(Color.BLACK,
+				getWorkflow() != null ? getWorkflow().getActionFont(WKFPreferences.getActionNodeFont()).getFont() : WKFPreferences
+						.getActionNodeFont().getFont()));
 		setIsMultilineAllowed(true);
 	}
 
-	public ActionNode getActionNode()
-	{
+	public ActionNode getActionNode() {
 		return getDrawable();
 	}
 
 	@Override
-	public Circle getShape()
-	{
-		return (Circle)super.getShape();
+	public Circle getShape() {
+		return (Circle) super.getShape();
 	}
 
 	/**
@@ -94,8 +87,7 @@ public abstract class AbstractActionNodeGR extends FlexoNodeGR<ActionNode> {
 	 */
 	@Override
 	public double getDefaultLabelY() {
-		return 40+getBorder().top;
+		return 40 + getBorder().top;
 	}
-
 
 }

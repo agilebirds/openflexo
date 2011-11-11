@@ -26,44 +26,45 @@ import org.netbeans.lib.cvsclient.commandLine.GetOpt;
 
 /**
  * A factory class for creating and configuring a checkout command
- * @author  Robert Greig
+ * 
+ * @author Robert Greig
  */
 public class checkout extends AbstractCommandProvider {
 
-    @Override
+	@Override
 	public String[] getSynonyms() {
-        return new String[] { "co", "get" };
-    }
-    
-    @Override
+		return new String[] { "co", "get" };
+	}
+
+	@Override
 	public Command createCommand(String[] args, int index, GlobalOptions gopt, String workDir) {
-        CheckoutCommand command = new CheckoutCommand();
-        command.setBuilder(null);
-        final String getOptString = command.getOptString();
-        GetOpt go = new GetOpt(args, getOptString);
-        int ch = -1;
-        go.optIndexSet(index);
-        boolean usagePrint = false;
-        while ((ch = go.getopt()) != GetOpt.optEOF) {
-            boolean ok = command.setCVSCommand((char)ch, go.optArgGet());
-            if (!ok) {
-                usagePrint = true;
-            }
-        }
-        if (usagePrint) {
-            throw new IllegalArgumentException(getUsage());
-        }
-        int modulesArgsIndex = go.optIndexGet();
-        // test if we have been passed any file arguments
-        if (modulesArgsIndex < args.length) {
-            String[] modulesArgs = new String[args.length - modulesArgsIndex];
-            // send the arguments as absolute paths
-            for (int i = modulesArgsIndex; i < args.length; i++) {
-                modulesArgs[i - modulesArgsIndex] = args[i];
-            }
-            command.setModules(modulesArgs);
-        }
-        return command;
-    }
-    
+		CheckoutCommand command = new CheckoutCommand();
+		command.setBuilder(null);
+		final String getOptString = command.getOptString();
+		GetOpt go = new GetOpt(args, getOptString);
+		int ch = -1;
+		go.optIndexSet(index);
+		boolean usagePrint = false;
+		while ((ch = go.getopt()) != GetOpt.optEOF) {
+			boolean ok = command.setCVSCommand((char) ch, go.optArgGet());
+			if (!ok) {
+				usagePrint = true;
+			}
+		}
+		if (usagePrint) {
+			throw new IllegalArgumentException(getUsage());
+		}
+		int modulesArgsIndex = go.optIndexGet();
+		// test if we have been passed any file arguments
+		if (modulesArgsIndex < args.length) {
+			String[] modulesArgs = new String[args.length - modulesArgsIndex];
+			// send the arguments as absolute paths
+			for (int i = modulesArgsIndex; i < args.length; i++) {
+				modulesArgs[i - modulesArgsIndex] = args[i];
+			}
+			command.setModules(modulesArgs);
+		}
+		return command;
+	}
+
 }

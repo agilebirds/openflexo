@@ -40,270 +40,230 @@ import org.openflexo.foundation.dm.RationalRoseRepository;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 
-public class CreateDMRepository extends FlexoAction<CreateDMRepository,DMObject,DMObject> 
-{
+public class CreateDMRepository extends FlexoAction<CreateDMRepository, DMObject, DMObject> {
 
-    private static final Logger logger = Logger.getLogger(CreateDMRepository.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(CreateDMRepository.class.getPackage().getName());
 
-    public static final String PROJECT_REPOSITORY = "PROJECT_REPOSITORY";
-    public static final String PROJECT_DATABASE_REPOSITORY = "PROJECT_DATABASE_REPOSITORY";
-    public static final String EXTERNAL_REPOSITORY = "EXTERNAL_REPOSITORY";
-    public static final String DENALI_FOUNDATION_REPOSITORY = "DENALI_FOUNDATION_REPOSITORY";
-    public static final String EXTERNAL_DATABASE_REPOSITORY = "EXTERNAL_DATABASE_REPOSITORY";
-    public static final String RATIONAL_ROSE_REPOSITORY = "RATIONAL_ROSE_REPOSITORY";
-    public static final String THESAURUS_REPOSITORY = "THESAURUS_REPOSITORY";
-    public static final String THESAURUS_DATABASE_REPOSITORY = "THESAURUS_DATABASE_REPOSITORY";
+	public static final String PROJECT_REPOSITORY = "PROJECT_REPOSITORY";
+	public static final String PROJECT_DATABASE_REPOSITORY = "PROJECT_DATABASE_REPOSITORY";
+	public static final String EXTERNAL_REPOSITORY = "EXTERNAL_REPOSITORY";
+	public static final String DENALI_FOUNDATION_REPOSITORY = "DENALI_FOUNDATION_REPOSITORY";
+	public static final String EXTERNAL_DATABASE_REPOSITORY = "EXTERNAL_DATABASE_REPOSITORY";
+	public static final String RATIONAL_ROSE_REPOSITORY = "RATIONAL_ROSE_REPOSITORY";
+	public static final String THESAURUS_REPOSITORY = "THESAURUS_REPOSITORY";
+	public static final String THESAURUS_DATABASE_REPOSITORY = "THESAURUS_DATABASE_REPOSITORY";
 
-    public static FlexoActionType<CreateDMRepository,DMObject,DMObject> actionType 
-    = new FlexoActionType<CreateDMRepository,DMObject,DMObject> (
-    		"add_repository...",
-    		FlexoActionType.newMenu,
-    		FlexoActionType.defaultGroup,
-    		FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<CreateDMRepository, DMObject, DMObject> actionType = new FlexoActionType<CreateDMRepository, DMObject, DMObject>(
+			"add_repository...", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public CreateDMRepository makeNewAction(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) 
-        {
-            return new CreateDMRepository(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public CreateDMRepository makeNewAction(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
+			return new CreateDMRepository(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) 
-        {
-            return true;
-         }
-                
-    };
-    
-    CreateDMRepository (DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+		@Override
+		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
+			return true;
+		}
 
-    protected CreateDMRepository (FlexoActionType anActionType, DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor)
-    {
-        super(anActionType, focusedObject, globalSelection, editor);        
-    }
-    
-    private DMRepository _newRepository = null;
-    private String _repositoryType;
-    private String _newRepositoryName;
-    private File _jarFile;
-    private File _denaliFoundationRepositoryFile;
-    private File _rationalRoseFile;
-    private String _rationalRosePackageName;
-    private FlexoProject _project;
+	};
 
-    public File getDenaliFoundationRepositoryFile() {
-        return _denaliFoundationRepositoryFile;
-    }
+	CreateDMRepository(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    public void setDenaliFoundationRepositoryFile(
-            File denaliFoundationRepositoryFile) {
-        _denaliFoundationRepositoryFile = denaliFoundationRepositoryFile;
-    }
+	protected CreateDMRepository(FlexoActionType anActionType, DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
+		super(anActionType, focusedObject, globalSelection, editor);
+	}
 
-    public File getJarFile() {
-        return _jarFile;
-    }
+	private DMRepository _newRepository = null;
+	private String _repositoryType;
+	private String _newRepositoryName;
+	private File _jarFile;
+	private File _denaliFoundationRepositoryFile;
+	private File _rationalRoseFile;
+	private String _rationalRosePackageName;
+	private FlexoProject _project;
 
-    public void setJarFile(File jarFile) 
-    {
-        _jarFile = jarFile;
-    }
+	public File getDenaliFoundationRepositoryFile() {
+		return _denaliFoundationRepositoryFile;
+	}
 
-    public File getRationalRoseFile() 
-    {
-        return _rationalRoseFile;
-    }
+	public void setDenaliFoundationRepositoryFile(File denaliFoundationRepositoryFile) {
+		_denaliFoundationRepositoryFile = denaliFoundationRepositoryFile;
+	}
 
-    public void setRationalRoseFile(File rationalRoseFile) 
-    {
-        _rationalRoseFile = rationalRoseFile;
-    }
+	public File getJarFile() {
+		return _jarFile;
+	}
 
-    public String getRationalRosePackageName() 
-    {
-    	if (_rationalRosePackageName!=null)
-    		return _rationalRosePackageName;
-        return "rational.rose";
-    }
+	public void setJarFile(File jarFile) {
+		_jarFile = jarFile;
+	}
 
-    public void setRationalRosePackageName(String rationalRosePackageName)
-    {
-        _rationalRosePackageName = rationalRosePackageName;
-    }
+	public File getRationalRoseFile() {
+		return _rationalRoseFile;
+	}
 
-    public DMRepository getNewRepository() 
-    {
-        return _newRepository;
-    }
+	public void setRationalRoseFile(File rationalRoseFile) {
+		_rationalRoseFile = rationalRoseFile;
+	}
 
-    public void setNewRepository(DMRepository newRepository) 
-    {
-        _newRepository = newRepository;
-    }
+	public String getRationalRosePackageName() {
+		if (_rationalRosePackageName != null)
+			return _rationalRosePackageName;
+		return "rational.rose";
+	}
 
-    public String getNewRepositoryName()
-    {
-        return _newRepositoryName;
-    }
+	public void setRationalRosePackageName(String rationalRosePackageName) {
+		_rationalRosePackageName = rationalRosePackageName;
+	}
 
-    public void setNewRepositoryName(String newRepositoryName) 
-    {
-        _newRepositoryName = newRepositoryName;
-    }
+	public DMRepository getNewRepository() {
+		return _newRepository;
+	}
 
-    public String getRepositoryType() 
-    {
-        return _repositoryType;
-    }
+	public void setNewRepository(DMRepository newRepository) {
+		_newRepository = newRepository;
+	}
 
-    public void setRepositoryType(String repositoryType)
-    {
-        _repositoryType = repositoryType;
-    }
+	public String getNewRepositoryName() {
+		return _newRepositoryName;
+	}
 
-    public FlexoProject getProject() 
-    {
-    	if (_project == null && getFocusedObject() != null) return getFocusedObject().getProject();
-        return _project;
-    }
+	public void setNewRepositoryName(String newRepositoryName) {
+		_newRepositoryName = newRepositoryName;
+	}
 
-    public void setProject(FlexoProject project) 
-    {
-        _project = project;
-    }
+	public String getRepositoryType() {
+		return _repositoryType;
+	}
 
-    private DMSet importedClassSet = null;
-    
-    public DMSet getImportedClassSet() 
-    {
-        return importedClassSet;
-    }
+	public void setRepositoryType(String repositoryType) {
+		_repositoryType = repositoryType;
+	}
 
-    public void setImportedClassSet(DMSet importedClassSet)
-    {
-        this.importedClassSet = importedClassSet;
-    }
+	public FlexoProject getProject() {
+		if (_project == null && getFocusedObject() != null)
+			return getFocusedObject().getProject();
+		return _project;
+	}
 
-    @Override
-	protected void doAction(Object context) throws FlexoException 
-    {
-        logger.info ("CREATE DMRepository");
- 
-        // TODO: fixed an NPE that i could not reproduce 
-        // (initializer was not called, and therefore repository type was null)
-        if (getRepositoryType() == null) return;
-        
-        if (getRepositoryType().equals(CreateDMRepository.PROJECT_REPOSITORY)) {
-            _newRepository = ProjectRepository.createNewProjectRepository(getNewRepositoryName(),
-                    getProject().getDataModel());
-        } 
-        else if (getRepositoryType().equals(CreateDMRepository.PROJECT_DATABASE_REPOSITORY)) {
-            _newRepository = ProjectDatabaseRepository.createNewProjectDatabaseRepository(getProject()
-                    .getDataModel(), getNewRepositoryName());
-        } 
-        else if (getRepositoryType().equals(CreateDMRepository.EXTERNAL_REPOSITORY)) {
-            if (getJarFile() != null) {
-            	makeFlexoProgress(FlexoLocalization
-                            .localizedForKey("importing")
-                            + " " + getJarFile().getName(), 5);
-                setProgress(FlexoLocalization
-                            .localizedForKey("importing")
-                            + " " + getJarFile().getName());
-                _newRepository = ExternalRepository.createNewExternalRepository(getProject()
-                        .getDataModel(), getJarFile(), getImportedClassSet(), getFlexoProgress());
-                ((ExternalRepository)_newRepository).setIsImportedByUser(true);
-                hideFlexoProgress();
-            }
-        } 
-        /*else if (_repositoryType.equals(CreateDMRepository.DENALI_FOUNDATION_REPOSITORY)) {
-                    if (getDenaliFoundationRepositoryFile() != null) {
-                if (!getNewRepositoryName()
-                        .equals(DenaliFoundationRepository.DENALI_FOUNDATION_REPOSITORY_NAME)) {
-                    if (_project.getDataModel().getDenaliFoundationRepository() == null) {*/
-                        /*FlexoController
-                                .notify(FlexoLocalization
-                                        .localizedForKey("dependant_repository_denali_foundation_must_also_be_imported"));*//*
-                        makeFlexoProgress(FlexoLocalization
-                                    .localizedForKey("importing_denali_foundation"), 6);
-                            setProgress(FlexoLocalization
-                                    .localizedForKey("importing")
-                                    + " " + getDenaliFoundationRepositoryFile().getName());
-                         _newRepository = DenaliFoundationRepository
-                                .createDenaliFoundationRepository(_project.getDataModel(),getFlexoProgress());
-                        hideFlexoProgress();
-                    }
-                }
-                if ((!getNewRepositoryName()
-                        .equals(DenaliFoundationRepository.DENALI_FOUNDATION_REPOSITORY_NAME))
-                        && (!getNewRepositoryName()
-                                .equals(DenaliFoundationRepository.DENALI_FLEXO_REPOSITORY_NAME))) {
-                    if (getProject().getDataModel().getDenaliFlexoRepository() == null) {*/
-                        /*FlexoController
-                                .notify(FlexoLocalization
-                                        .localizedForKey("dependant_repository_denali_flexo_must_also_be_imported"));*//*
-                        makeFlexoProgress(FlexoLocalization
-                                    .localizedForKey("importing_denali_flexo"), 6);
-                            setProgress(FlexoLocalization
-                                    .localizedForKey("importing")
-                                    + " " + getDenaliFoundationRepositoryFile().getName());
-                        _newRepository = DenaliFoundationRepository.createDenaliFlexoRepository(
-                                _project.getDataModel(), getFlexoProgress());
-                        hideFlexoProgress();
-                   }
-                }
+	public void setProject(FlexoProject project) {
+		_project = project;
+	}
 
-                    makeFlexoProgress(FlexoLocalization
-                            .localizedForKey("importing")
-                            + " " + getDenaliFoundationRepositoryFile().getName(), 6);
-                    setProgress(FlexoLocalization
-                            .localizedForKey("importing")
-                            + " " + getDenaliFoundationRepositoryFile().getName());
-                 _newRepository = DenaliFoundationRepository.createNewDenaliFoundationRepository(
-                        _project.getDataModel(), getDenaliFoundationRepositoryFile(), getFlexoProgress());
-                hideFlexoProgress();
-            }
-        } */
-        else if (getRepositoryType().equals(CreateDMRepository.RATIONAL_ROSE_REPOSITORY)) {
-            logger.info("Importing from RationalRose...");
-            DataImporter rationalRoseImporter = DataImporterLoader.KnownDataImporter.RATIONAL_ROSE_IMPORTER.getImporter();
-            if (rationalRoseImporter != null) {
-                Object[] params = new Object[3];
-                params[0] = getNewRepositoryName();
-                params[1] = getRationalRosePackageName();
-                params[2] = this;
-                makeFlexoProgress(FlexoLocalization
-                        .localizedForKey("importing")
-                        + " " + getRationalRoseFile().getName(), 4);
-                _newRepository = (RationalRoseRepository)rationalRoseImporter.importInProject(getProject(),getRationalRoseFile(),params);
-                hideFlexoProgress();
-            }
-            else {
-                logger.warning("Sorry, data importer "+DataImporterLoader.KnownDataImporter.RATIONAL_ROSE_IMPORTER+" not found ");
-            }
-            logger.info("Importing from RationalRose... DONE.");
-        } 
-        else if (getRepositoryType().equals(CreateDMRepository.EXTERNAL_DATABASE_REPOSITORY)) {
-            _newRepository = ExternalDatabaseRepository.createNewExternalDatabaseRepository(_project
-                    .getDataModel(), getNewRepositoryName());
-        } 
-        else if (getRepositoryType().equals(CreateDMRepository.THESAURUS_REPOSITORY)) {
-        } 
-        else if (getRepositoryType().equals(CreateDMRepository.THESAURUS_DATABASE_REPOSITORY)) {
-        }
-    }
+	private DMSet importedClassSet = null;
 
+	public DMSet getImportedClassSet() {
+		return importedClassSet;
+	}
 
+	public void setImportedClassSet(DMSet importedClassSet) {
+		this.importedClassSet = importedClassSet;
+	}
+
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		logger.info("CREATE DMRepository");
+
+		// TODO: fixed an NPE that i could not reproduce
+		// (initializer was not called, and therefore repository type was null)
+		if (getRepositoryType() == null)
+			return;
+
+		if (getRepositoryType().equals(CreateDMRepository.PROJECT_REPOSITORY)) {
+			_newRepository = ProjectRepository.createNewProjectRepository(getNewRepositoryName(), getProject().getDataModel());
+		} else if (getRepositoryType().equals(CreateDMRepository.PROJECT_DATABASE_REPOSITORY)) {
+			_newRepository = ProjectDatabaseRepository.createNewProjectDatabaseRepository(getProject().getDataModel(),
+					getNewRepositoryName());
+		} else if (getRepositoryType().equals(CreateDMRepository.EXTERNAL_REPOSITORY)) {
+			if (getJarFile() != null) {
+				makeFlexoProgress(FlexoLocalization.localizedForKey("importing") + " " + getJarFile().getName(), 5);
+				setProgress(FlexoLocalization.localizedForKey("importing") + " " + getJarFile().getName());
+				_newRepository = ExternalRepository.createNewExternalRepository(getProject().getDataModel(), getJarFile(),
+						getImportedClassSet(), getFlexoProgress());
+				((ExternalRepository) _newRepository).setIsImportedByUser(true);
+				hideFlexoProgress();
+			}
+		}
+		/*else if (_repositoryType.equals(CreateDMRepository.DENALI_FOUNDATION_REPOSITORY)) {
+		            if (getDenaliFoundationRepositoryFile() != null) {
+		        if (!getNewRepositoryName()
+		                .equals(DenaliFoundationRepository.DENALI_FOUNDATION_REPOSITORY_NAME)) {
+		            if (_project.getDataModel().getDenaliFoundationRepository() == null) {*/
+		/*FlexoController
+		        .notify(FlexoLocalization
+		                .localizedForKey("dependant_repository_denali_foundation_must_also_be_imported"));*//*
+																											makeFlexoProgress(FlexoLocalization
+																											.localizedForKey("importing_denali_foundation"), 6);
+																											setProgress(FlexoLocalization
+																											.localizedForKey("importing")
+																											+ " " + getDenaliFoundationRepositoryFile().getName());
+																											_newRepository = DenaliFoundationRepository
+																											.createDenaliFoundationRepository(_project.getDataModel(),getFlexoProgress());
+																											hideFlexoProgress();
+																											}
+																											}
+																											if ((!getNewRepositoryName()
+																											.equals(DenaliFoundationRepository.DENALI_FOUNDATION_REPOSITORY_NAME))
+																											&& (!getNewRepositoryName()
+																											.equals(DenaliFoundationRepository.DENALI_FLEXO_REPOSITORY_NAME))) {
+																											if (getProject().getDataModel().getDenaliFlexoRepository() == null) {*/
+		/*FlexoController
+		        .notify(FlexoLocalization
+		                .localizedForKey("dependant_repository_denali_flexo_must_also_be_imported"));*//*
+																										makeFlexoProgress(FlexoLocalization
+																										.localizedForKey("importing_denali_flexo"), 6);
+																										setProgress(FlexoLocalization
+																										.localizedForKey("importing")
+																										+ " " + getDenaliFoundationRepositoryFile().getName());
+																										_newRepository = DenaliFoundationRepository.createDenaliFlexoRepository(
+																										_project.getDataModel(), getFlexoProgress());
+																										hideFlexoProgress();
+																										}
+																										}
+
+																										makeFlexoProgress(FlexoLocalization
+																										.localizedForKey("importing")
+																										+ " " + getDenaliFoundationRepositoryFile().getName(), 6);
+																										setProgress(FlexoLocalization
+																										.localizedForKey("importing")
+																										+ " " + getDenaliFoundationRepositoryFile().getName());
+																										_newRepository = DenaliFoundationRepository.createNewDenaliFoundationRepository(
+																										_project.getDataModel(), getDenaliFoundationRepositoryFile(), getFlexoProgress());
+																										hideFlexoProgress();
+																										}
+																										} */
+		else if (getRepositoryType().equals(CreateDMRepository.RATIONAL_ROSE_REPOSITORY)) {
+			logger.info("Importing from RationalRose...");
+			DataImporter rationalRoseImporter = DataImporterLoader.KnownDataImporter.RATIONAL_ROSE_IMPORTER.getImporter();
+			if (rationalRoseImporter != null) {
+				Object[] params = new Object[3];
+				params[0] = getNewRepositoryName();
+				params[1] = getRationalRosePackageName();
+				params[2] = this;
+				makeFlexoProgress(FlexoLocalization.localizedForKey("importing") + " " + getRationalRoseFile().getName(), 4);
+				_newRepository = (RationalRoseRepository) rationalRoseImporter.importInProject(getProject(), getRationalRoseFile(), params);
+				hideFlexoProgress();
+			} else {
+				logger.warning("Sorry, data importer " + DataImporterLoader.KnownDataImporter.RATIONAL_ROSE_IMPORTER + " not found ");
+			}
+			logger.info("Importing from RationalRose... DONE.");
+		} else if (getRepositoryType().equals(CreateDMRepository.EXTERNAL_DATABASE_REPOSITORY)) {
+			_newRepository = ExternalDatabaseRepository
+					.createNewExternalDatabaseRepository(_project.getDataModel(), getNewRepositoryName());
+		} else if (getRepositoryType().equals(CreateDMRepository.THESAURUS_REPOSITORY)) {
+		} else if (getRepositoryType().equals(CreateDMRepository.THESAURUS_DATABASE_REPOSITORY)) {
+		}
+	}
 
 }

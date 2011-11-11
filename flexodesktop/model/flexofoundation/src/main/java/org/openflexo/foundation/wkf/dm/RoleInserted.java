@@ -27,12 +27,10 @@ import org.openflexo.foundation.wkf.Role;
  * @author sguerin
  * 
  */
-public class RoleInserted extends WKFDataModification
-{
+public class RoleInserted extends WKFDataModification {
 
-    public RoleInserted(Role insertedRole)
-    {
-        super("roles", null, insertedRole);
-    }
+	public RoleInserted(Role insertedRole) {
+		super("roles", null, insertedRole);
+	}
 
 }

@@ -33,14 +33,12 @@ import org.openflexo.foundation.wkf.action.AddOperationMetricsValue;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class AddOperationMetricsInitializer extends AddMetricsInitializer<AddOperationMetricsValue, OperationNode> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddOperationMetricsInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(actionInitializer,AddOperationMetricsValue.actionType);
+	AddOperationMetricsInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(actionInitializer, AddOperationMetricsValue.actionType);
 	}
 
 	@Override
@@ -51,10 +49,10 @@ public class AddOperationMetricsInitializer extends AddMetricsInitializer<AddOpe
 	@Override
 	protected Vector<MetricsDefinition> getAvailableMetricsDefinitions(OperationNode operation) {
 		Vector<MetricsDefinition> v = new Vector<MetricsDefinition>(getProject().getWorkflow().getOperationMetricsDefinitions());
-		for (MetricsValue mv: operation.getMetricsValues()) {
+		for (MetricsValue mv : operation.getMetricsValues()) {
 			v.remove(mv.getMetricsDefinition());
 		}
 		return v;
 	}
-	
+
 }

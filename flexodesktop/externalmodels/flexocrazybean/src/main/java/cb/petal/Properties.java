@@ -18,33 +18,34 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents Properties object
- *
+ * 
  * @version $Id: Properties.java,v 1.3 2011/09/12 11:46:47 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class Properties extends QuidObject {
-  public Properties(PetalNode parent, Collection params) {
-    super(parent, "Properties", params);
-  }
+	public Properties(PetalNode parent, Collection params) {
+		super(parent, "Properties", params);
+	}
 
-  public Properties() {
-    super("Properties");
-  }
+	public Properties() {
+		super("Properties");
+	}
 
-  public List getAttributes() {
-    return (List)getProperty("attributes");
-  }
+	public List getAttributes() {
+		return (List) getProperty("attributes");
+	}
 
-  public void setAttributes(List o) {
-    defineProperty("attributes", o);
-  }
+	public void setAttributes(List o) {
+		defineProperty("attributes", o);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

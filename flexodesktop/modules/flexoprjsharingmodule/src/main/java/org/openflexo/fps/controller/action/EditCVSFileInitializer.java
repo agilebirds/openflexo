@@ -32,63 +32,54 @@ import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class EditCVSFileInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	EditCVSFileInitializer(FPSControllerActionInitializer actionInitializer)
-	{
-		super(EditCVSFile.actionType,actionInitializer);
+	EditCVSFileInitializer(FPSControllerActionInitializer actionInitializer) {
+		super(EditCVSFile.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected FPSControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (FPSControllerActionInitializer)super.getControllerActionInitializer();
+	protected FPSControllerActionInitializer getControllerActionInitializer() {
+		return (FPSControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<EditCVSFile> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<EditCVSFile> getDefaultInitializer() {
 		return new FlexoActionInitializer<EditCVSFile>() {
-            @Override
-			public boolean run(ActionEvent e, EditCVSFile action)
-            {
-    			FileContentEditor editor = (FileContentEditor)getControllerActionInitializer()
-    			.getFPSController().moduleViewForObject(action.getFocusedObject());
-    			if (editor != null) {
-    				action.setFileContentEditor(editor);
-    				return true;
-    			}
-    			return false;
-           }
-        };
+			@Override
+			public boolean run(ActionEvent e, EditCVSFile action) {
+				FileContentEditor editor = (FileContentEditor) getControllerActionInitializer().getFPSController().moduleViewForObject(
+						action.getFocusedObject());
+				if (editor != null) {
+					action.setFileContentEditor(editor);
+					return true;
+				}
+				return false;
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<EditCVSFile> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<EditCVSFile> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<EditCVSFile>() {
-            @Override
-			public boolean run(ActionEvent e, EditCVSFile action)
-            {
-            	getControllerActionInitializer().getFPSController().setCurrentEditedObjectAsModuleView(action.getFocusedObject());
-            	getControllerActionInitializer().getFPSController().selectAndFocusObject(action.getFocusedObject());
-    			return true;            	
-          }
-        };
+			@Override
+			public boolean run(ActionEvent e, EditCVSFile action) {
+				getControllerActionInitializer().getFPSController().setCurrentEditedObjectAsModuleView(action.getFocusedObject());
+				getControllerActionInitializer().getFPSController().selectAndFocusObject(action.getFocusedObject());
+				return true;
+			}
+		};
 	}
 
-   	@Override
-	protected Icon getEnabledIcon() 
-	{
+	@Override
+	protected Icon getEnabledIcon() {
 		return GeneratorIconLibrary.EDIT_ICON;
 	}
- 
+
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return GeneratorIconLibrary.EDIT_DISABLED_ICON;
 	}
 

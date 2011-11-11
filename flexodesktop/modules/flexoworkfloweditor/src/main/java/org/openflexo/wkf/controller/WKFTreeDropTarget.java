@@ -37,11 +37,10 @@ import org.openflexo.foundation.wkf.action.MoveFlexoProcess;
 import org.openflexo.foundation.wkf.action.MoveProcessFolder;
 import org.openflexo.foundation.wkf.action.RemoveFromProcessFolder;
 
-
 /**
- *
+ * 
  * @author gpolet
- *
+ * 
  */
 public class WKFTreeDropTarget extends TreeDropTarget {
 
@@ -50,8 +49,7 @@ public class WKFTreeDropTarget extends TreeDropTarget {
 	}
 
 	@Override
-	public boolean targetAcceptsSource(BrowserElement target,
-			BrowserElement source) {
+	public boolean targetAcceptsSource(BrowserElement target, BrowserElement source) {
 		FlexoProcess srcProcess = null;
 		FlexoProcessNode srcNode = null;
 		ProcessFolder srcFolder = null;
@@ -60,48 +58,49 @@ public class WKFTreeDropTarget extends TreeDropTarget {
 		FlexoWorkflow targetWKF = null;
 		ProcessFolder targetFolder = null;
 		if (source instanceof ProcessElement) {
-			srcProcess = ((ProcessElement)source).getFlexoProcess();
+			srcProcess = ((ProcessElement) source).getFlexoProcess();
 			srcNode = srcProcess.getProcessNode();
 		} else if (source instanceof FlexoProcessNodeElement) {
-			srcNode = ((FlexoProcessNodeElement)source).getProcessNode();
+			srcNode = ((FlexoProcessNodeElement) source).getProcessNode();
 			srcProcess = srcNode.getProcess();
 		} else if (source instanceof ProcessFolderElement) {
-			srcFolder = ((ProcessFolderElement)source).getFolder();
+			srcFolder = ((ProcessFolderElement) source).getFolder();
 		}
 		if (target instanceof ProcessElement) {
-			targetProcess = ((ProcessElement)target).getFlexoProcess();
+			targetProcess = ((ProcessElement) target).getFlexoProcess();
 			targetNode = targetProcess.getProcessNode();
 		} else if (target instanceof FlexoProcessNodeElement) {
-			targetNode = ((FlexoProcessNodeElement)target).getProcessNode();
+			targetNode = ((FlexoProcessNodeElement) target).getProcessNode();
 			targetProcess = targetNode.getProcess();
 		} else if (target instanceof WorkflowElement) {
-			targetWKF = ((WorkflowElement)target).getFlexoWorkflow();
+			targetWKF = ((WorkflowElement) target).getFlexoWorkflow();
 		} else if (target instanceof ProcessFolderElement) {
-			targetFolder = ((ProcessFolderElement)target).getFolder();
+			targetFolder = ((ProcessFolderElement) target).getFolder();
 		}
 
-		if (srcProcess!=null) {
-			if (targetProcess!=null) {
-				if (srcNode.getParentFolder()!=null && srcNode.getParentFolder().getProcessNode()==targetNode) // Remove process from folder
+		if (srcProcess != null) {
+			if (targetProcess != null) {
+				if (srcNode.getParentFolder() != null && srcNode.getParentFolder().getProcessNode() == targetNode) // Remove process from
+																													// folder
 					return true;
 				if (srcProcess.isAcceptableAsParentProcess(targetProcess)) // Move process to another process
 					return true;
-			} else if (targetFolder!=null) {
-				if (targetFolder.getProcessNode()==srcNode.getFatherProcessNode()) // Add process to folder;
+			} else if (targetFolder != null) {
+				if (targetFolder.getProcessNode() == srcNode.getFatherProcessNode()) // Add process to folder;
 					return true;
-			} else if (targetWKF!=null) {
+			} else if (targetWKF != null) {
 				if (srcProcess.isAcceptableAsParentProcess(null))
 					return true;
 			}
-		} else if (srcFolder!=null) {
+		} else if (srcFolder != null) {
 			FlexoFolderContainerNode targetWKFNode = null;
-			if (targetNode!=null) {
+			if (targetNode != null) {
 				targetWKFNode = targetNode;
-			} else if (targetFolder!=null) {
+			} else if (targetFolder != null) {
 				if (srcFolder.isAcceptableParentFolder(targetFolder))
 					targetWKFNode = targetFolder;
 			}
-			if (targetWKFNode!=null) { // Move folder
+			if (targetWKFNode != null) { // Move folder
 				FlexoProcess targetParentProcess = targetWKFNode.getProcessNode().getProcess();
 				if (canMoveFolder(srcFolder, targetParentProcess)) {
 					return true;
@@ -121,60 +120,61 @@ public class WKFTreeDropTarget extends TreeDropTarget {
 		FlexoWorkflow targetWKF = null;
 		ProcessFolder targetFolder = null;
 		if (source instanceof ProcessElement) {
-			srcProcess = ((ProcessElement)source).getFlexoProcess();
+			srcProcess = ((ProcessElement) source).getFlexoProcess();
 			srcNode = srcProcess.getProcessNode();
 		} else if (source instanceof FlexoProcessNodeElement) {
-			srcNode = ((FlexoProcessNodeElement)source).getProcessNode();
+			srcNode = ((FlexoProcessNodeElement) source).getProcessNode();
 			srcProcess = srcNode.getProcess();
 		} else if (source instanceof ProcessFolderElement) {
-			srcFolder = ((ProcessFolderElement)source).getFolder();
+			srcFolder = ((ProcessFolderElement) source).getFolder();
 		}
 		if (target instanceof ProcessElement) {
-			targetProcess = ((ProcessElement)target).getFlexoProcess();
+			targetProcess = ((ProcessElement) target).getFlexoProcess();
 			targetNode = targetProcess.getProcessNode();
 		} else if (target instanceof FlexoProcessNodeElement) {
-			targetNode = ((FlexoProcessNodeElement)target).getProcessNode();
+			targetNode = ((FlexoProcessNodeElement) target).getProcessNode();
 			targetProcess = targetNode.getProcess();
 		} else if (target instanceof WorkflowElement) {
-			targetWKF = ((WorkflowElement)target).getFlexoWorkflow();
+			targetWKF = ((WorkflowElement) target).getFlexoWorkflow();
 		} else if (target instanceof ProcessFolderElement) {
-			targetFolder = ((ProcessFolderElement)target).getFolder();
+			targetFolder = ((ProcessFolderElement) target).getFolder();
 		}
-		if (srcProcess!=null) {
-			if (targetProcess!=null) {
-				if (srcNode.getParentFolder()!=null && srcNode.getParentFolder().getProcessNode()==targetNode) { // Remove process from folder
+		if (srcProcess != null) {
+			if (targetProcess != null) {
+				if (srcNode.getParentFolder() != null && srcNode.getParentFolder().getProcessNode() == targetNode) { // Remove process from
+																														// folder
 					RemoveFromProcessFolder remove = RemoveFromProcessFolder.actionType.makeNewAction(srcNode, null, _browser.getEditor());
 					return remove.doAction().hasActionExecutionSucceeded();
 				}
 				if (srcProcess.isAcceptableAsParentProcess(targetProcess)) {
 					MoveFlexoProcess moveProcessAction = MoveFlexoProcess.actionType.makeNewAction(srcProcess, null, _browser.getEditor());
-		            moveProcessAction.setNewParentProcess(targetProcess);
-		            moveProcessAction.setDoImmediately(true);
-		            return moveProcessAction.doAction().hasActionExecutionSucceeded();
+					moveProcessAction.setNewParentProcess(targetProcess);
+					moveProcessAction.setDoImmediately(true);
+					return moveProcessAction.doAction().hasActionExecutionSucceeded();
 				}
-			} else if (targetFolder!=null) {
-				if (targetFolder.getProcessNode()==srcNode.getFatherProcessNode()) { // Add process to folder;
+			} else if (targetFolder != null) {
+				if (targetFolder.getProcessNode() == srcNode.getFatherProcessNode()) { // Add process to folder;
 					AddToProcessFolder add = AddToProcessFolder.actionType.makeNewAction(srcNode, null, _browser.getEditor());
 					add.setDestination(targetFolder);
 					return add.doAction().hasActionExecutionSucceeded();
 				}
-			} else if (targetWKF!=null) {
+			} else if (targetWKF != null) {
 				if (srcProcess.isAcceptableAsParentProcess(null)) {
 					MoveFlexoProcess moveProcessAction = MoveFlexoProcess.actionType.makeNewAction(srcProcess, null, _browser.getEditor());
-		            moveProcessAction.setNewParentProcess(null);
-		            moveProcessAction.setDoImmediately(true);
-		            return moveProcessAction.doAction().hasActionExecutionSucceeded();
+					moveProcessAction.setNewParentProcess(null);
+					moveProcessAction.setDoImmediately(true);
+					return moveProcessAction.doAction().hasActionExecutionSucceeded();
 				}
 			}
-		} else if (srcFolder!=null) {
+		} else if (srcFolder != null) {
 			FlexoFolderContainerNode targetWKFNode = null;
-			if (targetNode!=null) {
+			if (targetNode != null) {
 				targetWKFNode = targetNode;
-			} else if (targetFolder!=null) {
+			} else if (targetFolder != null) {
 				if (srcFolder.isAcceptableParentFolder(targetFolder))
 					targetWKFNode = targetFolder;
 			}
-			if (targetWKFNode!=null) { // Move folder
+			if (targetWKFNode != null) { // Move folder
 				FlexoProcess targetParentProcess = targetWKFNode.getProcessNode().getProcess();
 				if (canMoveFolder(srcFolder, targetParentProcess)) {
 					MoveProcessFolder move = MoveProcessFolder.actionType.makeNewAction(srcFolder, null, _browser.getEditor());
@@ -187,11 +187,11 @@ public class WKFTreeDropTarget extends TreeDropTarget {
 	}
 
 	private boolean canMoveFolder(ProcessFolder srcFolder, FlexoProcess targetProcess) {
-		if (targetProcess==null || targetProcess.isImported())
+		if (targetProcess == null || targetProcess.isImported())
 			return false;
 		boolean ok = true;
-		for (FlexoProcessNode node:srcFolder.getAllDirectSubProcessNodes()) {
-			ok&=node.getProcess().isAcceptableAsParentProcess(targetProcess);
+		for (FlexoProcessNode node : srcFolder.getAllDirectSubProcessNodes()) {
+			ok &= node.getProcess().isAcceptableAsParentProcess(targetProcess);
 		}
 		return ok;
 	}

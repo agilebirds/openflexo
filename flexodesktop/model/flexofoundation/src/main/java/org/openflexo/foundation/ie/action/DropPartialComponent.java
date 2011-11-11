@@ -47,325 +47,308 @@ import org.openflexo.foundation.ie.widget.InnerTableReusableWidget;
 import org.openflexo.foundation.ie.widget.TopComponentReusableWidget;
 import org.openflexo.foundation.rm.FlexoProject;
 
+public class DropPartialComponent extends FlexoAction<DropPartialComponent, IEObject, IEObject> {
 
-public class DropPartialComponent extends FlexoAction<DropPartialComponent,IEObject,IEObject> 
-{
+	private static final Logger logger = Logger.getLogger(DropPartialComponent.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(DropPartialComponent.class.getPackage().getName());
-    
-    public static FlexoActionType<DropPartialComponent,IEObject,IEObject> actionType = new FlexoActionType<DropPartialComponent,IEObject,IEObject> ("drag_ie_element",FlexoActionType.newMenu,FlexoActionType.defaultGroup,FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<DropPartialComponent, IEObject, IEObject> actionType = new FlexoActionType<DropPartialComponent, IEObject, IEObject>(
+			"drag_ie_element", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public DropPartialComponent makeNewAction(IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor) 
-        {
-            return new DropPartialComponent(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public DropPartialComponent makeNewAction(IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor) {
+			return new DropPartialComponent(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(IEObject object, Vector<IEObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(IEObject object, Vector<IEObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) 
-        {
-            return (object != null);
-        }
-                
-    };
-    
-    DropPartialComponent (IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-        parameters = new Hashtable<String,Integer>();
-    }
+		@Override
+		protected boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
+			return (object != null);
+		}
 
-    private static final String INDEX = "index";
-    private static final String ROW = "row";
-    private static final String COL = "col";
-    private static final String ROW_SPAN = "rowspan";
-    private static final String COL_SPAN = "colspan";
-          
-    private IEReusableWidget droppedWidget; 
-    private IEObject container; 
-    private Hashtable<String,Integer> parameters;
-    public int getIndex()
-    {
-    	if (parameters.get(INDEX) == null) return 0;
-    	return parameters.get(INDEX);
-    }
-    
-    public void setIndex (int index)
-    {
-    	parameters.put(INDEX,index);
-    }
+	};
 
-    public int getRow()
-    {
-       	if (parameters.get(ROW) == null) return -1;
-       	return parameters.get(ROW);
-    }
-    
-    public void setRow (int row)
-    {
-    	parameters.put(ROW,row);
-    }
+	DropPartialComponent(IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+		parameters = new Hashtable<String, Integer>();
+	}
 
-    public int getCol()
-    {
-    	if (parameters.get(COL) == null) return -1;
-    	return parameters.get(COL);
-    }
-    
-   public void setCol (int col)
-    {
-    	parameters.put(COL,col);
-    }
+	private static final String INDEX = "index";
+	private static final String ROW = "row";
+	private static final String COL = "col";
+	private static final String ROW_SPAN = "rowspan";
+	private static final String COL_SPAN = "colspan";
 
-   public int getRowSpan()
-   {
-      	if (parameters.get(ROW_SPAN) == null) return -1;
-      	return parameters.get(ROW_SPAN);
-   }
-   
-   public void setRowSpan (int rowSpan)
-   {
-	   parameters.put(ROW_SPAN,rowSpan);
-   }
+	private IEReusableWidget droppedWidget;
+	private IEObject container;
+	private Hashtable<String, Integer> parameters;
 
-   public int getColSpan()
-   {
-      	if (parameters.get(COL_SPAN) == null) return -1;
-      	return parameters.get(COL_SPAN);
-   }
-   
-   public void setColSpan (int colSpan)
-   {
-	   parameters.put(COL_SPAN,colSpan);
-   }
+	public int getIndex() {
+		if (parameters.get(INDEX) == null)
+			return 0;
+		return parameters.get(INDEX);
+	}
 
-   
-   
-	public IEObject getContainer() 
-	{
+	public void setIndex(int index) {
+		parameters.put(INDEX, index);
+	}
+
+	public int getRow() {
+		if (parameters.get(ROW) == null)
+			return -1;
+		return parameters.get(ROW);
+	}
+
+	public void setRow(int row) {
+		parameters.put(ROW, row);
+	}
+
+	public int getCol() {
+		if (parameters.get(COL) == null)
+			return -1;
+		return parameters.get(COL);
+	}
+
+	public void setCol(int col) {
+		parameters.put(COL, col);
+	}
+
+	public int getRowSpan() {
+		if (parameters.get(ROW_SPAN) == null)
+			return -1;
+		return parameters.get(ROW_SPAN);
+	}
+
+	public void setRowSpan(int rowSpan) {
+		parameters.put(ROW_SPAN, rowSpan);
+	}
+
+	public int getColSpan() {
+		if (parameters.get(COL_SPAN) == null)
+			return -1;
+		return parameters.get(COL_SPAN);
+	}
+
+	public void setColSpan(int colSpan) {
+		parameters.put(COL_SPAN, colSpan);
+	}
+
+	public IEObject getContainer() {
 		if (container == null) {
 			container = getFocusedObject();
 			if (container instanceof IEWOComponent) {
-				container = ((IEWOComponent)container).getRootSequence();
+				container = ((IEWOComponent) container).getRootSequence();
 			}
 		}
 		return container;
 	}
 
-	public void setContainer(IEObject container) 
-	{
+	public void setContainer(IEObject container) {
 		this.container = container;
 	}
 
-	public FlexoProject getProject()
-	{
-		if (getContainer() != null) return getContainer().getProject();
+	public FlexoProject getProject() {
+		if (getContainer() != null)
+			return getContainer().getProject();
 		return null;
 	}
-	
-	public IEReusableWidget getDroppedWidget() 
-	{
+
+	public IEReusableWidget getDroppedWidget() {
 		return droppedWidget;
 	}
 
-     @Override
-	protected void doAction(Object context) throws InvalidDropException
-    {
-    	logger.info ("Insert partial component index="+getIndex()+" row="+getRow()+" col="+getCol());
-       	//logger.fine ("XML="+getElementXMLRepresentation());
-       	
-       	if (getContainer() == null) throw new InvalidDropException("Cannot drop on a null container !");
-       	
-       	if (getPartialComponent() == null) throw new InvalidDropException("Cannot drop a null partial component !");
- 
-        if (!insertWidget(getContainer())) {
-        	throw new InvalidDropException("Cannot drop such a widget ("+partialComponent.getClass().getName()+") on this container("+getContainer().getClass().getName()+") !");
-        }
-       	
-    }
+	@Override
+	protected void doAction(Object context) throws InvalidDropException {
+		logger.info("Insert partial component index=" + getIndex() + " row=" + getRow() + " col=" + getCol());
+		// logger.fine ("XML="+getElementXMLRepresentation());
 
-     private boolean insertWidget(IEObject container) throws InvalidDropException
-     {
-    	 IEWOComponent woComponent = container instanceof IEWidget ? ((IEWidget)container).getWOComponent() : null;
-    	 if(woComponent==null)return false;
-    	 
-     	 if (container instanceof IESequenceWidget && ((IESequenceWidget)container).isTopComponent() && getPartialComponent().getWOComponent().isTopComponent()) {
-     		 if (getIndex() == -1) throw new InvalidDropException("Cannot drop element at this index: "+getIndex());
-             IEReusableWidget newWidget 
-                 = new TopComponentReusableWidget(woComponent, getPartialComponent(), 
-                		 (IESequenceWidget)container,
-                		 container.getProject());
-          		droppedWidget = newWidget;
-          		newWidget.setIndex(getIndex());
-                 try {
-                	 // Do the insertion
-                	 ((IESequenceWidget)container).insertElementAt(newWidget, getIndex());
-                	 return true;
-                 }
-                 catch (IndexOutOfBoundsException e) {
-                	 throw new InvalidDropException("Cannot drop element at this index: "+getIndex());
-                 }
-     	 }
-     	if ((container instanceof IEBlocWidget) && getPartialComponent().getWOComponent().isASingleHTMLTable()){
-     		IEReusableWidget newWidget = new InnerBlocReusableWidget(woComponent,getPartialComponent(), 
-           		 (IEBlocWidget)container,
-           		 container.getProject());
-     		
-     		droppedWidget = newWidget;
-      		newWidget.setIndex(getIndex());
-             try {
-            	 // Do the insertion
-            	 ((IEBlocWidget)container).setContent((InnerBlocReusableWidget)newWidget);
-            	 // Now declare the resources dependancies
-            	 woComponent.getFlexoResource().addToDependantResources(partialComponent.getComponentResource());
-            	 return true;
-             }
-             catch (IndexOutOfBoundsException e) {
-            	 throw new InvalidDropException("Cannot drop element at this index: "+getIndex());
-             }
-             
-     	}
-     	
-     	if (getPartialComponent().getWOComponent().isAListOfTableRows()) {
-            DropLocationForITableRow loc = findSuitableSequenceTRForDroppedITableRow(container);
-            if(loc!=null){
-         		IEReusableWidget newWidget = new ITableRowReusableWidget(woComponent, getPartialComponent(),
-               		 loc.seq, container.getProject());
-         		//compInst.setHTMLTableWidget(loc.seq.htmlTable());
-         		droppedWidget = newWidget;
-          		newWidget.setIndex(loc.index);
-                 try {
-                	 // Do the insertion
-                	 loc.seq.insertElementAt((ITableRowReusableWidget)newWidget, loc.index);
-                	 loc.seq.htmlTable().setTRRowIndex();
-                	 //compInst.setHTMLTableWidget(loc.seq.htmlTable());
-                	 //loc.seq.setParentOfSingleWidgetComponentInstance(loc.seq.htmlTable());
-                	 return true;
-                 }
-                 catch (IndexOutOfBoundsException e) {
-                	 throw new InvalidDropException("Cannot drop element at this index: "+getIndex());
-                 }
-            }else{
-            	return false;
-            }
-        }
-     	if (container instanceof IESequenceWidget) {
+		if (getContainer() == null)
+			throw new InvalidDropException("Cannot drop on a null container !");
+
+		if (getPartialComponent() == null)
+			throw new InvalidDropException("Cannot drop a null partial component !");
+
+		if (!insertWidget(getContainer())) {
+			throw new InvalidDropException("Cannot drop such a widget (" + partialComponent.getClass().getName() + ") on this container("
+					+ getContainer().getClass().getName() + ") !");
+		}
+
+	}
+
+	private boolean insertWidget(IEObject container) throws InvalidDropException {
+		IEWOComponent woComponent = container instanceof IEWidget ? ((IEWidget) container).getWOComponent() : null;
+		if (woComponent == null)
+			return false;
+
+		if (container instanceof IESequenceWidget && ((IESequenceWidget) container).isTopComponent()
+				&& getPartialComponent().getWOComponent().isTopComponent()) {
 			if (getIndex() == -1)
 				throw new InvalidDropException("Cannot drop element at this index: " + getIndex());
-			IEReusableWidget newWidget = new InnerTableReusableWidget(woComponent, getPartialComponent(),(IESequenceWidget) container, container.getProject());
+			IEReusableWidget newWidget = new TopComponentReusableWidget(woComponent, getPartialComponent(), (IESequenceWidget) container,
+					container.getProject());
+			droppedWidget = newWidget;
+			newWidget.setIndex(getIndex());
+			try {
+				// Do the insertion
+				((IESequenceWidget) container).insertElementAt(newWidget, getIndex());
+				return true;
+			} catch (IndexOutOfBoundsException e) {
+				throw new InvalidDropException("Cannot drop element at this index: " + getIndex());
+			}
+		}
+		if ((container instanceof IEBlocWidget) && getPartialComponent().getWOComponent().isASingleHTMLTable()) {
+			IEReusableWidget newWidget = new InnerBlocReusableWidget(woComponent, getPartialComponent(), (IEBlocWidget) container,
+					container.getProject());
+
+			droppedWidget = newWidget;
+			newWidget.setIndex(getIndex());
+			try {
+				// Do the insertion
+				((IEBlocWidget) container).setContent((InnerBlocReusableWidget) newWidget);
+				// Now declare the resources dependancies
+				woComponent.getFlexoResource().addToDependantResources(partialComponent.getComponentResource());
+				return true;
+			} catch (IndexOutOfBoundsException e) {
+				throw new InvalidDropException("Cannot drop element at this index: " + getIndex());
+			}
+
+		}
+
+		if (getPartialComponent().getWOComponent().isAListOfTableRows()) {
+			DropLocationForITableRow loc = findSuitableSequenceTRForDroppedITableRow(container);
+			if (loc != null) {
+				IEReusableWidget newWidget = new ITableRowReusableWidget(woComponent, getPartialComponent(), loc.seq,
+						container.getProject());
+				// compInst.setHTMLTableWidget(loc.seq.htmlTable());
+				droppedWidget = newWidget;
+				newWidget.setIndex(loc.index);
+				try {
+					// Do the insertion
+					loc.seq.insertElementAt((ITableRowReusableWidget) newWidget, loc.index);
+					loc.seq.htmlTable().setTRRowIndex();
+					// compInst.setHTMLTableWidget(loc.seq.htmlTable());
+					// loc.seq.setParentOfSingleWidgetComponentInstance(loc.seq.htmlTable());
+					return true;
+				} catch (IndexOutOfBoundsException e) {
+					throw new InvalidDropException("Cannot drop element at this index: " + getIndex());
+				}
+			} else {
+				return false;
+			}
+		}
+		if (container instanceof IESequenceWidget) {
+			if (getIndex() == -1)
+				throw new InvalidDropException("Cannot drop element at this index: " + getIndex());
+			IEReusableWidget newWidget = new InnerTableReusableWidget(woComponent, getPartialComponent(), (IESequenceWidget) container,
+					container.getProject());
 			droppedWidget = newWidget;
 			newWidget.setIndex(getIndex());
 			try {
 				// Do the insertion
 				((IESequenceWidget) container).insertElementAt(newWidget, getIndex());
 				// Now declare the resources dependancies
-				((IESequenceWidget) container).getWOComponent().getFlexoResource().addToDependantResources(partialComponent.getComponentResource());
+				((IESequenceWidget) container).getWOComponent().getFlexoResource()
+						.addToDependantResources(partialComponent.getComponentResource());
 				return true;
 			} catch (IndexOutOfBoundsException e) {
 				throw new InvalidDropException("Cannot drop element at this index: " + getIndex());
 			}
 		}
-     	
-       	 return false;
-     		
-     }
 
-     private ReusableComponentDefinition partialComponent;
+		return false;
 
-	public ReusableComponentDefinition getPartialComponent() 
-	{
+	}
+
+	private ReusableComponentDefinition partialComponent;
+
+	public ReusableComponentDefinition getPartialComponent() {
 		return partialComponent;
 	}
 
-	public void setPartialComponent(ReusableComponentDefinition partialComponent) 
-	{
+	public void setPartialComponent(ReusableComponentDefinition partialComponent) {
 		this.partialComponent = partialComponent;
 	}
-	
-	   private class DropLocationForITableRow{
-	    	public int index;
-	    	public IESequenceTR seq;
-	    	
-	    	public DropLocationForITableRow(int i,IESequenceTR s){
-	    		super();
-	    		index = i;
-	    		seq = s;
-	    	}
-	    }
-	   
-	private DropLocationForITableRow findSuitableSequenceTRForDroppedITableRow(IEObject container){
-    	DropLocationForITableRow reply = null;
-    	if(container instanceof IEWidget){
-    		IEObject current = container;
-    		while(reply==null && current instanceof IEWidget){
-    			if(((IEWidget)current).getParent() instanceof IESequenceTR)
-    				reply = new DropLocationForITableRow(((IEWidget)current).getIndex(), (IESequenceTR)((IEWidget)current).getParent());
-    			current = ((IEWidget)current).getParent();
-    		}
-    	}
-    	return reply;
-    	
-    }
-    
-    private boolean isDropAcceptable(IEWidget rootWidget, IEObject container){
-        if ((container instanceof IESequenceWidget) && (rootWidget instanceof IETopComponent) && getIndex()!=-1) {
-        	return true;
-        }
-        if ((container instanceof IEBlocWidget) && (rootWidget instanceof IEHTMLTableWidget)) {
-            return ((IEBlocWidget)container).getContent()==null;
-        }
 
-        if ((container instanceof ButtonedWidgetInterface) && (rootWidget instanceof IEButtonWidget) && getIndex()!=-1) {
-            return true;
-        }
+	private class DropLocationForITableRow {
+		public int index;
+		public IESequenceTR seq;
 
-        if ((container instanceof IESequenceTab) && (rootWidget instanceof IETabWidget)) {
-            return true;
-        }
+		public DropLocationForITableRow(int i, IESequenceTR s) {
+			super();
+			index = i;
+			seq = s;
+		}
+	}
 
-        if (rootWidget instanceof ITableRow) {
-            return findSuitableSequenceTRForDroppedITableRow(container)!=null;
-        }
+	private DropLocationForITableRow findSuitableSequenceTRForDroppedITableRow(IEObject container) {
+		DropLocationForITableRow reply = null;
+		if (container instanceof IEWidget) {
+			IEObject current = container;
+			while (reply == null && current instanceof IEWidget) {
+				if (((IEWidget) current).getParent() instanceof IESequenceTR)
+					reply = new DropLocationForITableRow(((IEWidget) current).getIndex(), (IESequenceTR) ((IEWidget) current).getParent());
+				current = ((IEWidget) current).getParent();
+			}
+		}
+		return reply;
 
-        
-        if ((container instanceof IESequenceWidget) && getIndex()!=-1) {
-//            if (model instanceof IETDWidget) {
-//                if (logger.isLoggable(Level.INFO))
-//                    logger.info("CASE 9: insert IETDWidget in IESequenceWidget (IESequenceWidgetWidgetView)");
-//                IESequenceWidget seq = ((IETDWidget) model).getSequenceWidget();
-//                for (int j = 0; j < seq.size(); j++) {
-//                    model = seq.get(j);
-//                    model.setIndex(getIndex());
-//                    ((IESequenceWidget) container).insertElementAt(model, getIndex());
-//                }
-//            } else if (model instanceof IESequenceWidget && ((IESequenceWidget) model).getOperator() == null) {
-//                if (logger.isLoggable(Level.INFO))
-//                    logger.info("CASE 10: insert IESequenceWidget in IESequenceWidget (IESequenceWidgetWidgetView)");
-//                IESequenceWidget seq = (IESequenceWidget) model;
-//                for (int j = 0; j < seq.size(); j++) {
-//                    model = seq.get(j);
-//                    model.setIndex(getIndex());
-//                    ((IESequenceWidget) container).insertElementAt(model, getIndex());
-//                }
-//            } else {
-//                if (logger.isLoggable(Level.INFO))
-//                    logger.info("CASE 11: insert IEWidget in IESequenceWidget (IESequenceWidgetWidgetView)");
-//                model.setIndex(getIndex());
-//                ((IESequenceWidget) container).insertElementAt(model, getIndex());
-//            }
-            return true;
-        }
+	}
 
-        return false;
-    }
- 
+	private boolean isDropAcceptable(IEWidget rootWidget, IEObject container) {
+		if ((container instanceof IESequenceWidget) && (rootWidget instanceof IETopComponent) && getIndex() != -1) {
+			return true;
+		}
+		if ((container instanceof IEBlocWidget) && (rootWidget instanceof IEHTMLTableWidget)) {
+			return ((IEBlocWidget) container).getContent() == null;
+		}
+
+		if ((container instanceof ButtonedWidgetInterface) && (rootWidget instanceof IEButtonWidget) && getIndex() != -1) {
+			return true;
+		}
+
+		if ((container instanceof IESequenceTab) && (rootWidget instanceof IETabWidget)) {
+			return true;
+		}
+
+		if (rootWidget instanceof ITableRow) {
+			return findSuitableSequenceTRForDroppedITableRow(container) != null;
+		}
+
+		if ((container instanceof IESequenceWidget) && getIndex() != -1) {
+			// if (model instanceof IETDWidget) {
+			// if (logger.isLoggable(Level.INFO))
+			// logger.info("CASE 9: insert IETDWidget in IESequenceWidget (IESequenceWidgetWidgetView)");
+			// IESequenceWidget seq = ((IETDWidget) model).getSequenceWidget();
+			// for (int j = 0; j < seq.size(); j++) {
+			// model = seq.get(j);
+			// model.setIndex(getIndex());
+			// ((IESequenceWidget) container).insertElementAt(model, getIndex());
+			// }
+			// } else if (model instanceof IESequenceWidget && ((IESequenceWidget) model).getOperator() == null) {
+			// if (logger.isLoggable(Level.INFO))
+			// logger.info("CASE 10: insert IESequenceWidget in IESequenceWidget (IESequenceWidgetWidgetView)");
+			// IESequenceWidget seq = (IESequenceWidget) model;
+			// for (int j = 0; j < seq.size(); j++) {
+			// model = seq.get(j);
+			// model.setIndex(getIndex());
+			// ((IESequenceWidget) container).insertElementAt(model, getIndex());
+			// }
+			// } else {
+			// if (logger.isLoggable(Level.INFO))
+			// logger.info("CASE 11: insert IEWidget in IESequenceWidget (IESequenceWidgetWidgetView)");
+			// model.setIndex(getIndex());
+			// ((IESequenceWidget) container).insertElementAt(model, getIndex());
+			// }
+			return true;
+		}
+
+		return false;
+	}
+
 }

@@ -20,13 +20,12 @@
 package org.openflexo.foundation.ie.dm;
 
 import org.openflexo.foundation.ie.IETopComponent;
+
 @Deprecated
-public class TopComponentRemoved extends IEDataModification
-{
+public class TopComponentRemoved extends IEDataModification {
 	@Deprecated
-    public TopComponentRemoved(IETopComponent removedTable)
-    {
-        super(removedTable, null);
-    }
+	public TopComponentRemoved(IETopComponent removedTable) {
+		super(removedTable, null);
+	}
 
 }

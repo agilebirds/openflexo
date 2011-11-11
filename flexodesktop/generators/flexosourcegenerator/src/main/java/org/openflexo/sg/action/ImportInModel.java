@@ -36,13 +36,12 @@ import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.file.AbstractCGFile;
 import org.openflexo.sg.generator.ProjectGenerator;
 
-
 public class ImportInModel extends GCAction<ImportInModel, CGObject> {
 
 	private static final Logger logger = Logger.getLogger(ImportInModel.class.getPackage().getName());
 
-	public static FlexoActionType<ImportInModel, CGObject, CGObject> actionType = new FlexoActionType<ImportInModel, CGObject, CGObject>("import_in_model", MODEL_MENU, MODEL_GROUP1,
-			FlexoActionType.NORMAL_ACTION_TYPE) {
+	public static FlexoActionType<ImportInModel, CGObject, CGObject> actionType = new FlexoActionType<ImportInModel, CGObject, CGObject>(
+			"import_in_model", MODEL_MENU, MODEL_GROUP1, FlexoActionType.NORMAL_ACTION_TYPE) {
 		/**
 		 * Factory method
 		 */

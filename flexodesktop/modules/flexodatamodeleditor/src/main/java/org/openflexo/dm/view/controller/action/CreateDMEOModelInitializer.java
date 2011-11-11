@@ -31,7 +31,6 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 import org.openflexo.dm.view.DMEORepositoryView;
 import org.openflexo.dm.view.popups.CreatesNewEOModelDialog;
 import org.openflexo.foundation.FlexoException;
@@ -42,77 +41,70 @@ import org.openflexo.foundation.dm.action.CreateDMEOModel;
 import org.openflexo.foundation.dm.eo.InvalidEOModelFileException;
 import org.openflexo.foundation.rm.InvalidFileNameException;
 
-public class CreateDMEOModelInitializer extends ActionInitializer { 
+public class CreateDMEOModelInitializer extends ActionInitializer {
 
 	static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateDMEOModelInitializer(DMControllerActionInitializer actionInitializer)
-	{
-		super(CreateDMEOModel.actionType,actionInitializer);
+	CreateDMEOModelInitializer(DMControllerActionInitializer actionInitializer) {
+		super(CreateDMEOModel.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected DMControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DMControllerActionInitializer)super.getControllerActionInitializer();
+	protected DMControllerActionInitializer getControllerActionInitializer() {
+		return (DMControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<CreateDMEOModel> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<CreateDMEOModel> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateDMEOModel>() {
-            @Override
-			public boolean run(ActionEvent e, CreateDMEOModel action)
-            {
-                return (CreatesNewEOModelDialog.displayDialog(action, getControllerActionInitializer().getDMController().getProject(), 
-                		getControllerActionInitializer().getDMController()
-                        .getFlexoFrame()) == CreatesNewEOModelDialog.VALIDATE);
-           }
-        };
+			@Override
+			public boolean run(ActionEvent e, CreateDMEOModel action) {
+				return (CreatesNewEOModelDialog.displayDialog(action, getControllerActionInitializer().getDMController().getProject(),
+						getControllerActionInitializer().getDMController().getFlexoFrame()) == CreatesNewEOModelDialog.VALIDATE);
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<CreateDMEOModel> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<CreateDMEOModel> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateDMEOModel>() {
-            @Override
-			public boolean run(ActionEvent e, CreateDMEOModel action)
-            {
-                if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getRepository()) {
-                    if (logger.isLoggable(Level.FINE))
-                        logger.fine("Finalizer for CreateDMEOModel in DMEORepository");
-                    DMEORepositoryView repView = (DMEORepositoryView) getControllerActionInitializer().getDMController().getCurrentEditedObjectView();
-                    repView.getEoModelTable().selectObject(action.getNewDMEOModel());
-                }
-                return true;
-           }
-        };
+			@Override
+			public boolean run(ActionEvent e, CreateDMEOModel action) {
+				if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getRepository()) {
+					if (logger.isLoggable(Level.FINE))
+						logger.fine("Finalizer for CreateDMEOModel in DMEORepository");
+					DMEORepositoryView repView = (DMEORepositoryView) getControllerActionInitializer().getDMController()
+							.getCurrentEditedObjectView();
+					repView.getEoModelTable().selectObject(action.getNewDMEOModel());
+				}
+				return true;
+			}
+		};
 	}
 
-     @Override
-    protected FlexoExceptionHandler<? super CreateDMEOModel> getDefaultExceptionHandler() {
-    	return new FlexoExceptionHandler<CreateDMEOModel>() {
+	@Override
+	protected FlexoExceptionHandler<? super CreateDMEOModel> getDefaultExceptionHandler() {
+		return new FlexoExceptionHandler<CreateDMEOModel>() {
 
 			@Override
-			public boolean handleException(FlexoException exception,
-					CreateDMEOModel action) {
+			public boolean handleException(FlexoException exception, CreateDMEOModel action) {
 				if (exception instanceof InvalidFileNameException || exception instanceof InvalidEOModelFileException) {
-					if (action.getEOModelFile()!=null)
-						FlexoController.notify(FlexoLocalization.localizedForKey("invalid_file_name")+": "+action.getEOModelFile().getName());
+					if (action.getEOModelFile() != null)
+						FlexoController.notify(FlexoLocalization.localizedForKey("invalid_file_name") + ": "
+								+ action.getEOModelFile().getName());
 					else
 						FlexoController.notify(FlexoLocalization.localizedForKey("invalid_file_name"));
 					return true;
-				} 
+				}
 				return false;
 			}
-    		
-    	};
-    }
-     
- 	@Override
-	protected Icon getEnabledIcon() 
-	{
+
+		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return DMEIconLibrary.DM_EOMODEL_ICON;
 	}
- 
+
 }

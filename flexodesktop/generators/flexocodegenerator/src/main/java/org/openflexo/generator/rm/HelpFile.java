@@ -26,13 +26,11 @@ import org.openflexo.foundation.rm.cg.TextFile;
 import org.openflexo.generator.FlexoResourceGenerator;
 import org.openflexo.generator.rm.GenerationAvailableFile;
 
-
 public class HelpFile extends TextFile implements GenerationAvailableFile {
 
 	public HelpFile() {
 		super();
 	}
-	
 
 	public HelpFile(File f, HelpFileResource resource) {
 		super(f);
@@ -44,14 +42,12 @@ public class HelpFile extends TextFile implements GenerationAvailableFile {
 	}
 
 	@Override
-	public HelpFileResource getFlexoResource()
-    {
-        return (HelpFileResource)super.getFlexoResource(); 
-    }
+	public HelpFileResource getFlexoResource() {
+		return (HelpFileResource) super.getFlexoResource();
+	}
 
 	@Override
-	public FlexoResourceGenerator getGenerator() 
-	{
+	public FlexoResourceGenerator getGenerator() {
 		return getFlexoResource().getGenerator();
 	}
 }

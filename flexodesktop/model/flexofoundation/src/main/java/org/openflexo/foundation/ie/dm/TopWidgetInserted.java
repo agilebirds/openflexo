@@ -21,12 +21,10 @@ package org.openflexo.foundation.ie.dm;
 
 import org.openflexo.foundation.ie.widget.IEWidget;
 
-public class TopWidgetInserted extends IEDataModification
-{
+public class TopWidgetInserted extends IEDataModification {
 
-    public TopWidgetInserted(IEWidget widget)
-    {
-        super(null, widget);
-    }
+	public TopWidgetInserted(IEWidget widget) {
+		super(null, widget);
+	}
 
 }

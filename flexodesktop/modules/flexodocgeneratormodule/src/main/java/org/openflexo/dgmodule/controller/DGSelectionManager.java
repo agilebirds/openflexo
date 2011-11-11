@@ -23,20 +23,17 @@ import java.util.logging.Logger;
 
 import org.openflexo.doceditor.controller.DESelectionManager;
 
-
 /**
  * Selection manager dedicated to Doc generator module
  * 
  * @author gpolet
  */
-public class DGSelectionManager extends DESelectionManager
-{
+public class DGSelectionManager extends DESelectionManager {
 
-    protected static final Logger logger = Logger.getLogger(DGSelectionManager.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(DGSelectionManager.class.getPackage().getName());
 
-    public DGSelectionManager(DGController controller)
-    {
-        super(controller);
-    }
+	public DGSelectionManager(DGController controller) {
+		super(controller);
+	}
 
 }

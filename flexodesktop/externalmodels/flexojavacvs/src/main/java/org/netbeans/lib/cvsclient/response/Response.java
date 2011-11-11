@@ -23,23 +23,22 @@ import org.netbeans.lib.cvsclient.util.LoggedDataInputStream;
 
 /**
  * Handles responses from the CVS server
- * @author  Robert Greig
+ * 
+ * @author Robert Greig
  */
 public interface Response {
-    /**
-     * Process the data for the response.
-     * @param dis the data inputstream allowing the client to read the server's
-     * response. Note that the actual response name has already been read
-     * and the input stream is positioned just before the first argument, if
-     * any.
-     */
-    void process(LoggedDataInputStream dis, ResponseServices services)
-            throws ResponseException;
+	/**
+	 * Process the data for the response.
+	 * 
+	 * @param dis
+	 *            the data inputstream allowing the client to read the server's response. Note that the actual response name has already
+	 *            been read and the input stream is positioned just before the first argument, if any.
+	 */
+	void process(LoggedDataInputStream dis, ResponseServices services) throws ResponseException;
 
-    /**
-     * Is this a terminal response, i.e. should reading of responses stop
-     * after this response. This is true for responses such as OK or
-     * an error response
-     */
-    boolean isTerminalResponse();
+	/**
+	 * Is this a terminal response, i.e. should reading of responses stop after this response. This is true for responses such as OK or an
+	 * error response
+	 */
+	boolean isTerminalResponse();
 }

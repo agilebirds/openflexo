@@ -47,14 +47,12 @@ import org.openflexo.vpm.controller.CEDController;
 import org.openflexo.vpm.drawingshema.CalcDrawingShemaController;
 import org.openflexo.vpm.palette.CalcPaletteController;
 
-
 /**
  * CalcEditor module
  * 
  * @author sylvain
  */
-public class VPMModule extends FlexoModule implements ExternalCEDModule
-{
+public class VPMModule extends FlexoModule implements ExternalCEDModule {
 
 	private static final Logger logger = Logger.getLogger(VPMModule.class.getPackage().getName());
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.VPM, Inspectors.VE };
@@ -65,21 +63,18 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule
 	private FlexoModelObject screenshotObject;
 
 	/**
-	 * The 'main' method of module allow to launch this module as a
-	 * single-module application
-	 *
+	 * The 'main' method of module allow to launch this module as a single-module application
+	 * 
 	 * @param args
 	 */
-	public static void main(String[] args) throws Exception
-	{
+	public static void main(String[] args) throws Exception {
 		ToolBox.setPlatform();
 		FlexoLoggingManager.initialize();
 		FlexoApplication.initialize();
 		ModuleLoader.initializeSingleModule(Module.FPS_MODULE);
 	}
 
-	public VPMModule() throws Exception
-	{
+	public VPMModule() throws Exception {
 		super(InteractiveFlexoEditor.makeInteractiveEditorWithoutProject());
 		setFlexoController(new CEDController(this));
 		getCEDController().loadRelativeWindows();
@@ -89,66 +84,59 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule
 		// Put here a code to display default view
 		getCEDController().setCurrentEditedObjectAsModuleView(getCEDController().getCalcLibrary());
 
-
 		// Retain here all necessary resources
-		//retain(<the_required_resource_data>);
+		// retain(<the_required_resource_data>);
 	}
 
 	@Override
-	public InspectorGroup[] getInspectorGroups()
-	{
+	public InspectorGroup[] getInspectorGroups() {
 		return inspectorGroups;
 	}
 
-	public CEDController getCEDController()
-	{
+	public CEDController getCEDController() {
 		return (CEDController) getFlexoController();
 	}
 
 	@Override
-	public FlexoModelObject getDefaultObjectToSelect()
-	{
+	public FlexoModelObject getDefaultObjectToSelect() {
 		return getCEDController().getCalcLibrary();
 	}
 
 	@Override
-	public void moduleWillClose()
-	{
+	public void moduleWillClose() {
 		getCEDController().getEditorMenuBar().getFileMenu(getCEDController()).closeModule();
 		super.moduleWillClose();
 		CEDPreferences.reset();
 	}
 
 	@Override
-	public float getScreenshotQuality()
-	{
-		float reply = Float.valueOf(CEDPreferences.getScreenshotQuality())/100f;
-		if(reply>1) {
+	public float getScreenshotQuality() {
+		float reply = Float.valueOf(CEDPreferences.getScreenshotQuality()) / 100f;
+		if (reply > 1) {
 			return 1f;
 		}
-		if (reply<0.1f) {
+		if (reply < 0.1f) {
 			return 0.1f;
 		}
 		return reply;
 	}
 
 	@Override
-	public JComponent createScreenshotForShema(ExampleDrawingShema target)
-	{
-		if (target==null) {
+	public JComponent createScreenshotForShema(ExampleDrawingShema target) {
+		if (target == null) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Cannot create screenshot for null target!");
 			}
 			return null;
 		}
 
-		logger.info("createScreenshotForShema() "+target);
+		logger.info("createScreenshotForShema() " + target);
 
 		screenshotObject = target;
 
 		// prevent process to be marked as modified during screenshot generation
 		target.setIgnoreNotifications();
-		screenshotController = new CalcDrawingShemaController(getCEDController(),target,true);
+		screenshotController = new CalcDrawingShemaController(getCEDController(), target, true);
 
 		screenshot = screenshotController.getDrawingView();
 		drawWorkingArea = screenshot.getDrawingGraphicalRepresentation().getDrawWorkingArea();
@@ -157,7 +145,7 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule
 		screenshot.validate();
 		Dimension d = screenshot.getComputedMinimumSize();
 		d.height += 20;
-		d.width +=20;
+		d.width += 20;
 		screenshot.setSize(d);
 		screenshot.setPreferredSize(d);
 		target.resetIgnoreNotifications();
@@ -166,31 +154,29 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule
 	}
 
 	@Override
-	public JComponent createScreenshotForPalette(ViewPointPalette target)
-	{
-		if (target==null) {
+	public JComponent createScreenshotForPalette(ViewPointPalette target) {
+		if (target == null) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Cannot create screenshot for null target!");
 			}
 			return null;
 		}
 
-		logger.info("createScreenshotForPalette() "+target);
+		logger.info("createScreenshotForPalette() " + target);
 
 		screenshotObject = target;
 
 		// prevent process to be marked as modified during screenshot generation
 		target.setIgnoreNotifications();
-		screenshotController = new CalcPaletteController(getCEDController(),target,true);
+		screenshotController = new CalcPaletteController(getCEDController(), target, true);
 
 		screenshot = screenshotController.getDrawingView();
 		drawWorkingArea = screenshot.getDrawingGraphicalRepresentation().getDrawWorkingArea();
 		screenshot.getDrawingGraphicalRepresentation().setDrawWorkingArea(false);
 		screenshot.getPaintManager().disablePaintingCache();
 		screenshot.validate();
-		Dimension d = new Dimension(
-				(int)screenshot.getDrawingGraphicalRepresentation().getWidth(),
-				(int)screenshot.getDrawingGraphicalRepresentation().getHeight());
+		Dimension d = new Dimension((int) screenshot.getDrawingGraphicalRepresentation().getWidth(), (int) screenshot
+				.getDrawingGraphicalRepresentation().getHeight());
 		screenshot.setSize(d);
 		screenshot.setPreferredSize(d);
 		target.resetIgnoreNotifications();
@@ -199,8 +185,7 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule
 	}
 
 	@Override
-	public void finalizeScreenshotGeneration()
-	{
+	public void finalizeScreenshotGeneration() {
 		logger.info("finalizeScreenshotGeneration()");
 
 		if (screenshot != null) {
@@ -210,13 +195,12 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule
 				screenshotObject.resetIgnoreNotifications();
 			}
 			screenshotController.delete();
-			if (screenshot.getParent()!=null) {
+			if (screenshot.getParent() != null) {
 				screenshot.getParent().remove(screenshot);
 			}
 			screenshotController = null;
 			screenshot = null;
 		}
 	}
-
 
 }

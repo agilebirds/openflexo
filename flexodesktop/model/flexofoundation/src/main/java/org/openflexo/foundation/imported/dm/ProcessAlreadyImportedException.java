@@ -22,13 +22,12 @@ package org.openflexo.foundation.imported.dm;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.ws.client.PPMWebService.PPMProcess;
 
-
 public class ProcessAlreadyImportedException extends Exception {
 
 	private PPMProcess attempt;
-	
+
 	private FlexoProcess matchingProcess;
-	
+
 	public ProcessAlreadyImportedException(PPMProcess attempt, FlexoProcess fip) {
 		this.attempt = attempt;
 		this.matchingProcess = fip;
@@ -41,5 +40,5 @@ public class ProcessAlreadyImportedException extends Exception {
 	public FlexoProcess getMatchingProcess() {
 		return matchingProcess;
 	}
-	
+
 }

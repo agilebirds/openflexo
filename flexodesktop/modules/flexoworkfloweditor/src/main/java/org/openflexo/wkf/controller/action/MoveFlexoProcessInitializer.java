@@ -28,7 +28,6 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -45,66 +44,62 @@ public class MoveFlexoProcessInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	public MoveFlexoProcessInitializer(ControllerActionInitializer actionInitializer)
-	{
-		super(MoveFlexoProcess.actionType,actionInitializer);
+	public MoveFlexoProcessInitializer(ControllerActionInitializer actionInitializer) {
+		super(MoveFlexoProcess.actionType, actionInitializer);
 	}
 
 	@Override
-	protected FlexoActionInitializer<MoveFlexoProcess> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<MoveFlexoProcess> getDefaultInitializer() {
 		return new FlexoActionInitializer<MoveFlexoProcess>() {
 			@Override
-			public boolean run(ActionEvent e, final MoveFlexoProcess action)
-			{
-				if (action.getFocusedObject() == null) 
+			public boolean run(ActionEvent e, final MoveFlexoProcess action) {
+				if (action.getFocusedObject() == null)
 					return false;
-				if (action.isDoImmediately()) 
+				if (action.isDoImmediately())
 					return true;
-				LabelParameter infoLabel = new LabelParameter("info","info",action.getLocalizedDescription(), false);
+				LabelParameter infoLabel = new LabelParameter("info", "info", action.getLocalizedDescription(), false);
 				infoLabel.setWidth(300);
 				infoLabel.setHeight(150);
-				
+
 				final String CHOOSE_PARENT_PROCESS = FlexoLocalization.localizedForKey("move_process_under_another_process");
 				final String MAKE_CONTEXT_FREE = FlexoLocalization.localizedForKey("make_context_free");
 				String[] modes = { CHOOSE_PARENT_PROCESS, MAKE_CONTEXT_FREE };
-				final RadioButtonListParameter<String> modeSelector = new RadioButtonListParameter<String>("mode", "what_would_you_like_to_do", CHOOSE_PARENT_PROCESS, modes);
+				final RadioButtonListParameter<String> modeSelector = new RadioButtonListParameter<String>("mode",
+						"what_would_you_like_to_do", CHOOSE_PARENT_PROCESS, modes);
 
-				final ProcessParameter parentProcessParameter = new ProcessParameter("parentProcess", "parent_process", action.getFocusedObject().getParentProcess());
+				final ProcessParameter parentProcessParameter = new ProcessParameter("parentProcess", "parent_process", action
+						.getFocusedObject().getParentProcess());
 				// This widget is visible if and only if mode is NEW_PROCESS
 				parentProcessParameter.setDepends("mode");
 				parentProcessParameter.setConditional("mode=" + '"' + CHOOSE_PARENT_PROCESS + '"');
-				//parentProcessParameter.addParameter("isSelectable", "params.parentProcess.isAcceptableProcess");
+				// parentProcessParameter.addParameter("isSelectable", "params.parentProcess.isAcceptableProcess");
 				parentProcessParameter.setProcessSelectingConditional(new ProcessParameter.ProcessSelectingConditional() {
 					@Override
-					public boolean isSelectable(FlexoProcess aProcess)
-					{
+					public boolean isSelectable(FlexoProcess aProcess) {
 						return action.getFocusedObject().isAcceptableAsParentProcess(aProcess);
-						//return aProcess.isAncestorOf(action.getFocusedObject()) && (aProcess != action.getFocusedObject());
+						// return aProcess.isAncestorOf(action.getFocusedObject()) && (aProcess != action.getFocusedObject());
 					}
 				});
 
-		     	AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(
-		     			getProject(), 
-						null, 
+				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(
+						getProject(),
+						null,
 						action.getLocalizedName(),
-		     			"<html><center>"+WKFIconLibrary.PROCESS_ICON.getHTMLImg()+"<b>&nbsp;"+FlexoLocalization.localizedForKeyWithParams("move_process_($0)",action.getFocusedObject().getName())+"</b></center></html>",						
-						new AskParametersDialog.ValidationCondition() {
+						"<html><center>" + WKFIconLibrary.PROCESS_ICON.getHTMLImg() + "<b>&nbsp;"
+								+ FlexoLocalization.localizedForKeyWithParams("move_process_($0)", action.getFocusedObject().getName())
+								+ "</b></center></html>", new AskParametersDialog.ValidationCondition() {
 							@Override
 							public boolean isValid(ParametersModel model) {
-								if(modeSelector.getValue().equals(CHOOSE_PARENT_PROCESS) && (parentProcessParameter.getValue()!=null)){
+								if (modeSelector.getValue().equals(CHOOSE_PARENT_PROCESS) && (parentProcessParameter.getValue() != null)) {
 									return true;
 								}
-								if(modeSelector.getValue().equals(MAKE_CONTEXT_FREE)) {
+								if (modeSelector.getValue().equals(MAKE_CONTEXT_FREE)) {
 									return true;
 								}
 								errorMessage = FlexoLocalization.localizedForKey("please_choose_a_valid_parent_process");
 								return false;
-							}     				
-		     			},
-						infoLabel,
-						modeSelector, parentProcessParameter);
-		       
+							}
+						}, infoLabel, modeSelector, parentProcessParameter);
 
 				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 					action.setNewParentProcess(parentProcessParameter.getValue());
@@ -117,24 +112,20 @@ public class MoveFlexoProcessInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<MoveFlexoProcess> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<MoveFlexoProcess> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MoveFlexoProcess>() {
 			@Override
-			public boolean run(ActionEvent e, MoveFlexoProcess action)
-			{
+			public boolean run(ActionEvent e, MoveFlexoProcess action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoExceptionHandler<MoveFlexoProcess> getDefaultExceptionHandler() 
-	{
+	protected FlexoExceptionHandler<MoveFlexoProcess> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<MoveFlexoProcess>() {
 			@Override
-			public boolean handleException(FlexoException exception, MoveFlexoProcess action) 
-			{
+			public boolean handleException(FlexoException exception, MoveFlexoProcess action) {
 				exception.printStackTrace();
 				FlexoController.showError(exception.getLocalizedMessage());
 				return true;

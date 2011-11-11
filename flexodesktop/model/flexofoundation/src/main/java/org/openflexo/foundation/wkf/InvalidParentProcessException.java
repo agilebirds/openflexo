@@ -23,28 +23,24 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
 
 /**
- * Thown when trying to move a process under an invalid parent process
- * (fe if process hierarchy would be inconsistant)
+ * Thown when trying to move a process under an invalid parent process (fe if process hierarchy would be inconsistant)
  * 
  * @author sguerin
  * 
  */
-public class InvalidParentProcessException extends FlexoException
-{
-    public Params params;
+public class InvalidParentProcessException extends FlexoException {
+	public Params params;
 
-    public InvalidParentProcessException(FlexoProcess movedProcess,FlexoProcess newParentProcess)
-    {
-        super();
-        params = new Params();
-        params.movedProcess = movedProcess;
-        params.newParentProcess = newParentProcess;
-    }
+	public InvalidParentProcessException(FlexoProcess movedProcess, FlexoProcess newParentProcess) {
+		super();
+		params = new Params();
+		params.movedProcess = movedProcess;
+		params.newParentProcess = newParentProcess;
+	}
 
-    public class Params extends FlexoObject 
-    {
-        public FlexoProcess movedProcess;
-        public FlexoProcess newParentProcess;       
-    }
-    
+	public class Params extends FlexoObject {
+		public FlexoProcess movedProcess;
+		public FlexoProcess newParentProcess;
+	}
+
 }

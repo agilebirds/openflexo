@@ -21,11 +21,12 @@ package cb.petal;
 
 /**
  * Denote that a petal object has a tag, i.e. @12
- *
+ * 
  * @version $Id: Tagged.java,v 1.2 2011/09/12 11:46:47 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public interface Tagged {
-  public void setTag(int t);
-  public int  getTag();
+	public void setTag(int t);
+
+	public int getTag();
 }

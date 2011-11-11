@@ -28,7 +28,6 @@ import org.openflexo.tm.hibernate.gui.HibernateIconLibrary;
 import org.openflexo.tm.hibernate.impl.HibernateEnum;
 import org.openflexo.tm.hibernate.impl.HibernateEnumContainer;
 
-
 public class HibernateEnumContainerElement extends TechnologyModuleBrowserElement<HibernateEnumContainer> {
 
 	public HibernateEnumContainerElement(HibernateEnumContainer hibernateEnumContainer, ProjectBrowser browser, BrowserElement parent) {

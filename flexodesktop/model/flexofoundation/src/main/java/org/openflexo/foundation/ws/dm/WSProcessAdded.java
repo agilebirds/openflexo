@@ -19,20 +19,16 @@
  */
 package org.openflexo.foundation.ws.dm;
 
+public class WSProcessAdded extends WSDataModification {
 
-
-public class WSProcessAdded extends WSDataModification
-{
-
-    /**
-     * @param modificationType
-     * @param propertyName
-     * @param oldValue
-     * @param newValue
-     */
-    public WSProcessAdded(Object newValue)
-    {
-        super( null, newValue);
-    }
+	/**
+	 * @param modificationType
+	 * @param propertyName
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public WSProcessAdded(Object newValue) {
+		super(null, newValue);
+	}
 
 }

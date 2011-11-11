@@ -23,46 +23,38 @@ import java.awt.Point;
 
 import org.openflexo.foundation.wkf.action.WKFMove;
 
-
 /**
- * Notification fired when a WKFRepresentable object has been relocated in a
- * succession of many relocation (dragging)
+ * Notification fired when a WKFRepresentable object has been relocated in a succession of many relocation (dragging)
  * 
  * @author sguerin
  * @deprecated
  * 
  */
 @Deprecated
-public class ObjectHasMoved extends WKFDataModification
-{
+public class ObjectHasMoved extends WKFDataModification {
 
 	private String context = null;
 	private WKFMove _moveAction;
 
-	public ObjectHasMoved(Point initialLocation, Point newLocation, WKFMove moveAction, String context)
-	{
+	public ObjectHasMoved(Point initialLocation, Point newLocation, WKFMove moveAction, String context) {
 		super(initialLocation, newLocation);
 		_moveAction = moveAction;
 		this.context = context;
 	}
 
-	public Point getInitialLocation()
-	{
+	public Point getInitialLocation() {
 		return (Point) oldValue();
 	}
 
-	public Point getNewLocation()
-	{
+	public Point getNewLocation() {
 		return (Point) newValue();
 	}
 
-	public WKFMove getMoveAction() 
-	{
+	public WKFMove getMoveAction() {
 		return _moveAction;
 	}
 
-	public String getContext() 
-	{
+	public String getContext() {
 		return context;
 	}
 

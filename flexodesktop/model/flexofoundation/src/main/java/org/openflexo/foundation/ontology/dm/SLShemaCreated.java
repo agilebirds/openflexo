@@ -23,15 +23,13 @@ import org.openflexo.foundation.view.ViewDefinition;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class SLShemaCreated extends OEDataModification
-{
-    /**
+public class SLShemaCreated extends OEDataModification {
+	/**
      * 
      */
-    public SLShemaCreated(ViewDefinition def)
-    {
-        super("shemaCreated",null,def);
-    }
+	public SLShemaCreated(ViewDefinition def) {
+		super("shemaCreated", null, def);
+	}
 }

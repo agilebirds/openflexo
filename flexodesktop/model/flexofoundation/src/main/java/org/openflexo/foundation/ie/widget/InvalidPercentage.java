@@ -25,23 +25,20 @@ import org.openflexo.foundation.FlexoException;
  * @author gpolet
  * 
  */
-public class InvalidPercentage extends FlexoException
-{
+public class InvalidPercentage extends FlexoException {
 
-    private int percentage;
+	private int percentage;
 
-    /**
-     * @param newPercentage
-     */
-    public InvalidPercentage(int newPercentage)
-    {
-        super("Invalid percentage: "+newPercentage);
-        this.percentage = newPercentage;
-    }
+	/**
+	 * @param newPercentage
+	 */
+	public InvalidPercentage(int newPercentage) {
+		super("Invalid percentage: " + newPercentage);
+		this.percentage = newPercentage;
+	}
 
-    public int getPercentage()
-    {
-        return percentage;
-    }
+	public int getPercentage() {
+		return percentage;
+	}
 
 }

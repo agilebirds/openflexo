@@ -20,29 +20,30 @@
 package org.netbeans.lib.cvsclient.request;
 
 /**
- * Tells the server that filenames should be matched in a case-insensitive
- * fashion.
- * @author  Robert Greig
+ * Tells the server that filenames should be matched in a case-insensitive fashion.
+ * 
+ * @author Robert Greig
  */
 public class CaseRequest extends Request {
-    /**
-     * Get the request String that will be passed to the server
-     * @return the request String
-     * @throws UnconfiguredRequestException if the request has not been
-     * properly configured
-     */
-    @Override
+	/**
+	 * Get the request String that will be passed to the server
+	 * 
+	 * @return the request String
+	 * @throws UnconfiguredRequestException
+	 *             if the request has not been properly configured
+	 */
+	@Override
 	public String getRequestString() throws UnconfiguredRequestException {
-        return "Case \n"; //NOI18N
-    }
+		return "Case \n"; // NOI18N
+	}
 
-    /**
-     * Is a response expected from the server?
-     * @return true if a response is expected, false if no response if
-     * expected
-     */
-    @Override
+	/**
+	 * Is a response expected from the server?
+	 * 
+	 * @return true if a response is expected, false if no response if expected
+	 */
+	@Override
 	public boolean isResponseExpected() {
-        return false;
-    }
+		return false;
+	}
 }

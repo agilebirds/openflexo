@@ -30,7 +30,6 @@ import org.openflexo.foundation.rm.cg.GenerationStatus;
 import org.openflexo.foundation.xml.GeneratedCodeBuilder;
 import org.openflexo.foundation.xml.GeneratedSourcesBuilder;
 
-
 public class CGRelease extends CGObject {
 
 	private String _name;
@@ -38,157 +37,131 @@ public class CGRelease extends CGObject {
 	private String _userId;
 	private GenerationRepository _repository;
 	private CGVersionIdentifier _versionIdentifier;
-	
-	/**
-	 * Create a new release.
-     */
-    public CGRelease(GeneratedCodeBuilder builder)
-    {
-        this(builder.generatedCode);
-        initializeDeserialization(builder);
-     }
-    
-	/**
-	 * Create a new release.
-     */
-    public CGRelease(GeneratedSourcesBuilder builder)
-    {
-        this(builder.generatedSources);
-        initializeDeserialization(builder);
-     }
-    
-    public CGRelease(GeneratedOutput generatedCode)
-    {
-        super(generatedCode);  
-    }
 
-    public CGRelease(GenerationRepository repository)
-    {
-        this(repository.getGeneratedCode());
-        setCGRepository(repository);
-     }
+	/**
+	 * Create a new release.
+	 */
+	public CGRelease(GeneratedCodeBuilder builder) {
+		this(builder.generatedCode);
+		initializeDeserialization(builder);
+	}
+
+	/**
+	 * Create a new release.
+	 */
+	public CGRelease(GeneratedSourcesBuilder builder) {
+		this(builder.generatedSources);
+		initializeDeserialization(builder);
+	}
+
+	public CGRelease(GeneratedOutput generatedCode) {
+		super(generatedCode);
+	}
+
+	public CGRelease(GenerationRepository repository) {
+		this(repository.getGeneratedCode());
+		setCGRepository(repository);
+	}
 
 	@Override
-	public GenerationStatus getGenerationStatus() 
-	{
+	public GenerationStatus getGenerationStatus() {
 		// Not applicable
 		return null;
 	}
 
 	@Override
-	public boolean hasGenerationErrors() 
-	{
+	public boolean hasGenerationErrors() {
 		// Not applicable
 		return false;
 	}
 
 	@Override
-	public boolean needsModelReinjection()
-	{
+	public boolean needsModelReinjection() {
 		// Not applicable
 		return false;
 	}
 
 	@Override
-	public boolean isContainedIn(CGObject obj) 
-	{
+	public boolean isContainedIn(CGObject obj) {
 		return (obj == getCGRepository());
 	}
 
 	@Override
-	public boolean isEnabled() 
-	{
+	public boolean isEnabled() {
 		// Not applicable
 		return false;
 	}
 
 	@Override
-	public boolean needsRegeneration() 
-	{
+	public boolean needsRegeneration() {
 		// Not applicable
 		return false;
 	}
 
 	@Override
-	public String getClassNameKey() 
-	{
-        return "generated_code_release";
+	public String getClassNameKey() {
+		return "generated_code_release";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return getCGRepository().getFullyQualifiedName()+getVersionIdentifier();
+	public String getFullyQualifiedName() {
+		return getCGRepository().getFullyQualifiedName() + getVersionIdentifier();
 	}
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.GENERATORS.CG_RELEASE_INSPECTOR;
 	}
 
-
-	public Date getDate()
-	{
+	public Date getDate() {
 		return _date;
 	}
 
-	public void setDate(Date date)
-	{
+	public void setDate(Date date) {
 		_date = date;
 	}
 
 	@Override
-	public String getName() 
-	{
+	public String getName() {
 		return _name;
 	}
 
 	@Override
-	public void setName(String name) 
-	{
+	public void setName(String name) {
 		_name = name;
 	}
 
-	public GenerationRepository getCGRepository() 
-	{
+	public GenerationRepository getCGRepository() {
 		return _repository;
 	}
 
-	public void setCGRepository(GenerationRepository repository)
-	{
+	public void setCGRepository(GenerationRepository repository) {
 		_repository = repository;
 	}
 
-	public String getUserId()
-	{
+	public String getUserId() {
 		return _userId;
 	}
 
-	public void setUserId(String userId)
-	{
+	public void setUserId(String userId) {
 		_userId = userId;
 	}
 
-	public CGVersionIdentifier getVersionIdentifier() 
-	{
+	public CGVersionIdentifier getVersionIdentifier() {
 		return _versionIdentifier;
 	}
 
-	public void setVersionIdentifier(CGVersionIdentifier versionIdentifier) 
-	{
+	public void setVersionIdentifier(CGVersionIdentifier versionIdentifier) {
 		_versionIdentifier = versionIdentifier;
 		_versionIdentifier.type = CGVersionIdentifier.VersionType.Release;
 	}
-	
-	public static final Comparator<CGRelease> COMPARATOR
-	= new Comparator<CGRelease>() {
+
+	public static final Comparator<CGRelease> COMPARATOR = new Comparator<CGRelease>() {
 		@Override
-		public int compare(CGRelease o1, CGRelease o2) 
-		{
+		public int compare(CGRelease o1, CGRelease o2) {
 			return CGVersionIdentifier.COMPARATOR.compare(o1.getVersionIdentifier(), o2.getVersionIdentifier());
 		}
-		
+
 	};
 
 }

@@ -13,7 +13,7 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.FlexoFIBController;
 
 /**
- *
+ * 
  * @author Nicolas Daniels
  */
 public class ImplementationModelFibController extends FlexoFIBController<ImplementationModel> {
@@ -25,7 +25,8 @@ public class ImplementationModelFibController extends FlexoFIBController<Impleme
 	public void performAddTechnologyModule() {
 		Vector<ImplementationModel> globalSelection = new Vector<ImplementationModel>();
 		globalSelection.add(getDataObject());
-		FlexoAction<?, ?, ?> action = CreateTechnologyModuleImplementation.actionType.makeNewAction(getDataObject(), globalSelection, getEditor());
+		FlexoAction<?, ?, ?> action = CreateTechnologyModuleImplementation.actionType.makeNewAction(getDataObject(), globalSelection,
+				getEditor());
 		action.doAction();
 	}
 }

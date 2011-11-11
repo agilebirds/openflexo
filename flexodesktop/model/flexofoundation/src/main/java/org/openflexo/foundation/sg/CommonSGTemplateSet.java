@@ -27,35 +27,29 @@ import org.openflexo.localization.FlexoLocalization;
 
 public class CommonSGTemplateSet extends CGDirectoryTemplateSet {
 
-	public CommonSGTemplateSet(File directory,CGTemplateRepository repository,boolean recursive)
-	{
-		super(directory,repository,recursive);
+	public CommonSGTemplateSet(File directory, CGTemplateRepository repository, boolean recursive) {
+		super(directory, repository, recursive);
 		update();
-	}
-	
-	@Override
-	public String getFullyQualifiedName() 
-	{
-		return getRepository().getFullyQualifiedName()+".COMMON";
 	}
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getFullyQualifiedName() {
+		return getRepository().getFullyQualifiedName() + ".COMMON";
+	}
+
+	@Override
+	public String getInspectorName() {
 		return null; // Cannot be inspected
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return FlexoLocalization.localizedForKey("default_templates");
 	}
 
 	@Override
-	public String getRootFolderName()
-	{
+	public String getRootFolderName() {
 		return getRepository().getName();
 	}
-	
 
 }

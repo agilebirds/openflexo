@@ -37,61 +37,55 @@ import org.openflexo.ve.controller.OEKeyEventListener;
 import org.openflexo.ve.view.menu.OEMenuBar;
 import org.openflexo.view.FlexoFrame;
 
-
 /**
  * The main window of this module
  * 
  * @author yourname
  */
-public class OEFrame extends FlexoFrame
-{
+public class OEFrame extends FlexoFrame {
 
-    private static final Logger logger = Logger.getLogger(OEFrame.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(OEFrame.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance variables
+	// =========================
+	// ==========================================================================
 
-    protected OEController _oeController;
+	protected OEController _oeController;
 
-    protected OEMenuBar _oeMenuBar;
+	protected OEMenuBar _oeMenuBar;
 
-    protected OEKeyEventListener _oeKeyEventListener;
+	protected OEKeyEventListener _oeKeyEventListener;
 
+	// ================================================
+	// ================ Constructor ===================
+	// ================================================
 
-    // ================================================
-    // ================ Constructor ===================
-    // ================================================
+	/**
+	 * Constructor for XXXFrame
+	 */
+	public OEFrame(String title, OEController controller, OEKeyEventListener wkfKeyEventListener, OEMenuBar menuBar)
+			throws HeadlessException {
+		super(title, controller, wkfKeyEventListener, menuBar);
+		_oeController = controller;
+		_oeMenuBar = menuBar;
+		_oeKeyEventListener = wkfKeyEventListener;
+		setSize(VECst.DEFAULT_MAINFRAME_WIDTH, VECst.DEFAULT_MAINFRAME_HEIGHT);
+		updateTitle();
+		getContentPane().setLayout(new BorderLayout());
+		// You may observe here some model objects
+	}
 
-    /**
-     * Constructor for XXXFrame
-     */
-    public OEFrame(String title, OEController controller, OEKeyEventListener wkfKeyEventListener, OEMenuBar menuBar) throws HeadlessException
-    {
-        super(title, controller, wkfKeyEventListener, menuBar);
-        _oeController = controller;
-        _oeMenuBar = menuBar;
-        _oeKeyEventListener = wkfKeyEventListener;
-        setSize(VECst.DEFAULT_MAINFRAME_WIDTH, VECst.DEFAULT_MAINFRAME_HEIGHT);
-        updateTitle();
-        getContentPane().setLayout(new BorderLayout());
-        // You may observe here some model objects
-    }
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		super.update(observable, dataModification);
+	}
 
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-       super.update(observable,dataModification);
-    }
-
-    /**
-     * @return Returns the controller.
-     */
-    public OEController getOEController()
-    {
-        return _oeController;
-    }
-
+	/**
+	 * @return Returns the controller.
+	 */
+	public OEController getOEController() {
+		return _oeController;
+	}
 
 }

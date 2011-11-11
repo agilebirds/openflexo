@@ -27,54 +27,46 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
 import org.openflexo.foundation.wkf.node.OperatorNode;
 
-
 /**
  * Browser element representing an Operation Node
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public abstract class OperatorNodeElement extends BrowserElement
-{
+public abstract class OperatorNodeElement extends BrowserElement {
 
-    public OperatorNodeElement(OperatorNode node, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(node, elementType, browser, parent);
-    }
+	public OperatorNodeElement(OperatorNode node, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent) {
+		super(node, elementType, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        // We add post conditions
-        for (Enumeration e = getOperatorNode().getOutgoingPostConditions().elements(); e.hasMoreElements();) {
-            addToChilds((FlexoPostCondition) e.nextElement());
-        }
-    }
+	@Override
+	protected void buildChildrenVector() {
+		// We add post conditions
+		for (Enumeration e = getOperatorNode().getOutgoingPostConditions().elements(); e.hasMoreElements();) {
+			addToChilds((FlexoPostCondition) e.nextElement());
+		}
+	}
 
-    @Override
-	public String getName()
-    {
-        if (getOperatorNode().getName() == null) {
-            return getOperatorNode().getDefaultName();
-        }
-        return getOperatorNode().getName();
-    }
+	@Override
+	public String getName() {
+		if (getOperatorNode().getName() == null) {
+			return getOperatorNode().getDefaultName();
+		}
+		return getOperatorNode().getName();
+	}
 
-    protected OperatorNode getOperatorNode()
-    {
-        return (OperatorNode) getObject();
-    }
+	protected OperatorNode getOperatorNode() {
+		return (OperatorNode) getObject();
+	}
 
-    @Override
-	public boolean isNameEditable()
-    {
-        return true;
-    }
+	@Override
+	public boolean isNameEditable() {
+		return true;
+	}
 
-    @Override
-	public void setName(String aName)
-    {
-        getOperatorNode().setName(aName);
-    }
+	@Override
+	public void setName(String aName) {
+		getOperatorNode().setName(aName);
+	}
 
 }

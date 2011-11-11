@@ -35,88 +35,77 @@ import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.file.AbstractCGFile;
 import org.openflexo.localization.FlexoLocalization;
 
-public class AcceptDiskUpdate extends MultipleFileGCAction<AcceptDiskUpdate>
-{
+public class AcceptDiskUpdate extends MultipleFileGCAction<AcceptDiskUpdate> {
 
 	private static final Logger logger = Logger.getLogger(AcceptDiskUpdate.class.getPackage().getName());
 
-	public static final MultipleFileGCActionType<AcceptDiskUpdate> actionType 
-	= new MultipleFileGCActionType<AcceptDiskUpdate> ("accept_disk_version",
-			ROUND_TRIP_GROUP,FlexoActionType.NORMAL_ACTION_TYPE) 
-	{
+	public static final MultipleFileGCActionType<AcceptDiskUpdate> actionType = new MultipleFileGCActionType<AcceptDiskUpdate>(
+			"accept_disk_version", ROUND_TRIP_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 		/**
-         * Factory method
-         */
-        @Override
-		public AcceptDiskUpdate makeNewAction(CGObject repository, Vector<CGObject> globalSelection, FlexoEditor editor) 
-        {
-            return new AcceptDiskUpdate(repository, globalSelection, editor);
-        }
-		
-        @Override
-		protected boolean accept(AbstractCGFile file)
-        {
-         	return (file.getResource() != null
-    				&& file.getGenerationStatus().isDiskModified());
-        }
+		 * Factory method
+		 */
+		@Override
+		public AcceptDiskUpdate makeNewAction(CGObject repository, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new AcceptDiskUpdate(repository, globalSelection, editor);
+		}
+
+		@Override
+		protected boolean accept(AbstractCGFile file) {
+			return (file.getResource() != null && file.getGenerationStatus().isDiskModified());
+		}
 
 	};
-	
-    static {
-        FlexoModelObject.addActionForClass (AcceptDiskUpdate.actionType, CGObject.class);
-    }
-    
-    AcceptDiskUpdate (CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
 
-    @Override
-	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException
-    {
-    	logger.info ("Accepting disk update");
-       	
-       	AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();
-    	pg.setAction(this);
- 
-    	GenerationRepository repository = getRepository();
-    	
-    	if (getSaveBeforeGenerating()) {
-    		repository.getProject().save();
-    	}
-    	
-    	makeFlexoProgress(FlexoLocalization.localizedForKey("accepting") +  " "
-    			+ getFilesToAccept().size() + " "
-    			+ FlexoLocalization.localizedForKey("files") +" "
-    			+ FlexoLocalization.localizedForKey("from") 
-    			+ repository.getDirectory().getAbsolutePath(), getFilesToAccept().size()+2);
+	static {
+		FlexoModelObject.addActionForClass(AcceptDiskUpdate.actionType, CGObject.class);
+	}
 
-    	for (AbstractCGFile file : getFilesToAccept()) {
-    		setProgress(FlexoLocalization.localizedForKey("accepting") +  " " + file.getFileName());
-          	logger.info(FlexoLocalization.localizedForKey("accepting") +  " " + file.getFileName());
-          	file.acceptDiskVersion();
-    	}
-    	setProgress(FlexoLocalization.localizedForKey("save_rm"));
-    	repository.getProject().getFlexoRMResource().saveResourceData();
+	AcceptDiskUpdate(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-     	hideFlexoProgress();
-    	
-     	if (repository instanceof CGRepository)
-     		((CGRepository)repository).clearAllJavaParsingData();
-    }
+	@Override
+	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException {
+		logger.info("Accepting disk update");
 
-    private Vector<AbstractCGFile> _filesToAccept;
+		AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();
+		pg.setAction(this);
 
-    public Vector<AbstractCGFile> getFilesToAccept()
-    {
-    	if (_filesToAccept == null) {
-    		_filesToAccept = getSelectedCGFilesOnWhyCurrentActionShouldApply();
-    	}
-    	return _filesToAccept;
-    }
+		GenerationRepository repository = getRepository();
 
-	public void setFilesToAccept(Vector<AbstractCGFile> someFiles)
-	{
+		if (getSaveBeforeGenerating()) {
+			repository.getProject().save();
+		}
+
+		makeFlexoProgress(
+				FlexoLocalization.localizedForKey("accepting") + " " + getFilesToAccept().size() + " "
+						+ FlexoLocalization.localizedForKey("files") + " " + FlexoLocalization.localizedForKey("from")
+						+ repository.getDirectory().getAbsolutePath(), getFilesToAccept().size() + 2);
+
+		for (AbstractCGFile file : getFilesToAccept()) {
+			setProgress(FlexoLocalization.localizedForKey("accepting") + " " + file.getFileName());
+			logger.info(FlexoLocalization.localizedForKey("accepting") + " " + file.getFileName());
+			file.acceptDiskVersion();
+		}
+		setProgress(FlexoLocalization.localizedForKey("save_rm"));
+		repository.getProject().getFlexoRMResource().saveResourceData();
+
+		hideFlexoProgress();
+
+		if (repository instanceof CGRepository)
+			((CGRepository) repository).clearAllJavaParsingData();
+	}
+
+	private Vector<AbstractCGFile> _filesToAccept;
+
+	public Vector<AbstractCGFile> getFilesToAccept() {
+		if (_filesToAccept == null) {
+			_filesToAccept = getSelectedCGFilesOnWhyCurrentActionShouldApply();
+		}
+		return _filesToAccept;
+	}
+
+	public void setFilesToAccept(Vector<AbstractCGFile> someFiles) {
 		_filesToAccept = someFiles;
 	}
 
@@ -124,6 +113,5 @@ public class AcceptDiskUpdate extends MultipleFileGCAction<AcceptDiskUpdate>
 		// TODO Auto-generated method stub
 		return false;
 	}
-    
 
 }

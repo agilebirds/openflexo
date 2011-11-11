@@ -25,71 +25,62 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.xmlcode.XMLMapping;
 
-
 /**
- * Abstract class implemented by all objects involved in Component Library
- * coding
- *
+ * Abstract class implemented by all objects involved in Component Library coding
+ * 
  * @author sguerin
- *
+ * 
  */
-public abstract class IECLObject extends IEObject implements Validable
-{
+public abstract class IECLObject extends IEObject implements Validable {
 
-    private FlexoComponentLibrary _componentLibrary;
+	private FlexoComponentLibrary _componentLibrary;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    /**
-     * Never use this constructor except for ComponentLibrary
-     */
-    public IECLObject(FlexoProject project)
-    {
-        super(project);
-    }
+	/**
+	 * Never use this constructor except for ComponentLibrary
+	 */
+	public IECLObject(FlexoProject project) {
+		super(project);
+	}
 
-    /**
-     * Default constructor
-     */
-    public IECLObject(FlexoComponentLibrary componentLibrary)
-    {
-        super(componentLibrary.getProject());
-        setComponentLibrary(componentLibrary);
-    }
+	/**
+	 * Default constructor
+	 */
+	public IECLObject(FlexoComponentLibrary componentLibrary) {
+		super(componentLibrary.getProject());
+		setComponentLibrary(componentLibrary);
+	}
 
-    public FlexoComponentLibrary getComponentLibrary()
-    {
-        return _componentLibrary;
-    }
+	public FlexoComponentLibrary getComponentLibrary() {
+		return _componentLibrary;
+	}
 
-    public void setComponentLibrary(FlexoComponentLibrary aComponentLibrary)
-    {
-        _componentLibrary = aComponentLibrary;
-    }
+	public void setComponentLibrary(FlexoComponentLibrary aComponentLibrary) {
+		_componentLibrary = aComponentLibrary;
+	}
 
-    /**
-     * Returns reference to the main object in which this XML-serializable
-     * object is contained relating to storing scheme: here it's the component
-     * library
-     *
-     * @return the component library
-     */
-    @Override
-    public XMLStorageResourceData getXMLResourceData()
-    {
-        return getComponentLibrary();
-    }
+	/**
+	 * Returns reference to the main object in which this XML-serializable object is contained relating to storing scheme: here it's the
+	 * component library
+	 * 
+	 * @return the component library
+	 */
+	@Override
+	public XMLStorageResourceData getXMLResourceData() {
+		return getComponentLibrary();
+	}
 
-    /**
-     * Overrides getXMLMapping
-     * @see org.openflexo.foundation.ie.IEObject#getXMLMapping()
-     */
-    @Override
-    public XMLMapping getXMLMapping()
-    {
-        return getComponentLibrary().getXMLMapping();
-    }
+	/**
+	 * Overrides getXMLMapping
+	 * 
+	 * @see org.openflexo.foundation.ie.IEObject#getXMLMapping()
+	 */
+	@Override
+	public XMLMapping getXMLMapping() {
+		return getComponentLibrary().getXMLMapping();
+	}
 }

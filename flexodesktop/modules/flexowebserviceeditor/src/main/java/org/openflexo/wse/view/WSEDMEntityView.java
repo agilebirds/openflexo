@@ -30,93 +30,82 @@ import org.openflexo.wse.controller.WSEController;
 import org.openflexo.wse.controller.WSESelectionManager;
 import org.openflexo.wse.model.WSEDMPropertyTableModel;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class WSEDMEntityView extends WSEView<DMEntity>
-{
+public class WSEDMEntityView extends WSEView<DMEntity> {
 
-    private static final Logger logger = Logger.getLogger(WSEDMEntityView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(WSEDMEntityView.class.getPackage().getName());
 
-    private WSEDMPropertyTableModel propertyTableModel;
-    protected WSETabularView propertyTable;
+	private WSEDMPropertyTableModel propertyTableModel;
+	protected WSETabularView propertyTable;
 
- 
+	public WSEDMEntityView(DMEntity entity, WSEController controller) {
+		super(entity, controller, "entity_($name)");
+		/*  addAction(new TabularViewAction(CreateDMProperty.actionType) {
+		      protected Vector getGlobalSelection()
+		      {
+		          return getViewSelection();
+		      }
 
-    public WSEDMEntityView(DMEntity entity, WSEController controller)
-    {
-        super(entity, controller, "entity_($name)");
-      /*  addAction(new TabularViewAction(CreateDMProperty.actionType) {
-            protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+		      protected FlexoModelObject getFocusedObject() 
+		      {
+		          return getDMEntity();
+		      }           
+		  });
+		  addAction(new TabularViewAction(CreateDMMethod.actionType) {
+		      protected Vector getGlobalSelection()
+		      {
+		          return getViewSelection();
+		      }
 
-            protected FlexoModelObject getFocusedObject() 
-            {
-                return getDMEntity();
-            }           
-        });
-        addAction(new TabularViewAction(CreateDMMethod.actionType) {
-            protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+		      protected FlexoModelObject getFocusedObject() 
+		      {
+		          return getDMEntity();
+		      }           
+		  });
+		  addAction(new TabularViewAction(DMDelete.actionType) {
+		      protected Vector getGlobalSelection()
+		      {
+		           return getViewSelection();
+		      }
 
-            protected FlexoModelObject getFocusedObject() 
-            {
-                return getDMEntity();
-            }           
-        });
-        addAction(new TabularViewAction(DMDelete.actionType) {
-            protected Vector getGlobalSelection()
-            {
-                 return getViewSelection();
-            }
+		      protected FlexoModelObject getFocusedObject() 
+		      {
+		          return null;
+		      }           
+		  });*/
+		finalizeBuilding();
+	}
 
-            protected FlexoModelObject getFocusedObject() 
-            {
-                return null;
-            }           
-        });*/
-         finalizeBuilding();
-    }
+	@Override
+	protected JComponent buildContentPane() {
+		DMEntity entity = getDMEntity();
 
-    @Override
-	protected JComponent buildContentPane()
-    {
-        DMEntity entity = getDMEntity();
+		propertyTableModel = new WSEDMPropertyTableModel(entity, getWSEController().getProject());
+		addToMasterTabularView(propertyTable = new WSETabularView(getWSEController(), propertyTableModel, 15));
 
-        propertyTableModel = new WSEDMPropertyTableModel(entity, getWSEController().getProject());
-        addToMasterTabularView(propertyTable = new WSETabularView(getWSEController(), propertyTableModel, 15));
+		return propertyTable;
+	}
 
+	public DMEntity getDMEntity() {
+		return getModelObject();
+	}
 
-        return propertyTable;
-    }
+	public DMProperty getSelectedDMProperty() {
+		WSESelectionManager sm = getWSEController().getWSESelectionManager();
+		Vector selection = sm.getSelection();
+		if ((selection.size() == 1) && (selection.firstElement() instanceof DMProperty)) {
+			return (DMProperty) selection.firstElement();
+		}
+		return null;
+	}
 
-    public DMEntity getDMEntity()
-    {
-        return getModelObject();
-    }
+	public WSETabularView getPropertyTable() {
+		return propertyTable;
+	}
 
-    public DMProperty getSelectedDMProperty()
-    {
-        WSESelectionManager sm = getWSEController().getWSESelectionManager();
-        Vector selection = sm.getSelection();
-        if ((selection.size() == 1) && (selection.firstElement() instanceof DMProperty)) {
-            return (DMProperty) selection.firstElement();
-        }
-        return null;
-    }
-
-   
-    public WSETabularView getPropertyTable() 
-    {
-        return propertyTable;
-    }
-
- }
+}

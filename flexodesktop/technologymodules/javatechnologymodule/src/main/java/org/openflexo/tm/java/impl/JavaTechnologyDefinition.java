@@ -27,10 +27,9 @@ import org.openflexo.foundation.sg.implmodel.exception.TechnologyModuleInitializ
 import org.openflexo.sg.formatter.FormatterFactory;
 import org.openflexo.tm.java.formatter.JavaFormatter;
 
-
 /**
  * @author nid
- *
+ * 
  */
 public class JavaTechnologyDefinition extends TechnologyModuleDefinition {
 
@@ -38,7 +37,8 @@ public class JavaTechnologyDefinition extends TechnologyModuleDefinition {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public TechnologyModuleImplementation createNewImplementation(ImplementationModel implementationModel) throws TechnologyModuleCompatibilityCheckException {
+	public TechnologyModuleImplementation createNewImplementation(ImplementationModel implementationModel)
+			throws TechnologyModuleCompatibilityCheckException {
 		JavaImplementation javaImplementation = new JavaImplementation(implementationModel);
 		return javaImplementation;
 	}

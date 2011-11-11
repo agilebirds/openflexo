@@ -30,23 +30,20 @@ import org.openflexo.foundation.dm.dm.DMDataModification;
  * @author sguerin
  * 
  */
-public interface Typed extends DataFlexoObserver, DMTypeOwner
-{
+public interface Typed extends DataFlexoObserver, DMTypeOwner {
 
-    public DMType getType();
+	public DMType getType();
 
-    public void setType(DMType type);
-    
-    @Override
+	public void setType(DMType type);
+
+	@Override
 	public void update(FlexoObservable observable, DataModification dataModification);
-    
-	public static abstract class TypeChangeNotification extends DMDataModification
-	{
+
+	public static abstract class TypeChangeNotification extends DMDataModification {
 		private DMType _type;
-		
-		protected TypeChangeNotification(DMType type)
-		{
-			super("type",type,type);
+
+		protected TypeChangeNotification(DMType type) {
+			super("type", type, type);
 			_type = type;
 		}
 
@@ -55,12 +52,10 @@ public interface Typed extends DataFlexoObserver, DMTypeOwner
 		}
 	}
 
-	public static class TypeResolved extends TypeChangeNotification
-	{		
-		protected TypeResolved(DMType type)
-		{
+	public static class TypeResolved extends TypeChangeNotification {
+		protected TypeResolved(DMType type) {
 			super(type);
 		}
 	}
 
- }
+}

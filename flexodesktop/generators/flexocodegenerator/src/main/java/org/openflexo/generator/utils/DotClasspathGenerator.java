@@ -39,54 +39,49 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileFormat;
 
+public class DotClasspathGenerator extends MetaFileGenerator {
 
-public class DotClasspathGenerator extends MetaFileGenerator
-{
+	private static final Logger logger = FlexoLogger.getLogger(DotClasspathGenerator.class.getPackage().getName());
 
-    private static final Logger logger = FlexoLogger.getLogger(DotClasspathGenerator.class.getPackage().getName());
+	private static final String FILE_NAME = ".classpath";
+	public static final String IDENTIFIER = "DOT_CLASSPATH";
 
-    private static final String FILE_NAME = ".classpath";
-    public static final String IDENTIFIER = "DOT_CLASSPATH";
-
-    public DotClasspathGenerator(ProjectGenerator projectGenerator)
-    {
-        super(projectGenerator, FileFormat.XML, ResourceType.SYSTEM_FILE, FILE_NAME, IDENTIFIER);
-    }
+	public DotClasspathGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, FileFormat.XML, ResourceType.SYSTEM_FILE, FILE_NAME, IDENTIFIER);
+	}
 
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
-    @Override
-	public void generate(boolean forceRegenerate)
-    {
-       	if (!forceRegenerate && !needsGeneration()) {
+	@Override
+	public void generate(boolean forceRegenerate) {
+		if (!forceRegenerate && !needsGeneration()) {
 			return;
 		}
-    	try {
-    		refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating")+ " "+getIdentifier(),false);
-    		startGeneration();
-    		if (logger.isLoggable(Level.INFO)) {
-				logger.info("Generating "+FILE_NAME);
+		try {
+			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + getIdentifier(), false);
+			startGeneration();
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Generating " + FILE_NAME);
 			}
-    		VelocityContext velocityContext = defaultContext();
-            velocityContext.put("subPaths", computeSubPaths());
-    		String javaCode = merge("dotClasspath.vm", velocityContext);
-    		generatedCode = new GeneratedTextResource(FILE_NAME, javaCode);
-    		stopGeneration();
-      	} catch (GenerationException e) {
-    		setGenerationException(e);
+			VelocityContext velocityContext = defaultContext();
+			velocityContext.put("subPaths", computeSubPaths());
+			String javaCode = merge("dotClasspath.vm", velocityContext);
+			generatedCode = new GeneratedTextResource(FILE_NAME, javaCode);
+			stopGeneration();
+		} catch (GenerationException e) {
+			setGenerationException(e);
 		} catch (Exception e) {
-			setGenerationException(new UnexpectedExceptionOccuredException(e,getProjectGenerator()));
-    	}
-    }
+			setGenerationException(new UnexpectedExceptionOccuredException(e, getProjectGenerator()));
+		}
+	}
 
 	/**
-     * @return
-     */
-    private Vector<String> computeSubPaths() {
+	 * @return
+	 */
+	private Vector<String> computeSubPaths() {
 		Vector<String> v = new Vector<String>();
 		Enumeration<CGFile> en = getRepository().getFiles().elements();
 		Vector<CGSymbolicDirectory> javaSymbolicDirectories = new Vector<CGSymbolicDirectory>();
@@ -103,7 +98,14 @@ public class DotClasspathGenerator extends MetaFileGenerator
 						}
 					} else {
 
-						String path = file.getResource().getResourceFile().getRelativePath().substring(0, file.getResource().getResourceFile().getRelativePath().length() - file.getResource().getResourceFile().getFile().getName().length());
+						String path = file
+								.getResource()
+								.getResourceFile()
+								.getRelativePath()
+								.substring(
+										0,
+										file.getResource().getResourceFile().getRelativePath().length()
+												- file.getResource().getResourceFile().getFile().getName().length());
 						if (path.startsWith("/")) {
 							path = path.substring(1);
 						}
@@ -113,7 +115,7 @@ public class DotClasspathGenerator extends MetaFileGenerator
 							if (entity.getPathForPackage().length() > 0) {
 								path = path.substring(0, path.indexOf(entity.getPathForPackage()));
 							}
-						} 
+						}
 
 						if (path.endsWith("/")) {
 							path = path.substring(0, path.length() - 1);
@@ -131,26 +133,23 @@ public class DotClasspathGenerator extends MetaFileGenerator
 	}
 
 	@Override
-	public String getRelativePath() 
-	{
+	public String getRelativePath() {
 		return "";
 	}
 
 	@Override
-	public CGSymbolicDirectory getSymbolicDirectory(CGRepository repository) 
-	{
+	public CGSymbolicDirectory getSymbolicDirectory(CGRepository repository) {
 		return repository.getProjectSymbolicDirectory();
 	}
 
-    /**
-     * Overrides rebuildDependanciesForResource
-     * @see org.openflexo.generator.utils.MetaFileGenerator#rebuildDependanciesForResource(org.openflexo.generator.rm.ProjectTextFileResource)
-     */
-    @Override
-    public void rebuildDependanciesForResource(ProjectTextFileResource resource)
-    {
-        resource.addToDependantResources(getProject().getFlexoComponentLibraryResource());
-    }
-
+	/**
+	 * Overrides rebuildDependanciesForResource
+	 * 
+	 * @see org.openflexo.generator.utils.MetaFileGenerator#rebuildDependanciesForResource(org.openflexo.generator.rm.ProjectTextFileResource)
+	 */
+	@Override
+	public void rebuildDependanciesForResource(ProjectTextFileResource resource) {
+		resource.addToDependantResources(getProject().getFlexoComponentLibraryResource());
+	}
 
 }

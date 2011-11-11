@@ -18,49 +18,50 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents DataFlowView object
- *
+ * 
  * @version $Id: DataFlowView.java,v 1.3 2011/09/12 11:46:47 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class DataFlowView extends QuiduView {
-  public DataFlowView(PetalNode parent, Collection params, int tag) {
-    super(parent, "DataFlowView", params, tag);
-  }
+	public DataFlowView(PetalNode parent, Collection params, int tag) {
+		super(parent, "DataFlowView", params, tag);
+	}
 
-  public DataFlowView() {
-    super("DataFlowView");
-  }
+	public DataFlowView() {
+		super("DataFlowView");
+	}
 
-  public SegLabel getLabel() {
-    return (SegLabel)getProperty("label");
-  }
+	public SegLabel getLabel() {
+		return (SegLabel) getProperty("label");
+	}
 
-  public void setLabel(SegLabel o) {
-    defineProperty("label", o);
-  }
+	public void setLabel(SegLabel o) {
+		defineProperty("label", o);
+	}
 
-  public int getDir() {
-    return getPropertyAsInteger("dir");
-  }
+	public int getDir() {
+		return getPropertyAsInteger("dir");
+	}
 
-  public void setDir(int o) {
-    defineProperty("dir", o);
-  }
+	public void setDir(int o) {
+		defineProperty("dir", o);
+	}
 
-  public Tag getMessView() {
-    return (Tag)getProperty("MessView");
-  }
+	public Tag getMessView() {
+		return (Tag) getProperty("MessView");
+	}
 
-  public void setMessView(Tag o) {
-    defineProperty("MessView", o);
-  }
+	public void setMessView(Tag o) {
+		defineProperty("MessView", o);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

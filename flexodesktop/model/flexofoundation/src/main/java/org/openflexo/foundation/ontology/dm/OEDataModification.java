@@ -26,17 +26,14 @@ import org.openflexo.foundation.DataModification;
  * 
  * @author sguerin
  */
-public class OEDataModification extends DataModification
-{
+public class OEDataModification extends DataModification {
 
-    public OEDataModification(Object oldValue, Object newValue)
-    {
-        super(DataModification.OE_DM, oldValue, newValue);
-    }
+	public OEDataModification(Object oldValue, Object newValue) {
+		super(DataModification.OE_DM, oldValue, newValue);
+	}
 
-    public OEDataModification(String propertyName, Object oldValue, Object newValue)
-    {
-        super(DataModification.ATTRIBUTE, propertyName, oldValue, newValue);
-    }
+	public OEDataModification(String propertyName, Object oldValue, Object newValue) {
+		super(DataModification.ATTRIBUTE, propertyName, oldValue, newValue);
+	}
 
 }

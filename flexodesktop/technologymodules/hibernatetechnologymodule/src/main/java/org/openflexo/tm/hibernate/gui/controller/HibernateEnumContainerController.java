@@ -10,7 +10,7 @@ import org.openflexo.tm.hibernate.impl.HibernateEnumValue;
 import org.openflexo.view.controller.FlexoController;
 
 /**
- *
+ * 
  * @author Nicolas Daniels
  */
 public class HibernateEnumContainerController extends HibernateFibController<HibernateEnumContainer> {
@@ -48,7 +48,8 @@ public class HibernateEnumContainerController extends HibernateFibController<Hib
 
 		try {
 			HibernateEnumValue hibernateEnumValue = new HibernateEnumValue(hibernateEnum.getImplementationModel());
-			hibernateEnumValue.setName("value" + (hibernateEnum.getHibernateEnumValues().size() > 0 ? hibernateEnum.getHibernateEnumValues().size() : ""));
+			hibernateEnumValue.setName("value"
+					+ (hibernateEnum.getHibernateEnumValues().size() > 0 ? hibernateEnum.getHibernateEnumValues().size() : ""));
 			hibernateEnum.addToHibernateEnumValues(hibernateEnumValue);
 			return hibernateEnumValue;
 		} catch (Exception e) {

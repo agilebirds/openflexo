@@ -23,29 +23,24 @@ import org.openflexo.inspector.widget.DenaliWidget;
 
 public class CheckboxParameter extends ParameterDefinition<Boolean> {
 
-    public CheckboxParameter(String name, String label, boolean defaultValue)
-    {
-        super(name,label,new Boolean(defaultValue));
-        setBooleanValue(defaultValue);
-    }
-    
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.CHECKBOX;
-    }
+	public CheckboxParameter(String name, String label, boolean defaultValue) {
+		super(name, label, new Boolean(defaultValue));
+		setBooleanValue(defaultValue);
+	}
 
-   @Override
-public boolean getBooleanValue()
-   {
-           return getValue().booleanValue();
-   }
-   
-   @Override
-public void setBooleanValue(boolean aBoolean)
-   {
-       setValue(new Boolean(aBoolean));
-   }
-   
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.CHECKBOX;
+	}
+
+	@Override
+	public boolean getBooleanValue() {
+		return getValue().booleanValue();
+	}
+
+	@Override
+	public void setBooleanValue(boolean aBoolean) {
+		setValue(new Boolean(aBoolean));
+	}
 
 }

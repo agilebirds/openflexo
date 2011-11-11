@@ -35,55 +35,43 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.CEDController;
 
-
 public class CreateOntologyClassInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateOntologyClassInitializer(CEDControllerActionInitializer actionInitializer)
-	{
-		super(CreateOntologyClass.actionType,actionInitializer);
+	CreateOntologyClassInitializer(CEDControllerActionInitializer actionInitializer) {
+		super(CreateOntologyClass.actionType, actionInitializer);
 	}
 
 	@Override
-	protected CEDControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (CEDControllerActionInitializer)super.getControllerActionInitializer();
+	protected CEDControllerActionInitializer getControllerActionInitializer() {
+		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<CreateOntologyClass> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<CreateOntologyClass> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateOntologyClass>() {
 			@Override
-			public boolean run(ActionEvent e, CreateOntologyClass action)
-			{
-				FIBDialog dialog = FIBDialog.instanciateComponent(
-						CEDCst.CREATE_ONTOLOGY_CLASS_DIALOG_FIB,
-						action, null, true);
+			public boolean run(ActionEvent e, CreateOntologyClass action) {
+				FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.CREATE_ONTOLOGY_CLASS_DIALOG_FIB, action, null, true);
 				return (dialog.getStatus() == Status.VALIDATED);
 			}
 		};
 	}
-	
 
 	@Override
-	protected FlexoActionFinalizer<CreateOntologyClass> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<CreateOntologyClass> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateOntologyClass>() {
 			@Override
-			public boolean run(ActionEvent e, CreateOntologyClass action)
-			{
-				((CEDController)getController()).getSelectionManager().setSelectedObject(action.getNewClass());
+			public boolean run(ActionEvent e, CreateOntologyClass action) {
+				((CEDController) getController()).getSelectionManager().setSelectedObject(action.getNewClass());
 				return true;
 			}
 		};
 	}
 
-
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return OntologyIconLibrary.ONTOLOGY_CLASS_ICON;
 	}
 

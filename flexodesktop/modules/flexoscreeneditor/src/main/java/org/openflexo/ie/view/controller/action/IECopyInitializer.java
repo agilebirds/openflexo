@@ -34,41 +34,34 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class IECopyInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	IECopyInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(IECopy.actionType,actionInitializer);
+	IECopyInitializer(IEControllerActionInitializer actionInitializer) {
+		super(IECopy.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<IECopy> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<IECopy> getDefaultInitializer() {
 		return new FlexoActionInitializer<IECopy>() {
 			@Override
-			public boolean run(ActionEvent e, IECopy action)
-			{
+			public boolean run(ActionEvent e, IECopy action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<IECopy> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<IECopy> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<IECopy>() {
 			@Override
-			public boolean run(ActionEvent e, IECopy action)
-			{
+			public boolean run(ActionEvent e, IECopy action) {
 				getControllerActionInitializer().getIESelectionManager().performSelectionCopy();
 				return true;
 			}
@@ -76,14 +69,12 @@ public class IECopyInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return IconLibrary.COPY_ICON;
 	}
 
 	@Override
-	protected KeyStroke getShortcut()
-	{
+	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(KeyEvent.VK_C, FlexoCst.META_MASK);
 	}
 

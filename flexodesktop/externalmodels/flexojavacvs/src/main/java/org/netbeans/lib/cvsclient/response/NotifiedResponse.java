@@ -26,40 +26,36 @@ import org.netbeans.lib.cvsclient.command.CommandException;
 import org.netbeans.lib.cvsclient.util.LoggedDataInputStream;
 
 /**
- * @author  Thomas Singer
+ * @author Thomas Singer
  * @version Nov 14, 2001
  */
 class NotifiedResponse implements Response {
-    /**
-     * Process the data for the response.
-     * @param dis the data inputstream allowing the client to read the server's
-     * response. Note that the actual response name has already been read
-     * and the input stream is positioned just before the first argument, if
-     * any.
-     */
-    @Override
-	public void process(LoggedDataInputStream dataInputStream, ResponseServices services)
-            throws ResponseException {
-        try {
-/*          String relativeLocalDirectory =*/ dataInputStream.readLine();
-/*          String repositoryFilePath =*/ dataInputStream.readLine();
+	/**
+	 * Process the data for the response.
+	 * 
+	 * @param dis
+	 *            the data inputstream allowing the client to read the server's response. Note that the actual response name has already
+	 *            been read and the input stream is positioned just before the first argument, if any.
+	 */
+	@Override
+	public void process(LoggedDataInputStream dataInputStream, ResponseServices services) throws ResponseException {
+		try {
+			/*          String relativeLocalDirectory =*/dataInputStream.readLine();
+			/*          String repositoryFilePath =*/dataInputStream.readLine();
 
-        }
-        catch (EOFException ex) {
-            throw new ResponseException(ex, CommandException.getLocalMessage("CommandException.EndOfFile", null)); //NOI18N
-        }
-        catch (IOException ex) {
-            throw new ResponseException(ex);
-        }
-    }
+		} catch (EOFException ex) {
+			throw new ResponseException(ex, CommandException.getLocalMessage("CommandException.EndOfFile", null)); // NOI18N
+		} catch (IOException ex) {
+			throw new ResponseException(ex);
+		}
+	}
 
-    /**
-     * Is this a terminal response, i.e. should reading of responses stop
-     * after this response. This is true for responses such as OK or
-     * an error response
-     */
-    @Override
+	/**
+	 * Is this a terminal response, i.e. should reading of responses stop after this response. This is true for responses such as OK or an
+	 * error response
+	 */
+	@Override
 	public boolean isTerminalResponse() {
-        return false;
-    }
+		return false;
+	}
 }

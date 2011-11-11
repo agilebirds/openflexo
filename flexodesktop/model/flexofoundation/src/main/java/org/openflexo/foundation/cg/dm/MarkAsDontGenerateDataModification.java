@@ -25,5 +25,4 @@ public class MarkAsDontGenerateDataModification extends CGDataModification {
 		super(!newValue, newValue);
 	}
 
-	
 }

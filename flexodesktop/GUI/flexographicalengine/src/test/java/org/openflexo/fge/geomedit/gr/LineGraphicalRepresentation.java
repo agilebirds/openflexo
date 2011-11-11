@@ -43,21 +43,17 @@ import org.openflexo.fge.geomedit.construction.TangentLineWithCircleAndPointCons
 import org.openflexo.fge.geomedit.construction.VerticalLineWithPointConstruction;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
-public class LineGraphicalRepresentation extends GeometricObjectGraphicalRepresentation<FGELine,Line> implements XMLSerializable 
-{
+public class LineGraphicalRepresentation extends GeometricObjectGraphicalRepresentation<FGELine, Line> implements XMLSerializable {
 	// Called for LOAD
-	public LineGraphicalRepresentation(GeomEditBuilder builder)
-	{
-		this(null,builder.drawing);
+	public LineGraphicalRepresentation(GeomEditBuilder builder) {
+		this(null, builder.drawing);
 		initializeDeserialization();
 	}
-	
-	public LineGraphicalRepresentation(Line line, GeometricDrawing aDrawing)
-	{
+
+	public LineGraphicalRepresentation(Line line, GeometricDrawing aDrawing) {
 		super(line, aDrawing);
 	}
-	
+
 	/*@Override
 	public Line getDrawable() {
 		// TODO Auto-generated method stub
@@ -69,111 +65,106 @@ public class LineGraphicalRepresentation extends GeometricObjectGraphicalReprese
 		// TODO Auto-generated method stub
 		return super.getGeometricObject();
 	}*/
-	
+
 	@Override
-	protected List<ControlPoint> buildControlPointsForLine(FGEAbstractLine line)
-	{
+	protected List<ControlPoint> buildControlPointsForLine(FGEAbstractLine line) {
 		Vector<ControlPoint> returned = new Vector<ControlPoint>();
-		
+
 		LineConstruction lineConstruction = getDrawable().getConstruction();
-			
+
 		ExplicitPointConstruction pc1 = null;
 		ExplicitPointConstruction pc2 = null;
-			
+
 		if (lineConstruction instanceof LineWithTwoPointsConstruction) {
-			if (((LineWithTwoPointsConstruction)lineConstruction).pointConstruction1 instanceof ExplicitPointConstruction) {
-				pc1 = (ExplicitPointConstruction)((LineWithTwoPointsConstruction)lineConstruction).pointConstruction1;
+			if (((LineWithTwoPointsConstruction) lineConstruction).pointConstruction1 instanceof ExplicitPointConstruction) {
+				pc1 = (ExplicitPointConstruction) ((LineWithTwoPointsConstruction) lineConstruction).pointConstruction1;
 			}
-			if (((LineWithTwoPointsConstruction)lineConstruction).pointConstruction2 instanceof ExplicitPointConstruction) {
-				pc2 = (ExplicitPointConstruction)((LineWithTwoPointsConstruction)lineConstruction).pointConstruction2;
+			if (((LineWithTwoPointsConstruction) lineConstruction).pointConstruction2 instanceof ExplicitPointConstruction) {
+				pc2 = (ExplicitPointConstruction) ((LineWithTwoPointsConstruction) lineConstruction).pointConstruction2;
 			}
 		}
-		
+
 		if (lineConstruction instanceof OrthogonalLineWithPointConstruction) {
-			if (((OrthogonalLineWithPointConstruction)lineConstruction).pointConstruction instanceof ExplicitPointConstruction) {
-				pc1 = (ExplicitPointConstruction)((OrthogonalLineWithPointConstruction)lineConstruction).pointConstruction;
+			if (((OrthogonalLineWithPointConstruction) lineConstruction).pointConstruction instanceof ExplicitPointConstruction) {
+				pc1 = (ExplicitPointConstruction) ((OrthogonalLineWithPointConstruction) lineConstruction).pointConstruction;
 			}
 		}
-		
+
 		if (lineConstruction instanceof ParallelLineWithPointConstruction) {
-			if (((ParallelLineWithPointConstruction)lineConstruction).pointConstruction instanceof ExplicitPointConstruction) {
-				pc1 = (ExplicitPointConstruction)((ParallelLineWithPointConstruction)lineConstruction).pointConstruction;
+			if (((ParallelLineWithPointConstruction) lineConstruction).pointConstruction instanceof ExplicitPointConstruction) {
+				pc1 = (ExplicitPointConstruction) ((ParallelLineWithPointConstruction) lineConstruction).pointConstruction;
 			}
 		}
-		
+
 		if (lineConstruction instanceof RotatedLineWithPointConstruction) {
-			if (((RotatedLineWithPointConstruction)lineConstruction).pointConstruction instanceof ExplicitPointConstruction) {
-				pc1 = (ExplicitPointConstruction)((RotatedLineWithPointConstruction)lineConstruction).pointConstruction;
+			if (((RotatedLineWithPointConstruction) lineConstruction).pointConstruction instanceof ExplicitPointConstruction) {
+				pc1 = (ExplicitPointConstruction) ((RotatedLineWithPointConstruction) lineConstruction).pointConstruction;
 			}
 		}
-		
+
 		if (lineConstruction instanceof HorizontalLineWithPointConstruction) {
-			if (((HorizontalLineWithPointConstruction)lineConstruction).pointConstruction instanceof ExplicitPointConstruction) {
-				pc1 = (ExplicitPointConstruction)((HorizontalLineWithPointConstruction)lineConstruction).pointConstruction;
+			if (((HorizontalLineWithPointConstruction) lineConstruction).pointConstruction instanceof ExplicitPointConstruction) {
+				pc1 = (ExplicitPointConstruction) ((HorizontalLineWithPointConstruction) lineConstruction).pointConstruction;
 			}
 		}
-		
+
 		if (lineConstruction instanceof VerticalLineWithPointConstruction) {
-			if (((VerticalLineWithPointConstruction)lineConstruction).pointConstruction instanceof ExplicitPointConstruction) {
-				pc1 = (ExplicitPointConstruction)((VerticalLineWithPointConstruction)lineConstruction).pointConstruction;
+			if (((VerticalLineWithPointConstruction) lineConstruction).pointConstruction instanceof ExplicitPointConstruction) {
+				pc1 = (ExplicitPointConstruction) ((VerticalLineWithPointConstruction) lineConstruction).pointConstruction;
 			}
 		}
-		
+
 		if (lineConstruction instanceof TangentLineWithCircleAndPointConstruction) {
-			if (((TangentLineWithCircleAndPointConstruction)lineConstruction).pointConstruction instanceof ExplicitPointConstruction) {
-				pc1 = (ExplicitPointConstruction)((TangentLineWithCircleAndPointConstruction)lineConstruction).pointConstruction;
+			if (((TangentLineWithCircleAndPointConstruction) lineConstruction).pointConstruction instanceof ExplicitPointConstruction) {
+				pc1 = (ExplicitPointConstruction) ((TangentLineWithCircleAndPointConstruction) lineConstruction).pointConstruction;
 			}
 		}
-		
+
 		if (pc1 != null) {
-			returned.add(new DraggableControlPoint<FGELine>(this,"p1",line.getP1(),pc1) {
+			returned.add(new DraggableControlPoint<FGELine>(this, "p1", line.getP1(), pc1) {
 				@Override
-				public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-				{
+				public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration,
+						FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event) {
 					getGeometricObject().setP1(newAbsolutePoint);
 					setPoint(newAbsolutePoint);
 					notifyGeometryChanged();
 					return true;
 				}
+
 				@Override
-				public void update(FGELine geometricObject)
-				{
+				public void update(FGELine geometricObject) {
 					setPoint(geometricObject.getP1());
 				}
 			});
-		}
-		else {
-			returned.add(new ComputedControlPoint<FGELine>(this,"p1",line.getP1()) {
+		} else {
+			returned.add(new ComputedControlPoint<FGELine>(this, "p1", line.getP1()) {
 				@Override
-				public void update(FGELine geometricObject)
-				{
+				public void update(FGELine geometricObject) {
 					setPoint(geometricObject.getP1());
 				}
 			});
 		}
 
 		if (pc2 != null) {
-			returned.add(new DraggableControlPoint<FGELine>(this,"p2",line.getP2(),pc2) {
+			returned.add(new DraggableControlPoint<FGELine>(this, "p2", line.getP2(), pc2) {
 				@Override
-				public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-				{
+				public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration,
+						FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event) {
 					getGeometricObject().setP2(newAbsolutePoint);
 					setPoint(newAbsolutePoint);
 					notifyGeometryChanged();
 					return true;
 				}
+
 				@Override
-				public void update(FGELine geometricObject)
-				{
+				public void update(FGELine geometricObject) {
 					setPoint(geometricObject.getP2());
 				}
 			});
-		}
-		else {
-			returned.add(new ComputedControlPoint<FGELine>(this,"p2",line.getP1()) {
+		} else {
+			returned.add(new ComputedControlPoint<FGELine>(this, "p2", line.getP1()) {
 				@Override
-				public void update(FGELine geometricObject)
-				{
+				public void update(FGELine geometricObject) {
 					setPoint(geometricObject.getP2());
 				}
 			});
@@ -181,6 +172,5 @@ public class LineGraphicalRepresentation extends GeometricObjectGraphicalReprese
 
 		return returned;
 	}
-
 
 }

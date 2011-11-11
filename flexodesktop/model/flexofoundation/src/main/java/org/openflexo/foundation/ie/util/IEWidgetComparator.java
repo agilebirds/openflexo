@@ -25,7 +25,6 @@ import java.util.Vector;
 
 import org.openflexo.foundation.ie.widget.IEWidget;
 
-
 public class IEWidgetComparator implements Comparator<IEWidget> {
 
 	public IEWidgetComparator() {
@@ -37,11 +36,12 @@ public class IEWidgetComparator implements Comparator<IEWidget> {
 	public int compare(IEWidget arg0, IEWidget arg1) {
 		return arg0.getIndex() - arg1.getIndex();
 	}
-	
-	public static Vector sortWidgets(Vector<IEWidget> v){
+
+	public static Vector sortWidgets(Vector<IEWidget> v) {
 		IEWidget[] widgetArray = new IEWidget[v.size()];
-		for(int i=0;i<v.size();i++)widgetArray[i]=v.get(i);
-		Arrays.sort(widgetArray,new IEWidgetComparator());
+		for (int i = 0; i < v.size(); i++)
+			widgetArray[i] = v.get(i);
+		Arrays.sort(widgetArray, new IEWidgetComparator());
 		return new Vector<IEWidget>(Arrays.asList(widgetArray));
 	}
 

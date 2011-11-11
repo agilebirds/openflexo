@@ -25,42 +25,36 @@ import java.awt.event.MouseEvent;
 import javax.swing.Icon;
 import javax.swing.JButton;
 
-public class MouseOverButton extends JButton
-{
-    private MouseAdapter mouseOverAdapter;
+public class MouseOverButton extends JButton {
+	private MouseAdapter mouseOverAdapter;
 
-    protected Icon normalIcon;
+	protected Icon normalIcon;
 
-    protected Icon mouseOverIcon;
+	protected Icon mouseOverIcon;
 
-    public MouseOverButton()
-    {
-        super();
-        mouseOverAdapter = new MouseAdapter() {
-            @Override
-			public void mouseEntered(MouseEvent e)
-            {
-                setIcon(mouseOverIcon);
-            }
+	public MouseOverButton() {
+		super();
+		mouseOverAdapter = new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				setIcon(mouseOverIcon);
+			}
 
-            @Override
-			public void mouseExited(MouseEvent e)
-            {
-                setIcon(normalIcon);
-            }
-        };
-        addMouseListener(mouseOverAdapter);
-        setFocusable(false);
-    }
+			@Override
+			public void mouseExited(MouseEvent e) {
+				setIcon(normalIcon);
+			}
+		};
+		addMouseListener(mouseOverAdapter);
+		setFocusable(false);
+	}
 
-    public void setNormalIcon(Icon icon)
-    {
-        normalIcon = icon;
-        setIcon(normalIcon);
-    }
+	public void setNormalIcon(Icon icon) {
+		normalIcon = icon;
+		setIcon(normalIcon);
+	}
 
-    public void setMouseOverIcon(Icon icon)
-    {
-        mouseOverIcon = icon;
-    }
+	public void setMouseOverIcon(Icon icon) {
+		mouseOverIcon = icon;
+	}
 }

@@ -21,8 +21,7 @@ package org.openflexo.components.browser;
 
 import org.openflexo.foundation.FlexoModelObject;
 
-public interface BrowserElementFactory 
-{
-    public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent);
+public interface BrowserElementFactory {
+	public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent);
 
 }

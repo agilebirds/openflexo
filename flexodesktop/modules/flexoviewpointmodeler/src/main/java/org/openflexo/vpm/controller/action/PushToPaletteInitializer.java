@@ -35,48 +35,38 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.CEDController;
 
-
 public class PushToPaletteInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	PushToPaletteInitializer(CEDControllerActionInitializer actionInitializer)
-	{
-		super(PushToPalette.actionType,actionInitializer);
+	PushToPaletteInitializer(CEDControllerActionInitializer actionInitializer) {
+		super(PushToPalette.actionType, actionInitializer);
 	}
 
 	@Override
-	protected CEDControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (CEDControllerActionInitializer)super.getControllerActionInitializer();
+	protected CEDControllerActionInitializer getControllerActionInitializer() {
+		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	public CEDController getController()
-	{
-		return (CEDController)super.getController();
+	public CEDController getController() {
+		return (CEDController) super.getController();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<PushToPalette> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<PushToPalette> getDefaultInitializer() {
 		return new FlexoActionInitializer<PushToPalette>() {
 			@Override
-			public boolean run(ActionEvent e, PushToPalette action)
-			{
-				FIBDialog dialog = FIBDialog.instanciateComponent(
-						CEDCst.PUSH_TO_PALETTE_DIALOG_FIB,
-						action, null, true);
+			public boolean run(ActionEvent e, PushToPalette action) {
+				FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.PUSH_TO_PALETTE_DIALOG_FIB, action, null, true);
 				if (dialog.getStatus() == Status.VALIDATED) {
-					GraphicalRepresentation gr = 
-						((GraphicalRepresentation)action.getFocusedObject().getGraphicalRepresentation());
+					GraphicalRepresentation gr = ((GraphicalRepresentation) action.getFocusedObject().getGraphicalRepresentation());
 					if (gr instanceof ShapeGraphicalRepresentation) {
 						action.graphicalRepresentation = new ShapeGraphicalRepresentation();
-						((ShapeGraphicalRepresentation)action.graphicalRepresentation).setsWith(gr);
-					}
-					else if (gr instanceof ConnectorGraphicalRepresentation) {
+						((ShapeGraphicalRepresentation) action.graphicalRepresentation).setsWith(gr);
+					} else if (gr instanceof ConnectorGraphicalRepresentation) {
 						action.graphicalRepresentation = new ConnectorGraphicalRepresentation();
-						((ConnectorGraphicalRepresentation)action.graphicalRepresentation).setsWith(gr);
+						((ConnectorGraphicalRepresentation) action.graphicalRepresentation).setsWith(gr);
 					}
 					return true;
 				}
@@ -84,21 +74,17 @@ public class PushToPaletteInitializer extends ActionInitializer {
 			}
 		};
 	}
-	
 
 	@Override
-	protected FlexoActionFinalizer<PushToPalette> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<PushToPalette> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<PushToPalette>() {
 			@Override
-			public boolean run(ActionEvent e, PushToPalette action)
-			{
-				getController().setCurrentEditedObjectAsModuleView(action.palette,getController().VIEW_POINT_PERSPECTIVE);
+			public boolean run(ActionEvent e, PushToPalette action) {
+				getController().setCurrentEditedObjectAsModuleView(action.palette, getController().VIEW_POINT_PERSPECTIVE);
 				getController().getSelectionManager().setSelectedObject(action.getNewPaletteElement());
 				return true;
 			}
 		};
 	}
-
 
 }

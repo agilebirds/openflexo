@@ -25,34 +25,29 @@ public class LineIntersectionPointConstruction extends PointConstruction {
 
 	public LineConstruction lineConstruction1;
 	public LineConstruction lineConstruction2;
-	
-	public LineIntersectionPointConstruction() 
-	{
+
+	public LineIntersectionPointConstruction() {
 		super();
 	}
 
-	public LineIntersectionPointConstruction(LineConstruction lineConstruction1, LineConstruction lineConstruction2) 
-	{
+	public LineIntersectionPointConstruction(LineConstruction lineConstruction1, LineConstruction lineConstruction2) {
 		this();
 		this.lineConstruction1 = lineConstruction1;
 		this.lineConstruction2 = lineConstruction2;
 	}
 
 	@Override
-	protected FGEPoint computeData()
-	{
-		return  lineConstruction1.getData().getLineIntersection(lineConstruction2.getData());
+	protected FGEPoint computeData() {
+		return lineConstruction1.getData().getLineIntersection(lineConstruction2.getData());
 	}
 
 	@Override
-	public String toString()
-	{
-		return "LineIntersectionPointConstruction[\n"+"> "+lineConstruction1.toString()+"\n> "+lineConstruction2.toString()+"\n]";
+	public String toString() {
+		return "LineIntersectionPointConstruction[\n" + "> " + lineConstruction1.toString() + "\n> " + lineConstruction2.toString() + "\n]";
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public GeometricConstruction[] getDepends() {
 		GeometricConstruction[] returned = { lineConstruction1, lineConstruction2 };
 		return returned;
 	}

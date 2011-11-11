@@ -33,171 +33,172 @@ import org.netbeans.lib.cvsclient.request.CommandRequest;
 
 /**
  * The status command looks up the status of files in the repository
- * @author  Robert Greig
+ * 
+ * @author Robert Greig
  */
 public class StatusCommand extends BasicCommand {
-    /**
-     * The event manager to use
-     */
-    private EventManager eventManager;
+	/**
+	 * The event manager to use
+	 */
+	private EventManager eventManager;
 
-    /**
-     * Holds value of property includeTags.
-     */
-    private boolean includeTags;
+	/**
+	 * Holds value of property includeTags.
+	 */
+	private boolean includeTags;
 
-    /**
-     * Construct a new status command
-     */
-    public StatusCommand() {
-    }
+	/**
+	 * Construct a new status command
+	 */
+	public StatusCommand() {
+	}
 
-    /**
-     * Create a builder for this command.
-     * @param eventMan the event manager used to receive events.
-     */
-    @Override
+	/**
+	 * Create a builder for this command.
+	 * 
+	 * @param eventMan
+	 *            the event manager used to receive events.
+	 */
+	@Override
 	public Builder createBuilder(EventManager eventManager) {
-        return new StatusBuilder(eventManager, this);
-    }
+		return new StatusBuilder(eventManager, this);
+	}
 
-    /**
-     * Execute a command
-     * @param client the client services object that provides any necessary
-     * services to this command, including the ability to actually process
-     * all the requests.
-     */
-    @Override
-	public void execute(ClientServices client, EventManager em)
-            throws CommandException, AuthenticationException {
-        client.ensureConnection();
+	/**
+	 * Execute a command
+	 * 
+	 * @param client
+	 *            the client services object that provides any necessary services to this command, including the ability to actually process
+	 *            all the requests.
+	 */
+	@Override
+	public void execute(ClientServices client, EventManager em) throws CommandException, AuthenticationException {
+		client.ensureConnection();
 
-        eventManager = em;
+		eventManager = em;
 
-        super.execute(client, em);
+		super.execute(client, em);
 
-        try {
-            // parameters come now..
-            if (includeTags) {
-                requests.add(1, new ArgumentRequest("-v")); //NOI18N
-            }
+		try {
+			// parameters come now..
+			if (includeTags) {
+				requests.add(1, new ArgumentRequest("-v")); // NOI18N
+			}
 
-            addRequestForWorkingDirectory(client);
-            addArgumentRequests();
-            addRequest(CommandRequest.STATUS);
+			addRequestForWorkingDirectory(client);
+			addArgumentRequests();
+			addRequest(CommandRequest.STATUS);
 
-            client.processRequests(requests);
-        }
-        catch (CommandException ex) {
-            throw ex;
-        }
-        catch (Exception e) {
-            throw new CommandException(e, e.getLocalizedMessage());
-        }
-        finally {
-            requests.clear();
-        }
-    }
+			client.processRequests(requests);
+		} catch (CommandException ex) {
+			throw ex;
+		} catch (Exception e) {
+			throw new CommandException(e, e.getLocalizedMessage());
+		} finally {
+			requests.clear();
+		}
+	}
 
-    /**
-     * Getter for property includeTags.
-     * @return Value of property includeTags.
-     */
-    public boolean isIncludeTags() {
-        return includeTags;
-    }
+	/**
+	 * Getter for property includeTags.
+	 * 
+	 * @return Value of property includeTags.
+	 */
+	public boolean isIncludeTags() {
+		return includeTags;
+	}
 
-    /**
-     * Setter for property includeTags.
-     * @param includeTags New value of property includeTags.
-     */
-    public void setIncludeTags(boolean inclTags) {
-        includeTags = inclTags;
-    }
+	/**
+	 * Setter for property includeTags.
+	 * 
+	 * @param includeTags
+	 *            New value of property includeTags.
+	 */
+	public void setIncludeTags(boolean inclTags) {
+		includeTags = inclTags;
+	}
 
-    /**
-     * called when server responses with "ok" or "error", (when the command finishes)
-     */
-    @Override
+	/**
+	 * called when server responses with "ok" or "error", (when the command finishes)
+	 */
+	@Override
 	public void commandTerminated(TerminationEvent e) {
-        if (builder != null) {
-            builder.outputDone();
-        }
-    }
+		if (builder != null) {
+			builder.outputDone();
+		}
+	}
 
-    /**
-     * This method returns how the command would looklike when typed on the command line.
-     * Each command is responsible for constructing this information.
-     * @returns <command's name> [<parameters>] files/dirs. Example: checkout -p CvsCommand.java
-     */
-    @Override
+	/**
+	 * This method returns how the command would looklike when typed on the command line. Each command is responsible for constructing this
+	 * information.
+	 * 
+	 * @returns <command's name> [<parameters>] files/dirs. Example: checkout -p CvsCommand.java
+	 */
+	@Override
 	public String getCVSCommand() {
-        StringBuffer toReturn = new StringBuffer("status "); //NOI18N
-        toReturn.append(getCVSArguments());
-        File[] files = getFiles();
-        if (files != null) {
-            for (int index = 0; index < files.length; index++) {
-                toReturn.append(files[index].getName());
-                toReturn.append(' ');
-            }
-        }
-        return toReturn.toString();
-    }
+		StringBuffer toReturn = new StringBuffer("status "); // NOI18N
+		toReturn.append(getCVSArguments());
+		File[] files = getFiles();
+		if (files != null) {
+			for (int index = 0; index < files.length; index++) {
+				toReturn.append(files[index].getName());
+				toReturn.append(' ');
+			}
+		}
+		return toReturn.toString();
+	}
 
-    /**
-     * takes the arguments and sets the command. To be mainly
-     * used for automatic settings (like parsing the .cvsrc file)
-     * @return true if the option (switch) was recognized and set
-     */
-    @Override
+	/**
+	 * takes the arguments and sets the command. To be mainly used for automatic settings (like parsing the .cvsrc file)
+	 * 
+	 * @return true if the option (switch) was recognized and set
+	 */
+	@Override
 	public boolean setCVSCommand(char opt, String optArg) {
-        if (opt == 'R') {
-            setRecursive(true);
-        }
-        else if (opt == 'l') {
-            setRecursive(false);
-        }
-        else if (opt == 'v') {
-            setIncludeTags(true);
-        }
-        else {
-            return false;
-        }
-        return true;
-    }
+		if (opt == 'R') {
+			setRecursive(true);
+		} else if (opt == 'l') {
+			setRecursive(false);
+		} else if (opt == 'v') {
+			setIncludeTags(true);
+		} else {
+			return false;
+		}
+		return true;
+	}
 
-    /**
-     * String returned by this method defines which options are available for this particular command
-     */
-    @Override
+	/**
+	 * String returned by this method defines which options are available for this particular command
+	 */
+	@Override
 	public String getOptString() {
-        return "Rlv"; //NOI18N
-    }
+		return "Rlv"; // NOI18N
+	}
 
-    /**
-     * resets all switches in the command. After calling this method,
-     * the command should have no switches defined and should behave defaultly.
-     */
-    @Override
+	/**
+	 * resets all switches in the command. After calling this method, the command should have no switches defined and should behave
+	 * defaultly.
+	 */
+	@Override
 	public void resetCVSCommand() {
-        setRecursive(true);
-        setIncludeTags(false);
-    }
+		setRecursive(true);
+		setIncludeTags(false);
+	}
 
-    /**
-     * Returns the arguments of the command in the command-line style.
-     * Similar to getCVSCommand() however without the files and command's name
-     */
-    @Override
+	/**
+	 * Returns the arguments of the command in the command-line style. Similar to getCVSCommand() however without the files and command's
+	 * name
+	 */
+	@Override
 	public String getCVSArguments() {
-        StringBuffer toReturn = new StringBuffer(""); //NOI18N
-        if (isIncludeTags()) {
-            toReturn.append("-v "); //NOI18N
-        }
-        if (!isRecursive()) {
-            toReturn.append("-l "); //NOI18N
-        }
-        return toReturn.toString();
-    }
+		StringBuffer toReturn = new StringBuffer(""); // NOI18N
+		if (isIncludeTags()) {
+			toReturn.append("-v "); // NOI18N
+		}
+		if (!isRecursive()) {
+			toReturn.append("-l "); // NOI18N
+		}
+		return toReturn.toString();
+	}
 
 }

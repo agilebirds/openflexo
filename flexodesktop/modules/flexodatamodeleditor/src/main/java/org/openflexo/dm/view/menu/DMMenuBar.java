@@ -28,82 +28,70 @@ import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.view.menu.ToolsMenu;
 import org.openflexo.view.menu.WindowMenu;
 
+public class DMMenuBar extends FlexoMenuBar {
 
-public class DMMenuBar extends FlexoMenuBar
-{
+	public DMFileMenu _fileMenu;
+	public DMEditMenu _editMenu;
+	public DMToolsMenu _toolsMenu;
 
-    public DMFileMenu _fileMenu;
-    public DMEditMenu _editMenu;
-    public DMToolsMenu _toolsMenu;
+	public DMMenuBar(DMController controller) {
+		super(controller, Module.DM_MODULE);
+	}
 
-    public DMMenuBar(DMController controller)
-    {
-        super(controller, Module.DM_MODULE);
-     }
+	/**
+	 * Build if required and return DM 'File' menu. This method overrides the default one defined on superclass
+	 * 
+	 * @param controller
+	 * @return a WKFFileMenu instance
+	 */
+	@Override
+	public FileMenu getFileMenu(FlexoController controller) {
+		if (_fileMenu == null) {
+			_fileMenu = new DMFileMenu((DMController) controller);
+		}
+		return _fileMenu;
+	}
 
-    /**
-     * Build if required and return DM 'File' menu.
-     * This method overrides the default one defined on superclass
-     * 
-     * @param controller
-     * @return a WKFFileMenu instance
-     */
-    @Override
-	public FileMenu getFileMenu(FlexoController controller)
-    {
-        if (_fileMenu == null) {
-            _fileMenu = new DMFileMenu((DMController)controller);
-        }
-        return _fileMenu;
-    }
+	/**
+	 * Build if required and return DM 'Edit' menu. This method overrides the default one defined on superclass
+	 * 
+	 * @param controller
+	 * @return a WKFEditMenu instance
+	 */
+	@Override
+	public EditMenu getEditMenu(FlexoController controller) {
+		if (_editMenu == null) {
+			_editMenu = new DMEditMenu((DMController) controller);
+		}
+		return _editMenu;
+	}
 
-    /**
-     * Build if required and return DM 'Edit' menu.
-     * This method overrides the default one defined on superclass
-     * 
-     * @param controller
-     * @return a WKFEditMenu instance
-     */
-     @Override
-	public EditMenu getEditMenu(FlexoController controller)
-    {
-        if (_editMenu == null) {
-            _editMenu = new DMEditMenu((DMController)controller);
-        }
-        return _editMenu;
-    }
+	/**
+	 * Build if required and return DM 'Windows' menu. This method overrides the default one defined on superclass
+	 * 
+	 * @param controller
+	 * @return a WKFEditMenu instance
+	 */
+	@Override
+	public WindowMenu getWindowMenu(FlexoController controller, Module module) {
+		if (_windowMenu == null) {
+			_windowMenu = new DMWindowMenu((DMController) controller, module);
+		}
+		return _windowMenu;
+	}
 
-     /**
-      * Build if required and return DM 'Windows' menu.
-      * This method overrides the default one defined on superclass
-      * 
-      * @param controller
-      * @return a WKFEditMenu instance
-      */
-      @Override
-	public WindowMenu getWindowMenu(FlexoController controller, Module module)
-     {
-         if (_windowMenu == null) {
-             _windowMenu = new DMWindowMenu((DMController)controller,module);
-         }
-         return _windowMenu;
-     }
-
-  /**
-    * Build if required and return DM 'Tools' menu.
-    * This method overrides the default one defined on superclass
-    * 
-    * @param controller
-    * @return a WKFEditMenu instance
-    */
-    @Override
-	public ToolsMenu getToolsMenu(FlexoController controller)
-   {
-       if (_toolsMenu == null) {
-           _toolsMenu = new DMToolsMenu((DMController)controller);
-       }
-       return _toolsMenu;
-   }
-
+	/**
+	 * Build if required and return DM 'Tools' menu. This method overrides the default one defined on superclass
+	 * 
+	 * @param controller
+	 * @return a WKFEditMenu instance
+	 */
+	@Override
+	public ToolsMenu getToolsMenu(FlexoController controller) {
+		if (_toolsMenu == null) {
+			_toolsMenu = new DMToolsMenu((DMController) controller);
+		}
+		return _toolsMenu;
+	}
 
 }

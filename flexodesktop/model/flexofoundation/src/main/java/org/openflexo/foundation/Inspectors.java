@@ -31,7 +31,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.toolbox.FileResource;
 
-
 /**
  * Defines all the inspectors used in the project
  * 
@@ -193,7 +192,8 @@ public class Inspectors {
 				if (!_inspectorDirectory.exists()) {
 					_inspectorDirectory = new FileResource("Config/Inspector");
 					if (!_inspectorDirectory.exists())
-						logger.warning("Inspector directory NOT FOUND ! (searched " + getExpectedProjectName() + "/src/main/resources/Config/Inspector)");
+						logger.warning("Inspector directory NOT FOUND ! (searched " + getExpectedProjectName()
+								+ "/src/main/resources/Config/Inspector)");
 				} else
 					logger.info("Found " + _inspectorDirectory);
 			}
@@ -286,9 +286,9 @@ public class Inspectors {
 
 		public String BEGIN_NODE_INSPECTOR = "BeginNode.inspector";
 
-		//public String START_EVENT_INSPECTOR = "StartEvent.inspector";
+		// public String START_EVENT_INSPECTOR = "StartEvent.inspector";
 
-		//public String END_EVENT_INSPECTOR = "EndEvent.inspector";
+		// public String END_EVENT_INSPECTOR = "EndEvent.inspector";
 
 		public String END_NODE_INSPECTOR = "EndNode.inspector";
 
@@ -396,29 +396,29 @@ public class Inspectors {
 
 		public String PORTMAP_REGISTERY_INSPECTOR = "PortMapRegistery.inspector";
 
-		//public String MAIL_IN_INSPECTOR = "MailIn.inspector";
+		// public String MAIL_IN_INSPECTOR = "MailIn.inspector";
 
-		//public String MAIL_OUT_INSPECTOR = "MailOut.inspector";
+		// public String MAIL_OUT_INSPECTOR = "MailOut.inspector";
 
-		//public String TIMER_INSPECTOR = "Timer.inspector";
+		// public String TIMER_INSPECTOR = "Timer.inspector";
 
-		//public String TIME_OUT_INSPECTOR = "TimeOut.inspector";
+		// public String TIME_OUT_INSPECTOR = "TimeOut.inspector";
 
-		//public String FAULT_THROWER_INSPECTOR = "FaultThrower.inspector";
+		// public String FAULT_THROWER_INSPECTOR = "FaultThrower.inspector";
 
-		//public String FAULT_HANDLER_INSPECTOR = "FaultHandler.inspector";
+		// public String FAULT_HANDLER_INSPECTOR = "FaultHandler.inspector";
 
-		//public String CANCEL_THROWER_INSPECTOR = "CancelThrower.inspector";
+		// public String CANCEL_THROWER_INSPECTOR = "CancelThrower.inspector";
 
-		//public String CANCEL_HANDLER_INSPECTOR = "CancelHandler.inspector";
+		// public String CANCEL_HANDLER_INSPECTOR = "CancelHandler.inspector";
 
-		//public String COMPENSATE_THROWER_INSPECTOR = "CompensateThrower.inspector";
+		// public String COMPENSATE_THROWER_INSPECTOR = "CompensateThrower.inspector";
 
-		//public String COMPENSATE_HANDLER_INSPECTOR = "CompensateHandler.inspector";
+		// public String COMPENSATE_HANDLER_INSPECTOR = "CompensateHandler.inspector";
 
-		//public String CHECKPOINT_INSPECTOR = "Checkpoint.inspector";
+		// public String CHECKPOINT_INSPECTOR = "Checkpoint.inspector";
 
-		//public String REVERT_INSPECTOR = "Revert.inspector";
+		// public String REVERT_INSPECTOR = "Revert.inspector";
 
 		public String SELF_EXECUTABLE_ACTIVITY_INSPECTOR = "SelfExecutableActivityNode.inspector";
 

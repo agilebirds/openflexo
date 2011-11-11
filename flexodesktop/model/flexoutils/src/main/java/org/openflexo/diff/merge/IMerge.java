@@ -26,7 +26,6 @@ import java.util.Vector;
 import org.openflexo.diff.DiffSource;
 import org.openflexo.diff.merge.MergeChange.ChangeCategory;
 
-
 public interface IMerge {
 
 	public boolean isResolved();
@@ -38,25 +37,25 @@ public interface IMerge {
 	public int getConflictsChangeCount();
 
 	public int getResolvedConflictsChangeCount();
-	
+
 	public String getMergedText();
 
 	public void deleteObserver(Observer observer);
-	
+
 	public void addObserver(Observer observer);
-	
+
 	public DiffSource getLeftSource();
-	
+
 	public DiffSource getOriginalSource();
-	
+
 	public DiffSource getRightSource();
-	
+
 	public DiffSource getMergedSource();
-	
+
 	public Vector<MergeChange> getChanges();
-	
+
 	public MergeChange changeBefore(MergeChange change);
-	
+
 	public Vector<MergeChange> filteredChangeList(List<ChangeCategory> selectedCategories);
-	
+
 }

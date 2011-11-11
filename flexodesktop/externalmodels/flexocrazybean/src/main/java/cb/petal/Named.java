@@ -20,13 +20,13 @@
 package cb.petal;
 
 /**
- * Denote that a petal object has a name parameter, e.g.
- * (object Class "Person" ...)
- *
+ * Denote that a petal object has a name parameter, e.g. (object Class "Person" ...)
+ * 
  * @version $Id: Named.java,v 1.2 2011/09/12 11:46:48 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public interface Named {
-  public void   setNameParameter(String o);
-  public String getNameParameter();
+	public void setNameParameter(String o);
+
+	public String getNameParameter();
 }

@@ -27,41 +27,34 @@ import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geomedit.gr.GeometricObjectGraphicalRepresentation;
 
-
 public abstract class ComputedControlPoint<O extends FGEArea> extends GeometryAdjustingControlPoint<O> {
 
-	public ComputedControlPoint(GeometricObjectGraphicalRepresentation<O,?> gr, String aName, FGEPoint pt)
-	{
-		super(gr,aName,pt);
+	public ComputedControlPoint(GeometricObjectGraphicalRepresentation<O, ?> gr, String aName, FGEPoint pt) {
+		super(gr, aName, pt);
 		setDraggingAuthorizedArea(new FGEEmptyArea());
 	}
 
 	@Override
-	public GeometricObjectGraphicalRepresentation<O,?> getGraphicalRepresentation()
-	{
-		return (GeometricObjectGraphicalRepresentation<O,?>)super.getGraphicalRepresentation();
+	public GeometricObjectGraphicalRepresentation<O, ?> getGraphicalRepresentation() {
+		return (GeometricObjectGraphicalRepresentation<O, ?>) super.getGraphicalRepresentation();
 	}
 
 	@Override
-	public boolean isDraggable()
-	{
+	public boolean isDraggable() {
 		return false;
 	}
-	
+
 	@Override
-	public Cursor getDraggingCursor()
-	{
+	public Cursor getDraggingCursor() {
 		return Cursor.getDefaultCursor();
 	}
 
 	@Override
 	public abstract void update(O geometricObject);
 
-	
 	@Override
-	public FGEPoint getPoint()
-	{
-		update(((GeometricObject<O>)getGraphicalRepresentation().getDrawable()).getGeometricObject());
+	public FGEPoint getPoint() {
+		update(((GeometricObject<O>) getGraphicalRepresentation().getDrawable()).getGeometricObject());
 		return super.getPoint();
 	}
 }

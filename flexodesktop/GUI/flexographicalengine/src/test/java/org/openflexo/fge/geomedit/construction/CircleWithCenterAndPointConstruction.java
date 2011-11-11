@@ -29,40 +29,35 @@ public class CircleWithCenterAndPointConstruction extends CircleConstruction {
 	public PointConstruction centerConstruction;
 	public PointConstruction pointConstruction;
 
-	public CircleWithCenterAndPointConstruction()
-	{
+	public CircleWithCenterAndPointConstruction() {
 		super();
 	}
 
-	public CircleWithCenterAndPointConstruction(PointConstruction pointConstruction1, PointConstruction pointConstruction2)
-	{
+	public CircleWithCenterAndPointConstruction(PointConstruction pointConstruction1, PointConstruction pointConstruction2) {
 		this();
 		this.centerConstruction = pointConstruction1;
 		this.pointConstruction = pointConstruction2;
 	}
 
 	@Override
-	protected FGECircle computeData()
-	{
+	protected FGECircle computeData() {
 		FGEPoint center = centerConstruction.getPoint();
 		FGEPoint p = pointConstruction.getPoint();
 
-		double radius = FGESegment.getLength(center,p);
-		return new FGECircle(center,radius,(getIsFilled()?Filling.FILLED:Filling.NOT_FILLED));
+		double radius = FGESegment.getLength(center, p);
+		return new FGECircle(center, radius, (getIsFilled() ? Filling.FILLED : Filling.NOT_FILLED));
 	}
 
 	@Override
-	public String toString()
-	{
-		return "CircleWithCenterAndPointConstruction[\n"+"> "+centerConstruction.toString()+"\n> "+pointConstruction.toString()+"\n]";
+	public String toString() {
+		return "CircleWithCenterAndPointConstruction[\n" + "> " + centerConstruction.toString() + "\n> " + pointConstruction.toString()
+				+ "\n]";
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public GeometricConstruction[] getDepends() {
 		GeometricConstruction[] returned = { centerConstruction, pointConstruction };
 		return returned;
 	}
-
 
 }

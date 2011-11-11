@@ -35,129 +35,107 @@ public class Procedure implements AlgorithmicUnit {
 	private ControlGraph controlGraph;
 	private String comment;
 	private String returnType;
-	
-	public Procedure(String procedureName,ControlGraph controlGraph) 
-	{
+
+	public Procedure(String procedureName, ControlGraph controlGraph) {
 		super();
 		this.procedureName = procedureName;
 		this.controlGraph = controlGraph;
 		this.parameters = new Vector<ProcedureParameter>();
 	}
 
-	public Procedure(String procedureName,ControlGraph controlGraph,ProcedureParameter... parameters) 
-	{
-		this(procedureName,controlGraph);
-		for (ProcedureParameter p : parameters) addParameter(p);
+	public Procedure(String procedureName, ControlGraph controlGraph, ProcedureParameter... parameters) {
+		this(procedureName, controlGraph);
+		for (ProcedureParameter p : parameters)
+			addParameter(p);
 	}
 
-	public Procedure(String procedureName,ControlGraph controlGraph,String comment, ProcedureParameter... parameters) 
-	{
-		this(procedureName,controlGraph,parameters);
+	public Procedure(String procedureName, ControlGraph controlGraph, String comment, ProcedureParameter... parameters) {
+		this(procedureName, controlGraph, parameters);
 		setComment(comment);
 	}
 
-	public Procedure(String procedureName,Vector<ProcedureParameter> parameters,ControlGraph controlGraph) 
-	{
-		this(procedureName,controlGraph);
-		for (ProcedureParameter p : parameters) addParameter(p);
+	public Procedure(String procedureName, Vector<ProcedureParameter> parameters, ControlGraph controlGraph) {
+		this(procedureName, controlGraph);
+		for (ProcedureParameter p : parameters)
+			addParameter(p);
 	}
 
-	public Procedure(String procedureName,Vector<ProcedureParameter> parameters,ControlGraph controlGraph,String comment) 
-	{
-		this(procedureName,parameters,controlGraph);
+	public Procedure(String procedureName, Vector<ProcedureParameter> parameters, ControlGraph controlGraph, String comment) {
+		this(procedureName, parameters, controlGraph);
 		setComment(comment);
 	}
 
-	public ControlGraph getControlGraph()
-	{
+	public ControlGraph getControlGraph() {
 		return controlGraph;
 	}
-	
-	public void setControlGraph(ControlGraph controlGraph)
-	{
+
+	public void setControlGraph(ControlGraph controlGraph) {
 		this.controlGraph = controlGraph;
 	}
-	
-	public Vector<ProcedureParameter> getParameters() 
-	{
+
+	public Vector<ProcedureParameter> getParameters() {
 		return parameters;
 	}
-	
-	public void setParameters(Vector<ProcedureParameter> parameters) 
-	{
+
+	public void setParameters(Vector<ProcedureParameter> parameters) {
 		this.parameters = parameters;
 	}
-	
-	public void addParameter(ProcedureParameter parameter)
-	{
+
+	public void addParameter(ProcedureParameter parameter) {
 		parameters.add(parameter);
 	}
-	
-	public void removeParameter(ProcedureParameter parameter)
-	{
+
+	public void removeParameter(ProcedureParameter parameter) {
 		parameters.remove(parameter);
 	}
-	
-	public String getProcedureName()
-	{
+
+	public String getProcedureName() {
 		return procedureName;
 	}
-	
-	public void setProcedureName(String procedureName)
-	{
+
+	public void setProcedureName(String procedureName) {
 		this.procedureName = procedureName;
 	}
 
-	public String getComment() 
-	{
+	public String getComment() {
 		return comment;
 	}
 
-	public void setComment(String comment)
-	{
+	public void setComment(String comment) {
 		this.comment = comment;
 	}
 
-	public String getReturnType() 
-	{
+	public String getReturnType() {
 		return returnType;
 	}
 
-	public void setReturnType(String returnType)
-	{
+	public void setReturnType(String returnType) {
 		this.returnType = returnType;
 	}
-	
 
-	public static class ProcedureParameter
-	{
+	public static class ProcedureParameter {
 		private Variable variable;
 		private Type type;
 
-		public ProcedureParameter(Variable variable, Type type) 
-		{
+		public ProcedureParameter(Variable variable, Type type) {
 			super();
 			this.variable = variable;
 			this.type = type;
 		}
 
-		public Type getType() 
-		{
+		public Type getType() {
 			return type;
 		}
-		
-		public void setType(Type type) 
-		{
+
+		public void setType(Type type) {
 			this.type = type;
 		}
-		
-		public Variable getVariable() 
-		{
+
+		public Variable getVariable() {
 			return variable;
 		}
-		
-		public void setVariable(Variable variable) 
-		{
+
+		public void setVariable(Variable variable) {
 			this.variable = variable;
 		}
 	}

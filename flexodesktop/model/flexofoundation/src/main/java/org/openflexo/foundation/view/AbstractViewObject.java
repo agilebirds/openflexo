@@ -24,31 +24,26 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.inspector.InspectableObject;
 
-
 public abstract class AbstractViewObject extends FlexoModelObject implements InspectableObject {
 
 	/**
 	 * Never use this constructor except for ComponentLibrary
 	 */
-	public AbstractViewObject(FlexoProject project)
-	{
+	public AbstractViewObject(FlexoProject project) {
 		super(project);
 	}
 
-    protected void notifyModification(String key, Object oldValue, Object newValue)
-    {
-        notifyModification(key, oldValue, newValue, false);
-    }
+	protected void notifyModification(String key, Object oldValue, Object newValue) {
+		notifyModification(key, oldValue, newValue, false);
+	}
 
-    protected void notifyModification(String key, Object oldValue, Object newValue, boolean isReentrant)
-    {
-    	setChanged();
-    	int modifType = DataModification.ATTRIBUTE;
-    	DataModification dataModification = new DataModification(modifType, key, oldValue, newValue);
-    	if (isReentrant)
-    		dataModification.setReentrant(isReentrant);
+	protected void notifyModification(String key, Object oldValue, Object newValue, boolean isReentrant) {
+		setChanged();
+		int modifType = DataModification.ATTRIBUTE;
+		DataModification dataModification = new DataModification(modifType, key, oldValue, newValue);
+		if (isReentrant)
+			dataModification.setReentrant(isReentrant);
 		notifyObservers(dataModification);
-    }
-    
+	}
 
 }

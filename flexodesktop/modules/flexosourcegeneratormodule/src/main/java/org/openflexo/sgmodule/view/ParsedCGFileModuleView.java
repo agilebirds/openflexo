@@ -71,22 +71,19 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.listener.FlexoActionButton;
 
-
 /**
  * @author sylvain
  */
-public class ParsedCGFileModuleView extends JPanel implements ModuleView<CGFile>, FlexoObserver, FlexoActionSource, FileContentEditor
-{
+public class ParsedCGFileModuleView extends JPanel implements ModuleView<CGFile>, FlexoObserver, FlexoActionSource, FileContentEditor {
 	private final Logger logger = FlexoLogger.getLogger(ParsedCGFileModuleView.class.getPackage().getName());
 
 	protected CGFile _cgFile;
 	protected SGController _controller;
 	private boolean isEdited = false;
 
-    private static final ImageIcon CG_PERSPECTIVE_ICON = GeneratorIconLibrary.GENERATE_CODE_ICON;
+	private static final ImageIcon CG_PERSPECTIVE_ICON = GeneratorIconLibrary.GENERATE_CODE_ICON;
 
-	public ParsedCGFileModuleView(CGFile cgFile, SGController controller)
-	{
+	public ParsedCGFileModuleView(CGFile cgFile, SGController controller) {
 		super(new BorderLayout());
 		_controller = controller;
 		_cgFile = cgFile;
@@ -95,21 +92,16 @@ public class ParsedCGFileModuleView extends JPanel implements ModuleView<CGFile>
 	}
 
 	private GenerationStatus generationStatus = GenerationStatus.Unknown;
-	
-	public void refresh()
-	{
+
+	public void refresh() {
 		updateView(true);
 	}
-	
-	private void updateView(boolean forceRebuild)
-	{
-		//logger.info("updateView() isEdited="+isEdited+" _cgFile.isEdited()="+_cgFile.isEdited());
-		if ((forceRebuild)
-				|| (generationStatus == GenerationStatus.Unknown)
-				|| (generationStatus != _cgFile.getGenerationStatus())
-				|| (isEdited != _cgFile.isEdited())
-				|| (generationStatus == GenerationStatus.GenerationError)) {
-			logger.fine("CGFileModuleView :"+_cgFile.getFileName()+" rebuild view for new status "+_cgFile.getGenerationStatus());
+
+	private void updateView(boolean forceRebuild) {
+		// logger.info("updateView() isEdited="+isEdited+" _cgFile.isEdited()="+_cgFile.isEdited());
+		if ((forceRebuild) || (generationStatus == GenerationStatus.Unknown) || (generationStatus != _cgFile.getGenerationStatus())
+				|| (isEdited != _cgFile.isEdited()) || (generationStatus == GenerationStatus.GenerationError)) {
+			logger.fine("CGFileModuleView :" + _cgFile.getFileName() + " rebuild view for new status " + _cgFile.getGenerationStatus());
 			rebuildView();
 			revalidate();
 			repaint();
@@ -128,150 +120,148 @@ public class ParsedCGFileModuleView extends JPanel implements ModuleView<CGFile>
 	private ParsedJavaFileView _javaFileView;
 
 	private ViewHeader _header;
-	
-	protected class ViewHeader extends JPanel
-	{
+
+	protected class ViewHeader extends JPanel {
 		JLabel icon;
 		JLabel title;
 		JLabel subTitle;
 		JPanel controlPanel;
 		Vector<FlexoActionButton> actionButtons = new Vector<FlexoActionButton>();
-		
-		protected ViewHeader()
-		{
+
+		protected ViewHeader() {
 			super(new BorderLayout());
 			icon = new JLabel(FilesIconLibrary.mediumIconForFileFormat(_cgFile.getFileFormat()));
 			icon.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-			add(icon,BorderLayout.WEST);
-			title = new JLabel(_cgFile.getFileName(),SwingConstants.LEFT);
-			//title.setVerticalAlignment(JLabel.BOTTOM);
+			add(icon, BorderLayout.WEST);
+			title = new JLabel(_cgFile.getFileName(), SwingConstants.LEFT);
+			// title.setVerticalAlignment(JLabel.BOTTOM);
 			title.setFont(SGCst.HEADER_FONT);
 			title.setForeground(Color.BLACK);
 			title.setBorder(BorderFactory.createEmptyBorder(5, 10, 0, 10));
-			subTitle = new JLabel(subTitleForFile(),SwingConstants.LEFT);
-			//title.setVerticalAlignment(JLabel.BOTTOM);
+			subTitle = new JLabel(subTitleForFile(), SwingConstants.LEFT);
+			// title.setVerticalAlignment(JLabel.BOTTOM);
 			subTitle.setFont(SGCst.SUB_TITLE_FONT);
 			subTitle.setForeground(Color.GRAY);
 			subTitle.setBorder(BorderFactory.createEmptyBorder(0, 10, 5, 10));
-			
-			JPanel labelsPanel = new JPanel(new GridLayout(2,1));
+
+			JPanel labelsPanel = new JPanel(new GridLayout(2, 1));
 			labelsPanel.add(title);
 			labelsPanel.add(subTitle);
-			add(labelsPanel,BorderLayout.CENTER);			
+			add(labelsPanel, BorderLayout.CENTER);
 
 			controlPanel = new JPanel(new FlowLayout());
-			
+
 			if (isEdited) {
-				FlexoActionButton saveAction = new FlexoActionButton(SaveGeneratedFile.actionType,"save",ParsedCGFileModuleView.this,_controller.getEditor());
-				FlexoActionButton revertToSavedAction = new FlexoActionButton(RevertToSavedGeneratedFile.actionType,"revert_to_saved",ParsedCGFileModuleView.this,_controller.getEditor());
+				FlexoActionButton saveAction = new FlexoActionButton(SaveGeneratedFile.actionType, "save", ParsedCGFileModuleView.this,
+						_controller.getEditor());
+				FlexoActionButton revertToSavedAction = new FlexoActionButton(RevertToSavedGeneratedFile.actionType, "revert_to_saved",
+						ParsedCGFileModuleView.this, _controller.getEditor());
 				actionButtons.add(saveAction);
 				actionButtons.add(revertToSavedAction);
 				controlPanel.add(saveAction);
 				controlPanel.add(revertToSavedAction);
-			}
-			else if ((_cgFile.getGenerationStatus().isDiskModified())
-					|| (_cgFile.getGenerationStatus().isGenerationModified())
-					|| (_cgFile.getGenerationStatus().isConflicting())
-					|| (_cgFile.getGenerationStatus() == GenerationStatus.UpToDate)) {
-				FlexoActionButton editFileAction = new FlexoActionButton(EditGeneratedFile.actionType,"edit",ParsedCGFileModuleView.this,_controller.getEditor());
+			} else if ((_cgFile.getGenerationStatus().isDiskModified()) || (_cgFile.getGenerationStatus().isGenerationModified())
+					|| (_cgFile.getGenerationStatus().isConflicting()) || (_cgFile.getGenerationStatus() == GenerationStatus.UpToDate)) {
+				FlexoActionButton editFileAction = new FlexoActionButton(EditGeneratedFile.actionType, "edit", ParsedCGFileModuleView.this,
+						_controller.getEditor());
 				actionButtons.add(editFileAction);
 				controlPanel.add(editFileAction);
-				FlexoActionButton reinjectInModelAction = new FlexoActionButton(ReinjectInModel.actionType,"reinject_in_model",ParsedCGFileModuleView.this,_controller.getEditor());
+				FlexoActionButton reinjectInModelAction = new FlexoActionButton(ReinjectInModel.actionType, "reinject_in_model",
+						ParsedCGFileModuleView.this, _controller.getEditor());
 				actionButtons.add(reinjectInModelAction);
 				controlPanel.add(reinjectInModelAction);
-				FlexoActionButton updateModelAction = new FlexoActionButton(UpdateModel.actionType,"update_model",ParsedCGFileModuleView.this,_controller.getEditor());
+				FlexoActionButton updateModelAction = new FlexoActionButton(UpdateModel.actionType, "update_model",
+						ParsedCGFileModuleView.this, _controller.getEditor());
 				actionButtons.add(updateModelAction);
 				controlPanel.add(updateModelAction);
 			}
 
 			controlPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-			add(controlPanel,BorderLayout.EAST);
+			add(controlPanel, BorderLayout.EAST);
 
 			if (!(_cgFile instanceof SGJavaFile)) {
-				addInfoPanel(CGIconLibrary.UNFIXABLE_WARNING_ICON, 
-						FlexoLocalization.localizedForKey("model_reinjection_not_implemented"),
+				addInfoPanel(CGIconLibrary.UNFIXABLE_WARNING_ICON, FlexoLocalization.localizedForKey("model_reinjection_not_implemented"),
 						FlexoLocalization.localizedForKey("model_reinjection_not_implemented_description"));
 			}
-			
+
 			if (_cgFile instanceof SGJavaFile) {
-				boolean hasJavaParsingError = (((SGJavaFile)_cgFile).getParseException() != null);
+				boolean hasJavaParsingError = (((SGJavaFile) _cgFile).getParseException() != null);
 				if (hasJavaParsingError) {
-					addInfoPanel(CGIconLibrary.UNFIXABLE_ERROR_ICON, 
+					addInfoPanel(
+							CGIconLibrary.UNFIXABLE_ERROR_ICON,
 							FlexoLocalization.localizedForKey("parse_exception"),
-							FlexoLocalization.localizedForKey("parse_exception_description")+"\n"
-							+FlexoLocalization.localizedForKey("message")+" : "+((SGJavaFile)_cgFile).getParseException().getMessage());
+							FlexoLocalization.localizedForKey("parse_exception_description") + "\n"
+									+ FlexoLocalization.localizedForKey("message") + " : "
+									+ ((SGJavaFile) _cgFile).getParseException().getMessage());
 				}
 			}
 
 			if (_cgFile.getGenerationStatus().isGenerationModified()) {
-				FlexoActionButton generateAction = new FlexoActionButton(GenerateSourceCode.actionType,"regenerate",ParsedCGFileModuleView.this,_controller.getEditor());
+				FlexoActionButton generateAction = new FlexoActionButton(GenerateSourceCode.actionType, "regenerate",
+						ParsedCGFileModuleView.this, _controller.getEditor());
 				actionButtons.add(generateAction);
-				FlexoActionButton writeFileAction = new FlexoActionButton(WriteModifiedGeneratedFiles.actionType,"write_file",ParsedCGFileModuleView.this,_controller.getEditor());
+				FlexoActionButton writeFileAction = new FlexoActionButton(WriteModifiedGeneratedFiles.actionType, "write_file",
+						ParsedCGFileModuleView.this, _controller.getEditor());
 				actionButtons.add(writeFileAction);
-				JButton switchPerspectiveButton = new JButton(FlexoLocalization.localizedForKey("switch_to_cg_perspective"),CG_PERSPECTIVE_ICON);
+				JButton switchPerspectiveButton = new JButton(FlexoLocalization.localizedForKey("switch_to_cg_perspective"),
+						CG_PERSPECTIVE_ICON);
 				switchPerspectiveButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						getController().switchToPerspective(getController().CODE_GENERATION_PERSPECTIVE);
 					}
-				});			
+				});
 				if (_cgFile.hasVersionOnDisk()) {
-					addInfoPanel(CGIconLibrary.UNFIXABLE_WARNING_ICON, 
-							FlexoLocalization.localizedForKey("is_generation_modified_warning"), 
-							FlexoLocalization.localizedForKey("is_generation_modified_warning_description"),
-							switchPerspectiveButton,generateAction,writeFileAction);
+					addInfoPanel(CGIconLibrary.UNFIXABLE_WARNING_ICON, FlexoLocalization.localizedForKey("is_generation_modified_warning"),
+							FlexoLocalization.localizedForKey("is_generation_modified_warning_description"), switchPerspectiveButton,
+							generateAction, writeFileAction);
+				} else {
+					addInfoPanel(CGIconLibrary.UNFIXABLE_WARNING_ICON, FlexoLocalization.localizedForKey("is_new_generation_warning"),
+							FlexoLocalization.localizedForKey("is_new_generation_warning_description"), switchPerspectiveButton,
+							generateAction, writeFileAction);
 				}
-				else {
-					addInfoPanel(CGIconLibrary.UNFIXABLE_WARNING_ICON, 
-							FlexoLocalization.localizedForKey("is_new_generation_warning"), 
-							FlexoLocalization.localizedForKey("is_new_generation_warning_description"),
-							switchPerspectiveButton,generateAction,writeFileAction);
-				}
-			}
-			else if (_cgFile.getGenerationStatus().isDiskModified()) {
-				FlexoActionButton acceptDiskVersionAction = new FlexoActionButton(AcceptDiskUpdate.actionType,"accept_disk_version",ParsedCGFileModuleView.this,_controller.getEditor());
+			} else if (_cgFile.getGenerationStatus().isDiskModified()) {
+				FlexoActionButton acceptDiskVersionAction = new FlexoActionButton(AcceptDiskUpdate.actionType, "accept_disk_version",
+						ParsedCGFileModuleView.this, _controller.getEditor());
 				actionButtons.add(acceptDiskVersionAction);
-				FlexoActionButton acceptAndReinjectAction = new FlexoActionButton(AcceptDiskUpdateAndReinjectInModel.actionType,"accept_and_reinject",ParsedCGFileModuleView.this,_controller.getEditor());
+				FlexoActionButton acceptAndReinjectAction = new FlexoActionButton(AcceptDiskUpdateAndReinjectInModel.actionType,
+						"accept_and_reinject", ParsedCGFileModuleView.this, _controller.getEditor());
 				actionButtons.add(acceptAndReinjectAction);
-				JButton switchPerspectiveButton = new JButton(FlexoLocalization.localizedForKey("switch_to_cg_perspective"),CG_PERSPECTIVE_ICON);
+				JButton switchPerspectiveButton = new JButton(FlexoLocalization.localizedForKey("switch_to_cg_perspective"),
+						CG_PERSPECTIVE_ICON);
 				switchPerspectiveButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						getController().switchToPerspective(getController().CODE_GENERATION_PERSPECTIVE);
 					}
-				});			
-				addInfoPanel(CGIconLibrary.UNFIXABLE_WARNING_ICON, 
-						FlexoLocalization.localizedForKey("is_disk_modified_warning"), 
-						FlexoLocalization.localizedForKey("is_disk_modified_warning_description"),
-						switchPerspectiveButton,acceptDiskVersionAction,acceptAndReinjectAction);
-			}
-			else if (_cgFile.getGenerationStatus().isConflicting()) {
-				JButton switchPerspectiveButton = new JButton(FlexoLocalization.localizedForKey("switch_to_cg_perspective"),CG_PERSPECTIVE_ICON);
+				});
+				addInfoPanel(CGIconLibrary.UNFIXABLE_WARNING_ICON, FlexoLocalization.localizedForKey("is_disk_modified_warning"),
+						FlexoLocalization.localizedForKey("is_disk_modified_warning_description"), switchPerspectiveButton,
+						acceptDiskVersionAction, acceptAndReinjectAction);
+			} else if (_cgFile.getGenerationStatus().isConflicting()) {
+				JButton switchPerspectiveButton = new JButton(FlexoLocalization.localizedForKey("switch_to_cg_perspective"),
+						CG_PERSPECTIVE_ICON);
 				switchPerspectiveButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						getController().switchToPerspective(getController().CODE_GENERATION_PERSPECTIVE);
 					}
-				});			
-				addInfoPanel(CGIconLibrary.UNFIXABLE_WARNING_ICON, 
-						FlexoLocalization.localizedForKey("is_conflicting_warning"), 
-						FlexoLocalization.localizedForKey("is_conflicting_warning_description"),
-						switchPerspectiveButton);
+				});
+				addInfoPanel(CGIconLibrary.UNFIXABLE_WARNING_ICON, FlexoLocalization.localizedForKey("is_conflicting_warning"),
+						FlexoLocalization.localizedForKey("is_conflicting_warning_description"), switchPerspectiveButton);
 			}
 
 			update();
-            validate();
+			validate();
 		}
-		
-		private void addInfoPanel(Icon icon, String titleString, String textString)
-		{
-			addInfoPanel(icon,titleString,textString,(JButton[])null);
+
+		private void addInfoPanel(Icon icon, String titleString, String textString) {
+			addInfoPanel(icon, titleString, textString, (JButton[]) null);
 		}
-		
-		private void addInfoPanel(Icon icon, String titleString, String textString, JButton... buttons)
-		{
+
+		private void addInfoPanel(Icon icon, String titleString, String textString, JButton... buttons) {
 			JLabel regenerateIcon = new JLabel(icon);
-			JLabel title = new JLabel(titleString,SwingConstants.LEFT);
+			JLabel title = new JLabel(titleString, SwingConstants.LEFT);
 			title.setFont(FlexoCst.BOLD_FONT);
 			JTextArea text = new JTextArea(textString);
 			text.setBackground(null);
@@ -293,28 +283,24 @@ public class ParsedCGFileModuleView extends JPanel implements ModuleView<CGFile>
 				}
 				infoPanel.add(buttonPanel);
 			}
-			add(infoPanel,BorderLayout.SOUTH);
-            
+			add(infoPanel, BorderLayout.SOUTH);
+
 		}
-		
-		private String subTitleForFile()
-		{
+
+		private String subTitleForFile() {
 			if (isEdited) {
 				return FlexoLocalization.localizedForKey("edition_of_file_on_disk");
 			}
 			if (_cgFile instanceof SGJavaFile) {
-				if ((_cgFile.getGenerationStatus().isDiskModified())
-						|| (_cgFile.getGenerationStatus().isGenerationModified())
-						|| (_cgFile.getGenerationStatus().isConflicting())
-						|| (_cgFile.getGenerationStatus() == GenerationStatus.UpToDate)) {
+				if ((_cgFile.getGenerationStatus().isDiskModified()) || (_cgFile.getGenerationStatus().isGenerationModified())
+						|| (_cgFile.getGenerationStatus().isConflicting()) || (_cgFile.getGenerationStatus() == GenerationStatus.UpToDate)) {
 					return FlexoLocalization.localizedForKey("file_on_disk");
 				}
 			}
 			return FlexoLocalization.localizedForKey("perspective_not_available");
 		}
 
-		protected void update()
-		{
+		protected void update() {
 			title.setText(_cgFile.getFileName());
 			subTitle.setText(subTitleForFile());
 			for (FlexoActionButton button : actionButtons) {
@@ -323,130 +309,113 @@ public class ParsedCGFileModuleView extends JPanel implements ModuleView<CGFile>
 		}
 
 	}
-	
-	private void rebuildView()
-	{
+
+	private void rebuildView() {
 		DisplayContext previousDisplayContext = null;
 		if ((_javaFileView != null) && (_javaFileView.getJavaCodeDisplayer() != null)) {
-			previousDisplayContext 
-			= _javaFileView.getJavaCodeDisplayer().getDisplayContext();
-			
+			previousDisplayContext = _javaFileView.getJavaCodeDisplayer().getDisplayContext();
+
 			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Rebuild view, display context was: "+previousDisplayContext);
+				logger.info("Rebuild view, display context was: " + previousDisplayContext);
 			}
 		}
-		
+
 		removeAll();
 
 		isEdited = _cgFile.isEdited();
 
 		_header = new ViewHeader();
-		
-		add(_header,BorderLayout.NORTH);
+
+		add(_header, BorderLayout.NORTH);
 		validate();
 		generationStatus = _cgFile.getGenerationStatus();
 		_javaFileView = null;
 
 		if (_cgFile instanceof SGJavaFile) {
 			if (_cgFile.hasVersionOnDisk()) {
-				if ((_cgFile.getGenerationStatus().isDiskModified())
-						|| (_cgFile.getGenerationStatus().isGenerationModified())
-						|| (_cgFile.getGenerationStatus().isConflicting())
-						|| (_cgFile.getGenerationStatus() == GenerationStatus.UpToDate)) {
-					_javaFileView = new ParsedJavaFileView(((SGJavaFile)_cgFile).getJavaResource(),_controller,isEdited);
-					add(_javaFileView,BorderLayout.CENTER);
+				if ((_cgFile.getGenerationStatus().isDiskModified()) || (_cgFile.getGenerationStatus().isGenerationModified())
+						|| (_cgFile.getGenerationStatus().isConflicting()) || (_cgFile.getGenerationStatus() == GenerationStatus.UpToDate)) {
+					_javaFileView = new ParsedJavaFileView(((SGJavaFile) _cgFile).getJavaResource(), _controller, isEdited);
+					add(_javaFileView, BorderLayout.CENTER);
 				}
 			}
 		}
-		//add(new JLabel(FlexoLocalization.localizedForKey("perspective_not_available")),BorderLayout.CENTER);
-		
-		
+		// add(new JLabel(FlexoLocalization.localizedForKey("perspective_not_available")),BorderLayout.CENTER);
+
 		if (previousDisplayContext != null) {
 			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Restore display context: "+previousDisplayContext);
+				logger.info("Restore display context: " + previousDisplayContext);
 			}
 			_javaFileView.getJavaCodeDisplayer().setDisplayContext(previousDisplayContext);
 		}
-		
+
 		validate();
-		
+
 		return;
 	}
 
-	public SGController getController()
-	{
+	public SGController getController() {
 		return _controller;
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine ("CGFileModuleView : RECEIVED "+dataModification+" for "+observable);
+			logger.fine("CGFileModuleView : RECEIVED " + dataModification + " for " + observable);
 		}
 		updateView(false);
 	}
 
 	@Override
-	public void deleteModuleView() 
-	{
+	public void deleteModuleView() {
 		logger.info("CGFileModuleView view deleted");
 		getController().removeModuleView(this);
 		_cgFile.deleteObserver(this);
 	}
 
 	@Override
-	public FlexoPerspective<FlexoModelObject> getPerspective() 
-	{
-        return _controller.MODEL_REINJECTION_PERSPECTIVE;
+	public FlexoPerspective<FlexoModelObject> getPerspective() {
+		return _controller.MODEL_REINJECTION_PERSPECTIVE;
 	}
 
 	@Override
-	public CGFile getRepresentedObject() 
-	{
+	public CGFile getRepresentedObject() {
 		return _cgFile;
 	}
 
 	@Override
-	public void willHide() 
-	{
+	public void willHide() {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void willShow()
-	{
+	public void willShow() {
 		// TODO Auto-generated method stub
 	}
 
-
 	/**
-	 * Returns flag indicating if this view is itself responsible for scroll management
-	 * When not, Flexo will manage it's own scrollbar for you
+	 * Returns flag indicating if this view is itself responsible for scroll management When not, Flexo will manage it's own scrollbar for
+	 * you
 	 * 
 	 * @return
 	 */
 	@Override
-	public boolean isAutoscrolled() 
-	{
+	public boolean isAutoscrolled() {
 		return true;
 	}
 
 	@Override
-	public FlexoModelObject getFocusedObject()
-	{
+	public FlexoModelObject getFocusedObject() {
 		return getRepresentedObject();
 	}
 
 	@Override
-	public Vector getGlobalSelection() 
-	{
+	public Vector getGlobalSelection() {
 		return null;
 	}
 
 	@Override
-	public String getEditedContentForKey(String contentKey) 
-	{
+	public String getEditedContentForKey(String contentKey) {
 		if (isEdited) {
 			return _javaFileView.getEditedContentForKey(contentKey);
 		}
@@ -455,19 +424,16 @@ public class ParsedCGFileModuleView extends JPanel implements ModuleView<CGFile>
 	}
 
 	@Override
-	public void setEditedContent(CGFile file) 
-	{
+	public void setEditedContent(CGFile file) {
 		if (isEdited) {
 			_javaFileView.setEditedContent(file);
-		}
-		else {
+		} else {
 			logger.warning("setEditedContent() called for a non edited file");
 		}
 	}
 
 	@Override
-	public FlexoEditor getEditor() 
-	{
+	public FlexoEditor getEditor() {
 		return _controller.getEditor();
 	}
 }

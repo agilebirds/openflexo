@@ -25,17 +25,14 @@ import org.openflexo.foundation.wkf.node.IFOperator;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
-
 public class OperatorIFGR extends OperatorGR<IFOperator> {
 
-	public OperatorIFGR(IFOperator operatorNode, ProcessRepresentation aDrawing, boolean isInPalet) 
-	{
+	public OperatorIFGR(IFOperator operatorNode, ProcessRepresentation aDrawing, boolean isInPalet) {
 		super(operatorNode, aDrawing, isInPalet);
 	}
-	
+
 	@Override
-	public ImageIcon getImageIcon()
-	{
+	public ImageIcon getImageIcon() {
 		return WKFIconLibrary.IF_OPERATOR_ICON;
 	}
 }

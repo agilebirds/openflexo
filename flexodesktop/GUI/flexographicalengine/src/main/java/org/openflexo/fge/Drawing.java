@@ -22,35 +22,52 @@ package org.openflexo.fge;
 import java.util.List;
 
 /**
- * This interface is implemented by all objects representing a graphical drawing,
- * that is a complex graphical representation involving an object tree where all
- * objects have their own graphical representation.
+ * This interface is implemented by all objects representing a graphical drawing, that is a complex graphical representation involving an
+ * object tree where all objects have their own graphical representation.
  * 
  * To perform this, two major features are required here:
  * <ul>
- *     <li>First, a <pre>Drawing</pre> must indicate how to map a given object (called drawable)
- *     to its graphical representation (@see {@link #getGraphicalRepresentation(Object)})</li>
- *     <li>Then, this <pre>Drawing</pre> must encode the objects hierarchy, by implementing
- *     following methods: (@see {@link #getContainer(Object)} and @see {@link #getContainedObjects(Object)})</li>
+ * <li>First, a
+ * 
+ * <pre>
+ * Drawing
+ * </pre>
+ * 
+ * must indicate how to map a given object (called drawable) to its graphical representation (@see
+ * {@link #getGraphicalRepresentation(Object)})</li>
+ * <li>Then, this
+ * 
+ * <pre>
+ * Drawing
+ * </pre>
+ * 
+ * must encode the objects hierarchy, by implementing following methods: (@see {@link #getContainer(Object)} and @see
+ * {@link #getContainedObjects(Object)})</li>
  * </ul>
  * 
- * Note that at top level, this drawing is associated with its own {@link GraphicalRepresentation}
- * which is this case is a {@link DrawingGraphicalRepresentation<M>} of <pre>M</pre>.
+ * Note that at top level, this drawing is associated with its own {@link GraphicalRepresentation} which is this case is a
+ * {@link DrawingGraphicalRepresentation<M>} of
+ * 
+ * <pre>
+ * M
+ * </pre>
+ * 
+ * .
  * 
  * To implement those schemes, note that there is a default implementation {@link DefaultDrawing}.
  * 
  * @author sylvain
- *
- * @param <M> Type of object which is handled as root object
+ * 
+ * @param <M>
+ *            Type of object which is handled as root object
  */
-public interface Drawing<M>
-{
+public interface Drawing<M> {
 	public M getModel();
-	
+
 	public <O> GraphicalRepresentation<O> getGraphicalRepresentation(O aDrawable);
 
 	public Object getContainer(Object aDrawable);
-	
+
 	public List<?> getContainedObjects(Object aDrawable);
 
 	public DrawingGraphicalRepresentation<M> getDrawingGraphicalRepresentation();

@@ -34,114 +34,101 @@ import org.openflexo.foundation.dm.action.CreateDMRepository;
 import org.openflexo.foundation.dm.action.DMDelete;
 import org.openflexo.foundation.dm.action.UpdateDMRepository;
 
-
 /**
  * View allowing to represent/edit a DMRepositoryFolder object
  * 
  * @author sguerin
  * 
  */
-public class DMRepositoryFolderView extends DMView<DMRepositoryFolder>
-{
+public class DMRepositoryFolderView extends DMView<DMRepositoryFolder> {
 
-    private DMTabularView repositoriesTable;
-    private DMRepositoryTableModel repositoriesTableModel;
+	private DMTabularView repositoriesTable;
+	private DMRepositoryTableModel repositoriesTableModel;
 
-    public DMRepositoryFolderView(DMRepositoryFolder repositoryFolder, DMController controller)
-    {
-        super(repositoryFolder, controller, "folders_($localizedName)");
+	public DMRepositoryFolderView(DMRepositoryFolder repositoryFolder, DMController controller) {
+		super(repositoryFolder, controller, "folders_($localizedName)");
 
-        addAction(new TabularViewAction(CreateDMRepository.actionType,"add_repository",controller.getEditor()) {
-            @Override
-			protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+		addAction(new TabularViewAction(CreateDMRepository.actionType, "add_repository", controller.getEditor()) {
+			@Override
+			protected Vector getGlobalSelection() {
+				return getViewSelection();
+			}
 
-            @Override
-			protected FlexoModelObject getFocusedObject() 
-            {
-                return getDMRepositoryFolder().getDMModel();
-            }           
-        });
-        addAction(new TabularViewAction(UpdateDMRepository.actionType,controller.getEditor()) {
-            @Override
-			protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+			@Override
+			protected FlexoModelObject getFocusedObject() {
+				return getDMRepositoryFolder().getDMModel();
+			}
+		});
+		addAction(new TabularViewAction(UpdateDMRepository.actionType, controller.getEditor()) {
+			@Override
+			protected Vector getGlobalSelection() {
+				return getViewSelection();
+			}
 
-            @Override
-			protected FlexoModelObject getFocusedObject() 
-            {
-                return getSelectedDMRepository();
-            }           
-        });
-       addAction(new TabularViewAction(DMDelete.actionType,"delete_repository",controller.getEditor()) {
-            @Override
-			protected Vector getGlobalSelection()
-            {
-                 return getViewSelection();
-            }
+			@Override
+			protected FlexoModelObject getFocusedObject() {
+				return getSelectedDMRepository();
+			}
+		});
+		addAction(new TabularViewAction(DMDelete.actionType, "delete_repository", controller.getEditor()) {
+			@Override
+			protected Vector getGlobalSelection() {
+				return getViewSelection();
+			}
 
-            @Override
-			protected FlexoModelObject getFocusedObject() 
-            {
-                return null;
-            }           
-        });
-        finalizeBuilding();
-    }
+			@Override
+			protected FlexoModelObject getFocusedObject() {
+				return null;
+			}
+		});
+		finalizeBuilding();
+	}
 
-    @Override
-	protected JComponent buildContentPane()
-    {
-       repositoriesTableModel = new DMRepositoryTableModel(getDMRepositoryFolder(), getDMController().getProject());
-       addToMasterTabularView(repositoriesTable = new DMTabularView(getDMController(), repositoriesTableModel,15));
+	@Override
+	protected JComponent buildContentPane() {
+		repositoriesTableModel = new DMRepositoryTableModel(getDMRepositoryFolder(), getDMController().getProject());
+		addToMasterTabularView(repositoriesTable = new DMTabularView(getDMController(), repositoriesTableModel, 15));
 
-        return repositoriesTable;
-    }
+		return repositoriesTable;
+	}
 
-    public DMRepositoryFolder getDMRepositoryFolder()
-    {
-        return getDMObject();
-    }
+	public DMRepositoryFolder getDMRepositoryFolder() {
+		return getDMObject();
+	}
 
-    public DMRepository getSelectedDMRepository()
-    {
-        DMSelectionManager sm = getDMController().getDMSelectionManager();
-        Vector selection = sm.getSelection();
-        if ((selection.size() == 1) && (selection.firstElement() instanceof DMRepository)) {
-            return (DMRepository) selection.firstElement();
-        }
-        return null;
-    }
+	public DMRepository getSelectedDMRepository() {
+		DMSelectionManager sm = getDMController().getDMSelectionManager();
+		Vector selection = sm.getSelection();
+		if ((selection.size() == 1) && (selection.firstElement() instanceof DMRepository)) {
+			return (DMRepository) selection.firstElement();
+		}
+		return null;
+	}
 
-    public DMTabularView getRepositoriesTable() 
-    {
-        return repositoriesTable;
-    }
+	public DMTabularView getRepositoriesTable() {
+		return repositoriesTable;
+	}
 
-    /**
-     * Overrides willShow
-     * @see org.openflexo.view.ModuleView#willShow()
-     */
-    @Override
-	public void willShow()
-    {
-        // TODO Auto-generated method stub
-        
-    }
+	/**
+	 * Overrides willShow
+	 * 
+	 * @see org.openflexo.view.ModuleView#willShow()
+	 */
+	@Override
+	public void willShow() {
+		// TODO Auto-generated method stub
 
-    /**
-     * Overrides willHide
-     * @see org.openflexo.view.ModuleView#willHide()
-     */
-    @Override
-	public void willHide()
-    {
-        // TODO Auto-generated method stub
-        
-    }
+	}
+
+	/**
+	 * Overrides willHide
+	 * 
+	 * @see org.openflexo.view.ModuleView#willHide()
+	 */
+	@Override
+	public void willHide() {
+		// TODO Auto-generated method stub
+
+	}
 
 }

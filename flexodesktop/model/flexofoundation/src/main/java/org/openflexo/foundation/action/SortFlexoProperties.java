@@ -28,14 +28,14 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoProperty;
 
-
 public class SortFlexoProperties extends FlexoAction<SortFlexoProperties, FlexoModelObject, FlexoModelObject> {
 
-	public static final FlexoActionType<SortFlexoProperties, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<SortFlexoProperties, FlexoModelObject, FlexoModelObject>("sort_flexo_properties") {
+	public static final FlexoActionType<SortFlexoProperties, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<SortFlexoProperties, FlexoModelObject, FlexoModelObject>(
+			"sort_flexo_properties") {
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return object!=null;
+			return object != null;
 		}
 
 		@Override
@@ -44,23 +44,24 @@ public class SortFlexoProperties extends FlexoAction<SortFlexoProperties, FlexoM
 		}
 
 		@Override
-		public SortFlexoProperties makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
-			return new SortFlexoProperties(focusedObject, globalSelection,editor);
+		public SortFlexoProperties makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection,
+				FlexoEditor editor) {
+			return new SortFlexoProperties(focusedObject, globalSelection, editor);
 		}
-		
+
 	};
-	
+
 	static {
 		FlexoModelObject.addActionForClass(actionType, FlexoModelObject.class);
 	}
-	
+
 	private String name;
 	private String value;
-	
+
 	private FlexoProperty createdProperty;
-	
+
 	public SortFlexoProperties(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
-		super(actionType,focusedObject,globalSelection,editor);
+		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
@@ -72,23 +73,23 @@ public class SortFlexoProperties extends FlexoAction<SortFlexoProperties, FlexoM
 	}
 
 	private void sortPropertiesForObject(FlexoModelObject object) {
-		Collections.sort(object.getCustomProperties(),new Comparator<FlexoProperty>() {
+		Collections.sort(object.getCustomProperties(), new Comparator<FlexoProperty>() {
 
 			@Override
 			public int compare(FlexoProperty o1, FlexoProperty o2) {
-				if (o1.getName()==null) {
-					if (o2.getName()==null)
+				if (o1.getName() == null) {
+					if (o2.getName() == null)
 						return 0;
 					else
 						return -1;
 				} else {
-					if (o2.getName()==null)
+					if (o2.getName() == null)
 						return 1;
 					return o1.getName().compareTo(o2.getName());
 				}
 			}
-			
+
 		});
 	}
-	
+
 }

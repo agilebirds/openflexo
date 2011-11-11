@@ -26,35 +26,29 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.dm.eo.DMEORepository;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class DMEORepositoryElement extends DMRepositoryElement
-{
+public class DMEORepositoryElement extends DMRepositoryElement {
 
-    public DMEORepositoryElement(DMEORepository repository, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(repository, BrowserElementType.DM_EOREPOSITORY, browser,parent);
-    }
+	public DMEORepositoryElement(DMEORepository repository, ProjectBrowser browser, BrowserElement parent) {
+		super(repository, BrowserElementType.DM_EOREPOSITORY, browser, parent);
+	}
 
-    public DMEORepositoryElement(DMEORepository repository, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(repository, elementType, browser,parent);
-    }
+	public DMEORepositoryElement(DMEORepository repository, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent) {
+		super(repository, elementType, browser, parent);
+	}
 
-    protected DMEORepository getEORepository()
-    {
-        return (DMEORepository) getObject();
-    }
+	protected DMEORepository getEORepository() {
+		return (DMEORepository) getObject();
+	}
 
-    @Override
-	public Icon getIcon()
-    {
-        return getElementType().getIcon();
-    }
+	@Override
+	public Icon getIcon() {
+		return getElementType().getIcon();
+	}
 
 }

@@ -22,32 +22,27 @@ package org.openflexo.foundation.ie.dm;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 
 /**
- * Notify that a ComponentDefinition has been renamed
- * This notification is for CG resources (which are to be notified later)
+ * Notify that a ComponentDefinition has been renamed This notification is for CG resources (which are to be notified later)
  * 
  * @author sguerin
  * 
  */
-public class ComponentNameChanged2 extends IEDataModification
-{
+public class ComponentNameChanged2 extends IEDataModification {
 
-    public ComponentDefinition component;
+	public ComponentDefinition component;
 
-    public ComponentNameChanged2(ComponentDefinition component, String oldName, String newName)
-    {
-        super(oldName, newName);
-        this.component = component;
-    }
+	public ComponentNameChanged2(ComponentDefinition component, String oldName, String newName) {
+		super(oldName, newName);
+		this.component = component;
+	}
 
-    public ComponentNameChanged2(String propertyName, ComponentDefinition component, String oldName, String newName)
-    {
-        super(propertyName, oldName, newName);
-        this.component = component;
-    }
+	public ComponentNameChanged2(String propertyName, ComponentDefinition component, String oldName, String newName) {
+		super(propertyName, oldName, newName);
+		this.component = component;
+	}
 
-     @Override
-	public String toString()
-    {
-        return "ComponentNameChanged2" + oldValue() + "/" + newValue();
-    }
+	@Override
+	public String toString() {
+		return "ComponentNameChanged2" + oldValue() + "/" + newValue();
+	}
 }

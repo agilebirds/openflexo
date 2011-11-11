@@ -32,7 +32,6 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.viewpoint.action.DeleteExampleDrawingElements;
@@ -41,63 +40,53 @@ public class DeleteCalcShemaElementsInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeleteCalcShemaElementsInitializer(CEDControllerActionInitializer actionInitializer)
-	{
-		super(DeleteExampleDrawingElements.actionType,actionInitializer);
+	DeleteCalcShemaElementsInitializer(CEDControllerActionInitializer actionInitializer) {
+		super(DeleteExampleDrawingElements.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected CEDControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (CEDControllerActionInitializer)super.getControllerActionInitializer();
+	protected CEDControllerActionInitializer getControllerActionInitializer() {
+		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<DeleteExampleDrawingElements> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<DeleteExampleDrawingElements> getDefaultInitializer() {
 		return new FlexoActionInitializer<DeleteExampleDrawingElements>() {
-            @Override
-			public boolean run(ActionEvent e, DeleteExampleDrawingElements action)
-            {
-            	return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_delete_those_objects"));
-             }
-        };
-	}
-
-     @Override
-	protected FlexoActionFinalizer<DeleteExampleDrawingElements> getDefaultFinalizer() 
-	{
-		return new FlexoActionFinalizer<DeleteExampleDrawingElements>() {
-            @Override
-			public boolean run(ActionEvent e, DeleteExampleDrawingElements action)
-            {
-                if (getControllerActionInitializer().getCEDController().getSelectionManager().getLastSelectedObject()!=null
-                		&& getControllerActionInitializer().getCEDController().getSelectionManager().getLastSelectedObject().isDeleted())
-                	getControllerActionInitializer().getCEDController().getSelectionManager().resetSelection();
-                return true;
-          }
-        };
+			@Override
+			public boolean run(ActionEvent e, DeleteExampleDrawingElements action) {
+				return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_delete_those_objects"));
+			}
+		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected FlexoActionFinalizer<DeleteExampleDrawingElements> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<DeleteExampleDrawingElements>() {
+			@Override
+			public boolean run(ActionEvent e, DeleteExampleDrawingElements action) {
+				if (getControllerActionInitializer().getCEDController().getSelectionManager().getLastSelectedObject() != null
+						&& getControllerActionInitializer().getCEDController().getSelectionManager().getLastSelectedObject().isDeleted())
+					getControllerActionInitializer().getCEDController().getSelectionManager().resetSelection();
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return IconLibrary.DELETE_ICON;
 	}
 
 	@Override
-	protected KeyStroke getShortcut() 
-	{
+	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(FlexoCst.BACKSPACE_DELETE_KEY_CODE, 0);
 	}
 
-
 	@Override
-	public void init()
-	{
-        super.init();
-        getControllerActionInitializer().registerAction(DeleteExampleDrawingElements.actionType,KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0));
+	public void init() {
+		super.init();
+		getControllerActionInitializer().registerAction(DeleteExampleDrawingElements.actionType,
+				KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0));
 	}
-	
 
 }

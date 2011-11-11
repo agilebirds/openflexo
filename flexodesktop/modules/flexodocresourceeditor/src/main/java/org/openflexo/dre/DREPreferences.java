@@ -28,59 +28,51 @@ import org.openflexo.module.Module;
 import org.openflexo.prefs.ModulePreferences;
 import org.openflexo.toolbox.FileResource;
 
-
 /**
  * Contains preferences for this module
- *
+ * 
  * @author yourname
- *
+ * 
  */
-public final class DREPreferences extends ModulePreferences
-{
+public final class DREPreferences extends ModulePreferences {
 
-    private static final Logger logger = Logger.getLogger(DREPreferences.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DREPreferences.class.getPackage().getName());
 
-    private static final Class DRE_PREFERENCES = DREPreferences.class;
+	private static final Class DRE_PREFERENCES = DREPreferences.class;
 
-    protected static final String EXAMPLE_PREF_VALUE = "examplePrefValue";
+	protected static final String EXAMPLE_PREF_VALUE = "examplePrefValue";
 
-    public static void init(DREController controller)
-    {
-        preferences(DRE_PREFERENCES);
-    }
+	public static void init(DREController controller) {
+		preferences(DRE_PREFERENCES);
+	}
 
-    public static void reset() {
-    }
+	public static void reset() {
+	}
 
+	public DREPreferences() {
+		super(Module.DRE_MODULE);
+	}
 
-    public DREPreferences()
-    {
-        super(Module.DRE_MODULE);
-    }
+	@Override
+	public File getInspectorFile() {
+		return new FileResource("Config/Preferences/DREPrefs.inspector");
+	}
 
-    @Override
-    public File getInspectorFile()
-    {
-        return new FileResource("Config/Preferences/DREPrefs.inspector");
-    }
+	public static Boolean getExamplePrefValue() {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("getExamplePrefValue");
+		Boolean value = preferences(DRE_PREFERENCES).getBooleanProperty(EXAMPLE_PREF_VALUE);
+		if (value == null) {
+			setExamplePrefValue(Boolean.FALSE);
+			return getExamplePrefValue();
+		}
+		return value;
+	}
 
-    public static Boolean getExamplePrefValue()
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("getExamplePrefValue");
-        Boolean value = preferences(DRE_PREFERENCES).getBooleanProperty(EXAMPLE_PREF_VALUE);
-        if (value == null) {
-            setExamplePrefValue(Boolean.FALSE);
-            return getExamplePrefValue();
-        }
-        return value;
-    }
-
-    public static void setExamplePrefValue(Boolean alignOnGrid)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("setExamplePrefValue");
-        preferences(DRE_PREFERENCES).setBooleanProperty(EXAMPLE_PREF_VALUE, alignOnGrid);
-    }
+	public static void setExamplePrefValue(Boolean alignOnGrid) {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("setExamplePrefValue");
+		preferences(DRE_PREFERENCES).setBooleanProperty(EXAMPLE_PREF_VALUE, alignOnGrid);
+	}
 
 }

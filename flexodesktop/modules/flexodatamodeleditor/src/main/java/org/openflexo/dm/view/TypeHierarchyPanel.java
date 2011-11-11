@@ -24,19 +24,16 @@ import org.openflexo.dm.model.TypeHierarchyBrowserModel;
 import org.openflexo.dm.view.controller.DMController;
 import org.openflexo.foundation.dm.DMEntity;
 
-
 public class TypeHierarchyPanel extends TabularBrowserView {
-    
-    public TypeHierarchyPanel(DMEntity entity, DMController controller)
-    {
-        super(null,makeTabularBrowserModel(entity),controller.getEditor());
-        focusOn(entity);
-    }
-    
-    private static TypeHierarchyBrowserModel makeTabularBrowserModel(DMEntity entity)
-    {
-        logger.info("Building TypeHierarchyBrowserModel");
-        return new TypeHierarchyBrowserModel(entity);
-    }
-    
+
+	public TypeHierarchyPanel(DMEntity entity, DMController controller) {
+		super(null, makeTabularBrowserModel(entity), controller.getEditor());
+		focusOn(entity);
+	}
+
+	private static TypeHierarchyBrowserModel makeTabularBrowserModel(DMEntity entity) {
+		logger.info("Building TypeHierarchyBrowserModel");
+		return new TypeHierarchyBrowserModel(entity);
+	}
+
 }

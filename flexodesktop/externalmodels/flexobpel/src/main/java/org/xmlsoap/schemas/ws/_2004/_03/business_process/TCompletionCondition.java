@@ -23,18 +23,18 @@
 // Generated on: 2007.11.06 at 03:26:51 PM CET 
 //
 
-
 package org.xmlsoap.schemas.ws._2004._03.business_process;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for tCompletionCondition complex type.
+ * <p>
+ * Java class for tCompletionCondition complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tCompletionCondition">
@@ -51,37 +51,30 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tCompletionCondition", propOrder = {
-    "branches"
-})
-public class TCompletionCondition
-    extends TExtensibleElements
-{
+@XmlType(name = "tCompletionCondition", propOrder = { "branches" })
+public class TCompletionCondition extends TExtensibleElements {
 
-    protected TBranches branches;
+	protected TBranches branches;
 
-    /**
-     * Gets the value of the branches property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TBranches }
-     *     
-     */
-    public TBranches getBranches() {
-        return branches;
-    }
+	/**
+	 * Gets the value of the branches property.
+	 * 
+	 * @return possible object is {@link TBranches }
+	 * 
+	 */
+	public TBranches getBranches() {
+		return branches;
+	}
 
-    /**
-     * Sets the value of the branches property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TBranches }
-     *     
-     */
-    public void setBranches(TBranches value) {
-        this.branches = value;
-    }
+	/**
+	 * Sets the value of the branches property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link TBranches }
+	 * 
+	 */
+	public void setBranches(TBranches value) {
+		this.branches = value;
+	}
 
 }

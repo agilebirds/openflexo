@@ -25,24 +25,21 @@ import org.openflexo.foundation.rm.FlexoOEShemaLibraryResource;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 
-
 /**
  * Used only during XML serialization to build shema library
  * 
  * @author bmangez
  */
-public class VEShemaLibraryBuilder extends FlexoBuilder<FlexoOEShemaLibraryResource>
-{
-    @SuppressWarnings("unused")
+public class VEShemaLibraryBuilder extends FlexoBuilder<FlexoOEShemaLibraryResource> {
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(VEShemaLibraryBuilder.class.getPackage().getName());
 
-    public ViewLibrary shemaLibrary;
-    public ViewPointLibrary viewPointLibrary;
+	public ViewLibrary shemaLibrary;
+	public ViewPointLibrary viewPointLibrary;
 
-    public VEShemaLibraryBuilder(FlexoOEShemaLibraryResource library, ViewPointLibrary viewPointLibrary)
-    {
-        super(library);
-        this.viewPointLibrary = viewPointLibrary;
-    }
+	public VEShemaLibraryBuilder(FlexoOEShemaLibraryResource library, ViewPointLibrary viewPointLibrary) {
+		super(library);
+		this.viewPointLibrary = viewPointLibrary;
+	}
 
 }

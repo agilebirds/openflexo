@@ -70,16 +70,13 @@ public class ParametersRetriever implements BindingEvaluationContext {
 	private static final Logger logger = Logger.getLogger(ParametersRetriever.class.getPackage().getName());
 
 	private Vector<URIParameter> uriParametersList;
-	private Hashtable<EditionSchemeParameter,ParameterDefinition> paramHash;
+	private Hashtable<EditionSchemeParameter, ParameterDefinition> paramHash;
 	protected ViewPointPaletteElement paletteElement;
-	
-	public static boolean retrieveParameters(final EditionSchemeAction<?> action, boolean skipDialogWhenPossible)
-	{
+
+	public static boolean retrieveParameters(final EditionSchemeAction<?> action, boolean skipDialogWhenPossible) {
 		boolean successfullyRetrievedDefaultParameters = action.retrieveDefaultParameters();
-		
-		if (successfullyRetrievedDefaultParameters
-				&& action.getEditionScheme().getSkipConfirmationPanel()
-				&& skipDialogWhenPossible) {
+
+		if (successfullyRetrievedDefaultParameters && action.getEditionScheme().getSkipConfirmationPanel() && skipDialogWhenPossible) {
 			return true;
 		}
 
@@ -91,35 +88,33 @@ public class ParametersRetriever implements BindingEvaluationContext {
 	private ParametersRetriever() {
 	}
 
-	private boolean _retrieveParameters(final EditionSchemeAction<?> action)
-	{
-		paletteElement = (action instanceof DropSchemeAction ? ((DropSchemeAction)action).getPaletteElement() : null);
+	private boolean _retrieveParameters(final EditionSchemeAction<?> action) {
+		paletteElement = (action instanceof DropSchemeAction ? ((DropSchemeAction) action).getPaletteElement() : null);
 		EditionScheme editionScheme = action.getEditionScheme();
-		
+
 		Vector<ParameterDefinition> parameters = new Vector<ParameterDefinition>();
 
 		uriParametersList = new Vector<URIParameter>();
 		paramHash = new Hashtable<EditionSchemeParameter, ParameterDefinition>();
-		
+
 		String description = editionScheme.getDescription();
-		if (description == null) description = editionScheme.getEditionPattern().getDescription();
-		
+		if (description == null)
+			description = editionScheme.getEditionPattern().getDescription();
+
 		parameters.add(new InfoLabelParameter("infoLabel", "description", description));
-		
+
 		for (final EditionSchemeParameter parameter : editionScheme.getParameters()) {
 			ParameterDefinition param = null;
-			Object defaultValue =  parameter.getDefaultValue(action,this);
+			Object defaultValue = parameter.getDefaultValue(action, this);
 			if (parameter instanceof org.openflexo.foundation.viewpoint.URIParameter) {
-				param = new URIParameter((org.openflexo.foundation.viewpoint.URIParameter)parameter, action);
-				uriParametersList.add((URIParameter)param);
+				param = new URIParameter((org.openflexo.foundation.viewpoint.URIParameter) parameter, action);
+				uriParametersList.add((URIParameter) param);
 				if (defaultValue != null)
-					action.getParameterValues().put(parameter.getName(),defaultValue);
-			}
-			else if (parameter instanceof org.openflexo.foundation.viewpoint.TextFieldParameter) {
-				param = new TextFieldParameter(parameter.getName(), parameter.getLabel(), (String)defaultValue, 40) {
+					action.getParameterValues().put(parameter.getName(), defaultValue);
+			} else if (parameter instanceof org.openflexo.foundation.viewpoint.TextFieldParameter) {
+				param = new TextFieldParameter(parameter.getName(), parameter.getLabel(), (String) defaultValue, 40) {
 					@Override
-					public void setValue(String value)
-					{
+					public void setValue(String value) {
 						super.setValue(value);
 						action.getParameterValues().put(parameter.getName(), value);
 						for (URIParameter p : uriParametersList) {
@@ -131,126 +126,110 @@ public class ParametersRetriever implements BindingEvaluationContext {
 				};
 				if (defaultValue != null)
 					action.getParameterValues().put(parameter.getName(), defaultValue);
-			}
-			else if (parameter.getWidget() == WidgetType.LOCALIZED_TEXT_FIELD) {
-				LocalizedString ls = new LocalizedString((String)defaultValue,Language.ENGLISH);
-					param = new LocalizedTextFieldParameter(parameter.getName(), parameter.getLabel(), ls, 40) {
-				       	@Override
-			        	public void setValue(LocalizedString value)
-			        	{
-			        		super.setValue(value);
-			        		action.getParameterValues().put(parameter.getName(), value);
-			        	}
-					};
-					action.getParameterValues().put(parameter.getName(), ls);
-			}
-			else if (parameter instanceof org.openflexo.foundation.viewpoint.TextAreaParameter) {
-				param = new TextAreaParameter(parameter.getName(), parameter.getLabel(), (String)defaultValue, 40, 5) {
-			       	@Override
-		        	public void setValue(String value)
-		        	{
-		        		super.setValue(value);
-		        		action.getParameterValues().put(parameter.getName(), value);
-		        	}
+			} else if (parameter.getWidget() == WidgetType.LOCALIZED_TEXT_FIELD) {
+				LocalizedString ls = new LocalizedString((String) defaultValue, Language.ENGLISH);
+				param = new LocalizedTextFieldParameter(parameter.getName(), parameter.getLabel(), ls, 40) {
+					@Override
+					public void setValue(LocalizedString value) {
+						super.setValue(value);
+						action.getParameterValues().put(parameter.getName(), value);
+					}
+				};
+				action.getParameterValues().put(parameter.getName(), ls);
+			} else if (parameter instanceof org.openflexo.foundation.viewpoint.TextAreaParameter) {
+				param = new TextAreaParameter(parameter.getName(), parameter.getLabel(), (String) defaultValue, 40, 5) {
+					@Override
+					public void setValue(String value) {
+						super.setValue(value);
+						action.getParameterValues().put(parameter.getName(), value);
+					}
 				};
 				if (defaultValue != null)
 					action.getParameterValues().put(parameter.getName(), defaultValue);
-			}
-			else if (parameter instanceof org.openflexo.foundation.viewpoint.IntegerParameter) {
-				param = new IntegerParameter(parameter.getName(), parameter.getLabel(), ((Number)defaultValue).intValue()) {
-			       	@Override
-		        	public void setValue(Integer value)
-		        	{
-		        		super.setValue(value);
-		        		action.getParameterValues().put(parameter.getName(), value);
+			} else if (parameter instanceof org.openflexo.foundation.viewpoint.IntegerParameter) {
+				param = new IntegerParameter(parameter.getName(), parameter.getLabel(), ((Number) defaultValue).intValue()) {
+					@Override
+					public void setValue(Integer value) {
+						super.setValue(value);
+						action.getParameterValues().put(parameter.getName(), value);
 						for (URIParameter p : uriParametersList) {
 							if (p.getDependancyParameters() != null && p.getDependancyParameters().contains(this)) {
 								p.updateURIName();
 							}
 						}
-		        	}
+					}
 				};
 				if (defaultValue != null)
 					action.getParameterValues().put(parameter.getName(), defaultValue);
-			}
-			else if (parameter instanceof org.openflexo.foundation.viewpoint.CheckboxParameter) {
-				param = new CheckboxParameter(
-						parameter.getName(), 
-						parameter.getLabel(), 
-						(Boolean)defaultValue) {
-			       	@Override
-		        	public void setValue(Boolean value)
-		        	{
-		        		super.setValue(value);
-		        		action.getParameterValues().put(parameter.getName(), value);
-		        	}
+			} else if (parameter instanceof org.openflexo.foundation.viewpoint.CheckboxParameter) {
+				param = new CheckboxParameter(parameter.getName(), parameter.getLabel(), (Boolean) defaultValue) {
+					@Override
+					public void setValue(Boolean value) {
+						super.setValue(value);
+						action.getParameterValues().put(parameter.getName(), value);
+					}
 				};
 				if (defaultValue != null)
-					action.getParameterValues().put(
-							parameter.getName(), 
-							defaultValue);
-			}
-			else if (parameter instanceof DropDownParameter) {
-				param = new StaticDropDownParameter<String>(parameter.getName(), parameter.getLabel(), ((DropDownParameter) parameter).getValueList(),parameter.getDefaultValue().toString()) {
-			       	@Override
-		        	public void setValue(String value)
-		        	{
-		        		super.setValue(value);
-		        		action.getParameterValues().put(parameter.getName(), value);
-		        	}
+					action.getParameterValues().put(parameter.getName(), defaultValue);
+			} else if (parameter instanceof DropDownParameter) {
+				param = new StaticDropDownParameter<String>(parameter.getName(), parameter.getLabel(),
+						((DropDownParameter) parameter).getValueList(), parameter.getDefaultValue().toString()) {
+					@Override
+					public void setValue(String value) {
+						super.setValue(value);
+						action.getParameterValues().put(parameter.getName(), value);
+					}
 				};
 				if (defaultValue != null)
-						action.getParameterValues().put(parameter.getName(),defaultValue);
-			}
-			else if (parameter instanceof IndividualParameter) {
+					action.getParameterValues().put(parameter.getName(), defaultValue);
+			} else if (parameter instanceof IndividualParameter) {
 				OntologyClass ontologyClass = ((IndividualParameter) parameter).getConcept();
 				OntologyIndividual defaultIndividual = null;
 				if (ontologyClass != null && ontologyClass.getIndividuals().size() > 0) {
 					defaultIndividual = ontologyClass.getIndividuals().firstElement();
 				}
-				param = new OntologyIndividualParameter(parameter.getName(), parameter.getLabel(),ontologyClass,defaultIndividual) {
+				param = new OntologyIndividualParameter(parameter.getName(), parameter.getLabel(), ontologyClass, defaultIndividual) {
 					@Override
 					public void setValue(OntologyIndividual value) {
 						super.setValue(value);
-						logger.info("Set as parameter "+parameter.getName()+" value="+value);
+						logger.info("Set as parameter " + parameter.getName() + " value=" + value);
 						action.getParameterValues().put(parameter.getName(), value);
 					};
 				};
 				if (defaultIndividual != null) {
-					logger.info("Set as parameter "+parameter.getName()+" value="+defaultIndividual);
+					logger.info("Set as parameter " + parameter.getName() + " value=" + defaultIndividual);
 					action.getParameterValues().put(parameter.getName(), defaultIndividual);
 				}
-			}
-			else if (parameter instanceof FlexoObjectParameter) {
+			} else if (parameter instanceof FlexoObjectParameter) {
 				if (((FlexoObjectParameter) parameter).getFlexoObjectType() == FlexoObjectType.Role) {
-					param = new RoleParameter(parameter.getName(), parameter.getLabel(),null) {
+					param = new RoleParameter(parameter.getName(), parameter.getLabel(), null) {
 						@Override
 						public void setValue(Role value) {
 							super.setValue(value);
-							System.out.println("Set as parameter "+parameter.getName()+" value="+value);
+							System.out.println("Set as parameter " + parameter.getName() + " value=" + value);
 							action.getParameterValues().put(parameter.getName(), value);
 						};
 					};
 
 				}
 			}
-			
-				if (param != null) {
+
+			if (param != null) {
 				parameters.add(param);
-				paramHash.put(parameter,param);
+				paramHash.put(parameter, param);
 				/*if (StringUtils.isNotEmpty(parameter.getConditional())) {
 					// TODO: use AnTAR instead of bullshit from Inspector lib
-	            	String hackDeLaMort = ToolBox.replaceStringByStringInString("|", " OR ", parameter.getConditional());
-	            	hackDeLaMort = ToolBox.replaceStringByStringInString("'", "", hackDeLaMort);
+					String hackDeLaMort = ToolBox.replaceStringByStringInString("|", " OR ", parameter.getConditional());
+					hackDeLaMort = ToolBox.replaceStringByStringInString("'", "", hackDeLaMort);
 					
 					param.setConditional(hackDeLaMort);
 					param.setDepends(getDepends(parameter.getConditional(), action));
-	            	//System.out.println("hackDeLaMort="+hackDeLaMort);
-	            	//System.out.println("depends="+getDepends(parameter.getConditional(), action));
+					//System.out.println("hackDeLaMort="+hackDeLaMort);
+					//System.out.println("depends="+getDepends(parameter.getConditional(), action));
 				}*/
 			}
 		}
-		
+
 		for (URIParameter p : uriParametersList) {
 			p.buildDependancies();
 			p.updateURIName();
@@ -277,11 +256,9 @@ public class ParametersRetriever implements BindingEvaluationContext {
 			if (isValid) return true;
 			// We need to open dialog anyway
 		}*/
-		
-		AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(
-				action.getProject(), 
-				editionScheme.getEditionPattern().getName(), 
-				"", // No need for extra title
+
+		AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(action.getProject(), editionScheme.getEditionPattern()
+				.getName(), "", // No need for extra title
 				new ValidationCondition() {
 					@Override
 					public boolean isValid(ParametersModel model) {
@@ -291,49 +268,46 @@ public class ParametersRetriever implements BindingEvaluationContext {
 									setErrorMessage(FlexoLocalization.localizedForKey("declared_uri_must_be_specified_please_enter_uri"));
 									return false;
 								}
-								if (action.getProject().getProjectOntologyLibrary().isDuplicatedURI(action.getProject().getProjectOntology().getURI(),param.getValue())) {
-									setErrorMessage(FlexoLocalization.localizedForKey("declared_uri_must_be_unique_please_choose_an_other_uri"));
+								if (action.getProject().getProjectOntologyLibrary()
+										.isDuplicatedURI(action.getProject().getProjectOntology().getURI(), param.getValue())) {
+									setErrorMessage(FlexoLocalization
+											.localizedForKey("declared_uri_must_be_unique_please_choose_an_other_uri"));
 									return false;
-								}
-								else if (!action.getProject().getProjectOntologyLibrary().testValidURI(action.getProject().getProjectOntology().getURI(),param.getValue())) {
-									setErrorMessage(FlexoLocalization.localizedForKey("declared_uri_is_not_well_formed_please_choose_an_other_uri"));
+								} else if (!action.getProject().getProjectOntologyLibrary()
+										.testValidURI(action.getProject().getProjectOntology().getURI(), param.getValue())) {
+									setErrorMessage(FlexoLocalization
+											.localizedForKey("declared_uri_is_not_well_formed_please_choose_an_other_uri"));
 									return false;
 								}
 							}
 						}
 						return true;
 					}
-				},
-				parameters);
+				}, parameters);
 
-		if (dialog.getStatus()==AskParametersDialog.VALIDATE) {
+		if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
- 
+
 	}
 
-	
-	public class URIParameter extends TextFieldAndLabelParameter
-	{
+	public class URIParameter extends TextFieldAndLabelParameter {
 
 		private org.openflexo.foundation.viewpoint.URIParameter _parameter;
 		private EditionSchemeAction<?> _action;
 		private Expression baseExpression;
 		private Vector<ParameterDefinition> dependancyParameters;
-		
-		public URIParameter(org.openflexo.foundation.viewpoint.URIParameter parameter, EditionSchemeAction action)
-		{
+
+		public URIParameter(org.openflexo.foundation.viewpoint.URIParameter parameter, EditionSchemeAction action) {
 			super(parameter.getName(), parameter.getLabel(), "<not set yet>", 40);
 			_parameter = parameter;
 			_action = action;
 			buildDependancies();
 		}
 
-		protected void buildDependancies()
-		{
+		protected void buildDependancies() {
 			if (_parameter.getBaseURI() != null) {
 				DefaultExpressionParser parser = new DefaultExpressionParser();
 				try {
@@ -341,106 +315,101 @@ public class ParametersRetriever implements BindingEvaluationContext {
 					dependancyParameters = new Vector<ParameterDefinition>();
 					Vector<EditionSchemeParameter> depends = extractDepends(_parameter.getBaseURI().toString(), _action);
 					for (EditionSchemeParameter p : depends) {
-						if (p!= null) dependancyParameters.add(paramHash.get(p));
-						//System.out.println("Param URI "+parameter+" depends of "+paramHash.get(p)+" p="+p);
+						if (p != null)
+							dependancyParameters.add(paramHash.get(p));
+						// System.out.println("Param URI "+parameter+" depends of "+paramHash.get(p)+" p="+p);
 					}
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
 			}
 		}
-		
-       	@Override
-    	public void setValue(String value)
-    	{
-    		super.setValue(value);
-    		_action.getParameterValues().put(_parameter.getName(), value);
-			//System.out.println("Param URI "+_parameter+" (name="+_parameter.getName()+" takes value "+value);
-   	}
 
-		public Vector<ParameterDefinition> getDependancyParameters()
-		{
+		@Override
+		public void setValue(String value) {
+			super.setValue(value);
+			_action.getParameterValues().put(_parameter.getName(), value);
+			// System.out.println("Param URI "+_parameter+" (name="+_parameter.getName()+" takes value "+value);
+		}
+
+		public Vector<ParameterDefinition> getDependancyParameters() {
 			return dependancyParameters;
 		}
 
-		public void updateURIName() 
-		{
+		public void updateURIName() {
 			String baseProposal = getURIName();
 			String proposal = baseProposal;
 			if (!StringUtils.isEmpty(baseProposal)) {
 				Integer i = null;
-				while (_action.getProject().getProjectOntologyLibrary().isDuplicatedURI(
-						_action.getProject().getProjectOntology().getURI(),proposal)) {
-					if (i == null) i= 1; else i++;
-					proposal = baseProposal+i;
+				while (_action.getProject().getProjectOntologyLibrary()
+						.isDuplicatedURI(_action.getProject().getProjectOntology().getURI(), proposal)) {
+					if (i == null)
+						i = 1;
+					else
+						i++;
+					proposal = baseProposal + i;
 				}
 			}
-			setValue(proposal);			
+			setValue(proposal);
 		}
 
 		@Override
-		public String getAdditionalLabel() 
-		{
+		public String getAdditionalLabel() {
 			return getURI();
 		}
-		
-		public String getURI() 
-		{
+
+		public String getURI() {
 			return _action.getProject().getProjectOntology().makeURI(getURIName());
 		}
-		
-		public String getURIName() 
-		{
+
+		public String getURIName() {
 			if (baseExpression == null) {
-				return (String)_parameter.getDefaultValue(_action,ParametersRetriever.this);
+				return (String) _parameter.getDefaultValue(_action, ParametersRetriever.this);
 			}
-			Hashtable<String,Object> paramValues = new Hashtable<String,Object>();
+			Hashtable<String, Object> paramValues = new Hashtable<String, Object>();
 			for (String s : _action.getParameterValues().keySet()) {
 				String value = _action.getParameterValues().get(s).toString();
-				paramValues.put(s,JavaUtils.getClassName(value));
+				paramValues.put(s, JavaUtils.getClassName(value));
 			}
 			return evaluateExpression(paramValues);
 		}
-		
-		private String evaluateExpression(final Hashtable<String,Object> parameterValues)
-		{
-			if (baseExpression == null) return "";
+
+		private String evaluateExpression(final Hashtable<String, Object> parameterValues) {
+			if (baseExpression == null)
+				return "";
 			try {
 				Expression evaluation = baseExpression.evaluate(parameterValues);
 				if (evaluation instanceof StringConstant) {
-					return ((StringConstant)evaluation).getValue();
+					return ((StringConstant) evaluation).getValue();
 				}
-				logger.warning("Inconsistant data: expected StringConstant, found "+evaluation.getClass().getName());
+				logger.warning("Inconsistant data: expected StringConstant, found " + evaluation.getClass().getName());
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
-			} 
+			}
 			return "";
 		}
 
-
 	}
-	
-	private String getDepends(String anExpression, final EditionSchemeAction action)
-	{
+
+	private String getDepends(String anExpression, final EditionSchemeAction action) {
 		String depends = "";
 		boolean isFirst = true;
-		for (final EditionSchemeParameter parameter : extractDepends(anExpression,action)) {
-			depends += (isFirst?"":",")+parameter.getName();
+		for (final EditionSchemeParameter parameter : extractDepends(anExpression, action)) {
+			depends += (isFirst ? "" : ",") + parameter.getName();
 			isFirst = false;
 		}
 		return depends;
 	}
 
-	Vector<EditionSchemeParameter> extractDepends(String anExpression, final EditionSchemeAction action)
-	{
+	Vector<EditionSchemeParameter> extractDepends(String anExpression, final EditionSchemeAction action) {
 		EditionScheme editionScheme = action.getEditionScheme();
 		Vector<EditionSchemeParameter> returned = new Vector<EditionSchemeParameter>();
 		try {
-			System.out.println("Expression: "+anExpression);
+			System.out.println("Expression: " + anExpression);
 			Vector<Variable> variables = Expression.extractVariables(anExpression);
 			for (Variable v : variables) {
 				returned.add(editionScheme.getParameter(v.getName()));
-				System.out.println("depends: "+v.getName()+" param: "+editionScheme.getParameter(v.getName()));
+				System.out.println("depends: " + v.getName() + " param: " + editionScheme.getParameter(v.getName()));
 			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -453,12 +422,11 @@ public class ParametersRetriever implements BindingEvaluationContext {
 	}
 
 	@Override
-	public Object getValue(BindingVariable variable)
-	{
+	public Object getValue(BindingVariable variable) {
 		if (variable instanceof EditionSchemeParameterPathElement) {
 			return paramHash.get(((EditionSchemeParameterPathElement) variable).getParameter()).getValue();
 		}
-		logger.warning("Unexpected "+variable);
+		logger.warning("Unexpected " + variable);
 		return null;
 	}
 

@@ -24,38 +24,32 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ie.widget.IEMultimediaWidget;
 
+public class IEMultimediaElement extends IEElement {
 
-public class IEMultimediaElement extends IEElement
-{
+	/**
+	 * @param widget
+	 * @param browser
+	 */
+	public IEMultimediaElement(IEMultimediaWidget widget, ProjectBrowser browser, BrowserElement parent) {
+		super(widget, BrowserElementType.MULTIMEDIA, browser, parent);
+	}
 
-    /**
-     * @param widget
-     * @param browser
-     */
-    public IEMultimediaElement(IEMultimediaWidget widget, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(widget, BrowserElementType.MULTIMEDIA, browser,parent);
-    }
+	@Override
+	protected void buildChildrenVector() {
+		// no childs
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        //no childs
-    }
+	@Override
+	public String getName() {
+		if (getObject().getName() == null) {
+			return "Multimedia";
+		}
+		return getObject().getName();
+	}
 
-    @Override
-	public String getName()
-    {
-        if (getObject().getName() == null) {
-            return "Multimedia";
-        }
-        return getObject().getName();
-    }
-
-    @Override
-	public IEMultimediaWidget getObject()
-    {
-        return (IEMultimediaWidget) super.getObject();
-    }
+	@Override
+	public IEMultimediaWidget getObject() {
+		return (IEMultimediaWidget) super.getObject();
+	}
 
 }

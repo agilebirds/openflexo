@@ -25,71 +25,61 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.dm.action.CreateProjectDatabaseRepository;
 import org.openflexo.foundation.dm.action.ImportExternalDatabaseRepository;
 
-
 public class PersistantDataRepositoryFolder extends DMRepositoryFolder {
 
-    static final Logger logger = Logger.getLogger(PersistantDataRepositoryFolder.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(PersistantDataRepositoryFolder.class.getPackage().getName());
 
-    /**
-     * Default constructor
-     */
-    public PersistantDataRepositoryFolder(DMModel dmModel)
-    {
-        super(dmModel);
-     }
+	/**
+	 * Default constructor
+	 */
+	public PersistantDataRepositoryFolder(DMModel dmModel) {
+		super(dmModel);
+	}
 
-    @Override
-	public int getRepositoriesCount() 
-    {
-        return getDMModel().getProjectDatabaseRepositories().size()
-        +getDMModel().getExternalDatabaseRepositories().size();
-    }
+	@Override
+	public int getRepositoriesCount() {
+		return getDMModel().getProjectDatabaseRepositories().size() + getDMModel().getExternalDatabaseRepositories().size();
+	}
 
-    @Override
-	public DMRepository getRepositoryAtIndex(int index) 
-    {
-        if ((index >=0) 
-                && (index < getRepositoriesCount())) {
-            int d1 = getDMModel().getProjectDatabaseRepositories().size();
-            if (index < getDMModel().getProjectDatabaseRepositories().size()) {
-                return getDMModel().getProjectDatabaseRepositories().elementAt(index);                
-            }
-            else if (index-d1 < getDMModel().getExternalDatabaseRepositories().size()) {
-                return getDMModel().getExternalDatabaseRepositories().elementAt(index-d1);                
-            }
-         }
-        logger.warning("Index out of range: "+index);
-        return null;
-    }
+	@Override
+	public DMRepository getRepositoryAtIndex(int index) {
+		if ((index >= 0) && (index < getRepositoriesCount())) {
+			int d1 = getDMModel().getProjectDatabaseRepositories().size();
+			if (index < getDMModel().getProjectDatabaseRepositories().size()) {
+				return getDMModel().getProjectDatabaseRepositories().elementAt(index);
+			} else if (index - d1 < getDMModel().getExternalDatabaseRepositories().size()) {
+				return getDMModel().getExternalDatabaseRepositories().elementAt(index - d1);
+			}
+		}
+		logger.warning("Index out of range: " + index);
+		return null;
+	}
 
-    @Override
-	public String getName() 
-    {
-        return "persistant_data_repositories";
-     }
+	@Override
+	public String getName() {
+		return "persistant_data_repositories";
+	}
 
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return getDMModel().getFullyQualifiedName()+".PERSISTANT_DATA_REPOSITORY_FOLDER";
-    }
+	@Override
+	public String getFullyQualifiedName() {
+		return getDMModel().getFullyQualifiedName() + ".PERSISTANT_DATA_REPOSITORY_FOLDER";
+	}
 
-    @Override
-	protected Vector getSpecificActionListForThatClass()
-    {
-         Vector returned = super.getSpecificActionListForThatClass();
-         returned.add(CreateProjectDatabaseRepository.actionType);
-         returned.add(ImportExternalDatabaseRepository.actionType);
-         return returned;
-    }
+	@Override
+	protected Vector getSpecificActionListForThatClass() {
+		Vector returned = super.getSpecificActionListForThatClass();
+		returned.add(CreateProjectDatabaseRepository.actionType);
+		returned.add(ImportExternalDatabaseRepository.actionType);
+		return returned;
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return getName();
-    }
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return getName();
+	}
 }

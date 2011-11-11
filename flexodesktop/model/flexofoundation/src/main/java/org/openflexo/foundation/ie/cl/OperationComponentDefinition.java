@@ -45,181 +45,165 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.xml.FlexoComponentLibraryBuilder;
 import org.openflexo.toolbox.FileUtils;
 
-
 /**
- * Represents a component associated to a OperationNode, but only the
- * definition, not the component itself (no need to load the component to handle
- * a ComponentDefinition)
+ * Represents a component associated to a OperationNode, but only the definition, not the component itself (no need to load the component to
+ * handle a ComponentDefinition)
  * 
  * @author sguerin
  * 
  */
-public final class OperationComponentDefinition extends ComponentDefinition implements Serializable
-{
-    private static final Logger logger = Logger.getLogger(ComponentDefinition.class.getPackage().getName());
+public final class OperationComponentDefinition extends ComponentDefinition implements Serializable {
+	private static final Logger logger = Logger.getLogger(ComponentDefinition.class.getPackage().getName());
 
-    public OperationComponentDefinition(FlexoComponentLibrary componentLibrary)
-    {
-        super(componentLibrary);
-    }
+	public OperationComponentDefinition(FlexoComponentLibrary componentLibrary) {
+		super(componentLibrary);
+	}
 
-    /**
-     * Constructor used during deserialization
-     * 
-     * @throws DuplicateResourceException
-     * @throws DuplicateResourceException
-     */
-    public OperationComponentDefinition(FlexoComponentLibraryBuilder builder) throws DuplicateResourceException
-    {
-        this(null, builder.componentLibrary, null, builder.getProject());
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor used during deserialization
+	 * 
+	 * @throws DuplicateResourceException
+	 * @throws DuplicateResourceException
+	 */
+	public OperationComponentDefinition(FlexoComponentLibraryBuilder builder) throws DuplicateResourceException {
+		this(null, builder.componentLibrary, null, builder.getProject());
+		initializeDeserialization(builder);
+	}
 
-    public OperationComponentDefinition(String aComponentName, FlexoComponentLibrary componentLibrary, FlexoComponentFolder aFolder,
-            FlexoProject project, boolean checkUnicity) throws DuplicateResourceException
-    {
-        super(aComponentName, componentLibrary, aFolder, project);
-        if (checkUnicity) {
-            String resourceIdentifier = FlexoOperationComponentResource.resourceIdentifierForName(aComponentName);
-            if ((project != null) && (project.isRegistered(resourceIdentifier))) {
-                if (aFolder != null) {
-                    aFolder.removeFromComponents(this);
-                }
-                throw new DuplicateResourceException(resourceIdentifier);
-            }
-        }
-    }
+	public OperationComponentDefinition(String aComponentName, FlexoComponentLibrary componentLibrary, FlexoComponentFolder aFolder,
+			FlexoProject project, boolean checkUnicity) throws DuplicateResourceException {
+		super(aComponentName, componentLibrary, aFolder, project);
+		if (checkUnicity) {
+			String resourceIdentifier = FlexoOperationComponentResource.resourceIdentifierForName(aComponentName);
+			if ((project != null) && (project.isRegistered(resourceIdentifier))) {
+				if (aFolder != null) {
+					aFolder.removeFromComponents(this);
+				}
+				throw new DuplicateResourceException(resourceIdentifier);
+			}
+		}
+	}
 
-    public OperationComponentDefinition(String aComponentName, FlexoComponentLibrary componentLibrary, FlexoComponentFolder aFolder,
-            FlexoProject project) throws DuplicateResourceException
-    {
-        this(aComponentName, componentLibrary, aFolder, project, true);
-    }
-    
-    @Override
-    public IEWOComponent createNewComponent() {
-    	return new IEOperationComponent(this,getProject());
-    }
-
-    @Override
-	public FlexoComponentResource getComponentResource(boolean createIfNotExists)
-    {
-        if (getProject() != null) {
-            FlexoComponentResource returned = getProject().getFlexoOperationComponentResource(getName());
-            if (returned == null && createIfNotExists) {
-                if (logger.isLoggable(Level.INFO))
-                    logger.info("Creating new operation component resource !");
-                // FlexoProcessResource processRes =
-                // getProject().getFlexoProcessResource(getProcess().getName());
-                FlexoComponentLibraryResource libRes = getProject().getFlexoComponentLibraryResource();
-                File componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(getProject().getProjectDirectory(),
-                        this), _componentName + ".woxml");
-                FlexoProjectFile resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
-                FlexoOperationComponentResource compRes=null;
-                try {
-                    compRes = new FlexoOperationComponentResource(getProject(), _componentName, libRes, resourceComponentFile);
-                } catch (InvalidFileNameException e1) {
-                    boolean ok = false;
-                    for (int i = 0; i < 100 && !ok; i++) {
-                        try {
-                            componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(getProject().getProjectDirectory(),
-                                    this), FileUtils.getValidFileName(_componentName)+i + ".woxml");
-                            resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
-                            compRes = new FlexoOperationComponentResource(getProject(), _componentName, libRes, resourceComponentFile);
-                            ok = true;
-                        } catch (InvalidFileNameException e) {
-                        }
-                    }
-                    if (!ok) {
-                        componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(getProject().getProjectDirectory(),
-                                this), FileUtils.getValidFileName(_componentName)+getFlexoID()+ ".woxml");
-                        resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
-                        try {
-                            compRes = new FlexoOperationComponentResource(getProject(), _componentName, libRes, resourceComponentFile);
-                        } catch (InvalidFileNameException e) {
-                            if (logger.isLoggable(Level.SEVERE))
-                                logger.severe("This should really not happen.");
-                            return null;
-                        }
-                    }
-                }
-                if (compRes==null)
-                    return null;
-                compRes.setResourceData(new IEOperationComponent(this, getProject()));
-
-                try {
-                    compRes.getResourceData().setFlexoResource(compRes);
-                    getProject().registerResource(compRes);
-                } catch (DuplicateResourceException e) {
-                    // Warns about the exception
-                    if (logger.isLoggable(Level.WARNING))
-                        logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-                    e.printStackTrace();
-                    return null;
-                }
-                if (logger.isLoggable(Level.INFO))
-                    logger.info("Registered component " + _componentName + " file: " + componentFile);
-                returned = compRes;
-            }
-            return returned;
-        } else {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Could not access to project !");
-        }
-        return null;
-    }
-    
-    @Override
-	public String getInspectorName()
-    {
-        return Inspectors.IE.OPERATION_COMPONENT_DEFINITION_INSPECTOR;
-    }
-
-    /**
-     * Overrides getClassNameKey
-     * 
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "operation_component_definition";
-    }
-
-    @Override
-	public IEOperationComponent getWOComponent()
-    {
-        return (IEOperationComponent)super.getWOComponent();
-    }
-
-    public boolean usesTabComponent (TabComponentDefinition tab)
-    {
-    	return getWOComponent().usesTabComponent(tab);
-    }
-    
-    public Vector<TabComponentDefinition> getUsedTabComponents()
-    {
-    	return getWOComponent().getUsedTabComponents();
-    }
-    
-    public Vector<TabComponentInstance> getAllTabComponentInstances()
-    {
-    	return getWOComponent().getAllTabComponentInstances();
-     }
-    
-    public Vector<TabComponentInstance> getAllTabComponentInstances(TabComponentDefinition tab)
-    {
-    	return getWOComponent().getAllTabComponentInstances(tab);
-    }
+	public OperationComponentDefinition(String aComponentName, FlexoComponentLibrary componentLibrary, FlexoComponentFolder aFolder,
+			FlexoProject project) throws DuplicateResourceException {
+		this(aComponentName, componentLibrary, aFolder, project, true);
+	}
 
 	@Override
-	public List<OperationNode> getAllOperationNodesLinkedToThisComponent()
-	{
+	public IEWOComponent createNewComponent() {
+		return new IEOperationComponent(this, getProject());
+	}
+
+	@Override
+	public FlexoComponentResource getComponentResource(boolean createIfNotExists) {
+		if (getProject() != null) {
+			FlexoComponentResource returned = getProject().getFlexoOperationComponentResource(getName());
+			if (returned == null && createIfNotExists) {
+				if (logger.isLoggable(Level.INFO))
+					logger.info("Creating new operation component resource !");
+				// FlexoProcessResource processRes =
+				// getProject().getFlexoProcessResource(getProcess().getName());
+				FlexoComponentLibraryResource libRes = getProject().getFlexoComponentLibraryResource();
+				File componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(getProject().getProjectDirectory(),
+						this), _componentName + ".woxml");
+				FlexoProjectFile resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
+				FlexoOperationComponentResource compRes = null;
+				try {
+					compRes = new FlexoOperationComponentResource(getProject(), _componentName, libRes, resourceComponentFile);
+				} catch (InvalidFileNameException e1) {
+					boolean ok = false;
+					for (int i = 0; i < 100 && !ok; i++) {
+						try {
+							componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(getProject()
+									.getProjectDirectory(), this), FileUtils.getValidFileName(_componentName) + i + ".woxml");
+							resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
+							compRes = new FlexoOperationComponentResource(getProject(), _componentName, libRes, resourceComponentFile);
+							ok = true;
+						} catch (InvalidFileNameException e) {
+						}
+					}
+					if (!ok) {
+						componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(
+								getProject().getProjectDirectory(), this), FileUtils.getValidFileName(_componentName) + getFlexoID()
+								+ ".woxml");
+						resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
+						try {
+							compRes = new FlexoOperationComponentResource(getProject(), _componentName, libRes, resourceComponentFile);
+						} catch (InvalidFileNameException e) {
+							if (logger.isLoggable(Level.SEVERE))
+								logger.severe("This should really not happen.");
+							return null;
+						}
+					}
+				}
+				if (compRes == null)
+					return null;
+				compRes.setResourceData(new IEOperationComponent(this, getProject()));
+
+				try {
+					compRes.getResourceData().setFlexoResource(compRes);
+					getProject().registerResource(compRes);
+				} catch (DuplicateResourceException e) {
+					// Warns about the exception
+					if (logger.isLoggable(Level.WARNING))
+						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					e.printStackTrace();
+					return null;
+				}
+				if (logger.isLoggable(Level.INFO))
+					logger.info("Registered component " + _componentName + " file: " + componentFile);
+				returned = compRes;
+			}
+			return returned;
+		} else {
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("Could not access to project !");
+		}
+		return null;
+	}
+
+	@Override
+	public String getInspectorName() {
+		return Inspectors.IE.OPERATION_COMPONENT_DEFINITION_INSPECTOR;
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "operation_component_definition";
+	}
+
+	@Override
+	public IEOperationComponent getWOComponent() {
+		return (IEOperationComponent) super.getWOComponent();
+	}
+
+	public boolean usesTabComponent(TabComponentDefinition tab) {
+		return getWOComponent().usesTabComponent(tab);
+	}
+
+	public Vector<TabComponentDefinition> getUsedTabComponents() {
+		return getWOComponent().getUsedTabComponents();
+	}
+
+	public Vector<TabComponentInstance> getAllTabComponentInstances() {
+		return getWOComponent().getAllTabComponentInstances();
+	}
+
+	public Vector<TabComponentInstance> getAllTabComponentInstances(TabComponentDefinition tab) {
+		return getWOComponent().getAllTabComponentInstances(tab);
+	}
+
+	@Override
+	public List<OperationNode> getAllOperationNodesLinkedToThisComponent() {
 		List<OperationNode> results = new ArrayList<OperationNode>();
-		for(ComponentInstance ci : getComponentInstances())
-		{
-			if (((OperationComponentInstance)ci).getOperationNode()!=null) {
-				results.add(((OperationComponentInstance)ci).getOperationNode());
+		for (ComponentInstance ci : getComponentInstances()) {
+			if (((OperationComponentInstance) ci).getOperationNode() != null) {
+				results.add(((OperationComponentInstance) ci).getOperationNode());
 			}
 		}
 		return results;

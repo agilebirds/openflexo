@@ -40,40 +40,40 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.ws.client.PPMWebService.PPMProcess;
 
-
 public class ImportProcessesAction extends FlexoAction<ImportProcessesAction, FlexoModelObject, FlexoModelObject> {
-	
+
 	private static final Logger logger = FlexoLogger.getLogger(ImportProcessesAction.class.getPackage().getName());
 
-	public static final FlexoActionType<ImportProcessesAction, FlexoModelObject, FlexoModelObject> actionType = 
-		new FlexoActionType<ImportProcessesAction, FlexoModelObject, FlexoModelObject>("import_processes",FlexoActionType.defaultGroup,FlexoActionType.importMenu,FlexoActionType.ADD_ACTION_TYPE) {
-		
-			@Override
-			public ImportProcessesAction makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
-				return new ImportProcessesAction(focusedObject,globalSelection,editor);
-			}
-		
-			@Override
-			protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-				return true;
-			}
-		
-			@Override
-			protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-				return true;
-			}
+	public static final FlexoActionType<ImportProcessesAction, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<ImportProcessesAction, FlexoModelObject, FlexoModelObject>(
+			"import_processes", FlexoActionType.defaultGroup, FlexoActionType.importMenu, FlexoActionType.ADD_ACTION_TYPE) {
+
+		@Override
+		public ImportProcessesAction makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection,
+				FlexoEditor editor) {
+			return new ImportProcessesAction(focusedObject, globalSelection, editor);
+		}
+
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return true;
+		}
+
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return true;
+		}
 	};
-	
+
 	static {
 		FlexoModelObject.addActionForClass(actionType, FlexoWorkflow.class);
 		FlexoModelObject.addActionForClass(actionType, FlexoProcess.class);
 		FlexoModelObject.addActionForClass(actionType, FlexoImportedProcessLibrary.class);
 	}
-	
+
 	private Vector<PPMProcess> processesToImport;
-	
+
 	private ProcessImportReport importReport;
-	
+
 	public Vector<PPMProcess> getProcessesToImport() {
 		return processesToImport;
 	}
@@ -82,8 +82,7 @@ public class ImportProcessesAction extends FlexoAction<ImportProcessesAction, Fl
 		this.processesToImport = processesToImport;
 	}
 
-	protected ImportProcessesAction(FlexoModelObject focusedObject,
-			Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	protected ImportProcessesAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -92,7 +91,7 @@ public class ImportProcessesAction extends FlexoAction<ImportProcessesAction, Fl
 		FlexoWorkflow lib = getEditor().getProject().getFlexoWorkflow();
 		importReport = new ProcessImportReport();
 		for (PPMProcess p : getProcessesToImport()) {
-			if (!isValid(p) || p.getParentProcess()!=null)
+			if (!isValid(p) || p.getParentProcess() != null)
 				importReport.addToInvalidProcesses(p);
 			else {
 				try {
@@ -101,7 +100,7 @@ public class ImportProcessesAction extends FlexoAction<ImportProcessesAction, Fl
 				} catch (ProcessAlreadyImportedException e) {
 					importReport.addToAlreadyImportedProcesses(p);
 					if (logger.isLoggable(Level.FINE))
-						logger.log(Level.FINE,"Process "+p.getName()+" was already imported",e);
+						logger.log(Level.FINE, "Process " + p.getName() + " was already imported", e);
 				} catch (InvalidParentProcessException e) {
 					if (logger.isLoggable(Level.WARNING))
 						logger.warning("This should not happen for imported processes!");
@@ -112,20 +111,20 @@ public class ImportProcessesAction extends FlexoAction<ImportProcessesAction, Fl
 			}
 		}
 	}
-	
-    private boolean isValid(PPMProcess p) {
-    	return p.getUri()!=null && p.getVersionUri()!=null;
-    }
+
+	private boolean isValid(PPMProcess p) {
+		return p.getUri() != null && p.getVersionUri() != null;
+	}
 
 	public ProcessImportReport getImportReport() {
 		return importReport;
 	}
-	
+
 	public static class ProcessImportReport {
-		private LinkedHashMap<PPMProcess,FlexoProcess> properlyImported;
+		private LinkedHashMap<PPMProcess, FlexoProcess> properlyImported;
 		private Vector<PPMProcess> invalidProcesses;
 		private Vector<PPMProcess> alreadyImportedProcesses;
-		
+
 		public ProcessImportReport() {
 			properlyImported = new LinkedHashMap<PPMProcess, FlexoProcess>();
 			invalidProcesses = new Vector<PPMProcess>();
@@ -143,7 +142,7 @@ public class ImportProcessesAction extends FlexoAction<ImportProcessesAction, Fl
 		public void addToProperlyImportedProcesses(PPMProcess processToImport, FlexoProcess matchingImportedProcess) {
 			properlyImported.put(processToImport, matchingImportedProcess);
 		}
-		
+
 		public Vector<PPMProcess> getInvalidProcesses() {
 			return invalidProcesses;
 		}
@@ -151,7 +150,7 @@ public class ImportProcessesAction extends FlexoAction<ImportProcessesAction, Fl
 		public void setInvalidProcesses(Vector<PPMProcess> invalidProcess) {
 			this.invalidProcesses = invalidProcess;
 		}
-		
+
 		public void addToInvalidProcesses(PPMProcess process) {
 			invalidProcesses.add(process);
 		}
@@ -159,36 +158,36 @@ public class ImportProcessesAction extends FlexoAction<ImportProcessesAction, Fl
 		public Vector<PPMProcess> getAlreadyImportedProcesses() {
 			return alreadyImportedProcesses;
 		}
-		
+
 		public void setAlreadyImportedProcesses(Vector<PPMProcess> invalidProcess) {
 			this.alreadyImportedProcesses = invalidProcess;
 		}
-		
+
 		public void addToAlreadyImportedProcesses(PPMProcess process) {
 			alreadyImportedProcesses.add(process);
 		}
-		
+
 		@Override
 		public String toString() {
 			StringBuilder sb = new StringBuilder();
 			// 1. Properly imported
 			Iterator<PPMProcess> i = getProperlyImported().keySet().iterator();
-			append(sb,i,FlexoLocalization.localizedForKey("the_following_processes_have_been_properly_imported"));
+			append(sb, i, FlexoLocalization.localizedForKey("the_following_processes_have_been_properly_imported"));
 			// 2. Invalid roles
 			i = getInvalidProcesses().iterator();
-			append(sb,i,FlexoLocalization.localizedForKey("the_following_processes_were_not_valid"));
+			append(sb, i, FlexoLocalization.localizedForKey("the_following_processes_were_not_valid"));
 			// 3. Already imported
 			i = getAlreadyImportedProcesses().iterator();
-			append(sb,i,FlexoLocalization.localizedForKey("the_following_processes_were_already_imported"));
-			if (sb.length()==0)
+			append(sb, i, FlexoLocalization.localizedForKey("the_following_processes_were_already_imported"));
+			if (sb.length() == 0)
 				return FlexoLocalization.localizedForKey("nothing_has_been_imported");
-			else 
+			else
 				sb.append("</html>");
 			return sb.toString();
 		}
-		
-		private void append(StringBuilder sb,Iterator<PPMProcess> i,String title) {
-			if (sb.length()==0)
+
+		private void append(StringBuilder sb, Iterator<PPMProcess> i, String title) {
+			if (sb.length() == 0)
 				sb.append("<html>");
 			boolean needsClosingUl = false;
 			if (i.hasNext()) {
@@ -204,7 +203,7 @@ public class ImportProcessesAction extends FlexoAction<ImportProcessesAction, Fl
 				needsClosingUl = false;
 			}
 		}
-		
+
 	}
-	
+
 }

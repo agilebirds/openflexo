@@ -24,38 +24,33 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ws.ExternalWSService;
 
+public class ExternalWSServiceElement extends BrowserElement {
 
+	/**
+	 * @param object
+	 * @param elementType
+	 * @param browser
+	 */
+	public ExternalWSServiceElement(ExternalWSService object, ProjectBrowser browser, BrowserElement parent) {
+		super(object, BrowserElementType.EXTERNAL_WS_SERVICE, browser, parent);
+	}
 
-public class ExternalWSServiceElement extends BrowserElement
-{
+	/**
+	 * Overrides buildChildrenVector
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
+	 */
+	@Override
+	protected void buildChildrenVector() {
+		ExternalWSService g = (ExternalWSService) getObject();
+		addToChilds(g.getWSPortTypeFolder());
+		addToChilds(g.getWSRepositoryFolder());
+	}
 
-    /**
-     * @param object
-     * @param elementType
-     * @param browser
-     */
-    public ExternalWSServiceElement(ExternalWSService object, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(object, BrowserElementType.EXTERNAL_WS_SERVICE, browser, parent);
-    }
-
-    /**
-     * Overrides buildChildrenVector
-     *
-     * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
-     */
-    @Override
-	protected void buildChildrenVector()
-    {
-        ExternalWSService g = (ExternalWSService) getObject();
-        addToChilds(g.getWSPortTypeFolder());
-        addToChilds(g.getWSRepositoryFolder());
-    }
-
-    @Override
+	@Override
 	public String getName() {
-    	// TODO Auto-generated method stub
-    		return ((ExternalWSService)getObject()).getName();
-    }
+		// TODO Auto-generated method stub
+		return ((ExternalWSService) getObject()).getName();
+	}
 
 }

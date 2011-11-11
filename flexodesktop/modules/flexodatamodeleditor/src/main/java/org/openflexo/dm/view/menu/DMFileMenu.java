@@ -21,7 +21,6 @@ package org.openflexo.dm.view.menu;
 
 import javax.swing.JMenu;
 
-
 import org.openflexo.dataimporter.DataImporterLoader.KnownDataImporter;
 import org.openflexo.dm.view.controller.DMController;
 import org.openflexo.foundation.dm.action.CreateDMRepository;
@@ -37,47 +36,43 @@ import org.openflexo.module.ModuleLoader;
 import org.openflexo.view.menu.FileMenu;
 import org.openflexo.view.menu.FlexoMenuItem;
 
-public class DMFileMenu extends FileMenu
-{
+public class DMFileMenu extends FileMenu {
 
-    protected DMController _controller;
+	protected DMController _controller;
 
-    public DMFileMenu(DMController controller)
-    {
-        super(controller);
-        _controller = controller;
-     }
+	public DMFileMenu(DMController controller) {
+		super(controller);
+		_controller = controller;
+	}
 
-    public DMController getDMController()
-    {
-        return _controller;
-    }
+	public DMController getDMController() {
+		return _controller;
+	}
 
-    @Override
-	public void addSpecificItems()
-    {
-        JMenu newMenu = new JMenu();
-        newMenu.setText(FlexoLocalization.localizedForKey("new",newMenu));
-        newMenu.add(new FlexoMenuItem(CreateDMRepository.actionType, getController()));
-        newMenu.addSeparator();
-        newMenu.add(new FlexoMenuItem(CreateProjectRepository.actionType, getController()));
-        newMenu.add(new FlexoMenuItem(CreateProjectDatabaseRepository.actionType, getController()));
-        
-        JMenu importMenu = new JMenu();
-        importMenu.setText(FlexoLocalization.localizedForKey("import",importMenu));
-        importMenu.add(new FlexoMenuItem(ImportExternalDatabaseRepository.actionType, getController()));
-        if(ModuleLoader.isDevelopperRelease()||ModuleLoader.isMaintainerRelease()){
-        	importMenu.add(new FlexoMenuItem(ImportJARFileRepository.actionType, getController()));
-        	if (KnownDataImporter.RATIONAL_ROSE_IMPORTER.isAvailable())
-        		importMenu.add(new FlexoMenuItem(ImportRationalRoseRepository.actionType, getController()));
-        	//importMenu.add(new FlexoMenuItem(ImportDenaliFoundationRepository.actionType, getController()));
-        	importMenu.add(new FlexoMenuItem(ImportThesaurusRepository.actionType, getController()));
-        	importMenu.add(new FlexoMenuItem(ImportThesaurusDatabaseRepository.actionType, getController()));
-        }
-        add(newMenu);
-        add(importMenu);
-               
-        addSeparator();
-    }
-    
- }
+	@Override
+	public void addSpecificItems() {
+		JMenu newMenu = new JMenu();
+		newMenu.setText(FlexoLocalization.localizedForKey("new", newMenu));
+		newMenu.add(new FlexoMenuItem(CreateDMRepository.actionType, getController()));
+		newMenu.addSeparator();
+		newMenu.add(new FlexoMenuItem(CreateProjectRepository.actionType, getController()));
+		newMenu.add(new FlexoMenuItem(CreateProjectDatabaseRepository.actionType, getController()));
+
+		JMenu importMenu = new JMenu();
+		importMenu.setText(FlexoLocalization.localizedForKey("import", importMenu));
+		importMenu.add(new FlexoMenuItem(ImportExternalDatabaseRepository.actionType, getController()));
+		if (ModuleLoader.isDevelopperRelease() || ModuleLoader.isMaintainerRelease()) {
+			importMenu.add(new FlexoMenuItem(ImportJARFileRepository.actionType, getController()));
+			if (KnownDataImporter.RATIONAL_ROSE_IMPORTER.isAvailable())
+				importMenu.add(new FlexoMenuItem(ImportRationalRoseRepository.actionType, getController()));
+			// importMenu.add(new FlexoMenuItem(ImportDenaliFoundationRepository.actionType, getController()));
+			importMenu.add(new FlexoMenuItem(ImportThesaurusRepository.actionType, getController()));
+			importMenu.add(new FlexoMenuItem(ImportThesaurusDatabaseRepository.actionType, getController()));
+		}
+		add(newMenu);
+		add(importMenu);
+
+		addSeparator();
+	}
+
+}

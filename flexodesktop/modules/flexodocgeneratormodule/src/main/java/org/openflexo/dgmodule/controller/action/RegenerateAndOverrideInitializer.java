@@ -22,7 +22,6 @@ package org.openflexo.dgmodule.controller.action;
 import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
-
 import org.openflexo.dgmodule.view.DGMainPane;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -34,30 +33,25 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 public class RegenerateAndOverrideInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RegenerateAndOverrideInitializer(DGControllerActionInitializer actionInitializer)
-	{
-		super(RegenerateAndOverride.actionType,actionInitializer);
+	RegenerateAndOverrideInitializer(DGControllerActionInitializer actionInitializer) {
+		super(RegenerateAndOverride.actionType, actionInitializer);
 	}
 
 	@Override
-	protected DGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DGControllerActionInitializer)super.getControllerActionInitializer();
+	protected DGControllerActionInitializer getControllerActionInitializer() {
+		return (DGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<RegenerateAndOverride> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<RegenerateAndOverride> getDefaultInitializer() {
 		return new FlexoActionInitializer<RegenerateAndOverride>() {
 			@Override
-			public boolean run(ActionEvent e, RegenerateAndOverride action)
-			{
-				((DGMainPane)getController().getMainPane()).getDgBrowserView().getBrowser().setHoldStructure();
+			public boolean run(ActionEvent e, RegenerateAndOverride action) {
+				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().setHoldStructure();
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
 					return false;
@@ -68,27 +62,24 @@ public class RegenerateAndOverrideInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<RegenerateAndOverride> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<RegenerateAndOverride> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RegenerateAndOverride>() {
 			@Override
-			public boolean run(ActionEvent e, RegenerateAndOverride action)
-			{
-				((DGMainPane)getController().getMainPane()).getDgBrowserView().getBrowser().resetHoldStructure();
-				((DGMainPane)getController().getMainPane()).getDgBrowserView().getBrowser().update();
+			public boolean run(ActionEvent e, RegenerateAndOverride action) {
+				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().resetHoldStructure();
+				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().update();
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoExceptionHandler<RegenerateAndOverride> getDefaultExceptionHandler() 
-	{
+	protected FlexoExceptionHandler<RegenerateAndOverride> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<RegenerateAndOverride>() {
 			@Override
 			public boolean handleException(FlexoException exception, RegenerateAndOverride action) {
-				((DGMainPane)getController().getMainPane()).getDgBrowserView().getBrowser().resetHoldStructure();
-				((DGMainPane)getController().getMainPane()).getDgBrowserView().getBrowser().update();
+				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().resetHoldStructure();
+				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().update();
 				getControllerActionInitializer().getDGController().disposeProgressWindow();
 				exception.printStackTrace();
 				FlexoController.showError(FlexoLocalization.localizedForKey("code_generation_synchronization_for_repository_failed")

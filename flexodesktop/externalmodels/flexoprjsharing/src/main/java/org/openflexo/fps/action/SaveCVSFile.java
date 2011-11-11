@@ -29,56 +29,47 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.fps.CVSFile;
 import org.openflexo.fps.FPSObject;
 
+public class SaveCVSFile extends CVSAction<SaveCVSFile, CVSFile> {
 
-public class SaveCVSFile extends CVSAction<SaveCVSFile,CVSFile>
-{
+	private static final Logger logger = Logger.getLogger(SaveCVSFile.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(SaveCVSFile.class.getPackage().getName());
+	public static FlexoActionType<SaveCVSFile, CVSFile, FPSObject> actionType = new FlexoActionType<SaveCVSFile, CVSFile, FPSObject>(
+			"save_file", EDITION_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType<SaveCVSFile,CVSFile,FPSObject> actionType 
-    = new FlexoActionType<SaveCVSFile,CVSFile,FPSObject> (
-    		"save_file",EDITION_GROUP,FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public SaveCVSFile makeNewAction(CVSFile focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {
+			return new SaveCVSFile(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public SaveCVSFile makeNewAction(CVSFile focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) 
-        {
-            return new SaveCVSFile(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(CVSFile object, Vector<FPSObject> globalSelection) {
+			return (object != null && object.getSharedProject() != null);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(CVSFile object, Vector<FPSObject> globalSelection) 
-        {
-            return (object != null && object.getSharedProject() != null);
-       }
+		@Override
+		protected boolean isEnabledForSelection(CVSFile object, Vector<FPSObject> globalSelection) {
+			return ((object != null) && (object.isEdited()));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(CVSFile object, Vector<FPSObject> globalSelection) 
-        {
-            return ((object != null) && (object.isEdited()));
-       }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (SaveCVSFile.actionType, CVSFile.class);
-    }
-    
+	};
 
-    SaveCVSFile (CVSFile focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	static {
+		FlexoModelObject.addActionForClass(SaveCVSFile.actionType, CVSFile.class);
+	}
 
-    @Override
-	protected void doAction(Object context) throws SaveResourceException
-    {
-    	logger.info ("Save edited file "+getFocusedObject().getFileName());
-    	if (getFocusedObject() != null) {
-    		getFocusedObject().save();
-     	}
-     }
-	
+	SaveCVSFile(CVSFile focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws SaveResourceException {
+		logger.info("Save edited file " + getFocusedObject().getFileName());
+		if (getFocusedObject() != null) {
+			getFocusedObject().save();
+		}
+	}
+
 }

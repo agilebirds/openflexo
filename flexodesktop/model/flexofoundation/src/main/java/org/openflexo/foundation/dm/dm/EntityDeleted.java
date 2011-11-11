@@ -26,19 +26,16 @@ import org.openflexo.foundation.dm.DMEntity;
  * 
  * @author sguerin
  */
-public class EntityDeleted extends DMDataModification
-{
+public class EntityDeleted extends DMDataModification {
 
-    private DMEntity entity;
+	private DMEntity entity;
 
-    public EntityDeleted(DMEntity entity)
-    {
-        super(entity, null);
-        this.entity = entity;
-    }
-    
-    public DMEntity getEntity()
-    {
-        return entity;
-    }
+	public EntityDeleted(DMEntity entity) {
+		super(entity, null);
+		this.entity = entity;
+	}
+
+	public DMEntity getEntity() {
+		return entity;
+	}
 }

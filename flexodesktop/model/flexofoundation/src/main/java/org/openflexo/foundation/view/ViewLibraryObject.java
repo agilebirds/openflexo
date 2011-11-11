@@ -23,71 +23,62 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.xmlcode.XMLMapping;
 
-
 /**
- * Abstract class implemented by all objects involved in Shema Library
- * coding
- *
+ * Abstract class implemented by all objects involved in Shema Library coding
+ * 
  * @author sguerin
- *
+ * 
  */
-public abstract class ViewLibraryObject extends AbstractViewObject
-{
+public abstract class ViewLibraryObject extends AbstractViewObject {
 
-    private ViewLibrary _shemaLibrary;
+	private ViewLibrary _shemaLibrary;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    /**
-     * Never use this constructor except for ComponentLibrary
-     */
-    public ViewLibraryObject(FlexoProject project)
-    {
-        super(project);
-    }
+	/**
+	 * Never use this constructor except for ComponentLibrary
+	 */
+	public ViewLibraryObject(FlexoProject project) {
+		super(project);
+	}
 
-    /**
-     * Default constructor
-     */
-    public ViewLibraryObject(ViewLibrary shemaLibrary)
-    {
-        super(shemaLibrary.getProject());
-        setShemaLibrary(shemaLibrary);
-    }
+	/**
+	 * Default constructor
+	 */
+	public ViewLibraryObject(ViewLibrary shemaLibrary) {
+		super(shemaLibrary.getProject());
+		setShemaLibrary(shemaLibrary);
+	}
 
-    public ViewLibrary getShemaLibrary()
-    {
-        return _shemaLibrary;
-    }
+	public ViewLibrary getShemaLibrary() {
+		return _shemaLibrary;
+	}
 
-    public void setShemaLibrary(ViewLibrary aShemaLibrary)
-    {
-        _shemaLibrary = aShemaLibrary;
-    }
+	public void setShemaLibrary(ViewLibrary aShemaLibrary) {
+		_shemaLibrary = aShemaLibrary;
+	}
 
-    /**
-     * Returns reference to the main object in which this XML-serializable
-     * object is contained relating to storing scheme: here it's the component
-     * library
-     *
-     * @return the component library
-     */
-    @Override
-    public XMLStorageResourceData getXMLResourceData()
-    {
-        return getShemaLibrary();
-    }
+	/**
+	 * Returns reference to the main object in which this XML-serializable object is contained relating to storing scheme: here it's the
+	 * component library
+	 * 
+	 * @return the component library
+	 */
+	@Override
+	public XMLStorageResourceData getXMLResourceData() {
+		return getShemaLibrary();
+	}
 
-    /**
-     * Overrides getXMLMapping
-     * @see org.openflexo.foundation.ie.IEObject#getXMLMapping()
-     */
-    @Override
-    public XMLMapping getXMLMapping()
-    {
-        return getShemaLibrary().getXMLMapping();
-    }
+	/**
+	 * Overrides getXMLMapping
+	 * 
+	 * @see org.openflexo.foundation.ie.IEObject#getXMLMapping()
+	 */
+	@Override
+	public XMLMapping getXMLMapping() {
+		return getShemaLibrary().getXMLMapping();
+	}
 }

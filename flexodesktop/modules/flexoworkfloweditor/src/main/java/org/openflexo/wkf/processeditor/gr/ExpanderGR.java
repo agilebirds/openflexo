@@ -46,7 +46,6 @@ import org.openflexo.foundation.wkf.node.AbstractNode;
 import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
-
 public class ExpanderGR<O extends AbstractNode> extends ConnectorGraphicalRepresentation<ExpanderGR.Expander<O>> implements
 		ProcessEditorConstants {
 

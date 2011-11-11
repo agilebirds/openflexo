@@ -22,12 +22,11 @@ package org.openflexo.foundation.imported.dm;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.ws.client.PPMWebService.PPMRole;
 
-
 public class RoleAlreadyImportedException extends Exception {
 	private PPMRole attempt;
-	
+
 	private Role matching;
-	
+
 	public RoleAlreadyImportedException(PPMRole attempt, Role matchingProcess) {
 		this.attempt = attempt;
 		this.matching = matchingProcess;
@@ -40,6 +39,5 @@ public class RoleAlreadyImportedException extends Exception {
 	public Role getMatchingRole() {
 		return matching;
 	}
-	
 
 }

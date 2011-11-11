@@ -29,64 +29,54 @@ import org.openflexo.fge.geomedit.HalfPlane;
 import org.openflexo.fge.geomedit.construction.HalfPlaneWithLineAndPointConstruction;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
 
-
-
 public class CreateHalfPlaneWithLineAndPoint extends Edition {
-	
-    private static final Logger logger = Logger.getLogger(CreateHalfPlaneWithLineAndPoint.class.getPackage().getName());
+
+	private static final Logger logger = Logger.getLogger(CreateHalfPlaneWithLineAndPoint.class.getPackage().getName());
 
 	public CreateHalfPlaneWithLineAndPoint(GeomEditController controller) {
-		super("Create half-plane with line and point",controller);
-		inputs.add(new ObtainLine("Select a line delimiting half-plane",controller));
-		inputs.add(new ObtainPoint("Select point inside half-plane",controller));
+		super("Create half-plane with line and point", controller);
+		inputs.add(new ObtainLine("Select a line delimiting half-plane", controller));
+		inputs.add(new ObtainPoint("Select point inside half-plane", controller));
 	}
-	
+
 	@Override
-	public void performEdition()
-	{		
-		ObtainLine l = (ObtainLine)inputs.get(0);
-		ObtainPoint p = (ObtainPoint)inputs.get(1);
-		
-		addObject (new HalfPlane(
-					getController().getDrawing().getModel(),
-				new HalfPlaneWithLineAndPointConstruction(l.getConstruction(),p.getConstruction())));
+	public void performEdition() {
+		ObtainLine l = (ObtainLine) inputs.get(0);
+		ObtainPoint p = (ObtainPoint) inputs.get(1);
+
+		addObject(new HalfPlane(getController().getDrawing().getModel(), new HalfPlaneWithLineAndPointConstruction(l.getConstruction(),
+				p.getConstruction())));
 
 	}
-	
+
 	private FGEHalfPlane hpToPaint = null;
 	private boolean requireRepaint = true;
-	
+
 	@Override
-	public void paintEdition(FGEDrawingGraphics graphics,FGEPoint lastMouseLocation)
-	{
+	public void paintEdition(FGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		if (currentStep == 0) {
 			// Nothing to draw
-		}
-		else if (currentStep == 1) {
-			FGELine line = ((ObtainLine)inputs.get(0)).getInputData();
+		} else if (currentStep == 1) {
+			FGELine line = ((ObtainLine) inputs.get(0)).getInputData();
 			graphics.setDefaultForeground(focusedForegroundStyle);
 			graphics.setDefaultBackground(focusedBackgroundStyle);
-			FGEHalfPlane hp = new FGEHalfPlane(line,lastMouseLocation);
+			FGEHalfPlane hp = new FGEHalfPlane(line, lastMouseLocation);
 			hp.paint(graphics);
 		}
 	}
-	
+
 	@Override
-	public boolean requireRepaint(FGEPoint lastMouseLocation)
-	{
+	public boolean requireRepaint(FGEPoint lastMouseLocation) {
 		if (currentStep == 1) {
-			FGELine line = ((ObtainLine)inputs.get(0)).getInputData();
-			FGEHalfPlane hp = new FGEHalfPlane(line,lastMouseLocation.clone());
+			FGELine line = ((ObtainLine) inputs.get(0)).getInputData();
+			FGEHalfPlane hp = new FGEHalfPlane(line, lastMouseLocation.clone());
 			if (hpToPaint == null || !hpToPaint.equals(hp)) {
 				hpToPaint = hp;
 				requireRepaint = true;
-			}
-			else {
+			} else {
 				requireRepaint = false;
 			}
 		}
 		return requireRepaint;
 	}
 }
-
-

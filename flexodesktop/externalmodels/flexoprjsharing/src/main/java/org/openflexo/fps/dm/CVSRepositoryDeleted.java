@@ -21,11 +21,8 @@ package org.openflexo.fps.dm;
 
 import org.openflexo.fps.CVSRepository;
 
-
-public class CVSRepositoryDeleted extends FPSDataModification
-{
-    public CVSRepositoryDeleted(CVSRepository repository)
-    {
-        super(repository,null);
-    }
+public class CVSRepositoryDeleted extends FPSDataModification {
+	public CVSRepositoryDeleted(CVSRepository repository) {
+		super(repository, null);
+	}
 }

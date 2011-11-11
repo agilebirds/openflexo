@@ -43,23 +43,23 @@ public class UploadPrjAction extends FlexoAction<UploadPrjAction, FlexoProject, 
 	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(UploadPrjAction.class.getPackage().getName());
 
-	public static final FlexoActionType<UploadPrjAction, FlexoProject, FlexoProject> actionType =
-		new FlexoActionType<UploadPrjAction, FlexoProject, FlexoProject>("upload_prj",FlexoActionType.defaultGroup) {
+	public static final FlexoActionType<UploadPrjAction, FlexoProject, FlexoProject> actionType = new FlexoActionType<UploadPrjAction, FlexoProject, FlexoProject>(
+			"upload_prj", FlexoActionType.defaultGroup) {
 
-			@Override
-			public UploadPrjAction makeNewAction(FlexoProject focusedObject, Vector<FlexoProject> globalSelection, FlexoEditor editor) {
-				return new UploadPrjAction(focusedObject,globalSelection,editor);
-			}
+		@Override
+		public UploadPrjAction makeNewAction(FlexoProject focusedObject, Vector<FlexoProject> globalSelection, FlexoEditor editor) {
+			return new UploadPrjAction(focusedObject, globalSelection, editor);
+		}
 
-			@Override
-			protected boolean isVisibleForSelection(FlexoProject object, Vector<FlexoProject> globalSelection) {
-				return true;
-			}
+		@Override
+		protected boolean isVisibleForSelection(FlexoProject object, Vector<FlexoProject> globalSelection) {
+			return true;
+		}
 
-			@Override
-			protected boolean isEnabledForSelection(FlexoProject object, Vector<FlexoProject> globalSelection) {
-				return true;
-			}
+		@Override
+		protected boolean isEnabledForSelection(FlexoProject object, Vector<FlexoProject> globalSelection) {
+			return true;
+		}
 	};
 
 	static {
@@ -72,8 +72,7 @@ public class UploadPrjAction extends FlexoAction<UploadPrjAction, FlexoProject, 
 	private File zippedPrj;
 	private String _comments;
 
-	protected UploadPrjAction(FlexoProject focusedObject,
-			Vector<FlexoProject> globalSelection, FlexoEditor editor) {
+	protected UploadPrjAction(FlexoProject focusedObject, Vector<FlexoProject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -81,13 +80,14 @@ public class UploadPrjAction extends FlexoAction<UploadPrjAction, FlexoProject, 
 	protected void doAction(Object context) throws FlexoException {
 		DataHandler zip = new DataHandler(new FileDataSource(zippedPrj));
 		try {
-			uploadReport = client.uploadPrj(target, zip, _comments!=null && _comments.trim().length()>0 ?_comments:"direct upload from flexo", client.getLogin());
+			uploadReport = client.uploadPrj(target, zip, _comments != null && _comments.trim().length() > 0 ? _comments
+					: "direct upload from flexo", client.getLogin());
 		} catch (PPMWebServiceAuthentificationException e) {
 			e.printStackTrace();
-			throw new FlexoException(e.getMessage(),e);
+			throw new FlexoException(e.getMessage(), e);
 		} catch (RemoteException e) {
 			e.printStackTrace();
-			throw new FlexoException(e.getMessage(),e);
+			throw new FlexoException(e.getMessage(), e);
 		}
 	}
 
@@ -99,9 +99,10 @@ public class UploadPrjAction extends FlexoAction<UploadPrjAction, FlexoProject, 
 		this.target = target;
 	}
 
-	public void setClientWS(PPMWebServiceClient client){
+	public void setClientWS(PPMWebServiceClient client) {
 		this.client = client;
 	}
+
 	public void setFile(File zipFile) {
 		zippedPrj = zipFile;
 	}

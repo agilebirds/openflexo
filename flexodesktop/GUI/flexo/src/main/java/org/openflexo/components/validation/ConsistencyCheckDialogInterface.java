@@ -23,12 +23,12 @@ import org.openflexo.view.controller.ConsistencyCheckingController;
 
 public interface ConsistencyCheckDialogInterface {
 
-    public ConsistencyCheckingController getController();
+	public ConsistencyCheckingController getController();
 
-    public void toFront();
+	public void toFront();
 
-    public void hide();
+	public void hide();
 
-    public void dispose();
+	public void dispose();
 
 }

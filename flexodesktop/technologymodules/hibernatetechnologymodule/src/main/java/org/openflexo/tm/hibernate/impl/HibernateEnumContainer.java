@@ -21,7 +21,7 @@ import org.openflexo.foundation.sg.implmodel.event.SGObjectRemovedFromListModifi
 import org.openflexo.foundation.xml.ImplementationModelBuilder;
 
 /**
- *
+ * 
  * @author Nicolas Daniels
  */
 public class HibernateEnumContainer extends TechnologyModelObject implements FlexoObserver {
@@ -39,7 +39,8 @@ public class HibernateEnumContainer extends TechnologyModelObject implements Fle
 	 * Build a new Hibernate enum container for the specified implementation model builder.<br/>
 	 * This constructor is namely invoked during unserialization.
 	 * 
-	 * @param builder the builder that will create this enum container
+	 * @param builder
+	 *            the builder that will create this enum container
 	 */
 	public HibernateEnumContainer(ImplementationModelBuilder builder) {
 		this(builder.implementationModel);
@@ -49,7 +50,8 @@ public class HibernateEnumContainer extends TechnologyModelObject implements Fle
 	/**
 	 * Build a new Hibernate enum container for the specified implementation model.
 	 * 
-	 * @param implementationModel the implementation model where to create this enum container
+	 * @param implementationModel
+	 *            the implementation model where to create this enum container
 	 */
 	public HibernateEnumContainer(ImplementationModel implementationModel) {
 		super(implementationModel);

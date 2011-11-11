@@ -33,7 +33,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
@@ -96,7 +95,6 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.ws.client.PPMWebService.PPMProcess;
-
 
 /**
  * A FlexoWorkflow represent all the processes defined in corresponding project, and their hierarchy. A FlexoWorkflow always codes one and

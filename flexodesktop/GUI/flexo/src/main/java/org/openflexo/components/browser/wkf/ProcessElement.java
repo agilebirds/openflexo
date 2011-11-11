@@ -35,7 +35,6 @@ import org.openflexo.icon.IconMarker;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 
-
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
@@ -55,46 +54,44 @@ import org.openflexo.foundation.wkf.ws.ServiceInterface;
 
 /**
  * Browser element representing a process
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class ProcessElement extends BrowserElement
-{
-    static final Logger logger = Logger.getLogger(OperationNodeElement.class.getPackage().getName());
+public class ProcessElement extends BrowserElement {
+	static final Logger logger = Logger.getLogger(OperationNodeElement.class.getPackage().getName());
 
-    public ProcessElement(FlexoProcess process, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(process, BrowserElementType.PROCESS, browser, parent);
-    }
+	public ProcessElement(FlexoProcess process, ProjectBrowser browser, BrowserElement parent) {
+		super(process, BrowserElementType.PROCESS, browser, parent);
+	}
 
-    private boolean isObserving = false;
+	private boolean isObserving = false;
 
-    private void addObserver()
-    {
-        if (isObserving)
-            return;
-        if(getFlexoProcess().getProcessNode() != null)
-        	getFlexoProcess().getProcessNode().addObserver(this);
-        if (getFlexoProcess().getActivityPetriGraph() != null) {
-            getFlexoProcess().getActivityPetriGraph().addObserver(this);
-            isObserving = true;
-        }
-    }
-    @Override
-    public void delete() {
-    	if(getFlexoProcess().getProcessNode() != null)
-    		getFlexoProcess().getProcessNode().deleteObserver(this);
-    	if (getFlexoProcess().getActivityPetriGraph() != null) {
-            getFlexoProcess().getActivityPetriGraph().deleteObserver(this);
-            isObserving = false;
-        }
-    	super.delete();
-    }
-    @Override
-	protected void buildChildrenVector()
-    {
-        if (logger.isLoggable(Level.FINER))
+	private void addObserver() {
+		if (isObserving)
+			return;
+		if (getFlexoProcess().getProcessNode() != null)
+			getFlexoProcess().getProcessNode().addObserver(this);
+		if (getFlexoProcess().getActivityPetriGraph() != null) {
+			getFlexoProcess().getActivityPetriGraph().addObserver(this);
+			isObserving = true;
+		}
+	}
+
+	@Override
+	public void delete() {
+		if (getFlexoProcess().getProcessNode() != null)
+			getFlexoProcess().getProcessNode().deleteObserver(this);
+		if (getFlexoProcess().getActivityPetriGraph() != null) {
+			getFlexoProcess().getActivityPetriGraph().deleteObserver(this);
+			isObserving = false;
+		}
+		super.delete();
+	}
+
+	@Override
+	protected void buildChildrenVector() {
+		if (logger.isLoggable(Level.FINER))
 			logger.finer("Building children for process " + getName());
 
 		if (isImported()) {
@@ -124,11 +121,11 @@ public class ProcessElement extends BrowserElement
 		// We add SubProcesses
 		if (getFlexoProcess().getProcessNode() != null) {
 
-			for(Enumeration<ProcessFolder> en = getFlexoProcess().getProcessNode().getSortedFolders();en.hasMoreElements();) {
-	    		addToChilds(en.nextElement());
-	    	}
-	    	for (Enumeration<FlexoProcessNode> en = getFlexoProcess().getProcessNode().getSortedOrphanSubprocesses();en.hasMoreElements();)
-	   			addToChilds(en.nextElement().getProcess());
+			for (Enumeration<ProcessFolder> en = getFlexoProcess().getProcessNode().getSortedFolders(); en.hasMoreElements();) {
+				addToChilds(en.nextElement());
+			}
+			for (Enumeration<FlexoProcessNode> en = getFlexoProcess().getProcessNode().getSortedOrphanSubprocesses(); en.hasMoreElements();)
+				addToChilds(en.nextElement().getProcess());
 		}
 		// We add sub-process nodes and we add activity nodes
 		if (getFlexoProcess().getActivityPetriGraph() != null) {
@@ -150,38 +147,38 @@ public class ProcessElement extends BrowserElement
 		 * addToChilds(eventNode); }
 		 */
 		// logger.info("STOP buildChildrenVector()");
-    }
+	}
 
-    @Override
-    public Icon getIcon() {
-    	Icon icon = super.getIcon();
-    	IconMarker[] markers = getIconMarkers();
-    	if (markers!=null)
-    		return IconFactory.getImageIcon((ImageIcon) icon, markers);
-    	return icon;
-    }
+	@Override
+	public Icon getIcon() {
+		Icon icon = super.getIcon();
+		IconMarker[] markers = getIconMarkers();
+		if (markers != null)
+			return IconFactory.getImageIcon((ImageIcon) icon, markers);
+		return icon;
+	}
 
-    private IconMarker[] getIconMarkers() {
-    	int count = 0;
-    	if (isImported()) {
-    		count++;
-    		if (getFlexoProcess().isDeletedOnServer())
-    			count++;
-    	} else if(getFlexoProcess().getIsWebService()) {
-    		count++;
-    	}
-    	IconMarker[] markers = null;
-    	if (count>0)
-    		markers = new IconMarker[count];
-    	if (isImported()) {
-    		markers[0] = IconLibrary.IMPORT;
-    		if (getFlexoProcess().isDeletedOnServer())
-    			markers[1] = IconLibrary.WARNING;
-    	} else if(getFlexoProcess().getIsWebService()) {
-    		markers[0] = WKFIconLibrary.WS_MARKER;
-    	}
-    	return markers;
-    }
+	private IconMarker[] getIconMarkers() {
+		int count = 0;
+		if (isImported()) {
+			count++;
+			if (getFlexoProcess().isDeletedOnServer())
+				count++;
+		} else if (getFlexoProcess().getIsWebService()) {
+			count++;
+		}
+		IconMarker[] markers = null;
+		if (count > 0)
+			markers = new IconMarker[count];
+		if (isImported()) {
+			markers[0] = IconLibrary.IMPORT;
+			if (getFlexoProcess().isDeletedOnServer())
+				markers[1] = IconLibrary.WARNING;
+		} else if (getFlexoProcess().getIsWebService()) {
+			markers[0] = WKFIconLibrary.WS_MARKER;
+		}
+		return markers;
+	}
 
 	/**
 	 * @return
@@ -190,61 +187,56 @@ public class ProcessElement extends BrowserElement
 		return getFlexoProcess().isImported();
 	}
 
-    @Override
-	public String getName()
-    {
-        return getFlexoProcess().getName();
-    }
+	@Override
+	public String getName() {
+		return getFlexoProcess().getName();
+	}
 
-    public FlexoProcess getFlexoProcess()
-    {
-        return (FlexoProcess) getObject();
-    }
+	public FlexoProcess getFlexoProcess() {
+		return (FlexoProcess) getObject();
+	}
 
-    @Override
-    public String getToolTip() {
-    	if (getFlexoProcess().isDeletedOnServer()) {
-    		return FlexoLocalization.localizedForKey("object_is_no_more_available_in_portfolio");
-    	} else
-    		return null;
-    }
+	@Override
+	public String getToolTip() {
+		if (getFlexoProcess().isDeletedOnServer()) {
+			return FlexoLocalization.localizedForKey("object_is_no_more_available_in_portfolio");
+		} else
+			return null;
+	}
 
-    @Override
-	public boolean isNameEditable()
-    {
-        return !isImported();
-    }
+	@Override
+	public boolean isNameEditable() {
+		return !isImported();
+	}
 
-    @Override
-	public String getSuffixName()
-    {
-        if (getFlexoProcess().isRootProcess())
-        	return "[ROOT]";
-        else
-        	return super.getSuffixName();
-    }
+	@Override
+	public String getSuffixName() {
+		if (getFlexoProcess().isRootProcess())
+			return "[ROOT]";
+		else
+			return super.getSuffixName();
+	}
 
-    @Override
-	public void setName(String aName) throws FlexoException
-    {
-    	if (isImported())
-    		return;
-        try {
-            getFlexoProcess().setName(aName);
-        } catch (DuplicateResourceException e) {
-            // Abort
-        	throw new FlexoException(e.getLocalizedMessage(), e);
-        } catch (InvalidNameException e) {
-        	throw new FlexoException(e.getLocalizedMessage(), e);
+	@Override
+	public void setName(String aName) throws FlexoException {
+		if (isImported())
+			return;
+		try {
+			getFlexoProcess().setName(aName);
+		} catch (DuplicateResourceException e) {
+			// Abort
+			throw new FlexoException(e.getLocalizedMessage(), e);
+		} catch (InvalidNameException e) {
+			throw new FlexoException(e.getLocalizedMessage(), e);
 		}
-    }
+	}
 
-    @Override
-    public void update(FlexoObservable observable, DataModification dataModification) {
-    	 if (observable == getFlexoProcess() && "isDeletedOnServer".equals(dataModification.propertyName()))
-         	refreshWhenPossible();
-    	 else if (dataModification instanceof ProcessRemovedFromFolder || dataModification instanceof ProcessAddedToFolder)
-    		 refreshWhenPossible();
-    	 super.update(observable, dataModification);
-    }
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (observable == getFlexoProcess() && "isDeletedOnServer".equals(dataModification.propertyName()))
+			refreshWhenPossible();
+		else if (dataModification instanceof ProcessRemovedFromFolder || dataModification instanceof ProcessAddedToFolder)
+			refreshWhenPossible();
+		super.update(observable, dataModification);
+	}
 }

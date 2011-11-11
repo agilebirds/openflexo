@@ -41,24 +41,20 @@ public class AddLanguageInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddLanguageInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(AddLanguageAction.actionType,actionInitializer);
+	AddLanguageInitializer(IEControllerActionInitializer actionInitializer) {
+		super(AddLanguageAction.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<AddLanguageAction> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<AddLanguageAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddLanguageAction>() {
 			@Override
-			public boolean run(ActionEvent e, AddLanguageAction action)
-			{
+			public boolean run(ActionEvent e, AddLanguageAction action) {
 				DKVModel model = (action.getFocusedObject()).getDkvModel();
 				boolean ok = false;
 				while (!ok) {
@@ -86,12 +82,10 @@ public class AddLanguageInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<AddLanguageAction> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<AddLanguageAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddLanguageAction>() {
 			@Override
-			public boolean run(ActionEvent e, AddLanguageAction action)
-			{
+			public boolean run(ActionEvent e, AddLanguageAction action) {
 				getControllerActionInitializer().getIEController().getIESelectionManager().setSelectedObject((action).getNewLanguage());
 				// getController().setCurrentEditedObjectAsModuleView(((AddLanguageAction)
 				// action).getNewLanguage());
@@ -101,10 +95,8 @@ public class AddLanguageInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return SEIconLibrary.LANGUAGE_ICON;
 	}
-
 
 }

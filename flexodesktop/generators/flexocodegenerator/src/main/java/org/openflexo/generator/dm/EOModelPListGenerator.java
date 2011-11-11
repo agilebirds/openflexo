@@ -42,96 +42,91 @@ import org.openflexo.toolbox.FileUtils;
  * @author gpolet
  * 
  */
-public class EOModelPListGenerator extends MetaFileGenerator
-{
+public class EOModelPListGenerator extends MetaFileGenerator {
 
-    private static final Logger logger = FlexoLogger.getLogger(EOModelPListGenerator.class.getPackage().getName());
-    public String pListCache = "";
+	private static final Logger logger = FlexoLogger.getLogger(EOModelPListGenerator.class.getPackage().getName());
+	public String pListCache = "";
 
-    private final DMEOModel _dmeoModel;
-    /**
-     * @param projectGenerator
-     * @param object
-     */
-    public EOModelPListGenerator(ProjectGenerator projectGenerator, DMEOModel object)
-    {
-        super(projectGenerator, FileFormat.PLIST, ResourceType.EOMODEL,"index.eomodeld","INDEX_PLIST." +object.getName());
-        
-        _dmeoModel = object;
-    }
+	private final DMEOModel _dmeoModel;
 
-    /**
-     * Overrides buildResourcesAndSetGenerators
-     * 
-     * @see org.openflexo.generator.CGGenerator#buildResourcesAndSetGenerators(org.openflexo.foundation.cg.CGRepository,
-     *      Vector)
-     */
-    @Override
-    public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources)
-    {
-        // PList file
-    	textResource = GeneratedFileResourceFactory.createNewModelPlistFileResource(repository, this);
-        resources.add(textResource);
-    }
+	/**
+	 * @param projectGenerator
+	 * @param object
+	 */
+	public EOModelPListGenerator(ProjectGenerator projectGenerator, DMEOModel object) {
+		super(projectGenerator, FileFormat.PLIST, ResourceType.EOMODEL, "index.eomodeld", "INDEX_PLIST." + object.getName());
 
-    /**
-     * @return
-     */
-    public DMEOModel getModel()
-    {
-        return _dmeoModel;
-    }
+		_dmeoModel = object;
+	}
 
-    /**
-     * Overrides generate
-     * 
-     * @see org.openflexo.generator.CGGenerator#generate(boolean)
-     */
-    @Override
-    public void generate(boolean forceRegenerate)
-    {
-    	if (!forceRegenerate && !needsGeneration()) {
+	/**
+	 * Overrides buildResourcesAndSetGenerators
+	 * 
+	 * @see org.openflexo.generator.CGGenerator#buildResourcesAndSetGenerators(org.openflexo.foundation.cg.CGRepository, Vector)
+	 */
+	@Override
+	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
+		// PList file
+		textResource = GeneratedFileResourceFactory.createNewModelPlistFileResource(repository, this);
+		resources.add(textResource);
+	}
+
+	/**
+	 * @return
+	 */
+	public DMEOModel getModel() {
+		return _dmeoModel;
+	}
+
+	/**
+	 * Overrides generate
+	 * 
+	 * @see org.openflexo.generator.CGGenerator#generate(boolean)
+	 */
+	@Override
+	public void generate(boolean forceRegenerate) {
+		if (!forceRegenerate && !needsGeneration()) {
 			return;
 		}
-        startGeneration();
-        try {
-        	pListCache = generatePList();
-            generatedCode = new GeneratedTextResource(getModel().getName(), pListCache);
-        } catch (CayenneRuntimeException cre) {
-            cre.printStackTrace();
-            try {
-            	generatedCode = new GeneratedTextResource(getModel().getName(), FileUtils
-                        .fileContents(getModel().getEOModel().getIndexFile()));
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
-        stopGeneration();
-    }
+		startGeneration();
+		try {
+			pListCache = generatePList();
+			generatedCode = new GeneratedTextResource(getModel().getName(), pListCache);
+		} catch (CayenneRuntimeException cre) {
+			cre.printStackTrace();
+			try {
+				generatedCode = new GeneratedTextResource(getModel().getName(), FileUtils.fileContents(getModel().getEOModel()
+						.getIndexFile()));
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+		stopGeneration();
+	}
 
-    @Override
-    public boolean needsRegenerationBecauseOfTemplateUpdated() {
-    	return false;
-    }
-    
-    @Override
-    public boolean needsRegenerationBecauseOfTemplateUpdated(Date diskLastGenerationDate) {
-    	return false;
-    }
-    
-    public String generatePList() throws CayenneRuntimeException{
-    	return getModel().getEOModel().getPListRepresentation();
-    }
-    /**
-     * Overrides getGeneratorLogger
-     * 
-     * @see org.openflexo.generator.CGGenerator#getGeneratorLogger()
-     */
-    @Override
-    public Logger getGeneratorLogger()
-    {
-        return logger;
-    }
+	@Override
+	public boolean needsRegenerationBecauseOfTemplateUpdated() {
+		return false;
+	}
+
+	@Override
+	public boolean needsRegenerationBecauseOfTemplateUpdated(Date diskLastGenerationDate) {
+		return false;
+	}
+
+	public String generatePList() throws CayenneRuntimeException {
+		return getModel().getEOModel().getPListRepresentation();
+	}
+
+	/**
+	 * Overrides getGeneratorLogger
+	 * 
+	 * @see org.openflexo.generator.CGGenerator#getGeneratorLogger()
+	 */
+	@Override
+	public Logger getGeneratorLogger() {
+		return logger;
+	}
 
 	@Override
 	public String getRelativePath() {

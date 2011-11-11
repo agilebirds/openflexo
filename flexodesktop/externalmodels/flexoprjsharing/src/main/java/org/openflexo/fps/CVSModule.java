@@ -49,19 +49,16 @@ import org.openflexo.fps.dm.CVSModuleForgotten;
 import org.openflexo.fps.dm.HasCVSExplored;
 import org.openflexo.fps.dm.WillCVSExplore;
 
-
-public class CVSModule extends FPSObject implements CVSExplorable
-{
+public class CVSModule extends FPSObject implements CVSExplorable {
 	private static final Logger logger = Logger.getLogger(CVSModule.class.getPackage().getName());
 
 	private String _moduleName;
 	private CVSExplorable _parent;
-	
-	protected CVSModule(String moduleName, CVSExplorable parent)
-	{
+
+	protected CVSModule(String moduleName, CVSExplorable parent) {
 		super();
 		if (logger.isLoggable(Level.FINE))
-			logger.fine("Created module "+this+" ("+moduleName+") parent="+parent);
+			logger.fine("Created module " + this + " (" + moduleName + ") parent=" + parent);
 		_moduleName = moduleName;
 		_parent = parent;
 		_modules = new Vector<CVSModule>();
@@ -69,294 +66,273 @@ public class CVSModule extends FPSObject implements CVSExplorable
 	}
 
 	@Override
-	public CVSExplorable getParent()
-	{
+	public CVSExplorable getParent() {
 		return _parent;
 	}
-	
-	public String getModuleName() 
-	{
+
+	public String getModuleName() {
 		return _moduleName;
 	}
-	
-	public String getFullQualifiedModuleName() 
-	{
-		if (getParent() instanceof CVSRepository) return getModuleName();
-		else if (getParent() instanceof CVSModule) return ((CVSModule)getParent()).getFullQualifiedModuleName()+'/'+getModuleName();
+
+	public String getFullQualifiedModuleName() {
+		if (getParent() instanceof CVSRepository)
+			return getModuleName();
+		else if (getParent() instanceof CVSModule)
+			return ((CVSModule) getParent()).getFullQualifiedModuleName() + '/' + getModuleName();
 		return null;
 	}
-	
-	public boolean isSubModule()
-	{
+
+	public boolean isSubModule() {
 		return !(getParent() instanceof CVSRepository);
 	}
-	
+
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.FPS.CVS_MODULE_INSPECTOR;
 	}
-	
+
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "cvs_module";
 	}
 
 	@Override
-	public CVSRepository getCVSRepository() 
-	{
-		if (_parent instanceof CVSRepository) return (CVSRepository)_parent;
-		else return _parent.getCVSRepository();
+	public CVSRepository getCVSRepository() {
+		if (_parent instanceof CVSRepository)
+			return (CVSRepository) _parent;
+		else
+			return _parent.getCVSRepository();
 	}
-	
+
 	@Override
-	public boolean isContainedIn(FPSObject obj) 
-	{
+	public boolean isContainedIn(FPSObject obj) {
 		if (obj instanceof CVSRepositoryList) {
 			return getCVSRepository().isContainedIn(obj);
-		}
-		else if (obj instanceof CVSRepository) {
+		} else if (obj instanceof CVSRepository) {
 			return getCVSRepository() == obj;
 		}
 		return (obj == this);
 	}
 
 	private Vector<CVSModule> _modules;
-	
+
 	@Override
-	public Vector<CVSModule> getCVSModules() 
-	{
+	public Vector<CVSModule> getCVSModules() {
 		return _modules;
 	}
 
-	public void setCVSModules(Vector<CVSModule> modules) 
-	{
+	public void setCVSModules(Vector<CVSModule> modules) {
 		_modules = modules;
 		setChanged();
 	}
-	
-	public void addToCVSModules(CVSModule module) 
-	{
+
+	public void addToCVSModules(CVSModule module) {
 		_modules.add(module);
 		setChanged();
 		notifyObservers(new CVSModuleDiscovered(module));
 	}
-	
-	public void removeFromCVSModules(CVSModule module) 
-	{
+
+	public void removeFromCVSModules(CVSModule module) {
 		_modules.remove(module);
 		setChanged();
 		notifyObservers(new CVSModuleForgotten(module));
 	}
-	
-	public CVSModule getModuleNamed(String name)
-	{
+
+	public CVSModule getModuleNamed(String name) {
 		if (name.indexOf('/') > -1) {
-			String parentModuleName = name.substring(0,name.lastIndexOf('/'));
+			String parentModuleName = name.substring(0, name.lastIndexOf('/'));
 			CVSModule parentModule = getModuleNamed(parentModuleName);
-			return parentModule.getModuleNamed(name.substring(name.lastIndexOf('/')+1));
+			return parentModule.getModuleNamed(name.substring(name.lastIndexOf('/') + 1));
 		}
 		for (CVSModule module : _modules) {
-			if (module.getModuleName().equals(name)) return module;
+			if (module.getModuleName().equals(name))
+				return module;
 		}
 		// Not found, create it
 		CVSModule returned;
-		logger.info ("Create module "+name+" as child of module "+this.getFullQualifiedModuleName());
-		addToCVSModules(returned = new CVSModule(name,this));
+		logger.info("Create module " + name + " as child of module " + this.getFullQualifiedModuleName());
+		addToCVSModules(returned = new CVSModule(name, this));
 		return returned;
 	}
 
 	private Vector<CVSFile> _files;
-	
-	public Vector<CVSFile> getCVSFiles() 
-	{
+
+	public Vector<CVSFile> getCVSFiles() {
 		return _files;
 	}
 
-	public void setCVSFiles(Vector<CVSFile> modules) 
-	{
+	public void setCVSFiles(Vector<CVSFile> modules) {
 		_files = modules;
 		setChanged();
 	}
-	
-	public void addToCVSFiles(CVSFile module) 
-	{
+
+	public void addToCVSFiles(CVSFile module) {
 		_files.add(module);
 		setChanged();
 		notifyObservers(new CVSFileDiscovered(module));
 	}
-	
-	public void removeFromCVSFiles(CVSFile module) 
-	{
+
+	public void removeFromCVSFiles(CVSFile module) {
 		_files.remove(module);
 		setChanged();
 		notifyObservers(new CVSFileForgotten(module));
 	}
-	
+
 	private CVSExplorer _explorer;
-	
+
 	@Override
-	public CVSExplorer getCVSExplorer(CVSExplorerListener explorerListener)
-	{
+	public CVSExplorer getCVSExplorer(CVSExplorerListener explorerListener) {
 		if (_explorer == null) {
-			_explorer = new CVSExplorer(this,explorerListener);
+			_explorer = new CVSExplorer(this, explorerListener);
 		}
 		return _explorer;
 	}
-	
-	public CVSExplorer exploreModule(CVSExplorerListener explorerListener)
-	{
+
+	public CVSExplorer exploreModule(CVSExplorerListener explorerListener) {
 		_explorer = null;
 		CVSExplorer returned = getCVSExplorer(explorerListener);
 		returned.explore();
 		return returned;
 	}
-	
+
 	@Override
-	public void notifyWillExplore()
-	{
+	public void notifyWillExplore() {
 		setChanged();
 		notifyObservers(new WillCVSExplore());
 	}
-	
+
 	@Override
-	public void notifyHasExplored()
-	{
+	public void notifyHasExplored() {
 		setChanged();
 		notifyObservers(new HasCVSExplored());
 	}
-	
-	private class ModuleRetriever extends CVSAdapter
-	{
+
+	private class ModuleRetriever extends CVSAdapter {
 		private Vector<CVSModule> _knownModules;
 		private Vector<CVSFile> _knownFiles;
 		private StandardAdminHandler adminHandler;
-		
-		private ModuleRetriever (Vector<CVSModule> knownModules, Vector<CVSFile> knownFiles)
-		{
+
+		private ModuleRetriever(Vector<CVSModule> knownModules, Vector<CVSFile> knownFiles) {
 			_knownModules = knownModules;
 			_knownFiles = knownFiles;
 			adminHandler = new StandardAdminHandler();
 		}
-		
-		/**
-	     * Called when the server wants to send a message to be displayed to
-	     * the user. The message is only for information purposes and clients
-	     * can choose to ignore these messages if they wish.
-	     * @param e the event
-	     */
-	    @Override
-		public void messageSent(MessageEvent e) 
-	    {
-	    	
-	    	//logger.info("**** messageSent(MessageEvent) "+e+" "+e.getMessage());
-	    	if (e instanceof EnhancedMessageEvent) {
-	    		return;
-	    	}
-	    	else {
-	    		int start = e.getMessage().indexOf("`");
-	    		int stop = e.getMessage().indexOf("'");
-	    		if (start >=0 && stop >= start) {
-	    			String fullQualifiedModule = e.getMessage().substring(start+1,stop);
-	    			if (!fullQualifiedModule.equals("CVSROOT")) {
-	    				//logger.info("Found "+foundModule+" ! Add it.");
-	    				CVSModule existingModule = null;
-	    				String foundModule = fullQualifiedModule.substring(fullQualifiedModule.lastIndexOf('/')+1);
-	    				for (CVSModule m : _knownModules) {
-	    					if (m.getModuleName().equals(foundModule)) existingModule = m;
-	    				}
-	    				if (existingModule == null) {
-	    					addToCVSModules(new CVSModule(foundModule,CVSModule.this));
-	    				}
-	    				else {
-	    					_knownModules.remove(existingModule);
-	    				}
-	    			}
-	    		}
-	    	}
-	    }
-	    
-	    /**
-	     * Called when a file has been updated
-	     * @param e the event
-	     */
-	    @Override
-		public void fileUpdated(FileUpdatedEvent e) 
-	    {
-	    	if(logger.isLoggable(Level.FINE))
-	    		logger.fine("fileUpdated() "+e.getFilePath());
-	    }
 
-	    /**
-	     * Called when file status information has been received
-	     */
-	    @Override
-		public void fileInfoGenerated(FileInfoEvent e) 
-	    {
-	    	if(logger.isLoggable(Level.FINE))
-	    		logger.fine("fileInfoGenerated()  "+e.getInfoContainer().getClass().getSimpleName()+" "+e.getInfoContainer());
-	    	if (e.getInfoContainer() instanceof DefaultFileInfoContainer) {
-	    		DefaultFileInfoContainer info = (DefaultFileInfoContainer)e.getInfoContainer();
-	    		if (logger.isLoggable(Level.FINE)) 
-	    			logger.fine("Added file : "+info.getFile());
+		/**
+		 * Called when the server wants to send a message to be displayed to the user. The message is only for information purposes and
+		 * clients can choose to ignore these messages if they wish.
+		 * 
+		 * @param e
+		 *            the event
+		 */
+		@Override
+		public void messageSent(MessageEvent e) {
+
+			// logger.info("**** messageSent(MessageEvent) "+e+" "+e.getMessage());
+			if (e instanceof EnhancedMessageEvent) {
+				return;
+			} else {
+				int start = e.getMessage().indexOf("`");
+				int stop = e.getMessage().indexOf("'");
+				if (start >= 0 && stop >= start) {
+					String fullQualifiedModule = e.getMessage().substring(start + 1, stop);
+					if (!fullQualifiedModule.equals("CVSROOT")) {
+						// logger.info("Found "+foundModule+" ! Add it.");
+						CVSModule existingModule = null;
+						String foundModule = fullQualifiedModule.substring(fullQualifiedModule.lastIndexOf('/') + 1);
+						for (CVSModule m : _knownModules) {
+							if (m.getModuleName().equals(foundModule))
+								existingModule = m;
+						}
+						if (existingModule == null) {
+							addToCVSModules(new CVSModule(foundModule, CVSModule.this));
+						} else {
+							_knownModules.remove(existingModule);
+						}
+					}
+				}
+			}
+		}
+
+		/**
+		 * Called when a file has been updated
+		 * 
+		 * @param e
+		 *            the event
+		 */
+		@Override
+		public void fileUpdated(FileUpdatedEvent e) {
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("fileUpdated() " + e.getFilePath());
+		}
+
+		/**
+		 * Called when file status information has been received
+		 */
+		@Override
+		public void fileInfoGenerated(FileInfoEvent e) {
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("fileInfoGenerated()  " + e.getInfoContainer().getClass().getSimpleName() + " " + e.getInfoContainer());
+			if (e.getInfoContainer() instanceof DefaultFileInfoContainer) {
+				DefaultFileInfoContainer info = (DefaultFileInfoContainer) e.getInfoContainer();
+				if (logger.isLoggable(Level.FINE))
+					logger.fine("Added file : " + info.getFile());
 				CVSFile existingFile = null;
 				String foundFile = info.getFile().getName();
 				for (CVSFile f : _knownFiles) {
-					if (f.getFileName().equals(foundFile)) existingFile = f;
+					if (f.getFileName().equals(foundFile))
+						existingFile = f;
 				}
 				Entry entry = null;
 				try {
 					entry = adminHandler.getEntry(info.getFile());
-					if (logger.isLoggable(Level.FINE)) 
-		    			logger.fine("Entry for "+info.getFile()+": "+entry);
+					if (logger.isLoggable(Level.FINE))
+						logger.fine("Entry for " + info.getFile() + ": " + entry);
 				} catch (IOException e1) {
-					logger.warning("Could not retrieve entry for "+info.getFile());
+					logger.warning("Could not retrieve entry for " + info.getFile());
 				}
 				if (existingFile == null) {
-					addToCVSFiles(new CVSFile(info.getFile(),entry, null));
-				}
-				else {
+					addToCVSFiles(new CVSFile(info.getFile(), entry, null));
+				} else {
 					existingFile.setEntry(entry);
 					_knownFiles.remove(existingFile);
 				}
-	    	}
-	    }
+			}
+		}
 
 	}
-	
+
 	private File _repositoryExploringDirectory;
-	
+
 	@Override
-	public File getRepositoryExploringDirectory() 
-	{
+	public File getRepositoryExploringDirectory() {
 		return _repositoryExploringDirectory;
 	}
-	
-	private void _retrieveLocalFiles(ModuleRetriever retriever) throws IOException, CommandAbortedException, CommandException, AuthenticationException
-	{
-		if (logger.isLoggable(Level.FINE)) 
-			logger.fine("_retrieveLocalFiles() on directory "+getParent().getRepositoryExploringDirectory());
-	
-	    // Run "cvs checkout -l" command on parent directory
-        CheckoutCommand checkout = new CheckoutCommand();
-        checkout.setRecursive(false);
-        checkout.setModule(getFullQualifiedModuleName());
-        
+
+	private void _retrieveLocalFiles(ModuleRetriever retriever) throws IOException, CommandAbortedException, CommandException,
+			AuthenticationException {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("_retrieveLocalFiles() on directory " + getParent().getRepositoryExploringDirectory());
+
+		// Run "cvs checkout -l" command on parent directory
+		CheckoutCommand checkout = new CheckoutCommand();
+		checkout.setRecursive(false);
+		checkout.setModule(getFullQualifiedModuleName());
+
 		AbstractConnection connection = CVSConnection.initConnection(getCVSRepository());
 
 		GlobalOptions globalOptions = new GlobalOptions();
 		globalOptions.setCVSRoot(connection.getRepository());
 
- 		Client client = new Client(connection, retriever.adminHandler);
+		Client client = new Client(connection, retriever.adminHandler);
 		client.setLocalPath(getCVSRepository().getRepositoryExploringDirectory().getCanonicalPath());
-		
+
 		client.getEventManager().addCVSListener(retriever);
 		client.getEventManager().addCVSListener(CVSConsole.getCVSConsole());
 
-		CVSConsole.getCVSConsole().commandLog("cvs "+checkout.getCVSCommand());
+		CVSConsole.getCVSConsole().commandLog("cvs " + checkout.getCVSCommand());
 
-		logger.info("Command "+checkout.getCVSCommand());        
+		logger.info("Command " + checkout.getCVSCommand());
 		try {
 			client.executeCommand(checkout, globalOptions);
 		} finally {
@@ -366,27 +342,27 @@ public class CVSModule extends FPSObject implements CVSExplorable
 				e.printStackTrace();
 			}
 		}
-		
-		_repositoryExploringDirectory = new File(getParent().getRepositoryExploringDirectory(),getModuleName());
+
+		_repositoryExploringDirectory = new File(getParent().getRepositoryExploringDirectory(), getModuleName());
 	}
-	
-	private void _retrieveLocalDirectories(ModuleRetriever retriever) throws IOException, CommandAbortedException, CommandException, AuthenticationException
-	{
-		if (logger.isLoggable(Level.FINE)) 
-			logger.fine("_retrieveLocalDirectories() on directory "+getParent().getRepositoryExploringDirectory());
-	
-	       // Run "cvs -n update -d" command on parent directory
-        UpdateCommand updt = new UpdateCommand();
-        updt.setBuildDirectories( true ); // build directories '-d'
-        File[] files = new File[1];
-        files[0] = _repositoryExploringDirectory.getCanonicalFile();
-        updt.setFiles(files);       
-        
+
+	private void _retrieveLocalDirectories(ModuleRetriever retriever) throws IOException, CommandAbortedException, CommandException,
+			AuthenticationException {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("_retrieveLocalDirectories() on directory " + getParent().getRepositoryExploringDirectory());
+
+		// Run "cvs -n update -d" command on parent directory
+		UpdateCommand updt = new UpdateCommand();
+		updt.setBuildDirectories(true); // build directories '-d'
+		File[] files = new File[1];
+		files[0] = _repositoryExploringDirectory.getCanonicalFile();
+		updt.setFiles(files);
+
 		AbstractConnection connection = CVSConnection.initConnection(getCVSRepository());
 
 		GlobalOptions globalOptions = new GlobalOptions();
-		globalOptions.setDoNoChanges( true ); // no changes on files '-n'
-		globalOptions.setCVSRoot(connection.getRepository()); 
+		globalOptions.setDoNoChanges(true); // no changes on files '-n'
+		globalOptions.setCVSRoot(connection.getRepository());
 
 		Client client = new Client(connection, retriever.adminHandler);
 		client.setLocalPath(getParent().getRepositoryExploringDirectory().getCanonicalPath());
@@ -394,9 +370,9 @@ public class CVSModule extends FPSObject implements CVSExplorable
 		client.getEventManager().addCVSListener(retriever);
 		client.getEventManager().addCVSListener(CVSConsole.getCVSConsole());
 
-		CVSConsole.getCVSConsole().commandLog("cvs "+updt.getCVSCommand());
+		CVSConsole.getCVSConsole().commandLog("cvs " + updt.getCVSCommand());
 
-		logger.info("Command "+updt.getCVSCommand());        
+		logger.info("Command " + updt.getCVSCommand());
 		try {
 			client.executeCommand(updt, globalOptions);
 		} finally {
@@ -407,23 +383,21 @@ public class CVSModule extends FPSObject implements CVSExplorable
 			}
 		}
 	}
-	
-	protected void _retrieveSubModules() throws IOException, CommandAbortedException, CommandException, AuthenticationException
-	{
-		Vector<CVSModule> knownModules = (Vector<CVSModule>)getCVSModules().clone();
-		Vector<CVSFile> knownFiles = (Vector<CVSFile>)getCVSFiles().clone();
-		ModuleRetriever retriever = new ModuleRetriever(knownModules,knownFiles);
-		
+
+	protected void _retrieveSubModules() throws IOException, CommandAbortedException, CommandException, AuthenticationException {
+		Vector<CVSModule> knownModules = (Vector<CVSModule>) getCVSModules().clone();
+		Vector<CVSFile> knownFiles = (Vector<CVSFile>) getCVSFiles().clone();
+		ModuleRetriever retriever = new ModuleRetriever(knownModules, knownFiles);
+
 		_retrieveLocalFiles(retriever);
 		_retrieveLocalDirectories(retriever);
-		
+
 	}
-	
-    @Override
-	public String getFullyQualifiedName() 
-    {
-        return getFullQualifiedModuleName();
-    }
+
+	@Override
+	public String getFullyQualifiedName() {
+		return getFullQualifiedModuleName();
+	}
 
 	@Override
 	public CVSExplorer explore(CVSExplorerListener explorerListener) {

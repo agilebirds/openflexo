@@ -31,40 +31,35 @@ import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEArea;
 
-
 public class FGEConnectorGraphics extends FGEGraphics {
 
-    private static final Logger logger = Logger.getLogger(FGEConnectorGraphics.class.getPackage().getName());
-    
-    private FGESymbolGraphics symbolGraphics;
-    
-	public FGEConnectorGraphics(ConnectorGraphicalRepresentation aGraphicalRepresentation)
-	{
+	private static final Logger logger = Logger.getLogger(FGEConnectorGraphics.class.getPackage().getName());
+
+	private FGESymbolGraphics symbolGraphics;
+
+	public FGEConnectorGraphics(ConnectorGraphicalRepresentation aGraphicalRepresentation) {
 		super(aGraphicalRepresentation);
 		symbolGraphics = new FGESymbolGraphics(aGraphicalRepresentation);
 	}
-	
+
 	@Override
-	public ConnectorGraphicalRepresentation getGraphicalRepresentation() 
-	{
-		return (ConnectorGraphicalRepresentation)super.getGraphicalRepresentation();
+	public ConnectorGraphicalRepresentation getGraphicalRepresentation() {
+		return (ConnectorGraphicalRepresentation) super.getGraphicalRepresentation();
 	}
-	
+
 	/**
 	 * 
 	 * @param graphics2D
 	 * @param controller
 	 */
 	@Override
-	public void createGraphics (Graphics2D graphics2D, DrawingController controller)
-	{
+	public void createGraphics(Graphics2D graphics2D, DrawingController controller) {
 		super.createGraphics(graphics2D, controller);
 		symbolGraphics.createGraphics(graphics2D, controller);
 	}
-	
+
 	@Override
-	public void releaseGraphics ()
-	{
+	public void releaseGraphics() {
 		super.releaseGraphics();
 		symbolGraphics.releaseGraphics();
 	}
@@ -74,10 +69,10 @@ public class FGEConnectorGraphics extends FGEGraphics {
 	 * @param point
 	 * @param symbol
 	 * @param size
-	 * @param angle in radians
+	 * @param angle
+	 *            in radians
 	 */
-	public void drawSymbol(FGEPoint point,ConnectorSymbol symbol,double size,double angle)
-	{
+	public void drawSymbol(FGEPoint point, ConnectorSymbol symbol, double size, double angle) {
 		drawSymbol(point.x, point.y, symbol, size, angle);
 	}
 
@@ -87,33 +82,34 @@ public class FGEConnectorGraphics extends FGEGraphics {
 	 * @param y
 	 * @param symbol
 	 * @param size
-	 * @param angle in radians
+	 * @param angle
+	 *            in radians
 	 */
-	public void drawSymbol(double x, double y,ConnectorSymbol symbol,double size,double angle)
-	{
-		Point p = convertNormalizedPointToViewCoordinates(x,y);
-	
+	public void drawSymbol(double x, double y, ConnectorSymbol symbol, double size, double angle) {
+		Point p = convertNormalizedPointToViewCoordinates(x, y);
+
 		if (getGraphicalRepresentation().getApplyForegroundToSymbols())
 			symbolGraphics.setDefaultForeground(symbol.getForegroundStyle(getGraphicalRepresentation().getForeground()));
 
 		Color fgColor = getGraphicalRepresentation().getForeground().getColor();
 		Color bgColor = Color.WHITE;
-		symbolGraphics.setDefaultBackground(symbol.getBackgroundStyle(fgColor,bgColor));
-		
+		symbolGraphics.setDefaultBackground(symbol.getBackgroundStyle(fgColor, bgColor));
+
 		FGEArea symbolShape = symbol.getSymbol();
-		
+
 		// Debug: to see bounds
-		//symbolShape = new FGEUnionArea(symbolShape,new FGERectangle(0,0,1,1,Filling.NOT_FILLED));
-		
-		symbolShape = symbolShape.transform(AffineTransform.getTranslateInstance(-0.5,-0.5));
+		// symbolShape = new FGEUnionArea(symbolShape,new FGERectangle(0,0,1,1,Filling.NOT_FILLED));
+
+		symbolShape = symbolShape.transform(AffineTransform.getTranslateInstance(-0.5, -0.5));
 		symbolShape = symbolShape.transform(AffineTransform.getRotateInstance(-angle));
-		symbolShape = symbolShape.transform(AffineTransform.getScaleInstance(size*getScale(), size*getScale()));
-		symbolShape = symbolShape.transform(AffineTransform.getTranslateInstance(p.x-size/2*Math.cos(-angle)*getScale(),p.y-size/2*Math.sin(-angle)*getScale()));
-		
-		//System.out.println("Ce que je dessine: "+symbolShape);
-		
+		symbolShape = symbolShape.transform(AffineTransform.getScaleInstance(size * getScale(), size * getScale()));
+		symbolShape = symbolShape.transform(AffineTransform.getTranslateInstance(p.x - size / 2 * Math.cos(-angle) * getScale(), p.y - size
+				/ 2 * Math.sin(-angle) * getScale()));
+
+		// System.out.println("Ce que je dessine: "+symbolShape);
+
 		symbolShape.paint(symbolGraphics);
-		
+
 	}
 
 }

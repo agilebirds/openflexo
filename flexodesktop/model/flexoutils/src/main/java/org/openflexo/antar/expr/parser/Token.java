@@ -18,6 +18,7 @@
  *
  */
 package org.openflexo.antar.expr.parser;
+
 /*
  * Created on 4 janv. 2006 by sguerin
  *
@@ -27,7 +28,7 @@ package org.openflexo.antar.expr.parser;
 
 public abstract class Token implements AbstractToken {
 
-    @Override
+	@Override
 	public abstract String toString();
 
 }

@@ -39,9 +39,9 @@ public class FlexoForceProjectMain extends FlexoProjectMergeMain implements CVSE
 		File checkoutDir = checkoutProject();
 		File cvsProjectDirectory = searchProjectDirectory(checkoutDir);
 		if (logger.isLoggable(Level.INFO)) {
-			logger.info("CVS Project dir is: "+cvsProjectDirectory.getAbsolutePath());
+			logger.info("CVS Project dir is: " + cvsProjectDirectory.getAbsolutePath());
 		}
-		SharedProject.copyCVSFolders(cvsProjectDirectory,projectDirectory);
+		SharedProject.copyCVSFolders(cvsProjectDirectory, projectDirectory);
 		touchProject(projectDirectory, System.currentTimeMillis());
 		SharedProject project = SharedProject.openProject(repositories, projectDirectory, cvsRepository, EDITOR);
 		if (project == null) {
@@ -69,12 +69,12 @@ public class FlexoForceProjectMain extends FlexoProjectMergeMain implements CVSE
 		CVSModule module = cvsRepository.getModuleNamed(moduleName);
 		if (module == null) {
 			setExitCode(-1);
-			throw new NullPointerException("Module named " +  moduleName + " cannot be found");
+			throw new NullPointerException("Module named " + moduleName + " cannot be found");
 		}
 		String localName = moduleName;
 
-		if (localName.indexOf('/')>-1) {
-			localName = localName.substring(localName.lastIndexOf('/')+1);
+		if (localName.indexOf('/') > -1) {
+			localName = localName.substring(localName.lastIndexOf('/') + 1);
 		}
 		exploreModules(module);
 		File checkoutDirectory;

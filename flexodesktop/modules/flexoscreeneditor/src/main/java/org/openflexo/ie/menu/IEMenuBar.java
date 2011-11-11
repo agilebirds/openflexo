@@ -34,72 +34,61 @@ import org.openflexo.view.menu.FileMenu;
 import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.view.menu.ToolsMenu;
 
-
 /**
  * TODO : Description for this file
  * 
  * @author sguerin
  */
-public class IEMenuBar extends FlexoMenuBar
-{
+public class IEMenuBar extends FlexoMenuBar {
 
-    public IEFileMenu _fileMenu;
-    public IEEditMenu _editMenu;
-    public IEToolsMenu _toolsMenu;
+	public IEFileMenu _fileMenu;
+	public IEEditMenu _editMenu;
+	public IEToolsMenu _toolsMenu;
 
-    public IEMenuBar(IEController controller)
-    {
-        super(controller, Module.IE_MODULE);
-    }
-    
-    /**
-     * Build if required and return IE 'File' menu.
-     * This method overrides the default one defined on superclass
-     * 
-     * @param controller
-     * @return a IEFileMenu instance
-     */
-    @Override
-	public FileMenu getFileMenu(FlexoController controller)
-    {
-        if (_fileMenu == null) {
-            _fileMenu = new IEFileMenu((IEController)controller);
-        }
-        return _fileMenu;
-    }
+	public IEMenuBar(IEController controller) {
+		super(controller, Module.IE_MODULE);
+	}
 
-    /**
-     * Build if required and return IE 'Edit' menu.
-     * This method overrides the default one defined on superclass
-     * 
-     * @param controller
-     * @return a IEEditMenu instance
-     */
-     @Override
-	public EditMenu getEditMenu(FlexoController controller)
-    {
-        if (_editMenu == null) {
-            _editMenu = new IEEditMenu((IEController)controller);
-        }
-        return _editMenu;
-    }
+	/**
+	 * Build if required and return IE 'File' menu. This method overrides the default one defined on superclass
+	 * 
+	 * @param controller
+	 * @return a IEFileMenu instance
+	 */
+	@Override
+	public FileMenu getFileMenu(FlexoController controller) {
+		if (_fileMenu == null) {
+			_fileMenu = new IEFileMenu((IEController) controller);
+		}
+		return _fileMenu;
+	}
 
-     /**
-      * Build if required and return IE 'Tools' menu.
-      * This method overrides the default one defined on superclass
-      * 
-      * @param controller
-      * @return a IEToolsMenu instance
-      */
-      @Override
-	public ToolsMenu getToolsMenu(FlexoController controller)
-     {
-         if (_toolsMenu == null) {
-             _toolsMenu = new IEToolsMenu((IEController)controller);
-         }
-         return _toolsMenu;
-     }
+	/**
+	 * Build if required and return IE 'Edit' menu. This method overrides the default one defined on superclass
+	 * 
+	 * @param controller
+	 * @return a IEEditMenu instance
+	 */
+	@Override
+	public EditMenu getEditMenu(FlexoController controller) {
+		if (_editMenu == null) {
+			_editMenu = new IEEditMenu((IEController) controller);
+		}
+		return _editMenu;
+	}
 
+	/**
+	 * Build if required and return IE 'Tools' menu. This method overrides the default one defined on superclass
+	 * 
+	 * @param controller
+	 * @return a IEToolsMenu instance
+	 */
+	@Override
+	public ToolsMenu getToolsMenu(FlexoController controller) {
+		if (_toolsMenu == null) {
+			_toolsMenu = new IEToolsMenu((IEController) controller);
+		}
+		return _toolsMenu;
+	}
 
- 
 }

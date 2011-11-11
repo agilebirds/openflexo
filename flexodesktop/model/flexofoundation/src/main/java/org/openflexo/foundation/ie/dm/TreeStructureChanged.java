@@ -23,44 +23,24 @@ import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
 
 /**
  * @author bmangez
- * @version $Id: TreeStructureChanged.java,v 1.1.2.2 2005/08/04 16:20:19 sguerin
- *          Exp $ $Log: TreeStructureChanged.java,v $
- *          Exp $ Revision 1.2  2011/09/12 11:47:11  gpolet
- *          Exp $ Converted v2 to v3
- *          Exp $
- *          Exp $ Revision 1.1  2011/05/24 01:12:36  gpolet
- *          Exp $ LOW: First import of OpenFlexo
- *          Exp $
- *          Exp $ Revision 1.1.2.2  2011/05/20 14:23:30  gpolet
- *          Exp $ LOW: Added GPL v2 file header
- *          Exp $
- *          Exp $ Revision 1.1.2.1  2011/05/20 08:26:28  gpolet
- *          Exp $ Package refactor of flexofoundation
- *          Exp $
- *          Exp $ Revision 1.1.2.1  2011/05/19 09:39:48  gpolet
- *          Exp $ refactored package names
- *          Exp $
- *          Exp $ Revision 1.2  2006/02/02 15:30:31  bmangez
- *          Exp $ merge from bdev
- *          Exp $
- *          Exp $ Revision 1.1.2.3  2005/10/03 11:50:43  benoit
- *          Exp $ organize importformat codelogger test
- *          Exp $ Revision 1.1.2.2
- *          2005/08/04 16:20:19 sguerin Commit on 04/08/2005, Sylvain GUERIN,
- *          version 7.1.6.alpha Temporary commit, see next commit
+ * @version $Id: TreeStructureChanged.java,v 1.1.2.2 2005/08/04 16:20:19 sguerin Exp $ $Log: TreeStructureChanged.java,v $ Exp $ Revision
+ *          1.2 2011/09/12 11:47:11 gpolet Exp $ Converted v2 to v3 Exp $ Exp $ Revision 1.1 2011/05/24 01:12:36 gpolet Exp $ LOW: First
+ *          import of OpenFlexo Exp $ Exp $ Revision 1.1.2.2 2011/05/20 14:23:30 gpolet Exp $ LOW: Added GPL v2 file header Exp $ Exp $
+ *          Revision 1.1.2.1 2011/05/20 08:26:28 gpolet Exp $ Package refactor of flexofoundation Exp $ Exp $ Revision 1.1.2.1 2011/05/19
+ *          09:39:48 gpolet Exp $ refactored package names Exp $ Exp $ Revision 1.2 2006/02/02 15:30:31 bmangez Exp $ merge from bdev Exp $
+ *          Exp $ Revision 1.1.2.3 2005/10/03 11:50:43 benoit Exp $ organize import format code logger test Exp $ Revision 1.1.2.2
+ *          2005/08/04 16:20:19 sguerin Commit on 04/08/2005, Sylvain GUERIN, version 7.1.6.alpha Temporary commit, see next commit
  * 
- * Revision 1.1.2.1 2005/06/28 12:53:52 benoit ReusableComponents
+ *          Revision 1.1.2.1 2005/06/28 12:53:52 benoit ReusableComponents
  * 
  * 
- * <B>Class Description</B>
+ *          <B>Class Description</B>
  */
-public class TreeStructureChanged extends IEDataModification
-{
+public class TreeStructureChanged extends IEDataModification {
 
-    public TreeStructureChanged(FlexoComponentLibrary component)
-    {
-        super(component, null);
+	public TreeStructureChanged(FlexoComponentLibrary component) {
+		super(component, null);
 
-    }
+	}
 
 }

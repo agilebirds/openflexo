@@ -24,70 +24,63 @@ import org.openflexo.dg.ProjectDocGenerator;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.toc.TOCEntry;
 
-
 /**
  * 
- * This class is intended for generators that don't generate any physical file
- * on the disk but initiates multiple generators. Generators that generate a
- * physical file and also initiates multiple generators should not inherit from
- * this class because file generation is prevented.
+ * This class is intended for generators that don't generate any physical file on the disk but initiates multiple generators. Generators
+ * that generate a physical file and also initiates multiple generators should not inherit from this class because file generation is
+ * prevented.
  * 
  * @author gpolet
  * 
  */
-public abstract class AbstractCompoundGenerator<T extends FlexoModelObject> extends DGGenerator<T>
-{
+public abstract class AbstractCompoundGenerator<T extends FlexoModelObject> extends DGGenerator<T> {
 
-    /**
-     * @param projectGenerator
-     * @param source
-     */
-    public AbstractCompoundGenerator(ProjectDocGenerator projectGenerator, T source)
-    {
-        super(projectGenerator, source);
-    }
+	/**
+	 * @param projectGenerator
+	 * @param source
+	 */
+	public AbstractCompoundGenerator(ProjectDocGenerator projectGenerator, T source) {
+		super(projectGenerator, source);
+	}
 
-    /**
-     * Overrides generate
-     * 
-     * @see org.openflexo.dg.DGGenerator#generate(boolean)
-     */
-    @Override
-    public void generate(boolean forceRegenerate)
-    {
-        // We prevent compound generators with no physical file generated from
-        // attempting to generate a file (it would crash of course)
-    }
+	/**
+	 * Overrides generate
+	 * 
+	 * @see org.openflexo.dg.DGGenerator#generate(boolean)
+	 */
+	@Override
+	public void generate(boolean forceRegenerate) {
+		// We prevent compound generators with no physical file generated from
+		// attempting to generate a file (it would crash of course)
+	}
 
-    /**
-     * Overrides getFileName
-     * 
-     * @see org.openflexo.dg.DGGenerator#getFileName()
-     */
-    @Override
-    final public String getFileName()
-    {
-        return null;
-    }
+	/**
+	 * Overrides getFileName
+	 * 
+	 * @see org.openflexo.dg.DGGenerator#getFileName()
+	 */
+	@Override
+	final public String getFileName() {
+		return null;
+	}
 
-    @Override
-    final public String getFileExtension() {
-    	return null;
-    }
-    
-    /**
-     * Overrides getTemplateName
-     * 
-     * @see org.openflexo.dg.DGGenerator#getTemplateName()
-     */
-    @Override
-    final public String getTemplateName()
-    {
-        return null;
-    }
+	@Override
+	final public String getFileExtension() {
+		return null;
+	}
 
-    @Override
-    final public TOCEntry getTOCEntry() {
-    	return null;
-    }
+	/**
+	 * Overrides getTemplateName
+	 * 
+	 * @see org.openflexo.dg.DGGenerator#getTemplateName()
+	 */
+	@Override
+	final public String getTemplateName() {
+		return null;
+	}
+
+	@Override
+	final public TOCEntry getTOCEntry() {
+		return null;
+	}
 }

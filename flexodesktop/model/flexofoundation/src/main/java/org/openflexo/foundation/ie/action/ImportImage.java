@@ -34,7 +34,6 @@ import org.openflexo.foundation.rm.FlexoWebServerFileResource;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.toolbox.FileUtils;
 
-
 public class ImportImage extends FlexoAction<ImportImage, FlexoModelObject, FlexoModelObject> {
 	private FlexoWebServerFileResource _res = null;
 	private File _fileToImport;

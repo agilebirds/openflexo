@@ -49,402 +49,337 @@ import org.openflexo.sgmodule.controller.SGController;
 import org.openflexo.swing.diff.DiffPanel;
 import org.openflexo.toolbox.TokenMarkerStyle;
 
-
 public class DiffCodeDisplayer extends CodeDisplayer {
 
 	private static final Logger logger = Logger.getLogger(DiffCodeDisplayer.class.getPackage().getName());
 
-	//protected DiffCodeDisplayerComponent _component;
-	public DiffCodeDisplayer(GenerationAvailableFileResource resource, SGController controller)
-	{
-		super(resource,controller);
-	}
-	
-	@Override
-	public JComponent getComponent()
-	{
-		return (JComponent)_component;
+	// protected DiffCodeDisplayerComponent _component;
+	public DiffCodeDisplayer(GenerationAvailableFileResource resource, SGController controller) {
+		super(resource, controller);
 	}
 
-	protected interface DiffCodeDisplayerComponent extends CodeDisplayerComponent
-	{
+	@Override
+	public JComponent getComponent() {
+		return (JComponent) _component;
+	}
+
+	protected interface DiffCodeDisplayerComponent extends CodeDisplayerComponent {
 		@Override
 		void update();
 	}
 
 	@Override
-	protected DiffCodeDisplayerComponent buildComponent()
-	{
+	protected DiffCodeDisplayerComponent buildComponent() {
 		_component = null;
-		
+
 		if (getResource() instanceof ASCIIFileResource) {
 			_component = new ASCIIFileDiffCodeDisplayer();
-		}
-		else if (getResource() instanceof WOFileResource) {
+		} else if (getResource() instanceof WOFileResource) {
 			_component = new WOFileDiffCodeDisplayer();
 		}
 		if (_component == null) {
 			_component = new ErrorPanel();
 		}
-		
-		return (DiffCodeDisplayerComponent)_component;
+
+		return (DiffCodeDisplayerComponent) _component;
 	}
-	
-	protected class ErrorPanel extends JTextArea implements DiffCodeDisplayerComponent
-	{
-		protected ErrorPanel()
-		{
-			super(FlexoLocalization.localizedForKey("problem_accessing_sources_data")+"\nResource: "+getResource()+"\nCode: "+getGeneratedCode()+"\n");
+
+	protected class ErrorPanel extends JTextArea implements DiffCodeDisplayerComponent {
+		protected ErrorPanel() {
+			super(FlexoLocalization.localizedForKey("problem_accessing_sources_data") + "\nResource: " + getResource() + "\nCode: "
+					+ getGeneratedCode() + "\n");
 		}
-		
+
 		@Override
-		public void update()
-		{
+		public void update() {
 		}
-		
+
 		@Override
-		public String getEditedContentForKey(String contentKey) 
-		{
+		public String getEditedContentForKey(String contentKey) {
 			// Interface
 			return null;
 		}
-		
+
 		@Override
-		public void setEditedContent(CGFile file) 
-		{
-			// Interface		
-		}
-		
-		@Override
-		public void setContentSource(ContentSource aContentSource) 
-		{
+		public void setEditedContent(CGFile file) {
 			// Interface
 		}
 
 		@Override
-		public void addToFocusListener(FocusListener aFocusListener)
-		{
+		public void setContentSource(ContentSource aContentSource) {
 			// Interface
 		}
 
 		@Override
-		public DisplayContext getDisplayContext() 
-		{
-			return new DisplayContext("error",0,0,0,0);
+		public void addToFocusListener(FocusListener aFocusListener) {
+			// Interface
+		}
+
+		@Override
+		public DisplayContext getDisplayContext() {
+			return new DisplayContext("error", 0, 0, 0, 0);
 		}
 
 		@Override
 		public void setDisplayContext(DisplayContext context) {
 		}
-		
+
 	}
-	
+
 	@Override
-	public void update()
-	{
+	public void update() {
 		if (_component != null) {
 			_component.update();
 		}
 	}
-	
-	
 
-	protected class ASCIIFileDiffCodeDisplayer extends JPanel implements DiffCodeDisplayerComponent
-	{
+	protected class ASCIIFileDiffCodeDisplayer extends JPanel implements DiffCodeDisplayerComponent {
 		protected DiffPanel _diffPanel;
 		protected DiffReport _diffReport;
-		
-		protected ASCIIFileDiffCodeDisplayer()
-		{
+
+		protected ASCIIFileDiffCodeDisplayer() {
 			super(new BorderLayout());
 			update();
 		}
-		
-		public void setFirstVisibleLine(int lineNb)
-		{
+
+		public void setFirstVisibleLine(int lineNb) {
 			_diffPanel.setFirstVisibleLine(lineNb);
 		}
-		
+
 		@Override
-		public DisplayContext getDisplayContext()
-		{
+		public DisplayContext getDisplayContext() {
 			return _diffPanel.getLeftTextArea().getDisplayContext();
 		}
-		
+
 		@Override
-		public void setDisplayContext(DisplayContext context)
-		{
+		public void setDisplayContext(DisplayContext context) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Not implemented");
-			// This lead to display problems
-			// TODO: we need to scroll to right place: following code is not enough and has been unactivated
-			//_diffPanel.getLeftTextArea().scrollTo(context.getFirstVisibleLine(), 0);
+				// This lead to display problems
+				// TODO: we need to scroll to right place: following code is not enough and has been unactivated
+				// _diffPanel.getLeftTextArea().scrollTo(context.getFirstVisibleLine(), 0);
 			}
 		}
 
 		@Override
-		public void setEditable(boolean isEditable)
-		{
+		public void setEditable(boolean isEditable) {
 			// Not editable anyway
 		}
-		
+
 		@Override
-		public void setEditedContent(CGFile file) 
-		{
+		public void setEditedContent(CGFile file) {
 			// Not editable anyway
 		}
-		
+
 		@Override
-		public String getEditedContentForKey(String contentKey) 
-		{
+		public String getEditedContentForKey(String contentKey) {
 			// Interface: this component is not supposed to be editable
 			return null;
 		}
-		
+
 		@Override
-		public void update()
-		{
+		public void update() {
 			removeAll();
 			String leftLabel;
 			String rightLabel;
 			boolean isLeftOriented;
 			if (getCGFile().getGenerationStatus() == GenerationStatus.GenerationRemoved) {
-				_diffReport = ComputeDiff.diff(FlexoLocalization.localizedForKey("file_marked_for_deletion"),getContentOnDisk());
-				 leftLabel = FlexoLocalization.localizedForKey("current_generation");
-				 rightLabel = FlexoLocalization.localizedForKey("file_to_remove_from_disk");
-				 isLeftOriented = true;
-			}
-			else if (getCGFile().getGenerationStatus() == GenerationStatus.GenerationAdded) {
-				_diffReport = ComputeDiff.diff(getPureGeneration(),FlexoLocalization.localizedForKey("file_marked_for_addition"));
-				 leftLabel = FlexoLocalization.localizedForKey("current_generation");
-				 rightLabel = FlexoLocalization.localizedForKey("file_to_add_on_disk");
-				 isLeftOriented = true;
-			}
-			else if (getCGFile().getGenerationStatus() == GenerationStatus.GenerationModified) {
-				_diffReport = ComputeDiff.diff(getGeneratedMergeContent(),getContentOnDisk());
-				 leftLabel = FlexoLocalization.localizedForKey("current_generation");
-				 rightLabel = FlexoLocalization.localizedForKey("file_on_disk");
-				 isLeftOriented = true;
-			}
-			else if (getCGFile().getGenerationStatus() == GenerationStatus.DiskModified) {
-				_diffReport = ComputeDiff.diff(getLastAccepted(),getContentOnDisk());
-				 leftLabel = FlexoLocalization.localizedForKey("last_accepted_version");
-				 rightLabel = FlexoLocalization.localizedForKey("file_on_disk");
-				 isLeftOriented = false;
-			}
-			else if (getCGFile().getGenerationStatus() == GenerationStatus.DiskRemoved) {
-				_diffReport = ComputeDiff.diff(getLastAccepted(),FlexoLocalization.localizedForKey("missing_file"));
-				 leftLabel = FlexoLocalization.localizedForKey("last_accepted_version");
-				 rightLabel = FlexoLocalization.localizedForKey("file_on_disk");
-				 isLeftOriented = false;
-			}
-			else if ((getCGFile().getGenerationStatus() == GenerationStatus.OverrideScheduled)) {
-				_diffReport = ComputeDiff.diff(getContentToWriteOnDisk(),getContentOnDisk());
-				 leftLabel = FlexoLocalization.localizedForKey("overriden_version")+" ["+getCGFile().getScheduledOverrideVersion().getStringRepresentation()+"]";
-				 rightLabel = FlexoLocalization.localizedForKey("file_on_disk");
-				 isLeftOriented = true;
-			}
-			else {
-				logger.warning("I should never access here: status="+getCGFile().getGenerationStatus());
+				_diffReport = ComputeDiff.diff(FlexoLocalization.localizedForKey("file_marked_for_deletion"), getContentOnDisk());
+				leftLabel = FlexoLocalization.localizedForKey("current_generation");
+				rightLabel = FlexoLocalization.localizedForKey("file_to_remove_from_disk");
+				isLeftOriented = true;
+			} else if (getCGFile().getGenerationStatus() == GenerationStatus.GenerationAdded) {
+				_diffReport = ComputeDiff.diff(getPureGeneration(), FlexoLocalization.localizedForKey("file_marked_for_addition"));
+				leftLabel = FlexoLocalization.localizedForKey("current_generation");
+				rightLabel = FlexoLocalization.localizedForKey("file_to_add_on_disk");
+				isLeftOriented = true;
+			} else if (getCGFile().getGenerationStatus() == GenerationStatus.GenerationModified) {
+				_diffReport = ComputeDiff.diff(getGeneratedMergeContent(), getContentOnDisk());
+				leftLabel = FlexoLocalization.localizedForKey("current_generation");
+				rightLabel = FlexoLocalization.localizedForKey("file_on_disk");
+				isLeftOriented = true;
+			} else if (getCGFile().getGenerationStatus() == GenerationStatus.DiskModified) {
+				_diffReport = ComputeDiff.diff(getLastAccepted(), getContentOnDisk());
+				leftLabel = FlexoLocalization.localizedForKey("last_accepted_version");
+				rightLabel = FlexoLocalization.localizedForKey("file_on_disk");
+				isLeftOriented = false;
+			} else if (getCGFile().getGenerationStatus() == GenerationStatus.DiskRemoved) {
+				_diffReport = ComputeDiff.diff(getLastAccepted(), FlexoLocalization.localizedForKey("missing_file"));
+				leftLabel = FlexoLocalization.localizedForKey("last_accepted_version");
+				rightLabel = FlexoLocalization.localizedForKey("file_on_disk");
+				isLeftOriented = false;
+			} else if ((getCGFile().getGenerationStatus() == GenerationStatus.OverrideScheduled)) {
+				_diffReport = ComputeDiff.diff(getContentToWriteOnDisk(), getContentOnDisk());
+				leftLabel = FlexoLocalization.localizedForKey("overriden_version") + " ["
+						+ getCGFile().getScheduledOverrideVersion().getStringRepresentation() + "]";
+				rightLabel = FlexoLocalization.localizedForKey("file_on_disk");
+				isLeftOriented = true;
+			} else {
+				logger.warning("I should never access here: status=" + getCGFile().getGenerationStatus());
 				return;
 			}
-			_diffPanel = new DiffPanel(
-					_diffReport,
-					getTokenMarkerStyle(),
-					leftLabel,
-					rightLabel,
-					FlexoLocalization.localizedForKey("no_structural_changes"),
-					isLeftOriented);
-            _diffPanel.validate();
-			add(_diffPanel,BorderLayout.CENTER);
+			_diffPanel = new DiffPanel(_diffReport, getTokenMarkerStyle(), leftLabel, rightLabel,
+					FlexoLocalization.localizedForKey("no_structural_changes"), isLeftOriented);
+			_diffPanel.validate();
+			add(_diffPanel, BorderLayout.CENTER);
 			validate();
 		}
-		
-		protected TokenMarkerStyle getTokenMarkerStyle()
-		{
+
+		protected TokenMarkerStyle getTokenMarkerStyle() {
 			if (getFileFormat() != null) {
 				return DefaultMergedDocumentType.getMergedDocumentType(getFileFormat()).getStyle();
 			} else {
 				return TokenMarkerStyle.None;
 			}
 		}
-		
-		public String getPureGeneration() 
-		{
+
+		public String getPureGeneration() {
 			if (getResource() instanceof ASCIIFileResource) {
-				return ((ASCIIFileResource)getResource()).getCurrentGeneration();
+				return ((ASCIIFileResource) getResource()).getCurrentGeneration();
 			}
 			return "???";
 		}
-		
-		public String getGeneratedMergeContent() 
-		{
-			return ((ASCIIFile)getResourceData()).getContent(ContentSource.GENERATED_MERGE);
-		}
-		
-		public String getContentOnDisk() 
-		{
-			if (getResourceData() == null) {
-				return FlexoLocalization.localizedForKey("cannot_find_file")+"\n"
-				+((CGRepositoryFileResource)getResource()).getResourceFile().getFile().getAbsolutePath();
-			}
-			return ((ASCIIFile)getResourceData()).getContent(ContentSource.CONTENT_ON_DISK);
+
+		public String getGeneratedMergeContent() {
+			return ((ASCIIFile) getResourceData()).getContent(ContentSource.GENERATED_MERGE);
 		}
 
-		public String getLastAccepted() 
-		{
-			return ((ASCIIFile)getResourceData()).getContent(ContentSource.LAST_ACCEPTED);
+		public String getContentOnDisk() {
+			if (getResourceData() == null) {
+				return FlexoLocalization.localizedForKey("cannot_find_file") + "\n"
+						+ ((CGRepositoryFileResource) getResource()).getResourceFile().getFile().getAbsolutePath();
+			}
+			return ((ASCIIFile) getResourceData()).getContent(ContentSource.CONTENT_ON_DISK);
 		}
-		
-		public String getContentToWriteOnDisk()
-		{
-			return ((ASCIIFile)getResourceData()).getContentToWriteOnDisk();
+
+		public String getLastAccepted() {
+			return ((ASCIIFile) getResourceData()).getContent(ContentSource.LAST_ACCEPTED);
+		}
+
+		public String getContentToWriteOnDisk() {
+			return ((ASCIIFile) getResourceData()).getContentToWriteOnDisk();
 		}
 
 		@Override
-		public void setContentSource(ContentSource aContentSource) 
-		{
+		public void setContentSource(ContentSource aContentSource) {
 			// Interface
 		}
 
 		@Override
-		public void addToFocusListener(FocusListener aFocusListener) 
-		{
+		public void addToFocusListener(FocusListener aFocusListener) {
 			_diffPanel.getLeftTextArea().addFocusListener(aFocusListener);
 			_diffPanel.getRightTextArea().addFocusListener(aFocusListener);
 		}
 	}
 
-	protected class ImageDisplayer extends JPanel implements DiffCodeDisplayerComponent
-	{
+	protected class ImageDisplayer extends JPanel implements DiffCodeDisplayerComponent {
 		protected ImageDiffPanel _diffPanel;
-		
-		protected ImageDisplayer()
-		{
+
+		protected ImageDisplayer() {
 			super(new BorderLayout());
 			update();
-			
+
 		}
-		
-		public void setFirstVisibleLine(int lineNb)
-		{
-			
-		}
-		
-		@Override
-		public DisplayContext getDisplayContext()
-		{
-			return null;
-		}
-		
-		@Override
-		public void setDisplayContext(DisplayContext context)
-		{
-			// This lead to display problems
-			// TODO: we need to scroll to right place: following code is not enough and has been unactivated
-			//_diffPanel.getLeftTextArea().scrollTo(context.getFirstVisibleLine(), 0);
+
+		public void setFirstVisibleLine(int lineNb) {
+
 		}
 
 		@Override
-		public void setEditable(boolean isEditable)
-		{
+		public DisplayContext getDisplayContext() {
+			return null;
+		}
+
+		@Override
+		public void setDisplayContext(DisplayContext context) {
+			// This lead to display problems
+			// TODO: we need to scroll to right place: following code is not enough and has been unactivated
+			// _diffPanel.getLeftTextArea().scrollTo(context.getFirstVisibleLine(), 0);
+		}
+
+		@Override
+		public void setEditable(boolean isEditable) {
 			// Not editable anyway
 		}
-		
+
 		@Override
-		public void setEditedContent(CGFile file) 
-		{
+		public void setEditedContent(CGFile file) {
 			// Not editable anyway
 		}
-		
+
 		@Override
-		public String getEditedContentForKey(String contentKey) 
-		{
+		public String getEditedContentForKey(String contentKey) {
 			// Interface: this component is not supposed to be editable
 			return null;
 		}
-		
+
 		@Override
-		public void update()
-		{
+		public void update() {
 			removeAll();
 			String leftLabel;
 			String rightLabel;
 			File left = null;
 			File right = null;
 			if (getCGFile().getGenerationStatus() == GenerationStatus.GenerationRemoved) {
-				 right = (getResource().getFile());
-				 leftLabel = FlexoLocalization.localizedForKey("current_generation");
-				 rightLabel = FlexoLocalization.localizedForKey("file_to_remove_from_disk");
-			}
-			else if (getCGFile().getGenerationStatus() == GenerationStatus.GenerationAdded) {
-				 left = ((FlexoCopiedResource)getResource()).getResourceToCopy().getFile();
-				 leftLabel = FlexoLocalization.localizedForKey("current_generation");
-				 rightLabel = FlexoLocalization.localizedForKey("file_to_add_on_disk");
-			}
-			else if (getCGFile().getGenerationStatus() == GenerationStatus.GenerationModified) {
-				left = ((FlexoCopiedResource)getResource()).getResourceToCopy().getFile();
 				right = (getResource().getFile());
-				 leftLabel = FlexoLocalization.localizedForKey("current_generation");
-				 rightLabel = FlexoLocalization.localizedForKey("file_on_disk");
-			}
-			else if (getCGFile().getGenerationStatus() == GenerationStatus.DiskModified) {
-				left = ((FlexoCopiedResource)getResource()).getResourceToCopy().getFile();
+				leftLabel = FlexoLocalization.localizedForKey("current_generation");
+				rightLabel = FlexoLocalization.localizedForKey("file_to_remove_from_disk");
+			} else if (getCGFile().getGenerationStatus() == GenerationStatus.GenerationAdded) {
+				left = ((FlexoCopiedResource) getResource()).getResourceToCopy().getFile();
+				leftLabel = FlexoLocalization.localizedForKey("current_generation");
+				rightLabel = FlexoLocalization.localizedForKey("file_to_add_on_disk");
+			} else if (getCGFile().getGenerationStatus() == GenerationStatus.GenerationModified) {
+				left = ((FlexoCopiedResource) getResource()).getResourceToCopy().getFile();
 				right = (getResource().getFile());
-				 leftLabel = FlexoLocalization.localizedForKey("last_accepted_version");
-				 rightLabel = FlexoLocalization.localizedForKey("file_on_disk");
-			}
-			else if (getCGFile().getGenerationStatus() == GenerationStatus.DiskRemoved) {
-				left = ((FlexoCopiedResource)getResource()).getResourceToCopy().getFile();
-				 leftLabel = FlexoLocalization.localizedForKey("last_accepted_version");
-				 rightLabel = FlexoLocalization.localizedForKey("file_on_disk");
-			}
-			else {
-				logger.warning("I should never access here: status="+getCGFile().getGenerationStatus());
+				leftLabel = FlexoLocalization.localizedForKey("current_generation");
+				rightLabel = FlexoLocalization.localizedForKey("file_on_disk");
+			} else if (getCGFile().getGenerationStatus() == GenerationStatus.DiskModified) {
+				left = ((FlexoCopiedResource) getResource()).getResourceToCopy().getFile();
+				right = (getResource().getFile());
+				leftLabel = FlexoLocalization.localizedForKey("last_accepted_version");
+				rightLabel = FlexoLocalization.localizedForKey("file_on_disk");
+			} else if (getCGFile().getGenerationStatus() == GenerationStatus.DiskRemoved) {
+				left = ((FlexoCopiedResource) getResource()).getResourceToCopy().getFile();
+				leftLabel = FlexoLocalization.localizedForKey("last_accepted_version");
+				rightLabel = FlexoLocalization.localizedForKey("file_on_disk");
+			} else {
+				logger.warning("I should never access here: status=" + getCGFile().getGenerationStatus());
 				return;
 			}
-			_diffPanel = new ImageDiffPanel(
-					left,right,
-					leftLabel,
-					rightLabel);
-            _diffPanel.validate();
-			add(_diffPanel,BorderLayout.CENTER);
+			_diffPanel = new ImageDiffPanel(left, right, leftLabel, rightLabel);
+			_diffPanel.validate();
+			add(_diffPanel, BorderLayout.CENTER);
 			validate();
 		}
-		
+
 		@Override
-		public void setContentSource(ContentSource aContentSource) 
-		{
+		public void setContentSource(ContentSource aContentSource) {
 			// Interface
 		}
 
 		@Override
-		public void addToFocusListener(FocusListener aFocusListener) 
-		{
-			
+		public void addToFocusListener(FocusListener aFocusListener) {
+
 		}
 	}
-	
-	protected class WOFileDiffCodeDisplayer extends JTabbedPane implements DiffCodeDisplayerComponent
-	{	
+
+	protected class WOFileDiffCodeDisplayer extends JTabbedPane implements DiffCodeDisplayerComponent {
 		private static final String HTML = "html";
 		private static final String WOD = "wod";
 		private static final String WOO = "woo";
-		
+
 		protected ASCIIFileDiffCodeDisplayer htmlDisplayer;
 		protected ASCIIFileDiffCodeDisplayer wodDisplayer;
 		protected ASCIIFileDiffCodeDisplayer wooDisplayer;
-		
-		protected WOFileDiffCodeDisplayer()
-		{
+
+		protected WOFileDiffCodeDisplayer() {
 			super();
 			update();
-			
+
 		}
-		
+
 		@Override
-		public DisplayContext getDisplayContext()
-		{
+		public DisplayContext getDisplayContext() {
 			DisplayContext context = null;
 			if (getSelectedComponent() == htmlDisplayer) {
 				context = htmlDisplayer.getDisplayContext();
@@ -460,10 +395,9 @@ public class DiffCodeDisplayer extends CodeDisplayer {
 			}
 			return context;
 		}
-		
+
 		@Override
-		public void setDisplayContext(DisplayContext context)
-		{
+		public void setDisplayContext(DisplayContext context) {
 			if (context.getContent().equals(HTML)) {
 				setSelectedComponent(htmlDisplayer);
 				htmlDisplayer.setDisplayContext(context);
@@ -478,158 +412,145 @@ public class DiffCodeDisplayer extends CodeDisplayer {
 			}
 		}
 
-
-
 		@Override
-		public void setEditable(boolean isEditable)
-		{
+		public void setEditable(boolean isEditable) {
 			// Interface, not editable anyway
 		}
-		
+
 		@Override
-		public String getEditedContentForKey(String contentKey) 
-		{
+		public String getEditedContentForKey(String contentKey) {
 			// Interface, not editable anyway
 			return null;
 		}
 
 		@Override
-		public void setEditedContent(CGFile file) 
-		{
+		public void setEditedContent(CGFile file) {
 			// Interface, not editable anyway
 		}
 
-
 		@Override
-		public void update()
-		{
+		public void update() {
 			removeAll();
 			htmlDisplayer = new ASCIIFileDiffCodeDisplayer() {
 				@Override
-				protected TokenMarkerStyle getTokenMarkerStyle()
-				{
+				protected TokenMarkerStyle getTokenMarkerStyle() {
 					return TokenMarkerStyle.HTML;
 				}
+
 				@Override
-				public String getPureGeneration() 
-				{
+				public String getPureGeneration() {
 					if (getResource() instanceof WOFileResource) {
-						return ((WOFileResource)getResource()).getCurrentHTMLGeneration();
+						return ((WOFileResource) getResource()).getCurrentHTMLGeneration();
 					}
 					return "???";
 				}
+
 				@Override
-				public String getContentOnDisk() 
-				{
-					return ((WOFile)getResourceData()).getHTMLFile().getContent(ContentSource.CONTENT_ON_DISK);
+				public String getContentOnDisk() {
+					return ((WOFile) getResourceData()).getHTMLFile().getContent(ContentSource.CONTENT_ON_DISK);
 				}
+
 				@Override
-				public String getGeneratedMergeContent() 
-				{
-					return ((WOFile)getResourceData()).getHTMLFile().getContent(ContentSource.GENERATED_MERGE);
+				public String getGeneratedMergeContent() {
+					return ((WOFile) getResourceData()).getHTMLFile().getContent(ContentSource.GENERATED_MERGE);
 				}
+
 				@Override
-				public String getLastAccepted() 
-				{
-					return ((WOFile)getResourceData()).getHTMLFile().getContent(ContentSource.LAST_ACCEPTED);
+				public String getLastAccepted() {
+					return ((WOFile) getResourceData()).getHTMLFile().getContent(ContentSource.LAST_ACCEPTED);
 				}
+
 				@Override
-				public String getContentToWriteOnDisk()
-				{
-					return ((WOFile)getResourceData()).getHTMLFile().getContentToWriteOnDisk();
+				public String getContentToWriteOnDisk() {
+					return ((WOFile) getResourceData()).getHTMLFile().getContentToWriteOnDisk();
 				}
 			};
 			wodDisplayer = new ASCIIFileDiffCodeDisplayer() {
 				@Override
-				protected TokenMarkerStyle getTokenMarkerStyle()
-				{
+				protected TokenMarkerStyle getTokenMarkerStyle() {
 					return TokenMarkerStyle.WOD;
 				}
+
 				@Override
-				public String getPureGeneration() 
-				{
+				public String getPureGeneration() {
 					if (getResource() instanceof WOFileResource) {
-						return ((WOFileResource)getResource()).getCurrentWODGeneration();
+						return ((WOFileResource) getResource()).getCurrentWODGeneration();
 					}
 					return "???";
 				}
+
 				@Override
-				public String getContentOnDisk() 
-				{
-					return ((WOFile)getResourceData()).getWODFile().getContent(ContentSource.CONTENT_ON_DISK);
+				public String getContentOnDisk() {
+					return ((WOFile) getResourceData()).getWODFile().getContent(ContentSource.CONTENT_ON_DISK);
 				}
+
 				@Override
-				public String getGeneratedMergeContent() 
-				{
-					return ((WOFile)getResourceData()).getWODFile().getContent(ContentSource.GENERATED_MERGE);
+				public String getGeneratedMergeContent() {
+					return ((WOFile) getResourceData()).getWODFile().getContent(ContentSource.GENERATED_MERGE);
 				}
+
 				@Override
-				public String getLastAccepted() 
-				{
-					return ((WOFile)getResourceData()).getWODFile().getContent(ContentSource.LAST_ACCEPTED);
+				public String getLastAccepted() {
+					return ((WOFile) getResourceData()).getWODFile().getContent(ContentSource.LAST_ACCEPTED);
 				}
+
 				@Override
-				public String getContentToWriteOnDisk()
-				{
-					return ((WOFile)getResourceData()).getWODFile().getContentToWriteOnDisk();
+				public String getContentToWriteOnDisk() {
+					return ((WOFile) getResourceData()).getWODFile().getContentToWriteOnDisk();
 				}
-				
+
 			};
 			wooDisplayer = new ASCIIFileDiffCodeDisplayer() {
 				@Override
-				protected TokenMarkerStyle getTokenMarkerStyle()
-				{
+				protected TokenMarkerStyle getTokenMarkerStyle() {
 					return TokenMarkerStyle.WOD;
 				}
+
 				@Override
-				public String getPureGeneration() 
-				{
+				public String getPureGeneration() {
 					if (getResource() instanceof WOFileResource) {
-						return ((WOFileResource)getResource()).getCurrentWOOGeneration();
+						return ((WOFileResource) getResource()).getCurrentWOOGeneration();
 					}
 					return "???";
 				}
+
 				@Override
-				public String getContentOnDisk() 
-				{
-					return ((WOFile)getResourceData()).getWOOFile().getContent(ContentSource.CONTENT_ON_DISK);
+				public String getContentOnDisk() {
+					return ((WOFile) getResourceData()).getWOOFile().getContent(ContentSource.CONTENT_ON_DISK);
 				}
+
 				@Override
-				public String getGeneratedMergeContent() 
-				{
-					return ((WOFile)getResourceData()).getWOOFile().getContent(ContentSource.GENERATED_MERGE);
+				public String getGeneratedMergeContent() {
+					return ((WOFile) getResourceData()).getWOOFile().getContent(ContentSource.GENERATED_MERGE);
 				}
+
 				@Override
-				public String getLastAccepted() 
-				{
-					return ((WOFile)getResourceData()).getWOOFile().getContent(ContentSource.LAST_ACCEPTED);
+				public String getLastAccepted() {
+					return ((WOFile) getResourceData()).getWOOFile().getContent(ContentSource.LAST_ACCEPTED);
 				}
+
 				@Override
-				public String getContentToWriteOnDisk()
-				{
-					return ((WOFile)getResourceData()).getWOOFile().getContentToWriteOnDisk();
+				public String getContentToWriteOnDisk() {
+					return ((WOFile) getResourceData()).getWOOFile().getContentToWriteOnDisk();
 				}
 			};
-			add(".html",htmlDisplayer);
-			add(".wod",wodDisplayer);
-			add(".woo",wooDisplayer);
+			add(".html", htmlDisplayer);
+			add(".wod", wodDisplayer);
+			add(".woo", wooDisplayer);
 			validate();
 		}
 
 		@Override
-		public void setContentSource(ContentSource aContentSource) 
-		{
+		public void setContentSource(ContentSource aContentSource) {
 			// Interface
 		}
 
-		public void addToFocusListener(FocusListener aFocusListener) 
-		{
+		public void addToFocusListener(FocusListener aFocusListener) {
 			htmlDisplayer.addToFocusListener(aFocusListener);
 			wodDisplayer.addToFocusListener(aFocusListener);
 			wooDisplayer.addToFocusListener(aFocusListener);
 		}
 
 	}
-
 
 }

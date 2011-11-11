@@ -37,8 +37,7 @@ import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBDropDown;
 import org.openflexo.localization.FlexoLocalization;
 
-public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown,JComboBox,Object>
-{
+public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComboBox, Object> {
 
 	static final Logger logger = Logger.getLogger(FIBDropDownWidget.class.getPackage().getName());
 
@@ -48,34 +47,31 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown,JCombo
 
 	protected JComboBox _jComboBox;
 
-	public FIBDropDownWidget(FIBDropDown model, FIBController controller)
-	{
-		super(model,controller);
+	public FIBDropDownWidget(FIBDropDown model, FIBController controller) {
+		super(model, controller);
 		initJComboBox();
 		_mySmallPanel = new JPanel(new BorderLayout());
 		_resetButton = new JButton();
 		_resetButton.setText(FlexoLocalization.localizedForKey("reset", _resetButton));
 		_resetButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				_jComboBox.getModel().setSelectedItem(null);
 				setValue(null);
 			}
 		});
-		
+
 		_mySmallPanel.add(_jComboBox, BorderLayout.CENTER);
-		if (model.showReset) _mySmallPanel.add(_resetButton, BorderLayout.EAST);
+		if (model.showReset)
+			_mySmallPanel.add(_resetButton, BorderLayout.EAST);
 		_mySmallPanel.setOpaque(false);
 		_mySmallPanel.addFocusListener(this);
 
-        updateFont();
-        
+		updateFont();
+
 	}
 
-	
-	protected void initJComboBox()
-	{
+	protected void initJComboBox() {
 		if (logger.isLoggable(Level.FINE))
 			logger.fine("initJComboBox()");
 		Dimension dimTemp = null;
@@ -88,7 +84,7 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown,JCombo
 			parentTemp.remove(_jComboBox);
 			parentTemp.remove(_resetButton);
 		}
-		listModel=null;
+		listModel = null;
 		_jComboBox = new JComboBox(getListModel());
 		/*if (getDataObject() == null) {
 			Vector<Object> defaultValue = new Vector<Object>();
@@ -103,15 +99,14 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown,JCombo
 		_jComboBox.setRenderer(getListCellRenderer());
 		_jComboBox.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				if (logger.isLoggable(Level.FINE))
 					logger.fine("Action performed in " + this.getClass().getName());
 				updateModelFromWidget();
 			}
 		});
 		if (parentTemp != null) {
-			//_jComboBox.setSize(dimTemp);
+			// _jComboBox.setSize(dimTemp);
 			_jComboBox.setLocation(locTemp);
 			((JPanel) parentTemp).add(_jComboBox, BorderLayout.CENTER);
 			if (getWidget().showReset)
@@ -119,9 +114,8 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown,JCombo
 		}
 		// Important: otherwise might be desynchronized
 		_jComboBox.revalidate();
-		
-		if ((getWidget().getData() == null || !getWidget().getData().isValid()) 
-				&& getWidget().getAutoSelectFirstRow()
+
+		if ((getWidget().getData() == null || !getWidget().getData().isValid()) && getWidget().getAutoSelectFirstRow()
 				&& getListModel().getSize() > 0) {
 			_jComboBox.setSelectedIndex(0);
 		}
@@ -129,16 +123,15 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown,JCombo
 	}
 
 	@Override
-	public synchronized boolean updateWidgetFromModel()
-	{
-		if (notEquals(getValue(),_jComboBox.getSelectedItem()) || listModelRequireChange()) {
+	public synchronized boolean updateWidgetFromModel() {
+		if (notEquals(getValue(), _jComboBox.getSelectedItem()) || listModelRequireChange()) {
 
 			if (logger.isLoggable(Level.FINE))
 				logger.fine("updateWidgetFromModel()");
 			widgetUpdating = true;
 			initJComboBox();
 			_jComboBox.setSelectedItem(getValue());
-			
+
 			widgetUpdating = false;
 
 			if (getValue() == null && getWidget().getAutoSelectFirstRow() && getListModel().getSize() > 0) {
@@ -150,14 +143,12 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown,JCombo
 		return false;
 	}
 
-
 	/**
 	 * Update the model given the actual state of the widget
 	 */
 	@Override
-	public synchronized boolean updateModelFromWidget()
-	{
-		if (notEquals(getValue(),_jComboBox.getSelectedItem())) {
+	public synchronized boolean updateModelFromWidget() {
+		if (notEquals(getValue(), _jComboBox.getSelectedItem())) {
 			modelUpdating = true;
 			if (logger.isLoggable(Level.FINE))
 				logger.fine("updateModelFromWidget with " + _jComboBox.getSelectedItem());
@@ -171,45 +162,39 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown,JCombo
 	}
 
 	@Override
-	public MyComboBoxModel getListModel()
-	{
-		return (MyComboBoxModel)super.getListModel();
+	public MyComboBoxModel getListModel() {
+		return (MyComboBoxModel) super.getListModel();
 	}
 
 	@Override
-	protected MyComboBoxModel updateListModelWhenRequired()
-	{
+	protected MyComboBoxModel updateListModelWhenRequired() {
 		if (listModel == null) {
 			listModel = new MyComboBoxModel(getValue());
 			if (_jComboBox != null) {
-				_jComboBox.setModel((MyComboBoxModel)listModel);
+				_jComboBox.setModel((MyComboBoxModel) listModel);
 			}
-		}
-		else {
+		} else {
 			MyComboBoxModel aNewMyComboBoxModel = new MyComboBoxModel(getValue());
 			if (!aNewMyComboBoxModel.equals(listModel)) {
 				listModel = aNewMyComboBoxModel;
-				_jComboBox.setModel((MyComboBoxModel)listModel);
+				_jComboBox.setModel((MyComboBoxModel) listModel);
 			}
 		}
-		return (MyComboBoxModel)listModel;
+		return (MyComboBoxModel) listModel;
 	}
 
-
-	protected class MyComboBoxModel extends FIBMultipleValueModel implements ComboBoxModel
-	{
+	protected class MyComboBoxModel extends FIBMultipleValueModel implements ComboBoxModel {
 		protected Object selectedItem = null;
 
 		public MyComboBoxModel(Object selectedObject) {
 			super();
 		}
-		
+
 		@Override
-		public void setSelectedItem(Object anItem)
-		{
+		public void setSelectedItem(Object anItem) {
 			if (selectedItem != anItem) {
 				selectedItem = anItem;
-				//logger.info("setSelectedItem() with "+anItem+" widgetUpdating="+widgetUpdating+" modelUpdating="+modelUpdating);
+				// logger.info("setSelectedItem() with "+anItem+" widgetUpdating="+widgetUpdating+" modelUpdating="+modelUpdating);
 				getDynamicModel().selected = anItem;
 				getDynamicModel().selectedIndex = indexOf(anItem);
 				if (!widgetUpdating && !modelUpdating) {
@@ -219,40 +204,36 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown,JCombo
 		}
 
 		@Override
-		public Object getSelectedItem()
-		{
+		public Object getSelectedItem() {
 			return selectedItem;
 		}
 
 		@Override
 		public boolean equals(Object object) {
 			if (object instanceof MyComboBoxModel) {
-				if (selectedItem != ((MyComboBoxModel)object).selectedItem) {
+				if (selectedItem != ((MyComboBoxModel) object).selectedItem) {
 					return false;
 				}
 			}
 			return super.equals(object);
 		}
-		
+
 	}
 
 	@Override
-	public JPanel getJComponent() 
-	{
+	public JPanel getJComponent() {
 		return _mySmallPanel;
 	}
 
 	@Override
-	public JComboBox getDynamicJComponent()
-	{
+	public JComboBox getDynamicJComponent() {
 		return _jComboBox;
 	}
 
 	@Override
-	public void updateFont()
-	{
+	public void updateFont() {
 		super.updateFont();
 		_jComboBox.setFont(getFont());
 	}
-	
+
 }

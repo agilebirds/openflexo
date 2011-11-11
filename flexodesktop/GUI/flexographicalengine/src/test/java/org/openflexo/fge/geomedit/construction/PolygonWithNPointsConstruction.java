@@ -25,50 +25,43 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 
-
 public class PolygonWithNPointsConstruction extends PolygonConstruction {
 
 	public Vector<PointConstruction> pointConstructions;
-	
-	public PolygonWithNPointsConstruction() 
-	{
+
+	public PolygonWithNPointsConstruction() {
 		super();
 		pointConstructions = new Vector<PointConstruction>();
 	}
-	
-	public PolygonWithNPointsConstruction(Vector<PointConstruction> somePointConstructions) 
-	{
+
+	public PolygonWithNPointsConstruction(Vector<PointConstruction> somePointConstructions) {
 		this();
 		this.pointConstructions.addAll(somePointConstructions);
 	}
-	
+
 	@Override
-	protected FGEPolygon computeData()
-	{
+	protected FGEPolygon computeData() {
 		Vector<FGEPoint> pts = new Vector<FGEPoint>();
 		for (PointConstruction pc : pointConstructions) {
 			pts.add(pc.getData());
 		}
-		return new FGEPolygon((getIsFilled()?Filling.FILLED:Filling.NOT_FILLED),pts);
+		return new FGEPolygon((getIsFilled() ? Filling.FILLED : Filling.NOT_FILLED), pts);
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("PolygonWithNPointsConstruction[\n");
 		for (PointConstruction pc : pointConstructions) {
-			sb.append("> "+pc.toString()+"\n");
+			sb.append("> " + pc.toString() + "\n");
 		}
 		sb.append("]");
 		return sb.toString();
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public GeometricConstruction[] getDepends() {
 		return pointConstructions.toArray(new GeometricConstruction[pointConstructions.size()]);
 	}
-
 
 }

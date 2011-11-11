@@ -30,28 +30,25 @@ import java.util.logging.Logger;
 import org.openflexo.dre.controller.DREController;
 import org.openflexo.view.menu.EditMenu;
 
-
 /**
  * 'Edit' menu for this module
  * 
  * @author yourname
  */
-public class DREEditMenu extends EditMenu
-{
+public class DREEditMenu extends EditMenu {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DREEditMenu.class.getPackage().getName());
 
-    public DREEditMenu(DREController controller)
-    {
-        super(controller);
-        addSeparator();
-        // Add actions here
-        //add(deleteItem = new FlexoMenuItem(DREDelete.actionType, getController()));
-        //add(cutItem = new FlexoMenuItem(DRECut.actionType, getController()));
-        //add(copyItem = new FlexoMenuItem(DRECopy.actionType, getController()));
-        //add(pasteItem = new FlexoMenuItem(DREPaste.actionType, getController()));
-        //add(selectAllItem = new FlexoMenuItem(DRESelectAll.actionType, getController()));
-    }
+	public DREEditMenu(DREController controller) {
+		super(controller);
+		addSeparator();
+		// Add actions here
+		// add(deleteItem = new FlexoMenuItem(DREDelete.actionType, getController()));
+		// add(cutItem = new FlexoMenuItem(DRECut.actionType, getController()));
+		// add(copyItem = new FlexoMenuItem(DRECopy.actionType, getController()));
+		// add(pasteItem = new FlexoMenuItem(DREPaste.actionType, getController()));
+		// add(selectAllItem = new FlexoMenuItem(DRESelectAll.actionType, getController()));
+	}
 
 }

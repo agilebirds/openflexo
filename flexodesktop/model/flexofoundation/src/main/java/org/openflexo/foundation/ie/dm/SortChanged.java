@@ -19,11 +19,9 @@
  */
 package org.openflexo.foundation.ie.dm;
 
-public class SortChanged extends IEDataModification
-{
+public class SortChanged extends IEDataModification {
 
-    public SortChanged()
-    {
-        super(null, null);
-    }
+	public SortChanged() {
+		super(null, null);
+	}
 }

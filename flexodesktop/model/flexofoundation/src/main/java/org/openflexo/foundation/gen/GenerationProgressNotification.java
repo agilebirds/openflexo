@@ -21,10 +21,10 @@ package org.openflexo.foundation.gen;
 
 import org.openflexo.foundation.DataModification;
 
-public class GenerationProgressNotification extends DataModification{
+public class GenerationProgressNotification extends DataModification {
 
-	private boolean _isFine=false;
-	
+	private boolean _isFine = false;
+
 	public GenerationProgressNotification(int modificationType, Object oldValue, Object newValue) {
 		super(modificationType, oldValue, newValue);
 	}
@@ -32,18 +32,17 @@ public class GenerationProgressNotification extends DataModification{
 	public GenerationProgressNotification(String message) {
 		super(123456, null, message);
 	}
-	
-	public GenerationProgressNotification(String message,boolean isFine) {
+
+	public GenerationProgressNotification(String message, boolean isFine) {
 		super(123456, null, message);
 		_isFine = isFine;
 	}
-	
-	
-	public String getProgressMessage(){
-		return (String)newValue();
+
+	public String getProgressMessage() {
+		return (String) newValue();
 	}
-	
-	public boolean getIsFineMessage(){
+
+	public boolean getIsFineMessage() {
 		return _isFine;
 	}
 }

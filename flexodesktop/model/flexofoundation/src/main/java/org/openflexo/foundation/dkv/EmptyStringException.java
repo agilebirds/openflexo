@@ -23,14 +23,12 @@ import org.openflexo.foundation.FlexoException;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class EmptyStringException extends FlexoException
-{
-    /**
+public class EmptyStringException extends FlexoException {
+	/**
      * 
      */
-    public EmptyStringException()
-    {
-    }
+	public EmptyStringException() {
+	}
 }

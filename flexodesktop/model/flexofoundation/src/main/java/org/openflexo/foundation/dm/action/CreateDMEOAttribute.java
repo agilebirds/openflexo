@@ -31,76 +31,67 @@ import org.openflexo.foundation.dm.eo.DMEOAttribute;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.dm.eo.EOAccessException;
 
+public class CreateDMEOAttribute extends FlexoAction<CreateDMEOAttribute, DMEOEntity, DMObject> {
 
-public class CreateDMEOAttribute extends FlexoAction<CreateDMEOAttribute,DMEOEntity,DMObject>
-{
+	private static final Logger logger = Logger.getLogger(CreateDMEOAttribute.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(CreateDMEOAttribute.class.getPackage().getName());
+	public static FlexoActionType<CreateDMEOAttribute, DMEOEntity, DMObject> actionType = new FlexoActionType<CreateDMEOAttribute, DMEOEntity, DMObject>(
+			"add_eo_attribute", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
-    public static FlexoActionType<CreateDMEOAttribute,DMEOEntity,DMObject> actionType = new FlexoActionType<CreateDMEOAttribute,DMEOEntity,DMObject>("add_eo_attribute",FlexoActionType.newMenu,FlexoActionType.defaultGroup,FlexoActionType.ADD_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public CreateDMEOAttribute makeNewAction(DMEOEntity focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
+			return new CreateDMEOAttribute(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public CreateDMEOAttribute makeNewAction(DMEOEntity focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) 
-        {
-            return new CreateDMEOAttribute(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(DMEOEntity object, Vector<DMObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(DMEOEntity object, Vector<DMObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(DMEOEntity object, Vector<DMObject> globalSelection) {
+			return object != null && !object.getIsReadOnly();
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(DMEOEntity object, Vector<DMObject> globalSelection) 
-        {
-            return object != null && !object.getIsReadOnly();
-        }
-                
-    };
-    
-    private DMEOEntity _entity;
-    private String _newAttributeName;
-    private DMEOAttribute _newEOAttribute;
-    
-    CreateDMEOAttribute (DMEOEntity focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-    @Override
-	protected void doAction(Object context) throws EOAccessException 
-    {
-        logger.info ("CreateDMEOAttribute");
-        if (getEntity() != null) {
-            _newAttributeName = getEntity().getDMModel().getNextDefautAttributeName(getEntity());
-            _newEOAttribute = DMEOAttribute.createsNewDMEOAttribute(getEntity().getDMModel(), getEntity(), _newAttributeName, false,
-                    true, DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
-            getEntity().registerProperty(_newEOAttribute);
-        }
-    }
+	private DMEOEntity _entity;
+	private String _newAttributeName;
+	private DMEOAttribute _newEOAttribute;
 
-   public String getNewAttributeName()
-   {
-       return _newAttributeName;
-   }
-   
-   public DMEOEntity getEntity()
-   {
-       if (_entity == null) {
-           if (getFocusedObject() != null) {
-               _entity = getFocusedObject();
-            }           
-       }
-       return _entity;
-   }
+	CreateDMEOAttribute(DMEOEntity focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-   public DMEOAttribute getNewEOAttribute()
-   {
-       return _newEOAttribute;
-   }
+	@Override
+	protected void doAction(Object context) throws EOAccessException {
+		logger.info("CreateDMEOAttribute");
+		if (getEntity() != null) {
+			_newAttributeName = getEntity().getDMModel().getNextDefautAttributeName(getEntity());
+			_newEOAttribute = DMEOAttribute.createsNewDMEOAttribute(getEntity().getDMModel(), getEntity(), _newAttributeName, false, true,
+					DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
+			getEntity().registerProperty(_newEOAttribute);
+		}
+	}
+
+	public String getNewAttributeName() {
+		return _newAttributeName;
+	}
+
+	public DMEOEntity getEntity() {
+		if (_entity == null) {
+			if (getFocusedObject() != null) {
+				_entity = getFocusedObject();
+			}
+		}
+		return _entity;
+	}
+
+	public DMEOAttribute getNewEOAttribute() {
+		return _newEOAttribute;
+	}
 
 }

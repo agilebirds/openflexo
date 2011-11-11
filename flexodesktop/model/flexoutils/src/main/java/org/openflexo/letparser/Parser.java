@@ -18,6 +18,7 @@
  *
  */
 package org.openflexo.letparser;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -35,192 +36,167 @@ import java.util.Vector;
 
 public class Parser {
 
-    public static Token parse (String aString) throws ParseException
-    {
-        BufferedReader rdr = new BufferedReader(new StringReader(aString));
-        return parse(rdr);
-    }
+	public static Token parse(String aString) throws ParseException {
+		BufferedReader rdr = new BufferedReader(new StringReader(aString));
+		return parse(rdr);
+	}
 
-    private static StreamTokenizer initStreamTokenizer(Reader rdr)
-    {
-        // Always need to setup StreamTokenizer
-        StreamTokenizer input = new StreamTokenizer(rdr);
-        input.wordChars('_','_');
-        return input;
-    }
-    
-    public static Expression parseExpression (String aString) throws ParseException
-    {
-        Token result = parse(aString);
-        if (result instanceof Expression) return (Expression)result;
-        throw new ParseException("Could not parse as an expression "+aString);
-    }
+	private static StreamTokenizer initStreamTokenizer(Reader rdr) {
+		// Always need to setup StreamTokenizer
+		StreamTokenizer input = new StreamTokenizer(rdr);
+		input.wordChars('_', '_');
+		return input;
+	}
 
-    public static Function parseFunction (String aString) throws ParseException
-    {
-        Token result = parse(aString);
-        if (result instanceof Function) return (Function)result;
-        throw new ParseException("Could not parse as an function "+aString);
-    }
+	public static Expression parseExpression(String aString) throws ParseException {
+		Token result = parse(aString);
+		if (result instanceof Expression)
+			return (Expression) result;
+		throw new ParseException("Could not parse as an expression " + aString);
+	}
 
-    private static Token parse (Reader rdr) throws ParseException
-    {
-        ListOfToken unparsedList = parseLevel(initStreamTokenizer(rdr));
-        if ((unparsedList.size() == 1) && (unparsedList.firstElement() instanceof Token))
-            return (Token)unparsedList.firstElement();
-        try {
-            return Function.makeFunction(unparsedList);
-        }
-        catch (ParseException e) {
-            return Expression.makeExpression(unparsedList);
-        }
-       
-    }
-    
-    /**
-     * Return a vector of AbstractToken (Operator,Word,Value) and Vector elements
-     * @return
-     */
-    private static ListOfToken parseLevel(StreamTokenizer input) throws ParseException
-    {
-        ListOfToken returned = new ListOfToken();
-        
-        try
-        {
-            // Read input file and build array
+	public static Function parseFunction(String aString) throws ParseException {
+		Token result = parse(aString);
+		if (result instanceof Function)
+			return (Function) result;
+		throw new ParseException("Could not parse as an function " + aString);
+	}
 
-            String currentInput = "";
-            boolean levelSeemsToBeFinished = false;
-            boolean prefixedBy$ = false;
+	private static Token parse(Reader rdr) throws ParseException {
+		ListOfToken unparsedList = parseLevel(initStreamTokenizer(rdr));
+		if ((unparsedList.size() == 1) && (unparsedList.firstElement() instanceof Token))
+			return (Token) unparsedList.firstElement();
+		try {
+			return Function.makeFunction(unparsedList);
+		} catch (ParseException e) {
+			return Expression.makeExpression(unparsedList);
+		}
 
-            while ((!levelSeemsToBeFinished)
-                    && (input.nextToken() != StreamTokenizer.TT_EOF ))
-            {
-                //System.out.println("currentInput="+currentInput+" input="+input);
-                
-                if (input.ttype == StreamTokenizer.TT_WORD){
-                    //System.out.println("Found string: "+ input.sval);
-                    handlesCurrentInput(returned,currentInput);
-                    currentInput = "";
-                    handlesWordAddition(returned,input.sval);
-                }
-                else if (input.ttype == StreamTokenizer.TT_NUMBER){
-                    //System.out.println("Found double: "+ input.nval);
-                    handlesCurrentInput(returned,currentInput);
-                    currentInput = "";
-                    Value value = Value.createValue(input.nval);
-                    value.setPrefixedBy$(prefixedBy$);
-                    returned.add(value);
-                    prefixedBy$ = false;
-               }
-                // looks for quotes indicating delimited strings
-                else if ( input.ttype == '"'){ 
-                    // Then the string will be in the sval field
-                    //System.out.println("Found delimited string: "+ input.sval);
-                    handlesCurrentInput(returned,currentInput);
-                    currentInput = "";
-                    //handlesWordAddition(returned,input.sval);
-                    Value value = StringValue.createStringValue(input.sval);
-                    value.setPrefixedBy$(prefixedBy$);
-                    returned.add(value);
-                    prefixedBy$ = false;
-                }
-                else if ( input.ttype == '\''){ 
-                    // Then the string will be in the sval field
-                    //System.out.println("Found delimited string: "+ input.sval);
-                    handlesCurrentInput(returned,currentInput);
-                    currentInput = "";
-                    //handlesWordAddition(returned,input.sval);
-                    Value value = CharValue.createCharValue(input.sval.charAt(0));
-                    value.setPrefixedBy$(prefixedBy$);
-                    returned.add(value);
-                    prefixedBy$ = false;
-                }
-                else if ( input.ttype == '$'){ 
-                    // Then the string will be in the sval field
-                    //System.out.println("Found delimited string: "+ input.sval);
-                     handlesCurrentInput(returned,currentInput);
-                    currentInput = "";
-                    prefixedBy$ = true;
-                }
-               else {
-                    char foundChar = (char)input.ttype;
-                    //System.out.println("Found Ordinry Character: "+ foundChar);
-                    if (foundChar == '(') {
-                        handlesCurrentInput(returned,currentInput);
-                        currentInput = "";
-                       returned.add(parseLevel(input));
-                    }
-                    else if (foundChar == ')') {
-                        levelSeemsToBeFinished = true;
-                    }
-                    else {
-                        currentInput = currentInput+foundChar;
-                    }
-                }
-            }
-            
-            handlesCurrentInput(returned,currentInput);
-            currentInput = "";
+	}
 
-            //System.out.println("Done");
-                        
-            return returned;
-        }
-        catch (IOException exception)
-        {
-            throw new ParseException("IOException occured: "+exception.getMessage());
-       }
-        
-    }
-    
-    private static void handlesCurrentInput (Vector<AbstractToken> returned, String currentInput) throws ParseException
-    {
-        if (currentInput.equals("")) return;
-        if (currentInput.equals(",")) {
-            returned.add(new Comma());
-            return;
-        }
-        Operator operator = matchOperator(currentInput);
-        if (operator != null) {
-            returned.add(operator);
-         }
-        else {
-            throw new ParseException("Invalid characters : "+currentInput);               
-        }
-     }
-    
-    private static void handlesWordAddition (Vector<AbstractToken> returned, String word) throws ParseException
-    {
-        if (word.equals("")) return;
-        if ((word.equalsIgnoreCase("true")) 
-                || (word.equalsIgnoreCase("yes"))) {
-            returned.add(new BooleanValue(true));
-        }
-        else if ((word.equalsIgnoreCase("false")) 
-                || (word.equalsIgnoreCase("no"))) {
-            returned.add(new BooleanValue(false));
-        }
-        else if (matchOperator(word)!=null) {
-            returned.add(matchOperator(word));
-        }
-        else {
-            returned.add(new Word(word));
-        }
-     }
-    
-    private static Operator matchOperator (String anInput)
-    {
-        for (Enumeration en=Operator.getKnownOperators().elements(); en.hasMoreElements();) {
-            Operator next = (Operator)en.nextElement();
-            if ((anInput.toUpperCase().equals(next.getSymbol()))
-                    || (anInput.toUpperCase().equals(next.getAlternativeSymbol()))) {
-                return next;
-            }
-        }
-        return null;
-    }
-    
- 
+	/**
+	 * Return a vector of AbstractToken (Operator,Word,Value) and Vector elements
+	 * 
+	 * @return
+	 */
+	private static ListOfToken parseLevel(StreamTokenizer input) throws ParseException {
+		ListOfToken returned = new ListOfToken();
+
+		try {
+			// Read input file and build array
+
+			String currentInput = "";
+			boolean levelSeemsToBeFinished = false;
+			boolean prefixedBy$ = false;
+
+			while ((!levelSeemsToBeFinished) && (input.nextToken() != StreamTokenizer.TT_EOF)) {
+				// System.out.println("currentInput="+currentInput+" input="+input);
+
+				if (input.ttype == StreamTokenizer.TT_WORD) {
+					// System.out.println("Found string: "+ input.sval);
+					handlesCurrentInput(returned, currentInput);
+					currentInput = "";
+					handlesWordAddition(returned, input.sval);
+				} else if (input.ttype == StreamTokenizer.TT_NUMBER) {
+					// System.out.println("Found double: "+ input.nval);
+					handlesCurrentInput(returned, currentInput);
+					currentInput = "";
+					Value value = Value.createValue(input.nval);
+					value.setPrefixedBy$(prefixedBy$);
+					returned.add(value);
+					prefixedBy$ = false;
+				}
+				// looks for quotes indicating delimited strings
+				else if (input.ttype == '"') {
+					// Then the string will be in the sval field
+					// System.out.println("Found delimited string: "+ input.sval);
+					handlesCurrentInput(returned, currentInput);
+					currentInput = "";
+					// handlesWordAddition(returned,input.sval);
+					Value value = StringValue.createStringValue(input.sval);
+					value.setPrefixedBy$(prefixedBy$);
+					returned.add(value);
+					prefixedBy$ = false;
+				} else if (input.ttype == '\'') {
+					// Then the string will be in the sval field
+					// System.out.println("Found delimited string: "+ input.sval);
+					handlesCurrentInput(returned, currentInput);
+					currentInput = "";
+					// handlesWordAddition(returned,input.sval);
+					Value value = CharValue.createCharValue(input.sval.charAt(0));
+					value.setPrefixedBy$(prefixedBy$);
+					returned.add(value);
+					prefixedBy$ = false;
+				} else if (input.ttype == '$') {
+					// Then the string will be in the sval field
+					// System.out.println("Found delimited string: "+ input.sval);
+					handlesCurrentInput(returned, currentInput);
+					currentInput = "";
+					prefixedBy$ = true;
+				} else {
+					char foundChar = (char) input.ttype;
+					// System.out.println("Found Ordinry Character: "+ foundChar);
+					if (foundChar == '(') {
+						handlesCurrentInput(returned, currentInput);
+						currentInput = "";
+						returned.add(parseLevel(input));
+					} else if (foundChar == ')') {
+						levelSeemsToBeFinished = true;
+					} else {
+						currentInput = currentInput + foundChar;
+					}
+				}
+			}
+
+			handlesCurrentInput(returned, currentInput);
+			currentInput = "";
+
+			// System.out.println("Done");
+
+			return returned;
+		} catch (IOException exception) {
+			throw new ParseException("IOException occured: " + exception.getMessage());
+		}
+
+	}
+
+	private static void handlesCurrentInput(Vector<AbstractToken> returned, String currentInput) throws ParseException {
+		if (currentInput.equals(""))
+			return;
+		if (currentInput.equals(",")) {
+			returned.add(new Comma());
+			return;
+		}
+		Operator operator = matchOperator(currentInput);
+		if (operator != null) {
+			returned.add(operator);
+		} else {
+			throw new ParseException("Invalid characters : " + currentInput);
+		}
+	}
+
+	private static void handlesWordAddition(Vector<AbstractToken> returned, String word) throws ParseException {
+		if (word.equals(""))
+			return;
+		if ((word.equalsIgnoreCase("true")) || (word.equalsIgnoreCase("yes"))) {
+			returned.add(new BooleanValue(true));
+		} else if ((word.equalsIgnoreCase("false")) || (word.equalsIgnoreCase("no"))) {
+			returned.add(new BooleanValue(false));
+		} else if (matchOperator(word) != null) {
+			returned.add(matchOperator(word));
+		} else {
+			returned.add(new Word(word));
+		}
+	}
+
+	private static Operator matchOperator(String anInput) {
+		for (Enumeration en = Operator.getKnownOperators().elements(); en.hasMoreElements();) {
+			Operator next = (Operator) en.nextElement();
+			if ((anInput.toUpperCase().equals(next.getSymbol())) || (anInput.toUpperCase().equals(next.getAlternativeSymbol()))) {
+				return next;
+			}
+		}
+		return null;
+	}
 
 }

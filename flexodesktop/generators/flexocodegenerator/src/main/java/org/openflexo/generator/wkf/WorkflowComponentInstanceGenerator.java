@@ -26,31 +26,28 @@ import org.openflexo.generator.ProjectGenerator;
 import org.openflexo.generator.utils.JavaClassGenerator;
 import org.openflexo.logging.FlexoLogger;
 
-public class WorkflowComponentInstanceGenerator extends JavaClassGenerator
-{
+public class WorkflowComponentInstanceGenerator extends JavaClassGenerator {
 
 	private static final String TEMPLATE_NAME = "WorkflowComponentInstance.java.vm";
 
 	private static final Logger logger = FlexoLogger.getLogger(WorkflowComponentInstanceGenerator.class.getPackage().getName());
 
-	public WorkflowComponentInstanceGenerator(ProjectGenerator projectGenerator, String packageName)
-	{
+	public WorkflowComponentInstanceGenerator(ProjectGenerator projectGenerator, String packageName) {
 		super(projectGenerator, "WorkflowComponentInstance", packageName);
 	}
 
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
 	/**
 	 * Overrides rebuildDependanciesForResource
+	 * 
 	 * @see org.openflexo.generator.utils.JavaClassGenerator#rebuildDependanciesForResource(JavaFileResource)
 	 */
 	@Override
-	public void rebuildDependanciesForResource(JavaFileResource resource)
-	{
+	public void rebuildDependanciesForResource(JavaFileResource resource) {
 		resource.addToDependantResources(getProject().getFlexoComponentLibraryResource());
 	}
 

@@ -36,158 +36,128 @@ import org.openflexo.fge.geom.area.FGEHalfLine;
 import org.openflexo.fge.geom.area.FGEQuarterPlane;
 import org.openflexo.fge.shapes.Shape;
 
-
 public class ShapeResizingControlPoint extends ControlPoint {
 
 	private static final Logger logger = Logger.getLogger(ShapeResizingControlPoint.class.getPackage().getName());
 
 	private CardinalDirection cardinalDirection;
-	//private FGEArea authorizedDragArea;
 
-	public ShapeResizingControlPoint(ShapeGraphicalRepresentation<?> graphicalRepresentation, FGEPoint pt, CardinalDirection aCardinalDirection)
-	{
-		super(graphicalRepresentation,pt);
+	// private FGEArea authorizedDragArea;
 
-		//logger.info("***** new ShapeResizingControlPoint "+Integer.toHexString(hashCode())+" for "+graphicalRepresentation);
+	public ShapeResizingControlPoint(ShapeGraphicalRepresentation<?> graphicalRepresentation, FGEPoint pt,
+			CardinalDirection aCardinalDirection) {
+		super(graphicalRepresentation, pt);
+
+		// logger.info("***** new ShapeResizingControlPoint "+Integer.toHexString(hashCode())+" for "+graphicalRepresentation);
 
 		if (aCardinalDirection == null) {
 			cardinalDirection = FGEPoint.getOrientation(Shape.CENTER, getPoint());
-		}
-		else {
+		} else {
 			cardinalDirection = aCardinalDirection;
 		}
 
 		if (cardinalDirection == CardinalDirection.NORTH) {
 			if ((graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.FREELY_RESIZABLE)
 					|| (graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.WIDTH_FIXED)
-					|| (graphicalRepresentation.getDimensionConstraints()==DimensionConstraints.STEP_CONSTRAINED)) {
-				setDraggingAuthorizedArea(new FGEHalfLine(Shape.SOUTH,Shape.NORTH));
-			}
-			else {
+					|| (graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED)) {
+				setDraggingAuthorizedArea(new FGEHalfLine(Shape.SOUTH, Shape.NORTH));
+			} else {
 				setDraggingAuthorizedArea(new FGEEmptyArea());
 			}
-		}
-		else if (cardinalDirection == CardinalDirection.EAST) {
+		} else if (cardinalDirection == CardinalDirection.EAST) {
 			if ((graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.FREELY_RESIZABLE)
 					|| (graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.WIDTH_FIXED)
-					|| (graphicalRepresentation.getDimensionConstraints()==DimensionConstraints.STEP_CONSTRAINED)) {
-				setDraggingAuthorizedArea(new FGEHalfLine(Shape.WEST,Shape.EAST));
-			}
-			else {
+					|| (graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED)) {
+				setDraggingAuthorizedArea(new FGEHalfLine(Shape.WEST, Shape.EAST));
+			} else {
 				setDraggingAuthorizedArea(new FGEEmptyArea());
 			}
-		}
-		else if (cardinalDirection == CardinalDirection.SOUTH) {
+		} else if (cardinalDirection == CardinalDirection.SOUTH) {
 			if ((graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.FREELY_RESIZABLE)
 					|| (graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.WIDTH_FIXED)
-					|| (graphicalRepresentation.getDimensionConstraints()==DimensionConstraints.STEP_CONSTRAINED)) {
-				setDraggingAuthorizedArea(new FGEHalfLine(Shape.NORTH,Shape.SOUTH));
-			}
-			else {
+					|| (graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED)) {
+				setDraggingAuthorizedArea(new FGEHalfLine(Shape.NORTH, Shape.SOUTH));
+			} else {
 				setDraggingAuthorizedArea(new FGEEmptyArea());
 			}
-		}
-		else if (cardinalDirection == CardinalDirection.WEST) {
+		} else if (cardinalDirection == CardinalDirection.WEST) {
 			if ((graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.FREELY_RESIZABLE)
 					|| (graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.WIDTH_FIXED)
-					|| (graphicalRepresentation.getDimensionConstraints()==DimensionConstraints.STEP_CONSTRAINED)) {
-				setDraggingAuthorizedArea(new FGEHalfLine(Shape.EAST,Shape.WEST));
-			}
-			else {
+					|| (graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED)) {
+				setDraggingAuthorizedArea(new FGEHalfLine(Shape.EAST, Shape.WEST));
+			} else {
 				setDraggingAuthorizedArea(new FGEEmptyArea());
 			}
-		}
-		else if (cardinalDirection == CardinalDirection.NORTH_EAST) {
+		} else if (cardinalDirection == CardinalDirection.NORTH_EAST) {
 			if (graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.FREELY_RESIZABLE
-					|| (graphicalRepresentation.getDimensionConstraints()==DimensionConstraints.STEP_CONSTRAINED)) {
+					|| (graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED)) {
 				setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(Shape.SOUTH_WEST, CardinalQuadrant.NORTH_EAST));
-			}
-			else if (graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
-				setDraggingAuthorizedArea(new FGEHalfLine(Shape.SOUTH_WEST,Shape.NORTH_EAST));
-			}
-			else {
+			} else if (graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
+				setDraggingAuthorizedArea(new FGEHalfLine(Shape.SOUTH_WEST, Shape.NORTH_EAST));
+			} else {
 				setDraggingAuthorizedArea(new FGEEmptyArea());
 			}
-		}
-		else if (cardinalDirection == CardinalDirection.NORTH_WEST) {
+		} else if (cardinalDirection == CardinalDirection.NORTH_WEST) {
 			if (graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.FREELY_RESIZABLE
-					|| (graphicalRepresentation.getDimensionConstraints()==DimensionConstraints.STEP_CONSTRAINED)) {
+					|| (graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED)) {
 				setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(Shape.SOUTH_EAST, CardinalQuadrant.NORTH_WEST));
-			}
-			else if (graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
-				setDraggingAuthorizedArea(new FGEHalfLine(Shape.SOUTH_EAST,Shape.NORTH_WEST));
-			}
-			else {
+			} else if (graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
+				setDraggingAuthorizedArea(new FGEHalfLine(Shape.SOUTH_EAST, Shape.NORTH_WEST));
+			} else {
 				setDraggingAuthorizedArea(new FGEEmptyArea());
 			}
-		}
-		else if (cardinalDirection == CardinalDirection.SOUTH_WEST) {
+		} else if (cardinalDirection == CardinalDirection.SOUTH_WEST) {
 			if (graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.FREELY_RESIZABLE
-					|| (graphicalRepresentation.getDimensionConstraints()==DimensionConstraints.STEP_CONSTRAINED)) {
+					|| (graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED)) {
 				setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(Shape.NORTH_EAST, CardinalQuadrant.SOUTH_WEST));
-			}
-			else if (graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
-				setDraggingAuthorizedArea(new FGEHalfLine(Shape.NORTH_EAST,Shape.SOUTH_WEST));
-			}
-			else {
+			} else if (graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
+				setDraggingAuthorizedArea(new FGEHalfLine(Shape.NORTH_EAST, Shape.SOUTH_WEST));
+			} else {
 				setDraggingAuthorizedArea(new FGEEmptyArea());
 			}
-		}
-		else if (cardinalDirection == CardinalDirection.SOUTH_EAST) {
+		} else if (cardinalDirection == CardinalDirection.SOUTH_EAST) {
 			if (graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.FREELY_RESIZABLE
-					|| (graphicalRepresentation.getDimensionConstraints()==DimensionConstraints.STEP_CONSTRAINED)) {
+					|| (graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED)) {
 				setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(Shape.NORTH_WEST, CardinalQuadrant.SOUTH_EAST));
-			}
-			else if (graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
-				setDraggingAuthorizedArea(new FGEHalfLine(Shape.NORTH_WEST,Shape.SOUTH_EAST));
-			}
-			else {
+			} else if (graphicalRepresentation.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
+				setDraggingAuthorizedArea(new FGEHalfLine(Shape.NORTH_WEST, Shape.SOUTH_EAST));
+			} else {
 				setDraggingAuthorizedArea(new FGEEmptyArea());
 			}
-		}
-		else {
+		} else {
 			setDraggingAuthorizedArea(new FGEEmptyArea());
 		}
 	}
 
 	@Override
-	public ShapeGraphicalRepresentation<?> getGraphicalRepresentation()
-	{
-		return (ShapeGraphicalRepresentation<?>)super.getGraphicalRepresentation();
+	public ShapeGraphicalRepresentation<?> getGraphicalRepresentation() {
+		return (ShapeGraphicalRepresentation<?>) super.getGraphicalRepresentation();
 	}
 
 	@Override
-	public Cursor getDraggingCursor()
-	{
-		if (!isDraggable()) return Cursor.getDefaultCursor();
+	public Cursor getDraggingCursor() {
+		if (!isDraggable())
+			return Cursor.getDefaultCursor();
 		FGEPoint center = getGraphicalRepresentation().getShape().getShape().getCenter();
 		return getResizingCursor(FGEPoint.getOrientation(center, getPoint()));
 	}
 
-	private static Cursor getResizingCursor(CardinalDirection direction)
-	{
+	private static Cursor getResizingCursor(CardinalDirection direction) {
 		if (direction == CardinalDirection.NORTH) {
 			return Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR);
-		}
-		else if (direction == CardinalDirection.SOUTH) {
+		} else if (direction == CardinalDirection.SOUTH) {
 			return Cursor.getPredefinedCursor(Cursor.S_RESIZE_CURSOR);
-		}
-		else if (direction == CardinalDirection.EAST) {
+		} else if (direction == CardinalDirection.EAST) {
 			return Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR);
-		}
-		else if (direction == CardinalDirection.WEST) {
+		} else if (direction == CardinalDirection.WEST) {
 			return Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR);
-		}
-		else if (direction == CardinalDirection.NORTH_EAST) {
+		} else if (direction == CardinalDirection.NORTH_EAST) {
 			return Cursor.getPredefinedCursor(Cursor.NE_RESIZE_CURSOR);
-		}
-		else if (direction == CardinalDirection.SOUTH_EAST) {
+		} else if (direction == CardinalDirection.SOUTH_EAST) {
 			return Cursor.getPredefinedCursor(Cursor.SE_RESIZE_CURSOR);
-		}
-		else if (direction == CardinalDirection.NORTH_WEST) {
+		} else if (direction == CardinalDirection.NORTH_WEST) {
 			return Cursor.getPredefinedCursor(Cursor.NW_RESIZE_CURSOR);
-		}
-		else if (direction == CardinalDirection.SOUTH_WEST) {
+		} else if (direction == CardinalDirection.SOUTH_WEST) {
 			return Cursor.getPredefinedCursor(Cursor.SW_RESIZE_CURSOR);
 		}
 
@@ -200,10 +170,9 @@ public class ShapeResizingControlPoint extends ControlPoint {
 	}*/
 
 	@Override
-	public boolean isDraggable()
-	{
-		return (getGraphicalRepresentation().getDimensionConstraints() != DimensionConstraints.UNRESIZABLE
-				&& getGraphicalRepresentation().getDimensionConstraints() != DimensionConstraints.CONTAINER);
+	public boolean isDraggable() {
+		return (getGraphicalRepresentation().getDimensionConstraints() != DimensionConstraints.UNRESIZABLE && getGraphicalRepresentation()
+				.getDimensionConstraints() != DimensionConstraints.CONTAINER);
 	}
 
 	private FGEPoint initialShapePosition;
@@ -212,16 +181,17 @@ public class ShapeResizingControlPoint extends ControlPoint {
 	private FGEDimension offset;
 
 	@Override
-	public void startDragging(DrawingController<?> controller, FGEPoint startPoint)
-	{
-		if (!isDraggable()) return;
+	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
+		if (!isDraggable())
+			return;
 		initialWidth = getGraphicalRepresentation().getUnscaledViewWidth();
 		initialHeight = getGraphicalRepresentation().getUnscaledViewHeight();
-		if (initialWidth<FGEGeometricObject.EPSILON)
+		if (initialWidth < FGEGeometricObject.EPSILON)
 			initialWidth = 1;
-		if (initialHeight<FGEGeometricObject.EPSILON)
+		if (initialHeight < FGEGeometricObject.EPSILON)
 			initialHeight = 1;
-		offset = new FGEDimension(initialWidth-getGraphicalRepresentation().getWidth(),initialHeight-getGraphicalRepresentation().getHeight());
+		offset = new FGEDimension(initialWidth - getGraphicalRepresentation().getWidth(), initialHeight
+				- getGraphicalRepresentation().getHeight());
 		initialShapePosition = getGraphicalRepresentation().getLocation();
 
 		/*if (controller.getPaintManager().isPaintingCacheEnabled()) {
@@ -233,86 +203,74 @@ public class ShapeResizingControlPoint extends ControlPoint {
 	}
 
 	@Override
-	public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-	{
-		if (!isDraggable()) return true;
+	public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+			FGEPoint initialPoint, MouseEvent event) {
+		if (!isDraggable())
+			return true;
 
-
-		//System.out.println("pointRelativeToInitialConfiguration="+pointRelativeToInitialConfiguration);
+		// System.out.println("pointRelativeToInitialConfiguration="+pointRelativeToInitialConfiguration);
 		FGEPoint nearestPoint = getNearestPointOnAuthorizedArea(pointRelativeToInitialConfiguration);
-		//System.out.println("nearestPoint="+nearestPoint);
+		// System.out.println("nearestPoint="+nearestPoint);
 		if (nearestPoint == null) {
-			logger.warning("Could not find nearest point on authorized area: "+getDraggingAuthorizedArea()+" for "+getGraphicalRepresentation());
+			logger.warning("Could not find nearest point on authorized area: " + getDraggingAuthorizedArea() + " for "
+					+ getGraphicalRepresentation());
 			return true;
 		}
 		if (cardinalDirection == CardinalDirection.NORTH) {
 			FGEPoint opposite = Shape.SOUTH;
-			double newHeight = initialHeight*(opposite.y-nearestPoint.y)/(opposite.y-initialPoint.y);
-			getGraphicalRepresentation().setSize(new FGEDimension(initialWidth-offset.width,newHeight-offset.height));
+			double newHeight = initialHeight * (opposite.y - nearestPoint.y) / (opposite.y - initialPoint.y);
+			getGraphicalRepresentation().setSize(new FGEDimension(initialWidth - offset.width, newHeight - offset.height));
 			getGraphicalRepresentation().setLocation(
-					new FGEPoint(initialShapePosition.x,initialShapePosition.y-(newHeight-initialHeight)));
-		}
-		else if (cardinalDirection == CardinalDirection.SOUTH) {
+					new FGEPoint(initialShapePosition.x, initialShapePosition.y - (newHeight - initialHeight)));
+		} else if (cardinalDirection == CardinalDirection.SOUTH) {
 			FGEPoint opposite = Shape.NORTH;
-			double newHeight = initialHeight*(opposite.y-nearestPoint.y)/(opposite.y-initialPoint.y);
-			getGraphicalRepresentation().setSize(new FGEDimension(initialWidth-offset.width,newHeight-offset.height));
-		}
-		else if (cardinalDirection == CardinalDirection.WEST) {
+			double newHeight = initialHeight * (opposite.y - nearestPoint.y) / (opposite.y - initialPoint.y);
+			getGraphicalRepresentation().setSize(new FGEDimension(initialWidth - offset.width, newHeight - offset.height));
+		} else if (cardinalDirection == CardinalDirection.WEST) {
 			FGEPoint opposite = Shape.EAST;
-			double newWidth = initialWidth*(opposite.x-nearestPoint.x)/(opposite.x-initialPoint.x);
-			getGraphicalRepresentation().setSize(new FGEDimension(newWidth-offset.width,initialHeight-offset.height));
+			double newWidth = initialWidth * (opposite.x - nearestPoint.x) / (opposite.x - initialPoint.x);
+			getGraphicalRepresentation().setSize(new FGEDimension(newWidth - offset.width, initialHeight - offset.height));
 			getGraphicalRepresentation().setLocation(
-					new FGEPoint( initialShapePosition.x-(newWidth-initialWidth),initialShapePosition.y));
-		}
-		else if (cardinalDirection == CardinalDirection.EAST) {
+					new FGEPoint(initialShapePosition.x - (newWidth - initialWidth), initialShapePosition.y));
+		} else if (cardinalDirection == CardinalDirection.EAST) {
 			FGEPoint opposite = Shape.WEST;
-			double newWidth = initialWidth*(opposite.x-nearestPoint.x)/(opposite.x-initialPoint.x);
-			getGraphicalRepresentation().setSize(new FGEDimension(newWidth-offset.width,initialHeight-offset.height));
-		}
-		else if (cardinalDirection == CardinalDirection.SOUTH_EAST) {
+			double newWidth = initialWidth * (opposite.x - nearestPoint.x) / (opposite.x - initialPoint.x);
+			getGraphicalRepresentation().setSize(new FGEDimension(newWidth - offset.width, initialHeight - offset.height));
+		} else if (cardinalDirection == CardinalDirection.SOUTH_EAST) {
 			FGEPoint opposite = Shape.NORTH_WEST;
 
-			double newWidth = initialWidth*(opposite.x-nearestPoint.x)/(opposite.x-initialPoint.x);
-			double newHeight = initialHeight*(opposite.y-nearestPoint.y)/(opposite.y-initialPoint.y);
-			getGraphicalRepresentation().setSize(new FGEDimension(newWidth-offset.width,newHeight-offset.height));
-		}
-		else if (cardinalDirection == CardinalDirection.SOUTH_WEST) {
+			double newWidth = initialWidth * (opposite.x - nearestPoint.x) / (opposite.x - initialPoint.x);
+			double newHeight = initialHeight * (opposite.y - nearestPoint.y) / (opposite.y - initialPoint.y);
+			getGraphicalRepresentation().setSize(new FGEDimension(newWidth - offset.width, newHeight - offset.height));
+		} else if (cardinalDirection == CardinalDirection.SOUTH_WEST) {
 			FGEPoint opposite = Shape.NORTH_EAST;
-			double newWidth = initialWidth*(opposite.x-nearestPoint.x)/(opposite.x-initialPoint.x);
-			double newHeight = initialHeight*(opposite.y-nearestPoint.y)/(opposite.y-initialPoint.y);
-			getGraphicalRepresentation().setSize(new FGEDimension(newWidth-offset.width,newHeight-offset.height));
+			double newWidth = initialWidth * (opposite.x - nearestPoint.x) / (opposite.x - initialPoint.x);
+			double newHeight = initialHeight * (opposite.y - nearestPoint.y) / (opposite.y - initialPoint.y);
+			getGraphicalRepresentation().setSize(new FGEDimension(newWidth - offset.width, newHeight - offset.height));
 			getGraphicalRepresentation().setLocation(
-					new FGEPoint(
-							initialShapePosition.x-(newWidth-initialWidth),
-							initialShapePosition.y));
-		}
-		else if (cardinalDirection == CardinalDirection.NORTH_EAST) {
+					new FGEPoint(initialShapePosition.x - (newWidth - initialWidth), initialShapePosition.y));
+		} else if (cardinalDirection == CardinalDirection.NORTH_EAST) {
 			FGEPoint opposite = Shape.SOUTH_WEST;
-			double newWidth = initialWidth*(opposite.x-nearestPoint.x)/(opposite.x-initialPoint.x);
-			double newHeight = initialHeight*(opposite.y-nearestPoint.y)/(opposite.y-initialPoint.y);
-			getGraphicalRepresentation().setSize(new FGEDimension(newWidth-offset.width,newHeight-offset.height));
+			double newWidth = initialWidth * (opposite.x - nearestPoint.x) / (opposite.x - initialPoint.x);
+			double newHeight = initialHeight * (opposite.y - nearestPoint.y) / (opposite.y - initialPoint.y);
+			getGraphicalRepresentation().setSize(new FGEDimension(newWidth - offset.width, newHeight - offset.height));
 			getGraphicalRepresentation().setLocation(
-					new FGEPoint(
-							initialShapePosition.x,
-							initialShapePosition.y-(newHeight-initialHeight)));
-		}
-		else if (cardinalDirection == CardinalDirection.NORTH_WEST) {
+					new FGEPoint(initialShapePosition.x, initialShapePosition.y - (newHeight - initialHeight)));
+		} else if (cardinalDirection == CardinalDirection.NORTH_WEST) {
 			FGEPoint opposite = Shape.SOUTH_EAST;
-			double newWidth = initialWidth*(opposite.x-nearestPoint.x)/(opposite.x-initialPoint.x);
-			double newHeight = initialHeight*(opposite.y-nearestPoint.y)/(opposite.y-initialPoint.y);
-			getGraphicalRepresentation().setSize(new FGEDimension(newWidth-offset.width,newHeight-offset.height));
+			double newWidth = initialWidth * (opposite.x - nearestPoint.x) / (opposite.x - initialPoint.x);
+			double newHeight = initialHeight * (opposite.y - nearestPoint.y) / (opposite.y - initialPoint.y);
+			getGraphicalRepresentation().setSize(new FGEDimension(newWidth - offset.width, newHeight - offset.height));
 			getGraphicalRepresentation().setLocation(
-					new FGEPoint(
-							initialShapePosition.x-(newWidth-initialWidth),
-							initialShapePosition.y-(newHeight-initialHeight)));
+					new FGEPoint(initialShapePosition.x - (newWidth - initialWidth), initialShapePosition.y - (newHeight - initialHeight)));
 		}
 		return true;
 	}
 
 	@Override
-	public void stopDragging(DrawingController controller)
-	{
-		if (!isDraggable()) return;
+	public void stopDragging(DrawingController controller) {
+		if (!isDraggable())
+			return;
 
 		initialWidth = 0;
 		initialHeight = 0;

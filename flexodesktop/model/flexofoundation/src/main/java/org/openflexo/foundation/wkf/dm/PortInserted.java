@@ -27,17 +27,14 @@ import org.openflexo.foundation.wkf.ws.FlexoPort;
  * @author sguerin
  * 
  */
-public class PortInserted extends WKFDataModification
-{
+public class PortInserted extends WKFDataModification {
 
-    public PortInserted(FlexoPort insertedPort)
-    {
-        super(null, insertedPort);
-    }
+	public PortInserted(FlexoPort insertedPort) {
+		super(null, insertedPort);
+	}
 
-    public FlexoPort getInsertedPort()
-    {
-        return (FlexoPort) newValue();
-    }
+	public FlexoPort getInsertedPort() {
+		return (FlexoPort) newValue();
+	}
 
 }

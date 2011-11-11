@@ -46,13 +46,11 @@ import org.openflexo.swing.VerticalLayout;
 import org.openflexo.view.FlexoDialog;
 import org.openflexo.wkf.controller.WKFController;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class ViewNextOperationPopup extends FlexoDialog
-{
+public class ViewNextOperationPopup extends FlexoDialog {
 
 	protected WKFController controller;
 
@@ -61,17 +59,16 @@ public class ViewNextOperationPopup extends FlexoDialog
 	/**
 	 * 
 	 */
-	public ViewNextOperationPopup(Frame owner, WKFController controller, ActionNode node)
-	{
+	public ViewNextOperationPopup(Frame owner, WKFController controller, ActionNode node) {
 		super(owner);
 		this.node = node;
 		this.controller = controller;
-		setTitle(FlexoLocalization.localizedForKey("next_operations_for_node ")+node.getName());
+		setTitle(FlexoLocalization.localizedForKey("next_operations_for_node ") + node.getName());
 		initUI(node.getNextOperationsForAction());
 		validate();
 		doLayout();
 		pack();
-		if (getWidth()<300) {
+		if (getWidth() < 300) {
 			setSize(300, getHeight());
 		}
 		setVisible(true);
@@ -80,23 +77,21 @@ public class ViewNextOperationPopup extends FlexoDialog
 	/**
 	 * @param v
 	 */
-	private void initUI(List<WorkflowPathToOperationNode> v)
-	{
-		setMinimumSize(new Dimension(300,150));
-		setLayout(new VerticalLayout(4,4,4));
+	private void initUI(List<WorkflowPathToOperationNode> v) {
+		setMinimumSize(new Dimension(300, 150));
+		setLayout(new VerticalLayout(4, 4, 4));
 		getContentPane().setBackground(ColorCst.GUI_BACK_COLOR);
 		setBackground(ColorCst.GUI_BACK_COLOR);
 
 		List<WorkflowPathToOperationNode> pathWithOperationNodeList = new ArrayList<WorkflowPathToOperationNode>();
-		for(WorkflowPathToOperationNode workflowPath : v)
-		{
-			if(workflowPath.getOperationNode() != null) {
+		for (WorkflowPathToOperationNode workflowPath : v) {
+			if (workflowPath.getOperationNode() != null) {
 				pathWithOperationNodeList.add(workflowPath);
 			}
 		}
 
-		if (pathWithOperationNodeList.size()==0) {
-			JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER,1,1));
+		if (pathWithOperationNodeList.size() == 0) {
+			JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 1, 1));
 			panel.setBackground(ColorCst.GUI_BACK_COLOR);
 			JLabel l = new JLabel(FlexoLocalization.localizedForKey("no_next_operations"));
 			l.setBackground(ColorCst.GUI_BACK_COLOR);
@@ -113,14 +108,13 @@ public class ViewNextOperationPopup extends FlexoDialog
 				add(new OperationPanel(o.getOperationNode(), o.getNewStatusForProcess(o.getOperationNode().getProcess())));
 			}
 		}
-		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER,1,1));
+		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 1, 1));
 		panel.setBackground(ColorCst.GUI_BACK_COLOR);
 		JButton button = new JButton(FlexoLocalization.localizedForKey("ok"));
 		button.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 
@@ -131,13 +125,11 @@ public class ViewNextOperationPopup extends FlexoDialog
 		getRootPane().setDefaultButton(button);
 	}
 
-	public ActionNode getNode()
-	{
+	public ActionNode getNode() {
 		return node;
 	}
 
-	public void setNode(ActionNode node)
-	{
+	public void setNode(ActionNode node) {
 		this.node = node;
 	}
 
@@ -153,8 +145,7 @@ public class ViewNextOperationPopup extends FlexoDialog
 		 * @param o
 		 * @param status
 		 */
-		public OperationPanel(OperationNode o, Status status)
-		{
+		public OperationPanel(OperationNode o, Status status) {
 			this.operation = o;
 			this.status = status;
 			initUI();
@@ -163,15 +154,17 @@ public class ViewNextOperationPopup extends FlexoDialog
 		private void initUI() {
 			setBackground(ColorCst.GUI_BACK_COLOR);
 			StringBuilder sb = new StringBuilder();
-			if (operation.getProcess()!=node.getProcess()) {
+			if (operation.getProcess() != node.getProcess()) {
 				sb.append(operation.getProcess().getName()).append(">");
 			}
-			if (operation.getAbstractActivityNode()!=node.getAbstractActivityNode()) {
+			if (operation.getAbstractActivityNode() != node.getAbstractActivityNode()) {
 				sb.append(operation.getAbstractActivityNode().getName()).append(">");
 			}
-			sb.append(operation.getName()).append(": ").append(operation.hasWOComponent()?operation.getWOComponentName():FlexoLocalization.localizedForKey("no_component"));
+			sb.append(operation.getName())
+					.append(": ")
+					.append(operation.hasWOComponent() ? operation.getWOComponentName() : FlexoLocalization.localizedForKey("no_component"));
 			if (status != null) {
-				sb.append(" - Status: "+status.getName());
+				sb.append(" - Status: " + status.getName());
 			}
 			label = new JLabel();
 			label.setBackground(ColorCst.GUI_BACK_COLOR);
@@ -179,34 +172,29 @@ public class ViewNextOperationPopup extends FlexoDialog
 			label.addMouseListener(new MouseListener() {
 
 				@Override
-				public void mouseClicked(MouseEvent e)
-				{
+				public void mouseClicked(MouseEvent e) {
 					controller.selectAndFocusObject(operation);
 				}
 
 				@Override
-				public void mouseEntered(MouseEvent e)
-				{
+				public void mouseEntered(MouseEvent e) {
 					label.setForeground(Color.BLUE);
 					label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLUE));
 				}
 
 				@Override
-				public void mouseExited(MouseEvent e)
-				{
+				public void mouseExited(MouseEvent e) {
 					label.setForeground(Color.BLACK);
 					label.setBorder(null);
 				}
 
 				@Override
-				public void mousePressed(MouseEvent e)
-				{
+				public void mousePressed(MouseEvent e) {
 
 				}
 
 				@Override
-				public void mouseReleased(MouseEvent e)
-				{
+				public void mouseReleased(MouseEvent e) {
 
 				}
 

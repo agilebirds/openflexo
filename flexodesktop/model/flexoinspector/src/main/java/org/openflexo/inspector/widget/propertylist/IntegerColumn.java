@@ -27,56 +27,47 @@ import org.openflexo.inspector.InspectableObject;
  * @author sguerin
  * 
  */
-public abstract class IntegerColumn extends AbstractColumn implements EditableColumn
-{
+public abstract class IntegerColumn extends AbstractColumn implements EditableColumn {
 
-    public IntegerColumn(String title, int defaultWidth)
-    {
-        this(title, defaultWidth, true);
-    }
+	public IntegerColumn(String title, int defaultWidth) {
+		this(title, defaultWidth, true);
+	}
 
-    public IntegerColumn(String title, int defaultWidth, boolean isResizable)
-    {
-        this(title, defaultWidth, isResizable, true);
-    }
+	public IntegerColumn(String title, int defaultWidth, boolean isResizable) {
+		this(title, defaultWidth, isResizable, true);
+	}
 
-    public IntegerColumn(String title, int defaultWidth, boolean isResizable, boolean displayTitle)
-    {
-        super(title, defaultWidth, isResizable, displayTitle);
-    }
+	public IntegerColumn(String title, int defaultWidth, boolean isResizable, boolean displayTitle) {
+		super(title, defaultWidth, isResizable, displayTitle);
+	}
 
-    @Override
-	public Class getValueClass()
-    {
-        return Integer.class;
-    }
+	@Override
+	public Class getValueClass() {
+		return Integer.class;
+	}
 
-    @Override
-	public Object getValueFor(InspectableObject object)
-    {
-        return getValue(object);
-    }
+	@Override
+	public Object getValueFor(InspectableObject object) {
+		return getValue(object);
+	}
 
-    public abstract Integer getValue(InspectableObject object);
+	public abstract Integer getValue(InspectableObject object);
 
-    @Override
-	public boolean isCellEditableFor(InspectableObject object)
-    {
-        return true;
-    }
+	@Override
+	public boolean isCellEditableFor(InspectableObject object) {
+		return true;
+	}
 
-    @Override
-	public void setValueFor(InspectableObject object, Object value)
-    {
-        setValue(object, (Integer) value);
-        notifyValueChangedFor(object);
-    }
+	@Override
+	public void setValueFor(InspectableObject object, Object value) {
+		setValue(object, (Integer) value);
+		notifyValueChangedFor(object);
+	}
 
-    public abstract void setValue(InspectableObject object, Integer aValue);
+	public abstract void setValue(InspectableObject object, Integer aValue);
 
-    @Override
-	public String toString()
-    {
-        return "IntegerColumn " + "@" + Integer.toHexString(hashCode());
-    }
+	@Override
+	public String toString() {
+		return "IntegerColumn " + "@" + Integer.toHexString(hashCode());
+	}
 }

@@ -36,71 +36,64 @@ public class MaxDataRestrictionStatement extends DataRestrictionStatement {
 	private OntologyDataProperty property;
 	private int maxCardinality = 0;
 	private OntologicDataType dataRange;
-	
-	public MaxDataRestrictionStatement(OntologyObject subject, Statement s, Restriction r)
-	{
-		super(subject,s,r);
-		property = (OntologyDataProperty)getOntologyLibrary().getProperty(r.getOnProperty().getURI());
-		
+
+	public MaxDataRestrictionStatement(OntologyObject subject, Statement s, Restriction r) {
+		super(subject, s, r);
+		property = (OntologyDataProperty) getOntologyLibrary().getProperty(r.getOnProperty().getURI());
+
 		String OWL = getFlexoOntology().getOntModel().getNsPrefixURI("owl");
-		Property ON_DATA_RANGE = ResourceFactory.createProperty( OWL + "onDataRange" );
-		Property QUALIFIED_CARDINALITY = ResourceFactory.createProperty( OWL + "qualifiedCardinality" );
+		Property ON_DATA_RANGE = ResourceFactory.createProperty(OWL + "onDataRange");
+		Property QUALIFIED_CARDINALITY = ResourceFactory.createProperty(OWL + "qualifiedCardinality");
 
 		Statement onDataRangeStmt = r.getProperty(ON_DATA_RANGE);
 		Statement cardinalityStmt = r.getProperty(QUALIFIED_CARDINALITY);
-		
+
 		RDFNode onDataRangeStmtValue = onDataRangeStmt.getObject();
 		RDFNode maxCardinalityStmtValue = cardinalityStmt.getObject();
-		
+
 		if (onDataRangeStmtValue instanceof Resource) {
-			dataRange = OntologicDataType.fromURI(((Resource)onDataRangeStmtValue).getURI());
+			dataRange = OntologicDataType.fromURI(((Resource) onDataRangeStmtValue).getURI());
 		}
-			
+
 		if (maxCardinalityStmtValue.isLiteral() && maxCardinalityStmtValue.canAs(Literal.class)) {
-			Literal literal = (Literal)maxCardinalityStmtValue.as(Literal.class);
+			Literal literal = (Literal) maxCardinalityStmtValue.as(Literal.class);
 			maxCardinality = literal.getInt();
 		}
-		
-		
-		//object = getOntologyLibrary().getOntologyObject(r.get().getURI());
-		//cardinality = r.getCardinality();
+
+		// object = getOntologyLibrary().getOntologyObject(r.get().getURI());
+		// cardinality = r.getCardinality();
 	}
 
 	@Override
-	public OntologicDataType getDataRange()
-	{
+	public OntologicDataType getDataRange() {
 		return dataRange;
 	}
-	
+
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "max_restriction_statement";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return "MaxRestrictionStatement: "+getStatement();
+	public String getFullyQualifiedName() {
+		return "MaxRestrictionStatement: " + getStatement();
 	}
 
-
 	@Override
-	public OntologyDataProperty getProperty() 
-	{
+	public OntologyDataProperty getProperty() {
 		return property;
 	}
 
-
 	@Override
-	public String toString() 
-	{
-		return getSubject().getName()+" "+(property==null?"<NOT FOUND:"+restriction.getOnProperty().getURI()+">":property.getName())+" max "+maxCardinality+" "+getDataRange();
+	public String toString() {
+		return getSubject().getName() + " "
+				+ (property == null ? "<NOT FOUND:" + restriction.getOnProperty().getURI() + ">" : property.getName()) + " max "
+				+ maxCardinality + " " + getDataRange();
 	}
 
 	@Override
 	public String getName() {
-		return property.getName()+" max "+maxCardinality;
+		return property.getName() + " max " + maxCardinality;
 	}
 
 	@Override

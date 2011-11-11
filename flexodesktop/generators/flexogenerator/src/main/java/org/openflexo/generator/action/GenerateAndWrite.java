@@ -31,78 +31,73 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.file.AbstractCGFile;
 
-
-public class GenerateAndWrite extends MultipleFileGCAction<GenerateAndWrite>
-{
+public class GenerateAndWrite extends MultipleFileGCAction<GenerateAndWrite> {
 
 	private static final Logger logger = Logger.getLogger(GenerateAndWrite.class.getPackage().getName());
 
-	public static final MultipleFileGCActionType<GenerateAndWrite> actionType 
-	= new MultipleFileGCActionType<GenerateAndWrite> ("generate_and_write",
-            GENERATE_MENU, GENERATION_GROUP,FlexoActionType.NORMAL_ACTION_TYPE) 
-	{
+	public static final MultipleFileGCActionType<GenerateAndWrite> actionType = new MultipleFileGCActionType<GenerateAndWrite>(
+			"generate_and_write", GENERATE_MENU, GENERATION_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 		/**
-         * Factory method
-         */
-        @Override
-		public GenerateAndWrite makeNewAction(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) 
-        {
-            return new GenerateAndWrite(focusedObject, globalSelection,editor);
-        }
-		
-        @Override
-		protected boolean accept (AbstractCGFile file)
-        {
-      		return true;
-        }
+		 * Factory method
+		 */
+		@Override
+		public GenerateAndWrite makeNewAction(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new GenerateAndWrite(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Overrides isEnabled
-         * @see org.openflexo.foundation.action.FlexoActionType#isEnabled(org.openflexo.foundation.FlexoModelObject, java.util.Vector, org.openflexo.foundation.FlexoEditor)
-         */
-        @Override
-        public boolean isEnabled(CGObject object, Vector<CGObject> globalSelection, FlexoEditor editor)
-        {
-            return SynchronizeRepositoryCodeGeneration.actionType.isEnabled(getRepository(object, globalSelection), globalSelection, editor);
-        }
-        
+		@Override
+		protected boolean accept(AbstractCGFile file) {
+			return true;
+		}
+
+		/**
+		 * Overrides isEnabled
+		 * 
+		 * @see org.openflexo.foundation.action.FlexoActionType#isEnabled(org.openflexo.foundation.FlexoModelObject, java.util.Vector,
+		 *      org.openflexo.foundation.FlexoEditor)
+		 */
+		@Override
+		public boolean isEnabled(CGObject object, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return SynchronizeRepositoryCodeGeneration.actionType
+					.isEnabled(getRepository(object, globalSelection), globalSelection, editor);
+		}
+
 	};
 
-    static {
-        FlexoModelObject.addActionForClass (GenerateAndWrite.actionType, CGObject.class);
-    }
-    
-    GenerateAndWrite (CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	static {
+		FlexoModelObject.addActionForClass(GenerateAndWrite.actionType, CGObject.class);
+	}
 
-    @Override
-	protected void doAction(Object context) throws GenerationException, SaveResourceException
-    {
-        if (logger.isLoggable(Level.INFO))
-            logger.info("Generating and writing "+getRepository().getName());
-        SynchronizeRepositoryCodeGeneration synch = SynchronizeRepositoryCodeGeneration.actionType.makeNewEmbeddedAction(getRepository(), getGlobalSelection(), this);
-        synch.doAction();
-        if (!getWriteUnchangedFiles()) {
-            DismissUnchangedGeneratedFiles dismiss = DismissUnchangedGeneratedFiles.actionType.makeNewEmbeddedAction(getFocusedObject(), getGlobalSelection(), this);
-            dismiss.doAction();
-        }
-        WriteModifiedGeneratedFiles write = WriteModifiedGeneratedFiles.actionType.makeNewEmbeddedAction(getFocusedObject(), getGlobalSelection(), this);
-        if (write.getFilesToWrite().size()>0)
-            write.doAction();
-    }
+	GenerateAndWrite(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    private boolean writeUnchangedFiles = true;
+	@Override
+	protected void doAction(Object context) throws GenerationException, SaveResourceException {
+		if (logger.isLoggable(Level.INFO))
+			logger.info("Generating and writing " + getRepository().getName());
+		SynchronizeRepositoryCodeGeneration synch = SynchronizeRepositoryCodeGeneration.actionType.makeNewEmbeddedAction(getRepository(),
+				getGlobalSelection(), this);
+		synch.doAction();
+		if (!getWriteUnchangedFiles()) {
+			DismissUnchangedGeneratedFiles dismiss = DismissUnchangedGeneratedFiles.actionType.makeNewEmbeddedAction(getFocusedObject(),
+					getGlobalSelection(), this);
+			dismiss.doAction();
+		}
+		WriteModifiedGeneratedFiles write = WriteModifiedGeneratedFiles.actionType.makeNewEmbeddedAction(getFocusedObject(),
+				getGlobalSelection(), this);
+		if (write.getFilesToWrite().size() > 0)
+			write.doAction();
+	}
 
-    public boolean getWriteUnchangedFiles()
-    {
-        return writeUnchangedFiles;
-    }
+	private boolean writeUnchangedFiles = true;
 
-    public void setWriteUnchangedFiles(boolean writeUnchangedFiles)
-    {
-        this.writeUnchangedFiles = writeUnchangedFiles;
-    }
-    
- }
+	public boolean getWriteUnchangedFiles() {
+		return writeUnchangedFiles;
+	}
+
+	public void setWriteUnchangedFiles(boolean writeUnchangedFiles) {
+		this.writeUnchangedFiles = writeUnchangedFiles;
+	}
+
+}

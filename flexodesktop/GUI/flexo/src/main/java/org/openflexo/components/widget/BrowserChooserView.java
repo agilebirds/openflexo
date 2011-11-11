@@ -27,48 +27,41 @@ import org.openflexo.components.widget.AbstractSelectorPanel.AbstractSelectorPan
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 
-
 /**
- * View related to a ProjectBrowser, allowing to select an object with a
- * browsing perspective
- *
+ * View related to a ProjectBrowser, allowing to select an object with a browsing perspective
+ * 
  * @author sguerin
  */
-public abstract class BrowserChooserView extends BrowserView
-{
+public abstract class BrowserChooserView extends BrowserView {
 
-    private AbstractSelectorPanelOwner<?> _owner;
+	private AbstractSelectorPanelOwner<?> _owner;
 
-    public BrowserChooserView(ProjectBrowser browser, AbstractSelectorPanelOwner<?> owner, FlexoEditor editor)
-    {
-        super(browser, null, editor);
-        _owner = owner;
-        setMinimumSize(getDefaultSize());
-        validate();
-    }
+	public BrowserChooserView(ProjectBrowser browser, AbstractSelectorPanelOwner<?> owner, FlexoEditor editor) {
+		super(browser, null, editor);
+		_owner = owner;
+		setMinimumSize(getDefaultSize());
+		validate();
+	}
 
-    public Dimension getDefaultSize()
-    {
-        return new Dimension(280, 350);
-    }
+	public Dimension getDefaultSize() {
+		return new Dimension(280, 350);
+	}
 
-    @Override
-	public void treeSingleClick(FlexoModelObject object)
-    {
-        if (_owner.isSelectable(object)) {
-            objectWasSelected(object);
-        }
-    }
+	@Override
+	public void treeSingleClick(FlexoModelObject object) {
+		if (_owner.isSelectable(object)) {
+			objectWasSelected(object);
+		}
+	}
 
-    @Override
-	public void treeDoubleClick(FlexoModelObject object)
-    {
-        if (object!=null && _owner.isSelectable(object)) {
-           objectWasDefinitelySelected(object);
-        }
-    }
+	@Override
+	public void treeDoubleClick(FlexoModelObject object) {
+		if (object != null && _owner.isSelectable(object)) {
+			objectWasDefinitelySelected(object);
+		}
+	}
 
-    public abstract void objectWasSelected(FlexoModelObject object);
+	public abstract void objectWasSelected(FlexoModelObject object);
 
-    public abstract void objectWasDefinitelySelected(FlexoModelObject object);
+	public abstract void objectWasDefinitelySelected(FlexoModelObject object);
 }

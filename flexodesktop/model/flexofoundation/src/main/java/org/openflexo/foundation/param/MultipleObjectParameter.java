@@ -25,42 +25,36 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.inspector.model.ParamModel;
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
 public class MultipleObjectParameter<E extends FlexoModelObject> extends ParameterDefinition<Vector<E>> {
 
 	private ParamModel selectabilityParams;
 	private ParamModel visibilityParams;
-	
-    public MultipleObjectParameter(String name, String label, Vector<E> defaultValue)
-    {
-        super(name,label,defaultValue);
-        addParameter("className","org.openflexo.components.widget.MultipleObjectInspectorWidget");
-     }
-    
-    public void setRootObject(String path)
-    {
-        addParameter("rootObject",path);
-    }
-    
-    @Override
-	public String getWidgetName() 
-    {
-    	return DenaliWidget.CUSTOM;
-    }
 
-    public void addSelectableElements(String elementType)
-    {
-    	if (selectabilityParams == null) {
-    		selectabilityParams = addParameter("isSelectable", null);
-    	}
-    	selectabilityParams.parameters.put(elementType, new ParamModel(elementType,"true"));
-    }
+	public MultipleObjectParameter(String name, String label, Vector<E> defaultValue) {
+		super(name, label, defaultValue);
+		addParameter("className", "org.openflexo.components.widget.MultipleObjectInspectorWidget");
+	}
 
-    public void defineVisibility(String elementType, String visibility)
-    {
-    	if (visibilityParams == null) {
-    		visibilityParams = addParameter("visibility", null);
-    	}
-    	visibilityParams.parameters.put(elementType, new ParamModel(elementType,visibility));
-    }
+	public void setRootObject(String path) {
+		addParameter("rootObject", path);
+	}
+
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.CUSTOM;
+	}
+
+	public void addSelectableElements(String elementType) {
+		if (selectabilityParams == null) {
+			selectabilityParams = addParameter("isSelectable", null);
+		}
+		selectabilityParams.parameters.put(elementType, new ParamModel(elementType, "true"));
+	}
+
+	public void defineVisibility(String elementType, String visibility) {
+		if (visibilityParams == null) {
+			visibilityParams = addParameter("visibility", null);
+		}
+		visibilityParams.parameters.put(elementType, new ParamModel(elementType, visibility));
+	}
 }

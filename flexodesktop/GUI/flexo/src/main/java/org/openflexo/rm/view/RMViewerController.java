@@ -29,25 +29,22 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 
 public class RMViewerController extends DrawingController<RMViewerRepresentation> {
 
-	public RMViewerController(FlexoProject project)
-	{
+	public RMViewerController(FlexoProject project) {
 		super(new RMViewerRepresentation(project));
 	}
-	
+
 	private JPanel mainView;
-	
-	public JPanel getMainView()
-	{
+
+	public JPanel getMainView() {
 		if (mainView == null) {
 			JPanel topPanel = new JPanel(new BorderLayout());
-			topPanel.add(getScalePanel(),BorderLayout.WEST);
+			topPanel.add(getScalePanel(), BorderLayout.WEST);
 			JPanel controlPanel = new JPanel(new FlowLayout());
 			JButton randomLayoutButton = new JButton(FlexoLocalization.localizedForKey("random_layout"));
 			randomLayoutButton.addActionListener(new ActionListener() {
@@ -65,11 +62,11 @@ public class RMViewerController extends DrawingController<RMViewerRepresentation
 				}
 			});
 			controlPanel.add(autoLayoutButton);
-			topPanel.add(controlPanel,BorderLayout.EAST);
+			topPanel.add(controlPanel, BorderLayout.EAST);
 			mainView = new JPanel(new BorderLayout());
-			mainView.add(topPanel,BorderLayout.NORTH);
-			mainView.add(new JScrollPane(getDrawingView()),BorderLayout.CENTER);
-			mainView.setPreferredSize(new Dimension(500,500));
+			mainView.add(topPanel, BorderLayout.NORTH);
+			mainView.add(new JScrollPane(getDrawingView()), BorderLayout.CENTER);
+			mainView.setPreferredSize(new Dimension(500, 500));
 		}
 		return mainView;
 	}

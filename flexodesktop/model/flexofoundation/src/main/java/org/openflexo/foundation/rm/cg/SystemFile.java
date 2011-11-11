@@ -21,17 +21,14 @@ package org.openflexo.foundation.rm.cg;
 
 import java.io.File;
 
-public class SystemFile extends TextFile
-{
+public class SystemFile extends TextFile {
 
-	public SystemFile(File f)
-	{
+	public SystemFile(File f) {
 		super(f);
-    }
+	}
 
-	public SystemFile()
-	{
+	public SystemFile() {
 		super();
-    }
+	}
 
 }

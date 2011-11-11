@@ -54,7 +54,6 @@ import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.controller.WKFController;
 import org.openflexo.wkf.processeditor.gr.WKFObjectGR;
 
-
 public class ProcessEditorController extends SelectionManagingDrawingController<ProcessRepresentation> {
 
 	private static final Logger logger = FlexoLogger.getLogger(ProcessEditorController.class.getPackage().getName());
@@ -66,19 +65,18 @@ public class ProcessEditorController extends SelectionManagingDrawingController<
 	private EventPalette _eventPalette;
 	private ArtefactPalette artefactPalette;
 
-	public ProcessEditorController(WKFController controller,FlexoProcess process)
-	{
-		this(process,controller.getEditor(),controller.getSelectionManager());
+	public ProcessEditorController(WKFController controller, FlexoProcess process) {
+		this(process, controller.getEditor(), controller.getSelectionManager());
 		_controller = controller;
 	}
 
 	public ProcessEditorController(FlexoProcess process, FlexoEditor editor, SelectionManager sm) {
-		this(process,editor,sm,null);
+		this(process, editor, sm, null);
 	}
 
-	public ProcessEditorController(FlexoProcess process, FlexoEditor editor, SelectionManager sm, ProcessRepresentation.ProcessRepresentationObjectVisibilityDelegate visibilityDelegate)
-	{
-		super(new ProcessRepresentation(process,editor,visibilityDelegate),sm);
+	public ProcessEditorController(FlexoProcess process, FlexoEditor editor, SelectionManager sm,
+			ProcessRepresentation.ProcessRepresentationObjectVisibilityDelegate visibilityDelegate) {
+		super(new ProcessRepresentation(process, editor, visibilityDelegate), sm);
 		_activityPalette = new ActivityPalette();
 		_operationPalette = new OperationPalette();
 		_actionPalette = new ActionPalette();
@@ -102,8 +100,8 @@ public class ProcessEditorController extends SelectionManagingDrawingController<
 
 	@Override
 	public void delete() {
-		if (_controller!=null) {
-			if (getDrawingView()!=null) {
+		if (_controller != null) {
+			if (getDrawingView() != null) {
 				_controller.removeModuleView(getDrawingView());
 			}
 			_controller.PROCESS_EDITOR_PERSPECTIVE.removeProcessController(this);
@@ -112,9 +110,8 @@ public class ProcessEditorController extends SelectionManagingDrawingController<
 	}
 
 	@Override
-	public DrawingView<ProcessRepresentation> makeDrawingView(ProcessRepresentation drawing)
-	{
-		return new ProcessView(drawing,this);
+	public DrawingView<ProcessRepresentation> makeDrawingView(ProcessRepresentation drawing) {
+		return new ProcessView(drawing, this);
 	}
 
 	public WKFController getWKFController() {
@@ -122,45 +119,37 @@ public class ProcessEditorController extends SelectionManagingDrawingController<
 	}
 
 	@Override
-	public ProcessView getDrawingView()
-	{
-		return (ProcessView)super.getDrawingView();
+	public ProcessView getDrawingView() {
+		return (ProcessView) super.getDrawingView();
 	}
 
-	public FlexoEditor getEditor()
-	{
+	public FlexoEditor getEditor() {
 		return getDrawing().getEditor();
 	}
 
-	public ActivityPalette getActivityPalette()
-	{
+	public ActivityPalette getActivityPalette() {
 		return _activityPalette;
 	}
 
-	public OperationPalette getOperationPalette()
-	{
+	public OperationPalette getOperationPalette() {
 		return _operationPalette;
 	}
 
-	public ActionPalette getActionPalette()
-	{
+	public ActionPalette getActionPalette() {
 		return _actionPalette;
 	}
 
-	public EventPalette getEventPalette()
-	{
+	public EventPalette getEventPalette() {
 		return _eventPalette;
 	}
 
-	public ArtefactPalette getArtefactPalette()
-	{
+	public ArtefactPalette getArtefactPalette() {
 		return artefactPalette;
 	}
 
 	private JTabbedPane paletteView;
 
-	public JTabbedPane getPaletteView()
-	{
+	public JTabbedPane getPaletteView() {
 		if (paletteView == null) {
 			paletteView = new JTabbedPane() {
 
@@ -182,13 +171,19 @@ public class ProcessEditorController extends SelectionManagingDrawingController<
 				};
 
 			};
-			paletteView.addTab(null, WKFIconLibrary.ACTIVITY_NODE_ICON, getActivityPalette().getPaletteViewInScrollPane(),FlexoLocalization.localizedForKey("Activity"));
-			paletteView.addTab(null, WKFIconLibrary.OPERATION_NODE_ICON, getOperationPalette().getPaletteViewInScrollPane(),FlexoLocalization.localizedForKey("Operation"));
-			paletteView.addTab(null, WKFIconLibrary.ACTION_NODE_ICON, getActionPalette().getPaletteViewInScrollPane(),FlexoLocalization.localizedForKey("Action"));
-			paletteView.addTab(null, WKFIconLibrary.EVENT_ICON, getEventPalette().getPaletteViewInScrollPane(),FlexoLocalization.localizedForKey("Event"));
-			paletteView.addTab(null, WKFIconLibrary.ARTEFACT_ICON, getArtefactPalette().getPaletteViewInScrollPane(),FlexoLocalization.localizedForKey("Artefact"));
+			paletteView.addTab(null, WKFIconLibrary.ACTIVITY_NODE_ICON, getActivityPalette().getPaletteViewInScrollPane(),
+					FlexoLocalization.localizedForKey("Activity"));
+			paletteView.addTab(null, WKFIconLibrary.OPERATION_NODE_ICON, getOperationPalette().getPaletteViewInScrollPane(),
+					FlexoLocalization.localizedForKey("Operation"));
+			paletteView.addTab(null, WKFIconLibrary.ACTION_NODE_ICON, getActionPalette().getPaletteViewInScrollPane(),
+					FlexoLocalization.localizedForKey("Action"));
+			paletteView.addTab(null, WKFIconLibrary.EVENT_ICON, getEventPalette().getPaletteViewInScrollPane(),
+					FlexoLocalization.localizedForKey("Event"));
+			paletteView.addTab(null, WKFIconLibrary.ARTEFACT_ICON, getArtefactPalette().getPaletteViewInScrollPane(),
+					FlexoLocalization.localizedForKey("Artefact"));
 			getEventPalette().getPaletteView().getDrawingGraphicalRepresentation().setDrawWorkingArea(true);
-			getEventPalette().getPaletteView().getDrawingGraphicalRepresentation().setDecorationPainter(getEventPalette().getEventPaletteDecorationPainter());
+			getEventPalette().getPaletteView().getDrawingGraphicalRepresentation()
+					.setDecorationPainter(getEventPalette().getEventPaletteDecorationPainter());
 			/*paletteView.add(FlexoLocalization.localizedForKey("Activity",getActivityPalette().getPaletteView()),getActivityPalette().getPaletteView());
 			paletteView.add(FlexoLocalization.localizedForKey("Operation",getOperationPalette().getPaletteView()),getOperationPalette().getPaletteView());
 			paletteView.add(FlexoLocalization.localizedForKey("Action",getActionPalette().getPaletteView()),getActionPalette().getPaletteView());
@@ -199,17 +194,13 @@ public class ProcessEditorController extends SelectionManagingDrawingController<
 				public void stateChanged(ChangeEvent e) {
 					if (paletteView.getSelectedIndex() == 0) {
 						activatePalette(getActivityPalette());
-					}
-					else if (paletteView.getSelectedIndex() == 1) {
+					} else if (paletteView.getSelectedIndex() == 1) {
 						activatePalette(getOperationPalette());
-					}
-					else if (paletteView.getSelectedIndex() == 2) {
+					} else if (paletteView.getSelectedIndex() == 2) {
 						activatePalette(getActionPalette());
-					}
-					else if (paletteView.getSelectedIndex() == 3) {
+					} else if (paletteView.getSelectedIndex() == 3) {
 						activatePalette(getEventPalette());
-					}
-					else if (paletteView.getSelectedIndex() == 4) {
+					} else if (paletteView.getSelectedIndex() == 4) {
 						activatePalette(getArtefactPalette());
 					}
 				}
@@ -234,7 +225,7 @@ public class ProcessEditorController extends SelectionManagingDrawingController<
 	protected FlexoModelObject objectForPaletteSwitch;
 
 	public void setObjectForPaletteSwitch(FlexoModelObject objectForPaletteSwitch) {
-		if (this.objectForPaletteSwitch!=null && this.objectForPaletteSwitch!=objectForPaletteSwitch) {
+		if (this.objectForPaletteSwitch != null && this.objectForPaletteSwitch != objectForPaletteSwitch) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Received palette switch for different objects. Cannot fulfill everyone's needs, latest wins.");
 			}
@@ -262,14 +253,15 @@ public class ProcessEditorController extends SelectionManagingDrawingController<
 	 *
 	 */
 	protected synchronized void performPaletteSwitch() {
-		if (getSelectionManager()==null) {
+		if (getSelectionManager() == null) {
 			return;
 		}
-		if (objectForPaletteSwitch==null) {
+		if (objectForPaletteSwitch == null) {
 			objectForPaletteSwitch = getSelectionManager().getLastSelectedObject();
 		}
-		if (objectForPaletteSwitch!=null) {
-			if (objectForPaletteSwitch instanceof AbstractActivityNode || objectForPaletteSwitch instanceof ActivityPetriGraph || objectForPaletteSwitch instanceof FlexoProcess) {
+		if (objectForPaletteSwitch != null) {
+			if (objectForPaletteSwitch instanceof AbstractActivityNode || objectForPaletteSwitch instanceof ActivityPetriGraph
+					|| objectForPaletteSwitch instanceof FlexoProcess) {
 				selectActivityPalette();
 			} else if (objectForPaletteSwitch instanceof OperationNode || objectForPaletteSwitch instanceof OperationPetriGraph) {
 				selectOperationPalette();
@@ -305,20 +297,19 @@ public class ProcessEditorController extends SelectionManagingDrawingController<
 	private WKFMove currentMoveAction = null;
 
 	@Override
-	public void notifyWillMove(MoveInfo currentMove)
-	{
+	public void notifyWillMove(MoveInfo currentMove) {
 		currentMoveAction = null;
 
 		WKFObject movedObject = null;
 		Vector<WKFObject> movedObjects = new Vector<WKFObject>();
 
 		if (currentMove.getMovedObject() instanceof WKFObjectGR<?>) {
-			movedObject = ((WKFObjectGR<?>)currentMove.getMovedObject()).getModel();
+			movedObject = ((WKFObjectGR<?>) currentMove.getMovedObject()).getModel();
 		}
 
 		for (ShapeGraphicalRepresentation<?> gr : currentMove.getMovedObjects()) {
 			if (gr instanceof WKFObjectGR<?>) {
-				movedObjects.add(((WKFObjectGR<?>)gr).getModel());
+				movedObjects.add(((WKFObjectGR<?>) gr).getModel());
 			}
 		}
 
@@ -327,49 +318,47 @@ public class ProcessEditorController extends SelectionManagingDrawingController<
 			currentMoveAction.setGraphicalContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR);
 			for (ShapeGraphicalRepresentation<?> gr : currentMove.getMovedObjects()) {
 				if (gr instanceof WKFObjectGR<?>) {
-					WKFObject o = ((WKFObjectGR<?>)gr).getModel();
+					WKFObject o = ((WKFObjectGR<?>) gr).getModel();
 					FGEPoint initialLocation = currentMove.getInitialLocations().get(gr);
-					currentMoveAction.getInitialLocations().put(o,new Point2D.Double(initialLocation.x,initialLocation.y));
+					currentMoveAction.getInitialLocations().put(o, new Point2D.Double(initialLocation.x, initialLocation.y));
 				}
 			}
-			//System.out.println("Will move:");
-			//System.out.println("Initial locations:\n"+currentMoveAction.getInitialLocations());
+			// System.out.println("Will move:");
+			// System.out.println("Initial locations:\n"+currentMoveAction.getInitialLocations());
 
-			//for (WKFObject o : currentMoveAction.getInitialLocations().keySet()) {
-			//	System.out.println((o==movedObject?"> ":"  ")+"Object: "+o.getClass().getSimpleName()+" "+Integer.toHexString(o.hashCode())+" "+currentMoveAction.getInitialLocations().get(o));
-			//}
+			// for (WKFObject o : currentMoveAction.getInitialLocations().keySet()) {
+			// System.out.println((o==movedObject?"> ":"  ")+"Object: "+o.getClass().getSimpleName()+" "+Integer.toHexString(o.hashCode())+" "+currentMoveAction.getInitialLocations().get(o));
+			// }
 
 		}
 
 	}
 
 	@Override
-	public void notifyHasMoved(MoveInfo currentMove)
-	{
+	public void notifyHasMoved(MoveInfo currentMove) {
 		if (currentMoveAction != null) {
 			for (ShapeGraphicalRepresentation<?> gr : currentMove.getMovedObjects()) {
 				if (gr instanceof WKFObjectGR<?>) {
-					WKFObject o = ((WKFObjectGR<?>)gr).getModel();
-					currentMoveAction.getNewLocations().put(o,new Point2D.Double(gr.getX(),gr.getY()));
+					WKFObject o = ((WKFObjectGR<?>) gr).getModel();
+					currentMoveAction.getNewLocations().put(o, new Point2D.Double(gr.getX(), gr.getY()));
 				}
 			}
 			// This is already done, but keep it for record and undo/redo
 			currentMoveAction.setWasInteractivelyPerformed(true);
 			currentMoveAction.doAction();
 
-			//System.out.println("********* Has moved:");
+			// System.out.println("********* Has moved:");
 
-			//System.out.println("---------- initial locations");
-			//for (WKFObject o : currentMoveAction.getInitialLocations().keySet()) {
-			//	System.out.println((o==currentMoveAction.getFocusedObject()?"> ":"  ")+"Object: "+o.getClass().getSimpleName()+" "+Integer.toHexString(o.hashCode())+" "+currentMoveAction.getInitialLocations().get(o));
-			//}
-			//System.out.println("---------- new locations");
-			//for (WKFObject o : currentMoveAction.getNewLocations().keySet()) {
-			//	System.out.println((o==currentMoveAction.getFocusedObject()?"> ":"  ")+"Object: "+o.getClass().getSimpleName()+" "+Integer.toHexString(o.hashCode())+" "+currentMoveAction.getNewLocations().get(o));
-			//}
+			// System.out.println("---------- initial locations");
+			// for (WKFObject o : currentMoveAction.getInitialLocations().keySet()) {
+			// System.out.println((o==currentMoveAction.getFocusedObject()?"> ":"  ")+"Object: "+o.getClass().getSimpleName()+" "+Integer.toHexString(o.hashCode())+" "+currentMoveAction.getInitialLocations().get(o));
+			// }
+			// System.out.println("---------- new locations");
+			// for (WKFObject o : currentMoveAction.getNewLocations().keySet()) {
+			// System.out.println((o==currentMoveAction.getFocusedObject()?"> ":"  ")+"Object: "+o.getClass().getSimpleName()+" "+Integer.toHexString(o.hashCode())+" "+currentMoveAction.getNewLocations().get(o));
+			// }
 
 		}
 	}
-
 
 }

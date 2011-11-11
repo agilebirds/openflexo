@@ -21,11 +21,8 @@ package org.openflexo.foundation.ontology.dm;
 
 import org.openflexo.foundation.ontology.OntologyObject;
 
-
-public class OntologyObjectStatementsChanged extends OEDataModification
-{
-    public OntologyObjectStatementsChanged(OntologyObject object)
-    {
-        super(null, object);
-     }
+public class OntologyObjectStatementsChanged extends OEDataModification {
+	public OntologyObjectStatementsChanged(OntologyObject object) {
+		super(null, object);
+	}
 }

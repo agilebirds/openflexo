@@ -22,12 +22,10 @@ package org.openflexo.foundation.ie.dm.table;
 import org.openflexo.foundation.ie.dm.IEDataModification;
 import org.openflexo.foundation.ie.widget.IETDWidget;
 
-public class ConstraintUpdated extends IEDataModification
-{
+public class ConstraintUpdated extends IEDataModification {
 
-    public ConstraintUpdated(IETDWidget td)
-    {
-        super(null, td);
-    }
+	public ConstraintUpdated(IETDWidget td) {
+		super(null, td);
+	}
 
 }

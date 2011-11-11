@@ -26,66 +26,62 @@ import org.openflexo.logging.FlexoLogger;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public abstract class EOProperty extends EOObject
-{
-    private static final Logger logger = FlexoLogger.getLogger(EOProperty.class.getPackage().getName());
-    
-    private EOEntity entity;
+public abstract class EOProperty extends EOObject {
+	private static final Logger logger = FlexoLogger.getLogger(EOProperty.class.getPackage().getName());
 
-    public EOEntity getEntity()
-    {
-        return entity;
-    }
+	private EOEntity entity;
 
-    public void setEntity(EOEntity entity)
-    {
-        if (this.entity!=null && this.entity!=entity) {
-            this.entity.removeProperty(this);
-        }
-        this.entity = entity;
-    }
+	public EOEntity getEntity() {
+		return entity;
+	}
 
-    /**
-     * @return
-     */
-    public boolean getIsClassProperty()
-    {
-        if (getEntity() != null) {
-            return getEntity().getClassProperties().contains(this);
-        } else if (logger.isLoggable(Level.WARNING))
-            logger.warning("Impossible to determine if property is class property because it has no entity");
-        return false;
-    }
-    
-    /**
-     * @param isClassProperty
-     */
-    public void setIsClassProperty(boolean isClassProperty)
-    {
-        if (getEntity()==null)
-            throw new IllegalStateException("Trying to set a property as a class property while the property has no entity");
-        if (getIsClassProperty()!=isClassProperty) {
-            if (isClassProperty)
-                getEntity().getClassProperties().add(this);
-            else
-                getEntity().getClassProperties().remove(this);
-        }
-    }
-    /**
-     * Overrides setName
-     * @see org.openflexo.foundation.dm.eo.model.EOObject#setName(java.lang.String)
-     */
-    @Override
-    public void setName(String name)
-    {
-        if (getEntity()!=null) {
-            if (getEntity().propertyNamed(name)!=null)
-                throw new IllegalArgumentException("Another property is already named "+name+" in entity "+getEntity().getName());
-        }
-        if (name==null)
-            throw new NullPointerException();
-        super.setName(name);
-    }
+	public void setEntity(EOEntity entity) {
+		if (this.entity != null && this.entity != entity) {
+			this.entity.removeProperty(this);
+		}
+		this.entity = entity;
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean getIsClassProperty() {
+		if (getEntity() != null) {
+			return getEntity().getClassProperties().contains(this);
+		} else if (logger.isLoggable(Level.WARNING))
+			logger.warning("Impossible to determine if property is class property because it has no entity");
+		return false;
+	}
+
+	/**
+	 * @param isClassProperty
+	 */
+	public void setIsClassProperty(boolean isClassProperty) {
+		if (getEntity() == null)
+			throw new IllegalStateException("Trying to set a property as a class property while the property has no entity");
+		if (getIsClassProperty() != isClassProperty) {
+			if (isClassProperty)
+				getEntity().getClassProperties().add(this);
+			else
+				getEntity().getClassProperties().remove(this);
+		}
+	}
+
+	/**
+	 * Overrides setName
+	 * 
+	 * @see org.openflexo.foundation.dm.eo.model.EOObject#setName(java.lang.String)
+	 */
+	@Override
+	public void setName(String name) {
+		if (getEntity() != null) {
+			if (getEntity().propertyNamed(name) != null)
+				throw new IllegalArgumentException("Another property is already named " + name + " in entity " + getEntity().getName());
+		}
+		if (name == null)
+			throw new NullPointerException();
+		super.setName(name);
+	}
 }

@@ -31,93 +31,82 @@ import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.eo.model.EOAttribute;
 import org.openflexo.foundation.xml.FlexoDMBuilder;
 
-
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class DMEOPrototype extends DMEOAttribute
-{
+public class DMEOPrototype extends DMEOAttribute {
 
-    private static final Logger logger = Logger.getLogger(DMEOPrototype.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DMEOPrototype.class.getPackage().getName());
 
-    /**
-     * Constructor used during deserialization
-     */
-    public DMEOPrototype(FlexoDMBuilder builder)
-    {
-        this(builder.dmModel);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor used during deserialization
+	 */
+	public DMEOPrototype(FlexoDMBuilder builder) {
+		this(builder.dmModel);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor
-     */
-    public DMEOPrototype(DMModel dmModel)
-    {
-        super(dmModel);
-    }
+	/**
+	 * Default constructor
+	 */
+	public DMEOPrototype(DMModel dmModel) {
+		super(dmModel);
+	}
 
-    /**
-     * Default constructor for dynamic creation
-     */
-    public DMEOPrototype(DMModel dmModel, EOAttribute eoAttribute)
-    {
-        this(dmModel);
-        _eoAttribute = eoAttribute;
-        if (eoAttribute != null) {
-            try {
+	/**
+	 * Default constructor for dynamic creation
+	 */
+	public DMEOPrototype(DMModel dmModel, EOAttribute eoAttribute) {
+		this(dmModel);
+		_eoAttribute = eoAttribute;
+		if (eoAttribute != null) {
+			try {
 				setName(eoAttribute.getName());
 			} catch (IllegalArgumentException e) {
 				e.printStackTrace();// Should not happen
 			} catch (InvalidNameException e) {
 				e.printStackTrace();// Should not happen
 			}
-        }
-    }
+		}
+	}
 
-    /**
-     * Return String uniquely identifying inspector template which must be
-     * applied when trying to inspect this object
-     * 
-     * @return a String value
-     */
-    @Override
-	public String getInspectorName()
-    {
-        return Inspectors.DM.DM_RO_EO_PROTOTYPE_INSPECTOR;
-    }
+	/**
+	 * Return String uniquely identifying inspector template which must be applied when trying to inspect this object
+	 * 
+	 * @return a String value
+	 */
+	@Override
+	public String getInspectorName() {
+		return Inspectors.DM.DM_RO_EO_PROTOTYPE_INSPECTOR;
+	}
 
-    @Override
-	public TreeNode getParent()
-    {
-        return getDMEORepository();
-    }
+	@Override
+	public TreeNode getParent() {
+		return getDMEORepository();
+	}
 
-    @Override
-	public DMType getType()
-    {
-     	if (getEOAttribute() == null) return null;
-    	
-    	if (_prototypeType == null 
-    			|| _prototypeType.getBaseEntity() == null
-    			|| !_prototypeType.getBaseEntity().getFullQualifiedName().equals(getEOAttribute().getClassName())) {
-    		if (logger.isLoggable(Level.FINE))
-    			logger.fine("Recompute type for DMEOPrototype "+getName());
-    		_prototypeType = DMType.makeResolvedDMType(getDMModel().getDMEntity(getEOAttribute().getClassName()));
-    		if (_prototypeType.getBaseEntity() == null) {
-    			logger.warning("Could not find entity: "+getEOAttribute().getClassName());
-    		}
-    	}
-    	else {
-    		if (logger.isLoggable(Level.FINE))
-    			logger.fine("Return cached type for DMEOPrototype "+getName());
-     	}
-  		return _prototypeType;
-    }
-    
-    private DMType _prototypeType = null;
+	@Override
+	public DMType getType() {
+		if (getEOAttribute() == null)
+			return null;
+
+		if (_prototypeType == null || _prototypeType.getBaseEntity() == null
+				|| !_prototypeType.getBaseEntity().getFullQualifiedName().equals(getEOAttribute().getClassName())) {
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("Recompute type for DMEOPrototype " + getName());
+			_prototypeType = DMType.makeResolvedDMType(getDMModel().getDMEntity(getEOAttribute().getClassName()));
+			if (_prototypeType.getBaseEntity() == null) {
+				logger.warning("Could not find entity: " + getEOAttribute().getClassName());
+			}
+		} else {
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("Return cached type for DMEOPrototype " + getName());
+		}
+		return _prototypeType;
+	}
+
+	private DMType _prototypeType = null;
 }

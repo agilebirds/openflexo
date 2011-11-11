@@ -28,36 +28,32 @@ package org.openflexo.fps.view.menu;
 import org.openflexo.fps.controller.FPSController;
 import org.openflexo.view.menu.ToolsMenu;
 
-
 /**
  * 'Tools' menu for this Module
  * 
  * @author yourname
  */
-public class FPSToolsMenu extends ToolsMenu
-{
+public class FPSToolsMenu extends ToolsMenu {
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
-      protected FPSController _fpsController;
+	protected FPSController _fpsController;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public FPSToolsMenu(FPSController controller)
-    {
-        super(controller);
-        _fpsController = controller;
-        // Put your actions here
-    }
+	public FPSToolsMenu(FPSController controller) {
+		super(controller);
+		_fpsController = controller;
+		// Put your actions here
+	}
 
-    public FPSController getFPSController()
-    {
-        return _fpsController;
-    }
+	public FPSController getFPSController() {
+		return _fpsController;
+	}
 }

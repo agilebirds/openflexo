@@ -36,76 +36,61 @@ import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.CEDController;
 import org.openflexo.vpm.palette.PaletteGR;
 
-
 public class CreateCalcPaletteInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateCalcPaletteInitializer(CEDControllerActionInitializer actionInitializer)
-	{
-		super(CreateViewPointPalette.actionType,actionInitializer);
+	CreateCalcPaletteInitializer(CEDControllerActionInitializer actionInitializer) {
+		super(CreateViewPointPalette.actionType, actionInitializer);
 	}
 
 	@Override
-	protected CEDControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (CEDControllerActionInitializer)super.getControllerActionInitializer();
+	protected CEDControllerActionInitializer getControllerActionInitializer() {
+		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	public CEDController getController()
-	{
-		return (CEDController)super.getController();
+	public CEDController getController() {
+		return (CEDController) super.getController();
 	}
-	
 
 	@Override
-	protected FlexoActionInitializer<CreateViewPointPalette> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<CreateViewPointPalette> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateViewPointPalette>() {
 			@Override
-			public boolean run(ActionEvent e, CreateViewPointPalette action)
-			{
-				
+			public boolean run(ActionEvent e, CreateViewPointPalette action) {
+
 				action.graphicalRepresentation = makePaletteGraphicalRepresentation();
-				
-				FIBDialog dialog = FIBDialog.instanciateComponent(
-						CEDCst.CREATE_PALETTE_DIALOG_FIB,
-						action, null, true);
+
+				FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.CREATE_PALETTE_DIALOG_FIB, action, null, true);
 				return (dialog.getStatus() == Status.VALIDATED);
 			}
 		};
 	}
-	
 
 	@Override
-	protected FlexoActionFinalizer<CreateViewPointPalette> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<CreateViewPointPalette> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateViewPointPalette>() {
 			@Override
-			public boolean run(ActionEvent e, CreateViewPointPalette action)
-			{
-				getController().setCurrentEditedObjectAsModuleView(action.getNewPalette(),getController().VIEW_POINT_PERSPECTIVE);
+			public boolean run(ActionEvent e, CreateViewPointPalette action) {
+				getController().setCurrentEditedObjectAsModuleView(action.getNewPalette(), getController().VIEW_POINT_PERSPECTIVE);
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return VPMIconLibrary.CALC_ICON;
 	}
 
-	protected PaletteGR makePaletteGraphicalRepresentation()
-	{
-		final PaletteGR gr 
-		= new PaletteGR();
+	protected PaletteGR makePaletteGraphicalRepresentation() {
+		final PaletteGR gr = new PaletteGR();
 		gr.setDrawWorkingArea(true);
 		gr.setWidth(260);
 		gr.setHeight(300);
 		gr.setIsVisible(true);
 		return gr;
-	}	
+	}
 
 }

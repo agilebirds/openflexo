@@ -27,96 +27,82 @@ import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Abstract automatic fix proposal for a validation issue
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public abstract class FixProposal<R extends ValidationRule<R,V>, V extends Validable> extends FlexoObject
-{
+public abstract class FixProposal<R extends ValidationRule<R, V>, V extends Validable> extends FlexoObject {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FixProposal.class.getPackage().getName());
 
-    private String _message;
+	private String _message;
 
-    private String _localizedMessage;
+	private String _localizedMessage;
 
-    private ProblemIssue<R,V> _issue;
+	private ProblemIssue<R, V> _issue;
 
-    public FixProposal(String aMessage)
-    {
-        super();
-        _message = aMessage;
-    }
+	public FixProposal(String aMessage) {
+		super();
+		_message = aMessage;
+	}
 
-    public FixProposal(String aMessage, boolean localizedMessage)
-    {
-        this(aMessage);
-        if (localizedMessage) {
+	public FixProposal(String aMessage, boolean localizedMessage) {
+		this(aMessage);
+		if (localizedMessage) {
 			_localizedMessage = aMessage;
 		}
-    }
+	}
 
-    public String getMessage()
-    {
-        return _message;
-    }
+	public String getMessage() {
+		return _message;
+	}
 
-    public String getLocalizedMessage()
-    {
-        if ((_localizedMessage == null) && (getProblemIssue() != null) && (getObject() != null)) {
-            _localizedMessage = FlexoLocalization.localizedForKeyWithParams(_message, this);
-        }
-        return _localizedMessage;
-    }
+	public String getLocalizedMessage() {
+		if ((_localizedMessage == null) && (getProblemIssue() != null) && (getObject() != null)) {
+			_localizedMessage = FlexoLocalization.localizedForKeyWithParams(_message, this);
+		}
+		return _localizedMessage;
+	}
 
-    public void setMessage(String message)
-    {
-        this._message = message;
-    }
+	public void setMessage(String message) {
+		this._message = message;
+	}
 
-    public V getObject()
-    {
-        return getProblemIssue().getObject();
-    }
+	public V getObject() {
+		return getProblemIssue().getObject();
+	}
 
-    public void apply()
-    {
-        apply(true);
-    }
+	public void apply() {
+		apply(true);
+	}
 
-    public void apply(boolean revalidateAfterFixing)
-    {
-        fixAction();
-        if (revalidateAfterFixing) {
+	public void apply(boolean revalidateAfterFixing) {
+		fixAction();
+		if (revalidateAfterFixing) {
 			getProblemIssue().revalidateAfterFixing(false);
 		}
-    }
+	}
 
-    protected abstract void fixAction();
+	protected abstract void fixAction();
 
-    public void setProblemIssue(ProblemIssue<R,V> issue)
-    {
-        _issue = issue;
-    }
+	public void setProblemIssue(ProblemIssue<R, V> issue) {
+		_issue = issue;
+	}
 
-    public ProblemIssue<R,V> getProblemIssue()
-    {
-        return _issue;
-    }
+	public ProblemIssue<R, V> getProblemIssue() {
+		return _issue;
+	}
 
-    public boolean askConfirmation()
-    {
-        return false;
-    }
+	public boolean askConfirmation() {
+		return false;
+	}
 
-    public FlexoProject getProject()
-    {
-        if (getProblemIssue() != null) {
-            return getProblemIssue().getProject();
-        }
-        return null;
-    }
-
+	public FlexoProject getProject() {
+		if (getProblemIssue() != null) {
+			return getProblemIssue().getProject();
+		}
+		return null;
+	}
 
 }

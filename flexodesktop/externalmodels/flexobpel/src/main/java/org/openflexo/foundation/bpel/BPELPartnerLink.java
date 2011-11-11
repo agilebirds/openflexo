@@ -33,107 +33,101 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.ws.ServiceInterface;
 import org.openflexo.foundation.ws.WSPortType;
 
-
-public class BPELPartnerLink implements BPELPartnerLinkInterface{
+public class BPELPartnerLink implements BPELPartnerLinkInterface {
 	private FlexoProcess process;
 	private ServiceInterface serviceInterface;
-	private Hashtable<String,BPELPartnerLinkInvocation> invocations;
-	
+	private Hashtable<String, BPELPartnerLinkInvocation> invocations;
+
 	private String name;
 	private QName partnerLinkType;
 
-	
-	
 	public BPELPartnerLink(FlexoProcess pro) {
-		process=pro;
-		invocations=new Hashtable<String, BPELPartnerLinkInvocation>();
-		serviceInterface=pro.getServiceInterfaces().get(0);
-		name=BPELConstants.normalise(process.getName());
-		partnerLinkType=new QName(serviceInterface.getParentService().getTargetNamespace(),getName()+BPELConstants.APPEND_PARTNERLINKTYPE);
+		process = pro;
+		invocations = new Hashtable<String, BPELPartnerLinkInvocation>();
+		serviceInterface = pro.getServiceInterfaces().get(0);
+		name = BPELConstants.normalise(process.getName());
+		partnerLinkType = new QName(serviceInterface.getParentService().getTargetNamespace(), getName()
+				+ BPELConstants.APPEND_PARTNERLINKTYPE);
 		System.out.println("Service namespace : " + serviceInterface.getParentService().getTargetNamespace());
 		BPELNamespacePrefixMapperFactory.addNamespaceAndPrefix(serviceInterface.getParentService().getTargetNamespace(), null);
-		
+
 	}
-	
+
 	public BPELPartnerLinkInvocation getInvocation(String name) {
 		return invocations.get(name);
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public QName getPartnerLinkType() {
 		return partnerLinkType;
 	}
-	
+
 	public void addInvocation(BPELPartnerLinkInvocation pli) {
 		invocations.put(pli.getName(), pli);
 	}
-	
+
 	public TImport getImport() {
-		TImport toReturn=new TImport();
+		TImport toReturn = new TImport();
 		toReturn.setImportType(BPELConstants.NAMESPACE_WSDL);
-		toReturn.setLocation(BPELConstants.normalise(process.getName())+".wsdl");
+		toReturn.setLocation(BPELConstants.normalise(process.getName()) + ".wsdl");
 		toReturn.setNamespace(serviceInterface.getParentService().getTargetNamespace());
-		
+
 		return toReturn;
 	}
-	
+
 	public TPartnerLink getTPartnerLink() {
-		TPartnerLink toReturn=new TPartnerLink();
+		TPartnerLink toReturn = new TPartnerLink();
 		toReturn.setName(this.getName());
 		toReturn.setPartnerLinkType(this.getPartnerLinkType());
-		toReturn.setPartnerRole(BPELConstants.normalise(process.getName())+BPELConstants.APPEND_ROLE);
+		toReturn.setPartnerRole(BPELConstants.normalise(process.getName()) + BPELConstants.APPEND_ROLE);
 		return toReturn;
 	}
-	
+
 	@Override
 	public TPartnerLinkType getTPartnerLinkType() {
-		TPartnerLinkType toReturn=new TPartnerLinkType();
+		TPartnerLinkType toReturn = new TPartnerLinkType();
 		toReturn.setName(partnerLinkType.getLocalPart());
-		
+
 		// for now on, only one port type is supported per service
-		WSPortType portType=serviceInterface.getParentService().getWSPortTypes().get(0);
-	
-		TRole role=new TRole();
-		role.setName(BPELConstants.normalise(process.getName())+BPELConstants.APPEND_ROLE);
-		role.setPortType(new QName(serviceInterface.getParentService().getTargetNamespace(),portType.getName()));
+		WSPortType portType = serviceInterface.getParentService().getWSPortTypes().get(0);
+
+		TRole role = new TRole();
+		role.setName(BPELConstants.normalise(process.getName()) + BPELConstants.APPEND_ROLE);
+		role.setPortType(new QName(serviceInterface.getParentService().getTargetNamespace(), portType.getName()));
 		toReturn.getRole().add(role);
-		
+
 		return toReturn;
 	}
-	
-	
+
 	/*
 	 * TO-DO : this suppose that there is only one operation per PartnerLink
 	 * THIS SUPPOSITION IS WRONG
 	 */
 
-	
 	public ServiceInterface getServiceInterface() {
 		return serviceInterface;
 	}
 
 	public Vector<BPELPartnerLinkInvocation> getAllInvocations() {
-		Vector<BPELPartnerLinkInvocation> toReturn=new Vector<BPELPartnerLinkInvocation>();
-		
-		Enumeration en=invocations.elements();
+		Vector<BPELPartnerLinkInvocation> toReturn = new Vector<BPELPartnerLinkInvocation>();
+
+		Enumeration en = invocations.elements();
 		while (en.hasMoreElements()) {
-			toReturn.add((BPELPartnerLinkInvocation)en.nextElement());
+			toReturn.add((BPELPartnerLinkInvocation) en.nextElement());
 		}
 		return toReturn;
 	}
-	
-	
+
 	@Override
 	public String toString() {
-		String toReturn=new String();
-		toReturn+="BPELPartnerLink : \n";
-		toReturn+="  servceInterface : "+serviceInterface.getName()+"\n";
-		toReturn+=invocations.toString()+"\n";
+		String toReturn = new String();
+		toReturn += "BPELPartnerLink : \n";
+		toReturn += "  servceInterface : " + serviceInterface.getName() + "\n";
+		toReturn += invocations.toString() + "\n";
 		return toReturn;
 	}
-	
-	
+
 }

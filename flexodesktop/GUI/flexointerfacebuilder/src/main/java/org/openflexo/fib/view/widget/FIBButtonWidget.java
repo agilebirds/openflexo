@@ -29,82 +29,71 @@ import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBButton;
 import org.openflexo.fib.view.FIBWidgetView;
 
+public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
 
-public class FIBButtonWidget extends FIBWidgetView<FIBButton,JButton,String>
-{
+	private static final Logger logger = Logger.getLogger(FIBButtonWidget.class.getPackage().getName());
 
-    private static final Logger logger = Logger
-    .getLogger(FIBButtonWidget.class.getPackage().getName());
+	private final JButton buttonWidget;
 
-     private final JButton buttonWidget;
-
-     public FIBButtonWidget(FIBButton model, FIBController controller)
-    {
-        super(model,controller);
-        buttonWidget = new JButton();
-        buttonWidget.addActionListener(new ActionListener() {			
+	public FIBButtonWidget(FIBButton model, FIBController controller) {
+		super(model, controller);
+		buttonWidget = new JButton();
+		buttonWidget.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				buttonClicked();
 			}
 		});
-        updateLabel();
-        //updatePreferredSize();
-        updateFont();
-    }
+		updateLabel();
+		// updatePreferredSize();
+		updateFont();
+	}
 
-     @Override
-	public synchronized boolean updateWidgetFromModel()
-     {
-    	 if (modelUpdating)
-    		 return false;
-    	 widgetUpdating = true;
-    	 updateLabel();
-    	 widgetUpdating = false;
-    	 return false;
-     }
+	@Override
+	public synchronized boolean updateWidgetFromModel() {
+		if (modelUpdating)
+			return false;
+		widgetUpdating = true;
+		updateLabel();
+		widgetUpdating = false;
+		return false;
+	}
 
-    /**
-     * Update the model given the actual state of the widget
-     */
-    @Override
-	public synchronized boolean updateModelFromWidget()
-    {
-    	// not relevant
-    	return false;
-    }
-    
-    public synchronized void buttonClicked()
-    {
-    	logger.info("Button "+getWidget()+" has clicked");
-    	if (getWidget().getAction().isValid()) {
-    		getWidget().getAction().execute(getController());
-    	}
+	/**
+	 * Update the model given the actual state of the widget
+	 */
+	@Override
+	public synchronized boolean updateModelFromWidget() {
+		// not relevant
+		return false;
+	}
+
+	public synchronized void buttonClicked() {
+		logger.info("Button " + getWidget() + " has clicked");
+		if (getWidget().getAction().isValid()) {
+			getWidget().getAction().execute(getController());
+		}
 		updateDependancies();
-    }
-    
+	}
+
 	@Override
-	public JButton getJComponent() 
-	{
+	public JButton getJComponent() {
 		return buttonWidget;
 	}
 
 	@Override
-	public JButton getDynamicJComponent()
-	{
+	public JButton getDynamicJComponent() {
 		return buttonWidget;
 	}
 
-	protected void updateLabel()
-	{
-		//logger.info("Button update label with key="+getWidget().getLabel());
-		buttonWidget.setText(getValue() != null ? getValue() : (getWidget().getLocalize() ? getLocalized(getWidget().getLabel()) : getWidget().getLabel()));
+	protected void updateLabel() {
+		// logger.info("Button update label with key="+getWidget().getLabel());
+		buttonWidget.setText(getValue() != null ? getValue() : (getWidget().getLocalize() ? getLocalized(getWidget().getLabel())
+				: getWidget().getLabel()));
 	}
-	
+
 	@Override
-	public void updateLanguage()
-	{
+	public void updateLanguage() {
 		super.updateLanguage();
 		updateLabel();
 	}

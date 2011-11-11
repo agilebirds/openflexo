@@ -26,66 +26,56 @@ import org.openflexo.foundation.dm.eo.model.EOAttribute;
 import org.openflexo.foundation.dm.eo.model.EOEntity;
 import org.openflexo.foundation.dm.eo.model.EORelationship;
 
-
-
 /**
  * @author bmangez
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ *         TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
  */
-public class EOEntityDescriptor
-{
-    public EOEntityDescriptor(EOEntity _entity)
-    {
-        super();
-        entity = _entity;
+public class EOEntityDescriptor {
+	public EOEntityDescriptor(EOEntity _entity) {
+		super();
+		entity = _entity;
 
-    }
+	}
 
-    public EOAttribute attributeNamed(String name)
-    {
-        return entity.attributeNamed(name);
-    }
+	public EOAttribute attributeNamed(String name) {
+		return entity.attributeNamed(name);
+	}
 
-    public EORelationship relationshipNamed(String name)
-    {
-        return entity.relationshipNamed(name);
-    }
+	public EORelationship relationshipNamed(String name) {
+		return entity.relationshipNamed(name);
+	}
 
-    @Override
-	public String toString()
-    {
-        return entity.getName();
-    }
+	@Override
+	public String toString() {
+		return entity.getName();
+	}
 
-    public Vector<String> attributesList()
-    {
-        if (_attributesList == null) {
-            _attributesList = new Vector<String>();
-            Iterator<EOAttribute> i = entity.getAttributes().iterator();
-            while (i.hasNext()) {
-                _attributesList.add((i.next()).getName());
-            }
-        }
-        return _attributesList;
-    }
+	public Vector<String> attributesList() {
+		if (_attributesList == null) {
+			_attributesList = new Vector<String>();
+			Iterator<EOAttribute> i = entity.getAttributes().iterator();
+			while (i.hasNext()) {
+				_attributesList.add((i.next()).getName());
+			}
+		}
+		return _attributesList;
+	}
 
-    private Vector<String> _attributesList;
+	private Vector<String> _attributesList;
 
-    public Vector<String> relationshipsList()
-    {
-        if (_relationshipsList == null) {
-            _relationshipsList = new Vector<String>();
-            Iterator<EORelationship> i = entity.getRelationships().iterator();
-            while (i.hasNext()) {
-                _relationshipsList.add((i.next()).getName());
-            }
-        }
-        return _relationshipsList;
-    }
+	public Vector<String> relationshipsList() {
+		if (_relationshipsList == null) {
+			_relationshipsList = new Vector<String>();
+			Iterator<EORelationship> i = entity.getRelationships().iterator();
+			while (i.hasNext()) {
+				_relationshipsList.add((i.next()).getName());
+			}
+		}
+		return _relationshipsList;
+	}
 
-    private Vector<String> _relationshipsList;
+	private Vector<String> _relationshipsList;
 
-    public EOEntity entity;
+	public EOEntity entity;
 }

@@ -22,41 +22,33 @@ package org.openflexo.foundation.validation;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-
 /**
- * Represents a validation issue requiring attention embedded in a validation
- * report. An error signify that the project launching may lead to abnormal
- * behaviour.
- *
+ * Represents a validation issue requiring attention embedded in a validation report. An error signify that the project launching may lead
+ * to abnormal behaviour.
+ * 
  * @author sguerin
- *
+ * 
  */
-public class ValidationError<R extends ValidationRule<R,V>, V extends Validable> extends ProblemIssue<R,V>
-{
+public class ValidationError<R extends ValidationRule<R, V>, V extends Validable> extends ProblemIssue<R, V> {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ValidationError.class.getPackage().getName());
 
-    public ValidationError(R rule, V anObject, String aMessage)
-    {
-        super(rule, anObject, aMessage);
-    }
+	public ValidationError(R rule, V anObject, String aMessage) {
+		super(rule, anObject, aMessage);
+	}
 
-    public ValidationError(R rule, V anObject, String aMessage, FixProposal<R,V> proposal)
-    {
-        super(rule, anObject, aMessage, proposal);
-    }
+	public ValidationError(R rule, V anObject, String aMessage, FixProposal<R, V> proposal) {
+		super(rule, anObject, aMessage, proposal);
+	}
 
-    public ValidationError(R rule, V anObject, String aMessage, Vector<FixProposal<R,V>> fixProposals)
-    {
-        super(rule, anObject, aMessage, fixProposals);
-    }
+	public ValidationError(R rule, V anObject, String aMessage, Vector<FixProposal<R, V>> fixProposals) {
+		super(rule, anObject, aMessage, fixProposals);
+	}
 
-    @Override
-    public String toString()
-    {
-    	return "VALIDATION / ERROR:   "+getLocalizedMessage();
-    }
-
+	@Override
+	public String toString() {
+		return "VALIDATION / ERROR:   " + getLocalizedMessage();
+	}
 
 }

@@ -24,37 +24,28 @@ import org.openflexo.foundation.exec.inst.CreateOperationTask;
 import org.openflexo.foundation.wkf.node.ActionNode;
 import org.openflexo.foundation.wkf.node.FlexoPreCondition;
 
-
 public class BeginActionNodeActivation extends NodeActivation<ActionNode> {
 
-	public BeginActionNodeActivation(ActionNode node, FlexoPreCondition pre)
-	{
-		super(node,pre);
+	public BeginActionNodeActivation(ActionNode node, FlexoPreCondition pre) {
+		super(node, pre);
 	}
-	
-	public BeginActionNodeActivation(ActionNode node)
-	{
+
+	public BeginActionNodeActivation(ActionNode node) {
 		super(node);
 	}
-	
+
 	@Override
-	public ControlGraph makeSpecificControlGraph(boolean interprocedural) throws NotSupportedException, InvalidModelException 
-	{
+	public ControlGraph makeSpecificControlGraph(boolean interprocedural) throws NotSupportedException, InvalidModelException {
 		ControlGraph CREATE_OPERATION_TASK = new CreateOperationTask(getNode().getOperationNode());
 		ControlGraph RESET_TIME_OUT = makeResetTimeOut();
-		
-		return makeSequentialControlGraph(
-				CREATE_OPERATION_TASK,
-				RESET_TIME_OUT);
+
+		return makeSequentialControlGraph(CREATE_OPERATION_TASK, RESET_TIME_OUT);
 	}
 
 	@Override
-	protected ControlGraph makeControlGraphCommonPostlude(boolean interprocedural) throws NotSupportedException, InvalidModelException
-	{
-		return makeSequentialControlGraph(
-				super.makeControlGraphCommonPostlude(interprocedural),
-				NodeDesactivation.desactivateNode(getNode(),interprocedural));
+	protected ControlGraph makeControlGraphCommonPostlude(boolean interprocedural) throws NotSupportedException, InvalidModelException {
+		return makeSequentialControlGraph(super.makeControlGraphCommonPostlude(interprocedural),
+				NodeDesactivation.desactivateNode(getNode(), interprocedural));
 	}
-
 
 }

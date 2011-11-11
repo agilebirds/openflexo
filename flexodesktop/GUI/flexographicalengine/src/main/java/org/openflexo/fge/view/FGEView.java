@@ -26,7 +26,6 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.DrawingPalette;
 
-
 public interface FGEView<O> extends Observer, FGEConstants {
 
 	public O getModel();
@@ -44,6 +43,6 @@ public interface FGEView<O> extends Observer, FGEConstants {
 	public FGEPaintManager getPaintManager();
 
 	public void delete();
-	
+
 	public boolean isDeleted();
 }

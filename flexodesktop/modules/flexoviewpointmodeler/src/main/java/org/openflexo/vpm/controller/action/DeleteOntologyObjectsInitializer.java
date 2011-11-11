@@ -36,71 +36,58 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
 
-
 public class DeleteOntologyObjectsInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeleteOntologyObjectsInitializer(CEDControllerActionInitializer actionInitializer)
-	{
-		super(DeleteOntologyObjects.actionType,actionInitializer);
+	DeleteOntologyObjectsInitializer(CEDControllerActionInitializer actionInitializer) {
+		super(DeleteOntologyObjects.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected CEDControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (CEDControllerActionInitializer)super.getControllerActionInitializer();
+	protected CEDControllerActionInitializer getControllerActionInitializer() {
+		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<DeleteOntologyObjects> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<DeleteOntologyObjects> getDefaultInitializer() {
 		return new FlexoActionInitializer<DeleteOntologyObjects>() {
-            @Override
-			public boolean run(ActionEvent e, DeleteOntologyObjects action)
-            {
-				FIBDialog dialog = FIBDialog.instanciateComponent(
-						CEDCst.DELETE_ONTOLOGY_OBJECTS_DIALOG_FIB,
-						action, null, true);
+			@Override
+			public boolean run(ActionEvent e, DeleteOntologyObjects action) {
+				FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.DELETE_ONTOLOGY_OBJECTS_DIALOG_FIB, action, null, true);
 				return (dialog.getStatus() == Status.VALIDATED);
-            }
-        };
-	}
-
-     @Override
-	protected FlexoActionFinalizer<DeleteOntologyObjects> getDefaultFinalizer() 
-	{
-		return new FlexoActionFinalizer<DeleteOntologyObjects>() {
-            @Override
-			public boolean run(ActionEvent e, DeleteOntologyObjects action)
-            {
-                if (getControllerActionInitializer().getCEDController().getSelectionManager().getLastSelectedObject()!=null
-                		&& getControllerActionInitializer().getCEDController().getSelectionManager().getLastSelectedObject().isDeleted())
-                	getControllerActionInitializer().getCEDController().getSelectionManager().resetSelection();
-                return true;
-          }
-        };
+			}
+		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected FlexoActionFinalizer<DeleteOntologyObjects> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<DeleteOntologyObjects>() {
+			@Override
+			public boolean run(ActionEvent e, DeleteOntologyObjects action) {
+				if (getControllerActionInitializer().getCEDController().getSelectionManager().getLastSelectedObject() != null
+						&& getControllerActionInitializer().getCEDController().getSelectionManager().getLastSelectedObject().isDeleted())
+					getControllerActionInitializer().getCEDController().getSelectionManager().resetSelection();
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return IconLibrary.DELETE_ICON;
 	}
 
 	@Override
-	protected KeyStroke getShortcut() 
-	{
+	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(FlexoCst.BACKSPACE_DELETE_KEY_CODE, 0);
 	}
 
-
 	@Override
-	public void init()
-	{
-        super.init();
-        getControllerActionInitializer().registerAction(DeleteOntologyObjects.actionType,KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0));
+	public void init() {
+		super.init();
+		getControllerActionInitializer().registerAction(DeleteOntologyObjects.actionType,
+				KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0));
 	}
-	
 
 }

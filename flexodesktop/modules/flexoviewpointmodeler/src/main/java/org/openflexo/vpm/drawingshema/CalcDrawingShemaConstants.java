@@ -26,15 +26,15 @@ public interface CalcDrawingShemaConstants {
 
 	public static final int ENTITY_BORDER = 10;
 	public static final int PROPERTY_BORDER = 5;
-	
+
 	public static final double WIDTH = 200;
 	public static final double PROPERTY_HEIGHT = 17;
 	public static final double HEADER_HEIGHT = 30;
-	
-    public static final Font ENTITY_FONT = new Font("SansSerif", Font.BOLD, 11);
-    public static final Font ATTRIBUTE_FONT = new Font("SansSerif", Font.PLAIN, 10);
-    public static final Font RELATIONSHIP_FONT = new Font("SansSerif", Font.ITALIC, 10);
 
-    public static final Color SELECTED_COLOR = new Color(181,213,255);
-    public static final Color FOCUSED_COLOR = new Color(237,243,254);
+	public static final Font ENTITY_FONT = new Font("SansSerif", Font.BOLD, 11);
+	public static final Font ATTRIBUTE_FONT = new Font("SansSerif", Font.PLAIN, 10);
+	public static final Font RELATIONSHIP_FONT = new Font("SansSerif", Font.ITALIC, 10);
+
+	public static final Color SELECTED_COLOR = new Color(181, 213, 255);
+	public static final Color FOCUSED_COLOR = new Color(237, 243, 254);
 }

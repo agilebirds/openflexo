@@ -33,7 +33,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ReservedKeyword;
 import org.openflexo.view.controller.FlexoController;
 
-
 import org.openflexo.foundation.dm.DMPackage;
 import org.openflexo.foundation.dm.DMRepository;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -44,80 +43,73 @@ import org.openflexo.foundation.rm.FlexoProject;
  * @author sguerin
  * 
  */
-public class DMPackageTableModel extends AbstractModel<DMRepository,DMPackage>
-{
+public class DMPackageTableModel extends AbstractModel<DMRepository, DMPackage> {
 
-    protected static final Logger logger = Logger.getLogger(DMPackageTableModel.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(DMPackageTableModel.class.getPackage().getName());
 
-    public DMPackageTableModel(DMRepository repository, FlexoProject project)
-    {
-        super(repository, project);
-        addToColumns(new IconColumn<DMPackage>("package_icon", 30) {
-            @Override
-			public Icon getIcon(DMPackage aPackage)
-            {
-                return DMEIconLibrary.DM_PACKAGE_ICON;
-            }
-        });
-        addToColumns(new IconColumn<DMPackage>("read_only", 25) {
-            @Override
-			public Icon getIcon(DMPackage aPackage)
-            {
-                return (aPackage.getRepository()==null || aPackage.getRepository().isReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON);
-            }
-            
-            @Override
-            public String getLocalizedTooltip(DMPackage aPackage) {
-            	return (aPackage.getRepository()==null || aPackage.getRepository().isReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization.localizedForKey("is_not_read_only"));
-            }
-        });
-        addToColumns(new EditableStringColumn<DMPackage>("name", 745) {
-            @Override
-			public String getValue(DMPackage aPackage)
-            {
-                return aPackage.getLocalizedName();
-            }
+	public DMPackageTableModel(DMRepository repository, FlexoProject project) {
+		super(repository, project);
+		addToColumns(new IconColumn<DMPackage>("package_icon", 30) {
+			@Override
+			public Icon getIcon(DMPackage aPackage) {
+				return DMEIconLibrary.DM_PACKAGE_ICON;
+			}
+		});
+		addToColumns(new IconColumn<DMPackage>("read_only", 25) {
+			@Override
+			public Icon getIcon(DMPackage aPackage) {
+				return (aPackage.getRepository() == null || aPackage.getRepository().isReadOnly() ? DMEIconLibrary.READONLY_ICON
+						: DMEIconLibrary.MODIFIABLE_ICON);
+			}
 
-            @Override
-			public void setValue(DMPackage aPackage, String aValue)
-            {
-            	try{
-            		if(ReservedKeyword.contains(aValue))throw new InvalidNameException(aValue+" is a reserved keyword.");
-            		aPackage.setName(aValue);
-            	} catch (InvalidNameException e) {
+			@Override
+			public String getLocalizedTooltip(DMPackage aPackage) {
+				return (aPackage.getRepository() == null || aPackage.getRepository().isReadOnly() ? FlexoLocalization
+						.localizedForKey("is_read_only") : FlexoLocalization.localizedForKey("is_not_read_only"));
+			}
+		});
+		addToColumns(new EditableStringColumn<DMPackage>("name", 745) {
+			@Override
+			public String getValue(DMPackage aPackage) {
+				return aPackage.getLocalizedName();
+			}
+
+			@Override
+			public void setValue(DMPackage aPackage, String aValue) {
+				try {
+					if (ReservedKeyword.contains(aValue))
+						throw new InvalidNameException(aValue + " is a reserved keyword.");
+					aPackage.setName(aValue);
+				} catch (InvalidNameException e) {
 					FlexoController.showError(FlexoLocalization.localizedForKey("reserved_word"));
 				}
-            }
-        });
-    }
+			}
+		});
+	}
 
-    public DMRepository getDMRepository()
-    {
-        return getModel();
-    }
+	public DMRepository getDMRepository() {
+		return getModel();
+	}
 
-    @Override
-	public DMPackage elementAt(int row)
-    {
-        if ((row >= 0) && (row < getRowCount())) {
-            return (DMPackage)getDMRepository().getOrderedChildren().elementAt(row);
-        } else {
-            return null;
-        }
-    }
+	@Override
+	public DMPackage elementAt(int row) {
+		if ((row >= 0) && (row < getRowCount())) {
+			return (DMPackage) getDMRepository().getOrderedChildren().elementAt(row);
+		} else {
+			return null;
+		}
+	}
 
-    public DMPackage packageAt(int row)
-    {
-        return elementAt(row);
-    }
+	public DMPackage packageAt(int row) {
+		return elementAt(row);
+	}
 
-    @Override
-	public int getRowCount()
-    {
-        if (getDMRepository() != null) {
-            return getDMRepository().getOrderedChildren().size();
-        }
-        return 0;
-    }
+	@Override
+	public int getRowCount() {
+		if (getDMRepository() != null) {
+			return getDMRepository().getOrderedChildren().size();
+		}
+		return 0;
+	}
 
 }

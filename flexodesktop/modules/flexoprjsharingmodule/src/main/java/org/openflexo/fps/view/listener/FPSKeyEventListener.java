@@ -24,31 +24,26 @@ import org.openflexo.fps.controller.FPSController;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.listener.SelectionManagingKeyEventListener;
 
-
 /**
  * Key events listener used in the context of this module
  * 
  * @author yourname
  */
-public class FPSKeyEventListener extends SelectionManagingKeyEventListener
-{
+public class FPSKeyEventListener extends SelectionManagingKeyEventListener {
 
-    private static FPSKeyEventListener _current;
+	private static FPSKeyEventListener _current;
 
-    public FPSKeyEventListener(FPSController controller)
-    {
-        super(controller);
-    }
-
-    @Override
-	protected SelectionManager getSelectionManager()
-    {
-        return ((FPSController) getController()).getFPSSelectionManager();
-    }
+	public FPSKeyEventListener(FPSController controller) {
+		super(controller);
+	}
 
 	@Override
-	public FlexoEditor getEditor() 
-	{
+	protected SelectionManager getSelectionManager() {
+		return ((FPSController) getController()).getFPSSelectionManager();
+	}
+
+	@Override
+	public FlexoEditor getEditor() {
 		return getController().getEditor();
 	}
 }

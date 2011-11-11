@@ -28,20 +28,17 @@ import org.openflexo.foundation.utils.FlexoProjectFile;
  * @author sguerin
  * 
  */
-public class EOModelAlreadyRegisteredException extends FlexoException
-{
-    private FlexoProjectFile _eoModelFile;
+public class EOModelAlreadyRegisteredException extends FlexoException {
+	private FlexoProjectFile _eoModelFile;
 
-    public EOModelAlreadyRegisteredException(FlexoProjectFile eoModelFile)
-    {
-        super();
-        _eoModelFile = eoModelFile;
-    }
+	public EOModelAlreadyRegisteredException(FlexoProjectFile eoModelFile) {
+		super();
+		_eoModelFile = eoModelFile;
+	}
 
-    @Override
-	public String getMessage()
-    {
-        return "EOModelAlreadyRegisteredException : " + _eoModelFile.getFile().getName() + " already registered";
-    }
+	@Override
+	public String getMessage() {
+		return "EOModelAlreadyRegisteredException : " + _eoModelFile.getFile().getName() + " already registered";
+	}
 
 }

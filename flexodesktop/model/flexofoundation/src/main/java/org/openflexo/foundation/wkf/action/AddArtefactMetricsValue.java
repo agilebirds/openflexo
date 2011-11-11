@@ -29,18 +29,17 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.wkf.WKFArtefact;
 import org.openflexo.foundation.wkf.WKFObject;
 
+public class AddArtefactMetricsValue extends AddMetricsValue<AddArtefactMetricsValue, WKFArtefact> {
 
-public class AddArtefactMetricsValue extends AddMetricsValue<AddArtefactMetricsValue,WKFArtefact>
-{
-
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(AddArtefactMetricsValue.class.getPackage().getName());
 
-    public static FlexoActionType<AddArtefactMetricsValue, WKFArtefact, WKFObject> actionType = new FlexoActionType<AddArtefactMetricsValue, WKFArtefact, WKFObject>("add_metrics_value",FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<AddArtefactMetricsValue, WKFArtefact, WKFObject> actionType = new FlexoActionType<AddArtefactMetricsValue, WKFArtefact, WKFObject>(
+			"add_metrics_value", FlexoActionType.ADD_ACTION_TYPE) {
 
 		@Override
 		protected boolean isEnabledForSelection(WKFArtefact object, Vector<WKFObject> globalSelection) {
-			return object!=null && !object.isImported();
+			return object != null && !object.isImported();
 		}
 
 		@Override
@@ -50,22 +49,21 @@ public class AddArtefactMetricsValue extends AddMetricsValue<AddArtefactMetricsV
 
 		@Override
 		public AddArtefactMetricsValue makeNewAction(WKFArtefact focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
-			return new AddArtefactMetricsValue(focusedObject,globalSelection,editor);
+			return new AddArtefactMetricsValue(focusedObject, globalSelection, editor);
 		}
 
-    };
+	};
 
-    static {
-    	FlexoModelObject.addActionForClass(actionType, WKFArtefact.class);
-    }
+	static {
+		FlexoModelObject.addActionForClass(actionType, WKFArtefact.class);
+	}
 
-    AddArtefactMetricsValue (WKFArtefact focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	AddArtefactMetricsValue(WKFArtefact focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    @Override
-    protected void doAction(Object context) throws FlexoException {
-    	getFocusedObject().addToMetricsValues(createMetricsValue());
-    }
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		getFocusedObject().addToMetricsValues(createMetricsValue());
+	}
 }

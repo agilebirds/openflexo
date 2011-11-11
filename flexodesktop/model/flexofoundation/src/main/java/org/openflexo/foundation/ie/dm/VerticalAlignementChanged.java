@@ -19,16 +19,13 @@
  */
 package org.openflexo.foundation.ie.dm;
 
-public class VerticalAlignementChanged extends IEDataModification
-{
+public class VerticalAlignementChanged extends IEDataModification {
 
-    public VerticalAlignementChanged(String newValue)
-    {
-        super(null, newValue);
-    }
+	public VerticalAlignementChanged(String newValue) {
+		super(null, newValue);
+	}
 
-    public String getAlignement()
-    {
-        return (String) newValue();
-    }
+	public String getAlignement() {
+		return (String) newValue();
+	}
 }

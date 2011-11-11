@@ -26,45 +26,41 @@ import org.netbeans.lib.cvsclient.command.CommandException;
 import org.netbeans.lib.cvsclient.util.LoggedDataInputStream;
 
 /**
- * Tells the client what requests the server will accept. Also returns
- * whether the server supports sending patches, which is not really
+ * Tells the client what requests the server will accept. Also returns whether the server supports sending patches, which is not really
  * anything to do with requests!
- * @author  Robert Greig
+ * 
+ * @author Robert Greig
  */
 
 class ValidRequestsResponse implements Response {
-    /**
-     * Process the data for the response.
-     * @param dis the data inputstream allowing the client to read the server's
-     * response. Note that the actual response name has already been read
-     * and the input stream is positioned just before the first argument, if
-     * any.
-     */
-    @Override
-	public void process(LoggedDataInputStream dis, ResponseServices services)
-            throws ResponseException {
-        try {
-            String validRequests = dis.readLine();
-            services.setValidRequests(validRequests);
-            if (validRequests.indexOf("gzip-file-contents") < 0) {
-                services.dontUseGzipFileHandler();
-            }
-        }
-        catch (EOFException ex) {
-            throw new ResponseException(ex, CommandException.getLocalMessage("CommandException.EndOfFile", null)); //NOI18N
-        }
-        catch (IOException ex) {
-            throw new ResponseException(ex);
-        }
-    }
+	/**
+	 * Process the data for the response.
+	 * 
+	 * @param dis
+	 *            the data inputstream allowing the client to read the server's response. Note that the actual response name has already
+	 *            been read and the input stream is positioned just before the first argument, if any.
+	 */
+	@Override
+	public void process(LoggedDataInputStream dis, ResponseServices services) throws ResponseException {
+		try {
+			String validRequests = dis.readLine();
+			services.setValidRequests(validRequests);
+			if (validRequests.indexOf("gzip-file-contents") < 0) {
+				services.dontUseGzipFileHandler();
+			}
+		} catch (EOFException ex) {
+			throw new ResponseException(ex, CommandException.getLocalMessage("CommandException.EndOfFile", null)); // NOI18N
+		} catch (IOException ex) {
+			throw new ResponseException(ex);
+		}
+	}
 
-    /**
-     * Is this a terminal response, i.e. should reading of responses stop
-     * after this response. This is true for responses such as OK or
-     * an error response
-     */
-    @Override
+	/**
+	 * Is this a terminal response, i.e. should reading of responses stop after this response. This is true for responses such as OK or an
+	 * error response
+	 */
+	@Override
 	public boolean isTerminalResponse() {
-        return false;
-    }
+		return false;
+	}
 }

@@ -24,11 +24,11 @@ import org.openflexo.toolbox.TokenMarkerStyle;
 
 public interface MergedDocumentType {
 
-	public DelimitingMethod getDelimitingMethod(); 
+	public DelimitingMethod getDelimitingMethod();
 
 	public TokenMarkerStyle getStyle();
 
 	public AutomaticMergeResolvingModelInterface getAutomaticMergeResolvingModel();
-	
+
 	public String getName();
 }

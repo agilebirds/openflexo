@@ -23,28 +23,26 @@
 package com.metaphaseeditor;
 
 public enum LanguageDirection {
-    NONE("None", null),
-    LEFT_TO_RIGHT("Left to Right", "ltr"),
-    RIGHT_TO_LEFT("Right to Left", "rtl");
+	NONE("None", null), LEFT_TO_RIGHT("Left to Right", "ltr"), RIGHT_TO_LEFT("Right to Left", "rtl");
 
-    private String text;
-    private String attrValue;
+	private String text;
+	private String attrValue;
 
-    LanguageDirection(String text, String attrValue) {
-        this.text = text;
-        this.attrValue = attrValue;
-    }
+	LanguageDirection(String text, String attrValue) {
+		this.text = text;
+		this.attrValue = attrValue;
+	}
 
-    public String getAttrValue() {
-        return attrValue;
-    }
+	public String getAttrValue() {
+		return attrValue;
+	}
 
-    public String getText() {
-        return text;
-    }
+	public String getText() {
+		return text;
+	}
 
-    @Override
-    public String toString() {
-        return text;
-    }
+	@Override
+	public String toString() {
+		return text;
+	}
 };

@@ -28,45 +28,37 @@ import org.openflexo.foundation.cg.action.DisconnectCGRepository;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class DisconnectCGRepositoryInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DisconnectCGRepositoryInitializer(GeneratorControllerActionInitializer actionInitializer)
-	{
-		super(DisconnectCGRepository.actionType,actionInitializer);
+	DisconnectCGRepositoryInitializer(GeneratorControllerActionInitializer actionInitializer) {
+		super(DisconnectCGRepository.actionType, actionInitializer);
 	}
 
 	@Override
-	protected GeneratorControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (GeneratorControllerActionInitializer)super.getControllerActionInitializer();
+	protected GeneratorControllerActionInitializer getControllerActionInitializer() {
+		return (GeneratorControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<DisconnectCGRepository> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<DisconnectCGRepository> getDefaultInitializer() {
 		return new FlexoActionInitializer<DisconnectCGRepository>() {
 			@Override
-			public boolean run(ActionEvent e, DisconnectCGRepository action)
-			{
+			public boolean run(ActionEvent e, DisconnectCGRepository action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<DisconnectCGRepository> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<DisconnectCGRepository> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DisconnectCGRepository>() {
 			@Override
-			public boolean run(ActionEvent e, DisconnectCGRepository action)
-			{
+			public boolean run(ActionEvent e, DisconnectCGRepository action) {
 				return true;
 			}
 		};
 	}
-
 
 }

@@ -19,17 +19,15 @@
  */
 package org.openflexo.dm;
 
-
 /**
  * Constants used by the Data Model Editor module.
  * 
  * @author sguerin
  */
-public class DMCst
-{
+public class DMCst {
 
-    public static final int DEFAULT_DMEDITOR_WIDTH = 800;
+	public static final int DEFAULT_DMEDITOR_WIDTH = 800;
 
-    public static final int DEFAULT_DMEDITOR_HEIGHT = 700;
+	public static final int DEFAULT_DMEDITOR_HEIGHT = 700;
 
 }

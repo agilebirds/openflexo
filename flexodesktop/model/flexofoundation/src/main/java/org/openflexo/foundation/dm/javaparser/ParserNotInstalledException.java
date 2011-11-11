@@ -21,10 +21,8 @@ package org.openflexo.foundation.dm.javaparser;
 
 import org.openflexo.foundation.FlexoException;
 
-public class ParserNotInstalledException extends FlexoException
-{
-	public ParserNotInstalledException()
-	{
+public class ParserNotInstalledException extends FlexoException {
+	public ParserNotInstalledException() {
 		super("Java parser not installed");
 	}
 }

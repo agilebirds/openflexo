@@ -31,45 +31,47 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sguerin
  * 
  */
-public class FlexoProjectBuilder
-{
+public class FlexoProjectBuilder {
 	public ProjectLoadingHandler loadingHandler;
 
-    public FlexoProject project;
-    
-    public File projectDirectory;
+	public FlexoProject project;
 
-    public FlexoProgress progress;
+	public File projectDirectory;
 
-    private int resourcesCount;
-    private int current;
-    private int stepsToNotify;
-    
- 	public void initResourcesCount(int resourcesCount) 
-	{
- 		if (progress != null) {
-  			this.resourcesCount = resourcesCount;
-			if (resourcesCount < 20) stepsToNotify = 1;
- 			else if (resourcesCount < 100) stepsToNotify = 5;
- 			else if (resourcesCount < 500) stepsToNotify = 25;
- 			else if (resourcesCount < 1000) stepsToNotify = 50;
- 			else {
- 				stepsToNotify = (resourcesCount / 20);
- 			}
+	public FlexoProgress progress;
+
+	private int resourcesCount;
+	private int current;
+	private int stepsToNotify;
+
+	public void initResourcesCount(int resourcesCount) {
+		if (progress != null) {
+			this.resourcesCount = resourcesCount;
+			if (resourcesCount < 20)
+				stepsToNotify = 1;
+			else if (resourcesCount < 100)
+				stepsToNotify = 5;
+			else if (resourcesCount < 500)
+				stepsToNotify = 25;
+			else if (resourcesCount < 1000)
+				stepsToNotify = 50;
+			else {
+				stepsToNotify = (resourcesCount / 20);
+			}
 			current = 0;
-			//System.out.println("Steps to notify "+stepsToNotify);
-			progress.resetSecondaryProgress(resourcesCount/stepsToNotify+1);
+			// System.out.println("Steps to notify "+stepsToNotify);
+			progress.resetSecondaryProgress(resourcesCount / stepsToNotify + 1);
 		}
 	}
 
- 	public void notifyResourceLoading(FlexoResource resource) 
- 	{
- 		if (progress != null) {
- 			current++;
- 			if (stepsToNotify > 0 && current % stepsToNotify == 0) {
- 				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("loading_resources...")+" "+((current*100/resourcesCount))+" % "+FlexoLocalization.localizedForKey("completed"));
- 			}
- 		}
- 	}
+	public void notifyResourceLoading(FlexoResource resource) {
+		if (progress != null) {
+			current++;
+			if (stepsToNotify > 0 && current % stepsToNotify == 0) {
+				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("loading_resources...") + " "
+						+ ((current * 100 / resourcesCount)) + " % " + FlexoLocalization.localizedForKey("completed"));
+			}
+		}
+	}
 
 }

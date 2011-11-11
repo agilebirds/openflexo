@@ -24,58 +24,48 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geomedit.ComputedControlPoint;
 import org.openflexo.fge.geomedit.gr.GeometricObjectGraphicalRepresentation;
 
-
 public class ControlPointReference extends PointConstruction {
 
-	public GeometricObjectGraphicalRepresentation<?,?> reference;
+	public GeometricObjectGraphicalRepresentation<?, ?> reference;
 	public String cpName;
-	
-	public ControlPointReference() 
-	{
+
+	public ControlPointReference() {
 		super();
 	}
 
-	public ControlPointReference(GeometricObjectGraphicalRepresentation<?,?> aReference, String controlPointName) 
-	{
+	public ControlPointReference(GeometricObjectGraphicalRepresentation<?, ?> aReference, String controlPointName) {
 		this();
 		this.reference = aReference;
 		this.cpName = controlPointName;
 	}
 
-	protected ComputedControlPoint getControlPoint()
-	{
+	protected ComputedControlPoint getControlPoint() {
 		for (ControlPoint cp : reference.getControlPoints()) {
-			if (cp instanceof ComputedControlPoint
-					&& ((ComputedControlPoint)cp).getName().equals(cpName)) {
-				return (ComputedControlPoint)cp;
+			if (cp instanceof ComputedControlPoint && ((ComputedControlPoint) cp).getName().equals(cpName)) {
+				return (ComputedControlPoint) cp;
 			}
 		}
 		return null;
 	}
-	
+
 	@Override
-	protected FGEPoint computeData()
-	{
+	protected FGEPoint computeData() {
 		if (getControlPoint() != null)
 			return getControlPoint().getPoint();
-		System.out.println("computeData() for ControlPointReference: cannot find cp "+cpName+" for "+reference);
+		System.out.println("computeData() for ControlPointReference: cannot find cp " + cpName + " for " + reference);
 		setModified();
-		return new FGEPoint(0,0);
+		return new FGEPoint(0, 0);
 	}
 
 	@Override
-	public String toString()
-	{
-		return "ControlPointReference["+cpName+","+reference.getDrawable().getConstruction()+"]";
+	public String toString() {
+		return "ControlPointReference[" + cpName + "," + reference.getDrawable().getConstruction() + "]";
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public GeometricConstruction[] getDepends() {
 		GeometricConstruction[] returned = { reference.getDrawable().getConstruction() };
 		return returned;
 	}
-
-
 
 }

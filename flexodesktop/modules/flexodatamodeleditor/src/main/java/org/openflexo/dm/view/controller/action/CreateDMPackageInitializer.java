@@ -31,7 +31,6 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 import org.openflexo.dm.view.DMRepositoryView;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -42,58 +41,52 @@ public class CreateDMPackageInitializer extends ActionInitializer {
 
 	static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateDMPackageInitializer(DMControllerActionInitializer actionInitializer)
-	{
-		super(CreateDMPackage.actionType,actionInitializer);
+	CreateDMPackageInitializer(DMControllerActionInitializer actionInitializer) {
+		super(CreateDMPackage.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected DMControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DMControllerActionInitializer)super.getControllerActionInitializer();
+	protected DMControllerActionInitializer getControllerActionInitializer() {
+		return (DMControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<CreateDMPackage> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<CreateDMPackage> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateDMPackage>() {
-            @Override
-			public boolean run(ActionEvent e, CreateDMPackage action)
-            {
-                String newPackageName = FlexoController.askForStringMatchingPattern(FlexoLocalization
-                        .localizedForKey("please_enter_a_package_name"), DMRegExp.PACKAGE_NAME_PATTERN, FlexoLocalization
-                        .localizedForKey("package_must_start_with_a_letter_followed_by_any_letter_or_number"));
-                if (newPackageName != null) {
-                    action.setNewPackageName(newPackageName);
-                    return true;
-                }
-                return false;
-             }
-        };
+			@Override
+			public boolean run(ActionEvent e, CreateDMPackage action) {
+				String newPackageName = FlexoController.askForStringMatchingPattern(
+						FlexoLocalization.localizedForKey("please_enter_a_package_name"), DMRegExp.PACKAGE_NAME_PATTERN,
+						FlexoLocalization.localizedForKey("package_must_start_with_a_letter_followed_by_any_letter_or_number"));
+				if (newPackageName != null) {
+					action.setNewPackageName(newPackageName);
+					return true;
+				}
+				return false;
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<CreateDMPackage> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<CreateDMPackage> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateDMPackage>() {
-            @Override
-			public boolean run(ActionEvent e, CreateDMPackage action)
-            {
-                if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getRepository()) {
-                    if (logger.isLoggable(Level.FINE))
-                        logger.fine("Finalizer for CreateDMPackage in DMRepositoryView");
-                    DMRepositoryView repView = (DMRepositoryView) getControllerActionInitializer().getDMController().getCurrentEditedObjectView();
-                    repView.getPackageTable().selectObject(action.getNewPackage());
-                }
-                return true;
-           }
-        };
+			@Override
+			public boolean run(ActionEvent e, CreateDMPackage action) {
+				if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getRepository()) {
+					if (logger.isLoggable(Level.FINE))
+						logger.fine("Finalizer for CreateDMPackage in DMRepositoryView");
+					DMRepositoryView repView = (DMRepositoryView) getControllerActionInitializer().getDMController()
+							.getCurrentEditedObjectView();
+					repView.getPackageTable().selectObject(action.getNewPackage());
+				}
+				return true;
+			}
+		};
 	}
 
- 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	@Override
+	protected Icon getEnabledIcon() {
 		return DMEIconLibrary.DM_PACKAGE_ICON;
 	}
- 
+
 }

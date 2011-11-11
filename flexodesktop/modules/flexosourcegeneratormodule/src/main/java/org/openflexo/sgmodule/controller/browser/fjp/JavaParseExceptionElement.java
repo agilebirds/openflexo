@@ -23,27 +23,21 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.javaparser.FJPJavaParseException;
 
-
-public class JavaParseExceptionElement extends JavaBrowserElement
-{
-	public JavaParseExceptionElement(FJPJavaParseException exception, JavaParserBrowser browser, BrowserElement parent)
-	{
-		super(exception, BrowserElementType.PARSE_EXCEPTION, browser,parent);
+public class JavaParseExceptionElement extends JavaBrowserElement {
+	public JavaParseExceptionElement(FJPJavaParseException exception, JavaParserBrowser browser, BrowserElement parent) {
+		super(exception, BrowserElementType.PARSE_EXCEPTION, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return getException().getMessage();
 	}
 
-	public FJPJavaParseException getException()
-	{
-		return (FJPJavaParseException)getObject();
+	public FJPJavaParseException getException() {
+		return (FJPJavaParseException) getObject();
 	}
 }

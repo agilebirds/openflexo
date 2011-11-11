@@ -30,7 +30,7 @@ import java.util.logging.Logger;
 
 /**
  * @author bmangez
- *
+ * 
  *         <B>Class Description</B>
  */
 public class ResourceLocator {
@@ -130,8 +130,8 @@ public class ResourceLocator {
 	}
 
 	public static File findFlexoDesktopDirectory(File currentDir) {
-		if (currentDir!=null) {
-			File attempt = new File(currentDir,"flexodesktop");
+		if (currentDir != null) {
+			File attempt = new File(currentDir, "flexodesktop");
 			if (attempt.exists()) {
 				return attempt;
 			} else {

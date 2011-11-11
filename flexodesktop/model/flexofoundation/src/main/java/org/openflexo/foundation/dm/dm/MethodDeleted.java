@@ -26,11 +26,9 @@ import org.openflexo.foundation.dm.DMMethod;
  * 
  * @author sguerin
  */
-public class MethodDeleted extends DMDataModification
-{
+public class MethodDeleted extends DMDataModification {
 
-    public MethodDeleted(DMMethod method)
-    {
-        super(method, null);
-    }
+	public MethodDeleted(DMMethod method) {
+		super(method, null);
+	}
 }

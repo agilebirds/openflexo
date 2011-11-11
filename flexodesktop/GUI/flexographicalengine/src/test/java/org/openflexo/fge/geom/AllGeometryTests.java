@@ -19,7 +19,6 @@
  */
 package org.openflexo.fge.geom;
 
-
 import java.lang.reflect.InvocationTargetException;
 
 import junit.framework.Test;
@@ -27,24 +26,24 @@ import junit.framework.TestSuite;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class AllGeometryTests
-{
+public class AllGeometryTests {
 
-	private static void addTestCaseDynamic(String testClassName,String flexoProjectName,TestSuite suite){
+	private static void addTestCaseDynamic(String testClassName, String flexoProjectName, TestSuite suite) {
 		try {
 			Class testClass = Class.forName(testClassName);
-			addStaticTestCase(testClass,suite);
-        } catch (ClassNotFoundException e) {
-			System.out.println("WARNING : class '"+testClassName+"' not found in classpath and will be skipped.");
-			System.out.println("Add project "+flexoProjectName+" to your runtime unit test classpath to run this test class :"+testClassName);
+			addStaticTestCase(testClass, suite);
+		} catch (ClassNotFoundException e) {
+			System.out.println("WARNING : class '" + testClassName + "' not found in classpath and will be skipped.");
+			System.out.println("Add project " + flexoProjectName + " to your runtime unit test classpath to run this test class :"
+					+ testClassName);
 		}
 	}
-	
-	private static void addStaticTestCase(Class testClass,TestSuite suite){
+
+	private static void addStaticTestCase(Class testClass, TestSuite suite) {
 		try {
-			suite.addTest((Test)testClass.getMethod("suite").invoke(testClass));
+			suite.addTest((Test) testClass.getMethod("suite").invoke(testClass));
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -61,17 +60,16 @@ public class AllGeometryTests
 			suite.addTestSuite(testClass);
 		}
 	}
-	
-    public static Test suite()
-    {
-        TestSuite suite = new TestSuite("Tests for FGE geometry layer");
-        
-        addStaticTestCase(TestGeom.class,suite);
-        addStaticTestCase(TestOperations.class,suite);
-        addStaticTestCase(TestRectPolylin.class,suite);
-        addStaticTestCase(TestUnion.class,suite);
-        addStaticTestCase(TestArc.class,suite);
-        return suite;
-    }
+
+	public static Test suite() {
+		TestSuite suite = new TestSuite("Tests for FGE geometry layer");
+
+		addStaticTestCase(TestGeom.class, suite);
+		addStaticTestCase(TestOperations.class, suite);
+		addStaticTestCase(TestRectPolylin.class, suite);
+		addStaticTestCase(TestUnion.class, suite);
+		addStaticTestCase(TestArc.class, suite);
+		return suite;
+	}
 
 }

@@ -26,12 +26,10 @@ import org.openflexo.foundation.DataModification;
  * 
  * @author sguerin
  */
-public abstract class RMDataModification extends DataModification
-{
+public abstract class RMDataModification extends DataModification {
 
-    public RMDataModification(Object oldValue, Object newValue)
-    {
-        super(DataModification.RM_DM, oldValue, newValue);
-    }
+	public RMDataModification(Object oldValue, Object newValue) {
+		super(DataModification.RM_DM, oldValue, newValue);
+	}
 
 }

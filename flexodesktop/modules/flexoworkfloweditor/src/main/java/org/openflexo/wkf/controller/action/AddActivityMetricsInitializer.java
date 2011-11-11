@@ -33,14 +33,12 @@ import org.openflexo.foundation.wkf.action.AddMetricsDefinition;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
-public class AddActivityMetricsInitializer extends AddMetricsInitializer<AddActivityMetricsValue,AbstractActivityNode> {
+public class AddActivityMetricsInitializer extends AddMetricsInitializer<AddActivityMetricsValue, AbstractActivityNode> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddActivityMetricsInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(actionInitializer,AddActivityMetricsValue.actionType);
+	AddActivityMetricsInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(actionInitializer, AddActivityMetricsValue.actionType);
 	}
 
 	@Override
@@ -51,10 +49,10 @@ public class AddActivityMetricsInitializer extends AddMetricsInitializer<AddActi
 	@Override
 	protected Vector<MetricsDefinition> getAvailableMetricsDefinitions(AbstractActivityNode activity) {
 		Vector<MetricsDefinition> v = new Vector<MetricsDefinition>(getProject().getWorkflow().getActivityMetricsDefinitions());
-		for (MetricsValue mv: activity.getMetricsValues()) {
+		for (MetricsValue mv : activity.getMetricsValues()) {
 			v.remove(mv.getMetricsDefinition());
 		}
 		return v;
 	}
-	
+
 }

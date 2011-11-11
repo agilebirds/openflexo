@@ -19,81 +19,71 @@
  */
 package org.openflexo.docxparser.flexotag;
 
+public abstract class AbstractFlexoTag {
+	// Flexo Tag must be of the form "__TAG_[FLEXOID]_[USERID]_[OPTION]", only [OPTION] is optional
 
-public abstract class AbstractFlexoTag
-{
-	//Flexo Tag must be of the form "__TAG_[FLEXOID]_[USERID]_[OPTION]", only [OPTION] is optional
-	
 	private String flexoId;
 	private String userId;
 	private String optionalInfo;
-	
+
 	@SuppressWarnings("serial")
-	public static class FlexoTagFormatException extends Exception
-	{
-		public FlexoTagFormatException(String msg)
-		{
+	public static class FlexoTagFormatException extends Exception {
+		public FlexoTagFormatException(String msg) {
 			super(msg);
 		}
 	}
-	
-	protected AbstractFlexoTag(String tagValue) throws FlexoTagFormatException
-	{
+
+	protected AbstractFlexoTag(String tagValue) throws FlexoTagFormatException {
 		this.parse(tagValue);
 	}
-	
-	protected static String buildFlexoTag(String tag, String flexoId, String userId, String optionalInfo)
-	{
-		return tag + flexoId + "_" + userId + (optionalInfo!=null && optionalInfo.length() > 0?"_"+optionalInfo:"");
+
+	protected static String buildFlexoTag(String tag, String flexoId, String userId, String optionalInfo) {
+		return tag + flexoId + "_" + userId + (optionalInfo != null && optionalInfo.length() > 0 ? "_" + optionalInfo : "");
 	}
-	
+
 	abstract protected String getTag();
-	
-	private void parse(String tagValue) throws FlexoTagFormatException
-	{
-		if(tagValue == null || !tagValue.startsWith(getTag()))
-			throw new FlexoTagFormatException("Tag value '" +tagValue+ "' is either null or doesn't start with '" +getTag()+ "'");
-		
+
+	private void parse(String tagValue) throws FlexoTagFormatException {
+		if (tagValue == null || !tagValue.startsWith(getTag()))
+			throw new FlexoTagFormatException("Tag value '" + tagValue + "' is either null or doesn't start with '" + getTag() + "'");
+
 		int indexOfStartFlexoId = getTag().length();
-		if(tagValue.length() <= indexOfStartFlexoId)
-			throw new FlexoTagFormatException("Tag value '" +tagValue+ "' doesn't contain anything after '" +getTag()+ "'");
-		
+		if (tagValue.length() <= indexOfStartFlexoId)
+			throw new FlexoTagFormatException("Tag value '" + tagValue + "' doesn't contain anything after '" + getTag() + "'");
+
 		int indexOfEndFlexoId = tagValue.indexOf('_', indexOfStartFlexoId);
-		if(indexOfEndFlexoId == -1 || indexOfEndFlexoId == indexOfStartFlexoId)
-			throw new FlexoTagFormatException("Tag value '" +tagValue+ "' doesn't contain a Flexo Id (or the flexo id is not followed by '_')");
-		
+		if (indexOfEndFlexoId == -1 || indexOfEndFlexoId == indexOfStartFlexoId)
+			throw new FlexoTagFormatException("Tag value '" + tagValue
+					+ "' doesn't contain a Flexo Id (or the flexo id is not followed by '_')");
+
 		this.flexoId = tagValue.substring(indexOfStartFlexoId, indexOfEndFlexoId);
-		
+
 		int indexOfStartUserId = indexOfEndFlexoId + 1;
-		if(tagValue.length() <= indexOfStartUserId)
-			throw new FlexoTagFormatException("Tag value '" +tagValue+ "' doesn't contain an User id");
-		
+		if (tagValue.length() <= indexOfStartUserId)
+			throw new FlexoTagFormatException("Tag value '" + tagValue + "' doesn't contain an User id");
+
 		int indexOfEndUserId = tagValue.indexOf('_', indexOfStartUserId);
-		if(indexOfEndUserId == -1)
+		if (indexOfEndUserId == -1)
 			this.userId = tagValue.substring(indexOfStartUserId);
-		else if(indexOfEndUserId == indexOfStartUserId)
-			throw new FlexoTagFormatException("Tag value '" +tagValue+ "' doesn't contain an User id");
-		else
-		{
+		else if (indexOfEndUserId == indexOfStartUserId)
+			throw new FlexoTagFormatException("Tag value '" + tagValue + "' doesn't contain an User id");
+		else {
 			this.userId = tagValue.substring(indexOfStartUserId, indexOfEndUserId);
-			
-			if(tagValue.length() > indexOfEndUserId + 1)
+
+			if (tagValue.length() > indexOfEndUserId + 1)
 				this.optionalInfo = tagValue.substring(indexOfEndUserId + 1);
 		}
 	}
 
-	public String getFlexoId()
-	{
+	public String getFlexoId() {
 		return flexoId;
 	}
 
-	public String getUserId()
-	{
+	public String getUserId() {
 		return userId;
 	}
 
-	protected String getOptionalInfo()
-	{
+	protected String getOptionalInfo() {
 		return optionalInfo;
 	}
 }

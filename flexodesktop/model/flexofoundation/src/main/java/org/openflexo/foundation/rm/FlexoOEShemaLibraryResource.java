@@ -36,153 +36,134 @@ import org.openflexo.localization.FlexoLocalization;
  * 
  * @author sylvain
  */
-public class FlexoOEShemaLibraryResource extends FlexoXMLStorageResource<ViewLibrary> implements Serializable
-{
+public class FlexoOEShemaLibraryResource extends FlexoXMLStorageResource<ViewLibrary> implements Serializable {
 
 	private static final Logger logger = Logger.getLogger(FlexoOEShemaLibraryResource.class.getPackage().getName());
-    
+
 	/**
-     * Constructor used for XML Serialization: never try to instanciate resource
-     * from this constructor
-     * 
-     * @param builder
-     */
-    public FlexoOEShemaLibraryResource(FlexoProjectBuilder builder)
-    {
-        this(builder.project);
-        builder.notifyResourceLoading(this);
-   }
+	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
+	 * 
+	 * @param builder
+	 */
+	public FlexoOEShemaLibraryResource(FlexoProjectBuilder builder) {
+		this(builder.project);
+		builder.notifyResourceLoading(this);
+	}
 
-    public FlexoOEShemaLibraryResource(FlexoProject aProject)
-    {
-        super(aProject);
-        if (aProject != null) {
-            try {
-                setResourceFile(new FlexoProjectFile(ProjectRestructuration
-                        .getExpectedShemaLibFile(aProject), aProject));
-            } catch (InvalidFileNameException e) {
-                FlexoProjectFile f = new FlexoProjectFile("ShemaLibrary");
-                f.setProject(aProject);
-                try {
-                    setResourceFile(f);
-                } catch (InvalidFileNameException e1) {
-                    if (logger.isLoggable(Level.SEVERE))
-                        logger.severe("This should not happen.");
-                    e1.printStackTrace();
-                }
-            }
-        }
+	public FlexoOEShemaLibraryResource(FlexoProject aProject) {
+		super(aProject);
+		if (aProject != null) {
+			try {
+				setResourceFile(new FlexoProjectFile(ProjectRestructuration.getExpectedShemaLibFile(aProject), aProject));
+			} catch (InvalidFileNameException e) {
+				FlexoProjectFile f = new FlexoProjectFile("ShemaLibrary");
+				f.setProject(aProject);
+				try {
+					setResourceFile(f);
+				} catch (InvalidFileNameException e1) {
+					if (logger.isLoggable(Level.SEVERE))
+						logger.severe("This should not happen.");
+					e1.printStackTrace();
+				}
+			}
+		}
 
-        // this(aProject,new
-        // FlexoProjectFile(ProjectRestructuration.getExpectedComponentLibFile(aProject),aProject));
-    }
+		// this(aProject,new
+		// FlexoProjectFile(ProjectRestructuration.getExpectedComponentLibFile(aProject),aProject));
+	}
 
-    public FlexoOEShemaLibraryResource(FlexoProject aProject,
-            FlexoProjectFile shemaLibraryFile) throws InvalidFileNameException
-    {
-        super(aProject);
-        setResourceFile(shemaLibraryFile);
-    }
+	public FlexoOEShemaLibraryResource(FlexoProject aProject, FlexoProjectFile shemaLibraryFile) throws InvalidFileNameException {
+		super(aProject);
+		setResourceFile(shemaLibraryFile);
+	}
 
-    public FlexoOEShemaLibraryResource(FlexoProject aProject, ViewLibrary lib,
-            FlexoProjectFile shemaLibFile) throws InvalidFileNameException
-    {
-        this(aProject, shemaLibFile);
-        _resourceData = lib;
-        try {
-            lib.setFlexoResource(this);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+	public FlexoOEShemaLibraryResource(FlexoProject aProject, ViewLibrary lib, FlexoProjectFile shemaLibFile)
+			throws InvalidFileNameException {
+		this(aProject, shemaLibFile);
+		_resourceData = lib;
+		try {
+			lib.setFlexoResource(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-    public FlexoResource getFlexoResource()
-    {
-        return this;
-    }
+	public FlexoResource getFlexoResource() {
+		return this;
+	}
 
-    public void save() throws SaveResourceException
-    {
-        saveResourceData();
+	public void save() throws SaveResourceException {
+		saveResourceData();
 
-    }
+	}
 
-    public void setProject(FlexoProject aProject)
-    {
-        project = aProject;
+	public void setProject(FlexoProject aProject) {
+		project = aProject;
 
-    }
+	}
 
-    @Override
-	public ResourceType getResourceType()
-    {
-        return ResourceType.OE_SHEMA_LIBRARY;
-    }
+	@Override
+	public ResourceType getResourceType() {
+		return ResourceType.OE_SHEMA_LIBRARY;
+	}
 
-    @Override
-	public String getName()
-    {
-        return getProject().getProjectName();
-    }
+	@Override
+	public String getName() {
+		return getProject().getProjectName();
+	}
 
-    @Override
-	public Class getResourceDataClass()
-    {
-        return ViewLibrary.class;
-    }
+	@Override
+	public Class getResourceDataClass() {
+		return ViewLibrary.class;
+	}
 
-    @Override
+	@Override
 	public ViewLibrary performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler)
-            throws LoadXMLResourceException, ProjectLoadingCancelledException, MalformedXMLException
-    {
-    	ViewLibrary library;
-        if (progress != null) {
-            progress.setProgress(FlexoLocalization.localizedForKey("loading_shema_library"));
-        }
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("performLoadResourceData() in FlexoOEShemaLibraryResource");
-        try {
-            library = super.performLoadResourceData(progress, loadingHandler);
-        } catch (FlexoFileNotFoundException e) {
-            if (logger.isLoggable(Level.SEVERE))
-                logger.severe("File " + getFile().getName() + " NOT found");
-            e.printStackTrace();
-            return null;
-        }
-        library.setProject(getProject());
-        return library;
-    }
+			throws LoadXMLResourceException, ProjectLoadingCancelledException, MalformedXMLException {
+		ViewLibrary library;
+		if (progress != null) {
+			progress.setProgress(FlexoLocalization.localizedForKey("loading_shema_library"));
+		}
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("performLoadResourceData() in FlexoOEShemaLibraryResource");
+		try {
+			library = super.performLoadResourceData(progress, loadingHandler);
+		} catch (FlexoFileNotFoundException e) {
+			if (logger.isLoggable(Level.SEVERE))
+				logger.severe("File " + getFile().getName() + " NOT found");
+			e.printStackTrace();
+			return null;
+		}
+		library.setProject(getProject());
+		return library;
+	}
 
-    @Override
-	public boolean hasBuilder()
-    {
-        return true;
-    }
+	@Override
+	public boolean hasBuilder() {
+		return true;
+	}
 
-    /**
-     * Returns the required newly instancied builder if this resource needs a
-     * builder to be loaded
-     * 
-     * @return boolean
-     */
-    @Override
-	public Object instanciateNewBuilder()
-    {
-        if (logger.isLoggable(Level.INFO))
-            logger.info("instanciateNewBuilder in FlexoComponentLibraryResource");
-        VEShemaLibraryBuilder builder = new VEShemaLibraryBuilder(this,getProject().getResourceCenter().retrieveViewPointLibrary());
-        builder.shemaLibrary = _resourceData;
-        return builder;
-    }
+	/**
+	 * Returns the required newly instancied builder if this resource needs a builder to be loaded
+	 * 
+	 * @return boolean
+	 */
+	@Override
+	public Object instanciateNewBuilder() {
+		if (logger.isLoggable(Level.INFO))
+			logger.info("instanciateNewBuilder in FlexoComponentLibraryResource");
+		VEShemaLibraryBuilder builder = new VEShemaLibraryBuilder(this, getProject().getResourceCenter().retrieveViewPointLibrary());
+		builder.shemaLibrary = _resourceData;
+		return builder;
+	}
 
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
-    }
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+	}
 
 	@Override
 	protected boolean isDuplicateSerializationIdentifierRepairable() {

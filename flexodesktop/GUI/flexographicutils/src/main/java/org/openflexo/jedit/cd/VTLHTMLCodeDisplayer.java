@@ -23,19 +23,17 @@ import org.openflexo.jedit.JEditTextArea;
 import org.openflexo.jedit.VTLHTMLTokenMarker;
 import org.openflexo.toolbox.FontCst;
 
-public class VTLHTMLCodeDisplayer extends JEditTextArea
-{
+public class VTLHTMLCodeDisplayer extends JEditTextArea {
 
-    public VTLHTMLCodeDisplayer(String text)
-    {
-        super();
-        setTokenMarker(new VTLHTMLTokenMarker());
-        painter.setEOLMarkersPainted(false);
-        painter.setInvalidLinesPainted(false);
-        setFont(FontCst.CODE_FONT);
-        setEditable(false);
-        // setElectricScroll(1000);
-        setFirstLine(0);
-        setText(text);
-    }
+	public VTLHTMLCodeDisplayer(String text) {
+		super();
+		setTokenMarker(new VTLHTMLTokenMarker());
+		painter.setEOLMarkersPainted(false);
+		painter.setInvalidLinesPainted(false);
+		setFont(FontCst.CODE_FONT);
+		setEditable(false);
+		// setElectricScroll(1000);
+		setFirstLine(0);
+		setText(text);
+	}
 }

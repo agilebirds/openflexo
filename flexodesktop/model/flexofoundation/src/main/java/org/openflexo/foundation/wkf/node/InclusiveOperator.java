@@ -24,13 +24,12 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.localization.FlexoLocalization;
 
-public class InclusiveOperator  extends CommonOutputOperatorNode {
+public class InclusiveOperator extends CommonOutputOperatorNode {
 
 	/**
 	 * Constructor used during deserialization
 	 */
-	public InclusiveOperator(FlexoProcessBuilder builder)
-	{
+	public InclusiveOperator(FlexoProcessBuilder builder) {
 		this(builder.process);
 		initializeDeserialization(builder);
 	}
@@ -38,14 +37,12 @@ public class InclusiveOperator  extends CommonOutputOperatorNode {
 	/**
 	 * Default constructor
 	 */
-	public InclusiveOperator(FlexoProcess process)
-	{
+	public InclusiveOperator(FlexoProcess process) {
 		super(process);
 	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return Inspectors.WKF.OPERATOR_INCLUSIVE_INSPECTOR;
 	}
 

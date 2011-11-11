@@ -38,7 +38,6 @@ import org.openflexo.swing.merge.MergePanelElements.ComparePanel;
 import org.openflexo.xml.diff3.UnresolvedConflict;
 import org.openflexo.xml.diff3.XMLDiff3;
 
-
 public class XMLDiff3MergeEditor extends JLayeredPane {
 
 	private static final Logger logger = Logger.getLogger(CVSMergeEditor.class.getPackage().getName());
@@ -46,9 +45,8 @@ public class XMLDiff3MergeEditor extends JLayeredPane {
 	private XMLDiff3 _diff3;
 	private ComparePanel comparePanel;
 	private JPanel controlPanel;
-	
-	public XMLDiff3MergeEditor(XMLDiff3 diff3, String leftLabel, String rightLabel, String mergeLabel, String noChangeLabel)
-	{
+
+	public XMLDiff3MergeEditor(XMLDiff3 diff3, String leftLabel, String rightLabel, String mergeLabel, String noChangeLabel) {
 		super();
 		_diff3 = diff3;
 		setLayout(new BorderLayout());
@@ -56,34 +54,30 @@ public class XMLDiff3MergeEditor extends JLayeredPane {
 		JScrollPane scroll = new JScrollPane(listView);
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		add(scroll,BorderLayout.CENTER);
+		add(scroll, BorderLayout.CENTER);
 	}
-	
-	public boolean isEditable() 
-	{
+
+	public boolean isEditable() {
 		return false;
 	}
 
-	public void setEditable(boolean editable)
-	{
+	public void setEditable(boolean editable) {
 	}
 
-	public void addToFocusListener(FocusListener aFocusListener) 
-	{
+	public void addToFocusListener(FocusListener aFocusListener) {
 	}
 
-	public void setFirstVisibleLine(int firstVisibleLine) 
-	{
+	public void setFirstVisibleLine(int firstVisibleLine) {
 	}
-	
+
 	private class UnresolvedConflictListView extends JPanel/* implements ListCellRenderer*/{
-		public UnresolvedConflictListView(Vector<UnresolvedConflict> list){
+		public UnresolvedConflictListView(Vector<UnresolvedConflict> list) {
 			super();
 			GridBagLayout gridBag = new GridBagLayout();
 			setLayout(gridBag);
-			Enumeration<UnresolvedConflict> en  = list.elements();
+			Enumeration<UnresolvedConflict> en = list.elements();
 			int i = 0;
-			while(en.hasMoreElements()){
+			while (en.hasMoreElements()) {
 				UnresolvedConflict conflict = en.nextElement();
 				Component c = org.openflexo.xml.diff3.view.UnresolvedConflictView.getView(conflict);
 				GridBagConstraints cons = new GridBagConstraints();
@@ -91,23 +85,22 @@ public class XMLDiff3MergeEditor extends JLayeredPane {
 				cons.anchor = GridBagConstraints.NORTH;
 				cons.weightx = 1.0;
 				cons.fill = GridBagConstraints.HORIZONTAL;
-				add(c,cons);
+				add(c, cons);
 				i++;
 			}
-			
+
 			GridBagConstraints c = new GridBagConstraints();
-            c.fill = GridBagConstraints.HORIZONTAL;
-            c.weightx = 0.0;
-            c.weighty = 1.0;
-            c.gridwidth = GridBagConstraints.NONE;
-            c.gridheight = GridBagConstraints.REMAINDER;
-            c.anchor = GridBagConstraints.CENTER;
-            Component glue = Box.createGlue();
-            gridBag.setConstraints(glue, c);
-            add(glue);
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.weightx = 0.0;
+			c.weighty = 1.0;
+			c.gridwidth = GridBagConstraints.NONE;
+			c.gridheight = GridBagConstraints.REMAINDER;
+			c.anchor = GridBagConstraints.CENTER;
+			Component glue = Box.createGlue();
+			gridBag.setConstraints(glue, c);
+			add(glue);
 		}
 
-		
 	}
-	
+
 }

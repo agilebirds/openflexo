@@ -58,180 +58,156 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
-public class FIBTextStyleSelector extends CustomPopup<TextStyle>
-implements FIBCustomComponent<TextStyle,FIBTextStyleSelector>
-{
+public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBCustomComponent<TextStyle, FIBTextStyleSelector> {
 
-    @SuppressWarnings("hiding")
+	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBTextStyleSelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/TextStylePanel.fib");
 
 	private TextStyle _revertValue;
 
-    protected TextStyleDetailsPanel _selectorPanel;
+	protected TextStyleDetailsPanel _selectorPanel;
 
-    
-    public FIBTextStyleSelector(TextStyle editedObject)
-    {
-        super(editedObject);
-        setRevertValue(editedObject!=null?editedObject.clone():null);
-        setFocusable(true);
-    }
-
-	@Override
-	public void init(FIBCustom component, FIBController controller) 
-	{
+	public FIBTextStyleSelector(TextStyle editedObject) {
+		super(editedObject);
+		setRevertValue(editedObject != null ? editedObject.clone() : null);
+		setFocusable(true);
 	}
 
 	@Override
-	public void setRevertValue(TextStyle oldValue)
-    {
-    	// WARNING: we need here to clone to keep track back of previous data !!!
-        if (oldValue != null) _revertValue = oldValue.clone();
-        else _revertValue = null;
-        if (logger.isLoggable(Level.FINE))
-        	logger.fine("Sets revert value to "+_revertValue);
-    }
+	public void init(FIBCustom component, FIBController controller) {
+	}
 
-    @Override
-	public TextStyle getRevertValue()
-    {
-        return _revertValue;
-    }
+	@Override
+	public void setRevertValue(TextStyle oldValue) {
+		// WARNING: we need here to clone to keep track back of previous data !!!
+		if (oldValue != null)
+			_revertValue = oldValue.clone();
+		else
+			_revertValue = null;
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("Sets revert value to " + _revertValue);
+	}
 
-     @Override
-	protected ResizablePanel createCustomPanel(TextStyle editedObject)
-    {
-        _selectorPanel = makeCustomPanel(editedObject);
-        return _selectorPanel;
-    }
+	@Override
+	public TextStyle getRevertValue() {
+		return _revertValue;
+	}
 
-    protected TextStyleDetailsPanel makeCustomPanel(TextStyle editedObject)
-    {
-    	return new TextStyleDetailsPanel(editedObject);
-    }
-
-    @Override
-	public void updateCustomPanel(TextStyle editedObject)
-    {
-         if (_selectorPanel != null) {
-            _selectorPanel.update();
-        }
-         getFrontComponent().update();
-    }
-
-    public class TextStyleDetailsPanel extends ResizablePanel
-    {
-        private FIBComponent fibComponent;
-        private FIBView fibView;
-        private CustomFIBController controller;
-        
-        protected TextStyleDetailsPanel(TextStyle textStyle)
-        {
-        	super();
-
-           	fibComponent = FIBLibrary.instance().retrieveFIBComponent(FIB_FILE);
-        	controller = new CustomFIBController(fibComponent);
-    		fibView =  controller.buildView(fibComponent);
-
-        	controller.setDataObject(textStyle);
-        	
-        	setLayout(new BorderLayout());
-        	add(fibView.getResultingJComponent(),BorderLayout.CENTER);
-
-        }
-
-        public void update()
-        {
-           	controller.setDataObject(getEditedObject(),true);
-        }
-        
-        @Override
-		public Dimension getDefaultSize()
-        {
-        	return new Dimension(fibComponent.getWidth(),fibComponent.getHeight());
-        }
-
-        public void delete()
-        {
-        }
-
-		public class CustomFIBController extends FIBController<TextStyle>
-    	{
-    		public CustomFIBController(FIBComponent component)
-    		{
-    			super(component);
-    		}
-
-    		public void apply() 
-    		{
-    			FIBTextStyleSelector.this.apply();
-    		}
-
-    		public void cancel() 
-    		{
-    			FIBTextStyleSelector.this.cancel();
-    		}
-
-    		public void parameterChanged()
-    		{
-    			getFrontComponent().update();
-    		}
-    		
-     	}
-
- 
-     }
-
-    @Override
-	public void apply()
-    {
-    	setRevertValue(getEditedObject()!=null?getEditedObject().clone():null);
-    	closePopup();
-        super.apply();
-    }
-
-    @Override
-	public void cancel()
-    {
-    	if(logger.isLoggable(Level.FINE))
-   		 logger.fine("CANCEL: revert to "+getRevertValue());
-        setEditedObject(getRevertValue());
-        closePopup();
-        super.cancel();
-    }
-
-    @Override
-	protected void deletePopup()
-    {
-        if (_selectorPanel != null) _selectorPanel.delete();
-        _selectorPanel = null;
-        super.deletePopup();
-    }
-
-   /* protected void pointerLeavesPopup()
-    {
-        cancel();
-    }*/
-
-	public TextStyleDetailsPanel getSelectorPanel() 
-	{
+	@Override
+	protected ResizablePanel createCustomPanel(TextStyle editedObject) {
+		_selectorPanel = makeCustomPanel(editedObject);
 		return _selectorPanel;
 	}
-	
+
+	protected TextStyleDetailsPanel makeCustomPanel(TextStyle editedObject) {
+		return new TextStyleDetailsPanel(editedObject);
+	}
+
 	@Override
-	protected TextStylePreviewPanel buildFrontComponent()
-	{
+	public void updateCustomPanel(TextStyle editedObject) {
+		if (_selectorPanel != null) {
+			_selectorPanel.update();
+		}
+		getFrontComponent().update();
+	}
+
+	public class TextStyleDetailsPanel extends ResizablePanel {
+		private FIBComponent fibComponent;
+		private FIBView fibView;
+		private CustomFIBController controller;
+
+		protected TextStyleDetailsPanel(TextStyle textStyle) {
+			super();
+
+			fibComponent = FIBLibrary.instance().retrieveFIBComponent(FIB_FILE);
+			controller = new CustomFIBController(fibComponent);
+			fibView = controller.buildView(fibComponent);
+
+			controller.setDataObject(textStyle);
+
+			setLayout(new BorderLayout());
+			add(fibView.getResultingJComponent(), BorderLayout.CENTER);
+
+		}
+
+		public void update() {
+			controller.setDataObject(getEditedObject(), true);
+		}
+
+		@Override
+		public Dimension getDefaultSize() {
+			return new Dimension(fibComponent.getWidth(), fibComponent.getHeight());
+		}
+
+		public void delete() {
+		}
+
+		public class CustomFIBController extends FIBController<TextStyle> {
+			public CustomFIBController(FIBComponent component) {
+				super(component);
+			}
+
+			public void apply() {
+				FIBTextStyleSelector.this.apply();
+			}
+
+			public void cancel() {
+				FIBTextStyleSelector.this.cancel();
+			}
+
+			public void parameterChanged() {
+				getFrontComponent().update();
+			}
+
+		}
+
+	}
+
+	@Override
+	public void apply() {
+		setRevertValue(getEditedObject() != null ? getEditedObject().clone() : null);
+		closePopup();
+		super.apply();
+	}
+
+	@Override
+	public void cancel() {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("CANCEL: revert to " + getRevertValue());
+		setEditedObject(getRevertValue());
+		closePopup();
+		super.cancel();
+	}
+
+	@Override
+	protected void deletePopup() {
+		if (_selectorPanel != null)
+			_selectorPanel.delete();
+		_selectorPanel = null;
+		super.deletePopup();
+	}
+
+	/* protected void pointerLeavesPopup()
+	 {
+	     cancel();
+	 }*/
+
+	public TextStyleDetailsPanel getSelectorPanel() {
+		return _selectorPanel;
+	}
+
+	@Override
+	protected TextStylePreviewPanel buildFrontComponent() {
 		return new TextStylePreviewPanel();
 	}
-	
+
 	@Override
-	public TextStylePreviewPanel getFrontComponent()
-	{
-		return (TextStylePreviewPanel)super.getFrontComponent();
+	public TextStylePreviewPanel getFrontComponent() {
+		return (TextStylePreviewPanel) super.getFrontComponent();
 	}
-	
+
 	/*@Override
 	protected Border getDownButtonBorder()
 	{
@@ -244,36 +220,30 @@ implements FIBCustomComponent<TextStyle,FIBTextStyleSelector>
 		//return BorderFactory.createBevelBorder(BevelBorder.LOWERED);
 		//return BorderFactory.createBevelBorder(BevelBorder.LOWERED);
 	}*/
-	
-	
-	protected class TextStylePreviewPanel extends JPanel
-	{
+
+	protected class TextStylePreviewPanel extends JPanel {
 		private Drawing drawing;
 		private DrawingGraphicalRepresentation drawingGR;
 		private DrawingController<?> controller;
-		private Object p1,p2,text;
+		private Object p1, p2, text;
 		private ShapeGraphicalRepresentation textGR;
-		
-		
-		
-		protected TextStylePreviewPanel()
-		{
+
+		protected TextStylePreviewPanel() {
 			super(new BorderLayout());
-			setBorder(BorderFactory.createEtchedBorder(Color.GRAY,Color.LIGHT_GRAY));
-			//setBorder(BorderFactory.createEtchedBorder());
-			//setPreferredSize(new Dimension(40,19));
-			//setBackground(Color.WHITE);
-			setMinimumSize(new Dimension(40,19));
-			
+			setBorder(BorderFactory.createEtchedBorder(Color.GRAY, Color.LIGHT_GRAY));
+			// setBorder(BorderFactory.createEtchedBorder());
+			// setPreferredSize(new Dimension(40,19));
+			// setBackground(Color.WHITE);
+			setMinimumSize(new Dimension(40, 19));
+
 			text = new Object();
-			
+
 			final Vector<Object> singleton = new Vector<Object>();
 			singleton.add(text);
-			
+
 			drawing = new Drawing<TextStylePreviewPanel>() {
 				@Override
-				public List<?> getContainedObjects(Object aDrawable)
-				{
+				public List<?> getContainedObjects(Object aDrawable) {
 					if (aDrawable == TextStylePreviewPanel.this) {
 						return singleton;
 					}
@@ -281,22 +251,21 @@ implements FIBCustomComponent<TextStyle,FIBTextStyleSelector>
 				}
 
 				@Override
-				public Object getContainer(Object aDrawable)
-				{
-					if (aDrawable == text) return TextStylePreviewPanel.this;
+				public Object getContainer(Object aDrawable) {
+					if (aDrawable == text)
+						return TextStylePreviewPanel.this;
 					return null;
 				}
 
 				@Override
-				public DrawingGraphicalRepresentation<TextStylePreviewPanel> getDrawingGraphicalRepresentation()
-				{
+				public DrawingGraphicalRepresentation<TextStylePreviewPanel> getDrawingGraphicalRepresentation() {
 					return drawingGR;
 				}
 
 				@Override
-				public <O> GraphicalRepresentation<O> getGraphicalRepresentation(O aDrawable)
-				{
-					if (aDrawable == TextStylePreviewPanel.this) return drawingGR;
+				public <O> GraphicalRepresentation<O> getGraphicalRepresentation(O aDrawable) {
+					if (aDrawable == TextStylePreviewPanel.this)
+						return drawingGR;
 					else if (aDrawable == text) {
 						return textGR;
 					}
@@ -304,18 +273,17 @@ implements FIBCustomComponent<TextStyle,FIBTextStyleSelector>
 				}
 
 				@Override
-				public TextStylePreviewPanel getModel()
-				{
+				public TextStylePreviewPanel getModel() {
 					return TextStylePreviewPanel.this;
 				}
-				
+
 			};
-			drawingGR = new DrawingGraphicalRepresentation(drawing,false);
+			drawingGR = new DrawingGraphicalRepresentation(drawing, false);
 			drawingGR.setBackgroundColor(new Color(255, 255, 255));
 			drawingGR.setWidth(199);
 			drawingGR.setHeight(19);
 			drawingGR.setDrawWorkingArea(false);
-			textGR = new ShapeGraphicalRepresentation(ShapeType.RECTANGLE,text,drawing);
+			textGR = new ShapeGraphicalRepresentation(ShapeType.RECTANGLE, text, drawing);
 			textGR.setWidth(200);
 			textGR.setHeight(20);
 			textGR.setX(0);
@@ -331,33 +299,30 @@ implements FIBCustomComponent<TextStyle,FIBTextStyleSelector>
 			textGR.setIsSelectable(false);
 			textGR.setIsFocusable(false);
 			textGR.setIsReadOnly(true);
-			textGR.setBorder(new ShapeBorder(0,0,0,0));
-			
+			textGR.setBorder(new ShapeBorder(0, 0, 0, 0));
+
 			controller = new DrawingController<Drawing<?>>(drawing);
 			add(controller.getDrawingView());
-			
+
 			update();
 		}
-		
-		protected void update()
-		{
-			if (getEditedObject() == null) return;
+
+		protected void update() {
+			if (getEditedObject() == null)
+				return;
 			textGR.setTextStyle(getEditedObject());
 			textGR.setText(JFontChooser.fontDescription(getEditedObject().getFont()));
 		}
-		
-		
+
 	}
 
 	@Override
-	public FIBTextStyleSelector getJComponent()
-	{
+	public FIBTextStyleSelector getJComponent() {
 		return this;
 	}
 
 	@Override
-	public Class<TextStyle> getRepresentedType()
-	{
+	public Class<TextStyle> getRepresentedType() {
 		return TextStyle.class;
 	}
 

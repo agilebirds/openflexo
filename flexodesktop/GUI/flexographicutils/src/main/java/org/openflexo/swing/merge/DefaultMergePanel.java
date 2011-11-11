@@ -32,44 +32,40 @@ import org.openflexo.diff.merge.Merge;
 import org.openflexo.swing.merge.MergePanelElements.ComparePanel;
 import org.openflexo.toolbox.TokenMarkerStyle;
 
-
 public class DefaultMergePanel extends JLayeredPane {
 
 	private MergePanelElements mergePanelElements;
 	private Merge _merge;
 	JList changesList;
 	ComparePanel comparePanel;
-	
-	public DefaultMergePanel(Merge merge, TokenMarkerStyle style)
-	{
+
+	public DefaultMergePanel(Merge merge, TokenMarkerStyle style) {
 		super();
 		_merge = merge;
-		
+
 		setLayout(new BorderLayout());
-		
-		mergePanelElements = new MergePanelElements(merge,style);
+
+		mergePanelElements = new MergePanelElements(merge, style);
 		MergePanelElements.FilterChangeList changesList = mergePanelElements.getChangesList();
 		changesList.setVisibleRowCount(10);
 		ComparePanel comparePanel = mergePanelElements.getComparePanel();
-		
+
 		JPanel topPanel = new JPanel(new BorderLayout());
-		JLabel title = new JLabel("Merge panel",SwingConstants.CENTER);
+		JLabel title = new JLabel("Merge panel", SwingConstants.CENTER);
 
-			topPanel.add(title,BorderLayout.NORTH);
-			topPanel.add(changesList,BorderLayout.CENTER);
+		topPanel.add(title, BorderLayout.NORTH);
+		topPanel.add(changesList, BorderLayout.CENTER);
 
-		add(topPanel,BorderLayout.NORTH);
-		add(comparePanel,BorderLayout.CENTER);
+		add(topPanel, BorderLayout.NORTH);
+		add(comparePanel, BorderLayout.CENTER);
 
 		if (_merge.getChanges().size() > 0) {
 			mergePanelElements.selectChange(_merge.getChanges().firstElement());
 		}
 	}
 
-	public IMerge getMerge()
-	{
+	public IMerge getMerge() {
 		return mergePanelElements.getMerge();
 	}
-
 
 }

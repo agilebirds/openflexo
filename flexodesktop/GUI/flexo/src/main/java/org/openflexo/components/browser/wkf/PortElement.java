@@ -32,76 +32,65 @@ import org.openflexo.foundation.wkf.ws.FlexoPort;
 import org.openflexo.foundation.wkf.ws.OutputPort;
 import org.openflexo.icon.WKFIconLibrary;
 
-
 /**
  * Browser element representing a FlexoPort
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class PortElement extends BrowserElement
-{
+public class PortElement extends BrowserElement {
 
-    public PortElement(FlexoPort port, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(port, BrowserElementType.PORT, browser, parent);
-    }
+	public PortElement(FlexoPort port, ProjectBrowser browser, BrowserElement parent) {
+		super(port, BrowserElementType.PORT, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-    		if(getPort().isInPort()){
-    			addToChilds(((AbstractInPort)getPort()).getInputMessageDefinition());
-    		}
-    		if(getPort().isOutPort()){
-    			addToChilds(((OutputPort)getPort()).getOutputMessageDefinition());
-    		}
-    		//TODO: Add Fault Message Definition
+	@Override
+	protected void buildChildrenVector() {
+		if (getPort().isInPort()) {
+			addToChilds(((AbstractInPort) getPort()).getInputMessageDefinition());
+		}
+		if (getPort().isOutPort()) {
+			addToChilds(((OutputPort) getPort()).getOutputMessageDefinition());
+		}
+		// TODO: Add Fault Message Definition
 
+		// We add post conditions
+		if (getPort() instanceof AbstractInPort) {
+			for (Enumeration e = ((AbstractInPort) getPort()).getOutgoingPostConditions().elements(); e.hasMoreElements();) {
+				addToChilds((FlexoPostCondition) e.nextElement());
+			}
+		}
+	}
 
-        // We add post conditions
-        if (getPort() instanceof AbstractInPort) {
-            for (Enumeration e = ((AbstractInPort) getPort()).getOutgoingPostConditions().elements(); e.hasMoreElements();) {
-                addToChilds((FlexoPostCondition) e.nextElement());
-            }
-        }
-    }
+	@Override
+	public String getName() {
+		return getPort().getName();
+	}
 
-    @Override
-	public String getName()
-    {
-        return getPort().getName();
-    }
+	protected FlexoPort getPort() {
+		return (FlexoPort) getObject();
+	}
 
-    protected FlexoPort getPort()
-    {
-        return (FlexoPort) getObject();
-    }
+	@Override
+	protected BrowserElementType getFilteredElementType() {
+		// filtered element type should be PORT and not PORT_REGISTERY
+		return BrowserElementType.PORT;
+		// return BrowserElementType.PORT_REGISTERY;
+	}
 
-    @Override
-	protected BrowserElementType getFilteredElementType()
-    {
-        // filtered element type should be PORT and not PORT_REGISTERY
-    		return BrowserElementType.PORT;
-    		//return BrowserElementType.PORT_REGISTERY;
-    }
-
-    @Override
-	public Icon getIcon()
-    {
+	@Override
+	public Icon getIcon() {
 		return WKFIconLibrary.getSmallImageIconForFlexoPort(getPort());
-     }
+	}
 
-    @Override
-	public boolean isNameEditable()
-    {
-        return true;
-    }
+	@Override
+	public boolean isNameEditable() {
+		return true;
+	}
 
-    @Override
-	public void setName(String aName)
-    {
-        getPort().setName(aName);
-    }
+	@Override
+	public void setName(String aName) {
+		getPort().setName(aName);
+	}
 
 }

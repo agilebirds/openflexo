@@ -39,37 +39,28 @@ import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.LinkScheme;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 
-
-public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction> 
-{
+public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction> {
 
 	private static final Logger logger = Logger.getLogger(LinkSchemeAction.class.getPackage().getName());
 
-	public static FlexoActionType<LinkSchemeAction,FlexoModelObject,FlexoModelObject> actionType 
-	= new FlexoActionType<LinkSchemeAction,FlexoModelObject,FlexoModelObject> (
-			"link_palette_connector",
-			FlexoActionType.newMenu,
-			FlexoActionType.defaultGroup,
-			FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<LinkSchemeAction, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<LinkSchemeAction, FlexoModelObject, FlexoModelObject>(
+			"link_palette_connector", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public LinkSchemeAction makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) 
-		{
+		public LinkSchemeAction makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 			return new LinkSchemeAction(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) 
-		{
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return false;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) 
-		{
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return (object instanceof ViewObject);
 		}
 
@@ -80,70 +71,59 @@ public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction>
 	private ViewConnector _newConnector;
 
 	private LinkScheme _linkScheme;
-	
+
 	private Object _graphicalRepresentation;
 
-
-	LinkSchemeAction (FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-	{
+	LinkSchemeAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
-	//private Hashtable<EditionAction,FlexoModelObject> createdObjects;
+	// private Hashtable<EditionAction,FlexoModelObject> createdObjects;
 
-	public LinkScheme getLinkScheme() 
-	{
+	public LinkScheme getLinkScheme() {
 		return _linkScheme;
 	}
 
-	public void setLinkScheme(LinkScheme linkScheme) 
-	{
+	public void setLinkScheme(LinkScheme linkScheme) {
 		_linkScheme = linkScheme;
 	}
-	
+
 	private EditionPatternInstance editionPatternInstance;
-	
+
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException,NotImplementedException,InvalidParametersException
-	{
-		logger.info ("Link palette connector");  	
+	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParametersException {
+		logger.info("Link palette connector");
 
 		getEditionPattern().getCalc().getCalcOntology().loadWhenUnloaded();
 
 		editionPatternInstance = getProject().makeNewEditionPatternInstance(getEditionPattern());
-			
+
 		applyEditionActions();
 
 	}
 
 	@Override
-	public EditionScheme getEditionScheme()
-	{
+	public EditionScheme getEditionScheme() {
 		return getLinkScheme();
 	}
 
 	@Override
-	public Object getOverridenGraphicalRepresentation() 
-	{
+	public Object getOverridenGraphicalRepresentation() {
 		return _graphicalRepresentation;
 	}
 
-	public void setOverridenGraphicalRepresentation(Object graphicalRepresentation) 
-	{
+	public void setOverridenGraphicalRepresentation(Object graphicalRepresentation) {
 		_graphicalRepresentation = graphicalRepresentation;
 	}
 
-	public ViewConnector getNewConnector()
-	{
+	public ViewConnector getNewConnector() {
 		return _newConnector;
 	}
 
 	@Override
-	public EditionPatternInstance getEditionPatternInstance()
-	{
+	public EditionPatternInstance getEditionPatternInstance() {
 		return editionPatternInstance;
 	}
-
 
 	public ViewShape getFromShape() {
 		return _fromShape;
@@ -162,34 +142,31 @@ public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction>
 	}
 
 	@Override
-	protected View retrieveOEShema()
-	{
-		if (getFromShape() != null) return getFromShape().getShema();
-		if (getToShape() != null) return getToShape().getShema();
-		if (getFocusedObject() instanceof ViewObject) return ((ViewObject)getFocusedObject()).getShema();
+	protected View retrieveOEShema() {
+		if (getFromShape() != null)
+			return getFromShape().getShema();
+		if (getToShape() != null)
+			return getToShape().getShema();
+		if (getFocusedObject() instanceof ViewObject)
+			return ((ViewObject) getFocusedObject()).getShema();
 		return null;
 	}
-	
+
 	@Override
-	protected ViewConnector performAddConnector(AddConnector action)
-	{
+	protected ViewConnector performAddConnector(AddConnector action) {
 		_newConnector = super.performAddConnector(action);
 		return _newConnector;
 	}
 
 	@Override
-	public Object getValue(BindingVariable variable) 
-	{
+	public Object getValue(BindingVariable variable) {
 		if (variable instanceof EditionPatternPathElement) {
-			if (variable.getVariableName().equals(EditionScheme.FROM_TARGET)
-					&& getLinkScheme().getFromTargetEditionPattern() != null) 
+			if (variable.getVariableName().equals(EditionScheme.FROM_TARGET) && getLinkScheme().getFromTargetEditionPattern() != null)
 				return getFromShape().getEditionPatternInstance();
-			if (variable.getVariableName().equals(EditionScheme.TO_TARGET)
-					&& getLinkScheme().getToTargetEditionPattern() != null)
+			if (variable.getVariableName().equals(EditionScheme.TO_TARGET) && getLinkScheme().getToTargetEditionPattern() != null)
 				return getToShape().getEditionPatternInstance();
 		}
 		return super.getValue(variable);
 	}
-
 
 }

@@ -25,5 +25,5 @@ public interface TabComponentFileResource extends ComponentFileResource {
 
 	@Override
 	public ComponentDefinition getComponentDefinition();
-	
+
 }

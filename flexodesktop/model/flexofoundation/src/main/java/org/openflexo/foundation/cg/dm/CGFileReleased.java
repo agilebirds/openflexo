@@ -21,11 +21,8 @@ package org.openflexo.foundation.cg.dm;
 
 import org.openflexo.foundation.cg.CGFile;
 
-
-public class CGFileReleased extends CGDataModification
-{
-    public CGFileReleased(CGFile file)
-    {
-        super(null,file);
-    }
+public class CGFileReleased extends CGDataModification {
+	public CGFileReleased(CGFile file) {
+		super(null, file);
+	}
 }

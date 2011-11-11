@@ -25,43 +25,35 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.ProjectBrowser.DMViewMode;
 import org.openflexo.foundation.dm.eo.DMEOModel;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class DMEOModelElement extends DMElement
-{
+public class DMEOModelElement extends DMElement {
 
-    public DMEOModelElement(DMEOModel eoModel, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(eoModel, BrowserElementType.DM_EOMODEL, browser,parent);
-    }
+	public DMEOModelElement(DMEOModel eoModel, ProjectBrowser browser, BrowserElement parent) {
+		super(eoModel, BrowserElementType.DM_EOMODEL, browser, parent);
+	}
 
-    protected DMEOModel getDMEOModel()
-    {
-        return (DMEOModel) getObject();
-    }
+	protected DMEOModel getDMEOModel() {
+		return (DMEOModel) getObject();
+	}
 
-    @Override
-	public boolean isNameEditable()
-    {
-        return !getDMEOModel().isReadOnly();
-    }
+	@Override
+	public boolean isNameEditable() {
+		return !getDMEOModel().isReadOnly();
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
+	@Override
+	protected void buildChildrenVector() {
 
-    	if (getProjectBrowser().getDMViewMode() == DMViewMode.Diagrams) {
-    		// No children
-      	}
-    	else {
-    		super.buildChildrenVector();
-    	}
-   }
-
+		if (getProjectBrowser().getDMViewMode() == DMViewMode.Diagrams) {
+			// No children
+		} else {
+			super.buildChildrenVector();
+		}
+	}
 
 }

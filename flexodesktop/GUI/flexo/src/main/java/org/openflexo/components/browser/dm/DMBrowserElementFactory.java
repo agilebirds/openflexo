@@ -44,55 +44,51 @@ import org.openflexo.foundation.dm.eo.DMEORelationship;
 import org.openflexo.foundation.dm.eo.DMEORepository;
 import org.openflexo.foundation.dm.eo.EOPrototypeRepository;
 
-
-public class DMBrowserElementFactory implements BrowserElementFactory
-{
-    @Override
-	public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent)
-    {
-        if (object instanceof DMModel) {
-            return new DMModelElement((DMModel) object, browser,parent);
-        } else if (object instanceof DMRepositoryFolder) {
-            return new DMRepositoryFolderElement((DMRepositoryFolder) object, browser,parent);
-        } else if (object instanceof DMEORepository) {
-        	if (object instanceof EOPrototypeRepository)
-        		return new DMEORepositoryElement((DMEORepository) object, BrowserElementType.DM_EOPROTOTYPES_REPOSITORY,browser,parent);
-        	else if (object instanceof FlexoExecutionModelRepository)
-        		return new DMEORepositoryElement((DMEORepository) object, BrowserElementType.DM_EXECUTION_MODEL_REPOSITORY,browser,parent);
-        	else
-        		return new DMEORepositoryElement((DMEORepository) object, browser,parent);
-        } else if (object instanceof DMRepository) {
-        	if (object instanceof JDKRepository)
-        		return new DMRepositoryElement((DMRepository) object,BrowserElementType.JDK_REPOSITORY, browser,parent);
-        	else if (object instanceof WORepository)
-        		return new DMRepositoryElement((DMRepository) object,BrowserElementType.WO_REPOSITORY, browser,parent);
-        	else if (object instanceof ExternalRepository)
-        		return new DMRepositoryElement((DMRepository) object,BrowserElementType.EXTERNAL_REPOSITORY, browser,parent);
-        	else
-        		return new DMRepositoryElement((DMRepository) object, browser,parent);
-        } else if (object instanceof DMPackage) {
-            return new DMPackageElement((DMPackage) object, browser,parent);
-        } else if (object instanceof DMEOModel) {
-            return new DMEOModelElement((DMEOModel) object, browser,parent);
-        } else if (object instanceof DMEOEntity) {
-            return new DMEOEntityElement((DMEOEntity) object, browser,parent);
-        } else if (object instanceof DMEntity) {
-            return new DMEntityElement((DMEntity) object, browser,parent);
-        } else if (object instanceof DMEOAttribute) {
-            return new DMEOAttributeElement((DMEOAttribute) object, browser,parent);
-        } else if (object instanceof DMEORelationship) {
-            return new DMEORelationshipElement((DMEORelationship) object, browser,parent);
-        } else if (object instanceof DMProperty) {
-            return new DMPropertyElement((DMProperty) object, browser,parent);
-        } else if (object instanceof DMMethod) {
-        	return new DMMethodElement((DMMethod) object, browser,parent);
-        } else if (object instanceof DMTranstyper) {
-        	return new DMTranstyperElement((DMTranstyper) object, browser,parent);
-        } else if (object instanceof ERDiagram) {
-        	return new ERDiagramElement((ERDiagram) object, browser,parent);
-        }
-        return null;
-    }
-
+public class DMBrowserElementFactory implements BrowserElementFactory {
+	@Override
+	public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
+		if (object instanceof DMModel) {
+			return new DMModelElement((DMModel) object, browser, parent);
+		} else if (object instanceof DMRepositoryFolder) {
+			return new DMRepositoryFolderElement((DMRepositoryFolder) object, browser, parent);
+		} else if (object instanceof DMEORepository) {
+			if (object instanceof EOPrototypeRepository)
+				return new DMEORepositoryElement((DMEORepository) object, BrowserElementType.DM_EOPROTOTYPES_REPOSITORY, browser, parent);
+			else if (object instanceof FlexoExecutionModelRepository)
+				return new DMEORepositoryElement((DMEORepository) object, BrowserElementType.DM_EXECUTION_MODEL_REPOSITORY, browser, parent);
+			else
+				return new DMEORepositoryElement((DMEORepository) object, browser, parent);
+		} else if (object instanceof DMRepository) {
+			if (object instanceof JDKRepository)
+				return new DMRepositoryElement((DMRepository) object, BrowserElementType.JDK_REPOSITORY, browser, parent);
+			else if (object instanceof WORepository)
+				return new DMRepositoryElement((DMRepository) object, BrowserElementType.WO_REPOSITORY, browser, parent);
+			else if (object instanceof ExternalRepository)
+				return new DMRepositoryElement((DMRepository) object, BrowserElementType.EXTERNAL_REPOSITORY, browser, parent);
+			else
+				return new DMRepositoryElement((DMRepository) object, browser, parent);
+		} else if (object instanceof DMPackage) {
+			return new DMPackageElement((DMPackage) object, browser, parent);
+		} else if (object instanceof DMEOModel) {
+			return new DMEOModelElement((DMEOModel) object, browser, parent);
+		} else if (object instanceof DMEOEntity) {
+			return new DMEOEntityElement((DMEOEntity) object, browser, parent);
+		} else if (object instanceof DMEntity) {
+			return new DMEntityElement((DMEntity) object, browser, parent);
+		} else if (object instanceof DMEOAttribute) {
+			return new DMEOAttributeElement((DMEOAttribute) object, browser, parent);
+		} else if (object instanceof DMEORelationship) {
+			return new DMEORelationshipElement((DMEORelationship) object, browser, parent);
+		} else if (object instanceof DMProperty) {
+			return new DMPropertyElement((DMProperty) object, browser, parent);
+		} else if (object instanceof DMMethod) {
+			return new DMMethodElement((DMMethod) object, browser, parent);
+		} else if (object instanceof DMTranstyper) {
+			return new DMTranstyperElement((DMTranstyper) object, browser, parent);
+		} else if (object instanceof ERDiagram) {
+			return new ERDiagramElement((ERDiagram) object, browser, parent);
+		}
+		return null;
+	}
 
 }

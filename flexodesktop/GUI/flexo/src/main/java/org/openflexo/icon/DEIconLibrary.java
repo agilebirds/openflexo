@@ -23,12 +23,11 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.toolbox.ImageIconResource;
 
-
 /**
  * Utility class containing all icons used in context of DEModule
  * 
  * @author sylvain
- *
+ * 
  */
 public class DEIconLibrary extends IconLibrary {
 
@@ -41,12 +40,11 @@ public class DEIconLibrary extends IconLibrary {
 	// Perspective icons
 	public static final ImageIcon DE_DE_ACTIVE_ICON = new ImageIconResource("Icons/DE/DocEditorPerspective_A.png");
 	public static final ImageIcon DE_DE_SELECTED_ICON = new ImageIconResource("Icons/DE/DocEditorPerspective_S.png");
-	
+
 	// Model icons
-    
+
 	public static final ImageIcon TOC_ENTRY = new ImageIconResource("Icons/DE/TocEntry.gif");
 	public static final ImageIcon TOC_REPOSITORY = new ImageIconResource("Icons/DE/TOCRepository.png");
 	public static final ImageIcon TOC_ENTRY_BIG = new ImageIconResource("Icons/DE/TocEntryBig.png");
-	
-    
+
 }

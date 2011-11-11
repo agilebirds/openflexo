@@ -21,8 +21,7 @@ package org.openflexo.foundation.exec;
 
 public class NotSupportedException extends Exception {
 
-	public NotSupportedException(String message)
-	{
+	public NotSupportedException(String message) {
 		super(message);
 	}
 

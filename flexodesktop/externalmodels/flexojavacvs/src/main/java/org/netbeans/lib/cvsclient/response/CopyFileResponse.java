@@ -27,54 +27,50 @@ import org.netbeans.lib.cvsclient.command.CommandException;
 import org.netbeans.lib.cvsclient.util.LoggedDataInputStream;
 
 /**
- * This means that the server wants the local machine to copy a file in the
- * local file space. This is usually requested after a conflict (to allow the
- * user to keep the original file unaltered).
- * @author  Robert Greig
+ * This means that the server wants the local machine to copy a file in the local file space. This is usually requested after a conflict (to
+ * allow the user to keep the original file unaltered).
+ * 
+ * @author Robert Greig
  */
 class CopyFileResponse implements Response {
-    /**
-     * Process the data for the response.
-     * @param dis the data inputstream allowing the client to read the server's
-     * response. Note that the actual response name has already been read
-     * and the input stream is positioned just before the first argument, if
-     * any.
-     */
-    @Override
-	public void process(LoggedDataInputStream dis, ResponseServices services)
-            throws ResponseException {
-        try {
-//            System.err.println("Got copy file response.");
-            String localPath = dis.readLine();
-//            System.err.println("LocalPath is: " + localPath);
-            String repositoryPath = dis.readLine();
-//            System.err.println("Repository path is: " + repositoryPath);
-            String newname = dis.readLine();
-//            System.err.println("New name is: " + newname);
-            final String absPath = services.convertPathname(localPath, repositoryPath);
-            if (services.getGlobalOptions().isExcluded(new File(absPath))) {
-                return;
-            }            
-            if (!services.getGlobalOptions().isDoNoChanges()) {
-                services.removeLocalFile(new File(new File(absPath).getParentFile(), newname).getAbsolutePath());
-                services.renameLocalFile(absPath, newname);
-            }
-        }
-        catch (EOFException ex) {
-            throw new ResponseException(ex, CommandException.getLocalMessage("CommandException.EndOfFile", null)); //NOI18N
-        }
-        catch (IOException ex) {
-            throw new ResponseException(ex);
-        }
-    }
+	/**
+	 * Process the data for the response.
+	 * 
+	 * @param dis
+	 *            the data inputstream allowing the client to read the server's response. Note that the actual response name has already
+	 *            been read and the input stream is positioned just before the first argument, if any.
+	 */
+	@Override
+	public void process(LoggedDataInputStream dis, ResponseServices services) throws ResponseException {
+		try {
+			// System.err.println("Got copy file response.");
+			String localPath = dis.readLine();
+			// System.err.println("LocalPath is: " + localPath);
+			String repositoryPath = dis.readLine();
+			// System.err.println("Repository path is: " + repositoryPath);
+			String newname = dis.readLine();
+			// System.err.println("New name is: " + newname);
+			final String absPath = services.convertPathname(localPath, repositoryPath);
+			if (services.getGlobalOptions().isExcluded(new File(absPath))) {
+				return;
+			}
+			if (!services.getGlobalOptions().isDoNoChanges()) {
+				services.removeLocalFile(new File(new File(absPath).getParentFile(), newname).getAbsolutePath());
+				services.renameLocalFile(absPath, newname);
+			}
+		} catch (EOFException ex) {
+			throw new ResponseException(ex, CommandException.getLocalMessage("CommandException.EndOfFile", null)); // NOI18N
+		} catch (IOException ex) {
+			throw new ResponseException(ex);
+		}
+	}
 
-    /**
-     * Is this a terminal response, i.e. should reading of responses stop
-     * after this response. This is true for responses such as OK or
-     * an error response
-     */
-    @Override
+	/**
+	 * Is this a terminal response, i.e. should reading of responses stop after this response. This is true for responses such as OK or an
+	 * error response
+	 */
+	@Override
 	public boolean isTerminalResponse() {
-        return false;
-    }
+		return false;
+	}
 }

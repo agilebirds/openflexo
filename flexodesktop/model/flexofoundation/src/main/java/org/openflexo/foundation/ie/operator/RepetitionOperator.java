@@ -66,8 +66,7 @@ import org.openflexo.foundation.wkf.node.WorkflowPathToOperationNode;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 import org.openflexo.logging.FlexoLogger;
 
-public class RepetitionOperator extends IEOperator implements DMTypeOwner
-{
+public class RepetitionOperator extends IEOperator implements DMTypeOwner {
 
 	protected static final Logger logger = FlexoLogger.getLogger(RepetitionOperator.class.getPackage().getName());
 
@@ -108,39 +107,33 @@ public class RepetitionOperator extends IEOperator implements DMTypeOwner
 		initializeDeserialization(builder);
 	}
 
-	public RepetitionOperator(IEWOComponent wo, IESequence sequence, FlexoProject project)
-	{
+	public RepetitionOperator(IEWOComponent wo, IESequence sequence, FlexoProject project) {
 		super(wo, sequence, project);
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return "Repetition."+getName();
+	public String getFullyQualifiedName() {
+		return "Repetition." + getName();
 	}
 
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "repetition";
 	}
 
 	@Override
-	public String getDefaultInspectorName()
-	{
+	public String getDefaultInspectorName() {
 		return "Repetition.inspector";
 	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return getDefaultInspectorName();
 	}
 
-	public DMType getContentType()
-	{
+	public DMType getContentType() {
 		if (_contentType == null) {
-			if (_bindingItem!=null && _bindingItem.getAccessedType()!=null){
+			if (_bindingItem != null && _bindingItem.getAccessedType() != null) {
 				_contentType = _bindingItem.getAccessedType().clone();
 				_contentType.setOwner(this);
 			} else {
@@ -151,11 +144,10 @@ public class RepetitionOperator extends IEOperator implements DMTypeOwner
 		return _contentType;
 	}
 
-	public void setContentType(DMType contentType)
-	{
+	public void setContentType(DMType contentType) {
 		DMType oldContentType = _contentType;
 		_contentType = contentType;
-		if (_contentType!=null) {
+		if (_contentType != null) {
 			_contentType.setOwner(this);
 		}
 		_bindingListDefinition = null;
@@ -166,42 +158,39 @@ public class RepetitionOperator extends IEOperator implements DMTypeOwner
 
 	public DMType getItemType() {
 		DMType type = getContentType();
-		if (_listType==ListType.FETCH && !_fetchObjects) {
+		if (_listType == ListType.FETCH && !_fetchObjects) {
 			type = DMType.makeResolvedDMType(getProject().getDataModel().getDMEntity("com.webobjects.foundation", "NSDictionary"));
 		}
 		return type.clone();
 	}
 
-	public WidgetBindingDefinition getBindingItemDefinition()
-	{
+	public WidgetBindingDefinition getBindingItemDefinition() {
 		if (_bindingItemDefinition == null) {
 			/*DMType type = getContentType();
-    		if (_listType==ListType.FETCH && !_fetchObjects)
-    			type = DMType.makeResolvedDMType(getProject().getDataModel().getDMEntity("com.webobjects.foundation", "NSDictionary"));*/
+			if (_listType==ListType.FETCH && !_fetchObjects)
+				type = DMType.makeResolvedDMType(getProject().getDataModel().getDMEntity("com.webobjects.foundation", "NSDictionary"));*/
 			_bindingItemDefinition = new WidgetBindingDefinition("bindingItem", getContentType(), this, BindingDefinitionType.GET_SET, true);
-			if (_bindingItem!=null) {
+			if (_bindingItem != null) {
 				_bindingItem.setBindingDefinition(_bindingItemDefinition);
 			}
 		}
 		return _bindingItemDefinition;
 	}
 
-	public BindingValue getBindingItem()
-	{
+	public BindingValue getBindingItem() {
 		return _bindingItem;
 	}
 
-	public void setBindingItem(BindingValue bindingItem)
-	{
+	public void setBindingItem(BindingValue bindingItem) {
 		if (_bindingItem != null) {
 			BindingPathElement element = _bindingItem.getBindingPathLastElement();
 			if (element instanceof DMProperty) {
-				((DMProperty)element).setIsStaticallyDefinedInTemplate(false);
+				((DMProperty) element).setIsStaticallyDefinedInTemplate(false);
 			} else if (element instanceof DMMethod) {
-				((DMMethod)element).setIsStaticallyDefinedInTemplate(false);
+				((DMMethod) element).setIsStaticallyDefinedInTemplate(false);
 			} else {
-				if (logger.isLoggable(Level.WARNING) && element!=null) {
-					logger.warning("Unknown Binding path element: "+element.getClass().getName()+" Please fix me!");
+				if (logger.isLoggable(Level.WARNING) && element != null) {
+					logger.warning("Unknown Binding path element: " + element.getClass().getName() + " Please fix me!");
 				}
 			}
 		}
@@ -211,42 +200,37 @@ public class RepetitionOperator extends IEOperator implements DMTypeOwner
 			_bindingItem.setBindingDefinition(getBindingItemDefinition());
 			BindingPathElement element = _bindingItem.getBindingPathLastElement();
 			if (element instanceof DMProperty) {
-				((DMProperty)element).setIsStaticallyDefinedInTemplate(true);
-				((DMProperty)element).setIsBindable(false);
+				((DMProperty) element).setIsStaticallyDefinedInTemplate(true);
+				((DMProperty) element).setIsBindable(false);
 			} else if (element instanceof DMMethod) {
-				((DMMethod)element).setIsStaticallyDefinedInTemplate(true);
+				((DMMethod) element).setIsStaticallyDefinedInTemplate(true);
 			} else {
-				if (logger.isLoggable(Level.WARNING) && element!=null) {
-					logger.warning("Unknown Binding path element: "+element.getClass().getName()+" Please fix me!");
+				if (logger.isLoggable(Level.WARNING) && element != null) {
+					logger.warning("Unknown Binding path element: " + element.getClass().getName() + " Please fix me!");
 				}
 			}
 		}
 		setChanged();
-		notifyObservers(new IEDataModification("itemVariable", null,
-				bindingItem));
+		notifyObservers(new IEDataModification("itemVariable", null, bindingItem));
 	}
 
-	public BindingValue getItemVariable()
-	{
+	public BindingValue getItemVariable() {
 		return getBindingItem();
 	}
 
-	public DMProperty getItemProperty()
-	{
-		if(getItemVariable()!=null){
+	public DMProperty getItemProperty() {
+		if (getItemVariable() != null) {
 			BindingValue bv = getItemVariable();
-			return (DMProperty)bv.getBindingPath().get(bv.getBindingPath().size()-1);
+			return (DMProperty) bv.getBindingPath().get(bv.getBindingPath().size() - 1);
 		}
 		return null;
 	}
 
-	public void setItemVariable(BindingValue bindingItem)
-	{
+	public void setItemVariable(BindingValue bindingItem) {
 		setBindingItem(bindingItem);
 	}
 
-	public AbstractBinding getListAccessor()
-	{
+	public AbstractBinding getListAccessor() {
 		return _listAccessor;
 	}
 
@@ -260,19 +244,18 @@ public class RepetitionOperator extends IEOperator implements DMTypeOwner
 		notifyObservers(new IEDataModification("listAccessor", null, value));
 	}
 
-	public WidgetBindingDefinition getBindingListDefinition()
-	{
+	public WidgetBindingDefinition getBindingListDefinition() {
 		if (_bindingListDefinition == null) {
-			_bindingListDefinition = new WidgetBindingDefinition("bindingList",DMType.makeListDMType(getContentType(), getProject()),this,BindingDefinitionType.GET,true);
-			if (_listAccessor!=null) {
+			_bindingListDefinition = new WidgetBindingDefinition("bindingList", DMType.makeListDMType(getContentType(), getProject()),
+					this, BindingDefinitionType.GET, true);
+			if (_listAccessor != null) {
 				_listAccessor.setBindingDefinition(_bindingListDefinition);
 			}
 		}
 		return _bindingListDefinition;
 	}
 
-	public boolean getFetchObjects()
-	{
+	public boolean getFetchObjects() {
 		return _fetchObjects;
 	}
 
@@ -283,34 +266,29 @@ public class RepetitionOperator extends IEOperator implements DMTypeOwner
 		notifyObservers(new IEDataModification("fetchObjects", null, new Boolean(_fetchObjects)));
 	}
 
-	public boolean excelButton()
-	{
+	public boolean excelButton() {
 		return _excelButton;
 	}
 
-	public boolean refreshButton()
-	{
+	public boolean refreshButton() {
 		return _refreshButton;
 	}
 
-	public void setExcelButton(boolean excelButton)
-	{
+	public void setExcelButton(boolean excelButton) {
 		_excelButton = excelButton;
 		setChanged();
 		notifyObservers(new IEDataModification("excelButton", null, new Boolean(_excelButton)));
 		notifyParentBloc(new ExcellButtonStateChange(excelButton));
 	}
 
-	public void setRefreshButton(boolean refreshButton)
-	{
+	public void setRefreshButton(boolean refreshButton) {
 		_refreshButton = refreshButton;
 		setChanged();
 		notifyObservers(new IEDataModification("refreshButton", null, new Boolean(_refreshButton)));
 		notifyParentBloc(new RefreshButtonStateChange(refreshButton));
 	}
 
-	public boolean getHasBatch()
-	{
+	public boolean getHasBatch() {
 		return _hasBatch;
 	}
 
@@ -320,8 +298,7 @@ public class RepetitionOperator extends IEOperator implements DMTypeOwner
 		notifyObservers(new IEDataModification("hasBatch", null, new Boolean(_hasBatch)));
 	}
 
-	public int getDefaultBatchValue()
-	{
+	public int getDefaultBatchValue() {
 		return _defaultBatchValue;
 	}
 
@@ -331,16 +308,14 @@ public class RepetitionOperator extends IEOperator implements DMTypeOwner
 		notifyObservers(new IEDataModification("defaultBatchValue", null, new Integer(_defaultBatchValue)));
 	}
 
-	private void notifyParentBloc(IEDataModification modif)
-	{
+	private void notifyParentBloc(IEDataModification modif) {
 		IEBlocWidget bloc = findBlocInParent();
 		if (bloc != null) {
 			bloc.notifyListActionButtonStateChange(modif);
 		}
 	}
 
-	public DMEntity getEntity()
-	{
+	public DMEntity getEntity() {
 		if (getItemVariable() != null) {
 			return getItemVariable().getBindingPath().lastElement().getType().getBaseEntity();
 		}
@@ -348,8 +323,7 @@ public class RepetitionOperator extends IEOperator implements DMTypeOwner
 			entity = getProject().getDataModel().getEntityNamed(entityName);
 			if (entity == null) {
 				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Entity named: " + entityName
-							+ " could not be found");
+					logger.warning("Entity named: " + entityName + " could not be found");
 				}
 			}
 		}
@@ -357,8 +331,7 @@ public class RepetitionOperator extends IEOperator implements DMTypeOwner
 	}
 
 	@Deprecated
-	public void setEntity(DMEntity ent)
-	{
+	public void setEntity(DMEntity ent) {
 		DMEntity old = this.entity;
 		this.entity = ent;
 		if (old != null && old != ent) {
@@ -368,7 +341,8 @@ public class RepetitionOperator extends IEOperator implements DMTypeOwner
 			if (old != ent) {
 				entityName = ent.getFullyQualifiedName();
 			}
-			createsBindingVariable("fetchObjectOfList" + getFlexoID(), DMType.makeResolvedDMType(ent), DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD, false);
+			createsBindingVariable("fetchObjectOfList" + getFlexoID(), DMType.makeResolvedDMType(ent),
+					DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD, false);
 		} else {
 			entityName = null;
 		}
@@ -405,8 +379,7 @@ public class RepetitionOperator extends IEOperator implements DMTypeOwner
 		return _listType == ListType.ACCESSOR;
 	}
 
-	public DMMethod getPermanentFilter()
-	{
+	public DMMethod getPermanentFilter() {
 		if (permanentFilter == null && permanentFilterMethodSignature != null) {
 			permanentFilter = getWOComponent().getComponentDMEntity().getMethod(permanentFilterMethodSignature);
 			if (permanentFilter == null) {
@@ -430,8 +403,7 @@ public class RepetitionOperator extends IEOperator implements DMTypeOwner
 		notifyObservers(new IEDataModification("permanentFilter", old, f));
 	}
 
-	public Vector<DMMethod> getAvailableQualifiers()
-	{
+	public Vector<DMMethod> getAvailableQualifiers() {
 		DMEntity qual = getProject().getDataModel().getEntityNamed("com.webobjects.eocontrol.EOQualifier");
 		if (qual == null) {
 			return new Vector<DMMethod>();
@@ -440,7 +412,8 @@ public class RepetitionOperator extends IEOperator implements DMTypeOwner
 		Enumeration en = getComponentDMEntity().getMethods().keys();
 		while (en.hasMoreElements()) {
 			DMMethod method = getComponentDMEntity().getMethods().get(en.nextElement());
-			if (method.getReturnType()!=null && method.getReturnType().getBaseEntity()!=null && method.getReturnType().getBaseEntity().equals(qual) && method.getParameters().size()==0) {
+			if (method.getReturnType() != null && method.getReturnType().getBaseEntity() != null
+					&& method.getReturnType().getBaseEntity().equals(qual) && method.getParameters().size() == 0) {
 				ret.add(method);
 			}
 		}
@@ -461,24 +434,20 @@ public class RepetitionOperator extends IEOperator implements DMTypeOwner
 	}
 
 	/**
-	 * Returns all the widgets that are meant to be used for filtering this
-	 * list. This method should be used with great care since it parses the all
-	 * component to retrieve all those widgets
+	 * Returns all the widgets that are meant to be used for filtering this list. This method should be used with great care since it parses
+	 * the all component to retrieve all those widgets
 	 * 
 	 * @return all the widgets that are meant to be used for filtering this list
 	 */
-	public Vector<IEControlWidget> getFilterWidgets()
-	{
+	public Vector<IEControlWidget> getFilterWidgets() {
 		Vector<IEControlWidget> result = getWOComponent().getFilterWidgetsForRepetition(this);
-		Collections.sort(result, new Comparator<IEControlWidget>()
-				{
+		Collections.sort(result, new Comparator<IEControlWidget>() {
 
 			@Override
-			public int compare(IEControlWidget o1, IEControlWidget o2)
-			{
+			public int compare(IEControlWidget o1, IEControlWidget o2) {
 				return o1.compareTo(o2);
 			}
-				});
+		});
 		return result;
 	}
 
@@ -492,20 +461,18 @@ public class RepetitionOperator extends IEOperator implements DMTypeOwner
 	 * 
 	 * @return the inferred flexo process
 	 */
-	public FlexoProcess getInferredListProcess()
-	{
+	public FlexoProcess getInferredListProcess() {
 		if (getContentType() == null) {
 			return null;
 		}
 
-		if (!"java.lang.Object".equals(getContentType().getStringRepresentation()))
-		{
+		if (!"java.lang.Object".equals(getContentType().getStringRepresentation())) {
 			DMEntity entity = getContentType().getBaseEntity();
 			if (entity != null && getProject().getAllLocalFlexoProcesses() != null) {
 				Enumeration<FlexoProcess> en = getProject().getAllLocalFlexoProcesses().elements();
 				while (en.hasMoreElements()) {
 					FlexoProcess process = en.nextElement();
-					if(entity.equals(process.getBusinessDataType())) {
+					if (entity.equals(process.getBusinessDataType())) {
 						return process;
 					}
 				}
@@ -516,114 +483,108 @@ public class RepetitionOperator extends IEOperator implements DMTypeOwner
 
 		Set<FlexoProcess> foundProcessFromActions = new HashSet<FlexoProcess>();
 		Set<FlexoProcess> foundProcessFromSubProcessActivity = new HashSet<FlexoProcess>();
-		for(OperationNode operationNode : getWOComponent().getComponentDefinition().getAllOperationNodesLinkedToThisComponent())
-		{
-			if(foundProcessFromActions.size() <= 1)
-			{
-				for(ActionNode actionNode : operationNode.getAllActionNodes())
-				{
+		for (OperationNode operationNode : getWOComponent().getComponentDefinition().getAllOperationNodesLinkedToThisComponent()) {
+			if (foundProcessFromActions.size() <= 1) {
+				for (ActionNode actionNode : operationNode.getAllActionNodes()) {
 					IEHyperlinkWidget widget = actionNode.getAssociatedButtonWidget();
-					if(widget != null && widget.isInRepetition() && widget.repetition().getFlexoID() == getFlexoID())
-					{
-						for(WorkflowPathToOperationNode workflowPath : actionNode.getNextOperationsForAction())
-						{
+					if (widget != null && widget.isInRepetition() && widget.repetition().getFlexoID() == getFlexoID()) {
+						for (WorkflowPathToOperationNode workflowPath : actionNode.getNextOperationsForAction()) {
 							foundProcessFromActions.addAll(workflowPath.getCreatedProcesses());
 							foundProcessFromActions.addAll(workflowPath.getDeletedProcesses());
-							if(workflowPath.getOperationNode() != null) {
+							if (workflowPath.getOperationNode() != null) {
 								foundProcessFromActions.add(workflowPath.getOperationNode().getProcess());
 							}
 
-							if(foundProcessFromActions.size() > 1) {
+							if (foundProcessFromActions.size() > 1) {
 								break;
 							}
 						}
 
-						if(foundProcessFromActions.size() > 1) {
+						if (foundProcessFromActions.size() > 1) {
 							break;
 						}
 					}
 				}
 			}
 
-			if(operationNode.getAbstractActivityNode().isSubProcessNode()) {
-				foundProcessFromSubProcessActivity.add(((SubProcessNode)operationNode.getAbstractActivityNode()).getSubProcess());
+			if (operationNode.getAbstractActivityNode().isSubProcessNode()) {
+				foundProcessFromSubProcessActivity.add(((SubProcessNode) operationNode.getAbstractActivityNode()).getSubProcess());
 			}
 		}
 
-		if(foundProcessFromSubProcessActivity.size() == 1) {
+		if (foundProcessFromSubProcessActivity.size() == 1) {
 			return foundProcessFromSubProcessActivity.iterator().next();
 		}
 
-		if(foundProcessFromActions.size() == 1) {
+		if (foundProcessFromActions.size() == 1) {
 			return foundProcessFromActions.iterator().next();
 		}
-
 
 		return null;
 	}
 
 	/*    public class RepetitionBindingModel extends BindingModel
-    {
-    	public static final String COMPONENT_BINDING_VARIABLE_NAME = "component";
-    	public static final String ITEM_BINDING_VARIABLE_NAME = "itemOfRepetition";
+	{
+		public static final String COMPONENT_BINDING_VARIABLE_NAME = "component";
+		public static final String ITEM_BINDING_VARIABLE_NAME = "itemOfRepetition";
 
-        private BindingVariable _componentVariable;
-        private BindingVariable _itemVariable;
+	    private BindingVariable _componentVariable;
+	    private BindingVariable _itemVariable;
 
-        public RepetitionBindingModel()
-        {
-            super();
-            _componentVariable = new BindingVariable(RepetitionOperator.this, getProject().getDataModel(), FlexoLocalization
-                    .localizedForKey("access_to_the_current_component"));
-            _componentVariable.setVariableName(COMPONENT_BINDING_VARIABLE_NAME);
-            _componentVariable.setType(DMType.makeResolvedDMType(getComponentDMEntity()));
-            createOrUpdateItemVariable();
-        }
+	    public RepetitionBindingModel()
+	    {
+	        super();
+	        _componentVariable = new BindingVariable(RepetitionOperator.this, getProject().getDataModel(), FlexoLocalization
+	                .localizedForKey("access_to_the_current_component"));
+	        _componentVariable.setVariableName(COMPONENT_BINDING_VARIABLE_NAME);
+	        _componentVariable.setType(DMType.makeResolvedDMType(getComponentDMEntity()));
+	        createOrUpdateItemVariable();
+	    }
 
-        protected void createOrUpdateItemVariable() {
-        	if (getBindingItem()!=null && getBindingItem().getBindingPathLastElement() instanceof DMProperty){
+	    protected void createOrUpdateItemVariable() {
+	    	if (getBindingItem()!=null && getBindingItem().getBindingPathLastElement() instanceof DMProperty){
 	            _itemVariable = new BindingVariable(RepetitionOperator.this, getProject().getDataModel(), FlexoLocalization
 	            		.localizedForKey("access_to_the_item_of_the_repetition"));
 	            _itemVariable.setVariableName(((DMProperty)getBindingItem().getBindingPathLastElement()).getName());
 	            _itemVariable.setType(getContentType().clone());
-        	} else {
-        		_itemVariable = null;
-        	}
-        }
+	    	} else {
+	    		_itemVariable = null;
+	    	}
+	    }
 
-        @Override
-        public int getBindingVariablesCount()
-        {
-            return _itemVariable!=null?2:1;
-        }
+	    @Override
+	    public int getBindingVariablesCount()
+	    {
+	        return _itemVariable!=null?2:1;
+	    }
 
-        @Override
-        public BindingVariable getBindingVariableAt(int index)
-        {
-        	if (index==0)
-        		return getItemBindingVariable();
-        	else
-        		return getComponentBindingVariable();
-        }
+	    @Override
+	    public BindingVariable getBindingVariableAt(int index)
+	    {
+	    	if (index==0)
+	    		return getItemBindingVariable();
+	    	else
+	    		return getComponentBindingVariable();
+	    }
 
-        public BindingVariable getItemBindingVariable() {
+	    public BindingVariable getItemBindingVariable() {
 			return _itemVariable;
 		}
 
 		public BindingVariable getComponentBindingVariable()
-        {
-            return _componentVariable;
-        }
+	    {
+	        return _componentVariable;
+	    }
 
 		@Override
-        public boolean allowsNewBindingVariableCreation()
+	    public boolean allowsNewBindingVariableCreation()
 		{
 			return false;
 		}
 
-    }
+	}
 	 */
-	public static class ListMustHaveAName extends ValidationRule<ListMustHaveAName,RepetitionOperator> {
+	public static class ListMustHaveAName extends ValidationRule<ListMustHaveAName, RepetitionOperator> {
 
 		public ListMustHaveAName() {
 			super(RepetitionOperator.class, "list_must_have_a_name");
@@ -632,8 +593,9 @@ public class RepetitionOperator extends IEOperator implements DMTypeOwner
 		@Override
 		public ValidationIssue<ListMustHaveAName, RepetitionOperator> applyValidation(RepetitionOperator object) {
 			ValidationError<ListMustHaveAName, RepetitionOperator> error = null;
-			if (object.getName()==null || object.getName().trim().length()==0) {
-				error = new ValidationError<ListMustHaveAName, RepetitionOperator>(this,object,"list_must_have_a_name",new EnterNewListName());
+			if (object.getName() == null || object.getName().trim().length() == 0) {
+				error = new ValidationError<ListMustHaveAName, RepetitionOperator>(this, object, "list_must_have_a_name",
+						new EnterNewListName());
 			}
 			return error;
 		}
@@ -645,15 +607,13 @@ public class RepetitionOperator extends IEOperator implements DMTypeOwner
 			}
 
 			private static ParameterDefinition[] parameters() {
-				return new ParameterDefinition[]{
-						new TextFieldParameter("name","list_name",null)
-				};
+				return new ParameterDefinition[] { new TextFieldParameter("name", "list_name", null) };
 			}
 
 			@Override
 			protected void fixAction() {
 				String s = (String) getValueForParameter("name");
-				if (s!=null && s.trim().length()!=0) {
+				if (s != null && s.trim().length() != 0) {
 					getObject().setName(s);
 				}
 			}
@@ -661,21 +621,19 @@ public class RepetitionOperator extends IEOperator implements DMTypeOwner
 
 	}
 
-	public static class RawRowRepetitionCanNotContainEditableField extends ValidationRule<RawRowRepetitionCanNotContainEditableField,RepetitionOperator>
-	{
+	public static class RawRowRepetitionCanNotContainEditableField extends
+			ValidationRule<RawRowRepetitionCanNotContainEditableField, RepetitionOperator> {
 
 		/**
 		 * @author gpolet
 		 * 
 		 */
-		public class SetListTypeToFetch extends FixProposal<RawRowRepetitionCanNotContainEditableField,RepetitionOperator>
-		{
+		public class SetListTypeToFetch extends FixProposal<RawRowRepetitionCanNotContainEditableField, RepetitionOperator> {
 
 			/**
 			 * @param aMessage
 			 */
-			public SetListTypeToFetch()
-			{
+			public SetListTypeToFetch() {
 				super("set_list_type_to_fetch_objects");
 			}
 
@@ -685,8 +643,7 @@ public class RepetitionOperator extends IEOperator implements DMTypeOwner
 			 * @see org.openflexo.foundation.validation.FixProposal#fixAction()
 			 */
 			@Override
-			protected void fixAction()
-			{
+			protected void fixAction() {
 				getObject().setFetchObjects(true);
 			}
 
@@ -696,8 +653,7 @@ public class RepetitionOperator extends IEOperator implements DMTypeOwner
 		 * @param objectType
 		 * @param ruleName
 		 */
-		public RawRowRepetitionCanNotContainEditableField()
-		{
+		public RawRowRepetitionCanNotContainEditableField() {
 			super(RepetitionOperator.class, "raw_row_repetition_cannot_contain_editable_field");
 		}
 
@@ -707,8 +663,7 @@ public class RepetitionOperator extends IEOperator implements DMTypeOwner
 		 * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
 		 */
 		@Override
-		public ValidationIssue<RawRowRepetitionCanNotContainEditableField,RepetitionOperator> applyValidation(RepetitionOperator rep)
-		{
+		public ValidationIssue<RawRowRepetitionCanNotContainEditableField, RepetitionOperator> applyValidation(RepetitionOperator rep) {
 			if (rep.getFetchObjects()) {
 				return null;
 			}
@@ -717,7 +672,8 @@ public class RepetitionOperator extends IEOperator implements DMTypeOwner
 			while (en.hasMoreElements()) {
 				IEObject element = en.nextElement();
 				if (element instanceof IEEditableFieldWidget) {
-					ValidationError<RawRowRepetitionCanNotContainEditableField,RepetitionOperator> err = new ValidationError<RawRowRepetitionCanNotContainEditableField,RepetitionOperator>(this, rep, "raw_row_repetition_cannot_contain_editable_field");
+					ValidationError<RawRowRepetitionCanNotContainEditableField, RepetitionOperator> err = new ValidationError<RawRowRepetitionCanNotContainEditableField, RepetitionOperator>(
+							this, rep, "raw_row_repetition_cannot_contain_editable_field");
 					err.addToFixProposals(new SetListTypeToFetch());
 					return err;
 				}

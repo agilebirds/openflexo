@@ -27,20 +27,17 @@ import org.openflexo.foundation.dm.DMMethod;
  * @author sguerin
  * 
  */
-public class DMMethodNameChanged extends DMAttributeDataModification
-{
+public class DMMethodNameChanged extends DMAttributeDataModification {
 
-    private DMMethod _dmMethod;
+	private DMMethod _dmMethod;
 
-    public DMMethodNameChanged(DMMethod dmMethod, String oldName, String newName)
-    {
-        super("name", oldName, newName);
-        _dmMethod = dmMethod;
-    }
+	public DMMethodNameChanged(DMMethod dmMethod, String oldName, String newName) {
+		super("name", oldName, newName);
+		_dmMethod = dmMethod;
+	}
 
-    public DMMethod getDMMethod()
-    {
-        return _dmMethod;
-    }
+	public DMMethod getDMMethod() {
+		return _dmMethod;
+	}
 
 }

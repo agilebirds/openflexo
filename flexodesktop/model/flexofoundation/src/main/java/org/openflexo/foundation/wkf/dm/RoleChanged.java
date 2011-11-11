@@ -21,18 +21,15 @@ package org.openflexo.foundation.wkf.dm;
 
 import org.openflexo.foundation.wkf.Role;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class RoleChanged extends WKFAttributeDataModification
-{
+public class RoleChanged extends WKFAttributeDataModification {
 
-    public RoleChanged(Role oldRole, Role newRole)
-    {
-        super("role", oldRole, newRole);
-    }
+	public RoleChanged(Role oldRole, Role newRole) {
+		super("role", oldRole, newRole);
+	}
 }

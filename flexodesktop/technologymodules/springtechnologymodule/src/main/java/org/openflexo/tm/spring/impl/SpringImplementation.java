@@ -42,7 +42,8 @@ public class SpringImplementation extends TechnologyModuleImplementation {
 	 * Build a new Spring implementation for the specified implementation model builder.<br/>
 	 * This constructor is namely invoked during unserialization.
 	 * 
-	 * @param builder the builder that will create this implementation
+	 * @param builder
+	 *            the builder that will create this implementation
 	 * @throws TechnologyModuleCompatibilityCheckException
 	 */
 	public SpringImplementation(ImplementationModelBuilder builder) throws TechnologyModuleCompatibilityCheckException {
@@ -53,7 +54,8 @@ public class SpringImplementation extends TechnologyModuleImplementation {
 	/**
 	 * Build a new Spring implementation for the specified implementation model.
 	 * 
-	 * @param implementationModel the implementation model where to create this Spring implementation
+	 * @param implementationModel
+	 *            the implementation model where to create this Spring implementation
 	 * @throws TechnologyModuleCompatibilityCheckException
 	 */
 	public SpringImplementation(ImplementationModel implementationModel) throws TechnologyModuleCompatibilityCheckException {

@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-	package org.openflexo.dm.view.controller.action;
+package org.openflexo.dm.view.controller.action;
 
 import java.awt.event.ActionEvent;
 import java.util.Enumeration;
@@ -34,7 +34,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-
 
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.dm.view.DMEOEntityView;
@@ -62,142 +61,135 @@ public class CreateDMEORelationshipInitializer extends ActionInitializer {
 
 	static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateDMEORelationshipInitializer(DMControllerActionInitializer actionInitializer)
-	{
-		super(CreateDMEORelationship.actionType,actionInitializer);
+	CreateDMEORelationshipInitializer(DMControllerActionInitializer actionInitializer) {
+		super(CreateDMEORelationship.actionType, actionInitializer);
 	}
 
 	@Override
-	protected DMControllerActionInitializer getControllerActionInitializer()
-	{
-		return (DMControllerActionInitializer)super.getControllerActionInitializer();
+	protected DMControllerActionInitializer getControllerActionInitializer() {
+		return (DMControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<CreateDMEORelationship> getDefaultInitializer()
-	{
+	protected FlexoActionInitializer<CreateDMEORelationship> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateDMEORelationship>() {
-            @Override
-			public boolean run(ActionEvent e, final CreateDMEORelationship action)
-            {
+			@Override
+			public boolean run(ActionEvent e, final CreateDMEORelationship action) {
 				final String NORMAL_RELATIONSHIP = FlexoLocalization.localizedForKey("create_normal_relationship");
-            	final String FLATTEN_RELATIONSHIP = FlexoLocalization.localizedForKey("create_flatten_relationship");
+				final String FLATTEN_RELATIONSHIP = FlexoLocalization.localizedForKey("create_flatten_relationship");
 				String[] relationshipTypeChoices = { NORMAL_RELATIONSHIP, FLATTEN_RELATIONSHIP };
-				final RadioButtonListParameter<String> relationshipTypeChoiceParam
-				= new RadioButtonListParameter<String>("relationshipType","please_select_a_choice",NORMAL_RELATIONSHIP,relationshipTypeChoices);
+				final RadioButtonListParameter<String> relationshipTypeChoiceParam = new RadioButtonListParameter<String>(
+						"relationshipType", "please_select_a_choice", NORMAL_RELATIONSHIP, relationshipTypeChoices);
 
-    			final DMEOEntityParameter sourceEntityParameter = new DMEOEntityParameter("sourceEntity","source_entity",action.getEntity());
-    			sourceEntityParameter.setDepends("relationshipType");
-    			sourceEntityParameter.setConditional("relationshipType=ALWAYS_HIDE");
+				final DMEOEntityParameter sourceEntityParameter = new DMEOEntityParameter("sourceEntity", "source_entity",
+						action.getEntity());
+				sourceEntityParameter.setDepends("relationshipType");
+				sourceEntityParameter.setConditional("relationshipType=ALWAYS_HIDE");
 
-				final TextFieldParameter newRelationshipNameParam = new TextFieldParameter("name", "new_relationship_name", action.getNewRelationshipName());
+				final TextFieldParameter newRelationshipNameParam = new TextFieldParameter("name", "new_relationship_name",
+						action.getNewRelationshipName());
 				newRelationshipNameParam.setDepends("destinationEntity,isMultiple,relationshipType");
-				newRelationshipNameParam.setConditional("(relationshipType="+'"'+NORMAL_RELATIONSHIP+'"'+"and destinationEntity!=null) or relationshipType="+'"'+FLATTEN_RELATIONSHIP+'"');
+				newRelationshipNameParam.setConditional("(relationshipType=" + '"' + NORMAL_RELATIONSHIP + '"'
+						+ "and destinationEntity!=null) or relationshipType=" + '"' + FLATTEN_RELATIONSHIP + '"');
 
-				final DMEOEntityParameter destinationEntityParameter = new DMEOEntityParameter("destinationEntity","destination_entity",null);
+				final DMEOEntityParameter destinationEntityParameter = new DMEOEntityParameter("destinationEntity", "destination_entity",
+						null);
 				destinationEntityParameter.setDepends("relationshipType");
-				destinationEntityParameter.setConditional("relationshipType="+'"'+NORMAL_RELATIONSHIP+'"');
+				destinationEntityParameter.setConditional("relationshipType=" + '"' + NORMAL_RELATIONSHIP + '"');
 				destinationEntityParameter.addParameter("repository", "params.sourceEntity.value.repository");
-				destinationEntityParameter.addValueListener(new ParameterDefinition.ValueListener<DMEOEntity>(){
+				destinationEntityParameter.addValueListener(new ParameterDefinition.ValueListener<DMEOEntity>() {
 
 					@Override
 					public void newValueWasSet(ParameterDefinition param, DMEOEntity oldValue, DMEOEntity newValue) {
-                        if (destinationEntityParameter.getValue()!=null)
-                            newRelationshipNameParam.setValue(destinationEntityParameter.getValue().getNiceRelationshipNameToMe());
-                        else
-                            newRelationshipNameParam.setValue(action.getNewRelationshipName());
+						if (destinationEntityParameter.getValue() != null)
+							newRelationshipNameParam.setValue(destinationEntityParameter.getValue().getNiceRelationshipNameToMe());
+						else
+							newRelationshipNameParam.setValue(action.getNewRelationshipName());
 					}
-
 
 				});
 
-
-				final CheckboxParameter isMultipleParameter = new CheckboxParameter("isMultiple","is_to_many",false);
+				final CheckboxParameter isMultipleParameter = new CheckboxParameter("isMultiple", "is_to_many", false);
 				isMultipleParameter.setDepends("relationshipType");
-				isMultipleParameter.setConditional("relationshipType="+'"'+NORMAL_RELATIONSHIP+'"');
-				isMultipleParameter.addValueListener(new ParameterDefinition.ValueListener<Boolean>(){
+				isMultipleParameter.setConditional("relationshipType=" + '"' + NORMAL_RELATIONSHIP + '"');
+				isMultipleParameter.addValueListener(new ParameterDefinition.ValueListener<Boolean>() {
 
 					@Override
 					public void newValueWasSet(ParameterDefinition param, Boolean oldValue, Boolean newValue) {
-			            if(newValue && !newRelationshipNameParam.getValue().endsWith("s")){
-			            	newRelationshipNameParam.setValue(newRelationshipNameParam.getValue()+"s");
-			            }
-			            if(!newValue && newRelationshipNameParam.getValue().endsWith("s")){
-			            	newRelationshipNameParam.setValue(newRelationshipNameParam.getValue().substring(0,newRelationshipNameParam.getValue().length()-1));
-			            }
+						if (newValue && !newRelationshipNameParam.getValue().endsWith("s")) {
+							newRelationshipNameParam.setValue(newRelationshipNameParam.getValue() + "s");
+						}
+						if (!newValue && newRelationshipNameParam.getValue().endsWith("s")) {
+							newRelationshipNameParam.setValue(newRelationshipNameParam.getValue().substring(0,
+									newRelationshipNameParam.getValue().length() - 1));
+						}
 					}
-
 
 				});
 
-
-
-
-				final JoinsInfoParameter joinsParameters = new JoinsInfoParameter("joins","joins_defining_relationship",action.getFocusedObject(),20,5);
+				final JoinsInfoParameter joinsParameters = new JoinsInfoParameter("joins", "joins_defining_relationship",
+						action.getFocusedObject(), 20, 5);
 				joinsParameters.setDepends("destinationEntity,relationshipType");
-				joinsParameters.setConditional("relationshipType="+'"'+NORMAL_RELATIONSHIP+'"');
+				joinsParameters.setConditional("relationshipType=" + '"' + NORMAL_RELATIONSHIP + '"');
 
 				joinsParameters.addAddAction("add_join", "params.joins.addJoin", "params.joins.addJoinEnabled", null);
 				joinsParameters.addDeleteAction("remove_join", "params.joins.removeJoin", "params.joins.removeJoinEnabled", null);
 
-				joinsParameters.addIconColumn("isJoinValidIcon", "",30,false);
-				PropertyListColumn sourceAttributeColumn = joinsParameters.addCustomColumn("sourceAttribute", "source_attribute","org.openflexo.components.widget.DMEOAttributeInspectorWidget",180,true);
+				joinsParameters.addIconColumn("isJoinValidIcon", "", 30, false);
+				PropertyListColumn sourceAttributeColumn = joinsParameters.addCustomColumn("sourceAttribute", "source_attribute",
+						"org.openflexo.components.widget.DMEOAttributeInspectorWidget", 180, true);
 				sourceAttributeColumn.setValueForParameter("entity", "sourceEntity");
 				sourceAttributeColumn.setValueForParameter("format", "name");
-		    	PropertyListColumn destinationAttributeColumn = joinsParameters.addCustomColumn("destinationAttribute", "destination_attribute","org.openflexo.components.widget.DMEOAttributeInspectorWidget",180,true);
-		    	destinationAttributeColumn.setValueForParameter("entity", "destinationEntity");
-		    	destinationAttributeColumn.setValueForParameter("format", "name");
+				PropertyListColumn destinationAttributeColumn = joinsParameters.addCustomColumn("destinationAttribute",
+						"destination_attribute", "org.openflexo.components.widget.DMEOAttributeInspectorWidget", 180, true);
+				destinationAttributeColumn.setValueForParameter("entity", "destinationEntity");
+				destinationAttributeColumn.setValueForParameter("format", "name");
 
 				destinationEntityParameter.addValueListener(new ParameterDefinition.ValueListener<DMEOEntity>() {
 					@Override
 					public void newValueWasSet(ParameterDefinition param, DMEOEntity oldValue, DMEOEntity newValue) {
 						if (logger.isLoggable(Level.FINE))
-	                        logger.fine("New value :"+newValue);
+							logger.fine("New value :" + newValue);
 						joinsParameters.setDestinationEntity(newValue);
 					}
 				});
 
-				final FlattenRelationshipDefinitionParameter flattenRelationshipDefinitionParameter = new FlattenRelationshipDefinitionParameter("relationshipDefinition","relationship_definition",null);
+				final FlattenRelationshipDefinitionParameter flattenRelationshipDefinitionParameter = new FlattenRelationshipDefinitionParameter(
+						"relationshipDefinition", "relationship_definition", null);
 				flattenRelationshipDefinitionParameter.setDepends("relationshipType");
-				flattenRelationshipDefinitionParameter.setConditional("relationshipType="+'"'+FLATTEN_RELATIONSHIP+'"');
+				flattenRelationshipDefinitionParameter.setConditional("relationshipType=" + '"' + FLATTEN_RELATIONSHIP + '"');
 				flattenRelationshipDefinitionParameter.addParameter("source_entity", "params.sourceEntity.value");
-				flattenRelationshipDefinitionParameter.addValueListener(new ParameterDefinition.ValueListener<FlattenRelationshipDefinition>() {
+				flattenRelationshipDefinitionParameter
+						.addValueListener(new ParameterDefinition.ValueListener<FlattenRelationshipDefinition>() {
 
-					@Override
-					public void newValueWasSet(ParameterDefinition<FlattenRelationshipDefinition> param,
-							FlattenRelationshipDefinition oldValue, FlattenRelationshipDefinition newValue) {
-						if (newValue!=null && newValue.getBindingPathLastElement()!=null)
-                            newRelationshipNameParam.setValue(newValue.getBindingPathLastElement().getName());
-                        else
-                            newRelationshipNameParam.setValue(action.getNewRelationshipName());
-					}
-				});
-		     	AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(
-		     			getProject(),
-						null,
-						action.getLocalizedName(),
-		     			FlexoLocalization.localizedForKey("what_would_you_like_to_do"),
-		     			new AskParametersDialog.ValidationCondition() {
+							@Override
+							public void newValueWasSet(ParameterDefinition<FlattenRelationshipDefinition> param,
+									FlattenRelationshipDefinition oldValue, FlattenRelationshipDefinition newValue) {
+								if (newValue != null && newValue.getBindingPathLastElement() != null)
+									newRelationshipNameParam.setValue(newValue.getBindingPathLastElement().getName());
+								else
+									newRelationshipNameParam.setValue(action.getNewRelationshipName());
+							}
+						});
+				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null, action.getLocalizedName(),
+						FlexoLocalization.localizedForKey("what_would_you_like_to_do"), new AskParametersDialog.ValidationCondition() {
 							@Override
 							public boolean isValid(ParametersModel model) {
 								if (relationshipTypeChoiceParam.getValue().equals(NORMAL_RELATIONSHIP)) {
-									if (newRelationshipNameParam.getValue() != null
-											&& !newRelationshipNameParam.getValue().equals("")
+									if (newRelationshipNameParam.getValue() != null && !newRelationshipNameParam.getValue().equals("")
 											&& destinationEntityParameter.getValue() != null
-											/*&& joinsParameters.getDMEOJoins().size() > 0*/) {
+									/*&& joinsParameters.getDMEOJoins().size() > 0*/) {
 										/*for (DMEOJoin j : joinsParameters.getDMEOJoins()) {
 											if (logger.isLoggable(Level.FINE))
-						                        logger.fine("join: "+j);
+										        logger.fine("join: "+j);
 											if (!j.isJoinValid()) return false;
 										}*/
 										return true;
 									}
 									errorMessage = FlexoLocalization.localizedForKey("invalid_joins_definition");
 									return false;
-								}
-								else if (relationshipTypeChoiceParam.getValue().equals(FLATTEN_RELATIONSHIP)) {
-									if (newRelationshipNameParam.getValue() != null
-											&& !newRelationshipNameParam.getValue().equals("")
+								} else if (relationshipTypeChoiceParam.getValue().equals(FLATTEN_RELATIONSHIP)) {
+									if (newRelationshipNameParam.getValue() != null && !newRelationshipNameParam.getValue().equals("")
 											&& flattenRelationshipDefinitionParameter.getValue() != null
 											&& flattenRelationshipDefinitionParameter.getValue().isDefinitionValid()) {
 										return true;
@@ -206,14 +198,8 @@ public class CreateDMEORelationshipInitializer extends ActionInitializer {
 								}
 								return false;
 							}
-		     			},
-						sourceEntityParameter,
-						relationshipTypeChoiceParam,
-						newRelationshipNameParam,
-						destinationEntityParameter,
-						isMultipleParameter,
-						joinsParameters, flattenRelationshipDefinitionParameter);
-
+						}, sourceEntityParameter, relationshipTypeChoiceParam, newRelationshipNameParam, destinationEntityParameter,
+						isMultipleParameter, joinsParameters, flattenRelationshipDefinitionParameter);
 
 				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 					action.setNewRelationshipName(newRelationshipNameParam.getValue());
@@ -221,155 +207,137 @@ public class CreateDMEORelationshipInitializer extends ActionInitializer {
 						action.setFlattenRelationShip(false);
 						action.setDestinationEntity(destinationEntityParameter.getValue());
 						action.setMultipleRelation(isMultipleParameter.getValue());
-                        if (joinsParameters.getValue().size()>0)
-                            if (joinsParameters.getValue() instanceof Vector)
-                                action.setJoins((Vector<DMEOJoin>)joinsParameters.getValue());
-                            else {
-                                Vector<DMEOJoin> joins = new Vector<DMEOJoin>();
-                                joins.addAll(joinsParameters.getValue());
-                                action.setJoins(joins);
-                            }
-					}
-					else {
+						if (joinsParameters.getValue().size() > 0)
+							if (joinsParameters.getValue() instanceof Vector)
+								action.setJoins((Vector<DMEOJoin>) joinsParameters.getValue());
+							else {
+								Vector<DMEOJoin> joins = new Vector<DMEOJoin>();
+								joins.addAll(joinsParameters.getValue());
+								action.setJoins(joins);
+							}
+					} else {
 						action.setFlattenRelationShip(true);
 						action.setFlattenRelationshipDefinition(flattenRelationshipDefinitionParameter.getValue());
 					}
-	            	return true;
+					return true;
 				}
-            	return false;
-            }
-        };
+				return false;
+			}
+		};
 	}
-
-     @Override
-	protected FlexoActionFinalizer<CreateDMEORelationship> getDefaultFinalizer()
-	{
-		return new FlexoActionFinalizer<CreateDMEORelationship>() {
-            @Override
-			public boolean run(ActionEvent e, CreateDMEORelationship action)
-            {
-                if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getEntity().getDMEOModel()) {
-                    if (logger.isLoggable(Level.FINE))
-                        logger.fine("Finalizer for CreateDMEORelationship in DMEOModelView");
-                    DMEOModelView dmEOModelView = (DMEOModelView) getControllerActionInitializer().getDMController().getCurrentEditedObjectView();
-                    dmEOModelView.getEoEntityTable().selectObject(action.getEntity());
-                    dmEOModelView.getEoRelationshipTable().selectObject(action.getNewEORelationship());
-                } else if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getEntity()) {
-                    if (logger.isLoggable(Level.FINE))
-                        logger.fine("Finalizer for CreateDMEORelationship in DMEOEntityView");
-                    DMEOEntityView eoEntityView = (DMEOEntityView) getControllerActionInitializer().getDMController().getCurrentEditedObjectView();
-                    eoEntityView.getEoRelationshipTable().selectObject(action.getNewEORelationship());
-                }
-                return true;
-           }
-        };
-	}
-
-     @Override
-  	protected FlexoExceptionHandler<CreateDMEORelationship> getDefaultExceptionHandler()
-  	{
-  		return new FlexoExceptionHandler<CreateDMEORelationship>() {
-  			@Override
-			public boolean handleException(FlexoException exception, CreateDMEORelationship action) {
-                 if (exception instanceof EOAccessException) {
-                     FlexoController.showError(((EOAccessException)exception).getMessage());
-                     return true;
-                 }
-                 if (exception.getCause() instanceof InvalidJoinException) {
-                     FlexoController.showError(exception.getMessage());
-                     return true;
-                 }
-                 return false;
- 			}
-         };
-  	}
-
-
 
 	@Override
-	protected Icon getEnabledIcon()
-	{
+	protected FlexoActionFinalizer<CreateDMEORelationship> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<CreateDMEORelationship>() {
+			@Override
+			public boolean run(ActionEvent e, CreateDMEORelationship action) {
+				if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getEntity().getDMEOModel()) {
+					if (logger.isLoggable(Level.FINE))
+						logger.fine("Finalizer for CreateDMEORelationship in DMEOModelView");
+					DMEOModelView dmEOModelView = (DMEOModelView) getControllerActionInitializer().getDMController()
+							.getCurrentEditedObjectView();
+					dmEOModelView.getEoEntityTable().selectObject(action.getEntity());
+					dmEOModelView.getEoRelationshipTable().selectObject(action.getNewEORelationship());
+				} else if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getEntity()) {
+					if (logger.isLoggable(Level.FINE))
+						logger.fine("Finalizer for CreateDMEORelationship in DMEOEntityView");
+					DMEOEntityView eoEntityView = (DMEOEntityView) getControllerActionInitializer().getDMController()
+							.getCurrentEditedObjectView();
+					eoEntityView.getEoRelationshipTable().selectObject(action.getNewEORelationship());
+				}
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoExceptionHandler<CreateDMEORelationship> getDefaultExceptionHandler() {
+		return new FlexoExceptionHandler<CreateDMEORelationship>() {
+			@Override
+			public boolean handleException(FlexoException exception, CreateDMEORelationship action) {
+				if (exception instanceof EOAccessException) {
+					FlexoController.showError(((EOAccessException) exception).getMessage());
+					return true;
+				}
+				if (exception.getCause() instanceof InvalidJoinException) {
+					FlexoController.showError(exception.getMessage());
+					return true;
+				}
+				return false;
+			}
+		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return DMEIconLibrary.DM_EORELATIONSHIP_ICON;
 	}
 
-	public class JoinsInfoParameter extends PropertyListParameter<DMEOJoin>
-	{
-	    private DMEOEntity _sourceEntity = null;
-	    private DMEOEntity _destinationEntity = null;
+	public class JoinsInfoParameter extends PropertyListParameter<DMEOJoin> {
+		private DMEOEntity _sourceEntity = null;
+		private DMEOEntity _destinationEntity = null;
 
-		public JoinsInfoParameter(String name, String label,DMEOEntity sourceEntity, int rowHeight,int visibleRowCount)
-		{
-			super(name, label, new Vector<DMEOJoin>(),rowHeight,visibleRowCount);
+		public JoinsInfoParameter(String name, String label, DMEOEntity sourceEntity, int rowHeight, int visibleRowCount) {
+			super(name, label, new Vector<DMEOJoin>(), rowHeight, visibleRowCount);
 			_sourceEntity = sourceEntity;
 		}
 
-		 public DMEOJoin addJoin()
-		 {
-			 DMEOJoin newJoin = new DMEOJoin(_sourceEntity);
-			 newJoin.setDestinationEntity(_destinationEntity);
+		public DMEOJoin addJoin() {
+			DMEOJoin newJoin = new DMEOJoin(_sourceEntity);
+			newJoin.setDestinationEntity(_destinationEntity);
 
-			 addToDMEOJoins(newJoin);
-			 return newJoin;
-		 }
+			addToDMEOJoins(newJoin);
+			return newJoin;
+		}
 
-		 public void removeJoin(DMEOJoin join)
-		 {
-			 removeFromDMEOJoins(join);
-		 }
+		public void removeJoin(DMEOJoin join) {
+			removeFromDMEOJoins(join);
+		}
 
-		 public boolean addJoinEnabled(DMEOJoin join)
-		 {
-			 return true;
-		 }
+		public boolean addJoinEnabled(DMEOJoin join) {
+			return true;
+		}
 
-		 public boolean removeJoinEnabled(DMEOJoin join)
-		 {
-			 return true;
-		 }
+		public boolean removeJoinEnabled(DMEOJoin join) {
+			return true;
+		}
 
-		    public List<DMEOJoin> getDMEOJoins()
-		    {
-		        return getValue();
-		    }
+		public List<DMEOJoin> getDMEOJoins() {
+			return getValue();
+		}
 
-		    public void addToDMEOJoins(DMEOJoin join)
-		    {
-		    	getDMEOJoins().add(join);
-		    }
+		public void addToDMEOJoins(DMEOJoin join) {
+			getDMEOJoins().add(join);
+		}
 
-		    public void removeFromDMEOJoins(DMEOJoin join)
-		    {
-		    	getDMEOJoins().remove(join);
-		    }
+		public void removeFromDMEOJoins(DMEOJoin join) {
+			getDMEOJoins().remove(join);
+		}
 
-		    private void resetJoins()
-		    {
-		        Vector<DMEOJoin> toDelete = new Vector<DMEOJoin>();
-		        toDelete.addAll(getDMEOJoins());
-		        for (Enumeration en = toDelete.elements(); en.hasMoreElements();) {
-		            DMEOJoin next = (DMEOJoin) en.nextElement();
-		            next.delete();
-		        }
-		        getDMEOJoins().clear();
-		    }
+		private void resetJoins() {
+			Vector<DMEOJoin> toDelete = new Vector<DMEOJoin>();
+			toDelete.addAll(getDMEOJoins());
+			for (Enumeration en = toDelete.elements(); en.hasMoreElements();) {
+				DMEOJoin next = (DMEOJoin) en.nextElement();
+				next.delete();
+			}
+			getDMEOJoins().clear();
+		}
 
-		    public DMEOEntity getDestinationEntity()
-		    {
-		        return _destinationEntity;
-		    }
+		public DMEOEntity getDestinationEntity() {
+			return _destinationEntity;
+		}
 
-		    public void setDestinationEntity(DMEOEntity destinationEntity)
-		    {
-		        DMEOEntity oldDestinationEntity = getDestinationEntity();
-		        if (destinationEntity != oldDestinationEntity) {
-		            _destinationEntity = destinationEntity;
-					for (DMEOJoin j : getDMEOJoins()) {
-						j.setDestinationEntity(destinationEntity);
-					}
-		        }
-		    }
+		public void setDestinationEntity(DMEOEntity destinationEntity) {
+			DMEOEntity oldDestinationEntity = getDestinationEntity();
+			if (destinationEntity != oldDestinationEntity) {
+				_destinationEntity = destinationEntity;
+				for (DMEOJoin j : getDMEOJoins()) {
+					j.setDestinationEntity(destinationEntity);
+				}
+			}
+		}
 
 	}
-
 
 }

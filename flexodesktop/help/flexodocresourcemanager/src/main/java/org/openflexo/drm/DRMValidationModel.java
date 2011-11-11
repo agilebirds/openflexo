@@ -24,52 +24,47 @@ import java.util.Enumeration;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class DRMValidationModel extends ValidationModel
-{
+public class DRMValidationModel extends ValidationModel {
 
-    public DRMValidationModel()
-    {
-        super(null,null);
+	public DRMValidationModel() {
+		super(null, null);
 
-        DocResourceCenter drc = DocResourceManager.instance().getDocResourceCenter();
-        for (Enumeration en=drc.getLanguages().elements(); en.hasMoreElements();) {
-            Language language = (Language)en.nextElement();
-            registerRule(new DocItem.DocumentationShouldBeUpToDate(language));
-       }
-        registerRule(new DocItemFolder.DocItemFolderMustHavePrimaryItem());
+		DocResourceCenter drc = DocResourceManager.instance().getDocResourceCenter();
+		for (Enumeration en = drc.getLanguages().elements(); en.hasMoreElements();) {
+			Language language = (Language) en.nextElement();
+			registerRule(new DocItem.DocumentationShouldBeUpToDate(language));
+		}
+		registerRule(new DocItemFolder.DocItemFolderMustHavePrimaryItem());
 
-        // Notify that the validation model is complete and that inheritance
-        // computation could be performed
-        update();
-    }
+		// Notify that the validation model is complete and that inheritance
+		// computation could be performed
+		update();
+	}
 
-    /**
-     * Return a boolean indicating if validation of supplied object must be
-     * notified
-     * 
-     * @param next
-     * @return a boolean
-     */
-    @Override
-	protected boolean shouldNotifyValidation(Validable next)
-    {
-        return (next instanceof DocResourceCenter);
-    }
+	/**
+	 * Return a boolean indicating if validation of supplied object must be notified
+	 * 
+	 * @param next
+	 * @return a boolean
+	 */
+	@Override
+	protected boolean shouldNotifyValidation(Validable next) {
+		return (next instanceof DocResourceCenter);
+	}
 
-    /**
-     * Overrides fixAutomaticallyIfOneFixProposal
-     * @see org.openflexo.foundation.validation.ValidationModel#fixAutomaticallyIfOneFixProposal()
-     */
-    @Override
-    public boolean fixAutomaticallyIfOneFixProposal()
-    {
-        return false;
-}
+	/**
+	 * Overrides fixAutomaticallyIfOneFixProposal
+	 * 
+	 * @see org.openflexo.foundation.validation.ValidationModel#fixAutomaticallyIfOneFixProposal()
+	 */
+	@Override
+	public boolean fixAutomaticallyIfOneFixProposal() {
+		return false;
+	}
 }

@@ -29,42 +29,36 @@ public class SubPropertyStatement extends OntologyStatement {
 	private static final Logger logger = Logger.getLogger(SubPropertyStatement.class.getPackage().getName());
 
 	public static final String SUB_PROPERTY_URI = "http://www.w3.org/2000/01/rdf-schema#subPropertyOf";
-	
+
 	private OntologyObject superProperty;
-	
-	public SubPropertyStatement(OntologyObject subject, Statement s)
-	{
-		super(subject,s);
+
+	public SubPropertyStatement(OntologyObject subject, Statement s) {
+		super(subject, s);
 		if (s.getObject() instanceof Resource) {
-			superProperty = getOntologyLibrary().getOntologyObject(((Resource)s.getObject()).getURI());
-		}
-		else {
+			superProperty = getOntologyLibrary().getOntologyObject(((Resource) s.getObject()).getURI());
+		} else {
 			logger.warning("SubPropertyStatement: object is not a Resource !");
 		}
 	}
 
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "sub_property_statement";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return "SubPropertyStatement: "+getStatement();
+	public String getFullyQualifiedName() {
+		return "SubPropertyStatement: " + getStatement();
 	}
 
-
-	public OntologyObject getSuperProperty() 
-	{
+	public OntologyObject getSuperProperty() {
 		return superProperty;
 	}
 
 	@Override
-	public String toString() 
-	{
-		return getSubject().getName()+" is sub-property of "+(getSuperProperty() != null ? getSuperProperty().getName() : "<NOT_FOUND:"+getStatement().getObject()+">");
+	public String toString() {
+		return getSubject().getName() + " is sub-property of "
+				+ (getSuperProperty() != null ? getSuperProperty().getName() : "<NOT_FOUND:" + getStatement().getObject() + ">");
 	}
 
 }

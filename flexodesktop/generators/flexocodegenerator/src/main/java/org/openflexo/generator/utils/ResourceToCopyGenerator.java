@@ -41,47 +41,47 @@ import org.openflexo.generator.ProjectGenerator;
 import org.openflexo.generator.TemplateLocator;
 import org.openflexo.generator.rm.GeneratedFileResourceFactory;
 
-
 public class ResourceToCopyGenerator extends FlexoResourceGenerator<FlexoModelObject, GeneratedCopiedFile> {
 
-    private static final Logger logger = Logger.getLogger(ResourceToCopyGenerator.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ResourceToCopyGenerator.class.getPackage().getName());
 
-    private FlexoFileResource _source;
-    private CGRepositoryFileResource generatedResource;
-    private CGSymbolicDirectory _symbolicDir;
-    private String relativePath;
-    
-    public ResourceToCopyGenerator(ProjectGenerator projectGenerator,FlexoFileResource source, CGSymbolicDirectory symbolicDir) {
-    	this(projectGenerator, source, symbolicDir, "");
-    }
-    
-    public ResourceToCopyGenerator(ProjectGenerator projectGenerator,FlexoFileResource source, CGSymbolicDirectory symbolicDir, String relativePath) {
-    	super(projectGenerator);
-    	_symbolicDir = symbolicDir;
-    	_source = source;
-    	if (_source instanceof CGRepositoryFileResource)
-    		generatedResource = (CGRepositoryFileResource) _source; 
-    	this.relativePath = relativePath;
-    	generatedCode = new GeneratedCopiedFile(_source.getFile());
-    }
-    
+	private FlexoFileResource _source;
+	private CGRepositoryFileResource generatedResource;
+	private CGSymbolicDirectory _symbolicDir;
+	private String relativePath;
+
+	public ResourceToCopyGenerator(ProjectGenerator projectGenerator, FlexoFileResource source, CGSymbolicDirectory symbolicDir) {
+		this(projectGenerator, source, symbolicDir, "");
+	}
+
+	public ResourceToCopyGenerator(ProjectGenerator projectGenerator, FlexoFileResource source, CGSymbolicDirectory symbolicDir,
+			String relativePath) {
+		super(projectGenerator);
+		_symbolicDir = symbolicDir;
+		_source = source;
+		if (_source instanceof CGRepositoryFileResource)
+			generatedResource = (CGRepositoryFileResource) _source;
+		this.relativePath = relativePath;
+		generatedCode = new GeneratedCopiedFile(_source.getFile());
+	}
+
 	@Override
 	public void generate(boolean forceRegenerate) {
-	   	
-		if (generatedResource!=null && generatedResource.getGenerator()!=null)
+
+		if (generatedResource != null && generatedResource.getGenerator() != null)
 			generatedResource.getGenerator().generate(forceRegenerate);
-    	try {
+		try {
 			if (forceRegenerate || _source.needsUpdate()) {
-			    if (logger.isLoggable(Level.INFO))
-			        logger.info("Called force generate on copied resource");
-			    if (_source instanceof FlexoGeneratedResource)
-			        try {
-			            _source.update();
-			        } catch (SaveResourceException e) {
-			            e.printStackTrace();
-			        } catch (FlexoException e) {
-			            e.printStackTrace();
-			        } catch (FileNotFoundException e) {
+				if (logger.isLoggable(Level.INFO))
+					logger.info("Called force generate on copied resource");
+				if (_source instanceof FlexoGeneratedResource)
+					try {
+						_source.update();
+					} catch (SaveResourceException e) {
+						e.printStackTrace();
+					} catch (FlexoException e) {
+						e.printStackTrace();
+					} catch (FileNotFoundException e) {
 						e.printStackTrace();
 					} catch (ResourceDependancyLoopException e) {
 						e.printStackTrace();
@@ -89,69 +89,68 @@ public class ResourceToCopyGenerator extends FlexoResourceGenerator<FlexoModelOb
 			}
 		} catch (ResourceDependancyLoopException e) {
 			if (logger.isLoggable(Level.SEVERE))
-				logger.log(Level.SEVERE, "Resource dependency loop ",e);
+				logger.log(Level.SEVERE, "Resource dependency loop ", e);
 		}
 	}
-	
-    /**
-     * Overrides getMemoryLastGenerationDate
-     * @see org.openflexo.foundation.cg.generator.IFlexoResourceGenerator#getMemoryLastGenerationDate()
-     */
-    @Override
-	public Date getMemoryLastGenerationDate()
-    {
-    	if (generatedResource!=null && generatedResource.getGenerator()!=null) {
-    		return generatedResource.getGenerator().getMemoryLastGenerationDate();
-    	}
-        return _source.getDiskLastModifiedDate();
-    }
 
-    /**
-     * Overrides getUsedTemplates
-     * @see org.openflexo.foundation.cg.generator.IFlexoResourceGenerator#getUsedTemplates()
-     */
+	/**
+	 * Overrides getMemoryLastGenerationDate
+	 * 
+	 * @see org.openflexo.foundation.cg.generator.IFlexoResourceGenerator#getMemoryLastGenerationDate()
+	 */
 	@Override
-	public Vector<CGTemplate> getUsedTemplates()
-    {
+	public Date getMemoryLastGenerationDate() {
+		if (generatedResource != null && generatedResource.getGenerator() != null) {
+			return generatedResource.getGenerator().getMemoryLastGenerationDate();
+		}
+		return _source.getDiskLastModifiedDate();
+	}
+
+	/**
+	 * Overrides getUsedTemplates
+	 * 
+	 * @see org.openflexo.foundation.cg.generator.IFlexoResourceGenerator#getUsedTemplates()
+	 */
+	@Override
+	public Vector<CGTemplate> getUsedTemplates() {
 		return new Vector<CGTemplate>();
-    }
+	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean hasFormattingException()
-    {
-    	if (generatedResource!=null && generatedResource.getGenerator()!=null) {
+	public boolean hasFormattingException() {
+		if (generatedResource != null && generatedResource.getGenerator() != null) {
 			return generatedResource.getGenerator().hasFormattingException();
-    	}
-        return false;
-    }
+		}
+		return false;
+	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean hasAppendingException() {
-    	if (generatedResource!=null && generatedResource.getGenerator()!=null) {
+		if (generatedResource != null && generatedResource.getGenerator() != null) {
 			return generatedResource.getGenerator().hasAppendingException();
-    	}
-    	return false;
-    }
-    
+		}
+		return false;
+	}
+
 	@Override
 	public boolean isCodeAlreadyGenerated() {
-		if (generatedResource!=null && generatedResource.getGenerator()!=null) {
-    		return generatedResource.getGenerator().isCodeAlreadyGenerated();
-    	}
+		if (generatedResource != null && generatedResource.getGenerator() != null) {
+			return generatedResource.getGenerator().isCodeAlreadyGenerated();
+		}
 		return true;
 	}
-	
+
 	@Override
 	public boolean needsGeneration() {
-		if (generatedResource!=null && generatedResource.getGenerator()!=null) {
-    		return generatedResource.getGenerator().needsGeneration();
-    	}
+		if (generatedResource != null && generatedResource.getGenerator() != null) {
+			return generatedResource.getGenerator().needsGeneration();
+		}
 		return false;
 	}
 
@@ -159,25 +158,25 @@ public class ResourceToCopyGenerator extends FlexoResourceGenerator<FlexoModelOb
 	public boolean needsRegenerationBecauseOfTemplateUpdated() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean needsRegenerationBecauseOfTemplateUpdated(Date diskLastGenerationDate) {
 		return false;
 	}
-	
+
 	@Override
 	public TemplateLocator getTemplateLocator() {
 		return null;
 	}
-	
-	public FlexoFileResource getSource(){
+
+	public FlexoFileResource getSource() {
 		return _source;
 	}
-	
+
 	public String getRelativePath() {
 		return relativePath;
 	}
-	
+
 	@Override
 	public Logger getGeneratorLogger() {
 		return logger;
@@ -186,15 +185,15 @@ public class ResourceToCopyGenerator extends FlexoResourceGenerator<FlexoModelOb
 	public CGSymbolicDirectory getSymbolicDirectory() {
 		return _symbolicDir;
 	}
-	
+
 	@Override
 	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
 		resources.add(GeneratedFileResourceFactory.createNewFlexoCopyOfFlexoResource(repository, this, getSymbolicDirectory(), _source));
 	}
-	
+
 	@Override
 	public String getIdentifier() {
-		return "COPY_OF_"+_source.getFullyQualifiedName();
+		return "COPY_OF_" + _source.getFullyQualifiedName();
 	}
 
 }

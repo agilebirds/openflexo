@@ -21,15 +21,13 @@
 package org.openflexo.xmlcode;
 
 /**
- * Instances of classes implementing this interface are able to be encoded
- * to/from a string
+ * Instances of classes implementing this interface are able to be encoded to/from a string
  * 
  * @author sguerin
  * 
  */
-public interface StringConvertable<T>
-{
+public interface StringConvertable<T> {
 
-    public StringEncoder.Converter<? extends T> getConverter();
+	public StringEncoder.Converter<? extends T> getConverter();
 
 }

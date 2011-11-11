@@ -25,29 +25,25 @@ import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
 
-public class OpenPaletteComponent extends PaletteChooserComponent
-{
+public class OpenPaletteComponent extends PaletteChooserComponent {
 
-    private static final Logger logger = Logger.getLogger(OpenProjectComponent.class.getPackage()
-            .getName());
+	private static final Logger logger = Logger.getLogger(OpenProjectComponent.class.getPackage().getName());
 
-    protected OpenPaletteComponent()
-    {
-        super();
+	protected OpenPaletteComponent() {
+		super();
 
-    }
+	}
 
-    public static File getPaletteDirectory()
-    {
-    	OpenPaletteComponent chooser = new OpenPaletteComponent();
-        File returned = null;
-        int returnVal = chooser.showOpenDialog(null);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            returned = chooser.getSelectedFile();
-        } else {
-            if (logger.isLoggable(Level.INFO))
-                logger.info("No palette specified !");
-        }
-        return returned;
-    }
+	public static File getPaletteDirectory() {
+		OpenPaletteComponent chooser = new OpenPaletteComponent();
+		File returned = null;
+		int returnVal = chooser.showOpenDialog(null);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			returned = chooser.getSelectedFile();
+		} else {
+			if (logger.isLoggable(Level.INFO))
+				logger.info("No palette specified !");
+		}
+		return returned;
+	}
 }

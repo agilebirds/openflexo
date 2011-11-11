@@ -23,28 +23,22 @@ import org.openflexo.antar.ControlGraph;
 import org.openflexo.antar.Nop;
 import org.openflexo.foundation.wkf.node.OperationNode;
 
-
 public class EndOperationNodeDesactivation extends NodeDesactivation<OperationNode> {
 
-	public EndOperationNodeDesactivation(OperationNode node)
-	{
+	public EndOperationNodeDesactivation(OperationNode node) {
 		super(node);
 	}
-	
+
 	@Override
-	public ControlGraph makeSpecificControlGraph(boolean interprocedural) 
-	{
+	public ControlGraph makeSpecificControlGraph(boolean interprocedural) {
 		// Nothing special to do
 		return new Nop();
 	}
 
 	@Override
-	protected ControlGraph makeControlGraphCommonPostlude(boolean interprocedural) throws NotSupportedException, InvalidModelException
-	{
-		return makeSequentialControlGraph(
-				super.makeControlGraphCommonPostlude(interprocedural),
-				NodeDesactivation.desactivateNode(getNode().getAbstractActivityNode(),interprocedural));
+	protected ControlGraph makeControlGraphCommonPostlude(boolean interprocedural) throws NotSupportedException, InvalidModelException {
+		return makeSequentialControlGraph(super.makeControlGraphCommonPostlude(interprocedural),
+				NodeDesactivation.desactivateNode(getNode().getAbstractActivityNode(), interprocedural));
 	}
-
 
 }

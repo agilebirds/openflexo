@@ -22,11 +22,9 @@ package org.openflexo.generator.exception;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.generator.AbstractProjectGenerator;
 
-
-public class UnexpectedExceptionOccuredException extends GenerationException
-{
- 	public UnexpectedExceptionOccuredException(Throwable targetException, AbstractProjectGenerator<? extends GenerationRepository> projectGenerator)
-	{
-		super("Unexpected exception","unexpected_exception","no details",targetException);
+public class UnexpectedExceptionOccuredException extends GenerationException {
+	public UnexpectedExceptionOccuredException(Throwable targetException,
+			AbstractProjectGenerator<? extends GenerationRepository> projectGenerator) {
+		super("Unexpected exception", "unexpected_exception", "no details", targetException);
 	}
 }

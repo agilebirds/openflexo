@@ -28,38 +28,32 @@ import org.openflexo.foundation.dm.action.ImportExternalDatabaseRepository;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.view.FlexoFrame;
 
-
 /**
  * Popup allowing to choose and import an external DB
  * 
  * @author sguerin
  * 
  */
-public class ImportExternalDatabaseRepositoryDialog extends AskNewRepositoryDialog
-{
+public class ImportExternalDatabaseRepositoryDialog extends AskNewRepositoryDialog {
 
-    public ImportExternalDatabaseRepositoryDialog(ImportExternalDatabaseRepository flexoAction, FlexoFrame owner)
-    {
-        super(flexoAction,owner);
-    }
-    
-    public static int displayDialog(ImportExternalDatabaseRepository flexoAction, FlexoProject project,
-    		FlexoFrame owner)
-    {
-        flexoAction.setProject(project);
-        ImportExternalDatabaseRepositoryDialog dialog = new ImportExternalDatabaseRepositoryDialog(flexoAction, owner);
-        return dialog.getStatus();
-    }
+	public ImportExternalDatabaseRepositoryDialog(ImportExternalDatabaseRepository flexoAction, FlexoFrame owner) {
+		super(flexoAction, owner);
+	}
 
-    @Override
-	protected void init()
-    {
-        choicePanel = new JPanel();
-        choicePanel.setLayout(new GridLayout(1, 2));
-        choicePanel.add(externalDatabaseRepositoryButton);
-        choicePanel.add(new JPanel()/* externalDatabaseRepositorySelector */);
-        externalDatabaseRepositoryButton.setSelected(true);
-        selectRepositoryType(CreateDMRepository.EXTERNAL_DATABASE_REPOSITORY);
-   }
+	public static int displayDialog(ImportExternalDatabaseRepository flexoAction, FlexoProject project, FlexoFrame owner) {
+		flexoAction.setProject(project);
+		ImportExternalDatabaseRepositoryDialog dialog = new ImportExternalDatabaseRepositoryDialog(flexoAction, owner);
+		return dialog.getStatus();
+	}
+
+	@Override
+	protected void init() {
+		choicePanel = new JPanel();
+		choicePanel.setLayout(new GridLayout(1, 2));
+		choicePanel.add(externalDatabaseRepositoryButton);
+		choicePanel.add(new JPanel()/* externalDatabaseRepositorySelector */);
+		externalDatabaseRepositoryButton.setSelected(true);
+		selectRepositoryType(CreateDMRepository.EXTERNAL_DATABASE_REPOSITORY);
+	}
 
 }

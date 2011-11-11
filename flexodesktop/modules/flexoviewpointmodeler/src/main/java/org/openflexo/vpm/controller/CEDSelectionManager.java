@@ -26,52 +26,46 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.vpm.view.menu.CEDMenuBar;
 
-
 /**
  * Selection manager dedicated to this module
  */
-public class CEDSelectionManager extends SelectionManager
-{
+public class CEDSelectionManager extends SelectionManager {
 
-    protected static final Logger logger = Logger.getLogger(CEDSelectionManager.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(CEDSelectionManager.class.getPackage().getName());
 
-    public CEDSelectionManager(CEDController controller)
-    {
-        super(controller);
-        CEDMenuBar menuBar = controller.getEditorMenuBar();
-        _clipboard = new CEDClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem, menuBar.getEditMenu(controller).cutItem);
-        _contextualMenuManager = new CEDContextualMenuManager(this,controller.getEditor(),controller);
-   }
+	public CEDSelectionManager(CEDController controller) {
+		super(controller);
+		CEDMenuBar menuBar = controller.getEditorMenuBar();
+		_clipboard = new CEDClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem,
+				menuBar.getEditMenu(controller).cutItem);
+		_contextualMenuManager = new CEDContextualMenuManager(this, controller.getEditor(), controller);
+	}
 
-    public CEDController getCEDController()
-    {
-        return (CEDController) getController();
-    }
+	public CEDController getCEDController() {
+		return (CEDController) getController();
+	}
 
-    @Override
-	public boolean performSelectionSelectAll()
-    {
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("'Select All' not implemented yet in this module");
-        return false;
-    }
+	@Override
+	public boolean performSelectionSelectAll() {
+		if (logger.isLoggable(Level.WARNING))
+			logger.warning("'Select All' not implemented yet in this module");
+		return false;
+	}
 
-    /**
-     * Returns the root object that can be currently edited
-     * 
-     * @return FlexoModelObject
-     */
-    @Override
-	public FlexoModelObject getRootFocusedObject()
-    {
-        return getCEDController().getCurrentDisplayedObjectAsModuleView();
-    }
+	/**
+	 * Returns the root object that can be currently edited
+	 * 
+	 * @return FlexoModelObject
+	 */
+	@Override
+	public FlexoModelObject getRootFocusedObject() {
+		return getCEDController().getCurrentDisplayedObjectAsModuleView();
+	}
 
-    @Override
-	public FlexoModelObject getPasteContext()
-    {
-        // TODO please implement this
-        return null;
-    }
+	@Override
+	public FlexoModelObject getPasteContext() {
+		// TODO please implement this
+		return null;
+	}
 
 }

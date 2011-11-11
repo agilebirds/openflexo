@@ -55,20 +55,17 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Controller dedicated to inspector: there is only one instance of this
- * controller
- *
+ * Controller dedicated to inspector: there is only one instance of this controller
+ * 
  * @author bmangez,sguerin
  */
-public class InspectorController implements Observer, AbstractController
-{
+public class InspectorController implements Observer, AbstractController {
 
 	private final Logger logger = Logger.getLogger(InspectorController.class.getPackage().getName());
 
-	private Hashtable<String,InspectorModel> _inspectors;
+	private Hashtable<String, InspectorModel> _inspectors;
 
 	private Vector<InspectingWidget> _inspectingWidgets;
-
 
 	public final LabelFontMetrics labelFontMetrics = new LabelFontMetrics(DenaliWidget.DEFAULT_LABEL_FONT);
 
@@ -93,68 +90,59 @@ public class InspectorController implements Observer, AbstractController
 		this(inspectorDelegate, helpDelegate, null);
 	}
 
-	protected InspectorController(InspectorDelegate inspectorDelegate, HelpDelegate helpDelegate, InspectorWidgetConfiguration inspectorConfiguration)
-	{
+	protected InspectorController(InspectorDelegate inspectorDelegate, HelpDelegate helpDelegate,
+			InspectorWidgetConfiguration inspectorConfiguration) {
 		super();
 		this.delegate = inspectorDelegate;
 		this.helpDelegate = helpDelegate;
 		this.inspectorConfiguration = inspectorConfiguration;
-		_inspectors = new Hashtable<String,InspectorModel>();
+		_inspectors = new Hashtable<String, InspectorModel>();
 		_inspectingWidgets = new Vector<InspectingWidget>();
 
-		//_inspectorWindows = new Hashtable<JFrame,InspectorWindow>();
+		// _inspectorWindows = new Hashtable<JFrame,InspectorWindow>();
 
 		_exceptionHandlers = new Vector<InspectorExceptionHandler>();
 	}
 
-	public InspectorController instance()
-	{
+	public InspectorController instance() {
 		return _instance;
 	}
 
-	public void registerAsInstance(InspectorController instance)
-	{
+	public void registerAsInstance(InspectorController instance) {
 		_instance = instance;
 	}
 
-	public boolean hasInstance()
-	{
+	public boolean hasInstance() {
 		return _instance != null;
 	}
 
-	public InspectorWindow createInspectorWindow(JFrame frame)
-	{
-		InspectorWindow inspectorWindow = new InspectorWindow(frame,this);
+	public InspectorWindow createInspectorWindow(JFrame frame) {
+		InspectorWindow inspectorWindow = new InspectorWindow(frame, this);
 		_inspectingWidgets.add(inspectorWindow);
 		return inspectorWindow;
 	}
 
-	public InspectorTabbedPanel createInspectorTabbedPanel()
-	{
+	public InspectorTabbedPanel createInspectorTabbedPanel() {
 		InspectorTabbedPanel inspectorTabbedPanel = new InspectorTabbedPanel(this);
 		_inspectingWidgets.add(inspectorTabbedPanel);
 		return inspectorTabbedPanel;
 	}
 
-	public InspectorSinglePanel createInspectorSinglePanel(TabModel tabModel)
-	{
-		InspectorSinglePanel inspectorSinglePanel = new InspectorSinglePanel(this,tabModel);
+	public InspectorSinglePanel createInspectorSinglePanel(TabModel tabModel) {
+		InspectorSinglePanel inspectorSinglePanel = new InspectorSinglePanel(this, tabModel);
 		_inspectingWidgets.add(inspectorSinglePanel);
 		return inspectorSinglePanel;
 	}
 
-	public InspectorWindow createInspectorWindow(JFrame frame, JMenuBar menuBar)
-	{
+	public InspectorWindow createInspectorWindow(JFrame frame, JMenuBar menuBar) {
 		return createInspectorWindow(frame);
 	}
 
-	public XMLMapping getInspectorMapping()
-	{
+	public XMLMapping getInspectorMapping() {
 		return InspectorMapping.getInstance();
 	}
 
-	public InspectorModel importInspectorFile(File inspectorFile) throws FileNotFoundException
-	{
+	public InspectorModel importInspectorFile(File inspectorFile) throws FileNotFoundException {
 		InputStream inputStream = null;
 		try {
 
@@ -165,7 +153,7 @@ public class InspectorController implements Observer, AbstractController
 			throw e;
 		} catch (Exception e) {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Exception raised during inspector import: " + e+"\nFile path is: "+inspectorFile.getAbsolutePath());
+				logger.warning("Exception raised during inspector import: " + e + "\nFile path is: " + inspectorFile.getAbsolutePath());
 			}
 			e.printStackTrace();
 		} finally {
@@ -184,16 +172,16 @@ public class InspectorController implements Observer, AbstractController
 		return null;
 	}
 
-	public InspectorModel importInspector(String name, InputStream stream)
-	{
+	public InspectorModel importInspector(String name, InputStream stream) {
 		try {
 			if (getInspectorMapping() != null) {
-				InspectorModel inspectorModel = (InspectorModel) XMLDecoder.decodeObjectWithMapping(stream, getInspectorMapping(),
-						this);
+				InspectorModel inspectorModel = (InspectorModel) XMLDecoder.decodeObjectWithMapping(stream, getInspectorMapping(), this);
 				importInspector(name, inspectorModel);
 				if (logger.isLoggable(Level.FINE)) {
 					if (logger.isLoggable(Level.FINE)) {
-						logger.fine("Getting this " + XMLCoder.encodeObjectWithMapping(inspectorModel, getInspectorMapping(),StringEncoder.getDefaultInstance()));
+						logger.fine("Getting this "
+								+ XMLCoder.encodeObjectWithMapping(inspectorModel, getInspectorMapping(),
+										StringEncoder.getDefaultInstance()));
 					}
 				}
 				return inspectorModel;
@@ -208,14 +196,12 @@ public class InspectorController implements Observer, AbstractController
 		return null;
 	}
 
-	public boolean importInspector(String name, InspectorModel inspector)
-	{
+	public boolean importInspector(String name, InspectorModel inspector) {
 		_inspectors.put(name, inspector);
 		return true;
 	}
 
-	public boolean updateSuperInspectors()
-	{
+	public boolean updateSuperInspectors() {
 		Iterator it = _inspectors.values().iterator();
 		while (it.hasNext()) {
 			InspectorModel inspector = (InspectorModel) it.next();
@@ -233,8 +219,7 @@ public class InspectorController implements Observer, AbstractController
 		return true;
 	}
 
-	public Enumeration getInspectors()
-	{
+	public Enumeration getInspectors() {
 		return _inspectors.elements();
 	}
 
@@ -243,12 +228,11 @@ public class InspectorController implements Observer, AbstractController
 	// ==========================================================================
 
 	@Override
-	public void update(Observable observable, Object selection)
-	{
+	public void update(Observable observable, Object selection) {
 		if (selection instanceof InspectorSelection) {
-			InspectorSelection inspectorSelection = (InspectorSelection)selection;
+			InspectorSelection inspectorSelection = (InspectorSelection) selection;
 			if (inspectorSelection instanceof UniqueSelection) {
-				currentInspectionContext = ((UniqueSelection)inspectorSelection).getInspectionContext();
+				currentInspectionContext = ((UniqueSelection) inspectorSelection).getInspectionContext();
 			}
 			for (InspectingWidget i : _inspectingWidgets) {
 				i.newSelection(inspectorSelection);
@@ -256,10 +240,9 @@ public class InspectorController implements Observer, AbstractController
 		}
 	}
 
-	private Hashtable<String,Object> currentInspectionContext;
+	private Hashtable<String, Object> currentInspectionContext;
 
-	protected Hashtable<String,Object> getCurrentInspectionContext()
-	{
+	protected Hashtable<String, Object> getCurrentInspectionContext() {
 		return currentInspectionContext;
 	}
 
@@ -268,18 +251,15 @@ public class InspectorController implements Observer, AbstractController
 	// ==============================
 	// ==========================================================================
 
-	public Element elementFromFilePath(String xmlFilePath) throws Exception
-	{
+	public Element elementFromFilePath(String xmlFilePath) throws Exception {
 		return parseXMLFile(xmlFilePath).getDocumentElement();
 	}
 
-	public Element elementFromFile(File xmlFile) throws Exception
-	{
+	public Element elementFromFile(File xmlFile) throws Exception {
 		return parseXMLFile(xmlFile).getDocumentElement();
 	}
 
-	public Document parseXMLFile(String xmlFilePath) throws Exception
-	{
+	public Document parseXMLFile(String xmlFilePath) throws Exception {
 		File f = new File(xmlFilePath);
 		FileInputStream fis = new FileInputStream(f);
 		org.xml.sax.InputSource is = new org.xml.sax.InputSource(fis);
@@ -289,8 +269,7 @@ public class InspectorController implements Observer, AbstractController
 		return d;
 	}
 
-	public Document parseXMLFile(File f) throws Exception
-	{
+	public Document parseXMLFile(File f) throws Exception {
 		FileInputStream fis = new FileInputStream(f);
 		org.xml.sax.InputSource is = new org.xml.sax.InputSource(fis);
 		Document d = parseXMLFile(is);
@@ -299,8 +278,7 @@ public class InspectorController implements Observer, AbstractController
 		return d;
 	}
 
-	private Document parseXMLFile(org.xml.sax.InputSource is) throws Exception
-	{
+	private Document parseXMLFile(org.xml.sax.InputSource is) throws Exception {
 		org.apache.xerces.parsers.DOMParser parser = new org.apache.xerces.parsers.DOMParser();
 		parser.parse(is);
 		Document d = parser.getDocument();
@@ -309,8 +287,7 @@ public class InspectorController implements Observer, AbstractController
 		return d;
 	}
 
-	public Element elementFromString(String s) throws Exception
-	{
+	public Element elementFromString(String s) throws Exception {
 		ByteArrayInputStream bis = new ByteArrayInputStream(s.getBytes());
 		org.xml.sax.InputSource is = new org.xml.sax.InputSource(bis);
 		Element e = parseXMLFile(is).getDocumentElement();
@@ -319,8 +296,7 @@ public class InspectorController implements Observer, AbstractController
 		return e;
 	}
 
-	public Hashtable fillParameters(Hashtable<String, String> hash, NodeList list)
-	{
+	public Hashtable fillParameters(Hashtable<String, String> hash, NodeList list) {
 		for (int i = 0; i < list.getLength(); i++) {
 			if (list.item(i).getNodeType() == Node.ELEMENT_NODE) {
 				if (list.item(i).getLocalName().equals("param")) {
@@ -343,8 +319,7 @@ public class InspectorController implements Observer, AbstractController
 	// ===========================
 	// ==========================================================================
 
-	public InspectorModel getInspectorModel(String inspectorName)
-	{
+	public InspectorModel getInspectorModel(String inspectorName) {
 		if (inspectorName == null) {
 			return null;
 		}
@@ -363,39 +338,35 @@ public class InspectorController implements Observer, AbstractController
 		return answer;
 	}
 
-	public InspectorNotFoundHandler getInspectorNotFoundHandler()
-	{
+	public InspectorNotFoundHandler getInspectorNotFoundHandler() {
 		return _inspectorNotFoundHandler;
 	}
 
-	public void setInspectorNotFoundHandler(InspectorNotFoundHandler notFoundHandler)
-	{
+	public void setInspectorNotFoundHandler(InspectorNotFoundHandler notFoundHandler) {
 		_inspectorNotFoundHandler = notFoundHandler;
 	}
 
 	/**
 	 * Adds an InspectorExceptionHandler
-	 *
+	 * 
 	 * @param exceptionHandler
 	 */
-	public void addInspectorExceptionHandler(InspectorExceptionHandler exceptionHandler)
-	{
+	public void addInspectorExceptionHandler(InspectorExceptionHandler exceptionHandler) {
 		_exceptionHandlers.add(exceptionHandler);
 	}
 
 	/**
 	 * Remove an InspectorExceptionHandler
-	 *
+	 * 
 	 * @param exceptionHandler
 	 */
-	public void removeInspectorExceptionHandler(InspectorExceptionHandler exceptionHandler)
-	{
+	public void removeInspectorExceptionHandler(InspectorExceptionHandler exceptionHandler) {
 		_exceptionHandlers.remove(exceptionHandler);
 	}
 
 	/**
 	 * Tries to handle an exception raised during object inspection
-	 *
+	 * 
 	 * @param inspectable
 	 *            the object on which exception was raised
 	 * @param propertyName
@@ -407,8 +378,7 @@ public class InspectorController implements Observer, AbstractController
 	 * @return a boolean indicating exception was correctely handled, or not
 	 */
 	@Override
-	public boolean handleException(InspectableObject inspectable, String propertyName, Object value, Throwable exception)
-	{
+	public boolean handleException(InspectableObject inspectable, String propertyName, Object value, Throwable exception) {
 		for (Enumeration en = _exceptionHandlers.elements(); en.hasMoreElements();) {
 			InspectorExceptionHandler next = (InspectorExceptionHandler) en.nextElement();
 			if (next.handleException(inspectable, propertyName, value, exception)) {
@@ -423,36 +393,30 @@ public class InspectorController implements Observer, AbstractController
 	}
 
 	@Override
-	public InspectorDelegate getDelegate()
-	{
+	public InspectorDelegate getDelegate() {
 		return delegate;
 	}
 
 	@Override
-	public HelpDelegate getHelpDelegate()
-	{
+	public HelpDelegate getHelpDelegate() {
 		return helpDelegate;
 	}
 
 	@Override
-	public void notifiedInspectedObjectChange(InspectableObject newInspectedObject)
-	{
+	public void notifiedInspectedObjectChange(InspectableObject newInspectedObject) {
 		// Dont care
 	}
 
 	// At this level, we only use inspector name as supplied in InspectableObject interface
 	// But we may override this method to return a different value given a other context
-	public String getInspectorName(InspectableObject object, Hashtable<String, Object> inspectionContext)
-	{
+	public String getInspectorName(InspectableObject object, Hashtable<String, Object> inspectionContext) {
 		return object.getInspectorName();
 	}
 
-	public String getWindowTitle(InspectorModelView currentTabPanel)
-	{
+	public String getWindowTitle(InspectorModelView currentTabPanel) {
 
 		if (currentTabPanel != null) {
-			if (currentTabPanel.getInspectedObject() != null
-					&& currentTabPanel.getInspectedObject().getInspectorTitle() != null) {
+			if (currentTabPanel.getInspectedObject() != null && currentTabPanel.getInspectedObject().getInspectorTitle() != null) {
 				return currentTabPanel.getInspectedObject().getInspectorTitle();
 			}
 			return currentTabPanel.getName();
@@ -461,28 +425,24 @@ public class InspectorController implements Observer, AbstractController
 		}
 	}
 
-	public String getNothingToInspectLabel()
-	{
+	public String getNothingToInspectLabel() {
 		return FlexoLocalization.localizedForKey("nothing_to_inspect");
 	}
 
-	public String getMultipleSelectionLabel()
-	{
+	public String getMultipleSelectionLabel() {
 		return FlexoLocalization.localizedForKey("multiple_selection");
 	}
 
-	public String getNonApplicableLabel()
-	{
+	public String getNonApplicableLabel() {
 		return FlexoLocalization.localizedForKey("non_applicable");
 	}
 
 	// Override when required
 	@Override
-	public boolean isTabPanelVisible(TabModel tab, InspectableObject inspectable)
-	{
+	public boolean isTabPanelVisible(TabModel tab, InspectableObject inspectable) {
 		if (tab.visibilityContext != null && getCurrentInspectionContext() != null) {
-			//System.out.println("isTabPanelVisible() for tab "+tab.name+" visibilityContext="+tab.visibilityContext+" with "+getCurrentInspectionContext());
-			StringTokenizer st = new StringTokenizer(tab.visibilityContext,",");
+			// System.out.println("isTabPanelVisible() for tab "+tab.name+" visibilityContext="+tab.visibilityContext+" with "+getCurrentInspectionContext());
+			StringTokenizer st = new StringTokenizer(tab.visibilityContext, ",");
 			while (st.hasMoreTokens()) {
 				if (getCurrentInspectionContext().get(st.nextToken()) != null) {
 					return true;
@@ -494,8 +454,7 @@ public class InspectorController implements Observer, AbstractController
 	}
 
 	@Override
-	public final InspectorWidgetConfiguration getConfiguration()
-	{
+	public final InspectorWidgetConfiguration getConfiguration() {
 		/*if(inspectorConfiguration == null)
 			inspectorConfiguration = new InspectorWidgetConfiguration() {
 

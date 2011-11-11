@@ -27,12 +27,10 @@ import org.openflexo.foundation.wkf.node.FlexoPreCondition;
  * @author sguerin
  * 
  */
-public class PreInserted extends WKFDataModification
-{
+public class PreInserted extends WKFDataModification {
 
-    public PreInserted(FlexoPreCondition insertedPreCondition)
-    {
-        super(null, insertedPreCondition);
-    }
+	public PreInserted(FlexoPreCondition insertedPreCondition) {
+		super(null, insertedPreCondition);
+	}
 
 }

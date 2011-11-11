@@ -30,49 +30,44 @@ public class OnlyDataRestrictionStatement extends DataRestrictionStatement {
 
 	private OntologyDataProperty property;
 	private OntologicDataType dataRange;
-	
-	public OnlyDataRestrictionStatement(OntologyObject subject, Statement s, AllValuesFromRestriction r)
-	{
-		super(subject,s,r);
-		property = (OntologyDataProperty)getOntologyLibrary().getProperty(r.getOnProperty().getURI());
+
+	public OnlyDataRestrictionStatement(OntologyObject subject, Statement s, AllValuesFromRestriction r) {
+		super(subject, s, r);
+		property = (OntologyDataProperty) getOntologyLibrary().getProperty(r.getOnProperty().getURI());
 		dataRange = OntologicDataType.fromURI(r.getAllValuesFrom().getURI());
-	
+
 	}
 
 	@Override
-	public OntologicDataType getDataRange()
-	{
+	public OntologicDataType getDataRange() {
 		return dataRange;
 	}
-	
+
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "only_restriction_statement";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return "OnlyRestrictionStatement: "+getStatement();
+	public String getFullyQualifiedName() {
+		return "OnlyRestrictionStatement: " + getStatement();
 	}
 
-
 	@Override
-	public OntologyDataProperty getProperty() 
-	{
+	public OntologyDataProperty getProperty() {
 		return property;
 	}
 
 	@Override
-	public String toString() 
-	{
-		return getSubject().getName()+" "+(property==null?"<NOT FOUND:"+restriction.getOnProperty().getURI()+">":property.getName())+" only "+getDataRange();
+	public String toString() {
+		return getSubject().getName() + " "
+				+ (property == null ? "<NOT FOUND:" + restriction.getOnProperty().getURI() + ">" : property.getName()) + " only "
+				+ getDataRange();
 	}
 
 	@Override
 	public String getName() {
-		return property.getName()+" only";
+		return property.getName() + " only";
 	}
 
 	@Override

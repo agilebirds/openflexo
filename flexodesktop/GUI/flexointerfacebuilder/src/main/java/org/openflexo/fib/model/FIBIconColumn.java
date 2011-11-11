@@ -26,14 +26,12 @@ import javax.swing.Icon;
 public class FIBIconColumn extends FIBTableColumn {
 
 	@Override
-	public Type getDefaultDataClass()
-	{
+	public Type getDefaultDataClass() {
 		return Icon.class;
 	}
 
 	@Override
-	public ColumnType getColumnType()
-	{
+	public ColumnType getColumnType() {
 		return ColumnType.Icon;
 	}
 

@@ -32,8 +32,7 @@ import javax.swing.JRadioButton;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBRadioButtonList;
 
-public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioButtonList, JPanel, Object>
-{
+public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioButtonList, JPanel, Object> {
 
 	static final Logger logger = Logger.getLogger(FIBRadioButtonListWidget.class.getPackage().getName());
 
@@ -45,9 +44,8 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 
 	private Object selectedValue;
 
-	public FIBRadioButtonListWidget(FIBRadioButtonList model, FIBController controller)
-	{
-		super(model,controller);
+	public FIBRadioButtonListWidget(FIBRadioButtonList model, FIBController controller) {
+		super(model, controller);
 		buttonGroup = new ButtonGroup();
 		panel = new JPanel(new GridLayout(0, model.getColumns()));
 		rebuildRadioButtons();
@@ -57,8 +55,7 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 		}
 	}
 
-	protected void rebuildRadioButtons()
-	{
+	protected void rebuildRadioButtons() {
 		panel.removeAll();
 		buttonGroup = new ButtonGroup();
 		radioButtonArray = new JRadioButton[getListModel().getSize()];
@@ -74,18 +71,17 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 	}
 
 	@Override
-	public synchronized boolean updateWidgetFromModel()
-	{
+	public synchronized boolean updateWidgetFromModel() {
 		Object value = getValue();
 		if (notEquals(value, selectedValue) || listModelRequireChange() || listModel == null) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("updateWidgetFromModel()");
 			}
-			
+
 			widgetUpdating = true;
 			selectedValue = value;
 			rebuildRadioButtons();
-			
+
 			if (getValue() == null && getWidget().getAutoSelectFirstRow() && getListModel().getSize() > 0) {
 				radioButtonArray[0].setSelected(true);
 			}
@@ -125,8 +121,7 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 	 * Update the model given the actual state of the widget
 	 */
 	@Override
-	public synchronized boolean updateModelFromWidget()
-	{
+	public synchronized boolean updateModelFromWidget() {
 		if (notEquals(getValue(), selectedValue)) {
 			modelUpdating = true;
 			if (logger.isLoggable(Level.FINE)) {
@@ -142,25 +137,21 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 	}
 
 	@Override
-	public JPanel getJComponent()
-	{
+	public JPanel getJComponent() {
 		return panel;
 	}
 
 	@Override
-	public JPanel getDynamicJComponent()
-	{
+	public JPanel getDynamicJComponent() {
 		return panel;
 	}
 
 	@Override
-	public void updateFont()
-	{
+	public void updateFont() {
 		super.updateFont();
 		for (JRadioButton rb : radioButtonArray) {
 			rb.setFont(getFont());
 		}
 	}
-
 
 }

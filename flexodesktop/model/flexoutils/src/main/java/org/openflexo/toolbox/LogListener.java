@@ -21,15 +21,14 @@ package org.openflexo.toolbox;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public interface LogListener
-{
+public interface LogListener {
 
-    public void log(String line);
-    
-    public void warn(String line);
-    
-    public void err(String line);
-    
+	public void log(String line);
+
+	public void warn(String line);
+
+	public void err(String line);
+
 }

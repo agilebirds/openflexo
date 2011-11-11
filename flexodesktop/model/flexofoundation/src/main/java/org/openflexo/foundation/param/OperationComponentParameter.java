@@ -22,19 +22,16 @@ package org.openflexo.foundation.param;
 import org.openflexo.foundation.ie.IEOperationComponent;
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
 public class OperationComponentParameter extends ParameterDefinition<IEOperationComponent> {
 
-    public OperationComponentParameter(String name, String label, IEOperationComponent defaultValue)
-    {
-        super(name,label,defaultValue);
-        addParameter("className","org.openflexo.components.widget.OperationComponentInspectorWidget");
-    }
-    
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.CUSTOM;
-    }
+	public OperationComponentParameter(String name, String label, IEOperationComponent defaultValue) {
+		super(name, label, defaultValue);
+		addParameter("className", "org.openflexo.components.widget.OperationComponentInspectorWidget");
+	}
+
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.CUSTOM;
+	}
 
 }

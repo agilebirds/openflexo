@@ -32,7 +32,6 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.wkf.controller.WKFController;
 
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.ExecutionContext;
@@ -80,20 +79,17 @@ import org.openflexo.foundation.wkf.node.WSCallSubProcessNode;
 import org.openflexo.foundation.wkf.ws.AbstractInPort;
 import org.openflexo.foundation.wkf.ws.FlexoPortMap;
 
-
 public class CreateEdgeInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateEdgeInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(CreateEdge.actionType,actionInitializer);
+	CreateEdgeInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(CreateEdge.actionType, actionInitializer);
 	}
 
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer()
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
@@ -101,8 +97,7 @@ public class CreateEdgeInitializer extends ActionInitializer {
 		return (WKFController) super.getController();
 	}
 
-	private class CreateEdgeExecutionContext extends ExecutionContext
-	{
+	private class CreateEdgeExecutionContext extends ExecutionContext {
 		protected CreatePreCondition createPreCondition;
 		protected CreatePetriGraph createPetriGraph;
 		protected CreateExecutionPetriGraph createExecutionPetriGraph;
@@ -114,57 +109,54 @@ public class CreateEdgeInitializer extends ActionInitializer {
 
 	boolean nameWasEdited = false;
 
-
 	@Override
-	protected FlexoActionInitializer<CreateEdge> getDefaultInitializer()
-	{
+	protected FlexoActionInitializer<CreateEdge> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateEdge>() {
 			@Override
-			public boolean run(ActionEvent e, CreateEdge action)
-			{
+			public boolean run(ActionEvent e, CreateEdge action) {
 				CreateEdgeExecutionContext executionContext = new CreateEdgeExecutionContext(action);
 				action.setExecutionContext(executionContext);
 
 				boolean skipStartNodeCheck = false;
 				boolean skipEndNodeCheck = false;
 				if (action.getEndNode() instanceof PetriGraphNode) {
-					if(action.getStartingNode() instanceof AbstractActivityNode &&
-							((AbstractActivityNode)action.getStartingNode()).isEndNode()){
+					if (action.getStartingNode() instanceof AbstractActivityNode
+							&& ((AbstractActivityNode) action.getStartingNode()).isEndNode()) {
 						FlexoController.notify(FlexoLocalization.localizedForKey("invalid_edge_definition"));
 						return false;
 					}
 				}
 
-				if(action.getEndNode() instanceof SubProcessNode
-						&& ((SubProcessNode)action.getEndNode()).getSubProcess()!=null
-						&& ((SubProcessNode)action.getEndNode()).getSubProcess().isImported()) {
+				if (action.getEndNode() instanceof SubProcessNode && ((SubProcessNode) action.getEndNode()).getSubProcess() != null
+						&& ((SubProcessNode) action.getEndNode()).getSubProcess().isImported()) {
 					skipEndNodeCheck = true;
-				} else if (action.getEndNode() instanceof SingleInstanceSubProcessNode
-						|| action.getEndNode() instanceof LoopSubProcessNode
+				} else if (action.getEndNode() instanceof SingleInstanceSubProcessNode || action.getEndNode() instanceof LoopSubProcessNode
 						|| action.getEndNode() instanceof WSCallSubProcessNode) {
-					final SubProcessNode node = (SubProcessNode)action.getEndNode();
-					if (node.getSubProcess()==null || node.getPortMapRegistery()==null) {
+					final SubProcessNode node = (SubProcessNode) action.getEndNode();
+					if (node.getSubProcess() == null || node.getPortMapRegistery() == null) {
 						FlexoController.notify(FlexoLocalization.localizedForKey("no_process_defined_for_end_sub_process_node"));
 						return false;
 					}
 					if (node.getPortMapRegistery().getAllNewPortmaps().size() == 0) {
 						FlexoController.notify(FlexoLocalization.localizedForKey("no_new_portmap_defined"));
 						return false;
-					}
-					else if (node.getPortMapRegistery().getAllNewPortmaps().size() == 1) {
+					} else if (node.getPortMapRegistery().getAllNewPortmaps().size() == 1) {
 						action.setEndNode(node.getPortMapRegistery().getAllNewPortmaps().firstElement());
-					}
-					else if (node.getPortMapRegistery().getAllNewPortmaps().size() > 1) {
-						NodeParameter ports = new NodeParameter("port","NEW PortMap",node.getPortMapRegistery().getAllNewPortmaps().firstElement());
+					} else if (node.getPortMapRegistery().getAllNewPortmaps().size() > 1) {
+						NodeParameter ports = new NodeParameter("port", "NEW PortMap", node.getPortMapRegistery().getAllNewPortmaps()
+								.firstElement());
 						ports.setNodeSelectingConditional(new NodeParameter.NodeSelectingConditional() {
 							@Override
 							public boolean isSelectable(AbstractNode aNode) {
-								return aNode instanceof FlexoPortMap && ((FlexoPortMap)aNode).isNewPort() && ((FlexoPortMap)aNode).getPortMapRegistery()==node.getPortMapRegistery();
+								return aNode instanceof FlexoPortMap && ((FlexoPortMap) aNode).isNewPort()
+										&& ((FlexoPortMap) aNode).getPortMapRegistery() == node.getPortMapRegistery();
 							}
 						});
-						AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), FlexoLocalization.localizedForKey("select_a_new_portmap"), FlexoLocalization.localizedForKey("select_a_new_portmap"), ports);
+						AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(),
+								FlexoLocalization.localizedForKey("select_a_new_portmap"),
+								FlexoLocalization.localizedForKey("select_a_new_portmap"), ports);
 						if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-							if (ports.getValue()!=null)
+							if (ports.getValue() != null)
 								action.setEndNode(ports.getValue());
 							else
 								return false;
@@ -174,36 +166,39 @@ public class CreateEdgeInitializer extends ActionInitializer {
 					}
 				}
 
-				if(action.getStartingNode() instanceof SubProcessNode
-						&& ((SubProcessNode)action.getStartingNode()).getSubProcess()!=null
-						&& ((SubProcessNode)action.getStartingNode()).getSubProcess().isImported() && !((SubProcessNode)action.getStartingNode()).mightHaveOperationPetriGraph()) {
+				if (action.getStartingNode() instanceof SubProcessNode
+						&& ((SubProcessNode) action.getStartingNode()).getSubProcess() != null
+						&& ((SubProcessNode) action.getStartingNode()).getSubProcess().isImported()
+						&& !((SubProcessNode) action.getStartingNode()).mightHaveOperationPetriGraph()) {
 					skipStartNodeCheck = true;
 				} else if (action.getStartingNode() instanceof SingleInstanceSubProcessNode
 						|| action.getStartingNode() instanceof LoopSubProcessNode
 						|| action.getStartingNode() instanceof WSCallSubProcessNode) {
-					final SubProcessNode node = (SubProcessNode)action.getStartingNode();
-					if (node.getSubProcess()==null || node.getPortMapRegistery()==null) {
+					final SubProcessNode node = (SubProcessNode) action.getStartingNode();
+					if (node.getSubProcess() == null || node.getPortMapRegistery() == null) {
 						FlexoController.notify(FlexoLocalization.localizedForKey("no_process_defined_for_start_sub_process_node"));
 						return false;
 					}
 					if (node.getPortMapRegistery().getAllOutPortmaps().size() == 0) {
 						FlexoController.notify(FlexoLocalization.localizedForKey("no_out_portmap_defined"));
 						return false;
-					}
-					else if (node.getPortMapRegistery().getAllOutPortmaps().size() == 1) {
+					} else if (node.getPortMapRegistery().getAllOutPortmaps().size() == 1) {
 						action.setStartingNode(node.getPortMapRegistery().getAllOutPortmaps().firstElement());
-					}
-					else if (node.getPortMapRegistery().getAllOutPortmaps().size() > 1) {
-						NodeParameter ports = new NodeParameter("port","OUT PortMap",node.getPortMapRegistery().getAllOutPortmaps().firstElement());
+					} else if (node.getPortMapRegistery().getAllOutPortmaps().size() > 1) {
+						NodeParameter ports = new NodeParameter("port", "OUT PortMap", node.getPortMapRegistery().getAllOutPortmaps()
+								.firstElement());
 						ports.setNodeSelectingConditional(new NodeParameter.NodeSelectingConditional() {
 							@Override
 							public boolean isSelectable(AbstractNode aNode) {
-								return aNode instanceof FlexoPortMap && ((FlexoPortMap)aNode).isOutputPort() && ((FlexoPortMap)aNode).getPortMapRegistery()==node.getPortMapRegistery();
+								return aNode instanceof FlexoPortMap && ((FlexoPortMap) aNode).isOutputPort()
+										&& ((FlexoPortMap) aNode).getPortMapRegistery() == node.getPortMapRegistery();
 							}
 						});
-						AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), FlexoLocalization.localizedForKey("select_an_out_portmap"), FlexoLocalization.localizedForKey("select_an_out_portmap"), ports);
+						AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(),
+								FlexoLocalization.localizedForKey("select_an_out_portmap"),
+								FlexoLocalization.localizedForKey("select_an_out_portmap"), ports);
 						if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-							if (ports.getValue()!=null)
+							if (ports.getValue() != null)
 								action.setStartingNode(ports.getValue());
 							else
 								return false;
@@ -214,63 +209,52 @@ public class CreateEdgeInitializer extends ActionInitializer {
 				}
 
 				// BEGIN Node to BEGIN Node not allowed
-				if ((action.getEndNode() instanceof EventNode)
-						&& ((EventNode)action.getEndNode()).isStart()
-						&& (action.getStartingNode() instanceof EventNode)
-						&& ((EventNode)action.getStartingNode()).isStart()) {
+				if ((action.getEndNode() instanceof EventNode) && ((EventNode) action.getEndNode()).isStart()
+						&& (action.getStartingNode() instanceof EventNode) && ((EventNode) action.getStartingNode()).isStart()) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("invalid_edge_definition"));
 					return false;
 				}
 
 				// END Node to END Node not allowed
-				if ((action.getEndNode() instanceof EventNode)
-						&& ((EventNode)action.getEndNode()).isEnd()
-						&& (action.getStartingNode() instanceof EventNode)
-						&& ((EventNode)action.getStartingNode()).isEnd()) {
+				if ((action.getEndNode() instanceof EventNode) && ((EventNode) action.getEndNode()).isEnd()
+						&& (action.getStartingNode() instanceof EventNode) && ((EventNode) action.getStartingNode()).isEnd()) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("invalid_edge_definition"));
 					return false;
 				}
 
 				// BEGIN Node to BEGIN Node not allowed
-				if ((action.getEndNode() instanceof FlexoNode)
-						&& ((FlexoNode)action.getEndNode()).isBeginNode()
-						&& (action.getStartingNode() instanceof FlexoNode)
-						&& ((FlexoNode)action.getStartingNode()).isBeginNode()) {
+				if ((action.getEndNode() instanceof FlexoNode) && ((FlexoNode) action.getEndNode()).isBeginNode()
+						&& (action.getStartingNode() instanceof FlexoNode) && ((FlexoNode) action.getStartingNode()).isBeginNode()) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("invalid_edge_definition"));
 					return false;
 				}
-				
+
 				// END Node to END Node not allowed
-				if ((action.getEndNode() instanceof FlexoNode)
-						&& ((FlexoNode)action.getEndNode()).isEndNode()
-						&& (action.getStartingNode() instanceof FlexoNode)
-						&& ((FlexoNode)action.getStartingNode()).isEndNode()) {
+				if ((action.getEndNode() instanceof FlexoNode) && ((FlexoNode) action.getEndNode()).isEndNode()
+						&& (action.getStartingNode() instanceof FlexoNode) && ((FlexoNode) action.getStartingNode()).isEndNode()) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("invalid_edge_definition"));
 					return false;
 				}
-				
-				
-				if (action.getEndNode() instanceof FlexoNode
-						&& action.getEndNode() instanceof FatherNode
+
+				if (action.getEndNode() instanceof FlexoNode && action.getEndNode() instanceof FatherNode
 						&& action.getEndNodePreCondition() == null && !skipEndNodeCheck) {
 
-					if ((((FlexoNode)action.getEndNode()).isBeginNode()) && (!(action.getStartingNode() instanceof AbstractInPort))) {
+					if ((((FlexoNode) action.getEndNode()).isBeginNode()) && (!(action.getStartingNode() instanceof AbstractInPort))) {
 						// This is a deduced edge construction
-					}
-					else {
+					} else {
 
 						// Special test to avoid construction of a precondition if we already known
 						// that the edge could not be valid
 						if (action.getStartingNode() instanceof PetriGraphNode
 								|| action.getStartingNode() instanceof OperatorNode
 								|| action.getStartingNode() instanceof AbstractInPort
-								|| (action.getStartingNode() instanceof FlexoPortMap && ((FlexoPortMap)action.getStartingNode()).isOutputPort())) {
+								|| (action.getStartingNode() instanceof FlexoPortMap && ((FlexoPortMap) action.getStartingNode())
+										.isOutputPort())) {
 
 							// In this case, we first have to decide what to to relating to the end precondition
 
-							executionContext.createPreCondition
-							= CreatePreCondition.actionType.makeNewEmbeddedAction(
-									(FatherNode)action.getEndNode(), null, action);
+							executionContext.createPreCondition = CreatePreCondition.actionType.makeNewEmbeddedAction(
+									(FatherNode) action.getEndNode(), null, action);
 							executionContext.createPreCondition.setAllowsToSelectPreconditionOnly(true);
 							executionContext.createPreCondition.doAction();
 							if (!executionContext.createPreCondition.hasActionExecutionSucceeded()) {
@@ -288,10 +272,9 @@ public class CreateEdgeInitializer extends ActionInitializer {
 
 				// We don't want this anymore
 				/*if(action.getStartingNode() instanceof ActionNode){
-                	String postName = action.getStartingNode().getName();
-                	action.setNewEdgeName(postName);
-                }*/
-
+					String postName = action.getStartingNode().getName();
+					action.setNewEdgeName(postName);
+				}*/
 
 				if (action.getStartingNode() instanceof ContextualEdgeStarting) {
 					// In this case, builded edge is relative to a particular context (conditional)
@@ -300,8 +283,7 @@ public class CreateEdgeInitializer extends ActionInitializer {
 						final String NEGATIVE_EVALUATION = FlexoLocalization.localizedForKey("edge_matches_negative_evaluation");
 						final String TRUE = FlexoLocalization.localizedForKey("yes");
 						final String FALSE = FlexoLocalization.localizedForKey("no");
-						final TextFieldParameter newEdgeNameParam = new TextFieldParameter(
-								"newEdgeNameParam", "label", TRUE) {
+						final TextFieldParameter newEdgeNameParam = new TextFieldParameter("newEdgeNameParam", "label", TRUE) {
 							@Override
 							public void setValue(String value) {
 								super.setValue(value);
@@ -309,7 +291,8 @@ public class CreateEdgeInitializer extends ActionInitializer {
 									nameWasEdited = true;
 							}
 						};
-						RadioButtonListParameter<String> outputContextParam = new RadioButtonListParameter<String>("outputContextParam","output_context",POSITIVE_EVALUATION,POSITIVE_EVALUATION,NEGATIVE_EVALUATION) {
+						RadioButtonListParameter<String> outputContextParam = new RadioButtonListParameter<String>("outputContextParam",
+								"output_context", POSITIVE_EVALUATION, POSITIVE_EVALUATION, NEGATIVE_EVALUATION) {
 							@Override
 							public void setValue(String value) {
 								if (!nameWasEdited) {
@@ -319,31 +302,27 @@ public class CreateEdgeInitializer extends ActionInitializer {
 							}
 						};
 						newEdgeNameParam.setDepends("outputContextParam");
-						AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(
-								getProject(),
-								null,
-								action.getLocalizedName(), FlexoLocalization.localizedForKey("please_define_newly_created_edge"), newEdgeNameParam, outputContextParam);
+						AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
+								action.getLocalizedName(), FlexoLocalization.localizedForKey("please_define_newly_created_edge"),
+								newEdgeNameParam, outputContextParam);
 						if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-							//sprint 1.3.4 : do not set the name for IF operator
-							//sprint 1.3.6: come back to previous behaviour (bug 1007173 & 1007174)
+							// sprint 1.3.4 : do not set the name for IF operator
+							// sprint 1.3.6: come back to previous behaviour (bug 1007173 & 1007174)
 							action.setNewEdgeName(newEdgeNameParam.getValue());
 							action.setOutputContext(outputContextParam.getValue().equals(POSITIVE_EVALUATION) ? true : false);
 							return true;
-						}
-						else {
+						} else {
 							return false;
 						}
-					}
-					else if (action.getStartingNode() instanceof SWITCHOperator) {
+					} else if (action.getStartingNode() instanceof SWITCHOperator) {
 
 					}
 				}
 
 				if (action.getStartingNode() instanceof SelfExecutableActivityNode) {
-					final SelfExecutableActivityNode activityNode = (SelfExecutableActivityNode)action.getStartingNode();
+					final SelfExecutableActivityNode activityNode = (SelfExecutableActivityNode) action.getStartingNode();
 					if (!activityNode.hasExecutionPetriGraph()) {
-						executionContext.createExecutionPetriGraph
-						= CreateExecutionPetriGraph.actionType.makeNewEmbeddedAction(
+						executionContext.createExecutionPetriGraph = CreateExecutionPetriGraph.actionType.makeNewEmbeddedAction(
 								activityNode, null, action);
 						executionContext.createExecutionPetriGraph.doAction();
 						if (!executionContext.createExecutionPetriGraph.hasActionExecutionSucceeded()) {
@@ -356,14 +335,13 @@ public class CreateEdgeInitializer extends ActionInitializer {
 					if (pg.getAllEndNodes().size() == 0) {
 						// TODO: use FlexoAction here !!!
 						endNode = pg.createNewEndNode();
-					}
-					else if (pg.getAllEndNodes().size() == 1) {
-						endNode = (AbstractActivityNode)pg.getAllEndNodes().firstElement();
-					}
-					else  {
-						endNode = _selectEndNode((SelfExecutableNode)activityNode, action);
+					} else if (pg.getAllEndNodes().size() == 1) {
+						endNode = (AbstractActivityNode) pg.getAllEndNodes().firstElement();
+					} else {
+						endNode = _selectEndNode((SelfExecutableNode) activityNode, action);
 						if (endNode == null) {
-							if (!action.getIsGenericOutput()) return false; // Cancelled
+							if (!action.getIsGenericOutput())
+								return false; // Cancelled
 						}
 					}
 					if (endNode != null) {
@@ -372,13 +350,12 @@ public class CreateEdgeInitializer extends ActionInitializer {
 					}
 				} else if (action.getStartingNode() instanceof AbstractActivityNode
 						/*&& action.getEndNode().getParentPetriGraph() == action.getStartingNode().getParentPetriGraph()*/
-						&& (((AbstractActivityNode)action.getStartingNode()).isNormalNode()|| ((AbstractActivityNode)action.getStartingNode()).isBeginNode())
-						&& ((AbstractActivityNode)action.getStartingNode()).mightHaveOperationPetriGraph() && !skipStartNodeCheck) {
-					final AbstractActivityNode activityNode = (AbstractActivityNode)action.getStartingNode();
+						&& (((AbstractActivityNode) action.getStartingNode()).isNormalNode() || ((AbstractActivityNode) action
+								.getStartingNode()).isBeginNode())
+						&& ((AbstractActivityNode) action.getStartingNode()).mightHaveOperationPetriGraph() && !skipStartNodeCheck) {
+					final AbstractActivityNode activityNode = (AbstractActivityNode) action.getStartingNode();
 					if (!activityNode.hasContainedPetriGraph()) {
-						executionContext.createPetriGraph
-						= CreatePetriGraph.actionType.makeNewEmbeddedAction(
-								activityNode, null, action);
+						executionContext.createPetriGraph = CreatePetriGraph.actionType.makeNewEmbeddedAction(activityNode, null, action);
 						executionContext.createPetriGraph.doAction();
 						if (!executionContext.createPetriGraph.hasActionExecutionSucceeded()) {
 							return false;
@@ -390,14 +367,13 @@ public class CreateEdgeInitializer extends ActionInitializer {
 					if (pg.getAllEndNodes().size() == 0) {
 						// TODO: use FlexoAction here !!!
 						endNode = pg.createNewEndNode();
-					}
-					else if (pg.getAllEndNodes().size() == 1) {
-						endNode = (OperationNode)pg.getAllEndNodes().firstElement();
-					}
-					else /* > 1 */ {
+					} else if (pg.getAllEndNodes().size() == 1) {
+						endNode = (OperationNode) pg.getAllEndNodes().firstElement();
+					} else /* > 1 */{
 						endNode = selectEndNode(activityNode, action);
 						if (endNode == null) {
-							if (!action.getIsGenericOutput()) return false; // Cancelled
+							if (!action.getIsGenericOutput())
+								return false; // Cancelled
 						}
 					}
 					if (endNode != null) {
@@ -407,11 +383,10 @@ public class CreateEdgeInitializer extends ActionInitializer {
 				}
 
 				if (action.getStartingNode() instanceof SelfExecutableOperationNode
-						/*&& action.getEndNode().getParentPetriGraph() == action.getStartingNode().getParentPetriGraph()*/) {
-					final SelfExecutableOperationNode activityNode = (SelfExecutableOperationNode)action.getStartingNode();
+				/*&& action.getEndNode().getParentPetriGraph() == action.getStartingNode().getParentPetriGraph()*/) {
+					final SelfExecutableOperationNode activityNode = (SelfExecutableOperationNode) action.getStartingNode();
 					if (!activityNode.hasExecutionPetriGraph()) {
-						executionContext.createExecutionPetriGraph
-						= CreateExecutionPetriGraph.actionType.makeNewEmbeddedAction(
+						executionContext.createExecutionPetriGraph = CreateExecutionPetriGraph.actionType.makeNewEmbeddedAction(
 								activityNode, null, action);
 						executionContext.createExecutionPetriGraph.doAction();
 						if (!executionContext.createExecutionPetriGraph.hasActionExecutionSucceeded()) {
@@ -424,14 +399,13 @@ public class CreateEdgeInitializer extends ActionInitializer {
 					if (pg.getAllEndNodes().size() == 0) {
 						// TODO: use FlexoAction here !!!
 						endNode = pg.createNewEndNode();
-					}
-					else if (pg.getAllEndNodes().size() == 1) {
-						endNode = (OperationNode)pg.getAllEndNodes().firstElement();
-					}
-					else {
-						endNode = _selectEndNode((SelfExecutableNode)activityNode, action);
+					} else if (pg.getAllEndNodes().size() == 1) {
+						endNode = (OperationNode) pg.getAllEndNodes().firstElement();
+					} else {
+						endNode = _selectEndNode((SelfExecutableNode) activityNode, action);
 						if (endNode == null) {
-							if (!action.getIsGenericOutput()) return false; // Cancelled
+							if (!action.getIsGenericOutput())
+								return false; // Cancelled
 						}
 					}
 					if (endNode != null) {
@@ -439,14 +413,12 @@ public class CreateEdgeInitializer extends ActionInitializer {
 						action.setStartingNode(endNode);
 					}
 				} else if (action.getStartingNode() instanceof OperationNode
-						/*&& action.getEndNode().getParentPetriGraph() == action.getStartingNode().getParentPetriGraph()*/
-						&& ((OperationNode)action.getStartingNode()).isNormalNode()
-						&& ((OperationNode)action.getStartingNode()).mightHaveActionPetriGraph()) {
-					final OperationNode operationNode = (OperationNode)action.getStartingNode();
+				/*&& action.getEndNode().getParentPetriGraph() == action.getStartingNode().getParentPetriGraph()*/
+				&& ((OperationNode) action.getStartingNode()).isNormalNode()
+						&& ((OperationNode) action.getStartingNode()).mightHaveActionPetriGraph()) {
+					final OperationNode operationNode = (OperationNode) action.getStartingNode();
 					if (!operationNode.hasContainedPetriGraph()) {
-						executionContext.createPetriGraph
-						= CreatePetriGraph.actionType.makeNewEmbeddedAction(
-								operationNode, null, action);
+						executionContext.createPetriGraph = CreatePetriGraph.actionType.makeNewEmbeddedAction(operationNode, null, action);
 						executionContext.createPetriGraph.doAction();
 						if (!executionContext.createPetriGraph.hasActionExecutionSucceeded()) {
 							return false;
@@ -458,14 +430,13 @@ public class CreateEdgeInitializer extends ActionInitializer {
 					if (pg.getAllEndNodes().size() == 0) {
 						// TODO: use FlexoAction here !!!
 						endNode = pg.createNewEndNode();
-					}
-					else if (pg.getAllEndNodes().size() == 1) {
-						endNode = (ActionNode)pg.getAllEndNodes().firstElement();
-					}
-					else /* > 1 */ {
+					} else if (pg.getAllEndNodes().size() == 1) {
+						endNode = (ActionNode) pg.getAllEndNodes().firstElement();
+					} else /* > 1 */{
 						endNode = selectEndNode(operationNode, action);
 						if (endNode == null) {
-							if (!action.getIsGenericOutput()) return false; // Cancelled
+							if (!action.getIsGenericOutput())
+								return false; // Cancelled
 						}
 					}
 					if (endNode != null) {
@@ -477,7 +448,8 @@ public class CreateEdgeInitializer extends ActionInitializer {
 				/* && action.getEndNode().getParentPetriGraph() == action.getStartingNode().getParentPetriGraph() */) {
 					final SelfExecutableActionNode actionNode = (SelfExecutableActionNode) action.getStartingNode();
 					if (!actionNode.hasExecutionPetriGraph()) {
-						executionContext.createExecutionPetriGraph = CreateExecutionPetriGraph.actionType.makeNewEmbeddedAction(actionNode, null, action);
+						executionContext.createExecutionPetriGraph = CreateExecutionPetriGraph.actionType.makeNewEmbeddedAction(actionNode,
+								null, action);
 						executionContext.createExecutionPetriGraph.doAction();
 						if (!executionContext.createExecutionPetriGraph.hasActionExecutionSucceeded()) {
 							return false;
@@ -502,7 +474,7 @@ public class CreateEdgeInitializer extends ActionInitializer {
 						// Define END node as EXPLICIT starting
 						action.setStartingNode(endNode);
 					}
-		}
+				}
 
 				return true;
 			}
@@ -510,16 +482,14 @@ public class CreateEdgeInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<CreateEdge> getDefaultFinalizer()
-	{
+	protected FlexoActionFinalizer<CreateEdge> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateEdge>() {
 			@Override
-			public boolean run(ActionEvent e, CreateEdge action)
-			{
+			public boolean run(ActionEvent e, CreateEdge action) {
 				if (action.getExecutionContext() instanceof CreateEdgeExecutionContext) {
-					CreateEdgeExecutionContext context = (CreateEdgeExecutionContext)action.getExecutionContext();
-					if (context.createPreCondition != null
-							&& context.createPreCondition.getNewPreCondition() != null && context.createPreCondition.getNewPreCondition().getIncomingPostConditions().size()==1) {
+					CreateEdgeExecutionContext context = (CreateEdgeExecutionContext) action.getExecutionContext();
+					if (context.createPreCondition != null && context.createPreCondition.getNewPreCondition() != null
+							&& context.createPreCondition.getNewPreCondition().getIncomingPostConditions().size() == 1) {
 						context.createPreCondition.getNewPreCondition().resetLocation();
 					}
 				}
@@ -532,13 +502,11 @@ public class CreateEdgeInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionUndoFinalizer<CreateEdge> getDefaultUndoFinalizer()
-	{
+	protected FlexoActionUndoFinalizer<CreateEdge> getDefaultUndoFinalizer() {
 		return new FlexoActionUndoFinalizer<CreateEdge>() {
 			@Override
-			public boolean run(ActionEvent e, CreateEdge action) throws UndoException
-			{
-				CreateEdgeExecutionContext executionContext = (CreateEdgeExecutionContext)action.getExecutionContext();
+			public boolean run(ActionEvent e, CreateEdge action) throws UndoException {
+				CreateEdgeExecutionContext executionContext = (CreateEdgeExecutionContext) action.getExecutionContext();
 				if (executionContext.createPetriGraph != null)
 					executionContext.createPetriGraph.undoAction();
 				if (executionContext.createExecutionPetriGraph != null)
@@ -551,13 +519,11 @@ public class CreateEdgeInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionRedoInitializer<CreateEdge> getDefaultRedoInitializer()
-	{
+	protected FlexoActionRedoInitializer<CreateEdge> getDefaultRedoInitializer() {
 		return new FlexoActionRedoInitializer<CreateEdge>() {
 			@Override
-			public boolean run(ActionEvent e, CreateEdge action) throws RedoException
-			{
-				CreateEdgeExecutionContext executionContext = (CreateEdgeExecutionContext)action.getExecutionContext();
+			public boolean run(ActionEvent e, CreateEdge action) throws RedoException {
+				CreateEdgeExecutionContext executionContext = (CreateEdgeExecutionContext) action.getExecutionContext();
 				if (executionContext.createPreCondition != null) {
 					executionContext.createPreCondition.redoAction();
 					action.setEndNodePreCondition(executionContext.createPreCondition.getNewPreCondition());
@@ -574,31 +540,25 @@ public class CreateEdgeInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionRedoFinalizer<CreateEdge> getDefaultRedoFinalizer()
-	{
+	protected FlexoActionRedoFinalizer<CreateEdge> getDefaultRedoFinalizer() {
 		return new FlexoActionRedoFinalizer<CreateEdge>() {
 			@Override
-			public boolean run(ActionEvent e, CreateEdge action) throws RedoException
-			{
+			public boolean run(ActionEvent e, CreateEdge action) throws RedoException {
 				getControllerActionInitializer().getWKFController().getSelectionManager().setSelectedObject(action.getNewPostCondition());
 				return true;
 			}
 		};
 	}
 
-
-
 	@Override
-	protected FlexoExceptionHandler<CreateEdge> getDefaultExceptionHandler()
-	{
+	protected FlexoExceptionHandler<CreateEdge> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<CreateEdge>() {
 			@Override
 			public boolean handleException(FlexoException exception, CreateEdge action) {
 				if (exception instanceof CreateEdge.DisplayActionCannotBeBound) {
 					FlexoController.notify(exception.getLocalizedMessage());
 					return true;
-				}
-				else if (exception instanceof CreateEdge.InvalidEdgeDefinition) {
+				} else if (exception instanceof CreateEdge.InvalidEdgeDefinition) {
 					FlexoController.notify(exception.getLocalizedMessage());
 					return true;
 				}
@@ -607,15 +567,12 @@ public class CreateEdgeInitializer extends ActionInitializer {
 		};
 	}
 
-
 	@Override
-	protected Icon getEnabledIcon()
-	{
+	protected Icon getEnabledIcon() {
 		return WKFIconLibrary.POSTCONDITION_ICON;
 	}
 
-	private OperationNode selectEndNode(final AbstractActivityNode activityNode, CreateEdge action)
-	{
+	private OperationNode selectEndNode(final AbstractActivityNode activityNode, CreateEdge action) {
 		/*OperationPetriGraph pg = activityNode.getOperationPetriGraph();
 		String CHOOSE_EXISTING_END_NODE = FlexoLocalization.localizedForKey("choose_existing_end_node");
 		String CREATE_NEW_END_NODE = FlexoLocalization.localizedForKey("create_new_end_node");
@@ -669,13 +626,11 @@ public class CreateEdgeInitializer extends ActionInitializer {
 		return _selectEndNode(activityNode, action);
 	}
 
-	private ActionNode selectEndNode(final OperationNode operationNode, CreateEdge action)
-	{
+	private ActionNode selectEndNode(final OperationNode operationNode, CreateEdge action) {
 		return _selectEndNode(operationNode, action);
 	}
 
-	private <F extends FatherNode, C extends ChildNode> C _selectEndNode(final F fatherNode, CreateEdge action)
-	{
+	private <F extends FatherNode, C extends ChildNode> C _selectEndNode(final F fatherNode, CreateEdge action) {
 		FlexoPetriGraph pg = fatherNode.getContainedPetriGraph();
 		String CHOOSE_EXISTING_END_NODE = FlexoLocalization.localizedForKey("choose_existing_end_node");
 		String CREATE_NEW_END_NODE = FlexoLocalization.localizedForKey("create_new_end_node");
@@ -685,52 +640,41 @@ public class CreateEdgeInitializer extends ActionInitializer {
 		availableChoices.add(CREATE_NEW_END_NODE);
 		availableChoices.add(DEFINE_AS_GENERIC_OUTPUT);
 		String[] choices = availableChoices.toArray(new String[availableChoices.size()]);
-		RadioButtonListParameter<String> choiceParam = new RadioButtonListParameter<String>("choice","choose_an_option",
-				CHOOSE_EXISTING_END_NODE,choices);
-		TextFieldParameter newEndNodeNameParam = new TextFieldParameter(
-				"newEndNodeName", "new_end_node_name", pg.getProcess().findNextInitialName(FlexoLocalization.localizedForKey("end_node"), action.getFocusedObject()));
+		RadioButtonListParameter<String> choiceParam = new RadioButtonListParameter<String>("choice", "choose_an_option",
+				CHOOSE_EXISTING_END_NODE, choices);
+		TextFieldParameter newEndNodeNameParam = new TextFieldParameter("newEndNodeName", "new_end_node_name", pg.getProcess()
+				.findNextInitialName(FlexoLocalization.localizedForKey("end_node"), action.getFocusedObject()));
 		newEndNodeNameParam.setDepends("choice");
-		newEndNodeNameParam.setConditional("choice="+'"'+CREATE_NEW_END_NODE+'"');
-		NodeParameter existingNodeParameter = new NodeParameter("existingNode","existing_end_node",pg.getAllEndNodes().firstElement());
+		newEndNodeNameParam.setConditional("choice=" + '"' + CREATE_NEW_END_NODE + '"');
+		NodeParameter existingNodeParameter = new NodeParameter("existingNode", "existing_end_node", pg.getAllEndNodes().firstElement());
 		existingNodeParameter.setRootObject(action.getFocusedObject());
 		existingNodeParameter.setNodeSelectingConditional(new NodeSelectingConditional() {
 			@Override
 			public boolean isSelectable(AbstractNode node) {
-				return ((node instanceof ChildNode)
-						&& (((ChildNode)node).isEndNode())
-						&& (((ChildNode)node).getFather() == fatherNode));
+				return ((node instanceof ChildNode) && (((ChildNode) node).isEndNode()) && (((ChildNode) node).getFather() == fatherNode));
 			}
 		});
 		existingNodeParameter.setDepends("choice");
-		existingNodeParameter.setConditional("choice="+'"'+CHOOSE_EXISTING_END_NODE+'"');
-		AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(
-				getProject(),
-				null,
+		existingNodeParameter.setConditional("choice=" + '"' + CHOOSE_EXISTING_END_NODE + '"');
+		AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
 				FlexoLocalization.localizedForKey("multiple_outputs_are_defined_for_this_node"),
-				FlexoLocalization.localizedForKey("what_would_you_like_to_do"),
-				choiceParam,
-				newEndNodeNameParam,
-				existingNodeParameter);
+				FlexoLocalization.localizedForKey("what_would_you_like_to_do"), choiceParam, newEndNodeNameParam, existingNodeParameter);
 		if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 			if (choiceParam.getValue().equals(CHOOSE_EXISTING_END_NODE)) {
-				return ((C)existingNodeParameter.getValue());
-			}
-			else if (choiceParam.getValue().equals(CREATE_NEW_END_NODE)) {
+				return ((C) existingNodeParameter.getValue());
+			} else if (choiceParam.getValue().equals(CREATE_NEW_END_NODE)) {
 				// TODO: use FlexoAction here !!!
-				return (C)pg.createNewEndNode(newEndNodeNameParam.getValue());
-			}
-			else {
+				return (C) pg.createNewEndNode(newEndNodeNameParam.getValue());
+			} else {
 				action.setIsGenericOutput(true);
 				return null;
 			}
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
 
-	private <F extends SelfExecutableNode, P extends FlexoNode> P _selectEndNode(final F selfExec, CreateEdge action)
-	{
+	private <F extends SelfExecutableNode, P extends FlexoNode> P _selectEndNode(final F selfExec, CreateEdge action) {
 		FlexoPetriGraph pg = selfExec.getExecutionPetriGraph();
 		String CHOOSE_EXISTING_END_NODE = FlexoLocalization.localizedForKey("choose_existing_end_node");
 		String CREATE_NEW_END_NODE = FlexoLocalization.localizedForKey("create_new_end_node");
@@ -740,46 +684,37 @@ public class CreateEdgeInitializer extends ActionInitializer {
 		availableChoices.add(CREATE_NEW_END_NODE);
 		availableChoices.add(DEFINE_AS_GENERIC_OUTPUT);
 		String[] choices = availableChoices.toArray(new String[availableChoices.size()]);
-		RadioButtonListParameter<String> choiceParam = new RadioButtonListParameter<String>("choice","choose_an_option",
-				CHOOSE_EXISTING_END_NODE,choices);
-		TextFieldParameter newEndNodeNameParam = new TextFieldParameter(
-				"newEndNodeName", "new_end_node_name", pg.getProcess().findNextInitialName(FlexoLocalization.localizedForKey("end_node"), action.getFocusedObject()));
+		RadioButtonListParameter<String> choiceParam = new RadioButtonListParameter<String>("choice", "choose_an_option",
+				CHOOSE_EXISTING_END_NODE, choices);
+		TextFieldParameter newEndNodeNameParam = new TextFieldParameter("newEndNodeName", "new_end_node_name", pg.getProcess()
+				.findNextInitialName(FlexoLocalization.localizedForKey("end_node"), action.getFocusedObject()));
 		newEndNodeNameParam.setDepends("choice");
-		newEndNodeNameParam.setConditional("choice="+'"'+CREATE_NEW_END_NODE+'"');
-		NodeParameter existingNodeParameter = new NodeParameter("existingNode","existing_end_node",pg.getAllEndNodes().firstElement());
+		newEndNodeNameParam.setConditional("choice=" + '"' + CREATE_NEW_END_NODE + '"');
+		NodeParameter existingNodeParameter = new NodeParameter("existingNode", "existing_end_node", pg.getAllEndNodes().firstElement());
 		existingNodeParameter.setRootObject(action.getFocusedObject());
 		existingNodeParameter.setNodeSelectingConditional(new NodeSelectingConditional() {
 			@Override
 			public boolean isSelectable(AbstractNode node) {
-				return ((node instanceof FlexoNode)
-						&& (((FlexoNode)node).isEndNode())
-						&& (((FlexoNode)node).getParentPetriGraph().getContainer() == selfExec));
+				return ((node instanceof FlexoNode) && (((FlexoNode) node).isEndNode()) && (((FlexoNode) node).getParentPetriGraph()
+						.getContainer() == selfExec));
 			}
 		});
 		existingNodeParameter.setDepends("choice");
-		existingNodeParameter.setConditional("choice="+'"'+CHOOSE_EXISTING_END_NODE+'"');
-		AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(
-				getProject(),
-				null,
+		existingNodeParameter.setConditional("choice=" + '"' + CHOOSE_EXISTING_END_NODE + '"');
+		AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
 				FlexoLocalization.localizedForKey("multiple_outputs_are_defined_for_this_node"),
-				FlexoLocalization.localizedForKey("what_would_you_like_to_do"),
-				choiceParam,
-				newEndNodeNameParam,
-				existingNodeParameter);
+				FlexoLocalization.localizedForKey("what_would_you_like_to_do"), choiceParam, newEndNodeNameParam, existingNodeParameter);
 		if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 			if (choiceParam.getValue().equals(CHOOSE_EXISTING_END_NODE)) {
-				return ((P)existingNodeParameter.getValue());
-			}
-			else if (choiceParam.getValue().equals(CREATE_NEW_END_NODE)) {
+				return ((P) existingNodeParameter.getValue());
+			} else if (choiceParam.getValue().equals(CREATE_NEW_END_NODE)) {
 				// TODO: use FlexoAction here !!!
-				return (P)pg.createNewEndNode(newEndNodeNameParam.getValue());
-			}
-			else {
+				return (P) pg.createNewEndNode(newEndNodeNameParam.getValue());
+			} else {
 				action.setIsGenericOutput(true);
 				return null;
 			}
-		}
-		else {
+		} else {
 			return null;
 		}
 	}

@@ -24,37 +24,31 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ie.widget.IEDynamicImage;
 
+public class IEDynamicImageElement extends IEElement {
 
-public class IEDynamicImageElement extends IEElement
-{
+	/**
+	 * @param widget
+	 * @param browser
+	 */
+	public IEDynamicImageElement(IEDynamicImage widget, ProjectBrowser browser, BrowserElement parent) {
+		super(widget, BrowserElementType.DYNAMICIMAGE, browser, parent);
+	}
 
-    /**
-     * @param widget
-     * @param browser
-     */
-    public IEDynamicImageElement(IEDynamicImage widget, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(widget, BrowserElementType.DYNAMICIMAGE, browser,parent);
-    }
+	@Override
+	protected void buildChildrenVector() {
+		// no childs
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        //no childs
-    }
+	@Override
+	public String getName() {
+		if (getImage().getName() == null) {
+			return "Image";
+		}
+		return getImage().getName();
+	}
 
-    @Override
-	public String getName()
-    {
-        if (getImage().getName() == null) {
-            return "Image";
-        }
-        return getImage().getName();
-    }
-
-    protected IEDynamicImage getImage()
-    {
-        return (IEDynamicImage) getObject();
-    }
+	protected IEDynamicImage getImage() {
+		return (IEDynamicImage) getObject();
+	}
 
 }

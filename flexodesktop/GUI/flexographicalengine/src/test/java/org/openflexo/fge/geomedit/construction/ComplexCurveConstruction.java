@@ -25,8 +25,7 @@ import org.openflexo.fge.geom.FGEGeneralShape.Closure;
 
 public abstract class ComplexCurveConstruction extends GeometricConstruction<FGEComplexCurve> {
 
-	public final FGEGeneralShape getCurve()
-	{
+	public final FGEGeneralShape getCurve() {
 		return getData();
 	}
 
@@ -34,17 +33,14 @@ public abstract class ComplexCurveConstruction extends GeometricConstruction<FGE
 	protected abstract FGEComplexCurve computeData();
 
 	private Closure closure = Closure.OPEN_NOT_FILLED;
-	
-	public Closure getClosure()
-	{
+
+	public Closure getClosure() {
 		return closure;
 	}
 
-	public void setClosure(Closure aClosure)
-	{
+	public void setClosure(Closure aClosure) {
 		this.closure = aClosure;
 		setModified();
 	}
-
 
 }

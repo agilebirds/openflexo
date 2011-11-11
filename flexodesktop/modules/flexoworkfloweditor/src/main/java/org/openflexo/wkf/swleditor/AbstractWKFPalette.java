@@ -47,34 +47,28 @@ import org.openflexo.foundation.wkf.ws.OutPort;
 import org.openflexo.foundation.wkf.ws.PortRegistery;
 import org.openflexo.wkf.swleditor.gr.SWLObjectGR;
 
-
 public abstract class AbstractWKFPalette extends DrawingPalette {
 
 	private static final Logger logger = Logger.getLogger(AbstractWKFPalette.class.getPackage().getName());
 
-	public AbstractWKFPalette(String title)
-	{
-		super(300,230,title);
+	public AbstractWKFPalette(String title) {
+		super(300, 230, title);
 	}
 
-	public AbstractWKFPalette(int width, int height, String title)
-	{
-		super(width,height,title);
+	public AbstractWKFPalette(int width, int height, String title) {
+		super(width, height, title);
 	}
 
-	protected WKFPaletteElement makePaletteElement(
-			final WKFObject object,
-			ShapeGraphicalRepresentation<? extends WKFObject> graphicalRepresentation,
-			final ContainerValidity containerValidity)
-	{
-		final PaletteElementGraphicalRepresentation gr
-		= new PaletteElementGraphicalRepresentation(graphicalRepresentation,null,getPaletteDrawing());
+	protected WKFPaletteElement makePaletteElement(final WKFObject object,
+			ShapeGraphicalRepresentation<? extends WKFObject> graphicalRepresentation, final ContainerValidity containerValidity) {
+		final PaletteElementGraphicalRepresentation gr = new PaletteElementGraphicalRepresentation(graphicalRepresentation, null,
+				getPaletteDrawing());
 
 		if (object.getShortHelpText() != null) {
 			gr.setToolTipText(object.getShortHelpText());
 		} else {
 			if (logger.isLoggable(Level.FINE))
-				logger.fine("No help text defined for palette element: "+gr);
+				logger.fine("No help text defined for palette element: " + gr);
 		}
 
 		WKFPaletteElement returned = new WKFPaletteElement(gr, object, containerValidity);
@@ -95,104 +89,100 @@ public abstract class AbstractWKFPalette extends DrawingPalette {
 		}
 
 		@Override
-		public boolean acceptDragging(GraphicalRepresentation gr)
-		{
+		public boolean acceptDragging(GraphicalRepresentation gr) {
 			if (gr.getDrawable() instanceof FlexoModelObject)
-				return containerValidity.isContainerValid((FlexoModelObject)gr.getDrawable());
+				return containerValidity.isContainerValid((FlexoModelObject) gr.getDrawable());
 			return false;
 		}
 
 		@Override
-		public boolean elementDragged(GraphicalRepresentation gr, FGEPoint dropLocation)
-		{
+		public boolean elementDragged(GraphicalRepresentation gr, FGEPoint dropLocation) {
 			FlexoPetriGraph container = null;
-			logger.info("Dropping new object "+object+" for "+gr.getDrawable()+" container="+container+" "+dropLocation);
-			//if (gr.getDrawable() instanceof Role) container = process
+			logger.info("Dropping new object " + object + " for " + gr.getDrawable() + " container=" + container + " " + dropLocation);
+			// if (gr.getDrawable() instanceof Role) container = process
 			if (object instanceof FlexoPort) {
 				if (gr.getDrawable() instanceof PortRegistery) {
 					AddPort action = null;
 					if (object instanceof NewPort) {
-						action = AddPort.createNewPort.makeNewAction((PortRegistery)gr.getDrawable(), null, getController().getEditor());
+						action = AddPort.createNewPort.makeNewAction((PortRegistery) gr.getDrawable(), null, getController().getEditor());
+					} else if (object instanceof DeletePort) {
+						action = AddPort.createDeletePort
+								.makeNewAction((PortRegistery) gr.getDrawable(), null, getController().getEditor());
+					} else if (object instanceof InPort) {
+						action = AddPort.createInPort.makeNewAction((PortRegistery) gr.getDrawable(), null, getController().getEditor());
+					} else if (object instanceof OutPort) {
+						action = AddPort.createOutPort.makeNewAction((PortRegistery) gr.getDrawable(), null, getController().getEditor());
+					} else if (object instanceof InOutPort) {
+						action = AddPort.createInOutPort.makeNewAction((PortRegistery) gr.getDrawable(), null, getController().getEditor());
 					}
-					else if (object instanceof DeletePort) {
-						action = AddPort.createDeletePort.makeNewAction((PortRegistery)gr.getDrawable(), null, getController().getEditor());
-					}
-					else if (object instanceof InPort) {
-						action = AddPort.createInPort.makeNewAction((PortRegistery)gr.getDrawable(), null, getController().getEditor());
-					}
-					else if (object instanceof OutPort) {
-						action = AddPort.createOutPort.makeNewAction((PortRegistery)gr.getDrawable(), null, getController().getEditor());
-					}
-					else if (object instanceof InOutPort) {
-						action = AddPort.createInOutPort.makeNewAction((PortRegistery)gr.getDrawable(), null, getController().getEditor());
-					}
-					action.setNewPortName(((FlexoPort)object).getDefaultName());
+					action.setNewPortName(((FlexoPort) object).getDefaultName());
 
-					action.setLocation(dropLocation.x,dropLocation.y);
+					action.setLocation(dropLocation.x, dropLocation.y);
 					action.setEditNodeLabel(true);
 					action.setGraphicalContext(SWLEditorConstants.SWIMMING_LANE_EDITOR);
 					action.doAction();
 					return action.hasActionExecutionSucceeded();
-				}
-				else {
+				} else {
 					logger.warning("Unexpected container");
 					return false;
 				}
 			}
-			
-			else if(gr.getDrawable() instanceof AbstractActivityNode && (object instanceof EventNode)){
-				container = ((AbstractActivityNode)gr.getDrawable()).getProcess().getActivityPetriGraph();
-				((EventNode)object).setBoundaryOf((AbstractActivityNode)gr.getDrawable());
-				DropWKFElement action = createAndExecuteDropElementAction(dropLocation, container, null,true);
-				((EventNode)object).setBoundaryOf(null);
+
+			else if (gr.getDrawable() instanceof AbstractActivityNode && (object instanceof EventNode)) {
+				container = ((AbstractActivityNode) gr.getDrawable()).getProcess().getActivityPetriGraph();
+				((EventNode) object).setBoundaryOf((AbstractActivityNode) gr.getDrawable());
+				DropWKFElement action = createAndExecuteDropElementAction(dropLocation, container, null, true);
+				((EventNode) object).setBoundaryOf(null);
 				return action.hasActionExecutionSucceeded();
 			}
-			
+
 			else {
 				Role roleWhereToDrop = null;
-				SwimmingLaneRepresentation swlRepresentation = ((SWLObjectGR)gr).getDrawing();
+				SwimmingLaneRepresentation swlRepresentation = ((SWLObjectGR) gr).getDrawing();
 				if (gr.getDrawable() instanceof FlexoPetriGraph)
-					container = (FlexoPetriGraph)gr.getDrawable();
+					container = (FlexoPetriGraph) gr.getDrawable();
 				if (gr.getDrawable() instanceof Role) {
-					container =  swlRepresentation.getProcess().getActivityPetriGraph();
-					roleWhereToDrop = (Role)gr.getDrawable();
+					container = swlRepresentation.getProcess().getActivityPetriGraph();
+					roleWhereToDrop = (Role) gr.getDrawable();
 				}
 				if (container == null) {
-					logger.warning("Unexpected container: "+gr);
+					logger.warning("Unexpected container: " + gr);
 					return false;
 				}
 				if (object instanceof WKFArtefact && container == swlRepresentation.getProcess().getActivityPetriGraph()) {
 					FGEPoint p = new FGEPoint();
 					GraphicalRepresentation.convertFromDrawableToDrawingAT(gr, 1).transform(dropLocation, p);
 					dropLocation = p;
-					if(gr.getDrawing()!=null && swlRepresentation.isVisible(swlRepresentation.getProcess().getPortRegistery())) {
-						if(swlRepresentation.getGraphicalRepresentation(swlRepresentation.getProcess().getPortRegistery())!=null) {
-							dropLocation.y-= swlRepresentation.getGraphicalRepresentation(swlRepresentation.getProcess().getPortRegistery()).getViewBounds(1.0).height;
+					if (gr.getDrawing() != null && swlRepresentation.isVisible(swlRepresentation.getProcess().getPortRegistery())) {
+						if (swlRepresentation.getGraphicalRepresentation(swlRepresentation.getProcess().getPortRegistery()) != null) {
+							dropLocation.y -= swlRepresentation.getGraphicalRepresentation(
+									swlRepresentation.getProcess().getPortRegistery()).getViewBounds(1.0).height;
 						}
 					}
 				}
 				DropWKFElement action = createAndExecuteDropElementAction(dropLocation, container, roleWhereToDrop, true);
 				if (action.hasActionExecutionSucceeded()) {
 					if (roleWhereToDrop != null && action.getObject() instanceof AbstractNode)
-						swlRepresentation.setRepresentationRole(roleWhereToDrop,(AbstractNode)action.getObject());
+						swlRepresentation.setRepresentationRole(roleWhereToDrop, (AbstractNode) action.getObject());
 					action.getObject().setX(dropLocation.x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 					action.getObject().setY(dropLocation.y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 					return true;
-				}
-				else return false;
+				} else
+					return false;
 			}
 		}
 
-		public DropWKFElement createAndExecuteDropElementAction(FGEPoint dropLocation, FlexoPetriGraph container, Role roleWhereToDrop, boolean handlePaletteOffset)
-		{
+		public DropWKFElement createAndExecuteDropElementAction(FGEPoint dropLocation, FlexoPetriGraph container, Role roleWhereToDrop,
+				boolean handlePaletteOffset) {
 			DropWKFElement action = DropWKFElement.actionType.makeNewAction(container, null, getController().getEditor());
 			action.setHandlePaletteOffset(handlePaletteOffset);
-			action.setObject((WKFObject)object.cloneUsingXMLMapping(container.getProcess().instanciateNewBuilder(),true,container.getProcess().getXMLMapping()));
+			action.setObject((WKFObject) object.cloneUsingXMLMapping(container.getProcess().instanciateNewBuilder(), true, container
+					.getProcess().getXMLMapping()));
 			if (roleWhereToDrop != null)
 				action.setRoleToAssociate(roleWhereToDrop);
 			action.setGraphicalContext(SWLEditorConstants.SWIMMING_LANE_EDITOR);
 			action.setHandlePaletteOffset(false);
-			action.setLocation(dropLocation.x,dropLocation.y);
+			action.setLocation(dropLocation.x, dropLocation.y);
 			action.setResetNodeName(true);
 			action.setEditNodeLabel(true);
 			action.doAction();
@@ -200,27 +190,23 @@ public abstract class AbstractWKFPalette extends DrawingPalette {
 		}
 
 		@Override
-		public PaletteElementGraphicalRepresentation getGraphicalRepresentation()
-		{
+		public PaletteElementGraphicalRepresentation getGraphicalRepresentation() {
 			return gr;
 		}
 
 		@Override
-		public DrawingPalette getPalette()
-		{
+		public DrawingPalette getPalette() {
 			return AbstractWKFPalette.this;
 		}
 	}
 
-	protected interface ContainerValidity
-	{
+	protected interface ContainerValidity {
 		public boolean isContainerValid(FlexoModelObject container);
 	}
 
 	@Override
-	public SwimmingLaneEditorController getController()
-	{
-		return (SwimmingLaneEditorController)super.getController();
+	public SwimmingLaneEditorController getController() {
+		return (SwimmingLaneEditorController) super.getController();
 	}
 
 }

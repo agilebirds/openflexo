@@ -24,21 +24,18 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.wkf.node.SWITCHOperator;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class OperatorSwitchElement extends OperatorNodeElement
-{
+public class OperatorSwitchElement extends OperatorNodeElement {
 
-    /**
-     * @param object
-     * @param browser
-     */
-    public OperatorSwitchElement(SWITCHOperator object, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(object, BrowserElementType.OPERATOR_SWITCH_NODE, browser,parent);
-    }
+	/**
+	 * @param object
+	 * @param browser
+	 */
+	public OperatorSwitchElement(SWITCHOperator object, ProjectBrowser browser, BrowserElement parent) {
+		super(object, BrowserElementType.OPERATOR_SWITCH_NODE, browser, parent);
+	}
 
 }

@@ -43,62 +43,54 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.sgmodule.controller.SGController;
 import org.openflexo.toolbox.TokenMarkerStyle;
 
-
 public class MergeCodeDisplayer extends CodeDisplayer {
 
 	private static final Logger logger = Logger.getLogger(MergeCodeDisplayer.class.getPackage().getName());
 
-	//private MergeCodeDisplayerComponent _component;
-	
-	public MergeCodeDisplayer(GenerationAvailableFileResource resource, SGController controller)
-	{
-		super(resource,controller);
+	// private MergeCodeDisplayerComponent _component;
+
+	public MergeCodeDisplayer(GenerationAvailableFileResource resource, SGController controller) {
+		super(resource, controller);
 	}
-	
+
 	private boolean editable = true;
-	
-	public boolean isEditable() 
-	{
+
+	public boolean isEditable() {
 		return editable;
 	}
 
-	public void setEditable(boolean editable)
-	{
+	public void setEditable(boolean editable) {
 		this.editable = editable;
 		_component.setEditable(editable);
 	}
 
 	@Override
-	public JComponent getComponent()
-	{
-		return (JComponent)_component;
+	public JComponent getComponent() {
+		return (JComponent) _component;
 	}
 
-	protected interface MergeCodeDisplayerComponent extends CodeDisplayerComponent
-	{
+	protected interface MergeCodeDisplayerComponent extends CodeDisplayerComponent {
 		@Override
 		void update();
 	}
 
 	@Override
-	protected MergeCodeDisplayerComponent buildComponent()
-	{
+	protected MergeCodeDisplayerComponent buildComponent() {
 		_component = null;
-		
+
 		if (getResource() instanceof ASCIIFileResource) {
 			_component = new ASCIIFileMergeCodeDisplayer();
-		}
-		else if (getResource() instanceof WOFileResource) {
+		} else if (getResource() instanceof WOFileResource) {
 			_component = new WOFileMergeCodeDisplayer();
 		}
-		
+
 		if (_component == null) {
 			_component = new ErrorPanel();
 		}
-		
-		return (MergeCodeDisplayerComponent)_component;
+
+		return (MergeCodeDisplayerComponent) _component;
 	}
-	
+
 	/*protected MergeCodeDisplayerComponent buildComponent()
 	{
 		_component = null;
@@ -132,84 +124,71 @@ public class MergeCodeDisplayer extends CodeDisplayer {
 		}
 		return _component;
 	}*/
-	
-	private class ErrorPanel extends JTextArea implements MergeCodeDisplayerComponent
-	{
-		private ErrorPanel()
-		{
-			super(FlexoLocalization.localizedForKey("problem_accessing_file_view")+"\nResource: "+getResource()+"\nCode: "+getGeneratedCode()+"\n");
+
+	private class ErrorPanel extends JTextArea implements MergeCodeDisplayerComponent {
+		private ErrorPanel() {
+			super(FlexoLocalization.localizedForKey("problem_accessing_file_view") + "\nResource: " + getResource() + "\nCode: "
+					+ getGeneratedCode() + "\n");
 		}
 
 		@Override
-		public void update()
-		{
+		public void update() {
 		}
-		
+
 		@Override
-		public String getEditedContentForKey(String contentKey) 
-		{
+		public String getEditedContentForKey(String contentKey) {
 			// Interface
 			return null;
 		}
-		
+
 		@Override
-		public void setEditedContent(CGFile file) 
-		{
-			// Interface		
-		}
-		
-		@Override
-		public void setContentSource(ContentSource aContentSource) 
-		{
+		public void setEditedContent(CGFile file) {
 			// Interface
 		}
+
 		@Override
-		public void addToFocusListener(FocusListener aFocusListener)
-		{
-			// TODO Auto-generated method stub		
+		public void setContentSource(ContentSource aContentSource) {
+			// Interface
 		}
 
 		@Override
-		public DisplayContext getDisplayContext() 
-		{
-			return new DisplayContext("error",0,0,0,0);
+		public void addToFocusListener(FocusListener aFocusListener) {
+			// TODO Auto-generated method stub
 		}
 
 		@Override
-		public void setDisplayContext(DisplayContext context) 
-		{
+		public DisplayContext getDisplayContext() {
+			return new DisplayContext("error", 0, 0, 0, 0);
 		}
-		
+
+		@Override
+		public void setDisplayContext(DisplayContext context) {
+		}
+
 	}
-	
+
 	@Override
-	public void update()
-	{
+	public void update() {
 		if (_component != null) {
 			_component.update();
 		}
 	}
-	
-	
 
-	protected class ASCIIFileMergeCodeDisplayer extends JTabbedPane implements MergeCodeDisplayerComponent, Observer
-	{
+	protected class ASCIIFileMergeCodeDisplayer extends JTabbedPane implements MergeCodeDisplayerComponent, Observer {
 		private static final String GENERATION_MERGE = "generation_merge";
 		private static final String RESULT_FILE_MERGE = "result_file_merge";
 
 		private CGMergeEditor _generationMergeEditor;
 		private CGMergeEditor _fileMergeEditor;
 		private DisplayContext displayContext;
-		
-		protected ASCIIFileMergeCodeDisplayer()
-		{
+
+		protected ASCIIFileMergeCodeDisplayer() {
 			super();
 			update();
 		}
-		
+
 		@Override
-		public DisplayContext getDisplayContext()
-		{
+		public DisplayContext getDisplayContext() {
 			DisplayContext context = null;
 			if (getSelectedComponent() == _generationMergeEditor) {
 				context = _generationMergeEditor.getMergeTextArea().getDisplayContext();
@@ -221,10 +200,9 @@ public class MergeCodeDisplayer extends CodeDisplayer {
 			}
 			return context;
 		}
-		
+
 		@Override
-		public void setDisplayContext(DisplayContext context)
-		{
+		public void setDisplayContext(DisplayContext context) {
 			if (context != null) {
 				if ((context.getContent() != null) && context.getContent().equals(GENERATION_MERGE)) {
 					setSelectedComponent(_generationMergeEditor);
@@ -241,10 +219,8 @@ public class MergeCodeDisplayer extends CodeDisplayer {
 			}
 		}
 
-
 		@Override
-		public void setEditable(boolean isEditable)
-		{
+		public void setEditable(boolean isEditable) {
 			if (_generationMergeEditor != null) {
 				_generationMergeEditor.setEditable(isEditable);
 			}
@@ -252,109 +228,85 @@ public class MergeCodeDisplayer extends CodeDisplayer {
 				_fileMergeEditor.setEditable(isEditable);
 			}
 		}
-		
+
 		@Override
-		public void setEditedContent(CGFile file) 
-		{
+		public void setEditedContent(CGFile file) {
 			// Not editable anyway
 		}
-		
+
 		@Override
-		public String getEditedContentForKey(String contentKey) 
-		{
+		public String getEditedContentForKey(String contentKey) {
 			// Interface: this component is not supposed to be editable
 			return null;
 		}
-		
+
 		@Override
-		public void update()
-		{
+		public void update() {
 			removeAll();
-			_generationMergeEditor = new CGMergeEditor(
-					getGenerationMerge(),
-					getTokenMarkerStyle(),
-					FlexoLocalization.localizedForKey("pure_generation"),
-					FlexoLocalization.localizedForKey("last_accepted_version"),
-					FlexoLocalization.localizedForKey("merged_generation"),
-					FlexoLocalization.localizedForKey("no_structural_changes"));
-			_fileMergeEditor = new CGMergeEditor(
-					getResultFileMerge(),
-					getTokenMarkerStyle(),
-					FlexoLocalization.localizedForKey("merged_generation"),
-					FlexoLocalization.localizedForKey("content_on_disk"),
+			_generationMergeEditor = new CGMergeEditor(getGenerationMerge(), getTokenMarkerStyle(),
+					FlexoLocalization.localizedForKey("pure_generation"), FlexoLocalization.localizedForKey("last_accepted_version"),
+					FlexoLocalization.localizedForKey("merged_generation"), FlexoLocalization.localizedForKey("no_structural_changes"));
+			_fileMergeEditor = new CGMergeEditor(getResultFileMerge(), getTokenMarkerStyle(),
+					FlexoLocalization.localizedForKey("merged_generation"), FlexoLocalization.localizedForKey("content_on_disk"),
 					FlexoLocalization.localizedForKey("merged_file_(will_be_written_on_disk)"),
 					FlexoLocalization.localizedForKey("no_structural_changes"));
 			getResultFileMerge().addObserver(this);
-			add(FlexoLocalization.localizedForKey("generation"),_generationMergeEditor);
-			add(FlexoLocalization.localizedForKey("merged_file"),_fileMergeEditor);
+			add(FlexoLocalization.localizedForKey("generation"), _generationMergeEditor);
+			add(FlexoLocalization.localizedForKey("merged_file"), _fileMergeEditor);
 			if (getGenerationMerge().isReallyConflicting()) {
 				setSelectedIndex(0);
-			}
-			else {
+			} else {
 				setSelectedIndex(1);
 			}
 			revalidate();
 		}
-		
-		public void delete()
-		{
+
+		public void delete() {
 			getGenerationMerge().deleteObserver(this);
 		}
-		
+
 		@Override
-		public void update(Observable o, Object arg) 
-		{
+		public void update(Observable o, Object arg) {
 			if ((o == getResultFileMerge()) && (arg instanceof MergeRecomputed)) {
 				logger.info("update() received in ASCIIFileMergeCodeDisplayer for MergeRecomputed");
-				//logger.info("left: "+getResultFileMerge().getLeftSource().getSourceString());
+				// logger.info("left: "+getResultFileMerge().getLeftSource().getSourceString());
 				int selectedIndex = getSelectedIndex();
 				remove(_fileMergeEditor);
-				_fileMergeEditor = new CGMergeEditor(
-						getResultFileMerge(),
-						getTokenMarkerStyle(),
-						FlexoLocalization.localizedForKey("merged_generation"),
-						FlexoLocalization.localizedForKey("content_on_disk"),
+				_fileMergeEditor = new CGMergeEditor(getResultFileMerge(), getTokenMarkerStyle(),
+						FlexoLocalization.localizedForKey("merged_generation"), FlexoLocalization.localizedForKey("content_on_disk"),
 						FlexoLocalization.localizedForKey("merged_file_(will_be_written_on_disk)"),
 						FlexoLocalization.localizedForKey("no_structural_changes"));
-				add(FlexoLocalization.localizedForKey("merged_file"),_fileMergeEditor);
+				add(FlexoLocalization.localizedForKey("merged_file"), _fileMergeEditor);
 				setSelectedIndex(selectedIndex);
 			}
 		}
-		
-		protected Merge getGenerationMerge() 
-		{
-			return ((ASCIIFile)getResourceData()).getGenerationMerge();
-		}
-		
-		protected Merge getResultFileMerge()
-		{
-			return ((ASCIIFile)getResourceData()).getResultFileMerge();
+
+		protected Merge getGenerationMerge() {
+			return ((ASCIIFile) getResourceData()).getGenerationMerge();
 		}
 
+		protected Merge getResultFileMerge() {
+			return ((ASCIIFile) getResourceData()).getResultFileMerge();
+		}
 
-		protected TokenMarkerStyle getTokenMarkerStyle()
-		{
+		protected TokenMarkerStyle getTokenMarkerStyle() {
 			return DefaultMergedDocumentType.getMergedDocumentType(getFileFormat()).getStyle();
 		}
 
 		@Override
-		public void setContentSource(ContentSource aContentSource) 
-		{
+		public void setContentSource(ContentSource aContentSource) {
 			// Interface
 		}
 
 		@Override
-		public void addToFocusListener(FocusListener aFocusListener)
-		{
+		public void addToFocusListener(FocusListener aFocusListener) {
 			_generationMergeEditor.addToFocusListener(aFocusListener);
 			_fileMergeEditor.addToFocusListener(aFocusListener);
 		}
 
-
 	}
 
-	protected class WOFileMergeCodeDisplayer extends JTabbedPane implements MergeCodeDisplayerComponent
-	{	
+	protected class WOFileMergeCodeDisplayer extends JTabbedPane implements MergeCodeDisplayerComponent {
 		private static final String HTML = "html";
 		private static final String WOD = "wod";
 		private static final String WOO = "woo";
@@ -363,42 +315,39 @@ public class MergeCodeDisplayer extends CodeDisplayer {
 		ASCIIFileMergeCodeDisplayer wodDisplayer;
 		ASCIIFileMergeCodeDisplayer wooDisplayer;
 
-		protected WOFileMergeCodeDisplayer()
-		{
+		protected WOFileMergeCodeDisplayer() {
 			super();
 			update();
 		}
-		
+
 		@Override
-		public DisplayContext getDisplayContext()
-		{
+		public DisplayContext getDisplayContext() {
 			DisplayContext context = null;
 			if (getSelectedComponent() == htmlDisplayer) {
 				context = htmlDisplayer.getDisplayContext();
-				context.setContent(context.getContent()+"_"+HTML);
+				context.setContent(context.getContent() + "_" + HTML);
 			}
 			if (getSelectedComponent() == wodDisplayer) {
 				context = wodDisplayer.getDisplayContext();
-				context.setContent(context.getContent()+"_"+WOD);
+				context.setContent(context.getContent() + "_" + WOD);
 			}
 			if (getSelectedComponent() == wooDisplayer) {
 				context = wooDisplayer.getDisplayContext();
-				context.setContent(context.getContent()+"_"+WOO);
+				context.setContent(context.getContent() + "_" + WOO);
 			}
 			return context;
 		}
-		
+
 		@Override
-		public void setDisplayContext(DisplayContext context)
-		{
+		public void setDisplayContext(DisplayContext context) {
 			String subContext = null;
 			if (context.getContent().indexOf("_") > -1) {
-				subContext = context.getContent().substring(0,context.getContent().lastIndexOf("_"));
+				subContext = context.getContent().substring(0, context.getContent().lastIndexOf("_"));
 			}
 			if (context.getContent().endsWith(HTML)) {
 				setSelectedComponent(htmlDisplayer);
 				context = new DisplayContext(context);
-				if (subContext!=null) {
+				if (subContext != null) {
 					context.setContent(subContext);
 				}
 				htmlDisplayer.setDisplayContext(context);
@@ -406,7 +355,7 @@ public class MergeCodeDisplayer extends CodeDisplayer {
 			if (context.getContent().endsWith(WOD)) {
 				setSelectedComponent(wodDisplayer);
 				context = new DisplayContext(context);
-				if (subContext!=null) {
+				if (subContext != null) {
 					context.setContent(subContext);
 				}
 				wodDisplayer.setDisplayContext(context);
@@ -414,7 +363,7 @@ public class MergeCodeDisplayer extends CodeDisplayer {
 			if (context.getContent().endsWith(WOO)) {
 				setSelectedComponent(wooDisplayer);
 				context = new DisplayContext(context);
-				if (subContext!=null) {
+				if (subContext != null) {
 					context.setContent(subContext);
 				}
 				wooDisplayer.setDisplayContext(context);
@@ -422,101 +371,90 @@ public class MergeCodeDisplayer extends CodeDisplayer {
 		}
 
 		@Override
-		public void setEditable(boolean isEditable)
-		{
+		public void setEditable(boolean isEditable) {
 			// Interface, not editable anyway
 		}
-		
+
 		@Override
-		public String getEditedContentForKey(String contentKey) 
-		{
+		public String getEditedContentForKey(String contentKey) {
 			// Interface, not editable anyway
 			return null;
 		}
 
 		@Override
-		public void setEditedContent(CGFile file) 
-		{
+		public void setEditedContent(CGFile file) {
 			// Interface, not editable anyway
 		}
 
-
 		@Override
-		public void update()
-		{
+		public void update() {
 			removeAll();
 			htmlDisplayer = new ASCIIFileMergeCodeDisplayer() {
 				@Override
-				protected TokenMarkerStyle getTokenMarkerStyle()
-				{
+				protected TokenMarkerStyle getTokenMarkerStyle() {
 					return TokenMarkerStyle.HTML;
 				}
+
 				@Override
-				protected Merge getGenerationMerge() 
-				{
-					return ((WOFile)getResourceData()).getHTMLFile().getGenerationMerge();
-				}	
+				protected Merge getGenerationMerge() {
+					return ((WOFile) getResourceData()).getHTMLFile().getGenerationMerge();
+				}
+
 				@Override
-				protected Merge getResultFileMerge()
-				{
-					return ((WOFile)getResourceData()).getHTMLFile().getResultFileMerge();
+				protected Merge getResultFileMerge() {
+					return ((WOFile) getResourceData()).getHTMLFile().getResultFileMerge();
 				}
 			};
 			wodDisplayer = new ASCIIFileMergeCodeDisplayer() {
 				@Override
-				protected TokenMarkerStyle getTokenMarkerStyle()
-				{
+				protected TokenMarkerStyle getTokenMarkerStyle() {
 					return TokenMarkerStyle.WOD;
 				}
+
 				@Override
-				protected Merge getGenerationMerge() 
-				{
-					return ((WOFile)getResourceData()).getWODFile().getGenerationMerge();
-				}	
+				protected Merge getGenerationMerge() {
+					return ((WOFile) getResourceData()).getWODFile().getGenerationMerge();
+				}
+
 				@Override
-				protected Merge getResultFileMerge()
-				{
-					return ((WOFile)getResourceData()).getWODFile().getResultFileMerge();
+				protected Merge getResultFileMerge() {
+					return ((WOFile) getResourceData()).getWODFile().getResultFileMerge();
 				}
 			};
 			wooDisplayer = new ASCIIFileMergeCodeDisplayer() {
 				@Override
-				protected TokenMarkerStyle getTokenMarkerStyle()
-				{
+				protected TokenMarkerStyle getTokenMarkerStyle() {
 					return TokenMarkerStyle.WOD;
 				}
+
 				@Override
-				protected Merge getGenerationMerge() 
-				{
-					return ((WOFile)getResourceData()).getWOOFile().getGenerationMerge();
-				}	
+				protected Merge getGenerationMerge() {
+					return ((WOFile) getResourceData()).getWOOFile().getGenerationMerge();
+				}
+
 				@Override
-				protected Merge getResultFileMerge()
-				{
-					return ((WOFile)getResourceData()).getWOOFile().getResultFileMerge();
+				protected Merge getResultFileMerge() {
+					return ((WOFile) getResourceData()).getWOOFile().getResultFileMerge();
 				}
 			};
-			add(".html",htmlDisplayer);
-			add(".wod",wodDisplayer);
-			add(".woo",wooDisplayer);
+			add(".html", htmlDisplayer);
+			add(".wod", wodDisplayer);
+			add(".woo", wooDisplayer);
 			validate();
 		}
 
 		@Override
-		public void setContentSource(ContentSource aContentSource) 
-		{
+		public void setContentSource(ContentSource aContentSource) {
 			// Interface
 		}
 
 		@Override
-		public void addToFocusListener(FocusListener aFocusListener)
-		{
+		public void addToFocusListener(FocusListener aFocusListener) {
 			htmlDisplayer.addToFocusListener(aFocusListener);
 			wodDisplayer.addToFocusListener(aFocusListener);
 			wooDisplayer.addToFocusListener(aFocusListener);
 		}
 
 	}
-
 
 }

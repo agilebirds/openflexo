@@ -23,29 +23,24 @@ import org.openflexo.foundation.ie.widget.IETRWidget;
 
 /**
  * @author bmangez
- * @version $Id: TRInserted.java,v 1.2 2011/09/12 11:47:11 gpolet Exp $ $Log:
- *          TRInserted.java,v $ Revision 1.2 2005/04/18 15:19:07 sguerin Commit
- *          on 18/04/2005, Sylvain GUERIN, version 7.0.6 See committing
- *          documentation
+ * @version $Id: TRInserted.java,v 1.2 2011/09/12 11:47:11 gpolet Exp $ $Log: TRInserted.java,v $ Revision 1.2 2005/04/18 15:19:07 sguerin
+ *          Commit on 18/04/2005, Sylvain GUERIN, version 7.0.6 See committing documentation
  * 
- * Revision 1.1 2005/03/29 08:10:50 benoit *** empty log message ***
+ *          Revision 1.1 2005/03/29 08:10:50 benoit *** empty log message ***
  * 
  * 
- * <B>Class Description</B>
+ *          <B>Class Description</B>
  */
-public class TRInserted extends IEDataModification
-{
+public class TRInserted extends IEDataModification {
 
-    private IETRWidget _tr;
+	private IETRWidget _tr;
 
-    public TRInserted(IETRWidget insertedTR)
-    {
-        super(insertedTR, null);
-        _tr = insertedTR;
-    }
+	public TRInserted(IETRWidget insertedTR) {
+		super(insertedTR, null);
+		_tr = insertedTR;
+	}
 
-    public IETRWidget getTR()
-    {
-        return _tr;
-    }
+	public IETRWidget getTR() {
+		return _tr;
+	}
 }

@@ -30,127 +30,109 @@ import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.wkf.edge.WKFAssociation;
 import org.openflexo.foundation.wkf.node.WKFNode;
 
+public class CreateAssociation extends FlexoUndoableAction<CreateAssociation, WKFNode, WKFNode> {
 
-public class CreateAssociation extends FlexoUndoableAction<CreateAssociation,WKFNode,WKFNode> 
-{
+	private static final Logger logger = Logger.getLogger(CreateAssociation.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(CreateAssociation.class.getPackage().getName());
+	public static FlexoActionType<CreateAssociation, WKFNode, WKFNode> actionType = new FlexoActionType<CreateAssociation, WKFNode, WKFNode>(
+			"create_association", FlexoActionType.defaultGroup) {
 
-    public static FlexoActionType<CreateAssociation,WKFNode,WKFNode> actionType 
-    = new FlexoActionType<CreateAssociation,WKFNode,WKFNode> ("create_association",FlexoActionType.defaultGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public CreateAssociation makeNewAction(WKFNode focusedObject, Vector<WKFNode> globalSelection, FlexoEditor editor) {
+			return new CreateAssociation(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public CreateAssociation makeNewAction(WKFNode focusedObject, Vector<WKFNode> globalSelection, FlexoEditor editor) 
-        {
-            return new CreateAssociation(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(WKFNode object, Vector<WKFNode> globalSelection) {
+			return false;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(WKFNode object, Vector<WKFNode> globalSelection) 
-        {
-            return false;
-        }
+		@Override
+		protected boolean isEnabledForSelection(WKFNode object, Vector<WKFNode> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(WKFNode object, Vector<WKFNode> globalSelection) 
-        {
-            return true;
-        }
-                
-        private String[] persistentProperties = { "startNode", "endNode"};
-        
-        @Override
-		protected String[] getPersistentProperties() 
-        {
-        	return persistentProperties;
-        }
-        
-    };
-    
-    CreateAssociation (WKFNode focusedObject, Vector<WKFNode> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
-    
-    static {
-    	FlexoModelObject.addActionForClass(actionType, WKFNode.class);
-    }
+		private String[] persistentProperties = { "startNode", "endNode" };
 
-    WKFNode startNode;
-    WKFNode endNode;
-    private String newEdgeName;
-   
-    private WKFAssociation newAssociation;
-    @Override
-	protected void doAction(Object context) throws InvalidEdgeDefinition, DisplayActionCannotBeBound 
-    {
-    	// 1. Check validity
-    	// Cannot have null start node or end node 
-    	if (startNode == null || endNode == null) 
-    		throw new InvalidEdgeDefinition();
-    	
-        newAssociation = new WKFAssociation(startNode,endNode);       
-        objectCreated("NEW_ASSOCIATION",newAssociation);
-    }
+		@Override
+		protected String[] getPersistentProperties() {
+			return persistentProperties;
+		}
+
+	};
+
+	CreateAssociation(WKFNode focusedObject, Vector<WKFNode> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, WKFNode.class);
+	}
+
+	WKFNode startNode;
+	WKFNode endNode;
+	private String newEdgeName;
+
+	private WKFAssociation newAssociation;
 
 	@Override
-	protected void undoAction(Object context) throws FlexoException 
-	{
+	protected void doAction(Object context) throws InvalidEdgeDefinition, DisplayActionCannotBeBound {
+		// 1. Check validity
+		// Cannot have null start node or end node
+		if (startNode == null || endNode == null)
+			throw new InvalidEdgeDefinition();
+
+		newAssociation = new WKFAssociation(startNode, endNode);
+		objectCreated("NEW_ASSOCIATION", newAssociation);
+	}
+
+	@Override
+	protected void undoAction(Object context) throws FlexoException {
 		logger.info("Create association: UNDO");
 		getNewAssociation().delete();
 	}
-    
+
 	@Override
-	protected void redoAction(Object context) throws FlexoException
-	{
+	protected void redoAction(Object context) throws FlexoException {
 		logger.info("Create association: REDO");
 		doAction(context);
 	}
-	
-	public WKFNode getStartNode() 
-	{
+
+	public WKFNode getStartNode() {
 		if (startNode == null) {
 			return getFocusedObject();
 		}
 		return startNode;
 	}
 
-	public void setStartingNode(WKFNode startNode) 
-	{
+	public void setStartingNode(WKFNode startNode) {
 		this.startNode = startNode;
 	}
 
-	public WKFNode getEndNode() 
-	{
+	public WKFNode getEndNode() {
 		return endNode;
 	}
 
-	public void setEndNode(WKFNode endNode) 
-	{
+	public void setEndNode(WKFNode endNode) {
 		this.endNode = endNode;
 	}
 
-	public class InvalidEdgeDefinition extends FlexoException
-	{
-		protected InvalidEdgeDefinition()
-		{
-			super("Invalid association startNode="+startNode+" endNode="+endNode,"invalid_association");
+	public class InvalidEdgeDefinition extends FlexoException {
+		protected InvalidEdgeDefinition() {
+			super("Invalid association startNode=" + startNode + " endNode=" + endNode, "invalid_association");
 		}
 	}
 
-	public class DisplayActionCannotBeBound extends FlexoException
-	{
-		protected DisplayActionCannotBeBound()
-		{
-			super("DisplayActionCannotBeBound","display_action_can_not_be_bound");
+	public class DisplayActionCannotBeBound extends FlexoException {
+		protected DisplayActionCannotBeBound() {
+			super("DisplayActionCannotBeBound", "display_action_can_not_be_bound");
 		}
 	}
 
-	public WKFAssociation getNewAssociation()
-	{
+	public WKFAssociation getNewAssociation() {
 		return newAssociation;
 	}
 
@@ -161,5 +143,5 @@ public class CreateAssociation extends FlexoUndoableAction<CreateAssociation,WKF
 	public void setNewEdgeName(String newEdgeName) {
 		this.newEdgeName = newEdgeName;
 	}
-	
+
 }

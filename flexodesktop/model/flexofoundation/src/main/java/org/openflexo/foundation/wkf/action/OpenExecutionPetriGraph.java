@@ -37,71 +37,64 @@ import org.openflexo.foundation.wkf.node.SelfExecutableNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableOperationNode;
 import org.openflexo.localization.FlexoLocalization;
 
-public class OpenExecutionPetriGraph extends FlexoUndoableAction<OpenExecutionPetriGraph,PetriGraphNode,WKFObject> 
-{
+public class OpenExecutionPetriGraph extends FlexoUndoableAction<OpenExecutionPetriGraph, PetriGraphNode, WKFObject> {
 
 	private static final Logger logger = Logger.getLogger(OpenExecutionPetriGraph.class.getPackage().getName());
 
-	public static FlexoActionType<OpenExecutionPetriGraph,PetriGraphNode,WKFObject> actionType 
-	= new FlexoActionType<OpenExecutionPetriGraph,PetriGraphNode,WKFObject> ("open_execution_level",FlexoActionType.defaultGroup) {
+	public static FlexoActionType<OpenExecutionPetriGraph, PetriGraphNode, WKFObject> actionType = new FlexoActionType<OpenExecutionPetriGraph, PetriGraphNode, WKFObject>(
+			"open_execution_level", FlexoActionType.defaultGroup) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public OpenExecutionPetriGraph makeNewAction(PetriGraphNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) 
-		{
-			return new OpenExecutionPetriGraph(focusedObject, globalSelection,editor);
+		public OpenExecutionPetriGraph makeNewAction(PetriGraphNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+			return new OpenExecutionPetriGraph(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(PetriGraphNode object, Vector<WKFObject> globalSelection) 
-		{
+		protected boolean isVisibleForSelection(PetriGraphNode object, Vector<WKFObject> globalSelection) {
 			return (object instanceof SelfExecutableNode);
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(PetriGraphNode object, Vector<WKFObject> globalSelection) 
-		{
+		protected boolean isEnabledForSelection(PetriGraphNode object, Vector<WKFObject> globalSelection) {
 			return isVisibleForSelection(object, globalSelection);
 		}
 
 	};
 
-    static {
-        FlexoModelObject.addActionForClass(OpenExecutionPetriGraph.actionType, SelfExecutableActivityNode.class);
-        FlexoModelObject.addActionForClass(OpenExecutionPetriGraph.actionType, SelfExecutableOperationNode.class);
-        FlexoModelObject.addActionForClass(OpenExecutionPetriGraph.actionType, SelfExecutableActionNode.class);
-    }
+	static {
+		FlexoModelObject.addActionForClass(OpenExecutionPetriGraph.actionType, SelfExecutableActivityNode.class);
+		FlexoModelObject.addActionForClass(OpenExecutionPetriGraph.actionType, SelfExecutableOperationNode.class);
+		FlexoModelObject.addActionForClass(OpenExecutionPetriGraph.actionType, SelfExecutableActionNode.class);
+	}
 
-	OpenExecutionPetriGraph (PetriGraphNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-	{
-		super(actionType, focusedObject, globalSelection,editor);
+	OpenExecutionPetriGraph(PetriGraphNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
-	protected void doAction(Object context) 
-	{
+	protected void doAction(Object context) {
 		if (getExecutionPetriGraph() == null) {
-			// We use here a null editor because this action is embedded 
+			// We use here a null editor because this action is embedded
 			_createPetriGraph = CreateExecutionPetriGraph.actionType.makeNewEmbeddedAction(getFocusedObject(), null, this).doAction();
 			getExecutionPetriGraph().setIsVisible(false);
 		}
 		logger.info("OpenExecutionPetriGraph");
-  		if (getExecutionPetriGraph() != null) {
+		if (getExecutionPetriGraph() != null) {
 			if (getExecutionPetriGraph().getIsVisible()) {
 				getExecutionPetriGraph().setIsVisible(false);
 				getFocusedObject().setChanged();
- 				getFocusedObject().notifyObservers(new PetriGraphHasBeenClosed(getExecutionPetriGraph()));
-			}
-			else {
+				getFocusedObject().notifyObservers(new PetriGraphHasBeenClosed(getExecutionPetriGraph()));
+			} else {
 				getExecutionPetriGraph().setIsVisible(true);
 				getFocusedObject().setChanged();
- 				getFocusedObject().notifyObservers(new PetriGraphHasBeenOpened(getExecutionPetriGraph()));
- 				getExecutionPetriGraph().setChanged();
- 				getExecutionPetriGraph().notifyObservers(new PetriGraphHasBeenOpened(getExecutionPetriGraph()));
+				getFocusedObject().notifyObservers(new PetriGraphHasBeenOpened(getExecutionPetriGraph()));
+				getExecutionPetriGraph().setChanged();
+				getExecutionPetriGraph().notifyObservers(new PetriGraphHasBeenOpened(getExecutionPetriGraph()));
 			}
- 		}
+		}
 	}
 
 	/**
@@ -111,19 +104,16 @@ public class OpenExecutionPetriGraph extends FlexoUndoableAction<OpenExecutionPe
 		return getSelfExecutableNode().getExecutionPetriGraph();
 	}
 
-	public SelfExecutableNode getSelfExecutableNode()
-	{
-		return (SelfExecutableNode)getFocusedObject();
+	public SelfExecutableNode getSelfExecutableNode() {
+		return (SelfExecutableNode) getFocusedObject();
 	}
 
 	@Override
-	public String getLocalizedName ()
-	{
+	public String getLocalizedName() {
 		if ((getSelfExecutableNode()).getExecutionPetriGraph() != null) {
 			if ((getSelfExecutableNode()).getExecutionPetriGraph().getIsVisible()) {
 				return FlexoLocalization.localizedForKey("close_execution_level");
-			}
-			else {
+			} else {
 				return FlexoLocalization.localizedForKey("open_execution_level");
 			}
 		}
@@ -132,14 +122,12 @@ public class OpenExecutionPetriGraph extends FlexoUndoableAction<OpenExecutionPe
 	}
 
 	@Override
-	protected void undoAction(Object context) 
-	{
+	protected void undoAction(Object context) {
 		doAction(context);
 	}
 
 	@Override
-	protected void redoAction(Object context)
-	{
+	protected void redoAction(Object context) {
 		doAction(context);
 	}
 

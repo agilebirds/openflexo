@@ -26,11 +26,9 @@ import org.openflexo.foundation.dm.DMProperty;
  * 
  * @author sguerin
  */
-public class PropertyUnregistered extends DMDataModification
-{
+public class PropertyUnregistered extends DMDataModification {
 
-    public PropertyUnregistered(DMProperty property)
-    {
-        super(property, null);
-    }
+	public PropertyUnregistered(DMProperty property) {
+		super(property, null);
+	}
 }

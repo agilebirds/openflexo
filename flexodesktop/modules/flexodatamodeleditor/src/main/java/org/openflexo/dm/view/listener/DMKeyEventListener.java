@@ -23,26 +23,22 @@ import org.openflexo.dm.view.controller.DMController;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.listener.FlexoKeyEventListener;
 
-
 /**
  * Key events listener used in the context of Interface Editor
  * 
  * @author sguerin
  */
-public class DMKeyEventListener extends FlexoKeyEventListener
-{
+public class DMKeyEventListener extends FlexoKeyEventListener {
 
-    private DMController _dmController;
+	private DMController _dmController;
 
-    public DMKeyEventListener(DMController controller)
-    {
-        super(controller);
-        _dmController = controller;
-    }
+	public DMKeyEventListener(DMController controller) {
+		super(controller);
+		_dmController = controller;
+	}
 
-    protected SelectionManager getSelectionManager()
-    {
-        return _dmController.getDMSelectionManager();
-    }
+	protected SelectionManager getSelectionManager() {
+		return _dmController.getDMSelectionManager();
+	}
 
 }

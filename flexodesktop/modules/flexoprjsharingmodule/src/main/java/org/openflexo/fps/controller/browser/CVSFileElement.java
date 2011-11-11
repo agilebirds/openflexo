@@ -27,33 +27,26 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.fps.CVSFile;
 import org.openflexo.icon.FilesIconLibrary;
 
-
-public class CVSFileElement extends FPSBrowserElement
-{
-	public CVSFileElement(CVSFile file, ProjectBrowser browser, BrowserElement parent)
-	{
-		super(file, BrowserElementType.CVS_FILE, browser,parent);
+public class CVSFileElement extends FPSBrowserElement {
+	public CVSFileElement(CVSFile file, ProjectBrowser browser, BrowserElement parent) {
+		super(file, BrowserElementType.CVS_FILE, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 	}
 
 	@Override
-	public String getName()
-	{
-		return getFile().getFileName()+(getFile().getRevision()!=null?" - "+getFile().getRevision():"");
+	public String getName() {
+		return getFile().getFileName() + (getFile().getRevision() != null ? " - " + getFile().getRevision() : "");
 	}
 
-	public CVSFile getFile()
-	{
-		return (CVSFile)getObject();
+	public CVSFile getFile() {
+		return (CVSFile) getObject();
 	}
 
 	@Override
-	public ImageIcon getBaseIcon()
-	{
+	public ImageIcon getBaseIcon() {
 		if (getFile().getResourceType() != null) {
 			return FilesIconLibrary.smallIconForFileFormat(getFile().getResourceType().getFormat());
 		} else {

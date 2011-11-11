@@ -31,40 +31,33 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.wkf.controller.OpenProcessInNewWindow;
 
-
 public class OpenProcessInNewWindowInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	OpenProcessInNewWindowInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(OpenProcessInNewWindow.actionType,actionInitializer);
+	OpenProcessInNewWindowInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(OpenProcessInNewWindow.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	public void init()
-	{
-        OpenProcessInNewWindow.initWithController(getControllerActionInitializer().getWKFController());
-        getControllerActionInitializer().registerAction(OpenProcessInNewWindow.actionType,getShortcut());
+	public void init() {
+		OpenProcessInNewWindow.initWithController(getControllerActionInitializer().getWKFController());
+		getControllerActionInitializer().registerAction(OpenProcessInNewWindow.actionType, getShortcut());
 	}
-	
+
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return WKFIconLibrary.PROCESS_ICON;
 	}
 
 	@Override
-	protected KeyStroke getShortcut() 
-	{
+	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(KeyEvent.VK_U, FlexoCst.META_MASK);
 	}
-	
 
 }

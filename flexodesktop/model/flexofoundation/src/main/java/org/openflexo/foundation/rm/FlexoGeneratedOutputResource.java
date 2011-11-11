@@ -33,7 +33,7 @@ import org.openflexo.localization.FlexoLocalization;
 public abstract class FlexoGeneratedOutputResource<GO extends GeneratedOutput> extends FlexoXMLStorageResource<GO> {
 
 	private static final Logger logger = Logger.getLogger(FlexoGeneratedOutputResource.class.getPackage().getName());
-    
+
 	public FlexoGeneratedOutputResource(FlexoProject project) {
 		super(project);
 	}
@@ -41,16 +41,14 @@ public abstract class FlexoGeneratedOutputResource<GO extends GeneratedOutput> e
 	public FlexoGeneratedOutputResource(FlexoProjectBuilder builder) {
 		super(builder);
 	}
-	
-    @Override
-	public boolean hasBuilder()
-    {
-        return true;
-    }
 
 	@Override
-	public Object instanciateNewBuilder()
-	{
+	public boolean hasBuilder() {
+		return true;
+	}
+
+	@Override
+	public Object instanciateNewBuilder() {
 		GeneratedCodeBuilder builder = new GeneratedCodeBuilder(this);
 		builder.generatedCode = _resourceData;
 		return builder;
@@ -72,7 +70,8 @@ public abstract class FlexoGeneratedOutputResource<GO extends GeneratedOutput> e
 	}
 
 	@Override
-	public GO performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadXMLResourceException, ProjectLoadingCancelledException, MalformedXMLException {
+	public GO performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadXMLResourceException,
+			ProjectLoadingCancelledException, MalformedXMLException {
 		GO cg;
 		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("loading_generated_data"));
@@ -97,10 +96,9 @@ public abstract class FlexoGeneratedOutputResource<GO extends GeneratedOutput> e
 
 		return cg;
 	}
-	
-	public FlexoResource getFlexoResource()
-    {
-        return this;
-    }
+
+	public FlexoResource getFlexoResource() {
+		return this;
+	}
 
 }

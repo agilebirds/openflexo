@@ -28,111 +28,100 @@ import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class WidgetFont extends KVCObject implements StringConvertable
-{
+public class WidgetFont extends KVCObject implements StringConvertable {
 
-    private static final Logger logger = Logger.getLogger(WidgetFont.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(WidgetFont.class.getPackage().getName());
 
-    private Font _theFont;
-    public Font getTheFont(){
+	private Font _theFont;
+
+	public Font getTheFont() {
 		return _theFont;
 	}
-    
-    public static final StringEncoder.Converter<WidgetFont> flexoFontConverter = new Converter<WidgetFont>(WidgetFont.class) {
-    	
-        @Override
-		public WidgetFont convertFromString(String value)
-        {
-            return stringToFont(value);
-        }
 
-        @Override
-		public String convertToString(WidgetFont value)
-        {
-            return value.toString();
-        }
+	public static final StringEncoder.Converter<WidgetFont> flexoFontConverter = new Converter<WidgetFont>(WidgetFont.class) {
 
-    };
+		@Override
+		public WidgetFont convertFromString(String value) {
+			return stringToFont(value);
+		}
 
-    public WidgetFont(String s)
-    {
-        this(nameFromString(s), styleFromString(s), sizeFromString(s));
-    }
+		@Override
+		public String convertToString(WidgetFont value) {
+			return value.toString();
+		}
 
-    public WidgetFont(String name, int style, int size)
-    {
-        super();
-        _theFont = new Font(name,style,size);
-    }
+	};
 
-    public WidgetFont(Font aFont)
-    {
-        this(aFont.getName(), aFont.getStyle(), aFont.getSize());
-    }
+	public WidgetFont(String s) {
+		this(nameFromString(s), styleFromString(s), sizeFromString(s));
+	}
 
-    @Override
-	public String toString()
-    {
-        return _theFont.getName() + "," + _theFont.getStyle() + "," + _theFont.getSize();
-    }
+	public WidgetFont(String name, int style, int size) {
+		super();
+		_theFont = new Font(name, style, size);
+	}
 
-    @Override
-	public StringEncoder.Converter getConverter()
-    {
-        return flexoFontConverter;
-    }
+	public WidgetFont(Font aFont) {
+		this(aFont.getName(), aFont.getStyle(), aFont.getSize());
+	}
 
-    public static StringEncoder.Converter getConverterStatic()
-    {
-        return flexoFontConverter;
-    }
-    
-    public static WidgetFont stringToFont(String s)
-    {
-        return new WidgetFont(s);
-    }
+	@Override
+	public String toString() {
+		return _theFont.getName() + "," + _theFont.getStyle() + "," + _theFont.getSize();
+	}
 
-    private static String nameFromString(String s)
-    {
-        return s.substring(0, s.indexOf(","));
-    }
+	@Override
+	public StringEncoder.Converter getConverter() {
+		return flexoFontConverter;
+	}
 
-    private static int styleFromString(String s)
-    {
-    	String parseMe = s.substring(s.indexOf(",") + 1, s.lastIndexOf(","));
-    	if (parseMe.equalsIgnoreCase("plain")) return Font.PLAIN;
-    	if (parseMe.equalsIgnoreCase("bold")) return Font.BOLD;
-    	if (parseMe.equalsIgnoreCase("italic")) return Font.ITALIC;
-    	if (parseMe.equalsIgnoreCase("bold+italic")) return Font.BOLD+Font.ITALIC;
-    	try {
-    		return Integer.parseInt(parseMe);
-    	}
-    	catch (NumberFormatException e) {
-    		// OK, give up	
-    	}
-    	return Font.PLAIN;
-    }
+	public static StringEncoder.Converter getConverterStatic() {
+		return flexoFontConverter;
+	}
 
-    private static int sizeFromString(String s)
-    {
-        return Integer.parseInt(s.substring(s.lastIndexOf(",") + 1));
-    }
+	public static WidgetFont stringToFont(String s) {
+		return new WidgetFont(s);
+	}
 
-    private static final Hashtable<String,WidgetFont> fontHashtable=new Hashtable<String, WidgetFont>();
-    
-    public static WidgetFont get(String fontAsString)
-    {
-        if (fontAsString == null) {
-            return null;
-        }
-        WidgetFont answer = fontHashtable.get(fontAsString);
+	private static String nameFromString(String s) {
+		return s.substring(0, s.indexOf(","));
+	}
+
+	private static int styleFromString(String s) {
+		String parseMe = s.substring(s.indexOf(",") + 1, s.lastIndexOf(","));
+		if (parseMe.equalsIgnoreCase("plain"))
+			return Font.PLAIN;
+		if (parseMe.equalsIgnoreCase("bold"))
+			return Font.BOLD;
+		if (parseMe.equalsIgnoreCase("italic"))
+			return Font.ITALIC;
+		if (parseMe.equalsIgnoreCase("bold+italic"))
+			return Font.BOLD + Font.ITALIC;
+		try {
+			return Integer.parseInt(parseMe);
+		} catch (NumberFormatException e) {
+			// OK, give up
+		}
+		return Font.PLAIN;
+	}
+
+	private static int sizeFromString(String s) {
+		return Integer.parseInt(s.substring(s.lastIndexOf(",") + 1));
+	}
+
+	private static final Hashtable<String, WidgetFont> fontHashtable = new Hashtable<String, WidgetFont>();
+
+	public static WidgetFont get(String fontAsString) {
+		if (fontAsString == null) {
+			return null;
+		}
+		WidgetFont answer = fontHashtable.get(fontAsString);
 		if (answer == null) {
 			answer = new WidgetFont(fontAsString);
 			fontHashtable.put(fontAsString, answer);
@@ -144,6 +133,5 @@ public class WidgetFont extends KVCObject implements StringConvertable
 		// TODO Auto-generated method stub
 		logger.warning("Immediate update of browser font not implemented yet !");
 	}
-
 
 }

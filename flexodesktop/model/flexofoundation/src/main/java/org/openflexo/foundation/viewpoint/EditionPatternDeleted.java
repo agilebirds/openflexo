@@ -21,13 +21,10 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.ontology.dm.OEDataModification;
 
-public class EditionPatternDeleted extends OEDataModification
-{
+public class EditionPatternDeleted extends OEDataModification {
 
-     public EditionPatternDeleted(EditionPattern ep)
-    {
-        super(ep,null);
-    }
+	public EditionPatternDeleted(EditionPattern ep) {
+		super(ep, null);
+	}
 
- 
 }

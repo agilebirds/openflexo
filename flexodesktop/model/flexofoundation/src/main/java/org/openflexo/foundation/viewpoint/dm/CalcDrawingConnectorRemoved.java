@@ -29,20 +29,17 @@ import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
  * @author sguerin
  * 
  */
-public class CalcDrawingConnectorRemoved extends OEDataModification
-{
+public class CalcDrawingConnectorRemoved extends OEDataModification {
 
-    private ExampleDrawingObject _parent;
+	private ExampleDrawingObject _parent;
 
-    public CalcDrawingConnectorRemoved(ExampleDrawingConnector connector, ExampleDrawingObject parent)
-    {
-        super(connector,null);
-        _parent = parent;
-    }
+	public CalcDrawingConnectorRemoved(ExampleDrawingConnector connector, ExampleDrawingObject parent) {
+		super(connector, null);
+		_parent = parent;
+	}
 
-    public ExampleDrawingObject getParent()
-    {
-        return _parent;
-    }
+	public ExampleDrawingObject getParent() {
+		return _parent;
+	}
 
 }

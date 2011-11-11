@@ -19,50 +19,38 @@
  */
 package org.openflexo.fib.model;
 
-
-
 public class FIBTab extends FIBPanel {
 
-	private String title;	
+	private String title;
 	private int index;
 
-	public static enum Parameters implements FIBModelAttribute
-	{
-		title,
-		index
+	public static enum Parameters implements FIBModelAttribute {
+		title, index
 	}
-		
 
-	public int getIndex()
-	{
+	public int getIndex() {
 		return index;
 	}
 
-	public void setIndex(int index)
-	{
-		FIBAttributeNotification<Integer> notification = requireChange(
-				Parameters.index, index);
+	public void setIndex(int index) {
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.index, index);
 		if (notification != null) {
 			this.index = index;
 			hasChanged(notification);
 		}
 	}
-	
+
 	@Override
-	public String getIdentifier()
-	{
+	public String getIdentifier() {
 		return getTitle();
 	}
 
-	public String getTitle()
-	{
+	public String getTitle() {
 		return title;
 	}
 
-	public void setTitle(String title)
-	{
-		FIBAttributeNotification<String> notification = requireChange(
-				Parameters.title, title);
+	public void setTitle(String title) {
+		FIBAttributeNotification<String> notification = requireChange(Parameters.title, title);
 		if (notification != null) {
 			this.title = title;
 			hasChanged(notification);

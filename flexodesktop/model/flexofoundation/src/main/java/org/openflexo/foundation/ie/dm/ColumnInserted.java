@@ -23,23 +23,20 @@ package org.openflexo.foundation.ie.dm;
  * @author gpolet
  * 
  */
-public class ColumnInserted extends IEDataModification
-{
+public class ColumnInserted extends IEDataModification {
 
-    private int col;
+	private int col;
 
-    /**
-     * @param oldValue
-     * @param newValue
-     */
-    public ColumnInserted(int col)
-    {
-        super(null, null);
-        this.col=col;
-    }
+	/**
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public ColumnInserted(int col) {
+		super(null, null);
+		this.col = col;
+	}
 
-    public int getColumnIndex()
-    {
-        return col;
-    }
+	public int getColumnIndex() {
+		return col;
+	}
 }

@@ -30,7 +30,6 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -42,33 +41,26 @@ public class RevertToHistoryVersionInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RevertToHistoryVersionInitializer(SGControllerActionInitializer actionInitializer)
-	{
-		super(RevertToHistoryVersion.actionType,actionInitializer);
+	RevertToHistoryVersionInitializer(SGControllerActionInitializer actionInitializer) {
+		super(RevertToHistoryVersion.actionType, actionInitializer);
 	}
 
 	@Override
-	protected SGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (SGControllerActionInitializer)super.getControllerActionInitializer();
+	protected SGControllerActionInitializer getControllerActionInitializer() {
+		return (SGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<RevertToHistoryVersion> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<RevertToHistoryVersion> getDefaultInitializer() {
 		return new FlexoActionInitializer<RevertToHistoryVersion>() {
 			@Override
-			public boolean run(ActionEvent e, RevertToHistoryVersion action)
-			{
+			public boolean run(ActionEvent e, RevertToHistoryVersion action) {
 				if (action.getVersionId() == null) {
-					CGFileVersionParameter versionParameter 
-					= new CGFileVersionParameter("version","version",action.getCGFile(),null);
-					CheckboxParameter doItNowParameter = new CheckboxParameter("doItNow","do_it_immediately",false);
-					AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(
-							getProject(), 
-							null, 
-							action.getLocalizedName(),
-							FlexoLocalization.localizedForKey("please_choose_version_to_override_with"), versionParameter, doItNowParameter);
+					CGFileVersionParameter versionParameter = new CGFileVersionParameter("version", "version", action.getCGFile(), null);
+					CheckboxParameter doItNowParameter = new CheckboxParameter("doItNow", "do_it_immediately", false);
+					AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
+							action.getLocalizedName(), FlexoLocalization.localizedForKey("please_choose_version_to_override_with"),
+							versionParameter, doItNowParameter);
 					if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 						if (versionParameter.getValue() == null) {
 							FlexoController.notify(FlexoLocalization.localizedForKey("please_select_valid_version"));
@@ -86,13 +78,12 @@ public class RevertToHistoryVersionInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<RevertToHistoryVersion> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<RevertToHistoryVersion> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RevertToHistoryVersion>() {
 			@Override
-			public boolean run(ActionEvent e, RevertToHistoryVersion action)
-			{
-				getControllerActionInitializer().getSGController().switchToPerspective(getControllerActionInitializer().getSGController().CODE_GENERATION_PERSPECTIVE);
+			public boolean run(ActionEvent e, RevertToHistoryVersion action) {
+				getControllerActionInitializer().getSGController().switchToPerspective(
+						getControllerActionInitializer().getSGController().CODE_GENERATION_PERSPECTIVE);
 				getControllerActionInitializer().getSGController().selectAndFocusObject(action.getCGFile());
 				return true;
 			}
@@ -100,17 +91,13 @@ public class RevertToHistoryVersionInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return GeneratorIconLibrary.REVERT_TO_HISTORY_VERSION_ICON;
 	}
 
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return GeneratorIconLibrary.REVERT_TO_HISTORY_VERSION_DISABLED_ICON;
 	}
-
-
 
 }

@@ -30,83 +30,73 @@ import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMMethod;
 import org.openflexo.foundation.dm.DMObject;
 
+public class CreateDMMethod extends FlexoAction<CreateDMMethod, DMEntity, DMObject> {
 
-public class CreateDMMethod extends FlexoAction<CreateDMMethod,DMEntity,DMObject> 
-{
+	private static final Logger logger = Logger.getLogger(CreateDMMethod.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(CreateDMMethod.class.getPackage().getName());
+	public static FlexoActionType<CreateDMMethod, DMEntity, DMObject> actionType = new FlexoActionType<CreateDMMethod, DMEntity, DMObject>(
+			"add_method", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
-    public static FlexoActionType<CreateDMMethod,DMEntity,DMObject> actionType = new FlexoActionType<CreateDMMethod,DMEntity,DMObject> ("add_method",FlexoActionType.newMenu,FlexoActionType.defaultGroup,FlexoActionType.ADD_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public CreateDMMethod makeNewAction(DMEntity entity, Vector<DMObject> globalSelection, FlexoEditor editor) {
+			return new CreateDMMethod(entity, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public CreateDMMethod makeNewAction(DMEntity entity, Vector<DMObject> globalSelection, FlexoEditor editor) 
-        {
-            return new CreateDMMethod(entity, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(DMEntity entity, Vector<DMObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(DMEntity entity, Vector<DMObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(DMEntity entity, Vector<DMObject> globalSelection) {
+			return ((entity != null) && (!entity.getIsReadOnly()));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(DMEntity entity, Vector<DMObject> globalSelection) 
-        {
-            return ((entity != null) 
-                    && (!entity.getIsReadOnly()));
-        }
-                
-    };
-    
-    private DMEntity _entity;
-    private String _newMethodName;
-    private DMMethod _newMethod;
-    
-    CreateDMMethod (DMEntity entity, Vector<DMObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, entity, globalSelection, editor);
-    }
+	};
 
-   @Override
-protected void doAction(Object context) 
-    {
-	   if (logger.isLoggable(Level.FINE))
-		logger.fine("CreateDMMethod");
-      if (getEntity() != null) {
-    	  if (_newMethodName==null || getEntity().getMethod(_newMethodName+"()")!=null)
-    		  _newMethodName = getEntity().getDMModel().getNextDefautMethodName(getEntity());
-          _newMethod = new DMMethod(getEntity().getDMModel(),/* getEntity(),*/ _newMethodName);
-          _newMethod.setEntity(getEntity());
-          getEntity().registerMethod(_newMethod);
-      }
-    }
+	private DMEntity _entity;
+	private String _newMethodName;
+	private DMMethod _newMethod;
 
-   public String getNewMethodName()
-   {
-       return _newMethodName;
-   }
-   
-   public void setNewMethodName(String name) {
-	   this._newMethodName = name;
-   }
-   
-   public DMEntity getEntity()
-   {
-       if (_entity == null) {
-           if (getFocusedObject() != null) {
-               _entity = getFocusedObject();
-            }           
-       }
-       return _entity;
-   }
+	CreateDMMethod(DMEntity entity, Vector<DMObject> globalSelection, FlexoEditor editor) {
+		super(actionType, entity, globalSelection, editor);
+	}
 
-   public DMMethod getNewMethod()
-   {
-       return _newMethod;
-   }
+	@Override
+	protected void doAction(Object context) {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("CreateDMMethod");
+		if (getEntity() != null) {
+			if (_newMethodName == null || getEntity().getMethod(_newMethodName + "()") != null)
+				_newMethodName = getEntity().getDMModel().getNextDefautMethodName(getEntity());
+			_newMethod = new DMMethod(getEntity().getDMModel(),/* getEntity(),*/_newMethodName);
+			_newMethod.setEntity(getEntity());
+			getEntity().registerMethod(_newMethod);
+		}
+	}
+
+	public String getNewMethodName() {
+		return _newMethodName;
+	}
+
+	public void setNewMethodName(String name) {
+		this._newMethodName = name;
+	}
+
+	public DMEntity getEntity() {
+		if (_entity == null) {
+			if (getFocusedObject() != null) {
+				_entity = getFocusedObject();
+			}
+		}
+		return _entity;
+	}
+
+	public DMMethod getNewMethod() {
+		return _newMethod;
+	}
 
 }

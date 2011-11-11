@@ -21,12 +21,10 @@ package org.openflexo.foundation.ie.dm;
 
 import org.openflexo.foundation.ie.IEObject;
 
-public class WidgetRemovedFromSequence extends IEDataModification
-{
+public class WidgetRemovedFromSequence extends IEDataModification {
 
-    public WidgetRemovedFromSequence(IEObject removedWidget)
-    {
-        super(removedWidget, null);
-        
-    }
+	public WidgetRemovedFromSequence(IEObject removedWidget) {
+		super(removedWidget, null);
+
+	}
 }

@@ -33,109 +33,104 @@ import org.openflexo.kvc.KeyValueCoding;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class ButtonWidget extends DenaliWidget implements ActionListener
-{
-    private static final Logger logger = FlexoLogger.getLogger(ButtonWidget.class.getPackage().getName());
-    private JButton button;
-    
-    /**
-     * @param model
-     * @param controller
-     */
-    protected ButtonWidget(PropertyModel model, AbstractController controller)
-    {
-        super(model, controller);
-        button = new JButton();
-        button.setText(FlexoLocalization.localizedForKey(_propertyModel.label,button));
-        button.addActionListener(this);
-    }
+public class ButtonWidget extends DenaliWidget implements ActionListener {
+	private static final Logger logger = FlexoLogger.getLogger(ButtonWidget.class.getPackage().getName());
+	private JButton button;
 
-    /**
-     * Overrides getDefaultType
-     * @see org.openflexo.inspector.widget.DenaliWidget#getDefaultType()
-     */
-    @Override
-    public Class getDefaultType()
-    {
-        return null;
-    }
+	/**
+	 * @param model
+	 * @param controller
+	 */
+	protected ButtonWidget(PropertyModel model, AbstractController controller) {
+		super(model, controller);
+		button = new JButton();
+		button.setText(FlexoLocalization.localizedForKey(_propertyModel.label, button));
+		button.addActionListener(this);
+	}
 
-    /**
-     * Overrides getDynamicComponent
-     * @see org.openflexo.inspector.widget.DenaliWidget#getDynamicComponent()
-     */
-    @Override
-    public JComponent getDynamicComponent()
-    {
-        return button;
-    }
-    
-    /**
-     * Overrides defaultShouldExpandHorizontally
-     * @see org.openflexo.inspector.widget.DenaliWidget#defaultShouldExpandHorizontally()
-     */
-    @Override
-    public boolean defaultShouldExpandHorizontally()
-    {
-        return false;
-    }
+	/**
+	 * Overrides getDefaultType
+	 * 
+	 * @see org.openflexo.inspector.widget.DenaliWidget#getDefaultType()
+	 */
+	@Override
+	public Class getDefaultType() {
+		return null;
+	}
 
-    @Override
-	public boolean defaultDisplayLabel()
-    {
-        return false;
-    }
-    
-    /**
-     * Overrides updateModelFromWidget
-     * @see org.openflexo.inspector.widget.DenaliWidget#updateModelFromWidget()
-     */
-    @Override
-    public void updateModelFromWidget()
-    {
+	/**
+	 * Overrides getDynamicComponent
+	 * 
+	 * @see org.openflexo.inspector.widget.DenaliWidget#getDynamicComponent()
+	 */
+	@Override
+	public JComponent getDynamicComponent() {
+		return button;
+	}
 
-    }
+	/**
+	 * Overrides defaultShouldExpandHorizontally
+	 * 
+	 * @see org.openflexo.inspector.widget.DenaliWidget#defaultShouldExpandHorizontally()
+	 */
+	@Override
+	public boolean defaultShouldExpandHorizontally() {
+		return false;
+	}
 
-    /**
-     * Overrides updateWidgetFromModel
-     * @see org.openflexo.inspector.widget.DenaliWidget#updateWidgetFromModel()
-     */
-    @Override
-    public void updateWidgetFromModel()
-    {
+	@Override
+	public boolean defaultDisplayLabel() {
+		return false;
+	}
 
-    }
+	/**
+	 * Overrides updateModelFromWidget
+	 * 
+	 * @see org.openflexo.inspector.widget.DenaliWidget#updateModelFromWidget()
+	 */
+	@Override
+	public void updateModelFromWidget() {
 
-    /**
-     * Overrides actionPerformed
-     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-     */
-    @Override
-	public void actionPerformed(ActionEvent e)
-    {
-        if (_propertyModel.hasValueForParameter("action")) {
-            if (getController().getDelegate()!=null)
-                getController().getDelegate().performAction(e, _propertyModel.getValueForParameter("action"), getModel());
-            else
-                if (logger.isLoggable(Level.SEVERE))
-                    logger.severe("No delegate for inspector. Cannot perform action "+_propertyModel.getValueForParameter("action")+" on object "+getModel().toString());
-        }
-        String s = _propertyModel.name;
-        ((KeyValueCoding)getModel()).objectForKey(s);
-        
-        // Notification required for tab view updating
-        notifyInspectedPropertyChanged();
-    }
+	}
 
-    @Override
-	protected synchronized Class retrieveType()
-    {
-    	// Otherwise call action associated with button
-    	return Void.TYPE;
-    }
+	/**
+	 * Overrides updateWidgetFromModel
+	 * 
+	 * @see org.openflexo.inspector.widget.DenaliWidget#updateWidgetFromModel()
+	 */
+	@Override
+	public void updateWidgetFromModel() {
+
+	}
+
+	/**
+	 * Overrides actionPerformed
+	 * 
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (_propertyModel.hasValueForParameter("action")) {
+			if (getController().getDelegate() != null)
+				getController().getDelegate().performAction(e, _propertyModel.getValueForParameter("action"), getModel());
+			else if (logger.isLoggable(Level.SEVERE))
+				logger.severe("No delegate for inspector. Cannot perform action " + _propertyModel.getValueForParameter("action")
+						+ " on object " + getModel().toString());
+		}
+		String s = _propertyModel.name;
+		((KeyValueCoding) getModel()).objectForKey(s);
+
+		// Notification required for tab view updating
+		notifyInspectedPropertyChanged();
+	}
+
+	@Override
+	protected synchronized Class retrieveType() {
+		// Otherwise call action associated with button
+		return Void.TYPE;
+	}
 }

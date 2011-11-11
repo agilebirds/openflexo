@@ -27,100 +27,90 @@ import org.openflexo.foundation.xml.FlexoDKVModelBuilder;
  * @author gpolet
  * 
  */
-public class FlexoDKVResource extends FlexoXMLStorageResource<DKVModel>
-{
+public class FlexoDKVResource extends FlexoXMLStorageResource<DKVModel> {
 
-    /**
-     * @param builder
-     */
-    public FlexoDKVResource(FlexoProjectBuilder builder)
-    {
-        this(builder.project);
-        builder.notifyResourceLoading(this);
-   }
+	/**
+	 * @param builder
+	 */
+	public FlexoDKVResource(FlexoProjectBuilder builder) {
+		this(builder.project);
+		builder.notifyResourceLoading(this);
+	}
 
-    public FlexoDKVResource(FlexoProject project)
-    {
-        super(project);
-    }
+	public FlexoDKVResource(FlexoProject project) {
+		super(project);
+	}
 
-    /**
-     * @param aProject
-     * @throws InvalidFileNameException 
-     */
-    public FlexoDKVResource(FlexoProject aProject, DKVModel dkvModel, FlexoProjectFile dlFile) throws InvalidFileNameException
-    {
-        this(aProject);
-        dkvModel.setFlexoResource(this);
-        _resourceData = dkvModel;
-        setResourceFile(dlFile);
-    }
+	/**
+	 * @param aProject
+	 * @throws InvalidFileNameException
+	 */
+	public FlexoDKVResource(FlexoProject aProject, DKVModel dkvModel, FlexoProjectFile dlFile) throws InvalidFileNameException {
+		this(aProject);
+		dkvModel.setFlexoResource(this);
+		_resourceData = dkvModel;
+		setResourceFile(dlFile);
+	}
 
-    /**
-     * Overrides getResourceDataClass
-     * 
-     * @see org.openflexo.foundation.rm.FlexoXMLStorageResource#getResourceDataClass()
-     */
-    @Override
-	public Class getResourceDataClass()
-    {
-        return DKVModel.class;
-    }
+	/**
+	 * Overrides getResourceDataClass
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoXMLStorageResource#getResourceDataClass()
+	 */
+	@Override
+	public Class getResourceDataClass() {
+		return DKVModel.class;
+	}
 
-    /**
-     * Overrides instanciateNewBuilder
-     * 
-     * @see org.openflexo.foundation.rm.FlexoXMLStorageResource#instanciateNewBuilder()
-     */
-    @Override
-	public Object instanciateNewBuilder()
-    {
-    	FlexoDKVModelBuilder builder = new FlexoDKVModelBuilder(this);
-    	builder.dkvModel = _resourceData;
-    	return builder;
-    }
+	/**
+	 * Overrides instanciateNewBuilder
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoXMLStorageResource#instanciateNewBuilder()
+	 */
+	@Override
+	public Object instanciateNewBuilder() {
+		FlexoDKVModelBuilder builder = new FlexoDKVModelBuilder(this);
+		builder.dkvModel = _resourceData;
+		return builder;
+	}
 
-    /**
-     * Overrides hasBuilder
-     * 
-     * @see org.openflexo.foundation.rm.FlexoXMLStorageResource#hasBuilder()
-     */
-    @Override
-	public boolean hasBuilder()
-    {
-        return true;
-    }
+	/**
+	 * Overrides hasBuilder
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoXMLStorageResource#hasBuilder()
+	 */
+	@Override
+	public boolean hasBuilder() {
+		return true;
+	}
 
-    /**
-     * Overrides getResourceType
-     * 
-     * @see org.openflexo.foundation.rm.FlexoResource#getResourceType()
-     */
-    @Override
-	public ResourceType getResourceType()
-    {
-        return ResourceType.DKV_MODEL;
-    }
+	/**
+	 * Overrides getResourceType
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResource#getResourceType()
+	 */
+	@Override
+	public ResourceType getResourceType() {
+		return ResourceType.DKV_MODEL;
+	}
 
-    /**
-     * Overrides getName
-     * 
-     * @see org.openflexo.foundation.rm.FlexoResource#getName()
-     */
-    @Override
-	public String getName()
-    {
-        return getProject().getProjectName();
-    }
+	/**
+	 * Overrides getName
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResource#getName()
+	 */
+	@Override
+	public String getName() {
+		return getProject().getProjectName();
+	}
 
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
-    }
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+	}
 
 	@Override
 	protected boolean isDuplicateSerializationIdentifierRepairable() {

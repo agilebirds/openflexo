@@ -24,11 +24,10 @@ import org.openflexo.foundation.action.AddFlexoProperty;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class AddFlexoPropertyActionizer extends ActionInitializer<AddFlexoProperty, FlexoModelObject, FlexoModelObject> {
 
 	public AddFlexoPropertyActionizer(ControllerActionInitializer actionInitializer) {
 		super(AddFlexoProperty.actionType, actionInitializer);
 	}
-	
+
 }

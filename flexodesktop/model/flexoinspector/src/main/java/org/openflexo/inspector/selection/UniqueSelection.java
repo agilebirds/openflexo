@@ -23,44 +23,38 @@ import java.util.Hashtable;
 
 import org.openflexo.inspector.InspectableObject;
 
-
 /**
  * Used to "tell" the inspector that one object were selected
  * 
  * @author sguerin
  */
-public class UniqueSelection extends InspectorSelection
-{
+public class UniqueSelection extends InspectorSelection {
 
-    private InspectableObject _inspectedObject;
-    private Hashtable<String,Object> _inspectionContext;
-    
-    public UniqueSelection(InspectableObject inspectedObject, Hashtable<String,Object> inspectionContext)
-    {
-        super();
-        _inspectedObject = inspectedObject;
-        //_specificInspectorForObject=specificInspectorName;
-        _inspectionContext = inspectionContext;
-    }
+	private InspectableObject _inspectedObject;
+	private Hashtable<String, Object> _inspectionContext;
 
-    public InspectableObject getInspectedObject()
-    {
-        return _inspectedObject;
-    }
-    
-    /*public String getSpecificInspectorForObject()
-    {
-    	return _specificInspectorForObject;
-    }*/
-    
-    public Hashtable<String,Object> getInspectionContext()
-    {
-    	return _inspectionContext;
-    }
-  
-    @Override
-	public String toString()
-    {
-    	return "UniqueSelection: "+_inspectedObject;
-    }
+	public UniqueSelection(InspectableObject inspectedObject, Hashtable<String, Object> inspectionContext) {
+		super();
+		_inspectedObject = inspectedObject;
+		// _specificInspectorForObject=specificInspectorName;
+		_inspectionContext = inspectionContext;
+	}
+
+	public InspectableObject getInspectedObject() {
+		return _inspectedObject;
+	}
+
+	/*public String getSpecificInspectorForObject()
+	{
+		return _specificInspectorForObject;
+	}*/
+
+	public Hashtable<String, Object> getInspectionContext() {
+		return _inspectionContext;
+	}
+
+	@Override
+	public String toString() {
+		return "UniqueSelection: " + _inspectedObject;
+	}
 }

@@ -33,152 +33,136 @@ public class CVSRevision extends FPSObject {
 	private CVSFile _file;
 	private String _contents;
 	private LogInformation.Revision _revisionInfo;
-	
-	protected CVSRevision (CVSRevisionIdentifier identifier, CVSFile file)
-	{
+
+	protected CVSRevision(CVSRevisionIdentifier identifier, CVSFile file) {
 		super();
 		_identifier = identifier;
 		_file = file;
 	}
-	
+
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "cvs_revision";
 	}
 
 	@Override
-	public boolean isContainedIn(FPSObject obj) 
-	{
+	public boolean isContainedIn(FPSObject obj) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		// No inspectable alone
 		return null;
 	}
 
-	public CVSFile getFile()
-	{
+	public CVSFile getFile() {
 		return _file;
 	}
 
-	public CVSRevisionIdentifier getIdentifier() 
-	{
+	public CVSRevisionIdentifier getIdentifier() {
 		return _identifier;
 	}
 
-	public String getContents()
-	{
+	public String getContents() {
 		return _contents;
 	}
 
-	protected void setContents(String contents)
-	{
+	protected void setContents(String contents) {
 		_contents = contents;
 	}
 
-    public Date getDate() 
-    {
-    	if (_revisionInfo != null) return _revisionInfo.getDate();
-        return null;
-    }
+	public Date getDate() {
+		if (_revisionInfo != null)
+			return _revisionInfo.getDate();
+		return null;
+	}
 
-    public String getDateAsString() 
-    {
+	public String getDateAsString() {
 		if (getDate() != null) {
 			return (new SimpleDateFormat("dd/MM HH:mm:ss")).format(getDate());
 		}
 		return FlexoLocalization.localizedForKey("unknown");
-    }
+	}
 
-    public String getAuthor() 
-    {
-    	if (_revisionInfo != null) return _revisionInfo.getAuthor();
-        return null;
-   }
+	public String getAuthor() {
+		if (_revisionInfo != null)
+			return _revisionInfo.getAuthor();
+		return null;
+	}
 
-     public String getState() 
-     {
-     	if (_revisionInfo != null) return _revisionInfo.getState();
-        return null;
-   }
+	public String getState() {
+		if (_revisionInfo != null)
+			return _revisionInfo.getState();
+		return null;
+	}
 
-    public String getLines() 
-    {
-    	if (_revisionInfo != null) return _revisionInfo.getLines();
-        return null;
-   }
+	public String getLines() {
+		if (_revisionInfo != null)
+			return _revisionInfo.getLines();
+		return null;
+	}
 
-     public String getCommitID() 
-     {
-     	if (_revisionInfo != null) return _revisionInfo.getCommitID();
-        return null;
-    }
-    
-    public int getAddedLines() 
-    {
-    	if (_revisionInfo != null) return _revisionInfo.getAddedLines();
-        return 0;
-    }
-    
-    public int getRemovedLines() 
-    {
-    	if (_revisionInfo != null) return _revisionInfo.getRemovedLines();
-        return 0;
-   }
+	public String getCommitID() {
+		if (_revisionInfo != null)
+			return _revisionInfo.getCommitID();
+		return null;
+	}
 
-    public String getMessage() 
-    {
-    	if (_revisionInfo != null) return _revisionInfo.getMessage();
-        return null;
-   }
+	public int getAddedLines() {
+		if (_revisionInfo != null)
+			return _revisionInfo.getAddedLines();
+		return 0;
+	}
 
-     public String getBranches()
-     {
-     	if (_revisionInfo != null) return _revisionInfo.getBranches();
-        return null;
-    }
+	public int getRemovedLines() {
+		if (_revisionInfo != null)
+			return _revisionInfo.getRemovedLines();
+		return 0;
+	}
 
-	protected LogInformation.Revision getRevisionInfo() 
-	{
+	public String getMessage() {
+		if (_revisionInfo != null)
+			return _revisionInfo.getMessage();
+		return null;
+	}
+
+	public String getBranches() {
+		if (_revisionInfo != null)
+			return _revisionInfo.getBranches();
+		return null;
+	}
+
+	protected LogInformation.Revision getRevisionInfo() {
 		return _revisionInfo;
 	}
 
-	protected void setRevisionInfo(LogInformation.Revision revisionInfo) 
-	{
+	protected void setRevisionInfo(LogInformation.Revision revisionInfo) {
 		_revisionInfo = revisionInfo;
 	}
-	
-    protected static RevisionComparator COMPARATOR = new RevisionComparator();
 
-    /**
-     * Used to sort properties according to name alphabetic ordering
-     * 
-     * @author sguerin
-     * 
-     */
-    protected static class RevisionComparator implements Comparator<CVSRevision>
-    {
+	protected static RevisionComparator COMPARATOR = new RevisionComparator();
 
-        /**
-         * Implements
-         * 
-         * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-         * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-         */
-        @Override
-		public int compare(CVSRevision o1, CVSRevision o2)
-        {
-        	return CVSRevisionIdentifier.COMPARATOR.compare(o1.getIdentifier(), o2.getIdentifier());
-        }
-        
+	/**
+	 * Used to sort properties according to name alphabetic ordering
+	 * 
+	 * @author sguerin
+	 * 
+	 */
+	protected static class RevisionComparator implements Comparator<CVSRevision> {
 
-    }
+		/**
+		 * Implements
+		 * 
+		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+		 */
+		@Override
+		public int compare(CVSRevision o1, CVSRevision o2) {
+			return CVSRevisionIdentifier.COMPARATOR.compare(o1.getIdentifier(), o2.getIdentifier());
+		}
 
- 
+	}
 
- }
+}

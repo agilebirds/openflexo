@@ -27,29 +27,24 @@ import javax.swing.JCheckBoxMenuItem;
 
 import org.openflexo.localization.FlexoLocalization;
 
+public class FIBBrowserFilterMenuItem extends JCheckBoxMenuItem implements ActionListener {
+	protected static final Logger logger = Logger.getLogger(FIBBrowserFilterMenuItem.class.getPackage().getName());
 
-public class FIBBrowserFilterMenuItem extends JCheckBoxMenuItem implements ActionListener
-{
-    protected static final Logger logger = Logger.getLogger(FIBBrowserFilterMenuItem.class.getPackage().getName());
+	protected FIBBrowserElementType _elementType;
 
-    protected FIBBrowserElementType _elementType;
+	public FIBBrowserFilterMenuItem(FIBBrowserElementType elementType) {
+		super(FlexoLocalization.localizedForKey(elementType.getController().getLocalizer(), elementType.getBrowserElement().getName()),
+				elementType.getBrowserElement().getImageIcon(), !elementType.isFiltered());
+		_elementType = elementType;
+		addActionListener(this);
+	}
 
-    public FIBBrowserFilterMenuItem(FIBBrowserElementType elementType)
-    {
-        super(FlexoLocalization.localizedForKey(elementType.getController().getLocalizer(),elementType.getBrowserElement().getName()),
-        		elementType.getBrowserElement().getImageIcon(),!elementType.isFiltered());
-        _elementType = elementType;
-        addActionListener(this);
-    }
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		_elementType.setFiltered(!isSelected());
+	}
 
-    @Override
-	public void actionPerformed(ActionEvent e) 
-    {
-    	_elementType.setFiltered(!isSelected());
-    }
-    
-    public void update()
-    {
-    	setSelected(!_elementType.isFiltered());
-    }
+	public void update() {
+		setSelected(!_elementType.isFiltered());
+	}
 }

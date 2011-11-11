@@ -34,109 +34,88 @@ import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ShapePatternRole;
 
+public class DeclareInEditionPattern extends FlexoAction<DeclareInEditionPattern, ExampleDrawingObject, ExampleDrawingObject> {
 
-public class DeclareInEditionPattern extends FlexoAction<DeclareInEditionPattern,ExampleDrawingObject,ExampleDrawingObject> 
-{
+	private static final Logger logger = Logger.getLogger(DeclareInEditionPattern.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(DeclareInEditionPattern.class.getPackage().getName());
-    
-    public static FlexoActionType<DeclareInEditionPattern,ExampleDrawingObject,ExampleDrawingObject>  actionType 
-    = new FlexoActionType<DeclareInEditionPattern,ExampleDrawingObject,ExampleDrawingObject> (
-    		"declare_in_edition_pattern",
-			FlexoActionType.defaultGroup,
-			FlexoActionType.NORMAL_ACTION_TYPE) {
+	public static FlexoActionType<DeclareInEditionPattern, ExampleDrawingObject, ExampleDrawingObject> actionType = new FlexoActionType<DeclareInEditionPattern, ExampleDrawingObject, ExampleDrawingObject>(
+			"declare_in_edition_pattern", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public DeclareInEditionPattern makeNewAction(ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) 
-        {
-            return new DeclareInEditionPattern(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public DeclareInEditionPattern makeNewAction(ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection,
+				FlexoEditor editor) {
+			return new DeclareInEditionPattern(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(ExampleDrawingObject shape, Vector<ExampleDrawingObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(ExampleDrawingObject shape, Vector<ExampleDrawingObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(ExampleDrawingObject shape, Vector<ExampleDrawingObject> globalSelection) 
-        {
-            return (shape != null && shape.getCalc().getEditionPatterns().size() > 0);
-        }
-                
-    };
-    
+		@Override
+		protected boolean isEnabledForSelection(ExampleDrawingObject shape, Vector<ExampleDrawingObject> globalSelection) {
+			return (shape != null && shape.getCalc().getEditionPatterns().size() > 0);
+		}
+
+	};
+
 	static {
-		FlexoModelObject.addActionForClass (DeclareInEditionPattern.actionType, ExampleDrawingShape.class);
-		FlexoModelObject.addActionForClass (DeclareInEditionPattern.actionType, ExampleDrawingConnector.class);
+		FlexoModelObject.addActionForClass(DeclareInEditionPattern.actionType, ExampleDrawingShape.class);
+		FlexoModelObject.addActionForClass(DeclareInEditionPattern.actionType, ExampleDrawingConnector.class);
 	}
 
 	protected static String CREATES_EDITION_PATTERN = "CREATES_EDITION_PATTERN";
 	protected static String CHOOSE_ONE_EXISTING = "CHOOSE_ONE_EXISTING";
 	public static String[] choices = { CREATES_EDITION_PATTERN, CHOOSE_ONE_EXISTING };
-	
+
 	public static enum DeclareInEditionPatternChoices {
-		CREATES_EDITION_PATTERN,
-		CHOOSE_EXISTING_EDITION_PATTERN
+		CREATES_EDITION_PATTERN, CHOOSE_EXISTING_EDITION_PATTERN
 	}
-	
+
 	private EditionPattern editionPattern;
 	private PatternRole patternRole;
 
-	DeclareInEditionPattern (ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	DeclareInEditionPattern(ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-     @Override
-	protected void doAction(Object context)
-     {
-    	 logger.info ("Push to palette");
-    	 if (isValid())  {
-    		 if (patternRole instanceof ShapePatternRole) {
-    			 ((ShapePatternRole)patternRole).setGraphicalRepresentation(getFocusedObject().getGraphicalRepresentation());
-    		 }
-    		 else if (patternRole instanceof ConnectorPatternRole) {
-    			 ((ConnectorPatternRole)patternRole).setGraphicalRepresentation(getFocusedObject().getGraphicalRepresentation());
-    		 }
-    	 }
-    	 else {
-    		 logger.warning("Focused role is null !");
-    	 }
-     }
+	@Override
+	protected void doAction(Object context) {
+		logger.info("Push to palette");
+		if (isValid()) {
+			if (patternRole instanceof ShapePatternRole) {
+				((ShapePatternRole) patternRole).setGraphicalRepresentation(getFocusedObject().getGraphicalRepresentation());
+			} else if (patternRole instanceof ConnectorPatternRole) {
+				((ConnectorPatternRole) patternRole).setGraphicalRepresentation(getFocusedObject().getGraphicalRepresentation());
+			}
+		} else {
+			logger.warning("Focused role is null !");
+		}
+	}
 
-    public boolean isValid()
-    {
-    	return (getFocusedObject() != null 
-   			 && editionPattern != null
-			 && patternRole != null
-			 && ((patternRole instanceof ShapePatternRole && getFocusedObject() instanceof ExampleDrawingShape) 
-					 || (patternRole instanceof ConnectorPatternRole && getFocusedObject() instanceof ExampleDrawingConnector)));
-    }
+	public boolean isValid() {
+		return (getFocusedObject() != null && editionPattern != null && patternRole != null && ((patternRole instanceof ShapePatternRole && getFocusedObject() instanceof ExampleDrawingShape) || (patternRole instanceof ConnectorPatternRole && getFocusedObject() instanceof ExampleDrawingConnector)));
+	}
 
-	public EditionPattern getEditionPattern()
-	{
+	public EditionPattern getEditionPattern() {
 		return editionPattern;
 	}
 
-	public void setEditionPattern(EditionPattern editionPattern)
-	{
+	public void setEditionPattern(EditionPattern editionPattern) {
 		if (editionPattern != this.editionPattern) {
 			this.editionPattern = editionPattern;
 			patternRole = null;
 		}
 	}
 
-	public PatternRole getPatternRole()
-	{
+	public PatternRole getPatternRole() {
 		return patternRole;
 	}
 
-	public void setPatternRole(PatternRole patternRole)
-	{
+	public void setPatternRole(PatternRole patternRole) {
 		this.patternRole = patternRole;
 	}
 }

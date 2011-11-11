@@ -21,6 +21,5 @@ package org.openflexo.letparser;
 
 import java.util.Vector;
 
-public class ListOfToken extends Vector<AbstractToken> implements AbstractToken
-{
- }
+public class ListOfToken extends Vector<AbstractToken> implements AbstractToken {
+}

@@ -24,20 +24,19 @@ import java.util.Stack;
 public class ResourceDependancyLoopException extends Exception {
 
 	private Stack<FlexoResource> resourceStack;
-	
-	public ResourceDependancyLoopException(FlexoResource involvedResource)
-	{
+
+	public ResourceDependancyLoopException(FlexoResource involvedResource) {
 		resourceStack = new Stack<FlexoResource>();
-		if (involvedResource!=null)
+		if (involvedResource != null)
 			resourceStack.push(involvedResource);
 	}
-	
+
 	public void addToResourceStack(FlexoResource r) {
 		resourceStack.push(r);
 	}
-	
+
 	public Stack<FlexoResource> getResourceStack() {
 		return resourceStack;
 	}
-	
+
 }

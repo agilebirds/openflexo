@@ -376,12 +376,12 @@ public class ToolsMenu extends FlexoMenu {
 			if (dataModification instanceof ValidationNotification) {
 				if (dataModification instanceof ValidationInitNotification) {
 					ValidationInitNotification initNotification = (ValidationInitNotification) dataModification;
-					ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("validating") + " " + initNotification
-							.getRootObject().getFullyQualifiedName(), initNotification.getNbOfObjectToValidate());
+					ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("validating") + " "
+							+ initNotification.getRootObject().getFullyQualifiedName(), initNotification.getNbOfObjectToValidate());
 				} else if (dataModification instanceof ValidationProgressNotification) {
 					ValidationProgressNotification progressNotification = (ValidationProgressNotification) dataModification;
-					ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("validating") + " " + progressNotification
-							.getValidatedObject().getFullyQualifiedName());
+					ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("validating") + " "
+							+ progressNotification.getValidatedObject().getFullyQualifiedName());
 				} else if (dataModification instanceof ValidationSecondaryInitNotification) {
 					ValidationSecondaryInitNotification initNotification = (ValidationSecondaryInitNotification) dataModification;
 					ProgressWindow.resetSecondaryProgressInstance(initNotification.getNbOfRulesToApply());
@@ -428,8 +428,8 @@ public class ToolsMenu extends FlexoMenu {
 			if (ModuleLoader.isTimeTravelingAvailable())
 				ModuleLoader.showTimeTravelerDialog();
 			else {
-				if (FlexoController.confirm(FlexoLocalization.localizedForKey("time_traveling_is_disabled") + ". " + FlexoLocalization
-						.localizedForKey("would_you_like_to_activate_it_now?"))) {
+				if (FlexoController.confirm(FlexoLocalization.localizedForKey("time_traveling_is_disabled") + ". "
+						+ FlexoLocalization.localizedForKey("would_you_like_to_activate_it_now?"))) {
 					GeneralPreferences.setAutoSaveEnabled(true);
 					FlexoPreferences.savePreferences(true);
 					ModuleLoader.showTimeTravelerDialog();

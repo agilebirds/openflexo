@@ -31,53 +31,44 @@ public class RotatedLineWithPointConstruction extends LineConstruction {
 	public PointConstruction pointConstruction;
 	public LineConstruction lineConstruction;
 	public double angle;
-	
-	public RotatedLineWithPointConstruction() 
-	{
+
+	public RotatedLineWithPointConstruction() {
 		super();
 	}
-	
-	public RotatedLineWithPointConstruction(LineConstruction lineConstruction, PointConstruction pointConstruction, double anAngle) 
-	{
+
+	public RotatedLineWithPointConstruction(LineConstruction lineConstruction, PointConstruction pointConstruction, double anAngle) {
 		this();
 		this.lineConstruction = lineConstruction;
 		this.pointConstruction = pointConstruction;
 		angle = anAngle;
 	}
-	
+
 	@Override
-	protected FGELine computeData()
-	{
-		FGELine computedLine = FGEAbstractLine.getRotatedLine(
-				lineConstruction.getLine(),
-				angle,
-				pointConstruction.getPoint());
-		
-		FGEPoint p1,p2;
+	protected FGELine computeData() {
+		FGELine computedLine = FGEAbstractLine.getRotatedLine(lineConstruction.getLine(), angle, pointConstruction.getPoint());
+
+		FGEPoint p1, p2;
 		p1 = pointConstruction.getPoint().clone();
 		if (lineConstruction.getLine().contains(pointConstruction.getPoint())) {
-			FGEEllips ellips = new FGEEllips(p1,new FGEDimension(200,200),Filling.NOT_FILLED);
+			FGEEllips ellips = new FGEEllips(p1, new FGEDimension(200, 200), Filling.NOT_FILLED);
 			p2 = ellips.intersect(computedLine).getNearestPoint(p1);
-		}
-		else {
+		} else {
 			p2 = computedLine.getLineIntersection(lineConstruction.getLine()).clone();
 		}
-		return new FGELine(p1,p2);
+		return new FGELine(p1, p2);
 
 	}
 
 	@Override
-	public String toString()
-	{
-		return "RotatedLineWithPointConstruction["+angle+"\n"+"> "+lineConstruction.toString()+"\n> "+pointConstruction.toString()+"\n]";
+	public String toString() {
+		return "RotatedLineWithPointConstruction[" + angle + "\n" + "> " + lineConstruction.toString() + "\n> "
+				+ pointConstruction.toString() + "\n]";
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public GeometricConstruction[] getDepends() {
 		GeometricConstruction[] returned = { pointConstruction, lineConstruction };
 		return returned;
 	}
-
 
 }

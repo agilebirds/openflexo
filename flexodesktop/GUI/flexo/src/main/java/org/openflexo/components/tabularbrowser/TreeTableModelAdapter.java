@@ -18,6 +18,7 @@
  *
  */
 package org.openflexo.components.tabularbrowser;
+
 /*
  * %W% %E%
  *
@@ -66,7 +67,6 @@ import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeExpansionListener;
 import javax.swing.tree.TreePath;
 
-
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.foundation.FlexoModelObject;
@@ -74,120 +74,105 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.logging.FlexoLogger;
 
 /**
- * This is a wrapper class takes a TreeTableModel and implements 
- * the table model interface. The implementation is trivial, with 
- * all of the event dispatching support provided by the superclass: 
- * the AbstractTableModel. 
- *
- * @see http://java.sun.com/products/jfc/tsc/articles/treetable1/
- * Updated to fit Flexo architecture
- *
+ * This is a wrapper class takes a TreeTableModel and implements the table model interface. The implementation is trivial, with all of the
+ * event dispatching support provided by the superclass: the AbstractTableModel.
+ * 
+ * @see http://java.sun.com/products/jfc/tsc/articles/treetable1/ Updated to fit Flexo architecture
+ * 
  * @author Philip Milne
  * @author Scott Violet
  * @author Sylvain Guerin
  */
-public class TreeTableModelAdapter extends AbstractModel<FlexoModelObject, FlexoModelObject>
-{
-    
-    private static final Logger logger = FlexoLogger.getLogger(TreeTableModelAdapter.class.getPackage().getName());
-    private JTree tree;
-    private TreeTableModel treeTableModel;
-    
-    public TreeTableModelAdapter(FlexoModelObject modelObject, FlexoProject project,TreeTableModel treeTableModel, JTree tree) 
-    {
-        super(modelObject,project);
-        this.tree = tree;
-        this.treeTableModel = treeTableModel;
-        
-        tree.addTreeExpansionListener(new TreeExpansionListener() 
-                {
-            // Don't use fireTableRowsInserted() here; 
-            // the selection model would get  updated twice. 
-            @Override
-			public void treeExpanded(TreeExpansionEvent event) {  
-                //fireTableDataChanged(); 
-            }
-            @Override
-			public void treeCollapsed(TreeExpansionEvent event) {  
-                //fireTableDataChanged(); 
-            }
-                });
-    }
-    
-    // Wrappers, implementing TableModel interface. 
-    
-    @Override
-	public int getColumnCount() 
-    {
-        return treeTableModel.getColumnCount();
-    }
-    
-    @Override
-	public String getColumnName(int column)
-    {
-        return treeTableModel.getColumnName(column);
-    }
-    
-    @Override
-	public Class getColumnClass(int column) 
-    {
-        return treeTableModel.getColumnClass(column);
-    }
-    
-    @Override
-	public int getRowCount()
-    {
-        if (tree!=null)
-            return tree.getRowCount();
-        else
-            return 0;
-    }
-    
-    protected Object nodeForRow(int row) 
-    {
-        TreePath treePath = tree.getPathForRow(row);
-        return treePath.getLastPathComponent();         
-    }
-    
-    @Override
-	public Object getValueAt(int row, int column) 
-    {
-        return treeTableModel.getValueAt(nodeForRow(row), column);
-    }
-    
-    @Override
-	public boolean isCellEditable(int row, int column) 
-    {
-        return treeTableModel.isCellEditable(nodeForRow(row), column); 
-    }
-    
-    @Override
-	public void setValueAt(Object value, int row, int column) 
-    {
-        treeTableModel.setValueAt(value, nodeForRow(row), column);
-    }
+public class TreeTableModelAdapter extends AbstractModel<FlexoModelObject, FlexoModelObject> {
 
-    /**
-     * Overrides elementAt
-     * @see org.openflexo.components.tabular.model.AbstractModel#elementAt(int)
-     */
-    @Override
-    public FlexoModelObject elementAt(int row)
-    {
-        Object o = nodeForRow(row);
-        if (o==null){
-            return null;
-        } else if (o instanceof BrowserElement) {
-            return ((BrowserElement)o).getObject();
-        } else if (o instanceof FlexoModelObject) {
-            return (FlexoModelObject) o;
-        } else {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Found object of type "+o.getClass().getName()+" while expecting BrowserElement");
-            return null;
-        }
-            
-    }
+	private static final Logger logger = FlexoLogger.getLogger(TreeTableModelAdapter.class.getPackage().getName());
+	private JTree tree;
+	private TreeTableModel treeTableModel;
+
+	public TreeTableModelAdapter(FlexoModelObject modelObject, FlexoProject project, TreeTableModel treeTableModel, JTree tree) {
+		super(modelObject, project);
+		this.tree = tree;
+		this.treeTableModel = treeTableModel;
+
+		tree.addTreeExpansionListener(new TreeExpansionListener() {
+			// Don't use fireTableRowsInserted() here;
+			// the selection model would get updated twice.
+			@Override
+			public void treeExpanded(TreeExpansionEvent event) {
+				// fireTableDataChanged();
+			}
+
+			@Override
+			public void treeCollapsed(TreeExpansionEvent event) {
+				// fireTableDataChanged();
+			}
+		});
+	}
+
+	// Wrappers, implementing TableModel interface.
+
+	@Override
+	public int getColumnCount() {
+		return treeTableModel.getColumnCount();
+	}
+
+	@Override
+	public String getColumnName(int column) {
+		return treeTableModel.getColumnName(column);
+	}
+
+	@Override
+	public Class getColumnClass(int column) {
+		return treeTableModel.getColumnClass(column);
+	}
+
+	@Override
+	public int getRowCount() {
+		if (tree != null)
+			return tree.getRowCount();
+		else
+			return 0;
+	}
+
+	protected Object nodeForRow(int row) {
+		TreePath treePath = tree.getPathForRow(row);
+		return treePath.getLastPathComponent();
+	}
+
+	@Override
+	public Object getValueAt(int row, int column) {
+		return treeTableModel.getValueAt(nodeForRow(row), column);
+	}
+
+	@Override
+	public boolean isCellEditable(int row, int column) {
+		return treeTableModel.isCellEditable(nodeForRow(row), column);
+	}
+
+	@Override
+	public void setValueAt(Object value, int row, int column) {
+		treeTableModel.setValueAt(value, nodeForRow(row), column);
+	}
+
+	/**
+	 * Overrides elementAt
+	 * 
+	 * @see org.openflexo.components.tabular.model.AbstractModel#elementAt(int)
+	 */
+	@Override
+	public FlexoModelObject elementAt(int row) {
+		Object o = nodeForRow(row);
+		if (o == null) {
+			return null;
+		} else if (o instanceof BrowserElement) {
+			return ((BrowserElement) o).getObject();
+		} else if (o instanceof FlexoModelObject) {
+			return (FlexoModelObject) o;
+		} else {
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("Found object of type " + o.getClass().getName() + " while expecting BrowserElement");
+			return null;
+		}
+
+	}
 }
-
-

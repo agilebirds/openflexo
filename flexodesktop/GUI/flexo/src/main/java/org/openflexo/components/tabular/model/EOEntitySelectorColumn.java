@@ -29,75 +29,68 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public abstract class EOEntitySelectorColumn<D extends FlexoModelObject,T extends DMEOEntity> extends EntitySelectorColumn<D,T>
-{
-    private DMEntitySelector<T> _viewSelector;
+public abstract class EOEntitySelectorColumn<D extends FlexoModelObject, T extends DMEOEntity> extends EntitySelectorColumn<D, T> {
+	private DMEntitySelector<T> _viewSelector;
 
-    private DMEntitySelector<T> _editSelector;
+	private DMEntitySelector<T> _editSelector;
 
-    /**
-     * @param title
-     * @param defaultWidth
-     * @param project
-     */
-    public EOEntitySelectorColumn(String title, int defaultWidth, FlexoProject project, Class<T> entityClass)
-    {
-        super(title, defaultWidth, project,entityClass);
-    }
+	/**
+	 * @param title
+	 * @param defaultWidth
+	 * @param project
+	 */
+	public EOEntitySelectorColumn(String title, int defaultWidth, FlexoProject project, Class<T> entityClass) {
+		super(title, defaultWidth, project, entityClass);
+	}
 
-    @Override
-	protected AbstractBrowserSelector<T> getViewSelector(D rowObject, T value)
-    {
-        if (_viewSelector == null) {
-            _viewSelector = new DMEOEntitySelector<T>(_project, null,getValueClass());
-            _viewSelector.setFont(FlexoCst.MEDIUM_FONT);
-            if (STRING_REPRESENTATION_WHEN_NULL != null) {
-                _viewSelector.setNullStringRepresentation(STRING_REPRESENTATION_WHEN_NULL);
-            }
-        }
-        _viewSelector.setEditedObject(value);
-        return _viewSelector;
-    }
+	@Override
+	protected AbstractBrowserSelector<T> getViewSelector(D rowObject, T value) {
+		if (_viewSelector == null) {
+			_viewSelector = new DMEOEntitySelector<T>(_project, null, getValueClass());
+			_viewSelector.setFont(FlexoCst.MEDIUM_FONT);
+			if (STRING_REPRESENTATION_WHEN_NULL != null) {
+				_viewSelector.setNullStringRepresentation(STRING_REPRESENTATION_WHEN_NULL);
+			}
+		}
+		_viewSelector.setEditedObject(value);
+		return _viewSelector;
+	}
 
-    @Override
-	protected AbstractBrowserSelector<T> getEditSelector(D rowObject, T value)
-    {
-        if (_editSelector == null) {
-            _editSelector = new DMEOEntitySelector<T>(_project, null,getValueClass()) {
-                @Override
-				public void apply()
-                {
-                    super.apply();
-                    if (logger.isLoggable(Level.FINE))
-                        logger.fine("Apply");
-                    if (_editedRowObject != null) {
-                        setValue(_editedRowObject, getEditedObject());
-                    }
-                }
+	@Override
+	protected AbstractBrowserSelector<T> getEditSelector(D rowObject, T value) {
+		if (_editSelector == null) {
+			_editSelector = new DMEOEntitySelector<T>(_project, null, getValueClass()) {
+				@Override
+				public void apply() {
+					super.apply();
+					if (logger.isLoggable(Level.FINE))
+						logger.fine("Apply");
+					if (_editedRowObject != null) {
+						setValue(_editedRowObject, getEditedObject());
+					}
+				}
 
-                @Override
-				public void cancel()
-                {
-                    super.cancel();
-                    if (logger.isLoggable(Level.FINE))
-                        logger.fine("Cancel");
-                    if (_editedRowObject != null) {
-                        setValue(_editedRowObject, getRevertValue());
-                    }
-                }
-            };
-            _editSelector.setFont(FlexoCst.NORMAL_FONT);
-        }
-        if (STRING_REPRESENTATION_WHEN_NULL != null) {
-            _editSelector.setNullStringRepresentation(STRING_REPRESENTATION_WHEN_NULL);
-        }
-        _editSelector.setEditedObject(value);
-        _editSelector.setRevertValue(value);
-        return _editSelector;
-    }
+				@Override
+				public void cancel() {
+					super.cancel();
+					if (logger.isLoggable(Level.FINE))
+						logger.fine("Cancel");
+					if (_editedRowObject != null) {
+						setValue(_editedRowObject, getRevertValue());
+					}
+				}
+			};
+			_editSelector.setFont(FlexoCst.NORMAL_FONT);
+		}
+		if (STRING_REPRESENTATION_WHEN_NULL != null) {
+			_editSelector.setNullStringRepresentation(STRING_REPRESENTATION_WHEN_NULL);
+		}
+		_editSelector.setEditedObject(value);
+		_editSelector.setRevertValue(value);
+		return _editSelector;
+	}
 }

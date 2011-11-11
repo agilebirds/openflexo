@@ -27,72 +27,60 @@ import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
-
 public class ActionScheme extends EditionScheme {
 
-	public static enum ActionSchemeBindingAttribute implements InspectorBindingAttribute
-	{
+	public static enum ActionSchemeBindingAttribute implements InspectorBindingAttribute {
 		conditional
 	}
 
-
 	private ViewPointDataBinding conditional;
-	
-	public ActionScheme() 
-	{
+
+	public ActionScheme() {
 		super();
 	}
 
 	@Override
-	public EditionSchemeType getEditionSchemeType()
-	{
+	public EditionSchemeType getEditionSchemeType() {
 		return EditionSchemeType.ActionScheme;
 	}
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.VPM.ACTION_SCHEME_INSPECTOR;
 	}
 
 	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
-	
-	public BindingDefinition getConditionalBindingDefinition()
-	{
+
+	public BindingDefinition getConditionalBindingDefinition() {
 		return CONDITIONAL;
 	}
 
-	public ViewPointDataBinding getConditional() 
-	{
-		if (conditional == null) conditional = new ViewPointDataBinding(this,ActionSchemeBindingAttribute.conditional,getConditionalBindingDefinition());
+	public ViewPointDataBinding getConditional() {
+		if (conditional == null)
+			conditional = new ViewPointDataBinding(this, ActionSchemeBindingAttribute.conditional, getConditionalBindingDefinition());
 		return conditional;
 	}
 
-	public void setConditional(ViewPointDataBinding conditional) 
-	{
+	public void setConditional(ViewPointDataBinding conditional) {
 		conditional.setOwner(this);
 		conditional.setBindingAttribute(ActionSchemeBindingAttribute.conditional);
 		conditional.setBindingDefinition(getConditionalBindingDefinition());
 		this.conditional = conditional;
 	}
-	
-	
-	public boolean evaluateCondition(EditionPatternReference editionPatternReference)
-	{
+
+	public boolean evaluateCondition(EditionPatternReference editionPatternReference) {
 		if (getConditional().isValid())
-			return (Boolean)getConditional().getBindingValue(editionPatternReference);
+			return (Boolean) getConditional().getBindingValue(editionPatternReference);
 		return true;
 	}
-	
+
 	@Override
-	public BindingModel getBindingModel() 
-	{
+	public BindingModel getBindingModel() {
 		return getEditionPattern().getInspector().getBindingModel();
 	}
 
 	@Override
-	protected void appendContextualBindingVariables(BindingModel bindingModel) 
-	{
+	protected void appendContextualBindingVariables(BindingModel bindingModel) {
 	}
 
 }

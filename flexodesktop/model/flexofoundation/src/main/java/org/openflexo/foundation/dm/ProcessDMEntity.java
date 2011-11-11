@@ -119,8 +119,8 @@ public class ProcessDMEntity extends DMEntity {
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (dataModification instanceof EntityDeleted) {
-			if (getBusinessDataProperty() != null && ((EntityDeleted) dataModification).getEntity().equals(
-					getBusinessDataProperty().getType().getBaseEntity())) {
+			if (getBusinessDataProperty() != null
+					&& ((EntityDeleted) dataModification).getEntity().equals(getBusinessDataProperty().getType().getBaseEntity())) {
 				getBusinessDataProperty().delete();
 				((EntityDeleted) dataModification).getEntity().deleteObserver(this);
 			}
@@ -152,8 +152,9 @@ public class ProcessDMEntity extends DMEntity {
 				return createParentProcessPropertyIfRequired();
 			}
 		}
-		if (getParentProcessProperty() != null && (getParentProcessProperty().getType() == null || getParentProcessProperty().getType()
-				.getBaseEntity() != _process.getParentProcess().getProcessDMEntity())) {
+		if (getParentProcessProperty() != null
+				&& (getParentProcessProperty().getType() == null || getParentProcessProperty().getType().getBaseEntity() != _process
+						.getParentProcess().getProcessDMEntity())) {
 			logger.info("UPDATE parent process property !");
 			getParentProcessProperty().setType(DMType.makeResolvedDMType(_process.getParentProcess().getProcessDMEntity()));
 		}
@@ -164,8 +165,8 @@ public class ProcessDMEntity extends DMEntity {
 		Enumeration en = getProperties().elements();
 		while (en.hasMoreElements()) {
 			DMProperty next = (DMProperty) en.nextElement();
-			if (next.getType() != null && !getDMModel().getExecutionModelRepository().getProcessInstanceEntity()
-					.isAncestorOf(next.getType().getBaseEntity())) {
+			if (next.getType() != null
+					&& !getDMModel().getExecutionModelRepository().getProcessInstanceEntity().isAncestorOf(next.getType().getBaseEntity())) {
 				return next;
 			}
 		}
@@ -181,8 +182,8 @@ public class ProcessDMEntity extends DMEntity {
 		Enumeration en = getProperties().elements();
 		while (en.hasMoreElements()) {
 			DMProperty next = (DMProperty) en.nextElement();
-			if (next.getType() != null && getDMModel().getExecutionModelRepository().getProcessInstanceEntity()
-					.isAncestorOf(next.getType().getBaseEntity())) {
+			if (next.getType() != null
+					&& getDMModel().getExecutionModelRepository().getProcessInstanceEntity().isAncestorOf(next.getType().getBaseEntity())) {
 				return next;
 			}
 		}

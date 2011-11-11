@@ -102,10 +102,9 @@ import org.openflexo.toolbox.ToolBox;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public abstract class FlexoTestCase extends TestCase
-{
+public abstract class FlexoTestCase extends TestCase {
 
 	private static final Logger logger = FlexoLogger.getLogger(FlexoTestCase.class.getPackage().getName());
 
@@ -118,7 +117,6 @@ public abstract class FlexoTestCase extends TestCase
 			e.printStackTrace();
 		}
 	}
-
 
 	protected static final FlexoEditorFactory EDITOR_FACTORY = new FlexoEditorFactory() {
 		@Override
@@ -133,14 +131,17 @@ public abstract class FlexoTestCase extends TestCase
 		}
 
 		@Override
-		public <A extends FlexoAction<?,T1,T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject>   FlexoActionInitializer<? super A> getInitializerFor(FlexoActionType<A, T1, T2> actionType) {
+		public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionInitializer<? super A> getInitializerFor(
+				FlexoActionType<A, T1, T2> actionType) {
 			FlexoActionInitializer<A> init = new FlexoActionInitializer<A>() {
 
 				@Override
 				public boolean run(ActionEvent event, A action) {
-					boolean reply = action.getActionType().isEnabled(action.getFocusedObject(), action.getGlobalSelection(),FlexoTestEditor.this);
-					if(!reply){
-						System.err.println("ACTION NOT ENABLED :"+action.getClass()+" on object "+(action.getFocusedObject()!=null?action.getFocusedObject().getClass():"null focused object"));
+					boolean reply = action.getActionType().isEnabled(action.getFocusedObject(), action.getGlobalSelection(),
+							FlexoTestEditor.this);
+					if (!reply) {
+						System.err.println("ACTION NOT ENABLED :" + action.getClass() + " on object "
+								+ (action.getFocusedObject() != null ? action.getFocusedObject().getClass() : "null focused object"));
 					}
 					return reply;
 				}
@@ -151,62 +152,58 @@ public abstract class FlexoTestCase extends TestCase
 	}
 
 	public FlexoTestCase() {
-		logger.severe("Here is the system property : "+System.getProperty("flexo.resources.location"));
-		if(System.getProperty("flexo.resources.location")!=null) {
+		logger.severe("Here is the system property : " + System.getProperty("flexo.resources.location"));
+		if (System.getProperty("flexo.resources.location") != null) {
 			ResourceLocator.resetFlexoResourceLocation(new File(System.getProperty("flexo.resources.location")));
 		}
 	}
-	public FlexoTestCase(String name)
-	{
+
+	public FlexoTestCase(String name) {
 		super(name);
-		logger.severe("Here is the system property : "+System.getProperty("flexo.resources.location"));
-		if(System.getProperty("flexo.resources.location")!=null) {
+		logger.severe("Here is the system property : " + System.getProperty("flexo.resources.location"));
+		if (System.getProperty("flexo.resources.location") != null) {
 			ResourceLocator.resetFlexoResourceLocation(new File(System.getProperty("flexo.resources.location")));
 		}
 		FlexoObject.initialize();
 	}
 
-	public File getResource(String resourceRelativeName)
-	{
-		File retval = new File("src/test/resources",resourceRelativeName);
+	public File getResource(String resourceRelativeName) {
+		File retval = new File("src/test/resources", resourceRelativeName);
 		if (retval.exists()) {
 			return retval;
 		}
-		retval = new File("../FlexoFoundation/src/test/resources",resourceRelativeName);
+		retval = new File("../FlexoFoundation/src/test/resources", resourceRelativeName);
 		if (retval.exists()) {
 			return retval;
 		}
-		retval = new File("tmp/tests/FlexoResources/",resourceRelativeName);
+		retval = new File("tmp/tests/FlexoResources/", resourceRelativeName);
 		if (retval.exists()) {
 			return retval;
-		} else
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Could not find resource "+resourceRelativeName);
-			}
+		} else if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Could not find resource " + resourceRelativeName);
+		}
 		return null;
 	}
 
-	protected FlexoEditor createProject(String projectName)
-	{
-		return createProject(projectName,null);
+	protected FlexoEditor createProject(String projectName) {
+		return createProject(projectName, null);
 	}
 
-	protected FlexoEditor createProject(String projectName, FlexoResourceCenter resourceCenter)
-	{
+	protected FlexoEditor createProject(String projectName, FlexoResourceCenter resourceCenter) {
 		ToolBox.setPlatform();
 		FlexoLoggingManager.forceInitialize();
 		File _projectDirectory = null;
 		try {
 			File tempFile = File.createTempFile(projectName, "");
-			_projectDirectory = new File (tempFile.getParentFile(),tempFile.getName()+".prj");
+			_projectDirectory = new File(tempFile.getParentFile(), tempFile.getName() + ".prj");
 			tempFile.delete();
 		} catch (IOException e) {
 			fail();
 		}
-		logger.info("Project directory: "+_projectDirectory.getAbsolutePath());
-		String _projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length()-4);
-		logger.info("Project identifier: "+_projectIdentifier);
-		FlexoEditor reply = FlexoResourceManager.initializeNewProject(_projectDirectory,EDITOR_FACTORY,resourceCenter);
+		logger.info("Project directory: " + _projectDirectory.getAbsolutePath());
+		String _projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length() - 4);
+		logger.info("Project identifier: " + _projectIdentifier);
+		FlexoEditor reply = FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY, resourceCenter);
 		logger.info("Project has been SUCCESSFULLY created");
 		try {
 			reply.getProject().setProjectName(_projectIdentifier/*projectName*/);
@@ -221,8 +218,7 @@ public abstract class FlexoTestCase extends TestCase
 		return reply;
 	}
 
-	protected void saveProject(FlexoProject prj)
-	{
+	protected void saveProject(FlexoProject prj) {
 		try {
 			prj.save();
 		} catch (SaveResourceException e) {
@@ -230,11 +226,11 @@ public abstract class FlexoTestCase extends TestCase
 		}
 	}
 
-	protected FlexoEditor reloadProject(File prjDir){
+	protected FlexoEditor reloadProject(File prjDir) {
 		try {
 			FlexoEditor _editor = null;
-			assertNotNull(_editor = FlexoResourceManager.initializeExistingProject(prjDir,EDITOR_FACTORY,null));
-			_editor.getProject().setProjectName(_editor.getProject().getProjectName()+new Random().nextInt());
+			assertNotNull(_editor = FlexoResourceManager.initializeExistingProject(prjDir, EDITOR_FACTORY, null));
+			_editor.getProject().setProjectName(_editor.getProject().getProjectName() + new Random().nextInt());
 			return _editor;
 		} catch (ProjectInitializerException e) {
 			e.printStackTrace();
@@ -251,17 +247,17 @@ public abstract class FlexoTestCase extends TestCase
 
 	protected void assertSynchonized(FlexoResource resource1, FlexoResource resource2) {
 		try {
-			assertTrue (resource1.getSynchronizedResources().contains(resource2));
-			assertTrue (resource2.getSynchronizedResources().contains(resource1));
-		}
-		catch (AssertionFailedError e) {
-			logger.severe("RESOURCE synchonization problem: "+resource1+" MUST be synchronized with "+resource2);
+			assertTrue(resource1.getSynchronizedResources().contains(resource2));
+			assertTrue(resource2.getSynchronizedResources().contains(resource1));
+		} catch (AssertionFailedError e) {
+			logger.severe("RESOURCE synchonization problem: " + resource1 + " MUST be synchronized with " + resource2);
 			throw e;
 		}
 	}
 
 	/**
 	 * Assert resource1 depends of resource2
+	 * 
 	 * @param resource1
 	 * @param resource2
 	 */
@@ -269,15 +265,15 @@ public abstract class FlexoTestCase extends TestCase
 		try {
 			assertTrue(resource1.getDependantResources().contains(resource2));
 			assertTrue(resource2.getAlteredResources().contains(resource1));
-		}
-		catch (AssertionFailedError e) {
-			logger.severe("RESOURCE synchonization problem: "+resource1+" MUST depends on "+resource2);
+		} catch (AssertionFailedError e) {
+			logger.severe("RESOURCE synchonization problem: " + resource1 + " MUST depends on " + resource2);
 			throw e;
 		}
 	}
 
 	/**
 	 * Assert resource1 depends of resource2
+	 * 
 	 * @param resource1
 	 * @param resource2
 	 */
@@ -285,93 +281,90 @@ public abstract class FlexoTestCase extends TestCase
 		try {
 			assertFalse(resource1.getDependantResources().contains(resource2));
 			assertFalse(resource2.getAlteredResources().contains(resource1));
-		}
-		catch (AssertionFailedError e) {
-			logger.severe("RESOURCE synchonization problem: "+resource1+" MUST depends on "+resource2);
+		} catch (AssertionFailedError e) {
+			logger.severe("RESOURCE synchonization problem: " + resource1 + " MUST depends on " + resource2);
 			throw e;
 		}
 	}
 
 	protected void assertNotModified(FlexoStorageResource resource) {
 		try {
-			assertFalse (resource.isModified());
-		}
-		catch (AssertionFailedError e) {
-			logger.warning("RESOURCE status problem: "+resource+" MUST be NOT modified");
+			assertFalse(resource.isModified());
+		} catch (AssertionFailedError e) {
+			logger.warning("RESOURCE status problem: " + resource + " MUST be NOT modified");
 			throw e;
 		}
 	}
 
 	protected void assertModified(FlexoStorageResource resource) {
 		try {
-			assertTrue (resource.isModified());
-		}
-		catch (AssertionFailedError e) {
-			logger.warning("RESOURCE status problem: "+resource+" MUST be modified");
+			assertTrue(resource.isModified());
+		} catch (AssertionFailedError e) {
+			logger.warning("RESOURCE status problem: " + resource + " MUST be modified");
 			throw e;
 		}
 	}
 
 	protected void assertNotLoaded(FlexoStorageResource resource) {
 		try {
-			assertFalse (resource.isLoaded());
-		}
-		catch (AssertionFailedError e) {
-			logger.warning("RESOURCE status problem: "+resource+" MUST be NOT loaded");
+			assertFalse(resource.isLoaded());
+		} catch (AssertionFailedError e) {
+			logger.warning("RESOURCE status problem: " + resource + " MUST be NOT loaded");
 			throw e;
 		}
 	}
 
 	protected void assertLoaded(FlexoStorageResource resource) {
 		try {
-			assertTrue (resource.isLoaded());
-		}
-		catch (AssertionFailedError e) {
-			logger.warning("RESOURCE status problem: "+resource+" MUST be loaded");
+			assertTrue(resource.isLoaded());
+		} catch (AssertionFailedError e) {
+			logger.warning("RESOURCE status problem: " + resource + " MUST be loaded");
 			throw e;
 		}
 	}
 
 	protected static void log(String step) {
-		logger.info ("\n******************************************************************************\n"
-				+ step +"\n******************************************************************************\n");
+		logger.info("\n******************************************************************************\n" + step
+				+ "\n******************************************************************************\n");
 	}
 
-	public static IEWOComponent createComponent(String componentName, FlexoComponentFolder folder, AddComponent.ComponentType type, FlexoEditor editor){
+	public static IEWOComponent createComponent(String componentName, FlexoComponentFolder folder, AddComponent.ComponentType type,
+			FlexoEditor editor) {
 		AddComponent addComponent = AddComponent.actionType.makeNewAction(folder, null, editor);
 		addComponent.setNewComponentName(componentName);
 		addComponent.setComponentType(type);
 		addComponent.doAction();
 		assertTrue(addComponent.hasActionExecutionSucceeded());
 		IEWOComponent reply = null;
-		if(type.equals(AddComponent.ComponentType.OPERATION_COMPONENT)){
+		if (type.equals(AddComponent.ComponentType.OPERATION_COMPONENT)) {
 			reply = folder.getProject().getOperationComponent(componentName);
-		}else if(type.equals(AddComponent.ComponentType.POPUP_COMPONENT)){
+		} else if (type.equals(AddComponent.ComponentType.POPUP_COMPONENT)) {
 			reply = folder.getProject().getPopupComponent(componentName);
-		}else if(type.equals(AddComponent.ComponentType.TAB_COMPONENT)){
+		} else if (type.equals(AddComponent.ComponentType.TAB_COMPONENT)) {
 			reply = folder.getProject().getTabComponent(componentName);
-		}else if(type.equals(AddComponent.ComponentType.PARTIAL_COMPONENT)){
+		} else if (type.equals(AddComponent.ComponentType.PARTIAL_COMPONENT)) {
 			reply = folder.getProject().getSingleWidgetComponent(componentName);
-		}else if(type.equals(AddComponent.ComponentType.DATA_COMPONENT)){
+		} else if (type.equals(AddComponent.ComponentType.DATA_COMPONENT)) {
 			fail("Data component not implemented");
-		}else if(type.equals(AddComponent.ComponentType.MONITORING_COMPONENT)){
+		} else if (type.equals(AddComponent.ComponentType.MONITORING_COMPONENT)) {
 			fail("Monitoring component not implemented");
-		}else if(type.equals(AddComponent.ComponentType.MONITORING_SCREEN)){
+		} else if (type.equals(AddComponent.ComponentType.MONITORING_SCREEN)) {
 			fail("Monitoring screen not implemented");
 		}
 		assertNotNull(reply);
 		return reply;
 	}
 
-	public static FlexoComponentFolder createFolder(String folderName,FlexoComponentFolder parentFolder,FlexoEditor editor){
-		AddComponentFolder addComponentFolder = AddComponentFolder.actionType.makeNewAction(editor.getProject().getFlexoComponentLibrary(), null,editor);
+	public static FlexoComponentFolder createFolder(String folderName, FlexoComponentFolder parentFolder, FlexoEditor editor) {
+		AddComponentFolder addComponentFolder = AddComponentFolder.actionType.makeNewAction(editor.getProject().getFlexoComponentLibrary(),
+				null, editor);
 		addComponentFolder.setNewFolderName(folderName);
 		addComponentFolder.setParentFolder(parentFolder);
 		addComponentFolder.doAction();
 		assertTrue(addComponentFolder.hasActionExecutionSucceeded());
 		FlexoComponentFolder reply = editor.getProject().getFlexoComponentLibrary().getFlexoComponentFolderWithName(folderName);
 		assertNotNull(reply);
-		if(parentFolder!=null) {
+		if (parentFolder != null) {
 			assertEquals(parentFolder, reply.getParent());
 		} else {
 			assertEquals(editor.getProject().getFlexoComponentLibrary().getRootFolder(), reply.getParent());
@@ -379,10 +372,10 @@ public abstract class FlexoTestCase extends TestCase
 		return reply;
 	}
 
-	protected static IEBlocWidget dropBlocAtIndex(String blocTitle, IEWOComponent wo, int index, FlexoEditor editor){
+	protected static IEBlocWidget dropBlocAtIndex(String blocTitle, IEWOComponent wo, int index, FlexoEditor editor) {
 		DropIEElement dropBloc1 = DropIEElement.createBlocInComponent(wo, index, editor);
 		assertTrue(dropBloc1.doAction().hasActionExecutionSucceeded());
-		IEBlocWidget bloc1 = (IEBlocWidget)dropBloc1.getDroppedWidget();
+		IEBlocWidget bloc1 = (IEBlocWidget) dropBloc1.getDroppedWidget();
 		assertNotNull(bloc1);
 		bloc1.setTitle("Bloc1");
 		return bloc1;
@@ -409,14 +402,15 @@ public abstract class FlexoTestCase extends TestCase
 	protected static IEHTMLTableWidget dropTableInBloc(IEBlocWidget bloc1, FlexoEditor editor) {
 		DropIEElement dropTable = DropIEElement.createTableInBloc(bloc1, editor);
 		assertTrue(dropTable.doAction().hasActionExecutionSucceeded());
-		IEHTMLTableWidget table = (IEHTMLTableWidget)dropTable.getDroppedWidget();
+		IEHTMLTableWidget table = (IEHTMLTableWidget) dropTable.getDroppedWidget();
 		assertNotNull(table);
 		assertHTMLTableIsValid(table);
 		return table;
 	}
 
-	protected static IEWidget dropWidgetInTable(WidgetType widgetType, IEHTMLTableWidget table, int tdx, int tdy, int indexInTD, FlexoEditor editor){
-		DropIEElement dropIEWidget = DropIEElement.insertWidgetInTable(table, widgetType, tdx, tdy, indexInTD,editor);
+	protected static IEWidget dropWidgetInTable(WidgetType widgetType, IEHTMLTableWidget table, int tdx, int tdy, int indexInTD,
+			FlexoEditor editor) {
+		DropIEElement dropIEWidget = DropIEElement.insertWidgetInTable(table, widgetType, tdx, tdy, indexInTD, editor);
 		assertTrue(dropIEWidget.doAction().hasActionExecutionSucceeded());
 		IEWidget widget = dropIEWidget.getDroppedWidget();
 		assertNotNull(widget);
@@ -424,7 +418,8 @@ public abstract class FlexoTestCase extends TestCase
 		return widget;
 	}
 
-	protected static IEReusableWidget makePartial(String partialComponentName, FlexoComponentFolder folder,IEWidget rootWidget, FlexoEditor editor){
+	protected static IEReusableWidget makePartial(String partialComponentName, FlexoComponentFolder folder, IEWidget rootWidget,
+			FlexoEditor editor) {
 		MakePartialComponent makePartial = MakePartialComponent.actionType.makeNewAction(rootWidget, null, editor);
 		makePartial.setNewComponentName(partialComponentName);
 		makePartial.setNewComponentFolder(folder);
@@ -433,22 +428,22 @@ public abstract class FlexoTestCase extends TestCase
 		return makePartial.getReusableWidget();
 	}
 
-	protected static IEReusableWidget dropPartialComponent(IEReusableComponent droppedComponent, IEObject targetObject, FlexoEditor editor){
-		DropPartialComponent dropPartial = DropPartialComponent.actionType.makeNewAction(targetObject, null,editor);
+	protected static IEReusableWidget dropPartialComponent(IEReusableComponent droppedComponent, IEObject targetObject, FlexoEditor editor) {
+		DropPartialComponent dropPartial = DropPartialComponent.actionType.makeNewAction(targetObject, null, editor);
 		dropPartial.setPartialComponent(droppedComponent.getComponentDefinition());
 		assertTrue(dropPartial.doAction().hasActionExecutionSucceeded());
 		return dropPartial.getDroppedWidget();
 	}
 
-	public static DMProperty createProperty(DMEntity entity,String newPropertyName,FlexoEditor editor){
-		CreateDMProperty createDMProperty = CreateDMProperty.actionType.makeNewAction(entity, null,editor);
+	public static DMProperty createProperty(DMEntity entity, String newPropertyName, FlexoEditor editor) {
+		CreateDMProperty createDMProperty = CreateDMProperty.actionType.makeNewAction(entity, null, editor);
 		createDMProperty.setNewPropertyName(newPropertyName);
 		createDMProperty.doAction();
 		assertTrue(createDMProperty.hasActionExecutionSucceeded());
 		DMProperty property = createDMProperty.getNewProperty();
 		assertNotNull(property);
-		if(entity instanceof ComponentDMEntity){
-			ComponentDMEntity componentEntity = (ComponentDMEntity)entity;
+		if (entity instanceof ComponentDMEntity) {
+			ComponentDMEntity componentEntity = (ComponentDMEntity) entity;
 			assertFalse(componentEntity.isMandatory(property));
 			assertFalse(componentEntity.isSettable(property));
 			assertFalse(componentEntity.isBindable(property));
@@ -475,23 +470,23 @@ public abstract class FlexoTestCase extends TestCase
 			fail("Could not create EOEntity");
 		}
 		DMEOEntity e = eoEntity.getNewEntity();
-		if (name!=null) {
+		if (name != null) {
 			try {
 				e.setName(name);
 			} catch (InvalidNameException e1) {
 				e1.printStackTrace();
-				fail("Entity name '"+name+"' is invalid!");
+				fail("Entity name '" + name + "' is invalid!");
 			}
 		}
 		return e;
 	}
 
 	public static DMEOModel createDMEOModel(FlexoEditor editor, DMEORepository rep, String modelName) {
-		if (modelName==null) {
+		if (modelName == null) {
 			modelName = "MyEOModel";
 		}
 		if (!modelName.endsWith(".eomodeld")) {
-			modelName+=".eomodeld";
+			modelName += ".eomodeld";
 		}
 		CreateDMEOModel eoModel = CreateDMEOModel.actionType.makeNewAction(rep, null, editor);
 		eoModel.setEOModelFile(new File(modelName));
@@ -504,7 +499,7 @@ public abstract class FlexoTestCase extends TestCase
 	}
 
 	public static DMEORepository createDMEORepository(FlexoEditor editor, String repName) {
-		if (repName==null) {
+		if (repName == null) {
 			repName = "MyNewRepository";
 		}
 		CreateDMRepository rep = CreateDMRepository.actionType.makeNewAction(editor.getProject().getDataModel(), null, editor);
@@ -517,7 +512,7 @@ public abstract class FlexoTestCase extends TestCase
 		return (DMEORepository) rep.getNewRepository();
 	}
 
-	public static FlexoProcess createSubProcess(String subProcessName,FlexoProcess parentProcess,FlexoEditor editor){
+	public static FlexoProcess createSubProcess(String subProcessName, FlexoProcess parentProcess, FlexoEditor editor) {
 		AddSubProcess action = AddSubProcess.actionType.makeNewAction(parentProcess, null, editor);
 		action.setParentProcess(parentProcess);
 		action.setNewProcessName(subProcessName);
@@ -526,129 +521,131 @@ public abstract class FlexoTestCase extends TestCase
 		FlexoProcessResource _subProcessResource = parentProcess.getProject().getFlexoProcessResource(subProcessName);
 		assertNotNull(_subProcessResource);
 		assertNotNull(_subProcessResource.getFlexoProcess());
-		assertEquals(_subProcessResource.getFlexoProcess().getParentProcess(),parentProcess);
+		assertEquals(_subProcessResource.getFlexoProcess().getParentProcess(), parentProcess);
 		assertEquals(_subProcessResource.getFlexoProcess(), parentProcess.getProject().getLocalFlexoProcess(subProcessName));
 		return _subProcessResource.getFlexoProcess();
 	}
 
-	public static SubProcessNode instanciateForkSubProcess(FlexoProcess subProcess,FlexoProcess parentProcess,int x,int y,FlexoEditor editor){
-		return instanciateSubProcess(subProcess, parentProcess, x, y, WKFElementType.MULTIPLE_INSTANCE_PARALLEL_SUB_PROCESS_NODE,editor);
+	public static SubProcessNode instanciateForkSubProcess(FlexoProcess subProcess, FlexoProcess parentProcess, int x, int y,
+			FlexoEditor editor) {
+		return instanciateSubProcess(subProcess, parentProcess, x, y, WKFElementType.MULTIPLE_INSTANCE_PARALLEL_SUB_PROCESS_NODE, editor);
 	}
 
-	public static SubProcessNode instanciateLoopSubProcess(FlexoProcess subProcess,FlexoProcess parentProcess,int x,int y,FlexoEditor editor){
-		return instanciateSubProcess(subProcess, parentProcess, x, y, WKFElementType.MULTIPLE_INSTANCE_SEQUENTIAL_SUB_PROCESS_NODE,editor);
+	public static SubProcessNode instanciateLoopSubProcess(FlexoProcess subProcess, FlexoProcess parentProcess, int x, int y,
+			FlexoEditor editor) {
+		return instanciateSubProcess(subProcess, parentProcess, x, y, WKFElementType.MULTIPLE_INSTANCE_SEQUENTIAL_SUB_PROCESS_NODE, editor);
 	}
 
-	public static SubProcessNode instanciateSingleSubProcess(FlexoProcess subProcess,FlexoProcess parentProcess,int x,int y,FlexoEditor editor){
-		return instanciateSubProcess(subProcess, parentProcess, x, y, WKFElementType.SINGLE_INSTANCE_SUB_PROCESS_NODE,editor);
+	public static SubProcessNode instanciateSingleSubProcess(FlexoProcess subProcess, FlexoProcess parentProcess, int x, int y,
+			FlexoEditor editor) {
+		return instanciateSubProcess(subProcess, parentProcess, x, y, WKFElementType.SINGLE_INSTANCE_SUB_PROCESS_NODE, editor);
 	}
 
-	private static SubProcessNode instanciateSubProcess(FlexoProcess subProcess,FlexoProcess parentProcess,int x,int y, WKFElementType elementType,FlexoEditor editor)
-	{
+	private static SubProcessNode instanciateSubProcess(FlexoProcess subProcess, FlexoProcess parentProcess, int x, int y,
+			WKFElementType elementType, FlexoEditor editor) {
 		DropWKFElement action = DropWKFElement.actionType.makeNewAction(parentProcess.getActivityPetriGraph(), null, editor);
 		action.setElementType(elementType);
 		action.setParameter(DropWKFElement.SUB_PROCESS, subProcess);
-		action.setLocation(x,y);
+		action.setLocation(x, y);
 		action.doAction();
 		assertTrue(action.hasActionExecutionSucceeded());
 		assertNotNull(action.getObject());
-		assertEquals(((SubProcessNode)action.getObject()).getProcess(), parentProcess);
-		assertEquals(((SubProcessNode)action.getObject()).getSubProcess(), subProcess);
+		assertEquals(((SubProcessNode) action.getObject()).getProcess(), parentProcess);
+		assertEquals(((SubProcessNode) action.getObject()).getSubProcess(), subProcess);
 
-		return (SubProcessNode)action.getObject();
+		return (SubProcessNode) action.getObject();
 	}
 
-	private static AbstractNode createNode(FlexoPetriGraph petriGraph,int x,int y, String nodeName,WKFElementType elementType,FlexoEditor editor)
-	{
+	private static AbstractNode createNode(FlexoPetriGraph petriGraph, int x, int y, String nodeName, WKFElementType elementType,
+			FlexoEditor editor) {
 		DropWKFElement action = DropWKFElement.actionType.makeNewAction(petriGraph, null, editor);
 		action.setElementType(elementType);
-		((AbstractNode)action.getObject()).setName(nodeName);
-		action.setLocation(x,y);
+		((AbstractNode) action.getObject()).setName(nodeName);
+		action.setLocation(x, y);
 		action.setResetNodeName(false);
 		action.doAction();
 		assertTrue(action.hasActionExecutionSucceeded());
 		assertNotNull(action.getObject());
 		assertEquals(nodeName, action.getObject().getName());
-		return (AbstractNode)action.getObject();
+		return (AbstractNode) action.getObject();
 	}
 
-	public static AbstractActivityNode createActivityNode(FlexoProcess process,int x,int y, String activityName,FlexoEditor editor)
-	{
-		AbstractActivityNode reply = (AbstractActivityNode)createNode(process.getActivityPetriGraph(), x, y, activityName, WKFElementType.NORMAL_ACTIVITY,editor);
+	public static AbstractActivityNode createActivityNode(FlexoProcess process, int x, int y, String activityName, FlexoEditor editor) {
+		AbstractActivityNode reply = (AbstractActivityNode) createNode(process.getActivityPetriGraph(), x, y, activityName,
+				WKFElementType.NORMAL_ACTIVITY, editor);
 		assertNotNull(reply);
 		assertEquals(reply.getProcess(), process);
 		return reply;
 	}
 
-	public static AbstractActivityNode createBeginActivityNode(FlexoProcess process,int x,int y, String activityName,FlexoEditor editor)
-	{
-		return (AbstractActivityNode)createNode(process.getActivityPetriGraph(), x, y, activityName, WKFElementType.BEGIN_ACTIVITY,editor);
+	public static AbstractActivityNode createBeginActivityNode(FlexoProcess process, int x, int y, String activityName, FlexoEditor editor) {
+		return (AbstractActivityNode) createNode(process.getActivityPetriGraph(), x, y, activityName, WKFElementType.BEGIN_ACTIVITY, editor);
 	}
 
-	public static AbstractActivityNode createEndActivityNode(FlexoProcess process,int x,int y, String activityName,FlexoEditor editor)
-	{
-		return (AbstractActivityNode)createNode(process.getActivityPetriGraph(), x, y, activityName, WKFElementType.END_ACTIVITY,editor);
+	public static AbstractActivityNode createEndActivityNode(FlexoProcess process, int x, int y, String activityName, FlexoEditor editor) {
+		return (AbstractActivityNode) createNode(process.getActivityPetriGraph(), x, y, activityName, WKFElementType.END_ACTIVITY, editor);
 	}
 
-	public static AbstractActivityNode createSelfExcutableActivityNode(FlexoProcess process,int x,int y, String activityName,FlexoEditor editor)
-	{
-		return (AbstractActivityNode)createNode(process.getActivityPetriGraph(), x, y, activityName, WKFElementType.SELF_EXECUTABLE_ACTIVITY,editor);
+	public static AbstractActivityNode createSelfExcutableActivityNode(FlexoProcess process, int x, int y, String activityName,
+			FlexoEditor editor) {
+		return (AbstractActivityNode) createNode(process.getActivityPetriGraph(), x, y, activityName,
+				WKFElementType.SELF_EXECUTABLE_ACTIVITY, editor);
 	}
 
-	public static AbstractActivityNode createANDNode(FlexoPetriGraph pg,int x,int y, String activityName,FlexoEditor editor)
-	{
-		return (AbstractActivityNode)createNode(pg, x, y, activityName, WKFElementType.AND_OPERATOR,editor);
+	public static AbstractActivityNode createANDNode(FlexoPetriGraph pg, int x, int y, String activityName, FlexoEditor editor) {
+		return (AbstractActivityNode) createNode(pg, x, y, activityName, WKFElementType.AND_OPERATOR, editor);
 	}
 
-	public static AbstractActivityNode createORNode(FlexoPetriGraph pg,int x,int y, String activityName,FlexoEditor editor)
-	{
-		return (AbstractActivityNode)createNode(pg, x, y, activityName, WKFElementType.OR_OPERATOR,editor);
+	public static AbstractActivityNode createORNode(FlexoPetriGraph pg, int x, int y, String activityName, FlexoEditor editor) {
+		return (AbstractActivityNode) createNode(pg, x, y, activityName, WKFElementType.OR_OPERATOR, editor);
 	}
 
-	public static AbstractActivityNode createIFNode(FlexoPetriGraph pg,int x,int y, String activityName,FlexoEditor editor)
-	{
-		return (AbstractActivityNode)createNode(pg, x, y, activityName, WKFElementType.IF_OPERATOR,editor);
+	public static AbstractActivityNode createIFNode(FlexoPetriGraph pg, int x, int y, String activityName, FlexoEditor editor) {
+		return (AbstractActivityNode) createNode(pg, x, y, activityName, WKFElementType.IF_OPERATOR, editor);
 	}
 
-	public static AbstractActivityNode createLoopNode(FlexoPetriGraph pg,int x,int y, String activityName,FlexoEditor editor)
-	{
-		return (AbstractActivityNode)createNode(pg, x, y, activityName, WKFElementType.LOOP_OPERATOR,editor);
+	public static AbstractActivityNode createLoopNode(FlexoPetriGraph pg, int x, int y, String activityName, FlexoEditor editor) {
+		return (AbstractActivityNode) createNode(pg, x, y, activityName, WKFElementType.LOOP_OPERATOR, editor);
 	}
 
-	public static OperationNode createOperationNode(String operationNodeName,AbstractActivityNode activityNode,int x,int y,FlexoEditor editor)
-	{
+	public static OperationNode createOperationNode(String operationNodeName, AbstractActivityNode activityNode, int x, int y,
+			FlexoEditor editor) {
 		if (activityNode.getOperationPetriGraph() == null) {
-			openOperationLevel(activityNode,editor);
+			openOperationLevel(activityNode, editor);
 		}
-		OperationNode reply = (OperationNode)createNode(activityNode.getOperationPetriGraph(), x, y, operationNodeName, WKFElementType.NORMAL_OPERATION,editor);
+		OperationNode reply = (OperationNode) createNode(activityNode.getOperationPetriGraph(), x, y, operationNodeName,
+				WKFElementType.NORMAL_OPERATION, editor);
 		assertNotNull(reply);
 		assertEquals(reply.getProcess(), activityNode.getProcess());
 		assertEquals(reply.getParentPetriGraph().getProcess(), activityNode.getProcess());
 		return reply;
 	}
 
-	public static OperationNode createBeginOperationNode(String operationNodeName,AbstractActivityNode activityNode,int x,int y,FlexoEditor editor)
-	{
+	public static OperationNode createBeginOperationNode(String operationNodeName, AbstractActivityNode activityNode, int x, int y,
+			FlexoEditor editor) {
 		if (activityNode.getOperationPetriGraph() == null) {
-			openOperationLevel(activityNode,editor);
+			openOperationLevel(activityNode, editor);
 		}
-		return (OperationNode)createNode(activityNode.getOperationPetriGraph(), x, y, operationNodeName, WKFElementType.BEGIN_OPERATION,editor);
+		return (OperationNode) createNode(activityNode.getOperationPetriGraph(), x, y, operationNodeName, WKFElementType.BEGIN_OPERATION,
+				editor);
 	}
 
-	public static OperationNode createEndOperationNode(String operationNodeName,AbstractActivityNode activityNode,int x,int y,FlexoEditor editor)
-	{
+	public static OperationNode createEndOperationNode(String operationNodeName, AbstractActivityNode activityNode, int x, int y,
+			FlexoEditor editor) {
 		if (activityNode.getOperationPetriGraph() == null) {
-			openOperationLevel(activityNode,editor);
+			openOperationLevel(activityNode, editor);
 		}
-		return (OperationNode)createNode(activityNode.getOperationPetriGraph(), x, y, operationNodeName, WKFElementType.END_OPERATION,editor);
+		return (OperationNode) createNode(activityNode.getOperationPetriGraph(), x, y, operationNodeName, WKFElementType.END_OPERATION,
+				editor);
 	}
 
-	public static OperationNode createSelfExcutableOperationNode(String operationNodeName,AbstractActivityNode activityNode,int x,int y,FlexoEditor editor)
-	{
+	public static OperationNode createSelfExcutableOperationNode(String operationNodeName, AbstractActivityNode activityNode, int x, int y,
+			FlexoEditor editor) {
 		if (activityNode.getOperationPetriGraph() == null) {
-			openOperationLevel(activityNode,editor);
+			openOperationLevel(activityNode, editor);
 		}
-		return (OperationNode)createNode(activityNode.getOperationPetriGraph(), x, y, operationNodeName, WKFElementType.SELF_EXECUTABLE_OPERATION,editor);
+		return (OperationNode) createNode(activityNode.getOperationPetriGraph(), x, y, operationNodeName,
+				WKFElementType.SELF_EXECUTABLE_OPERATION, editor);
 	}
 
 	public static FlexoPreCondition createPreCondition(FlexoNode attachedToNode, FlexoNode attachedBeginNode, FlexoEditor editor) {
@@ -666,143 +663,135 @@ public abstract class FlexoTestCase extends TestCase
 		return father.getContainedPetriGraph();
 	}
 
-	public static void openOperationLevel(AbstractActivityNode activityNode,FlexoEditor editor){
+	public static void openOperationLevel(AbstractActivityNode activityNode, FlexoEditor editor) {
 		OpenOperationLevel openOperationLevel = OpenOperationLevel.actionType.makeNewAction(activityNode, null, editor);
 		openOperationLevel.doAction();
 	}
 
-	public static void openActionLevel(OperationNode operationNode,FlexoEditor editor){
+	public static void openActionLevel(OperationNode operationNode, FlexoEditor editor) {
 		OpenActionLevel openOperationLevel = OpenActionLevel.actionType.makeNewAction(operationNode, null, editor);
 		openOperationLevel.doAction();
 	}
 
-	public static ActionNode createBeginActionNode(String actionNodeName,OperationNode operationNode,int x,int y,FlexoEditor editor){
+	public static ActionNode createBeginActionNode(String actionNodeName, OperationNode operationNode, int x, int y, FlexoEditor editor) {
 		if (operationNode.getActionPetriGraph() == null) {
-			openActionLevel(operationNode,editor);
+			openActionLevel(operationNode, editor);
 		}
-		return (ActionNode)createNode(operationNode.getActionPetriGraph(), x, y, actionNodeName, WKFElementType.BEGIN_ACTION,editor);
+		return (ActionNode) createNode(operationNode.getActionPetriGraph(), x, y, actionNodeName, WKFElementType.BEGIN_ACTION, editor);
 	}
 
-	public static ActionNode createEndActionNode(String actionNodeName,OperationNode operationNode,int x,int y,FlexoEditor editor){
+	public static ActionNode createEndActionNode(String actionNodeName, OperationNode operationNode, int x, int y, FlexoEditor editor) {
 		if (operationNode.getActionPetriGraph() == null) {
-			openActionLevel(operationNode,editor);
+			openActionLevel(operationNode, editor);
 		}
-		return (ActionNode)createNode(operationNode.getActionPetriGraph(), x, y, actionNodeName, WKFElementType.END_ACTION,editor);
+		return (ActionNode) createNode(operationNode.getActionPetriGraph(), x, y, actionNodeName, WKFElementType.END_ACTION, editor);
 	}
 
-	public static ActionNode createFlexoActionNode(String actionNodeName,OperationNode operationNode,int x,int y,FlexoEditor editor)
-	{
+	public static ActionNode createFlexoActionNode(String actionNodeName, OperationNode operationNode, int x, int y, FlexoEditor editor) {
 		if (operationNode.getActionPetriGraph() == null) {
-			openActionLevel(operationNode,editor);
+			openActionLevel(operationNode, editor);
 		}
-		return (ActionNode)createNode(operationNode.getActionPetriGraph(), x, y, actionNodeName, WKFElementType.FLEXO_ACTION,editor);
+		return (ActionNode) createNode(operationNode.getActionPetriGraph(), x, y, actionNodeName, WKFElementType.FLEXO_ACTION, editor);
 	}
 
-	public static ActionNode createSelfActivatedActionNode(String actionNodeName,OperationNode operationNode,int x,int y,FlexoEditor editor)
-	{
+	public static ActionNode createSelfActivatedActionNode(String actionNodeName, OperationNode operationNode, int x, int y,
+			FlexoEditor editor) {
 		if (operationNode.getActionPetriGraph() == null) {
-			openActionLevel(operationNode,editor);
+			openActionLevel(operationNode, editor);
 		}
-		return (ActionNode)createNode(operationNode.getActionPetriGraph(), x, y, actionNodeName, WKFElementType.END_ACTIVITY,editor);
+		return (ActionNode) createNode(operationNode.getActionPetriGraph(), x, y, actionNodeName, WKFElementType.END_ACTIVITY, editor);
 	}
 
-	public static ActionNode createSelfExecutableActionNode(String actionNodeName,OperationNode operationNode,int x,int y,FlexoEditor editor)
-	{
+	public static ActionNode createSelfExecutableActionNode(String actionNodeName, OperationNode operationNode, int x, int y,
+			FlexoEditor editor) {
 		if (operationNode.getActionPetriGraph() == null) {
-			openActionLevel(operationNode,editor);
+			openActionLevel(operationNode, editor);
 		}
-		return (ActionNode)createNode(operationNode.getActionPetriGraph(), x, y, actionNodeName, WKFElementType.SELF_EXECUTABLE_ACTION,editor);
+		return (ActionNode) createNode(operationNode.getActionPetriGraph(), x, y, actionNodeName, WKFElementType.SELF_EXECUTABLE_ACTION,
+				editor);
 	}
 
 	@Deprecated
-	public static ActionNode createNextPageActionNode(String actionNodeName,OperationNode operationNode,int x,int y,FlexoEditor editor)
-	{
+	public static ActionNode createNextPageActionNode(String actionNodeName, OperationNode operationNode, int x, int y, FlexoEditor editor) {
 		if (operationNode.getActionPetriGraph() == null) {
-			openActionLevel(operationNode,editor);
+			openActionLevel(operationNode, editor);
 		}
-		return (ActionNode)createNode(operationNode.getActionPetriGraph(), x, y, actionNodeName, null,editor);
+		return (ActionNode) createNode(operationNode.getActionPetriGraph(), x, y, actionNodeName, null, editor);
 	}
 
 	@Deprecated
-	public static ActionNode createCreateSubProcessActionNode(String actionNodeName,OperationNode operationNode,int x,int y,FlexoEditor editor)
-	{
+	public static ActionNode createCreateSubProcessActionNode(String actionNodeName, OperationNode operationNode, int x, int y,
+			FlexoEditor editor) {
 		if (operationNode.getActionPetriGraph() == null) {
-			openActionLevel(operationNode,editor);
+			openActionLevel(operationNode, editor);
 		}
-		return (ActionNode)createNode(operationNode.getActionPetriGraph(), x, y, actionNodeName, null,editor);
+		return (ActionNode) createNode(operationNode.getActionPetriGraph(), x, y, actionNodeName, null, editor);
 	}
 
 	@Deprecated
-	public static ActionNode createExecuteSubProcessActionNode(String actionNodeName,OperationNode operationNode,int x,int y,FlexoEditor editor)
-	{
+	public static ActionNode createExecuteSubProcessActionNode(String actionNodeName, OperationNode operationNode, int x, int y,
+			FlexoEditor editor) {
 		if (operationNode.getActionPetriGraph() == null) {
-			openActionLevel(operationNode,editor);
+			openActionLevel(operationNode, editor);
 		}
-		return (ActionNode)createNode(operationNode.getActionPetriGraph(), x, y, actionNodeName, null,editor);
+		return (ActionNode) createNode(operationNode.getActionPetriGraph(), x, y, actionNodeName, null, editor);
 	}
 
-	public static EventNode createMailInNode(String nodeName,FlexoPetriGraph pg,int x,int y,FlexoEditor editor)
-	{
-		return (EventNode)createNode(pg, x, y, nodeName, WKFElementType.MAIL_IN,editor);
+	public static EventNode createMailInNode(String nodeName, FlexoPetriGraph pg, int x, int y, FlexoEditor editor) {
+		return (EventNode) createNode(pg, x, y, nodeName, WKFElementType.MAIL_IN, editor);
 	}
 
-	public static EventNode createMailOutNode(String nodeName,FlexoPetriGraph pg,int x,int y,FlexoEditor editor)
-	{
-		return (EventNode)createNode(pg, x, y, nodeName, WKFElementType.MAIL_OUT,editor);
+	public static EventNode createMailOutNode(String nodeName, FlexoPetriGraph pg, int x, int y, FlexoEditor editor) {
+		return (EventNode) createNode(pg, x, y, nodeName, WKFElementType.MAIL_OUT, editor);
 	}
 
-	public static EventNode createCancelHandlerNode(String nodeName,FlexoPetriGraph pg,int x,int y,FlexoEditor editor)
-	{
-		return (EventNode)createNode(pg, x, y, nodeName, WKFElementType.CANCEL_HANDLER, editor);
+	public static EventNode createCancelHandlerNode(String nodeName, FlexoPetriGraph pg, int x, int y, FlexoEditor editor) {
+		return (EventNode) createNode(pg, x, y, nodeName, WKFElementType.CANCEL_HANDLER, editor);
 	}
 
-	public static EventNode createCancelThrowerNode(String nodeName,FlexoPetriGraph pg,int x,int y,FlexoEditor editor)
-	{
-		return (EventNode)createNode(pg, x, y, nodeName, WKFElementType.CANCEL_THROWER, editor);
+	public static EventNode createCancelThrowerNode(String nodeName, FlexoPetriGraph pg, int x, int y, FlexoEditor editor) {
+		return (EventNode) createNode(pg, x, y, nodeName, WKFElementType.CANCEL_THROWER, editor);
 	}
 
-	public static EventNode createCheckPointNode(String nodeName,FlexoPetriGraph pg,int x,int y,FlexoEditor editor)
-	{
-		return (EventNode)createNode(pg, x, y, nodeName, WKFElementType.CHECKPOINT, editor);
+	public static EventNode createCheckPointNode(String nodeName, FlexoPetriGraph pg, int x, int y, FlexoEditor editor) {
+		return (EventNode) createNode(pg, x, y, nodeName, WKFElementType.CHECKPOINT, editor);
 	}
 
-	public static EventNode createFaultHandlerNode(String nodeName,FlexoPetriGraph pg,int x,int y,FlexoEditor editor)
-	{
-		return (EventNode)createNode(pg, x, y, nodeName, WKFElementType.FAULT_HANDLER, editor);
+	public static EventNode createFaultHandlerNode(String nodeName, FlexoPetriGraph pg, int x, int y, FlexoEditor editor) {
+		return (EventNode) createNode(pg, x, y, nodeName, WKFElementType.FAULT_HANDLER, editor);
 	}
 
-	public static EventNode createFaultThrowerNode(String nodeName,FlexoPetriGraph pg,int x,int y,FlexoEditor editor)
-	{
-		return (EventNode)createNode(pg, x, y, nodeName, WKFElementType.FAULT_THROWER, editor);
+	public static EventNode createFaultThrowerNode(String nodeName, FlexoPetriGraph pg, int x, int y, FlexoEditor editor) {
+		return (EventNode) createNode(pg, x, y, nodeName, WKFElementType.FAULT_THROWER, editor);
 	}
 
-	public static EventNode createRevertNode(String nodeName,FlexoPetriGraph pg,int x,int y,FlexoEditor editor)
-	{
-		return (EventNode)createNode(pg, x, y, nodeName, WKFElementType.REVERT, editor);
+	public static EventNode createRevertNode(String nodeName, FlexoPetriGraph pg, int x, int y, FlexoEditor editor) {
+		return (EventNode) createNode(pg, x, y, nodeName, WKFElementType.REVERT, editor);
 	}
 
-	public static EventNode createTimeOutNode(String nodeName,FlexoPetriGraph pg,int x,int y,FlexoEditor editor)
-	{
-		return (EventNode)createNode(pg, x, y, nodeName, WKFElementType.TIME_OUT, editor);
+	public static EventNode createTimeOutNode(String nodeName, FlexoPetriGraph pg, int x, int y, FlexoEditor editor) {
+		return (EventNode) createNode(pg, x, y, nodeName, WKFElementType.TIME_OUT, editor);
 	}
 
-	public static EventNode createTimerNode(String nodeName,FlexoPetriGraph pg,int x,int y,FlexoEditor editor)
-	{
-		return (EventNode)createNode(pg, x, y, nodeName, WKFElementType.TIMER, editor);
+	public static EventNode createTimerNode(String nodeName, FlexoPetriGraph pg, int x, int y, FlexoEditor editor) {
+		return (EventNode) createNode(pg, x, y, nodeName, WKFElementType.TIMER, editor);
 	}
 
-	public static OperationComponentInstance bindOperationWithComponentNamed(OperationNode operationNode, String componentName,FlexoEditor editor){
-		SetAndOpenOperationComponent setOperationComponent = SetAndOpenOperationComponent.actionType.makeNewAction(operationNode, null, editor);
+	public static OperationComponentInstance bindOperationWithComponentNamed(OperationNode operationNode, String componentName,
+			FlexoEditor editor) {
+		SetAndOpenOperationComponent setOperationComponent = SetAndOpenOperationComponent.actionType.makeNewAction(operationNode, null,
+				editor);
 		setOperationComponent.setNewComponentName(componentName);
 		setOperationComponent.doAction();
 		assertTrue(setOperationComponent.hasActionExecutionSucceeded());
-		FlexoOperationComponentResource _operationComponentResource1 = operationNode.getProject().getFlexoOperationComponentResource(componentName);
+		FlexoOperationComponentResource _operationComponentResource1 = operationNode.getProject().getFlexoOperationComponentResource(
+				componentName);
 		assertNotNull(_operationComponentResource1);
 		assertNotNull(operationNode.getComponentInstance());
 		return operationNode.getComponentInstance();
 	}
 
-	public static FlexoPostCondition createEdge(AbstractNode start, AbstractNode end, FlexoEditor editor){
+	public static FlexoPostCondition createEdge(AbstractNode start, AbstractNode end, FlexoEditor editor) {
 		CreateEdge createEdge = CreateEdge.actionType.makeNewAction(start, null, editor);
 		createEdge.setStartingNode(start);
 		createEdge.setEndNode(end);
@@ -811,7 +800,7 @@ public abstract class FlexoTestCase extends TestCase
 		return createEdge.getNewPostCondition();
 	}
 
-	public static void deleteWKFObjects(WKFObject focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor){
+	public static void deleteWKFObjects(WKFObject focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
 		WKFDelete deleteAction = WKFDelete.actionType.makeNewAction(focusedObject, globalSelection, editor);
 		assertTrue(deleteAction.doAction().hasActionExecutionSucceeded());
 	}

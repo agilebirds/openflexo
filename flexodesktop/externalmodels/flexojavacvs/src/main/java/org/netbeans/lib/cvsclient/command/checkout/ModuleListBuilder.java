@@ -27,71 +27,69 @@ import org.netbeans.lib.cvsclient.event.EventManager;
 import org.netbeans.lib.cvsclient.event.FileInfoEvent;
 
 /**
- * Handles the building of module list information object and the firing of
- * events when complete objects are built.
- *
- * @author  Milos Kleint
+ * Handles the building of module list information object and the firing of events when complete objects are built.
+ * 
+ * @author Milos Kleint
  */
 public class ModuleListBuilder implements Builder {
-    /**
-     * The module object that is currently being built.
-     */
-    private ModuleListInformation moduleInformation;
+	/**
+	 * The module object that is currently being built.
+	 */
+	private ModuleListInformation moduleInformation;
 
-    /**
-     * The event manager to use.
-     */
-    private final EventManager eventManager;
+	/**
+	 * The event manager to use.
+	 */
+	private final EventManager eventManager;
 
-    private final CheckoutCommand checkoutCommand;
+	private final CheckoutCommand checkoutCommand;
 
-    public ModuleListBuilder(EventManager eventMan, CheckoutCommand comm) {
-        eventManager = eventMan;
-        checkoutCommand = comm;
-    }
+	public ModuleListBuilder(EventManager eventMan, CheckoutCommand comm) {
+		eventManager = eventMan;
+		checkoutCommand = comm;
+	}
 
-    @Override
+	@Override
 	public void outputDone() {
-        if (moduleInformation != null) {
-            eventManager.fireCVSEvent(new FileInfoEvent(this, moduleInformation));
-            moduleInformation = null;
-        }
-    }
+		if (moduleInformation != null) {
+			eventManager.fireCVSEvent(new FileInfoEvent(this, moduleInformation));
+			moduleInformation = null;
+		}
+	}
 
-    @Override
+	@Override
 	public void parseLine(String line, boolean isErrorMessage) {
-        line = line.replace('\t', ' ');
-        if (!line.startsWith(" ")) { //NOI18N
-            processModule(line, true);
-        }
-        else {
-            processModule(line, false);
-        }
-    }
+		line = line.replace('\t', ' ');
+		if (!line.startsWith(" ")) { // NOI18N
+			processModule(line, true);
+		} else {
+			processModule(line, false);
+		}
+	}
 
-    protected void processModule(String line, boolean firstLine) {
-        StringTokenizer tok = new StringTokenizer(line, " ", false); //NOI18N
-        if (firstLine) {
-            outputDone();
-            moduleInformation = new ModuleListInformation();
-            String modName = tok.nextToken();
-            moduleInformation.setModuleName(modName);
-            if (checkoutCommand.isShowModulesWithStatus()) {
-                String stat = tok.nextToken();
-                moduleInformation.setModuleStatus(stat);
-            }
-        }
-        while (tok.hasMoreTokens()) {
-            String nextTok = tok.nextToken();
-            if (nextTok.startsWith("-")) { //NOI18N
-                moduleInformation.setType(nextTok);
-                continue;
-            }
-            moduleInformation.addPath(nextTok);
-        }
-    }
+	protected void processModule(String line, boolean firstLine) {
+		StringTokenizer tok = new StringTokenizer(line, " ", false); // NOI18N
+		if (firstLine) {
+			outputDone();
+			moduleInformation = new ModuleListInformation();
+			String modName = tok.nextToken();
+			moduleInformation.setModuleName(modName);
+			if (checkoutCommand.isShowModulesWithStatus()) {
+				String stat = tok.nextToken();
+				moduleInformation.setModuleStatus(stat);
+			}
+		}
+		while (tok.hasMoreTokens()) {
+			String nextTok = tok.nextToken();
+			if (nextTok.startsWith("-")) { // NOI18N
+				moduleInformation.setType(nextTok);
+				continue;
+			}
+			moduleInformation.addPath(nextTok);
+		}
+	}
 
-    @Override
+	@Override
 	public void parseEnhancedMessage(String key, Object value) {
-    }
+	}
 }

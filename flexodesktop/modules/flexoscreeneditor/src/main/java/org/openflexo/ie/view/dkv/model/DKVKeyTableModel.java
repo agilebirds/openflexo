@@ -38,176 +38,159 @@ import org.openflexo.foundation.dkv.Value;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.DMEIconLibrary;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class DKVKeyTableModel extends AbstractModel<Domain, Key>
-{
+public class DKVKeyTableModel extends AbstractModel<Domain, Key> {
 
-    protected static final Logger logger = Logger.getLogger(DKVKeyTableModel.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(DKVKeyTableModel.class.getPackage().getName());
 
-    private DKVModel _dkvModel;
-    
-    public DKVKeyTableModel(DKVModel dkvModel, Domain domain, FlexoProject project)
-    {
-        super(domain, project);
-        _dkvModel = dkvModel;
-        if (domain!=null)
-            domain.getKeyList().addObserver(this);
-        addToColumns(new IconColumn<Key>("domain_icon", 30) {
-            @Override
-			public Icon getIcon(Key object)
-            {
-                return DMEIconLibrary.KEY_ICON;
-            }
-        });
-        addToColumns(new StringColumn<Key>("key", 150) {
-            @Override
-			public String getValue(Key key)
-            {
-                return key.getName();
-            }
+	private DKVModel _dkvModel;
 
-        });
-        for (Language language : getDKVModel().getLanguages()) {
-            addToColumns(new LanguageValueColumn(language, 150));
-        }
-        addToColumns(new EditableStringColumn<Key>("description", 250) {
-            @Override
-			public String getValue(Key key)
-            {
-                return key.getDescription();
-            }
+	public DKVKeyTableModel(DKVModel dkvModel, Domain domain, FlexoProject project) {
+		super(domain, project);
+		_dkvModel = dkvModel;
+		if (domain != null)
+			domain.getKeyList().addObserver(this);
+		addToColumns(new IconColumn<Key>("domain_icon", 30) {
+			@Override
+			public Icon getIcon(Key object) {
+				return DMEIconLibrary.KEY_ICON;
+			}
+		});
+		addToColumns(new StringColumn<Key>("key", 150) {
+			@Override
+			public String getValue(Key key) {
+				return key.getName();
+			}
 
-            @Override
-			public void setValue(Key key, String aValue)
-            {
-                key.setDescription(aValue);
-            }
-        });
-    }
+		});
+		for (Language language : getDKVModel().getLanguages()) {
+			addToColumns(new LanguageValueColumn(language, 150));
+		}
+		addToColumns(new EditableStringColumn<Key>("description", 250) {
+			@Override
+			public String getValue(Key key) {
+				return key.getDescription();
+			}
 
-    protected class LanguageValueColumn extends EditableStringColumn<Key>
-    {
-        Language _language;
+			@Override
+			public void setValue(Key key, String aValue) {
+				key.setDescription(aValue);
+			}
+		});
+	}
 
-        public LanguageValueColumn(Language language, int defaultWidth)
-        {
-            super("", defaultWidth);
-            _language = language;
-        }
+	protected class LanguageValueColumn extends EditableStringColumn<Key> {
+		Language _language;
 
-        @Override
-		public String getValue(Key key)
-        {
-            if ((_language != null) && (key.getDomain() != null)) {
-                Value value = key.getDomain().getValue(key, _language);
-                if (value != null)
-                    return value.getValue();
-            }
-            return "";
-        }
+		public LanguageValueColumn(Language language, int defaultWidth) {
+			super("", defaultWidth);
+			_language = language;
+		}
 
-        @Override
-		public void setValue(Key key, String aValue)
-        {
-            if ((_language != null) && (key.getDomain() != null)) {
-                key.getDomain().putValueForLanguage(key, aValue, _language);
-            }
-        }
+		@Override
+		public String getValue(Key key) {
+			if ((_language != null) && (key.getDomain() != null)) {
+				Value value = key.getDomain().getValue(key, _language);
+				if (value != null)
+					return value.getValue();
+			}
+			return "";
+		}
 
-        @Override
-		public String getLocalizedTitle()
-        {
-            return _language.getName() + " [" + _language.getIsoCode() + "]";
-        }
+		@Override
+		public void setValue(Key key, String aValue) {
+			if ((_language != null) && (key.getDomain() != null)) {
+				key.getDomain().putValueForLanguage(key, aValue, _language);
+			}
+		}
 
-    }
+		@Override
+		public String getLocalizedTitle() {
+			return _language.getName() + " [" + _language.getIsoCode() + "]";
+		}
 
-    public Domain getDomain()
-    {
-        return getModel();
-    }
+	}
 
-    public DKVModel getDKVModel()
-    {
-        return _dkvModel;
-    }
+	public Domain getDomain() {
+		return getModel();
+	}
 
-    @Override
-	public Key elementAt(int row)
-    {
-        if ((row >= 0) && (row < getRowCount())) {
-            return (Key) getDomain().getKeyList().elementAt(row);
-        } else {
-            return null;
-        }
-    }
+	public DKVModel getDKVModel() {
+		return _dkvModel;
+	}
 
-    public Key keyAt(int row)
-    {
-        return elementAt(row);
-    }
+	@Override
+	public Key elementAt(int row) {
+		if ((row >= 0) && (row < getRowCount())) {
+			return (Key) getDomain().getKeyList().elementAt(row);
+		} else {
+			return null;
+		}
+	}
 
-    @Override
-	public int getRowCount()
-    {
-        if (getDomain() != null) {
-            return getDomain().getKeyList().getKeyList().length;
-        }
-        return 0;
-    }
+	public Key keyAt(int row) {
+		return elementAt(row);
+	}
 
-    public void notifyLanguageAdded(Language addedLanguage)
-    {
-        // logger.info("Add column");
-        insertColumnAtIndex(new LanguageValueColumn(addedLanguage, 150), getColumnCount() - 1);
-        fireTableStructureChanged();
-    }
+	@Override
+	public int getRowCount() {
+		if (getDomain() != null) {
+			return getDomain().getKeyList().getKeyList().length;
+		}
+		return 0;
+	}
 
-    public void notifyLanguageRemoved(Language removedLanguage)
-    {
-        // logger.info("Remove column");
-        LanguageValueColumn searchedColumn = null;
-        for (int i = 0; i < getColumnCount(); i++) {
-            AbstractColumn col = columnAt(i);
-            if ((col != null) && (col instanceof LanguageValueColumn) && (((LanguageValueColumn) col)._language == removedLanguage)) {
-                searchedColumn = (LanguageValueColumn) col;
-            }
-        }
-        if (searchedColumn != null) {
-            removeFromColumns(searchedColumn);
-            fireTableStructureChanged();
-        }
-    }
+	public void notifyLanguageAdded(Language addedLanguage) {
+		// logger.info("Add column");
+		insertColumnAtIndex(new LanguageValueColumn(addedLanguage, 150), getColumnCount() - 1);
+		fireTableStructureChanged();
+	}
 
-    /**
-     * Overrides update
-     * @see org.openflexo.components.tabular.model.AbstractModel#update(org.openflexo.foundation.FlexoObservable, org.openflexo.foundation.DataModification)
-     */
-    @Override
-    public void update(FlexoObservable observable, DataModification dataModification)
-    {
-            if (dataModification.propertyName()!=null && dataModification.propertyName().equals("index")) {
-                int firstRow = 0;
-                int lastRow = getRowCount()-1;
-                if (dataModification.oldValue()!=null && dataModification.newValue()!=null) {
-                    if (((Integer)dataModification.oldValue())<((Integer)dataModification.newValue())) {
-                        firstRow = ((Integer)dataModification.oldValue()).intValue()-1;
-                        lastRow = ((Integer)dataModification.newValue()).intValue()-1;
-                    } else if (((Integer)dataModification.oldValue())>((Integer)dataModification.newValue())) {
-                        firstRow = ((Integer)dataModification.newValue()).intValue()-1;
-                        lastRow = ((Integer)dataModification.oldValue()).intValue()-1;
-                    } else //nothing has changed
-                        return;
-                }
-                fireTableRowsUpdated(firstRow, lastRow);
-                return;
-            }
-        super.update(observable, dataModification);
-    }
+	public void notifyLanguageRemoved(Language removedLanguage) {
+		// logger.info("Remove column");
+		LanguageValueColumn searchedColumn = null;
+		for (int i = 0; i < getColumnCount(); i++) {
+			AbstractColumn col = columnAt(i);
+			if ((col != null) && (col instanceof LanguageValueColumn) && (((LanguageValueColumn) col)._language == removedLanguage)) {
+				searchedColumn = (LanguageValueColumn) col;
+			}
+		}
+		if (searchedColumn != null) {
+			removeFromColumns(searchedColumn);
+			fireTableStructureChanged();
+		}
+	}
+
+	/**
+	 * Overrides update
+	 * 
+	 * @see org.openflexo.components.tabular.model.AbstractModel#update(org.openflexo.foundation.FlexoObservable,
+	 *      org.openflexo.foundation.DataModification)
+	 */
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (dataModification.propertyName() != null && dataModification.propertyName().equals("index")) {
+			int firstRow = 0;
+			int lastRow = getRowCount() - 1;
+			if (dataModification.oldValue() != null && dataModification.newValue() != null) {
+				if (((Integer) dataModification.oldValue()) < ((Integer) dataModification.newValue())) {
+					firstRow = ((Integer) dataModification.oldValue()).intValue() - 1;
+					lastRow = ((Integer) dataModification.newValue()).intValue() - 1;
+				} else if (((Integer) dataModification.oldValue()) > ((Integer) dataModification.newValue())) {
+					firstRow = ((Integer) dataModification.newValue()).intValue() - 1;
+					lastRow = ((Integer) dataModification.oldValue()).intValue() - 1;
+				} else
+					// nothing has changed
+					return;
+			}
+			fireTableRowsUpdated(firstRow, lastRow);
+			return;
+		}
+		super.update(observable, dataModification);
+	}
 }

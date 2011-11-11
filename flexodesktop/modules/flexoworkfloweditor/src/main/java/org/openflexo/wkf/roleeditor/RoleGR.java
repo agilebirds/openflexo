@@ -56,7 +56,6 @@ import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.toolbox.ConcatenedList;
 import org.openflexo.toolbox.FileResource;
 
-
 public class RoleGR extends ShapeGraphicalRepresentation<Role> implements GraphicalFlexoObserver {
 
 	@SuppressWarnings("unused")
@@ -71,18 +70,16 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 	private BackgroundStyle background;
 	private TextStyle textStyle;
 
-
-	public RoleGR(Role aRole, Drawing<?> aDrawing)
-	{
+	public RoleGR(Role aRole, Drawing<?> aDrawing) {
 		super(ShapeType.RECTANGLE, aRole, aDrawing);
 		setWidth(100);
 		setHeight(40);
-		//setText(getRole().getName());
+		// setText(getRole().getName());
 		setIsFloatingLabel(false);
 		getShape().setIsRounded(true);
 		setDimensionConstraints(DimensionConstraints.FREELY_RESIZABLE);
 		updateStyles();
-		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(25,25,25,25));
+		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(25, 25, 25, 25));
 
 		setDecorationPainter(new RoleDecorationPainter(aRole));
 
@@ -90,35 +87,32 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 		setAdjustMinimalWidthToLabelWidth(true);
 		setAdjustMinimalHeightToLabelHeight(true);
 		setTextAlignment(TextAlignment.CENTER);
-		
+
 		addToMouseClickControls(new RoleEditorController.ShowContextualMenuControl());
 		addToMouseDragControls(new DrawRoleSpecializationControl());
 
 		aRole.addObserver(this);
 
 	}
-	
+
 	@Override
-	public RoleListRepresentation getDrawing()
-	{
-		return (RoleListRepresentation)super.getDrawing();
+	public RoleListRepresentation getDrawing() {
+		return (RoleListRepresentation) super.getDrawing();
 	}
 
 	@Override
-	public void delete()
-	{
+	public void delete() {
 		Role role = getRole();
 		super.delete();
 		role.deleteObserver(this);
 	}
 
-	private void updateStyles()
-	{
+	private void updateStyles() {
 		foreground = ForegroundStyle.makeStyle(getRoleColor());
 		foreground.setLineWidth(2);
 		background = BackgroundStyle.makeColorGradientBackground(getRoleColor(), Color.WHITE, ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
 		textStyle = TextStyle.makeDefault();
-		textStyle.setColor(FGEUtils.chooseBestColor(getRoleColor(), Color.WHITE,Color.BLACK));
+		textStyle.setColor(FGEUtils.chooseBestColor(getRoleColor(), Color.WHITE, Color.BLACK));
 		setForeground(foreground);
 		setBackground(background);
 		setTextStyle(textStyle);
@@ -131,26 +125,23 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 		// See also org.openflexo.wkf.swleditor.gr.RoleContainerGR.updateColors() and
 		// org.openflexo.components.browser.wkf.RoleElement.buildCustomIcon(Color)
 		// org.openflexo.wkf.processeditor.gr.AbstractActivityNodeGR.getMainBgColor()
-		if (getRole().getColor()!=null)
+		if (getRole().getColor() != null)
 			return getRole().getColor();
 		return Color.RED;
 	}
 
-	public class RoleDecorationPainter implements DecorationPainter, Cloneable
-	{
+	public class RoleDecorationPainter implements DecorationPainter, Cloneable {
 		private Role role;
 		protected ForegroundStyle decorationForeground;
 		protected BackgroundImage decorationBackground;
 		private boolean isSystemRole;
 
 		@Override
-		public RoleDecorationPainter clone()
-		{
+		public RoleDecorationPainter clone() {
 			return new RoleDecorationPainter(role);
 		}
 
-		public RoleDecorationPainter(Role aRole)
-		{
+		public RoleDecorationPainter(Role aRole) {
 			role = aRole;
 
 			updateDecorationBackground();
@@ -159,13 +150,11 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 			decorationForeground.setLineWidth(2);
 		}
 
-		private void updateDecorationBackground()
-		{
+		private void updateDecorationBackground() {
 			if (role.getIsSystemRole()) {
 				isSystemRole = true;
 				decorationBackground = BackgroundStyle.makeImageBackground(SYSTEM_ROLE_ICON);
-			}
-			else {
+			} else {
 				isSystemRole = false;
 				decorationBackground = BackgroundStyle.makeImageBackground(USER_ROLE_ICON);
 			}
@@ -190,15 +179,14 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 			}
 
 			g.useBackgroundStyle(decorationBackground);
-			g.fillCircle(new FGEPoint(30,20),new FGEDimension(22,22));
+			g.fillCircle(new FGEPoint(30, 20), new FGEDimension(22, 22));
 			g.useForegroundStyle(decorationForeground);
-			g.drawCircle(new FGEPoint(30,20),new FGEDimension(22,22));
+			g.drawCircle(new FGEPoint(30, 20), new FGEDimension(22, 22));
 
 		};
 
 		@Override
-		public boolean paintBeforeShape()
-		{
+		public boolean paintBeforeShape() {
 			return false;
 		}
 	}
@@ -206,36 +194,32 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 	private boolean isUpdatingPosition = false;
 
 	@Override
-	public double getX()
-	{
+	public double getX() {
 		if (!getRole().hasLocationForContext(RepresentableFlexoModelObject.DEFAULT)) {
-			getRole().getX(RepresentableFlexoModelObject.DEFAULT,getDefaultX());
+			getRole().getX(RepresentableFlexoModelObject.DEFAULT, getDefaultX());
 		}
 		return getRole().getX(RepresentableFlexoModelObject.DEFAULT);
 	}
 
 	@Override
-	public void setXNoNotification(double posX)
-	{
+	public void setXNoNotification(double posX) {
 		isUpdatingPosition = true;
-		getRole().setX(posX,RepresentableFlexoModelObject.DEFAULT);
+		getRole().setX(posX, RepresentableFlexoModelObject.DEFAULT);
 		isUpdatingPosition = false;
 	}
 
 	@Override
-	public double getY()
-	{
+	public double getY() {
 		if (!getRole().hasLocationForContext(RepresentableFlexoModelObject.DEFAULT)) {
-			getRole().getY(RepresentableFlexoModelObject.DEFAULT,getDefaultY());
+			getRole().getY(RepresentableFlexoModelObject.DEFAULT, getDefaultY());
 		}
 		return getRole().getY(RepresentableFlexoModelObject.DEFAULT);
 	}
 
 	@Override
-	public void setYNoNotification(double posY)
-	{
+	public void setYNoNotification(double posY) {
 		isUpdatingPosition = true;
-		getRole().setY(posY,RepresentableFlexoModelObject.DEFAULT);
+		getRole().setY(posY, RepresentableFlexoModelObject.DEFAULT);
 		isUpdatingPosition = false;
 	}
 
@@ -243,19 +227,17 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 	private int defaultY = -1;
 
 	// Override to implement defaut automatic layout
-	public double getDefaultX()
-	{
-		if (defaultX<0) {
-			doDefaultLayout(10,10);
+	public double getDefaultX() {
+		if (defaultX < 0) {
+			doDefaultLayout(10, 10);
 		}
 		return defaultX;
 	}
 
 	// Override to implement defaut automatic layout
-	public double getDefaultY()
-	{
-		if (defaultY<0) {
-			doDefaultLayout(10,10);
+	public double getDefaultY() {
+		if (defaultY < 0) {
+			doDefaultLayout(10, 10);
 		}
 		return defaultY;
 	}
@@ -267,22 +249,23 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 			GraphicalRepresentation<?> gr = en.nextElement();
 			if (gr instanceof RoleGR) {
 				RoleGR rgr = (RoleGR) gr;
-				if (rgr!=this) {
+				if (rgr != this) {
 					if (rgr.getRole().hasLocationForContext(RepresentableFlexoModelObject.DEFAULT)) {
 						java.awt.Rectangle viewBounds = gr.getViewBounds(1.0);
-						if (viewBounds.intersects(new java.awt.Rectangle(x,y,WIDTH,HEIGHT))) {
+						if (viewBounds.intersects(new java.awt.Rectangle(x, y, WIDTH, HEIGHT))) {
 							ok = false;
-							if (viewBounds.x+viewBounds.width + WIDTH>getDrawingGraphicalRepresentation().getWidth()) {
+							if (viewBounds.x + viewBounds.width + WIDTH > getDrawingGraphicalRepresentation().getWidth()) {
 								// End of line, we go to the next one
-								if (y+10+HEIGHT<getDrawingGraphicalRepresentation().getHeight())
-									doDefaultLayout(10, y+10+HEIGHT);
+								if (y + 10 + HEIGHT < getDrawingGraphicalRepresentation().getHeight())
+									doDefaultLayout(10, y + 10 + HEIGHT);
 								else {
 									if (logger.isLoggable(Level.WARNING))
-										logger.warning("Could not find suitable location for role: "+getRole());
-									defaultX = 10; defaultY = 10;
+										logger.warning("Could not find suitable location for role: " + getRole());
+									defaultX = 10;
+									defaultY = 10;
 								}
 							} else {
-								doDefaultLayout(viewBounds.x+viewBounds.width + 10, y);
+								doDefaultLayout(viewBounds.x + viewBounds.width + 10, y);
 							}
 						}
 					}
@@ -295,15 +278,15 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 		}
 	}
 
-
 	private boolean isEditingLabel = false;
 	private String editingText;
-	//private Color textColor;
+
+	// private Color textColor;
 
 	@Override
 	public void notifyLabelWillBeEdited() {
 		editingText = getText();
-		//textColor = getTextStyle().getColor();
+		// textColor = getTextStyle().getColor();
 		isEditingLabel = true;
 		super.notifyLabelWillBeEdited();
 	}
@@ -313,7 +296,7 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 		isEditingLabel = false;
 		setTextNoNotification(editingText);
 		editingText = null;
-		//textColor = null;
+		// textColor = null;
 		super.notifyLabelHasBeenEdited();
 	}
 
@@ -348,70 +331,58 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 		}*/
 	}
 
-	public Role getRole()
-	{
+	public Role getRole() {
 		return getDrawable();
 	}
 
 	@Override
-	public Rectangle getShape()
-	{
-		return (Rectangle)super.getShape();
+	public Rectangle getShape() {
+		return (Rectangle) super.getShape();
 	}
-	
 
 	@Override
-	public void update (FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getRole()) {
 			if (dataModification instanceof WKFAttributeDataModification) {
-				if ((((WKFAttributeDataModification)dataModification).getAttributeName().equals("posX"))
-						|| (((WKFAttributeDataModification)dataModification).getAttributeName().equals("posY"))) {
+				if ((((WKFAttributeDataModification) dataModification).getAttributeName().equals("posX"))
+						|| (((WKFAttributeDataModification) dataModification).getAttributeName().equals("posY"))) {
 					if (!isUpdatingPosition) {
 						notifyObjectMoved();
 					}
-				}
-				else if (((WKFAttributeDataModification)dataModification).getAttributeName().equals("roleSpecializations")) {
+				} else if (((WKFAttributeDataModification) dataModification).getAttributeName().equals("roleSpecializations")) {
 					if (getDrawing() instanceof RoleListRepresentation) {
 						(getDrawing()).updateGraphicalObjectsHierarchy();
 					}
 					// This might be not the case when used in palette !!!
-				}
-				else if ("isSystemRole".equals(((WKFAttributeDataModification)dataModification).getAttributeName())){
+				} else if ("isSystemRole".equals(((WKFAttributeDataModification) dataModification).getAttributeName())) {
+					notifyShapeNeedsToBeRedrawn();
+				} else {
 					notifyShapeNeedsToBeRedrawn();
 				}
-				else {
-					notifyShapeNeedsToBeRedrawn();
-				}
-			}
-			else if (dataModification instanceof ObjectLocationChanged) {
+			} else if (dataModification instanceof ObjectLocationChanged) {
 				if (!isUpdatingPosition) {
 					notifyObjectMoved();
 				}
-			}
-			else if (dataModification instanceof RoleNameChange) {
+			} else if (dataModification instanceof RoleNameChange) {
 				notifyAttributeChange(org.openflexo.fge.GraphicalRepresentation.Parameters.text);
-			}
-			else if (dataModification instanceof RoleColorChange) {
+			} else if (dataModification instanceof RoleColorChange) {
 				updateStyles();
 				notifyShapeNeedsToBeRedrawn();
 			}
 		}
 	}
-	
 
 	private ConcatenedList<ControlArea> controlAreas;
 
 	@Override
-	public List<? extends ControlArea> getControlAreas() 
-	{
-		if (controlAreas==null) {
+	public List<? extends ControlArea> getControlAreas() {
+		if (controlAreas == null) {
 			controlAreas = new ConcatenedList<ControlArea>();
 			controlAreas.addElementList(super.getControlAreas());
-			controlAreas.addElement(new FloatingPalette(this, getDrawable().getRoleList(),SimplifiedCardinalDirection.EAST));
-			controlAreas.addElement(new FloatingPalette(this, getDrawable().getRoleList(),SimplifiedCardinalDirection.WEST));
-			controlAreas.addElement(new FloatingPalette(this, getDrawable().getRoleList(),SimplifiedCardinalDirection.NORTH));
-			controlAreas.addElement(new FloatingPalette(this, getDrawable().getRoleList(),SimplifiedCardinalDirection.SOUTH));
+			controlAreas.addElement(new FloatingPalette(this, getDrawable().getRoleList(), SimplifiedCardinalDirection.EAST));
+			controlAreas.addElement(new FloatingPalette(this, getDrawable().getRoleList(), SimplifiedCardinalDirection.WEST));
+			controlAreas.addElement(new FloatingPalette(this, getDrawable().getRoleList(), SimplifiedCardinalDirection.NORTH));
+			controlAreas.addElement(new FloatingPalette(this, getDrawable().getRoleList(), SimplifiedCardinalDirection.SOUTH));
 		}
 		return controlAreas;
 	}

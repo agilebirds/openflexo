@@ -26,9 +26,7 @@ import java.util.logging.Logger;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.inspector.DefaultInspectableObject;
 
-
-public abstract class MouseControl extends DefaultInspectableObject
-{
+public abstract class MouseControl extends DefaultInspectableObject {
 	static final Logger logger = Logger.getLogger(MouseClickControlAction.class.getPackage().getName());
 
 	public String name;
@@ -38,25 +36,30 @@ public abstract class MouseControl extends DefaultInspectableObject
 	public boolean altPressed = false;
 	public MouseButton button;
 
-	public boolean isApplicable(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent e)
-	{
+	public boolean isApplicable(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent e) {
 		if (logger.isLoggable(Level.FINE))
-			logger.fine("Called isApplicable(MouseEvent) for "+this+" event="+e);
+			logger.fine("Called isApplicable(MouseEvent) for " + this + " event=" + e);
 
-		if (e.isConsumed()) return false;
+		if (e.isConsumed())
+			return false;
 
-		if (button == MouseButton.LEFT && e.getButton() != MouseEvent.BUTTON1) return false;
-		if (button == MouseButton.CENTER && e.getButton() != MouseEvent.BUTTON2) return false;
-		if (button == MouseButton.RIGHT && e.getButton() != MouseEvent.BUTTON3) return false;
+		if (button == MouseButton.LEFT && e.getButton() != MouseEvent.BUTTON1)
+			return false;
+		if (button == MouseButton.CENTER && e.getButton() != MouseEvent.BUTTON2)
+			return false;
+		if (button == MouseButton.RIGHT && e.getButton() != MouseEvent.BUTTON3)
+			return false;
 
 		// logger.info("shiftPressed="+shiftPressed+" e.isShiftDown()="+e.isShiftDown());
 		// logger.info("ctrlPressed="+ctrlPressed+" e.isControlDown()="+e.isControlDown());
 		// logger.info("metaPressed="+metaPressed+" e.isMetaDown()="+e.isMetaDown());
 		// logger.info("altPressed="+altPressed+" e.isAltDown()="+e.isAltDown());
-		
-		if (shiftPressed != e.isShiftDown()) return false;
-		if (ctrlPressed != e.isControlDown()) return false;
-		
+
+		if (shiftPressed != e.isShiftDown())
+			return false;
+		if (ctrlPressed != e.isControlDown())
+			return false;
+
 		if (button == MouseButton.RIGHT) {
 			// Correction here: on all platforms, it is impossible to
 			// distinguish right-click with meta key down from right-click
@@ -69,28 +72,27 @@ public abstract class MouseControl extends DefaultInspectableObject
 			// Special case for MacOS platform: right-click is emuled by APPLE key (=<META>)
 			// cannot distinguish both, so just skip this test
 			 */
+		} else {
+			if (metaPressed != e.isMetaDown())
+				return false;
 		}
-		else {
-			if (metaPressed != e.isMetaDown()) return false;
-		}
-		if (button==MouseButton.CENTER) {
-			
-		} else
-			if (altPressed != e.isAltDown()) return false;
+		if (button == MouseButton.CENTER) {
+
+		} else if (altPressed != e.isAltDown())
+			return false;
 
 		// Everything seems ok, return true
 		return true;
 	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		// not inspected alone
 		return null;
 	}
 
-	protected MouseControl(String aName, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed, MouseButton button) 
-	{
+	protected MouseControl(String aName, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed,
+			MouseButton button) {
 		super();
 		name = aName;
 		this.shiftPressed = shiftPressed;
@@ -100,23 +102,13 @@ public abstract class MouseControl extends DefaultInspectableObject
 		this.button = button;
 	}
 
-	public static enum MouseButton
-	{
-		LEFT,
-		RIGHT,
-		CENTER
+	public static enum MouseButton {
+		LEFT, RIGHT, CENTER
 	}
-	
-	protected String getModifiersAsString()
-	{
-		return button.name()
-		+(shiftPressed?",SHIFT":"")
-		+(ctrlPressed?",CTRL":"")
-		+(metaPressed?",META":"")
-		+(altPressed?",ALT":"");
-	}
-	
 
+	protected String getModifiersAsString() {
+		return button.name() + (shiftPressed ? ",SHIFT" : "") + (ctrlPressed ? ",CTRL" : "") + (metaPressed ? ",META" : "")
+				+ (altPressed ? ",ALT" : "");
+	}
 
 }
-

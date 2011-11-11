@@ -35,15 +35,13 @@ import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.GeneratedDoc;
 
-
 /**
  * Browser for Code Generator module
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class DGBrowser extends ConfigurableProjectBrowser implements FlexoObserver
-{
+public class DGBrowser extends ConfigurableProjectBrowser implements FlexoObserver {
 	// GPO: DGBrowser does not extends DEBrowser because they are
 	// different browsers (even though, they have some objects from the model in
 	// common, they are not displayed the same way at all).
@@ -61,37 +59,32 @@ public class DGBrowser extends ConfigurableProjectBrowser implements FlexoObserv
 	// ================================
 	// ==========================================================================
 
-	public DGBrowser(DGController controller)
-	{
-		super(makeDefaultBrowserConfiguration(controller.getProject().getGeneratedDoc()),controller.getSelectionManager());
+	public DGBrowser(DGController controller) {
+		super(makeDefaultBrowserConfiguration(controller.getProject().getGeneratedDoc()), controller.getSelectionManager());
 		_controller = controller;
 		update();
 	}
 
 	@Override
-	public void update(FlexoObservable o, DataModification arg)
-	{
+	public void update(FlexoObservable o, DataModification arg) {
 		if (logger.isLoggable(Level.FINE))
 			logger.fine("GeneratorBrowser update");
 	}
 
-	public static BrowserConfiguration makeDefaultBrowserConfiguration(final GeneratedDoc generatedCode)
-	{
+	public static BrowserConfiguration makeDefaultBrowserConfiguration(final GeneratedDoc generatedCode) {
 		BrowserConfiguration returned = new DGBrowserConfiguration(generatedCode);
 		return returned;
 	}
 
-	public static BrowserConfiguration makeBrowserConfigurationForFileHistory(final CGFile file)
-	{
-		BrowserConfiguration returned = new DGBrowserConfiguration((file!=null?file.getGeneratedCode():null)) {
+	public static BrowserConfiguration makeBrowserConfigurationForFileHistory(final CGFile file) {
+		BrowserConfiguration returned = new DGBrowserConfiguration((file != null ? file.getGeneratedCode() : null)) {
 			@Override
-			public CGFile getDefaultRootObject()
-			{
+			public CGFile getDefaultRootObject() {
 				return file;
 			}
+
 			@Override
-			public void configure(ProjectBrowser browser)
-			{
+			public void configure(ProjectBrowser browser) {
 				browser.setFilterStatus(BrowserElementType.FILE_RELEASE_VERSION, BrowserFilterStatus.SHOW);
 			}
 		};
@@ -108,12 +101,11 @@ public class DGBrowser extends ConfigurableProjectBrowser implements FlexoObserv
 	private CustomBrowserFilter needsReinjectingFilter;
 	private CustomBrowserFilter otherFilesFilter;
 
-	public CustomBrowserFilter getAllFilesAndDirectoryFilter()	{
+	public CustomBrowserFilter getAllFilesAndDirectoryFilter() {
 		return allFilesAndDirectoryFilter;
 	}
 
-	public void setAllFilesAndDirectoryFilter(
-			CustomBrowserFilter allFilesAndDirectoryFilter) {
+	public void setAllFilesAndDirectoryFilter(CustomBrowserFilter allFilesAndDirectoryFilter) {
 		this.allFilesAndDirectoryFilter = allFilesAndDirectoryFilter;
 	}
 
@@ -137,8 +129,7 @@ public class DGBrowser extends ConfigurableProjectBrowser implements FlexoObserv
 		return generationModifiedFilter;
 	}
 
-	public void setGenerationModifiedFilter(
-			CustomBrowserFilter generationModifiedFilter) {
+	public void setGenerationModifiedFilter(CustomBrowserFilter generationModifiedFilter) {
 		this.generationModifiedFilter = generationModifiedFilter;
 	}
 
@@ -162,8 +153,7 @@ public class DGBrowser extends ConfigurableProjectBrowser implements FlexoObserv
 		return unresolvedConflictsFilter;
 	}
 
-	public void setUnresolvedConflictsFilter(
-			CustomBrowserFilter unresolvedConflictsFilter) {
+	public void setUnresolvedConflictsFilter(CustomBrowserFilter unresolvedConflictsFilter) {
 		this.unresolvedConflictsFilter = unresolvedConflictsFilter;
 	}
 
@@ -175,13 +165,11 @@ public class DGBrowser extends ConfigurableProjectBrowser implements FlexoObserv
 		this.upToDateFilesFilter = upToDateFilesFilter;
 	}
 
-	public CustomBrowserFilter getNeedsReinjectingFilter()
-	{
+	public CustomBrowserFilter getNeedsReinjectingFilter() {
 		return needsReinjectingFilter;
 	}
 
-	public void setNeedsReinjectingFilter(CustomBrowserFilter needsReinjectingFilter)
-	{
+	public void setNeedsReinjectingFilter(CustomBrowserFilter needsReinjectingFilter) {
 		this.needsReinjectingFilter = needsReinjectingFilter;
 	}
 

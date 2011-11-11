@@ -22,7 +22,6 @@ package org.openflexo.generator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGSymbolicDirectory;
 import org.openflexo.foundation.cg.GenerationRepository;
@@ -39,64 +38,64 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileUtils;
 
 public class GeneratedResourceFileFactory {
-	
+
 	private static final Logger logger = FlexoLogger.getLogger(GeneratedResourceFileFactory.class.getPackage().getName());
-	
-	public static void initCGFile(CGFile cgFile, CGSymbolicDirectory symbDir, CGRepositoryFileResource returned){
+
+	public static void initCGFile(CGFile cgFile, CGSymbolicDirectory symbDir, CGRepositoryFileResource returned) {
 		cgFile.setSymbolicDirectory(symbDir);
 		returned.setCGFile(cgFile);
 		symbDir.getGeneratedCodeRepository().addToFiles(cgFile);
 	}
-	
-	public static <FR extends CGRepositoryFileResource>  FR registerResource(FR returned, String fileName) {
+
+	public static <FR extends CGRepositoryFileResource> FR registerResource(FR returned, String fileName) {
 		return registerResource(returned, fileName, "");
 	}
-	
-	public static <FR extends CGRepositoryFileResource>  FR registerResource(FR returned, String fileName, String folderPath) {
-		if (returned.getName()==null)
+
+	public static <FR extends CGRepositoryFileResource> FR registerResource(FR returned, String fileName, String folderPath) {
+		if (returned.getName() == null)
 			throw new NullPointerException();
-	    FlexoProjectFile file = returned.makeFlexoProjectFile(folderPath, fileName);
+		FlexoProjectFile file = returned.makeFlexoProjectFile(folderPath, fileName);
 
 		try {
-	    	 returned.setResourceFile(file);
-	     } catch (InvalidFileNameException e1) {
-	         file = new FlexoProjectFile(FileUtils.getValidFileName(file.getRelativePath()));
-	         try {
-	        	 returned.setResourceFile(file);
-	         } catch (InvalidFileNameException e) {
-	             if (logger.isLoggable(Level.SEVERE))
-	                 logger.severe("Invalid file name: "+file.getRelativePath()+". This should never happen.");
-	             return null;
-	         }
-	     }
-	     try {
-	         returned.getProject().registerResource(returned);
-	     } catch (DuplicateResourceException e) {
-	         // Warns about the exception
-	         logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-	         e.printStackTrace();
-	     }
-	
-	     returned.rebuildDependancies();
-	
-	     return returned;
+			returned.setResourceFile(file);
+		} catch (InvalidFileNameException e1) {
+			file = new FlexoProjectFile(FileUtils.getValidFileName(file.getRelativePath()));
+			try {
+				returned.setResourceFile(file);
+			} catch (InvalidFileNameException e) {
+				if (logger.isLoggable(Level.SEVERE))
+					logger.severe("Invalid file name: " + file.getRelativePath() + ". This should never happen.");
+				return null;
+			}
+		}
+		try {
+			returned.getProject().registerResource(returned);
+		} catch (DuplicateResourceException e) {
+			// Warns about the exception
+			logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+			e.printStackTrace();
+		}
+
+		returned.rebuildDependancies();
+
+		return returned;
 	}
-	
-    public static CGRepositoryFileResource resourceForKeyWithCGFile(FlexoProject project, ResourceType type, String resourceName)
-    {
-        CGRepositoryFileResource ret = (CGRepositoryFileResource) project.resourceForKey(type, resourceName);
-        if (ret!=null && ret.getCGFile()==null) {
-            ret.delete(false);
-            ret = null;
-        }
-        return ret;
-    }
-    
-	public static FlexoCopyOfFileResource createNewFlexoCopyOfFileResource(GenerationRepository repository, PackagedResourceToCopyGenerator<GenerationRepository> generator) {
-		FlexoCopyOfFileResource copiedFile = (FlexoCopyOfFileResource) resourceForKeyWithCGFile(repository.getProject(), ResourceType.COPIED_FILE ,
-				CopyOfFileResource.nameForRepositoryAndFileToCopy(repository, generator.getSource())); 
-        if (copiedFile == null) {
-       		FlexoCopyOfFileResource returned = new FlexoCopyOfFileResource(repository.getProject(), generator.getSource());
+
+	public static CGRepositoryFileResource resourceForKeyWithCGFile(FlexoProject project, ResourceType type, String resourceName) {
+		CGRepositoryFileResource ret = (CGRepositoryFileResource) project.resourceForKey(type, resourceName);
+		if (ret != null && ret.getCGFile() == null) {
+			ret.delete(false);
+			ret = null;
+		}
+		return ret;
+	}
+
+	public static FlexoCopyOfFileResource createNewFlexoCopyOfFileResource(GenerationRepository repository,
+			PackagedResourceToCopyGenerator<GenerationRepository> generator) {
+		FlexoCopyOfFileResource copiedFile = (FlexoCopyOfFileResource) resourceForKeyWithCGFile(repository.getProject(),
+				ResourceType.COPIED_FILE, CopyOfFileResource.nameForRepositoryAndFileToCopy(repository, generator.getSource()));
+		if (copiedFile == null) {
+			FlexoCopyOfFileResource returned = new FlexoCopyOfFileResource(repository.getProject(), generator.getSource());
 			returned.setGenerator(generator);
 			returned.setName(CopyOfFileResource.nameForRepositoryAndFileToCopy(repository, generator.getSource()));
 			CGPackagedResourceFile cgFile = new CGPackagedResourceFile(repository, returned);
@@ -106,11 +105,11 @@ public class GeneratedResourceFileFactory {
 			copiedFile = registerResource(returned, generator.getSource().getName(), generator.getRelativePath());
 			if (logger.isLoggable(Level.FINE))
 				logger.fine("Created PackagedFileResource resource " + copiedFile.getName());
-        } else {
-        	copiedFile.setGenerator(generator);
-        	if (logger.isLoggable(Level.FINE))
+		} else {
+			copiedFile.setGenerator(generator);
+			if (logger.isLoggable(Level.FINE))
 				logger.fine("Successfully retrieved PackagedFileResource resource " + copiedFile.getName());
-        }
-        return copiedFile;
+		}
+		return copiedFile;
 	}
 }

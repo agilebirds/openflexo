@@ -22,31 +22,29 @@ package org.openflexo.foundation.bpel;
 import org.openflexo.antar.Instruction;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
 
-
-public class BPELWSInvocation extends Instruction{
+public class BPELWSInvocation extends Instruction {
 
 	private SubProcessNode subProcess;
-	
-	
+
 	public BPELWSInvocation() {
-		
+
 	}
-	
+
 	public BPELWSInvocation(SubProcessNode n) {
-		subProcess=n;
+		subProcess = n;
 	}
-	
+
 	public SubProcessNode getSubProcessNode() {
 		return subProcess;
 	}
-	
+
 	@Override
 	public String toString() {
-		String toReturn=new String();
-		toReturn="invoking "+(subProcess==null?"null":subProcess.getName());
+		String toReturn = new String();
+		toReturn = "invoking " + (subProcess == null ? "null" : subProcess.getName());
 		return toReturn;
 	}
-	
+
 	@Override
 	public Instruction clone() {
 		// TODO Auto-generated method stub

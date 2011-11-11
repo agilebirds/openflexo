@@ -28,56 +28,47 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.fps.CVSFile;
 import org.openflexo.fps.FPSObject;
 
+public class RevertToSavedCVSFile extends CVSAction<RevertToSavedCVSFile, CVSFile> {
 
-public class RevertToSavedCVSFile extends CVSAction<RevertToSavedCVSFile,CVSFile>
-{
+	private static final Logger logger = Logger.getLogger(RevertToSavedCVSFile.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(RevertToSavedCVSFile.class.getPackage().getName());
+	public static FlexoActionType<RevertToSavedCVSFile, CVSFile, FPSObject> actionType = new FlexoActionType<RevertToSavedCVSFile, CVSFile, FPSObject>(
+			"revert_to_saved", EDITION_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType<RevertToSavedCVSFile,CVSFile,FPSObject> actionType 
-    = new FlexoActionType<RevertToSavedCVSFile,CVSFile,FPSObject> (
-    		"revert_to_saved",EDITION_GROUP,FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public RevertToSavedCVSFile makeNewAction(CVSFile focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {
+			return new RevertToSavedCVSFile(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public RevertToSavedCVSFile makeNewAction(CVSFile focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) 
-        {
-            return new RevertToSavedCVSFile(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(CVSFile object, Vector<FPSObject> globalSelection) {
+			return (object != null && object.getSharedProject() != null);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(CVSFile object, Vector<FPSObject> globalSelection) 
-        {
-            return (object != null && object.getSharedProject() != null);
-       }
+		@Override
+		protected boolean isEnabledForSelection(CVSFile object, Vector<FPSObject> globalSelection) {
+			return ((object != null) && (object.isEdited()));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(CVSFile object, Vector<FPSObject> globalSelection) 
-        {
-            return ((object != null) && (object.isEdited()));
-       }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (RevertToSavedCVSFile.actionType, CVSFile.class);
-    }
-    
+	};
 
-    RevertToSavedCVSFile (CVSFile focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	static {
+		FlexoModelObject.addActionForClass(RevertToSavedCVSFile.actionType, CVSFile.class);
+	}
 
-    @Override
-	protected void doAction(Object context)
-    {
-    	logger.info ("Revert to saved file "+getFocusedObject().getFileName());
-    	if (getFocusedObject() != null) {
-    		getFocusedObject().revertToSaved();
-     	}
-     }
-	
+	RevertToSavedCVSFile(CVSFile focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) {
+		logger.info("Revert to saved file " + getFocusedObject().getFileName());
+		if (getFocusedObject() != null) {
+			getFocusedObject().revertToSaved();
+		}
+	}
+
 }

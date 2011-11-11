@@ -27,10 +27,9 @@ import java.util.Observable;
  * @author sguerin
  * 
  */
-public interface EditableColumn<D extends Observable,T>
-{
+public interface EditableColumn<D extends Observable, T> {
 
-    public boolean isCellEditableFor(D object);
+	public boolean isCellEditableFor(D object);
 
-    public void setValueFor(D object, T value);
+	public void setValueFor(D object, T value);
 }

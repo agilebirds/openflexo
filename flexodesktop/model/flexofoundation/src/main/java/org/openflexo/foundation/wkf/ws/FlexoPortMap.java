@@ -51,7 +51,6 @@ import org.openflexo.foundation.wkf.node.AbstractNode;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 
-
 /**
  * Abstract representation of connexion between an operation associated to a ServiceInterface (for PortRegistry, a DefaultServiceInterface)
  * associated to a FlexoProcess and the SubProcessNode and thus, related petri graph where the SubProcessNode is embedded: this make the
@@ -75,7 +74,7 @@ public class FlexoPortMap extends AbstractNode implements Bindable, FlexoObserve
 	private String _portName;
 
 	private PortMapRegistery _portMapRegistery;
-	
+
 	private int index = -1;
 
 	// ==========================================================================
@@ -183,12 +182,12 @@ public class FlexoPortMap extends AbstractNode implements Bindable, FlexoObserve
 			} else {
 				_operation.addObserver(this);
 
-				for (FlexoPostCondition<AbstractNode,AbstractNode> entry : getIncomingPostConditions()) {
+				for (FlexoPostCondition<AbstractNode, AbstractNode> entry : getIncomingPostConditions()) {
 					if (entry instanceof MessageEdge) {
 						((MessageEdge<AbstractNode, AbstractNode>) entry).lookupMessageDefinition();
 					}
 				}
-				for (FlexoPostCondition<AbstractNode,AbstractNode> exit : getOutgoingPostConditions()) {
+				for (FlexoPostCondition<AbstractNode, AbstractNode> exit : getOutgoingPostConditions()) {
 					if (exit instanceof MessageEdge) {
 						((MessageEdge<AbstractNode, AbstractNode>) exit).lookupMessageDefinition();
 					}
@@ -335,15 +334,15 @@ public class FlexoPortMap extends AbstractNode implements Bindable, FlexoObserve
 
 	@Override
 	public boolean mayHaveIncomingPostConditions() {
-		if (getOperation()!=null) {
+		if (getOperation() != null) {
 			return isInputPort();
 		}
 		return true;
 	}
-	
+
 	@Override
 	public boolean mayHaveOutgoingPostConditions() {
-		if (getOperation()!=null) {
+		if (getOperation() != null) {
 			return isOutputPort();
 		}
 		return true;
@@ -438,12 +437,11 @@ public class FlexoPortMap extends AbstractNode implements Bindable, FlexoObserve
 	}
 
 	@Override
-	public int getIndex()
-	{
+	public int getIndex() {
 		if (isBeingCloned()) {
 			return -1;
 		}
-		if ((index==-1) && (getCollection()!=null)) {
+		if ((index == -1) && (getCollection() != null)) {
 			index = getCollection().length;
 			FlexoIndexManager.reIndexObjectOfArray(getCollection());
 		}
@@ -451,37 +449,35 @@ public class FlexoPortMap extends AbstractNode implements Bindable, FlexoObserve
 	}
 
 	@Override
-	public final void setIndex(int index)
-	{
+	public final void setIndex(int index) {
 		if (isDeserializing() || isCreatedByCloning()) {
 			setIndexValue(index);
 			return;
 		}
-		FlexoIndexManager.switchIndexForKey(this.index,index,this);
-		if (getIndex()!=index) {
+		FlexoIndexManager.switchIndexForKey(this.index, index, this);
+		if (getIndex() != index) {
 			setChanged();
-			AttributeDataModification dm = new AttributeDataModification("index",null,getIndex());
+			AttributeDataModification dm = new AttributeDataModification("index", null, getIndex());
 			dm.setReentrant(true);
 			notifyObservers(dm);
 		}
 	}
 
 	@Override
-	public int getIndexValue()
-	{
+	public int getIndexValue() {
 		return getIndex();
 	}
 
 	@Override
 	public final void setIndexValue(int index) {
-		if(index==this.index) {
+		if (index == this.index) {
 			return;
 		}
 		int old = this.index;
 		this.index = index;
 		setChanged();
 		notifyAttributeModification("index", old, index);
-		if (!isDeserializing() && (getPortMapRegistery()!=null)) { 
+		if (!isDeserializing() && (getPortMapRegistery() != null)) {
 			getPortMapRegistery().setChanged();
 			getPortMapRegistery().notifyObservers(new ChildrenOrderChanged());
 		}
@@ -516,7 +512,8 @@ public class FlexoPortMap extends AbstractNode implements Bindable, FlexoObserve
 		@Override
 		public ValidationIssue<PortMapMustReferToAServiceOperation, FlexoPortMap> applyValidation(FlexoPortMap portMap) {
 			if (portMap.getOperation() == null) {
-				ValidationError<PortMapMustReferToAServiceOperation, FlexoPortMap> error = new ValidationError<PortMapMustReferToAServiceOperation, FlexoPortMap>(this, portMap, "portmap_is_not_linked_to_a_service_operation");
+				ValidationError<PortMapMustReferToAServiceOperation, FlexoPortMap> error = new ValidationError<PortMapMustReferToAServiceOperation, FlexoPortMap>(
+						this, portMap, "portmap_is_not_linked_to_a_service_operation");
 				error.addToFixProposals(new DeletionFixProposal<PortMapMustReferToAServiceOperation, FlexoPortMap>("delete_this_portmap"));
 				return error;
 			}

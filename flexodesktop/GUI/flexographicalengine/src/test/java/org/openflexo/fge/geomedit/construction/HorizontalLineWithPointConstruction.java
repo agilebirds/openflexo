@@ -24,36 +24,30 @@ import org.openflexo.fge.geom.FGELine;
 public class HorizontalLineWithPointConstruction extends LineConstruction {
 
 	public PointConstruction pointConstruction;
-	
-	public HorizontalLineWithPointConstruction() 
-	{
+
+	public HorizontalLineWithPointConstruction() {
 		super();
 	}
-	
-	public HorizontalLineWithPointConstruction(PointConstruction pointConstruction) 
-	{
+
+	public HorizontalLineWithPointConstruction(PointConstruction pointConstruction) {
 		this();
 		this.pointConstruction = pointConstruction;
 	}
-	
+
 	@Override
-	protected FGELine computeData()
-	{
-		return FGELine.makeHorizontalLine(pointConstruction.getPoint(),100);
+	protected FGELine computeData() {
+		return FGELine.makeHorizontalLine(pointConstruction.getPoint(), 100);
 	}
 
 	@Override
-	public String toString()
-	{
-		return "HorizontalLineWithPointConstruction[\n"+"> "+pointConstruction.toString()+"\n]";
+	public String toString() {
+		return "HorizontalLineWithPointConstruction[\n" + "> " + pointConstruction.toString() + "\n]";
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public GeometricConstruction[] getDepends() {
 		GeometricConstruction[] returned = { pointConstruction };
 		return returned;
 	}
-
 
 }

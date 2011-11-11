@@ -27,31 +27,27 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-
 public class AddShema extends EditionAction<ShemaPatternRole> {
 
 	private static final Logger logger = Logger.getLogger(AddShema.class.getPackage().getName());
-	
+
 	private ShapePatternRole shapePatternRole;
-	
+
 	public AddShema() {
 	}
-	
+
 	@Override
-	public EditionActionType getEditionActionType()
-	{
+	public EditionActionType getEditionActionType() {
 		return EditionActionType.AddShema;
 	}
-	
+
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.VPM.ADD_SHEMA_INSPECTOR;
 	}
 
-	public String getShemaName(EditionSchemeAction action)
-	{
-		return (String)getShemaName().getBindingValue(action);
+	public String getShemaName(EditionSchemeAction action) {
+		return (String) getShemaName().getBindingValue(action);
 	}
 
 	@Override
@@ -64,16 +60,14 @@ public class AddShema extends EditionAction<ShemaPatternRole> {
 			return null;
 		}
 	}
-	
+
 	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
 	// Need to be fixed in KeyValueProperty.java
 	@Override
 	public void setPatternRole(ShemaPatternRole patternRole) {
 		super.setPatternRole(patternRole);
 	}
-	
 
-	
 	/*@Override
 	protected void updatePatternRoleType()
 	{
@@ -82,38 +76,33 @@ public class AddShema extends EditionAction<ShemaPatternRole> {
 		}
 	}*/
 
-	public ShapePatternRole getShapePatternRole()
-	{
+	public ShapePatternRole getShapePatternRole() {
 		return shapePatternRole;
 	}
 
-	public void setShapePatternRole(ShapePatternRole shapePatternRole)
-	{
+	public void setShapePatternRole(ShapePatternRole shapePatternRole) {
 		this.shapePatternRole = shapePatternRole;
 	}
 
 	private ViewPointDataBinding shemaName;
-	
+
 	private BindingDefinition SHEMA_NAME = new BindingDefinition("shemaName", String.class, BindingDefinitionType.GET, false);
-	
-	public BindingDefinition getShemaNameBindingDefinition()
-	{
+
+	public BindingDefinition getShemaNameBindingDefinition() {
 		return SHEMA_NAME;
 	}
 
-	public ViewPointDataBinding getShemaName() 
-	{
-		if (shemaName == null) shemaName = new ViewPointDataBinding(this,EditionActionBindingAttribute.shemaName,getShemaNameBindingDefinition());
+	public ViewPointDataBinding getShemaName() {
+		if (shemaName == null)
+			shemaName = new ViewPointDataBinding(this, EditionActionBindingAttribute.shemaName, getShemaNameBindingDefinition());
 		return shemaName;
 	}
 
-	public void setShemaName(ViewPointDataBinding shemaName) 
-	{
+	public void setShemaName(ViewPointDataBinding shemaName) {
 		shemaName.setOwner(this);
 		shemaName.setBindingAttribute(EditionActionBindingAttribute.shemaName);
 		shemaName.setBindingDefinition(getShemaNameBindingDefinition());
 		this.shemaName = shemaName;
 	}
-	
 
 }

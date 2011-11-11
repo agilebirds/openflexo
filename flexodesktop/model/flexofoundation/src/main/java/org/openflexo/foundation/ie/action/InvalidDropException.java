@@ -23,13 +23,11 @@ import org.openflexo.foundation.FlexoException;
 
 public class InvalidDropException extends FlexoException {
 
-    /**
-     * @param string
-     */
-    public InvalidDropException(String string)
-    {
-        super(string,string);
-    }
-
+	/**
+	 * @param string
+	 */
+	public InvalidDropException(String string) {
+		super(string, string);
+	}
 
 }

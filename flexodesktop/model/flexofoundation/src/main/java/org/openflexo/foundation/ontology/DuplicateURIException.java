@@ -27,20 +27,17 @@ import org.openflexo.foundation.FlexoException;
  * @author sguerin
  * 
  */
-public class DuplicateURIException extends FlexoException
-{
+public class DuplicateURIException extends FlexoException {
 
-    private String uri;
+	private String uri;
 
-    public DuplicateURIException(String aURI)
-    {
-        super(null);
-        uri = aURI;
-    }
+	public DuplicateURIException(String aURI) {
+		super(null);
+		uri = aURI;
+	}
 
-    @Override
-	public String getMessage()
-    {
-        return "DuplicateURIException: a concept with that URI (" + uri + ") already declared.";
-    }
+	@Override
+	public String getMessage() {
+		return "DuplicateURIException: a concept with that URI (" + uri + ") already declared.";
+	}
 }

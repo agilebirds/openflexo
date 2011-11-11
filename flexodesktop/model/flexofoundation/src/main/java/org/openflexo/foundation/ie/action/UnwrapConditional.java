@@ -28,49 +28,42 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.widget.IESequence;
 import org.openflexo.foundation.ie.widget.IEWidget;
 
+public class UnwrapConditional extends FlexoAction {
 
-public class UnwrapConditional extends FlexoAction
-{
+	public static FlexoActionType actionType = new FlexoActionType("unwrap conditional content", FlexoActionType.defaultGroup) {
 
-    public static FlexoActionType actionType = new FlexoActionType("unwrap conditional content", FlexoActionType.defaultGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new UnwrapConditional(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-        {
-            return new UnwrapConditional(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return (object instanceof IEWidget && ((IEWidget) object).getParent() instanceof IESequence && ((IESequence) ((IEWidget) object)
+					.getParent()).isConditional()) || (object instanceof IESequence && ((IESequence) object).isConditional());
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection)
-        {
-            return (object instanceof IEWidget && ((IEWidget) object).getParent() instanceof IESequence
-                    && ((IESequence) ((IEWidget) object).getParent()).isConditional()) || (object instanceof IESequence && ((IESequence)object).isConditional());
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection)
-        {
-            return true;
-        }
+	};
 
-    };
+	UnwrapConditional(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    UnwrapConditional(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
-
-    @Override
-	protected void doAction(Object context)
-    {
-        if (getFocusedObject() instanceof IESequence && ((IESequence)getFocusedObject()).isConditional())  {
-            ((IESequence)getFocusedObject()).getOperator().delete();
-        } else if (getFocusedObject() instanceof IEWidget) {
-            ((IESequence) ((IEWidget) getFocusedObject()).getParent()).getOperator().delete();
-        }
-    }
+	@Override
+	protected void doAction(Object context) {
+		if (getFocusedObject() instanceof IESequence && ((IESequence) getFocusedObject()).isConditional()) {
+			((IESequence) getFocusedObject()).getOperator().delete();
+		} else if (getFocusedObject() instanceof IEWidget) {
+			((IESequence) ((IEWidget) getFocusedObject()).getParent()).getOperator().delete();
+		}
+	}
 
 }

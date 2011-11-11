@@ -26,51 +26,40 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMObject;
 
+public class ImportJARFileRepository extends CreateDMRepository {
 
-public class ImportJARFileRepository extends CreateDMRepository 
-{
+	static final Logger logger = Logger.getLogger(ImportJARFileRepository.class.getPackage().getName());
 
-    static final Logger logger = Logger.getLogger(ImportJARFileRepository.class.getPackage().getName());
+	public static FlexoActionType<ImportJARFileRepository, DMObject, DMObject> actionType = new FlexoActionType<ImportJARFileRepository, DMObject, DMObject>(
+			"import_jar_file", FlexoActionType.importMenu, FlexoActionType.defaultGroup) {
 
-    public static FlexoActionType<ImportJARFileRepository,DMObject,DMObject> actionType 
-    = new FlexoActionType<ImportJARFileRepository,DMObject,DMObject> (
-    		"import_jar_file",
-    		FlexoActionType.importMenu,
-    		FlexoActionType.defaultGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public ImportJARFileRepository makeNewAction(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
+			return new ImportJARFileRepository(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public ImportJARFileRepository makeNewAction(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) 
-        {
-            return new ImportJARFileRepository(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) 
-        {
-            return true;
-         }
-                
-    };
-    
-    ImportJARFileRepository (DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-    @Override
-	public String getRepositoryType() 
-    {
-        return EXTERNAL_REPOSITORY;
-    }
+	ImportJARFileRepository(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
- 
+	@Override
+	public String getRepositoryType() {
+		return EXTERNAL_REPOSITORY;
+	}
+
 }

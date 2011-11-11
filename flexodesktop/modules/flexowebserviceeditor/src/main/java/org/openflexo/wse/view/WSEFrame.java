@@ -37,61 +37,55 @@ import org.openflexo.wse.controller.WSEController;
 import org.openflexo.wse.view.listener.WSEKeyEventListener;
 import org.openflexo.wse.view.menu.WSEMenuBar;
 
-
 /**
  * The main window of this module
  * 
  * @author yourname
  */
-public class WSEFrame extends FlexoFrame
-{
+public class WSEFrame extends FlexoFrame {
 
-    private static final Logger logger = Logger.getLogger(WSEFrame.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(WSEFrame.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance variables
+	// =========================
+	// ==========================================================================
 
-    protected WSEController _wseController;
+	protected WSEController _wseController;
 
-    protected WSEMenuBar _wseMenuBar;
+	protected WSEMenuBar _wseMenuBar;
 
-    protected WSEKeyEventListener _wseKeyEventListener;
+	protected WSEKeyEventListener _wseKeyEventListener;
 
+	// ================================================
+	// ================ Constructor ===================
+	// ================================================
 
-    // ================================================
-    // ================ Constructor ===================
-    // ================================================
+	/**
+	 * Constructor for WSEFrame
+	 */
+	public WSEFrame(String title, WSEController controller, WSEKeyEventListener wkfKeyEventListener, WSEMenuBar menuBar)
+			throws HeadlessException {
+		super(title, controller, wkfKeyEventListener, menuBar);
+		_wseController = controller;
+		_wseMenuBar = menuBar;
+		_wseKeyEventListener = wkfKeyEventListener;
+		setSize(WSECst.DEFAULT_MAINFRAME_WIDTH, WSECst.DEFAULT_MAINFRAME_HEIGHT);
+		updateTitle();
+		getContentPane().setLayout(new BorderLayout());
+		// You may observe here some model objects
+	}
 
-    /**
-     * Constructor for WSEFrame
-     */
-    public WSEFrame(String title, WSEController controller, WSEKeyEventListener wkfKeyEventListener, WSEMenuBar menuBar) throws HeadlessException
-    {
-        super(title, controller, wkfKeyEventListener, menuBar);
-        _wseController = controller;
-        _wseMenuBar = menuBar;
-        _wseKeyEventListener = wkfKeyEventListener;
-        setSize(WSECst.DEFAULT_MAINFRAME_WIDTH, WSECst.DEFAULT_MAINFRAME_HEIGHT);
-        updateTitle();
-        getContentPane().setLayout(new BorderLayout());
-        // You may observe here some model objects
-    }
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		super.update(observable, dataModification);
+	}
 
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-       super.update(observable,dataModification);
-    }
-
-    /**
-     * @return Returns the controller.
-     */
-    public WSEController getWSEController()
-    {
-        return _wseController;
-    }
-
+	/**
+	 * @return Returns the controller.
+	 */
+	public WSEController getWSEController() {
+		return _wseController;
+	}
 
 }

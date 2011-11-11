@@ -27,42 +27,37 @@ import java.util.Vector;
  * 
  * @author bmangez
  */
-public class IECSSClassCollection
-{
+public class IECSSClassCollection {
 
-    /**
+	/**
      * 
      */
-    public IECSSClassCollection()
-    {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+	public IECSSClassCollection() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
-    public static void registerCSSClass(IECSSClass cls)
-    {
-        cssClasses.put(cls.name, cls);
-        Vector v = getAllClassNameForTarget(cls.target);
-        v.add(cls.name);
-    }
+	public static void registerCSSClass(IECSSClass cls) {
+		cssClasses.put(cls.name, cls);
+		Vector v = getAllClassNameForTarget(cls.target);
+		v.add(cls.name);
+	}
 
-    public static IECSSClass get(String name)
-    {
-        return (IECSSClass) cssClasses.get(name);
-    }
+	public static IECSSClass get(String name) {
+		return (IECSSClass) cssClasses.get(name);
+	}
 
-    public static Vector getAllClassNameForTarget(String target)
-    {
-        if (target == null || target.equals("")) {
-            target = "all";
-        }
-        Vector answer = (Vector) targets.get(target);
-        if (answer == null)
-            return new Vector();
-        return answer;
-    }
+	public static Vector getAllClassNameForTarget(String target) {
+		if (target == null || target.equals("")) {
+			target = "all";
+		}
+		Vector answer = (Vector) targets.get(target);
+		if (answer == null)
+			return new Vector();
+		return answer;
+	}
 
-    public static final Hashtable targets = new Hashtable();
+	public static final Hashtable targets = new Hashtable();
 
-    public static final Hashtable cssClasses = new Hashtable();
+	public static final Hashtable cssClasses = new Hashtable();
 }

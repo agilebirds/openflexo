@@ -29,24 +29,21 @@ import org.openflexo.foundation.utils.FlexoProjectFile;
  * @author sguerin
  * 
  */
-public class InvalidEOModelFileException extends LoadResourceException
-{
-    private FlexoProjectFile _eoModelFile;
+public class InvalidEOModelFileException extends LoadResourceException {
+	private FlexoProjectFile _eoModelFile;
 
-    public InvalidEOModelFileException(FlexoEOModelResource fileResource)
-    {
-        super(fileResource, null);
-        _eoModelFile = fileResource.getResourceFile();
-    }
+	public InvalidEOModelFileException(FlexoEOModelResource fileResource) {
+		super(fileResource, null);
+		_eoModelFile = fileResource.getResourceFile();
+	}
 
-    @Override
-	public String getMessage()
-    {
-        if ((_eoModelFile != null) && (_eoModelFile.getFile() != null)) {
-            return "InvalidEOModelFileException: file: " + _eoModelFile.getFile().getAbsolutePath();
-        } else {
-            return "InvalidEOModelFileException: file is null";
-        }
-    }
+	@Override
+	public String getMessage() {
+		if ((_eoModelFile != null) && (_eoModelFile.getFile() != null)) {
+			return "InvalidEOModelFileException: file: " + _eoModelFile.getFile().getAbsolutePath();
+		} else {
+			return "InvalidEOModelFileException: file is null";
+		}
+	}
 
 }

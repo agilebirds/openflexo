@@ -26,85 +26,78 @@ import java.util.Vector;
 ;
 
 /**
- * The purpose of this class is to have an empty vector an re-use wherever we
- * only want to have an empty vector that does not change over time and avoid
- * taking memory. If a programmer calls add by mistake on this class, at least
- * it will have no impact on the rest of the application.
+ * The purpose of this class is to have an empty vector an re-use wherever we only want to have an empty vector that does not change over
+ * time and avoid taking memory. If a programmer calls add by mistake on this class, at least it will have no impact on the rest of the
+ * application.
  * 
  * @author gpolet
  * 
  */
-public class EmptyVector<T> extends Vector<T>
-{
-	
-	private static final Hashtable<Class,EmptyVector> values = new Hashtable<Class,EmptyVector>();
+public class EmptyVector<T> extends Vector<T> {
+
+	private static final Hashtable<Class, EmptyVector> values = new Hashtable<Class, EmptyVector>();
 
 	public static final Vector EMPTY_VECTOR = new EmptyVector();
-	
-    public static <T> Vector<T> EMPTY_VECTOR(Class<T> c) {
-    	if (values.get(c) == null) values.put(c, new EmptyVector<T>());
-    	return values.get(c);
-    }
 
-    /**
-     * Overrides add
-     * 
-     * @see java.util.Vector#add(int, java.lang.Object)
-     */
-    @Override
-	public void add(int index, Object element)
-    {
-        System.err.println("Called add(int index, Object element) on EmptyVector. This is probably a mistake.");
-    }
+	public static <T> Vector<T> EMPTY_VECTOR(Class<T> c) {
+		if (values.get(c) == null)
+			values.put(c, new EmptyVector<T>());
+		return values.get(c);
+	}
 
-    /**
-     * Overrides add
-     * 
-     * @see java.util.Vector#add(java.lang.Object)
-     */
-    @Override
-	public synchronized boolean add(Object o)
-    {
-        System.err.println("Called add(Object o) on EmptyVector. This is probably a mistake.");
-        return false;
-    }
+	/**
+	 * Overrides add
+	 * 
+	 * @see java.util.Vector#add(int, java.lang.Object)
+	 */
+	@Override
+	public void add(int index, Object element) {
+		System.err.println("Called add(int index, Object element) on EmptyVector. This is probably a mistake.");
+	}
 
-    /**
-     * Overrides addAll
-     * 
-     * @see java.util.Vector#addAll(java.util.Collection)
-     */
-    @Override
-	public synchronized boolean addAll(Collection c)
-    {
-        System.err.println("Called addAll(Collection c) on EmptyVector. This is probably a mistake.");
-        return false;
-    }
+	/**
+	 * Overrides add
+	 * 
+	 * @see java.util.Vector#add(java.lang.Object)
+	 */
+	@Override
+	public synchronized boolean add(Object o) {
+		System.err.println("Called add(Object o) on EmptyVector. This is probably a mistake.");
+		return false;
+	}
 
-    /**
-     * Overrides addAll
-     * 
-     * @see java.util.Vector#addAll(int, java.util.Collection)
-     */
-    @Override
-	public synchronized boolean addAll(int index, Collection c)
-    {
-        System.err.println("Called addAll(int index, Collection c) on EmptyVector. This is probably a mistake.");
-        return false;
-    }
+	/**
+	 * Overrides addAll
+	 * 
+	 * @see java.util.Vector#addAll(java.util.Collection)
+	 */
+	@Override
+	public synchronized boolean addAll(Collection c) {
+		System.err.println("Called addAll(Collection c) on EmptyVector. This is probably a mistake.");
+		return false;
+	}
 
-    /**
-     * Overrides addElement
-     * 
-     * @see java.util.Vector#addElement(java.lang.Object)
-     */
-    @Override
-	public synchronized void addElement(Object obj)
-    {
-        System.err.println("Called addElement(Object obj) on EmptyVector. This is probably a mistake.");
-    }
+	/**
+	 * Overrides addAll
+	 * 
+	 * @see java.util.Vector#addAll(int, java.util.Collection)
+	 */
+	@Override
+	public synchronized boolean addAll(int index, Collection c) {
+		System.err.println("Called addAll(int index, Collection c) on EmptyVector. This is probably a mistake.");
+		return false;
+	}
 
-    public EmptyVector()
-    {
-    }
+	/**
+	 * Overrides addElement
+	 * 
+	 * @see java.util.Vector#addElement(java.lang.Object)
+	 */
+	@Override
+	public synchronized void addElement(Object obj) {
+		System.err.println("Called addElement(Object obj) on EmptyVector. This is probably a mistake.");
+	}
+
+	public EmptyVector() {
+	}
 }

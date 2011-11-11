@@ -26,19 +26,15 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.ContextualMenuManager;
 
-
 public class DMContextualMenuManager extends ContextualMenuManager {
 
-    
-    public DMContextualMenuManager(DMSelectionManager selectionManager, FlexoEditor editor)
-    {
-        super(selectionManager,editor);
-    }
-    
-     @Override
-	public FlexoModelObject getFocusedObject(Component focusedComponent, MouseEvent e)
-    {
-         return super.getFocusedObject(focusedComponent,e);
-    }
+	public DMContextualMenuManager(DMSelectionManager selectionManager, FlexoEditor editor) {
+		super(selectionManager, editor);
+	}
+
+	@Override
+	public FlexoModelObject getFocusedObject(Component focusedComponent, MouseEvent e) {
+		return super.getFocusedObject(focusedComponent, e);
+	}
 
 }

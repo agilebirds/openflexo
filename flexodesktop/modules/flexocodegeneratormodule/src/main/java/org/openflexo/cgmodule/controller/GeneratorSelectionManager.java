@@ -26,53 +26,47 @@ import org.openflexo.cgmodule.menu.GeneratorMenuBar;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.SelectionManager;
 
-
 /**
  * Selection manager dedicated to Data Model Editor module
  * 
  * @author sguerin
  */
-public class GeneratorSelectionManager extends SelectionManager
-{
+public class GeneratorSelectionManager extends SelectionManager {
 
-    protected static final Logger logger = Logger.getLogger(GeneratorSelectionManager.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(GeneratorSelectionManager.class.getPackage().getName());
 
-    public GeneratorSelectionManager(GeneratorController controller)
-    {
-        super(controller);
-        GeneratorMenuBar menuBar = controller.getEditorMenuBar();
-        _clipboard = new GeneratorClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem, menuBar.getEditMenu(controller).cutItem);
-        _contextualMenuManager = new GeneratorContextualMenuManager(this,controller.getEditor(),controller);
-   }
+	public GeneratorSelectionManager(GeneratorController controller) {
+		super(controller);
+		GeneratorMenuBar menuBar = controller.getEditorMenuBar();
+		_clipboard = new GeneratorClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem,
+				menuBar.getEditMenu(controller).cutItem);
+		_contextualMenuManager = new GeneratorContextualMenuManager(this, controller.getEditor(), controller);
+	}
 
-    public GeneratorController getGeneratorController()
-    {
-        return (GeneratorController) getController();
-    }
+	public GeneratorController getGeneratorController() {
+		return (GeneratorController) getController();
+	}
 
-    @Override
-	public boolean performSelectionSelectAll()
-    {
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("'Select All' not implemented yet in CodeGenerator");
-        return false;
-    }
+	@Override
+	public boolean performSelectionSelectAll() {
+		if (logger.isLoggable(Level.WARNING))
+			logger.warning("'Select All' not implemented yet in CodeGenerator");
+		return false;
+	}
 
-    /**
-     * Returns the root object that can be currently edited
-     * 
-     * @return FlexoObservable
-     */
-    @Override
-	public FlexoModelObject getRootFocusedObject()
-    {
-        return getGeneratorController().getCurrentGeneratedCodeRepository();
-    }
+	/**
+	 * Returns the root object that can be currently edited
+	 * 
+	 * @return FlexoObservable
+	 */
+	@Override
+	public FlexoModelObject getRootFocusedObject() {
+		return getGeneratorController().getCurrentGeneratedCodeRepository();
+	}
 
-    @Override
-	public FlexoModelObject getPasteContext() 
-    {
-        return getFocusedObject();
-    }
+	@Override
+	public FlexoModelObject getPasteContext() {
+		return getFocusedObject();
+	}
 
 }

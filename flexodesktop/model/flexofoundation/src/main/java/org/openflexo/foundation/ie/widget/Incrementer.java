@@ -25,45 +25,40 @@ package org.openflexo.foundation.ie.widget;
  * @author gpolet
  * 
  */
-public class Incrementer
-{
+public class Incrementer {
 
-    private int currentValue = 0;
+	private int currentValue = 0;
 
-    /**
-     * Default constructor
-     */
-    public Incrementer()
-    {
-    }
-    
-    public Incrementer(int start)
-    {
-    	currentValue=start;
-    }
+	/**
+	 * Default constructor
+	 */
+	public Incrementer() {
+	}
 
-    /**
-     * Increase the current value of 1
-     * 
-     */
-    public void increment()
-    {
-        currentValue++;
-    }
+	public Incrementer(int start) {
+		currentValue = start;
+	}
 
-    /**
-     * Returns the current value of this incrementer
-     * 
-     * @return - the current value.
-     */
-    public int getValue()
-    {
-        return currentValue;
-    }
+	/**
+	 * Increase the current value of 1
+	 * 
+	 */
+	public void increment() {
+		currentValue++;
+	}
+
+	/**
+	 * Returns the current value of this incrementer
+	 * 
+	 * @return - the current value.
+	 */
+	public int getValue() {
+		return currentValue;
+	}
 
 	public void increment(int value) {
-		for(int i = 0; i<value;i++)
+		for (int i = 0; i < value; i++)
 			increment();
-		
+
 	}
 }

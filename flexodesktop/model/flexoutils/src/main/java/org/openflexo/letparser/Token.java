@@ -18,6 +18,7 @@
  *
  */
 package org.openflexo.letparser;
+
 /*
  * Created on 4 janv. 2006 by sguerin
  *
@@ -27,6 +28,6 @@ package org.openflexo.letparser;
 
 public abstract class Token implements AbstractToken {
 
-    public abstract String getSerializationValue();
+	public abstract String getSerializationValue();
 
 }

@@ -21,16 +21,12 @@ package org.openflexo.foundation.cg.templates;
 
 import org.openflexo.foundation.cg.dm.CGDataModification;
 
+public class TemplateFileNotification extends CGDataModification {
+	public TemplateFileNotification(CGTemplate file) {
+		super(null, file);
+	}
 
-public class TemplateFileNotification extends CGDataModification
-{
-	public TemplateFileNotification(CGTemplate file)
-    {
-        super(null,file);
-    }
-    
-	public CGTemplate getTemplateFile()
-    {
+	public CGTemplate getTemplateFile() {
 		return (CGTemplate) newValue();
-    }
+	}
 }

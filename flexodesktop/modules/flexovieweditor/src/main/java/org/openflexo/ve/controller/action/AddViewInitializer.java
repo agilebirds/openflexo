@@ -31,7 +31,6 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.foundation.FlexoException;
@@ -43,32 +42,25 @@ import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.view.ViewDefinition.DuplicateShemaNameException;
 import org.openflexo.foundation.view.action.AddView;
 
-
 public class AddViewInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddViewInitializer(OEControllerActionInitializer actionInitializer)
-	{
-		super(AddView.actionType,actionInitializer);
+	AddViewInitializer(OEControllerActionInitializer actionInitializer) {
+		super(AddView.actionType, actionInitializer);
 	}
 
 	@Override
-	protected OEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (OEControllerActionInitializer)super.getControllerActionInitializer();
+	protected OEControllerActionInitializer getControllerActionInitializer() {
+		return (OEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<AddView> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<AddView> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddView>() {
 			@Override
-			public boolean run(ActionEvent e, AddView action)
-			{
-				FIBDialog dialog = FIBDialog.instanciateComponent(
-						VECst.ADD_VIEW_DIALOG_FIB,
-						action, null, true);
+			public boolean run(ActionEvent e, AddView action) {
+				FIBDialog dialog = FIBDialog.instanciateComponent(VECst.ADD_VIEW_DIALOG_FIB, action, null, true);
 				return (dialog.getStatus() == Status.VALIDATED);
 
 				/*if ((action.newShemaName != null) && (action.getFolder() != null))
@@ -127,12 +119,10 @@ public class AddViewInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<AddView> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<AddView> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddView>() {
 			@Override
-			public boolean run(ActionEvent e, AddView action)
-			{
+			public boolean run(ActionEvent e, AddView action) {
 				getController().setCurrentEditedObjectAsModuleView(action.getNewShema());
 				return true;
 			}
@@ -140,8 +130,7 @@ public class AddViewInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoExceptionHandler<AddView> getDefaultExceptionHandler() 
-	{
+	protected FlexoExceptionHandler<AddView> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<AddView>() {
 			@Override
 			public boolean handleException(FlexoException exception, AddView action) {
@@ -162,12 +151,9 @@ public class AddViewInitializer extends ActionInitializer {
 		};
 	}
 
-
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return VEIconLibrary.VIEW_ICON;
 	}
-
 
 }

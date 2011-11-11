@@ -32,11 +32,10 @@ import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.generator.action.GCAction;
 import org.openflexo.generator.file.AbstractCGFile;
 
-
 public class OpenDMEntity extends FlexoGUIAction<OpenDMEntity, CGFile, CGObject> {
 
-	public static FlexoActionType<OpenDMEntity, CGFile, CGObject> actionType = new FlexoActionType<OpenDMEntity, CGFile, CGObject>("open_entity_in_dm", GCAction.MODEL_MENU, GCAction.MODEL_GROUP2,
-			FlexoActionType.NORMAL_ACTION_TYPE) {
+	public static FlexoActionType<OpenDMEntity, CGFile, CGObject> actionType = new FlexoActionType<OpenDMEntity, CGFile, CGObject>(
+			"open_entity_in_dm", GCAction.MODEL_MENU, GCAction.MODEL_GROUP2, FlexoActionType.NORMAL_ACTION_TYPE) {
 
 		/**
 		 * Factory method

@@ -384,7 +384,8 @@ public class Flexo {
 		try {
 			FlexoLoggingManager.initialize();
 		} catch (SecurityException e) {
-			logger.severe("cannot read logging configuration file : " + System.getProperty("java.util.logging.config.file") + "\nIt seems the file has read access protection.");
+			logger.severe("cannot read logging configuration file : " + System.getProperty("java.util.logging.config.file")
+					+ "\nIt seems the file has read access protection.");
 			e.printStackTrace();
 		} catch (IOException e) {
 			logger.severe("cannot read logging configuration file : " + System.getProperty("java.util.logging.config.file"));

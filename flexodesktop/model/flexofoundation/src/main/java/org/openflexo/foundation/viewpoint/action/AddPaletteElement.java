@@ -34,96 +34,77 @@ import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.foundation.viewpoint.ViewPointPaletteElement;
 
-
-public class AddPaletteElement extends FlexoAction<AddPaletteElement,ViewPointPalette,ViewPointObject> 
-{
+public class AddPaletteElement extends FlexoAction<AddPaletteElement, ViewPointPalette, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(AddPaletteElement.class.getPackage().getName());
 
-	public static FlexoActionType<AddPaletteElement,ViewPointPalette,ViewPointObject> actionType 
-	= new FlexoActionType<AddPaletteElement,ViewPointPalette,ViewPointObject> (
-			"add_new_palette_element",
-			FlexoActionType.newMenu,
-			FlexoActionType.defaultGroup,
-			FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<AddPaletteElement, ViewPointPalette, ViewPointObject> actionType = new FlexoActionType<AddPaletteElement, ViewPointPalette, ViewPointObject>(
+			"add_new_palette_element", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public AddPaletteElement makeNewAction(ViewPointPalette focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) 
-		{
+		public AddPaletteElement makeNewAction(ViewPointPalette focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 			return new AddPaletteElement(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ViewPointPalette object, Vector<ViewPointObject> globalSelection) 
-		{
+		protected boolean isVisibleForSelection(ViewPointPalette object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ViewPointPalette object, Vector<ViewPointObject> globalSelection) 
-		{
+		protected boolean isEnabledForSelection(ViewPointPalette object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass (AddPaletteElement.actionType, ViewPointPalette.class);
+		FlexoModelObject.addActionForClass(AddPaletteElement.actionType, ViewPointPalette.class);
 	}
-
 
 	private String _newElementName;
 	private ViewPointPaletteElement _newElement;
 	private Object _graphicalRepresentation;
 
-	AddPaletteElement (ViewPointPalette focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor)
-	{
+	AddPaletteElement(ViewPointPalette focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException,NotImplementedException,InvalidParameterException
-	{
-		logger.info ("Add calc palette element, gr = "+getGraphicalRepresentation());  	
+	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
+		logger.info("Add calc palette element, gr = " + getGraphicalRepresentation());
 
 		_newElement = getFocusedObject().addPaletteElement(getNewElementName(), getGraphicalRepresentation());
-		
+
 	}
 
-	public FlexoProject getProject()
-	{
-		if (getFocusedObject() != null) return getFocusedObject().getProject();
+	public FlexoProject getProject() {
+		if (getFocusedObject() != null)
+			return getFocusedObject().getProject();
 		return null;
 	}
 
-	public ViewPointPaletteElement getNewElement() 
-	{
+	public ViewPointPaletteElement getNewElement() {
 		return _newElement;
 	}
 
-	public String getNewElementName() 
-	{
+	public String getNewElementName() {
 		return _newElementName;
 	}
 
-	public void setNewElementName(String newElementName) 
-	{
+	public void setNewElementName(String newElementName) {
 		_newElementName = newElementName;
 	}
 
-
-	public Object getGraphicalRepresentation() 
-	{
+	public Object getGraphicalRepresentation() {
 		return _graphicalRepresentation;
 	}
 
-	public void setGraphicalRepresentation(Object graphicalRepresentation) 
-	{
+	public void setGraphicalRepresentation(Object graphicalRepresentation) {
 		_graphicalRepresentation = graphicalRepresentation;
 	}
-
 
 }

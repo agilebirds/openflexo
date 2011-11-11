@@ -19,12 +19,9 @@
  */
 package org.openflexo.foundation.ie.dm;
 
+public class ExcellButtonStateChange extends IEDataModification {
 
-public class ExcellButtonStateChange extends IEDataModification
-{
-
-    public ExcellButtonStateChange(boolean isVisible)
-    {
-        super("excelButton",null, new Boolean(isVisible));
-    }
+	public ExcellButtonStateChange(boolean isVisible) {
+		super("excelButton", null, new Boolean(isVisible));
+	}
 }

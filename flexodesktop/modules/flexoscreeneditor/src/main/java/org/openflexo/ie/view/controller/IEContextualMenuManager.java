@@ -33,43 +33,39 @@ import org.openflexo.ie.view.widget.IETDWidgetView;
 import org.openflexo.ie.view.widget.IEWidgetView;
 import org.openflexo.selection.ContextualMenuManager;
 
+public class IEContextualMenuManager extends ContextualMenuManager {
 
-public class IEContextualMenuManager extends ContextualMenuManager
-{
+	public IEContextualMenuManager(IESelectionManager selectionManager, FlexoEditor editor) {
+		super(selectionManager, editor);
+	}
 
-    public IEContextualMenuManager(IESelectionManager selectionManager, FlexoEditor editor)
-    {
-        super(selectionManager,editor);
-   }
-
-    @Override
-	public FlexoModelObject getFocusedObject(Component focusedComponent, MouseEvent e)
-    {
-    	if (focusedComponent instanceof IETDWidgetView) {
-    		return ((IETDWidgetView)focusedComponent).td();
-    	}
-        if (focusedComponent instanceof IEWidgetView) {
-            return ((IEWidgetView) focusedComponent).getObject();
-        }
-        if (focusedComponent instanceof IEWOComponentView) {
-            return ((IEWOComponentView) focusedComponent).getModel();
-        }
-        if (focusedComponent instanceof DropZoneTopComponent) {
-            return (((DropZoneTopComponent) focusedComponent).getContainerModel());
-        }
-        if (focusedComponent instanceof DropTabZone) {
-            return (((DropTabZone) focusedComponent).getContainerModel());
-        }
-        if (focusedComponent instanceof DropTabZone) {
-            return (((DropTabZone) focusedComponent).getContainerModel());
-        }
-        if (focusedComponent instanceof DropTableZone) {
-            return (((DropTableZone) focusedComponent).getContainerModel());
-        }
-        if (focusedComponent instanceof ButtonPanel) {
-            return (((ButtonPanel) focusedComponent).getContainerModel());
-        }
-        return super.getFocusedObject(focusedComponent, e);
-    }
+	@Override
+	public FlexoModelObject getFocusedObject(Component focusedComponent, MouseEvent e) {
+		if (focusedComponent instanceof IETDWidgetView) {
+			return ((IETDWidgetView) focusedComponent).td();
+		}
+		if (focusedComponent instanceof IEWidgetView) {
+			return ((IEWidgetView) focusedComponent).getObject();
+		}
+		if (focusedComponent instanceof IEWOComponentView) {
+			return ((IEWOComponentView) focusedComponent).getModel();
+		}
+		if (focusedComponent instanceof DropZoneTopComponent) {
+			return (((DropZoneTopComponent) focusedComponent).getContainerModel());
+		}
+		if (focusedComponent instanceof DropTabZone) {
+			return (((DropTabZone) focusedComponent).getContainerModel());
+		}
+		if (focusedComponent instanceof DropTabZone) {
+			return (((DropTabZone) focusedComponent).getContainerModel());
+		}
+		if (focusedComponent instanceof DropTableZone) {
+			return (((DropTableZone) focusedComponent).getContainerModel());
+		}
+		if (focusedComponent instanceof ButtonPanel) {
+			return (((ButtonPanel) focusedComponent).getContainerModel());
+		}
+		return super.getFocusedObject(focusedComponent, e);
+	}
 
 }

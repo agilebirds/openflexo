@@ -24,64 +24,56 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.dm.action.CreateProjectRepository;
 
-
 public class NonPersistantDataRepositoryFolder extends DMRepositoryFolder {
 
-    static final Logger logger = Logger.getLogger(NonPersistantDataRepositoryFolder.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(NonPersistantDataRepositoryFolder.class.getPackage().getName());
 
-    /**
-     * Default constructor
-     */
-    public NonPersistantDataRepositoryFolder(DMModel dmModel)
-    {
-        super(dmModel);
-     }
+	/**
+	 * Default constructor
+	 */
+	public NonPersistantDataRepositoryFolder(DMModel dmModel) {
+		super(dmModel);
+	}
 
-    @Override
-	public int getRepositoriesCount() 
-    {
-        return getDMModel().getProjectRepositories().size();
-    }
+	@Override
+	public int getRepositoriesCount() {
+		return getDMModel().getProjectRepositories().size();
+	}
 
-    @Override
-	public DMRepository getRepositoryAtIndex(int index) 
-    {
-        if ((index >=0) 
-                && (index < getDMModel().getProjectRepositories().size())) {
-            return getDMModel().getProjectRepositories().elementAt(index);
-        }
-        logger.warning("Index out of range: "+index);
-        return null;
-    }
+	@Override
+	public DMRepository getRepositoryAtIndex(int index) {
+		if ((index >= 0) && (index < getDMModel().getProjectRepositories().size())) {
+			return getDMModel().getProjectRepositories().elementAt(index);
+		}
+		logger.warning("Index out of range: " + index);
+		return null;
+	}
 
-    @Override
-	public String getName() 
-    {
-        return "non_persistant_data_repositories";
-     }
+	@Override
+	public String getName() {
+		return "non_persistant_data_repositories";
+	}
 
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return getDMModel().getFullyQualifiedName()+".NON_PERSISTANT_DATA_REPOSITORY_FOLDER";
-    }
+	@Override
+	public String getFullyQualifiedName() {
+		return getDMModel().getFullyQualifiedName() + ".NON_PERSISTANT_DATA_REPOSITORY_FOLDER";
+	}
 
-    @Override
-	protected Vector getSpecificActionListForThatClass()
-    {
-         Vector returned = super.getSpecificActionListForThatClass();
-         returned.add(CreateProjectRepository.actionType);
-         return returned;
-    }
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return getName();
-    }
-    
+	@Override
+	protected Vector getSpecificActionListForThatClass() {
+		Vector returned = super.getSpecificActionListForThatClass();
+		returned.add(CreateProjectRepository.actionType);
+		return returned;
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return getName();
+	}
 
 }

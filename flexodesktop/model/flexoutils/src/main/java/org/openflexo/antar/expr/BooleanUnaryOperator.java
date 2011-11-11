@@ -23,30 +23,31 @@ import org.openflexo.antar.expr.Constant.BooleanConstant;
 
 public abstract class BooleanUnaryOperator extends UnaryOperator {
 
-	public static final BooleanUnaryOperator NOT = new BooleanUnaryOperator() 
-	{
+	public static final BooleanUnaryOperator NOT = new BooleanUnaryOperator() {
 		@Override
-		public int getPriority() { return 4; }
+		public int getPriority() {
+			return 4;
+		}
 
 		@Override
 		public Constant evaluate(Constant arg) throws TypeMismatchException {
 			if (arg instanceof BooleanConstant) {
-				return BooleanConstant.get(!((BooleanConstant)arg).getValue());
+				return BooleanConstant.get(!((BooleanConstant) arg).getValue());
 			}
-			throw new TypeMismatchException(this,arg.getEvaluationType(),EvaluationType.BOOLEAN);
+			throw new TypeMismatchException(this, arg.getEvaluationType(), EvaluationType.BOOLEAN);
 		}
 
 		@Override
 		public String getName() {
-			return "logical_not";			
+			return "logical_not";
 		}
-		
+
 		@Override
 		public EvaluationType getEvaluationType(EvaluationType operandType) throws TypeMismatchException {
 			if (operandType.isBooleanOrLiteral()) {
 				return EvaluationType.BOOLEAN;
 			}
-			throw new TypeMismatchException(this,operandType,EvaluationType.BOOLEAN,EvaluationType.LITERAL);
+			throw new TypeMismatchException(this, operandType, EvaluationType.BOOLEAN, EvaluationType.LITERAL);
 		}
 	};
 

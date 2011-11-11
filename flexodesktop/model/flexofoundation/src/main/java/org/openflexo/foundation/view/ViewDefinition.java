@@ -56,20 +56,18 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 
 	private ViewFolder _folder;
 	private String _shemaName;
-	private int index  = -1;
+	private int index = -1;
 	private ViewPoint _calc;
 	private ViewPointLibrary _calcLibrary;
 
-	public ViewDefinition(VEShemaLibraryBuilder builder) throws DuplicateResourceException
-	{
-		this(null, builder.shemaLibrary, null, builder.getProject(),false);
+	public ViewDefinition(VEShemaLibraryBuilder builder) throws DuplicateResourceException {
+		this(null, builder.shemaLibrary, null, builder.getProject(), false);
 		initializeDeserialization(builder);
 		_calcLibrary = builder.viewPointLibrary;
 	}
 
-	public ViewDefinition(String aShemaName, ViewLibrary shemaLibrary, ViewFolder aFolder,
-			FlexoProject project, boolean checkUnicity) throws DuplicateResourceException
-			{
+	public ViewDefinition(String aShemaName, ViewLibrary shemaLibrary, ViewFolder aFolder, FlexoProject project, boolean checkUnicity)
+			throws DuplicateResourceException {
 		super(shemaLibrary);
 		_shemaName = aShemaName;
 		if (aFolder != null) {
@@ -86,33 +84,30 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 				throw new DuplicateResourceException(resourceIdentifier);
 			}
 		}
-			}
+	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return _shemaName;
 	}
 
 	@Override
-	public void setName(String aName) throws DuplicateResourceException, InvalidNameException
-	{
+	public void setName(String aName) throws DuplicateResourceException, InvalidNameException {
 		setShemaName(aName);
 	}
 
-	private void setShemaName(String name) throws DuplicateResourceException, InvalidNameException
-	{
+	private void setShemaName(String name) throws DuplicateResourceException, InvalidNameException {
 		if (_shemaName != null && !_shemaName.equals(name) && name != null && !isDeserializing()) {
 			if (!name.matches(IERegExp.JAVA_CLASS_NAME_REGEXP)) {
 				throw new InvalidNameException();
 			}
 
-			if(ReservedKeyword.contains(name)) {
+			if (ReservedKeyword.contains(name)) {
 				throw new InvalidNameException();
 			}
 			if (getProject() != null) {
 				ViewDefinition cd = getShemaLibrary().getShemaNamed(name);
-				if (cd != null && cd!=this) {
+				if (cd != null && cd != this) {
 					throw new DuplicateResourceException(getShemaResource(false));
 				}
 				FlexoOEShemaResource resource = getShemaResource();
@@ -136,13 +131,11 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 		}
 	}
 
-	public FlexoOEShemaResource getShemaResource()
-	{
+	public FlexoOEShemaResource getShemaResource() {
 		return getShemaResource(true);
 	}
 
-	public FlexoOEShemaResource getShemaResource(boolean createIfNotExists)
-	{
+	public FlexoOEShemaResource getShemaResource(boolean createIfNotExists) {
 		if (getProject() != null) {
 			FlexoOEShemaResource returned = getProject().getShemaResource(getName());
 			if (returned == null && createIfNotExists) {
@@ -153,7 +146,7 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 				File shemaFile = new File(ProjectRestructuration.getExpectedOntologyDirectory(getProject().getProjectDirectory()),
 						getName() + ProjectRestructuration.SHEMA_EXTENSION);
 				FlexoProjectFile resourceShemaFile = new FlexoProjectFile(shemaFile, getProject());
-				FlexoOEShemaResource shemaRes=null;
+				FlexoOEShemaResource shemaRes = null;
 				try {
 					shemaRes = new FlexoOEShemaResource(getProject(), getName(), libRes, resourceShemaFile);
 				} catch (InvalidFileNameException e1) {
@@ -170,7 +163,7 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 					}
 					if (!ok) {
 						shemaFile = new File(ProjectRestructuration.getExpectedOntologyDirectory(getProject().getProjectDirectory()),
-								FileUtils.getValidFileName(getName())+getFlexoID() + ".shema");
+								FileUtils.getValidFileName(getName()) + getFlexoID() + ".shema");
 						resourceShemaFile = new FlexoProjectFile(shemaFile, getProject());
 						try {
 							shemaRes = new FlexoOEShemaResource(getProject(), getName(), libRes, resourceShemaFile);
@@ -182,7 +175,7 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 						}
 					}
 				}
-				if (shemaRes==null) {
+				if (shemaRes == null) {
 					return null;
 				}
 				shemaRes.setResourceData(createNewShema());
@@ -212,27 +205,22 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 		return null;
 	}
 
-
-	public View createNewShema()
-	{
-		return new View(this,getProject());
+	public View createNewShema() {
+		return new View(this, getProject());
 	}
 
-	public void notifyShemaHasBeenLoaded()
-	{
+	public void notifyShemaHasBeenLoaded() {
 		/*setChanged(false);
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("Notify observers that WO has been loaded");
-        notifyObservers(new ShemaLoaded(this));*/
+		if (logger.isLoggable(Level.FINE))
+		    logger.fine("Notify observers that WO has been loaded");
+		notifyObservers(new ShemaLoaded(this));*/
 	}
 
-	public ViewFolder getFolder()
-	{
+	public ViewFolder getFolder() {
 		return _folder;
 	}
 
-	public void setFolder(ViewFolder aFolder)
-	{
+	public void setFolder(ViewFolder aFolder) {
 		_folder = aFolder;
 		if (!isDeserializing()) {
 			if (_folder == null) {
@@ -244,16 +232,15 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 	}
 
 	public boolean isIndexed() {
-		return this.index>-1;
+		return this.index > -1;
 	}
 
 	@Override
-	public int getIndex()
-	{
+	public int getIndex() {
 		if (isBeingCloned()) {
 			return -1;
 		}
-		if (index==-1 && getCollection()!=null) {
+		if (index == -1 && getCollection() != null) {
 			index = getCollection().length;
 			FlexoIndexManager.reIndexObjectOfArray(getCollection());
 		}
@@ -261,37 +248,35 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 	}
 
 	@Override
-	public void setIndex(int index)
-	{
+	public void setIndex(int index) {
 		if (isDeserializing() || isCreatedByCloning()) {
 			setIndexValue(index);
 			return;
 		}
-		FlexoIndexManager.switchIndexForKey(this.index,index,this);
-		if (getIndex()!=index) {
+		FlexoIndexManager.switchIndexForKey(this.index, index, this);
+		if (getIndex() != index) {
 			setChanged();
-			AttributeDataModification dm = new AttributeDataModification("index",null,getIndex());
+			AttributeDataModification dm = new AttributeDataModification("index", null, getIndex());
 			dm.setReentrant(true);
 			notifyObservers(dm);
 		}
 	}
 
 	@Override
-	public int getIndexValue()
-	{
+	public int getIndexValue() {
 		return getIndex();
 	}
 
 	@Override
 	public void setIndexValue(int index) {
-		if (this.index==index) {
+		if (this.index == index) {
 			return;
 		}
 		int old = this.index;
 		this.index = index;
 		setChanged();
 		notifyModification("index", old, index);
-		if (!isDeserializing() && !isCreatedByCloning() && getFolder()!=null) {
+		if (!isDeserializing() && !isCreatedByCloning() && getFolder() != null) {
 			getFolder().setChanged();
 			getFolder().notifyObservers(new ChildrenOrderChanged());
 		}
@@ -299,67 +284,59 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 
 	public static final ShemaComparator COMPARATOR = new ShemaComparator();
 
-	public static class ShemaComparator implements Comparator<ViewDefinition>
-	{
-		protected ShemaComparator()
-		{
+	public static class ShemaComparator implements Comparator<ViewDefinition> {
+		protected ShemaComparator() {
 		}
 
 		/**
 		 * Overrides compare
-		 *
+		 * 
 		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 		 */
 		@Override
-		public int compare(ViewDefinition o1, ViewDefinition o2)
-		{
+		public int compare(ViewDefinition o1, ViewDefinition o2) {
 			return o1.getName().compareTo(o2.getName());
 		}
 
 	}
 
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "shema_definition";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return getProject().getFullyQualifiedName()+".SHEMA."+getName();
+	public String getFullyQualifiedName() {
+		return getProject().getFullyQualifiedName() + ".SHEMA." + getName();
 	}
 
 	/**
 	 * Overrides getCollection
+	 * 
 	 * @see org.openflexo.foundation.utils.Sortable#getCollection()
 	 */
 	@Override
-	public ViewDefinition[] getCollection()
-	{
-		if (getFolder()==null) {
+	public ViewDefinition[] getCollection() {
+		if (getFolder() == null) {
 			return null;
 		}
 		return getFolder().getShemas().toArray(new ViewDefinition[0]);
 	}
 
-	public boolean isLoaded()
-	{
+	public boolean isLoaded() {
 		return hasShemaResource() && getShemaResource().isLoaded();
 	}
 
 	public boolean hasShemaResource() {
 
-		return getShemaResource(false)!=null;
+		return getShemaResource(false) != null;
 	}
 
-	public View getShema()
-	{
+	public View getShema() {
 		return getShema(null);
 	}
 
-	public View getShema(FlexoProgress progress)
-	{
+	public View getShema(FlexoProgress progress) {
 		return getShemaResource().getResourceData(progress);
 	}
 
@@ -367,20 +344,17 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 
 		private String name;
 
-		public DuplicateShemaNameException(String newShemaName)
-		{
+		public DuplicateShemaNameException(String newShemaName) {
 			this.name = newShemaName;
 		}
 
-		public String getName()
-		{
+		public String getName() {
 			return name;
 		}
 	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return Inspectors.VE.OE_SHEMA_DEFINITION_INSPECTOR;
 	}
 
@@ -388,15 +362,13 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 		return _calc;
 	}
 
-	public void setCalc(ViewPoint calc)
-	{
+	public void setCalc(ViewPoint calc) {
 		_calc = calc;
 		setChanged();
 	}
 
 	// Don't use it, serialization only
-	public String _getCalcURI()
-	{
+	public String _getCalcURI() {
 		if (getCalc() != null) {
 			return getCalc().getViewPointURI();
 		}
@@ -404,8 +376,7 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 	}
 
 	// Don't use it, deserialization only
-	public void _setCalcURI(String ontologyCalcUri)
-	{
+	public void _setCalcURI(String ontologyCalcUri) {
 		_calc = _calcLibrary.getOntologyCalc(ontologyCalcUri);
 	}
 

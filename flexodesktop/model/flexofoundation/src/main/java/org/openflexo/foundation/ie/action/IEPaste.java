@@ -27,60 +27,51 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.ie.IEObject;
 
+public class IEPaste extends FlexoUndoableAction<IEPaste, IEObject, IEObject> {
 
-public class IEPaste extends FlexoUndoableAction<IEPaste,IEObject,IEObject> 
-{
+	private static final Logger logger = Logger.getLogger(IEPaste.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(IEPaste.class.getPackage().getName());
+	public static FlexoActionType<IEPaste, IEObject, IEObject> actionType = new FlexoActionType<IEPaste, IEObject, IEObject>("paste",
+			FlexoActionType.editGroup) {
 
-    public static FlexoActionType<IEPaste,IEObject,IEObject>  actionType = new FlexoActionType<IEPaste,IEObject,IEObject>  ("paste",FlexoActionType.editGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public IEPaste makeNewAction(IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor) {
+			return new IEPaste(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public IEPaste makeNewAction(IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor) 
-        {
-            return new IEPaste(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(IEObject object, Vector<IEObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(IEObject object, Vector<IEObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) 
-        {
-            return true;
-         }
-                
-    };
-    
-    IEPaste (IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	};
 
-    @Override
-	protected void doAction(Object context) 
-    {
-        // Not yet implemented in Foundation, but in IE module
-       logger.info ("PASTE on IE");
-    }
-    
-    @Override
-	protected void undoAction(Object context) 
-    {
-        logger.warning ("UNDO PASTE on IE not implemented yet !");
-    }
+	IEPaste(IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    @Override
-	protected void redoAction(Object context)
-    {
-        logger.warning ("REDO PASTE on IE not implemented yet !");
-    }
-    
+	@Override
+	protected void doAction(Object context) {
+		// Not yet implemented in Foundation, but in IE module
+		logger.info("PASTE on IE");
+	}
+
+	@Override
+	protected void undoAction(Object context) {
+		logger.warning("UNDO PASTE on IE not implemented yet !");
+	}
+
+	@Override
+	protected void redoAction(Object context) {
+		logger.warning("REDO PASTE on IE not implemented yet !");
+	}
 
 }

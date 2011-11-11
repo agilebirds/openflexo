@@ -28,91 +28,79 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 
+public class CreateDocItemFolder extends FlexoAction {
 
-public class CreateDocItemFolder extends FlexoAction 
-{
+	private static final Logger logger = Logger.getLogger(CreateDocItemFolder.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(CreateDocItemFolder.class.getPackage().getName());
+	public static FlexoActionType actionType = new FlexoActionType("create_new_folder", FlexoActionType.newMenu,
+			FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
-    public static FlexoActionType actionType = new FlexoActionType ("create_new_folder",FlexoActionType.newMenu,FlexoActionType.defaultGroup,FlexoActionType.ADD_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new CreateDocItemFolder(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) 
-        {
-            return new CreateDocItemFolder(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return ((object != null) && (object instanceof DocItemFolder));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return ((object != null) 
-                    && (object instanceof DocItemFolder));
-        }
-                
-    };
-    
-    private DocItemFolder _parentDocItemFolder;
-    private String _newItemFolderIdentifier;
-    private String _newItemFolderDescription;
-    private DocItemFolder _newDocItemFolder;
-    
-    CreateDocItemFolder (FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-   @Override
-protected void doAction(Object context) 
-    {
-      logger.info ("CreateDocItemFolder");
-      if (getParentDocItemFolder() != null) {
-           _newDocItemFolder = DocItemFolder.createDocItemFolder(getNewItemFolderIdentifier(),getNewItemFolderDescription(),getParentDocItemFolder(),getParentDocItemFolder().getDocResourceCenter());
+	private DocItemFolder _parentDocItemFolder;
+	private String _newItemFolderIdentifier;
+	private String _newItemFolderDescription;
+	private DocItemFolder _newDocItemFolder;
 
-      }
-    }
+	CreateDocItemFolder(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-   public String getNewItemFolderIdentifier()
-   {
-       return _newItemFolderIdentifier;
-   }
-   
-   public void setNewItemFolderIdentifier(String anIdentifier)
-   {
-       _newItemFolderIdentifier = anIdentifier;
-   }
-   
-   public String getNewItemFolderDescription() 
-   {
-       return _newItemFolderDescription;
-   }
+	@Override
+	protected void doAction(Object context) {
+		logger.info("CreateDocItemFolder");
+		if (getParentDocItemFolder() != null) {
+			_newDocItemFolder = DocItemFolder.createDocItemFolder(getNewItemFolderIdentifier(), getNewItemFolderDescription(),
+					getParentDocItemFolder(), getParentDocItemFolder().getDocResourceCenter());
 
-   public void setNewItemFolderDescription(String newItemDescription)
-   {
-       _newItemFolderDescription = newItemDescription;
-   }
+		}
+	}
 
-  public DocItemFolder getParentDocItemFolder()
-   {
-       if (_parentDocItemFolder == null) {
-           if ((getFocusedObject() != null) && (getFocusedObject() instanceof DocItemFolder)) {
-               _parentDocItemFolder = (DocItemFolder)getFocusedObject();
-            }           
-       }
-       return _parentDocItemFolder;
-   }
+	public String getNewItemFolderIdentifier() {
+		return _newItemFolderIdentifier;
+	}
 
-    public DocItemFolder getNewDocItemFolder()
-   {
-       return _newDocItemFolder;
-   }
+	public void setNewItemFolderIdentifier(String anIdentifier) {
+		_newItemFolderIdentifier = anIdentifier;
+	}
+
+	public String getNewItemFolderDescription() {
+		return _newItemFolderDescription;
+	}
+
+	public void setNewItemFolderDescription(String newItemDescription) {
+		_newItemFolderDescription = newItemDescription;
+	}
+
+	public DocItemFolder getParentDocItemFolder() {
+		if (_parentDocItemFolder == null) {
+			if ((getFocusedObject() != null) && (getFocusedObject() instanceof DocItemFolder)) {
+				_parentDocItemFolder = (DocItemFolder) getFocusedObject();
+			}
+		}
+		return _parentDocItemFolder;
+	}
+
+	public DocItemFolder getNewDocItemFolder() {
+		return _newDocItemFolder;
+	}
 
 }

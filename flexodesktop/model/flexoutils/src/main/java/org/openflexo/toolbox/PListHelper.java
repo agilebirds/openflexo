@@ -21,53 +21,51 @@ package org.openflexo.toolbox;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class PListHelper
-{
-    public static int getInteger(Object o) throws NullPointerException, NumberFormatException {
-        if (o == null)
-            throw new NullPointerException();
-        if (o instanceof String)
-            return Integer.parseInt((String)o);
-        else if (o instanceof Number) {
-            return ((Number)o).intValue();
-        } else {
-            System.err.println("Don't know how to convert from "+o.getClass().getName()+" to int");
-            return 0; 
-        }
-    }
-    
-    public static boolean getBoolean(Object o) throws NullPointerException {
-        if (o == null)
-            throw new NullPointerException();
-        if (o instanceof String) {
-            String s = ((String)o).toLowerCase();
-            if (s.equals("true") || s.equals("y") || s.equals("yes"))
-                return true;
-            else
-                return false;
-        }
-        else if (o instanceof Boolean) {
-            return ((Boolean)o).booleanValue();
-        } else {
-            System.err.println("Don't know how to convert from "+o.getClass().getName()+" to boolean");
-            return false; 
-        }
-    }
-    
-    public static Object getObject(Boolean o) throws NullPointerException {
-        if (o == null)
-            throw new NullPointerException();
-        if (o)
-            return "Y";
-        else
-            return "N";
-    }
-    
-    public static Object getObject(Integer o) throws NullPointerException {
-        if (o == null)
-            throw new NullPointerException();
-        return String.valueOf(o);
-    }
+public class PListHelper {
+	public static int getInteger(Object o) throws NullPointerException, NumberFormatException {
+		if (o == null)
+			throw new NullPointerException();
+		if (o instanceof String)
+			return Integer.parseInt((String) o);
+		else if (o instanceof Number) {
+			return ((Number) o).intValue();
+		} else {
+			System.err.println("Don't know how to convert from " + o.getClass().getName() + " to int");
+			return 0;
+		}
+	}
+
+	public static boolean getBoolean(Object o) throws NullPointerException {
+		if (o == null)
+			throw new NullPointerException();
+		if (o instanceof String) {
+			String s = ((String) o).toLowerCase();
+			if (s.equals("true") || s.equals("y") || s.equals("yes"))
+				return true;
+			else
+				return false;
+		} else if (o instanceof Boolean) {
+			return ((Boolean) o).booleanValue();
+		} else {
+			System.err.println("Don't know how to convert from " + o.getClass().getName() + " to boolean");
+			return false;
+		}
+	}
+
+	public static Object getObject(Boolean o) throws NullPointerException {
+		if (o == null)
+			throw new NullPointerException();
+		if (o)
+			return "Y";
+		else
+			return "N";
+	}
+
+	public static Object getObject(Integer o) throws NullPointerException {
+		if (o == null)
+			throw new NullPointerException();
+		return String.valueOf(o);
+	}
 }

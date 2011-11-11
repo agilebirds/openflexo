@@ -25,20 +25,17 @@ import org.openflexo.generator.action.IncludeInGeneration;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class IncludeFromGenerationInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	IncludeFromGenerationInitializer(DGControllerActionInitializer actionInitializer)
-	{
-		super(IncludeInGeneration.actionType,actionInitializer);
+	IncludeFromGenerationInitializer(DGControllerActionInitializer actionInitializer) {
+		super(IncludeInGeneration.actionType, actionInitializer);
 	}
 
 	@Override
-	protected DGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DGControllerActionInitializer)super.getControllerActionInitializer();
+	protected DGControllerActionInitializer getControllerActionInitializer() {
+		return (DGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 }

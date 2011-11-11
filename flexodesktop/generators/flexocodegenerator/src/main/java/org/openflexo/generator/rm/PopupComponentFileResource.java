@@ -25,7 +25,7 @@ public interface PopupComponentFileResource extends ComponentFileResource {
 
 	@Override
 	public ComponentDefinition getComponentDefinition();
-	
+
 	// A quoi est relie un popup, une operation forcement ????? Je sais pas trop quoi mettre la ?
-	
+
 }

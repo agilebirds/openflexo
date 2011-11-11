@@ -28,95 +28,81 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.Role;
 
-
 /**
  * Widget allowing to select a Process while browsing the workflow
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class RoleSelector extends AbstractBrowserSelector<Role>
-{
+public class RoleSelector extends AbstractBrowserSelector<Role> {
 
-    protected static final String EMPTY_STRING = "";
+	protected static final String EMPTY_STRING = "";
 
-    public RoleSelector(FlexoProject project, Role role)
-    {
-        super(project, role, Role.class);
-    }
+	public RoleSelector(FlexoProject project, Role role) {
+		super(project, role, Role.class);
+	}
 
-    public RoleSelector(FlexoProject project, Role role, int cols)
-    {
-        super(project, role, Role.class, cols);
-    }
+	public RoleSelector(FlexoProject project, Role role, int cols) {
+		super(project, role, Role.class, cols);
+	}
 
-    @Override
-	protected RoleSelectorPanel makeCustomPanel(Role editedObject)
-    {
-        return new RoleSelectorPanel();
-    }
+	@Override
+	protected RoleSelectorPanel makeCustomPanel(Role editedObject) {
+		return new RoleSelectorPanel();
+	}
 
-    @Override
-	public String renderedString(Role editedObject)
-    {
-        if (editedObject != null) {
-            return (editedObject).getName();
-        }
-        return EMPTY_STRING;
-    }
+	@Override
+	public String renderedString(Role editedObject) {
+		if (editedObject != null) {
+			return (editedObject).getName();
+		}
+		return EMPTY_STRING;
+	}
 
-    protected class RoleSelectorPanel extends AbstractSelectorPanel<Role>
-    {
-        protected RoleSelectorPanel()
-        {
-            super(RoleSelector.this);
-        }
+	protected class RoleSelectorPanel extends AbstractSelectorPanel<Role> {
+		protected RoleSelectorPanel() {
+			super(RoleSelector.this);
+		}
 
-        @Override
-		protected ProjectBrowser createBrowser(FlexoProject project)
-        {
-            return new RoleBrowser();
-        }
+		@Override
+		protected ProjectBrowser createBrowser(FlexoProject project) {
+			return new RoleBrowser();
+		}
 
-        @Override
-		public Dimension getDefaultSize()
-        {
-            Dimension returned = _browserView.getDefaultSize();
-            returned.width = returned.width;
-            returned.height = returned.height - 100;
-            return returned;
-        }
-    }
+		@Override
+		public Dimension getDefaultSize() {
+			Dimension returned = _browserView.getDefaultSize();
+			returned.width = returned.width;
+			returned.height = returned.height - 100;
+			return returned;
+		}
+	}
 
-    protected class RoleBrowser extends ProjectBrowser
-    {
+	protected class RoleBrowser extends ProjectBrowser {
 
-        protected RoleBrowser()
-        {
-            super(RoleSelector.this.getProject(), false);
-            init();
-        }
+		protected RoleBrowser() {
+			super(RoleSelector.this.getProject(), false);
+			init();
+		}
 
-        @Override
-		public void configure()
-        {
-        	for(BrowserElementType browserElementType : BrowserElementType.values())
-        		setFilterStatus(browserElementType, BrowserFilterStatus.HIDE);
+		@Override
+		public void configure() {
+			for (BrowserElementType browserElementType : BrowserElementType.values())
+				setFilterStatus(browserElementType, BrowserFilterStatus.HIDE);
 
-        	setFilterStatus(BrowserElementType.WORKFLOW, BrowserFilterStatus.SHOW);
-            setFilterStatus(BrowserElementType.ROLE, BrowserFilterStatus.SHOW);
-        }
+			setFilterStatus(BrowserElementType.WORKFLOW, BrowserFilterStatus.SHOW);
+			setFilterStatus(BrowserElementType.ROLE, BrowserFilterStatus.SHOW);
+		}
 
-        @Override
-		public FlexoModelObject getDefaultRootObject()
-        {
-            return getProject();
-        }
+		@Override
+		public FlexoModelObject getDefaultRootObject() {
+			return getProject();
+		}
 
-        @Override
-        public boolean showRootNode() {
-        	return false;
-        }
-    }
+		@Override
+		public boolean showRootNode() {
+			return false;
+		}
+	}
 
 }

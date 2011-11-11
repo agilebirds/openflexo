@@ -24,36 +24,30 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.dm.DMMethod;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class DMMethodElement extends DMElement
-{
+public class DMMethodElement extends DMElement {
 
-    public DMMethodElement(DMMethod method, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(method, BrowserElementType.DM_METHOD, browser,parent);
-    }
+	public DMMethodElement(DMMethod method, ProjectBrowser browser, BrowserElement parent) {
+		super(method, BrowserElementType.DM_METHOD, browser, parent);
+	}
 
-    @Override
-	public String getName()
-    {
-        return getDMMethod().getSimplifiedSignature();
-    }
+	@Override
+	public String getName() {
+		return getDMMethod().getSimplifiedSignature();
+	}
 
-    protected DMMethod getDMMethod()
-    {
-        return (DMMethod) getObject();
-    }
+	protected DMMethod getDMMethod() {
+		return (DMMethod) getObject();
+	}
 
-    @Override
-	public boolean isNameEditable()
-    {
-        return !getDMMethod().getEntity().getIsReadOnly();
-    }
+	@Override
+	public boolean isNameEditable() {
+		return !getDMMethod().getEntity().getIsReadOnly();
+	}
 
 }

@@ -24,34 +24,29 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 public class DeleteOperationTask extends CustomInstruction {
 
 	private OperationNode operationNode;
-	
-	public DeleteOperationTask (OperationNode operationNode)
-	{
+
+	public DeleteOperationTask(OperationNode operationNode) {
 		super();
 		this.operationNode = operationNode;
-		setInlineComment("Delete current OperationTask for node "+getOperationNode().getName());
+		setInlineComment("Delete current OperationTask for node " + getOperationNode().getName());
 	}
 
-	public OperationNode getOperationNode()
-	{
+	public OperationNode getOperationNode() {
 		return operationNode;
 	}
 
 	@Override
-	public String toString()
-	{
-		return "[DeleteOperationTask:"+operationNode+"]";
+	public String toString() {
+		return "[DeleteOperationTask:" + operationNode + "]";
 	}
 
 	@Override
-	public String getJavaStringRepresentation() 
-	{
-		return "deleteOperationTask("+getOperationNode().getFlexoID()+");";
+	public String getJavaStringRepresentation() {
+		return "deleteOperationTask(" + getOperationNode().getFlexoID() + ");";
 	}
-	
+
 	@Override
-	public DeleteOperationTask clone()
-	{
+	public DeleteOperationTask clone() {
 		DeleteOperationTask returned = new DeleteOperationTask(operationNode);
 		returned.setHeaderComment(getHeaderComment());
 		returned.setInlineComment(getInlineComment());

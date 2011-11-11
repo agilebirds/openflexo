@@ -35,120 +35,111 @@ import org.openflexo.wse.controller.WSESelectionManager;
 import org.openflexo.wse.model.WSEOperationTableModel;
 import org.openflexo.wse.model.WSEPortTypeTableModel;
 
-
 /**
  * View allowing to represent/edit a DMModel object
  * 
  * @author sguerin
  * 
  */
-public class WSEPortTypeFolderView extends WSEView<WSPortTypeFolder>
-{
+public class WSEPortTypeFolderView extends WSEView<WSPortTypeFolder> {
 
-    private static final Logger logger = Logger.getLogger(WSEPortTypeFolderView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(WSEPortTypeFolderView.class.getPackage().getName());
 
-   
+	private WSETabularView wsPortTypesTable;
+	private WSEPortTypeTableModel wsPortTypesTableModel;
 
-    private WSETabularView wsPortTypesTable;
-    private WSEPortTypeTableModel wsPortTypesTableModel;
-    
-    private WSETabularView operationTable;
-    private WSEOperationTableModel operationTableModel;
+	private WSETabularView operationTable;
+	private WSEOperationTableModel operationTableModel;
 
-    public WSEPortTypeFolderView(WSPortTypeFolder model, WSEController controller)
-    {
-        super(model, controller, model.getName());
+	public WSEPortTypeFolderView(WSPortTypeFolder model, WSEController controller) {
+		super(model, controller, model.getName());
 
-    /*    addAction(new TabularViewAction(CreateDMRepository.actionType,"add_repository") {
-            protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+		/*    addAction(new TabularViewAction(CreateDMRepository.actionType,"add_repository") {
+		        protected Vector getGlobalSelection()
+		        {
+		            return getViewSelection();
+		        }
 
-            protected FlexoModelObject getFocusedObject() 
-            {
-                return getWSProcessFolder();
-            }           
-        });
-        addAction(new TabularViewAction(UpdateDMRepository.actionType) {
-            protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+		        protected FlexoModelObject getFocusedObject() 
+		        {
+		            return getWSProcessFolder();
+		        }           
+		    });
+		    addAction(new TabularViewAction(UpdateDMRepository.actionType) {
+		        protected Vector getGlobalSelection()
+		        {
+		            return getViewSelection();
+		        }
 
-            protected FlexoModelObject getFocusedObject() 
-            {
-                return getSelectedFlexoProcess();
-            }           
-        });
-       addAction(new TabularViewAction(DMDelete.actionType,"delete_repository") {
-            protected Vector getGlobalSelection()
-            {
-                 return getViewSelection();
-            }
+		        protected FlexoModelObject getFocusedObject() 
+		        {
+		            return getSelectedFlexoProcess();
+		        }           
+		    });
+		   addAction(new TabularViewAction(DMDelete.actionType,"delete_repository") {
+		        protected Vector getGlobalSelection()
+		        {
+		             return getViewSelection();
+		        }
 
-            protected FlexoModelObject getFocusedObject() 
-            {
-                return null;
-            }           
-        });*/
-        finalizeBuilding();
-    }
+		        protected FlexoModelObject getFocusedObject() 
+		        {
+		            return null;
+		        }           
+		    });*/
+		finalizeBuilding();
+	}
 
-    @Override
-	protected JComponent buildContentPane()
-    {
-        
-    
-       WSService service = getWSPortTypeFolder().getWSService();
-       boolean readOnly=false;
-		if(service!=null && service instanceof ExternalWSService) readOnly=true;
-        wsPortTypesTableModel = new WSEPortTypeTableModel(service, getWSEController().getProject(), readOnly);
-        wsPortTypesTable = new WSETabularView(getWSEController(), wsPortTypesTableModel,10);
-        addToMasterTabularView(wsPortTypesTable);
+	@Override
+	protected JComponent buildContentPane() {
 
-        
-        operationTableModel = new WSEOperationTableModel(null, getWSEController().getProject(), readOnly);
-        addToSlaveTabularView (operationTable = new WSETabularView(getWSEController(),operationTableModel,10), wsPortTypesTable);
-  
-        return new JSplitPane(JSplitPane.VERTICAL_SPLIT, wsPortTypesTable, operationTable);
+		WSService service = getWSPortTypeFolder().getWSService();
+		boolean readOnly = false;
+		if (service != null && service instanceof ExternalWSService)
+			readOnly = true;
+		wsPortTypesTableModel = new WSEPortTypeTableModel(service, getWSEController().getProject(), readOnly);
+		wsPortTypesTable = new WSETabularView(getWSEController(), wsPortTypesTableModel, 10);
+		addToMasterTabularView(wsPortTypesTable);
 
-    }
+		operationTableModel = new WSEOperationTableModel(null, getWSEController().getProject(), readOnly);
+		addToSlaveTabularView(operationTable = new WSETabularView(getWSEController(), operationTableModel, 10), wsPortTypesTable);
 
-    public WSPortTypeFolder getWSPortTypeFolder()
-    {
-        return getModelObject();
-    }
+		return new JSplitPane(JSplitPane.VERTICAL_SPLIT, wsPortTypesTable, operationTable);
 
-    public ServiceInterface getSelectedServiceInterface()
-    {
-        WSESelectionManager sm = getWSEController().getWSESelectionManager();
-        Vector selection = sm.getSelection();
-        if ((selection.size() == 1) && (selection.firstElement() instanceof ServiceInterface)) {
-            return (ServiceInterface) selection.firstElement();
-        }
-        if (getSelectedServiceOperation() != null) {
-           return getSelectedServiceOperation().getServiceInterface();
-        }
-        
-        return null;
-    }
-    
-    public ServiceOperation getSelectedServiceOperation()
-    {
-        WSESelectionManager sm = getWSEController().getWSESelectionManager();
-        Vector selection = sm.getSelection();
-        if ((selection.size() == 1) && (selection.firstElement() instanceof ServiceOperation)) {
-            return (ServiceOperation) selection.firstElement();
-        }
-        return null;
-    }
+	}
 
-    public WSETabularView getWSPortTypesTable() {
-        return wsPortTypesTable;
-    }
-    public WSETabularView getOperationsTable() {
-        return operationTable;
-    }
+	public WSPortTypeFolder getWSPortTypeFolder() {
+		return getModelObject();
+	}
 
- }
+	public ServiceInterface getSelectedServiceInterface() {
+		WSESelectionManager sm = getWSEController().getWSESelectionManager();
+		Vector selection = sm.getSelection();
+		if ((selection.size() == 1) && (selection.firstElement() instanceof ServiceInterface)) {
+			return (ServiceInterface) selection.firstElement();
+		}
+		if (getSelectedServiceOperation() != null) {
+			return getSelectedServiceOperation().getServiceInterface();
+		}
+
+		return null;
+	}
+
+	public ServiceOperation getSelectedServiceOperation() {
+		WSESelectionManager sm = getWSEController().getWSESelectionManager();
+		Vector selection = sm.getSelection();
+		if ((selection.size() == 1) && (selection.firstElement() instanceof ServiceOperation)) {
+			return (ServiceOperation) selection.firstElement();
+		}
+		return null;
+	}
+
+	public WSETabularView getWSPortTypesTable() {
+		return wsPortTypesTable;
+	}
+
+	public WSETabularView getOperationsTable() {
+		return operationTable;
+	}
+
+}

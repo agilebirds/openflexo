@@ -26,7 +26,7 @@ import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.xml.ImplementationModelBuilder;
 
 /**
- *
+ * 
  * @author Nicolas Daniels
  */
 public class HibernateModel extends TechnologyModelObject implements FlexoObserver {
@@ -47,7 +47,8 @@ public class HibernateModel extends TechnologyModelObject implements FlexoObserv
 	 * Build a new Hibernate mode for the specified implementation model builder.<br/>
 	 * This constructor is namely invoked during unserialization.
 	 * 
-	 * @param builder the builder that will create this entity
+	 * @param builder
+	 *            the builder that will create this entity
 	 */
 	public HibernateModel(ImplementationModelBuilder builder) {
 		this(builder.implementationModel);
@@ -57,7 +58,8 @@ public class HibernateModel extends TechnologyModelObject implements FlexoObserv
 	/**
 	 * Build a new Hibernate model for the specified implementation model.
 	 * 
-	 * @param implementationModel the implementation model where to create this Hibernate entity
+	 * @param implementationModel
+	 *            the implementation model where to create this Hibernate entity
 	 */
 	protected HibernateModel(ImplementationModel implementationModel) {
 		super(implementationModel);
@@ -95,7 +97,8 @@ public class HibernateModel extends TechnologyModelObject implements FlexoObserv
 	/* ====== Actions ====== */
 	/* ===================== */
 
-	public static HibernateModel createNewHibernateModel(String name, HibernateImplementation hibernateImplementation) throws DuplicateResourceException, InvalidNameException {
+	public static HibernateModel createNewHibernateModel(String name, HibernateImplementation hibernateImplementation)
+			throws DuplicateResourceException, InvalidNameException {
 		HibernateModel newModel = new HibernateModel(hibernateImplementation.getImplementationModel());
 		newModel.setName(name);
 		hibernateImplementation.addToModels(newModel);
@@ -150,7 +153,7 @@ public class HibernateModel extends TechnologyModelObject implements FlexoObserv
 	 */
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if(dataModification instanceof NameChanged)
+		if (dataModification instanceof NameChanged)
 			sortEntities();
 	}
 

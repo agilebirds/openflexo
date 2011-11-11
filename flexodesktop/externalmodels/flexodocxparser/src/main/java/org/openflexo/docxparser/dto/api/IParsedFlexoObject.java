@@ -19,18 +19,24 @@
  */
 package org.openflexo.docxparser.dto.api;
 
-public interface IParsedFlexoObject
-{
+public interface IParsedFlexoObject {
 	public String getFlexoId();
+
 	public String getUserId();
-	
+
 	public IParsedFlexoName getParsedFlexoName();
+
 	public IParsedFlexoDescription getParsedFlexoDescription();
+
 	public IParsedFlexoTitle getParsedFlexoTitle();
+
 	public IParsedFlexoContent getParsedFlexoContent();
-	
+
 	public void setParsedFlexoName(IParsedFlexoName flexoName);
+
 	public void setParsedFlexoDescription(IParsedFlexoDescription flexoDescription);
+
 	public void setParsedFlexoTitle(IParsedFlexoTitle flexoTitle);
+
 	public void setParsedFlexoContent(IParsedFlexoContent flexoContent);
 }

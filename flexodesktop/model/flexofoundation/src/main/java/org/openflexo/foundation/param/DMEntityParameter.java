@@ -22,19 +22,16 @@ package org.openflexo.foundation.param;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
 public class DMEntityParameter extends ParameterDefinition<DMEntity> {
 
-    public DMEntityParameter(String name, String label, DMEntity defaultValue)
-    {
-        super(name,label,defaultValue);
-        addParameter("className","org.openflexo.components.widget.DMEntityInspectorWidget");
-    }
-    
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.CUSTOM;
-    }
+	public DMEntityParameter(String name, String label, DMEntity defaultValue) {
+		super(name, label, defaultValue);
+		addParameter("className", "org.openflexo.components.widget.DMEntityInspectorWidget");
+	}
+
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.CUSTOM;
+	}
 
 }

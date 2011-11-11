@@ -26,50 +26,48 @@ import org.netbeans.lib.cvsclient.util.LoggedDataInputStream;
 
 /**
  * Handles the Set-static-directory response.
- * @author  Robert Greig
+ * 
+ * @author Robert Greig
  */
 
 class SetStaticDirectoryResponse implements Response {
 
-    /**
-     * Process the data for the response.
-     * @param dis the data inputstream allowing the client to read the server's
-     * response. Note that the actual response name has already been read
-     * and the input stream is positioned just before the first argument, if
-     * any.
-     */
-    @Override
-	public void process(LoggedDataInputStream dis, ResponseServices services)
-            throws ResponseException {
-        try {
-            String localPath = dis.readLine();
+	/**
+	 * Process the data for the response.
+	 * 
+	 * @param dis
+	 *            the data inputstream allowing the client to read the server's response. Note that the actual response name has already
+	 *            been read and the input stream is positioned just before the first argument, if any.
+	 */
+	@Override
+	public void process(LoggedDataInputStream dis, ResponseServices services) throws ResponseException {
+		try {
+			String localPath = dis.readLine();
 
-            String repositoryPath = dis.readLine();
-            //System.err.println("Repository path is: " + repositoryPath);
-            services.updateAdminData(localPath, repositoryPath, null);
-            String absPath = services.convertPathname(localPath, repositoryPath);
-            if (services.getGlobalOptions().isExcluded(new File(absPath))) {
-                return;
-            }
-            absPath = absPath + "/CVS"; //NOI18N
-            File absFile = new File(absPath);
-            if (absFile.exists()) {
-                File staticFile = new File(absPath, "Entries.Static"); //NOI18N
-                staticFile.createNewFile();
-            }
-        }
-        catch (IOException e) {
-            throw new ResponseException(e);
-        }
-    }
+			String repositoryPath = dis.readLine();
+			// System.err.println("Repository path is: " + repositoryPath);
+			services.updateAdminData(localPath, repositoryPath, null);
+			String absPath = services.convertPathname(localPath, repositoryPath);
+			if (services.getGlobalOptions().isExcluded(new File(absPath))) {
+				return;
+			}
+			absPath = absPath + "/CVS"; // NOI18N
+			File absFile = new File(absPath);
+			if (absFile.exists()) {
+				File staticFile = new File(absPath, "Entries.Static"); // NOI18N
+				staticFile.createNewFile();
+			}
+		} catch (IOException e) {
+			throw new ResponseException(e);
+		}
+	}
 
-    /**
-     * Is this a terminal response, i.e. should reading of responses stop
-     * after this response. This is true for responses such as OK or
-     * an error response
-     */
-    @Override
+	/**
+	 * Is this a terminal response, i.e. should reading of responses stop after this response. This is true for responses such as OK or an
+	 * error response
+	 */
+	@Override
 	public boolean isTerminalResponse() {
-        return false;
-    }
+		return false;
+	}
 }

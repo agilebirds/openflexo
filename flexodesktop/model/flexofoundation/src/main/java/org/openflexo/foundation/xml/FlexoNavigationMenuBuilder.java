@@ -24,22 +24,19 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.ie.menu.FlexoNavigationMenu;
 import org.openflexo.foundation.rm.FlexoNavigationMenuResource;
 
-
 /**
  * Used only during XML serialization to build navigation menu
  * 
  * @author sguerin
  */
-public class FlexoNavigationMenuBuilder extends FlexoBuilder<FlexoNavigationMenuResource>
-{
-    @SuppressWarnings("unused")
+public class FlexoNavigationMenuBuilder extends FlexoBuilder<FlexoNavigationMenuResource> {
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FlexoNavigationMenuBuilder.class.getPackage().getName());
 
-    public FlexoNavigationMenu navigationMenu;
+	public FlexoNavigationMenu navigationMenu;
 
-    public FlexoNavigationMenuBuilder(FlexoNavigationMenuResource resource)
-    {
-        super(resource);
-    }
+	public FlexoNavigationMenuBuilder(FlexoNavigationMenuResource resource) {
+		super(resource);
+	}
 
 }

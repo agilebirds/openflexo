@@ -29,7 +29,6 @@ import javax.swing.border.Border;
 import org.openflexo.foundation.wkf.FlexoLevel;
 import org.openflexo.toolbox.FileResource;
 
-
 /**
  * Constants used by the Workflow Editor module.
  * 

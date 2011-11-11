@@ -9,8 +9,7 @@ import org.openflexo.model.factory.ModelExecutionException;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = ElementType.TYPE)
-public @interface ModelEntity
-{
+public @interface ModelEntity {
 	/**
 	 * Defines the different initialization policy of the model entity.
 	 * <ul>

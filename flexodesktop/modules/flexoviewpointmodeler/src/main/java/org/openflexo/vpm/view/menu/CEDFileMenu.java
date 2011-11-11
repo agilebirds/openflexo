@@ -42,112 +42,91 @@ import org.openflexo.view.menu.FlexoMenuItem;
 import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.CEDController;
 
-
 /**
  * 'File' menu for this Module
  * 
  * @author yourname
  */
-public class CEDFileMenu extends FileMenu
-{
+public class CEDFileMenu extends FileMenu {
 
-    private static final Logger logger = Logger.getLogger(CEDFileMenu.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(CEDFileMenu.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
-      protected CEDController _cedController;
+	protected CEDController _cedController;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public CEDFileMenu(CEDController controller)
-    {
-        super(controller,false);
-        _cedController = controller;
-        // Put your actions here
-    }
+	public CEDFileMenu(CEDController controller) {
+		super(controller, false);
+		_cedController = controller;
+		// Put your actions here
+	}
 
-    public CEDController getCEDController()
-    {
-        return _cedController;
-    }
-    
-    @Override
-	public void addSpecificItems()
-    {
-    	add(new SaveModifiedItem());
-      	addSeparator();
-    }
-    
-    @Override
-    public void quit()
-    {
-   		getCEDController().reviewModifiedResources();
-		FIBDialog dialog = FIBDialog.instanciateComponent(
-				CEDCst.REVIEW_UNSAVED_VPM_DIALOG_FIB,
-				getCEDController(), null, true);
+	public CEDController getCEDController() {
+		return _cedController;
+	}
+
+	@Override
+	public void addSpecificItems() {
+		add(new SaveModifiedItem());
+		addSeparator();
+	}
+
+	@Override
+	public void quit() {
+		getCEDController().reviewModifiedResources();
+		FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.REVIEW_UNSAVED_VPM_DIALOG_FIB, getCEDController(), null, true);
 		if (dialog.getStatus() == Status.VALIDATED) {
-	   		getCEDController().saveModified();
-	        if (logger.isLoggable(Level.INFO))
-	            logger.info("Exiting FLEXO Application... DONE");
-	   		System.exit(0);
+			getCEDController().saveModified();
+			if (logger.isLoggable(Level.INFO))
+				logger.info("Exiting FLEXO Application... DONE");
+			System.exit(0);
+		} else if (dialog.getStatus() == Status.ABORTED) {
+			if (logger.isLoggable(Level.INFO))
+				logger.info("Exiting FLEXO Application... DONE");
+			System.exit(0);
 		}
-		else if (dialog.getStatus() == Status.ABORTED) {
-	        if (logger.isLoggable(Level.INFO))
-	            logger.info("Exiting FLEXO Application... DONE");
-	   		System.exit(0);
-		}
-    }
+	}
 
-     public void closeModule()
-    {
-   		getCEDController().reviewModifiedResources();
-		FIBDialog dialog = FIBDialog.instanciateComponent(
-				CEDCst.REVIEW_UNSAVED_VPM_DIALOG_FIB,
-				getCEDController(), null, true);
+	public void closeModule() {
+		getCEDController().reviewModifiedResources();
+		FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.REVIEW_UNSAVED_VPM_DIALOG_FIB, getCEDController(), null, true);
 		if (dialog.getStatus() == Status.VALIDATED) {
-	   		getCEDController().saveModified();
+			getCEDController().saveModified();
 		}
-    }
+	}
 
-   public void askAndSave()
-    {
-   		getCEDController().reviewModifiedResources();
-		FIBDialog dialog = FIBDialog.instanciateComponent(
-				CEDCst.SAVE_VPM_DIALOG_FIB,
-				getCEDController(), null, true);
+	public void askAndSave() {
+		getCEDController().reviewModifiedResources();
+		FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.SAVE_VPM_DIALOG_FIB, getCEDController(), null, true);
 		if (dialog.getStatus() == Status.VALIDATED) {
-	   		getCEDController().saveModified();
+			getCEDController().saveModified();
 		}
-    }
-        
-    public class SaveModifiedItem extends FlexoMenuItem
-    {
-    	public SaveModifiedItem()
-    	{
-    		super(new SaveModifiedAction(), "save", KeyStroke.getKeyStroke(KeyEvent.VK_S, FlexoCst.META_MASK), getController(), true);
-            setIcon(IconLibrary.SAVE_ICON);
-    	}
-    }
+	}
 
-    public class SaveModifiedAction extends AbstractAction
-    {
-    	public SaveModifiedAction()
-    	{
-    		super();
-    	}
+	public class SaveModifiedItem extends FlexoMenuItem {
+		public SaveModifiedItem() {
+			super(new SaveModifiedAction(), "save", KeyStroke.getKeyStroke(KeyEvent.VK_S, FlexoCst.META_MASK), getController(), true);
+			setIcon(IconLibrary.SAVE_ICON);
+		}
+	}
 
-    	@Override
-		public void actionPerformed(ActionEvent event)
-    	{
-    		askAndSave();
-    	}
-    }
+	public class SaveModifiedAction extends AbstractAction {
+		public SaveModifiedAction() {
+			super();
+		}
 
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			askAndSave();
+		}
+	}
 
 }

@@ -31,46 +31,39 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class CVSRefreshInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CVSRefreshInitializer(FPSControllerActionInitializer actionInitializer)
-	{
-		super(CVSRefresh.actionType,actionInitializer);
+	CVSRefreshInitializer(FPSControllerActionInitializer actionInitializer) {
+		super(CVSRefresh.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected FPSControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (FPSControllerActionInitializer)super.getControllerActionInitializer();
+	protected FPSControllerActionInitializer getControllerActionInitializer() {
+		return (FPSControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
-     @Override
- 	protected FlexoExceptionHandler<CVSRefresh> getDefaultExceptionHandler() 
- 	{
- 		return new FlexoExceptionHandler<CVSRefresh>() {
- 			@Override
+
+	@Override
+	protected FlexoExceptionHandler<CVSRefresh> getDefaultExceptionHandler() {
+		return new FlexoExceptionHandler<CVSRefresh>() {
+			@Override
 			public boolean handleException(FlexoException exception, CVSRefresh action) {
- 	           	if (exception instanceof FlexoAuthentificationException) {
-            		getControllerActionInitializer().handleAuthenticationException((FlexoAuthentificationException) exception);
-            	}
-            	return false;
+				if (exception instanceof FlexoAuthentificationException) {
+					getControllerActionInitializer().handleAuthenticationException((FlexoAuthentificationException) exception);
+				}
+				return false;
 			}
-        };
- 	}
+		};
+	}
 
-
-  	@Override
-	protected Icon getEnabledIcon() 
-	{
+	@Override
+	protected Icon getEnabledIcon() {
 		return IconLibrary.REFRESH_ICON;
 	}
- 
+
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return IconLibrary.REFRESH_DISABLED_ICON;
 	}
 

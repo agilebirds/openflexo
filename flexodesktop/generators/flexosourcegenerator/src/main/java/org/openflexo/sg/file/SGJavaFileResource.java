@@ -41,12 +41,12 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.sg.generator.SGGenerator;
 import org.openflexo.sg.generator.SGJavaClassGenerator;
 
-
 /**
  * @author sylvain
  * 
  */
-public class SGJavaFileResource extends JavaFileResource<SGJavaClassGenerator, SGJavaFile> implements GenerationAvailableFileResource, FlexoObserver {
+public class SGJavaFileResource extends JavaFileResource<SGJavaClassGenerator, SGJavaFile> implements GenerationAvailableFileResource,
+		FlexoObserver {
 	static final Logger logger = FlexoLogger.getLogger(SGJavaFileResource.class.getPackage().getName());
 
 	/**
@@ -106,7 +106,8 @@ public class SGJavaFileResource extends JavaFileResource<SGJavaClassGenerator, S
 	}
 
 	/**
-	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this resource's dependant resources
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this
+	 * resource's dependant resources
 	 * 
 	 * @param resource
 	 * @param dependancyScheme

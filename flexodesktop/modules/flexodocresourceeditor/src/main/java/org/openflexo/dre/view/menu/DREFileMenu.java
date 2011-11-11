@@ -34,35 +34,29 @@ import org.openflexo.drm.action.SaveDocumentationCenter;
 import org.openflexo.view.menu.FileMenu;
 import org.openflexo.view.menu.FlexoMenuItem;
 
-
 /**
  * 'File' menu for this Module
  * 
  * @author yourname
  */
-public class DREFileMenu extends FileMenu
-{
+public class DREFileMenu extends FileMenu {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DREFileMenu.class.getPackage().getName());
 
+	public DREFileMenu(DREController controller) {
+		super(controller);
+	}
 
-    public DREFileMenu(DREController controller)
-    {
-        super(controller);
-    }
+	@Override
+	public void addSpecificItems() {
+		add(new FlexoMenuItem(SaveDocumentationCenter.actionType, getController()));
+		add(new FlexoMenuItem(GenerateHelpSet.actionType, getController()));
+		add(new FlexoMenuItem(ImportDocSubmissionReport.actionType, getController()));
+		addSeparator();
+	}
 
-    @Override
-	public void addSpecificItems()
-    {
-        add(new FlexoMenuItem(SaveDocumentationCenter.actionType, getController()));
-        add(new FlexoMenuItem(GenerateHelpSet.actionType, getController()));
-        add(new FlexoMenuItem(ImportDocSubmissionReport.actionType, getController()));
-        addSeparator();
-   }
-
-    public DREController getDREController()
-    {
-        return (DREController)getController();
-    }
+	public DREController getDREController() {
+		return (DREController) getController();
+	}
 }

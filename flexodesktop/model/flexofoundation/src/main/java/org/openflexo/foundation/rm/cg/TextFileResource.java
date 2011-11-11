@@ -31,71 +31,61 @@ import org.openflexo.toolbox.FileFormat;
  * @author sylvain
  * 
  */
-public class TextFileResource<G extends IFlexoResourceGenerator, F extends CGFile> extends ASCIIFileResource<G,F>
-{
+public class TextFileResource<G extends IFlexoResourceGenerator, F extends CGFile> extends ASCIIFileResource<G, F> {
 
-    private ResourceType _fileType;
-    private FileFormat _format;
-    
-    /**
-     * @param builder
-     */
-    public TextFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
+	private ResourceType _fileType;
+	private FileFormat _format;
 
-    /**
-     * @param aProject
-     */
-    public TextFileResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
+	/**
+	 * @param builder
+	 */
+	public TextFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * Overrides getResourceType
-     * 
-     * @see org.openflexo.foundation.rm.FlexoResource#getResourceType()
-     */
-    @Override
-	public ResourceType getResourceType()
-    {
-        return ResourceType.TEXT_FILE;
-    }
+	/**
+	 * @param aProject
+	 */
+	public TextFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    @Override
-	protected TextFile createGeneratedResourceData()
-    {
-        return new TextFile(getFile());
-    }
-    
-    public TextFile getTextFile()
-    {
-        return (TextFile) getGeneratedResourceData();
-    }
+	/**
+	 * Overrides getResourceType
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResource#getResourceType()
+	 */
+	@Override
+	public ResourceType getResourceType() {
+		return ResourceType.TEXT_FILE;
+	}
 
-	public ResourceType getFileType() 
-	{
+	@Override
+	protected TextFile createGeneratedResourceData() {
+		return new TextFile(getFile());
+	}
+
+	public TextFile getTextFile() {
+		return (TextFile) getGeneratedResourceData();
+	}
+
+	public ResourceType getFileType() {
 		return _fileType;
 	}
 
-	public void setFileType(ResourceType fileType) 
-	{
+	public void setFileType(ResourceType fileType) {
 		_fileType = fileType;
 	}
 
 	@Override
-	public FileFormat getResourceFormat() 
-	{
+	public FileFormat getResourceFormat() {
 		return _format;
 	}
 
-	public void setResourceFormat(FileFormat format) 
-	{
+	public void setResourceFormat(FileFormat format) {
 		_format = format;
 	}
-	
+
 	@Override
 	public String getGenerationResultKey() {
 		return GeneratedCodeResult.DEFAULT_KEY;

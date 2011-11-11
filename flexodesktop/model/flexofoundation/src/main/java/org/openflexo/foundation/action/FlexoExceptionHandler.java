@@ -23,5 +23,5 @@ import org.openflexo.foundation.FlexoException;
 
 public abstract class FlexoExceptionHandler<A extends FlexoAction> {
 
-   public abstract boolean handleException (FlexoException exception, A action);
+	public abstract boolean handleException(FlexoException exception, A action);
 }

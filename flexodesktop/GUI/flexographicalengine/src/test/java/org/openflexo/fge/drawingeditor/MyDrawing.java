@@ -37,11 +37,11 @@ public class MyDrawing extends MyDrawingElement {
 	private static final Logger logger = FlexoLogger.getLogger(MyDrawing.class.getPackage().getName());
 
 	private static XMLMapping mapping;
-	
+
 	private static int totalOccurences = 0;
-	
+
 	private int index;
-	
+
 	static {
 		try {
 			mapping = new XMLMapping(new FileResource("Mappings/DrawingMapping.xml"));
@@ -49,118 +49,108 @@ public class MyDrawing extends MyDrawingElement {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public File file = null;
-	
+
 	private EditedDrawing editedDrawing;
-	
+
 	// Called for NEW
-	public static MyDrawing makeNewDrawing()
-	{
+	public static MyDrawing makeNewDrawing() {
 		totalOccurences++;
 		MyDrawing returned = new MyDrawing();
 		returned.index = totalOccurences;
 		returned.editedDrawing.init();
 		return returned;
 	}
-	
-	private MyDrawing()
-	{
+
+	private MyDrawing() {
 		super(null);
 		_drawing = this;
 		editedDrawing = new EditedDrawing(this);
 	}
-	
+
 	// Called for LOAD
-	public MyDrawing(DrawingBuilder builder)
-	{
+	public MyDrawing(DrawingBuilder builder) {
 		this();
 		builder.drawing = editedDrawing;
 		initializeDeserialization();
 	}
-	
-	public String getTitle()
-	{
-		if (file != null) return file.getName();
-		else return FlexoLocalization.localizedForKey("untitled")+"-"+index;
+
+	public String getTitle() {
+		if (file != null)
+			return file.getName();
+		else
+			return FlexoLocalization.localizedForKey("untitled") + "-" + index;
 	}
-	
+
 	@Override
-	public MyDrawingGraphicalRepresentation getGraphicalRepresentation()
-	{
+	public MyDrawingGraphicalRepresentation getGraphicalRepresentation() {
 		return editedDrawing.getDrawingGraphicalRepresentation();
 	}
 
-	public void setGraphicalRepresentation(MyDrawingGraphicalRepresentation aGR)
-	{
+	public void setGraphicalRepresentation(MyDrawingGraphicalRepresentation aGR) {
 		aGR.setDrawable(this);
 		editedDrawing.setDrawingGraphicalRepresentation(aGR);
 	}
 
-	public EditedDrawing getEditedDrawing()
-	{
+	public EditedDrawing getEditedDrawing() {
 		return editedDrawing;
 	}
-	
-	public void save()
-	{
-		System.out.println("Saving "+file);
-		
+
+	public void save() {
+		System.out.println("Saving " + file);
+
 		XMLCoder coder = new XMLCoder(mapping);
-		
+
 		try {
-			coder.encodeObject(this,new FileOutputStream(file));
-			logger.info("Succeeded to save: "+file);
-			System.out.println("> "+(new XMLCoder(mapping)).encodeObject(this));
+			coder.encodeObject(this, new FileOutputStream(file));
+			logger.info("Succeeded to save: " + file);
+			System.out.println("> " + (new XMLCoder(mapping)).encodeObject(this));
 		} catch (Exception e) {
-			logger.warning("Failed to save: "+file+" unexpected exception: "+e.getMessage());
+			logger.warning("Failed to save: " + file + " unexpected exception: " + e.getMessage());
 			e.printStackTrace();
 		}
-		
+
 	}
-	
-	public static MyDrawing load(File file)
-	{
-		logger.info("Loading "+file);
-		
-		XMLDecoder decoder = new XMLDecoder(mapping,new DrawingBuilder());
-		
+
+	public static MyDrawing load(File file) {
+		logger.info("Loading " + file);
+
+		XMLDecoder decoder = new XMLDecoder(mapping, new DrawingBuilder());
+
 		try {
-			MyDrawing drawing = (MyDrawing)decoder.decodeObject(new FileInputStream(file));
+			MyDrawing drawing = (MyDrawing) decoder.decodeObject(new FileInputStream(file));
 			drawing.file = file;
 			drawing.editedDrawing.init();
-			logger.info("Succeeded to load: "+file);
+			logger.info("Succeeded to load: " + file);
 			return drawing;
 		} catch (Exception e) {
-			logger.warning("Failed to load: "+file+" unexpected exception: "+e.getMessage());
+			logger.warning("Failed to load: " + file + " unexpected exception: " + e.getMessage());
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
-	public static class DrawingBuilder
-	{
+
+	public static class DrawingBuilder {
 		public EditedDrawing drawing;
 	}
-	
+
 	@Override
-	public void finalizeDeserialization()
-	{
+	public void finalizeDeserialization() {
 		// TODO Auto-generated method stub
 		super.finalizeDeserialization();
-		
+
 		/*for (MyDrawingElement e : childs) {
 			getDrawing().getEditedDrawing().addDrawable(e, this);
 		}*/
 		_finalizeDeserializationFor(this);
-		
+
 		editedDrawing.getDrawingGraphicalRepresentation().startConnectorObserving();
-		
+
 	}
 
-	private void _finalizeDeserializationFor(MyDrawingElement element)
-	{
-		//element.getGraphicalRepresentation().resetToDefaultIdentifier();
+	private void _finalizeDeserializationFor(MyDrawingElement element) {
+		// element.getGraphicalRepresentation().resetToDefaultIdentifier();
 		for (MyDrawingElement e : element.getChilds()) {
 			getDrawing().getEditedDrawing().addDrawable(e, element);
 			_finalizeDeserializationFor(e);

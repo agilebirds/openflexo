@@ -21,16 +21,14 @@ package org.openflexo.foundation.dm.javaparser;
 
 import java.util.Vector;
 
-
-public interface ParsedJavadoc
-{
+public interface ParsedJavadoc {
 	public String getComment();
 
 	public void setComment(String comment);
 
 	public Vector<? extends ParsedJavadocItem> getDocletTags();
 
-	public Vector<? extends ParsedJavadocItem> getTagsByName(String name) ;
+	public Vector<? extends ParsedJavadocItem> getTagsByName(String name);
 
 	public ParsedJavadocItem getTagByName(String name);
 
@@ -39,6 +37,6 @@ public interface ParsedJavadoc
 	// When insert set to true, insert at first position (related to tag name), otherwise put at the end
 	public ParsedJavadocItem addTagForNameAndValue(String tagName, String parameterName, String value, boolean insert);
 
-	public String getStringRepresentation();	 
+	public String getStringRepresentation();
 
 }

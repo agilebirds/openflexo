@@ -29,20 +29,17 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
  * @author sguerin
  * 
  */
-public class CalcDrawingShemaInserted extends OEDataModification
-{
+public class CalcDrawingShemaInserted extends OEDataModification {
 
-    private ViewPoint _parent;
+	private ViewPoint _parent;
 
-    public CalcDrawingShemaInserted(ExampleDrawingShema shema, ViewPoint parent)
-    {
-        super(null, shema);
-        _parent = parent;
-    }
+	public CalcDrawingShemaInserted(ExampleDrawingShema shema, ViewPoint parent) {
+		super(null, shema);
+		_parent = parent;
+	}
 
-    public ViewPoint getParent()
-    {
-        return _parent;
-    }
+	public ViewPoint getParent() {
+		return _parent;
+	}
 
 }

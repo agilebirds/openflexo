@@ -36,12 +36,12 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.sg.generator.SGTextFileGenerator;
 import org.openflexo.toolbox.FileFormat;
 
-
 /**
  * @author sylvain
  * 
  */
-public class SGTextFileResource extends TextFileResource<SGTextFileGenerator, SGTextFile> implements GenerationAvailableFileResource, FlexoObserver {
+public class SGTextFileResource extends TextFileResource<SGTextFileGenerator, SGTextFile> implements GenerationAvailableFileResource,
+		FlexoObserver {
 	static final Logger logger = FlexoLogger.getLogger(SGTextFileResource.class.getPackage().getName());
 
 	/**
@@ -83,7 +83,8 @@ public class SGTextFileResource extends TextFileResource<SGTextFileGenerator, SG
 	}
 
 	/**
-	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this resource's dependant resources
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this
+	 * resource's dependant resources
 	 * 
 	 * @param resource
 	 * @param dependancyScheme

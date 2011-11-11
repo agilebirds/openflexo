@@ -42,30 +42,25 @@ import org.openflexo.foundation.ie.widget.IESpanTDWidget;
 import org.openflexo.foundation.ie.widget.IETDWidget;
 import org.openflexo.foundation.ie.widget.ITableRow;
 
-
 public class SuroundWithConditionalInitializer extends ActionInitializer {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	SuroundWithConditionalInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(SuroundWithConditional.actionType,actionInitializer);
+	SuroundWithConditionalInitializer(IEControllerActionInitializer actionInitializer) {
+		super(SuroundWithConditional.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<SuroundWithConditional> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<SuroundWithConditional> getDefaultInitializer() {
 		return new FlexoActionInitializer<SuroundWithConditional>() {
 			@Override
-			public boolean run(ActionEvent e, SuroundWithConditional action)
-			{
+			public boolean run(ActionEvent e, SuroundWithConditional action) {
 				if (action.getFocusedObject() instanceof ITableRow) {
 					Vector<FlexoModelObject> v = (Vector<FlexoModelObject>) action.getGlobalSelection().clone();
 					if (!v.contains(action.getFocusedObject()))
@@ -123,23 +118,19 @@ public class SuroundWithConditionalInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<SuroundWithConditional> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<SuroundWithConditional> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<SuroundWithConditional>() {
 			@Override
-			public boolean run(ActionEvent e, SuroundWithConditional action)
-			{
-				((IEController)getController()).getSelectionManager().setSelectedObject(action.getNewConditional().getOperatedSequence());
+			public boolean run(ActionEvent e, SuroundWithConditional action) {
+				((IEController) getController()).getSelectionManager().setSelectedObject(action.getNewConditional().getOperatedSequence());
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return SEIconLibrary.CONDITIONAL_ICON;
 	}
-
 
 }

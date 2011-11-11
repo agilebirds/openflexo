@@ -29,7 +29,6 @@ import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.node.WKFNode;
 import org.openflexo.inspector.InspectableObject;
 
-
 public abstract class WKFEdge<S extends WKFNode, E extends WKFNode> extends WKFObject implements InspectableObject {
 
 	private static final Logger logger = Logger.getLogger(WKFEdge.class.getPackage().getName());
@@ -44,10 +43,9 @@ public abstract class WKFEdge<S extends WKFNode, E extends WKFNode> extends WKFO
 		super(process);
 	}
 
-    public boolean isEdgeDisplayable() {
-    	return getStartNode()!=null && getEndNode()!=null
-    	       && getStartNode().isNodeValid() && getEndNode().isNodeValid();
-    }
+	public boolean isEdgeDisplayable() {
+		return getStartNode() != null && getEndNode() != null && getStartNode().isNodeValid() && getEndNode().isNodeValid();
+	}
 
 	@Override
 	public void finalizeDeserialization(Object builder) {
@@ -60,39 +58,40 @@ public abstract class WKFEdge<S extends WKFNode, E extends WKFNode> extends WKFO
 		super.finalizeDeserialization(builder);
 	}
 
-    @Override
-    public void delete() {
-    	if (getStartNode() != null) {
+	@Override
+	public void delete() {
+		if (getStartNode() != null) {
 			removeOutgoingEdgeFromStartNode(getStartNode());
 		}
-		if (getEndNode()!=null) {
+		if (getEndNode() != null) {
 			removeIncomingEdgeFromEndNode(getEndNode());
 		}
-    	super.delete();
-    }
+		super.delete();
+	}
 
-    protected void resetStartAndEndNode() {
-    	setStartNode(null);
-    	setEndNode(null);
-    }
+	protected void resetStartAndEndNode() {
+		setStartNode(null);
+		setEndNode(null);
+	}
 
-    public abstract Class<S> getStartNodeClass();
-    public abstract Class<E> getEndNodeClass();
+	public abstract Class<S> getStartNodeClass();
+
+	public abstract Class<E> getEndNodeClass();
 
 	public final S getStartNode() {
 		return startNode;
 	}
 
 	public void setStartNode(S startNode) {
-		if (this.startNode==startNode)
+		if (this.startNode == startNode)
 			return;
-		if(this.startNode!=null) {
+		if (this.startNode != null) {
 			removeOutgoingEdgeFromStartNode(this.startNode);
 			this.startNode = null;
 		}
-		if (startNode==null || getStartNodeClass().isAssignableFrom(startNode.getClass())) {
+		if (startNode == null || getStartNodeClass().isAssignableFrom(startNode.getClass())) {
 			this.startNode = startNode;
-			if (this.startNode!=null) {
+			if (this.startNode != null) {
 				addOutgoingEdgeToStartNode(startNode);
 			}
 		}
@@ -103,43 +102,41 @@ public abstract class WKFEdge<S extends WKFNode, E extends WKFNode> extends WKFO
 	}
 
 	public void setEndNode(E endNode) {
-		if (this.endNode==endNode)
+		if (this.endNode == endNode)
 			return;
-		if (this.endNode!=null) {
+		if (this.endNode != null) {
 			removeIncomingEdgeFromEndNode(this.endNode);
 			this.endNode = null;
 		}
-		if (endNode==null || getEndNodeClass().isAssignableFrom(endNode.getClass())) {
+		if (endNode == null || getEndNodeClass().isAssignableFrom(endNode.getClass())) {
 			this.endNode = endNode;
-			if (this.endNode!=null)
+			if (this.endNode != null)
 				addIncomingEdgeToEndNode(endNode);
 		}
 	}
 
 	public abstract void addOutgoingEdgeToStartNode(S startNode);
+
 	public abstract void addIncomingEdgeToEndNode(E endNode);
 
 	public abstract void removeOutgoingEdgeFromStartNode(S startNode);
+
 	public abstract void removeIncomingEdgeFromEndNode(E endNode);
 
 	@Override
-	public String toString()
-	{
-		return getClass().getSimpleName()+" name="+getName()+" start="+getStartNode()+" end="+getEndNode();
+	public String toString() {
+		return getClass().getSimpleName() + " name=" + getName() + " start=" + getStartNode() + " end=" + getEndNode();
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return (getStartNode() != null ? getStartNode()
-				.getFullyQualifiedName() : "UNLINK")
-				+ ".EDGE_TO."
+	public String getFullyQualifiedName() {
+		return (getStartNode() != null ? getStartNode().getFullyQualifiedName() : "UNLINK") + ".EDGE_TO."
 				+ (getEndNode() != null ? getEndNode().getFullyQualifiedName() : "UNLINK");
 	}
 
 	/**
 	 * Return a Vector of all embedded WKFObjects
-	 *
+	 * 
 	 * @return a Vector of WKFObject instances
 	 */
 	@Override
@@ -150,9 +147,8 @@ public abstract class WKFEdge<S extends WKFNode, E extends WKFNode> extends WKFO
 	}
 
 	/**
-	 * Build and return a vector of all the objects that will be deleted during
-	 * this deletion
-	 *
+	 * Build and return a vector of all the objects that will be deleted during this deletion
+	 * 
 	 * @param aVector
 	 *            of DeletableObject
 	 */

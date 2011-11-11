@@ -27,26 +27,22 @@ import org.openflexo.foundation.FlexoException;
  * @author sguerin
  * 
  */
-public abstract class LoadResourceException extends FlexoException
-{
+public abstract class LoadResourceException extends FlexoException {
 
-    protected FlexoFileResource _fileResource;
+	protected FlexoFileResource _fileResource;
 
-	public LoadResourceException(FlexoFileResource fileResource, String message)
-    {
-        super(message);
-        _fileResource = fileResource;
-    }
+	public LoadResourceException(FlexoFileResource fileResource, String message) {
+		super(message);
+		_fileResource = fileResource;
+	}
 
-    @Override
-	public String getMessage()
-    {
-    	String msg = super.getMessage();
-        return "LoadResourceException: resource " + _fileResource.getResourceIdentifier()+(msg!=null?"\n"+msg:"");
-    }
+	@Override
+	public String getMessage() {
+		String msg = super.getMessage();
+		return "LoadResourceException: resource " + _fileResource.getResourceIdentifier() + (msg != null ? "\n" + msg : "");
+	}
 
-	public FlexoFileResource getFileResource()
-	{
+	public FlexoFileResource getFileResource() {
 		return _fileResource;
 	}
 

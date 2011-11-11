@@ -24,38 +24,34 @@ import java.util.Date;
 
 import org.openflexo.xmlcode.XMLSerializable;
 
-
 /**
- * Class <code>Album</code> is intented to represent a movie object in XML
- * coding/decoding example.
+ * Class <code>Album</code> is intented to represent a movie object in XML coding/decoding example.
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  */
-public class Album extends MultimediaArticle implements XMLSerializable
-{
+public class Album extends MultimediaArticle implements XMLSerializable {
 
-    public String author;
+	public String author;
 
-    public String title;
+	public String title;
 
-    public String description;
+	public String description;
 
-    public Date dateReleased;
+	public Date dateReleased;
 
-    @Override
-	public String toString()
-    {
+	@Override
+	public String toString() {
 
-        String returnedString = "Album (id=" + articleId + ", price=" + price + ", title=" + title + ", author=" + author + ", description=" + description
-                + ", date=";
-        if (dateReleased != null) {
-            returnedString += dateReleased.toString();
-        } else {
-            returnedString += "null";
-        }
+		String returnedString = "Album (id=" + articleId + ", price=" + price + ", title=" + title + ", author=" + author
+				+ ", description=" + description + ", date=";
+		if (dateReleased != null) {
+			returnedString += dateReleased.toString();
+		} else {
+			returnedString += "null";
+		}
 
-        returnedString += ")";
-        return returnedString;
-    }
+		returnedString += ")";
+		return returnedString;
+	}
 
 }

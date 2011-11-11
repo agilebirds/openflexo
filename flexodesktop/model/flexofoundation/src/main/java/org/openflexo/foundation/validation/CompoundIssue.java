@@ -22,68 +22,58 @@ package org.openflexo.foundation.validation;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-
 /**
- * Represents a validation issue containing many other validation issues.
- * This is an artefact to express that some validation rules may throw more than
- * one error or warning 
+ * Represents a validation issue containing many other validation issues. This is an artefact to express that some validation rules may
+ * throw more than one error or warning
  * 
  * @author sguerin
  * 
  */
-public class CompoundIssue<R extends ValidationRule<R,V>, V extends Validable> extends ValidationIssue<R,V>
-{
+public class CompoundIssue<R extends ValidationRule<R, V>, V extends Validable> extends ValidationIssue<R, V> {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(CompoundIssue.class.getPackage().getName());
 
-    private Vector<ValidationIssue<R,V>> _containedIssues;
-    
-    public CompoundIssue(V anObject)
-    {
-        super(anObject, null);
-        _containedIssues = new Vector<ValidationIssue<R,V>>();
-    }
+	private Vector<ValidationIssue<R, V>> _containedIssues;
 
-     public Vector<ValidationIssue<R,V>> getContainedIssues() 
-    {
-        return _containedIssues;
-    }
+	public CompoundIssue(V anObject) {
+		super(anObject, null);
+		_containedIssues = new Vector<ValidationIssue<R, V>>();
+	}
 
-    public void setContainedIssues(Vector<ValidationIssue<R,V>> containedIssues) 
-    {
-        _containedIssues = containedIssues;
-    }
+	public Vector<ValidationIssue<R, V>> getContainedIssues() {
+		return _containedIssues;
+	}
 
-    public void addToContainedIssues(ValidationIssue<R,V> issue)
-    {
-        _containedIssues.add(issue);
-    }
-    
-    public void removeFromContainedIssues(ValidationIssue<R,V> issue)
-    {
-        _containedIssues.remove(issue);
-    }
-    
-    @Override
-    public void setCause(R rule) {
-    	super.setCause(rule);
-    	for (ValidationIssue<R,V> issue : _containedIssues) {
-    		if (issue!=this) {
+	public void setContainedIssues(Vector<ValidationIssue<R, V>> containedIssues) {
+		_containedIssues = containedIssues;
+	}
+
+	public void addToContainedIssues(ValidationIssue<R, V> issue) {
+		_containedIssues.add(issue);
+	}
+
+	public void removeFromContainedIssues(ValidationIssue<R, V> issue) {
+		_containedIssues.remove(issue);
+	}
+
+	@Override
+	public void setCause(R rule) {
+		super.setCause(rule);
+		for (ValidationIssue<R, V> issue : _containedIssues) {
+			if (issue != this) {
 				issue.setCause(rule);
 			}
 		}
-    }
-    
-    @Override
-	public String toString()
-    {
-    	StringBuffer sb = new StringBuffer();
-    	for (ValidationIssue issue : getContainedIssues()) {
-    		sb.append(issue.toString()+"\n");
-    	}
-    	return sb.toString();
-    }
+	}
 
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		for (ValidationIssue issue : getContainedIssues()) {
+			sb.append(issue.toString() + "\n");
+		}
+		return sb.toString();
+	}
 
 }

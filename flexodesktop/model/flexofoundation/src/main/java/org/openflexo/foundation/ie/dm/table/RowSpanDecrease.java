@@ -23,15 +23,12 @@ import org.openflexo.foundation.ie.dm.IEDataModification;
 import org.openflexo.foundation.ie.widget.IEWidget;
 
 /**
- * @author bmangez
- * <B>Class Description</B>
+ * @author bmangez <B>Class Description</B>
  */
-public class RowSpanDecrease extends IEDataModification
-{
+public class RowSpanDecrease extends IEDataModification {
 
-    public RowSpanDecrease(IEWidget td)
-    {
-        super("rowSpan",null, td);
-    }
+	public RowSpanDecrease(IEWidget td) {
+		super("rowSpan", null, td);
+	}
 
 }

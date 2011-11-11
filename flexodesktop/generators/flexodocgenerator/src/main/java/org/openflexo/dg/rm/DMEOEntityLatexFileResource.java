@@ -23,7 +23,6 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.openflexo.dg.latex.DGLatexGenerator;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -40,81 +39,72 @@ import org.openflexo.logging.FlexoLogger;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class DMEOEntityLatexFileResource extends LatexFileResource<DGLatexGenerator<DMEOEntity>> implements FlexoObserver
-{
-    protected static final Logger logger = FlexoLogger.getLogger(DMEOEntityLatexFileResource.class.getPackage().getName());
+public class DMEOEntityLatexFileResource extends LatexFileResource<DGLatexGenerator<DMEOEntity>> implements FlexoObserver {
+	protected static final Logger logger = FlexoLogger.getLogger(DMEOEntityLatexFileResource.class.getPackage().getName());
 
-    /**
-     * @param builder
-     */
-    public DMEOEntityLatexFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
+	/**
+	 * @param builder
+	 */
+	public DMEOEntityLatexFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * @param aProject
-     */
-    public DMEOEntityLatexFileResource(FlexoProject aProject)
-    {
-    	super(aProject);
-    }
+	/**
+	 * @param aProject
+	 */
+	public DMEOEntityLatexFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    private boolean isObserverRegistered = false;
+	private boolean isObserverRegistered = false;
 
-    @Override
-	public String getName()
-    {
-    	if (getCGFile()==null || getCGFile().getRepository()==null || getEntity()==null) return super.getName();
-    	registerObserverWhenRequired();
-    	if (super.getName()==null)
-    		setName(nameForRepositoryAndEntity(getCGFile().getRepository(), getEntity()));
-    	return nameForRepositoryAndEntity(getCGFile().getRepository(), getEntity());
-    }
+	@Override
+	public String getName() {
+		if (getCGFile() == null || getCGFile().getRepository() == null || getEntity() == null)
+			return super.getName();
+		registerObserverWhenRequired();
+		if (super.getName() == null)
+			setName(nameForRepositoryAndEntity(getCGFile().getRepository(), getEntity()));
+		return nameForRepositoryAndEntity(getCGFile().getRepository(), getEntity());
+	}
 
-    public void registerObserverWhenRequired()
-    {
-    	if ((!isObserverRegistered) && (getEntity() != null)) {
-    		isObserverRegistered = true;
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("*** addObserver "+getFileName()+" for "+getEntity());
-    		getEntity().addObserver(this);
-    	}
-    }
+	public void registerObserverWhenRequired() {
+		if ((!isObserverRegistered) && (getEntity() != null)) {
+			isObserverRegistered = true;
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("*** addObserver " + getFileName() + " for " + getEntity());
+			getEntity().addObserver(this);
+		}
+	}
 
-    public static String nameForRepositoryAndEntity(GenerationRepository repository, DMEOEntity entity)
-    {
-    	return repository.getName()+".DMEOENTITY_LATEX."+entity.getFullyQualifiedName();
-    }
+	public static String nameForRepositoryAndEntity(GenerationRepository repository, DMEOEntity entity) {
+		return repository.getName() + ".DMEOENTITY_LATEX." + entity.getFullyQualifiedName();
+	}
 
-    public DMEOEntity getEntity()
-    {
-    	if (getGenerator() != null)
-    		return getGenerator().getObject();
-    	return null;
-    }
+	public DMEOEntity getEntity() {
+		if (getGenerator() != null)
+			return getGenerator().getObject();
+		return null;
+	}
 
-    @Override
-	protected LatexFile createGeneratedResourceData()
-    {
-        return new LatexFile(getFile(),this);
-    }
+	@Override
+	protected LatexFile createGeneratedResourceData() {
+		return new LatexFile(getFile(), this);
+	}
 
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
-        addToDependantResources(getProject().getFlexoDMResource());
-   }
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+		addToDependantResources(getProject().getFlexoDMResource());
+	}
 
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getEntity()) {
 			if (dataModification instanceof DMEntityClassNameChanged) {
 				logger.info("Building new resource after entity renaming");
@@ -125,8 +115,7 @@ public class DMEOEntityLatexFileResource extends LatexFileResource<DGLatexGenera
 				generator.getRepository().refresh();
 				observable.deleteObserver(this);
 				isObserverRegistered = false;
-			}
-			else if (dataModification instanceof EntityDeleted && ((EntityDeleted)dataModification).getEntity()==getEntity()) {
+			} else if (dataModification instanceof EntityDeleted && ((EntityDeleted) dataModification).getEntity() == getEntity()) {
 				logger.info("Handle entity has been deleted");
 				setGenerator(null);
 				getCGFile().setMarkedForDeletion(true);
@@ -137,28 +126,27 @@ public class DMEOEntityLatexFileResource extends LatexFileResource<DGLatexGenera
 		}
 	}
 
-   /**
-     * Return dependancy computing between this resource, and an other resource,
-     * asserting that this resource is contained in this resource's dependant resources
-     *
-     * @param resource
-     * @param dependancyScheme
-     * @return
-     */
+	/**
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this
+	 * resource's dependant resources
+	 * 
+	 * @param resource
+	 * @param dependancyScheme
+	 * @return
+	 */
 	@Override
-	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate)
-	{
+	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
 		if (resource instanceof FlexoDMResource) {
-			FlexoDMResource dmRes = (FlexoDMResource)resource;
+			FlexoDMResource dmRes = (FlexoDMResource) resource;
 			if (dmRes.isLoaded() && getEntity() != null) {
 				if (!requestDate.before(getEntity().getLastUpdate())) {
-					if (logger.isLoggable(Level.FINER)) logger.finer("OPTIMIST DEPENDANCY CHECKING for ENTITY "+getEntity().getName());
+					if (logger.isLoggable(Level.FINER))
+						logger.finer("OPTIMIST DEPENDANCY CHECKING for ENTITY " + getEntity().getName());
 					return false;
 				}
 			}
 		}
 		return super.optimisticallyDependsOf(resource, requestDate);
 	}
-
 
 }

@@ -19,11 +19,9 @@
  */
 package org.openflexo.foundation.ie.dm;
 
-public class SmallButtonTabNeedRefresh extends IEDataModification
-{
+public class SmallButtonTabNeedRefresh extends IEDataModification {
 
-    public SmallButtonTabNeedRefresh()
-    {
-        super(null, null);
-    }
+	public SmallButtonTabNeedRefresh() {
+		super(null, null);
+	}
 }

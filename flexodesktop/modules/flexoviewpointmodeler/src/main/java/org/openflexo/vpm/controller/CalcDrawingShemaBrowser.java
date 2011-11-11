@@ -23,35 +23,28 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 
-
-class CalcDrawingShemaBrowser extends CEDBrowser
-{
+class CalcDrawingShemaBrowser extends CEDBrowser {
 	private ExampleDrawingShema representedShema = null;
-	
-	protected CalcDrawingShemaBrowser(CEDController controller)
-	{
+
+	protected CalcDrawingShemaBrowser(CEDController controller) {
 		super(controller);
 	}
 
-	protected ExampleDrawingShema getRepresentedShema() 
-	{
+	protected ExampleDrawingShema getRepresentedShema() {
 		return representedShema;
 	}
 
-	protected void setRepresentedShema(ExampleDrawingShema representedShema) 
-	{
+	protected void setRepresentedShema(ExampleDrawingShema representedShema) {
 		this.representedShema = representedShema;
 	}
 
-    @Override
-	public ExampleDrawingShema getDefaultRootObject()
-    {
-    	return representedShema;
-    }
-    
 	@Override
-	public void configure()
-	{
+	public ExampleDrawingShema getDefaultRootObject() {
+		return representedShema;
+	}
+
+	@Override
+	public void configure() {
 		super.configure();
 		setFilterStatus(BrowserElementType.ONTOLOGY_CALC_DRAWING_SHAPE, BrowserFilterStatus.SHOW);
 		setFilterStatus(BrowserElementType.ONTOLOGY_CALC_DRAWING_CONNECTOR, BrowserFilterStatus.SHOW);

@@ -23,47 +23,40 @@ import java.util.Date;
 
 public class DateValue extends Value {
 
-    private Date _value;
-    
-    public static DateValue createDateValue(Date value)
-    {
-        return new DateValue(value);
-    }
- 
-    public DateValue (Date value)
-    {
-        super();
-        _value = value;
-    }
-    
-    public Date getDateValue() 
-    {
-        return _value;
-    }
-    
-    @Override
-	public String getStringValue() 
-    {
-        return _value.toString();
-    }
-    
-    @Override
-	public String toString()
-    {
-        return getPrefix()+"Date["+_value+"]";
-    }
+	private Date _value;
 
-    public String getSerializationValue()
-    {
-        return "$\""+_value+"\"";
-    }
+	public static DateValue createDateValue(Date value) {
+		return new DateValue(value);
+	}
 
-   @Override
-public boolean equals (Object obj)
-    {
-        if (obj instanceof DateValue) {
-            return getDateValue().equals(((DateValue)obj).getDateValue());
-        }
-        return super.equals(obj);
-    }
+	public DateValue(Date value) {
+		super();
+		_value = value;
+	}
+
+	public Date getDateValue() {
+		return _value;
+	}
+
+	@Override
+	public String getStringValue() {
+		return _value.toString();
+	}
+
+	@Override
+	public String toString() {
+		return getPrefix() + "Date[" + _value + "]";
+	}
+
+	public String getSerializationValue() {
+		return "$\"" + _value + "\"";
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof DateValue) {
+			return getDateValue().equals(((DateValue) obj).getDateValue());
+		}
+		return super.equals(obj);
+	}
 }

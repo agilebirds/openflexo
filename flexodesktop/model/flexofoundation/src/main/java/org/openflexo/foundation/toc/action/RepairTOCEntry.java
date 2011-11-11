@@ -33,59 +33,52 @@ import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.toc.TOCRepository;
 
+public class RepairTOCEntry extends FlexoAction<RepairTOCEntry, TOCEntry, TOCObject> {
 
-public class RepairTOCEntry extends FlexoAction<RepairTOCEntry, TOCEntry,TOCObject>
-{
-
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(RepairTOCEntry.class.getPackage().getName());
 
-    public static FlexoActionType<RepairTOCEntry, TOCEntry, TOCObject> actionType = new FlexoActionType<RepairTOCEntry, TOCEntry, TOCObject>(
-            "repair_toc_entry", FlexoActionType.defaultGroup) {
+	public static FlexoActionType<RepairTOCEntry, TOCEntry, TOCObject> actionType = new FlexoActionType<RepairTOCEntry, TOCEntry, TOCObject>(
+			"repair_toc_entry", FlexoActionType.defaultGroup) {
 
-        /**
-         * Factory method
-         */
-        @Override
-        public RepairTOCEntry makeNewAction(TOCEntry focusedObject, Vector<TOCObject> globalSelection, FlexoEditor editor)
-        {
-            return new RepairTOCEntry(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public RepairTOCEntry makeNewAction(TOCEntry focusedObject, Vector<TOCObject> globalSelection, FlexoEditor editor) {
+			return new RepairTOCEntry(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-        protected boolean isVisibleForSelection(TOCEntry object, Vector<TOCObject> globalSelection)
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(TOCEntry object, Vector<TOCObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-        protected boolean isEnabledForSelection(TOCEntry object, Vector<TOCObject> globalSelection)
-        {
-            return object.isReadOnly() && object.getIdentifier()==null && object.getObject(true) == null;
-        }
+		@Override
+		protected boolean isEnabledForSelection(TOCEntry object, Vector<TOCObject> globalSelection) {
+			return object.isReadOnly() && object.getIdentifier() == null && object.getObject(true) == null;
+		}
 
-    };
+	};
 
-    private FixProposal choice;
-    private FlexoModelObject modelObject;
-    
-    protected RepairTOCEntry(TOCEntry focusedObject, Vector<TOCObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	private FixProposal choice;
+	private FlexoModelObject modelObject;
 
-    public enum FixProposal {
-    	DELETE, CHOOSE_OTHER_OBJECT, MAKE_NORMAL_SECTION
-    }
+	protected RepairTOCEntry(TOCEntry focusedObject, Vector<TOCObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    public TOCRepository getRepository() {
-    	return getFocusedObject().getRepository();
-    }
-    
-    @Override
-    protected void doAction(Object context) throws DuplicateSectionException, InvalidLevelException
-    {
-    	switch (choice) {
+	public enum FixProposal {
+		DELETE, CHOOSE_OTHER_OBJECT, MAKE_NORMAL_SECTION
+	}
+
+	public TOCRepository getRepository() {
+		return getFocusedObject().getRepository();
+	}
+
+	@Override
+	protected void doAction(Object context) throws DuplicateSectionException, InvalidLevelException {
+		switch (choice) {
 		case DELETE:
 			getFocusedObject().delete();
 			break;
@@ -99,8 +92,8 @@ public class RepairTOCEntry extends FlexoAction<RepairTOCEntry, TOCEntry,TOCObje
 		default:
 			break;
 		}
-    }
-    
+	}
+
 	public FixProposal getChoice() {
 		return choice;
 	}

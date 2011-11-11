@@ -29,37 +29,31 @@ import org.openflexo.fps.CVSRepository;
 import org.openflexo.fps.CVSRepositoryList;
 import org.openflexo.localization.FlexoLocalization;
 
-public class CVSRepositoryListElement extends FPSBrowserElement
-{
-	public CVSRepositoryListElement(CVSRepositoryList repList, ProjectBrowser browser, BrowserElement parent)
-	{
-		super(repList, BrowserElementType.CVS_REPOSITORY_LIST, browser,parent);
+public class CVSRepositoryListElement extends FPSBrowserElement {
+	public CVSRepositoryListElement(CVSRepositoryList repList, ProjectBrowser browser, BrowserElement parent) {
+		super(repList, BrowserElementType.CVS_REPOSITORY_LIST, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 		if (logger.isLoggable(Level.FINE))
 			logger.fine("buildChildrenVector() for CVSRepositoryListElement");
-		for (CVSRepository rep : ((Vector<CVSRepository>)getCVSRepositoryList().getCVSRepositories().clone())) {
+		for (CVSRepository rep : ((Vector<CVSRepository>) getCVSRepositoryList().getCVSRepositories().clone())) {
 			addToChilds(rep);
 		}
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		if (getCVSRepositoryList().getCVSRepositories().size() == 0) {
 			return FlexoLocalization.localizedForKey("no_cvs_repositories");
-		}
-		else {
+		} else {
 			return FlexoLocalization.localizedForKey("cvs_repositories");
 		}
 	}
 
-	public CVSRepositoryList getCVSRepositoryList()
-	{
-		return (CVSRepositoryList)getObject();
+	public CVSRepositoryList getCVSRepositoryList() {
+		return (CVSRepositoryList) getObject();
 	}
 
 }

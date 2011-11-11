@@ -23,7 +23,6 @@
 // Generated on: 2007.11.06 at 03:26:51 PM CET 
 //
 
-
 package org.xmlsoap.schemas.ws._2004._03.business_process;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -31,11 +30,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for tCompensateScope complex type.
+ * <p>
+ * Java class for tCompensateScope complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tCompensateScope">
@@ -51,35 +51,30 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tCompensateScope")
-public class TCompensateScope
-    extends TActivity
-{
+public class TCompensateScope extends TActivity {
 
-    @XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
-    protected String target;
+	@XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
+	protected String target;
 
-    /**
-     * Gets the value of the target property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getTarget() {
-        return target;
-    }
+	/**
+	 * Gets the value of the target property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getTarget() {
+		return target;
+	}
 
-    /**
-     * Sets the value of the target property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setTarget(String value) {
-        this.target = value;
-    }
+	/**
+	 * Sets the value of the target property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setTarget(String value) {
+		this.target = value;
+	}
 
 }

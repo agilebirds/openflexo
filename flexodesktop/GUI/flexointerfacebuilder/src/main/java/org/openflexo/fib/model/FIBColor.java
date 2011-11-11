@@ -24,13 +24,11 @@ import java.lang.reflect.Type;
 
 public class FIBColor extends FIBWidget {
 
-	public FIBColor() 
-	{
+	public FIBColor() {
 	}
-	
+
 	@Override
-	public Type getDefaultDataClass() 
-	{
+	public Type getDefaultDataClass() {
 		return Color.class;
 	}
 }

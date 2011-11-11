@@ -103,7 +103,6 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.toolbox.ReservedKeyword;
 import org.openflexo.toolbox.ToolBox;
 
-
 /**
  * Represents an abstract WOComponent
  * 
@@ -295,7 +294,8 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	// ==================================
 	// ==========================================================================
 	/**
-	 * Returns reference to the main object in which this XML-serializable object is contained relating to storing scheme: here it's the WOComponent itself
+	 * Returns reference to the main object in which this XML-serializable object is contained relating to storing scheme: here it's the
+	 * WOComponent itself
 	 * 
 	 * @return this
 	 */
@@ -578,8 +578,8 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	/**
 	 * Implements
 	 * 
-	 * @see org.openflexo.foundation.rm.FlexoResourceData#receiveRMNotification(org.openflexo.foundation.rm.RMNotification) Receive a notification that has been propagated by the ResourceManager
-	 *      scheme and coming from a modification on an other resource
+	 * @see org.openflexo.foundation.rm.FlexoResourceData#receiveRMNotification(org.openflexo.foundation.rm.RMNotification) Receive a
+	 *      notification that has been propagated by the ResourceManager scheme and coming from a modification on an other resource
 	 * 
 	 *      Handles ComponentNameChanged notifications
 	 * 
@@ -652,7 +652,8 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		for (Enumeration en = allIEObjects.elements(); en.hasMoreElements();) {
 			IEObject next = (IEObject) en.nextElement();
 			if (next instanceof IEHyperlinkWidget) {
-				if (((IEHyperlinkWidget) next).getPopupComponentDefinition() != null && ((IEHyperlinkWidget) next).getPopupComponentDefinition().equals(ci.getComponentDefinition()))
+				if (((IEHyperlinkWidget) next).getPopupComponentDefinition() != null
+						&& ((IEHyperlinkWidget) next).getPopupComponentDefinition().equals(ci.getComponentDefinition()))
 					returned.add((IEHyperlinkWidget) next);
 			}
 		}
@@ -675,7 +676,8 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		Enumeration en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IEObject widget = (IEObject) en.nextElement();
-			if (widget instanceof IESequence && ((IESequence) widget).getOperator() != null && (((IESequence) widget).getOperator() instanceof RepetitionOperator))
+			if (widget instanceof IESequence && ((IESequence) widget).getOperator() != null
+					&& (((IESequence) widget).getOperator() instanceof RepetitionOperator))
 				reply.add((RepetitionOperator) ((IESequence) widget).getOperator());
 		}
 		return reply;
@@ -781,9 +783,11 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	}
 
 	/**
-	 * Validates this object by appending eventual issues to supplied ValidationReport. Default validation model is used to perform this validation.
+	 * Validates this object by appending eventual issues to supplied ValidationReport. Default validation model is used to perform this
+	 * validation.
 	 * 
-	 * @param report, a ValidationReport object on which found issues are appened
+	 * @param report
+	 *            , a ValidationReport object on which found issues are appened
 	 */
 	@Override
 	public void validate(ValidationReport report) {
@@ -791,9 +795,11 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	}
 
 	/**
-	 * Validates this object by appending eventual issues to supplied ValidationReport. Supplied validation model is used to perform this validation.
+	 * Validates this object by appending eventual issues to supplied ValidationReport. Supplied validation model is used to perform this
+	 * validation.
 	 * 
-	 * @param report, a ValidationReport object on which found issues are appened
+	 * @param report
+	 *            , a ValidationReport object on which found issues are appened
 	 */
 	@Override
 	public void validate(ValidationReport report, ValidationModel validationModel) {
@@ -868,7 +874,8 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		return getHelpText() != null && getHelpText().trim().length() > 0;
 	}
 
-	public static class ComponentCannotHaveTwoListWithSameName extends ValidationRule<ComponentCannotHaveTwoListWithSameName, IEWOComponent> {
+	public static class ComponentCannotHaveTwoListWithSameName extends
+			ValidationRule<ComponentCannotHaveTwoListWithSameName, IEWOComponent> {
 		public ComponentCannotHaveTwoListWithSameName() {
 			super(IEWOComponent.class, "list_name_must_be_unique_in_a_component");
 		}
@@ -885,8 +892,8 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 				if (rep.getName() != null && h.get(rep.getName()) == null) {
 					h.put(rep.getName(), rep);
 				} else {
-					ValidationError<ComponentCannotHaveTwoListWithSameName, IEWOComponent> error = new ValidationError<ComponentCannotHaveTwoListWithSameName, IEWOComponent>(this, wo,
-							"list_name_must_be_unique_in_a_component");
+					ValidationError<ComponentCannotHaveTwoListWithSameName, IEWOComponent> error = new ValidationError<ComponentCannotHaveTwoListWithSameName, IEWOComponent>(
+							this, wo, "list_name_must_be_unique_in_a_component");
 					error.addToFixProposals(new ChangeListName(rep));
 					return error;
 				}
@@ -1021,8 +1028,9 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	}
 
 	/**
-	 * Returns all the strings ({@link IEStringWidget}) of this WOComponent. You should not use directly this method but instead implement a cache mechanism and use the benefits of the methods
-	 * notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to preserve the order of this component when presenting this to a user.
+	 * Returns all the strings ({@link IEStringWidget}) of this WOComponent. You should not use directly this method but instead implement a
+	 * cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to
+	 * preserve the order of this component when presenting this to a user.
 	 * 
 	 * @return all the strings contained in this component.
 	 */
@@ -1039,8 +1047,9 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	}
 
 	/**
-	 * Returns all the textfields ({@link IETextFieldWidget}) of this WOComponent. You should not use directly this method but instead implement a cache mechanism and use the benefits of the methods
-	 * notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to preserve the order of this component when presenting this to a user.
+	 * Returns all the textfields ({@link IETextFieldWidget}) of this WOComponent. You should not use directly this method but instead
+	 * implement a cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to
+	 * be used to preserve the order of this component when presenting this to a user.
 	 * 
 	 * @return all the textfields contained in this component.
 	 */
@@ -1057,8 +1066,9 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	}
 
 	/**
-	 * Returns all the textareas ({@link IETextAreaWidget}) of this WOComponent. You should not use directly this method but instead implement a cache mechanism and use the benefits of the methods
-	 * notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to preserve the order of this component when presenting this to a user.
+	 * Returns all the textareas ({@link IETextAreaWidget}) of this WOComponent. You should not use directly this method but instead
+	 * implement a cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to
+	 * be used to preserve the order of this component when presenting this to a user.
 	 * 
 	 * @return all the textareas contained in this component.
 	 */
@@ -1075,8 +1085,9 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	}
 
 	/**
-	 * Returns all the dropdowns ({@link IEDropDownWidget}) of this WOComponent. You should not use directly this method but instead implement a cache mechanism and use the benefits of the methods
-	 * notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to preserve the order of this component when presenting this to a user.
+	 * Returns all the dropdowns ({@link IEDropDownWidget}) of this WOComponent. You should not use directly this method but instead
+	 * implement a cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to
+	 * be used to preserve the order of this component when presenting this to a user.
 	 * 
 	 * @return all the dropdowns contained in this component.
 	 */
@@ -1093,8 +1104,9 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	}
 
 	/**
-	 * Returns all the browsers ({@link IEBrowserWidget}) of this WOComponent. You should not use directly this method but instead implement a cache mechanism and use the benefits of the methods
-	 * notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to preserve the order of this component when presenting this to a user.
+	 * Returns all the browsers ({@link IEBrowserWidget}) of this WOComponent. You should not use directly this method but instead implement
+	 * a cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used
+	 * to preserve the order of this component when presenting this to a user.
 	 * 
 	 * @return all the browsers contained in this component.
 	 */
@@ -1111,8 +1123,9 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	}
 
 	/**
-	 * Returns all the checkboxes ({@link IECheckBoxWidget}) of this WOComponent. You should not use directly this method but instead implement a cache mechanism and use the benefits of the methods
-	 * notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to preserve the order of this component when presenting this to a user.
+	 * Returns all the checkboxes ({@link IECheckBoxWidget}) of this WOComponent. You should not use directly this method but instead
+	 * implement a cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to
+	 * be used to preserve the order of this component when presenting this to a user.
 	 * 
 	 * @return all the checkboxes contained in this component.
 	 */
@@ -1129,8 +1142,9 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	}
 
 	/**
-	 * Returns all the radio buttons ({@link IERadioButtonWidget}) of this WOComponent. You should not use directly this method but instead implement a cache mechanism and use the benefits of the
-	 * methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to preserve the order of this component when presenting this to a user.
+	 * Returns all the radio buttons ({@link IERadioButtonWidget}) of this WOComponent. You should not use directly this method but instead
+	 * implement a cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to
+	 * be used to preserve the order of this component when presenting this to a user.
 	 * 
 	 * @return all the radio buttons contained in this component.
 	 */
@@ -1147,8 +1161,9 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	}
 
 	/**
-	 * Returns all the buttons ({@link IEButtonWidget}) of this WOComponent. You should not use directly this method but instead implement a cache mechanism and use the benefits of the methods
-	 * notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to preserve the order of this component when presenting this to a user.
+	 * Returns all the buttons ({@link IEButtonWidget}) of this WOComponent. You should not use directly this method but instead implement a
+	 * cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to
+	 * preserve the order of this component when presenting this to a user.
 	 * 
 	 * @return all the buttons contained in this component.
 	 */
@@ -1164,8 +1179,9 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	}
 
 	/**
-	 * Returns all the hyperlinks ({@link IEHyperlinkWidget}) of this WOComponent. You should not use directly this method but instead implement a cache mechanism and use the benefits of the methods
-	 * notifyWidgetAdded and notifyWidgetRemoved. This method is intended to be used to preserve the order of this component when presenting this to a user.
+	 * Returns all the hyperlinks ({@link IEHyperlinkWidget}) of this WOComponent. You should not use directly this method but instead
+	 * implement a cache mechanism and use the benefits of the methods notifyWidgetAdded and notifyWidgetRemoved. This method is intended to
+	 * be used to preserve the order of this component when presenting this to a user.
 	 * 
 	 * @return all the hyperlinks contained in this component.
 	 */
@@ -1206,7 +1222,9 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		if (getNameForWidgetMap().getKey(widget) != null)
 			return (String) getNameForWidgetMap().getKey(widget);
 		if (logger.isLoggable(Level.WARNING))
-			logger.warning("Widget " + widget + " had no computed name meaning that it was probably not properly embedded in the WOComponent."
+			logger.warning("Widget "
+					+ widget
+					+ " had no computed name meaning that it was probably not properly embedded in the WOComponent."
 					+ "I will compute its name now, but this can be source of instability in the names of the widgets. You should try to find why that widget was not embedded.");
 		return computeAndStoreNameForWidget(widget);
 	}
@@ -1353,7 +1371,8 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		Enumeration en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IEObject widget = (IEObject) en.nextElement();
-			if (widget instanceof IESequence && ((IESequence) widget).getOperator() != null && (((IESequence) widget).getOperator() instanceof ConditionalOperator))
+			if (widget instanceof IESequence && ((IESequence) widget).getOperator() != null
+					&& (((IESequence) widget).getOperator() instanceof ConditionalOperator))
 				reply.add((IESequence) widget);
 		}
 		return reply;

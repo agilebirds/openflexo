@@ -19,9 +19,6 @@
  */
 package org.openflexo.dg.test;
 
-
-
-
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoTestCase;
@@ -32,108 +29,93 @@ import junit.framework.AssertionFailedError;
 
 public abstract class DGTestCase extends FlexoTestCase {
 
-    public DGTestCase(String name)
-    {
+	public DGTestCase(String name) {
 		super(name);
 	}
 
-    protected static final Logger logger = Logger.
-        getLogger(DGTestCase.class.
-                getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(DGTestCase.class.getPackage().getName());
 
 	@Override
-	protected void assertSynchonized(FlexoResource resource1, FlexoResource resource2)
-	{
+	protected void assertSynchonized(FlexoResource resource1, FlexoResource resource2) {
 		try {
-			assertTrue (resource1.getSynchronizedResources().contains(resource2));
-			assertTrue (resource2.getSynchronizedResources().contains(resource1));
-		}
-		catch (AssertionFailedError e) {
-			logger.severe("RESOURCE synchonization problem: "+resource1+" MUST be synchronized with "+resource2);
+			assertTrue(resource1.getSynchronizedResources().contains(resource2));
+			assertTrue(resource2.getSynchronizedResources().contains(resource1));
+		} catch (AssertionFailedError e) {
+			logger.severe("RESOURCE synchonization problem: " + resource1 + " MUST be synchronized with " + resource2);
 			throw e;
 		}
 	}
 
 	/**
 	 * Assert resource1 depends of resource2
+	 * 
 	 * @param resource1
 	 * @param resource2
 	 */
 	@Override
-	protected void assertDepends(FlexoResource resource1, FlexoResource resource2)
-	{
+	protected void assertDepends(FlexoResource resource1, FlexoResource resource2) {
 		try {
-			assertTrue (resource1.getDependantResources().contains(resource2));
-			assertTrue (resource2.getAlteredResources().contains(resource1));
-		}
-		catch (AssertionFailedError e) {
-			logger.severe("RESOURCE synchonization problem: "+resource1+" MUST depends on "+resource2);
+			assertTrue(resource1.getDependantResources().contains(resource2));
+			assertTrue(resource2.getAlteredResources().contains(resource1));
+		} catch (AssertionFailedError e) {
+			logger.severe("RESOURCE synchonization problem: " + resource1 + " MUST depends on " + resource2);
 			throw e;
 		}
 	}
 
 	/**
 	 * Assert resource1 depends of resource2
+	 * 
 	 * @param resource1
 	 * @param resource2
 	 */
 	@Override
-	protected void assertNotDepends(FlexoResource resource1, FlexoResource resource2)
-	{
+	protected void assertNotDepends(FlexoResource resource1, FlexoResource resource2) {
 		try {
-			assertFalse (resource1.getDependantResources().contains(resource2));
-			assertFalse (resource2.getAlteredResources().contains(resource1));
-		}
-		catch (AssertionFailedError e) {
-			logger.severe("RESOURCE synchonization problem: "+resource1+" SHOULD NOT depends on "+resource2);
+			assertFalse(resource1.getDependantResources().contains(resource2));
+			assertFalse(resource2.getAlteredResources().contains(resource1));
+		} catch (AssertionFailedError e) {
+			logger.severe("RESOURCE synchonization problem: " + resource1 + " SHOULD NOT depends on " + resource2);
 			throw e;
 		}
 	}
 
 	@Override
-	protected void assertNotModified (FlexoStorageResource resource)
-	{
+	protected void assertNotModified(FlexoStorageResource resource) {
 		try {
-			assertFalse (resource.isModified());
-		}
-		catch (AssertionFailedError e) {
-			logger.warning("RESOURCE status problem: "+resource+" MUST be NOT modified ("+resource.getFileName()+")");
+			assertFalse(resource.isModified());
+		} catch (AssertionFailedError e) {
+			logger.warning("RESOURCE status problem: " + resource + " MUST be NOT modified (" + resource.getFileName() + ")");
 			throw e;
 		}
 	}
 
 	@Override
-	protected void assertModified (FlexoStorageResource resource)
-	{
+	protected void assertModified(FlexoStorageResource resource) {
 		try {
-			assertTrue (resource.isModified());
-		}
-		catch (AssertionFailedError e) {
-			logger.warning("RESOURCE status problem: "+resource+" MUST be modified");
+			assertTrue(resource.isModified());
+		} catch (AssertionFailedError e) {
+			logger.warning("RESOURCE status problem: " + resource + " MUST be modified");
 			throw e;
 		}
 	}
 
 	@Override
-	protected void assertNotLoaded (FlexoStorageResource resource)
-	{
+	protected void assertNotLoaded(FlexoStorageResource resource) {
 		try {
-			assertFalse (resource.isLoaded());
-		}
-		catch (AssertionFailedError e) {
-			logger.warning("RESOURCE status problem: "+resource+" MUST be NOT loaded");
+			assertFalse(resource.isLoaded());
+		} catch (AssertionFailedError e) {
+			logger.warning("RESOURCE status problem: " + resource + " MUST be NOT loaded");
 			throw e;
 		}
 	}
 
 	@Override
-	protected void assertLoaded (FlexoStorageResource resource)
-	{
+	protected void assertLoaded(FlexoStorageResource resource) {
 		try {
-			assertTrue (resource.isLoaded());
-		}
-		catch (AssertionFailedError e) {
-			logger.warning("RESOURCE status problem: "+resource+" MUST be loaded");
+			assertTrue(resource.isLoaded());
+		} catch (AssertionFailedError e) {
+			logger.warning("RESOURCE status problem: " + resource + " MUST be loaded");
 			throw e;
 		}
 	}

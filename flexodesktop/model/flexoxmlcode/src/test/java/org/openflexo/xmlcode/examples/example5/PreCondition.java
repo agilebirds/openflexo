@@ -24,54 +24,47 @@ import java.util.Vector;
 
 import org.openflexo.xmlcode.XMLSerializable;
 
-
 /**
- * Class <code>PreCondition</code> is intented to represent an oriented edge object in
- * XML coding/decoding example.
+ * Class <code>PreCondition</code> is intented to represent an oriented edge object in XML coding/decoding example.
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  */
-public class PreCondition implements XMLSerializable
-{
+public class PreCondition implements XMLSerializable {
 
-    public Node attachedNode;
-    public Vector incomingEdges;
+	public Node attachedNode;
+	public Vector incomingEdges;
 
-    public int identifier;
+	public int identifier;
 
-    public PreCondition()
-    {
-        super();
-        attachedNode = null;
-        incomingEdges = new Vector();
-    }
+	public PreCondition() {
+		super();
+		attachedNode = null;
+		incomingEdges = new Vector();
+	}
 
-    public PreCondition(int anIdentifier, Node node)
-    {
-        this();
-        attachedNode = node;
-        attachedNode.preConditions.add(this);
-        identifier = anIdentifier;
-    }
+	public PreCondition(int anIdentifier, Node node) {
+		this();
+		attachedNode = node;
+		attachedNode.preConditions.add(this);
+		identifier = anIdentifier;
+	}
 
-    public String toShortString()
-    {
-        return "PreCondition:" + identifier;
-    }
+	public String toShortString() {
+		return "PreCondition:" + identifier;
+	}
 
-   @Override
-public String toString()
-    {
-        String returned = " [ PreCondition "+identifier+" attached to node id ";
-        returned += (attachedNode == null ? -1 : attachedNode.identifier) + " receiving edges : ";
-        boolean isFirst = true;
-        for (Enumeration en=incomingEdges.elements(); en.hasMoreElements();) {
-            Edge edge = (Edge)en.nextElement();
-            returned += (isFirst?"":",")+edge.identifier;
-            isFirst = false;
-        }
-        returned += " ]";
-        return returned;
-    }
+	@Override
+	public String toString() {
+		String returned = " [ PreCondition " + identifier + " attached to node id ";
+		returned += (attachedNode == null ? -1 : attachedNode.identifier) + " receiving edges : ";
+		boolean isFirst = true;
+		for (Enumeration en = incomingEdges.elements(); en.hasMoreElements();) {
+			Edge edge = (Edge) en.nextElement();
+			returned += (isFirst ? "" : ",") + edge.identifier;
+			isFirst = false;
+		}
+		returned += " ]";
+		return returned;
+	}
 
 }

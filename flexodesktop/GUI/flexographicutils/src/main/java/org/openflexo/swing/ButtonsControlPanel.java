@@ -40,30 +40,31 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 /**
- * This class provides a common way to create and maintain a panel containing JButton stored with
- * a FlowLayout. Support provided by this class are mainly focus traversable policy management. Buttons
- * stored in this panel are automatically managed according to a common focus management scheme which could
- * be exported to parent components with <pre>applyFocusTraversablePolicyTo(Container,boolean)</pre>
+ * This class provides a common way to create and maintain a panel containing JButton stored with a FlowLayout. Support provided by this
+ * class are mainly focus traversable policy management. Buttons stored in this panel are automatically managed according to a common focus
+ * management scheme which could be exported to parent components with
+ * 
+ * <pre>
+ * applyFocusTraversablePolicyTo(Container,boolean)
+ * </pre>
  * 
  * @author sylvain
- *
+ * 
  */
 public class ButtonsControlPanel extends JPanel {
 
 	Vector<JButton> _buttons;
-	
-	public ButtonsControlPanel()
-	{
+
+	public ButtonsControlPanel() {
 		super();
 		setLayout(new FlowLayout());
 		_buttons = new Vector<JButton>();
-        setFocusTraversalPolicyProvider(true);
-        setFocusTraversalPolicy(new ButtonsControlPanelFocusTraversalPolicy());
+		setFocusTraversalPolicyProvider(true);
+		setFocusTraversalPolicy(new ButtonsControlPanelFocusTraversalPolicy());
 
 	}
-	
-	public JButton addButton(String buttonName, ActionListener listener)
-	{
+
+	public JButton addButton(String buttonName, ActionListener listener) {
 		final JButton returned = new JButton();
 		returned.setText(localizedForKeyAndButton(buttonName, returned));
 		returned.addActionListener(listener);
@@ -73,10 +74,11 @@ public class ButtonsControlPanel extends JPanel {
 			public void focusGained(FocusEvent e) {
 				returned.setSelected(true);
 			}
+
 			@Override
 			public void focusLost(FocusEvent e) {
 				returned.setSelected(false);
-			}			
+			}
 		});
 		returned.addKeyListener(new KeyAdapter() {
 			@Override
@@ -90,16 +92,15 @@ public class ButtonsControlPanel extends JPanel {
 		add(returned);
 		return returned;
 	}
-	
+
 	@Override
-	public void remove(Component comp)
-	{
+	public void remove(Component comp) {
 		super.remove(comp);
-		if (_buttons.contains(comp)) _buttons.remove(comp);
+		if (_buttons.contains(comp))
+			_buttons.remove(comp);
 	}
-	
-	public void requestFocusInFirstButton()
-	{
+
+	public void requestFocusInFirstButton() {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -111,107 +112,121 @@ public class ButtonsControlPanel extends JPanel {
 		});
 	}
 
-	public void applyFocusTraversablePolicyTo(Container container, boolean requestFocus)
-	{
-		
+	public void applyFocusTraversablePolicyTo(Container container, boolean requestFocus) {
+
 		container.setFocusTraversalPolicyProvider(true);
 		container.setFocusTraversalPolicy(getFocusTraversalPolicy());
-		
-		Set<AWTKeyStroke> set = container.getFocusTraversalKeys  ( KeyboardFocusManager.DOWN_CYCLE_TRAVERSAL_KEYS ) ; 
-		set = new HashSet<AWTKeyStroke>(set) ; 
-		KeyStroke right = KeyStroke.getKeyStroke ("RIGHT"); 
-		set.add(right); 
-		KeyStroke down = KeyStroke.getKeyStroke ("DOWN"); 
-		set.add(down) ; 
-		KeyStroke tab = KeyStroke.getKeyStroke("TAB"); 
-		set.add(tab) ; 
-		container.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, set); 
-		set = container.getFocusTraversalKeys  ( KeyboardFocusManager.UP_CYCLE_TRAVERSAL_KEYS ) ; 
-		set = new HashSet<AWTKeyStroke>(set) ; 
-		KeyStroke left = KeyStroke.getKeyStroke("LEFT") ; 
-		set.add(left); 
-		KeyStroke up = KeyStroke.getKeyStroke("UP") ; 
-		set.add(up); 
+
+		Set<AWTKeyStroke> set = container.getFocusTraversalKeys(KeyboardFocusManager.DOWN_CYCLE_TRAVERSAL_KEYS);
+		set = new HashSet<AWTKeyStroke>(set);
+		KeyStroke right = KeyStroke.getKeyStroke("RIGHT");
+		set.add(right);
+		KeyStroke down = KeyStroke.getKeyStroke("DOWN");
+		set.add(down);
+		KeyStroke tab = KeyStroke.getKeyStroke("TAB");
+		set.add(tab);
+		container.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, set);
+		set = container.getFocusTraversalKeys(KeyboardFocusManager.UP_CYCLE_TRAVERSAL_KEYS);
+		set = new HashSet<AWTKeyStroke>(set);
+		KeyStroke left = KeyStroke.getKeyStroke("LEFT");
+		set.add(left);
+		KeyStroke up = KeyStroke.getKeyStroke("UP");
+		set.add(up);
 		container.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, set);
 
-		if (requestFocus) requestFocusInFirstButton();
+		if (requestFocus)
+			requestFocusInFirstButton();
 
 	}
 
-	class ButtonsControlPanelFocusTraversalPolicy extends FocusTraversalPolicy
-	{
+	class ButtonsControlPanelFocusTraversalPolicy extends FocusTraversalPolicy {
 
 		@Override
-		public Component getComponentAfter(Container aContainer, Component aComponent) 
-		{
-			if (allButtonsAreDisabled()) return null;
+		public Component getComponentAfter(Container aContainer, Component aComponent) {
+			if (allButtonsAreDisabled())
+				return null;
 			JButton returned = null;
 			int index = _buttons.indexOf(aComponent);
 			if (index > -1) {
-				int returnedIndex = index+1;
-				if (returnedIndex == _buttons.size()) returnedIndex = 0;
+				int returnedIndex = index + 1;
+				if (returnedIndex == _buttons.size())
+					returnedIndex = 0;
 				returned = _buttons.elementAt(returnedIndex);
 			}
-			if (returned == null) return null;
-			if (returned.isEnabled()) return returned;
-			else return getComponentAfter(aContainer,returned);
+			if (returned == null)
+				return null;
+			if (returned.isEnabled())
+				return returned;
+			else
+				return getComponentAfter(aContainer, returned);
 		}
 
 		@Override
-		public Component getComponentBefore(Container aContainer, Component aComponent) 
-		{
-			if (allButtonsAreDisabled()) return null;
+		public Component getComponentBefore(Container aContainer, Component aComponent) {
+			if (allButtonsAreDisabled())
+				return null;
 			JButton returned = null;
 			int index = _buttons.indexOf(aComponent);
 			if (index > -1) {
-				int returnedIndex = index-1;
-				if (returnedIndex == -1) returnedIndex = _buttons.size()-1;
+				int returnedIndex = index - 1;
+				if (returnedIndex == -1)
+					returnedIndex = _buttons.size() - 1;
 				returned = _buttons.elementAt(returnedIndex);
 			}
-			if (returned == null) return null;
-			if (returned.isEnabled()) return returned;
-			else return getComponentBefore(aContainer,returned);
+			if (returned == null)
+				return null;
+			if (returned.isEnabled())
+				return returned;
+			else
+				return getComponentBefore(aContainer, returned);
 		}
 
 		@Override
-		public Component getDefaultComponent(Container aContainer) 
-		{
+		public Component getDefaultComponent(Container aContainer) {
 			return getFirstComponent(aContainer);
 		}
 
 		@Override
-		public Component getFirstComponent(Container aContainer) 
-		{
-			if (allButtonsAreDisabled()) return null;
+		public Component getFirstComponent(Container aContainer) {
+			if (allButtonsAreDisabled())
+				return null;
 			JButton returned = null;
-			if (_buttons.size() > 0) returned = _buttons.firstElement();
-			if (returned == null) return null;
-			if (returned.isEnabled()) return returned;
-			else return getComponentAfter(aContainer,returned);
+			if (_buttons.size() > 0)
+				returned = _buttons.firstElement();
+			if (returned == null)
+				return null;
+			if (returned.isEnabled())
+				return returned;
+			else
+				return getComponentAfter(aContainer, returned);
 		}
 
 		@Override
-		public Component getLastComponent(Container aContainer) 
-		{
-			if (allButtonsAreDisabled()) return null;
+		public Component getLastComponent(Container aContainer) {
+			if (allButtonsAreDisabled())
+				return null;
 			JButton returned = null;
-			if (_buttons.size() > 0) returned = _buttons.lastElement();
-			if (returned == null) return null;
-			if (returned.isEnabled()) return returned;
-			else return getComponentBefore(aContainer,returned);
+			if (_buttons.size() > 0)
+				returned = _buttons.lastElement();
+			if (returned == null)
+				return null;
+			if (returned.isEnabled())
+				return returned;
+			else
+				return getComponentBefore(aContainer, returned);
 		}
-		
-		private boolean allButtonsAreDisabled()
-		{
-			for (JButton b : _buttons) if (b.isEnabled()) return false;
+
+		private boolean allButtonsAreDisabled() {
+			for (JButton b : _buttons)
+				if (b.isEnabled())
+					return false;
 			return true;
 		}
-		
+
 	}
-	
+
 	// Override if required
-	public String localizedForKeyAndButton(String key, JButton component)
-	{
+	public String localizedForKeyAndButton(String key, JButton component) {
 		return key;
 	}
 }

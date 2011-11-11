@@ -26,38 +26,34 @@ public class QuadCurveWithThreePointsConstruction extends QuadCurveConstruction 
 	public PointConstruction startPointConstruction;
 	public PointConstruction controlPointConstruction;
 	public PointConstruction endPointConstruction;
-	
-	public QuadCurveWithThreePointsConstruction() 
-	{
+
+	public QuadCurveWithThreePointsConstruction() {
 		super();
 	}
-	
-	public QuadCurveWithThreePointsConstruction(PointConstruction pointConstruction1, PointConstruction pointConstruction2, PointConstruction pointConstruction3) 
-	{
+
+	public QuadCurveWithThreePointsConstruction(PointConstruction pointConstruction1, PointConstruction pointConstruction2,
+			PointConstruction pointConstruction3) {
 		this();
 		this.startPointConstruction = pointConstruction1;
 		this.controlPointConstruction = pointConstruction2;
 		this.endPointConstruction = pointConstruction3;
 	}
-	
+
 	@Override
-	protected FGEQuadCurve computeData()
-	{
-		return new FGEQuadCurve(startPointConstruction.getPoint(),controlPointConstruction.getPoint(),endPointConstruction.getPoint());
+	protected FGEQuadCurve computeData() {
+		return new FGEQuadCurve(startPointConstruction.getPoint(), controlPointConstruction.getPoint(), endPointConstruction.getPoint());
 	}
 
 	@Override
-	public String toString()
-	{
-		return "QuadCurveWithThreePointsConstruction[\n"+"> "+startPointConstruction.toString()+"\n> "+controlPointConstruction.toString()+"\n> "+endPointConstruction.toString()+"\n]";
+	public String toString() {
+		return "QuadCurveWithThreePointsConstruction[\n" + "> " + startPointConstruction.toString() + "\n> "
+				+ controlPointConstruction.toString() + "\n> " + endPointConstruction.toString() + "\n]";
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public GeometricConstruction[] getDepends() {
 		GeometricConstruction[] returned = { startPointConstruction, controlPointConstruction, endPointConstruction };
 		return returned;
 	}
-
 
 }

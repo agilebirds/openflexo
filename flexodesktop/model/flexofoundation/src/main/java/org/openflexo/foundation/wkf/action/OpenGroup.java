@@ -29,81 +29,73 @@ import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.wkf.WKFGroup;
 import org.openflexo.localization.FlexoLocalization;
 
-public class OpenGroup extends FlexoUndoableAction<OpenGroup,WKFGroup,WKFGroup> 
-{
+public class OpenGroup extends FlexoUndoableAction<OpenGroup, WKFGroup, WKFGroup> {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(OpenGroup.class.getPackage().getName());
 
-    public static FlexoActionType<OpenGroup,WKFGroup,WKFGroup> actionType = new FlexoActionType<OpenGroup,WKFGroup,WKFGroup> ("open_group",FlexoActionType.defaultGroup) {
+	public static FlexoActionType<OpenGroup, WKFGroup, WKFGroup> actionType = new FlexoActionType<OpenGroup, WKFGroup, WKFGroup>(
+			"open_group", FlexoActionType.defaultGroup) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public OpenGroup makeNewAction(WKFGroup focusedObject, Vector<WKFGroup> globalSelection, FlexoEditor editor) 
-        {
-            return new OpenGroup(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public OpenGroup makeNewAction(WKFGroup focusedObject, Vector<WKFGroup> globalSelection, FlexoEditor editor) {
+			return new OpenGroup(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(WKFGroup object, Vector<WKFGroup> globalSelection) 
-        {
-            return false;
-        }
+		@Override
+		protected boolean isVisibleForSelection(WKFGroup object, Vector<WKFGroup> globalSelection) {
+			return false;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(WKFGroup object, Vector<WKFGroup> globalSelection) 
-        {
-            return object!=null;
-        }
-                
-    };
-    
-    static {
-    	FlexoModelObject.addActionForClass(actionType, WKFGroup.class);
-    }
-    
-    private Boolean visibility;
-    
-    OpenGroup (WKFGroup focusedObject, Vector<WKFGroup> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+		@Override
+		protected boolean isEnabledForSelection(WKFGroup object, Vector<WKFGroup> globalSelection) {
+			return object != null;
+		}
 
-    @Override
-	protected void doAction(Object context) 
-    {
-    	getFocusedObject().setIsVisible(visibility());
-    }
-    
-    @Override
-	public String getLocalizedName ()
-    {
-        if (getFocusedObject().isExpanded()) {
-            return FlexoLocalization.localizedForKey("close_group");
-        } else {
-            return FlexoLocalization.localizedForKey("open_group");
-        }
-        
-    }
+	};
 
-    @Override
-	protected void undoAction(Object context) 
-    {
-    	setVisibility(!visibility());
-        doAction(context);
-    }
+	static {
+		FlexoModelObject.addActionForClass(actionType, WKFGroup.class);
+	}
 
-    @Override
-	protected void redoAction(Object context)
-    {
-    	setVisibility(!visibility());
-        doAction(context);
-    }
+	private Boolean visibility;
+
+	OpenGroup(WKFGroup focusedObject, Vector<WKFGroup> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) {
+		getFocusedObject().setIsVisible(visibility());
+	}
+
+	@Override
+	public String getLocalizedName() {
+		if (getFocusedObject().isExpanded()) {
+			return FlexoLocalization.localizedForKey("close_group");
+		} else {
+			return FlexoLocalization.localizedForKey("open_group");
+		}
+
+	}
+
+	@Override
+	protected void undoAction(Object context) {
+		setVisibility(!visibility());
+		doAction(context);
+	}
+
+	@Override
+	protected void redoAction(Object context) {
+		setVisibility(!visibility());
+		doAction(context);
+	}
 
 	public boolean visibility() {
-		if (visibility==null)
+		if (visibility == null)
 			visibility = !getFocusedObject().getIsVisible();
 		return visibility;
 	}

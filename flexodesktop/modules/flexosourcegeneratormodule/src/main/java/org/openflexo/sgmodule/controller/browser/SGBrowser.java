@@ -35,62 +35,55 @@ import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.GeneratedOutput;
 import org.openflexo.sgmodule.controller.SGController;
 
-
 /**
  * Browser for Code Generator module
  * 
  * @author sguerin
  * 
  */
-public class SGBrowser extends ConfigurableProjectBrowser implements FlexoObserver
-{
+public class SGBrowser extends ConfigurableProjectBrowser implements FlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(SGBrowser.class.getPackage().getName());
 
 	private SGController _controller;
-	
+
 	// ==========================================================================
 	// ============================= Constructor
 	// ================================
 	// ==========================================================================
 
-	public SGBrowser(SGController controller)
-	{
-		super(makeDefaultBrowserConfiguration(controller.getProject().getGeneratedSources()),controller.getSelectionManager());
+	public SGBrowser(SGController controller) {
+		super(makeDefaultBrowserConfiguration(controller.getProject().getGeneratedSources()), controller.getSelectionManager());
 		_controller = controller;
 		update();
 	}
 
 	@Override
-	public void update(FlexoObservable o, DataModification arg)
-	{
+	public void update(FlexoObservable o, DataModification arg) {
 		if (logger.isLoggable(Level.FINE))
 			logger.fine("GeneratorBrowser update");
 	}
 
-	public static BrowserConfiguration makeDefaultBrowserConfiguration(final GeneratedOutput generatedCode)
-	{
+	public static BrowserConfiguration makeDefaultBrowserConfiguration(final GeneratedOutput generatedCode) {
 		BrowserConfiguration returned = new SGBrowserConfiguration(generatedCode);
 		return returned;
 	}
 
-	public static BrowserConfiguration makeBrowserConfigurationForFileHistory(final CGFile file)
-	{
-		BrowserConfiguration returned = new SGBrowserConfiguration((file!=null?file.getGeneratedCode():null)) {
+	public static BrowserConfiguration makeBrowserConfigurationForFileHistory(final CGFile file) {
+		BrowserConfiguration returned = new SGBrowserConfiguration((file != null ? file.getGeneratedCode() : null)) {
 			@Override
-			public CGFile getDefaultRootObject()
-			{
+			public CGFile getDefaultRootObject() {
 				return file;
 			}
+
 			@Override
-			public void configure(ProjectBrowser browser) 
-			{
+			public void configure(ProjectBrowser browser) {
 				browser.setFilterStatus(BrowserElementType.FILE_RELEASE_VERSION, BrowserFilterStatus.SHOW);
 			}
 		};
 		return returned;
 	}
-	
+
 	private CustomBrowserFilter allFilesAndDirectoryFilter;
 	private CustomBrowserFilter upToDateFilesFilter;
 	private CustomBrowserFilter needsGenerationFilter;
@@ -101,12 +94,11 @@ public class SGBrowser extends ConfigurableProjectBrowser implements FlexoObserv
 	private CustomBrowserFilter needsReinjectingFilter;
 	private CustomBrowserFilter otherFilesFilter;
 
-	public CustomBrowserFilter getAllFilesAndDirectoryFilter()	{
+	public CustomBrowserFilter getAllFilesAndDirectoryFilter() {
 		return allFilesAndDirectoryFilter;
 	}
 
-	public void setAllFilesAndDirectoryFilter(
-			CustomBrowserFilter allFilesAndDirectoryFilter) {
+	public void setAllFilesAndDirectoryFilter(CustomBrowserFilter allFilesAndDirectoryFilter) {
 		this.allFilesAndDirectoryFilter = allFilesAndDirectoryFilter;
 	}
 
@@ -130,8 +122,7 @@ public class SGBrowser extends ConfigurableProjectBrowser implements FlexoObserv
 		return generationModifiedFilter;
 	}
 
-	public void setGenerationModifiedFilter(
-			CustomBrowserFilter generationModifiedFilter) {
+	public void setGenerationModifiedFilter(CustomBrowserFilter generationModifiedFilter) {
 		this.generationModifiedFilter = generationModifiedFilter;
 	}
 
@@ -155,8 +146,7 @@ public class SGBrowser extends ConfigurableProjectBrowser implements FlexoObserv
 		return unresolvedConflictsFilter;
 	}
 
-	public void setUnresolvedConflictsFilter(
-			CustomBrowserFilter unresolvedConflictsFilter) {
+	public void setUnresolvedConflictsFilter(CustomBrowserFilter unresolvedConflictsFilter) {
 		this.unresolvedConflictsFilter = unresolvedConflictsFilter;
 	}
 
@@ -168,18 +158,16 @@ public class SGBrowser extends ConfigurableProjectBrowser implements FlexoObserv
 		this.upToDateFilesFilter = upToDateFilesFilter;
 	}
 
-	public CustomBrowserFilter getNeedsReinjectingFilter() 
-	{
+	public CustomBrowserFilter getNeedsReinjectingFilter() {
 		return needsReinjectingFilter;
 	}
 
-	public void setNeedsReinjectingFilter(CustomBrowserFilter needsReinjectingFilter) 
-	{
+	public void setNeedsReinjectingFilter(CustomBrowserFilter needsReinjectingFilter) {
 		this.needsReinjectingFilter = needsReinjectingFilter;
 	}
 
 	public SGController getController() {
 		return _controller;
 	}
-	
+
 }

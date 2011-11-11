@@ -22,33 +22,29 @@ package org.openflexo.foundation.param;
 import org.openflexo.foundation.utils.FlexoColor;
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
 public class ColorParameter extends ParameterDefinition<FlexoColor> {
 
-    public ColorParameter(String name, String label, FlexoColor defaultValue)
-    {
-        super(name,label,defaultValue);
-        setValue(defaultValue);
-    }
-    
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.COLOR;
-    }
+	public ColorParameter(String name, String label, FlexoColor defaultValue) {
+		super(name, label, defaultValue);
+		setValue(defaultValue);
+	}
 
-   /*public FlexoColor getFlexoColorValue()
-   {
-       if (getValue() instanceof FlexoColor) {
-           return ((Integer)getValue()).intValue();
-       }
-       else return super.getIntegerValue();
-   }
-   
-   public void setFlexoColorValue(FlexoColor anInteger)
-   {
-       setValue(new Integer(anInteger));
-   }*/
-   
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.COLOR;
+	}
+
+	/*public FlexoColor getFlexoColorValue()
+	{
+	    if (getValue() instanceof FlexoColor) {
+	        return ((Integer)getValue()).intValue();
+	    }
+	    else return super.getIntegerValue();
+	}
+	
+	public void setFlexoColorValue(FlexoColor anInteger)
+	{
+	    setValue(new Integer(anInteger));
+	}*/
 
 }

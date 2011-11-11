@@ -41,130 +41,118 @@ import org.openflexo.xmlcode.XMLMapping;
 import org.openflexo.xmlcode.XMLSerializable;
 import org.xml.sax.SAXException;
 
+public class HSIndex extends FlexoObject implements XMLSerializable {
 
-public class HSIndex extends FlexoObject implements XMLSerializable
-{
+	private static final Logger logger = Logger.getLogger(HSIndex.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(HSIndex.class.getPackage().getName());
+	private DocResourceCenter _drc;
+	private Language _language;
+	private Vector<HSIndexEntry> _rootEntries;
+	public String version = "1.0";
+	private File _indexFile;
 
-    private DocResourceCenter _drc;
-    private Language _language;
-    private Vector<HSIndexEntry> _rootEntries;
-    public String version = "1.0";
-    private File _indexFile;
+	private HelpSetConfiguration configuration;
 
-    private HelpSetConfiguration configuration;
+	public HSIndex(DocResourceCenter drc, Language language, File indexFile, HelpSetConfiguration config) {
+		_drc = drc;
+		_language = language;
+		_indexFile = indexFile;
+		configuration = config;
+		getRootEntries();
+	}
 
-   public HSIndex (DocResourceCenter drc, Language language, File indexFile, HelpSetConfiguration config)
-   {
-       _drc = drc;
-       _language = language;
-       _indexFile = indexFile;
-       configuration = config;
-       getRootEntries();
-  }
+	public Vector<HSIndexEntry> getRootEntries() {
+		if (_rootEntries == null) {
+			_rootEntries = new Vector<HSIndexEntry>();
+			for (DocItem next : _drc.getAllItems()) {
+				if (next.isIncluded(configuration)) {
+					if ((next.getInheritanceParentItem() == null) && (!next.getIsEmbedded()) && (next.isPublished())) {
+						logger.fine("Generate index entry for " + next);
+						_rootEntries.add(new HSIndexEntry(next));
+					}
+				} else {
+					logger.fine("Ignoring " + next);
+				}
+			}
+		}
+		return _rootEntries;
+	}
 
-   public Vector<HSIndexEntry> getRootEntries()
-   {
-       if (_rootEntries == null) {
-           _rootEntries = new Vector<HSIndexEntry>();
-           for (DocItem next : _drc.getAllItems()) {
-               if (next.isIncluded(configuration)) {
-                   if ((next.getInheritanceParentItem() == null) && (!next.getIsEmbedded()) && (next.isPublished())) {
-                       logger.fine("Generate index entry for "+next);
-                       _rootEntries.add(new HSIndexEntry(next));
-                   }
-               }
-               else {
-                   logger.fine("Ignoring "+next);
-               }
-           }
-       }
-       return _rootEntries;
-   }
+	public class HSIndexEntry extends FlexoObject implements XMLSerializable {
+		public DocItem docItem;
+		public Vector entryChilds;
+		public String text;
 
-   public class HSIndexEntry extends FlexoObject implements XMLSerializable
-   {
-       public DocItem docItem;
-       public Vector entryChilds;
-       public String text;
+		public HSIndexEntry(DocItem docItem) {
+			this.docItem = docItem;
+			text = docItem.getTitle(_language);
+			if (text == null) {
+				text = docItem.getIdentifier();
+			}
 
-       public HSIndexEntry(DocItem docItem)
-       {
-           this.docItem = docItem;
-           text = docItem.getTitle(_language);
-           if (text == null) {
-               text = docItem.getIdentifier();
-           }
+			entryChilds = new Vector();
+			for (Enumeration en = docItem.getInheritanceChildItems().elements(); en.hasMoreElements();) {
+				DocItem next = (DocItem) en.nextElement();
+				if (next.isPublished())
+					entryChilds.add(new HSIndexEntry(next));
+			}
 
-           entryChilds = new Vector();
-           for (Enumeration en=docItem.getInheritanceChildItems().elements(); en.hasMoreElements();) {
-               DocItem next = (DocItem)en.nextElement();
-               if (next.isPublished())
-            	   entryChilds.add(new HSIndexEntry(next));
-           }
+		}
+	}
 
-       }
-   }
+	protected void generate() {
+		try {
+			FileOutputStream out = new FileOutputStream(_indexFile);
+			XMLCoder.encodeObjectWithMapping(this, getIndexMapping(), out, getIndexDocType());
+			out.flush();
+			out.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-   protected void generate()
-   {
-        try {
-           FileOutputStream out = new FileOutputStream(_indexFile);
-           XMLCoder.encodeObjectWithMapping(this, getIndexMapping(), out, getIndexDocType());
-           out.flush();
-           out.close();
-       } catch (Exception e) {
-           e.printStackTrace();
-       }
-  }
+	private static XMLMapping _indexMapping;
 
-   private static XMLMapping _indexMapping;
+	public static XMLMapping getIndexMapping() {
+		if (_indexMapping == null) {
+			File hsIndexModelFile;
+			hsIndexModelFile = new FileResource("Models/HSIndexModel.xml");
+			if (!hsIndexModelFile.exists()) {
+				if (logger.isLoggable(Level.WARNING))
+					logger.warning("File " + hsIndexModelFile.getAbsolutePath() + " doesn't exist. Maybe you have to check your paths ?");
+				return null;
+			} else {
+				try {
+					_indexMapping = new XMLMapping(hsIndexModelFile);
+				} catch (InvalidModelException e) {
+					// Warns about the exception
+					if (logger.isLoggable(Level.WARNING))
+						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					e.printStackTrace();
+				} catch (IOException e) {
+					// Warns about the exception
+					if (logger.isLoggable(Level.WARNING))
+						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					e.printStackTrace();
+				} catch (SAXException e) {
+					// Warns about the exception
+					if (logger.isLoggable(Level.WARNING))
+						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					e.printStackTrace();
+				} catch (ParserConfigurationException e) {
+					// Warns about the exception
+					if (logger.isLoggable(Level.WARNING))
+						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					e.printStackTrace();
+				}
+			}
+		}
+		return _indexMapping;
+	}
 
-   public static XMLMapping getIndexMapping()
-    {
-        if (_indexMapping == null) {
-            File hsIndexModelFile;
-            hsIndexModelFile = new FileResource("Models/HSIndexModel.xml");
-            if (!hsIndexModelFile.exists()) {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("File " + hsIndexModelFile.getAbsolutePath() + " doesn't exist. Maybe you have to check your paths ?");
-                return null;
-            } else {
-                try {
-                    _indexMapping = new XMLMapping(hsIndexModelFile);
-                } catch (InvalidModelException e) {
-                    // Warns about the exception
-                    if (logger.isLoggable(Level.WARNING))
-                        logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    // Warns about the exception
-                    if (logger.isLoggable(Level.WARNING))
-                        logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-                    e.printStackTrace();
-                } catch (SAXException e) {
-                    // Warns about the exception
-                    if (logger.isLoggable(Level.WARNING))
-                        logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-                    e.printStackTrace();
-                } catch (ParserConfigurationException e) {
-                    // Warns about the exception
-                    if (logger.isLoggable(Level.WARNING))
-                        logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-                    e.printStackTrace();
-                }
-            }
-        }
-        return _indexMapping;
-    }
-
-   public static DocType getIndexDocType()
-   {
-       return new DocType("index",
-               "-//Sun Microsystems Inc.//DTD JavaHelp Index Version 1.0//EN",
-               "http://java.sun.com/products/javahelp/index_1_0.dtd");
-   }
-
+	public static DocType getIndexDocType() {
+		return new DocType("index", "-//Sun Microsystems Inc.//DTD JavaHelp Index Version 1.0//EN",
+				"http://java.sun.com/products/javahelp/index_1_0.dtd");
+	}
 
 }

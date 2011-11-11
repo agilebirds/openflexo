@@ -21,7 +21,6 @@ package org.openflexo.doceditor.controller;
 
 import java.util.logging.Logger;
 
-
 import org.openflexo.FlexoCst;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.doceditor.controller.action.DEControllerActionInitializer;
@@ -29,7 +28,6 @@ import org.openflexo.doceditor.menu.DEMenuBar;
 import org.openflexo.doceditor.view.DEFrame;
 import org.openflexo.doceditor.view.DEMainPane;
 import org.openflexo.doceditor.view.listener.DEKeyEventListener;
-
 
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
@@ -60,8 +58,7 @@ import org.openflexo.view.menu.FlexoMenuBar;
  * 
  * @author gpolet
  */
-public class DEController extends FlexoController implements FlexoObserver, SelectionManagingController
-{
+public class DEController extends FlexoController implements FlexoObserver, SelectionManagingController {
 
 	protected static final Logger logger = Logger.getLogger(DEController.class.getPackage().getName());
 
@@ -89,8 +86,7 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 	 * @param workflowFile
 	 * @throws Exception
 	 */
-	public DEController(InteractiveFlexoEditor projectEditor, FlexoModule module) throws Exception
-	{
+	public DEController(InteractiveFlexoEditor projectEditor, FlexoModule module) throws Exception {
 		super(projectEditor, module);
 
 		addToPerspectives(DOCEDITOR_PERSPECTIVE);
@@ -109,27 +105,25 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 	}
 
 	protected DEClipboard createClipboard(DESelectionManager selectionManager) {
-		return new DEClipboard(selectionManager, getEditorMenuBar().getEditMenu(this).copyItem, getEditorMenuBar().getEditMenu(this).pasteItem, getEditorMenuBar().getEditMenu(this).cutItem);
+		return new DEClipboard(selectionManager, getEditorMenuBar().getEditMenu(this).copyItem,
+				getEditorMenuBar().getEditMenu(this).pasteItem, getEditorMenuBar().getEditMenu(this).cutItem);
 	}
 
 	protected DEContextualMenuManager createContextualMenuManager(DESelectionManager selectionManager) {
-		return new DEContextualMenuManager(selectionManager,getEditor(),this);
+		return new DEContextualMenuManager(selectionManager, getEditor(), this);
 	}
 
 	/**
-	 * Creates a new instance of MenuBar for the module this controller refers
-	 * to
+	 * Creates a new instance of MenuBar for the module this controller refers to
 	 * 
 	 * @return
 	 */
 	@Override
-	protected FlexoMenuBar createNewMenuBar()
-	{
+	protected FlexoMenuBar createNewMenuBar() {
 		return new DEMenuBar(this);
 	}
 
-	public DEMenuBar getEditorMenuBar()
-	{
+	public DEMenuBar getEditorMenuBar() {
 		return _generatorMenuBar;
 	}
 
@@ -137,104 +131,89 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 	 * public ModuleView getCurrentModuleView() { return null; }
 	 */
 
-	public DEKeyEventListener getGeneratorKeyEventListener()
-	{
+	public DEKeyEventListener getGeneratorKeyEventListener() {
 		return _generatorKeyEventListener;
 	}
 
 	@Override
-	protected FlexoMainPane createMainPane()
-	{
+	protected FlexoMainPane createMainPane() {
 		return new DEMainPane(this, getEmptyPanel(), getFlexoFrame());
 	}
 
 	@Override
-	public DEControllerActionInitializer createControllerActionInitializer()
-	{
+	public DEControllerActionInitializer createControllerActionInitializer() {
 		return new DEControllerActionInitializer(this);
 	}
 
-	public DEKeyEventListener getKeyEventListener()
-	{
+	public DEKeyEventListener getKeyEventListener() {
 		return _generatorKeyEventListener;
 	}
 
-	public void initProgressWindow(String msg, int steps)
-	{
+	public void initProgressWindow(String msg, int steps) {
 		ProgressWindow.showProgressWindow(msg, steps);
 	}
 
-	public void refreshProgressWindow(String msg)
-	{
+	public void refreshProgressWindow(String msg) {
 		ProgressWindow.setProgressInstance(msg);
 	}
 
-	public void refreshSecondaryProgressWindow(String msg)
-	{
+	public void refreshSecondaryProgressWindow(String msg) {
 		ProgressWindow.setSecondaryProgressInstance(msg);
 	}
 
-	public void disposeProgressWindow()
-	{
+	public void disposeProgressWindow() {
 		ProgressWindow.hideProgressWindow();
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 	}
 
 	/**
 	 * 
 	 */
-	 @Override
-	public void initInspectors()
-	{
+	@Override
+	public void initInspectors() {
 		super.initInspectors();
 		getDESelectionManager().addObserver(getSharedInspectorController());
 	}
 
-	 // =========================================================
-	 // ================ Selection management ===================
-	 // =========================================================
+	// =========================================================
+	// ================ Selection management ===================
+	// =========================================================
 
-	 protected DESelectionManager _selectionManager;
+	protected DESelectionManager _selectionManager;
 
-	 @Override
-	public DESelectionManager getSelectionManager()
-	 {
-		 return getDESelectionManager();
-	 }
+	@Override
+	public DESelectionManager getSelectionManager() {
+		return getDESelectionManager();
+	}
 
-	 public DESelectionManager getDESelectionManager()
-	 {
-		 return _selectionManager;
-	 }
+	public DESelectionManager getDESelectionManager() {
+		return _selectionManager;
+	}
 
-	 /**
-	  * Select the view representing supplied object, if this view exists. Try
-	  * all to really display supplied object, even if required view is not the
-	  * current displayed view
-	  * 
-	  * @param object:
-	  *            the object to focus on
-	  */
-	 @Override
-	public void selectAndFocusObject(FlexoModelObject object)
-	 {
-		 if (object instanceof TOCEntry) {
-			 setCurrentEditedObjectAsModuleView(object);
-		 }
-		 getSelectionManager().setSelectedObject(object);
-	 }
+	/**
+	 * Select the view representing supplied object, if this view exists. Try all to really display supplied object, even if required view
+	 * is not the current displayed view
+	 * 
+	 * @param object
+	 *            : the object to focus on
+	 */
+	@Override
+	public void selectAndFocusObject(FlexoModelObject object) {
+		if (object instanceof TOCEntry) {
+			setCurrentEditedObjectAsModuleView(object);
+		}
+		getSelectionManager().setSelectedObject(object);
+	}
 
-	 /**
-	  * @return
-	  */
-	 public boolean getIgnoreScreenshotVisualization()
-	 {
-		 return true;
-	 }
+	/**
+	 * @return
+	 */
+	public boolean getIgnoreScreenshotVisualization() {
+		return true;
+	}
 
 	@Override
 	public String getWindowTitleforObject(FlexoModelObject object) {
@@ -252,13 +231,16 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 						synched = true;
 				}
 				if (synched)
-					return cgFile.getRepository().getName() + " " + cgFile.getResource().getFile().getName() + (cgFile.isEdited() ? "[" + FlexoLocalization.localizedForKey("edited") + "]" : "");
+					return cgFile.getRepository().getName() + " " + cgFile.getResource().getFile().getName()
+							+ (cgFile.isEdited() ? "[" + FlexoLocalization.localizedForKey("edited") + "]" : "");
 			}
-			return cgFile.getResource().getFile().getName() + (cgFile.isEdited() ? "[" + FlexoLocalization.localizedForKey("edited") + "]" : "");
+			return cgFile.getResource().getFile().getName()
+					+ (cgFile.isEdited() ? "[" + FlexoLocalization.localizedForKey("edited") + "]" : "");
 		} else if (object instanceof CGTemplate) {
 			CGTemplate cgTemplateFile = (CGTemplate) object;
 			return cgTemplateFile.getTemplateName()
-					+ (cgTemplateFile instanceof CGTemplateFile && ((CGTemplateFile) cgTemplateFile).isEdited() ? "[" + FlexoLocalization.localizedForKey("edited") + "]" : "");
+					+ (cgTemplateFile instanceof CGTemplateFile && ((CGTemplateFile) cgTemplateFile).isEdited() ? "["
+							+ FlexoLocalization.localizedForKey("edited") + "]" : "");
 		} else if (object instanceof TOCRepository) {
 			return FlexoLocalization.localizedForKey("table_of_content" + ": ") + ((TOCRepository) object).getTitle();
 		} else if (object instanceof TOCData) {

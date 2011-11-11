@@ -23,7 +23,6 @@
 // Generated on: 2007.11.06 at 03:26:51 PM CET 
 //
 
-
 package org.xmlsoap.schemas.ws._2004._03.business_process;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -32,11 +31,12 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
-
 /**
- * <p>Java class for tVariable complex type.
+ * <p>
+ * Java class for tVariable complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tVariable">
@@ -57,167 +57,144 @@ import javax.xml.namespace.QName;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tVariable", propOrder = {
-    "opaqueFrom",
-    "from"
-})
-public class TVariable
-    extends TExtensibleElements
-{
+@XmlType(name = "tVariable", propOrder = { "opaqueFrom", "from" })
+public class TVariable extends TExtensibleElements {
 
-    protected TExtensibleElements opaqueFrom;
-    protected TFrom from;
-    @XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
-    protected String name;
-    @XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
-    protected QName messageType;
-    @XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
-    protected String type;
-    @XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
-    protected String element;
+	protected TExtensibleElements opaqueFrom;
+	protected TFrom from;
+	@XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
+	protected String name;
+	@XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
+	protected QName messageType;
+	@XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
+	protected String type;
+	@XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
+	protected String element;
 
-    /**
-     * Gets the value of the opaqueFrom property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TExtensibleElements }
-     *     
-     */
-    public TExtensibleElements getOpaqueFrom() {
-        return opaqueFrom;
-    }
+	/**
+	 * Gets the value of the opaqueFrom property.
+	 * 
+	 * @return possible object is {@link TExtensibleElements }
+	 * 
+	 */
+	public TExtensibleElements getOpaqueFrom() {
+		return opaqueFrom;
+	}
 
-    /**
-     * Sets the value of the opaqueFrom property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TExtensibleElements }
-     *     
-     */
-    public void setOpaqueFrom(TExtensibleElements value) {
-        this.opaqueFrom = value;
-    }
+	/**
+	 * Sets the value of the opaqueFrom property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link TExtensibleElements }
+	 * 
+	 */
+	public void setOpaqueFrom(TExtensibleElements value) {
+		this.opaqueFrom = value;
+	}
 
-    /**
-     * Gets the value of the from property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TFrom }
-     *     
-     */
-    public TFrom getFrom() {
-        return from;
-    }
+	/**
+	 * Gets the value of the from property.
+	 * 
+	 * @return possible object is {@link TFrom }
+	 * 
+	 */
+	public TFrom getFrom() {
+		return from;
+	}
 
-    /**
-     * Sets the value of the from property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TFrom }
-     *     
-     */
-    public void setFrom(TFrom value) {
-        this.from = value;
-    }
+	/**
+	 * Sets the value of the from property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link TFrom }
+	 * 
+	 */
+	public void setFrom(TFrom value) {
+		this.from = value;
+	}
 
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
+	/**
+	 * Gets the value of the name property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
+	/**
+	 * Sets the value of the name property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setName(String value) {
+		this.name = value;
+	}
 
-    /**
-     * Gets the value of the messageType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QName }
-     *     
-     */
-    public QName getMessageType() {
-        return messageType;
-    }
+	/**
+	 * Gets the value of the messageType property.
+	 * 
+	 * @return possible object is {@link QName }
+	 * 
+	 */
+	public QName getMessageType() {
+		return messageType;
+	}
 
-    /**
-     * Sets the value of the messageType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QName }
-     *     
-     */
-    public void setMessageType(QName value) {
-        this.messageType = value;
-    }
+	/**
+	 * Sets the value of the messageType property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link QName }
+	 * 
+	 */
+	public void setMessageType(QName value) {
+		this.messageType = value;
+	}
 
-    /**
-     * Gets the value of the type property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getType() {
-        return type;
-    }
+	/**
+	 * Gets the value of the type property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getType() {
+		return type;
+	}
 
-    /**
-     * Sets the value of the type property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setType(String value) {
-        this.type = value;
-    }
+	/**
+	 * Sets the value of the type property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setType(String value) {
+		this.type = value;
+	}
 
-    /**
-     * Gets the value of the element property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getElement() {
-        return element;
-    }
+	/**
+	 * Gets the value of the element property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getElement() {
+		return element;
+	}
 
-    /**
-     * Sets the value of the element property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setElement(String value) {
-        this.element = value;
-    }
+	/**
+	 * Sets the value of the element property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setElement(String value) {
+		this.element = value;
+	}
 
 }

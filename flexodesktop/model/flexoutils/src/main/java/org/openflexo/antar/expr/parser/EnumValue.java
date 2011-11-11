@@ -21,42 +21,36 @@ package org.openflexo.antar.expr.parser;
 
 public class EnumValue extends Value {
 
-    private Enum _value;
-    
-    public static EnumValue createEnumValue(Enum value)
-    {
-        return new EnumValue(value);
-    }
- 
-    public EnumValue (Enum value)
-    {
-        super();
-        _value = value;
-    }
-    
-    @Override
-	public String getStringValue() 
-    {
-        return _value.name();
-    }
-    
-    @Override
-	public String toString()
-    {
-        return getPrefix()+"Enum["+_value+"]";
-    }
+	private Enum _value;
 
-    public String getSerializationValue()
-    {
-        return "$\""+_value+"\"";
-    }
+	public static EnumValue createEnumValue(Enum value) {
+		return new EnumValue(value);
+	}
 
-   @Override
-public boolean equals (Object obj)
-    {
-        if (obj instanceof EnumValue) {
-            return getStringValue().equals(((EnumValue)obj).getStringValue());
-        }
-        return super.equals(obj);
-    }
+	public EnumValue(Enum value) {
+		super();
+		_value = value;
+	}
+
+	@Override
+	public String getStringValue() {
+		return _value.name();
+	}
+
+	@Override
+	public String toString() {
+		return getPrefix() + "Enum[" + _value + "]";
+	}
+
+	public String getSerializationValue() {
+		return "$\"" + _value + "\"";
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof EnumValue) {
+			return getStringValue().equals(((EnumValue) obj).getStringValue());
+		}
+		return super.equals(obj);
+	}
 }

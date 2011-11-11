@@ -40,59 +40,51 @@ import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.foundation.wkf.WKFValidationModel;
 import org.openflexo.localization.FlexoLocalization;
 
-public class ValidateProject extends FlexoAction<ValidateProject,FlexoModelObject,FlexoModelObject>
-{
+public class ValidateProject extends FlexoAction<ValidateProject, FlexoModelObject, FlexoModelObject> {
 
 	static final Logger logger = Logger.getLogger(ValidateProject.class.getPackage().getName());
 
-	public static FlexoActionType<ValidateProject,FlexoModelObject,FlexoModelObject> actionType 
-	= new FlexoActionType<ValidateProject,FlexoModelObject,FlexoModelObject> ("validate_project") {
+	public static FlexoActionType<ValidateProject, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<ValidateProject, FlexoModelObject, FlexoModelObject>(
+			"validate_project") {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public ValidateProject makeNewAction(FlexoModelObject object, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) 
-        {
-            return new ValidateProject(object, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public ValidateProject makeNewAction(FlexoModelObject object, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+			return new ValidateProject(object, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection) 
-        {
-            return true;
-        }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (ValidateProject.actionType, FlexoProject.class);
-    }
-    
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection) {
+			return true;
+		}
 
-    
-    ValidateProject (FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-    public FlexoProject getProject() {
-    	return getFocusedObject().getProject();
-    }
-    
-    @Override
-	protected void doAction(Object context)
-    {
-    	logger.info("Validate project");
-    	makeFlexoProgress(FlexoLocalization.localizedForKey("check_model_consistency"),5);
+	static {
+		FlexoModelObject.addActionForClass(ValidateProject.actionType, FlexoProject.class);
+	}
+
+	ValidateProject(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	public FlexoProject getProject() {
+		return getFocusedObject().getProject();
+	}
+
+	@Override
+	protected void doAction(Object context) {
+		logger.info("Validate project");
+		makeFlexoProgress(FlexoLocalization.localizedForKey("check_model_consistency"), 5);
 		setProgress(FlexoLocalization.localizedForKey("loading_required_resources"));
-		
+
 		// We validate the component library model
 		IEValidationModel ieValidationModel = new IEValidationModel(getProject(), CodeType.PROTOTYPE);
 		ieValidationModel.addObserver(ieValidationObserver);
@@ -117,38 +109,39 @@ public class ValidateProject extends FlexoAction<ValidateProject,FlexoModelObjec
 		dmValidationModel.deleteObserver(dmValidationObserver);
 
 		hideFlexoProgress();
-    }
- 
-    private ValidationReport ieValidationReport = null;
-    private ValidationReport wkfValidationReport = null;
-    private ValidationReport dkvValidationReport = null;
-    private ValidationReport dmValidationReport = null;
-       
-	public boolean isProjectValid()
-	{
+	}
+
+	private ValidationReport ieValidationReport = null;
+	private ValidationReport wkfValidationReport = null;
+	private ValidationReport dkvValidationReport = null;
+	private ValidationReport dmValidationReport = null;
+
+	public boolean isProjectValid() {
 		return (getErrorsNb() == 0);
 	}
-	
-	public int getErrorsNb()
-	{
+
+	public int getErrorsNb() {
 		int errorsNb = 0;
-		if (ieValidationReport != null) errorsNb += ieValidationReport.getErrorNb();
-		if (wkfValidationReport != null) errorsNb += wkfValidationReport.getErrorNb();
-		if (dkvValidationReport != null) errorsNb += dkvValidationReport.getErrorNb();
-		if (dmValidationReport != null) errorsNb += dmValidationReport.getErrorNb();		
+		if (ieValidationReport != null)
+			errorsNb += ieValidationReport.getErrorNb();
+		if (wkfValidationReport != null)
+			errorsNb += wkfValidationReport.getErrorNb();
+		if (dkvValidationReport != null)
+			errorsNb += dkvValidationReport.getErrorNb();
+		if (dmValidationReport != null)
+			errorsNb += dmValidationReport.getErrorNb();
 		return errorsNb;
 	}
 
-    private  FlexoObserver ieValidationObserver = new FlexoObserver() {
+	private FlexoObserver ieValidationObserver = new FlexoObserver() {
 		@Override
-		public void update(FlexoObservable observable, DataModification dataModification)
-		{
+		public void update(FlexoObservable observable, DataModification dataModification) {
 			if (dataModification instanceof ValidationNotification) {
 				if (dataModification instanceof ValidationInitNotification) {
 					ValidationInitNotification initNotification = (ValidationInitNotification) dataModification;
 					setProgress(FlexoLocalization.localizedForKey("validating_ie_model"));
 					resetSecondaryProgress(initNotification.getNbOfObjectToValidate());
-					logger.info("validating_ie_model "+initNotification.getNbOfObjectToValidate());
+					logger.info("validating_ie_model " + initNotification.getNbOfObjectToValidate());
 				} else if (dataModification instanceof ValidationProgressNotification) {
 					ValidationProgressNotification progressNotification = (ValidationProgressNotification) dataModification;
 					setSecondaryProgress(FlexoLocalization.localizedForKey("validating") + " "
@@ -160,110 +153,111 @@ public class ValidateProject extends FlexoAction<ValidateProject,FlexoModelObjec
 		}
 	};
 
-	private	FlexoObserver wkfValidationObserver = new FlexoObserver() {
-			@Override
-			public void update(FlexoObservable observable, DataModification dataModification)
-			{
-				if (dataModification instanceof ValidationNotification) {
-					if (dataModification instanceof ValidationInitNotification) {
-						ValidationInitNotification initNotification = (ValidationInitNotification) dataModification;
-						setProgress(FlexoLocalization.localizedForKey("validating_wkf_model"));
-						resetSecondaryProgress(initNotification.getNbOfObjectToValidate());
-						logger.info("validating_wkf_model "+initNotification.getNbOfObjectToValidate());
-					} else if (dataModification instanceof ValidationProgressNotification) {
-						ValidationProgressNotification progressNotification = (ValidationProgressNotification) dataModification;
-						setSecondaryProgress(FlexoLocalization.localizedForKey("validating") + " "
-								+ progressNotification.getValidatedObject().getFullyQualifiedName());
-					} else if (dataModification instanceof ValidationFinishedNotification) {
-						// Nothing
-					}
-
+	private FlexoObserver wkfValidationObserver = new FlexoObserver() {
+		@Override
+		public void update(FlexoObservable observable, DataModification dataModification) {
+			if (dataModification instanceof ValidationNotification) {
+				if (dataModification instanceof ValidationInitNotification) {
+					ValidationInitNotification initNotification = (ValidationInitNotification) dataModification;
+					setProgress(FlexoLocalization.localizedForKey("validating_wkf_model"));
+					resetSecondaryProgress(initNotification.getNbOfObjectToValidate());
+					logger.info("validating_wkf_model " + initNotification.getNbOfObjectToValidate());
+				} else if (dataModification instanceof ValidationProgressNotification) {
+					ValidationProgressNotification progressNotification = (ValidationProgressNotification) dataModification;
+					setSecondaryProgress(FlexoLocalization.localizedForKey("validating") + " "
+							+ progressNotification.getValidatedObject().getFullyQualifiedName());
+				} else if (dataModification instanceof ValidationFinishedNotification) {
+					// Nothing
 				}
-			}
-		};
-		
-		private	FlexoObserver dkvValidationObserver = new FlexoObserver() {
-			@Override
-			public void update(FlexoObservable observable, DataModification dataModification)
-			{
-				if (dataModification instanceof ValidationNotification) {
-					if (dataModification instanceof ValidationInitNotification) {
-						ValidationInitNotification initNotification = (ValidationInitNotification) dataModification;
-						setProgress(FlexoLocalization.localizedForKey("validating_dkv_model"));
-						resetSecondaryProgress(initNotification.getNbOfObjectToValidate());
-						logger.info("validating_dkv_model "+initNotification.getNbOfObjectToValidate());
-					} else if (dataModification instanceof ValidationProgressNotification) {
-						ValidationProgressNotification progressNotification = (ValidationProgressNotification) dataModification;
-						setSecondaryProgress(FlexoLocalization.localizedForKey("validating") + " "
-								+ progressNotification.getValidatedObject().getFullyQualifiedName());
-					} else if (dataModification instanceof ValidationFinishedNotification) {
-						// Nothing
-					}
 
+			}
+		}
+	};
+
+	private FlexoObserver dkvValidationObserver = new FlexoObserver() {
+		@Override
+		public void update(FlexoObservable observable, DataModification dataModification) {
+			if (dataModification instanceof ValidationNotification) {
+				if (dataModification instanceof ValidationInitNotification) {
+					ValidationInitNotification initNotification = (ValidationInitNotification) dataModification;
+					setProgress(FlexoLocalization.localizedForKey("validating_dkv_model"));
+					resetSecondaryProgress(initNotification.getNbOfObjectToValidate());
+					logger.info("validating_dkv_model " + initNotification.getNbOfObjectToValidate());
+				} else if (dataModification instanceof ValidationProgressNotification) {
+					ValidationProgressNotification progressNotification = (ValidationProgressNotification) dataModification;
+					setSecondaryProgress(FlexoLocalization.localizedForKey("validating") + " "
+							+ progressNotification.getValidatedObject().getFullyQualifiedName());
+				} else if (dataModification instanceof ValidationFinishedNotification) {
+					// Nothing
 				}
-			}
-		};
-		
-		private	FlexoObserver dmValidationObserver = new FlexoObserver() {
-			@Override
-			public void update(FlexoObservable observable, DataModification dataModification)
-			{
-				if (dataModification instanceof ValidationNotification) {
-					if (dataModification instanceof ValidationInitNotification) {
-						ValidationInitNotification initNotification = (ValidationInitNotification) dataModification;
-						setProgress(FlexoLocalization.localizedForKey("validating_dm_model"));
-						resetSecondaryProgress(initNotification.getNbOfObjectToValidate());
-						logger.info("validating_dm_model "+initNotification.getNbOfObjectToValidate());
-					} else if (dataModification instanceof ValidationProgressNotification) {
-						ValidationProgressNotification progressNotification = (ValidationProgressNotification) dataModification;
-						setSecondaryProgress(FlexoLocalization.localizedForKey("validating") + " "
-								+ progressNotification.getValidatedObject().getFullyQualifiedName());
-					} else if (dataModification instanceof ValidationFinishedNotification) {
-						// Nothing
-					}
 
+			}
+		}
+	};
+
+	private FlexoObserver dmValidationObserver = new FlexoObserver() {
+		@Override
+		public void update(FlexoObservable observable, DataModification dataModification) {
+			if (dataModification instanceof ValidationNotification) {
+				if (dataModification instanceof ValidationInitNotification) {
+					ValidationInitNotification initNotification = (ValidationInitNotification) dataModification;
+					setProgress(FlexoLocalization.localizedForKey("validating_dm_model"));
+					resetSecondaryProgress(initNotification.getNbOfObjectToValidate());
+					logger.info("validating_dm_model " + initNotification.getNbOfObjectToValidate());
+				} else if (dataModification instanceof ValidationProgressNotification) {
+					ValidationProgressNotification progressNotification = (ValidationProgressNotification) dataModification;
+					setSecondaryProgress(FlexoLocalization.localizedForKey("validating") + " "
+							+ progressNotification.getValidatedObject().getFullyQualifiedName());
+				} else if (dataModification instanceof ValidationFinishedNotification) {
+					// Nothing
 				}
+
 			}
-		};
+		}
+	};
 
-		public ValidationReport getDmValidationReport() {
-			return dmValidationReport;
-		}
+	public ValidationReport getDmValidationReport() {
+		return dmValidationReport;
+	}
 
-		public void setDmValidationReport(ValidationReport dmValidationReport) {
-			this.dmValidationReport = dmValidationReport;
-		}
+	public void setDmValidationReport(ValidationReport dmValidationReport) {
+		this.dmValidationReport = dmValidationReport;
+	}
 
-		public ValidationReport getIeValidationReport() {
-			return ieValidationReport;
-		}
+	public ValidationReport getIeValidationReport() {
+		return ieValidationReport;
+	}
 
-		public void setIeValidationReport(ValidationReport ieValidationReport) {
-			this.ieValidationReport = ieValidationReport;
-		}
+	public void setIeValidationReport(ValidationReport ieValidationReport) {
+		this.ieValidationReport = ieValidationReport;
+	}
 
-		public ValidationReport getWkfValidationReport() {
-			return wkfValidationReport;
-		}
+	public ValidationReport getWkfValidationReport() {
+		return wkfValidationReport;
+	}
 
-		public void setWkfValidationReport(ValidationReport wkfValidationReport) {
-			this.wkfValidationReport = wkfValidationReport;
-		}
+	public void setWkfValidationReport(ValidationReport wkfValidationReport) {
+		this.wkfValidationReport = wkfValidationReport;
+	}
 
-		public ValidationReport getDkvValidationReport() {
-			return dkvValidationReport;
-		}
+	public ValidationReport getDkvValidationReport() {
+		return dkvValidationReport;
+	}
 
-		public void setDkvValidationReport(ValidationReport dkvValidationReport) {
-			this.dkvValidationReport = dkvValidationReport;
-		}
-		
-		public String readableValidationErrors(){
-			StringBuffer bf = new StringBuffer();
-			if(getWkfValidationReport()!=null)bf.append(getWkfValidationReport().errorAsString());
-			if(getIeValidationReport()!=null)bf.append(getIeValidationReport().errorAsString());
-			if(getDkvValidationReport()!=null)bf.append(getDkvValidationReport().errorAsString());
-			if(getDmValidationReport()!=null)bf.append(getDmValidationReport().errorAsString());
-			return bf.toString();
-		}
- }
+	public void setDkvValidationReport(ValidationReport dkvValidationReport) {
+		this.dkvValidationReport = dkvValidationReport;
+	}
+
+	public String readableValidationErrors() {
+		StringBuffer bf = new StringBuffer();
+		if (getWkfValidationReport() != null)
+			bf.append(getWkfValidationReport().errorAsString());
+		if (getIeValidationReport() != null)
+			bf.append(getIeValidationReport().errorAsString());
+		if (getDkvValidationReport() != null)
+			bf.append(getDkvValidationReport().errorAsString());
+		if (getDmValidationReport() != null)
+			bf.append(getDmValidationReport().errorAsString());
+		return bf.toString();
+	}
+}

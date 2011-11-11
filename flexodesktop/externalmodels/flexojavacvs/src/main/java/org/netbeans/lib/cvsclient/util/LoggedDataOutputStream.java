@@ -24,93 +24,92 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * A data output stream that also logs everything sent to a Writer (via the
- * logger).
- * @author  Robert Greig
+ * A data output stream that also logs everything sent to a Writer (via the logger).
+ * 
+ * @author Robert Greig
  */
 public class LoggedDataOutputStream extends FilterOutputStream {
 
-    private long counter;
+	private long counter;
 
-    /**
-     * Construct a logged stream using the specified underlying stream
-     * @param out the stream
-     */
-    public LoggedDataOutputStream(OutputStream out) {
-        super(out);
-    }
+	/**
+	 * Construct a logged stream using the specified underlying stream
+	 * 
+	 * @param out
+	 *            the stream
+	 */
+	public LoggedDataOutputStream(OutputStream out) {
+		super(out);
+	}
 
-    /**
-     * Write a line to the stream, logging it too. For compatibility reasons
-     * only. Does exactly the same what writeBytes() does.
-     *
-     * @deprecated Line to to bytes conversion is host specifics.
-     * Use raw byte access methods insted.
-     *
-     */
-    @Deprecated
+	/**
+	 * Write a line to the stream, logging it too. For compatibility reasons only. Does exactly the same what writeBytes() does.
+	 * 
+	 * @deprecated Line to to bytes conversion is host specifics. Use raw byte access methods insted.
+	 * 
+	 */
+	@Deprecated
 	public void writeChars(String line) throws IOException {
-        writeBytes(line);
-    }
-    
-    /**
-     * Write a line to the stream, logging it too.
-     *
-     * Line to to bytes conversion is host specifics. Use {@link #writeBytes(String, String)} if possible.
-     */
-    public void writeBytes(String line) throws IOException {
-        byte[] bytes = line.getBytes();
-        out.write(bytes);
-        Logger.logOutput(bytes);
-        counter += bytes.length;
-    }
+		writeBytes(line);
+	}
 
-    /**
-     * Write a line to the stream, logging it too.
-     */
-    public void writeBytes(String line, String encoding) throws IOException {
-        byte[] bytes = line.getBytes(encoding);
-        out.write(bytes);
-        Logger.logOutput(bytes);
-        counter += bytes.length;
-    }
+	/**
+	 * Write a line to the stream, logging it too.
+	 * 
+	 * Line to to bytes conversion is host specifics. Use {@link #writeBytes(String, String)} if possible.
+	 */
+	public void writeBytes(String line) throws IOException {
+		byte[] bytes = line.getBytes();
+		out.write(bytes);
+		Logger.logOutput(bytes);
+		counter += bytes.length;
+	}
 
-    @Override
+	/**
+	 * Write a line to the stream, logging it too.
+	 */
+	public void writeBytes(String line, String encoding) throws IOException {
+		byte[] bytes = line.getBytes(encoding);
+		out.write(bytes);
+		Logger.logOutput(bytes);
+		counter += bytes.length;
+	}
+
+	@Override
 	public void write(int b) throws IOException {
-        super.write(b);
-        counter++;
-    }
+		super.write(b);
+		counter++;
+	}
 
-    @Override
+	@Override
 	public void write(byte b[]) throws IOException {
-        super.write(b);
-        counter += b.length;
-    }
+		super.write(b);
+		counter += b.length;
+	}
 
-    @Override
+	@Override
 	public void write(byte b[], int off, int len) throws IOException {
-        super.write(b, off, len);
-        counter += len;
-    }
+		super.write(b, off, len);
+		counter += len;
+	}
 
-    /**
-     * Closes this input stream and releases any system resources associated
-     * with the stream.
-     */
-    @Override
+	/**
+	 * Closes this input stream and releases any system resources associated with the stream.
+	 */
+	@Override
 	public void close() throws IOException {
-        out.close();
-    }
+		out.close();
+	}
 
-    public OutputStream getUnderlyingStream() {
-        return out;
-    }
+	public OutputStream getUnderlyingStream() {
+		return out;
+	}
 
-    public void setUnderlyingStream(OutputStream os) {
-        out = os;
-    }
+	public void setUnderlyingStream(OutputStream os) {
+		out = os;
+	}
 
-    public long getCounter() {
-        return counter;
-    }
+	public long getCounter() {
+		return counter;
+	}
 }

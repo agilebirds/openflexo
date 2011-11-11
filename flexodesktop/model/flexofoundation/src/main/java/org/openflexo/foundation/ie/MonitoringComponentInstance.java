@@ -25,8 +25,6 @@ import org.openflexo.foundation.xml.FlexoComponentBuilder;
 
 public class MonitoringComponentInstance extends PartialComponentInstance {
 
-	
-	
 	public MonitoringComponentInstance(FlexoComponentBuilder builder) {
 		super(builder);
 	}

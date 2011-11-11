@@ -39,50 +39,55 @@ import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.WorkflowModelObject;
 import org.openflexo.foundation.wkf.action.AddRole;
 
-
 public class RolePalette extends DrawingPalette {
 
 	private static final Logger logger = Logger.getLogger(RolePalette.class.getPackage().getName());
 
-	public RolePalette()
-	{
-		super(300,230,"default");
+	public RolePalette() {
+		super(300, 230, "default");
 		int n = 1;
 		int m = 1;
-		for (int i=0; i<2; i++) {
-			for (int j=0; j<4; j++) {
-				if (j<3)
-					addElement(makeRoleElement(colorFor(i,j),i*(RoleGR.WIDTH+20)+25,j*(RoleGR.HEIGHT+20),"Role"+(n++),false));
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 4; j++) {
+				if (j < 3)
+					addElement(makeRoleElement(colorFor(i, j), i * (RoleGR.WIDTH + 20) + 25, j * (RoleGR.HEIGHT + 20), "Role" + (n++),
+							false));
 				else
-					addElement(makeRoleElement(colorFor(i,j),i*(RoleGR.WIDTH+20)+25,j*(RoleGR.HEIGHT+20),"System"+(m++),true));
+					addElement(makeRoleElement(colorFor(i, j), i * (RoleGR.WIDTH + 20) + 25, j * (RoleGR.HEIGHT + 20), "System" + (m++),
+							true));
 			}
 		}
 		makePalettePanel();
 	}
 
-	private FlexoColor colorFor (int x, int y)
-	{
-		if (x==0) {
-			if (y==0) return new FlexoColor(FGEUtils.NICE_RED);
-			if (y==1) return new FlexoColor(FGEUtils.NICE_BLUE);
-			if (y==2) return new FlexoColor(FGEUtils.NICE_YELLOW);
-			if (y==3) return new FlexoColor(Color.LIGHT_GRAY);
-		}
-		else if (x==1) {
-			if (y==0) return new FlexoColor(FGEUtils.NICE_PINK);
-			if (y==1) return new FlexoColor(FGEUtils.NICE_GREEN);
-			if (y==2) return new FlexoColor(FGEUtils.NICE_TURQUOISE);
-			if (y==3) return new FlexoColor(Color.GRAY);
+	private FlexoColor colorFor(int x, int y) {
+		if (x == 0) {
+			if (y == 0)
+				return new FlexoColor(FGEUtils.NICE_RED);
+			if (y == 1)
+				return new FlexoColor(FGEUtils.NICE_BLUE);
+			if (y == 2)
+				return new FlexoColor(FGEUtils.NICE_YELLOW);
+			if (y == 3)
+				return new FlexoColor(Color.LIGHT_GRAY);
+		} else if (x == 1) {
+			if (y == 0)
+				return new FlexoColor(FGEUtils.NICE_PINK);
+			if (y == 1)
+				return new FlexoColor(FGEUtils.NICE_GREEN);
+			if (y == 2)
+				return new FlexoColor(FGEUtils.NICE_TURQUOISE);
+			if (y == 3)
+				return new FlexoColor(Color.GRAY);
 		}
 		return new FlexoColor(Color.WHITE);
 	}
 
-	private PaletteElement makeRoleElement(final FlexoColor color, int x, int y, String roleName, final boolean isSystemRole)
-	{
-		Role role = new Role((FlexoProject)null,(FlexoWorkflow)null);
+	private PaletteElement makeRoleElement(final FlexoColor color, int x, int y, String roleName, final boolean isSystemRole) {
+		Role role = new Role((FlexoProject) null, (FlexoWorkflow) null);
 		role.setColor(color);
-		role.setX(x,RepresentableFlexoModelObject.DEFAULT);
-		role.setY(y,RepresentableFlexoModelObject.DEFAULT);
+		role.setX(x, RepresentableFlexoModelObject.DEFAULT);
+		role.setY(y, RepresentableFlexoModelObject.DEFAULT);
 		role.setIsSystemRole(isSystemRole);
 		try {
 			role.setName(roleName);
@@ -90,44 +95,43 @@ public class RolePalette extends DrawingPalette {
 			// Cannot happen since no related project
 			e.printStackTrace();
 		}
-		final PaletteElementGraphicalRepresentation gr
-		= new PaletteElementGraphicalRepresentation(new RoleGR(role,getPaletteDrawing()),null,getPaletteDrawing());
+		final PaletteElementGraphicalRepresentation gr = new PaletteElementGraphicalRepresentation(new RoleGR(role, getPaletteDrawing()),
+				null, getPaletteDrawing());
 		PaletteElement returned = new PaletteElement() {
 			@Override
-			public boolean acceptDragging(GraphicalRepresentation gr)
-			{
+			public boolean acceptDragging(GraphicalRepresentation gr) {
 				return (gr instanceof DrawingGraphicalRepresentation);
 			}
+
 			@Override
-			public boolean elementDragged(GraphicalRepresentation gr, FGEPoint dropLocation)
-			{
-				//MyDrawingElement container = (MyDrawingElement)gr.getDrawable();
-				//getController().addNewShape(new MyShape(getGraphicalRepresentation().getShapeType(), dropLocation, getController().getDrawing()),container);
-				logger.info("Dropping new role for "+gr.getDrawable());
-				FlexoWorkflow workflow = ((WorkflowModelObject)gr.getDrawable()).getWorkflow();
+			public boolean elementDragged(GraphicalRepresentation gr, FGEPoint dropLocation) {
+				// MyDrawingElement container = (MyDrawingElement)gr.getDrawable();
+				// getController().addNewShape(new MyShape(getGraphicalRepresentation().getShapeType(), dropLocation,
+				// getController().getDrawing()),container);
+				logger.info("Dropping new role for " + gr.getDrawable());
+				FlexoWorkflow workflow = ((WorkflowModelObject) gr.getDrawable()).getWorkflow();
 				AddRole addRole = AddRole.actionType.makeNewAction(workflow, null, getController().getWKFController().getEditor());
 				addRole.setRoleAutomaticallyCreated(true);
-				addRole.setLocation(dropLocation.x,dropLocation.y);
+				addRole.setLocation(dropLocation.x, dropLocation.y);
 				if (isSystemRole) {
 					addRole.setNewRoleName(workflow.getRoleList().getNextNewSystemRoleName());
-				}
-				else {
+				} else {
 					addRole.setNewRoleName(workflow.getRoleList().getNextNewUserRoleName());
 				}
 				addRole.setNewColor(color);
 				addRole.setIsSystemRole(isSystemRole);
-				//addRole.doAction();
-				addRole.actionPerformed(new ActionEvent(gr,ActionEvent.ACTION_PERFORMED,""));
+				// addRole.doAction();
+				addRole.actionPerformed(new ActionEvent(gr, ActionEvent.ACTION_PERFORMED, ""));
 				return true;
 			}
+
 			@Override
-			public PaletteElementGraphicalRepresentation getGraphicalRepresentation()
-			{
+			public PaletteElementGraphicalRepresentation getGraphicalRepresentation() {
 				return gr;
 			}
+
 			@Override
-			public DrawingPalette getPalette()
-			{
+			public DrawingPalette getPalette() {
 				return RolePalette.this;
 			}
 		};
@@ -136,9 +140,8 @@ public class RolePalette extends DrawingPalette {
 	}
 
 	@Override
-	public RoleEditorController getController()
-	{
-		return (RoleEditorController)super.getController();
+	public RoleEditorController getController() {
+		return (RoleEditorController) super.getController();
 	}
 
 }

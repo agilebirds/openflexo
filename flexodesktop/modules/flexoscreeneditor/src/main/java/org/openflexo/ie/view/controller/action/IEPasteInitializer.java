@@ -39,41 +39,34 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class IEPasteInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	IEPasteInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(IEPaste.actionType,actionInitializer);
+	IEPasteInitializer(IEControllerActionInitializer actionInitializer) {
+		super(IEPaste.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<IEPaste> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<IEPaste> getDefaultInitializer() {
 		return new FlexoActionInitializer<IEPaste>() {
 			@Override
-			public boolean run(ActionEvent e, IEPaste action)
-			{
+			public boolean run(ActionEvent e, IEPaste action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<IEPaste> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<IEPaste> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<IEPaste>() {
 			@Override
-			public boolean run(ActionEvent e, IEPaste action)
-			{
+			public boolean run(ActionEvent e, IEPaste action) {
 				getControllerActionInitializer().getIESelectionManager().performSelectionPaste();
 				return true;
 			}
@@ -81,28 +74,24 @@ public class IEPasteInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionEnableCondition getEnableCondition()
-	{
-		return new FlexoActionEnableCondition<IEPaste,IEObject,IEObject>() {
+	protected FlexoActionEnableCondition getEnableCondition() {
+		return new FlexoActionEnableCondition<IEPaste, IEObject, IEObject>() {
 			@Override
-			public boolean isEnabled(FlexoActionType<IEPaste, IEObject, IEObject> actionType, IEObject object, Vector<IEObject> globalSelection, FlexoEditor editor) {
+			public boolean isEnabled(FlexoActionType<IEPaste, IEObject, IEObject> actionType, IEObject object,
+					Vector<IEObject> globalSelection, FlexoEditor editor) {
 				return getControllerActionInitializer().getIESelectionManager().hasCopiedData();
 			}
 		};
 	}
 
-
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return IconLibrary.PASTE_ICON;
 	}
 
 	@Override
-	protected KeyStroke getShortcut()
-	{
+	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(KeyEvent.VK_V, FlexoCst.META_MASK);
 	}
-
 
 }

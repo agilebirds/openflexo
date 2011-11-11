@@ -21,20 +21,17 @@ package org.openflexo.foundation.wkf.dm;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class LabelLocationChanged extends WKFDataModification
-{
+public class LabelLocationChanged extends WKFDataModification {
 
-    /**
-     * @param propertyName
-     * @param oldValue
-     * @param newValue
-     */
-    public LabelLocationChanged()
-    {
-        super("labelPosition", null,null);
-    }
+	/**
+	 * @param propertyName
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public LabelLocationChanged() {
+		super("labelPosition", null, null);
+	}
 
-   
 }

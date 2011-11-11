@@ -63,49 +63,48 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 
 	private static final Logger logger = Logger.getLogger(OntologyLibrary.class.getPackage().getName());
 
-	//public static OntologyLibrary INSTANCE;
-	
-	//public static final File ONTOLOGY_LIBRARY_DIR = new FileResource("Ontologies");
-	//public static final String FLEXO_ONTOLOGY_ROOT_URI = "http://www.agilebirds.com/openflexo/ontologies";
+	// public static OntologyLibrary INSTANCE;
+
+	// public static final File ONTOLOGY_LIBRARY_DIR = new FileResource("Ontologies");
+	// public static final String FLEXO_ONTOLOGY_ROOT_URI = "http://www.agilebirds.com/openflexo/ontologies";
 
 	public static final String RDFS_ONTOLOGY_URI = "http://www.w3.org/2000/01/rdf-schema";
 	public static final String RDF_ONTOLOGY_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns";
 	public static final String OWL_ONTOLOGY_URI = "http://www.w3.org/2002/07/owl";
 	public static final String FLEXO_CONCEPT_ONTOLOGY_URI = "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl";
 
-	public static final String OWL_THING_URI =  OWL_ONTOLOGY_URI + "#Thing";
-	public static final String OWL_CLASS_URI = OWL_ONTOLOGY_URI+"#Class";
-	public static final String OWL_DATA_PROPERTY_URI = OWL_ONTOLOGY_URI+"#DatatypeProperty";
-	public static final String OWL_OBJECT_PROPERTY_URI = OWL_ONTOLOGY_URI+"#ObjectProperty";
-	
-	public static final String RDFS_LITERAL_URI =  RDFS_ONTOLOGY_URI + "#Literal";
-	
+	public static final String OWL_THING_URI = OWL_ONTOLOGY_URI + "#Thing";
+	public static final String OWL_CLASS_URI = OWL_ONTOLOGY_URI + "#Class";
+	public static final String OWL_DATA_PROPERTY_URI = OWL_ONTOLOGY_URI + "#DatatypeProperty";
+	public static final String OWL_OBJECT_PROPERTY_URI = OWL_ONTOLOGY_URI + "#ObjectProperty";
+
+	public static final String RDFS_LITERAL_URI = RDFS_ONTOLOGY_URI + "#Literal";
+
 	public OntologyClass THING;
 
-	//private FlexoProject _project;
-	protected Hashtable<String,FlexoOntology> ontologies;
+	// private FlexoProject _project;
+	protected Hashtable<String, FlexoOntology> ontologies;
 	private SimpleGraphMaker graphMaker;
 
-	private Hashtable<String,OntologyClass> classes;
-	private Hashtable<String,OntologyIndividual> individuals;
-	private Hashtable<String,OntologyDataProperty> dataProperties;
-	private Hashtable<String,OntologyObjectProperty> objectProperties;
-	
+	private Hashtable<String, OntologyClass> classes;
+	private Hashtable<String, OntologyIndividual> individuals;
+	private Hashtable<String, OntologyDataProperty> dataProperties;
+	private Hashtable<String, OntologyObjectProperty> objectProperties;
+
 	private Vector<FlexoOntology> _allOntologies;
 	private Vector<OntologyClass> _allClasses;
 	private Vector<OntologyIndividual> _allIndividuals;
 	private Vector<OntologyObjectProperty> _allObjectProperties;
 	private Vector<OntologyDataProperty> _allDataProperties;
-	
+
 	private FlexoResourceCenter resourceCenter;
 	private OntologyLibrary parentOntologyLibrary = null;
-	
+
 	private OntologyFolder rootFolder;
-	
+
 	private OntologyObjectConverter ontologyObjectConverter;
 
-	public OntologyLibrary(FlexoResourceCenter resourceCenter, OntologyLibrary parentOntologyLibrary)
-	{
+	public OntologyLibrary(FlexoResourceCenter resourceCenter, OntologyLibrary parentOntologyLibrary) {
 		super();
 		this.resourceCenter = resourceCenter;
 		if (parentOntologyLibrary != null) {
@@ -113,36 +112,33 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 			parentOntologyLibrary.addObserver(this);
 		}
 		ontologyObjectConverter = new OntologyObjectConverter(this);
-		//INSTANCE = this;
-		//_project = project;
-		ontologies = new Hashtable<String,FlexoOntology>();
-		if (parentOntologyLibrary == null) graphMaker = new SimpleGraphMaker();
-		classes = new Hashtable<String,OntologyClass>();
-		individuals = new Hashtable<String,OntologyIndividual>();
-		dataProperties = new Hashtable<String,OntologyDataProperty>();
-		objectProperties = new Hashtable<String,OntologyObjectProperty>();
-		//findOntologies(ONTOLOGY_LIBRARY_DIR, FLEXO_ONTOLOGY_ROOT_URI);
-		
-		rootFolder = new OntologyFolder("root", null,this);
+		// INSTANCE = this;
+		// _project = project;
+		ontologies = new Hashtable<String, FlexoOntology>();
+		if (parentOntologyLibrary == null)
+			graphMaker = new SimpleGraphMaker();
+		classes = new Hashtable<String, OntologyClass>();
+		individuals = new Hashtable<String, OntologyIndividual>();
+		dataProperties = new Hashtable<String, OntologyDataProperty>();
+		objectProperties = new Hashtable<String, OntologyObjectProperty>();
+		// findOntologies(ONTOLOGY_LIBRARY_DIR, FLEXO_ONTOLOGY_ROOT_URI);
+
+		rootFolder = new OntologyFolder("root", null, this);
 
 	}
-	
-	public OntologyObjectConverter getOntologyObjectConverter()
-	{
+
+	public OntologyObjectConverter getOntologyObjectConverter() {
 		return ontologyObjectConverter;
 	}
-	
-	public FlexoResourceCenter getResourceCenter()
-	{
+
+	public FlexoResourceCenter getResourceCenter() {
 		return resourceCenter;
 	}
 
-	public void setResourceCenter(FlexoResourceCenter resourceCenter)
-	{
+	public void setResourceCenter(FlexoResourceCenter resourceCenter) {
 		this.resourceCenter = resourceCenter;
 	}
 
-	
 	/*public void init()
 	{
 		getRDFSOntology().loadWhenUnloaded();
@@ -153,142 +149,133 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		getRDFOntology().updateConceptsAndProperties();
 		getFlexoConceptOntology().loadWhenUnloaded();
 	}*/
-	
-	public OntologyClass getRootClass()
-	{
-		if (parentOntologyLibrary != null) return parentOntologyLibrary.getRootClass();
+
+	public OntologyClass getRootClass() {
+		if (parentOntologyLibrary != null)
+			return parentOntologyLibrary.getRootClass();
 		return THING;
 	}
-	
-	
-	public Collection<FlexoOntology> getAllOntologies()
-	{
+
+	public Collection<FlexoOntology> getAllOntologies() {
 		if (_allOntologies == null) {
 			_allOntologies = new Vector<FlexoOntology>();
 			_allOntologies.addAll(ontologies.values());
-			if (parentOntologyLibrary != null) _allOntologies.addAll(parentOntologyLibrary.getAllOntologies());
+			if (parentOntologyLibrary != null)
+				_allOntologies.addAll(parentOntologyLibrary.getAllOntologies());
 		}
 		return _allOntologies;
 	}
-	
-	public Collection<OntologyDataProperty> getAllDataProperties()
-	{
+
+	public Collection<OntologyDataProperty> getAllDataProperties() {
 		if (_allDataProperties == null) {
 			_allDataProperties = new Vector<OntologyDataProperty>();
 			_allDataProperties.addAll(dataProperties.values());
-			if (parentOntologyLibrary != null) _allDataProperties.addAll(parentOntologyLibrary.getAllDataProperties());
+			if (parentOntologyLibrary != null)
+				_allDataProperties.addAll(parentOntologyLibrary.getAllDataProperties());
 		}
 		return _allDataProperties;
 	}
-	
-	
-	public Collection<OntologyObjectProperty> getAllObjectProperties()
-	{
+
+	public Collection<OntologyObjectProperty> getAllObjectProperties() {
 		if (_allObjectProperties == null) {
 			_allObjectProperties = new Vector<OntologyObjectProperty>();
 			_allObjectProperties.addAll(objectProperties.values());
-			if (parentOntologyLibrary != null) _allObjectProperties.addAll(parentOntologyLibrary.getAllObjectProperties());
+			if (parentOntologyLibrary != null)
+				_allObjectProperties.addAll(parentOntologyLibrary.getAllObjectProperties());
 		}
 		return _allObjectProperties;
 	}
-	
-	
-	public Collection<OntologyClass> getAllClasses()
-	{
+
+	public Collection<OntologyClass> getAllClasses() {
 		if (_allClasses == null) {
 			_allClasses = new Vector<OntologyClass>();
 			_allClasses.addAll(classes.values());
-			if (parentOntologyLibrary != null) _allClasses.addAll(parentOntologyLibrary.getAllClasses());
+			if (parentOntologyLibrary != null)
+				_allClasses.addAll(parentOntologyLibrary.getAllClasses());
 		}
 		return _allClasses;
 	}
-	
-	public Collection<OntologyIndividual> getAllIndividuals()
-	{
+
+	public Collection<OntologyIndividual> getAllIndividuals() {
 		if (_allIndividuals == null) {
 			_allIndividuals = new Vector<OntologyIndividual>();
 			_allIndividuals.addAll(individuals.values());
-			if (parentOntologyLibrary != null) _allIndividuals.addAll(parentOntologyLibrary.getAllIndividuals());
+			if (parentOntologyLibrary != null)
+				_allIndividuals.addAll(parentOntologyLibrary.getAllIndividuals());
 		}
 		return _allIndividuals;
 	}
-	
-	public FlexoOntology getOntology(String ontologyUri)
-	{
+
+	public FlexoOntology getOntology(String ontologyUri) {
 		FlexoOntology returned = ontologies.get(ontologyUri);
-		if (returned == null && parentOntologyLibrary != null) return parentOntologyLibrary.getOntology(ontologyUri);
+		if (returned == null && parentOntologyLibrary != null)
+			return parentOntologyLibrary.getOntology(ontologyUri);
 		return returned;
 	}
 
-	public FlexoOntology getFlexoConceptOntology()
-	{
+	public FlexoOntology getFlexoConceptOntology() {
 		return getOntology(FLEXO_CONCEPT_ONTOLOGY_URI);
 	}
-	
-	public FlexoOntology getRDFOntology()
-	{
+
+	public FlexoOntology getRDFOntology() {
 		return getOntology(RDF_ONTOLOGY_URI);
 	}
-	
-	public FlexoOntology getRDFSOntology()
-	{
+
+	public FlexoOntology getRDFSOntology() {
 		return getOntology(RDFS_ONTOLOGY_URI);
 	}
-	
-	public FlexoOntology getOWLOntology()
-	{
+
+	public FlexoOntology getOWLOntology() {
 		return getOntology(OWL_ONTOLOGY_URI);
 	}
-	
-	public ImportedOntology importOntology(String ontologyUri,File alternativeLocalFile)
-	{
+
+	public ImportedOntology importOntology(String ontologyUri, File alternativeLocalFile) {
 		return importOntology(ontologyUri, alternativeLocalFile, null);
 	}
-	
-	public ImportedOntology importOntology(String ontologyUri,File alternativeLocalFile, OntologyFolder folder)
-	{
-		logger.fine("Import ontology "+ontologyUri+" as "+alternativeLocalFile);
-		if (_allOntologies != null) _allOntologies.clear();
+
+	public ImportedOntology importOntology(String ontologyUri, File alternativeLocalFile, OntologyFolder folder) {
+		logger.fine("Import ontology " + ontologyUri + " as " + alternativeLocalFile);
+		if (_allOntologies != null)
+			_allOntologies.clear();
 		_allOntologies = null;
-		ImportedOntology newOntology = new ImportedOntology(ontologyUri,alternativeLocalFile,this);
-		ontologies.put(ontologyUri,newOntology);
-		if (folder != null) folder.addToOntologies(newOntology);
+		ImportedOntology newOntology = new ImportedOntology(ontologyUri, alternativeLocalFile, this);
+		ontologies.put(ontologyUri, newOntology);
+		if (folder != null)
+			folder.addToOntologies(newOntology);
 		setChanged();
 		notifyObservers(new OntologyImported(newOntology));
 		return newOntology;
 	}
-	
+
 	protected Model description;
 
 	@Override
-	public GraphMaker getGraphMaker()
-	{ 
-		if (parentOntologyLibrary != null) return parentOntologyLibrary.getGraphMaker();
-		return graphMaker; 
+	public GraphMaker getGraphMaker() {
+		if (parentOntologyLibrary != null)
+			return parentOntologyLibrary.getGraphMaker();
+		return graphMaker;
 	}
 
 	@Override
-	public void close()
-	{ 
+	public void close() {
 		getGraphMaker().close();
 	}
 
-	public Model openModel()
-	{
-		if (parentOntologyLibrary != null) return parentOntologyLibrary.openModel();
-		return new ModelCom( getGraphMaker().openGraph() );
+	public Model openModel() {
+		if (parentOntologyLibrary != null)
+			return parentOntologyLibrary.openModel();
+		return new ModelCom(getGraphMaker().openGraph());
 	}
 
 	@Override
-	public OntModel openModelIfPresent( String name )
-	{ 
-		return getGraphMaker().hasGraph( name ) ? openModel( name ) : null;
+	public OntModel openModelIfPresent(String name) {
+		return getGraphMaker().hasGraph(name) ? openModel(name) : null;
 	}
 
 	@Override
-	public OntModel openModel( String name, boolean strict )
-	{ 
-		if (parentOntologyLibrary != null) return parentOntologyLibrary.openModel(name,strict);
+	public OntModel openModel(String name, boolean strict) {
+		if (parentOntologyLibrary != null)
+			return parentOntologyLibrary.openModel(name, strict);
 		getGraphMaker().openGraph(name, strict);
 		FlexoOntology ont = getOntology(name);
 		if (ont != null) {
@@ -296,107 +283,100 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 			return ont.getOntModel();
 		}
 		if (!strict) {
-			ont = new ImportedOntology(name,null,this);
+			ont = new ImportedOntology(name, null, this);
 			ont.setOntModel(createFreshModel());
-			ontologies.put(name,ont);
+			ontologies.put(name, ont);
 			setChanged();
 			notifyObservers(new OntologyImported(ont));
 			return ont.getOntModel();
-		}
-		else {
+		} else {
 			throw new DoesNotExistException(name);
 		}
 	}
 
 	@Override
-	public OntModel openModel( String name )
-	{ 
-		return openModel( name, false ); 
+	public OntModel openModel(String name) {
+		return openModel(name, false);
 	}
 
 	@Override
-	public OntModel createModel( String name, boolean strict )
-	{ 
-		if (parentOntologyLibrary != null) return parentOntologyLibrary.createModel(name,strict);
+	public OntModel createModel(String name, boolean strict) {
+		if (parentOntologyLibrary != null)
+			return parentOntologyLibrary.createModel(name, strict);
 		getGraphMaker().createGraph(name, strict);
 		FlexoOntology ont = getOntology(name);
 		if (ont != null) {
-			if (strict) throw new AlreadyExistsException(name);
+			if (strict)
+				throw new AlreadyExistsException(name);
 			return createDefaultModel();
 		}
-		ont = new ImportedOntology(name,null,this);
+		ont = new ImportedOntology(name, null, this);
 		ont.setOntModel(createFreshModel());
-		ontologies.put(name,ont);
+		ontologies.put(name, ont);
 		setChanged();
 		notifyObservers(new OntologyImported(ont));
 		return ont.getOntModel();
 	}
 
 	@Override
-	public OntModel createModel( String name )
-	{
-		return createModel( name, false ); 
+	public OntModel createModel(String name) {
+		return createModel(name, false);
 	}
 
-	public OntModel createModelOver( String name )
-	{
-		return createModel( name ); 
+	public OntModel createModelOver(String name) {
+		return createModel(name);
 	}
 
 	@Override
-	public OntModel createFreshModel()
-	{ 
-		if (parentOntologyLibrary != null) return parentOntologyLibrary.createFreshModel();
+	public OntModel createFreshModel() {
+		if (parentOntologyLibrary != null)
+			return parentOntologyLibrary.createFreshModel();
 		return ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, this, null);
 	}
 
 	@Override
-	public OntModel createDefaultModel()
-	{
-		if (parentOntologyLibrary != null) return parentOntologyLibrary.createDefaultModel();
+	public OntModel createDefaultModel() {
+		if (parentOntologyLibrary != null)
+			return parentOntologyLibrary.createDefaultModel();
 		return ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, this, null);
 	}
 
 	@Override
-	public void removeModel( String name )
-	{ 
-		getGraphMaker().removeGraph( name ); 
+	public void removeModel(String name) {
+		getGraphMaker().removeGraph(name);
 	}
 
 	@Override
-	public boolean hasModel( String name )
-	{ 
-		if (ontologies.get(name) != null) return true;
-		if (parentOntologyLibrary != null) return parentOntologyLibrary.hasModel(name);
-		return getGraphMaker().hasGraph( name ); 
+	public boolean hasModel(String name) {
+		if (ontologies.get(name) != null)
+			return true;
+		if (parentOntologyLibrary != null)
+			return parentOntologyLibrary.hasModel(name);
+		return getGraphMaker().hasGraph(name);
 	}
 
 	@Override
-	public ExtendedIterator listModels()
-	{ 
+	public ExtendedIterator listModels() {
 		return getGraphMaker().listGraphs();
 	}
 
 	/**
-        ModelGetter implementation component.     
+	 * ModelGetter implementation component.
 	 */
 	@Override
-	public Model getModel( String URL )
-	{ 
-		return hasModel( URL ) ? openModel( URL ) : null; 
-	}         
+	public Model getModel(String URL) {
+		return hasModel(URL) ? openModel(URL) : null;
+	}
 
 	@Override
-	public Model getModel( String URL, ModelReader loadIfAbsent )
-	{ 
-		Model already = getModel( URL );
-		return already == null ? loadIfAbsent.readModel( createModel( URL ), URL ) : already;
+	public Model getModel(String URL, ModelReader loadIfAbsent) {
+		Model already = getModel(URL);
+		return already == null ? loadIfAbsent.readModel(createModel(URL), URL) : already;
 	}
-	
-	public void debug()
-	{
+
+	public void debug() {
 		for (FlexoOntology ont : ontologies.values()) {
-			System.out.println("URI: "+ont.getOntologyURI()+" "+(ont.isLoaded()?"LOADED":"NOT LOADED")+" : "+ont);
+			System.out.println("URI: " + ont.getOntologyURI() + " " + (ont.isLoaded() ? "LOADED" : "NOT LOADED") + " : " + ont);
 		}
 	}
 
@@ -405,308 +385,320 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		return _project;
 	}*/
 
-	public OntologyObject getOntologyObject(String objectURI)
-	{
-		//System.out.println("Classes: "+classes.toString());
-		//System.out.println("Individuals: "+individuals.toString());
-		//System.out.println("ObjectProperties: "+objectProperties.toString());
-		//System.out.println("DataProperties: "+dataProperties.toString());
-		
-		if (objectURI == null) return null;
-		
-		if (objectURI.endsWith("#")) objectURI = objectURI.substring(0,objectURI.length()-1);
-		
+	public OntologyObject getOntologyObject(String objectURI) {
+		// System.out.println("Classes: "+classes.toString());
+		// System.out.println("Individuals: "+individuals.toString());
+		// System.out.println("ObjectProperties: "+objectProperties.toString());
+		// System.out.println("DataProperties: "+dataProperties.toString());
+
+		if (objectURI == null)
+			return null;
+
+		if (objectURI.endsWith("#"))
+			objectURI = objectURI.substring(0, objectURI.length() - 1);
+
 		OntologyObject returned = getOntology(objectURI);
-		if (returned != null) return returned;
+		if (returned != null)
+			return returned;
 		returned = getClass(objectURI);
-		if (returned != null) return returned;
+		if (returned != null)
+			return returned;
 		returned = getIndividual(objectURI);
-		if (returned != null) return returned;
+		if (returned != null)
+			return returned;
 		returned = getObjectProperty(objectURI);
-		if (returned != null) return returned;
+		if (returned != null)
+			return returned;
 		returned = getDataProperty(objectURI);
-		if (returned != null) return returned;
-		
+		if (returned != null)
+			return returned;
+
 		if (returned == null && objectURI.indexOf("#") > 0) {
 			// Maybe required ontology is not loaded ???
 			// This is an other chance to get it
-			String ontologyURI = objectURI.substring(0,objectURI.indexOf("#"));
+			String ontologyURI = objectURI.substring(0, objectURI.indexOf("#"));
 			FlexoOntology o = getOntology(ontologyURI);
 			if (o != null && !o.isLoaded() && !o.isLoading()) {
 				o.loadWhenUnloaded();
 				return getOntologyObject(objectURI);
 			}
 		}
-		
-		if (parentOntologyLibrary != null) return parentOntologyLibrary.getOntologyObject(objectURI);
-		
+
+		if (parentOntologyLibrary != null)
+			return parentOntologyLibrary.getOntologyObject(objectURI);
+
 		return null;
 	}
-	
-	public OntologyProperty getProperty(String objectURI)
-	{
+
+	public OntologyProperty getProperty(String objectURI) {
 		OntologyProperty returned = getObjectProperty(objectURI);
-		if (returned != null) return returned;
+		if (returned != null)
+			return returned;
 		returned = getDataProperty(objectURI);
-		if (returned != null) return returned;
+		if (returned != null)
+			return returned;
 
-		if (parentOntologyLibrary != null) return parentOntologyLibrary.getProperty(objectURI);
+		if (parentOntologyLibrary != null)
+			return parentOntologyLibrary.getProperty(objectURI);
 
 		return null;
 	}
-	
+
 	/**
 	 * Return true if URI is well formed and valid regarding its unicity (no one other object has same URI)
 	 * 
 	 * @param uri
 	 * @return
 	 */
-	public boolean testValidURI(String ontologyURI, String conceptURI)
-	{
-		if (StringUtils.isEmpty(conceptURI)) return false;
-		if (StringUtils.isEmpty(conceptURI.trim())) return false;
-		return (conceptURI.equals(ToolBox.getJavaName(conceptURI,true,false)) && getOntologyObject(ontologyURI+"#"+conceptURI) == null);
+	public boolean testValidURI(String ontologyURI, String conceptURI) {
+		if (StringUtils.isEmpty(conceptURI))
+			return false;
+		if (StringUtils.isEmpty(conceptURI.trim()))
+			return false;
+		return (conceptURI.equals(ToolBox.getJavaName(conceptURI, true, false)) && getOntologyObject(ontologyURI + "#" + conceptURI) == null);
 	}
-	
+
 	/**
 	 * Return true if URI is duplicated
 	 * 
 	 * @param uri
 	 * @return
 	 */
-	public boolean isDuplicatedURI(String ontologyURI, String conceptURI)
-	{
-		return getOntologyObject(ontologyURI+"#"+conceptURI) != null;
+	public boolean isDuplicatedURI(String ontologyURI, String conceptURI) {
+		return getOntologyObject(ontologyURI + "#" + conceptURI) != null;
 	}
-	
-	public OntologyClass getClass(String classURI)
-	{
-		if (classURI == null) return null;
+
+	public OntologyClass getClass(String classURI) {
+		if (classURI == null)
+			return null;
 		OntologyClass returned = classes.get(classURI);
-		if (returned != null) return returned;
-		if (parentOntologyLibrary != null) return parentOntologyLibrary.getClass(classURI);
+		if (returned != null)
+			return returned;
+		if (parentOntologyLibrary != null)
+			return parentOntologyLibrary.getClass(classURI);
 		return null;
 	}
-	
-	protected void registerNewClass(OntologyClass aClass)
-	{
-		classes.put(aClass.getURI(), aClass);		
-		if (_allClasses != null) _allClasses.clear();
+
+	protected void registerNewClass(OntologyClass aClass) {
+		classes.put(aClass.getURI(), aClass);
+		if (_allClasses != null)
+			_allClasses.clear();
 		_allClasses = null;
 		setChanged();
 		notifyObservers(new OntologyClassInserted(aClass));
 	}
 
-	protected void unregisterClass(OntologyClass aClass)
-	{
-		classes.remove(aClass.getURI());		
-		if (_allClasses != null) _allClasses.clear();
+	protected void unregisterClass(OntologyClass aClass) {
+		classes.remove(aClass.getURI());
+		if (_allClasses != null)
+			_allClasses.clear();
 		_allClasses = null;
 		setChanged();
 		notifyObservers(new OntologyClassRemoved(aClass));
 	}
 
-	protected void renameClass(OntologyClass object, String oldURI, String newURI)
-	{
-		classes.remove(oldURI);		
-		classes.put(object.getURI(), object);		
-		if (_allClasses != null) _allClasses.clear();
+	protected void renameClass(OntologyClass object, String oldURI, String newURI) {
+		classes.remove(oldURI);
+		classes.put(object.getURI(), object);
+		if (_allClasses != null)
+			_allClasses.clear();
 		_allClasses = null;
 		setChanged();
 		notifyObservers(new OntologyObjectRenamed(object, oldURI, newURI));
 	}
-	
-	public OntologyIndividual getIndividual(String individualURI)
-	{
-		if (individualURI == null) return null;
+
+	public OntologyIndividual getIndividual(String individualURI) {
+		if (individualURI == null)
+			return null;
 		OntologyIndividual returned = individuals.get(individualURI);
-		if (returned != null) return returned;
-		if (parentOntologyLibrary != null) return parentOntologyLibrary.getIndividual(individualURI);
+		if (returned != null)
+			return returned;
+		if (parentOntologyLibrary != null)
+			return parentOntologyLibrary.getIndividual(individualURI);
 		return null;
 	}
-	
-	protected void registerNewIndividual(OntologyIndividual anIndividual)
-	{
+
+	protected void registerNewIndividual(OntologyIndividual anIndividual) {
 		individuals.put(anIndividual.getURI(), anIndividual);
-		if (_allIndividuals != null) _allIndividuals.clear();
+		if (_allIndividuals != null)
+			_allIndividuals.clear();
 		_allIndividuals = null;
 		setChanged();
 		notifyObservers(new OntologyIndividualInserted(anIndividual));
 	}
 
-	protected void unregisterIndividual(OntologyIndividual anIndividual)
-	{
-		individuals.remove(anIndividual.getURI());		
-		if (_allIndividuals != null) _allIndividuals.clear();
+	protected void unregisterIndividual(OntologyIndividual anIndividual) {
+		individuals.remove(anIndividual.getURI());
+		if (_allIndividuals != null)
+			_allIndividuals.clear();
 		_allIndividuals = null;
 		setChanged();
 		notifyObservers(new OntologyIndividualRemoved(anIndividual));
 	}
 
-	protected void renameIndividual(OntologyIndividual object, String oldURI, String newURI)
-	{
-		individuals.remove(oldURI);		
-		individuals.put(object.getURI(), object);		
-		if (_allIndividuals != null) _allIndividuals.clear();
+	protected void renameIndividual(OntologyIndividual object, String oldURI, String newURI) {
+		individuals.remove(oldURI);
+		individuals.put(object.getURI(), object);
+		if (_allIndividuals != null)
+			_allIndividuals.clear();
 		_allIndividuals = null;
 		setChanged();
 		notifyObservers(new OntologyObjectRenamed(object, oldURI, newURI));
 	}
-	
-	public OntologyDataProperty getDataProperty(String propertyURI)
-	{
-		if (propertyURI == null) return null;
+
+	public OntologyDataProperty getDataProperty(String propertyURI) {
+		if (propertyURI == null)
+			return null;
 		OntologyDataProperty returned = dataProperties.get(propertyURI);
-		if (returned != null) return returned;
-		if (parentOntologyLibrary != null) return parentOntologyLibrary.getDataProperty(propertyURI);
+		if (returned != null)
+			return returned;
+		if (parentOntologyLibrary != null)
+			return parentOntologyLibrary.getDataProperty(propertyURI);
 		return null;
 	}
-	
-	protected void registerNewDataProperty(OntologyDataProperty property)
-	{
+
+	protected void registerNewDataProperty(OntologyDataProperty property) {
 		dataProperties.put(property.getURI(), property);
-		if (_allDataProperties != null) _allDataProperties.clear();
+		if (_allDataProperties != null)
+			_allDataProperties.clear();
 		_allDataProperties = null;
 		setChanged();
 		notifyObservers(new OntologyDataPropertyInserted(property));
 	}
 
-	protected void unregisterDataProperty(OntologyDataProperty aProperty)
-	{
-		dataProperties.remove(aProperty.getURI());		
-		if (_allDataProperties != null) _allDataProperties.clear();
+	protected void unregisterDataProperty(OntologyDataProperty aProperty) {
+		dataProperties.remove(aProperty.getURI());
+		if (_allDataProperties != null)
+			_allDataProperties.clear();
 		_allDataProperties = null;
 		setChanged();
 		notifyObservers(new OntologyDataPropertyRemoved(aProperty));
 	}
 
-	protected void renameDataProperty(OntologyDataProperty object, String oldURI, String newURI)
-	{
-		dataProperties.remove(oldURI);		
-		dataProperties.put(object.getURI(), object);		
-		if (_allDataProperties != null) _allDataProperties.clear();
+	protected void renameDataProperty(OntologyDataProperty object, String oldURI, String newURI) {
+		dataProperties.remove(oldURI);
+		dataProperties.put(object.getURI(), object);
+		if (_allDataProperties != null)
+			_allDataProperties.clear();
 		_allDataProperties = null;
 		setChanged();
 		notifyObservers(new OntologyObjectRenamed(object, oldURI, newURI));
 	}
-	
-	public OntologyObjectProperty getObjectProperty(String propertyURI)
-	{
-		if (propertyURI == null) return null;
+
+	public OntologyObjectProperty getObjectProperty(String propertyURI) {
+		if (propertyURI == null)
+			return null;
 		OntologyObjectProperty returned = objectProperties.get(propertyURI);
-		if (returned != null) return returned;
-		if (parentOntologyLibrary != null) return parentOntologyLibrary.getObjectProperty(propertyURI);
+		if (returned != null)
+			return returned;
+		if (parentOntologyLibrary != null)
+			return parentOntologyLibrary.getObjectProperty(propertyURI);
 		return null;
 	}
-	
-	protected void registerNewObjectProperty(OntologyObjectProperty property)
-	{
+
+	protected void registerNewObjectProperty(OntologyObjectProperty property) {
 		objectProperties.put(property.getURI(), property);
-		if (_allObjectProperties != null) _allObjectProperties.clear();
+		if (_allObjectProperties != null)
+			_allObjectProperties.clear();
 		_allObjectProperties = null;
 		setChanged();
-		notifyObservers(new OntologyObjectPropertyInserted(property));	
+		notifyObservers(new OntologyObjectPropertyInserted(property));
 	}
 
-	protected void unregisterObjectProperty(OntologyObjectProperty aProperty)
-	{
-		objectProperties.remove(aProperty.getURI());		
-		if (_allObjectProperties != null) _allObjectProperties.clear();
+	protected void unregisterObjectProperty(OntologyObjectProperty aProperty) {
+		objectProperties.remove(aProperty.getURI());
+		if (_allObjectProperties != null)
+			_allObjectProperties.clear();
 		_allObjectProperties = null;
 		setChanged();
 		notifyObservers(new OntologyObjectPropertyRemoved(aProperty));
 	}
 
-	protected void renameObjectProperty(OntologyObjectProperty object, String oldURI, String newURI)
-	{
-		objectProperties.remove(oldURI);		
-		objectProperties.put(object.getURI(), object);		
-		if (_allObjectProperties != null) _allObjectProperties.clear();
+	protected void renameObjectProperty(OntologyObjectProperty object, String oldURI, String newURI) {
+		objectProperties.remove(oldURI);
+		objectProperties.put(object.getURI(), object);
+		if (_allObjectProperties != null)
+			_allObjectProperties.clear();
 		_allObjectProperties = null;
 		setChanged();
 		notifyObservers(new OntologyObjectRenamed(object, oldURI, newURI));
 	}
-	
+
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.VE.ONTOLOGY_LIBRARY_INSPECTOR;
 	}
-	
-	public Vector<OntologyObjectProperty> getRootObjectProperties() 
-	{
+
+	public Vector<OntologyObjectProperty> getRootObjectProperties() {
 		Vector<OntologyObjectProperty> topLevelProperties = new Vector<OntologyObjectProperty>();
 		for (String uri : objectProperties.keySet()) {
 			OntologyObjectProperty property = objectProperties.get(uri);
-			addTopLevelOntologyObjectProperty(property,topLevelProperties);
+			addTopLevelOntologyObjectProperty(property, topLevelProperties);
 		}
 		return topLevelProperties;
 	}
 
-	private void addTopLevelOntologyObjectProperty(OntologyObjectProperty property, Vector<OntologyObjectProperty> topLevelProperties)
-	{
+	private void addTopLevelOntologyObjectProperty(OntologyObjectProperty property, Vector<OntologyObjectProperty> topLevelProperties) {
 		if (property.getSuperProperties().size() == 0) {
-			if (!topLevelProperties.contains(property)) topLevelProperties.add(property);
+			if (!topLevelProperties.contains(property))
+				topLevelProperties.add(property);
 			return;
 		}
 		for (OntologyProperty superProperty : property.getSuperProperties()) {
 			if (superProperty instanceof OntologyObjectProperty)
-				addTopLevelOntologyObjectProperty((OntologyObjectProperty)superProperty,topLevelProperties);
+				addTopLevelOntologyObjectProperty((OntologyObjectProperty) superProperty, topLevelProperties);
 		}
 	}
-	
-	public Vector<OntologyDataProperty> getRootDataProperties() 
-	{
+
+	public Vector<OntologyDataProperty> getRootDataProperties() {
 		Vector<OntologyDataProperty> topLevelProperties = new Vector<OntologyDataProperty>();
 		for (String uri : dataProperties.keySet()) {
 			OntologyDataProperty property = dataProperties.get(uri);
-			addTopLevelOntologyDataProperty(property,topLevelProperties);
+			addTopLevelOntologyDataProperty(property, topLevelProperties);
 		}
 		return topLevelProperties;
 	}
 
-	private void addTopLevelOntologyDataProperty(OntologyDataProperty property, Vector<OntologyDataProperty> topLevelProperties)
-	{
+	private void addTopLevelOntologyDataProperty(OntologyDataProperty property, Vector<OntologyDataProperty> topLevelProperties) {
 		if (property.getSuperProperties().size() == 0) {
-			if (!topLevelProperties.contains(property)) topLevelProperties.add(property);
+			if (!topLevelProperties.contains(property))
+				topLevelProperties.add(property);
 			return;
 		}
 		for (OntologyProperty superProperty : property.getSuperProperties()) {
 			if (superProperty instanceof OntologyDataProperty)
-				addTopLevelOntologyDataProperty((OntologyDataProperty)superProperty,topLevelProperties);
+				addTopLevelOntologyDataProperty((OntologyDataProperty) superProperty, topLevelProperties);
 		}
 	}
-	
+
 	@Override
-	public void update(FlexoObservable observable,
-			DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == parentOntologyLibrary) {
 			if (dataModification instanceof OntologyImported) {
-				if (_allOntologies != null) _allOntologies.clear();
+				if (_allOntologies != null)
+					_allOntologies.clear();
 				_allOntologies = null;
-			}
-			else if (dataModification instanceof OntologyClassInserted) {
-				if (_allClasses != null) _allClasses.clear();
+			} else if (dataModification instanceof OntologyClassInserted) {
+				if (_allClasses != null)
+					_allClasses.clear();
 				_allClasses = null;
-			}
-			else if (dataModification instanceof OntologyIndividualInserted) {
-				if (_allIndividuals != null) _allIndividuals.clear();
+			} else if (dataModification instanceof OntologyIndividualInserted) {
+				if (_allIndividuals != null)
+					_allIndividuals.clear();
 				_allIndividuals = null;
-			}
-			else if (dataModification instanceof OntologyDataPropertyInserted) {
-				if (_allDataProperties != null) _allDataProperties.clear();
+			} else if (dataModification instanceof OntologyDataPropertyInserted) {
+				if (_allDataProperties != null)
+					_allDataProperties.clear();
 				_allDataProperties = null;
-			}
-			else if (dataModification instanceof OntologyObjectPropertyInserted) {
-				if (_allObjectProperties != null) _allObjectProperties.clear();
+			} else if (dataModification instanceof OntologyObjectPropertyInserted) {
+				if (_allObjectProperties != null)
+					_allObjectProperties.clear();
 				_allObjectProperties = null;
 			}
 		}
 	}
 
-	public OntologyFolder getRootFolder() 
-	{
+	public OntologyFolder getRootFolder() {
 		return rootFolder;
 	}
 

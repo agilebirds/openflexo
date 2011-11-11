@@ -28,47 +28,37 @@ public class HalfBandWithLinesConstruction extends HalfBandConstruction {
 	public LineConstruction lineConstruction2;
 	public LineConstruction limitLineConstruction;
 	public PointConstruction pointConstruction;
-	
-	public HalfBandWithLinesConstruction() 
-	{
+
+	public HalfBandWithLinesConstruction() {
 		super();
 	}
-	
-	public HalfBandWithLinesConstruction(LineConstruction aLineConstruction1, LineConstruction aLineConstruction2, LineConstruction limitLineConstruction, PointConstruction aPointConstruction) 
-	{
+
+	public HalfBandWithLinesConstruction(LineConstruction aLineConstruction1, LineConstruction aLineConstruction2,
+			LineConstruction limitLineConstruction, PointConstruction aPointConstruction) {
 		this();
 		this.lineConstruction1 = aLineConstruction1;
 		this.lineConstruction2 = aLineConstruction2;
 		this.limitLineConstruction = limitLineConstruction;
 		this.pointConstruction = aPointConstruction;
 	}
-	
+
 	@Override
-	protected FGEHalfBand computeData()
-	{
-		FGEHalfBand returned = new FGEHalfBand(
-				lineConstruction1.getLine(),
-				lineConstruction2.getLine(),
-				new FGEHalfPlane(limitLineConstruction.getLine(),pointConstruction.getPoint()));
+	protected FGEHalfBand computeData() {
+		FGEHalfBand returned = new FGEHalfBand(lineConstruction1.getLine(), lineConstruction2.getLine(), new FGEHalfPlane(
+				limitLineConstruction.getLine(), pointConstruction.getPoint()));
 		return returned;
 	}
 
 	@Override
-	public String toString()
-	{
-		return "HalfBandWithLinesConstruction[\n"+"> "
-		+lineConstruction1.toString()+"\n> "+"> "
-		+lineConstruction2.toString()+"\n> "+"> "
-		+limitLineConstruction.toString()+"\n> "
-		+pointConstruction.toString()+"\n]";
+	public String toString() {
+		return "HalfBandWithLinesConstruction[\n" + "> " + lineConstruction1.toString() + "\n> " + "> " + lineConstruction2.toString()
+				+ "\n> " + "> " + limitLineConstruction.toString() + "\n> " + pointConstruction.toString() + "\n]";
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
-		GeometricConstruction[] returned = { lineConstruction1, lineConstruction2, limitLineConstruction,  pointConstruction };
+	public GeometricConstruction[] getDepends() {
+		GeometricConstruction[] returned = { lineConstruction1, lineConstruction2, limitLineConstruction, pointConstruction };
 		return returned;
 	}
-
 
 }

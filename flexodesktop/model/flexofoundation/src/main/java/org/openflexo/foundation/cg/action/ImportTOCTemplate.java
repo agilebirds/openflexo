@@ -32,60 +32,54 @@ import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 
+public class ImportTOCTemplate extends FlexoAction<ImportTOCTemplate, FlexoModelObject, FlexoModelObject> {
 
-public class ImportTOCTemplate extends FlexoAction<ImportTOCTemplate, FlexoModelObject, FlexoModelObject>
-{
+	public static final FlexoActionType<ImportTOCTemplate, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<ImportTOCTemplate, FlexoModelObject, FlexoModelObject>(
+			"import_toc_as_template") {
 
-    public static final FlexoActionType<ImportTOCTemplate, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<ImportTOCTemplate, FlexoModelObject, FlexoModelObject>("import_toc_as_template") {
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-        protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection)
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-        protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection)
-        {
-            return true;
-        }
+		@Override
+		public ImportTOCTemplate makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+			return new ImportTOCTemplate(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-        public ImportTOCTemplate makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-        {
-            return new ImportTOCTemplate(focusedObject,globalSelection,editor);
-        }
+	};
 
-    };
-
-    static {
-        FlexoModelObject.addActionForClass (ImportTOCTemplate.actionType, GeneratedDoc.class);
-    }
-
-    private File sourceFile ;
-
-    public TOCRepository getSourceRepository() {
-		return (TOCRepository)getFocusedObject();
+	static {
+		FlexoModelObject.addActionForClass(ImportTOCTemplate.actionType, GeneratedDoc.class);
 	}
-    
-	/**
-     * @param actionType
-     * @param focusedObject
-     * @param globalSelection
-     */
-    protected ImportTOCTemplate(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
 
-    /**
-     * Overrides doAction
-     *
-     * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
-     */
-    @Override
-    protected void doAction(Object context) throws FlexoException
-    {
+	private File sourceFile;
+
+	public TOCRepository getSourceRepository() {
+		return (TOCRepository) getFocusedObject();
+	}
+
+	/**
+	 * @param actionType
+	 * @param focusedObject
+	 * @param globalSelection
+	 */
+	protected ImportTOCTemplate(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	/**
+	 * Overrides doAction
+	 * 
+	 * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
+	 */
+	@Override
+	protected void doAction(Object context) throws FlexoException {
 		try {
 			File tocTemplateDirectory = new FileResource("Config/TOCTemplates");
 			FileUtils.copyFileToDir(getSourceFile(), tocTemplateDirectory);
@@ -93,16 +87,14 @@ public class ImportTOCTemplate extends FlexoAction<ImportTOCTemplate, FlexoModel
 			e.printStackTrace();
 			throw new FlexoException(e.getMessage(), e);
 		}
-    }
+	}
 
-    public File getSourceFile()
-    {
-        return sourceFile;
-    }
+	public File getSourceFile() {
+		return sourceFile;
+	}
 
-    public void setSourceFile(File sourceFile)
-    {
-        this.sourceFile = sourceFile;
-    }
+	public void setSourceFile(File sourceFile) {
+		this.sourceFile = sourceFile;
+	}
 
 }

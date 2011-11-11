@@ -23,7 +23,6 @@
 // Generated on: 2008.02.08 at 10:43:57 AM CET 
 //
 
-
 package org.oasis_open.docs.wsbpel._2_0.process.executable;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -34,11 +33,12 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-
 /**
- * <p>Java class for tToPart complex type.
+ * <p>
+ * Java class for tToPart complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tToPart">
@@ -55,64 +55,56 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tToPart")
-public class TToPart
-    extends TExtensibleElements
-{
+public class TToPart extends TExtensibleElements {
 
-    @XmlAttribute(required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "NCName")
-    protected String part;
-    @XmlAttribute(required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String fromVariable;
+	@XmlAttribute(required = true)
+	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+	@XmlSchemaType(name = "NCName")
+	protected String part;
+	@XmlAttribute(required = true)
+	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+	protected String fromVariable;
 
-    /**
-     * Gets the value of the part property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getPart() {
-        return part;
-    }
+	/**
+	 * Gets the value of the part property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getPart() {
+		return part;
+	}
 
-    /**
-     * Sets the value of the part property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPart(String value) {
-        this.part = value;
-    }
+	/**
+	 * Sets the value of the part property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setPart(String value) {
+		this.part = value;
+	}
 
-    /**
-     * Gets the value of the fromVariable property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getFromVariable() {
-        return fromVariable;
-    }
+	/**
+	 * Gets the value of the fromVariable property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getFromVariable() {
+		return fromVariable;
+	}
 
-    /**
-     * Sets the value of the fromVariable property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setFromVariable(String value) {
-        this.fromVariable = value;
-    }
+	/**
+	 * Sets the value of the fromVariable property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setFromVariable(String value) {
+		this.fromVariable = value;
+	}
 
 }

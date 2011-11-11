@@ -30,49 +30,37 @@ import java.util.Vector;
 
 /**
  * <p>
- * A KeyValue property represents a vector-like property, accessible directly by
- * related field or related accessors.
+ * A KeyValue property represents a vector-like property, accessible directly by related field or related accessors.
  * </p>
- *
+ * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  * @see KeyValueCoder
  * @see KeyValueDecoder
- *
+ * 
  */
-public class VectorKeyValueProperty extends KeyValueProperty
-{
+public class VectorKeyValueProperty extends KeyValueProperty {
 
 	/**
-	 * Stores all 'addTo...' methods, in order of the specialization of their
-	 * arguments, as {@link AccessorMethod} objects. (the first methods are the
-	 * first we will try to invoke, that's why vector needs to be sorted).<br>
-	 * NB: 'addTo...' methods are methods with general form:
-	 * <code>addToXXX(Class anObject)</code> or
-	 * <code>_addToXXX(Class anObject)</code>, where XXX is the property name
-	 * (try with or without a terminal 's' character), and Class could be
-	 * anything...
+	 * Stores all 'addTo...' methods, in order of the specialization of their arguments, as {@link AccessorMethod} objects. (the first
+	 * methods are the first we will try to invoke, that's why vector needs to be sorted).<br>
+	 * NB: 'addTo...' methods are methods with general form: <code>addToXXX(Class anObject)</code> or <code>_addToXXX(Class anObject)</code>
+	 * , where XXX is the property name (try with or without a terminal 's' character), and Class could be anything...
 	 */
 	protected TreeSet addToMethods;
 
 	/**
-	 * Stores all 'removeFrom...' methods, in order of the specialization of
-	 * their arguments, as {@link AccessorMethod} objects. (the first methods
-	 * are the first we will try to invoke, that's why vector needs to be
-	 * sorted).<br>
-	 * NB: 'removeFrom...' methods are methods with general form:
-	 * <code>removeFromXXX(Class anObject)</code> or
-	 * <code>_removeFromXXX(Class anObject)</code>, where XXX is the property
-	 * name (try with or without a terminal 's' character), and Class could be
-	 * anything...
+	 * Stores all 'removeFrom...' methods, in order of the specialization of their arguments, as {@link AccessorMethod} objects. (the first
+	 * methods are the first we will try to invoke, that's why vector needs to be sorted).<br>
+	 * NB: 'removeFrom...' methods are methods with general form: <code>removeFromXXX(Class anObject)</code> or
+	 * <code>_removeFromXXX(Class anObject)</code>, where XXX is the property name (try with or without a terminal 's' character), and Class
+	 * could be anything...
 	 */
 	protected TreeSet removeFromMethods;
 
 	/**
-	 * Creates a new <code>VectorKeyValueProperty</code> instance, given an
-	 * object class.<br>
-	 * To be usable, this property should be set with a correct object
-	 * (according to object class)
-	 *
+	 * Creates a new <code>VectorKeyValueProperty</code> instance, given an object class.<br>
+	 * To be usable, this property should be set with a correct object (according to object class)
+	 * 
 	 * @param anObject
 	 *            an <code>Object</code> value
 	 * @param propertyName
@@ -80,8 +68,8 @@ public class VectorKeyValueProperty extends KeyValueProperty
 	 * @exception InvalidKeyValuePropertyException
 	 *                if an error occurs
 	 */
-	public VectorKeyValueProperty(Class anObjectClass, String propertyName, boolean setMethodIsMandatory) throws InvalidKeyValuePropertyException
-	{
+	public VectorKeyValueProperty(Class anObjectClass, String propertyName, boolean setMethodIsMandatory)
+			throws InvalidKeyValuePropertyException {
 
 		super(anObjectClass, propertyName);
 		init(propertyName, setMethodIsMandatory);
@@ -90,27 +78,24 @@ public class VectorKeyValueProperty extends KeyValueProperty
 	/**
 	 * Returns boolean indicating if related type inherits from Vector
 	 */
-	public boolean typeInheritsFromVector()
-	{
+	public boolean typeInheritsFromVector() {
 
 		return Vector.class.isAssignableFrom(getType());
 	}
 
-	public Type getAccessedType()
-	{
-		if (field!=null) {
+	public Type getAccessedType() {
+		if (field != null) {
 			return field.getGenericType();
-		} else if (getGetMethod()!=null) {
+		} else if (getGetMethod() != null) {
 			return getGetMethod().getGenericReturnType();
 		} else {
 			return null;
 		}
 	}
 
-	public Class getContentType()
-	{
-		if (getAccessedType() instanceof ParameterizedType && ((ParameterizedType)getAccessedType()).getActualTypeArguments().length > 0) {
-			Type returned = ((ParameterizedType)getAccessedType()).getActualTypeArguments()[0];
+	public Class getContentType() {
+		if (getAccessedType() instanceof ParameterizedType && ((ParameterizedType) getAccessedType()).getActualTypeArguments().length > 0) {
+			Type returned = ((ParameterizedType) getAccessedType()).getActualTypeArguments()[0];
 			if (returned instanceof Class) {
 				return (Class) returned;
 			} else if (returned instanceof ParameterizedType && ((ParameterizedType) returned).getRawType() instanceof Class) {
@@ -122,19 +107,17 @@ public class VectorKeyValueProperty extends KeyValueProperty
 
 	/**
 	 * Initialize this property, given a propertyName.<br>
-	 * This method is called during constructor invokation. NB: to be valid, a
-	 * property should be identified by at least the field or the accessors
-	 * methods. If the field is accessible, and only some of accessors methods
-	 * are accessible, a warning will be thrown.
+	 * This method is called during constructor invokation. NB: to be valid, a property should be identified by at least the field or the
+	 * accessors methods. If the field is accessible, and only some of accessors methods are accessible, a warning will be thrown.
 	 */
 	@Override
-	protected void init(String propertyName, boolean setMethodIsMandatory) throws InvalidKeyValuePropertyException
-	{
+	protected void init(String propertyName, boolean setMethodIsMandatory) throws InvalidKeyValuePropertyException {
 
 		super.init(propertyName, setMethodIsMandatory);
 
 		if (!typeInheritsFromVector()) {
-			throw new InvalidKeyValuePropertyException("Property " + propertyName + " found, but doesn't seem inherits from java.util.Vector");
+			throw new InvalidKeyValuePropertyException("Property " + propertyName
+					+ " found, but doesn't seem inherits from java.util.Vector");
 		}
 
 		// If related type is a sub-class of vector, check that there is a
@@ -144,8 +127,8 @@ public class VectorKeyValueProperty extends KeyValueProperty
 				Object testInstanciation = type.newInstance();
 			} catch (InstantiationException e) {
 				throw new InvalidKeyValuePropertyException("Class " + type.getName()
-						+ " cannot be instanciated directly (check that this class has a constructor with no arguments [public " + type.getName()
-						+ "()] and that this class is not abstract.");
+						+ " cannot be instanciated directly (check that this class has a constructor with no arguments [public "
+						+ type.getName() + "()] and that this class is not abstract.");
 			} catch (Exception e) {
 				throw new InvalidModelException("Unexpected error occurs during model initialization. Please send a bug report.");
 			}
@@ -158,12 +141,14 @@ public class VectorKeyValueProperty extends KeyValueProperty
 
 			addToMethods = searchMatchingAddToMethods(propertyName);
 			if ((addToMethods.size() == 0) && (setMethodIsMandatory)) {
-				throw new InvalidKeyValuePropertyException("No public field " + propertyName + " found, and no 'addTo' methods accessors found");
+				throw new InvalidKeyValuePropertyException("No public field " + propertyName
+						+ " found, and no 'addTo' methods accessors found");
 			}
 
 			removeFromMethods = searchMatchingRemoveFromMethods(propertyName);
 			if ((removeFromMethods.size() == 0) && (setMethodIsMandatory)) {
-				throw new InvalidKeyValuePropertyException("No public field " + propertyName + " found, and no 'removeFrom' methods accessors found");
+				throw new InvalidKeyValuePropertyException("No public field " + propertyName
+						+ " found, and no 'removeFrom' methods accessors found");
 			}
 
 		}
@@ -172,14 +157,11 @@ public class VectorKeyValueProperty extends KeyValueProperty
 
 	/**
 	 * Search and return matching "addTo" methods<br>
-	 * NB: 'addTo...' methods are methods with general form:
-	 * <code>addToXXX(Class anObject)</code> or
-	 * <code>_addToXXX(Class anObject)</code>, where XXX is the property name
-	 * (try with or without a terminal 's' character), and Class could be
-	 * anything... Returns an ordered TreeSet of {@link AccessorMethod} objects
+	 * NB: 'addTo...' methods are methods with general form: <code>addToXXX(Class anObject)</code> or <code>_addToXXX(Class anObject)</code>
+	 * , where XXX is the property name (try with or without a terminal 's' character), and Class could be anything... Returns an ordered
+	 * TreeSet of {@link AccessorMethod} objects
 	 */
-	protected TreeSet searchMatchingAddToMethods(String propertyName)
-	{
+	protected TreeSet searchMatchingAddToMethods(String propertyName) {
 
 		String singularPropertyName;
 		String pluralPropertyName;
@@ -203,14 +185,11 @@ public class VectorKeyValueProperty extends KeyValueProperty
 
 	/**
 	 * Search and return matching "removeFrom" methods<br>
-	 * NB: 'removeFrom...' methods are methods with general form:
-	 * <code>removeFromXXX(Class anObject)</code> or
-	 * <code>_removeFromXXX(Class anObject)</code>, where XXX is the property
-	 * name (try with or without a terminal 's' character), and Class could be
-	 * anything... Returns an ordered TreeSet of {@link AccessorMethod} objects
+	 * NB: 'removeFrom...' methods are methods with general form: <code>removeFromXXX(Class anObject)</code> or
+	 * <code>_removeFromXXX(Class anObject)</code>, where XXX is the property name (try with or without a terminal 's' character), and Class
+	 * could be anything... Returns an ordered TreeSet of {@link AccessorMethod} objects
 	 */
-	protected TreeSet searchMatchingRemoveFromMethods(String propertyName)
-	{
+	protected TreeSet searchMatchingRemoveFromMethods(String propertyName) {
 
 		String singularPropertyName;
 		String pluralPropertyName;
@@ -232,19 +211,16 @@ public class VectorKeyValueProperty extends KeyValueProperty
 		return searchMethodsWithNameAndParamsNumber(methodNameCondidates, 1);
 	}
 
-
 	/**
-	 * Add Object value for considered object <code>anObject</code>,
-	 * asserting that this property represents a Vector-like property (if not,
+	 * Add Object value for considered object <code>anObject</code>, asserting that this property represents a Vector-like property (if not,
 	 * throw an InvalidKeyValuePropertyException exception)
-	 *
+	 * 
 	 * @param aValue
 	 *            an <code>Object</code> value
 	 * @exception InvalidKeyValuePropertyException
 	 *                if an error occurs
 	 */
-	public synchronized void addObjectValue(Object aValue, Object object)
-	{
+	public synchronized void addObjectValue(Object aValue, Object object) {
 
 		if (object == null) {
 			throw new InvalidKeyValuePropertyException("No object is specified");
@@ -254,8 +230,8 @@ public class VectorKeyValueProperty extends KeyValueProperty
 					Vector vector = (Vector) field.get(object);
 					vector.addElement(aValue);
 				} catch (Exception e) {
-					throw new InvalidKeyValuePropertyException("InvalidKeyValuePropertyException: class " + getObjectClass().getName() + ": field "
-							+ field.getName() + " Exception raised: " + e.toString());
+					throw new InvalidKeyValuePropertyException("InvalidKeyValuePropertyException: class " + getObjectClass().getName()
+							+ ": field " + field.getName() + " Exception raised: " + e.toString());
 				}
 			} else {
 				Object params[] = new Object[1];
@@ -268,7 +244,7 @@ public class VectorKeyValueProperty extends KeyValueProperty
 						method.invoke(object, params);
 						return;
 					} catch (InvocationTargetException e) {
-						//e.getTargetException().printStackTrace();
+						// e.getTargetException().printStackTrace();
 						throw new AccessorInvocationException("Exception thrown while invoking: " + method, e);
 					} catch (IllegalArgumentException e) {
 						// Debugging.debug ("FAILED with
@@ -281,24 +257,22 @@ public class VectorKeyValueProperty extends KeyValueProperty
 					}
 				}
 				throw new InvalidKeyValuePropertyException("addObjectValue, class " + getObjectClass().getName()
-						+ ": could not find a valid 'addTo' accessor method for property '"+name+"': object class was " + aValue.getClass().getName() + " value= " + aValue);
+						+ ": could not find a valid 'addTo' accessor method for property '" + name + "': object class was "
+						+ aValue.getClass().getName() + " value= " + aValue);
 			}
 		}
 	}
 
-
 	/**
-	 * Remove Object value for considered object <code>anObject</code>,
-	 * asserting that this property represents a Vector-like property (if not,
-	 * throw an InvalidKeyValuePropertyException exception)
-	 *
+	 * Remove Object value for considered object <code>anObject</code>, asserting that this property represents a Vector-like property (if
+	 * not, throw an InvalidKeyValuePropertyException exception)
+	 * 
 	 * @param aValue
 	 *            an <code>Object</code> value
 	 * @exception InvalidKeyValuePropertyException
 	 *                if an error occurs
 	 */
-	public synchronized void removeObjectValue(Object aValue, Object object)
-	{
+	public synchronized void removeObjectValue(Object aValue, Object object) {
 
 		if (object == null) {
 			throw new InvalidKeyValuePropertyException("No object is specified");
@@ -308,8 +282,8 @@ public class VectorKeyValueProperty extends KeyValueProperty
 					Vector vector = (Vector) field.get(object);
 					vector.removeElement(aValue);
 				} catch (Exception e) {
-					throw new InvalidKeyValuePropertyException("InvalidKeyValuePropertyException: class " + getObjectClass().getName() + ": field "
-							+ field.getName() + " Exception raised: " + e.toString());
+					throw new InvalidKeyValuePropertyException("InvalidKeyValuePropertyException: class " + getObjectClass().getName()
+							+ ": field " + field.getName() + " Exception raised: " + e.toString());
 				}
 			} else {
 				Object params[] = new Object[1];
@@ -333,11 +307,9 @@ public class VectorKeyValueProperty extends KeyValueProperty
 	}
 
 	/**
-	 * Creates a new instance of this represented class, which MUST be a
-	 * {@link Vector} or a subclass of {@link Vector}.
+	 * Creates a new instance of this represented class, which MUST be a {@link Vector} or a subclass of {@link Vector}.
 	 */
-	public Vector newInstance() throws InvalidObjectSpecificationException
-	{
+	public Vector newInstance() throws InvalidObjectSpecificationException {
 
 		try {
 			return (Vector) type.newInstance();

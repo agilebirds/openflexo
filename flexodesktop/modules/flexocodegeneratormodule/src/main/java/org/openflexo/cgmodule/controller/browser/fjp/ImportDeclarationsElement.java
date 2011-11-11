@@ -24,24 +24,19 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.javaparser.FJPJavaSource.FJPImportDeclarations;
 import org.openflexo.javaparser.FJPJavaSource.FJPImportDeclarations.FJPImportDeclaration;
 
-
-public class ImportDeclarationsElement extends JavaBrowserElement
-{
-	public ImportDeclarationsElement(FJPImportDeclarations importsDeclaration, JavaParserBrowser browser, BrowserElement parent)
-	{
-		super(importsDeclaration, BrowserElementType.IMPORTS, browser,parent);
+public class ImportDeclarationsElement extends JavaBrowserElement {
+	public ImportDeclarationsElement(FJPImportDeclarations importsDeclaration, JavaParserBrowser browser, BrowserElement parent) {
+		super(importsDeclaration, BrowserElementType.IMPORTS, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 		for (FJPImportDeclaration i : getImportDeclarations().getImportDeclarations()) {
 			addToChilds(i);
 		}
 	}
 
-	public FJPImportDeclarations getImportDeclarations()
-	{
-		return (FJPImportDeclarations)getObject();
+	public FJPImportDeclarations getImportDeclarations() {
+		return (FJPImportDeclarations) getObject();
 	}
 }

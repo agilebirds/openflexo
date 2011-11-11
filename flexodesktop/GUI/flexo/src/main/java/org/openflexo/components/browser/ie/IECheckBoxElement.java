@@ -24,41 +24,34 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ie.widget.IECheckBoxWidget;
 
-
 /**
- * @author bmangez
- * <B>Class Description</B>
+ * @author bmangez <B>Class Description</B>
  */
-public class IECheckBoxElement extends IEElement
-{
+public class IECheckBoxElement extends IEElement {
 
-    /**
-     * @param widget
-     * @param browser
-     */
-    public IECheckBoxElement(IECheckBoxWidget widget, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(widget, BrowserElementType.CHECKBOX, browser,parent);
-    }
+	/**
+	 * @param widget
+	 * @param browser
+	 */
+	public IECheckBoxElement(IECheckBoxWidget widget, ProjectBrowser browser, BrowserElement parent) {
+		super(widget, BrowserElementType.CHECKBOX, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        //no childs
-    }
+	@Override
+	protected void buildChildrenVector() {
+		// no childs
+	}
 
-    @Override
-	public String getName()
-    {
-        if (getCheckBox().getName() == null) {
-            return "CheckBox";
-        }
-        return getCheckBox().getName();
-    }
+	@Override
+	public String getName() {
+		if (getCheckBox().getName() == null) {
+			return "CheckBox";
+		}
+		return getCheckBox().getName();
+	}
 
-    protected IECheckBoxWidget getCheckBox()
-    {
-        return (IECheckBoxWidget) getObject();
-    }
+	protected IECheckBoxWidget getCheckBox() {
+		return (IECheckBoxWidget) getObject();
+	}
 
 }

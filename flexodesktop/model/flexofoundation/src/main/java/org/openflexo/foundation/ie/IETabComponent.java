@@ -29,63 +29,57 @@ import org.openflexo.foundation.xml.FlexoComponentBuilder;
 import org.openflexo.logging.FlexoLogger;
 
 /**
- * Represents a 'popup' WOComponent related to a ComponentDefinition.Popup
- * attached to an Operation Node
+ * Represents a 'popup' WOComponent related to a ComponentDefinition.Popup attached to an Operation Node
  * 
  * @author sguerin
  * 
  */
-public final class IETabComponent extends IEPartialComponent implements DataFlexoObserver
-{
-    @SuppressWarnings("unused")
+public final class IETabComponent extends IEPartialComponent implements DataFlexoObserver {
+	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(IETabComponent.class.getPackage().getName());
 
-     /**
-     * Constructor invoked during deserialization for IEThumbnailComponent
-     * 
-     * @param componentDefinition
-     */
-    public IETabComponent(FlexoComponentBuilder builder)
-    {
-        super(builder);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor invoked during deserialization for IEThumbnailComponent
+	 * 
+	 * @param componentDefinition
+	 */
+	public IETabComponent(FlexoComponentBuilder builder) {
+		super(builder);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor for IEThumbnailComponent
-     * 
-     * @param componentDefinition
-     */
-    public IETabComponent(TabComponentDefinition aComponentDefinition, FlexoProject prj)
-    {
-        super(aComponentDefinition, prj);
-    }
-    
-    @Override
-    public TabComponentDefinition getComponentDefinition() {
-    	return (TabComponentDefinition) super.getComponentDefinition();
-    }
+	/**
+	 * Default constructor for IEThumbnailComponent
+	 * 
+	 * @param componentDefinition
+	 */
+	public IETabComponent(TabComponentDefinition aComponentDefinition, FlexoProject prj) {
+		super(aComponentDefinition, prj);
+	}
 
-    @Override
-	public String getInspectorName()
-    {
-        return Inspectors.IE.TAB_COMPONENT_INSPECTOR;
-    }
+	@Override
+	public TabComponentDefinition getComponentDefinition() {
+		return (TabComponentDefinition) super.getComponentDefinition();
+	}
 
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return "Tab:" + getName();
-    }
-    
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "tab_component";
-    }
-    
+	@Override
+	public String getInspectorName() {
+		return Inspectors.IE.TAB_COMPONENT_INSPECTOR;
+	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		return "Tab:" + getName();
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "tab_component";
+	}
+
 }

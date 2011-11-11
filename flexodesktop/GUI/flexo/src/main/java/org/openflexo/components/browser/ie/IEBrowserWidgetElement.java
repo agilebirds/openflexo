@@ -25,51 +25,46 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.widget.IEBrowserWidget;
 
-
 /**
  * @author gpolet Created on 13 sept. 2005
  */
-public class IEBrowserWidgetElement extends IEElement
-{
+public class IEBrowserWidgetElement extends IEElement {
 
-    /**
-     * @param widget
-     * @param browserElementType
-     * @param browser
-     */
-    public IEBrowserWidgetElement(FlexoModelObject widget, BrowserElementType browserElementType, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(widget, BrowserElementType.BROWSERWIDGET, browser,parent);
-    }
+	/**
+	 * @param widget
+	 * @param browserElementType
+	 * @param browser
+	 */
+	public IEBrowserWidgetElement(FlexoModelObject widget, BrowserElementType browserElementType, ProjectBrowser browser,
+			BrowserElement parent) {
+		super(widget, BrowserElementType.BROWSERWIDGET, browser, parent);
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
-     */
-    @Override
-	protected void buildChildrenVector()
-    {
-        // Empty block
-    }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
+	 */
+	@Override
+	protected void buildChildrenVector() {
+		// Empty block
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.openflexo.components.browser.BrowserElement#getName()
-     */
-    @Override
-	public String getName()
-    {
-        if (getBrowser().getName() == null)
-            return "Browser";
-        else
-            return getBrowser().getName();
-    }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.openflexo.components.browser.BrowserElement#getName()
+	 */
+	@Override
+	public String getName() {
+		if (getBrowser().getName() == null)
+			return "Browser";
+		else
+			return getBrowser().getName();
+	}
 
-    public IEBrowserWidget getBrowser()
-    {
-        return (IEBrowserWidget) getObject();
-    }
+	public IEBrowserWidget getBrowser() {
+		return (IEBrowserWidget) getObject();
+	}
 
 }

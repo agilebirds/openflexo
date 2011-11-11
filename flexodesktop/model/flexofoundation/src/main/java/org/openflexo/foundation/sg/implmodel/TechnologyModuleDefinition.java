@@ -42,7 +42,6 @@ import org.openflexo.toolbox.JavaResourceUtil;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
 
-
 /**
  * Contains the content of the module.xml at the {@link TechnologyModuleImplementation} creation
  * 
@@ -78,14 +77,15 @@ public abstract class TechnologyModuleDefinition {
 	 * Pay attention that this method will be called BEFORE the module initialization (thus before having its name/version/... set)
 	 * 
 	 * @return the path to the resources needed by this module.
-	 * @throws TechnologyModuleInitializationException if resource path cannot be found
+	 * @throws TechnologyModuleInitializationException
+	 *             if resource path cannot be found
 	 */
 	public String getResourcePath() {
 		for (String resourceName : JavaResourceUtil.getMatchingResources(this.getClass(), "module.xml")) {
-			if(resourceName.endsWith("/module.xml"))
+			if (resourceName.endsWith("/module.xml"))
 				return resourceName.substring(0, resourceName.length() - "/module.xml".length());
 		}
-		
+
 		throw new TechnologyModuleInitializationException("module.xml not found for module '" + this.getClass() + "' !");
 	}
 
@@ -94,9 +94,11 @@ public abstract class TechnologyModuleDefinition {
 	 * 
 	 * @param implementationModel
 	 * @return the created {@link TechnologyModuleImplementation}
-	 * @throws TechnologyModuleCompatibilityCheckException if there is incompatibility with existing module.
+	 * @throws TechnologyModuleCompatibilityCheckException
+	 *             if there is incompatibility with existing module.
 	 */
-	public abstract TechnologyModuleImplementation createNewImplementation(ImplementationModel implementationModel) throws TechnologyModuleCompatibilityCheckException;
+	public abstract TechnologyModuleImplementation createNewImplementation(ImplementationModel implementationModel)
+			throws TechnologyModuleCompatibilityCheckException;
 
 	/**
 	 * Load and parse the module.xml file associated to this {@link TechnologyModuleDefinition}. <br>
@@ -105,7 +107,8 @@ public abstract class TechnologyModuleDefinition {
 	 * For example it will record all inspectors available in this jar. <br>
 	 * Override the method to load the needed GUI elements in the module using SGModule.recordTechnologyModuleGUIFactory.
 	 * 
-	 * @throws TechnologyModuleInitializationException if the module.xml file is not found, if it has parsing error or if any other exception occurred during initialization
+	 * @throws TechnologyModuleInitializationException
+	 *             if the module.xml file is not found, if it has parsing error or if any other exception occurred during initialization
 	 */
 	protected void loadModule() throws TechnologyModuleInitializationException {
 
@@ -125,7 +128,8 @@ public abstract class TechnologyModuleDefinition {
 				throw new TechnologyModuleInitializationException("Cannot find module.xml using path '" + getResourcePath() + "' !");
 			}
 
-			TechnologyModuleDefinitionDTO returned = (TechnologyModuleDefinitionDTO) XMLDecoder.decodeObjectWithMapping(inputStream, getModuleModel());
+			TechnologyModuleDefinitionDTO returned = (TechnologyModuleDefinitionDTO) XMLDecoder.decodeObjectWithMapping(inputStream,
+					getModuleModel());
 			fillFromDTO(returned);
 
 			// Load inspectors
@@ -215,7 +219,7 @@ public abstract class TechnologyModuleDefinition {
 		for (TechnologyModuleDefinition moduleDefinition : getRequiredModules())
 			moduleDefinition.fillRequiredModules(requiredModules, level + 1);
 	}
-	
+
 	protected static XMLMapping getModuleModel() {
 		if (MODULE_MODEL == null) {
 			File moduleModelFile = new FileResource("Models/TechnologyModules/ModuleModel.xml");

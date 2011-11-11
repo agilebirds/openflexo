@@ -24,16 +24,13 @@ package org.openflexo.foundation.rm;
  * 
  * @author sguerin
  */
-public class ResourceRemoved extends RMDataModification
-{
+public class ResourceRemoved extends RMDataModification {
 
-    public ResourceRemoved(FlexoResource newResource)
-    {
-        super(newResource, null);
-    }
+	public ResourceRemoved(FlexoResource newResource) {
+		super(newResource, null);
+	}
 
-    public FlexoResource getRemovedResource()
-    {
-        return (FlexoResource) oldValue();
-    }
+	public FlexoResource getRemovedResource() {
+		return (FlexoResource) oldValue();
+	}
 }

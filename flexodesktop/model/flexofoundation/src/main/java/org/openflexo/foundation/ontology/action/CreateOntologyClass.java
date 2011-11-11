@@ -22,7 +22,6 @@ package org.openflexo.foundation.ontology.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
@@ -34,88 +33,74 @@ import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
-public class CreateOntologyClass extends FlexoAction<CreateOntologyClass,OntologyObject,OntologyObject> 
-{
+public class CreateOntologyClass extends FlexoAction<CreateOntologyClass, OntologyObject, OntologyObject> {
 
 	private static final Logger logger = Logger.getLogger(CreateOntologyClass.class.getPackage().getName());
 
-	public static FlexoActionType<CreateOntologyClass,OntologyObject,OntologyObject> actionType 
-	= new FlexoActionType<CreateOntologyClass,OntologyObject,OntologyObject> (
-			"create_class",
-			FlexoActionType.newMenu,
-			FlexoActionType.defaultGroup,
-			FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<CreateOntologyClass, OntologyObject, OntologyObject> actionType = new FlexoActionType<CreateOntologyClass, OntologyObject, OntologyObject>(
+			"create_class", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public CreateOntologyClass makeNewAction(OntologyObject focusedObject, Vector<OntologyObject> globalSelection, FlexoEditor editor) 
-		{
+		public CreateOntologyClass makeNewAction(OntologyObject focusedObject, Vector<OntologyObject> globalSelection, FlexoEditor editor) {
 			return new CreateOntologyClass(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(OntologyObject object, Vector<OntologyObject> globalSelection) 
-		{
+		protected boolean isVisibleForSelection(OntologyObject object, Vector<OntologyObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(OntologyObject object, Vector<OntologyObject> globalSelection) 
-		{
+		protected boolean isEnabledForSelection(OntologyObject object, Vector<OntologyObject> globalSelection) {
 			return object != null && !object.getIsReadOnly();
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass (CreateOntologyClass.actionType, FlexoOntology.class);
-		FlexoModelObject.addActionForClass (CreateOntologyClass.actionType, OntologyClass.class);
+		FlexoModelObject.addActionForClass(CreateOntologyClass.actionType, FlexoOntology.class);
+		FlexoModelObject.addActionForClass(CreateOntologyClass.actionType, OntologyClass.class);
 	}
 
 	public String newOntologyClassName;
 	public String description;
 	public OntologyClass fatherClass;
-	
+
 	public String validURILabel;
-	
+
 	private OntologyClass newClass;
 
 	private static final String VALID_URI_LABEL = FlexoLocalization.localizedForKey("uri_is_well_formed_and_valid_regarding_its_unicity");
 	private static final String INVALID_URI_LABEL = FlexoLocalization.localizedForKey("uri_is_not_valid_please_choose_another_class_name");
-	
-	CreateOntologyClass (OntologyObject focusedObject, Vector<OntologyObject> globalSelection, FlexoEditor editor)
-	{
+
+	CreateOntologyClass(OntologyObject focusedObject, Vector<OntologyObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		newOntologyClassName = "NewClass";
-		fatherClass = (focusedObject instanceof OntologyClass ? (OntologyClass)focusedObject : focusedObject.getOntologyLibrary().THING);
+		fatherClass = (focusedObject instanceof OntologyClass ? (OntologyClass) focusedObject : focusedObject.getOntologyLibrary().THING);
 		isValid();
 	}
 
-
 	@Override
-	protected void doAction(Object context) throws DuplicateURIException 
-    {
-      logger.info ("Create OntologyClass on "+getFocusedObject());
-      newClass = getOntology().createOntologyClass(newOntologyClassName, fatherClass);
-    }
+	protected void doAction(Object context) throws DuplicateURIException {
+		logger.info("Create OntologyClass on " + getFocusedObject());
+		newClass = getOntology().createOntologyClass(newOntologyClassName, fatherClass);
+	}
 
-	public OntologyClass getNewClass()
-	{
+	public OntologyClass getNewClass() {
 		return newClass;
 	}
-	
-	public FlexoOntology getOntology()
-	{
+
+	public FlexoOntology getOntology() {
 		return getFocusedObject().getFlexoOntology();
 	}
-	
-	public boolean isValid()
-	{
+
+	public boolean isValid() {
 		boolean returned = !StringUtils.isEmpty(newOntologyClassName) && getOntology().testValidURI(newOntologyClassName);
 		validURILabel = (returned ? VALID_URI_LABEL : INVALID_URI_LABEL);
 		return returned;
 	}
-	
- }
+
+}

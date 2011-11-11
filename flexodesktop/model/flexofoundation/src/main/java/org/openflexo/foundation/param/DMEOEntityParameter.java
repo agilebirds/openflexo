@@ -22,19 +22,16 @@ package org.openflexo.foundation.param;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
 public class DMEOEntityParameter extends ParameterDefinition<DMEOEntity> {
 
-    public DMEOEntityParameter(String name, String label, DMEOEntity defaultValue)
-    {
-        super(name,label,defaultValue);
-        addParameter("className","org.openflexo.components.widget.DMEOEntityInspectorWidget");
-    }
-    
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.CUSTOM;
-    }
+	public DMEOEntityParameter(String name, String label, DMEOEntity defaultValue) {
+		super(name, label, defaultValue);
+		addParameter("className", "org.openflexo.components.widget.DMEOEntityInspectorWidget");
+	}
+
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.CUSTOM;
+	}
 
 }

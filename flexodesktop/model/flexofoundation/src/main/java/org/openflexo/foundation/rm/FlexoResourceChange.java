@@ -23,17 +23,15 @@ import org.openflexo.foundation.DataModification;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class FlexoResourceChange extends DataModification
-{
+public class FlexoResourceChange extends DataModification {
 
-    /**
-     * @param resource
-     */
-    public FlexoResourceChange(FlexoResource resource)
-    {
-        super(UNDEFINED, null, resource);
-    }
+	/**
+	 * @param resource
+	 */
+	public FlexoResourceChange(FlexoResource resource) {
+		super(UNDEFINED, null, resource);
+	}
 
 }

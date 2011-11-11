@@ -22,8 +22,7 @@ package org.openflexo.antar;
 public abstract class Instruction extends ControlGraph implements Cloneable {
 
 	@Override
-	public ControlGraph normalize()
-	{
+	public ControlGraph normalize() {
 		return clone();
 	}
 

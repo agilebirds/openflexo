@@ -83,7 +83,7 @@ public class ModuleBar extends JPanel {
 
 	public void notifySwitchToModule(Module m) {
 		refresh();
-		if (moduleButtons.get(m) != null) 
+		if (moduleButtons.get(m) != null)
 			(moduleButtons.get(m)).setAsActive();
 	}
 

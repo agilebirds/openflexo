@@ -21,16 +21,14 @@ package org.openflexo.foundation.exec.inst;
 
 import org.openflexo.foundation.wkf.node.EventNode;
 
-
 public class ResetTimeOut extends CustomInstruction {
 
 	private EventNode timeOut;
-	
-	public ResetTimeOut (EventNode timeOut)
-	{
+
+	public ResetTimeOut(EventNode timeOut) {
 		super();
 		this.timeOut = timeOut;
-		setInlineComment("Arm time-out "+getTimeOut().getName());
+		setInlineComment("Arm time-out " + getTimeOut().getName());
 	}
 
 	public EventNode getTimeOut() {
@@ -38,20 +36,17 @@ public class ResetTimeOut extends CustomInstruction {
 	}
 
 	@Override
-	public String toString()
-	{
-		return "[ResetTimeOut:"+timeOut+"]";
+	public String toString() {
+		return "[ResetTimeOut:" + timeOut + "]";
 	}
 
 	@Override
-	public String getJavaStringRepresentation() 
-	{
-		return "resetTimeOut("+getTimeOut().getFlexoID()+");";
+	public String getJavaStringRepresentation() {
+		return "resetTimeOut(" + getTimeOut().getFlexoID() + ");";
 	}
-	
+
 	@Override
-	public ResetTimeOut clone()
-	{
+	public ResetTimeOut clone() {
 		ResetTimeOut returned = new ResetTimeOut(timeOut);
 		returned.setHeaderComment(getHeaderComment());
 		returned.setInlineComment(getInlineComment());

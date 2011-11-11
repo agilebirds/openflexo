@@ -33,104 +33,87 @@ import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteElementRemoved;
 import org.openflexo.toolbox.ToolBox;
 
-
 public class PaletteElementGR extends ShapeGraphicalRepresentation<ViewPointPaletteElement> implements GraphicalFlexoObserver {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(PaletteElementGR.class.getPackage().getName());
 
 	/**
-	 * Constructor invoked during deserialization
-	 * DO NOT use it
+	 * Constructor invoked during deserialization DO NOT use it
 	 */
-	public PaletteElementGR()
-	{
-		super(ShapeType.RECTANGLE, null,null);
+	public PaletteElementGR() {
+		super(ShapeType.RECTANGLE, null, null);
 	}
 
-	public PaletteElementGR(ViewPointPaletteElement aShape, Drawing<?> aDrawing) 
-	{
+	public PaletteElementGR(ViewPointPaletteElement aShape, Drawing<?> aDrawing) {
 		super(ShapeType.RECTANGLE, aShape, aDrawing);
 
 		addToMouseClickControls(new CalcPaletteController.ShowContextualMenuControl());
-		if (ToolBox.getPLATFORM()!=ToolBox.MACOS) {
+		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
 			addToMouseClickControls(new CalcPaletteController.ShowContextualMenuControl(true));
 		}
 
-		if (aShape != null) aShape.addObserver(this);
+		if (aShape != null)
+			aShape.addObserver(this);
 
 	}
 
-	
 	@Override
-	public void delete()
-	{
-		//logger.info("Delete PaletteElementGR");
-		if (getDrawable() != null) getDrawable().deleteObserver(this);
+	public void delete() {
+		// logger.info("Delete PaletteElementGR");
+		if (getDrawable() != null)
+			getDrawable().deleteObserver(this);
 		super.delete();
 	}
 
-
 	@Override
-	public CalcPaletteRepresentation getDrawing() 
-	{
-		return (CalcPaletteRepresentation)super.getDrawing();
+	public CalcPaletteRepresentation getDrawing() {
+		return (CalcPaletteRepresentation) super.getDrawing();
 	}
-	
-	public ViewPointPaletteElement getCalcPaletteElement()
-	{
+
+	public ViewPointPaletteElement getCalcPaletteElement() {
 		return getDrawable();
 	}
 
-
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getCalcPaletteElement()) {
-			//logger.info("Notified "+dataModification);
+			// logger.info("Notified "+dataModification);
 			if (dataModification instanceof CalcPaletteElementInserted) {
 				getDrawing().updateGraphicalObjectsHierarchy();
-			}
-			else if (dataModification instanceof CalcPaletteElementRemoved) {
+			} else if (dataModification instanceof CalcPaletteElementRemoved) {
 				getDrawing().updateGraphicalObjectsHierarchy();
 			}
 		}
 	}
 
 	@Override
-	public boolean getAllowToLeaveBounds()
-	{
+	public boolean getAllowToLeaveBounds() {
 		return false;
 	}
-	
+
 	@Override
-	public String getText()
-	{
+	public String getText() {
 		if (getCalcPaletteElement() != null)
 			return getCalcPaletteElement().getName();
 		return super.getText();
 	}
 
 	@Override
-	public void setTextNoNotification(String text) 
-	{
+	public void setTextNoNotification(String text) {
 		if (getCalcPaletteElement() != null)
 			getCalcPaletteElement().setName(text);
-		else super.setTextNoNotification(text);
+		else
+			super.setTextNoNotification(text);
 	}
 
 	@Override
-	public void notifyObservers(Object arg)
-	{
+	public void notifyObservers(Object arg) {
 		super.notifyObservers(arg);
-		if (arg instanceof FGENotification
-				&& ((FGENotification)arg).isModelNotification()
-				&& getDrawing() != null 
-				&& !getDrawing().ignoreNotifications()
-				&& getCalcPaletteElement() != null
+		if (arg instanceof FGENotification && ((FGENotification) arg).isModelNotification() && getDrawing() != null
+				&& !getDrawing().ignoreNotifications() && getCalcPaletteElement() != null
 				&& !getCalcPaletteElement().getPalette().ignoreNotifications())
 			getCalcPaletteElement().setChanged();
 	}
-
 
 }

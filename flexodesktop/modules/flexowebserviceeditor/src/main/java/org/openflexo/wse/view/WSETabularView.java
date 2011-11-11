@@ -19,7 +19,6 @@
  */
 package org.openflexo.wse.view;
 
-
 import org.openflexo.components.tabular.TabularView;
 import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.foundation.FlexoModelObject;
@@ -34,47 +33,42 @@ import org.openflexo.foundation.ws.WSPortType;
 import org.openflexo.foundation.ws.WSRepository;
 import org.openflexo.wse.controller.WSEController;
 
-
 public class WSETabularView extends TabularView {
 
-    public WSETabularView(WSEController controller, AbstractModel model, int visibleRowCount)
-    {
-        super(controller,model,visibleRowCount);
-    }
+	public WSETabularView(WSEController controller, AbstractModel model, int visibleRowCount) {
+		super(controller, model, visibleRowCount);
+	}
 
-    public WSETabularView(WSEController controller, AbstractModel model)
-    {
-        super(controller,model);
-    }
-    
-    @Override
-	protected FlexoModelObject getParentObject(FlexoModelObject object)
-    {
-    		if(object instanceof WSObject){
-    			return (WSObject) ((WSObject)object).getParent();
-    		}
-    		else if(object instanceof DMRepository){
-        		WSRepository wsr = ((DMRepository)object).getProject().getFlexoWSLibrary().getWSRepositoryNamed(((DMRepository)object).getName());
-             if(wsr!=null) return wsr.getWSService();
-    		}
-    		else if (object instanceof DMObject) {
-                return (DMObject)(((DMObject)object).getParent());
-            }
-    		else if(object instanceof ServiceInterface){
- 	           WSPortType wsp = ((ServiceInterface)object).getProject().getFlexoWSLibrary().getWSPortTypeNamed(((ServiceInterface)object).getName());
- 	      		if(wsp !=null) return wsp.getWSService();
- 	        }
-		else if(object instanceof ServiceOperation)
-			return ((ServiceOperation)object).getServiceInterface();
-		
-		else if(object instanceof ServiceMessageDefinition){
-			return ((ServiceMessageDefinition)object).getOperation();
+	public WSETabularView(WSEController controller, AbstractModel model) {
+		super(controller, model);
+	}
+
+	@Override
+	protected FlexoModelObject getParentObject(FlexoModelObject object) {
+		if (object instanceof WSObject) {
+			return (WSObject) ((WSObject) object).getParent();
+		} else if (object instanceof DMRepository) {
+			WSRepository wsr = ((DMRepository) object).getProject().getFlexoWSLibrary()
+					.getWSRepositoryNamed(((DMRepository) object).getName());
+			if (wsr != null)
+				return wsr.getWSService();
+		} else if (object instanceof DMObject) {
+			return (DMObject) (((DMObject) object).getParent());
+		} else if (object instanceof ServiceInterface) {
+			WSPortType wsp = ((ServiceInterface) object).getProject().getFlexoWSLibrary()
+					.getWSPortTypeNamed(((ServiceInterface) object).getName());
+			if (wsp != null)
+				return wsp.getWSService();
+		} else if (object instanceof ServiceOperation)
+			return ((ServiceOperation) object).getServiceInterface();
+
+		else if (object instanceof ServiceMessageDefinition) {
+			return ((ServiceMessageDefinition) object).getOperation();
+		} else if (object instanceof MessageEntry) {
+			return ((MessageEntry) object).getMessage();
 		}
-		else if(object instanceof MessageEntry){
-			return ((MessageEntry)object).getMessage();
-		}
-        
-        return null;
-    }
+
+		return null;
+	}
 
 }

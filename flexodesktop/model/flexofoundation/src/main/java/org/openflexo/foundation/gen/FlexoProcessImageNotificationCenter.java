@@ -22,15 +22,15 @@ package org.openflexo.foundation.gen;
 import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.FlexoObservable;
 
-public class FlexoProcessImageNotificationCenter extends FlexoObservable{
-	
+public class FlexoProcessImageNotificationCenter extends FlexoObservable {
+
 	private static FlexoProcessImageNotificationCenter instance = new FlexoProcessImageNotificationCenter();
-	
-	public static FlexoProcessImageNotificationCenter getInstance(){
+
+	public static FlexoProcessImageNotificationCenter getInstance() {
 		return instance;
 	}
-	
-	public void notifyNewImage(){
+
+	public void notifyNewImage() {
 		setChanged();
 		notifyObservers(new AttributeDataModification("displaySubProcessImage", null, null));
 	}

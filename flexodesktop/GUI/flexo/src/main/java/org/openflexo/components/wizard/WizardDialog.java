@@ -39,79 +39,80 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.view.FlexoDialog;
 
 public class WizardDialog extends FlexoDialog implements ActionListener {
-	
+
 	private static final Logger logger = FlexoLogger.getLogger(WizardDialog.class.getPackage().getName());
 
 	protected FlexoWizard wizard;
-	
+
 	private JLabel pageTitle;
-	
+
 	private JPanel northPanel;
 	private JPanel controlPanel;
-	
+
 	private JPanel mainPanel;
 	private BorderLayout mainPanelLayout;
-	
+
 	private JButton previous;
 	private JButton next;
-	
+
 	private JButton cancel;
 	private JButton finish;
-	
+
 	public WizardDialog(Frame owner, FlexoWizard wizard) {
-		super(owner,true);
+		super(owner, true);
 		setTitle(wizard.getWizardTitle());
 		this.wizard = wizard;
 		init();
 	}
-	
+
 	private void init() {
 		pageTitle = new JLabel();
-		
+
 		northPanel = new JPanel() {
 			@Override
 			public void paint(Graphics g) {
-				if (wizard.getPageImage()!=null)
+				if (wizard.getPageImage() != null)
 					g.drawImage(wizard.getPageImage(), 0, 0, getWidth(), getHeight(), null);
 				super.paint(g);
 			}
 		};
 		northPanel.add(pageTitle);
-		
-		controlPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT,5,5));
+
+		controlPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 
 		// init the content pane;
-		mainPanel = new JPanel(mainPanelLayout=new BorderLayout()){
-			
+		mainPanel = new JPanel(mainPanelLayout = new BorderLayout()) {
+
 			@Override
 			protected void processMouseEvent(MouseEvent e) {
 				super.processMouseEvent(e);
 				updateControls();
 			}
+
 			@Override
 			protected void processKeyEvent(KeyEvent e) {
 				super.processKeyEvent(e);
 				updateControls();
 			}
 		};
-		mainPanel.add(northPanel,BorderLayout.NORTH);
-		mainPanel.add(controlPanel,BorderLayout.SOUTH);
+		mainPanel.add(northPanel, BorderLayout.NORTH);
+		mainPanel.add(controlPanel, BorderLayout.SOUTH);
 		mainPanel.validate();
-		
+
 		cancel = new JButton();
 		cancel.setText(FlexoLocalization.localizedForKey("cancel", cancel));
 		cancel.addActionListener(this);
 		finish = new JButton();
-		finish.setText(FlexoLocalization.localizedForKey("finish",finish));
-		
+		finish.setText(FlexoLocalization.localizedForKey("finish", finish));
+
 		controlPanel.add(cancel);
 		controlPanel.add(finish);
 		// init the buttons
 		if (wizard.needsPreviousAndNext()) {
 			previous = new JButton();
-			previous.setText(FlexoLocalization.localizedForKey("previous",previous));
+			previous.setText(FlexoLocalization.localizedForKey("previous", previous));
 			next = new JButton();
-			next.setText(FlexoLocalization.localizedForKey("next",next));
+			next.setText(FlexoLocalization.localizedForKey("next", next));
 			controlPanel.add(next);
 			controlPanel.add(previous);
 		}
@@ -121,55 +122,53 @@ public class WizardDialog extends FlexoDialog implements ActionListener {
 		updateCurrentPage();
 		validate();
 	}
-	
+
 	private void updateCurrentPage() {
-		if (mainPanelLayout.getLayoutComponent(BorderLayout.CENTER)!=null)
+		if (mainPanelLayout.getLayoutComponent(BorderLayout.CENTER) != null)
 			mainPanel.remove(mainPanelLayout.getLayoutComponent(BorderLayout.CENTER));
-		if (wizard.getCurrentPage().getUserInterface()==null)
+		if (wizard.getCurrentPage().getUserInterface() == null)
 			wizard.getCurrentPage().initUserInterface(mainPanel);
 		mainPanel.add(wizard.getCurrentPage().getUserInterface());
 		pageTitle.setText(wizard.getCurrentPage().getTitle());
 		updateControls();
 	}
-	
+
 	protected void updateControls() {
 		if (wizard.needsPreviousAndNext()) {
-			if (previous!=null)
+			if (previous != null)
 				previous.setEnabled(wizard.isPreviousEnabled());
-			else
-				if (logger.isLoggable(Level.WARNING))
-					logger.warning("FlexoWizard.needsPreviousAndNext() returned true but previous button is not initialized");
-			if (next!=null)
+			else if (logger.isLoggable(Level.WARNING))
+				logger.warning("FlexoWizard.needsPreviousAndNext() returned true but previous button is not initialized");
+			if (next != null)
 				next.setEnabled(wizard.isNextEnabled());
-			else
-				if (logger.isLoggable(Level.WARNING))
-					logger.warning("FlexoWizard.needsPreviousAndNext() returned true but next button is not initialized");
+			else if (logger.isLoggable(Level.WARNING))
+				logger.warning("FlexoWizard.needsPreviousAndNext() returned true but next button is not initialized");
 		}
 		finish.setEnabled(wizard.canFinish());
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource()==null) {
+		if (e.getSource() == null) {
 			return;
 		}
-		if (e.getSource()==cancel) {
+		if (e.getSource() == cancel) {
 			wizard.performCancel();
 			dispose();
 			return;
-		} else if (e.getSource()==finish) {
+		} else if (e.getSource() == finish) {
 			wizard.performFinish();
 			dispose();
 			return;
-		} else if (e.getSource()==next) {
+		} else if (e.getSource() == next) {
 			IWizardPage nextPage = wizard.getNextPage(wizard.getCurrentPage());
-			if (nextPage!=null) {
+			if (nextPage != null) {
 				wizard.setCurrentPage(nextPage);
 				updateCurrentPage();
 			}
-		} else if (e.getSource()==previous) {
+		} else if (e.getSource() == previous) {
 			IWizardPage previousPage = wizard.getPreviousPage(wizard.getCurrentPage());
-			if (previousPage!=null) {
+			if (previousPage != null) {
 				wizard.setCurrentPage(previousPage);
 				updateCurrentPage();
 			}

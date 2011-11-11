@@ -21,11 +21,8 @@ package org.openflexo.foundation.ontology.dm;
 
 import org.openflexo.foundation.ontology.OntologyClass;
 
-
-public class OntologyClassRemoved extends OEDataModification
-{
-    public OntologyClassRemoved(OntologyClass aClass)
-    {
-        super(aClass, null);
-     }
+public class OntologyClassRemoved extends OEDataModification {
+	public OntologyClassRemoved(OntologyClass aClass) {
+		super(aClass, null);
+	}
 }

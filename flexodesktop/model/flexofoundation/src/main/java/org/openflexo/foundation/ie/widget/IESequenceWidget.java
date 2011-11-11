@@ -47,191 +47,176 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 import org.openflexo.logging.FlexoLogger;
 
-public class IESequenceWidget extends IESequence<IEWidget> implements WidgetsContainer
-{
+public class IESequenceWidget extends IESequence<IEWidget> implements WidgetsContainer {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(IESequenceWidget.class.getPackage().getName());
-	
-    public IESequenceWidget(FlexoComponentBuilder builder)
-    {
-        this(builder.woComponent, null, builder.getProject());
-        initializeDeserialization(builder);
-    }
 
-    public IESequenceWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj)
-    {
-        super(woComponent, parent, prj);
-    }
+	public IESequenceWidget(FlexoComponentBuilder builder) {
+		this(builder.woComponent, null, builder.getProject());
+		initializeDeserialization(builder);
+	}
 
-    @Override
-    public boolean isTopComponent() {
-    	return getNonSequenceParent() instanceof IEWOComponent;
-    }
-    
-    @Override
-	public void addToInnerWidgets(IEWidget w)
-    {
-        if (w instanceof IESequenceOperator)
-            setSequenceOperator((IESequenceOperator) w);
-        else
-            super.addToInnerWidgets(w);
-    }
+	public IESequenceWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj) {
+		super(woComponent, parent, prj);
+	}
 
-    @Override
-	public void removeFromInnerWidgets(IEWidget w)
-    {
-        super.removeFromInnerWidgets(w);
-        setChanged();
-        notifyObservers(new WidgetRemovedFromSequence(w));
-        if (getParent() instanceof IESequenceWidget && size() == 0) {
-            this.delete();
-        }
-        if (getParent() instanceof IETDWidget) {
-            ((IETDWidget)getParent()).notifyWidgetRemoved(w);
-        }
-    }
+	@Override
+	public boolean isTopComponent() {
+		return getNonSequenceParent() instanceof IEWOComponent;
+	}
 
-    public boolean isInTD()
-    {
-        return getParent() != null && getParent() instanceof IETDWidget;
-    }
+	@Override
+	public void addToInnerWidgets(IEWidget w) {
+		if (w instanceof IESequenceOperator)
+			setSequenceOperator((IESequenceOperator) w);
+		else
+			super.addToInnerWidgets(w);
+	}
 
-    public boolean isInButtonPanel() {
-        return getNonSequenceParent() instanceof ButtonedWidgetInterface;
-    }
-    
-    public IETDWidget td()
-    {
-        return getAncestorOfClass(IETDWidget.class);
-    }
+	@Override
+	public void removeFromInnerWidgets(IEWidget w) {
+		super.removeFromInnerWidgets(w);
+		setChanged();
+		notifyObservers(new WidgetRemovedFromSequence(w));
+		if (getParent() instanceof IESequenceWidget && size() == 0) {
+			this.delete();
+		}
+		if (getParent() instanceof IETDWidget) {
+			((IETDWidget) getParent()).notifyWidgetRemoved(w);
+		}
+	}
 
-    public String getAlignement()
-    {
-        if (isInTD())
-            return ((IETDWidget) getParent()).getAlignement();
-        else {
-            if (getParent() instanceof IESequenceWidget) {
-                return ((IESequenceWidget) getParent()).getAlignement();
-            } else {
-                return null;
-            }
+	public boolean isInTD() {
+		return getParent() != null && getParent() instanceof IETDWidget;
+	}
 
-        }
-    }
+	public boolean isInButtonPanel() {
+		return getNonSequenceParent() instanceof ButtonedWidgetInterface;
+	}
 
-    public Color getBackground()
-    {
-        if (isInTD()) {
-            return getAncestorOfClass(IETDWidget.class).getBackground();
-        } else if (isInButtonPanel()) {
-        	return getProject().getCssSheet().getMainColor();
-        } else {
-            if (getParent() instanceof IESequenceWidget) {
-                return ((IESequenceWidget) getParent()).getBackground();
-            } else {
-                return null;
-            }
-        }
-    }
+	public IETDWidget td() {
+		return getAncestorOfClass(IETDWidget.class);
+	}
 
-    public IEHTMLTableWidget htmlTable()
-    {
-        if (isInTD())
-            return ((IETDWidget) getParent()).htmlTable();
-        else {
-            if (getParent() instanceof IESequenceWidget) {
-                return ((IESequenceWidget) getParent()).htmlTable();
-            } else {
-                return null;
-            }
+	public String getAlignement() {
+		if (isInTD())
+			return ((IETDWidget) getParent()).getAlignement();
+		else {
+			if (getParent() instanceof IESequenceWidget) {
+				return ((IESequenceWidget) getParent()).getAlignement();
+			} else {
+				return null;
+			}
 
-        }
-    }
+		}
+	}
 
-    @Override
-	public void insertElementAt(IEWidget o, int i)
-    {
-        super.insertElementAt(o, i);
-        if (!isDeserializing() && !isCreatedByCloning() && getParent() instanceof IETDWidget) {
-            ((IETDWidget)getParent()).notifyWidgetInserted(o);
-            if (htmlTable()!=null)
-                htmlTable().handleResize();
-        }
-    }
+	public Color getBackground() {
+		if (isInTD()) {
+			return getAncestorOfClass(IETDWidget.class).getBackground();
+		} else if (isInButtonPanel()) {
+			return getProject().getCssSheet().getMainColor();
+		} else {
+			if (getParent() instanceof IESequenceWidget) {
+				return ((IESequenceWidget) getParent()).getBackground();
+			} else {
+				return null;
+			}
+		}
+	}
 
-    @Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass()
-    {
-        Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-        returned.add(InsertColAfter.actionType);
-        returned.add(InsertColBefore.actionType);
-        returned.add(InsertRowAfter.actionType);
-        returned.add(InsertRowBefore.actionType);
-        returned.add(IncreaseColSpan.actionType);
-        returned.add(DecreaseColSpan.actionType);
-        returned.add(IncreaseRowSpan.actionType);
-        returned.add(DecreaseRowSpan.actionType);
-        returned.add(DeleteRow.actionType);
-        returned.add(DeleteCol.actionType);
-        returned.remove(IEDelete.actionType);
-        returned.add(DropIEElement.actionType);
-        returned.add(DropPartialComponent.actionType);
-        return returned;
-    }
+	public IEHTMLTableWidget htmlTable() {
+		if (isInTD())
+			return ((IETDWidget) getParent()).htmlTable();
+		else {
+			if (getParent() instanceof IESequenceWidget) {
+				return ((IESequenceWidget) getParent()).htmlTable();
+			} else {
+				return null;
+			}
 
-    @Override
-	public boolean isSubsequence()
-    {
-        return getParent() instanceof IESequenceWidget;
-    }
+		}
+	}
 
-    /*
-     * public String getLabelForChild(IEWidget widget) { Object o =
-     * getPrevious(widget); if (o instanceof IELabelWidget) return
-     * ((IELabelWidget)o).getValue(); else if (o instanceof IEWidget) return
-     * ((IEWidget)o).lookForLabelInTD(); else return null; }
-     */
+	@Override
+	public void insertElementAt(IEWidget o, int i) {
+		super.insertElementAt(o, i);
+		if (!isDeserializing() && !isCreatedByCloning() && getParent() instanceof IETDWidget) {
+			((IETDWidget) getParent()).notifyWidgetInserted(o);
+			if (htmlTable() != null)
+				htmlTable().handleResize();
+		}
+	}
 
-    public IEWidget findFirstWidgetOfClass(Class c)
-    {
-        Enumeration en = elements();
-        IEWidget temp = null;
-        while (en.hasMoreElements()) {
-            temp = (IEWidget) en.nextElement();
-            if (temp.getClass().equals(c))
-                return temp;
-        }
-        return null;
-    }
+	@Override
+	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
+		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
+		returned.add(InsertColAfter.actionType);
+		returned.add(InsertColBefore.actionType);
+		returned.add(InsertRowAfter.actionType);
+		returned.add(InsertRowBefore.actionType);
+		returned.add(IncreaseColSpan.actionType);
+		returned.add(DecreaseColSpan.actionType);
+		returned.add(IncreaseRowSpan.actionType);
+		returned.add(DecreaseRowSpan.actionType);
+		returned.add(DeleteRow.actionType);
+		returned.add(DeleteCol.actionType);
+		returned.remove(IEDelete.actionType);
+		returned.add(DropIEElement.actionType);
+		returned.add(DropPartialComponent.actionType);
+		return returned;
+	}
 
-    @Override
-	public void notifyDisplayNeedsRefresh()
-    {
-        Enumeration<IEWidget> en = elements();
-        while (en.hasMoreElements()) {
-            IEWidget w = en.nextElement();
-            w.notifyDisplayNeedsRefresh();
-        }
-        setChanged();
-        notifyObservers(new DisplayNeedsRefresh(this));
-    }
-    
+	@Override
+	public boolean isSubsequence() {
+		return getParent() instanceof IESequenceWidget;
+	}
+
+	/*
+	 * public String getLabelForChild(IEWidget widget) { Object o =
+	 * getPrevious(widget); if (o instanceof IELabelWidget) return
+	 * ((IELabelWidget)o).getValue(); else if (o instanceof IEWidget) return
+	 * ((IEWidget)o).lookForLabelInTD(); else return null; }
+	 */
+
+	public IEWidget findFirstWidgetOfClass(Class c) {
+		Enumeration en = elements();
+		IEWidget temp = null;
+		while (en.hasMoreElements()) {
+			temp = (IEWidget) en.nextElement();
+			if (temp.getClass().equals(c))
+				return temp;
+		}
+		return null;
+	}
+
+	@Override
+	public void notifyDisplayNeedsRefresh() {
+		Enumeration<IEWidget> en = elements();
+		while (en.hasMoreElements()) {
+			IEWidget w = en.nextElement();
+			w.notifyDisplayNeedsRefresh();
+		}
+		setChanged();
+		notifyObservers(new DisplayNeedsRefresh(this));
+	}
+
 	public Vector<IETextFieldWidget> getAllDateTextfields() {
 		Vector<IETextFieldWidget> v = new Vector<IETextFieldWidget>();
-        Enumeration<IEWidget> en = elements();
-        while (en.hasMoreElements()) {
-            IEWidget element = en.nextElement();
-            if (element instanceof IETextFieldWidget && ((IETextFieldWidget) element).getFieldType() == TextFieldType.DATE) {
-                v.add((IETextFieldWidget) element);
-            } else if (element instanceof IESequenceWidget)
-            	v.addAll(((IESequenceWidget)element).getAllDateTextfields());
-            else if (element instanceof InnerBlocWidgetInterface)
-            	v.addAll(((InnerBlocWidgetInterface)element).getAllDateTextfields());
-            else if (element instanceof IEBlocWidget)
-            	v.addAll(((IEBlocWidget)element).getAllDateTextfields());
-        }
-        return v;
+		Enumeration<IEWidget> en = elements();
+		while (en.hasMoreElements()) {
+			IEWidget element = en.nextElement();
+			if (element instanceof IETextFieldWidget && ((IETextFieldWidget) element).getFieldType() == TextFieldType.DATE) {
+				v.add((IETextFieldWidget) element);
+			} else if (element instanceof IESequenceWidget)
+				v.addAll(((IESequenceWidget) element).getAllDateTextfields());
+			else if (element instanceof InnerBlocWidgetInterface)
+				v.addAll(((InnerBlocWidgetInterface) element).getAllDateTextfields());
+			else if (element instanceof IEBlocWidget)
+				v.addAll(((IEBlocWidget) element).getAllDateTextfields());
+		}
+		return v;
 	}
-	
+
 }

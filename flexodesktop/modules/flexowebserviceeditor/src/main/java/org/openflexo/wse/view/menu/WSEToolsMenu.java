@@ -30,38 +30,34 @@ import java.util.logging.Logger;
 import org.openflexo.view.menu.ToolsMenu;
 import org.openflexo.wse.controller.WSEController;
 
-
 /**
  * 'Tools' menu for this Module
  * 
  * @author yourname
  */
-public class WSEToolsMenu extends ToolsMenu
-{
+public class WSEToolsMenu extends ToolsMenu {
 
-    private static final Logger logger = Logger.getLogger(WSEToolsMenu.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(WSEToolsMenu.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
-      protected WSEController _wseController;
+	protected WSEController _wseController;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public WSEToolsMenu(WSEController controller)
-    {
-        super(controller);
-        _wseController = controller;
-        // Put your actions here
-    }
+	public WSEToolsMenu(WSEController controller) {
+		super(controller);
+		_wseController = controller;
+		// Put your actions here
+	}
 
-    public WSEController getWSEController()
-    {
-        return _wseController;
-    }
+	public WSEController getWSEController() {
+		return _wseController;
+	}
 }

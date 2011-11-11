@@ -23,15 +23,12 @@ import org.openflexo.foundation.ie.dm.IEDataModification;
 import org.openflexo.foundation.ie.widget.IEWidget;
 
 /**
- * @author bmangez
- * <B>Class Description</B>
+ * @author bmangez <B>Class Description</B>
  */
-public class ColSpanIncrease extends IEDataModification
-{
+public class ColSpanIncrease extends IEDataModification {
 
-    public ColSpanIncrease(IEWidget td)
-    {
-        super("colSpan",null, td);
-    }
+	public ColSpanIncrease(IEWidget td) {
+		super("colSpan", null, td);
+	}
 
 }

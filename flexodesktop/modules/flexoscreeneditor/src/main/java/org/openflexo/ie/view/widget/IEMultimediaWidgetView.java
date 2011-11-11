@@ -32,75 +32,76 @@ import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.swing.MouseResizer;
 import org.openflexo.swing.MouseResizer.MouseResizerDelegate;
 
-
-public class IEMultimediaWidgetView extends AbstractInnerTableWidgetView<IEMultimediaWidget> implements MouseResizerDelegate{
+public class IEMultimediaWidgetView extends AbstractInnerTableWidgetView<IEMultimediaWidget> implements MouseResizerDelegate {
 
 	private final MouseResizer resizer;
 	private static final Image image = SEIconLibrary.MULTIMEDIA_ICON.getImage();
 
-	public IEMultimediaWidgetView(IEController ieController, IEMultimediaWidget model, boolean addDnDSupport, IEWOComponentView componentView) {
+	public IEMultimediaWidgetView(IEController ieController, IEMultimediaWidget model, boolean addDnDSupport,
+			IEWOComponentView componentView) {
 		super(ieController, model, addDnDSupport, componentView);
-        setBorder(null);
-        setOpaque(false);
-        resizer = new MouseResizer(this,this);
+		setBorder(null);
+		setOpaque(false);
+		resizer = new MouseResizer(this, this);
 
 	}
 
-    @Override
-    public boolean isDragEnabled() {
-    	if (resizer.getMode()!=MouseResizer.ResizeMode.NONE) {
+	@Override
+	public boolean isDragEnabled() {
+		if (resizer.getMode() != MouseResizer.ResizeMode.NONE) {
 			return false;
 		}
-    	return super.isDragEnabled();
-    }
-    
-    @Override
-    public void paint(Graphics g) {
-    	g.drawImage(image, 0, 0, getModel().getWidthPixel(), getModel().getHeightPixel(), null);
-    	super.paint(g);
-    }
-    
+		return super.isDragEnabled();
+	}
+
+	@Override
+	public void paint(Graphics g) {
+		g.drawImage(image, 0, 0, getModel().getWidthPixel(), getModel().getHeightPixel(), null);
+		super.paint(g);
+	}
+
 	@Override
 	public void resizeBy(int deltaX, int deltaY) {
 	}
 
 	@Override
 	public void resizeDirectlyBy(int deltaX, int deltaY) {
-		Dimension d = new Dimension(getModel().getWidthPixel(),getModel().getHeightPixel());
-		if (deltaY!=0) {
-			getModel().setHeightPixel(d.height+deltaY);
+		Dimension d = new Dimension(getModel().getWidthPixel(), getModel().getHeightPixel());
+		if (deltaY != 0) {
+			getModel().setHeightPixel(d.height + deltaY);
 		}
-		if (deltaX!=0) {
-			getModel().setWidthPixel(d.width+deltaX);
+		if (deltaX != 0) {
+			getModel().setWidthPixel(d.width + deltaX);
 		}
 	}
 
-    /**
-     * Overrides getPreferredSize
-     * @see javax.swing.JComponent#getPreferredSize()
-     */
-    @Override
-    public Dimension getPreferredSize()
-    {
-    	if (getHoldsNextComputedPreferredSize()){
-        	Dimension storedSize = storedPrefSize();
-            if(storedSize!=null) {
+	/**
+	 * Overrides getPreferredSize
+	 * 
+	 * @see javax.swing.JComponent#getPreferredSize()
+	 */
+	@Override
+	public Dimension getPreferredSize() {
+		if (getHoldsNextComputedPreferredSize()) {
+			Dimension storedSize = storedPrefSize();
+			if (storedSize != null) {
 				return storedSize;
 			}
-        }
-        Dimension d = new Dimension(getModel().getWidthPixel(),getModel().getHeightPixel());
-        if (getHoldsNextComputedPreferredSize()) {
+		}
+		Dimension d = new Dimension(getModel().getWidthPixel(), getModel().getHeightPixel());
+		if (getHoldsNextComputedPreferredSize()) {
 			storePrefSize(d);
 		}
-        return d;
-    }
-    
-    @Override
-    public void update(FlexoObservable observable, DataModification dataModification) {
-        if ((getModel()==observable) && ((dataModification.propertyName()=="heightPixel") || (dataModification.propertyName()=="widthPixel"))){
-	    	doLayout();
-	    	paintImmediately(getBounds());
-        }
-    	super.update(observable, dataModification);
-    }
+		return d;
+	}
+
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if ((getModel() == observable)
+				&& ((dataModification.propertyName() == "heightPixel") || (dataModification.propertyName() == "widthPixel"))) {
+			doLayout();
+			paintImmediately(getBounds());
+		}
+		super.update(observable, dataModification);
+	}
 }

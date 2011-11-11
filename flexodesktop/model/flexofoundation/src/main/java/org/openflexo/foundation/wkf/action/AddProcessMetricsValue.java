@@ -29,18 +29,17 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 
+public class AddProcessMetricsValue extends AddMetricsValue<AddProcessMetricsValue, FlexoProcess> {
 
-public class AddProcessMetricsValue extends AddMetricsValue<AddProcessMetricsValue,FlexoProcess>
-{
-
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(AddProcessMetricsValue.class.getPackage().getName());
-    
-    public static FlexoActionType<AddProcessMetricsValue, FlexoProcess, WKFObject> actionType = new FlexoActionType<AddProcessMetricsValue, FlexoProcess, WKFObject>("add_metrics_value",FlexoActionType.ADD_ACTION_TYPE) {
+
+	public static FlexoActionType<AddProcessMetricsValue, FlexoProcess, WKFObject> actionType = new FlexoActionType<AddProcessMetricsValue, FlexoProcess, WKFObject>(
+			"add_metrics_value", FlexoActionType.ADD_ACTION_TYPE) {
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
-			return object!=null && !object.isImported();
+			return object != null && !object.isImported();
 		}
 
 		@Override
@@ -50,22 +49,21 @@ public class AddProcessMetricsValue extends AddMetricsValue<AddProcessMetricsVal
 
 		@Override
 		public AddProcessMetricsValue makeNewAction(FlexoProcess focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
-			return new AddProcessMetricsValue(focusedObject,globalSelection,editor);
+			return new AddProcessMetricsValue(focusedObject, globalSelection, editor);
 		}
-    	
-    };
-    
-    static {
-    	FlexoModelObject.addActionForClass(actionType, FlexoProcess.class);
-    }
-    
-    AddProcessMetricsValue (FlexoProcess focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
 
-    @Override
-    protected void doAction(Object context) throws FlexoException {
-    	getFocusedObject().addToMetricsValues(createMetricsValue());
-    }
+	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoProcess.class);
+	}
+
+	AddProcessMetricsValue(FlexoProcess focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		getFocusedObject().addToMetricsValues(createMetricsValue());
+	}
 }

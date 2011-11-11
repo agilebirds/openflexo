@@ -29,21 +29,16 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.dm.CGStructureRefreshed;
 
-
-public class GeneratedDocRepositoryElement extends DGBrowserElement
-{
-	public GeneratedDocRepositoryElement(GenerationRepository repository, ProjectBrowser browser, BrowserElement parent)
-	{
-		super(repository, BrowserElementType.GENERATED_DOC_REPOSITORY, browser,parent);
+public class GeneratedDocRepositoryElement extends DGBrowserElement {
+	public GeneratedDocRepositoryElement(GenerationRepository repository, ProjectBrowser browser, BrowserElement parent) {
+		super(repository, BrowserElementType.GENERATED_DOC_REPOSITORY, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 		if (getRepository().isEnabled()) {
 			getRepository().ensureStructureIsUpToDate();
-			
-			
+
 			String[] keys = getRepository().getSymbolicDirectories().keySet().toArray(new String[] {});
 			Arrays.sort(keys);
 			for (String key : keys) {
@@ -53,23 +48,20 @@ public class GeneratedDocRepositoryElement extends DGBrowserElement
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return getRepository().getDisplayName();
 	}
 
-	public GenerationRepository getRepository()
-	{
-		return (GenerationRepository)getObject();
+	public GenerationRepository getRepository() {
+		return (GenerationRepository) getObject();
 	}
-	
+
 	@Override
-	public void update(FlexoObservable observable,
-			DataModification dataModification) {
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (dataModification instanceof CGStructureRefreshed) {
-            refreshWhenPossible();
-            return;
-        }
+			refreshWhenPossible();
+			return;
+		}
 		super.update(observable, dataModification);
 	}
 }

@@ -21,15 +21,13 @@ package org.openflexo.foundation.dm.dm;
 
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 
-public class EOEntityInserted extends DMDataModification
-{
+public class EOEntityInserted extends DMDataModification {
 
-    public EOEntityInserted(DMEOEntity entity)
-    {
-        super(null, entity);
-    }
-    
-    public DMEOEntity getEntity(){
-    	return (DMEOEntity)newValue();
-    }
+	public EOEntityInserted(DMEOEntity entity) {
+		super(null, entity);
+	}
+
+	public DMEOEntity getEntity() {
+		return (DMEOEntity) newValue();
+	}
 }

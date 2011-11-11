@@ -24,41 +24,34 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ie.widget.IEWysiwygWidget;
 
-
 /**
- * @author bmangez
- * <B>Class Description</B>
+ * @author bmangez <B>Class Description</B>
  */
-public class IEWysiwygElement extends IEElement
-{
+public class IEWysiwygElement extends IEElement {
 
-    /**
-     * @param widget
-     * @param browser
-     */
-    public IEWysiwygElement(IEWysiwygWidget widget, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(widget, BrowserElementType.WYSIWYG, browser,parent);
-    }
+	/**
+	 * @param widget
+	 * @param browser
+	 */
+	public IEWysiwygElement(IEWysiwygWidget widget, ProjectBrowser browser, BrowserElement parent) {
+		super(widget, BrowserElementType.WYSIWYG, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
+	@Override
+	protected void buildChildrenVector() {
 
-    }
+	}
 
-    @Override
-	public String getName()
-    {
-        if (getWysiwyg().getName() == null) {
-            return "Wysiwyg";
-        }
-        return getWysiwyg().getName();
-    }
+	@Override
+	public String getName() {
+		if (getWysiwyg().getName() == null) {
+			return "Wysiwyg";
+		}
+		return getWysiwyg().getName();
+	}
 
-    protected IEWysiwygWidget getWysiwyg()
-    {
-        return (IEWysiwygWidget) getObject();
-    }
+	protected IEWysiwygWidget getWysiwyg() {
+		return (IEWysiwygWidget) getObject();
+	}
 
 }

@@ -28,17 +28,13 @@ import org.openflexo.fps.CVSDirectory;
 import org.openflexo.fps.CVSFile;
 import org.openflexo.icon.FilesIconLibrary;
 
-
-public class CVSDirectoryElement extends FPSBrowserElement
-{
-	public CVSDirectoryElement(CVSDirectory directory, ProjectBrowser browser, BrowserElement parent)
-	{
-		super(directory, BrowserElementType.CVS_DIRECTORY, browser,parent);
+public class CVSDirectoryElement extends FPSBrowserElement {
+	public CVSDirectoryElement(CVSDirectory directory, ProjectBrowser browser, BrowserElement parent) {
+		super(directory, BrowserElementType.CVS_DIRECTORY, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 		for (CVSDirectory dir : getDirectory().getDirectories()) {
 			addToChilds(dir);
 		}
@@ -48,19 +44,16 @@ public class CVSDirectoryElement extends FPSBrowserElement
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return getDirectory().getFileName();
 	}
 
-	public CVSDirectory getDirectory()
-	{
-		return (CVSDirectory)getObject();
+	public CVSDirectory getDirectory() {
+		return (CVSDirectory) getObject();
 	}
 
 	@Override
-	public ImageIcon getBaseIcon()
-	{
+	public ImageIcon getBaseIcon() {
 		if (getDirectory().getResourceType() != null) {
 			return FilesIconLibrary.smallIconForFileFormat(getDirectory().getResourceType().getFormat());
 		} else {

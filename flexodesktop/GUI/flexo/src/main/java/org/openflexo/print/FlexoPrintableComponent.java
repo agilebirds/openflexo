@@ -25,26 +25,25 @@ import java.awt.Rectangle;
 
 import org.openflexo.foundation.FlexoModelObject;
 
-
 public interface FlexoPrintableComponent {
 
-    public FlexoPrintableDelegate getPrintableDelegate();
-    
-    public String getDefaultPrintableName();
-    
-    public void paint(Graphics graphics);
+	public FlexoPrintableDelegate getPrintableDelegate();
 
-    public Rectangle getOptimalBounds();
+	public String getDefaultPrintableName();
 
-    public void resizeComponent(Dimension aSize);
-    
-    public void refreshComponent();
- 
-    public int getWidth();
+	public void paint(Graphics graphics);
 
-    public int getHeight();
+	public Rectangle getOptimalBounds();
+
+	public void resizeComponent(Dimension aSize);
+
+	public void refreshComponent();
+
+	public int getWidth();
+
+	public int getHeight();
 
 	public void print(Graphics graphics);
-	
+
 	public FlexoModelObject getFlexoModelObject();
 }

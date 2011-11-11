@@ -28,7 +28,6 @@ import org.openflexo.fge.controller.MouseClickControlAction;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.wkf.swleditor.AbstractWKFPalette.WKFPaletteElement;
 
-
 public class AnnotationMouseClickControl extends MouseClickControl {
 
 	private static final class CreateAnnotationAction extends MouseClickControlAction {
@@ -38,14 +37,18 @@ public class AnnotationMouseClickControl extends MouseClickControl {
 		}
 
 		@Override
-		public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
-				MouseEvent event) {
-			WKFPaletteElement annotation = ((SwimmingLaneEditorController)controller).getArtefactPalette().getAnnotationElement();
+		public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
+			WKFPaletteElement annotation = ((SwimmingLaneEditorController) controller).getArtefactPalette().getAnnotationElement();
 			if (annotation.acceptDragging(graphicalRepresentation)) {
-				 //Point p = getDrawingGraphicalRepresentation().convertNormalizedPointToViewCoordinates(getDrawingGraphicalRepresentation().convertRemoteViewCoordinatesToLocalNormalizedPoint(event.getPoint(), RoleContainerGR.this, controller.getScale()),1.0);
-				//FGEPoint normalizedPoint = convertLocalViewCoordinatesToRemoteNormalizedPoint(event.getPoint(), getDrawingGraphicalRepresentation(), controller.getScale());
-				//Point p = getDrawingGraphicalRepresentation().convertNormalizedPointToViewCoordinates(normalizedPoint,1.0);
-				FGEPoint dropLocation = new FGEPoint(event.getX()/controller.getScale()-annotation.getGraphicalRepresentation().getBorder().left,event.getY()/controller.getScale()-annotation.getGraphicalRepresentation().getBorder().top);
+				// Point p =
+				// getDrawingGraphicalRepresentation().convertNormalizedPointToViewCoordinates(getDrawingGraphicalRepresentation().convertRemoteViewCoordinatesToLocalNormalizedPoint(event.getPoint(),
+				// RoleContainerGR.this, controller.getScale()),1.0);
+				// FGEPoint normalizedPoint = convertLocalViewCoordinatesToRemoteNormalizedPoint(event.getPoint(),
+				// getDrawingGraphicalRepresentation(), controller.getScale());
+				// Point p = getDrawingGraphicalRepresentation().convertNormalizedPointToViewCoordinates(normalizedPoint,1.0);
+				FGEPoint dropLocation = new FGEPoint(event.getX() / controller.getScale()
+						- annotation.getGraphicalRepresentation().getBorder().left, event.getY() / controller.getScale()
+						- annotation.getGraphicalRepresentation().getBorder().top);
 				annotation.elementDragged(graphicalRepresentation, dropLocation);
 			}
 			return false;
@@ -53,6 +56,6 @@ public class AnnotationMouseClickControl extends MouseClickControl {
 	}
 
 	public AnnotationMouseClickControl() {
-		super("create_annotation", MouseButton.LEFT, 2, new CreateAnnotationAction(),false,false,false,false);
+		super("create_annotation", MouseButton.LEFT, 2, new CreateAnnotationAction(), false, false, false, false);
 	}
 }

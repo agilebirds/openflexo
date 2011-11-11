@@ -42,31 +42,24 @@ import org.openflexo.toolbox.ToolBox;
 import org.openflexo.toolbox.ZipUtils;
 
 public class FlexoWarBuilder extends FlexoObservable {
-	protected static final Logger logger = FlexoLogger
-			.getLogger(FlexoWarBuilder.class.getPackage().getName());
+	protected static final Logger logger = FlexoLogger.getLogger(FlexoWarBuilder.class.getPackage().getName());
 
 	private static final String ZIPPED_TEMPLATE_PROJECT_PATH = "Config/Generator/Libraries/template-project.zip";
 
 	private static final String WO_BUILD_PROPERTIES = "wobuild.properties";
 
-	private static final String[] ABSOLUTE_KEYS = new String[] { "wo.dir.root",
-			"wo.woroot", "wo.dir.local.library", "wo.wolocalroot" };
+	private static final String[] ABSOLUTE_KEYS = new String[] { "wo.dir.root", "wo.woroot", "wo.dir.local.library", "wo.wolocalroot" };
 
-	private static final String[] USER_HOME_KEYS = new String[] {
-			"wo.dir.user.home.library.frameworks", "wo.dir.user.home.library" };
+	private static final String[] USER_HOME_KEYS = new String[] { "wo.dir.user.home.library.frameworks", "wo.dir.user.home.library" };
 
-	private static final String[] WO_DIR_KEYS = new String[] { "wo.dir.local",
-			"wo.wosystemroot", "wo.dir.library", "wo.dir.library.frameworks",
-			"wo.dir.local.library.frameworks", "wo.dir.system" };
+	private static final String[] WO_DIR_KEYS = new String[] { "wo.dir.local", "wo.wosystemroot", "wo.dir.library",
+			"wo.dir.library.frameworks", "wo.dir.local.library.frameworks", "wo.dir.system" };
 
-	private static final String[] DEFAULT_ABSOLUTE_PATH = new String[] { "/",
-			"/", "/Library", "/" };
+	private static final String[] DEFAULT_ABSOLUTE_PATH = new String[] { "/", "/", "/Library", "/" };
 
-	private static final String[] DEFAULT_USER_HOME_RELATIVE_PATH = new String[] {
-			"Library/Frameworks", "Library" };
+	private static final String[] DEFAULT_USER_HOME_RELATIVE_PATH = new String[] { "Library/Frameworks", "Library" };
 
-	private static final String[] DEFAULT_WO_DIR_RELATIVE_PATH = new String[] {
-			"", "", "Library", "Library/Frameworks",
+	private static final String[] DEFAULT_WO_DIR_RELATIVE_PATH = new String[] { "", "", "Library", "Library/Frameworks",
 			"Local/Library/Frameworks", "" };
 
 	private File _warProjectDir;
@@ -99,17 +92,16 @@ public class FlexoWarBuilder extends FlexoObservable {
 
 	private Vector<BuildListener> listeners;
 
-	public FlexoWarBuilder(FlexoProject project, File buildAna,
-			File distDirectory, boolean isProto) {
+	public FlexoWarBuilder(FlexoProject project, File buildAna, File distDirectory, boolean isProto) {
 		super();
-		FileResource apiZippedFile = new FileResource(isProto?
-				"Config/Generator/Libraries/api-proto.zip":"Config/Generator/Libraries/api-app.zip");
+		FileResource apiZippedFile = new FileResource(isProto ? "Config/Generator/Libraries/api-proto.zip"
+				: "Config/Generator/Libraries/api-app.zip");
 		try {
 			if (apiZippedFile != null && apiZippedFile.exists()) {
 				checkoutLibraries = false;
 				zipped_api_file_path = apiZippedFile.getCanonicalPath();
-				FileResource apiFmkFile = new FileResource(isProto?
-						"Config/Generator/Libraries/framework-proto.zip":"Config/Generator/Libraries/framework-app.zip");
+				FileResource apiFmkFile = new FileResource(isProto ? "Config/Generator/Libraries/framework-proto.zip"
+						: "Config/Generator/Libraries/framework-app.zip");
 				zipped_api_framework_path = apiFmkFile.getCanonicalPath();
 			}
 		} catch (IOException e) {
@@ -119,16 +111,14 @@ public class FlexoWarBuilder extends FlexoObservable {
 			e.printStackTrace();
 			checkoutLibraries = true;
 		}
-		flexo_embedded_framework_path = project.getFrameworksToEmbedDirectory()
-				.getAbsolutePath();
+		flexo_embedded_framework_path = project.getFrameworksToEmbedDirectory().getAbsolutePath();
 		// checkoutLibraries = true;
 		_buildAna = buildAna;
 		_distDir = distDirectory;
 		runner = new AntRunner(this);
 		listeners = new Vector<BuildListener>();
 		if (logger.isLoggable(Level.FINE))
-			logger.fine("################### checkout libraries = "
-				+ checkoutLibraries + " ##################");
+			logger.fine("################### checkout libraries = " + checkoutLibraries + " ##################");
 	}
 
 	private String getWarProjectName() {
@@ -176,7 +166,7 @@ public class FlexoWarBuilder extends FlexoObservable {
 		return _buildWSDir;
 	}
 
-	private void cleanWarProjectDir(final File outputDir,boolean cleanImmediately) throws IOException {
+	private void cleanWarProjectDir(final File outputDir, boolean cleanImmediately) throws IOException {
 		_xdocsDir = null;
 		_buildAna = null;
 		_xdocsDir = null;
@@ -190,10 +180,10 @@ public class FlexoWarBuilder extends FlexoObservable {
 			public void run() {
 				try {
 					if (logger.isLoggable(Level.INFO))
-						logger.info("Deleting "+outputDir.getAbsolutePath());
+						logger.info("Deleting " + outputDir.getAbsolutePath());
 					FileUtils.recursiveDeleteFile(outputDir);
 					if (logger.isLoggable(Level.INFO))
-						logger.info("Done deleting "+outputDir.getAbsolutePath());
+						logger.info("Done deleting " + outputDir.getAbsolutePath());
 				} catch (Exception e) {
 					e.printStackTrace();
 				} finally {
@@ -217,29 +207,29 @@ public class FlexoWarBuilder extends FlexoObservable {
 		FileUtils.copyFileToFile(_buildAna, destFile);
 	}
 
-//	private void moveAntUserFramework(File generatedCodeDirectory) throws IOException {
-//		File destDirectory = new File(generatedCodeDirectory, "woproject");
-//		File antFrameworkFile = new File(generatedCodeDirectory, "ant.frameworks.user.home.manual");
-//		File destFile = new File(destDirectory,antFrameworkFile.getName());
-//		if (destFile.exists())
-//			return;
-//		FileUtils.copyFileToDir(antFrameworkFile, destDirectory);
-//	}
+	// private void moveAntUserFramework(File generatedCodeDirectory) throws IOException {
+	// File destDirectory = new File(generatedCodeDirectory, "woproject");
+	// File antFrameworkFile = new File(generatedCodeDirectory, "ant.frameworks.user.home.manual");
+	// File destFile = new File(destDirectory,antFrameworkFile.getName());
+	// if (destFile.exists())
+	// return;
+	// FileUtils.copyFileToDir(antFrameworkFile, destDirectory);
+	// }
 
-	public void makeWar(File outputDir, File generatedCodeDirectory,boolean cleanImmediately) throws Exception {
+	public void makeWar(File outputDir, File generatedCodeDirectory, boolean cleanImmediately) throws Exception {
 		createWoBuildProperties();
 		copyBuildAna(outputDir);
-		//moveAntUserFramework(generatedCodeDirectory);
+		// moveAntUserFramework(generatedCodeDirectory);
 		modifyDefaultProperties(outputDir);
 		runBuildScriptGenerator(outputDir);
 		runBuildScript(outputDir);
-		notifyProgress("Copying WAR to: "+outputDir.getAbsolutePath());
+		notifyProgress("Copying WAR to: " + outputDir.getAbsolutePath());
 		if (logger.isLoggable(Level.INFO))
-			logger.info("Copying WAR to: "+outputDir.getAbsolutePath());
+			logger.info("Copying WAR to: " + outputDir.getAbsolutePath());
 		copyWarToDist(outputDir);
-		//copyWebResourcesToDist(outputDir);
+		// copyWebResourcesToDist(outputDir);
 		notifyProgress("Clean temporary files");
-		cleanWarProjectDir(outputDir,cleanImmediately);
+		cleanWarProjectDir(outputDir, cleanImmediately);
 	}
 
 	/**
@@ -257,8 +247,7 @@ public class FlexoWarBuilder extends FlexoObservable {
 				for (int i = 0; i < ABSOLUTE_KEYS.length; i++) {
 					String s = ABSOLUTE_KEYS[i];
 					try {
-						p.put(s, new File(DEFAULT_ABSOLUTE_PATH[i])
-								.getCanonicalPath());
+						p.put(s, new File(DEFAULT_ABSOLUTE_PATH[i]).getCanonicalPath());
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -281,9 +270,7 @@ public class FlexoWarBuilder extends FlexoObservable {
 				for (int i = 0; i < WO_DIR_KEYS.length; i++) {
 					String s = WO_DIR_KEYS[i];
 					try {
-						p.put(s, new File(WO_DIR,
-								DEFAULT_WO_DIR_RELATIVE_PATH[i])
-								.getCanonicalPath());
+						p.put(s, new File(WO_DIR, DEFAULT_WO_DIR_RELATIVE_PATH[i]).getCanonicalPath());
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -291,16 +278,13 @@ public class FlexoWarBuilder extends FlexoObservable {
 				for (int i = 0; i < USER_HOME_KEYS.length; i++) {
 					String s = USER_HOME_KEYS[i];
 					try {
-						p.put(s, new File(userHome,
-								DEFAULT_USER_HOME_RELATIVE_PATH[i])
-								.getCanonicalPath());
+						p.put(s, new File(userHome, DEFAULT_USER_HOME_RELATIVE_PATH[i]).getCanonicalPath());
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				}
 				try {
-					p.store(new FileOutputStream(f),
-							"This file stores the wo specific properties");
+					p.store(new FileOutputStream(f), "This file stores the wo specific properties");
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				} catch (IOException e) {
@@ -318,11 +302,9 @@ public class FlexoWarBuilder extends FlexoObservable {
 		if (checkoutLibraries) {
 			File buildxmlfile = new FileResource("Resources/build.xml");
 			File buildxmldir = buildxmlfile.getParentFile();
-			AntRunner.initAndRunTask(runner, buildxmlfile.getCanonicalPath(), buildxmldir
-					.getCanonicalPath(), null, null,listeners);
+			AntRunner.initAndRunTask(runner, buildxmlfile.getCanonicalPath(), buildxmldir.getCanonicalPath(), null, null, listeners);
 		} else {
-			ZipUtils.unzip(new FileResource(ZIPPED_TEMPLATE_PROJECT_PATH),
-					outputDir);
+			ZipUtils.unzip(new FileResource(ZIPPED_TEMPLATE_PROJECT_PATH), outputDir);
 		}
 		File libraries = new File(getWarProjectDir(outputDir), "libraries");
 		if (!libraries.exists())
@@ -330,16 +312,13 @@ public class FlexoWarBuilder extends FlexoObservable {
 
 	}
 
-	private void modifyDefaultProperties(File outputDir)
-			throws FileNotFoundException, IOException {
+	private void modifyDefaultProperties(File outputDir) throws FileNotFoundException, IOException {
 		Properties defaultProperties = new Properties();
-		defaultProperties.load(new FileInputStream(
-				getDefaultPropertiesFile(outputDir)));
+		defaultProperties.load(new FileInputStream(getDefaultPropertiesFile(outputDir)));
 		defaultProperties.put("project.dir", getWarProjectName());
 		if (!checkoutLibraries) {
 			defaultProperties.put("zipped_api_file", zipped_api_file_path);
-			defaultProperties.put("zipped_framework_file",
-					zipped_api_framework_path);
+			defaultProperties.put("zipped_framework_file", zipped_api_framework_path);
 			defaultProperties.put("no_versionning", "true");
 			defaultProperties.remove("database");
 		}
@@ -347,17 +326,14 @@ public class FlexoWarBuilder extends FlexoObservable {
 		if (flexo_embedded_framework_path != null) {
 			if (logger.isLoggable(Level.INFO))
 				logger.info("Frameworks path: " + flexo_embedded_framework_path);
-			defaultProperties.put("flexo_framework_dir",
-					flexo_embedded_framework_path);
+			defaultProperties.put("flexo_framework_dir", flexo_embedded_framework_path);
 		}
-		defaultProperties.store(new FileOutputStream(
-				getDefaultPropertiesFile(outputDir)), null);
+		defaultProperties.store(new FileOutputStream(getDefaultPropertiesFile(outputDir)), null);
 	}
 
 	private File getDefaultPropertiesFile(File outputDir) throws IOException {
 		if (_defaultPropertiesFile == null)
-			_defaultPropertiesFile = new File(getWarProjectDir(outputDir),
-					"default.properties");
+			_defaultPropertiesFile = new File(getWarProjectDir(outputDir), "default.properties");
 		return _defaultPropertiesFile;
 	}
 
@@ -365,8 +341,7 @@ public class FlexoWarBuilder extends FlexoObservable {
 		File buildxmlfile = new File(getWarProjectDir(outputDir), "build.xml");
 		File buildxmldir = getWarProjectDir(outputDir);
 		notifyProgress("Generate build scripts");
-		AntRunner.initAndRunTask(runner,buildxmlfile.getCanonicalPath(), buildxmldir
-				.getCanonicalPath(), null, "generate",listeners);
+		AntRunner.initAndRunTask(runner, buildxmlfile.getCanonicalPath(), buildxmldir.getCanonicalPath(), null, "generate", listeners);
 
 	}
 
@@ -375,20 +350,18 @@ public class FlexoWarBuilder extends FlexoObservable {
 		File buildxmldir = getWarProjectDir(outputDir);
 		if (checkoutLibraries) {
 			notifyProgress("Checkout api's");
-			AntRunner.initAndRunTask(runner,buildxmlfile.getCanonicalPath(), buildxmldir
-					.getCanonicalPath(), null, "checkout.api",listeners);
+			AntRunner.initAndRunTask(runner, buildxmlfile.getCanonicalPath(), buildxmldir.getCanonicalPath(), null, "checkout.api",
+					listeners);
 			notifyProgress("Checkout frameworks");
-			AntRunner.initAndRunTask(runner,buildxmlfile.getCanonicalPath(), buildxmldir
-					.getCanonicalPath(), null, "checkout.framework",listeners);
+			AntRunner.initAndRunTask(runner, buildxmlfile.getCanonicalPath(), buildxmldir.getCanonicalPath(), null, "checkout.framework",
+					listeners);
 			notifyProgress("Clean install");
-			AntRunner.initAndRunTask(runner,buildxmlfile.getCanonicalPath(), buildxmldir
-					.getCanonicalPath(), null, "clean",listeners);
+			AntRunner.initAndRunTask(runner, buildxmlfile.getCanonicalPath(), buildxmldir.getCanonicalPath(), null, "clean", listeners);
 		}
 		notifyProgress("Build war");
 		// flexo_framework_dir
-		AntRunner.initAndRunTask(runner,buildxmlfile.getCanonicalPath(), buildxmldir
-				.getCanonicalPath(), null, checkoutLibraries ? "dist"
-				: "flexo_fast",listeners);
+		AntRunner.initAndRunTask(runner, buildxmlfile.getCanonicalPath(), buildxmldir.getCanonicalPath(), null, checkoutLibraries ? "dist"
+				: "flexo_fast", listeners);
 
 	}
 
@@ -411,12 +384,11 @@ public class FlexoWarBuilder extends FlexoObservable {
 		super.notifyObservers(arg);
 	}
 
-    /**
-     * @param buildListeners
-     */
-    public void addBuildListeners(Vector<BuildListener> buildListeners)
-    {
-        listeners.addAll(buildListeners);
-    }
+	/**
+	 * @param buildListeners
+	 */
+	public void addBuildListeners(Vector<BuildListener> buildListeners) {
+		listeners.addAll(buildListeners);
+	}
 
 }

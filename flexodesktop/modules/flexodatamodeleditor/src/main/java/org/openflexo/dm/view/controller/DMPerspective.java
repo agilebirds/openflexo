@@ -24,72 +24,63 @@ import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-
 import org.openflexo.components.widget.DMEntitySelector;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.FlexoPerspective;
 
-public abstract class DMPerspective<O extends FlexoModelObject> extends FlexoPerspective<O>
-{
-	
+public abstract class DMPerspective<O extends FlexoModelObject> extends FlexoPerspective<O> {
+
 	protected JPanel searchPanel;
 	private DMEntity searchedEntity = null;
 
-    public DMPerspective(String name, final DMController controller) 
-    {
+	public DMPerspective(String name, final DMController controller) {
 		super(name);
 
 		searchPanel = new JPanel(new BorderLayout());
-    	searchPanel.add(new JLabel(FlexoLocalization.localizedForKey("search")),BorderLayout.WEST);
-    	searchPanel.add(new DMEntitySelector<DMEntity>(controller.getProject(),searchedEntity,DMEntity.class) {
-    		@Override
+		searchPanel.add(new JLabel(FlexoLocalization.localizedForKey("search")), BorderLayout.WEST);
+		searchPanel.add(new DMEntitySelector<DMEntity>(controller.getProject(), searchedEntity, DMEntity.class) {
+			@Override
 			public void setEditedObject(DMEntity entity) {
-    			if (!browserMayRepresent(entity))
-    				return;
-    			changeBrowserFiltersFor(entity);
-    			super.setEditedObject(entity);
-    			searchedEntity = entity;
-    			controller.getSelectionManager().setSelectedObject(entity);
-    		}
-    	},BorderLayout.CENTER);
-     }
+				if (!browserMayRepresent(entity))
+					return;
+				changeBrowserFiltersFor(entity);
+				super.setEditedObject(entity);
+				searchedEntity = entity;
+				controller.getSelectionManager().setSelectedObject(entity);
+			}
+		}, BorderLayout.CENTER);
+	}
 
-	protected class PropertiesBrowser extends DMBrowser
-    {
-    	private DMEntity representedEntity = null;
-    	
-    	protected PropertiesBrowser(DMController controller)
-    	{
-    		super(controller,false);
-    	}
+	protected class PropertiesBrowser extends DMBrowser {
+		private DMEntity representedEntity = null;
 
-    	protected DMEntity getRepresentedEntity() 
-		{
+		protected PropertiesBrowser(DMController controller) {
+			super(controller, false);
+		}
+
+		protected DMEntity getRepresentedEntity() {
 			return representedEntity;
 		}
 
-    	protected void setRepresentedEntity(DMEntity representedEntity) 
-		{
+		protected void setRepresentedEntity(DMEntity representedEntity) {
 			this.representedEntity = representedEntity;
 		}
 
-        @Override
-		public FlexoModelObject getDefaultRootObject()
-        {
-        	return representedEntity;
-        }
-    }
-
-	protected abstract boolean browserMayRepresent(DMEntity entity);
-	protected abstract void changeBrowserFiltersFor(DMEntity entity);
-	
-	@Override
-	public final boolean isAlwaysVisible() 
-	{
-		return true;
+		@Override
+		public FlexoModelObject getDefaultRootObject() {
+			return representedEntity;
+		}
 	}
 
+	protected abstract boolean browserMayRepresent(DMEntity entity);
+
+	protected abstract void changeBrowserFiltersFor(DMEntity entity);
+
+	@Override
+	public final boolean isAlwaysVisible() {
+		return true;
+	}
 
 }

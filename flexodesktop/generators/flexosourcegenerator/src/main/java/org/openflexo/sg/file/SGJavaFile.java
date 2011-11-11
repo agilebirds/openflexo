@@ -29,8 +29,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
-
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.cg.ModelReinjectableFile;
@@ -57,7 +55,6 @@ import org.openflexo.javaparser.FJPDMSet.FJPPackageReference.FJPClassReference;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.sg.generator.SGJavaClassGenerator;
 import org.openflexo.toolbox.FileUtils;
-
 
 import com.thoughtworks.qdox.parser.ParseException;
 
@@ -92,7 +89,8 @@ public class SGJavaFile extends SGFile implements ModelReinjectableFile {
 	private FJPJavaParseException _parseException;
 
 	public FJPJavaSource getParsedJavaSource() {
-		if (_parsedJavaSource == null && _parseException == null && getGeneratedResourceData() != null && getGeneratedResourceData().hasCurrentDiskContent()) {
+		if (_parsedJavaSource == null && _parseException == null && getGeneratedResourceData() != null
+				&& getGeneratedResourceData().hasCurrentDiskContent()) {
 			try {
 				// Date date0 = new Date();
 				String currentDiskContent = getGeneratedResourceData().getCurrentDiskContent();
@@ -123,7 +121,8 @@ public class SGJavaFile extends SGFile implements ModelReinjectableFile {
 			Date date3 = new Date();
 			saveKnownJavaStructure();
 			Date date4 = new Date();
-			logger.info("Time for CGJavaFile saveKnownJavaStructure() " + getFileName() + ": " + (date4.getTime() - date3.getTime()) + " ms");
+			logger.info("Time for CGJavaFile saveKnownJavaStructure() " + getFileName() + ": " + (date4.getTime() - date3.getTime())
+					+ " ms");
 		}
 		Date date2 = new Date();
 		logger.info("Total time for CGJavaFile writeModifiedFile() " + getFileName() + ": " + (date2.getTime() - date1.getTime()) + " ms");
@@ -196,8 +195,9 @@ public class SGJavaFile extends SGFile implements ModelReinjectableFile {
 	}
 
 	/**
-	 * This method is called whenever we have to store known Java model. Since known properties and methods are stored in the data model, we juste have to store here properties and methods that we
-	 * explicitely choose to ignore. At this point we just do a comparison between parsed java source and related entity to store the delta.
+	 * This method is called whenever we have to store known Java model. Since known properties and methods are stored in the data model, we
+	 * juste have to store here properties and methods that we explicitely choose to ignore. At this point we just do a comparison between
+	 * parsed java source and related entity to store the delta.
 	 * 
 	 */
 	private void saveKnownJavaStructure() {
@@ -293,7 +293,8 @@ public class SGJavaFile extends SGFile implements ModelReinjectableFile {
 		return _methodsKnownAndIgnored;
 	}
 
-	public void updateModel(FJPDMSet updateContext) throws FJPTypeResolver.CrossReferencedEntitiesException, FJPTypeResolver.UnresolvedTypeException {
+	public void updateModel(FJPDMSet updateContext) throws FJPTypeResolver.CrossReferencedEntitiesException,
+			FJPTypeResolver.UnresolvedTypeException {
 		FJPJavaSource parsedSource = getParsedJavaSource();
 		FJPJavaClass parsedClass = parsedSource.getRootClass();
 		ClassReference classReference = updateContext.getClassReference(parsedClass);
@@ -314,10 +315,12 @@ public class SGJavaFile extends SGFile implements ModelReinjectableFile {
 	}
 
 	/**
-	 * Maybe some explanation required here. Reinjection in model will result here in two concurrent changes: one in the model itself, and one resulting from the necessary previous acceptation. This
-	 * situation will result as a conflict occurring in the next generation iteration (normally changes are both side the same and this conflict must be automatically resolved). The goal here is to
-	 * avoid this situation, by asserting that reinjection is enough and round-trip for the related reinjected elements is no more necessary, so we just re-run silently the code generation, and put
-	 * the result as the LAST_GENERATED (this will shortcut round-trip for the next generation, and thus prevent from a conflict to appear).
+	 * Maybe some explanation required here. Reinjection in model will result here in two concurrent changes: one in the model itself, and
+	 * one resulting from the necessary previous acceptation. This situation will result as a conflict occurring in the next generation
+	 * iteration (normally changes are both side the same and this conflict must be automatically resolved). The goal here is to avoid this
+	 * situation, by asserting that reinjection is enough and round-trip for the related reinjected elements is no more necessary, so we
+	 * just re-run silently the code generation, and put the result as the LAST_GENERATED (this will shortcut round-trip for the next
+	 * generation, and thus prevent from a conflict to appear).
 	 * 
 	 * @param entity
 	 * @param aClassReference
@@ -348,8 +351,10 @@ public class SGJavaFile extends SGFile implements ModelReinjectableFile {
 				pureGenerationSource = new FJPJavaSource(sourceName, pureGeneration, getProject().getDataModel().getClassLibrary());
 				FJPJavaClass parsedClass = pureGenerationSource.getRootClass();
 				Vector<String> excludedSignatures = new Vector<String>();
-				Vector<DMProperty> parsedProperties = FJPDMMapper.searchForProperties(parsedClass, getProject().getDataModel(), null, pureGenerationSource, true, false, excludedSignatures);
-				Vector<DMMethod> parsedMethods = FJPDMMapper.searchForMethods(parsedClass, getProject().getDataModel(), null, pureGenerationSource, false, excludedSignatures);
+				Vector<DMProperty> parsedProperties = FJPDMMapper.searchForProperties(parsedClass, getProject().getDataModel(), null,
+						pureGenerationSource, true, false, excludedSignatures);
+				Vector<DMMethod> parsedMethods = FJPDMMapper.searchForMethods(parsedClass, getProject().getDataModel(), null,
+						pureGenerationSource, false, excludedSignatures);
 				for (DMObject o : newObjects) {
 					if (o instanceof DMProperty) {
 						DMProperty newProperty = (DMProperty) o;

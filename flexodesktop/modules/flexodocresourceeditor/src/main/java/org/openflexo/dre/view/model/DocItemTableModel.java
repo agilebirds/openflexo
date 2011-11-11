@@ -31,85 +31,73 @@ import org.openflexo.drm.DocItemFolder;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.DREIconLibrary;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class DocItemTableModel extends AbstractModel<DocItemFolder,DocItem>
-{
+public class DocItemTableModel extends AbstractModel<DocItemFolder, DocItem> {
 
-    protected static final Logger logger = Logger.getLogger(DocItemTableModel.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(DocItemTableModel.class.getPackage().getName());
 
-    public DocItemTableModel(DocItemFolder folder, FlexoProject project)
-    {
-        super(folder, project);
-        addToColumns(new IconColumn<DocItem>("item_icon", 30) {
-            @Override
-			public Icon getIcon(DocItem item)
-            {
-                return DREIconLibrary.DOC_ITEM_ICON;
-            }
-        });
-        
-        addToColumns(new EditableStringColumn<DocItem>("documentation_items", 200) {
-            @Override
-			public String getValue(DocItem item)
-            {
-                return item.getIdentifier();
-            }
+	public DocItemTableModel(DocItemFolder folder, FlexoProject project) {
+		super(folder, project);
+		addToColumns(new IconColumn<DocItem>("item_icon", 30) {
+			@Override
+			public Icon getIcon(DocItem item) {
+				return DREIconLibrary.DOC_ITEM_ICON;
+			}
+		});
 
-            @Override
-			public void setValue(DocItem item, String aValue)
-            {
-                item.setIdentifier(aValue);
-            }
-        });
-       addToColumns(new EditableStringColumn<DocItem>("description", 270) {
-            @Override
-			public String getValue(DocItem item)
-            {
-                return item.getDescription();
-            }
+		addToColumns(new EditableStringColumn<DocItem>("documentation_items", 200) {
+			@Override
+			public String getValue(DocItem item) {
+				return item.getIdentifier();
+			}
 
-            @Override
-			public void setValue(DocItem item, String aValue)
-            {
-                item.setDescription(aValue);
-            }
-        });
+			@Override
+			public void setValue(DocItem item, String aValue) {
+				item.setIdentifier(aValue);
+			}
+		});
+		addToColumns(new EditableStringColumn<DocItem>("description", 270) {
+			@Override
+			public String getValue(DocItem item) {
+				return item.getDescription();
+			}
 
-    }
+			@Override
+			public void setValue(DocItem item, String aValue) {
+				item.setDescription(aValue);
+			}
+		});
 
-    public DocItemFolder getDocItemFolder()
-    {
-        return getModel();
-    }
+	}
 
-    @Override
-	public DocItem elementAt(int row)
-    {
-        if ((row >= 0) && (row < getRowCount())) {
-            return getDocItemFolder().getItems().elementAt(row);
-        } else {
-            return null;
-        }
-    }
+	public DocItemFolder getDocItemFolder() {
+		return getModel();
+	}
 
-    public DocItem folderAt(int row)
-    {
-        return elementAt(row);
-    }
+	@Override
+	public DocItem elementAt(int row) {
+		if ((row >= 0) && (row < getRowCount())) {
+			return getDocItemFolder().getItems().elementAt(row);
+		} else {
+			return null;
+		}
+	}
 
-    @Override
-	public int getRowCount()
-    {
-        if (getDocItemFolder() != null) {
-            return getDocItemFolder().getItems().size();
-        }
-        return 0;
-    }
+	public DocItem folderAt(int row) {
+		return elementAt(row);
+	}
+
+	@Override
+	public int getRowCount() {
+		if (getDocItemFolder() != null) {
+			return getDocItemFolder().getItems().size();
+		}
+		return 0;
+	}
 
 }

@@ -41,301 +41,307 @@ import cb.petal.StringLiteral;
 import cb.petal.Value;
 
 public class Parser {
-  private Lexer     lexer;
+	private Lexer lexer;
 
-  private PetalNode current_parent = null;
-  private Stack     parent_stack   = new Stack(); // Stack<PetalNode>
+	private PetalNode current_parent = null;
+	private Stack parent_stack = new Stack(); // Stack<PetalNode>
 
-  private void saveParent(PetalNode new_parent) {
-    parent_stack.push(current_parent);
-    current_parent = new_parent;
-  }
+	private void saveParent(PetalNode new_parent) {
+		parent_stack.push(current_parent);
+		current_parent = new_parent;
+	}
 
-  private void restoreParent() {
-    current_parent = (PetalNode)parent_stack.pop();
-  }
+	private void restoreParent() {
+		current_parent = (PetalNode) parent_stack.pop();
+	}
 
-  private static ObjectFactory factory = ObjectFactory.getInstance();
+	private static ObjectFactory factory = ObjectFactory.getInstance();
 
-  public Parser(Reader r) {
-    lexer = new Lexer(r);
-  }
+	public Parser(Reader r) {
+		lexer = new Lexer(r);
+	}
 
-  private java.util.List ignored_nodes = Collections.EMPTY_LIST;
+	private java.util.List ignored_nodes = Collections.EMPTY_LIST;
 
-  /** If the parser finds such a node while building the petal tree, the node
-   * will be ignored and not added to the tree. E.g, setIgnoredNodes(Diagram.class) will
-   * abandon all diagrams of the model.
-   */
-  public void setIgnoredNodes(java.lang.Class[] nodes) {
-    ignored_nodes = new ArrayList(Arrays.asList(nodes));
-  }
+	/**
+	 * If the parser finds such a node while building the petal tree, the node will be ignored and not added to the tree. E.g,
+	 * setIgnoredNodes(Diagram.class) will abandon all diagrams of the model.
+	 */
+	public void setIgnoredNodes(java.lang.Class[] nodes) {
+		ignored_nodes = new ArrayList(Arrays.asList(nodes));
+	}
 
-  public java.lang.Class[] getIgnoredNodes() {
-    java.lang.Class[] nodes = new java.lang.Class[ignored_nodes.size()];
-    ignored_nodes.toArray(nodes);
-    return nodes;
-  }
+	public java.lang.Class[] getIgnoredNodes() {
+		java.lang.Class[] nodes = new java.lang.Class[ignored_nodes.size()];
+		ignored_nodes.toArray(nodes);
+		return nodes;
+	}
 
-  private boolean ignored(PetalNode obj) {
-    for(Iterator i = ignored_nodes.iterator(); i.hasNext(); ) {
-      java.lang.Class clazz = (java.lang.Class)i.next();
-      if(clazz.isInstance(obj)) {
-	return true;
-      }
-    }
+	private boolean ignored(PetalNode obj) {
+		for (Iterator i = ignored_nodes.iterator(); i.hasNext();) {
+			java.lang.Class clazz = (java.lang.Class) i.next();
+			if (clazz.isInstance(obj)) {
+				return true;
+			}
+		}
 
-    return false;
-  }
-    
-  private Token match(int kind, String match) {
-    Token t = lexer.getToken();
+		return false;
+	}
 
-    if(t.kind != kind)
-      throw new RuntimeException("Mismatch: Expected " + kind + " but got " + t.kind +
-				 " at line " + t.line);
+	private Token match(int kind, String match) {
+		Token t = lexer.getToken();
 
-    if((match != null) && !match.equals(t.image))
-      throw new RuntimeException("Mismatch: Expected " + match + " but got " + t.image +
-				 " at line " + t.line);
+		if (t.kind != kind)
+			throw new RuntimeException("Mismatch: Expected " + kind + " but got " + t.kind + " at line " + t.line);
 
-    return t;
-  }
+		if ((match != null) && !match.equals(t.image))
+			throw new RuntimeException("Mismatch: Expected " + match + " but got " + t.image + " at line " + t.line);
 
-  private Token match(int kind) {
-    return match(kind, null);
-  }
+		return t;
+	}
 
-  private ArrayList list = new ArrayList(); // Reused list to collect docs
+	private Token match(int kind) {
+		return match(kind, null);
+	}
 
-  /** (...)* wildcard
-   * @return images
-   */
-  private ArrayList matchAll(int kind) {
-    list.clear();
+	private ArrayList list = new ArrayList(); // Reused list to collect docs
 
-    Token t = lexer.getToken();
+	/**
+	 * (...)* wildcard
+	 * 
+	 * @return images
+	 */
+	private ArrayList matchAll(int kind) {
+		list.clear();
 
-    while(t.kind == kind) {
-      list.add(t.image);
-      t = lexer.getToken();
-    }
+		Token t = lexer.getToken();
 
-    lexer.ungetToken(t);
+		while (t.kind == kind) {
+			list.add(t.image);
+			t = lexer.getToken();
+		}
 
-    return list;
-  }
+		lexer.ungetToken(t);
 
-  /** [...] optional
-   * @return image
-   */
-  private Token matchAny(int kind) {
-    Token t = lexer.getToken();
+		return list;
+	}
 
-    if(t.kind == kind)
-      return t;
-    else {
-      lexer.ungetToken(t);
-      return null;
-    }
-  }
+	/**
+	 * [...] optional
+	 * 
+	 * @return image
+	 */
+	private Token matchAny(int kind) {
+		Token t = lexer.getToken();
 
-  public static PetalFile parse(String file_name) {
-    return parse(new File(file_name));
-  }
+		if (t.kind == kind)
+			return t;
+		else {
+			lexer.ungetToken(t);
+			return null;
+		}
+	}
 
-  public static PetalFile parse(java.net.URL url) {
-    try {
-      return parse(url.openStream());
-    } catch(IOException e) {
-      throw new RuntimeException(e.toString());
-    }
-  }
+	public static PetalFile parse(String file_name) {
+		return parse(new File(file_name));
+	}
 
-  public static PetalFile parse(File file) {
-    try {
-      PetalFile tree  = parse(new FileReader(file));
-      String    name  = file.getName();
-      int       index = name.lastIndexOf('.');
+	public static PetalFile parse(java.net.URL url) {
+		try {
+			return parse(url.openStream());
+		} catch (IOException e) {
+			throw new RuntimeException(e.toString());
+		}
+	}
 
-      if(index > 0)
-	name = name.substring(0, index);
+	public static PetalFile parse(File file) {
+		try {
+			PetalFile tree = parse(new FileReader(file));
+			String name = file.getName();
+			int index = name.lastIndexOf('.');
 
-      tree.setModelName(name);
-      
-      return tree;
-    } catch(IOException e) {
-      throw new RuntimeException(e.toString());
-    }
-  }
+			if (index > 0)
+				name = name.substring(0, index);
 
-  public static PetalFile parse(Reader stream) {
-    return new Parser(stream).parse();
-  }
+			tree.setModelName(name);
 
-  public static PetalFile parse(InputStream stream) {
-    return parse(new InputStreamReader(stream));
-  }
+			return tree;
+		} catch (IOException e) {
+			throw new RuntimeException(e.toString());
+		}
+	}
 
-  /** Top level construct are always petal and design objects
-   */
-  public PetalFile parse() {
-    PetalObject petal, design;
-    PetalFile file = new PetalFile();
-    current_parent = file;
+	public static PetalFile parse(Reader stream) {
+		return new Parser(stream).parse();
+	}
 
-    petal  = parseObject();
-    design = parseObject();
-  
-    file.setPetal((Petal)petal);
-    file.setDesign((Design)design);
-    return file;
-  }
+	public static PetalFile parse(InputStream stream) {
+		return parse(new InputStreamReader(stream));
+	}
 
-  /* Example: (object ClassView "Class" "Use Case View::Student" @76	
-   *             location   	(160, 176))
-   */
-  public PetalObject parseObject() {
-    match(Lexer.LPAREN);  match(Lexer.IDENT, "object");
+	/**
+	 * Top level construct are always petal and design objects
+	 */
+	public PetalFile parse() {
+		PetalObject petal, design;
+		PetalFile file = new PetalFile();
+		current_parent = file;
 
-    Token     t1   = match(Lexer.IDENT);
-    ArrayList docs = matchAll(Lexer.STRING);
-    Token     t3   = matchAny(Lexer.TAG);
+		petal = parseObject();
+		design = parseObject();
 
-    PetalNode   parent = ignored(current_parent)? null : current_parent;
-    PetalObject obj    = factory.createObject(parent, t1.image, docs,
-					      t3 == null? null : t3.image);
-    saveParent(obj);
+		file.setPetal((Petal) petal);
+		file.setDesign((Design) design);
+		return file;
+	}
 
-    /* List of properties
-     */
-    Token t4 = matchAny(Lexer.IDENT);
+	/* Example: (object ClassView "Class" "Use Case View::Student" @76	
+	 *             location   	(160, 176))
+	 */
+	public PetalObject parseObject() {
+		match(Lexer.LPAREN);
+		match(Lexer.IDENT, "object");
 
-    while(t4 != null) {
-      PetalNode prop = parseValue(false);
+		Token t1 = match(Lexer.IDENT);
+		ArrayList docs = matchAll(Lexer.STRING);
+		Token t3 = matchAny(Lexer.TAG);
 
-      if(prop != null)
-	obj.addProperty(t4.image, prop);
+		PetalNode parent = ignored(current_parent) ? null : current_parent;
+		PetalObject obj = factory.createObject(parent, t1.image, docs, t3 == null ? null : t3.image);
+		saveParent(obj);
 
-      t4 = matchAny(Lexer.IDENT);
-    }
-  
-    match(Lexer.RPAREN);
+		/* List of properties
+		 */
+		Token t4 = matchAny(Lexer.IDENT);
 
-    restoreParent();
+		while (t4 != null) {
+			PetalNode prop = parseValue(false);
 
-    if(!ignored(obj)) {
-      obj.init();
-      return obj;
-    } else
-      return null;
-  }
+			if (prop != null)
+				obj.addProperty(t4.image, prop);
 
-  public PetalNode parseValue(boolean rparen_ok) {
-    Token t = lexer.getToken();
+			t4 = matchAny(Lexer.IDENT);
+		}
 
-    switch(t.kind) {
-    case Lexer.STRING:
-      return factory.createString(t.image, false);
+		match(Lexer.RPAREN);
 
-    case Lexer.MULTI_STRING:
-      return factory.createString(t.image, true);
+		restoreParent();
 
-    case Lexer.INTEGER:
-      return factory.createInteger(t.image);
+		if (!ignored(obj)) {
+			obj.init();
+			return obj;
+		} else
+			return null;
+	}
 
-    case Lexer.FLOAT:
-      return factory.createFloat(t.image);
+	public PetalNode parseValue(boolean rparen_ok) {
+		Token t = lexer.getToken();
 
-    case Lexer.BOOLEAN:
-      return factory.createBoolean(t.image);
+		switch (t.kind) {
+		case Lexer.STRING:
+			return factory.createString(t.image, false);
 
-    case Lexer.TAG:
-      return factory.createTag(t.image);
+		case Lexer.MULTI_STRING:
+			return factory.createString(t.image, true);
 
-    case Lexer.LPAREN:
-      Token t2 = lexer.getToken();
-      
-      switch(t2.kind) {
-      case Lexer.IDENT:
-	lexer.ungetToken(t2);
-	lexer.ungetToken(t);
+		case Lexer.INTEGER:
+			return factory.createInteger(t.image);
 
-	if(t2.image.equals("object")) {
-	  return parseObject();
-	} else if(t2.image.equals("list")) {
-	  return parseList();
-	} else if(t2.image.equals("value")) {
-	  return parseValueObject();
-	} else
-	  throw new RuntimeException("Unexpected " + t2.image + " after (");
+		case Lexer.FLOAT:
+			return factory.createFloat(t.image);
 
-      case Lexer.INTEGER:
-	match(Lexer.COMMA);
-	Token t3 = match(Lexer.INTEGER);
-	match(Lexer.RPAREN);
+		case Lexer.BOOLEAN:
+			return factory.createBoolean(t.image);
 
-	return factory.createLocation(t2.image, t3.image);
+		case Lexer.TAG:
+			return factory.createTag(t.image);
 
-      case Lexer.STRING:
-	Token t4 = match(Lexer.INTEGER);
-	match(Lexer.RPAREN);
-	return factory.createTuple(t2.image, t4.image);
+		case Lexer.LPAREN:
+			Token t2 = lexer.getToken();
 
-      default:
-	throw new RuntimeException("Unexpected " + t2.image + "after (");
-      }
+			switch (t2.kind) {
+			case Lexer.IDENT:
+				lexer.ungetToken(t2);
+				lexer.ungetToken(t);
 
-    default:
-      if((t.kind == Lexer.RPAREN) && rparen_ok)
-	return null;
-      else
-	throw new RuntimeException("Unexpected " + t.image);
-    }
-  }
+				if (t2.image.equals("object")) {
+					return parseObject();
+				} else if (t2.image.equals("list")) {
+					return parseList();
+				} else if (t2.image.equals("value")) {
+					return parseValueObject();
+				} else
+					throw new RuntimeException("Unexpected " + t2.image + " after (");
 
-  /* Example: (list unit_reference_list (object Module_Diagram "Main"
-   *		quid       	"35CB163B03CF"))
-   *
-   */
-  public List parseList() {
-    match(Lexer.LPAREN);  match(Lexer.IDENT, "list");
+			case Lexer.INTEGER:
+				match(Lexer.COMMA);
+				Token t3 = match(Lexer.INTEGER);
+				match(Lexer.RPAREN);
 
-    Token t    = matchAny(Lexer.IDENT);
-    List  list = factory.createList(t == null ? null : t.image);
-  
-    PetalNode obj;
+				return factory.createLocation(t2.image, t3.image);
 
-    while((obj = parseValue(true)) != null) // null == RPAREN
-      list.add(obj);
-    return list;
-  }
+			case Lexer.STRING:
+				Token t4 = match(Lexer.INTEGER);
+				match(Lexer.RPAREN);
+				return factory.createTuple(t2.image, t4.image);
 
-  public Value parseValueObject() {
-    match(Lexer.LPAREN);  match(Lexer.IDENT, "value");
-    Token         t   = match(Lexer.IDENT);
-    Token         t2  = lexer.getToken();
-    StringLiteral str;
+			default:
+				throw new RuntimeException("Unexpected " + t2.image + "after (");
+			}
 
-    switch(t2.kind) {
-    case Lexer.STRING:
-      str = factory.createString(t2.image, false);
-      break;
-    case Lexer.MULTI_STRING:
-      str = factory.createString(t2.image, true);
-      break;
-    default:
-      throw new RuntimeException("Unexpected " + t2.image + " in (value ...)");
-    }
+		default:
+			if ((t.kind == Lexer.RPAREN) && rparen_ok)
+				return null;
+			else
+				throw new RuntimeException("Unexpected " + t.image);
+		}
+	}
 
-    match(Lexer.RPAREN);
-    return factory.createValue(t.image, str);
-  }
+	/* Example: (list unit_reference_list (object Module_Diagram "Main"
+	 *		quid       	"35CB163B03CF"))
+	 *
+	 */
+	public List parseList() {
+		match(Lexer.LPAREN);
+		match(Lexer.IDENT, "list");
 
-  public static void main(String[] args) throws Exception {
-    FileReader r = new FileReader(args[0]);
+		Token t = matchAny(Lexer.IDENT);
+		List list = factory.createList(t == null ? null : t.image);
 
-    Parser parser = new Parser(r);
-    parser.parse();
-  }
+		PetalNode obj;
+
+		while ((obj = parseValue(true)) != null)
+			// null == RPAREN
+			list.add(obj);
+		return list;
+	}
+
+	public Value parseValueObject() {
+		match(Lexer.LPAREN);
+		match(Lexer.IDENT, "value");
+		Token t = match(Lexer.IDENT);
+		Token t2 = lexer.getToken();
+		StringLiteral str;
+
+		switch (t2.kind) {
+		case Lexer.STRING:
+			str = factory.createString(t2.image, false);
+			break;
+		case Lexer.MULTI_STRING:
+			str = factory.createString(t2.image, true);
+			break;
+		default:
+			throw new RuntimeException("Unexpected " + t2.image + " in (value ...)");
+		}
+
+		match(Lexer.RPAREN);
+		return factory.createValue(t.image, str);
+	}
+
+	public static void main(String[] args) throws Exception {
+		FileReader r = new FileReader(args[0]);
+
+		Parser parser = new Parser(r);
+		parser.parse();
+	}
 }

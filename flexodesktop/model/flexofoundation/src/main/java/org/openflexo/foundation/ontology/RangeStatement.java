@@ -29,61 +29,55 @@ public class RangeStatement extends OntologyStatement {
 	private static final Logger logger = Logger.getLogger(RangeStatement.class.getPackage().getName());
 
 	public static final String RANGE_URI = "http://www.w3.org/2000/01/rdf-schema#range";
-	
+
 	private OntologyObject range;
 	private OntologicDataType dataType;
-	
+
 	public OntologicDataType getDataType() {
 		return dataType;
 	}
 
-	public RangeStatement(OntologyObject subject, Statement s)
-	{
-		super(subject,s);
+	public RangeStatement(OntologyObject subject, Statement s) {
+		super(subject, s);
 		if (s.getObject() instanceof Resource) {
-			range = getOntologyLibrary().getOntologyObject(((Resource)s.getObject()).getURI());
-			if (((Resource)s.getObject()).getURI() != null) {
-				dataType = OntologicDataType.fromURI(((Resource)s.getObject()).getURI());
+			range = getOntologyLibrary().getOntologyObject(((Resource) s.getObject()).getURI());
+			if (((Resource) s.getObject()).getURI() != null) {
+				dataType = OntologicDataType.fromURI(((Resource) s.getObject()).getURI());
 			}
-		}
-		else {
+		} else {
 			logger.warning("RangeStatement: object is not a Resource !");
 		}
 	}
 
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "range_statement";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return "RangeStatement: "+getStatement();
+	public String getFullyQualifiedName() {
+		return "RangeStatement: " + getStatement();
 	}
 
-
-	public OntologyObject getRange() 
-	{
+	public OntologyObject getRange() {
 		return range;
 	}
 
 	@Override
-	public String toString() 
-	{
+	public String toString() {
 		if (getDataType() != null) {
-			return getSubject().getName()+" has range "+getDataType().getURI();
+			return getSubject().getName() + " has range " + getDataType().getURI();
 		}
-		return getSubject().getName()+" has range "+(getRange() != null ? getRange().getName() : "<NOT_FOUND:"+getStatement().getObject()+">");
+		return getSubject().getName() + " has range "
+				+ (getRange() != null ? getRange().getName() : "<NOT_FOUND:" + getStatement().getObject() + ">");
 	}
 
-	public String getStringRepresentation()
-	{
+	public String getStringRepresentation() {
 		if (getDataType() != null) {
 			return getDataType().toString();
 		}
-		if (getRange() != null) return getRange().getName();
+		if (getRange() != null)
+			return getRange().getName();
 		return "";
 	}
 }

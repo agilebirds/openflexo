@@ -19,7 +19,6 @@
  */
 package org.openflexo.components.browser.ontology;
 
-
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
@@ -28,22 +27,19 @@ import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Browser element representing the project ontology
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class ProjectOntologyElement extends FlexoOntologyElement
-{
+public class ProjectOntologyElement extends FlexoOntologyElement {
 
-    protected ProjectOntologyElement(ProjectOntology ontology, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(ontology, BrowserElementType.PROJECT_ONTOLOGY, browser,parent);
-    }
+	protected ProjectOntologyElement(ProjectOntology ontology, ProjectBrowser browser, BrowserElement parent) {
+		super(ontology, BrowserElementType.PROJECT_ONTOLOGY, browser, parent);
+	}
 
-    @Override
-    public String getName()
-    {
-        return FlexoLocalization.localizedForKey("project_ontology");
-    }
+	@Override
+	public String getName() {
+		return FlexoLocalization.localizedForKey("project_ontology");
+	}
 
 }

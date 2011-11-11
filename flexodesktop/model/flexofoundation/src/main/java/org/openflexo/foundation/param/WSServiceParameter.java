@@ -22,38 +22,35 @@ package org.openflexo.foundation.param;
 import org.openflexo.foundation.ws.WSService;
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
 public class WSServiceParameter extends ParameterDefinition<WSService> {
 
-   // private ProcessSelectingConditional _processSelectingConditional;
-    
-    public WSServiceParameter(String name, String label, WSService defaultValue)
-    {
-        super(name,label,defaultValue);
-        addParameter("className","org.openflexo.components.widget.WSServiceInspectorWidget");
-       // _processSelectingConditional = null;
-    }
-    
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.CUSTOM;
-    }
-/*
-   public boolean isAcceptableProcess(FlexoProcess aProcess) 
-   {
-       if (_processSelectingConditional != null) return _processSelectingConditional.isSelectable(aProcess);
-       return true;
-   }
+	// private ProcessSelectingConditional _processSelectingConditional;
 
-   public void setProcessSelectingConditional(ProcessSelectingConditional processSelectingConditional) 
-   {
-       _processSelectingConditional = processSelectingConditional;
-   }
-   
-   public abstract static class ProcessSelectingConditional
-   {
-       public abstract boolean isSelectable(FlexoProcess process);
-   }
-*/
+	public WSServiceParameter(String name, String label, WSService defaultValue) {
+		super(name, label, defaultValue);
+		addParameter("className", "org.openflexo.components.widget.WSServiceInspectorWidget");
+		// _processSelectingConditional = null;
+	}
+
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.CUSTOM;
+	}
+	/*
+	   public boolean isAcceptableProcess(FlexoProcess aProcess) 
+	   {
+	       if (_processSelectingConditional != null) return _processSelectingConditional.isSelectable(aProcess);
+	       return true;
+	   }
+
+	   public void setProcessSelectingConditional(ProcessSelectingConditional processSelectingConditional) 
+	   {
+	       _processSelectingConditional = processSelectingConditional;
+	   }
+	   
+	   public abstract static class ProcessSelectingConditional
+	   {
+	       public abstract boolean isSelectable(FlexoProcess process);
+	   }
+	*/
 }

@@ -22,19 +22,16 @@ package org.openflexo.foundation.param;
 import org.openflexo.foundation.dm.DMRepository;
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
 public class DMRepositoryParameter extends ParameterDefinition<DMRepository> {
 
-    public DMRepositoryParameter(String name, String label, DMRepository defaultValue)
-    {
-        super(name,label,defaultValue);
-        addParameter("className","org.openflexo.components.widget.DMRepositoryInspectorWidget");
-    }
-    
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.CUSTOM;
-    }
+	public DMRepositoryParameter(String name, String label, DMRepository defaultValue) {
+		super(name, label, defaultValue);
+		addParameter("className", "org.openflexo.components.widget.DMRepositoryInspectorWidget");
+	}
+
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.CUSTOM;
+	}
 
 }

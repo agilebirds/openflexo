@@ -62,14 +62,12 @@ import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FileUtils.CopyStrategy;
 import org.openflexo.warbuilder.FlexoWarBuilder;
 
-
 /**
  * Controller for Generator module
- *
+ * 
  * @author sguerin
  */
-public class ProjectGenerator extends AbstractProjectGenerator<CGRepository>
-{
+public class ProjectGenerator extends AbstractProjectGenerator<CGRepository> {
 
 	protected static final Logger logger = Logger.getLogger(ProjectGenerator.class.getPackage().getName());
 
@@ -82,7 +80,7 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository>
 	private static final String GENERATE_READER = "generate_reader";
 	private static final String GENERATE_WORKFLOW = "generate_workflow";
 	private static final String GENERATE_CONTROL_GRAPHS = "generating_control_graph";
-	private Hashtable<FlexoProcess,BPELWriter> processes=new Hashtable<FlexoProcess, BPELWriter>();
+	private Hashtable<FlexoProcess, BPELWriter> processes = new Hashtable<FlexoProcess, BPELWriter>();
 
 	private ComponentsGenerator componentsGenerator;
 
@@ -114,14 +112,13 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository>
 
 	/**
 	 * Default constructor
-	 *
+	 * 
 	 * @param workflowFile
 	 * @throws Exception
 	 */
-	public ProjectGenerator(FlexoProject project, CGRepository repository) throws GenerationException
-	{
+	public ProjectGenerator(FlexoProject project, CGRepository repository) throws GenerationException {
 		super(project, repository);
-		if(repository==null) {
+		if (repository == null) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("No target repository, this may happen during dynamic invocation of code generator within the context of the Data model edition");
 			}
@@ -146,10 +143,10 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository>
 		}
 
 		if (getRootOutputDirectory() != null) {
-			if(!getResourceOutputDirectory().exists()) {
+			if (!getResourceOutputDirectory().exists()) {
 				getRootOutputDirectory().mkdirs();
 			}
-			if(!getRootOutputDirectory().canWrite()) {
+			if (!getRootOutputDirectory().canWrite()) {
 				throw new PermissionDeniedException(getRootOutputDirectory(), this);
 			}
 		}
@@ -158,7 +155,7 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository>
 	}
 
 	public boolean isPrototype() {
-		return getTarget()==CodeType.PROTOTYPE;
+		return getTarget() == CodeType.PROTOTYPE;
 	}
 
 	@Override
@@ -171,37 +168,34 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository>
 		return (CodeType) super.getTarget();
 	}
 
-	public ProjectInstanceTree getProjectInstanceTree(){
-		if(_projectInstanceTree==null) {
+	public ProjectInstanceTree getProjectInstanceTree() {
+		if (_projectInstanceTree == null) {
 			_projectInstanceTree = new ProjectInstanceTree(getProject());
 		}
 		return _projectInstanceTree;
 	}
 
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
 	/**
-	 * This method is very important, because it is the way we must identify or
-	 * build all resources involved in code generation. After this list has been
-	 * built, we just let ResourceManager do the work.
-	 *
-	 * @param repository:
-	 *            repository where resources should be retrieved or built
-	 * @param resources:
-	 *            the list of resources we must retrieve or build
+	 * This method is very important, because it is the way we must identify or build all resources involved in code generation. After this
+	 * list has been built, we just let ResourceManager do the work.
+	 * 
+	 * @param repository
+	 *            : repository where resources should be retrieved or built
+	 * @param resources
+	 *            : the list of resources we must retrieve or build
 	 */
 	@Override
-	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources)
-	{
+	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
 		hasBeenInitialized = true;
 
 		if (componentsGenerator != null) {
-			refreshProgressWindow(GENERATE_COMPONENTS,true);
-			componentsGenerator.buildResourcesAndSetGenerators(repository,resources);
+			refreshProgressWindow(GENERATE_COMPONENTS, true);
+			componentsGenerator.buildResourcesAndSetGenerators(repository, resources);
 		}
 
 		if (utilsGenerator != null) {
@@ -215,23 +209,23 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository>
 		}
 
 		if (dataModelGenerator != null) {
-			refreshProgressWindow(GENERATE_DATA_MODEL,true);
-			dataModelGenerator.buildResourcesAndSetGenerators(repository,resources);
+			refreshProgressWindow(GENERATE_DATA_MODEL, true);
+			dataModelGenerator.buildResourcesAndSetGenerators(repository, resources);
 		}
 
 		if (readerGenerator != null) {
-			refreshProgressWindow(GENERATE_READER,true);
-			readerGenerator.buildResourcesAndSetGenerators(repository,resources);
+			refreshProgressWindow(GENERATE_READER, true);
+			readerGenerator.buildResourcesAndSetGenerators(repository, resources);
 		}
 
 		if (workflowGenerator != null) {
-			refreshProgressWindow(GENERATE_WORKFLOW,true);
-			workflowGenerator.buildResourcesAndSetGenerators(repository,resources);
+			refreshProgressWindow(GENERATE_WORKFLOW, true);
+			workflowGenerator.buildResourcesAndSetGenerators(repository, resources);
 		}
 
 		/*if (controlGraphsGenerator != null) {
-        	controlGraphsGenerator.buildResourcesAndSetGenerators(repository, resources);
-        }*/
+			controlGraphsGenerator.buildResourcesAndSetGenerators(repository, resources);
+		}*/
 
 		if (bpelGenerator != null) {
 			bpelGenerator.buildResourcesAndSetGenerators(repository, resources);
@@ -240,8 +234,7 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository>
 	}
 
 	@Override
-	public boolean hasBeenInitialized()
-	{
+	public boolean hasBeenInitialized() {
 		return hasBeenInitialized;
 	}
 
@@ -295,7 +288,7 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository>
 			logger.info("Launching war creation. Working directory is " + tmpOutputDir.getAbsolutePath());
 		}
 		try {
-			warBuilder.makeWar(tmpOutputDir, genTempOutputDir,cleanImmediately);
+			warBuilder.makeWar(tmpOutputDir, genTempOutputDir, cleanImmediately);
 		} catch (IOException e) {
 			e.printStackTrace();
 			setGenerationException(new IOExceptionOccuredException(e, ProjectGenerator.this));
@@ -314,11 +307,10 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository>
 
 	/**
 	 * Generates the data model classes. Resources are not copied.
-	 *
+	 * 
 	 * @return - true
 	 */
-	protected boolean generateDataModel(boolean forceRegenerate) throws GenerationException
-	{
+	protected boolean generateDataModel(boolean forceRegenerate) throws GenerationException {
 		if (dataModelGenerator != null) {
 			refreshProgressWindow(GENERATE_DATA_MODEL, true);
 			dataModelGenerator.generate(forceRegenerate);
@@ -327,8 +319,7 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository>
 		return false;
 	}
 
-	protected boolean generateControlGraphs(boolean forceRegenerate) throws GenerationException
-	{
+	protected boolean generateControlGraphs(boolean forceRegenerate) throws GenerationException {
 		if (dataModelGenerator != null) {
 			refreshProgressWindow(GENERATE_CONTROL_GRAPHS, true);
 			controlGraphsGenerator.generate(forceRegenerate);
@@ -338,27 +329,25 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository>
 	}
 
 	/**
-	 * Generates the workflow: screens, popups, utils classes and copies
-	 * resources.
-	 *
+	 * Generates the workflow: screens, popups, utils classes and copies resources.
+	 * 
 	 * @return - true if the workflow is effectively generated.
 	 */
-	public boolean generateWorkflow(boolean forceRegenerate) throws GenerationException
-	{
+	public boolean generateWorkflow(boolean forceRegenerate) throws GenerationException {
 		if (componentsGenerator != null) {
-			refreshProgressWindow(GENERATE_COMPONENTS,true);
+			refreshProgressWindow(GENERATE_COMPONENTS, true);
 			componentsGenerator.generate(forceRegenerate);
 		}
 
 		/*    	if (popupsGenerator != null) {
-    		refreshProgressWindow(GENERATE_POPUPS,true);
-    		popupsGenerator.generate(forceRegenerate);
-    	}
+			refreshProgressWindow(GENERATE_POPUPS,true);
+			popupsGenerator.generate(forceRegenerate);
+		}
 
-    	if (tabsGenerator != null) {
-    		refreshProgressWindow(GENERATE_TABS,true);
-    		tabsGenerator.generate(forceRegenerate);
-    	}
+		if (tabsGenerator != null) {
+			refreshProgressWindow(GENERATE_TABS,true);
+			tabsGenerator.generate(forceRegenerate);
+		}
 		 */
 		if (utilsGenerator != null) {
 			refreshProgressWindow(GENERATE_UTILS, true);
@@ -373,8 +362,7 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository>
 		return true;
 	}
 
-	public Properties collectComponentHelp()
-	{
+	public Properties collectComponentHelp() {
 		Properties p = new Properties();
 		Enumeration en = getProject().getFlexoComponentLibrary().getAllComponentList().elements();
 		ComponentDefinition cd = null;
@@ -391,13 +379,13 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository>
 		return p;
 	}
 
-	public String getAfterLoginDA()
-	{
-		//        return utilsGenerator.getDirectActionGenerator().getGeneratedClassName() + "/open"
-		//                + nameForOperation(getProject().getFlexoNavigationMenu().getRootMenu().getOperation());
-		if (getProject().getFlexoNavigationMenu().getRootMenu().getOperation()==null) {
+	public String getAfterLoginDA() {
+		// return utilsGenerator.getDirectActionGenerator().getGeneratedClassName() + "/open"
+		// + nameForOperation(getProject().getFlexoNavigationMenu().getRootMenu().getOperation());
+		if (getProject().getFlexoNavigationMenu().getRootMenu().getOperation() == null) {
 			if (getProject().getFlexoWorkflow().getRootFlexoProcess().getAllOperationNodesWithComponent().size() > 0) {
-				return getProject().getFlexoWorkflow().getRootFlexoProcess().getAllOperationNodesWithComponent().firstElement().getStaticDirectActionUrl();
+				return getProject().getFlexoWorkflow().getRootFlexoProcess().getAllOperationNodesWithComponent().firstElement()
+						.getStaticDirectActionUrl();
 			} else {
 				return "null";
 			}
@@ -405,67 +393,59 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository>
 		return getProject().getFlexoNavigationMenu().getRootMenu().getOperation().getStaticDirectActionUrl();
 	}
 
-	//    public WorkflowGenerator getWorkflowGenerator()
-	//    {
-	//        return workflowGenerator;
-	//    }
+	// public WorkflowGenerator getWorkflowGenerator()
+	// {
+	// return workflowGenerator;
+	// }
 
-	public ComponentsGenerator getComponentsGenerator()
-	{
+	public ComponentsGenerator getComponentsGenerator() {
 		return componentsGenerator;
 	}
 
-	public DataModelGenerator getDataModelGenerator()
-	{
+	public DataModelGenerator getDataModelGenerator() {
 		return dataModelGenerator;
 	}
 
-	public File getResourceOutputDirectory()
-	{
+	public File getResourceOutputDirectory() {
 		return getRootOutputDirectory();
 	}
-	public File getWebResourceOutputDirectory()
-	{
+
+	public File getWebResourceOutputDirectory() {
 		return getRepository().getWebResourcesSymbolicDirectory().getDirectory().getFile();
 	}
 
 	@Override
-	public File getRootOutputDirectory()
-	{
+	public File getRootOutputDirectory() {
 		if (getRepository() == null) {
 			return null;
 		}
 		return getRepository().getDirectory();
 	}
 
-	public void addBuildListener(BuildListener listener)
-	{
+	public void addBuildListener(BuildListener listener) {
 		buildListeners.add(listener);
 	}
 
-	public void removeBuildListener(BuildListener listener)
-	{
+	public void removeBuildListener(BuildListener listener) {
 		buildListeners.remove(listener);
 	}
 
-	public UtilsGenerator getUtilsGenerator()
-	{
+	public UtilsGenerator getUtilsGenerator() {
 		return utilsGenerator;
 	}
 
 	public BPELWriter getInstance(FlexoProcess p, boolean forceNew) {
-		if (processes.containsKey(p) && ! forceNew) {
-			System.out.println("returning old BPELWriter for process : "+p.getName());
+		if (processes.containsKey(p) && !forceNew) {
+			System.out.println("returning old BPELWriter for process : " + p.getName());
 			return processes.get(p);
-		}
-		else {
-			System.out.println("returning new BPELWriter for process : "+p.getName());
+		} else {
+			System.out.println("returning new BPELWriter for process : " + p.getName());
 
 			if (processes.containsKey(p) && forceNew) {
 				processes.remove(p);
 			}
-			BPELWriter newWriter= new BPELWriter(p);
-			processes.put(p,newWriter);
+			BPELWriter newWriter = new BPELWriter(p);
+			processes.put(p, newWriter);
 			return newWriter;
 		}
 	}
@@ -479,48 +459,41 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository>
 		try {
 			result.add(templateWithName(CG_MACRO_LIBRARY_NAME));
 		} catch (TemplateNotFoundException e) {
-			logger.warning("Should include velocity macro template for project generator but template is not found '" + CG_MACRO_LIBRARY_NAME + "'");
+			logger.warning("Should include velocity macro template for project generator but template is not found '"
+					+ CG_MACRO_LIBRARY_NAME + "'");
 			e.printStackTrace();
 		}
 		return result;
 	}
 
-	public String getPrototypeProcessInstance_Id_Key()
-	{
+	public String getPrototypeProcessInstance_Id_Key() {
 		return PrototypeProcessBusinessDataSamplesCreator.PROCESSINSTANCE_ID_KEY;
 	}
 
-	public String getPrototypeProcessInstance_Status_Key()
-	{
+	public String getPrototypeProcessInstance_Status_Key() {
 		return FlexoProcess.PROCESSINSTANCE_STATUS_KEY;
 	}
 
-	public String getPrototypeProcessInstance_CreationDate_Key()
-	{
+	public String getPrototypeProcessInstance_CreationDate_Key() {
 		return FlexoProcess.PROCESSINSTANCE_CREATIONDATE_KEY;
 	}
 
-	public String getPrototypeProcessInstance_LastUpdateDate_Key()
-	{
+	public String getPrototypeProcessInstance_LastUpdateDate_Key() {
 		return FlexoProcess.PROCESSINSTANCE_LASTUPDATEDATE_KEY;
 	}
 
-	public String getWorkflowClassPackage()
-	{
+	public String getWorkflowClassPackage() {
 		return WorkflowContextGenerator.PACKAGENAME;
 	}
 
-	public DMEntity getProcessBusinessDataBaseEntity()
-	{
+	public DMEntity getProcessBusinessDataBaseEntity() {
 		return getProject().getDataModel().getProcessBusinessDataRepository().getProcessBusinessDataEntity();
 	}
 
-	public String getProcessBusinessDataPackageImports()
-	{
+	public String getProcessBusinessDataPackageImports() {
 		StringBuilder sb = new StringBuilder();
-		for(DMPackage dmPackage : getProject().getDataModel().getProcessBusinessDataRepository().getPackages().values())
-		{
-			if(!dmPackage.isDefaultPackage()) {
+		for (DMPackage dmPackage : getProject().getDataModel().getProcessBusinessDataRepository().getPackages().values()) {
+			if (!dmPackage.isDefaultPackage()) {
 				sb.append("import " + dmPackage.getFullyQualifiedName() + ".*;");
 			}
 		}

@@ -31,56 +31,47 @@ import org.openflexo.icon.FPSIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class UpdateFilesInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	UpdateFilesInitializer(FPSControllerActionInitializer actionInitializer)
-	{
-		super(UpdateFiles.actionType,actionInitializer);
+	UpdateFilesInitializer(FPSControllerActionInitializer actionInitializer) {
+		super(UpdateFiles.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected FPSControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (FPSControllerActionInitializer)super.getControllerActionInitializer();
+	protected FPSControllerActionInitializer getControllerActionInitializer() {
+		return (FPSControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<UpdateFiles> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<UpdateFiles> getDefaultInitializer() {
 		return new FlexoActionInitializer<UpdateFiles>() {
-            @Override
-			public boolean run(ActionEvent e, UpdateFiles action)
-            {
-    			return true;
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, UpdateFiles action) {
+				return true;
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<UpdateFiles> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<UpdateFiles> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<UpdateFiles>() {
-            @Override
-			public boolean run(ActionEvent e, UpdateFiles action)
-            {
-    			return true;
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, UpdateFiles action) {
+				return true;
+			}
+		};
 	}
 
-   	@Override
-	protected Icon getEnabledIcon() 
-	{
+	@Override
+	protected Icon getEnabledIcon() {
 		return FPSIconLibrary.FPS_UPDATE_ICON;
 	}
- 
+
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return FPSIconLibrary.FPS_UPDATE_DISABLED_ICON;
 	}
 
- }
+}

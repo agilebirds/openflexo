@@ -41,9 +41,8 @@ public class ModelProperty<I> {
 
 	private ModelProperty<? super I> superProperty = null;
 
-	protected ModelProperty(String propertyIdentifier, ModelEntity<I> modelEntity) throws ModelDefinitionException
-	{
-		//System.out.println("CREATED ModelProperty for "+propertyIdentifier);
+	protected ModelProperty(String propertyIdentifier, ModelEntity<I> modelEntity) throws ModelDefinitionException {
+		// System.out.println("CREATED ModelProperty for "+propertyIdentifier);
 
 		this.modelEntity = modelEntity;
 		this.propertyIdentifier = propertyIdentifier;
@@ -55,9 +54,9 @@ public class ModelProperty<I> {
 			Remover aRemover = m.getAnnotation(Remover.class);
 			if (aGetter != null && aGetter.value().equals(propertyIdentifier)) {
 				if (getter != null) {
-					throw new ModelDefinitionException("Duplicate getter "+propertyIdentifier+" defined for interface "+modelEntity.getImplementedInterface());
-				}
-				else {
+					throw new ModelDefinitionException("Duplicate getter " + propertyIdentifier + " defined for interface "
+							+ modelEntity.getImplementedInterface());
+				} else {
 					getter = aGetter;
 					getterMethod = m;
 					switch (getter.cardinality()) {
@@ -70,42 +69,41 @@ public class ModelProperty<I> {
 						break;
 					}
 					if (type.isPrimitive() && getter.defaultValue().equals(Getter.UNDEFINED)) {
-						throw new ModelDefinitionException("No default value defined for primitive property "+this);
+						throw new ModelDefinitionException("No default value defined for primitive property " + this);
 					}
 					if (!Getter.UNDEFINED.equals(getter.defaultValue())) {
 						try {
 							defaultValue = getModelFactory().getStringEncoder().fromString(getType(), getter.defaultValue());
 						} catch (InvalidDataException e) {
-							throw new ModelDefinitionException("Invalid default value for property "+this+" : "+e.getMessage());
+							throw new ModelDefinitionException("Invalid default value for property " + this + " : " + e.getMessage());
 						}
 					}
-
 
 				}
 			}
 			if (aSetter != null && aSetter.value().equals(propertyIdentifier)) {
 				if (setter != null) {
-					throw new ModelDefinitionException("Duplicate setter "+propertyIdentifier+" defined for interface "+modelEntity.getImplementedInterface());
-				}
-				else {
+					throw new ModelDefinitionException("Duplicate setter " + propertyIdentifier + " defined for interface "
+							+ modelEntity.getImplementedInterface());
+				} else {
 					setter = aSetter;
 					setterMethod = m;
 				}
 			}
 			if (anAdder != null && anAdder.id().equals(propertyIdentifier)) {
 				if (adder != null) {
-					throw new ModelDefinitionException("Duplicate adder "+propertyIdentifier+" defined for interface "+modelEntity.getImplementedInterface());
-				}
-				else {
+					throw new ModelDefinitionException("Duplicate adder " + propertyIdentifier + " defined for interface "
+							+ modelEntity.getImplementedInterface());
+				} else {
 					adder = anAdder;
 					adderMethod = m;
 				}
 			}
 			if (aRemover != null && aRemover.id().equals(propertyIdentifier)) {
 				if (remover != null) {
-					throw new ModelDefinitionException("Duplicate remover "+propertyIdentifier+" defined for interface "+modelEntity.getImplementedInterface());
-				}
-				else {
+					throw new ModelDefinitionException("Duplicate remover " + propertyIdentifier + " defined for interface "
+							+ modelEntity.getImplementedInterface());
+				} else {
 					remover = aRemover;
 					removerMethod = m;
 				}
@@ -120,11 +118,11 @@ public class ModelProperty<I> {
 			}
 			superEntity = superEntity.getSuperEntity();
 		}
-		//if (getSuperProperty() != null) System.out.println("Found super property "+superProperty+" for "+this);
-
+		// if (getSuperProperty() != null) System.out.println("Found super property "+superProperty+" for "+this);
 
 		if (getGetter() == null) {
-			throw new ModelDefinitionException("No getter defined for "+propertyIdentifier+", interface "+modelEntity.getImplementedInterface());
+			throw new ModelDefinitionException("No getter defined for " + propertyIdentifier + ", interface "
+					+ modelEntity.getImplementedInterface());
 		}
 
 		xmlAttribute = retrieveAnnotation(XMLAttribute.class);
@@ -137,10 +135,12 @@ public class ModelProperty<I> {
 		case LIST:
 		case MAP:
 			if (getAdder() == null) {
-				throw new ModelDefinitionException("No adder defined for "+propertyIdentifier+", interface "+modelEntity.getImplementedInterface());
+				throw new ModelDefinitionException("No adder defined for " + propertyIdentifier + ", interface "
+						+ modelEntity.getImplementedInterface());
 			}
 			if (getRemover() == null) {
-				throw new ModelDefinitionException("No remover defined for "+propertyIdentifier+", interface "+modelEntity.getImplementedInterface());
+				throw new ModelDefinitionException("No remover defined for " + propertyIdentifier + ", interface "
+						+ modelEntity.getImplementedInterface());
 			}
 			break;
 		default:
@@ -148,8 +148,7 @@ public class ModelProperty<I> {
 		}
 	}
 
-	public <A extends Annotation> A retrieveAnnotation(Class<A> annotationClass)
-	{
+	public <A extends Annotation> A retrieveAnnotation(Class<A> annotationClass) {
 		A returned = null;
 		ModelProperty<? super I> current = this;
 		while (current != null) {
@@ -164,23 +163,19 @@ public class ModelProperty<I> {
 		return null;
 	}
 
-	public ModelFactory getModelFactory()
-	{
+	public ModelFactory getModelFactory() {
 		return getModelEntity().getModelFactory();
 	}
 
-	public ModelEntity<I> getModelEntity()
-	{
+	public ModelEntity<I> getModelEntity() {
 		return modelEntity;
 	}
 
-	public Class<I> getImplementedInterface()
-	{
+	public Class<I> getImplementedInterface() {
 		return getModelEntity().getImplementedInterface();
 	}
 
-	public Class<?> getType()
-	{
+	public Class<?> getType() {
 		if (type == null && override()) {
 			return getSuperProperty().getType();
 		}
@@ -191,45 +186,39 @@ public class ModelProperty<I> {
 		return propertyIdentifier;
 	}
 
-	public Getter getGetter()
-	{
+	public Getter getGetter() {
 		if (getter == null && override()) {
 			return getSuperProperty().getGetter();
 		}
 		return getter;
 	}
 
-	public Setter getSetter()
-	{
+	public Setter getSetter() {
 		if (setter == null && override()) {
 			return getSuperProperty().getSetter();
 		}
 		return setter;
 	}
 
-	public Adder getAdder()
-	{
+	public Adder getAdder() {
 		if (adder == null && override()) {
 			return getSuperProperty().getAdder();
 		}
 		return adder;
 	}
 
-	public Remover getRemover()
-	{
+	public Remover getRemover() {
 		if (remover == null && override()) {
 			return getSuperProperty().getRemover();
 		}
 		return remover;
 	}
 
-	public XMLAttribute getXMLAttribute()
-	{
+	public XMLAttribute getXMLAttribute() {
 		return xmlAttribute;
 	}
 
-	public XMLElement getXMLElement()
-	{
+	public XMLElement getXMLElement() {
 		return xmlElement;
 	}
 
@@ -243,32 +232,28 @@ public class ModelProperty<I> {
 		return xmlTag;
 	}
 
-	public Method getGetterMethod()
-	{
+	public Method getGetterMethod() {
 		if (getterMethod == null && override()) {
 			return getSuperProperty().getGetterMethod();
 		}
 		return getterMethod;
 	}
 
-	public Method getSetterMethod()
-	{
+	public Method getSetterMethod() {
 		if (setterMethod == null && override()) {
 			return getSuperProperty().getSetterMethod();
 		}
 		return setterMethod;
 	}
 
-	public Method getAdderMethod()
-	{
+	public Method getAdderMethod() {
 		if (adderMethod == null && override()) {
 			return getSuperProperty().getAdderMethod();
 		}
 		return adderMethod;
 	}
 
-	public Method getRemoverMethod()
-	{
+	public Method getRemoverMethod() {
 		if (removerMethod == null && override()) {
 			return getSuperProperty().getRemoverMethod();
 		}
@@ -277,16 +262,14 @@ public class ModelProperty<I> {
 
 	private Object defaultValue = null;
 
-	public Object getDefaultValue()
-	{
+	public Object getDefaultValue() {
 		if (defaultValue == null && override()) {
 			return getSuperProperty().getDefaultValue();
 		}
 		return defaultValue;
 	}
 
-	public Cardinality getCardinality()
-	{
+	public Cardinality getCardinality() {
 		if (cardinality == null) {
 			cardinality = getGetter().cardinality();
 		}
@@ -297,10 +280,9 @@ public class ModelProperty<I> {
 	private Cardinality cardinality;
 
 	// TODO: optimize this (for the case of inverse is incorrectly defined)
-	public ModelProperty getInverseProperty()
-	{
+	public ModelProperty getInverseProperty() {
 		if (inverseProperty == null) {
-			if(!getGetter().inverse().equals(Getter.UNDEFINED)) {
+			if (!getGetter().inverse().equals(Getter.UNDEFINED)) {
 				try {
 					inverseProperty = findInverseProperty();
 				} catch (ModelDefinitionException e) {
@@ -313,60 +295,52 @@ public class ModelProperty<I> {
 		return inverseProperty;
 	}
 
-	private ModelProperty<?> findInverseProperty() throws ModelDefinitionException
-	{
+	private ModelProperty<?> findInverseProperty() throws ModelDefinitionException {
 		ModelProperty<?> returned = null;
 		if (!getGetter().inverse().equals(Getter.UNDEFINED)) {
 			ModelEntity<?> oppositeEntity = getModelFactory().getModelEntity(getType());
 			if (oppositeEntity == null) {
-				throw new ModelDefinitionException(getModelEntity()+": Cannot find opposite entity "+getType());
+				throw new ModelDefinitionException(getModelEntity() + ": Cannot find opposite entity " + getType());
 			}
 			returned = oppositeEntity.getModelProperty(getGetter().inverse());
 			if (returned == null) {
-				throw new ModelDefinitionException(getModelEntity()+": Cannot find inverse property "+getGetter().inverse()+" for "+oppositeEntity.getImplementedInterface().getSimpleName());
+				throw new ModelDefinitionException(getModelEntity() + ": Cannot find inverse property " + getGetter().inverse() + " for "
+						+ oppositeEntity.getImplementedInterface().getSimpleName());
 			}
 		}
 		return returned;
 	}
 
 	@Override
-	public String toString()
-	{
-		return "ModelProperty["+getModelEntity().getImplementedInterface().getSimpleName()+"."+getPropertyIdentifier()+"]";
+	public String toString() {
+		return "ModelProperty[" + getModelEntity().getImplementedInterface().getSimpleName() + "." + getPropertyIdentifier() + "]";
 	}
 
-	public ModelEntity<?> getAccessedEntity() throws ModelDefinitionException
-	{
+	public ModelEntity<?> getAccessedEntity() throws ModelDefinitionException {
 		return getModelFactory().getModelEntity(getType());
 	}
 
-	public ModelProperty<? super I> getSuperProperty()
-	{
+	public ModelProperty<? super I> getSuperProperty() {
 		return superProperty;
 	}
 
-	public boolean override()
-	{
+	public boolean override() {
 		return superProperty != null;
 	}
 
-	public ReturnedValue getReturnedValue()
-	{
+	public ReturnedValue getReturnedValue() {
 		return returnedValue;
 	}
 
-	public Embedded getEmbedded()
-	{
+	public Embedded getEmbedded() {
 		return embedded;
 	}
 
-	public StrategyType getCloningStrategy()
-	{
+	public StrategyType getCloningStrategy() {
 		if (cloningStrategy == null) {
 			if (getModelFactory().isModelEntity(getType())) {
 				return StrategyType.REFERENCE;
-			}
-			else {
+			} else {
 				return StrategyType.CLONE;
 			}
 		} else {
@@ -374,8 +348,7 @@ public class ModelProperty<I> {
 		}
 	}
 
-	public String getStrategyTypeFactory()
-	{
+	public String getStrategyTypeFactory() {
 		return cloningStrategy.factory();
 	}
 }

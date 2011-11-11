@@ -19,7 +19,6 @@
  */
 package org.openflexo.generator;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
@@ -112,8 +111,7 @@ import org.openflexo.toolbox.ToolBox;
 
 public abstract class CGTestCase extends FlexoTestCase implements ProjectGeneratorFactory {
 
-	public CGTestCase(String name)
-	{
+	public CGTestCase(String name) {
 		super(name);
 	}
 
@@ -164,12 +162,12 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 
 	/**
 	 * Overrides setUp
+	 * 
 	 * @see junit.framework.TestCase#setUp()
 	 */
 	@Override
-	protected void setUp() throws Exception
-	{
-		//CGRepository.refreshImmediately = true;
+	protected void setUp() throws Exception {
+		// CGRepository.refreshImmediately = true;
 		super.setUp();
 	}
 
@@ -178,15 +176,14 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 	protected static ProjectGenerator projectGenerator;
 
 	@Override
-	public ProjectGenerator generatorForRepository(GenerationRepository repository)
-	{
+	public ProjectGenerator generatorForRepository(GenerationRepository repository) {
 		if (repository == codeRepository) {
 			if (projectGenerator == null || projectGenerator.getRepository() != repository) {
 				try {
-					projectGenerator = new ProjectGenerator(repository.getProject(), (CGRepository)repository);
+					projectGenerator = new ProjectGenerator(repository.getProject(), (CGRepository) repository);
 				} catch (GenerationException e) {
 					e.printStackTrace();
-					fail("Generation exception "+e.getMessage());
+					fail("Generation exception " + e.getMessage());
 				}
 			}
 			return projectGenerator;
@@ -195,22 +192,22 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 		return null;
 	}
 
-	protected void checkThatAllFilesAreUpToDate()
-	{
+	protected void checkThatAllFilesAreUpToDate() {
 		AssertionFailedError failed = null;
 		for (CGFile file : codeRepository.getFiles()) {
 			try {
 				assertEquals(GenerationStatus.UpToDate, file.getGenerationStatus());
-			}
-			catch (AssertionFailedError e) {
-				logger.warning("RESOURCE status problem: "+file.getFileName()+"("+file.getPathName()+") MUST be up-to-date; Status is currently "+file.getGenerationStatus()+" reason:\n"+file.getResource().getNeedsUpdateReason());
+			} catch (AssertionFailedError e) {
+				logger.warning("RESOURCE status problem: " + file.getFileName() + "(" + file.getPathName()
+						+ ") MUST be up-to-date; Status is currently " + file.getGenerationStatus() + " reason:\n"
+						+ file.getResource().getNeedsUpdateReason());
 				if (file.getGenerationStatus() == GenerationStatus.GenerationError) {
-					GenerationAvailableFileResource resource = (GenerationAvailableFileResource)file.getResource();
-					FlexoResourceGenerator generator = (FlexoResourceGenerator)resource.getGenerator();
-					((Exception)generator.getGenerationException()).printStackTrace();
+					GenerationAvailableFileResource resource = (GenerationAvailableFileResource) file.getResource();
+					FlexoResourceGenerator generator = (FlexoResourceGenerator) resource.getGenerator();
+					((Exception) generator.getGenerationException()).printStackTrace();
 				}
 				failed = e;
-				//System.exit(0);
+				// System.exit(0);
 			}
 		}
 		if (failed != null) {
@@ -218,8 +215,7 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 		}
 	}
 
-	protected void checkThatAllFilesAreUpToDateExcept(GenerationStatus alternateStatus, CGFile... someFilesThatMustBeMarkedAsModified)
-	{
+	protected void checkThatAllFilesAreUpToDateExcept(GenerationStatus alternateStatus, CGFile... someFilesThatMustBeMarkedAsModified) {
 		AssertionFailedError failed = null;
 
 		for (CGFile file : codeRepository.getFiles()) {
@@ -233,21 +229,20 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 
 			if (!shouldBeModified) {
 				try {
-                    assertEquals(file.getFileName()+"["+file.getName()+"]",GenerationStatus.UpToDate,file.getGenerationStatus());
-				}
-				catch (AssertionFailedError e) {
-					logger.warning("RESOURCE status problem: "+file.getFileName()+" MUST be up-to-date; Status is currently "+file.getGenerationStatus()+" reason:\n"+file.getResource().getNeedsUpdateReason());
+					assertEquals(file.getFileName() + "[" + file.getName() + "]", GenerationStatus.UpToDate, file.getGenerationStatus());
+				} catch (AssertionFailedError e) {
+					logger.warning("RESOURCE status problem: " + file.getFileName() + " MUST be up-to-date; Status is currently "
+							+ file.getGenerationStatus() + " reason:\n" + file.getResource().getNeedsUpdateReason());
 					failed = e;
 				}
-			}
-			else {
+			} else {
 				try {
 					if (alternateStatus != null) {
-						assertEquals("File:"+file.getFileName(),alternateStatus,file.getGenerationStatus());
+						assertEquals("File:" + file.getFileName(), alternateStatus, file.getGenerationStatus());
 					}
-				}
-				catch (AssertionFailedError e) {
-					logger.warning("RESOURCE status problem: "+file.getFileName()+" MUST be modified; Status is currently "+file.getGenerationStatus()+" reason:"+file.getResource().getNeedsUpdateReason());
+				} catch (AssertionFailedError e) {
+					logger.warning("RESOURCE status problem: " + file.getFileName() + " MUST be modified; Status is currently "
+							+ file.getGenerationStatus() + " reason:" + file.getResource().getNeedsUpdateReason());
 					failed = e;
 				}
 			}
@@ -257,14 +252,11 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 		}
 	}
 
-	protected void checkThatAllFilesAreUpToDateExcept(CGFile... someFilesThatMustBeMarkedAsModified)
-	{
-		checkThatAllFilesAreUpToDateExcept((GenerationStatus)null,someFilesThatMustBeMarkedAsModified);
+	protected void checkThatAllFilesAreUpToDateExcept(CGFile... someFilesThatMustBeMarkedAsModified) {
+		checkThatAllFilesAreUpToDateExcept((GenerationStatus) null, someFilesThatMustBeMarkedAsModified);
 	}
 
-
-	protected void checkDependingOnTemplate(CGTemplate templateFile, CGFile... onlyThoseFileShouldDependOnThatTemplate)
-	{
+	protected void checkDependingOnTemplate(CGTemplate templateFile, CGFile... onlyThoseFileShouldDependOnThatTemplate) {
 		AssertionFailedError failed = null;
 
 		for (CGFile file : codeRepository.getFiles()) {
@@ -278,19 +270,21 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 
 			if (shouldDependsOnTemplate) {
 				try {
-                    assertTrue("Was expecting that template "+templateFile+" being part of the used templates. Used templates : "+((GenerationAvailableFileResource)file.getResource()).getGenerator().getUsedTemplates(),((GenerationAvailableFileResource)file.getResource()).getGenerator().getUsedTemplates().contains(templateFile));
-				}
-				catch (AssertionFailedError e) {
-					logger.warning("File: " + file.getFileName() + " should depends on template " + templateFile.getTemplateName() + " which is not the case");
+					assertTrue("Was expecting that template " + templateFile + " being part of the used templates. Used templates : "
+							+ ((GenerationAvailableFileResource) file.getResource()).getGenerator().getUsedTemplates(),
+							((GenerationAvailableFileResource) file.getResource()).getGenerator().getUsedTemplates().contains(templateFile));
+				} catch (AssertionFailedError e) {
+					logger.warning("File: " + file.getFileName() + " should depends on template " + templateFile.getTemplateName()
+							+ " which is not the case");
 					failed = e;
 				}
-			}
-			else {
+			} else {
 				try {
-					assertFalse(((GenerationAvailableFileResource)file.getResource()).getGenerator().getUsedTemplates().contains(templateFile));
-				}
-				catch (AssertionFailedError e) {
-					logger.warning("File: " + file.getFileName() + " should NOT depends on template " + templateFile.getTemplateName() + " which is the case");
+					assertFalse(((GenerationAvailableFileResource) file.getResource()).getGenerator().getUsedTemplates()
+							.contains(templateFile));
+				} catch (AssertionFailedError e) {
+					logger.warning("File: " + file.getFileName() + " should NOT depends on template " + templateFile.getTemplateName()
+							+ " which is the case");
 					failed = e;
 				}
 			}
@@ -300,15 +294,13 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 		}
 	}
 
-
-
 	protected static OperationComponentJavaFileResource operationComponent1JavaResource;
 	protected static OperationComponentJavaFileResource operationComponent2JavaResource;
 	protected static OperationComponentJavaFileResource operationComponent3JavaResource;
 	protected static TabComponentJavaFileResource tabComponent1JavaResource;
 	protected static TabComponentJavaFileResource tabComponent2JavaResource;
 
-    protected static JavaFileResource workflowComponentInstanceResource;
+	protected static JavaFileResource workflowComponentInstanceResource;
 
 	protected static OperationComponentAPIFileResource operationComponent1APIResource;
 	protected static OperationComponentAPIFileResource operationComponent2APIResource;
@@ -363,92 +355,120 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 	/*	protected static ProcessorJavaFileResource processorRootProcessResource;
 	protected static ProcessorJavaFileResource processorSubProcessResource;*/
 
-	protected void reloadGeneratedResources()
-	{
-		reloadGeneratedResources(TAB_COMPONENT1,TAB_COMPONENT2);
+	protected void reloadGeneratedResources() {
+		reloadGeneratedResources(TAB_COMPONENT1, TAB_COMPONENT2);
 	}
 
-	protected void reloadGeneratedResources(String tab1Name, String tab2Name)
-	{
+	protected void reloadGeneratedResources(String tab1Name, String tab2Name) {
 		projectGenerator = null;
-		if (_project.getGeneratedDoc().getGeneratedRepositories().size()==0) {
+		if (_project.getGeneratedDoc().getGeneratedRepositories().size() == 0) {
 			createDefaultDGRepository();
 		} else {
 			docRepository = (DGRepository) _project.getGeneratedDoc().getGeneratedRepositories().firstElement();
 		}
 
-		if (_project.getGeneratedCode().getGeneratedRepositories().size()==0) {
+		if (_project.getGeneratedCode().getGeneratedRepositories().size() == 0) {
 			createDefaultGCRepository();
 		} else {
 			codeRepository = (CGRepository) _project.getGeneratedCode().getGeneratedRepositories().firstElement();
 		}
 
-		operationComponent1JavaResource = (OperationComponentJavaFileResource)_project.resourceForKey(ResourceType.JAVA_FILE, codeRepository.getName()+"."+OPERATION_COMPONENT_1);
+		operationComponent1JavaResource = (OperationComponentJavaFileResource) _project.resourceForKey(ResourceType.JAVA_FILE,
+				codeRepository.getName() + "." + OPERATION_COMPONENT_1);
 		assertNotNull(operationComponent1JavaResource);
-		operationComponent2JavaResource = (OperationComponentJavaFileResource)_project.resourceForKey(ResourceType.JAVA_FILE, codeRepository.getName()+"."+OPERATION_COMPONENT_2);
+		operationComponent2JavaResource = (OperationComponentJavaFileResource) _project.resourceForKey(ResourceType.JAVA_FILE,
+				codeRepository.getName() + "." + OPERATION_COMPONENT_2);
 		assertNotNull(operationComponent2JavaResource);
-		operationComponent3JavaResource = (OperationComponentJavaFileResource)_project.resourceForKey(ResourceType.JAVA_FILE, codeRepository.getName()+"."+OPERATION_COMPONENT_3);
+		operationComponent3JavaResource = (OperationComponentJavaFileResource) _project.resourceForKey(ResourceType.JAVA_FILE,
+				codeRepository.getName() + "." + OPERATION_COMPONENT_3);
 		assertNotNull(operationComponent3JavaResource);
-		tabComponent1JavaResource = (TabComponentJavaFileResource)_project.resourceForKey(ResourceType.JAVA_FILE, codeRepository.getName()+"."+tab1Name);
-		//assertNotNull(tabComponent1JavaResource);
-		tabComponent2JavaResource = (TabComponentJavaFileResource)_project.resourceForKey(ResourceType.JAVA_FILE, codeRepository.getName()+"."+tab2Name);
+		tabComponent1JavaResource = (TabComponentJavaFileResource) _project.resourceForKey(ResourceType.JAVA_FILE, codeRepository.getName()
+				+ "." + tab1Name);
+		// assertNotNull(tabComponent1JavaResource);
+		tabComponent2JavaResource = (TabComponentJavaFileResource) _project.resourceForKey(ResourceType.JAVA_FILE, codeRepository.getName()
+				+ "." + tab2Name);
 		assertNotNull(tabComponent2JavaResource);
 
-        workflowComponentInstanceResource = (JavaFileResource)_project.resourceForKey(ResourceType.JAVA_FILE, codeRepository.getName()+"."+"org.openflexo.workflowcontext.WorkflowComponentInstance");
+		workflowComponentInstanceResource = (JavaFileResource) _project.resourceForKey(ResourceType.JAVA_FILE, codeRepository.getName()
+				+ "." + "org.openflexo.workflowcontext.WorkflowComponentInstance");
 
-		operationComponent1APIResource = (OperationComponentAPIFileResource)_project.resourceForKey(ResourceType.API_FILE, codeRepository.getName()+"."+OPERATION_COMPONENT_1);
+		operationComponent1APIResource = (OperationComponentAPIFileResource) _project.resourceForKey(ResourceType.API_FILE,
+				codeRepository.getName() + "." + OPERATION_COMPONENT_1);
 		assertNotNull(operationComponent1APIResource);
-		operationComponent2APIResource = (OperationComponentAPIFileResource)_project.resourceForKey(ResourceType.API_FILE, codeRepository.getName()+"."+OPERATION_COMPONENT_2);
+		operationComponent2APIResource = (OperationComponentAPIFileResource) _project.resourceForKey(ResourceType.API_FILE,
+				codeRepository.getName() + "." + OPERATION_COMPONENT_2);
 		assertNotNull(operationComponent2APIResource);
-		operationComponent3APIResource = (OperationComponentAPIFileResource)_project.resourceForKey(ResourceType.API_FILE, codeRepository.getName()+"."+OPERATION_COMPONENT_3);
+		operationComponent3APIResource = (OperationComponentAPIFileResource) _project.resourceForKey(ResourceType.API_FILE,
+				codeRepository.getName() + "." + OPERATION_COMPONENT_3);
 		assertNotNull(operationComponent3APIResource);
-		tabComponent1APIResource = (TabComponentAPIFileResource)_project.resourceForKey(ResourceType.API_FILE, codeRepository.getName()+"."+tab1Name);
-		//assertNotNull(tabComponent1APIResource);
-		tabComponent2APIResource = (TabComponentAPIFileResource)_project.resourceForKey(ResourceType.API_FILE, codeRepository.getName()+"."+tab2Name);
+		tabComponent1APIResource = (TabComponentAPIFileResource) _project.resourceForKey(ResourceType.API_FILE, codeRepository.getName()
+				+ "." + tab1Name);
+		// assertNotNull(tabComponent1APIResource);
+		tabComponent2APIResource = (TabComponentAPIFileResource) _project.resourceForKey(ResourceType.API_FILE, codeRepository.getName()
+				+ "." + tab2Name);
 		assertNotNull(tabComponent2APIResource);
 
-		operationComponent1WOResource = (OperationComponentWOFileResource)_project.resourceForKey(ResourceType.WO_FILE, codeRepository.getName()+"."+OPERATION_COMPONENT_1);
+		operationComponent1WOResource = (OperationComponentWOFileResource) _project.resourceForKey(ResourceType.WO_FILE,
+				codeRepository.getName() + "." + OPERATION_COMPONENT_1);
 		assertNotNull(operationComponent1WOResource);
-		operationComponent2WOResource = (OperationComponentWOFileResource)_project.resourceForKey(ResourceType.WO_FILE, codeRepository.getName()+"."+OPERATION_COMPONENT_2);
+		operationComponent2WOResource = (OperationComponentWOFileResource) _project.resourceForKey(ResourceType.WO_FILE,
+				codeRepository.getName() + "." + OPERATION_COMPONENT_2);
 		assertNotNull(operationComponent2WOResource);
-		operationComponent3WOResource = (OperationComponentWOFileResource)_project.resourceForKey(ResourceType.WO_FILE, codeRepository.getName()+"."+OPERATION_COMPONENT_3);
+		operationComponent3WOResource = (OperationComponentWOFileResource) _project.resourceForKey(ResourceType.WO_FILE,
+				codeRepository.getName() + "." + OPERATION_COMPONENT_3);
 		assertNotNull(operationComponent3WOResource);
-		tabComponent1WOResource = (TabComponentWOFileResource)_project.resourceForKey(ResourceType.WO_FILE, codeRepository.getName()+"."+tab1Name);
-		//assertNotNull(tabComponent1WOResource);
-		tabComponent2WOResource = (TabComponentWOFileResource)_project.resourceForKey(ResourceType.WO_FILE, codeRepository.getName()+"."+tab2Name);
+		tabComponent1WOResource = (TabComponentWOFileResource) _project.resourceForKey(ResourceType.WO_FILE, codeRepository.getName() + "."
+				+ tab1Name);
+		// assertNotNull(tabComponent1WOResource);
+		tabComponent2WOResource = (TabComponentWOFileResource) _project.resourceForKey(ResourceType.WO_FILE, codeRepository.getName() + "."
+				+ tab2Name);
 		assertNotNull(tabComponent2WOResource);
 
-		classpathTextResource = (ProjectTextFileResource) _project.resourceForKey(ResourceType.TEXT_FILE,GeneratorUtils.nameForRepositoryAndIdentifier(codeRepository, DotClasspathGenerator.IDENTIFIER));
+		classpathTextResource = (ProjectTextFileResource) _project.resourceForKey(ResourceType.TEXT_FILE,
+				GeneratorUtils.nameForRepositoryAndIdentifier(codeRepository, DotClasspathGenerator.IDENTIFIER));
 		assertNotNull(classpathTextResource);
-		buildPropertiesResource = (BuildPropertiesResource) _project.resourceForKey(ResourceType.TEXT_FILE,GeneratorUtils.nameForRepositoryAndIdentifier(codeRepository, BuildPropertiesGenerator.IDENTIFIER));
+		buildPropertiesResource = (BuildPropertiesResource) _project.resourceForKey(ResourceType.TEXT_FILE,
+				GeneratorUtils.nameForRepositoryAndIdentifier(codeRepository, BuildPropertiesGenerator.IDENTIFIER));
 		assertNotNull(buildPropertiesResource);
-		appConfProdResource = (ApplicationConfProdResource) _project.resourceForKey(ResourceType.TEXT_FILE,GeneratorUtils.nameForRepositoryAndIdentifier(codeRepository, ApplicationConfProdGenerator.IDENTIFIER));
+		appConfProdResource = (ApplicationConfProdResource) _project.resourceForKey(ResourceType.TEXT_FILE,
+				GeneratorUtils.nameForRepositoryAndIdentifier(codeRepository, ApplicationConfProdGenerator.IDENTIFIER));
 		assertNotNull(appConfProdResource);
 
-
-		headerFooterJavaResource = (UtilComponentJavaFileResource) _project.resourceForKey(ResourceType.JAVA_FILE, codeRepository.getName()+"."+_project.getPrefix()+"HeaderFooter");
+		headerFooterJavaResource = (UtilComponentJavaFileResource) _project.resourceForKey(ResourceType.JAVA_FILE, codeRepository.getName()
+				+ "." + _project.getPrefix() + "HeaderFooter");
 		assertNotNull(headerFooterJavaResource);
-		headerFooterWOResource = (UtilComponentWOFileResource) _project.resourceForKey(ResourceType.WO_FILE, codeRepository.getName()+"."+_project.getPrefix()+"HeaderFooter");
+		headerFooterWOResource = (UtilComponentWOFileResource) _project.resourceForKey(ResourceType.WO_FILE, codeRepository.getName() + "."
+				+ _project.getPrefix() + "HeaderFooter");
 		assertNotNull(headerFooterWOResource);
-		headerFooterAPIResource = (UtilComponentAPIFileResource) _project.resourceForKey(ResourceType.API_FILE, codeRepository.getName()+"."+_project.getPrefix()+"HeaderFooter");
+		headerFooterAPIResource = (UtilComponentAPIFileResource) _project.resourceForKey(ResourceType.API_FILE, codeRepository.getName()
+				+ "." + _project.getPrefix() + "HeaderFooter");
 		assertNotNull(headerFooterAPIResource);
 
-		daJavaResource = (UtilJavaFileResource) _project.resourceForKey(ResourceType.JAVA_FILE, codeRepository.getName()+"."+_project.getPrefix() + "DA");
-		System.out.println("_project.resourceForKey("+ResourceType.JAVA_FILE.getName()+","+codeRepository.getName()+"."+_project.getPrefix() + "DA) = "+daJavaResource);
-		//assertNotNull(daJavaResource);
-		cstJavaResource = (UtilJavaFileResource) _project.resourceForKey(ResourceType.JAVA_FILE, codeRepository.getName()+"."+_project.getPrefix() + "Constants");
-		//assertNotNull(cstJavaResource);
-		JSFileResource rootProcessJS = (JSFileResource) _project.resourceForKey(ResourceType.JS_FILE, ProcessJSFileResource.nameForRepositoryAndProcess(docRepository, _rootProcessResource.getFlexoProcess()));
-		if (rootProcessJS!=null) {
-			rootProcessJSCopy = (FlexoCopyOfFlexoResource) _project.resourceForKey(ResourceType.COPIED_FILE,CopyOfFlexoResource.nameForRepositoryAndResource(codeRepository, rootProcessJS));
+		daJavaResource = (UtilJavaFileResource) _project.resourceForKey(ResourceType.JAVA_FILE,
+				codeRepository.getName() + "." + _project.getPrefix() + "DA");
+		System.out.println("_project.resourceForKey(" + ResourceType.JAVA_FILE.getName() + "," + codeRepository.getName() + "."
+				+ _project.getPrefix() + "DA) = " + daJavaResource);
+		// assertNotNull(daJavaResource);
+		cstJavaResource = (UtilJavaFileResource) _project.resourceForKey(ResourceType.JAVA_FILE,
+				codeRepository.getName() + "." + _project.getPrefix() + "Constants");
+		// assertNotNull(cstJavaResource);
+		JSFileResource rootProcessJS = (JSFileResource) _project.resourceForKey(ResourceType.JS_FILE,
+				ProcessJSFileResource.nameForRepositoryAndProcess(docRepository, _rootProcessResource.getFlexoProcess()));
+		if (rootProcessJS != null) {
+			rootProcessJSCopy = (FlexoCopyOfFlexoResource) _project.resourceForKey(ResourceType.COPIED_FILE,
+					CopyOfFlexoResource.nameForRepositoryAndResource(codeRepository, rootProcessJS));
 		}
-		JSFileResource subProcessJS = (JSFileResource) _project.resourceForKey(ResourceType.JS_FILE, ProcessJSFileResource.nameForRepositoryAndProcess(docRepository, _subProcessResource.getFlexoProcess()));
-		if (subProcessJS!=null) {
-			subProcessJSCopy = (FlexoCopyOfFlexoResource) _project.resourceForKey(ResourceType.COPIED_FILE,CopyOfFlexoResource.nameForRepositoryAndResource(codeRepository, subProcessJS));
+		JSFileResource subProcessJS = (JSFileResource) _project.resourceForKey(ResourceType.JS_FILE,
+				ProcessJSFileResource.nameForRepositoryAndProcess(docRepository, _subProcessResource.getFlexoProcess()));
+		if (subProcessJS != null) {
+			subProcessJSCopy = (FlexoCopyOfFlexoResource) _project.resourceForKey(ResourceType.COPIED_FILE,
+					CopyOfFlexoResource.nameForRepositoryAndResource(codeRepository, subProcessJS));
 		}
 
-		WorkflowTextFileResource htmlProperties = (WorkflowTextFileResource) _project.resourceForKey(ResourceType.TEXT_FILE, WorkflowTextFileResource.nameForRepositoryAndWorkflow(docRepository, _project.getFlexoWorkflow()));
-		htmlPropertiesCopy = (FlexoCopyOfFlexoResource) _project.resourceForKey(ResourceType.COPIED_FILE,CopyOfFlexoResource.nameForRepositoryAndResource(codeRepository, htmlProperties));
+		WorkflowTextFileResource htmlProperties = (WorkflowTextFileResource) _project.resourceForKey(ResourceType.TEXT_FILE,
+				WorkflowTextFileResource.nameForRepositoryAndWorkflow(docRepository, _project.getFlexoWorkflow()));
+		htmlPropertiesCopy = (FlexoCopyOfFlexoResource) _project.resourceForKey(ResourceType.COPIED_FILE,
+				CopyOfFlexoResource.nameForRepositoryAndResource(codeRepository, htmlProperties));
 
 		operationComponent1ScreenshotCopyOfCopy = getCopyOfReaderScreenshotResourceForObject(_operationComponent1);
 		operationComponent2ScreenshotCopyOfCopy = getCopyOfReaderScreenshotResourceForObject(_operationComponent2);
@@ -463,8 +483,10 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 		subProcessScreenshotCopyOfCopy = getCopyOfReaderScreenshotResourceForObject(_subProcessResource.getFlexoProcess());
 		AbstractActivityNode activity = _subProcessResource.getFlexoProcess().getAbstractActivityNodeNamed(TEST_ACTIVITY_IN_SUB_PROCESS);
 		activityInSubProcessScreenshotCopyOfCopy = getCopyOfReaderScreenshotResourceForObject(activity);
-		operationNode2ScreenshotCopyOfCopy = getCopyOfReaderScreenshotResourceForObject(activity.getOperationNodeNamed(TEST_OPERATION_NODE_2));
-		operationNode3ScreenshotCopyOfCopy = getCopyOfReaderScreenshotResourceForObject(activity.getOperationNodeNamed(TEST_OPERATION_NODE_3));
+		operationNode2ScreenshotCopyOfCopy = getCopyOfReaderScreenshotResourceForObject(activity
+				.getOperationNodeNamed(TEST_OPERATION_NODE_2));
+		operationNode3ScreenshotCopyOfCopy = getCopyOfReaderScreenshotResourceForObject(activity
+				.getOperationNodeNamed(TEST_OPERATION_NODE_3));
 		/*
 		ScreenshotResource subProcessNodeScreenshot = _project.getScreenshotResource(_rootProcessResource.getFlexoProcess().getAbstractActivityNodeNamed(TEST_SUB_PROCESS));
 		if (subProcessNodeScreenshot!=null)
@@ -483,14 +505,16 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 	}
 
 	protected FlexoCopyOfFlexoResource getCopyOfReaderScreenshotResourceForObject(FlexoModelObject object) {
-		if (object==null) {
+		if (object == null) {
 			return null;
 		}
 		ScreenshotResource screenshot = _project.getScreenshotResource(object);
-		if (screenshot!=null) {
-			FlexoCopiedResource screenshotCopy = (FlexoCopiedResource) _project.resourceForKey(ResourceType.COPIED_FILE,FlexoCopiedResource.nameForCopiedResource(docRepository, screenshot));
-			if (screenshotCopy!=null) {
-				return (FlexoCopyOfFlexoResource) _project.resourceForKey(ResourceType.COPIED_FILE,CopyOfFlexoResource.nameForRepositoryAndResource(codeRepository, screenshotCopy));
+		if (screenshot != null) {
+			FlexoCopiedResource screenshotCopy = (FlexoCopiedResource) _project.resourceForKey(ResourceType.COPIED_FILE,
+					FlexoCopiedResource.nameForCopiedResource(docRepository, screenshot));
+			if (screenshotCopy != null) {
+				return (FlexoCopyOfFlexoResource) _project.resourceForKey(ResourceType.COPIED_FILE,
+						CopyOfFlexoResource.nameForRepositoryAndResource(codeRepository, screenshotCopy));
 			}
 		}
 		return null;
@@ -502,7 +526,7 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 	protected void createDefaultDGRepository() {
 		AddGeneratedCodeRepository add = AddGeneratedCodeRepository.actionType.makeNewAction(_project.getGeneratedDoc(), null, _editor);
 		add.setNewGeneratedCodeRepositoryName("Reader repository test");
-		File directory = new File(_projectDirectory.getParentFile(),"GeneratedReaderFor"+_project.getProjectName());
+		File directory = new File(_projectDirectory.getParentFile(), "GeneratedReaderFor" + _project.getProjectName());
 		directory.mkdirs();
 		add.setNewGeneratedCodeRepositoryDirectory(directory);
 		add.setFormat(Format.HTML);
@@ -517,12 +541,12 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 	 * 
 	 */
 	protected void createDefaultGCRepository() {
-		if (docRepository==null) {
+		if (docRepository == null) {
 			createDefaultDGRepository();
 		}
 		AddGeneratedCodeRepository add = AddGeneratedCodeRepository.actionType.makeNewAction(_project.getGeneratedCode(), null, _editor);
 		add.setNewGeneratedCodeRepositoryName("Code repository test");
-		File directory = new File(_projectDirectory.getParentFile(),"GeneratedCodeFor"+_project.getProjectName());
+		File directory = new File(_projectDirectory.getParentFile(), "GeneratedCodeFor" + _project.getProjectName());
 		directory.mkdirs();
 		add.setNewGeneratedCodeRepositoryDirectory(directory);
 		add.setIncludeReader(true);
@@ -534,8 +558,7 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 		codeRepository.setTargetType(CodeType.PROTOTYPE);
 	}
 
-	protected void reloadProject(boolean fullLoading)
-	{
+	protected void reloadProject(boolean fullLoading) {
 		reloadProject(fullLoading, TAB_COMPONENT1, TAB_COMPONENT2);
 	}
 
@@ -591,15 +614,15 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 		processorSubProcessResource = null;*/
 	}
 
-	protected void reloadProject(boolean fullLoading, String tab1Name, String tab2Name)
-	{
-		if (_project!=null) {
+	protected void reloadProject(boolean fullLoading, String tab1Name, String tab2Name) {
+		if (_project != null) {
 			_project.close();
 		}
 		resetVariables();
 
 		try {
-			assertNotNull(_editor = (DefaultFlexoEditor)FlexoResourceManager.initializeExistingProject(_projectDirectory,EDITOR_FACTORY,null));
+			assertNotNull(_editor = (DefaultFlexoEditor) FlexoResourceManager.initializeExistingProject(_projectDirectory, EDITOR_FACTORY,
+					null));
 			_project = _editor.getProject();
 			_project.getGeneratedCode().setFactory(this);
 		} catch (ProjectInitializerException e) {
@@ -620,10 +643,12 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 		assertNotNull(_eoPrototypesResource = _project.getEOModelResource(EOPrototypeRepository.EOPROTOTYPE_REPOSITORY_DIR.getName()));
 		assertNotNull(_subProcessResource = _project.getFlexoProcessResource(TEST_SUB_PROCESS));
 		if (fullLoading) {
-			assertNotNull(_subProcessNode = _rootProcessResource.getFlexoProcess().getActivityPetriGraph().getSubProcessNodeNamed(TEST_SUB_PROCESS_NODE));
+			assertNotNull(_subProcessNode = _rootProcessResource.getFlexoProcess().getActivityPetriGraph()
+					.getSubProcessNodeNamed(TEST_SUB_PROCESS_NODE));
 		}
 		if (fullLoading) {
-			assertNotNull(_operationNode = _rootProcessResource.getFlexoProcess().getActivityPetriGraph().getOperationNodeNamed(TEST_OPERATION_NODE_1));
+			assertNotNull(_operationNode = _rootProcessResource.getFlexoProcess().getActivityPetriGraph()
+					.getOperationNodeNamed(TEST_OPERATION_NODE_1));
 		}
 		assertNotNull(_operationComponentResource1 = _project.getFlexoOperationComponentResource(OPERATION_COMPONENT_1));
 		assertNotNull(_operationComponentResource2 = _project.getFlexoOperationComponentResource(OPERATION_COMPONENT_2));
@@ -651,16 +676,16 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 			_tab2 = _tab2ComponentResource.getComponentDefinition();
 		}
 
-		assertSynchonized (_dmResource,_executionModelResource);
-		assertSynchonized (_dmResource,_eoPrototypesResource);
-		assertSynchonized (_wkfResource,_rootProcessResource);
-		assertDepends (_rootProcessResource,_dmResource);
-		assertNotDepends (_rootProcessResource,_clResource);
+		assertSynchonized(_dmResource, _executionModelResource);
+		assertSynchonized(_dmResource, _eoPrototypesResource);
+		assertSynchonized(_wkfResource, _rootProcessResource);
+		assertDepends(_rootProcessResource, _dmResource);
+		assertNotDepends(_rootProcessResource, _clResource);
 
-		assertSynchonized(_subProcessResource,_rmResource);
-		assertSynchonized(_subProcessResource,_wkfResource);
-		assertDepends(_subProcessResource,_dmResource);
-		assertNotDepends(_subProcessResource,_clResource);
+		assertSynchonized(_subProcessResource, _rmResource);
+		assertSynchonized(_subProcessResource, _wkfResource);
+		assertDepends(_subProcessResource, _dmResource);
+		assertNotDepends(_subProcessResource, _clResource);
 
 		assertSynchonized(_operationComponentResource1, _rmResource);
 		assertSynchonized(_operationComponentResource1, _clResource);
@@ -692,23 +717,22 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 		}
 
 		if (tab1Name != null) {
-			assertDepends(_operationComponentResource1,_tab1ComponentResource);
+			assertDepends(_operationComponentResource1, _tab1ComponentResource);
 		}
 		if (tab2Name != null) {
-			assertDepends(_operationComponentResource1,_tab2ComponentResource);
+			assertDepends(_operationComponentResource1, _tab2ComponentResource);
 		}
 
 		if (tab1Name != null) {
-			assertDepends(_operationComponentResource2,_tab1ComponentResource);
+			assertDepends(_operationComponentResource2, _tab1ComponentResource);
 		}
 		if (tab2Name != null) {
-			assertDepends(_operationComponentResource3,_tab2ComponentResource);
+			assertDepends(_operationComponentResource3, _tab2ComponentResource);
 		}
 
 	}
 
-	protected void saveProject()
-	{
+	protected void saveProject() {
 		try {
 			_project.save();
 		} catch (SaveResourceException e) {
@@ -716,13 +740,12 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 		}
 		for (FlexoResource resource : _project.getResources().values()) {
 			if (resource instanceof FlexoStorageResource) {
-				assertNotModified((FlexoStorageResource)resource);
+				assertNotModified((FlexoStorageResource) resource);
 			}
 		}
 	}
 
-	protected String tagStringWithLineNb(String fileContent, String marker, int beginIndex, int endIndex)
-	{
+	protected String tagStringWithLineNb(String fileContent, String marker, int beginIndex, int endIndex) {
 		StringBuilder sb = new StringBuilder();
 		StringTokenizer st = new StringTokenizer(fileContent, "\n");
 		int i = 0;
@@ -736,10 +759,9 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 		return sb.toString();
 	}
 
-	protected String tagFileWithLineNb(File file, String marker, int beginIndex, int endIndex)
-	{
+	protected String tagFileWithLineNb(File file, String marker, int beginIndex, int endIndex) {
 		try {
-			return tagStringWithLineNb(FileUtils.fileContents(file),marker,beginIndex,endIndex);
+			return tagStringWithLineNb(FileUtils.fileContents(file), marker, beginIndex, endIndex);
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail();
@@ -747,21 +769,20 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 		}
 	}
 
-	protected void assertChange(MergeChange change, MergeChangeSource changeSource, MergeChangeType changeType, int first0, int last0, int first1, int last1, int first2, int last2)
-	{
-		assertEquals (change.getMergeChangeSource(),changeSource);
-		assertEquals (change.getMergeChangeType(),changeType);
-		assertEquals(first0,change.getFirst0());
-		assertEquals(first1,change.getFirst1());
-		assertEquals(first2,change.getFirst2());
-		assertEquals(last0,change.getLast0());
-		assertEquals(last1,change.getLast1());
-		assertEquals(last2,change.getLast2());
+	protected void assertChange(MergeChange change, MergeChangeSource changeSource, MergeChangeType changeType, int first0, int last0,
+			int first1, int last1, int first2, int last2) {
+		assertEquals(change.getMergeChangeSource(), changeSource);
+		assertEquals(change.getMergeChangeType(), changeType);
+		assertEquals(first0, change.getFirst0());
+		assertEquals(first1, change.getFirst1());
+		assertEquals(first2, change.getFirst2());
+		assertEquals(last0, change.getLast0());
+		assertEquals(last1, change.getLast1());
+		assertEquals(last2, change.getLast2());
 	}
 
-
-	protected CGRepository createNewCodeRepository(FlexoProject prj, CodeType targetType, String repositoryName){
-		File directory = new File(prj.getProjectDirectory().getParentFile(),"GeneratedCodeFor"+prj.getProjectName());
+	protected CGRepository createNewCodeRepository(FlexoProject prj, CodeType targetType, String repositoryName) {
+		File directory = new File(prj.getProjectDirectory().getParentFile(), "GeneratedCodeFor" + prj.getProjectName());
 		directory.mkdirs();
 		CGRepository reply = null;
 		prj.setTargetType(targetType);
@@ -769,42 +790,41 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 		addCGRepository.setNewGeneratedCodeRepositoryName(repositoryName);
 		addCGRepository.setNewGeneratedCodeRepositoryDirectory(directory);
 		addCGRepository.doAction();
-		assertNotNull(reply = (CGRepository)addCGRepository.getNewGeneratedCodeRepository());
+		assertNotNull(reply = (CGRepository) addCGRepository.getNewGeneratedCodeRepository());
 		reply.setTargetType(targetType);
 		return reply;
 	}
 
-	public void synchronizeCodeGeneration(CGRepository codeRep)
-	{
+	public void synchronizeCodeGeneration(CGRepository codeRep) {
 		// Synchronize code generation
-		SynchronizeRepositoryCodeGeneration synchronizeCodeGeneration = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(codeRep, null);
+		SynchronizeRepositoryCodeGeneration synchronizeCodeGeneration = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(
+				codeRep, null);
 		// Do it even if validation failed
 		synchronizeCodeGeneration.setContinueAfterValidation(true);
 		synchronizeCodeGeneration.doAction();
 
 		// Write generated files to disk
-		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRep,null);
+		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRep, null);
 		writeToDisk.doAction();
 		saveProject();
 	}
 
-	public void assertProjectIsValid(CGRepository codeRep)
-	{
+	public void assertProjectIsValid(CGRepository codeRep) {
 
-		_editor.registerExceptionHandlerFor(ValidateProject.actionType,new FlexoExceptionHandler<ValidateProject>() {
+		_editor.registerExceptionHandlerFor(ValidateProject.actionType, new FlexoExceptionHandler<ValidateProject>() {
 			@Override
 			public boolean handleException(FlexoException exception, ValidateProject action) {
 				if (action.getIeValidationReport() != null && action.getIeValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from IE:\n"+action.getIeValidationReport().reportAsString());
+					logger.info("Errors reported from IE:\n" + action.getIeValidationReport().reportAsString());
 				}
 				if (action.getWkfValidationReport() != null && action.getWkfValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from WKF:\n"+action.getWkfValidationReport().reportAsString());
+					logger.info("Errors reported from WKF:\n" + action.getWkfValidationReport().reportAsString());
 				}
 				if (action.getDkvValidationReport() != null && action.getDkvValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from DKV:\n"+action.getDkvValidationReport().reportAsString());
+					logger.info("Errors reported from DKV:\n" + action.getDkvValidationReport().reportAsString());
 				}
 				if (action.getDmValidationReport() != null && action.getDmValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from DM:\n"+action.getDmValidationReport().reportAsString());
+					logger.info("Errors reported from DM:\n" + action.getDmValidationReport().reportAsString());
 				}
 				return true;
 			}
@@ -824,10 +844,9 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 		}
 		fail();*/
 
-
 		// Try to fix errors
 		FlexoComponentFolder rootFolder = _project.getFlexoComponentLibrary().getRootFolder();
-		//rootFolder.setComponentPrefix("TST");
+		// rootFolder.setComponentPrefix("TST");
 		_project.getFlexoNavigationMenu().getRootMenu().setProcess(_operationNode.getProcess());
 		_project.getFlexoNavigationMenu().getRootMenu().setOperation(_operationNode);
 
@@ -840,27 +859,32 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 
 	}
 
-    protected void defineStatusColumn(FlexoProcess process){
-        process.getBusinessDataType().createDMProperty("status", DMType.makeResolvedDMType(String.class, _rootProcessResource.getProject()), DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
+	protected void defineStatusColumn(FlexoProcess process) {
+		process.getBusinessDataType().createDMProperty("status",
+				DMType.makeResolvedDMType(String.class, _rootProcessResource.getProject()),
+				DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
 
-    }
+	}
 
-	protected void associateTabWithOperations(){
-		//now we have to define tabs for operations
-		Enumeration<OperationComponentInstance> en = _operationComponent1.getProject().getFlexoWorkflow().getAllComponentInstances(_operationComponent1.getComponentDefinition()).elements();
-		while(en.hasMoreElements()){
+	protected void associateTabWithOperations() {
+		// now we have to define tabs for operations
+		Enumeration<OperationComponentInstance> en = _operationComponent1.getProject().getFlexoWorkflow()
+				.getAllComponentInstances(_operationComponent1.getComponentDefinition()).elements();
+		while (en.hasMoreElements()) {
 			OperationNode operationNode = en.nextElement().getOperationNode();
 			operationNode.setTabComponent(_tab1);
 			assertDepends(operationNode.getProcess().getFlexoResource(), _tab1.getComponentResource());
 		}
-		en = _operationComponent2.getProject().getFlexoWorkflow().getAllComponentInstances(_operationComponent2.getComponentDefinition()).elements();
-		while(en.hasMoreElements()){
+		en = _operationComponent2.getProject().getFlexoWorkflow().getAllComponentInstances(_operationComponent2.getComponentDefinition())
+				.elements();
+		while (en.hasMoreElements()) {
 			OperationNode operationNode = en.nextElement().getOperationNode();
 			operationNode.setTabComponent(_tab1);
 			assertDepends(operationNode.getProcess().getFlexoResource(), _tab1.getComponentResource());
 		}
-		en = _operationComponent3.getProject().getFlexoWorkflow().getAllComponentInstances(_operationComponent3.getComponentDefinition()).elements();
-		while(en.hasMoreElements()){
+		en = _operationComponent3.getProject().getFlexoWorkflow().getAllComponentInstances(_operationComponent3.getComponentDefinition())
+				.elements();
+		while (en.hasMoreElements()) {
 			OperationNode operationNode = en.nextElement().getOperationNode();
 			operationNode.setTabComponent(_tab2);
 			assertDepends(operationNode.getProcess().getFlexoResource(), _tab2.getComponentResource());
@@ -875,9 +899,9 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 		// This can be adapted in the velocity.properties file (property: file.resource.loader.modificationCheckInterval).
 		// See org.apache.velocity.runtime.resource.ResourceManagerImpl.getResource(String, int, String)
 		// and org.apache.velocity.runtime.resource.ResourceManagerImpl.refreshResource(Resource, String) for details
-		int seconds = ToolBox.getPLATFORM()==ToolBox.MACOS?7:5;
+		int seconds = ToolBox.getPLATFORM() == ToolBox.MACOS ? 7 : 5;
 		try {
-			Thread.sleep(seconds*1000+1);
+			Thread.sleep(seconds * 1000 + 1);
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}

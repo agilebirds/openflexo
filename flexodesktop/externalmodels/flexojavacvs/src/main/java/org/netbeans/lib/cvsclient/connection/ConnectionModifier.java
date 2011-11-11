@@ -25,15 +25,14 @@ import org.netbeans.lib.cvsclient.util.LoggedDataInputStream;
 import org.netbeans.lib.cvsclient.util.LoggedDataOutputStream;
 
 /**
- * Provides a way to modify the communication channel between client and
- * server.
- * @author  Robert Greig
+ * Provides a way to modify the communication channel between client and server.
+ * 
+ * @author Robert Greig
  */
 public interface ConnectionModifier {
 
-    void modifyInputStream(LoggedDataInputStream ldis) throws IOException;
+	void modifyInputStream(LoggedDataInputStream ldis) throws IOException;
 
-    void modifyOutputStream(LoggedDataOutputStream ldos) throws IOException;
+	void modifyOutputStream(LoggedDataOutputStream ldos) throws IOException;
 
 }
-

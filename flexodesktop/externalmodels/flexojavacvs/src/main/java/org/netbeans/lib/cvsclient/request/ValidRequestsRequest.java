@@ -21,28 +21,30 @@ package org.netbeans.lib.cvsclient.request;
 
 /**
  * Asks the server to send back a Valid-requests response
- * @author  Robert Greig
+ * 
+ * @author Robert Greig
  * @see org.netbeans.lib.cvsclient.response.ValidRequestsResponse
  */
 public class ValidRequestsRequest extends Request {
-    /**
-     * Get the request String that will be passed to the server
-     * @return the request String
-     * @throws UnconfiguredRequestException if the request has not been
-     * properly configured
-     */
-    @Override
+	/**
+	 * Get the request String that will be passed to the server
+	 * 
+	 * @return the request String
+	 * @throws UnconfiguredRequestException
+	 *             if the request has not been properly configured
+	 */
+	@Override
 	public String getRequestString() throws UnconfiguredRequestException {
-        return "valid-requests \n"; //NOI18N
-    }
+		return "valid-requests \n"; // NOI18N
+	}
 
-    /**
-     * Is a response expected from the server?
-     * @return true if a response is expected, false if no response if
-     * expected
-     */
-    @Override
+	/**
+	 * Is a response expected from the server?
+	 * 
+	 * @return true if a response is expected, false if no response if expected
+	 */
+	@Override
 	public boolean isResponseExpected() {
-        return true;
-    }
+		return true;
+	}
 }

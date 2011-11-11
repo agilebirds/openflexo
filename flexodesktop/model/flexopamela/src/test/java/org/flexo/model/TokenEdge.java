@@ -7,11 +7,11 @@ import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
-@XMLElement(xmlTag="TokenEdge")
+@XMLElement(xmlTag = "TokenEdge")
 @ImplementationClass(TokenEdgeImpl.class)
 public interface TokenEdge extends Edge {
 
-	@Getter(value=PROCESS)
+	@Getter(value = PROCESS)
 	public FlexoProcess getProcess();
 
 }

@@ -48,7 +48,6 @@ import org.openflexo.wkf.processeditor.gr.ContainerGR;
 import org.openflexo.wkf.swleditor.SWLEditorConstants;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-
 public class ExpanderGR<O extends AbstractNode> extends ConnectorGraphicalRepresentation<ExpanderGR.Expander<O>> {
 
 	static final Logger logger = Logger.getLogger(Connector.class.getPackage().getName());

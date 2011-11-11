@@ -22,6 +22,6 @@ package org.openflexo.foundation;
 public class ConvertedIntoLocalObject extends DataModification {
 
 	public ConvertedIntoLocalObject(FlexoModelObject object) {
-		super(-1,"isImported",null,object);
+		super(-1, "isImported", null, object);
 	}
 }

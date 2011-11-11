@@ -27,19 +27,18 @@ import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
  * Default implementation by all path elements flagged as final (no children)
  * 
  * @author sylvain
- *
+ * 
  */
 public abstract class FinalBindingPathElementImpl<T> extends SimpleBindingPathElementImpl<T> implements FinalBindingPathElement<T> {
 
-	public FinalBindingPathElementImpl(String label, Class<?> declaringClass, Type type, boolean isSettable, String tooltipText) 
-	{
+	public FinalBindingPathElementImpl(String label, Class<?> declaringClass, Type type, boolean isSettable, String tooltipText) {
 		super(label, declaringClass, type, isSettable, tooltipText);
 	}
 
 	@Override
 	public abstract T getBindingValue(Object target, BindingEvaluationContext context);
-	
-    @Override
-    public abstract void setBindingValue(T value, Object target, BindingEvaluationContext context);
 
- }
+	@Override
+	public abstract void setBindingValue(T value, Object target, BindingEvaluationContext context);
+
+}

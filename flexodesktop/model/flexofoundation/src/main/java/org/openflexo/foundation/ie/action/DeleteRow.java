@@ -30,72 +30,67 @@ import org.openflexo.foundation.ie.widget.IESequenceWidget;
 import org.openflexo.foundation.ie.widget.IETDWidget;
 import org.openflexo.foundation.ie.widget.IETRWidget;
 
+public class DeleteRow extends FlexoAction {
 
-public class DeleteRow  extends FlexoAction 
-{
+	public static FlexoActionType actionType = new FlexoActionType("delete_row", FlexoActionType.defaultGroup,
+			FlexoActionType.DELETE_ACTION_TYPE) {
 
-    public static FlexoActionType actionType = new FlexoActionType ("delete_row",FlexoActionType.defaultGroup,FlexoActionType.DELETE_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new DeleteRow(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) 
-        {
-            return new DeleteRow(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return true;
-        }
-
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            Vector<FlexoModelObject> v = getGlobalSelectionAndFocusedObject(object, globalSelection);
-            Enumeration<FlexoModelObject> en = v.elements();
-            while (en.hasMoreElements()) {
-                FlexoModelObject o = en.nextElement();
-                if (!(o instanceof IETDWidget) && !(o instanceof IETRWidget) && !((o instanceof IESequenceWidget) && ((IESequenceWidget)o).isInTD())) {
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			Vector<FlexoModelObject> v = getGlobalSelectionAndFocusedObject(object, globalSelection);
+			Enumeration<FlexoModelObject> en = v.elements();
+			while (en.hasMoreElements()) {
+				FlexoModelObject o = en.nextElement();
+				if (!(o instanceof IETDWidget) && !(o instanceof IETRWidget)
+						&& !((o instanceof IESequenceWidget) && ((IESequenceWidget) o).isInTD())) {
 					return false;
 				}
-            }
-            return true;
-        }
-                
-    };
-    
-    DeleteRow (FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+			}
+			return true;
+		}
 
-    @Override
-	protected void doAction(Object context) 
-    {
-    	Enumeration<FlexoModelObject> en = getGlobalSelectionAndFocusedObject().elements();
-        while (en.hasMoreElements()) {
-            FlexoModelObject o = en.nextElement();
-            if (o instanceof IETRWidget) {
-                IETRWidget tr = (IETRWidget)o;
-                if (!tr.isDeleted() && (tr.getAllTD().size()>0) && !tr.getAllTD().firstElement().isDeleted()) {
-                    tr.getAllTD().firstElement().deleteRow();
-                }
-            } else if (o instanceof IETDWidget) {
-                IETDWidget td = (IETDWidget)o;
-                if (!td.isDeleted()) {
+	};
+
+	DeleteRow(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) {
+		Enumeration<FlexoModelObject> en = getGlobalSelectionAndFocusedObject().elements();
+		while (en.hasMoreElements()) {
+			FlexoModelObject o = en.nextElement();
+			if (o instanceof IETRWidget) {
+				IETRWidget tr = (IETRWidget) o;
+				if (!tr.isDeleted() && (tr.getAllTD().size() > 0) && !tr.getAllTD().firstElement().isDeleted()) {
+					tr.getAllTD().firstElement().deleteRow();
+				}
+			} else if (o instanceof IETDWidget) {
+				IETDWidget td = (IETDWidget) o;
+				if (!td.isDeleted()) {
 					td.deleteRow();
 				}
-            } else if (o instanceof IESequenceWidget) {
-                IESequenceWidget seq = (IESequenceWidget)o;
-                IETDWidget td = seq.td();
-                if ((td!=null) && !td.isDeleted()) {
+			} else if (o instanceof IESequenceWidget) {
+				IESequenceWidget seq = (IESequenceWidget) o;
+				IETDWidget td = seq.td();
+				if ((td != null) && !td.isDeleted()) {
 					td.deleteRow();
 				}
-            }
-        }
-    }
-    
+			}
+		}
+	}
+
 }

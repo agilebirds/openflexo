@@ -30,7 +30,6 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 import org.openflexo.cgmodule.GeneratorPreferences;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -40,59 +39,51 @@ import org.openflexo.generator.action.DismissUnchangedGeneratedFiles;
 import org.openflexo.generator.action.GenerateAndWrite;
 import org.openflexo.generator.exception.GenerationException;
 
-
 public class GenerateAndWriteCodeInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	GenerateAndWriteCodeInitializer(GeneratorControllerActionInitializer actionInitializer)
-	{
-		super(GenerateAndWrite.actionType,actionInitializer);
+	GenerateAndWriteCodeInitializer(GeneratorControllerActionInitializer actionInitializer) {
+		super(GenerateAndWrite.actionType, actionInitializer);
 	}
 
 	@Override
-	protected GeneratorControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (GeneratorControllerActionInitializer)super.getControllerActionInitializer();
+	protected GeneratorControllerActionInitializer getControllerActionInitializer() {
+		return (GeneratorControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<GenerateAndWrite> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<GenerateAndWrite> getDefaultInitializer() {
 		return new FlexoActionInitializer<GenerateAndWrite>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateAndWrite action)
-			{
+			public boolean run(ActionEvent e, GenerateAndWrite action) {
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
 					return false;
 				}
-                action.setSaveBeforeGenerating(GeneratorPreferences.getSaveBeforeGenerating());
-                action.setWriteUnchangedFiles(!GeneratorPreferences.getAutomaticallyDismissUnchangedFiles());
+				action.setSaveBeforeGenerating(GeneratorPreferences.getSaveBeforeGenerating());
+				action.setWriteUnchangedFiles(!GeneratorPreferences.getAutomaticallyDismissUnchangedFiles());
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<GenerateAndWrite> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<GenerateAndWrite> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<GenerateAndWrite>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateAndWrite action)
-			{
+			public boolean run(ActionEvent e, GenerateAndWrite action) {
 				getControllerActionInitializer().getGeneratorController().disposeProgressWindow();
-                if (GeneratorPreferences.getAutomaticallyDismissUnchangedFiles())
-                    DismissUnchangedGeneratedFiles.actionType.makeNewAction(
-                            action.getFocusedObject(), action.getGlobalSelection(), action.getEditor()).doAction();
+				if (GeneratorPreferences.getAutomaticallyDismissUnchangedFiles())
+					DismissUnchangedGeneratedFiles.actionType.makeNewAction(action.getFocusedObject(), action.getGlobalSelection(),
+							action.getEditor()).doAction();
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoExceptionHandler<GenerateAndWrite> getDefaultExceptionHandler() 
-	{
+	protected FlexoExceptionHandler<GenerateAndWrite> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<GenerateAndWrite>() {
 			@Override
 			public boolean handleException(FlexoException exception, GenerateAndWrite action) {
@@ -108,11 +99,9 @@ public class GenerateAndWriteCodeInitializer extends ActionInitializer {
 		};
 	}
 
-
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return GeneratorIconLibrary.GENERATE_WRITE_CODE_ICON;
-    }
+	}
 
 }

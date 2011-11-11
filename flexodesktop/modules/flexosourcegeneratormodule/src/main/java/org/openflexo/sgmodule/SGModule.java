@@ -40,39 +40,35 @@ import org.openflexo.sgmodule.controller.SGController;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
-
 /**
  * Source Generator module
  * 
  * @author sylvain
  */
-public class SGModule extends FlexoModule implements ExternalSGModule
-{
-	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.GENERATORS, Inspectors.SG, SGJarInspectorGroup.INSTANCE };
+public class SGModule extends FlexoModule implements ExternalSGModule {
+	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.GENERATORS, Inspectors.SG,
+			SGJarInspectorGroup.INSTANCE };
 	private static Hashtable<Class<? extends TechnologyModuleImplementation>, TechnologyModuleGUIFactory> recordedGUIFactories = new Hashtable<Class<? extends TechnologyModuleImplementation>, TechnologyModuleGUIFactory>();
 
 	/**
-	 * The 'main' method of module allow to launch this module as a
-	 * single-module application
+	 * The 'main' method of module allow to launch this module as a single-module application
 	 * 
 	 * @param args
 	 */
-	public static void main(String[] args) throws Exception
-	{
+	public static void main(String[] args) throws Exception {
 		ToolBox.setPlatform();
 		FlexoLoggingManager.initialize();
 		FlexoApplication.initialize();
 		ModuleLoader.initializeSingleModule(Module.SG_MODULE);
 	}
 
-	public SGModule(InteractiveFlexoEditor projectEditor) throws Exception
-	{
+	public SGModule(InteractiveFlexoEditor projectEditor) throws Exception {
 		super(projectEditor);
 
 		// Load all available technology modules.
 		TechnologyModuleDefinition.getAllTechnologyModuleDefinitions();
 
-		setFlexoController(new SGController(projectEditor,this));
+		setFlexoController(new SGController(projectEditor, this));
 		getSGController().loadRelativeWindows();
 		SGPreferences.init(getSGController());
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
@@ -80,67 +76,59 @@ public class SGModule extends FlexoModule implements ExternalSGModule
 		// Put here a code to display default view
 		getSGController().setCurrentEditedObjectAsModuleView(projectEditor.getProject().getGeneratedSources());
 
-
 		// Retain here all necessary resources
-		//retain(<the_required_resource_data>);
+		// retain(<the_required_resource_data>);
 	}
 
-	public InspectorGroup getInspectorGroup()
-	{
+	public InspectorGroup getInspectorGroup() {
 		return Inspectors.SG;
 	}
 
-	public static String getModuleName()
-	{
+	public static String getModuleName() {
 		return SGCst.SG_MODULE_NAME;
 	}
 
-	public static String getModuleShortName()
-	{
+	public static String getModuleShortName() {
 		return SGCst.SG_MODULE_SHORT_NAME;
 	}
 
-	public static String getModuleDescription()
-	{
+	public static String getModuleDescription() {
 		return SGCst.SG_MODULE_DESCRIPTION;
 	}
 
-	public static String getModuleVersion()
-	{
+	public static String getModuleVersion() {
 		return SGCst.SG_MODULE_VERSION;
 	}
 
-	public String getVersion()
-	{
+	public String getVersion() {
 		return getModuleVersion();
 	}
 
-	public SGController getSGController()
-	{
+	public SGController getSGController() {
 		return (SGController) getFlexoController();
 	}
 
 	@Override
-	public FlexoModelObject getDefaultObjectToSelect()
-	{
+	public FlexoModelObject getDefaultObjectToSelect() {
 		// Implement this
 		return null;
 	}
 
 	@Override
-	public InspectorGroup[] getInspectorGroups()
-	{
+	public InspectorGroup[] getInspectorGroups() {
 		return inspectorGroups;
 	}
 
 	/**
 	 * Records a GUI factory for a technology module implementation.
 	 * 
-	 * @param <T> : The technology module implementation class.
+	 * @param <T>
+	 *            : The technology module implementation class.
 	 * @param implementationClass
 	 * @param technologyModuleGUIFactory
 	 */
-	public static <T extends TechnologyModuleImplementation> void recordTechnologyModuleGUIFactory(Class<T> implementationClass, TechnologyModuleGUIFactory technologyModuleGUIFactory) {
+	public static <T extends TechnologyModuleImplementation> void recordTechnologyModuleGUIFactory(Class<T> implementationClass,
+			TechnologyModuleGUIFactory technologyModuleGUIFactory) {
 		recordedGUIFactories.put(implementationClass, technologyModuleGUIFactory);
 	}
 
@@ -150,7 +138,8 @@ public class SGModule extends FlexoModule implements ExternalSGModule
 	 * @param implementationClass
 	 * @return the retrieved GUI Factory. Null if not found
 	 */
-	public static <T extends TechnologyModuleImplementation> TechnologyModuleGUIFactory getTechnologyModuleGUIFactory(Class<T> implementationClass) {
+	public static <T extends TechnologyModuleImplementation> TechnologyModuleGUIFactory getTechnologyModuleGUIFactory(
+			Class<T> implementationClass) {
 		return recordedGUIFactories.get(implementationClass);
 	}
 

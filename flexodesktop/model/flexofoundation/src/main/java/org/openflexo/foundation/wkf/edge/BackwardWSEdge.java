@@ -38,183 +38,167 @@ import org.openflexo.foundation.wkf.ws.ServiceMessageDefinition;
 import org.openflexo.foundation.wkf.ws.ServiceOperation;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 
-
 /**
  * Edge linking an OUT PortMap a a WS Edge to an OUT port
  * 
  * @author sguerin
  * 
  */
-public final class BackwardWSEdge extends ExternalMessageEdge<FlexoPortMap,FlexoPort>
-{
+public final class BackwardWSEdge extends ExternalMessageEdge<FlexoPortMap, FlexoPort> {
 
-    private static final Logger logger = Logger.getLogger(BackwardWSEdge.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(BackwardWSEdge.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    /**
-     * Constructor used during deserialization
-     */
-    public BackwardWSEdge(FlexoProcessBuilder builder)
-    {
-        this(builder.process);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor used during deserialization
+	 */
+	public BackwardWSEdge(FlexoProcessBuilder builder) {
+		this(builder.process);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor
-     */
-    public BackwardWSEdge(FlexoProcess process)
-    {
-        super(process);
-    }
+	/**
+	 * Default constructor
+	 */
+	public BackwardWSEdge(FlexoProcess process) {
+		super(process);
+	}
 
-    /**
-     * Constructor with start port, next precondition and process
-     */
-    public BackwardWSEdge(FlexoPortMap startPortMap, FlexoPort outPort, FlexoProcess process) throws InvalidEdgeException
-    {
-        this(process);
-        if (outPort.getProcess() == process && startPortMap.getProcess() == process) {
-        	setStartNode(startPortMap);
-            setEndNode(outPort);
-        } else {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Inconsistent data while building BackwardWSEdge !");
-            throw new InvalidEdgeException(this);
-        }
-         
-        if (!isEdgeValid()) {
-        	resetStartAndEndNode();
-            throw new InvalidEdgeException(this);
-        }
-    }
+	/**
+	 * Constructor with start port, next precondition and process
+	 */
+	public BackwardWSEdge(FlexoPortMap startPortMap, FlexoPort outPort, FlexoProcess process) throws InvalidEdgeException {
+		this(process);
+		if (outPort.getProcess() == process && startPortMap.getProcess() == process) {
+			setStartNode(startPortMap);
+			setEndNode(outPort);
+		} else {
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("Inconsistent data while building BackwardWSEdge !");
+			throw new InvalidEdgeException(this);
+		}
 
-    /**
-     * Constructor with start port, next precondition
-     */
-    public BackwardWSEdge(FlexoPortMap startPortMap, FlexoPort outPort) throws InvalidEdgeException
-    {
-        this(startPortMap, outPort, startPortMap.getProcess());
-    }
+		if (!isEdgeValid()) {
+			resetStartAndEndNode();
+			throw new InvalidEdgeException(this);
+		}
+	}
 
-    @Override
-	public String getInspectorName()
-    {
-        return Inspectors.WKF.BACKWARD_WS_EDGE_INSPECTOR;
-    }
+	/**
+	 * Constructor with start port, next precondition
+	 */
+	public BackwardWSEdge(FlexoPortMap startPortMap, FlexoPort outPort) throws InvalidEdgeException {
+		this(startPortMap, outPort, startPortMap.getProcess());
+	}
 
-    @Override
-	public PortMapRegistery getPortMapRegistery()
-    {
-        if (getStartNode() != null) {
-            return getStartNode().getPortMapRegistery();
-        }
-        return null;
-    }
+	@Override
+	public String getInspectorName() {
+		return Inspectors.WKF.BACKWARD_WS_EDGE_INSPECTOR;
+	}
 
-    public PortRegistery getEndPortRegistery()
-    {
-        if (getEndNode() != null) {
-            return getEndNode().getPortRegistery();
-        }
-        return null;
-    }
+	@Override
+	public PortMapRegistery getPortMapRegistery() {
+		if (getStartNode() != null) {
+			return getStartNode().getPortMapRegistery();
+		}
+		return null;
+	}
 
-    // ==========================================================================
-    // ============================= Validation
-    // =================================
-    // ==========================================================================
+	public PortRegistery getEndPortRegistery() {
+		if (getEndNode() != null) {
+			return getEndNode().getPortRegistery();
+		}
+		return null;
+	}
 
-    @Override
-	public boolean isEdgeValid()
-    {
-        // Such edges are valid if and only if they link an OUT portmap
-        // of a WebService to an OUT port
+	// ==========================================================================
+	// ============================= Validation
+	// =================================
+	// ==========================================================================
 
-        if (getStartNode() == null || !getStartNode().isOutputPort() || getEndNode() == null || !getEndNode().isOutPort() || getPortMapRegistery() == null || getPortMapRegistery().getSubProcessNode() == null)
-            return false;
+	@Override
+	public boolean isEdgeValid() {
+		// Such edges are valid if and only if they link an OUT portmap
+		// of a WebService to an OUT port
 
-        return ((getStartNode().getProcess() == getEndNode().getProcess()) && (getStartNode().getSubProcessNode().getSubProcess().getIsWebService()));
-    }
+		if (getStartNode() == null || !getStartNode().isOutputPort() || getEndNode() == null || !getEndNode().isOutPort()
+				|| getPortMapRegistery() == null || getPortMapRegistery().getSubProcessNode() == null)
+			return false;
 
-    public static class BackwardWSEdgeEdgeMustBeValid extends ValidationRule<BackwardWSEdgeEdgeMustBeValid, BackwardWSEdge>
-    {
-        public BackwardWSEdgeEdgeMustBeValid()
-        {
-            super(BackwardWSEdge.class, "backward_ws_edge_must_be_valid");
-        }
+		return ((getStartNode().getProcess() == getEndNode().getProcess()) && (getStartNode().getSubProcessNode().getSubProcess()
+				.getIsWebService()));
+	}
 
-        @Override
-		public ValidationIssue<BackwardWSEdgeEdgeMustBeValid, BackwardWSEdge> applyValidation(BackwardWSEdge edge)
-        {
-            if (!edge.isEdgeValid()) {
-                ValidationError<BackwardWSEdgeEdgeMustBeValid, BackwardWSEdge> error = new ValidationError<BackwardWSEdgeEdgeMustBeValid, BackwardWSEdge>(this, edge, "backward_ws_edge_is_not_valid");
-                error.addToFixProposals(new DeletionFixProposal<BackwardWSEdgeEdgeMustBeValid, BackwardWSEdge>("delete_this_message_edge"));
-                return error;
-            }
-            return null;
-        }
+	public static class BackwardWSEdgeEdgeMustBeValid extends ValidationRule<BackwardWSEdgeEdgeMustBeValid, BackwardWSEdge> {
+		public BackwardWSEdgeEdgeMustBeValid() {
+			super(BackwardWSEdge.class, "backward_ws_edge_must_be_valid");
+		}
 
-    }
+		@Override
+		public ValidationIssue<BackwardWSEdgeEdgeMustBeValid, BackwardWSEdge> applyValidation(BackwardWSEdge edge) {
+			if (!edge.isEdgeValid()) {
+				ValidationError<BackwardWSEdgeEdgeMustBeValid, BackwardWSEdge> error = new ValidationError<BackwardWSEdgeEdgeMustBeValid, BackwardWSEdge>(
+						this, edge, "backward_ws_edge_is_not_valid");
+				error.addToFixProposals(new DeletionFixProposal<BackwardWSEdgeEdgeMustBeValid, BackwardWSEdge>("delete_this_message_edge"));
+				return error;
+			}
+			return null;
+		}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "backward_ws_edge";
-    }
-    
-    @Override
-	public ServiceOperation getServiceOperation()
-    {
-    	if (getStartNode() != null) {
-    		return getStartNode().getOperation();
-    	}
-    	return null;
-    }
+	}
 
-    @Override
-	public ServiceMessageDefinition getInputMessageDefinition()
-    {
-        if (getServiceOperation() != null && getServiceOperation().getOutputMessageDefinition() != null) {
-       		return getServiceOperation().getOutputMessageDefinition();
-    	}
-    	else {
-    		if (!isDeserializing())
-    			logger.warning("Inconsistant data found in BackwardWSEdge "+getServiceOperation());
-    		return null;
-    	}
-     }
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "backward_ws_edge";
+	}
 
-    @Override
-	public MessageDefinition getOutputMessageDefinition()
-    {
-       	if (getFlexoPort() != null && getFlexoPort() instanceof OutputPort) {
-    		return ((OutputPort)getFlexoPort()).getOutputMessageDefinition();
-    	}
-    	else {
-    		if (!isDeserializing())
-    			logger.warning("Inconsistant data found in BackwardWSEdge");
-    		return null;
-    	}
-     }
+	@Override
+	public ServiceOperation getServiceOperation() {
+		if (getStartNode() != null) {
+			return getStartNode().getOperation();
+		}
+		return null;
+	}
 
-    @Override
-    public Class<FlexoPortMap> getStartNodeClass() {
-    	return FlexoPortMap.class;
-    }
+	@Override
+	public ServiceMessageDefinition getInputMessageDefinition() {
+		if (getServiceOperation() != null && getServiceOperation().getOutputMessageDefinition() != null) {
+			return getServiceOperation().getOutputMessageDefinition();
+		} else {
+			if (!isDeserializing())
+				logger.warning("Inconsistant data found in BackwardWSEdge " + getServiceOperation());
+			return null;
+		}
+	}
 
-    @Override
+	@Override
+	public MessageDefinition getOutputMessageDefinition() {
+		if (getFlexoPort() != null && getFlexoPort() instanceof OutputPort) {
+			return ((OutputPort) getFlexoPort()).getOutputMessageDefinition();
+		} else {
+			if (!isDeserializing())
+				logger.warning("Inconsistant data found in BackwardWSEdge");
+			return null;
+		}
+	}
+
+	@Override
+	public Class<FlexoPortMap> getStartNodeClass() {
+		return FlexoPortMap.class;
+	}
+
+	@Override
 	public Class<FlexoPort> getEndNodeClass() {
 		return FlexoPort.class;
 	}
-
 
 }

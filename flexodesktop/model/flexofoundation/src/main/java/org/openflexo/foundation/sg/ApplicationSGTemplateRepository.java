@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.sg;
 
-
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.cg.templates.CGTemplateRepository;
 import org.openflexo.localization.FlexoLocalization;
@@ -27,55 +26,46 @@ import org.openflexo.toolbox.FileResource;
 
 public class ApplicationSGTemplateRepository extends CGTemplateRepository {
 
-	private static final FileResource flexoTemplatesDirectory
-	= new FileResource("Generator/TechnologyModules");
+	private static final FileResource flexoTemplatesDirectory = new FileResource("Generator/TechnologyModules");
 
-	public ApplicationSGTemplateRepository(SGTemplates templates)
-	{
-		super(flexoTemplatesDirectory,templates, null);
+	public ApplicationSGTemplateRepository(SGTemplates templates) {
+		super(flexoTemplatesDirectory, templates, null);
 	}
-	
+
 	@Override
-	public CommonSGTemplateSet makeCommonTemplateSet()
-	{
+	public CommonSGTemplateSet makeCommonTemplateSet() {
 		return new CommonSGApplicationTemplateSet(getDirectory(), this, true);
 	}
-	
+
 	@Override
-	public String getFullyQualifiedName() 
-	{
+	public String getFullyQualifiedName() {
 		return "APPLICATION_TEMPLATES";
 	}
 
-	public FileResource getFlexoTemplatesDirectory() 
-	{
+	public FileResource getFlexoTemplatesDirectory() {
 		return flexoTemplatesDirectory;
 	}
 
 	@Override
-	public boolean readOnly()
-	{
+	public boolean readOnly() {
 		return true;
 	}
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.SG.SG_APPLICATION_TEMPLATE_REPOSITORY;
 	}
 
 	@Override
-	public String getHelpText()
-	{
+	public String getHelpText() {
 		return FlexoLocalization.localizedForKey("contains_default_templates_used_for_code_generation");
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return FlexoLocalization.localizedForKey("application_templates");
 	}
-	
+
 	@Override
 	public boolean isApplicationRepository() {
 		return true;

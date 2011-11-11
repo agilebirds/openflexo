@@ -23,91 +23,79 @@ import java.io.File;
 
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 /**
  * Please comment this class
  * 
  * @author gpolet
  * 
  */
-public abstract class GeneratedDocument
-{
+public abstract class GeneratedDocument {
 
-    protected File _file;
+	protected File _file;
 
-    protected String _stringRepresentation;
+	protected String _stringRepresentation;
 
-    protected File _dmFile;
+	protected File _dmFile;
 
-    protected File _wkfFile;
-    
-    protected File _ieFile;
+	protected File _wkfFile;
 
-    public GeneratedDocument(FlexoProject project, String fileName)
-    {
-        super();
-        File generatedDir = new File(project.getProjectDirectory(), DGCst.DEFAULT_OUTPUT_DIRECTORY);
-        if (!generatedDir.exists()) {
-            generatedDir.mkdir();
-        }
-        _file = new File(generatedDir, fileName + ".tex");
-        _dmFile = new File(generatedDir, fileName + ".dm.tex");
-        _ieFile = new File(generatedDir, fileName + ".ie.tex");
-        _wkfFile = new File(generatedDir, fileName + ".wkf.tex");
-    }
+	protected File _ieFile;
 
-    public File getFile()
-    {
-        return _file;
-    }
+	public GeneratedDocument(FlexoProject project, String fileName) {
+		super();
+		File generatedDir = new File(project.getProjectDirectory(), DGCst.DEFAULT_OUTPUT_DIRECTORY);
+		if (!generatedDir.exists()) {
+			generatedDir.mkdir();
+		}
+		_file = new File(generatedDir, fileName + ".tex");
+		_dmFile = new File(generatedDir, fileName + ".dm.tex");
+		_ieFile = new File(generatedDir, fileName + ".ie.tex");
+		_wkfFile = new File(generatedDir, fileName + ".wkf.tex");
+	}
 
-    public void setFile(File file)
-    {
-        _file = file;
-    }
+	public File getFile() {
+		return _file;
+	}
 
-    public abstract FlexoProject getProject();
+	public void setFile(File file) {
+		_file = file;
+	}
 
-    public abstract void generate();
+	public abstract FlexoProject getProject();
 
-    public abstract void save(boolean overWrite);
+	public abstract void generate();
 
-    public abstract void reset();
-    
-    public abstract boolean fileExists();
+	public abstract void save(boolean overWrite);
 
-    public  String getStringRepresentation()
-    {
-        return _stringRepresentation;
-    }
+	public abstract void reset();
 
-    public File getDmFile()
-    {
-        return _dmFile;
-    }
+	public abstract boolean fileExists();
 
-    public void setDmFile(File dmFile)
-    {
-        _dmFile = dmFile;
-    }
+	public String getStringRepresentation() {
+		return _stringRepresentation;
+	}
 
-    public File getWkfFile()
-    {
-        return _wkfFile;
-    }
+	public File getDmFile() {
+		return _dmFile;
+	}
 
-    public void setWkfFile(File wkfFile)
-    {
-        _wkfFile = wkfFile;
-    }
+	public void setDmFile(File dmFile) {
+		_dmFile = dmFile;
+	}
 
-    public File getIeFile()
-    {
-        return _ieFile;
-    }
+	public File getWkfFile() {
+		return _wkfFile;
+	}
 
-    public void setIeFile(File ieFile)
-    {
-        _ieFile = ieFile;
-    }
+	public void setWkfFile(File wkfFile) {
+		_wkfFile = wkfFile;
+	}
+
+	public File getIeFile() {
+		return _ieFile;
+	}
+
+	public void setIeFile(File ieFile) {
+		_ieFile = ieFile;
+	}
 }

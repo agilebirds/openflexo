@@ -36,13 +36,15 @@ public class ResourceCount extends MergeTextRule {
 
 	@Override
 	public MergeTextAction getAction() {
-		if(_action==null){
+		if (_action == null) {
 			int v1 = Integer.valueOf(_conflict.getText1().getText());
 			int v2 = Integer.valueOf(_conflict.getText2().getText());
-			if(v1>v2)
-				_action = new MergeTextAction(_conflict.getConflictIndex(),MergeActionType.CHOOSE1,_conflict.getParentMergedElement(),_conflict.getText1(), _conflict.getText2());
+			if (v1 > v2)
+				_action = new MergeTextAction(_conflict.getConflictIndex(), MergeActionType.CHOOSE1, _conflict.getParentMergedElement(),
+						_conflict.getText1(), _conflict.getText2());
 			else
-				_action = new MergeTextAction(_conflict.getConflictIndex(),MergeActionType.CHOOSE2,_conflict.getParentMergedElement(),_conflict.getText1(), _conflict.getText2());
+				_action = new MergeTextAction(_conflict.getConflictIndex(), MergeActionType.CHOOSE2, _conflict.getParentMergedElement(),
+						_conflict.getText1(), _conflict.getText2());
 		}
 		return _action;
 	}

@@ -22,15 +22,13 @@ package org.openflexo.components.browser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 
-public interface BrowserConfiguration
-{
-    public FlexoProject getProject();
-    
-    public void configure(ProjectBrowser browser);
-    
-    public FlexoModelObject getDefaultRootObject();
-    
-    public BrowserElementFactory getBrowserElementFactory();
+public interface BrowserConfiguration {
+	public FlexoProject getProject();
+
+	public void configure(ProjectBrowser browser);
+
+	public FlexoModelObject getDefaultRootObject();
+
+	public BrowserElementFactory getBrowserElementFactory();
 
 }
-

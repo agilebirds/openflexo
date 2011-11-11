@@ -22,16 +22,15 @@ package org.openflexo.foundation.dm;
 import org.openflexo.foundation.rm.FlexoProject;
 
 /**
- * Implemented by all classes using DMType
- * This notion is used to retrieve context while interpreting types (eg TypeVariable support)
+ * Implemented by all classes using DMType This notion is used to retrieve context while interpreting types (eg TypeVariable support)
  * 
  * @author sylvain
- *
+ * 
  */
 public interface DMTypeOwner {
 
 	public FlexoProject getProject();
-	
+
 	public void setChanged();
-	
+
 }

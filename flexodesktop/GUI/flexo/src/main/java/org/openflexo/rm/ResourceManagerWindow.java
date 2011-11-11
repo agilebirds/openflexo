@@ -35,7 +35,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-
 import org.openflexo.components.AskForSaveResources;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.components.ProjectResourcesReviewer;
@@ -59,236 +58,223 @@ import org.openflexo.view.controller.FlexoController;
  * @author sguerin
  * 
  */
-public class ResourceManagerWindow extends FlexoDialog implements ChangeListener
-{
+public class ResourceManagerWindow extends FlexoDialog implements ChangeListener {
 
-    static final Logger logger = Logger.getLogger(ResourceManagerWindow.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(ResourceManagerWindow.class.getPackage().getName());
 
-    protected ResourceManagerPanel _storageResourcesPanel;
-    protected ResourceManagerPanel _importedResourcesPanel;
-    protected ResourceManagerPanel _generatedResourcesPanel;
-    private JTabbedPane tabbedPane;
-    protected FlexoProject _project;
-    private JButton saveSelectedButton;
-    private JButton loadSelectedButton;
-    private JButton deleteSelectedButton;
-    private JButton saveAllButton;
-    private JButton rebuildDependenciesButton;
-    private JButton refreshButton;
-    private JButton closeButton;
+	protected ResourceManagerPanel _storageResourcesPanel;
+	protected ResourceManagerPanel _importedResourcesPanel;
+	protected ResourceManagerPanel _generatedResourcesPanel;
+	private JTabbedPane tabbedPane;
+	protected FlexoProject _project;
+	private JButton saveSelectedButton;
+	private JButton loadSelectedButton;
+	private JButton deleteSelectedButton;
+	private JButton saveAllButton;
+	private JButton rebuildDependenciesButton;
+	private JButton refreshButton;
+	private JButton closeButton;
 
-    private RMViewerController rmViewerController;
-    
-    public ResourceManagerWindow(FlexoProject project)
-    {
-        super((JFrame) null, false);
-        setTitle(FlexoLocalization.localizedForKey("resource_manager"));
-        getContentPane().setLayout(new BorderLayout());
-        _storageResourcesPanel = new ResourceManagerPanel(project, new ResourceManagerModel.StorageResourceModel(project), this);
-        _importedResourcesPanel = new ResourceManagerPanel(project, new ResourceManagerModel.ImportedResourceModel(project), this);
-        _generatedResourcesPanel = new ResourceManagerPanel(project, new ResourceManagerModel.GeneratedResourceModel(project), this);
-        _project = project;
+	private RMViewerController rmViewerController;
 
-        JPanel controlPanel = new JPanel();
-        controlPanel.setLayout(new FlowLayout());
+	public ResourceManagerWindow(FlexoProject project) {
+		super((JFrame) null, false);
+		setTitle(FlexoLocalization.localizedForKey("resource_manager"));
+		getContentPane().setLayout(new BorderLayout());
+		_storageResourcesPanel = new ResourceManagerPanel(project, new ResourceManagerModel.StorageResourceModel(project), this);
+		_importedResourcesPanel = new ResourceManagerPanel(project, new ResourceManagerModel.ImportedResourceModel(project), this);
+		_generatedResourcesPanel = new ResourceManagerPanel(project, new ResourceManagerModel.GeneratedResourceModel(project), this);
+		_project = project;
 
-        saveSelectedButton = new JButton(FlexoLocalization.localizedForKey("save"));
-        loadSelectedButton = new JButton(FlexoLocalization.localizedForKey("load"));
-        deleteSelectedButton = new JButton(FlexoLocalization.localizedForKey("delete"));
-        saveAllButton = new JButton(FlexoLocalization.localizedForKey("save_all"));
-        rebuildDependenciesButton = new JButton(FlexoLocalization.localizedForKey("rebuild_dependancies"));
-        refreshButton = new JButton(FlexoLocalization.localizedForKey("refresh"));
-        closeButton = new JButton(FlexoLocalization.localizedForKey("close"));
+		JPanel controlPanel = new JPanel();
+		controlPanel.setLayout(new FlowLayout());
 
-        saveSelectedButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                if (getActivePanel() == _storageResourcesPanel) {
-                    if (_storageResourcesPanel.getSelectedResource() != null) {
-                        try {
-                            ((FlexoStorageResource)_storageResourcesPanel.getSelectedResource()).saveResourceData();
-                            toFront();
-                        } catch (SaveResourceException e1) {
-                            // Warns about the exception
-                            if (logger.isLoggable(Level.WARNING))
-                                logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
-                            e1.printStackTrace();
-                        }
-                    }
-                }
-            }
-        });
+		saveSelectedButton = new JButton(FlexoLocalization.localizedForKey("save"));
+		loadSelectedButton = new JButton(FlexoLocalization.localizedForKey("load"));
+		deleteSelectedButton = new JButton(FlexoLocalization.localizedForKey("delete"));
+		saveAllButton = new JButton(FlexoLocalization.localizedForKey("save_all"));
+		rebuildDependenciesButton = new JButton(FlexoLocalization.localizedForKey("rebuild_dependancies"));
+		refreshButton = new JButton(FlexoLocalization.localizedForKey("refresh"));
+		closeButton = new JButton(FlexoLocalization.localizedForKey("close"));
 
-        loadSelectedButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                if (getActivePanel().getSelectedResource() != null) {
-                    try {
-                        FlexoResource resourceToLoad = getActivePanel().getSelectedResource();
-                        if (resourceToLoad instanceof FlexoStorageResource) {
-                            ((FlexoStorageResource)resourceToLoad).loadResourceData();
-                        }
-                        else if (resourceToLoad instanceof FlexoImportedResource) {
-                            ((FlexoImportedResource)resourceToLoad).importResourceData();
-                        }
-                        else if (resourceToLoad instanceof FlexoGeneratedResource) {
-                            ((FlexoGeneratedResource)resourceToLoad).getGeneratedResourceData();
-                        }
-                         getActivePanel().getRMModel().fireTableDataChanged();
-                        toFront();
-                    } catch (FlexoException exception) {
-                        // Warns about the exception
-                        if (logger.isLoggable(Level.WARNING))
-                            logger.warning("Exception raised: " + exception.getClass().getName() + ". See console for details.");
-                        exception.printStackTrace();
-                    }
-                }
-            }
-        });
+		saveSelectedButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (getActivePanel() == _storageResourcesPanel) {
+					if (_storageResourcesPanel.getSelectedResource() != null) {
+						try {
+							((FlexoStorageResource) _storageResourcesPanel.getSelectedResource()).saveResourceData();
+							toFront();
+						} catch (SaveResourceException e1) {
+							// Warns about the exception
+							if (logger.isLoggable(Level.WARNING))
+								logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+							e1.printStackTrace();
+						}
+					}
+				}
+			}
+		});
 
-        deleteSelectedButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                if (getActivePanel().getSelectedResource() != null) {
-                    getActivePanel().getSelectedResource().delete();
-                    getActivePanel().getRMModel().fireTableDataChanged();
-                    toFront();
-                }
-            }
-        });
+		loadSelectedButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (getActivePanel().getSelectedResource() != null) {
+					try {
+						FlexoResource resourceToLoad = getActivePanel().getSelectedResource();
+						if (resourceToLoad instanceof FlexoStorageResource) {
+							((FlexoStorageResource) resourceToLoad).loadResourceData();
+						} else if (resourceToLoad instanceof FlexoImportedResource) {
+							((FlexoImportedResource) resourceToLoad).importResourceData();
+						} else if (resourceToLoad instanceof FlexoGeneratedResource) {
+							((FlexoGeneratedResource) resourceToLoad).getGeneratedResourceData();
+						}
+						getActivePanel().getRMModel().fireTableDataChanged();
+						toFront();
+					} catch (FlexoException exception) {
+						// Warns about the exception
+						if (logger.isLoggable(Level.WARNING))
+							logger.warning("Exception raised: " + exception.getClass().getName() + ". See console for details.");
+						exception.printStackTrace();
+					}
+				}
+			}
+		});
 
-        saveAllButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                ProjectResourcesReviewer reviewer = new ProjectResourcesReviewer(_project);
-                if (reviewer.getStatus()==AskForSaveResources.SAVE) {
-                    try {
-                        reviewer.saveSelection();
-                    } catch (SaveResourcePermissionDeniedException e1) {
-                        e1.printStackTrace();
-                        if (e1.getFileResource().getFile().isDirectory())
-                            FlexoController.showError(FlexoLocalization.localizedForKey("permission_denied"), FlexoLocalization
-                                    .localizedForKey("project_was_not_properly_saved_permission_denied_directory")
-                                    + "\n" + e1.getFileResource().getFile().getAbsolutePath());
-                        else
-                            FlexoController.showError(FlexoLocalization.localizedForKey("permission_denied"), FlexoLocalization
-                                    .localizedForKey("project_was_not_properly_saved_permission_denied_file")
-                                    + "\n" + e1.getFileResource().getFile().getAbsolutePath());
-                    } catch (SaveResourceExceptionList e1) {
-                        e1.printStackTrace();
-                        FlexoController.showError(FlexoLocalization.localizedForKey("error_during_saving") + "\n"+e1.errorFilesList());
-                    }
-                }
-                _importedResourcesPanel.getRMModel().fireTableDataChanged();
-                toFront();
-            }
-        });
+		deleteSelectedButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (getActivePanel().getSelectedResource() != null) {
+					getActivePanel().getSelectedResource().delete();
+					getActivePanel().getRMModel().fireTableDataChanged();
+					toFront();
+				}
+			}
+		});
 
-        rebuildDependenciesButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                if (!ProgressWindow.hasInstance()) {
-                    ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("rebuild_dependancies"), _project.getResources().size());
-                }
-                _project.rebuildDependancies(ProgressWindow.instance());
-                ProgressWindow.hideProgressWindow();
-                _importedResourcesPanel.getRMModel().fireTableDataChanged();
-                _importedResourcesPanel.getRMModel().fireTableDataChanged();
-                _generatedResourcesPanel.getRMModel().fireTableDataChanged();
-                toFront();
-            }
-        });
+		saveAllButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ProjectResourcesReviewer reviewer = new ProjectResourcesReviewer(_project);
+				if (reviewer.getStatus() == AskForSaveResources.SAVE) {
+					try {
+						reviewer.saveSelection();
+					} catch (SaveResourcePermissionDeniedException e1) {
+						e1.printStackTrace();
+						if (e1.getFileResource().getFile().isDirectory())
+							FlexoController.showError(FlexoLocalization.localizedForKey("permission_denied"),
+									FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_directory") + "\n"
+											+ e1.getFileResource().getFile().getAbsolutePath());
+						else
+							FlexoController.showError(FlexoLocalization.localizedForKey("permission_denied"),
+									FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_file") + "\n"
+											+ e1.getFileResource().getFile().getAbsolutePath());
+					} catch (SaveResourceExceptionList e1) {
+						e1.printStackTrace();
+						FlexoController.showError(FlexoLocalization.localizedForKey("error_during_saving") + "\n" + e1.errorFilesList());
+					}
+				}
+				_importedResourcesPanel.getRMModel().fireTableDataChanged();
+				toFront();
+			}
+		});
 
-        refreshButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                _importedResourcesPanel.getRMModel().refresh();
-                _importedResourcesPanel.getRMModel().refresh();
-                _generatedResourcesPanel.getRMModel().refresh();
-                _importedResourcesPanel.getRMModel().fireTableDataChanged();
-                _importedResourcesPanel.getRMModel().fireTableDataChanged();
-                _generatedResourcesPanel.getRMModel().fireTableDataChanged();
-               toFront();
-            }
-        });
+		rebuildDependenciesButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (!ProgressWindow.hasInstance()) {
+					ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("rebuild_dependancies"), _project.getResources()
+							.size());
+				}
+				_project.rebuildDependancies(ProgressWindow.instance());
+				ProgressWindow.hideProgressWindow();
+				_importedResourcesPanel.getRMModel().fireTableDataChanged();
+				_importedResourcesPanel.getRMModel().fireTableDataChanged();
+				_generatedResourcesPanel.getRMModel().fireTableDataChanged();
+				toFront();
+			}
+		});
 
-        closeButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                setVisible(false);
-            }
-        });
+		refreshButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				_importedResourcesPanel.getRMModel().refresh();
+				_importedResourcesPanel.getRMModel().refresh();
+				_generatedResourcesPanel.getRMModel().refresh();
+				_importedResourcesPanel.getRMModel().fireTableDataChanged();
+				_importedResourcesPanel.getRMModel().fireTableDataChanged();
+				_generatedResourcesPanel.getRMModel().fireTableDataChanged();
+				toFront();
+			}
+		});
 
-        controlPanel.add(saveSelectedButton);
-        controlPanel.add(loadSelectedButton);
-        controlPanel.add(deleteSelectedButton);
-        controlPanel.add(saveAllButton);
-        controlPanel.add(rebuildDependenciesButton);
-        controlPanel.add(refreshButton);
-        controlPanel.add(closeButton);
+		closeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+			}
+		});
 
-        JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new BorderLayout());
+		controlPanel.add(saveSelectedButton);
+		controlPanel.add(loadSelectedButton);
+		controlPanel.add(deleteSelectedButton);
+		controlPanel.add(saveAllButton);
+		controlPanel.add(rebuildDependenciesButton);
+		controlPanel.add(refreshButton);
+		controlPanel.add(closeButton);
 
-        rmViewerController = new RMViewerController(project);
-        
-        tabbedPane = new JTabbedPane();
-        tabbedPane.addChangeListener(this);
-        tabbedPane.add(FlexoLocalization.localizedForKey("storage_resources"),_storageResourcesPanel);
-        tabbedPane.add(FlexoLocalization.localizedForKey("imported_resources"),_importedResourcesPanel);
-        tabbedPane.add(FlexoLocalization.localizedForKey("generated_resources"),_generatedResourcesPanel);
-        tabbedPane.add(FlexoLocalization.localizedForKey("viewer"),rmViewerController.getMainView());
-       
-        contentPanel.add(tabbedPane, BorderLayout.CENTER);
-        contentPanel.add(controlPanel, BorderLayout.SOUTH);
+		JPanel contentPanel = new JPanel();
+		contentPanel.setLayout(new BorderLayout());
 
-        getContentPane().add(contentPanel, BorderLayout.CENTER);
+		rmViewerController = new RMViewerController(project);
 
-        update();
+		tabbedPane = new JTabbedPane();
+		tabbedPane.addChangeListener(this);
+		tabbedPane.add(FlexoLocalization.localizedForKey("storage_resources"), _storageResourcesPanel);
+		tabbedPane.add(FlexoLocalization.localizedForKey("imported_resources"), _importedResourcesPanel);
+		tabbedPane.add(FlexoLocalization.localizedForKey("generated_resources"), _generatedResourcesPanel);
+		tabbedPane.add(FlexoLocalization.localizedForKey("viewer"), rmViewerController.getMainView());
 
-        setModal(false);
-        setSize(1000, 200);
-        validate();
-        pack();
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
-        setVisible(true);
-    }
+		contentPanel.add(tabbedPane, BorderLayout.CENTER);
+		contentPanel.add(controlPanel, BorderLayout.SOUTH);
 
-    @Override
-	public void dispose()
-    {
-        super.dispose();
-        _importedResourcesPanel.getRMModel().delete();
-        _importedResourcesPanel.getRMModel().delete();
-        _generatedResourcesPanel.getRMModel().delete();
-    }
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
 
-    protected void update()
-    {
-        saveSelectedButton.setEnabled(getActivePanel() != null && (getActivePanel() == _storageResourcesPanel) && (getActivePanel().getSelectedResource() != null));
-        loadSelectedButton.setEnabled(getActivePanel() != null && getActivePanel().getSelectedResource() != null);
-        deleteSelectedButton.setEnabled(getActivePanel() != null && getActivePanel().getSelectedResource() != null);
-    }
+		update();
 
-    @Override
-	public void stateChanged(ChangeEvent e) 
-    {
-        update();
-    }
-    
-    protected ResourceManagerPanel getActivePanel()
-    {
-    	if (tabbedPane.getSelectedComponent() instanceof ResourceManagerPanel)
-    		return (ResourceManagerPanel)tabbedPane.getSelectedComponent();
-    	return null;
-    }
-    
+		setModal(false);
+		setSize(1000, 200);
+		validate();
+		pack();
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
+		setVisible(true);
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		_importedResourcesPanel.getRMModel().delete();
+		_importedResourcesPanel.getRMModel().delete();
+		_generatedResourcesPanel.getRMModel().delete();
+	}
+
+	protected void update() {
+		saveSelectedButton.setEnabled(getActivePanel() != null && (getActivePanel() == _storageResourcesPanel)
+				&& (getActivePanel().getSelectedResource() != null));
+		loadSelectedButton.setEnabled(getActivePanel() != null && getActivePanel().getSelectedResource() != null);
+		deleteSelectedButton.setEnabled(getActivePanel() != null && getActivePanel().getSelectedResource() != null);
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		update();
+	}
+
+	protected ResourceManagerPanel getActivePanel() {
+		if (tabbedPane.getSelectedComponent() instanceof ResourceManagerPanel)
+			return (ResourceManagerPanel) tabbedPane.getSelectedComponent();
+		return null;
+	}
+
 }

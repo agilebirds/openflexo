@@ -27,73 +27,62 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 
+public class RemoveInheritanceChildItem extends FlexoAction {
 
-public class RemoveInheritanceChildItem extends FlexoAction 
-{
+	public static FlexoActionType actionType = new FlexoActionType("remove_inheritance_child", FlexoActionType.defaultGroup,
+			FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType actionType = new FlexoActionType ("remove_inheritance_child",FlexoActionType.defaultGroup,FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new RemoveInheritanceChildItem(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) 
-        {
-            return new RemoveInheritanceChildItem(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return ((object != null) && (object instanceof DocItem) && (((DocItem) object).getInheritanceParentItem() != null));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return ((object != null) 
-                    && (object instanceof DocItem)
-                    && (((DocItem)object).getInheritanceParentItem() != null));
-        }
-                
-    };
-    
-    private DocItem _docItemToRemove;
-    
-    RemoveInheritanceChildItem (FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-   @Override
-protected void doAction(Object context) 
-    {
-       if ((getParentDocItem() != null) && (getDocItemToRemove() != null)) {
-           getParentDocItem().removeFromInheritanceChildItems(getDocItemToRemove());
-       }
-    }
+	private DocItem _docItemToRemove;
 
-   public void setDocItemToRemove(DocItem docItemToRemove) 
-   {
-       _docItemToRemove = docItemToRemove;
-   }
+	RemoveInheritanceChildItem(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-   public DocItem getDocItemToRemove()
-   {
-       if (_docItemToRemove == null) {
-           if ((getFocusedObject() != null) && (getFocusedObject() instanceof DocItem)) {
-               _docItemToRemove = (DocItem)getFocusedObject();
-            }           
-       }
-       return _docItemToRemove;
-   }
+	@Override
+	protected void doAction(Object context) {
+		if ((getParentDocItem() != null) && (getDocItemToRemove() != null)) {
+			getParentDocItem().removeFromInheritanceChildItems(getDocItemToRemove());
+		}
+	}
 
-   public DocItem getParentDocItem()
-   {
-       if (getDocItemToRemove() != null) {
-           return getDocItemToRemove().getInheritanceParentItem();
-       }
-       return null;
-   }
+	public void setDocItemToRemove(DocItem docItemToRemove) {
+		_docItemToRemove = docItemToRemove;
+	}
 
-  }
+	public DocItem getDocItemToRemove() {
+		if (_docItemToRemove == null) {
+			if ((getFocusedObject() != null) && (getFocusedObject() instanceof DocItem)) {
+				_docItemToRemove = (DocItem) getFocusedObject();
+			}
+		}
+		return _docItemToRemove;
+	}
+
+	public DocItem getParentDocItem() {
+		if (getDocItemToRemove() != null) {
+			return getDocItemToRemove().getInheritanceParentItem();
+		}
+		return null;
+	}
+
+}

@@ -23,6 +23,6 @@ import java.awt.event.ActionEvent;
 
 public abstract class FlexoActionRedoFinalizer<A extends FlexoAction> extends FlexoActionRunnable<A> {
 
-    @Override
-	public abstract boolean run (ActionEvent event, A action) throws RedoException;
+	@Override
+	public abstract boolean run(ActionEvent event, A action) throws RedoException;
 }

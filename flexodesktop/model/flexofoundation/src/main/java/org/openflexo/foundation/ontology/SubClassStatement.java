@@ -29,43 +29,37 @@ public class SubClassStatement extends OntologyStatement {
 	private static final Logger logger = Logger.getLogger(SubClassStatement.class.getPackage().getName());
 
 	public static final String SUB_CLASS_URI = "http://www.w3.org/2000/01/rdf-schema#subClassOf";
-	
+
 	private OntologyObject parent;
-	
-	public SubClassStatement(OntologyObject subject, Statement s)
-	{
-		super(subject,s);
-		//System.out.println("s.getObject() is a "+s.getObject().getClass().getName()+" : "+s.getObject());
+
+	public SubClassStatement(OntologyObject subject, Statement s) {
+		super(subject, s);
+		// System.out.println("s.getObject() is a "+s.getObject().getClass().getName()+" : "+s.getObject());
 		if (s.getObject() instanceof Resource) {
-			parent = getOntologyLibrary().getOntologyObject(((Resource)s.getObject()).getURI());
-		}
-		else {
+			parent = getOntologyLibrary().getOntologyObject(((Resource) s.getObject()).getURI());
+		} else {
 			logger.warning("SubClassStatement: object is not a Resource !");
 		}
 	}
 
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "sub_class_statement";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return "SubClassStatement: "+getStatement();
+	public String getFullyQualifiedName() {
+		return "SubClassStatement: " + getStatement();
 	}
 
-
-	public OntologyObject getParent() 
-	{
+	public OntologyObject getParent() {
 		return parent;
 	}
 
 	@Override
-	public String toString() 
-	{
-		return getSubject().getName()+" is a subclass of "+(getParent() != null ? getParent().getName() : "<NOT_FOUND:"+getStatement().getObject()+">");
+	public String toString() {
+		return getSubject().getName() + " is a subclass of "
+				+ (getParent() != null ? getParent().getName() : "<NOT_FOUND:" + getStatement().getObject() + ">");
 	}
 
 }

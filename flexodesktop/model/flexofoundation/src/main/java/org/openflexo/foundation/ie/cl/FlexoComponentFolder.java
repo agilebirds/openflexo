@@ -72,13 +72,11 @@ import org.openflexo.toolbox.ToolBox;
 /**
  * @author bmangez <B>Class Description</B>
  */
-public class FlexoComponentFolder extends IECLObject implements
-		MutableTreeNode, InspectableObject, Sortable {
+public class FlexoComponentFolder extends IECLObject implements MutableTreeNode, InspectableObject, Sortable {
 
 	public static final FolderComparator COMPARATOR = new FolderComparator();
 
-	protected static final Logger logger = Logger
-			.getLogger(FlexoComponentFolder.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(FlexoComponentFolder.class.getPackage().getName());
 
 	// ==========================================================================
 	// ============================= Instance variables
@@ -118,20 +116,16 @@ public class FlexoComponentFolder extends IECLObject implements
 	@Override
 	public void finalizeDeserialization(Object builder) {
 		super.finalizeDeserialization(builder);
-		if (getComponents().size() > 0
-				&& !getComponents().firstElement().isIndexed()) {
-			ComponentDefinition[] cd = new ComponentDefinition[getComponents()
-					.size()];
+		if (getComponents().size() > 0 && !getComponents().firstElement().isIndexed()) {
+			ComponentDefinition[] cd = new ComponentDefinition[getComponents().size()];
 			cd = getComponents().toArray(cd);
 			Arrays.sort(cd, ComponentDefinition.COMPARATOR);
 			for (int i = 0; i < cd.length; i++) {
 				cd[i].setIndexValue(i + 1);
 			}
 		}
-		if (getSubFolders().size() > 0
-				&& !getSubFolders().firstElement().isIndexed()) {
-			FlexoComponentFolder[] folder = new FlexoComponentFolder[getSubFolders()
-					.size()];
+		if (getSubFolders().size() > 0 && !getSubFolders().firstElement().isIndexed()) {
+			FlexoComponentFolder[] folder = new FlexoComponentFolder[getSubFolders().size()];
 			folder = getSubFolders().toArray(folder);
 			Arrays.sort(folder, FlexoComponentFolder.COMPARATOR);
 			for (int i = 0; i < folder.length; i++) {
@@ -141,23 +135,20 @@ public class FlexoComponentFolder extends IECLObject implements
 	}
 
 	@Override
-    protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super
-				.getSpecificActionListForThatClass();
+	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
+		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
 		returned.add(AddComponent.actionType);
 		returned.add(AddComponentFolder.actionType);
 		return returned;
 	}
 
-	private static Vector<FlexoComponentFolder> getAllSubFoldersForFolder(
-			FlexoComponentFolder folder) {
+	private static Vector<FlexoComponentFolder> getAllSubFoldersForFolder(FlexoComponentFolder folder) {
 		Vector<FlexoComponentFolder> v = new Vector<FlexoComponentFolder>();
 		if (folder != null) {
 			v.add(folder);
 			Enumeration en = folder.getSubFolders().elements();
 			while (en.hasMoreElements()) {
-				FlexoComponentFolder f = (FlexoComponentFolder) en
-						.nextElement();
+				FlexoComponentFolder f = (FlexoComponentFolder) en.nextElement();
 				v.addAll(getAllSubFoldersForFolder(f));
 			}
 		}
@@ -165,14 +156,12 @@ public class FlexoComponentFolder extends IECLObject implements
 	}
 
 	/**
-	 * Creates a new FlexoComponentFolder with default values (public API
-	 * outside XML serialization)
-	 *
+	 * Creates a new FlexoComponentFolder with default values (public API outside XML serialization)
+	 * 
 	 * @param workflow
 	 * @throws DuplicateResourceException
 	 */
-	public FlexoComponentFolder(String folderName,
-			FlexoComponentLibrary componentLibrary) {
+	public FlexoComponentFolder(String folderName, FlexoComponentLibrary componentLibrary) {
 		this(componentLibrary);
 		_name = folderName;
 		generationRelativePath = "src/main/java/" + folderName;
@@ -188,19 +177,16 @@ public class FlexoComponentFolder extends IECLObject implements
 
 	/**
 	 * Creates and returns a newly created root process
-	 *
+	 * 
 	 * @return a newly created workflow
 	 */
-	public static FlexoComponentFolder createNewRootFolder(
-			FlexoComponentLibrary library) {
+	public static FlexoComponentFolder createNewRootFolder(FlexoComponentLibrary library) {
 		if (!library.hasRootFolder()) {
-			return createNewFolder(library, null, library.getProject()
-					.getProject().getProjectName());
+			return createNewFolder(library, null, library.getProject().getProject().getProjectName());
 
 		} else {
 			if (logger.isLoggable(Level.WARNING))
-				logger
-						.warning("Cannot create root folder: a root folder is already declared");
+				logger.warning("Cannot create root folder: a root folder is already declared");
 			return null;
 		}
 	}
@@ -212,8 +198,7 @@ public class FlexoComponentFolder extends IECLObject implements
 			boolean answer = false;
 			Enumeration en = getSubFolders().elements();
 			while (en.hasMoreElements() && !answer) {
-				answer = ((FlexoComponentFolder) en.nextElement())
-						.containsComponents();
+				answer = ((FlexoComponentFolder) en.nextElement()).containsComponents();
 			}
 			return answer;
 		}
@@ -222,15 +207,12 @@ public class FlexoComponentFolder extends IECLObject implements
 
 	/**
 	 * Creates and returns a newly created folder
-	 *
+	 * 
 	 * @return a newly created folder
 	 * @throws DuplicateResourceException
 	 */
-	public static FlexoComponentFolder createNewFolder(
-			FlexoComponentLibrary library, FlexoComponentFolder parentFolder,
-			String folderName) {
-		FlexoComponentFolder newFolder = new FlexoComponentFolder(folderName,
-				library);
+	public static FlexoComponentFolder createNewFolder(FlexoComponentLibrary library, FlexoComponentFolder parentFolder, String folderName) {
+		FlexoComponentFolder newFolder = new FlexoComponentFolder(folderName, library);
 		newFolder.setParent(parentFolder);
 		if (parentFolder != null) {
 			parentFolder.addToSubFolders(newFolder);
@@ -257,8 +239,7 @@ public class FlexoComponentFolder extends IECLObject implements
 		return v;
 	}
 
-	public FlexoComponentFolder getFlexoComponentFolderWithName(
-			String folderName) {
+	public FlexoComponentFolder getFlexoComponentFolderWithName(String folderName) {
 		for (FlexoComponentFolder folder : getAllSubFolders()) {
 			if (folder.getName().equals(folderName)) {
 				return folder;
@@ -278,27 +259,26 @@ public class FlexoComponentFolder extends IECLObject implements
 
 	/**
 	 * Overrides delete
+	 * 
 	 * @see org.openflexo.foundation.FlexoModelObject#delete()
 	 */
 	@Override
-	public void delete()
-	{
-	    getFatherFolder().removeFromSubFolders(this);
-	    super.delete();
-	    deleteObservers();
+	public void delete() {
+		getFatherFolder().removeFromSubFolders(this);
+		super.delete();
+		deleteObservers();
 	}
 
 	public boolean delete(ComponentDefinition def) {
 		if (getComponents().contains(def)) {
 			removeFromComponents(def);
-			//getComponentLibrary().notifyTreeStructureChanged();
+			// getComponentLibrary().notifyTreeStructureChanged();
 			return true;
 		} else {
 
 			Enumeration en = getSubFolders().elements();
 			while (en.hasMoreElements()) {
-				boolean isDeleted = ((FlexoComponentFolder) en.nextElement())
-						.delete(def);
+				boolean isDeleted = ((FlexoComponentFolder) en.nextElement()).delete(def);
 				if (isDeleted)
 					return true;
 			}
@@ -323,8 +303,7 @@ public class FlexoComponentFolder extends IECLObject implements
 		// Ben, il faudrait que tu solutionnes le pb a la source !
 		if (value.lastIndexOf("#") > -1) {
 			if (logger.isLoggable(Level.WARNING))
-				logger
-						.warning("Tab notation with '#' is deprecated and should be replaced by tab_name only ! See Ben to do it !");
+				logger.warning("Tab notation with '#' is deprecated and should be replaced by tab_name only ! See Ben to do it !");
 			StringTokenizer st = new StringTokenizer(value, "#");
 			String newValue = null;
 			while (st.hasMoreTokens()) {
@@ -344,26 +323,22 @@ public class FlexoComponentFolder extends IECLObject implements
 		ComponentDefinition cur = null;
 		en = getSubFolders().elements();
 		while (en.hasMoreElements() && cur == null) {
-			cur = ((FlexoComponentFolder) en.nextElement())
-					.getComponentNamed(searchedName);
+			cur = ((FlexoComponentFolder) en.nextElement()).getComponentNamed(searchedName);
 		}
 
-		if (cur != null
-				&& cur.getComponentName().toLowerCase().equals(
-						searchedName.toLowerCase()))
+		if (cur != null && cur.getComponentName().toLowerCase().equals(searchedName.toLowerCase()))
 			return cur;
 		return null;
 	}
 
 	/**
-	 * Returns reference to the main object in which this XML-serializable
-	 * object is contained relating to storing scheme: here it's the component
-	 * library
-	 *
+	 * Returns reference to the main object in which this XML-serializable object is contained relating to storing scheme: here it's the
+	 * component library
+	 * 
 	 * @return the component library object
 	 */
 	@Override
-    public XMLStorageResourceData getXMLResourceData() {
+	public XMLStorageResourceData getXMLResourceData() {
 		return getComponentLibrary();
 	}
 
@@ -378,8 +353,7 @@ public class FlexoComponentFolder extends IECLObject implements
 		}
 		en = getSubFolders().elements();
 		while (en.hasMoreElements()) {
-			answer.addAll(((FlexoComponentFolder) en.nextElement())
-					.getOperationsComponentList());
+			answer.addAll(((FlexoComponentFolder) en.nextElement()).getOperationsComponentList());
 		}
 		return answer;
 	}
@@ -395,8 +369,7 @@ public class FlexoComponentFolder extends IECLObject implements
 		}
 		en = getSubFolders().elements();
 		while (en.hasMoreElements()) {
-			answer.addAll(((FlexoComponentFolder) en.nextElement())
-					.getTabComponentList());
+			answer.addAll(((FlexoComponentFolder) en.nextElement()).getTabComponentList());
 		}
 		return answer;
 	}
@@ -412,14 +385,13 @@ public class FlexoComponentFolder extends IECLObject implements
 		}
 		en = getSubFolders().elements();
 		while (en.hasMoreElements()) {
-			answer.addAll(((FlexoComponentFolder) en.nextElement())
-					.getPopupsComponentList());
+			answer.addAll(((FlexoComponentFolder) en.nextElement()).getPopupsComponentList());
 		}
 		return answer;
 	}
 
 	@Override
-    public FlexoProject getProject() {
+	public FlexoProject getProject() {
 		return getComponentLibrary().getProject();
 	}
 
@@ -439,7 +411,7 @@ public class FlexoComponentFolder extends IECLObject implements
 			v.addAll(f.getAllComponents());
 		}
 		Enumeration<ComponentDefinition> en1 = getSortedComponents();
-		while(en1.hasMoreElements())
+		while (en1.hasMoreElements())
 			v.add(en1.nextElement());
 		return v;
 	}
@@ -454,9 +426,8 @@ public class FlexoComponentFolder extends IECLObject implements
 	public void addToComponents(ComponentDefinition cd) {
 		if ((cd.getFolder() != null) && (cd.getFolder() != this)) {
 			if (logger.isLoggable(Level.WARNING))
-				logger.warning("UNEXPECTEDELY Move component " + cd
-						+ " from folder " + cd.getFolder().getName()
-						+ " to folder " + getName());
+				logger.warning("UNEXPECTEDELY Move component " + cd + " from folder " + cd.getFolder().getName() + " to folder "
+						+ getName());
 			cd.getFolder().removeFromComponents(cd);
 		}
 		_components.add(cd);
@@ -466,7 +437,7 @@ public class FlexoComponentFolder extends IECLObject implements
 			for (Enumeration<ComponentDefinition> en = getSortedComponents(); en.hasMoreElements(); i++) {
 				ComponentDefinition cd1 = en.nextElement();
 				if (ComponentDefinition.COMPARATOR.compare(cd1, cd) > 0) {
-					cd.setIndex(i+1);
+					cd.setIndex(i + 1);
 					break;
 				}
 			}
@@ -476,8 +447,7 @@ public class FlexoComponentFolder extends IECLObject implements
 		notifyObservers(new ComponentInserted(cd, this));
 	}
 
-	public void removeFromComponents(ComponentDefinition sub)
-	{
+	public void removeFromComponents(ComponentDefinition sub) {
 		_components.remove(sub);
 		sub.setFolder(null);
 		FlexoIndexManager.reIndexObjectOfArray(getComponents().toArray(new ComponentDefinition[0]));
@@ -485,8 +455,7 @@ public class FlexoComponentFolder extends IECLObject implements
 		notifyObservers(new ComponentRemoved(sub, this));
 	}
 
-	public Enumeration<FlexoComponentFolder> getSortedSubFolders()
-	{
+	public Enumeration<FlexoComponentFolder> getSortedSubFolders() {
 		disableObserving();
 		FlexoComponentFolder[] o = FlexoIndexManager.sortArray(getSubFolders().toArray(new FlexoComponentFolder[0]));
 		enableObserving();
@@ -509,18 +478,17 @@ public class FlexoComponentFolder extends IECLObject implements
 			if (!isDeserializing()) {
 				if (getSubFolders().size() > 0) {
 					int i = 0;
-					for (Enumeration<FlexoComponentFolder> en = getSortedSubFolders(); en.hasMoreElements()&& i<getSubFolders().size(); i++ ) {
+					for (Enumeration<FlexoComponentFolder> en = getSortedSubFolders(); en.hasMoreElements() && i < getSubFolders().size(); i++) {
 						FlexoComponentFolder f = getSubFolders().get(i);
 						if (FlexoComponentFolder.COMPARATOR.compare(f, sub) > 0) {
-							sub.setIndex(i+1);
+							sub.setIndex(i + 1);
 							break;
 						}
 					}
-                    // We don't care if no index has been set, it will then keep its current one which is the last one.
+					// We don't care if no index has been set, it will then keep its current one which is the last one.
 				} else
 					sub.setIndex(1);
-				FlexoIndexManager.reIndexObjectOfArray(getSubFolders()
-						.toArray(new FlexoComponentFolder[0]));
+				FlexoIndexManager.reIndexObjectOfArray(getSubFolders().toArray(new FlexoComponentFolder[0]));
 			}
 			sub.setComponentLibrary(getComponentLibrary());
 			setChanged();
@@ -541,13 +509,10 @@ public class FlexoComponentFolder extends IECLObject implements
 	}
 
 	@Override
-	public void setName(String name) throws DuplicateFolderNameException,
-			InvalidNameException {
-		if (getFatherFolder() != null
-				&& getFatherFolder().getFolderNamed(name) != null)
+	public void setName(String name) throws DuplicateFolderNameException, InvalidNameException {
+		if (getFatherFolder() != null && getFatherFolder().getFolderNamed(name) != null)
 			throw new DuplicateFolderNameException(this, name);
-		if (!isDeserializing()
-				&& !name.matches(FileUtils.GOOD_CHARACTERS_REG_EXP + "+")) {
+		if (!isDeserializing() && !name.matches(FileUtils.GOOD_CHARACTERS_REG_EXP + "+")) {
 			throw new InvalidNameException(name);
 		}
 		String old = _name;
@@ -590,8 +555,7 @@ public class FlexoComponentFolder extends IECLObject implements
 	@Override
 	public void setParent(MutableTreeNode arg0) {
 		if (arg0 != null) {
-			setComponentLibrary(((FlexoComponentFolder) arg0)
-					.getComponentLibrary());
+			setComponentLibrary(((FlexoComponentFolder) arg0).getComponentLibrary());
 		}
 		_fatherFolder = (FlexoComponentFolder) arg0;
 		if (!isDeserializing())
@@ -659,11 +623,11 @@ public class FlexoComponentFolder extends IECLObject implements
 	}
 
 	public String getComponentPrefix() {
-		if (componentPrefix==null){
+		if (componentPrefix == null) {
 			if (getProject().getProjectName().length() > 2)
 				componentPrefix = getProject().getProjectName().substring(0, 3).toUpperCase();
-	        else
-	        	componentPrefix = getProject().getProjectName().toUpperCase();
+			else
+				componentPrefix = getProject().getProjectName().toUpperCase();
 		}
 		return componentPrefix;
 	}
@@ -685,37 +649,29 @@ public class FlexoComponentFolder extends IECLObject implements
 	}
 
 	public static void convertComponent(ComponentDefinition def) {
-		ComponentConverter2 converter = new ComponentConverter2(def
-				.getComponentResource());
+		ComponentConverter2 converter = new ComponentConverter2(def.getComponentResource());
 		if (converter.conversionWasSucessfull) {
-			System.out.println("SUCCES IN converting " + def.getComponentName()
-					+ " in resource :"
+			System.out.println("SUCCES IN converting " + def.getComponentName() + " in resource :"
 					+ def.getComponentResource().getResourceIdentifier());
 
 		} else {
-			System.out.println("FAILURE IN converting "
-					+ def.getComponentName() + " in resource :"
+			System.out.println("FAILURE IN converting " + def.getComponentName() + " in resource :"
 					+ def.getComponentResource().getResourceIdentifier());
 		}
 	}
 
 	public static void convertComponent(FlexoResource res) {
 		if (res instanceof FlexoFileResource) {
-			System.out.println("converting  resource :"
-					+ res.getResourceIdentifier());
-			ComponentConverter2 converter = new ComponentConverter2(
-					(FlexoFileResource) res);
+			System.out.println("converting  resource :" + res.getResourceIdentifier());
+			ComponentConverter2 converter = new ComponentConverter2((FlexoFileResource) res);
 			if (converter.conversionWasSucessfull) {
-				System.out.println("SUCCES IN converting  resource :"
-						+ res.getResourceIdentifier());
+				System.out.println("SUCCES IN converting  resource :" + res.getResourceIdentifier());
 
 			} else {
-				System.out.println("FAILURE IN converting resource :"
-						+ res.getResourceIdentifier());
+				System.out.println("FAILURE IN converting resource :" + res.getResourceIdentifier());
 			}
 		} else {
-			System.out.println("FAILURE IN converting resource :"
-					+ res.getResourceIdentifier() + " NOT A FILE RESOURCE");
+			System.out.println("FAILURE IN converting resource :" + res.getResourceIdentifier() + " NOT A FILE RESOURCE");
 
 		}
 	}
@@ -741,23 +697,19 @@ public class FlexoComponentFolder extends IECLObject implements
 			} catch (Exception e) {
 				// Warns about the exception
 				if (logger.isLoggable(Level.WARNING))
-					logger.warning("Exception raised: "
-							+ e.getClass().getName()
-							+ ". See console for details.");
+					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
 				e.printStackTrace();
 			}
 		}
 
-		private Element createComponentInstanceElement(String prefix,
-				String aName) {
+		private Element createComponentInstanceElement(String prefix, String aName) {
 			Element answer = new Element(prefix + "ComponentInstance");
 			answer.setAttribute("componentName", aName);
 			return answer;
 		}
 
 		private void convert() {
-			Iterator tableElementIterator = document
-					.getDescendants(new ElementFilter("IEButton"));
+			Iterator tableElementIterator = document.getDescendants(new ElementFilter("IEButton"));
 			Vector temp = new Vector();
 			while (tableElementIterator.hasNext()) {
 				temp.add(tableElementIterator.next());
@@ -767,20 +719,15 @@ public class FlexoComponentFolder extends IECLObject implements
 			while (en.hasMoreElements()) {
 				Element nextElement = (Element) en.nextElement();
 				if (nextElement.getAttributeValue("popupName") != null) {
-					nextElement
-							.addContent(createComponentInstanceElement("Popup",
-									nextElement.getAttributeValue("popupName")));
+					nextElement.addContent(createComponentInstanceElement("Popup", nextElement.getAttributeValue("popupName")));
 					nextElement.removeAttribute("popupName");
 				} else if (nextElement.getAttributeValue("pageName") != null) {
-					nextElement.addContent(createComponentInstanceElement(
-							"Operation", nextElement
-									.getAttributeValue("pageName")));
+					nextElement.addContent(createComponentInstanceElement("Operation", nextElement.getAttributeValue("pageName")));
 					nextElement.removeAttribute("pageName");
 				}
 			}
 
-			tableElementIterator = document.getDescendants(new ElementFilter(
-					"IEHyperlink"));
+			tableElementIterator = document.getDescendants(new ElementFilter("IEHyperlink"));
 			temp = new Vector();
 			while (tableElementIterator.hasNext()) {
 				temp.add(tableElementIterator.next());
@@ -790,19 +737,14 @@ public class FlexoComponentFolder extends IECLObject implements
 			while (en.hasMoreElements()) {
 				Element nextElement = (Element) en.nextElement();
 				if (nextElement.getAttributeValue("pageName") != null) {
-					nextElement.addContent(createComponentInstanceElement(
-							"Operation", nextElement
-									.getAttributeValue("pageName")));
+					nextElement.addContent(createComponentInstanceElement("Operation", nextElement.getAttributeValue("pageName")));
 					nextElement.removeAttribute("pageName");
 				} else if (nextElement.getAttributeValue("pageName") != null) {
-					nextElement.addContent(createComponentInstanceElement(
-							"Operation", nextElement
-									.getAttributeValue("pageName")));
+					nextElement.addContent(createComponentInstanceElement("Operation", nextElement.getAttributeValue("pageName")));
 					nextElement.removeAttribute("pageName");
 				}
 			}
-			tableElementIterator = document.getDescendants(new ElementFilter(
-					"IEThumbnail"));
+			tableElementIterator = document.getDescendants(new ElementFilter("IEThumbnail"));
 			temp = new Vector();
 			while (tableElementIterator.hasNext()) {
 				temp.add(tableElementIterator.next());
@@ -812,9 +754,7 @@ public class FlexoComponentFolder extends IECLObject implements
 			while (en.hasMoreElements()) {
 				Element nextElement = (Element) en.nextElement();
 				if (nextElement.getAttributeValue("woComponentName") != null) {
-					nextElement.addContent(createComponentInstanceElement(
-							"Thumbnail", nextElement
-									.getAttributeValue("woComponentName")));
+					nextElement.addContent(createComponentInstanceElement("Thumbnail", nextElement.getAttributeValue("woComponentName")));
 					nextElement.removeAttribute("woComponentName");
 				}
 			}
@@ -839,13 +779,12 @@ public class FlexoComponentFolder extends IECLObject implements
 	}
 
 	/**
-	 * Return a Vector of embedded IEObjects at this level. NOTE that this is
-	 * NOT a recursive method
-	 *
+	 * Return a Vector of embedded IEObjects at this level. NOTE that this is NOT a recursive method
+	 * 
 	 * @return a Vector of IEObject instances
 	 */
 	@Override
-    public Vector<IObject> getEmbeddedIEObjects() {
+	public Vector<IObject> getEmbeddedIEObjects() {
 		Vector answer = new Vector();
 		answer.addAll(getSubFolders());
 		answer.addAll(getComponents());
@@ -853,14 +792,13 @@ public class FlexoComponentFolder extends IECLObject implements
 	}
 
 	@Override
-    public String getFullyQualifiedName() {
+	public String getFullyQualifiedName() {
 		return "Folder:" + getName();
 	}
 
 	/**
-	 * Returns a flag indicating if this object is valid according to default
-	 * validation model
-	 *
+	 * Returns a flag indicating if this object is valid according to default validation model
+	 * 
 	 * @return boolean
 	 */
 	@Override
@@ -869,9 +807,8 @@ public class FlexoComponentFolder extends IECLObject implements
 	}
 
 	/**
-	 * Returns a flag indicating if this object is valid according to specified
-	 * validation model
-	 *
+	 * Returns a flag indicating if this object is valid according to specified validation model
+	 * 
 	 * @return boolean
 	 */
 	@Override
@@ -880,8 +817,7 @@ public class FlexoComponentFolder extends IECLObject implements
 	}
 
 	/**
-	 * Validates this object by building new ValidationReport object Default
-	 * validation model is used to perform this validation.
+	 * Validates this object by building new ValidationReport object Default validation model is used to perform this validation.
 	 */
 	@Override
 	public ValidationReport validate() {
@@ -889,8 +825,7 @@ public class FlexoComponentFolder extends IECLObject implements
 	}
 
 	/**
-	 * Validates this object by building new ValidationReport object Supplied
-	 * validation model is used to perform this validation.
+	 * Validates this object by building new ValidationReport object Supplied validation model is used to perform this validation.
 	 */
 	@Override
 	public ValidationReport validate(ValidationModel validationModel) {
@@ -898,12 +833,11 @@ public class FlexoComponentFolder extends IECLObject implements
 	}
 
 	/**
-	 * Validates this object by appending eventual issues to supplied
-	 * ValidationReport. Default validation model is used to perform this
+	 * Validates this object by appending eventual issues to supplied ValidationReport. Default validation model is used to perform this
 	 * validation.
-	 *
-	 * @param report,
-	 *            a ValidationReport object on which found issues are appened
+	 * 
+	 * @param report
+	 *            , a ValidationReport object on which found issues are appened
 	 */
 	@Override
 	public void validate(ValidationReport report) {
@@ -911,16 +845,14 @@ public class FlexoComponentFolder extends IECLObject implements
 	}
 
 	/**
-	 * Validates this object by appending eventual issues to supplied
-	 * ValidationReport. Supplied validation model is used to perform this
+	 * Validates this object by appending eventual issues to supplied ValidationReport. Supplied validation model is used to perform this
 	 * validation.
-	 *
-	 * @param report,
-	 *            a ValidationReport object on which found issues are appened
+	 * 
+	 * @param report
+	 *            , a ValidationReport object on which found issues are appened
 	 */
 	@Override
-	public void validate(ValidationReport report,
-			ValidationModel validationModel) {
+	public void validate(ValidationReport report, ValidationModel validationModel) {
 		validationModel.validate(this, report);
 	}
 
@@ -930,13 +862,10 @@ public class FlexoComponentFolder extends IECLObject implements
 		}
 
 		@Override
-        public ValidationIssue applyValidation(final Validable object) {
+		public ValidationIssue applyValidation(final Validable object) {
 			final FlexoComponentFolder folder = (FlexoComponentFolder) object;
-			if ((folder.getFatherFolder() == null)
-					&& (folder.getComponentPrefix() == null || folder
-							.getComponentPrefix().equals(""))) {
-				ValidationError error = new ValidationError(this, object,
-						"folder_($object.name)_has_no_component_prefix");
+			if ((folder.getFatherFolder() == null) && (folder.getComponentPrefix() == null || folder.getComponentPrefix().equals(""))) {
+				ValidationError error = new ValidationError(this, object, "folder_($object.name)_has_no_component_prefix");
 
 				return error;
 			}
@@ -945,20 +874,17 @@ public class FlexoComponentFolder extends IECLObject implements
 	}
 
 	/**
-	 * Search in the direct sub-folders of this folder for a folder named
-	 * <code>name</code> (case insensitive).
-	 *
-	 * @param name -
-	 *            the name of the direct sub-folder to find
-	 * @return the direct sub-folder named <code>name</code> or null if it
-	 *         cannot be found.
+	 * Search in the direct sub-folders of this folder for a folder named <code>name</code> (case insensitive).
+	 * 
+	 * @param name
+	 *            - the name of the direct sub-folder to find
+	 * @return the direct sub-folder named <code>name</code> or null if it cannot be found.
 	 */
 	public FlexoComponentFolder getFolderNamed(String name) {
 		name = name.toLowerCase();
 		Enumeration<FlexoComponentFolder> en = getSubFolders().elements();
 		while (en.hasMoreElements()) {
-			FlexoComponentFolder folder = en
-					.nextElement();
+			FlexoComponentFolder folder = en.nextElement();
 			if (folder.getName().toLowerCase().equals(name))
 				return folder;
 		}
@@ -976,20 +902,18 @@ public class FlexoComponentFolder extends IECLObject implements
 		return false;
 	}
 
-	public static class FolderComparator implements
-			Comparator<FlexoComponentFolder> {
+	public static class FolderComparator implements Comparator<FlexoComponentFolder> {
 		protected FolderComparator() {
 		}
 
 		/**
 		 * Overrides compare
-		 *
+		 * 
 		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 		 */
 		@Override
 		public int compare(FlexoComponentFolder o1, FlexoComponentFolder o2) {
-			return (o1).getName().compareTo(
-					(o2).getName());
+			return (o1).getName().compareTo((o2).getName());
 		}
 	}
 
@@ -1004,9 +928,7 @@ public class FlexoComponentFolder extends IECLObject implements
 				retval = f.getFolderTyped(type);
 		}
 		if (isRootFolder() && retval == null) {
-			retval = createNewFolder(getComponentLibrary(), this,
-					FlexoLocalization.localizedForKey(type.getName()
-							.toLowerCase()));
+			retval = createNewFolder(getComponentLibrary(), this, FlexoLocalization.localizedForKey(type.getName().toLowerCase()));
 			retval.setFolderType(type);
 		}
 		return retval;
@@ -1026,11 +948,11 @@ public class FlexoComponentFolder extends IECLObject implements
 
 	/**
 	 * Overrides getClassNameKey
-	 *
+	 * 
 	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
 	 */
 	@Override
-    public String getClassNameKey() {
+	public String getClassNameKey() {
 		return "component_folder";
 	}
 
@@ -1040,10 +962,10 @@ public class FlexoComponentFolder extends IECLObject implements
 
 	@Override
 	public int getIndex() {
-	    if (isBeingCloned())
-            return -1;
+		if (isBeingCloned())
+			return -1;
 		if (index == -1 && getCollection() != null) {
-			index = getCollection().length ;
+			index = getCollection().length;
 			FlexoIndexManager.reIndexObjectOfArray(getCollection());
 		}
 		return index;
@@ -1056,9 +978,9 @@ public class FlexoComponentFolder extends IECLObject implements
 			return;
 		}
 		FlexoIndexManager.switchIndexForKey(this.index, index, this);
-		if (getIndex()!=index) {
+		if (getIndex() != index) {
 			setChanged();
-			AttributeDataModification dm = new AttributeDataModification("index",null,getIndex());
+			AttributeDataModification dm = new AttributeDataModification("index", null, getIndex());
 			dm.setReentrant(true);
 			notifyObservers(dm);
 		}
@@ -1071,8 +993,8 @@ public class FlexoComponentFolder extends IECLObject implements
 
 	@Override
 	public void setIndexValue(int index) {
-        if (this.index==index)
-            return;
+		if (this.index == index)
+			return;
 		int old = this.index;
 		this.index = index;
 		setChanged();
@@ -1085,14 +1007,13 @@ public class FlexoComponentFolder extends IECLObject implements
 
 	/**
 	 * Overrides getCollection
-	 *
+	 * 
 	 * @see org.openflexo.foundation.utils.Sortable#getCollection()
 	 */
 	@Override
-	public FlexoComponentFolder[] getCollection() 
-	{
+	public FlexoComponentFolder[] getCollection() {
 		if (getFatherFolder() == null)
-			return new FlexoComponentFolder[]{this};
+			return new FlexoComponentFolder[] { this };
 		return getFatherFolder().getSubFolders().toArray(new FlexoComponentFolder[0]);
 	}
 

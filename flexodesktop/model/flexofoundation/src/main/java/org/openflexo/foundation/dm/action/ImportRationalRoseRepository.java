@@ -27,51 +27,40 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMObject;
 
+public class ImportRationalRoseRepository extends CreateDMRepository {
 
-public class ImportRationalRoseRepository extends CreateDMRepository 
-{
+	static final Logger logger = Logger.getLogger(ImportRationalRoseRepository.class.getPackage().getName());
 
-    static final Logger logger = Logger.getLogger(ImportRationalRoseRepository.class.getPackage().getName());
+	public static FlexoActionType<ImportRationalRoseRepository, DMObject, DMObject> actionType = new FlexoActionType<ImportRationalRoseRepository, DMObject, DMObject>(
+			"import_rational_rose", FlexoActionType.importMenu, FlexoActionType.defaultGroup) {
 
-    public static FlexoActionType<ImportRationalRoseRepository,DMObject,DMObject> actionType 
-    = new FlexoActionType<ImportRationalRoseRepository,DMObject,DMObject> (
-    		"import_rational_rose",
-    		FlexoActionType.importMenu,
-    		FlexoActionType.defaultGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public ImportRationalRoseRepository makeNewAction(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
+			return new ImportRationalRoseRepository(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public ImportRationalRoseRepository makeNewAction(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) 
-        {
-            return new ImportRationalRoseRepository(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
+			return DataImporterLoader.KnownDataImporter.RATIONAL_ROSE_IMPORTER.isAvailable();
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) 
-        {
-            return DataImporterLoader.KnownDataImporter.RATIONAL_ROSE_IMPORTER.isAvailable();
-        }
+		@Override
+		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) 
-        {
-            return true;
-         }
-                
-    };
-    
-    ImportRationalRoseRepository (DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-    @Override
-	public String getRepositoryType() 
-    {
-        return RATIONAL_ROSE_REPOSITORY;
-    }
+	ImportRationalRoseRepository(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
- 
+	@Override
+	public String getRepositoryType() {
+		return RATIONAL_ROSE_REPOSITORY;
+	}
+
 }

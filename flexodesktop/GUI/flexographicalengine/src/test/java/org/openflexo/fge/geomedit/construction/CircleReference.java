@@ -24,37 +24,30 @@ import org.openflexo.fge.geom.FGECircle;
 public class CircleReference extends CircleConstruction {
 
 	public CircleConstruction reference;
-	
-	public CircleReference() 
-	{
+
+	public CircleReference() {
 		super();
 	}
 
-	public CircleReference(CircleConstruction aReference) 
-	{
+	public CircleReference(CircleConstruction aReference) {
 		this();
 		this.reference = aReference;
 	}
 
-	
 	@Override
-	protected FGECircle computeData()
-	{
+	protected FGECircle computeData() {
 		return reference.getData();
-	}
-	
-	@Override
-	public String toString()
-	{
-		return "CircleReference["+reference.toString()+"]";
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public String toString() {
+		return "CircleReference[" + reference.toString() + "]";
+	}
+
+	@Override
+	public GeometricConstruction[] getDepends() {
 		GeometricConstruction[] returned = { reference };
 		return returned;
 	}
-
 
 }

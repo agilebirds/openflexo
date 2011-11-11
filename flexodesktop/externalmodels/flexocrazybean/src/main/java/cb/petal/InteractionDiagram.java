@@ -18,31 +18,32 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents InteractionDiagram object
- *
+ * 
  * @version $Id: InteractionDiagram.java,v 1.3 2011/09/12 11:46:49 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class InteractionDiagram extends Diagram {
-  public InteractionDiagram(PetalNode parent, Collection params) {
-    super(parent, "InteractionDiagram", params);
-  }
+	public InteractionDiagram(PetalNode parent, Collection params) {
+		super(parent, "InteractionDiagram", params);
+	}
 
-  public InteractionDiagram() {
-    super("InteractionDiagram");
-  }
+	public InteractionDiagram() {
+		super("InteractionDiagram");
+	}
 
-  // TODO
-  @Override
-protected View searchView(String qual_name) {
-    throw new RuntimeException("TODO: Not implemented yet");
-  }
+	// TODO
+	@Override
+	protected View searchView(String qual_name) {
+		throw new RuntimeException("TODO: Not implemented yet");
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

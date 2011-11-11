@@ -19,9 +19,10 @@
  */
 package org.openflexo.docxparser.dto.api;
 
-public interface IParsedFlexoContent
-{
+public interface IParsedFlexoContent {
 	public IParsedFlexoObject getParsedFlexoObject();
+
 	public IParsedHtml getFlexoContent();
+
 	public void setFlexoContent(IParsedHtml flexoContent);
 }

@@ -30,35 +30,31 @@ import org.openflexo.fge.graphics.ForegroundStyle.CapStyle;
 import org.openflexo.foundation.wkf.node.ComplexOperator;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
-
 public class OperatorComplexGR extends OperatorGR<ComplexOperator> {
 
 	private ForegroundStyle painterForeground;
 
-	public OperatorComplexGR(ComplexOperator operatorNode, ProcessRepresentation aDrawing, boolean isInPalet) 
-	{
+	public OperatorComplexGR(ComplexOperator operatorNode, ProcessRepresentation aDrawing, boolean isInPalet) {
 		super(operatorNode, aDrawing, isInPalet);
 		painterForeground = ForegroundStyle.makeStyle(Color.BLACK);
 		painterForeground.setLineWidth(4.0);
 		painterForeground.setCapStyle(CapStyle.CAP_ROUND);
 		setShapePainter(new ShapePainter() {
 
-		@Override
-		public void paintShape(FGEShapeGraphics g)
-		{
-			g.useForegroundStyle(painterForeground);
-			g.drawLine(0.35, 0.35, 0.65, 0.65);
-			g.drawLine(0.65, 0.35, 0.35, 0.65);
-			
-			g.drawLine(0.5, 0.25, 0.5, 0.75);
-			g.drawLine(0.25, 0.5, 0.75, 0.5);
-		}
+			@Override
+			public void paintShape(FGEShapeGraphics g) {
+				g.useForegroundStyle(painterForeground);
+				g.drawLine(0.35, 0.35, 0.65, 0.65);
+				g.drawLine(0.65, 0.35, 0.35, 0.65);
+
+				g.drawLine(0.5, 0.25, 0.5, 0.75);
+				g.drawLine(0.25, 0.5, 0.75, 0.5);
+			}
 		});
 	}
-	
+
 	@Override
-	public ImageIcon getImageIcon() 
-	{
+	public ImageIcon getImageIcon() {
 		return null;
 	}
 }

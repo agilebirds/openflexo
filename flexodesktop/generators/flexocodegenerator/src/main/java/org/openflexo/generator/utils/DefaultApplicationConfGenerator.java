@@ -32,65 +32,58 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileFormat;
 
-
 /**
  * @author gpolet
  * 
  */
-public class DefaultApplicationConfGenerator extends MetaFileGenerator
-{
-    private static final String TEMPLATE_NAME = "DefaultApplication.conf.vm";
+public class DefaultApplicationConfGenerator extends MetaFileGenerator {
+	private static final String TEMPLATE_NAME = "DefaultApplication.conf.vm";
 
 	private static final Logger logger = FlexoLogger.getLogger(DefaultApplicationConfGenerator.class.getPackage().getName());
 
-    private static final String FILE_NAME = "DefaultApplication.conf";
-    public static final String IDENTIFIER = "DEFAULT_APPLICATION_CONF";
+	private static final String FILE_NAME = "DefaultApplication.conf";
+	public static final String IDENTIFIER = "DEFAULT_APPLICATION_CONF";
 
-    /**
-     * @param aProject
-     */
-    public DefaultApplicationConfGenerator(ProjectGenerator projectGenerator)
-    {
-        super(projectGenerator, FileFormat.TEXT, ResourceType.TEXT_FILE, FILE_NAME, IDENTIFIER);
-    }
+	/**
+	 * @param aProject
+	 */
+	public DefaultApplicationConfGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, FileFormat.TEXT, ResourceType.TEXT_FILE, FILE_NAME, IDENTIFIER);
+	}
 
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
-   /**
+	/**
      * 
      */
-    @Override
-	public void generate(boolean forceRegenerate)
-    {
-       	if (!forceRegenerate && !needsGeneration()) {
+	@Override
+	public void generate(boolean forceRegenerate) {
+		if (!forceRegenerate && !needsGeneration()) {
 			return;
 		}
-    	try {
-    		refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating")+ " "+getIdentifier(),false);
-    		startGeneration();
-    		String generated = merge(TEMPLATE_NAME, defaultContext());
-    		generatedCode = new GeneratedTextResource(FILE_NAME, generated);
-    		stopGeneration();
-      	} catch (GenerationException e) {
-    		setGenerationException(e);
+		try {
+			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + getIdentifier(), false);
+			startGeneration();
+			String generated = merge(TEMPLATE_NAME, defaultContext());
+			generatedCode = new GeneratedTextResource(FILE_NAME, generated);
+			stopGeneration();
+		} catch (GenerationException e) {
+			setGenerationException(e);
 		} catch (Exception e) {
-			setGenerationException(new UnexpectedExceptionOccuredException(e,getProjectGenerator()));
-   	}
-    }
+			setGenerationException(new UnexpectedExceptionOccuredException(e, getProjectGenerator()));
+		}
+	}
 
 	@Override
-	public String getRelativePath() 
-	{
+	public String getRelativePath() {
 		return "";
 	}
 
 	@Override
-	public CGSymbolicDirectory getSymbolicDirectory(CGRepository repository) 
-	{
+	public CGSymbolicDirectory getSymbolicDirectory(CGRepository repository) {
 		return repository.getResourcesSymbolicDirectory();
 	}
 

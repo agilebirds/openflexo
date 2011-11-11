@@ -32,107 +32,95 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
+class DefaultValuePerspective extends FlexoPerspective<ComponentInstance> {
 
-class DefaultValuePerspective extends FlexoPerspective<ComponentInstance>
-	{
-
-		/**
+	/**
 		 * 
 		 */
-		private final IEController _controller;
+	private final IEController _controller;
 
-		/**
-		 * @param controller TODO
-		 * 
-		 */
-		public DefaultValuePerspective(IEController controller)
-		{
-			super("default_values_perspective");
-			_controller = controller;
-		}
+	/**
+	 * @param controller
+	 *            TODO
+	 * 
+	 */
+	public DefaultValuePerspective(IEController controller) {
+		super("default_values_perspective");
+		_controller = controller;
+	}
 
-		/**
-		 * Overrides getIcon
-		 * 
-		 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
-		 */
-		@Override
-		public ImageIcon getActiveIcon()
-		{
-			return IconLibrary.LIST_PERSPECTIVE_ACTIVE_ICON;
-		}
+	/**
+	 * Overrides getIcon
+	 * 
+	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 */
+	@Override
+	public ImageIcon getActiveIcon() {
+		return IconLibrary.LIST_PERSPECTIVE_ACTIVE_ICON;
+	}
 
-		/**
-		 * Overrides getSelectedIcon
-		 * 
-		 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
-		 */
-		@Override
-		public ImageIcon getSelectedIcon()
-		{
-			return IconLibrary.LIST_PERSPECTIVE_SELECTED_ICON;
-		}
+	/**
+	 * Overrides getSelectedIcon
+	 * 
+	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
+	 */
+	@Override
+	public ImageIcon getSelectedIcon() {
+		return IconLibrary.LIST_PERSPECTIVE_SELECTED_ICON;
+	}
 
-		@Override
-		public ComponentInstance getDefaultObject(FlexoModelObject proposedObject) 
-		{
-			if (proposedObject instanceof ComponentInstance) return (ComponentInstance)proposedObject;
-			return null;
-		}
+	@Override
+	public ComponentInstance getDefaultObject(FlexoModelObject proposedObject) {
+		if (proposedObject instanceof ComponentInstance)
+			return (ComponentInstance) proposedObject;
+		return null;
+	}
 
-		@Override
-		public boolean hasModuleViewForObject(FlexoModelObject object) {
-			return object instanceof ComponentInstance;
-		}
+	@Override
+	public boolean hasModuleViewForObject(FlexoModelObject object) {
+		return object instanceof ComponentInstance;
+	}
 
-		@Override
-		public ModuleView<ComponentInstance> createModuleViewForObject(ComponentInstance object, FlexoController controller) 
-		{
-			return new IEExampleValuesView((IEController)controller, object);
-		}
+	@Override
+	public ModuleView<ComponentInstance> createModuleViewForObject(ComponentInstance object, FlexoController controller) {
+		return new IEExampleValuesView((IEController) controller, object);
+	}
 
-		@Override
-		public boolean isAlwaysVisible() 
-		{
-			return true;
-		}
-		
-		@Override
-		public void notifyModuleViewDisplayed(ModuleView<?> moduleView) 
-		{
-			if (moduleView instanceof IEWOComponentView) {
-				ComponentInstance ci = ((IEWOComponentView)moduleView).getRepresentedObject();
-				ComponentDefinition component = ci.getComponentDefinition();
-				_controller.getComponentLibraryBrowser().focusOn(component);
-				_controller.getSelectionManager().setSelectedObject(component.getWOComponent());
-				_controller.getComponentBrowser().setCurrentComponent(component);
-				_controller.getComponentBrowser().focusOn(component);
-			}
-		}
-		
-		@Override
-		public boolean doesPerspectiveControlLeftView() {
-			return true;
-		}
+	@Override
+	public boolean isAlwaysVisible() {
+		return true;
+	}
 
-		@Override
-		public JComponent getLeftView() 
-		{
-			return _controller.getSplitPaneWithBrowsers();
+	@Override
+	public void notifyModuleViewDisplayed(ModuleView<?> moduleView) {
+		if (moduleView instanceof IEWOComponentView) {
+			ComponentInstance ci = ((IEWOComponentView) moduleView).getRepresentedObject();
+			ComponentDefinition component = ci.getComponentDefinition();
+			_controller.getComponentLibraryBrowser().focusOn(component);
+			_controller.getSelectionManager().setSelectedObject(component.getWOComponent());
+			_controller.getComponentBrowser().setCurrentComponent(component);
+			_controller.getComponentBrowser().focusOn(component);
 		}
-		
-		@Override
-		public boolean doesPerspectiveControlRightView() 
-		{
-			return true;
-		}
-		
-		@Override
-		public JComponent getRightView() 
-		{
-			return _controller.getDisconnectedDocInspectorPanel();
-		}
+	}
 
+	@Override
+	public boolean doesPerspectiveControlLeftView() {
+		return true;
+	}
 
+	@Override
+	public JComponent getLeftView() {
+		return _controller.getSplitPaneWithBrowsers();
+	}
+
+	@Override
+	public boolean doesPerspectiveControlRightView() {
+		return true;
+	}
+
+	@Override
+	public JComponent getRightView() {
+		return _controller.getDisconnectedDocInspectorPanel();
+	}
 
 }

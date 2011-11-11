@@ -19,18 +19,16 @@
  */
 package org.openflexo.foundation.bpel;
 
-
 public class BPELNamespacePrefixMapperFactory {
 
-	
-	private static final BPELNamespacePrefixMapper namespacePrefixMapper=new BPELNamespacePrefixMapper();
-	
+	private static final BPELNamespacePrefixMapper namespacePrefixMapper = new BPELNamespacePrefixMapper();
+
 	public static BPELNamespacePrefixMapper getInstance() {
 		return namespacePrefixMapper;
 	}
-	
+
 	public static void addNamespaceAndPrefix(String namespace, String prefix) {
 		namespacePrefixMapper.addNamespaceAndPrefix(namespace, prefix);
 	}
-	
+
 }

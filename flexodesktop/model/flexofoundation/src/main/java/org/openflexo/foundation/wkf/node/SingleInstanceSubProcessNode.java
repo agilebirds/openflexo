@@ -26,19 +26,16 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.ws.ServiceInterface;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 
-
 /**
  * Activity related to execution of a single instance of sub-process
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class SingleInstanceSubProcessNode extends SubProcessNode
-{
+public class SingleInstanceSubProcessNode extends SubProcessNode {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(SingleInstanceSubProcessNode.class.getPackage()
-			.getName());
+	private static final Logger logger = Logger.getLogger(SingleInstanceSubProcessNode.class.getPackage().getName());
 
 	// ==========================================================================
 	// ============================= Constructor
@@ -48,8 +45,7 @@ public class SingleInstanceSubProcessNode extends SubProcessNode
 	/**
 	 * Constructor used during deserialization
 	 */
-	public SingleInstanceSubProcessNode(FlexoProcessBuilder builder)
-	{
+	public SingleInstanceSubProcessNode(FlexoProcessBuilder builder) {
 		this(builder.process);
 		initializeDeserialization(builder);
 	}
@@ -57,43 +53,37 @@ public class SingleInstanceSubProcessNode extends SubProcessNode
 	/**
 	 * Default constructor
 	 */
-	public SingleInstanceSubProcessNode(FlexoProcess process)
-	{
+	public SingleInstanceSubProcessNode(FlexoProcess process) {
 		super(process);
 	}
 
 	/**
 	 * Dynamic constructor with ServiceInterface...
 	 */
-	public SingleInstanceSubProcessNode(FlexoProcess process, ServiceInterface _interface)
-	{
+	public SingleInstanceSubProcessNode(FlexoProcess process, ServiceInterface _interface) {
 		this(process);
 		setServiceInterface(_interface);
 	}
 
 	/**
 	 * Overrides delete
-	 *
+	 * 
 	 * @see org.openflexo.foundation.wkf.node.AbstractActivityNode#delete()
 	 */
 	@Override
-	public final void delete()
-	{
+	public final void delete() {
 		super.delete();
 		deleteObservers();
 	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return Inspectors.WKF.SINGLE_INSTANCE_SUB_PROCESS_NODE_INSPECTOR;
 	}
 
 	@Override
-	public boolean mightHaveOperationPetriGraph() 
-	{
+	public boolean mightHaveOperationPetriGraph() {
 		return false;
 	}
 
 }
-

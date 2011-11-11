@@ -40,12 +40,14 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.ws.client.PPMWebService.PPMRole;
 
-public class RefreshImportedRoleAction extends RefreshImportedObjectAction<RefreshImportedRoleAction,WorkflowModelObject,WorkflowModelObject> {
+public class RefreshImportedRoleAction extends
+		RefreshImportedObjectAction<RefreshImportedRoleAction, WorkflowModelObject, WorkflowModelObject> {
 
 	private final class RefreshRoleDeltaVisitor implements FlexoImportedRoleLibraryDelta.DeltaVisitor {
 		private final RoleList lib;
 
 		private StringBuilder report;
+
 		protected RefreshRoleDeltaVisitor(RoleList lib) {
 			this.lib = lib;
 			this.report = new StringBuilder();
@@ -60,22 +62,25 @@ public class RefreshImportedRoleAction extends RefreshImportedObjectAction<Refre
 				break;
 			case DELETED:
 				if (!delta.getFiRole().isDeletedOnServer()) {
-					if (report.length()>0)
+					if (report.length() > 0)
 						report.append("\n");
-					report.append(FlexoLocalization.localizedForKey("the_role")).append(" ").append(delta.getFiRole().getName()).append(" ").append(FlexoLocalization.localizedForKey("has_been_removed_from_server"));
+					report.append(FlexoLocalization.localizedForKey("the_role")).append(" ").append(delta.getFiRole().getName())
+							.append(" ").append(FlexoLocalization.localizedForKey("has_been_removed_from_server"));
 				}
 				delta.getFiRole().markAsDeletedOnServer();
 				break;
 			case UPDATED:
 				Role rip = lib.getImportedObjectWithURI(role.getUri());
-				if (report.length()>0)
+				if (report.length() > 0)
 					report.append("\n");
-				report.append(FlexoLocalization.localizedForKey("the_role")).append(" ").append(rip.getName()).append(" ").append(FlexoLocalization.localizedForKey("has_been_updated"));
+				report.append(FlexoLocalization.localizedForKey("the_role")).append(" ").append(rip.getName()).append(" ")
+						.append(FlexoLocalization.localizedForKey("has_been_updated"));
 				rip.updateFromObject(role);
 				break;
 			case NEW:
 				// We have received a new role-->we import it
-				ImportRolesAction importRoles = ImportRolesAction.actionType.makeNewEmbeddedAction(lib, null, RefreshImportedRoleAction.this);
+				ImportRolesAction importRoles = ImportRolesAction.actionType.makeNewEmbeddedAction(lib, null,
+						RefreshImportedRoleAction.this);
 				Vector<PPMRole> v = new Vector<PPMRole>();
 				v.add(role);
 				importRoles.setRolesToImport(v);
@@ -87,7 +92,7 @@ public class RefreshImportedRoleAction extends RefreshImportedObjectAction<Refre
 		}
 
 		public String getReport() {
-			if (report.length()==0) {
+			if (report.length() == 0) {
 				return FlexoLocalization.localizedForKey("there_are_no_changes");
 			}
 			return report.toString();
@@ -96,21 +101,23 @@ public class RefreshImportedRoleAction extends RefreshImportedObjectAction<Refre
 
 	private static final Logger logger = FlexoLogger.getLogger(RefreshImportedRoleAction.class.getPackage().getName());
 
-	public static final FlexoActionType<RefreshImportedRoleAction, WorkflowModelObject, WorkflowModelObject> actionType = new FlexoActionType<RefreshImportedRoleAction, WorkflowModelObject, WorkflowModelObject>("refresh_imported_roles"){
+	public static final FlexoActionType<RefreshImportedRoleAction, WorkflowModelObject, WorkflowModelObject> actionType = new FlexoActionType<RefreshImportedRoleAction, WorkflowModelObject, WorkflowModelObject>(
+			"refresh_imported_roles") {
 
 		@Override
 		protected boolean isEnabledForSelection(WorkflowModelObject object, Vector<WorkflowModelObject> globalSelection) {
-			return object!=null;
+			return object != null;
 		}
 
 		@Override
 		protected boolean isVisibleForSelection(WorkflowModelObject object, Vector<WorkflowModelObject> globalSelection) {
-			return object!=null && object.isImported();
+			return object != null && object.isImported();
 		}
 
 		@Override
-		public RefreshImportedRoleAction makeNewAction(WorkflowModelObject focusedObject, Vector<WorkflowModelObject> globalSelection, FlexoEditor editor) {
-			return new RefreshImportedRoleAction(focusedObject,globalSelection,editor);
+		public RefreshImportedRoleAction makeNewAction(WorkflowModelObject focusedObject, Vector<WorkflowModelObject> globalSelection,
+				FlexoEditor editor) {
+			return new RefreshImportedRoleAction(focusedObject, globalSelection, editor);
 		}
 
 	};
@@ -144,11 +151,11 @@ public class RefreshImportedRoleAction extends RefreshImportedObjectAction<Refre
 			updated = getWebService().refreshRoles(getLogin(), getMd5Password(), uris);
 		} catch (RemoteException e) {
 			if (logger.isLoggable(Level.WARNING))
-				logger.log(Level.WARNING,"Remote exception: "+e.getMessage(),e);
-			throw new FlexoRemoteException(null,e);
+				logger.log(Level.WARNING, "Remote exception: " + e.getMessage(), e);
+			throw new FlexoRemoteException(null, e);
 		}
-		if (updated!=null) {
-			libraryDelta = new FlexoImportedRoleLibraryDelta(lib,updated);
+		if (updated != null) {
+			libraryDelta = new FlexoImportedRoleLibraryDelta(lib, updated);
 			visitor = new RefreshRoleDeltaVisitor(lib);
 			libraryDelta.visit(visitor);
 		}
@@ -159,7 +166,7 @@ public class RefreshImportedRoleAction extends RefreshImportedObjectAction<Refre
 	}
 
 	public String getReport() {
-		if (visitor!=null)
+		if (visitor != null)
 			return visitor.getReport();
 		return FlexoLocalization.localizedForKey("refresh_has_not_been_performed");
 	}

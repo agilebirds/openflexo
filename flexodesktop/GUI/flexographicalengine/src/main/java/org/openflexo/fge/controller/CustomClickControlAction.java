@@ -19,12 +19,9 @@
  */
 package org.openflexo.fge.controller;
 
-
-public abstract class CustomClickControlAction extends MouseClickControlAction
-{
+public abstract class CustomClickControlAction extends MouseClickControlAction {
 	@Override
-	public MouseClickControlActionType getActionType()
-	{
+	public MouseClickControlActionType getActionType() {
 		return MouseClickControlActionType.CUSTOM;
 	}
 }

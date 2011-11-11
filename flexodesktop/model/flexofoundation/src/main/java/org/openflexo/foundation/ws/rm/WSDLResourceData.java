@@ -32,48 +32,40 @@ import org.openflexo.foundation.utils.FlexoProjectFile;
  * @author sguerin
  * 
  */
-public class WSDLResourceData extends FlexoObservable implements ImportedResourceData
-{
+public class WSDLResourceData extends FlexoObservable implements ImportedResourceData {
 
+	private FlexoProject _project;
 
-    private FlexoProject _project;
+	private FlexoWSDLResource _resource;
 
-    private FlexoWSDLResource _resource;
+	public WSDLResourceData(FlexoProject aProject, FlexoWSDLResource resource) {
+		super();
+		_project = aProject;
+		_resource = resource;
+	}
 
-    public WSDLResourceData(FlexoProject aProject, FlexoWSDLResource resource)
-    {
-        super();
-        _project = aProject;
-         _resource = resource;
-    }
+	public FlexoProjectFile getWSDLFile() {
+		return _resource.getResourceFile();
+	}
 
-    public FlexoProjectFile getWSDLFile()
-    {
-        return _resource.getResourceFile();
-    }
+	@Override
+	public FlexoWSDLResource getFlexoResource() {
+		return _resource;
+	}
 
-    @Override
-	public FlexoWSDLResource getFlexoResource()
-    {
-        return _resource;
-    }
+	@Override
+	public void setFlexoResource(FlexoResource resource) {
+		_resource = (FlexoWSDLResource) resource;
+	}
 
-    @Override
-	public void setFlexoResource(FlexoResource resource)
-    {
-        _resource = (FlexoWSDLResource) resource;
-    }
+	@Override
+	public FlexoProject getProject() {
+		return _project;
+	}
 
-    @Override
-	public FlexoProject getProject()
-    {
-        return _project;
-    }
-
-    @Override
-	public void setProject(FlexoProject aProject)
-    {
-        _project = aProject;
-    }
+	@Override
+	public void setProject(FlexoProject aProject) {
+		_project = aProject;
+	}
 
 }

@@ -21,18 +21,16 @@ package org.openflexo.foundation.ie.dm;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class ActivateDisplayRefresh extends IEDataModification
-{
+public class ActivateDisplayRefresh extends IEDataModification {
 
-    /**
-     * @param oldValue
-     * @param newValue
-     */
-    public ActivateDisplayRefresh()
-    {
-        super(null, null);
-    }
+	/**
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public ActivateDisplayRefresh() {
+		super(null, null);
+	}
 
 }

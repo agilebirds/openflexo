@@ -21,16 +21,16 @@ package org.openflexo.docxparser.dto.api;
 
 import java.util.Set;
 
-public interface IParsedFlexoDescription
-{
+public interface IParsedFlexoDescription {
 	public IParsedFlexoObject getParsedFlexoObject();
-	
+
 	/**
 	 * @param target
 	 * @return the ParsedHtmlDescription associated to the target if any, null otherwise.
 	 */
 	public IParsedHtml getHtmlDescription(String target);
+
 	public Set<String> getAllTargets();
-	
+
 	public void addHtmlDescription(String target, IParsedHtml html);
 }

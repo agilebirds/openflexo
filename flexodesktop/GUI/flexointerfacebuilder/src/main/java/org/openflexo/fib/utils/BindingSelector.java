@@ -75,17 +75,13 @@ import org.openflexo.swing.SwingUtils;
 import org.openflexo.swing.TextFieldCustomPopup;
 import org.openflexo.toolbox.StringUtils;
 
-
 /**
  * Widget allowing to edit a binding
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class BindingSelector
-extends TextFieldCustomPopup<AbstractBinding>
-implements FIBCustomComponent<AbstractBinding,BindingSelector>
-{
+public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> implements FIBCustomComponent<AbstractBinding, BindingSelector> {
 	static final Logger logger = Logger.getLogger(BindingSelector.class.getPackage().getName());
 
 	private AbstractBinding _revertBindingValue;
@@ -100,14 +96,12 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 
 	private boolean textIsEditing = false;
 
-	protected KeyEventDispatcher tabDispatcher = new KeyEventDispatcher()
-	{
+	protected KeyEventDispatcher tabDispatcher = new KeyEventDispatcher() {
 		@Override
-		public boolean dispatchKeyEvent(KeyEvent e)
-		{
+		public boolean dispatchKeyEvent(KeyEvent e) {
 			if (e.getID() == KeyEvent.KEY_TYPED && (e.getKeyChar() == KeyEvent.VK_RIGHT || e.getKeyChar() == KeyEvent.VK_TAB)) {
 				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("Calling tab pressed "+e);
+					logger.fine("Calling tab pressed " + e);
 				}
 				getCustomPanel().processTabPressed();
 				e.consume();
@@ -116,16 +110,11 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 		}
 	};
 
-	static enum EditionMode
-	{
-		NORMAL_BINDING,
-		COMPOUND_BINDING,
-		STATIC_BINDING,
-		BINDING_EXPRESSION;/*,
-		NEW_ENTRY;*/
+	static enum EditionMode {
+		NORMAL_BINDING, COMPOUND_BINDING, STATIC_BINDING, BINDING_EXPRESSION;/*,
+																				NEW_ENTRY;*/
 
-		boolean useCommonPanel()
-		{
+		boolean useCommonPanel() {
 			return (this != BINDING_EXPRESSION);
 		}
 	}
@@ -135,31 +124,29 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 	public KeyAdapter shortcutsKeyAdapter;
 	private DocumentListener documentListener;
 
-	public BindingSelector(AbstractBinding editedObject)
-	{
+	public BindingSelector(AbstractBinding editedObject) {
 		this(editedObject, -1);
 	}
 
-	public BindingSelector(AbstractBinding editedObject, int cols)
-	{
+	public BindingSelector(AbstractBinding editedObject, int cols) {
 		super(null, cols);
 		setFocusable(true);
 		getTextField().setFocusable(true);
 		getTextField().setEditable(true);
-		getTextField().addFocusListener(new FocusListener(){
+		getTextField().addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent focusEvent) {
 				KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(tabDispatcher);
 			}
+
 			@Override
 			public void focusLost(FocusEvent focusEvent) {
 				KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(tabDispatcher);
 				Component opposite = focusEvent.getOppositeComponent();
 				if (logger.isLoggable(Level.FINER)) {
-					logger.finer("focus lost for "+(opposite!=null?SwingUtils.getComponentPath(opposite):"null"));
+					logger.finer("focus lost for " + (opposite != null ? SwingUtils.getComponentPath(opposite) : "null"));
 				}
-				if ((opposite != null)
-						&& !(opposite instanceof JRootPane)
+				if ((opposite != null) && !(opposite instanceof JRootPane)
 						&& !(SwingUtils.isComponentContainedInContainer(opposite, getParent()))
 						&& !(SwingUtils.isComponentContainedInContainer(opposite, _selectorPanel))) {
 					// Little hook used to automatically apply a valid value which has generally been edited
@@ -172,17 +159,12 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 		});
 		shortcutsKeyAdapter = new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e)
-			{
-				boolean isSignificativeKey =
-						(e.getKeyCode() >= KeyEvent.VK_A && e.getKeyCode() <= KeyEvent.VK_Z)
+			public void keyPressed(KeyEvent e) {
+				boolean isSignificativeKey = (e.getKeyCode() >= KeyEvent.VK_A && e.getKeyCode() <= KeyEvent.VK_Z)
 						|| (e.getKeyCode() >= KeyEvent.VK_0 && e.getKeyCode() <= KeyEvent.VK_9);
 
-
-				if (!popupIsShown()
-						&& getTextField().getText()!=null
-						&& !isAcceptableAsBeginningOfStaticBindingValue(getTextField().getText())
-						&& isSignificativeKey) {
+				if (!popupIsShown() && getTextField().getText() != null
+						&& !isAcceptableAsBeginningOfStaticBindingValue(getTextField().getText()) && isSignificativeKey) {
 					boolean requestFocus = (getTextField().hasFocus());
 					openPopup();
 					if (requestFocus) {
@@ -198,18 +180,19 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 				if (_selectorPanel != null) {
 
 					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-						if(StringUtils.isNotEmpty(getTextField().getText()) && textFieldNotSynchWithEditedObject()) {
+						if (StringUtils.isNotEmpty(getTextField().getText()) && textFieldNotSynchWithEditedObject()) {
 							if (_selectorPanel instanceof BindingSelectorPanel) {
-								BindingSelectorPanel selectorPanel = (BindingSelectorPanel)_selectorPanel;
-								if (selectorPanel.isKeyPathFromTextASubKeyPath(getTextField().getText()) && selectorPanel.isKeyPathFromPanelValid()){
+								BindingSelectorPanel selectorPanel = (BindingSelectorPanel) _selectorPanel;
+								if (selectorPanel.isKeyPathFromTextASubKeyPath(getTextField().getText())
+										&& selectorPanel.isKeyPathFromPanelValid()) {
 									setEditedObject(selectorPanel.makeBindingValueFromPanel());
 									apply();
 								} else {
 									String input = getTextField().getText();
-									if(input.indexOf(".")>-1){
-										String pathIgnoringLastPart = input.substring(0,input.lastIndexOf("."));
-										if(isKeyPathValid(pathIgnoringLastPart)){
-											String inexitingPart = input.substring(input.lastIndexOf(".")+1);
+									if (input.indexOf(".") > -1) {
+										String pathIgnoringLastPart = input.substring(0, input.lastIndexOf("."));
+										if (isKeyPathValid(pathIgnoringLastPart)) {
+											String inexitingPart = input.substring(input.lastIndexOf(".") + 1);
 											Type hostType = selectorPanel.getEndingTypeForSubPath(pathIgnoringLastPart);
 										}
 									}
@@ -223,16 +206,13 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 					else if (e.getKeyCode() == KeyEvent.VK_UP) {
 						_selectorPanel.processUpPressed();
 						e.consume();
-					}
-					else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+					} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 						_selectorPanel.processDownPressed();
 						e.consume();
-					}
-					else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+					} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 						_selectorPanel.processLeftPressed();
 						e.consume();
-					}
-					else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+					} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 						_selectorPanel.processRightPressed();
 						e.consume();
 					}
@@ -240,15 +220,23 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 			}
 		};
 
-		documentListener = new DocumentListener()
-		{
+		documentListener = new DocumentListener() {
 			@Override
-			public void changedUpdate(DocumentEvent e) { textEdited(e); }
+			public void changedUpdate(DocumentEvent e) {
+				textEdited(e);
+			}
+
 			@Override
-			public void insertUpdate(DocumentEvent e) { textEdited(e); }
+			public void insertUpdate(DocumentEvent e) {
+				textEdited(e);
+			}
+
 			@Override
-			public void removeUpdate(DocumentEvent e) { textEdited(e); }
-			public void textEdited(DocumentEvent e)  {
+			public void removeUpdate(DocumentEvent e) {
+				textEdited(e);
+			}
+
+			public void textEdited(DocumentEvent e) {
 				if (isProgrammaticalySet()) {
 					return;
 				}
@@ -256,8 +244,7 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 				textIsEditing = true;
 				try {
 					synchronizeWithTextFieldValue(textValue);
-				}
-				finally {
+				} finally {
 					textIsEditing = false;
 				}
 			}
@@ -266,9 +253,8 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 		getTextField().addKeyListener(shortcutsKeyAdapter);
 		getTextField().getDocument().addDocumentListener(documentListener);
 
-		//setEditedObjectAndUpdateBDAndOwner(editedObject);
+		// setEditedObjectAndUpdateBDAndOwner(editedObject);
 		setEditedObject(editedObject);
-
 
 		/*(new Thread() {
 			@Override
@@ -289,29 +275,26 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 	}
 
 	@Override
-	public void init(FIBCustom component, FIBController controller)
-	{
+	public void init(FIBCustom component, FIBController controller) {
 	}
 
 	@Override
-	public Class<AbstractBinding> getRepresentedType()
-	{
+	public Class<AbstractBinding> getRepresentedType() {
 		return AbstractBinding.class;
 	}
 
-	protected void synchronizeWithTextFieldValue(String textValue)
-	{
+	protected void synchronizeWithTextFieldValue(String textValue) {
 		try {
 			isUpdatingModel = true;
 
 			AbstractBinding newEditedBinding = makeBindingFromString(textValue);
 
 			if (newEditedBinding != null) {
-				logger.fine("Decoding binding as "+newEditedBinding);
-				//if (newEditedBinding instanceof BindingValue) logger.info("BV="+((BindingValue)newEditedBinding).getBindingVariable());
+				logger.fine("Decoding binding as " + newEditedBinding);
+				// if (newEditedBinding instanceof BindingValue) logger.info("BV="+((BindingValue)newEditedBinding).getBindingVariable());
 				if (newEditedBinding.isBindingValid()) {
 					if (logger.isLoggable(Level.FINE)) {
-						logger.fine("Decoded as VALID binding: "+newEditedBinding);
+						logger.fine("Decoded as VALID binding: " + newEditedBinding);
 					}
 					if (!newEditedBinding.equals(getEditedObject())) {
 						if (logger.isLoggable(Level.FINE)) {
@@ -319,18 +302,16 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 						}
 						setEditedObject(newEditedBinding);
 						return;
-					}
-					else {
+					} else {
 						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("Skipping as it represents the same binding");
 						}
 						getTextField().setForeground(Color.BLACK);
 						return;
 					}
-				}
-				else {
+				} else {
 					if (logger.isLoggable(Level.FINE)) {
-						logger.fine("Decoded as INVALID binding: "+newEditedBinding+" trying to synchronize panel");
+						logger.fine("Decoded as INVALID binding: " + newEditedBinding + " trying to synchronize panel");
 					}
 					getTextField().setForeground(Color.RED);
 					if (_selectorPanel != null) {
@@ -357,7 +338,6 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 
 	}
 
-
 	/*public void setEditedObjectAndUpdateBDAndOwner(AbstractBinding object)
 	{
 		setEditedObject(object);
@@ -368,8 +348,7 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 	}*/
 
 	@Override
-	public void setEditedObject(AbstractBinding object)
-	{
+	public void setEditedObject(AbstractBinding object) {
 		setEditedObject(object, true);
 		if (object != null) {
 			if (object.getBindingDefinition() != null) {
@@ -381,10 +360,8 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 		}
 	}
 
-
-	public void setEditedObject(AbstractBinding object, boolean updateBindingSelectionMode)
-	{
-		//logger.info(">>>>>>>>>>>>>> setEditedObject() with "+object);
+	public void setEditedObject(AbstractBinding object, boolean updateBindingSelectionMode) {
+		// logger.info(">>>>>>>>>>>>>> setEditedObject() with "+object);
 		if (updateBindingSelectionMode) {
 			if (object != null) {
 				object = checkIfDisplayModeShouldChange(object, false);
@@ -402,24 +379,23 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 
 	}
 
-	AbstractBinding checkIfDisplayModeShouldChange(AbstractBinding object, boolean setValueAsNewEditedValue)
-	{
+	AbstractBinding checkIfDisplayModeShouldChange(AbstractBinding object, boolean setValueAsNewEditedValue) {
 		AbstractBinding returned = object;
 
 		EditionMode oldEditionMode = editionMode;
 		EditionMode newEditionMode = editionMode;
 
 		if (object != null) {
-			if (object instanceof BindingExpression && ((BindingExpression)object).getExpression() != null) {
-				Expression exp = ((BindingExpression)object).getExpression();
+			if (object instanceof BindingExpression && ((BindingExpression) object).getExpression() != null) {
+				Expression exp = ((BindingExpression) object).getExpression();
 				if (exp instanceof BindingValueConstant) {
-					returned = ((BindingValueConstant)exp).getStaticBinding();
+					returned = ((BindingValueConstant) exp).getStaticBinding();
 				}
 				if (exp instanceof BindingValueVariable) {
-					returned = ((BindingValueVariable)exp).getBindingValue();
+					returned = ((BindingValueVariable) exp).getBindingValue();
 				}
 				if (exp instanceof BindingValueFunction) {
-					returned = ((BindingValueFunction)exp).getBindingValue();
+					returned = ((BindingValueFunction) exp).getBindingValue();
 				}
 			}
 		}
@@ -431,19 +407,19 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 			newEditionMode = EditionMode.BINDING_EXPRESSION;
 		}
 		if (returned instanceof BindingValue) {
-			if (((BindingValue)returned).isCompoundBinding()
+			if (((BindingValue) returned).isCompoundBinding()
 					|| (getBindingDefinition() != null && getBindingDefinition().getBindingDefinitionType() == BindingDefinitionType.EXECUTE)) {
 				newEditionMode = EditionMode.COMPOUND_BINDING;
 			} else if (oldEditionMode != EditionMode.NORMAL_BINDING && oldEditionMode != EditionMode.COMPOUND_BINDING) {
 				newEditionMode = EditionMode.NORMAL_BINDING;
 			}
 		}
-		if (returned==null) {
+		if (returned == null) {
 			newEditionMode = EditionMode.NORMAL_BINDING;
 		}
 
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("DISPLAY_MODE was: "+oldEditionMode+" is now "+newEditionMode);
+			logger.fine("DISPLAY_MODE was: " + oldEditionMode + " is now " + newEditionMode);
 		}
 		if (oldEditionMode.useCommonPanel() != newEditionMode.useCommonPanel()) {
 			if (newEditionMode.useCommonPanel()) {
@@ -452,9 +428,8 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 				} else {
 					activateNormalBindingMode();
 				}
-			}
-			else if (object instanceof BindingExpression) {
-				activateBindingExpressionMode((BindingExpression)object);
+			} else if (object instanceof BindingExpression) {
+				activateBindingExpressionMode((BindingExpression) object);
 			}
 		}
 		if (oldEditionMode != EditionMode.COMPOUND_BINDING && newEditionMode == EditionMode.COMPOUND_BINDING) {
@@ -466,7 +441,7 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 		// Should i change edited object ???
 		if (returned != object && setValueAsNewEditedValue) {
 			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Switching edited object from "+object+" to "+returned);
+				logger.fine("Switching edited object from " + object + " to " + returned);
 			}
 			_editedObject = returned;
 			updateCustomPanel(getEditedObject());
@@ -475,20 +450,17 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 		return returned;
 	}
 
-
-
-
-	boolean isKeyPathValid(String pathIgnoringLastPart)
-	{
+	boolean isKeyPathValid(String pathIgnoringLastPart) {
 		if (!(_selectorPanel instanceof BindingSelectorPanel)) {
 			return false;
 		}
-		StringTokenizer token = new StringTokenizer(pathIgnoringLastPart,".",false);
+		StringTokenizer token = new StringTokenizer(pathIgnoringLastPart, ".", false);
 		Object obj = null;
 		int i = 0;
-		while(token.hasMoreTokens()){
-			obj = ((BindingSelectorPanel)_selectorPanel).findElementEquals(((BindingSelectorPanel)_selectorPanel).listAtIndex(i).getModel(), token.nextToken());
-			if(obj==null) {
+		while (token.hasMoreTokens()) {
+			obj = ((BindingSelectorPanel) _selectorPanel).findElementEquals(((BindingSelectorPanel) _selectorPanel).listAtIndex(i)
+					.getModel(), token.nextToken());
+			if (obj == null) {
 				return false;
 			}
 			i++;
@@ -497,8 +469,7 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 	}
 
 	@Override
-	public void fireEditedObjectChanged()
-	{
+	public void fireEditedObjectChanged() {
 		updateCustomPanel(getEditedObject());
 		if (!getIsUpdatingModel()) {
 			_isProgrammaticalySet = true;
@@ -506,78 +477,66 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 				getTextField().setText(renderedString(getEditedObject()));
 			}
 			if (getEditedObject() != null) {
-				getTextField().setForeground(getEditedObject().isBindingValid()?Color.BLACK:Color.RED);
-			}
-			else {
+				getTextField().setForeground(getEditedObject().isBindingValid() ? Color.BLACK : Color.RED);
+			} else {
 				getTextField().setForeground(Color.RED);
 			}
 			_isProgrammaticalySet = false;
 		}
 	}
 
-	public boolean areCompoundBindingAllowed()
-	{
-		//if (getBindingDefinition() != null && getBindingDefinition().getIsSettable()) return false;
+	public boolean areCompoundBindingAllowed() {
+		// if (getBindingDefinition() != null && getBindingDefinition().getIsSettable()) return false;
 		return _allowsCompoundBindings;
 	}
 
-	public void allowsCompoundBindings()
-	{
+	public void allowsCompoundBindings() {
 		_allowsCompoundBindings = true;
 		rebuildPopup();
 	}
 
-	public void denyCompoundBindings()
-	{
+	public void denyCompoundBindings() {
 		_allowsCompoundBindings = false;
 		rebuildPopup();
 	}
 
-	public boolean areBindingExpressionsAllowed()
-	{
-		if (getBindingDefinition() != null && (getBindingDefinition().getIsSettable()
-				|| getBindingDefinition().getBindingDefinitionType() == BindingDefinitionType.EXECUTE)) {
+	public boolean areBindingExpressionsAllowed() {
+		if (getBindingDefinition() != null
+				&& (getBindingDefinition().getIsSettable() || getBindingDefinition().getBindingDefinitionType() == BindingDefinitionType.EXECUTE)) {
 			return false;
 		}
 		return _allowsBindingExpressions;
 	}
 
-	public void allowsBindingExpressions()
-	{
+	public void allowsBindingExpressions() {
 		_allowsBindingExpressions = true;
 		rebuildPopup();
 	}
 
-	public void denyBindingExpressions()
-	{
+	public void denyBindingExpressions() {
 		_allowsBindingExpressions = false;
 		rebuildPopup();
 	}
 
-	public boolean areStaticValuesAllowed()
-	{
+	public boolean areStaticValuesAllowed() {
 		if (getBindingDefinition() != null
-				&& (getBindingDefinition().getIsSettable()
-						|| getBindingDefinition().getBindingDefinitionType() == BindingDefinitionType.EXECUTE)) {
+				&& (getBindingDefinition().getIsSettable() || getBindingDefinition().getBindingDefinitionType() == BindingDefinitionType.EXECUTE)) {
 			return false;
 		}
 		return _allowsStaticValues;
 	}
 
-	public void allowsStaticValues()
-	{
+	public void allowsStaticValues() {
 		_allowsStaticValues = true;
 		rebuildPopup();
 	}
 
-	public void denyStaticValues()
-	{
+	public void denyStaticValues() {
 		_allowsStaticValues = false;
 		rebuildPopup();
 	}
 
-	private void rebuildPopup()
-	{
+	private void rebuildPopup() {
 		boolean showAgain = false;
 		if (popupIsShown()) {
 			showAgain = true;
@@ -590,10 +549,10 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 		}
 	}
 
-	public void activateCompoundBindingMode()
-	{
+	public void activateCompoundBindingMode() {
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("ActivateCompoundBindingMode() getEditedObject()="+getEditedObject()+" editionMode="+editionMode+" popupIsShown()="+popupIsShown()+" _selectorPanel="+_selectorPanel);
+			logger.fine("ActivateCompoundBindingMode() getEditedObject()=" + getEditedObject() + " editionMode=" + editionMode
+					+ " popupIsShown()=" + popupIsShown() + " _selectorPanel=" + _selectorPanel);
 		}
 		if ((_selectorPanel != null) && (editionMode != EditionMode.COMPOUND_BINDING)) {
 			editionMode = EditionMode.COMPOUND_BINDING;
@@ -614,8 +573,7 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 		editionMode = EditionMode.COMPOUND_BINDING;
 	}
 
-	public void activateNormalBindingMode()
-	{
+	public void activateNormalBindingMode() {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("activateNormalBindingMode()");
 		}
@@ -638,8 +596,7 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 		editionMode = EditionMode.NORMAL_BINDING;
 	}
 
-	public void activateBindingExpressionMode(BindingExpression bindingExpression)
-	{
+	public void activateBindingExpressionMode(BindingExpression bindingExpression) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("activateBindingExpressionMode()");
 		}
@@ -652,9 +609,8 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 			}
 			if (bindingExpression != null) {
 				_editedObject = bindingExpression;
-			}
-			else {
-				_editedObject = new BindingExpression(getBindingDefinition(),getBindable()); // I dont want to notify it !!!
+			} else {
+				_editedObject = new BindingExpression(getBindingDefinition(), getBindable()); // I dont want to notify it !!!
 			}
 			deleteCustomPanel();
 			if (showAgain) {
@@ -665,15 +621,13 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 	}
 
 	@Override
-	protected void deleteCustomPanel()
-	{
+	protected void deleteCustomPanel() {
 		super.deleteCustomPanel();
 		_selectorPanel = null;
 	}
 
 	@Override
-	public void setRevertValue(AbstractBinding oldValue)
-	{
+	public void setRevertValue(AbstractBinding oldValue) {
 		if (oldValue != null) {
 			_revertBindingValue = oldValue.clone();
 		} else {
@@ -682,14 +636,12 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 	}
 
 	@Override
-	public AbstractBinding getRevertValue()
-	{
+	public AbstractBinding getRevertValue() {
 		return _revertBindingValue;
 	}
 
 	@Override
-	protected ResizablePanel createCustomPanel(AbstractBinding editedObject)
-	{
+	protected ResizablePanel createCustomPanel(AbstractBinding editedObject) {
 		if (editionMode == EditionMode.BINDING_EXPRESSION) {
 			_selectorPanel = new BindingExpressionSelectorPanel(this);
 			_selectorPanel.init();
@@ -710,21 +662,19 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 		return _selectorPanel;
 	}
 
-	public void refreshBindingModel()
-	{
+	public void refreshBindingModel() {
 		if (_bindable != null && _selectorPanel != null) {
-			//_selectorPanel.setBindingModel(_bindable.getBindingModel());
+			// _selectorPanel.setBindingModel(_bindable.getBindingModel());
 			_selectorPanel.update();
 		}
 	}
 
 	@Override
-	public void updateCustomPanel(AbstractBinding editedObject)
-	{
+	public void updateCustomPanel(AbstractBinding editedObject) {
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("updateCustomPanel() with "+editedObject);
+			logger.fine("updateCustomPanel() with " + editedObject);
 		}
-		if (editedObject != null && editedObject instanceof BindingValue && ((BindingValue)editedObject).isCompoundBinding()) {
+		if (editedObject != null && editedObject instanceof BindingValue && ((BindingValue) editedObject).isCompoundBinding()) {
 			activateCompoundBindingMode();
 		}
 		if (_selectorPanel != null) {
@@ -732,29 +682,25 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 		}
 	}
 
-	public void resetMethodCallPanel()
-	{
+	public void resetMethodCallPanel() {
 		if (_selectorPanel != null && _selectorPanel instanceof BindingSelectorPanel) {
-			((BindingSelectorPanel)_selectorPanel).resetMethodCallPanel();
+			((BindingSelectorPanel) _selectorPanel).resetMethodCallPanel();
 		}
 	}
 
 	@Override
-	public String renderedString(AbstractBinding editedObject)
-	{
+	public String renderedString(AbstractBinding editedObject) {
 		if (editedObject != null) {
 			return (editedObject).getStringRepresentation();
 		}
 		return "";
 	}
 
-	public Bindable getBindable()
-	{
+	public Bindable getBindable() {
 		return _bindable;
 	}
 
-	public void setBindable(Bindable bindable)
-	{
+	public void setBindable(Bindable bindable) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setBindable with " + bindable);
 		}
@@ -762,13 +708,12 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 		if ((bindable != null) && (_selectorPanel != null)) {
 			_selectorPanel.fireBindableChanged();
 		}
-		//getCustomPanel().setBindingModel(bindable.getBindingModel());
+		// getCustomPanel().setBindingModel(bindable.getBindingModel());
 		updateTextFieldProgrammaticaly();
 	}
 
 	@Override
-	public void updateTextFieldProgrammaticaly()
-	{
+	public void updateTextFieldProgrammaticaly() {
 		// Don't update textfield if original event was triggered by a textfield edition
 		if (!textIsEditing) {
 			super.updateTextFieldProgrammaticaly();
@@ -797,17 +742,16 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 	}*/
 
 	BindingDefinition _bindingDefinition;
-	//BindingModel _bindingModel;
 
-	public BindingDefinition getBindingDefinition()
-	{
+	// BindingModel _bindingModel;
+
+	public BindingDefinition getBindingDefinition() {
 		return _bindingDefinition;
 	}
 
-	public void setBindingDefinition(BindingDefinition bindingDefinition)
-	{
+	public void setBindingDefinition(BindingDefinition bindingDefinition) {
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine(toString()+"Setting new binding definition: "+bindingDefinition+ " old: "+_bindingDefinition);
+			logger.fine(toString() + "Setting new binding definition: " + bindingDefinition + " old: " + _bindingDefinition);
 		}
 		if (bindingDefinition != _bindingDefinition) {
 			_bindingDefinition = bindingDefinition;
@@ -815,7 +759,7 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 			if (bindingValue != null) {
 				bindingValue.setBindingDefinition(bindingDefinition);
 				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("set BD "+bindingDefinition+" for BV "+bindingValue);
+					logger.fine("set BD " + bindingDefinition + " for BV " + bindingValue);
 				}
 			}
 			if (_selectorPanel != null) {
@@ -824,8 +768,7 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 		}
 	}
 
-	public BindingModel getBindingModel()
-	{
+	public BindingModel getBindingModel() {
 		if (getBindable() != null) {
 			return getBindable().getBindingModel();
 		}
@@ -833,13 +776,11 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 	}
 
 	@Override
-	public AbstractBindingSelectorPanel getCustomPanel()
-	{
-		return (AbstractBindingSelectorPanel)super.getCustomPanel();
+	public AbstractBindingSelectorPanel getCustomPanel() {
+		return (AbstractBindingSelectorPanel) super.getCustomPanel();
 	}
 
-	protected BindingExpression makeBindingExpression()
-	{
+	protected BindingExpression makeBindingExpression() {
 		if (getBindable() != null) {
 			BindingExpressionFactory factory = getBindable().getBindingFactory().getBindingExpressionFactory();
 			BindingExpression returned = new BindingExpression(getBindingDefinition(), getBindable());
@@ -849,38 +790,29 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 		return null;
 	}
 
-	protected AbstractBinding makeBinding()
-	{
+	protected AbstractBinding makeBinding() {
 		AbstractBinding returned = null;
 		if (editionMode == EditionMode.BINDING_EXPRESSION) {
 			if ((getBindingDefinition() != null) && (getBindable() != null)) {
 				returned = makeBindingExpression();
 			}
-		}
-		else if (editionMode == EditionMode.STATIC_BINDING) {
+		} else if (editionMode == EditionMode.STATIC_BINDING) {
 			if ((getBindingDefinition() != null) && (getBindable() != null)) {
 				if (getBindingDefinition().getType() != null) {
 					if (TypeUtils.isBoolean(getBindingDefinition().getType())) {
-						returned = new BooleanStaticBinding(getBindingDefinition(),getBindable(),false);
-					}
-					else if (TypeUtils.isInteger(getBindingDefinition().getType())
-							|| TypeUtils.isLong(getBindingDefinition().getType())
-							|| TypeUtils.isShort(getBindingDefinition().getType())
-							|| TypeUtils.isChar(getBindingDefinition().getType())
+						returned = new BooleanStaticBinding(getBindingDefinition(), getBindable(), false);
+					} else if (TypeUtils.isInteger(getBindingDefinition().getType()) || TypeUtils.isLong(getBindingDefinition().getType())
+							|| TypeUtils.isShort(getBindingDefinition().getType()) || TypeUtils.isChar(getBindingDefinition().getType())
 							|| TypeUtils.isByte(getBindingDefinition().getType())) {
-						returned = new IntegerStaticBinding(getBindingDefinition(),getBindable(),0);
+						returned = new IntegerStaticBinding(getBindingDefinition(), getBindable(), 0);
+					} else if (TypeUtils.isFloat(getBindingDefinition().getType()) || TypeUtils.isDouble(getBindingDefinition().getType())) {
+						returned = new FloatStaticBinding(getBindingDefinition(), getBindable(), 0.0);
 					}
-					else if (TypeUtils.isFloat(getBindingDefinition().getType())
-							|| TypeUtils.isDouble(getBindingDefinition().getType())) {
-						returned = new FloatStaticBinding(getBindingDefinition(),getBindable(),0.0);
-					}
-				}
-				else if (TypeUtils.isString(getBindingDefinition().getType())) {
-					returned = new StringStaticBinding(getBindingDefinition(), getBindable(),"");
+				} else if (TypeUtils.isString(getBindingDefinition().getType())) {
+					returned = new StringStaticBinding(getBindingDefinition(), getBindable(), "");
 				}
 			}
-		}
-		else if (editionMode == EditionMode.NORMAL_BINDING || editionMode == EditionMode.COMPOUND_BINDING) { // Normal or compound binding
+		} else if (editionMode == EditionMode.NORMAL_BINDING || editionMode == EditionMode.COMPOUND_BINDING) { // Normal or compound binding
 			if ((getBindingDefinition() != null) && (getBindable() != null)) {
 				returned = new BindingValue(getBindingDefinition(), getBindable());
 			}
@@ -888,33 +820,39 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 		return returned;
 	}
 
-	AbstractBinding recreateBindingValue()
-	{
+	AbstractBinding recreateBindingValue() {
 		setEditedObject(makeBinding());
-		logger.info("Recreating Binding with mode "+editionMode+" as "+getEditedObject());
+		logger.info("Recreating Binding with mode " + editionMode + " as " + getEditedObject());
 		return getEditedObject();
 	}
 
 	Bindable _bindable;
 
-	protected abstract class AbstractBindingSelectorPanel extends ResizablePanel
-	{
+	protected abstract class AbstractBindingSelectorPanel extends ResizablePanel {
 		protected abstract void synchronizePanelWithTextFieldValue(String textValue);
 
 		protected abstract void init();
 
 		protected abstract void update();
+
 		protected abstract void fireBindingDefinitionChanged();
+
 		protected abstract void fireBindableChanged();
 
-
 		protected abstract void processTabPressed();
+
 		protected abstract void processDownPressed();
+
 		protected abstract void processUpPressed();
+
 		protected abstract void processLeftPressed();
+
 		protected abstract void processRightPressed();
+
 		protected abstract void processEnterPressed();
+
 		protected abstract void processBackspace();
+
 		protected abstract void processDelete();
 
 		protected abstract void willApply();
@@ -925,8 +863,8 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 	protected void openPopup() {
 		if (_selectorPanel != null) {
 			if (_selectorPanel instanceof BindingSelectorPanel) {
-				JList list = ((BindingSelectorPanel)_selectorPanel).listAtIndex(0);
-				if (list.getModel().getSize()==1) {
+				JList list = ((BindingSelectorPanel) _selectorPanel).listAtIndex(0);
+				if (list.getModel().getSize() == 1) {
 					list.setSelectedIndex(0);
 				}
 			}
@@ -935,23 +873,20 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 		if (_selectorPanel != null) {
 			ButtonsControlPanel controlPanel = null;
 			if (_selectorPanel instanceof BindingSelectorPanel) {
-				controlPanel = ((BindingSelectorPanel)_selectorPanel)._controlPanel;
-			}
-			else if (_selectorPanel instanceof BindingExpressionSelectorPanel) {
-				controlPanel = ((BindingExpressionSelectorPanel)_selectorPanel)._controlPanel;
+				controlPanel = ((BindingSelectorPanel) _selectorPanel)._controlPanel;
+			} else if (_selectorPanel instanceof BindingExpressionSelectorPanel) {
+				controlPanel = ((BindingExpressionSelectorPanel) _selectorPanel)._controlPanel;
 			}
 			if (controlPanel != null) {
-				controlPanel.applyFocusTraversablePolicyTo(controlPanel,false);
+				controlPanel.applyFocusTraversablePolicyTo(controlPanel, false);
 			}
 		}
 	}
 
-
 	@Override
-	public void closePopup()
-	{
+	public void closePopup() {
 		super.closePopup();
-		//logger.info("closePopup()");
+		// logger.info("closePopup()");
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -961,8 +896,7 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 	}
 
 	@Override
-	public void apply()
-	{
+	public void apply() {
 		if (_selectorPanel != null) {
 			_selectorPanel.willApply();
 		}
@@ -970,10 +904,10 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 		if (bindingValue != null) {
 			if (bindingValue.isBindingValid()) {
 				if (bindingValue instanceof BindingValue) {
-					((BindingValue)bindingValue).connect();
+					((BindingValue) bindingValue).connect();
 				}
 				getTextField().setForeground(Color.BLACK);
-			}else{
+			} else {
 				getTextField().setForeground(Color.RED);
 			}
 			_revertBindingValue = bindingValue.clone();
@@ -988,47 +922,40 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 	}
 
 	@Override
-	public void cancel()
-	{
+	public void cancel() {
 		setEditedObject(_revertBindingValue);
 		closePopup();
 		super.cancel();
 	}
 
 	@Override
-	protected void pointerLeavesPopup()
-	{
+	protected void pointerLeavesPopup() {
 		cancel();
 	}
 
-	public boolean getIsUpdatingModel()
-	{
+	public boolean getIsUpdatingModel() {
 		return isUpdatingModel;
 	}
 
-	public void setUpdatingModel(boolean isUpdatingModelFlag)
-	{
+	public void setUpdatingModel(boolean isUpdatingModelFlag) {
 		this.isUpdatingModel = isUpdatingModelFlag;
 	}
 
-	protected AbstractListModel getRootListModel()
-	{
+	protected AbstractListModel getRootListModel() {
 		if (_selectorPanel != null && _selectorPanel instanceof BindingSelectorPanel) {
-			return ((BindingSelectorPanel)_selectorPanel).getRootColumnListModel();
+			return ((BindingSelectorPanel) _selectorPanel).getRootColumnListModel();
 		}
 		return null;
 	}
 
-	protected final AbstractListModel getListModelFor(BindingPathElement element,Type resultingType)
-	{
+	protected final AbstractListModel getListModelFor(BindingPathElement element, Type resultingType) {
 		if (_selectorPanel != null && _selectorPanel instanceof BindingSelectorPanel) {
-			return ((BindingSelectorPanel)_selectorPanel).getColumnListModel(element,resultingType);
+			return ((BindingSelectorPanel) _selectorPanel).getColumnListModel(element, resultingType);
 		}
 		return null;
 	}
 
-	protected void valueSelected(int index, JList list, AbstractBinding binding)
-	{
+	protected void valueSelected(int index, JList list, AbstractBinding binding) {
 		if (!(binding instanceof BindingValue)) {
 			editionMode = EditionMode.NORMAL_BINDING;
 			binding = makeBinding(); // Should create a BindingValue instance !!!
@@ -1037,19 +964,17 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 				return;
 			}
 		}
-		BindingValue bindingValue = (BindingValue)binding;
+		BindingValue bindingValue = (BindingValue) binding;
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Value selected: index="+index+" list="+list+" bindingValue="+bindingValue);
+			logger.fine("Value selected: index=" + index + " list=" + list + " bindingValue=" + bindingValue);
 		}
-		BindingSelectorPanel.BindingColumnElement selectedValue
-		= (BindingSelectorPanel.BindingColumnElement)list.getSelectedValue();
+		BindingSelectorPanel.BindingColumnElement selectedValue = (BindingSelectorPanel.BindingColumnElement) list.getSelectedValue();
 		if (selectedValue == null) {
 			return;
 		}
-		if (index == 0
-				&& (selectedValue.getElement() instanceof BindingVariable)) { // ICI
+		if (index == 0 && (selectedValue.getElement() instanceof BindingVariable)) { // ICI
 			if (list.getSelectedValue() != bindingValue.getBindingVariable()) {
-				bindingValue.setBindingVariable((BindingVariable)selectedValue.getElement());
+				bindingValue.setBindingVariable((BindingVariable) selectedValue.getElement());
 				setEditedObject(bindingValue);
 				fireEditedObjectChanged();
 			}
@@ -1060,14 +985,13 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 					setEditedObject(bindingValue);
 					fireEditedObjectChanged();
 				}
-			}
-			else if ((selectedValue.getElement() instanceof ComplexPathElement) && (editionMode == EditionMode.COMPOUND_BINDING)) {
+			} else if ((selectedValue.getElement() instanceof ComplexPathElement) && (editionMode == EditionMode.COMPOUND_BINDING)) {
 				// TODO: we need to handle here generic ComplexPathElement and not only MethodCall
 				BindingPathElement currentElement = bindingValue.getBindingPathElementAtIndex(index - 1);
 				if (!(currentElement instanceof MethodCall)
-						|| (((MethodCall)currentElement).getMethod() != ((MethodDefinition)selectedValue.getElement()).getMethod())) {
-					Method method = ((MethodDefinition)selectedValue.getElement()).getMethod();
-					MethodCall newMethodCall = new MethodCall(bindingValue,method,bindingValue.getAccessedType());
+						|| (((MethodCall) currentElement).getMethod() != ((MethodDefinition) selectedValue.getElement()).getMethod())) {
+					Method method = ((MethodDefinition) selectedValue.getElement()).getMethod();
+					MethodCall newMethodCall = new MethodCall(bindingValue, method, bindingValue.getAccessedType());
 					bindingValue.setBindingPathElementAtIndex(newMethodCall, index - 1);
 					setEditedObject(bindingValue);
 					fireEditedObjectChanged();
@@ -1076,49 +1000,40 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 		}
 	}
 
-	boolean isAcceptableStaticBindingValue(String stringValue)
-	{
+	boolean isAcceptableStaticBindingValue(String stringValue) {
 		if (getBindingDefinition() == null || getBindingDefinition().getType() == null) {
 			return false;
 		}
 		StaticBinding b = makeStaticBindingFromString(stringValue);
-		if (b==null) {
+		if (b == null) {
 			return false;
 		}
-		if (TypeUtils.isObject(getBindingDefinition().getType())
-				&& !(stringValue.endsWith("."))) {
+		if (TypeUtils.isObject(getBindingDefinition().getType()) && !(stringValue.endsWith("."))) {
 			return true;
 		}
 		if (TypeUtils.isBoolean(getBindingDefinition().getType())) {
 			return (b instanceof BooleanStaticBinding);
-		}
-		else if (TypeUtils.isInteger(getBindingDefinition().getType())
-				|| TypeUtils.isLong(getBindingDefinition().getType())
-				|| TypeUtils.isShort(getBindingDefinition().getType())
-				|| TypeUtils.isChar(getBindingDefinition().getType())
+		} else if (TypeUtils.isInteger(getBindingDefinition().getType()) || TypeUtils.isLong(getBindingDefinition().getType())
+				|| TypeUtils.isShort(getBindingDefinition().getType()) || TypeUtils.isChar(getBindingDefinition().getType())
 				|| TypeUtils.isByte(getBindingDefinition().getType())) {
 			return (b instanceof IntegerStaticBinding);
-		}
-		else if (TypeUtils.isFloat(getBindingDefinition().getType())
-				|| TypeUtils.isDouble(getBindingDefinition().getType())) {
+		} else if (TypeUtils.isFloat(getBindingDefinition().getType()) || TypeUtils.isDouble(getBindingDefinition().getType())) {
 			if (stringValue.endsWith(".")) {
 				return false;
 			}
 			return (b instanceof IntegerStaticBinding) || (b instanceof FloatStaticBinding);
-		}
-		else if (TypeUtils.isString(getBindingDefinition().getType())) {
+		} else if (TypeUtils.isString(getBindingDefinition().getType())) {
 			return (b instanceof StringStaticBinding);
 		}
 		return false;
 	}
 
-	private boolean isAcceptableAsBeginningOfBooleanStaticBindingValue(String stringValue)
-	{
+	private boolean isAcceptableAsBeginningOfBooleanStaticBindingValue(String stringValue) {
 		if (stringValue.length() > 0) {
-			if (stringValue.length() <= 4 && "true".substring(0,stringValue.length()).equalsIgnoreCase(stringValue)) {
+			if (stringValue.length() <= 4 && "true".substring(0, stringValue.length()).equalsIgnoreCase(stringValue)) {
 				return true;
 			}
-			if (stringValue.length() <= 5 && "false".substring(0,stringValue.length()).equalsIgnoreCase(stringValue)) {
+			if (stringValue.length() <= 5 && "false".substring(0, stringValue.length()).equalsIgnoreCase(stringValue)) {
 				return true;
 			}
 			return false;
@@ -1127,8 +1042,7 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 		}
 	}
 
-	boolean isAcceptableAsBeginningOfStringStaticBindingValue(String stringValue)
-	{
+	boolean isAcceptableAsBeginningOfStringStaticBindingValue(String stringValue) {
 		if (stringValue.length() > 0) {
 			if ((stringValue.indexOf("\"") == 0) || (stringValue.indexOf("'") == 0)) {
 				return true;
@@ -1139,49 +1053,41 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 		}
 	}
 
-	boolean isAcceptableAsBeginningOfStaticBindingValue(String stringValue)
-	{
-		//logger.info("isAcceptableAsBeginningOfStaticBindingValue for ? "+stringValue+" project="+getProject()+" bd="+getBindingDefinition());
+	boolean isAcceptableAsBeginningOfStaticBindingValue(String stringValue) {
+		// logger.info("isAcceptableAsBeginningOfStaticBindingValue for ? "+stringValue+" project="+getProject()+" bd="+getBindingDefinition());
 		if (getBindingDefinition() == null || getBindingDefinition().getType() == null) {
 			return false;
 		}
 
-		if (stringValue.length()==0) {
+		if (stringValue.length() == 0) {
 			return true;
 		}
 
 		if (TypeUtils.isObject(getBindingDefinition().getType())) {
 			// In this case, any of matching is enough
-			return ((isAcceptableStaticBindingValue(stringValue) && !(stringValue.endsWith("."))) // Special case to handle float on-the-fly typing
-					|| isAcceptableAsBeginningOfBooleanStaticBindingValue(stringValue)
-					|| isAcceptableAsBeginningOfStringStaticBindingValue(stringValue));
+			return ((isAcceptableStaticBindingValue(stringValue) && !(stringValue.endsWith("."))) // Special case to handle float on-the-fly
+																									// typing
+					|| isAcceptableAsBeginningOfBooleanStaticBindingValue(stringValue) || isAcceptableAsBeginningOfStringStaticBindingValue(stringValue));
 		}
 
 		if (TypeUtils.isBoolean(getBindingDefinition().getType())) {
 			return isAcceptableAsBeginningOfBooleanStaticBindingValue(stringValue);
-		}
-		else if (TypeUtils.isInteger(getBindingDefinition().getType())
-				|| TypeUtils.isLong(getBindingDefinition().getType())
-				|| TypeUtils.isShort(getBindingDefinition().getType())
-				|| TypeUtils.isChar(getBindingDefinition().getType())
+		} else if (TypeUtils.isInteger(getBindingDefinition().getType()) || TypeUtils.isLong(getBindingDefinition().getType())
+				|| TypeUtils.isShort(getBindingDefinition().getType()) || TypeUtils.isChar(getBindingDefinition().getType())
 				|| TypeUtils.isByte(getBindingDefinition().getType())) {
 			return isAcceptableStaticBindingValue(stringValue);
-		}
-		else if (TypeUtils.isFloat(getBindingDefinition().getType())
-				|| TypeUtils.isDouble(getBindingDefinition().getType())) {
+		} else if (TypeUtils.isFloat(getBindingDefinition().getType()) || TypeUtils.isDouble(getBindingDefinition().getType())) {
 			if (stringValue.endsWith(".") && stringValue.length() > 1) {
-				return isAcceptableStaticBindingValue(stringValue.substring(0,stringValue.length()-1));
+				return isAcceptableStaticBindingValue(stringValue.substring(0, stringValue.length() - 1));
 			}
 			return isAcceptableStaticBindingValue(stringValue);
-		}
-		else if (TypeUtils.isString(getBindingDefinition().getType())) {
+		} else if (TypeUtils.isString(getBindingDefinition().getType())) {
 			return isAcceptableAsBeginningOfStringStaticBindingValue(stringValue);
 		}
 		return false;
 	}
 
-	StaticBinding makeStaticBindingFromString(String stringValue)
-	{
+	StaticBinding makeStaticBindingFromString(String stringValue) {
 		if (getBindable() != null) {
 			StaticBindingFactory factory = getBindable().getBindingFactory().getStaticBindingFactory();
 			StaticBinding returned = factory.convertFromString(stringValue);
@@ -1195,13 +1101,12 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 		return null;
 	}
 
-	AbstractBinding makeBindingFromString(String stringValue)
-	{
+	AbstractBinding makeBindingFromString(String stringValue) {
 		if (getBindable() != null) {
 			BindingFactory factory = getBindable().getBindingFactory();
 			if (factory == null) {
 				logger.info("OK, je tiens le probleme, factory=null");
-				logger.info("bindable="+getBindable());
+				logger.info("bindable=" + getBindable());
 			}
 			factory.setWarnOnFailure(false);
 			factory.setBindable(getBindable());
@@ -1217,22 +1122,19 @@ implements FIBCustomComponent<AbstractBinding,BindingSelector>
 		return null;
 	}
 
-	boolean textFieldSynchWithEditedObject()
-	{
-		if(StringUtils.isEmpty(getTextField().getText())) {
-			return getEditedObject()==null || StringUtils.isEmpty(renderedString(getEditedObject()));
+	boolean textFieldSynchWithEditedObject() {
+		if (StringUtils.isEmpty(getTextField().getText())) {
+			return getEditedObject() == null || StringUtils.isEmpty(renderedString(getEditedObject()));
 		}
-		return getTextField().getText()!=null && getTextField().getText().equals(renderedString(getEditedObject()));
+		return getTextField().getText() != null && getTextField().getText().equals(renderedString(getEditedObject()));
 	}
 
-	boolean textFieldNotSynchWithEditedObject()
-	{
+	boolean textFieldNotSynchWithEditedObject() {
 		return !textFieldSynchWithEditedObject();
 	}
 
 	@Override
-	public BindingSelector getJComponent()
-	{
+	public BindingSelector getJComponent() {
 		return this;
 	}
 

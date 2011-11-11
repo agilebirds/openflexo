@@ -27,47 +27,40 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 
+public class DMCopy extends FlexoAction {
 
-public class DMCopy extends FlexoAction 
-{
+	private static final Logger logger = Logger.getLogger(DMCopy.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(DMCopy.class.getPackage().getName());
+	public static FlexoActionType actionType = new FlexoActionType("copy", FlexoActionType.editGroup) {
 
-    public static FlexoActionType actionType = new FlexoActionType ("copy",FlexoActionType.editGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new DMCopy(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) 
-        {
-            return new DMCopy(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return false;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return false;
-        }
-                
-    };
-    
-    DMCopy (FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-    @Override
-	protected void doAction(Object context) 
-    {
-        // Implemented in WKF module
-        logger.info ("COPY on DM");
-    }
-    
+	DMCopy(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) {
+		// Implemented in WKF module
+		logger.info("COPY on DM");
+	}
+
 }

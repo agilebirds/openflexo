@@ -18,60 +18,60 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
- * Represents uses relationship in use case diagrams, in class
- * diagrams this is also used to express dependency relationships.
- *
+ * Represents uses relationship in use case diagrams, in class diagrams this is also used to express dependency relationships.
+ * 
  * @version $Id: UsesRelationship.java,v 1.3 2011/09/12 11:46:47 gpolet Exp $
  * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class UsesRelationship extends Relationship implements AccessQualified {
-  public UsesRelationship(PetalNode parent, Collection params) {
-    super(parent, "Uses_Relationship", params);
-  }
+	public UsesRelationship(PetalNode parent, Collection params) {
+		super(parent, "Uses_Relationship", params);
+	}
 
-  public UsesRelationship() {
-    super("Uses_Relationship");
-  }
+	public UsesRelationship() {
+		super("Uses_Relationship");
+	}
 
-  public List getAttributes() {
-    return (List)getProperty("attributes");
-  }
+	public List getAttributes() {
+		return (List) getProperty("attributes");
+	}
 
-  public void setAttributes(List o) {
-    defineProperty("attributes", o);
-  }
+	public void setAttributes(List o) {
+		defineProperty("attributes", o);
+	}
 
-  @Override
-public String getExportControl() {
-    return getPropertyAsString("exportControl");
-  }
+	@Override
+	public String getExportControl() {
+		return getPropertyAsString("exportControl");
+	}
 
-  @Override
-public void setExportControl(String o) {
-    defineProperty("exportControl", o);
-  }
+	@Override
+	public void setExportControl(String o) {
+		defineProperty("exportControl", o);
+	}
 
-  public Value getClientCardinality() {
-    return (Value)getProperty("client_cardinality");
-  }
+	public Value getClientCardinality() {
+		return (Value) getProperty("client_cardinality");
+	}
 
-  public void setClientCardinality(Value o) {
-    defineProperty("client_cardinality", o);
-  }
+	public void setClientCardinality(Value o) {
+		defineProperty("client_cardinality", o);
+	}
 
-  public Value getSupplierCardinality() {
-    return (Value)getProperty("supplier_cardinality");
-  }
+	public Value getSupplierCardinality() {
+		return (Value) getProperty("supplier_cardinality");
+	}
 
-  public void setSupplierCardinality(Value o) {
-    defineProperty("supplier_cardinality", o);
-  }
+	public void setSupplierCardinality(Value o) {
+		defineProperty("supplier_cardinality", o);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

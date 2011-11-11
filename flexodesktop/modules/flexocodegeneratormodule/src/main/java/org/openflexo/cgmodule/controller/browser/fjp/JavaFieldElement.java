@@ -26,44 +26,34 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.icon.JavaIconLibrary;
 import org.openflexo.javaparser.FJPJavaField;
 
-
-public class JavaFieldElement extends JavaBrowserElementWithModifiers
-{
-	public JavaFieldElement(FJPJavaField aField, JavaParserBrowser browser, BrowserElement parent)
-	{
-		super(aField, BrowserElementType.FIELD, browser,parent);
+public class JavaFieldElement extends JavaBrowserElementWithModifiers {
+	public JavaFieldElement(FJPJavaField aField, JavaParserBrowser browser, BrowserElement parent) {
+		super(aField, BrowserElementType.FIELD, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 	}
 
-	public FJPJavaField getJavaField()
-	{
-		return (FJPJavaField)getObject();
+	public FJPJavaField getJavaField() {
+		return (FJPJavaField) getObject();
 	}
 
 	@Override
-	public ImageIcon getBaseIcon()
-	{
+	public ImageIcon getBaseIcon() {
 		if (getJavaField().isPublic()) {
 			return JavaIconLibrary.FJP_FIELD_PUBLIC_ICON;
-		}
-		else if (getJavaField().isProtected()) {
+		} else if (getJavaField().isProtected()) {
 			return JavaIconLibrary.FJP_FIELD_PROTECTED_ICON;
-		}
-		else if (getJavaField().isPrivate()) {
+		} else if (getJavaField().isPrivate()) {
 			return JavaIconLibrary.FJP_FIELD_PRIVATE_ICON;
-		}
-		else {
+		} else {
 			return JavaIconLibrary.FJP_FIELD_DEFAULT_ICON;
 		}
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return getJavaField().getName();
 	}
 }

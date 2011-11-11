@@ -21,11 +21,11 @@ package org.openflexo.foundation.dm.javaparser;
 
 import org.openflexo.foundation.dm.DMType;
 
-
-public interface ParsedJavaField extends ParsedJavaElement
-{
+public interface ParsedJavaField extends ParsedJavaElement {
 	public String getName();
-	public DMType getType(); 
-	public String getInitializationExpression(); 
+
+	public DMType getType();
+
+	public String getInitializationExpression();
 
 }

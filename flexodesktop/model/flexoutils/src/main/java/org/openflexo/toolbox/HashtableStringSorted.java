@@ -26,40 +26,37 @@ import java.util.Vector;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class HashtableStringSorted<V> extends Hashtable<String, V>
-{
+public class HashtableStringSorted<V> extends Hashtable<String, V> {
 
-    /**
-     * @param titles
-     */
-    public HashtableStringSorted(Hashtable<String, V> titles)
-    {
-        super(titles);
-    }
+	/**
+	 * @param titles
+	 */
+	public HashtableStringSorted(Hashtable<String, V> titles) {
+		super(titles);
+	}
 
-    /**
+	/**
      * 
      */
-    public HashtableStringSorted()
-    {
-        super();
-    }
+	public HashtableStringSorted() {
+		super();
+	}
 
-    /**
-     * Overrides keys
-     * @see java.util.Hashtable#keys()
-     */
-    @Override
-    public synchronized Enumeration<String> keys()
-    {
-        Enumeration<String> en = super.keys();
-        Vector<String> v = new Vector<String>();
-        while (en.hasMoreElements()) {
-            v.add(en.nextElement());
-        }
-        Collections.sort(v);
-        return v.elements();
-    }
+	/**
+	 * Overrides keys
+	 * 
+	 * @see java.util.Hashtable#keys()
+	 */
+	@Override
+	public synchronized Enumeration<String> keys() {
+		Enumeration<String> en = super.keys();
+		Vector<String> v = new Vector<String>();
+		while (en.hasMoreElements()) {
+			v.add(en.nextElement());
+		}
+		Collections.sort(v);
+		return v.elements();
+	}
 }

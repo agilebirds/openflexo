@@ -23,11 +23,10 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.view.BrowserView.FlexoJTree;
 import org.openflexo.doceditor.controller.browser.TOCTreeDropTarget;
 
-
 public class DGTreeDropTarget extends TOCTreeDropTarget {
 
 	public DGTreeDropTarget(FlexoJTree tree, ProjectBrowser browser) {
-		super(tree, browser);	
+		super(tree, browser);
 	}
-	
+
 }

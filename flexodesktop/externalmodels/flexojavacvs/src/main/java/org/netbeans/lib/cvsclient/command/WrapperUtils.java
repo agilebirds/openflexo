@@ -36,114 +36,110 @@ import org.netbeans.lib.cvsclient.util.SimpleStringPattern;
  */
 public class WrapperUtils {
 
-    /**
-     * Reads the wrappers from the specified source and populates the specified
-     * map
-     *
-     * @param reader The source of wrappers which is being processed
-     * @param theMap The map which is being updated
-     */
-    private static  void parseWrappers(BufferedReader reader, Map theMap)
-                 throws IOException {
+	/**
+	 * Reads the wrappers from the specified source and populates the specified map
+	 * 
+	 * @param reader
+	 *            The source of wrappers which is being processed
+	 * @param theMap
+	 *            The map which is being updated
+	 */
+	private static void parseWrappers(BufferedReader reader, Map theMap) throws IOException {
 
-        String line;
-        while ((line = reader.readLine()) != null){
-            StringTokenizer tokenizer = new StringTokenizer(line);
+		String line;
+		while ((line = reader.readLine()) != null) {
+			StringTokenizer tokenizer = new StringTokenizer(line);
 
-            // the first token is the pattern
-            SimpleStringPattern pattern = new SimpleStringPattern(tokenizer.nextToken());
+			// the first token is the pattern
+			SimpleStringPattern pattern = new SimpleStringPattern(tokenizer.nextToken());
 
-            // it is followed by option value pairs
-            String option, value;
+			// it is followed by option value pairs
+			String option, value;
 
-            while (tokenizer.hasMoreTokens()) {
-                option = tokenizer.nextToken();
-                value = tokenizer.nextToken();
+			while (tokenizer.hasMoreTokens()) {
+				option = tokenizer.nextToken();
+				value = tokenizer.nextToken();
 
-                // do not bother with the -m Options now
-                if (option.equals("-k")) { //NOI18N
+				// do not bother with the -m Options now
+				if (option.equals("-k")) { // NOI18N
 
-                    // This is a keyword substitution option
-                    // strip the quotes
-                    int first = value.indexOf('\'');
-                    int last = value.lastIndexOf('\'');
-                    if (first >=0 && last >= 0) {
-                        value = value.substring(first+1, last);
-                    }
+					// This is a keyword substitution option
+					// strip the quotes
+					int first = value.indexOf('\'');
+					int last = value.lastIndexOf('\'');
+					if (first >= 0 && last >= 0) {
+						value = value.substring(first + 1, last);
+					}
 
-                    KeywordSubstitutionOptions keywordOption = KeywordSubstitutionOptions.findKeywordSubstOption(value);
-                    if (!theMap.containsKey(pattern)) {
-                        theMap.put(pattern, keywordOption);
-                    }
-                }
-            }
-        }
-    }
+					KeywordSubstitutionOptions keywordOption = KeywordSubstitutionOptions.findKeywordSubstOption(value);
+					if (!theMap.containsKey(pattern)) {
+						theMap.put(pattern, keywordOption);
+					}
+				}
+			}
+		}
+	}
 
-    /**
-     * Reads the wrappers from the specified file and populates the specified
-     * map
-     *
-     * @param file The File object corresponding to the file which is being processed
-     * @param wrapperMap The map which is being updated
-     */
-    public static void readWrappersFromFile(File file, Map wrapperMap) throws IOException, FileNotFoundException{
-        parseWrappers(new BufferedReader(new FileReader(file)), wrapperMap);
-    }
+	/**
+	 * Reads the wrappers from the specified file and populates the specified map
+	 * 
+	 * @param file
+	 *            The File object corresponding to the file which is being processed
+	 * @param wrapperMap
+	 *            The map which is being updated
+	 */
+	public static void readWrappersFromFile(File file, Map wrapperMap) throws IOException, FileNotFoundException {
+		parseWrappers(new BufferedReader(new FileReader(file)), wrapperMap);
+	}
 
-    /**
-     * Reads the wrappers from the specified System property and populates the specified
-     * map. The map is unchanged if the property is not set.
-     *
-     * @param envVar The system variable name
-     * @param wrapperMap The map which is being updated
-     */
-    private static void readWrappersFromProperty(String envVar, Map wrapperMap) throws IOException {
-        String propertyValue = System.getenv(envVar);
-        if (propertyValue != null)
-        {
-            parseWrappers(new BufferedReader(new StringReader(propertyValue)), wrapperMap);
-        }
-    }
+	/**
+	 * Reads the wrappers from the specified System property and populates the specified map. The map is unchanged if the property is not
+	 * set.
+	 * 
+	 * @param envVar
+	 *            The system variable name
+	 * @param wrapperMap
+	 *            The map which is being updated
+	 */
+	private static void readWrappersFromProperty(String envVar, Map wrapperMap) throws IOException {
+		String propertyValue = System.getenv(envVar);
+		if (propertyValue != null) {
+			parseWrappers(new BufferedReader(new StringReader(propertyValue)), wrapperMap);
+		}
+	}
 
-    /**
-     * This method consolidates the wrapper map so that it follows CVS prioritization
-     * rules for the wrappers. Both AddCommand and ImportCommand will be calling
-     * this.
-     */
-    public static Map mergeWrapperMap(ClientServices client) throws CommandException
-    {
-        String wrapperSource = null;
-        Map wrappersMap = new java.util.HashMap(client.getWrappersMap());
-        try
-        {
-            File home = new File(System.getProperty("user.home"));  // NOI18N
-            File wrappers = new File(home, "./cvswrappers"); //NOI18N
+	/**
+	 * This method consolidates the wrapper map so that it follows CVS prioritization rules for the wrappers. Both AddCommand and
+	 * ImportCommand will be calling this.
+	 */
+	public static Map mergeWrapperMap(ClientServices client) throws CommandException {
+		String wrapperSource = null;
+		Map wrappersMap = new java.util.HashMap(client.getWrappersMap());
+		try {
+			File home = new File(System.getProperty("user.home")); // NOI18N
+			File wrappers = new File(home, "./cvswrappers"); // NOI18N
 
-            wrapperSource = CommandException.getLocalMessage("WrapperUtils.clientDotWrapper.text"); //NOI18N
+			wrapperSource = CommandException.getLocalMessage("WrapperUtils.clientDotWrapper.text"); // NOI18N
 
-            if (wrappers.exists()) {
-                readWrappersFromFile(wrappers, wrappersMap);
-            }
+			if (wrappers.exists()) {
+				readWrappersFromFile(wrappers, wrappersMap);
+			}
 
-            wrapperSource = CommandException.getLocalMessage("WrapperUtils.environmentWrapper.text"); //NOI18N
+			wrapperSource = CommandException.getLocalMessage("WrapperUtils.environmentWrapper.text"); // NOI18N
 
-            //process the Environment variable CVSWRAPPERS
-            readWrappersFromProperty("CVSWRAPPERS", wrappersMap);   //NOI18N
-        }
-        catch (FileNotFoundException fnex) {
-            // should not happen as we check for file existence. Even if it does
-            // it just means the .cvswrappers are not there and can be ignored
-        }
-        catch (Exception ioex) {
-            Object [] parms = new Object[1];
-            parms[0] = wrapperSource;
-            String localizedMessage = CommandException.getLocalMessage("WrapperUtils.wrapperError.text", parms); //NOI18N
-            throw new CommandException(ioex, localizedMessage);
-        }
+			// process the Environment variable CVSWRAPPERS
+			readWrappersFromProperty("CVSWRAPPERS", wrappersMap); // NOI18N
+		} catch (FileNotFoundException fnex) {
+			// should not happen as we check for file existence. Even if it does
+			// it just means the .cvswrappers are not there and can be ignored
+		} catch (Exception ioex) {
+			Object[] parms = new Object[1];
+			parms[0] = wrapperSource;
+			String localizedMessage = CommandException.getLocalMessage("WrapperUtils.wrapperError.text", parms); // NOI18N
+			throw new CommandException(ioex, localizedMessage);
+		}
 
-        return wrappersMap;
-    }
-
+		return wrappersMap;
+	}
 
 }

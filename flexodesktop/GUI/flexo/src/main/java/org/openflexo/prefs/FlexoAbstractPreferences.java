@@ -31,276 +31,250 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.toolbox.FlexoProperties;
 
-
 /**
- * Class FlexoAbstractPreferences is internally used to be inherited from
- * FlexoPreferences
- *
+ * Class FlexoAbstractPreferences is internally used to be inherited from FlexoPreferences
+ * 
  * @author sguerin
  */
-public abstract class FlexoAbstractPreferences extends FlexoObservable implements InspectableObject
-{
+public abstract class FlexoAbstractPreferences extends FlexoObservable implements InspectableObject {
 
-    private static final Logger logger = Logger.getLogger(FlexoPreferences.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(FlexoPreferences.class.getPackage().getName());
 
-    protected FlexoAbstractPreferences()
-    {
-        super();
-        _preferences = new FlexoProperties();
-    }
+	protected FlexoAbstractPreferences() {
+		super();
+		_preferences = new FlexoProperties();
+	}
 
-    protected FlexoAbstractPreferences(Properties properties)
-    {
-        super();
-        _preferences = new FlexoProperties(properties);
-    }
+	protected FlexoAbstractPreferences(Properties properties) {
+		super();
+		_preferences = new FlexoProperties(properties);
+	}
 
-    protected FlexoAbstractPreferences(File preferencesFile)
-    {
-        super();
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("Constructor of FlexoAbstractPreferences with " + preferencesFile.getAbsolutePath());
-        _preferences = loadFromFile(preferencesFile);
-    }
+	protected FlexoAbstractPreferences(File preferencesFile) {
+		super();
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("Constructor of FlexoAbstractPreferences with " + preferencesFile.getAbsolutePath());
+		_preferences = loadFromFile(preferencesFile);
+	}
 
-    protected void reloadFromFile(File preferencesFile)
-    {
-        Properties reloadedProperties = loadFromFile(preferencesFile);
-        for (Enumeration e = reloadedProperties.keys(); e.hasMoreElements();) {
-            String reloadedKey = (String) e.nextElement();
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("Resetting = " + reloadedKey + " with " + reloadedProperties.getProperty(reloadedKey));
-            setProperty(reloadedKey, reloadedProperties.getProperty(reloadedKey));
-        }
-    }
+	protected void reloadFromFile(File preferencesFile) {
+		Properties reloadedProperties = loadFromFile(preferencesFile);
+		for (Enumeration e = reloadedProperties.keys(); e.hasMoreElements();) {
+			String reloadedKey = (String) e.nextElement();
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("Resetting = " + reloadedKey + " with " + reloadedProperties.getProperty(reloadedKey));
+			setProperty(reloadedKey, reloadedProperties.getProperty(reloadedKey));
+		}
+	}
 
-    private static Properties loadFromFile(File preferencesFile)
-    {
-        Properties returned = new FlexoProperties();
-        try {
-            File parentDir = preferencesFile.getParentFile();
-            if (logger.isLoggable(Level.FINE))
-                logger.finest("Parent file = " + parentDir);
-            if (!parentDir.exists()) {
-                parentDir.mkdir();
-            }
-            if (!preferencesFile.exists()) {
-                preferencesFile.createNewFile();
-            }
-            returned.load(new FileInputStream(preferencesFile));
-        } catch (Exception e) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Unable to read preferences " + e.getClass().getName());
-        }
-        return returned;
-    }
+	private static Properties loadFromFile(File preferencesFile) {
+		Properties returned = new FlexoProperties();
+		try {
+			File parentDir = preferencesFile.getParentFile();
+			if (logger.isLoggable(Level.FINE))
+				logger.finest("Parent file = " + parentDir);
+			if (!parentDir.exists()) {
+				parentDir.mkdir();
+			}
+			if (!preferencesFile.exists()) {
+				preferencesFile.createNewFile();
+			}
+			returned.load(new FileInputStream(preferencesFile));
+		} catch (Exception e) {
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("Unable to read preferences " + e.getClass().getName());
+		}
+		return returned;
+	}
 
-    public void setProperty(String key, String value, String notificationKey) {
-        if (logger.isLoggable(Level.FINE))
-            logger.finer("setProperty " + key + " with " + value);
-        String oldValue = getProperty(key);
-        if (value!=null)
-        	_preferences.setProperty(key, value);
-        else
-        	_preferences.remove(key);
-        PreferencesHaveChanged modif = new PreferencesHaveChanged(key, oldValue, value);
-        if (logger.isLoggable(Level.FINE))
-            logger.finer("Notifying about " + modif);
-        setChanged();
-        notifyObservers(modif);
-        if (!key.equals(notificationKey)) {
-        	modif = new PreferencesHaveChanged(notificationKey, oldValue, value);
-        	setChanged();
-        	notifyObservers(modif);
-        }
-    }
+	public void setProperty(String key, String value, String notificationKey) {
+		if (logger.isLoggable(Level.FINE))
+			logger.finer("setProperty " + key + " with " + value);
+		String oldValue = getProperty(key);
+		if (value != null)
+			_preferences.setProperty(key, value);
+		else
+			_preferences.remove(key);
+		PreferencesHaveChanged modif = new PreferencesHaveChanged(key, oldValue, value);
+		if (logger.isLoggable(Level.FINE))
+			logger.finer("Notifying about " + modif);
+		setChanged();
+		notifyObservers(modif);
+		if (!key.equals(notificationKey)) {
+			modif = new PreferencesHaveChanged(notificationKey, oldValue, value);
+			setChanged();
+			notifyObservers(modif);
+		}
+	}
 
-    public void setProperty(String key, String value)
-    {
-    	setProperty(key, value, key);
-    }
+	public void setProperty(String key, String value) {
+		setProperty(key, value, key);
+	}
 
-    public String getProperty(String key)
-    {
-        return _preferences.getProperty(key);
-    }
+	public String getProperty(String key) {
+		return _preferences.getProperty(key);
+	}
 
-    public abstract File getPreferencesFile();
+	public abstract File getPreferencesFile();
 
-    protected void saveToFile(boolean warning)
-    {
-        try {
-            File preferenceFile = getPreferencesFile();
-            if (!preferenceFile.exists()) {
-                preferenceFile.createNewFile();
-            }
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("Saving preferences to file: " + preferenceFile.getAbsolutePath());
-            if (logger.isLoggable(Level.FINE))
-                logger.finer("properties:" + _preferences);
-            _preferences.store(new FileOutputStream(preferenceFile), "Flexo Preferences");
-        } catch (Exception e) {
-            if (warning) {
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Unable to save preferences");
-            }
-        }
-    }
+	protected void saveToFile(boolean warning) {
+		try {
+			File preferenceFile = getPreferencesFile();
+			if (!preferenceFile.exists()) {
+				preferenceFile.createNewFile();
+			}
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("Saving preferences to file: " + preferenceFile.getAbsolutePath());
+			if (logger.isLoggable(Level.FINE))
+				logger.finer("properties:" + _preferences);
+			_preferences.store(new FileOutputStream(preferenceFile), "Flexo Preferences");
+		} catch (Exception e) {
+			if (warning) {
+				if (logger.isLoggable(Level.WARNING))
+					logger.warning("Unable to save preferences");
+			}
+		}
+	}
 
-    // INSPECTABLE OBJECT
+	// INSPECTABLE OBJECT
 
-    public void setAttributeNamed(String attName, Object value)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.finer("setAttributeNamed " + attName + " and " + value + " of class " + value.getClass().getName());
-        if (value instanceof String) {
-            // setProperty(attName,(String)value);
-            setValueForKey((String) value, attName);
-        } else {
-            if (logger.isLoggable(Level.SEVERE))
-                logger.severe("I don't know what to do with a " + value.getClass().getName());
-        }
-    }
+	public void setAttributeNamed(String attName, Object value) {
+		if (logger.isLoggable(Level.FINE))
+			logger.finer("setAttributeNamed " + attName + " and " + value + " of class " + value.getClass().getName());
+		if (value instanceof String) {
+			// setProperty(attName,(String)value);
+			setValueForKey((String) value, attName);
+		} else {
+			if (logger.isLoggable(Level.SEVERE))
+				logger.severe("I don't know what to do with a " + value.getClass().getName());
+		}
+	}
 
-    public Object getAttributeNamed(String attName)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.finer("getAttributeNamed " + attName);
-        return valueForKey(attName);
-        // return getProperty (attName);
-    }
+	public Object getAttributeNamed(String attName) {
+		if (logger.isLoggable(Level.FINE))
+			logger.finer("getAttributeNamed " + attName);
+		return valueForKey(attName);
+		// return getProperty (attName);
+	}
 
-    @Override
-	public String getInspectorName()
-    {
-        return "Preferences";
-    }
+	@Override
+	public String getInspectorName() {
+		return "Preferences";
+	}
 
-    // PUBLIC GET/SET ACCESSORS
+	// PUBLIC GET/SET ACCESSORS
 
-    public Boolean getBooleanProperty(String key)
-    {
-        String booleanValue = getProperty(key);
-        if (booleanValue != null) {
-            return Boolean.valueOf(booleanValue);
-        } else {
-            return null;
-        }
-    }
+	public Boolean getBooleanProperty(String key) {
+		String booleanValue = getProperty(key);
+		if (booleanValue != null) {
+			return Boolean.valueOf(booleanValue);
+		} else {
+			return null;
+		}
+	}
 
-    public void setBooleanProperty(String key, Boolean aBoolean)
-    {
-        if (aBoolean != null) {
-            setProperty(key, aBoolean.toString());
-        } else {
-            setProperty(key, null);
-        }
-    }
+	public void setBooleanProperty(String key, Boolean aBoolean) {
+		if (aBoolean != null) {
+			setProperty(key, aBoolean.toString());
+		} else {
+			setProperty(key, null);
+		}
+	}
 
-    public Integer getIntegerProperty(String key)
-    {
-        String integerValue = getProperty(key);
-        if (integerValue != null) {
-            return Integer.valueOf(integerValue);
-        } else {
-            return null;
-        }
-    }
+	public Integer getIntegerProperty(String key) {
+		String integerValue = getProperty(key);
+		if (integerValue != null) {
+			return Integer.valueOf(integerValue);
+		} else {
+			return null;
+		}
+	}
 
-    public void setIntegerProperty(String key, Integer anInteger) {
-    	setIntegerProperty(key, anInteger, key);
-    }
+	public void setIntegerProperty(String key, Integer anInteger) {
+		setIntegerProperty(key, anInteger, key);
+	}
 
-    public void setIntegerProperty(String key, Integer anInteger, String notificationKey)
-    {
-        if (anInteger != null) {
-            setProperty(key, anInteger.toString(),notificationKey);
-        } else {
-            setProperty(key, null, notificationKey);
-        }
-    }
+	public void setIntegerProperty(String key, Integer anInteger, String notificationKey) {
+		if (anInteger != null) {
+			setProperty(key, anInteger.toString(), notificationKey);
+		} else {
+			setProperty(key, null, notificationKey);
+		}
+	}
 
-    public File getFileProperty(String key)
-    {
-        String fileName = getProperty(key);
-        if (fileName != null) {
-            return new File(fileName);
-        } else {
-            return null;
-        }
-    }
+	public File getFileProperty(String key) {
+		String fileName = getProperty(key);
+		if (fileName != null) {
+			return new File(fileName);
+		} else {
+			return null;
+		}
+	}
 
-    public void setFileProperty(String key, File aFile)
-    {
-        if (aFile != null) {
-            setProperty(key, aFile.getAbsolutePath());
-        } else {
-            setProperty(key, null);
-        }
-    }
+	public void setFileProperty(String key, File aFile) {
+		if (aFile != null) {
+			setProperty(key, aFile.getAbsolutePath());
+		} else {
+			setProperty(key, null);
+		}
+	}
 
-    public File getFileProperty(String key, boolean mustExist)
-    {
-        File returned = getFileProperty(key);
-        if (returned != null && (returned.exists() || !mustExist)) {
-            return returned;
-        } else {
-            return null;
-        }
-    }
+	public File getFileProperty(String key, boolean mustExist) {
+		File returned = getFileProperty(key);
+		if (returned != null && (returned.exists() || !mustExist)) {
+			return returned;
+		} else {
+			return null;
+		}
+	}
 
-    public boolean setFileProperty(String key, File aFile, boolean mustExist)
-    {
-        if (aFile != null && aFile.exists()) {
-            setFileProperty(key, aFile);
-            return true;
-        } else {
-            return false;
-        }
-    }
+	public boolean setFileProperty(String key, File aFile, boolean mustExist) {
+		if (aFile != null && aFile.exists()) {
+			setFileProperty(key, aFile);
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-    public File getDirectoryProperty(String key)
-    {
-        File returned = getFileProperty(key);
-        if (returned != null && returned.isDirectory()) {
-            return returned;
-        } else {
-            return null;
-        }
-    }
+	public File getDirectoryProperty(String key) {
+		File returned = getFileProperty(key);
+		if (returned != null && returned.isDirectory()) {
+			return returned;
+		} else {
+			return null;
+		}
+	}
 
-    public void setDirectoryProperty(String key, File aFile)
-    {
-        if (aFile != null && aFile.isDirectory()) {
-            setFileProperty(key, aFile);
-        } else {
-            setFileProperty(key, null);
-        }
-    }
+	public void setDirectoryProperty(String key, File aFile) {
+		if (aFile != null && aFile.isDirectory()) {
+			setFileProperty(key, aFile);
+		} else {
+			setFileProperty(key, null);
+		}
+	}
 
-    public File getDirectoryProperty(String key, boolean mustExist)
-    {
-        File returned = getFileProperty(key, mustExist);
-        if (returned != null && returned.isDirectory()) {
-            return returned;
-        } else {
-            return null;
-        }
-    }
+	public File getDirectoryProperty(String key, boolean mustExist) {
+		File returned = getFileProperty(key, mustExist);
+		if (returned != null && returned.isDirectory()) {
+			return returned;
+		} else {
+			return null;
+		}
+	}
 
-    public boolean setDirectoryProperty(String key, File aFile, boolean mustExist)
-    {
-        if (aFile != null && aFile.exists()) {
-            setDirectoryProperty(key, aFile);
-            return true;
-        } else {
-            return false;
-        }
-    }
+	public boolean setDirectoryProperty(String key, File aFile, boolean mustExist) {
+		if (aFile != null && aFile.exists()) {
+			setDirectoryProperty(key, aFile);
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-    /**
-     * Object where are stored the preferences
-     */
-    private Properties _preferences;
+	/**
+	 * Object where are stored the preferences
+	 */
+	private Properties _preferences;
 
 }

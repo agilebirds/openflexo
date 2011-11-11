@@ -19,12 +19,8 @@
  */
 package org.openflexo.antar.java;
 
-
-
-public class JavaFormattingException extends Exception
-{
- 	public JavaFormattingException()
-	{
+public class JavaFormattingException extends Exception {
+	public JavaFormattingException() {
 		super("");
 	}
 

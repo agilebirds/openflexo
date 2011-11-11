@@ -21,11 +21,8 @@ package org.openflexo.foundation.cg.dm;
 
 import org.openflexo.foundation.cg.templates.CustomCGTemplateRepository;
 
-
-public class CustomTemplateRepositoryChanged extends CGDataModification
-{
-    public CustomTemplateRepositoryChanged (CustomCGTemplateRepository oldRep, CustomCGTemplateRepository newRep)
-    {
-        super("preferredTemplateRepository",oldRep,newRep);
-    }
+public class CustomTemplateRepositoryChanged extends CGDataModification {
+	public CustomTemplateRepositoryChanged(CustomCGTemplateRepository oldRep, CustomCGTemplateRepository newRep) {
+		super("preferredTemplateRepository", oldRep, newRep);
+	}
 }

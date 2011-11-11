@@ -30,14 +30,12 @@ import org.openflexo.wkf.processeditor.ProcessRepresentation;
 import org.openflexo.wkf.swleditor.SWLEditorConstants;
 import org.openflexo.wkf.utils.ActionNodeShapePainter;
 
-
 public class ActionNodeGR extends AbstractActionNodeGR {
 
 	private ForegroundStyle foreground;
 	private BackgroundStyle background;
 
-	public ActionNodeGR(ActionNode actionNode, ProcessRepresentation aDrawing, boolean isInPalet)
-	{
+	public ActionNodeGR(ActionNode actionNode, ProcessRepresentation aDrawing, boolean isInPalet) {
 		super(actionNode, aDrawing, isInPalet);
 		setIsFloatingLabel(true);
 		setWidth(30);
@@ -66,17 +64,17 @@ public class ActionNodeGR extends AbstractActionNodeGR {
 			}
 		}
 		else {*/
-			foreground = ForegroundStyle.makeStyle(Color.RED);
-			foreground.setLineWidth(0.6);
-			background = BackgroundStyle.makeColoredBackground(getMainBgColor());
-		//}
+		foreground = ForegroundStyle.makeStyle(Color.RED);
+		foreground.setLineWidth(0.6);
+		background = BackgroundStyle.makeColoredBackground(getMainBgColor());
+		// }
 		setForeground(foreground);
 		setBackground(background);
 	}
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (dataModification.propertyName()!=null && dataModification.propertyName().equals("actionType")) {
+		if (dataModification.propertyName() != null && dataModification.propertyName().equals("actionType")) {
 			updateImageBackground();
 		}
 		super.update(observable, dataModification);
@@ -86,55 +84,50 @@ public class ActionNodeGR extends AbstractActionNodeGR {
 	 * Overriden to implement defaut automatic layout
 	 */
 	@Override
-	public double _getDefaultX()
-	{
+	public double _getDefaultX() {
 		int index = getActionNode().getParentPetriGraph().getIndexForNormalNode(getActionNode());
-/*		double xOffset = 0;
-		Vector<FlexoNode> allBeginNodes = getActionNode().getParentPetriGraph().getAllBeginNodes();
-		if (allBeginNodes.size()>0) {
-			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) getGraphicalRepresentation(allBeginNodes.firstElement());
-			if (gr!=null && allBeginNodes.firstElement()!=getActionNode() && allBeginNodes.firstElement().hasLocationForContext(BASIC_PROCESS_EDITOR))
-				xOffset = gr.getX();
-		}
-		return (index % 4 ) * 50 + xOffset + 75;
-*/
-		return (index % 4 ) * 50 + 50;
+		/*		double xOffset = 0;
+				Vector<FlexoNode> allBeginNodes = getActionNode().getParentPetriGraph().getAllBeginNodes();
+				if (allBeginNodes.size()>0) {
+					ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) getGraphicalRepresentation(allBeginNodes.firstElement());
+					if (gr!=null && allBeginNodes.firstElement()!=getActionNode() && allBeginNodes.firstElement().hasLocationForContext(BASIC_PROCESS_EDITOR))
+						xOffset = gr.getX();
+				}
+				return (index % 4 ) * 50 + xOffset + 75;
+		*/
+		return (index % 4) * 50 + 50;
 	}
 
 	/**
 	 * Overriden to implement defaut automatic layout
 	 */
 	@Override
-	public double _getDefaultY()
-	{
+	public double _getDefaultY() {
 		int index = getActionNode().getParentPetriGraph().getIndexForNormalNode(getActionNode());
-/*		double yOffset = 0;
-		Vector<FlexoNode> allBeginNodes = getActionNode().getParentPetriGraph().getAllBeginNodes();
-		if (allBeginNodes.size()>0) {
-			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) getGraphicalRepresentation(allBeginNodes.firstElement());
-			if (gr!=null && allBeginNodes.firstElement()!=getActionNode() && allBeginNodes.firstElement().hasLocationForContext(BASIC_PROCESS_EDITOR))
-				yOffset = gr.getY();
-		}
-		return ((index / 4 )) * 50+yOffset;
-*/
-		return (index / 4 ) * 50;
+		/*		double yOffset = 0;
+				Vector<FlexoNode> allBeginNodes = getActionNode().getParentPetriGraph().getAllBeginNodes();
+				if (allBeginNodes.size()>0) {
+					ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) getGraphicalRepresentation(allBeginNodes.firstElement());
+					if (gr!=null && allBeginNodes.firstElement()!=getActionNode() && allBeginNodes.firstElement().hasLocationForContext(BASIC_PROCESS_EDITOR))
+						yOffset = gr.getY();
+				}
+				return ((index / 4 )) * 50+yOffset;
+		*/
+		return (index / 4) * 50;
 	}
 
 	@Override
-	public double getDefaultLabelX() 
-	{
+	public double getDefaultLabelX() {
 		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR))
 			return getModel().getLabelLocation(SWLEditorConstants.SWIMMING_LANE_EDITOR).getX();
-		return getLeftBorder()+15;
+		return getLeftBorder() + 15;
 	}
 
 	@Override
-	public double getDefaultLabelY() 
-	{
+	public double getDefaultLabelY() {
 		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR))
 			return getModel().getLabelLocation(SWLEditorConstants.SWIMMING_LANE_EDITOR).getY();
-		return getTopBorder()+40;
+		return getTopBorder() + 40;
 	}
-
 
 }

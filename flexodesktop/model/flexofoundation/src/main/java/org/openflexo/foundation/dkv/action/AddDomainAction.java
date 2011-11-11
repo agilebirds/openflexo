@@ -36,105 +36,95 @@ import org.openflexo.logging.FlexoLogger;
  * @author gpolet
  * 
  */
-public class AddDomainAction extends FlexoUndoableAction<AddDomainAction,DKVObject,DKVObject>
-{
+public class AddDomainAction extends FlexoUndoableAction<AddDomainAction, DKVObject, DKVObject> {
 
-    protected static final Logger logger = FlexoLogger.getLogger(AddDomainAction.class.getPackage().getName());
+	protected static final Logger logger = FlexoLogger.getLogger(AddDomainAction.class.getPackage().getName());
 
-    public static FlexoActionType<AddDomainAction,DKVObject,DKVObject> actionType = new FlexoActionType<AddDomainAction,DKVObject,DKVObject>("add_domain", FlexoActionType.newMenu, FlexoActionType.defaultGroup,
-            FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<AddDomainAction, DKVObject, DKVObject> actionType = new FlexoActionType<AddDomainAction, DKVObject, DKVObject>(
+			"add_domain", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public AddDomainAction makeNewAction(DKVObject focusedObject, Vector<DKVObject> globalSelection, FlexoEditor editor) 
-        {
-            return new AddDomainAction(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public AddDomainAction makeNewAction(DKVObject focusedObject, Vector<DKVObject> globalSelection, FlexoEditor editor) {
+			return new AddDomainAction(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(DKVObject object, Vector<DKVObject> globalSelection)
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(DKVObject object, Vector<DKVObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(DKVObject object, Vector<DKVObject> globalSelection)
-        {
-            return object instanceof DKVModel.DomainList || object instanceof DKVModel;
-        }
-        
-        private String[] persistentProperties = {"newDomainName","newDomainDescription"};
-        
-        @Override
-		protected String[] getPersistentProperties(){
-        	return persistentProperties;
-        }
+		@Override
+		protected boolean isEnabledForSelection(DKVObject object, Vector<DKVObject> globalSelection) {
+			return object instanceof DKVModel.DomainList || object instanceof DKVModel;
+		}
 
-     };
+		private String[] persistentProperties = { "newDomainName", "newDomainDescription" };
 
-    private Domain newDomain;
-    private DKVModel _dkvModel;
-    private String _newDomainName;
-    private String _newDomainDescription;
-    
-    /**
-     * @param actionType
-     * @param focusedObject
-     * @param globalSelection
-     */
-    public AddDomainAction(DKVObject focusedObject, Vector<DKVObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+		@Override
+		protected String[] getPersistentProperties() {
+			return persistentProperties;
+		}
 
-    /**
-     * Overrides doAction
-     * 
-     * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
-     */
-    @Override
-	protected void doAction(Object context) throws FlexoException
-    {
-        newDomain = getDkvModel().addDomainNamed(getNewDomainName());
-        newDomain.setDescription(getNewDomainDescription());
-        if (logger.isLoggable(Level.INFO))
-            logger.info("Domain added");
-        objectCreated("NEW_DOMAIN", newDomain);
-    }
+	};
 
-    public Domain getNewDomain()
-    {
-        return newDomain;
-    }
+	private Domain newDomain;
+	private DKVModel _dkvModel;
+	private String _newDomainName;
+	private String _newDomainDescription;
 
+	/**
+	 * @param actionType
+	 * @param focusedObject
+	 * @param globalSelection
+	 */
+	public AddDomainAction(DKVObject focusedObject, Vector<DKVObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    public DKVModel getDkvModel() 
-    {
-        return _dkvModel;
-    }
+	/**
+	 * Overrides doAction
+	 * 
+	 * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
+	 */
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		newDomain = getDkvModel().addDomainNamed(getNewDomainName());
+		newDomain.setDescription(getNewDomainDescription());
+		if (logger.isLoggable(Level.INFO))
+			logger.info("Domain added");
+		objectCreated("NEW_DOMAIN", newDomain);
+	}
 
-    public void setDkvModel(DKVModel dkvModel) 
-    {
-        _dkvModel = dkvModel;
-    }
+	public Domain getNewDomain() {
+		return newDomain;
+	}
 
-    public String getNewDomainDescription() {
-        return _newDomainDescription;
-    }
+	public DKVModel getDkvModel() {
+		return _dkvModel;
+	}
 
-    public void setNewDomainDescription(String newDomainDescription) {
-        _newDomainDescription = newDomainDescription;
-    }
+	public void setDkvModel(DKVModel dkvModel) {
+		_dkvModel = dkvModel;
+	}
 
-    public String getNewDomainName() {
-        return _newDomainName;
-    }
+	public String getNewDomainDescription() {
+		return _newDomainDescription;
+	}
 
-    public void setNewDomainName(String newDomainName) {
-        _newDomainName = newDomainName;
-    }
+	public void setNewDomainDescription(String newDomainDescription) {
+		_newDomainDescription = newDomainDescription;
+	}
+
+	public String getNewDomainName() {
+		return _newDomainName;
+	}
+
+	public void setNewDomainName(String newDomainName) {
+		_newDomainName = newDomainName;
+	}
 
 	@Override
 	protected void redoAction(Object context) throws FlexoException {
@@ -145,6 +135,5 @@ public class AddDomainAction extends FlexoUndoableAction<AddDomainAction,DKVObje
 	protected void undoAction(Object context) throws FlexoException {
 		getNewDomain().delete();
 	}
-
 
 }

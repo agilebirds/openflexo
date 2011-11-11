@@ -30,27 +30,26 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.cg.GenerationStatusModification;
 import org.openflexo.foundation.cg.dm.CGFileWritenOnDisk;
 
-
 public abstract class DEBrowserElement extends BrowserElement {
 
-    protected static final Logger logger = Logger.getLogger(DEBrowserElement.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(DEBrowserElement.class.getPackage().getName());
 
-	public DEBrowserElement(FlexoModelObject object, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent)
-	{
+	public DEBrowserElement(FlexoModelObject object, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent) {
 		super(object, elementType, browser, parent);
 	}
 
-    /**
-     * Overrides update
-     * @see org.openflexo.components.browser.BrowserElement#update(org.openflexo.foundation.FlexoObservable, org.openflexo.foundation.DataModification)
-     */
-    @Override
-    public void update(FlexoObservable observable, DataModification dataModification)
-    {
-        if (dataModification instanceof GenerationStatusModification || dataModification instanceof CGFileWritenOnDisk) {
-            return;
-        }
-        super.update(observable, dataModification);
-    }
+	/**
+	 * Overrides update
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#update(org.openflexo.foundation.FlexoObservable,
+	 *      org.openflexo.foundation.DataModification)
+	 */
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (dataModification instanceof GenerationStatusModification || dataModification instanceof CGFileWritenOnDisk) {
+			return;
+		}
+		super.update(observable, dataModification);
+	}
 
 }

@@ -24,15 +24,11 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.wkf.processeditor.gr.WKFConnectorGR;
 
-
-public class SwimmingLaneGraphicalRepresentation extends
-		DrawingGraphicalRepresentation<FlexoProcess> {
-
+public class SwimmingLaneGraphicalRepresentation extends DrawingGraphicalRepresentation<FlexoProcess> {
 
 	private SwimmingLaneRepresentation swimmingLaneRepresentation;
-	
-	public SwimmingLaneGraphicalRepresentation(SwimmingLaneRepresentation aDrawing, FlexoProcess process)
-	{
+
+	public SwimmingLaneGraphicalRepresentation(SwimmingLaneRepresentation aDrawing, FlexoProcess process) {
 		super(aDrawing);
 		swimmingLaneRepresentation = aDrawing;
 	}
@@ -46,12 +42,12 @@ public class SwimmingLaneGraphicalRepresentation extends
 	public double getHeight() {
 		return swimmingLaneRepresentation.computeHeight();
 	}
-	
-	public void updateAllEdgeLayers()
-	{
+
+	public void updateAllEdgeLayers() {
 		for (GraphicalRepresentation<?> processChild : getContainedGraphicalRepresentations()) {
-			if (processChild instanceof WKFConnectorGR<?>) ((WKFConnectorGR<?>)processChild).updateLayer();
-		}	
+			if (processChild instanceof WKFConnectorGR<?>)
+				((WKFConnectorGR<?>) processChild).updateLayer();
+		}
 	}
 
 }

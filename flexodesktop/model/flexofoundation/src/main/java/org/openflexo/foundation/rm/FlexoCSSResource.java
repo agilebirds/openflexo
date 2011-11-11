@@ -25,49 +25,40 @@ import javax.swing.text.html.StyleSheet;
 
 import org.openflexo.foundation.FlexoException;
 
-
-public class FlexoCSSResource extends FlexoImportedResource<CSSResourceData>
-{
+public class FlexoCSSResource extends FlexoImportedResource<CSSResourceData> {
 	private StyleSheet styleSheet = null;
-	
-	public FlexoCSSResource(FlexoProjectBuilder builder) 
-	{
+
+	public FlexoCSSResource(FlexoProjectBuilder builder) {
 		this(builder.project);
 		builder.notifyResourceLoading(this);
 	}
-	
-	public FlexoCSSResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
-	
+
+	public FlexoCSSResource(FlexoProject aProject) {
+		super(aProject);
+	}
+
 	@Override
-	protected CSSResourceData doImport() throws FlexoException
-	{
+	protected CSSResourceData doImport() throws FlexoException {
 		return new CSSResourceData(getProject(), this);
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return getFile().getName();
 	}
 
 	@Override
-	public ResourceType getResourceType()
-	{
+	public ResourceType getResourceType() {
 		return ResourceType.CSS_FILE;
 	}
 
-	public StyleSheet getStyleSheet() throws MalformedURLException
-	{
-		if(styleSheet == null)
-		{
+	public StyleSheet getStyleSheet() throws MalformedURLException {
+		if (styleSheet == null) {
 			styleSheet = new StyleSheet();
 			styleSheet.importStyleSheet(getFile().toURI().toURL());
 		}
-		
+
 		return styleSheet;
 	}
-	
+
 }

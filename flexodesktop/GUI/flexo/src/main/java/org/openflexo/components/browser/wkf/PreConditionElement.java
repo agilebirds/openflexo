@@ -24,30 +24,25 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.wkf.node.FlexoPreCondition;
 
-
 /**
  * Browser element representing a FlexoPreCondition
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class PreConditionElement extends BrowserElement
-{
+public class PreConditionElement extends BrowserElement {
 
-    public PreConditionElement(FlexoPreCondition preCondition, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(preCondition, BrowserElementType.PRECONDITION, browser, parent);
-    }
+	public PreConditionElement(FlexoPreCondition preCondition, ProjectBrowser browser, BrowserElement parent) {
+		super(preCondition, BrowserElementType.PRECONDITION, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        // No children
-    }
+	@Override
+	protected void buildChildrenVector() {
+		// No children
+	}
 
-    protected FlexoPreCondition getPreCondition()
-    {
-        return (FlexoPreCondition) getObject();
-    }
+	protected FlexoPreCondition getPreCondition() {
+		return (FlexoPreCondition) getObject();
+	}
 
 }

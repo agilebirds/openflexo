@@ -37,146 +37,136 @@ import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.xml.FlexoComponentLibraryBuilder;
 import org.openflexo.toolbox.FileUtils;
 
-
 /**
- * @author bmangez
- * <B>Class Description</B>
+ * @author bmangez <B>Class Description</B>
  */
-public class ReusableComponentDefinition extends PartialComponentDefinition implements Serializable
-{
-    private static final Logger logger = Logger.getLogger(TabComponentDefinition.class.getPackage().getName());
+public class ReusableComponentDefinition extends PartialComponentDefinition implements Serializable {
+	private static final Logger logger = Logger.getLogger(TabComponentDefinition.class.getPackage().getName());
 
-    /**
-     * Constructor used during deserialization
-     * 
-     * @throws DuplicateResourceException
-     */
-    public ReusableComponentDefinition(FlexoComponentLibraryBuilder builder) throws DuplicateResourceException
-    {
-        this(null, builder.componentLibrary, null, builder.getProject());
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor used during deserialization
+	 * 
+	 * @throws DuplicateResourceException
+	 */
+	public ReusableComponentDefinition(FlexoComponentLibraryBuilder builder) throws DuplicateResourceException {
+		this(null, builder.componentLibrary, null, builder.getProject());
+		initializeDeserialization(builder);
+	}
 
-    public ReusableComponentDefinition(FlexoComponentLibrary componentLibrary)
-    {
-        super(componentLibrary);
-    }
+	public ReusableComponentDefinition(FlexoComponentLibrary componentLibrary) {
+		super(componentLibrary);
+	}
 
-    public ReusableComponentDefinition(String aComponentName, FlexoComponentLibrary componentLibrary, FlexoComponentFolder aFolder, FlexoProject prj,
-            boolean checkUnicity) throws DuplicateResourceException
-    {
-        super(aComponentName, componentLibrary, aFolder, prj);
-        if (checkUnicity) {
-            String resourceIdentifier = FlexoReusableComponentResource.resourceIdentifierForName(aComponentName);
-            if ((aFolder != null) && (aFolder.getProject() != null) && (aFolder.getProject().isRegistered(resourceIdentifier))) {
-                aFolder.removeFromComponents(this);
-                throw new DuplicateResourceException(resourceIdentifier);
-            }
-        }
-    }
+	public ReusableComponentDefinition(String aComponentName, FlexoComponentLibrary componentLibrary, FlexoComponentFolder aFolder,
+			FlexoProject prj, boolean checkUnicity) throws DuplicateResourceException {
+		super(aComponentName, componentLibrary, aFolder, prj);
+		if (checkUnicity) {
+			String resourceIdentifier = FlexoReusableComponentResource.resourceIdentifierForName(aComponentName);
+			if ((aFolder != null) && (aFolder.getProject() != null) && (aFolder.getProject().isRegistered(resourceIdentifier))) {
+				aFolder.removeFromComponents(this);
+				throw new DuplicateResourceException(resourceIdentifier);
+			}
+		}
+	}
 
-    public ReusableComponentDefinition(String aComponentName, FlexoComponentLibrary componentLibrary, FlexoComponentFolder aFolder, FlexoProject prj)
-            throws DuplicateResourceException
-    {
-        this(aComponentName, componentLibrary, aFolder, prj, true);
-    }
+	public ReusableComponentDefinition(String aComponentName, FlexoComponentLibrary componentLibrary, FlexoComponentFolder aFolder,
+			FlexoProject prj) throws DuplicateResourceException {
+		this(aComponentName, componentLibrary, aFolder, prj, true);
+	}
 
-    @Override
-	public FlexoComponentResource getComponentResource(boolean createIfNotExists)
-    {
-        if (getProject() != null) {
-            FlexoComponentResource returned = getProject().getFlexoReusableComponentResource(getName());
-            if (returned == null && createIfNotExists) {
-            	//if(isLoadingComponentResource)return null;
-            	//isLoadingComponentResource = true;
-            	if (logger.isLoggable(Level.INFO))
-                    logger.info("Creating new reusable component resource !");
-                // FlexoProcessResource processRes =
-                // getProject().getFlexoProcessResource(getProcess().getName());
-                File componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(getProject().getProjectDirectory(), this), _componentName
-                        + ".woxml");
-                FlexoProjectFile resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
-                FlexoReusableComponentResource compRes=null;
-                try {
-                    compRes = new FlexoReusableComponentResource(getProject(), _componentName, getProject()
-                            .getFlexoComponentLibraryResource(), resourceComponentFile);
-                    try {
+	@Override
+	public FlexoComponentResource getComponentResource(boolean createIfNotExists) {
+		if (getProject() != null) {
+			FlexoComponentResource returned = getProject().getFlexoReusableComponentResource(getName());
+			if (returned == null && createIfNotExists) {
+				// if(isLoadingComponentResource)return null;
+				// isLoadingComponentResource = true;
+				if (logger.isLoggable(Level.INFO))
+					logger.info("Creating new reusable component resource !");
+				// FlexoProcessResource processRes =
+				// getProject().getFlexoProcessResource(getProcess().getName());
+				File componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(getProject().getProjectDirectory(),
+						this), _componentName + ".woxml");
+				FlexoProjectFile resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
+				FlexoReusableComponentResource compRes = null;
+				try {
+					compRes = new FlexoReusableComponentResource(getProject(), _componentName, getProject()
+							.getFlexoComponentLibraryResource(), resourceComponentFile);
+					try {
 						getProject().registerResource(compRes);
 					} catch (DuplicateResourceException e) {
 						throw new InvalidFileNameException(resourceComponentFile);
 					}
-               } catch (InvalidFileNameException e1) {
-                    boolean ok = false;
-                    for (int i = 0; i < 100 && !ok; i++) {
-                        try {
-                            componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(getProject().getProjectDirectory(), this), FileUtils.getValidFileName(_componentName)+i
-                                    + ".woxml");
-                            resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
-                            compRes = new FlexoReusableComponentResource(getProject(), _componentName, getProject()
-                                    .getFlexoComponentLibraryResource(), resourceComponentFile);
-                            try {
-        						getProject().registerResource(compRes);
-                                ok = true;
-        					} catch (DuplicateResourceException e) {
-        						throw new InvalidFileNameException(resourceComponentFile);
-        					}
-                        } catch (InvalidFileNameException e) {
-                            if (logger.isLoggable(Level.SEVERE))
-                                logger.severe("This should not happen");
-                            //isLoadingComponentResource = false;
-                            return null;
-                        }
-                    }
-                    if (!ok) {
-                        componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(getProject().getProjectDirectory(), this), FileUtils.getValidFileName(_componentName)+getFlexoID()
-                                + ".woxml");
-                        resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
-                        try {
-                            compRes = new FlexoReusableComponentResource(getProject(), _componentName, getProject()
-                                    .getFlexoComponentLibraryResource(), resourceComponentFile);
-                            try {
-        						getProject().registerResource(compRes);
-        					} catch (DuplicateResourceException e) {
-        						throw new InvalidFileNameException(resourceComponentFile);
-        					}
-                       } catch (InvalidFileNameException e) {
-                            if (logger.isLoggable(Level.SEVERE))
-                                logger.severe("This should really not happen.");
-                            //isLoadingComponentResource = false;
-                            return null;
-                        }
-                    }
-                }
-                //isLoadingComponentResource = false;
-                if (compRes==null)
-                    return null;
-                
-                
-                if (logger.isLoggable(Level.INFO))
-                        logger.info("Registered component " + _componentName + " file: " + componentFile);
-                    
-                
-                returned = compRes;
-            }
-            return returned;
-        }
-        return null;
-    }
+				} catch (InvalidFileNameException e1) {
+					boolean ok = false;
+					for (int i = 0; i < 100 && !ok; i++) {
+						try {
+							componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(getProject()
+									.getProjectDirectory(), this), FileUtils.getValidFileName(_componentName) + i + ".woxml");
+							resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
+							compRes = new FlexoReusableComponentResource(getProject(), _componentName, getProject()
+									.getFlexoComponentLibraryResource(), resourceComponentFile);
+							try {
+								getProject().registerResource(compRes);
+								ok = true;
+							} catch (DuplicateResourceException e) {
+								throw new InvalidFileNameException(resourceComponentFile);
+							}
+						} catch (InvalidFileNameException e) {
+							if (logger.isLoggable(Level.SEVERE))
+								logger.severe("This should not happen");
+							// isLoadingComponentResource = false;
+							return null;
+						}
+					}
+					if (!ok) {
+						componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(
+								getProject().getProjectDirectory(), this), FileUtils.getValidFileName(_componentName) + getFlexoID()
+								+ ".woxml");
+						resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
+						try {
+							compRes = new FlexoReusableComponentResource(getProject(), _componentName, getProject()
+									.getFlexoComponentLibraryResource(), resourceComponentFile);
+							try {
+								getProject().registerResource(compRes);
+							} catch (DuplicateResourceException e) {
+								throw new InvalidFileNameException(resourceComponentFile);
+							}
+						} catch (InvalidFileNameException e) {
+							if (logger.isLoggable(Level.SEVERE))
+								logger.severe("This should really not happen.");
+							// isLoadingComponentResource = false;
+							return null;
+						}
+					}
+				}
+				// isLoadingComponentResource = false;
+				if (compRes == null)
+					return null;
 
-    @Override
-    public String getClassNameKey() {
-    	return "reusable_component";
-    }
-    
-    @Override
-    public IEWOComponent createNewComponent() {
-    	return new IEReusableComponent(this,getProject());
-    }
-    
-    @Override
-	public String getInspectorName()
-    {
-        return Inspectors.IE.REUSABLE_COMPONENT_DEFINITION_INSPECTOR;
-    }
+				if (logger.isLoggable(Level.INFO))
+					logger.info("Registered component " + _componentName + " file: " + componentFile);
+
+				returned = compRes;
+			}
+			return returned;
+		}
+		return null;
+	}
+
+	@Override
+	public String getClassNameKey() {
+		return "reusable_component";
+	}
+
+	@Override
+	public IEWOComponent createNewComponent() {
+		return new IEReusableComponent(this, getProject());
+	}
+
+	@Override
+	public String getInspectorName() {
+		return Inspectors.IE.REUSABLE_COMPONENT_DEFINITION_INSPECTOR;
+	}
 
 }

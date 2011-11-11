@@ -21,14 +21,13 @@ public class RemoveFromConsultedRole extends RemoveFromXRole<RemoveFromConsulted
 	private static final Logger logger = Logger.getLogger(RemoveFromConsultedRole.class.getPackage().getName());
 
 	public static FlexoActionType<RemoveFromConsultedRole, Role, AbstractActivityNode> actionType = new FlexoActionType<RemoveFromConsultedRole, Role, AbstractActivityNode>(
-	"remove_from_consulted_role") {
+			"remove_from_consulted_role") {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public RemoveFromConsultedRole makeNewAction(Role focusedObject, Vector<AbstractActivityNode> globalSelection,
-				FlexoEditor editor) {
+		public RemoveFromConsultedRole makeNewAction(Role focusedObject, Vector<AbstractActivityNode> globalSelection, FlexoEditor editor) {
 			return new RemoveFromConsultedRole(focusedObject, globalSelection, editor);
 		}
 

@@ -24,8 +24,7 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-class VersionningPerspective extends FlexoPerspective<FlexoModelObject>
-{
+class VersionningPerspective extends FlexoPerspective<FlexoModelObject> {
 
 	/**
 	 * 
@@ -33,11 +32,11 @@ class VersionningPerspective extends FlexoPerspective<FlexoModelObject>
 	private final GeneratorController generatorController;
 
 	/**
-	 * @param generatorController TODO
+	 * @param generatorController
+	 *            TODO
 	 * @param name
 	 */
-	public VersionningPerspective(GeneratorController generatorController)
-	{
+	public VersionningPerspective(GeneratorController generatorController) {
 		super("versionning");
 		this.generatorController = generatorController;
 	}
@@ -48,8 +47,7 @@ class VersionningPerspective extends FlexoPerspective<FlexoModelObject>
 	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
-	public ImageIcon getActiveIcon()
-	{
+	public ImageIcon getActiveIcon() {
 		return CGIconLibrary.CG_VP_ACTIVE_ICON;
 	}
 
@@ -59,22 +57,19 @@ class VersionningPerspective extends FlexoPerspective<FlexoModelObject>
 	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
 	 */
 	@Override
-	public ImageIcon getSelectedIcon()
-	{
+	public ImageIcon getSelectedIcon() {
 		return CGIconLibrary.CG_VP_SELECTED_ICON;
 	}
 
 	@Override
-	public JPanel getFooter() 
-	{
+	public JPanel getFooter() {
 		return this.generatorController._footer;
 	}
 
 	@Override
-	public CGFile getDefaultObject(FlexoModelObject proposedObject) 
-	{
+	public CGFile getDefaultObject(FlexoModelObject proposedObject) {
 		if (proposedObject instanceof CGFile) {
-			return (CGFile)proposedObject;
+			return (CGFile) proposedObject;
 		}
 		return null;
 	}
@@ -85,41 +80,35 @@ class VersionningPerspective extends FlexoPerspective<FlexoModelObject>
 	}
 
 	@Override
-	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoModelObject object, FlexoController controller)
-	{
-		if (object instanceof GeneratedOutput) 
-		{
-			return new GeneratedCodeModuleView((GeneratedOutput)object, (GeneratorController)controller);
-		} 
-
-		else if (object instanceof GenerationRepository) 
-		{
-			return new CGRepositoryModuleView((CGRepository)object, (GeneratorController)controller);
-		} 
-
-		else if (object instanceof CGFile) 
-		{
-			return new CGFileHistoryModuleView((CGFile)object,(GeneratorController)controller);
+	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+		if (object instanceof GeneratedOutput) {
+			return new GeneratedCodeModuleView((GeneratedOutput) object, (GeneratorController) controller);
 		}
 
-		else if (object instanceof CGTemplate)
-		{
+		else if (object instanceof GenerationRepository) {
+			return new CGRepositoryModuleView((CGRepository) object, (GeneratorController) controller);
+		}
+
+		else if (object instanceof CGFile) {
+			return new CGFileHistoryModuleView((CGFile) object, (GeneratorController) controller);
+		}
+
+		else if (object instanceof CGTemplate) {
 			return new CGTemplateFileModuleView((CGTemplate) object, (GeneratorController) controller);
 		}
 		return null;
 	}
 
 	@Override
-	public void notifyModuleViewDisplayed(ModuleView<?> moduleView)
-	{
+	public void notifyModuleViewDisplayed(ModuleView<?> moduleView) {
 		if (moduleView.getRepresentedObject() instanceof CGObject) {
-			this.generatorController._lastEditedCGRepository = AbstractGCAction.repositoryForObject((CGObject)moduleView.getRepresentedObject());
+			this.generatorController._lastEditedCGRepository = AbstractGCAction.repositoryForObject((CGObject) moduleView
+					.getRepresentedObject());
 		}
 		this.generatorController.refreshFooter();
 		if (moduleView instanceof CGFileModuleView) {
-			((CGFileModuleView)moduleView).refresh();
+			((CGFileModuleView) moduleView).refresh();
 		}
 	}
-
 
 }

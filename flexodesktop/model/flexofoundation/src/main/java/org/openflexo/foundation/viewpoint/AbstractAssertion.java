@@ -26,77 +26,65 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.EditionAction.EditionActionBindingAttribute;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-
 public abstract class AbstractAssertion extends ViewPointObject {
 
 	private AddIndividual _action;
 
-	public void setAction(AddIndividual action) 
-	{
+	public void setAction(AddIndividual action) {
 		_action = action;
 	}
 
-	public AddIndividual getAction() 
-	{
+	public AddIndividual getAction() {
 		return _action;
 	}
-	
-	public EditionScheme getScheme()
-	{
+
+	public EditionScheme getScheme() {
 		return getAction().getScheme();
 	}
-	
-	public EditionScheme getEditionScheme()
-	{
+
+	public EditionScheme getEditionScheme() {
 		return getScheme();
 	}
-	
+
 	@Override
-	public ViewPoint getCalc() 
-	{
+	public ViewPoint getCalc() {
 		return getAction().getCalc();
 	}
-	
-	public boolean evaluateCondition(EditionSchemeAction action)
-	{
+
+	public boolean evaluateCondition(EditionSchemeAction action) {
 		if (getConditional().isValid())
-			return (Boolean)getConditional().getBindingValue(action);
+			return (Boolean) getConditional().getBindingValue(action);
 		return true;
 	}
 
-	public EditionPattern getEditionPattern()
-	{
+	public EditionPattern getEditionPattern() {
 		return getScheme().getEditionPattern();
 	}
-	
+
 	@Override
-	public BindingModel getBindingModel() 
-	{
+	public BindingModel getBindingModel() {
 		return getEditionPattern().getBindingModel();
 	}
 
 	private ViewPointDataBinding conditional;
-	
+
 	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
-	
-	public BindingDefinition getConditionalBindingDefinition()
-	{
+
+	public BindingDefinition getConditionalBindingDefinition() {
 		return CONDITIONAL;
 	}
 
-	public ViewPointDataBinding getConditional() 
-	{
-		if (conditional == null) conditional = new ViewPointDataBinding(this,EditionActionBindingAttribute.conditional,getConditionalBindingDefinition());
+	public ViewPointDataBinding getConditional() {
+		if (conditional == null)
+			conditional = new ViewPointDataBinding(this, EditionActionBindingAttribute.conditional, getConditionalBindingDefinition());
 		return conditional;
 	}
 
-	public void setConditional(ViewPointDataBinding conditional) 
-	{
+	public void setConditional(ViewPointDataBinding conditional) {
 		conditional.setOwner(this);
 		conditional.setBindingAttribute(EditionActionBindingAttribute.conditional);
 		conditional.setBindingDefinition(getConditionalBindingDefinition());
 		this.conditional = conditional;
 	}
-	
 
 }

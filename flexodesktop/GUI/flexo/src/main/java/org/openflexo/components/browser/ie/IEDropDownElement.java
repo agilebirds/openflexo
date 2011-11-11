@@ -24,41 +24,34 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ie.widget.IEDropDownWidget;
 
-
 /**
- * @author bmangez
- * <B>Class Description</B>
+ * @author bmangez <B>Class Description</B>
  */
-public class IEDropDownElement extends IEElement
-{
+public class IEDropDownElement extends IEElement {
 
-    /**
-     * @param widget
-     * @param browser
-     */
-    public IEDropDownElement(IEDropDownWidget widget, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(widget, BrowserElementType.DROPDOWN, browser,parent);
-    }
+	/**
+	 * @param widget
+	 * @param browser
+	 */
+	public IEDropDownElement(IEDropDownWidget widget, ProjectBrowser browser, BrowserElement parent) {
+		super(widget, BrowserElementType.DROPDOWN, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        //no childs
-    }
+	@Override
+	protected void buildChildrenVector() {
+		// no childs
+	}
 
-    @Override
-	public String getName()
-    {
-        if (getDropDown().getName() == null) {
-            return "DropDown";
-        }
-        return getDropDown().getName();
-    }
+	@Override
+	public String getName() {
+		if (getDropDown().getName() == null) {
+			return "DropDown";
+		}
+		return getDropDown().getName();
+	}
 
-    protected IEDropDownWidget getDropDown()
-    {
-        return (IEDropDownWidget) getObject();
-    }
+	protected IEDropDownWidget getDropDown() {
+		return (IEDropDownWidget) getObject();
+	}
 
 }

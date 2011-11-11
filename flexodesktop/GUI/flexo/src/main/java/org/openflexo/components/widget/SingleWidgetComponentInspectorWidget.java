@@ -23,66 +23,57 @@ import org.openflexo.foundation.ie.cl.SingleWidgetComponentDefinition;
 import org.openflexo.inspector.AbstractController;
 import org.openflexo.inspector.model.PropertyModel;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class SingleWidgetComponentInspectorWidget extends AbstractComponentInspectorWidget
-{
+public class SingleWidgetComponentInspectorWidget extends AbstractComponentInspectorWidget {
 
-    public SingleWidgetComponentInspectorWidget(PropertyModel model, AbstractController controller)
-    {
-        super(model,controller);
-    }
+	public SingleWidgetComponentInspectorWidget(PropertyModel model, AbstractController controller) {
+		super(model, controller);
+	}
 
-    @Override
-	protected AbstractComponentSelector createComponentSelector()
-    {
-        return new SingleWidgetComponentSelector(null, null) {
-            @Override
-			public void apply()
-            {
-                super.apply();
-                updateModelFromWidget();
-            }
+	@Override
+	protected AbstractComponentSelector createComponentSelector() {
+		return new SingleWidgetComponentSelector(null, null) {
+			@Override
+			public void apply() {
+				super.apply();
+				updateModelFromWidget();
+			}
 
-            @Override
-			public void cancel()
-            {
-                super.cancel();
-                updateModelFromWidget();
-            }
+			@Override
+			public void cancel() {
+				super.cancel();
+				updateModelFromWidget();
+			}
 
-            @Override
-			public void newComponent()
-            {
-                super.newComponent();
-                updateModelFromWidget();
-            }
+			@Override
+			public void newComponent() {
+				super.newComponent();
+				updateModelFromWidget();
+			}
 
-        };
-    }
+		};
+	}
 
-    @Override
-	public Class getDefaultType()
-    {
-        return SingleWidgetComponentDefinition.class;
-    }
+	@Override
+	public Class getDefaultType() {
+		return SingleWidgetComponentDefinition.class;
+	}
 
-    @Override
-    public void fireEditingCanceled() 
-    {
-    	if (_selector != null) _selector.closePopup();
-    }
-    
-    @Override
-    public void fireEditingStopped()     
-    {
-    	if (_selector != null) _selector.closePopup();
-    }
+	@Override
+	public void fireEditingCanceled() {
+		if (_selector != null)
+			_selector.closePopup();
+	}
 
+	@Override
+	public void fireEditingStopped() {
+		if (_selector != null)
+			_selector.closePopup();
+	}
 
 }

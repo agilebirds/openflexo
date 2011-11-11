@@ -30,59 +30,54 @@ import org.openflexo.foundation.wkf.MetricsDefinition;
 import org.openflexo.foundation.wkf.WorkflowModelObject;
 import org.openflexo.foundation.wkf.MetricsDefinition.MetricsType;
 
+public abstract class AddMetricsDefinition extends FlexoAction<AddMetricsDefinition, FlexoWorkflow, WorkflowModelObject> {
 
-public abstract class AddMetricsDefinition extends FlexoAction<AddMetricsDefinition,FlexoWorkflow,WorkflowModelObject> 
-{
-
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(AddMetricsDefinition.class.getPackage().getName());
-    
-    private String newMetricsName;
-    private MetricsType type;
-    private String unit;
-    private String description;
-    private boolean alwaysDefined=false;
 
-    AddMetricsDefinition (FlexoActionType actionType, FlexoWorkflow focusedObject, Vector<WorkflowModelObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	private String newMetricsName;
+	private MetricsType type;
+	private String unit;
+	private String description;
+	private boolean alwaysDefined = false;
 
-    private MetricsDefinition newMetricsDefinition;
-    
-    public MetricsDefinition getNewMetricsDefinition() {
+	AddMetricsDefinition(FlexoActionType actionType, FlexoWorkflow focusedObject, Vector<WorkflowModelObject> globalSelection,
+			FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	private MetricsDefinition newMetricsDefinition;
+
+	public MetricsDefinition getNewMetricsDefinition() {
 		return newMetricsDefinition;
 	}
-    
-    protected MetricsDefinition createMetricsDefinition() {
-    	if (newMetricsDefinition==null) {
-    		newMetricsDefinition = new MetricsDefinition(getFocusedObject().getProject(),getFocusedObject());
-    		newMetricsDefinition.setName(newMetricsName);
-    		newMetricsDefinition.setType(getType());
-    		newMetricsDefinition.setDescription(getDescription());
-    		newMetricsDefinition.setUnit(unit);
-    		newMetricsDefinition.setAlwaysDefined(alwaysDefined);
-    	}
-    	return newMetricsDefinition;
-    }
-    
-    public FlexoWorkflow getWorkflow() 
-    {
-        return getFocusedObject();
-    }
-    
-    public String getNewMetricsName() 
-    {
-        return newMetricsName;
-    }
 
-    public void setNewMetricsName(String newMetricsName) 
-    {
-        this.newMetricsName = newMetricsName;
-    }
+	protected MetricsDefinition createMetricsDefinition() {
+		if (newMetricsDefinition == null) {
+			newMetricsDefinition = new MetricsDefinition(getFocusedObject().getProject(), getFocusedObject());
+			newMetricsDefinition.setName(newMetricsName);
+			newMetricsDefinition.setType(getType());
+			newMetricsDefinition.setDescription(getDescription());
+			newMetricsDefinition.setUnit(unit);
+			newMetricsDefinition.setAlwaysDefined(alwaysDefined);
+		}
+		return newMetricsDefinition;
+	}
+
+	public FlexoWorkflow getWorkflow() {
+		return getFocusedObject();
+	}
+
+	public String getNewMetricsName() {
+		return newMetricsName;
+	}
+
+	public void setNewMetricsName(String newMetricsName) {
+		this.newMetricsName = newMetricsName;
+	}
 
 	public MetricsType getType() {
-		if (type==null)
+		if (type == null)
 			type = MetricsType.TEXT;
 		return type;
 	}
@@ -106,5 +101,5 @@ public abstract class AddMetricsDefinition extends FlexoAction<AddMetricsDefinit
 	public void setAlwaysDefined(boolean alwaysDefined) {
 		this.alwaysDefined = alwaysDefined;
 	}
-    
+
 }

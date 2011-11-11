@@ -22,35 +22,30 @@ package org.openflexo.foundation.rm;
 import org.openflexo.foundation.FlexoException;
 
 /**
- * Thown when trying to register a resource with the same identifier as an other
- * resource already registered
+ * Thown when trying to register a resource with the same identifier as an other resource already registered
  * 
  * @author sguerin
  * 
  */
-public class DuplicateResourceException extends FlexoException
-{
-    private String resourceIdentifier;
+public class DuplicateResourceException extends FlexoException {
+	private String resourceIdentifier;
 
-    public DuplicateResourceException(FlexoResource aResource)
-    {
-        this(aResource.getResourceIdentifier());
-    }
+	public DuplicateResourceException(FlexoResource aResource) {
+		this(aResource.getResourceIdentifier());
+	}
 
-    public DuplicateResourceException(String aResourceIdentifier)
-    {
-        super();
-        resourceIdentifier = aResourceIdentifier;
-    }
-    public DuplicateResourceException(String aResourceIdentifier, String localizationKey)
-    {
-        super(null, localizationKey);
-        resourceIdentifier = aResourceIdentifier;
-    }
+	public DuplicateResourceException(String aResourceIdentifier) {
+		super();
+		resourceIdentifier = aResourceIdentifier;
+	}
 
-    @Override
-	public String getMessage()
-    {
-        return "DuplicateResourceException: resource " + resourceIdentifier + " already registered.";
-    }
+	public DuplicateResourceException(String aResourceIdentifier, String localizationKey) {
+		super(null, localizationKey);
+		resourceIdentifier = aResourceIdentifier;
+	}
+
+	@Override
+	public String getMessage() {
+		return "DuplicateResourceException: resource " + resourceIdentifier + " already registered.";
+	}
 }

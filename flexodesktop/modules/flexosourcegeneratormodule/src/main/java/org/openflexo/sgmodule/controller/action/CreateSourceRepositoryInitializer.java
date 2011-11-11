@@ -39,33 +39,26 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 public class CreateSourceRepositoryInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateSourceRepositoryInitializer(SGControllerActionInitializer actionInitializer)
-	{
-		super(CreateSourceRepository.actionType,actionInitializer);
+	CreateSourceRepositoryInitializer(SGControllerActionInitializer actionInitializer) {
+		super(CreateSourceRepository.actionType, actionInitializer);
 	}
 
 	@Override
-	protected SGControllerActionInitializer getControllerActionInitializer()
-	{
-		return (SGControllerActionInitializer)super.getControllerActionInitializer();
+	protected SGControllerActionInitializer getControllerActionInitializer() {
+		return (SGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<CreateSourceRepository> getDefaultInitializer()
-	{
+	protected FlexoActionInitializer<CreateSourceRepository> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateSourceRepository>() {
 			@Override
-			public boolean run(ActionEvent e, CreateSourceRepository action)
-			{
+			public boolean run(ActionEvent e, CreateSourceRepository action) {
 
-				FIBDialog dialog = FIBDialog.instanciateComponent(
-						SGCst.CREATE_SOURCE_REPOSITORY_DIALOG_FIB,
-						action, null, true);
+				FIBDialog dialog = FIBDialog.instanciateComponent(SGCst.CREATE_SOURCE_REPOSITORY_DIALOG_FIB, action, null, true);
 				return (dialog.getStatus() == Status.VALIDATED);
 			}
 
@@ -73,13 +66,11 @@ public class CreateSourceRepositoryInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<CreateSourceRepository> getDefaultFinalizer()
-	{
+	protected FlexoActionFinalizer<CreateSourceRepository> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateSourceRepository>() {
 			@Override
-			public boolean run(ActionEvent e, CreateSourceRepository action)
-			{
-                if (action.getNewSourceRepository()!=null) {
+			public boolean run(ActionEvent e, CreateSourceRepository action) {
+				if (action.getNewSourceRepository() != null) {
 					getController().setCurrentEditedObjectAsModuleView(action.getNewSourceRepository());
 				}
 				return true;
@@ -89,31 +80,28 @@ public class CreateSourceRepositoryInitializer extends ActionInitializer {
 
 	/**
 	 * Overrides getDefaultExceptionHandler
+	 * 
 	 * @see org.openflexo.view.controller.ActionInitializer#getDefaultExceptionHandler()
 	 */
 	@Override
-	protected FlexoExceptionHandler<CreateSourceRepository> getDefaultExceptionHandler()
-	{
-	    return new FlexoExceptionHandler<CreateSourceRepository>() {
+	protected FlexoExceptionHandler<CreateSourceRepository> getDefaultExceptionHandler() {
+		return new FlexoExceptionHandler<CreateSourceRepository>() {
 
-            @Override
-            public boolean handleException(FlexoException exception, CreateSourceRepository action)
-            {
-                if (exception instanceof DuplicateCodeRepositoryNameException) {
-                    FlexoController.notify(FlexoLocalization.localizedForKey("name_is_already_used"));
-                    return true;
-                }
-                 return false;
-            }
+			@Override
+			public boolean handleException(FlexoException exception, CreateSourceRepository action) {
+				if (exception instanceof DuplicateCodeRepositoryNameException) {
+					FlexoController.notify(FlexoLocalization.localizedForKey("name_is_already_used"));
+					return true;
+				}
+				return false;
+			}
 
-	    };
+		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon()
-	{
+	protected Icon getEnabledIcon() {
 		return SGIconLibrary.GENERATED_CODE_REPOSITORY_ICON;
 	}
-
 
 }

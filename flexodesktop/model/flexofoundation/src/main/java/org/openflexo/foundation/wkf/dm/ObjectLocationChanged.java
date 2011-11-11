@@ -28,33 +28,28 @@ import java.awt.geom.Point2D;
  * @author sguerin
  * 
  */
-public class ObjectLocationChanged extends WKFDataModification
-{
+public class ObjectLocationChanged extends WKFDataModification {
 
 	private String context = null;
-    private Point initialLocation = null;
+	private Point initialLocation = null;
 
-    public ObjectLocationChanged(Point2D oldLocation, Point2D newLocation, String context)
-    {
-        super(oldLocation, newLocation);
-        this.context = context;
-    }
+	public ObjectLocationChanged(Point2D oldLocation, Point2D newLocation, String context) {
+		super(oldLocation, newLocation);
+		this.context = context;
+	}
 
-    @Deprecated
-    public ObjectLocationChanged(Point2D oldLocation, Point2D newLocation, Point initialLocation, String context)
-    {
-        this(oldLocation, newLocation, context);
-        this.initialLocation = initialLocation;
-    }
+	@Deprecated
+	public ObjectLocationChanged(Point2D oldLocation, Point2D newLocation, Point initialLocation, String context) {
+		this(oldLocation, newLocation, context);
+		this.initialLocation = initialLocation;
+	}
 
-    @Deprecated
-    public Point getInitialLocation()
-    {
-        return initialLocation;
-    }
+	@Deprecated
+	public Point getInitialLocation() {
+		return initialLocation;
+	}
 
-	public String getContext() 
-	{
+	public String getContext() {
 		return context;
 	}
 }

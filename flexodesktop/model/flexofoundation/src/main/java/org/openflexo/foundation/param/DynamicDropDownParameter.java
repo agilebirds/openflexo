@@ -23,37 +23,31 @@ import java.util.Vector;
 
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
 public class DynamicDropDownParameter<T> extends ParameterDefinition<T> {
 
 	private Vector<T> _availableValues;
 
-	public DynamicDropDownParameter(String name,String label,Vector<T> availableValues,T defaultValue)
-	{
-		super(name,label,defaultValue);
-		addParameter("dynamiclist","params."+name+".availableValues");
+	public DynamicDropDownParameter(String name, String label, Vector<T> availableValues, T defaultValue) {
+		super(name, label, defaultValue);
+		addParameter("dynamiclist", "params." + name + ".availableValues");
 		_availableValues = availableValues;
 	}
 
-	public DynamicDropDownParameter(String name, String label,T defaultValue)
-	{
-		this(name,label,null,defaultValue);
+	public DynamicDropDownParameter(String name, String label, T defaultValue) {
+		this(name, label, null, defaultValue);
 	}
 
-	public void setShowReset(boolean showReset)
-	{
-		addParameter("showReset",""+showReset);
+	public void setShowReset(boolean showReset) {
+		addParameter("showReset", "" + showReset);
 	}
 
 	@Override
-	public String getWidgetName()
-	{
+	public String getWidgetName() {
 		return DenaliWidget.DROPDOWN;
 	}
 
 	// Override this if list not defined in constructor
-	public Vector<T> getAvailableValues()
-	{
+	public Vector<T> getAvailableValues() {
 		return _availableValues;
 	}
 

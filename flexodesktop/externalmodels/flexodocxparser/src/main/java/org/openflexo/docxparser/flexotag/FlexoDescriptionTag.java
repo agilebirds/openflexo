@@ -19,29 +19,23 @@
  */
 package org.openflexo.docxparser.flexotag;
 
-
-public class FlexoDescriptionTag extends AbstractFlexoTag
-{
+public class FlexoDescriptionTag extends AbstractFlexoTag {
 	public static final String FLEXODESCRIPTIONTAG = "__FLXDESC_";
-	
-	public FlexoDescriptionTag(String tagValue) throws FlexoTagFormatException
-	{
+
+	public FlexoDescriptionTag(String tagValue) throws FlexoTagFormatException {
 		super(tagValue);
 	}
-	
+
 	@Override
-	protected String getTag()
-	{
+	protected String getTag() {
 		return FLEXODESCRIPTIONTAG;
 	}
 
-	public static String buildFlexoDescriptionTag(String flexoId, String userId, String target)
-	{
+	public static String buildFlexoDescriptionTag(String flexoId, String userId, String target) {
 		return buildFlexoTag(FLEXODESCRIPTIONTAG, flexoId, userId, target);
 	}
 
-	public String getTarget()
-	{
+	public String getTarget() {
 		return getOptionalInfo();
 	}
 }

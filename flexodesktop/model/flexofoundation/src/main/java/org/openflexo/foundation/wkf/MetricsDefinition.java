@@ -26,7 +26,6 @@ import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
 import org.openflexo.inspector.InspectableObject;
 
-
 public class MetricsDefinition extends WorkflowModelObject implements InspectableObject {
 
 	private String name;
@@ -35,16 +34,10 @@ public class MetricsDefinition extends WorkflowModelObject implements Inspectabl
 	private boolean alwaysDefined = false;
 
 	public static enum MetricsType {
-		TEXT,
-		NUMBER,
-		DOUBLE,
-		TIME,
-		TRUE_FALSE; /*,
-		FREQUENCY*/
+		TEXT, NUMBER, DOUBLE, TIME, TRUE_FALSE; /*,
+												FREQUENCY*/
 		public boolean isUnitEditable() {
-			return this == MetricsType.NUMBER
-			|| this == MetricsType.DOUBLE
-			|| this == MetricsType.TEXT;
+			return this == MetricsType.NUMBER || this == MetricsType.DOUBLE || this == MetricsType.TEXT;
 		}
 	}
 
@@ -53,7 +46,7 @@ public class MetricsDefinition extends WorkflowModelObject implements Inspectabl
 	}
 
 	public MetricsDefinition(FlexoWorkflowBuilder builder) {
-		this(builder.workflow.getProject(),builder.workflow);
+		this(builder.workflow.getProject(), builder.workflow);
 	}
 
 	@Override
@@ -76,7 +69,7 @@ public class MetricsDefinition extends WorkflowModelObject implements Inspectabl
 
 	@Override
 	public String getFullyQualifiedName() {
-		return "METRICS_DEFINITION."+getName();
+		return "METRICS_DEFINITION." + getName();
 	}
 
 	@Override
@@ -120,7 +113,7 @@ public class MetricsDefinition extends WorkflowModelObject implements Inspectabl
 		this.alwaysDefined = alwaysDefined;
 		setChanged();
 		notifyAttributeModification("alwaysDefined", !alwaysDefined, alwaysDefined);
-		if (getWorkflow()!=null && !isDeserializing()) {
+		if (getWorkflow() != null && !isDeserializing()) {
 			getWorkflow().updateProcessModelObjects(this);
 		}
 	}
@@ -139,35 +132,35 @@ public class MetricsDefinition extends WorkflowModelObject implements Inspectabl
 	}
 
 	public boolean isProcessMetricsDefinition() {
-		if (getWorkflow()!=null) {
+		if (getWorkflow() != null) {
 			return getWorkflow().getProcessMetricsDefinitions().contains(this);
 		}
 		return false;
 	}
 
 	public boolean isActivityMetricsDefinition() {
-		if (getWorkflow()!=null) {
+		if (getWorkflow() != null) {
 			return getWorkflow().getActivityMetricsDefinitions().contains(this);
 		}
 		return false;
 	}
 
 	public boolean isOperationMetricsDefinition() {
-		if (getWorkflow()!=null) {
+		if (getWorkflow() != null) {
 			return getWorkflow().getOperationMetricsDefinitions().contains(this);
 		}
 		return false;
 	}
 
 	public boolean isEdgeMetricsDefinition() {
-		if (getWorkflow()!=null) {
+		if (getWorkflow() != null) {
 			return getWorkflow().getEdgeMetricsDefinitions().contains(this);
 		}
 		return false;
 	}
 
 	public boolean isArtefactMetricsDefinition() {
-		if (getWorkflow()!=null) {
+		if (getWorkflow() != null) {
 			return getWorkflow().getArtefactMetricsDefinitions().contains(this);
 		}
 		return false;

@@ -23,27 +23,21 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.javaparser.FJPJavaSource.FJPImportDeclarations.FJPImportDeclaration;
 
-
-public class ImportDeclarationElement extends JavaBrowserElement
-{
-	public ImportDeclarationElement(FJPImportDeclaration importDeclaration, JavaParserBrowser browser, BrowserElement parent)
-	{
-		super(importDeclaration, BrowserElementType.IMPORT, browser,parent);
+public class ImportDeclarationElement extends JavaBrowserElement {
+	public ImportDeclarationElement(FJPImportDeclaration importDeclaration, JavaParserBrowser browser, BrowserElement parent) {
+		super(importDeclaration, BrowserElementType.IMPORT, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return getImportDeclaration().getImportDeclaration();
 	}
 
-	public FJPImportDeclaration getImportDeclaration()
-	{
-		return (FJPImportDeclaration)getObject();
+	public FJPImportDeclaration getImportDeclaration() {
+		return (FJPImportDeclaration) getObject();
 	}
 }

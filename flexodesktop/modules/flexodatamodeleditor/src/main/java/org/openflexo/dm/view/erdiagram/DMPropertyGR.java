@@ -42,7 +42,6 @@ import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.foundation.dm.DuplicatePropertyNameException;
 import org.openflexo.toolbox.ToolBox;
 
-
 public class DMPropertyGR extends ShapeGraphicalRepresentation<DMProperty> implements GraphicalFlexoObserver, ERDiagramConstants {
 
 	@SuppressWarnings("unused")
@@ -50,108 +49,95 @@ public class DMPropertyGR extends ShapeGraphicalRepresentation<DMProperty> imple
 
 	public static final int WIDTH = 100;
 	public static final int HEIGHT = 40;
-	
+
 	private TextStyle propertyNameStyle;
 	private TextStyle propertyTypeStyle;
 
 	private BackgroundStyle unfocusedBackground;
 	private BackgroundStyle focusedBackground;
 	private BackgroundStyle selectedBackground;
-	
 
-	public DMPropertyGR(DMProperty aDMProperty, Drawing<?> aDrawing) 
-	{
+	public DMPropertyGR(DMProperty aDMProperty, Drawing<?> aDrawing) {
 		super(ShapeType.RECTANGLE, aDMProperty, aDrawing);
-		//setText(getRole().getName());
+		// setText(getRole().getName());
 		setIsFloatingLabel(false);
 		getShape().setIsRounded(false);
 		setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
 		updateStyles();
-		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(10,10,10,10));
-		
+		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(10, 10, 10, 10));
+
 		propertyNameStyle = TextStyle.makeTextStyle(Color.DARK_GRAY, ATTRIBUTE_FONT);
 		propertyTypeStyle = TextStyle.makeTextStyle(Color.GRAY, ATTRIBUTE_FONT);
 
 		setTextStyle(propertyNameStyle);
-		
+
 		setForeground(ForegroundStyle.makeNone());
 		setShadowStyle(ShadowStyle.makeNone());
-		
+
 		unfocusedBackground = BackgroundStyle.makeEmptyBackground();
 		focusedBackground = BackgroundStyle.makeColoredBackground(FOCUSED_COLOR);
 		selectedBackground = BackgroundStyle.makeColoredBackground(SELECTED_COLOR);
 		setBackground(unfocusedBackground);
-		
-		
+
 		setIsFocusable(true);
 		setDrawControlPointsWhenFocused(false);
 		setDrawControlPointsWhenSelected(false);
-		
+
 		addToMouseClickControls(new ERDiagramController.ShowContextualMenuControl());
-		if (ToolBox.getPLATFORM()!=ToolBox.MACOS) {
+		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
 			addToMouseClickControls(new ERDiagramController.ShowContextualMenuControl(true));
 		}
-		//addToMouseDragControls(new DrawRoleSpecializationControl());
-		
+		// addToMouseDragControls(new DrawRoleSpecializationControl());
+
 		aDMProperty.addObserver(this);
-		
+
 		setDecorationPainter(new DecorationPainter() {
 			@Override
 			public void paintDecoration(org.openflexo.fge.graphics.FGEShapeDecorationGraphics g) {
 				g.useTextStyle(propertyTypeStyle);
-				g.drawString(getProperty().getTypeStringRepresentation(), g.getWidth()-PROPERTY_BORDER*3, 20,TextAlignment.RIGHT);
+				g.drawString(getProperty().getTypeStringRepresentation(), g.getWidth() - PROPERTY_BORDER * 3, 20, TextAlignment.RIGHT);
 			};
-			
+
 			@Override
-			public boolean paintBeforeShape()
-			{
+			public boolean paintBeforeShape() {
 				return false;
 			}
 		});
 
-
 	}
-	
-	
-	private void updateStyles()
-	{
+
+	private void updateStyles() {
 		/*foreground = ForegroundStyle.makeStyle(getEntity().getColor());
 		foreground.setLineWidth(2);
 		background = BackgroundStyle.makeColorGradientBackground(getRole().getColor(), Color.WHITE, ColorGradientDirection.SOUTH_WEST_NORTH_EAST);
 		setForeground(foreground);
 		setBackground(background);*/
 	}
-	
-	@Override
-	public ERDiagramRepresentation getDrawing() 
-	{
-		return (ERDiagramRepresentation)super.getDrawing();
-	}
-	
-	@Override
-	public double getRelativeTextX() 
-	{
-		Dimension labelSize = getNormalizedLabelSize();
-		double absoluteCenterX = labelSize.width/2;
-		return absoluteCenterX/getWidth();
-	}
-	
-	@Override
-	public double getRelativeTextY() 
-	{
-		return 0.5;
-	}
-	
 
 	@Override
-	public String getText() 
-	{
+	public ERDiagramRepresentation getDrawing() {
+		return (ERDiagramRepresentation) super.getDrawing();
+	}
+
+	@Override
+	public double getRelativeTextX() {
+		Dimension labelSize = getNormalizedLabelSize();
+		double absoluteCenterX = labelSize.width / 2;
+		return absoluteCenterX / getWidth();
+	}
+
+	@Override
+	public double getRelativeTextY() {
+		return 0.5;
+	}
+
+	@Override
+	public String getText() {
 		return getProperty().getName();
 	}
-	
+
 	@Override
-	public void setTextNoNotification(String text) 
-	{
+	public void setTextNoNotification(String text) {
 		try {
 			getProperty().setName(text);
 		} catch (DuplicatePropertyNameException e) {
@@ -162,60 +148,53 @@ public class DMPropertyGR extends ShapeGraphicalRepresentation<DMProperty> imple
 			e.printStackTrace();
 		}
 	}
-	
-	public DMProperty getProperty()
-	{
+
+	public DMProperty getProperty() {
 		return getDrawable();
 	}
-	
+
 	@Override
-	public Rectangle getShape()
-	{
-		return (Rectangle)super.getShape();
+	public Rectangle getShape() {
+		return (Rectangle) super.getShape();
 	}
-	
-	public int getIndex()
-	{
-		if (getProperty() == null || getProperty().getEntity() == null) return -1;
+
+	public int getIndex() {
+		if (getProperty() == null || getProperty().getEntity() == null)
+			return -1;
 		return getProperty().getEntity().getOrderedProperties().indexOf(getProperty());
 	}
-	
+
 	@Override
-	public double getX() 
-	{
+	public double getX() {
 		return 1;
 	}
-	
+
 	@Override
-	public double getY()
-	{
-		return (getIndex()*PROPERTY_HEIGHT)+HEADER_HEIGHT+PROPERTY_BORDER;
+	public double getY() {
+		return (getIndex() * PROPERTY_HEIGHT) + HEADER_HEIGHT + PROPERTY_BORDER;
 	}
-	
+
 	@Override
-	public double getWidth()
-	{
+	public double getWidth() {
 		GraphicalRepresentation<?> container = getContainerGraphicalRepresentation();
-		if (container instanceof DMEntityGR) return ((DMEntityGR)container).getWidth()-1;
+		if (container instanceof DMEntityGR)
+			return ((DMEntityGR) container).getWidth() - 1;
 		return WIDTH;
 	}
-	
+
 	@Override
-	public double getHeight()
-	{
+	public double getHeight() {
 		return PROPERTY_HEIGHT;
 	}
-	
+
 	@Override
-	public void setIsSelected(boolean aFlag)
-	{
+	public void setIsSelected(boolean aFlag) {
 		boolean old = getIsSelected();
 		super.setIsSelected(aFlag);
 		if (old != aFlag) {
 			if (aFlag) {
 				setBackground(selectedBackground);
-			}
-			else if (!getIsFocused()) {
+			} else if (!getIsFocused()) {
 				setBackground(unfocusedBackground);
 			}
 			notifyShapeNeedsToBeRedrawn();
@@ -223,15 +202,13 @@ public class DMPropertyGR extends ShapeGraphicalRepresentation<DMProperty> imple
 	}
 
 	@Override
-	public void setIsFocused(boolean aFlag) 
-	{
+	public void setIsFocused(boolean aFlag) {
 		boolean old = getIsFocused();
 		super.setIsFocused(aFlag);
 		if (old != aFlag) {
 			if (aFlag) {
 				setBackground(focusedBackground);
-			}
-			else if (!getIsSelected()) {
+			} else if (!getIsSelected()) {
 				setBackground(unfocusedBackground);
 			}
 			notifyShapeNeedsToBeRedrawn();
@@ -239,8 +216,7 @@ public class DMPropertyGR extends ShapeGraphicalRepresentation<DMProperty> imple
 	}
 
 	@Override
-	public void update (FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getProperty()) {
 		}
 	}

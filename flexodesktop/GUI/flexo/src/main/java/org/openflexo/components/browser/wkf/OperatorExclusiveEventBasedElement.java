@@ -24,12 +24,9 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.wkf.node.ExclusiveEventBasedOperator;
 
+public class OperatorExclusiveEventBasedElement extends OperatorNodeElement {
 
-public class OperatorExclusiveEventBasedElement extends OperatorNodeElement
-{
-
-    public OperatorExclusiveEventBasedElement(ExclusiveEventBasedOperator node, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(node, BrowserElementType.OPERATOR_EXCLUSIVE_NODE, browser,parent);
-    }
+	public OperatorExclusiveEventBasedElement(ExclusiveEventBasedOperator node, ProjectBrowser browser, BrowserElement parent) {
+		super(node, BrowserElementType.OPERATOR_EXCLUSIVE_NODE, browser, parent);
+	}
 }

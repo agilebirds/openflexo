@@ -19,8 +19,6 @@
  */
 package org.openflexo.diff.merge;
 
-
-
 public class TestRoundTrip {
 
 	/*public static void main(String[] args) 

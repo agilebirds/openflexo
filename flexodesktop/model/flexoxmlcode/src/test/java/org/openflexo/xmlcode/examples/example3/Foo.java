@@ -23,22 +23,19 @@ package org.openflexo.xmlcode.examples.example3;
 import org.openflexo.xmlcode.XMLSerializable;
 
 /**
- * Class <code>Foo</code> is intented to represent a command object in XML
- * coding/decoding example.
+ * Class <code>Foo</code> is intented to represent a command object in XML coding/decoding example.
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  */
-public class Foo implements XMLSerializable
-{
+public class Foo implements XMLSerializable {
 
-    public int intField;
+	public int intField;
 
-    public String stringField;
+	public String stringField;
 
-    @Override
-	public String toString()
-    {
+	@Override
+	public String toString() {
 
-        return "Foo (" + intField + "," + stringField + ")";
-    }
+		return "Foo (" + intField + "," + stringField + ")";
+	}
 }

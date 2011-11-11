@@ -34,52 +34,46 @@ import org.openflexo.view.menu.FlexoMenuItem;
 import org.openflexo.view.menu.WindowMenu;
 import org.openflexo.wkf.controller.WKFController;
 
-
 /**
  * 'Edit' menu
- *
+ * 
  * @author benoit
  */
-public class WKFWindowMenu extends WindowMenu
-{
+public class WKFWindowMenu extends WindowMenu {
 
-    private static final Logger logger = Logger.getLogger(WKFWindowMenu.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(WKFWindowMenu.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
+	public FlexoMenuItem openInNewWindow;
 
-    public FlexoMenuItem openInNewWindow;
+	protected WKFController _controller;
 
-    protected WKFController _controller;
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	public WKFWindowMenu(WKFController controller) {
+		super(controller, Module.WKF_MODULE);
+		_controller = controller;
+		addSeparator();
 
-    public WKFWindowMenu(WKFController controller)
-    {
-        super(controller,Module.WKF_MODULE);
-        _controller = controller;
-        addSeparator();
- 
-        add(new FlexoMenuItem(org.openflexo.wkf.controller.OpenProcessInNewWindow.actionType, getController()) {
-            @Override
-			public FlexoModelObject getFocusedObject() 
-            {
-                return _controller.getCurrentFlexoProcess();
-            }           
-            @Override
-			public Vector getGlobalSelection() 
-            {
-                return null;
-            }
-        });
-  
-    }
+		add(new FlexoMenuItem(org.openflexo.wkf.controller.OpenProcessInNewWindow.actionType, getController()) {
+			@Override
+			public FlexoModelObject getFocusedObject() {
+				return _controller.getCurrentFlexoProcess();
+			}
 
- 
+			@Override
+			public Vector getGlobalSelection() {
+				return null;
+			}
+		});
+
+	}
+
 }

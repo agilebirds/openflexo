@@ -19,16 +19,13 @@
  */
 package org.openflexo.foundation.rm;
 
-
 /**
- * This interface is implemented by all classes which represents imported data related to
- * a given FlexoImportedResource
+ * This interface is implemented by all classes which represents imported data related to a given FlexoImportedResource
  * 
  * @author sguerin
  * 
  */
-public interface ImportedResourceData extends FlexoResourceData
-{
+public interface ImportedResourceData extends FlexoResourceData {
 	/**
 	 * Return the resource related to this object
 	 * 

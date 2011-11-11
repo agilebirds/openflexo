@@ -19,29 +19,22 @@
  */
 package org.openflexo.fib.model;
 
-
-public class FIBRemovingNotification<T extends Object> extends FIBModelNotification<T>
-{
-	public FIBRemovingNotification(Enum<?> parameterKey, T removedValue)
-	{
-		super(parameterKey.name(),removedValue,null);
+public class FIBRemovingNotification<T extends Object> extends FIBModelNotification<T> {
+	public FIBRemovingNotification(Enum<?> parameterKey, T removedValue) {
+		super(parameterKey.name(), removedValue, null);
 	}
-	
 
-	public FIBRemovingNotification(String attributeName, T addedValue)
-	{
-		super(attributeName,null,addedValue);
+	public FIBRemovingNotification(String attributeName, T addedValue) {
+		super(attributeName, null, addedValue);
 	}
-	
-	public T getRemovedValue()
-	{
+
+	public T getRemovedValue() {
 		return oldValue();
 	}
-	
+
 	@Override
-	public String toString()
-	{
-		return "FIBRemovingNotification of "+getClass().getSimpleName()+" "+getAttributeName()+" removed: "+oldValue();
+	public String toString() {
+		return "FIBRemovingNotification of " + getClass().getSimpleName() + " " + getAttributeName() + " removed: " + oldValue();
 	}
-	
+
 }

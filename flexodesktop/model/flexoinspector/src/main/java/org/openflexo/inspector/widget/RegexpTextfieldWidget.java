@@ -34,155 +34,145 @@ import javax.swing.event.DocumentListener;
 import org.openflexo.inspector.AbstractController;
 import org.openflexo.inspector.model.PropertyModel;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class RegexpTextfieldWidget extends DenaliWidget<String>
-{
-    
-    private JTextField textfield;
-    
-    private boolean isUpdatingModel = false;
-    
-    private boolean isUpdatingWidget = false;
-    
-    public static final String COLUMNS_PARAM = "columns";
-    private static final int DEFAULT_COLUMNS = 5;
+public class RegexpTextfieldWidget extends DenaliWidget<String> {
 
-    /**
-     * @param model
-     */
-    protected RegexpTextfieldWidget(PropertyModel model, AbstractController controller)
-    {
-        super(model,controller);
-        textfield = new JTextField();
-        textfield.getDocument().addDocumentListener(new DocumentListener() {
+	private JTextField textfield;
 
-            @Override
-			public void changedUpdate(DocumentEvent e)
-            {
-                checkRegexp();
-            }
+	private boolean isUpdatingModel = false;
 
-            @Override
-			public void insertUpdate(DocumentEvent e)
-            {
-                checkRegexp();
-            }
+	private boolean isUpdatingWidget = false;
 
-            @Override
-			public void removeUpdate(DocumentEvent e)
-            {
-                checkRegexp();
-            }
+	public static final String COLUMNS_PARAM = "columns";
+	private static final int DEFAULT_COLUMNS = 5;
 
-        });
-        textfield.addFocusListener(new FocusListener() {
+	/**
+	 * @param model
+	 */
+	protected RegexpTextfieldWidget(PropertyModel model, AbstractController controller) {
+		super(model, controller);
+		textfield = new JTextField();
+		textfield.getDocument().addDocumentListener(new DocumentListener() {
 
-            @Override
-			public void focusGained(FocusEvent e)
-            {
-                
-            }
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				checkRegexp();
+			}
 
-            @Override
-			public void focusLost(FocusEvent e)
-            {
-                updateModelFromWidget();
-                updateWidgetFromModel();
-            }
-            
-        });
-        textfield.addActionListener(new ActionListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				checkRegexp();
+			}
 
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                updateModelFromWidget();
-                updateWidgetFromModel();
-            }
-            
-        });
-        
-        if (model.hasValueForParameter(COLUMNS_PARAM)) {
-            int colNb = model.getIntValueForParameter(COLUMNS_PARAM);
-            textfield.setColumns(colNb > 0 ? colNb : DEFAULT_COLUMNS);
-        } else {
-        	textfield.setColumns(DEFAULT_COLUMNS);
-        }
-        textfield.setMinimumSize(MINIMUM_SIZE);
-    }
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				checkRegexp();
+			}
 
-    void checkRegexp()
-    {
-        if (textfield.getText()!=null && getPattern().matcher(textfield.getText()).matches())
-            textfield.setBackground(Color.WHITE);
-        else
-            textfield.setBackground(Color.RED);
-    }
-    
-    /**
-     * Overrides getDefaultType
-     * @see org.openflexo.inspector.widget.DenaliWidget#getDefaultType()
-     */
-    @Override
-    public Class getDefaultType()
-    {
-        return String.class;
-    }
+		});
+		textfield.addFocusListener(new FocusListener() {
 
-    /**
-     * Overrides getDynamicComponent
-     * @see org.openflexo.inspector.widget.DenaliWidget#getDynamicComponent()
-     */
-    @Override
-    public JComponent getDynamicComponent()
-    {
-        return textfield;
-    }
+			@Override
+			public void focusGained(FocusEvent e) {
 
-    /**
-     * Overrides updateModelFromWidget
-     * @see org.openflexo.inspector.widget.DenaliWidget#updateModelFromWidget()
-     */
-    @Override
-    public synchronized void updateModelFromWidget()
-    {
-        isUpdatingModel = true;
-        if (!isUpdatingWidget) {
-            if (textfield.getText()!=null && getPattern().matcher(textfield.getText()).matches())
-                setObjectValue(textfield.getText());
-        }
-        isUpdatingModel = false;
-    }
+			}
 
-    /**
-     * Overrides updateWidgetFromModel
-     * @see org.openflexo.inspector.widget.DenaliWidget#updateWidgetFromModel()
-     */
-    @Override
-    public synchronized void updateWidgetFromModel()
-    {
+			@Override
+			public void focusLost(FocusEvent e) {
+				updateModelFromWidget();
+				updateWidgetFromModel();
+			}
+
+		});
+		textfield.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				updateModelFromWidget();
+				updateWidgetFromModel();
+			}
+
+		});
+
+		if (model.hasValueForParameter(COLUMNS_PARAM)) {
+			int colNb = model.getIntValueForParameter(COLUMNS_PARAM);
+			textfield.setColumns(colNb > 0 ? colNb : DEFAULT_COLUMNS);
+		} else {
+			textfield.setColumns(DEFAULT_COLUMNS);
+		}
+		textfield.setMinimumSize(MINIMUM_SIZE);
+	}
+
+	void checkRegexp() {
+		if (textfield.getText() != null && getPattern().matcher(textfield.getText()).matches())
+			textfield.setBackground(Color.WHITE);
+		else
+			textfield.setBackground(Color.RED);
+	}
+
+	/**
+	 * Overrides getDefaultType
+	 * 
+	 * @see org.openflexo.inspector.widget.DenaliWidget#getDefaultType()
+	 */
+	@Override
+	public Class getDefaultType() {
+		return String.class;
+	}
+
+	/**
+	 * Overrides getDynamicComponent
+	 * 
+	 * @see org.openflexo.inspector.widget.DenaliWidget#getDynamicComponent()
+	 */
+	@Override
+	public JComponent getDynamicComponent() {
+		return textfield;
+	}
+
+	/**
+	 * Overrides updateModelFromWidget
+	 * 
+	 * @see org.openflexo.inspector.widget.DenaliWidget#updateModelFromWidget()
+	 */
+	@Override
+	public synchronized void updateModelFromWidget() {
+		isUpdatingModel = true;
+		if (!isUpdatingWidget) {
+			if (textfield.getText() != null && getPattern().matcher(textfield.getText()).matches())
+				setObjectValue(textfield.getText());
+		}
+		isUpdatingModel = false;
+	}
+
+	/**
+	 * Overrides updateWidgetFromModel
+	 * 
+	 * @see org.openflexo.inspector.widget.DenaliWidget#updateWidgetFromModel()
+	 */
+	@Override
+	public synchronized void updateWidgetFromModel() {
 		widgetUpdating = true;
-      isUpdatingWidget = true;
-        if (!isUpdatingModel) {
-            textfield.setText(getStringValue());
-        }
-        isUpdatingWidget = false;
+		isUpdatingWidget = true;
+		if (!isUpdatingModel) {
+			textfield.setText(getStringValue());
+		}
+		isUpdatingWidget = false;
 		widgetUpdating = false;
-    }
-    
-    public Pattern getPattern() {
-        return Pattern.compile(getRegexp());
-    }
-    
-    public String getRegexp() {
-        if (_propertyModel.getValueForParameter("regexp").indexOf('"')>-1)
-            return _propertyModel.getValueForParameter("regexp").substring(1, _propertyModel.getValueForParameter("regexp").length()-1);
-        else 
-            return getModel().valueForKey(_propertyModel.getValueForParameter("regexp"));
-    }
+	}
+
+	public Pattern getPattern() {
+		return Pattern.compile(getRegexp());
+	}
+
+	public String getRegexp() {
+		if (_propertyModel.getValueForParameter("regexp").indexOf('"') > -1)
+			return _propertyModel.getValueForParameter("regexp").substring(1, _propertyModel.getValueForParameter("regexp").length() - 1);
+		else
+			return getModel().valueForKey(_propertyModel.getValueForParameter("regexp"));
+	}
 
 }

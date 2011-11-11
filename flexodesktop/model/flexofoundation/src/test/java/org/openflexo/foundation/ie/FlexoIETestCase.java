@@ -23,15 +23,13 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoTestCase;
 
-
 public abstract class FlexoIETestCase extends FlexoTestCase {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FlexoIETestCase.class.getPackage().getName());
-	
+
 	public FlexoIETestCase(String arg0) {
 		super(arg0);
 	}
-	
 
 }

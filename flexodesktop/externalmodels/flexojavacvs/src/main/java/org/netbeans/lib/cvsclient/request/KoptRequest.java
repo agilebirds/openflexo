@@ -22,27 +22,28 @@ package org.netbeans.lib.cvsclient.request;
 
 /**
  * Represents <tt>Kopt option\n</tt> request.
- *
+ * 
  * @author Petr Kuzel
  */
 public class KoptRequest extends Request {
 
-    private final String option;
+	private final String option;
 
-    /**
-     * @param option >i>option</i> terminal from C/S protol specification.
-     */
-    public KoptRequest(String option) {
-        this.option = option;
-    }
+	/**
+	 * @param option
+	 *            >i>option</i> terminal from C/S protol specification.
+	 */
+	public KoptRequest(String option) {
+		this.option = option;
+	}
 
-    @Override
+	@Override
 	public String getRequestString() throws UnconfiguredRequestException {
-        return "Kopt " + option + "\n";  // NOI!8N
-    }
+		return "Kopt " + option + "\n"; // NOI!8N
+	}
 
-    @Override
+	@Override
 	public boolean isResponseExpected() {
-        return false;
-    }
+		return false;
+	}
 }

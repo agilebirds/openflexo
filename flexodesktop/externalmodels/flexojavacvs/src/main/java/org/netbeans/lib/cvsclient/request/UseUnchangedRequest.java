@@ -20,27 +20,28 @@
 package org.netbeans.lib.cvsclient.request;
 
 /**
- * Issues the UseUnchanged request, which tells servers that the client
- * is using version 1.10 of the CVS protocol.
- * @author  Robert Greig
+ * Issues the UseUnchanged request, which tells servers that the client is using version 1.10 of the CVS protocol.
+ * 
+ * @author Robert Greig
  */
 public class UseUnchangedRequest extends Request {
-    /**
-     * Get the request String that will be passed to the server
-     * @return the request String
-     */
-    @Override
+	/**
+	 * Get the request String that will be passed to the server
+	 * 
+	 * @return the request String
+	 */
+	@Override
 	public String getRequestString() throws UnconfiguredRequestException {
-        return "UseUnchanged \n"; //NOI18N
-    }
+		return "UseUnchanged \n"; // NOI18N
+	}
 
-    /**
-     * Is a response expected from the server?
-     * @return true if a response is expected, false if no response if
-     * expected
-     */
-    @Override
+	/**
+	 * Is a response expected from the server?
+	 * 
+	 * @return true if a response is expected, false if no response if expected
+	 */
+	@Override
 	public boolean isResponseExpected() {
-        return false;
-    }
+		return false;
+	}
 }

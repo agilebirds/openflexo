@@ -23,14 +23,12 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.controller.DrawingPalette;
 
-
 public class DiagramPalette extends DrawingPalette {
 
 	private static final Logger logger = Logger.getLogger(DiagramPalette.class.getPackage().getName());
 
-	public DiagramPalette()
-	{
-		super(300,230,"default");
+	public DiagramPalette() {
+		super(300, 230, "default");
 		/*int n = 1;
 		for (int i=0; i<2; i++) {
 			for (int j=0; j<4; j++) {	
@@ -42,7 +40,7 @@ public class DiagramPalette extends DrawingPalette {
 		}*/
 		makePalettePanel();
 	}
-	
+
 	/*private FlexoColor colorFor (int x, int y) 
 	{
 		if (x==0) {
@@ -112,11 +110,10 @@ public class DiagramPalette extends DrawingPalette {
 		gr.setDrawable(returned);
 		return returned;
 	}*/
-	
+
 	@Override
-	public ERDiagramController getController()
-	{
-		return (ERDiagramController)super.getController();
+	public ERDiagramController getController() {
+		return (ERDiagramController) super.getController();
 	}
-	
+
 }

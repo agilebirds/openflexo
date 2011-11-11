@@ -25,28 +25,24 @@ package org.openflexo.foundation.wkf.dm;
  * @author sguerin
  * 
  */
-public class PortMapRegisteryOrientationChanged extends WKFDataModification
-{
+public class PortMapRegisteryOrientationChanged extends WKFDataModification {
 
-    private int _newOrientation;
+	private int _newOrientation;
 
-    private int _oldOrientation;
+	private int _oldOrientation;
 
-    public PortMapRegisteryOrientationChanged(int oldOrientation, int newOrientation)
-    {
-        super(new Integer(oldOrientation), new Integer(newOrientation));
-        _newOrientation = newOrientation;
-        _oldOrientation = oldOrientation;
-    }
+	public PortMapRegisteryOrientationChanged(int oldOrientation, int newOrientation) {
+		super(new Integer(oldOrientation), new Integer(newOrientation));
+		_newOrientation = newOrientation;
+		_oldOrientation = oldOrientation;
+	}
 
-    public int getNewOrientation()
-    {
-        return _newOrientation;
-    }
+	public int getNewOrientation() {
+		return _newOrientation;
+	}
 
-    public int getOldOrientation()
-    {
-        return _oldOrientation;
-    }
+	public int getOldOrientation() {
+		return _oldOrientation;
+	}
 
 }

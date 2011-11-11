@@ -34,31 +34,25 @@ import org.openflexo.icon.FilesIconLibrary;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconMarker;
 
-
-public class FileReleaseVersionElement extends DGBrowserElement
-{
-	public FileReleaseVersionElement(CGFileReleaseVersion fileReleaseVersion, ProjectBrowser browser, BrowserElement parent)
-	{
-		super(fileReleaseVersion, BrowserElementType.FILE_RELEASE_VERSION, browser,parent);
+public class FileReleaseVersionElement extends DGBrowserElement {
+	public FileReleaseVersionElement(CGFileReleaseVersion fileReleaseVersion, ProjectBrowser browser, BrowserElement parent) {
+		super(fileReleaseVersion, BrowserElementType.FILE_RELEASE_VERSION, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 		for (CGFileIntermediateVersion version : getReleaseVersion().getIntermediateVersions()) {
 			addToChilds(version);
 		}
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return getReleaseVersion().getStringRepresentation();
 	}
 
 	@Override
-	public ImageIcon getBaseIcon()
-	{
+	public ImageIcon getBaseIcon() {
 		ImageIcon returned = FilesIconLibrary.smallIconForFileFormat(getReleaseVersion().getCGFile().getFileFormat());
 		if (returned == null) {
 			returned = super.getBaseIcon();
@@ -67,8 +61,7 @@ public class FileReleaseVersionElement extends DGBrowserElement
 	}
 
 	@Override
-	public Icon getIcon()
-	{
+	public Icon getIcon() {
 		ImageIcon returned = getBaseIcon();
 		Vector<IconMarker> markers = new Vector<IconMarker>();
 		markers.add(CGIconLibrary.RELEASE_VERSION);
@@ -77,9 +70,8 @@ public class FileReleaseVersionElement extends DGBrowserElement
 		return returned;
 	}
 
-	public CGFileReleaseVersion getReleaseVersion()
-	{
-		return (CGFileReleaseVersion)getObject();
+	public CGFileReleaseVersion getReleaseVersion() {
+		return (CGFileReleaseVersion) getObject();
 	}
 
 }

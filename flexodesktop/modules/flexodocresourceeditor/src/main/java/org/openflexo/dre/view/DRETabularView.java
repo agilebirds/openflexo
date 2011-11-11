@@ -19,7 +19,6 @@
  */
 package org.openflexo.dre.view;
 
-
 import org.openflexo.components.tabular.TabularView;
 import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.dre.controller.DREController;
@@ -27,29 +26,24 @@ import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemFolder;
 import org.openflexo.foundation.FlexoModelObject;
 
-
 public class DRETabularView extends TabularView {
 
-    public DRETabularView(DREController controller, AbstractModel model, int visibleRowCount)
-    {
-        super(controller,model,visibleRowCount);
-    }
+	public DRETabularView(DREController controller, AbstractModel model, int visibleRowCount) {
+		super(controller, model, visibleRowCount);
+	}
 
-    public DRETabularView(DREController controller, AbstractModel model)
-    {
-        super(controller,model);
-    }
-    
-    @Override
-	protected FlexoModelObject getParentObject(FlexoModelObject object)
-    {
-        if (object instanceof DocItem) {
-            return ((DocItem)object).getFolder();
-        }
-        else if (object instanceof DocItemFolder) {
-            return ((DocItemFolder)object).getParentFolder();
-        }
-        return null;
-    }
+	public DRETabularView(DREController controller, AbstractModel model) {
+		super(controller, model);
+	}
+
+	@Override
+	protected FlexoModelObject getParentObject(FlexoModelObject object) {
+		if (object instanceof DocItem) {
+			return ((DocItem) object).getFolder();
+		} else if (object instanceof DocItemFolder) {
+			return ((DocItemFolder) object).getParentFolder();
+		}
+		return null;
+	}
 
 }

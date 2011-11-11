@@ -24,59 +24,50 @@ import java.io.FileNotFoundException;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.dm.eo.model.PropertyListDeserializationException;
 
-
 /**
  * Thrown when exception occurs in EOAccess layer
  * 
  * @author sguerin
  * 
  */
-public class EOAccessException extends FlexoException
-{
+public class EOAccessException extends FlexoException {
 
-    private Exception _eofException;
+	private Exception _eofException;
 
-    public EOAccessException(IllegalArgumentException e)
-    {
-        super();
-        _eofException = e;
-    }
+	public EOAccessException(IllegalArgumentException e) {
+		super();
+		_eofException = e;
+	}
 
-    public EOAccessException(IllegalStateException e)
-    {
-        super();
-        _eofException = e;
-    }
+	public EOAccessException(IllegalStateException e) {
+		super();
+		_eofException = e;
+	}
 
-    /**
-     * @param e
-     */
-    public EOAccessException(FileNotFoundException e)
-    {
-        super();
-        _eofException = e;
-    }
+	/**
+	 * @param e
+	 */
+	public EOAccessException(FileNotFoundException e) {
+		super();
+		_eofException = e;
+	}
 
-    /**
-     * @param e
-     */
-    public EOAccessException(PropertyListDeserializationException e)
-    {
-        super();
-        _eofException = e;
-    }
+	/**
+	 * @param e
+	 */
+	public EOAccessException(PropertyListDeserializationException e) {
+		super();
+		_eofException = e;
+	}
 
-    @Override
-	public String getMessage()
-    {
-        return _eofException.getMessage();
-    }
-    
 	@Override
-	public Throwable getCause()
-	{
+	public String getMessage() {
+		return _eofException.getMessage();
+	}
+
+	@Override
+	public Throwable getCause() {
 		return _eofException;
 	}
-	
 
 }

@@ -29,61 +29,60 @@ import org.netbeans.lib.cvsclient.util.LoggedDataInputStream;
 
 /**
  * Handles standard message responses
- * @author  Robert Greig
+ * 
+ * @author Robert Greig
  */
 class MessageResponse implements Response {
 
-    private boolean terminating = false;
+	private boolean terminating = false;
 
-    private String firstWord;
+	private String firstWord;
 
-    public MessageResponse() {
-        // do nothing
-    }
-    
-    public MessageResponse(String initialWord) {
-        firstWord = initialWord;
-    }
-    
-    /**
-     * Process the data for the response.
-     * @param dis the data inputstream allowing the client to read the server's
-     * response. Note that the actual response name has already been read
-     * and the inputstream is positioned just before the first argument, if any.
-     */
-    @Override
-	public void process(LoggedDataInputStream dis, ResponseServices services)
-            throws ResponseException {
-        try {
-            ByteArray bytes = dis.readLineBytes();
-            String line = bytes.getStringFromBytes();
-            if (firstWord != null) {
-                line = firstWord + " " + line; //NOI18N
-            }
-            terminating |= line.endsWith(SpecialResponses.SERVER_ABORTED);
-            terminating |= line.endsWith(SpecialResponses.SERVER_ABORTED_2);
-            terminating |= line.endsWith(SpecialResponses.SERVER_ABORTED_3);
-            terminating &= dis.available() == 0;  // heuristics to relax SpecialResponses in commit messages...
-            MessageEvent event = new MessageEvent(this, line, bytes.getBytes(), false);
-            services.getEventManager().fireCVSEvent(event);
-        }
-        catch (EOFException ex) {
-            throw new ResponseException(ex, CommandException.getLocalMessage("CommandException.EndOfFile", null)); //NOI18N
-        }
-        catch (IOException ex) {
-            throw new ResponseException(ex);
-        }
-    }
+	public MessageResponse() {
+		// do nothing
+	}
 
-    /**
-     * Is this a terminal response, i.e. should reading of responses stop
-     * after this response. This is true for responses such as OK or
-     * an error response
-     * <p>
-     * @see SpecialResponses.SERVER_ABORTED
-     */
-    @Override
+	public MessageResponse(String initialWord) {
+		firstWord = initialWord;
+	}
+
+	/**
+	 * Process the data for the response.
+	 * 
+	 * @param dis
+	 *            the data inputstream allowing the client to read the server's response. Note that the actual response name has already
+	 *            been read and the inputstream is positioned just before the first argument, if any.
+	 */
+	@Override
+	public void process(LoggedDataInputStream dis, ResponseServices services) throws ResponseException {
+		try {
+			ByteArray bytes = dis.readLineBytes();
+			String line = bytes.getStringFromBytes();
+			if (firstWord != null) {
+				line = firstWord + " " + line; // NOI18N
+			}
+			terminating |= line.endsWith(SpecialResponses.SERVER_ABORTED);
+			terminating |= line.endsWith(SpecialResponses.SERVER_ABORTED_2);
+			terminating |= line.endsWith(SpecialResponses.SERVER_ABORTED_3);
+			terminating &= dis.available() == 0; // heuristics to relax SpecialResponses in commit messages...
+			MessageEvent event = new MessageEvent(this, line, bytes.getBytes(), false);
+			services.getEventManager().fireCVSEvent(event);
+		} catch (EOFException ex) {
+			throw new ResponseException(ex, CommandException.getLocalMessage("CommandException.EndOfFile", null)); // NOI18N
+		} catch (IOException ex) {
+			throw new ResponseException(ex);
+		}
+	}
+
+	/**
+	 * Is this a terminal response, i.e. should reading of responses stop after this response. This is true for responses such as OK or an
+	 * error response
+	 * <p>
+	 * 
+	 * @see SpecialResponses.SERVER_ABORTED
+	 */
+	@Override
 	public boolean isTerminalResponse() {
-        return terminating;
-    }
+		return terminating;
+	}
 }

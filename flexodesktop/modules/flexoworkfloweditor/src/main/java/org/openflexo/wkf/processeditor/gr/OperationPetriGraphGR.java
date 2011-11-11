@@ -30,75 +30,63 @@ import org.openflexo.foundation.wkf.node.PetriGraphNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableNode;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
-
 public class OperationPetriGraphGR extends ContainerGR<OperationPetriGraph> {
 
-
-
-	public OperationPetriGraphGR(OperationPetriGraph object, ProcessRepresentation aDrawing)
-	{
-		super(object, aDrawing,OPERATION_PG_COLOR, OPERATION_PG_BACK_COLOR);
+	public OperationPetriGraphGR(OperationPetriGraph object, ProcessRepresentation aDrawing) {
+		super(object, aDrawing, OPERATION_PG_COLOR, OPERATION_PG_BACK_COLOR);
 		setLayer(OPERATION_PG_LAYER);
 	}
 
-	public OperationPetriGraph getOperationPetriGraph()
-	{
+	public OperationPetriGraph getOperationPetriGraph() {
 		return getDrawable();
 	}
 
 	@Override
-	public String getLabel()
-	{
-		return (getOperationPetriGraph().getContainer() instanceof AbstractNode ?
-				((AbstractNode)getOperationPetriGraph().getContainer()).getName() : "???");
+	public String getLabel() {
+		return (getOperationPetriGraph().getContainer() instanceof AbstractNode ? ((AbstractNode) getOperationPetriGraph().getContainer())
+				.getName() : "???");
 	}
 
 	@Override
-	public void closingRequested()
-	{
+	public void closingRequested() {
 		if (getOperationPetriGraph().getContainer() instanceof SelfExecutableNode) {
-			OpenExecutionPetriGraph.actionType.makeNewAction((PetriGraphNode)getOperationPetriGraph().getContainer(),null,getDrawing().getEditor()).doAction();
+			OpenExecutionPetriGraph.actionType.makeNewAction((PetriGraphNode) getOperationPetriGraph().getContainer(), null,
+					getDrawing().getEditor()).doAction();
+		} else if (getOperationPetriGraph().getContainer() instanceof LOOPOperator) {
+			OpenLoopedPetriGraph.actionType.makeNewAction((LOOPOperator) getOperationPetriGraph().getContainer(), null,
+					getDrawing().getEditor()).doAction();
+		} else if (getOperationPetriGraph().getContainer() instanceof AbstractActivityNode) {
+			OpenOperationLevel.actionType.makeNewAction((AbstractActivityNode) getOperationPetriGraph().getContainer(), null,
+					getDrawing().getEditor()).doAction();
 		}
-		else if (getOperationPetriGraph().getContainer() instanceof LOOPOperator) {
-			OpenLoopedPetriGraph.actionType.makeNewAction((LOOPOperator)getOperationPetriGraph().getContainer(),null,getDrawing().getEditor()).doAction();
-		}
-		else if (getOperationPetriGraph().getContainer() instanceof AbstractActivityNode) {
-			OpenOperationLevel.actionType.makeNewAction((AbstractActivityNode)getOperationPetriGraph().getContainer(),null,getDrawing().getEditor()).doAction();
-		}
-        // Is now performed by receiving notification
-        // getDrawing().updateGraphicalObjectsHierarchy();
+		// Is now performed by receiving notification
+		// getDrawing().updateGraphicalObjectsHierarchy();
 	}
 
-	protected WKFObjectGR<?> getWKFContainerGR()
-	{
-		return (WKFObjectGR<?>)getGraphicalRepresentation(getOperationPetriGraph().getContainer());
+	protected WKFObjectGR<?> getWKFContainerGR() {
+		return (WKFObjectGR<?>) getGraphicalRepresentation(getOperationPetriGraph().getContainer());
 	}
-
 
 	/**
-	 * Overriden to implement defaut automatic layout
-	 * Container will be horizontal centered above parent node
+	 * Overriden to implement defaut automatic layout Container will be horizontal centered above parent node
 	 */
 	@Override
-	public double getDefaultX()
-	{
+	public double getDefaultX() {
 		if (getWKFContainerGR() != null) {
 			WKFObjectGR containerGR = getWKFContainerGR();
-			return Math.max(0, containerGR.getLocationInDrawing().x-(getWidth()-containerGR.getWidth())/2);
+			return Math.max(0, containerGR.getLocationInDrawing().x - (getWidth() - containerGR.getWidth()) / 2);
 		}
 		return 0;
 	}
 
 	/**
-	 * Overriden to implement defaut automatic layout
-	 * Container will be located 50 pixels (1.0 scale) above parent node
+	 * Overriden to implement defaut automatic layout Container will be located 50 pixels (1.0 scale) above parent node
 	 */
 	@Override
-	public double getDefaultY()
-	{
+	public double getDefaultY() {
 		if (getWKFContainerGR() != null) {
 			WKFObjectGR containerGR = getWKFContainerGR();
-			return containerGR.getLocationInDrawing().y+containerGR.getHeight()+50;
+			return containerGR.getLocationInDrawing().y + containerGR.getHeight() + 50;
 		}
 		return 0;
 	}

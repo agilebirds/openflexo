@@ -33,7 +33,6 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.dm.action.DMCut;
@@ -43,53 +42,44 @@ public class DMCutInitializer extends ActionInitializer {
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DMCutInitializer(DMControllerActionInitializer actionInitializer)
-	{
-		super(DMCut.actionType,actionInitializer);
+	DMCutInitializer(DMControllerActionInitializer actionInitializer) {
+		super(DMCut.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected DMControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DMControllerActionInitializer)super.getControllerActionInitializer();
+	protected DMControllerActionInitializer getControllerActionInitializer() {
+		return (DMControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<DMCut> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<DMCut> getDefaultInitializer() {
 		return new FlexoActionInitializer<DMCut>() {
-            @Override
-			public boolean run(ActionEvent e, DMCut action)
-            {
-                return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_cut_those_objects"));
-           }
-        };
-	}
-
-     @Override
-	protected FlexoActionFinalizer<DMCut> getDefaultFinalizer() 
-	{
-		return new FlexoActionFinalizer<DMCut>() {
-            @Override
-			public boolean run(ActionEvent e, DMCut action)
-            {
-            	getControllerActionInitializer().getDMSelectionManager().performSelectionCut();
-                return true;
-           }
-        };
+			@Override
+			public boolean run(ActionEvent e, DMCut action) {
+				return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_cut_those_objects"));
+			}
+		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected FlexoActionFinalizer<DMCut> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<DMCut>() {
+			@Override
+			public boolean run(ActionEvent e, DMCut action) {
+				getControllerActionInitializer().getDMSelectionManager().performSelectionCut();
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return IconLibrary.CUT_ICON;
 	}
- 
+
 	@Override
-	protected KeyStroke getShortcut()
-	{
+	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(KeyEvent.VK_X, FlexoCst.META_MASK);
 	}
-
 
 }

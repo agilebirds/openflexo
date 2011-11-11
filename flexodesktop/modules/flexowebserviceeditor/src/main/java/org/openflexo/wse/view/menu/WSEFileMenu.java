@@ -30,45 +30,40 @@ import java.util.logging.Logger;
 import org.openflexo.view.menu.FileMenu;
 import org.openflexo.wse.controller.WSEController;
 
-
 /**
  * 'File' menu for this Module
  * 
  * @author yourname
  */
-public class WSEFileMenu extends FileMenu
-{
+public class WSEFileMenu extends FileMenu {
 
-    private static final Logger logger = Logger.getLogger(WSEFileMenu.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(WSEFileMenu.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
-      protected WSEController _wseController;
+	protected WSEController _wseController;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public WSEFileMenu(WSEController controller)
-    {
-        super(controller);
-        _wseController = controller;
-        // Put your actions here
-    }
+	public WSEFileMenu(WSEController controller) {
+		super(controller);
+		_wseController = controller;
+		// Put your actions here
+	}
 
-    public WSEController getWSEController()
-    {
-        return _wseController;
-    }
-    
-    @Override
-	public void addSpecificItems()
-    {
-    		//add(new FlexoMenuItem(ImportWsdl.actionType, getController()));
-    }
-    
+	public WSEController getWSEController() {
+		return _wseController;
+	}
+
+	@Override
+	public void addSpecificItems() {
+		// add(new FlexoMenuItem(ImportWsdl.actionType, getController()));
+	}
+
 }

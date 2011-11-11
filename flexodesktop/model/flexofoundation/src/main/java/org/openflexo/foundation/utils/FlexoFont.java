@@ -28,132 +28,113 @@ import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class FlexoFont extends KVCObject implements StringConvertable
-{
+public class FlexoFont extends KVCObject implements StringConvertable {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FlexoFont.class.getPackage().getName());
 
-    private Font _theFont;
-    
-     public static final StringEncoder.Converter<FlexoFont> flexoFontConverter = new Converter<FlexoFont>(FlexoFont.class) {
+	private Font _theFont;
 
-        @Override
-		public FlexoFont convertFromString(String value)
-        {
-            return stringToFont(value);
-        }
+	public static final StringEncoder.Converter<FlexoFont> flexoFontConverter = new Converter<FlexoFont>(FlexoFont.class) {
 
-        @Override
-		public String convertToString(FlexoFont value)
-        {
-            return value.toString();
-        }
+		@Override
+		public FlexoFont convertFromString(String value) {
+			return stringToFont(value);
+		}
 
-    };
+		@Override
+		public String convertToString(FlexoFont value) {
+			return value.toString();
+		}
 
-    public static final FlexoFont SANS_SERIF = new FlexoFont("Lucida Sans",Font.PLAIN, 10);
+	};
 
-    public FlexoFont(String s)
-    {
-        this(nameFromString(s), styleFromString(s), sizeFromString(s));
-    }
+	public static final FlexoFont SANS_SERIF = new FlexoFont("Lucida Sans", Font.PLAIN, 10);
 
-    public FlexoFont(String name, int style, int size)
-    {
-        super();
-        _theFont = new Font(name,style,size);
-    }
+	public FlexoFont(String s) {
+		this(nameFromString(s), styleFromString(s), sizeFromString(s));
+	}
 
-    public FlexoFont(Font aFont)
-    {
-        this(aFont.getName(), aFont.getStyle(), aFont.getSize());
-    }
+	public FlexoFont(String name, int style, int size) {
+		super();
+		_theFont = new Font(name, style, size);
+	}
 
-    @Override
-	public String toString()
-    {
-        return _theFont.getName() + "," + _theFont.getStyle() + "," + _theFont.getSize();
-    }
+	public FlexoFont(Font aFont) {
+		this(aFont.getName(), aFont.getStyle(), aFont.getSize());
+	}
 
-    @Override
-	public StringEncoder.Converter getConverter()
-    {
-        return flexoFontConverter;
-    }
+	@Override
+	public String toString() {
+		return _theFont.getName() + "," + _theFont.getStyle() + "," + _theFont.getSize();
+	}
 
-    public static StringEncoder.Converter getConverterStatic()
-    {
-        return flexoFontConverter;
-    }
+	@Override
+	public StringEncoder.Converter getConverter() {
+		return flexoFontConverter;
+	}
 
-    public static FlexoFont stringToFont(String s)
-    {
-        return new FlexoFont(s);
-    }
+	public static StringEncoder.Converter getConverterStatic() {
+		return flexoFontConverter;
+	}
 
-    private static String nameFromString(String s)
-    {
-        return s.substring(0, s.indexOf(","));
-    }
+	public static FlexoFont stringToFont(String s) {
+		return new FlexoFont(s);
+	}
 
-    private static int styleFromString(String s)
-    {
-        return Integer.parseInt(s.substring(s.indexOf(",") + 1, s.lastIndexOf(",")));
-    }
+	private static String nameFromString(String s) {
+		return s.substring(0, s.indexOf(","));
+	}
 
-    private static int sizeFromString(String s)
-    {
-        return Integer.parseInt(s.substring(s.lastIndexOf(",") + 1));
-    }
+	private static int styleFromString(String s) {
+		return Integer.parseInt(s.substring(s.indexOf(",") + 1, s.lastIndexOf(",")));
+	}
 
-    private static final Hashtable<String, FlexoFont> fontHashtable = new Hashtable<String, FlexoFont>();
+	private static int sizeFromString(String s) {
+		return Integer.parseInt(s.substring(s.lastIndexOf(",") + 1));
+	}
 
-    public static FlexoFont get(String fontAsString)
-    {
-        if (fontAsString == null) {
-            return null;
-        }
-        FlexoFont answer = fontHashtable.get(fontAsString);
-        if(answer==null){
-        		answer = new FlexoFont(fontAsString);
-        		fontHashtable.put(fontAsString,answer);
-        }
-        return answer;
-    }
+	private static final Hashtable<String, FlexoFont> fontHashtable = new Hashtable<String, FlexoFont>();
 
-	public int getSize()
-	{
+	public static FlexoFont get(String fontAsString) {
+		if (fontAsString == null) {
+			return null;
+		}
+		FlexoFont answer = fontHashtable.get(fontAsString);
+		if (answer == null) {
+			answer = new FlexoFont(fontAsString);
+			fontHashtable.put(fontAsString, answer);
+		}
+		return answer;
+	}
+
+	public int getSize() {
 		return getFont().getSize();
 	}
 
 	@Override
-	public boolean equals(Object obj) 
-	{
-		if (obj == this) return true;
+	public boolean equals(Object obj) {
+		if (obj == this)
+			return true;
 		if (obj instanceof FlexoFont) {
-			FlexoFont font = (FlexoFont)obj;
+			FlexoFont font = (FlexoFont) obj;
 			return getFont().equals(font.getFont());
 		}
 		return super.equals(obj);
 	}
 
-	public Font getFont()
-	{
+	public Font getFont() {
 		return _theFont;
 	}
 
-	public void setFont(Font aFont)
-	{
+	public void setFont(Font aFont) {
 		_theFont = aFont;
 	}
-	    
 
 }

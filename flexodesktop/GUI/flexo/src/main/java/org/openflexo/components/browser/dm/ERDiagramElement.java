@@ -25,52 +25,44 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.ERDiagram;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class ERDiagramElement extends DMElement
-{
+public class ERDiagramElement extends DMElement {
 
-    public ERDiagramElement(ERDiagram diagram, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(diagram, BrowserElementType.ER_DIAGRAM, browser,parent);
-    }
+	public ERDiagramElement(ERDiagram diagram, ProjectBrowser browser, BrowserElement parent) {
+		super(diagram, BrowserElementType.ER_DIAGRAM, browser, parent);
+	}
 
-    @Override
-	public String getName()
-    {
-        return getDiagram().getName();
-    }
+	@Override
+	public String getName() {
+		return getDiagram().getName();
+	}
 
-    protected ERDiagram getDiagram()
-    {
-        return (ERDiagram) getObject();
-    }
+	protected ERDiagram getDiagram() {
+		return (ERDiagram) getObject();
+	}
 
-    @Override
-	public boolean isNameEditable()
-    {
-        return true;
-    }
+	@Override
+	public boolean isNameEditable() {
+		return true;
+	}
 
-    @Override
-    public void setName(String aName)
-    {
-    	getDiagram().setName(aName);
-    }
+	@Override
+	public void setName(String aName) {
+		getDiagram().setName(aName);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
+	@Override
+	protected void buildChildrenVector() {
 
-    	for (DMEntity entity : getDiagram().getEntities()) {
-    		addToChilds(entity);
-    	}
+		for (DMEntity entity : getDiagram().getEntities()) {
+			addToChilds(entity);
+		}
 
-   }
+	}
 
 }

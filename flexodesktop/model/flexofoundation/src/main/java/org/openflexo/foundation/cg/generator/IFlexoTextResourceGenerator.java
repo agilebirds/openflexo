@@ -36,6 +36,6 @@ public interface IFlexoTextResourceGenerator extends IFlexoResourceGenerator {
 
 	public CGSymbolicDirectory getSymbolicDirectory(CGRepository repository);
 
-    @Override
+	@Override
 	public GeneratedTextResource getGeneratedCode();
 }

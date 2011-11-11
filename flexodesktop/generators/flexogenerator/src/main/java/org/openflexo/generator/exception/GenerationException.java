@@ -26,57 +26,47 @@ import org.openflexo.foundation.cg.generator.IGenerationException;
  * @author gpolet
  * 
  */
-public class GenerationException extends FlexoException implements IGenerationException
-{
+public class GenerationException extends FlexoException implements IGenerationException {
 	private String _details;
 	private Throwable _targetException;
-	
-	public GenerationException(String message)
-	{
+
+	public GenerationException(String message) {
 		super(message);
 	}
-	
-	public GenerationException(String message, String localizationKey)
-	{
-		super(message,localizationKey);
+
+	public GenerationException(String message, String localizationKey) {
+		super(message, localizationKey);
 	}
-	
-	public GenerationException(String message, String localizationKey, String details, Throwable targetException)
-	{
-		super(message,localizationKey);
+
+	public GenerationException(String message, String localizationKey, String details, Throwable targetException) {
+		super(message, localizationKey);
 		setDetails(details);
 		setTargetException(targetException);
 	}
-	
-	public void setDetails(String someDetails)
-	{
+
+	public void setDetails(String someDetails) {
 		_details = someDetails;
 	}
 
 	@Override
-	public Throwable getTargetException() 
-	{
+	public Throwable getTargetException() {
 		return _targetException;
 	}
 
-	public void setTargetException(Throwable targetException)
-	{
+	public void setTargetException(Throwable targetException) {
 		_targetException = targetException;
 	}
 
 	@Override
-	public String getDetails() 
-	{
-        if(_details==null || _details.trim().length()==0)
-            return getMessage();
+	public String getDetails() {
+		if (_details == null || _details.trim().length() == 0)
+			return getMessage();
 		return _details;
 	}
-	
+
 	@Override
-	public Throwable getCause()
-	{
+	public Throwable getCause() {
 		return getTargetException();
 	}
-	
 
 }

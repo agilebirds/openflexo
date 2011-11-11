@@ -23,42 +23,45 @@ import java.awt.Color;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class JConsoleOutputStream extends OutputStream{
+public class JConsoleOutputStream extends OutputStream {
 
 	private JConsole _console;
 	private StringBuffer _buffer;
 	private Color _color;
-	
-	public JConsoleOutputStream(JConsole console, Color color){
+
+	public JConsoleOutputStream(JConsole console, Color color) {
 		super();
-		if(console==null)
+		if (console == null)
 			throw new IllegalArgumentException("console cannot be null.");
 		_console = console;
 		_buffer = new StringBuffer();
-		if(color==null)_color = Color.BLACK;
-		else _color = color;
+		if (color == null)
+			_color = Color.BLACK;
+		else
+			_color = color;
 	}
-	
-	private void resetBuffer(){
+
+	private void resetBuffer() {
 		_buffer = new StringBuffer();
 	}
+
 	@Override
 	public void write(int b) throws IOException {
-		if(b==Byte.valueOf(Character.LINE_SEPARATOR) || (char)b=='\n'){
+		if (b == Byte.valueOf(Character.LINE_SEPARATOR) || (char) b == '\n') {
 			String out = _buffer.toString().trim();
-			if(out.length()>0)
-				_console.log(out+"\n",_color);
+			if (out.length() > 0)
+				_console.log(out + "\n", _color);
 			resetBuffer();
-		}else{
+		} else {
 			_buffer.append((char) b);
 		}
-		
+
 	}
 
 	@Override
 	public void flush() throws IOException {
-		_console.log(_buffer.toString(),_color);
+		_console.log(_buffer.toString(), _color);
 		resetBuffer();
 	}
-	
+
 }

@@ -31,7 +31,6 @@ import org.openflexo.foundation.ie.widget.IEHyperlinkWidget;
 import org.openflexo.foundation.ie.widget.IEReusableWidget;
 import org.openflexo.foundation.ie.widget.IETabWidget;
 
-
 public class InstanceTree implements TreeNode {
 
 	private ComponentInstance _node;
@@ -39,105 +38,114 @@ public class InstanceTree implements TreeNode {
 	private InstanceTree _rootNode;
 	private InstanceTree _father;
 	private Vector<IEHyperlinkWidget> localButtons;
-	private Hashtable<IEHyperlinkWidget,Vector<ButtonInComponentInstance>> buttonMap;
+	private Hashtable<IEHyperlinkWidget, Vector<ButtonInComponentInstance>> buttonMap;
 	private OperationComponentInstanceTree _operationComponentInstanceTree;
-	protected InstanceTree(ComponentInstance node, InstanceTree rootTree, InstanceTree father, OperationComponentInstanceTree operationComponentInstanceTree){
+
+	protected InstanceTree(ComponentInstance node, InstanceTree rootTree, InstanceTree father,
+			OperationComponentInstanceTree operationComponentInstanceTree) {
 		super();
 		children = new Vector<InstanceTree>();
 		localButtons = new Vector<IEHyperlinkWidget>();
 		_operationComponentInstanceTree = operationComponentInstanceTree;
 		_node = node;
-		if(rootTree == null){
+		if (rootTree == null) {
 			_rootNode = this;
 			buttonMap = new Hashtable<IEHyperlinkWidget, Vector<ButtonInComponentInstance>>();
-		}else{
+		} else {
 			_rootNode = rootTree;
 		}
 		_operationComponentInstanceTree.registerInstance(this);
 		buildChildren();
 	}
-	
-	private void registerButton(ButtonInComponentInstance couple){
+
+	private void registerButton(ButtonInComponentInstance couple) {
 		Vector<ButtonInComponentInstance> allOccurenceOfButton = buttonMap.get(couple.getButton());
-		if(allOccurenceOfButton == null){
+		if (allOccurenceOfButton == null) {
 			allOccurenceOfButton = new Vector<ButtonInComponentInstance>();
 			buttonMap.put(couple.getButton(), allOccurenceOfButton);
 		}
-		if(!allOccurenceOfButton.contains(couple)){
+		if (!allOccurenceOfButton.contains(couple)) {
 			allOccurenceOfButton.add(couple);
 		}
 	}
-	
-	public OperationComponentInstance getOperationComponentInstance(){
-		return (OperationComponentInstance)_rootNode._node;
+
+	public OperationComponentInstance getOperationComponentInstance() {
+		return (OperationComponentInstance) _rootNode._node;
 	}
-	
-	public ComponentDefinition getComponentDefinition(){
+
+	public ComponentDefinition getComponentDefinition() {
 		return _node.getComponentDefinition();
 	}
-	
-	public ComponentInstance getComponentInstance(){
+
+	public ComponentInstance getComponentInstance() {
 		return _node;
 	}
-	
-	private void buildChildren(){
+
+	private void buildChildren() {
 		Enumeration<IObject> en = _node.getWOComponentEmbeddedIEObjects().elements();
 		IObject temp = null;
-		while(en.hasMoreElements()){
+		while (en.hasMoreElements()) {
 			temp = en.nextElement();
-			if(temp instanceof IETabWidget){
-				children.add(new InstanceTree(((IETabWidget)temp).getComponentInstance(),_rootNode,this,_operationComponentInstanceTree));
-			}else if(temp instanceof IEReusableWidget){
-				children.add(new InstanceTree(((IEReusableWidget)temp).getReusableComponentInstance(),_rootNode,this,_operationComponentInstanceTree));
-			}else if(temp instanceof IEHyperlinkWidget){
-				IEHyperlinkWidget button = (IEHyperlinkWidget)temp;
-				if(getOperationComponentInstance().getActionNodeForButton(button)!=null){
+			if (temp instanceof IETabWidget) {
+				children.add(new InstanceTree(((IETabWidget) temp).getComponentInstance(), _rootNode, this, _operationComponentInstanceTree));
+			} else if (temp instanceof IEReusableWidget) {
+				children.add(new InstanceTree(((IEReusableWidget) temp).getReusableComponentInstance(), _rootNode, this,
+						_operationComponentInstanceTree));
+			} else if (temp instanceof IEHyperlinkWidget) {
+				IEHyperlinkWidget button = (IEHyperlinkWidget) temp;
+				if (getOperationComponentInstance().getActionNodeForButton(button) != null) {
 					localButtons.add(button);
-					_rootNode.registerButton(new ButtonInComponentInstance(button,_node));
+					_rootNode.registerButton(new ButtonInComponentInstance(button, _node));
 				}
 			}
 		}
 	}
-	
-	private int getDepth(){
-		if(getParent()==null)return 0;
-		return _father.getDepth()+1;
+
+	private int getDepth() {
+		if (getParent() == null)
+			return 0;
+		return _father.getDepth() + 1;
 	}
+
 	public StringBuffer toString(StringBuffer buf) {
 		int d = getDepth();
-		for(int i=0;i<d;i++)buf.append("\t");
+		for (int i = 0; i < d; i++)
+			buf.append("\t");
 		buf.append(_node.getFullyQualifiedName());
 		buf.append("(buttons : ");
 		Enumeration<IEHyperlinkWidget> en = localButtons.elements();
-		while(en.hasMoreElements()){
+		while (en.hasMoreElements()) {
 			buf.append(en.nextElement().getBeautifiedName());
-			if(en.hasMoreElements())buf.append(" , ");
+			if (en.hasMoreElements())
+				buf.append(" , ");
 		}
 		buf.append(")\n");
 		Enumeration<InstanceTree> en2 = children.elements();
-		while(en2.hasMoreElements()){
+		while (en2.hasMoreElements()) {
 			buf.append(en2.nextElement().toString(buf));
 		}
 		return buf;
 	}
-	
+
 	public void print(PrintStream out) {
 		int d = getDepth();
-		for(int i=0;i<d;i++)out.print("\t");
+		for (int i = 0; i < d; i++)
+			out.print("\t");
 		out.print(_node.getFullyQualifiedName());
 		out.print("\n(buttons : ");
 		Enumeration<IEHyperlinkWidget> en = localButtons.elements();
-		while(en.hasMoreElements()){
+		while (en.hasMoreElements()) {
 			out.print(en.nextElement().getBeautifiedName());
-			if(en.hasMoreElements())out.print(" , ");
+			if (en.hasMoreElements())
+				out.print(" , ");
 		}
 		out.println(")\n");
 		Enumeration<InstanceTree> en2 = children.elements();
-		while(en2.hasMoreElements()){
+		while (en2.hasMoreElements()) {
 			en2.nextElement().print(out);
 		}
 	}
-	
+
 	@Override
 	public Enumeration children() {
 		return children.elements();
@@ -170,39 +178,37 @@ public class InstanceTree implements TreeNode {
 
 	@Override
 	public boolean isLeaf() {
-		return getChildCount()==0;
+		return getChildCount() == 0;
 	}
-	
-	private class ButtonInComponentInstance{
-		
+
+	private class ButtonInComponentInstance {
+
 		private IEHyperlinkWidget _button;
 		private ComponentInstance _ci;
-		
-		public ButtonInComponentInstance(IEHyperlinkWidget button, ComponentInstance ci){
+
+		public ButtonInComponentInstance(IEHyperlinkWidget button, ComponentInstance ci) {
 			super();
 			_ci = ci;
 			_button = button;
 		}
-		
+
 		public IEHyperlinkWidget getButton() {
 			return _button;
 		}
-		
+
 		public ComponentInstance getComponentInstance() {
 			return _ci;
 		}
-		
+
 		@Override
-		public boolean equals(Object obj){
-			if(obj instanceof ButtonInComponentInstance){
-				return ((ButtonInComponentInstance)obj).getButton().equals(getButton()) && ((ButtonInComponentInstance)obj).getComponentInstance().equals(getComponentInstance());
+		public boolean equals(Object obj) {
+			if (obj instanceof ButtonInComponentInstance) {
+				return ((ButtonInComponentInstance) obj).getButton().equals(getButton())
+						&& ((ButtonInComponentInstance) obj).getComponentInstance().equals(getComponentInstance());
 			}
 			return false;
 		}
-		
+
 	}
-
-	
-
 
 }

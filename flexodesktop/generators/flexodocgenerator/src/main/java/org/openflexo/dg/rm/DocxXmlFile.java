@@ -26,38 +26,29 @@ import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.cg.TextFile;
 import org.openflexo.generator.rm.GenerationAvailableFile;
 
+public class DocxXmlFile extends TextFile implements GenerationAvailableFile {
 
-public class DocxXmlFile extends TextFile implements GenerationAvailableFile
-{
-
-	public DocxXmlFile(File f, DocxXmlFileResource resource)
-	{
+	public DocxXmlFile(File f, DocxXmlFileResource resource) {
 		super(f);
-		try
-		{
+		try {
 			setFlexoResource(resource);
-		}
-		catch (DuplicateResourceException e)
-		{
+		} catch (DuplicateResourceException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public DocxXmlFileResource getFlexoResource()
-	{
+	public DocxXmlFileResource getFlexoResource() {
 		return (DocxXmlFileResource) super.getFlexoResource();
 	}
 
 	@Override
-	public String getCurrentGeneration()
-	{
+	public String getCurrentGeneration() {
 		return getFlexoResource().getCurrentGeneration();
 	}
 
 	@Override
-	public DGDocxXMLGenerator getGenerator()
-	{
+	public DGDocxXMLGenerator getGenerator() {
 		return (DGDocxXMLGenerator) getFlexoResource().getGenerator();
 	}
 }

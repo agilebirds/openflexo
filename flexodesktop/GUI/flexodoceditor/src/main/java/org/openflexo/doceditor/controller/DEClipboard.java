@@ -30,58 +30,49 @@ import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.selection.FlexoClipboard;
 import org.openflexo.selection.PastingGraphicalContext;
 
-
 /**
- * DEClipboard is intented to be the object working with the DESelectionManager
- * and storing copied, cut and pasted objects. 
+ * DEClipboard is intented to be the object working with the DESelectionManager and storing copied, cut and pasted objects.
  * 
  * @author gpolet
  */
-public class DEClipboard extends FlexoClipboard
-{
+public class DEClipboard extends FlexoClipboard {
 
-    private static final Logger logger = Logger.getLogger(DEClipboard.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DEClipboard.class.getPackage().getName());
 
-    private CGObject _clipboardData;
+	private CGObject _clipboardData;
 
-    private DEController _generatorController;
+	private DEController _generatorController;
 
-    public DEClipboard(DESelectionManager aSelectionManager, JMenuItem copyMenuItem, JMenuItem pasteMenuItem, JMenuItem cutMenuItem)
-    {
-        super(aSelectionManager, copyMenuItem, pasteMenuItem, cutMenuItem);
-        _generatorController = aSelectionManager.getGeneratorController();
-    }
+	public DEClipboard(DESelectionManager aSelectionManager, JMenuItem copyMenuItem, JMenuItem pasteMenuItem, JMenuItem cutMenuItem) {
+		super(aSelectionManager, copyMenuItem, pasteMenuItem, cutMenuItem);
+		_generatorController = aSelectionManager.getGeneratorController();
+	}
 
-    @Override
-	protected void performSelectionPaste(FlexoModelObject pastingContext, PastingGraphicalContext graphicalContext)
-    {
-            logger.warning("Pasting " + _clipboardData+" not implemented");
-    }
+	@Override
+	protected void performSelectionPaste(FlexoModelObject pastingContext, PastingGraphicalContext graphicalContext) {
+		logger.warning("Pasting " + _clipboardData + " not implemented");
+	}
 
-    @Override
-	protected boolean isCurrentSelectionValidForCopy(Vector currentlySelectedObjects)
-    {
-        if (currentlySelectedObjects == null || currentlySelectedObjects.size() == 0) {
-            return false;
-        }
-        return true;
-    }
+	@Override
+	protected boolean isCurrentSelectionValidForCopy(Vector currentlySelectedObjects) {
+		if (currentlySelectedObjects == null || currentlySelectedObjects.size() == 0) {
+			return false;
+		}
+		return true;
+	}
 
-    @Override
-	protected boolean performCopyOfSelection(Vector currentlySelectedObjects)
-    {
-        logger.warning("Copy not implemented");
-         return true;
-    }
+	@Override
+	protected boolean performCopyOfSelection(Vector currentlySelectedObjects) {
+		logger.warning("Copy not implemented");
+		return true;
+	}
 
-    protected boolean isTargetValidForPasting(JComponent targetContainer)
-    {
-         return false;
-    }
+	protected boolean isTargetValidForPasting(JComponent targetContainer) {
+		return false;
+	}
 
-	public DEController getController() 
-	{
+	public DEController getController() {
 		return _generatorController;
 	}
 
- }
+}

@@ -25,7 +25,6 @@ import java.util.Date;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.toolbox.FileFormat;
 
-
 /**
  * Abstract class representing a template.
  * 
@@ -131,11 +130,11 @@ public abstract class CGTemplate extends CGTemplateObject {
 	public FileFormat getFileFormat() {
 		String name = getTemplateName().toLowerCase();
 
-		if(name.endsWith(".vm")) {
+		if (name.endsWith(".vm")) {
 			name = name.substring(0, name.length() - 3);
 		}
 
-		String extension = name.substring(name.lastIndexOf(".")+1);
+		String extension = name.substring(name.lastIndexOf(".") + 1);
 		FileFormat returned = FileFormat.getDefaultFileFormatByExtension(extension);
 		if (returned == FileFormat.UNKNOWN) {
 			return FileFormat.UNKNOWN_ASCII_FILE;
@@ -180,7 +179,8 @@ public abstract class CGTemplate extends CGTemplateObject {
 
 	/**
 	 * Return the template path relative to its principal parent. <br>
-	 * The returned path doesn't start with a '/' and contains the template name. This can be used for example to redefine the template in another directory while keeping its uniqueness. <br>
+	 * The returned path doesn't start with a '/' and contains the template name. This can be used for example to redefine the template in
+	 * another directory while keeping its uniqueness. <br>
 	 * i.e. /home/flexo/flexocodegenerator/resources/templates/java/test.vm will return java/test.vm.
 	 * 
 	 * @return the template path relative to its principal parent.

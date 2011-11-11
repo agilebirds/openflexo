@@ -38,110 +38,103 @@ import org.openflexo.foundation.cg.templates.CustomCGTemplateRepository;
 import org.openflexo.foundation.cg.templates.TargetSpecificCGTemplateSet;
 import org.openflexo.toolbox.FileUtils;
 
+public class RedefineAllTemplates extends FlexoAction<RedefineAllTemplates, CGTemplateRepository, CGTemplateObject> {
 
-public class RedefineAllTemplates extends FlexoAction<RedefineAllTemplates,CGTemplateRepository,CGTemplateObject>
-{
+	private static final Logger logger = Logger.getLogger(RedefineAllTemplates.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(RedefineAllTemplates.class.getPackage().getName());
+	public static FlexoActionType<RedefineAllTemplates, CGTemplateRepository, CGTemplateObject> actionType = new FlexoActionType<RedefineAllTemplates, CGTemplateRepository, CGTemplateObject>(
+			"redefine_all_template", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType<RedefineAllTemplates,CGTemplateRepository,CGTemplateObject> actionType = new FlexoActionType<RedefineAllTemplates,CGTemplateRepository,CGTemplateObject> ("redefine_all_template",FlexoActionType.defaultGroup,FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public RedefineAllTemplates makeNewAction(CGTemplateRepository focusedObject, Vector<CGTemplateObject> globalSelection,
+				FlexoEditor editor) {
+			return new RedefineAllTemplates(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public RedefineAllTemplates makeNewAction(CGTemplateRepository focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor) 
-        {
-            return new RedefineAllTemplates(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(CGTemplateRepository object, Vector<CGTemplateObject> globalSelection) {
+			return object != null && !(object instanceof CustomCGTemplateRepository);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(CGTemplateRepository object, Vector<CGTemplateObject> globalSelection) 
-        {
-            return object != null && !(object instanceof CustomCGTemplateRepository);
-       }
+		@Override
+		protected boolean isEnabledForSelection(CGTemplateRepository object, Vector<CGTemplateObject> globalSelection) {
+			return object != null && !(object instanceof CustomCGTemplateRepository);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(CGTemplateRepository object, Vector<CGTemplateObject> globalSelection) 
-        {
-            return object != null && !(object instanceof CustomCGTemplateRepository);
-       }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (RedefineAllTemplates.actionType, CGTemplateRepository.class);
-    }
-    
+	};
 
-    private CustomCGTemplateRepository _repository;
-    
-    RedefineAllTemplates (CGTemplateRepository focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	static {
+		FlexoModelObject.addActionForClass(RedefineAllTemplates.actionType, CGTemplateRepository.class);
+	}
 
-    @Override
-	protected void doAction(Object context) throws IOFlexoException
-    {
-    	logger.info ("RedefineAllTemplates from "+getFocusedObject().getName()+" to "+getRepository().getName());
-    	CGTemplateRepository source = getFocusedObject();
-    	CustomCGTemplateRepository dest = getRepository();
+	private CustomCGTemplateRepository _repository;
+
+	RedefineAllTemplates(CGTemplateRepository focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws IOFlexoException {
+		logger.info("RedefineAllTemplates from " + getFocusedObject().getName() + " to " + getRepository().getName());
+		CGTemplateRepository source = getFocusedObject();
+		CustomCGTemplateRepository dest = getRepository();
 		Enumeration<CGTemplate> en = source.getCommonTemplates().getAllTemplates();
-    	while(en.hasMoreElements()){
+		while (en.hasMoreElements()) {
 			CGTemplate candidate = en.nextElement();
 			if (candidate.getTemplateName().equals("VM_global_library.vm"))
 				continue;
 			CGTemplate existingRedefinedTemplate = dest.getCommonTemplates().getTemplate(candidate.getRelativePath());
-    		if(existingRedefinedTemplate!=null){
-				logger.info("Template '" + existingRedefinedTemplate.getTemplateName() + "' is already redefined in the repository " + dest.getName());
-    		}else{
-    			redefineTemplate(candidate,null);
-    		}
-    	}
-    	Enumeration<TargetSpecificCGTemplateSet> en2 = source.getTargetSpecificTemplates();
-    	while(en2.hasMoreElements()){
-    		TargetSpecificCGTemplateSet targetTemplateSet = en2.nextElement();
-    		TargetType targetType = targetTemplateSet.getTargetType();
+			if (existingRedefinedTemplate != null) {
+				logger.info("Template '" + existingRedefinedTemplate.getTemplateName() + "' is already redefined in the repository "
+						+ dest.getName());
+			} else {
+				redefineTemplate(candidate, null);
+			}
+		}
+		Enumeration<TargetSpecificCGTemplateSet> en2 = source.getTargetSpecificTemplates();
+		while (en2.hasMoreElements()) {
+			TargetSpecificCGTemplateSet targetTemplateSet = en2.nextElement();
+			TargetType targetType = targetTemplateSet.getTargetType();
 			en = targetTemplateSet.getAllTemplates();
-    		while (en.hasMoreElements()) {
+			while (en.hasMoreElements()) {
 				CGTemplate candidate = en.nextElement();
 				CGTemplate existingRedefinedTemplate = null;
-				if(dest.getTemplateSetForTarget(targetType)!=null)
+				if (dest.getTemplateSetForTarget(targetType) != null)
 					existingRedefinedTemplate = dest.getTemplateSetForTarget(targetType).getTemplate(candidate.getRelativePath());
-				if(existingRedefinedTemplate!=null){
-					logger.info("Template '" + existingRedefinedTemplate.getTemplateName() + "' is already redefined in the repository " + dest.getName());
-				}else{
-					redefineTemplate(candidate,targetType);
+				if (existingRedefinedTemplate != null) {
+					logger.info("Template '" + existingRedefinedTemplate.getTemplateName() + "' is already redefined in the repository "
+							+ dest.getName());
+				} else {
+					redefineTemplate(candidate, targetType);
 				}
 			}
-    	}
-    	dest.refresh();
-     }
+		}
+		dest.refresh();
+	}
 
 	private void redefineTemplate(CGTemplate src, TargetType target) throws IOFlexoException {
-    	File createdFile = null;
-    	if (target == null) {
+		File createdFile = null;
+		if (target == null) {
 			createdFile = new File(_repository.getDirectory(), src.getRelativePath());
-		}
-		else {
-   			createdFile = new File(new File(_repository.getDirectory(), target.getTemplateFolderName()), src.getRelativePath());
+		} else {
+			createdFile = new File(new File(_repository.getDirectory(), target.getTemplateFolderName()), src.getRelativePath());
 		}
 		try {
 			FileUtils.saveToFile(createdFile, src.getContent());
 		} catch (IOException e) {
 			throw new IOFlexoException(e);
 		}
-    }
-	public CustomCGTemplateRepository getRepository() 
-	{
+	}
+
+	public CustomCGTemplateRepository getRepository() {
 		return _repository;
 	}
 
-	public void setRepository(CustomCGTemplateRepository repository)
-	{
+	public void setRepository(CustomCGTemplateRepository repository) {
 		_repository = repository;
 	}
-
 
 }

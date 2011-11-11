@@ -18,19 +18,22 @@
  *
  */
 package org.openflexo.foundation.rm;
+
 import java.util.Vector;
 
 /**
  * 
  */
 
-public interface FlexoResourceTree
-{
+public interface FlexoResourceTree {
 	public FlexoResource getRootNode();
+
 	public Vector<FlexoResourceTree> getChildNodes();
+
 	public boolean isEmpty();
-	
+
 	@Override
 	public String toString();
+
 	public String toString(int offset, boolean isLastChild);
 }

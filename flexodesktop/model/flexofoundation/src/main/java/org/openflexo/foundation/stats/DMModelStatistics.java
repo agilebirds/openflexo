@@ -24,94 +24,86 @@ import org.openflexo.foundation.dm.eo.DMEOModel;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class DMModelStatistics extends FlexoStatistics<DMModel>
-{
+public class DMModelStatistics extends FlexoStatistics<DMModel> {
 
 	private int eoAttributeCount = -1;
-	
+
 	private int eoRelationshipCount = -1;
-	
+
 	private int eoEntityCount = -1;
-	
-    /**
-     * @param object
-     */
-    public DMModelStatistics(DMModel object)
-    {
-        super(object);
-        refresh();
-    }
 
-    public int getEoAttributeCount()
-    {
-        return eoAttributeCount;
-    }
+	/**
+	 * @param object
+	 */
+	public DMModelStatistics(DMModel object) {
+		super(object);
+		refresh();
+	}
 
-    private void setEoAttributeCount(int attributeCount)
-    {
-        int old = this.eoAttributeCount;
-        this.eoAttributeCount = attributeCount;
-        if (old != attributeCount) {
-            setChanged();
-            notifyObservers(new StatModification("eoAttributeCount", old, attributeCount));
-        }
-    }
+	public int getEoAttributeCount() {
+		return eoAttributeCount;
+	}
 
-    public int getEoRelationshipCount()
-    {
-        return eoRelationshipCount;
-    }
+	private void setEoAttributeCount(int attributeCount) {
+		int old = this.eoAttributeCount;
+		this.eoAttributeCount = attributeCount;
+		if (old != attributeCount) {
+			setChanged();
+			notifyObservers(new StatModification("eoAttributeCount", old, attributeCount));
+		}
+	}
 
-    private void setEoRelationshipCount(int relationshipCount)
-    {
-        int old = this.eoRelationshipCount;
-        this.eoRelationshipCount = relationshipCount;
-        if (old != relationshipCount) {
-            setChanged();
-            notifyObservers(new StatModification("eoRelationshipCount", old, relationshipCount));
-        }
-    }
+	public int getEoRelationshipCount() {
+		return eoRelationshipCount;
+	}
 
-    public int getEoEntityCount()
-    {
-        return eoEntityCount;
-    }
+	private void setEoRelationshipCount(int relationshipCount) {
+		int old = this.eoRelationshipCount;
+		this.eoRelationshipCount = relationshipCount;
+		if (old != relationshipCount) {
+			setChanged();
+			notifyObservers(new StatModification("eoRelationshipCount", old, relationshipCount));
+		}
+	}
 
-    private void setEoEntityCount(int entityCount)
-    {
-        int old = this.eoEntityCount;
-        this.eoEntityCount = entityCount;
-        if (old != entityCount) {
-            setChanged();
-            notifyObservers(new StatModification("eoEntityCount", old, entityCount));
-        }
-    }
+	public int getEoEntityCount() {
+		return eoEntityCount;
+	}
 
-    /**
-     * Overrides refresh
-     * @see org.openflexo.foundation.stats.FlexoStatistics#refresh()
-     */
-    @Override
-    public void refresh()
-    {
-        int attCount = 0; //EOAttributes
-        int rCount = 0; //EORelationships
-        int eCount = 0; //EOEntity
+	private void setEoEntityCount(int entityCount) {
+		int old = this.eoEntityCount;
+		this.eoEntityCount = entityCount;
+		if (old != entityCount) {
+			setChanged();
+			notifyObservers(new StatModification("eoEntityCount", old, entityCount));
+		}
+	}
 
-        for (DMEOModel model : getObject().getAllDMEOModel()) {
-            if (model.isNotPrototypes() && model.getRepository()!=getObject().getExecutionModelRepository()) {
-                // We don't care about prototypes and execution model
-                model.getStatistics().refresh();
-                attCount += model.getStatistics().getEoAttributeCount();
-                rCount += model.getStatistics().getEoRelationshipCount();
-                eCount += model.getStatistics().getEoEntityCount();
-            }
-        }
-        setEoEntityCount(eCount);
-        setEoAttributeCount(attCount);
-        setEoRelationshipCount(rCount);
-    }
+	/**
+	 * Overrides refresh
+	 * 
+	 * @see org.openflexo.foundation.stats.FlexoStatistics#refresh()
+	 */
+	@Override
+	public void refresh() {
+		int attCount = 0; // EOAttributes
+		int rCount = 0; // EORelationships
+		int eCount = 0; // EOEntity
+
+		for (DMEOModel model : getObject().getAllDMEOModel()) {
+			if (model.isNotPrototypes() && model.getRepository() != getObject().getExecutionModelRepository()) {
+				// We don't care about prototypes and execution model
+				model.getStatistics().refresh();
+				attCount += model.getStatistics().getEoAttributeCount();
+				rCount += model.getStatistics().getEoRelationshipCount();
+				eCount += model.getStatistics().getEoEntityCount();
+			}
+		}
+		setEoEntityCount(eCount);
+		setEoAttributeCount(attCount);
+		setEoRelationshipCount(rCount);
+	}
 
 }

@@ -33,60 +33,53 @@ import org.openflexo.fge.view.widget.FIBForegroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBShadowStyleSelector;
 import org.openflexo.fge.view.widget.FIBTextStyleSelector;
 
-
 public class EditorToolbox {
 
 	public ForegroundStyle currentForegroundStyle;
 	public BackgroundStyle currentBackgroundStyle;
 	public TextStyle currentTextStyle;
 	public ShadowStyle currentShadowStyle;
-	
+
 	private JPanel toolboxPanel;
 	private FIBForegroundStyleSelector foregroundSelector;
 	private FIBBackgroundStyleSelector backgroundSelector;
 	private FIBTextStyleSelector textStyleSelector;
 	private FIBShadowStyleSelector shadowStyleSelector;
-	
-	public EditorToolbox() 
-	{
+
+	public EditorToolbox() {
 		currentForegroundStyle = ForegroundStyle.makeDefault();
 		currentBackgroundStyle = BackgroundStyle.makeColoredBackground(Color.RED);
 		currentTextStyle = TextStyle.makeDefault();
-		currentShadowStyle =  ShadowStyle.makeDefault();
+		currentShadowStyle = ShadowStyle.makeDefault();
 	}
 
-	public JPanel getToolboxPanel()
-	{
+	public JPanel getToolboxPanel() {
 		if (toolboxPanel == null) {
 			toolboxPanel = new JPanel(new FlowLayout());
 			foregroundSelector = new FIBForegroundStyleSelector(currentForegroundStyle) {
 				@Override
-				public void setEditedObject(ForegroundStyle object)
-				{
+				public void setEditedObject(ForegroundStyle object) {
 					super.setEditedObject(object);
 					currentForegroundStyle = object;
 				}
 			};
 			backgroundSelector = new FIBBackgroundStyleSelector(currentBackgroundStyle) {
 				@Override
-				public void setEditedObject(BackgroundStyle object)
-				{
+				public void setEditedObject(BackgroundStyle object) {
 					super.setEditedObject(object);
 					currentBackgroundStyle = object;
 				}
 			};
 			textStyleSelector = new FIBTextStyleSelector(currentTextStyle) {
 				@Override
-				public void setEditedObject(TextStyle object)
-				{
+				public void setEditedObject(TextStyle object) {
 					super.setEditedObject(object);
 					currentTextStyle = object;
 				}
 			};
 			shadowStyleSelector = new FIBShadowStyleSelector(currentShadowStyle) {
 				@Override
-				public void setEditedObject(ShadowStyle object)
-				{
+				public void setEditedObject(ShadowStyle object) {
 					super.setEditedObject(object);
 					currentShadowStyle = object;
 				}

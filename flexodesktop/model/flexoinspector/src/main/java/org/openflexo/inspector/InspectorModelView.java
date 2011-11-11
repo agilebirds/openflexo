@@ -40,103 +40,95 @@ import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Main view for the inspector
- *
+ * 
  * @author bmangez, sguerin
  */
-public class InspectorModelView extends JTabbedPane implements ChangeListener
-{
+public class InspectorModelView extends JTabbedPane implements ChangeListener {
 
-    private static final Logger logger = Logger.getLogger(InspectorModelView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(InspectorModelView.class.getPackage().getName());
 
-    private Vector<TabModelView> tabViews;
+	private Vector<TabModelView> tabViews;
 
-    private Vector<TabModel> tabs;
+	private Vector<TabModel> tabs;
 
-    //private Vector<TabModel> tabsToHide;
+	// private Vector<TabModel> tabsToHide;
 
-    private Vector<InnerTabWidgetView> _widgets;
+	private Vector<InnerTabWidgetView> _widgets;
 
-    private InspectableObject _inspectable;
+	private InspectableObject _inspectable;
 
-    private InspectingWidget _inspectingWidget;
+	private InspectingWidget _inspectingWidget;
 
-    private InspectorModel _model;
+	private InspectorModel _model;
 
-    public InspectorModelView(InspectorModel _model, InspectingWidget inspectingWidget)
-    {
-        super();
-        setOpaque(false);
-        _inspectingWidget = inspectingWidget;
-        _widgets = new Vector<InnerTabWidgetView>();
-        _extraTabs = new Vector<TabModel>();
-        _extraTabViews = new Hashtable<TabModel, TabModelView>();
-        //tabsToHide = new Vector<TabModel>();
-        this._model = _model;
-        build(_model, _inspectingWidget);
-        addChangeListener(this);
-    }
+	public InspectorModelView(InspectorModel _model, InspectingWidget inspectingWidget) {
+		super();
+		setOpaque(false);
+		_inspectingWidget = inspectingWidget;
+		_widgets = new Vector<InnerTabWidgetView>();
+		_extraTabs = new Vector<TabModel>();
+		_extraTabViews = new Hashtable<TabModel, TabModelView>();
+		// tabsToHide = new Vector<TabModel>();
+		this._model = _model;
+		build(_model, _inspectingWidget);
+		addChangeListener(this);
+	}
 
-    public void setInspectedObject(InspectableObject inspectable)
-    {
-        if (_inspectable == null || !_inspectable.equals(inspectable)) {
-            performObserverSwitch(inspectable);
-            _inspectable = inspectable;
-            refreshAllConditionals();
-        } else {
-            // Only update values
-            updateFromModel();
-        }
-    }
+	public void setInspectedObject(InspectableObject inspectable) {
+		if (_inspectable == null || !_inspectable.equals(inspectable)) {
+			performObserverSwitch(inspectable);
+			_inspectable = inspectable;
+			refreshAllConditionals();
+		} else {
+			// Only update values
+			updateFromModel();
+		}
+	}
 
-    public void updateFromModel()
-    {
-    	/*setBackground(InspectorCst.BACK_COLOR);
-    	System.err.println(getBackground());*/
-    	for (Enumeration e = _widgets.elements(); e.hasMoreElements();) {
-            InnerTabWidgetView widget = (InnerTabWidgetView) e.nextElement();
-            if (widget instanceof DenaliWidget) {
-                if (!((DenaliWidget)widget).widgetHasFocus()) {
-                  	if (((DenaliWidget)widget).isWidgetVisible())
-                  		((DenaliWidget)widget).updateWidgetFromModel();
-                }
-            } else
-                widget.updateWidgetFromModel();
-        }
-        refreshAllConditionals();
-    }
+	public void updateFromModel() {
+		/*setBackground(InspectorCst.BACK_COLOR);
+		System.err.println(getBackground());*/
+		for (Enumeration e = _widgets.elements(); e.hasMoreElements();) {
+			InnerTabWidgetView widget = (InnerTabWidgetView) e.nextElement();
+			if (widget instanceof DenaliWidget) {
+				if (!((DenaliWidget) widget).widgetHasFocus()) {
+					if (((DenaliWidget) widget).isWidgetVisible())
+						((DenaliWidget) widget).updateWidgetFromModel();
+				}
+			} else
+				widget.updateWidgetFromModel();
+		}
+		refreshAllConditionals();
+	}
 
+	private void refreshAllConditionals() {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("REFRESH conditionals");
+		for (Enumeration en = tabViews.elements(); en.hasMoreElements();) {
+			TabModelView next = (TabModelView) en.nextElement();
+			next.valueChange(_inspectable);
+		}
+		refreshTabVisibility();
+	}
 
-    private void refreshAllConditionals()
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("REFRESH conditionals");
-        for (Enumeration en=tabViews.elements(); en.hasMoreElements();) {
-            TabModelView next = (TabModelView)en.nextElement();
-            next.valueChange(_inspectable);
-        }
-        refreshTabVisibility();
-    }
+	public void valueChange(Object newValue, DenaliWidget widget) {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("valueChange with " + newValue + " for " + widget);
+		for (Enumeration en = tabViews.elements(); en.hasMoreElements();) {
+			TabModelView next = (TabModelView) en.nextElement();
+			next.valueChange(newValue, widget);
+		}
+		refreshTabVisibility();
+	}
 
-    public void valueChange(Object newValue, DenaliWidget widget)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("valueChange with "+newValue+" for "+widget);
-        for (Enumeration en=tabViews.elements(); en.hasMoreElements();) {
-            TabModelView next = (TabModelView)en.nextElement();
-            next.valueChange(newValue,widget);
-        }
-        refreshTabVisibility();
-   }
-
-    private void refreshTabVisibility()
-    {
-    	Component selectComponent = getSelectedComponent();
-    	int selectedIndex = getSelectedIndex();
-    	String title = selectedIndex>-1?getTitleAt(selectedIndex):null;
-    	boolean hasChanged = false;
-        int count=0;
-        try {
-        	removeChangeListener(this);
+	private void refreshTabVisibility() {
+		Component selectComponent = getSelectedComponent();
+		int selectedIndex = getSelectedIndex();
+		String title = selectedIndex > -1 ? getTitleAt(selectedIndex) : null;
+		boolean hasChanged = false;
+		int count = 0;
+		try {
+			removeChangeListener(this);
 			for (TabModelView view : tabViews) {
 				boolean tabIsVisible = getController().isTabPanelVisible(view.getTabModel(), getInspectedObject());
 				if (view.hasVisibleWidgets() && tabIsVisible) {
@@ -176,31 +168,31 @@ public class InspectorModelView extends JTabbedPane implements ChangeListener
 		} finally {
 			addChangeListener(this);
 		}
-        // AJA : commented with approval of BMA to avoid a bug in the wysiwyg (kind of deadlock)
-        // GPO : uncommented the next line because it is essential and logical since we potentially have added/removed components to/from
+		// AJA : commented with approval of BMA to avoid a bug in the wysiwyg (kind of deadlock)
+		// GPO : uncommented the next line because it is essential and logical since we potentially have added/removed components to/from
 		// the tabbed pane
-        if (hasChanged)
-        	validate();
-        boolean componentHasBeenSelected = false;
-        if (selectedIndex>-1) {
-        	if (selectComponent!=null && indexOfComponent(selectComponent)>-1) {
-        		setSelectedComponent(selectComponent);
-        		componentHasBeenSelected = true;
-        	} else if (title!=null) {
-        		for(int i=0;i<getTabCount() && !componentHasBeenSelected;i++) {
-        			if(title.equals(getTitleAt(i))) {
-        				setSelectedIndex(i);
-        				componentHasBeenSelected = true;
-        			}
-        		}
-        	}
-        	if (!componentHasBeenSelected && selectedIndex>-1) {
-        		setSelectedIndex(Math.min(getTabCount()-1, selectedIndex));
-        		componentHasBeenSelected = true;
-        	}
-        }
+		if (hasChanged)
+			validate();
+		boolean componentHasBeenSelected = false;
+		if (selectedIndex > -1) {
+			if (selectComponent != null && indexOfComponent(selectComponent) > -1) {
+				setSelectedComponent(selectComponent);
+				componentHasBeenSelected = true;
+			} else if (title != null) {
+				for (int i = 0; i < getTabCount() && !componentHasBeenSelected; i++) {
+					if (title.equals(getTitleAt(i))) {
+						setSelectedIndex(i);
+						componentHasBeenSelected = true;
+					}
+				}
+			}
+			if (!componentHasBeenSelected && selectedIndex > -1) {
+				setSelectedIndex(Math.min(getTabCount() - 1, selectedIndex));
+				componentHasBeenSelected = true;
+			}
+		}
 
-    	/*boolean hasChanged = false;
+		/*boolean hasChanged = false;
 		for (TabModelView view : tabViews) {
 			if (getController().isTabPanelVisible(view.getTabModel(), getInspectedObject())) {
 				if (!view.isVisible()) {
@@ -221,9 +213,9 @@ public class InspectorModelView extends JTabbedPane implements ChangeListener
 		}*/
 
 		/*
-        int count=0;
-        try {
-        	removeChangeListener(this);
+		int count=0;
+		try {
+			removeChangeListener(this);
 			for (TabModelView view : tabViews) {
 				if (view.hasVisibleWidgets() && !getTabsToHide().contains(view.getTabModel())) {
 					if (view.getParent() == null) {
@@ -258,199 +250,188 @@ public class InspectorModelView extends JTabbedPane implements ChangeListener
 		} finally {
 			addChangeListener(this);
 		}
-        // AJA : commented with approval of BMA to avoid a bug in the wysiwyg (kind of deadlock)
-        // GPO : uncommented the next line because it is essential and logical since we potentially have added/removed components to/from
+		// AJA : commented with approval of BMA to avoid a bug in the wysiwyg (kind of deadlock)
+		// GPO : uncommented the next line because it is essential and logical since we potentially have added/removed components to/from
 		// the tabbed pane
-        validate();*/
-    }
+		validate();*/
+	}
 
-    public InspectableObject getInspectedObject()
-    {
-        return _inspectable;
-    }
+	public InspectableObject getInspectedObject() {
+		return _inspectable;
+	}
 
-    public AbstractController getController()
-    {
-        return _inspectingWidget.getController();
-    }
+	public AbstractController getController() {
+		return _inspectingWidget.getController();
+	}
 
-    private void build(InspectorModel inspectorModel, InspectingWidget inspectingWidget)
-    {
-        setName(FlexoLocalization.localizedForKey(inspectorModel.title,this));
-        tabs = buildTabs(inspectorModel,inspectingWidget.getController());
-        tabViews = new Vector<TabModelView>();
-        Enumeration en = tabs.elements();
-        while (en.hasMoreElements()) {
-            TabModel temp = (TabModel) en.nextElement();
-            TabModelView tabModelView = new TabModelView(temp, this, inspectingWidget.getController());
-            tabViews.add(tabModelView);
-            if (inspectingWidget instanceof InspectorTabbedPanel) {
-                if (temp.name.equals(((InspectorTabbedPanel)inspectingWidget).getLastInspectedTabName())) {
-                	((InspectorTabbedPanel)inspectingWidget).setNextFocusedTab(tabModelView);
-                }
-            }
-            add(tabModelView);
-        }
-    }
+	private void build(InspectorModel inspectorModel, InspectingWidget inspectingWidget) {
+		setName(FlexoLocalization.localizedForKey(inspectorModel.title, this));
+		tabs = buildTabs(inspectorModel, inspectingWidget.getController());
+		tabViews = new Vector<TabModelView>();
+		Enumeration en = tabs.elements();
+		while (en.hasMoreElements()) {
+			TabModel temp = (TabModel) en.nextElement();
+			TabModelView tabModelView = new TabModelView(temp, this, inspectingWidget.getController());
+			tabViews.add(tabModelView);
+			if (inspectingWidget instanceof InspectorTabbedPanel) {
+				if (temp.name.equals(((InspectorTabbedPanel) inspectingWidget).getLastInspectedTabName())) {
+					((InspectorTabbedPanel) inspectingWidget).setNextFocusedTab(tabModelView);
+				}
+			}
+			add(tabModelView);
+		}
+	}
 
-    private Vector<TabModel> buildTabs(InspectorModel inspectorModel, AbstractController c)
-    {
-        Vector<TabModel> answer = new Vector<TabModel>();
-        Vector<InspectorModel> inspectorHierarchy = createInspectorHierarchy(inspectorModel);
-        Vector<Vector<TabModel>> vectorOfVectorOfTabs = createVectorOfVector(inspectorHierarchy);
-        Enumeration<Vector<TabModel>> en = vectorOfVectorOfTabs.elements();
-        while (en.hasMoreElements()) {
-            TabModel tab = TabModel.createMergedModel(en.nextElement(), c);
-            if (tab.getProperties().size() > 0) {
-                answer.add(tab);
-                tab.setInspectorModel(inspectorModel);
-            }
-        }
-        return answer;
-    }
+	private Vector<TabModel> buildTabs(InspectorModel inspectorModel, AbstractController c) {
+		Vector<TabModel> answer = new Vector<TabModel>();
+		Vector<InspectorModel> inspectorHierarchy = createInspectorHierarchy(inspectorModel);
+		Vector<Vector<TabModel>> vectorOfVectorOfTabs = createVectorOfVector(inspectorHierarchy);
+		Enumeration<Vector<TabModel>> en = vectorOfVectorOfTabs.elements();
+		while (en.hasMoreElements()) {
+			TabModel tab = TabModel.createMergedModel(en.nextElement(), c);
+			if (tab.getProperties().size() > 0) {
+				answer.add(tab);
+				tab.setInspectorModel(inspectorModel);
+			}
+		}
+		return answer;
+	}
 
-    private Vector<Vector<TabModel>> createVectorOfVector(Vector inspectorHierarchy)
-    {
-        Vector<Vector<TabModel>> answer = new Vector<Vector<TabModel>>();
-        Hashtable<String,Vector<TabModel>> allReadyStoredTabs = new Hashtable<String,Vector<TabModel>>();
-        Enumeration en = inspectorHierarchy.elements();
-        while (en.hasMoreElements()) {
-            InspectorModel currentInspectorModel = (InspectorModel) en.nextElement();
-            Iterator tabIter = currentInspectorModel.getTabs().values().iterator();
-            while (tabIter.hasNext()) {
-                TabModel currentTab = (TabModel) tabIter.next();
-                if (allReadyStoredTabs.get(currentTab.name) == null) {
-                    Vector<TabModel> v = new Vector<TabModel>();
-                    v.add(currentTab);
-                    allReadyStoredTabs.put(currentTab.name, v);
-                } else {
-                    Vector<TabModel> v = allReadyStoredTabs.get(currentTab.name);
-                    v.add(currentTab);
-                }
-            }
-        }
-        int tabCount = allReadyStoredTabs.size();
-        while (allReadyStoredTabs.size() > 0) {
-            Enumeration en2 = allReadyStoredTabs.keys();
-            String key = (String) en2.nextElement();
-            Vector<TabModel> v = allReadyStoredTabs.remove(key);
-            insertVectorInAnswer(v, answer);
-        }
-        if (answer.size() != tabCount) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Error...missing a tab...");
-        }
-        return answer;
-    }
+	private Vector<Vector<TabModel>> createVectorOfVector(Vector inspectorHierarchy) {
+		Vector<Vector<TabModel>> answer = new Vector<Vector<TabModel>>();
+		Hashtable<String, Vector<TabModel>> allReadyStoredTabs = new Hashtable<String, Vector<TabModel>>();
+		Enumeration en = inspectorHierarchy.elements();
+		while (en.hasMoreElements()) {
+			InspectorModel currentInspectorModel = (InspectorModel) en.nextElement();
+			Iterator tabIter = currentInspectorModel.getTabs().values().iterator();
+			while (tabIter.hasNext()) {
+				TabModel currentTab = (TabModel) tabIter.next();
+				if (allReadyStoredTabs.get(currentTab.name) == null) {
+					Vector<TabModel> v = new Vector<TabModel>();
+					v.add(currentTab);
+					allReadyStoredTabs.put(currentTab.name, v);
+				} else {
+					Vector<TabModel> v = allReadyStoredTabs.get(currentTab.name);
+					v.add(currentTab);
+				}
+			}
+		}
+		int tabCount = allReadyStoredTabs.size();
+		while (allReadyStoredTabs.size() > 0) {
+			Enumeration en2 = allReadyStoredTabs.keys();
+			String key = (String) en2.nextElement();
+			Vector<TabModel> v = allReadyStoredTabs.remove(key);
+			insertVectorInAnswer(v, answer);
+		}
+		if (answer.size() != tabCount) {
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("Error...missing a tab...");
+		}
+		return answer;
+	}
 
-    private void insertVectorInAnswer(Vector<TabModel> vToInsert, Vector<Vector<TabModel>> container)
-    {
-        if (container.size() == 0) {
-            container.add(vToInsert);
-        } else {
-            int indexToInsert = vToInsert.elementAt(0).index.intValue();
-            Enumeration<Vector<TabModel>> en = container.elements();
-            boolean isInserted = false;
-            while (!isInserted) {
-            	Vector<TabModel> currentV = en.nextElement();
-                int indexOfCurrent = currentV.elementAt(0).index.intValue();
-                if (indexToInsert < indexOfCurrent) {
-                    container.add(container.indexOf(currentV), vToInsert);
-                    isInserted = true;
-                } else {
-                    if (!en.hasMoreElements()) {
-                        container.add(vToInsert);
-                        isInserted = true;
-                    }
-                }
-            }
-        }
-    }
+	private void insertVectorInAnswer(Vector<TabModel> vToInsert, Vector<Vector<TabModel>> container) {
+		if (container.size() == 0) {
+			container.add(vToInsert);
+		} else {
+			int indexToInsert = vToInsert.elementAt(0).index.intValue();
+			Enumeration<Vector<TabModel>> en = container.elements();
+			boolean isInserted = false;
+			while (!isInserted) {
+				Vector<TabModel> currentV = en.nextElement();
+				int indexOfCurrent = currentV.elementAt(0).index.intValue();
+				if (indexToInsert < indexOfCurrent) {
+					container.add(container.indexOf(currentV), vToInsert);
+					isInserted = true;
+				} else {
+					if (!en.hasMoreElements()) {
+						container.add(vToInsert);
+						isInserted = true;
+					}
+				}
+			}
+		}
+	}
 
-    private Vector<InspectorModel> createInspectorHierarchy(InspectorModel startingModel)
-    {
-        Vector<InspectorModel> answer = new Vector<InspectorModel>();
-        InspectorModel fatherModel = startingModel;
-        while (fatherModel != null) {
-            answer.add(0, fatherModel);
-            fatherModel = fatherModel.getSuperInspector();
-        }
-        return answer;
-    }
+	private Vector<InspectorModel> createInspectorHierarchy(InspectorModel startingModel) {
+		Vector<InspectorModel> answer = new Vector<InspectorModel>();
+		InspectorModel fatherModel = startingModel;
+		while (fatherModel != null) {
+			answer.add(0, fatherModel);
+			fatherModel = fatherModel.getSuperInspector();
+		}
+		return answer;
+	}
 
-    private void performObserverSwitch(InspectableObject newInspectable)
-    {
-        Enumeration en = _widgets.elements();
-        while (en.hasMoreElements()) {
-            ((InnerTabWidgetView) en.nextElement()).switchObserved(newInspectable);
-        }
-        _inspectingWidget.notifiedInspectedObjectChange(newInspectable);
-    }
+	private void performObserverSwitch(InspectableObject newInspectable) {
+		Enumeration en = _widgets.elements();
+		while (en.hasMoreElements()) {
+			((InnerTabWidgetView) en.nextElement()).switchObserved(newInspectable);
+		}
+		_inspectingWidget.notifiedInspectedObjectChange(newInspectable);
+	}
 
-    public void addToWidgets(InnerTabWidgetView widget)
-    {
-        _widgets.add(widget);
-    }
+	public void addToWidgets(InnerTabWidgetView widget) {
+		_widgets.add(widget);
+	}
 
-    public void removeFromWidgets(InnerTabWidgetView widget)
-    {
-        _widgets.remove(widget);
-    }
+	public void removeFromWidgets(InnerTabWidgetView widget) {
+		_widgets.remove(widget);
+	}
 
-    @Override
-	public void stateChanged(ChangeEvent e)
-    {
-    	if (ignoreStateChanged) return;
-        updateFromModel();
-        if (_inspectingWidget!=null && getSelectedComponent()!=null && getSelectedComponent().getTabModel()!=null)
-        	_inspectingWidget.notifiedActiveTabChange(getSelectedComponent().getTabModel().name);
-        //logger.info("state changed with "+e);
-    }
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		if (ignoreStateChanged)
+			return;
+		updateFromModel();
+		if (_inspectingWidget != null && getSelectedComponent() != null && getSelectedComponent().getTabModel() != null)
+			_inspectingWidget.notifiedActiveTabChange(getSelectedComponent().getTabModel().name);
+		// logger.info("state changed with "+e);
+	}
 
-    @Override
-	public TabModelView getSelectedComponent()
-    {
-    	return (TabModelView)super.getSelectedComponent();
-    }
+	@Override
+	public TabModelView getSelectedComponent() {
+		return (TabModelView) super.getSelectedComponent();
+	}
 
-    public TabModelView getTabModelViewForName(String name)
-    {
-    	for (TabModelView tabView : tabViews) {
-    		if (tabView.getTabModel().name.equals(name)) return tabView;
-    	}
-    	return null;
-    }
+	public TabModelView getTabModelViewForName(String name) {
+		for (TabModelView tabView : tabViews) {
+			if (tabView.getTabModel().name.equals(name))
+				return tabView;
+		}
+		return null;
+	}
 
-   /* private String lastInspectedPropertyName;
+	/* private String lastInspectedPropertyName;
 
-    private String lastInspectedTabName;
+	 private String lastInspectedTabName;
 
-     public void widgetGetFocus(DenaliWidget widget)
-    {
-        lastInspectedPropertyName = widget.getObservedPropertyName();
-        lastInspectedTabName = widget.getObservedTabName();
-    }
+	  public void widgetGetFocus(DenaliWidget widget)
+	 {
+	     lastInspectedPropertyName = widget.getObservedPropertyName();
+	     lastInspectedTabName = widget.getObservedTabName();
+	 }
 
-    public String getLastInspectedPropertyName()
-    {
-        return lastInspectedPropertyName;
-    }
+	 public String getLastInspectedPropertyName()
+	 {
+	     return lastInspectedPropertyName;
+	 }
 
-    public void setLastInspectedPropertyName(String lstInspectedPropertyName)
-    {
-        this.lastInspectedPropertyName = lstInspectedPropertyName;
-    }
+	 public void setLastInspectedPropertyName(String lstInspectedPropertyName)
+	 {
+	     this.lastInspectedPropertyName = lstInspectedPropertyName;
+	 }
 
-    public String getLastInspectedTabName()
-    {
-        return lastInspectedTabName;
-    }
+	 public String getLastInspectedTabName()
+	 {
+	     return lastInspectedTabName;
+	 }
 
-    public void setLastInspectedTabName(String lstInspectedTabName)
-    {
-        this.lastInspectedTabName = lstInspectedTabName;
-    }
-*/
+	 public void setLastInspectedTabName(String lstInspectedTabName)
+	 {
+	     this.lastInspectedTabName = lstInspectedTabName;
+	 }
+	*/
 
 	public InspectingWidget getInspectingWidget() {
 		return _inspectingWidget;
@@ -484,52 +465,48 @@ public class InspectorModelView extends JTabbedPane implements ChangeListener
 		}
 	}*/
 
-	public int getTabsNb()
-	{
+	public int getTabsNb() {
 		return tabViews.size();
 	}
 
-    public TabModelView getTabAtIndex(int i)
-    {
-    	return tabViews.get(i);
-    }
+	public TabModelView getTabAtIndex(int i) {
+		return tabViews.get(i);
+	}
 
-	public Vector<TabModelView> getTabViews()
-	{
+	public Vector<TabModelView> getTabViews() {
 		return tabViews;
 	}
-	
+
 	private Vector<TabModel> _extraTabs;
-	private Hashtable<TabModel,TabModelView> _extraTabViews;
-	
+	private Hashtable<TabModel, TabModelView> _extraTabViews;
+
 	boolean ignoreStateChanged = false;
-	
-	public void updateExtraTabs(Vector<TabModel> extraTabs)
-	{
-		if (extraTabs == null) return;
-		
+
+	public void updateExtraTabs(Vector<TabModel> extraTabs) {
+		if (extraTabs == null)
+			return;
+
 		boolean tabChanged = false;
-		
+
 		ignoreStateChanged = true;
-		
+
 		Vector<TabModel> extraTabsToRemove = new Vector<TabModel>();
 		extraTabsToRemove.addAll(_extraTabs);
 		for (TabModel t : extraTabs) {
 			if (extraTabsToRemove.contains(t)) {
 				// Already contained, do nothing
 				extraTabsToRemove.remove(t);
-			}
-			else {
-				logger.fine("Adding tab "+t.name);
+			} else {
+				logger.fine("Adding tab " + t.name);
 				TabModelView tabView = retrieveExtraTabModelView(t);
 				tabView.registerWidgets();
-				insertTab(t.name, null, tabView, null, t.index);				
+				insertTab(t.name, null, tabView, null, t.index);
 				_extraTabs.add(t);
 				tabChanged = true;
 			}
 		}
 		for (TabModel t : extraTabsToRemove) {
-			logger.fine("Removing tab "+t.name);
+			logger.fine("Removing tab " + t.name);
 			TabModelView tabView = retrieveExtraTabModelView(t);
 			tabView.unregisterWidgets();
 			remove(tabView);
@@ -546,16 +523,16 @@ public class InspectorModelView extends JTabbedPane implements ChangeListener
 			}*/
 			tabChanged = true;
 		}
-		
+
 		if (tabChanged) {
-			SwingUtilities.invokeLater(new Runnable() {			
+			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
 					setSelectedIndex(0);
 				}
 			});
- 		}
-	
+		}
+
 		ignoreStateChanged = false;
 
 		/*_extraTabs = extraTabs;
@@ -566,7 +543,7 @@ public class InspectorModelView extends JTabbedPane implements ChangeListener
 
 			}
 		}*/
-		
+
 	}
 
 	/*public void removeExtraTabs()
@@ -579,16 +556,15 @@ public class InspectorModelView extends JTabbedPane implements ChangeListener
 			}
 		}
 	}*/
-	
-	private TabModelView retrieveExtraTabModelView(TabModel tab)
-	{
+
+	private TabModelView retrieveExtraTabModelView(TabModel tab) {
 		TabModelView returned = _extraTabViews.get(tab);
 		if (returned == null) {
-			//System.out.println("Je cree la TabModelView pour "+tab.name);
+			// System.out.println("Je cree la TabModelView pour "+tab.name);
 			returned = new TabModelView(tab, this, _inspectingWidget.getController());
 			_extraTabViews.put(tab, returned);
 		}
 		return returned;
 	}
-	
+
 }

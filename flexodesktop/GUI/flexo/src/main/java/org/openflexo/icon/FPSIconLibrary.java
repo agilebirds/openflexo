@@ -27,7 +27,7 @@ import org.openflexo.toolbox.ImageIconResource;
  * Utility class containing all icons used in context of FPSModule
  * 
  * @author sylvain
- *
+ * 
  */
 public class FPSIconLibrary extends IconLibrary {
 

@@ -36,7 +36,6 @@ import org.openflexo.foundation.wkf.node.ActivityNode;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
-
 public class ActivityNodeGR extends NormalAbstractActivityNodeGR<ActivityNode> {
 
 	private static final int MIN_SPACE = 5;
@@ -45,22 +44,20 @@ public class ActivityNodeGR extends NormalAbstractActivityNodeGR<ActivityNode> {
 	private BackgroundStyle background;
 	private boolean isInPalette = false;
 
-	public ActivityNodeGR(ActivityNode activityNode, ProcessRepresentation aDrawing,boolean isInPalet)
-	{
-		super(activityNode, ShapeType.RECTANGLE, aDrawing,isInPalet);
+	public ActivityNodeGR(ActivityNode activityNode, ProcessRepresentation aDrawing, boolean isInPalet) {
+		super(activityNode, ShapeType.RECTANGLE, aDrawing, isInPalet);
 
 		isInPalette = isInPalet;
-		
+
 		setShapePainter(new ShapePainter() {
 			@Override
-			public void paintShape(FGEShapeGraphics g)
-			{
+			public void paintShape(FGEShapeGraphics g) {
 				g.useTextStyle(roleLabelTextStyle);
 				Dimension labelSize = getNormalizedLabelSize();
 				double vGap = getVerticalGap();
-				double absoluteRoleLabelCenterY = vGap*2+labelSize.height+getRoleFont().getSize()/2-3;
-				g.drawString(getSubLabel(), new FGEPoint(0.5,absoluteRoleLabelCenterY/getHeight()),TextAlignment.CENTER);
-				if(getImageIcon()!=null){
+				double absoluteRoleLabelCenterY = vGap * 2 + labelSize.height + getRoleFont().getSize() / 2 - 3;
+				g.drawString(getSubLabel(), new FGEPoint(0.5, absoluteRoleLabelCenterY / getHeight()), TextAlignment.CENTER);
+				if (getImageIcon() != null) {
 					g.drawImage(getImageIcon().getImage(), new FGEPoint(0d, 0d));
 				}
 			};
@@ -88,61 +85,65 @@ public class ActivityNodeGR extends NormalAbstractActivityNodeGR<ActivityNode> {
 	{
 		return (isInPalette ? 1 : super.getRightBorder());
 	}*/
-	
 
-	private ImageIcon getImageIcon(){
-		if(getActivityNode().getTaskType()==null)return null;
+	private ImageIcon getImageIcon() {
+		if (getActivityNode().getTaskType() == null)
+			return null;
 		switch (getActivityNode().getTaskType()) {
-		case BusinessRule: return WKFIconLibrary.TASKTYPE_BUSINESSRULE;
-		case Manual: return WKFIconLibrary.TASKTYPE_MANUAL;
-		case Receive: return WKFIconLibrary.TASKTYPE_RECEIVE;
-		case Script: return WKFIconLibrary.TASKTYPE_SCRIPT;
-		case Send: return WKFIconLibrary.TASKTYPE_SEND;
-		case Service: return WKFIconLibrary.TASKTYPE_SERVICE;
-		case User: return WKFIconLibrary.TASKTYPE_USER;
+		case BusinessRule:
+			return WKFIconLibrary.TASKTYPE_BUSINESSRULE;
+		case Manual:
+			return WKFIconLibrary.TASKTYPE_MANUAL;
+		case Receive:
+			return WKFIconLibrary.TASKTYPE_RECEIVE;
+		case Script:
+			return WKFIconLibrary.TASKTYPE_SCRIPT;
+		case Send:
+			return WKFIconLibrary.TASKTYPE_SEND;
+		case Service:
+			return WKFIconLibrary.TASKTYPE_SERVICE;
+		case User:
+			return WKFIconLibrary.TASKTYPE_USER;
 
 		default:
 			return null;
 		}
 	}
 
-	protected double getVerticalGap()
-	{
+	protected double getVerticalGap() {
 		Dimension labelSize = getNormalizedLabelSize();
-		return (getHeight()-labelSize.height-getRoleFont().getSize())/3;
+		return (getHeight() - labelSize.height - getRoleFont().getSize()) / 3;
 	}
 
 	@Override
-	public double getRelativeTextY()
-	{
+	public double getRelativeTextY() {
 		Dimension labelSize = getNormalizedLabelSize();
 		double vGap = getVerticalGap();
-		double absoluteCenterY = vGap+labelSize.height/2;
-		return absoluteCenterY/getHeight();
+		double absoluteCenterY = vGap + labelSize.height / 2;
+		return absoluteCenterY / getHeight();
 	}
 
 	@Override
-	public double getRequiredHeight(double labelHeight)
-	{
-		return labelHeight+getRoleFont().getSize()+3*MIN_SPACE;
+	public double getRequiredHeight(double labelHeight) {
+		return labelHeight + getRoleFont().getSize() + 3 * MIN_SPACE;
 	}
 
 	@Override
 	public double getRequiredWidth(double labelWidth) {
-		double required =  super.getRequiredWidth(labelWidth);
-		if (getImageIcon()!=null)
-			required+=getImageIcon().getIconWidth()*2;
+		double required = super.getRequiredWidth(labelWidth);
+		if (getImageIcon() != null)
+			required += getImageIcon().getIconWidth() * 2;
 		return required;
 	}
 
-	public ActivityNode getActivityNode()
-	{
+	public ActivityNode getActivityNode() {
 		return getDrawable();
 	}
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (dataModification instanceof WKFAttributeDataModification && "taskType".equals(((WKFAttributeDataModification)dataModification).getAttributeName())) {
+		if (dataModification instanceof WKFAttributeDataModification
+				&& "taskType".equals(((WKFAttributeDataModification) dataModification).getAttributeName())) {
 			checkAndUpdateDimensionIfRequired();
 		}
 		super.update(observable, dataModification);

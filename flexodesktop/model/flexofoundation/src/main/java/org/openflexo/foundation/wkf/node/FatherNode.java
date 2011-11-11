@@ -28,43 +28,35 @@ import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.action.CreatePetriGraph;
 import org.openflexo.foundation.wkf.dm.PetriGraphSet;
 
-
 /**
- * Represents a FlexoNode that way contains imbricated PetriGraph: this is an
- * intermediate parent class for ActivityNode and OperationNode
- *
+ * Represents a FlexoNode that way contains imbricated PetriGraph: this is an intermediate parent class for ActivityNode and OperationNode
+ * 
  * @author sguerin
- *
+ * 
  */
-public abstract class FatherNode extends FlexoNode
-{
+public abstract class FatherNode extends FlexoNode {
 
 	private FlexoPetriGraph containedPetriGraph;
 
-	public FatherNode(FlexoProcess process)
-	{
+	public FatherNode(FlexoProcess process) {
 		super(process);
 	}
 
-	public FlexoPetriGraph getContainedPetriGraph()
-	{
+	public FlexoPetriGraph getContainedPetriGraph() {
 		return containedPetriGraph;
 	}
 
-	public boolean hasContainedPetriGraph()
-	{
+	public boolean hasContainedPetriGraph() {
 		return (containedPetriGraph != null);
 	}
 
-	public void setContainedPetriGraph(FlexoPetriGraph aPetriGraph)
-	{
+	public void setContainedPetriGraph(FlexoPetriGraph aPetriGraph) {
 		containedPetriGraph = aPetriGraph;
 		if (containedPetriGraph != null) {
 			if (this instanceof AbstractActivityNode) {
-				containedPetriGraph.setContainer(this,FlexoProcess.OPERATION_CONTEXT);
-			}
-			else if (this instanceof OperationNode) {
-				containedPetriGraph.setContainer(this,FlexoProcess.ACTION_CONTEXT);
+				containedPetriGraph.setContainer(this, FlexoProcess.OPERATION_CONTEXT);
+			} else if (this instanceof OperationNode) {
+				containedPetriGraph.setContainer(this, FlexoProcess.ACTION_CONTEXT);
 			}
 		}
 		if (!isDeserializing()) {
@@ -74,18 +66,17 @@ public abstract class FatherNode extends FlexoNode
 	}
 
 	public boolean containsNormalNodes() {
-		if (getContainedPetriGraph()==null)
+		if (getContainedPetriGraph() == null)
 			return false;
-		for (AbstractNode node:getContainedPetriGraph().getNodes()) {
-			if (node instanceof FlexoNode && !((FlexoNode)node).isBeginOrEndNode())
+		for (AbstractNode node : getContainedPetriGraph().getNodes()) {
+			if (node instanceof FlexoNode && !((FlexoNode) node).isBeginOrEndNode())
 				return true;
 		}
 		return false;
 	}
 
 	@Override
-	public void delete()
-	{
+	public void delete() {
 		if (containedPetriGraph != null) {
 			containedPetriGraph.delete();
 		}
@@ -95,12 +86,11 @@ public abstract class FatherNode extends FlexoNode
 
 	/**
 	 * Return a Vector of all embedded WKFObjects
-	 *
+	 * 
 	 * @return a Vector of WKFObject instances
 	 */
 	@Override
-	public Vector<WKFObject> getAllEmbeddedWKFObjects()
-	{
+	public Vector<WKFObject> getAllEmbeddedWKFObjects() {
 		Vector<WKFObject> returned = super.getAllEmbeddedWKFObjects();
 		if (containedPetriGraph != null) {
 			returned.add(containedPetriGraph);
@@ -110,13 +100,11 @@ public abstract class FatherNode extends FlexoNode
 	}
 
 	/**
-	 * The insertion or removal of subNodes has to be done with Constructor or
-	 * removeFromSubNodes method.
-	 *
+	 * The insertion or removal of subNodes has to be done with Constructor or removeFromSubNodes method.
+	 * 
 	 * @return Vector of FlexoNode
 	 */
-	public Vector getSubNodes()
-	{
+	public Vector getSubNodes() {
 		if (containedPetriGraph != null) {
 			return containedPetriGraph.getNodes();
 		} else {
@@ -127,15 +115,14 @@ public abstract class FatherNode extends FlexoNode
 	@Override
 	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
 		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		//returned.add(OpenOperationLevel.actionType);
+		// returned.add(OpenOperationLevel.actionType);
 		returned.add(CreatePetriGraph.actionType);
 		return returned;
 	}
 
-    @Override
-	public boolean isInteractive()
-    {
-    	return isNormalNode();
-    }
+	@Override
+	public boolean isInteractive() {
+		return isNormalNode();
+	}
 
 }

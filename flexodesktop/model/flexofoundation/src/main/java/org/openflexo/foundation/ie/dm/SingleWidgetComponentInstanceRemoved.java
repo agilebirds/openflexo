@@ -23,23 +23,19 @@ import org.openflexo.foundation.ie.SingleWidgetComponentInstance;
 
 /**
  * @author bmangez
- * @version $Id: SingleWidgetComponentInstanceRemoved.java,v 1.1.2.2 2005/08/19
- *          16:45:38 sguerin Exp $ $Log:
- *          SingleWidgetComponentInstanceRemoved.java,v $ Revision 1.1.2.2
- *          2005/08/19 16:45:38 sguerin Commit on 19/08/2005, Sylvain GUERIN,
+ * @version $Id: SingleWidgetComponentInstanceRemoved.java,v 1.1.2.2 2005/08/19 16:45:38 sguerin Exp $ $Log:
+ *          SingleWidgetComponentInstanceRemoved.java,v $ Revision 1.1.2.2 2005/08/19 16:45:38 sguerin Commit on 19/08/2005, Sylvain GUERIN,
  *          version 7.1.10.alpha See committing documentation
  * 
- * Revision 1.1.2.1 2005/06/28 12:53:52 benoit ReusableComponents
+ *          Revision 1.1.2.1 2005/06/28 12:53:52 benoit ReusableComponents
  * 
  * 
- * <B>Class Description</B>
+ *          <B>Class Description</B>
  */
-public class SingleWidgetComponentInstanceRemoved extends IEDataModification
-{
+public class SingleWidgetComponentInstanceRemoved extends IEDataModification {
 
-    public SingleWidgetComponentInstanceRemoved(SingleWidgetComponentInstance removed)
-    {
-        super(removed, null);
-    }
+	public SingleWidgetComponentInstanceRemoved(SingleWidgetComponentInstance removed) {
+		super(removed, null);
+	}
 
 }

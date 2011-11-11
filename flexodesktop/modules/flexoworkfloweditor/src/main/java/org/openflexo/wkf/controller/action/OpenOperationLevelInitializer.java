@@ -30,35 +30,30 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.wkf.processeditor.ProcessView;
 import org.openflexo.wkf.swleditor.SwimmingLaneView;
 
-
-public class OpenOperationLevelInitializer extends ActionInitializer { 
+public class OpenOperationLevelInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	OpenOperationLevelInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(OpenOperationLevel.actionType,actionInitializer);
+	OpenOperationLevelInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(OpenOperationLevel.actionType, actionInitializer);
 	}
 
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionFinalizer<OpenOperationLevel> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<OpenOperationLevel> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<OpenOperationLevel>() {
 			@Override
-			public boolean run(ActionEvent e, OpenOperationLevel action)
-			{
+			public boolean run(ActionEvent e, OpenOperationLevel action) {
 				OperationPetriGraph petriGraph = action.getFocusedObject().getOperationPetriGraph();
 				if (petriGraph != null && petriGraph.getIsVisible()) {
 					if (getController().getCurrentModuleView() instanceof ProcessView) {
-						((ProcessView)getController().getCurrentModuleView()).getController().setObjectForPaletteSwitch(petriGraph);
+						((ProcessView) getController().getCurrentModuleView()).getController().setObjectForPaletteSwitch(petriGraph);
 					} else if (getController().getCurrentModuleView() instanceof SwimmingLaneView) {
-						((SwimmingLaneView)getController().getCurrentModuleView()).getController().setObjectForPaletteSwitch(petriGraph);
+						((SwimmingLaneView) getController().getCurrentModuleView()).getController().setObjectForPaletteSwitch(petriGraph);
 					}
 				}
 				return true;

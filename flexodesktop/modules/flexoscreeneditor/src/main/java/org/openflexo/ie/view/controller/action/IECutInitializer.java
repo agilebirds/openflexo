@@ -33,7 +33,6 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.ie.action.IECut;
@@ -42,36 +41,30 @@ public class IECutInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	IECutInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(IECut.actionType,actionInitializer);
+	IECutInitializer(IEControllerActionInitializer actionInitializer) {
+		super(IECut.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<IECut> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<IECut> getDefaultInitializer() {
 		return new FlexoActionInitializer<IECut>() {
 			@Override
-			public boolean run(ActionEvent e, IECut action)
-			{
+			public boolean run(ActionEvent e, IECut action) {
 				return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_cut_those_objects"));
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<IECut> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<IECut> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<IECut>() {
 			@Override
-			public boolean run(ActionEvent e, IECut action)
-			{
+			public boolean run(ActionEvent e, IECut action) {
 				getControllerActionInitializer().getIESelectionManager().performSelectionCut();
 				return true;
 			}
@@ -79,14 +72,12 @@ public class IECutInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return IconLibrary.CUT_ICON;
 	}
 
 	@Override
-	protected KeyStroke getShortcut()
-	{
+	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(KeyEvent.VK_X, FlexoCst.META_MASK);
 	}
 

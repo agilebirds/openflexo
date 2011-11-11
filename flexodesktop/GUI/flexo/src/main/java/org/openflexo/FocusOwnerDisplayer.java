@@ -25,14 +25,14 @@ public class FocusOwnerDisplayer implements Runnable {
 
 	@Override
 	public void run() {
-		while(true){
+		while (true) {
 			FocusManager fm = FocusManager.getCurrentManager();
 			Object owner = fm.getFocusOwner();
-			System.out.println("Focus Manager = "+fm);
-			System.out.println("Focus Owner = "+owner);
-			try{
+			System.out.println("Focus Manager = " + fm);
+			System.out.println("Focus Owner = " + owner);
+			try {
 				Thread.sleep(3000);
-			}catch(Exception e){
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}

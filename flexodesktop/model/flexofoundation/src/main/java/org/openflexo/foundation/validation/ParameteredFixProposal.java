@@ -25,57 +25,49 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.param.TextFieldParameter;
 
-
 /**
  * Automatic fix proposal with parameters
  * 
  * @author sguerin
  * 
  */
-public abstract class ParameteredFixProposal<R extends ValidationRule<R,V>, V extends Validable> extends FixProposal<R,V>
-{
+public abstract class ParameteredFixProposal<R extends ValidationRule<R, V>, V extends Validable> extends FixProposal<R, V> {
 
-    private static final Logger logger = Logger.getLogger(ParameteredFixProposal.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ParameteredFixProposal.class.getPackage().getName());
 
-    //private Hashtable _params;
-    //private Hashtable _labels;
-    
-    private Hashtable _parameters;
-    private ParameterDefinition[] _paramsArray;
-    
-    public ParameteredFixProposal(String aMessage, ParameterDefinition[] parameters)
-    {
-        super(aMessage);
-        _parameters = new Hashtable();
-        for (int i=0; i<parameters.length; i++) {
-            _parameters.put(parameters[i].getName(),parameters[i]);
-        }
-        _paramsArray = parameters;
-    }
+	// private Hashtable _params;
+	// private Hashtable _labels;
 
-    public ParameteredFixProposal(String aMessage, String paramName, String paramLabel, String paramDefaultValue)
-    {
-        this(aMessage, singleParameterWith(paramName,paramLabel,paramDefaultValue));
-    }
+	private Hashtable _parameters;
+	private ParameterDefinition[] _paramsArray;
 
-    private static ParameterDefinition[] singleParameterWith(String paramName, String paramLabel, String paramDefaultValue)
-    {
-        ParameterDefinition[] returned = { new TextFieldParameter(paramName,paramLabel,paramDefaultValue) };
-        return returned;
-    }
-    
-    public Object getValueForParameter(String name)
-    {
-        return ((ParameterDefinition)_parameters.get(name)).getValue();
-    }
+	public ParameteredFixProposal(String aMessage, ParameterDefinition[] parameters) {
+		super(aMessage);
+		_parameters = new Hashtable();
+		for (int i = 0; i < parameters.length; i++) {
+			_parameters.put(parameters[i].getName(), parameters[i]);
+		}
+		_paramsArray = parameters;
+	}
 
-    public ParameterDefinition[] getParameters()
-    {
-        return _paramsArray;
-    }
-    
-    public void updateBeforeApply()
-    {
-    	// Override 
-    }
+	public ParameteredFixProposal(String aMessage, String paramName, String paramLabel, String paramDefaultValue) {
+		this(aMessage, singleParameterWith(paramName, paramLabel, paramDefaultValue));
+	}
+
+	private static ParameterDefinition[] singleParameterWith(String paramName, String paramLabel, String paramDefaultValue) {
+		ParameterDefinition[] returned = { new TextFieldParameter(paramName, paramLabel, paramDefaultValue) };
+		return returned;
+	}
+
+	public Object getValueForParameter(String name) {
+		return ((ParameterDefinition) _parameters.get(name)).getValue();
+	}
+
+	public ParameterDefinition[] getParameters() {
+		return _paramsArray;
+	}
+
+	public void updateBeforeApply() {
+		// Override
+	}
 }

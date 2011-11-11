@@ -20,6 +20,5 @@
 package org.openflexo.foundation.cg.utils;
 
 public enum TemplateRepositoryType {
-	Code,
-	Documentation;
+	Code, Documentation;
 }

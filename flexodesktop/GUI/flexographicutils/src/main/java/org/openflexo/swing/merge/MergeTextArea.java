@@ -40,14 +40,13 @@ import org.openflexo.jedit.TokenMarker;
 import org.openflexo.toolbox.FontCst;
 import org.openflexo.toolbox.TokenMarkerStyle;
 
-
-public class MergeTextArea extends JEditTextAreaWithHighlights
-{
+public class MergeTextArea extends JEditTextAreaWithHighlights {
 	private MergeChange selectedChange;
-	private Hashtable<MergeChange,MergeHighlight> highlights;
+	private Hashtable<MergeChange, MergeHighlight> highlights;
 
-
-	public enum Side { Right, Left, Merge };
+	public enum Side {
+		Right, Left, Merge
+	};
 
 	private Side side;
 	private IMerge _merge;
@@ -58,27 +57,23 @@ public class MergeTextArea extends JEditTextAreaWithHighlights
 
 	private JTextArea linesTA;
 
-	protected class Line
-	{
+	protected class Line {
 		int lineNb;
 		boolean isExtraLine;
 		String lineText;
 
-		protected Line(String lineText, int lineNb)
-		{
+		protected Line(String lineText, int lineNb) {
 			isExtraLine = false;
 			this.lineText = lineText;
 			this.lineNb = lineNb;
 		}
 
-		protected Line(int lineNb)
-		{
+		protected Line(int lineNb) {
 			isExtraLine = true;
 			this.lineNb = lineNb;
 		}
 
-		protected String getStringValue()
-		{
+		protected String getStringValue() {
 			if (isExtraLine) {
 				return "";
 			} else {
@@ -86,8 +81,7 @@ public class MergeTextArea extends JEditTextAreaWithHighlights
 			}
 		}
 
-		protected boolean isExtraLine()
-		{
+		protected boolean isExtraLine() {
 			return isExtraLine;
 		}
 
@@ -95,28 +89,27 @@ public class MergeTextArea extends JEditTextAreaWithHighlights
 
 	private int maxCols = 40;
 
-	private String buildText(MergeToken[] someText)
-	{
+	private String buildText(MergeToken[] someText) {
 		Vector<Line> lines = new Vector<Line>();
-		for (int i=0; i<someText.length; i++) {
+		for (int i = 0; i < someText.length; i++) {
 			String line = someText[i].getToken();
-			lines.add(new Line(line,i));
+			lines.add(new Line(line, i));
 			if (line.length() > maxCols) {
 				maxCols = line.length();
 			}
 		}
 
 		for (MergeChange change : _merge.getChanges()) {
-			int startIndex = isRight()?change.getFirst2():change.getFirst0();
-			int endIndex = isRight()?change.getLast2():change.getLast0();
-			int oppositeStartIndex = isLeft()?change.getFirst2():change.getFirst0();
-			int oppositeEndIndex = isLeft()?change.getLast2():change.getLast0();
+			int startIndex = isRight() ? change.getFirst2() : change.getFirst0();
+			int endIndex = isRight() ? change.getLast2() : change.getLast0();
+			int oppositeStartIndex = isLeft() ? change.getFirst2() : change.getFirst0();
+			int oppositeEndIndex = isLeft() ? change.getLast2() : change.getLast0();
 			int range = endIndex - startIndex;
 			int oppositeRange = oppositeEndIndex - oppositeStartIndex;
 			if (range != oppositeRange) {
-				int indexOfLastLine = getIndexOfLineNb(lines,endIndex);
-				for (int i=range; i<oppositeRange; i++) {
-					lines.insertElementAt(new Line(endIndex), indexOfLastLine+1);
+				int indexOfLastLine = getIndexOfLineNb(lines, endIndex);
+				for (int i = range; i < oppositeRange; i++) {
+					lines.insertElementAt(new Line(endIndex), indexOfLastLine + 1);
 				}
 			}
 		}
@@ -127,13 +120,13 @@ public class MergeTextArea extends JEditTextAreaWithHighlights
 		for (Line line : text) {
 			if (!line.isExtraLine) {
 				if (line.lineNb < 10) {
-					linesTASB.append("   "+line.lineNb+" ");
+					linesTASB.append("   " + line.lineNb + " ");
 				} else if (line.lineNb < 100) {
-					linesTASB.append("  "+line.lineNb+" ");
+					linesTASB.append("  " + line.lineNb + " ");
 				} else if (line.lineNb < 1000) {
-					linesTASB.append(" "+line.lineNb+" ");
+					linesTASB.append(" " + line.lineNb + " ");
 				} else {
-					linesTASB.append(""+line.lineNb);
+					linesTASB.append("" + line.lineNb);
 				}
 				returned.append(line.getStringValue());
 			}
@@ -146,12 +139,11 @@ public class MergeTextArea extends JEditTextAreaWithHighlights
 
 	private DiffSource _source;
 
-	public MergeTextArea (DiffSource source, IMerge merge, Side side, TokenMarkerStyle style)
-	{
+	public MergeTextArea(DiffSource source, IMerge merge, Side side, TokenMarkerStyle style) {
 		super();
 		disableDefaultMouseWheelListener();
 		setTokenMarker(TokenMarker.makeTokenMarker(style));
-		setPreferredSize(new Dimension(10,10));
+		setPreferredSize(new Dimension(10, 10));
 		this.side = side;
 		this._merge = merge;
 		this._source = source;
@@ -161,30 +153,30 @@ public class MergeTextArea extends JEditTextAreaWithHighlights
 		setColumns(maxCols);
 		setEditable(false);
 
-		_changes = new Hashtable<MergeChange,ChangeBounds>();
+		_changes = new Hashtable<MergeChange, ChangeBounds>();
 
-		//if (MergeReport.getChanges().size() > 0) {
-		highlights = new Hashtable<MergeChange,MergeHighlight>();
+		// if (MergeReport.getChanges().size() > 0) {
+		highlights = new Hashtable<MergeChange, MergeHighlight>();
 		for (MergeChange change : _merge.getChanges()) {
-			highlights.put(change,makeHighlightForChange(change));
+			highlights.put(change, makeHighlightForChange(change));
 		}
-		//}
+		// }
 		int cols;
 		if (text.length < 10) {
-			cols=2;
+			cols = 2;
 		} else if (text.length < 100) {
-			cols=3;
+			cols = 3;
 		} else if (text.length < 1000) {
-			cols=4;
+			cols = 4;
 		} else {
-			cols=5;
+			cols = 5;
 		}
-		linesTA = new JTextArea(text.length,cols);
+		linesTA = new JTextArea(text.length, cols);
 		linesTA.setEditable(false);
 		linesTA.setFont(new Font("Verdana", Font.PLAIN, 11));
 		linesTA.setBackground(null);
 		linesTA.setText(linesTAText);
-		linesTA.setFont(FontCst.TEXT_FONT.getStyle()!=Font.PLAIN?FontCst.TEXT_FONT.deriveFont(Font.PLAIN):FontCst.TEXT_FONT);
+		linesTA.setFont(FontCst.TEXT_FONT.getStyle() != Font.PLAIN ? FontCst.TEXT_FONT.deriveFont(Font.PLAIN) : FontCst.TEXT_FONT);
 		if (side != Side.Merge) {
 			remove(vertical);
 			remove(horizontal);
@@ -194,36 +186,35 @@ public class MergeTextArea extends JEditTextAreaWithHighlights
 
 	/**
 	 * Overrides setFont
+	 * 
 	 * @see org.openflexo.jedit.JEditTextArea#setFont(java.awt.Font)
 	 */
 	@Override
-	public void setFont(Font font)
-	{
+	public void setFont(Font font) {
 		super.setFont(font);
-		if (linesTA!=null && linesTA.getFont()!=font) {
-			linesTA.setFont(font.getStyle()==Font.PLAIN?font:font.deriveFont(Font.PLAIN));
+		if (linesTA != null && linesTA.getFont() != font) {
+			linesTA.setFont(font.getStyle() == Font.PLAIN ? font : font.deriveFont(Font.PLAIN));
 		}
 	}
 
-	protected void update()
-	{
+	protected void update() {
 		removeAllCustomHighlight();
 		globalText = buildText(_source.getTextTokens());
 		setText(globalText);
 		_changes.clear();
-		highlights = new Hashtable<MergeChange,MergeHighlight>();
+		highlights = new Hashtable<MergeChange, MergeHighlight>();
 		for (MergeChange change : _merge.getChanges()) {
-			highlights.put(change,makeHighlightForChange(change));
+			highlights.put(change, makeHighlightForChange(change));
 		}
 		int cols;
 		if (text.length < 10) {
-			cols=2;
+			cols = 2;
 		} else if (text.length < 100) {
-			cols=3;
+			cols = 3;
 		} else if (text.length < 1000) {
-			cols=4;
+			cols = 4;
 		} else {
-			cols=5;
+			cols = 5;
 		}
 		linesTA.setRows(text.length);
 		linesTA.setColumns(cols);
@@ -231,19 +222,16 @@ public class MergeTextArea extends JEditTextAreaWithHighlights
 		selectedChange = null;
 	}
 
-	public JScrollBar getHorizontalScrollBar()
-	{
+	public JScrollBar getHorizontalScrollBar() {
 		return horizontal;
 	}
 
-	public JScrollBar getVerticalScrollBar()
-	{
+	public JScrollBar getVerticalScrollBar() {
 		return vertical;
 	}
 
-	private static int getIndexOfLineNb(Vector<Line> lines, int lineNb)
-	{
-		for (int i=0; i<lines.size(); i++) {
+	private static int getIndexOfLineNb(Vector<Line> lines, int lineNb) {
+		for (int i = 0; i < lines.size(); i++) {
 			if (lines.get(i).lineNb == lineNb) {
 				return i;
 			}
@@ -251,43 +239,39 @@ public class MergeTextArea extends JEditTextAreaWithHighlights
 		return -1;
 	}
 
-	int lineToChar(int lineNb, boolean isFirst)
-	{
+	int lineToChar(int lineNb, boolean isFirst) {
 		int returned = 0;
 		int i;
-		for (i=0; i<text.length && text[i].lineNb<lineNb; i++) {
-			returned += text[i].isExtraLine()?1:text[i].getStringValue().length()+1;
+		for (i = 0; i < text.length && text[i].lineNb < lineNb; i++) {
+			returned += text[i].isExtraLine() ? 1 : text[i].getStringValue().length() + 1;
 		}
 		if (isFirst) {
-			int j= i-1;
-			while (j>0 && text[j/*-1*/].isExtraLine() && text[j-1].isExtraLine()) {
+			int j = i - 1;
+			while (j > 0 && text[j/*-1*/].isExtraLine() && text[j - 1].isExtraLine()) {
 				returned -= 1;
-				j = j-1;
+				j = j - 1;
 			}
 		}
 		return returned;
 	}
 
-	int lineToPhysLine(int lineNb, boolean isFirst)
-	{
+	int lineToPhysLine(int lineNb, boolean isFirst) {
 		if (isFirst) {
 			int i = 0;
-			while (i<text.length && text[i].lineNb<lineNb) {
+			while (i < text.length && text[i].lineNb < lineNb) {
 				i++;
 			}
 			return i;
-		}
-		else {
+		} else {
 			int i = 0;
-			while (i<text.length && text[i].lineNb<=lineNb) {
+			while (i < text.length && text[i].lineNb <= lineNb) {
 				i++;
 			}
-			return i-1;
+			return i - 1;
 		}
 	}
 
-	protected void setChange (final MergeChange change, boolean shouldScroll)
-	{
+	protected void setChange(final MergeChange change, boolean shouldScroll) {
 		if (change == null) {
 			return;
 		}
@@ -295,7 +279,7 @@ public class MergeTextArea extends JEditTextAreaWithHighlights
 		// TODO: (SGU) quelqu'un (moi ?) a supprime le test if (change != selectedChange) ...
 		// Je me rappelle que ca greve pas mal les performances, il faudrait regarder ca un jour.
 
-		//if ((change != selectedChange) && (getPainter().isValid())) {
+		// if ((change != selectedChange) && (getPainter().isValid())) {
 		if (selectedChange != null && highlights.get(selectedChange) != null) {
 			highlights.get(selectedChange).deselect();
 		}
@@ -308,13 +292,13 @@ public class MergeTextArea extends JEditTextAreaWithHighlights
 			ChangeBounds cb = boundsForChange(change);
 			final Rectangle bounds = new Rectangle();
 			bounds.x = 0;
-			bounds.y = cb.beginPLine*getLineHeight();
+			bounds.y = cb.beginPLine * getLineHeight();
 			if (bounds.y < 50) {
 				bounds.y = 0;
 			} else {
 				bounds.y -= 50;
 			}
-			//int requiredHeight = (cb.endPLine-cb.beginPLine+1)*getLineHeight()+50;
+			// int requiredHeight = (cb.endPLine-cb.beginPLine+1)*getLineHeight()+50;
 			bounds.height = viewPort.getHeight();
 			bounds.width = viewPort.getWidth();
 			SwingUtilities.invokeLater(new Runnable() {
@@ -325,17 +309,16 @@ public class MergeTextArea extends JEditTextAreaWithHighlights
 			});
 		}
 
-		//}
+		// }
 	}
 
-	private JViewport getViewPort()
-	{
+	private JViewport getViewPort() {
 		Component current = getPainter();
 		while (current != null && !(current instanceof JViewport)) {
 			current = current.getParent();
 		}
 		if (current instanceof JViewport) {
-			return (JViewport)current;
+			return (JViewport) current;
 		}
 		return null;
 	}
@@ -345,20 +328,18 @@ public class MergeTextArea extends JEditTextAreaWithHighlights
 		   super.scrollRectToVisible(aRect);
 	   }*/
 
-	private MergeHighlight makeHighlightForChange (MergeChange change)
-	{
+	private MergeHighlight makeHighlightForChange(MergeChange change) {
 		ChangeBounds cb = boundsForChange(change);
-		MergeHighlight returned = new MergeHighlight(change,this);
+		MergeHighlight returned = new MergeHighlight(change, this);
 		returned.setBeginLineNb(cb.beginPLine);
 		returned.setEndLineNb(cb.endPLine);
 		addCustomHighlight(returned);
 		return returned;
 	}
 
-	private Hashtable<MergeChange,ChangeBounds> _changes;
+	private Hashtable<MergeChange, ChangeBounds> _changes;
 
-	protected ChangeBounds boundsForChange(MergeChange change)
-	{
+	protected ChangeBounds boundsForChange(MergeChange change) {
 		ChangeBounds returned = _changes.get(change);
 		if (returned == null) {
 			returned = new ChangeBounds(change);
@@ -367,8 +348,7 @@ public class MergeTextArea extends JEditTextAreaWithHighlights
 		return returned;
 	}
 
-	private class ChangeBounds
-	{
+	private class ChangeBounds {
 		int beginLine;
 		int endLine;
 		int beginIndex;
@@ -376,33 +356,29 @@ public class MergeTextArea extends JEditTextAreaWithHighlights
 		int beginPLine;
 		int endPLine;
 
-		ChangeBounds (MergeChange change)
-		{
+		ChangeBounds(MergeChange change) {
 			if (!isMerge()) {
-				beginLine = isRight()?change.getFirst2():change.getFirst0();
-				endLine = isRight()?change.getLast2():change.getLast0();
-				beginIndex = lineToChar(beginLine,true);
-				endIndex = lineToChar(endLine,false);
-				if (isRight() && change.getFirst2() > change.getLast2()
-						|| isLeft() && change.getFirst0() > change.getLast0()) {
-					beginIndex = beginIndex-1;
+				beginLine = isRight() ? change.getFirst2() : change.getFirst0();
+				endLine = isRight() ? change.getLast2() : change.getLast0();
+				beginIndex = lineToChar(beginLine, true);
+				endIndex = lineToChar(endLine, false);
+				if (isRight() && change.getFirst2() > change.getLast2() || isLeft() && change.getFirst0() > change.getLast0()) {
+					beginIndex = beginIndex - 1;
 				}
 
 				if (beginLine <= endLine) {
 					beginPLine = lineToPhysLine(beginLine, true);
 					endPLine = lineToPhysLine(endLine, false);
-				}
-				else {
-					int oppositeLength = (isRight()?change.getLast0()-change.getFirst0():change.getLast2()-change.getFirst2())+1;
+				} else {
+					int oppositeLength = (isRight() ? change.getLast0() - change.getFirst0() : change.getLast2() - change.getFirst2()) + 1;
 					endPLine = lineToPhysLine(endLine, false);
-					beginPLine = endPLine-oppositeLength+1;
+					beginPLine = endPLine - oppositeLength + 1;
 				}
-			}
-			else {
+			} else {
 				beginLine = change.getFirstMergeIndex();
 				endLine = change.getLastMergeIndex();
-				beginIndex = lineToChar(beginLine,true);
-				endIndex = lineToChar(endLine,false);
+				beginIndex = lineToChar(beginLine, true);
+				endIndex = lineToChar(endLine, false);
 				beginPLine = beginLine;
 				endPLine = endLine;
 			}
@@ -410,75 +386,60 @@ public class MergeTextArea extends JEditTextAreaWithHighlights
 
 	}
 
-	boolean isMerge()
-	{
+	boolean isMerge() {
 		return side == Side.Merge;
 	}
 
-	boolean isRight()
-	{
+	boolean isRight() {
 		return side == Side.Right;
 	}
 
-	boolean isLeft()
-	{
+	boolean isLeft() {
 		return side == Side.Left;
 	}
 
-	public JTextArea getLinesTA()
-	{
+	public JTextArea getLinesTA() {
 		return linesTA;
 	}
 
-	protected boolean readyToDisplay()
-	{
+	protected boolean readyToDisplay() {
 		return getPainter().getFontMetrics() != null;
 	}
 
-	private int getLineHeight()
-	{
+	private int getLineHeight() {
 		if (readyToDisplay()) {
 			return getPainter().getFontMetrics().getHeight();
 		}
 		return -1;
 	}
 
-	public float heightAboveChange(MergeChange change, int buttonHeight)
-	{
+	public float heightAboveChange(MergeChange change, int buttonHeight) {
 		if (!readyToDisplay()) {
 			return -1;
 		}
 		MergeChange previousChange = _merge.changeBefore(change);
 		if (previousChange == null) {
-			return getFirstHeight(change)+(getHeightForChange(change)-buttonHeight)/2;
-		}
-		else {
-			return (getHeightForChange(previousChange)-buttonHeight)/2
-					+ getHeightBetweenChange(previousChange,change)
-					+ (getHeightForChange(change)-buttonHeight)/2;
+			return getFirstHeight(change) + (getHeightForChange(change) - buttonHeight) / 2;
+		} else {
+			return (getHeightForChange(previousChange) - buttonHeight) / 2 + getHeightBetweenChange(previousChange, change)
+					+ (getHeightForChange(change) - buttonHeight) / 2;
 		}
 	}
 
-	private float getHeightForChange(MergeChange change)
-	{
+	private float getHeightForChange(MergeChange change) {
 		ChangeBounds cb = boundsForChange(change);
-		return (cb.endPLine-cb.beginPLine+1)*getLineHeight();
+		return (cb.endPLine - cb.beginPLine + 1) * getLineHeight();
 	}
 
-
-
-	private float getHeightBetweenChange(MergeChange change1,MergeChange change2)
-	{
+	private float getHeightBetweenChange(MergeChange change1, MergeChange change2) {
 		ChangeBounds cb1 = boundsForChange(change1);
 		ChangeBounds cb2 = boundsForChange(change2);
-		return (cb2.beginPLine-cb1.endPLine-1)*getLineHeight();
+		return (cb2.beginPLine - cb1.endPLine - 1) * getLineHeight();
 	}
 
-
-	private float getFirstHeight(MergeChange firstChange)
-	{
+	private float getFirstHeight(MergeChange firstChange) {
 		ChangeBounds cb = boundsForChange(firstChange);
-		return cb.beginPLine*getLineHeight();
+		return cb.beginPLine * getLineHeight();
 	}
 
 	/*public void setText(String text)

@@ -22,11 +22,9 @@ package org.openflexo.xmlcode;
 
 /**
  * <p>
- * Exception thrown when trying to handle invalid key-value properties. This
- * exception is raised in following cases:
+ * Exception thrown when trying to handle invalid key-value properties. This exception is raised in following cases:
  * <ul>
- * <li>trying to instanciate a property which doesn't exist (no field or no
- * get/set pair accessing methods)</li>
+ * <li>trying to instanciate a property which doesn't exist (no field or no get/set pair accessing methods)</li>
  * <li>trying to get or set a value from/to an invalid type</li>
  * </ul>
  * The 'message' (see {@link #getMessage()}) contains the error description.
@@ -34,27 +32,23 @@ package org.openflexo.xmlcode;
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  * @see KeyValueProperty
  */
-public class InvalidKeyValuePropertyException extends RuntimeException
-{
+public class InvalidKeyValuePropertyException extends RuntimeException {
 
-    /**
-     * Creates a new <code>InvalidKeyValuePropertyException</code> instance.
-     * 
-     */
-    public InvalidKeyValuePropertyException()
-    {
-        super();
-    }
+	/**
+	 * Creates a new <code>InvalidKeyValuePropertyException</code> instance.
+	 * 
+	 */
+	public InvalidKeyValuePropertyException() {
+		super();
+	}
 
-    /**
-     * Creates a new <code>InvalidKeyValuePropertyException</code> instance,
-     * given a message <code>aMessage</code>
-     * 
-     * @param aMessage
-     *            a <code>String</code> value
-     */
-    public InvalidKeyValuePropertyException(String aMessage)
-    {
-        super(aMessage);
-    }
+	/**
+	 * Creates a new <code>InvalidKeyValuePropertyException</code> instance, given a message <code>aMessage</code>
+	 * 
+	 * @param aMessage
+	 *            a <code>String</code> value
+	 */
+	public InvalidKeyValuePropertyException(String aMessage) {
+		super(aMessage);
+	}
 }

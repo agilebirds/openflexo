@@ -24,12 +24,11 @@ import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 public class CreateActivityTask extends CustomInstruction {
 
 	private AbstractActivityNode activity;
-	
-	public CreateActivityTask (AbstractActivityNode activity)
-	{
+
+	public CreateActivityTask(AbstractActivityNode activity) {
 		super();
 		this.activity = activity;
-		setInlineComment("Create new ActivityTask for node "+(getActivity()!=null?getActivity().getName():null));
+		setInlineComment("Create new ActivityTask for node " + (getActivity() != null ? getActivity().getName() : null));
 	}
 
 	public AbstractActivityNode getActivity() {
@@ -37,25 +36,21 @@ public class CreateActivityTask extends CustomInstruction {
 	}
 
 	@Override
-	public String toString()
-	{
-		return "[CreateActivityTask:"+activity+"]";
+	public String toString() {
+		return "[CreateActivityTask:" + activity + "]";
 	}
 
 	@Override
-	public String getJavaStringRepresentation() 
-	{
-		return "createActivityTask("+getActivity().getFlexoID()+");";
+	public String getJavaStringRepresentation() {
+		return "createActivityTask(" + getActivity().getFlexoID() + ");";
 	}
-	
+
 	@Override
-	public CreateActivityTask clone()
-	{
+	public CreateActivityTask clone() {
 		CreateActivityTask returned = new CreateActivityTask(activity);
 		returned.setHeaderComment(getHeaderComment());
 		returned.setInlineComment(getInlineComment());
 		return returned;
 	}
-
 
 }

@@ -30,53 +30,47 @@ import org.openflexo.foundation.action.UndoException;
 import org.openflexo.foundation.wkf.InvalidParentProcessException;
 import org.openflexo.foundation.wkf.ProcessFolder;
 
+public class DeleteProcessFolder extends FlexoAction<DeleteProcessFolder, ProcessFolder, ProcessFolder> {
 
-public class DeleteProcessFolder extends FlexoAction<DeleteProcessFolder,ProcessFolder,ProcessFolder>
-{
-
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DeleteProcessFolder.class.getPackage().getName());
 
-    public static FlexoActionType<DeleteProcessFolder,ProcessFolder,ProcessFolder> actionType
-    = new FlexoActionType<DeleteProcessFolder,ProcessFolder,ProcessFolder> ("delete_process_folder",FlexoActionType.DELETE_ACTION_TYPE) {
+	public static FlexoActionType<DeleteProcessFolder, ProcessFolder, ProcessFolder> actionType = new FlexoActionType<DeleteProcessFolder, ProcessFolder, ProcessFolder>(
+			"delete_process_folder", FlexoActionType.DELETE_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public DeleteProcessFolder makeNewAction(ProcessFolder focusedObject, Vector<ProcessFolder> globalSelection, FlexoEditor editor)
-        {
-            return new DeleteProcessFolder(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public DeleteProcessFolder makeNewAction(ProcessFolder focusedObject, Vector<ProcessFolder> globalSelection, FlexoEditor editor) {
+			return new DeleteProcessFolder(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(ProcessFolder object, Vector<ProcessFolder> globalSelection)
-        {
-            return object != null;
-        }
+		@Override
+		protected boolean isVisibleForSelection(ProcessFolder object, Vector<ProcessFolder> globalSelection) {
+			return object != null;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(ProcessFolder object, Vector<ProcessFolder> globalSelection)
-        {
-            return object != null;
-        }
+		@Override
+		protected boolean isEnabledForSelection(ProcessFolder object, Vector<ProcessFolder> globalSelection) {
+			return object != null;
+		}
 
-    };
+	};
 
-    DeleteProcessFolder (ProcessFolder focusedObject, Vector<ProcessFolder> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	DeleteProcessFolder(ProcessFolder focusedObject, Vector<ProcessFolder> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    static {
-    	FlexoModelObject.addActionForClass(actionType, ProcessFolder.class);
-    }
+	static {
+		FlexoModelObject.addActionForClass(actionType, ProcessFolder.class);
+	}
 
-    @Override
+	@Override
 	protected void doAction(Object context) throws InvalidParentProcessException, UndoException {
-    	for(FlexoModelObject folder:getGlobalSelectionAndFocusedObject())
-    		if (folder instanceof ProcessFolder)
-    			folder.delete();
-    }
+		for (FlexoModelObject folder : getGlobalSelectionAndFocusedObject())
+			if (folder instanceof ProcessFolder)
+				folder.delete();
+	}
 
 }

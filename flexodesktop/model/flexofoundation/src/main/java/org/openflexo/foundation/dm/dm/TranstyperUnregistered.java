@@ -26,11 +26,9 @@ import org.openflexo.foundation.dm.DMTranstyper;
  * 
  * @author sguerin
  */
-public class TranstyperUnregistered extends DMDataModification
-{
+public class TranstyperUnregistered extends DMDataModification {
 
-    public TranstyperUnregistered(DMTranstyper transtyper)
-    {
-        super(transtyper, null);
-    }
+	public TranstyperUnregistered(DMTranstyper transtyper) {
+		super(transtyper, null);
+	}
 }

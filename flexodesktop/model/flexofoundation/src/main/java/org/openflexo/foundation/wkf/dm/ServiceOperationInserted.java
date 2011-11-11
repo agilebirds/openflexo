@@ -27,17 +27,14 @@ import org.openflexo.foundation.wkf.ws.ServiceOperation;
  * @author dvanvyve
  * 
  */
-public class ServiceOperationInserted extends WKFDataModification
-{
+public class ServiceOperationInserted extends WKFDataModification {
 
-    public ServiceOperationInserted(ServiceOperation insertedOperation)
-    {
-        super(null, insertedOperation);
-    }
+	public ServiceOperationInserted(ServiceOperation insertedOperation) {
+		super(null, insertedOperation);
+	}
 
-    public ServiceOperation getInsertedServiceOperation()
-    {
-        return (ServiceOperation) newValue();
-    }
-    
+	public ServiceOperation getInsertedServiceOperation() {
+		return (ServiceOperation) newValue();
+	}
+
 }

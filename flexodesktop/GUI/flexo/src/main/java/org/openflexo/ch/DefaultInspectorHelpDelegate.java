@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 
 import javax.help.BadIDException;
 
-
 import org.openflexo.GeneralPreferences;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocResourceManager;
@@ -36,63 +35,55 @@ import org.openflexo.inspector.widget.DenaliWidget;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.FlexoController;
 
-
 public class DefaultInspectorHelpDelegate implements HelpDelegate {
 
-	private static final Logger logger = Logger
-	.getLogger(DenaliWidget.class.getPackage().getName());
-
+	private static final Logger logger = Logger.getLogger(DenaliWidget.class.getPackage().getName());
 
 	private DocResourceManager _docResourceManager;
 
-	public DefaultInspectorHelpDelegate(DocResourceManager docResourceManager)
-	{
+	public DefaultInspectorHelpDelegate(DocResourceManager docResourceManager) {
 		_docResourceManager = docResourceManager;
 	}
 
 	@Override
-	public boolean displayHelpFor(InspectableObject object) 
-	{
-        DocItem item = DocResourceManager.instance().getDocItemFor(object);
-        if (item != null) {
-            try {
-                logger.info("Trying to display help for "+item.getIdentifier());
-                FlexoHelp.getHelpBroker().setCurrentID(item.getIdentifier());
-                FlexoHelp.getHelpBroker().setDisplayed(true);
-            }
-            catch (BadIDException exception) {
-                FlexoController.showError(FlexoLocalization.localizedForKey("sorry_no_help_available_for")+" "+item.getIdentifier());
-                return false;
-            }
-            return true;
-       }
-        return false;
-    }
+	public boolean displayHelpFor(InspectableObject object) {
+		DocItem item = DocResourceManager.instance().getDocItemFor(object);
+		if (item != null) {
+			try {
+				logger.info("Trying to display help for " + item.getIdentifier());
+				FlexoHelp.getHelpBroker().setCurrentID(item.getIdentifier());
+				FlexoHelp.getHelpBroker().setDisplayed(true);
+			} catch (BadIDException exception) {
+				FlexoController.showError(FlexoLocalization.localizedForKey("sorry_no_help_available_for") + " " + item.getIdentifier());
+				return false;
+			}
+			return true;
+		}
+		return false;
+	}
 
 	@Override
-	public boolean isHelpAvailableFor(PropertyModel property) 
-	{
-    	Language language = _docResourceManager.getLanguage(GeneralPreferences.getLanguage());
-      	DocItem propertyModelItem = _docResourceManager.getDocItemFor(property);
-    	if (propertyModelItem != null) {
-    		if (propertyModelItem.getLastApprovedActionForLanguage(language) != null) {
-    			return true;
-    		}
-    	}
+	public boolean isHelpAvailableFor(PropertyModel property) {
+		Language language = _docResourceManager.getLanguage(GeneralPreferences.getLanguage());
+		DocItem propertyModelItem = _docResourceManager.getDocItemFor(property);
+		if (propertyModelItem != null) {
+			if (propertyModelItem.getLastApprovedActionForLanguage(language) != null) {
+				return true;
+			}
+		}
 		return false;
 	}
 
 	@Override
 	public String getHelpFor(PropertyModel property) {
 		Language language = _docResourceManager.getLanguage(GeneralPreferences.getLanguage());
-      	DocItem propertyModelItem = _docResourceManager.getDocItemFor(property);
-    	if (propertyModelItem != null) {
-    		if (propertyModelItem.getLastApprovedActionForLanguage(language) != null) {
-    			return propertyModelItem.getLastApprovedActionForLanguage(language).getVersion().getFullHTMLDescription();
-    		}
-    	}
+		DocItem propertyModelItem = _docResourceManager.getDocItemFor(property);
+		if (propertyModelItem != null) {
+			if (propertyModelItem.getLastApprovedActionForLanguage(language) != null) {
+				return propertyModelItem.getLastApprovedActionForLanguage(language).getVersion().getFullHTMLDescription();
+			}
+		}
 		return null;
 	}
-
 
 }

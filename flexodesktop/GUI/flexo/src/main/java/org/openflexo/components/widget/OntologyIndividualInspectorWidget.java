@@ -33,127 +33,110 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.inspector.widget.WidgetFocusListener;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class OntologyIndividualInspectorWidget extends CustomInspectorWidget<OntologyIndividual>
-{
+public class OntologyIndividualInspectorWidget extends CustomInspectorWidget<OntologyIndividual> {
 
-    protected static final Logger logger = Logger.getLogger(OntologyIndividualInspectorWidget.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(OntologyIndividualInspectorWidget.class.getPackage().getName());
 
-    protected OntologyIndividualSelector _selector;
+	protected OntologyIndividualSelector _selector;
 
-    public OntologyIndividualInspectorWidget(PropertyModel model, AbstractController controller)
-    {
-        super(model,controller);
-        _selector = new OntologyIndividualSelector(null) {
-            @Override
-			public void apply()
-            {
-                super.apply();
-                updateModelFromWidget();
-            }
+	public OntologyIndividualInspectorWidget(PropertyModel model, AbstractController controller) {
+		super(model, controller);
+		_selector = new OntologyIndividualSelector(null) {
+			@Override
+			public void apply() {
+				super.apply();
+				updateModelFromWidget();
+			}
 
-            @Override
-			public void cancel()
-            {
-                super.cancel();
-                updateModelFromWidget();
-            }
-        };
-        getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
-            @Override
-			public void focusGained(FocusEvent arg0)
-            {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Focus gained in " + getClass().getName());
-                super.focusGained(arg0);
-                _selector.getTextField().requestFocus();
-                _selector.getTextField().selectAll();
-            }
+			@Override
+			public void cancel() {
+				super.cancel();
+				updateModelFromWidget();
+			}
+		};
+		getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				if (logger.isLoggable(Level.FINE))
+					logger.fine("Focus gained in " + getClass().getName());
+				super.focusGained(arg0);
+				_selector.getTextField().requestFocus();
+				_selector.getTextField().selectAll();
+			}
 
-            @Override
-			public void focusLost(FocusEvent arg0)
-            {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Focus lost in " + getClass().getName());
-                super.focusLost(arg0);
-            }
-        });
-    }
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if (logger.isLoggable(Level.FINE))
+					logger.fine("Focus lost in " + getClass().getName());
+				super.focusLost(arg0);
+			}
+		});
+	}
 
-    @Override
-	public Class<OntologyIndividual> getDefaultType()
-    {
-        return OntologyIndividual.class;
-    }
+	@Override
+	public Class<OntologyIndividual> getDefaultType() {
+		return OntologyIndividual.class;
+	}
 
-    @Override
-	public synchronized void updateWidgetFromModel()
-    {
-        _selector.setEditedObject(getObjectValue());
-        _selector.setRevertValue(getObjectValue());
-    }
+	@Override
+	public synchronized void updateWidgetFromModel() {
+		_selector.setEditedObject(getObjectValue());
+		_selector.setRevertValue(getObjectValue());
+	}
 
-    /**
-     * Update the model given the actual state of the widget
-     */
-    @Override
-	public synchronized void updateModelFromWidget()
-    {
-        setObjectValue(_selector.getEditedObject());
-    	super.updateModelFromWidget();
-    }
+	/**
+	 * Update the model given the actual state of the widget
+	 */
+	@Override
+	public synchronized void updateModelFromWidget() {
+		setObjectValue(_selector.getEditedObject());
+		super.updateModelFromWidget();
+	}
 
-    @Override
-	public JComponent getDynamicComponent()
-    {
-        return _selector;
-    }
-
-    @Override
-	public void setProject(FlexoProject aProject)
-    {
-        super.setProject(aProject);
-        _selector.setProject(aProject);
-    }
-
-	public OntologyIndividualSelector getSelector()
-	{
+	@Override
+	public JComponent getDynamicComponent() {
 		return _selector;
 	}
 
-    protected void setOntologyClass(OntologyClass ontologyClass)
-    {
-    	if (logger.isLoggable(Level.FINE))
-    		logger.fine("Setting ontology class to " + ontologyClass);
-    	_selector.setOntologyClass(ontologyClass);
-    }
+	@Override
+	public void setProject(FlexoProject aProject) {
+		super.setProject(aProject);
+		_selector.setProject(aProject);
+	}
 
-    @Override
-	protected void performModelUpdating(InspectableObject value)
-    {
-    	if (hasValueForParameter("ontologyClass")) {
-    		setOntologyClass((OntologyClass) getDynamicValueForParameter("ontologyClass", value));
-    	}
-    }
+	public OntologyIndividualSelector getSelector() {
+		return _selector;
+	}
 
-    @Override
-    public void fireEditingCanceled()
-    {
-    	if (_selector != null) _selector.closePopup();
-    }
+	protected void setOntologyClass(OntologyClass ontologyClass) {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("Setting ontology class to " + ontologyClass);
+		_selector.setOntologyClass(ontologyClass);
+	}
 
-    @Override
-    public void fireEditingStopped()
-    {
-    	if (_selector != null) _selector.closePopup();
-    }
+	@Override
+	protected void performModelUpdating(InspectableObject value) {
+		if (hasValueForParameter("ontologyClass")) {
+			setOntologyClass((OntologyClass) getDynamicValueForParameter("ontologyClass", value));
+		}
+	}
 
+	@Override
+	public void fireEditingCanceled() {
+		if (_selector != null)
+			_selector.closePopup();
+	}
 
+	@Override
+	public void fireEditingStopped() {
+		if (_selector != null)
+			_selector.closePopup();
+	}
 
 }

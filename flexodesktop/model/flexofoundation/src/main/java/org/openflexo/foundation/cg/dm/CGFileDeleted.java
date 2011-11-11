@@ -21,10 +21,8 @@ package org.openflexo.foundation.cg.dm;
 
 import org.openflexo.foundation.cg.CGFile;
 
-public class CGFileDeleted extends CGDataModification
-{
-    public CGFileDeleted(CGFile file)
-    {
-        super(file,null);
-    }
+public class CGFileDeleted extends CGDataModification {
+	public CGFileDeleted(CGFile file) {
+		super(file, null);
+	}
 }

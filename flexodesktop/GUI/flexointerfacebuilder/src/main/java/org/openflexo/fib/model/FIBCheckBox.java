@@ -25,47 +25,37 @@ public class FIBCheckBox extends FIBWidget {
 
 	private boolean negate = false;
 	private boolean selected = false;
-	
-	public static enum Parameters implements FIBModelAttribute
-	{
-		negate,
-		selected
+
+	public static enum Parameters implements FIBModelAttribute {
+		negate, selected
 	}
-	
-	public FIBCheckBox() 
-	{
+
+	public FIBCheckBox() {
 	}
-	
+
 	@Override
-	public Type getDefaultDataClass() 
-	{
+	public Type getDefaultDataClass() {
 		return Boolean.class;
 	}
 
-	public boolean getNegate() 
-	{
+	public boolean getNegate() {
 		return negate;
 	}
 
-	public void setNegate(boolean negate) 
-	{
-		FIBAttributeNotification<Boolean> notification = requireChange(
-				Parameters.negate, negate);
+	public void setNegate(boolean negate) {
+		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.negate, negate);
 		if (notification != null) {
 			this.negate = negate;
 			hasChanged(notification);
 		}
 	}
 
-	public boolean getSelected() 
-	{
+	public boolean getSelected() {
 		return selected;
 	}
 
-	public void setSelected(boolean selected)
-	{
-		FIBAttributeNotification<Boolean> notification = requireChange(
-				Parameters.selected, selected);
+	public void setSelected(boolean selected) {
+		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.selected, selected);
 		if (notification != null) {
 			this.selected = selected;
 			hasChanged(notification);

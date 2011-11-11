@@ -38,13 +38,11 @@ import org.openflexo.view.controller.BasicInteractiveProjectLoadingHandler;
 import org.openflexo.view.controller.FullInteractiveProjectLoadingHandler;
 
 /**
- * Represents a user type, and is used to determine configuration of Flexo
- * Application Suite, which is also called a package set
- *
+ * Represents a user type, and is used to determine configuration of Flexo Application Suite, which is also called a package set
+ * 
  * @author sguerin
  */
-public abstract class UserType extends FlexoObject
-{
+public abstract class UserType extends FlexoObject {
 
 	public static final String PRODUCT_NAME = "OPENFLEXO";
 
@@ -54,29 +52,29 @@ public abstract class UserType extends FlexoObject
 
 	private static final Logger logger = Logger.getLogger(Module.class.getPackage().getName());
 
-	public static UserType getUserTypeNamed(String userTypeName){
-		if(MAINTAINER.getName().equalsIgnoreCase(userTypeName)) {
+	public static UserType getUserTypeNamed(String userTypeName) {
+		if (MAINTAINER.getName().equalsIgnoreCase(userTypeName)) {
 			return MAINTAINER;
 		}
-		if(ANALYST.getName().equalsIgnoreCase(userTypeName)) {
+		if (ANALYST.getName().equalsIgnoreCase(userTypeName)) {
 			return ANALYST;
 		}
 		if (DEVELOPER.getName().equalsIgnoreCase(userTypeName)) {
 			return DEVELOPER;
 		}
-		if(CUSTOMER.getName().equalsIgnoreCase(userTypeName)) {
+		if (CUSTOMER.getName().equalsIgnoreCase(userTypeName)) {
 			return CUSTOMER;
 		}
-		if(MAINTAINER.getIdentifier().equalsIgnoreCase(userTypeName)) {
+		if (MAINTAINER.getIdentifier().equalsIgnoreCase(userTypeName)) {
 			return MAINTAINER;
 		}
-		if(ANALYST.getIdentifier().equalsIgnoreCase(userTypeName)) {
+		if (ANALYST.getIdentifier().equalsIgnoreCase(userTypeName)) {
 			return ANALYST;
 		}
 		if (DEVELOPER.getIdentifier().equalsIgnoreCase(userTypeName)) {
 			return DEVELOPER;
 		}
-		if(CUSTOMER.getIdentifier().equalsIgnoreCase(userTypeName)) {
+		if (CUSTOMER.getIdentifier().equalsIgnoreCase(userTypeName)) {
 			return CUSTOMER;
 		}
 		return MAINTAINER;
@@ -92,8 +90,7 @@ public abstract class UserType extends FlexoObject
 
 	private Vector<DocItemFolder> documentationFolders = null;
 
-	public Vector<DocItemFolder> getDocumentationFolders()
-	{
+	public Vector<DocItemFolder> getDocumentationFolders() {
 		if (documentationFolders == null) {
 			documentationFolders = new Vector<DocItemFolder>();
 			documentationFolders.add(DocResourceManager.instance().getAbstractModuleItem().getFolder());
@@ -107,30 +104,26 @@ public abstract class UserType extends FlexoObject
 		return documentationFolders;
 	}
 
-	protected void addModelItems (InspectorGroup inspectorGroup)
-	{
+	protected void addModelItems(InspectorGroup inspectorGroup) {
 		DocItemFolder inspectorGroupFolder;
 		DocItemFolder modelFolder = DocResourceManager.instance().getDocResourceCenter().getModelFolder();
 		String inspectorGroupName = inspectorGroup.getName();
 		inspectorGroupFolder = modelFolder.getItemFolderNamed(inspectorGroupName);
 		if (inspectorGroupFolder != null) {
 			documentationFolders.add(inspectorGroupFolder);
-		}
-		else {
-			logger.warning("Unable to find DocItemFolder for "+inspectorGroupName);
+		} else {
+			logger.warning("Unable to find DocItemFolder for " + inspectorGroupName);
 		}
 	}
 
-	protected void addModuleItems (Module module)
-	{
+	protected void addModuleItems(Module module) {
 		DocItemFolder moduleItemFolder;
 		DocItemFolder ftsFolder = DocResourceManager.instance().getDocResourceCenter().getFTSFolder();
 		moduleItemFolder = ftsFolder.getItemFolderNamed(module.getHelpTopic());
 		if (moduleItemFolder != null) {
 			documentationFolders.add(moduleItemFolder);
-		}
-		else {
-			logger.warning("Unable to find DocItemFolder for "+module.getHelpTopic());
+		} else {
+			logger.warning("Unable to find DocItemFolder for " + module.getHelpTopic());
 		}
 	}
 
@@ -138,24 +131,20 @@ public abstract class UserType extends FlexoObject
 
 	public abstract ImageIcon getIconImage();
 
-	public static class Developer extends UserType
-	{
+	public static class Developer extends UserType {
 
 		@Override
-		public String getName()
-		{
+		public String getName() {
 			return "developer_release";
 		}
 
 		@Override
-		public String getIdentifier()
-		{
+		public String getIdentifier() {
 			return "DEVELOPER";
 		}
 
 		@Override
-		protected void addModelItems()
-		{
+		protected void addModelItems() {
 			addModelItems(Inspectors.COMMON);
 			addModelItems(Inspectors.WKF);
 			addModelItems(Inspectors.IE);
@@ -164,20 +153,17 @@ public abstract class UserType extends FlexoObject
 		}
 
 		@Override
-		public ProjectLoadingHandler getDefaultLoadingHandler(File projectDirectory)
-		{
+		public ProjectLoadingHandler getDefaultLoadingHandler(File projectDirectory) {
 			return new FullInteractiveProjectLoadingHandler(projectDirectory);
 		}
 
 		@Override
-		public String getBusinessName1()
-		{
+		public String getBusinessName1() {
 			return PRODUCT_NAME;
 		}
 
 		@Override
-		public String getBusinessName2()
-		{
+		public String getBusinessName2() {
 			return "Enterprise edition";
 		}
 
@@ -193,24 +179,20 @@ public abstract class UserType extends FlexoObject
 
 	}
 
-	protected static class Analyst extends UserType
-	{
+	protected static class Analyst extends UserType {
 
 		@Override
-		public String getName()
-		{
+		public String getName() {
 			return "analyst_release";
 		}
 
 		@Override
-		public String getIdentifier()
-		{
+		public String getIdentifier() {
 			return "ANALYST";
 		}
 
 		@Override
-		protected void addModelItems()
-		{
+		protected void addModelItems() {
 			addModelItems(Inspectors.COMMON);
 			addModelItems(Inspectors.WKF);
 			addModelItems(Inspectors.IE);
@@ -218,20 +200,17 @@ public abstract class UserType extends FlexoObject
 		}
 
 		@Override
-		public ProjectLoadingHandler getDefaultLoadingHandler(File projectDirectory)
-		{
+		public ProjectLoadingHandler getDefaultLoadingHandler(File projectDirectory) {
 			return new BasicInteractiveProjectLoadingHandler(projectDirectory);
 		}
 
 		@Override
-		public String getBusinessName1()
-		{
+		public String getBusinessName1() {
 			return PRODUCT_NAME;
 		}
 
 		@Override
-		public String getBusinessName2()
-		{
+		public String getBusinessName2() {
 			return "Business+ edition";
 		}
 
@@ -247,43 +226,36 @@ public abstract class UserType extends FlexoObject
 
 	}
 
-	protected static class Customer extends UserType
-	{
+	protected static class Customer extends UserType {
 		@Override
-		public String getName()
-		{
+		public String getName() {
 			return "customer_release";
 		}
 
 		@Override
-		public String getIdentifier()
-		{
+		public String getIdentifier() {
 			return "CUSTOMER";
 		}
 
 		@Override
-		protected void addModelItems()
-		{
+		protected void addModelItems() {
 			addModelItems(Inspectors.COMMON);
 			addModelItems(Inspectors.WKF);
 			addModelItems(Inspectors.IE);
 		}
 
 		@Override
-		public ProjectLoadingHandler getDefaultLoadingHandler(File projectDirectory)
-		{
+		public ProjectLoadingHandler getDefaultLoadingHandler(File projectDirectory) {
 			return new BasicInteractiveProjectLoadingHandler(projectDirectory);
 		}
 
 		@Override
-		public String getBusinessName1()
-		{
+		public String getBusinessName1() {
 			return PRODUCT_NAME;
 		}
 
 		@Override
-		public String getBusinessName2()
-		{
+		public String getBusinessName2() {
 			return "Business edition";
 		}
 
@@ -299,23 +271,19 @@ public abstract class UserType extends FlexoObject
 
 	}
 
-	public static class Maintainer extends UserType
-	{
+	public static class Maintainer extends UserType {
 		@Override
-		public String getName()
-		{
+		public String getName() {
 			return "maintainer_release";
 		}
 
 		@Override
-		public String getIdentifier()
-		{
+		public String getIdentifier() {
 			return "MAINTAINER";
 		}
 
 		@Override
-		protected void addModelItems()
-		{
+		protected void addModelItems() {
 			addModelItems(Inspectors.COMMON);
 			addModelItems(Inspectors.WKF);
 			addModelItems(Inspectors.IE);
@@ -325,20 +293,17 @@ public abstract class UserType extends FlexoObject
 		}
 
 		@Override
-		public ProjectLoadingHandler getDefaultLoadingHandler(File projectDirectory)
-		{
+		public ProjectLoadingHandler getDefaultLoadingHandler(File projectDirectory) {
 			return new FullInteractiveProjectLoadingHandler(projectDirectory);
 		}
 
 		@Override
-		public String getBusinessName1()
-		{
+		public String getBusinessName1() {
 			return PRODUCT_NAME;
 		}
 
 		@Override
-		public String getBusinessName2()
-		{
+		public String getBusinessName2() {
 			return "Enterprise edition";
 		}
 
@@ -364,17 +329,15 @@ public abstract class UserType extends FlexoObject
 
 	public abstract String getBusinessName2();
 
-	//public abstract File getLicenceFile();
+	// public abstract File getLicenceFile();
 
-	public String getLocalizedName()
-	{
+	public String getLocalizedName() {
 		return FlexoLocalization.localizedForKey(getName());
 	}
 
 	private static final UserType[] knownsUserType = { CUSTOMER, ANALYST, DEVELOPER, MAINTAINER };
 
-	public static Vector<UserType> allKnownUserType()
-	{
+	public static Vector<UserType> allKnownUserType() {
 		Vector<UserType> returned = new Vector<UserType>();
 		for (int i = 0; i < knownsUserType.length; i++) {
 			returned.add(knownsUserType[i]);
@@ -386,6 +349,5 @@ public abstract class UserType extends FlexoObject
 		}
 		return returned;
 	}
-
 
 }

@@ -19,11 +19,9 @@
  */
 package org.openflexo.fge.notifications;
 
-
 public class ObjectWillResize extends FGENotification {
 
-	public ObjectWillResize()
-	{
-		super("location",null,null);
+	public ObjectWillResize() {
+		super("location", null, null);
 	}
 }

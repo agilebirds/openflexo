@@ -23,18 +23,21 @@ import org.jdom.Content;
 import org.jdom.Element;
 import org.jdom.Text;
 
-public class MergeElementAction extends MergeAction{
+public class MergeElementAction extends MergeAction {
 
 	private Content _operatedElement;
 	private Element _parentElement;
 	private Element _existingChild;
 	private int _insertionIndex;
-	public MergeElementAction(int actionIndex,MergeActionType actionType,Content operatedElement, Element parentElement, int insertionIndex){
-		this(actionIndex,actionType, operatedElement, parentElement, null,insertionIndex);
+
+	public MergeElementAction(int actionIndex, MergeActionType actionType, Content operatedElement, Element parentElement,
+			int insertionIndex) {
+		this(actionIndex, actionType, operatedElement, parentElement, null, insertionIndex);
 	}
-	
-	public MergeElementAction(int actionIndex,MergeActionType actionType,Content operatedElement, Element parentElement, Element existingChild, int insertionIndex){
-		super(actionIndex,actionType);
+
+	public MergeElementAction(int actionIndex, MergeActionType actionType, Content operatedElement, Element parentElement,
+			Element existingChild, int insertionIndex) {
+		super(actionIndex, actionType);
 		_insertionIndex = insertionIndex;
 		_parentElement = parentElement;
 		_operatedElement = operatedElement;
@@ -47,11 +50,11 @@ public class MergeElementAction extends MergeAction{
 		case DELETE:
 			_parentElement.removeContent(_operatedElement);
 			break;
-		
+
 		case INSERT:
-			if(_insertionIndex>-1){
-				_parentElement.addContent(Math.min(_insertionIndex,_parentElement.getContentSize()), _operatedElement.detach());
-			}else
+			if (_insertionIndex > -1) {
+				_parentElement.addContent(Math.min(_insertionIndex, _parentElement.getContentSize()), _operatedElement.detach());
+			} else
 				_parentElement.addContent(_operatedElement);
 			break;
 		case SWAP:
@@ -62,16 +65,16 @@ public class MergeElementAction extends MergeAction{
 		default:
 			break;
 		}
-		
+
 	}
-	
+
 	@Override
 	public void undo() {
 		switch (_actionType) {
 		case DELETE:
-			if(_insertionIndex>-1){
-				_parentElement.addContent(Math.min(_insertionIndex,_parentElement.getContentSize()), _operatedElement);
-			}else
+			if (_insertionIndex > -1) {
+				_parentElement.addContent(Math.min(_insertionIndex, _parentElement.getContentSize()), _operatedElement);
+			} else
 				_parentElement.addContent(_operatedElement);
 			break;
 		case INSERT:
@@ -85,19 +88,21 @@ public class MergeElementAction extends MergeAction{
 		default:
 			break;
 		}
-		
+
 	}
-	
+
 	@Override
-	public String getLabel(){
+	public String getLabel() {
 		switch (_actionType) {
 		case DELETE:
-			return "delete "+(_operatedElement instanceof Element?((Element)_operatedElement).getName():((Text)_operatedElement).getText());
+			return "delete "
+					+ (_operatedElement instanceof Element ? ((Element) _operatedElement).getName() : ((Text) _operatedElement).getText());
 		case INSERT:
-			return "insert "+(_operatedElement instanceof Element?((Element)_operatedElement).getName():((Text)_operatedElement).getText());
+			return "insert "
+					+ (_operatedElement instanceof Element ? ((Element) _operatedElement).getName() : ((Text) _operatedElement).getText());
 		case SWAP:
 			return "replace existing child by it's concurrent";
 		}
-		return "error : action type "+_actionType+" is not supposed to be set on this conflict";
+		return "error : action type " + _actionType + " is not supposed to be set on this conflict";
 	}
 }

@@ -22,5 +22,6 @@ package org.openflexo.generator.ie;
 public interface WidgetWithContentGenerator {
 
 	public String generatedHTMLBegin();
+
 	public String generatedHTMLEnd();
 }

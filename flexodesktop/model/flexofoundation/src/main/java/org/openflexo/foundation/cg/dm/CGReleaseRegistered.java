@@ -21,11 +21,8 @@ package org.openflexo.foundation.cg.dm;
 
 import org.openflexo.foundation.cg.version.CGRelease;
 
-
-public class CGReleaseRegistered extends CGDataModification
-{
-    public CGReleaseRegistered(CGRelease release)
-    {
-        super(null,release);
-    }
+public class CGReleaseRegistered extends CGDataModification {
+	public CGReleaseRegistered(CGRelease release) {
+		super(null, release);
+	}
 }

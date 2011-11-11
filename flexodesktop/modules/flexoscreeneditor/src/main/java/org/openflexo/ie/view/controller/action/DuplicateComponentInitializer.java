@@ -37,24 +37,20 @@ public class DuplicateComponentInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DuplicateComponentInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(DuplicateComponentAction.actionType,actionInitializer);
+	DuplicateComponentInitializer(IEControllerActionInitializer actionInitializer) {
+		super(DuplicateComponentAction.actionType, actionInitializer);
 	}
 
 	@Override
-    protected IEControllerActionInitializer getControllerActionInitializer()
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<DuplicateComponentAction> getDefaultInitializer()
-	{
+	protected FlexoActionInitializer<DuplicateComponentAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<DuplicateComponentAction>() {
 			@Override
-            public boolean run(ActionEvent e, DuplicateComponentAction action)
-			{
+			public boolean run(ActionEvent e, DuplicateComponentAction action) {
 				IEWOComponent c;
 				if (action.getFocusedObject() instanceof ComponentDefinition)
 					c = ((ComponentDefinition) action.getFocusedObject()).getWOComponent();
@@ -67,8 +63,8 @@ public class DuplicateComponentInitializer extends ActionInitializer {
 					if (componentName != null)
 						FlexoController.notify("this_name_isalready_used_by_another_component");
 					componentName = FlexoController.askForStringMatchingPattern(FlexoLocalization.localizedForKey("new_component_name"),
-							IERegExp.JAVA_CLASS_NAME_PATTERN, FlexoLocalization
-							.localizedForKey("must_start_with_a_letter_followed_by_any_letter_or_number"));
+							IERegExp.JAVA_CLASS_NAME_PATTERN,
+							FlexoLocalization.localizedForKey("must_start_with_a_letter_followed_by_any_letter_or_number"));
 				} while (componentName != null && getProject().getFlexoComponentLibrary().getComponentNamed(componentName) != null);
 				(action).setNewComponentName(componentName);
 				(action).setComponent(c);
@@ -78,18 +74,15 @@ public class DuplicateComponentInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<DuplicateComponentAction> getDefaultFinalizer()
-	{
+	protected FlexoActionFinalizer<DuplicateComponentAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DuplicateComponentAction>() {
 			@Override
-            public boolean run(ActionEvent e, DuplicateComponentAction action)
-			{
-			    if (action.getComponentDefinition()!=null)
-			        getController().setCurrentEditedObjectAsModuleView(action.getComponentDefinition().getDummyComponentInstance());
+			public boolean run(ActionEvent e, DuplicateComponentAction action) {
+				if (action.getComponentDefinition() != null)
+					getController().setCurrentEditedObjectAsModuleView(action.getComponentDefinition().getDummyComponentInstance());
 				return true;
 			}
 		};
 	}
-
 
 }

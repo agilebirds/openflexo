@@ -24,50 +24,43 @@ import java.util.Vector;
 import org.openflexo.fge.geom.FGEComplexCurve;
 import org.openflexo.fge.geom.FGEPoint;
 
-
 public class ComplexCurveWithNPointsConstruction extends ComplexCurveConstruction {
 
 	public Vector<PointConstruction> pointConstructions;
-	
-	public ComplexCurveWithNPointsConstruction() 
-	{
+
+	public ComplexCurveWithNPointsConstruction() {
 		super();
 		pointConstructions = new Vector<PointConstruction>();
 	}
-	
-	public ComplexCurveWithNPointsConstruction(Vector<PointConstruction> somePointConstructions) 
-	{
+
+	public ComplexCurveWithNPointsConstruction(Vector<PointConstruction> somePointConstructions) {
 		this();
 		this.pointConstructions.addAll(somePointConstructions);
 	}
-	
+
 	@Override
-	protected FGEComplexCurve computeData()
-	{
+	protected FGEComplexCurve computeData() {
 		Vector<FGEPoint> pts = new Vector<FGEPoint>();
 		for (PointConstruction pc : pointConstructions) {
 			pts.add(pc.getPoint());
 		}
-		return new FGEComplexCurve(getClosure(),pts);
+		return new FGEComplexCurve(getClosure(), pts);
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("CurveWithNPointsConstruction[\n");
 		for (PointConstruction pc : pointConstructions) {
-			sb.append("> "+pc.toString()+"\n");
+			sb.append("> " + pc.toString() + "\n");
 		}
 		sb.append("]");
 		return sb.toString();
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public GeometricConstruction[] getDepends() {
 		return pointConstructions.toArray(new GeometricConstruction[pointConstructions.size()]);
 	}
-
 
 }

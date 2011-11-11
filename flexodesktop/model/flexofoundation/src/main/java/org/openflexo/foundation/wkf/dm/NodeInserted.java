@@ -29,39 +29,33 @@ import org.openflexo.foundation.wkf.node.AbstractNode;
  * @author sguerin
  * 
  */
-public class NodeInserted extends WKFDataModification
-{
+public class NodeInserted extends WKFDataModification {
 
-    private AbstractNode _insertedNode;
-    private FlexoPetriGraph _pg;
-    private WKFObject _container;
+	private AbstractNode _insertedNode;
+	private FlexoPetriGraph _pg;
+	private WKFObject _container;
 
-    public NodeInserted(AbstractNode insertedNode, FlexoPetriGraph pg, WKFObject container)
-    {
-        super(null, insertedNode);
-        _insertedNode = insertedNode;
-        _pg = pg;
-        _container = container;
-    }
+	public NodeInserted(AbstractNode insertedNode, FlexoPetriGraph pg, WKFObject container) {
+		super(null, insertedNode);
+		_insertedNode = insertedNode;
+		_pg = pg;
+		_container = container;
+	}
 
-    public WKFObject getContainer()
-    {
-        return _container;
-    }
+	public WKFObject getContainer() {
+		return _container;
+	}
 
-    public FlexoPetriGraph getPetriGraph()
-    {
-        return _pg;
-    }
+	public FlexoPetriGraph getPetriGraph() {
+		return _pg;
+	}
 
-   public AbstractNode getInsertedNode()
-    {
-        return _insertedNode;
-    }
+	public AbstractNode getInsertedNode() {
+		return _insertedNode;
+	}
 
-    @Override
-	public String toString()
-    {
-        return "NodeInserted: " + _insertedNode + " in " + _container;
-    }
+	@Override
+	public String toString() {
+		return "NodeInserted: " + _insertedNode + " in " + _container;
+	}
 }

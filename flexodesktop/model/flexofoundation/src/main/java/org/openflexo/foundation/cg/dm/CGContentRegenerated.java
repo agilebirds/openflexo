@@ -23,14 +23,12 @@ import org.openflexo.foundation.cg.generator.GeneratedCodeResult;
 
 public abstract class CGContentRegenerated extends CGDataModification {
 
-	public CGContentRegenerated(GeneratedCodeResult newGeneratedContent)
-	{
-		super(null,newGeneratedContent);
+	public CGContentRegenerated(GeneratedCodeResult newGeneratedContent) {
+		super(null, newGeneratedContent);
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "ContentRegenerated ";
 	}
 

@@ -26,49 +26,43 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
 
+public class DKVValidationModel extends ValidationModel {
 
-public class DKVValidationModel extends ValidationModel
-{
-
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DKVValidationModel.class.getPackage().getName());
 
-    public DKVValidationModel(FlexoProject project)
-    {
-        this(project,project.getTargetType());
-    }
-    
-    public DKVValidationModel(FlexoProject project, TargetType targetType)
-    {
-        super(project,targetType);
-        registerRule(new Language.IsoCodeMustBe2CharLength());
-        registerRule(new Language.IsoCodeMustBeDefined());
-        registerRule(new Language.IsoCodeMustBeUnique());
-        // Notify that the validation model is complete and that inheritance
-        // computation could be performed
-        update();
-    }
+	public DKVValidationModel(FlexoProject project) {
+		this(project, project.getTargetType());
+	}
 
-    /**
-     * Return a boolean indicating if validation of supplied object must be
-     * notified
-     * 
-     * @param next
-     * @return a boolean
-     */
-    @Override
-	protected boolean shouldNotifyValidation(Validable next)
-    {
-        return false;
-    }
+	public DKVValidationModel(FlexoProject project, TargetType targetType) {
+		super(project, targetType);
+		registerRule(new Language.IsoCodeMustBe2CharLength());
+		registerRule(new Language.IsoCodeMustBeDefined());
+		registerRule(new Language.IsoCodeMustBeUnique());
+		// Notify that the validation model is complete and that inheritance
+		// computation could be performed
+		update();
+	}
 
-    /**
-     * Overrides fixAutomaticallyIfOneFixProposal
-     * @see org.openflexo.foundation.validation.ValidationModel#fixAutomaticallyIfOneFixProposal()
-     */
-    @Override
-    public boolean fixAutomaticallyIfOneFixProposal()
-    {
-        return false;
-}
+	/**
+	 * Return a boolean indicating if validation of supplied object must be notified
+	 * 
+	 * @param next
+	 * @return a boolean
+	 */
+	@Override
+	protected boolean shouldNotifyValidation(Validable next) {
+		return false;
+	}
+
+	/**
+	 * Overrides fixAutomaticallyIfOneFixProposal
+	 * 
+	 * @see org.openflexo.foundation.validation.ValidationModel#fixAutomaticallyIfOneFixProposal()
+	 */
+	@Override
+	public boolean fixAutomaticallyIfOneFixProposal() {
+		return false;
+	}
 }

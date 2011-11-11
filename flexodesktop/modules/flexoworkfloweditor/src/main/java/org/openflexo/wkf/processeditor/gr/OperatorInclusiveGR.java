@@ -29,29 +29,25 @@ import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.foundation.wkf.node.InclusiveOperator;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
-
-public class OperatorInclusiveGR  extends OperatorGR<InclusiveOperator> {
+public class OperatorInclusiveGR extends OperatorGR<InclusiveOperator> {
 
 	private ForegroundStyle painterForeground;
 
-	public OperatorInclusiveGR(InclusiveOperator operatorNode, ProcessRepresentation aDrawing, boolean isInPalet) 
-	{
+	public OperatorInclusiveGR(InclusiveOperator operatorNode, ProcessRepresentation aDrawing, boolean isInPalet) {
 		super(operatorNode, aDrawing, isInPalet);
 		painterForeground = ForegroundStyle.makeStyle(Color.BLACK);
 		painterForeground.setLineWidth(3.0);
 		setShapePainter(new ShapePainter() {
-		@Override
-		public void paintShape(FGEShapeGraphics g)
-		{
-			g.useForegroundStyle(painterForeground);
-			g.drawCircle(0.215, 0.2, 0.57, 0.58);
-		}
+			@Override
+			public void paintShape(FGEShapeGraphics g) {
+				g.useForegroundStyle(painterForeground);
+				g.drawCircle(0.215, 0.2, 0.57, 0.58);
+			}
 		});
 	}
-	
+
 	@Override
-	public ImageIcon getImageIcon() 
-	{
+	public ImageIcon getImageIcon() {
 		return null;
 	}
 }

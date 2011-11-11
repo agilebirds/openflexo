@@ -29,132 +29,122 @@ import javax.swing.SwingUtilities;
 /**
  * @author bmangez
  * 
- * To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
+ *         To change the template for this generated type comment go to Window - Preferences - Java - Code Generation - Code and Comments
  */
-public class TransparentMouseListener implements MouseListener, MouseMotionListener
-{
+public class TransparentMouseListener implements MouseListener, MouseMotionListener {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent)
-     */
-    @Override
-	public void mouseDragged(MouseEvent arg0)
-    {
-        if (_target == null)
-            _target = _src.getParent().getParent();
-        MouseEvent convertedEvent = SwingUtilities.convertMouseEvent(_src, arg0, _target);
-        for (int i = 0; i < _target.getMouseMotionListeners().length; i++) {
-            _target.getMouseMotionListeners()[i].mouseDragged(convertedEvent);
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent)
+	 */
+	@Override
+	public void mouseDragged(MouseEvent arg0) {
+		if (_target == null)
+			_target = _src.getParent().getParent();
+		MouseEvent convertedEvent = SwingUtilities.convertMouseEvent(_src, arg0, _target);
+		for (int i = 0; i < _target.getMouseMotionListeners().length; i++) {
+			_target.getMouseMotionListeners()[i].mouseDragged(convertedEvent);
+		}
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
-     */
-    @Override
-	public void mouseMoved(MouseEvent arg0)
-    {
-        if (_target == null)
-            _target = _src.getParent().getParent();
-        MouseEvent convertedEvent = SwingUtilities.convertMouseEvent(_src, arg0, _target);
-        for (int i = 0; i < _target.getMouseMotionListeners().length; i++) {
-            _target.getMouseMotionListeners()[i].mouseMoved(convertedEvent);
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
+	 */
+	@Override
+	public void mouseMoved(MouseEvent arg0) {
+		if (_target == null)
+			_target = _src.getParent().getParent();
+		MouseEvent convertedEvent = SwingUtilities.convertMouseEvent(_src, arg0, _target);
+		for (int i = 0; i < _target.getMouseMotionListeners().length; i++) {
+			_target.getMouseMotionListeners()[i].mouseMoved(convertedEvent);
+		}
+	}
 
-    public TransparentMouseListener(Component src, Component target)
-    {
-        super();
-        _src = src;
-        _target = target;
-    }
+	public TransparentMouseListener(Component src, Component target) {
+		super();
+		_src = src;
+		_target = target;
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
-     */
-    @Override
-	public void mouseClicked(MouseEvent arg0)
-    {
-        if (_target == null)
-            _target = _src.getParent().getParent();
-        MouseEvent convertedEvent = SwingUtilities.convertMouseEvent(_src, arg0, _target);
-        for (int i = 0; i < _target.getMouseListeners().length; i++) {
-            _target.getMouseListeners()[i].mouseClicked(convertedEvent);
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
+	 */
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		if (_target == null)
+			_target = _src.getParent().getParent();
+		MouseEvent convertedEvent = SwingUtilities.convertMouseEvent(_src, arg0, _target);
+		for (int i = 0; i < _target.getMouseListeners().length; i++) {
+			_target.getMouseListeners()[i].mouseClicked(convertedEvent);
+		}
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
-     */
-    @Override
-	public void mousePressed(MouseEvent arg0)
-    {
-        if (_target == null)
-            _target = _src.getParent().getParent();
-        MouseEvent convertedEvent = SwingUtilities.convertMouseEvent(_src, arg0, _target);
-        for (int i = 0; i < _target.getMouseListeners().length; i++) {
-            _target.getMouseListeners()[i].mousePressed(convertedEvent);
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
+	 */
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		if (_target == null)
+			_target = _src.getParent().getParent();
+		MouseEvent convertedEvent = SwingUtilities.convertMouseEvent(_src, arg0, _target);
+		for (int i = 0; i < _target.getMouseListeners().length; i++) {
+			_target.getMouseListeners()[i].mousePressed(convertedEvent);
+		}
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
-     */
-    @Override
-	public void mouseReleased(MouseEvent arg0)
-    {
-        if (_target == null)
-            _target = _src.getParent().getParent();
-        MouseEvent convertedEvent = SwingUtilities.convertMouseEvent(_src, arg0, _target);
-        for (int i = 0; i < _target.getMouseListeners().length; i++) {
-            _target.getMouseListeners()[i].mouseReleased(convertedEvent);
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
+	 */
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		if (_target == null)
+			_target = _src.getParent().getParent();
+		MouseEvent convertedEvent = SwingUtilities.convertMouseEvent(_src, arg0, _target);
+		for (int i = 0; i < _target.getMouseListeners().length; i++) {
+			_target.getMouseListeners()[i].mouseReleased(convertedEvent);
+		}
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent)
-     */
-    @Override
-	public void mouseEntered(MouseEvent arg0)
-    {
-        if (_target == null)
-            _target = _src.getParent().getParent();
-        MouseEvent convertedEvent = SwingUtilities.convertMouseEvent(_src, arg0, _target);
-        for (int i = 0; i < _target.getMouseListeners().length; i++) {
-            _target.getMouseListeners()[i].mouseEntered(convertedEvent);
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent)
+	 */
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		if (_target == null)
+			_target = _src.getParent().getParent();
+		MouseEvent convertedEvent = SwingUtilities.convertMouseEvent(_src, arg0, _target);
+		for (int i = 0; i < _target.getMouseListeners().length; i++) {
+			_target.getMouseListeners()[i].mouseEntered(convertedEvent);
+		}
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent)
-     */
-    @Override
-	public void mouseExited(MouseEvent arg0)
-    {
-        if (_target == null)
-            _target = _src.getParent().getParent();
-        MouseEvent convertedEvent = SwingUtilities.convertMouseEvent(_src, arg0, _target);
-        for (int i = 0; i < _target.getMouseListeners().length; i++) {
-            _target.getMouseListeners()[i].mouseExited(convertedEvent);
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent)
+	 */
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		if (_target == null)
+			_target = _src.getParent().getParent();
+		MouseEvent convertedEvent = SwingUtilities.convertMouseEvent(_src, arg0, _target);
+		for (int i = 0; i < _target.getMouseListeners().length; i++) {
+			_target.getMouseListeners()[i].mouseExited(convertedEvent);
+		}
+	}
 
-    Component _src;
+	Component _src;
 
-    Component _target;
+	Component _target;
 }

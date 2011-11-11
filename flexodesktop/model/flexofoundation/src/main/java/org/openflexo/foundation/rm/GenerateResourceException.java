@@ -21,17 +21,15 @@ package org.openflexo.foundation.rm;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class GenerateResourceException extends LoadResourceException
-{
+public class GenerateResourceException extends LoadResourceException {
 
-    /**
-     * @param fileResource
-     */
-    public GenerateResourceException(FlexoFileResource fileResource)
-    {
-        super(fileResource, null);
-    }
+	/**
+	 * @param fileResource
+	 */
+	public GenerateResourceException(FlexoFileResource fileResource) {
+		super(fileResource, null);
+	}
 
 }

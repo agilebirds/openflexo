@@ -32,7 +32,6 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.SelectionManagingController;
 
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -48,47 +47,50 @@ public class DKVDeleteInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DKVDeleteInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(DKVDelete.actionType,actionInitializer);
+	DKVDeleteInitializer(IEControllerActionInitializer actionInitializer) {
+		super(DKVDelete.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<DKVDelete> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<DKVDelete> getDefaultInitializer() {
 		return new FlexoActionInitializer<DKVDelete>() {
 			@Override
-			public boolean run(ActionEvent e, DKVDelete action)
-			{
+			public boolean run(ActionEvent e, DKVDelete action) {
 				if (!FlexoController.confirmWithWarning(FlexoLocalization.localizedForKey("would_you_like_to_delete_those_objects")))
 					return false;
-				Vector<FlexoModelObject> v = (Vector)action.getGlobalSelection().clone();
-				if (action.getFocusedObject()!=null && !v.contains(action.getFocusedObject()))
+				Vector<FlexoModelObject> v = (Vector) action.getGlobalSelection().clone();
+				if (action.getFocusedObject() != null && !v.contains(action.getFocusedObject()))
 					v.add(action.getFocusedObject());
 				(action).setObjectsToDelete(v);
 				Vector<FlexoModelObject> objects = action.getGlobalSelectionAndFocusedObject();
 				Vector<TOCEntry> tocEntries = new Vector<TOCEntry>();
 				for (FlexoModelObject object : objects) {
-					if(!object.isDeleted()){
-						for (FlexoModelObjectReference ref: object.getReferencers()) {
+					if (!object.isDeleted()) {
+						for (FlexoModelObjectReference ref : object.getReferencers()) {
 							if (ref.getOwner() instanceof TOCEntry) {
-								tocEntries.add((TOCEntry)ref.getOwner());
+								tocEntries.add((TOCEntry) ref.getOwner());
 							}
 						}
 					}
 				}
-				if (tocEntries.size()==0)
+				if (tocEntries.size() == 0)
 					return true;
 				CheckboxListParameter<TOCEntry>[] def = new CheckboxListParameter[1];
-				def[0] = new CheckboxListParameter<TOCEntry>("entries","select_entries_to_delete",tocEntries, new Vector<TOCEntry>());
+				def[0] = new CheckboxListParameter<TOCEntry>("entries", "select_entries_to_delete", tocEntries, new Vector<TOCEntry>());
 				def[0].setFormatter("displayString");
-				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), getController().getFlexoFrame(), FlexoLocalization.localizedForKey("select_toc_entries_to_delete"), FlexoLocalization.localizedForKey("<html>the_following_toc_entries_are_linked_to_the_objects_you_are_about_to_delete.<br>select_the_ones_you_would_like_to_delete</html>"), def);
+				AskParametersDialog dialog = AskParametersDialog
+						.createAskParametersDialog(
+								getProject(),
+								getController().getFlexoFrame(),
+								FlexoLocalization.localizedForKey("select_toc_entries_to_delete"),
+								FlexoLocalization
+										.localizedForKey("<html>the_following_toc_entries_are_linked_to_the_objects_you_are_about_to_delete.<br>select_the_ones_you_would_like_to_delete</html>"),
+								def);
 				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 					Vector<TOCEntry> entriesToDelete = def[0].getValue();
 					action.setEntriesToDelete(entriesToDelete);
@@ -100,29 +102,27 @@ public class DKVDeleteInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<DKVDelete> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<DKVDelete> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DKVDelete>() {
 			@Override
-			public boolean run(ActionEvent e, DKVDelete action)
-			{
-                Domain domainToSelect = null;
-                if (action.getFocusedObject() instanceof Key) {
-                    if (((Key)action.getFocusedObject()).getDomain()!=null && ((Key)action.getFocusedObject()).getDomain()!=null)
-                        domainToSelect = ((Key)action.getFocusedObject()).getDomain();
-                }
-                if (domainToSelect==null && action.getGlobalSelection()!=null && action.getGlobalSelection().size()>0 && action.getGlobalSelection().firstElement() instanceof Key)
-                    domainToSelect = ((Key)action.getGlobalSelection().firstElement()).getDomain();
-                if (domainToSelect!=null)
-                    ((SelectionManagingController)getController()).getSelectionManager().setSelectedObject(domainToSelect);
+			public boolean run(ActionEvent e, DKVDelete action) {
+				Domain domainToSelect = null;
+				if (action.getFocusedObject() instanceof Key) {
+					if (((Key) action.getFocusedObject()).getDomain() != null && ((Key) action.getFocusedObject()).getDomain() != null)
+						domainToSelect = ((Key) action.getFocusedObject()).getDomain();
+				}
+				if (domainToSelect == null && action.getGlobalSelection() != null && action.getGlobalSelection().size() > 0
+						&& action.getGlobalSelection().firstElement() instanceof Key)
+					domainToSelect = ((Key) action.getGlobalSelection().firstElement()).getDomain();
+				if (domainToSelect != null)
+					((SelectionManagingController) getController()).getSelectionManager().setSelectedObject(domainToSelect);
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return IconLibrary.DELETE_ICON;
 	}
 

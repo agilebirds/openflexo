@@ -30,60 +30,51 @@ import org.openflexo.foundation.view.ViewDefinition;
  * @author sguerin
  * 
  */
-public class ShemaNameChanged extends OEDataModification implements RMNotification
-{
+public class ShemaNameChanged extends OEDataModification implements RMNotification {
 
-    public ViewDefinition shema;
+	public ViewDefinition shema;
 
-    public ShemaNameChanged(ViewDefinition shema, String oldName, String newName)
-    {
-        super(oldName, newName);
-        this.shema = shema;
-    }
+	public ShemaNameChanged(ViewDefinition shema, String oldName, String newName) {
+		super(oldName, newName);
+		this.shema = shema;
+	}
 
-    public ShemaNameChanged(String propertyName, ViewDefinition component, String oldName, String newName)
-    {
-        super(propertyName, oldName, newName);
-        this.shema = component;
-    }
+	public ShemaNameChanged(String propertyName, ViewDefinition component, String oldName, String newName) {
+		super(propertyName, oldName, newName);
+		this.shema = component;
+	}
 
-    @Override
-	public boolean forceUpdateWhenUnload()
-    {
-        return true;
-    }
+	@Override
+	public boolean forceUpdateWhenUnload() {
+		return true;
+	}
 
-    @Override
-	public boolean isDeepNotification()
-    {
-        return true;
-    }
+	@Override
+	public boolean isDeepNotification() {
+		return true;
+	}
 
-    @Override
-	public boolean propagateToSynchronizedResource(FlexoResource originResource, FlexoResource targetResource)
-    {
-//    		return true;
-        if (originResource == shema.getShemaLibrary().getFlexoResource()
-        			&& (targetResource instanceof FlexoOEShemaResource)) {
-          return true;
-        } else {
-           return false;
-        }
-    }
+	@Override
+	public boolean propagateToSynchronizedResource(FlexoResource originResource, FlexoResource targetResource) {
+		// return true;
+		if (originResource == shema.getShemaLibrary().getFlexoResource() && (targetResource instanceof FlexoOEShemaResource)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-    @Override
-	public boolean propagateToAlteredResource(FlexoResource originResource, FlexoResource targetResource)
-    {
-        if (originResource == shema.getShemaResource()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+	@Override
+	public boolean propagateToAlteredResource(FlexoResource originResource, FlexoResource targetResource) {
+		if (originResource == shema.getShemaResource()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-    @Override
-	public String toString()
-    {
-        return "ShemaNameChanged " + oldValue() + "/" + newValue();
-    }
+	@Override
+	public String toString() {
+		return "ShemaNameChanged " + oldValue() + "/" + newValue();
+	}
 }

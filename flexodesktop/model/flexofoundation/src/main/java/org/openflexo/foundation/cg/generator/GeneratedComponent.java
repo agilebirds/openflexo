@@ -19,55 +19,45 @@
  */
 package org.openflexo.foundation.cg.generator;
 
-
 import java.io.File;
-
 
 /**
  * Encode the result of a component generation
  * 
  * @author bmangez
  */
-public class GeneratedComponent extends GeneratedCodeResult
-{
+public class GeneratedComponent extends GeneratedCodeResult {
 
-    public GeneratedComponent(String name, String java, String api, String html, String wod, String woo)
-    {
-        super(name);
-        setDefaultCode(java);
-        addCode(COMPONENT_CODE_TYPE.API.toString(), api);
-        addCode(COMPONENT_CODE_TYPE.HTML.toString(), html);
-        addCode(COMPONENT_CODE_TYPE.WOD.toString(), wod);
-        addCode(COMPONENT_CODE_TYPE.WOO.toString(), woo);
-    }
+	public GeneratedComponent(String name, String java, String api, String html, String wod, String woo) {
+		super(name);
+		setDefaultCode(java);
+		addCode(COMPONENT_CODE_TYPE.API.toString(), api);
+		addCode(COMPONENT_CODE_TYPE.HTML.toString(), html);
+		addCode(COMPONENT_CODE_TYPE.WOD.toString(), wod);
+		addCode(COMPONENT_CODE_TYPE.WOO.toString(), woo);
+	}
 
-    public void writeWOComponentFiles(File woComponentDirectory, File javaSrcDirectory)
-    {
-        GeneratorUtils.writeWOComponentFiles(woComponentDirectory, javaSrcDirectory, name(), java(), api(), html(), wod(), woo());
-    }
-    
-    public String java()
-    {
-        return defaultCode();
-    }
+	public void writeWOComponentFiles(File woComponentDirectory, File javaSrcDirectory) {
+		GeneratorUtils.writeWOComponentFiles(woComponentDirectory, javaSrcDirectory, name(), java(), api(), html(), wod(), woo());
+	}
 
-    public String api()
-    {
-        return get(COMPONENT_CODE_TYPE.API.toString());
-    }
+	public String java() {
+		return defaultCode();
+	}
 
-    public String wod()
-    {
-        return get(COMPONENT_CODE_TYPE.WOD.toString());
-    }
+	public String api() {
+		return get(COMPONENT_CODE_TYPE.API.toString());
+	}
 
-    public String woo()
-    {
-        return get(COMPONENT_CODE_TYPE.WOO.toString());
-    }
+	public String wod() {
+		return get(COMPONENT_CODE_TYPE.WOD.toString());
+	}
 
-    public String html()
-    {
-        return get(COMPONENT_CODE_TYPE.HTML.toString());
-    }
+	public String woo() {
+		return get(COMPONENT_CODE_TYPE.WOO.toString());
+	}
+
+	public String html() {
+		return get(COMPONENT_CODE_TYPE.HTML.toString());
+	}
 }

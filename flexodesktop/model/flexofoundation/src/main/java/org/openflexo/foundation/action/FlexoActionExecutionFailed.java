@@ -24,29 +24,28 @@ import org.openflexo.localization.FlexoLocalization;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class FlexoActionExecutionFailed extends FlexoException
-{
+public class FlexoActionExecutionFailed extends FlexoException {
 
-    private FlexoAction failedAction;
-    
-    /**
-     * @param addComponent
-     */
-    public FlexoActionExecutionFailed(FlexoAction action)
-    {
-        super();
-    }
-    
-    /**
-     * Overrides getLocalizedMessage
-     * @see org.openflexo.foundation.FlexoException#getLocalizedMessage()
-     */
-    @Override
-    public String getLocalizedMessage()
-    {
-        return FlexoLocalization.localizedForKey("execution_of_action")+" "+failedAction.getLocalizedName()+" "+FlexoLocalization.localizedForKey("has_failed");
-    }
+	private FlexoAction failedAction;
+
+	/**
+	 * @param addComponent
+	 */
+	public FlexoActionExecutionFailed(FlexoAction action) {
+		super();
+	}
+
+	/**
+	 * Overrides getLocalizedMessage
+	 * 
+	 * @see org.openflexo.foundation.FlexoException#getLocalizedMessage()
+	 */
+	@Override
+	public String getLocalizedMessage() {
+		return FlexoLocalization.localizedForKey("execution_of_action") + " " + failedAction.getLocalizedName() + " "
+				+ FlexoLocalization.localizedForKey("has_failed");
+	}
 
 }

@@ -24,46 +24,43 @@ import java.io.File;
 import org.netbeans.lib.cvsclient.command.FileInfoContainer;
 
 /**
- * Describes remove information for a file. This is the result of doing a
- * cvs remove command. The fields in instances of this object are populated
- * by response handlers.
- *
- * @author  Milos Kleint
+ * Describes remove information for a file. This is the result of doing a cvs remove command. The fields in instances of this object are
+ * populated by response handlers.
+ * 
+ * @author Milos Kleint
  */
 public class RemoveInformation extends FileInfoContainer {
-    private File file;
-    private boolean removed;
+	private File file;
+	private boolean removed;
 
-    public RemoveInformation() {
-    }
+	public RemoveInformation() {
+	}
 
-    @Override
+	@Override
 	public File getFile() {
-        return file;
-    }
+		return file;
+	}
 
-    public void setFile(File file) {
-        this.file = file;
-    }
+	public void setFile(File file) {
+		this.file = file;
+	}
 
-    public void setRemoved(boolean rem) {
-        removed = rem;
-    }
+	public void setRemoved(boolean rem) {
+		removed = rem;
+	}
 
-    public boolean isRemoved() {
-        return removed;
-    }
+	public boolean isRemoved() {
+		return removed;
+	}
 
-    /**
-     * Return a string representation of this object. Useful for debugging.
-     */
-    @Override
+	/**
+	 * Return a string representation of this object. Useful for debugging.
+	 */
+	@Override
 	public String toString() {
-        StringBuffer buf = new StringBuffer(30);
-        buf.append("  "); //NOI18N
-        buf.append((file != null)
-                           ? file.getAbsolutePath()
-                           :"null"); //NOI18N
-        return buf.toString();
-    }
+		StringBuffer buf = new StringBuffer(30);
+		buf.append("  "); // NOI18N
+		buf.append((file != null) ? file.getAbsolutePath() : "null"); // NOI18N
+		return buf.toString();
+	}
 }

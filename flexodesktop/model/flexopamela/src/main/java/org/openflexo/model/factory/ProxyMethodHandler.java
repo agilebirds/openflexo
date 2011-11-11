@@ -57,7 +57,7 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 			PERFORM_SUPER_FINDER = AccessibleProxyObject.class.getMethod("performSuperFinder", Object.class);
 			TO_STRING = Object.class.getMethod("toString");
 			CLONE_OBJECT = CloneableProxyObject.class.getMethod("cloneObject");
-			CLONE_OBJECT_WITH_CONTEXT = CloneableProxyObject.class.getMethod("cloneObject",Array.newInstance(Object.class,0).getClass());
+			CLONE_OBJECT_WITH_CONTEXT = CloneableProxyObject.class.getMethod("cloneObject", Array.newInstance(Object.class, 0).getClass());
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -67,35 +67,29 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 		}
 	}
 
-	public ProxyMethodHandler(ModelEntity<I> modelEntity)
-	{
+	public ProxyMethodHandler(ModelEntity<I> modelEntity) {
 		this.modelEntity = modelEntity;
 		values = new HashMap<String, Object>(modelEntity.getDeclaredPropertiesSize(), 1.0f);
 	}
 
-	public I getObject()
-	{
+	public I getObject() {
 		return object;
 	}
 
-	public void setObject(I object)
-	{
+	public void setObject(I object) {
 		this.object = object;
 	}
 
-	public ModelFactory getModelFactory()
-	{
+	public ModelFactory getModelFactory() {
 		return getModelEntity().getModelFactory();
 	}
 
-	public ModelEntity<I> getModelEntity()
-	{
+	public ModelEntity<I> getModelEntity() {
 		return modelEntity;
 	}
 
 	@Override
-	public Object invoke(Object self, Method method, Method proceed,
-			Object[] args) throws Throwable {
+	public Object invoke(Object self, Method method, Method proceed, Object[] args) throws Throwable {
 
 		/*boolean debug = false;
 		if (method.getName().indexOf("setFlexoID") > -1 && args[0].equals("0000")) {
@@ -107,27 +101,27 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 			System.exit(-1);
 		}*/
 
-		Getter getter=method.getAnnotation(Getter.class);
+		Getter getter = method.getAnnotation(Getter.class);
 		if (getter != null) {
 			String id = getter.value();
 			return internallyInvokeGetter(id);
 		}
 
-		Setter setter=method.getAnnotation(Setter.class);
+		Setter setter = method.getAnnotation(Setter.class);
 		if (setter != null) {
 			String id = setter.value();
 			internallyInvokeSetter(id, args);
 			return null;
 		}
 
-		Adder adder=method.getAnnotation(Adder.class);
+		Adder adder = method.getAnnotation(Adder.class);
 		if (adder != null) {
 			String id = adder.id();
 			internallyInvokeAdder(id, args);
 			return null;
 		}
 
-		Remover remover=method.getAnnotation(Remover.class);
+		Remover remover = method.getAnnotation(Remover.class);
 		if (remover != null) {
 			String id = remover.id();
 			internallyInvokerRemover(id, args);
@@ -146,18 +140,15 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 		}
 
 		if (method.equals(PERFORM_SUPER_GETTER)) {
-			return internallyInvokeGetter(modelEntity.getModelProperty((String)args[0]));
-		}
-		else if (method.equals(PERFORM_SUPER_SETTER)) {
-			internallyInvokeSetter(modelEntity.getModelProperty((String)args[0]),args[1]);
+			return internallyInvokeGetter(modelEntity.getModelProperty((String) args[0]));
+		} else if (method.equals(PERFORM_SUPER_SETTER)) {
+			internallyInvokeSetter(modelEntity.getModelProperty((String) args[0]), args[1]);
 			return null;
-		}
-		else if (method.equals(PERFORM_SUPER_ADDER)) {
-			internallyInvokeAdder(modelEntity.getModelProperty((String)args[0]),args[1]);
+		} else if (method.equals(PERFORM_SUPER_ADDER)) {
+			internallyInvokeAdder(modelEntity.getModelProperty((String) args[0]), args[1]);
 			return null;
-		}
-		else if (method.equals(PERFORM_SUPER_REMOVER)) {
-			internallyInvokeRemover(modelEntity.getModelProperty((String)args[0]),args[1]);
+		} else if (method.equals(PERFORM_SUPER_REMOVER)) {
+			internallyInvokeRemover(modelEntity.getModelProperty((String) args[0]), args[1]);
 			return null;
 		} else if (method.equals(PERFORM_SUPER_DELETER)) {
 			internallyInvokeDeleter();
@@ -167,15 +158,13 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 			return null;
 		} else if (method.equals(CLONE_OBJECT)) {
 			return cloneObject();
-		}
-		else if (method.equals(CLONE_OBJECT_WITH_CONTEXT)) {
+		} else if (method.equals(CLONE_OBJECT_WITH_CONTEXT)) {
 			return cloneObject(args);
-		}
-		else if (method.equals(TO_STRING)) {
+		} else if (method.equals(TO_STRING)) {
 			return internallyInvokeToString();
 		}
 
-		System.err.println("Cannot handle method "+method);
+		System.err.println("Cannot handle method " + method);
 		return null;
 	}
 
@@ -215,11 +204,11 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 				for (String embedded : deleter.getDeleter().embedded()) {
 					ModelProperty<? super I> property = getModelEntity().getModelProperty(embedded);
 					Object value = invokeGetter(embedded);
-					if (value==null) {
+					if (value == null) {
 						continue;
 					}
 					List<?> objectsToDelete;
-					switch(property.getCardinality()) {
+					switch (property.getCardinality()) {
 					case SINGLE:
 						objectsToDelete = Arrays.asList(value);
 						break;
@@ -232,7 +221,7 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 					default:
 						continue;
 					}
-					for(Object toDelete:objectsToDelete) {
+					for (Object toDelete : objectsToDelete) {
 						if (toDelete != null) {
 							ProxyMethodHandler<Object> handler = getModelFactory().getHandler(toDelete);
 							if (handler.getModelEntity().getModelDeleter() != null) {
@@ -276,8 +265,7 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 		}
 	}
 
-	public Object invokeGetter(ModelProperty<? super I> property)
-	{
+	public Object invokeGetter(ModelProperty<? super I> property) {
 		try {
 			return property.getGetterMethod().invoke(getObject(), new Object[0]);
 		} catch (IllegalArgumentException e) {
@@ -289,8 +277,7 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 		}
 	}
 
-	public void invokeSetter(ModelProperty<? super I> property, Object value)
-	{
+	public void invokeSetter(ModelProperty<? super I> property, Object value) {
 		try {
 			property.getSetterMethod().invoke(getObject(), value);
 		} catch (IllegalArgumentException e) {
@@ -302,8 +289,7 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 		}
 	}
 
-	public void invokeAdder(ModelProperty<? super I> property, Object value)
-	{
+	public void invokeAdder(ModelProperty<? super I> property, Object value) {
 		try {
 			property.getAdderMethod().invoke(getObject(), value);
 		} catch (IllegalArgumentException e) {
@@ -315,8 +301,7 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 		}
 	}
 
-	public void invokeRemover(ModelProperty<? super I> property, Object value)
-	{
+	public void invokeRemover(ModelProperty<? super I> property, Object value) {
 		try {
 			property.getRemoverMethod().invoke(getObject(), value);
 		} catch (IllegalArgumentException e) {
@@ -356,8 +341,7 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 		}
 	}
 
-	private Object internallyInvokeGetter(ModelProperty<? super I> property)
-	{
+	private Object internallyInvokeGetter(ModelProperty<? super I> property) {
 		switch (property.getCardinality()) {
 		case SINGLE:
 			return invokeGetterForSingleCardinality(property);
@@ -366,37 +350,33 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 		case MAP:
 			return invokeGetterForMapCardinality(property);
 		default:
-			throw new ModelExecutionException("Invalid cardinality: "+property.getCardinality());
+			throw new ModelExecutionException("Invalid cardinality: " + property.getCardinality());
 		}
 	}
 
-	private Object invokeGetterForSingleCardinality(ModelProperty<? super I> property)
-	{
+	private Object invokeGetterForSingleCardinality(ModelProperty<? super I> property) {
 		Object returned = values.get(property.getPropertyIdentifier());
 		if (returned != null) {
 			return returned;
-		}
-		else {
+		} else {
 			Object defaultValue = property.getDefaultValue();
 			if (defaultValue != null) {
-				values.put(property.getPropertyIdentifier(),defaultValue);
+				values.put(property.getPropertyIdentifier(), defaultValue);
 				return defaultValue;
 			}
 			if (property.getType().isPrimitive()) {
-				throw new ModelExecutionException("No default value defined for primitive property "+property);
+				throw new ModelExecutionException("No default value defined for primitive property " + property);
 			}
 			return null;
 		}
 	}
 
-	private List<?> invokeGetterForListCardinality(ModelProperty<? super I> property)
-	{
-		List<?> returned = (List<?>)values.get(property.getPropertyIdentifier());
+	private List<?> invokeGetterForListCardinality(ModelProperty<? super I> property) {
+		List<?> returned = (List<?>) values.get(property.getPropertyIdentifier());
 		if (returned != null) {
 			return returned;
-		}
-		else {
-			Class<? extends List> listClass =  getModelFactory().getListImplementationClass();
+		} else {
+			Class<? extends List> listClass = getModelFactory().getListImplementationClass();
 			try {
 				returned = listClass.newInstance();
 			} catch (InstantiationException e) {
@@ -405,21 +385,19 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 				throw new ModelExecutionException(e);
 			}
 			if (returned != null) {
-				values.put(property.getPropertyIdentifier(),returned);
+				values.put(property.getPropertyIdentifier(), returned);
 				return returned;
 			}
 			return null;
 		}
 	}
 
-	private Map<?,?> invokeGetterForMapCardinality(ModelProperty<? super I> property)
-	{
-		Map<?,?> returned = (Map<?,?>)values.get(property.getPropertyIdentifier());
+	private Map<?, ?> invokeGetterForMapCardinality(ModelProperty<? super I> property) {
+		Map<?, ?> returned = (Map<?, ?>) values.get(property.getPropertyIdentifier());
 		if (returned != null) {
 			return returned;
-		}
-		else {
-			Class<? extends Map> mapClass =  getModelFactory().getMapImplementationClass();
+		} else {
+			Class<? extends Map> mapClass = getModelFactory().getMapImplementationClass();
 			try {
 				returned = mapClass.newInstance();
 			} catch (InstantiationException e) {
@@ -428,32 +406,30 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 				throw new ModelExecutionException(e);
 			}
 			if (returned != null) {
-				values.put(property.getPropertyIdentifier(),returned);
+				values.put(property.getPropertyIdentifier(), returned);
 				return returned;
 			}
 			return null;
 		}
 	}
 
-	private void internallyInvokeSetter(ModelProperty<? super I> property, Object value)
-	{
+	private void internallyInvokeSetter(ModelProperty<? super I> property, Object value) {
 		switch (property.getCardinality()) {
 		case SINGLE:
-			invokeSetterForSingleCardinality(property,value);
+			invokeSetterForSingleCardinality(property, value);
 			break;
 		case LIST:
-			invokeSetterForListCardinality(property,value);
+			invokeSetterForListCardinality(property, value);
 			break;
 		case MAP:
-			invokeSetterForMapCardinality(property,value);
+			invokeSetterForMapCardinality(property, value);
 			break;
 		default:
-			throw new ModelExecutionException("Invalid cardinality: "+property.getCardinality());
+			throw new ModelExecutionException("Invalid cardinality: " + property.getCardinality());
 		}
 	}
 
-	private void invokeSetterForSingleCardinality(ModelProperty<? super I> property, Object value)
-	{
+	private void invokeSetterForSingleCardinality(ModelProperty<? super I> property, Object value) {
 		Object oldValue = invokeGetter(property);
 
 		// Is it a real change ?
@@ -475,20 +451,19 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 				case MAP:
 					break;
 				default:
-					throw new ModelExecutionException("Invalid cardinality: "+property.getInverseProperty().getCardinality());
+					throw new ModelExecutionException("Invalid cardinality: " + property.getInverseProperty().getCardinality());
 				}
 			}
 
 			// Now do the job, internally
 			if (value == null) {
 				values.remove(property.getPropertyIdentifier());
-			}
-			else {
-				values.put(property.getPropertyIdentifier(),value);
+			} else {
+				values.put(property.getPropertyIdentifier(), value);
 			}
 
 			if (getObject() instanceof ObservableObject) {
-				((ObservableObject)getObject()).firePropertyChanged(property.getPropertyIdentifier(),oldValue,value);
+				((ObservableObject) getObject()).firePropertyChanged(property.getPropertyIdentifier(), oldValue, value);
 			}
 
 			// First handle inverse property for newValue
@@ -501,53 +476,49 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 					}
 					break;
 				case LIST:
-					//System.out.println("Je viens de faire le setter pour "+property+" value="+value);
+					// System.out.println("Je viens de faire le setter pour "+property+" value="+value);
 					if (value != null) {
 						handler.invokeAdder(property.getInverseProperty(), getObject());
-						//System.out.println("J'ai execute: "+property.getInverseProperty().getAdderMethod()+" avec "+getObject());
+						// System.out.println("J'ai execute: "+property.getInverseProperty().getAdderMethod()+" avec "+getObject());
 					}
 					break;
 				case MAP:
 					break;
 				default:
-					throw new ModelExecutionException("Invalid cardinality: "+property.getInverseProperty().getCardinality());
+					throw new ModelExecutionException("Invalid cardinality: " + property.getInverseProperty().getCardinality());
 				}
 			}
 		}
 	}
 
-	private void invokeSetterForListCardinality(ModelProperty<? super I> property, Object value)
-	{
+	private void invokeSetterForListCardinality(ModelProperty<? super I> property, Object value) {
 		// TODO implement this
 		System.err.println("Setter for LIST: not implemented yet");
 	}
 
-	private void invokeSetterForMapCardinality(ModelProperty<? super I> property, Object value)
-	{
+	private void invokeSetterForMapCardinality(ModelProperty<? super I> property, Object value) {
 		// TODO implement this
 		System.err.println("Setter for MAP: not implemented yet");
 	}
 
-	private void internallyInvokeAdder(ModelProperty<? super I> property, Object value)
-	{
-		//System.out.println("Invoke ADDER "+property.getPropertyIdentifier());
+	private void internallyInvokeAdder(ModelProperty<? super I> property, Object value) {
+		// System.out.println("Invoke ADDER "+property.getPropertyIdentifier());
 		switch (property.getCardinality()) {
 		case SINGLE:
-			throw new ModelExecutionException("Cannot invoke ADDER on "+property.getPropertyIdentifier()+": Invalid cardinality SINGLE");
+			throw new ModelExecutionException("Cannot invoke ADDER on " + property.getPropertyIdentifier() + ": Invalid cardinality SINGLE");
 		case LIST:
-			invokeAdderForListCardinality(property,value);
+			invokeAdderForListCardinality(property, value);
 			break;
 		case MAP:
-			invokeAdderForMapCardinality(property,value);
+			invokeAdderForMapCardinality(property, value);
 			break;
 		default:
-			throw new ModelExecutionException("Invalid cardinality: "+property.getCardinality());
+			throw new ModelExecutionException("Invalid cardinality: " + property.getCardinality());
 		}
 	}
 
-	private void invokeAdderForListCardinality(ModelProperty<? super I> property, Object value)
-	{
-		List list = (List)invokeGetter(property);
+	private void invokeAdderForListCardinality(ModelProperty<? super I> property, Object value) {
+		List list = (List) invokeGetter(property);
 
 		if (!list.contains(value)) {
 			list.add(value);
@@ -568,38 +539,36 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 				case MAP:
 					break;
 				default:
-					throw new ModelExecutionException("Invalid cardinality: "+property.getInverseProperty().getCardinality());
+					throw new ModelExecutionException("Invalid cardinality: " + property.getInverseProperty().getCardinality());
 				}
 			}
 		}
 	}
 
-	private void invokeAdderForMapCardinality(ModelProperty<? super I> property, Object value)
-	{
+	private void invokeAdderForMapCardinality(ModelProperty<? super I> property, Object value) {
 		// TODO implement this
 		System.err.println("Adder for MAP: not implemented yet");
 	}
 
-	private void internallyInvokeRemover(ModelProperty<? super I> property, Object value)
-	{
-		//System.out.println("Invoke REMOVER "+property.getPropertyIdentifier());
+	private void internallyInvokeRemover(ModelProperty<? super I> property, Object value) {
+		// System.out.println("Invoke REMOVER "+property.getPropertyIdentifier());
 		switch (property.getCardinality()) {
 		case SINGLE:
-			throw new ModelExecutionException("Cannot invoke REMOVER on "+property.getPropertyIdentifier()+": Invalid cardinality SINGLE");
+			throw new ModelExecutionException("Cannot invoke REMOVER on " + property.getPropertyIdentifier()
+					+ ": Invalid cardinality SINGLE");
 		case LIST:
-			invokeRemoverForListCardinality(property,value);
+			invokeRemoverForListCardinality(property, value);
 			break;
 		case MAP:
-			invokeRemoverForMapCardinality(property,value);
+			invokeRemoverForMapCardinality(property, value);
 			break;
 		default:
-			throw new ModelExecutionException("Invalid cardinality: "+property.getCardinality());
+			throw new ModelExecutionException("Invalid cardinality: " + property.getCardinality());
 		}
 	}
 
-	private void invokeRemoverForListCardinality(ModelProperty<? super I> property, Object value)
-	{
-		List list = (List)invokeGetter(property);
+	private void invokeRemoverForListCardinality(ModelProperty<? super I> property, Object value) {
+		List list = (List) invokeGetter(property);
 
 		if (list.contains(value)) {
 			list.remove(value);
@@ -620,21 +589,21 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 				case MAP:
 					break;
 				default:
-					throw new ModelExecutionException("Invalid cardinality: "+property.getInverseProperty().getCardinality());
+					throw new ModelExecutionException("Invalid cardinality: " + property.getInverseProperty().getCardinality());
 				}
 			}
 		}
 	}
 
-	private void invokeRemoverForMapCardinality(ModelProperty<? super I> property, Object value)
-	{
+	private void invokeRemoverForMapCardinality(ModelProperty<? super I> property, Object value) {
 		// TODO implement this
 		System.err.println("Remover for MAP: not implemented yet");
 	}
 
 	private Object internallyInvokeFinder(Finder finder, Object[] args) throws ModelDefinitionException {
-		if (args.length==0) {
-			throw new ModelDefinitionException("Finder "+finder.collection()+" by attribute "+finder.attribute()+" does not declare enough argument!");
+		if (args.length == 0) {
+			throw new ModelDefinitionException("Finder " + finder.collection() + " by attribute " + finder.attribute()
+					+ " does not declare enough argument!");
 		}
 		String collectionID = finder.collection();
 		ModelProperty<? super I> property = getModelEntity().getModelProperty(collectionID);
@@ -642,7 +611,7 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 		if (collection == null) {
 			return null;
 		}
-		Object value = args[0] ;
+		Object value = args[0];
 		String attribute = finder.attribute();
 		if (collection instanceof Map<?, ?>) {
 			collection = ((Map<?, ?>) collection).values();
@@ -658,7 +627,7 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 				return objects;
 			} else {
 				for (Object o : (Iterable<?>) collection) {
-					if(isObjectAttributeEquals(o,attribute,value)) {
+					if (isObjectAttributeEquals(o, attribute, value)) {
 						return o;
 					}
 				}
@@ -679,8 +648,7 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 		}
 	}
 
-	private static boolean isEqual(Object oldValue, Object newValue)
-	{
+	private static boolean isEqual(Object oldValue, Object newValue) {
 		if (oldValue == null) {
 			return newValue == null;
 		}
@@ -875,33 +843,30 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 	}*/
 
 	/**
-	 * Clone current object, using meta informations provided by related class
-	 * All property should be annoted with a @CloningStrategy annotation which determine
-	 * the way of handling this property
-	 * Supplied context is used to determine the closure of objects graph being constructed
-	 * during this operation. If a property is marked as @CloningStrategy.CLONE but lead
-	 * to an object outside scope of cloning (the closure being computed), then resulting
-	 * value is nullified.
-	 * When context is not set, don't compute any closure, and clone all required objects
+	 * Clone current object, using meta informations provided by related class All property should be annoted with a @CloningStrategy
+	 * annotation which determine the way of handling this property Supplied context is used to determine the closure of objects graph being
+	 * constructed during this operation. If a property is marked as @CloningStrategy.CLONE but lead to an object outside scope of cloning
+	 * (the closure being computed), then resulting value is nullified. When context is not set, don't compute any closure, and clone all
+	 * required objects
 	 * 
 	 * @param context
 	 * @return
 	 * @throws ModelExecutionException
 	 * @throws ModelDefinitionException
-	 * @throws CloneNotSupportedException when supplied object is not implementing CloneableProxyObject interface
+	 * @throws CloneNotSupportedException
+	 *             when supplied object is not implementing CloneableProxyObject interface
 	 */
-	protected Object cloneObject(Object... context) throws ModelExecutionException, ModelDefinitionException, CloneNotSupportedException
-	{
-		//System.out.println("Cloning "+getObject());
+	protected Object cloneObject(Object... context) throws ModelExecutionException, ModelDefinitionException, CloneNotSupportedException {
+		// System.out.println("Cloning "+getObject());
 
 		if (context != null && context.length == 1 && context[0].getClass().isArray()) {
-			context = (Object[])context[0];
+			context = (Object[]) context[0];
 		}
 
 		// Append this object to supplied context
 		if (context != null && context.length > 0) {
-			Object[] newContext = new Object[context.length+1];
-			for (int i=0; i<context.length; i++) {
+			Object[] newContext = new Object[context.length + 1];
+			for (int i = 0; i < context.length; i++) {
 				newContext[i] = context[i];
 			}
 			newContext[context.length] = getObject();
@@ -912,11 +877,11 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 			throw new CloneNotSupportedException();
 		}
 
-		Hashtable<CloneableProxyObject,Object> clonedObjects = new Hashtable<CloneableProxyObject, Object>();
-		Object returned = performClone(clonedObjects,context);
+		Hashtable<CloneableProxyObject, Object> clonedObjects = new Hashtable<CloneableProxyObject, Object>();
+		Object returned = performClone(clonedObjects, context);
 		for (CloneableProxyObject o : clonedObjects.keySet()) {
 			ProxyMethodHandler<?> clonedObjectHandler = getModelFactory().getHandler(o);
-			clonedObjectHandler.finalizeClone(clonedObjects,context);
+			clonedObjectHandler.finalizeClone(clonedObjects, context);
 		}
 		return returned;
 	}
@@ -924,25 +889,24 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 	/**
 	 * Internally used for cloning computation
 	 */
-	private Object appendToClonedObjects(Hashtable<CloneableProxyObject,Object> clonedObjects, CloneableProxyObject objectToCloneOrReference) throws ModelExecutionException, ModelDefinitionException
-	{
+	private Object appendToClonedObjects(Hashtable<CloneableProxyObject, Object> clonedObjects,
+			CloneableProxyObject objectToCloneOrReference) throws ModelExecutionException, ModelDefinitionException {
 		Object returned = clonedObjects.get(objectToCloneOrReference);
 		if (returned != null) {
 			return returned;
 		}
 		ProxyMethodHandler<?> clonedValueHandler = getModelFactory().getHandler(objectToCloneOrReference);
 		returned = clonedValueHandler.performClone(clonedObjects);
-		//System.out.println("for "+objectToCloneOrReference+" clone is "+returned);
+		// System.out.println("for "+objectToCloneOrReference+" clone is "+returned);
 		return returned;
 	}
 
 	/**
 	 * Internally used for cloning computation
 	 */
-	private Object performClone(Hashtable<CloneableProxyObject,Object> clonedObjects, Object... context)
-			throws ModelExecutionException, ModelDefinitionException
-			{
-		//System.out.println("******* performClone "+getObject());
+	private Object performClone(Hashtable<CloneableProxyObject, Object> clonedObjects, Object... context) throws ModelExecutionException,
+			ModelDefinitionException {
+		// System.out.println("******* performClone "+getObject());
 
 		Object returned = null;
 		try {
@@ -958,7 +922,7 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 		} catch (InvocationTargetException e) {
 			throw new ModelExecutionException(e);
 		}
-		clonedObjects.put((CloneableProxyObject)getObject(),returned);
+		clonedObjects.put((CloneableProxyObject) getObject(), returned);
 
 		ProxyMethodHandler<?> clonedObjectHandler = getModelFactory().getHandler(returned);
 		Iterator<ModelProperty<? super I>> properties = getModelEntity().getProperties();
@@ -970,11 +934,10 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 				switch (p.getCloningStrategy()) {
 				case CLONE:
 					if (getModelFactory().isModelEntity(p.getType()) && singleValue instanceof CloneableProxyObject) {
-						if (!isPartOfContext(singleValue,context)) {
+						if (!isPartOfContext(singleValue, context)) {
 							// Don't do it, outside of context
-						}
-						else {
-							appendToClonedObjects(clonedObjects, (CloneableProxyObject)singleValue);
+						} else {
+							appendToClonedObjects(clonedObjects, (CloneableProxyObject) singleValue);
 						}
 					}
 					break;
@@ -987,16 +950,15 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 				}
 				break;
 			case LIST:
-				List values = (List)invokeGetter(p);
+				List values = (List) invokeGetter(p);
 				for (Object value : values) {
 					switch (p.getCloningStrategy()) {
 					case CLONE:
 						if (getModelFactory().isModelEntity(p.getType()) && value instanceof CloneableProxyObject) {
-							if (!isPartOfContext(value,context)) {
+							if (!isPartOfContext(value, context)) {
 								// Don't do it, outside of context
-							}
-							else {
-								appendToClonedObjects(clonedObjects, (CloneableProxyObject)value);
+							} else {
+								appendToClonedObjects(clonedObjects, (CloneableProxyObject) value);
 							}
 						}
 						break;
@@ -1016,17 +978,16 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 		}
 
 		return returned;
-			}
+	}
 
 	/**
 	 * Internally used for cloning computation
 	 */
-	private Object finalizeClone(Hashtable<CloneableProxyObject,Object> clonedObjects, Object... context)
-			throws ModelExecutionException, ModelDefinitionException
-			{
+	private Object finalizeClone(Hashtable<CloneableProxyObject, Object> clonedObjects, Object... context) throws ModelExecutionException,
+			ModelDefinitionException {
 		Object clonedObject = clonedObjects.get(getObject());
 
-		//System.out.println("Finalizing clone for "+getObject()+" clone is "+clonedObject);
+		// System.out.println("Finalizing clone for "+getObject()+" clone is "+clonedObject);
 
 		ProxyMethodHandler<?> clonedObjectHandler = getModelFactory().getHandler(clonedObject);
 
@@ -1050,18 +1011,17 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 						Object clonedValue = null;
 						try {
 							String clonedValueAsString = getModelFactory().getStringEncoder().toString(singleValue);
-							clonedValue = getModelFactory().getStringEncoder().fromString(p.getType(),clonedValueAsString);
+							clonedValue = getModelFactory().getStringEncoder().fromString(p.getType(), clonedValueAsString);
 						} catch (InvalidDataException e) {
 							throw new ModelExecutionException(e);
 						}
-						clonedObjectHandler.invokeSetter(p,clonedValue);
-					}
-					else if (getModelFactory().isModelEntity(p.getType()) && singleValue instanceof CloneableProxyObject) {
+						clonedObjectHandler.invokeSetter(p, clonedValue);
+					} else if (getModelFactory().isModelEntity(p.getType()) && singleValue instanceof CloneableProxyObject) {
 						Object clonedValue = clonedObjects.get(singleValue);
-						if (!isPartOfContext(singleValue,context)) {
+						if (!isPartOfContext(singleValue, context)) {
 							clonedValue = null;
 						}
-						clonedObjectHandler.invokeSetter(p,clonedValue);
+						clonedObjectHandler.invokeSetter(p, clonedValue);
 					}
 					break;
 				case REFERENCE:
@@ -1069,13 +1029,13 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 					if (referenceValue == null) {
 						referenceValue = singleValue;
 					}
-					clonedObjectHandler.invokeSetter(p,referenceValue);
+					clonedObjectHandler.invokeSetter(p, referenceValue);
 					break;
 				case FACTORY:
 					if (p.getStrategyTypeFactory().equals("deriveName()")) {
 						// TODO: just to test
 						// TODO: implement this properly!
-						//System.out.println("TODO: implement this (FACTORY whine cloning)");
+						// System.out.println("TODO: implement this (FACTORY whine cloning)");
 						// Object factoredValue = ((FlexoModelObject)getObject()).deriveName();
 						// clonedObjectHandler.invokeSetter(p,factoredValue);
 					}
@@ -1085,7 +1045,7 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 				}
 				break;
 			case LIST:
-				List values = (List)invokeGetter(p);
+				List values = (List) invokeGetter(p);
 				List valuesToClone = new ArrayList<Object>(values);
 				for (Object value : valuesToClone) {
 					switch (p.getCloningStrategy()) {
@@ -1094,20 +1054,19 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 							Object clonedValue = null;
 							try {
 								String clonedValueAsString = getModelFactory().getStringEncoder().toString(value);
-								clonedValue = getModelFactory().getStringEncoder().fromString(p.getType(),clonedValueAsString);
+								clonedValue = getModelFactory().getStringEncoder().fromString(p.getType(), clonedValueAsString);
 							} catch (InvalidDataException e) {
 								throw new ModelExecutionException(e);
 							}
-							List l = (List)clonedObjectHandler.invokeGetter(p);
-							clonedObjectHandler.invokeAdder(p,clonedValue);
-						}
-						else if (getModelFactory().isModelEntity(p.getType()) && value instanceof CloneableProxyObject) {
+							List l = (List) clonedObjectHandler.invokeGetter(p);
+							clonedObjectHandler.invokeAdder(p, clonedValue);
+						} else if (getModelFactory().isModelEntity(p.getType()) && value instanceof CloneableProxyObject) {
 							Object clonedValue = clonedObjects.get(value);
-							if (!isPartOfContext(value,context)) {
+							if (!isPartOfContext(value, context)) {
 								clonedValue = null;
 							}
 							if (clonedValue != null) {
-								clonedObjectHandler.invokeAdder(p,clonedValue);
+								clonedObjectHandler.invokeAdder(p, clonedValue);
 							}
 						}
 						break;
@@ -1116,7 +1075,7 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 						if (referenceValue == null) {
 							referenceValue = value;
 						}
-						clonedObjectHandler.invokeAdder(p,referenceValue);
+						clonedObjectHandler.invokeAdder(p, referenceValue);
 						break;
 					case FACTORY:
 						// TODO Not implemented
@@ -1134,14 +1093,12 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 		}
 
 		return clonedObject;
-			}
+	}
 
 	/**
-	 * Internally used for cloning computation
-	 * This is the method which determine if a value belongs to derived object graph closure
+	 * Internally used for cloning computation This is the method which determine if a value belongs to derived object graph closure
 	 */
-	private boolean isPartOfContext(Object aValue, Object... context)
-	{
+	private boolean isPartOfContext(Object aValue, Object... context) {
 		if (context == null || context.length == 0) {
 			return true;
 		}
@@ -1152,20 +1109,18 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 			}
 		}
 
-		//System.out.println("Sorry "+aValue+" is not part of context "+context);
+		// System.out.println("Sorry "+aValue+" is not part of context "+context);
 
 		return false;
 	}
 
 	/**
-	 * Clone several object, using meta informations provided by related class
-	 * All property should be annoted with a @CloningStrategy annotation which determine
-	 * the way of handling this property
+	 * Clone several object, using meta informations provided by related class All property should be annoted with a @CloningStrategy
+	 * annotation which determine the way of handling this property
 	 * 
-	 * The list of objects is used as the context considered to determine the closure
-	 * of objects graph being constructed during this operation. If a property is marked
-	 * as @CloningStrategy.CLONE but lead to an object outside scope of cloning
-	 * (the closure being computed), then resulting value is nullified.
+	 * The list of objects is used as the context considered to determine the closure of objects graph being constructed during this
+	 * operation. If a property is marked as @CloningStrategy.CLONE but lead to an object outside scope of cloning (the closure being
+	 * computed), then resulting value is nullified.
 	 * 
 	 * @param someObjects
 	 * @return
@@ -1173,10 +1128,10 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 	 * @throws ModelDefinitionException
 	 * @throws CloneNotSupportedException
 	 */
-	protected List<Object> cloneObjects(Object... someObjects) throws ModelExecutionException, ModelDefinitionException, CloneNotSupportedException
-	{
+	protected List<Object> cloneObjects(Object... someObjects) throws ModelExecutionException, ModelDefinitionException,
+			CloneNotSupportedException {
 		if (someObjects != null && someObjects.length == 1 && someObjects[0].getClass().isArray()) {
-			someObjects = (Object[])someObjects[0];
+			someObjects = (Object[]) someObjects[0];
 		}
 
 		for (Object o : someObjects) {
@@ -1185,20 +1140,20 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 			}
 		}
 
-		Hashtable<CloneableProxyObject,Object> clonedObjects = new Hashtable<CloneableProxyObject, Object>();
+		Hashtable<CloneableProxyObject, Object> clonedObjects = new Hashtable<CloneableProxyObject, Object>();
 
 		for (Object o : someObjects) {
 			ProxyMethodHandler<?> clonedObjectHandler = getModelFactory().getHandler(o);
-			clonedObjectHandler.performClone(clonedObjects,someObjects);
+			clonedObjectHandler.performClone(clonedObjects, someObjects);
 		}
 
 		for (CloneableProxyObject o : clonedObjects.keySet()) {
 			ProxyMethodHandler<?> clonedObjectHandler = getModelFactory().getHandler(o);
-			clonedObjectHandler.finalizeClone(clonedObjects,someObjects);
+			clonedObjectHandler.finalizeClone(clonedObjects, someObjects);
 		}
 
 		List<Object> returned = new ArrayList<Object>();
-		for (int i=0; i<someObjects.length; i++) {
+		for (int i = 0; i < someObjects.length; i++) {
 			Object o = someObjects[i];
 			returned.add(clonedObjects.get(o));
 		}
@@ -1206,19 +1161,17 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 		return returned;
 	}
 
-	protected void paste(Clipboard clipboard) throws ModelExecutionException, ModelDefinitionException, CloneNotSupportedException
-	{
+	protected void paste(Clipboard clipboard) throws ModelExecutionException, ModelDefinitionException, CloneNotSupportedException {
 		ModelEntity<?> entity = getModelEntity();
 		PastingPoint pp = entity.retrievePastingPoint(clipboard.getType());
 		if (pp == null) {
 			throw new ClipboardOperationException("Cannot paste here: no pasting point found");
 		}
-		//System.out.println("Found pasting point: "+pp);
+		// System.out.println("Found pasting point: "+pp);
 		ModelProperty ppProperty = entity.getModelProperty(pp.id());
-		if (ppProperty == null)
-		{
-			throw new ClipboardOperationException("Cannot paste here: cannot find property "+pp.id());
-			//System.out.println("Found property: "+ppProperty);
+		if (ppProperty == null) {
+			throw new ClipboardOperationException("Cannot paste here: cannot find property " + pp.id());
+			// System.out.println("Found property: "+ppProperty);
 		}
 
 		switch (ppProperty.getCardinality()) {
@@ -1231,9 +1184,8 @@ public class ProxyMethodHandler<I> implements MethodHandler {
 		case LIST:
 			if (clipboard.isSingleObject()) {
 				invokeAdder(ppProperty, clipboard.getContents());
-			}
-			else {
-				for (Object o : (List)clipboard.getContents()) {
+			} else {
+				for (Object o : (List) clipboard.getContents()) {
 					invokeAdder(ppProperty, o);
 				}
 			}

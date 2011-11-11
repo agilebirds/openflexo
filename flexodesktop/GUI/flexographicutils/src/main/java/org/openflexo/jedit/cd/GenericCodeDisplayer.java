@@ -24,19 +24,18 @@ import org.openflexo.jedit.TokenMarker;
 import org.openflexo.toolbox.FontCst;
 import org.openflexo.toolbox.TokenMarkerStyle;
 
-public class GenericCodeDisplayer extends JEditTextArea{
+public class GenericCodeDisplayer extends JEditTextArea {
 
-	public GenericCodeDisplayer(String text, TokenMarkerStyle tokenMarkerStyle)
-	{
+	public GenericCodeDisplayer(String text, TokenMarkerStyle tokenMarkerStyle) {
 		super();
 		setTokenMarker(TokenMarker.makeTokenMarker(tokenMarkerStyle));
 		painter.setEOLMarkersPainted(false);
 		painter.setInvalidLinesPainted(false);
 		setFont(FontCst.CODE_FONT);
 		setEditable(false);
-		//setElectricScroll(1000);
+		// setElectricScroll(1000);
 		setFirstLine(0);
 		setText(text);
 	}
-	
+
 }

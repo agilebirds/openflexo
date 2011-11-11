@@ -27,46 +27,46 @@ import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 public class ProjectInstanceTree {
-	
+
 	private Hashtable<ComponentDefinition, Vector<InstanceTree>> bigMap;
 	private FlexoProject _project;
-	
-	public ProjectInstanceTree(FlexoProject prj){
+
+	public ProjectInstanceTree(FlexoProject prj) {
 		super();
 		_project = prj;
 		bigMap = new Hashtable<ComponentDefinition, Vector<InstanceTree>>();
 		Enumeration<OperationComponentDefinition> en = prj.getAllInstanciatedOperationComponentDefinition().elements();
 		OperationComponentInstanceTree temp = null;
 		OperationComponentDefinition opcd = null;
-		while(en.hasMoreElements()){
-			temp = new OperationComponentInstanceTree(en.nextElement(),this);
+		while (en.hasMoreElements()) {
+			temp = new OperationComponentInstanceTree(en.nextElement(), this);
 		}
 	}
-	
-	public void registerInstance(InstanceTree tree){
-		if(bigMap.get(tree.getComponentDefinition())==null){
+
+	public void registerInstance(InstanceTree tree) {
+		if (bigMap.get(tree.getComponentDefinition()) == null) {
 			bigMap.put(tree.getComponentDefinition(), new Vector<InstanceTree>());
 		}
-		if(!bigMap.get(tree.getComponentDefinition()).contains(tree)){
+		if (!bigMap.get(tree.getComponentDefinition()).contains(tree)) {
 			bigMap.get(tree.getComponentDefinition()).add(tree);
 		}
 	}
-	
-	public Vector<OperationComponentInstance> getAllOperationsWhereComponentIsUsed(ComponentDefinition cd){
+
+	public Vector<OperationComponentInstance> getAllOperationsWhereComponentIsUsed(ComponentDefinition cd) {
 		Vector<OperationComponentInstance> reply = new Vector<OperationComponentInstance>();
 		Vector<InstanceTree> instances = bigMap.get(cd);
-		if(instances!=null && instances.size()>0){
+		if (instances != null && instances.size() > 0) {
 			InstanceTree t = null;
 			Enumeration<InstanceTree> en = instances.elements();
 			while (en.hasMoreElements()) {
 				t = en.nextElement();
-				if(!reply.contains(t.getOperationComponentInstance()))reply.add(t.getOperationComponentInstance());
+				if (!reply.contains(t.getOperationComponentInstance()))
+					reply.add(t.getOperationComponentInstance());
 			}
 		}
-		
+
 		return reply;
 	}
-	
+
 }

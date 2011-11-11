@@ -28,49 +28,42 @@ import org.openflexo.fps.action.RetrieveCVSHistory;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class RetrieveCVSHistoryInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RetrieveCVSHistoryInitializer(FPSControllerActionInitializer actionInitializer)
-	{
-		super(RetrieveCVSHistory.actionType,actionInitializer);
+	RetrieveCVSHistoryInitializer(FPSControllerActionInitializer actionInitializer) {
+		super(RetrieveCVSHistory.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected FPSControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (FPSControllerActionInitializer)super.getControllerActionInitializer();
+	protected FPSControllerActionInitializer getControllerActionInitializer() {
+		return (FPSControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<RetrieveCVSHistory> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<RetrieveCVSHistory> getDefaultInitializer() {
 		return new FlexoActionInitializer<RetrieveCVSHistory>() {
-            @Override
-			public boolean run(ActionEvent e, RetrieveCVSHistory action)
-            {
-    			return true;
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, RetrieveCVSHistory action) {
+				return true;
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<RetrieveCVSHistory> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<RetrieveCVSHistory> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RetrieveCVSHistory>() {
-            @Override
-			public boolean run(ActionEvent e, RetrieveCVSHistory action)
-            {
-       			getControllerActionInitializer().getFPSController().getSelectionManager().setSelectedObject(action.getFocusedObject());
-       			getControllerActionInitializer().getFPSController().showInspector();
-       			if (getControllerActionInitializer().getFPSController().getInspectorWindow().getContent().currentTabPanel != null)
-       				getControllerActionInitializer().getFPSController().getInspectorWindow().getContent().currentTabPanel.setSelectedIndex(2);
-                return true;
-           }
-        };
+			@Override
+			public boolean run(ActionEvent e, RetrieveCVSHistory action) {
+				getControllerActionInitializer().getFPSController().getSelectionManager().setSelectedObject(action.getFocusedObject());
+				getControllerActionInitializer().getFPSController().showInspector();
+				if (getControllerActionInitializer().getFPSController().getInspectorWindow().getContent().currentTabPanel != null)
+					getControllerActionInitializer().getFPSController().getInspectorWindow().getContent().currentTabPanel
+							.setSelectedIndex(2);
+				return true;
+			}
+		};
 	}
-
 
 }

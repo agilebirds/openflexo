@@ -43,87 +43,77 @@ import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-
-class RepositoryPerspective extends DMPerspective<DMObject>
-{
+class RepositoryPerspective extends DMPerspective<DMObject> {
 
 	private final DMController _controller;
- 	private final DMBrowser _browser;
+	private final DMBrowser _browser;
 	private final DMBrowserView _browserView;
 	private final JPanel leftView;
 
-    
-    /**
-     * @param controller TODO
-     * @param name
-     */
-    public RepositoryPerspective(DMController controller)
-    {
-        super("repository_perspective",controller);
+	/**
+	 * @param controller
+	 *            TODO
+	 * @param name
+	 */
+	public RepositoryPerspective(DMController controller) {
+		super("repository_perspective", controller);
 		_controller = controller;
 		_browser = new DMBrowser(controller);
 		_browser.setDMViewMode(DMViewMode.Repositories);
 		_browserView = new DMBrowserView(_browser, _controller);
 		leftView = new JPanel(new BorderLayout());
-		leftView.add(_browserView,BorderLayout.CENTER);
-		leftView.add(searchPanel,BorderLayout.NORTH);
-    }
+		leftView.add(_browserView, BorderLayout.CENTER);
+		leftView.add(searchPanel, BorderLayout.NORTH);
+	}
 
 	@Override
-	public boolean doesPerspectiveControlLeftView() 
-	{
+	public boolean doesPerspectiveControlLeftView() {
 		return true;
 	}
 
 	@Override
-	public JComponent getLeftView() 
-	{
+	public JComponent getLeftView() {
 		return leftView;
 	}
 
-    /**
-     * Overrides getIcon
-     * 
-     * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
-     */
-    @Override
-	public ImageIcon getActiveIcon()
-    {
-        return DMEIconLibrary.DME_RP_ACTIVE_ICON;
-    }
+	/**
+	 * Overrides getIcon
+	 * 
+	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 */
+	@Override
+	public ImageIcon getActiveIcon() {
+		return DMEIconLibrary.DME_RP_ACTIVE_ICON;
+	}
 
-    /**
-     * Overrides getSelectedIcon
-     * 
-     * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
-     */
-    @Override
-	public ImageIcon getSelectedIcon()
-    {
-        return DMEIconLibrary.DME_RP_SELECTED_ICON;
-    }
+	/**
+	 * Overrides getSelectedIcon
+	 * 
+	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
+	 */
+	@Override
+	public ImageIcon getSelectedIcon() {
+		return DMEIconLibrary.DME_RP_SELECTED_ICON;
+	}
 
-    @Override
-    public DMObject getDefaultObject(FlexoModelObject proposedObject) 
-    {
-    	if ((proposedObject instanceof DMObject) && hasModuleViewForObject(proposedObject)) {
-			return (DMObject)proposedObject;
+	@Override
+	public DMObject getDefaultObject(FlexoModelObject proposedObject) {
+		if ((proposedObject instanceof DMObject) && hasModuleViewForObject(proposedObject)) {
+			return (DMObject) proposedObject;
 		}
-    	return null;
-    }
-    
-    @Override
-    public boolean hasModuleViewForObject(FlexoModelObject object)
-    {
-    	// Only DMProperty or Diagrams objects have no module view representation
-    	return !(object instanceof DMProperty) && !(object instanceof ERDiagram);
-    }
+		return null;
+	}
 
-    @Override
-    public ModuleView<? extends DMObject> createModuleViewForObject(DMObject object, FlexoController controller) 
-    {
-        return _controller.createDMView(object);
-    }
+	@Override
+	public boolean hasModuleViewForObject(FlexoModelObject object) {
+		// Only DMProperty or Diagrams objects have no module view representation
+		return !(object instanceof DMProperty) && !(object instanceof ERDiagram);
+	}
+
+	@Override
+	public ModuleView<? extends DMObject> createModuleViewForObject(DMObject object, FlexoController controller) {
+		return _controller.createDMView(object);
+	}
 
 	@Override
 	protected boolean browserMayRepresent(DMEntity entity) {
@@ -132,19 +122,19 @@ class RepositoryPerspective extends DMPerspective<DMObject>
 
 	@Override
 	protected void changeBrowserFiltersFor(DMEntity entity) {
-		if (entity.getRepository()!=null) {
+		if (entity.getRepository() != null) {
 			if (entity.getRepository() instanceof JDKRepository) {
-				_browser.setFilterStatus(BrowserElementType.JDK_REPOSITORY,BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
+				_browser.setFilterStatus(BrowserElementType.JDK_REPOSITORY, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
 			} else if (entity.getRepository() instanceof WORepository) {
-				_browser.setFilterStatus(BrowserElementType.WO_REPOSITORY,BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
+				_browser.setFilterStatus(BrowserElementType.WO_REPOSITORY, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
 			} else if (entity.getRepository() instanceof ExternalRepository) {
-				_browser.setFilterStatus(BrowserElementType.EXTERNAL_REPOSITORY,BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
+				_browser.setFilterStatus(BrowserElementType.EXTERNAL_REPOSITORY, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
 			} else if (entity.getRepository() instanceof EOPrototypeRepository) {
-				_browser.setFilterStatus(BrowserElementType.DM_EOPROTOTYPES_REPOSITORY,BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
+				_browser.setFilterStatus(BrowserElementType.DM_EOPROTOTYPES_REPOSITORY, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
 			} else if (entity.getRepository() instanceof FlexoExecutionModelRepository) {
-				_browser.setFilterStatus(BrowserElementType.DM_EXECUTION_MODEL_REPOSITORY,BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
+				_browser.setFilterStatus(BrowserElementType.DM_EXECUTION_MODEL_REPOSITORY, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
 			}
 		}
 	}
-    
+
 }

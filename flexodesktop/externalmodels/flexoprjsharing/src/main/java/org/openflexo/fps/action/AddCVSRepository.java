@@ -32,79 +32,70 @@ import org.openflexo.fps.FPSObject;
 import org.openflexo.fps.FlexoAuthentificationException;
 import org.openflexo.fps.CVSRepository.ConnectionType;
 
+public class AddCVSRepository extends CVSAction<AddCVSRepository, CVSRepositoryList> {
 
-public class AddCVSRepository extends CVSAction<AddCVSRepository,CVSRepositoryList> 
-{
+	private static final Logger logger = Logger.getLogger(AddCVSRepository.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(AddCVSRepository.class.getPackage().getName());
+	public static FlexoActionType<AddCVSRepository, CVSRepositoryList, FPSObject> actionType = new FlexoActionType<AddCVSRepository, CVSRepositoryList, FPSObject>(
+			"add_CVS_repository", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
-    public static FlexoActionType<AddCVSRepository,CVSRepositoryList,FPSObject> actionType 
-    = new FlexoActionType<AddCVSRepository,CVSRepositoryList,FPSObject> 
-    ("add_CVS_repository",FlexoActionType.newMenu,FlexoActionType.defaultGroup,FlexoActionType.ADD_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public AddCVSRepository makeNewAction(CVSRepositoryList focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {
+			return new AddCVSRepository(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public AddCVSRepository makeNewAction(CVSRepositoryList focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) 
-        {
-            return new AddCVSRepository(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(CVSRepositoryList object, Vector<FPSObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(CVSRepositoryList object, Vector<FPSObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(CVSRepositoryList object, Vector<FPSObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(CVSRepositoryList object, Vector<FPSObject> globalSelection) 
-        {
-            return true;
-        }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (actionType, CVSRepositoryList.class);
-    }
- 
-    private CVSRepository _newCVSRepository;
-    
+	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, CVSRepositoryList.class);
+	}
+
+	private CVSRepository _newCVSRepository;
+
 	private String name = "Sylvain sur localhost";
 	private String userName = "sylvain";
 	private String hostName = "localhost";
-    private String repository = "/usr/local/CVS";
-    private int port = 119;
-    private String passwd = "";
-    private ConnectionType _connectionType = ConnectionType.PServer;
-    private boolean storePasswd;
-    
-    AddCVSRepository (CVSRepositoryList focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor)
-    {
-    	super(actionType, focusedObject, globalSelection, editor);
-    }
+	private String repository = "/usr/local/CVS";
+	private int port = 119;
+	private String passwd = "";
+	private ConnectionType _connectionType = ConnectionType.PServer;
+	private boolean storePasswd;
 
-    @Override
-	protected void doAction(Object context) throws IOFlexoException, FlexoAuthentificationException
-    {
-    	logger.info ("AddCVSRepository");
-    	_newCVSRepository = new CVSRepository();
-    	_newCVSRepository.setName(name);
-    	_newCVSRepository.setHostName(hostName);
-    	_newCVSRepository.setRepository(repository);
-    	_newCVSRepository.setConnectionType(_connectionType);
-       	_newCVSRepository.setPort(port);
-       	_newCVSRepository.setUserName(userName);
-    	if (_connectionType == ConnectionType.PServer) {
-    		_newCVSRepository.setPassword(passwd,true);
-    	}
-    	else {
-       		_newCVSRepository.setPassword(passwd,false);
-    	}
-    	_newCVSRepository.setStorePassword(storePasswd);
-    	getFocusedObject().addToCVSRepositories(_newCVSRepository);
-    	/*try {
+	AddCVSRepository(CVSRepositoryList focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws IOFlexoException, FlexoAuthentificationException {
+		logger.info("AddCVSRepository");
+		_newCVSRepository = new CVSRepository();
+		_newCVSRepository.setName(name);
+		_newCVSRepository.setHostName(hostName);
+		_newCVSRepository.setRepository(repository);
+		_newCVSRepository.setConnectionType(_connectionType);
+		_newCVSRepository.setPort(port);
+		_newCVSRepository.setUserName(userName);
+		if (_connectionType == ConnectionType.PServer) {
+			_newCVSRepository.setPassword(passwd, true);
+		} else {
+			_newCVSRepository.setPassword(passwd, false);
+		}
+		_newCVSRepository.setStorePassword(storePasswd);
+		getFocusedObject().addToCVSRepositories(_newCVSRepository);
+		/*try {
 			_newCVSRepository._retrieveModules();
 		} catch (IOException e) {
 			throw new IOFlexoException(e);
@@ -117,12 +108,11 @@ public class AddCVSRepository extends CVSAction<AddCVSRepository,CVSRepositoryLi
 		} catch (AuthenticationException e) {
 			throw new FlexoAuthentificationException(_newCVSRepository);
 		}*/
-    }
+	}
 
-    public CVSRepository getNewCVSRepository()
-    {
-    	return _newCVSRepository;
-    }
+	public CVSRepository getNewCVSRepository() {
+		return _newCVSRepository;
+	}
 
 	public ConnectionType getConnectionType() {
 		return _connectionType;
@@ -136,8 +126,7 @@ public class AddCVSRepository extends CVSAction<AddCVSRepository,CVSRepositoryLi
 		return passwd;
 	}
 
-	public void setPassword(String passwd)
-	{
+	public void setPassword(String passwd) {
 		this.passwd = passwd;
 	}
 

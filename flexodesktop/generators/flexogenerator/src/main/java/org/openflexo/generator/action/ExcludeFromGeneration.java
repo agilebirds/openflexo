@@ -28,59 +28,53 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.generator.file.AbstractCGFile;
 
-
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class ExcludeFromGeneration extends MultipleFileGCAction<ExcludeFromGeneration>
-{
+public class ExcludeFromGeneration extends MultipleFileGCAction<ExcludeFromGeneration> {
 
-    public static final MultipleFileGCActionType<ExcludeFromGeneration> actionType = new MultipleFileGCActionType<ExcludeFromGeneration>("exclude_from_generation",
-            GENERATE_MENU, GENERATION_GROUP,FlexoActionType.NORMAL_ACTION_TYPE){
+	public static final MultipleFileGCActionType<ExcludeFromGeneration> actionType = new MultipleFileGCActionType<ExcludeFromGeneration>(
+			"exclude_from_generation", GENERATE_MENU, GENERATION_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-                @Override
-                protected boolean accept(AbstractCGFile aFile)
-                {
-                    return !aFile.getMarkedAsDoNotGenerate();
-                }
+		@Override
+		protected boolean accept(AbstractCGFile aFile) {
+			return !aFile.getMarkedAsDoNotGenerate();
+		}
 
-                @Override
-                public ExcludeFromGeneration makeNewAction(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-                {
-                    return new ExcludeFromGeneration(focusedObject,globalSelection,editor);
-                }
-        
-    };
-    
-    /**
-     * @param actionType
-     * @param focusedObject
-     * @param globalSelection
-     * @param editor
-     */
-    protected ExcludeFromGeneration(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
-    
-    static {
-        FlexoModelObject.addActionForClass (ExcludeFromGeneration.actionType, CGObject.class);
-    }
-    
-    /**
-     * Overrides doAction
-     * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
-     */
-    @Override
-    protected void doAction(Object context) throws FlexoException
-    {
-        for (AbstractCGFile file : getSelectedCGFilesOnWhyCurrentActionShouldApply()) {
-            file.setMarkedAsDoNotGenerate(true);
-        }
-        getRepository().refresh();
-    }
+		@Override
+		public ExcludeFromGeneration makeNewAction(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new ExcludeFromGeneration(focusedObject, globalSelection, editor);
+		}
+
+	};
+
+	/**
+	 * @param actionType
+	 * @param focusedObject
+	 * @param globalSelection
+	 * @param editor
+	 */
+	protected ExcludeFromGeneration(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	static {
+		FlexoModelObject.addActionForClass(ExcludeFromGeneration.actionType, CGObject.class);
+	}
+
+	/**
+	 * Overrides doAction
+	 * 
+	 * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
+	 */
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		for (AbstractCGFile file : getSelectedCGFilesOnWhyCurrentActionShouldApply()) {
+			file.setMarkedAsDoNotGenerate(true);
+		}
+		getRepository().refresh();
+	}
 
 	public boolean requiresThreadPool() {
 		// TODO Auto-generated method stub

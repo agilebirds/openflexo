@@ -23,7 +23,6 @@
 // Generated on: 2008.02.08 at 10:43:57 AM CET 
 //
 
-
 package org.oasis_open.docs.wsbpel._2_0.process.executable;
 
 import java.util.ArrayList;
@@ -33,16 +32,17 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
  * 
- * 				XSD Authors: The child element onAlarm needs to be a Local Element Declaration, 
- * 				because there is another onAlarm element defined for the pick activity.
- * 			
+ * XSD Authors: The child element onAlarm needs to be a Local Element Declaration, because there is another onAlarm element defined for the
+ * pick activity.
  * 
- * <p>Java class for tEventHandlers complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * Java class for tEventHandlers complex type.
+ * 
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tEventHandlers">
@@ -60,73 +60,64 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tEventHandlers", propOrder = {
-    "onEvent",
-    "onAlarm"
-})
-public class TEventHandlers
-    extends TExtensibleElements
-{
+@XmlType(name = "tEventHandlers", propOrder = { "onEvent", "onAlarm" })
+public class TEventHandlers extends TExtensibleElements {
 
-    protected List<TOnEvent> onEvent;
-    protected List<TOnAlarmEvent> onAlarm;
+	protected List<TOnEvent> onEvent;
+	protected List<TOnAlarmEvent> onAlarm;
 
-    /**
-     * Gets the value of the onEvent property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the onEvent property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getOnEvent().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link TOnEvent }
-     * 
-     * 
-     */
-    public List<TOnEvent> getOnEvent() {
-        if (onEvent == null) {
-            onEvent = new ArrayList<TOnEvent>();
-        }
-        return this.onEvent;
-    }
+	/**
+	 * Gets the value of the onEvent property.
+	 * 
+	 * <p>
+	 * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make to the returned list
+	 * will be present inside the JAXB object. This is why there is not a <CODE>set</CODE> method for the onEvent property.
+	 * 
+	 * <p>
+	 * For example, to add a new item, do as follows:
+	 * 
+	 * <pre>
+	 * getOnEvent().add(newItem);
+	 * </pre>
+	 * 
+	 * 
+	 * <p>
+	 * Objects of the following type(s) are allowed in the list {@link TOnEvent }
+	 * 
+	 * 
+	 */
+	public List<TOnEvent> getOnEvent() {
+		if (onEvent == null) {
+			onEvent = new ArrayList<TOnEvent>();
+		}
+		return this.onEvent;
+	}
 
-    /**
-     * Gets the value of the onAlarm property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the onAlarm property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getOnAlarm().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link TOnAlarmEvent }
-     * 
-     * 
-     */
-    public List<TOnAlarmEvent> getOnAlarm() {
-        if (onAlarm == null) {
-            onAlarm = new ArrayList<TOnAlarmEvent>();
-        }
-        return this.onAlarm;
-    }
+	/**
+	 * Gets the value of the onAlarm property.
+	 * 
+	 * <p>
+	 * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make to the returned list
+	 * will be present inside the JAXB object. This is why there is not a <CODE>set</CODE> method for the onAlarm property.
+	 * 
+	 * <p>
+	 * For example, to add a new item, do as follows:
+	 * 
+	 * <pre>
+	 * getOnAlarm().add(newItem);
+	 * </pre>
+	 * 
+	 * 
+	 * <p>
+	 * Objects of the following type(s) are allowed in the list {@link TOnAlarmEvent }
+	 * 
+	 * 
+	 */
+	public List<TOnAlarmEvent> getOnAlarm() {
+		if (onAlarm == null) {
+			onAlarm = new ArrayList<TOnAlarmEvent>();
+		}
+		return this.onAlarm;
+	}
 
 }

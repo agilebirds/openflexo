@@ -30,26 +30,22 @@ import org.openflexo.fge.graphics.FGEDrawingGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.BackgroundStyle.Texture.TextureType;
 
-
-
-public abstract class Edition 
-{
+public abstract class Edition {
 	public int currentStep;
 	public Vector<EditionInput> inputs;
 	private String label;
 	private GeomEditController controller;
-	
+
 	protected static ForegroundStyle focusedForegroundStyle;
 	protected static BackgroundStyle focusedBackgroundStyle;
-	
+
 	static {
 		focusedForegroundStyle = ForegroundStyle.makeStyle(Color.RED);
 		focusedBackgroundStyle = BackgroundStyle.makeTexturedBackground(TextureType.TEXTURE1, Color.RED, Color.WHITE);
 		focusedBackgroundStyle.setUseTransparency(true);
 	}
-	
-	public Edition(String aLabel, GeomEditController aController) 
-	{
+
+	public Edition(String aLabel, GeomEditController aController) {
 		super();
 		controller = aController;
 		label = aLabel;
@@ -57,23 +53,19 @@ public abstract class Edition
 		inputs = new Vector<EditionInput>();
 	}
 
-	public String getLabel()
-	{
+	public String getLabel() {
 		return label;
 	}
 
-	public GeomEditController getController()
-	{
+	public GeomEditController getController() {
 		return controller;
 	}
-	
-	public final void addObject(GeometricObject object)
-	{
+
+	public final void addObject(GeometricObject object) {
 		getController().getDrawing().getModel().addToChilds(object);
 	}
-	
-	public boolean next()
-	{
+
+	public boolean next() {
 		currentStep++;
 		if (currentStep >= inputs.size()) {
 			performEdition();
@@ -81,20 +73,18 @@ public abstract class Edition
 		}
 		return false;
 	}
-	
+
 	public abstract void performEdition();
-	
-	public final void paint(FGEDrawingGraphics graphics,FGEPoint lastMouseLocation)
-	{
+
+	public final void paint(FGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		paintEdition(graphics, lastMouseLocation);
 		inputs.get(currentStep).paint(graphics);
 	}
 
-	public abstract void paintEdition(FGEDrawingGraphics graphics,FGEPoint lastMouseLocation);
+	public abstract void paintEdition(FGEDrawingGraphics graphics, FGEPoint lastMouseLocation);
 
-	public boolean requireRepaint(FGEPoint lastMouseLocation)
-	{
+	public boolean requireRepaint(FGEPoint lastMouseLocation) {
 		return true;
 	}
-	
+
 }

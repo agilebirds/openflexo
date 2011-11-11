@@ -23,10 +23,9 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * @author  Milos Kleint
+ * @author Milos Kleint
  */
 public interface TemporaryFileCreator {
 
-    File createTempFile(String filename) throws IOException;
+	File createTempFile(String filename) throws IOException;
 }
-

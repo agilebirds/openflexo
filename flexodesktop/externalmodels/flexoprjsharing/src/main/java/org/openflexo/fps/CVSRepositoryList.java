@@ -34,36 +34,31 @@ public class CVSRepositoryList extends FPSObject {
 	private static final Logger logger = Logger.getLogger(CVSRepositoryList.class.getPackage().getName());
 
 	private File _storedRepositoryDirectory;
-	
+
 	private Vector<CVSRepository> _repositories;
-	
-	public CVSRepositoryList()
-	{
+
+	public CVSRepositoryList() {
 		_repositories = new Vector<CVSRepository>();
 	}
 
-	public Vector<CVSRepository> getCVSRepositories() 
-	{
+	public Vector<CVSRepository> getCVSRepositories() {
 		return _repositories;
 	}
 
-	public void setCVSRepositories(Vector<CVSRepository> repositories) 
-	{
+	public void setCVSRepositories(Vector<CVSRepository> repositories) {
 		_repositories = repositories;
 		setChanged();
 	}
-	
-	public void addToCVSRepositories(CVSRepository repository) 
-	{
+
+	public void addToCVSRepositories(CVSRepository repository) {
 		_repositories.add(repository);
 		repository.saveCVSRepositoryLocation();
 		repository.setCVSRepositoryList(this);
 		setChanged();
 		notifyObservers(new CVSRepositoryCreated(repository));
 	}
-	
-	public void removeFromCVSRepositories(CVSRepository repository) 
-	{
+
+	public void removeFromCVSRepositories(CVSRepository repository) {
 		repository.setCVSRepositoryList(null);
 		_repositories.remove(repository);
 		setChanged();
@@ -71,37 +66,32 @@ public class CVSRepositoryList extends FPSObject {
 	}
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.FPS.CVS_REPOSITORY_LIST_INSPECTOR;
 	}
-	
+
 	@Override
-	public String getHelpText()
-	{
+	public String getHelpText() {
 		return FlexoLocalization.localizedForKey("cvs_repository_list_help_text");
 	}
-	
+
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "cvs_repository_list";
 	}
 
-	public File getStoredRepositoryDirectory() 
-	{
+	public File getStoredRepositoryDirectory() {
 		return _storedRepositoryDirectory;
 	}
 
-	public void setStoredRepositoryDirectory(File storedRepositoryDirectory)
-	{
+	public void setStoredRepositoryDirectory(File storedRepositoryDirectory) {
 		_storedRepositoryDirectory = storedRepositoryDirectory;
 	}
-	
-	public void loadStoredRepositoryLocation(File storedRepositoryDirectory/*, FlexoEditor editor*/)
-	{
+
+	public void loadStoredRepositoryLocation(File storedRepositoryDirectory/*, FlexoEditor editor*/) {
 		setStoredRepositoryDirectory(storedRepositoryDirectory);
-		if (storedRepositoryDirectory == null || !storedRepositoryDirectory.exists()) return;
+		if (storedRepositoryDirectory == null || !storedRepositoryDirectory.exists())
+			return;
 		File[] allLocationFiles = storedRepositoryDirectory.listFiles(new FileFilter() {
 			@Override
 			public boolean accept(File pathname) {
@@ -111,10 +101,10 @@ public class CVSRepositoryList extends FPSObject {
 		for (File f : allLocationFiles) {
 			CVSRepository rep = new CVSRepository(f);
 			addToCVSRepositories(rep);
-			//SwingUtilities.invokeLater(new RetrieveModuleRunnable(rep,editor));
+			// SwingUtilities.invokeLater(new RetrieveModuleRunnable(rep,editor));
 		}
 	}
-	
+
 	/*public static class RetrieveModuleRunnable implements Runnable
 	{
 		private CVSRepository _rep;
@@ -134,8 +124,7 @@ public class CVSRepositoryList extends FPSObject {
 	}*/
 
 	@Override
-	public boolean isContainedIn(FPSObject obj) 
-	{
+	public boolean isContainedIn(FPSObject obj) {
 		return (obj == this);
 	}
 }

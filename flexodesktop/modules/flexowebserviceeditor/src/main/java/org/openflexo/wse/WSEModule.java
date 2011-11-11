@@ -34,73 +34,66 @@ import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.wse.controller.WSEController;
 
-
 /**
  * WSE module
- *
+ * 
  * @author yourname
  */
-public class WSEModule extends FlexoModule implements ExternalWSEModule
-{
-	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[]{Inspectors.WSE};
+public class WSEModule extends FlexoModule implements ExternalWSEModule {
+	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.WSE };
+
 	/**
-	 * The 'main' method of module allow to launch this module as a
-	 * single-module application
-	 *
+	 * The 'main' method of module allow to launch this module as a single-module application
+	 * 
 	 * @param args
 	 */
-	public static void main(String[] args) throws Exception
-	{
+	public static void main(String[] args) throws Exception {
 		ToolBox.setPlatform();
 		FlexoLoggingManager.initialize();
 		FlexoApplication.initialize();
 		ModuleLoader.initializeSingleModule(Module.WSE_MODULE);
 	}
 
-	public WSEModule(InteractiveFlexoEditor projectEditor) throws Exception
-	{
+	public WSEModule(InteractiveFlexoEditor projectEditor) throws Exception {
 		super(projectEditor);
-		setFlexoController(new WSEController(projectEditor,this));
+		setFlexoController(new WSEController(projectEditor, this));
 		getWSEController().loadRelativeWindows();
 		WSEPreferences.init(getWSEController());
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
 
 		// Put here a code to display default view
 
-
 		// Retain here all necessary resources
-		//retain(<the_required_resource_data>);
+		// retain(<the_required_resource_data>);
 	}
 
 	/**
 	 * Overrides moduleWillClose
+	 * 
 	 * @see org.openflexo.module.FlexoModule#moduleWillClose()
 	 */
 	@Override
-	public void moduleWillClose()
-	{
+	public void moduleWillClose() {
 		super.moduleWillClose();
 		WSEPreferences.reset();
 	}
 
 	@Override
-	public InspectorGroup[] getInspectorGroups()
-	{
+	public InspectorGroup[] getInspectorGroups() {
 		return inspectorGroups;
 	}
 
-	public WSEController getWSEController()
-	{
+	public WSEController getWSEController() {
 		return (WSEController) getFlexoController();
 	}
 
 	/**
 	 * Overrides getDefaultObjectToSelect
+	 * 
 	 * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect()
 	 */
 	@Override
-	public FlexoModelObject getDefaultObjectToSelect()
-	{
+	public FlexoModelObject getDefaultObjectToSelect() {
 		return getProject();
 	}
 

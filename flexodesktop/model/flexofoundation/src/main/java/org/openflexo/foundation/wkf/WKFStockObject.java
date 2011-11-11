@@ -24,7 +24,6 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.inspector.InspectableObject;
 
-
 public class WKFStockObject extends WKFArtefact implements InspectableObject, DeletableObject, LevelledObject {
 
 	// ==========================================================
@@ -34,8 +33,7 @@ public class WKFStockObject extends WKFArtefact implements InspectableObject, De
 	/**
 	 * Constructor used during deserialization
 	 */
-	public WKFStockObject(FlexoProcessBuilder builder)
-	{
+	public WKFStockObject(FlexoProcessBuilder builder) {
 		this(builder.process);
 		initializeDeserialization(builder);
 	}
@@ -43,8 +41,7 @@ public class WKFStockObject extends WKFArtefact implements InspectableObject, De
 	/**
 	 * Default constructor
 	 */
-	public WKFStockObject(FlexoProcess process)
-	{
+	public WKFStockObject(FlexoProcess process) {
 		super(process);
 	}
 
@@ -54,15 +51,13 @@ public class WKFStockObject extends WKFArtefact implements InspectableObject, De
 	}
 
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "stock";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return "STOCK."+getText();
+	public String getFullyQualifiedName() {
+		return "STOCK." + getText();
 	}
 
 }

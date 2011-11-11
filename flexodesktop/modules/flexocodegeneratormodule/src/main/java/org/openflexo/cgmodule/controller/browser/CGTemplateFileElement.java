@@ -19,7 +19,6 @@
  */
 package org.openflexo.cgmodule.controller.browser;
 
-
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
@@ -29,42 +28,32 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.icon.GeneratorIconLibrary;
 
+public class CGTemplateFileElement extends BrowserElement {
 
-public class CGTemplateFileElement extends BrowserElement
-{
-
-	
-	public CGTemplateFileElement(CGTemplate templateFile, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(templateFile, BrowserElementType.TEMPLATE_FILE, browser, parent);
+	public CGTemplateFileElement(CGTemplate templateFile, ProjectBrowser browser, BrowserElement parent) {
+		super(templateFile, BrowserElementType.TEMPLATE_FILE, browser, parent);
 	}
 
-    @Override
-	public String getName()
-    {
+	@Override
+	public String getName() {
 		return getCGTemplate().getTemplateName();
-    }
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-    }
+	@Override
+	protected void buildChildrenVector() {
+	}
 
-	protected CGTemplate getCGTemplate()
-    {
+	protected CGTemplate getCGTemplate() {
 		return (CGTemplate) getObject();
-    }
-    
-    public ImageIcon getBaseIcon()
-	{
+	}
+
+	public ImageIcon getBaseIcon() {
 		return getElementType().getIcon();
 	}
-	
+
 	@Override
-	public Icon getIcon()
-	{
+	public Icon getIcon() {
 		return GeneratorIconLibrary.getIconForTemplate(getCGTemplate());
 	}
 
-	
- }
+}

@@ -18,6 +18,7 @@
  *
  */
 package org.openflexo.antar.expr.parser;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -45,7 +46,6 @@ import org.openflexo.toolbox.Duration;
 import org.openflexo.toolbox.Duration.DurationStringConverter;
 import org.openflexo.xmlcode.StringEncoder.DateConverter;
 
-
 /*
  * Created on 4 janv. 2006 by sguerin
  *
@@ -59,14 +59,12 @@ public class ExpressionParser {
 	private DateConverter dateConverter = new DateConverter();
 	private DurationStringConverter durationConverter = new DurationStringConverter();
 
-	public ExpressionParser(ExpressionGrammar grammar)
-	{
+	public ExpressionParser(ExpressionGrammar grammar) {
 		super();
 		this.grammar = grammar;
 	}
 
-	public Expression parse (String aString) throws ParseException
-	{
+	public Expression parse(String aString) throws ParseException {
 		String preprocessedString = preprocessString(aString);
 		BufferedReader rdr = new BufferedReader(new StringReader(preprocessedString));
 		Token parsed = parse(rdr);
@@ -74,44 +72,47 @@ public class ExpressionParser {
 	}
 
 	// Perform some lexical checks...
-	
-	private String preprocessString(String aString) throws ParseException
-	{
+
+	private String preprocessString(String aString) throws ParseException {
 		StringBuffer returned = new StringBuffer();
-		if (aString.length() == 0) throw new ParseException("Empty string");
+		if (aString.length() == 0)
+			throw new ParseException("Empty string");
 		int parentLevel = 0;
 		boolean escaping = false;
 		char waitedEscapingEndChar = '?';
-		for (int i=0; i<aString.length(); i++) {
+		for (int i = 0; i < aString.length(); i++) {
 			char c = aString.charAt(i);
 			if (!escaping) {
 				if (c == '\'') {
 					escaping = true;
 					waitedEscapingEndChar = '\'';
-				}
-				else if (c == '"') {
+				} else if (c == '"') {
 					escaping = true;
 					waitedEscapingEndChar = '"';
-				}
-				else if (c == '[') {
+				} else if (c == '[') {
 					escaping = true;
 					waitedEscapingEndChar = ']';
-				}
-				else if (c == '(') parentLevel++;
-				else if (c == ')') parentLevel--;
+				} else if (c == '(')
+					parentLevel++;
+				else if (c == ')')
+					parentLevel--;
 				returned.append(c);
-			}
-			else {
-				if (c == waitedEscapingEndChar) escaping = false;
-				if (c == ']') returned.append('['); // We use [] to embed date or duration representation
-				else returned.append(c);
+			} else {
+				if (c == waitedEscapingEndChar)
+					escaping = false;
+				if (c == ']')
+					returned.append('['); // We use [] to embed date or duration representation
+				else
+					returned.append(c);
 			}
 		}
-		if (parentLevel != 0) throw new ParseException("Unbalanced parenthesis: "+aString);
-		if (escaping) throw new ParseException("Unbalanced escaping char : expecting "+waitedEscapingEndChar);
+		if (parentLevel != 0)
+			throw new ParseException("Unbalanced parenthesis: " + aString);
+		if (escaping)
+			throw new ParseException("Unbalanced escaping char : expecting " + waitedEscapingEndChar);
 		return returned.toString();
 	}
-	
+
 	/*public ParsedExpression parseExpression (String aString) throws ParseException
 	{
 		Token result = parse(aString);
@@ -126,17 +127,16 @@ public class ExpressionParser {
 		throw new ParseException("Could not parse as an function "+aString);
 	}*/
 
-	private StreamTokenizer initStreamTokenizer(Reader rdr)
-	{
+	private StreamTokenizer initStreamTokenizer(Reader rdr) {
 		// Always need to setup StreamTokenizer
 		StreamTokenizer input = new StreamTokenizer(rdr);
-		input.wordChars('_','_');
+		input.wordChars('_', '_');
 		input.quoteChar('[');
 
 		for (UnaryOperator op : getAllSupportedUnaryOperators()) {
 			try {
-				considerAsOperator(getSymbol(op),input);
-				considerAsOperator(getAlternativeSymbol(op),input);
+				considerAsOperator(getSymbol(op), input);
+				considerAsOperator(getAlternativeSymbol(op), input);
 			} catch (OperatorNotSupportedException e) {
 				// Shoud not happen
 				e.printStackTrace();
@@ -145,8 +145,8 @@ public class ExpressionParser {
 
 		for (BinaryOperator op : getAllSupportedBinaryOperators()) {
 			try {
-				considerAsOperator(getSymbol(op),input);
-				considerAsOperator(getAlternativeSymbol(op),input);
+				considerAsOperator(getSymbol(op), input);
+				considerAsOperator(getAlternativeSymbol(op), input);
 			} catch (OperatorNotSupportedException e) {
 				// Shoud not happen
 				e.printStackTrace();
@@ -154,36 +154,32 @@ public class ExpressionParser {
 		}
 
 		/* input.ordinaryChar('/');
-        input.ordinaryChar('&');
-        input.ordinaryChar('!');
-        input.ordinaryChar('-');*/
+		input.ordinaryChar('&');
+		input.ordinaryChar('!');
+		input.ordinaryChar('-');*/
 		return input;
 	}
 
-	private void considerAsOperator(String symbol, StreamTokenizer input)
-	{
-		if (symbol == null) return;
-		//System.out.println("considerAsOperator: "+symbol);
+	private void considerAsOperator(String symbol, StreamTokenizer input) {
+		if (symbol == null)
+			return;
+		// System.out.println("considerAsOperator: "+symbol);
 		char firstChar = symbol.charAt(0);
-		if ((firstChar >= 'a' && firstChar <= 'z') 
-				|| (firstChar >= 'A' && firstChar <= 'Z')) {
+		if ((firstChar >= 'a' && firstChar <= 'z') || (firstChar >= 'A' && firstChar <= 'Z')) {
 			// Ignore this
-		}
-		else {
-			//System.out.println("Ordinary char: "+firstChar);
+		} else {
+			// System.out.println("Ordinary char: "+firstChar);
 			input.ordinaryChar(firstChar);
 		}
 	}
 
-	private Token parse (Reader rdr) throws ParseException
-	{
+	private Token parse(Reader rdr) throws ParseException {
 		ListOfToken unparsedList = parseLevel(initStreamTokenizer(rdr));
 		if ((unparsedList.size() == 1) && (unparsedList.firstElement() instanceof Token))
-			return (Token)unparsedList.firstElement();
+			return (Token) unparsedList.firstElement();
 		try {
 			return ParsedFunction.makeFunction(unparsedList);
-		}
-		catch (ParseException e) {
+		} catch (ParseException e) {
 			return ParsedExpression.makeExpression(unparsedList);
 		}
 
@@ -191,44 +187,38 @@ public class ExpressionParser {
 
 	/**
 	 * Return a vector of AbstractToken (Operator,Word,Value) and Vector elements
+	 * 
 	 * @return
 	 */
-	private ListOfToken parseLevel(StreamTokenizer input) throws ParseException
-	{
+	private ListOfToken parseLevel(StreamTokenizer input) throws ParseException {
 		ListOfToken returned = new ListOfToken();
 
-		try
-		{
+		try {
 			// Read input file and build array
 
 			String currentInput = "";
 			boolean levelSeemsToBeFinished = false;
 			boolean prefixedBy$ = false;
 
-			while ((!levelSeemsToBeFinished)
-					&& (input.nextToken() != StreamTokenizer.TT_EOF ))
-			{
-				//System.out.println("currentInput="+currentInput+" input="+input);
+			while ((!levelSeemsToBeFinished) && (input.nextToken() != StreamTokenizer.TT_EOF)) {
+				// System.out.println("currentInput="+currentInput+" input="+input);
 
-				if (input.ttype == StreamTokenizer.TT_WORD){
-					//System.out.println("Found string: "+ input.sval);
-					handlesCurrentInput(returned,currentInput);
+				if (input.ttype == StreamTokenizer.TT_WORD) {
+					// System.out.println("Found string: "+ input.sval);
+					handlesCurrentInput(returned, currentInput);
 					currentInput = "";
-					handlesWordAddition(returned,input.sval);
-				}
-				else if (input.ttype == StreamTokenizer.TT_NUMBER){
-					//System.out.println("Found double: "+ input.nval);
-					handlesCurrentInput(returned,currentInput);
+					handlesWordAddition(returned, input.sval);
+				} else if (input.ttype == StreamTokenizer.TT_NUMBER) {
+					// System.out.println("Found double: "+ input.nval);
+					handlesCurrentInput(returned, currentInput);
 					currentInput = "";
 					double valueAsDouble = input.nval;
 					if (valueAsDouble < 0) {
-						if (returned.size() > 0 && returned.lastElement() != null 
-								&& (returned.lastElement() instanceof Value 
-										|| returned.lastElement() instanceof Word)) {
-							returned.add(new ParsedOperator(ArithmeticBinaryOperator.SUBSTRACTION,this));
-						}
-						else {
-							returned.add(new ParsedOperator(ArithmeticUnaryOperator.UNARY_MINUS,this));
+						if (returned.size() > 0 && returned.lastElement() != null
+								&& (returned.lastElement() instanceof Value || returned.lastElement() instanceof Word)) {
+							returned.add(new ParsedOperator(ArithmeticBinaryOperator.SUBSTRACTION, this));
+						} else {
+							returned.add(new ParsedOperator(ArithmeticUnaryOperator.UNARY_MINUS, this));
 						}
 						valueAsDouble = -valueAsDouble;
 					}
@@ -238,10 +228,10 @@ public class ExpressionParser {
 					prefixedBy$ = false;
 				}
 				// looks for quotes indicating delimited strings
-				else if ( input.ttype == '['){ 
+				else if (input.ttype == '[') {
 					// Then the string will be in the sval field
-					//System.out.println("Found delimited string: "+ input.sval);
-					handlesCurrentInput(returned,currentInput);
+					// System.out.println("Found delimited string: "+ input.sval);
+					handlesCurrentInput(returned, currentInput);
 					currentInput = "";
 					// Is it a date or a duration ?
 					String parseThis = input.sval;
@@ -251,8 +241,7 @@ public class ExpressionParser {
 						value.setPrefixedBy$(prefixedBy$);
 						returned.add(value);
 						prefixedBy$ = false;
-					}
-					catch (java.text.ParseException cannotParseAsADate) {
+					} catch (java.text.ParseException cannotParseAsADate) {
 						// Lets continue...
 						try {
 							Duration parsedDuration = durationConverter.tryToConvertFromString(parseThis);
@@ -260,82 +249,73 @@ public class ExpressionParser {
 							value.setPrefixedBy$(prefixedBy$);
 							returned.add(value);
 							prefixedBy$ = false;
-						}
-						catch (java.text.ParseException cannotParseAsADurationEither) {
+						} catch (java.text.ParseException cannotParseAsADurationEither) {
 							Value value = StringValue.createStringValue("<unparsable>");
 							value.setPrefixedBy$(prefixedBy$);
 							returned.add(value);
 							prefixedBy$ = false;
 						}
 					}
-				}
-				else if ( input.ttype == '"'){ 
+				} else if (input.ttype == '"') {
 					// Then the string will be in the sval field
-					//System.out.println("Found delimited string: "+ input.sval);
-					handlesCurrentInput(returned,currentInput);
+					// System.out.println("Found delimited string: "+ input.sval);
+					handlesCurrentInput(returned, currentInput);
 					currentInput = "";
-					//handlesWordAddition(returned,input.sval);
+					// handlesWordAddition(returned,input.sval);
 					Value value = StringValue.createStringValue(input.sval);
 					value.setPrefixedBy$(prefixedBy$);
 					returned.add(value);
 					prefixedBy$ = false;
-				}
-				else if ( input.ttype == '\''){ 
+				} else if (input.ttype == '\'') {
 					// Then the string will be in the sval field
-					//System.out.println("Found delimited string: "+ input.sval);
-					handlesCurrentInput(returned,currentInput);
+					// System.out.println("Found delimited string: "+ input.sval);
+					handlesCurrentInput(returned, currentInput);
 					currentInput = "";
-					//handlesWordAddition(returned,input.sval);
+					// handlesWordAddition(returned,input.sval);
 					Value value;
 					if (input.sval.length() == 0)
 						value = CharValue.createCharValue(input.sval.charAt(0));
-					else 
+					else
 						value = StringValue.createStringValue(input.sval);
 					value.setPrefixedBy$(prefixedBy$);
 					returned.add(value);
 					prefixedBy$ = false;
-				}
-				else if ( input.ttype == '$'){ 
+				} else if (input.ttype == '$') {
 					// Then the string will be in the sval field
-					//System.out.println("Found delimited string: "+ input.sval);
-					handlesCurrentInput(returned,currentInput);
+					// System.out.println("Found delimited string: "+ input.sval);
+					handlesCurrentInput(returned, currentInput);
 					currentInput = "";
 					prefixedBy$ = true;
-				}
-				else {
-					char foundChar = (char)input.ttype;
-					//System.out.println("Found Ordinry Character: "+ foundChar);
+				} else {
+					char foundChar = (char) input.ttype;
+					// System.out.println("Found Ordinry Character: "+ foundChar);
 					if (foundChar == '(') {
-						handlesCurrentInput(returned,currentInput);
+						handlesCurrentInput(returned, currentInput);
 						currentInput = "";
 						returned.add(parseLevel(input));
-					}
-					else if (foundChar == ')') {
+					} else if (foundChar == ')') {
 						levelSeemsToBeFinished = true;
-					}
-					else {
-						currentInput = currentInput+foundChar;
+					} else {
+						currentInput = currentInput + foundChar;
 					}
 				}
 			}
 
-			handlesCurrentInput(returned,currentInput);
+			handlesCurrentInput(returned, currentInput);
 			currentInput = "";
 
-			//System.out.println("Done");
+			// System.out.println("Done");
 
 			return returned;
-		}
-		catch (IOException exception)
-		{
-			throw new ParseException("IOException occured: "+exception.getMessage());
+		} catch (IOException exception) {
+			throw new ParseException("IOException occured: " + exception.getMessage());
 		}
 
 	}
 
-	private void handlesCurrentInput (Vector<AbstractToken> returned, String currentInput) throws ParseException
-	{
-		if (currentInput.equals("")) return;
+	private void handlesCurrentInput(Vector<AbstractToken> returned, String currentInput) throws ParseException {
+		if (currentInput.equals(""))
+			return;
 		if (currentInput.equals(",")) {
 			returned.add(new Comma());
 			return;
@@ -343,56 +323,48 @@ public class ExpressionParser {
 		ParsedOperator operator = matchOperator(currentInput);
 		if (operator != null) {
 			returned.add(operator);
-		}
-		else {
-			throw new ParseException("Invalid characters : "+currentInput);               
+		} else {
+			throw new ParseException("Invalid characters : " + currentInput);
 		}
 	}
 
-	private void handlesWordAddition (Vector<AbstractToken> returned, String word) throws ParseException
-	{
-		if (word.equals("")) return;
-		if ((word.equalsIgnoreCase("true")) 
-				|| (word.equalsIgnoreCase("yes"))) {
+	private void handlesWordAddition(Vector<AbstractToken> returned, String word) throws ParseException {
+		if (word.equals(""))
+			return;
+		if ((word.equalsIgnoreCase("true")) || (word.equalsIgnoreCase("yes"))) {
 			returned.add(new BooleanValue(true));
-		}
-		else if ((word.equalsIgnoreCase("false")) 
-				|| (word.equalsIgnoreCase("no"))) {
+		} else if ((word.equalsIgnoreCase("false")) || (word.equalsIgnoreCase("no"))) {
 			returned.add(new BooleanValue(false));
-		}
-		else if (matchOperator(word)!=null) {
+		} else if (matchOperator(word) != null) {
 			returned.add(matchOperator(word));
-		}
-		else {
+		} else {
 			returned.add(new Word(word));
 		}
 	}
 
-	private ParsedOperator matchOperator (String anInput)
-	{
+	private ParsedOperator matchOperator(String anInput) {
 		UnaryOperator unaryOperator = matchUnaryOperator(anInput);
 		BinaryOperator binaryOperator = matchBinaryOperator(anInput);
 
 		if (unaryOperator != null) {
 			if (binaryOperator != null) {
 				// Ambigous operator
-				return new ParsedOperator(unaryOperator,binaryOperator,this);
-			}
-			else return new ParsedOperator(unaryOperator,this);
-		}
-		else {
+				return new ParsedOperator(unaryOperator, binaryOperator, this);
+			} else
+				return new ParsedOperator(unaryOperator, this);
+		} else {
 			if (binaryOperator != null)
-				return new ParsedOperator(binaryOperator,this);
+				return new ParsedOperator(binaryOperator, this);
 		}
 		return null;
 	}
 
-	private UnaryOperator matchUnaryOperator (String anInput)
-	{
+	private UnaryOperator matchUnaryOperator(String anInput) {
 		for (UnaryOperator operator : getAllSupportedUnaryOperators()) {
 			try {
 				if ((anInput.toUpperCase().equalsIgnoreCase(getSymbol(operator)))
-						|| (getAlternativeSymbol(operator) != null && anInput.toUpperCase().equalsIgnoreCase(getAlternativeSymbol(operator)))) {
+						|| (getAlternativeSymbol(operator) != null && anInput.toUpperCase()
+								.equalsIgnoreCase(getAlternativeSymbol(operator)))) {
 					return operator;
 				}
 			} catch (OperatorNotSupportedException e) {
@@ -402,12 +374,12 @@ public class ExpressionParser {
 		return null;
 	}
 
-	private BinaryOperator matchBinaryOperator (String anInput)
-	{
+	private BinaryOperator matchBinaryOperator(String anInput) {
 		for (BinaryOperator operator : getAllSupportedBinaryOperators()) {
 			try {
 				if ((anInput.toUpperCase().equalsIgnoreCase(getSymbol(operator)))
-						|| (getAlternativeSymbol(operator) != null && anInput.toUpperCase().equalsIgnoreCase(getAlternativeSymbol(operator)))) {
+						|| (getAlternativeSymbol(operator) != null && anInput.toUpperCase()
+								.equalsIgnoreCase(getAlternativeSymbol(operator)))) {
 					return operator;
 				}
 			} catch (OperatorNotSupportedException e) {
@@ -417,36 +389,32 @@ public class ExpressionParser {
 		return null;
 	}
 
-	private Expression makeExpression(Token parsed) throws ParseException 
-	{
+	private Expression makeExpression(Token parsed) throws ParseException {
 		if (parsed instanceof Word) {
 			for (SymbolicConstant c : SymbolicConstant.allKnownSymbolicConstants) {
-				if (((Word)parsed).getValue().equalsIgnoreCase(c.getSymbol())) {
-					return (Constant)c;
+				if (((Word) parsed).getValue().equalsIgnoreCase(c.getSymbol())) {
+					return (Constant) c;
 				}
 			}
-			return _variableFactory.makeVariable((Word)parsed);
-		}
-		else if (parsed instanceof Value) {
-			return _constantFactory.makeConstant((Value)parsed);
-		}
-		else if (parsed instanceof ParsedFunction) {
-			ParsedFunction f = (ParsedFunction)parsed;
+			return _variableFactory.makeVariable((Word) parsed);
+		} else if (parsed instanceof Value) {
+			return _constantFactory.makeConstant((Value) parsed);
+		} else if (parsed instanceof ParsedFunction) {
+			ParsedFunction f = (ParsedFunction) parsed;
 			Vector<Expression> args = new Vector<Expression>();
 			for (Token t : f.getParameters()) {
 				args.add(makeExpression(t));
 			}
 			return _functionFactory.makeFunction(f.getCall().getValue(), args);
+		} else if (parsed instanceof ParsedBinaryExpression) {
+			ParsedBinaryExpression e = (ParsedBinaryExpression) parsed;
+			return new BinaryOperatorExpression(e.getBinaryOperator(), makeExpression(e.getLeftOperand()),
+					makeExpression(e.getRightOperand()));
+		} else if (parsed instanceof ParsedUnaryExpression) {
+			ParsedUnaryExpression e = (ParsedUnaryExpression) parsed;
+			return new UnaryOperatorExpression(e.getUnaryOperator(), makeExpression(e.getOperand()));
 		}
-		else if (parsed instanceof ParsedBinaryExpression) {
-			ParsedBinaryExpression e = (ParsedBinaryExpression)parsed;
-			return new BinaryOperatorExpression(e.getBinaryOperator(),makeExpression(e.getLeftOperand()),makeExpression(e.getRightOperand()));
-		}
-		else if (parsed instanceof ParsedUnaryExpression) {
-			ParsedUnaryExpression e = (ParsedUnaryExpression)parsed;
-			return new UnaryOperatorExpression(e.getUnaryOperator(),makeExpression(e.getOperand()));
-		}
-		
+
 		throw new ParseException("Parse error: unexpected token found");
 	}
 
@@ -466,80 +434,69 @@ public class ExpressionParser {
 		return grammar.getSymbol(operator);
 	}
 
-	public static interface VariableFactory
-	{
+	public static interface VariableFactory {
 		public Expression makeVariable(Word value);
 	}
 
-	public static class DefaultVariableFactory implements VariableFactory
-	{
-		private Hashtable<String,Variable> hash = new Hashtable<String,Variable>();
+	public static class DefaultVariableFactory implements VariableFactory {
+		private Hashtable<String, Variable> hash = new Hashtable<String, Variable>();
+
 		@Override
 		public Variable makeVariable(Word value) {
 			Variable returned = hash.get(value.getValue());
 			if (returned == null) {
 				returned = new Variable(value.getValue());
-				hash.put(value.getValue(),returned);
+				hash.put(value.getValue(), returned);
 			}
 			return returned;
-		}		
+		}
 	}
-		
-	public static interface ConstantFactory
-	{
+
+	public static interface ConstantFactory {
 		public Expression makeConstant(Value value);
 	}
-	
-	public static class DefaultConstantFactory implements ConstantFactory
-	{
+
+	public static class DefaultConstantFactory implements ConstantFactory {
 		@Override
 		public Constant makeConstant(Value value) {
-			if (value == null) return /*Constant.ObjectSymbolicConstant.NULL;*/ new Constant.StringConstant("null");
+			if (value == null)
+				return /*Constant.ObjectSymbolicConstant.NULL;*/new Constant.StringConstant("null");
 			if (value instanceof BooleanValue) {
-				if (((BooleanValue)value).getBooleanValue())
+				if (((BooleanValue) value).getBooleanValue())
 					return Constant.BooleanConstant.TRUE;
 				else {
 					return Constant.BooleanConstant.FALSE;
 				}
-			}
-			else if (value instanceof CharValue) {
-				return new Constant.StringConstant(((CharValue)value).getStringValue());
-			}
-			else if (value instanceof StringValue) {
-				return new Constant.StringConstant(((StringValue)value).getStringValue());
-			}
-			else if (value instanceof EnumValue) {
-				return new Constant.EnumConstant(((EnumValue)value).getStringValue());
-			}
-			else if (value instanceof FloatValue) {
-				return new Constant.FloatConstant(((FloatValue)value).getDoubleValue());
-			}
-			else if (value instanceof IntValue) {
-				return new Constant.IntegerConstant(((IntValue)value).getIntValue());
-			}
-			else if (value instanceof DateValue) {
-				return new Constant.DateConstant(((DateValue)value).getDateValue());
-			}
-			else if (value instanceof DurationValue) {
-				return new Constant.DurationConstant(((DurationValue)value).getDurationValue());
+			} else if (value instanceof CharValue) {
+				return new Constant.StringConstant(((CharValue) value).getStringValue());
+			} else if (value instanceof StringValue) {
+				return new Constant.StringConstant(((StringValue) value).getStringValue());
+			} else if (value instanceof EnumValue) {
+				return new Constant.EnumConstant(((EnumValue) value).getStringValue());
+			} else if (value instanceof FloatValue) {
+				return new Constant.FloatConstant(((FloatValue) value).getDoubleValue());
+			} else if (value instanceof IntValue) {
+				return new Constant.IntegerConstant(((IntValue) value).getIntValue());
+			} else if (value instanceof DateValue) {
+				return new Constant.DateConstant(((DateValue) value).getDateValue());
+			} else if (value instanceof DurationValue) {
+				return new Constant.DurationConstant(((DurationValue) value).getDurationValue());
 			}
 			return new Constant.StringConstant("?");
-		}		
+		}
 	}
-	
-	public static interface FunctionFactory
-	{
+
+	public static interface FunctionFactory {
 		public Expression makeFunction(String functionName, Vector<Expression> args);
 	}
-	
-	public static class DefaultFunctionFactory implements FunctionFactory
-	{
+
+	public static class DefaultFunctionFactory implements FunctionFactory {
 		@Override
-		public Function makeFunction(String functionName, Vector<Expression> args) {			
-			return new Function(functionName,args);
-		}		
+		public Function makeFunction(String functionName, Vector<Expression> args) {
+			return new Function(functionName, args);
+		}
 	}
-	
+
 	private ConstantFactory _constantFactory = new DefaultConstantFactory();
 
 	private VariableFactory _variableFactory = new DefaultVariableFactory();
@@ -570,5 +527,4 @@ public class ExpressionParser {
 		_variableFactory = variableFactory;
 	}
 
-	
 }

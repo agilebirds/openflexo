@@ -19,7 +19,6 @@
  */
 package org.openflexo.components.browser.dm;
 
-
 import javax.swing.Icon;
 
 import org.openflexo.components.browser.BrowserElement;
@@ -29,56 +28,48 @@ import org.openflexo.components.browser.ProjectBrowser.DMViewMode;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.icon.DMEIconLibrary;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class DMEntityElement extends DMElement
-{
+public class DMEntityElement extends DMElement {
 
-    public DMEntityElement(DMEntity entity, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(entity, BrowserElementType.DM_ENTITY, browser,parent);
-    }
+	public DMEntityElement(DMEntity entity, ProjectBrowser browser, BrowserElement parent) {
+		super(entity, BrowserElementType.DM_ENTITY, browser, parent);
+	}
 
-    public DMEntityElement(DMEntity entity, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(entity, elementType, browser,parent);
-    }
+	public DMEntityElement(DMEntity entity, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent) {
+		super(entity, elementType, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-    	if (getProjectBrowser().getDMViewMode() == DMViewMode.Hierarchy) {
-    		for (DMEntity child : getDMEntity().getChildEntities()) {
-                addToChilds(child);
-    		}
-    	}
-       	if (getProjectBrowser().getDMViewMode() == DMViewMode.Repositories) {
-       		super.buildChildrenVector();
-    	}
-     }
+	@Override
+	protected void buildChildrenVector() {
+		if (getProjectBrowser().getDMViewMode() == DMViewMode.Hierarchy) {
+			for (DMEntity child : getDMEntity().getChildEntities()) {
+				addToChilds(child);
+			}
+		}
+		if (getProjectBrowser().getDMViewMode() == DMViewMode.Repositories) {
+			super.buildChildrenVector();
+		}
+	}
 
-    protected DMEntity getDMEntity()
-    {
-        return (DMEntity) getObject();
-    }
+	protected DMEntity getDMEntity() {
+		return (DMEntity) getObject();
+	}
 
-    @Override
-	public boolean isNameEditable()
-    {
-        return !(getDMEntity().getIsReadOnly());
-    }
+	@Override
+	public boolean isNameEditable() {
+		return !(getDMEntity().getIsReadOnly());
+	}
 
-    @Override
-	public Icon getIcon()
-    {
-    	if (getDMEntity() != null) {
-    		return decorateIcon(DMEIconLibrary.getIconFor(getDMEntity()));
-    	}
-    	return super.getIcon();
-    }
+	@Override
+	public Icon getIcon() {
+		if (getDMEntity() != null) {
+			return decorateIcon(DMEIconLibrary.getIconFor(getDMEntity()));
+		}
+		return super.getIcon();
+	}
 }

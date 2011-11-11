@@ -22,26 +22,21 @@ package org.openflexo.fps.dm;
 import org.openflexo.fps.CVSFile;
 import org.openflexo.fps.CVSStatus;
 
-
-public class CVSStatusChanged extends FPSDataModification
-{
+public class CVSStatusChanged extends FPSDataModification {
 	private CVSStatus _oldStatus;
 	private CVSStatus _newStatus;
-	
-    public CVSStatusChanged(CVSFile file, CVSStatus oldStatus, CVSStatus newStatus)
-    {
-        super(null,file);
-        _oldStatus = oldStatus;
-        _newStatus = newStatus;
-    }
 
-	public CVSStatus getNewStatus() 
-	{
+	public CVSStatusChanged(CVSFile file, CVSStatus oldStatus, CVSStatus newStatus) {
+		super(null, file);
+		_oldStatus = oldStatus;
+		_newStatus = newStatus;
+	}
+
+	public CVSStatus getNewStatus() {
 		return _newStatus;
 	}
 
-	public CVSStatus getOldStatus()
-	{
+	public CVSStatus getOldStatus() {
 		return _oldStatus;
 	}
 
