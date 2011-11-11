@@ -1,5 +1,5 @@
 #French
-#Wed Oct 26 21:45:52 CEST 2011
+#Thu Nov 10 18:49:37 CET 2011
 =
 \ =\ 
 \ into\ =\ dans 
@@ -3591,6 +3591,7 @@ open_port_registery=Ouvrir le registre des ports
 open_process_in_new_window=Ouvrir le processus dans une nouvelle fen\u00EAtre
 open_project=Ouvrir un projet
 open_workflow=Ouvrir un WorkFlow...
+opening_fib_editor=opening_fib_editor
 operation=op\u00E9ration
 operationComponent=Ecran
 operation_($object.name)_defines_no_wo_component=L'op\u00E9ration "($object.name)" ne d\u00E9finit aucun \u00E9cran 

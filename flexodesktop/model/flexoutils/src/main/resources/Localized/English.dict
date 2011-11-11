@@ -1,5 +1,5 @@
 #English
-#Wed Oct 26 21:45:52 CEST 2011
+#Thu Nov 10 18:49:37 CET 2011
 =
 \ =\ 
 \ into\ =\ into 
@@ -3594,6 +3594,7 @@ open_port_registery=Open port registery
 open_process_in_new_window=Open process in new window
 open_project=Open project
 open_workflow=Open WorkFlow...
+opening_fib_editor=opening_fib_editor
 operation=operation
 operationComponent=Operation component
 operation_($object.name)_defines_no_wo_component=Operation "($object.name)" defines no screen
