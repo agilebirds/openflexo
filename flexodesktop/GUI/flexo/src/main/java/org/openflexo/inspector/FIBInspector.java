@@ -63,6 +63,12 @@ public class FIBInspector extends FIBPanel {
 
 	private boolean superInspectorWereAppened = false;
 	
+	private FIBInspector superInspector;
+	
+	public FIBInspector getSuperInspector() {
+		return superInspector;
+	}
+	
 	protected void appendSuperInspectors(MainInspectorController controller)
 	{
 		if (getDataType() == null) return;
@@ -70,6 +76,7 @@ public class FIBInspector extends FIBPanel {
 			FIBInspector superInspector = controller.inspectorForClass(((Class)getDataType()).getSuperclass());
 			if (superInspector != null) {
 				superInspector.appendSuperInspectors(controller);
+				this.superInspector = superInspector;
 				appendSuperInspector(superInspector);
 			}
 		}

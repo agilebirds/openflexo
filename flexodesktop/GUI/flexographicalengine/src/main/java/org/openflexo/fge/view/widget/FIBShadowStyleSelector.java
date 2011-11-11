@@ -29,7 +29,6 @@ import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
@@ -230,7 +229,7 @@ implements FIBCustomComponent<ShadowStyle,FIBShadowStyleSelector>
 		return (ShadowStylePreviewPanel)super.getFrontComponent();
 	}
 	
-	@Override
+	/*@Override
 	protected Border getDownButtonBorder()
 	{
 		return BorderFactory.createCompoundBorder(
@@ -241,7 +240,7 @@ implements FIBCustomComponent<ShadowStyle,FIBShadowStyleSelector>
 		//return BorderFactory.createEtchedBorder();
 		//return BorderFactory.createBevelBorder(BevelBorder.LOWERED);
 		//return BorderFactory.createBevelBorder(BevelBorder.LOWERED);
-	}
+	}*/
 	
 	
 	protected class ShadowStylePreviewPanel extends JPanel

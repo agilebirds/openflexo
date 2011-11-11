@@ -266,7 +266,9 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C,JPanel>
 			if (glc.getX() == col && glc.getY() == row) return getController().viewForComponent(subComponent).getResultingJComponent();
 		}
 		// Otherwise, it's an empty cell
-		return new JPanel();
+		JPanel returned = new JPanel();
+		returned.setOpaque(false);
+		return returned;
 
 	}
 

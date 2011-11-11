@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="twocols" hGap="5" vGap="5" flowAlignment="LEADING" border="empty">
-  <Panel layout="border" border="titled" borderTitle="Panel" constraints="twocols(location=left;index=1;alignmentY=0.5;alignmentX=0.5;expandHorizontally=false;expandVertically=false)" width="80" height="50" />
-  <Panel layout="border" border="titled" borderTitle="Ici" name="Le panel tout zarb" constraints="twocols(location=right;index=2;alignmentY=0.5;alignmentX=0.5;expandHorizontally=true;expandVertically=false)" width="80" height="50" />
-  <Panel layout="border" border="titled" borderTitle="Panel" constraints="twocols(location=center;index=3;alignmentY=0.5;alignmentX=0.5;expandHorizontally=true;expandVertically=true)" width="80" height="50" />
-  <Label label="label" align="left" constraints="twocols(location=center;index=4;alignmentY=0.5;alignmentX=0.5;expandHorizontally=true;expandVertically=false)" manageDynamicModel="false" />
-  <Panel layout="border" border="titled" borderTitle="Panel" constraints="twocols(location=center;index=0;expandHorizontally=true;expandVertically=false)" width="80" height="50" />
+<Panel layout="border" titleFont="Lucida Grande,0,13" darkLevel="0">
+  <Panel layout="twocols" border="rounded3d" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="border(location=center)" width="80" height="60">
+    <Label label="label" localize="true" constraints="twocols(location=left;index=0;expandHorizontally=true;expandVertically=false)">
+      <LocalizedDictionary />
+    </Label>
+    <TextField validateOnReturn="true" columns="7" passwd="false" text="TextField" constraints="twocols(location=right;index=1;expandVertically=false;expandHorizontally=true)" localize="true" />
+    <Label label="label" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=true;expandVertically=false)">
+      <LocalizedDictionary />
+    </Label>
+    <CheckBox selected="true" localize="true" name="checkbox" constraints="twocols(location=right;index=3;expandVertically=false;expandHorizontally=true)" />
+  </Panel>
+  <LocalizedDictionary />
 </Panel>
 

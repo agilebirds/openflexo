@@ -182,11 +182,19 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown,JCombo
 		if (listModel == null) {
 			listModel = new MyComboBoxModel(getValue());
 			if (_jComboBox != null) {
-				_jComboBox.setModel(getListModel());
+				_jComboBox.setModel((MyComboBoxModel)listModel);
+			}
+		}
+		else {
+			MyComboBoxModel aNewMyComboBoxModel = new MyComboBoxModel(getValue());
+			if (!aNewMyComboBoxModel.equals(listModel)) {
+				listModel = aNewMyComboBoxModel;
+				_jComboBox.setModel((MyComboBoxModel)listModel);
 			}
 		}
 		return (MyComboBoxModel)listModel;
 	}
+
 
 	protected class MyComboBoxModel extends FIBMultipleValueModel implements ComboBoxModel
 	{
@@ -194,16 +202,20 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown,JCombo
 
 		public MyComboBoxModel(Object selectedObject) {
 			super();
-			setSelectedItem(selectedObject);
 		}
 		
 		@Override
 		public void setSelectedItem(Object anItem)
 		{
-			selectedItem = anItem;
-			getDynamicModel().selected = anItem;
-			getDynamicModel().selectedIndex = indexOf(anItem);
-			notifyDynamicModelChanged();
+			if (selectedItem != anItem) {
+				selectedItem = anItem;
+				//logger.info("setSelectedItem() with "+anItem+" widgetUpdating="+widgetUpdating+" modelUpdating="+modelUpdating);
+				getDynamicModel().selected = anItem;
+				getDynamicModel().selectedIndex = indexOf(anItem);
+				if (!widgetUpdating && !modelUpdating) {
+					notifyDynamicModelChanged();
+				}
+			}
 		}
 
 		@Override
@@ -212,6 +224,16 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown,JCombo
 			return selectedItem;
 		}
 
+		@Override
+		public boolean equals(Object object) {
+			if (object instanceof MyComboBoxModel) {
+				if (selectedItem != ((MyComboBoxModel)object).selectedItem) {
+					return false;
+				}
+			}
+			return super.equals(object);
+		}
+		
 	}
 
 	@Override

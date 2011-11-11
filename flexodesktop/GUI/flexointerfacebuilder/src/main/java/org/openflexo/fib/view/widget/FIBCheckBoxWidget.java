@@ -23,7 +23,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.logging.Logger;
 
-import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 
 import org.openflexo.fib.controller.FIBController;
@@ -54,6 +53,7 @@ public class FIBCheckBoxWidget extends FIBWidgetView<FIBCheckBox,JCheckBox,Boole
         super(model,controller);
         _jCheckBox = new JCheckBox();
         _jCheckBox.setOpaque(false);
+        _jCheckBox.setBorderPaintedFlat(true);
         _jCheckBox.setSelected(model.getSelected());
         if (isReadOnly())
         	_jCheckBox.setEnabled(false);
@@ -67,7 +67,7 @@ public class FIBCheckBoxWidget extends FIBWidgetView<FIBCheckBox,JCheckBox,Boole
         	});
         _jCheckBox.addFocusListener(this);
         
-        _jCheckBox.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
+        //_jCheckBox.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
         
         isNegate = model.getNegate();
 

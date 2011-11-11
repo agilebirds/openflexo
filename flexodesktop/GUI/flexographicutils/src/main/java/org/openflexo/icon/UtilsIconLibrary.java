@@ -15,7 +15,10 @@ public class UtilsIconLibrary {
 	
 	// Common icons used in the context of utils
 	
-    public static final ImageIcon ARROW_DOWN = new ImageIconResource("Icons/ArrowDown.gif");
+	public static final ImageIcon CUSTOM_POPUP_DOWN = new ImageIconResource("Icons/CustomPopupDown.png");
+	public static final ImageIcon CUSTOM_POPUP_DOWN_DISABLED = new ImageIconResource("Icons/CustomPopupDownDisabled.png");
+	   
+	public static final ImageIcon ARROW_DOWN = new ImageIconResource("Icons/ArrowDown.gif");
     public static final ImageIcon ARROW_UP = new ImageIconResource("Icons/ArrowUp.gif");
     public static final ImageIcon ARROW_LEFT = new ImageIconResource("Icons/ArrowLeft.gif");
     public static final ImageIcon ARROW_RIGHT = new ImageIconResource("Icons/ArrowRight.gif");

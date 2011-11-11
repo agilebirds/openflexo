@@ -19,10 +19,13 @@
  */
 package org.openflexo.view.controller;
 
+import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.Flexo;
+import org.openflexo.components.ProgressWindow;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.foundation.DataModification;
@@ -32,7 +35,6 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ontology.AbstractOntologyObject;
-import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.view.AbstractViewObject;
 import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
 import org.openflexo.foundation.wkf.WKFObject;
@@ -41,6 +43,7 @@ import org.openflexo.icon.SEIconLibrary;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.icon.WKFIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManager;
 
 
@@ -137,5 +140,17 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 		}
 		logger.warning("Sorry, no icon defined for "+object+(object!=null?object.getClass():""));
 		return null;
+	}
+	
+	@Override
+	protected boolean allowsFIBEdition() {
+		return Flexo.isDev;
+	}
+	
+	@Override
+	protected void openFIBEditor(FIBComponent component, MouseEvent event) {
+		ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("opening_fib_editor"), 1);
+		super.openFIBEditor(component,event);
+        ProgressWindow.hideProgressWindow();
 	}
 }

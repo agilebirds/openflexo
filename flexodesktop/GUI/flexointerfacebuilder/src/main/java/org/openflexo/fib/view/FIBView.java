@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 
@@ -136,6 +137,9 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 						getJComponent(),
 						getComponent().getVerticalScrollbarPolicy().getPolicy(), 
 						getComponent().getHorizontalScrollbarPolicy().getPolicy());
+				scrolledComponent.setOpaque(false);
+				scrolledComponent.getViewport().setOpaque(false);
+				scrolledComponent.setBorder(BorderFactory.createEmptyBorder());
 			}
 			return scrolledComponent;
 		}

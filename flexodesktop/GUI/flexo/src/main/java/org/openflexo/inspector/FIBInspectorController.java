@@ -19,9 +19,17 @@
  */
 package org.openflexo.inspector;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.logging.Logger;
 
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternInstancePathElement;
@@ -71,4 +79,33 @@ public class FIBInspectorController extends FlexoFIBController {
 		}
 		return super.getValue(variable);
 	}
+	
+	@Override
+	protected void openFIBEditor(FIBComponent component, final MouseEvent event) {
+		System.out.println("Je suis le controlleur de l'inspecteur");
+		if (component instanceof FIBInspector) {
+			JPopupMenu popup = new JPopupMenu();
+			FIBInspector current = (FIBInspector)component;
+			while (current != null) {
+				File inspectorFile = new File(current.getDefinitionFile());
+				System.out.println("> "+inspectorFile);
+				if (inspectorFile.exists()) {
+					JMenuItem menuItem = new JMenuItem(inspectorFile.getName());
+					// We dont use existing inspector which is already aggregated !!!
+					final FIBInspector inspectorToOpen = (FIBInspector)FIBLibrary.instance().retrieveFIBComponent(inspectorFile, false);
+					menuItem.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e)
+						{	
+							FIBInspectorController.super.openFIBEditor(inspectorToOpen,event);
+						}
+					});
+					popup.add(menuItem);		
+				}
+				current = current.getSuperInspector();
+			}
+			popup.show(event.getComponent(), event.getX(), event.getY());
+		}
+	}
+
 }

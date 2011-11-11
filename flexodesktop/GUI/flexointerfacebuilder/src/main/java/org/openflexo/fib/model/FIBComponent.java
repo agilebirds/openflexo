@@ -51,6 +51,8 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	public static BindingDefinition VISIBLE = new BindingDefinition("visible", Boolean.class, BindingDefinitionType.GET, false);
 	private BindingDefinition DATA;
 	
+	private String definitionFile;
+	
 	public BindingDefinition getDataBindingDefinition()
 	{
 		if (DATA == null) {
@@ -1285,6 +1287,14 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	public FIBLocalizedDictionary getLocalizedDictionary()
 	{
 		return localizedDictionary;
+	}
+
+	public String getDefinitionFile() {
+		return definitionFile;
+	}
+
+	public void setDefinitionFile(String definitionFile) {
+		this.definitionFile = definitionFile;
 	}
 
 }

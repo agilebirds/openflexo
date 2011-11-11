@@ -24,7 +24,6 @@ import java.awt.Dimension;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
 
 /**
  * Abstract widget allowing to edit a complex object with a popup
@@ -50,12 +49,12 @@ public abstract class TextFieldCustomPopup<T> extends CustomPopup<T> {
 		_textField.setText(renderedString(editedObject));
 	}
 
-	// Override to use specific border
+	/*// Override to use specific border
 	@Override
 	protected Border getDownButtonBorder()
 	{
 		return null;
-	}
+	}*/
 	
 
 	@Override
