@@ -58,9 +58,14 @@ public class TestPopup {
     static FlexoEditor editor;
     static FlexoProject prj ;
 
-	static {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
 		try {
-			editor = FlexoResourceManager.initializeExistingProject(new File("/Users/sylvain/Documents/TestsFlexo/TestBindingSelector.prj"), EDITOR_FACTORY,null);
+			editor = FlexoResourceManager.initializeExistingProject(new File("/Users/sylvain/Documents/TestsFlexo/TestBindingSelector" +
+                    ".prj"), EDITOR_FACTORY,null);
 		} catch (ProjectLoadingCancelledException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -69,12 +74,6 @@ public class TestPopup {
 			e.printStackTrace();
 		}
 		prj = editor.getProject();
-	}
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-
 		final JFrame frame = new JFrame();
 		JPanel panel = new JPanel(new BorderLayout());
 		frame.setContentPane(panel);

@@ -899,7 +899,8 @@ public class OperationNode extends FatherNode implements ApplicationHelpEntryPoi
 		@Override
 		public ValidationIssue<OperationMustHaveATab,OperationNode> applyValidation(OperationNode node)
 		{
-			if (!(node instanceof SelfExecutableOperationNode) && node.getNodeType() == NodeType.NORMAL && node.getComponentInstance() != null) {
+			if (node.isAccessible() && !(node instanceof SelfExecutableOperationNode) && node.getNodeType() == NodeType.NORMAL && node
+                .getComponentInstance() != null) {
 				if(node.getComponentDefinition().getWOComponent().hasTabContainer() && node.getOperationComponent().getWOComponent().hasAtLeastOneTabDefined() && node.getSelectedTabKey()==null) {
 					return new ValidationError<OperationMustHaveATab,OperationNode>(this, node, "operation_($object.name)_must_define_a_tab");
 				}

@@ -15,6 +15,16 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
 			</plugin>
+            <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <forkMode>always</forkMode>
+                    <excludes>
+                        <exclude>**/*/TestCG2.java</exclude>
+                    </excludes>
+                </configuration>
+			</plugin>
 		</plugins>
 	</build>
 	<dependencies>

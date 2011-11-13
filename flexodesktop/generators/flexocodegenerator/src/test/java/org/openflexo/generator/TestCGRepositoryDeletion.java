@@ -200,6 +200,8 @@ public class TestCGRepositoryDeletion  extends CGTestCase {
 		action.doAction();
 		logger.info("SubProcess "+action.getNewProcess().getName()+" successfully created");
 		_subProcessResource = _project.getFlexoProcessResource(TEST_SUB_PROCESS);
+        defineStatusColumn(_rootProcessResource.getFlexoProcess());
+        defineStatusColumn(action.getNewProcess());
 		assertNotNull(_subProcessResource);
 		assertSynchonized(_subProcessResource,_rmResource);
 		assertSynchonized(_subProcessResource,_wkfResource);
@@ -236,6 +238,7 @@ public class TestCGRepositoryDeletion  extends CGTestCase {
 		action.setLocation(100,100);
 		action.doAction();
 		assertTrue(action.hasActionExecutionSucceeded());
+        defineStatusColumn(action.getProcess());
 		_subProcessNode = (SubProcessNode)action.getObject();
 		logger.info("SubProcessNode "+_subProcessNode.getName()+" successfully created");
 		assertDepends(_rootProcessResource,_subProcessResource);
@@ -561,6 +564,7 @@ public class TestCGRepositoryDeletion  extends CGTestCase {
 		AddSubProcess process = AddSubProcess.actionType.makeNewAction(_project.getFlexoWorkflow(), null, _editor);
 		process.setNewProcessName("Process context free");
 		process.doAction();
+        defineStatusColumn(process.getNewProcess());
 		DropWKFElement addActivity = DropWKFElement.actionType.makeNewAction(process.getNewProcess().getActivityPetriGraph(), null, _editor);
         addActivity.setElementType(WKFElementType.NORMAL_ACTIVITY);
         addActivity.setLocation(100,100);

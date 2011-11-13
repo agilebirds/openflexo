@@ -200,7 +200,8 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 		AssertionFailedError failed = null;
 		for (CGFile file : codeRepository.getFiles()) {
 			try {
-				assertEquals(GenerationStatus.UpToDate, file.getGenerationStatus());
+				assertEquals("Expecting '"+file.getFileName()+"' to be uptodate but was : "+file.getGenerationStatus(),GenerationStatus.UpToDate,
+                        file.getGenerationStatus());
 			}
 			catch (AssertionFailedError e) {
 				logger.warning("RESOURCE status problem: "+file.getFileName()+"("+file.getPathName()+") MUST be up-to-date; Status is currently "+file.getGenerationStatus()+" reason:\n"+file.getResource().getNeedsUpdateReason());
@@ -620,7 +621,11 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 		assertNotNull(_eoPrototypesResource = _project.getEOModelResource(EOPrototypeRepository.EOPROTOTYPE_REPOSITORY_DIR.getName()));
 		assertNotNull(_subProcessResource = _project.getFlexoProcessResource(TEST_SUB_PROCESS));
 		if (fullLoading) {
-			assertNotNull(_subProcessNode = _rootProcessResource.getFlexoProcess().getActivityPetriGraph().getSubProcessNodeNamed(TEST_SUB_PROCESS_NODE));
+            //strange stuff here since the subprocessnode don't have the name of the process...
+            //since a more or less recent change : sub process nodes must have the same name that
+            //the process they are referencing.
+			_subProcessNode = _rootProcessResource.getFlexoProcess().getActivityPetriGraph().getSubProcessNodeNamed
+                    (TEST_SUB_PROCESS_NODE);
 		}
 		if (fullLoading) {
 			assertNotNull(_operationNode = _rootProcessResource.getFlexoProcess().getActivityPetriGraph().getOperationNodeNamed(TEST_OPERATION_NODE_1));

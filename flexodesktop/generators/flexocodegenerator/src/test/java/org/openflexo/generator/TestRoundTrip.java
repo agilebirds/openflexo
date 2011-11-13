@@ -174,10 +174,12 @@ public class TestRoundTrip extends CGTestCase  {
 			}
 		}
 
+        defineStatusColumn(_rootProcessResource.getFlexoProcess());
 		AddSubProcess action = AddSubProcess.actionType.makeNewAction(_rootProcessResource.getFlexoProcess(), null, _editor);
 		action.setParentProcess(_rootProcessResource.getFlexoProcess());
 		action.setNewProcessName(TEST_SUB_PROCESS);
 		action.doAction();
+        defineStatusColumn(action.getNewProcess());
 		assertTrue(action.hasActionExecutionSucceeded());
 		logger.info("SubProcess "+action.getNewProcess().getName()+" successfully created");
 		_subProcessResource = _project.getFlexoProcessResource(TEST_SUB_PROCESS);
@@ -475,6 +477,7 @@ public class TestRoundTrip extends CGTestCase  {
 		process.setNewProcessName("Process context free");
 		process.doAction();
 		assertTrue(process.hasActionExecutionSucceeded());
+        defineStatusColumn(process.getNewProcess());
 		DropWKFElement addActivity = DropWKFElement.actionType.makeNewAction(process.getNewProcess().getActivityPetriGraph(), null, _editor);
 		addActivity.setElementType(WKFElementType.NORMAL_ACTIVITY);
 		addActivity.setLocation(100,100);

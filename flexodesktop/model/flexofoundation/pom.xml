@@ -15,6 +15,16 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
 			</plugin>
+            <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <forkMode>always</forkMode>
+                    <excludes>
+                        <exclude>**/*/TestOntologies.java</exclude>
+                    </excludes>
+                </configuration>
+			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
@@ -34,6 +44,12 @@
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexowsclient</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>flexographicalengine</artifactId>
+			<version>${project.version}</version>
+            <scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.cayenne</groupId>
